@@ -8,4 +8,8 @@ trait ProverSpec extends Specification {
   val Conjunction = Connective("and", "∧", 2)
 
   implicit def intToAtom(i: Int): Atom = Atom(i)
+
+  implicit class TheoremBuilderOps(theoremBuilder: TheoremBuilder) {
+    def addStep(statement: Statement): TheoremBuilder = theoremBuilder.addStep(Step(statement))
+  }
 }

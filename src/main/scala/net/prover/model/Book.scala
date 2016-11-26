@@ -46,7 +46,7 @@ object Book {
   }
 
   def parse(s: String): Book = {
-    val lines = s.lines.map(_.trim).filter(!_.isEmpty).filter(!_.startsWith("#")).toSeq
+    val lines = s.lines.map(_.trim).filter(!_.isEmpty).filter(!_.startsWith("#")).toList
     lines match {
       case WordAndRemainingText("book", title) +: otherLines =>
         addLinesToBook(otherLines, Book(title))

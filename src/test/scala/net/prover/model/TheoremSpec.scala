@@ -9,9 +9,14 @@ class TheoremSpec extends ProverSpec {
     firstLine: String,
     lines: Seq[String],
     rules: Seq[Rule] = Nil,
-    connectives: Seq[Connective] = Nil
+    connectives: Seq[Connective] = Nil,
+    definitions: Seq[Definition] = Nil
   ): Theorem = {
-    Theorem.parse(firstLine, lines, Book("", rules = rules, connectives = connectives))._1
+    Theorem.parse(
+      firstLine,
+      lines,
+      Book("", rules = rules, connectives = connectives, definitions = definitions)
+    )._1
   }
 
   "theorem parse" should {
@@ -44,6 +49,19 @@ class TheoremSpec extends ProverSpec {
         Seq(restate, introduceImplication, eliminateImplication),
         Seq(Implication))
       theorem.result mustEqual Implication(Implication(1, 2), Implication(1, 3))
+    }
+
+    "parse a theorem with a definition application" in {
+      val theorem = parseTheorem(
+        "imp-distr Implication Distributes over Itself",
+        Seq(
+          "hypothesis and 1 2",
+          "definition-and h1",
+          "qed"),
+        Seq(restate, introduceImplication, eliminateImplication),
+        Seq(Negation, Implication, Conjunction),
+        Seq(Definition(Conjunction, Negation(Implication(1, Negation(2))))))
+      theorem.result mustEqual Negation(Implication(1, Negation(2)))
     }
   }
 

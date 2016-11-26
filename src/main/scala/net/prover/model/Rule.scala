@@ -1,16 +1,13 @@
 package net.prover.model
 
-trait Rule {
-  def name: String
-  def applyToTheorem(theoremBuilder: TheoremBuilder, text: String): TheoremBuilder
-}
+trait Rule extends TheoremLineParser
 
 case class DirectRule(
     name: String,
     premises: Seq[Statement],
     conclusion: Statement)
   extends Rule {
-  override def applyToTheorem(theoremBuilder: TheoremBuilder, applicationText: String): TheoremBuilder = {
+  override def applyToTheorem(theoremBuilder: TheoremBuilder, applicationText: String, book: Book): TheoremBuilder = {
     val matchAttempts = premises.mapFold(applicationText) { (textSoFar, premise) =>
       textSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r))).swap
     }
@@ -27,13 +24,13 @@ case class FantasyRule(
     premises: Seq[Statement],
     conclusion: Statement)
   extends Rule {
-  override def applyToTheorem(theoremBuilder: TheoremBuilder, applicationText: String): TheoremBuilder = {
+  override def applyToTheorem(theoremBuilder: TheoremBuilder, applicationText: String, book: Book): TheoremBuilder = {
     theoremBuilder.replaceFantasy { fantasy =>
       val matchAttempts = hypothesis.attemptMatch(fantasy.hypothesis) +: premises.mapFold(applicationText) { (textSoFar, premise) =>
         textSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(fantasy.resolveReference(r))).swap
       }
       val matchResult = Statement.mergeMatchAttempts(matchAttempts)
-        .getOrElse(throw new Exception(s"Could not match rule premises\n$applicationText"))
+        .getOrElse(throw new Exception(s"Could not match rule premises\n$name $applicationText"))
       val statement = conclusion.replace(matchResult)
       Step(statement, Some(Step.Fantasy(fantasy.hypothesis, fantasy.steps)))
     }
