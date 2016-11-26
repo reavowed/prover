@@ -1,11 +1,6 @@
 package net.prover.model
 
-import org.specs2.mutable.Specification
-
-class StatementSpec extends Specification {
-  val Implication = Connective("implies", "→", 2)
-  val Conjunction = Connective("and", "∧", 2)
-
+class StatementSpec extends ProverSpec {
   "statement parser" should {
     "parse an atom" in {
       Statement.parse("1", Nil)._1 mustEqual Atom(1)

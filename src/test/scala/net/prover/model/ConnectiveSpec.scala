@@ -1,13 +1,6 @@
 package net.prover.model
 
-import org.specs2.mutable.Specification
-
-class ConnectiveSpec extends Specification {
-  val Implication = Connective("implies", "→", 2)
-  val Negation = Connective("not", "¬", 1)
-
-  implicit def intToAtom(i: Int): Atom = Atom(i)
-
+class ConnectiveSpec extends ProverSpec {
   "connective parser" should {
     "parse a binary connective" in {
       Connective.parse("implies → 2")  mustEqual Implication

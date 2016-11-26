@@ -1,10 +1,6 @@
 package net.prover.model
 
-import org.specs2.mutable.Specification
-
-class RuleSpec extends Specification {
-  val Implication = Connective("implies", "→", 2)
-
+class RuleSpec extends ProverSpec {
   "rule parser" should {
     "parse a rule with a single premise" in {
       Rule.parse("restate 1 ⇒ 1", Nil) mustEqual DirectRule("restate", Seq(Atom(1)), Atom(1))

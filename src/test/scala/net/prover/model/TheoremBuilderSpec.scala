@@ -1,11 +1,6 @@
 package net.prover.model
 
-import org.specs2.mutable.Specification
-
-class TheoremBuilderSpec extends Specification {
-  val Implication = Connective("implies", "→", 2)
-  val Conjunction = Connective("and", "∧", 2)
-
+class TheoremBuilderSpec extends ProverSpec {
   "theorem builder" should {
     "handle simple direct rule" in {
       val rule = DirectRule("restate", Seq(Atom(1)), Atom(1))

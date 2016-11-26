@@ -31,17 +31,18 @@ case class FantasyRule(
     conclusion: Statement)
   extends Rule {
   override def applyToTheorem(theoremBuilder: TheoremBuilder, applicationText: String): TheoremBuilder = {
-    val fantasy = theoremBuilder.fantasyOption.getOrElse(throw new Exception("No assumption to discharge"))
-    val matchAttempts = hypothesis.attemptMatch(fantasy.hypothesis) +: premises.mapFold(applicationText) { case (textSoFar, premise) =>
-      textSoFar match {
-        case SingleWord(reference, remainingText) =>
-          (remainingText, premise.attemptMatch(fantasy.resolveReference(reference)))
+    theoremBuilder.replaceFantasy { fantasy =>
+      val matchAttempts = hypothesis.attemptMatch(fantasy.hypothesis) +: premises.mapFold(applicationText) { case (textSoFar, premise) =>
+        textSoFar match {
+          case SingleWord(reference, remainingText) =>
+            (remainingText, premise.attemptMatch(fantasy.resolveReference(reference)))
+        }
       }
+      val matchResult = Statement.mergeMatchAttempts(matchAttempts)
+        .getOrElse(throw new Exception(s"Could not match rule premises\n$applicationText"))
+      val statement = conclusion.replace(matchResult)
+      Step(statement, Some(Step.Fantasy(fantasy.hypothesis, fantasy.steps)))
     }
-    val matchResult = Statement.mergeMatchAttempts(matchAttempts)
-      .getOrElse(throw new Exception(s"Could not match rule premises\n$applicationText"))
-    val statement = conclusion.replace(matchResult)
-    theoremBuilder.copy(fantasyOption = None).addStep(Step(statement, Some(Step.Fantasy(fantasy.hypothesis, fantasy.steps))))
   }
 }
 

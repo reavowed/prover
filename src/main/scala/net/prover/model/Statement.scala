@@ -9,6 +9,7 @@ trait Statement extends JsonSerializable.Base {
   def replace(map: Map[Int, Statement]): Statement
   def html: String
   def safeHtml: String = html
+  override def toString: String = html
 
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeString(html)
