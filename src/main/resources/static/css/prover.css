@@ -7,10 +7,34 @@
     padding-bottom: 5px;
 }
 
+.bookEntry a {
+    color: inherit;
+}
+
+.bookEntry a:hover {
+    color: inherit;
+}
+
 .theoremSummary {
     margin-left: 10px;
 }
 
-.hypothesis, .result {
+.theoremPanel {
+    padding: 20px 50px;
+}
+
+.proofSection {
+    margin-bottom: 10px;
+}
+
+.hypothesis, .fantasyHypothesis, .stepResult, .result {
     margin-bottom: 5px;
+}
+
+.fantasyBody {
+    margin-left: 10px;
+}
+
+.statement {
+    padding: 3px;
 }
