@@ -7,7 +7,18 @@ package object model {
     def splitByWhitespace(max: Int = 0): Seq[String] = {
       s.trim.split("\\s+", max).toSeq
     }
-    def splitKeyword = splitByWhitespace(2)
+    def splitFirstWord: (String, String) = splitByWhitespace(2) match {
+      case Seq(word, remainingText) =>
+        (word, remainingText)
+      case Seq(word) =>
+        (word, "")
+    }
+  }
+
+  object WordAndRemainingText {
+    def unapply(line: String): Option[(String, String)] = {
+      Some(line.splitFirstWord)
+    }
   }
 
   implicit class TupleOps[S,T](tuple: (S, T)) {
@@ -31,19 +42,6 @@ package object model {
             sequence <- sequenceOption
             value <- valueOption
           } yield sequence :+ value
-      }
-    }
-  }
-
-  object SingleWord {
-    def unapply(line: String): Option[(String, String)] = {
-      line.splitByWhitespace(2) match {
-        case Seq(word, restOfLine) =>
-          Some((word, restOfLine))
-        case Seq(word) =>
-          Some((word, ""))
-        case _ =>
-          None
       }
     }
   }

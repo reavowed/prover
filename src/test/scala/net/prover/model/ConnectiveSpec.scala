@@ -3,7 +3,7 @@ package net.prover.model
 class ConnectiveSpec extends ProverSpec {
   "connective parser" should {
     "parse a binary connective" in {
-      Connective.parse("implies → 2")  mustEqual Implication
+      Connective.parse("implies → 2", Book(""))  mustEqual Implication
     }
   }
 

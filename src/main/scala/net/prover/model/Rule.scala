@@ -11,11 +11,8 @@ case class DirectRule(
     conclusion: Statement)
   extends Rule {
   override def applyToTheorem(theoremBuilder: TheoremBuilder, applicationText: String): TheoremBuilder = {
-    val matchAttempts = premises.mapFold(applicationText) { case (textSoFar, premise) =>
-      textSoFar match {
-        case SingleWord(reference, remainingText) =>
-          (remainingText, premise.attemptMatch(theoremBuilder.resolveReference(reference)))
-      }
+    val matchAttempts = premises.mapFold(applicationText) { (textSoFar, premise) =>
+      textSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r))).swap
     }
     val matchResult = Statement.mergeMatchAttempts(matchAttempts)
       .getOrElse(throw new Exception(s"Could not match rule premises\n$applicationText"))
@@ -32,11 +29,8 @@ case class FantasyRule(
   extends Rule {
   override def applyToTheorem(theoremBuilder: TheoremBuilder, applicationText: String): TheoremBuilder = {
     theoremBuilder.replaceFantasy { fantasy =>
-      val matchAttempts = hypothesis.attemptMatch(fantasy.hypothesis) +: premises.mapFold(applicationText) { case (textSoFar, premise) =>
-        textSoFar match {
-          case SingleWord(reference, remainingText) =>
-            (remainingText, premise.attemptMatch(fantasy.resolveReference(reference)))
-        }
+      val matchAttempts = hypothesis.attemptMatch(fantasy.hypothesis) +: premises.mapFold(applicationText) { (textSoFar, premise) =>
+        textSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(fantasy.resolveReference(r))).swap
       }
       val matchResult = Statement.mergeMatchAttempts(matchAttempts)
         .getOrElse(throw new Exception(s"Could not match rule premises\n$applicationText"))
@@ -46,33 +40,36 @@ case class FantasyRule(
   }
 }
 
-object Rule {
-  def parse(ruleText: String, connectives: Seq[Connective]): Rule = {
-    ruleText match {
-      case SingleWord(name, textAfterName) =>
-        val (hypothesisOrPremises, remainingText) = Statement.parseList(textAfterName, connectives)
-        remainingText match {
-          case SingleWord("⇒", conclusionText) =>
-            val (conclusion, _) = Statement.parse(conclusionText, connectives)
-            DirectRule(name, hypothesisOrPremises, conclusion)
-          case SingleWord("⊢", premisesText) =>
-            hypothesisOrPremises match {
-              case Seq(hypothesis) =>
-                val (premises, textAfterPremises) = Statement.parseList(premisesText, connectives)
-                textAfterPremises match {
-                  case SingleWord("⇒", conclusionText) =>
-                    val (conclusion, _) = Statement.parse(conclusionText, connectives)
-                    FantasyRule(name, hypothesis, premises, conclusion)
-                  case _ =>
-                    throw new Exception("Rule did not have a conclusion\n" + textAfterPremises)
-                }
-              case _ =>
-                throw new Exception("A rule cannot discharge more than one assumption")
-            }
+object Rule extends SingleLineBookEntryParser[Rule] {
+  override val name: String = "rule"
+  override def parse(text: String, book: Book): Rule = {
+    val connectives = book.connectives
+    val (name, textAfterName) = text.splitFirstWord
+    val (hypothesisOrPremises, textAfterHypothesisOrPremises) = Statement.parseList(textAfterName, connectives)
+    val (firstSymbol, textAfterFirstSymbol) = textAfterHypothesisOrPremises.splitFirstWord
+    firstSymbol match {
+      case "⇒" =>
+        val (conclusion, _) = Statement.parse(textAfterFirstSymbol, connectives)
+        DirectRule(name, hypothesisOrPremises, conclusion)
+      case "⊢" =>
+        val hypothesis = hypothesisOrPremises match {
+          case Seq(singleHypothesis) =>
+            singleHypothesis
+          case _ =>
+            throw new Exception("A rule cannot discharge more than one assumption\n" + text)
         }
+        val (premises, textAfterPremises) = Statement.parseList(textAfterFirstSymbol, connectives)
+        val (secondSymbol, conclusionText) = textAfterPremises.splitFirstWord
+        if (secondSymbol != "⇒") {
+            throw new Exception("Rule did not have a conclusion\n" + text)
+        }
+        val (conclusion, _) = Statement.parse(conclusionText, connectives)
+        FantasyRule(name, hypothesis, premises, conclusion)
       case _ =>
-        throw new Exception("Rule was not a name followed by a definition\n" + ruleText)
+        throw new Exception("Rule did not have a conclusion\n" + text)
     }
   }
-
+  override def addToBook(rule: Rule, book: Book): Book = {
+    book.copy(rules = book.rules :+ rule)
+  }
 }

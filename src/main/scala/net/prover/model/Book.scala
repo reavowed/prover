@@ -7,41 +7,39 @@ case class Book(
   title: String,
   connectives: Seq[Connective] = Nil,
   rules: Seq[Rule] = Nil,
-  theorems: Seq[Theorem] = Nil) {
-  def addConnective(statementDefinition: Connective): Book = {
-    copy(connectives = connectives :+ statementDefinition)
+  theorems: Seq[Theorem] = Nil,
+  definitions: Seq[Definition] = Nil)
+
+trait BookEntryParser[T] {
+  def name: String
+  def parse(firstLine: String, remainingLines: Seq[String], book: Book): (T, Seq[String])
+  def addToBook(t: T, book: Book): Book
+
+  def parseToBook(firstLine: String, remainingLines: Seq[String], book: Book): (Book, Seq[String]) = {
+    parse(firstLine, remainingLines, book).mapLeft(addToBook(_, book))
   }
-  def addRule(rule: Rule): Book = {
-    copy(rules = rules :+ rule)
-  }
-  def addTheorem(theorem: Theorem): Book = {
-    copy(theorems = theorems :+ theorem)
+}
+
+trait SingleLineBookEntryParser[T] extends BookEntryParser[T] {
+  def parse(line: String, book: Book): T
+
+  override def parse(firstLine: String, remainingLines: Seq[String], book: Book): (T, Seq[String]) = {
+    (parse(firstLine, book), remainingLines)
   }
 }
 
 object Book {
 
+  val bookEntryParsers: Seq[BookEntryParser[_]] = Seq(Connective, Definition, Rule, Theorem)
+
   private def addLinesToBook(lines: Seq[String], book: Book): Book = {
     lines match {
       case nextLine +: moreLines =>
-        nextLine.splitKeyword match {
-          case Seq("connective", connectiveText) =>
-            val connective = Connective.parse(connectiveText)
-            addLinesToBook(moreLines, book.addConnective(connective))
-          case Seq("rule", ruleText) =>
-            val rule = Rule.parse(ruleText, book.connectives)
-            addLinesToBook(moreLines, book.addRule(rule))
-          case Seq("theorem", theoremText) =>
-            theoremText.splitKeyword match {
-              case Seq(name, title) =>
-                val (theorem, linesAfterTheorem) = Theorem.parse(name, title, moreLines, book.rules, book.connectives)
-                addLinesToBook(linesAfterTheorem, book.addTheorem(theorem))
-              case _ =>
-                throw new Exception("Could not parse theorem name and title:\n" + nextLine)
-            }
-          case _ =>
-            throw new Exception("Could not parse line:\n" + nextLine)
-        }
+        val (entryType, restOfLine) = nextLine.splitFirstWord
+        val parser = bookEntryParsers.find(_.name == entryType)
+          .getOrElse(throw new Exception(s"Unrecognised type '$entryType'"))
+        val (updatedBook, remainingLines) = parser.parseToBook(restOfLine, moreLines, book)
+        addLinesToBook(remainingLines, updatedBook)
       case Nil =>
         book
     }
@@ -50,7 +48,7 @@ object Book {
   def parse(s: String): Book = {
     val lines = s.lines.map(_.trim).filter(!_.isEmpty).filter(!_.startsWith("#")).toSeq
     lines match {
-      case SingleWord("book", title) +: otherLines =>
+      case WordAndRemainingText("book", title) +: otherLines =>
         addLinesToBook(otherLines, Book(title))
       case _ =>
         throw new Exception("Book must start with title line")

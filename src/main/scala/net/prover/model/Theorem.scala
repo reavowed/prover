@@ -100,27 +100,23 @@ object TheoremBuilder {
   }
 }
 
-object Theorem {
-
-  def parse(
-    name: String,
-    title: String,
-    lines: Seq[String],
-    rules: Seq[Rule],
-    connectives: Seq[Connective]
-  ): (Theorem, Seq[String]) = {
+object Theorem extends BookEntryParser[Theorem] {
+  override val name: String = "theorem"
+  override def parse(firstLine: String, lines: Seq[String], book: Book): (Theorem, Seq[String]) = {
+    val (name, title) = firstLine.splitFirstWord
     def parseLine(
       line: String,
       theoremBuilder: TheoremBuilder
     ): TheoremBuilder = {
-      line.splitKeyword match {
-        case Seq("hypothesis", hypothesisText) =>
+      import book.connectives, book.rules
+      line.splitFirstWord match {
+        case ("hypothesis", hypothesisText) =>
           val hypothesis = Statement.parse(hypothesisText, connectives)._1
           theoremBuilder.addHypothesis(hypothesis)
-        case Seq("assume", hypothesisText) =>
+        case ("assume", hypothesisText) =>
           val hypothesis = Statement.parse(hypothesisText, connectives)._1
           theoremBuilder.addFantasy(hypothesis)
-        case Seq(ruleName, ruleApplicationText) =>
+        case (ruleName, ruleApplicationText) =>
           val rule = rules.find(_.name == ruleName).getOrElse(throw new Exception(s"Did not understand rule $ruleName\n" + line))
           rule.applyToTheorem(theoremBuilder, ruleApplicationText)
       }
@@ -140,4 +136,5 @@ object Theorem {
     }
     parseHelper(lines, TheoremBuilder())
   }
+  override def addToBook(theorem: Theorem, book: Book): Book = book.copy(theorems = book.theorems :+ theorem)
 }

@@ -71,9 +71,9 @@ object Statement {
 
   def parse(s: String, connectiveDefinitions: Seq[Connective]): (Statement, String) = {
     s match {
-      case SingleWord(IntParser(i), restOfLine) =>
+      case WordAndRemainingText(IntParser(i), restOfLine) =>
         (Atom(i), restOfLine)
-      case SingleWord(connectiveName, substatements) =>
+      case WordAndRemainingText(connectiveName, substatements) =>
         val connective = connectiveDefinitions
           .find(_.name == connectiveName)
           .getOrElse(throw new Exception(s"Unrecognised statement connective '$connectiveName'"))
