@@ -1,0 +1,15 @@
+<div ng-show="book">
+    <h3>{{book.title}}</h3>
+    <div class="bookEntry" ng-repeat="theorem in book.theorems">
+        <h4 class="title">Theorem {{$index + 1}} - {{theorem.title}}</h4>
+        <div class="theoremSummary">
+            <div ng-repeat="hypothesis in theorem.hypotheses" class="hypothesis">
+                Suppose {{hypothesis}}.
+            </div>
+            <div class="result">
+                <span ng-if="theorem.hypotheses.length">Then</span>
+                {{theorem.steps[theorem.steps.length - 1].statement}}.
+            </div>
+        </div>
+    </div>
+</div>
