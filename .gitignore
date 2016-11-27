@@ -1,6 +1,6 @@
 # Project-specific
 .idea/
-*.txt
+*.book
 
 # Created by https://www.gitignore.io/api/intellij,sbt
 

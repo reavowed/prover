@@ -88,7 +88,7 @@ object Book {
   }
 
   def fromFile(pathText: String): Book = {
-    val path = Paths.get("book.txt")
+    val path = Paths.get(pathText)
     val bookText = new String(Files.readAllBytes(path), StandardCharsets.UTF_8)
     parse(bookText)
   }
