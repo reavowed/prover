@@ -8,7 +8,9 @@ case class Theorem(
     hypotheses: Seq[Statement],
     steps: Seq[Step],
     result: Statement)
-  extends TheoremLineParser {
+  extends ChapterEntry with TheoremLineParser {
+
+  val `type` = "theorem"
 
   override def applyToTheorem(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
     val (remainingLine, matchAttempts) = hypotheses.mapFold(line) { (lineSoFar, premise) =>
@@ -52,7 +54,7 @@ object FantasyHypothesisParser extends TheoremLineParser {
   }
 }
 
-object Theorem extends BookEntryParser[Theorem] {
+object Theorem extends ChapterEntryParser[Theorem] {
   override val name: String = "theorem"
   override def parse(firstLine: PartialLine, lines: Seq[BookLine], book: Book): (Theorem, Seq[BookLine]) = {
     val (name, title) = firstLine.splitFirstWord.mapRight(_.remainingText)

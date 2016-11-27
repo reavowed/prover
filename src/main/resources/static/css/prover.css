@@ -2,42 +2,69 @@
     margin-bottom: 20px;
 }
 
-.bookEntry {
-    border: 1px solid transparent;
-    padding-bottom: 5px;
+.book .chapter:first-of-type {
+    margin-top: 20px;
 }
 
-.bookEntry a {
-    color: inherit;
+.chapterEntry {
+    clear: left;
 }
 
-.bookEntry a:hover {
-    color: inherit;
+.result {
+    margin: 10px;
+    width: calc(100% - 20px);
+    font-weight: bold;
+    padding: 5px 10px ;
+    border: 1px solid rgba(0,0,0,0.5);
+    border-radius: 5px;
 }
 
-.theoremSummary {
-    margin-left: 10px;
+.definition:after {
+    clear: both;
 }
 
-.theoremPanelColumn {
-    position: relative;
+.normal {
+    font-weight: normal;
 }
 
-.theoremPanel {
-    padding: 20px 50px;
+.ruleWrapper {
+    float: left;
+    margin-top: 0;
 }
 
-.theoremPanel.fixed {
-    position: absolute;
-    top: 10px;
-    width: calc(100% - 30px);
+.ruleWrapper > div {
+    float: left;
+    margin-right: 10px;
 }
+
+.rulePremises {
+    border-bottom: 1px solid black;
+}
+
+.theoremStatement {
+    font-weight: normal;
+    margin: 5px 10px;
+}
+
+.theoremProof {
+    font-weight: normal;
+    margin: 0 10px;
+}
+
+.theoremProof > step:last-of-type > .step > .stepResult span:after {
+    content: " □"
+}
+
+.comment + .comment {
+    margin-top: 15px;
+}
+
 
 .proofSection {
     margin-bottom: 10px;
 }
 
-.hypothesis, .fantasyHypothesis, .stepResult, .result {
+.hypothesis, .fantasyHypothesis, .stepResult {
     margin-bottom: 5px;
 }
 

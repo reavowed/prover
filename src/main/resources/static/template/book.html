@@ -1,24 +1,7 @@
-<div ng-show="book">
+<div class="book" ng-show="book">
     <h3>{{book.title}}</h3>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="bookEntry" ng-repeat="theorem in book.theorems" ng-click="setChosenTheorem(theorem)">
-                <h4 class="title">Theorem {{$index + 1}} - {{theorem.title}}</h4>
-                <div class="theoremSummary">
-                    <div ng-repeat="hypothesis in theorem.hypotheses" class="hypothesis">
-                        Suppose {{hypothesis}}.
-                    </div>
-                    <div class="result">
-                        <span ng-if="theorem.hypotheses.length">Then</span>
-                        {{theorem.result}}.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 theoremPanelColumn">
-            <div ng-show="chosenTheorem" class="jumbotron theoremPanel">
-                <theorem theorem="chosenTheorem"></theorem>
-            </div>
-        </div>
+    <div class="chapter" ng-repeat="chapter in book.chapters">
+        <h4><a href="#/chapters/{{chapter.key}}">{{chapter.title}}</a></h4>
+        <p>{{chapter.summary}}</p>
     </div>
 </div>

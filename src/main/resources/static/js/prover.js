@@ -5,16 +5,30 @@ proverApp.config(['$routeProvider', function($routeProvider) {
     .when("/", {
       template: "<book></book>"
     })
+    .when("/chapters/:chapterKey", {
+      template: "<chapter></chapter>"
+    })
 }]);
 
 proverApp.component('book', {
   templateUrl: 'template/book.html',
   controller: ['$scope', '$http', function($scope, $http) {
-    $scope.books = [];
-    $scope.newBookTitle = "";
+    $scope.book = null;
     $scope.chosenTheorem = null;
     $http.get('/book').then(function(response) {
       $scope.book = response.data;
+    });
+  }]
+});
+
+proverApp.component('chapter', {
+  templateUrl: 'template/chapter.html',
+  controller: ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
+    $scope.chapter = null;
+    $scope.chosenTheorem = null;
+    $http.get('/book').then(function(response) {
+      var book = response.data;
+      $scope.chapter = _.find(book.chapters, ["key", $routeParams.chapterKey]);
     });
     $scope.setChosenTheorem = function(chosenTheorem) {
       $scope.chosenTheorem = chosenTheorem;

@@ -1,6 +1,8 @@
 package net.prover.model
 
-trait Rule extends TheoremLineParser
+trait Rule extends ChapterEntry with TheoremLineParser {
+  val `type` = "rule"
+}
 
 case class DirectRule(
     name: String,
@@ -78,7 +80,7 @@ case class FantasyRule(
   }
 }
 
-object Rule extends SingleLineBookEntryParser[Rule] {
+object Rule extends SingleLineChapterEntryParser[Rule] {
   override val name: String = "rule"
   override def parse(line: PartialLine, book: Book): Rule = {
     val connectives = book.connectives

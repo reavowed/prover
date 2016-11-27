@@ -3,39 +3,13 @@ package net.prover.model
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
-import scala.util.control.NonFatal
-
 case class Book(
   title: String,
+  chapters: Seq[Chapter] = Nil,
   connectives: Seq[Connective] = Nil,
   rules: Seq[Rule] = Nil,
   theorems: Seq[Theorem] = Nil,
   definitions: Seq[Definition] = Nil)
-
-trait BookEntryParser[T] {
-  def name: String
-  def parse(line: PartialLine, remainingLines: Seq[BookLine], book: Book): (T, Seq[BookLine])
-  def addToBook(t: T, book: Book): Book
-
-  def parseToBook(line: PartialLine, remainingLines: Seq[BookLine], book: Book): (Book, Seq[BookLine]) = {
-    parse(line, remainingLines, book).mapLeft(addToBook(_, book))
-  }
-}
-
-trait SingleLineBookEntryParser[T] extends BookEntryParser[T] {
-  def parse(line: PartialLine, book: Book): T
-
-  override def parse(line: PartialLine, remainingLines: Seq[BookLine], book: Book): (T, Seq[BookLine]) = {
-    try {
-      (parse(line, book), remainingLines)
-    } catch {
-      case e: ParseException =>
-        throw e
-      case NonFatal(e) =>
-        throw ParseException.fromCause(e, line.fullLine)
-    }
-  }
-}
 
 case class BookLine(text: String, number: Int) {
   def splitFirstWord: (String, PartialLine) = {
@@ -53,13 +27,19 @@ case class PartialLine(remainingText: String, fullLine: BookLine) {
 
 object Book {
 
-  val bookEntryParsers: Seq[BookEntryParser[_]] = Seq(Connective, Definition, Rule, Theorem)
+  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, Connective, Definition, Rule, Theorem)
 
   private def addLinesToBook(lines: Seq[BookLine], book: Book): Book = {
     lines match {
-      case nextLine +: moreLines =>
-        val (entryType, restOfLine) = nextLine.splitFirstWord
-        val parser = bookEntryParsers.find(_.name == entryType)
+      case WordAndRemainingText("chapter", PartialLine(chapterTitle, _)) +: linesAfterChapterDefinition =>
+        linesAfterChapterDefinition match {
+          case BookLine(chapterSummary, _) +: linesAfterChapterSummary =>
+            addLinesToBook(
+              linesAfterChapterSummary,
+              book.copy(chapters = book.chapters :+ Chapter(chapterTitle, chapterSummary)))
+        }
+      case (line @ WordAndRemainingText(entryType, restOfLine)) +: moreLines =>
+        val parser = entryParsers.find(_.name == entryType)
           .getOrElse(throw new Exception(s"Unrecognised type '$entryType'"))
         val (updatedBook, remainingLines) = parser.parseToBook(restOfLine, moreLines, book)
         addLinesToBook(remainingLines, updatedBook)

@@ -1,6 +1,7 @@
 package net.prover.model
 
-case class Definition(connective: Connective, defininingStatement: Statement) extends TheoremLineParser {
+case class Definition(connective: Connective, definingStatement: Statement) extends ChapterEntry with TheoremLineParser {
+  val `type` = "definition"
   val definedStatement: Statement = ConnectiveStatement(
     (1 to connective.arity).map(Atom),
     connective)
@@ -9,14 +10,14 @@ case class Definition(connective: Connective, defininingStatement: Statement) ex
   override def applyToTheorem(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
     val (reference, _) = line.splitFirstWord
     val referredStatement = theoremBuilder.resolveReference(reference)
-    val replacedStatement = definedStatement.attemptMatch(referredStatement).map(defininingStatement.replace)
-        .orElse(defininingStatement.attemptMatch(referredStatement).map(definedStatement.replace))
+    val replacedStatement = definedStatement.attemptMatch(referredStatement).map(definingStatement.replace)
+        .orElse(definingStatement.attemptMatch(referredStatement).map(definedStatement.replace))
         .getOrElse(throw new Exception(s"Could not apply definition to statement '$referredStatement'"))
     theoremBuilder.addStep(Step(replacedStatement))
   }
 }
 
-object Definition extends SingleLineBookEntryParser[Definition] {
+object Definition extends SingleLineChapterEntryParser[Definition] {
   override val name: String = "definition"
   override def parse(line: PartialLine, book: Book): Definition = {
     val (connectiveName, lineAfterConnectiveName) = line.splitFirstWord
