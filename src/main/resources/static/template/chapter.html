@@ -33,7 +33,7 @@
             </div>
         </div>
         <div ng-switch-when="theorem">
-            <div class="result">
+            <div class="result" data-toggle="collapse" data-target="#proof-{{entry.name}}">
                 <div>Theorem: {{entry.title}}</div>
                 <div class="theoremStatement">
                     <span ng-if="entry.hypotheses.length">
@@ -48,9 +48,11 @@
                     </span>
                     {{entry.result}}.
                 </div>
-                <label>Proof</label>
-                <div class="theoremProof">
-                    <step step="step" ng-repeat="step in entry.steps"></step>
+                <div class="collapse" id="proof-{{entry.name}}">
+                    <label>Proof</label>
+                    <div class="theoremProof">
+                        <step step="step" ng-repeat="step in entry.steps"></step>
+                    </div>
                 </div>
             </div>
         </div>
