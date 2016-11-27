@@ -215,6 +215,8 @@ flip-and 1
 definition-equiv 2
 qed
 
+comment The next three theorems establish the meta-theorem that if α ↔ β, then α can be substituted for β in any other statement. Once we have shown this is true for our two fundamental connectives, establishing it for any more complicated statement is just a rote application of these three theorems.
+
 theorem equiv-imp-ant Equivalence of Implication Antecedent
 hypothesis equiv 1 2
 assume implies 1 3
@@ -250,8 +252,7 @@ contraposition 1
 introduce-equiv 3 4
 qed
 
-chapter Propositional Logic Identities
-Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
+comment We now show that our equivalence connective has the properties we will later establish as defining an equivalence relation, justifying the use of the same word to describe each.
 
 theorem equiv-refl Equivalence is Reflexive
 imp-ref 1
@@ -276,6 +277,9 @@ introduceImplication flip-equiv 1 2
 introduceImplication flip-equiv 2 1
 introduce-equiv 1 2
 qed
+
+chapter Propositional Logic Identities
+Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
 
 theorem and-sym Conjunction is Symmetric
 introduceImplication flip-and 1 2
