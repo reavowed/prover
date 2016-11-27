@@ -70,7 +70,7 @@ object Book {
 
   def parse(s: String): Book = {
     val lines = s.lines.zipWithIndex.map {
-      case (line, number) => BookLine(line, number)
+      case (line, index) => BookLine(line, index + 1)
     }.filter(!_.text.isEmpty).filter(!_.text.startsWith("#")).toList
     lines match {
       case firstLine +: otherLines =>

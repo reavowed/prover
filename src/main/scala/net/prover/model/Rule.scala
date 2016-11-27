@@ -25,6 +25,47 @@ case class FantasyRule(
     conclusion: Statement)
   extends Rule {
   override def applyToTheorem(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
+    line.splitFirstWord.mapLeft(n => book.theorems.find(_.name == n)) match {
+      case (Some(theorem), restOfLine) =>
+        applyWithPreviousTheorem(theorem, theoremBuilder, restOfLine, book)
+      case (None, _) =>
+        applyWithFantasy(theoremBuilder, line, book)
+    }
+  }
+
+  private def applyWithPreviousTheorem(
+    theorem: Theorem,
+    theoremBuilder: TheoremBuilder,
+    line: PartialLine,
+    book: Book
+  ): TheoremBuilder = {
+    val theoremHypothesis = theorem.hypotheses match {
+      case Seq(singleHypothesis) =>
+        singleHypothesis
+      case _ =>
+        throw ParseException.withMessage("Can only apply rule to theorem with a single hypothesis", line.fullLine)
+    }
+    val premise = premises match {
+      case Seq(singlePremise) =>
+        singlePremise
+      case _ =>
+        throw ParseException.withMessage("Can only apply rule to theorem if it has a single premise", line.fullLine)
+    }
+    val atoms = Seq(theoremHypothesis, theorem.result).flatMap(_.atoms).distinct
+    val atomMatch = readMissingAtoms(atoms, line, book)._1
+    val updatedTheoremHypothesis = theoremHypothesis.replace(atomMatch)
+    val updatedTheoremResult = theorem.result.replace(atomMatch)
+    val fullMatch = Statement.mergeMatchAttempts(Seq(
+      hypothesis.attemptMatch(updatedTheoremHypothesis),
+      premise.attemptMatch(updatedTheoremResult))
+    ).getOrElse(throw ParseException.withMessage(
+      s"Theorem $updatedTheoremHypothesis ⊢ $updatedTheoremResult did not match rule requirement $hypothesis ⊢ $premise",
+      line.fullLine))
+    val statement = conclusion.replace(fullMatch)
+    theoremBuilder.addStep(Step(statement))
+  }
+
+  def applyWithFantasy(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
     theoremBuilder.replaceFantasy { fantasy =>
       val matchAttempts = hypothesis.attemptMatch(fantasy.hypothesis) +: premises.mapFold(line) { (lineSoFar, premise) =>
         lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(fantasy.resolveReference(r))).swap

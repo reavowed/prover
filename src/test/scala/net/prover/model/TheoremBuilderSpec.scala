@@ -42,5 +42,12 @@ class TheoremBuilderSpec extends ProverSpec {
       updatedTheoremBuilder.steps mustEqual Seq(Step(Implication(Atom(1), Atom(2)), Some(Step.Fantasy(Atom(1), Seq(Step(Atom(2)))))))
       updatedTheoremBuilder.fantasyOption must beNone
     }
+
+    "handle assumption discharging rule applied to theorem" in {
+      val rule = FantasyRule("introduceImplication", Atom(1), Seq(Atom(2)), Implication(Atom(1), Atom(2)))
+      val theorem = Theorem("and-sym", "Conjunction is Symmetric", Seq(Conjunction(1, 2)), Nil, Conjunction(2, 1))
+      val theoremBuilder = rule.applyToTheorem(TheoremBuilder(), "and-sym 2 1", Book("", theorems = Seq(theorem)))
+      theoremBuilder.steps mustEqual Seq(Step(Implication(Conjunction(2, 1), Conjunction(1, 2))))
+    }
   }
 }

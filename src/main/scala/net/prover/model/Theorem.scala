@@ -16,9 +16,8 @@ case class Theorem(
     }
     val matchResult = Statement.mergeMatchAttempts(matchAttempts)
       .getOrElse(throw ParseException.withMessage(s"Could not match theorem hypotheses", line.fullLine))
-    val expandedMatch = result.atoms.diff(matchResult.keys.toSeq).mapFold(remainingLine) { (lineSoFar, missingAtom) =>
-      Statement.parse(lineSoFar, book.connectives).swap.mapRight(missingAtom -> _)
-    }._2.toMap ++ matchResult
+    val missingAtoms = result.atoms.diff(matchResult.keys.toSeq)
+    val expandedMatch = readMissingAtoms(missingAtoms, remainingLine, book)._1 ++ matchResult
     val statement = result.replace(expandedMatch)
     theoremBuilder.addStep(Step(statement))
   }
@@ -27,6 +26,12 @@ case class Theorem(
 trait TheoremLineParser {
   def name: String
   def applyToTheorem(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder
+
+  def readMissingAtoms(atoms: Seq[Int], line: PartialLine, book: Book): (Map[Int, Statement], PartialLine) = {
+    atoms.mapFold(line) { (lineSoFar, missingAtom) =>
+      Statement.parse(lineSoFar, book.connectives).swap.mapRight(missingAtom -> _)
+    }.swap.mapLeft(_.toMap)
+  }
 }
 
 object HypothesisParser extends TheoremLineParser {
