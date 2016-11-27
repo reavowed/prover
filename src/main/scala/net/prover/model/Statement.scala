@@ -69,31 +69,34 @@ object Statement {
     }).traverseOption.map(_.toMap)
   }
 
-  def parse(s: String, connectiveDefinitions: Seq[Connective]): (Statement, String) = {
-    s match {
-      case WordAndRemainingText(IntParser(i), restOfLine) =>
-        (Atom(i), restOfLine)
-      case WordAndRemainingText(connectiveName, substatements) =>
-        val connective = connectiveDefinitions
-          .find(_.name == connectiveName)
-          .getOrElse(throw new Exception(s"Unrecognised statement connective '$connectiveName'"))
-        connective.parseStatement(substatements, connectiveDefinitions)
+  def parse(line: PartialLine, connectiveDefinitions: Seq[Connective]): (Statement, PartialLine) = {
+    object ConnectiveName {
+      def unapply(s: String): Option[Connective] = {
+        connectiveDefinitions.find(_.name == s)
+      }
+    }
+    val (statementType, remainingLine) = line.splitFirstWord
+    statementType match {
+      case IntParser(i) =>
+        (Atom(i), remainingLine)
+      case ConnectiveName(connective) =>
+        connective.parseStatement(remainingLine, connectiveDefinitions)
       case _ =>
-        throw new Exception("Could not read statement\n" + s)
+        throw ParseException.withMessage(s"Unrecognised statement type $statementType", line.fullLine)
     }
   }
 
   def parseList(
-    text: String,
+    line: PartialLine,
     statementDefinitions: Seq[Connective],
     statementsSoFar: Seq[Statement] = Nil
-  ): (Seq[Statement], String) = {
-    val (statement, textAfterStatement) = parse(text, statementDefinitions)
-    textAfterStatement.splitByWhitespace(2) match {
-      case Seq("&", remainingText) =>
+  ): (Seq[Statement], PartialLine) = {
+    val (statement, lineAfterStatement) = parse(line, statementDefinitions)
+    lineAfterStatement match {
+      case WordAndRemainingText("&", remainingText) =>
         parseList(remainingText, statementDefinitions, statementsSoFar :+ statement)
       case _ =>
-        (statementsSoFar :+ statement, textAfterStatement)
+        (statementsSoFar :+ statement, lineAfterStatement)
     }
   }
 }

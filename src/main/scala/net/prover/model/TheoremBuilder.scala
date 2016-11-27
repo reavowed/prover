@@ -2,6 +2,8 @@ package net.prover.model
 
 import net.prover.model.TheoremBuilder.Fantasy
 
+import scala.util.control.NonFatal
+
 trait TheoremBuildable[T <: TheoremBuildable[T]] {
   def steps: Seq[Step]
   def fantasyOption: Option[Fantasy]
@@ -45,13 +47,29 @@ trait TheoremBuildable[T <: TheoremBuildable[T]] {
   def resolveReference(reference: String): Statement = {
     val fantasyReference = "f\\.(.+)".r
     val stepReference = "(\\d+)".r
-    reference match {
-      case fantasyReference(innerReference) =>
-        fantasyOption.getOrElse(throw new Exception("No fantasy to reference")).resolveReference(innerReference)
-      case stepReference(IntParser(number)) =>
-        steps(number - 1).statement
+    try {
+      reference match {
+        case fantasyReference(innerReference) =>
+          fantasyOption
+            .getOrElse(throw ReferenceResolveException(reference, "No fantasy to reference"))
+            .resolveReference(innerReference)
+        case stepReference(IntParser(number)) =>
+          steps.lift(number - 1)
+            .getOrElse(throw ReferenceResolveException(reference, "Step index out of range"))
+            .statement
+        case _ =>
+          resolveSpecificReference.lift(reference)
+            .getOrElse(throw ReferenceResolveException(reference, "Unrecognised reference format"))
+      }
+    } catch {
+      case e: ReferenceResolveException =>
+        throw e.copy(reference = reference)
+      case NonFatal(other) =>
+        throw ReferenceResolveException(reference, "unexpected error")
     }
   }
+
+  protected def resolveSpecificReference: PartialFunction[String, Statement]
 }
 
 case class TheoremBuilder(
@@ -64,14 +82,12 @@ case class TheoremBuilder(
 
   override protected def withStep(step: Step): TheoremBuilder = copy(steps = steps :+ step)
   override protected def withFantasy(fantasyOption: Option[Fantasy]): TheoremBuilder = copy(fantasyOption = fantasyOption)
-
-  override def resolveReference(reference: String): Statement = {
-    val hypothesisReference = "h(\\d+)".r
-    reference match {
-      case hypothesisReference(IntParser(number)) =>
-        hypotheses(number - 1)
-      case _ =>
-        super.resolveReference(reference)
+  override protected def resolveSpecificReference: PartialFunction[String, Statement] = {
+    val hypothesisReference = "h(\\d+)".r;
+    {
+      case reference @ hypothesisReference(IntParser(number)) =>
+        hypotheses.lift(number - 1)
+          .getOrElse(throw ReferenceResolveException(reference, "Step index out of range"))
     }
   }
 }
@@ -82,17 +98,11 @@ object TheoremBuilder {
       steps: Seq[Step] = Nil,
       fantasyOption: Option[Fantasy] = None)
     extends TheoremBuildable[Fantasy] {
-
     override protected def withStep(step: Step): Fantasy = copy(steps = steps :+ step)
     override protected def withFantasy(fantasyOption: Option[Fantasy]): Fantasy = copy(fantasyOption = fantasyOption)
-
-    override def resolveReference(reference: String): Statement = {
-      reference match {
-        case "h" =>
-          hypothesis
-        case _ =>
-          super.resolveReference(reference)
-      }
+    override protected def resolveSpecificReference: PartialFunction[String, Statement] = {
+      case "h" =>
+        hypothesis
     }
   }
 }

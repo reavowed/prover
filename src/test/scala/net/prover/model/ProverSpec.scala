@@ -9,6 +9,12 @@ trait ProverSpec extends Specification {
 
   implicit def intToAtom(i: Int): Atom = Atom(i)
 
+  implicit def stringToPartialLine(s: String): PartialLine = PartialLine(s, BookLine(s, 1))
+
+  implicit def stringsToLines(strings: Seq[String]): Seq[BookLine] = {
+    strings.zipWithIndex.map((BookLine.apply _).tupled)
+  }
+
   implicit class TheoremBuilderOps(theoremBuilder: TheoremBuilder) {
     def addStep(statement: Statement): TheoremBuilder = theoremBuilder.addStep(Step(statement))
   }

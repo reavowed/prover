@@ -16,7 +16,10 @@ package object model {
   }
 
   object WordAndRemainingText {
-    def unapply(line: String): Option[(String, String)] = {
+    def unapply(line: PartialLine): Option[(String, PartialLine)] = {
+      Some(line.splitFirstWord)
+    }
+    def unapply(line: BookLine): Option[(String, PartialLine)] = {
       Some(line.splitFirstWord)
     }
   }
