@@ -18,7 +18,18 @@ proverApp.component('book', {
     });
     $scope.setChosenTheorem = function(chosenTheorem) {
       $scope.chosenTheorem = chosenTheorem;
-    }
+    };
+    var theoremPanelColumn = $('.theoremPanelColumn');
+    var theoremPanel = $('.theoremPanel');
+    $(window).scroll(function() {
+      if ($(window).scrollTop() > theoremPanelColumn.offset().top) {
+        theoremPanel
+          .addClass('fixed')
+          .css({'top': $(window).scrollTop() - theoremPanelColumn.offset().top + 10});
+      } else {
+        theoremPanel.removeClass('fixed');
+      }
+    });
   }]
 });
 

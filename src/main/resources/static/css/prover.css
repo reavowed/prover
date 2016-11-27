@@ -19,8 +19,18 @@
     margin-left: 10px;
 }
 
+.theoremPanelColumn {
+    position: relative;
+}
+
 .theoremPanel {
     padding: 20px 50px;
+}
+
+.theoremPanel.fixed {
+    position: absolute;
+    top: 10px;
+    width: calc(100% - 30px);
 }
 
 .proofSection {
