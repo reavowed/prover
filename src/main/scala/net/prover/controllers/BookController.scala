@@ -9,6 +9,6 @@ class BookController {
 
   @GetMapping(Array(""))
   def get: Book = {
-    Book.fromFile("propositionalLogic.book")
+    Book.fromFile("propositionalCalculus.book")
   }
 }

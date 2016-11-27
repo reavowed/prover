@@ -1,0 +1,371 @@
+book Propositional Calculus
+
+chapter Implication and Negation
+We start by introducing our two fundamental connectives, → and ¬, and proving some basic facts about them.
+
+comment Our first connective is '→', or implication. It is a binary connective, which means it has two substatements.
+connective implies → 2
+comment This should be read "α implies β", or "if α then β".
+
+comment We now introduce our first rules of inference. The first is a basic one, referred to internally as "restate":
+rule restate 1 ⇒ 1
+comment This rule is more of a proof assistant than a deep fact about logic. It simply says that if we have proved a statement  then we may re-use it later in the proof.
+
+comment Our second rule is more interesting, and is half of the definition of '→'.
+rule introduceImplication 1 ⊢ 2 ⇒ implies 1 2
+comment In other words, if by assuming α we can deduce β, then we can deduce α → β directly. This rule is called "Implication Introduction".
+
+comment We can illustrate these two rules with our first theorem.
+theorem imp-ref Implication is Reflexive
+assume 1
+  restate f.h
+introduceImplication 1
+qed
+comment We start by assuming α. We then apply the first rule of inference to re-assert it. We then apply the second rule of inference: since by assuming α we have shown α, it follows that 'α → α' can be deduced with no assumptions at all.
+
+comment Our next rule of inference completes the definition of '→'.
+rule eliminateImplication implies 1 2 & 1 ⇒ 2
+comment This is called "Implication Elimination", and lets us eliminate an '→' if we already know the first part (or antecedent), and deduce the second part (or consequent) on its own. Our next theorem demonstrates its use.
+
+theorem imp-trans Implication is Transitive
+hypothesis implies 1 2
+hypothesis implies 2 3
+assume 1
+  eliminateImplication h1 f.h
+  eliminateImplication h2 f.1
+introduceImplication 2
+qed
+
+connective not ¬ 1
+rule introduceNegation 1 ⊢ 2 & not 2 ⇒ not 1
+rule eliminateNegation not not 1 ⇒ 1
+
+theorem double-not Double Negation Introduction
+hypothesis 1
+assume not 1
+  restate h1
+  restate f.h
+introduceNegation 1 2
+qed
+
+theorem any-imp-true Anything Implies a True Statement
+hypothesis 1
+assume 2
+  restate h1
+introduceImplication 1
+qed
+
+theorem false-imp-any A False Statement Implies Anything
+hypothesis not 1
+assume 1
+  assume not 2
+    restate f.h
+    restate h1
+  introduceNegation 1 2
+  eliminateNegation f.1
+introduceImplication 2
+qed
+
+theorem false-imp-any-2 A False Statement Implies Anything (2)
+hypothesis 1
+double-not h1
+false-imp-any 1 2
+qed
+
+theorem contraposition Contraposition
+hypothesis implies 1 2
+assume not 2
+  assume 1
+    eliminateImplication h1 f.f.h
+    restate f.h
+  introduceNegation 1 2
+introduceImplication 1
+qed
+
+theorem contradiction Proof by Contradiction
+hypothesis implies 1 2
+hypothesis implies 1 not 2
+assume 1
+  eliminateImplication h1 f.h
+  eliminateImplication h2 f.h
+introduceNegation 1 2
+qed
+
+theorem cases Proof by Cases
+hypothesis implies 1 2
+hypothesis implies not 1 2
+contraposition h1
+contraposition h2
+contradiction 1 2
+eliminateNegation 3
+qed
+
+chapter Conjunction and Disjunction
+We introduce two more connectives, ∧ (conjunction, or 'and') and ∨ (disjunction, or 'or'). These will not be defined with introduction and elimination rules, but in terms of the two fundamental connectives → and ¬. We can then prove introduction and elimination rules for them as theorems.
+
+connective and ∧ 2
+definition and not implies 1 not 2
+
+theorem introduce-and Introduce Conjunction
+hypothesis 1
+hypothesis 2
+assume implies 1 not 2
+  restate h2
+  eliminateImplication f.h h1
+introduceNegation 1 2
+definition-and 1
+qed
+
+theorem eliminate-and-l Eliminate Conjunction (Left)
+hypothesis and 1 2
+assume not 1
+  false-imp-any f.h not 2
+  definition-and h1
+introduceNegation 1 2
+eliminateNegation 1
+qed
+
+theorem eliminate-and-r Eliminate Conjunction (Right)
+hypothesis and 1 2
+assume not 2
+  any-imp-true f.h 1
+  definition-and h1
+introduceNegation 1 2
+eliminateNegation 1
+qed
+
+theorem flip-and Reverse Conjunction
+hypothesis and 1 2
+eliminate-and-l h1
+eliminate-and-r h1
+introduce-and 2 1
+qed
+
+connective or ∨ 2
+definition or implies not 1 2
+
+theorem or-left Introduce Disjunction (Left)
+hypothesis 1
+false-imp-any-2 h1 2
+definition-or 1
+qed
+
+theorem or-right Introduce Disjunction (Right)
+hypothesis 2
+any-imp-true h1 not 1
+definition-or 1
+qed
+
+theorem eliminate-or Eliminate Disjunction
+hypothesis implies 1 3
+hypothesis implies 2 3
+hypothesis or 1 2
+definition-or h3
+imp-trans 1 h2
+cases h1 2
+qed
+
+theorem introduce-or Combine Cases
+hypothesis implies 1 3
+hypothesis implies 2 3
+assume or 1 2
+  definition-or f.h
+  imp-trans f.1 h2
+  cases h1 f.2
+introduceImplication 3
+qed
+
+theorem flip-or Reverse Disjunction
+hypothesis or 1 2
+introduceImplication or-right 1 2
+introduceImplication or-left 2 1
+introduce-or 1 2
+eliminateImplication 3 h1
+qed
+
+theorem excluded-middle Law of the Excluded Middle
+imp-ref not 1
+definition-or 1
+qed
+
+theorem non-contradiction Law of Non-Contradiction
+assume and 1 not 1
+definition-and f.h
+introduceImplication double-not 1
+introduceNegation 2 1
+qed
+
+chapter Equivalence
+We introduce our final connective, ↔ (equivalence).
+
+connective equiv ↔ 2
+definition equiv and implies 1 2 implies 2 1
+
+theorem equiv-forward Implication from Equivalence
+hypothesis equiv 1 2
+definition-equiv h1
+eliminate-and-l 1
+qed
+
+theorem equiv-converse Converse from Equivalence
+hypothesis equiv 1 2
+definition-equiv h1
+eliminate-and-r 1
+qed
+
+theorem introduce-equiv Equivalence from Implication and Converse
+hypothesis implies 1 2
+hypothesis implies 2 1
+introduce-and h1 h2
+definition-equiv 1
+qed
+
+theorem flip-equiv Reverse Equivalence
+hypothesis equiv 1 2
+definition-equiv h1
+flip-and 1
+definition-equiv 2
+qed
+
+theorem equiv-imp-ant Equivalence of Implication Antecedent
+hypothesis equiv 1 2
+assume implies 1 3
+  equiv-converse h1
+  imp-trans f.1 f.h
+introduceImplication 2
+assume implies 2 3
+  equiv-forward h1
+  imp-trans f.1 f.h
+introduceImplication 2
+introduce-equiv 1 2
+qed
+
+theorem equiv-imp-con Equivalence of Implication Consequent
+hypothesis equiv 1 2
+assume implies 3 1
+  equiv-forward h1
+  imp-trans f.h f.1
+introduceImplication 2
+assume implies 3 2
+  equiv-converse h1
+  imp-trans f.h f.1
+introduceImplication 2
+introduce-equiv 1 2
+qed
+
+theorem equiv-not Equivalence of Negation
+hypothesis equiv 1 2
+equiv-forward h1
+equiv-converse h1
+contraposition 2
+contraposition 1
+introduce-equiv 3 4
+qed
+
+chapter Propositional Logic Identities
+Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
+
+theorem equiv-refl Equivalence is Reflexive
+imp-ref 1
+introduce-and 1 1
+definition-equiv 2
+qed
+
+theorem equiv-trans Equivalence is Transitive
+hypothesis equiv 1 2
+hypothesis equiv 2 3
+equiv-forward h1
+equiv-forward h2
+imp-trans 1 2
+equiv-converse h2
+equiv-converse h1
+imp-trans 4 5
+introduce-equiv 3 6
+qed
+
+theorem equiv-sym Equivalence is Symmetric
+introduceImplication flip-equiv 1 2
+introduceImplication flip-equiv 2 1
+introduce-equiv 1 2
+qed
+
+theorem and-sym Conjunction is Symmetric
+introduceImplication flip-and 1 2
+introduceImplication flip-and 2 1
+introduce-equiv 1 2
+qed
+
+theorem or-sym Disjunction is Symmetric
+introduceImplication flip-or 1 2
+introduceImplication flip-or 2 1
+introduce-equiv 1 2
+qed
+
+theorem and-assoc Conjunction is Associative
+assume and 1 and 2 3
+  eliminate-and-r f.h
+  eliminate-and-l f.h
+  eliminate-and-l f.1
+  eliminate-and-r f.1
+  introduce-and f.2 f.3
+  introduce-and f.5 f.4
+introduceImplication 6
+assume and and 1 2 3
+  eliminate-and-l f.h
+  eliminate-and-l f.1
+  eliminate-and-r f.1
+  eliminate-and-r f.h
+  introduce-and f.3 f.4
+  introduce-and f.2 f.5
+introduceImplication 6
+introduce-equiv 1 2
+qed
+
+theorem or-assoc Disjunction is Associative
+introduceImplication or-left 1 2
+introduceImplication or-right 2 1
+introduceImplication or-left or 1 2 3
+imp-trans 1 3
+imp-trans 2 3
+introduceImplication or-right 3 or 1 2
+introduce-or 5 6
+introduce-or 4 7
+introduceImplication or-left 2 3
+introduceImplication or-right 3 2
+introduceImplication or-right or 2 3 1
+introduceImplication or-left 1 or 2 3
+imp-trans 9 11
+imp-trans 10 11
+introduce-or 12 13
+introduce-or 15 14
+introduce-equiv 8 16
+qed
+
+theorem and-idem Conjunction is Idempotent
+assume 1
+  introduce-and f.h f.h
+introduceImplication 1
+introduceImplication eliminate-and-r 1 1
+introduce-equiv 1 2
+qed
+
+theorem or-idem Disjunction is Idempotent
+introduceImplication or-right 1 1
+imp-ref 1
+introduce-or 2 2
+introduce-equiv 1 3
+qed
+
+theorem double-not-equiv Double Negation is No Negation At All
+introduceImplication double-not 1
+assume not not 1
+  eliminateNegation f.h
+introduceImplication 1
+introduce-equiv 1 2
+qed
+
+theorem de-morgan De Morgan's Law
+assume and 1 2
+definition-and f.h
+introduceImplication 1
+qed
