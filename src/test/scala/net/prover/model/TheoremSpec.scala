@@ -10,12 +10,13 @@ class TheoremSpec extends ProverSpec {
     lines: Seq[String],
     rules: Seq[Rule] = Nil,
     connectives: Seq[Connective] = Nil,
-    definitions: Seq[Definition] = Nil
+    definitions: Seq[Definition] = Nil,
+    theorems: Seq[Theorem] = Nil
   ): Theorem = {
     Theorem.parse(
       firstLine,
       lines,
-      Book("", rules = rules, connectives = connectives, definitions = definitions)
+      Book("", rules = rules, connectives = connectives, definitions = definitions, theorems = theorems)
     )._1
   }
 
@@ -62,6 +63,50 @@ class TheoremSpec extends ProverSpec {
         Seq(Negation, Implication, Conjunction),
         Seq(Definition(Conjunction, Negation(Implication(1, Negation(2))))))
       theorem.result mustEqual Negation(Implication(1, Negation(2)))
+    }
+
+    "parse a theorem with a previous theorem application" in {
+      val previousTheorem = Theorem(
+        "false-imp-any",
+        "A False Statement Implies Anything",
+        Seq(1),
+        Nil,
+        Implication(Negation(1), 2))
+
+      val theorem = parseTheorem(
+        "or-left Disjunction from Left",
+        Seq(
+          "hypothesis 1",
+          "false-imp-any h1 2",
+          "definition-or 1",
+          "qed"),
+        Nil,
+        Seq(Negation, Implication, Disjunction),
+        Seq(Definition(Disjunction, Implication(Negation(1), 2))),
+        Seq(previousTheorem))
+      theorem.result mustEqual Disjunction(1, 2)
+
+    }
+  }
+
+  "theorem" should {
+    "apply to a theorem that matches its hypotheses" in {
+      val theorem = Theorem("contra", "Contrapositive", Seq(Implication(1, 2)), Nil, Implication(Negation(2), Negation(1)))
+      val theoremBuilder = TheoremBuilder().addStep(Implication(1, 2))
+      val updatedTheoremBuilder = theorem.applyToTheorem(theoremBuilder, "1", Book(""))
+      updatedTheoremBuilder.steps(1).statement mustEqual Implication(Negation(2), Negation(1))
+    }
+
+    "apply to a theorem that matches its hypotheses with a free statement variable" in {
+      val theorem = Theorem(
+        "false-imp-all",
+        "A False Statement Implies Everything",
+        Seq(Negation(1)),
+        Nil,
+        Implication(1, 2))
+      val theoremBuilder = TheoremBuilder().addStep(Negation(1))
+      val updatedTheoremBuilder = theorem.applyToTheorem(theoremBuilder, "1 not 2", Book("", connectives = Seq(Negation)))
+      updatedTheoremBuilder.steps(1).statement mustEqual Implication(1, Negation(2))
     }
   }
 

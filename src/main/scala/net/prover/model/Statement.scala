@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
 trait Statement extends JsonSerializable.Base {
+  def atoms: Seq[Int]
   def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]]
   def replace(map: Map[Int, Statement]): Statement
   def html: String
@@ -20,6 +21,7 @@ trait Statement extends JsonSerializable.Base {
 }
 
 case class Atom(i: Int) extends Statement {
+  override def atoms = Seq(i)
   override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = {
     Some(Map(i -> otherStatement))
   }
@@ -30,6 +32,7 @@ case class Atom(i: Int) extends Statement {
 }
 
 case class ConnectiveStatement(substatements: Seq[Statement], connective: Connective) extends Statement {
+  override def atoms = substatements.flatMap(_.atoms).distinct
   override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = {
     otherStatement match {
       case ConnectiveStatement(otherSubstatements, `connective`) =>

@@ -10,7 +10,7 @@ case class DirectRule(
   override def applyToTheorem(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
     val matchAttempts = premises.mapFold(line) { (lineSoFar, premise) =>
       lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r))).swap
-    }
+    }._2
     val matchResult = Statement.mergeMatchAttempts(matchAttempts)
       .getOrElse(throw ParseException.withMessage("Could not match rule premises", line.fullLine))
     val statement = conclusion.replace(matchResult)
@@ -28,7 +28,7 @@ case class FantasyRule(
     theoremBuilder.replaceFantasy { fantasy =>
       val matchAttempts = hypothesis.attemptMatch(fantasy.hypothesis) +: premises.mapFold(line) { (lineSoFar, premise) =>
         lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(fantasy.resolveReference(r))).swap
-      }
+      }._2
       val matchResult = Statement.mergeMatchAttempts(matchAttempts)
         .getOrElse(throw ParseException.withMessage("Could not match rule premises", line.fullLine))
       val statement = conclusion.replace(matchResult)

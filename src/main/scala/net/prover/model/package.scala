@@ -30,12 +30,12 @@ package object model {
   }
 
   implicit class SeqOps[T](x: Seq[T]) {
-    def mapFold[S, U](initial: S)(f: (S, T) => (S, U)): Seq[U] = {
+    def mapFold[S, U](initial: S)(f: (S, T) => (S, U)): (S, Seq[U]) = {
       x.foldLeft((initial, Seq.empty[U])) {
         case ((previous, list), element) =>
           f(previous, element).mapRight(list :+ _)
       }
-    }._2
+    }
   }
 
   implicit class SeqOptionsOps[T](x: Seq[Option[T]]) {

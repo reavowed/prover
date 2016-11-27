@@ -2,7 +2,27 @@ package net.prover.model
 
 import scala.util.control.NonFatal
 
-case class Theorem(name: String, title: String, hypotheses: Seq[Statement], steps: Seq[Step], result: Statement)
+case class Theorem(
+    name: String,
+    title: String,
+    hypotheses: Seq[Statement],
+    steps: Seq[Step],
+    result: Statement)
+  extends TheoremLineParser {
+
+  override def applyToTheorem(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
+    val (remainingLine, matchAttempts) = hypotheses.mapFold(line) { (lineSoFar, premise) =>
+      lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r))).swap
+    }
+    val matchResult = Statement.mergeMatchAttempts(matchAttempts)
+      .getOrElse(throw ParseException.withMessage(s"Could not match theorem hypotheses", line.fullLine))
+    val expandedMatch = result.atoms.diff(matchResult.keys.toSeq).mapFold(remainingLine) { (lineSoFar, missingAtom) =>
+      Statement.parse(lineSoFar, book.connectives).swap.mapRight(missingAtom -> _)
+    }._2.toMap ++ matchResult
+    val statement = result.replace(expandedMatch)
+    theoremBuilder.addStep(Step(statement))
+  }
+}
 
 trait TheoremLineParser {
   def name: String
@@ -36,7 +56,7 @@ object Theorem extends BookEntryParser[Theorem] {
       theoremBuilder: TheoremBuilder
     ): TheoremBuilder = {
       try {
-        val parsers = Seq(HypothesisParser, FantasyHypothesisParser) ++ book.rules ++ book.definitions
+        val parsers = Seq(HypothesisParser, FantasyHypothesisParser) ++ book.rules ++ book.definitions ++ book.theorems
         val (lineType, restOfLine) = line.splitFirstWord
         val parser = parsers.find(_.name == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
         parser.applyToTheorem(theoremBuilder, restOfLine, book)
