@@ -27,7 +27,7 @@ class TheoremSpec extends ProverSpec {
         Seq(
           "assume 1",
           "restate f.h",
-          "introduceImplication 1",
+          "introduceImplication f.1",
           "qed"),
         Seq(restate, introduceImplication),
         Seq(Implication))
@@ -44,8 +44,8 @@ class TheoremSpec extends ProverSpec {
           "eliminateImplication h1 f.f.h",
           "eliminateImplication f.h f.f.h",
           "eliminateImplication f.f.1 f.f.2",
-          "introduceImplication 3",
-          "introduceImplication 1",
+          "introduceImplication f.f.3",
+          "introduceImplication f.1",
           "qed"),
         Seq(restate, introduceImplication, eliminateImplication),
         Seq(Implication))

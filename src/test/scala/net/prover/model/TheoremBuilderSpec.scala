@@ -38,7 +38,7 @@ class TheoremBuilderSpec extends ProverSpec {
     "handle assumption discharging rule with premise" in {
       val rule = FantasyRule("introduceImplication", Atom(1), Seq(Atom(2)), Implication(Atom(1), Atom(2)))
       val theoremBuilder = TheoremBuilder().addFantasy(Atom(1)).addStep(Step(Atom(2)))
-      val updatedTheoremBuilder = rule.applyToTheorem(theoremBuilder, "1", Book(""))
+      val updatedTheoremBuilder = rule.applyToTheorem(theoremBuilder, "f.1", Book(""))
       updatedTheoremBuilder.steps mustEqual Seq(Step(Implication(Atom(1), Atom(2)), Some(Step.Fantasy(Atom(1), Seq(Step(Atom(2)))))))
       updatedTheoremBuilder.fantasyOption must beNone
     }
