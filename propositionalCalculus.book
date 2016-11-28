@@ -20,7 +20,7 @@ comment We start by assuming α. But then we certainly already know α itself, s
 
 comment Our next rule of inference completes the definition of '→'.
 rule eliminateImplication implies 1 2 & 1 ⇒ 2
-comment This is called "Implication Elimination", and lets us eliminate an '→' if we already know the first part (or antecedent), and deduce the second part (or consequent) on its own. Our next theorem demonstrates its use.
+comment This rule is called "Implication Elimination" within the system of natural deduction that we are using, but is more commonly known as "Modus Ponens". Our next theorem demonstrates its use.
 
 theorem imp-trans Implication is Transitive
 hypothesis implies 1 2
@@ -280,6 +280,24 @@ qed
 
 chapter Propositional Logic Identities
 Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
+
+theorem and-defn Conjunction is Equivalent to Its Definition
+introduceImplication definition-and and 1 2
+introduceImplication definition-and not implies 1 not 2
+introduce-equiv 1 2
+qed
+
+theorem or-defn Disjunction is Equivalent to Its Definition
+introduceImplication definition-or or 1 2
+introduceImplication definition-or implies not 1 2
+introduce-equiv 1 2
+qed
+
+theorem equiv-defn Equivalence is Equivalent to Its Definition
+introduceImplication definition-equiv equiv 1 2
+introduceImplication definition-equiv and implies 1 2 implies 2 1
+introduce-equiv 1 2
+qed
 
 theorem and-sym Conjunction is Symmetric
 introduceImplication flip-and 1 2
