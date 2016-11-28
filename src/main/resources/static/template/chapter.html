@@ -33,26 +33,29 @@
             </div>
         </div>
         <div ng-switch-when="theorem">
-            <div class="result" data-toggle="collapse" data-target="#proof-{{entry.name}}">
-                <div>Theorem: {{entry.title}}</div>
-                <div class="theoremStatement">
-                    <span ng-if="entry.hypotheses.length">
+            <div class="result" data-toggle="collapse" data-target="#{{entry.name}}-proof, #{{entry.name}}-summary">
+                <div class="theoremTitle">Theorem: {{entry.title}}</div>
+                <div id="{{entry.name}}-summary" class="theoremSummary collapse in">
+                    <div ng-if="entry.hypotheses.length">
                         Suppose
                         <span ng-if="entry.hypotheses.length > 1">
                             {{entry.hypotheses.slice(0, entry.hypotheses.length - 1).join(", ")}}
                             and
                         </span>
                         {{entry.hypotheses[entry.hypotheses.length - 1]}}.
-                        <br/>
-                        Then
-                    </span>
-                    {{entry.result}}.
-                </div>
-                <div class="collapse" id="proof-{{entry.name}}">
-                    <label>Proof</label>
-                    <div class="theoremProof">
-                        <step step="step" ng-repeat="step in entry.steps"></step>
                     </div>
+                    <div>
+                        <span ng-if="entry.hypotheses.length">Then</span>
+                        {{entry.result}}.
+                    </div>
+                </div>
+                <div id="{{entry.name}}-proof" class="theoremProof collapse">
+                    <div ng-if="entry.hypotheses.length">
+                        <label>Hypotheses</label>
+                        <div ng-repeat="hypothesis in entry.hypotheses" class="theoremHypothesis">{{hypothesis}}</div>
+                        <label>Proof</label>
+                    </div>
+                    <step step="step" ng-repeat="step in entry.steps"></step>
                 </div>
             </div>
         </div>
