@@ -1,7 +1,7 @@
 <div class="book" ng-show="book">
     <h3>{{book.title}}</h3>
     <div class="chapter" ng-repeat="chapter in book.chapters">
-        <h4><a href="#/chapters/{{chapter.key}}">{{chapter.title}}</a></h4>
+        <h4><a href="#/{{book.key}}/{{chapter.key}}">{{chapter.title}}</a></h4>
         <p>{{chapter.summary}}</p>
     </div>
 </div>

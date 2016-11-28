@@ -13,6 +13,7 @@ package object model {
       case Seq(word) =>
         (word, "")
     }
+    def formatAsKey: String = splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase).mkString("-")
   }
 
   object WordAndRemainingText {
@@ -31,9 +32,9 @@ package object model {
     def optionMapRight[R](f: T => Option[R]): Option[(S, R)] = f(tuple._2).map((tuple._1, _))
   }
 
-  implicit class SeqOps[T](x: Seq[T]) {
+  implicit class SeqOps[T](seq: Seq[T]) {
     def mapFold[S, U](initial: S)(f: (S, T) => (S, U)): (S, Seq[U]) = {
-      x.foldLeft((initial, Seq.empty[U])) {
+      seq.foldLeft((initial, Seq.empty[U])) {
         case ((previous, list), element) =>
           f(previous, element).mapRight(list :+ _)
       }

@@ -1,7 +1,8 @@
 package net.prover.model
 
+import java.io.File
 import java.nio.charset.StandardCharsets
-import java.nio.file.{Files, Paths}
+import java.nio.file.Files
 
 case class Book(
   title: String,
@@ -9,7 +10,9 @@ case class Book(
   connectives: Seq[Connective] = Nil,
   rules: Seq[Rule] = Nil,
   theorems: Seq[Theorem] = Nil,
-  definitions: Seq[Definition] = Nil)
+  definitions: Seq[Definition] = Nil) {
+  val key = title.formatAsKey
+}
 
 case class BookLine(text: String, number: Int) {
   def splitFirstWord: (String, PartialLine) = {
@@ -48,28 +51,82 @@ object Book {
     }
   }
 
-  def parse(s: String): Book = {
-    val lines = s.lines.zipWithIndex.map {
-      case (line, index) => BookLine(line, index + 1)
-    }.filter(!_.text.isEmpty).filter(!_.text.startsWith("#")).toList
-    lines match {
-      case firstLine +: otherLines =>
-        val book = firstLine match {
-          case WordAndRemainingText("book", remainingLine) =>
-            val title = remainingLine.remainingText
-            Book(title)
-          case _ =>
-            throw ParseException.withMessage("First line of book must be a book definition", firstLine)
-        }
-        addLinesToBook(otherLines, book)
+  private def readImports(nextLines: Seq[BookLine], imports: Seq[String] = Nil): (Seq[String], Seq[BookLine]) = {
+    nextLines match {
+      case WordAndRemainingText("import", PartialLine(importTitle, _)) +: remainingLines =>
+        readImports(remainingLines, imports :+ importTitle)
       case _ =>
-        throw new Exception("Book must at least have a title line")
+        (imports, nextLines)
     }
   }
 
-  def fromFile(pathText: String): Book = {
-    val path = Paths.get(pathText)
-    val bookText = new String(Files.readAllBytes(path), StandardCharsets.UTF_8)
-    parse(bookText)
+  private case class PreParsedBook(title: String, imports: Seq[String], lines: Seq[BookLine])
+
+  private def preparseBooks(bookFiles: Seq[File]): Seq[PreParsedBook] = {
+    bookFiles.map { file =>
+      val bookText = new String(Files.readAllBytes(file.toPath), StandardCharsets.UTF_8)
+      val lines = bookText.lines.zipWithIndex.map {
+        case (line, index) => BookLine(line, index + 1)
+      }.filter(!_.text.isEmpty).filter(!_.text.startsWith("#")).toList
+      val (title, linesAfterTitle) = lines match {
+        case WordAndRemainingText("book", PartialLine(bookTitle, _)) +: remainingLines =>
+          (bookTitle, remainingLines)
+        case _ =>
+          throw new Exception("Book must start with a title line")
+      }
+      val (imports, linesAfterImports) = readImports(linesAfterTitle)
+      PreParsedBook(title, imports, linesAfterImports)
+    }
+  }
+
+  private def parseBook(
+    book: PreParsedBook,
+    dependentBooks: Seq[PreParsedBook],
+    otherBooks: Seq[PreParsedBook],
+    parsedBooks: Seq[Book]
+  ): (Seq[Book], Seq[PreParsedBook]) = {
+    book.imports.foldLeft[Either[Seq[Book], String]](Left(Nil)) {
+      case (Left(books), title) =>
+        parsedBooks.find(_.title == title).map(b => Left(books :+ b)).getOrElse(Right(title))
+      case (r @ Right(_), _) =>
+        r
+    } match {
+      case Left(dependencies) =>
+        val parsedBook = addLinesToBook(book.lines, Book(book.title))
+        dependentBooks match {
+          case dependentBook +: otherDependentBooks =>
+            parseBook(dependentBook, otherDependentBooks, otherBooks, parsedBook +: parsedBooks)
+          case Nil =>
+            (parsedBooks :+ parsedBook, otherBooks)
+        }
+      case Right(title) =>
+        otherBooks.partition(_.title == title) match {
+          case (Seq(dependency), otherOtherBooks) =>
+            parseBook(dependency, book +: dependentBooks, otherOtherBooks, parsedBooks)
+          case (Nil, _) =>
+            dependentBooks.find(_.title == title) match {
+              case Some(_) =>
+                throw new Exception(s"Circular dependency detected in book '$title'")
+              case None =>
+                throw new Exception(s"Unrecognised book '$title'")
+            }
+        }
+    }
+  }
+
+  private def parseBooks(books: Seq[PreParsedBook], parsedBooks: Seq[Book] = Nil): Seq[Book] = {
+    books match {
+      case Nil =>
+        parsedBooks
+      case book +: otherBooks =>
+        val (moreParsedBooks, remainingUnparsedBooks) = parseBook(book, Nil, otherBooks, parsedBooks)
+        parseBooks(remainingUnparsedBooks, moreParsedBooks)
+    }
+  }
+
+  def fromDirectory(pathName: String): Seq[Book] = {
+    val bookFiles = Option(new File(".").listFiles()).get.filter(_.getPath.endsWith(".book"))
+    val preparsedBooks = preparseBooks(bookFiles)
+    parseBooks(preparsedBooks)
   }
 }

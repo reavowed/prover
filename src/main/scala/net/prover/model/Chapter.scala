@@ -3,7 +3,7 @@ package net.prover.model
 import scala.util.control.NonFatal
 
 case class Chapter(title: String, summary: String, entries: Seq[ChapterEntry] = Nil) {
-  val key = title.splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase).mkString("-")
+  val key = title.formatAsKey
 }
 
 trait ChapterEntry {

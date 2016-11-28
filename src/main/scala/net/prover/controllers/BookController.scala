@@ -4,11 +4,13 @@ import net.prover.model.Book
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 
 @RestController
-@RequestMapping(Array("/book"))
+@RequestMapping(Array("/books"))
 class BookController {
 
+  def books = Book.fromDirectory(".")
+
   @GetMapping(Array(""))
-  def get: Book = {
-    Book.fromFile("propositionalCalculus.book")
+  def get = {
+    books
   }
 }
