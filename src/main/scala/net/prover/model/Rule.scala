@@ -1,6 +1,6 @@
 package net.prover.model
 
-trait Rule extends ChapterEntry with TheoremLineParser {
+sealed trait Rule extends ChapterEntry with TheoremLineParser {
   val `type` = "rule"
 }
 
@@ -8,15 +8,16 @@ case class DirectRule(
     name: String,
     premises: Seq[Statement],
     conclusion: Statement)
-  extends Rule {
-  override def applyToTheorem(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
-    val matchAttempts = premises.mapFold(line) { (lineSoFar, premise) =>
+  extends Rule with DirectStepParser {
+  override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): (Step, PartialLine) = {
+    val (matchAttempts, lineAfterPremises) = premises.mapFold(line) { (lineSoFar, premise) =>
       lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r))).swap
-    }._2
+    }.swap
     val matchResult = Statement.mergeMatchAttempts(matchAttempts)
       .getOrElse(throw ParseException.withMessage("Could not match rule premises", line.fullLine))
     val statement = conclusion.replace(matchResult)
-    theoremBuilder.addStep(Step(statement))
+    val step = Step(statement)
+    (step, lineAfterPremises)
   }
 }
 
@@ -26,7 +27,7 @@ case class FantasyRule(
     premises: Seq[Statement],
     conclusion: Statement)
   extends Rule {
-  override def applyToTheorem(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
+  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
     def withTheorem = line.splitFirstWord.optionMapLeft(n => book.theorems.find(_.name == n)) map {
       case (theorem, restOfLine) =>
         applyWithPreviousTheorem(theorem, theoremBuilder, restOfLine, book)
