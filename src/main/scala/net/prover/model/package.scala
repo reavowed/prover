@@ -27,6 +27,8 @@ package object model {
   implicit class TupleOps[S,T](tuple: (S, T)) {
     def mapLeft[R](f: S => R): (R, T) = (f(tuple._1), tuple._2)
     def mapRight[R](f: T => R): (S, R) = (tuple._1, f(tuple._2))
+    def optionMapLeft[R](f: S => Option[R]): Option[(R, T)] = f(tuple._1).map((_, tuple._2))
+    def optionMapRight[R](f: T => Option[R]): Option[(S, R)] = f(tuple._2).map((tuple._1, _))
   }
 
   implicit class SeqOps[T](x: Seq[T]) {

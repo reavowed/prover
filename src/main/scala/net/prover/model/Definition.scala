@@ -10,10 +10,14 @@ case class Definition(connective: Connective, definingStatement: Statement) exte
   override def applyToTheorem(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
     val (reference, _) = line.splitFirstWord
     val referredStatement = theoremBuilder.resolveReference(reference)
-    val replacedStatement = definedStatement.attemptMatch(referredStatement).map(definingStatement.replace)
-        .orElse(definingStatement.attemptMatch(referredStatement).map(definedStatement.replace))
-        .getOrElse(throw new Exception(s"Could not apply definition to statement '$referredStatement'"))
+    val replacedStatement = applyToStatement(referredStatement)
     theoremBuilder.addStep(Step(replacedStatement))
+  }
+
+  def applyToStatement(statement: Statement): Statement = {
+    definedStatement.attemptMatch(statement).map(definingStatement.replace)
+      .orElse(definingStatement.attemptMatch(statement).map(definedStatement.replace))
+      .getOrElse(throw new Exception(s"Could not apply definition to statement '$statement'"))
   }
 }
 
