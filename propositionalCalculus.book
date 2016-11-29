@@ -92,8 +92,7 @@ qed
 chapter Conjunction and Disjunction
 We introduce two more connectives, ∧ (conjunction, or 'and') and ∨ (disjunction, or 'or'). These will not be defined with introduction and elimination rules, but in terms of the two fundamental connectives → and ¬. We can then prove introduction and elimination rules for them as theorems.
 
-connective and ∧ 2
-definition and not implies 1 not 2
+connective and ∧ 2 not implies 1 not 2
 
 theorem introduce-and Introduce Conjunction
 hypothesis 1
@@ -129,8 +128,7 @@ eliminate-and-r h1
 introduce-and 2 1
 qed
 
-connective or ∨ 2
-definition or implies not 1 2
+connective or ∨ 2 implies not 1 2
 
 theorem or-left Introduce Disjunction (Left)
 hypothesis 1
@@ -186,8 +184,7 @@ qed
 chapter Equivalence
 We introduce our final connective, ↔ (equivalence).
 
-connective equiv ↔ 2
-definition equiv and implies 1 2 implies 2 1
+connective equiv ↔ 2 and implies 1 2 implies 2 1
 
 theorem equiv-forward Implication from Equivalence
 hypothesis equiv 1 2

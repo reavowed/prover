@@ -55,11 +55,10 @@ class TheoremBuilderSpec extends ProverSpec {
 
     "handle assumption discharging rule applied to definition" in {
       val rule = FantasyRule("introduceImplication", Atom(1), Seq(Atom(2)), Implication(Atom(1), Atom(2)))
-      val definition = Definition(Disjunction, Implication(Negation(1), 2))
       val theoremBuilder = rule.readAndUpdateTheoremBuilder(
         TheoremBuilder(),
         "definition-or or not 1 2",
-        defaultContext.copy(definitions = Seq(definition)))
+        defaultContext)
       theoremBuilder.steps mustEqual Seq(Step(
         Implication(
           Disjunction(Negation(1), 2),

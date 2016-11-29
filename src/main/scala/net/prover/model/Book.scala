@@ -33,11 +33,12 @@ case class PartialLine(remainingText: String, fullLine: BookLine) {
   def splitWords: Seq[String] = {
     remainingText.splitByWhitespace()
   }
+  def nonEmpty: Boolean = remainingText.nonEmpty
 }
 
 object Book {
 
-  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, Connective, Quantifier, Predicate, Definition, Rule, Theorem)
+  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, Connective, Quantifier, Predicate, Rule, Theorem)
 
   private def addLinesToBook(lines: Seq[BookLine], book: Book): Book = {
     lines match {

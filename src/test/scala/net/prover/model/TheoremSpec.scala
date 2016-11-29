@@ -10,13 +10,12 @@ class TheoremSpec extends ProverSpec {
     lines: Seq[String],
     rules: Seq[Rule] = Nil,
     connectives: Seq[Connective] = Nil,
-    definitions: Seq[Definition] = Nil,
     theorems: Seq[Theorem] = Nil
   ): Theorem = {
     Theorem.parse(
       firstLine,
       lines,
-      defaultContext.copy(rules = rules, connectives = connectives, definitions = definitions, theorems = theorems)
+      defaultContext.copy(rules = rules, connectives = connectives, theorems = theorems)
     )._1
   }
 
@@ -60,8 +59,7 @@ class TheoremSpec extends ProverSpec {
           "definition-and h1",
           "qed"),
         Seq(restate, introduceImplication, eliminateImplication),
-        Seq(Negation, Implication, Conjunction),
-        Seq(Definition(Conjunction, Negation(Implication(1, Negation(2))))))
+        Seq(Negation, Implication, Conjunction))
       theorem.result mustEqual Negation(Implication(1, Negation(2)))
     }
 
@@ -82,7 +80,6 @@ class TheoremSpec extends ProverSpec {
           "qed"),
         Nil,
         Seq(Negation, Implication, Disjunction),
-        Seq(Definition(Disjunction, Implication(Negation(1), 2))),
         Seq(previousTheorem))
       theorem.result mustEqual Disjunction(1, 2)
 

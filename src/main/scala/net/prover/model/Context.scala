@@ -5,8 +5,7 @@ case class Context(
     quantifiers: Seq[Quantifier],
     predicates: Seq[Predicate],
     rules: Seq[Rule],
-    theorems: Seq[Theorem],
-    definitions: Seq[Definition]) {
+    theorems: Seq[Theorem]) {
 
   def +(other: Context): Context = {
     Context(
@@ -14,11 +13,10 @@ case class Context(
       quantifiers ++ other.quantifiers,
       predicates ++ other.predicates,
       rules ++ other.rules,
-      theorems ++ other.theorems,
-      definitions ++ other.definitions)
+      theorems ++ other.theorems)
   }
 }
 
 object Context {
-  val empty = Context(Nil, Nil, Nil, Nil, Nil, Nil)
+  val empty = Context(Nil, Nil, Nil, Nil, Nil)
 }

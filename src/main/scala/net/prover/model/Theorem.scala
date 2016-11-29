@@ -71,7 +71,10 @@ object Theorem extends ChapterEntryParser[Theorem] {
       theoremBuilder: TheoremBuilder
     ): TheoremBuilder = {
       try {
-        val parsers = Seq(HypothesisParser, FantasyHypothesisParser) ++ context.rules ++ context.definitions ++ context.theorems
+        val parsers = Seq(HypothesisParser, FantasyHypothesisParser) ++
+          context.rules ++
+          context.connectives.flatMap(_.definition) ++
+          context.theorems
         val (lineType, restOfLine) = line.splitFirstWord
         val parser = parsers.find(_.name == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
         parser.readAndUpdateTheoremBuilder(theoremBuilder, restOfLine, context)

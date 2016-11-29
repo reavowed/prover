@@ -32,7 +32,7 @@ case class FantasyRule(
       case (theorem, restOfLine) =>
         applyWithPreviousTheorem(theorem, theoremBuilder, restOfLine, context)
     }
-    def withDefinition = line.splitFirstWord.optionMapLeft(n => context.definitions.find(_.name == n)) map {
+    def withDefinition = line.splitFirstWord.optionMapLeft(n => context.connectives.flatMap(_.definition).find(_.name == n)) map {
       case (definition, restOfLine) =>
         applyWithDefinition(definition, theoremBuilder, restOfLine, context)
     }

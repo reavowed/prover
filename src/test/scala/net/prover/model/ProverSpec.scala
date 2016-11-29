@@ -3,10 +3,10 @@ package net.prover.model
 import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {
-  val Implication = Connective("implies", "→", 2)
-  val Negation = Connective("not", "¬", 1)
-  val Conjunction = Connective("and", "∧", 2)
-  val Disjunction = Connective("or", "∨", 2)
+  val Implication = Connective("implies", "→", 2, None)
+  val Negation = Connective("not", "¬", 1, None)
+  val Conjunction = Connective("and", "∧", 2, Some(Negation(Implication(1, Negation(2)))))
+  val Disjunction = Connective("or", "∨", 2, Some(Implication(Negation(1), 2)))
 
   val ForAll = Quantifier("∀")
 
@@ -15,8 +15,7 @@ trait ProverSpec extends Specification {
     quantifiers = Seq(ForAll),
     predicates = Nil,
     rules = Nil,
-    theorems = Nil,
-    definitions = Nil)
+    theorems = Nil)
 
   implicit def intToAtom(i: Int): Atom = Atom(i)
 

@@ -4,8 +4,15 @@ import org.specs2.matcher.Matcher
 
 class ConnectiveSpec extends ProverSpec {
   "connective parser" should {
-    "parse a binary connective" in {
-      Connective.parse("implies → 2", defaultContext)  mustEqual Implication
+    "parse a connective with no definition" in {
+      Connective.parse("implies → 2", Context.empty)  mustEqual Connective("implies", "→", 2, None)
+    }
+
+    "parse a connective with a definition" in {
+      Connective.parse(
+        "and ∧ 2 not implies 1 not 2",
+        Context.empty.copy(connectives = Seq(Implication, Negation))
+      ) mustEqual Connective("and", "∧", 2, Some(Negation(Implication(1, Negation(2)))))
     }
   }
 
@@ -30,6 +37,17 @@ class ConnectiveSpec extends ProverSpec {
     "parse nested statements" in {
       Implication.parseStatement("1 not 2", defaultContext) must
         beStatementAndLine(Implication(1, Negation(2)), "")
+    }
+
+    "apply definition to a theorem with the connective" in {
+      val theorem = TheoremBuilder().addStep(Conjunction(Implication(1, 2), 3))
+      val updatedTheorem = Conjunction.definition.get.readAndUpdateTheoremBuilder(theorem, "1", defaultContext)
+      updatedTheorem.steps(1).statement mustEqual Negation(Implication(Implication(1, 2), Negation(3)))
+    }
+    "apply definition to a theorem with the defining statement" in {
+      val theorem = TheoremBuilder().addStep(Negation(Implication(Implication(1, 2), Negation(3))))
+      val updatedTheorem = Conjunction.definition.get.readAndUpdateTheoremBuilder(theorem, "1", defaultContext)
+      updatedTheorem.steps(1).statement mustEqual Conjunction(Implication(1, 2), 3)
     }
   }
 }
