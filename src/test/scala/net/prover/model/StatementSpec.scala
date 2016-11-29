@@ -14,6 +14,11 @@ class StatementSpec extends ProverSpec {
       Statement.parse("implies implies 1 2 3", defaultContext)._1
         .mustEqual(Implication(Implication(Atom(1), Atom(2)), Atom(3)))
     }
+
+    "parse a quantified statement" in {
+      Statement.parse("∀ 2 3", defaultContext)._1 mustEqual
+        ForAll(2, 3)
+    }
   }
 
   "statement match" should {

@@ -58,6 +58,16 @@ case class ConnectiveStatement(substatements: Seq[Statement], connective: Connec
   override def safeHtml = if (substatements.length == 1) html else "(" + html + ")"
 }
 
+case class QuantifierStatement(term: TermVariable, statement: Statement, quantifier: Quantifier) extends Statement {
+  override def atoms: Seq[Int] = statement.atoms
+
+  override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = statement.attemptMatch(otherStatement)
+
+  override def replace(map: Map[Int, Statement]): Statement = copy(statement = statement.replace(map))
+
+  override def html: String = s"(${quantifier.symbol}${term.html})${statement.safeHtml}"
+}
+
 object Statement {
 
   def mergeMatchAttempts(matches: Seq[Option[Map[Int, Statement]]]): Option[Map[Int, Statement]] = {
@@ -78,12 +88,19 @@ object Statement {
         context.connectives.find(_.name == s)
       }
     }
+    object QuantifierName {
+      def unapply(s: String): Option[Quantifier] = {
+        context.quantifiers.find(_.symbol == s)
+      }
+    }
     val (statementType, remainingLine) = line.splitFirstWord
     statementType match {
-      case IntParser(i) =>
-        (Atom(i), remainingLine)
       case ConnectiveName(connective) =>
         connective.parseStatement(remainingLine, context)
+      case QuantifierName(quantifier) =>
+        quantifier.parseStatement(remainingLine, context)
+      case IntParser(i) =>
+        (Atom(i), remainingLine)
       case _ =>
         throw ParseException.withMessage(s"Unrecognised statement type $statementType", line.fullLine)
     }

@@ -76,6 +76,8 @@ object Theorem extends ChapterEntryParser[Theorem] {
         val parser = parsers.find(_.name == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
         parser.readAndUpdateTheoremBuilder(theoremBuilder, restOfLine, context)
       } catch {
+        case e: ParseException =>
+          throw e
         case NonFatal(ex) =>
           throw ParseException.fromCause(ex, line)
       }

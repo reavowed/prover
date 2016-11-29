@@ -11,6 +11,11 @@
                 Connective: {{entry.defaultStatement}}
             </div>
         </div>
+        <div ng-switch-when="quantifier">
+            <div class="result">
+                Quantifier: {{entry.defaultStatement}}
+            </div>
+        </div>
         <div ng-switch-when="definition">
             <div class="result">
                 Definition: {{entry.definedStatement}} <span class="normal">is defined to mean</span> {{entry.definingStatement}}

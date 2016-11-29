@@ -9,12 +9,13 @@ case class Book(
   dependencies: Seq[Book],
   chapters: Seq[Chapter] = Nil,
   connectives: Seq[Connective] = Nil,
+  quantifiers: Seq[Quantifier] = Nil,
   rules: Seq[Rule] = Nil,
   theorems: Seq[Theorem] = Nil,
   definitions: Seq[Definition] = Nil) {
   val key: String = title.formatAsKey
 
-  protected def localContext = Context(connectives, rules, theorems, definitions)
+  protected def localContext = Context(connectives, quantifiers, rules, theorems, definitions)
   protected def transitiveDependencies: Seq[Book] = dependencies.flatMap(_.transitiveDependencies).distinctBy(_.title) :+ this
 
   lazy val context: Context = {
@@ -38,7 +39,7 @@ case class PartialLine(remainingText: String, fullLine: BookLine) {
 
 object Book {
 
-  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, Connective, Definition, Rule, Theorem)
+  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, Connective, Quantifier, Definition, Rule, Theorem)
 
   private def addLinesToBook(lines: Seq[BookLine], book: Book): Book = {
     lines match {
