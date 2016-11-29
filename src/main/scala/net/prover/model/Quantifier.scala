@@ -27,7 +27,7 @@ object Quantifier extends SingleLineChapterEntryParser[Quantifier] {
     val (symbol, _) = line.splitFirstWord
     Quantifier(symbol)
   }
-  override def addToBook(quantifier: Quantifier, book: Book): Book = {
-    book.copy(quantifiers = book.quantifiers :+ quantifier)
+  override def addToContext(quantifier: Quantifier, context: Context): Context = {
+    context.copy(quantifiers = context.quantifiers :+ quantifier)
   }
 }

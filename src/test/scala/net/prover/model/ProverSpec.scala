@@ -13,6 +13,7 @@ trait ProverSpec extends Specification {
   val defaultContext = Context(
     connectives = Seq(Implication, Negation, Conjunction, Disjunction),
     quantifiers = Seq(ForAll),
+    predicates = Nil,
     rules = Nil,
     theorems = Nil,
     definitions = Nil)

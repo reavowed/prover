@@ -32,7 +32,7 @@ object Definition extends SingleLineChapterEntryParser[Definition] {
     val (definingStatement, _) = Statement.parse(lineAfterConnectiveName, context)
     Definition(connective, definingStatement)
   }
-  override def addToBook(definition: Definition, book: Book): Book = {
-    book.copy(definitions = book.definitions :+ definition)
+  override def addToContext(definition: Definition, context: Context): Context = {
+    context.copy(definitions = context.definitions :+ definition)
   }
 }

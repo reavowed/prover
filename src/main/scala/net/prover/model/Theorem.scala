@@ -13,8 +13,8 @@ case class Theorem(
   val `type` = "theorem"
 
   override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
-    val (lineAfterHypotheses, matchAttempts) = hypotheses.mapFold(line) { (lineSoFar, premise) =>
-      lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r))).swap
+    val (matchAttempts, lineAfterHypotheses) = hypotheses.mapFold(line) { (premise, lineSoFar) =>
+      lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r)))
     }
     val matchResult = Statement.mergeMatchAttempts(matchAttempts)
       .getOrElse(throw ParseException.withMessage(s"Could not match theorem hypotheses", line.fullLine))
@@ -31,9 +31,9 @@ trait TheoremLineParser {
   def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder
 
   def readMissingAtoms(atoms: Seq[Int], line: PartialLine, context: Context): (Map[Int, Statement], PartialLine) = {
-    atoms.mapFold(line) { (lineSoFar, missingAtom) =>
-      Statement.parse(lineSoFar, context).swap.mapRight(missingAtom -> _)
-    }.swap.mapLeft(_.toMap)
+    atoms.mapFold(line) { (missingAtom, lineSoFar) =>
+      Statement.parse(lineSoFar, context).mapLeft(missingAtom -> _)
+    }.mapLeft(_.toMap)
   }
 }
 
@@ -98,5 +98,7 @@ object Theorem extends ChapterEntryParser[Theorem] {
     }
     parseHelper(lines, TheoremBuilder())
   }
-  override def addToBook(theorem: Theorem, book: Book): Book = book.copy(theorems = book.theorems :+ theorem)
+  override def addToContext(theorem: Theorem, context: Context): Context = {
+    context.copy(theorems = context.theorems :+ theorem)
+  }
 }

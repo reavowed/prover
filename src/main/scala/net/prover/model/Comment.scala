@@ -9,5 +9,5 @@ object Comment extends SingleLineChapterEntryParser[Comment] {
   override def parse(line: PartialLine, context: Context): Comment = {
     Comment(line.remainingText)
   }
-  override def addToBook(t: Comment, book: Book): Book = book
+  override def addToContext(t: Comment, context: Context): Context = context
 }

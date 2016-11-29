@@ -28,11 +28,11 @@ case class Atom(i: Int) extends Statement {
   override def replace(map: Map[Int, Statement]): Statement = {
     map.getOrElse(i, throw new Exception(s"No replacement for atom $i"))
   }
-  override def html = (944 + i).toChar.toString
+  override def html: String = (944 + i).toChar.toString
 }
 
 case class ConnectiveStatement(substatements: Seq[Statement], connective: Connective) extends Statement {
-  override def atoms = substatements.flatMap(_.atoms).distinct
+  override def atoms: Seq[Int] = substatements.flatMap(_.atoms).distinct
   override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = {
     otherStatement match {
       case ConnectiveStatement(otherSubstatements, `connective`) =>
@@ -48,14 +48,14 @@ case class ConnectiveStatement(substatements: Seq[Statement], connective: Connec
     ConnectiveStatement(substatements.map(_.replace(map)), connective)
   }
 
-  def html = substatements match {
+  def html: String = substatements match {
     case Seq(substatement) =>
       connective.symbol + substatement.safeHtml
     case _ =>
       substatements.map(_.safeHtml).mkString(" " + connective.symbol + " ")
   }
 
-  override def safeHtml = if (substatements.length == 1) html else "(" + html + ")"
+  override def safeHtml: String = if (substatements.length == 1) html else "(" + html + ")"
 }
 
 case class QuantifierStatement(term: TermVariable, statement: Statement, quantifier: Quantifier) extends Statement {
@@ -66,6 +66,13 @@ case class QuantifierStatement(term: TermVariable, statement: Statement, quantif
   override def replace(map: Map[Int, Statement]): Statement = copy(statement = statement.replace(map))
 
   override def html: String = s"(${quantifier.symbol}${term.html})${statement.safeHtml}"
+}
+
+case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends Statement {
+  override def atoms: Seq[Int] = Nil
+  override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = Some(Map.empty)
+  override def replace(map: Map[Int, Statement]): Statement = this
+  def html: String = terms.map(_.html).mkString(" " + predicate.symbol + " ")
 }
 
 object Statement {

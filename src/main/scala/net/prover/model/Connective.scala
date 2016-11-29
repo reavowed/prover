@@ -5,10 +5,9 @@ case class Connective(name: String, symbol: String, arity: Int) extends ChapterE
   val defaultStatement: ConnectiveStatement = apply((1 to arity).map(Atom): _*)
 
   def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {
-    (1 to arity).foldLeft((Seq.empty[Statement], line)) {
-      case ((statements, lineSoFar), _) =>
-        Statement.parse(lineSoFar, context).mapLeft(statements :+ _)
-    }.mapLeft(this.apply(_: _*))
+    (1 to arity).mapFold(line) { case (_, lineSoFar) =>
+      Statement.parse(lineSoFar, context)
+    }.mapLeft(apply(_: _*))
   }
 
   def apply(substatements: Statement*): ConnectiveStatement = {
@@ -26,7 +25,7 @@ object Connective extends SingleLineChapterEntryParser[Connective] {
         throw ParseException.withMessage("Could not parse connective definition", line.fullLine)
     }
   }
-  override def addToBook(connective: Connective, book: Book): Book = {
-    book.copy(connectives = book.connectives :+ connective)
+  override def addToContext(connective: Connective, context: Context): Context = {
+    context.copy(connectives = context.connectives :+ connective)
   }
 }

@@ -34,10 +34,10 @@ package object model {
   }
 
   implicit class SeqOps[T](seq: Seq[T]) {
-    def mapFold[S, U](initial: S)(f: (S, T) => (S, U)): (S, Seq[U]) = {
-      seq.foldLeft((initial, Seq.empty[U])) {
-        case ((previous, list), element) =>
-          f(previous, element).mapRight(list :+ _)
+    def mapFold[S, U](initial: S)(f: (T, S) => (U, S)): (Seq[U], S) = {
+      seq.foldLeft((Seq.empty[U], initial)) {
+        case ((list, previous), element) =>
+          f(element, previous).mapLeft(list :+ _)
       }
     }
     def distinctBy[S](f: T => S): Seq[T] = {

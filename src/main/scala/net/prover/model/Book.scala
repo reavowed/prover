@@ -4,22 +4,20 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
+@JsonIgnoreProperties(Array("dependencies", "context", "fullContext"))
 case class Book(
   title: String,
   dependencies: Seq[Book],
   chapters: Seq[Chapter] = Nil,
-  connectives: Seq[Connective] = Nil,
-  quantifiers: Seq[Quantifier] = Nil,
-  rules: Seq[Rule] = Nil,
-  theorems: Seq[Theorem] = Nil,
-  definitions: Seq[Definition] = Nil) {
+  context: Context = Context.empty) {
   val key: String = title.formatAsKey
 
-  protected def localContext = Context(connectives, quantifiers, rules, theorems, definitions)
   protected def transitiveDependencies: Seq[Book] = dependencies.flatMap(_.transitiveDependencies).distinctBy(_.title) :+ this
 
-  lazy val context: Context = {
-    transitiveDependencies.map(_.localContext).reduce(_ + _) + localContext
+  lazy val fullContext: Context = {
+    transitiveDependencies.map(_.context).reduce(_ + _) + context
   }
 }
 
@@ -39,7 +37,7 @@ case class PartialLine(remainingText: String, fullLine: BookLine) {
 
 object Book {
 
-  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, Connective, Quantifier, Definition, Rule, Theorem)
+  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, Connective, Quantifier, Predicate, Definition, Rule, Theorem)
 
   private def addLinesToBook(lines: Seq[BookLine], book: Book): Book = {
     lines match {
@@ -50,7 +48,7 @@ object Book {
               linesAfterChapterSummary,
               book.copy(chapters = book.chapters :+ Chapter(chapterTitle, chapterSummary)))
         }
-      case (line @ WordAndRemainingText(entryType, restOfLine)) +: moreLines =>
+      case WordAndRemainingText(entryType, restOfLine) +: moreLines =>
         val parser = entryParsers.find(_.name == entryType)
           .getOrElse(throw new Exception(s"Unrecognised type '$entryType'"))
         val (updatedBook, remainingLines) = parser.parseToBook(restOfLine, moreLines, book)

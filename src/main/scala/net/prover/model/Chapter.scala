@@ -13,22 +13,24 @@ trait ChapterEntry {
 trait ChapterEntryParser[T <: ChapterEntry] {
   def name: String
   def parse(line: PartialLine, remainingLines: Seq[BookLine], context: Context): (T, Seq[BookLine])
-  def addToBook(t: T, book: Book): Book
+  def addToContext(t: T, context: Context): Context
 
   def parseToBook(
     line: PartialLine,
     remainingLines: Seq[BookLine],
     book: Book
   ): (Book, Seq[BookLine]) = {
-    parse(line, remainingLines, book.context)
+    parse(line, remainingLines, book.fullContext)
       .mapLeft { model =>
-        val updatedBook = addToBook(model, book)
-        updatedBook.copy(chapters = updatedBook.chapters match {
-          case previousChapters :+ lastChapter =>
-            previousChapters :+ lastChapter.copy(entries = lastChapter.entries :+ model)
-          case _ =>
-            throw ParseException.withMessage("First entry of book must be a chapter", line.fullLine)
-        })
+        val updatedContext = addToContext(model, book.context)
+        book.copy(
+          context = updatedContext,
+          chapters = book.chapters match {
+            case previousChapters :+ lastChapter =>
+              previousChapters :+ lastChapter.copy(entries = lastChapter.entries :+ model)
+            case _ =>
+              throw ParseException.withMessage("First entry of book must be a chapter", line.fullLine)
+          })
       }
   }
 }

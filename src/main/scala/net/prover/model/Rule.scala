@@ -10,9 +10,9 @@ case class DirectRule(
     conclusion: Statement)
   extends Rule with DirectStepParser {
   override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
-    val (matchAttempts, lineAfterPremises) = premises.mapFold(line) { (lineSoFar, premise) =>
-      lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r))).swap
-    }.swap
+    val (matchAttempts, lineAfterPremises) = premises.mapFold(line) { (premise, lineSoFar) =>
+      lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r)))
+    }
     val matchResult = Statement.mergeMatchAttempts(matchAttempts)
       .getOrElse(throw ParseException.withMessage("Could not match rule premises", line.fullLine))
     val statement = conclusion.replace(matchResult)
@@ -99,9 +99,9 @@ case class FantasyRule(
 
   private def applyWithFantasy(theoremBuilder: TheoremBuilder, line: PartialLine): TheoremBuilder = {
     theoremBuilder.replaceFantasy { fantasy =>
-      val matchAttempts = hypothesis.attemptMatch(fantasy.hypothesis) +: premises.mapFold(line) { (lineSoFar, premise) =>
-        lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r))).swap
-      }._2
+      val matchAttempts = hypothesis.attemptMatch(fantasy.hypothesis) +: premises.mapFold(line) { (premise, lineSoFar) =>
+        lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r)))
+      }._1
       val matchResult = Statement.mergeMatchAttempts(matchAttempts)
         .getOrElse(throw ParseException.withMessage("Could not match rule premises", line.fullLine))
       val statement = conclusion.replace(matchResult)
@@ -138,7 +138,7 @@ object Rule extends SingleLineChapterEntryParser[Rule] {
         throw ParseException.withMessage("Rule did not have a conclusion", line.fullLine)
     }
   }
-  override def addToBook(rule: Rule, book: Book): Book = {
-    book.copy(rules = book.rules :+ rule)
+  override def addToContext(rule: Rule, context: Context): Context = {
+    context.copy(rules = context.rules :+ rule)
   }
 }
