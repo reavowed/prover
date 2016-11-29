@@ -8,7 +8,7 @@ case class Definition(connective: Connective, definingStatement: Statement) exte
 
   override val name: String = "definition-" + connective.name
 
-  override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): (Step, PartialLine) = {
+  override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
     val (reference, lineAfterReference) = line.splitFirstWord
     val referredStatement = theoremBuilder.resolveReference(reference)
     val replacedStatement = applyToStatement(referredStatement)
@@ -25,11 +25,11 @@ case class Definition(connective: Connective, definingStatement: Statement) exte
 
 object Definition extends SingleLineChapterEntryParser[Definition] {
   override val name: String = "definition"
-  override def parse(line: PartialLine, book: Book): Definition = {
+  override def parse(line: PartialLine, context: Context): Definition = {
     val (connectiveName, lineAfterConnectiveName) = line.splitFirstWord
-    val connective = book.connectives.find(_.name == connectiveName)
+    val connective = context.connectives.find(_.name == connectiveName)
       .getOrElse(throw ParseException.withMessage(s"Unrecognised connective '$connectiveName'", line.fullLine))
-    val (definingStatement, _) = Statement.parse(lineAfterConnectiveName, book.connectives)
+    val (definingStatement, _) = Statement.parse(lineAfterConnectiveName, context)
     Definition(connective, definingStatement)
   }
   override def addToBook(definition: Definition, book: Book): Book = {

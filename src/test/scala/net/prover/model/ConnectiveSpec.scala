@@ -1,11 +1,11 @@
 package net.prover.model
 
-import org.specs2.matcher.{BeEqualTo, BeTypedEqualTo, Matcher}
+import org.specs2.matcher.Matcher
 
 class ConnectiveSpec extends ProverSpec {
   "connective parser" should {
     "parse a binary connective" in {
-      Connective.parse("implies → 2", Book(""))  mustEqual Implication
+      Connective.parse("implies → 2", defaultContext)  mustEqual Implication
     }
   }
 
@@ -17,18 +17,18 @@ class ConnectiveSpec extends ProverSpec {
     }
 
     "parse a binary connective statement from atoms" in {
-      Implication.parseStatement("1 2", Nil) must
+      Implication.parseStatement("1 2", defaultContext) must
         beStatementAndLine(Implication(1, 2), "")
     }
     "ignore extra text" in {
-      Implication.parseStatement("1 2 and 3 4", Nil) must
+      Implication.parseStatement("1 2 and 3 4", defaultContext) must
         beStatementAndLine(Implication(1, 2), "and 3 4")
     }
     "throw an exception if not enough statements are supplied" in {
-      Implication.parseStatement("1", Nil) must throwAn[Exception]
+      Implication.parseStatement("1", defaultContext) must throwAn[Exception]
     }
     "parse nested statements" in {
-      Implication.parseStatement("1 not 2", Seq(Negation)) must
+      Implication.parseStatement("1 not 2", defaultContext) must
         beStatementAndLine(Implication(1, Negation(2)), "")
     }
   }

@@ -6,12 +6,20 @@ import java.nio.file.Files
 
 case class Book(
   title: String,
+  dependencies: Seq[Book],
   chapters: Seq[Chapter] = Nil,
   connectives: Seq[Connective] = Nil,
   rules: Seq[Rule] = Nil,
   theorems: Seq[Theorem] = Nil,
   definitions: Seq[Definition] = Nil) {
-  val key = title.formatAsKey
+  val key: String = title.formatAsKey
+
+  protected def localContext = Context(connectives, rules, theorems, definitions)
+  protected def transitiveDependencies: Seq[Book] = dependencies.flatMap(_.transitiveDependencies).distinctBy(_.title) :+ this
+
+  lazy val context: Context = {
+    transitiveDependencies.map(_.localContext).reduce(_ + _) + localContext
+  }
 }
 
 case class BookLine(text: String, number: Int) {
@@ -92,7 +100,9 @@ object Book {
         r
     } match {
       case Left(dependencies) =>
-        val parsedBook = addLinesToBook(book.lines, Book(book.title))
+        val parsedBook = addLinesToBook(
+          book.lines,
+          Book(book.title, dependencies))
         dependentBooks match {
           case dependentBook +: otherDependentBooks =>
             parseBook(dependentBook, otherDependentBooks, otherBooks, parsedBook +: parsedBooks)

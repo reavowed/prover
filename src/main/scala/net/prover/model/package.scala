@@ -1,5 +1,6 @@
 package net.prover
 
+import scala.collection.mutable
 import scala.util.Try
 
 package object model {
@@ -38,6 +39,18 @@ package object model {
         case ((previous, list), element) =>
           f(previous, element).mapRight(list :+ _)
       }
+    }
+    def distinctBy[S](f: T => S): Seq[T] = {
+      val b = Seq.newBuilder[T]
+      val seen = mutable.HashSet[S]()
+      for (x <- seq) {
+        val key = f(x)
+        if (!seen(key)) {
+          b += x
+          seen += key
+        }
+      }
+      b.result()
     }
   }
 

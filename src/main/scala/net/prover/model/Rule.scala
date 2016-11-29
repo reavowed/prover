@@ -9,7 +9,7 @@ case class DirectRule(
     premises: Seq[Statement],
     conclusion: Statement)
   extends Rule with DirectStepParser {
-  override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): (Step, PartialLine) = {
+  override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
     val (matchAttempts, lineAfterPremises) = premises.mapFold(line) { (lineSoFar, premise) =>
       lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r))).swap
     }.swap
@@ -27,23 +27,23 @@ case class FantasyRule(
     premises: Seq[Statement],
     conclusion: Statement)
   extends Rule {
-  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
-    def withTheorem = line.splitFirstWord.optionMapLeft(n => book.theorems.find(_.name == n)) map {
+  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
+    def withTheorem = line.splitFirstWord.optionMapLeft(n => context.theorems.find(_.name == n)) map {
       case (theorem, restOfLine) =>
-        applyWithPreviousTheorem(theorem, theoremBuilder, restOfLine, book)
+        applyWithPreviousTheorem(theorem, theoremBuilder, restOfLine, context)
     }
-    def withDefinition = line.splitFirstWord.optionMapLeft(n => book.definitions.find(_.name == n)) map {
+    def withDefinition = line.splitFirstWord.optionMapLeft(n => context.definitions.find(_.name == n)) map {
       case (definition, restOfLine) =>
-        applyWithDefinition(definition, theoremBuilder, restOfLine, book)
+        applyWithDefinition(definition, theoremBuilder, restOfLine, context)
     }
-    withTheorem.orElse(withDefinition).getOrElse(applyWithFantasy(theoremBuilder, line, book))
+    withTheorem.orElse(withDefinition).getOrElse(applyWithFantasy(theoremBuilder, line))
   }
 
   private def applyWithPreviousTheorem(
     theorem: Theorem,
     theoremBuilder: TheoremBuilder,
     line: PartialLine,
-    book: Book
+    context: Context
   ): TheoremBuilder = {
     val theoremHypothesis = theorem.hypotheses match {
       case Seq(singleHypothesis) =>
@@ -58,7 +58,7 @@ case class FantasyRule(
         throw ParseException.withMessage("Can only apply rule to theorem if it has a single premise", line.fullLine)
     }
     val atoms = Seq(theoremHypothesis, theorem.result).flatMap(_.atoms).distinct
-    val atomMatch = readMissingAtoms(atoms, line, book)._1
+    val atomMatch = readMissingAtoms(atoms, line, context)._1
     val updatedTheoremHypothesis = theoremHypothesis.replace(atomMatch)
     val updatedTheoremResult = theorem.result.replace(atomMatch)
     val fullMatch = Statement.mergeMatchAttempts(Seq(
@@ -75,7 +75,7 @@ case class FantasyRule(
     definition: Definition,
     theoremBuilder: TheoremBuilder,
     line: PartialLine,
-    book: Book
+    context: Context
   ): TheoremBuilder = {
     val premise = premises match {
       case Seq(singlePremise) =>
@@ -84,7 +84,7 @@ case class FantasyRule(
         throw ParseException.withMessage("Can only apply rule to theorem if it has a single premise", line.fullLine)
     }
 
-    val (definitionHypothesis, _) = Statement.parse(line, book.connectives)
+    val (definitionHypothesis, _) = Statement.parse(line, context)
     val definitionResult = definition.applyToStatement(definitionHypothesis)
 
     val hypothesisMatch = hypothesis.attemptMatch(definitionHypothesis)
@@ -97,7 +97,7 @@ case class FantasyRule(
     theoremBuilder.addStep(Step(statement))
   }
 
-  def applyWithFantasy(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
+  private def applyWithFantasy(theoremBuilder: TheoremBuilder, line: PartialLine): TheoremBuilder = {
     theoremBuilder.replaceFantasy { fantasy =>
       val matchAttempts = hypothesis.attemptMatch(fantasy.hypothesis) +: premises.mapFold(line) { (lineSoFar, premise) =>
         lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r))).swap
@@ -112,14 +112,13 @@ case class FantasyRule(
 
 object Rule extends SingleLineChapterEntryParser[Rule] {
   override val name: String = "rule"
-  override def parse(line: PartialLine, book: Book): Rule = {
-    val connectives = book.connectives
+  override def parse(line: PartialLine, context: Context): Rule = {
     val (name, lineAfterName) = line.splitFirstWord
-    val (hypothesisOrPremises, lineAfterHypothesisOrPremises) = Statement.parseList(lineAfterName, connectives)
+    val (hypothesisOrPremises, lineAfterHypothesisOrPremises) = Statement.parseList(lineAfterName, context)
     val (firstSymbol, lineAfterFirstSymbol) = lineAfterHypothesisOrPremises.splitFirstWord
     firstSymbol match {
       case "⇒" =>
-        val (conclusion, _) = Statement.parse(lineAfterFirstSymbol, connectives)
+        val (conclusion, _) = Statement.parse(lineAfterFirstSymbol, context)
         DirectRule(name, hypothesisOrPremises, conclusion)
       case "⊢" =>
         val hypothesis = hypothesisOrPremises match {
@@ -128,12 +127,12 @@ object Rule extends SingleLineChapterEntryParser[Rule] {
           case _ =>
             throw ParseException.withMessage("A rule cannot discharge more than one assumption", line.fullLine)
         }
-        val (premises, textAfterPremises) = Statement.parseList(lineAfterFirstSymbol, connectives)
+        val (premises, textAfterPremises) = Statement.parseList(lineAfterFirstSymbol, context)
         val (secondSymbol, conclusionText) = textAfterPremises.splitFirstWord
         if (secondSymbol != "⇒") {
           throw ParseException.withMessage("Rule did not have a conclusion", line.fullLine)
         }
-        val (conclusion, _) = Statement.parse(conclusionText, connectives)
+        val (conclusion, _) = Statement.parse(conclusionText, context)
         FantasyRule(name, hypothesis, premises, conclusion)
       case _ =>
         throw ParseException.withMessage("Rule did not have a conclusion", line.fullLine)

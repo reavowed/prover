@@ -3,7 +3,7 @@ package net.prover.model
 import scala.util.control.NonFatal
 
 case class Chapter(title: String, summary: String, entries: Seq[ChapterEntry] = Nil) {
-  val key = title.formatAsKey
+  val key: String = title.formatAsKey
 }
 
 trait ChapterEntry {
@@ -12,7 +12,7 @@ trait ChapterEntry {
 
 trait ChapterEntryParser[T <: ChapterEntry] {
   def name: String
-  def parse(line: PartialLine, remainingLines: Seq[BookLine], book: Book): (T, Seq[BookLine])
+  def parse(line: PartialLine, remainingLines: Seq[BookLine], context: Context): (T, Seq[BookLine])
   def addToBook(t: T, book: Book): Book
 
   def parseToBook(
@@ -20,7 +20,7 @@ trait ChapterEntryParser[T <: ChapterEntry] {
     remainingLines: Seq[BookLine],
     book: Book
   ): (Book, Seq[BookLine]) = {
-    parse(line, remainingLines, book)
+    parse(line, remainingLines, book.context)
       .mapLeft { model =>
         val updatedBook = addToBook(model, book)
         updatedBook.copy(chapters = updatedBook.chapters match {
@@ -34,11 +34,11 @@ trait ChapterEntryParser[T <: ChapterEntry] {
 }
 
 trait SingleLineChapterEntryParser[T <: ChapterEntry] extends ChapterEntryParser[T] {
-  def parse(line: PartialLine, book: Book): T
+  def parse(line: PartialLine, context: Context): T
 
-  override def parse(line: PartialLine, remainingLines: Seq[BookLine], book: Book): (T, Seq[BookLine]) = {
+  override def parse(line: PartialLine, remainingLines: Seq[BookLine], context: Context): (T, Seq[BookLine]) = {
     try {
-      (parse(line, book), remainingLines)
+      (parse(line, context), remainingLines)
     } catch {
       case e: ParseException =>
         throw e

@@ -8,6 +8,12 @@ trait ProverSpec extends Specification {
   val Conjunction = Connective("and", "∧", 2)
   val Disjunction = Connective("or", "∨", 2)
 
+  val defaultContext = Context(
+    connectives = Seq(Implication, Negation, Conjunction, Disjunction),
+    rules = Nil,
+    theorems = Nil,
+    definitions = Nil)
+
   implicit def intToAtom(i: Int): Atom = Atom(i)
 
   implicit def stringToPartialLine(s: String): PartialLine = PartialLine(s, BookLine(s, 1))

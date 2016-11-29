@@ -72,10 +72,10 @@ object Statement {
     }).traverseOption.map(_.toMap)
   }
 
-  def parse(line: PartialLine, connectiveDefinitions: Seq[Connective]): (Statement, PartialLine) = {
+  def parse(line: PartialLine, context: Context): (Statement, PartialLine) = {
     object ConnectiveName {
       def unapply(s: String): Option[Connective] = {
-        connectiveDefinitions.find(_.name == s)
+        context.connectives.find(_.name == s)
       }
     }
     val (statementType, remainingLine) = line.splitFirstWord
@@ -83,7 +83,7 @@ object Statement {
       case IntParser(i) =>
         (Atom(i), remainingLine)
       case ConnectiveName(connective) =>
-        connective.parseStatement(remainingLine, connectiveDefinitions)
+        connective.parseStatement(remainingLine, context)
       case _ =>
         throw ParseException.withMessage(s"Unrecognised statement type $statementType", line.fullLine)
     }
@@ -91,13 +91,13 @@ object Statement {
 
   def parseList(
     line: PartialLine,
-    statementDefinitions: Seq[Connective],
+    context: Context,
     statementsSoFar: Seq[Statement] = Nil
   ): (Seq[Statement], PartialLine) = {
-    val (statement, lineAfterStatement) = parse(line, statementDefinitions)
+    val (statement, lineAfterStatement) = parse(line, context)
     lineAfterStatement match {
       case WordAndRemainingText("&", remainingText) =>
-        parseList(remainingText, statementDefinitions, statementsSoFar :+ statement)
+        parseList(remainingText, context, statementsSoFar :+ statement)
       case _ =>
         (statementsSoFar :+ statement, lineAfterStatement)
     }

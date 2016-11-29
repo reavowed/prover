@@ -6,7 +6,7 @@ case class Comment(text: String) extends ChapterEntry {
 
 object Comment extends SingleLineChapterEntryParser[Comment] {
   override val name: String = "comment"
-  override def parse(line: PartialLine, book: Book): Comment = {
+  override def parse(line: PartialLine, context: Context): Comment = {
     Comment(line.remainingText)
   }
   override def addToBook(t: Comment, book: Book): Book = book

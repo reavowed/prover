@@ -12,14 +12,14 @@ case class Theorem(
 
   val `type` = "theorem"
 
-  override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): (Step, PartialLine) = {
+  override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
     val (lineAfterHypotheses, matchAttempts) = hypotheses.mapFold(line) { (lineSoFar, premise) =>
       lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r))).swap
     }
     val matchResult = Statement.mergeMatchAttempts(matchAttempts)
       .getOrElse(throw ParseException.withMessage(s"Could not match theorem hypotheses", line.fullLine))
     val missingAtoms = result.atoms.diff(matchResult.keys.toSeq)
-    val (atomMatch, lineAfterAtoms) = readMissingAtoms(missingAtoms, lineAfterHypotheses, book)
+    val (atomMatch, lineAfterAtoms) = readMissingAtoms(missingAtoms, lineAfterHypotheses, context)
     val expandedMatch = atomMatch ++ matchResult
     val step = Step(result.replace(expandedMatch))
     (step, lineAfterAtoms)
@@ -28,55 +28,53 @@ case class Theorem(
 
 trait TheoremLineParser {
   def name: String
-  def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder
+  def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder
 
-  def readMissingAtoms(atoms: Seq[Int], line: PartialLine, book: Book): (Map[Int, Statement], PartialLine) = {
+  def readMissingAtoms(atoms: Seq[Int], line: PartialLine, context: Context): (Map[Int, Statement], PartialLine) = {
     atoms.mapFold(line) { (lineSoFar, missingAtom) =>
-      Statement.parse(lineSoFar, book.connectives).swap.mapRight(missingAtom -> _)
+      Statement.parse(lineSoFar, context).swap.mapRight(missingAtom -> _)
     }.swap.mapLeft(_.toMap)
   }
 }
 
 object HypothesisParser extends TheoremLineParser {
   override val name: String = "hypothesis"
-  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
-    import book.connectives
-    val (hypothesis, _) = Statement.parse(line, connectives)
+  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
+    val (hypothesis, _) = Statement.parse(line, context)
     theoremBuilder.addHypothesis(hypothesis)
   }
 }
 
 object FantasyHypothesisParser extends TheoremLineParser {
   override val name: String = "assume"
-  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
-    import book.connectives
-    val (hypothesis, _) = Statement.parse(line, connectives)
+  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
+    val (hypothesis, _) = Statement.parse(line, context)
     theoremBuilder.addFantasy(hypothesis)
   }
 }
 
 trait DirectStepParser extends TheoremLineParser {
-  def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): (Step, PartialLine)
+  def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine)
 
-  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, book: Book): TheoremBuilder = {
-    val (step, _) = readStep(theoremBuilder, line, book)
+  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
+    val (step, _) = readStep(theoremBuilder, line, context)
     theoremBuilder.addStep(step)
   }
 }
 
 object Theorem extends ChapterEntryParser[Theorem] {
   override val name: String = "theorem"
-  override def parse(firstLine: PartialLine, lines: Seq[BookLine], book: Book): (Theorem, Seq[BookLine]) = {
+  override def parse(firstLine: PartialLine, lines: Seq[BookLine], context: Context): (Theorem, Seq[BookLine]) = {
     val (name, title) = firstLine.splitFirstWord.mapRight(_.remainingText)
     def parseLine(
       line: BookLine,
       theoremBuilder: TheoremBuilder
     ): TheoremBuilder = {
       try {
-        val parsers = Seq(HypothesisParser, FantasyHypothesisParser) ++ book.rules ++ book.definitions ++ book.theorems
+        val parsers = Seq(HypothesisParser, FantasyHypothesisParser) ++ context.rules ++ context.definitions ++ context.theorems
         val (lineType, restOfLine) = line.splitFirstWord
         val parser = parsers.find(_.name == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
-        parser.readAndUpdateTheoremBuilder(theoremBuilder, restOfLine, book)
+        parser.readAndUpdateTheoremBuilder(theoremBuilder, restOfLine, context)
       } catch {
         case NonFatal(ex) =>
           throw ParseException.fromCause(ex, line)

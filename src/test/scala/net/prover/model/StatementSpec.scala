@@ -3,15 +3,15 @@ package net.prover.model
 class StatementSpec extends ProverSpec {
   "statement parser" should {
     "parse an atom" in {
-      Statement.parse("1", Nil)._1 mustEqual Atom(1)
+      Statement.parse("1", defaultContext)._1 mustEqual Atom(1)
     }
 
     "parse a binary connective" in {
-      Statement.parse("implies 1 2", Seq(Implication))._1 mustEqual ConnectiveStatement(Seq(Atom(1), Atom(2)), Implication)
+      Statement.parse("implies 1 2", defaultContext)._1 mustEqual ConnectiveStatement(Seq(Atom(1), Atom(2)), Implication)
     }
 
     "parse a nested binary connective" in {
-      Statement.parse("implies implies 1 2 3", Seq(Implication))._1
+      Statement.parse("implies implies 1 2 3", defaultContext)._1
         .mustEqual(Implication(Implication(Atom(1), Atom(2)), Atom(3)))
     }
   }

@@ -16,7 +16,7 @@ class TheoremSpec extends ProverSpec {
     Theorem.parse(
       firstLine,
       lines,
-      Book("", rules = rules, connectives = connectives, definitions = definitions, theorems = theorems)
+      defaultContext.copy(rules = rules, connectives = connectives, definitions = definitions, theorems = theorems)
     )._1
   }
 
@@ -93,7 +93,7 @@ class TheoremSpec extends ProverSpec {
     "apply to a theorem that matches its hypotheses" in {
       val theorem = Theorem("contra", "Contrapositive", Seq(Implication(1, 2)), Nil, Implication(Negation(2), Negation(1)))
       val theoremBuilder = TheoremBuilder().addStep(Implication(1, 2))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1", Book(""))
+      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1", defaultContext)
       updatedTheoremBuilder.steps(1).statement mustEqual Implication(Negation(2), Negation(1))
     }
 
@@ -105,7 +105,7 @@ class TheoremSpec extends ProverSpec {
         Nil,
         Implication(1, 2))
       val theoremBuilder = TheoremBuilder().addStep(Negation(1))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1 not 2", Book("", connectives = Seq(Negation)))
+      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1 not 2", defaultContext)
       updatedTheoremBuilder.steps(1).statement mustEqual Implication(1, Negation(2))
     }
   }
