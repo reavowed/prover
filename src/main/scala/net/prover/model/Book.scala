@@ -21,7 +21,7 @@ case class Book(
   }
 }
 
-case class BookLine(text: String, number: Int) {
+case class BookLine(text: String, number: Int, bookTitle: String) {
   def splitFirstWord: (String, PartialLine) = {
     text.splitFirstWord.mapRight(PartialLine(_, this))
   }
@@ -44,7 +44,7 @@ object Book {
     lines match {
       case WordAndRemainingText("chapter", PartialLine(chapterTitle, _)) +: linesAfterChapterDefinition =>
         linesAfterChapterDefinition match {
-          case BookLine(chapterSummary, _) +: linesAfterChapterSummary =>
+          case BookLine(chapterSummary, _, _) +: linesAfterChapterSummary =>
             addLinesToBook(
               linesAfterChapterSummary,
               book.copy(chapters = book.chapters :+ Chapter(chapterTitle, chapterSummary)))
@@ -73,16 +73,17 @@ object Book {
   private def preparseBooks(bookFiles: Seq[File]): Seq[PreParsedBook] = {
     bookFiles.map { file =>
       val bookText = new String(Files.readAllBytes(file.toPath), StandardCharsets.UTF_8)
-      val lines = bookText.lines.zipWithIndex.map {
-        case (line, index) => BookLine(line, index + 1)
-      }.filter(!_.text.isEmpty).filter(!_.text.startsWith("#")).toList
-      val (title, linesAfterTitle) = lines match {
-        case WordAndRemainingText("book", PartialLine(bookTitle, _)) +: remainingLines =>
+      val plainLinesWithIndices = bookText.lines.zipWithIndex.filter(!_._1.isEmpty).filter(!_._1.startsWith("#")).toList
+      val (title, plainLinesAfterTitle) = plainLinesWithIndices match {
+        case (WordAndRemainingText("book", bookTitle), _) +: remainingLines =>
           (bookTitle, remainingLines)
         case _ =>
           throw new Exception("Book must start with a title line")
       }
-      val (imports, linesAfterImports) = readImports(linesAfterTitle)
+      val bookLinesAfterTitle = plainLinesAfterTitle map { case(lineText, lineIndex) =>
+        BookLine(lineText, lineIndex + 1, title)
+      }
+      val (imports, linesAfterImports) = readImports(bookLinesAfterTitle)
       PreParsedBook(title, imports, linesAfterImports)
     }
   }

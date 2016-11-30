@@ -24,6 +24,9 @@ package object model {
     def unapply(line: BookLine): Option[(String, PartialLine)] = {
       Some(line.splitFirstWord)
     }
+    def unapply(str: String): Option[(String, String)] = {
+      Some(str.splitFirstWord)
+    }
   }
 
   implicit class TupleOps[S,T](tuple: (S, T)) {
