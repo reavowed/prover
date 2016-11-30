@@ -1,6 +1,6 @@
 package net.prover.model
 
-case class Connective(name: String, symbol: String, arity: Int, definingStatement: Option[Statement]) extends ChapterEntry {
+case class Connective(symbol: String, arity: Int, definingStatement: Option[Statement]) extends ChapterEntry {
   val `type` = "connective"
   val defaultStatement: ConnectiveStatement = apply((1 to arity).map(StatementVariable): _*)
 
@@ -15,7 +15,7 @@ case class Connective(name: String, symbol: String, arity: Int, definingStatemen
   }
 
   def definition: Option[Definition] = definingStatement.map { d => new Definition {
-    override val name: String = "definition-" + Connective.this.name
+    override val name: String = "definition-" + symbol
     override def definedStatement: ConnectiveStatement = defaultStatement
     override def definingStatement: Statement = d
   }}
@@ -24,8 +24,7 @@ case class Connective(name: String, symbol: String, arity: Int, definingStatemen
 object Connective extends SingleLineChapterEntryParser[Connective] {
   override val name: String = "connective"
   override def parse(line: PartialLine, context: Context): Connective = {
-    val (name, lineAfterName) = line.splitFirstWord
-    val (symbol, lineAfterSymbol) = lineAfterName.splitFirstWord
+    val (symbol, lineAfterSymbol) = line.splitFirstWord
     val (arity, lineAfterArity) = lineAfterSymbol.splitFirstWord match {
       case (IntParser(arity), lineAfterArity) =>
         (arity, lineAfterArity)
@@ -37,7 +36,7 @@ object Connective extends SingleLineChapterEntryParser[Connective] {
     } else {
       None
     }
-    Connective(name, symbol, arity, definingStatementOption)
+    Connective(symbol, arity, definingStatementOption)
   }
   override def addToContext(connective: Connective, context: Context): Context = {
     context.copy(connectives = context.connectives :+ connective)

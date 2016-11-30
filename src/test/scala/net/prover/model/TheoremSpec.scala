@@ -37,8 +37,8 @@ class TheoremSpec extends ProverSpec {
       val theorem = parseTheorem(
         "imp-distr Implication Distributes over Itself",
         Seq(
-          "hypothesis implies 1 implies 2 3",
-          "assume implies 1 2",
+          "hypothesis → 1 → 2 3",
+          "assume → 1 2",
           "assume 1",
           "eliminateImplication h1 f.f.h",
           "eliminateImplication f.h f.f.h",
@@ -55,8 +55,8 @@ class TheoremSpec extends ProverSpec {
       val theorem = parseTheorem(
         "imp-distr Implication Distributes over Itself",
         Seq(
-          "hypothesis and 1 2",
-          "definition-and h1",
+          "hypothesis ∧ 1 2",
+          "definition-∧ h1",
           "qed"),
         Seq(restate, introduceImplication, eliminateImplication),
         Seq(Negation, Implication, Conjunction))
@@ -76,7 +76,7 @@ class TheoremSpec extends ProverSpec {
         Seq(
           "hypothesis 1",
           "false-imp-any h1 2",
-          "definition-or 1",
+          "definition-∨ 1",
           "qed"),
         Nil,
         Seq(Negation, Implication, Disjunction),
@@ -102,7 +102,7 @@ class TheoremSpec extends ProverSpec {
         Nil,
         Implication(1, 2))
       val theoremBuilder = TheoremBuilder().addStep(Negation(1))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1 not 2", defaultContext)
+      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1 ¬ 2", defaultContext)
       updatedTheoremBuilder.steps(1).statement mustEqual Implication(1, Negation(2))
     }
   }

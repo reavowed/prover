@@ -5,4 +5,4 @@ chapter Set Membership and Equality
 ∈ and =
 
 predicate ∈ 2
-predicate = 2 ∀ 3 and equiv ∈ 3 1 ∈ 3 2 equiv ∈ 1 3 ∈ 2 3
+predicate = 2 ∀ 3 ∧ ↔ ∈ 3 1 ∈ 3 2 ↔ ∈ 1 3 ∈ 2 3

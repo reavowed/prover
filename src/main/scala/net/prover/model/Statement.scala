@@ -92,7 +92,7 @@ object Statement {
   def parse(line: PartialLine, context: Context): (Statement, PartialLine) = {
     object ConnectiveName {
       def unapply(s: String): Option[Connective] = {
-        context.connectives.find(_.name == s)
+        context.connectives.find(_.symbol == s)
       }
     }
     object QuantifierName {

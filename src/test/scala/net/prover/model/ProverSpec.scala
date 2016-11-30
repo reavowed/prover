@@ -3,10 +3,10 @@ package net.prover.model
 import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {
-  val Implication = Connective("implies", "→", 2, None)
-  val Negation = Connective("not", "¬", 1, None)
-  val Conjunction = Connective("and", "∧", 2, Some(Negation(Implication(1, Negation(2)))))
-  val Disjunction = Connective("or", "∨", 2, Some(Implication(Negation(1), 2)))
+  val Implication = Connective("→", 2, None)
+  val Negation = Connective("¬", 1, None)
+  val Conjunction = Connective("∧", 2, Some(Negation(Implication(1, Negation(2)))))
+  val Disjunction = Connective("∨", 2, Some(Implication(Negation(1), 2)))
 
   val ForAll = Quantifier("∀")
 

@@ -57,7 +57,7 @@ class TheoremBuilderSpec extends ProverSpec {
       val rule = FantasyRule("introduceImplication", StatementVariable(1), Seq(StatementVariable(2)), Implication(StatementVariable(1), StatementVariable(2)))
       val theoremBuilder = rule.readAndUpdateTheoremBuilder(
         TheoremBuilder(),
-        "definition-or or not 1 2",
+        "definition-∨ ∨ ¬ 1 2",
         defaultContext)
       theoremBuilder.steps mustEqual Seq(Step(
         Implication(

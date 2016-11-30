@@ -5,14 +5,14 @@ import org.specs2.matcher.Matcher
 class ConnectiveSpec extends ProverSpec {
   "connective parser" should {
     "parse a connective with no definition" in {
-      Connective.parse("implies → 2", Context.empty)  mustEqual Connective("implies", "→", 2, None)
+      Connective.parse("→ 2", Context.empty)  mustEqual Connective("→", 2, None)
     }
 
     "parse a connective with a definition" in {
       Connective.parse(
-        "and ∧ 2 not implies 1 not 2",
+        "∧ 2 ¬ → 1 ¬ 2",
         Context.empty.copy(connectives = Seq(Implication, Negation))
-      ) mustEqual Connective("and", "∧", 2, Some(Negation(Implication(1, Negation(2)))))
+      ) mustEqual Connective("∧", 2, Some(Negation(Implication(1, Negation(2)))))
     }
   }
 
@@ -28,14 +28,14 @@ class ConnectiveSpec extends ProverSpec {
         beStatementAndLine(Implication(1, 2), "")
     }
     "ignore extra text" in {
-      Implication.parseStatement("1 2 and 3 4", defaultContext) must
-        beStatementAndLine(Implication(1, 2), "and 3 4")
+      Implication.parseStatement("1 2 ∧ 3 4", defaultContext) must
+        beStatementAndLine(Implication(1, 2), "∧ 3 4")
     }
     "throw an exception if not enough statements are supplied" in {
       Implication.parseStatement("1", defaultContext) must throwAn[Exception]
     }
     "parse nested statements" in {
-      Implication.parseStatement("1 not 2", defaultContext) must
+      Implication.parseStatement("1 ¬ 2", defaultContext) must
         beStatementAndLine(Implication(1, Negation(2)), "")
     }
 
