@@ -2,7 +2,7 @@ package net.prover.model
 
 case class Quantifier(symbol: String) extends ChapterEntry {
   override val `type`: String = "quantifier"
-  val defaultStatement: Statement = apply(TermVariable(1), Atom(1))
+  val defaultStatement: Statement = apply(TermVariable(1), StatementVariable(1))
 
   def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {
     val (term, lineAterTerm) = Term.parse(line, context)

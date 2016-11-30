@@ -23,7 +23,7 @@ class ConnectiveSpec extends ProverSpec {
       }
     }
 
-    "parse a binary connective statement from atoms" in {
+    "parse a binary connective statement from statement variables" in {
       Implication.parseStatement("1 2", defaultContext) must
         beStatementAndLine(Implication(1, 2), "")
     }

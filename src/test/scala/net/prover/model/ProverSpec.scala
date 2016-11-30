@@ -17,7 +17,7 @@ trait ProverSpec extends Specification {
     rules = Nil,
     theorems = Nil)
 
-  implicit def intToAtom(i: Int): Atom = Atom(i)
+  implicit def intToStatementVariable(i: Int): StatementVariable = StatementVariable(i)
 
   implicit def intToTermVariable(i: Int): TermVariable = TermVariable(i)
 

@@ -57,10 +57,10 @@ case class FantasyRule(
       case _ =>
         throw ParseException.withMessage("Can only apply rule to theorem if it has a single premise", line.fullLine)
     }
-    val atoms = Seq(theoremHypothesis, theorem.result).flatMap(_.atoms).distinct
-    val atomMatch = readMissingAtoms(atoms, line, context)._1
-    val updatedTheoremHypothesis = theoremHypothesis.replace(atomMatch)
-    val updatedTheoremResult = theorem.result.replace(atomMatch)
+    val statementVariables = Seq(theoremHypothesis, theorem.result).flatMap(_.statementVariables).distinct
+    val statementVariableMatch = readMissingStatements(statementVariables, line, context)._1
+    val updatedTheoremHypothesis = theoremHypothesis.replace(statementVariableMatch)
+    val updatedTheoremResult = theorem.result.replace(statementVariableMatch)
     val fullMatch = Statement.mergeMatchAttempts(Seq(
       hypothesis.attemptMatch(updatedTheoremHypothesis),
       premise.attemptMatch(updatedTheoremResult))

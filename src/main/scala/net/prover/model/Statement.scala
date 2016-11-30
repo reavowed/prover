@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
 trait Statement extends JsonSerializable.Base {
-  def atoms: Seq[Int]
+  def statementVariables: Seq[Int]
   def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]]
   def replace(map: Map[Int, Statement]): Statement
   def html: String
@@ -20,19 +20,19 @@ trait Statement extends JsonSerializable.Base {
   }
 }
 
-case class Atom(i: Int) extends Statement {
-  override def atoms = Seq(i)
+case class StatementVariable(i: Int) extends Statement {
+  override def statementVariables = Seq(i)
   override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = {
     Some(Map(i -> otherStatement))
   }
   override def replace(map: Map[Int, Statement]): Statement = {
-    map.getOrElse(i, throw new Exception(s"No replacement for atom $i"))
+    map.getOrElse(i, throw new Exception(s"No replacement for statement variable $i"))
   }
   override def html: String = (944 + i).toChar.toString
 }
 
 case class ConnectiveStatement(substatements: Seq[Statement], connective: Connective) extends Statement {
-  override def atoms: Seq[Int] = substatements.flatMap(_.atoms).distinct
+  override def statementVariables: Seq[Int] = substatements.flatMap(_.statementVariables).distinct
   override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = {
     otherStatement match {
       case ConnectiveStatement(otherSubstatements, `connective`) =>
@@ -59,7 +59,7 @@ case class ConnectiveStatement(substatements: Seq[Statement], connective: Connec
 }
 
 case class QuantifierStatement(term: TermVariable, statement: Statement, quantifier: Quantifier) extends Statement {
-  override def atoms: Seq[Int] = statement.atoms
+  override def statementVariables: Seq[Int] = statement.statementVariables
 
   override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = statement.attemptMatch(otherStatement)
 
@@ -69,7 +69,7 @@ case class QuantifierStatement(term: TermVariable, statement: Statement, quantif
 }
 
 case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends Statement {
-  override def atoms: Seq[Int] = Nil
+  override def statementVariables: Seq[Int] = Nil
   override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = Some(Map.empty)
   override def replace(map: Map[Int, Statement]): Statement = this
   def html: String = terms.map(_.html).mkString(" " + predicate.symbol + " ")
@@ -114,7 +114,7 @@ object Statement {
       case PredicateName(predicate) =>
         predicate.parseStatement(remainingLine, context)
       case IntParser(i) =>
-        (Atom(i), remainingLine)
+        (StatementVariable(i), remainingLine)
       case _ =>
         throw ParseException.withMessage(s"Unrecognised statement type $statementType", line.fullLine)
     }
