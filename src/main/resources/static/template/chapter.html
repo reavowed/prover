@@ -45,6 +45,13 @@
                 </div>
             </div>
         </div>
+        <div ng-switch-when="axiom">
+            <div class="result">
+                Axiom: {{entry.title}}
+                <br>
+                {{entry.statement}}
+            </div>
+        </div>
         <div ng-switch-when="theorem">
             <div class="result" data-toggle="collapse" data-target="#{{entry.name}}-proof, #{{entry.name}}-summary">
                 <div class="theoremTitle">Theorem: {{entry.title}}</div>

@@ -8,11 +8,17 @@ package object model {
     def splitByWhitespace(max: Int = 0): Seq[String] = {
       s.trim.split("\\s+", max).toSeq
     }
-    def splitFirstWord: (String, String) = splitByWhitespace(2) match {
-      case Seq(word, remainingText) =>
-        (word, remainingText)
-      case Seq(word) =>
-        (word, "")
+    def splitFirstWord: (String, String) = {
+      if (s.startsWith("\"")) {
+        s.tail.span(_ != '"').mapRight(_.tail.trim())
+      } else {
+        splitByWhitespace(2) match {
+          case Seq(word, remainingText) =>
+            (word, remainingText)
+          case Seq(word) =>
+            (word, "")
+        }
+      }
     }
     def formatAsKey: String = splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase).mkString("-")
   }
@@ -32,6 +38,7 @@ package object model {
   implicit class TupleOps[S,T](tuple: (S, T)) {
     def mapLeft[R](f: S => R): (R, T) = (f(tuple._1), tuple._2)
     def mapRight[R](f: T => R): (S, R) = (tuple._1, f(tuple._2))
+    def mapBoth[U, R](f: S => U, g: T => R): (U, R) = (f(tuple._1), g(tuple._2))
     def optionMapLeft[R](f: S => Option[R]): Option[(R, T)] = f(tuple._1).map((_, tuple._2))
     def optionMapRight[R](f: T => Option[R]): Option[(S, R)] = f(tuple._2).map((tuple._1, _))
   }

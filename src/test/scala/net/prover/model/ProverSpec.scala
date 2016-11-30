@@ -7,16 +7,19 @@ trait ProverSpec extends Specification {
   val Negation = Connective("¬", 1, None)
   val Conjunction = Connective("∧", 2, Some(Negation(Implication(1, Negation(2)))))
   val Disjunction = Connective("∨", 2, Some(Implication(Negation(1), 2)))
+  val Equivalence = Connective("↔", 2, None)
 
   val ForAll = Quantifier("∀")
+  val ElementOf = Predicate("∈", 2, None)
   val Equals = Predicate("=", 2, None)
 
   val defaultContext = Context(
-    connectives = Seq(Implication, Negation, Conjunction, Disjunction),
+    connectives = Seq(Implication, Negation, Conjunction, Disjunction, Equivalence),
     quantifiers = Seq(ForAll),
-    predicates = Seq(Equals),
+    predicates = Seq(ElementOf, Equals),
     rules = Nil,
-    theorems = Nil)
+    theorems = Nil,
+    axioms = Nil)
 
   implicit def intToStatementVariable(i: Int): StatementVariable = StatementVariable(i)
 
