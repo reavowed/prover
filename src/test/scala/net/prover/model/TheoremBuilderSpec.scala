@@ -3,21 +3,21 @@ package net.prover.model
 class TheoremBuilderSpec extends ProverSpec {
   "theorem builder" should {
     "handle simple direct rule" in {
-      val rule = DirectRule("restate", Seq(StatementVariable(1)), StatementVariable(1))
+      val rule = DirectRule("restate", Seq(StatementVariable(1)), StatementVariable(1), Nil)
       val theoremBuilder = TheoremBuilder().addHypothesis(StatementVariable(1))
       val updatedTheoremBuilder = rule.readAndUpdateTheoremBuilder(theoremBuilder, "h1", defaultContext)
       updatedTheoremBuilder.steps mustEqual Seq(Step(StatementVariable(1)))
     }
 
     "handle direct rule referencing fantasy hypothesis" in {
-      val rule = DirectRule("restate", Seq(StatementVariable(1)), StatementVariable(1))
+      val rule = DirectRule("restate", Seq(StatementVariable(1)), StatementVariable(1), Nil)
       val theoremBuilder = TheoremBuilder().addFantasy(StatementVariable(1))
       val updatedTheoremBuilder = rule.readAndUpdateTheoremBuilder(theoremBuilder, "f.h", defaultContext)
       updatedTheoremBuilder.fantasyOption.get.steps mustEqual Seq(Step(StatementVariable(1)))
     }
 
     "handle simple direct rule with a more complicated match" in {
-      val rule = DirectRule("restate", Seq(StatementVariable(1)), StatementVariable(1))
+      val rule = DirectRule("restate", Seq(StatementVariable(1)), StatementVariable(1), Nil)
       val theoremBuilder = TheoremBuilder().addHypothesis(Conjunction(StatementVariable(1), StatementVariable(2)))
       val updatedTheoremBuilder = rule.readAndUpdateTheoremBuilder(theoremBuilder, "h1", defaultContext)
       updatedTheoremBuilder.steps mustEqual Seq(Step(Conjunction(StatementVariable(1), StatementVariable(2))))
@@ -67,7 +67,7 @@ class TheoremBuilderSpec extends ProverSpec {
     }
 
     "handle rule with a substitution in the conclusion" in {
-      val rule = DirectRule("eliminateAll", Seq(ForAll(1, 1)), StatementVariableWithReplacement(1, 2, 1))
+      val rule = DirectRule("eliminateAll", Seq(ForAll(1, 1)), StatementVariableWithReplacement(1, 2, 1), Nil)
       val theoremBuilder = rule.readAndUpdateTheoremBuilder(
         TheoremBuilder().addStep(ForAll(2, Equals(2, 1))),
         "1 3",

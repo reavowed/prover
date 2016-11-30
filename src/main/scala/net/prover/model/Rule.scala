@@ -7,7 +7,8 @@ sealed trait Rule extends ChapterEntry with TheoremLineParser {
 case class DirectRule(
     id: String,
     premises: Seq[Statement],
-    conclusion: Statement)
+    conclusion: Statement,
+    freeVariables: Seq[TermVariable])
   extends Rule with DirectStepParser {
   override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
     val (premiseMatchAttempts, lineAfterPremises) = premises.mapFold(line) { (premise, lineSoFar) =>
@@ -113,14 +114,21 @@ case class FantasyRule(
 
 object Rule extends SingleLineChapterEntryParser[Rule] {
   override val name: String = "rule"
+
   override def parse(line: PartialLine, context: Context): Rule = {
     val (id, lineAfterName) = line.splitFirstWord
     val (hypothesisOrPremises, lineAfterHypothesisOrPremises) = Statement.parseList(lineAfterName, context)
     val (firstSymbol, lineAfterFirstSymbol) = lineAfterHypothesisOrPremises.splitFirstWord
     firstSymbol match {
       case "⇒" =>
-        val (conclusion, _) = Statement.parse(lineAfterFirstSymbol, context)
-        DirectRule(id, hypothesisOrPremises, conclusion)
+        val (conclusion, lineAfterConclusion) = Statement.parse(lineAfterFirstSymbol, context)
+        val freeVariables = lineAfterConclusion match {
+          case WordAndRemainingText("|", lineAfterPipe) =>
+            Term.parseList(lineAfterPipe, context)._1.map(Term.asVariable)
+          case _ =>
+            Nil
+        }
+        DirectRule(id, hypothesisOrPremises, conclusion, freeVariables)
       case "⊢" =>
         val hypothesis = hypothesisOrPremises match {
           case Seq(singleHypothesis) =>

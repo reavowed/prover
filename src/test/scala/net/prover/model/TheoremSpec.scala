@@ -1,9 +1,9 @@
 package net.prover.model
 
 class TheoremSpec extends ProverSpec {
-  val restate = DirectRule("restate", Seq(1), 1)
+  val restate = DirectRule("restate", Seq(1), 1, Nil)
   val introduceImplication = FantasyRule("introduceImplication", 1, Seq(2), Implication(1, 2))
-  val eliminateImplication = DirectRule("eliminateImplication", Seq(Implication(1, 2), 1), 2)
+  val eliminateImplication = DirectRule("eliminateImplication", Seq(Implication(1, 2), 1), 2, Nil)
 
   def parseTheorem(
     firstLine: String,

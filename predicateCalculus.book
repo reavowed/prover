@@ -6,3 +6,4 @@ Introduce the universal quantifier.
 
 quantifier ∀
 rule eliminateAll ∀ 1 1 ⇒ sub 2 1 1
+rule introduceAll sub 2 1 1 ⇒ ∀ 1 1 | 2

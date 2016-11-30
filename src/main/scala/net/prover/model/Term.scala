@@ -49,4 +49,14 @@ object Term {
         throw ParseException.withMessage(s"Unrecognised term type '$termType'", line.fullLine)
     }
   }
+
+  def parseList(line: PartialLine, context: Context, termsSoFar: Seq[Term] = Nil): (Seq[Term], PartialLine) = {
+    val (term, lineAfterTerm) = parse(line, context)
+    lineAfterTerm match {
+      case WordAndRemainingText("&", remainingText) =>
+        parseList(remainingText, context, termsSoFar :+ term)
+      case _ =>
+        (termsSoFar :+ term, lineAfterTerm)
+    }
+  }
 }
