@@ -15,4 +15,20 @@ class AxiomSpec extends ProverSpec {
     }
   }
 
+  "axiom" should {
+    "apply directly to theorem" in {
+      val axiom = Axiom(
+        "ax-extensionality",
+        "Axiom of Extensionality",
+        ForAll(1, ForAll(2, ForAll(3, Implication(
+          Equivalence(ElementOf(3, 1), ElementOf(3, 2)),
+          Equivalence(ElementOf(1, 3), ElementOf(2, 3)))))))
+
+      axiom.readStep(TheoremBuilder(), "", defaultContext)._1.statement mustEqual
+        ForAll(1, ForAll(2, ForAll(3, Implication(
+          Equivalence(ElementOf(3, 1), ElementOf(3, 2)),
+          Equivalence(ElementOf(1, 3), ElementOf(2, 3))))))
+    }
+  }
+
 }

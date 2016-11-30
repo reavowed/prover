@@ -15,7 +15,7 @@ case class Predicate(symbol: String, arity: Int, definingStatement: Option[State
   }
 
   def definition: Option[Definition] = definingStatement.map { d => new Definition {
-    override val name: String = "definition-" + symbol
+    override val id: String = "definition-" + symbol
     override def definedStatement: Statement = defaultStatement
     override def definingStatement: Statement = d
   }}

@@ -8,6 +8,7 @@ import scala.collection.immutable.Nil
 
 trait Statement extends JsonSerializable.Base {
   def variables: Variables
+  def freeVariables: Variables
   def attemptMatch(otherStatement: Statement): Option[Match]
   def applyMatch(m: Match): Statement
   def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement
@@ -25,6 +26,7 @@ trait Statement extends JsonSerializable.Base {
 
 case class StatementVariable(i: Int) extends Statement {
   override def variables: Variables = Variables(Seq(this), Nil)
+  override def freeVariables: Variables = variables
   override def attemptMatch(otherStatement: Statement): Option[Match] = {
     Some(Match(Map(this -> otherStatement), Map.empty))
   }
@@ -43,6 +45,7 @@ case class StatementVariableWithReplacement(
     termToBeReplaced: TermVariable)
   extends Statement {
   override def variables: Variables = Variables(Seq(statementVariable), Seq(termToReplaceWith, termToBeReplaced))
+  override def freeVariables: Variables = variables
   override def attemptMatch(otherStatement: Statement): Option[Match] = {
     // TODO: match currently way too limited
     otherStatement match {
@@ -68,6 +71,7 @@ case class StatementVariableWithReplacement(
 
 case class ConnectiveStatement(substatements: Seq[Statement], connective: Connective) extends Statement {
   override def variables: Variables = substatements.map(_.variables).reduce(_ ++ _)
+  override def freeVariables: Variables = substatements.map(_.freeVariables).reduce(_ ++ _)
   override def attemptMatch(otherStatement: Statement): Option[Match] = {
     otherStatement match {
       case ConnectiveStatement(otherSubstatements, `connective`) =>
@@ -100,6 +104,7 @@ case class ConnectiveStatement(substatements: Seq[Statement], connective: Connec
 
 case class QuantifierStatement(boundVariable: TermVariable, substatement: Statement, quantifier: Quantifier) extends Statement {
   override def variables: Variables = substatement.variables + boundVariable
+  override def freeVariables: Variables = substatement.freeVariables - boundVariable
 
   override def attemptMatch(otherStatement: Statement): Option[Match] = {
     otherStatement match {
@@ -112,15 +117,7 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
     }
   }
   override def applyMatch(m: Match): Statement = {
-    val newBoundVariable = boundVariable.applyMatch(m) match {
-      case v: TermVariable =>
-        v
-      case _ =>
-        throw new Exception("Cannot replace a bound variable with a non-variable term")
-    }
-    copy(
-      boundVariable = newBoundVariable,
-      substatement = substatement.applyMatch(m))
+    copy(substatement = substatement.applyMatch(m - boundVariable))
   }
 
   override def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement = {
@@ -137,6 +134,7 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
 
 case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends Statement {
   override def variables: Variables = terms.map(_.variables).reduce(_ ++ _)
+  override def freeVariables: Variables = terms.map(_.freeVariables).reduce(_ ++ _)
   override def attemptMatch(otherStatement: Statement): Option[Match] = {
     otherStatement match {
       case PredicateStatement(otherTerms, `predicate`) =>

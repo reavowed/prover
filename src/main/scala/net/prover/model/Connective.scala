@@ -15,7 +15,7 @@ case class Connective(symbol: String, arity: Int, definingStatement: Option[Stat
   }
 
   def definition: Option[Definition] = definingStatement.map { d => new Definition {
-    override val name: String = "definition-" + symbol
+    override val id: String = "definition-" + symbol
     override def definedStatement: ConnectiveStatement = defaultStatement
     override def definingStatement: Statement = d
   }}

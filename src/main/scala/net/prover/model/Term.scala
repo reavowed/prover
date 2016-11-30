@@ -2,6 +2,7 @@ package net.prover.model
 
 trait Term {
   def variables: Variables
+  def freeVariables: Variables
   def attemptMatch(otherTerm: Term): Option[Match]
   def applyMatch(m: Match): Term
   def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Term
@@ -11,11 +12,14 @@ trait Term {
 
 case class TermVariable(i: Int) extends Term {
   override def variables: Variables = Variables(Nil, Seq(this))
+  override def freeVariables: Variables = variables
   override def attemptMatch(otherTerm: Term): Option[Match] = {
     Some(Match(Map.empty, Map(this -> otherTerm)))
   }
   override def applyMatch(m: Match): Term = {
-    m.terms.getOrElse(this, throw new Exception(s"No replacement for term variable $this"))
+    m.terms.getOrElse(
+      this,
+      throw new Exception(s"No replacement for term variable $this"))
   }
   override def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): TermVariable = {
     if (this == termToBeReplaced)

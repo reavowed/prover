@@ -3,7 +3,7 @@ package net.prover.model
 import scala.util.control.NonFatal
 
 case class Theorem(
-    name: String,
+    id: String,
     title: String,
     hypotheses: Seq[Statement],
     steps: Seq[Step],
@@ -25,7 +25,7 @@ case class Theorem(
 }
 
 trait TheoremLineParser {
-  def name: String
+  def id: String
   def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder
 
   protected def readReference(line: PartialLine, theoremBuilder: TheoremBuilder): (Statement, PartialLine) = {
@@ -44,7 +44,7 @@ trait TheoremLineParser {
 }
 
 object HypothesisParser extends TheoremLineParser {
-  override val name: String = "hypothesis"
+  override val id: String = "hypothesis"
   override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
     val (hypothesis, _) = Statement.parse(line, context)
     theoremBuilder.addHypothesis(hypothesis)
@@ -52,7 +52,7 @@ object HypothesisParser extends TheoremLineParser {
 }
 
 object FantasyHypothesisParser extends TheoremLineParser {
-  override val name: String = "assume"
+  override val id: String = "assume"
   override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
     val (hypothesis, _) = Statement.parse(line, context)
     theoremBuilder.addFantasy(hypothesis)
@@ -71,7 +71,7 @@ trait DirectStepParser extends TheoremLineParser {
 object Theorem extends ChapterEntryParser[Theorem] {
   override val name: String = "theorem"
   override def parse(firstLine: PartialLine, lines: Seq[BookLine], context: Context): (Theorem, Seq[BookLine]) = {
-    val (name, title) = firstLine.splitFirstWord.mapRight(_.remainingText)
+    val (id, title) = firstLine.splitFirstWord.mapRight(_.remainingText)
     def parseLine(
       line: BookLine,
       theoremBuilder: TheoremBuilder
@@ -81,9 +81,10 @@ object Theorem extends ChapterEntryParser[Theorem] {
           context.rules ++
           context.connectives.flatMap(_.definition) ++
           context.predicates.flatMap(_.definition) ++
-          context.theorems
+          context.theorems ++
+          context.axioms
         val (lineType, restOfLine) = line.splitFirstWord
-        val parser = parsers.find(_.name == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
+        val parser = parsers.find(_.id == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
         parser.readAndUpdateTheoremBuilder(theoremBuilder, restOfLine, context)
       } catch {
         case e: ParseException =>
@@ -99,7 +100,7 @@ object Theorem extends ChapterEntryParser[Theorem] {
           import theoremBuilder._
           if (fantasyOption.isDefined)
             throw new Exception("Cannot finish theorem with open assumption")
-          (Theorem(name, title, hypotheses, steps, steps.last.statement), nonTheoremLines)
+          (Theorem(id, title, hypotheses, steps, steps.last.statement), nonTheoremLines)
         case definitionLine +: otherLines =>
           parseHelper(otherLines, parseLine(definitionLine, theoremBuilder))
         case Nil =>

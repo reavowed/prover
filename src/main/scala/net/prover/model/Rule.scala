@@ -5,7 +5,7 @@ sealed trait Rule extends ChapterEntry with TheoremLineParser {
 }
 
 case class DirectRule(
-    name: String,
+    id: String,
     premises: Seq[Statement],
     conclusion: Statement)
   extends Rule with DirectStepParser {
@@ -23,17 +23,17 @@ case class DirectRule(
 }
 
 case class FantasyRule(
-    name: String,
+    id: String,
     hypothesis: Statement,
     premises: Seq[Statement],
     conclusion: Statement)
   extends Rule {
   override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
-    def withTheorem = line.splitFirstWord.optionMapLeft(n => context.theorems.find(_.name == n)) map {
+    def withTheorem = line.splitFirstWord.optionMapLeft(n => context.theorems.find(_.id == n)) map {
       case (theorem, restOfLine) =>
         applyWithPreviousTheorem(theorem, theoremBuilder, restOfLine, context)
     }
-    def withDefinition = line.splitFirstWord.optionMapLeft(n => context.connectives.flatMap(_.definition).find(_.name == n)) map {
+    def withDefinition = line.splitFirstWord.optionMapLeft(n => context.connectives.flatMap(_.definition).find(_.id == n)) map {
       case (definition, restOfLine) =>
         applyWithDefinition(definition, theoremBuilder, restOfLine, context)
     }
@@ -114,13 +114,13 @@ case class FantasyRule(
 object Rule extends SingleLineChapterEntryParser[Rule] {
   override val name: String = "rule"
   override def parse(line: PartialLine, context: Context): Rule = {
-    val (name, lineAfterName) = line.splitFirstWord
+    val (id, lineAfterName) = line.splitFirstWord
     val (hypothesisOrPremises, lineAfterHypothesisOrPremises) = Statement.parseList(lineAfterName, context)
     val (firstSymbol, lineAfterFirstSymbol) = lineAfterHypothesisOrPremises.splitFirstWord
     firstSymbol match {
       case "⇒" =>
         val (conclusion, _) = Statement.parse(lineAfterFirstSymbol, context)
-        DirectRule(name, hypothesisOrPremises, conclusion)
+        DirectRule(id, hypothesisOrPremises, conclusion)
       case "⊢" =>
         val hypothesis = hypothesisOrPremises match {
           case Seq(singleHypothesis) =>
@@ -134,7 +134,7 @@ object Rule extends SingleLineChapterEntryParser[Rule] {
           throw ParseException.withMessage("Rule did not have a conclusion", line.fullLine)
         }
         val (conclusion, _) = Statement.parse(conclusionText, context)
-        FantasyRule(name, hypothesis, premises, conclusion)
+        FantasyRule(id, hypothesis, premises, conclusion)
       case _ =>
         throw ParseException.withMessage("Rule did not have a conclusion", line.fullLine)
     }
