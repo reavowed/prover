@@ -192,10 +192,10 @@ object Statement {
       case IntParser(i) =>
         (StatementVariable(i), remainingLine)
       case "sub" =>
-        val (statementVariable, lineAfterStatementVariable) = parseStatementVariable(remainingLine, context)
-        val (termToReplaceWith, lineAfterFirstTerm) = Term.parse(lineAfterStatementVariable, context).mapLeft(Term.asVariable)
+        val (termToReplaceWith, lineAfterFirstTerm) = Term.parse(remainingLine, context).mapLeft(Term.asVariable)
         val (termToBeReplaced, lineAfterSecondTerm) = Term.parse(lineAfterFirstTerm, context).mapLeft(Term.asVariable)
-        (StatementVariableWithReplacement(statementVariable, termToReplaceWith, termToBeReplaced), lineAfterSecondTerm)
+        val (statementVariable, lineAfterStatement) = parseStatementVariable(lineAfterSecondTerm, context)
+        (StatementVariableWithReplacement(statementVariable, termToReplaceWith, termToBeReplaced), lineAfterStatement)
       case _ =>
         throw ParseException.withMessage(s"Unrecognised statement type $statementType", line.fullLine)
     }

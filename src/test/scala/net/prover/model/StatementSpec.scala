@@ -19,6 +19,10 @@ class StatementSpec extends ProverSpec {
       Statement.parse("∀ 2 3", defaultContext)._1 mustEqual
         ForAll(2, 3)
     }
+
+    "parse a replacement statement" in {
+      Statement.parse("sub 2 1 3", defaultContext)._1 mustEqual StatementVariableWithReplacement(3, 2, 1)
+    }
   }
 
   "statement match" should {
