@@ -9,11 +9,12 @@ trait ProverSpec extends Specification {
   val Disjunction = Connective("∨", 2, Some(Implication(Negation(1), 2)))
 
   val ForAll = Quantifier("∀")
+  val Equals = Predicate("=", 2, None)
 
   val defaultContext = Context(
     connectives = Seq(Implication, Negation, Conjunction, Disjunction),
     quantifiers = Seq(ForAll),
-    predicates = Nil,
+    predicates = Seq(Equals),
     rules = Nil,
     theorems = Nil)
 

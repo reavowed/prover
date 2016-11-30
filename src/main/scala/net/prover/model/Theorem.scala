@@ -13,16 +13,14 @@ case class Theorem(
   val `type` = "theorem"
 
   override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
-    val (matchAttempts, lineAfterHypotheses) = hypotheses.mapFold(line) { (premise, lineSoFar) =>
-      lineSoFar.splitFirstWord.mapLeft(r => premise.attemptMatch(theoremBuilder.resolveReference(r)))
+    val (matchAttempts, lineAfterHypotheses) = hypotheses.mapFold(line) { (hypothesis, lineSoFar) =>
+      readReference(lineSoFar, theoremBuilder).mapLeft(hypothesis.attemptMatch)
     }
-    val matchResult = Statement.mergeMatchAttempts(matchAttempts)
+    val matchResult = Match.mergeAttempts(matchAttempts)
       .getOrElse(throw ParseException.withMessage(s"Could not match theorem hypotheses", line.fullLine))
-    val missingStatementVariables = result.statementVariables.diff(matchResult.keys.toSeq)
-    val (missingStatementMatch, lineAfterStatements) = readMissingStatements(missingStatementVariables, lineAfterHypotheses, context)
-    val expandedMatch = missingStatementMatch ++ matchResult
-    val step = Step(result.replace(expandedMatch))
-    (step, lineAfterStatements)
+    val (expandedMatch, lineAfterMatch) = matchResult.expand(result.variables, lineAfterHypotheses, context)
+    val step = Step(result.applyMatch(expandedMatch))
+    (step, lineAfterMatch)
   }
 }
 
@@ -30,10 +28,18 @@ trait TheoremLineParser {
   def name: String
   def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder
 
-  def readMissingStatements(statementVariables: Seq[Int], line: PartialLine, context: Context): (Map[Int, Statement], PartialLine) = {
-    statementVariables.mapFold(line) { (statementVariable, lineSoFar) =>
-      Statement.parse(lineSoFar, context).mapLeft(statementVariable -> _)
-    }.mapLeft(_.toMap)
+  protected def readReference(line: PartialLine, theoremBuilder: TheoremBuilder): (Statement, PartialLine) = {
+    line.splitFirstWord.mapLeft(theoremBuilder.resolveReference)
+  }
+
+  protected def readStatement(line: PartialLine, theoremBuilder: TheoremBuilder, context: Context): (Statement, PartialLine) = {
+    val ReferenceMatcher = "r\\.(.*)".r
+    line match {
+      case WordAndRemainingText(ReferenceMatcher(reference), lineAfterReference) =>
+        (theoremBuilder.resolveReference(reference), lineAfterReference)
+      case _ =>
+        Statement.parse(line, context)
+    }
   }
 }
 
@@ -74,6 +80,7 @@ object Theorem extends ChapterEntryParser[Theorem] {
         val parsers = Seq(HypothesisParser, FantasyHypothesisParser) ++
           context.rules ++
           context.connectives.flatMap(_.definition) ++
+          context.predicates.flatMap(_.definition) ++
           context.theorems
         val (lineType, restOfLine) = line.splitFirstWord
         val parser = parsers.find(_.name == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))

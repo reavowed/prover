@@ -4,10 +4,13 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
+import scala.collection.immutable.Nil
+
 trait Statement extends JsonSerializable.Base {
-  def statementVariables: Seq[Int]
-  def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]]
-  def replace(map: Map[Int, Statement]): Statement
+  def variables: Variables
+  def attemptMatch(otherStatement: Statement): Option[Match]
+  def applyMatch(m: Match): Statement
+  def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement
   def html: String
   def safeHtml: String = html
   override def toString: String = html
@@ -21,31 +24,68 @@ trait Statement extends JsonSerializable.Base {
 }
 
 case class StatementVariable(i: Int) extends Statement {
-  override def statementVariables = Seq(i)
-  override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = {
-    Some(Map(i -> otherStatement))
+  override def variables: Variables = Variables(Seq(this), Nil)
+  override def attemptMatch(otherStatement: Statement): Option[Match] = {
+    Some(Match(Map(this -> otherStatement), Map.empty))
   }
-  override def replace(map: Map[Int, Statement]): Statement = {
-    map.getOrElse(i, throw new Exception(s"No replacement for statement variable $i"))
+  override def applyMatch(m: Match): Statement = {
+    m.statements.getOrElse(this, throw new Exception(s"No replacement for statement variable $this"))
+  }
+  def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement = {
+    StatementVariableWithReplacement(this, termToReplaceWith, termToBeReplaced)
   }
   override def html: String = (944 + i).toChar.toString
 }
 
+case class StatementVariableWithReplacement(
+    statementVariable: StatementVariable,
+    termToReplaceWith: TermVariable,
+    termToBeReplaced: TermVariable)
+  extends Statement {
+  override def variables: Variables = Variables(Seq(statementVariable), Seq(termToReplaceWith, termToBeReplaced))
+  override def attemptMatch(otherStatement: Statement): Option[Match] = {
+    // TODO: match currently way too limited
+    otherStatement match {
+      case StatementVariableWithReplacement(otherStatementVariable, `termToBeReplaced`, `termToReplaceWith`) =>
+        statementVariable.attemptMatch(otherStatementVariable)
+      case _ =>
+        None
+    }
+  }
+  override def applyMatch(m: Match): Statement = {
+    statementVariable.applyMatch(m)
+      .substituteTermVariables(
+        Term.asVariable(termToReplaceWith.applyMatch(m)),
+        Term.asVariable(termToBeReplaced.applyMatch(m)))
+  }
+
+  def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement = {
+    throw new Exception("Multiple term substitutions not currently supported")
+  }
+
+  override def html: String = s"$statementVariable[$termToReplaceWith/$termToBeReplaced]"
+}
+
 case class ConnectiveStatement(substatements: Seq[Statement], connective: Connective) extends Statement {
-  override def statementVariables: Seq[Int] = substatements.flatMap(_.statementVariables).distinct
-  override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = {
+  override def variables: Variables = substatements.map(_.variables).reduce(_ ++ _)
+  override def attemptMatch(otherStatement: Statement): Option[Match] = {
     otherStatement match {
       case ConnectiveStatement(otherSubstatements, `connective`) =>
-        Statement.mergeMatchAttempts(substatements.zip(otherSubstatements).map { case (substatement, otherSubstatement) =>
+        val matchAttempts = substatements.zip(otherSubstatements).map { case (substatement, otherSubstatement) =>
           substatement.attemptMatch(otherSubstatement)
-        })
+        }
+        Match.mergeAttempts(matchAttempts)
       case _ =>
         None
     }
   }
 
-  override def replace(map: Map[Int, Statement]): Statement = {
-    ConnectiveStatement(substatements.map(_.replace(map)), connective)
+  override def applyMatch(m: Match): Statement = {
+    copy(substatements = substatements.map(_.applyMatch(m)))
+  }
+
+  def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement = {
+    copy(substatements = substatements.map(_.substituteTermVariables(termToReplaceWith, termToBeReplaced)))
   }
 
   def html: String = substatements match {
@@ -58,35 +98,73 @@ case class ConnectiveStatement(substatements: Seq[Statement], connective: Connec
   override def safeHtml: String = if (substatements.length == 1) html else "(" + html + ")"
 }
 
-case class QuantifierStatement(term: TermVariable, statement: Statement, quantifier: Quantifier) extends Statement {
-  override def statementVariables: Seq[Int] = statement.statementVariables
+case class QuantifierStatement(boundVariable: TermVariable, substatement: Statement, quantifier: Quantifier) extends Statement {
+  override def variables: Variables = substatement.variables + boundVariable
 
-  override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = statement.attemptMatch(otherStatement)
+  override def attemptMatch(otherStatement: Statement): Option[Match] = {
+    otherStatement match {
+      case QuantifierStatement(otherBoundVariable, otherSubstatement, `quantifier`) =>
+        substatement.attemptMatch(otherSubstatement).flatMap { substatementMatch =>
+          Match.merge(Seq(substatementMatch, Match(Map.empty, Map(boundVariable -> otherBoundVariable))))
+        }
+      case _ =>
+        None
+    }
+  }
+  override def applyMatch(m: Match): Statement = {
+    val newBoundVariable = boundVariable.applyMatch(m) match {
+      case v: TermVariable =>
+        v
+      case _ =>
+        throw new Exception("Cannot replace a bound variable with a non-variable term")
+    }
+    copy(
+      boundVariable = newBoundVariable,
+      substatement = substatement.applyMatch(m))
+  }
 
-  override def replace(map: Map[Int, Statement]): Statement = copy(statement = statement.replace(map))
+  override def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement = {
+    if (termToBeReplaced == boundVariable)
+      this
+    else if (termToReplaceWith == boundVariable)
+      throw new Exception("Cannot replace free variable with bound variable in quantified statement")
+    else
+      copy(substatement = substatement.substituteTermVariables(termToReplaceWith, termToBeReplaced))
+  }
 
-  override def html: String = s"(${quantifier.symbol}${term.html})${statement.safeHtml}"
+  override def html: String = s"(${quantifier.symbol}${boundVariable.html})${substatement.safeHtml}"
 }
 
 case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends Statement {
-  override def statementVariables: Seq[Int] = Nil
-  override def attemptMatch(otherStatement: Statement): Option[Map[Int, Statement]] = Some(Map.empty)
-  override def replace(map: Map[Int, Statement]): Statement = this
+  override def variables: Variables = terms.map(_.variables).reduce(_ ++ _)
+  override def attemptMatch(otherStatement: Statement): Option[Match] = {
+    otherStatement match {
+      case PredicateStatement(otherTerms, `predicate`) =>
+        val matchAttempts = terms.zip(otherTerms).map { case (term, otherTerm) =>
+          term.attemptMatch(otherTerm)
+        }
+        Match.mergeAttempts(matchAttempts)
+      case _ =>
+        None
+    }
+  }
+  override def applyMatch(m: Match): Statement = {
+    copy(terms = terms.map(_.applyMatch(m)))
+  }
+  def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement = {
+    copy(terms = terms.map(_.substituteTermVariables(termToReplaceWith, termToBeReplaced)))
+  }
   def html: String = terms.map(_.html).mkString(" " + predicate.symbol + " ")
 }
 
 object Statement {
-
-  def mergeMatchAttempts(matches: Seq[Option[Map[Int, Statement]]]): Option[Map[Int, Statement]] = {
-    matches.traverseOption.flatMap(mergeMatches)
-  }
-
-  def mergeMatches(matches: Seq[Map[Int, Statement]]): Option[Map[Int, Statement]] = {
-    val keys = matches.map(_.keySet).fold(Set.empty)(_ ++ _).toSeq
-    keys.map(i => matches.flatMap(_.get(i)).distinct match {
-      case Seq(statement) => Some(i -> statement)
-      case _ => None
-    }).traverseOption.map(_.toMap)
+  def parseStatementVariable(line: PartialLine, context: Context): (StatementVariable, PartialLine) = {
+    parse(line, context) match {
+      case (v: StatementVariable, remainingLine) =>
+        (v, remainingLine)
+      case (x, _) =>
+        throw ParseException.withMessage(s"Expected statement variable, got $x", line.fullLine)
+    }
   }
 
   def parse(line: PartialLine, context: Context): (Statement, PartialLine) = {
@@ -115,6 +193,11 @@ object Statement {
         predicate.parseStatement(remainingLine, context)
       case IntParser(i) =>
         (StatementVariable(i), remainingLine)
+      case "sub" =>
+        val (statementVariable, lineAfterStatementVariable) = parseStatementVariable(remainingLine, context)
+        val (termToReplaceWith, lineAfterFirstTerm) = Term.parse(lineAfterStatementVariable, context).mapLeft(Term.asVariable)
+        val (termToBeReplaced, lineAfterSecondTerm) = Term.parse(lineAfterFirstTerm, context).mapLeft(Term.asVariable)
+        (StatementVariableWithReplacement(statementVariable, termToReplaceWith, termToBeReplaced), lineAfterSecondTerm)
       case _ =>
         throw ParseException.withMessage(s"Unrecognised statement type $statementType", line.fullLine)
     }

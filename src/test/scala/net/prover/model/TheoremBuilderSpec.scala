@@ -8,6 +8,7 @@ class TheoremBuilderSpec extends ProverSpec {
       val updatedTheoremBuilder = rule.readAndUpdateTheoremBuilder(theoremBuilder, "h1", defaultContext)
       updatedTheoremBuilder.steps mustEqual Seq(Step(StatementVariable(1)))
     }
+
     "handle direct rule referencing fantasy hypothesis" in {
       val rule = DirectRule("restate", Seq(StatementVariable(1)), StatementVariable(1))
       val theoremBuilder = TheoremBuilder().addFantasy(StatementVariable(1))
@@ -63,6 +64,15 @@ class TheoremBuilderSpec extends ProverSpec {
         Implication(
           Disjunction(Negation(1), 2),
           Implication(Negation(Negation(1)), 2))))
+    }
+
+    "handle rule with a substitution in the conclusion" in {
+      val rule = DirectRule("eliminateAll", Seq(ForAll(1, 1)), StatementVariableWithReplacement(1, 2, 1))
+      val theoremBuilder = rule.readAndUpdateTheoremBuilder(
+        TheoremBuilder().addStep(ForAll(2, Equals(2, 1))),
+        "1 3",
+        defaultContext)
+      theoremBuilder.steps(1).statement mustEqual Equals(3, 1)
     }
   }
 }

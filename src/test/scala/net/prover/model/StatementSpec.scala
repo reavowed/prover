@@ -23,7 +23,8 @@ class StatementSpec extends ProverSpec {
 
   "statement match" should {
     "match a statement variable to anything" in {
-      StatementVariable(1).attemptMatch(Implication(StatementVariable(1), StatementVariable(2))) mustEqual Some(Map(1 -> Implication(StatementVariable(1), StatementVariable(2))))
+      StatementVariable(1).attemptMatch(Implication(StatementVariable(1), StatementVariable(2))) mustEqual
+        Some(Match(Map(StatementVariable(1) -> Implication(StatementVariable(1), StatementVariable(2))), Map.empty))
     }
     "not match a connective to a statement variable" in {
       Implication(StatementVariable(1), StatementVariable(2)).attemptMatch(StatementVariable(1)) must beNone
@@ -39,17 +40,25 @@ class StatementSpec extends ProverSpec {
     "match two connectives of the same type that only differ in statement variable number" in {
       Implication(StatementVariable(1), StatementVariable(2))
         .attemptMatch(Implication(StatementVariable(1), StatementVariable(3)))
-        .mustEqual(Some(Map(1 -> StatementVariable(1), 2 -> StatementVariable(3))))
+        .mustEqual(Some(Match(
+          Map(StatementVariable(1) -> StatementVariable(1), StatementVariable(2) -> StatementVariable(3)),
+          Map.empty)))
     }
     "match two connectives of the same type whose substatements are different but match" in {
       Implication(StatementVariable(1), StatementVariable(2))
         .attemptMatch(Implication(Conjunction(StatementVariable(1), StatementVariable(2)), StatementVariable(3)))
-        .mustEqual(Some(Map(1 -> Conjunction(StatementVariable(1), StatementVariable(2)), 2 -> StatementVariable(3))))
+        .mustEqual(Some(Match(
+          Map(
+            StatementVariable(1) -> Conjunction(1, 2),
+            StatementVariable(2) -> StatementVariable(3)),
+          Map.empty)))
     }
     "match two connectives of the same type whose substatements merge correctly" in {
       Implication(StatementVariable(1), StatementVariable(1))
         .attemptMatch(Implication(Conjunction(StatementVariable(1), StatementVariable(2)), Conjunction(StatementVariable(1), StatementVariable(2))))
-        .mustEqual(Some(Map(1 -> Conjunction(StatementVariable(1), StatementVariable(2)))))
+        .mustEqual(Some(Match(
+          Map(StatementVariable(1) -> Conjunction(1, 2)),
+          Map.empty)))
     }
     "match two connectives of the same type whose substatements do not merge correctly" in {
       Implication(StatementVariable(1), StatementVariable(1))

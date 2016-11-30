@@ -5,16 +5,21 @@ trait Definition extends DirectStepParser {
   def definingStatement: Statement
 
   override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
-    val (reference, lineAfterReference) = line.splitFirstWord
-    val referredStatement = theoremBuilder.resolveReference(reference)
-    val replacedStatement = applyToStatement(referredStatement)
-    val step = Step(replacedStatement)
-    (step, lineAfterReference)
+    val (statement, lineAfterStatement) = readReference(line, theoremBuilder)
+    applyToStatement(statement, lineAfterStatement, theoremBuilder, context).mapLeft(Step(_))
   }
 
-  def applyToStatement(statement: Statement): Statement = {
-    definedStatement.attemptMatch(statement).map(definingStatement.replace)
-      .orElse(definingStatement.attemptMatch(statement).map(definedStatement.replace))
-      .getOrElse(throw new Exception(s"Could not apply definition to statement '$statement'"))
+  def applyToStatement(
+    statement: Statement,
+    line: PartialLine,
+    theoremBuilder: TheoremBuilder,
+    context: Context
+  ): (Statement, PartialLine) = {
+    val (fromStatementMatch, toStatement) =
+        definedStatement.attemptMatch(statement).map((_, definingStatement))
+          .orElse(definingStatement.attemptMatch(statement).map((_, definedStatement)))
+          .getOrElse(throw new Exception(s"Could not apply definition to statement '$statement'"))
+    val (matcher, remainingLine) = fromStatementMatch.expand(toStatement.variables, line, context)
+    (toStatement.applyMatch(matcher), remainingLine)
   }
 }

@@ -5,3 +5,4 @@ chapter Universal Quantifier
 Introduce the universal quantifier.
 
 quantifier ∀
+rule eliminateAll ∀ 1 1 ⇒ sub 1 2 1
