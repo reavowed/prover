@@ -37,8 +37,12 @@
     margin-right: 10px;
 }
 
-.rulePremises {
-    border-bottom: 1px solid black;
+.rule .arbitraryVariables {
+    font-weight: normal;
+}
+
+.ruleConclusion {
+    border-top: 1px solid black;
 }
 
 .theoremTitle {

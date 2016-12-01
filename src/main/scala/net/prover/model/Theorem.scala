@@ -7,17 +7,21 @@ case class Theorem(
     title: String,
     hypotheses: Seq[Statement],
     steps: Seq[Step],
-    result: Statement)
-  extends ChapterEntry with DirectStepParser {
+    result: Statement,
+    arbitraryVariables: Seq[TermVariable])
+  extends ChapterEntry with TheoremLineParser {
 
   val `type` = "theorem"
 
-  override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
+  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
     val (hypothesesAndTemplates, lineAfterHypotheses) = hypotheses.mapFold(line) { (hypothesisTemplate, lineSoFar) =>
       readReference(lineSoFar, theoremBuilder).mapLeft((_, hypothesisTemplate))
     }
-    matchPremisesToConclusion(hypothesesAndTemplates, result, lineAfterHypotheses, context)
-      .mapLeft(Step(_))
+    val (matcher, remainingLine) = matchPremises(hypothesesAndTemplates, result, lineAfterHypotheses, context)
+    val updatedArbitraryVariables = arbitraryVariables.flatMap(matcher.terms.get).map(Term.asVariable)
+    theoremBuilder
+      .addStep(Step(result.applyMatch(matcher)))
+      .withArbitraryVariables(updatedArbitraryVariables)
   }
 }
 
@@ -35,6 +39,16 @@ trait TheoremLineParser {
     line: PartialLine,
     context: Context
   ): (Statement, PartialLine) = {
+    matchPremises(premisesWithTemplates, conclusionTemplate, line, context)
+        .mapLeft(conclusionTemplate.applyMatch)
+  }
+
+  protected def matchPremises(
+    premisesWithTemplates: Seq[(Statement, Statement)],
+    conclusionTemplate: Statement,
+    line: PartialLine,
+    context: Context
+  ): (Match, PartialLine) = {
     val premiseMatchAttempts = premisesWithTemplates.map { case (premise, premiseTemplate) =>
       premiseTemplate.attemptMatch(premise)
     }
@@ -44,7 +58,7 @@ trait TheoremLineParser {
     val (expandedMatch, lineAfterVariables) = premisesMatchAttempt.expand(requiredVariables, line, context)
     val fullMatch = expandedMatch.checkSubstitutions()
       .getOrElse(throw ParseException.withMessage("Could not match substitutions", line.fullLine))
-    (conclusionTemplate.applyMatch(fullMatch), lineAfterVariables)
+    (fullMatch, lineAfterVariables)
   }
 }
 
@@ -106,7 +120,14 @@ object Theorem extends ChapterEntryParser[Theorem] {
           import theoremBuilder._
           if (fantasyOption.isDefined)
             throw new Exception("Cannot finish theorem with open assumption")
-          (Theorem(id, title, hypotheses, steps, steps.last.statement), nonTheoremLines)
+          val theorem = Theorem(
+            id,
+            title,
+            hypotheses,
+            steps,
+            steps.last.statement,
+            hypotheses.flatMap(_.freeVariables.termVariables).intersect(arbitraryVariables))
+          (theorem, nonTheoremLines)
         case definitionLine +: otherLines =>
           parseHelper(otherLines, parseLine(definitionLine, theoremBuilder))
         case Nil =>

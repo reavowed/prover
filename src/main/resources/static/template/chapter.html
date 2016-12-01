@@ -41,9 +41,7 @@
                         Given
                         {{entry.hypothesisTemplate ? entry.hypothesisTemplate + ' ⊢' : ''}}
                         {{entry.premiseTemplates.join(", ")}}
-                        <span ng-if="entry.freeVariables.length">
-                            (with {{entry.freeVariables.join(", ")}} free)
-                        </span>
+                        <arbitrary-variables variables="entry.arbitraryVariables"></arbitrary-variables>
                     </div>
                     <div class="ruleConclusion">
                         Deduce
@@ -70,6 +68,7 @@
                             and
                         </span>
                         {{entry.hypotheses[entry.hypotheses.length - 1]}}.
+                        <arbitrary-variables variables="entry.arbitraryVariables"></arbitrary-variables>
                     </div>
                     <div>
                         <span ng-if="entry.hypotheses.length">Then</span>

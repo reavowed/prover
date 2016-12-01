@@ -50,3 +50,14 @@ assume ∀ 1 ¬ 1
 introduceNegation h1 f.1
 definition-∃ 1
 qed
+
+theorem eliminateExists Eliminate Existential Quantifier
+hypothesis ∃ 1 1
+hypothesis → sub 2 1 1 2
+definition-∃ h1
+assume ¬ 2
+  modusTollens h2 f.h
+  introduceForall f.1 ¬ 1 2 1
+introduceNegation f.2 1
+eliminateNegation 2
+qed

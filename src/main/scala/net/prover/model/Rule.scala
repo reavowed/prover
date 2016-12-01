@@ -4,26 +4,23 @@ sealed trait Rule extends ChapterEntry with TheoremLineParser {
   val `type` = "rule"
 }
 
-case class FreeVariableRestrictionException(message: String) extends Exception(message)
+case class ArbitraryVariableException(message: String) extends Exception(message)
 
 case class DirectRule(
     id: String,
     premiseTemplates: Seq[Statement],
     conclusionTemplate: Statement,
-    freeVariables: Seq[TermVariable])
-  extends Rule with DirectStepParser {
-  override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
-    if (theoremBuilder.nonFreeTerms.intersect(freeVariables).nonEmpty) {
-      throw FreeVariableRestrictionException(
-        s"Cannot apply rule '$id' to theorem with variables " +
-          theoremBuilder.nonFreeTerms.intersect(freeVariables).mkString(", ") +
-          "in the hypotheses")
-    }
+    arbitraryVariables: Seq[TermVariable])
+  extends Rule with TheoremLineParser {
+  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
     val (premisesAndTemplates, lineAfterPremises) = premiseTemplates.mapFold(line) { (premiseTemplate, lineSoFar) =>
       readReference(lineSoFar, theoremBuilder).mapLeft((_, premiseTemplate))
     }
-    matchPremisesToConclusion(premisesAndTemplates, conclusionTemplate, lineAfterPremises, context)
-        .mapLeft(Step(_))
+    val (matcher, remainingLine) = matchPremises(premisesAndTemplates, conclusionTemplate, lineAfterPremises, context)
+    val updatedArbitraryVariables = arbitraryVariables.flatMap(matcher.terms.get).map(Term.asVariable)
+    theoremBuilder
+      .addStep(Step(conclusionTemplate.applyMatch(matcher)))
+      .withArbitraryVariables(updatedArbitraryVariables)
   }
 }
 

@@ -62,12 +62,18 @@ introduceDoubleNegation h1
 falseImpliesAnything1 1 2
 qed
 
+theorem modusTollens Modus Tollens
+hypothesis → 1 2
+hypothesis ¬ 2
+assume 1
+  eliminateImplication h1 f.h
+introduceNegation f.1 h2
+qed
+
 theorem contraposition Contraposition
 hypothesis → 1 2
 assume ¬ 2
-  assume 1
-    eliminateImplication h1 f.f.h
-  introduceNegation f.f.1 f.h
+  modusTollens h1 f.h
 introduceImplication f.1
 qed
 

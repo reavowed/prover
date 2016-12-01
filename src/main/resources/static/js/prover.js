@@ -52,3 +52,10 @@ proverApp.component('step', {
     step: '<'
   }
 });
+
+proverApp.component('arbitraryVariables', {
+  templateUrl: 'template/arbitraryVariables.html',
+  bindings: {
+    variables: '<'
+  }
+});

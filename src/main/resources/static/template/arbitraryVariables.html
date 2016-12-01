@@ -1,0 +1,13 @@
+<span class="arbitraryVariables" ng-if="$ctrl.variables.length">
+    (where
+    <span ng-if="$ctrl.variables.length == 1">
+        {{$ctrl.variables[0]}} is
+    </span>
+    <span ng-if="$ctrl.variables.length > 1">
+        {{$ctrl.variables.slice(0, $ctrl.variables.length).join(", ")}}
+        and
+        {{$ctrl.variables[$ctrl.variables.length - 1]}
+        are
+    </span>
+    arbitrary)
+</span>

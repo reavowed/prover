@@ -70,17 +70,26 @@ trait TheoremBuildable[T <: TheoremBuildable[T]] {
   }
 
   protected def resolveSpecificReference: PartialFunction[String, Statement]
-
-  def nonFreeTerms: Seq[TermVariable] = fantasyOption.toSeq.flatMap(_.nonFreeTerms)
 }
 
 case class TheoremBuilder(
     hypotheses: Seq[Statement] = Nil,
     steps: Seq[Step] = Nil,
-    fantasyOption: Option[Fantasy] = None)
+    fantasyOption: Option[Fantasy] = None,
+    arbitraryVariables: Seq[TermVariable] = Nil)
   extends TheoremBuildable[TheoremBuilder] {
 
-  def addHypothesis(hypothesis: Statement) = copy(hypotheses = hypotheses :+ hypothesis)
+  def addHypothesis(hypothesis: Statement): TheoremBuilder = {
+    copy(hypotheses = hypotheses :+ hypothesis)
+  }
+  def withArbitraryVariables(newArbitraryVariables: Seq[TermVariable]): TheoremBuilder = {
+    val fantasyVariables = fantasyHypotheses.flatMap(_.freeVariables.termVariables)
+    if (fantasyVariables.intersect(newArbitraryVariables).nonEmpty) {
+      throw ArbitraryVariableException(
+        s"Variables ${fantasyVariables.intersect(newArbitraryVariables).mkString(", ")} were non-arbitrary")
+    }
+    copy(arbitraryVariables = (arbitraryVariables ++ newArbitraryVariables).distinct.sortBy(_.i))
+  }
 
   override protected def withStep(step: Step): TheoremBuilder = copy(steps = steps :+ step)
   override protected def withFantasy(fantasyOption: Option[Fantasy]): TheoremBuilder = copy(fantasyOption = fantasyOption)
@@ -92,9 +101,16 @@ case class TheoremBuilder(
           .getOrElse(throw ReferenceResolveException(reference, "Step index out of range"))
     }
   }
-
-  override def nonFreeTerms: Seq[TermVariable] = {
-    (super.nonFreeTerms ++ hypotheses.flatMap(_.freeVariables.termVariables)).distinct
+  protected def fantasyHypotheses: Seq[Statement] = {
+    def helper(fantasy: Option[Fantasy], acc: Seq[Statement]): Seq[Statement] = {
+      fantasy match {
+        case Some(f) =>
+          helper(f.fantasyOption, acc :+ f.hypothesis)
+        case None =>
+          acc
+      }
+    }
+    helper(fantasyOption, Nil)
   }
 }
 
@@ -109,9 +125,6 @@ object TheoremBuilder {
     override protected def resolveSpecificReference: PartialFunction[String, Statement] = {
       case "h" =>
         hypothesis
-    }
-    override def nonFreeTerms: Seq[TermVariable] = {
-      (super.nonFreeTerms ++ hypothesis.freeVariables.termVariables).distinct
     }
   }
 }

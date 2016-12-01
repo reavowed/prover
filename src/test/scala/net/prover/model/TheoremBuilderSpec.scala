@@ -46,7 +46,7 @@ class TheoremBuilderSpec extends ProverSpec {
 
     "handle assumption discharging rule applied to theorem" in {
       val rule = FantasyRule("introduceImplication", StatementVariable(1), Seq(StatementVariable(2)), Implication(StatementVariable(1), StatementVariable(2)))
-      val theorem = Theorem("and-sym", "Conjunction is Symmetric", Seq(Conjunction(1, 2)), Nil, Conjunction(2, 1))
+      val theorem = Theorem("and-sym", "Conjunction is Symmetric", Seq(Conjunction(1, 2)), Nil, Conjunction(2, 1), Nil)
       val theoremBuilder = rule.readAndUpdateTheoremBuilder(
         TheoremBuilder(),
         "and-sym 2 1",
@@ -97,20 +97,20 @@ class TheoremBuilderSpec extends ProverSpec {
       theoremBuilder.steps(1).statement mustEqual ForAll(1, 3)
     }
 
-    "fail a rule with free variables if a free variable appears in a theorem hypothesis" in {
-      IntroduceAll.readAndUpdateTheoremBuilder(
+    "add a rule's arbitrary variable to the theorem if it appears in a theorem hypothesis" in {
+      val theoremBuilder = IntroduceAll.readAndUpdateTheoremBuilder(
         TheoremBuilder().addHypothesis(Equals(1, 2)),
-        "h1 2 = 1 3",
-        defaultContext
-      ) must throwA[FreeVariableRestrictionException]
+        "h1 = 1 3 2 3",
+        defaultContext)
+      theoremBuilder.arbitraryVariables mustEqual Seq(TermVariable(2))
     }
 
-    "fail a rule with free variables if a free variable appears in a fantasy hypothesis" in {
+    "fail a rule with arbitrary variables if an arbitrary variable appears in a fantasy hypothesis" in {
       IntroduceAll.readAndUpdateTheoremBuilder(
         TheoremBuilder().addFantasy(Equals(1, 2)),
-        "f.h 2 = 1 3",
+        "f.h = 1 3 2 3",
         defaultContext
-      ) must throwA[FreeVariableRestrictionException]
+      ) must throwAn[ArbitraryVariableException]
     }
   }
 }
