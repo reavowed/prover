@@ -8,7 +8,7 @@ import scala.collection.immutable.Nil
 
 trait Statement extends JsonSerializable.Base {
   def variables: Variables
-  def freeVariables: Variables
+  def freeVariables: Seq[TermVariable]
   def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions]
   def applyMatch(m: Match): Statement
   def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement
@@ -26,7 +26,7 @@ trait Statement extends JsonSerializable.Base {
 
 case class StatementVariable(i: Int) extends Statement {
   override def variables: Variables = Variables(Seq(this), Nil)
-  override def freeVariables: Variables = variables
+  override def freeVariables: Seq[TermVariable] = Nil
   override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
     Some(MatchWithSubstitutions(Map(this -> otherStatement), Map.empty, Nil))
   }
@@ -48,7 +48,7 @@ case class StatementVariableWithReplacement(
     termToBeReplaced: TermVariable)
   extends Statement {
   override def variables: Variables = Variables(Seq(statementVariable), Seq(termToReplaceWith, termToBeReplaced))
-  override def freeVariables: Variables = variables
+  override def freeVariables: Seq[TermVariable] = Seq(termToReplaceWith)
   override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
     otherStatement match {
       case StatementVariableWithReplacement(otherStatementVariable, otherTermToReplaceWith, otherTermToBeReplaced) =>
@@ -76,7 +76,7 @@ case class StatementVariableWithReplacement(
 
 case class ConnectiveStatement(substatements: Seq[Statement], connective: Connective) extends Statement {
   override def variables: Variables = substatements.map(_.variables).reduce(_ ++ _)
-  override def freeVariables: Variables = substatements.map(_.freeVariables).reduce(_ ++ _)
+  override def freeVariables: Seq[TermVariable] = substatements.map(_.freeVariables).reduce(_ ++ _)
   override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
     otherStatement match {
       case ConnectiveStatement(otherSubstatements, `connective`) =>
@@ -109,7 +109,7 @@ case class ConnectiveStatement(substatements: Seq[Statement], connective: Connec
 
 case class QuantifierStatement(boundVariable: TermVariable, substatement: Statement, quantifier: Quantifier) extends Statement {
   override def variables: Variables = boundVariable +: substatement.variables
-  override def freeVariables: Variables = substatement.freeVariables - boundVariable
+  override def freeVariables: Seq[TermVariable] = substatement.freeVariables.filter(_ != boundVariable)
 
   override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
     otherStatement match {
@@ -141,7 +141,7 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
 
 case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends Statement {
   override def variables: Variables = terms.map(_.variables).reduce(_ ++ _)
-  override def freeVariables: Variables = terms.map(_.freeVariables).reduce(_ ++ _)
+  override def freeVariables: Seq[TermVariable] = terms.map(_.freeVariables).reduce(_ ++ _)
   override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
     otherStatement match {
       case PredicateStatement(otherTerms, `predicate`) =>

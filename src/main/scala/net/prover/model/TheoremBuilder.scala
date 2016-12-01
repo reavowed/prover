@@ -83,7 +83,7 @@ case class TheoremBuilder(
     copy(hypotheses = hypotheses :+ hypothesis)
   }
   def withArbitraryVariables(newArbitraryVariables: Seq[TermVariable]): TheoremBuilder = {
-    val fantasyVariables = fantasyHypotheses.flatMap(_.freeVariables.termVariables)
+    val fantasyVariables = fantasyHypotheses.flatMap(_.freeVariables)
     if (fantasyVariables.intersect(newArbitraryVariables).nonEmpty) {
       throw ArbitraryVariableException(
         s"Variables ${fantasyVariables.intersect(newArbitraryVariables).mkString(", ")} were non-arbitrary")

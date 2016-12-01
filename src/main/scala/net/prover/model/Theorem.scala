@@ -126,7 +126,7 @@ object Theorem extends ChapterEntryParser[Theorem] {
             hypotheses,
             steps,
             steps.last.statement,
-            hypotheses.flatMap(_.freeVariables.termVariables).intersect(arbitraryVariables))
+            hypotheses.flatMap(_.freeVariables).intersect(arbitraryVariables))
           (theorem, nonTheoremLines)
         case definitionLine +: otherLines =>
           parseHelper(otherLines, parseLine(definitionLine, theoremBuilder))

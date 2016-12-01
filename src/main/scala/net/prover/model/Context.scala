@@ -17,6 +17,10 @@ case class Context(
       theorems ++ other.theorems,
       axioms ++ other.axioms)
   }
+
+  def definitions: Seq[Definition] = connectives.flatMap(_.definition) ++
+    predicates.flatMap(_.definition) ++
+    quantifiers.flatMap(_.definition)
 }
 
 object Context {

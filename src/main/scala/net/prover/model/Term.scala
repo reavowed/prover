@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
 trait Term extends JsonSerializable.Base {
   def variables: Variables
-  def freeVariables: Variables
+  def freeVariables: Seq[TermVariable]
   def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions]
   def applyMatch(m: Match): Term
   def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Term
@@ -23,7 +23,7 @@ trait Term extends JsonSerializable.Base {
 
 case class TermVariable(i: Int) extends Term {
   override def variables: Variables = Variables(Nil, Seq(this))
-  override def freeVariables: Variables = variables
+  override def freeVariables: Seq[TermVariable] = Seq(this)
   override def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions] = {
     Some(MatchWithSubstitutions(Map.empty, Map(this -> otherTerm), Nil))
   }
