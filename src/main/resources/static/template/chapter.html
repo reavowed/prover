@@ -18,6 +18,10 @@
         <div ng-switch-when="quantifier">
             <div class="result">
                 Quantifier: {{entry.defaultStatement}}
+                <span ng-if="entry.definingStatement">
+                    <span class="normal">is defined to mean</span>
+                    {{ entry.definingStatement }}
+                </span>
             </div>
         </div>
         <div ng-switch-when="predicate">

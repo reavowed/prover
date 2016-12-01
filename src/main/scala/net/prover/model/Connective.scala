@@ -31,11 +31,7 @@ object Connective extends SingleLineChapterEntryParser[Connective] {
       case _ =>
         throw ParseException.withMessage("Connective arity must be an integer", line.fullLine)
     }
-    val definingStatementOption = if (lineAfterArity.nonEmpty) {
-      Some(Statement.parse(lineAfterArity, context)._1)
-    } else {
-      None
-    }
+    val definingStatementOption = Statement.parseOptional(lineAfterArity, context)._1
     Connective(symbol, arity, definingStatementOption)
   }
   override def addToContext(connective: Connective, context: Context): Context = {

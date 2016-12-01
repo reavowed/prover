@@ -31,12 +31,8 @@ object Predicate extends SingleLineChapterEntryParser[Predicate] {
       case _ =>
         throw ParseException.withMessage("Predicate arity must be an integer", line.fullLine)
     }
-    val definition = if (lineAfterArity.nonEmpty) {
-      Some(Statement.parse(lineAfterArity, context)._1)
-    } else {
-      None
-    }
-    Predicate(symbol, arity, definition)
+    val definingStatementOption = Statement.parseOptional(lineAfterArity, context)._1
+    Predicate(symbol, arity, definingStatementOption)
   }
   override def addToContext(predicate: Predicate, context: Context): Context = {
     context.copy(predicates = context.predicates :+ predicate)

@@ -86,6 +86,7 @@ object Theorem extends ChapterEntryParser[Theorem] {
           context.rules ++
           context.connectives.flatMap(_.definition) ++
           context.predicates.flatMap(_.definition) ++
+          context.quantifiers.flatMap(_.definition) ++
           context.theorems ++
           context.axioms
         val (lineType, restOfLine) = line.splitFirstWord

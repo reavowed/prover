@@ -9,7 +9,7 @@ trait ProverSpec extends Specification {
   val Disjunction = Connective("∨", 2, Some(Implication(Negation(1), 2)))
   val Equivalence = Connective("↔", 2, None)
 
-  val ForAll = Quantifier("∀")
+  val ForAll = Quantifier("∀", None)
   val ElementOf = Predicate("∈", 2, None)
   val Equals = Predicate("=", 2, None)
 
