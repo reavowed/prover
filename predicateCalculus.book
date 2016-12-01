@@ -35,5 +35,5 @@ assume ∧ ∀ 1 1 ∀ 1 2
   introduceAnd f.2 f.4
   introduceForall f.5 ∧ 1 2 2 1
 introduceImplication f.6
-introduce-equiv 1 2
+introduceEquivalence 1 2
 qed

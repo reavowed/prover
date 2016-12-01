@@ -12,7 +12,7 @@ rule introduceImplication 1 ⊢ 2 ⇒ → 1 2
 comment In other words, if by assuming α we can deduce β, then we can deduce α → β directly. This rule is called "Implication Introduction".
 
 comment This rule is all we need to prove our first theorem.
-theorem imp-ref Implication is Reflexive
+theorem implicationIsReflexive Implication is Reflexive
 assume 1
 introduceImplication f.h
 qed
@@ -22,7 +22,7 @@ comment Our next rule of inference completes the definition of '→'.
 rule eliminateImplication → 1 2 & 1 ⇒ 2
 comment This rule is called "Implication Elimination" within the system of natural deduction that we are using, but is more commonly known as "Modus Ponens". Our next theorem demonstrates its use.
 
-theorem imp-trans Implication is Transitive
+theorem implicationIsTransitive Implication is Transitive
 hypothesis → 1 2
 hypothesis → 2 3
 assume 1
@@ -35,19 +35,19 @@ connective ¬ 1
 rule introduceNegation 1 ⊢ 2 & ¬ 2 ⇒ ¬ 1
 rule eliminateNegation ¬ ¬ 1 ⇒ 1
 
-theorem double-not Double Negation Introduction
+theorem introduceDoubleNegation Double Negation Introduction
 hypothesis 1
 assume ¬ 1
 introduceNegation h1 f.h
 qed
 
-theorem any-imp-true Anything Implies a True Statement
+theorem anythingImpliesTrue Anything Implies a True Statement
 hypothesis 1
 assume 2
 introduceImplication h1
 qed
 
-theorem false-imp-any A False Statement Implies Anything
+theorem falseImpliesAnything1 A False Statement Implies Anything (1)
 hypothesis ¬ 1
 assume 1
   assume ¬ 2
@@ -56,10 +56,10 @@ assume 1
 introduceImplication f.2
 qed
 
-theorem false-imp-any-2 A False Statement Implies Anything (2)
+theorem falseImpliesAnything2 A False Statement Implies Anything (2)
 hypothesis 1
-double-not h1
-false-imp-any 1 2
+introduceDoubleNegation h1
+falseImpliesAnything1 1 2
 qed
 
 theorem contraposition Contraposition
@@ -106,7 +106,7 @@ qed
 theorem eliminateAndLeft Eliminate Conjunction (Left)
 hypothesis ∧ 1 2
 assume ¬ 1
-  false-imp-any f.h ¬ 2
+  falseImpliesAnything1 f.h ¬ 2
   definition-∧ h1
 introduceNegation f.1 f.2
 eliminateNegation 1
@@ -115,13 +115,13 @@ qed
 theorem eliminateAndRight Eliminate Conjunction (Right)
 hypothesis ∧ 1 2
 assume ¬ 2
-  any-imp-true f.h 1
+  anythingImpliesTrue f.h 1
   definition-∧ h1
 introduceNegation f.1 f.2
 eliminateNegation 1
 qed
 
-theorem flip-and Reverse Conjunction
+theorem reverseAnd Reverse Conjunction
 hypothesis ∧ 1 2
 eliminateAndLeft h1
 eliminateAndRight h1
@@ -130,54 +130,54 @@ qed
 
 connective ∨ 2 → ¬ 1 2
 
-theorem or-left Introduce Disjunction (Left)
+theorem introduceOrLeft Introduce Disjunction (Left)
 hypothesis 1
-false-imp-any-2 h1 2
+falseImpliesAnything2 h1 2
 definition-∨ 1
 qed
 
-theorem or-right Introduce Disjunction (Right)
+theorem introduceOrRight Introduce Disjunction (Right)
 hypothesis 2
-any-imp-true h1 ¬ 1
+anythingImpliesTrue h1 ¬ 1
 definition-∨ 1
 qed
 
-theorem eliminate-or Eliminate Disjunction
+theorem eliminateOr Eliminate Disjunction
 hypothesis → 1 3
 hypothesis → 2 3
 hypothesis ∨ 1 2
 definition-∨ h3
-imp-trans 1 h2
+implicationIsTransitive 1 h2
 cases h1 2
 qed
 
-theorem introduce-or Combine Cases
+theorem combineCases Combine Cases
 hypothesis → 1 3
 hypothesis → 2 3
 assume ∨ 1 2
   definition-∨ f.h
-  imp-trans f.1 h2
+  implicationIsTransitive f.1 h2
   cases h1 f.2
 introduceImplication f.3
 qed
 
-theorem flip-or Reverse Disjunction
+theorem reverseOr Reverse Disjunction
 hypothesis ∨ 1 2
-introduceImplication or-right 1 2
-introduceImplication or-left 2 1
-introduce-or 1 2
+introduceImplication introduceOrRight 1 2
+introduceImplication introduceOrLeft 2 1
+combineCases 1 2
 eliminateImplication 3 h1
 qed
 
-theorem excluded-middle Law of the Excluded Middle
-imp-ref ¬ 1
+theorem excludedMiddle Law of the Excluded Middle
+implicationIsReflexive ¬ 1
 definition-∨ 1
 qed
 
-theorem non-contradiction Law of Non-Contradiction
+theorem nonContradiction Law of Non-Contradiction
 assume ∧ 1 ¬ 1
 definition-∧ f.h
-introduceImplication double-not 1
+introduceImplication introduceDoubleNegation 1
 introduceNegation f.2 f.1
 qed
 
@@ -186,93 +186,93 @@ We introduce our final connective, ↔ (equivalence).
 
 connective ↔ 2 ∧ → 1 2 → 2 1
 
-theorem equiv-forward Implication from Equivalence
+theorem eliminateEquivalenceForward Implication from Equivalence
 hypothesis ↔ 1 2
 definition-↔ h1
 eliminateAndLeft 1
 qed
 
-theorem equiv-converse Converse from Equivalence
+theorem eliminateEquivalenceConverse Converse from Equivalence
 hypothesis ↔ 1 2
 definition-↔ h1
 eliminateAndRight 1
 qed
 
-theorem introduce-equiv Equivalence from Implication and Converse
+theorem introduceEquivalence Equivalence from Implication and Converse
 hypothesis → 1 2
 hypothesis → 2 1
 introduceAnd h1 h2
 definition-↔ 1
 qed
 
-theorem flip-equiv Reverse Equivalence
+theorem reverseEquivalence Reverse Equivalence
 hypothesis ↔ 1 2
 definition-↔ h1
-flip-and 1
+reverseAnd 1
 definition-↔ 2
 qed
 
 comment The next three theorems establish the meta-theorem that if α ↔ β, then α can be substituted for β in any other statement. Once we have shown this is true for our two fundamental connectives, establishing it for any more complicated statement is just a rote application of these three theorems.
 
-theorem equiv-imp-ant Equivalence of Implication Antecedent
+theorem substituteEquivalenceIntoImplicationAntecedent Substitute Equivalence into Implication Antecedent
 hypothesis ↔ 1 2
 assume → 1 3
-  equiv-converse h1
-  imp-trans f.1 f.h
+  eliminateEquivalenceConverse h1
+  implicationIsTransitive f.1 f.h
 introduceImplication f.2
 assume → 2 3
-  equiv-forward h1
-  imp-trans f.1 f.h
+  eliminateEquivalenceForward h1
+  implicationIsTransitive f.1 f.h
 introduceImplication f.2
-introduce-equiv 1 2
+introduceEquivalence 1 2
 qed
 
-theorem equiv-imp-con Equivalence of Implication Consequent
+theorem substituteEquivalenceIntoImplicationConsequent Substitute Equivalence into Implication Consequent
 hypothesis ↔ 1 2
 assume → 3 1
-  equiv-forward h1
-  imp-trans f.h f.1
+  eliminateEquivalenceForward h1
+  implicationIsTransitive f.h f.1
 introduceImplication f.2
 assume → 3 2
-  equiv-converse h1
-  imp-trans f.h f.1
+  eliminateEquivalenceConverse h1
+  implicationIsTransitive f.h f.1
 introduceImplication f.2
-introduce-equiv 1 2
+introduceEquivalence 1 2
 qed
 
-theorem equiv-not Equivalence of Negation
+theorem substituteEquivalenceIntoNegation Substitute Equivalence into Negation
 hypothesis ↔ 1 2
-equiv-forward h1
-equiv-converse h1
+eliminateEquivalenceForward h1
+eliminateEquivalenceConverse h1
 contraposition 2
 contraposition 1
-introduce-equiv 3 4
+introduceEquivalence 3 4
 qed
 
 comment We now show that our equivalence connective has the properties we will later establish as defining an equivalence relation, justifying the use of the same word to describe each.
 
-theorem equiv-refl Equivalence is Reflexive
-imp-ref 1
+theorem equivalenceIsReflexive Equivalence is Reflexive
+implicationIsReflexive 1
 introduceAnd 1 1
 definition-↔ 2
 qed
 
-theorem equiv-trans Equivalence is Transitive
+theorem equivalenceIsTransitive Equivalence is Transitive
 hypothesis ↔ 1 2
 hypothesis ↔ 2 3
-equiv-forward h1
-equiv-forward h2
-imp-trans 1 2
-equiv-converse h2
-equiv-converse h1
-imp-trans 4 5
-introduce-equiv 3 6
+eliminateEquivalenceForward h1
+eliminateEquivalenceForward h2
+implicationIsTransitive 1 2
+eliminateEquivalenceConverse h2
+eliminateEquivalenceConverse h1
+implicationIsTransitive 4 5
+introduceEquivalence 3 6
 qed
 
-theorem equiv-sym Equivalence is Symmetric
-introduceImplication flip-equiv 1 2
-introduceImplication flip-equiv 2 1
-introduce-equiv 1 2
+theorem equivalenceIsSymmetric Equivalence is Symmetric
+introduceImplication reverseEquivalence 1 2
+introduceImplication reverseEquivalence 2 1
+introduceEquivalence 1 2
 qed
 
 comment Some helper theorems for proofs involving equivalences
@@ -280,51 +280,51 @@ comment Some helper theorems for proofs involving equivalences
 theorem modusPonensEquivalenceLeft Modus Ponens with Equivalence (Left)
 hypothesis ↔ 1 2
 hypothesis 1
-equiv-forward h1
+eliminateEquivalenceForward h1
 eliminateImplication 1 h2
 qed
 
 theorem modusPonensEquivalenceRight Modus Ponens with Equivalence (Right)
 hypothesis ↔ 1 2
 hypothesis 2
-equiv-converse h1
+eliminateEquivalenceConverse h1
 eliminateImplication 1 h2
 qed
 
 chapter Propositional Logic Identities
 Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
 
-theorem ∧-defn Conjunction is Equivalent to Its Definition
+theorem andDefinitionEquivalence Conjunction is Equivalent to Its Definition
 introduceImplication definition-∧ ∧ 1 2
 introduceImplication definition-∧ ¬ → 1 ¬ 2
-introduce-equiv 1 2
+introduceEquivalence 1 2
 qed
 
-theorem or-defn Disjunction is Equivalent to Its Definition
+theorem orDefinitionEquivalence Disjunction is Equivalent to Its Definition
 introduceImplication definition-∨ ∨ 1 2
 introduceImplication definition-∨ → ¬ 1 2
-introduce-equiv 1 2
+introduceEquivalence 1 2
 qed
 
-theorem equiv-defn Equivalence is Equivalent to Its Definition
+theorem equivalenceDefinitionEquivalence Equivalence is Equivalent to Its Definition
 introduceImplication definition-↔ ↔ 1 2
 introduceImplication definition-↔ ∧ → 1 2 → 2 1
-introduce-equiv 1 2
+introduceEquivalence 1 2
 qed
 
-theorem ∧-sym Conjunction is Symmetric
-introduceImplication flip-and 1 2
-introduceImplication flip-and 2 1
-introduce-equiv 1 2
+theorem andIsSymmetric Conjunction is Symmetric
+introduceImplication reverseAnd 1 2
+introduceImplication reverseAnd 2 1
+introduceEquivalence 1 2
 qed
 
-theorem or-sym Disjunction is Symmetric
-introduceImplication flip-or 1 2
-introduceImplication flip-or 2 1
-introduce-equiv 1 2
+theorem orIsSymmetric Disjunction is Symmetric
+introduceImplication reverseOr 1 2
+introduceImplication reverseOr 2 1
+introduceEquivalence 1 2
 qed
 
-theorem ∧-assoc Conjunction is Associative
+theorem andIsAssociative Conjunction is Associative
 assume ∧ 1 ∧ 2 3
   eliminateAndRight f.h
   eliminateAndLeft f.h
@@ -341,49 +341,49 @@ assume ∧ ∧ 1 2 3
   introduceAnd f.3 f.4
   introduceAnd f.2 f.5
 introduceImplication f.6
-introduce-equiv 1 2
+introduceEquivalence 1 2
 qed
 
-theorem or-assoc Disjunction is Associative
-introduceImplication or-left 1 2
-introduceImplication or-right 2 1
-introduceImplication or-left ∨ 1 2 3
-imp-trans 1 3
-imp-trans 2 3
-introduceImplication or-right 3 ∨ 1 2
-introduce-or 5 6
-introduce-or 4 7
-introduceImplication or-left 2 3
-introduceImplication or-right 3 2
-introduceImplication or-right ∨ 2 3 1
-introduceImplication or-left 1 ∨ 2 3
-imp-trans 9 11
-imp-trans 10 11
-introduce-or 12 13
-introduce-or 15 14
-introduce-equiv 8 16
+theorem orIsAssociative Disjunction is Associative
+introduceImplication introduceOrLeft 1 2
+introduceImplication introduceOrRight 2 1
+introduceImplication introduceOrLeft ∨ 1 2 3
+implicationIsTransitive 1 3
+implicationIsTransitive 2 3
+introduceImplication introduceOrRight 3 ∨ 1 2
+combineCases 5 6
+combineCases 4 7
+introduceImplication introduceOrLeft 2 3
+introduceImplication introduceOrRight 3 2
+introduceImplication introduceOrRight ∨ 2 3 1
+introduceImplication introduceOrLeft 1 ∨ 2 3
+implicationIsTransitive 9 11
+implicationIsTransitive 10 11
+combineCases 12 13
+combineCases 15 14
+introduceEquivalence 8 16
 qed
 
-theorem ∧-idem Conjunction is Idempotent
+theorem andIsIdempotent Conjunction is Idempotent
 assume 1
   introduceAnd f.h f.h
 introduceImplication f.1
 introduceImplication eliminateAndRight 1 1
-introduce-equiv 1 2
+introduceEquivalence 1 2
 qed
 
-theorem or-idem Disjunction is Idempotent
-introduceImplication or-right 1 1
-imp-ref 1
-introduce-or 2 2
-introduce-equiv 1 3
+theorem orIsIdempotent Disjunction is Idempotent
+introduceImplication introduceOrRight 1 1
+implicationIsReflexive 1
+combineCases 2 2
+introduceEquivalence 1 3
 qed
 
-theorem double-not-equiv Double Negation is No Negation At All
-introduceImplication double-not 1
+theorem doubleNegationIsNoNegation Double Negation is No Negation At All
+introduceImplication introduceDoubleNegation 1
 assume ¬ ¬ 1
   eliminateNegation f.h
 introduceImplication f.1
-introduce-equiv 1 2
+introduceEquivalence 1 2
 qed
 
