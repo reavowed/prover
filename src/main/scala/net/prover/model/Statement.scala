@@ -164,6 +164,7 @@ case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends St
     copy(terms = terms.map(_.substituteTermVariables(termToReplaceWith, termToBeReplaced)))
   }
   def html: String = terms.map(_.html).mkString(" " + predicate.symbol + " ")
+  override def safeHtml: String = if (terms.length > 1) "(" + html + ")" else html
 }
 
 object Statement {
