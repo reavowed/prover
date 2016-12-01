@@ -13,14 +13,11 @@ case class Theorem(
   val `type` = "theorem"
 
   override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
-    val (matchAttempts, lineAfterHypotheses) = hypotheses.mapFold(line) { (hypothesis, lineSoFar) =>
-      readReference(lineSoFar, theoremBuilder).mapLeft(hypothesis.attemptMatch)
+    val (hypothesesAndTemplates, lineAfterHypotheses) = hypotheses.mapFold(line) { (hypothesisTemplate, lineSoFar) =>
+      readReference(lineSoFar, theoremBuilder).mapLeft((_, hypothesisTemplate))
     }
-    val matchResult = Match.mergeAttempts(matchAttempts)
-      .getOrElse(throw ParseException.withMessage(s"Could not match theorem hypotheses", line.fullLine))
-    val (expandedMatch, lineAfterMatch) = matchResult.expand(result.variables, lineAfterHypotheses, context)
-    val step = Step(result.applyMatch(expandedMatch))
-    (step, lineAfterMatch)
+    matchPremisesToConclusion(hypothesesAndTemplates, result, lineAfterHypotheses, context)
+      .mapLeft(Step(_))
   }
 }
 
@@ -32,14 +29,22 @@ trait TheoremLineParser {
     line.splitFirstWord.mapLeft(theoremBuilder.resolveReference)
   }
 
-  protected def readStatement(line: PartialLine, theoremBuilder: TheoremBuilder, context: Context): (Statement, PartialLine) = {
-    val ReferenceMatcher = "r\\.(.*)".r
-    line match {
-      case WordAndRemainingText(ReferenceMatcher(reference), lineAfterReference) =>
-        (theoremBuilder.resolveReference(reference), lineAfterReference)
-      case _ =>
-        Statement.parse(line, context)
+  protected def matchPremisesToConclusion(
+    premisesWithTemplates: Seq[(Statement, Statement)],
+    conclusionTemplate: Statement,
+    line: PartialLine,
+    context: Context
+  ): (Statement, PartialLine) = {
+    val premiseMatchAttempts = premisesWithTemplates.map { case (premise, premiseTemplate) =>
+      premiseTemplate.attemptMatch(premise)
     }
+    val premisesMatchAttempt = MatchWithSubstitutions.mergeAttempts(premiseMatchAttempts)
+      .getOrElse(throw ParseException.withMessage("Could not match rule premises", line.fullLine))
+    val requiredVariables = (premisesWithTemplates.map(_._2.variables) :+ conclusionTemplate.variables).reduce(_ ++ _)
+    val (expandedMatch, lineAfterVariables) = premisesMatchAttempt.expand(requiredVariables, line, context)
+    val fullMatch = expandedMatch.checkSubstitutions()
+      .getOrElse(throw ParseException.withMessage("Could not match substitutions", line.fullLine))
+    (conclusionTemplate.applyMatch(fullMatch), lineAfterVariables)
   }
 }
 

@@ -9,7 +9,7 @@ import scala.collection.immutable.Nil
 trait Statement extends JsonSerializable.Base {
   def variables: Variables
   def freeVariables: Variables
-  def attemptMatch(otherStatement: Statement): Option[Match]
+  def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions]
   def applyMatch(m: Match): Statement
   def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement
   def html: String
@@ -27,14 +27,17 @@ trait Statement extends JsonSerializable.Base {
 case class StatementVariable(i: Int) extends Statement {
   override def variables: Variables = Variables(Seq(this), Nil)
   override def freeVariables: Variables = variables
-  override def attemptMatch(otherStatement: Statement): Option[Match] = {
-    Some(Match(Map(this -> otherStatement), Map.empty))
+  override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
+    Some(MatchWithSubstitutions(Map(this -> otherStatement), Map.empty, Nil))
   }
   override def applyMatch(m: Match): Statement = {
     m.statements.getOrElse(this, throw new Exception(s"No replacement for statement variable $this"))
   }
   def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement = {
-    StatementVariableWithReplacement(this, termToReplaceWith, termToBeReplaced)
+    if (termToReplaceWith == termToBeReplaced)
+      this
+    else
+      StatementVariableWithReplacement(this, termToReplaceWith, termToBeReplaced)
   }
   override def html: String = (944 + i).toChar.toString
 }
@@ -46,13 +49,15 @@ case class StatementVariableWithReplacement(
   extends Statement {
   override def variables: Variables = Variables(Seq(statementVariable), Seq(termToReplaceWith, termToBeReplaced))
   override def freeVariables: Variables = variables
-  override def attemptMatch(otherStatement: Statement): Option[Match] = {
-    // TODO: match currently way too limited
+  override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
     otherStatement match {
-      case StatementVariableWithReplacement(otherStatementVariable, `termToBeReplaced`, `termToReplaceWith`) =>
-        statementVariable.attemptMatch(otherStatementVariable)
+      case StatementVariableWithReplacement(otherStatementVariable, otherTermToReplaceWith, otherTermToBeReplaced) =>
+        Some(MatchWithSubstitutions(
+          Map(statementVariable -> otherStatementVariable),
+          Map(termToReplaceWith -> otherTermToReplaceWith, termToBeReplaced -> otherTermToBeReplaced),
+          Nil))
       case _ =>
-        None
+        Some(MatchWithSubstitutions(Map.empty, Map.empty, Seq((this, otherStatement))))
     }
   }
   override def applyMatch(m: Match): Statement = {
@@ -72,13 +77,13 @@ case class StatementVariableWithReplacement(
 case class ConnectiveStatement(substatements: Seq[Statement], connective: Connective) extends Statement {
   override def variables: Variables = substatements.map(_.variables).reduce(_ ++ _)
   override def freeVariables: Variables = substatements.map(_.freeVariables).reduce(_ ++ _)
-  override def attemptMatch(otherStatement: Statement): Option[Match] = {
+  override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
     otherStatement match {
       case ConnectiveStatement(otherSubstatements, `connective`) =>
         val matchAttempts = substatements.zip(otherSubstatements).map { case (substatement, otherSubstatement) =>
           substatement.attemptMatch(otherSubstatement)
         }
-        Match.mergeAttempts(matchAttempts)
+        MatchWithSubstitutions.mergeAttempts(matchAttempts)
       case _ =>
         None
     }
@@ -103,21 +108,23 @@ case class ConnectiveStatement(substatements: Seq[Statement], connective: Connec
 }
 
 case class QuantifierStatement(boundVariable: TermVariable, substatement: Statement, quantifier: Quantifier) extends Statement {
-  override def variables: Variables = substatement.variables + boundVariable
+  override def variables: Variables = boundVariable +: substatement.variables
   override def freeVariables: Variables = substatement.freeVariables - boundVariable
 
-  override def attemptMatch(otherStatement: Statement): Option[Match] = {
+  override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
     otherStatement match {
       case QuantifierStatement(otherBoundVariable, otherSubstatement, `quantifier`) =>
         substatement.attemptMatch(otherSubstatement).flatMap { substatementMatch =>
-          Match.merge(Seq(substatementMatch, Match(Map.empty, Map(boundVariable -> otherBoundVariable))))
+          MatchWithSubstitutions.merge(Seq(substatementMatch, MatchWithSubstitutions(Map.empty, Map(boundVariable -> otherBoundVariable), Nil)))
         }
       case _ =>
         None
     }
   }
   override def applyMatch(m: Match): Statement = {
-    copy(substatement = substatement.applyMatch(m - boundVariable))
+    copy(
+      boundVariable = Term.asVariable(boundVariable.applyMatch(m)),
+      substatement = substatement.applyMatch(m))
   }
 
   override def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement = {
@@ -135,13 +142,13 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
 case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends Statement {
   override def variables: Variables = terms.map(_.variables).reduce(_ ++ _)
   override def freeVariables: Variables = terms.map(_.freeVariables).reduce(_ ++ _)
-  override def attemptMatch(otherStatement: Statement): Option[Match] = {
+  override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
     otherStatement match {
       case PredicateStatement(otherTerms, `predicate`) =>
         val matchAttempts = terms.zip(otherTerms).map { case (term, otherTerm) =>
           term.attemptMatch(otherTerm)
         }
-        Match.mergeAttempts(matchAttempts)
+        MatchWithSubstitutions.mergeAttempts(matchAttempts)
       case _ =>
         None
     }

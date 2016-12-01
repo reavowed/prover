@@ -35,12 +35,15 @@
                 <div>
                     <div class="rulePremises">
                         Given
-                        {{entry.hypothesis ? entry.hypothesis + ' ⊢' : ''}}
-                        {{entry.premises.join(", ")}}
+                        {{entry.hypothesisTemplate ? entry.hypothesisTemplate + ' ⊢' : ''}}
+                        {{entry.premiseTemplates.join(", ")}}
+                        <span ng-if="entry.freeVariables.length">
+                            (with {{entry.freeVariables.join(", ")}} free)
+                        </span>
                     </div>
                     <div class="ruleConclusion">
                         Deduce
-                        {{entry.conclusion}}
+                        {{entry.conclusionTemplate}}
                     </div>
                 </div>
             </div>
@@ -53,9 +56,9 @@
             </div>
         </div>
         <div ng-switch-when="theorem">
-            <div class="result" data-toggle="collapse" data-target="#{{entry.name}}-proof, #{{entry.name}}-summary">
+            <div class="result" data-toggle="collapse" data-target="#{{entry.id}}-proof, #{{entry.id}}-summary">
                 <div class="theoremTitle">Theorem: {{entry.title}}</div>
-                <div id="{{entry.name}}-summary" class="theoremSummary collapse in">
+                <div id="{{entry.id}}-summary" class="theoremSummary collapse in">
                     <div ng-if="entry.hypotheses.length">
                         Suppose
                         <span ng-if="entry.hypotheses.length > 1">
@@ -69,7 +72,7 @@
                         {{entry.result}}.
                     </div>
                 </div>
-                <div id="{{entry.name}}-proof" class="theoremProof collapse">
+                <div id="{{entry.id}}-proof" class="theoremProof collapse">
                     <div ng-if="entry.hypotheses.length">
                         <label>Hypotheses</label>
                         <div ng-repeat="hypothesis in entry.hypotheses" class="theoremHypothesis">{{hypothesis}}</div>

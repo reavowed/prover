@@ -94,7 +94,7 @@ We introduce two more connectives, ∧ (conjunction, or 'and') and ∨ (disjunct
 
 connective ∧ 2 ¬ → 1 ¬ 2
 
-theorem introduce-and Introduce Conjunction
+theorem introduceAnd Introduce Conjunction
 hypothesis 1
 hypothesis 2
 assume → 1 ¬ 2
@@ -103,7 +103,7 @@ introduceNegation h2 f.1
 definition-∧ 1
 qed
 
-theorem eliminate-and-l Eliminate Conjunction (Left)
+theorem eliminateAndLeft Eliminate Conjunction (Left)
 hypothesis ∧ 1 2
 assume ¬ 1
   false-imp-any f.h ¬ 2
@@ -112,7 +112,7 @@ introduceNegation f.1 f.2
 eliminateNegation 1
 qed
 
-theorem eliminate-and-r Eliminate Conjunction (Right)
+theorem eliminateAndRight Eliminate Conjunction (Right)
 hypothesis ∧ 1 2
 assume ¬ 2
   any-imp-true f.h 1
@@ -123,9 +123,9 @@ qed
 
 theorem flip-and Reverse Conjunction
 hypothesis ∧ 1 2
-eliminate-and-l h1
-eliminate-and-r h1
-introduce-and 2 1
+eliminateAndLeft h1
+eliminateAndRight h1
+introduceAnd 2 1
 qed
 
 connective ∨ 2 → ¬ 1 2
@@ -189,19 +189,19 @@ connective ↔ 2 ∧ → 1 2 → 2 1
 theorem equiv-forward Implication from Equivalence
 hypothesis ↔ 1 2
 definition-↔ h1
-eliminate-and-l 1
+eliminateAndLeft 1
 qed
 
 theorem equiv-converse Converse from Equivalence
 hypothesis ↔ 1 2
 definition-↔ h1
-eliminate-and-r 1
+eliminateAndRight 1
 qed
 
 theorem introduce-equiv Equivalence from Implication and Converse
 hypothesis → 1 2
 hypothesis → 2 1
-introduce-and h1 h2
+introduceAnd h1 h2
 definition-↔ 1
 qed
 
@@ -253,7 +253,7 @@ comment We now show that our equivalence connective has the properties we will l
 
 theorem equiv-refl Equivalence is Reflexive
 imp-ref 1
-introduce-and 1 1
+introduceAnd 1 1
 definition-↔ 2
 qed
 
@@ -273,6 +273,22 @@ theorem equiv-sym Equivalence is Symmetric
 introduceImplication flip-equiv 1 2
 introduceImplication flip-equiv 2 1
 introduce-equiv 1 2
+qed
+
+comment Some helper theorems for proofs involving equivalences
+
+theorem modusPonensEquivalenceLeft Modus Ponens with Equivalence (Left)
+hypothesis ↔ 1 2
+hypothesis 1
+equiv-forward h1
+eliminateImplication 1 h2
+qed
+
+theorem modusPonensEquivalenceRight Modus Ponens with Equivalence (Right)
+hypothesis ↔ 1 2
+hypothesis 2
+equiv-converse h1
+eliminateImplication 1 h2
 qed
 
 chapter Propositional Logic Identities
@@ -310,20 +326,20 @@ qed
 
 theorem ∧-assoc Conjunction is Associative
 assume ∧ 1 ∧ 2 3
-  eliminate-and-r f.h
-  eliminate-and-l f.h
-  eliminate-and-l f.1
-  eliminate-and-r f.1
-  introduce-and f.2 f.3
-  introduce-and f.5 f.4
+  eliminateAndRight f.h
+  eliminateAndLeft f.h
+  eliminateAndLeft f.1
+  eliminateAndRight f.1
+  introduceAnd f.2 f.3
+  introduceAnd f.5 f.4
 introduceImplication f.6
 assume ∧ ∧ 1 2 3
-  eliminate-and-l f.h
-  eliminate-and-l f.1
-  eliminate-and-r f.1
-  eliminate-and-r f.h
-  introduce-and f.3 f.4
-  introduce-and f.2 f.5
+  eliminateAndLeft f.h
+  eliminateAndLeft f.1
+  eliminateAndRight f.1
+  eliminateAndRight f.h
+  introduceAnd f.3 f.4
+  introduceAnd f.2 f.5
 introduceImplication f.6
 introduce-equiv 1 2
 qed
@@ -350,9 +366,9 @@ qed
 
 theorem ∧-idem Conjunction is Idempotent
 assume 1
-  introduce-and f.h f.h
+  introduceAnd f.h f.h
 introduceImplication f.1
-introduceImplication eliminate-and-r 1 1
+introduceImplication eliminateAndRight 1 1
 introduce-equiv 1 2
 qed
 

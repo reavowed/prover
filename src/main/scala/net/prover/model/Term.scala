@@ -1,20 +1,31 @@
 package net.prover.model
 
-trait Term {
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.jsontype.TypeSerializer
+import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
+
+trait Term extends JsonSerializable.Base {
   def variables: Variables
   def freeVariables: Variables
-  def attemptMatch(otherTerm: Term): Option[Match]
+  def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions]
   def applyMatch(m: Match): Term
   def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Term
   def html: String
   override def toString: String = html
+
+  override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
+    gen.writeString(html)
+  }
+  override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
+    serialize(gen, serializers)
+  }
 }
 
 case class TermVariable(i: Int) extends Term {
   override def variables: Variables = Variables(Nil, Seq(this))
   override def freeVariables: Variables = variables
-  override def attemptMatch(otherTerm: Term): Option[Match] = {
-    Some(Match(Map.empty, Map(this -> otherTerm)))
+  override def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions] = {
+    Some(MatchWithSubstitutions(Map.empty, Map(this -> otherTerm), Nil))
   }
   override def applyMatch(m: Match): Term = {
     m.terms.getOrElse(

@@ -15,11 +15,14 @@ trait Definition extends DirectStepParser {
     theoremBuilder: TheoremBuilder,
     context: Context
   ): (Statement, PartialLine) = {
-    val (fromStatementMatch, toStatement) =
-        definedStatement.attemptMatch(statement).map((_, definingStatement))
-          .orElse(definingStatement.attemptMatch(statement).map((_, definedStatement)))
+    val (fromStatement, toStatement) =
+        definedStatement.attemptMatch(statement).map(_ => (definedStatement, definingStatement))
+          .orElse(definingStatement.attemptMatch(statement).map(_ => (definingStatement, definedStatement)))
           .getOrElse(throw new Exception(s"Could not apply definition to statement '$statement'"))
-    val (matcher, remainingLine) = fromStatementMatch.expand(toStatement.variables, line, context)
-    (toStatement.applyMatch(matcher), remainingLine)
+    matchPremisesToConclusion(
+      Seq((statement, fromStatement)),
+      toStatement,
+      line,
+      context)
   }
 }

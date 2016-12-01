@@ -4,30 +4,34 @@ sealed trait Rule extends ChapterEntry with TheoremLineParser {
   val `type` = "rule"
 }
 
+case class FreeVariableRestrictionException(message: String) extends Exception(message)
+
 case class DirectRule(
     id: String,
-    premises: Seq[Statement],
-    conclusion: Statement,
+    premiseTemplates: Seq[Statement],
+    conclusionTemplate: Statement,
     freeVariables: Seq[TermVariable])
   extends Rule with DirectStepParser {
   override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
-    val (premiseMatchAttempts, lineAfterPremises) = premises.mapFold(line) { (premise, lineSoFar) =>
-      readReference(lineSoFar, theoremBuilder).mapLeft(premise.attemptMatch)
+    if (theoremBuilder.nonFreeTerms.intersect(freeVariables).nonEmpty) {
+      throw FreeVariableRestrictionException(
+        s"Cannot apply rule '$id' to theorem with variables " +
+          theoremBuilder.nonFreeTerms.intersect(freeVariables).mkString(", ") +
+          "in the hypotheses")
     }
-    val premisesMatch = Match.mergeAttempts(premiseMatchAttempts)
-      .getOrElse(throw ParseException.withMessage("Could not match rule premises", line.fullLine))
-    val (expandedMatch, remainingLine) = premisesMatch.expand(conclusion.variables, lineAfterPremises, context)
-    val statement = conclusion.applyMatch(expandedMatch)
-    val step = Step(statement)
-    (step, remainingLine)
+    val (premisesAndTemplates, lineAfterPremises) = premiseTemplates.mapFold(line) { (premiseTemplate, lineSoFar) =>
+      readReference(lineSoFar, theoremBuilder).mapLeft((_, premiseTemplate))
+    }
+    matchPremisesToConclusion(premisesAndTemplates, conclusionTemplate, lineAfterPremises, context)
+        .mapLeft(Step(_))
   }
 }
 
 case class FantasyRule(
     id: String,
-    hypothesis: Statement,
-    premises: Seq[Statement],
-    conclusion: Statement)
+    hypothesisTemplate: Statement,
+    premiseTemplates: Seq[Statement],
+    conclusionTemplate: Statement)
   extends Rule {
   override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
     def withTheorem = line.splitFirstWord.optionMapLeft(n => context.theorems.find(_.id == n)) map {
@@ -38,8 +42,9 @@ case class FantasyRule(
       case (definition, restOfLine) =>
         applyWithDefinition(definition, theoremBuilder, restOfLine, context)
     }
-    withTheorem.orElse(withDefinition).getOrElse(applyWithFantasy(theoremBuilder, line))
+    withTheorem.orElse(withDefinition).getOrElse(applyWithFantasy(theoremBuilder, line, context))
   }
+
 
   private def applyWithPreviousTheorem(
     theorem: Theorem,
@@ -53,24 +58,22 @@ case class FantasyRule(
       case _ =>
         throw ParseException.withMessage("Can only apply rule to theorem with a single hypothesis", line.fullLine)
     }
-    val premise = premises match {
+    val premiseTemplate = premiseTemplates match {
       case Seq(singlePremise) =>
         singlePremise
       case _ =>
         throw ParseException.withMessage("Can only apply rule to theorem if it has a single premise", line.fullLine)
     }
     val requiredVariables = theoremHypothesis.variables ++ theorem.result.variables
-    val matcher = Match.empty.expand(requiredVariables, line, context)._1
+    val (matcher, lineAfterVariables) = Match.empty.expand(requiredVariables, line, context)
     val updatedTheoremHypothesis = theoremHypothesis.applyMatch(matcher)
     val updatedTheoremResult = theorem.result.applyMatch(matcher)
-    val fullMatch = Match.mergeAttempts(Seq(
-      hypothesis.attemptMatch(updatedTheoremHypothesis),
-      premise.attemptMatch(updatedTheoremResult))
-    ).getOrElse(throw ParseException.withMessage(
-      s"Theorem $updatedTheoremHypothesis ⊢ $updatedTheoremResult did not match rule requirement $hypothesis ⊢ $premise",
-      line.fullLine))
-    val statement = conclusion.applyMatch(fullMatch)
-    theoremBuilder.addStep(Step(statement))
+    val conclusion = matchPremisesToConclusion(
+      Seq((updatedTheoremHypothesis, hypothesisTemplate), (updatedTheoremResult, premiseTemplate)),
+      conclusionTemplate,
+      lineAfterVariables,
+      context)._1
+    theoremBuilder.addStep(Step(conclusion))
   }
 
   private def applyWithDefinition(
@@ -79,35 +82,37 @@ case class FantasyRule(
     line: PartialLine,
     context: Context
   ): TheoremBuilder = {
-    val premise = premises match {
+    val premiseTemplate = premiseTemplates match {
       case Seq(singlePremise) =>
         singlePremise
       case _ =>
         throw ParseException.withMessage("Can only apply rule to definition if it has a single premise", line.fullLine)
     }
 
-    val (definitionHypothesis, lineAfterHypothesis) = readStatement(line, theoremBuilder, context)
+    val (definitionHypothesis, lineAfterHypothesis) = Statement.parse(line, context)
     val (definitionResult, _) = definition.applyToStatement(definitionHypothesis, lineAfterHypothesis, theoremBuilder, context)
 
-    val hypothesisMatch = hypothesis.attemptMatch(definitionHypothesis)
-    val premiseMatch = premise.attemptMatch(definitionResult)
-    val fullMatch = Match.mergeAttempts(Seq(hypothesisMatch, premiseMatch))
-      .getOrElse(throw ParseException.withMessage(
-        s"Definition $definitionHypothesis ⇒ $definitionResult did not match rule $hypothesis ⊢ $premise",
-        line.fullLine))
-    val statement = conclusion.applyMatch(fullMatch)
-    theoremBuilder.addStep(Step(statement))
+    val conclusion = matchPremisesToConclusion(
+      Seq((definitionHypothesis, hypothesisTemplate), (definitionResult, premiseTemplate)),
+      conclusionTemplate,
+      line,
+      context
+    )._1
+    theoremBuilder.addStep(Step(conclusion))
   }
 
-  private def applyWithFantasy(theoremBuilder: TheoremBuilder, line: PartialLine): TheoremBuilder = {
+  private def applyWithFantasy(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
     theoremBuilder.replaceFantasy { fantasy =>
-      val matchAttempts = hypothesis.attemptMatch(fantasy.hypothesis) +: premises.mapFold(line) { (premise, lineSoFar) =>
-        readReference(lineSoFar, theoremBuilder).mapLeft(premise.attemptMatch)
-      }._1
-      val matchResult = Match.mergeAttempts(matchAttempts)
-        .getOrElse(throw ParseException.withMessage("Could not match rule premises", line.fullLine))
-      val statement = conclusion.applyMatch(matchResult)
-      Step(statement, Some(Step.Fantasy(fantasy.hypothesis, fantasy.steps)))
+      val (premisesAndTemplates, lineAfterPremises) = premiseTemplates.mapFold(line) { (premiseTemplate, lineSoFar) =>
+        readReference(lineSoFar, theoremBuilder).mapLeft((_, premiseTemplate))
+      }
+      val conclusion = matchPremisesToConclusion(
+        (fantasy.hypothesis, hypothesisTemplate) +: premisesAndTemplates,
+        conclusionTemplate,
+        lineAfterPremises,
+        context
+      )._1
+      Step(conclusion, Some(Step.Fantasy(fantasy.hypothesis, fantasy.steps)))
     }
   }
 }

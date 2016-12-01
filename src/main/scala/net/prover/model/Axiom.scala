@@ -4,8 +4,7 @@ case class Axiom(id: String, title: String, statement: Statement) extends Chapte
   override val `type`: String = "axiom"
 
   override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
-    val (matcher, remainingLine) = Match.empty.expand(statement.freeVariables, line, context)
-    (Step(statement.applyMatch(matcher)), remainingLine)
+    matchPremisesToConclusion(Nil, statement, line, context).mapLeft(Step(_))
   }
 }
 

@@ -74,5 +74,43 @@ class TheoremBuilderSpec extends ProverSpec {
         defaultContext)
       theoremBuilder.steps(1).statement mustEqual Equals(3, 1)
     }
+
+    val IntroduceAll = DirectRule(
+      "introduceAll",
+      Seq(StatementVariableWithReplacement(1, 2, 1)),
+      ForAll(1, 1),
+      Seq(2))
+
+    "handle rule with a substitution in the premise applied to a non-substituted statement" in {
+      val theoremBuilder = IntroduceAll.readAndUpdateTheoremBuilder(
+        TheoremBuilder().addStep(Conjunction(Equals(3, 3), ElementOf(1, 2))),
+        "1 ∧ = 4 4 ∈ 1 2 3 4",
+        defaultContext)
+      theoremBuilder.steps(1).statement mustEqual ForAll(4, Conjunction(Equals(4, 4), ElementOf(1, 2)))
+    }
+
+    "handle rule with a substitution in the premise applied to a substituted statement" in {
+      val theoremBuilder = IntroduceAll.readAndUpdateTheoremBuilder(
+        TheoremBuilder().addStep(StatementVariableWithReplacement(3, 2, 1)),
+        "1",
+        defaultContext)
+      theoremBuilder.steps(1).statement mustEqual ForAll(1, 3)
+    }
+
+    "fail a rule with free variables if a free variable appears in a theorem hypothesis" in {
+      IntroduceAll.readAndUpdateTheoremBuilder(
+        TheoremBuilder().addHypothesis(Equals(1, 2)),
+        "h1 2 = 1 3",
+        defaultContext
+      ) must throwA[FreeVariableRestrictionException]
+    }
+
+    "fail a rule with free variables if a free variable appears in a fantasy hypothesis" in {
+      IntroduceAll.readAndUpdateTheoremBuilder(
+        TheoremBuilder().addFantasy(Equals(1, 2)),
+        "f.h 2 = 1 3",
+        defaultContext
+      ) must throwA[FreeVariableRestrictionException]
+    }
   }
 }

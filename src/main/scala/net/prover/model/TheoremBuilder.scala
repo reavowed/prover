@@ -70,6 +70,8 @@ trait TheoremBuildable[T <: TheoremBuildable[T]] {
   }
 
   protected def resolveSpecificReference: PartialFunction[String, Statement]
+
+  def nonFreeTerms: Seq[TermVariable] = fantasyOption.toSeq.flatMap(_.nonFreeTerms)
 }
 
 case class TheoremBuilder(
@@ -90,6 +92,10 @@ case class TheoremBuilder(
           .getOrElse(throw ReferenceResolveException(reference, "Step index out of range"))
     }
   }
+
+  override def nonFreeTerms: Seq[TermVariable] = {
+    (super.nonFreeTerms ++ hypotheses.flatMap(_.freeVariables.termVariables)).distinct
+  }
 }
 
 object TheoremBuilder {
@@ -103,6 +109,9 @@ object TheoremBuilder {
     override protected def resolveSpecificReference: PartialFunction[String, Statement] = {
       case "h" =>
         hypothesis
+    }
+    override def nonFreeTerms: Seq[TermVariable] = {
+      (super.nonFreeTerms ++ hypothesis.freeVariables.termVariables).distinct
     }
   }
 }
