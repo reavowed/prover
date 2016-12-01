@@ -47,6 +47,11 @@
 
 .theoremTitle {
     margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.theoremTitle:hover {
+    text-decoration: underline;
 }
 
 .theoremSummary, .theoremProof {
