@@ -67,8 +67,12 @@ case class StatementVariableWithReplacement(
         Term.asVariable(termToBeReplaced.applyMatch(m)))
   }
 
-  def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement = {
-    throw new Exception("Multiple term substitutions not currently supported")
+  def substituteTermVariables(newTermToReplaceWith: TermVariable, newTermToBeReplaced: TermVariable): Statement = {
+    if (newTermToBeReplaced == termToBeReplaced || newTermToReplaceWith == newTermToBeReplaced) {
+      this
+    } else {
+      throw new Exception("Multiple term substitutions not currently supported")
+    }
   }
 
   override def html: String = s"$statementVariable[$termToReplaceWith/$termToBeReplaced]"

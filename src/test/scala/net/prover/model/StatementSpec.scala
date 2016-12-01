@@ -76,4 +76,28 @@ class StatementSpec extends ProverSpec {
         .must(beNone)
     }
   }
+
+  "statement term substitution" should {
+    "not do anything if substituting a variable for itself" in {
+      val statements = Seq(
+        StatementVariable(1),
+        Implication(1, 2),
+        Equals(1, 2))
+
+      forall(statements) { s =>
+        s.substituteTermVariables(1, 1) mustEqual s
+      }
+    }
+    "not do anything if substituting an already-substituted variable" in {
+      val statements = Seq(
+        StatementVariable(1),
+        Implication(1, 2),
+        Equals(1, 2))
+
+      forall(statements) { s =>
+        val firstSubstitution = s.substituteTermVariables(2, 1)
+        firstSubstitution.substituteTermVariables(3, 1) mustEqual firstSubstitution
+      }
+    }
+  }
 }
