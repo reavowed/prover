@@ -127,6 +127,16 @@ introduceNegation f.1 f.2
 eliminateNegation 1
 qed
 
+theorem combineAntecedents Combine Antecedents
+hypothesis → 1 → 2 3
+assume ∧ 1 2
+  eliminateAndLeft f.h
+  eliminateImplication h1 f.1
+  eliminateAndRight f.h
+  eliminateImplication f.2 f.3
+introduceImplication f.4
+qed
+
 theorem reverseAnd Reverse Conjunction
 hypothesis ∧ 1 2
 eliminateAndLeft h1
@@ -295,6 +305,22 @@ hypothesis ↔ 1 2
 hypothesis 2
 eliminateEquivalenceConverse h1
 eliminateImplication 1 h2
+qed
+
+theorem trueStatementsAreEquivalent True Statements Are Equivalent
+hypothesis 1
+hypothesis 2
+anythingImpliesTrue h2 1
+anythingImpliesTrue h1 2
+introduceEquivalence 1 2
+qed
+
+theorem falseStatementsAreEquivalent False Statements Are Equivalent
+hypothesis ¬ 1
+hypothesis ¬ 2
+falseImpliesAnything1 h1 2
+falseImpliesAnything1 h2 1
+introduceEquivalence 1 2
 qed
 
 chapter Propositional Logic Identities

@@ -17,7 +17,7 @@ case class Theorem(
     val (hypothesesAndTemplates, lineAfterHypotheses) = hypotheses.mapFold(line) { (hypothesisTemplate, lineSoFar) =>
       readReference(lineSoFar, theoremBuilder).mapLeft((_, hypothesisTemplate))
     }
-    val (matcher, remainingLine) = matchPremises(hypothesesAndTemplates, result, lineAfterHypotheses, context)
+    val (matcher, _) = matchPremises(hypothesesAndTemplates, result, lineAfterHypotheses, context)
     val updatedArbitraryVariables = arbitraryVariables.flatMap(matcher.terms.get).map(Term.asVariable)
     theoremBuilder
       .addStep(Step(result.applyMatch(matcher)))
@@ -49,16 +49,43 @@ trait TheoremLineParser {
     line: PartialLine,
     context: Context
   ): (Match, PartialLine) = {
-    val premiseMatchAttempts = premisesWithTemplates.map { case (premise, premiseTemplate) =>
-      premiseTemplate.attemptMatch(premise)
+      val premiseMatchAttempts = premisesWithTemplates.map { case (premise, premiseTemplate) =>
+        premiseTemplate.attemptMatch(premise)
+      }
+      val premisesMatchAttempt = MatchWithSubstitutions.mergeAttempts(premiseMatchAttempts)
+        .getOrElse(throw ParseException.withMessage("Could not match rule premises", line.fullLine))
+      val (expandedMatch, lineAfterVariables) = expandMatch(
+        premisesMatchAttempt,
+        premisesWithTemplates,
+        conclusionTemplate,
+        line,
+        context)
+      val fullMatch = expandedMatch.checkSubstitutions()
+        .getOrElse(throw ParseException.withMessage("Could not match substitutions", line.fullLine))
+      (fullMatch, lineAfterVariables)
+  }
+
+  private def expandMatch(
+    premisesMatchAttempt: MatchWithSubstitutions,
+    premisesWithTemplates: Seq[(Statement, Statement)],
+    conclusionTemplate: Statement,
+    line: PartialLine,
+    context: Context
+  ): (MatchWithSubstitutions, PartialLine) = {
+    (premisesWithTemplates, line) match {
+      case (Seq((premise, substitution: StatementVariableWithReplacement)), WordAndRemainingText("self", remainingLine)) =>
+        val (term, lineAfterTerm) = Term.parse(remainingLine, context).mapLeft(Term.asVariable)
+        val substitutionMatch = MatchWithSubstitutions(
+          Map(substitution.statementVariable -> premise),
+          Map(substitution.termToReplaceWith -> term, substitution.termToBeReplaced -> term),
+          Nil)
+        val combinedMatch = MatchWithSubstitutions.merge(Seq(premisesMatchAttempt, substitutionMatch)).getOrElse(
+          throw ParseException.withMessage("Invalid substitution match", line.fullLine))
+        combinedMatch.expand(conclusionTemplate.variables, lineAfterTerm, context)
+      case _ =>
+        val requiredVariables = (premisesWithTemplates.map(_._2.variables) :+ conclusionTemplate.variables).reduce(_ ++ _)
+        premisesMatchAttempt.expand(requiredVariables, line, context)
     }
-    val premisesMatchAttempt = MatchWithSubstitutions.mergeAttempts(premiseMatchAttempts)
-      .getOrElse(throw ParseException.withMessage("Could not match rule premises", line.fullLine))
-    val requiredVariables = (premisesWithTemplates.map(_._2.variables) :+ conclusionTemplate.variables).reduce(_ ++ _)
-    val (expandedMatch, lineAfterVariables) = premisesMatchAttempt.expand(requiredVariables, line, context)
-    val fullMatch = expandedMatch.checkSubstitutions()
-      .getOrElse(throw ParseException.withMessage("Could not match substitutions", line.fullLine))
-    (fullMatch, lineAfterVariables)
   }
 }
 

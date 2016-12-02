@@ -33,6 +33,7 @@ case class PartialLine(remainingText: String, fullLine: BookLine) {
   def splitWords: Seq[String] = {
     remainingText.splitByWhitespace()
   }
+  def isEmpty: Boolean = remainingText.isEmpty
   def nonEmpty: Boolean = remainingText.nonEmpty
 }
 

@@ -98,7 +98,7 @@ case class TheoremBuilder(
     {
       case reference @ hypothesisReference(IntParser(number)) =>
         hypotheses.lift(number - 1)
-          .getOrElse(throw ReferenceResolveException(reference, "Step index out of range"))
+          .getOrElse(throw ReferenceResolveException(reference, "Hypothesis index out of range"))
     }
   }
   protected def fantasyHypotheses: Seq[Statement] = {
