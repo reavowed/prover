@@ -51,6 +51,36 @@ introduceForall 4 self 3 3
 setsWithSameMembersEqual 5
 qed
 
+chapter Subsets
+Introduce the subset predicate, ⊆.
+
+predicate ⊆ 2 ∀ 3 → ∈ 3 1 ∈ 3 2
+
+theorem subsetIsReflexive Subset is Reflexive
+implicationIsReflexive ∈ 2 1
+introduceForall 1 self 2
+definition-⊆ 2
+introduceForall 3 self 1
+qed
+
+theorem subsetIsAntisymmetric Subset is Antisymmetric
+hypothesis ⊆ 1 2
+hypothesis ⊆ 2 1
+definition-⊆ h1 3
+definition-⊆ h2 3
+introduceEquivalenceInsideForall 1 2
+setsWithSameMembersEqual 3
+qed
+
+theorem subsetIsTransitive Subset is Transitive
+hypothesis ⊆ 1 2
+hypothesis ⊆ 2 3
+definition-⊆ h1 3
+definition-⊆ h2 3
+implicationIsTransitiveInsideForall 1 2
+definition-⊆ 3
+qed
+
 chapter Uniqueness Quantifier
 Introduce the uniqueness quantifier, ∃!.
 
