@@ -33,6 +33,13 @@
                 </span>
             </div>
         </div>
+        <div ng-switch-when="constant">
+            <div class="result">
+                Constant: {{entry.symbol}}
+                <span class="normal">is defined by</span>
+                {{ entry.definition }}
+            </div>
+        </div>
         <div ng-switch-when="rule">
             <div class="result ruleWrapper">
                 <div>Rule:</div>

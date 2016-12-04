@@ -9,9 +9,7 @@ case class Theorem(
     steps: Seq[Step],
     result: Statement,
     arbitraryVariables: Seq[TermVariable])
-  extends ChapterEntry with TheoremLineParser {
-
-  val `type` = "theorem"
+  extends ChapterEntry(Theorem) with TheoremLineParser {
 
   override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
     val (hypothesesAndTemplates, lineAfterHypotheses) = hypotheses.mapFold(line) { (hypothesisTemplate, lineSoFar) =>

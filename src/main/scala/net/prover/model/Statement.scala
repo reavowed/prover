@@ -193,6 +193,11 @@ object Statement {
         context.predicates.find(_.symbol == s)
       }
     }
+    object Constant {
+      def unapply(s: String): Option[Constant] = {
+        context.constants.find(_.symbol == s)
+      }
+    }
     val (statementType, remainingLine) = line.splitFirstWord
     statementType match {
       case ConnectiveName(connective) =>

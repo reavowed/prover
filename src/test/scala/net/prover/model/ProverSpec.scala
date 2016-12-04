@@ -19,7 +19,8 @@ trait ProverSpec extends Specification {
     predicates = Seq(ElementOf, Equals),
     rules = Nil,
     theorems = Nil,
-    axioms = Nil)
+    axioms = Nil,
+    constants = Nil)
 
   implicit def intToStatementVariable(i: Int): StatementVariable = StatementVariable(i)
 

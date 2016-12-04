@@ -41,6 +41,26 @@ case class TermVariable(i: Int) extends Term {
   override def html: String = (123 - i).toChar.toString
 }
 
+case class ConstantTerm(symbol: String) extends Term {
+  override def variables: Variables = Variables(Nil, Nil)
+  override def freeVariables: Seq[TermVariable] = Nil
+  override def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions] = {
+    if (otherTerm == this) {
+      Some(MatchWithSubstitutions.empty)
+    } else {
+      None
+    }
+  }
+  override def applyMatch(m: Match): Term = this
+  override def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Term = this
+  override def html: String = symbol
+}
+
+trait TermParser {
+  def symbol: String
+  def parseTerm(line: PartialLine, context: Context): (Term, PartialLine)
+}
+
 object Term {
   def asVariable(term: Term): TermVariable = {
     term match {
@@ -52,8 +72,16 @@ object Term {
   }
 
   def parse(line: PartialLine, context: Context): (Term, PartialLine) = {
+    object ParsableTerm {
+      def unapply(s: String): Option[TermParser] = {
+        context.constants.find(_.symbol == s)
+      }
+    }
+
     val (termType, remainingLine) = line.splitFirstWord
     termType match {
+      case ParsableTerm(termParser) =>
+        termParser.parseTerm(remainingLine, context)
       case IntParser(i) =>
         (TermVariable(i), remainingLine)
       case _ =>

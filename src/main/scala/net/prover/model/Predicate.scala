@@ -1,7 +1,6 @@
 package net.prover.model
 
-case class Predicate(symbol: String, arity: Int, definingStatement: Option[Statement]) extends ChapterEntry {
-  val `type` = "predicate"
+case class Predicate(symbol: String, arity: Int, definingStatement: Option[Statement]) extends ChapterEntry(Predicate) {
   val defaultStatement: PredicateStatement = apply((1 to arity).map(TermVariable): _*)
 
   def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {

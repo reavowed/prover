@@ -1,8 +1,6 @@
 package net.prover.model
 
-case class Axiom(id: String, title: String, statement: Statement) extends ChapterEntry with DirectStepParser {
-  override val `type`: String = "axiom"
-
+case class Axiom(id: String, title: String, statement: Statement) extends ChapterEntry(Axiom) with DirectStepParser {
   override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
     matchPremisesToConclusion(Nil, statement, line, context).mapLeft(Step(_))
   }

@@ -6,8 +6,8 @@ case class Chapter(title: String, summary: String, entries: Seq[ChapterEntry] = 
   val key: String = title.formatAsKey
 }
 
-trait ChapterEntry {
-  def `type`: String
+abstract class ChapterEntry(chapterEntryParser: ChapterEntryParser[_]) {
+  val `type`: String = chapterEntryParser.name
 }
 
 trait ChapterEntryParser[T <: ChapterEntry] {

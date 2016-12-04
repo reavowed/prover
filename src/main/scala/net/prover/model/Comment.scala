@@ -1,8 +1,6 @@
 package net.prover.model
 
-case class Comment(text: String) extends ChapterEntry {
-  val `type` = "comment"
-}
+case class Comment(text: String) extends ChapterEntry(Comment)
 
 object Comment extends SingleLineChapterEntryParser[Comment] {
   override val name: String = "comment"

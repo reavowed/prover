@@ -39,7 +39,7 @@ case class PartialLine(remainingText: String, fullLine: BookLine) {
 
 object Book {
 
-  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, Connective, Quantifier, Predicate, Rule, Theorem, Axiom)
+  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, Connective, Quantifier, Predicate, Rule, Theorem, Axiom, Constant)
 
   private def addLinesToBook(lines: Seq[BookLine], book: Book): Book = {
     lines match {

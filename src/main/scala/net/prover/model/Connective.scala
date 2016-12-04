@@ -1,7 +1,6 @@
 package net.prover.model
 
-case class Connective(symbol: String, arity: Int, definingStatement: Option[Statement]) extends ChapterEntry {
-  val `type` = "connective"
+case class Connective(symbol: String, arity: Int, definingStatement: Option[Statement]) extends ChapterEntry(Connective) {
   val defaultStatement: ConnectiveStatement = apply((1 to arity).map(StatementVariable): _*)
 
   def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {

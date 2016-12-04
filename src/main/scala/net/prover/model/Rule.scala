@@ -1,8 +1,6 @@
 package net.prover.model
 
-sealed trait Rule extends ChapterEntry with TheoremLineParser {
-  val `type` = "rule"
-}
+abstract class Rule extends ChapterEntry(Rule) with TheoremLineParser
 
 case class ArbitraryVariableException(message: String) extends Exception(message)
 
@@ -16,7 +14,7 @@ case class DirectRule(
     val (premisesAndTemplates, lineAfterPremises) = premiseTemplates.mapFold(line) { (premiseTemplate, lineSoFar) =>
       readReference(lineSoFar, theoremBuilder).mapLeft((_, premiseTemplate))
     }
-    val (matcher, remainingLine) = matchPremises(premisesAndTemplates, conclusionTemplate, lineAfterPremises, context)
+    val (matcher, _) = matchPremises(premisesAndTemplates, conclusionTemplate, lineAfterPremises, context)
     val updatedArbitraryVariables = arbitraryVariables.flatMap(matcher.terms.get).map(Term.asVariable)
     theoremBuilder
       .addStep(Step(conclusionTemplate.applyMatch(matcher)))
