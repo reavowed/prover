@@ -1,5 +1,5 @@
 <div class="chapter" ng-show="chapter">
-    <h4>{{chapter.title}}</h4>
+    <h3>{{chapter.title}}</h3>
     <p class="comment">{{chapter.summary}}</p>
 
     <div ng-repeat="entry in chapter.entries" ng-switch="entry.type" class="chapterEntry {{entry.type}}">

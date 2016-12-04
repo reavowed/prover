@@ -18,6 +18,7 @@ proverApp.component('books', {
   controller: ['$scope', '$http', function($scope, $http) {
     $scope.books = null;
     $http.get('/books').then(function(response) {
+      $scope.$parent.$parent.breadcrumbs = [];
       $scope.books = response.data;
     });
   }]
@@ -30,6 +31,15 @@ proverApp.component('book', {
     $http.get('/books').then(function(response) {
       var books = response.data;
       $scope.book = _.find(books, ['key', $routeParams.bookKey]);
+      $scope.$parent.$parent.breadcrumbs = [
+        {
+          text: 'Books',
+          link: '#/'
+        },
+        {
+          text: $scope.book.title
+        }
+      ];
     });
   }]
 });
@@ -42,8 +52,25 @@ proverApp.component('chapter', {
       var books = response.data;
       var book = _.find(books, ['key', $routeParams.bookKey]);
       $scope.chapter = _.find(book.chapters, ["key", $routeParams.chapterKey]);
+      $scope.$parent.$parent.breadcrumbs = [
+        {
+          text: 'Books',
+          link: '#/'
+        },
+        {
+          text: book.title,
+          link: '#/' + book.key
+        },
+        {
+          text: $scope.chapter.title
+        }
+      ];
     });
   }]
+});
+
+proverApp.controller('NavController', function($scope) {
+  $scope.breadcrumbs = [];
 });
 
 proverApp.component('step', {
