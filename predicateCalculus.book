@@ -13,7 +13,7 @@ hypothesis 1
 introduceForall h1 1 1 1
 qed
 
-theorem eliminateForallWithoutSubtitution Eliminate Universal Quantifier Without Substitution
+theorem eliminateForallWithoutSubstitution Eliminate Universal Quantifier Without Substitution
 hypothesis ∀ 1 1
 eliminateForall h1 1
 qed

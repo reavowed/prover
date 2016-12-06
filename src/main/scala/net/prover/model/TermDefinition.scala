@@ -45,7 +45,6 @@ object ComponentTypeList {
   }
 }
 
-
 case class TermDefinition(
     symbol: String,
     componentTypes: ComponentTypeList,
@@ -53,6 +52,7 @@ case class TermDefinition(
     definition: Option[Statement])
   extends ChapterEntry(TermDefinition) with TermParser
 {
+  val id: String = s"definition-$symbol"
   val defaultTerm: Term = apply(componentTypes.defaults())
 
   override def parseTerm(line: PartialLine, context: Context): (Term, PartialLine) = {
@@ -62,6 +62,13 @@ case class TermDefinition(
   def apply(components: componentTypes.Components): Term = {
     DefinedTerm[componentTypes.Components](symbol, format, components, componentTypes)
   }
+
+  def definitionStepParser: Option[DirectStepParser] = definition.map{ statement => new DirectStepParser {
+    override val id: String = s"definition-$symbol"
+    override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context) = {
+      matchPremisesToConclusion(Nil, statement, line, context).mapLeft(Step(_))
+    }
+  }}
 }
 
 object TermDefinition extends SingleLineChapterEntryParser[TermDefinition] {

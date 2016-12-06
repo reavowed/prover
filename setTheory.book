@@ -116,7 +116,7 @@ introduceForallWithoutSubstitution 5 3
 setsWithSameMembersEqual 6
 qed
 
-theorem emptySetIsUnique The Empty Set Is Unique
+theorem thereIsAUniqueEmptySet There Is a Unique Empty Set
 emptySet 1 2
 assume ∀ 2 ∉ 2 3
   assume ∀ 2 ∉ 2 4
@@ -131,6 +131,15 @@ definition-∃! 6
 qed
 
 term ∅ ∀ 1 ∉ 1 ∅
+
+theorem theEmptySetIsASubsetOfAnySet The Empty Set Is a Subset of Any Set
+definition-∅ 2
+eliminateForallWithoutSubstitution 1
+definition-∉ 2
+falseImpliesAnything1 3 ∈ 2 1
+introduceForallWithoutSubstitution 4 2
+definition-⊆ 5
+qed
 
 chapter Power Sets
 Define the power set of a set - the set of all its subsets.
