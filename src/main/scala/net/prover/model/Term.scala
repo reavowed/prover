@@ -3,16 +3,9 @@ package net.prover.model
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
+import shapeless.HList
 
-trait Term extends JsonSerializable.Base {
-  def variables: Variables
-  def freeVariables: Seq[TermVariable]
-  def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions]
-  def applyMatch(m: Match): Term
-  def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Term
-  def html: String
-  override def toString: String = html
-
+trait Term extends JsonSerializable.Base with Component[Term] {
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeString(html)
   }
@@ -41,7 +34,13 @@ case class TermVariable(i: Int) extends Term {
   override def html: String = (123 - i).toChar.toString
 }
 
-case class ConstantTerm(symbol: String) extends Term {
+case class DefinedTerm[Components <: HList](
+    symbol: String,
+    format: String,
+    components: Components,
+    componentTypes: ComponentTypeList.Aux[Components])
+  extends Term
+{
   override def variables: Variables = Variables(Nil, Nil)
   override def freeVariables: Seq[TermVariable] = Nil
   override def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions] = {
@@ -53,7 +52,9 @@ case class ConstantTerm(symbol: String) extends Term {
   }
   override def applyMatch(m: Match): Term = this
   override def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Term = this
-  override def html: String = symbol
+  override def html: String = {
+    componentTypes.format(format, components)
+  }
 }
 
 trait TermParser {
@@ -61,7 +62,7 @@ trait TermParser {
   def parseTerm(line: PartialLine, context: Context): (Term, PartialLine)
 }
 
-object Term {
+object Term extends ComponentType[Term] {
   def asVariable(term: Term): TermVariable = {
     term match {
       case v: TermVariable =>
@@ -71,10 +72,10 @@ object Term {
     }
   }
 
-  def parse(line: PartialLine, context: Context): (Term, PartialLine) = {
+  override def parse(line: PartialLine, context: Context): (Term, PartialLine) = {
     object ParsableTerm {
       def unapply(s: String): Option[TermParser] = {
-        context.constants.find(_.symbol == s)
+        context.termDefinitions.find(_.symbol == s)
       }
     }
 

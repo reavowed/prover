@@ -6,16 +6,8 @@ import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
 import scala.collection.immutable.Nil
 
-trait Statement extends JsonSerializable.Base {
-  def variables: Variables
-  def freeVariables: Seq[TermVariable]
-  def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions]
-  def applyMatch(m: Match): Statement
-  def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Statement
-  def html: String
+trait Statement extends JsonSerializable.Base with Component[Statement] {
   def safeHtml: String = html
-  override def toString: String = html
-
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeString(html)
   }
@@ -167,7 +159,7 @@ case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends St
   override def safeHtml: String = if (terms.length > 1) "(" + html + ")" else html
 }
 
-object Statement {
+object Statement extends ComponentType[Statement] {
   def parseStatementVariable(line: PartialLine, context: Context): (StatementVariable, PartialLine) = {
     parse(line, context) match {
       case (v: StatementVariable, remainingLine) =>
@@ -191,11 +183,6 @@ object Statement {
     object PredicateName {
       def unapply(s: String): Option[Predicate] = {
         context.predicates.find(_.symbol == s)
-      }
-    }
-    object Constant {
-      def unapply(s: String): Option[Constant] = {
-        context.constants.find(_.symbol == s)
       }
     }
     val (statementType, remainingLine) = line.splitFirstWord

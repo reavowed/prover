@@ -5,6 +5,7 @@ version := "0.1"
 scalaVersion := "2.12.0"
 
 libraryDependencies ++= Seq(
+  "com.chuusai" %% "shapeless" % "2.3.2",
   "org.springframework.boot" % "spring-boot-starter-web" % "1.4.2.RELEASE",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.8.4",
   "org.webjars" % "jquery" % "3.1.1",

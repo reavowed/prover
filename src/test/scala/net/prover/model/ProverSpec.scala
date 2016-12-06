@@ -20,7 +20,7 @@ trait ProverSpec extends Specification {
     rules = Nil,
     theorems = Nil,
     axioms = Nil,
-    constants = Nil)
+    termDefinitions = Nil)
 
   implicit def intToStatementVariable(i: Int): StatementVariable = StatementVariable(i)
 

@@ -7,7 +7,7 @@ case class Context(
     rules: Seq[Rule],
     theorems: Seq[Theorem],
     axioms: Seq[Axiom],
-    constants: Seq[Constant]) {
+    termDefinitions: Seq[TermDefinition]) {
 
   def +(other: Context): Context = {
     Context(
@@ -17,7 +17,7 @@ case class Context(
       rules ++ other.rules,
       theorems ++ other.theorems,
       axioms ++ other.axioms,
-      constants ++ other.constants)
+      termDefinitions ++ other.termDefinitions)
   }
 
   def definitions: Seq[Definition] = connectives.flatMap(_.definition) ++
