@@ -35,25 +35,38 @@ case class TermVariable(i: Int) extends Term {
 }
 
 case class DefinedTerm[Components <: HList](
-    symbol: String,
-    format: String,
     components: Components,
-    componentTypes: ComponentTypeList.Aux[Components])
+    termDefinition: TermDefinition[Components])
   extends Term
 {
   override def variables: Variables = Variables(Nil, Nil)
   override def freeVariables: Seq[TermVariable] = Nil
-  override def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions] = {
-    if (otherTerm == this) {
-      Some(MatchWithSubstitutions.empty)
-    } else {
+  override def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions] = otherTerm match {
+    case termDefinition(otherComponents) =>
+      termDefinition.componentTypes.attemptMatch(components, otherComponents)
+    case _ =>
       None
-    }
   }
-  override def applyMatch(m: Match): Term = this
-  override def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Term = this
+  override def applyMatch(m: Match): Term = termDefinition(termDefinition.componentTypes.applyMatch(components, m))
+  override def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): Term = {
+    termDefinition(termDefinition.componentTypes.substituteTermVariables(
+      components,
+      termToReplaceWith,
+      termToBeReplaced))
+  }
   override def html: String = {
-    componentTypes.format(format, components)
+    termDefinition.componentTypes.format(termDefinition.format, components)
+  }
+
+  override def equals(obj: Any): Boolean = obj match {
+    case DefinedTerm(`components`, otherTermDefinition) if otherTermDefinition.symbol == termDefinition.symbol =>
+      true
+    case _ =>
+      false
+  }
+
+  override def hashCode(): Int = {
+    components.hashCode * 41 + termDefinition.symbol.hashCode
   }
 }
 

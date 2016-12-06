@@ -51,7 +51,9 @@ trait TheoremLineParser {
       premiseTemplate.attemptMatch(premise)
     }
     val premisesMatchAttempt = MatchWithSubstitutions.mergeAttempts(premiseMatchAttempts)
-      .getOrElse(throw ParseException.withMessage("Could not match rule premises", line.fullLine))
+      .getOrElse(throw ParseException.withMessage(
+        s"Could not match rule premises\n$premisesWithTemplates",
+        line.fullLine))
     val requiredVariables = (premisesWithTemplates.map(_._2.variables) :+ conclusionTemplate.variables).reduce(_ ++ _)
     val (expandedMatch, lineAfterVariables) = premisesMatchAttempt.expand(requiredVariables, line, context)
     val fullMatch = expandedMatch.checkSubstitutions()

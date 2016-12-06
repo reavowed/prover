@@ -7,7 +7,7 @@ case class Context(
     rules: Seq[Rule],
     theorems: Seq[Theorem],
     axioms: Seq[Axiom],
-    termDefinitions: Seq[TermDefinition]) {
+    termDefinitions: Seq[TermDefinition[_]]) {
 
   def +(other: Context): Context = {
     Context(

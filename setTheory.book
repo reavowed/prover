@@ -5,7 +5,6 @@ chapter Set Membership and Equality
 Introduce set membership, ∈, and equality, =.
 
 predicate ∈ 2
-predicate ∉ 2 ¬ ∈ 1 2
 predicate = 2 ∀ 3 ∧ ↔ ∈ 3 1 ∈ 3 2 ↔ ∈ 1 3 ∈ 2 3
 
 theorem substituteEqualsIntoElement Substitute equal terms into set element
@@ -102,24 +101,22 @@ qed
 
 chapter Empty Set
 Introduce the empty set, ∅.
-axiom emptySet "Empty Set" ∃ 1 ∀ 2 ∉ 2 1
+axiom emptySet "Empty Set" ∃ 1 ∀ 2 ¬ ∈ 2 1
 
 theorem emptySetsAreEqual Empty Sets are Equal
-hypothesis ∀ 3 ∉ 3 1
-hypothesis ∀ 3 ∉ 3 2
+hypothesis ∀ 3 ¬ ∈ 3 1
+hypothesis ∀ 3 ¬ ∈ 3 2
 eliminateForall h1 3 3
 eliminateForall h2 3 3
-definition-∉ 1
-definition-∉ 2
-falseStatementsAreEquivalent 3 4
-introduceForallWithoutSubstitution 5 3
-setsWithSameMembersEqual 6
+falseStatementsAreEquivalent 1 2
+introduceForallWithoutSubstitution 3 3
+setsWithSameMembersEqual 4
 qed
 
 theorem thereIsAUniqueEmptySet There Is a Unique Empty Set
 emptySet 1 2
-assume ∀ 2 ∉ 2 3
-  assume ∀ 2 ∉ 2 4
+assume ∀ 2 ¬ ∈ 2 3
+  assume ∀ 2 ¬ ∈ 2 4
     emptySetsAreEqual f.h f.f.h
   introduceImplication f.f.1
 introduceImplication f.1
@@ -130,15 +127,33 @@ introduceAnd 1 5
 definition-∃! 6
 qed
 
-term ∅ ∀ 1 ∉ 1 ∅
+term ∅ ∀ 1 ¬ ∈ 1 ∅
 
 theorem theEmptySetIsASubsetOfAnySet The Empty Set Is a Subset of Any Set
 definition-∅ 2
 eliminateForallWithoutSubstitution 1
-definition-∉ 2
-falseImpliesAnything1 3 ∈ 2 1
-introduceForallWithoutSubstitution 4 2
-definition-⊆ 5
+falseImpliesAnything1 2 ∈ 2 1
+introduceForallWithoutSubstitution 3 2
+definition-⊆ 4
+qed
+
+theorem theOnlySubsetOfTheEmptySetIsTheEmptySet The Only Subset of the Empty Set is the Empty Set
+assume ⊆ 1 ∅
+  definition-⊆ f.h 2
+  definition-∅ 2
+  eliminateForallWithoutSubstitution f.1
+  eliminateForallWithoutSubstitution f.2
+  modusTollens f.3 f.4
+  introduceForallWithoutSubstitution f.5 2
+  emptySetsAreEqual f.6 f.2
+introduceImplication f.7
+assume = 1 ∅
+  substituteEqualsIntoElement f.h 2
+  eliminateEquivalenceForward f.1
+  introduceForallWithoutSubstitution f.2 2
+  definition-⊆ f.3
+introduceImplication f.4
+introduceEquivalence 1 2
 qed
 
 chapter Power Sets
@@ -147,3 +162,10 @@ Define the power set of a set - the set of all its subsets.
 axiom axiomOfPowerset "Power Set" ∀ 1 ∃ 2 ∀ 3 ↔ ∈ 3 2 ⊆ 3 1
 
 term powerSet term 𝒫{} ∀ 2 ↔ ∈ 2 powerSet 1 ⊆ 2 1
+
+theorem powerSetOfEmptySetContainsExactlyEmptySet The Power Set of The Empty Set Contains Exactly the Empty Set
+definition-powerSet 1 ∅
+eliminateForallWithoutSubstitution 1
+theOnlySubsetOfTheEmptySetIsTheEmptySet 1
+equivalenceIsTransitive 2 3
+qed
