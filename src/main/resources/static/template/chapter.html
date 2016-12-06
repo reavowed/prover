@@ -66,9 +66,12 @@
         </div>
         <div ng-switch-when="theorem">
             <div class="result">
+                <span class="theoremId">{{entry.id}}</span>
                 <div class="theoremTitle"
                      data-toggle="collapse"
-                     data-target="#{{entry.id}}-proof, #{{entry.id}}-summary">Theorem: {{entry.title}}</div>
+                     data-target="#{{entry.id}}-proof, #{{entry.id}}-summary">
+                    Theorem: {{entry.title}}
+                </div>
                 <div id="{{entry.id}}-summary" class="theoremSummary collapse in">
                     <div ng-if="entry.hypotheses.length">
                         Suppose
