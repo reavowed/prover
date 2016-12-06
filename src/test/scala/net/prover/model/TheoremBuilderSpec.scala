@@ -112,13 +112,5 @@ class TheoremBuilderSpec extends ProverSpec {
         defaultContext
       ) must throwAn[ArbitraryVariableException]
     }
-
-    "apply a rule with a single substitution premise to a self construction" in {
-      val theoremBuilder = IntroduceAll.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addStep(Equals(1, 2)),
-        "1 self 1",
-        defaultContext)
-      theoremBuilder.steps(1).statement mustEqual ForAll(1, Equals(1, 2))
-    }
   }
 }
