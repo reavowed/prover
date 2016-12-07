@@ -7,7 +7,7 @@ trait Component[T <: Component[T]] {
   def freeVariables: Seq[TermVariable]
   def attemptMatch(other: T): Option[MatchWithSubstitutions]
   def applyMatch(m: Match): T
-  def substituteTermVariables(termToReplaceWith: TermVariable, termToBeReplaced: TermVariable): T
+  def substituteTermVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): T
   def html: String
   override def toString: String = html
 }
@@ -26,7 +26,7 @@ trait ComponentTypeList{
   def applyMatch(components: Components, m: Match): Components
   def substituteTermVariables(
     components: Components,
-    termToReplaceWith: TermVariable,
+    termToReplaceWith: Term,
     termToBeReplaced: TermVariable
   ): Components
 
@@ -51,7 +51,7 @@ object ComponentTypeList {
     override def applyMatch(components: Components, m: Match): Components = HNil
     override def substituteTermVariables(
       components: Components,
-      termToReplaceWith: TermVariable,
+      termToReplaceWith: Term,
       termToBeReplaced: TermVariable
     ): Components = HNil
   }
@@ -90,10 +90,10 @@ object ComponentTypeList {
 
     override def substituteTermVariables(
       components: Components,
-      termToReplaceWith: TermVariable,
+      termToReplaceWith: Term,
       termToBeReplaced: TermVariable
     ): Components = {
-      components.head.substituteTermVariables(termToReplaceWith, termToBeReplaced) ::
+      components.head.substituteTermVariable(termToReplaceWith, termToBeReplaced) ::
         inner.substituteTermVariables(components.tail, termToReplaceWith, termToBeReplaced)
     }
   }
