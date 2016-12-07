@@ -7,7 +7,7 @@ trait Component[T <: Component[T]] {
   def freeVariables: Seq[TermVariable]
   def attemptMatch(other: T): Option[MatchWithSubstitutions]
   def applyMatch(m: Match): T
-  def substituteTermVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): T
+  def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): T
   def html: String
   override def toString: String = html
 }
@@ -93,7 +93,7 @@ object ComponentTypeList {
       termToReplaceWith: Term,
       termToBeReplaced: TermVariable
     ): Components = {
-      components.head.substituteTermVariable(termToReplaceWith, termToBeReplaced) ::
+      components.head.substituteFreeVariable(termToReplaceWith, termToBeReplaced) ::
         inner.substituteTermVariables(components.tail, termToReplaceWith, termToBeReplaced)
     }
   }

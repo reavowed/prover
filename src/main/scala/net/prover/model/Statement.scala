@@ -25,7 +25,7 @@ case class StatementVariable(i: Int) extends Statement {
   override def applyMatch(m: Match): Statement = {
     m.statements.getOrElse(this, throw new Exception(s"No replacement for statement variable $this"))
   }
-  def substituteTermVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
+  def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
     if (termToReplaceWith == termToBeReplaced)
       this
     else termToReplaceWith match {
@@ -58,12 +58,12 @@ case class StatementVariableWithReplacement(
   }
   override def applyMatch(m: Match): Statement = {
     statementVariable.applyMatch(m)
-      .substituteTermVariable(
+      .substituteFreeVariable(
         termToReplaceWith.applyMatch(m),
         Term.asVariable(termToBeReplaced.applyMatch(m)))
   }
 
-  def substituteTermVariable(newTermToReplaceWith: Term, newTermToBeReplaced: TermVariable): Statement = {
+  def substituteFreeVariable(newTermToReplaceWith: Term, newTermToBeReplaced: TermVariable): Statement = {
     if (newTermToBeReplaced == termToBeReplaced || newTermToReplaceWith == newTermToBeReplaced) {
       this
     } else {
@@ -93,8 +93,8 @@ case class ConnectiveStatement(substatements: Seq[Statement], connective: Connec
     copy(substatements = substatements.map(_.applyMatch(m)))
   }
 
-  def substituteTermVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
-    copy(substatements = substatements.map(_.substituteTermVariable(termToReplaceWith, termToBeReplaced)))
+  def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
+    copy(substatements = substatements.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced)))
   }
 
   def html: String = substatements match {
@@ -127,13 +127,13 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
       substatement = substatement.applyMatch(m))
   }
 
-  override def substituteTermVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
+  override def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
     if (termToBeReplaced == boundVariable)
       this
-    else if (termToReplaceWith == boundVariable)
+    else if (termToReplaceWith.freeVariables.contains(boundVariable))
       throw new Exception("Cannot replace free variable with bound variable in quantified statement")
     else
-      copy(substatement = substatement.substituteTermVariable(termToReplaceWith, termToBeReplaced))
+      copy(substatement = substatement.substituteFreeVariable(termToReplaceWith, termToBeReplaced))
   }
 
   override def html: String = s"(${quantifier.symbol}${boundVariable.html})${substatement.safeHtml}"
@@ -156,8 +156,8 @@ case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends St
   override def applyMatch(m: Match): Statement = {
     copy(terms = terms.map(_.applyMatch(m)))
   }
-  def substituteTermVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
-    copy(terms = terms.map(_.substituteTermVariable(termToReplaceWith, termToBeReplaced)))
+  def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
+    copy(terms = terms.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced)))
   }
   def html: String = terms.map(_.html).mkString(" " + predicate.symbol + " ")
   override def safeHtml: String = if (terms.length > 1) "(" + html + ")" else html

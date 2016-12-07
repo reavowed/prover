@@ -25,7 +25,7 @@ case class TermVariable(i: Int) extends Term {
       this,
       throw new Exception(s"No replacement for term variable $this"))
   }
-  override def substituteTermVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term = {
+  override def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term = {
     if (this == termToBeReplaced)
       termToReplaceWith
     else
@@ -48,7 +48,7 @@ case class DefinedTerm[Components <: HList](
       None
   }
   override def applyMatch(m: Match): Term = termDefinition(termDefinition.componentTypes.applyMatch(components, m))
-  override def substituteTermVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term = {
+  override def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term = {
     termDefinition(termDefinition.componentTypes.substituteTermVariables(
       components,
       termToReplaceWith,
