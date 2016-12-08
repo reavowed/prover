@@ -50,7 +50,7 @@
     margin-right: 10px;
 }
 
-.rule .arbitraryVariables {
+.arbitraryVariables, .distinctVariables {
     font-weight: normal;
 }
 

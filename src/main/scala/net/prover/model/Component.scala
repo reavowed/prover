@@ -6,7 +6,7 @@ trait Component[T <: Component[T]] {
   def variables: Variables
   def freeVariables: Seq[TermVariable]
   def attemptMatch(other: T): Option[MatchWithSubstitutions]
-  def applyMatch(m: Match): T
+  def applyMatch(m: Match): T with Component[T]
   def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): T
   def html: String
   override def toString: String = html

@@ -13,3 +13,7 @@ case class Variables(statementVariables: Seq[StatementVariable], termVariables: 
       (termVariables ++ otherVariables.termVariables).distinct)
   }
 }
+
+object Variables {
+  val empty = Variables(Nil, Nil)
+}

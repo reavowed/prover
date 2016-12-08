@@ -48,11 +48,19 @@
                         Given
                         {{entry.assumptionTemplate ? entry.assumptionTemplate + ' ⊢' : ''}}
                         {{entry.premiseTemplates.join(", ")}}
-                        <arbitrary-variables variables="entry.arbitraryVariables"></arbitrary-variables>
                     </div>
                     <div class="ruleConclusion">
                         Deduce
                         {{entry.conclusionTemplate}}
+                    </div>
+                    <div class="arbitraryVariables" ng-if="entry.arbitraryVariables.length">
+                        Arbitrary variables: {{entry.arbitraryVariables.join(", ")}}
+                    </div>
+                    <div class="distinctVariables" ng-if="entry.distinctVariableRequirements.length">
+                        Distinct variables:
+                        <span ng-repeat="requirement in entry.distinctVariableRequirements">
+                            {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -85,6 +93,15 @@
                     <div>
                         <span ng-if="entry.premiseTemplates.length">Then</span>
                         {{entry.conclusionTemplate}}.
+                    </div>
+                    <div class="arbitraryVariables" ng-if="entry.arbitraryVariables.length">
+                        Arbitrary variables: {{entry.arbitraryVariables.join(", ")}}
+                    </div>
+                    <div class="distinctVariables" ng-if="entry.distinctVariableRequirements.length">
+                        Distinct variables:
+                        <span ng-repeat="requirement in entry.distinctVariableRequirements">
+                            {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
+                        </span>
                     </div>
                 </div>
                 <div id="{{entry.id}}-proof" class="theoremProof collapse">

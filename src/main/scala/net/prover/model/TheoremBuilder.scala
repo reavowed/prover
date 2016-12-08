@@ -76,7 +76,8 @@ case class TheoremBuilder(
     premises: Seq[Statement] = Nil,
     steps: Seq[Step] = Nil,
     fantasyOption: Option[Fantasy] = None,
-    arbitraryVariables: Seq[TermVariable] = Nil)
+    arbitraryVariables: Seq[TermVariable] = Nil,
+    distinctVariableRequirements: DistinctVariableRequirements = DistinctVariableRequirements.empty)
   extends TheoremBuildable[TheoremBuilder] {
 
   def addPremise(premise: Statement): TheoremBuilder = {
@@ -89,6 +90,9 @@ case class TheoremBuilder(
         s"Variables ${fantasyVariables.intersect(newArbitraryVariables).mkString(", ")} were non-arbitrary")
     }
     copy(arbitraryVariables = (arbitraryVariables ++ newArbitraryVariables).distinct.sortBy(_.i))
+  }
+  def withDistinctVariableRequirements(newDistinctVariableRequirements: DistinctVariableRequirements): TheoremBuilder = {
+    copy(distinctVariableRequirements = distinctVariableRequirements ++ newDistinctVariableRequirements)
   }
 
   override protected def withStep(step: Step): TheoremBuilder = copy(steps = steps :+ step)

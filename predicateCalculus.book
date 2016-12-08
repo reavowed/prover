@@ -5,18 +5,8 @@ chapter Universal Quantifier
 Introduce the universal quantifier.
 
 quantifier ∀
-rule introduceForall sub 2 1 1 ⇒ ∀ 1 1 | 2
+rule introduceForall sub 2 1 1 ⇒ ∀ 1 1 | 2 x 2 1
 rule eliminateForall ∀ 1 1 ⇒ sub 2 1 1
-
-theorem introduceForallWithoutSubstitution Introduce Universal Quantifier Without Substitution
-premise 1
-introduceForall p1 1 1 1
-qed
-
-theorem eliminateForallWithoutSubstitution Eliminate Universal Quantifier Without Substitution
-premise ∀ 1 1
-eliminateForall p1 1
-qed
 
 theorem distributeForallOverImplication Distribute Universal Quantifier over Implication
 premise ∀ 1 → 1 2
@@ -46,24 +36,6 @@ assume ∧ ∀ 1 1 ∀ 1 2
   introduceForall f.5 ∧ 1 2 2 1
 introduceImplication f.6
 introduceEquivalence 1 2
-qed
-
-theorem implicationIsTransitiveInsideForall Implication is Transitive Inside Universal Quantifier
-premise ∀ 1 → 1 2
-premise ∀ 1 → 2 3
-eliminateForall p1 1
-eliminateForall p2 1
-implicationIsTransitive 1 2
-introduceForallWithoutSubstitution 3 1
-qed
-
-theorem introduceEquivalenceInsideForall Introduce Equivalence Inside Universal Quantifier
-premise ∀ 1 → 1 2
-premise ∀ 1 → 2 1
-eliminateForall p1 1
-eliminateForall p2 1
-introduceEquivalence 1 2
-introduceForallWithoutSubstitution 3 1
 qed
 
 chapter Existential Quantifier

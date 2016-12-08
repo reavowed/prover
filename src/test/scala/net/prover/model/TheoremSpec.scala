@@ -1,19 +1,6 @@
 package net.prover.model
 
 class TheoremSpec extends ProverSpec {
-  val introduceImplication = FantasyRule("introduceImplication", 1, Seq(2), Implication(1, 2))
-  val eliminateImplication = DirectRule("eliminateImplication", Seq(Implication(1, 2), 1), 2, Nil)
-  val introduceForall = DirectRule(
-    "introduceForall",
-    Seq(StatementVariableWithReplacement(1, 2, 1)),
-    ForAll(1, 1),
-    Seq(2))
-  val eliminateForall = DirectRule(
-    "eliminateForall",
-    Seq(ForAll(1, 1)),
-    StatementVariableWithReplacement(1, 2, 1),
-    Nil)
-
   def parseTheorem(
     firstLine: String,
     lines: Seq[String],
@@ -23,7 +10,7 @@ class TheoremSpec extends ProverSpec {
       firstLine,
       lines,
       defaultContext.copy(
-        rules = defaultContext.rules ++ Seq(introduceImplication, eliminateImplication, introduceForall, eliminateForall),
+        rules = defaultContext.rules ++ Seq(IntroduceImplication, EliminateImplication, IntroduceForall, EliminateForall),
         theorems = defaultContext.theorems ++ additionalTheorems)
     )._1
   }
@@ -72,7 +59,8 @@ class TheoremSpec extends ProverSpec {
         Seq(1),
         Nil,
         Implication(Negation(1), 2),
-        Nil)
+        Nil,
+        DistinctVariableRequirements.empty)
 
       val theorem = parseTheorem(
         "or-left Disjunction from Left",
@@ -95,6 +83,32 @@ class TheoremSpec extends ProverSpec {
       theorem.arbitraryVariables mustEqual Seq(TermVariable(2))
     }
 
+    "parse a theorem with distinct variables" in {
+      val theorem = parseTheorem(
+        "id Title",
+        Seq(
+          "premise sub 2 1 1",
+          "introduceForall p1",
+          "qed"))
+      theorem.distinctVariableRequirements mustEqual
+        DistinctVariableRequirements(Map(TermVariable(2) -> Variables(Seq(1), Nil)))
+    }
+
+    "not include distinct variables if they don't appear in the hypotheses or conclusion" in {
+      val theorem = parseTheorem(
+        "id Title",
+        Seq(
+          "premise ∀ 1 → 1 2",
+          "eliminateForall p1 2",
+          "assume ∀ 1 1",
+          "eliminateForall f.a 2",
+          "eliminateImplication 1 f.1",
+          "introduceForall f.2",
+          "introduceImplication f.3",
+          "qed"))
+      theorem.distinctVariableRequirements mustEqual DistinctVariableRequirements.empty
+    }
+
     "not include arbitrary variables if they don't appear in the hypotheses" in {
       val theorem = parseTheorem(
         "id Title",
@@ -115,7 +129,8 @@ class TheoremSpec extends ProverSpec {
         Seq(Implication(1, 2)),
         Nil,
         Implication(Negation(2), Negation(1)),
-        Nil)
+        Nil,
+        DistinctVariableRequirements.empty)
       val theoremBuilder = TheoremBuilder().addStep(Implication(1, 2))
       val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1", defaultContext)
       updatedTheoremBuilder.steps(1).statement mustEqual Implication(Negation(2), Negation(1))
@@ -128,7 +143,8 @@ class TheoremSpec extends ProverSpec {
         Seq(Negation(1)),
         Nil,
         Implication(1, 2),
-        Nil)
+        Nil,
+        DistinctVariableRequirements.empty)
       val theoremBuilder = TheoremBuilder().addStep(Negation(1))
       val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1 ¬ 2", defaultContext)
       updatedTheoremBuilder.steps(1).statement mustEqual Implication(1, Negation(2))
@@ -141,7 +157,8 @@ class TheoremSpec extends ProverSpec {
         Seq(Equals(1, 2)),
         Nil,
         Equals(2, 3),
-        Seq(1))
+        Seq(1),
+        DistinctVariableRequirements.empty)
       val theoremBuilder = TheoremBuilder().addPremise(Equals(2, 1))
       val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "p1 4", defaultContext)
       updatedTheoremBuilder.arbitraryVariables mustEqual Seq(TermVariable(2))
@@ -154,7 +171,8 @@ class TheoremSpec extends ProverSpec {
         Seq(Equals(1, 2)),
         Nil,
         Equals(2, 3),
-        Seq(1))
+        Seq(1),
+        DistinctVariableRequirements.empty)
       val theoremBuilder = TheoremBuilder().addFantasy(Equals(2, 1))
       theorem.readAndUpdateTheoremBuilder(theoremBuilder, "f.a 4", defaultContext) must throwAn[ArbitraryVariableException]
 

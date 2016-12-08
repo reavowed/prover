@@ -8,7 +8,8 @@ case class Theorem(
     premiseTemplates: Seq[Statement],
     steps: Seq[Step],
     conclusionTemplate: Statement,
-    arbitraryVariables: Seq[TermVariable])
+    arbitraryVariables: Seq[TermVariable],
+    distinctVariableRequirements: DistinctVariableRequirements)
   extends ChapterEntry(Theorem) with Deduction
 
 trait TheoremLineParser {
@@ -109,13 +110,16 @@ object Theorem extends ChapterEntryParser[Theorem] {
           import theoremBuilder._
           if (fantasyOption.isDefined)
             throw new Exception("Cannot finish theorem with open assumption")
+          val conclusion = steps.last.statement
+          val termVariables = premises.flatMap(_.variables.termVariables) ++ conclusion.variables.termVariables
           val theorem = Theorem(
             id,
             title,
             premises,
             steps,
-            steps.last.statement,
-            premises.flatMap(_.freeVariables).intersect(arbitraryVariables))
+            conclusion,
+            arbitraryVariables.intersect(termVariables),
+            distinctVariableRequirements.filter(termVariables.contains))
           (theorem, nonTheoremLines)
         case definitionLine +: otherLines =>
           parseHelper(otherLines, parseLine(definitionLine, theoremBuilder))
