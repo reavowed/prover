@@ -5,23 +5,11 @@ import scala.util.control.NonFatal
 case class Theorem(
     id: String,
     title: String,
-    hypotheses: Seq[Statement],
+    premiseTemplates: Seq[Statement],
     steps: Seq[Step],
-    result: Statement,
+    conclusionTemplate: Statement,
     arbitraryVariables: Seq[TermVariable])
-  extends ChapterEntry(Theorem) with TheoremLineParser {
-
-  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
-    val (hypothesesAndTemplates, lineAfterHypotheses) = hypotheses.mapFold(line) { (hypothesisTemplate, lineSoFar) =>
-      readReference(lineSoFar, theoremBuilder).mapLeft((_, hypothesisTemplate))
-    }
-    val (matcher, _) = matchPremises(hypothesesAndTemplates, result, lineAfterHypotheses, context)
-    val updatedArbitraryVariables = arbitraryVariables.flatMap(matcher.terms.get).map(Term.asVariable)
-    theoremBuilder
-      .addStep(Step(result.applyMatch(matcher)))
-      .withArbitraryVariables(updatedArbitraryVariables)
-  }
-}
+  extends ChapterEntry(Theorem) with Deduction
 
 trait TheoremLineParser {
   def id: String
@@ -62,19 +50,19 @@ trait TheoremLineParser {
   }
 }
 
-object HypothesisParser extends TheoremLineParser {
-  override val id: String = "hypothesis"
+object PremiseParser extends TheoremLineParser {
+  override val id: String = "premise"
   override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
-    val (hypothesis, _) = Statement.parse(line, context)
-    theoremBuilder.addHypothesis(hypothesis)
+    val (premise, _) = Statement.parse(line, context)
+    theoremBuilder.addPremise(premise)
   }
 }
 
-object FantasyHypothesisParser extends TheoremLineParser {
+object FantasyAssumptionParser extends TheoremLineParser {
   override val id: String = "assume"
   override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
-    val (hypothesis, _) = Statement.parse(line, context)
-    theoremBuilder.addFantasy(hypothesis)
+    val (assumption, _) = Statement.parse(line, context)
+    theoremBuilder.addFantasy(assumption)
   }
 }
 
@@ -96,7 +84,7 @@ object Theorem extends ChapterEntryParser[Theorem] {
       theoremBuilder: TheoremBuilder
     ): TheoremBuilder = {
       try {
-        val parsers = Seq(HypothesisParser, FantasyHypothesisParser) ++
+        val parsers = Seq(PremiseParser, FantasyAssumptionParser) ++
           context.rules ++
           context.connectives.flatMap(_.definition) ++
           context.predicates.flatMap(_.definition) ++
@@ -124,10 +112,10 @@ object Theorem extends ChapterEntryParser[Theorem] {
           val theorem = Theorem(
             id,
             title,
-            hypotheses,
+            premises,
             steps,
             steps.last.statement,
-            hypotheses.flatMap(_.freeVariables).intersect(arbitraryVariables))
+            premises.flatMap(_.freeVariables).intersect(arbitraryVariables))
           (theorem, nonTheoremLines)
         case definitionLine +: otherLines =>
           parseHelper(otherLines, parseLine(definitionLine, theoremBuilder))

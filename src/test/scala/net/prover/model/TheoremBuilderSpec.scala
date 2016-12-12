@@ -4,22 +4,23 @@ class TheoremBuilderSpec extends ProverSpec {
   "theorem builder" should {
     "handle simple direct rule" in {
       val rule = DirectRule("restate", Seq(StatementVariable(1)), StatementVariable(1), Nil)
-      val theoremBuilder = TheoremBuilder().addHypothesis(StatementVariable(1))
-      val updatedTheoremBuilder = rule.readAndUpdateTheoremBuilder(theoremBuilder, "h1", defaultContext)
+      val theoremBuilder = TheoremBuilder().addPremise(StatementVariable(1))
+      val updatedTheoremBuilder = rule.readAndUpdateTheoremBuilder(theoremBuilder, "p1", defaultContext)
       updatedTheoremBuilder.steps mustEqual Seq(Step(StatementVariable(1)))
     }
 
     "handle direct rule referencing fantasy hypothesis" in {
       val rule = DirectRule("restate", Seq(StatementVariable(1)), StatementVariable(1), Nil)
       val theoremBuilder = TheoremBuilder().addFantasy(StatementVariable(1))
-      val updatedTheoremBuilder = rule.readAndUpdateTheoremBuilder(theoremBuilder, "f.h", defaultContext)
+      val updatedTheoremBuilder = rule.readAndUpdateTheoremBuilder(theoremBuilder, "f.a", defaultContext)
+
       updatedTheoremBuilder.fantasyOption.get.steps mustEqual Seq(Step(StatementVariable(1)))
     }
 
     "handle simple direct rule with a more complicated match" in {
       val rule = DirectRule("restate", Seq(StatementVariable(1)), StatementVariable(1), Nil)
-      val theoremBuilder = TheoremBuilder().addHypothesis(Conjunction(StatementVariable(1), StatementVariable(2)))
-      val updatedTheoremBuilder = rule.readAndUpdateTheoremBuilder(theoremBuilder, "h1", defaultContext)
+      val theoremBuilder = TheoremBuilder().addPremise(Conjunction(StatementVariable(1), StatementVariable(2)))
+      val updatedTheoremBuilder = rule.readAndUpdateTheoremBuilder(theoremBuilder, "p1", defaultContext)
       updatedTheoremBuilder.steps mustEqual Seq(Step(Conjunction(StatementVariable(1), StatementVariable(2))))
     }
 
@@ -99,8 +100,8 @@ class TheoremBuilderSpec extends ProverSpec {
 
     "add a rule's arbitrary variable to the theorem if it appears in a theorem hypothesis" in {
       val theoremBuilder = IntroduceAll.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addHypothesis(Equals(1, 2)),
-        "h1 = 1 3 2 3",
+        TheoremBuilder().addPremise(Equals(1, 2)),
+        "p1 = 1 3 2 3",
         defaultContext)
       theoremBuilder.arbitraryVariables mustEqual Seq(TermVariable(2))
     }
@@ -108,7 +109,7 @@ class TheoremBuilderSpec extends ProverSpec {
     "fail a rule with arbitrary variables if an arbitrary variable appears in a fantasy hypothesis" in {
       IntroduceAll.readAndUpdateTheoremBuilder(
         TheoremBuilder().addFantasy(Equals(1, 2)),
-        "f.h = 1 3 2 3",
+        "f.a = 1 3 2 3",
         defaultContext
       ) must throwAn[ArbitraryVariableException]
     }

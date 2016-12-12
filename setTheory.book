@@ -8,15 +8,15 @@ predicate ∈ 2
 predicate = 2 ∀ 3 ∧ ↔ ∈ 3 1 ∈ 3 2 ↔ ∈ 1 3 ∈ 2 3
 
 theorem substituteEqualsIntoElement Substitute equal terms into set element
-hypothesis = 1 2
-definition-= h1 3
+premise = 1 2
+definition-= p1 3
 eliminateForall 1 3
 eliminateAndLeft 2
 qed
 
 theorem substituteEqualsIntoContainer Substitute equal terms into set container
-hypothesis = 1 2
-definition-= h1 3
+premise = 1 2
+definition-= p1 3
 eliminateForall 1 3
 eliminateAndRight 2
 qed
@@ -30,8 +30,8 @@ definition-= 4
 qed
 
 theorem reverseEquality Reverse Equality
-hypothesis = 1 2
-definition-= h1 3
+premise = 1 2
+definition-= p1 3
 eliminateForallWithoutSubstitution 1
 eliminateAndLeft 2
 eliminateAndRight 2
@@ -49,10 +49,10 @@ introduceEquivalence 1 2
 qed
 
 theorem equalityIsTransitive Equality is Transitive
-hypothesis = 1 2
-hypothesis = 2 3
-definition-= h1 4
-definition-= h2 4
+premise = 1 2
+premise = 2 3
+definition-= p1 4
+definition-= p2 4
 eliminateForallWithoutSubstitution 1
 eliminateForallWithoutSubstitution 2
 eliminateAndLeft 3
@@ -77,23 +77,23 @@ Introduce the Axiom of Extensionality and explore its consequences for equality.
 axiom extensionality Extensionality ∀ 1 ∀ 2 ∀ 3 → ↔ ∈ 3 1 ∈ 3 2 ↔ ∈ 1 3 ∈ 2 3
 
 theorem setsWithSameMembersEqual Sets Are Equal If They Have The Same Members
-hypothesis ∀ 3 ↔ ∈ 3 1 ∈ 3 2
+premise ∀ 3 ↔ ∈ 3 1 ∈ 3 2
 extensionality 1 2 3
 eliminateForall 1 1
 eliminateForall 2 2
 distributeForallOverImplication 3
-eliminateImplication 4 h1
-introduceAnd h1 5
+eliminateImplication 4 p1
+introduceAnd p1 5
 distributeForallOverConjunction ↔ ∈ 3 1 ∈ 3 2 ↔ ∈ 1 3 ∈ 2 3 3
 modusPonensEquivalenceRight 7 6
 definition-= 8
 qed
 
 theorem setsWithSameMembershipConditionEqual Sets Are Equal If They Have The Same Membership Condition
-hypothesis ∀ 3 ↔ ∈ 3 1 1
-hypothesis ∀ 3 ↔ ∈ 3 2 1
-eliminateForall h1 3
-eliminateForall h2 3
+premise ∀ 3 ↔ ∈ 3 1 1
+premise ∀ 3 ↔ ∈ 3 2 1
+eliminateForall p1 3
+eliminateForall p2 3
 reverseEquivalence 2
 equivalenceIsTransitive 1 3
 introduceForallWithoutSubstitution 4 3
@@ -113,19 +113,19 @@ introduceForallWithoutSubstitution 3 1
 qed
 
 theorem subsetIsAntisymmetric Subset is Antisymmetric
-hypothesis ⊆ 1 2
-hypothesis ⊆ 2 1
-definition-⊆ h1 3
-definition-⊆ h2 3
+premise ⊆ 1 2
+premise ⊆ 2 1
+definition-⊆ p1 3
+definition-⊆ p2 3
 introduceEquivalenceInsideForall 1 2
 setsWithSameMembersEqual 3
 qed
 
 theorem subsetIsTransitive Subset is Transitive
-hypothesis ⊆ 1 2
-hypothesis ⊆ 2 3
-definition-⊆ h1 3
-definition-⊆ h2 3
+premise ⊆ 1 2
+premise ⊆ 2 3
+definition-⊆ p1 3
+definition-⊆ p2 3
 implicationIsTransitiveInsideForall 1 2
 definition-⊆ 3
 qed
@@ -136,31 +136,31 @@ Introduce the uniqueness quantifier, ∃!.
 quantifier ∃! ∧ ∃ 1 1 ∀ 2 ∀ 3 → ∧ sub 2 1 1 sub 3 1 1 = 2 3
 
 theorem uniquenessDeduction Uniqueness Deduction
-hypothesis ∃ 1 1
-hypothesis → sub 2 1 1 → sub 3 1 1 = 2 3
-combineAntecedents h2
+premise ∃ 1 1
+premise → sub 2 1 1 → sub 3 1 1 = 2 3
+combineAntecedents p2
 introduceForallWithoutSubstitution 1 3
 introduceForallWithoutSubstitution 2 2
-introduceAnd h1 3
+introduceAnd p1 3
 definition-∃! 4
 qed
 
 theorem setWithMembershipConditionIsUnique A Set with a Membership Condition Is Unique
-hypothesis ∃ 1 ∀ 4 ↔ ∈ 4 1 sub 5 1 1
+premise ∃ 1 ∀ 4 ↔ ∈ 4 1 sub 5 1 1
 assume ∀ 4 ↔ ∈ 4 2 sub 5 1 1
   assume ∀ 4 ↔ ∈ 4 3 sub 5 1 1
-    setsWithSameMembershipConditionEqual f.h f.f.h
+    setsWithSameMembershipConditionEqual f.a f.f.a
   introduceImplication f.f.1
 introduceImplication f.1
-uniquenessDeduction h1 1
+uniquenessDeduction p1 1
 qed
 
 theorem thereExistsAUniqueSetEqualToAnySet There Exists a Unique Set Equal to Any Set
 thereExistsASetEqualToAnySet 2 1
 assume = 3 1
   assume = 4 1
-    reverseEquality f.f.h
-    equalityIsTransitive f.h f.f.1
+    reverseEquality f.f.a
+    equalityIsTransitive f.a f.f.1
   introduceImplication f.f.2
 introduceImplication f.1
 uniquenessDeduction 1 2
@@ -171,10 +171,10 @@ Introduce the empty set, ∅.
 axiom emptySet "Empty Set" ∃ 1 ∀ 2 ¬ ∈ 2 1
 
 theorem emptySetsAreEqual Empty Sets are Equal
-hypothesis ∀ 3 ¬ ∈ 3 1
-hypothesis ∀ 3 ¬ ∈ 3 2
-eliminateForall h1 3 3
-eliminateForall h2 3 3
+premise ∀ 3 ¬ ∈ 3 1
+premise ∀ 3 ¬ ∈ 3 2
+eliminateForall p1 3 3
+eliminateForall p2 3 3
 falseStatementsAreEquivalent 1 2
 introduceForallWithoutSubstitution 3 3
 setsWithSameMembersEqual 4
@@ -184,7 +184,7 @@ theorem thereIsAUniqueEmptySet There Is a Unique Empty Set
 emptySet 1 2
 assume ∀ 2 ¬ ∈ 2 3
   assume ∀ 2 ¬ ∈ 2 4
-    emptySetsAreEqual f.h f.f.h
+    emptySetsAreEqual f.a f.f.a
   introduceImplication f.f.1
 introduceImplication f.1
 combineAntecedents 2
@@ -206,7 +206,7 @@ qed
 
 theorem theOnlySubsetOfTheEmptySetIsTheEmptySet The Only Subset of the Empty Set is the Empty Set
 assume ⊆ 1 ∅
-  definition-⊆ f.h 2
+  definition-⊆ f.a 2
   definition-∅ 2
   eliminateForallWithoutSubstitution f.1
   eliminateForallWithoutSubstitution f.2
@@ -215,7 +215,7 @@ assume ⊆ 1 ∅
   emptySetsAreEqual f.6 f.2
 introduceImplication f.7
 assume = 1 ∅
-  substituteEqualsIntoElement f.h 2
+  substituteEqualsIntoElement f.a 2
   eliminateEquivalenceForward f.1
   introduceForallWithoutSubstitution f.2 2
   definition-⊆ f.3
@@ -260,18 +260,18 @@ axiomOfReplacement = 4 1 3 powerSet ∅ 4 2
 eliminateImplication 4 3
 assume ∃ 3 ∧ ∈ 3 powerSet ∅ = 4 1
   assume ∧ ∈ 3 powerSet ∅ = 4 1
-    eliminateAndRight f.f.h
+    eliminateAndRight f.f.a
   introduceImplication f.f.1
-  eliminateExistsWithoutSubstitution f.h f.1
+  eliminateExistsWithoutSubstitution f.a f.1
 introduceImplication f.2
 assume = 4 1
   powerSetOfEmptySetContainsEmptySet
-  introduceAnd f.1 f.h
+  introduceAnd f.1 f.a
   introduceExists f.2 ∧ ∈ 3 powerSet ∅ = 4 1 ∅ 3
 introduceImplication f.3
 introduceEquivalence 6 7
 assume ∀ 4 ↔ ∈ 4 2 ∃ 3 ∧ ∈ 3 powerSet ∅ = 4 1
-  eliminateForallWithoutSubstitution f.h
+  eliminateForallWithoutSubstitution f.a
   equivalenceIsTransitive f.1 8
   introduceForallWithoutSubstitution f.2 4
   introduceExistsWithoutSubstitution f.3 2

@@ -9,20 +9,20 @@ rule introduceForall sub 2 1 1 ⇒ ∀ 1 1 | 2
 rule eliminateForall ∀ 1 1 ⇒ sub 2 1 1
 
 theorem introduceForallWithoutSubstitution Introduce Universal Quantifier Without Substitution
-hypothesis 1
-introduceForall h1 1 1 1
+premise 1
+introduceForall p1 1 1 1
 qed
 
 theorem eliminateForallWithoutSubstitution Eliminate Universal Quantifier Without Substitution
-hypothesis ∀ 1 1
-eliminateForall h1 1
+premise ∀ 1 1
+eliminateForall p1 1
 qed
 
 theorem distributeForallOverImplication Distribute Universal Quantifier over Implication
-hypothesis ∀ 1 → 1 2
-eliminateForall h1 2
+premise ∀ 1 → 1 2
+eliminateForall p1 2
 assume ∀ 1 1
-  eliminateForall f.h 2
+  eliminateForall f.a 2
   eliminateImplication 1 f.1
   introduceForall f.2
 introduceImplication f.3
@@ -30,7 +30,7 @@ qed
 
 theorem distributeForallOverConjunction Universal Quantifier Distributes over Conjunction
 assume ∀ 1 ∧ 1 2
-  eliminateForall f.h 2
+  eliminateForall f.a 2
   eliminateAndLeft f.1
   introduceForall f.2
   eliminateAndRight f.1
@@ -38,9 +38,9 @@ assume ∀ 1 ∧ 1 2
   introduceAnd f.3 f.5
 introduceImplication f.6
 assume ∧ ∀ 1 1 ∀ 1 2
-  eliminateAndLeft f.h
+  eliminateAndLeft f.a
   eliminateForall f.1 2
-  eliminateAndRight f.h
+  eliminateAndRight f.a
   eliminateForall f.3 2
   introduceAnd f.2 f.4
   introduceForall f.5 ∧ 1 2 2 1
@@ -49,19 +49,19 @@ introduceEquivalence 1 2
 qed
 
 theorem implicationIsTransitiveInsideForall Implication is Transitive Inside Universal Quantifier
-hypothesis ∀ 1 → 1 2
-hypothesis ∀ 1 → 2 3
-eliminateForall h1 1
-eliminateForall h2 1
+premise ∀ 1 → 1 2
+premise ∀ 1 → 2 3
+eliminateForall p1 1
+eliminateForall p2 1
 implicationIsTransitive 1 2
 introduceForallWithoutSubstitution 3 1
 qed
 
 theorem introduceEquivalenceInsideForall Introduce Equivalence Inside Universal Quantifier
-hypothesis ∀ 1 → 1 2
-hypothesis ∀ 1 → 2 1
-eliminateForall h1 1
-eliminateForall h2 1
+premise ∀ 1 → 1 2
+premise ∀ 1 → 2 1
+eliminateForall p1 1
+eliminateForall p2 1
 introduceEquivalence 1 2
 introduceForallWithoutSubstitution 3 1
 qed
@@ -72,31 +72,31 @@ Introduce the existential quantifier, ∃.
 quantifier ∃ ¬ ∀ 1 ¬ 1
 
 theorem introduceExists Introduce Existential Quantifier
-hypothesis sub 2 1 1
+premise sub 2 1 1
 assume ∀ 1 ¬ 1
-  eliminateForall f.h 2
-introduceNegation h1 f.1
+  eliminateForall f.a 2
+introduceNegation p1 f.1
 definition-∃ 1
 qed
 
 theorem eliminateExists Eliminate Existential Quantifier
-hypothesis ∃ 1 1
-hypothesis → sub 2 1 1 2
-definition-∃ h1
+premise ∃ 1 1
+premise → sub 2 1 1 2
+definition-∃ p1
 assume ¬ 2
-  modusTollens h2 f.h
+  modusTollens p2 f.a
   introduceForall f.1 ¬ 1 2 1
 introduceNegation f.2 1
 eliminateNegation 2
 qed
 
 theorem introduceExistsWithoutSubstitution Introduce Existential Quantifier Without Substitution
-hypothesis 1
-introduceExists h1 1 1 1
+premise 1
+introduceExists p1 1 1 1
 qed
 
 theorem eliminateExistsWithoutSubstitution Eliminate Existential Quantifier Without Substitution
-hypothesis ∃ 1 1
-hypothesis → 1 2
-eliminateExists h1 h2 1
+premise ∃ 1 1
+premise → 1 2
+eliminateExists p1 p2 1
 qed

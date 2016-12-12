@@ -8,8 +8,8 @@ class TheoremSpec extends ProverSpec {
     Seq(StatementVariableWithReplacement(1, 2, 1)),
     ForAll(1, 1),
     Seq(2))
-  val eliminateForAll = DirectRule(
-    "eliminateForAll",
+  val eliminateForall = DirectRule(
+    "eliminateForall",
     Seq(ForAll(1, 1)),
     StatementVariableWithReplacement(1, 2, 1),
     Nil)
@@ -23,7 +23,7 @@ class TheoremSpec extends ProverSpec {
       firstLine,
       lines,
       defaultContext.copy(
-        rules = defaultContext.rules ++ Seq(introduceImplication, eliminateImplication, introduceForall, eliminateForAll),
+        rules = defaultContext.rules ++ Seq(introduceImplication, eliminateImplication, introduceForall, eliminateForall),
         theorems = defaultContext.theorems ++ additionalTheorems)
     )._1
   }
@@ -34,35 +34,35 @@ class TheoremSpec extends ProverSpec {
         "imp-refl Implication is Reflexive",
         Seq(
           "assume 1",
-          "introduceImplication f.h",
+          "introduceImplication f.a",
           "qed"))
-      theorem.result mustEqual Implication(1, 1)
+      theorem.conclusionTemplate mustEqual Implication(1, 1)
     }
 
     "parse a theorem with a nested fantasy" in {
       val theorem = parseTheorem(
         "imp-distr Implication Distributes over Itself",
         Seq(
-          "hypothesis → 1 → 2 3",
+          "premise → 1 → 2 3",
           "assume → 1 2",
           "assume 1",
-          "eliminateImplication h1 f.f.h",
-          "eliminateImplication f.h f.f.h",
+          "eliminateImplication p1 f.f.a",
+          "eliminateImplication f.a f.f.a",
           "eliminateImplication f.f.1 f.f.2",
           "introduceImplication f.f.3",
           "introduceImplication f.1",
           "qed"))
-      theorem.result mustEqual Implication(Implication(1, 2), Implication(1, 3))
+      theorem.conclusionTemplate mustEqual Implication(Implication(1, 2), Implication(1, 3))
     }
 
     "parse a theorem with a definition application" in {
       val theorem = parseTheorem(
         "imp-distr Implication Distributes over Itself",
         Seq(
-          "hypothesis ∧ 1 2",
-          "definition-∧ h1",
+          "premise ∧ 1 2",
+          "definition-∧ p1",
           "qed"))
-      theorem.result mustEqual Negation(Implication(1, Negation(2)))
+      theorem.conclusionTemplate mustEqual Negation(Implication(1, Negation(2)))
     }
 
     "parse a theorem with a previous theorem application" in {
@@ -77,20 +77,20 @@ class TheoremSpec extends ProverSpec {
       val theorem = parseTheorem(
         "or-left Disjunction from Left",
         Seq(
-          "hypothesis 1",
-          "false-imp-any h1 2",
+          "premise 1",
+          "false-imp-any p1 2",
           "definition-∨ 1",
           "qed"),
         additionalTheorems = Seq(previousTheorem))
-      theorem.result mustEqual Disjunction(1, 2)
+      theorem.conclusionTemplate mustEqual Disjunction(1, 2)
     }
 
     "parse a theorem with arbitrary variables" in {
       val theorem = parseTheorem(
         "id Title",
         Seq(
-          "hypothesis = 1 2",
-          "introduceForall h1 = 1 3 2 3",
+          "premise = 1 2",
+          "introduceForall p1 = 1 3 2 3",
           "qed"))
       theorem.arbitraryVariables mustEqual Seq(TermVariable(2))
     }
@@ -99,8 +99,8 @@ class TheoremSpec extends ProverSpec {
       val theorem = parseTheorem(
         "id Title",
         Seq(
-          "hypothesis ∀ 1 1",
-          "eliminateForAll h1 2",
+          "premise ∀ 1 1",
+          "eliminateForall p1 2",
           "introduceForall 1",
           "qed"))
       theorem.arbitraryVariables mustEqual Nil
@@ -142,12 +142,12 @@ class TheoremSpec extends ProverSpec {
         Nil,
         Equals(2, 3),
         Seq(1))
-      val theoremBuilder = TheoremBuilder().addHypothesis(Equals(2, 1))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "h1 4", defaultContext)
+      val theoremBuilder = TheoremBuilder().addPremise(Equals(2, 1))
+      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "p1 4", defaultContext)
       updatedTheoremBuilder.arbitraryVariables mustEqual Seq(TermVariable(2))
     }
 
-    "fail a rule with arbitrary variables if an arbitrary variable appears in a fantasy hypothesis" in {
+    "fail a rule with arbitrary variables if an arbitrary variable appears in a fantasy assumption" in {
       val theorem = Theorem(
         "id",
         "Title",
@@ -156,7 +156,7 @@ class TheoremSpec extends ProverSpec {
         Equals(2, 3),
         Seq(1))
       val theoremBuilder = TheoremBuilder().addFantasy(Equals(2, 1))
-      theorem.readAndUpdateTheoremBuilder(theoremBuilder, "f.h 4", defaultContext) must throwAn[ArbitraryVariableException]
+      theorem.readAndUpdateTheoremBuilder(theoremBuilder, "f.a 4", defaultContext) must throwAn[ArbitraryVariableException]
 
     }
   }

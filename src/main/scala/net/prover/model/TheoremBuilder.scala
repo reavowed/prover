@@ -20,12 +20,12 @@ trait TheoremBuildable[T <: TheoremBuildable[T]] {
     }
   }
 
-  def addFantasy(fantasyHypothesis: Statement): T = {
+  def addFantasy(assumption: Statement): T = {
     val newFantasy = fantasyOption match {
       case Some(fantasy) =>
-        fantasy.addFantasy(fantasyHypothesis)
+        fantasy.addFantasy(assumption)
       case None =>
-        Fantasy(fantasyHypothesis)
+        Fantasy(assumption)
     }
     withFantasy(Some(newFantasy))
   }
@@ -73,17 +73,17 @@ trait TheoremBuildable[T <: TheoremBuildable[T]] {
 }
 
 case class TheoremBuilder(
-    hypotheses: Seq[Statement] = Nil,
+    premises: Seq[Statement] = Nil,
     steps: Seq[Step] = Nil,
     fantasyOption: Option[Fantasy] = None,
     arbitraryVariables: Seq[TermVariable] = Nil)
   extends TheoremBuildable[TheoremBuilder] {
 
-  def addHypothesis(hypothesis: Statement): TheoremBuilder = {
-    copy(hypotheses = hypotheses :+ hypothesis)
+  def addPremise(premise: Statement): TheoremBuilder = {
+    copy(premises = premises :+ premise)
   }
   def withArbitraryVariables(newArbitraryVariables: Seq[TermVariable]): TheoremBuilder = {
-    val fantasyVariables = fantasyHypotheses.flatMap(_.freeVariables)
+    val fantasyVariables = fantasyAssumptions.flatMap(_.freeVariables)
     if (fantasyVariables.intersect(newArbitraryVariables).nonEmpty) {
       throw ArbitraryVariableException(
         s"Variables ${fantasyVariables.intersect(newArbitraryVariables).mkString(", ")} were non-arbitrary")
@@ -94,18 +94,18 @@ case class TheoremBuilder(
   override protected def withStep(step: Step): TheoremBuilder = copy(steps = steps :+ step)
   override protected def withFantasy(fantasyOption: Option[Fantasy]): TheoremBuilder = copy(fantasyOption = fantasyOption)
   override protected def resolveSpecificReference: PartialFunction[String, Statement] = {
-    val hypothesisReference = "h(\\d+)".r;
+    val premiseReference = "p(\\d+)".r;
     {
-      case reference @ hypothesisReference(IntParser(number)) =>
-        hypotheses.lift(number - 1)
-          .getOrElse(throw ReferenceResolveException(reference, "Hypothesis index out of range"))
+      case reference @ premiseReference(IntParser(number)) =>
+        premises.lift(number - 1)
+          .getOrElse(throw ReferenceResolveException(reference, s"No premise with number $number"))
     }
   }
-  protected def fantasyHypotheses: Seq[Statement] = {
+  protected def fantasyAssumptions: Seq[Statement] = {
     def helper(fantasy: Option[Fantasy], acc: Seq[Statement]): Seq[Statement] = {
       fantasy match {
         case Some(f) =>
-          helper(f.fantasyOption, acc :+ f.hypothesis)
+          helper(f.fantasyOption, acc :+ f.assumption)
         case None =>
           acc
       }
@@ -116,15 +116,15 @@ case class TheoremBuilder(
 
 object TheoremBuilder {
   case class Fantasy(
-      hypothesis: Statement,
+      assumption: Statement,
       steps: Seq[Step] = Nil,
       fantasyOption: Option[Fantasy] = None)
     extends TheoremBuildable[Fantasy] {
     override protected def withStep(step: Step): Fantasy = copy(steps = steps :+ step)
     override protected def withFantasy(fantasyOption: Option[Fantasy]): Fantasy = copy(fantasyOption = fantasyOption)
     override protected def resolveSpecificReference: PartialFunction[String, Statement] = {
-      case "h" =>
-        hypothesis
+      case "a" =>
+        assumption
     }
   }
 }

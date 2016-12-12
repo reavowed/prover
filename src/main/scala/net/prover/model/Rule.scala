@@ -9,22 +9,11 @@ case class DirectRule(
     premiseTemplates: Seq[Statement],
     conclusionTemplate: Statement,
     arbitraryVariables: Seq[TermVariable])
-  extends Rule with TheoremLineParser {
-  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
-    val (premisesAndTemplates, lineAfterPremises) = premiseTemplates.mapFold(line) { (premiseTemplate, lineSoFar) =>
-      readReference(lineSoFar, theoremBuilder).mapLeft((_, premiseTemplate))
-    }
-    val (matcher, _) = matchPremises(premisesAndTemplates, conclusionTemplate, lineAfterPremises, context)
-    val updatedArbitraryVariables = arbitraryVariables.flatMap(matcher.terms.get).map(Term.asVariable)
-    theoremBuilder
-      .addStep(Step(conclusionTemplate.applyMatch(matcher)))
-      .withArbitraryVariables(updatedArbitraryVariables)
-  }
-}
+  extends Rule with Deduction
 
 case class FantasyRule(
     id: String,
-    hypothesisTemplate: Statement,
+    assumptionTemplate: Statement,
     premiseTemplates: Seq[Statement],
     conclusionTemplate: Statement)
   extends Rule {
@@ -47,24 +36,24 @@ case class FantasyRule(
     line: PartialLine,
     context: Context
   ): TheoremBuilder = {
-    val theoremHypothesis = theorem.hypotheses match {
-      case Seq(singleHypothesis) =>
-        singleHypothesis
+    val theoremPremiseTemplate = theorem.premiseTemplates match {
+      case Seq(singlePremiseTemplate) =>
+        singlePremiseTemplate
       case _ =>
-        throw ParseException.withMessage("Can only apply rule to theorem with a single hypothesis", line.fullLine)
+        throw ParseException.withMessage("Can only apply rule to a theorem with a single premise", line.fullLine)
     }
     val premiseTemplate = premiseTemplates match {
       case Seq(singlePremise) =>
         singlePremise
       case _ =>
-        throw ParseException.withMessage("Can only apply rule to theorem if it has a single premise", line.fullLine)
+        throw ParseException.withMessage("Can only apply a rule with a single premise to a theorem", line.fullLine)
     }
-    val requiredVariables = theoremHypothesis.variables ++ theorem.result.variables
+    val requiredVariables = theoremPremiseTemplate.variables ++ theorem.conclusionTemplate.variables
     val (matcher, lineAfterVariables) = Match.empty.expand(requiredVariables, line, context)
-    val updatedTheoremHypothesis = theoremHypothesis.applyMatch(matcher)
-    val updatedTheoremResult = theorem.result.applyMatch(matcher)
+    val theoremPremise = theoremPremiseTemplate.applyMatch(matcher)
+    val theoremConclusion = theorem.conclusionTemplate.applyMatch(matcher)
     val conclusion = matchPremisesToConclusion(
-      Seq((updatedTheoremHypothesis, hypothesisTemplate), (updatedTheoremResult, premiseTemplate)),
+      Seq((theoremPremise, assumptionTemplate), (theoremConclusion, premiseTemplate)),
       conclusionTemplate,
       lineAfterVariables,
       context)._1
@@ -84,11 +73,11 @@ case class FantasyRule(
         throw ParseException.withMessage("Can only apply rule to definition if it has a single premise", line.fullLine)
     }
 
-    val (definitionHypothesis, lineAfterHypothesis) = Statement.parse(line, context)
-    val (definitionResult, _) = definition.applyToStatement(definitionHypothesis, lineAfterHypothesis, theoremBuilder, context)
+    val (definitionPremise, lineAfterPremise) = Statement.parse(line, context)
+    val (definitionConclusion, _) = definition.applyToStatement(definitionPremise, lineAfterPremise, theoremBuilder, context)
 
     val conclusion = matchPremisesToConclusion(
-      Seq((definitionHypothesis, hypothesisTemplate), (definitionResult, premiseTemplate)),
+      Seq((definitionPremise, assumptionTemplate), (definitionConclusion, premiseTemplate)),
       conclusionTemplate,
       line,
       context
@@ -102,12 +91,12 @@ case class FantasyRule(
         readReference(lineSoFar, theoremBuilder).mapLeft((_, premiseTemplate))
       }
       val conclusion = matchPremisesToConclusion(
-        (fantasy.hypothesis, hypothesisTemplate) +: premisesAndTemplates,
+        (fantasy.assumption, assumptionTemplate) +: premisesAndTemplates,
         conclusionTemplate,
         lineAfterPremises,
         context
       )._1
-      Step(conclusion, Some(Step.Fantasy(fantasy.hypothesis, fantasy.steps)))
+      Step(conclusion, Some(Step.Fantasy(fantasy.assumption, fantasy.steps)))
     }
   }
 }
@@ -117,10 +106,11 @@ object Rule extends SingleLineChapterEntryParser[Rule] {
 
   override def parse(line: PartialLine, context: Context): Rule = {
     val (id, lineAfterName) = line.splitFirstWord
-    val (hypothesisOrPremises, lineAfterHypothesisOrPremises) = Statement.parseList(lineAfterName, context)
-    val (firstSymbol, lineAfterFirstSymbol) = lineAfterHypothesisOrPremises.splitFirstWord
+    val (assumptionOrPremises, lineAfterAssumptionOrPremises) = Statement.parseList(lineAfterName, context)
+    val (firstSymbol, lineAfterFirstSymbol) = lineAfterAssumptionOrPremises.splitFirstWord
     firstSymbol match {
       case "⇒" =>
+        val premises = assumptionOrPremises
         val (conclusion, lineAfterConclusion) = Statement.parse(lineAfterFirstSymbol, context)
         val freeVariables = lineAfterConclusion match {
           case WordAndRemainingText("|", lineAfterPipe) =>
@@ -128,11 +118,11 @@ object Rule extends SingleLineChapterEntryParser[Rule] {
           case _ =>
             Nil
         }
-        DirectRule(id, hypothesisOrPremises, conclusion, freeVariables)
+        DirectRule(id, premises, conclusion, freeVariables)
       case "⊢" =>
-        val hypothesis = hypothesisOrPremises match {
-          case Seq(singleHypothesis) =>
-            singleHypothesis
+        val assumption = assumptionOrPremises match {
+          case Seq(singleAssumption) =>
+            singleAssumption
           case _ =>
             throw ParseException.withMessage("A rule cannot discharge more than one assumption", line.fullLine)
         }
@@ -142,7 +132,7 @@ object Rule extends SingleLineChapterEntryParser[Rule] {
           throw ParseException.withMessage("Rule did not have a conclusion", line.fullLine)
         }
         val (conclusion, _) = Statement.parse(conclusionText, context)
-        FantasyRule(id, hypothesis, premises, conclusion)
+        FantasyRule(id, assumption, premises, conclusion)
       case _ =>
         throw ParseException.withMessage("Rule did not have a conclusion", line.fullLine)
     }
