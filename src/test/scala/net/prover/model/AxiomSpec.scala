@@ -24,7 +24,7 @@ class AxiomSpec extends ProverSpec {
           Equivalence(ElementOf(3, 1), ElementOf(3, 2)),
           Equivalence(ElementOf(1, 3), ElementOf(2, 3)))))))
 
-      axiom.readStep(TheoremBuilder(), "2 1 3", defaultContext)._1.statement mustEqual
+      axiom.readAndUpdateTheoremBuilder(TheoremBuilder(), "2 1 3", defaultContext).steps.head.statement mustEqual
         ForAll(2, ForAll(1, ForAll(3, Implication(
           Equivalence(ElementOf(3, 2), ElementOf(3, 1)),
           Equivalence(ElementOf(2, 3), ElementOf(1, 3))))))

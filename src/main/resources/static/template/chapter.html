@@ -105,9 +105,9 @@
                     </div>
                 </div>
                 <div id="{{entry.id}}-proof" class="theoremProof collapse">
-                    <div ng-if="entry.premises.length">
+                    <div ng-if="entry.premiseTemplates.length">
                         <label>Premises</label>
-                        <div ng-repeat="premise in entry.premises" class="premise">{{premise}}</div>
+                        <div ng-repeat="premiseTemplate in entry.premiseTemplates" class="premise">{{premiseTemplate}}</div>
                         <label>Proof</label>
                     </div>
                     <step step="step" ng-repeat="step in entry.steps"></step>
