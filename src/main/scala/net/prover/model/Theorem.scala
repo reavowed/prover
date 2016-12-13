@@ -30,7 +30,7 @@ trait TheoremLineParser {
         .mapLeft(conclusionTemplate.applyMatch)
   }
 
-  protected def matchPremises(
+  def matchPremises(
     premisesWithTemplates: Seq[(Statement, Statement)],
     conclusionTemplate: Statement,
     line: PartialLine,
@@ -85,14 +85,7 @@ object Theorem extends ChapterEntryParser[Theorem] {
       theoremBuilder: TheoremBuilder
     ): TheoremBuilder = {
       try {
-        val parsers = Seq(PremiseParser, FantasyAssumptionParser) ++
-          context.rules ++
-          context.connectives.flatMap(_.definition) ++
-          context.predicates.flatMap(_.definition) ++
-          context.quantifiers.flatMap(_.definition) ++
-          context.termDefinitions.flatMap(_.definitionStepParser) ++
-          context.theorems ++
-          context.axioms
+        val parsers = Seq(PremiseParser, FantasyAssumptionParser) ++ context.theoremLineParsers
         val (lineType, restOfLine) = line.splitFirstWord
         val parser = parsers.find(_.id == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
         parser.readAndUpdateTheoremBuilder(theoremBuilder, restOfLine, context)

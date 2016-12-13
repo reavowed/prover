@@ -1,6 +1,7 @@
 package net.prover
 
 import scala.collection.mutable
+import scala.reflect.ClassTag
 import scala.util.Try
 
 package object model {
@@ -61,6 +62,10 @@ package object model {
         }
       }
       b.result()
+    }
+    def ofType[S: ClassTag]: Seq[S] = seq.collect {
+      case s: S =>
+        s
     }
   }
 

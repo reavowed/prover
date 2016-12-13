@@ -57,7 +57,7 @@ class TheoremBuilderSpec extends ProverSpec {
         DistinctVariableRequirements.empty)
       val theoremBuilder = IntroduceImplication.readAndUpdateTheoremBuilder(
         TheoremBuilder(),
-        "and-sym 2 1",
+        "and-sym ∧ 2 1",
         defaultContext.copy(theorems = Seq(theorem)))
       theoremBuilder.steps mustEqual Seq(Step(Implication(Conjunction(2, 1), Conjunction(1, 2))))
     }
@@ -65,7 +65,7 @@ class TheoremBuilderSpec extends ProverSpec {
     "handle assumption discharging rule applied to definition" in {
       val theoremBuilder = IntroduceImplication.readAndUpdateTheoremBuilder(
         TheoremBuilder(),
-        "definition-∨ ∨ ¬ 1 2",
+        "unapply-∨ ∨ ¬ 1 2",
         defaultContext)
       theoremBuilder.steps mustEqual Seq(Step(
         Implication(

@@ -20,9 +20,16 @@ case class Context(
       termDefinitions ++ other.termDefinitions)
   }
 
-  def definitions: Seq[Definition] = connectives.flatMap(_.definition) ++
-    predicates.flatMap(_.definition) ++
-    quantifiers.flatMap(_.definition)
+  def statementDefinitions: Seq[StatementDefinition] = connectives ++ predicates ++ quantifiers
+
+  def theoremLineParsers: Seq[TheoremLineParser] =
+    rules ++
+      theorems ++
+      axioms ++
+      statementDefinitions.flatMap(d => d.forwardDeduction ++ d.reverseDeduction) ++
+      termDefinitions.flatMap(_.deduction)
+
+  def deductions: Seq[Deduction] = theoremLineParsers.ofType[Deduction]
 }
 
 object Context {

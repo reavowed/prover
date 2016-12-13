@@ -47,7 +47,7 @@ class TheoremSpec extends ProverSpec {
         "imp-distr Implication Distributes over Itself",
         Seq(
           "premise ∧ 1 2",
-          "definition-∧ p1",
+          "unapply-∧ p1",
           "qed"))
       theorem.conclusionTemplate mustEqual Negation(Implication(1, Negation(2)))
     }
@@ -67,7 +67,7 @@ class TheoremSpec extends ProverSpec {
         Seq(
           "premise 1",
           "false-imp-any p1 2",
-          "definition-∨ 1",
+          "apply-∨ 1",
           "qed"),
         additionalTheorems = Seq(previousTheorem))
       theorem.conclusionTemplate mustEqual Disjunction(1, 2)

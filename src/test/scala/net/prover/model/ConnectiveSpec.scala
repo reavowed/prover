@@ -41,12 +41,12 @@ class ConnectiveSpec extends ProverSpec {
 
     "apply definition to a theorem with the connective" in {
       val theorem = TheoremBuilder().addStep(Conjunction(Implication(1, 2), 3))
-      val updatedTheorem = Conjunction.definition.get.readAndUpdateTheoremBuilder(theorem, "1", defaultContext)
+      val updatedTheorem = Conjunction.reverseDeduction.get.readAndUpdateTheoremBuilder(theorem, "1", defaultContext)
       updatedTheorem.steps(1).statement mustEqual Negation(Implication(Implication(1, 2), Negation(3)))
     }
     "apply definition to a theorem with the defining statement" in {
       val theorem = TheoremBuilder().addStep(Negation(Implication(Implication(1, 2), Negation(3))))
-      val updatedTheorem = Conjunction.definition.get.readAndUpdateTheoremBuilder(theorem, "1", defaultContext)
+      val updatedTheorem = Conjunction.forwardDeduction.get.readAndUpdateTheoremBuilder(theorem, "1", defaultContext)
       updatedTheorem.steps(1).statement mustEqual Conjunction(Implication(1, 2), 3)
     }
   }

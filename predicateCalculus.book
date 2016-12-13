@@ -48,13 +48,13 @@ premise sub 2 1 1
 assume ∀ 1 ¬ 1
   eliminateForall f.a 2
 introduceNegation p1 f.1
-definition-∃ 1
+apply-∃ 1
 qed
 
 theorem eliminateExists Eliminate Existential Quantifier
 premise ∃ 1 1
 premise → sub 2 1 1 2
-definition-∃ p1
+unapply-∃ p1
 assume ¬ 2
   modusTollens p2 f.a
   introduceForall f.1 ¬ 1 2 1

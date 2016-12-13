@@ -27,12 +27,15 @@ case class TermDefinition[Components <: HList](
       None
   }
 
-  def definitionStepParser: Option[DirectStepParser] = definition.map{ statement => new DirectStepParser {
-    override val id: String = s"definition-$symbol"
-    override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
-      matchPremisesToConclusion(Nil, statement, line, context).mapLeft(Step(_))
+  val deduction: Option[Deduction] = definition.map { d =>
+    new Deduction {
+      override val id: String = s"definition-$symbol"
+      override val premiseTemplates: Seq[Statement] = Nil
+      override val conclusionTemplate: Statement = d
+      override val arbitraryVariables: Seq[TermVariable] = Nil
+      override val distinctVariableRequirements: DistinctVariableRequirements = DistinctVariableRequirements.empty
     }
-  }}
+  }
 }
 
 object TermDefinition extends SingleLineChapterEntryParser[TermDefinition[_]] {

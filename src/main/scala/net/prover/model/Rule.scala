@@ -18,30 +18,30 @@ case class FantasyRule(
     premiseTemplates: Seq[Statement],
     conclusionTemplate: Statement)
   extends Rule {
-  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
-    def withTheorem = line.splitFirstWord.optionMapLeft(n => context.theorems.find(_.id == n)) map {
-      case (theorem, restOfLine) =>
-        applyWithPreviousTheorem(theorem, theoremBuilder, restOfLine, context)
-    }
-    def withDefinition = line.splitFirstWord.optionMapLeft(n => context.definitions.find(_.id == n)) map {
-      case (definition, restOfLine) =>
-        applyWithDefinition(definition, theoremBuilder, restOfLine, context)
-    }
-    withTheorem.orElse(withDefinition).getOrElse(applyWithFantasy(theoremBuilder, line, context))
-  }
-
-
-  private def applyWithPreviousTheorem(
-    theorem: Theorem,
+  override def readAndUpdateTheoremBuilder(
     theoremBuilder: TheoremBuilder,
     line: PartialLine,
     context: Context
   ): TheoremBuilder = {
-    val theoremPremiseTemplate = theorem.premiseTemplates match {
+    def withDeduction = line.splitFirstWord.optionMapLeft(n => context.deductions.find(_.id == n)) map {
+      case (deduction, restOfLine) =>
+        applyWithDeduction(deduction, theoremBuilder, restOfLine, context)
+    }
+    withDeduction.getOrElse(applyWithFantasy(theoremBuilder, line, context))
+  }
+
+
+  private def applyWithDeduction(
+    deduction: Deduction,
+    theoremBuilder: TheoremBuilder,
+    line: PartialLine,
+    context: Context
+  ): TheoremBuilder = {
+    val deductionPremiseTemplate = deduction.premiseTemplates match {
       case Seq(singlePremiseTemplate) =>
         singlePremiseTemplate
       case _ =>
-        throw ParseException.withMessage("Can only apply rule to a theorem with a single premise", line.fullLine)
+        throw ParseException.withMessage("Can only apply rule to a deduction with a single premise", line.fullLine)
     }
     val premiseTemplate = premiseTemplates match {
       case Seq(singlePremise) =>
@@ -49,40 +49,19 @@ case class FantasyRule(
       case _ =>
         throw ParseException.withMessage("Can only apply a rule with a single premise to a theorem", line.fullLine)
     }
-    val requiredVariables = theoremPremiseTemplate.variables ++ theorem.conclusionTemplate.variables
-    val (matcher, lineAfterVariables) = Match.empty.expand(requiredVariables, line, context)
-    val theoremPremise = theoremPremiseTemplate.applyMatch(matcher)
-    val theoremConclusion = theorem.conclusionTemplate.applyMatch(matcher)
+    val (deductionPremise, lineAfterDeductionPremise) = Statement.parse(line, context)
+    val (matcher, lineAfterVariables) = deduction.matchPremises(
+      Seq((deductionPremise, deductionPremiseTemplate)),
+      deduction.conclusionTemplate,
+      lineAfterDeductionPremise,
+      context)
+    val theoremPremise = deductionPremiseTemplate.applyMatch(matcher)
+    val theoremConclusion = deduction.conclusionTemplate.applyMatch(matcher)
     val conclusion = matchPremisesToConclusion(
       Seq((theoremPremise, assumptionTemplate), (theoremConclusion, premiseTemplate)),
       conclusionTemplate,
       lineAfterVariables,
       context)._1
-    theoremBuilder.addStep(Step(conclusion))
-  }
-
-  private def applyWithDefinition(
-    definition: Definition,
-    theoremBuilder: TheoremBuilder,
-    line: PartialLine,
-    context: Context
-  ): TheoremBuilder = {
-    val premiseTemplate = premiseTemplates match {
-      case Seq(singlePremise) =>
-        singlePremise
-      case _ =>
-        throw ParseException.withMessage("Can only apply rule to definition if it has a single premise", line.fullLine)
-    }
-
-    val (definitionPremise, lineAfterPremise) = Statement.parse(line, context)
-    val (definitionConclusion, _) = definition.applyToStatement(definitionPremise, lineAfterPremise, theoremBuilder, context)
-
-    val conclusion = matchPremisesToConclusion(
-      Seq((definitionPremise, assumptionTemplate), (definitionConclusion, premiseTemplate)),
-      conclusionTemplate,
-      line,
-      context
-    )._1
     theoremBuilder.addStep(Step(conclusion))
   }
 
