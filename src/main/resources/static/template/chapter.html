@@ -42,27 +42,40 @@
         </div>
         <div ng-switch-when="rule">
             <div class="result ruleWrapper">
-                <div>Rule:</div>
-                <div>
-                    <div class="rulePremises">
-                        Given
-                        {{entry.assumptionTemplate ? entry.assumptionTemplate + ' ⊢' : ''}}
-                        {{entry.premiseTemplates.join(", ")}}
-                    </div>
-                    <div class="ruleConclusion">
-                        Deduce
-                        {{entry.conclusionTemplate}}
-                    </div>
-                    <div class="arbitraryVariables" ng-if="entry.arbitraryVariables.length">
-                        Arbitrary variables: {{entry.arbitraryVariables.join(", ")}}
-                    </div>
-                    <div class="distinctVariables" ng-if="entry.distinctVariableRequirements.length">
-                        Distinct variables:
-                        <span ng-repeat="requirement in entry.distinctVariableRequirements">
-                            {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
-                        </span>
-                    </div>
-                </div>
+                <table>
+                    <tr>
+                        <td>Rule:</td>
+                        <td>
+                            <div class="ruleStatement">
+                                <span class="rulePremises">
+                                    Given
+                                    {{entry.assumptionTemplate ? entry.assumptionTemplate + ' ⊢' : ''}}
+                                    {{entry.premiseTemplates.join(", ")}}
+                                </span>
+                                <span class="ruleDivide"></span>
+                                <span class="ruleConclusion">
+                                    Deduce
+                                    {{entry.conclusionTemplate}}
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr ng-if="entry.arbitraryVariables.length">
+                        <td></td>
+                        <td class="arbitraryVariables">
+                            Arbitrary variables: {{entry.arbitraryVariables.join(", ")}}
+                        </td>
+                    </tr>
+                    <tr ng-if="entry.distinctVariableRequirements.length">
+                        <td></td>
+                        <td class="distinctVariables">
+                            Distinct variables:
+                            <span ng-repeat="requirement in entry.distinctVariableRequirements">
+                                {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
+                            </span>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
         <div ng-switch-when="axiom">
