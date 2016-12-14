@@ -56,7 +56,7 @@ premise ∃ 1 1
 premise → sub 2 1 1 2
 unapply-∃ p1
 assume ¬ 2
-  modusTollens p2 f.a
+  modusTollens1 p2 f.a
   introduceForall f.1 ¬ 1 2 1
 introduceNegation f.2 1
 eliminateNegation 2

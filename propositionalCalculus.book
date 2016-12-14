@@ -62,7 +62,7 @@ introduceDoubleNegation p1
 falseImpliesAnything1 1 2
 qed
 
-theorem modusTollens Modus Tollens
+theorem modusTollens1 Modus Tollens (1)
 premise → 1 2
 premise ¬ 2
 assume 1
@@ -70,10 +70,32 @@ assume 1
 introduceNegation f.1 p2
 qed
 
+theorem modusTollens2 Modus Tollens (2)
+premise → ¬ 1 2
+premise ¬ 2
+modusTollens1 p1 p2
+eliminateNegation 1
+qed
+
+theorem modusTollens3 Modus Tollens (3)
+premise → 1 ¬ 2
+premise 2
+assume 1
+  eliminateImplication p1 f.a
+introduceNegation p2 f.1
+qed
+
+theorem modusTollens2 Modus Tollens (4)
+premise → ¬ 1 ¬ 2
+premise 2
+modusTollens3 p1 p2
+eliminateNegation 1
+qed
+
 theorem contraposition Contraposition
 premise → 1 2
 assume ¬ 2
-  modusTollens p1 f.a
+  modusTollens1 p1 f.a
 introduceImplication f.1
 qed
 
@@ -111,29 +133,25 @@ qed
 
 theorem eliminateAndLeft Eliminate Conjunction (Left)
 premise ∧ 1 2
-assume ¬ 1
-  falseImpliesAnything1 f.a ¬ 2
-  unapply-∧ p1
-introduceNegation f.1 f.2
-eliminateNegation 1
+unapply-∧ p1
+introduceImplication falseImpliesAnything1 ¬ 1 ¬ 2
+modusTollens2 2 1
 qed
 
 theorem eliminateAndRight Eliminate Conjunction (Right)
 premise ∧ 1 2
-assume ¬ 2
-  anythingImpliesTrue f.a 1
-  unapply-∧ p1
-introduceNegation f.1 f.2
-eliminateNegation 1
+unapply-∧ p1
+introduceImplication anythingImpliesTrue ¬ 2 1
+modusTollens2 2 1
 qed
 
 theorem combineAntecedents Combine Antecedents
 premise → 1 → 2 3
 assume ∧ 1 2
   eliminateAndLeft f.a
-  eliminateImplication p1 f.1
   eliminateAndRight f.a
-  eliminateImplication f.2 f.3
+  eliminateImplication p1 f.1
+  eliminateImplication f.3 f.2
 introduceImplication f.4
 qed
 
@@ -171,10 +189,8 @@ theorem combineCases Combine Cases
 premise → 1 3
 premise → 2 3
 assume ∨ 1 2
-  unapply-∨ f.a
-  implicationIsTransitive f.1 p2
-  cases p1 f.2
-introduceImplication f.3
+  eliminateOr p1 p2 f.a
+introduceImplication f.1
 qed
 
 theorem reverseOr Reverse Disjunction
@@ -192,8 +208,8 @@ qed
 
 theorem nonContradiction Law of Non-Contradiction
 assume ∧ 1 ¬ 1
-unapply-∧ f.a
-introduceImplication introduceDoubleNegation 1
+  unapply-∧ f.a
+  introduceImplication introduceDoubleNegation 1
 introduceNegation f.2 f.1
 qed
 
