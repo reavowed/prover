@@ -62,13 +62,3 @@ introduceNegation f.2 1
 eliminateNegation 2
 qed
 
-theorem introduceExistsWithoutSubstitution Introduce Existential Quantifier Without Substitution
-premise 1
-introduceExists p1 1 1 1
-qed
-
-theorem eliminateExistsWithoutSubstitution Eliminate Existential Quantifier Without Substitution
-premise ∃ 1 1
-premise → 1 2
-eliminateExists p1 p2 1
-qed

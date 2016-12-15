@@ -73,6 +73,13 @@ proverApp.controller('NavController', function($scope) {
   $scope.breadcrumbs = [];
 });
 
+proverApp.component('theorem', {
+  templateUrl: 'template/theorem.html',
+  bindings: {
+    theorem: '<'
+  }
+});
+
 proverApp.component('step', {
   templateUrl: 'template/step.html',
   bindings: {

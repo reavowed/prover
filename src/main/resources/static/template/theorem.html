@@ -1,0 +1,40 @@
+<div ng-if="$ctrl.theorem">
+    <span class="theoremId">{{$ctrl.theorem.id}}</span>
+    <div class="theoremTitle"
+         data-toggle="collapse"
+         data-target="#{{$ctrl.theorem.id}}-proof, #{{$ctrl.theorem.id}}-summary">
+        Theorem: {{$ctrl.theorem.title}}
+    </div>
+    <div id="{{$ctrl.theorem.id}}-summary" class="theoremSummary collapse in">
+        <div ng-if="$ctrl.theorem.premiseTemplates.length">
+            Suppose
+            <span ng-if="$ctrl.theorem.premiseTemplates.length > 1">
+                {{$ctrl.theorem.premiseTemplates.slice(0, $ctrl.theorem.premiseTemplates.length - 1).join(", ")}}
+                and
+            </span>
+            {{$ctrl.theorem.premiseTemplates[$ctrl.theorem.premiseTemplates.length - 1]}}.
+            <arbitrary-variables variables="$ctrl.theorem.arbitraryVariables"></arbitrary-variables>
+        </div>
+        <div>
+            <span ng-if="$ctrl.theorem.premiseTemplates.length">Then</span>
+            {{$ctrl.theorem.conclusionTemplate}}.
+        </div>
+        <div class="arbitraryVariables" ng-if="$ctrl.theorem.arbitraryVariables.length">
+            Arbitrary variables: {{$ctrl.theorem.arbitraryVariables.join(", ")}}
+        </div>
+        <div class="distinctVariables" ng-if="$ctrl.theorem.distinctVariableRequirements.length">
+            Distinct variables:
+            <span ng-repeat="requirement in $ctrl.theorem.distinctVariableRequirements">
+                {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
+            </span>
+        </div>
+    </div>
+    <div id="{{$ctrl.theorem.id}}-proof" class="theoremProof collapse">
+        <div ng-if="$ctrl.theorem.premiseTemplates.length">
+            <label>Premises</label>
+            <div ng-repeat="premiseTemplate in $ctrl.theorem.premiseTemplates" class="premise">{{premiseTemplate}}</div>
+            <label>Proof</label>
+        </div>
+        <step step="step" ng-repeat="step in $ctrl.theorem.steps"></step>
+    </div>
+</div>
