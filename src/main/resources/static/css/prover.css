@@ -109,11 +109,15 @@
     margin-top: 15px;
 }
 
-.premise, .assumption, .stepConclusion {
-    margin-left: 5px;
-    margin-bottom: 5px;
+.premise, .proofRow td {
+    padding-left: 5px;
+    padding-bottom: 5px;
 }
 
-.fantasyBody {
+.proofIndent {
     margin-left: 10px;
+}
+
+table {
+    font-size: inherit;
 }

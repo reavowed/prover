@@ -1,9 +1,0 @@
-<div class="step">
-    <div ng-if="$ctrl.step.fantasy">
-        <div class="assumption">Assume {{$ctrl.step.fantasy.assumption}}.</div>
-        <div class="fantasyBody">
-            <step step="step" ng-repeat="step in $ctrl.step.fantasy.steps"></step>
-        </div>
-    </div>
-    <div class="stepConclusion"><span>{{$ctrl.step.fantasy ? 'So' : 'Then'}} {{$ctrl.step.statement}}.</span></div>
-</div>

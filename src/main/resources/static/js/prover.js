@@ -77,12 +77,28 @@ proverApp.component('theorem', {
   templateUrl: 'template/theorem.html',
   bindings: {
     theorem: '<'
-  }
-});
+  },
+  controller: ['$scope', function($scope) {
+    $scope.proofRows = [];
+    $scope._ = _;
+    function addRow(prefix, statement, indentLevel) {
+      $scope.proofRows.push({
+        prefix: prefix,
+        statement: statement,
+        indentLevel: indentLevel
+      });
+    }
+    function addFantasy(fantasy, indentLevel) {
+      addRow('Assume', fantasy.assumption, indentLevel);
+      _.forEach(fantasy.steps, function(step) { addStep(step, indentLevel + 1) });
 
-proverApp.component('step', {
-  templateUrl: 'template/step.html',
-  bindings: {
-    step: '<'
-  }
+    }
+    function addStep(step, indentLevel) {
+      if (step.fantasy) {
+        addFantasy(step.fantasy, indentLevel);
+      }
+      addRow(step.fantasy ? 'So' : 'Then', step.statement, indentLevel);
+    }
+    _.forEach($scope.$ctrl.theorem.steps, function(step) { addStep(step, 0) });
+  }]
 });

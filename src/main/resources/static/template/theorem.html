@@ -35,6 +35,13 @@
             <div ng-repeat="premiseTemplate in $ctrl.theorem.premiseTemplates" class="premise">{{premiseTemplate}}</div>
             <label>Proof</label>
         </div>
-        <step step="step" ng-repeat="step in $ctrl.theorem.steps"></step>
+        <table class="proofRows">
+            <tr ng-repeat="row in proofRows" class="proofRow">
+                <td>
+                    <span ng-repeat="i in _.range(row.indentLevel)" class="proofIndent"></span>
+                    <span>{{row.prefix}} {{row.statement}}.</span>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
