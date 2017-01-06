@@ -17,11 +17,19 @@
         </div>
         <div ng-switch-when="quantifier">
             <div class="result">
-                Quantifier: {{entry.defaultStatement}}
-                <span ng-if="entry.definingStatement">
-                    <span class="normal">is defined to mean</span>
-                    {{ entry.definingStatement }}
-                </span>
+                <div>
+                    Quantifier: {{entry.defaultStatement}}
+                    <span ng-if="entry.definingStatement">
+                        <span class="normal">is defined to mean</span>
+                        {{ entry.definingStatement }}
+                    </span>
+                </div>
+                <div class="distinctVariables" ng-if="entry.distinctVariableRequirements.length">
+                    Distinct variables:
+                    <span ng-repeat="requirement in entry.distinctVariableRequirements">
+                        {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
+                    </span>
+                </div>
             </div>
         </div>
         <div ng-switch-when="predicate">

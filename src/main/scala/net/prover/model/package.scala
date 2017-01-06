@@ -10,15 +10,10 @@ package object model {
       s.trim.split("\\s+", max).toSeq
     }
     def splitFirstWord: (String, String) = {
-      if (s.startsWith("\"")) {
-        s.tail.span(_ != '"').mapRight(_.tail.trim())
+      if (s.trim.startsWith("\"")) {
+        s.trim.tail.span(_ != '"').mapRight(_.tail.trim)
       } else {
-        splitByWhitespace(2) match {
-          case Seq(word, remainingText) =>
-            (word, remainingText)
-          case Seq(word) =>
-            (word, "")
-        }
+        s.trim.span(c => !c.isWhitespace && !"(),".contains(c)).mapRight(_.trim)
       }
     }
     def formatAsKey: String = splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase).mkString("-")

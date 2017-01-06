@@ -30,8 +30,8 @@ case class PartialLine(remainingText: String, fullLine: BookLine) {
   def splitFirstWord: (String, PartialLine) = {
     remainingText.splitFirstWord.mapRight(PartialLine(_, fullLine))
   }
-  def splitWords: Seq[String] = {
-    remainingText.splitByWhitespace()
+  def tail: PartialLine = {
+    copy(remainingText = remainingText.tail.trim())
   }
   def isEmpty: Boolean = remainingText.isEmpty
   def nonEmpty: Boolean = remainingText.nonEmpty

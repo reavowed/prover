@@ -131,7 +131,7 @@ qed
 chapter Uniqueness Quantifier
 Introduce the uniqueness quantifier, ∃!.
 
-quantifier ∃! ∃ 2 ∀ 1 ↔ 1 = 1 2
+quantifier ∃! (∃ 2 ∀ 1 ↔ 1 = 1 2) (2 1)
 
 # theorem setWithMembershipConditionIsUnique A Set with a Membership Condition Is Unique
 # premise ∃ 1 ∀ 4 ↔ ∈ 4 1 sub 5 1 1

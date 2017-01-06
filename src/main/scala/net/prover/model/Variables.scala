@@ -4,6 +4,9 @@ case class Variables(statementVariables: Seq[StatementVariable], termVariables: 
   def +:(termVariable: TermVariable): Variables = {
     copy(termVariables = (termVariable +: termVariables).distinct)
   }
+  def :+(statementVariable: StatementVariable): Variables = {
+    copy(statementVariables = (statementVariables :+ statementVariable).distinct)
+  }
   def -(termVariable: TermVariable): Variables = {
     copy(termVariables = termVariables.filter(_ != termVariable))
   }

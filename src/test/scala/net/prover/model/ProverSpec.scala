@@ -9,7 +9,8 @@ trait ProverSpec extends Specification {
   val Disjunction = Connective("∨", 2, Some(Implication(Negation(1), 2)))
   val Equivalence = Connective("↔", 2, None)
 
-  val ForAll = Quantifier("∀", None)
+  val ForAll = Quantifier("∀", None, DistinctVariableRequirements.empty)
+  var Exists = Quantifier("∃", Some(Negation(ForAll(1, Negation(1)))), DistinctVariableRequirements.empty)
   val ElementOf = Predicate("∈", 2, None)
   val Equals = Predicate("=", 2, None)
 
@@ -45,7 +46,7 @@ trait ProverSpec extends Specification {
 
   val defaultContext = Context(
     connectives = Seq(Implication, Negation, Conjunction, Disjunction, Equivalence),
-    quantifiers = Seq(ForAll),
+    quantifiers = Seq(ForAll, Exists),
     predicates = Seq(ElementOf, Equals),
     rules = Nil,
     theorems = Nil,

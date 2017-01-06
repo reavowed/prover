@@ -4,6 +4,7 @@ trait StatementDefinition {
   def symbol: String
   def defaultStatement: Statement
   def definingStatement: Option[Statement]
+  def distinctVariableRequirements: DistinctVariableRequirements
 
   def forwardDeduction: Option[Deduction] = definingStatement.map { s =>
     new Deduction {
@@ -11,7 +12,8 @@ trait StatementDefinition {
       override val premiseTemplates: Seq[Statement] = Seq(s)
       override val conclusionTemplate: Statement = defaultStatement
       override val arbitraryVariables: Seq[TermVariable] = Nil
-      override val distinctVariableRequirements: DistinctVariableRequirements = DistinctVariableRequirements.empty
+      override val distinctVariableRequirements: DistinctVariableRequirements =
+        StatementDefinition.this.distinctVariableRequirements
     }
   }
 
@@ -21,7 +23,8 @@ trait StatementDefinition {
       override val premiseTemplates: Seq[Statement] = Seq(defaultStatement)
       override val conclusionTemplate: Statement = s
       override val arbitraryVariables: Seq[TermVariable] = Nil
-      override val distinctVariableRequirements: DistinctVariableRequirements = DistinctVariableRequirements.empty
+      override val distinctVariableRequirements: DistinctVariableRequirements =
+        StatementDefinition.this.distinctVariableRequirements
     }
   }
 }

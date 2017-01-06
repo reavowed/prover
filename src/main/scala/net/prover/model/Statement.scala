@@ -224,7 +224,7 @@ object Statement extends ComponentType[Statement] {
   }
 
   def parseOptional(line: PartialLine, context: Context): (Option[Statement], PartialLine) = {
-    if (line.nonEmpty) {
+    if (line.nonEmpty && line.remainingText.head != ')') {
       Statement.parse(line, context).mapLeft(Some(_))
     } else {
       (None, line)

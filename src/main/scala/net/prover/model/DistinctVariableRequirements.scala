@@ -21,6 +21,12 @@ case class DistinctVariableRequirements(map: Map[TermVariable, Variables]) exten
     })
   }
 
+  def +(tuple: (TermVariable, StatementVariable)): DistinctVariableRequirements = {
+    val variables = map.getOrElse(tuple._1, Variables.empty)
+    val updatedMap = map + (tuple._1 -> (variables :+ tuple._2))
+    copy(map = updatedMap)
+  }
+
   def ++(other: DistinctVariableRequirements): DistinctVariableRequirements = {
     DistinctVariableRequirements((map.keySet ++ other.map.keySet).map { variable =>
       variable -> (map.getOrElse(variable, Variables.empty) ++ other.map.getOrElse(variable, Variables.empty))
@@ -49,4 +55,36 @@ case class DistinctVariableRequirements(map: Map[TermVariable, Variables]) exten
 
 object DistinctVariableRequirements {
   val empty = DistinctVariableRequirements(Map.empty)
+
+  def parse(line: PartialLine, context: Context): (DistinctVariableRequirements, PartialLine) = {
+    def parseIndividualRequirements(
+      remainingLine: PartialLine,
+      distinctVariableRequirements: DistinctVariableRequirements = DistinctVariableRequirements.empty
+    ): (DistinctVariableRequirements, PartialLine) = {
+      if (remainingLine.remainingText.head == ')') {
+        (distinctVariableRequirements, remainingLine)
+      } else {
+        val (term, lineAfterTerm) =
+          Term.parse(remainingLine, context)
+            .mapLeft(Term.asVariable)
+        val (statement, lineAfterStatement) =
+          Statement.parseStatementVariable(lineAfterTerm, context)
+        val updatedDistinctVariableRequirements = distinctVariableRequirements + (term -> statement)
+        lineAfterStatement match {
+          case WordAndRemainingText(",", lineAfterComma) =>
+            parseIndividualRequirements(lineAfterComma, updatedDistinctVariableRequirements)
+          case _ =>
+            (updatedDistinctVariableRequirements, lineAfterStatement)
+        }
+      }
+    }
+    if (line.remainingText.head != '(') {
+      throw ParseException.withMessage("Open-paren expected but not found", line.fullLine)
+    }
+    val (distinctVariableRequirements, lineAfterRequirements) = parseIndividualRequirements(line.tail)
+    if (lineAfterRequirements.remainingText.head != ')') {
+      throw ParseException.withMessage("Close-paren expected but not found", line.fullLine)
+    }
+    (distinctVariableRequirements, lineAfterRequirements.tail)
+  }
 }
