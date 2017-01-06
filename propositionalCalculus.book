@@ -309,6 +309,20 @@ qed
 
 comment Some helper theorems for proofs involving equivalences
 
+theorem equivalenceIsTransitiveLeft Equivalence is Transitive (Left)
+premise ↔ 2 1
+premise ↔ 2 3
+reverseEquivalence p1
+equivalenceIsTransitive 1 p2
+qed
+
+theorem equivalenceIsTransitiveRight Equivalence is Transitive (Right)
+premise ↔ 1 2
+premise ↔ 3 2
+reverseEquivalence p2
+equivalenceIsTransitive p1 1
+qed
+
 theorem modusPonensEquivalenceLeft Modus Ponens with Equivalence (Left)
 premise ↔ 1 2
 premise 1
