@@ -9,7 +9,7 @@ case class DirectRule(
     premiseTemplates: Seq[Statement],
     conclusionTemplate: Statement,
     arbitraryVariables: Seq[TermVariable],
-    distinctVariableRequirements: DistinctVariableRequirements)
+    distinctVariables: DistinctVariables)
   extends Rule with Deduction
 
 case class FantasyRule(
@@ -98,19 +98,19 @@ object Rule extends SingleLineChapterEntryParser[Rule] {
           case _ =>
             (Nil, lineAfterConclusion)
         }
-        val (distinctVariableRequirements, _) = lineAfterArbitraryVariables match {
+        val (distinctVariables, _) = lineAfterArbitraryVariables match {
           case WordAndRemainingText("x", lineAfterCross) =>
             val (distinctVariable, lineAfterDistinctVariable) = Term.parse(lineAfterCross, context)
               .mapLeft(Term.asVariable)
             val (distinctStatement, lineAfterDistinctStatement) = Statement.parseStatementVariable(lineAfterDistinctVariable, context)
             (
-              DistinctVariableRequirements(
+              DistinctVariables(
                 Map(distinctVariable -> Variables(Seq(distinctStatement), Nil))),
               lineAfterDistinctStatement)
           case _ =>
-            (DistinctVariableRequirements.empty, lineAfterArbitraryVariables)
+            (DistinctVariables.empty, lineAfterArbitraryVariables)
         }
-        DirectRule(id, premises, conclusion, arbitraryVariables, distinctVariableRequirements)
+        DirectRule(id, premises, conclusion, arbitraryVariables, distinctVariables)
       case "⊢" =>
         val assumption = assumptionOrPremises match {
           case Seq(singleAssumption) =>

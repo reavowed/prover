@@ -33,7 +33,7 @@ case class TermDefinition[Components <: HList](
       override val premiseTemplates: Seq[Statement] = Nil
       override val conclusionTemplate: Statement = d
       override val arbitraryVariables: Seq[TermVariable] = Nil
-      override val distinctVariableRequirements: DistinctVariableRequirements = DistinctVariableRequirements.empty
+      override val distinctVariables: DistinctVariables = DistinctVariables.empty
     }
   }
 }

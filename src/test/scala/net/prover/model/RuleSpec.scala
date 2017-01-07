@@ -12,7 +12,7 @@ class RuleSpec extends ProverSpec {
         Seq(StatementVariable(1)),
         StatementVariable(1),
         Nil,
-        DistinctVariableRequirements.empty)
+        DistinctVariables.empty)
     }
 
     "parse a rule with two premises" in {
@@ -22,7 +22,7 @@ class RuleSpec extends ProverSpec {
           Seq(Implication(StatementVariable(1), StatementVariable(2)), StatementVariable(1)),
           StatementVariable(2),
           Nil,
-          DistinctVariableRequirements.empty)
+          DistinctVariables.empty)
     }
 
     "parse a rule with a discharged assumption" in {
@@ -46,7 +46,7 @@ class RuleSpec extends ProverSpec {
           Seq(StatementVariableWithReplacement(1, 2, 1)),
           ForAll(1, 1),
           Seq(2),
-          DistinctVariableRequirements.empty)
+          DistinctVariables.empty)
     }
   }
 }

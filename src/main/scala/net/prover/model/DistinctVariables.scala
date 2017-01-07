@@ -4,37 +4,38 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
-case class DistinctVariableRequirementViolationException(
+case class DistinctVariableViolationException(
     variable: TermVariable)
   extends Exception(
-    s"Distinct variable requirement violated: $variable")
+    s"Distinct variable violated: $variable")
 
-case class DistinctVariableRequirements(map: Map[TermVariable, Variables]) extends JsonSerializable.Base {
-  def applyMatch(m: Match): DistinctVariableRequirements = {
-    DistinctVariableRequirements(map.map { case (termVariable, Variables(statementVariables, termVariables)) =>
+case class DistinctVariables(map: Map[TermVariable, Variables]) extends JsonSerializable.Base {
+  def applyMatch(m: Match): DistinctVariables = {
+    DistinctVariables(map.map { case (termVariable, Variables(statementVariables, termVariables)) =>
       val updatedTermVariable = Term.asVariable(termVariable.applyMatch(m))
-      val updatedOtherVariables = (statementVariables.map(_.applyMatch(m).variables) ++ termVariables.map(_.applyMatch(m).variables))
-              .reduce(_ ++ _)
+      val updatedStatementVariables = statementVariables.map(_.applyMatch(m).variables)
+      val updatedTermVariables = termVariables.map(_.applyMatch(m).variables)
+      val updatedOtherVariables = (updatedStatementVariables ++ updatedTermVariables).reduce(_ ++ _)
       if (updatedOtherVariables.termVariables.contains(updatedTermVariable))
-        throw DistinctVariableRequirementViolationException(updatedTermVariable)
+        throw DistinctVariableViolationException(updatedTermVariable)
       updatedTermVariable -> updatedOtherVariables
     })
   }
 
-  def +(tuple: (TermVariable, StatementVariable)): DistinctVariableRequirements = {
+  def +(tuple: (TermVariable, StatementVariable)): DistinctVariables = {
     val variables = map.getOrElse(tuple._1, Variables.empty)
     val updatedMap = map + (tuple._1 -> (variables :+ tuple._2))
     copy(map = updatedMap)
   }
 
-  def ++(other: DistinctVariableRequirements): DistinctVariableRequirements = {
-    DistinctVariableRequirements((map.keySet ++ other.map.keySet).map { variable =>
+  def ++(other: DistinctVariables): DistinctVariables = {
+    DistinctVariables((map.keySet ++ other.map.keySet).map { variable =>
       variable -> (map.getOrElse(variable, Variables.empty) ++ other.map.getOrElse(variable, Variables.empty))
     }.toMap)
   }
 
-  def filter(f: TermVariable => Boolean): DistinctVariableRequirements = {
-    DistinctVariableRequirements(map.filterKeys(f))
+  def filter(f: TermVariable => Boolean): DistinctVariables = {
+    DistinctVariables(map.filterKeys(f))
   }
 
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
@@ -53,38 +54,38 @@ case class DistinctVariableRequirements(map: Map[TermVariable, Variables]) exten
 
 }
 
-object DistinctVariableRequirements {
-  val empty = DistinctVariableRequirements(Map.empty)
+object DistinctVariables {
+  val empty = DistinctVariables(Map.empty)
 
-  def parse(line: PartialLine, context: Context): (DistinctVariableRequirements, PartialLine) = {
+  def parse(line: PartialLine, context: Context): (DistinctVariables, PartialLine) = {
     def parseIndividualRequirements(
       remainingLine: PartialLine,
-      distinctVariableRequirements: DistinctVariableRequirements = DistinctVariableRequirements.empty
-    ): (DistinctVariableRequirements, PartialLine) = {
+      distinctVariables: DistinctVariables = DistinctVariables.empty
+    ): (DistinctVariables, PartialLine) = {
       if (remainingLine.remainingText.head == ')') {
-        (distinctVariableRequirements, remainingLine)
+        (distinctVariables, remainingLine)
       } else {
         val (term, lineAfterTerm) =
           Term.parse(remainingLine, context)
             .mapLeft(Term.asVariable)
         val (statement, lineAfterStatement) =
           Statement.parseStatementVariable(lineAfterTerm, context)
-        val updatedDistinctVariableRequirements = distinctVariableRequirements + (term -> statement)
+        val updatedDistinctVariables = distinctVariables + (term -> statement)
         lineAfterStatement match {
           case WordAndRemainingText(",", lineAfterComma) =>
-            parseIndividualRequirements(lineAfterComma, updatedDistinctVariableRequirements)
+            parseIndividualRequirements(lineAfterComma, updatedDistinctVariables)
           case _ =>
-            (updatedDistinctVariableRequirements, lineAfterStatement)
+            (updatedDistinctVariables, lineAfterStatement)
         }
       }
     }
     if (line.remainingText.head != '(') {
       throw ParseException.withMessage("Open-paren expected but not found", line.fullLine)
     }
-    val (distinctVariableRequirements, lineAfterRequirements) = parseIndividualRequirements(line.tail)
+    val (distinctVariables, lineAfterRequirements) = parseIndividualRequirements(line.tail)
     if (lineAfterRequirements.remainingText.head != ')') {
       throw ParseException.withMessage("Close-paren expected but not found", line.fullLine)
     }
-    (distinctVariableRequirements, lineAfterRequirements.tail)
+    (distinctVariables, lineAfterRequirements.tail)
   }
 }

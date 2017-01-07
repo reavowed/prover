@@ -7,7 +7,7 @@ case class Connective(
   extends ChapterEntry(Connective) with StatementDefinition
 {
   val defaultStatement: ConnectiveStatement = apply((1 to arity).map(StatementVariable): _*)
-  val distinctVariableRequirements: DistinctVariableRequirements = DistinctVariableRequirements.empty
+  val distinctVariables: DistinctVariables = DistinctVariables.empty
 
   def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {
     (1 to arity).mapFold(line) { case (_, lineSoFar) =>

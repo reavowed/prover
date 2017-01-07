@@ -77,7 +77,7 @@ case class TheoremBuilder(
     steps: Seq[Step] = Nil,
     fantasyOption: Option[Fantasy] = None,
     arbitraryVariables: Seq[TermVariable] = Nil,
-    distinctVariableRequirements: DistinctVariableRequirements = DistinctVariableRequirements.empty)
+    distinctVariables: DistinctVariables = DistinctVariables.empty)
   extends TheoremBuildable[TheoremBuilder] {
 
   def addPremise(premise: Statement): TheoremBuilder = {
@@ -91,8 +91,8 @@ case class TheoremBuilder(
     }
     copy(arbitraryVariables = (arbitraryVariables ++ newArbitraryVariables).distinct.sortBy(_.i))
   }
-  def withDistinctVariableRequirements(newDistinctVariableRequirements: DistinctVariableRequirements): TheoremBuilder = {
-    copy(distinctVariableRequirements = distinctVariableRequirements ++ newDistinctVariableRequirements)
+  def withDistinctVariables(newDistinctVariables: DistinctVariables): TheoremBuilder = {
+    copy(distinctVariables = distinctVariables ++ newDistinctVariables)
   }
 
   override protected def withStep(step: Step): TheoremBuilder = copy(steps = steps :+ step)

@@ -22,9 +22,9 @@
         <div class="arbitraryVariables" ng-if="$ctrl.theorem.arbitraryVariables.length">
             Arbitrary variables: {{$ctrl.theorem.arbitraryVariables.join(", ")}}
         </div>
-        <div class="distinctVariables" ng-if="$ctrl.theorem.distinctVariableRequirements.length">
+        <div class="distinctVariables" ng-if="$ctrl.theorem.distinctVariables.length">
             Distinct variables:
-            <span ng-repeat="requirement in $ctrl.theorem.distinctVariableRequirements">
+            <span ng-repeat="requirement in $ctrl.theorem.distinctVariables">
                 {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
             </span>
         </div>

@@ -9,7 +9,7 @@ case class Theorem(
     steps: Seq[Step],
     conclusionTemplate: Statement,
     arbitraryVariables: Seq[TermVariable],
-    distinctVariableRequirements: DistinctVariableRequirements)
+    distinctVariables: DistinctVariables)
   extends ChapterEntry(Theorem) with Deduction
 
 trait TheoremLineParser {
@@ -112,7 +112,7 @@ object Theorem extends ChapterEntryParser[Theorem] {
             steps,
             conclusion,
             arbitraryVariables.intersect(termVariables),
-            distinctVariableRequirements.filter(termVariables.contains))
+            distinctVariables.filter(termVariables.contains))
           (theorem, nonTheoremLines)
         case definitionLine +: otherLines =>
           parseHelper(otherLines, parseLine(definitionLine, theoremBuilder))

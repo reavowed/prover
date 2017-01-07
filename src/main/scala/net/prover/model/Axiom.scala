@@ -3,7 +3,7 @@ package net.prover.model
 case class Axiom(id: String, title: String, conclusionTemplate: Statement) extends ChapterEntry(Axiom) with Deduction {
   val premiseTemplates: Seq[Statement] = Nil
   val arbitraryVariables: Seq[TermVariable] = Nil
-  val distinctVariableRequirements: DistinctVariableRequirements = DistinctVariableRequirements.empty
+  val distinctVariables: DistinctVariables = DistinctVariables.empty
 }
 
 object Axiom extends SingleLineChapterEntryParser[Axiom] {

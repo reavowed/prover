@@ -9,8 +9,8 @@ trait ProverSpec extends Specification {
   val Disjunction = Connective("∨", 2, Some(Implication(Negation(1), 2)))
   val Equivalence = Connective("↔", 2, None)
 
-  val ForAll = Quantifier("∀", None, DistinctVariableRequirements.empty)
-  var Exists = Quantifier("∃", Some(Negation(ForAll(1, Negation(1)))), DistinctVariableRequirements.empty)
+  val ForAll = Quantifier("∀", None, DistinctVariables.empty)
+  var Exists = Quantifier("∃", Some(Negation(ForAll(1, Negation(1)))), DistinctVariables.empty)
   val ElementOf = Predicate("∈", 2, None)
   val Equals = Predicate("=", 2, None)
 
@@ -19,7 +19,7 @@ trait ProverSpec extends Specification {
     Seq(StatementVariable(1)),
     StatementVariable(1),
     Nil,
-    DistinctVariableRequirements.empty)
+    DistinctVariables.empty)
   val IntroduceImplication = FantasyRule(
     "introduceImplication",
     StatementVariable(1),
@@ -30,19 +30,19 @@ trait ProverSpec extends Specification {
     Seq(Implication(1, 2), 1),
     2,
     Nil,
-    DistinctVariableRequirements.empty)
+    DistinctVariables.empty)
   val IntroduceForall = DirectRule(
     "introduceForall",
     Seq(StatementVariableWithReplacement(1, 2, 1)),
     ForAll(1, 1),
     Seq(2),
-    DistinctVariableRequirements(Map(TermVariable(2) -> Variables(Seq(1), Nil))))
+    DistinctVariables(Map(TermVariable(2) -> Variables(Seq(1), Nil))))
   val EliminateForall = DirectRule(
     "eliminateForall",
     Seq(ForAll(1, 1)),
     StatementVariableWithReplacement(1, 2, 1),
     Nil,
-    DistinctVariableRequirements.empty)
+    DistinctVariables.empty)
 
   val defaultContext = Context(
     connectives = Seq(Implication, Negation, Conjunction, Disjunction, Equivalence),

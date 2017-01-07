@@ -24,9 +24,9 @@
                         {{ entry.definingStatement }}
                     </span>
                 </div>
-                <div class="distinctVariables" ng-if="entry.distinctVariableRequirements.length">
+                <div class="distinctVariables" ng-if="entry.distinctVariables.length">
                     Distinct variables:
-                    <span ng-repeat="requirement in entry.distinctVariableRequirements">
+                    <span ng-repeat="requirement in entry.distinctVariables">
                         {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
                     </span>
                 </div>
@@ -74,11 +74,11 @@
                             Arbitrary variables: {{entry.arbitraryVariables.join(", ")}}
                         </td>
                     </tr>
-                    <tr ng-if="entry.distinctVariableRequirements.length">
+                    <tr ng-if="entry.distinctVariables.length">
                         <td></td>
                         <td class="distinctVariables">
                             Distinct variables:
-                            <span ng-repeat="requirement in entry.distinctVariableRequirements">
+                            <span ng-repeat="requirement in entry.distinctVariables">
                                 {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
                             </span>
                         </td>

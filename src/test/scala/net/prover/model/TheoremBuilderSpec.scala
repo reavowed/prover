@@ -54,7 +54,7 @@ class TheoremBuilderSpec extends ProverSpec {
         Nil,
         Conjunction(2, 1),
         Nil,
-        DistinctVariableRequirements.empty)
+        DistinctVariables.empty)
       val theoremBuilder = IntroduceImplication.readAndUpdateTheoremBuilder(
         TheoremBuilder(),
         "and-sym ∧ 2 1",
@@ -118,7 +118,7 @@ class TheoremBuilderSpec extends ProverSpec {
         TheoremBuilder().addStep(Equals(1, 1)),
         "1 = 2 1 1 2",
         defaultContext
-      ) must throwA[DistinctVariableRequirementViolationException]
+      ) must throwA[DistinctVariableViolationException]
     }
   }
 }

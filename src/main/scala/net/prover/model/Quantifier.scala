@@ -3,7 +3,7 @@ package net.prover.model
 case class Quantifier(
     symbol: String,
     definingStatement: Option[Statement],
-    distinctVariableRequirements: DistinctVariableRequirements)
+    distinctVariables: DistinctVariables)
   extends ChapterEntry(Quantifier) with StatementDefinition {
   val defaultStatement: Statement = apply(TermVariable(1), StatementVariable(1))
 
@@ -31,8 +31,8 @@ object Quantifier extends SingleLineChapterEntryParser[Quantifier] {
     val (definingStatementOption, lineAfterDefiningStatement) = Parser.inParens(
       lineAfterSymbol,
       Statement.parseOptional(_, context))
-    val (distinctVariableRequirements, _) = DistinctVariableRequirements.parse(lineAfterDefiningStatement, context)
-    Quantifier(symbol, definingStatementOption, distinctVariableRequirements)
+    val (distinctVariables, _) = DistinctVariables.parse(lineAfterDefiningStatement, context)
+    Quantifier(symbol, definingStatementOption, distinctVariables)
   }
   override def addToContext(quantifier: Quantifier, context: Context): Context = {
     context.copy(quantifiers = context.quantifiers :+ quantifier)

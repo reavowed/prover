@@ -60,7 +60,7 @@ class TheoremSpec extends ProverSpec {
         Nil,
         Implication(Negation(1), 2),
         Nil,
-        DistinctVariableRequirements.empty)
+        DistinctVariables.empty)
 
       val theorem = parseTheorem(
         "or-left Disjunction from Left",
@@ -90,8 +90,8 @@ class TheoremSpec extends ProverSpec {
           "premise sub 2 1 1",
           "introduceForall p1",
           "qed"))
-      theorem.distinctVariableRequirements mustEqual
-        DistinctVariableRequirements(Map(TermVariable(2) -> Variables(Seq(1), Nil)))
+      theorem.distinctVariables mustEqual
+        DistinctVariables(Map(TermVariable(2) -> Variables(Seq(1), Nil)))
     }
 
     "not include distinct variables if they don't appear in the hypotheses or conclusion" in {
@@ -106,7 +106,7 @@ class TheoremSpec extends ProverSpec {
           "introduceForall f.2",
           "introduceImplication f.3",
           "qed"))
-      theorem.distinctVariableRequirements mustEqual DistinctVariableRequirements.empty
+      theorem.distinctVariables mustEqual DistinctVariables.empty
     }
 
     "not include arbitrary variables if they don't appear in the hypotheses" in {
@@ -130,7 +130,7 @@ class TheoremSpec extends ProverSpec {
         Nil,
         Implication(Negation(2), Negation(1)),
         Nil,
-        DistinctVariableRequirements.empty)
+        DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addStep(Implication(1, 2))
       val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1", defaultContext)
       updatedTheoremBuilder.steps(1).statement mustEqual Implication(Negation(2), Negation(1))
@@ -144,7 +144,7 @@ class TheoremSpec extends ProverSpec {
         Nil,
         Implication(1, 2),
         Nil,
-        DistinctVariableRequirements.empty)
+        DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addStep(Negation(1))
       val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1 ¬ 2", defaultContext)
       updatedTheoremBuilder.steps(1).statement mustEqual Implication(1, Negation(2))
@@ -158,7 +158,7 @@ class TheoremSpec extends ProverSpec {
         Nil,
         Equals(2, 3),
         Seq(1),
-        DistinctVariableRequirements.empty)
+        DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addPremise(Equals(2, 1))
       val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "p1 4", defaultContext)
       updatedTheoremBuilder.arbitraryVariables mustEqual Seq(TermVariable(2))
@@ -172,7 +172,7 @@ class TheoremSpec extends ProverSpec {
         Nil,
         Equals(2, 3),
         Seq(1),
-        DistinctVariableRequirements.empty)
+        DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addFantasy(Equals(2, 1))
       theorem.readAndUpdateTheoremBuilder(theoremBuilder, "f.a 4", defaultContext) must throwAn[ArbitraryVariableException]
 
