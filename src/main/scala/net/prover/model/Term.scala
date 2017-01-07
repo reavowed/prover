@@ -20,12 +20,16 @@ case class TermVariable(i: Int) extends Term {
   override def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions] = {
     Some(MatchWithSubstitutions(Map.empty, Map(this -> otherTerm), Nil))
   }
-  override def applyMatch(m: Match): Term = {
+  override def applyMatch(m: Match, distinctVariables: DistinctVariables): Term = {
     m.terms.getOrElse(
       this,
       throw new Exception(s"No replacement for term variable $this"))
   }
-  override def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term = {
+  override def substituteFreeVariable(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    distinctVariables: DistinctVariables
+  ): Term = {
     if (this == termToBeReplaced)
       termToReplaceWith
     else
@@ -47,12 +51,19 @@ case class DefinedTerm[Components <: HList](
     case _ =>
       None
   }
-  override def applyMatch(m: Match): Term = termDefinition(termDefinition.componentTypes.applyMatch(components, m))
-  override def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term = {
+  override def applyMatch(m: Match, distinctVariables: DistinctVariables): Term = {
+    termDefinition(termDefinition.componentTypes.applyMatch(components, m, distinctVariables))
+  }
+  override def substituteFreeVariable(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    distinctVariables: DistinctVariables
+  ): Term = {
     termDefinition(termDefinition.componentTypes.substituteTermVariables(
       components,
       termToReplaceWith,
-      termToBeReplaced))
+      termToBeReplaced,
+      distinctVariables))
   }
   override def html: String = {
     termDefinition.componentTypes.format(termDefinition.format, components)

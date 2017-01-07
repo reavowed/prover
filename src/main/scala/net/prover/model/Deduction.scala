@@ -10,11 +10,16 @@ trait Deduction extends TheoremLineParser {
     val (premisesAndTemplates, lineAfterPremises) = premiseTemplates.mapFold(line) { (premiseTemplate, lineSoFar) =>
       readReference(lineSoFar, theoremBuilder).mapLeft((_, premiseTemplate))
     }
-    val (matcher, _) = matchPremises(premisesAndTemplates, conclusionTemplate, lineAfterPremises, context)
+    val (matcher, _) = matchPremises(
+      premisesAndTemplates,
+      conclusionTemplate,
+      theoremBuilder.distinctVariables,
+      lineAfterPremises,
+      context)
     val updatedArbitraryVariables = arbitraryVariables.flatMap(matcher.terms.get).map(Term.asVariable)
-    val updatedDistinctVariables = distinctVariables.applyMatch(matcher)
+    val updatedDistinctVariables = distinctVariables.applyMatch(matcher, theoremBuilder.distinctVariables)
     theoremBuilder
-      .addStep(Step(conclusionTemplate.applyMatch(matcher)))
+      .addStep(Step(conclusionTemplate.applyMatch(matcher, theoremBuilder.distinctVariables)))
       .withArbitraryVariables(updatedArbitraryVariables)
       .withDistinctVariables(updatedDistinctVariables)
   }

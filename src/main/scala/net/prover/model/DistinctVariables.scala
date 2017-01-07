@@ -10,11 +10,11 @@ case class DistinctVariableViolationException(
     s"Distinct variable violated: $variable")
 
 case class DistinctVariables(map: Map[TermVariable, Variables]) extends JsonSerializable.Base {
-  def applyMatch(m: Match): DistinctVariables = {
+  def applyMatch(m: Match, otherDistinctVariables: DistinctVariables): DistinctVariables = {
     DistinctVariables(map.map { case (termVariable, Variables(statementVariables, termVariables)) =>
-      val updatedTermVariable = Term.asVariable(termVariable.applyMatch(m))
-      val updatedStatementVariables = statementVariables.map(_.applyMatch(m).variables)
-      val updatedTermVariables = termVariables.map(_.applyMatch(m).variables)
+      val updatedTermVariable = Term.asVariable(termVariable.applyMatch(m, otherDistinctVariables))
+      val updatedStatementVariables = statementVariables.map(_.applyMatch(m, otherDistinctVariables).variables)
+      val updatedTermVariables = termVariables.map(_.applyMatch(m, otherDistinctVariables).variables)
       val updatedOtherVariables = (updatedStatementVariables ++ updatedTermVariables).reduce(_ ++ _)
       if (updatedOtherVariables.termVariables.contains(updatedTermVariable))
         throw DistinctVariableViolationException(updatedTermVariable)

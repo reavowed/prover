@@ -6,8 +6,12 @@ trait Component[T <: Component[T]] {
   def variables: Variables
   def freeVariables: Seq[TermVariable]
   def attemptMatch(other: T): Option[MatchWithSubstitutions]
-  def applyMatch(m: Match): T with Component[T]
-  def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): T
+  def applyMatch(m: Match, distinctVariables: DistinctVariables): T with Component[T]
+  def substituteFreeVariable(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    distinctVariables: DistinctVariables
+  ): T
   def html: String
   override def toString: String = html
 }
@@ -23,11 +27,12 @@ trait ComponentTypeList{
   def defaults(currentStatement: Int = 1, currentTerm: Int = 1): Components
   def format(formatString: String, components: Components): String
   def attemptMatch(components: Components, otherComponents: Components): Option[MatchWithSubstitutions]
-  def applyMatch(components: Components, m: Match): Components
+  def applyMatch(components: Components, m: Match, distinctVariables: DistinctVariables): Components
   def substituteTermVariables(
     components: Components,
     termToReplaceWith: Term,
-    termToBeReplaced: TermVariable
+    termToBeReplaced: TermVariable,
+    distinctVariables: DistinctVariables
   ): Components
 
   def termDefinition(symbol: String, format: String, definition: Option[Statement]): TermDefinition[Components] = {
@@ -48,11 +53,16 @@ object ComponentTypeList {
       components: Components,
       otherComponents: Components
     ): Option[MatchWithSubstitutions] = Some(MatchWithSubstitutions.empty)
-    override def applyMatch(components: Components, m: Match): Components = HNil
+    override def applyMatch(
+      components: Components,
+      m: Match,
+      distinctVariables: DistinctVariables
+    ): Components = HNil
     override def substituteTermVariables(
       components: Components,
       termToReplaceWith: Term,
-      termToBeReplaced: TermVariable
+      termToBeReplaced: TermVariable,
+      distinctVariables: DistinctVariables
     ): Components = HNil
   }
 
@@ -84,17 +94,22 @@ object ComponentTypeList {
         inner.attemptMatch(components.tail, otherComponents.tail)))
     }
 
-    override def applyMatch(components: Components, m: Match): Components = {
-      components.head.applyMatch(m) :: inner.applyMatch(components.tail, m)
+    override def applyMatch(
+      components: Components,
+      m: Match,
+      distinctVariables: DistinctVariables
+    ): Components = {
+      components.head.applyMatch(m, distinctVariables) :: inner.applyMatch(components.tail, m, distinctVariables)
     }
 
     override def substituteTermVariables(
       components: Components,
       termToReplaceWith: Term,
-      termToBeReplaced: TermVariable
+      termToBeReplaced: TermVariable,
+      distinctVariables: DistinctVariables
     ): Components = {
-      components.head.substituteFreeVariable(termToReplaceWith, termToBeReplaced) ::
-        inner.substituteTermVariables(components.tail, termToReplaceWith, termToBeReplaced)
+      components.head.substituteFreeVariable(termToReplaceWith, termToBeReplaced, distinctVariables) ::
+        inner.substituteTermVariables(components.tail, termToReplaceWith, termToBeReplaced, distinctVariables)
     }
   }
 }

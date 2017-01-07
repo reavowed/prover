@@ -65,10 +65,10 @@ case class MatchWithSubstitutions(
     (copy(statements = statements ++ missingStatements, terms = terms ++ missingTerms), lineAfterTerms)
   }
 
-  def checkSubstitutions(): Option[Match] = {
+  def checkSubstitutions(distinctVariables: DistinctVariables): Option[Match] = {
     substitutions.foldLeft(Option(Match(statements, terms))) {
       case (matchOption, (substitutionTemplate, statement)) =>
-        matchOption.filter(m => substitutionTemplate.applyMatch(m) == statement)
+        matchOption.filter(m => substitutionTemplate.applyMatch(m, distinctVariables) == statement)
     }
   }
 }

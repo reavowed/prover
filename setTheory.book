@@ -133,6 +133,18 @@ Introduce the uniqueness quantifier, ∃!.
 
 quantifier ∃! (∃ 2 ∀ 1 ↔ 1 = 1 2) (2 1)
 
+theorem uniqueSetExists A Unique Set Exists
+premise ∃! 1 1
+unapply-∃! p1 2
+assume ∀ 1 ↔ 1 = 1 3
+  eliminateForall f.a 3
+  equalityIsReflexive 3
+  modusPonensEquivalenceRight f.1 f.2
+  introduceExists f.3
+introduceImplication f.4
+eliminateExists 1 2 3
+qed
+
 # theorem setWithMembershipConditionIsUnique A Set with a Membership Condition Is Unique
 # premise ∃ 1 ∀ 4 ↔ ∈ 4 1 sub 5 1 1
 # assume ∀ 4 ↔ ∈ 4 2 sub 5 1 1

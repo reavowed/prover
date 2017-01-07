@@ -85,7 +85,7 @@ class StatementSpec extends ProverSpec {
         Equals(1, 2))
 
       forall(statements) { s =>
-        s.substituteFreeVariable(1, 1) mustEqual s
+        s.substituteFreeVariable(1, 1, DistinctVariables.empty) mustEqual s
       }
     }
     "not do anything if substituting an already-substituted variable" in {
@@ -95,9 +95,17 @@ class StatementSpec extends ProverSpec {
         Equals(1, 2))
 
       forall(statements) { s =>
-        val firstSubstitution = s.substituteFreeVariable(2, 1)
-        firstSubstitution.substituteFreeVariable(3, 1) mustEqual firstSubstitution
+        val firstSubstitution = s.substituteFreeVariable(2, 1, DistinctVariables.empty)
+        firstSubstitution.substituteFreeVariable(3, 1, DistinctVariables.empty) mustEqual firstSubstitution
       }
+    }
+    "not do anything if substituting distinct variables" in {
+      StatementVariable(1).substituteFreeVariable(
+        2,
+        1,
+        DistinctVariables(Map(
+          TermVariable(1) -> Variables(Seq(StatementVariable(1)), Nil)))
+      ) mustEqual StatementVariable(1)
     }
   }
 }

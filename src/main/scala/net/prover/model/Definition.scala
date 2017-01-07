@@ -51,6 +51,7 @@ trait Definition extends DirectStepParser {
     matchPremisesToConclusion(
       Seq((statement, fromStatement)),
       toStatement,
+      theoremBuilder.distinctVariables,
       line,
       context)
   }

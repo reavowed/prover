@@ -30,14 +30,17 @@ class TermSpec extends ProverSpec {
     "do nothing to a constant" in {
       EmptySet.applyMatch(Match(
         Map(StatementVariable(1) -> StatementVariable(2)),
-        Map(TermVariable(1) -> TermVariable(2)))
+        Map(TermVariable(1) -> TermVariable(2))),
+        DistinctVariables.empty
       ) mustEqual EmptySet
     }
 
     "replace terms in a unary function" in {
-      PowerSet(TermVariable(1) :: HNil).applyMatch(Match(
-        Map(StatementVariable(1) -> StatementVariable(2)),
-        Map(TermVariable(1) -> TermVariable(2)))
+      PowerSet(TermVariable(1) :: HNil).applyMatch(
+        Match(
+          Map(StatementVariable(1) -> StatementVariable(2)),
+          Map(TermVariable(1) -> TermVariable(2))),
+        DistinctVariables.empty
       ) mustEqual PowerSet(TermVariable(2) :: HNil)
     }
   }

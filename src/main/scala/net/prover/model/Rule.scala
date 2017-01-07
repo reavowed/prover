@@ -53,13 +53,15 @@ case class FantasyRule(
     val (matcher, lineAfterVariables) = deduction.matchPremises(
       Seq((deductionPremise, deductionPremiseTemplate)),
       deduction.conclusionTemplate,
+      theoremBuilder.distinctVariables,
       lineAfterDeductionPremise,
       context)
-    val theoremPremise = deductionPremiseTemplate.applyMatch(matcher)
-    val theoremConclusion = deduction.conclusionTemplate.applyMatch(matcher)
+    val theoremPremise = deductionPremiseTemplate.applyMatch(matcher, theoremBuilder.distinctVariables)
+    val theoremConclusion = deduction.conclusionTemplate.applyMatch(matcher, theoremBuilder.distinctVariables)
     val conclusion = matchPremisesToConclusion(
       Seq((theoremPremise, assumptionTemplate), (theoremConclusion, premiseTemplate)),
       conclusionTemplate,
+      theoremBuilder.distinctVariables,
       lineAfterVariables,
       context)._1
     theoremBuilder.addStep(Step(conclusion))
@@ -73,6 +75,7 @@ case class FantasyRule(
       val conclusion = matchPremisesToConclusion(
         (fantasy.assumption, assumptionTemplate) +: premisesAndTemplates,
         conclusionTemplate,
+        theoremBuilder.distinctVariables,
         lineAfterPremises,
         context
       )._1
