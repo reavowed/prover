@@ -28,31 +28,3 @@ trait StatementDefinition {
     }
   }
 }
-
-trait Definition extends DirectStepParser {
-  def definedStatement: Statement
-  def definingStatement: Statement
-
-  override def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine) = {
-    val (statement, lineAfterStatement) = readReference(line, theoremBuilder)
-    applyToStatement(statement, lineAfterStatement, theoremBuilder, context).mapLeft(Step(_))
-  }
-
-  def applyToStatement(
-    statement: Statement,
-    line: PartialLine,
-    theoremBuilder: TheoremBuilder,
-    context: Context
-  ): (Statement, PartialLine) = {
-    val (fromStatement, toStatement) =
-        definedStatement.attemptMatch(statement).map(_ => (definedStatement, definingStatement))
-          .orElse(definingStatement.attemptMatch(statement).map(_ => (definingStatement, definedStatement)))
-          .getOrElse(throw new Exception(s"Could not apply definition to statement '$statement'"))
-    matchPremisesToConclusion(
-      Seq((statement, fromStatement)),
-      toStatement,
-      theoremBuilder.distinctVariables,
-      line,
-      context)
-  }
-}

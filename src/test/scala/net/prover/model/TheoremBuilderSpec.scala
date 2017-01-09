@@ -120,5 +120,13 @@ class TheoremBuilderSpec extends ProverSpec {
         defaultContext
       ) must throwA[DistinctVariableViolationException]
     }
+
+    "apply a rule by adding distinct variables if necessary" in {
+      val updatedTheoremBuilder = IntroduceForall.readAndUpdateTheoremBuilder(
+        TheoremBuilder().addStep(Equivalence(StatementVariableWithReplacement(1, 3, 1), Equals(3, 4))),
+        "1 ↔ 1 = 1 4 3 1",
+        defaultContext)
+      updatedTheoremBuilder.steps(1).statement mustEqual ForAll(1, Equivalence(1, Equals(1, 4)))
+    }
   }
 }

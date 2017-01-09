@@ -5,13 +5,14 @@ import shapeless.{::, HList, HNil}
 trait Component[T <: Component[T]] {
   def variables: Variables
   def freeVariables: Seq[TermVariable]
-  def attemptMatch(other: T): Option[MatchWithSubstitutions]
-  def applyMatch(m: Match, distinctVariables: DistinctVariables): T with Component[T]
+  def calculateSubstitutions(other: T): Option[Substitutions]
+  def applySubstitutions(substitutions: Substitutions): T with Component[T]
   def substituteFreeVariable(
     termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
-    distinctVariables: DistinctVariables
+    termToBeReplaced: TermVariable
   ): T
+  def attemptSimplification(other: T): Option[DistinctVariables]
+  def makeSimplifications(distinctVariables: DistinctVariables): T
   def html: String
   override def toString: String = html
 }
@@ -26,12 +27,22 @@ trait ComponentTypeList{
   def parse(line: PartialLine, context: Context): (Components, PartialLine)
   def defaults(currentStatement: Int = 1, currentTerm: Int = 1): Components
   def format(formatString: String, components: Components): String
-  def attemptMatch(components: Components, otherComponents: Components): Option[MatchWithSubstitutions]
-  def applyMatch(components: Components, m: Match, distinctVariables: DistinctVariables): Components
-  def substituteTermVariables(
+  def calculateSubstitutions(components: Components, otherComponents: Components): Option[Substitutions]
+  def applySubstitutions(
+    components: Components,
+    substitutions: Substitutions
+  ): Components
+  def substituteFreeVariable(
     components: Components,
     termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
+    termToBeReplaced: TermVariable
+  ): Components
+  def attemptSimplification(
+    components: Components,
+    otherComponents: Components
+  ): Option[DistinctVariables]
+  def makeSimplifications(
+    components: Components,
     distinctVariables: DistinctVariables
   ): Components
 
@@ -49,19 +60,25 @@ object ComponentTypeList {
     override def parse(line: PartialLine, context: Context): (HNil, PartialLine) = (HNil, line)
     override def defaults(currentStatement: Int, currentTerm: Int) = HNil
     override def format(formatString: String, components: HNil): String = formatString
-    override def attemptMatch(
+    override def calculateSubstitutions(
       components: Components,
       otherComponents: Components
-    ): Option[MatchWithSubstitutions] = Some(MatchWithSubstitutions.empty)
-    override def applyMatch(
+    ): Option[Substitutions] = Some(Substitutions.empty)
+    override def applySubstitutions(
       components: Components,
-      m: Match,
-      distinctVariables: DistinctVariables
+      substitutions: Substitutions
     ): Components = HNil
-    override def substituteTermVariables(
+    override def substituteFreeVariable(
       components: Components,
       termToReplaceWith: Term,
-      termToBeReplaced: TermVariable,
+      termToBeReplaced: TermVariable
+    ): Components = HNil
+    override def attemptSimplification(
+      components: Components,
+      otherComponents: Components
+    ) = Some(DistinctVariables.empty)
+    override def makeSimplifications(
+      components: Components,
       distinctVariables: DistinctVariables
     ): Components = HNil
   }
@@ -88,28 +105,47 @@ object ComponentTypeList {
       inner.format(updatedFormatString, components.tail)
     }
 
-    override def attemptMatch(components: Components, otherComponents: Components): Option[MatchWithSubstitutions] = {
-      MatchWithSubstitutions.mergeAttempts(Seq(
-        components.head.attemptMatch(otherComponents.head),
-        inner.attemptMatch(components.tail, otherComponents.tail)))
-    }
-
-    override def applyMatch(
+    override def calculateSubstitutions(
       components: Components,
-      m: Match,
-      distinctVariables: DistinctVariables
-    ): Components = {
-      components.head.applyMatch(m, distinctVariables) :: inner.applyMatch(components.tail, m, distinctVariables)
+      otherComponents: Components
+    ): Option[Substitutions] = {
+      Substitutions.mergeAttempts(Seq(
+        components.head.calculateSubstitutions(otherComponents.head),
+        inner.calculateSubstitutions(components.tail, otherComponents.tail)))
     }
 
-    override def substituteTermVariables(
+    override def applySubstitutions(
+      components: Components,
+      substitutions: Substitutions
+    ): Components = {
+      components.head.applySubstitutions(substitutions) :: inner.applySubstitutions(components.tail, substitutions)
+    }
+
+    override def substituteFreeVariable(
       components: Components,
       termToReplaceWith: Term,
-      termToBeReplaced: TermVariable,
+      termToBeReplaced: TermVariable
+    ): Components = {
+      components.head.substituteFreeVariable(termToReplaceWith, termToBeReplaced) ::
+        inner.substituteFreeVariable(components.tail, termToReplaceWith, termToBeReplaced)
+    }
+
+    override def attemptSimplification(
+      components: Components,
+      otherComponents: Components
+    ): Option[DistinctVariables] = {
+      for {
+        head <- components.head.attemptSimplification(otherComponents.head)
+        tail <- inner.attemptSimplification(components.tail, otherComponents.tail)
+      } yield head ++ tail
+    }
+
+    override def makeSimplifications(
+      components: Components,
       distinctVariables: DistinctVariables
     ): Components = {
-      components.head.substituteFreeVariable(termToReplaceWith, termToBeReplaced, distinctVariables) ::
-        inner.substituteTermVariables(components.tail, termToReplaceWith, termToBeReplaced, distinctVariables)
+      components.head.makeSimplifications(distinctVariables) ::
+        inner.makeSimplifications(components.tail, distinctVariables)
     }
   }
 }

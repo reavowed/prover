@@ -19,23 +19,17 @@ trait Statement extends JsonSerializable.Base with Component[Statement] {
 case class StatementVariable(i: Int) extends Statement {
   override def variables: Variables = Variables(Seq(this), Nil)
   override def freeVariables: Seq[TermVariable] = Nil
-  override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
-    Some(MatchWithSubstitutions(Map(this -> otherStatement), Map.empty, Nil))
+  override def calculateSubstitutions(otherStatement: Statement): Option[Substitutions] = {
+    Some(Substitutions(Map(this -> otherStatement), Map.empty))
   }
-  override def applyMatch(m: Match, distinctVariables: DistinctVariables): Statement = {
-    m.statements.getOrElse(this, throw new Exception(s"No replacement for statement variable $this"))
+  override def applySubstitutions(substitutions: Substitutions): Statement = {
+    substitutions.statements.getOrElse(this, throw new Exception(s"No replacement for statement variable $this"))
   }
-  def substituteFreeVariable(
+  override def substituteFreeVariable(
     termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
-    distinctVariables: DistinctVariables
+    termToBeReplaced: TermVariable
   ): Statement = {
     if (termToReplaceWith == termToBeReplaced)
-      this
-    else if (
-      distinctVariables.map.contains(termToBeReplaced) &&
-      distinctVariables.map(termToBeReplaced).statementVariables.contains(this)
-    )
       this
     else termToReplaceWith match {
       case variable: TermVariable =>
@@ -44,6 +38,18 @@ case class StatementVariable(i: Int) extends Statement {
         throw new Exception("Cannot substitute a non-variable term into a statement variable")
     }
   }
+
+  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
+    case StatementVariableWithReplacement(x, _, termToBeReplaced) if x == this =>
+      Some(DistinctVariables(Map(termToBeReplaced -> Variables(Seq(this), Nil))))
+    case x if x == this =>
+      Some(DistinctVariables.empty)
+    case _ =>
+      None
+  }
+
+  override def makeSimplifications(distinctVariables: DistinctVariables): Statement = this
+
   override def html: String = (944 + i).toChar.toString
 }
 
@@ -54,29 +60,26 @@ case class StatementVariableWithReplacement(
   extends Statement {
   override def variables: Variables = Variables(Seq(statementVariable), Seq(termToReplaceWith, termToBeReplaced))
   override def freeVariables: Seq[TermVariable] = Seq(termToReplaceWith)
-  override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
+  override def calculateSubstitutions(otherStatement: Statement): Option[Substitutions] = {
     otherStatement match {
       case StatementVariableWithReplacement(otherStatementVariable, otherTermToReplaceWith, otherTermToBeReplaced) =>
-        Some(MatchWithSubstitutions(
+        Some(Substitutions(
           Map(statementVariable -> otherStatementVariable),
-          Map(termToReplaceWith -> otherTermToReplaceWith, termToBeReplaced -> otherTermToBeReplaced),
-          Nil))
+          Map(termToReplaceWith -> otherTermToReplaceWith, termToBeReplaced -> otherTermToBeReplaced)))
       case _ =>
-        Some(MatchWithSubstitutions(Map.empty, Map.empty, Seq((this, otherStatement))))
+        Some(Substitutions(Map.empty, Map.empty))
     }
   }
-  override def applyMatch(m: Match, distinctVariables: DistinctVariables): Statement = {
-    statementVariable.applyMatch(m, distinctVariables)
+  override def applySubstitutions(substitutions: Substitutions): Statement = {
+    statementVariable.applySubstitutions(substitutions)
       .substituteFreeVariable(
-        termToReplaceWith.applyMatch(m, distinctVariables),
-        Term.asVariable(termToBeReplaced.applyMatch(m, distinctVariables)),
-        distinctVariables)
+        termToReplaceWith.applySubstitutions(substitutions),
+        Term.asVariable(termToBeReplaced.applySubstitutions(substitutions)))
   }
 
   def substituteFreeVariable(
     newTermToReplaceWith: Term,
-    newTermToBeReplaced: TermVariable,
-    distinctVariables: DistinctVariables
+    newTermToBeReplaced: TermVariable
   ): Statement = {
     if (newTermToBeReplaced == termToBeReplaced || newTermToReplaceWith == newTermToBeReplaced) {
       this
@@ -85,35 +88,64 @@ case class StatementVariableWithReplacement(
     }
   }
 
+  override def attemptSimplification(other: Statement): Option[DistinctVariables] = {
+    if (other == this)
+      Some(DistinctVariables.empty)
+    else if (other == statementVariable)
+      Some(DistinctVariables(Map(termToBeReplaced -> Variables(Seq(statementVariable), Nil))))
+    else
+      None
+  }
+
+  override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
+    if (distinctVariables.map.contains(termToBeReplaced) &&
+      distinctVariables.map(termToBeReplaced).statementVariables.contains(statementVariable)
+    )
+      statementVariable
+    else
+      this
+  }
+
   override def html: String = s"$statementVariable[$termToReplaceWith/$termToBeReplaced]"
 }
 
 case class ConnectiveStatement(substatements: Seq[Statement], connective: Connective) extends Statement {
   override def variables: Variables = substatements.map(_.variables).reduce(_ ++ _)
   override def freeVariables: Seq[TermVariable] = substatements.map(_.freeVariables).reduce(_ ++ _)
-  override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
+  override def calculateSubstitutions(otherStatement: Statement): Option[Substitutions] = {
     otherStatement match {
       case ConnectiveStatement(otherSubstatements, `connective`) =>
-        val matchAttempts = substatements.zip(otherSubstatements).map { case (substatement, otherSubstatement) =>
-          substatement.attemptMatch(otherSubstatement)
+        val substitutionAttempts = substatements.zip(otherSubstatements).map { case (substatement, otherSubstatement) =>
+          substatement.calculateSubstitutions(otherSubstatement)
         }
-        MatchWithSubstitutions.mergeAttempts(matchAttempts)
+        Substitutions.mergeAttempts(substitutionAttempts)
       case _ =>
         None
     }
   }
 
-  override def applyMatch(m: Match, distinctVariables: DistinctVariables): Statement = {
-    copy(substatements = substatements.map(_.applyMatch(m, distinctVariables)))
+  override def applySubstitutions(substitutions: Substitutions): Statement = {
+    copy(substatements = substatements.map(_.applySubstitutions(substitutions)))
   }
 
   def substituteFreeVariable(
     termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
-    distinctVariables: DistinctVariables
+    termToBeReplaced: TermVariable
   ): Statement = {
-    copy(substatements = substatements.map(
-      _.substituteFreeVariable(termToReplaceWith, termToBeReplaced, distinctVariables)))
+    copy(substatements = substatements.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced)))
+  }
+
+  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
+    case ConnectiveStatement(otherSubstatements, `connective`) =>
+      substatements.zip(otherSubstatements).map { case (substatement, otherSubstatement) =>
+        substatement.attemptSimplification(otherSubstatement)
+      }.traverseOption.map(_.reduce(_ ++ _))
+    case _ =>
+      None
+  }
+
+  override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
+    copy(substatements.map(_.makeSimplifications(distinctVariables)))
   }
 
   def html: String = substatements match {
@@ -130,26 +162,27 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
   override def variables: Variables = boundVariable +: substatement.variables
   override def freeVariables: Seq[TermVariable] = substatement.freeVariables.filter(_ != boundVariable)
 
-  override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
+  override def calculateSubstitutions(otherStatement: Statement): Option[Substitutions] = {
     otherStatement match {
       case QuantifierStatement(otherBoundVariable, otherSubstatement, `quantifier`) =>
-        substatement.attemptMatch(otherSubstatement).flatMap { substatementMatch =>
-          MatchWithSubstitutions.merge(Seq(substatementMatch, MatchWithSubstitutions(Map.empty, Map(boundVariable -> otherBoundVariable), Nil)))
+        substatement.calculateSubstitutions(otherSubstatement).flatMap { substatementMatch =>
+          Substitutions.merge(Seq(
+            substatementMatch,
+            Substitutions(Map.empty, Map(boundVariable -> otherBoundVariable))))
         }
       case _ =>
         None
     }
   }
-  override def applyMatch(m: Match, distinctVariables: DistinctVariables): Statement = {
+  override def applySubstitutions(substitutions: Substitutions): Statement = {
     copy(
-      boundVariable = Term.asVariable(boundVariable.applyMatch(m, distinctVariables)),
-      substatement = substatement.applyMatch(m, distinctVariables))
+      boundVariable = Term.asVariable(boundVariable.applySubstitutions(substitutions)),
+      substatement = substatement.applySubstitutions(substitutions))
   }
 
   override def substituteFreeVariable(
     termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
-    distinctVariables: DistinctVariables
+    termToBeReplaced: TermVariable
   ): Statement = {
     if (termToBeReplaced == boundVariable)
       this
@@ -158,8 +191,18 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
     else
       copy(substatement = substatement.substituteFreeVariable(
         termToReplaceWith,
-        termToBeReplaced,
-        distinctVariables))
+        termToBeReplaced))
+  }
+
+  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
+    case QuantifierStatement(`boundVariable`, otherSubstatement, `quantifier`) =>
+      substatement.attemptSimplification(otherSubstatement)
+    case _ =>
+      None
+  }
+
+  override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
+    copy(substatement = substatement.makeSimplifications(distinctVariables))
   }
 
   override def html: String = s"(${quantifier.symbol}${boundVariable.html})${substatement.safeHtml}"
@@ -168,26 +211,36 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
 case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends Statement {
   override def variables: Variables = terms.map(_.variables).reduce(_ ++ _)
   override def freeVariables: Seq[TermVariable] = terms.map(_.freeVariables).reduce(_ ++ _)
-  override def attemptMatch(otherStatement: Statement): Option[MatchWithSubstitutions] = {
+  override def calculateSubstitutions(otherStatement: Statement): Option[Substitutions] = {
     otherStatement match {
       case PredicateStatement(otherTerms, `predicate`) =>
-        val matchAttempts = terms.zip(otherTerms).map { case (term, otherTerm) =>
-          term.attemptMatch(otherTerm)
+        val substitutionAttempts = terms.zip(otherTerms).map { case (term, otherTerm) =>
+          term.calculateSubstitutions(otherTerm)
         }
-        MatchWithSubstitutions.mergeAttempts(matchAttempts)
+        Substitutions.mergeAttempts(substitutionAttempts)
       case _ =>
         None
     }
   }
-  override def applyMatch(m: Match, distinctVariables: DistinctVariables): Statement = {
-    copy(terms = terms.map(_.applyMatch(m, distinctVariables)))
+  override def applySubstitutions(substitutions: Substitutions): Statement = {
+    copy(terms = terms.map(_.applySubstitutions(substitutions)))
   }
   def substituteFreeVariable(
     termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
-    distinctVariables: DistinctVariables
+    termToBeReplaced: TermVariable
   ): Statement = {
-    copy(terms = terms.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced, distinctVariables)))
+    copy(terms = terms.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced)))
+  }
+  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
+    case PredicateStatement(otherTerms, `predicate`) =>
+      terms.zip(otherTerms).map { case (term, otherTerm) =>
+        term.attemptSimplification(otherTerm)
+      }.traverseOption.map(_.reduce(_ ++ _))
+    case _ =>
+      None
+  }
+  override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
+    copy(terms = terms.map(_.makeSimplifications(distinctVariables)))
   }
   def html: String = terms.map(_.html).mkString(" " + predicate.symbol + " ")
   override def safeHtml: String = if (terms.length > 1) "(" + html + ")" else html

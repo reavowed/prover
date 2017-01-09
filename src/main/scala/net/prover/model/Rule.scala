@@ -18,18 +18,55 @@ case class FantasyRule(
     premiseTemplates: Seq[Statement],
     conclusionTemplate: Statement)
   extends Rule {
-  override def readAndUpdateTheoremBuilder(
-    theoremBuilder: TheoremBuilder,
+
+  def getSubstitutions(
+    assumption: Statement,
+    premises: Seq[Statement],
     line: PartialLine,
     context: Context
-  ): TheoremBuilder = {
-    def withDeduction = line.splitFirstWord.optionMapLeft(n => context.deductions.find(_.id == n)) map {
-      case (deduction, restOfLine) =>
-        applyWithDeduction(deduction, theoremBuilder, restOfLine, context)
+  ): Substitutions = {
+    val assumptionSubstitutionAttempt = assumptionTemplate.calculateSubstitutions(assumption)
+    val premiseSubstitutionAttempts = premises.zip(premiseTemplates).map { case (premise, premiseTemplate) =>
+      premiseTemplate.calculateSubstitutions(premise)
     }
-    withDeduction.getOrElse(applyWithFantasy(theoremBuilder, line, context))
+    val initialSubstitutions = Substitutions.mergeAttempts(assumptionSubstitutionAttempt +: premiseSubstitutionAttempts)
+      .getOrElse(throw ParseException.withMessage(
+        s"Could not match premises\n$premises\n$premiseTemplates",
+        line.fullLine))
+    val requiredVariables = (premiseTemplates.map(_.variables) :+ conclusionTemplate.variables).reduce(_ ++ _)
+    initialSubstitutions.expand(requiredVariables, line, context)._1
   }
 
+  def makeSubstitutions(substitutions: Substitutions): FantasyRule = FantasyRule(
+    id,
+    assumptionTemplate.applySubstitutions(substitutions),
+    premiseTemplates.map(_.applySubstitutions(substitutions)),
+    conclusionTemplate.applySubstitutions(substitutions))
+
+  def simplify(assumption: Statement, premises: Seq[Statement]): FantasyRule = {
+    val distinctVariableAttempts = assumptionTemplate.attemptSimplification(assumption) +:
+      premises.zip(premiseTemplates).map {
+        case (premise, premiseTemplate) =>
+          premiseTemplate.attemptSimplification(premise)
+      }
+    val distinctVariables = distinctVariableAttempts.traverseOption
+      .getOrElse(throw new Exception("Unexpected error resolving simplifications")).reduce(_ ++ _)
+    FantasyRule(
+      id,
+      assumptionTemplate.makeSimplifications(distinctVariables),
+      premiseTemplates.map(_.makeSimplifications(distinctVariables)),
+      conclusionTemplate.makeSimplifications(distinctVariables))
+  }
+
+  def matchAssumptionAndPremises(
+    assumption: Statement,
+    premises: Seq[Statement],
+    line: PartialLine,
+    context: Context
+  ): FantasyRule = {
+    val substitutions = getSubstitutions(assumption, premises, line, context)
+    makeSubstitutions(substitutions).simplify(assumption, premises)
+  }
 
   private def applyWithDeduction(
     deduction: Deduction,
@@ -50,37 +87,43 @@ case class FantasyRule(
         throw ParseException.withMessage("Can only apply a rule with a single premise to a theorem", line.fullLine)
     }
     val (deductionPremise, lineAfterDeductionPremise) = Statement.parse(line, context)
-    val (matcher, lineAfterVariables) = deduction.matchPremises(
-      Seq((deductionPremise, deductionPremiseTemplate)),
-      deduction.conclusionTemplate,
-      theoremBuilder.distinctVariables,
+    val updatedDeduction = deduction.matchPremises(
+      Seq(deductionPremise),
       lineAfterDeductionPremise,
       context)
-    val theoremPremise = deductionPremiseTemplate.applyMatch(matcher, theoremBuilder.distinctVariables)
-    val theoremConclusion = deduction.conclusionTemplate.applyMatch(matcher, theoremBuilder.distinctVariables)
-    val conclusion = matchPremisesToConclusion(
-      Seq((theoremPremise, assumptionTemplate), (theoremConclusion, premiseTemplate)),
-      conclusionTemplate,
-      theoremBuilder.distinctVariables,
-      lineAfterVariables,
-      context)._1
-    theoremBuilder.addStep(Step(conclusion))
+    val updatedRule = matchAssumptionAndPremises(
+      updatedDeduction.premiseTemplates.head,
+      Seq(updatedDeduction.conclusionTemplate),
+      lineAfterDeductionPremise,
+      context)
+    theoremBuilder.addStep(Step(updatedRule.conclusionTemplate))
   }
 
   private def applyWithFantasy(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
     theoremBuilder.replaceFantasy { fantasy =>
-      val (premisesAndTemplates, lineAfterPremises) = premiseTemplates.mapFold(line) { (premiseTemplate, lineSoFar) =>
-        readReference(lineSoFar, theoremBuilder).mapLeft((_, premiseTemplate))
+      val (premises, lineAfterPremises) = premiseTemplates.mapFold(line) { (premiseTemplate, lineSoFar) =>
+        readReference(lineSoFar, theoremBuilder)
       }
-      val conclusion = matchPremisesToConclusion(
-        (fantasy.assumption, assumptionTemplate) +: premisesAndTemplates,
-        conclusionTemplate,
-        theoremBuilder.distinctVariables,
+      val updatedRule = matchAssumptionAndPremises(
+        fantasy.assumption,
+        premises,
         lineAfterPremises,
         context
-      )._1
-      Step(conclusion, Some(Step.Fantasy(fantasy.assumption, fantasy.steps)))
+      )
+      Step(updatedRule.conclusionTemplate, Some(Step.Fantasy(fantasy.assumption, fantasy.steps)))
     }
+  }
+
+  override def readAndUpdateTheoremBuilder(
+    theoremBuilder: TheoremBuilder,
+    line: PartialLine,
+    context: Context
+  ): TheoremBuilder = {
+    def withDeduction = line.splitFirstWord.optionMapLeft(n => context.deductions.find(_.id == n)) map {
+      case (deduction, restOfLine) =>
+        applyWithDeduction(deduction, theoremBuilder, restOfLine, context)
+    }
+    withDeduction.getOrElse(applyWithFantasy(theoremBuilder, line, context))
   }
 }
 

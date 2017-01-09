@@ -27,52 +27,48 @@ class StatementSpec extends ProverSpec {
 
   "statement match" should {
     "match a statement variable to anything" in {
-      StatementVariable(1).attemptMatch(Implication(StatementVariable(1), StatementVariable(2))) mustEqual
-        Some(MatchWithSubstitutions(
+      StatementVariable(1).calculateSubstitutions(Implication(StatementVariable(1), StatementVariable(2))) mustEqual
+        Some(Substitutions(
           Map(StatementVariable(1) -> Implication(StatementVariable(1), StatementVariable(2))),
-          Map.empty,
-          Nil))
+          Map.empty))
     }
     "not match a connective to a statement variable" in {
-      Implication(StatementVariable(1), StatementVariable(2)).attemptMatch(StatementVariable(1)) must beNone
+      Implication(StatementVariable(1), StatementVariable(2)).calculateSubstitutions(StatementVariable(1)) must beNone
     }
     "not match two different connectives" in {
-      Implication(StatementVariable(1), StatementVariable(2)).attemptMatch(Conjunction(StatementVariable(1), StatementVariable(2))) must beNone
+      Implication(StatementVariable(1), StatementVariable(2)).calculateSubstitutions(Conjunction(StatementVariable(1), StatementVariable(2))) must beNone
     }
     "not match two connectives of the same type whose substatements don't match" in {
       Implication(Implication(StatementVariable(1), StatementVariable(2)), StatementVariable(3))
-        .attemptMatch(Implication(StatementVariable(1), StatementVariable(2)))
+        .calculateSubstitutions(Implication(StatementVariable(1), StatementVariable(2)))
         .must(beNone)
     }
     "match two connectives of the same type that only differ in statement variable number" in {
       Implication(StatementVariable(1), StatementVariable(2))
-        .attemptMatch(Implication(StatementVariable(1), StatementVariable(3)))
-        .mustEqual(Some(MatchWithSubstitutions(
+        .calculateSubstitutions(Implication(StatementVariable(1), StatementVariable(3)))
+        .mustEqual(Some(Substitutions(
           Map(StatementVariable(1) -> StatementVariable(1), StatementVariable(2) -> StatementVariable(3)),
-          Map.empty,
-          Nil)))
+          Map.empty)))
     }
     "match two connectives of the same type whose substatements are different but match" in {
       Implication(StatementVariable(1), StatementVariable(2))
-        .attemptMatch(Implication(Conjunction(StatementVariable(1), StatementVariable(2)), StatementVariable(3)))
-        .mustEqual(Some(MatchWithSubstitutions(
+        .calculateSubstitutions(Implication(Conjunction(StatementVariable(1), StatementVariable(2)), StatementVariable(3)))
+        .mustEqual(Some(Substitutions(
           Map(
             StatementVariable(1) -> Conjunction(1, 2),
             StatementVariable(2) -> StatementVariable(3)),
-          Map.empty,
-          Nil)))
+          Map.empty)))
     }
     "match two connectives of the same type whose substatements merge correctly" in {
       Implication(StatementVariable(1), StatementVariable(1))
-        .attemptMatch(Implication(Conjunction(StatementVariable(1), StatementVariable(2)), Conjunction(StatementVariable(1), StatementVariable(2))))
-        .mustEqual(Some(MatchWithSubstitutions(
+        .calculateSubstitutions(Implication(Conjunction(StatementVariable(1), StatementVariable(2)), Conjunction(StatementVariable(1), StatementVariable(2))))
+        .mustEqual(Some(Substitutions(
           Map(StatementVariable(1) -> Conjunction(1, 2)),
-          Map.empty,
-          Nil)))
+          Map.empty)))
     }
     "match two connectives of the same type whose substatements do not merge correctly" in {
       Implication(StatementVariable(1), StatementVariable(1))
-        .attemptMatch(Implication(Conjunction(StatementVariable(1), StatementVariable(2)), StatementVariable(3)))
+        .calculateSubstitutions(Implication(Conjunction(StatementVariable(1), StatementVariable(2)), StatementVariable(3)))
         .must(beNone)
     }
   }
@@ -85,7 +81,7 @@ class StatementSpec extends ProverSpec {
         Equals(1, 2))
 
       forall(statements) { s =>
-        s.substituteFreeVariable(1, 1, DistinctVariables.empty) mustEqual s
+        s.substituteFreeVariable(1, 1) mustEqual s
       }
     }
     "not do anything if substituting an already-substituted variable" in {
@@ -95,17 +91,9 @@ class StatementSpec extends ProverSpec {
         Equals(1, 2))
 
       forall(statements) { s =>
-        val firstSubstitution = s.substituteFreeVariable(2, 1, DistinctVariables.empty)
-        firstSubstitution.substituteFreeVariable(3, 1, DistinctVariables.empty) mustEqual firstSubstitution
+        val firstSubstitution = s.substituteFreeVariable(2, 1)
+        firstSubstitution.substituteFreeVariable(3, 1) mustEqual firstSubstitution
       }
-    }
-    "not do anything if substituting distinct variables" in {
-      StatementVariable(1).substituteFreeVariable(
-        2,
-        1,
-        DistinctVariables(Map(
-          TermVariable(1) -> Variables(Seq(StatementVariable(1)), Nil)))
-      ) mustEqual StatementVariable(1)
     }
   }
 }

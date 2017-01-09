@@ -17,24 +17,35 @@ trait Term extends JsonSerializable.Base with Component[Term] {
 case class TermVariable(i: Int) extends Term {
   override def variables: Variables = Variables(Nil, Seq(this))
   override def freeVariables: Seq[TermVariable] = Seq(this)
-  override def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions] = {
-    Some(MatchWithSubstitutions(Map.empty, Map(this -> otherTerm), Nil))
+  override def calculateSubstitutions(otherTerm: Term): Option[Substitutions] = {
+    Some(Substitutions(Map.empty, Map(this -> otherTerm)))
   }
-  override def applyMatch(m: Match, distinctVariables: DistinctVariables): Term = {
-    m.terms.getOrElse(
+  override def applySubstitutions(substitutions: Substitutions): Term = {
+    substitutions.terms.getOrElse(
       this,
       throw new Exception(s"No replacement for term variable $this"))
   }
   override def substituteFreeVariable(
     termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
-    distinctVariables: DistinctVariables
+    termToBeReplaced: TermVariable
   ): Term = {
     if (this == termToBeReplaced)
       termToReplaceWith
     else
       this
   }
+
+  override def attemptSimplification(other: Term): Option[DistinctVariables] = {
+    if (other == this)
+      Some(DistinctVariables.empty)
+    else
+      None
+  }
+
+  override def makeSimplifications(distinctVariables: DistinctVariables): Term = {
+    this
+  }
+
   override def html: String = (123 - i).toChar.toString
 }
 
@@ -45,25 +56,32 @@ case class DefinedTerm[Components <: HList](
 {
   override def variables: Variables = Variables(Nil, Nil)
   override def freeVariables: Seq[TermVariable] = Nil
-  override def attemptMatch(otherTerm: Term): Option[MatchWithSubstitutions] = otherTerm match {
+  override def calculateSubstitutions(otherTerm: Term): Option[Substitutions] = otherTerm match {
     case termDefinition(otherComponents) =>
-      termDefinition.componentTypes.attemptMatch(components, otherComponents)
+      termDefinition.componentTypes.calculateSubstitutions(components, otherComponents)
     case _ =>
       None
   }
-  override def applyMatch(m: Match, distinctVariables: DistinctVariables): Term = {
-    termDefinition(termDefinition.componentTypes.applyMatch(components, m, distinctVariables))
+  override def applySubstitutions(substitutions: Substitutions): Term = {
+    termDefinition(termDefinition.componentTypes.applySubstitutions(components, substitutions))
   }
   override def substituteFreeVariable(
     termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
-    distinctVariables: DistinctVariables
+    termToBeReplaced: TermVariable
   ): Term = {
-    termDefinition(termDefinition.componentTypes.substituteTermVariables(
+    termDefinition(termDefinition.componentTypes.substituteFreeVariable(
       components,
       termToReplaceWith,
-      termToBeReplaced,
-      distinctVariables))
+      termToBeReplaced))
+  }
+  override def attemptSimplification(otherTerm: Term): Option[DistinctVariables] = otherTerm match {
+    case termDefinition(otherComponents) =>
+      termDefinition.componentTypes.attemptSimplification(components, otherComponents)
+    case _ =>
+      None
+  }
+  override def makeSimplifications(distinctVariables: DistinctVariables): Term = {
+    termDefinition(termDefinition.componentTypes.makeSimplifications(components, distinctVariables))
   }
   override def html: String = {
     termDefinition.componentTypes.format(termDefinition.format, components)
