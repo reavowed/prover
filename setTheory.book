@@ -53,6 +53,28 @@ introduceForall 3 ↔ ∈ 3 1 ∈ 3 2 4 3
 setsWithSameMembersEqual 4
 qed
 
+theorem setIsEqualIffItHasSameMembershipCondition A Set Is Equal to Another Iff It Has the Same Membership Condition
+premise ∀ 3 ↔ ∈ 3 1 1
+assume ∀ 3 ↔ ∈ 3 2 1
+  setsWithSameMembershipConditionEqual f.a p1
+introduceImplication f.1
+assume = 2 1
+  eliminateEqualsReverse f.a p1 ∀ 3 ↔ ∈ 3 4 1 4
+introduceImplication f.1
+introduceEquivalence 1 2
+qed
+
+theorem setWithMembershipConditionIsUnique A Set With a Membership Condition Is Unique
+premise ∃ 1 ∀ 2 ↔ ∈ 2 1 1
+assume ∀ 2 ↔ ∈ 2 3 1
+  setIsEqualIffItHasSameMembershipCondition f.a 3'
+  introduceForall f.1 ↔ ∀ 2 ↔ ∈ 2 1 1 = 1 3 3' 1
+  introduceExists f.2 ∀ 1 ↔ ∀ 2 ↔ ∈ 2 1 1 = 1 4 3 4
+  apply-∃! f.3
+introduceImplication f.4
+eliminateExists p1 1 3
+qed
+
 chapter Subsets
 Introduce the subset relation, ⊆.
 
@@ -80,50 +102,6 @@ unapply-⊆ p1 3
 unapply-⊆ p2 3
 implicationIsTransitiveInsideForall 1 2
 apply-⊆ 3
-qed
-
-chapter Uniqueness Quantifier
-Introduce the uniqueness quantifier, ∃!.
-
-quantifier ∃! (∃ 2 ∀ 1 ↔ 1 = 1 2) (2 1)
-
-theorem uniqueSetExists A Unique Set Exists
-premise ∃! 1 1
-unapply-∃! p1 2
-assume ∀ 1 ↔ 1 = 1 3
-  eliminateForall f.a 3
-  equalityIsReflexive 3
-  modusPonensEquivalenceRight f.1 f.2
-  introduceExists f.3
-introduceImplication f.4
-eliminateExists 1 2 3
-qed
-
-theorem setWithMembershipConditionIsUnique A Set With a Membership Condition Is Unique
-premise ∃ 1 ∀ 2 ↔ ∈ 2 1 1
-assume ∀ 2 ↔ ∈ 2 3 1
-  assume ∀ 2 ↔ ∈ 2 4 1
-    setsWithSameMembershipConditionEqual f.f.a f.a
-  introduceImplication f.f.1
-  assume = 4 3
-    substituteEqualsIntoContainer f.f.a 5
-    eliminateForall f.a 5 2
-    equivalenceIsTransitive f.f.1 f.f.2
-    introduceForall f.f.3 ↔ ∈ 2 4 1 5 2
-  introduceImplication f.f.4
-  introduceEquivalence f.1 f.2
-  introduceForall f.3 ↔ ∀ 2 ↔ ∈ 2 1 1 = 1 3 4 1
-  introduceExists f.4 ∀ 1 ↔ ∀ 2 ↔ ∈ 2 1 1 = 1 4 3 4
-  apply-∃! f.5
-introduceImplication f.6
-eliminateExists p1 1 3
-qed
-
-theorem thereExistsAUniqueSetEqualToAnySet There Exists a Unique Set Equal to Any Set
-equivalenceIsReflexive = 3 2
-introduceForall 1 ↔ = 1 2 = 1 2 3 1
-introduceExists 2 ∀ 1 ↔ = 1 2 = 1 3 2 3
-apply-∃! 3
 qed
 
 chapter Empty Set
