@@ -11,14 +11,14 @@ theorem substituteEqualsIntoElement Substitute equal terms into set element
 premise = 1 2
 unapply-= p1 3
 eliminateForall 1 3
-eliminateAndLeft 2
+eliminateAndRight 2
 qed
 
 theorem substituteEqualsIntoContainer Substitute equal terms into set container
 premise = 1 2
 unapply-= p1 3
 eliminateForall 1 3
-eliminateAndRight 2
+eliminateAndLeft 2
 qed
 
 theorem equalityIsReflexive Equality is Reflexive
@@ -145,65 +145,76 @@ introduceImplication f.4
 eliminateExists 1 2 3
 qed
 
-# theorem setWithMembershipConditionIsUnique A Set with a Membership Condition Is Unique
-# premise ∃ 1 ∀ 4 ↔ ∈ 4 1 sub 5 1 1
-# assume ∀ 4 ↔ ∈ 4 2 sub 5 1 1
-#   assume ∀ 4 ↔ ∈ 4 3 sub 5 1 1
-#     setsWithSameMembershipConditionEqual f.a f.f.a
-#   introduceImplication f.f.1
-# introduceImplication f.1
-# uniquenessDeduction p1 1
-# qed
-#
-# theorem thereExistsAUniqueSetEqualToAnySet There Exists a Unique Set Equal to Any Set
-# thereExistsASetEqualToAnySet 2 1
-# assume = 3 1
-#   assume = 4 1
-#     reverseEquality f.f.a
-#     equalityIsTransitive f.a f.f.1
-#   introduceImplication f.f.2
-# introduceImplication f.1
-# uniquenessDeduction 1 2
-# qed
-#
-# chapter Empty Set
-# Introduce the empty set, ∅.
-# axiom emptySet "Empty Set" ∃ 1 ∀ 2 ¬ ∈ 2 1
-#
-# theorem emptySetsAreEqual Empty Sets are Equal
-# premise ∀ 3 ¬ ∈ 3 1
-# premise ∀ 3 ¬ ∈ 3 2
-# eliminateForall p1 3 3
-# eliminateForall p2 3 3
-# falseStatementsAreEquivalent 1 2
-# introduceForallWithoutSubstitution 3 3
-# setsWithSameMembersEqual 4
-# qed
-#
-# theorem thereIsAUniqueEmptySet There Is a Unique Empty Set
-# emptySet 1 2
-# assume ∀ 2 ¬ ∈ 2 3
-#   assume ∀ 2 ¬ ∈ 2 4
-#     emptySetsAreEqual f.a f.f.a
-#   introduceImplication f.f.1
-# introduceImplication f.1
-# combineAntecedents 2
-# introduceForallWithoutSubstitution 3 4
-# introduceForallWithoutSubstitution 4 3
-# introduceAnd 1 5
-# definition-∃! 6
-# qed
-#
-# term ∅ ∀ 1 ¬ ∈ 1 ∅
-#
-# theorem theEmptySetIsASubsetOfAnySet The Empty Set Is a Subset of Any Set
-# definition-∅ 2
-# eliminateForallWithoutSubstitution 1
-# falseImpliesAnything1 2 ∈ 2 1
-# introduceForallWithoutSubstitution 3 2
-# definition-⊆ 4
-# qed
-#
+theorem setWithMembershipConditionIsUnique A Set With a Membership Condition Is Unique
+premise ∃ 1 ∀ 2 ↔ ∈ 2 1 1
+assume ∀ 2 ↔ ∈ 2 3 1
+  assume ∀ 2 ↔ ∈ 2 4 1
+    setsWithSameMembershipConditionEqual f.f.a f.a
+  introduceImplication f.f.1
+  assume = 4 3
+    substituteEqualsIntoContainer f.f.a 5
+    eliminateForall f.a 5 2
+    equivalenceIsTransitive f.f.1 f.f.2
+    introduceForall f.f.3 ↔ ∈ 2 4 1 5 2
+  introduceImplication f.f.4
+  introduceEquivalence f.1 f.2
+  introduceForall f.3 ↔ ∀ 2 ↔ ∈ 2 1 1 = 1 3 4 1
+  introduceExists f.4 ∀ 1 ↔ ∀ 2 ↔ ∈ 2 1 1 = 1 4 3 4
+  apply-∃! f.5
+introduceImplication f.6
+eliminateExists p1 1 3
+qed
+
+# theorem equivalencePreservesUniqueness Equivalence Preserves Uniqueness
+# premise ∃! 1 1
+# premise ↔ 1 2
+
+
+chapter Empty Set
+Introduce the empty set, ∅.
+axiom emptySetExists "Empty Set" ∃ 1 ∀ 2 ¬ ∈ 2 1
+
+theorem emptySetsAreEqual Empty Sets are Equal
+premise ∀ 3 ¬ ∈ 3 1
+premise ∀ 3 ¬ ∈ 3 2
+eliminateForall p1 4 3
+eliminateForall p2 4 3
+falseStatementsAreEquivalent 1 2
+introduceForall 3 ↔ ∈ 3 1 ∈ 3 2 4 3
+setsWithSameMembersEqual 4
+qed
+
+theorem thereIsAUniqueEmptySet There Is a Unique Empty Set
+emptySetExists 1 2
+assume ∀ 2 ¬ ∈ 2 3
+  assume ∀ 2 ¬ ∈ 2 4
+    emptySetsAreEqual f.f.a f.a
+  introduceImplication f.f.1
+  assume = 4 3
+    substituteEqualsIntoContainer f.f.a 5 4
+    negateEquivalence f.f.1
+    eliminateForall f.a 5 3
+    modusPonensEquivalenceRight f.f.2 f.f.3
+    introduceForall f.f.4 ¬ ∈ 2 4 5 2
+  introduceImplication f.f.5
+  introduceEquivalence f.1 f.2
+  introduceForall f.3 ↔ ∀ 2 ¬ ∈ 2 1 = 1 3 4 1
+  introduceExists f.4 ∀ 1 ↔ ∀ 2 ¬ ∈ 2 1 = 1 3 3 3
+  apply-∃! f.5
+introduceImplication f.6
+eliminateExists 1 2 3
+qed
+
+term ∅ ∀ 1 ¬ ∈ 1 ∅
+
+theorem theEmptySetIsASubsetOfAnySet The Empty Set Is a Subset of Any Set
+definition-∅ 1
+eliminateForall 1 2 1
+falseImpliesAnything1 2 ∈ 2 1
+introduceForall 3 → ∈ 3 ∅ ∈ 3 1 2 3
+apply-⊆ 4
+qed
+
 # theorem theOnlySubsetOfTheEmptySetIsTheEmptySet The Only Subset of the Empty Set is the Empty Set
 # assume ⊆ 1 ∅
 #   definition-⊆ f.a 2
@@ -215,7 +226,7 @@ qed
 #   emptySetsAreEqual f.6 f.2
 # introduceImplication f.7
 # assume = 1 ∅
-#   substituteEqualsIntoElement f.a 2
+#   substituteEqualsIntoContainer f.a 2
 #   eliminateEquivalenceForward f.1
 #   introduceForallWithoutSubstitution f.2 2
 #   definition-⊆ f.3

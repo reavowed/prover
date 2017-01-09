@@ -58,7 +58,7 @@ class TheoremBuilderSpec extends ProverSpec {
       val theoremBuilder = IntroduceImplication.readAndUpdateTheoremBuilder(
         TheoremBuilder(),
         "and-sym ∧ 2 1",
-        defaultContext.copy(theorems = Seq(theorem)))
+        defaultContext.copy(otherTheoremLineParsers = Seq(theorem)))
       theoremBuilder.steps mustEqual Seq(Step(Implication(Conjunction(2, 1), Conjunction(1, 2))))
     }
 

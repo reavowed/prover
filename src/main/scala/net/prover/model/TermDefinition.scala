@@ -2,20 +2,12 @@ package net.prover.model
 
 import shapeless.HList
 
-case class TermDefinition[Components <: HList](
+case class TermSpecification[Components <: HList](
     symbol: String,
     componentTypes: ComponentTypeList.Aux[Components],
-    format: String,
-    definition: Option[Statement])
-  extends ChapterEntry(TermDefinition) with TermParser
+    format: String)
+  extends TermParser
 {
-  val id: String = s"definition-$symbol"
-  val defaultTerm: Term = apply(componentTypes.defaults())
-
-  override def parseTerm(line: PartialLine, context: Context): (Term, PartialLine) = {
-    componentTypes.parse(line, context).mapLeft(apply)
-  }
-
   def apply(components: Components): Term = {
     DefinedTerm(components, this)
   }
@@ -27,14 +19,25 @@ case class TermDefinition[Components <: HList](
       None
   }
 
-  val deduction: Option[Deduction] = definition.map { d =>
-    new Deduction {
-      override val id: String = s"definition-$symbol"
-      override val premiseTemplates: Seq[Statement] = Nil
-      override val conclusionTemplate: Statement = d
-      override val arbitraryVariables: Seq[TermVariable] = Nil
-      override val distinctVariables: DistinctVariables = DistinctVariables.empty
-    }
+  override def parseTerm(line: PartialLine, context: Context): (Term, PartialLine) = {
+    componentTypes.parse(line, context).mapLeft(apply)
+  }
+}
+
+case class TermDefinition[Components <: HList](
+    specification: TermSpecification[Components],
+    definition: Statement)
+  extends ChapterEntry(TermDefinition)
+{
+  val id: String = s"definition-${specification.symbol}"
+  val defaultTerm: Term = specification(specification.componentTypes.defaults())
+
+  val deduction: Deduction = new Deduction {
+    override val id: String = TermDefinition.this.id
+    override val premiseTemplates: Seq[Statement] = Nil
+    override val conclusionTemplate: Statement = definition
+    override val arbitraryVariables: Seq[TermVariable] = Nil
+    override val distinctVariables: DistinctVariables = DistinctVariables.empty
   }
 }
 
@@ -72,13 +75,16 @@ object TermDefinition extends SingleLineChapterEntryParser[TermDefinition[_]] {
       case _ =>
         throw ParseException.withMessage("Explicit format must be supplied with more than two componenets", line.fullLine)
     }
+    val termSpecification = componentTypes.termSpecification(symbol, format)
     val (definitionTemplate, _) = Statement.parse(
       lineAfterFormat,
-      addToContext(componentTypes.termDefinition(symbol, format, None), context))
-    componentTypes.termDefinition(symbol, format, Some(definitionTemplate))
+      context.copy(termParsers = context.termParsers :+ termSpecification))
+    TermDefinition(termSpecification, definitionTemplate)
   }
   override def addToContext(termDefinition: TermDefinition[_], context: Context): Context = {
-    context.copy(termDefinitions = context.termDefinitions :+ termDefinition)
+    context.copy(
+      termParsers = context.termParsers :+ termDefinition.specification,
+      otherTheoremLineParsers = context.otherTheoremLineParsers :+ termDefinition.deduction)
   }
 }
 

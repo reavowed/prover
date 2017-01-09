@@ -257,29 +257,15 @@ object Statement extends ComponentType[Statement] {
   }
 
   def parse(line: PartialLine, context: Context): (Statement, PartialLine) = {
-    object ConnectiveName {
-      def unapply(s: String): Option[Connective] = {
-        context.connectives.find(_.symbol == s)
-      }
-    }
-    object QuantifierName {
-      def unapply(s: String): Option[Quantifier] = {
-        context.quantifiers.find(_.symbol == s)
-      }
-    }
-    object PredicateName {
-      def unapply(s: String): Option[Predicate] = {
-        context.predicates.find(_.symbol == s)
+    object ParsableStatement {
+      def unapply(s: String): Option[StatementDefinition] = {
+        context.statementDefinitions.find(_.symbol == s)
       }
     }
     val (statementType, remainingLine) = line.splitFirstWord
     statementType match {
-      case ConnectiveName(connective) =>
-        connective.parseStatement(remainingLine, context)
-      case QuantifierName(quantifier) =>
-        quantifier.parseStatement(remainingLine, context)
-      case PredicateName(predicate) =>
-        predicate.parseStatement(remainingLine, context)
+      case ParsableStatement(statementDefinition) =>
+        statementDefinition.parseStatement(remainingLine, context)
       case IntParser(i) =>
         (StatementVariable(i), remainingLine)
       case "sub" =>

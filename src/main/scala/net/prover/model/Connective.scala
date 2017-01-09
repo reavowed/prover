@@ -34,6 +34,6 @@ object Connective extends SingleLineChapterEntryParser[Connective] {
     Connective(symbol, arity, definingStatementOption)
   }
   override def addToContext(connective: Connective, context: Context): Context = {
-    context.copy(connectives = context.connectives :+ connective)
+    context.copy(statementDefinitions = context.statementDefinitions :+ connective)
   }
 }

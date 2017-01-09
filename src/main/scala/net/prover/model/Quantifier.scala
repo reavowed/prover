@@ -35,6 +35,6 @@ object Quantifier extends SingleLineChapterEntryParser[Quantifier] {
     Quantifier(symbol, definingStatementOption, distinctVariables)
   }
   override def addToContext(quantifier: Quantifier, context: Context): Context = {
-    context.copy(quantifiers = context.quantifiers :+ quantifier)
+    context.copy(statementDefinitions = context.statementDefinitions :+ quantifier)
   }
 }

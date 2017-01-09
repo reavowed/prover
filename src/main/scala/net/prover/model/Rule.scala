@@ -119,9 +119,11 @@ case class FantasyRule(
     line: PartialLine,
     context: Context
   ): TheoremBuilder = {
-    def withDeduction = line.splitFirstWord.optionMapLeft(n => context.deductions.find(_.id == n)) map {
-      case (deduction, restOfLine) =>
-        applyWithDeduction(deduction, theoremBuilder, restOfLine, context)
+    def withDeduction = {
+      line.splitFirstWord.optionMapLeft(n => context.deductions.find(_.id == n)) map {
+        case (deduction, restOfLine) =>
+          applyWithDeduction(deduction, theoremBuilder, restOfLine, context)
+      }
     }
     withDeduction.getOrElse(applyWithFantasy(theoremBuilder, line, context))
   }
@@ -176,6 +178,6 @@ object Rule extends SingleLineChapterEntryParser[Rule] {
     }
   }
   override def addToContext(rule: Rule, context: Context): Context = {
-    context.copy(rules = context.rules :+ rule)
+    context.copy(otherTheoremLineParsers = context.otherTheoremLineParsers :+ rule)
   }
 }

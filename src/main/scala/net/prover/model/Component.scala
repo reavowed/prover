@@ -46,8 +46,8 @@ trait ComponentTypeList{
     distinctVariables: DistinctVariables
   ): Components
 
-  def termDefinition(symbol: String, format: String, definition: Option[Statement]): TermDefinition[Components] = {
-    TermDefinition[Components](symbol, this, format, definition)
+  def termSpecification(symbol: String, format: String): TermSpecification[Components] = {
+    TermSpecification[Components](symbol, this, format)
   }
 }
 

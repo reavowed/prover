@@ -51,7 +51,7 @@ case class TermVariable(i: Int) extends Term {
 
 case class DefinedTerm[Components <: HList](
     components: Components,
-    termDefinition: TermDefinition[Components])
+    termDefinition: TermSpecification[Components])
   extends Term
 {
   override def variables: Variables = Variables(Nil, Nil)
@@ -117,7 +117,7 @@ object Term extends ComponentType[Term] {
   override def parse(line: PartialLine, context: Context): (Term, PartialLine) = {
     object ParsableTerm {
       def unapply(s: String): Option[TermParser] = {
-        context.termDefinitions.find(_.symbol == s)
+        context.termParsers.find(_.symbol == s)
       }
     }
 

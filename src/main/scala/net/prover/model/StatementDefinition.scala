@@ -5,6 +5,7 @@ trait StatementDefinition {
   def defaultStatement: Statement
   def definingStatement: Option[Statement]
   def distinctVariables: DistinctVariables
+  def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine)
 
   def forwardDeduction: Option[Deduction] = definingStatement.map { s =>
     new Deduction {

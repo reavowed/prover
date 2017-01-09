@@ -15,6 +15,6 @@ object Axiom extends SingleLineChapterEntryParser[Axiom] {
     Axiom(id, title, statement)
   }
   override def addToContext(axiom: Axiom, context: Context): Context = {
-    context.copy(axioms = context.axioms :+ axiom)
+    context.copy(otherTheoremLineParsers = context.otherTheoremLineParsers :+ axiom)
   }
 }

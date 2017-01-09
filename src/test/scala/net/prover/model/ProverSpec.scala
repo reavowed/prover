@@ -1,6 +1,7 @@
 package net.prover.model
 
 import org.specs2.mutable.Specification
+import shapeless.HNil
 
 trait ProverSpec extends Specification {
   val Implication = Connective("→", 2, None)
@@ -13,6 +14,14 @@ trait ProverSpec extends Specification {
   var Exists = Quantifier("∃", Some(Negation(ForAll(1, Negation(1)))), DistinctVariables.empty)
   val ElementOf = Predicate("∈", 2, None)
   val Equals = Predicate("=", 2, None)
+
+  val EmptySetDefinitionXXX = TermSpecification(
+    "∅",
+    ComponentTypeList.empty,
+    "∅")
+  val EmptySetDefinition = TermDefinition(
+    EmptySetDefinitionXXX,
+    ForAll(1, Negation(ElementOf(1, DefinedTerm(HNil, EmptySetDefinitionXXX)))))
 
   val Restate = DirectRule(
     "restate",
@@ -44,14 +53,18 @@ trait ProverSpec extends Specification {
     Nil,
     DistinctVariables.empty)
 
+  val statementDefinitions = Seq(
+    Implication, Negation, Conjunction, Disjunction, Equivalence,
+    ForAll, Exists,
+    ElementOf, Equals)
+
   val defaultContext = Context(
-    connectives = Seq(Implication, Negation, Conjunction, Disjunction, Equivalence),
-    quantifiers = Seq(ForAll, Exists),
-    predicates = Seq(ElementOf, Equals),
-    rules = Nil,
-    theorems = Nil,
-    axioms = Nil,
-    termDefinitions = Nil)
+    statementDefinitions = Seq(
+      Implication, Negation, Conjunction, Disjunction, Equivalence,
+      ForAll, Exists,
+      ElementOf, Equals),
+    termParsers = Nil,
+    otherTheoremLineParsers = Nil)
 
   implicit def intToStatementVariable(i: Int): StatementVariable = StatementVariable(i)
 

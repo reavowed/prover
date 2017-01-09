@@ -353,6 +353,15 @@ falseImpliesAnything1 p2 1
 introduceEquivalence 1 2
 qed
 
+theorem negateEquivalence Negate Equivalence
+premise ↔ 1 2
+eliminateEquivalenceForward p1
+contraposition 1
+eliminateEquivalenceConverse p1
+contraposition 3
+introduceEquivalence 4 2
+qed
+
 chapter Propositional Logic Identities
 Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
 

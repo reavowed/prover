@@ -3,12 +3,13 @@ package net.prover.model
 import shapeless.{::, HNil}
 
 class TermSpec extends ProverSpec {
-  val EmptySet: Term = ComponentTypeList.empty.termDefinition("∅", "∅", None).apply(HNil)
-  val PowerSet: TermDefinition[Term :: HNil] = ComponentTypeList.withTerm(ComponentTypeList.empty).termDefinition("powerSet", "𝒫{}", None)
+  val EmptySet: Term = ComponentTypeList.empty.termSpecification("∅", "∅").apply(HNil)
+  val PowerSet: TermSpecification[Term :: HNil] = ComponentTypeList.withTerm(ComponentTypeList.empty)
+    .termSpecification("powerSet", "𝒫{}")
 
   "two equally defined term constants should be equal" in {
-    val one = ComponentTypeList.empty.termDefinition("∅", "∅", None).apply(HNil)
-    val two = ComponentTypeList.empty.termDefinition("∅", "∅", None).apply(HNil)
+    val one = ComponentTypeList.empty.termSpecification("∅", "∅").apply(HNil)
+    val two = ComponentTypeList.empty.termSpecification("∅", "∅").apply(HNil)
     one mustEqual two
   }
 

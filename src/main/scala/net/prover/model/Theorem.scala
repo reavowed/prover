@@ -93,6 +93,6 @@ object Theorem extends ChapterEntryParser[Theorem] {
     parseHelper(lines, TheoremBuilder())
   }
   override def addToContext(theorem: Theorem, context: Context): Context = {
-    context.copy(theorems = context.theorems :+ theorem)
+    context.copy(otherTheoremLineParsers = context.otherTheoremLineParsers :+ theorem)
   }
 }

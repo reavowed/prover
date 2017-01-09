@@ -10,8 +10,9 @@ class TheoremSpec extends ProverSpec {
       firstLine,
       lines,
       defaultContext.copy(
-        rules = defaultContext.rules ++ Seq(IntroduceImplication, EliminateImplication, IntroduceForall, EliminateForall),
-        theorems = defaultContext.theorems ++ additionalTheorems)
+        otherTheoremLineParsers = defaultContext.otherTheoremLineParsers ++
+          Seq(IntroduceImplication, EliminateImplication, IntroduceForall, EliminateForall) ++
+          additionalTheorems)
     )._1
   }
 
