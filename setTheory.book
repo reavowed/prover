@@ -1,8 +1,8 @@
 book Set Theory
 import Predicate Calculus
 
-chapter Set Membership and Equality
-Introduce set membership, ∈, and equality, =.
+chapter Set Membership
+Introduce the set membership relation, ∈.
 
 predicate ∈ 2
 
@@ -54,7 +54,7 @@ setsWithSameMembersEqual 4
 qed
 
 chapter Subsets
-Introduce the subset predicate, ⊆.
+Introduce the subset relation, ⊆.
 
 predicate ⊆ 2 ∀ 3 → ∈ 3 1 ∈ 3 2
 
@@ -217,8 +217,13 @@ eliminateForall 1 2 2
 modusPonensEquivalenceRight 2 p1
 qed
 
-theorem powerSetOfEmptySetContainsEmptySet The Power Set of The Empty Set Contains the Empty Set
-theEmptySetIsASubsetOfAnySet ∅
+theorem theEmptySetIsAnElementOfAnyPowerSet The Empty Set Is an Element of Any Power Set
+theEmptySetIsASubsetOfAnySet 1
+subsetIsElementOfPowerset 1
+qed
+
+theorem anySetIsAnElementOfItsPowerSet Any Set Is an Element of Its Power Set
+subsetIsReflexive 1
 subsetIsElementOfPowerset 1
 qed
 
@@ -248,7 +253,7 @@ assume ∃ 4 ∧ ∈ 4 powerSet ∅ = 3' 1
   eliminateExists f.a f.1 4'
 introduceImplication f.2
 assume = 3' 1
-  powerSetOfEmptySetContainsEmptySet
+  theEmptySetIsAnElementOfAnyPowerSet ∅
   introduceAnd f.1 f.a
   introduceExists f.2 ∧ ∈ 4 powerSet ∅ = 3' 1 ∅ 4
 introduceImplication f.3
@@ -281,4 +286,49 @@ premise ∈ 2 singleton 1
 definition-singleton 2 1
 eliminateForall 1 2
 modusPonensEquivalenceLeft 2 p1
+qed
+
+theorem singletonIsSubsetIfSetIsElement Singleton Is a Subset If the Set Is an Element
+premise ∈ 2 1
+assume ∈ 3' singleton 2
+  elementOfSingletonIsSet f.a
+  eliminateEqualsReverse f.1 p1 ∈ 4 1 4
+introduceImplication f.2
+introduceForall 1 → ∈ 3 singleton 2 ∈ 3 1 3' 3
+apply-⊆ 2
+qed
+
+theorem subsetsOfSingleton Subsets of a Singleton
+assume ∈ 2 powerSet singleton 1
+  elementOfPowersetIsSubset f.a
+  unapply-⊆ f.1 3
+  definition-singleton 3 1
+  implicationThenEquivalenceInsideForall f.2 f.3
+  assume ∃ 3 ∈ 3 2
+    assume ∈ 3' 2
+      modusPonensInsideForall f.4 f.f.f.a 3'
+      eliminateEquals f.f.f.1 f.f.f.a ∈ 4 2 4
+    introduceImplication f.f.f.2
+    eliminateExists f.f.a f.f.1 3'
+    singletonIsSubsetIfSetIsElement f.f.2
+    subsetIsAntisymmetric f.1 f.f.3
+    introduceOrRight f.f.4 = 2 ∅
+  introduceImplication f.f.5
+  assume ¬ ∃ 3 ∈ 3 2
+    notExistsIsForallNot f.f.a
+    anEmptySetIsTheEmptySet f.f.1
+    introduceOrLeft f.f.2 = 2 singleton 1
+  introduceImplication f.f.3
+  proofByCases f.5 f.6
+introduceImplication f.7
+assume = 2 ∅
+  theEmptySetIsAnElementOfAnyPowerSet singleton 1
+  eliminateEqualsReverse f.a f.1 ∈ 3 powerSet singleton 1 3
+introduceImplication f.2
+assume = 2 singleton 1
+  anySetIsAnElementOfItsPowerSet singleton 1
+  eliminateEqualsReverse f.a f.1 ∈ 3 powerSet singleton 1 3
+introduceImplication f.2
+combineCases 2 3
+introduceEquivalence 1 4
 qed

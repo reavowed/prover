@@ -99,7 +99,7 @@ assume ¬ 2
 introduceImplication f.1
 qed
 
-theorem contradiction Proof by Contradiction
+theorem proofByContradiction Proof by Contradiction
 premise → 1 2
 premise → 1 ¬ 2
 assume 1
@@ -108,12 +108,12 @@ assume 1
 introduceNegation f.1 f.2
 qed
 
-theorem cases Proof by Cases
+theorem proofByCases Proof by Cases
 premise → 1 2
 premise → ¬ 1 2
 contraposition p1
 contraposition p2
-contradiction 1 2
+proofByContradiction 1 2
 eliminateNegation 3
 qed
 
@@ -182,7 +182,7 @@ premise → 2 3
 premise ∨ 1 2
 unapply-∨ p3
 implicationIsTransitive 1 p2
-cases p1 2
+proofByCases p1 2
 qed
 
 theorem combineCases Combine Cases
@@ -360,6 +360,13 @@ contraposition 1
 eliminateEquivalenceConverse p1
 contraposition 3
 introduceEquivalence 4 2
+qed
+
+theorem implicationThenEquivalence Implication then Equivalence
+premise → 1 2
+premise ↔ 2 3
+eliminateEquivalenceForward p2
+implicationIsTransitive p1 1
 qed
 
 chapter Propositional Logic Identities

@@ -18,6 +18,23 @@ assume ∀ 1 1
 introduceImplication f.3
 qed
 
+theorem modusPonensInsideForall Modus Ponens Inside Forall
+premise ∀ 1 → 1 2
+premise sub 2 1 1
+eliminateForall p1 2 1
+eliminateImplication 1 p2
+qed
+
+theorem implicationThenEquivalenceInsideForall Implication then Equivalence Inside Forall
+premise ∀ 1 → 1 2
+premise ∀ 1 ↔ 2 3
+eliminateForall p1 2 1
+eliminateForall p2 2 1
+implicationThenEquivalence 1 2
+introduceForall 3 → 1 3 2 1
+qed
+
+
 theorem distributeForallOverConjunction Universal Quantifier Distributes over Conjunction
 assume ∀ 1 ∧ 1 2
   eliminateForall f.a 2
@@ -115,6 +132,13 @@ theorem equalityIsTransitive Equality Is Transitive
 premise = 1 2
 premise = 2 3
 eliminateEquals p2 p1 = 1 4 4
+qed
+
+theorem eliminateEqualsReverse
+premise = 2 1
+premise sub 1 3 1
+reverseEquality p1
+eliminateEquals 1 p2
 qed
 
 theorem thereExistsASetEqualToAnySet There Exists a Set Equal to Any Set

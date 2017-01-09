@@ -27,6 +27,8 @@ trait ComponentTypeList{
   def parse(line: PartialLine, context: Context): (Components, PartialLine)
   def defaults(currentStatement: Int = 1, currentTerm: Int = 1): Components
   def format(formatString: String, components: Components): String
+  def getVariables(components: Components): Variables
+  def getFreeVariables(components: Components): Seq[TermVariable]
   def calculateSubstitutions(components: Components, otherComponents: Components): Option[Substitutions]
   def applySubstitutions(
     components: Components,
@@ -60,6 +62,8 @@ object ComponentTypeList {
     override def parse(line: PartialLine, context: Context): (HNil, PartialLine) = (HNil, line)
     override def defaults(currentStatement: Int, currentTerm: Int) = HNil
     override def format(formatString: String, components: HNil): String = formatString
+    override def getVariables(components: Components): Variables = Variables.empty
+    override def getFreeVariables(components: Components): Seq[TermVariable] = Nil
     override def calculateSubstitutions(
       components: Components,
       otherComponents: Components
@@ -103,6 +107,14 @@ object ComponentTypeList {
     ): String = {
       val updatedFormatString = formatString.replaceFirst("\\{\\}", components.head.toString)
       inner.format(updatedFormatString, components.tail)
+    }
+
+    override def getVariables(components: Components): Variables = {
+      components.head.variables ++ inner.getVariables(components.tail)
+    }
+
+    override def getFreeVariables(components: Components): Seq[TermVariable] = {
+      components.head.freeVariables ++ inner.getFreeVariables(components.tail)
     }
 
     override def calculateSubstitutions(

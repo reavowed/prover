@@ -21,9 +21,12 @@ case class TermVariable(i: Int, prime: Boolean = false) extends Term {
     Some(Substitutions(Map.empty, Map(this -> otherTerm)))
   }
   override def applySubstitutions(substitutions: Substitutions): Term = {
-    substitutions.terms.getOrElse(
-      this,
-      throw new Exception(s"No replacement for term variable $this"))
+    if (!substitutions.terms.contains(this)) {
+      throw new Exception()
+    }
+    substitutions.terms.getOrElse(this, {
+      throw new Exception(s"No replacement for term variable $this")
+    })
   }
   override def substituteFreeVariable(
     termToReplaceWith: Term,
@@ -54,8 +57,8 @@ case class DefinedTerm[Components <: HList](
     termDefinition: TermSpecification[Components])
   extends Term
 {
-  override def variables: Variables = Variables(Nil, Nil)
-  override def freeVariables: Seq[TermVariable] = Nil
+  override def variables: Variables = termDefinition.componentTypes.getVariables(components)
+  override def freeVariables: Seq[TermVariable] = termDefinition.componentTypes.getFreeVariables(components)
   override def calculateSubstitutions(otherTerm: Term): Option[Substitutions] = otherTerm match {
     case termDefinition(otherComponents) =>
       termDefinition.componentTypes.calculateSubstitutions(components, otherComponents)
