@@ -5,7 +5,7 @@ case class Predicate(
     arity: Int,
     definingStatement: Option[Statement])
   extends ChapterEntry(Predicate) with StatementDefinition {
-  val defaultStatement: PredicateStatement = apply((1 to arity).map(TermVariable): _*)
+  val defaultStatement: PredicateStatement = apply((1 to arity).map(TermVariable(_)): _*)
   val distinctVariables: DistinctVariables = DistinctVariables.empty
 
   def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {

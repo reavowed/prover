@@ -52,7 +52,7 @@ object Book {
         }
       case WordAndRemainingText(entryType, restOfLine) +: moreLines =>
         val parser = entryParsers.find(_.name == entryType)
-          .getOrElse(throw new Exception(s"Unrecognised type '$entryType'"))
+          .getOrElse(throw ParseException.withMessage(s"Unrecognised type '$entryType'", lines.head))
         val (updatedBook, remainingLines) = parser.parseToBook(restOfLine, moreLines, book)
         addLinesToBook(remainingLines, updatedBook)
       case Nil =>

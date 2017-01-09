@@ -80,3 +80,10 @@ introduceNegation f.2 1
 eliminateNegation 2
 qed
 
+theorem notExistsIsForallNot Negated Exists is Forall Negated
+premise ¬ ∃ 1 1
+assume ¬ ∀ 1 ¬ 1
+  apply-∃ f.a
+introduceNegation f.1 p1
+eliminateNegation 1
+qed
