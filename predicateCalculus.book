@@ -134,6 +134,20 @@ premise = 2 3
 eliminateEquals p2 p1 = 1 4 4
 qed
 
+theorem equalityIsTransitiveLeft Equality Is Transitive (Left)
+premise = 1 2
+premise = 1 3
+reverseEquality p1
+equalityIsTransitive 1 p2
+qed
+
+theorem equalityIsTransitiveRight Equality Is Transitive (Right)
+premise = 1 2
+premise = 3 2
+reverseEquality p2
+equalityIsTransitive p1 1
+qed
+
 theorem eliminateEqualsReverse
 premise = 2 1
 premise sub 1 3 1

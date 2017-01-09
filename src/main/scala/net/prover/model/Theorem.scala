@@ -74,15 +74,15 @@ object Theorem extends ChapterEntryParser[Theorem] {
           if (fantasyOption.isDefined)
             throw new Exception("Cannot finish theorem with open assumption")
           val conclusion = steps.last.statement
-          val termVariables = premises.flatMap(_.variables.termVariables) ++ conclusion.variables.termVariables
+          val variables = (premises.map(_.variables) :+ conclusion.variables).reduce(_ ++ _)
           val theorem = Theorem(
             id,
             title,
             premises,
             steps,
             conclusion,
-            arbitraryVariables.intersect(termVariables),
-            distinctVariables.filter(termVariables.contains))
+            arbitraryVariables.intersect(variables.termVariables),
+            distinctVariables.filter(variables.statementVariables.contains, variables.termVariables.contains))
           (theorem, nonTheoremLines)
         case definitionLine +: otherLines =>
           parseHelper(otherLines, parseLine(definitionLine, theoremBuilder))

@@ -38,8 +38,10 @@ case class DistinctVariables(map: Map[TermVariable, Variables]) extends JsonSeri
     }.toMap)
   }
 
-  def filter(f: TermVariable => Boolean): DistinctVariables = {
-    DistinctVariables(map.filterKeys(f))
+  def filter(f: StatementVariable => Boolean, g: TermVariable => Boolean): DistinctVariables = {
+    DistinctVariables(map.filterKeys(g).mapValues(x => x.filter(f, g)).filter {
+      case (_, variables) => variables.nonEmpty
+    })
   }
 
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {

@@ -21,9 +21,6 @@ case class TermVariable(i: Int, prime: Boolean = false) extends Term {
     Some(Substitutions(Map.empty, Map(this -> otherTerm)))
   }
   override def applySubstitutions(substitutions: Substitutions): Term = {
-    if (!substitutions.terms.contains(this)) {
-      throw new Exception()
-    }
     substitutions.terms.getOrElse(this, {
       throw new Exception(s"No replacement for term variable $this")
     })
