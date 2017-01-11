@@ -81,15 +81,16 @@ proverApp.component('theorem', {
   controller: ['$scope', function($scope) {
     $scope.proofRows = [];
     $scope._ = _;
-    function addRow(prefix, statement, indentLevel) {
+    function addRow(prefix, statement, deductionId, indentLevel) {
       $scope.proofRows.push({
         prefix: prefix,
         statement: statement,
+        deductionId: deductionId,
         indentLevel: indentLevel
       });
     }
     function addFantasy(fantasy, indentLevel) {
-      addRow('Assume', fantasy.assumption, indentLevel);
+      addRow('Assume', fantasy.assumption, "assumption", indentLevel);
       _.forEach(fantasy.steps, function(step) { addStep(step, indentLevel + 1) });
 
     }
@@ -97,7 +98,7 @@ proverApp.component('theorem', {
       if (step.fantasy) {
         addFantasy(step.fantasy, indentLevel);
       }
-      addRow(step.fantasy ? 'So' : 'Then', step.statement, indentLevel);
+      addRow(step.fantasy ? 'So' : 'Then', step.statement, step.deductionId, indentLevel);
     }
     _.forEach($scope.$ctrl.theorem.steps, function(step) { addStep(step, 0) });
   }]

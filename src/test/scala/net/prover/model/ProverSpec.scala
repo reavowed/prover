@@ -77,7 +77,7 @@ trait ProverSpec extends Specification {
   }
 
   implicit class TheoremBuilderOps(theoremBuilder: TheoremBuilder) {
-    def addStep(statement: Statement): TheoremBuilder = theoremBuilder.addStep(Step(statement))
+    def addStep(statement: Statement): TheoremBuilder = theoremBuilder.addStep(Step(statement, ""))
     def addStep(i: Int): TheoremBuilder = addStep(intToStatementVariable(i))
   }
 }

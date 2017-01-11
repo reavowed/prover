@@ -69,7 +69,7 @@ trait Deduction extends TheoremLineParser {
     }
     val updatedDeduction = matchPremises(premises, lineAfterPremises, context)
     theoremBuilder
-      .addStep(Step(updatedDeduction.conclusionTemplate))
+      .addStep(Step(updatedDeduction.conclusionTemplate, id))
       .withArbitraryVariables(updatedDeduction.arbitraryVariables)
       .withDistinctVariables(updatedDeduction.distinctVariables)
   }

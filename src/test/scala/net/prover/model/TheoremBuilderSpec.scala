@@ -8,7 +8,7 @@ class TheoremBuilderSpec extends ProverSpec {
         TheoremBuilder().addPremise(StatementVariable(1)),
         "p1",
         defaultContext)
-      updatedTheoremBuilder.steps mustEqual Seq(Step(StatementVariable(1)))
+      updatedTheoremBuilder.steps.head.statement mustEqual StatementVariable(1)
     }
 
     "handle direct rule referencing fantasy hypothesis" in {
@@ -16,7 +16,7 @@ class TheoremBuilderSpec extends ProverSpec {
         TheoremBuilder().addFantasy(StatementVariable(1)),
         "f.a",
         defaultContext)
-      updatedTheoremBuilder.fantasyOption.get.steps mustEqual Seq(Step(StatementVariable(1)))
+      updatedTheoremBuilder.fantasyOption.get.steps.head.statement mustEqual StatementVariable(1)
     }
 
     "handle simple direct rule with a more complicated match" in {
@@ -24,7 +24,7 @@ class TheoremBuilderSpec extends ProverSpec {
         TheoremBuilder().addPremise(Conjunction(StatementVariable(1), StatementVariable(2))),
         "p1",
         defaultContext)
-      updatedTheoremBuilder.steps mustEqual Seq(Step(Conjunction(StatementVariable(1), StatementVariable(2))))
+      updatedTheoremBuilder.steps.head.statement mustEqual Conjunction(StatementVariable(1), StatementVariable(2))
     }
 
     "fail an assumption discharging rule when theorem builder has no fantasy" in {
@@ -37,12 +37,12 @@ class TheoremBuilderSpec extends ProverSpec {
 
     "handle assumption discharging rule with premise" in {
       val updatedTheoremBuilder = IntroduceImplication.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addFantasy(StatementVariable(1)).addStep(Step(StatementVariable(2))),
+        TheoremBuilder().addFantasy(StatementVariable(1)).addStep(StatementVariable(2)),
         "f.1",
         defaultContext)
-      updatedTheoremBuilder.steps mustEqual Seq(Step(
-        Implication(StatementVariable(1), StatementVariable(2)),
-        Some(Step.Fantasy(StatementVariable(1), Seq(Step(StatementVariable(2)))))))
+      val step = updatedTheoremBuilder.steps.head
+      step.statement mustEqual Implication(StatementVariable(1), StatementVariable(2))
+      step.fantasy must beSome
       updatedTheoremBuilder.fantasyOption must beNone
     }
 
@@ -59,7 +59,7 @@ class TheoremBuilderSpec extends ProverSpec {
         TheoremBuilder(),
         "and-sym ∧ 2 1",
         defaultContext.copy(otherTheoremLineParsers = Seq(theorem)))
-      theoremBuilder.steps mustEqual Seq(Step(Implication(Conjunction(2, 1), Conjunction(1, 2))))
+      theoremBuilder.steps.head.statement mustEqual Implication(Conjunction(2, 1), Conjunction(1, 2))
     }
 
     "handle assumption discharging rule applied to definition" in {
@@ -67,10 +67,9 @@ class TheoremBuilderSpec extends ProverSpec {
         TheoremBuilder(),
         "unapply-∨ ∨ ¬ 1 2",
         defaultContext)
-      theoremBuilder.steps mustEqual Seq(Step(
-        Implication(
-          Disjunction(Negation(1), 2),
-          Implication(Negation(Negation(1)), 2))))
+      theoremBuilder.steps.head.statement mustEqual Implication(
+        Disjunction(Negation(1), 2),
+        Implication(Negation(Negation(1)), 2))
     }
 
     "handle rule with a substitution in the conclusion" in {

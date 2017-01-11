@@ -96,7 +96,7 @@ case class FantasyRule(
       Seq(updatedDeduction.conclusionTemplate),
       lineAfterDeductionPremise,
       context)
-    theoremBuilder.addStep(Step(updatedRule.conclusionTemplate))
+    theoremBuilder.addStep(Step(updatedRule.conclusionTemplate, s"$id with ${deduction.id}"))
   }
 
   private def applyWithFantasy(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
@@ -110,7 +110,7 @@ case class FantasyRule(
         lineAfterPremises,
         context
       )
-      Step(updatedRule.conclusionTemplate, Some(Step.Fantasy(fantasy.assumption, fantasy.steps)))
+      Step(updatedRule.conclusionTemplate, id, Some(Step.Fantasy(fantasy.assumption, fantasy.steps)))
     }
   }
 

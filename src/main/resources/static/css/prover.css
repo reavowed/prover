@@ -121,3 +121,10 @@
 table {
     font-size: inherit;
 }
+
+.deductionId {
+    font-family: monospace;
+    color: gray;
+    font-size: 0.85em;
+    padding-left: 25px;
+}
