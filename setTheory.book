@@ -30,6 +30,18 @@ introduceImplication f.1
 introduceEquivalence 1 3
 qed
 
+theorem equalSetsHaveSameElements Equal Sets Have the Same Elements
+premise = 1 2
+assume ∈ 3' 1
+  eliminateEquals p1 f.a ∈ 3' 4 4
+introduceImplication f.1
+assume ∈ 3' 2
+  eliminateEqualsReverse p1 f.a ∈ 3' 4 4
+introduceImplication f.1
+introduceEquivalence 1 2
+introduceForall 3 ↔ ∈ 3 1 ∈ 3 2 3' 3
+qed
+
 theorem setsWithDifferentElementsNotEqual1 Sets with Different Elements Are Not Equal (1)
 premise ∈ 3 1
 premise ¬ ∈ 3 2
@@ -67,6 +79,23 @@ eliminateForall p2 4
 equivalenceIsTransitiveRight 1 2
 introduceForall 3 ↔ ∈ 3 1 ∈ 3 2 4 3
 setsWithSameMembersEqual 4
+qed
+
+theorem setsWithEquivalentMembershipConditionsEqual Sets with Equivalent Membership Conditions Are Equal
+premise ∀ 3 ↔ ∈ 3 1 1
+premise ∀ 3 ↔ ∈ 3 2 2
+premise ∀ 3 ↔ 1 2
+equivalenceIsTransitiveInsideForall p1 p3
+setsWithSameMembershipConditionEqual 1 p2
+qed
+
+theorem equalSetsHaveEquivalentMembershipConditions Equal Sets Have Equivalent Membership Conditions
+premise = 1 2
+premise ∀ 3 ↔ ∈ 3 1 1
+premise ∀ 3 ↔ ∈ 3 2 2
+equalSetsHaveSameElements p1 3
+equivalenceIsTransitiveInsideForallLeft p2 1
+equivalenceIsTransitiveInsideForall 2 p3
 qed
 
 theorem setIsEqualIffItHasSameMembershipCondition A Set Is Equal to Another Iff It Has the Same Membership Condition
@@ -286,18 +315,21 @@ qed
 
 term singleton term {{}} ∀ 2 ↔ ∈ 2 singleton 1 = 2 1
 
-theorem setIsElementOfSingleton A Set is an Element of Its Singleton
+theorem characteriseElementsOfSingleton Characterise Elements of a Singleton
 definition-singleton 2 1
-eliminateForall 1 1
+eliminateForall 1 2
+qed
+
+theorem setIsElementOfSingleton A Set is an Element of Its Singleton
+characteriseElementsOfSingleton 1 1
 equalityIsReflexive 1
-modusPonensEquivalenceRight 2 3
+modusPonensEquivalenceRight 1 2
 qed
 
 theorem elementOfSingletonIsSet An Element of a Singleton is the Set Itself
 premise ∈ 2 singleton 1
-definition-singleton 2 1
-eliminateForall 1 2
-modusPonensEquivalenceLeft 2 p1
+characteriseElementsOfSingleton 2 1
+modusPonensEquivalenceLeft 1 p1
 qed
 
 theorem emptySetNotEqualToItsSingleton The Empty Set Is Not Equal To Its Singleton
@@ -315,6 +347,13 @@ assume ∈ 3' singleton 2
 introduceImplication f.2
 introduceForall 1 → ∈ 3 singleton 2 ∈ 3 1 3' 3
 apply-⊆ 2
+qed
+
+theorem setsAreEqualIfTheirSingletonsAreEqual Sets Are Equal If Their Singletons Are Equal
+premise = singleton 1 singleton 2
+setIsElementOfSingleton 1
+eliminateEquals p1 1 ∈ 1 3 3
+elementOfSingletonIsSet 2
 qed
 
 theorem subsetsOfSingleton Subsets of a Singleton
@@ -352,7 +391,7 @@ combineCases 2 3
 introduceEquivalence 1 4
 qed
 
-chapter Unordered Pair
+chapter Unordered Pairs
 Establish the existence of the unordered pair {x,y}.
 
 theorem unorderedPairExistenceLemma1 Unordered Pair Existence Lemma 1
@@ -392,7 +431,7 @@ assume 2
   introduceExists f.5 ∀ 3 ↔ ∨ ∧ 1 = 3 1 ∧ 2 = 3 2 = 3 4 2 4
   apply-∃! f.6
 introduceImplication f.7
-eliminateOr 1 2 p1
+eliminateOr p1 1 2
 qed
 
 theorem unorderedPairExistenceLemma3 Unordered Pair Existence Lemma 3
@@ -422,7 +461,7 @@ assume ∃ 3 ∧ ∈ 3 powerSet singleton ∅ ∨ ∧ = 3 ∅ = 4' 1 ∧ = 3 sin
       eliminateAndRight f.f.f.a
       introduceOrRight f.f.f.1 = 4' 1
     introduceImplication f.f.f.2
-    eliminateOr f.f.2 f.f.3 f.f.1
+    eliminateOr f.f.1 f.f.2 f.f.3
   introduceImplication f.f.4
   eliminateExists f.a f.1 3'
 introduceImplication f.2
@@ -459,4 +498,165 @@ unorderedPairsExist 5 4 1 2
 setWithMembershipConditionIsUnique 1
 qed
 
-term pair term term "{{}, {}}" ∀ 3 ↔ ∈ 3 pair 1 2 ∨ = 3 1 = 3 2
+term pair term term "{{},{}}" ∀ 3 ↔ ∈ 3 pair 1 2 ∨ = 3 1 = 3 2
+
+theorem characteriseElementsOfPair Characterise Elements of Pair
+definition-pair 3 1 2
+eliminateForall 1 3
+qed
+
+theorem characteriseElementOfPair Characterise Element of Pair
+premise ∈ 3 pair 1 2
+characteriseElementsOfPair 3 1 2
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem firstElementOfPair First Element of Pair
+characteriseElementsOfPair 1 1 2
+equalityIsReflexive 1
+introduceOrLeft 2 = 1 2
+modusPonensEquivalenceRight 1 3
+qed
+
+theorem secondElementOfPair Second Element of Pair
+characteriseElementsOfPair 2 1 2
+equalityIsReflexive 2
+introduceOrRight 2 = 2 1
+modusPonensEquivalenceRight 1 3
+qed
+
+theorem pairIsSymmetric Pair is Symmetric
+definition-pair 3 1 2
+definition-pair 3 2 1
+orIsSymmetric = 3' 1 = 3' 2
+introduceForall 3 ↔ ∨ = 3 1 = 3 2 ∨ = 3 2 = 3 1 3' 3
+setsWithEquivalentMembershipConditionsEqual 1 2 4
+qed
+
+theorem repeatedPairIsSingleton A Repeated Pair Is a Singleton
+definition-pair 3 1 1
+definition-singleton 3 1
+orIsIdempotent = 3' 1
+reverseEquivalence 3
+introduceForall 4 ↔ ∨ = 3 1 = 3 1 = 3 1 3' 3
+setsWithEquivalentMembershipConditionsEqual 1 2 5
+qed
+
+theorem setIsFirstElementIfSingletonIsPair Set Is First Element If Singleton Is Pair
+premise = singleton 1 pair 2 3
+definition-singleton 4 1
+definition-pair 4 2 3
+equalSetsHaveEquivalentMembershipConditions p1 1 2
+eliminateForall 3 2
+equalityIsReflexive 2
+modusPonensEquivalenceRightOrLeft 4 5
+reverseEquality 6
+qed
+
+theorem setIsSecondElementIfSingletonIsPair Set Is Second Element If Singleton Is Pair
+premise = singleton 1 pair 2 3
+definition-singleton 4 1
+definition-pair 4 2 3
+equalSetsHaveEquivalentMembershipConditions p1 1 2
+eliminateForall 3 3
+equalityIsReflexive 3
+modusPonensEquivalenceRightOrRight 4 5
+reverseEquality 6
+qed
+
+theorem elementsAreEqualIfSingletonIsPair Elements Are Equal If Singleton Is Pair
+premise = singleton 1 pair 2 3
+setIsFirstElementIfSingletonIsPair p1
+setIsSecondElementIfSingletonIsPair p1
+equalityIsTransitiveLeft 1 2
+qed
+
+chapter Ordered Pairs
+Establish the existence of the ordered pair (x,y).
+
+term orderedPair term term "({},{})" = orderedPair 1 2 pair singleton 1 pair 1 2
+
+theorem characteriseElementsOfOrderedPair Characterise Elements of Ordered Pair
+definition-orderedPair 1 2
+definition-pair 3 singleton 1 pair 1 2
+eliminateEqualsReverse 1 2 ∀ 3 ↔ ∈ 3 4 ∨ = 3 singleton 1 = 3 pair 1 2 4
+eliminateForall 3 3
+qed
+
+theorem characteriseElementOfOrderedPair Characterise Element of Ordered Pair
+premise ∈ 3 orderedPair 1 2
+characteriseElementsOfOrderedPair 3 1 2
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem singletonFirstElementIsElementOfOrderedPair Singleton of First Element is Element of Ordered Pair
+definition-orderedPair 1 2
+firstElementOfPair singleton 1 pair 1 2
+eliminateEqualsReverse 1 2 ∈ singleton 1 2 2
+qed
+
+theorem pairIsElementOfOrderedPair Pair Is Element of Ordered Pair
+definition-orderedPair 1 2
+secondElementOfPair pair 1 2 singleton 1
+eliminateEqualsReverse 1 2 ∈ pair 1 2 3 3
+qed
+
+theorem elementsOfOrderedPairEqualIfPairIsSingleton Elements of An Ordered Pair Are Equal If The Pair Is A Singleton
+premise = orderedPair 1 2 singleton 3
+singletonFirstElementIsElementOfOrderedPair 1 2
+eliminateEquals p1 1 ∈ singleton 1 3 3
+elementOfSingletonIsSet 2
+pairIsElementOfOrderedPair 1 2
+eliminateEquals p1 4 ∈ pair 1 2 3 3
+elementOfSingletonIsSet 5
+equalityIsTransitiveRight 3 6
+elementsAreEqualIfSingletonIsPair 7
+qed
+
+theorem repeatedOrderedPairIsDoubleSingleton A Repeated Ordered Pair Is a Double Singleton
+definition-orderedPair 1 1
+repeatedPairIsSingleton 1
+eliminateEquals 2 1 = orderedPair 1 1 pair singleton 1 2 2
+repeatedPairIsSingleton singleton 1
+equalityIsTransitive 3 4
+qed
+
+theorem equalOrderedPairsHaveEqualFirstElements Equal Ordered Pairs Have Equal First Elements
+premise = orderedPair 1 2 orderedPair 3 4
+singletonFirstElementIsElementOfOrderedPair 1 2
+eliminateEquals p1 1 ∈ singleton 1 3 3
+characteriseElementOfOrderedPair 2
+introduceImplication setsAreEqualIfTheirSingletonsAreEqual = singleton 1 singleton 3
+introduceImplication setIsFirstElementIfSingletonIsPair = singleton 1 pair 3 4
+eliminateOr 3 4 5
+qed
+
+theorem equalOrderedPairsHaveEqualSecondElements Equal Ordered Pairs Have Equal Second Elements
+premise = orderedPair 1 2 orderedPair 3 4
+equalOrderedPairsHaveEqualFirstElements p1
+eliminateEqualsReverse 1 p1 = orderedPair 1 2 orderedPair 5 4 5
+pairIsElementOfOrderedPair 1 2
+eliminateEquals 2 3 ∈ pair 1 2 3 3
+characteriseElementOfOrderedPair 4
+assume = 1 2
+  eliminateEqualsReverse f.a 2 = orderedPair 1 5 orderedPair 1 4 5
+  repeatedOrderedPairIsDoubleSingleton 1
+  equalityIsTransitiveLeft f.1 f.2
+  elementsOfOrderedPairEqualIfPairIsSingleton f.3
+  equalityIsTransitiveLeft f.a f.4
+introduceImplication f.5
+assume = pair 1 2 singleton 1
+  reverseEquality f.a
+  elementsAreEqualIfSingletonIsPair f.1
+  eliminateImplication 6 f.2
+introduceImplication f.3
+assume = pair 1 2 pair 1 4
+  secondElementOfPair 2 1
+  eliminateEquals f.a f.1 ∈ 2 1 1
+  characteriseElementOfPair f.2
+  introduceImplication reverseEquality = 2 1
+  implicationIsTransitive f.4 6
+  collapseOr f.3 f.5
+introduceImplication f.6
+eliminateOr 5 7 8
+qed

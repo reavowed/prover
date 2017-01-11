@@ -184,19 +184,19 @@ apply-∨ 1
 qed
 
 theorem eliminateOr Eliminate Disjunction
+premise ∨ 1 2
 premise → 1 3
 premise → 2 3
-premise ∨ 1 2
-unapply-∨ p3
-implicationIsTransitive 1 p2
-proofByCases p1 2
+unapply-∨ p1
+implicationIsTransitive 1 p3
+proofByCases p2 2
 qed
 
 theorem combineCases Combine Cases
 premise → 1 3
 premise → 2 3
 assume ∨ 1 2
-  eliminateOr p1 p2 f.a
+  eliminateOr f.a p1 p2
 introduceImplication f.1
 qed
 
@@ -234,6 +234,13 @@ premise ¬ ∧ 1 2
 assume 1
   introduceAnd f.a p1
 introduceNegation f.1 p2
+qed
+
+theorem collapseOr Collapse Or
+premise ∨ 1 2
+premise → 1 2
+implicationIsReflexive 2
+eliminateOr p1 p2 1
 qed
 
 chapter Equivalence
@@ -358,6 +365,34 @@ premise ↔ 1 2
 premise 2
 eliminateEquivalenceConverse p1
 eliminateImplication 1 p2
+qed
+
+theorem modusPonensEquivalenceLeftOrLeft Modus Ponens with Equivalence (Left) Inside Or (Left)
+premise ↔ ∨ 1 2 3
+premise 1
+introduceOrLeft p2 2
+modusPonensEquivalenceLeft p1 1
+qed
+
+theorem modusPonensEquivalenceLeftOrRight Modus Ponens with Equivalence (Left) Inside Or (Right)
+premise ↔ ∨ 1 2 3
+premise 2
+introduceOrRight p2 1
+modusPonensEquivalenceLeft p1 1
+qed
+
+theorem modusPonensEquivalenceRightOrLeft Modus Ponens with Equivalence Inside Or (Left)
+premise ↔ 1 ∨ 2 3
+premise 2
+introduceOrLeft p2 3
+modusPonensEquivalenceRight p1 1
+qed
+
+theorem modusPonensEquivalenceRightOrRight Modus Ponens with Equivalence (Right) Inside Or (Right)
+premise ↔ 1 ∨ 2 3
+premise 3
+introduceOrRight p2 2
+modusPonensEquivalenceRight p1 1
 qed
 
 theorem trueStatementsAreEquivalent True Statements Are Equivalent
