@@ -49,6 +49,9 @@ object TermDefinition extends SingleLineChapterEntryParser[TermDefinition[_]] {
       case WordAndRemainingText("term", lineAfterTerm) =>
         val (innerComponentTypeList, remainingLine) = parseComponentTypeList(lineAfterTerm)
         (ComponentTypeList.withTerm(innerComponentTypeList), remainingLine)
+      case WordAndRemainingText("statement", lineAfterTerm) =>
+        val (innerComponentTypeList, remainingLine) = parseComponentTypeList(lineAfterTerm)
+        (ComponentTypeList.withStatement(innerComponentTypeList), remainingLine)
       case _ =>
         (ComponentTypeList.empty, line)
     }

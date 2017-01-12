@@ -160,4 +160,78 @@ object ComponentTypeList {
         inner.makeSimplifications(components.tail, distinctVariables)
     }
   }
+
+  def withStatement(inner: ComponentTypeList): ComponentTypeList.Aux[Statement :: inner.Components] = new ComponentTypeList {
+    type Components = Statement :: inner.Components
+    val length: Int = inner.length + 1
+    override def parse(line: PartialLine, context: Context): (Statement :: inner.Components, PartialLine) = {
+      val (statement, lineAfterTerm) = Statement.parse(line, context)
+      val (otherComponents, remainingLine) = inner.parse(lineAfterTerm, context)
+      (::(statement, otherComponents), remainingLine)
+    }
+
+    override def defaults(currentStatement: Int, currentTerm: Int): Statement :: inner.Components = {
+      val innerDefaults = inner.defaults(currentStatement + 1, currentTerm)
+      ::(StatementVariable(currentStatement), innerDefaults)
+    }
+
+    override def format(
+      formatString: String,
+      components: Statement :: inner.Components
+    ): String = {
+      val updatedFormatString = formatString.replaceFirst("\\{\\}", components.head.toString)
+      inner.format(updatedFormatString, components.tail)
+    }
+
+    override def getVariables(components: Components): Variables = {
+      components.head.variables ++ inner.getVariables(components.tail)
+    }
+
+    override def getFreeVariables(components: Components): Seq[TermVariable] = {
+      components.head.freeVariables ++ inner.getFreeVariables(components.tail)
+    }
+
+    override def calculateSubstitutions(
+      components: Components,
+      otherComponents: Components
+    ): Option[Substitutions] = {
+      Substitutions.mergeAttempts(Seq(
+        components.head.calculateSubstitutions(otherComponents.head),
+        inner.calculateSubstitutions(components.tail, otherComponents.tail)))
+    }
+
+    override def applySubstitutions(
+      components: Components,
+      substitutions: Substitutions
+    ): Components = {
+      components.head.applySubstitutions(substitutions) :: inner.applySubstitutions(components.tail, substitutions)
+    }
+
+    override def substituteFreeVariable(
+      components: Components,
+      termToReplaceWith: Term,
+      termToBeReplaced: TermVariable
+    ): Components = {
+      components.head.substituteFreeVariable(termToReplaceWith, termToBeReplaced) ::
+        inner.substituteFreeVariable(components.tail, termToReplaceWith, termToBeReplaced)
+    }
+
+    override def attemptSimplification(
+      components: Components,
+      otherComponents: Components
+    ): Option[DistinctVariables] = {
+      for {
+        head <- components.head.attemptSimplification(otherComponents.head)
+        tail <- inner.attemptSimplification(components.tail, otherComponents.tail)
+      } yield head ++ tail
+    }
+
+    override def makeSimplifications(
+      components: Components,
+      distinctVariables: DistinctVariables
+    ): Components = {
+      components.head.makeSimplifications(distinctVariables) ::
+        inner.makeSimplifications(components.tail, distinctVariables)
+    }
+  }
 }
