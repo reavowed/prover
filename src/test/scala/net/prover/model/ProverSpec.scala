@@ -15,13 +15,14 @@ trait ProverSpec extends Specification {
   val ElementOf = Predicate("∈", 2, None)
   val Equals = Predicate("=", 2, None)
 
-  val EmptySetDefinitionXXX = TermSpecification(
+  val EmptySetSpecification = TermSpecification(
     "∅",
     ComponentTypeList.empty,
     "∅")
   val EmptySetDefinition = TermDefinition(
-    EmptySetDefinitionXXX,
-    ForAll(1, Negation(ElementOf(1, DefinedTerm(HNil, EmptySetDefinitionXXX)))))
+    EmptySetSpecification,
+    ForAll(1, Negation(ElementOf(1, DefinedTerm(HNil, EmptySetSpecification)))))
+  val EmptySet = EmptySetSpecification(HNil)
 
   val Restate = DirectRule(
     "restate",

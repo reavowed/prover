@@ -3,7 +3,6 @@ package net.prover.model
 import shapeless.{::, HNil}
 
 class TermSpec extends ProverSpec {
-  val EmptySet: Term = ComponentTypeList.empty.termSpecification("∅", "∅").apply(HNil)
   val PowerSet: TermSpecification[Term :: HNil] = ComponentTypeList.withTerm(ComponentTypeList.empty)
     .termSpecification("powerSet", "𝒫{}")
 

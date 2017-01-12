@@ -93,7 +93,26 @@ class StatementSpec extends ProverSpec {
       forall(statements) { s =>
         val firstSubstitution = s.substituteFreeVariable(2, 1)
         firstSubstitution.substituteFreeVariable(3, 1) mustEqual firstSubstitution
+        val secondSubstitution = firstSubstitution.substituteFreeVariable(EmptySet, 2)
+        secondSubstitution.substituteFreeVariable(3, 1) mustEqual secondSubstitution
+        secondSubstitution.substituteFreeVariable(3, 2) mustEqual secondSubstitution
       }
+    }
+
+    "be simplified correctly" in {
+      val firstSubstitution = StatementVariable(1)
+        .substituteFreeVariable(2, 1)
+        .substituteFreeVariable(4, 3)
+        .substituteFreeVariable(6, 5)
+      val secondSubstitution = StatementVariable(1)
+        .substituteFreeVariable(4, 3)
+
+      val distinctVariables = firstSubstitution.attemptSimplification(secondSubstitution)
+      distinctVariables mustEqual Some(DistinctVariables(Map(
+        TermVariable(1) -> Variables(Seq(StatementVariable(1)), Nil),
+        TermVariable(5) -> Variables(Seq(StatementVariable(1)), Nil))))
+
+      firstSubstitution.makeSimplifications(distinctVariables.get) mustEqual secondSubstitution
     }
   }
 }

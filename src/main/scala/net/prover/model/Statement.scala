@@ -33,15 +33,15 @@ case class StatementVariable(i: Int) extends Statement {
       this
     else termToReplaceWith match {
       case variable: TermVariable =>
-        StatementVariableWithReplacement(this, variable, termToBeReplaced)
+        StatementVariableWithReplacement(this, Seq((variable, termToBeReplaced)))
       case _ =>
         throw new Exception("Cannot substitute a non-variable term into a statement variable")
     }
   }
 
   override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
-    case StatementVariableWithReplacement(x, _, termToBeReplaced) if x == this =>
-      Some(DistinctVariables(Map(termToBeReplaced -> Variables(Seq(this), Nil))))
+    case x: StatementVariableWithReplacement =>
+      Some(DistinctVariables(x.variablesBeingReplaced.map(_ -> Variables(Seq(this), Nil)).toMap))
     case x if x == this =>
       Some(DistinctVariables.empty)
     case _ =>
@@ -55,58 +55,87 @@ case class StatementVariable(i: Int) extends Statement {
 
 case class StatementVariableWithReplacement(
     statementVariable: StatementVariable,
-    termToReplaceWith: TermVariable,
-    termToBeReplaced: TermVariable)
+    replacements: Seq[(Term, TermVariable)])
   extends Statement {
-  override def variables: Variables = Variables(Seq(statementVariable), Seq(termToReplaceWith, termToBeReplaced))
-  override def freeVariables: Seq[TermVariable] = Seq(termToReplaceWith)
+  def replacingTerms = replacements.map(_._1)
+  def variablesBeingReplaced = replacements.map(_._2)
+  override def variables: Variables = replacements.foldLeft(Variables(Seq(statementVariable), Nil)) { case (variables, (term, termVariable)) =>
+    variables ++ term.variables :+ termVariable
+  }
+  override def freeVariables: Seq[TermVariable] = replacements.foldRight(Seq.empty[TermVariable]) { case ((term, termVariable), freeVariables) =>
+    freeVariables.filter(_ != termVariable).union(term.freeVariables)
+  }
   override def calculateSubstitutions(otherStatement: Statement): Option[Substitutions] = {
     otherStatement match {
-      case StatementVariableWithReplacement(otherStatementVariable, otherTermToReplaceWith, otherTermToBeReplaced) =>
-        Some(Substitutions(
-          Map(statementVariable -> otherStatementVariable),
-          Map(termToReplaceWith -> otherTermToReplaceWith, termToBeReplaced -> otherTermToBeReplaced)))
+      case other @ StatementVariableWithReplacement(otherStatementVariable, otherReplacements) if otherReplacements.length == replacements.length =>
+        val base = Substitutions(Map(statementVariable -> otherStatementVariable), variablesBeingReplaced.zip(other.variablesBeingReplaced).toMap)
+        val substitutionAttempts = Some(base) +: replacingTerms.zip(other.replacingTerms).map { case (x, y) =>
+            x.calculateSubstitutions(y)
+        }
+        Substitutions.mergeAttempts(substitutionAttempts)
       case _ =>
         Some(Substitutions(Map.empty, Map.empty))
     }
   }
   override def applySubstitutions(substitutions: Substitutions): Statement = {
-    statementVariable.applySubstitutions(substitutions)
-      .substituteFreeVariable(
-        termToReplaceWith.applySubstitutions(substitutions),
-        Term.asVariable(termToBeReplaced.applySubstitutions(substitutions)))
+    replacements.foldLeft(statementVariable.applySubstitutions(substitutions)) { case (statement, (a, b)) =>
+      statement.substituteFreeVariable(
+        a.applySubstitutions(substitutions),
+        Term.asVariable(b.applySubstitutions(substitutions)))
+    }
   }
 
   def substituteFreeVariable(
     newTermToReplaceWith: Term,
     newTermToBeReplaced: TermVariable
   ): Statement = {
-    if (newTermToBeReplaced == termToBeReplaced || newTermToReplaceWith == newTermToBeReplaced) {
+    if (newTermToReplaceWith == newTermToBeReplaced || variablesBeingReplaced.contains(newTermToBeReplaced)) {
       this
     } else {
-      throw new Exception("Multiple term substitutions not currently supported")
+      copy(replacements = (newTermToReplaceWith -> newTermToBeReplaced) +: replacements)
     }
   }
 
-  override def attemptSimplification(other: Statement): Option[DistinctVariables] = {
-    if (other == this)
+  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
+    case x if x == this =>
       Some(DistinctVariables.empty)
-    else if (other == statementVariable)
-      Some(DistinctVariables(Map(termToBeReplaced -> Variables(Seq(statementVariable), Nil))))
-    else
+    case `statementVariable` =>
+      Some(DistinctVariables(variablesBeingReplaced.map(_ -> Variables(Seq(statementVariable), Nil)).toMap))
+    case StatementVariableWithReplacement(`statementVariable`, otherReplacements) =>
+      otherReplacements.omittedElements(replacements).map { omittedReplacements =>
+        DistinctVariables(
+          omittedReplacements.map(_._2 -> Variables(Seq(statementVariable), Nil)).toMap)
+      }
+    case _ =>
       None
   }
 
   override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
-    if (distinctVariables.map.contains(termToBeReplaced) &&
-      distinctVariables.map(termToBeReplaced).statementVariables.contains(statementVariable)
-    )
+    val simplifiedReplacements = replacements.filter { case (_, termVariable) =>
+      !distinctVariables.map.contains(termVariable) ||
+        !distinctVariables.map(termVariable).statementVariables.contains(statementVariable)
+    }
+    if (simplifiedReplacements.isEmpty)
       statementVariable
     else
-      this
+      copy(replacements = simplifiedReplacements)
   }
 
-  override def html: String = s"$statementVariable[$termToReplaceWith/$termToBeReplaced]"
+  override def html: String = {
+    replacements.map { case (term, termVariable) =>
+      s"[$term/$termVariable]"
+    }.mkString("") + statementVariable.html
+  }
+}
+
+object StatementVariableWithReplacement {
+  def apply(
+    statementVariable: StatementVariable,
+    term: Term,
+    termVariable: TermVariable
+  ): StatementVariableWithReplacement = {
+    StatementVariableWithReplacement(statementVariable, Seq(term -> termVariable))
+  }
 }
 
 case class ConnectiveStatement(substatements: Seq[Statement], connective: Connective) extends Statement {

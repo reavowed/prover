@@ -62,6 +62,22 @@ package object model {
       case s: S =>
         s
     }
+    def omittedElements(other: Seq[T], acc: Seq[T] = Nil): Option[Seq[T]] = {
+      if (other.isEmpty)
+        Some(acc)
+      else seq match {
+        case head +: tail =>
+          val (l, r) = other.span(_ != head)
+          r match {
+            case `head` +: rTail =>
+              tail.omittedElements(rTail, acc ++ l)
+            case _ =>
+              None
+          }
+        case Nil =>
+          Some(acc ++ other)
+      }
+    }
   }
 
   implicit class SeqOptionsOps[T](x: Seq[Option[T]]) {
