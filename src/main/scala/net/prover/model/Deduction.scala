@@ -33,14 +33,14 @@ trait Deduction extends TheoremLineParser {
     override val distinctVariables = Deduction.this.distinctVariables.applySubstitutions(substitutions)
   }
 
-  def simplify(premises: Seq[Statement]): Deduction = {
+  def simplify(premises: Seq[Statement], distinctVariables: DistinctVariables): Deduction = {
     val additionalDistinctVariables = premises.zip(premiseTemplates).map {
       case (premise, premiseTemplate) =>
         premiseTemplate.attemptSimplification(premise)
     }
       .traverseOption
       .getOrElse(throw new Exception(s"Could not match premises\n$premises\n$premiseTemplates"))
-      .foldLeft(DistinctVariables.empty)(_ ++ _)
+      .foldLeft(distinctVariables)(_ ++ _)
     new Deduction {
       override val id = Deduction.this.id
       override val premiseTemplates = Deduction.this.premiseTemplates
@@ -52,10 +52,10 @@ trait Deduction extends TheoremLineParser {
     }
   }
 
-  def matchPremises(premises: Seq[Statement], line: PartialLine, context: Context): Deduction = {
+  def matchPremises(premises: Seq[Statement], line: PartialLine, context: Context, distinctVariables: DistinctVariables): Deduction = {
     val substitutions = getSubstitutions(premises, line, context)
     val substitutedDeduction = makeSubstitutions(substitutions)
-    val simplifiedDeduction = substitutedDeduction.simplify(premises)
+    val simplifiedDeduction = substitutedDeduction.simplify(premises, distinctVariables)
     simplifiedDeduction
   }
 
@@ -67,7 +67,7 @@ trait Deduction extends TheoremLineParser {
     val (premises, lineAfterPremises) = premiseTemplates.mapFold(line) { (premiseTemplate, lineSoFar) =>
       readReference(lineSoFar, theoremBuilder)
     }
-    val updatedDeduction = matchPremises(premises, lineAfterPremises, context)
+    val updatedDeduction = matchPremises(premises, lineAfterPremises, context, theoremBuilder.distinctVariables)
     theoremBuilder
       .addStep(Step(updatedDeduction.conclusionTemplate, id))
       .withArbitraryVariables(updatedDeduction.arbitraryVariables)

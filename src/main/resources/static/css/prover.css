@@ -69,6 +69,11 @@
 
 .arbitraryVariables, .distinctVariables {
     font-weight: normal;
+    margin-top: 5px;
+}
+
+.distinctVariable + .distinctVariable::before {
+    content: ", ";
 }
 
 .theoremId {
@@ -122,9 +127,20 @@ table {
     font-size: inherit;
 }
 
-.deductionId {
+.reference, .deductionId {
     font-family: monospace;
     color: gray;
     font-size: 0.85em;
+}
+
+.referenceCell {
+    text-align: right;
+}
+
+.reference {
+    margin-right: 10px;
+}
+
+.deductionId {
     padding-left: 25px;
 }

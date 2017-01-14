@@ -44,6 +44,10 @@ case class DistinctVariables(map: Map[TermVariable, Variables]) extends JsonSeri
     })
   }
 
+  def areDistinct(termVariable: TermVariable, statementVariable: StatementVariable): Boolean = {
+    map.get(termVariable).exists(_.statementVariables.contains(statementVariable))
+  }
+
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeStartArray()
     map.foreach { case (termVariable, variables) =>

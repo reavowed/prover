@@ -232,6 +232,12 @@ introduceImplication f.4
 introduceEquivalence 1 2
 qed
 
+theorem falseStatementCharacterisesTheEmptySet A False Statement Characterises The Empty Set
+premise ∀ 1 ¬ 1
+definition-∅ 1
+falseStatementsAreEquivalentInsideForall 1 p1
+qed
+
 chapter Power Sets
 Define the power set of a set - the set of all its subsets.
 
@@ -395,29 +401,11 @@ chapter Unordered Pairs
 Establish the existence of the unordered pair {x,y}.
 
 theorem unorderedPairExistenceLemma1 Unordered Pair Existence Lemma 1
-premise 1
-premise ¬ 2
-assume ∧ 1 3
-  eliminateAndRight f.a
-introduceImplication f.1
-assume ∧ 2 4
-  eliminateAndLeft f.a
-  contradictionImpliesAnything f.1 p2 3
-introduceImplication f.2
-combineCases 1 2
-assume 3
-  introduceAnd p1 f.a
-  introduceOrLeft f.1 ∧ 2 4
-introduceImplication f.2
-introduceEquivalence 3 4
-qed
-
-theorem unorderedPairExistenceLemma2 Unordered Pair Existence Lemma 2
 premise ∨ 1 2
 premise ¬ ∧ 1 2
 assume 1
   eliminateNegatedConjunctRight f.a p2
-  unorderedPairExistenceLemma1 f.a f.1 = 3' 1 = 3' 2
+  disjoinedConjunctEquivalenceLeft1 f.a f.1 = 3' 1 = 3' 2
   introduceForall f.2 ↔ ∨ ∧ 1 = 3 1 ∧ 2 = 3 2 = 3 1 3' 3
   introduceExists f.3 ∀ 3 ↔ ∨ ∧ 1 = 3 1 ∧ 2 = 3 2 = 3 4 1 4
   apply-∃! f.4
@@ -425,7 +413,7 @@ introduceImplication f.5
 assume 2
   eliminateNegatedConjunctLeft f.a p2
   orIsSymmetric ∧ 1 = 3' 1 ∧ 2 = 3' 2
-  unorderedPairExistenceLemma1 f.a f.1 = 3' 2 = 3' 1
+  disjoinedConjunctEquivalenceLeft1 f.a f.1 = 3' 2 = 3' 1
   equivalenceIsTransitive f.2 f.3
   introduceForall f.4 ↔ ∨ ∧ 1 = 3 1 ∧ 2 = 3 2 = 3 2 3' 3
   introduceExists f.5 ∀ 3 ↔ ∨ ∧ 1 = 3 1 ∧ 2 = 3 2 = 3 4 2 4
@@ -434,7 +422,7 @@ introduceImplication f.7
 eliminateOr p1 1 2
 qed
 
-theorem unorderedPairExistenceLemma3 Unordered Pair Existence Lemma 3
+theorem unorderedPairExistenceLemma2 Unordered Pair Existence Lemma 2
 assume ∈ 3' powerSet singleton ∅
   subsetsOfSingleton 3' ∅
   modusPonensEquivalenceLeft f.1 f.a
@@ -444,12 +432,12 @@ assume ∈ 3' powerSet singleton ∅
     equalityIsTransitiveLeft f.f.1 f.f.2
     emptySetNotEqualToItsSingleton
   introduceNegation f.f.3 f.f.4
-  unorderedPairExistenceLemma2 f.2 f.3 4 1 2
+  unorderedPairExistenceLemma1 f.2 f.3 4 1 2
 introduceImplication f.4
 introduceForall 1 → ∈ 3 powerSet singleton ∅ ∃! 4 ∨ ∧ = 3 ∅ = 4 1 ∧ = 3 singleton ∅ = 4 2 3' 3
 qed
 
-theorem unorderedPairExistenceLemma4 Unordered Pair Existence Lemma 4
+theorem unorderedPairExistenceLemma3 Unordered Pair Existence Lemma 3
 assume ∃ 3 ∧ ∈ 3 powerSet singleton ∅ ∨ ∧ = 3 ∅ = 4' 1 ∧ = 3 singleton ∅ = 4' 2
   assume ∧ ∈ 3' powerSet singleton ∅ ∨ ∧ = 3' ∅ = 4' 1 ∧ = 3' singleton ∅ = 4' 2
     eliminateAndRight f.f.a
@@ -487,9 +475,9 @@ introduceForall 5 ↔ ∃ 3 ∧ ∈ 3 powerSet singleton ∅ ∨ ∧ = 3 ∅ = 4
 qed
 
 theorem unorderedPairsExist Unordered Pairs Exist
-unorderedPairExistenceLemma3 3 4 1 2
+unorderedPairExistenceLemma2 3 4 1 2
 replacementInference 1 5
-unorderedPairExistenceLemma4 4 3 1 2
+unorderedPairExistenceLemma3 4 3 1 2
 equivalenceOfMembershipConditions 2 3
 qed
 
@@ -660,3 +648,108 @@ assume = pair 1 2 pair 1 4
 introduceImplication f.6
 eliminateOr 5 7 8
 qed
+
+chapter Set Comprehension
+Introduce set comprehension, {z∈y|α}.
+
+theorem setComprehensionLemma1 Set Comprehension Lemma 1
+assume 1
+  disjoinedConjunctEquivalenceLeft2 f.a f.a = 3' 1 = 3' 2
+  introduceForall f.1 ↔ ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 2 = 3 1 3' 3
+  introduceExists f.2 ∀ 3 ↔ ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 2 = 3 4 1 4
+  apply-∃! f.3
+introduceImplication f.4
+assume ¬ 1
+  disjoinedConjunctEquivalenceRight1 f.a f.a = 3' 1 = 3' 2
+  introduceForall f.1 ↔ ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 2 = 3 2 3' 3
+  introduceExists f.2 ∀ 3 ↔ ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 2 = 3 4 2 4
+  apply-∃! f.3
+introduceImplication f.4
+proofByCases 1 2
+qed
+
+theorem setComprehensionLemma2 Set Comprehension Lemma 2
+setComprehensionLemma1 sub 1' 1 1 3 1' 4
+anythingImpliesTrue 1 ∈ 1' 2
+introduceForall 2 → ∈ 1 2 ∃! 3 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 4 1' 1
+qed
+
+theorem setComprehensionLemma3 Set Comprehension Lemma 3
+premise ∧ ∈ 4 2 sub 4 1 1
+eliminateAndLeft p1
+eliminateAndRight p1
+assume ∃ 1 ∧ ∈ 1 2 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 4
+  assume ∧ ∈ 1' 2 ∨ ∧ sub 1' 1 1 = 3 1' ∧ ¬ sub 1' 1 1 = 3 4
+    eliminateAndLeft f.f.a
+    eliminateAndRight f.f.a
+    assume sub 1' 1 1
+      disjoinedConjunctEquivalenceLeft2 f.f.f.a f.f.f.a = 3 1' = 3 4
+      modusPonensEquivalenceLeft f.f.f.1 f.f.2
+      eliminateEqualsReverse f.f.f.2 f.f.1 ∈ 3 2 3
+      eliminateEqualsReverse f.f.f.2 f.f.f.a sub 3 1 1 3
+      introduceAnd f.f.f.3 f.f.f.4
+    introduceImplication f.f.f.5
+    assume ¬ sub 1' 1 1
+      disjoinedConjunctEquivalenceRight1 f.f.f.a f.f.f.a = 3 1' = 3 4
+      modusPonensEquivalenceLeft f.f.f.1 f.f.2
+      eliminateEqualsReverse f.f.f.2 1 ∈ 3 2 3
+      eliminateEqualsReverse f.f.f.2 2 sub 3 1 1 3
+      introduceAnd f.f.f.3 f.f.f.4
+    introduceImplication f.f.f.5
+    proofByCases f.f.3 f.f.4
+  introduceImplication f.f.5
+  eliminateExists f.a f.1 1'
+introduceImplication f.2
+assume ∧ ∈ 3 2 sub 3 1 1
+  eliminateAndLeft f.a
+  eliminateAndRight f.a
+  equalityIsReflexive 3
+  introduceAnd f.2 f.3
+  introduceOrLeft f.4 ∧ ¬ sub 3 1 1 = 3 4
+  introduceAnd f.1 f.5
+  introduceExists f.6 ∧ ∈ 1 2 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 4 3 1
+introduceImplication f.7
+introduceEquivalence 3 4
+qed
+
+theorem setComprehensionLemma4 Set Comprehension Lemma 4
+premise ∧ ∈ 4 2 sub 4 1 1
+setComprehensionLemma2 1 1 2 3 4
+replacementInference 1 5
+assume ∀ 3 ↔ ∈ 3 5' ∃ 1 ∧ ∈ 1 2 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 4 3 1
+  eliminateForall f.a 3'
+  setComprehensionLemma3 p1 3'
+  equivalenceIsTransitive f.1 f.2
+  introduceForall f.3 ↔ ∈ 1 5' ∧ ∈ 1 2 1 3' 1
+introduceImplication f.4
+eliminateExists 2 3 5'
+introduceExists 4 ∀ 1 ↔ ∈ 1 5 ∧ ∈ 1 2 1 5' 5
+qed
+
+theorem setComprehensionLemma5 Set Comprehension Lemma 5
+premise ∃ 1 ∧ ∈ 1 2 1
+assume ∧ ∈ 1' 2 sub 1' 1 1
+  setComprehensionLemma4 f.a 5
+introduceImplication f.1
+eliminateExists p1 1 1'
+qed
+
+theorem setComprehensionLemma6 Set Comprehension Lemma 6
+premise ¬ ∃ 1 ∧ ∈ 1 2 1
+notExistsIsForallNot p1
+falseStatementCharacterisesTheEmptySet 1 5
+introduceExists 2 ∀ 1 ↔ ∈ 1 5 ∧ ∈ 1 2 1 ∅ 5
+qed
+
+theorem setComprehensionsExist Set Comprehensions Exist
+introduceImplication setComprehensionLemma5 ∃ 3 ∧ ∈ 3 1 1 2
+introduceImplication setComprehensionLemma6 ¬ ∃ 3 ∧ ∈ 3 1 1 2
+proofByCases 1 2
+qed
+
+theorem setComprehensionIsUnique Set Comprehension Is Unique
+setComprehensionsExist 1 2 3 1
+setWithMembershipConditionIsUnique 1
+qed
+
+term comprehension term term statement "{{} ∈ {} | {}}" ∀ 1 ↔ ∈ 1 comprehension 1 2 1 ∧ ∈ 1 2 1

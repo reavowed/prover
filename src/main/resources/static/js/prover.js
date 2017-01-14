@@ -81,25 +81,26 @@ proverApp.component('theorem', {
   controller: ['$scope', function($scope) {
     $scope.proofRows = [];
     $scope._ = _;
-    function addRow(prefix, statement, deductionId, indentLevel) {
+    function addRow(prefix, statement, deductionId, reference, indentLevel) {
       $scope.proofRows.push({
         prefix: prefix,
         statement: statement,
         deductionId: deductionId,
+        reference: reference,
         indentLevel: indentLevel
       });
     }
-    function addFantasy(fantasy, indentLevel) {
-      addRow('Assume', fantasy.assumption, "assumption", indentLevel);
-      _.forEach(fantasy.steps, function(step) { addStep(step, indentLevel + 1) });
+    function addFantasy(fantasy, outerReference, indentLevel) {
+      addRow('Assume', fantasy.assumption, "assumption", outerReference + "f.a", indentLevel);
+      _.forEach(fantasy.steps, function(step, index) { addStep(step, outerReference + "f.", index, indentLevel + 1) });
 
     }
-    function addStep(step, indentLevel) {
+    function addStep(step, outerReference, index, indentLevel) {
       if (step.fantasy) {
-        addFantasy(step.fantasy, indentLevel);
+        addFantasy(step.fantasy, outerReference, indentLevel);
       }
-      addRow(step.fantasy ? 'So' : 'Then', step.statement, step.deductionId, indentLevel);
+      addRow(step.fantasy ? 'So' : 'Then', step.statement, step.deductionId, outerReference + (index + 1), indentLevel);
     }
-    _.forEach($scope.$ctrl.theorem.steps, function(step) { addStep(step, 0) });
+    _.forEach($scope.$ctrl.theorem.steps, function(step, index) { addStep(step, "", index, 0) });
   }]
 });

@@ -90,7 +90,8 @@ case class FantasyRule(
     val updatedDeduction = deduction.matchPremises(
       Seq(deductionPremise),
       lineAfterDeductionPremise,
-      context)
+      context,
+      theoremBuilder.distinctVariables)
     val updatedRule = matchAssumptionAndPremises(
       updatedDeduction.premiseTemplates.head,
       Seq(updatedDeduction.conclusionTemplate),

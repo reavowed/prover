@@ -99,7 +99,7 @@ class StatementSpec extends ProverSpec {
       }
     }
 
-    "be simplified correctly" in {
+    "eliminate extra replacements when simplifying" in {
       val firstSubstitution = StatementVariable(1)
         .substituteFreeVariable(2, 1)
         .substituteFreeVariable(4, 3)
@@ -111,6 +111,20 @@ class StatementSpec extends ProverSpec {
       distinctVariables mustEqual Some(DistinctVariables(Map(
         TermVariable(1) -> Variables(Seq(StatementVariable(1)), Nil),
         TermVariable(5) -> Variables(Seq(StatementVariable(1)), Nil))))
+
+      firstSubstitution.makeSimplifications(distinctVariables.get) mustEqual secondSubstitution
+    }
+
+    "combine replacements when simplifying" in {
+      val firstSubstitution = StatementVariable(1)
+        .substituteFreeVariable(2, 1)
+        .substituteFreeVariable(3, 2)
+      val secondSubstitution = StatementVariable(1)
+        .substituteFreeVariable(3, 1)
+
+      val distinctVariables = firstSubstitution.attemptSimplification(secondSubstitution)
+      distinctVariables mustEqual Some(DistinctVariables(Map(
+        TermVariable(2) -> Variables(Seq(StatementVariable(1)), Nil))))
 
       firstSubstitution.makeSimplifications(distinctVariables.get) mustEqual secondSubstitution
     }

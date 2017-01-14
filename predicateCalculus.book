@@ -100,6 +100,33 @@ equivalenceIsTransitiveLeft 1 2
 introduceForall 3 ↔ 2 3 2 1
 qed
 
+theorem modusTollensEquivalenceInsideForallLeft Modus Tollens With Equivalence Inside Forall (Left)
+premise ∀ 1 ↔ 1 2
+premise ∀ 1 ¬ 1
+eliminateForall p1 1' 1
+eliminateForall p2 1' 1
+modusTollensEquivalenceLeft 1 2
+introduceForall 3 ¬ 2 1' 1
+qed
+
+theorem modusTollensEquivalenceInsideForallRight Modus Tollens With Equivalence Inside Forall (Right)
+premise ∀ 1 ↔ 1 2
+premise ∀ 1 ¬ 2
+eliminateForall p1 1' 1
+eliminateForall p2 1' 1
+modusTollensEquivalenceRight 1 2
+introduceForall 3 ¬ 1 1' 1
+qed
+
+theorem falseStatementsAreEquivalentInsideForall False Statements Are Equivalent Inside Forall
+premise ∀ 1 ¬ 1
+premise ∀ 1 ¬ 2
+eliminateForall p1 1'
+eliminateForall p2 1'
+falseStatementsAreEquivalent 1 2
+introduceForall 3 ↔ 1 2 1' 1
+qed
+
 chapter Existential Quantifier
 Introduce the existential quantifier, ∃.
 

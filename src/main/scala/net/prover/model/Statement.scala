@@ -31,12 +31,8 @@ case class StatementVariable(i: Int) extends Statement {
   ): Statement = {
     if (termToReplaceWith == termToBeReplaced)
       this
-    else termToReplaceWith match {
-      case variable: TermVariable =>
-        StatementVariableWithReplacement(this, Seq((variable, termToBeReplaced)))
-      case _ =>
-        throw new Exception("Cannot substitute a non-variable term into a statement variable")
-    }
+    else
+      StatementVariableWithReplacement(this, termToReplaceWith, termToBeReplaced)
   }
 
   override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
@@ -96,25 +92,65 @@ case class StatementVariableWithReplacement(
     }
   }
 
-  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
-    case x if x == this =>
-      Some(DistinctVariables.empty)
-    case `statementVariable` =>
-      Some(DistinctVariables(variablesBeingReplaced.map(_ -> Variables(Seq(statementVariable), Nil)).toMap))
-    case StatementVariableWithReplacement(`statementVariable`, otherReplacements) =>
-      otherReplacements.omittedElements(replacements).map { omittedReplacements =>
-        DistinctVariables(
-          omittedReplacements.map(_._2 -> Variables(Seq(statementVariable), Nil)).toMap)
+  override def attemptSimplification(other: Statement): Option[DistinctVariables] = {
+    def calculateOmittedVariables(
+      replacementsToSimplify: Seq[(Term, TermVariable)],
+      replacementsToMatch: Seq[(Term, TermVariable)],
+      acc: Seq[TermVariable]
+    ): Option[Seq[TermVariable]] = {
+      replacementsToSimplify match {
+        case (a, b) +: tail =>
+          replacementsToMatch match {
+            case (`a`, `b`) +: otherTail =>
+              calculateOmittedVariables(tail, otherTail, acc)
+            case (`a`, c) +: otherTail if tail.nonEmpty && tail.head._1 == b && tail.head._2 == c =>
+              calculateOmittedVariables(tail.tail, otherTail, acc :+ b)
+            case _ =>
+              calculateOmittedVariables(tail, replacementsToMatch, acc :+ b)
+          }
+        case Nil =>
+          if (replacementsToMatch.isEmpty) Some(acc)
+          else None
       }
-    case _ =>
-      None
+    }
+
+    other match {
+      case x if x == this =>
+        Some(DistinctVariables.empty)
+      case `statementVariable` =>
+        Some(DistinctVariables(variablesBeingReplaced.map(_ -> Variables(Seq(statementVariable), Nil)).toMap))
+      case StatementVariableWithReplacement(`statementVariable`, otherReplacements) =>
+        calculateOmittedVariables(replacements, otherReplacements, Nil).map { omittedVariables =>
+          DistinctVariables(omittedVariables.map(_ -> Variables(Seq(statementVariable), Nil)).toMap)
+        }
+      case _ =>
+        None
+    }
   }
 
   override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
-    val simplifiedReplacements = replacements.filter { case (_, termVariable) =>
-      !distinctVariables.map.contains(termVariable) ||
-        !distinctVariables.map(termVariable).statementVariables.contains(statementVariable)
+    def calculateSimplifiedReplacements(
+      remainingReplacements: Seq[(Term, TermVariable)],
+      acc: Seq[(Term, TermVariable)]
+    ): Seq[(Term, TermVariable)] = {
+      remainingReplacements match {
+        case (a, b) +: tail =>
+          if (distinctVariables.areDistinct(b, statementVariable)) {
+            tail match {
+              case (`b`, c) +: tailTail =>
+                calculateSimplifiedReplacements(tailTail, acc :+ (a, c))
+              case _ =>
+                calculateSimplifiedReplacements(tail, acc)
+            }
+          } else {
+            calculateSimplifiedReplacements(tail, acc :+ (a, b))
+          }
+        case Nil =>
+          acc
+      }
     }
+
+    val simplifiedReplacements = calculateSimplifiedReplacements(replacements, Nil)
     if (simplifiedReplacements.isEmpty)
       statementVariable
     else
