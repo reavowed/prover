@@ -14,6 +14,7 @@ trait Component[T <: Component[T]] {
   def attemptSimplification(other: T): Option[DistinctVariables]
   def makeSimplifications(distinctVariables: DistinctVariables): T
   def html: String
+  def safeHtml: String = html
   override def toString: String = html
 }
 
@@ -48,8 +49,8 @@ trait ComponentTypeList{
     distinctVariables: DistinctVariables
   ): Components
 
-  def termSpecification(symbol: String, format: String): TermSpecification[Components] = {
-    TermSpecification[Components](symbol, this, format)
+  def termSpecification(symbol: String, format: String, requiresBrackets: Boolean): TermSpecification[Components] = {
+    TermSpecification[Components](symbol, this, format, requiresBrackets)
   }
 }
 
@@ -105,7 +106,7 @@ object ComponentTypeList {
       formatString: String,
       components: Term :: inner.Components
     ): String = {
-      val updatedFormatString = formatString.replaceFirst("\\{\\}", components.head.toString)
+      val updatedFormatString = formatString.replaceFirst("\\{\\}", components.head.safeHtml)
       inner.format(updatedFormatString, components.tail)
     }
 
@@ -179,7 +180,7 @@ object ComponentTypeList {
       formatString: String,
       components: Statement :: inner.Components
     ): String = {
-      val updatedFormatString = formatString.replaceFirst("\\{\\}", components.head.toString)
+      val updatedFormatString = formatString.replaceFirst("\\{\\}", components.head.safeHtml)
       inner.format(updatedFormatString, components.tail)
     }
 

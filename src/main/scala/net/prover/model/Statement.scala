@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 import scala.collection.immutable.Nil
 
 trait Statement extends JsonSerializable.Base with Component[Statement] {
-  def safeHtml: String = html
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeString(html)
   }
@@ -309,7 +308,7 @@ case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends St
   override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
     copy(terms = terms.map(_.makeSimplifications(distinctVariables)))
   }
-  def html: String = terms.map(_.html).mkString(" " + predicate.symbol + " ")
+  def html: String = terms.map(_.safeHtml).mkString(" " + predicate.symbol + " ")
   override def safeHtml: String = if (terms.length > 1) "(" + html + ")" else html
 }
 

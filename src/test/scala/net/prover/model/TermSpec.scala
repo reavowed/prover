@@ -4,11 +4,11 @@ import shapeless.{::, HNil}
 
 class TermSpec extends ProverSpec {
   val PowerSet: TermSpecification[Term :: HNil] = ComponentTypeList.withTerm(ComponentTypeList.empty)
-    .termSpecification("powerSet", "𝒫{}")
+    .termSpecification("powerSet", "𝒫{}", requiresBrackets = false)
 
   "two equally defined term constants should be equal" in {
-    val one = ComponentTypeList.empty.termSpecification("∅", "∅").apply(HNil)
-    val two = ComponentTypeList.empty.termSpecification("∅", "∅").apply(HNil)
+    val one = ComponentTypeList.empty.termSpecification("∅", "∅", requiresBrackets = false).apply(HNil)
+    val two = ComponentTypeList.empty.termSpecification("∅", "∅", requiresBrackets = false).apply(HNil)
     one mustEqual two
   }
 

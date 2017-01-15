@@ -5,7 +5,8 @@ import shapeless.HList
 case class TermSpecification[Components <: HList](
     symbol: String,
     componentTypes: ComponentTypeList.Aux[Components],
-    format: String)
+    format: String,
+    requiresBrackets: Boolean)
   extends TermParser
 {
   def apply(components: Components): Term = {
@@ -66,21 +67,27 @@ object TermDefinition extends SingleLineChapterEntryParser[TermDefinition[_]] {
       case _ =>
         (None, lineAfterComponents)
     }
-    val format = formatOption match {
+    val (format, requiresBrackets, lineAfterBrackets) = formatOption match {
       case Some(f) =>
-        f
+        val (requiresBrackets, lineAfterBrackets) = lineAfterFormat match {
+          case WordAndRemainingText("requiresBrackets", remainingLine) =>
+            (true, remainingLine)
+          case _ =>
+            (false, lineAfterFormat)
+        }
+        (f, requiresBrackets, lineAfterBrackets)
       case None if componentTypes.length == 2 =>
-        s"{} $symbol {}"
+        (s"{} $symbol {}", true, lineAfterFormat)
       case None if componentTypes.length == 1 =>
-        s"$symbol {}"
+        (s"$symbol {}", false, lineAfterFormat)
       case None if componentTypes.length == 0 =>
-        symbol
+        (symbol, false, lineAfterFormat)
       case _ =>
         throw ParseException.withMessage("Explicit format must be supplied with more than two componenets", line.fullLine)
     }
-    val termSpecification = componentTypes.termSpecification(symbol, format)
+    val termSpecification = componentTypes.termSpecification(symbol, format, requiresBrackets)
     val (definitionTemplate, _) = Statement.parse(
-      lineAfterFormat,
+      lineAfterBrackets,
       context.copy(termParsers = context.termParsers :+ termSpecification))
     TermDefinition(termSpecification, definitionTemplate)
   }

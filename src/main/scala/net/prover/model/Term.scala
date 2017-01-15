@@ -87,6 +87,13 @@ case class DefinedTerm[Components <: HList](
     termDefinition.componentTypes.format(termDefinition.format, components)
   }
 
+  override def safeHtml: String = {
+    if (termDefinition.requiresBrackets)
+      s"($html)"
+    else
+      html
+  }
+
   override def equals(obj: Any): Boolean = obj match {
     case DefinedTerm(`components`, otherTermDefinition) if otherTermDefinition.symbol == termDefinition.symbol =>
       true

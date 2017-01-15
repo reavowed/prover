@@ -18,7 +18,8 @@ trait ProverSpec extends Specification {
   val EmptySetSpecification = TermSpecification(
     "∅",
     ComponentTypeList.empty,
-    "∅")
+    "∅",
+    requiresBrackets = false)
   val EmptySetDefinition = TermDefinition(
     EmptySetSpecification,
     ForAll(1, Negation(ElementOf(1, DefinedTerm(HNil, EmptySetSpecification)))))
