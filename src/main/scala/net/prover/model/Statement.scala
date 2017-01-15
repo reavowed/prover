@@ -69,6 +69,8 @@ case class StatementVariableWithReplacement(
             x.calculateSubstitutions(y)
         }
         Substitutions.mergeAttempts(substitutionAttempts)
+      case other if other.variables.termVariables.isEmpty =>
+        Some(Substitutions(Map(statementVariable -> other), Map.empty))
       case _ =>
         Some(Substitutions(Map.empty, Map.empty))
     }
