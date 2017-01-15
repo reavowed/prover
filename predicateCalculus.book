@@ -25,6 +25,15 @@ eliminateForall p1 2 1
 eliminateImplication 1 p2
 qed
 
+theorem modusTollensInsideForall Modus Tollens Inside Forall
+premise ∀ 1 → 1 2
+premise ∀ 1 ¬ 2
+eliminateForall p1 1' 1
+eliminateForall p2 1' 1
+modusTollens1 1 2
+introduceForall 3 ¬ 1 1' 1
+qed
+
 theorem implicationThenEquivalenceInsideForall Implication then Equivalence Inside Forall
 premise ∀ 1 → 1 2
 premise ∀ 1 ↔ 2 3
