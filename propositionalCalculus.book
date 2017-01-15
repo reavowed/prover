@@ -124,6 +124,12 @@ proofByContradiction 1 2
 eliminateNegation 3
 qed
 
+theorem selfContradiction Self-Contradiction
+premise → 1 ¬ 1
+implicationIsReflexive 1
+proofByContradiction 1 p1
+qed
+
 chapter Conjunction and Disjunction
 We introduce two more connectives, ∧ (conjunction, or 'and') and ∨ (disjunction, or 'or'). These will not be defined with introduction and elimination rules, but in terms of the two fundamental connectives → and ¬. We can then prove introduction and elimination rules for them as theorems.
 

@@ -236,6 +236,15 @@ definition-∅ 1
 falseStatementsAreEquivalentInsideForall 1 p1
 qed
 
+theorem nonEmptySetHasAnElement A Non-Empty Set Has an Element
+premise ¬ = 1 ∅
+assume ¬ ∃ 2 ∈ 2 1
+  notExistsIsForallNot f.a
+  anEmptySetIsTheEmptySet f.1
+introduceNegation f.2 p1
+eliminateNegation 1
+qed
+
 chapter Power Sets
 Define the power set of a set - the set of all its subsets.
 
@@ -751,3 +760,115 @@ setWithMembershipConditionIsUnique 1
 qed
 
 term comprehension term term statement "{{} ∈ {} | {}}" ∀ 1 ↔ ∈ 1 comprehension 1 2 1 ∧ ∈ 1 2 1
+
+theorem characteriseElementsOfSetComprehension Characterise Elements of Set Comprehension
+definition-comprehension 1 1 2
+eliminateForall 1 1 1
+qed
+
+theorem characteriseElementOfSetComprehension Characterise Element of Set Comprehension
+premise ∈ 1 comprehension 1 2 1
+characteriseElementsOfSetComprehension 1 1 2
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem comprehensionOverEmptySetIsEmpty A Comprehension Over the Empty Set is Empty
+definition-comprehension 1 1 ∅
+definition-∅ 1
+introduceAndInsideNegationLeftInsideForall 2 1
+modusTollensEquivalenceInsideForallRight 1 3
+anEmptySetIsTheEmptySet 4
+qed
+
+chapter Unions
+Arbitrary and binary unions of sets.
+
+axiom axiomOfUnion Union ∀ 1 ∃ 2 ∀ 3 ↔ ∈ 3 2 ∃ 4 ∧ ∈ 3 4 ∈ 4 1
+
+theorem arbitraryUnionsExist Arbitrary Unions Exist
+axiomOfUnion 1 2 3 4
+eliminateForall 1 1 1
+qed
+
+theorem arbitraryUnionsAreUnique Arbitrary Unions Are Unique
+arbitraryUnionsExist 2 3 4 1
+setWithMembershipConditionIsUnique 1
+qed
+
+term union term ⋃{} ∀ 2 ↔ ∈ 2 union 1 ∃ 3 ∧ ∈ 2 3 ∈ 3 1
+
+theorem characteriseElementsOfArbitraryUnion Characterise Elements of Arbitrary Union
+definition-union 2 1 3
+eliminateForall 1 2 2
+qed
+
+theorem characteriseElementOfArbitraryUnion Characterise Element of Arbitrary Union
+premise ∈ 2 union 1
+characteriseElementsOfArbitraryUnion 2 1 3
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem elementOfElementIsElementOfUnion An Element of an Element of a Set Is an Element of the Union
+premise ∈ 1 2
+premise ∈ 2 3
+introduceAnd p1 p2
+introduceExists 1 ∧ ∈ 1 2 ∈ 2 3 2 2
+characteriseElementsOfArbitraryUnion 1 3 2
+modusPonensEquivalenceRight 3 2
+qed
+
+theorem unionOverEmptySetIsEmptySet Union over the Empty Set Is the Empty Set
+definition-union 1 ∅ 2
+definition-∅ 2
+introduceAndInsideNegationRightInsideForall 2 ∈ 1' 2
+forallNotIsNotExists 3
+introduceForall 4 ¬ ∃ 2 ∧ ∈ 1 2 ∈ 2 ∅ 1' 1
+modusTollensEquivalenceInsideForallRight 1 5
+anEmptySetIsTheEmptySet 6
+qed
+
+theorem unionOverSingletonIsSet Union over a Singleton Is the Set
+definition-union 1 singleton 2 3
+assume ∃ 3 ∧ ∈ 1' 3 ∈ 3 singleton 2
+  assume ∧ ∈ 1' 3' ∈ 3' singleton 2
+    eliminateAndRight f.f.a
+    elementOfSingletonIsSet f.f.1
+    eliminateAndLeft f.f.a
+    eliminateEquals f.f.2 f.f.3 ∈ 1' 2 2
+  introduceImplication f.f.4
+  eliminateExists f.a f.1 3'
+introduceImplication f.2
+assume ∈ 1' 2
+  setIsElementOfSingleton 2
+  introduceAnd f.a f.1
+  introduceExists f.2 ∧ ∈ 1' 3 ∈ 3 singleton 2 2 3
+introduceImplication f.3
+introduceEquivalence 2 3
+introduceForall 4 ↔ ∃ 3 ∧ ∈ 1 3 ∈ 3 singleton 2 ∈ 1 2 1' 1
+equivalenceIsTransitiveInsideForall 1 5
+setsWithSameMembersEqual 6
+qed
+
+theorem unionPowerSetIsSet Union over a Power Set Is the Set
+definition-union 1 powerSet 2 3
+assume ∃ 3 ∧ ∈ 1' 3 ∈ 3 powerSet 2
+  assume ∧ ∈ 1' 3' ∈ 3' powerSet 2
+    eliminateAndRight f.f.a
+    elementOfPowersetIsSubset f.f.1 3 2
+    unapply-⊆ f.f.2 4
+    eliminateForall f.f.3 1'
+    eliminateAndLeft f.f.a
+    eliminateImplication f.f.4 f.f.5
+  introduceImplication f.f.6
+  eliminateExists f.a f.1 3'
+introduceImplication f.2
+assume ∈ 1' 2
+  anySetIsAnElementOfItsPowerSet 2
+  introduceAnd f.a f.1
+  introduceExists f.2 ∧ ∈ 1' 3 ∈ 3 powerSet 2 2 3
+introduceImplication f.3
+introduceEquivalence 2 3
+introduceForall 4 ↔ ∃ 3 ∧ ∈ 1 3 ∈ 3 powerSet 2 ∈ 1 2 1' 1
+equivalenceIsTransitiveInsideForall 1 5
+setsWithSameMembersEqual 6
+qed
