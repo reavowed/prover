@@ -27,6 +27,7 @@ case class TermSpecification[Components <: HList](
 
 case class TermDefinition[Components <: HList](
     specification: TermSpecification[Components],
+    premises: Seq[Statement],
     definition: Statement)
   extends ChapterEntry(TermDefinition)
 {
@@ -35,7 +36,7 @@ case class TermDefinition[Components <: HList](
 
   val deduction: Deduction = new Deduction {
     override val id: String = TermDefinition.this.id
-    override val premiseTemplates: Seq[Statement] = Nil
+    override val premiseTemplates: Seq[Statement] = premises
     override val conclusionTemplate: Statement = definition
     override val arbitraryVariables: Seq[TermVariable] = Nil
     override val distinctVariables: DistinctVariables = DistinctVariables.empty
@@ -58,38 +59,33 @@ object TermDefinition extends SingleLineChapterEntryParser[TermDefinition[_]] {
     }
   }
 
+  private def parseRawFormat(line: PartialLine): (String, PartialLine) = {
+    line.toEndOfParens
+  }
+
+  private def readFormat(rawFormat: String, symbol: String, numberOfComponents: Int)(implicit line: BookLine): (String, Boolean) = rawFormat match {
+    case f if f.nonEmpty =>
+      (f, false)
+    case "" if numberOfComponents == 2 =>
+      (s"{} $symbol {}", true)
+    case "" if numberOfComponents == 1 =>
+      (s"$symbol {}", false)
+    case "" if numberOfComponents == 0 =>
+      (symbol, false)
+    case "" =>
+      throw ParseException.withMessage("Explicit format must be supplied with more than two components", line)
+  }
+
   override def parse(line: PartialLine, context: Context): TermDefinition[_] = {
     val (symbol, lineAfterSymbol) = line.splitFirstWord
-    val (componentTypes, lineAfterComponents) = parseComponentTypeList(lineAfterSymbol)
-    val (formatOption, lineAfterFormat) = lineAfterComponents match {
-      case WordAndRemainingText(f, remainingLine) if f.contains('{') =>
-        (Some(f), remainingLine)
-      case _ =>
-        (None, lineAfterComponents)
-    }
-    val (format, requiresBrackets, lineAfterBrackets) = formatOption match {
-      case Some(f) =>
-        val (requiresBrackets, lineAfterBrackets) = lineAfterFormat match {
-          case WordAndRemainingText("requiresBrackets", remainingLine) =>
-            (true, remainingLine)
-          case _ =>
-            (false, lineAfterFormat)
-        }
-        (f, requiresBrackets, lineAfterBrackets)
-      case None if componentTypes.length == 2 =>
-        (s"{} $symbol {}", true, lineAfterFormat)
-      case None if componentTypes.length == 1 =>
-        (s"$symbol {}", false, lineAfterFormat)
-      case None if componentTypes.length == 0 =>
-        (symbol, false, lineAfterFormat)
-      case _ =>
-        throw ParseException.withMessage("Explicit format must be supplied with more than two componenets", line.fullLine)
-    }
+    val (componentTypes, lineAfterComponents) = Parser.inParens(lineAfterSymbol, parseComponentTypeList)
+    val (rawFormat, lineAfterFormat) = Parser.inParens(lineAfterComponents, parseRawFormat)
+    val (format, requiresBrackets) = readFormat(rawFormat, symbol, componentTypes.length)(line.fullLine)
     val termSpecification = componentTypes.termSpecification(symbol, format, requiresBrackets)
-    val (definitionTemplate, _) = Statement.parse(
-      lineAfterBrackets,
-      context.copy(termParsers = context.termParsers :+ termSpecification))
-    TermDefinition(termSpecification, definitionTemplate)
+    val (premises, lineAfterPremises) = Parser.listInParens(lineAfterFormat, Statement.parse(_, context))
+    val updatedContext = context.copy(termParsers = context.termParsers :+ termSpecification)
+    val (definitionTemplate, _) = Parser.inParens(lineAfterPremises, Statement.parse(_, updatedContext))
+    TermDefinition(termSpecification, premises, definitionTemplate)
   }
   override def addToContext(termDefinition: TermDefinition[_], context: Context): Context = {
     context.copy(

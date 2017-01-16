@@ -8,95 +8,74 @@
         </div>
         <div ng-switch-when="connective">
             <div class="result">
-                Connective: {{entry.defaultStatement}}
-                <span ng-if="entry.definingStatement">
-                    <span class="normal">is defined to mean</span>
-                    {{ entry.definingStatement }}
-                </span>
+                <h5>Connective: {{entry.defaultStatement}}</h5>
+                <div ng-if="entry.definingStatement">
+                    {{entry.defaultStatement}} is defined to mean {{entry.definingStatement}}
+                </div>
             </div>
         </div>
         <div ng-switch-when="quantifier">
             <div class="result">
-                <div>
-                    Quantifier: {{entry.defaultStatement}}
-                    <span ng-if="entry.definingStatement">
-                        <span class="normal">is defined to mean</span>
-                        {{ entry.definingStatement }}
-                    </span>
-                </div>
-                <div class="distinctVariables" ng-if="entry.distinctVariables.length">
-                    Distinct variables:
-                    <span ng-repeat="requirement in entry.distinctVariables">
-                        {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
-                    </span>
+                <h5>Quantifier: {{entry.defaultStatement}}</h5>
+                <div ng-if="entry.definingStatement">
+                    {{entry.defaultStatement}} is defined to mean {{entry.definingStatement}}
                 </div>
             </div>
         </div>
         <div ng-switch-when="predicate">
             <div class="result">
-                Predicate: {{entry.defaultStatement}}
-                <span ng-if="entry.definingStatement">
-                    <span class="normal">is defined to mean</span>
-                    {{ entry.definingStatement }}
-                </span>
+                <h5>Predicate: {{entry.defaultStatement}}</h5>
+                <div ng-if="entry.definingStatement">
+                    {{entry.defaultStatement}} is defined to mean {{entry.definingStatement}}
+                </div>
             </div>
         </div>
         <div ng-switch-when="term">
             <div class="result">
-                Term Definition: {{entry.defaultTerm}}
-                <span class="normal">is defined by</span>
-                {{ entry.definition }}
+                <h5>Term Definition: {{entry.defaultTerm}}</h5>
+                <div ng-if="entry.premises.length">
+                    Suppose
+                    <span ng-if="entry.premises.length > 1">
+                        {{entry.premises.slice(0, entry.premises.length - 1).join(", ")}}
+                        and
+                    </span>
+                    {{entry.premises[entry.premises.length - 1]}}.
+                </div>
+                <div>
+                    <span ng-if="entry.premises.length">Then</span>
+                    {{entry.defaultTerm}} is defined by {{ entry.definition }}
+                </div>
             </div>
         </div>
         <div ng-switch-when="rule">
-            <div class="result ruleWrapper">
-                <table>
-                    <tr>
-                        <td>Rule:</td>
-                        <td>
-                            <div class="ruleStatement">
-                                <span class="rulePremises">
-                                    Given
-                                    {{entry.assumptionTemplate ? entry.assumptionTemplate + ' ⊢' : ''}}
-                                    {{entry.premiseTemplates.join(", ")}}
-                                </span>
-                                <span class="ruleDivide"></span>
-                                <span class="ruleConclusion">
-                                    Deduce
-                                    {{entry.conclusionTemplate}}
-                                </span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr ng-if="entry.arbitraryVariables.length">
-                        <td></td>
-                        <td class="arbitraryVariables">
-                            Arbitrary variables: {{entry.arbitraryVariables.join(", ")}}
-                        </td>
-                    </tr>
-                    <tr ng-if="entry.distinctVariables.length">
-                        <td></td>
-                        <td class="distinctVariables">
-                            Distinct variables:
-                            <span ng-repeat="requirement in entry.distinctVariables">
-                                {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
-                            </span>
-                        </td>
-                    </tr>
+            <div class="result">
+                <h5>Rule: {{entry.id}}</h5>
+                <div class="resultBlock">
+                    {{entry.assumptionTemplate ? entry.assumptionTemplate + ' ⊢' : ''}}
+                    {{entry.premiseTemplates.join(" & ")}}
+                    <span class="ruleSeparator">⇒</span>
+                    {{entry.conclusionTemplate}}
+                </div>
+                <div ng-if="entry.arbitraryVariables.length" class="arbitraryVariables">
+                    Arbitrary variables: {{entry.arbitraryVariables.join(", ")}}
+                </div>
+                <div ng-if="entry.distinctVariables.length" class="distinctVariables">
+                    Distinct variables:
+                    <span ng-repeat="requirement in entry.distinctVariables">
+                        {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
+                    </span>
+                </div>
                 </table>
             </div>
         </div>
         <div ng-switch-when="axiom">
             <div class="result">
-                Axiom: {{entry.title}}
-                <br>
-                {{entry.conclusionTemplate}}
+                <h5>Axiom: {{entry.title}}</h5>
+                <div>{{entry.conclusionTemplate}}</div>
             </div>
         </div>
         <div ng-switch-when="theorem">
-            <div class="result">
-                <theorem theorem="entry"></theorem>
-            </div>
+            <theorem theorem="entry"></theorem>
         </div>
     </div>
 </div>

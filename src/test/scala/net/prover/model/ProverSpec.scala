@@ -22,6 +22,7 @@ trait ProverSpec extends Specification {
     requiresBrackets = false)
   val EmptySetDefinition = TermDefinition(
     EmptySetSpecification,
+    Nil,
     ForAll(1, Negation(ElementOf(1, DefinedTerm(HNil, EmptySetSpecification)))))
   val EmptySet = EmptySetSpecification(HNil)
 

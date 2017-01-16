@@ -203,7 +203,7 @@ introduceImplication f.6
 eliminateExists 1 2 3
 qed
 
-term ∅ ∀ 1 ¬ ∈ 1 ∅
+term ∅ () () () (∀ 1 ¬ ∈ 1 ∅)
 
 theorem anEmptySetIsTheEmptySet An Empty Set Is The Empty Set
 premise ∀ 2 ¬ ∈ 2 1
@@ -250,7 +250,7 @@ Define the power set of a set - the set of all its subsets.
 
 axiom axiomOfPowerset "Power Set" ∀ 1 ∃ 2 ∀ 3 ↔ ∈ 3 2 ⊆ 3 1
 
-term powerSet term 𝒫{} ∀ 2 ↔ ∈ 2 powerSet 1 ⊆ 2 1
+term powerSet (term) (𝒫{}) () (∀ 2 ↔ ∈ 2 powerSet 1 ⊆ 2 1)
 
 theorem elementOfPowersetIsSubset An Element of a Power Set is a Subset
 premise ∈ 2 powerSet 1
@@ -326,7 +326,7 @@ singletonsExist 2 3 1
 setWithMembershipConditionIsUnique 1
 qed
 
-term singleton term {{}} ∀ 2 ↔ ∈ 2 singleton 1 = 2 1
+term singleton (term) ({{}}) () (∀ 2 ↔ ∈ 2 singleton 1 = 2 1)
 
 theorem characteriseElementsOfSingleton Characterise Elements of a Singleton
 definition-singleton 2 1
@@ -493,7 +493,7 @@ unorderedPairsExist 5 4 1 2
 setWithMembershipConditionIsUnique 1
 qed
 
-term pair term term "{{},{}}" ∀ 3 ↔ ∈ 3 pair 1 2 ∨ = 3 1 = 3 2
+term pair (term term) ({{},{}}) () (∀ 3 ↔ ∈ 3 pair 1 2 ∨ = 3 1 = 3 2)
 
 theorem characteriseElementsOfPair Characterise Elements of Pair
 definition-pair 3 1 2
@@ -569,7 +569,7 @@ qed
 chapter Ordered Pairs
 Establish the existence of the ordered pair (x,y).
 
-term orderedPair term term "({},{})" = orderedPair 1 2 pair singleton 1 pair 1 2
+term orderedPair (term term) (({},{})) () (= orderedPair 1 2 pair singleton 1 pair 1 2)
 
 theorem characteriseElementsOfOrderedPair Characterise Elements of Ordered Pair
 definition-orderedPair 1 2
@@ -742,7 +742,7 @@ setComprehensionsExist sub 3 1 1 4 3 2
 setWithMembershipConditionIsUnique 1
 qed
 
-term comprehension term term statement "{{} ∈ {} | {}}" ∀ 3 ↔ ∈ 3 comprehension 1 2 1 ∧ ∈ 3 2 sub 3 1 1
+term comprehension (term term statement) ({{} ∈ {} | {}}) () (∀ 3 ↔ ∈ 3 comprehension 1 2 1 ∧ ∈ 3 2 sub 3 1 1)
 
 theorem characteriseElementsOfSetComprehension Characterise Elements of Set Comprehension
 definition-comprehension 1 3 1 2
@@ -778,7 +778,7 @@ arbitraryUnionsExist 2 3 4 1
 setWithMembershipConditionIsUnique 1
 qed
 
-term union term ⋃{} ∀ 2 ↔ ∈ 2 union 1 ∃ 3 ∧ ∈ 2 3 ∈ 3 1
+term union (term) (⋃{}) () (∀ 2 ↔ ∈ 2 union 1 ∃ 3 ∧ ∈ 2 3 ∈ 3 1)
 
 theorem characteriseElementsOfArbitraryUnion Characterise Elements of Arbitrary Union
 definition-union 2 1 3
@@ -889,7 +889,7 @@ introduceForall 6 ↔ ∃ 4 ∧ ∈ 3 4 ∈ 4 pair 1 2 ∨ ∈ 3 1 ∈ 3 2 3' 3
 equivalenceIsTransitiveInsideForall 1 7
 qed
 
-term ∪ term term = ∪ 1 2 union pair 1 2
+term ∪ (term term) () () (= ∪ 1 2 union pair 1 2)
 
 theorem binaryUnionMembershipCondition Binary Union Membership Condition
 definition-∪ 1 2
@@ -911,3 +911,31 @@ binaryUnionMembershipCondition 3 2 1
 equivalenceIsTransitiveInsideForallRight 4 5
 setsWithSameMembersEqual 6
 qed
+
+chapter Intersections
+Arbitrary and binary intersections.
+
+theorem arbitraryIntersectionsExist Arbitrary Intersections Exist
+premise ¬ = 1 ∅
+nonEmptySetHasAnElement p1 3
+assume ∈ 3' 1
+  definition-comprehension ∀ 3 → ∈ 3 1 ∈ 4 3 2 4 3'
+  assume ∀ 3 → ∈ 3 1 ∈ 2' 3
+    eliminateForall f.f.a 3'
+    eliminateImplication f.f.1 f.a
+  introduceImplication f.f.2
+  redundantAnd f.2
+  introduceForall f.3 ↔ ∧ ∈ 2 3' ∀ 3 → ∈ 3 1 ∈ 2 3 ∀ 3 → ∈ 3 1 ∈ 2 3 2' 2
+  equivalenceIsTransitiveInsideForall f.1 f.4
+  introduceExists f.5 ∀ 2 ↔ ∈ 2 4 ∀ 3 → ∈ 3 1 ∈ 2 3 comprehension 4 3' ∀ 3 → ∈ 3 1 ∈ 4 3 4
+introduceImplication f.6
+eliminateExists 1 2 3'
+qed
+
+theorem arbitraryIntersectionsAreUnique Arbitrary Intersections Are Unique
+premise ¬ = 1 ∅
+arbitraryIntersectionsExist p1 4 2 3
+setWithMembershipConditionIsUnique 1
+qed
+
+term intersection (term) (⋂{}) (¬ = 1 ∅) (∀ 2 ↔ ∈ 2 intersection 1 ∀ 3 → ∈ 3 1 ∈ 2 3)

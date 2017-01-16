@@ -1,48 +1,52 @@
 <div ng-if="$ctrl.theorem">
-    <span class="theoremId">{{$ctrl.theorem.id}}</span>
-    <div class="theoremTitle"
-         data-toggle="collapse"
-         data-target="#{{$ctrl.theorem.id}}-proof, #{{$ctrl.theorem.id}}-summary">
-        Theorem: {{$ctrl.theorem.title}}
-    </div>
-    <div id="{{$ctrl.theorem.id}}-summary" class="theoremSummary collapse in">
-        <div ng-if="$ctrl.theorem.premiseTemplates.length">
-            Suppose
-            <span ng-if="$ctrl.theorem.premiseTemplates.length > 1">
-                {{$ctrl.theorem.premiseTemplates.slice(0, $ctrl.theorem.premiseTemplates.length - 1).join(", ")}}
-                and
-            </span>
-            {{$ctrl.theorem.premiseTemplates[$ctrl.theorem.premiseTemplates.length - 1]}}.
-            <arbitrary-variables variables="$ctrl.theorem.arbitraryVariables"></arbitrary-variables>
+    <div class="result">
+        <span class="theoremId">{{$ctrl.theorem.id}}</span>
+        <h5 class="theoremTitle"
+            data-toggle="collapse"
+            data-target="#{{$ctrl.theorem.id}}-proof, #{{$ctrl.theorem.id}}-summary">
+            Theorem: {{$ctrl.theorem.title}}
+        </h5>
+        <div id="{{$ctrl.theorem.id}}-summary" class="theoremSummary collapse in">
+            <div class="resultBlock">
+                <div ng-if="$ctrl.theorem.premiseTemplates.length">
+                    Suppose
+                    <span ng-if="$ctrl.theorem.premiseTemplates.length > 1">
+                        {{$ctrl.theorem.premiseTemplates.slice(0, $ctrl.theorem.premiseTemplates.length - 1).join(", ")}}
+                        and
+                    </span>
+                    {{$ctrl.theorem.premiseTemplates[$ctrl.theorem.premiseTemplates.length - 1]}}.
+                    <arbitrary-variables variables="$ctrl.theorem.arbitraryVariables"></arbitrary-variables>
+                </div>
+                <div>
+                    <span ng-if="$ctrl.theorem.premiseTemplates.length">Then</span>
+                    {{$ctrl.theorem.conclusionTemplate}}.
+                </div>
+            </div>
+            <div class="arbitraryVariables" ng-if="$ctrl.theorem.arbitraryVariables.length">
+                Arbitrary variables: {{$ctrl.theorem.arbitraryVariables.join(", ")}}
+            </div>
+            <div class="distinctVariables" ng-if="$ctrl.theorem.distinctVariables.length">
+                Distinct variables:
+                <span ng-repeat="requirement in $ctrl.theorem.distinctVariables"
+                      class="distinctVariable">({{requirement.termVariable}} in {{requirement.variables.join(", ")}})</span>
+            </div>
         </div>
-        <div>
-            <span ng-if="$ctrl.theorem.premiseTemplates.length">Then</span>
-            {{$ctrl.theorem.conclusionTemplate}}.
+        <div id="{{$ctrl.theorem.id}}-proof" class="theoremProof collapse">
+            <div ng-if="$ctrl.theorem.premiseTemplates.length">
+                <h5>Premises</h5>
+                <div ng-repeat="premiseTemplate in $ctrl.theorem.premiseTemplates" class="premise">{{premiseTemplate}}</div>
+                <h5>Proof</h5>
+            </div>
+            <table class="proofRows">
+                <tr ng-repeat="row in proofRows" class="proofRow">
+                    <td class="referenceCell"><span class="reference">{{row.reference}}</span></td>
+                    <td>
+                        <span ng-repeat="i in _.range(row.indentLevel)" class="proofIndent"></span>
+                        <span>{{row.prefix}} {{row.statement}}.</span>
+                    </td>
+                    <td><span class="deductionId">{{row.deductionId}}</span></td>
+                </tr>
+            </table>
         </div>
-        <div class="arbitraryVariables" ng-if="$ctrl.theorem.arbitraryVariables.length">
-            Arbitrary variables: {{$ctrl.theorem.arbitraryVariables.join(", ")}}
-        </div>
-        <div class="distinctVariables" ng-if="$ctrl.theorem.distinctVariables.length">
-            Distinct variables:
-            <span ng-repeat="requirement in $ctrl.theorem.distinctVariables"
-                  class="distinctVariable">({{requirement.termVariable}} in {{requirement.variables.join(", ")}})</span>
-        </div>
-    </div>
-    <div id="{{$ctrl.theorem.id}}-proof" class="theoremProof collapse">
-        <div ng-if="$ctrl.theorem.premiseTemplates.length">
-            <label>Premises</label>
-            <div ng-repeat="premiseTemplate in $ctrl.theorem.premiseTemplates" class="premise">{{premiseTemplate}}</div>
-            <label>Proof</label>
-        </div>
-        <table class="proofRows">
-            <tr ng-repeat="row in proofRows" class="proofRow">
-                <td class="referenceCell"><span class="reference">{{row.reference}}</span></td>
-                <td>
-                    <span ng-repeat="i in _.range(row.indentLevel)" class="proofIndent"></span>
-                    <span>{{row.prefix}} {{row.statement}}.</span>
-                </td>
-                <td><span class="deductionId">{{row.deductionId}}</span></td>
-            </tr>
-        </table>
     </div>
 </div>

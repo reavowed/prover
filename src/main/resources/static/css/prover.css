@@ -26,50 +26,31 @@
 .result {
     margin: 10px;
     width: calc(100% - 20px);
-    font-weight: bold;
     padding: 5px 10px ;
     border: 1px solid rgba(0,0,0,0.5);
     border-radius: 5px;
 }
 
-.definition:after {
-    clear: both;
-}
-
-.normal {
-    font-weight: normal;
-}
-
-.rule table {
-    font-weight: inherit;
-    font-size: inherit;
-}
-
-.rule td {
-    vertical-align: top;
-    padding: 2px 5px 2px 0;
-}
-
-.ruleStatement {
-    display: inline-block;
-}
-
-.rulePremises {
-    padding-bottom: 2px;
-}
-
-.ruleDivide {
-    display: block;
-    border-top: 1px solid black;
-}
-
-.ruleConclusion {
-    padding-top: 2px;
-}
-
-.arbitraryVariables, .distinctVariables {
-    font-weight: normal;
+.result h5 {
+    font-weight: bold;
     margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.result > h5:first-of-type {
+    margin-top: 2px;
+}
+
+.result h5:not(:last-child) {
+    margin-bottom: 3px;
+}
+
+.resultBlock + div {
+    margin-top: 5px;
+}
+
+.ruleSeparator {
+    margin: 0 3px;
 }
 
 .distinctVariable + .distinctVariable::before {
@@ -77,7 +58,6 @@
 }
 
 .theoremId {
-    font-weight: normal;
     font-size: small;
     font-family: monospace;
     float: right;
@@ -90,7 +70,6 @@
 }
 
 .theoremTitle {
-    margin-bottom: 5px;
     cursor: pointer;
 }
 
@@ -98,12 +77,12 @@
     text-decoration: underline;
 }
 
-.theoremSummary, .theoremProof {
-    font-weight: normal;
+.theoremSummary {
+    margin-left: 3px;
 }
 
-.theoremSummary {
-    margin-left: 5px;
+.proofRows {
+    margin-top: 5px;
 }
 
 .theoremProof > step:last-of-type > .step > .stepConclusion span:after {

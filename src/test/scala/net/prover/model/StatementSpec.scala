@@ -23,6 +23,21 @@ class StatementSpec extends ProverSpec {
     "parse a replacement statement" in {
       Statement.parse("sub 2 1 3", defaultContext)._1 mustEqual StatementVariableWithReplacement(3, 2, 1)
     }
+
+    "parse an empty list" in {
+      Parser.listInParens("()", Statement.parse(_, defaultContext))._1 mustEqual Nil
+    }
+
+    "parse a list with a single statement" in {
+      Parser.listInParens("(1)", Statement.parse(_, defaultContext))._1 mustEqual Seq(StatementVariable(1))
+    }
+
+    "parse a list with multiple statements" in {
+      Parser.listInParens("(1, 2, 3)", Statement.parse(_, defaultContext))._1 mustEqual Seq(
+        StatementVariable(1),
+        StatementVariable(2),
+        StatementVariable(3))
+    }
   }
 
   "statement match" should {
