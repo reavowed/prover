@@ -173,6 +173,13 @@ introduceNegation f.2 1
 eliminateNegation 2
 qed
 
+theorem introduceExistsInAntecedent Introduce Exists in Antecedent
+premise → sub 2 1 1 2
+assume ∃ 1 1
+  eliminateExists f.a p1 2
+introduceImplication f.1
+qed
+
 theorem notExistsIsForallNot Negated Exists Is Forall Negated
 premise ¬ ∃ 1 1
 assume ¬ ∀ 1 ¬ 1
@@ -278,4 +285,11 @@ equivalenceIsReflexive = 3 2
 introduceForall 1 ↔ = 1 2 = 1 2 3 1
 introduceExists 2 ∀ 1 ↔ = 1 2 = 1 3 2 3
 apply-∃! 3
+qed
+
+theorem introduceUniqueness Introduce Uniqueness
+premise sub 1' 1 ↔ 1 = 1' 2
+introduceForall p1 ↔ 1 = 1 2 1' 1
+introduceExists 1 ∀ 1 ↔ 1 = 1 3 2 3
+apply-∃! 2
 qed

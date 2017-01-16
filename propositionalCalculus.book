@@ -625,3 +625,39 @@ disjoinedConjunctEquivalenceLeft1 p2 p1 4 2
 orIsSymmetric ∧ 3 4 ∧ 1 2
 equivalenceIsTransitiveLeft 2 1
 qed
+
+theorem pickDisjoinedConjunctLeft Pick Disjoined Conjunct (Left)
+premise ∨ ∧ 1 2 ∧ ¬ 3 4
+premise 1
+premise 3
+disjoinedConjunctEquivalenceLeft2 p2 p3 2 4
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem pickDisjoinedConjunctRight Pick Disjoined Conjunct (Right)
+premise ∨ ∧ 1 2 ∧ 3 4
+premise ¬ 1
+premise 3
+disjoinedConjunctEquivalenceRight1 p2 p3 2 4
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem redundantAnd Redundant And
+premise → 1 2
+introduceImplication eliminateAndRight ∧ 2 1
+assume 1
+  eliminateImplication p1 f.a
+  introduceAnd f.1 f.a
+introduceImplication f.2
+introduceEquivalence 1 2
+qed
+
+theorem rearrangeAndWithOr Rearrange And with Or
+premise ∧ 1 2
+premise 3
+eliminateAndLeft p1
+eliminateAndRight p1
+introduceAnd 2 p2
+introduceOrLeft 3 4
+introduceAnd 1 4
+qed
