@@ -414,6 +414,13 @@ eliminateEquivalenceForward p2
 implicationIsTransitive p1 1
 qed
 
+theorem equivalenceThenImplication Equivalence then Implication
+premise ↔ 1 2
+premise → 2 3
+eliminateEquivalenceForward p1
+implicationIsTransitive 1 p2
+qed
+
 chapter Propositional Logic Identities
 Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
 
