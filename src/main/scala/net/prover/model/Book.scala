@@ -153,7 +153,7 @@ object Book {
   }
 
   def fromDirectory(pathName: String): Seq[Book] = {
-    val bookFiles = Option(new File(".").listFiles()).get.filter(_.getPath.endsWith(".book"))
+    val bookFiles = Option(new File(pathName).listFiles()).get.filter(_.getPath.endsWith(".book"))
     val preparsedBooks = preparseBooks(bookFiles)
     parseBooks(preparsedBooks)
   }

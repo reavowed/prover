@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Rest
 @RequestMapping(Array("/books"))
 class BookController {
 
-  def books = Book.fromDirectory(".")
+  def books = Book.fromDirectory("./books")
 
   @GetMapping(Array(""))
   def get = {
