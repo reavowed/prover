@@ -20,17 +20,11 @@ assume ∀ 2 ¬ ∈ 2 3
     emptySetsAreEqual f.f.a f.a
   introduceImplication f.f.1
   assume = 4 3
-    substituteEqualsIntoContainer f.f.a 5 4
-    negateEquivalence f.f.1
-    eliminateForall f.a 5 3
-    modusPonensEquivalenceRight f.f.2 f.f.3
-    introduceForall f.f.4 ¬ ∈ 2 4 5 2
-  introduceImplication f.f.5
+    eliminateEqualsReverse f.f.a f.a ∀ 2 ¬ ∈ 2 1 1
+  introduceImplication f.f.1
   introduceEquivalence f.1 f.2
-  introduceForall f.3 ↔ ∀ 2 ¬ ∈ 2 1 = 1 3 4 1
-  introduceExists f.4 ∀ 1 ↔ ∀ 2 ¬ ∈ 2 1 = 1 3 3 3
-  apply-∃! f.5
-introduceImplication f.6
+  introduceUniqueness f.3 ∀ 2 ¬ ∈ 2 1 1
+introduceImplication f.4
 eliminateExists 1 2 3
 qed
 
