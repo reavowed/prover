@@ -49,7 +49,7 @@ characteriseElementsOfSingleton 2 1
 modusPonensEquivalenceLeft 1 p1
 qed
 
-theorem singletonIsNonEmpty A Singleton Is Non-Empty
+theorem singletonIsNotEmpty A Singleton Is Not Empty
 setIsElementOfSingleton 1
 introduceExists 1 ∈ 2 singleton 1 1 2
 setWithSomeElementIsNonEmpty 2

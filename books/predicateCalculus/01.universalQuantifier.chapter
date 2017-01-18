@@ -155,3 +155,10 @@ eliminateForall p1 1'
 introduceAndInsideNegationRight 1 sub 1' 1 2
 introduceForall 2 ¬ ∧ 2 1 1' 1
 qed
+
+theorem eliminateForallAndImplication Eliminate Forall And Implication
+premise ∀ 1 → 1 2
+premise sub 2 1 1
+eliminateForall p1 2
+eliminateImplication 1 p2
+qed
