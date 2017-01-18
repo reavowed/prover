@@ -108,5 +108,5 @@ definition-comprehension 1 2 1 ∅
 definition-∅ 2
 introduceAndInsideNegationLeftInsideForall 2 sub 2 1 1
 modusTollensEquivalenceInsideForallRight 1 3
-anEmptySetIsTheEmptySet 4
+setWithNoElementsIsTheEmptySet 4
 qed

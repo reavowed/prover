@@ -22,31 +22,29 @@ qed
 
 term ∅ () () () (∀ 1 ¬ ∈ 1 ∅)
 
-theorem anEmptySetIsTheEmptySet An Empty Set Is The Empty Set
+theorem setWithNoElementsIsTheEmptySet A Set with No Elements Is the Empty Set
 premise ∀ 2 ¬ ∈ 2 1
 definition-∅ 2
 emptySetsAreEqual p1 1
 qed
 
-theorem setIsNotInEmptySet A Set Is Not in the Empty Set
+theorem noSetIsElementOfEmptySet No Set Is an Element of the Empty Set
 definition-∅ 1
 eliminateForall 1 1
 qed
 
-theorem theEmptySetIsASubsetOfAnySet The Empty Set Is a Subset of Any Set
-definition-∅ 1
-eliminateForall 1 2 1
-falseImpliesAnything1 2 ∈ 2 1
-introduceForall 3 → ∈ 3 ∅ ∈ 3 1 2 3
-apply-⊆ 4
+theorem emptySetIsSubsetOfAnySet The Empty Set Is a Subset of Any Set
+definition-∅ 2
+falseStatementImpliesAnythingInsideForall 1 ∈ 2 1
+apply-⊆ 2
 qed
 
-theorem theOnlySubsetOfTheEmptySetIsTheEmptySet The Only Subset of the Empty Set is the Empty Set
+theorem onlySubsetOfEmptySetIsEmptySet The Only Subset of the Empty Set is the Empty Set
 assume ⊆ 1 ∅
   unapply-⊆ f.a 2
   definition-∅ 2
   modusTollensInsideForall f.1 f.2
-  emptySetsAreEqual f.3 f.2
+  setWithNoElementsIsTheEmptySet f.3
 introduceImplication f.4
 introduceImplication equalsImpliesSubset = 1 ∅
 introduceEquivalence 1 2
@@ -60,11 +58,10 @@ qed
 
 theorem nonEmptySetHasAnElement A Non-Empty Set Has an Element
 premise ¬ = 1 ∅
-assume ¬ ∃ 2 ∈ 2 1
-  notExistsIsForallNot f.a
-  anEmptySetIsTheEmptySet f.1
-introduceNegation f.2 p1
-eliminateNegation 1
+assume ∀ 2 ¬ ∈ 2 1
+  setWithNoElementsIsTheEmptySet f.a
+introduceNegation f.1 p1
+apply-∃ 1
 qed
 
 theorem setWithSomeElementIsNonEmpty A Set with Some Element Is Non-Empty

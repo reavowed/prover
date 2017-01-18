@@ -96,7 +96,7 @@ assume ∈ 2 powerSet singleton 1
   introduceImplication f.f.5
   assume ¬ ∃ 3 ∈ 3 2
     notExistsIsForallNot f.f.a
-    anEmptySetIsTheEmptySet f.f.1
+    setWithNoElementsIsTheEmptySet f.f.1
     introduceOrLeft f.f.2 = 2 singleton 1
   introduceImplication f.f.3
   proofByCases f.5 f.6

@@ -18,17 +18,24 @@ qed
 theorem modusPonensInsideForall Modus Ponens Inside Forall
 premise ∀ 1 → 1 2
 premise sub 2 1 1
-eliminateForall p1 2 1
+eliminateForall p1 2
 eliminateImplication 1 p2
 qed
 
 theorem modusTollensInsideForall Modus Tollens Inside Forall
 premise ∀ 1 → 1 2
 premise ∀ 1 ¬ 2
-eliminateForall p1 1' 1
-eliminateForall p2 1' 1
+eliminateForall p1 2
+eliminateForall p2 2
 modusTollens1 1 2
-introduceForall 3 ¬ 1 1' 1
+introduceForall 3 ¬ 1 2 1
+qed
+
+theorem falseStatementImpliesAnythingInsideForall A False Statement Implies Anything Inside Forall
+premise ∀ 1 ¬ 1
+eliminateForall p1 2
+falseImpliesAnything1 1 sub 2 1 2
+introduceForall 2 → 1 2 2 1
 qed
 
 theorem implicationThenEquivalenceInsideForall Implication then Equivalence Inside Forall

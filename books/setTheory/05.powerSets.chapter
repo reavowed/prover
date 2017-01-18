@@ -20,18 +20,11 @@ modusPonensEquivalenceRight 2 p1
 qed
 
 theorem theEmptySetIsAnElementOfAnyPowerSet The Empty Set Is an Element of Any Power Set
-theEmptySetIsASubsetOfAnySet 1
+emptySetIsSubsetOfAnySet 1
 subsetIsElementOfPowerset 1
 qed
 
 theorem anySetIsAnElementOfItsPowerSet Any Set Is an Element of Its Power Set
 subsetIsReflexive 1
 subsetIsElementOfPowerset 1
-qed
-
-theorem powerSetOfEmptySetContainsExactlyEmptySet The Power Set of The Empty Set Contains Exactly the Empty Set
-definition-powerSet 1 ∅
-eliminateForall 1 1 1
-theOnlySubsetOfTheEmptySetIsTheEmptySet 1
-equivalenceIsTransitive 2 3
 qed

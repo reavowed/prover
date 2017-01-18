@@ -51,11 +51,11 @@ definition-intersection 1 2 3
 assume ∀ 3 → ∈ 3 1 ∈ 2' 3
   eliminateForall f.a ∅
   eliminateImplication f.1 p1
-  setIsNotInEmptySet 2'
+  noSetIsElementOfEmptySet 2'
 introduceNegation f.2 f.3
 introduceForall 3 ¬ ∀ 3 → ∈ 3 1 ∈ 2 3 2' 2
 modusTollensEquivalenceInsideForallRight 2 4
-anEmptySetIsTheEmptySet 5
+setWithNoElementsIsTheEmptySet 5
 qed
 
 theorem intersectionOverPairMembershipCondition Intersection over Pair Membership Condition

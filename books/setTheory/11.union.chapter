@@ -42,7 +42,7 @@ introduceAndInsideNegationRightInsideForall 2 ∈ 1' 2
 forallNotIsNotExists 3
 introduceForall 4 ¬ ∃ 2 ∧ ∈ 1 2 ∈ 2 ∅ 1' 1
 modusTollensEquivalenceInsideForallRight 1 5
-anEmptySetIsTheEmptySet 6
+setWithNoElementsIsTheEmptySet 6
 qed
 
 theorem unionOverSingletonIsSet Union over a Singleton Is the Set
