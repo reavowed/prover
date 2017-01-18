@@ -162,3 +162,12 @@ premise sub 2 1 1
 eliminateForall p1 2
 eliminateImplication 1 p2
 qed
+
+theorem combineCasesInsideForall Combine Cases Inside Forall
+premise ∀ 1 → 1 3
+premise ∀ 1 → 2 3
+eliminateForall p1 2 1
+eliminateForall p2 2 1
+combineCases 1 2
+introduceForall 3 → ∨ 1 2 3 2 1
+qed

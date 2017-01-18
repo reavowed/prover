@@ -146,3 +146,18 @@ binaryUnionMembershipCondition 3 2 1
 equivalenceIsTransitiveInsideForallRight 4 5
 setsWithSameMembersEqual 6
 qed
+
+theorem elementOfUnionLeft Element of Union (Left)
+premise ∈ 3 1
+introduceOrLeft p1 ∈ 3 2
+characteriseElementsOfBinaryUnion 3 1 2
+modusPonensEquivalenceRight 2 1
+qed
+
+
+theorem elementOfUnionRight Element of Union (Right)
+premise ∈ 3 2
+introduceOrRight p1 ∈ 3 1
+characteriseElementsOfBinaryUnion 3 1 2
+modusPonensEquivalenceRight 2 1
+qed

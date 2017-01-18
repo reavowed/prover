@@ -8,7 +8,7 @@ case class ReferenceResolveException(
 case class ParseException(
     line: BookLine,
     message: String)
-  extends Exception(s"Parse error in book '${line.bookTitle}' line ${line.number}: $message\n${line.text}")
+  extends Exception(s"Parse error in book '${line.bookTitle}' (${line.fileName} line ${line.number}): $message\n${line.text}")
 
 object ParseException {
   def withMessage(message: String, line: BookLine) = ParseException(line, message)

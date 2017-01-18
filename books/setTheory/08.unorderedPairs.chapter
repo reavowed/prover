@@ -164,3 +164,21 @@ setIsFirstElementIfSingletonIsPair p1
 setIsSecondElementIfSingletonIsPair p1
 equalityIsTransitiveLeft 1 2
 qed
+
+theorem pairIsSubsetIfSetsAreElements Pair Is a Subset If the Sets Are Elements
+premise ∈ 1 3
+premise ∈ 2 3
+quantifiedEqualityReplacement p1 ∈ 4 3 1 4
+quantifiedEqualityReplacement p2 ∈ 4 3 2 4
+combineCasesInsideForall 1 2
+definition-pair 4 1 2
+equivalenceThenImplicationInsideForall 4 3
+apply-⊆ 5
+qed
+
+theorem pairInPowerSet Pair Is In Power Set
+premise ∈ 1 3
+premise ∈ 2 3
+pairIsSubsetIfSetsAreElements p1 p2
+subsetIsElementOfPowerset 1
+qed

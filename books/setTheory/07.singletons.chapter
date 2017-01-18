@@ -63,13 +63,19 @@ setsWithDifferentElementsNotEqual2 1 3
 qed
 
 theorem singletonIsSubsetIfSetIsElement Singleton Is a Subset If the Set Is an Element
-premise ∈ 2 1
-assume ∈ 3' singleton 2
+premise ∈ 1 2
+assume ∈ 3' singleton 1
   elementOfSingletonIsSet f.a
-  eliminateEqualsReverse f.1 p1 ∈ 4 1 4
+  eliminateEqualsReverse f.1 p1 ∈ 4 2 4
 introduceImplication f.2
-introduceForall 1 → ∈ 3 singleton 2 ∈ 3 1 3' 3
+introduceForall 1 → ∈ 3 singleton 1 ∈ 3 2 3' 3
 apply-⊆ 2
+qed
+
+theorem singletonInPowerSet Singleton Is in Power Set
+premise ∈ 1 2
+singletonIsSubsetIfSetIsElement p1
+subsetIsElementOfPowerset 1
 qed
 
 theorem setsAreEqualIfTheirSingletonsAreEqual Sets Are Equal If Their Singletons Are Equal

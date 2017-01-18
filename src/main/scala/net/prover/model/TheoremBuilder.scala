@@ -84,12 +84,15 @@ case class TheoremBuilder(
     copy(premises = premises :+ premise)
   }
   def withArbitraryVariables(newArbitraryVariables: Seq[TermVariable]): TheoremBuilder = {
-    val fantasyVariables = fantasyAssumptions.flatMap(_.freeVariables)
-    if (fantasyVariables.intersect(newArbitraryVariables).nonEmpty) {
+    val fantasyVariables = fantasyAssumptions.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
+    if (fantasyVariables.termVariables.intersect(newArbitraryVariables).nonEmpty) {
       throw ArbitraryVariableException(
-        s"Variables ${fantasyVariables.intersect(newArbitraryVariables).mkString(", ")} were non-arbitrary")
+        s"Variables ${fantasyVariables.termVariables.intersect(newArbitraryVariables).mkString(", ")} were non-arbitrary")
     }
-    copy(arbitraryVariables = (arbitraryVariables ++ newArbitraryVariables).distinct.sortBy(_.i))
+    val newDistinctVariables = DistinctVariables(newArbitraryVariables.map(_ -> fantasyVariables).toMap)
+    copy(
+      arbitraryVariables = (arbitraryVariables ++ newArbitraryVariables).distinct.sortBy(_.i),
+      distinctVariables = distinctVariables ++ newDistinctVariables)
   }
   def withDistinctVariables(newDistinctVariables: DistinctVariables): TheoremBuilder = {
     copy(distinctVariables = distinctVariables ++ newDistinctVariables)

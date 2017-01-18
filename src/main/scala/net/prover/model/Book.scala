@@ -26,7 +26,7 @@ case class Book(
   }
 }
 
-case class BookLine(text: String, number: Int, bookTitle: String) {
+case class BookLine(text: String, number: Int, bookTitle: String, fileName: String) {
   def splitFirstWord: (String, PartialLine) = {
     text.splitFirstWord.mapRight(PartialLine(_, this))
   }
@@ -66,7 +66,7 @@ object Book {
     lines match {
       case WordAndRemainingText("chapter", PartialLine(chapterTitle, _)) +: linesAfterChapterDefinition =>
         linesAfterChapterDefinition match {
-          case BookLine(chapterSummary, _, _) +: linesAfterChapterSummary =>
+          case BookLine(chapterSummary, _, _, _) +: linesAfterChapterSummary =>
             addLinesToBook(
               linesAfterChapterSummary,
               book.copy(chapters = book.chapters :+ Chapter(chapterTitle, chapterSummary)))
@@ -98,7 +98,7 @@ object Book {
   private def getIncludeLines(pathText: String, book: Book): Seq[BookLine] = {
     val path = book.path.getParent.resolve(pathText)
     val plainLines = getPlainLinesWithIndices(path)
-    createBookLines(plainLines, book.title)
+    createBookLines(plainLines, book.title, path.getFileName.toString)
   }
 
   private def getPlainLinesWithIndices(path: Path): Seq[(String, Int)] = {
@@ -106,9 +106,9 @@ object Book {
     bookText.lines.zipWithIndex.filter(!_._1.isEmpty).filter(!_._1.startsWith("#")).toList
   }
 
-  private def createBookLines(plainLines: Seq[(String, Int)], bookTitle: String): Seq[BookLine] = {
+  private def createBookLines(plainLines: Seq[(String, Int)], bookTitle: String, fileName: String): Seq[BookLine] = {
     plainLines map { case(lineText, lineIndex) =>
-      BookLine(lineText, lineIndex + 1, bookTitle)
+      BookLine(lineText, lineIndex + 1, bookTitle, fileName)
     }
   }
 
@@ -122,7 +122,7 @@ object Book {
         case _ =>
           throw new Exception("Book must start with a title line")
       }
-      val bookLinesAfterTitle = createBookLines(plainLinesAfterTitle, title)
+      val bookLinesAfterTitle = createBookLines(plainLinesAfterTitle, title, path.getFileName.toString)
       val (imports, linesAfterImports) = readImports(bookLinesAfterTitle)
       PreParsedBook(title, path, imports, linesAfterImports)
     }

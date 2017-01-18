@@ -73,10 +73,10 @@ trait ProverSpec extends Specification {
 
   implicit def intToTermVariable(i: Int): TermVariable = TermVariable(i)
 
-  implicit def stringToPartialLine(s: String): PartialLine = PartialLine(s, BookLine(s, 1, "Fake Book"))
+  implicit def stringToPartialLine(s: String): PartialLine = PartialLine(s, BookLine(s, 1, "Fake Book", "filename"))
 
   implicit def stringsToLines(strings: Seq[String]): Seq[BookLine] = {
-    strings.zipWithIndex.map { case(s, i) => BookLine(s, i+1, "Fake Book")}
+    strings.zipWithIndex.map { case(s, i) => BookLine(s, i+1, "Fake Book", "filename")}
   }
 
   implicit class TheoremBuilderOps(theoremBuilder: TheoremBuilder) {
