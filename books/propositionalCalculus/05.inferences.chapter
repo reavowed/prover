@@ -149,3 +149,12 @@ introduceAnd 2 p2
 introduceOrLeft 3 4
 introduceAnd 1 4
 qed
+
+theorem eliminateAndInAntecedentLeft Eliminate And in Antecedent (Left)
+premise → ∧ 1 2 3
+premise 1
+assume 2
+  introduceAnd p2 f.a
+  eliminateImplication p1 f.1
+introduceImplication f.2
+qed

@@ -6,26 +6,18 @@ axiom emptySetExists "Empty Set" ∃ 1 ∀ 2 ¬ ∈ 2 1
 theorem emptySetsAreEqual Empty Sets are Equal
 premise ∀ 3 ¬ ∈ 3 1
 premise ∀ 3 ¬ ∈ 3 2
-eliminateForall p1 4 3
-eliminateForall p2 4 3
-falseStatementsAreEquivalent 1 2
-introduceForall 3 ↔ ∈ 3 1 ∈ 3 2 4 3
-setsWithSameMembersEqual 4
+falseStatementsAreEquivalentInsideForall p1 p2
+setsWithSameMembersEqual 1
 qed
 
 theorem thereIsAUniqueEmptySet There Is a Unique Empty Set
 emptySetExists 1 2
-assume ∀ 2 ¬ ∈ 2 3
-  assume ∀ 2 ¬ ∈ 2 4
-    emptySetsAreEqual f.f.a f.a
-  introduceImplication f.f.1
-  assume = 4 3
-    eliminateEqualsReverse f.f.a f.a ∀ 2 ¬ ∈ 2 1 1
-  introduceImplication f.f.1
-  introduceEquivalence f.1 f.2
-  introduceUniqueness f.3 ∀ 2 ¬ ∈ 2 1 1
-introduceImplication f.4
-eliminateExists 1 2 3
+assume ∧ ∀ 2 ¬ ∈ 2 3 ∀ 2 ¬ ∈ 2 4
+  eliminateAndLeft f.a
+  eliminateAndRight f.a
+  emptySetsAreEqual f.2 f.1
+introduceImplication f.3
+uniquenessCondition 1 2
 qed
 
 term ∅ () () () (∀ 1 ¬ ∈ 1 ∅)
