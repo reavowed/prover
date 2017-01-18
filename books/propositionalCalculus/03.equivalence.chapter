@@ -1,0 +1,204 @@
+chapter Equivalence
+We introduce our final connective, ↔ (equivalence).
+
+connective ↔ 2 ∧ → 1 2 → 2 1
+
+theorem eliminateEquivalenceForward Implication from Equivalence
+premise ↔ 1 2
+unapply-↔ p1
+eliminateAndLeft 1
+qed
+
+theorem eliminateEquivalenceConverse Converse from Equivalence
+premise ↔ 1 2
+unapply-↔ p1
+eliminateAndRight 1
+qed
+
+theorem introduceEquivalence Equivalence from Implication and Converse
+premise → 1 2
+premise → 2 1
+introduceAnd p1 p2
+apply-↔ 1
+qed
+
+theorem reverseEquivalence Reverse Equivalence
+premise ↔ 1 2
+unapply-↔ p1
+reverseAnd 1
+apply-↔ 2
+qed
+
+comment The next three theorems establish the meta-theorem that if α ↔ β, then α can be substituted for β in any other statement. Once we have shown this is true for our two fundamental connectives, establishing it for any more complicated statement is just a rote application of these three theorems.
+
+theorem substituteEquivalenceIntoImplicationAntecedent Substitute Equivalence into Implication Antecedent
+premise ↔ 1 2
+assume → 1 3
+  eliminateEquivalenceConverse p1
+  implicationIsTransitive f.1 f.a
+introduceImplication f.2
+assume → 2 3
+  eliminateEquivalenceForward p1
+  implicationIsTransitive f.1 f.a
+introduceImplication f.2
+introduceEquivalence 1 2
+qed
+
+theorem substituteEquivalenceIntoImplicationConsequent Substitute Equivalence into Implication Consequent
+premise ↔ 1 2
+assume → 3 1
+  eliminateEquivalenceForward p1
+  implicationIsTransitive f.a f.1
+introduceImplication f.2
+assume → 3 2
+  eliminateEquivalenceConverse p1
+  implicationIsTransitive f.a f.1
+introduceImplication f.2
+introduceEquivalence 1 2
+qed
+
+theorem substituteEquivalenceIntoNegation Substitute Equivalence into Negation
+premise ↔ 1 2
+eliminateEquivalenceForward p1
+eliminateEquivalenceConverse p1
+contraposition 2
+contraposition 1
+introduceEquivalence 3 4
+qed
+
+comment We now show that our equivalence connective has the properties we will later establish as defining an equivalence relation, justifying the use of the same word to describe each.
+
+theorem equivalenceIsReflexive Equivalence is Reflexive
+implicationIsReflexive 1
+introduceAnd 1 1
+apply-↔ 2
+qed
+
+theorem equivalenceIsTransitive Equivalence is Transitive
+premise ↔ 1 2
+premise ↔ 2 3
+eliminateEquivalenceForward p1
+eliminateEquivalenceForward p2
+implicationIsTransitive 1 2
+eliminateEquivalenceConverse p2
+eliminateEquivalenceConverse p1
+implicationIsTransitive 4 5
+introduceEquivalence 3 6
+qed
+
+theorem equivalenceIsSymmetric Equivalence is Symmetric
+introduceImplication reverseEquivalence ↔ 1 2
+introduceImplication reverseEquivalence ↔ 2 1
+introduceEquivalence 1 2
+qed
+
+comment Some helper theorems for proofs involving equivalences
+
+theorem equivalenceIsTransitiveLeft Equivalence is Transitive (Left)
+premise ↔ 2 1
+premise ↔ 2 3
+reverseEquivalence p1
+equivalenceIsTransitive 1 p2
+qed
+
+theorem equivalenceIsTransitiveRight Equivalence is Transitive (Right)
+premise ↔ 1 2
+premise ↔ 3 2
+reverseEquivalence p2
+equivalenceIsTransitive p1 1
+qed
+
+theorem negateEquivalence Negate Equivalence
+premise ↔ 1 2
+eliminateEquivalenceForward p1
+contraposition 1
+eliminateEquivalenceConverse p1
+contraposition 3
+introduceEquivalence 4 2
+qed
+
+theorem modusPonensEquivalenceLeft Modus Ponens with Equivalence (Left)
+premise ↔ 1 2
+premise 1
+eliminateEquivalenceForward p1
+eliminateImplication 1 p2
+qed
+
+theorem modusPonensEquivalenceRight Modus Ponens with Equivalence (Right)
+premise ↔ 1 2
+premise 2
+eliminateEquivalenceConverse p1
+eliminateImplication 1 p2
+qed
+
+theorem modusTollensEquivalenceLeft Modus Tollens With Equivalence (Left)
+premise ↔ 1 2
+premise ¬ 1
+negateEquivalence p1
+modusPonensEquivalenceLeft 1 p2
+qed
+
+theorem modusTollensEquivalenceRight Modus Tollens With Equivalence (Right)
+premise ↔ 1 2
+premise ¬ 2
+negateEquivalence p1
+modusPonensEquivalenceRight 1 p2
+qed
+
+theorem modusPonensEquivalenceLeftOrLeft Modus Ponens with Equivalence (Left) Inside Or (Left)
+premise ↔ ∨ 1 2 3
+premise 1
+introduceOrLeft p2 2
+modusPonensEquivalenceLeft p1 1
+qed
+
+theorem modusPonensEquivalenceLeftOrRight Modus Ponens with Equivalence (Left) Inside Or (Right)
+premise ↔ ∨ 1 2 3
+premise 2
+introduceOrRight p2 1
+modusPonensEquivalenceLeft p1 1
+qed
+
+theorem modusPonensEquivalenceRightOrLeft Modus Ponens with Equivalence Inside Or (Left)
+premise ↔ 1 ∨ 2 3
+premise 2
+introduceOrLeft p2 3
+modusPonensEquivalenceRight p1 1
+qed
+
+theorem modusPonensEquivalenceRightOrRight Modus Ponens with Equivalence (Right) Inside Or (Right)
+premise ↔ 1 ∨ 2 3
+premise 3
+introduceOrRight p2 2
+modusPonensEquivalenceRight p1 1
+qed
+
+theorem trueStatementsAreEquivalent True Statements Are Equivalent
+premise 1
+premise 2
+anythingImpliesTrue p2 1
+anythingImpliesTrue p1 2
+introduceEquivalence 1 2
+qed
+
+theorem falseStatementsAreEquivalent False Statements Are Equivalent
+premise ¬ 1
+premise ¬ 2
+falseImpliesAnything1 p1 2
+falseImpliesAnything1 p2 1
+introduceEquivalence 1 2
+qed
+
+theorem implicationThenEquivalence Implication then Equivalence
+premise → 1 2
+premise ↔ 2 3
+eliminateEquivalenceForward p2
+implicationIsTransitive p1 1
+qed
+
+theorem equivalenceThenImplication Equivalence then Implication
+premise ↔ 1 2
+premise → 2 3
+eliminateEquivalenceForward p1
+implicationIsTransitive 1 p2
+qed

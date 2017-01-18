@@ -1,0 +1,34 @@
+chapter Subsets
+Introduce the subset relation, ⊆.
+
+predicate ⊆ 2 ∀ 3 → ∈ 3 1 ∈ 3 2
+
+theorem subsetIsReflexive Subset is Reflexive
+implicationIsReflexive ∈ 3 1
+introduceForall 1 → ∈ 2 1 ∈ 2 1 3 2
+apply-⊆ 2
+qed
+
+theorem subsetIsAntisymmetric Subset is Antisymmetric
+premise ⊆ 1 2
+premise ⊆ 2 1
+unapply-⊆ p1 3
+unapply-⊆ p2 3
+introduceEquivalenceInsideForall 1 2
+setsWithSameMembersEqual 3
+qed
+
+theorem subsetIsTransitive Subset is Transitive
+premise ⊆ 1 2
+premise ⊆ 2 3
+unapply-⊆ p1 3
+unapply-⊆ p2 3
+implicationIsTransitiveInsideForall 1 2
+apply-⊆ 3
+qed
+
+theorem equalsImpliesSubset Equals Implies Subset
+premise = 1 2
+subsetIsReflexive 1
+eliminateEquals p1 1 ⊆ 1 3 3
+qed

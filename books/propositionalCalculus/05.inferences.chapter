@@ -1,0 +1,151 @@
+chapter Useful Inferences
+Some inferences that can be used to reduce boilerplate in proofs.
+
+theorem combineAntecedents Combine Antecedents
+premise → 1 → 2 3
+assume ∧ 1 2
+  eliminateAndLeft f.a
+  eliminateAndRight f.a
+  eliminateImplication p1 f.1
+  eliminateImplication f.3 f.2
+introduceImplication f.4
+qed
+
+theorem eliminateNegatedConjunctRight Eliminate Negated Conjunct (Right)
+premise 1
+premise ¬ ∧ 1 2
+assume 2
+  introduceAnd p1 f.a
+introduceNegation f.1 p2
+qed
+
+theorem eliminateNegatedConjunctLeft Eliminate Negated Conjunct (Left)
+premise 2
+premise ¬ ∧ 1 2
+assume 1
+  introduceAnd f.a p1
+introduceNegation f.1 p2
+qed
+
+theorem eliminateLeftDisjunct Eliminate Left Disjunct
+premise ∨ 1 2
+premise ¬ 1
+unapply-∨ p1
+eliminateImplication 1 p2
+qed
+
+theorem eliminateRightDisjunct Eliminate Right Disjunct
+premise ∨ 1 2
+premise ¬ 2
+reverseOr p1
+eliminateLeftDisjunct 1 p2
+qed
+
+theorem deMorganPONNtoNAPP De Morgan's Law (PONN to NAPP)
+premise ∨ ¬ 1 ¬ 2
+unapply-∨ p1
+assume 1
+  introduceDoubleNegation f.a
+  eliminateImplication 1 f.1
+introduceImplication f.2
+assume ∧ 1 2
+  unapply-∧ f.a
+introduceNegation 2 f.1
+qed
+
+theorem introduceAndInsideNegationLeft Introduce And Inside Negation (Left)
+premise ¬ 1
+introduceOrLeft p1 ¬ 2
+deMorganPONNtoNAPP 1
+qed
+
+theorem introduceAndInsideNegationRight Introduce And Inside Negation (Right)
+premise ¬ 2
+introduceOrRight p1 ¬ 1
+deMorganPONNtoNAPP 1
+qed
+
+theorem collapseOr Collapse Or
+premise ∨ 1 2
+premise → 1 2
+implicationIsReflexive 2
+eliminateOr p1 p2 1
+qed
+
+theorem modusPonensOnOr Modus Ponens on Or
+premise ∨ 1 3
+premise → 1 2
+premise → 3 4
+introduceImplication introduceOrLeft 2 4
+implicationIsTransitive p2 1
+introduceImplication introduceOrRight 4 2
+implicationIsTransitive p3 3
+eliminateOr p1 2 4
+qed
+
+theorem disjoinedConjunctEquivalenceLeft1 Disjoined Conjunct Equivalence (Left 1)
+premise 1
+premise ¬ 3
+introduceImplication eliminateAndRight ∧ 1 2
+assume ∧ 3 4
+  eliminateAndLeft f.a
+  contradictionImpliesAnything f.1 p2 2
+introduceImplication f.2
+combineCases 1 2
+assume 2
+  introduceAnd p1 f.a
+  introduceOrLeft f.1 ∧ 3 4
+introduceImplication f.2
+introduceEquivalence 3 4
+qed
+
+theorem disjoinedConjunctEquivalenceLeft2 Disjoined Conjunct Equivalence (Left 2)
+premise 1
+premise 3
+introduceDoubleNegation p2
+disjoinedConjunctEquivalenceLeft1 p1 1 2 4
+qed
+
+theorem disjoinedConjunctEquivalenceRight1 Disjoined Conjunct Equivalence (Right 1)
+premise ¬ 1
+premise 3
+disjoinedConjunctEquivalenceLeft1 p2 p1 4 2
+orIsSymmetric ∧ 3 4 ∧ 1 2
+equivalenceIsTransitiveLeft 2 1
+qed
+
+theorem pickDisjoinedConjunctLeft Pick Disjoined Conjunct (Left)
+premise ∨ ∧ 1 2 ∧ ¬ 3 4
+premise 1
+premise 3
+disjoinedConjunctEquivalenceLeft2 p2 p3 2 4
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem pickDisjoinedConjunctRight Pick Disjoined Conjunct (Right)
+premise ∨ ∧ 1 2 ∧ 3 4
+premise ¬ 1
+premise 3
+disjoinedConjunctEquivalenceRight1 p2 p3 2 4
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem redundantAnd Redundant And
+premise → 1 2
+introduceImplication eliminateAndRight ∧ 2 1
+assume 1
+  eliminateImplication p1 f.a
+  introduceAnd f.1 f.a
+introduceImplication f.2
+introduceEquivalence 1 2
+qed
+
+theorem rearrangeAndWithOr Rearrange And with Or
+premise ∧ 1 2
+premise 3
+eliminateAndLeft p1
+eliminateAndRight p1
+introduceAnd 2 p2
+introduceOrLeft 3 4
+introduceAnd 1 4
+qed

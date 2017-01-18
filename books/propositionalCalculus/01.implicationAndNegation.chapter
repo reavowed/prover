@@ -1,0 +1,130 @@
+chapter Implication and Negation
+We start by introducing our two fundamental connectives, → and ¬, and proving some basic facts about them.
+
+comment Our first connective is '→', or implication. It is a binary connective, which means it has two substatements.
+connective → 2
+comment This should be read "α implies β", or "if α then β".
+
+comment Our first rule is the first half of the definition of '→'.
+rule introduceImplication 1 ⊢ 2 ⇒ → 1 2
+comment In other words, if by assuming α we can deduce β, then we can deduce α → β directly. This rule is called "Implication Introduction".
+
+comment This rule is all we need to prove our first theorem.
+theorem implicationIsReflexive Implication is Reflexive
+assume 1
+introduceImplication f.a
+qed
+comment We start by assuming α. But then we certainly already know α itself, so we can apply the rule of implication introduction to deduce α → α as a tautology - a statement that is always true, regardless of α.
+
+comment Our next rule of inference completes the definition of '→'.
+rule eliminateImplication → 1 2 & 1 ⇒ 2
+comment This rule is called "Implication Elimination" within the system of natural deduction that we are using, but is more commonly known as "Modus Ponens". Our next theorem demonstrates its use.
+
+theorem implicationIsTransitive Implication is Transitive
+premise → 1 2
+premise → 2 3
+assume 1
+  eliminateImplication p1 f.a
+  eliminateImplication p2 f.1
+introduceImplication f.2
+qed
+
+connective ¬ 1
+rule introduceNegation 1 ⊢ 2 & ¬ 2 ⇒ ¬ 1
+rule eliminateNegation ¬ ¬ 1 ⇒ 1
+
+theorem introduceDoubleNegation Double Negation Introduction
+premise 1
+assume ¬ 1
+introduceNegation p1 f.a
+qed
+
+theorem anythingImpliesTrue Anything Implies a True Statement
+premise 1
+assume 2
+introduceImplication p1
+qed
+
+theorem contradictionImpliesAnything A Contradiction Implies Anything
+premise 1
+premise ¬ 1
+assume ¬ 2
+introduceNegation p1 p2
+eliminateNegation 1
+qed
+
+theorem falseImpliesAnything1 A False Statement Implies Anything (1)
+premise ¬ 1
+assume 1
+  contradictionImpliesAnything f.a p1 2
+introduceImplication f.1
+qed
+
+theorem falseImpliesAnything2 A False Statement Implies Anything (2)
+premise 1
+assume ¬ 1
+  contradictionImpliesAnything p1 f.a 2
+introduceImplication f.1
+qed
+
+theorem modusTollens1 Modus Tollens (1)
+premise → 1 2
+premise ¬ 2
+assume 1
+  eliminateImplication p1 f.a
+introduceNegation f.1 p2
+qed
+
+theorem modusTollens2 Modus Tollens (2)
+premise → ¬ 1 2
+premise ¬ 2
+modusTollens1 p1 p2
+eliminateNegation 1
+qed
+
+theorem modusTollens3 Modus Tollens (3)
+premise → 1 ¬ 2
+premise 2
+assume 1
+  eliminateImplication p1 f.a
+introduceNegation p2 f.1
+qed
+
+theorem modusTollens4 Modus Tollens (4)
+premise → ¬ 1 ¬ 2
+premise 2
+modusTollens3 p1 p2
+eliminateNegation 1
+qed
+
+theorem contraposition Contraposition
+premise → 1 2
+assume ¬ 2
+  modusTollens1 p1 f.a
+introduceImplication f.1
+qed
+
+theorem proofByContradiction Proof by Contradiction
+premise → 1 2
+premise → 1 ¬ 2
+assume 1
+  eliminateImplication p1 f.a
+  eliminateImplication p2 f.a
+introduceNegation f.1 f.2
+qed
+
+theorem proofByCases Proof by Cases
+premise → 1 2
+premise → ¬ 1 2
+contraposition p1
+contraposition p2
+proofByContradiction 1 2
+eliminateNegation 3
+qed
+
+theorem selfContradiction Self-Contradiction
+premise → 1 ¬ 1
+implicationIsReflexive 1
+proofByContradiction 1 p1
+qed
+

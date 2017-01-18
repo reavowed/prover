@@ -1,0 +1,95 @@
+chapter Propositional Logic Identities
+Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
+
+theorem andDefinitionEquivalence Conjunction is Equivalent to Its Definition
+introduceImplication unapply-∧ ∧ 1 2
+introduceImplication apply-∧ ¬ → 1 ¬ 2
+introduceEquivalence 1 2
+qed
+
+theorem orDefinitionEquivalence Disjunction is Equivalent to Its Definition
+introduceImplication unapply-∨ ∨ 1 2
+introduceImplication apply-∨ → ¬ 1 2
+introduceEquivalence 1 2
+qed
+
+theorem equivalenceDefinitionEquivalence Equivalence is Equivalent to Its Definition
+introduceImplication unapply-↔ ↔ 1 2
+introduceImplication apply-↔ ∧ → 1 2 → 2 1
+introduceEquivalence 1 2
+qed
+
+theorem andIsSymmetric Conjunction is Symmetric
+introduceImplication reverseAnd ∧ 1 2
+introduceImplication reverseAnd ∧ 2 1
+introduceEquivalence 1 2
+qed
+
+theorem orIsSymmetric Disjunction is Symmetric
+introduceImplication reverseOr ∨ 1 2
+introduceImplication reverseOr ∨ 2 1
+introduceEquivalence 1 2
+qed
+
+theorem andIsAssociative Conjunction is Associative
+assume ∧ 1 ∧ 2 3
+  eliminateAndRight f.a
+  eliminateAndLeft f.a
+  eliminateAndLeft f.1
+  eliminateAndRight f.1
+  introduceAnd f.2 f.3
+  introduceAnd f.5 f.4
+introduceImplication f.6
+assume ∧ ∧ 1 2 3
+  eliminateAndLeft f.a
+  eliminateAndLeft f.1
+  eliminateAndRight f.1
+  eliminateAndRight f.a
+  introduceAnd f.3 f.4
+  introduceAnd f.2 f.5
+introduceImplication f.6
+introduceEquivalence 1 2
+qed
+
+theorem orIsAssociative Disjunction is Associative
+introduceImplication introduceOrLeft 1 2
+introduceImplication introduceOrRight 2 1
+introduceImplication introduceOrLeft ∨ 1 2 3
+implicationIsTransitive 1 3
+implicationIsTransitive 2 3
+introduceImplication introduceOrRight 3 ∨ 1 2
+combineCases 5 6
+combineCases 4 7
+introduceImplication introduceOrLeft 2 3
+introduceImplication introduceOrRight 3 2
+introduceImplication introduceOrRight ∨ 2 3 1
+introduceImplication introduceOrLeft 1 ∨ 2 3
+implicationIsTransitive 9 11
+implicationIsTransitive 10 11
+combineCases 12 13
+combineCases 15 14
+introduceEquivalence 8 16
+qed
+
+theorem andIsIdempotent Conjunction is Idempotent
+assume 1
+  introduceAnd f.a f.a
+introduceImplication f.1
+introduceImplication eliminateAndRight ∧ 1 1
+introduceEquivalence 1 2
+qed
+
+theorem orIsIdempotent Disjunction is Idempotent
+introduceImplication introduceOrRight 1 1
+implicationIsReflexive 1
+combineCases 2 2
+introduceEquivalence 1 3
+qed
+
+theorem doubleNegationIsNoNegation Double Negation is No Negation At All
+introduceImplication introduceDoubleNegation 1
+assume ¬ ¬ 1
+  eliminateNegation f.a
+introduceImplication f.1
+introduceEquivalence 1 2
+qed

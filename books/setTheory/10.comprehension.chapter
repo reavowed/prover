@@ -1,0 +1,106 @@
+chapter Set Comprehension
+Introduce set comprehension, {z∈y|α}.
+
+theorem setComprehensionLemma1 Set Comprehension Lemma 1
+assume 1
+  disjoinedConjunctEquivalenceLeft2 f.a f.a = 3' 1 = 3' 2
+  introduceUniqueness f.1 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 2 3
+introduceImplication f.2
+assume ¬ 1
+  disjoinedConjunctEquivalenceRight1 f.a f.a = 3' 1 = 3' 2
+  introduceUniqueness f.1 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 2 3
+introduceImplication f.2
+proofByCases 1 2
+qed
+
+theorem setComprehensionLemma2 Set Comprehension Lemma 2
+setComprehensionLemma1 sub 1' 1 1 3 1' 4
+anythingImpliesTrue 1 ∈ 1' 2
+introduceForall 2 → ∈ 1 2 ∃! 3 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 4 1' 1
+qed
+
+theorem setComprehensionLemma3 Set Comprehension Lemma 3
+premise ∧ ∈ 5 2 sub 5 1 1
+assume ∧ ∈ 1' 2 ∨ ∧ sub 1' 1 1 = 3 1' ∧ ¬ sub 1' 1 1 = 3 5
+  eliminateAndLeft f.a
+  eliminateAndRight f.a
+  assume sub 1' 1 1
+    pickDisjoinedConjunctLeft f.2 f.f.a f.f.a
+    introduceAnd f.1 f.f.a
+    eliminateEqualsReverse f.f.1 f.f.2 ∧ ∈ 3 2 sub 3 1 1 3
+  introduceImplication f.f.3
+  assume ¬ sub 1' 1 1
+    pickDisjoinedConjunctRight f.2 f.f.a f.f.a
+    eliminateEqualsReverse f.f.1 p1 ∧ ∈ 4 2 sub 4 1 1 4
+  introduceImplication f.f.2
+  proofByCases f.3 f.4
+introduceImplication f.5
+introduceExistsInAntecedent 1 ∧ ∈ 1 2 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 5 1' 1
+assume ∧ ∈ 3 2 sub 3 1 1
+  equalityIsReflexive 3
+  rearrangeAndWithOr f.a f.1 ∧ ¬ sub 3 1 1 = 3 5
+  introduceExists f.2 ∧ ∈ 1 2 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 5 3 1
+introduceImplication f.3
+introduceEquivalence 2 3
+qed
+
+theorem setComprehensionLemma4 Set Comprehension Lemma 4
+premise ∧ ∈ 5 2 sub 5 1 1
+setComprehensionLemma2 1 1 2 3 5
+replacementInference 1 4
+assume ∀ 3 ↔ ∈ 3 4' ∃ 1 ∧ ∈ 1 2 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 5 3 1
+  eliminateForall f.a 3'
+  setComprehensionLemma3 p1 3'
+  equivalenceIsTransitive f.1 f.2
+  introduceForall f.3 ↔ ∈ 1 4' ∧ ∈ 1 2 1 3' 1
+introduceImplication f.4
+eliminateExists 2 3 4'
+introduceExists 4 ∀ 1 ↔ ∈ 1 4 ∧ ∈ 1 2 1 4' 4
+qed
+
+theorem setComprehensionLemma5 Set Comprehension Lemma 5
+premise ∃ 3 ∧ ∈ 3 2 1
+assume ∧ ∈ 3' 2 sub 3' 3 1
+  setComprehensionLemma4 f.a 4
+introduceImplication f.1
+eliminateExists p1 1 3'
+qed
+
+theorem setComprehensionLemma6 Set Comprehension Lemma 6
+premise ¬ ∃ 3 ∧ ∈ 3 2 1
+notExistsIsForallNot p1
+falseStatementCharacterisesTheEmptySet 1 5
+introduceExists 2 ∀ 3 ↔ ∈ 3 4 ∧ ∈ 3 2 1 ∅ 4
+qed
+
+theorem setComprehensionsExist Set Comprehensions Exist
+introduceImplication setComprehensionLemma5 ∃ 3 ∧ ∈ 3 2 1 4
+introduceImplication setComprehensionLemma6 ¬ ∃ 3 ∧ ∈ 3 2 1 4
+proofByCases 1 2
+qed
+
+theorem setComprehensionIsUnique Set Comprehension Is Unique
+setComprehensionsExist sub 3 1 1 4 3 2
+setWithMembershipConditionIsUnique 1
+qed
+
+term comprehension (term term statement) ({{} ∈ {} | {}}) () (∀ 3 ↔ ∈ 3 comprehension 1 2 1 ∧ ∈ 3 2 sub 3 1 1)
+
+theorem characteriseElementsOfSetComprehension Characterise Elements of Set Comprehension
+definition-comprehension 1 3 1 2
+eliminateForall 1 3
+qed
+
+theorem characteriseElementOfSetComprehension Characterise Element of Set Comprehension
+premise ∈ 3 comprehension 1 2 1
+characteriseElementsOfSetComprehension 1 3 1 2
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem comprehensionOverEmptySetIsEmpty A Comprehension Over the Empty Set is Empty
+definition-comprehension 1 2 1 ∅
+definition-∅ 2
+introduceAndInsideNegationLeftInsideForall 2 sub 2 1 1
+modusTollensEquivalenceInsideForallRight 1 3
+anEmptySetIsTheEmptySet 4
+qed

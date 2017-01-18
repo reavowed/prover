@@ -2,13 +2,18 @@ package net.prover.model
 
 import java.io.File
 import java.nio.charset.StandardCharsets
-import java.nio.file.Files
+import java.nio.file.{Files, Path}
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.filefilter.TrueFileFilter
 
-@JsonIgnoreProperties(Array("dependencies", "context", "fullContext"))
+import scala.collection.JavaConverters._
+
+@JsonIgnoreProperties(Array("path", "dependencies", "context", "fullContext"))
 case class Book(
   title: String,
+  path: Path,
   dependencies: Seq[Book],
   chapters: Seq[Chapter] = Nil,
   context: Context = Context.empty) {
@@ -66,6 +71,9 @@ object Book {
               linesAfterChapterSummary,
               book.copy(chapters = book.chapters :+ Chapter(chapterTitle, chapterSummary)))
         }
+      case WordAndRemainingText("include", PartialLine(includePathText, _)) +: linesAfterInclude =>
+        val includeLines = getIncludeLines(includePathText, book)
+        addLinesToBook(includeLines ++ linesAfterInclude, book)
       case WordAndRemainingText(entryType, restOfLine) +: moreLines =>
         val parser = entryParsers.find(_.name == entryType)
           .getOrElse(throw ParseException.withMessage(s"Unrecognised type '$entryType'", lines.head))
@@ -85,23 +93,38 @@ object Book {
     }
   }
 
-  private case class PreParsedBook(title: String, imports: Seq[String], lines: Seq[BookLine])
+  private case class PreParsedBook(title: String, path: Path, imports: Seq[String], lines: Seq[BookLine])
+
+  private def getIncludeLines(pathText: String, book: Book): Seq[BookLine] = {
+    val path = book.path.getParent.resolve(pathText)
+    val plainLines = getPlainLinesWithIndices(path)
+    createBookLines(plainLines, book.title)
+  }
+
+  private def getPlainLinesWithIndices(path: Path): Seq[(String, Int)] = {
+    val bookText = new String(Files.readAllBytes(path), StandardCharsets.UTF_8)
+    bookText.lines.zipWithIndex.filter(!_._1.isEmpty).filter(!_._1.startsWith("#")).toList
+  }
+
+  private def createBookLines(plainLines: Seq[(String, Int)], bookTitle: String): Seq[BookLine] = {
+    plainLines map { case(lineText, lineIndex) =>
+      BookLine(lineText, lineIndex + 1, bookTitle)
+    }
+  }
 
   private def preparseBooks(bookFiles: Seq[File]): Seq[PreParsedBook] = {
     bookFiles.map { file =>
-      val bookText = new String(Files.readAllBytes(file.toPath), StandardCharsets.UTF_8)
-      val plainLinesWithIndices = bookText.lines.zipWithIndex.filter(!_._1.isEmpty).filter(!_._1.startsWith("#")).toList
+      val path = file.toPath
+      val plainLinesWithIndices = getPlainLinesWithIndices(path)
       val (title, plainLinesAfterTitle) = plainLinesWithIndices match {
         case (WordAndRemainingText("book", bookTitle), _) +: remainingLines =>
           (bookTitle, remainingLines)
         case _ =>
           throw new Exception("Book must start with a title line")
       }
-      val bookLinesAfterTitle = plainLinesAfterTitle map { case(lineText, lineIndex) =>
-        BookLine(lineText, lineIndex + 1, title)
-      }
+      val bookLinesAfterTitle = createBookLines(plainLinesAfterTitle, title)
       val (imports, linesAfterImports) = readImports(bookLinesAfterTitle)
-      PreParsedBook(title, imports, linesAfterImports)
+      PreParsedBook(title, path, imports, linesAfterImports)
     }
   }
 
@@ -120,7 +143,7 @@ object Book {
       case Left(dependencies) =>
         val parsedBook = addLinesToBook(
           book.lines,
-          Book(book.title, dependencies))
+          Book(book.title, book.path, dependencies))
         dependentBooks match {
           case dependentBook +: otherDependentBooks =>
             parseBook(dependentBook, otherDependentBooks, otherBooks, parsedBook +: parsedBooks)
@@ -153,7 +176,10 @@ object Book {
   }
 
   def fromDirectory(pathName: String): Seq[Book] = {
-    val bookFiles = Option(new File(pathName).listFiles()).get.filter(_.getPath.endsWith(".book"))
+    val bookFiles = FileUtils.listFiles(new File(pathName), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)
+      .asScala
+      .filter(_.getPath.endsWith(".book"))
+      .toSeq
     val preparsedBooks = preparseBooks(bookFiles)
     parseBooks(preparsedBooks)
   }

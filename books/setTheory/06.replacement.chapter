@@ -1,0 +1,10 @@
+chapter Replacement
+Introduce the Axiom of Replacement.
+
+axiom axiomOfReplacement Replacement → ∀ 3 → ∈ 3 1 ∃! 4 1 ∃ 2 ∀ 4 ↔ ∈ 4 2 ∃ 3 ∧ ∈ 3 1 1
+
+theorem replacementInference Replacement Inference
+premise ∀ 3 → ∈ 3 1 ∃! 4 1
+axiomOfReplacement 1 3 1 4 2
+eliminateImplication 1 p1
+qed

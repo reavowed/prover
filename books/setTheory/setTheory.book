@@ -1,0 +1,15 @@
+book Set Theory
+import Predicate Calculus
+
+include 01.membership.chapter
+include 02.extensionality.chapter
+include 03.subsets.chapter
+include 04.emptySet.chapter
+include 05.powerSets.chapter
+include 06.replacement.chapter
+include 07.singletons.chapter
+include 08.unorderedPairs.chapter
+include 09.orderedPairs.chapter
+include 10.comprehension.chapter
+include 11.union.chapter
+include 12.intersection.chapter

@@ -1,0 +1,46 @@
+chapter Existential Quantifier
+Introduce the existential quantifier, ∃.
+
+quantifier ∃ (¬ ∀ 1 ¬ 1) ()
+
+theorem introduceExists Introduce Existential Quantifier
+premise sub 2 1 1
+assume ∀ 1 ¬ 1
+  eliminateForall f.a 2
+introduceNegation p1 f.1
+apply-∃ 1
+qed
+
+theorem eliminateExists Eliminate Existential Quantifier
+premise ∃ 1 1
+premise → sub 2 1 1 2
+unapply-∃ p1
+assume ¬ 2
+  modusTollens1 p2 f.a
+  introduceForall f.1 ¬ 1 2 1
+introduceNegation f.2 1
+eliminateNegation 2
+qed
+
+theorem introduceExistsInAntecedent Introduce Exists in Antecedent
+premise → sub 2 1 1 2
+assume ∃ 1 1
+  eliminateExists f.a p1 2
+introduceImplication f.1
+qed
+
+theorem notExistsIsForallNot Negated Exists Is Forall Negated
+premise ¬ ∃ 1 1
+assume ¬ ∀ 1 ¬ 1
+  apply-∃ f.a
+introduceNegation f.1 p1
+eliminateNegation 1
+qed
+
+theorem forallNotIsNotExists Forall Negated Is Negated Exists
+premise ∀ 1 ¬ 1
+eliminateForall p1 1'
+assume ∃ 1 1
+  unapply-∃ f.a
+introduceNegation p1 f.1
+qed

@@ -1,0 +1,89 @@
+chapter Ordered Pairs
+Establish the existence of the ordered pair (x,y).
+
+term orderedPair (term term) (({},{})) () (= orderedPair 1 2 pair singleton 1 pair 1 2)
+
+theorem characteriseElementsOfOrderedPair Characterise Elements of Ordered Pair
+definition-orderedPair 1 2
+definition-pair 3 singleton 1 pair 1 2
+eliminateEqualsReverse 1 2 ∀ 3 ↔ ∈ 3 4 ∨ = 3 singleton 1 = 3 pair 1 2 4
+eliminateForall 3 3
+qed
+
+theorem characteriseElementOfOrderedPair Characterise Element of Ordered Pair
+premise ∈ 3 orderedPair 1 2
+characteriseElementsOfOrderedPair 3 1 2
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem singletonFirstElementIsElementOfOrderedPair Singleton of First Element is Element of Ordered Pair
+definition-orderedPair 1 2
+firstElementOfPair singleton 1 pair 1 2
+eliminateEqualsReverse 1 2 ∈ singleton 1 2 2
+qed
+
+theorem pairIsElementOfOrderedPair Pair Is Element of Ordered Pair
+definition-orderedPair 1 2
+secondElementOfPair pair 1 2 singleton 1
+eliminateEqualsReverse 1 2 ∈ pair 1 2 3 3
+qed
+
+theorem elementsOfOrderedPairEqualIfPairIsSingleton Elements of An Ordered Pair Are Equal If The Pair Is A Singleton
+premise = orderedPair 1 2 singleton 3
+singletonFirstElementIsElementOfOrderedPair 1 2
+eliminateEquals p1 1 ∈ singleton 1 3 3
+elementOfSingletonIsSet 2
+pairIsElementOfOrderedPair 1 2
+eliminateEquals p1 4 ∈ pair 1 2 3 3
+elementOfSingletonIsSet 5
+equalityIsTransitiveRight 3 6
+elementsAreEqualIfSingletonIsPair 7
+qed
+
+theorem repeatedOrderedPairIsDoubleSingleton A Repeated Ordered Pair Is a Double Singleton
+definition-orderedPair 1 1
+repeatedPairIsSingleton 1
+eliminateEquals 2 1 = orderedPair 1 1 pair singleton 1 2 2
+repeatedPairIsSingleton singleton 1
+equalityIsTransitive 3 4
+qed
+
+theorem equalOrderedPairsHaveEqualFirstElements Equal Ordered Pairs Have Equal First Elements
+premise = orderedPair 1 2 orderedPair 3 4
+singletonFirstElementIsElementOfOrderedPair 1 2
+eliminateEquals p1 1 ∈ singleton 1 3 3
+characteriseElementOfOrderedPair 2
+introduceImplication setsAreEqualIfTheirSingletonsAreEqual = singleton 1 singleton 3
+introduceImplication setIsFirstElementIfSingletonIsPair = singleton 1 pair 3 4
+eliminateOr 3 4 5
+qed
+
+theorem equalOrderedPairsHaveEqualSecondElements Equal Ordered Pairs Have Equal Second Elements
+premise = orderedPair 1 2 orderedPair 3 4
+equalOrderedPairsHaveEqualFirstElements p1
+eliminateEqualsReverse 1 p1 = orderedPair 1 2 orderedPair 5 4 5
+pairIsElementOfOrderedPair 1 2
+eliminateEquals 2 3 ∈ pair 1 2 3 3
+characteriseElementOfOrderedPair 4
+assume = 1 2
+  eliminateEqualsReverse f.a 2 = orderedPair 1 5 orderedPair 1 4 5
+  repeatedOrderedPairIsDoubleSingleton 1
+  equalityIsTransitiveLeft f.1 f.2
+  elementsOfOrderedPairEqualIfPairIsSingleton f.3
+  equalityIsTransitiveLeft f.a f.4
+introduceImplication f.5
+assume = pair 1 2 singleton 1
+  reverseEquality f.a
+  elementsAreEqualIfSingletonIsPair f.1
+  eliminateImplication 6 f.2
+introduceImplication f.3
+assume = pair 1 2 pair 1 4
+  secondElementOfPair 2 1
+  eliminateEquals f.a f.1 ∈ 2 1 1
+  characteriseElementOfPair f.2
+  introduceImplication reverseEquality = 2 1
+  implicationIsTransitive f.4 6
+  collapseOr f.3 f.5
+introduceImplication f.6
+eliminateOr 5 7 8
+qed
