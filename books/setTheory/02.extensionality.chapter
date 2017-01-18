@@ -3,6 +3,12 @@ Introduce the set membership predicate ∈ and the Axiom of Extensionality, and 
 
 predicate ∈ 2
 
+theorem equalSetsHaveSameMembers Equal Sets Have Same Members
+premise = 1 2
+equalityEquivalence p1 ∈ 3' 1 1
+introduceForall 1 ↔ ∈ 3 1 ∈ 3 2 3' 3
+qed
+
 axiom extensionality Extensionality ∀ 1 ∀ 2 → ∀ 3 ↔ ∈ 3 1 ∈ 3 2 = 1 2
 
 theorem setsWithSameMembersEqual Sets Are Equal If They Have The Same Members
@@ -16,11 +22,8 @@ qed
 theorem setsWithSameMembershipConditionEqual Sets Are Equal If They Have The Same Membership Condition
 premise ∀ 3 ↔ ∈ 3 1 1
 premise ∀ 3 ↔ ∈ 3 2 1
-eliminateForall p1 4
-eliminateForall p2 4
-equivalenceIsTransitiveRight 1 2
-introduceForall 3 ↔ ∈ 3 1 ∈ 3 2 4 3
-setsWithSameMembersEqual 4
+equivalenceIsTransitiveInsideForallRight p1 p2
+setsWithSameMembersEqual 1
 qed
 
 theorem setsWithEquivalentMembershipConditionsEqual Sets with Equivalent Membership Conditions Are Equal
@@ -35,13 +38,12 @@ theorem equalSetsHaveEquivalentMembershipConditions Equal Sets Have Equivalent M
 premise = 1 2
 premise ∀ 3 ↔ ∈ 3 1 1
 premise ∀ 3 ↔ ∈ 3 2 2
-equalityEquivalence p1 ∈ 3' 1 1
-introduceForall 1 ↔ ∈ 3 1 ∈ 3 2 3' 3
-equivalenceIsTransitiveInsideForallLeft p2 2
-equivalenceIsTransitiveInsideForall 3 p3
+equalSetsHaveSameMembers p1 3
+equivalenceIsTransitiveInsideForallLeft p2 1
+equivalenceIsTransitiveInsideForall 2 p3
 qed
 
-theorem setIsEqualIffItHasSameMembershipCondition A Set Is Equal to Another Iff It Has the Same Membership Condition
+theorem setEqualIffSameMembershipCondition A Set Is Equal to Another Iff It Has the Same Membership Condition
 premise ∀ 3 ↔ ∈ 3 1 1
 assume ∀ 3 ↔ ∈ 3 2 1
   setsWithSameMembershipConditionEqual f.a p1
@@ -55,23 +57,18 @@ qed
 theorem setWithMembershipConditionIsUnique A Set With a Membership Condition Is Unique
 premise ∃ 1 ∀ 2 ↔ ∈ 2 1 1
 assume ∀ 2 ↔ ∈ 2 3 1
-  setIsEqualIffItHasSameMembershipCondition f.a 3'
-  introduceForall f.1 ↔ ∀ 2 ↔ ∈ 2 1 1 = 1 3 3' 1
-  introduceExists f.2 ∀ 1 ↔ ∀ 2 ↔ ∈ 2 1 1 = 1 4 3 4
-  apply-∃! f.3
-introduceImplication f.4
+  setEqualIffSameMembershipCondition f.a 3'
+  introduceUniqueness f.1 ∀ 2 ↔ ∈ 2 1 1 1
+introduceImplication f.2
 eliminateExists p1 1 3
 qed
 
-theorem equivalenceOfMembershipConditions Equivalence of Membership Conditions
+theorem substituteExistenceMembershipCondition Substitute Existence Membership Condition
 premise ∃ 1 ∀ 2 ↔ ∈ 2 1 1
 premise ∀ 2 ↔ 1 2
 assume ∀ 2 ↔ ∈ 2 1' 1
-  eliminateForall f.a 3
-  eliminateForall p2 3
-  equivalenceIsTransitive f.1 f.2
-  introduceForall f.3 ↔ ∈ 2 1' 2 3 2
-  introduceExists f.4 ∀ 2 ↔ ∈ 2 1 2 1' 1
-introduceImplication f.5
+  equivalenceIsTransitiveInsideForall f.a p2
+  introduceExists f.1 ∀ 2 ↔ ∈ 2 1 2 1' 1
+introduceImplication f.2
 eliminateExists p1 1 1'
 qed

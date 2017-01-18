@@ -79,7 +79,7 @@ theorem unorderedPairsExist Unordered Pairs Exist
 unorderedPairExistenceLemma2 3 4 1 2
 replacementInference 1 5
 unorderedPairExistenceLemma3 4 3 1 2
-equivalenceOfMembershipConditions 2 3
+substituteExistenceMembershipCondition 2 3
 qed
 
 theorem unorderedPairsUnique Unordered Pairs Are Unique
