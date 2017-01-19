@@ -1,0 +1,21 @@
+book Functions
+
+import Set Theory
+
+variables (f X Y x y)
+
+chapter Definition
+Definition of a function.
+
+statement function (term term term) ({}: {} → {}) (f X Y) (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f)
+
+theorem functionApplicationIsUnique Function Application Is Unique
+premise function f X Y
+premise ∈ x X
+unapply-function p1 x y
+eliminateAndRight 1
+eliminateForall 2 x
+eliminateImplication 3 p2
+qed
+
+term apply (term term) ({}({})) (f x) (function f X Y, ∈ x X) (∧ ∈ apply f x Y ∈ orderedPair x apply f x f)
