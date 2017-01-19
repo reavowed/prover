@@ -178,3 +178,10 @@ eliminateForall p2 2 1
 combineCases 1 2
 introduceForall 3 → ∨ 1 2 3 2 1
 qed
+
+theorem redundantAndInsideForall Redundant And Inside Forall
+premise ∀ 1 → 1 2
+eliminateForall p1 2 1
+redundantAnd 1
+introduceForall 2 ↔ ∧ 2 1 1 2 1
+qed

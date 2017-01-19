@@ -2,12 +2,12 @@ book Functions
 
 import Set Theory
 
-variables (f X Y x y)
+variables (f g X Y x y S)
 
 chapter Definition
 Definition of a function.
 
-statement function (term term term) ({}: {} → {}) (f X Y) (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f)
+statement function (term term term) ({}: {} → {} in parens) (f X Y) (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f)
 
 theorem functionApplicationIsUnique Function Application Is Unique
 premise function f X Y
@@ -27,15 +27,15 @@ eliminateAndLeft 1
 subsetIsElementOfPowerSet 2
 qed
 
-term functionSet (term term) ({}^{}) (X Y) () (= functionSet X Y comprehension f powerSet × X Y function f X Y)
+term functionSet (term term) ({}^{}) (X Y) () (= functionSet X Y unrestrictedComprehension f function f X Y)
 
 theorem characteriseElementsOfFunctionSet Characterise Elements of Function Set
+introduceImplication functionElementOfPowerSetOfProduct function g X Y
+introduceForall 1 → function f X Y ∈ f powerSet × X Y g f
+introduceExists 2 ∀ f → function f X Y ∈ f S powerSet × X Y S
 definition-functionSet X Y f
-definitionComprehensionRenamed 1 f
-eliminateForall 2 f
-introduceImplication functionElementOfPowerSetOfProduct function f X Y
-redundantAnd 4
-equivalenceIsTransitive 3 5
+definitionUnrestrictedComprehensionRenamed 3 4
+eliminateForall 5 f
 qed
 
 theorem elementOfFunctionSetIsFunction An Element of a Function Set Is a Function

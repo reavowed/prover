@@ -103,10 +103,33 @@ definition-comprehension 1 4 1 2
 eliminateEqualsReverse p1 1 ∀ 4 ↔ ∈ 4 5 ∧ ∈ 4 2 sub 4 1 1 5
 qed
 
-theorem comprehensionOverEmptySetIsEmpty A Comprehension Over the Empty Set is Empty
-definition-comprehension 1 2 1 ∅
-definition-∅ 2
-introduceAndInsideNegationLeftInsideForall 2 sub 2 1 1
-modusTollensEquivalenceInsideForallRight 1 3
-setWithNoElementsIsTheEmptySet 4
+variables (x y z y' X Y S T)
+
+theorem unrestrictedComprehensionsExist Unrestricted Comprehensions Exist
+premise ∃ X ∀ x → sub x y 1 ∈ x X
+assume ∀ x → sub x y 1 ∈ x Y
+  assume = T comprehension y Y 1
+    definitionComprehensionRenamed f.f.a x
+    redundantAndInsideForall f.a
+    equivalenceIsTransitiveInsideForall f.f.1 f.f.2
+    introduceExists f.f.3 ∀ x ↔ ∈ x S sub x y 1 T S
+  introduceImplication f.f.4
+  eliminateRename f.1
+introduceImplication f.2
+eliminateExists p1 1 Y
+qed
+
+theorem unrestrictedComprehensionsAreUnique Unrestricted Comprehensions Are Unique
+premise ∃ X ∀ x → sub x y 1 ∈ x X
+unrestrictedComprehensionsExist p1 S
+setWithMembershipConditionIsUnique 1
+qed
+
+term unrestrictedComprehension (term statement) ({{} | {}}) (x 1) (∃ Y ∀ y → sub y x 1 ∈ y Y) (∀ y ↔ ∈ y unrestrictedComprehension x 1 sub y x 1)
+
+theorem definitionUnrestrictedComprehensionRenamed Definition of Unrestricted Comprehension (Renamed)
+premise ∃ X ∀ x → sub x y 1 ∈ x X
+premise = S unrestrictedComprehension y 1
+definition-unrestrictedComprehension p1
+eliminateEqualsReverse p2 1 ∀ x ↔ ∈ x T sub x y 1 T
 qed
