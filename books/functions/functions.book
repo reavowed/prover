@@ -19,3 +19,33 @@ eliminateImplication 3 p2
 qed
 
 term apply (term term) ({}({})) (f x) (function f X Y, ∈ x X) (∧ ∈ apply f x Y ∈ orderedPair x apply f x f)
+
+theorem functionElementOfPowerSetOfProduct Function Is Element of Power Set of Product
+premise function f X Y
+unapply-function p1 x y
+eliminateAndLeft 1
+subsetIsElementOfPowerSet 2
+qed
+
+term functionSet (term term) ({}^{}) (X Y) () (= functionSet X Y comprehension f powerSet × X Y function f X Y)
+
+theorem characteriseElementsOfFunctionSet Characterise Elements of Function Set
+definition-functionSet X Y f
+definitionComprehensionRenamed 1 f
+eliminateForall 2 f
+introduceImplication functionElementOfPowerSetOfProduct function f X Y
+redundantAnd 4
+equivalenceIsTransitive 3 5
+qed
+
+theorem elementOfFunctionSetIsFunction An Element of a Function Set Is a Function
+premise ∈ f functionSet X Y
+characteriseElementsOfFunctionSet f X Y
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem functionIsElementOfFunctionSet A Function Is an Element of a Function Set
+premise function f X Y
+characteriseElementsOfFunctionSet f X Y
+modusPonensEquivalenceRight 1 p1
+qed

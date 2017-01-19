@@ -5,14 +5,14 @@ axiom axiomOfPowerset "Power Set" ∀ 1 ∃ 2 ∀ 3 ↔ ∈ 3 2 ⊆ 3 1
 
 term powerSet (term) (𝒫{}) (1) () (∀ 2 ↔ ∈ 2 powerSet 1 ⊆ 2 1)
 
-theorem elementOfPowersetIsSubset An Element of a Power Set is a Subset
+theorem elementOfPowerSetIsSubset An Element of a Power Set is a Subset
 premise ∈ 2 powerSet 1
 definition-powerSet 2 1
 eliminateForall 1 2 2
 modusPonensEquivalenceLeft 2 p1
 qed
 
-theorem subsetIsElementOfPowerset A Subset is An Element of a Power Set
+theorem subsetIsElementOfPowerSet A Subset is An Element of a Power Set
 premise ⊆ 2 1
 definition-powerSet 2 1
 eliminateForall 1 2 2
@@ -21,10 +21,10 @@ qed
 
 theorem theEmptySetIsAnElementOfAnyPowerSet The Empty Set Is an Element of Any Power Set
 emptySetIsSubsetOfAnySet 1
-subsetIsElementOfPowerset 1
+subsetIsElementOfPowerSet 1
 qed
 
 theorem anySetIsAnElementOfItsPowerSet Any Set Is an Element of Its Power Set
 subsetIsReflexive 1
-subsetIsElementOfPowerset 1
+subsetIsElementOfPowerSet 1
 qed

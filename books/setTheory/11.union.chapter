@@ -72,7 +72,7 @@ definition-union 1 powerSet 2 3
 assume ∃ 3 ∧ ∈ 1' 3 ∈ 3 powerSet 2
   assume ∧ ∈ 1' 3' ∈ 3' powerSet 2
     eliminateAndRight f.f.a
-    elementOfPowersetIsSubset f.f.1 3 2
+    elementOfPowerSetIsSubset f.f.1 3 2
     unapply-⊆ f.f.2 4
     eliminateForall f.f.3 1'
     eliminateAndLeft f.f.a

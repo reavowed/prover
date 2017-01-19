@@ -56,7 +56,7 @@ qed
 theorem singletonInPowerSet Singleton Is in Power Set
 premise ∈ 1 2
 singletonIsSubsetIfSetIsElement p1
-subsetIsElementOfPowerset 1
+subsetIsElementOfPowerSet 1
 qed
 
 theorem setsAreEqualIfTheirSingletonsAreEqual Sets Are Equal If Their Singletons Are Equal
@@ -68,7 +68,7 @@ qed
 
 theorem subsetsOfSingleton Subsets of a Singleton
 assume ∈ 2 powerSet singleton 1
-  elementOfPowersetIsSubset f.a
+  elementOfPowerSetIsSubset f.a
   unapply-⊆ f.1 3
   definition-singleton 3 1
   implicationThenEquivalenceInsideForall f.2 f.3
