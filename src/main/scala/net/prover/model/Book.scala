@@ -146,7 +146,7 @@ object Book {
           Book(book.title, book.path, dependencies))
         dependentBooks match {
           case dependentBook +: otherDependentBooks =>
-            parseBook(dependentBook, otherDependentBooks, otherBooks, parsedBook +: parsedBooks)
+            parseBook(dependentBook, otherDependentBooks, otherBooks, parsedBooks :+ parsedBook)
           case Nil =>
             (parsedBooks :+ parsedBook, otherBooks)
         }

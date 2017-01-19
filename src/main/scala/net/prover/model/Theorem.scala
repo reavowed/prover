@@ -77,7 +77,7 @@ object Theorem extends ChapterEntryParser[Theorem] {
 
     def parseHelper(linesRemaining: Seq[BookLine], theoremBuilder: TheoremBuilder): (Theorem, Seq[BookLine]) = {
       linesRemaining match {
-        case BookLine("qed", _, _) +: nonTheoremLines =>
+        case BookLine("qed", _, _, _) +: nonTheoremLines =>
           import theoremBuilder._
           if (fantasyOption.isDefined)
             throw new Exception("Cannot finish theorem with open assumption")
