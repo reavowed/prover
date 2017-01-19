@@ -26,7 +26,6 @@ trait ComponentTypeList{
   type Components <: HList
   def length: Int
   def parse(line: PartialLine, context: Context): (Components, PartialLine)
-  def defaults(currentStatement: Int = 1, currentTerm: Int = 1): Components
   def format(formatString: String, components: Components): String
   def getVariables(components: Components): Variables
   def getFreeVariables(components: Components): Seq[TermVariable]
@@ -62,7 +61,6 @@ object ComponentTypeList {
     type Components = HNil
     val length: Int = 0
     override def parse(line: PartialLine, context: Context): (HNil, PartialLine) = (HNil, line)
-    override def defaults(currentStatement: Int, currentTerm: Int) = HNil
     override def format(formatString: String, components: HNil): String = formatString
     override def getVariables(components: Components): Variables = Variables.empty
     override def getFreeVariables(components: Components): Seq[TermVariable] = Nil
@@ -99,11 +97,6 @@ object ComponentTypeList {
       val (term, lineAfterTerm) = Term.parse(line, context)
       val (otherComponents, remainingLine) = inner.parse(lineAfterTerm, context)
       (::(term, otherComponents), remainingLine)
-    }
-
-    override def defaults(currentStatement: Int, currentTerm: Int): Term :: inner.Components = {
-      val innerDefaults = inner.defaults(currentStatement, currentTerm + 1)
-      ::(TermVariable(currentTerm), innerDefaults)
     }
 
     override def format(
@@ -177,11 +170,6 @@ object ComponentTypeList {
       val (statement, lineAfterTerm) = Statement.parse(line, context)
       val (otherComponents, remainingLine) = inner.parse(lineAfterTerm, context)
       (::(statement, otherComponents), remainingLine)
-    }
-
-    override def defaults(currentStatement: Int, currentTerm: Int): Statement :: inner.Components = {
-      val innerDefaults = inner.defaults(currentStatement + 1, currentTerm)
-      ::(StatementVariable(currentStatement), innerDefaults)
     }
 
     override def format(

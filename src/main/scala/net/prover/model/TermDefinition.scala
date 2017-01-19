@@ -32,7 +32,6 @@ case class TermDefinition[Components <: HList](
   extends ChapterEntry(TermDefinition)
 {
   val id: String = s"definition-${specification.symbol}"
-  val defaultTerm: Term = specification(specification.componentTypes.defaults())
 
   val deduction: Deduction = new Deduction {
     override val id: String = TermDefinition.this.id

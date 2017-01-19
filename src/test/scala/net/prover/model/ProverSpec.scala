@@ -11,7 +11,7 @@ trait ProverSpec extends Specification {
   val Equivalence = Connective("↔", 2, None)
 
   val ForAll = Quantifier("∀", None, DistinctVariables.empty)
-  var Exists = Quantifier("∃", Some(Negation(ForAll(1, Negation(1)))), DistinctVariables.empty)
+  var Exists = Quantifier("∃", Some(Negation(ForAll("z", Negation(1)))), DistinctVariables.empty)
   val ElementOf = Predicate("∈", 2, None)
   val Equals = Predicate("=", 2, None)
 
@@ -20,11 +20,11 @@ trait ProverSpec extends Specification {
     ComponentTypeList.empty,
     "∅",
     requiresBrackets = false)
+  val EmptySet = EmptySetSpecification(HNil)
   val EmptySetDefinition = TermDefinition(
     EmptySetSpecification,
     Nil,
-    ForAll(1, Negation(ElementOf(1, DefinedTerm(HNil, EmptySetSpecification)))))
-  val EmptySet = EmptySetSpecification(HNil)
+    ForAll("z", Negation(ElementOf("z", EmptySet))))
 
   val Restate = DirectRule(
     "restate",
@@ -45,14 +45,14 @@ trait ProverSpec extends Specification {
     DistinctVariables.empty)
   val IntroduceForall = DirectRule(
     "introduceForall",
-    Seq(StatementVariableWithReplacement(1, 2, 1)),
-    ForAll(1, 1),
-    Seq(2),
-    DistinctVariables(Map(TermVariable(2) -> Variables(Seq(1), Nil))))
+    Seq(StatementVariableWithReplacement(1, "y", "z")),
+    ForAll("z", 1),
+    Seq("y"),
+    DistinctVariables(Map(TermVariable("y") -> Variables(Seq(1), Nil))))
   val EliminateForall = DirectRule(
     "eliminateForall",
-    Seq(ForAll(1, 1)),
-    StatementVariableWithReplacement(1, 2, 1),
+    Seq(ForAll("z", 1)),
+    StatementVariableWithReplacement(1, "y", "z"),
     Nil,
     DistinctVariables.empty)
 
@@ -71,7 +71,7 @@ trait ProverSpec extends Specification {
 
   implicit def intToStatementVariable(i: Int): StatementVariable = StatementVariable(i)
 
-  implicit def intToTermVariable(i: Int): TermVariable = TermVariable(i)
+  implicit def stringToTermVariable(s: String): TermVariable = TermVariable(s)
 
   implicit def stringToPartialLine(s: String): PartialLine = PartialLine(s, BookLine(s, 1, "Fake Book", "filename"))
 

@@ -91,7 +91,7 @@ case class TheoremBuilder(
     }
     val newDistinctVariables = DistinctVariables(newArbitraryVariables.map(_ -> fantasyVariables).toMap)
     copy(
-      arbitraryVariables = (arbitraryVariables ++ newArbitraryVariables).distinct.sortBy(_.i),
+      arbitraryVariables = (arbitraryVariables ++ newArbitraryVariables).distinct,
       distinctVariables = distinctVariables ++ newDistinctVariables)
   }
   def withDistinctVariables(newDistinctVariables: DistinctVariables): TheoremBuilder = {

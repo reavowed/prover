@@ -14,7 +14,7 @@ trait Term extends JsonSerializable.Base with Component[Term] {
   }
 }
 
-case class TermVariable(i: Int, prime: Boolean = false) extends Term {
+case class TermVariable(text: String) extends Term {
   override def variables: Variables = Variables(Nil, Seq(this))
   override def freeVariables: Seq[TermVariable] = Seq(this)
   override def calculateSubstitutions(otherTerm: Term): Option[Substitutions] = {
@@ -46,7 +46,7 @@ case class TermVariable(i: Int, prime: Boolean = false) extends Term {
     this
   }
 
-  override def html: String = (123 - i).toChar.toString + (if (prime) "'" else "")
+  override def html: String = text
 }
 
 case class DefinedTerm[Components <: HList](
@@ -133,9 +133,9 @@ object Term extends ComponentType[Term] {
       case ParsableTerm(termParser) =>
         termParser.parseTerm(remainingLine, context)
       case IntParser(i) =>
-        (TermVariable(i), remainingLine)
+        (TermVariable((123 - i).toChar.toString), remainingLine)
       case primeVariableRegex(IntParser(i)) =>
-        (TermVariable(i, prime = true), remainingLine)
+        (TermVariable((123 - i).toChar.toString + "'"), remainingLine)
       case _ =>
         throw ParseException.withMessage(s"Unrecognised term type '$termType'", line.fullLine)
     }

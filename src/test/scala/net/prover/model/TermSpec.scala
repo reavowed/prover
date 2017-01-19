@@ -18,27 +18,27 @@ class TermSpec extends ProverSpec {
     }
 
     "match a unary function to another application of the same function" in {
-      PowerSet(TermVariable(1) :: HNil)
-        .calculateSubstitutions(PowerSet(TermVariable(2) :: HNil))
+      PowerSet(TermVariable("z") :: HNil)
+        .calculateSubstitutions(PowerSet(TermVariable("y") :: HNil))
         .mustEqual(Some(Substitutions(
           Map.empty,
-          Map(TermVariable(1) -> TermVariable(2)))))
+          Map(TermVariable("z") -> TermVariable("y")))))
     }
   }
   "term apply match" should {
     "do nothing to a constant" in {
       EmptySet.applySubstitutions(Substitutions(
         Map(StatementVariable(1) -> StatementVariable(2)),
-        Map(TermVariable(1) -> TermVariable(2)))
+        Map(TermVariable("z") -> TermVariable("y")))
       ) mustEqual EmptySet
     }
 
     "replace terms in a unary function" in {
-      PowerSet(TermVariable(1) :: HNil).applySubstitutions(
+      PowerSet(TermVariable("z") :: HNil).applySubstitutions(
         Substitutions(
           Map(StatementVariable(1) -> StatementVariable(2)),
-          Map(TermVariable(1) -> TermVariable(2)))
-      ) mustEqual PowerSet(TermVariable(2) :: HNil)
+          Map(TermVariable("z") -> TermVariable("y")))
+      ) mustEqual PowerSet(TermVariable("y") :: HNil)
     }
   }
 

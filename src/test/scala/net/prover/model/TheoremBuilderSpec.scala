@@ -74,39 +74,39 @@ class TheoremBuilderSpec extends ProverSpec {
 
     "handle rule with a substitution in the conclusion" in {
       val theoremBuilder = EliminateForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addStep(ForAll(2, Equals(2, 1))),
+        TheoremBuilder().addStep(ForAll("y", Equals("y", "z"))),
         "1 3",
         defaultContext)
-      theoremBuilder.steps(1).statement mustEqual Equals(3, 1)
+      theoremBuilder.steps(1).statement mustEqual Equals("x", "z")
     }
 
     "handle rule with a substitution in the premise applied to a non-substituted statement" in {
       val theoremBuilder = IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addStep(Conjunction(Equals(3, 3), ElementOf(1, 2))),
+        TheoremBuilder().addStep(Conjunction(Equals("x", "x"), ElementOf("z", "y"))),
         "1 ∧ = 4 4 ∈ 1 2 3 4",
         defaultContext)
-      theoremBuilder.steps(1).statement mustEqual ForAll(4, Conjunction(Equals(4, 4), ElementOf(1, 2)))
+      theoremBuilder.steps(1).statement mustEqual ForAll("w", Conjunction(Equals("w", "w"), ElementOf("z", "y")))
     }
 
     "handle rule with a substitution in the premise applied to a substituted statement" in {
       val theoremBuilder = IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addStep(StatementVariableWithReplacement(3, 2, 1)),
+        TheoremBuilder().addStep(StatementVariableWithReplacement(3, "y", "z")),
         "1",
         defaultContext)
-      theoremBuilder.steps(1).statement mustEqual ForAll(1, 3)
+      theoremBuilder.steps(1).statement mustEqual ForAll("z", 3)
     }
 
     "add a rule's arbitrary variable to the theorem if it appears in a theorem hypothesis" in {
       val theoremBuilder = IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addPremise(Equals(1, 2)),
+        TheoremBuilder().addPremise(Equals("z", "y")),
         "p1 = 1 3 2 3",
         defaultContext)
-      theoremBuilder.arbitraryVariables mustEqual Seq(TermVariable(2))
+      theoremBuilder.arbitraryVariables mustEqual Seq(TermVariable("y"))
     }
 
     "fail a rule with arbitrary variables if an arbitrary variable appears in a fantasy hypothesis" in {
       IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addFantasy(Equals(1, 2)),
+        TheoremBuilder().addFantasy(Equals("z", "y")),
         "f.a = 1 3 2 3",
         defaultContext
       ) must throwAn[ArbitraryVariableException]
@@ -114,7 +114,7 @@ class TheoremBuilderSpec extends ProverSpec {
 
     "disallow a rule if distinct variable requirements are not followed" in {
       IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addStep(Equals(1, 1)),
+        TheoremBuilder().addStep(Equals("z", "z")),
         "1 = 2 1 1 2",
         defaultContext
       ) must throwA[DistinctVariableViolationException]
@@ -122,10 +122,10 @@ class TheoremBuilderSpec extends ProverSpec {
 
     "apply a rule by adding distinct variables if necessary" in {
       val updatedTheoremBuilder = IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addStep(Equivalence(StatementVariableWithReplacement(1, 3, 1), Equals(3, 4))),
+        TheoremBuilder().addStep(Equivalence(StatementVariableWithReplacement(1, "x", "z"), Equals("x", "w"))),
         "1 ↔ 1 = 1 4 3 1",
         defaultContext)
-      updatedTheoremBuilder.steps(1).statement mustEqual ForAll(1, Equivalence(1, Equals(1, 4)))
+      updatedTheoremBuilder.steps(1).statement mustEqual ForAll("z", Equivalence(1, Equals("z", "w")))
     }
   }
 }

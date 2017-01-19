@@ -5,7 +5,7 @@ case class Quantifier(
     definingStatement: Option[Statement],
     distinctVariables: DistinctVariables)
   extends ChapterEntry(Quantifier) with StatementDefinition {
-  val defaultStatement: Statement = apply(TermVariable(1), StatementVariable(1))
+  val defaultStatement: Statement = apply(TermVariable("z"), StatementVariable(1))
 
   def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {
     val (term, lineAterTerm) = Term.parse(line, context)

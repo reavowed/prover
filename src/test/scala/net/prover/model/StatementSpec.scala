@@ -17,11 +17,11 @@ class StatementSpec extends ProverSpec {
 
     "parse a quantified statement" in {
       Statement.parse("∀ 2 3", defaultContext)._1 mustEqual
-        ForAll(2, 3)
+        ForAll("y", 3)
     }
 
     "parse a replacement statement" in {
-      Statement.parse("sub 2 1 3", defaultContext)._1 mustEqual StatementVariableWithReplacement(3, 2, 1)
+      Statement.parse("sub 2 1 3", defaultContext)._1 mustEqual StatementVariableWithReplacement(3, "y", "z")
     }
 
     "parse an empty list" in {
@@ -93,53 +93,53 @@ class StatementSpec extends ProverSpec {
       val statements = Seq(
         StatementVariable(1),
         Implication(1, 2),
-        Equals(1, 2))
+        Equals("z", "y"))
 
       forall(statements) { s =>
-        s.substituteFreeVariable(1, 1) mustEqual s
+        s.substituteFreeVariable("z", "z") mustEqual s
       }
     }
     "not do anything if substituting an already-substituted variable" in {
       val statements = Seq(
         StatementVariable(1),
         Implication(1, 2),
-        Equals(1, 2))
+        Equals("z", "y"))
 
       forall(statements) { s =>
-        val firstSubstitution = s.substituteFreeVariable(2, 1)
-        firstSubstitution.substituteFreeVariable(3, 1) mustEqual firstSubstitution
-        val secondSubstitution = firstSubstitution.substituteFreeVariable(EmptySet, 2)
-        secondSubstitution.substituteFreeVariable(3, 1) mustEqual secondSubstitution
-        secondSubstitution.substituteFreeVariable(3, 2) mustEqual secondSubstitution
+        val firstSubstitution = s.substituteFreeVariable("y", "z")
+        firstSubstitution.substituteFreeVariable("x", "z") mustEqual firstSubstitution
+        val secondSubstitution = firstSubstitution.substituteFreeVariable(EmptySet, "y")
+        secondSubstitution.substituteFreeVariable("x", "z") mustEqual secondSubstitution
+        secondSubstitution.substituteFreeVariable("x", "y") mustEqual secondSubstitution
       }
     }
 
     "eliminate extra replacements when simplifying" in {
       val firstSubstitution = StatementVariable(1)
-        .substituteFreeVariable(2, 1)
-        .substituteFreeVariable(4, 3)
-        .substituteFreeVariable(6, 5)
+        .substituteFreeVariable("y", "z")
+        .substituteFreeVariable("w", "x")
+        .substituteFreeVariable("u", "v")
       val secondSubstitution = StatementVariable(1)
-        .substituteFreeVariable(4, 3)
+        .substituteFreeVariable("w", "x")
 
       val distinctVariables = firstSubstitution.attemptSimplification(secondSubstitution)
       distinctVariables mustEqual Some(DistinctVariables(Map(
-        TermVariable(1) -> Variables(Seq(StatementVariable(1)), Nil),
-        TermVariable(5) -> Variables(Seq(StatementVariable(1)), Nil))))
+        TermVariable("z") -> Variables(Seq(StatementVariable(1)), Nil),
+        TermVariable("v") -> Variables(Seq(StatementVariable(1)), Nil))))
 
       firstSubstitution.makeSimplifications(distinctVariables.get) mustEqual secondSubstitution
     }
 
     "combine replacements when simplifying" in {
       val firstSubstitution = StatementVariable(1)
-        .substituteFreeVariable(2, 1)
-        .substituteFreeVariable(3, 2)
+        .substituteFreeVariable("y", "z")
+        .substituteFreeVariable("x", "y")
       val secondSubstitution = StatementVariable(1)
-        .substituteFreeVariable(3, 1)
+        .substituteFreeVariable("x", "z")
 
       val distinctVariables = firstSubstitution.attemptSimplification(secondSubstitution)
       distinctVariables mustEqual Some(DistinctVariables(Map(
-        TermVariable(2) -> Variables(Seq(StatementVariable(1)), Nil))))
+        TermVariable("y") -> Variables(Seq(StatementVariable(1)), Nil))))
 
       firstSubstitution.makeSimplifications(distinctVariables.get) mustEqual secondSubstitution
     }

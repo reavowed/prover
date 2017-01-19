@@ -8,15 +8,15 @@ class QuantifierSpec extends ProverSpec {
 
     "parse a quantifier with a definition" in {
       Quantifier.parse("∃ (¬ ∀ 1 ¬ 1) ()", defaultContext) mustEqual
-        Quantifier("∃", Some(Negation(ForAll(1, Negation(1)))), DistinctVariables.empty)
+        Quantifier("∃", Some(Negation(ForAll("z", Negation(1)))), DistinctVariables.empty)
     }
 
     "parse a quantifier with distinct variable requirements" in {
       Quantifier.parse("∃! (∀ 2 ∃ 1 ↔ 1 = 1 2) (2 1)", defaultContext) mustEqual
         Quantifier(
           "∃!",
-          Some(ForAll(2, Exists(1, Equivalence(1, Equals(1, 2))))),
-          DistinctVariables(Map(TermVariable(2) -> Variables(Seq(StatementVariable(1)), Nil))))
+          Some(ForAll("y", Exists("z", Equivalence(1, Equals("z", "y"))))),
+          DistinctVariables(Map(TermVariable("y") -> Variables(Seq(StatementVariable(1)), Nil))))
     }
   }
 }

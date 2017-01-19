@@ -81,7 +81,7 @@ class TheoremSpec extends ProverSpec {
           "premise = 1 2",
           "introduceForall p1 = 1 3 2 3",
           "qed"))
-      theorem.arbitraryVariables mustEqual Seq(TermVariable(2))
+      theorem.arbitraryVariables mustEqual Seq(TermVariable("y"))
     }
 
     "parse a theorem with distinct variables" in {
@@ -92,7 +92,7 @@ class TheoremSpec extends ProverSpec {
           "introduceForall p1",
           "qed"))
       theorem.distinctVariables mustEqual
-        DistinctVariables(Map(TermVariable(2) -> Variables(Seq(1), Nil)))
+        DistinctVariables(Map(TermVariable("y") -> Variables(Seq(1), Nil)))
     }
 
     "not include distinct variables if they don't appear in the hypotheses or conclusion" in {
@@ -155,26 +155,26 @@ class TheoremSpec extends ProverSpec {
       val theorem = Theorem(
         "id",
         "Title",
-        Seq(Equals(1, 2)),
+        Seq(Equals("z", "y")),
         Nil,
-        Equals(2, 3),
-        Seq(1),
+        Equals("y", "x"),
+        Seq("z"),
         DistinctVariables.empty)
-      val theoremBuilder = TheoremBuilder().addPremise(Equals(2, 1))
+      val theoremBuilder = TheoremBuilder().addPremise(Equals("y", "z"))
       val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "p1 4", defaultContext)
-      updatedTheoremBuilder.arbitraryVariables mustEqual Seq(TermVariable(2))
+      updatedTheoremBuilder.arbitraryVariables mustEqual Seq(TermVariable("y"))
     }
 
     "fail a rule with arbitrary variables if an arbitrary variable appears in a fantasy assumption" in {
       val theorem = Theorem(
         "id",
         "Title",
-        Seq(Equals(1, 2)),
+        Seq(Equals("z", "y")),
         Nil,
-        Equals(2, 3),
-        Seq(1),
+        Equals("y", "x"),
+        Seq("z"),
         DistinctVariables.empty)
-      val theoremBuilder = TheoremBuilder().addFantasy(Equals(2, 1))
+      val theoremBuilder = TheoremBuilder().addFantasy(Equals("y", "z"))
       theorem.readAndUpdateTheoremBuilder(theoremBuilder, "f.a 4", defaultContext) must throwAn[ArbitraryVariableException]
 
     }

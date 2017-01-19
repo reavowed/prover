@@ -43,9 +43,9 @@ class RuleSpec extends ProverSpec {
       parseRule("introduceAll sub 2 1 1 ⇒ ∀ 1 1 | 2") mustEqual
         DirectRule(
           "introduceAll",
-          Seq(StatementVariableWithReplacement(1, 2, 1)),
-          ForAll(1, 1),
-          Seq(2),
+          Seq(StatementVariableWithReplacement(1, "y", "z")),
+          ForAll("z", 1),
+          Seq("y"),
           DistinctVariables.empty)
     }
   }
