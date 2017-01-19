@@ -3,3 +3,4 @@ book Natural Numbers
 import Functions
 
 include 01.definition.chapter
+include 02.literals.chapter
