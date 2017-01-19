@@ -44,3 +44,19 @@ assume ∃ 1 1
   unapply-∃ f.a
 introduceNegation p1 f.1
 qed
+
+theorem redunantAndInExists Redundant And in Existential Quantifier
+premise ∃ 1 1
+assume ∃ 1 ∧ 1 2
+  introduceImplication eliminateAndRight ∧ sub 2 1 1 2
+  eliminateExists f.a f.1 2
+introduceImplication f.2
+assume 2
+  assume sub 2 1 1
+    introduceAnd f.f.a f.a
+    introduceExists f.f.1 ∧ 1 2 2 1
+  introduceImplication f.f.2
+  eliminateExists p1 f.1 2
+introduceImplication f.2
+introduceEquivalence 1 2
+qed

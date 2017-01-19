@@ -13,6 +13,7 @@ trait Statement extends JsonSerializable.Base with Component[Statement] {
   override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
     serialize(gen, serializers)
   }
+  def containsTerms: Boolean
 }
 
 case class StatementVariable(i: Int) extends Statement {
@@ -45,6 +46,8 @@ case class StatementVariable(i: Int) extends Statement {
 
   override def makeSimplifications(distinctVariables: DistinctVariables): Statement = this
 
+  override def containsTerms = false
+
   override def html: String = (944 + i).toChar.toString
 }
 
@@ -68,7 +71,7 @@ case class StatementVariableWithReplacement(
             x.calculateSubstitutions(y)
         }
         Substitutions.mergeAttempts(substitutionAttempts)
-      case other if other.variables.termVariables.isEmpty =>
+      case other if !other.containsTerms =>
         Some(Substitutions(Map(statementVariable -> other), Map.empty))
       case _ =>
         Some(Substitutions(Map.empty, Map.empty))
@@ -158,6 +161,8 @@ case class StatementVariableWithReplacement(
       copy(replacements = simplifiedReplacements)
   }
 
+  override def containsTerms = true
+
   override def html: String = {
     replacements.map { case (term, termVariable) =>
       s"[$term/$termVariable]"
@@ -221,6 +226,8 @@ case class ConnectiveStatement(substatements: Seq[Statement], connective: Connec
       substatements.map(_.safeHtml).mkString(" " + connective.symbol + " ")
   }
 
+  override def containsTerms = substatements.exists(_.containsTerms)
+
   override def safeHtml: String = if (substatements.length == 1) html else "(" + html + ")"
 }
 
@@ -271,6 +278,8 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
     copy(substatement = substatement.makeSimplifications(distinctVariables))
   }
 
+  override def containsTerms = true
+
   override def html: String = s"(${quantifier.symbol}${boundVariable.html})${substatement.safeHtml}"
 }
 
@@ -308,6 +317,7 @@ case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends St
   override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
     copy(terms = terms.map(_.makeSimplifications(distinctVariables)))
   }
+  override def containsTerms = true
   def html: String = terms.map(_.safeHtml).mkString(" " + predicate.symbol + " ")
   override def safeHtml: String = if (terms.length > 1) "(" + html + ")" else html
 }

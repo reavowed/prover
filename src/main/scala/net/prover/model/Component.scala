@@ -48,6 +48,7 @@ trait ComponentTypeList{
     components: Components,
     distinctVariables: DistinctVariables
   ): Components
+  def containsTerms(components: Components): Boolean
 
   def termSpecification(symbol: String, format: String, requiresBrackets: Boolean): TermSpecification[Components] = {
     TermSpecification[Components](symbol, this, format, requiresBrackets)
@@ -86,6 +87,9 @@ object ComponentTypeList {
       components: Components,
       distinctVariables: DistinctVariables
     ): Components = HNil
+    override def containsTerms(
+      components: Components
+    ) = false
   }
 
   def withTerm(inner: ComponentTypeList): ComponentTypeList.Aux[Term :: inner.Components] = new ComponentTypeList {
@@ -160,6 +164,10 @@ object ComponentTypeList {
       components.head.makeSimplifications(distinctVariables) ::
         inner.makeSimplifications(components.tail, distinctVariables)
     }
+
+    override def containsTerms(
+      components: Components
+    ) = true
   }
 
   def withStatement(inner: ComponentTypeList): ComponentTypeList.Aux[Statement :: inner.Components] = new ComponentTypeList {
@@ -233,6 +241,12 @@ object ComponentTypeList {
     ): Components = {
       components.head.makeSimplifications(distinctVariables) ::
         inner.makeSimplifications(components.tail, distinctVariables)
+    }
+
+    override def containsTerms(
+      components: Components
+    ) = {
+      components.head.containsTerms || inner.containsTerms(components.tail)
     }
   }
 }
