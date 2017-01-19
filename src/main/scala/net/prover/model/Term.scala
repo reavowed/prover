@@ -122,11 +122,18 @@ object Term extends ComponentType[Term] {
         context.termSpecifications.find(_.symbol == s)
       }
     }
+    object SpecifiedVariable {
+      def unapply(s: String): Option[TermVariable] = {
+        context.variables.termVariables.find(_.text == s)
+      }
+    }
     val primeVariableRegex = "(\\d)'".r
     val (termType, remainingLine) = line.splitFirstWord
     termType match {
       case TermSpecificationMatcher(termSpecification) =>
         termSpecification.parseTerm(remainingLine, context)
+      case SpecifiedVariable(variable) =>
+        (variable, remainingLine)
       case IntParser(i) =>
         (TermVariable((123 - i).toChar.toString), remainingLine)
       case primeVariableRegex(IntParser(i)) =>

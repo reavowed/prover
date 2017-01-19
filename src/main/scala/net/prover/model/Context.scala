@@ -3,13 +3,16 @@ package net.prover.model
 case class Context(
     statementParsers: Seq[StatementParser],
     termSpecifications: Seq[TermSpecification[_]],
-    theoremLineParsers: Seq[TheoremLineParser]) {
+    theoremLineParsers: Seq[TheoremLineParser],
+    variables: Variables) {
 
-  def +(other: Context): Context = {
+  def combine(others: Seq[Context]): Context = {
     Context(
-      statementParsers ++ other.statementParsers,
-      termSpecifications ++ other.termSpecifications,
-      theoremLineParsers ++ other.theoremLineParsers)
+      others.flatMap(_.statementParsers) ++ statementParsers,
+      others.flatMap(_.termSpecifications) ++ termSpecifications,
+      others.flatMap(_.theoremLineParsers) ++ theoremLineParsers,
+      variables
+    )
   }
 
   def deductions: Seq[Deduction] = theoremLineParsers.ofType[Deduction]
@@ -22,5 +25,5 @@ case class Context(
 }
 
 object Context {
-  val empty = Context(Nil, Nil, Nil)
+  val empty = Context(Nil, Nil, Nil, Variables.empty)
 }

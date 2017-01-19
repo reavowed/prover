@@ -22,7 +22,7 @@ case class Book(
   protected def transitiveDependencies: Seq[Book] = dependencies.flatMap(_.transitiveDependencies).distinctBy(_.title) :+ this
 
   lazy val fullContext: Context = {
-    transitiveDependencies.map(_.context).reduce(_ + _) + context
+    context.combine(transitiveDependencies.map(_.context))
   }
 }
 
@@ -74,6 +74,12 @@ object Book {
       case WordAndRemainingText("include", PartialLine(includePathText, _)) +: linesAfterInclude =>
         val includeLines = getIncludeLines(includePathText, book)
         addLinesToBook(includeLines ++ linesAfterInclude, book)
+      case WordAndRemainingText("variables", variablesLine) +: linesAfterVariables =>
+        val variableNames = Parser.inParens(variablesLine, _.toEndOfParens)._1.splitByWhitespace()
+        val variables = Variables(Nil, variableNames.map(TermVariable))
+        val updatedContext = book.context.copy(variables = book.context.variables ++ variables)
+        val updatedBook = book.copy(context = updatedContext)
+        addLinesToBook(linesAfterVariables, updatedBook)
       case WordAndRemainingText(entryType, restOfLine) +: moreLines =>
         val parser = entryParsers.find(_.name == entryType)
           .getOrElse(throw ParseException.withMessage(s"Unrecognised type '$entryType'", lines.head))
