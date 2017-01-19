@@ -1,26 +1,36 @@
 chapter Intersections
 Arbitrary and binary intersections.
 
+variables (x y z y' S T)
+
+theorem intersectionOverClassExists An Intersection over a Class Exists
+premise ∃ x 1
+assume sub z x 1
+  assume = T comprehension y z ∀ x → 1 ∈ y x
+    definitionComprehensionRenamed f.f.a y
+    assume ∀ x → 1 ∈ y' x
+      eliminateForall f.f.f.a z
+    eliminateImplication f.f.f.1 f.a
+    introduceImplication f.f.f.2
+    redundantAnd f.f.2
+    introduceForall f.f.3 ↔ ∧ ∈ y z ∀ x → 1 ∈ y x ∀ x → 1 ∈ y x y' y
+    equivalenceIsTransitiveInsideForall f.f.1 f.f.4
+    introduceExists f.f.5 ∀ y ↔ ∈ y S ∀ x → 1 ∈ y x T S
+  introduceImplication f.f.6
+  eliminateRename f.1
+introduceImplication f.2
+eliminateExists p1 1
+qed
+
 theorem arbitraryIntersectionsExist Arbitrary Intersections Exist
 premise ¬ = 1 ∅
 nonEmptySetHasAnElement p1 3
-assume ∈ 3' 1
-  definition-comprehension ∀ 3 → ∈ 3 1 ∈ 4 3 2 4 3'
-  assume ∀ 3 → ∈ 3 1 ∈ 2' 3
-    eliminateForall f.f.a 3'
-    eliminateImplication f.f.1 f.a
-  introduceImplication f.f.2
-  redundantAnd f.2
-  introduceForall f.3 ↔ ∧ ∈ 2 3' ∀ 3 → ∈ 3 1 ∈ 2 3 ∀ 3 → ∈ 3 1 ∈ 2 3 2' 2
-  equivalenceIsTransitiveInsideForall f.1 f.4
-  introduceExists f.5 ∀ 2 ↔ ∈ 2 4 ∀ 3 → ∈ 3 1 ∈ 2 3 comprehension 4 3' ∀ 3 → ∈ 3 1 ∈ 4 3 4
-introduceImplication f.6
-eliminateExists 1 2 3'
+intersectionOverClassExists 1 S y
 qed
 
 theorem arbitraryIntersectionsAreUnique Arbitrary Intersections Are Unique
 premise ¬ = 1 ∅
-arbitraryIntersectionsExist p1 4 2 3
+arbitraryIntersectionsExist p1 S y x
 setWithMembershipConditionIsUnique 1
 qed
 

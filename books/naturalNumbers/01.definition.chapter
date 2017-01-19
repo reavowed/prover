@@ -1,0 +1,22 @@
+variables (n x y X Y S s)
+
+chapter Definition of the Natural Numbers
+Introduce the set of natural numbers ℕ, via the successor pseudo-function S(n) and the concept of an inductive set.
+
+term succ (term) (S({})) (n) () (= succ n ∪ n singleton n)
+
+statement inductive (term) ({} is inductive in parens) (X) (∧ ∈ ∅ X ∀ x → ∈ x X ∈ succ x X)
+
+axiom axiomOfInfinity Infinity ∃ X inductive X
+
+theorem naturalNumbersExist The Natural Numbers Exist
+axiomOfInfinity X
+intersectionOverClassExists 1 S s Y
+qed
+
+theorem naturalNumbersAreUnqiue The Natural Numbers Are Unique
+naturalNumbersExist S s X
+setWithMembershipConditionIsUnique 1
+qed
+
+term ℕ () () () () (∀ n ↔ ∈ n ℕ ∀ X → inductive X ∈ n X )

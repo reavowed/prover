@@ -35,7 +35,10 @@ object Parser {
     val (rawFormat, remainingLine) = Parser.inParens(line, _.toEndOfParens)
     val (format, requiresBrackets) = rawFormat match {
       case f if f.nonEmpty =>
-        (f, false)
+        if (f.endsWith("in parens"))
+          (f.stripSuffix("in parens").trim, true)
+        else
+          (f, false)
       case "" if numberOfComponents == 2 =>
         (s"{} $symbol {}", true)
       case "" if numberOfComponents == 1 =>

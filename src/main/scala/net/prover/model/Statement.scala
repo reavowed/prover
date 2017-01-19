@@ -354,6 +354,7 @@ case class DefinedStatement[Components <: HList](
     statementSpecification(componentTypeList.makeSimplifications(components, distinctVariables))
   }
   override def html: String = statementSpecification.formatHtml(components)
+  override def safeHtml: String = if (statementSpecification.requiresBrackets) s"($html)" else html
 }
 
 object Statement extends ComponentType[Statement] {
