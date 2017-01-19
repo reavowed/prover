@@ -30,6 +30,23 @@
                 </div>
             </div>
         </div>
+        <div ng-switch-when="statement">
+            <div class="result">
+                <h5>Statement Definition: {{entry.defaultStatement}}</h5>
+                <div ng-if="entry.premises.length">
+                    Suppose
+                    <span ng-if="entry.premises.length > 1">
+                        {{entry.premises.slice(0, entry.premises.length - 1).join(", ")}}
+                        and
+                    </span>
+                    {{entry.premises[entry.premises.length - 1]}}.
+                </div>
+                <div>
+                    <span ng-if="entry.premises.length">Then</span>
+                    {{entry.defaultStatement}} is defined to mean {{ entry.definingStatement }}
+                </div>
+            </div>
+        </div>
         <div ng-switch-when="term">
             <div class="result">
                 <h5>Term Definition: {{entry.defaultTerm}}</h5>

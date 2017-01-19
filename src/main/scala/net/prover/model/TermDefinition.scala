@@ -7,7 +7,6 @@ case class TermSpecification[Components <: HList](
     componentTypes: ComponentTypeList.Aux[Components],
     format: String,
     requiresBrackets: Boolean)
-  extends TermParser
 {
   def apply(components: Components): Term = {
     DefinedTerm(components, this)
@@ -20,7 +19,7 @@ case class TermSpecification[Components <: HList](
       None
   }
 
-  override def parseTerm(line: PartialLine, context: Context): (Term, PartialLine) = {
+  def parseTerm(line: PartialLine, context: Context): (Term, PartialLine) = {
     componentTypes.parse(line, context).mapLeft(apply)
   }
 }
@@ -28,11 +27,11 @@ case class TermSpecification[Components <: HList](
 case class TermDefinition[Components <: HList](
     specification: TermSpecification[Components],
     premises: Seq[Statement],
+    defaultTerm: Term,
     definition: Statement)
   extends ChapterEntry(TermDefinition)
 {
   val id: String = s"definition-${specification.symbol}"
-
   val deduction: Deduction = new Deduction {
     override val id: String = TermDefinition.this.id
     override val premiseTemplates: Seq[Statement] = premises
@@ -45,51 +44,21 @@ case class TermDefinition[Components <: HList](
 object TermDefinition extends SingleLineChapterEntryParser[TermDefinition[_]] {
   override val name: String = "term"
 
-  private def parseComponentTypeList(line: PartialLine): (ComponentTypeList, PartialLine) = {
-    line match {
-      case WordAndRemainingText("term", lineAfterTerm) =>
-        val (innerComponentTypeList, remainingLine) = parseComponentTypeList(lineAfterTerm)
-        (ComponentTypeList.withTerm(innerComponentTypeList), remainingLine)
-      case WordAndRemainingText("statement", lineAfterTerm) =>
-        val (innerComponentTypeList, remainingLine) = parseComponentTypeList(lineAfterTerm)
-        (ComponentTypeList.withStatement(innerComponentTypeList), remainingLine)
-      case _ =>
-        (ComponentTypeList.empty, line)
-    }
-  }
-
-  private def parseRawFormat(line: PartialLine): (String, PartialLine) = {
-    line.toEndOfParens
-  }
-
-  private def readFormat(rawFormat: String, symbol: String, numberOfComponents: Int)(implicit line: BookLine): (String, Boolean) = rawFormat match {
-    case f if f.nonEmpty =>
-      (f, false)
-    case "" if numberOfComponents == 2 =>
-      (s"{} $symbol {}", true)
-    case "" if numberOfComponents == 1 =>
-      (s"$symbol {}", false)
-    case "" if numberOfComponents == 0 =>
-      (symbol, false)
-    case "" =>
-      throw ParseException.withMessage("Explicit format must be supplied with more than two components", line)
-  }
-
   override def parse(line: PartialLine, context: Context): TermDefinition[_] = {
     val (symbol, lineAfterSymbol) = line.splitFirstWord
-    val (componentTypes, lineAfterComponents) = Parser.inParens(lineAfterSymbol, parseComponentTypeList)
-    val (rawFormat, lineAfterFormat) = Parser.inParens(lineAfterComponents, parseRawFormat)
-    val (format, requiresBrackets) = readFormat(rawFormat, symbol, componentTypes.length)(line.fullLine)
+    val (componentTypes, lineAfterComponents) = Parser.inParens(lineAfterSymbol, ComponentTypeList.parse)
+    val (format, requiresBrackets, lineAfterFormat) = Parser.parseFormat(lineAfterComponents, symbol, componentTypes.length)
     val termSpecification = componentTypes.termSpecification(symbol, format, requiresBrackets)
-    val (premises, lineAfterPremises) = Parser.listInParens(lineAfterFormat, Statement.parse(_, context))
-    val updatedContext = context.copy(termParsers = context.termParsers :+ termSpecification)
+    val (defaultTerm, lineAfterDefaultTerm) = Parser.inParens(lineAfterFormat, termSpecification.parseTerm(_, context))
+    val (premises, lineAfterPremises) = Parser.listInParens(lineAfterDefaultTerm, Statement.parse(_, context))
+    val updatedContext = context.copy(termSpecifications = context.termSpecifications :+ termSpecification)
     val (definitionTemplate, _) = Parser.inParens(lineAfterPremises, Statement.parse(_, updatedContext))
-    TermDefinition(termSpecification, premises, definitionTemplate)
+    TermDefinition(termSpecification, premises, defaultTerm, definitionTemplate)
   }
   override def addToContext(termDefinition: TermDefinition[_], context: Context): Context = {
     context.copy(
-      termParsers = context.termParsers :+ termDefinition.specification,
-      otherTheoremLineParsers = context.otherTheoremLineParsers :+ termDefinition.deduction)
+      termSpecifications = context.termSpecifications :+ termDefinition.specification,
+      theoremLineParsers = context.theoremLineParsers :+ termDefinition.deduction)
   }
 }
 

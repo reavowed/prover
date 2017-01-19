@@ -11,7 +11,7 @@ class ConnectiveSpec extends ProverSpec {
     "parse a connective with a definition" in {
       Connective.parse(
         "∧ 2 ¬ → 1 ¬ 2",
-        Context.empty.copy(statementDefinitions = Seq(Implication, Negation))
+        Context.empty.copy(statementParsers = Seq(Implication, Negation))
       ) mustEqual Connective("∧", 2, Some(Negation(Implication(1, Negation(2)))))
     }
   }

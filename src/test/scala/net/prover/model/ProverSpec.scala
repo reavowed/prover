@@ -24,6 +24,7 @@ trait ProverSpec extends Specification {
   val EmptySetDefinition = TermDefinition(
     EmptySetSpecification,
     Nil,
+    EmptySet,
     ForAll("z", Negation(ElementOf("z", EmptySet))))
 
   val Restate = DirectRule(
@@ -61,13 +62,9 @@ trait ProverSpec extends Specification {
     ForAll, Exists,
     ElementOf, Equals)
 
-  val defaultContext = Context(
-    statementDefinitions = Seq(
-      Implication, Negation, Conjunction, Disjunction, Equivalence,
-      ForAll, Exists,
-      ElementOf, Equals),
-    termParsers = Nil,
-    otherTheoremLineParsers = Nil)
+  val defaultContext = statementDefinitions.foldLeft(Context.empty) { case (context, statementDefinition) =>
+    context.addStatementDefinition(statementDefinition)
+  }
 
   implicit def intToStatementVariable(i: Int): StatementVariable = StatementVariable(i)
 

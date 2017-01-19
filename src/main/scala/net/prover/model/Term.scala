@@ -106,11 +106,6 @@ case class DefinedTerm[Components <: HList](
   }
 }
 
-trait TermParser {
-  def symbol: String
-  def parseTerm(line: PartialLine, context: Context): (Term, PartialLine)
-}
-
 object Term extends ComponentType[Term] {
   def asVariable(term: Term): TermVariable = {
     term match {
@@ -122,16 +117,16 @@ object Term extends ComponentType[Term] {
   }
 
   override def parse(line: PartialLine, context: Context): (Term, PartialLine) = {
-    object ParsableTerm {
-      def unapply(s: String): Option[TermParser] = {
-        context.termParsers.find(_.symbol == s)
+    object TermSpecificationMatcher {
+      def unapply(s: String): Option[TermSpecification[_]] = {
+        context.termSpecifications.find(_.symbol == s)
       }
     }
     val primeVariableRegex = "(\\d)'".r
     val (termType, remainingLine) = line.splitFirstWord
     termType match {
-      case ParsableTerm(termParser) =>
-        termParser.parseTerm(remainingLine, context)
+      case TermSpecificationMatcher(termSpecification) =>
+        termSpecification.parseTerm(remainingLine, context)
       case IntParser(i) =>
         (TermVariable((123 - i).toChar.toString), remainingLine)
       case primeVariableRegex(IntParser(i)) =>

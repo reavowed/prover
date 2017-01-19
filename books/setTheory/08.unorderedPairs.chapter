@@ -87,7 +87,7 @@ unorderedPairsExist 5 4 1 2
 setWithMembershipConditionIsUnique 1
 qed
 
-term pair (term term) ({{},{}}) () (∀ 3 ↔ ∈ 3 pair 1 2 ∨ = 3 1 = 3 2)
+term pair (term term) ({{},{}}) (1 2) () (∀ 3 ↔ ∈ 3 pair 1 2 ∨ = 3 1 = 3 2)
 
 theorem characteriseElementsOfPair Characterise Elements of Pair
 definition-pair 3 1 2

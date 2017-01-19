@@ -179,6 +179,6 @@ object Rule extends SingleLineChapterEntryParser[Rule] {
     }
   }
   override def addToContext(rule: Rule, context: Context): Context = {
-    context.copy(otherTheoremLineParsers = context.otherTheoremLineParsers :+ rule)
+    context.copy(theoremLineParsers = context.theoremLineParsers :+ rule)
   }
 }

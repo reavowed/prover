@@ -3,6 +3,7 @@ package net.prover.model
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
+import shapeless.HList
 
 import scala.collection.immutable.Nil
 
@@ -322,6 +323,39 @@ case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends St
   override def safeHtml: String = if (terms.length > 1) "(" + html + ")" else html
 }
 
+case class DefinedStatement[Components <: HList](
+    components: Components,
+    statementSpecification: StatementSpecification[Components])
+ extends Statement
+{
+  private def componentTypeList = statementSpecification.componentTypeList
+  override def containsTerms: Boolean = componentTypeList.containsTerms(components)
+  override def variables: Variables = componentTypeList.getVariables(components)
+  override def freeVariables: Seq[TermVariable] = componentTypeList.getFreeVariables(components)
+  override def calculateSubstitutions(other: Statement): Option[Substitutions] = other match {
+    case statementSpecification(otherComponents) =>
+      componentTypeList.calculateSubstitutions(components, otherComponents)
+    case _ =>
+      None
+  }
+  override def applySubstitutions(substitutions: Substitutions): Statement = {
+    statementSpecification(componentTypeList.applySubstitutions(components, substitutions))
+  }
+  override def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
+     statementSpecification(componentTypeList.substituteFreeVariable(components, termToReplaceWith, termToBeReplaced))
+  }
+  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
+    case statementSpecification(otherComponents) =>
+      componentTypeList.attemptSimplification(components, otherComponents)
+    case _ =>
+      None
+  }
+  override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
+    statementSpecification(componentTypeList.makeSimplifications(components, distinctVariables))
+  }
+  override def html: String = statementSpecification.formatHtml(components)
+}
+
 object Statement extends ComponentType[Statement] {
   def parseStatementVariable(line: PartialLine, context: Context): (StatementVariable, PartialLine) = {
     parse(line, context) match {
@@ -334,8 +368,8 @@ object Statement extends ComponentType[Statement] {
 
   def parse(line: PartialLine, context: Context): (Statement, PartialLine) = {
     object ParsableStatement {
-      def unapply(s: String): Option[StatementDefinition] = {
-        context.statementDefinitions.find(_.symbol == s)
+      def unapply(s: String): Option[StatementParser] = {
+        context.statementParsers.find(_.symbol == s)
       }
     }
     val (statementType, remainingLine) = line.splitFirstWord

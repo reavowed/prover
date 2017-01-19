@@ -33,6 +33,6 @@ object Predicate extends SingleLineChapterEntryParser[Predicate] {
     Predicate(symbol, arity, definingStatementOption)
   }
   override def addToContext(predicate: Predicate, context: Context): Context = {
-    context.copy(statementDefinitions = context.statementDefinitions :+ predicate)
+    context.addStatementDefinition(predicate)
   }
 }

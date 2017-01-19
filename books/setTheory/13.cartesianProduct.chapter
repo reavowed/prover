@@ -39,4 +39,4 @@ cartesianProductExists 5 6 1 2 3 4
 setWithMembershipConditionIsUnique 1
 qed
 
-term × (term term) () () (∀ 5 ↔ ∈ 5 × 1 2 ∃ 3 ∃ 4 ∧ ∧ ∈ 3 1 ∈ 4 2 = 5 orderedPair 3 4)
+term × (term term) () (1 2) () (∀ 5 ↔ ∈ 5 × 1 2 ∃ 3 ∃ 4 ∧ ∧ ∈ 3 1 ∈ 4 2 = 5 orderedPair 3 4)

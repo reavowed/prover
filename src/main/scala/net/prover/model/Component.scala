@@ -49,6 +49,9 @@ trait ComponentTypeList{
   ): Components
   def containsTerms(components: Components): Boolean
 
+  def statementSpecification(symbol: String, format: String, requiresBrackets: Boolean): StatementSpecification[Components] = {
+    StatementSpecification[Components](symbol, this, format, requiresBrackets)
+  }
   def termSpecification(symbol: String, format: String, requiresBrackets: Boolean): TermSpecification[Components] = {
     TermSpecification[Components](symbol, this, format, requiresBrackets)
   }
@@ -235,6 +238,19 @@ object ComponentTypeList {
       components: Components
     ) = {
       components.head.containsTerms || inner.containsTerms(components.tail)
+    }
+  }
+
+  def parse(line: PartialLine): (ComponentTypeList, PartialLine) = {
+    line match {
+      case WordAndRemainingText("term", lineAfterTerm) =>
+        val (innerComponentTypeList, remainingLine) = parse(lineAfterTerm)
+        (withTerm(innerComponentTypeList), remainingLine)
+      case WordAndRemainingText("statement", lineAfterStatement) =>
+        val (innerComponentTypeList, remainingLine) = parse(lineAfterStatement)
+        (withStatement(innerComponentTypeList), remainingLine)
+      case _ =>
+        (ComponentTypeList.empty, line)
     }
   }
 }

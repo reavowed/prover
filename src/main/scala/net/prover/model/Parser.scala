@@ -30,4 +30,21 @@ object Parser {
     }
     parseRecursive(line.tail, Nil)
   }
+
+  def parseFormat(line: PartialLine, symbol: String, numberOfComponents: Int): (String, Boolean, PartialLine) = {
+    val (rawFormat, remainingLine) = Parser.inParens(line, _.toEndOfParens)
+    val (format, requiresBrackets) = rawFormat match {
+      case f if f.nonEmpty =>
+        (f, false)
+      case "" if numberOfComponents == 2 =>
+        (s"{} $symbol {}", true)
+      case "" if numberOfComponents == 1 =>
+        (s"$symbol {}", false)
+      case "" if numberOfComponents == 0 =>
+        (symbol, false)
+      case "" =>
+        throw ParseException.withMessage("Explicit format must be supplied with more than two components", line.fullLine)
+    }
+    (format, requiresBrackets, remainingLine)
+  }
 }

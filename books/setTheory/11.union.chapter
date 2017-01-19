@@ -13,7 +13,7 @@ arbitraryUnionsExist 2 3 4 1
 setWithMembershipConditionIsUnique 1
 qed
 
-term union (term) (⋃{}) () (∀ 2 ↔ ∈ 2 union 1 ∃ 3 ∧ ∈ 2 3 ∈ 3 1)
+term union (term) (⋃{}) (1) () (∀ 2 ↔ ∈ 2 union 1 ∃ 3 ∧ ∈ 2 3 ∈ 3 1)
 
 theorem characteriseElementsOfArbitraryUnion Characterise Elements of Arbitrary Union
 definition-union 2 1 3
@@ -124,7 +124,7 @@ introduceForall 6 ↔ ∃ 4 ∧ ∈ 3 4 ∈ 4 pair 1 2 ∨ ∈ 3 1 ∈ 3 2 3' 3
 equivalenceIsTransitiveInsideForall 1 7
 qed
 
-term ∪ (term term) () () (= ∪ 1 2 union pair 1 2)
+term ∪ (term term) () (1 2) () (= ∪ 1 2 union pair 1 2)
 
 theorem binaryUnionMembershipCondition Binary Union Membership Condition
 definition-∪ 1 2
