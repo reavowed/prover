@@ -1,0 +1,27 @@
+chapter Induction
+Proof by induction.
+
+theorem naturalsSubsetOfAnyInductiveSet ℕ Is a Subset of Any Inductive Set
+premise inductive X
+assume ∈ n ℕ
+  naturalNumberIsElementOfAnyInductiveSet f.a p1
+introduceImplication f.1
+introduceForall 1 → ∈ x ℕ ∈ x X n x
+apply-⊆ 2
+qed
+
+theorem inductiveSubsetOfNaturalsIsNaturals An Inductive Subset of ℕ is ℕ
+premise ⊆ S ℕ
+premise inductive S
+naturalsSubsetOfAnyInductiveSet p2
+subsetIsAntisymmetric p1 1
+qed
+
+theorem proofByInduction Proof by Induction
+premise ⊆ S ℕ
+premise ∈ ∅ S
+premise ∀ n → ∈ n S ∈ succ n S
+introduceAnd p2 p3
+apply-inductive 1
+inductiveSubsetOfNaturalsIsNaturals p1 2
+qed

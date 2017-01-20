@@ -1,5 +1,3 @@
-variables (n x y X Y S s)
-
 chapter Definition of the Natural Numbers
 Introduce the set of natural numbers ℕ, via the successor pseudo-function S(n) and the concept of an inductive set.
 
@@ -45,7 +43,7 @@ eliminateForall 1 n
 modusPonensEquivalenceLeft 2 p1
 qed
 
-theorem naturalNumberIsElementOfAnyInductiveSet A Natural Number Is an Element of All Inductive Set
+theorem naturalNumberIsElementOfAnyInductiveSet A Natural Number Is an Element of Any Inductive Set
 premise ∈ n ℕ
 premise inductive X
 naturalNumberIsElementOfAllInductiveSets p1 Y
