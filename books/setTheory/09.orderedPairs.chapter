@@ -87,3 +87,19 @@ assume = pair 1 2 pair 1 4
 introduceImplication f.6
 eliminateOr 5 7 8
 qed
+
+theorem orderedPairsEqualIffElementsEqual Ordered Pairs Are Equal Iff Their Elements Are Equal
+assume = orderedPair 1 2 orderedPair 3 4
+  equalOrderedPairsHaveEqualFirstElements f.a
+  equalOrderedPairsHaveEqualSecondElements f.a
+  introduceAnd f.1 f.2
+introduceImplication f.3
+assume ∧ = 1 3 = 2 4
+  eliminateAndLeft f.a
+  eliminateAndRight f.a
+  equalityIsReflexive orderedPair 1 2
+  eliminateEquals f.1 f.3 = orderedPair 1 2 orderedPair 3 2 3
+  eliminateEquals f.2 f.4 = orderedPair 1 2 orderedPair 3 4 4
+introduceImplication f.5
+introduceEquivalence 1 2
+qed

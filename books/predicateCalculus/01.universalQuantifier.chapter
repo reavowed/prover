@@ -185,3 +185,10 @@ eliminateForall p1 2 1
 redundantAnd 1
 introduceForall 2 ↔ ∧ 2 1 1 2 1
 qed
+
+theorem eliminateEquivalenceAndConjunctInsideForall Eliminate Equivalence and ConjunctInsideForall
+premise ∀ 1 ↔ 1 ∧ 2 3
+eliminateForall p1 2
+eliminateEquivalenceAndConjunct 1
+introduceForall 2 → 1 2 2 1
+qed

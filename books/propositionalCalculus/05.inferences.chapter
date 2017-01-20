@@ -158,3 +158,35 @@ assume 2
   eliminateImplication p1 f.1
 introduceImplication f.2
 qed
+
+theorem eliminateAndInConsequentLeft Eliminate And in Consequent (Left)
+premise → 1 ∧ 2 3
+assume 1
+  eliminateImplication p1 f.a
+  eliminateAndLeft f.1
+introduceImplication f.2
+qed
+
+theorem eliminateAndInConsequentRight Eliminate And in Consequent (Right)
+premise → 1 ∧ 2 3
+assume 1
+  eliminateImplication p1 f.a
+  eliminateAndRight f.1
+introduceImplication f.2
+qed
+
+theorem eliminateAndInEquivalenceLeft Eliminate And in Equivalence (Left)
+premise ↔ 1 ∧ 2 3
+premise 2
+eliminateEquivalenceForward p1
+eliminateAndInConsequentRight 1
+eliminateEquivalenceConverse p1
+eliminateAndInAntecedentLeft 3 p2
+introduceEquivalence 2 4
+qed
+
+theorem eliminateEquivalenceAndConjunct Eliminate Equivalence and Conjunct
+premise ↔ 1 ∧ 2 3
+eliminateEquivalenceForward p1
+eliminateAndInConsequentLeft 1
+qed

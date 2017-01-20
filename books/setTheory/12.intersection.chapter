@@ -7,7 +7,7 @@ theorem intersectionOverClassExists An Intersection over a Class Exists
 premise ∃ x 1
 assume sub z x 1
   assume = T comprehension y z ∀ x → 1 ∈ y x
-    definitionComprehensionRenamed f.f.a y
+    definitionRenamedComprehension f.f.a y
     assume ∀ x → 1 ∈ y' x
       eliminateForall f.f.f.a z
     eliminateImplication f.f.f.1 f.a

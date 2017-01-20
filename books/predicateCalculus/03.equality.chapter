@@ -67,6 +67,16 @@ introduceImplication f.1
 introduceForall 1 → = 2 1 1 2' 2
 qed
 
+theorem eliminateQuantifiedEquality Eliminate Quantified Equality
+premise ∃ 1 ∧ = 2 1 sub 1 3 1
+assume ∧ = 2 1' sub 1' 3 1
+  eliminateAndLeft f.a
+  eliminateAndRight f.a
+  eliminateEqualsReverse f.1 f.2
+introduceImplication f.3
+eliminateExists p1 1 1'
+qed
+
 theorem reverseEqualityInAntecedent Reverse Equality in Antecedent
 premise → = 1 2 1
 assume = 2 1

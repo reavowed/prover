@@ -2,8 +2,9 @@ book Natural Numbers
 
 import Functions
 
-variables (n m x y X Y s S f F)
+variables (n n' m x x' y y' X Y s S t T f F)
 
 include 01.definition.chapter
 include 02.literals.chapter
 include 03.induction.chapter
+include 04.successorFunction.chapter

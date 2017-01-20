@@ -60,3 +60,23 @@ assume 2
 introduceImplication f.2
 introduceEquivalence 1 2
 qed
+
+theorem eliminateAndRightInExists Eliminate And (Right) In Existential Quantifier
+premise ∃ 1 ∧ 1 2
+assume ∧ sub 2 1 1 sub 2 1 2
+  eliminateAndRight f.a
+  introduceExists f.1
+introduceImplication f.2
+eliminateExists p1 1 2
+qed
+
+theorem modusPonensEquivalenceLeftInExists Modus Ponens with Equivalence (Left) In Existential Quantifier
+premise ∃ 1 1
+premise ∀ 1 ↔ 1 2
+assume sub 2 1 1
+  eliminateForall p2 2
+  modusPonensEquivalenceLeft f.1 f.a
+  introduceExists f.2
+introduceImplication f.3
+eliminateExists p1 1 2
+qed

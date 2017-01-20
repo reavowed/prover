@@ -15,7 +15,7 @@ qed
 
 theorem cartesianProductExists Cartesian Product Exists
 assume = 5' comprehension 6 powerSet powerSet ∪ 3 4 ∃ 1 ∃ 2 ∧ ∧ ∈ 1 3 ∈ 2 4 = 6 orderedPair 1 2
-  definitionComprehensionRenamed f.a 6
+  definitionRenamedComprehension f.a 6
   assume ∧ ∧ ∈ 1' 3 ∈ 2' 4 = 6' orderedPair 1' 2'
     eliminateAndLeft f.f.a
     eliminateAndLeft f.f.1
@@ -40,3 +40,18 @@ setWithMembershipConditionIsUnique 1
 qed
 
 term × (term term) () (1 2) () (∀ 5 ↔ ∈ 5 × 1 2 ∃ 3 ∃ 4 ∧ ∧ ∈ 3 1 ∈ 4 2 = 5 orderedPair 3 4)
+
+variables (x y z x' y' X Y)
+
+theorem orderedPairElementOfCartesianProduct Ordered Pair Is Element of Cartesian Product
+premise ∈ x X
+premise ∈ y Y
+definition-× z X Y x' y'
+eliminateForall 1 orderedPair x y
+equalityIsReflexive orderedPair x y
+introduceAnd p1 p2
+introduceAnd 4 3
+introduceExists 5 ∧ ∧ ∈ x X ∈ y' Y = orderedPair x y orderedPair x y' y y'
+introduceExists 6 ∃ 2' ∧ ∧ ∈ x' X ∈ y' Y = orderedPair x y orderedPair x' y' x x'
+modusPonensEquivalenceRight 2 7
+qed
