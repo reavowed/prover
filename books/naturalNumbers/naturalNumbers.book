@@ -2,7 +2,7 @@ book Natural Numbers
 
 import Functions
 
-variables (n n' m x x' y y' X Y s S t T f F)
+variables (n n' m m' x x' y y' X Y s S t T f g F)
 
 include 01.definition.chapter
 include 02.literals.chapter

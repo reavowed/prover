@@ -198,3 +198,12 @@ premise ↔ 1 ∧ 2 3
 eliminateEquivalenceForward p1
 eliminateAndInConsequentLeft 1
 qed
+
+theorem substituteEquivalenceIntoOrLeft Substitute Equivalence Into Or (Left)
+premise ↔ 1 2
+orDefinitionEquivalence 3 1
+substituteEquivalenceIntoImplicationConsequent p1 ¬ 3
+equivalenceIsTransitive 1 2
+orDefinitionEquivalence 3 2
+equivalenceIsTransitiveRight 3 4
+qed

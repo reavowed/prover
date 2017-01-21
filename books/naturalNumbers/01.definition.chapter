@@ -1,7 +1,16 @@
 chapter Definition of the Natural Numbers
 Introduce the set of natural numbers ℕ, via the successor pseudo-function S(n) and the concept of an inductive set.
 
-term succ (term) (S({})) (n) () (= succ n ∪ n singleton n)
+term succ (term) (succ({})) (n) () (= succ n ∪ n singleton n)
+
+theorem successorMembershipCondition Successor Membership Condition
+definition-succ x
+binaryUnionMembershipCondition y x singleton x
+eliminateEqualsReverse 1 2 ∀ y ↔ ∈ y X ∨ ∈ y x ∈ y singleton x X
+definition-singleton y x
+substituteEquivalenceIntoOrLeftInsideForall 4 ∈ y x
+equivalenceIsTransitiveInsideForall 3 5
+qed
 
 statement inductive (term) ({} is inductive in parens) (X) (∧ ∈ ∅ X ∀ x → ∈ x X ∈ succ x X)
 

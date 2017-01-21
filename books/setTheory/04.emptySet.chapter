@@ -78,3 +78,8 @@ premise ∈ 2 1
 introduceExists p1 ∈ 2 1 2 2
 setWithSomeElementIsNonEmpty 1
 qed
+
+theorem elementsOfEmptySetMeetAnyCondition Elements of the Empty Set Meet Any Condition
+definition-∅ 1
+falseStatementImpliesAnythingInsideForall 1 1
+qed

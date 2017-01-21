@@ -61,3 +61,29 @@ assume = S comprehension n ℕ ∨ = n 0 ∃ m ∧ ∈ m ℕ = n succ m
 introduceImplication f.8
 eliminateRename 1
 qed
+
+theorem everyElementOfNaturalNumberIsNaturalNumber Every Element of a Natural Number Is a Natural Number
+premise ∈ n ℕ
+assume = S comprehension n ℕ ∀ m → ∈ m n ∈ m ℕ
+  0isNaturalNumber
+  definition-0
+  elementsOfEmptySetMeetAnyCondition ∈ m ℕ m
+  eliminateEqualsReverse f.2 f.3 ∀ m → ∈ m X ∈ m ℕ X
+  setIsElementOfComprehensionIfItMeetsCondition f.a f.1 f.4
+  assume ∈ n' S
+    elementOfComprehensionIsInSuperset f.a f.f.a
+    successorOfNaturalNumberIsNaturalNumber f.f.1
+    successorMembershipCondition m n'
+    elementOfComprehensionMeetsCondition f.a f.f.a
+    quantifiedEqualityReplacement f.f.1 ∈ m ℕ n' m
+    combineCasesInsideForall f.f.4 f.f.5
+    equivalenceThenImplicationInsideForall f.f.3 f.f.6
+    setIsElementOfComprehensionIfItMeetsCondition f.a f.f.2 f.f.7
+  introduceImplication f.f.8
+  introduceForall f.6 → ∈ n S ∈ succ n S n' n
+  proofByInductionComprehension f.a f.5 f.7
+  eliminateForall f.8 n
+  eliminateImplication f.9 p1
+introduceImplication f.10
+eliminateRename 1
+qed
