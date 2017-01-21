@@ -19,9 +19,45 @@ qed
 
 theorem proofByInduction Proof by Induction
 premise ⊆ S ℕ
-premise ∈ ∅ S
+premise ∈ 0 S
 premise ∀ n → ∈ n S ∈ succ n S
-introduceAnd p2 p3
-apply-inductive 1
-inductiveSubsetOfNaturalsIsNaturals p1 2
+definition-0
+eliminateEquals 1 p2 ∈ s S s
+introduceAnd 2 p3
+apply-inductive 3
+inductiveSubsetOfNaturalsIsNaturals p1 4
+qed
+
+theorem proofByInductionComprehension Proof by Induction on Comprehension
+premise = S comprehension n ℕ 1
+premise ∈ 0 S
+premise ∀ n → ∈ n S ∈ succ n S
+comprehensionIsSubset p1
+proofByInduction 1 p2 p3
+definitionRenamedComprehension p1 n
+eliminateEquals 2 3 ∀ n ↔ ∈ n X ∧ ∈ n ℕ 1 X
+eliminateRedundantAndInsideForall 4
+qed
+
+theorem naturalIsZeroOrSuccessor A Natural Number is Either 0 or a Successor
+premise ∈ n ℕ
+assume = S comprehension n ℕ ∨ = n 0 ∃ m ∧ ∈ m ℕ = n succ m
+  0isNaturalNumber
+  equalityIsReflexive 0
+  introduceOrLeft f.2 ∃ m ∧ ∈ m ℕ = 0 succ m
+  setIsElementOfComprehensionIfItMeetsCondition f.a f.1 f.3
+  assume ∈ n' S
+    elementOfComprehensionIsInSuperset f.a f.f.a
+    successorOfNaturalNumberIsNaturalNumber f.f.1
+    equalityIsReflexive succ n'
+    introduceAnd f.f.1 f.f.3
+    introduceExists f.f.4 ∧ ∈ m ℕ = succ n' succ m n' m
+    introduceOrRight f.f.5 = succ n' 0
+    setIsElementOfComprehensionIfItMeetsCondition f.a f.f.2 f.f.6
+  introduceImplication f.f.7
+  introduceForall f.5 → ∈ n S ∈ succ n S n' n
+  proofByInductionComprehension f.a f.4 f.6
+  modusPonensInsideForall f.7 p1 n
+introduceImplication f.8
+eliminateRename 1
 qed

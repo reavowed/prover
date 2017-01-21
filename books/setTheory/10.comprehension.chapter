@@ -112,6 +112,15 @@ eliminateEquivalenceAndConjunctInsideForall 1
 apply-⊆ 2
 qed
 
+theorem elementOfComprehensionIsInSuperset An Element of a Comprehension Is in Its Superset
+premise = S comprehension x X 1
+premise ∈ s S
+definitionRenamedComprehension p1 s
+eliminateForall 1 s
+modusPonensEquivalenceLeft 2 p2
+eliminateAndLeft 3
+qed
+
 theorem elementOfComprehensionMeetsCondition An Element of a Comprehension Meets Its Condition
 premise = S comprehension x X 1
 premise ∈ s S
@@ -121,12 +130,22 @@ modusPonensEquivalenceLeft 2 p2
 eliminateAndRight 3
 qed
 
+theorem setIsElementOfComprehensionIfItMeetsCondition A Set Is an Element of a Comprehension If It Meets Its Condition
+premise = S comprehension x X 1
+premise ∈ s X
+premise sub s x 1
+definitionRenamedComprehension p1 s
+eliminateForall 1 s
+introduceAnd p2 p3
+modusPonensEquivalenceRight 2 3
+qed
+
 theorem unrestrictedComprehensionsExist Unrestricted Comprehensions Exist
 premise ∃ X ∀ x → sub x y 1 ∈ x X
 assume ∀ x → sub x y 1 ∈ x Y
   assume = T comprehension y Y 1
     definitionRenamedComprehension f.f.a x
-    redundantAndInsideForall f.a
+    introduceRedundantAndInsideForall f.a
     equivalenceIsTransitiveInsideForall f.f.1 f.f.2
     introduceExists f.f.3 ∀ x ↔ ∈ x S sub x y 1 T S
   introduceImplication f.f.4

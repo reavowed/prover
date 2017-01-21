@@ -12,7 +12,7 @@ assume sub z x 1
       eliminateForall f.f.f.a z
     eliminateImplication f.f.f.1 f.a
     introduceImplication f.f.f.2
-    redundantAnd f.f.2
+    introduceRedundantAnd f.f.2
     introduceForall f.f.3 ↔ ∧ ∈ y z ∀ x → 1 ∈ y x ∀ x → 1 ∈ y x y' y
     equivalenceIsTransitiveInsideForall f.f.1 f.f.4
     introduceExists f.f.5 ∀ y ↔ ∈ y S ∀ x → 1 ∈ y x T S

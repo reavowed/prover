@@ -179,14 +179,21 @@ combineCases 1 2
 introduceForall 3 → ∨ 1 2 3 2 1
 qed
 
-theorem redundantAndInsideForall Redundant And Inside Forall
+theorem introduceRedundantAndInsideForall Introduce Redundant And Inside Forall
 premise ∀ 1 → 1 2
 eliminateForall p1 2 1
-redundantAnd 1
+introduceRedundantAnd 1
 introduceForall 2 ↔ ∧ 2 1 1 2 1
 qed
 
-theorem eliminateEquivalenceAndConjunctInsideForall Eliminate Equivalence and ConjunctInsideForall
+theorem eliminateRedundantAndInsideForall Eliminate Redundant And Inside Forall
+premise ∀ 1 ↔ 1 ∧ 1 2
+eliminateForall p1 2 1
+eliminateRedundantAnd 1
+introduceForall 2 → 1 2 2 1
+qed
+
+theorem eliminateEquivalenceAndConjunctInsideForall Eliminate Equivalence and Conjunct Inside Forall
 premise ∀ 1 ↔ 1 ∧ 2 3
 eliminateForall p1 2
 eliminateEquivalenceAndConjunct 1

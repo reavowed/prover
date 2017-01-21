@@ -130,7 +130,7 @@ disjoinedConjunctEquivalenceRight1 p2 p3 2 4
 modusPonensEquivalenceLeft 1 p1
 qed
 
-theorem redundantAnd Redundant And
+theorem introduceRedundantAnd Introduce Redundant And
 premise → 1 2
 introduceImplication eliminateAndRight ∧ 2 1
 assume 1
@@ -138,6 +138,14 @@ assume 1
   introduceAnd f.1 f.a
 introduceImplication f.2
 introduceEquivalence 1 2
+qed
+
+theorem eliminateRedundantAnd Eliminate Redundant And
+premise ↔ 1 ∧ 1 2
+assume 1
+  modusPonensEquivalenceLeft p1 f.a
+  eliminateAndRight f.1
+introduceImplication f.2
 qed
 
 theorem rearrangeAndWithOr Rearrange And with Or
