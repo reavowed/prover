@@ -1,6 +1,7 @@
 <div ng-if="$ctrl.theorem">
     <div class="result">
         <span class="theoremId">{{$ctrl.theorem.id}}</span>
+        <span class="toggleSteps"><input type="checkbox" ng-model="showSteps"></span>
         <h5 class="theoremTitle"
             data-toggle="collapse"
             data-target="#{{$ctrl.theorem.id}}-proof, #{{$ctrl.theorem.id}}-summary">
@@ -44,7 +45,7 @@
                         <span ng-repeat="i in _.range(row.indentLevel)" class="proofIndent"></span>
                         <span>{{row.prefix}} {{row.statement}}.</span>
                     </td>
-                    <td><span class="deductionId">{{row.deductionId}}</span></td>
+                    <td ng-show="showSteps"><span class="deductionId">{{row.deductionId}}</span></td>
                 </tr>
             </table>
         </div>

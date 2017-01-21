@@ -80,6 +80,7 @@ proverApp.component('theorem', {
   },
   controller: ['$scope', function($scope) {
     $scope.proofRows = [];
+    $scope.showSteps = false;
     $scope._ = _;
     function addRow(prefix, statement, deductionId, reference, indentLevel) {
       $scope.proofRows.push({
