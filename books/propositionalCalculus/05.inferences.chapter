@@ -41,6 +41,20 @@ reverseOr p1
 eliminateLeftDisjunct 1 p2
 qed
 
+theorem eliminateNegatedDisjunctLeft Eliminate Negated Disjunct (Left)
+premise ¬ ∨ 1 2
+assume 1
+  introduceOrLeft f.a 2
+introduceNegation f.1 p1
+qed
+
+theorem eliminateNegatedDisjunctRight Eliminate Negated Disjunct (Right)
+premise ¬ ∨ 1 2
+assume 2
+  introduceOrRight f.a 1
+introduceNegation f.1 p1
+qed
+
 theorem deMorganPONNtoNAPP De Morgan's Law (PONN to NAPP)
 premise ∨ ¬ 1 ¬ 2
 unapply-∨ p1
@@ -206,4 +220,15 @@ substituteEquivalenceIntoImplicationConsequent p1 ¬ 3
 equivalenceIsTransitive 1 2
 orDefinitionEquivalence 3 2
 equivalenceIsTransitiveRight 3 4
+qed
+
+
+theorem substituteEquivalenceIntoOrRight Substitute Equivalence Into Or (Right)
+premise ↔ 1 2
+orDefinitionEquivalence 1 3
+substituteEquivalenceIntoNegation p1
+substituteEquivalenceIntoImplicationAntecedent 2 3
+equivalenceIsTransitive 1 3
+orDefinitionEquivalence 2 3
+equivalenceIsTransitiveRight 4 5
 qed

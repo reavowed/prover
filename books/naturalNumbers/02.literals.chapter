@@ -3,7 +3,7 @@ Define some literal natural numbers - 0, 1, 2, etc.
 
 term 0 () () () () (= 0 ∅)
 
-theorem 0isNaturalNumber 0 Is a Natural Number
+theorem zeroIsNaturalNumber 0 Is a Natural Number
 definition-0
 assume inductive Y
   unapply-inductive f.a n
@@ -16,9 +16,9 @@ qed
 
 term 1 () () () () (= 1 succ 0)
 
-theorem 1isNaturalNumber 1 Is a Natural Number
+theorem oneIsNaturalNumber 1 Is a Natural Number
 definition-1
-0isNaturalNumber
+zeroIsNaturalNumber
 successorOfNaturalNumberIsNaturalNumber 2
 eliminateEqualsReverse 1 3 ∈ n ℕ n
 qed

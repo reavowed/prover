@@ -42,7 +42,7 @@ qed
 theorem naturalIsZeroOrSuccessor A Natural Number is Either 0 or a Successor
 premise ∈ n ℕ
 assume = S comprehension n ℕ ∨ = n 0 ∃ m ∧ ∈ m ℕ = n succ m
-  0isNaturalNumber
+  zeroIsNaturalNumber
   equalityIsReflexive 0
   introduceOrLeft f.2 ∃ m ∧ ∈ m ℕ = 0 succ m
   setIsElementOfComprehensionIfItMeetsCondition f.a f.1 f.3
@@ -65,7 +65,7 @@ qed
 theorem everyElementOfNaturalNumberIsNaturalNumber Every Element of a Natural Number Is a Natural Number
 premise ∈ n ℕ
 assume = S comprehension n ℕ ∀ m → ∈ m n ∈ m ℕ
-  0isNaturalNumber
+  zeroIsNaturalNumber
   definition-0
   elementsOfEmptySetMeetAnyCondition ∈ m ℕ m
   eliminateEqualsReverse f.2 f.3 ∀ m → ∈ m X ∈ m ℕ X
@@ -86,4 +86,113 @@ assume = S comprehension n ℕ ∀ m → ∈ m n ∈ m ℕ
   eliminateImplication f.9 p1
 introduceImplication f.10
 eliminateRename 1
+qed
+
+theorem naturalNumberIsZeroOrContainsZero A Natural Number Is Either 0 or Contains 0
+premise ∈ n ℕ
+assume = S comprehension n ℕ ∨ ∈ 0 n = 0 n
+  zeroIsNaturalNumber
+  equalityIsReflexive 0
+  introduceOrRight f.2 ∈ 0 0
+  setIsElementOfComprehensionIfItMeetsCondition f.a f.1 f.3
+  assume ∈ n' S
+    elementOfComprehensionIsInSuperset f.a f.f.a
+    successorOfNaturalNumberIsNaturalNumber f.f.1
+    elementOfComprehensionMeetsCondition f.a f.f.a
+    assume ∈ 0 n'
+      setIsSubsetOfSuccessor n'
+      elementOfSubsetIsElementOfSet f.f.f.1 f.f.f.a
+    introduceImplication f.f.f.2
+    assume = 0 n'
+      setIsElementOfSuccessor n'
+      eliminateEqualsReverse f.f.f.a f.f.f.1 ∈ x succ n' x
+    introduceImplication f.f.f.2
+    eliminateOr f.f.3 f.f.4 f.f.5
+    introduceOrLeft f.f.6 = 0 succ n'
+    setIsElementOfComprehensionIfItMeetsCondition f.a f.f.2 f.f.7
+  introduceImplication f.f.8
+  introduceForall f.5 → ∈ n S ∈ succ n S n' n
+  proofByInductionComprehension f.a f.4 f.6
+  eliminateForall f.7 n
+  eliminateImplication f.8 p1
+introduceImplication f.9
+eliminateRename 1
+qed
+
+theorem naturalNumberEitherContainsOrIsSuccessorOfElement A Natural Number Either Contains or Is The Successor of an Element
+premise ∈ n ℕ
+premise ∈ m n
+assume = S comprehension n ℕ ∀ m → ∈ m n ∨ ∈ succ m n = succ m n
+  zeroIsNaturalNumber
+  elementsOfEmptySetMeetAnyCondition ∨ ∈ succ m ∅ = succ m ∅ m
+  definition-0
+  eliminateEqualsReverse f.3 f.2 ∀ m → ∈ m x ∨ ∈ succ m x = succ m x x
+  setIsElementOfComprehensionIfItMeetsCondition f.a f.1 f.4
+  assume ∈ n' S
+    elementOfComprehensionIsInSuperset f.a f.f.a
+    successorOfNaturalNumberIsNaturalNumber f.f.1
+    elementOfComprehensionMeetsCondition f.a f.f.a
+    assume ∈ m' succ n'
+      characteriseElementOfSuccessor f.f.f.a
+      assume ∈ m' n'
+        modusPonensInsideForall f.f.3 f.f.f.f.a m'
+        introduceImplication elementOfSetIsElementOfSuccessor ∈ succ m' n'
+        setIsElementOfSuccessor n'
+        eliminateEqualityDeduction f.f.f.f.3 ∈ x succ n' n' x succ m'
+        eliminateOr f.f.f.f.1 f.f.f.f.2 f.f.f.f.4
+      introduceImplication f.f.f.f.5
+      assume = m' n'
+        equalityIsReflexive succ m'
+        eliminateEquals f.f.f.f.a f.f.f.f.1 = succ m' succ x x
+      introduceImplication f.f.f.f.2
+      modusPonensOnOr f.f.f.1 f.f.f.2 f.f.f.3
+    introduceImplication f.f.f.4
+    introduceForall f.f.4 → ∈ m succ n' ∨ ∈ succ m succ n' = succ m succ n' m' m
+    setIsElementOfComprehensionIfItMeetsCondition f.a f.f.2 f.f.5
+  introduceImplication f.f.6
+  introduceForall f.6 → ∈ n S ∈ succ n S n' n
+  proofByInductionComprehension f.a f.5 f.7
+  eliminateForall f.8 n
+  eliminateImplication f.9 p1
+introduceImplication f.10
+eliminateRename 1
+eliminateForall 2 m
+eliminateImplication 3 p2
+qed
+
+theorem naturalTrichotomy Natural Number Trichotomy
+premise ∈ n ℕ
+premise ∈ m ℕ
+assume = S comprehension m ℕ ∨ ∨ ∈ m n = m n ∈ n m
+  zeroIsNaturalNumber
+  naturalNumberIsZeroOrContainsZero p1
+  introduceOrLeft f.2 ∈ n 0
+  setIsElementOfComprehensionIfItMeetsCondition f.a f.1 f.3
+  assume ∈ n' S
+    elementOfComprehensionIsInSuperset f.a f.f.a
+    successorOfNaturalNumberIsNaturalNumber f.f.1
+    elementOfComprehensionMeetsCondition f.a f.f.a
+    assume ∈ n' n
+      naturalNumberEitherContainsOrIsSuccessorOfElement p1 f.f.f.a
+      introduceOrLeft f.f.f.1 ∈ n succ n'
+    introduceImplication f.f.f.2
+    assume = n' n
+      setIsElementOfSuccessor n'
+      eliminateEquals f.f.f.a f.f.f.1 ∈ x succ n' x
+      introduceOrRight f.f.f.2 ∨ ∈ succ n' n = succ n' n
+    introduceImplication f.f.f.3
+    assume ∈ n n'
+      elementOfSetIsElementOfSuccessor f.f.f.a
+      introduceOrRight f.f.f.1 ∨ ∈ succ n' n = succ n' n
+    introduceImplication f.f.f.2
+    combineCases f.f.4 f.f.5
+    eliminateOr f.f.3 f.f.7 f.f.6
+    setIsElementOfComprehensionIfItMeetsCondition f.a f.f.2 f.f.8
+  introduceImplication f.f.9
+  introduceForall f.5 → ∈ m S ∈ succ m S n' m
+  proofByInductionComprehension f.a f.4 f.6
+introduceImplication f.7
+eliminateRename 1
+eliminateForall 2 m
+eliminateImplication 3 p2
 qed

@@ -12,6 +12,41 @@ substituteEquivalenceIntoOrLeftInsideForall 4 ∈ y x
 equivalenceIsTransitiveInsideForall 3 5
 qed
 
+theorem characteriseElementsOfSuccessor Characterise Elements of Successor
+successorMembershipCondition y x
+eliminateForall 1 y
+qed
+
+theorem characteriseElementOfSuccessor Characterise Element of Successor
+premise ∈ y succ x
+characteriseElementsOfSuccessor y x
+modusPonensEquivalenceLeft 1 p1
+qed
+
+theorem setIsElementOfSuccessor A Set Is an Element of Its Successor
+characteriseElementsOfSuccessor x x
+equalityIsReflexive x
+introduceOrRight 2 ∈ x x
+modusPonensEquivalenceRight 1 3
+qed
+
+theorem setIsSubsetOfSuccessor A Set Is a Subset of Its Successor
+assume ∈ y' x
+  characteriseElementsOfSuccessor y' x
+  introduceOrLeft f.a = y' x
+  modusPonensEquivalenceRight f.1 f.2
+introduceImplication f.3
+introduceForall 1 → ∈ y x ∈ y succ x y' y
+apply-⊆ 2
+qed
+
+theorem elementOfSetIsElementOfSuccessor An Element of a Set Is an Element of Its Successor
+premise ∈ y x
+introduceOrLeft p1 = y x
+characteriseElementsOfSuccessor y x
+modusPonensEquivalenceRight 2 1
+qed
+
 statement inductive (term) ({} is inductive in parens) (X) (∧ ∈ ∅ X ∀ x → ∈ x X ∈ succ x X)
 
 theorem successorOfElementOfInductiveSetIsElement The Successor of an Element of an Inductive Set Is an Element of the Set
