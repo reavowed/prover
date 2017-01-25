@@ -1,0 +1,50 @@
+chapter Definition of the Natural Numbers
+Introduce the set of natural numbers ℕ, via the successor pseudo-function S(n) and the concept of an inductive set.
+
+
+axiom axiomOfInfinity Infinity ∃ X inductive X
+
+theorem naturalNumbersExist The Natural Numbers Exist
+axiomOfInfinity X
+intersectionOverClassExists 1 S s Y
+qed
+
+theorem naturalNumbersAreUnqiue The Natural Numbers Are Unique
+naturalNumbersExist S s X
+setWithMembershipConditionIsUnique 1
+qed
+
+
+term ℕ () () () () (∀ n ↔ ∈ n ℕ ∀ X → inductive X ∈ n X )
+
+theorem elementOfAllInductiveSetsIsNaturalNumber An Element of All Inductive Sets Is a Natural Number
+premise ∀ X → inductive X ∈ n X
+definition-ℕ n X
+eliminateForall 1 n
+modusPonensEquivalenceRight 2 p1
+qed
+
+theorem naturalNumberIsElementOfAllInductiveSets A Natural Number Is an Element of All Inductive Sets
+premise ∈ n ℕ
+definition-ℕ n X
+eliminateForall 1 n
+modusPonensEquivalenceLeft 2 p1
+qed
+
+theorem naturalNumberIsElementOfAnyInductiveSet A Natural Number Is an Element of Any Inductive Set
+premise ∈ n ℕ
+premise inductive X
+naturalNumberIsElementOfAllInductiveSets p1 Y
+eliminateForall 1 X
+eliminateImplication 2 p2
+qed
+
+theorem successorOfNaturalNumberIsNaturalNumber A Successor of a Natural Number Is a Natural Number
+premise ∈ n ℕ
+assume inductive Y
+  naturalNumberIsElementOfAnyInductiveSet p1 f.a
+  successorOfElementOfInductiveSetIsElement f.a f.1
+introduceImplication f.2
+introduceForall 1 → inductive X ∈ succ n X Y X
+elementOfAllInductiveSetsIsNaturalNumber 2
+qed

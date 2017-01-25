@@ -4,7 +4,9 @@ import Functions
 
 variables (n n' m m' x x' y y' X Y s S t T f g F)
 
-include 01.definition.chapter
-include 02.literals.chapter
-include 03.induction.chapter
-include 04.successorFunction.chapter
+include 01.successors.chapter
+include 02.inductiveSets.chapter
+include 03.definitionOfNaturals.chapter
+include 04.literals.chapter
+include 05.induction.chapter
+include 06.successorFunction.chapter
