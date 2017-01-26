@@ -25,8 +25,8 @@ trait Deduction extends TheoremLineParser {
   def makeSubstitutions(
     substitutions: Substitutions): Deduction = new Deduction {
     override val id = Deduction.this.id
-    override val premiseTemplates = Deduction.this.premiseTemplates.map(_.applySubstitutions(substitutions))
-    override val conclusionTemplate = Deduction.this.conclusionTemplate.applySubstitutions(substitutions)
+    override val premiseTemplates = Deduction.this.premiseTemplates.map(_.applySubstitutions(substitutions).asInstanceOf[Statement])
+    override val conclusionTemplate = Deduction.this.conclusionTemplate.applySubstitutions(substitutions).asInstanceOf[Statement]
     override val arbitraryVariables = Deduction.this.arbitraryVariables
       .map(_.applySubstitutions(substitutions))
       .map(Term.asVariable)
@@ -44,9 +44,9 @@ trait Deduction extends TheoremLineParser {
     new Deduction {
       override val id = Deduction.this.id
       override val premiseTemplates = Deduction.this.premiseTemplates
-        .map(_.makeSimplifications(additionalDistinctVariables))
+        .map(_.makeSimplifications(additionalDistinctVariables).asInstanceOf[Statement])
       override val conclusionTemplate = Deduction.this.conclusionTemplate
-        .makeSimplifications(additionalDistinctVariables)
+        .makeSimplifications(additionalDistinctVariables).asInstanceOf[Statement]
       override val arbitraryVariables = Deduction.this.arbitraryVariables
       override val distinctVariables = Deduction.this.distinctVariables ++ additionalDistinctVariables
     }

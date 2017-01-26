@@ -3,11 +3,10 @@ package net.prover.model
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
-import shapeless.HList
 
 import scala.collection.immutable.Nil
 
-trait Statement extends JsonSerializable.Base with Component[Statement] {
+trait Statement extends JsonSerializable.Base with Component {
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeString(html)
   }
@@ -20,8 +19,11 @@ trait Statement extends JsonSerializable.Base with Component[Statement] {
 case class StatementVariable(i: Int) extends Statement {
   override def variables: Variables = Variables(Seq(this), Nil)
   override def freeVariables: Seq[TermVariable] = Nil
-  override def calculateSubstitutions(otherStatement: Statement): Option[Substitutions] = {
-    Some(Substitutions(Map(this -> otherStatement), Map.empty))
+  override def calculateSubstitutions(other: Component): Option[Substitutions] = other match {
+    case otherStatement: Statement =>
+      Some(Substitutions(Map(this -> otherStatement), Map.empty))
+    case _ =>
+      None
   }
   override def applySubstitutions(substitutions: Substitutions): Statement = {
     substitutions.statements.getOrElse(this, throw new Exception(s"No replacement for statement variable $this"))
@@ -36,7 +38,7 @@ case class StatementVariable(i: Int) extends Statement {
       StatementVariableWithReplacement(this, termToReplaceWith, termToBeReplaced)
   }
 
-  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
+  override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {
     case x: StatementVariableWithReplacement =>
       Some(DistinctVariables(x.variablesBeingReplaced.map(_ -> Variables(Seq(this), Nil)).toMap))
     case x if x == this =>
@@ -64,25 +66,31 @@ case class StatementVariableWithReplacement(
   override def freeVariables: Seq[TermVariable] = replacements.foldRight(Seq.empty[TermVariable]) { case ((term, termVariable), freeVariables) =>
     freeVariables.filter(_ != termVariable).union(term.freeVariables)
   }
-  override def calculateSubstitutions(otherStatement: Statement): Option[Substitutions] = {
-    otherStatement match {
-      case other @ StatementVariableWithReplacement(otherStatementVariable, otherReplacements) if otherReplacements.length == replacements.length =>
-        val base = Substitutions(Map(statementVariable -> otherStatementVariable), variablesBeingReplaced.zip(other.variablesBeingReplaced).toMap)
-        val substitutionAttempts = Some(base) +: replacingTerms.zip(other.replacingTerms).map { case (x, y) =>
+  override def calculateSubstitutions(other: Component): Option[Substitutions] = {
+    other match {
+      case otherStatementVariableWithReplacement
+        @ StatementVariableWithReplacement(otherStatementVariable, otherReplacements)
+        if otherReplacements.length == replacements.length
+      =>
+        val base = Substitutions(
+          Map(statementVariable -> otherStatementVariable),
+          variablesBeingReplaced.zip(otherStatementVariableWithReplacement.variablesBeingReplaced).toMap)
+        val substitutionAttempts = Some(base) +: replacingTerms.zip(otherStatementVariableWithReplacement.replacingTerms).map { case (x, y) =>
             x.calculateSubstitutions(y)
         }
         Substitutions.mergeAttempts(substitutionAttempts)
-      case other if !other.containsTerms =>
-        Some(Substitutions(Map(statementVariable -> other), Map.empty))
+      case otherStatement: Statement if !otherStatement.containsTerms =>
+        Some(Substitutions(Map(statementVariable -> otherStatement), Map.empty))
       case _ =>
         Some(Substitutions(Map.empty, Map.empty))
     }
   }
-  override def applySubstitutions(substitutions: Substitutions): Statement = {
+  override def applySubstitutions(substitutions: Substitutions): Component = {
     replacements.foldLeft(statementVariable.applySubstitutions(substitutions)) { case (statement, (a, b)) =>
       statement.substituteFreeVariable(
-        a.applySubstitutions(substitutions),
-        Term.asVariable(b.applySubstitutions(substitutions)))
+        a.applySubstitutions(substitutions).asInstanceOf[Term],
+        Term.asVariable(b.applySubstitutions(substitutions))
+      ).asInstanceOf[Statement]
     }
   }
 
@@ -97,7 +105,7 @@ case class StatementVariableWithReplacement(
     }
   }
 
-  override def attemptSimplification(other: Statement): Option[DistinctVariables] = {
+  override def attemptSimplification(other: Component): Option[DistinctVariables] = {
     def calculateOmittedVariables(
       replacementsToSimplify: Seq[(Term, TermVariable)],
       replacementsToMatch: Seq[(Term, TermVariable)],
@@ -184,8 +192,8 @@ object StatementVariableWithReplacement {
 case class ConnectiveStatement(substatements: Seq[Statement], connective: Connective) extends Statement {
   override def variables: Variables = substatements.map(_.variables).reduce(_ ++ _)
   override def freeVariables: Seq[TermVariable] = substatements.map(_.freeVariables).reduce(_ ++ _)
-  override def calculateSubstitutions(otherStatement: Statement): Option[Substitutions] = {
-    otherStatement match {
+  override def calculateSubstitutions(other: Component): Option[Substitutions] = {
+    other match {
       case ConnectiveStatement(otherSubstatements, `connective`) =>
         val substitutionAttempts = substatements.zip(otherSubstatements).map { case (substatement, otherSubstatement) =>
           substatement.calculateSubstitutions(otherSubstatement)
@@ -196,18 +204,18 @@ case class ConnectiveStatement(substatements: Seq[Statement], connective: Connec
     }
   }
 
-  override def applySubstitutions(substitutions: Substitutions): Statement = {
-    copy(substatements = substatements.map(_.applySubstitutions(substitutions)))
+  override def applySubstitutions(substitutions: Substitutions): Component = {
+    copy(substatements = substatements.map(_.applySubstitutions(substitutions).asInstanceOf[Statement]))
   }
 
   def substituteFreeVariable(
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable
   ): Statement = {
-    copy(substatements = substatements.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced)))
+    copy(substatements = substatements.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced).asInstanceOf[Statement]))
   }
 
-  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
+  override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {
     case ConnectiveStatement(otherSubstatements, `connective`) =>
       substatements.zip(otherSubstatements).map { case (substatement, otherSubstatement) =>
         substatement.attemptSimplification(otherSubstatement)
@@ -216,8 +224,8 @@ case class ConnectiveStatement(substatements: Seq[Statement], connective: Connec
       None
   }
 
-  override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
-    copy(substatements.map(_.makeSimplifications(distinctVariables)))
+  override def makeSimplifications(distinctVariables: DistinctVariables): Component = {
+    copy(substatements.map(_.makeSimplifications(distinctVariables).asInstanceOf[Statement]))
   }
 
   def html: String = substatements match {
@@ -236,8 +244,8 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
   override def variables: Variables = boundVariable +: substatement.variables
   override def freeVariables: Seq[TermVariable] = substatement.freeVariables.filter(_ != boundVariable)
 
-  override def calculateSubstitutions(otherStatement: Statement): Option[Substitutions] = {
-    otherStatement match {
+  override def calculateSubstitutions(other: Component): Option[Substitutions] = {
+    other match {
       case QuantifierStatement(otherBoundVariable, otherSubstatement, `quantifier`) =>
         substatement.calculateSubstitutions(otherSubstatement).flatMap { substatementMatch =>
           Substitutions.merge(Seq(
@@ -248,10 +256,10 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
         None
     }
   }
-  override def applySubstitutions(substitutions: Substitutions): Statement = {
+  override def applySubstitutions(substitutions: Substitutions): Component = {
     copy(
       boundVariable = Term.asVariable(boundVariable.applySubstitutions(substitutions)),
-      substatement = substatement.applySubstitutions(substitutions))
+      substatement = substatement.applySubstitutions(substitutions).asInstanceOf[Statement])
   }
 
   override def substituteFreeVariable(
@@ -265,18 +273,19 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
     else
       copy(substatement = substatement.substituteFreeVariable(
         termToReplaceWith,
-        termToBeReplaced))
+        termToBeReplaced
+      ).asInstanceOf[Statement])
   }
 
-  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
+  override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {
     case QuantifierStatement(`boundVariable`, otherSubstatement, `quantifier`) =>
       substatement.attemptSimplification(otherSubstatement)
     case _ =>
       None
   }
 
-  override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
-    copy(substatement = substatement.makeSimplifications(distinctVariables))
+  override def makeSimplifications(distinctVariables: DistinctVariables): Component = {
+    copy(substatement = substatement.makeSimplifications(distinctVariables).asInstanceOf[Statement])
   }
 
   override def containsTerms = true
@@ -287,8 +296,8 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
 case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends Statement {
   override def variables: Variables = terms.map(_.variables).reduce(_ ++ _)
   override def freeVariables: Seq[TermVariable] = terms.map(_.freeVariables).reduce(_ ++ _)
-  override def calculateSubstitutions(otherStatement: Statement): Option[Substitutions] = {
-    otherStatement match {
+  override def calculateSubstitutions(other: Component): Option[Substitutions] = {
+    other match {
       case PredicateStatement(otherTerms, `predicate`) =>
         val substitutionAttempts = terms.zip(otherTerms).map { case (term, otherTerm) =>
           term.calculateSubstitutions(otherTerm)
@@ -298,16 +307,16 @@ case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends St
         None
     }
   }
-  override def applySubstitutions(substitutions: Substitutions): Statement = {
-    copy(terms = terms.map(_.applySubstitutions(substitutions)))
+  override def applySubstitutions(substitutions: Substitutions): Component = {
+    copy(terms = terms.map(_.applySubstitutions(substitutions).asInstanceOf[Term]))
   }
   def substituteFreeVariable(
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable
-  ): Statement = {
-    copy(terms = terms.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced)))
+  ): Component = {
+    copy(terms = terms.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced).asInstanceOf[Term]))
   }
-  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
+  override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {
     case PredicateStatement(otherTerms, `predicate`) =>
       terms.zip(otherTerms).map { case (term, otherTerm) =>
         term.attemptSimplification(otherTerm)
@@ -316,48 +325,61 @@ case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends St
       None
   }
   override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
-    copy(terms = terms.map(_.makeSimplifications(distinctVariables)))
+    copy(terms = terms.map(_.makeSimplifications(distinctVariables).asInstanceOf[Term]))
   }
   override def containsTerms = true
   def html: String = terms.map(_.safeHtml).mkString(" " + predicate.symbol + " ")
   override def safeHtml: String = if (terms.length > 1) "(" + html + ")" else html
 }
 
-case class DefinedStatement[Components <: HList](
-    components: Components,
-    statementSpecification: StatementSpecification[Components])
+case class DefinedStatement(
+    subcomponents: Seq[Component],
+    statementSpecification: StatementSpecification)
  extends Statement
 {
-  private def componentTypeList = statementSpecification.componentTypeList
-  override def containsTerms: Boolean = componentTypeList.containsTerms(components)
-  override def variables: Variables = componentTypeList.getVariables(components)
-  override def freeVariables: Seq[TermVariable] = componentTypeList.getFreeVariables(components)
-  override def calculateSubstitutions(other: Statement): Option[Substitutions] = other match {
-    case statementSpecification(otherComponents) =>
-      componentTypeList.calculateSubstitutions(components, otherComponents)
+  override def containsTerms: Boolean = subcomponents.exists {
+    case s: Statement =>
+      s.containsTerms
+    case t: Term =>
+      true
+  }
+  override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
+  override def freeVariables: Seq[TermVariable] = subcomponents.map(_.freeVariables).foldLeft(Seq.empty[TermVariable])(_ ++ _)
+  override def calculateSubstitutions(other: Component): Option[Substitutions] = other match {
+    case DefinedStatement(otherSubcomponents, `statementSpecification`) =>
+      val substitutionAttempts = subcomponents.zip(otherSubcomponents).map { case (component, otherComponent) =>
+        component.calculateSubstitutions(otherComponent)
+      }
+      Substitutions.mergeAttempts(substitutionAttempts)
     case _ =>
       None
   }
   override def applySubstitutions(substitutions: Substitutions): Statement = {
-    statementSpecification(componentTypeList.applySubstitutions(components, substitutions))
+    copy(subcomponents = subcomponents.map(_.applySubstitutions(substitutions)))
   }
   override def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
-     statementSpecification(componentTypeList.substituteFreeVariable(components, termToReplaceWith, termToBeReplaced))
+    copy(subcomponents = subcomponents.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced)))
   }
-  override def attemptSimplification(other: Statement): Option[DistinctVariables] = other match {
-    case statementSpecification(otherComponents) =>
-      componentTypeList.attemptSimplification(components, otherComponents)
+  override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {
+    case DefinedStatement(otherSubcomponents, `statementSpecification`) =>
+      subcomponents.zip(otherSubcomponents).map { case (component, otherComponent) =>
+        component.attemptSimplification(otherComponent)
+      }.traverseOption.map(_.foldLeft(DistinctVariables.empty)(_ ++ _))
     case _ =>
       None
   }
   override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
-    statementSpecification(componentTypeList.makeSimplifications(components, distinctVariables))
+    copy(subcomponents = subcomponents.map(_.makeSimplifications(distinctVariables)))
   }
-  override def html: String = statementSpecification.formatHtml(components)
+  override def html: String = {
+    subcomponents.foldLeft(statementSpecification.format) { case (str, component) =>
+      str.replaceFirst("\\{\\}", component.safeHtml)
+    }
+  }
   override def safeHtml: String = if (statementSpecification.requiresBrackets) s"($html)" else html
 }
 
-object Statement extends ComponentType[Statement] {
+object Statement extends ComponentType {
   def parseStatementVariable(line: PartialLine, context: Context): (StatementVariable, PartialLine) = {
     parse(line, context) match {
       case (v: StatementVariable, remainingLine) =>
@@ -383,7 +405,7 @@ object Statement extends ComponentType[Statement] {
         val (termToReplaceWith, lineAfterFirstTerm) = Term.parse(remainingLine, context)
         val (termToBeReplaced, lineAfterSecondTerm) = Term.parse(lineAfterFirstTerm, context).mapLeft(Term.asVariable)
         val (statement, lineAfterStatement) = parse(lineAfterSecondTerm, context)
-        (statement.substituteFreeVariable(termToReplaceWith, termToBeReplaced), lineAfterStatement)
+        (statement.substituteFreeVariable(termToReplaceWith, termToBeReplaced).asInstanceOf[Statement], lineAfterStatement)
       case _ =>
         throw ParseException.withMessage(s"Unrecognised statement type $statementType", line.fullLine)
     }

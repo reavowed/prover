@@ -15,12 +15,8 @@ trait ProverSpec extends Specification {
   val ElementOf = Predicate("∈", 2, None)
   val Equals = Predicate("=", 2, None)
 
-  val EmptySetSpecification = TermSpecification(
-    "∅",
-    ComponentTypeList.empty,
-    "∅",
-    requiresBrackets = false)
-  val EmptySet = EmptySetSpecification(HNil)
+  val EmptySetSpecification = TermSpecification("∅", Nil, "∅", requiresBrackets = false)
+  val EmptySet = DefinedTerm(Nil, EmptySetSpecification)
   val EmptySetDefinition = TermDefinition(
     EmptySetSpecification,
     Nil,

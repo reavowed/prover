@@ -3,9 +3,8 @@ package net.prover.model
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
-import shapeless.HList
 
-trait Term extends JsonSerializable.Base with Component[Term] {
+trait Term extends JsonSerializable.Base with Component {
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeString(html)
   }
@@ -17,8 +16,13 @@ trait Term extends JsonSerializable.Base with Component[Term] {
 case class TermVariable(text: String) extends Term {
   override def variables: Variables = Variables(Nil, Seq(this))
   override def freeVariables: Seq[TermVariable] = Seq(this)
-  override def calculateSubstitutions(otherTerm: Term): Option[Substitutions] = {
-    Some(Substitutions(Map.empty, Map(this -> otherTerm)))
+  override def calculateSubstitutions(other: Component): Option[Substitutions] = {
+    other match {
+      case otherTerm: Term =>
+        Some(Substitutions(Map.empty, Map(this -> otherTerm)))
+      case _ =>
+        None
+    }
   }
   override def applySubstitutions(substitutions: Substitutions): Term = {
     substitutions.terms.getOrElse(this, {
@@ -35,7 +39,7 @@ case class TermVariable(text: String) extends Term {
       this
   }
 
-  override def attemptSimplification(other: Term): Option[DistinctVariables] = {
+  override def attemptSimplification(other: Component): Option[DistinctVariables] = {
     if (other == this)
       Some(DistinctVariables.empty)
     else
@@ -49,64 +53,68 @@ case class TermVariable(text: String) extends Term {
   override def html: String = text
 }
 
-case class DefinedTerm[Components <: HList](
-    components: Components,
-    termDefinition: TermSpecification[Components])
+case class DefinedTerm(
+    subcomponents: Seq[Component],
+    termSpecification: TermSpecification)
   extends Term
 {
-  override def variables: Variables = termDefinition.componentTypes.getVariables(components)
-  override def freeVariables: Seq[TermVariable] = termDefinition.componentTypes.getFreeVariables(components)
-  override def calculateSubstitutions(otherTerm: Term): Option[Substitutions] = otherTerm match {
-    case termDefinition(otherComponents) =>
-      termDefinition.componentTypes.calculateSubstitutions(components, otherComponents)
+  override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
+  override def freeVariables: Seq[TermVariable] = subcomponents.map(_.freeVariables).foldLeft(Seq.empty[TermVariable])(_ ++ _)
+  override def calculateSubstitutions(other: Component): Option[Substitutions] = other match {
+    case DefinedTerm(otherSubcomponents, `termSpecification`) =>
+      val substitutionAttempts = subcomponents.zip(otherSubcomponents).map { case (component, otherComponent) =>
+        component.calculateSubstitutions(otherComponent)
+      }
+      Substitutions.mergeAttempts(substitutionAttempts)
     case _ =>
       None
   }
   override def applySubstitutions(substitutions: Substitutions): Term = {
-    termDefinition(termDefinition.componentTypes.applySubstitutions(components, substitutions))
+    copy(subcomponents = subcomponents.map(_.applySubstitutions(substitutions)))
   }
   override def substituteFreeVariable(
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable
   ): Term = {
-    termDefinition(termDefinition.componentTypes.substituteFreeVariable(
-      components,
-      termToReplaceWith,
-      termToBeReplaced))
+    copy(subcomponents = subcomponents.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced)))
   }
-  override def attemptSimplification(otherTerm: Term): Option[DistinctVariables] = otherTerm match {
-    case termDefinition(otherComponents) =>
-      termDefinition.componentTypes.attemptSimplification(components, otherComponents)
+  override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {
+    case DefinedTerm(otherSubcomponents, `termSpecification`) =>
+      subcomponents.zip(otherSubcomponents).map { case (component, otherComponent) =>
+        component.attemptSimplification(otherComponent)
+      }.traverseOption.map(_.foldLeft(DistinctVariables.empty)(_ ++ _))
     case _ =>
       None
   }
   override def makeSimplifications(distinctVariables: DistinctVariables): Term = {
-    termDefinition(termDefinition.componentTypes.makeSimplifications(components, distinctVariables))
+    copy(subcomponents = subcomponents.map(_.makeSimplifications(distinctVariables)))
   }
   override def html: String = {
-    termDefinition.componentTypes.format(termDefinition.format, components)
+    subcomponents.foldLeft(termSpecification.format) { case (str, component) =>
+      str.replaceFirst("\\{\\}", component.safeHtml)
+    }
   }
 
   override def safeHtml: String = {
-    if (termDefinition.requiresBrackets)
+    if (termSpecification.requiresBrackets)
       s"($html)"
     else
       html
   }
 
   override def equals(obj: Any): Boolean = obj match {
-    case DefinedTerm(`components`, otherTermDefinition) if otherTermDefinition.symbol == termDefinition.symbol =>
+    case DefinedTerm(`subcomponents`, otherTermDefinition) if otherTermDefinition.symbol == termSpecification.symbol =>
       true
     case _ =>
       false
   }
 
   override def hashCode(): Int = {
-    components.hashCode * 41 + termDefinition.symbol.hashCode
+    subcomponents.hashCode * 41 + termSpecification.symbol.hashCode
   }
 }
 
-object Term extends ComponentType[Term] {
+object Term extends ComponentType {
   def asVariable(term: Term): TermVariable = {
     term match {
       case v: TermVariable =>
@@ -118,7 +126,7 @@ object Term extends ComponentType[Term] {
 
   override def parse(line: PartialLine, context: Context): (Term, PartialLine) = {
     object TermSpecificationMatcher {
-      def unapply(s: String): Option[TermSpecification[_]] = {
+      def unapply(s: String): Option[TermSpecification] = {
         context.termSpecifications.find(_.symbol == s)
       }
     }

@@ -12,15 +12,18 @@ object Parser {
     (t, remainingLine.tail)
   }
 
-  def listInParens[T](line: PartialLine, f: PartialLine => (T, PartialLine)): (Seq[T], PartialLine) = {
+  def listInParens[T](line: PartialLine, f: PartialLine => (T, PartialLine), separatorOption: Option[String] = Some(",")): (Seq[T], PartialLine) = {
     def parseRecursive(lineSoFar: PartialLine, acc: Seq[T]): (Seq[T], PartialLine) = {
       if (lineSoFar.remainingText.head == ')') {
         (acc, lineSoFar.tail)
       } else {
-        val lineToParse =
-          if (acc.nonEmpty && lineSoFar.remainingText.head == ',') lineSoFar.tail
-          else if (acc.nonEmpty) throw ParseException.withMessage("Expected comma or end-paren after list item", line.fullLine)
-          else lineSoFar
+        val lineToParse = separatorOption match {
+          case Some(separator) if acc.nonEmpty =>
+            if (lineSoFar.remainingText.startsWith(separator)) lineSoFar.tail
+            else throw ParseException.withMessage("Expected comma or end-paren after list item", line.fullLine)
+          case _ =>
+            lineSoFar
+        }
         val (next, remainingLine) = f(lineToParse)
         parseRecursive(remainingLine, acc :+ next)
       }

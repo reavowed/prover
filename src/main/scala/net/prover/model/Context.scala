@@ -2,7 +2,7 @@ package net.prover.model
 
 case class Context(
     statementParsers: Seq[StatementParser],
-    termSpecifications: Seq[TermSpecification[_]],
+    termSpecifications: Seq[TermSpecification],
     theoremLineParsers: Seq[TheoremLineParser],
     variables: Variables) {
 

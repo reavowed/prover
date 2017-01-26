@@ -39,9 +39,9 @@ case class FantasyRule(
 
   def makeSubstitutions(substitutions: Substitutions): FantasyRule = FantasyRule(
     id,
-    assumptionTemplate.applySubstitutions(substitutions),
-    premiseTemplates.map(_.applySubstitutions(substitutions)),
-    conclusionTemplate.applySubstitutions(substitutions))
+    assumptionTemplate.applySubstitutions(substitutions).asInstanceOf[Statement],
+    premiseTemplates.map(_.applySubstitutions(substitutions).asInstanceOf[Statement]),
+    conclusionTemplate.applySubstitutions(substitutions).asInstanceOf[Statement])
 
   def simplify(assumption: Statement, premises: Seq[Statement]): FantasyRule = {
     val distinctVariableAttempts = assumptionTemplate.attemptSimplification(assumption) +:
@@ -53,9 +53,9 @@ case class FantasyRule(
       .getOrElse(throw new Exception("Unexpected error resolving simplifications")).reduce(_ ++ _)
     FantasyRule(
       id,
-      assumptionTemplate.makeSimplifications(distinctVariables),
-      premiseTemplates.map(_.makeSimplifications(distinctVariables)),
-      conclusionTemplate.makeSimplifications(distinctVariables))
+      assumptionTemplate.makeSimplifications(distinctVariables).asInstanceOf[Statement],
+      premiseTemplates.map(_.makeSimplifications(distinctVariables).asInstanceOf[Statement]),
+      conclusionTemplate.makeSimplifications(distinctVariables).asInstanceOf[Statement])
   }
 
   def matchAssumptionAndPremises(
