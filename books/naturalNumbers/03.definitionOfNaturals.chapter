@@ -43,7 +43,7 @@ theorem successorOfNaturalNumberIsNaturalNumber A Successor of a Natural Number 
 premise ∈ n ℕ
 assume inductive Y
   naturalNumberIsElementOfAnyInductiveSet p1 f.a
-  successorOfElementOfInductiveSetIsElement f.a f.1
+  inductiveSetContainSuccessors f.a f.1
 introduceImplication f.2
 introduceForall 1 → inductive X ∈ succ n X Y X
 elementOfAllInductiveSetsIsNaturalNumber 2

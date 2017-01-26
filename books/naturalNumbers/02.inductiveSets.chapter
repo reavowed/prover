@@ -3,7 +3,13 @@ Define the concept of an inductive set - effectively, a set that contains every 
 
 statement inductive (term) ({} is inductive in parens) (X) (∧ ∈ ∅ X ∀ x → ∈ x X ∈ succ x X)
 
-theorem successorOfElementOfInductiveSetIsElement The Successor of an Element of an Inductive Set Is an Element of the Set
+theorem inductiveSetContainsEmptySet An Inductive Set Contains the Empty Set
+premise inductive X
+unapply-inductive p1 x
+eliminateAndLeft 1
+qed
+
+theorem inductiveSetContainSuccessors An Inductive Set Contains the Successors of Its Elements
 premise inductive X
 premise ∈ n X
 unapply-inductive p1 x
