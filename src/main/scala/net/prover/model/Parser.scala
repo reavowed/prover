@@ -78,4 +78,6 @@ object Parser {
     }
     parseRecursive(line.tail, Nil)
   }
+
+  def allInParens: Parser[String] = Parser(_.toEndOfParens).inParens
 }

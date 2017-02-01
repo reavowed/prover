@@ -53,7 +53,7 @@ object Format {
   }
 
   def parser(symbol: String, numberOfComponents: Int): Parser[Format] = {
-    Parser(_.toEndOfParens).inParens.mapWithLine { (rawFormat, line) =>
+    Parser.allInParens.mapWithLine { (rawFormat, line) =>
       parseRaw(rawFormat, symbol, numberOfComponents, line)
     }
   }

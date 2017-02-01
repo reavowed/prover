@@ -8,12 +8,21 @@ case class Axiom(id: String, title: String, conclusion: Statement) extends Chapt
 
 object Axiom extends SingleLineChapterEntryParser[Axiom] {
   override val name: String = "axiom"
-  override def parse(line: PartialLine, context: Context): Axiom = {
-    val (id, lineAfterId) = line.splitFirstWord
-    val (title, lineAfterTitle) = lineAfterId.splitFirstWord
-    val (statement, _) = Statement.parse(lineAfterTitle, context)
-    Axiom(id, title, statement)
+
+  def parser(context: Context): Parser[Axiom] = {
+    for {
+      id <- Parser.singleWord
+      title <- Parser.allInParens
+      statement <- Statement.parser(context).inParens
+    } yield {
+      Axiom(id, title, statement)
+    }
   }
+
+  override def parse(line: PartialLine, context: Context): Axiom = {
+    parser(context).parse(line)._1
+  }
+
   override def addToContext(axiom: Axiom, context: Context): Context = {
     context.copy(theoremLineParsers = context.theoremLineParsers :+ axiom)
   }

@@ -9,11 +9,11 @@ equalityEquivalence p1 ∈ 3' 1 1
 introduceForall 1 ↔ ∈ 3 1 ∈ 3 2 3' 3
 qed
 
-axiom extensionality Extensionality ∀ 1 ∀ 2 → ∀ 3 ↔ ∈ 3 1 ∈ 3 2 = 1 2
+axiom axiomOfExtensionality (Axiom of Extensionality) (∀ 1 ∀ 2 → ∀ 3 ↔ ∈ 3 1 ∈ 3 2 = 1 2)
 
 theorem setsWithSameMembersEqual Sets Are Equal If They Have The Same Members
 premise ∀ 3 ↔ ∈ 3 1 ∈ 3 2
-extensionality 1 2 3
+axiomOfExtensionality 1 2 3
 eliminateForall 1 1
 eliminateForall 2 2
 eliminateImplication 3 p1

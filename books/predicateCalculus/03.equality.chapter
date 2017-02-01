@@ -2,7 +2,9 @@ chapter Equality
 Introduce equality and its associated rules of inference.
 
 statement = (term term) () (1 2) ()
-axiom equalityIsReflexive "Equality is Reflexive" = 1 1
+
+axiom equalityIsReflexive (Equality is Reflexive) (= 1 1)
+
 rule eliminateEquals = 1 2 & sub 1 3 1 ⇒ sub 2 3 1
 
 theorem reverseEquality Reverse Equality

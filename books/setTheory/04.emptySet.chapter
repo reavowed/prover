@@ -1,7 +1,7 @@
 chapter Empty Set
 Introduce the empty set, ∅.
 
-axiom emptySetExists "Empty Set" ∃ 1 ∀ 2 ¬ ∈ 2 1
+axiom axiomOfEmptySet (Empty Set) (∃ 1 ∀ 2 ¬ ∈ 2 1)
 
 theorem emptySetsAreEqual Empty Sets are Equal
 premise ∀ 3 ¬ ∈ 3 1
@@ -11,7 +11,7 @@ setsWithSameMembersEqual 1
 qed
 
 theorem thereIsAUniqueEmptySet There Is a Unique Empty Set
-emptySetExists 1 2
+axiomOfEmptySet 1 2
 assume ∧ ∀ 2 ¬ ∈ 2 3 ∀ 2 ¬ ∈ 2 4
   eliminateAndLeft f.a
   eliminateAndRight f.a
