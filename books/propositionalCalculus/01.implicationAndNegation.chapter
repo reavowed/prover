@@ -2,22 +2,30 @@ chapter Implication and Negation
 We start by introducing our two fundamental connectives, → and ¬, and proving some basic facts about them.
 
 comment Our first connective is '→', or implication. It is a binary connective, which means it has two substatements.
+
 statement → (statement statement) () (1 2) ()
+
 comment This should be read "α implies β", or "if α then β".
 
 comment Our first rule is the first half of the definition of '→'.
-rule introduceImplication 1 ⊢ 2 ⇒ → 1 2
+
+axiom introduceImplication (Introduce Implication) (1) (2) (→ 1 2) () ()
+
 comment In other words, if by assuming α we can deduce β, then we can deduce α → β directly. This rule is called "Implication Introduction".
 
 comment This rule is all we need to prove our first theorem.
+
 theorem implicationIsReflexive Implication is Reflexive
 assume 1
 introduceImplication f.a
 qed
+
 comment We start by assuming α. But then we certainly already know α itself, so we can apply the rule of implication introduction to deduce α → α as a tautology - a statement that is always true, regardless of α.
 
 comment Our next rule of inference completes the definition of '→'.
-rule eliminateImplication → 1 2 & 1 ⇒ 2
+
+axiom eliminateImplication (Modus Ponens) () (→ 1 2, 1) (2) () ()
+
 comment This rule is called "Implication Elimination" within the system of natural deduction that we are using, but is more commonly known as "Modus Ponens". Our next theorem demonstrates its use.
 
 theorem implicationIsTransitive Implication is Transitive
@@ -30,8 +38,8 @@ introduceImplication f.2
 qed
 
 statement ¬ (statement) () (1) ()
-rule introduceNegation 1 ⊢ 2 & ¬ 2 ⇒ ¬ 1
-rule eliminateNegation ¬ ¬ 1 ⇒ 1
+axiom introduceNegation (Introduce Negation) (1) (2, ¬ 2) (¬ 1) () ()
+axiom eliminateNegation (Eliminate Double Negation) () (¬ ¬ 1) (1) () ()
 
 theorem introduceDoubleNegation Double Negation Introduction
 premise 1

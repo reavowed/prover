@@ -14,3 +14,5 @@ object ParseException {
   def withMessage(message: String, line: BookLine) = ParseException(line, message)
   def fromCause(cause: Throwable, line: BookLine) = ParseException(line, cause.getMessage)
 }
+
+case class ArbitraryVariableException(message: String) extends Exception(message)

@@ -145,11 +145,13 @@ object Term extends ComponentType {
     }
   }
 
-  def parseList(line: PartialLine, context: Context, termsSoFar: Seq[Term] = Nil): (Seq[Term], PartialLine) = {
-    Parser.listInParens(line, parse(_, context))
+  def parser(context: Context): Parser[Term] = Parser(parse(_, context))
+
+  def listParser(context: Context): Parser[Seq[Term]] = {
+    parser(context).listInParens(Some(","))
   }
 
-  def parseVariableList(line: PartialLine, context: Context): (Seq[TermVariable], PartialLine) = {
-    parseList(line, context) mapLeft (_ map asVariable)
+  def variableListParser(context: Context): Parser[Seq[TermVariable]] = {
+    parser(context).map(asVariable).listInParens(None)
   }
 }

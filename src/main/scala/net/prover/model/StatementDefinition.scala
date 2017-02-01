@@ -42,6 +42,7 @@ trait StatementDefinition extends StatementParser {
   def forwardInference: Option[Inference] = definingStatement.map { s =>
     new Inference {
       override val id: String = s"apply-$symbol"
+      override val assumption = None
       override val premises: Seq[Statement] = Seq(s)
       override val conclusion: Statement = defaultStatement
       override val arbitraryVariables: Seq[TermVariable] = Nil
@@ -53,6 +54,7 @@ trait StatementDefinition extends StatementParser {
   def reverseInference: Option[Inference] = definingStatement.map { s =>
     new Inference {
       override val id: String = s"unapply-$symbol"
+      override val assumption = None
       override val premises: Seq[Statement] = Seq(defaultStatement)
       override val conclusion: Statement = s
       override val arbitraryVariables: Seq[TermVariable] = Nil
@@ -63,17 +65,13 @@ trait StatementDefinition extends StatementParser {
 }
 
 object StatementDefinition extends SingleLineChapterEntryParser[CustomStatementDefinition] {
-  private def definingStatementParser(context: Context): Parser[Option[Statement]] = {
-    Parser(Statement.parse(_, context)).optionalInParens
-  }
-
   def parser(context: Context): Parser[CustomStatementDefinition] = {
     for {
       symbol <- Parser.singleWord
       componentTypes <- ComponentType.listParser
       format <- Format.parser(symbol, componentTypes.length)
       defaultVariables <- Components.listParser(componentTypes, context)
-      optionalDefiningStatement <- definingStatementParser(context)
+      optionalDefiningStatement <- Statement.parser(context).optionalInParens
       statementSpecification = StatementSpecification(symbol, componentTypes, format)
     } yield {
       CustomStatementDefinition(statementSpecification, defaultVariables, optionalDefiningStatement)

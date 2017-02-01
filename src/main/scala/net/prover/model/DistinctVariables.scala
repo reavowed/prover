@@ -98,4 +98,6 @@ object DistinctVariables {
     }
     (distinctVariables, lineAfterRequirements.tail)
   }
+
+  def parser(context: Context): Parser[DistinctVariables] = Parser(parse(_, context))
 }

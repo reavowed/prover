@@ -72,7 +72,26 @@
         <div ng-switch-when="axiom">
             <div class="result">
                 <h5>Axiom: {{entry.title}}</h5>
-                <div>{{entry.conclusion}}</div>
+                <div ng-if="entry.premises.length">
+                    Suppose
+                    <span ng-if="entry.premises.length > 1">
+                        {{entry.premises.slice(0, entry.premises.length - 1).join(", ")}}
+                        and
+                    </span>
+                    {{entry.premises[entry.premises.length - 1]}}.
+                </div>
+                <div>
+                    <span ng-if="entry.premises.length">Then</span>
+                    {{entry.conclusion}}.
+                </div>
+                <div class="arbitraryVariables" ng-if="entry.arbitraryVariables.length">
+                    Arbitrary variables: {{entry.arbitraryVariables.join(", ")}}
+                </div>
+                <div class="distinctVariables" ng-if="entry.distinctVariables.length">
+                    Distinct variables:
+                    <span ng-repeat="requirement in entry.distinctVariables"
+                          class="distinctVariable">({{requirement.termVariable}} in {{requirement.variables.join(", ")}})</span>
+                </div>
             </div>
         </div>
         <div ng-switch-when="theorem">

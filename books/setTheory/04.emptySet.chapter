@@ -1,7 +1,7 @@
 chapter Empty Set
 Introduce the empty set, ∅.
 
-axiom axiomOfEmptySet (Empty Set) (∃ 1 ∀ 2 ¬ ∈ 2 1)
+axiom axiomOfEmptySet (Empty Set) () () (∃ 1 ∀ 2 ¬ ∈ 2 1) () ()
 
 theorem emptySetsAreEqual Empty Sets are Equal
 premise ∀ 3 ¬ ∈ 3 1

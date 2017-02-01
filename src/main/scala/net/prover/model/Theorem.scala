@@ -11,6 +11,9 @@ case class Theorem(
     arbitraryVariables: Seq[TermVariable],
     distinctVariables: DistinctVariables)
   extends ChapterEntry(Theorem) with Inference
+{
+  val assumption = None
+}
 
 trait TheoremLineParser {
   def id: String

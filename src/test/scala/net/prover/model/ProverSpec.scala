@@ -1,7 +1,6 @@
 package net.prover.model
 
 import org.specs2.mutable.Specification
-import shapeless.HNil
 
 trait ProverSpec extends Specification {
   def connective(
@@ -45,31 +44,42 @@ trait ProverSpec extends Specification {
     Nil,
     ForAll("z", Negation(ElementOf("z", EmptySet))))
 
-  val Restate = DirectRule(
+  val Restate = Axiom(
     "restate",
+    "Restate",
+    None,
     Seq(StatementVariable(1)),
     StatementVariable(1),
     Nil,
     DistinctVariables.empty)
-  val IntroduceImplication = FantasyRule(
+  val IntroduceImplication = Axiom(
     "introduceImplication",
-    StatementVariable(1),
+    "Introduce Implication",
+    Some(StatementVariable(1)),
     Seq(StatementVariable(2)),
-    Implication(1, 2))
-  val EliminateImplication = DirectRule(
+    Implication(1, 2),
+    Nil,
+    DistinctVariables.empty)
+  val EliminateImplication = Axiom(
     "eliminateImplication",
+    "Eliminate Implication",
+    None,
     Seq(Implication(1, 2), 1),
     2,
     Nil,
     DistinctVariables.empty)
-  val IntroduceForall = DirectRule(
+  val IntroduceForall = Axiom(
     "introduceForall",
+    "Introduce Forall",
+    None,
     Seq(StatementVariableWithReplacement(1, "y", "z")),
     ForAll("z", 1),
     Seq("y"),
     DistinctVariables(Map(TermVariable("y") -> Variables(Seq(1), Nil))))
-  val EliminateForall = DirectRule(
+  val EliminateForall = Axiom(
     "eliminateForall",
+    "Eliminate Forall",
+    None,
     Seq(ForAll("z", 1)),
     StatementVariableWithReplacement(1, "y", "z"),
     Nil,

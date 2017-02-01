@@ -321,8 +321,6 @@ object Statement extends ComponentType {
     }
   }
 
-  def parser(context: Context): Parser[Statement] = Parser(parse(_, context))
-
   def parseList(
     line: PartialLine,
     context: Context,
@@ -336,6 +334,8 @@ object Statement extends ComponentType {
         (statementsSoFar :+ statement, lineAfterStatement)
     }
   }
+
+  def parser(context: Context): Parser[Statement] = Parser(parse(_, context))
 
   def listParser(context: Context): Parser[Seq[Statement]] = parser(context).listInParens(Some(","))
 
