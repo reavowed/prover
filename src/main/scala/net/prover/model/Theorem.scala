@@ -10,7 +10,7 @@ case class Theorem(
     conclusionTemplate: Statement,
     arbitraryVariables: Seq[TermVariable],
     distinctVariables: DistinctVariables)
-  extends ChapterEntry(Theorem) with Deduction
+  extends ChapterEntry(Theorem) with Inference
 
 trait TheoremLineParser {
   def id: String

@@ -10,7 +10,7 @@ case class DirectRule(
     conclusionTemplate: Statement,
     arbitraryVariables: Seq[TermVariable],
     distinctVariables: DistinctVariables)
-  extends Rule with Deduction
+  extends Rule with Inference
 
 case class FantasyRule(
     id: String,
@@ -68,17 +68,17 @@ case class FantasyRule(
     makeSubstitutions(substitutions).simplify(assumption, premises)
   }
 
-  private def applyWithDeduction(
-    deduction: Deduction,
+  private def applyWithInference(
+    inference: Inference,
     theoremBuilder: TheoremBuilder,
     line: PartialLine,
     context: Context
   ): TheoremBuilder = {
-    val deductionPremiseTemplate = deduction.premiseTemplates match {
+    val inferencePremiseTemplate = inference.premiseTemplates match {
       case Seq(singlePremiseTemplate) =>
         singlePremiseTemplate
       case _ =>
-        throw ParseException.withMessage("Can only apply rule to a deduction with a single premise", line.fullLine)
+        throw ParseException.withMessage("Can only apply rule to a inference with a single premise", line.fullLine)
     }
     val premiseTemplate = premiseTemplates match {
       case Seq(singlePremise) =>
@@ -86,18 +86,18 @@ case class FantasyRule(
       case _ =>
         throw ParseException.withMessage("Can only apply a rule with a single premise to a theorem", line.fullLine)
     }
-    val (deductionPremise, lineAfterDeductionPremise) = Statement.parse(line, context)
-    val updatedDeduction = deduction.matchPremises(
-      Seq(deductionPremise),
-      lineAfterDeductionPremise,
+    val (inferencePremise, lineAfterInferencePremise) = Statement.parse(line, context)
+    val updatedInference = inference.matchPremises(
+      Seq(inferencePremise),
+      lineAfterInferencePremise,
       context,
       theoremBuilder.distinctVariables)
     val updatedRule = matchAssumptionAndPremises(
-      updatedDeduction.premiseTemplates.head,
-      Seq(updatedDeduction.conclusionTemplate),
-      lineAfterDeductionPremise,
+      updatedInference.premiseTemplates.head,
+      Seq(updatedInference.conclusionTemplate),
+      lineAfterInferencePremise,
       context)
-    theoremBuilder.addStep(Step(updatedRule.conclusionTemplate, s"$id with ${deduction.id}"))
+    theoremBuilder.addStep(Step(updatedRule.conclusionTemplate, s"$id with ${inference.id}"))
   }
 
   private def applyWithFantasy(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
@@ -120,13 +120,13 @@ case class FantasyRule(
     line: PartialLine,
     context: Context
   ): TheoremBuilder = {
-    def withDeduction = {
-      line.splitFirstWord.optionMapLeft(n => context.deductions.find(_.id == n)) map {
-        case (deduction, restOfLine) =>
-          applyWithDeduction(deduction, theoremBuilder, restOfLine, context)
+    def withInference = {
+      line.splitFirstWord.optionMapLeft(n => context.inferences.find(_.id == n)) map {
+        case (inference, restOfLine) =>
+          applyWithInference(inference, theoremBuilder, restOfLine, context)
       }
     }
-    withDeduction.getOrElse(applyWithFantasy(theoremBuilder, line, context))
+    withInference.getOrElse(applyWithFantasy(theoremBuilder, line, context))
   }
 }
 

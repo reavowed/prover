@@ -1,6 +1,6 @@
 package net.prover.model
 
-trait Deduction extends TheoremLineParser {
+trait Inference extends TheoremLineParser {
   def premiseTemplates: Seq[Statement]
   def conclusionTemplate: Statement
   def arbitraryVariables: Seq[TermVariable]
@@ -23,17 +23,17 @@ trait Deduction extends TheoremLineParser {
   }
 
   def makeSubstitutions(
-    substitutions: Substitutions): Deduction = new Deduction {
-    override val id = Deduction.this.id
-    override val premiseTemplates = Deduction.this.premiseTemplates.map(_.applySubstitutions(substitutions).asInstanceOf[Statement])
-    override val conclusionTemplate = Deduction.this.conclusionTemplate.applySubstitutions(substitutions).asInstanceOf[Statement]
-    override val arbitraryVariables = Deduction.this.arbitraryVariables
+    substitutions: Substitutions): Inference = new Inference {
+    override val id = Inference.this.id
+    override val premiseTemplates = Inference.this.premiseTemplates.map(_.applySubstitutions(substitutions).asInstanceOf[Statement])
+    override val conclusionTemplate = Inference.this.conclusionTemplate.applySubstitutions(substitutions).asInstanceOf[Statement]
+    override val arbitraryVariables = Inference.this.arbitraryVariables
       .map(_.applySubstitutions(substitutions))
       .map(Term.asVariable)
-    override val distinctVariables = Deduction.this.distinctVariables.applySubstitutions(substitutions)
+    override val distinctVariables = Inference.this.distinctVariables.applySubstitutions(substitutions)
   }
 
-  def simplify(premises: Seq[Statement], distinctVariables: DistinctVariables): Deduction = {
+  def simplify(premises: Seq[Statement], distinctVariables: DistinctVariables): Inference = {
     val additionalDistinctVariables = premises.zip(premiseTemplates).map {
       case (premise, premiseTemplate) =>
         premiseTemplate.attemptSimplification(premise)
@@ -41,22 +41,22 @@ trait Deduction extends TheoremLineParser {
       .traverseOption
       .getOrElse(throw new Exception(s"Could not match premises\n$premises\n$premiseTemplates"))
       .foldLeft(distinctVariables)(_ ++ _)
-    new Deduction {
-      override val id = Deduction.this.id
-      override val premiseTemplates = Deduction.this.premiseTemplates
+    new Inference {
+      override val id = Inference.this.id
+      override val premiseTemplates = Inference.this.premiseTemplates
         .map(_.makeSimplifications(additionalDistinctVariables).asInstanceOf[Statement])
-      override val conclusionTemplate = Deduction.this.conclusionTemplate
+      override val conclusionTemplate = Inference.this.conclusionTemplate
         .makeSimplifications(additionalDistinctVariables).asInstanceOf[Statement]
-      override val arbitraryVariables = Deduction.this.arbitraryVariables
-      override val distinctVariables = Deduction.this.distinctVariables ++ additionalDistinctVariables
+      override val arbitraryVariables = Inference.this.arbitraryVariables
+      override val distinctVariables = Inference.this.distinctVariables ++ additionalDistinctVariables
     }
   }
 
-  def matchPremises(premises: Seq[Statement], line: PartialLine, context: Context, distinctVariables: DistinctVariables): Deduction = {
+  def matchPremises(premises: Seq[Statement], line: PartialLine, context: Context, distinctVariables: DistinctVariables): Inference = {
     val substitutions = getSubstitutions(premises, line, context)
-    val substitutedDeduction = makeSubstitutions(substitutions)
-    val simplifiedDeduction = substitutedDeduction.simplify(premises, distinctVariables)
-    simplifiedDeduction
+    val substitutedInference = makeSubstitutions(substitutions)
+    val simplifiedInference = substitutedInference.simplify(premises, distinctVariables)
+    simplifiedInference
   }
 
   override def readAndUpdateTheoremBuilder(
@@ -67,10 +67,10 @@ trait Deduction extends TheoremLineParser {
     val (premises, lineAfterPremises) = premiseTemplates.mapFold(line) { (premiseTemplate, lineSoFar) =>
       readReference(lineSoFar, theoremBuilder)
     }
-    val updatedDeduction = matchPremises(premises, lineAfterPremises, context, theoremBuilder.distinctVariables)
+    val updatedInference = matchPremises(premises, lineAfterPremises, context, theoremBuilder.distinctVariables)
     theoremBuilder
-      .addStep(Step(updatedDeduction.conclusionTemplate, id))
-      .withArbitraryVariables(updatedDeduction.arbitraryVariables)
-      .withDistinctVariables(updatedDeduction.distinctVariables)
+      .addStep(Step(updatedInference.conclusionTemplate, id))
+      .withArbitraryVariables(updatedInference.arbitraryVariables)
+      .withDistinctVariables(updatedInference.distinctVariables)
   }
 }

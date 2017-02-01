@@ -25,7 +25,7 @@ case class TermDefinition(
 {
   val id: String = s"definition-${specification.symbol}"
   val defaultTerm = DefinedTerm(defaultComponents, specification)
-  val deduction: Deduction = new Deduction {
+  val inference: Inference = new Inference {
     override val id: String = TermDefinition.this.id
     override val premiseTemplates: Seq[Statement] = premises
     override val conclusionTemplate: Statement = definition

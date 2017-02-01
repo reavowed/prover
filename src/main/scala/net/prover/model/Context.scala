@@ -15,20 +15,20 @@ case class Context(
     )
   }
 
-  def deductions: Seq[Deduction] = theoremLineParsers.ofType[Deduction]
+  def inferences: Seq[Inference] = theoremLineParsers.ofType[Inference]
 
   def addStatementDefinition(statementDefinition: StatementDefinition): Context = {
     copy(
       statementParsers = statementParsers :+ statementDefinition,
       theoremLineParsers = theoremLineParsers ++
-        statementDefinition.forwardDeduction.toSeq ++
-        statementDefinition.reverseDeduction.toSeq)
+        statementDefinition.forwardInference.toSeq ++
+        statementDefinition.reverseInference.toSeq)
   }
 
   def addTermDefinition(termDefinition: TermDefinition) = {
     copy(
       termSpecifications = termSpecifications :+ termDefinition.specification,
-      theoremLineParsers = theoremLineParsers :+ termDefinition.deduction)
+      theoremLineParsers = theoremLineParsers :+ termDefinition.inference)
   }
 }
 

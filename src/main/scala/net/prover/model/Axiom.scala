@@ -1,6 +1,6 @@
 package net.prover.model
 
-case class Axiom(id: String, title: String, conclusionTemplate: Statement) extends ChapterEntry(Axiom) with Deduction {
+case class Axiom(id: String, title: String, conclusionTemplate: Statement) extends ChapterEntry(Axiom) with Inference {
   val premiseTemplates: Seq[Statement] = Nil
   val arbitraryVariables: Seq[TermVariable] = Nil
   val distinctVariables: DistinctVariables = DistinctVariables.empty

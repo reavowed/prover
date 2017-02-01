@@ -39,8 +39,8 @@ trait StatementDefinition extends StatementParser {
   def definingStatement: Option[Statement]
   def distinctVariables: DistinctVariables
 
-  def forwardDeduction: Option[Deduction] = definingStatement.map { s =>
-    new Deduction {
+  def forwardInference: Option[Inference] = definingStatement.map { s =>
+    new Inference {
       override val id: String = s"apply-$symbol"
       override val premiseTemplates: Seq[Statement] = Seq(s)
       override val conclusionTemplate: Statement = defaultStatement
@@ -50,8 +50,8 @@ trait StatementDefinition extends StatementParser {
     }
   }
 
-  def reverseDeduction: Option[Deduction] = definingStatement.map { s =>
-    new Deduction {
+  def reverseInference: Option[Inference] = definingStatement.map { s =>
+    new Inference {
       override val id: String = s"unapply-$symbol"
       override val premiseTemplates: Seq[Statement] = Seq(defaultStatement)
       override val conclusionTemplate: Statement = s

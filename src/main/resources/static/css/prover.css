@@ -116,7 +116,7 @@ table {
     font-size: inherit;
 }
 
-.reference, .deductionId {
+.reference, .inferenceId {
     font-family: monospace;
     color: gray;
     font-size: 0.85em;
@@ -130,6 +130,6 @@ table {
     margin-right: 10px;
 }
 
-.deductionId {
+.inferenceId {
     padding-left: 25px;
 }
