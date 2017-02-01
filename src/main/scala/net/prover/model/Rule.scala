@@ -6,66 +6,66 @@ case class ArbitraryVariableException(message: String) extends Exception(message
 
 case class DirectRule(
     id: String,
-    premiseTemplates: Seq[Statement],
-    conclusionTemplate: Statement,
+    premises: Seq[Statement],
+    conclusion: Statement,
     arbitraryVariables: Seq[TermVariable],
     distinctVariables: DistinctVariables)
   extends Rule with Inference
 
 case class FantasyRule(
     id: String,
-    assumptionTemplate: Statement,
-    premiseTemplates: Seq[Statement],
-    conclusionTemplate: Statement)
+    assumption: Statement,
+    premises: Seq[Statement],
+    conclusion: Statement)
   extends Rule {
 
   def getSubstitutions(
-    assumption: Statement,
-    premises: Seq[Statement],
+    targetAssumption: Statement,
+    targetPremises: Seq[Statement],
     line: PartialLine,
     context: Context
   ): Substitutions = {
-    val assumptionSubstitutionAttempt = assumptionTemplate.calculateSubstitutions(assumption)
-    val premiseSubstitutionAttempts = premises.zip(premiseTemplates).map { case (premise, premiseTemplate) =>
-      premiseTemplate.calculateSubstitutions(premise)
+    val assumptionSubstitutionAttempt = assumption.calculateSubstitutions(targetAssumption)
+    val premiseSubstitutionAttempts = premises.zip(targetPremises).map { case (premise, targetPremise) =>
+      premise.calculateSubstitutions(targetPremise)
     }
     val initialSubstitutions = Substitutions.mergeAttempts(assumptionSubstitutionAttempt +: premiseSubstitutionAttempts)
       .getOrElse(throw ParseException.withMessage(
-        s"Could not match premises\n$premises\n$premiseTemplates",
+        s"Could not match premises\n$targetPremises\n$premises",
         line.fullLine))
-    val requiredVariables = (premiseTemplates.map(_.variables) :+ conclusionTemplate.variables).reduce(_ ++ _)
+    val requiredVariables = (premises.map(_.variables) :+ conclusion.variables).reduce(_ ++ _)
     initialSubstitutions.expand(requiredVariables, line, context)._1
   }
 
   def makeSubstitutions(substitutions: Substitutions): FantasyRule = FantasyRule(
     id,
-    assumptionTemplate.applySubstitutions(substitutions).asInstanceOf[Statement],
-    premiseTemplates.map(_.applySubstitutions(substitutions).asInstanceOf[Statement]),
-    conclusionTemplate.applySubstitutions(substitutions).asInstanceOf[Statement])
+    assumption.applySubstitutions(substitutions).asInstanceOf[Statement],
+    premises.map(_.applySubstitutions(substitutions).asInstanceOf[Statement]),
+    conclusion.applySubstitutions(substitutions).asInstanceOf[Statement])
 
-  def simplify(assumption: Statement, premises: Seq[Statement]): FantasyRule = {
-    val distinctVariableAttempts = assumptionTemplate.attemptSimplification(assumption) +:
-      premises.zip(premiseTemplates).map {
-        case (premise, premiseTemplate) =>
-          premiseTemplate.attemptSimplification(premise)
+  def simplify(targetAssumption: Statement, targetPremises: Seq[Statement]): FantasyRule = {
+    val distinctVariableAttempts = assumption.attemptSimplification(targetAssumption) +:
+      premises.zip(targetPremises).map {
+        case (premise, targetPremise) =>
+          premise.attemptSimplification(targetPremise)
       }
     val distinctVariables = distinctVariableAttempts.traverseOption
       .getOrElse(throw new Exception("Unexpected error resolving simplifications")).reduce(_ ++ _)
     FantasyRule(
       id,
-      assumptionTemplate.makeSimplifications(distinctVariables).asInstanceOf[Statement],
-      premiseTemplates.map(_.makeSimplifications(distinctVariables).asInstanceOf[Statement]),
-      conclusionTemplate.makeSimplifications(distinctVariables).asInstanceOf[Statement])
+      targetAssumption.makeSimplifications(distinctVariables).asInstanceOf[Statement],
+      premises.map(_.makeSimplifications(distinctVariables).asInstanceOf[Statement]),
+      conclusion.makeSimplifications(distinctVariables).asInstanceOf[Statement])
   }
 
   def matchAssumptionAndPremises(
-    assumption: Statement,
-    premises: Seq[Statement],
+    targetAssumption: Statement,
+    targetPremises: Seq[Statement],
     line: PartialLine,
     context: Context
   ): FantasyRule = {
-    val substitutions = getSubstitutions(assumption, premises, line, context)
-    makeSubstitutions(substitutions).simplify(assumption, premises)
+    val substitutions = getSubstitutions(targetAssumption, targetPremises, line, context)
+    makeSubstitutions(substitutions).simplify(targetAssumption, targetPremises)
   }
 
   private def applyWithInference(
@@ -74,44 +74,44 @@ case class FantasyRule(
     line: PartialLine,
     context: Context
   ): TheoremBuilder = {
-    val inferencePremiseTemplate = inference.premiseTemplates match {
-      case Seq(singlePremiseTemplate) =>
-        singlePremiseTemplate
+    inference.premises match {
+      case Seq(_) =>
+        ()
       case _ =>
         throw ParseException.withMessage("Can only apply rule to a inference with a single premise", line.fullLine)
     }
-    val premiseTemplate = premiseTemplates match {
-      case Seq(singlePremise) =>
-        singlePremise
+    premises match {
+      case Seq(_) =>
+        ()
       case _ =>
-        throw ParseException.withMessage("Can only apply a rule with a single premise to a theorem", line.fullLine)
+        throw ParseException.withMessage("Can only apply a rule with a single premise to an inference", line.fullLine)
     }
-    val (inferencePremise, lineAfterInferencePremise) = Statement.parse(line, context)
+    val (targetInferencePremise, lineAfterInferencePremise) = Statement.parse(line, context)
     val updatedInference = inference.matchPremises(
-      Seq(inferencePremise),
+      Seq(targetInferencePremise),
       lineAfterInferencePremise,
       context,
       theoremBuilder.distinctVariables)
     val updatedRule = matchAssumptionAndPremises(
-      updatedInference.premiseTemplates.head,
-      Seq(updatedInference.conclusionTemplate),
+      updatedInference.premises.head,
+      Seq(updatedInference.conclusion),
       lineAfterInferencePremise,
       context)
-    theoremBuilder.addStep(Step(updatedRule.conclusionTemplate, s"$id with ${inference.id}"))
+    theoremBuilder.addStep(Step(updatedRule.conclusion, s"$id with ${inference.id}"))
   }
 
   private def applyWithFantasy(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
     theoremBuilder.replaceFantasy { fantasy =>
-      val (premises, lineAfterPremises) = premiseTemplates.mapFold(line) { (premiseTemplate, lineSoFar) =>
+      val (targetPremises, lineAfterPremises) = premises.mapFold(line) { (_, lineSoFar) =>
         readReference(lineSoFar, theoremBuilder)
       }
       val updatedRule = matchAssumptionAndPremises(
         fantasy.assumption,
-        premises,
+        targetPremises,
         lineAfterPremises,
         context
       )
-      Step(updatedRule.conclusionTemplate, id, Some(Step.Fantasy(fantasy.assumption, fantasy.steps)))
+      Step(updatedRule.conclusion, id, Some(Step.Fantasy(fantasy.assumption, fantasy.steps)))
     }
   }
 

@@ -6,25 +6,9 @@
         <div ng-switch-when="comment">
             <p>{{entry.text}}</p>
         </div>
-        <div ng-switch-when="connective">
-            <div class="result">
-                <h5>Connective: {{entry.defaultStatement}}</h5>
-                <div ng-if="entry.definingStatement">
-                    {{entry.defaultStatement}} is defined to mean {{entry.definingStatement}}
-                </div>
-            </div>
-        </div>
         <div ng-switch-when="quantifier">
             <div class="result">
                 <h5>Quantifier: {{entry.defaultStatement}}</h5>
-                <div ng-if="entry.definingStatement">
-                    {{entry.defaultStatement}} is defined to mean {{entry.definingStatement}}
-                </div>
-            </div>
-        </div>
-        <div ng-switch-when="predicate">
-            <div class="result">
-                <h5>Predicate: {{entry.defaultStatement}}</h5>
                 <div ng-if="entry.definingStatement">
                     {{entry.defaultStatement}} is defined to mean {{entry.definingStatement}}
                 </div>
@@ -68,10 +52,10 @@
             <div class="result">
                 <h5>Rule: {{entry.id}}</h5>
                 <div class="resultBlock">
-                    {{entry.assumptionTemplate ? entry.assumptionTemplate + ' ⊢' : ''}}
-                    {{entry.premiseTemplates.join(" & ")}}
+                    {{entry.assumption ? entry.assumption + ' ⊢' : ''}}
+                    {{entry.premises.join(" & ")}}
                     <span class="ruleSeparator">⇒</span>
-                    {{entry.conclusionTemplate}}
+                    {{entry.conclusion}}
                 </div>
                 <div ng-if="entry.arbitraryVariables.length" class="arbitraryVariables">
                     Arbitrary variables: {{entry.arbitraryVariables.join(", ")}}
@@ -88,7 +72,7 @@
         <div ng-switch-when="axiom">
             <div class="result">
                 <h5>Axiom: {{entry.title}}</h5>
-                <div>{{entry.conclusionTemplate}}</div>
+                <div>{{entry.conclusion}}</div>
             </div>
         </div>
         <div ng-switch-when="theorem">

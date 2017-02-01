@@ -5,9 +5,9 @@ import scala.util.control.NonFatal
 case class Theorem(
     id: String,
     title: String,
-    premiseTemplates: Seq[Statement],
+    premises: Seq[Statement],
     steps: Seq[Step],
-    conclusionTemplate: Statement,
+    conclusion: Statement,
     arbitraryVariables: Seq[TermVariable],
     distinctVariables: DistinctVariables)
   extends ChapterEntry(Theorem) with Inference

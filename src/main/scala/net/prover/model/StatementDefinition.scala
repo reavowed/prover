@@ -42,8 +42,8 @@ trait StatementDefinition extends StatementParser {
   def forwardInference: Option[Inference] = definingStatement.map { s =>
     new Inference {
       override val id: String = s"apply-$symbol"
-      override val premiseTemplates: Seq[Statement] = Seq(s)
-      override val conclusionTemplate: Statement = defaultStatement
+      override val premises: Seq[Statement] = Seq(s)
+      override val conclusion: Statement = defaultStatement
       override val arbitraryVariables: Seq[TermVariable] = Nil
       override val distinctVariables: DistinctVariables =
         StatementDefinition.this.distinctVariables
@@ -53,8 +53,8 @@ trait StatementDefinition extends StatementParser {
   def reverseInference: Option[Inference] = definingStatement.map { s =>
     new Inference {
       override val id: String = s"unapply-$symbol"
-      override val premiseTemplates: Seq[Statement] = Seq(defaultStatement)
-      override val conclusionTemplate: Statement = s
+      override val premises: Seq[Statement] = Seq(defaultStatement)
+      override val conclusion: Statement = s
       override val arbitraryVariables: Seq[TermVariable] = Nil
       override val distinctVariables: DistinctVariables =
         StatementDefinition.this.distinctVariables

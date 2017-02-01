@@ -9,18 +9,18 @@
         </h5>
         <div id="{{$ctrl.theorem.id}}-summary" class="theoremSummary collapse in">
             <div class="resultBlock">
-                <div ng-if="$ctrl.theorem.premiseTemplates.length">
+                <div ng-if="$ctrl.theorem.premises.length">
                     Suppose
-                    <span ng-if="$ctrl.theorem.premiseTemplates.length > 1">
-                        {{$ctrl.theorem.premiseTemplates.slice(0, $ctrl.theorem.premiseTemplates.length - 1).join(", ")}}
+                    <span ng-if="$ctrl.theorem.premises.length > 1">
+                        {{$ctrl.theorem.premises.slice(0, $ctrl.theorem.premises.length - 1).join(", ")}}
                         and
                     </span>
-                    {{$ctrl.theorem.premiseTemplates[$ctrl.theorem.premiseTemplates.length - 1]}}.
+                    {{$ctrl.theorem.premises[$ctrl.theorem.premises.length - 1]}}.
                     <arbitrary-variables variables="$ctrl.theorem.arbitraryVariables"></arbitrary-variables>
                 </div>
                 <div>
-                    <span ng-if="$ctrl.theorem.premiseTemplates.length">Then</span>
-                    {{$ctrl.theorem.conclusionTemplate}}.
+                    <span ng-if="$ctrl.theorem.premises.length">Then</span>
+                    {{$ctrl.theorem.conclusion}}.
                 </div>
             </div>
             <div class="arbitraryVariables" ng-if="$ctrl.theorem.arbitraryVariables.length">
@@ -33,9 +33,9 @@
             </div>
         </div>
         <div id="{{$ctrl.theorem.id}}-proof" class="theoremProof collapse">
-            <div ng-if="$ctrl.theorem.premiseTemplates.length">
+            <div ng-if="$ctrl.theorem.premises.length">
                 <h5>Premises</h5>
-                <div ng-repeat="premiseTemplate in $ctrl.theorem.premiseTemplates" class="premise">{{premiseTemplate}}</div>
+                <div ng-repeat="premise in $ctrl.theorem.premises" class="premise">{{premise}}</div>
                 <h5>Proof</h5>
             </div>
             <table class="proofRows">

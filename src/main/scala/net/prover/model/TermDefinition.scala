@@ -27,8 +27,8 @@ case class TermDefinition(
   val defaultTerm = DefinedTerm(defaultComponents, specification)
   val inference: Inference = new Inference {
     override val id: String = TermDefinition.this.id
-    override val premiseTemplates: Seq[Statement] = premises
-    override val conclusionTemplate: Statement = definition
+    override val premises: Seq[Statement] = TermDefinition.this.premises
+    override val conclusion: Statement = definition
     override val arbitraryVariables: Seq[TermVariable] = Nil
     override val distinctVariables: DistinctVariables = DistinctVariables.empty
   }

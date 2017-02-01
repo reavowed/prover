@@ -24,7 +24,7 @@ class TheoremSpec extends ProverSpec {
           "assume 1",
           "introduceImplication f.a",
           "qed"))
-      theorem.conclusionTemplate mustEqual Implication(1, 1)
+      theorem.conclusion mustEqual Implication(1, 1)
     }
 
     "parse a theorem with a nested fantasy" in {
@@ -40,7 +40,7 @@ class TheoremSpec extends ProverSpec {
           "introduceImplication f.f.3",
           "introduceImplication f.1",
           "qed"))
-      theorem.conclusionTemplate mustEqual Implication(Implication(1, 2), Implication(1, 3))
+      theorem.conclusion mustEqual Implication(Implication(1, 2), Implication(1, 3))
     }
 
     "parse a theorem with a definition application" in {
@@ -50,7 +50,7 @@ class TheoremSpec extends ProverSpec {
           "premise ∧ 1 2",
           "unapply-∧ p1",
           "qed"))
-      theorem.conclusionTemplate mustEqual Negation(Implication(1, Negation(2)))
+      theorem.conclusion mustEqual Negation(Implication(1, Negation(2)))
     }
 
     "parse a theorem with a previous theorem application" in {
@@ -71,7 +71,7 @@ class TheoremSpec extends ProverSpec {
           "apply-∨ 1",
           "qed"),
         additionalTheorems = Seq(previousTheorem))
-      theorem.conclusionTemplate mustEqual Disjunction(1, 2)
+      theorem.conclusion mustEqual Disjunction(1, 2)
     }
 
     "parse a theorem with arbitrary variables" in {
