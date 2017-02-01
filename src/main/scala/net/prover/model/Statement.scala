@@ -242,45 +242,6 @@ case class QuantifierStatement(boundVariable: TermVariable, substatement: Statem
   override def html: String = s"(${quantifier.symbol}${boundVariable.html})${substatement.safeHtml}"
 }
 
-case class PredicateStatement(terms: Seq[Term], predicate: Predicate) extends Statement {
-  override def variables: Variables = terms.map(_.variables).reduce(_ ++ _)
-  override def freeVariables: Seq[TermVariable] = terms.map(_.freeVariables).reduce(_ ++ _)
-  override def calculateSubstitutions(other: Component): Option[Substitutions] = {
-    other match {
-      case PredicateStatement(otherTerms, `predicate`) =>
-        val substitutionAttempts = terms.zip(otherTerms).map { case (term, otherTerm) =>
-          term.calculateSubstitutions(otherTerm)
-        }
-        Substitutions.mergeAttempts(substitutionAttempts)
-      case _ =>
-        None
-    }
-  }
-  override def applySubstitutions(substitutions: Substitutions): Component = {
-    copy(terms = terms.map(_.applySubstitutions(substitutions).asInstanceOf[Term]))
-  }
-  def substituteFreeVariable(
-    termToReplaceWith: Term,
-    termToBeReplaced: TermVariable
-  ): Component = {
-    copy(terms = terms.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced).asInstanceOf[Term]))
-  }
-  override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {
-    case PredicateStatement(otherTerms, `predicate`) =>
-      terms.zip(otherTerms).map { case (term, otherTerm) =>
-        term.attemptSimplification(otherTerm)
-      }.traverseOption.map(_.reduce(_ ++ _))
-    case _ =>
-      None
-  }
-  override def makeSimplifications(distinctVariables: DistinctVariables): Statement = {
-    copy(terms = terms.map(_.makeSimplifications(distinctVariables).asInstanceOf[Term]))
-  }
-  override def containsTerms = true
-  def html: String = terms.map(_.safeHtml).mkString(" " + predicate.symbol + " ")
-  override def safeHtml: String = if (terms.length > 1) "(" + html + ")" else html
-}
-
 case class DefinedStatement(
     subcomponents: Seq[Component],
     statementSpecification: StatementSpecification)

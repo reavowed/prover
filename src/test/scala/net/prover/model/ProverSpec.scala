@@ -14,6 +14,16 @@ trait ProverSpec extends Specification {
       (1 to size).map(StatementVariable),
       definingStatement)
   }
+  def predicate(
+    symbol: String,
+    size: Int,
+    definingStatement: Option[Statement]
+  ): CustomStatementDefinition = {
+    CustomStatementDefinition(
+      StatementSpecification(symbol, Seq.fill(size)(Term), Format.default(symbol, size)),
+      (1 to size).map(123 - _).map(_.toChar.toString).map(TermVariable),
+      definingStatement)
+  }
 
 
   val Implication = connective("→", 2, None)
@@ -24,8 +34,8 @@ trait ProverSpec extends Specification {
 
   val ForAll = Quantifier("∀", None, DistinctVariables.empty)
   var Exists = Quantifier("∃", Some(Negation(ForAll("z", Negation(1)))), DistinctVariables.empty)
-  val ElementOf = Predicate("∈", 2, None)
-  val Equals = Predicate("=", 2, None)
+  val ElementOf = predicate("∈", 2, None)
+  val Equals = predicate("=", 2, None)
 
   val EmptySetSpecification = TermSpecification("∅", Nil, Format.default("∅", 0))
   val EmptySet = DefinedTerm(Nil, EmptySetSpecification)
