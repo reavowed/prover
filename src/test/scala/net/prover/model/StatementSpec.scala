@@ -7,7 +7,7 @@ class StatementSpec extends ProverSpec {
     }
 
     "parse a binary connective" in {
-      Statement.parse("→ 1 2", defaultContext)._1 mustEqual ConnectiveStatement(Seq(StatementVariable(1), StatementVariable(2)), Implication)
+      Statement.parse("→ 1 2", defaultContext)._1 mustEqual Implication(StatementVariable(1), StatementVariable(2))
     }
 
     "parse a nested binary connective" in {

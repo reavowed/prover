@@ -20,7 +20,15 @@ case class Context(
   def addStatementDefinition(statementDefinition: StatementDefinition): Context = {
     copy(
       statementParsers = statementParsers :+ statementDefinition,
-      theoremLineParsers = theoremLineParsers ++ statementDefinition.forwardDeduction.toSeq ++ statementDefinition.reverseDeduction.toSeq)
+      theoremLineParsers = theoremLineParsers ++
+        statementDefinition.forwardDeduction.toSeq ++
+        statementDefinition.reverseDeduction.toSeq)
+  }
+
+  def addTermDefinition(termDefinition: TermDefinition) = {
+    copy(
+      termSpecifications = termSpecifications :+ termDefinition.specification,
+      theoremLineParsers = theoremLineParsers :+ termDefinition.deduction)
   }
 }
 

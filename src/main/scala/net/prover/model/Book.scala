@@ -56,11 +56,13 @@ case class PartialLine(remainingText: String, fullLine: BookLine) {
   }
   def isEmpty: Boolean = remainingText.isEmpty
   def nonEmpty: Boolean = remainingText.nonEmpty
+
+  def throwParseException(msg: String) = throw ParseException.withMessage(msg, fullLine)
 }
 
 object Book {
 
-  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, Connective, Quantifier, Predicate, Rule, Theorem, Axiom, StatementDefinition, TermDefinition)
+  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, Quantifier, Predicate, Rule, Theorem, Axiom, StatementDefinition, TermDefinition)
 
   private def addLinesToBook(lines: Seq[BookLine], book: Book): Book = {
     lines match {

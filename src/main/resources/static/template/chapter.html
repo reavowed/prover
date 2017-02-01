@@ -41,7 +41,7 @@
                     </span>
                     {{entry.premises[entry.premises.length - 1]}}.
                 </div>
-                <div>
+                <div ng-if="entry.definingStatement">
                     <span ng-if="entry.premises.length">Then</span>
                     "{{entry.defaultStatement}}" is defined to mean "{{ entry.definingStatement }}"
                 </div>

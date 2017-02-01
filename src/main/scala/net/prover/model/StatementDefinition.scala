@@ -1,7 +1,5 @@
 package net.prover.model
 
-import shapeless.HList
-
 trait StatementParser {
   def symbol: String
   def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine)
@@ -10,8 +8,7 @@ trait StatementParser {
 case class StatementSpecification(
     symbol: String,
     componentTypes: Seq[ComponentType],
-    format: String,
-    requiresBrackets: Boolean)
+    format: Format)
   extends StatementParser
 {
   override def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {
@@ -21,15 +18,20 @@ case class StatementSpecification(
   }
 }
 
-case class CustomStatementDefinition[Components <: HList](
+case class CustomStatementDefinition(
     specification: StatementSpecification,
-    defaultStatement: Statement,
-  definingStatement: Option[Statement])
+    defaultComponents: Seq[Component],
+    definingStatement: Option[Statement])
   extends ChapterEntry(StatementDefinition) with StatementDefinition
 {
+  override val defaultStatement = DefinedStatement(defaultComponents, specification)
   override def symbol = specification.symbol
   override def distinctVariables: DistinctVariables = DistinctVariables.empty
   override def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = specification.parseStatement(line, context)
+
+  def apply(components: Component*): Statement = {
+    DefinedStatement(components, specification)
+  }
 }
 
 trait StatementDefinition extends StatementParser {
@@ -60,18 +62,30 @@ trait StatementDefinition extends StatementParser {
   }
 }
 
-object StatementDefinition extends SingleLineChapterEntryParser[CustomStatementDefinition[_]] {
-  override def name: String = "statement"
-  override def parse(line: PartialLine, context: Context): CustomStatementDefinition[_] = {
-    val (symbol, lineAfterSymbol) = line.splitFirstWord
-    val (componentTypes, lineAfterComponents) = Parser.listInParens(lineAfterSymbol, ComponentType.parse, None)
-    val (format, requiresBrackets, lineAfterFormat) = Parser.parseFormat(lineAfterComponents, symbol, componentTypes.length)
-    val statementSpecification = StatementSpecification(symbol, componentTypes, format, requiresBrackets)
-    val (defaultStatement, lineAfterDefaultStatement) = Parser.inParens(lineAfterFormat, statementSpecification.parseStatement(_, context))
-    val (definingStatement, _) = Parser.inParens(lineAfterDefaultStatement, Statement.parse(_, context))
-    CustomStatementDefinition(statementSpecification, defaultStatement, Some(definingStatement))
+object StatementDefinition extends SingleLineChapterEntryParser[CustomStatementDefinition] {
+  private def definingStatementParser(context: Context): Parser[Option[Statement]] = {
+    Parser(Statement.parse(_, context)).optionalInParens
   }
-  override def addToContext(t: CustomStatementDefinition[_], context: Context): Context = {
+
+  def parser(context: Context): Parser[CustomStatementDefinition] = {
+    for {
+      symbol <- Parser.singleWord
+      componentTypes <- ComponentType.listParser
+      format <- Format.parser(symbol, componentTypes.length)
+      defaultVariables <- Components.listParser(componentTypes, context)
+      optionalDefiningStatement <- definingStatementParser(context)
+      statementSpecification = StatementSpecification(symbol, componentTypes, format)
+    } yield {
+      CustomStatementDefinition(statementSpecification, defaultVariables, optionalDefiningStatement)
+    }
+  }
+
+  override def parse(line: PartialLine, context: Context): CustomStatementDefinition = {
+    parser(context).parse(line)._1
+  }
+
+  override def name: String = "statement"
+  override def addToContext(t: CustomStatementDefinition, context: Context): Context = {
     context.addStatementDefinition(t)
   }
 }

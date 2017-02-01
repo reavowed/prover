@@ -1,12 +1,9 @@
 package net.prover.model
 
-import shapeless.HList
-
 case class TermSpecification(
     symbol: String,
     componentTypes: Seq[ComponentType],
-    format: String,
-    requiresBrackets: Boolean)
+    format: Format)
 {
   def apply(components: Seq[Component]) = DefinedTerm(components, this)
 
@@ -15,16 +12,19 @@ case class TermSpecification(
       componentType.parse(remainingLine, context).mapLeft(components :+ _)
     }.mapLeft(apply)
   }
+
+  def termParser(context: Context): Parser[Term] = Parser(parseTerm(_, context))
 }
 
-case class TermDefinition[Components <: HList](
+case class TermDefinition(
     specification: TermSpecification,
     premises: Seq[Statement],
-    defaultTerm: Term,
+    defaultComponents: Seq[Component],
     definition: Statement)
   extends ChapterEntry(TermDefinition)
 {
   val id: String = s"definition-${specification.symbol}"
+  val defaultTerm = DefinedTerm(defaultComponents, specification)
   val deduction: Deduction = new Deduction {
     override val id: String = TermDefinition.this.id
     override val premiseTemplates: Seq[Statement] = premises
@@ -34,24 +34,30 @@ case class TermDefinition[Components <: HList](
   }
 }
 
-object TermDefinition extends SingleLineChapterEntryParser[TermDefinition[_]] {
+object TermDefinition extends SingleLineChapterEntryParser[TermDefinition] {
   override val name: String = "term"
 
-  override def parse(line: PartialLine, context: Context): TermDefinition[_] = {
-    val (symbol, lineAfterSymbol) = line.splitFirstWord
-    val (componentTypes, lineAfterComponents) = Parser.listInParens(lineAfterSymbol, ComponentType.parse, None)
-    val (format, requiresBrackets, lineAfterFormat) = Parser.parseFormat(lineAfterComponents, symbol, componentTypes.length)
-    val termSpecification = TermSpecification(symbol, componentTypes, format, requiresBrackets)
-    val (defaultTerm, lineAfterDefaultTerm) = Parser.inParens(lineAfterFormat, termSpecification.parseTerm(_, context))
-    val (premises, lineAfterPremises) = Parser.listInParens(lineAfterDefaultTerm, Statement.parse(_, context))
-    val updatedContext = context.copy(termSpecifications = context.termSpecifications :+ termSpecification)
-    val (definitionTemplate, _) = Parser.inParens(lineAfterPremises, Statement.parse(_, updatedContext))
-    TermDefinition(termSpecification, premises, defaultTerm, definitionTemplate)
+  def parser(context: Context): Parser[TermDefinition] = {
+    for {
+      symbol <- Parser.singleWord
+      componentTypes <- ComponentType.listParser
+      format <- Format.parser(symbol, componentTypes.length)
+      termSpecification = TermSpecification(symbol, componentTypes, format)
+      defaultComponents <- Components.listParser(componentTypes, context)
+      premises <- Statement.listParser(context)
+      updatedContext = context.copy(termSpecifications = context.termSpecifications :+ termSpecification)
+      definitionTemplate <- Statement.parser(updatedContext).inParens
+    } yield {
+      TermDefinition(termSpecification, premises, defaultComponents, definitionTemplate)
+    }
   }
-  override def addToContext(termDefinition: TermDefinition[_], context: Context): Context = {
-    context.copy(
-      termSpecifications = context.termSpecifications :+ termDefinition.specification,
-      theoremLineParsers = context.theoremLineParsers :+ termDefinition.deduction)
+
+  override def parse(line: PartialLine, context: Context): TermDefinition = {
+    parser(context).parse(line)._1
+  }
+
+  override def addToContext(termDefinition: TermDefinition, context: Context): Context = {
+    context.addTermDefinition(termDefinition)
   }
 }
 

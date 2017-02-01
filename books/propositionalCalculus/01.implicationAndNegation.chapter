@@ -2,7 +2,7 @@ chapter Implication and Negation
 We start by introducing our two fundamental connectives, → and ¬, and proving some basic facts about them.
 
 comment Our first connective is '→', or implication. It is a binary connective, which means it has two substatements.
-connective → 2
+statement → (statement statement) () (1 2) ()
 comment This should be read "α implies β", or "if α then β".
 
 comment Our first rule is the first half of the definition of '→'.
@@ -29,7 +29,7 @@ assume 1
 introduceImplication f.2
 qed
 
-connective ¬ 1
+statement ¬ (statement) () (1) ()
 rule introduceNegation 1 ⊢ 2 & ¬ 2 ⇒ ¬ 1
 rule eliminateNegation ¬ ¬ 1 ⇒ 1
 

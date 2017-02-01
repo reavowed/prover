@@ -4,23 +4,35 @@ import org.specs2.mutable.Specification
 import shapeless.HNil
 
 trait ProverSpec extends Specification {
-  val Implication = Connective("→", 2, None)
-  val Negation = Connective("¬", 1, None)
-  val Conjunction = Connective("∧", 2, Some(Negation(Implication(1, Negation(2)))))
-  val Disjunction = Connective("∨", 2, Some(Implication(Negation(1), 2)))
-  val Equivalence = Connective("↔", 2, None)
+  def connective(
+    symbol: String,
+    size: Int,
+    definingStatement: Option[Statement]
+  ): CustomStatementDefinition = {
+    CustomStatementDefinition(
+      StatementSpecification(symbol, Seq.fill(size)(Statement), Format.default(symbol, size)),
+      (1 to size).map(StatementVariable),
+      definingStatement)
+  }
+
+
+  val Implication = connective("→", 2, None)
+  val Negation = connective("¬", 1, None)
+  val Conjunction = connective("∧", 2, Some(Negation(Implication(1, Negation(2)))))
+  val Disjunction = connective("∨", 2, Some(Implication(Negation(1), 2)))
+  val Equivalence = connective("↔", 2, None)
 
   val ForAll = Quantifier("∀", None, DistinctVariables.empty)
   var Exists = Quantifier("∃", Some(Negation(ForAll("z", Negation(1)))), DistinctVariables.empty)
   val ElementOf = Predicate("∈", 2, None)
   val Equals = Predicate("=", 2, None)
 
-  val EmptySetSpecification = TermSpecification("∅", Nil, "∅", requiresBrackets = false)
+  val EmptySetSpecification = TermSpecification("∅", Nil, Format.default("∅", 0))
   val EmptySet = DefinedTerm(Nil, EmptySetSpecification)
   val EmptySetDefinition = TermDefinition(
     EmptySetSpecification,
     Nil,
-    EmptySet,
+    Nil,
     ForAll("z", Negation(ElementOf("z", EmptySet))))
 
   val Restate = DirectRule(
@@ -60,7 +72,7 @@ trait ProverSpec extends Specification {
 
   val defaultContext = statementDefinitions.foldLeft(Context.empty) { case (context, statementDefinition) =>
     context.addStatementDefinition(statementDefinition)
-  }
+  }.addTermDefinition(EmptySetDefinition)
 
   implicit def intToStatementVariable(i: Int): StatementVariable = StatementVariable(i)
 

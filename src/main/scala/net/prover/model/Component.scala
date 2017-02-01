@@ -16,6 +16,16 @@ trait Component {
   override def toString: String = html
 }
 
+object Components {
+  def listParser(componentTypes: Seq[ComponentType], context: Context):Parser[Seq[Component]] = {
+    Parser { line =>
+      componentTypes.foldLeft((Seq.empty[Component], line)) { case ((components, remainingLine), componentType) =>
+        componentType.parse(remainingLine, context).mapLeft(components :+ _)
+      }
+    }.inParens
+  }
+}
+
 trait ComponentType {
   def parse(line: PartialLine, context: Context): (Component, PartialLine)
 }
@@ -31,4 +41,10 @@ object ComponentType {
         throw ParseException.withMessage("Unrecognised statement type '$something'", line.fullLine)
     }
   }
+
+  def parseList(line: PartialLine): (Seq[ComponentType], PartialLine) = {
+    Parser.listInParens(line, parse, None)
+  }
+
+  def listParser: Parser[Seq[ComponentType]] = Parser(parseList)
 }

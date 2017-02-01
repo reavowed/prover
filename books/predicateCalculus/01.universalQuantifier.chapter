@@ -2,7 +2,7 @@ chapter Universal Quantifier
 Introduce the universal quantifier.
 
 quantifier ∀ () ()
-rule introduceForall sub 2 1 1 ⇒ ∀ 1 1 | 2 x 2 1
+rule introduceForall sub 2 1 1 ⇒ ∀ 1 1 | (2) x 2 1
 rule eliminateForall ∀ 1 1 ⇒ sub 2 1 1
 
 theorem distributeForallOverImplication Distribute Universal Quantifier over Implication

@@ -189,57 +189,6 @@ object StatementVariableWithReplacement {
   }
 }
 
-case class ConnectiveStatement(substatements: Seq[Statement], connective: Connective) extends Statement {
-  override def variables: Variables = substatements.map(_.variables).reduce(_ ++ _)
-  override def freeVariables: Seq[TermVariable] = substatements.map(_.freeVariables).reduce(_ ++ _)
-  override def calculateSubstitutions(other: Component): Option[Substitutions] = {
-    other match {
-      case ConnectiveStatement(otherSubstatements, `connective`) =>
-        val substitutionAttempts = substatements.zip(otherSubstatements).map { case (substatement, otherSubstatement) =>
-          substatement.calculateSubstitutions(otherSubstatement)
-        }
-        Substitutions.mergeAttempts(substitutionAttempts)
-      case _ =>
-        None
-    }
-  }
-
-  override def applySubstitutions(substitutions: Substitutions): Component = {
-    copy(substatements = substatements.map(_.applySubstitutions(substitutions).asInstanceOf[Statement]))
-  }
-
-  def substituteFreeVariable(
-    termToReplaceWith: Term,
-    termToBeReplaced: TermVariable
-  ): Statement = {
-    copy(substatements = substatements.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced).asInstanceOf[Statement]))
-  }
-
-  override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {
-    case ConnectiveStatement(otherSubstatements, `connective`) =>
-      substatements.zip(otherSubstatements).map { case (substatement, otherSubstatement) =>
-        substatement.attemptSimplification(otherSubstatement)
-      }.traverseOption.map(_.reduce(_ ++ _))
-    case _ =>
-      None
-  }
-
-  override def makeSimplifications(distinctVariables: DistinctVariables): Component = {
-    copy(substatements.map(_.makeSimplifications(distinctVariables).asInstanceOf[Statement]))
-  }
-
-  def html: String = substatements match {
-    case Seq(substatement) =>
-      connective.symbol + substatement.safeHtml
-    case _ =>
-      substatements.map(_.safeHtml).mkString(" " + connective.symbol + " ")
-  }
-
-  override def containsTerms = substatements.exists(_.containsTerms)
-
-  override def safeHtml: String = if (substatements.length == 1) html else "(" + html + ")"
-}
-
 case class QuantifierStatement(boundVariable: TermVariable, substatement: Statement, quantifier: Quantifier) extends Statement {
   override def variables: Variables = boundVariable +: substatement.variables
   override def freeVariables: Seq[TermVariable] = substatement.freeVariables.filter(_ != boundVariable)
@@ -372,11 +321,11 @@ case class DefinedStatement(
     copy(subcomponents = subcomponents.map(_.makeSimplifications(distinctVariables)))
   }
   override def html: String = {
-    subcomponents.foldLeft(statementSpecification.format) { case (str, component) =>
-      str.replaceFirst("\\{\\}", component.safeHtml)
-    }
+    statementSpecification.format.html(subcomponents)
   }
-  override def safeHtml: String = if (statementSpecification.requiresBrackets) s"($html)" else html
+  override def safeHtml: String = {
+    statementSpecification.format.safeHtml(subcomponents)
+  }
 }
 
 object Statement extends ComponentType {
@@ -411,6 +360,8 @@ object Statement extends ComponentType {
     }
   }
 
+  def parser(context: Context): Parser[Statement] = Parser(parse(_, context))
+
   def parseList(
     line: PartialLine,
     context: Context,
@@ -424,6 +375,8 @@ object Statement extends ComponentType {
         (statementsSoFar :+ statement, lineAfterStatement)
     }
   }
+
+  def listParser(context: Context): Parser[Seq[Statement]] = parser(context).listInParens(Some(","))
 
   def parseOptional(line: PartialLine, context: Context): (Option[Statement], PartialLine) = {
     if (line.nonEmpty && line.remainingText.head != ')') {

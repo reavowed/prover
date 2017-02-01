@@ -40,7 +40,7 @@ class RuleSpec extends ProverSpec {
     }
 
     "parse a rule with arbitrary variables" in {
-      parseRule("introduceAll sub 2 1 1 ⇒ ∀ 1 1 | 2") mustEqual
+      parseRule("introduceAll sub 2 1 1 ⇒ ∀ 1 1 | (2)") mustEqual
         DirectRule(
           "introduceAll",
           Seq(StatementVariableWithReplacement(1, "y", "z")),

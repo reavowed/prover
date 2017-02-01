@@ -1,9 +1,7 @@
 package net.prover.model
 
-import shapeless.{::, HNil}
-
 class TermSpec extends ProverSpec {
-  val PowerSet = TermSpecification("powerSet", Seq(Term), "𝒫{}", requiresBrackets = false)
+  val PowerSet = TermSpecification("powerSet", Seq(Term), Format("𝒫{}", requiresBrackets = false))
 
   "term match" should {
     "match a constant term to itself" in {

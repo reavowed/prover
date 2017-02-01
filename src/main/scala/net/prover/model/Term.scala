@@ -90,16 +90,10 @@ case class DefinedTerm(
     copy(subcomponents = subcomponents.map(_.makeSimplifications(distinctVariables)))
   }
   override def html: String = {
-    subcomponents.foldLeft(termSpecification.format) { case (str, component) =>
-      str.replaceFirst("\\{\\}", component.safeHtml)
-    }
+    termSpecification.format.html(subcomponents)
   }
-
   override def safeHtml: String = {
-    if (termSpecification.requiresBrackets)
-      s"($html)"
-    else
-      html
+    termSpecification.format.safeHtml(subcomponents)
   }
 
   override def equals(obj: Any): Boolean = obj match {
@@ -152,12 +146,10 @@ object Term extends ComponentType {
   }
 
   def parseList(line: PartialLine, context: Context, termsSoFar: Seq[Term] = Nil): (Seq[Term], PartialLine) = {
-    val (term, lineAfterTerm) = parse(line, context)
-    lineAfterTerm match {
-      case WordAndRemainingText("&", remainingText) =>
-        parseList(remainingText, context, termsSoFar :+ term)
-      case _ =>
-        (termsSoFar :+ term, lineAfterTerm)
-    }
+    Parser.listInParens(line, parse(_, context))
+  }
+
+  def parseVariableList(line: PartialLine, context: Context): (Seq[TermVariable], PartialLine) = {
+    parseList(line, context) mapLeft (_ map asVariable)
   }
 }
