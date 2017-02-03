@@ -7,7 +7,7 @@ variables (f g X Y x y S)
 chapter Definition
 Definition of a function.
 
-statement function (term term term) ({}: {} → {} in parens) (f X Y) (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f)
+statement function (term term term) ({}: {} → {} in parens) (f X Y) (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f) ()
 
 theorem functionApplicationIsUnique Function Application Is Unique
 premise function f X Y

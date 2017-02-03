@@ -9,8 +9,12 @@ trait ProverSpec extends Specification {
     definingStatement: Option[Statement]
   ): CustomStatementDefinition = {
     CustomStatementDefinition(
-      StatementSpecification(symbol, Seq.fill(size)(Statement), Format.default(symbol, size)),
+      symbol,
+      Seq.fill(size)(Statement),
+      Format.default(symbol, size),
       (1 to size).map(StatementVariable),
+      Nil,
+      DistinctVariables.empty,
       definingStatement)
   }
   def predicate(
@@ -19,8 +23,27 @@ trait ProverSpec extends Specification {
     definingStatement: Option[Statement]
   ): CustomStatementDefinition = {
     CustomStatementDefinition(
-      StatementSpecification(symbol, Seq.fill(size)(Term), Format.default(symbol, size)),
+      symbol,
+      Seq.fill(size)(Term),
+      Format.default(symbol, size),
       (1 to size).map(123 - _).map(_.toChar.toString).map(TermVariable),
+      Nil,
+      DistinctVariables.empty,
+      definingStatement)
+  }
+
+  def quantifier(
+    symbol: String,
+    definingStatement: Option[Statement],
+    distinctVariables: DistinctVariables
+  ): CustomStatementDefinition = {
+    CustomStatementDefinition(
+      symbol,
+      Seq(Term, Statement),
+      Format(s"($symbol{}){}", false),
+      Seq(TermVariable("z"), StatementVariable(1)),
+      Seq(TermVariable("z")),
+      DistinctVariables.empty,
       definingStatement)
   }
 
@@ -31,8 +54,8 @@ trait ProverSpec extends Specification {
   val Disjunction = connective("∨", 2, Some(Implication(Negation(1), 2)))
   val Equivalence = connective("↔", 2, None)
 
-  val ForAll = Quantifier("∀", None, DistinctVariables.empty)
-  var Exists = Quantifier("∃", Some(Negation(ForAll("z", Negation(1)))), DistinctVariables.empty)
+  val ForAll = quantifier("∀", None, DistinctVariables.empty)
+  var Exists = quantifier("∃", Some(Negation(ForAll("z", Negation(1)))), DistinctVariables.empty)
   val ElementOf = predicate("∈", 2, None)
   val Equals = predicate("=", 2, None)
 

@@ -1,7 +1,7 @@
 chapter Equality
 Introduce equality and its associated rules of inference.
 
-statement = (term term) () (1 2) ()
+statement = (term term) () (1 2) () () ()
 
 axiom equalityIsReflexive (Equality is Reflexive) () () (= 1 1) () ()
 

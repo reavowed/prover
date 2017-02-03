@@ -29,6 +29,15 @@
                     <span ng-if="entry.premises.length">Then</span>
                     "{{entry.defaultStatement}}" is defined to mean "{{ entry.definingStatement }}"
                 </div>
+                <div ng-if="entry.arbitraryVariables.length" class="arbitraryVariables">
+                    Arbitrary variables: {{entry.arbitraryVariables.join(", ")}}
+                </div>
+                <div ng-if="entry.distinctVariables.length" class="distinctVariables">
+                    Distinct variables:
+                    <span ng-repeat="requirement in entry.distinctVariables">
+                        {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
+                    </span>
+                </div>
             </div>
         </div>
         <div ng-switch-when="term">

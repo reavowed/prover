@@ -13,6 +13,7 @@ trait Statement extends JsonSerializable.Base with Component {
   override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
     serialize(gen, serializers)
   }
+  def allBoundVariables: Seq[TermVariable]
   def containsTerms: Boolean
 }
 
@@ -48,6 +49,8 @@ case class StatementVariable(i: Int) extends Statement {
   }
 
   override def makeSimplifications(distinctVariables: DistinctVariables): Statement = this
+
+  override def allBoundVariables = Nil
 
   override def containsTerms = false
 
@@ -170,6 +173,8 @@ case class StatementVariableWithReplacement(
       copy(replacements = simplifiedReplacements)
   }
 
+  override def allBoundVariables = Nil
+
   override def containsTerms = true
 
   override def html: String = {
@@ -189,74 +194,16 @@ object StatementVariableWithReplacement {
   }
 }
 
-case class QuantifierStatement(boundVariable: TermVariable, substatement: Statement, quantifier: Quantifier) extends Statement {
-  override def variables: Variables = boundVariable +: substatement.variables
-  override def freeVariables: Seq[TermVariable] = substatement.freeVariables.filter(_ != boundVariable)
-
-  override def calculateSubstitutions(other: Component): Option[Substitutions] = {
-    other match {
-      case QuantifierStatement(otherBoundVariable, otherSubstatement, `quantifier`) =>
-        substatement.calculateSubstitutions(otherSubstatement).flatMap { substatementMatch =>
-          Substitutions.merge(Seq(
-            substatementMatch,
-            Substitutions(Map.empty, Map(boundVariable -> otherBoundVariable))))
-        }
-      case _ =>
-        None
-    }
-  }
-  override def applySubstitutions(substitutions: Substitutions): Component = {
-    copy(
-      boundVariable = Term.asVariable(boundVariable.applySubstitutions(substitutions)),
-      substatement = substatement.applySubstitutions(substitutions).asInstanceOf[Statement])
-  }
-
-  override def substituteFreeVariable(
-    termToReplaceWith: Term,
-    termToBeReplaced: TermVariable
-  ): Statement = {
-    if (termToBeReplaced == boundVariable)
-      this
-    else if (termToReplaceWith.freeVariables.contains(boundVariable))
-      throw new Exception("Cannot replace free variable with bound variable in quantified statement")
-    else
-      copy(substatement = substatement.substituteFreeVariable(
-        termToReplaceWith,
-        termToBeReplaced
-      ).asInstanceOf[Statement])
-  }
-
-  override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {
-    case QuantifierStatement(`boundVariable`, otherSubstatement, `quantifier`) =>
-      substatement.attemptSimplification(otherSubstatement)
-    case _ =>
-      None
-  }
-
-  override def makeSimplifications(distinctVariables: DistinctVariables): Component = {
-    copy(substatement = substatement.makeSimplifications(distinctVariables).asInstanceOf[Statement])
-  }
-
-  override def containsTerms = true
-
-  override def html: String = s"(${quantifier.symbol}${boundVariable.html})${substatement.safeHtml}"
-}
-
 case class DefinedStatement(
     subcomponents: Seq[Component],
-    statementSpecification: StatementSpecification)
+    boundVariables: Seq[TermVariable],
+    definition: CustomStatementDefinition)
  extends Statement
 {
-  override def containsTerms: Boolean = subcomponents.exists {
-    case s: Statement =>
-      s.containsTerms
-    case t: Term =>
-      true
-  }
   override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
   override def freeVariables: Seq[TermVariable] = subcomponents.map(_.freeVariables).foldLeft(Seq.empty[TermVariable])(_ ++ _)
   override def calculateSubstitutions(other: Component): Option[Substitutions] = other match {
-    case DefinedStatement(otherSubcomponents, `statementSpecification`) =>
+    case DefinedStatement(otherSubcomponents, _, `definition`) =>
       val substitutionAttempts = subcomponents.zip(otherSubcomponents).map { case (component, otherComponent) =>
         component.calculateSubstitutions(otherComponent)
       }
@@ -265,13 +212,17 @@ case class DefinedStatement(
       None
   }
   override def applySubstitutions(substitutions: Substitutions): Statement = {
-    copy(subcomponents = subcomponents.map(_.applySubstitutions(substitutions)))
+    copy(
+      subcomponents = subcomponents.map(_.applySubstitutions(substitutions)),
+      boundVariables = boundVariables.map(_.applySubstitutions(substitutions)).map(Term.asVariable))
   }
   override def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
+    if (boundVariables.exists(termToReplaceWith.freeVariables.contains))
+      throw new Exception("Cannot replace free variable with bound variable in quantified statement")
     copy(subcomponents = subcomponents.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced)))
   }
   override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {
-    case DefinedStatement(otherSubcomponents, `statementSpecification`) =>
+    case DefinedStatement(otherSubcomponents, _, `definition`) =>
       subcomponents.zip(otherSubcomponents).map { case (component, otherComponent) =>
         component.attemptSimplification(otherComponent)
       }.traverseOption.map(_.foldLeft(DistinctVariables.empty)(_ ++ _))
@@ -282,11 +233,19 @@ case class DefinedStatement(
     copy(subcomponents = subcomponents.map(_.makeSimplifications(distinctVariables)))
   }
   override def html: String = {
-    statementSpecification.format.html(subcomponents)
+    definition.format.html(subcomponents)
   }
   override def safeHtml: String = {
-    statementSpecification.format.safeHtml(subcomponents)
+    definition.format.safeHtml(subcomponents)
   }
+  override def containsTerms: Boolean = subcomponents.exists {
+    case s: Statement =>
+      s.containsTerms
+    case t: Term =>
+      true
+  }
+
+  override def allBoundVariables = boundVariables ++ subcomponents.ofType[Statement].flatMap(_.allBoundVariables)
 }
 
 object Statement extends ComponentType {

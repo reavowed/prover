@@ -143,5 +143,18 @@ class StatementSpec extends ProverSpec {
 
       firstSubstitution.makeSimplifications(distinctVariables.get) mustEqual secondSubstitution
     }
+
+    "not allow substituting a bound variable" in {
+      ForAll(TermVariable("y"), Equals(TermVariable("y"), TermVariable("x")))
+          .substituteFreeVariable("y", "x") must throwAn[Exception]
+    }
+
+    "not allow substituting a bound variable after full substitution" in {
+      ForAll(TermVariable("z"), StatementVariable(1))
+        .applySubstitutions(Substitutions(
+          Map(StatementVariable(1) -> Equals(TermVariable("y"), TermVariable("x"))),
+          Map(TermVariable("z") -> TermVariable("y"))))
+        .substituteFreeVariable("y", "x") must throwAn[Exception]
+    }
   }
 }

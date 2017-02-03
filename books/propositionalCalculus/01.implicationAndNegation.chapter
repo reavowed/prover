@@ -3,7 +3,7 @@ We start by introducing our two fundamental connectives, → and ¬, and proving
 
 comment Our first connective is '→', or implication. It is a binary connective, which means it has two substatements.
 
-statement → (statement statement) () (1 2) ()
+statement → (statement statement) () (1 2) () () ()
 
 comment This should be read "α implies β", or "if α then β".
 
@@ -37,7 +37,7 @@ assume 1
 introduceImplication f.2
 qed
 
-statement ¬ (statement) () (1) ()
+statement ¬ (statement) () (1) () () ()
 axiom introduceNegation (Introduce Negation) (1) (2, ¬ 2) (¬ 1) () ()
 axiom eliminateNegation (Eliminate Double Negation) () (¬ ¬ 1) (1) () ()
 

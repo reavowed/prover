@@ -28,6 +28,8 @@ case class Parser[T](parse: PartialLine => (T, PartialLine)) {
 
 object Parser {
 
+  def constant[T](t: T): Parser[T] = Parser { (t, _) }
+
   def singleWord: Parser[String] = Parser(_.splitFirstWord)
 
   def inParens[T](line: PartialLine, f: PartialLine => (T, PartialLine)): (T, PartialLine) = {

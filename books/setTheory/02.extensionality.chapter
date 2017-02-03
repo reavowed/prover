@@ -1,7 +1,7 @@
 chapter Set Membership and Extensionality
 Introduce the set membership predicate ∈ and the Axiom of Extensionality, and explore their consequences for equality.
 
-statement ∈ (term term) () (1 2) ()
+statement ∈ (term term) () (1 2) () () ()
 
 theorem equalSetsHaveSameMembers Equal Sets Have Same Members
 premise = 1 2

@@ -5,32 +5,31 @@ trait StatementParser {
   def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine)
 }
 
-case class StatementSpecification(
+case class CustomStatementDefinition(
     symbol: String,
     componentTypes: Seq[ComponentType],
-    format: Format)
-  extends StatementParser
-{
-  override def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {
-    componentTypes.foldLeft((Seq.empty[Component], line)) { case ((components, remainingLine), componentType) =>
-      componentType.parse(remainingLine, context).mapLeft(components :+ _)
-    }.mapLeft(DefinedStatement(_, this))
-  }
-}
-
-case class CustomStatementDefinition(
-    specification: StatementSpecification,
+    format: Format,
     defaultComponents: Seq[Component],
+    boundVariables: Seq[TermVariable],
+    distinctVariables: DistinctVariables,
     definingStatement: Option[Statement])
   extends ChapterEntry(StatementDefinition) with StatementDefinition
 {
-  override val defaultStatement = DefinedStatement(defaultComponents, specification)
-  override def symbol = specification.symbol
-  override def distinctVariables: DistinctVariables = DistinctVariables.empty
-  override def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = specification.parseStatement(line, context)
+  override val defaultStatement = DefinedStatement(defaultComponents, boundVariables, this)
+
+  override def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {
+    componentTypes.foldLeft((Seq.empty[Component], line)) { case ((components, remainingLine), componentType) =>
+      componentType.parse(remainingLine, context).mapLeft(components :+ _)
+    }.mapLeft(apply)
+  }
 
   def apply(components: Component*): Statement = {
-    DefinedStatement(components, specification)
+    DefinedStatement(
+      components,
+      boundVariables.map { v =>
+        components(defaultComponents.indexOf(v))
+      }.map(_.asInstanceOf[TermVariable]),
+      this)
   }
 }
 
@@ -72,9 +71,22 @@ object StatementDefinition extends SingleLineChapterEntryParser[CustomStatementD
       format <- Format.parser(symbol, componentTypes.length)
       defaultVariables <- Components.listParser(componentTypes, context)
       optionalDefiningStatement <- Statement.parser(context).optionalInParens
-      statementSpecification = StatementSpecification(symbol, componentTypes, format)
+      boundVariables <- optionalDefiningStatement match {
+        case Some(x) =>
+          Parser.constant(x.allBoundVariables.intersect(defaultVariables))
+        case None =>
+          Term.variableListParser(context)
+      }
+      distinctVariables <- DistinctVariables.parser(context)
     } yield {
-      CustomStatementDefinition(statementSpecification, defaultVariables, optionalDefiningStatement)
+      CustomStatementDefinition(
+        symbol,
+        componentTypes,
+        format,
+        defaultVariables,
+        boundVariables,
+        distinctVariables,
+        optionalDefiningStatement)
     }
   }
 
