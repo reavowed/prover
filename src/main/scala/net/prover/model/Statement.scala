@@ -280,20 +280,6 @@ object Statement extends ComponentType {
     }
   }
 
-  def parseList(
-    line: PartialLine,
-    context: Context,
-    statementsSoFar: Seq[Statement] = Nil
-  ): (Seq[Statement], PartialLine) = {
-    val (statement, lineAfterStatement) = parse(line, context)
-    lineAfterStatement match {
-      case WordAndRemainingText("&", remainingText) =>
-        parseList(remainingText, context, statementsSoFar :+ statement)
-      case _ =>
-        (statementsSoFar :+ statement, lineAfterStatement)
-    }
-  }
-
   def parser(context: Context): Parser[Statement] = Parser(parse(_, context))
 
   def listParser(context: Context): Parser[Seq[Statement]] = parser(context).listInParens(Some(","))

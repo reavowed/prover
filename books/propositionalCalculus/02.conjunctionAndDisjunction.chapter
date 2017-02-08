@@ -68,8 +68,7 @@ theorem reverseOr Reverse Disjunction
 premise ∨ 1 2
 introduceImplication introduceOrRight 1 2
 introduceImplication introduceOrLeft 2 1
-combineCases 1 2
-eliminateImplication 3 p1
+eliminateOr p1 1 2
 qed
 
 theorem excludedMiddle Law of the Excluded Middle

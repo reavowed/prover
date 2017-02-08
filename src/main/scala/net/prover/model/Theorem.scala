@@ -40,14 +40,6 @@ object FantasyAssumptionParser extends TheoremLineParser {
   }
 }
 
-object DistinctVariableParser extends TheoremLineParser {
-  override val id: String = "distinct"
-  override def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
-    val (distinctVariables, _) = DistinctVariables.parse(line, context)
-    theoremBuilder.withDistinctVariables(distinctVariables)
-  }
-}
-
 trait DirectStepParser extends TheoremLineParser {
   def readStep(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): (Step, PartialLine)
 
@@ -66,7 +58,7 @@ object Theorem extends ChapterEntryParser[Theorem] {
       theoremBuilder: TheoremBuilder
     ): TheoremBuilder = {
       try {
-        val parsers = Seq(PremiseParser, FantasyAssumptionParser, DistinctVariableParser) ++ context.theoremLineParsers
+        val parsers = Seq(PremiseParser, FantasyAssumptionParser) ++ context.theoremLineParsers
         val (lineType, restOfLine) = line.splitFirstWord
         val parser = parsers.find(_.id == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
         parser.readAndUpdateTheoremBuilder(theoremBuilder, restOfLine, context)
