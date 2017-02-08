@@ -31,20 +31,16 @@ trait ComponentType {
 }
 
 object ComponentType {
-  def parse(line: PartialLine): (ComponentType, PartialLine) = {
-    line match {
-      case WordAndRemainingText("term", lineAfterTerm) =>
-        (Term, lineAfterTerm)
-      case WordAndRemainingText("statement", lineAfterStatement) =>
-        (Statement, lineAfterStatement)
-      case WordAndRemainingText(something, _) =>
-        throw ParseException.withMessage("Unrecognised statement type '$something'", line.fullLine)
+
+  private val componentTypesByName = Map(
+    "term" -> Term,
+    "statement" -> Statement)
+
+  def parser: Parser[ComponentType] = {
+    Parser.singleWord.mapWithLine { (name, line) =>
+      componentTypesByName.getOrElse(name, line.throwParseException(s"Unrecognised statement type $name"))
     }
   }
 
-  def parseList(line: PartialLine): (Seq[ComponentType], PartialLine) = {
-    Parser.listInParens(line, parse, None)
-  }
-
-  def listParser: Parser[Seq[ComponentType]] = Parser(parseList)
+  def listParser: Parser[Seq[ComponentType]] = parser.listInParens(None)
 }

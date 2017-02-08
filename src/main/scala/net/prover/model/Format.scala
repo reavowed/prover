@@ -28,19 +28,14 @@ object Format {
         Format(f.stripSuffix("in parens").trim, true)
       else
         Format(f, false)
-    case "" if numberOfComponents == 2 =>
-      Format(s"{} $symbol {}", true)
-    case "" if numberOfComponents == 1 =>
-      Format(s"$symbol{}", false)
-    case "" if numberOfComponents == 0 =>
-      Format(symbol, false)
     case "" =>
-      throw ParseException.withMessage("Explicit format must be supplied with more than two components", line.fullLine)
+      default(symbol, numberOfComponents, line)
   }
 
   def default(
     symbol: String,
-    numberOfComponents: Int
+    numberOfComponents: Int,
+    line: PartialLine
   ): Format = {
     if (numberOfComponents == 0)
       Format(symbol, false)
@@ -49,7 +44,7 @@ object Format {
     else if (numberOfComponents == 2)
       Format(s"{} $symbol {}", true)
     else
-      throw new Exception("Explicit format must be supplied with more than two components")
+      line.throwParseException("Explicit format must be supplied with more than two components")
   }
 
   def parser(symbol: String, numberOfComponents: Int): Parser[Format] = {

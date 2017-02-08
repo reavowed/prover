@@ -25,15 +25,15 @@ class StatementSpec extends ProverSpec {
     }
 
     "parse an empty list" in {
-      Parser.listInParens("()", Statement.parse(_, defaultContext))._1 mustEqual Nil
+      Statement.listParser(defaultContext).parse("()")._1 mustEqual Nil
     }
 
     "parse a list with a single statement" in {
-      Parser.listInParens("(1)", Statement.parse(_, defaultContext))._1 mustEqual Seq(StatementVariable(1))
+      Statement.listParser(defaultContext).parse("(1)")._1 mustEqual Seq(StatementVariable(1))
     }
 
     "parse a list with multiple statements" in {
-      Parser.listInParens("(1, 2, 3)", Statement.parse(_, defaultContext))._1 mustEqual Seq(
+      Statement.listParser(defaultContext).parse("(1, 2, 3)")._1 mustEqual Seq(
         StatementVariable(1),
         StatementVariable(2),
         StatementVariable(3))

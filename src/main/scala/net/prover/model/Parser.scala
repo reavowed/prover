@@ -16,34 +16,16 @@ case class Parser[T](parse: PartialLine => (T, PartialLine)) {
     }
   }
   def inParens: Parser[T] = Parser { line =>
-    Parser.inParens(line, parse)
-  }
-  def optionalInParens: Parser[Option[T]] = Parser { line =>
-    Parser.optionalInParens(line, parse)
-  }
-  def listInParens(separator: Option[String]) = Parser { line =>
-    Parser.listInParens(line, parse, separator)
-  }
-}
-
-object Parser {
-
-  def constant[T](t: T): Parser[T] = Parser { (t, _) }
-
-  def singleWord: Parser[String] = Parser(_.splitFirstWord)
-
-  def inParens[T](line: PartialLine, f: PartialLine => (T, PartialLine)): (T, PartialLine) = {
     if (line.remainingText.head != '(') {
       throw ParseException.withMessage("Open-paren expected but not found", line.fullLine)
     }
-    val (t, remainingLine) = f(line.tail)
+    val (t, remainingLine) = parse(line.tail)
     if (remainingLine.remainingText.head != ')') {
       throw ParseException.withMessage("Close-paren expected but not found", line.fullLine)
     }
     (t, remainingLine.tail)
   }
-
-  def optionalInParens[T](line: PartialLine, f: PartialLine => (T, PartialLine)): (Option[T], PartialLine) = {
+  def optionalInParens: Parser[Option[T]] = Parser { line =>
     if (line.remainingText.head != '(') {
       throw ParseException.withMessage("Open-paren expected but not found", line.fullLine)
     }
@@ -51,15 +33,14 @@ object Parser {
     if (lineAfterOpenParen.remainingText.head == ')') {
       (None, lineAfterOpenParen.tail)
     } else {
-      val (t, remainingLine) = f(line.tail)
+      val (t, remainingLine) = parse(line.tail)
       if (remainingLine.remainingText.head != ')') {
         throw ParseException.withMessage("Close-paren expected but not found", line.fullLine)
       }
       (Some(t), remainingLine.tail)
     }
   }
-
-  def listInParens[T](line: PartialLine, f: PartialLine => (T, PartialLine), separatorOption: Option[String] = Some(",")): (Seq[T], PartialLine) = {
+  def listInParens(separatorOption: Option[String]) = Parser { line =>
     def parseRecursive(lineSoFar: PartialLine, acc: Seq[T]): (Seq[T], PartialLine) = {
       if (lineSoFar.remainingText.head == ')') {
         (acc, lineSoFar.tail)
@@ -71,7 +52,7 @@ object Parser {
           case _ =>
             lineSoFar
         }
-        val (next, remainingLine) = f(lineToParse)
+        val (next, remainingLine) = parse(lineToParse)
         parseRecursive(remainingLine, acc :+ next)
       }
     }
@@ -80,6 +61,12 @@ object Parser {
     }
     parseRecursive(line.tail, Nil)
   }
+}
+
+object Parser {
+  def constant[T](t: T): Parser[T] = Parser { (t, _) }
+
+  def singleWord: Parser[String] = Parser(_.splitFirstWord)
 
   def allInParens: Parser[String] = Parser(_.toEndOfParens).inParens
 }
