@@ -26,66 +26,16 @@ case class Book(
   }
 }
 
-case class BookLine(text: String, number: Int, bookTitle: String, fileName: String) {
-  def splitFirstWord: (String, PartialLine) = {
-    text.splitFirstWord.mapRight(PartialLine(_, this))
-  }
-}
-case class PartialLine(remainingText: String, fullLine: BookLine) {
-  def splitFirstWord: (String, PartialLine) = {
-    remainingText.splitFirstWord.mapRight(PartialLine(_, fullLine))
-  }
-  def tail: PartialLine = {
-    copy(remainingText = remainingText.tail.trim())
-  }
-  def toEndOfParens: (String, PartialLine) = {
-    val (_, pre, post) = remainingText.foldLeft((1, "", "")) { case ((count, pre, post), c) =>
-      if (count == 0 || (count == 1 &&  c == ')'))
-        (0, pre, post + c)
-      else {
-        val newCount = if (c == '(')
-          count + 1
-        else if (c == ')')
-          count - 1
-        else
-          count
-        (newCount, pre + c, post)
-      }
-    }
-    (pre, PartialLine(post, fullLine))
-  }
-  def isEmpty: Boolean = remainingText.isEmpty
-  def nonEmpty: Boolean = remainingText.nonEmpty
-
-  def throwParseException(msg: String) = throw ParseException.withMessage(msg, fullLine)
-}
-
 object Book {
-
-  val entryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, StatementDefinition, TermDefinition, Axiom, Theorem)
+  val chapterEntryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, StatementDefinition, TermDefinition, Axiom, Theorem)
+  val bookEntryParsers: Seq[BookEntryParser] = Seq(Chapter, BookInclude, VariableDefinitions) ++ chapterEntryParsers
 
   private def addLinesToBook(lines: Seq[BookLine], book: Book): Book = {
     lines match {
-      case WordAndRemainingText("chapter", PartialLine(chapterTitle, _)) +: linesAfterChapterDefinition =>
-        linesAfterChapterDefinition match {
-          case BookLine(chapterSummary, _, _, _) +: linesAfterChapterSummary =>
-            addLinesToBook(
-              linesAfterChapterSummary,
-              book.copy(chapters = book.chapters :+ Chapter(chapterTitle, chapterSummary)))
-        }
-      case WordAndRemainingText("include", PartialLine(includePathText, _)) +: linesAfterInclude =>
-        val includeLines = getIncludeLines(includePathText, book)
-        addLinesToBook(includeLines ++ linesAfterInclude, book)
-      case WordAndRemainingText("variables", variablesLine) +: linesAfterVariables =>
-        val variableNames = Parser.inParens(variablesLine, _.toEndOfParens)._1.splitByWhitespace()
-        val variables = Variables(Nil, variableNames.map(TermVariable))
-        val updatedContext = book.context.copy(variables = book.context.variables ++ variables)
-        val updatedBook = book.copy(context = updatedContext)
-        addLinesToBook(linesAfterVariables, updatedBook)
       case WordAndRemainingText(entryType, restOfLine) +: moreLines =>
-        val parser = entryParsers.find(_.name == entryType)
-          .getOrElse(throw ParseException.withMessage(s"Unrecognised type '$entryType'", lines.head))
-        val (updatedBook, remainingLines) = parser.parseToBook(restOfLine, moreLines, book)
+        val parser = bookEntryParsers.find(_.name == entryType)
+          .getOrElse(throw ParseException.withMessage(s"Unrecognised entry '$entryType'", lines.head))
+        val (updatedBook, remainingLines) = parser.parse(restOfLine, moreLines, book)
         addLinesToBook(remainingLines, updatedBook)
       case Nil =>
         book
@@ -103,18 +53,12 @@ object Book {
 
   private case class PreParsedBook(title: String, path: Path, imports: Seq[String], lines: Seq[BookLine])
 
-  private def getIncludeLines(pathText: String, book: Book): Seq[BookLine] = {
-    val path = book.path.getParent.resolve(pathText)
-    val plainLines = getPlainLinesWithIndices(path)
-    createBookLines(plainLines, book.title, path.getFileName.toString)
-  }
-
-  private def getPlainLinesWithIndices(path: Path): Seq[(String, Int)] = {
+  def getPlainLinesWithIndices(path: Path): Seq[(String, Int)] = {
     val bookText = new String(Files.readAllBytes(path), StandardCharsets.UTF_8)
     bookText.lines.zipWithIndex.filter(!_._1.isEmpty).filter(!_._1.startsWith("#")).toList
   }
 
-  private def createBookLines(plainLines: Seq[(String, Int)], bookTitle: String, fileName: String): Seq[BookLine] = {
+  def createBookLines(plainLines: Seq[(String, Int)], bookTitle: String, fileName: String): Seq[BookLine] = {
     plainLines map { case(lineText, lineIndex) =>
       BookLine(lineText, lineIndex + 1, bookTitle, fileName)
     }
