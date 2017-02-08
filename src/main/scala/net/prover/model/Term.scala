@@ -151,7 +151,9 @@ object Term extends ComponentType {
     parser(context).listInParens(Some(","))
   }
 
+  def variableParser(context: Context): Parser[TermVariable] = parser(context).map(asVariable)
+
   def variableListParser(context: Context): Parser[Seq[TermVariable]] = {
-    parser(context).map(asVariable).listInParens(None)
+    variableParser(context).listInParens(None)
   }
 }

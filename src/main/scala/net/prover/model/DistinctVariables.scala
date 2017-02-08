@@ -67,37 +67,16 @@ case class DistinctVariables(map: Map[TermVariable, Variables]) extends JsonSeri
 object DistinctVariables {
   val empty = DistinctVariables(Map.empty)
 
-  def parse(line: PartialLine, context: Context): (DistinctVariables, PartialLine) = {
-    def parseIndividualRequirements(
-      remainingLine: PartialLine,
-      distinctVariables: DistinctVariables = DistinctVariables.empty
-    ): (DistinctVariables, PartialLine) = {
-      if (remainingLine.remainingText.head == ')') {
-        (distinctVariables, remainingLine)
-      } else {
-        val (term, lineAfterTerm) =
-          Term.parse(remainingLine, context)
-            .mapLeft(Term.asVariable)
-        val (statement, lineAfterStatement) =
-          Statement.parseStatementVariable(lineAfterTerm, context)
-        val updatedDistinctVariables = distinctVariables + (term -> statement)
-        lineAfterStatement match {
-          case WordAndRemainingText(",", lineAfterComma) =>
-            parseIndividualRequirements(lineAfterComma, updatedDistinctVariables)
-          case _ =>
-            (updatedDistinctVariables, lineAfterStatement)
-        }
-      }
-    }
-    if (line.remainingText.head != '(') {
-      throw ParseException.withMessage("Open-paren expected but not found", line.fullLine)
-    }
-    val (distinctVariables, lineAfterRequirements) = parseIndividualRequirements(line.tail)
-    if (lineAfterRequirements.remainingText.head != ')') {
-      throw ParseException.withMessage("Close-paren expected but not found", line.fullLine)
-    }
-    (distinctVariables, lineAfterRequirements.tail)
+  private def singleClauseParser(context: Context): Parser[(TermVariable, StatementVariable)] = {
+    for {
+      term <- Term.variableParser(context)
+      statement <- Statement.variableParser(context)
+    } yield term -> statement
   }
 
-  def parser(context: Context): Parser[DistinctVariables] = Parser(parse(_, context))
+  def parser(context: Context): Parser[DistinctVariables] = {
+    singleClauseParser(context)
+      .listInParens(Some(","))
+      .map(seq => seq.foldLeft(DistinctVariables.empty)(_ + _))
+  }
 }

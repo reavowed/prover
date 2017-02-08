@@ -284,6 +284,8 @@ object Statement extends ComponentType {
 
   def listParser(context: Context): Parser[Seq[Statement]] = parser(context).listInParens(Some(","))
 
+  def variableParser(context: Context): Parser[StatementVariable] = Parser(parseStatementVariable(_, context))
+
   def parseOptional(line: PartialLine, context: Context): (Option[Statement], PartialLine) = {
     if (line.nonEmpty && line.remainingText.head != ')') {
       Statement.parse(line, context).mapLeft(Some(_))
