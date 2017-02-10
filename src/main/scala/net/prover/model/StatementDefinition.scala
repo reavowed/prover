@@ -1,11 +1,6 @@
 package net.prover.model
 
-trait StatementParser {
-  def symbol: String
-  def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine)
-}
-
-case class CustomStatementDefinition(
+case class StatementDefinition(
     symbol: String,
     componentTypes: Seq[ComponentType],
     format: Format,
@@ -13,11 +8,11 @@ case class CustomStatementDefinition(
     boundVariables: Seq[TermVariable],
     distinctVariables: DistinctVariables,
     definingStatement: Option[Statement])
-  extends ChapterEntry(StatementDefinition) with StatementDefinition
+  extends ChapterEntry(StatementDefinition)
 {
-  override val defaultStatement = DefinedStatement(defaultComponents, boundVariables, this)
+  val defaultStatement = DefinedStatement(defaultComponents, boundVariables, this)
 
-  override def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {
+  def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {
     componentTypes.foldLeft((Seq.empty[Component], line)) { case ((components, remainingLine), componentType) =>
       componentType.parse(remainingLine, context).mapLeft(components :+ _)
     }.mapLeft(apply)
@@ -31,12 +26,6 @@ case class CustomStatementDefinition(
       }.map(_.asInstanceOf[TermVariable]),
       this)
   }
-}
-
-trait StatementDefinition extends StatementParser {
-  def defaultStatement: Statement
-  def definingStatement: Option[Statement]
-  def distinctVariables: DistinctVariables
 
   def forwardInference: Option[Inference] = definingStatement.map { s =>
     new Inference {
@@ -63,8 +52,8 @@ trait StatementDefinition extends StatementParser {
   }
 }
 
-object StatementDefinition extends SingleLineChapterEntryParser[CustomStatementDefinition] {
-  def parser(context: Context): Parser[CustomStatementDefinition] = {
+object StatementDefinition extends SingleLineChapterEntryParser[StatementDefinition] {
+  def parser(context: Context): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
       componentTypes <- ComponentType.listParser
@@ -79,7 +68,7 @@ object StatementDefinition extends SingleLineChapterEntryParser[CustomStatementD
       }
       distinctVariables <- DistinctVariables.parser(context)
     } yield {
-      CustomStatementDefinition(
+      StatementDefinition(
         symbol,
         componentTypes,
         format,
@@ -90,12 +79,12 @@ object StatementDefinition extends SingleLineChapterEntryParser[CustomStatementD
     }
   }
 
-  override def parse(line: PartialLine, context: Context): CustomStatementDefinition = {
+  override def parse(line: PartialLine, context: Context): StatementDefinition = {
     parser(context).parse(line)._1
   }
 
   override def name: String = "statement"
-  override def addToContext(t: CustomStatementDefinition, context: Context): Context = {
+  override def addToContext(t: StatementDefinition, context: Context): Context = {
     context.addStatementDefinition(t)
   }
 }

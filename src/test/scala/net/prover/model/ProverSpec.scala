@@ -7,8 +7,8 @@ trait ProverSpec extends Specification {
     symbol: String,
     size: Int,
     definingStatement: Option[Statement]
-  ): CustomStatementDefinition = {
-    CustomStatementDefinition(
+  ): StatementDefinition = {
+    StatementDefinition(
       symbol,
       Seq.fill(size)(Statement),
       Format.default(symbol, size, ""),
@@ -21,8 +21,8 @@ trait ProverSpec extends Specification {
     symbol: String,
     size: Int,
     definingStatement: Option[Statement]
-  ): CustomStatementDefinition = {
-    CustomStatementDefinition(
+  ): StatementDefinition = {
+    StatementDefinition(
       symbol,
       Seq.fill(size)(Term),
       Format.default(symbol, size, ""),
@@ -36,8 +36,8 @@ trait ProverSpec extends Specification {
     symbol: String,
     definingStatement: Option[Statement],
     distinctVariables: DistinctVariables
-  ): CustomStatementDefinition = {
-    CustomStatementDefinition(
+  ): StatementDefinition = {
+    StatementDefinition(
       symbol,
       Seq(Term, Statement),
       Format(s"($symbol{}){}", false),

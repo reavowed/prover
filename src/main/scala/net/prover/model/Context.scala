@@ -1,14 +1,14 @@
 package net.prover.model
 
 case class Context(
-    statementParsers: Seq[StatementParser],
+    statementDefinitions: Seq[StatementDefinition],
     termSpecifications: Seq[TermSpecification],
     theoremLineParsers: Seq[TheoremLineParser],
     variables: Variables) {
 
   def combine(others: Seq[Context]): Context = {
     Context(
-      others.flatMap(_.statementParsers) ++ statementParsers,
+      others.flatMap(_.statementDefinitions) ++ statementDefinitions,
       others.flatMap(_.termSpecifications) ++ termSpecifications,
       others.flatMap(_.theoremLineParsers) ++ theoremLineParsers,
       variables
@@ -19,7 +19,7 @@ case class Context(
 
   def addStatementDefinition(statementDefinition: StatementDefinition): Context = {
     copy(
-      statementParsers = statementParsers :+ statementDefinition,
+      statementDefinitions = statementDefinitions :+ statementDefinition,
       theoremLineParsers = theoremLineParsers ++
         statementDefinition.forwardInference.toSeq ++
         statementDefinition.reverseInference.toSeq)

@@ -197,7 +197,7 @@ object StatementVariableWithReplacement {
 case class DefinedStatement(
     subcomponents: Seq[Component],
     boundVariables: Seq[TermVariable],
-    definition: CustomStatementDefinition)
+    definition: StatementDefinition)
  extends Statement
 {
   override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
@@ -260,8 +260,8 @@ object Statement extends ComponentType {
 
   def parse(line: PartialLine, context: Context): (Statement, PartialLine) = {
     object ParsableStatement {
-      def unapply(s: String): Option[StatementParser] = {
-        context.statementParsers.find(_.symbol == s)
+      def unapply(s: String): Option[StatementDefinition] = {
+        context.statementDefinitions.find(_.symbol == s)
       }
     }
     val (statementType, remainingLine) = line.splitFirstWord
