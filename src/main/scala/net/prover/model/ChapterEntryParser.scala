@@ -27,11 +27,11 @@ trait ChapterEntryParser[T <: ChapterEntry] extends BookEntryParser {
 }
 
 trait SingleLineChapterEntryParser[T <: ChapterEntry] extends ChapterEntryParser[T] {
-  def parse(line: PartialLine, context: Context): T
+  def parser(context: Context): Parser[T]
 
   override def parse(line: PartialLine, remainingLines: Seq[BookLine], context: Context): (T, Seq[BookLine]) = {
     try {
-      (parse(line, context), remainingLines)
+      (parser(context).parse(line)._1, remainingLines)
     } catch {
       case e: ParseException =>
         throw e

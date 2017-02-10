@@ -29,10 +29,6 @@ object Axiom extends SingleLineChapterEntryParser[Axiom] {
     }
   }
 
-  override def parse(line: PartialLine, context: Context): Axiom = {
-    parser(context).parse(line)._1
-  }
-
   override def addToContext(axiom: Axiom, context: Context): Context = {
     context.copy(theoremLineParsers = context.theoremLineParsers :+ axiom)
   }

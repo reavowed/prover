@@ -61,10 +61,14 @@ case class Parser[T](parse: PartialLine => (T, PartialLine)) {
     }
     parseRecursive(line.tail, Nil)
   }
+
+  def parseAndDiscard(line: PartialLine): T = parse(line)._1
 }
 
 object Parser {
   def constant[T](t: T): Parser[T] = Parser { (t, _) }
+
+  def allRemaining: Parser[String] = Parser { l => (l.remainingText, l.copy(remainingText = "")) }
 
   def singleWord: Parser[String] = Parser(_.splitFirstWord)
 

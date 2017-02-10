@@ -3,7 +3,7 @@ package net.prover.model
 class AxiomSpec extends ProverSpec {
 
   def parseAxiom(text: String): Axiom = {
-    Axiom.parse(text, defaultContext)
+    Axiom.parser(defaultContext).parseAndDiscard(text)
   }
 
   "axiom parser" should {

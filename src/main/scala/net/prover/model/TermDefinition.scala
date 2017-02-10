@@ -53,10 +53,6 @@ object TermDefinition extends SingleLineChapterEntryParser[TermDefinition] {
     }
   }
 
-  override def parse(line: PartialLine, context: Context): TermDefinition = {
-    parser(context).parse(line)._1
-  }
-
   override def addToContext(termDefinition: TermDefinition, context: Context): Context = {
     context.addTermDefinition(termDefinition)
   }

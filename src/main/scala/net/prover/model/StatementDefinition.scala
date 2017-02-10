@@ -79,10 +79,6 @@ object StatementDefinition extends SingleLineChapterEntryParser[StatementDefinit
     }
   }
 
-  override def parse(line: PartialLine, context: Context): StatementDefinition = {
-    parser(context).parse(line)._1
-  }
-
   override def name: String = "statement"
   override def addToContext(t: StatementDefinition, context: Context): Context = {
     context.addStatementDefinition(t)
