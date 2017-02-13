@@ -249,15 +249,6 @@ case class DefinedStatement(
 }
 
 object Statement extends ComponentType {
-  def parseStatementVariable(line: PartialLine, context: Context): (StatementVariable, PartialLine) = {
-    parse(line, context) match {
-      case (v: StatementVariable, remainingLine) =>
-        (v, remainingLine)
-      case (x, _) =>
-        throw ParseException.withMessage(s"Expected statement variable, got $x", line.fullLine)
-    }
-  }
-
   def parse(line: PartialLine, context: Context): (Statement, PartialLine) = {
     object ParsableStatement {
       def unapply(s: String): Option[StatementDefinition] = {
@@ -284,7 +275,12 @@ object Statement extends ComponentType {
 
   def listParser(context: Context): Parser[Seq[Statement]] = parser(context).listInParens(Some(","))
 
-  def variableParser(context: Context): Parser[StatementVariable] = Parser(parseStatementVariable(_, context))
+  def variableParser(context: Context): Parser[StatementVariable] = parser(context).mapWithLine {
+    case (variable: StatementVariable, _) =>
+      variable
+    case (nonVariable, line) =>
+      throw line.throwParseException(s"Expected statement variable, got $nonVariable")
+  }
 
   def parseOptional(line: PartialLine, context: Context): (Option[Statement], PartialLine) = {
     if (line.nonEmpty && line.remainingText.head != ')') {
