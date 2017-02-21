@@ -7,6 +7,22 @@ case class Substitutions(
     copy(terms = terms + (termVariable -> termVariable))
   }
 
+  def expandParser(
+    requiredVariables: Variables,
+    context: Context
+  ): Parser[Substitutions] = {
+    val missingStatementVariables = requiredVariables.statementVariables.diff(statements.keySet.toSeq)
+    val missingTermVariables = requiredVariables.termVariables.diff(terms.keySet.toSeq)
+    val parserForStatements = missingStatementVariables.map(_ -> Statement.parser(context)).traverseParserMap
+    val parserForTerms = missingTermVariables.map(_ -> Term.parser(context)).traverseParserMap
+    for {
+      statementMap <- parserForStatements
+      termMap <- parserForTerms
+    } yield {
+      copy(statements = statements ++ statementMap, terms = terms ++ termMap)
+    }
+  }
+
   def expand(
     requiredVariables: Variables,
     line: PartialLine,

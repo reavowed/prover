@@ -75,6 +75,32 @@ package object model {
     }
   }
 
+  implicit class SeqParserOps[T](x: Seq[Parser[T]]) {
+    def traverseParser: Parser[Seq[T]] = {
+      x.foldLeft(Parser.constant(Seq.empty[T])) { case (seqParser, tParser) =>
+        for {
+          seq <- seqParser
+          t <- tParser
+        } yield {
+          seq :+ t
+        }
+      }
+    }
+  }
+
+  implicit class SeqParserTupleOps[S, T](x: Seq[(S, Parser[T])]) {
+    def traverseParserMap: Parser[Map[S, T]] = {
+      x.foldLeft(Parser.constant(Map.empty[S, T])) { case (mapParser, (s, tParser)) =>
+        for {
+          map <- mapParser
+          t <- tParser
+        } yield {
+          map + (s -> t)
+        }
+      }
+    }
+  }
+
   object IntParser {
     def unapply(s: String): Option[Int] = {
       Try(s.toInt).toOption

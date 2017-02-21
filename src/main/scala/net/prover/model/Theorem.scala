@@ -22,6 +22,10 @@ trait TheoremLineParser {
   protected def readReference(line: PartialLine, theoremBuilder: TheoremBuilder): (Statement, PartialLine) = {
     line.splitFirstWord.mapLeft(theoremBuilder.resolveReference)
   }
+
+  protected def referenceParser(theoremBuilder: TheoremBuilder): Parser[Statement] = {
+    Parser.singleWord.map(theoremBuilder.resolveReference)
+  }
 }
 
 object PremiseParser extends TheoremLineParser {

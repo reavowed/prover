@@ -7,27 +7,34 @@ trait Inference extends TheoremLineParser {
   def arbitraryVariables: Seq[TermVariable]
   def distinctVariables: DistinctVariables
 
-  def getSubstitutions(
+  private def getInitialSubstitutions(
     targetAssumption: Option[Statement],
     targetPremises: Seq[Statement],
-    line: PartialLine,
     context: Context
   ): Substitutions = {
     val assumptionSubstitutionAttempt = assumption match {
       case Some(actualAssumption) =>
-        actualAssumption.calculateSubstitutions(targetAssumption.getOrElse(line.throwParseException("No assumption provided for inference")))
+        actualAssumption.calculateSubstitutions(
+          targetAssumption.getOrElse(throw new Exception("No assumption provided for inference")))
       case None =>
         Some(Substitutions.empty)
     }
     val premiseSubstitutionAttempts = premises.zip(targetPremises).map { case (premise, targetPremise) =>
       premise.calculateSubstitutions(targetPremise)
     }
-    val initialSubstitutions = Substitutions.mergeAttempts(assumptionSubstitutionAttempt +: premiseSubstitutionAttempts)
-      .getOrElse(throw ParseException.withMessage(
-        s"Could not match premises\n${targetAssumption.toSeq ++ targetPremises}\n${assumption.toSeq ++ premises}",
-        line.fullLine))
+    Substitutions.mergeAttempts(assumptionSubstitutionAttempt +: premiseSubstitutionAttempts)
+      .getOrElse(throw new Exception(
+        s"Could not match premises\n${targetAssumption.toSeq ++ targetPremises}\n${assumption.toSeq ++ premises}"))
+  }
+
+  def getSubstitutionsParser(
+    targetAssumption: Option[Statement],
+    targetPremises: Seq[Statement],
+    context: Context
+  ): Parser[Substitutions] = {
+    val initialSubstitutions = getInitialSubstitutions(targetAssumption, targetPremises, context)
     val requiredVariables = (premises.map(_.variables) :+ conclusion.variables).reduce(_ ++ _)
-    initialSubstitutions.expand(requiredVariables, line, context)._1
+    initialSubstitutions.expandParser(requiredVariables, context)
   }
 
   def makeSubstitutions(
@@ -68,68 +75,64 @@ trait Inference extends TheoremLineParser {
   def matchPremises(
     targetAssumption: Option[Statement],
     targetPremises: Seq[Statement],
-    line: PartialLine,
     context: Context,
     distinctVariables: DistinctVariables
-  ): Inference = {
-    val substitutions = getSubstitutions(targetAssumption, targetPremises, line, context)
-    val substitutedInference = makeSubstitutions(substitutions)
-    val simplifiedInference = substitutedInference.simplify(targetPremises, distinctVariables)
-    simplifiedInference
+  ): Parser[Inference] = {
+    getSubstitutionsParser(targetAssumption, targetPremises, context).map { substitutions =>
+      val substitutedInference = makeSubstitutions(substitutions)
+      val simplifiedInference = substitutedInference.simplify(targetPremises, distinctVariables)
+      simplifiedInference
+    }
   }
 
   private def applyWithInference(
     targetInference: Inference,
     theoremBuilder: TheoremBuilder,
-    line: PartialLine,
     context: Context
-  ): TheoremBuilder = {
-    targetInference.assumption match {
-      case None =>
-        ()
-      case _ =>
-        throw ParseException.withMessage("Cannot apply assumption-discharging inference to another assumption-discharging inference", line.fullLine)
-    }
-    targetInference.premises match {
-      case Seq(_) =>
-        ()
-      case _ =>
-        throw ParseException.withMessage("Can only apply assumption-discharging inference to an inference with a single premise", line.fullLine)
-    }
-    premises match {
-      case Seq(_) =>
-        ()
-      case _ =>
-        throw ParseException.withMessage("Can only apply assumption-discharging inference with a single premise to an inference", line.fullLine)
-    }
-    val (targetInferencePremise, lineAfterInferencePremise) = Statement.parse(line, context)
-    val updatedTargetInference = targetInference.matchPremises(
-      None,
-      Seq(targetInferencePremise),
-      lineAfterInferencePremise,
-      context,
-      theoremBuilder.distinctVariables)
-    val updatedInference = matchPremises(
-      Some(updatedTargetInference.premises.head),
-      Seq(updatedTargetInference.conclusion),
-      lineAfterInferencePremise,
-      context,
-      theoremBuilder.distinctVariables)
-    theoremBuilder.addStep(Step(updatedInference.conclusion, s"$id with ${targetInference.id}"))
-  }
+  ): Parser[TheoremBuilder] = {
+    if (targetInference.assumption.nonEmpty)
+        throw new Exception(
+          "Cannot apply assumption-discharging inference to another assumption-discharging inference")
+    if (targetInference.premises.length != 1)
+        throw new Exception(
+          "Can only apply assumption-discharging inference to an inference with a single premise")
+    if (premises.length != 1)
+        throw new Exception(
+          "Can only apply assumption-discharging inference with a single premise to an inference")
 
-  private def applyWithFantasy(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
-    theoremBuilder.replaceFantasy { fantasy =>
-      val (targetPremises, lineAfterPremises) = premises.mapFold(line) { (_, lineSoFar) =>
-        readReference(lineSoFar, theoremBuilder)
-      }
-      val updatedRule = matchPremises(
-        Some(fantasy.assumption),
-        targetPremises,
-        lineAfterPremises,
+    for {
+      targetInferencePremise <- Statement.parser(context)
+      updatedTargetInference <- targetInference.matchPremises(
+        None,
+        Seq(targetInferencePremise),
         context,
         theoremBuilder.distinctVariables)
-      Step(updatedRule.conclusion, id, Some(Step.Fantasy(fantasy.assumption, fantasy.steps)))
+      updatedInference <- matchPremises(
+        Some(updatedTargetInference.premises.head),
+        Seq(updatedTargetInference.conclusion),
+        context,
+        theoremBuilder.distinctVariables)
+    } yield {
+      theoremBuilder.addStep(Step(updatedInference.conclusion, s"$id with ${targetInference.id}"))
+    }
+  }
+
+  private def premisesParser(theoremBuilder: TheoremBuilder): Parser[Seq[Statement]] = {
+    premises.map(_ => referenceParser(theoremBuilder)).traverseParser
+  }
+
+  private def applyWithFantasy(theoremBuilder: TheoremBuilder, context: Context): Parser[TheoremBuilder] = {
+    theoremBuilder.replaceFantasy { fantasy =>
+      for {
+        targetPremises <- premisesParser(theoremBuilder)
+        updatedRule <- matchPremises(
+          Some(fantasy.assumption),
+          targetPremises,
+          context,
+          theoremBuilder.distinctVariables)
+      } yield {
+        Step(updatedRule.conclusion, id, Some(Step.Fantasy(fantasy.assumption, fantasy.steps)))
+      }
     }
   }
 
@@ -138,24 +141,27 @@ trait Inference extends TheoremLineParser {
     line: PartialLine,
     context: Context
   ): TheoremBuilder = {
-    assumption match {
+    val parser = assumption match {
       case Some(_) =>
-        def withInference = {
-          line.splitFirstWord.optionMapLeft(n => context.inferences.find(_.id == n)) map {
-            case (inference, restOfLine) =>
-              applyWithInference(inference, theoremBuilder, restOfLine, context)
+        def withInferenceParser = {
+          Parser.singleWord.flatMapOption { id =>
+            context.inferences
+              .find(_.id == id)
+              .map(applyWithInference(_, theoremBuilder, context))
           }
         }
-        withInference.getOrElse(applyWithFantasy(theoremBuilder, line, context))
+        withInferenceParser.orElse(applyWithFantasy(theoremBuilder, context))
       case None =>
-        val (targetPremises, lineAfterPremises) = premises.mapFold(line) { (_, lineSoFar) =>
-          readReference(lineSoFar, theoremBuilder)
+        for {
+          targetPremises <- premisesParser(theoremBuilder)
+          updatedInference <- matchPremises(None, targetPremises, context, theoremBuilder.distinctVariables)
+        } yield {
+          theoremBuilder
+            .addStep(Step(updatedInference.conclusion, id))
+            .withArbitraryVariables(updatedInference.arbitraryVariables)
+            .withDistinctVariables(updatedInference.distinctVariables)
         }
-        val updatedInference = matchPremises(None, targetPremises, lineAfterPremises, context, theoremBuilder.distinctVariables)
-        theoremBuilder
-          .addStep(Step(updatedInference.conclusion, id))
-          .withArbitraryVariables(updatedInference.arbitraryVariables)
-          .withDistinctVariables(updatedInference.distinctVariables)
     }
+    parser.parseAndDiscard(line)
   }
 }

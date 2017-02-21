@@ -30,14 +30,18 @@ trait TheoremBuildable[T <: TheoremBuildable[T]] {
     withFantasy(Some(newFantasy))
   }
 
-  def replaceFantasy(f: Fantasy => Step): T = {
+  def replaceFantasy(f: Fantasy => Parser[Step]): Parser[T] = {
     fantasyOption match {
       case Some(fantasy) =>
         fantasy.fantasyOption match {
           case None =>
-            withFantasy(None).withStep(f(fantasy))
+            f(fantasy).map { step =>
+              withFantasy(None).withStep(step)
+            }
           case Some(_) =>
-            withFantasy(Some(fantasy.replaceFantasy(f)))
+            fantasy.replaceFantasy(f).map { newFantasy =>
+              withFantasy(Some(newFantasy))
+            }
         }
       case None =>
         throw new Exception("No fantasy to replace")

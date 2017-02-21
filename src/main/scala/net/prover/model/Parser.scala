@@ -1,14 +1,25 @@
 package net.prover.model
 
-case class Parser[T](parse: PartialLine => (T, PartialLine)) {
-  def map[S](f: T => S): Parser[S] = Parser(l => parse(l).mapLeft(f))
-  def mapWithLine[S](f: (T, PartialLine) => S) = Parser(l => parse(l).mapLeft(f(_, l)))
+import scala.util.control.NonFatal
+
+case class Parser[T](attemptParse: PartialLine => (T, PartialLine)) {
+  def map[S](f: T => S): Parser[S] = Parser(l => attemptParse(l).mapLeft(f))
+  def mapWithLine[S](f: (T, PartialLine) => S) = Parser(l => attemptParse(l).mapLeft(f(_, l)))
   def flatMap[S](f: T => Parser[S]): Parser[S] = Parser { line =>
-    val (t, remainingLine) = parse(line)
-    f(t).parse(remainingLine)
+    val (t, remainingLine) = attemptParse(line)
+    f(t).attemptParse(remainingLine)
+  }
+  def flatMapOption[S](f: T => Option[Parser[S]]): Parser[Option[S]] = Parser { line =>
+    val (t, remainingLine) = attemptParse(line)
+    f(t) match {
+      case Some(otherParser) =>
+        otherParser.attemptParse(remainingLine).mapLeft(Some.apply)
+      case None =>
+        (None, line)
+    }
   }
   def withFilter(f: T => Boolean): Parser[T] = Parser { line =>
-    val (t, remainingLine) = parse(line)
+    val (t, remainingLine) = attemptParse(line)
     if (f(t)) {
       (t, remainingLine)
     } else {
@@ -19,7 +30,7 @@ case class Parser[T](parse: PartialLine => (T, PartialLine)) {
     if (line.remainingText.head != '(') {
       throw ParseException.withMessage("Open-paren expected but not found", line.fullLine)
     }
-    val (t, remainingLine) = parse(line.tail)
+    val (t, remainingLine) = attemptParse(line.tail)
     if (remainingLine.remainingText.head != ')') {
       throw ParseException.withMessage("Close-paren expected but not found", line.fullLine)
     }
@@ -33,7 +44,7 @@ case class Parser[T](parse: PartialLine => (T, PartialLine)) {
     if (lineAfterOpenParen.remainingText.head == ')') {
       (None, lineAfterOpenParen.tail)
     } else {
-      val (t, remainingLine) = parse(line.tail)
+      val (t, remainingLine) = attemptParse(line.tail)
       if (remainingLine.remainingText.head != ')') {
         throw ParseException.withMessage("Close-paren expected but not found", line.fullLine)
       }
@@ -52,7 +63,7 @@ case class Parser[T](parse: PartialLine => (T, PartialLine)) {
           case _ =>
             lineSoFar
         }
-        val (next, remainingLine) = parse(lineToParse)
+        val (next, remainingLine) = attemptParse(lineToParse)
         parseRecursive(remainingLine, acc :+ next)
       }
     }
@@ -62,6 +73,14 @@ case class Parser[T](parse: PartialLine => (T, PartialLine)) {
     parseRecursive(line.tail, Nil)
   }
 
+  def parse(partialLine: PartialLine): (T, PartialLine) = {
+    try {
+      attemptParse(partialLine)
+    } catch {
+      case e @ (_:ParseException | _:ArbitraryVariableException | _:DistinctVariableViolationException) => throw e
+      case NonFatal(e) => partialLine.throwParseException(e.getMessage)
+    }
+  }
   def parseAndDiscard(line: PartialLine): T = parse(line)._1
 }
 
@@ -73,4 +92,15 @@ object Parser {
   def singleWord: Parser[String] = Parser(_.splitFirstWord)
 
   def allInParens: Parser[String] = Parser(_.toEndOfParens).inParens
+
+  implicit class OptionParserOps[T](parser: Parser[Option[T]]) {
+    def orElse(otherParser: => Parser[T]): Parser[T] = Parser { line =>
+      parser.attemptParse(line) match {
+        case (Some(t), remainingLine) =>
+          (t, remainingLine)
+        case (None, _) =>
+          otherParser.attemptParse(line)
+      }
+    }
+  }
 }
