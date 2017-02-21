@@ -1,5 +1,4 @@
-book Natural Numbers
-
+Natural Numbers
 import Functions
 
 variables (n n' m m' x x' y y' X Y s S t T f g F)

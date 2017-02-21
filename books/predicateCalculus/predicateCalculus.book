@@ -1,5 +1,4 @@
-book Predicate Calculus
-
+Predicate Calculus
 import Propositional Calculus
 
 include 01.universalQuantifier.chapter

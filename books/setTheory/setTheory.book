@@ -1,4 +1,4 @@
-book Set Theory
+Set Theory
 import Predicate Calculus
 
 include 02.extensionality.chapter

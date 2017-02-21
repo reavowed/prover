@@ -1,4 +1,4 @@
-book Propositional Calculus
+Propositional Calculus
 
 include 01.implicationAndNegation.chapter
 include 02.conjunctionAndDisjunction.chapter

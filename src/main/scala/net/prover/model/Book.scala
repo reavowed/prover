@@ -69,7 +69,7 @@ object Book {
       val path = file.toPath
       val plainLinesWithIndices = getPlainLinesWithIndices(path)
       val (title, plainLinesAfterTitle) = plainLinesWithIndices match {
-        case (WordAndRemainingText("book", bookTitle), _) +: remainingLines =>
+        case (bookTitle, _) +: remainingLines =>
           (bookTitle, remainingLines)
         case _ =>
           throw new Exception("Book must start with a title line")
