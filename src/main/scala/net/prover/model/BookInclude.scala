@@ -2,9 +2,12 @@ package net.prover.model
 
 object BookInclude extends BookEntryParser {
   override def name: String = "include"
-  override def parse(remainingLine: PartialLine, otherLines: Seq[BookLine], book: Book): (Book, Seq[BookLine]) = {
-    val pathText = remainingLine.remainingText
-    (book, getIncludeLines(pathText, book) ++ otherLines)
+  override def parser(book: Book, lines: Seq[BookLine]): Parser[(Book, Seq[BookLine])] = {
+    for {
+      pathText <- Parser.allRemaining
+    } yield {
+      (book, getIncludeLines(pathText, book) ++ lines)
+    }
   }
 
   private def getIncludeLines(pathText: String, book: Book): Seq[BookLine] = {

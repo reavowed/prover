@@ -4,4 +4,5 @@ case class BookLine(text: String, number: Int, bookTitle: String, fileName: Stri
   def splitFirstWord: (String, PartialLine) = {
     text.splitFirstWord.mapRight(PartialLine(_, this))
   }
+  def asPartialLine: PartialLine = PartialLine(text, this)
 }

@@ -6,14 +6,13 @@ class TheoremSpec extends ProverSpec {
     lines: Seq[String],
     additionalTheorems: Seq[Theorem] = Nil
   ): Theorem = {
-    Theorem.parse(
-      firstLine,
+    Theorem.parser(
       lines,
       defaultContext.copy(
         theoremLineParsers = defaultContext.theoremLineParsers ++
           Seq(IntroduceImplication, EliminateImplication, IntroduceForall, EliminateForall) ++
           additionalTheorems)
-    )._1
+    ).parseAndDiscard(firstLine)._1
   }
 
   "theorem parse" should {

@@ -26,6 +26,7 @@ case class Parser[T](attemptParse: PartialLine => (T, PartialLine)) {
       line.throwParseException(s"Parse value '$t' did not match filter")
     }
   }
+  def onlyIf(f: T => Boolean): Parser[Option[T]] = map { t => if (f(t)) Some(t) else None }
   def inParens: Parser[T] = Parser { line =>
     if (line.remainingText.head != '(') {
       throw ParseException.withMessage("Open-paren expected but not found", line.fullLine)
@@ -82,6 +83,7 @@ case class Parser[T](attemptParse: PartialLine => (T, PartialLine)) {
     }
   }
   def parseAndDiscard(line: PartialLine): T = parse(line)._1
+  def parseAndDiscard(line: BookLine): T = parseAndDiscard(line.asPartialLine)
 }
 
 object Parser {

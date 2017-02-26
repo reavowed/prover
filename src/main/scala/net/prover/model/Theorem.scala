@@ -55,50 +55,63 @@ trait DirectStepParser extends TheoremLineParser {
 
 object Theorem extends ChapterEntryParser[Theorem] {
   override val name: String = "theorem"
-  override def parse(firstLine: PartialLine, lines: Seq[BookLine], context: Context): (Theorem, Seq[BookLine]) = {
-    val (id, title) = firstLine.splitFirstWord.mapRight(_.remainingText)
-    def parseLine(
-      line: BookLine,
-      theoremBuilder: TheoremBuilder
-    ): TheoremBuilder = {
-      try {
-        val parsers = Seq(PremiseParser, FantasyAssumptionParser) ++ context.theoremLineParsers
-        val (lineType, restOfLine) = line.splitFirstWord
-        val parser = parsers.find(_.id == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
-        parser.readAndUpdateTheoremBuilder(theoremBuilder, restOfLine, context)
-      } catch {
-        case e: ParseException =>
-          throw e
-        case NonFatal(ex) =>
-          throw ParseException.fromCause(ex, line)
-      }
+  override def parser(lines: Seq[BookLine], context: Context): Parser[(Theorem, Seq[BookLine])] = {
+    for {
+      id <- Parser.singleWord
+      title <- Parser.allRemaining
+    } yield {
+      parseLines(id, title, lines, TheoremBuilder(), context)
     }
-
-    def parseHelper(linesRemaining: Seq[BookLine], theoremBuilder: TheoremBuilder): (Theorem, Seq[BookLine]) = {
-      linesRemaining match {
-        case BookLine("qed", _, _, _) +: nonTheoremLines =>
-          import theoremBuilder._
-          if (fantasyOption.isDefined)
-            throw new Exception("Cannot finish theorem with open assumption")
-          val conclusion = steps.last.statement
-          val variables = (premises.map(_.variables) :+ conclusion.variables).reduce(_ ++ _)
-          val theorem = Theorem(
-            id,
-            title,
-            premises,
-            steps,
-            conclusion,
-            arbitraryVariables.intersect(variables.termVariables),
-            distinctVariables.filter(variables.statementVariables.contains, variables.termVariables.contains))
-          (theorem, nonTheoremLines)
-        case definitionLine +: otherLines =>
-          parseHelper(otherLines, parseLine(definitionLine, theoremBuilder))
-        case Nil =>
-          throw new Exception("Book ended in middle of theorem")
-      }
-    }
-    parseHelper(lines, TheoremBuilder())
   }
+
+  def parseLine(
+    line: BookLine,
+    theoremBuilder: TheoremBuilder,
+    context: Context
+  ): TheoremBuilder = {
+    try {
+      val parsers = Seq(PremiseParser, FantasyAssumptionParser) ++ context.theoremLineParsers
+      val (lineType, restOfLine) = line.splitFirstWord
+      val parser = parsers.find(_.id == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
+      parser.readAndUpdateTheoremBuilder(theoremBuilder, restOfLine, context)
+    } catch {
+      case e: ParseException =>
+        throw e
+      case NonFatal(ex) =>
+        throw ParseException.fromCause(ex, line)
+    }
+  }
+
+  def parseLines(
+    id: String,
+    title: String,
+    linesRemaining: Seq[BookLine],
+    theoremBuilder: TheoremBuilder,
+    context: Context
+  ): (Theorem, Seq[BookLine]) = {
+    linesRemaining match {
+      case BookLine("qed", _, _, _) +: nonTheoremLines =>
+        import theoremBuilder._
+        if (fantasyOption.isDefined)
+          throw new Exception("Cannot finish theorem with open assumption")
+        val conclusion = steps.last.statement
+        val variables = (premises.map(_.variables) :+ conclusion.variables).reduce(_ ++ _)
+        val theorem = Theorem(
+          id,
+          title,
+          premises,
+          steps,
+          conclusion,
+          arbitraryVariables.intersect(variables.termVariables),
+          distinctVariables.filter(variables.statementVariables.contains, variables.termVariables.contains))
+        (theorem, nonTheoremLines)
+      case definitionLine +: otherLines =>
+        parseLines(id, title, otherLines, parseLine(definitionLine, theoremBuilder, context), context)
+      case Nil =>
+        throw new Exception("Book ended in middle of theorem")
+    }
+  }
+
   override def addToContext(theorem: Theorem, context: Context): Context = {
     context.copy(theoremLineParsers = context.theoremLineParsers :+ theorem)
   }

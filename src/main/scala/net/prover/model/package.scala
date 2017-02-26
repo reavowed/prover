@@ -19,18 +19,6 @@ package object model {
     def formatAsKey: String = splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase).mkString("-")
   }
 
-  object WordAndRemainingText {
-    def unapply(line: PartialLine): Option[(String, PartialLine)] = {
-      Some(line.splitFirstWord)
-    }
-    def unapply(line: BookLine): Option[(String, PartialLine)] = {
-      Some(line.splitFirstWord)
-    }
-    def unapply(str: String): Option[(String, String)] = {
-      Some(str.splitFirstWord)
-    }
-  }
-
   implicit class TupleOps[S,T](tuple: (S, T)) {
     def mapLeft[R](f: S => R): (R, T) = (f(tuple._1), tuple._2)
     def mapRight[R](f: T => R): (S, R) = (tuple._1, f(tuple._2))

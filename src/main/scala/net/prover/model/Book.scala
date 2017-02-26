@@ -30,12 +30,21 @@ object Book {
   val chapterEntryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, StatementDefinition, TermDefinition, Axiom, Theorem)
   val bookEntryParsers: Seq[BookEntryParser] = Seq(Chapter, BookInclude, VariableDefinitions) ++ chapterEntryParsers
 
+  private def lineParser(
+    book: Book,
+    lines: Seq[BookLine]
+  ): Parser[(Book, Seq[BookLine])] = {
+    Parser.singleWord.flatMap { entryType =>
+      bookEntryParsers.find(_.name == entryType)
+        .getOrElse(throw new Exception(s"Unrecognised entry '$entryType'"))
+        .parser(book, lines)
+    }
+  }
+
   private def addLinesToBook(lines: Seq[BookLine], book: Book): Book = {
     lines match {
-      case WordAndRemainingText(entryType, restOfLine) +: moreLines =>
-        val parser = bookEntryParsers.find(_.name == entryType)
-          .getOrElse(throw ParseException.withMessage(s"Unrecognised entry '$entryType'", lines.head))
-        val (updatedBook, remainingLines) = parser.parse(restOfLine, moreLines, book)
+      case nextLine +: moreLines =>
+        val (updatedBook, remainingLines) = lineParser(book, moreLines).parseAndDiscard(nextLine)
         addLinesToBook(remainingLines, updatedBook)
       case Nil =>
         book
@@ -44,9 +53,15 @@ object Book {
 
   private def readImports(nextLines: Seq[BookLine], imports: Seq[String] = Nil): (Seq[String], Seq[BookLine]) = {
     nextLines match {
-      case WordAndRemainingText("import", PartialLine(importTitle, _)) +: remainingLines =>
-        readImports(remainingLines, imports :+ importTitle)
-      case _ =>
+      case nextLine +: otherLines =>
+        val parser = for {
+          entryType <- Parser.singleWord
+          importTitle <- Parser.allRemaining
+        } yield {
+          if (entryType == "import") readImports(otherLines, imports :+ importTitle) else (imports, nextLines)
+        }
+        parser.parseAndDiscard(nextLine)
+      case Nil =>
         (imports, nextLines)
     }
   }
