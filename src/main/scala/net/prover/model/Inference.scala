@@ -136,12 +136,11 @@ trait Inference extends TheoremLineParser {
     }
   }
 
-  override def readAndUpdateTheoremBuilder(
+  override def parser(
     theoremBuilder: TheoremBuilder,
-    line: PartialLine,
     context: Context
-  ): TheoremBuilder = {
-    val parser = assumption match {
+  ): Parser[TheoremBuilder] = {
+    assumption match {
       case Some(_) =>
         def withInferenceParser = {
           Parser.singleWord.flatMapOption { id =>
@@ -162,6 +161,5 @@ trait Inference extends TheoremLineParser {
             .withDistinctVariables(updatedInference.distinctVariables)
         }
     }
-    parser.parseAndDiscard(line)
   }
 }
