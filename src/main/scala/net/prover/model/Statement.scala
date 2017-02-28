@@ -249,29 +249,33 @@ case class DefinedStatement(
 }
 
 object Statement extends ComponentType {
-  def parse(line: PartialLine, context: Context): (Statement, PartialLine) = {
+
+  def parser(context: Context): Parser[Statement] = {
     object ParsableStatement {
       def unapply(s: String): Option[StatementDefinition] = {
         context.statementDefinitions.find(_.symbol == s)
       }
     }
-    val (statementType, remainingLine) = line.splitFirstWord
-    statementType match {
-      case ParsableStatement(statementDefinition) =>
-        statementDefinition.statementParser(context).parse(remainingLine)
-      case IntParser(i) =>
-        (StatementVariable(i), remainingLine)
-      case "sub" =>
-        val (termToReplaceWith, lineAfterFirstTerm) = Term.parse(remainingLine, context)
-        val (termToBeReplaced, lineAfterSecondTerm) = Term.parse(lineAfterFirstTerm, context).mapLeft(Term.asVariable)
-        val (statement, lineAfterStatement) = parse(lineAfterSecondTerm, context)
-        (statement.substituteFreeVariable(termToReplaceWith, termToBeReplaced).asInstanceOf[Statement], lineAfterStatement)
-      case _ =>
-        throw ParseException.withMessage(s"Unrecognised statement type $statementType", line.fullLine)
-    }
-  }
 
-  def parser(context: Context): Parser[Statement] = Parser(parse(_, context))
+    def parserForStatementType(statementType: String): Parser[Statement] = statementType match {
+      case ParsableStatement(statementDefinition) =>
+        statementDefinition.statementParser(context)
+      case IntParser(i) =>
+        Parser.constant(StatementVariable(i))
+      case "sub" =>
+        for {
+          termToReplaceWith <- Term.parser(context)
+          termToBeReplaced <- Term.variableParser(context)
+          statement <- parser(context)
+        } yield {
+          statement.substituteFreeVariable(termToReplaceWith, termToBeReplaced).asInstanceOf[Statement]
+        }
+      case _ =>
+        throw new Exception(s"Unrecognised statement type $statementType")
+    }
+
+    Parser.singleWord.flatMap(parserForStatementType)
+  }
 
   def listParser(context: Context): Parser[Seq[Statement]] = parser(context).listInParens(Some(","))
 
@@ -280,13 +284,5 @@ object Statement extends ComponentType {
       variable
     case (nonVariable, line) =>
       throw line.throwParseException(s"Expected statement variable, got $nonVariable")
-  }
-
-  def parseOptional(line: PartialLine, context: Context): (Option[Statement], PartialLine) = {
-    if (line.nonEmpty && line.remainingText.head != ')') {
-      Statement.parse(line, context).mapLeft(Some(_))
-    } else {
-      (None, line)
-    }
   }
 }

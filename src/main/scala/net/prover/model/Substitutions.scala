@@ -22,22 +22,6 @@ case class Substitutions(
       copy(statements = statements ++ statementMap, terms = terms ++ termMap)
     }
   }
-
-  def expand(
-    requiredVariables: Variables,
-    line: PartialLine,
-    context: Context
-  ): (Substitutions, PartialLine) = {
-    val missingStatementVariables = requiredVariables.statementVariables.diff(statements.keySet.toSeq)
-    val (missingStatements, lineAfterStatements) = missingStatementVariables.mapFold(line) { (statementVariable, lineSoFar) =>
-      Statement.parse(lineSoFar, context).mapLeft(statementVariable -> _)
-    }.mapLeft(_.toMap)
-    val missingTermVariables = requiredVariables.termVariables.diff(terms.keySet.toSeq)
-    val (missingTerms, lineAfterTerms) = missingTermVariables.mapFold(lineAfterStatements) { (termVariable, lineSoFar) =>
-      Term.parse(lineSoFar, context).mapLeft(termVariable -> _)
-    }.mapLeft(_.toMap)
-    (copy(statements = statements ++ missingStatements, terms = terms ++ missingTerms), lineAfterTerms)
-  }
 }
 
 object Substitutions {

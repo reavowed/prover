@@ -118,7 +118,7 @@ object Term extends ComponentType {
     }
   }
 
-  def parse(line: PartialLine, context: Context): (Term, PartialLine) = {
+  def parser(context: Context): Parser[Term] = {
     object TermSpecificationMatcher {
       def unapply(s: String): Option[TermSpecification] = {
         context.termSpecifications.find(_.symbol == s)
@@ -130,22 +130,22 @@ object Term extends ComponentType {
       }
     }
     val primeVariableRegex = "(\\d)'".r
-    val (termType, remainingLine) = line.splitFirstWord
-    termType match {
-      case TermSpecificationMatcher(termSpecification) =>
-        termSpecification.termParser(context).parse(remainingLine)
-      case SpecifiedVariable(variable) =>
-        (variable, remainingLine)
-      case IntParser(i) =>
-        (TermVariable((123 - i).toChar.toString), remainingLine)
-      case primeVariableRegex(IntParser(i)) =>
-        (TermVariable((123 - i).toChar.toString + "'"), remainingLine)
-      case _ =>
-        throw ParseException.withMessage(s"Unrecognised term type '$termType'", line.fullLine)
+    def parserForTermType(termType: String): Parser[Term] = {
+      termType match {
+        case TermSpecificationMatcher(termSpecification) =>
+          termSpecification.termParser(context)
+        case SpecifiedVariable(variable) =>
+          Parser.constant(variable)
+        case IntParser(i) =>
+          Parser.constant(TermVariable((123 - i).toChar.toString))
+        case primeVariableRegex(IntParser(i)) =>
+          Parser.constant(TermVariable((123 - i).toChar.toString + "'"))
+        case _ =>
+          throw new Exception(s"Unrecognised term type '$termType'")
+      }
     }
+    Parser.singleWord.flatMap(parserForTermType)
   }
-
-  def parser(context: Context): Parser[Term] = Parser(parse(_, context))
 
   def listParser(context: Context): Parser[Seq[Term]] = {
     parser(context).listInParens(Some(","))

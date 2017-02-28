@@ -1,39 +1,47 @@
 package net.prover.model
 
 class StatementSpec extends ProverSpec {
+
+  def parseStatement(line: String): Statement = {
+    Statement.parser(defaultContext).parseAndDiscard(line)
+  }
+
+  def parseStatementList(line: String): Seq[Statement] = {
+    Statement.listParser(defaultContext).parseAndDiscard(line)
+  }
+
   "statement parser" should {
     "parse a statement variable" in {
-      Statement.parse("1", defaultContext)._1 mustEqual StatementVariable(1)
+      parseStatement("1") mustEqual StatementVariable(1)
     }
 
     "parse a binary connective" in {
-      Statement.parse("→ 1 2", defaultContext)._1 mustEqual Implication(StatementVariable(1), StatementVariable(2))
+      parseStatement("→ 1 2") mustEqual Implication(StatementVariable(1), StatementVariable(2))
     }
 
     "parse a nested binary connective" in {
-      Statement.parse("→ → 1 2 3", defaultContext)._1
-        .mustEqual(Implication(Implication(StatementVariable(1), StatementVariable(2)), StatementVariable(3)))
+      parseStatement("→ → 1 2 3") mustEqual
+        Implication(Implication(StatementVariable(1), StatementVariable(2)), StatementVariable(3))
     }
 
     "parse a quantified statement" in {
-      Statement.parse("∀ 2 3", defaultContext)._1 mustEqual
-        ForAll("y", 3)
+      parseStatement("∀ 2 3") mustEqual ForAll("y", 3)
     }
 
     "parse a replacement statement" in {
-      Statement.parse("sub 2 1 3", defaultContext)._1 mustEqual StatementVariableWithReplacement(3, "y", "z")
+      parseStatement("sub 2 1 3") mustEqual StatementVariableWithReplacement(3, "y", "z")
     }
 
     "parse an empty list" in {
-      Statement.listParser(defaultContext).parse("()")._1 mustEqual Nil
+      parseStatementList("()") mustEqual Nil
     }
 
     "parse a list with a single statement" in {
-      Statement.listParser(defaultContext).parse("(1)")._1 mustEqual Seq(StatementVariable(1))
+      parseStatementList("(1)") mustEqual Seq(StatementVariable(1))
     }
 
     "parse a list with multiple statements" in {
-      Statement.listParser(defaultContext).parse("(1, 2, 3)")._1 mustEqual Seq(
+      parseStatementList("(1, 2, 3)") mustEqual Seq(
         StatementVariable(1),
         StatementVariable(2),
         StatementVariable(3))
