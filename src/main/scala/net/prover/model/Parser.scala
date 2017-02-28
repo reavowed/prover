@@ -17,60 +17,43 @@ case class Parser[+T](attemptParse: PartialLine => (T, PartialLine)) {
         (None, line)
     }
   }
-  def withFilter(f: T => Boolean): Parser[T] = Parser { line =>
-    val (t, remainingLine) = attemptParse(line)
-    if (f(t)) {
-      (t, remainingLine)
-    } else {
-      line.throwParseException(s"Parse value '$t' did not match filter")
-    }
-  }
   def onlyIf(f: T => Boolean): Parser[Option[T]] = map { t => if (f(t)) Some(t) else None }
   def inParens: Parser[T] = Parser { line =>
     if (line.remainingText.head != '(') {
-      throw ParseException.withMessage("Open-paren expected but not found", line.fullLine)
+      throw new Exception("Open-paren expected but not found")
     }
     val (t, remainingLine) = attemptParse(line.tail)
     if (remainingLine.remainingText.head != ')') {
-      throw ParseException.withMessage("Close-paren expected but not found", line.fullLine)
+      throw new Exception("Close-paren expected but not found")
     }
     (t, remainingLine.tail)
   }
-  def optionalInParens: Parser[Option[T]] = Parser { line =>
-    if (line.remainingText.head != '(') {
-      throw ParseException.withMessage("Open-paren expected but not found", line.fullLine)
-    }
-    val lineAfterOpenParen = line.tail
-    if (lineAfterOpenParen.remainingText.head == ')') {
-      (None, lineAfterOpenParen.tail)
-    } else {
-      val (t, remainingLine) = attemptParse(line.tail)
-      if (remainingLine.remainingText.head != ')') {
-        throw ParseException.withMessage("Close-paren expected but not found", line.fullLine)
-      }
-      (Some(t), remainingLine.tail)
-    }
-  }
-  def listInParens(separatorOption: Option[String]) = Parser { line =>
-    def parseRecursive(lineSoFar: PartialLine, acc: Seq[T]): (Seq[T], PartialLine) = {
+  def optionalInParens: Parser[Option[T]] = Parser[Option[T]] { line =>
+    if (line.remainingText.head != ')')
+      attemptParse(line).mapLeft(Some.apply)
+    else
+      (None, line)
+  }.inParens
+
+  def listInParens(separatorOption: Option[String]) = {
+    def parseNext(lineSoFar: PartialLine, acc: Seq[T]): (Seq[T], PartialLine) = {
       if (lineSoFar.remainingText.head == ')') {
-        (acc, lineSoFar.tail)
+        (acc, lineSoFar)
       } else {
         val lineToParse = separatorOption match {
           case Some(separator) if acc.nonEmpty =>
             if (lineSoFar.remainingText.startsWith(separator)) lineSoFar.tail
-            else throw ParseException.withMessage("Expected comma or end-paren after list item", line.fullLine)
+            else throw new Exception("Expected separator or end-paren after list item")
           case _ =>
             lineSoFar
         }
         val (next, remainingLine) = attemptParse(lineToParse)
-        parseRecursive(remainingLine, acc :+ next)
+        parseNext(remainingLine, acc :+ next)
       }
     }
-    if (line.remainingText.head != '(') {
-      throw ParseException.withMessage("Open-paren expected but not found", line.fullLine)
-    }
-    parseRecursive(line.tail, Nil)
+    Parser { line =>
+      parseNext(line, Nil)
+    }.inParens
   }
 
   def parse(partialLine: PartialLine): (T, PartialLine) = {
@@ -78,7 +61,7 @@ case class Parser[+T](attemptParse: PartialLine => (T, PartialLine)) {
       attemptParse(partialLine)
     } catch {
       case e @ (_:ParseException | _:ArbitraryVariableException | _:DistinctVariableViolationException) => throw e
-      case NonFatal(e) => partialLine.throwParseException(e.getMessage)
+      case NonFatal(e) => throw new ParseException(e.getMessage, partialLine.fullLine)
     }
   }
   def parseAndDiscard(line: PartialLine): T = parse(line)._1
@@ -90,7 +73,10 @@ object Parser {
 
   def allRemaining: Parser[String] = Parser { l => (l.remainingText, l.copy(remainingText = "")) }
 
-  def singleWord: Parser[String] = Parser(_.splitFirstWord)
+  def singleWord: Parser[String] = Parser { l =>
+    val (word, remainingText) = l.remainingText.trim.span(c => !c.isWhitespace && !"),".contains(c))
+    (word, l.copy(remainingText = remainingText.trim))
+  }
 
   def allInParens: Parser[String] = Parser(_.toEndOfParens).inParens
 

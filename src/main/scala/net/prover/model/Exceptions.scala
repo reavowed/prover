@@ -6,13 +6,8 @@ case class ReferenceResolveException(
   extends Exception(s"Could not resolve reference $reference: $message")
 
 case class ParseException(
-    line: BookLine,
-    message: String)
+    message: String,
+    line: BookLine)
   extends Exception(s"Parse error in book '${line.bookTitle}' (${line.fileName} line ${line.number}): $message\n${line.text}")
-
-object ParseException {
-  def withMessage(message: String, line: BookLine) = ParseException(line, message)
-  def fromCause(cause: Throwable, line: BookLine) = ParseException(line, cause.getMessage)
-}
 
 case class ArbitraryVariableException(message: String) extends Exception(message)

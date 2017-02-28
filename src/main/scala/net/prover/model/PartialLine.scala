@@ -1,9 +1,6 @@
 package net.prover.model
 
 case class PartialLine(remainingText: String, fullLine: BookLine) {
-  def splitFirstWord: (String, PartialLine) = {
-    remainingText.splitFirstWord.mapRight(PartialLine(_, fullLine))
-  }
   def tail: PartialLine = {
     copy(remainingText = remainingText.tail.trim())
   }
@@ -25,6 +22,4 @@ case class PartialLine(remainingText: String, fullLine: BookLine) {
   }
   def isEmpty: Boolean = remainingText.isEmpty
   def nonEmpty: Boolean = remainingText.nonEmpty
-
-  def throwParseException(msg: String) = throw ParseException.withMessage(msg, fullLine)
 }

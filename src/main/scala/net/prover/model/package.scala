@@ -9,13 +9,6 @@ package object model {
     def splitByWhitespace(max: Int = 0): Seq[String] = {
       s.trim.split("\\s+", max).toSeq
     }
-    def splitFirstWord: (String, String) = {
-      if (s.trim.startsWith("\"")) {
-        s.trim.tail.span(_ != '"').mapRight(_.tail.trim)
-      } else {
-        s.trim.span(c => !c.isWhitespace && !"(),".contains(c)).mapRight(_.trim)
-      }
-    }
     def formatAsKey: String = splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase).mkString("-")
   }
 
