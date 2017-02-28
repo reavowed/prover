@@ -20,8 +20,7 @@ object Format {
   private def parseRaw(
     rawFormatString: String,
     symbol: String,
-    numberOfComponents: Int,
-    line: PartialLine
+    numberOfComponents: Int
   ): Format = rawFormatString match {
     case f if f.nonEmpty =>
       if (f.endsWith("in parens"))
@@ -29,13 +28,12 @@ object Format {
       else
         Format(f, false)
     case "" =>
-      default(symbol, numberOfComponents, line)
+      default(symbol, numberOfComponents)
   }
 
   def default(
     symbol: String,
-    numberOfComponents: Int,
-    line: PartialLine
+    numberOfComponents: Int
   ): Format = {
     if (numberOfComponents == 0)
       Format(symbol, false)
@@ -44,12 +42,10 @@ object Format {
     else if (numberOfComponents == 2)
       Format(s"{} $symbol {}", true)
     else
-      line.throwParseException("Explicit format must be supplied with more than two components")
+      throw new Exception("Explicit format must be supplied with more than two components")
   }
 
   def parser(symbol: String, numberOfComponents: Int): Parser[Format] = {
-    Parser.allInParens.mapWithLine { (rawFormat, line) =>
-      parseRaw(rawFormat, symbol, numberOfComponents, line)
-    }
+    Parser.allInParens.map(parseRaw(_, symbol, numberOfComponents))
   }
 }

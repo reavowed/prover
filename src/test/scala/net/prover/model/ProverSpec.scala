@@ -11,7 +11,7 @@ trait ProverSpec extends Specification {
     StatementDefinition(
       symbol,
       Seq.fill(size)(Statement),
-      Format.default(symbol, size, ""),
+      Format.default(symbol, size),
       (1 to size).map(StatementVariable),
       Nil,
       DistinctVariables.empty,
@@ -25,7 +25,7 @@ trait ProverSpec extends Specification {
     StatementDefinition(
       symbol,
       Seq.fill(size)(Term),
-      Format.default(symbol, size, ""),
+      Format.default(symbol, size),
       (1 to size).map(123 - _).map(_.toChar.toString).map(TermVariable),
       Nil,
       DistinctVariables.empty,
@@ -59,7 +59,7 @@ trait ProverSpec extends Specification {
   val ElementOf = predicate("∈", 2, None)
   val Equals = predicate("=", 2, None)
 
-  val EmptySetSpecification = TermSpecification("∅", Nil, Format.default("∅", 0, ""))
+  val EmptySetSpecification = TermSpecification("∅", Nil, Format.default("∅", 0))
   val EmptySet = DefinedTerm(Nil, EmptySetSpecification)
   val EmptySetDefinition = TermDefinition(
     EmptySetSpecification,

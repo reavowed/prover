@@ -27,8 +27,8 @@ object ComponentType {
     "statement" -> Statement)
 
   def parser: Parser[ComponentType] = {
-    Parser.singleWord.mapWithLine { (name, line) =>
-      componentTypesByName.getOrElse(name, line.throwParseException(s"Unrecognised statement type $name"))
+    Parser.singleWord.map { name =>
+      componentTypesByName.getOrElse(name, throw new Exception(s"Unrecognised statement type $name"))
     }
   }
 

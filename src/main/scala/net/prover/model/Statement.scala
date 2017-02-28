@@ -279,10 +279,10 @@ object Statement extends ComponentType {
 
   def listParser(context: Context): Parser[Seq[Statement]] = parser(context).listInParens(Some(","))
 
-  def variableParser(context: Context): Parser[StatementVariable] = parser(context).mapWithLine {
-    case (variable: StatementVariable, _) =>
+  def variableParser(context: Context): Parser[StatementVariable] = parser(context).map {
+    case variable: StatementVariable =>
       variable
-    case (nonVariable, line) =>
-      throw line.throwParseException(s"Expected statement variable, got $nonVariable")
+    case nonVariable =>
+      throw new Exception(s"Expected statement variable, got $nonVariable")
   }
 }
