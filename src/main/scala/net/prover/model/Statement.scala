@@ -258,7 +258,7 @@ object Statement extends ComponentType {
     val (statementType, remainingLine) = line.splitFirstWord
     statementType match {
       case ParsableStatement(statementDefinition) =>
-        statementDefinition.parseStatement(remainingLine, context)
+        statementDefinition.statementParser(context).parse(remainingLine)
       case IntParser(i) =>
         (StatementVariable(i), remainingLine)
       case "sub" =>

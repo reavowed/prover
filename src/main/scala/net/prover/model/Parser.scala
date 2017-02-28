@@ -2,7 +2,7 @@ package net.prover.model
 
 import scala.util.control.NonFatal
 
-case class Parser[T](attemptParse: PartialLine => (T, PartialLine)) {
+case class Parser[+T](attemptParse: PartialLine => (T, PartialLine)) {
   def map[S](f: T => S): Parser[S] = Parser(l => attemptParse(l).mapLeft(f))
   def mapWithLine[S](f: (T, PartialLine) => S) = Parser(l => attemptParse(l).mapLeft(f(_, l)))
   def flatMap[S](f: T => Parser[S]): Parser[S] = Parser { line =>

@@ -118,7 +118,7 @@ object Term extends ComponentType {
     }
   }
 
-  override def parse(line: PartialLine, context: Context): (Term, PartialLine) = {
+  def parse(line: PartialLine, context: Context): (Term, PartialLine) = {
     object TermSpecificationMatcher {
       def unapply(s: String): Option[TermSpecification] = {
         context.termSpecifications.find(_.symbol == s)
@@ -133,7 +133,7 @@ object Term extends ComponentType {
     val (termType, remainingLine) = line.splitFirstWord
     termType match {
       case TermSpecificationMatcher(termSpecification) =>
-        termSpecification.parseTerm(remainingLine, context)
+        termSpecification.termParser(context).parse(remainingLine)
       case SpecifiedVariable(variable) =>
         (variable, remainingLine)
       case IntParser(i) =>

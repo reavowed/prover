@@ -12,10 +12,8 @@ case class StatementDefinition(
 {
   val defaultStatement = DefinedStatement(defaultComponents, boundVariables, this)
 
-  def parseStatement(line: PartialLine, context: Context): (Statement, PartialLine) = {
-    componentTypes.foldLeft((Seq.empty[Component], line)) { case ((components, remainingLine), componentType) =>
-      componentType.parse(remainingLine, context).mapLeft(components :+ _)
-    }.mapLeft(apply)
+  def statementParser(context: Context): Parser[Statement] = {
+    componentTypes.componentsParser(context).map(apply)
   }
 
   def apply(components: Component*): Statement = {
@@ -58,7 +56,7 @@ object StatementDefinition extends SingleLineChapterEntryParser[StatementDefinit
       symbol <- Parser.singleWord
       componentTypes <- ComponentType.listParser
       format <- Format.parser(symbol, componentTypes.length)
-      defaultVariables <- Components.listParser(componentTypes, context)
+      defaultVariables <- componentTypes.componentsParser(context).inParens
       optionalDefiningStatement <- Statement.parser(context).optionalInParens
       boundVariables <- optionalDefiningStatement match {
         case Some(x) =>

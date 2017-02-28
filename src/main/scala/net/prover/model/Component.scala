@@ -16,18 +16,8 @@ trait Component {
   override def toString: String = html
 }
 
-object Components {
-  def listParser(componentTypes: Seq[ComponentType], context: Context):Parser[Seq[Component]] = {
-    Parser { line =>
-      componentTypes.foldLeft((Seq.empty[Component], line)) { case ((components, remainingLine), componentType) =>
-        componentType.parse(remainingLine, context).mapLeft(components :+ _)
-      }
-    }.inParens
-  }
-}
-
 trait ComponentType {
-  def parse(line: PartialLine, context: Context): (Component, PartialLine)
+  def parser(context: Context): Parser[Component]
 }
 
 object ComponentType {
@@ -43,4 +33,10 @@ object ComponentType {
   }
 
   def listParser: Parser[Seq[ComponentType]] = parser.listInParens(None)
+
+  implicit class ComponentTypeSeqOps(componentTypes: Seq[ComponentType]) {
+    def componentsParser(context: Context) = {
+      componentTypes.map(_.parser(context)).traverseParser
+    }
+  }
 }

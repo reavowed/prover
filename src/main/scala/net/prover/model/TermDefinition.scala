@@ -7,13 +7,9 @@ case class TermSpecification(
 {
   def apply(components: Seq[Component]) = DefinedTerm(components, this)
 
-  def parseTerm(line: PartialLine, context: Context): (Term, PartialLine) = {
-    componentTypes.foldLeft((Seq.empty[Component], line)) { case ((components, remainingLine), componentType) =>
-      componentType.parse(remainingLine, context).mapLeft(components :+ _)
-    }.mapLeft(apply)
+  def termParser(context: Context): Parser[Term] = {
+    componentTypes.componentsParser(context).map(apply)
   }
-
-  def termParser(context: Context): Parser[Term] = Parser(parseTerm(_, context))
 }
 
 case class TermDefinition(
@@ -44,7 +40,7 @@ object TermDefinition extends SingleLineChapterEntryParser[TermDefinition] {
       componentTypes <- ComponentType.listParser
       format <- Format.parser(symbol, componentTypes.length)
       termSpecification = TermSpecification(symbol, componentTypes, format)
-      defaultComponents <- Components.listParser(componentTypes, context)
+      defaultComponents <- componentTypes.componentsParser(context).inParens
       premises <- Statement.listParser(context)
       updatedContext = context.copy(termSpecifications = context.termSpecifications :+ termSpecification)
       definitionTemplate <- Statement.parser(updatedContext).inParens
