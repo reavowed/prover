@@ -17,7 +17,6 @@ case class Parser[+T](attemptParse: PartialLine => (T, PartialLine)) {
         (None, line)
     }
   }
-  def onlyIf(f: T => Boolean): Parser[Option[T]] = map { t => if (f(t)) Some(t) else None }
   def inParens: Parser[T] = Parser { line =>
     if (line.remainingText.head != '(') {
       throw new Exception("Open-paren expected but not found")
@@ -61,7 +60,7 @@ case class Parser[+T](attemptParse: PartialLine => (T, PartialLine)) {
       attemptParse(partialLine)
     } catch {
       case e @ (_:ParseException | _:ArbitraryVariableException | _:DistinctVariableViolationException) => throw e
-      case NonFatal(e) => throw new ParseException(e.getMessage, partialLine.fullLine)
+      case NonFatal(e) => throw new ParseException(e.getMessage, partialLine.fullLine, Some(e))
     }
   }
   def parseAndDiscard(line: PartialLine): T = parse(line)._1

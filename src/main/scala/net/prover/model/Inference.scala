@@ -27,7 +27,7 @@ trait Inference extends TheoremLineParser {
         s"Could not match premises\n${targetAssumption.toSeq ++ targetPremises}\n${assumption.toSeq ++ premises}"))
   }
 
-  def getSubstitutionsParser(
+  def substitutionsParser(
     targetAssumption: Option[Statement],
     targetPremises: Seq[Statement],
     context: Context
@@ -72,13 +72,15 @@ trait Inference extends TheoremLineParser {
     }
   }
 
-  def matchPremises(
+  private def matchPremises(
     targetAssumption: Option[Statement],
     targetPremises: Seq[Statement],
     context: Context,
     distinctVariables: DistinctVariables
   ): Parser[Inference] = {
-    getSubstitutionsParser(targetAssumption, targetPremises, context).map { substitutions =>
+    for {
+      substitutions <- substitutionsParser(targetAssumption, targetPremises, context)
+    } yield {
       val substitutedInference = makeSubstitutions(substitutions)
       val simplifiedInference = substitutedInference.simplify(targetPremises, distinctVariables)
       simplifiedInference
@@ -118,7 +120,7 @@ trait Inference extends TheoremLineParser {
   }
 
   private def premisesParser(theoremBuilder: TheoremBuilder): Parser[Seq[Statement]] = {
-    premises.map(_ => referenceParser(theoremBuilder)).traverseParser
+    premises.map(_ => theoremBuilder.referenceParser).traverseParser
   }
 
   private def applyWithFantasy(theoremBuilder: TheoremBuilder, context: Context): Parser[TheoremBuilder] = {

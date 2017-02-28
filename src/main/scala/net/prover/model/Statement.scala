@@ -19,7 +19,6 @@ trait Statement extends JsonSerializable.Base with Component {
 
 case class StatementVariable(i: Int) extends Statement {
   override def variables: Variables = Variables(Seq(this), Nil)
-  override def freeVariables: Seq[TermVariable] = Nil
   override def calculateSubstitutions(other: Component): Option[Substitutions] = other match {
     case otherStatement: Statement =>
       Some(Substitutions(Map(this -> otherStatement), Map.empty))
@@ -65,9 +64,6 @@ case class StatementVariableWithReplacement(
   def variablesBeingReplaced = replacements.map(_._2)
   override def variables: Variables = replacements.foldLeft(Variables(Seq(statementVariable), Nil)) { case (variables, (term, termVariable)) =>
     variables ++ term.variables :+ termVariable
-  }
-  override def freeVariables: Seq[TermVariable] = replacements.foldRight(Seq.empty[TermVariable]) { case ((term, termVariable), freeVariables) =>
-    freeVariables.filter(_ != termVariable).union(term.freeVariables)
   }
   override def calculateSubstitutions(other: Component): Option[Substitutions] = {
     other match {
@@ -201,7 +197,6 @@ case class DefinedStatement(
  extends Statement
 {
   override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
-  override def freeVariables: Seq[TermVariable] = subcomponents.map(_.freeVariables).foldLeft(Seq.empty[TermVariable])(_ ++ _)
   override def calculateSubstitutions(other: Component): Option[Substitutions] = other match {
     case DefinedStatement(otherSubcomponents, _, `definition`) =>
       val substitutionAttempts = subcomponents.zip(otherSubcomponents).map { case (component, otherComponent) =>
@@ -217,8 +212,11 @@ case class DefinedStatement(
       boundVariables = boundVariables.map(_.applySubstitutions(substitutions)).map(Term.asVariable))
   }
   override def substituteFreeVariable(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
-    if (boundVariables.exists(termToReplaceWith.freeVariables.contains))
-      throw new Exception("Cannot replace free variable with bound variable in quantified statement")
+    boundVariables.intersect(termToReplaceWith.variables.termVariables) match {
+      case v :+ _ =>
+        throw new Exception(s"Cannot substitute $termToReplaceWith into $this - bound variable $v would be captured")
+      case Nil =>
+    }
     copy(subcomponents = subcomponents.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced)))
   }
   override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {

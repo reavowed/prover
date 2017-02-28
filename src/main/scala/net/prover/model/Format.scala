@@ -46,6 +46,10 @@ object Format {
   }
 
   def parser(symbol: String, numberOfComponents: Int): Parser[Format] = {
-    Parser.allInParens.map(parseRaw(_, symbol, numberOfComponents))
+    for {
+      rawFormat <- Parser.allInParens
+    } yield {
+      parseRaw(rawFormat, symbol, numberOfComponents)
+    }
   }
 }

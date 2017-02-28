@@ -75,8 +75,10 @@ object DistinctVariables {
   }
 
   def parser(context: Context): Parser[DistinctVariables] = {
-    singleClauseParser(context)
-      .listInParens(Some(","))
-      .map(seq => seq.foldLeft(DistinctVariables.empty)(_ + _))
+    for {
+      clauses <- singleClauseParser(context).listInParens(Some(","))
+    } yield {
+      clauses.foldLeft(DistinctVariables.empty)(_ + _)
+    }
   }
 }

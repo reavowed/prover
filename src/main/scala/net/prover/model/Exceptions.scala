@@ -7,7 +7,10 @@ case class ReferenceResolveException(
 
 case class ParseException(
     message: String,
-    line: BookLine)
-  extends Exception(s"Parse error in book '${line.bookTitle}' (${line.fileName} line ${line.number}): $message\n${line.text}")
+    line: BookLine,
+    cause: Option[Throwable] = None)
+  extends Exception(
+    s"Parse error in book '${line.bookTitle}' (${line.fileName} line ${line.number}): $message\n${line.text}",
+    cause.orNull)
 
 case class ArbitraryVariableException(message: String) extends Exception(message)

@@ -15,7 +15,6 @@ trait Term extends JsonSerializable.Base with Component {
 
 case class TermVariable(text: String) extends Term {
   override def variables: Variables = Variables(Nil, Seq(this))
-  override def freeVariables: Seq[TermVariable] = Seq(this)
   override def calculateSubstitutions(other: Component): Option[Substitutions] = {
     other match {
       case otherTerm: Term =>
@@ -59,7 +58,6 @@ case class DefinedTerm(
   extends Term
 {
   override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
-  override def freeVariables: Seq[TermVariable] = subcomponents.map(_.freeVariables).foldLeft(Seq.empty[TermVariable])(_ ++ _)
   override def calculateSubstitutions(other: Component): Option[Substitutions] = other match {
     case DefinedTerm(otherSubcomponents, `termSpecification`) =>
       val substitutionAttempts = subcomponents.zip(otherSubcomponents).map { case (component, otherComponent) =>

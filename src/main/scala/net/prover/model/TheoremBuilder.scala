@@ -35,11 +35,15 @@ trait TheoremBuildable[T <: TheoremBuildable[T]] {
       case Some(fantasy) =>
         fantasy.fantasyOption match {
           case None =>
-            f(fantasy).map { step =>
+            for {
+              step <- f(fantasy)
+            } yield {
               withFantasy(None).withStep(step)
             }
           case Some(_) =>
-            fantasy.replaceFantasy(f).map { newFantasy =>
+            for {
+              newFantasy <- fantasy.replaceFantasy(f)
+            } yield {
               withFantasy(Some(newFantasy))
             }
         }
@@ -47,6 +51,8 @@ trait TheoremBuildable[T <: TheoremBuildable[T]] {
         throw new Exception("No fantasy to replace")
     }
   }
+
+  def referenceParser: Parser[Statement] = Parser.singleWord.map(resolveReference)
 
   def resolveReference(reference: String): Statement = {
     val fantasyReference = "f\\.(.+)".r

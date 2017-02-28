@@ -28,7 +28,7 @@
             <div class="distinctVariables" ng-if="$ctrl.theorem.distinctVariables.length">
                 Distinct variables:
                 <span ng-repeat="requirement in $ctrl.theorem.distinctVariables"
-                      class="distinctVariable">({{requirement.termVariable}} in {{requirement.variables.join(", ")}})</span>
+                      class="distinctVariable">({{requirement.termVariable}} may not appear in {{requirement.variables.join(", ")}})</span>
             </div>
         </div>
         <div id="{{$ctrl.theorem.id}}-proof" class="theoremProof collapse">

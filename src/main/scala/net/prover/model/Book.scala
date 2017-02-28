@@ -12,18 +12,18 @@ import scala.collection.JavaConverters._
 
 @JsonIgnoreProperties(Array("path", "dependencies", "context", "fullContext"))
 case class Book(
-  title: String,
-  path: Path,
-  dependencies: Seq[Book],
-  chapters: Seq[Chapter] = Nil,
-  context: Context = Context.empty) {
+    title: String,
+    path: Path,
+    dependencies: Seq[Book],
+    chapters: Seq[Chapter] = Nil,
+    context: Context = Context.empty) {
   val key: String = title.formatAsKey
-
-  protected def transitiveDependencies: Seq[Book] = dependencies.flatMap(_.transitiveDependencies).distinctBy(_.title) :+ this
 
   lazy val fullContext: Context = {
     context.combine(transitiveDependencies.map(_.context))
   }
+
+  protected def transitiveDependencies: Seq[Book] = dependencies.flatMap(_.transitiveDependencies).distinctBy(_.title) :+ this
 }
 
 object Book {

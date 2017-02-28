@@ -2,7 +2,6 @@ package net.prover.model
 
 trait Component {
   def variables: Variables
-  def freeVariables: Seq[TermVariable]
   def calculateSubstitutions(other: Component): Option[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Component
   def substituteFreeVariable(
@@ -21,14 +20,17 @@ trait ComponentType {
 }
 
 object ComponentType {
-
   private val componentTypesByName = Map(
     "term" -> Term,
     "statement" -> Statement)
 
   def parser: Parser[ComponentType] = {
-    Parser.singleWord.map { name =>
-      componentTypesByName.getOrElse(name, throw new Exception(s"Unrecognised statement type $name"))
+    for {
+      name <- Parser.singleWord
+    } yield {
+      componentTypesByName.getOrElse(
+        name,
+        throw new Exception(s"Unrecognised statement type $name"))
     }
   }
 
