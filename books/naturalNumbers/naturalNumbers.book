@@ -1,7 +1,7 @@
 Natural Numbers
 import Functions
 
-variables (n n' m m' x x' y y' X Y s S t T f g F)
+variables () (n n' m m' x x' y y' X Y s S t T f g F)
 
 include 01.successors.chapter
 include 02.inductiveSets.chapter

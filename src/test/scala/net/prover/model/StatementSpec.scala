@@ -12,24 +12,24 @@ class StatementSpec extends ProverSpec {
 
   "statement parser" should {
     "parse a statement variable" in {
-      parseStatement("1") mustEqual StatementVariable(1)
+      parseStatement("φ") mustEqual φ
     }
 
     "parse a binary connective" in {
-      parseStatement("→ 1 2") mustEqual Implication(StatementVariable(1), StatementVariable(2))
+      parseStatement("→ φ ψ") mustEqual Implication(φ, ψ)
     }
 
     "parse a nested binary connective" in {
-      parseStatement("→ → 1 2 3") mustEqual
-        Implication(Implication(StatementVariable(1), StatementVariable(2)), StatementVariable(3))
+      parseStatement("→ → φ ψ χ") mustEqual
+        Implication(Implication(φ, ψ), χ)
     }
 
     "parse a quantified statement" in {
-      parseStatement("∀ 2 3") mustEqual ForAll("y", 3)
+      parseStatement("∀ y χ") mustEqual ForAll(y, χ)
     }
 
     "parse a replacement statement" in {
-      parseStatement("sub 2 1 3") mustEqual StatementVariableWithReplacement(3, "y", "z")
+      parseStatement("sub y x φ") mustEqual StatementVariableWithReplacement(φ, y, x)
     }
 
     "parse an empty list" in {
@@ -37,61 +37,58 @@ class StatementSpec extends ProverSpec {
     }
 
     "parse a list with a single statement" in {
-      parseStatementList("(1)") mustEqual Seq(StatementVariable(1))
+      parseStatementList("(φ)") mustEqual Seq(φ)
     }
 
     "parse a list with multiple statements" in {
-      parseStatementList("(1, 2, 3)") mustEqual Seq(
-        StatementVariable(1),
-        StatementVariable(2),
-        StatementVariable(3))
+      parseStatementList("(φ, ψ, χ)") mustEqual Seq(φ, ψ, χ)
     }
   }
 
   "statement match" should {
     "match a statement variable to anything" in {
-      StatementVariable(1).calculateSubstitutions(Implication(StatementVariable(1), StatementVariable(2))) mustEqual
+      φ.calculateSubstitutions(Implication(φ, ψ)) mustEqual
         Some(Substitutions(
-          Map(StatementVariable(1) -> Implication(StatementVariable(1), StatementVariable(2))),
+          Map(φ -> Implication(φ, ψ)),
           Map.empty))
     }
     "not match a connective to a statement variable" in {
-      Implication(StatementVariable(1), StatementVariable(2)).calculateSubstitutions(StatementVariable(1)) must beNone
+      Implication(φ, ψ).calculateSubstitutions(φ) must beNone
     }
     "not match two different connectives" in {
-      Implication(StatementVariable(1), StatementVariable(2)).calculateSubstitutions(Conjunction(StatementVariable(1), StatementVariable(2))) must beNone
+      Implication(φ, ψ).calculateSubstitutions(Conjunction(φ, ψ)) must beNone
     }
     "not match two connectives of the same type whose substatements don't match" in {
-      Implication(Implication(StatementVariable(1), StatementVariable(2)), StatementVariable(3))
-        .calculateSubstitutions(Implication(StatementVariable(1), StatementVariable(2)))
+      Implication(Implication(φ, ψ), χ)
+        .calculateSubstitutions(Implication(φ, ψ))
         .must(beNone)
     }
     "match two connectives of the same type that only differ in statement variable number" in {
-      Implication(StatementVariable(1), StatementVariable(2))
-        .calculateSubstitutions(Implication(StatementVariable(1), StatementVariable(3)))
+      Implication(φ, ψ)
+        .calculateSubstitutions(Implication(φ, χ))
         .mustEqual(Some(Substitutions(
-          Map(StatementVariable(1) -> StatementVariable(1), StatementVariable(2) -> StatementVariable(3)),
+          Map(φ -> φ, ψ -> χ),
           Map.empty)))
     }
     "match two connectives of the same type whose substatements are different but match" in {
-      Implication(StatementVariable(1), StatementVariable(2))
-        .calculateSubstitutions(Implication(Conjunction(StatementVariable(1), StatementVariable(2)), StatementVariable(3)))
+      Implication(φ, ψ)
+        .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ))
         .mustEqual(Some(Substitutions(
           Map(
-            StatementVariable(1) -> Conjunction(1, 2),
-            StatementVariable(2) -> StatementVariable(3)),
+            φ -> Conjunction(φ, ψ),
+            ψ -> χ),
           Map.empty)))
     }
     "match two connectives of the same type whose substatements merge correctly" in {
-      Implication(StatementVariable(1), StatementVariable(1))
-        .calculateSubstitutions(Implication(Conjunction(StatementVariable(1), StatementVariable(2)), Conjunction(StatementVariable(1), StatementVariable(2))))
+      Implication(φ, φ)
+        .calculateSubstitutions(Implication(Conjunction(φ, ψ), Conjunction(φ, ψ)))
         .mustEqual(Some(Substitutions(
-          Map(StatementVariable(1) -> Conjunction(1, 2)),
+          Map(φ -> Conjunction(φ, ψ)),
           Map.empty)))
     }
     "match two connectives of the same type whose substatements do not merge correctly" in {
-      Implication(StatementVariable(1), StatementVariable(1))
-        .calculateSubstitutions(Implication(Conjunction(StatementVariable(1), StatementVariable(2)), StatementVariable(3)))
+      Implication(φ, φ)
+        .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ))
         .must(beNone)
     }
   }
@@ -99,70 +96,75 @@ class StatementSpec extends ProverSpec {
   "statement term substitution" should {
     "not do anything if substituting a variable for itself" in {
       val statements = Seq(
-        StatementVariable(1),
-        Implication(1, 2),
-        Equals("z", "y"))
+        φ,
+        Implication(φ, ψ),
+        Equals(x, y))
 
       forall(statements) { s =>
-        s.substituteFreeVariable("z", "z") mustEqual s
+        s.substituteFreeVariable(x, x) mustEqual s
       }
     }
     "not do anything if substituting an already-substituted variable" in {
       val statements = Seq(
-        StatementVariable(1),
-        Implication(1, 2),
-        Equals("z", "y"))
+        φ,
+        Implication(φ, ψ),
+        Equals(x, y))
 
       forall(statements) { s =>
-        val firstSubstitution = s.substituteFreeVariable("y", "z")
-        firstSubstitution.substituteFreeVariable("x", "z") mustEqual firstSubstitution
-        val secondSubstitution = firstSubstitution.substituteFreeVariable(EmptySet, "y")
-        secondSubstitution.substituteFreeVariable("x", "z") mustEqual secondSubstitution
-        secondSubstitution.substituteFreeVariable("x", "y") mustEqual secondSubstitution
+        val firstSubstitution = s.substituteFreeVariable(y, x)
+        firstSubstitution.substituteFreeVariable(z, x) mustEqual firstSubstitution
+        val secondSubstitution = firstSubstitution.substituteFreeVariable(EmptySet, y)
+        secondSubstitution.substituteFreeVariable(z, x) mustEqual secondSubstitution
+        secondSubstitution.substituteFreeVariable(z, y) mustEqual secondSubstitution
       }
     }
 
     "eliminate extra replacements when simplifying" in {
-      val firstSubstitution = StatementVariable(1)
-        .substituteFreeVariable("y", "z")
-        .substituteFreeVariable("w", "x")
-        .substituteFreeVariable("u", "v")
-      val secondSubstitution = StatementVariable(1)
-        .substituteFreeVariable("w", "x")
+      val a = TermVariable("a")
+      val b = TermVariable("b")
+      val p = TermVariable("p")
+      val q = TermVariable("q")
+
+      val firstSubstitution = φ
+        .substituteFreeVariable(y, x)
+        .substituteFreeVariable(b, a)
+        .substituteFreeVariable(q, p)
+      val secondSubstitution = φ
+        .substituteFreeVariable(b, a)
 
       val distinctVariables = firstSubstitution.attemptSimplification(secondSubstitution)
       distinctVariables mustEqual Some(DistinctVariables(Map(
-        TermVariable("z") -> Variables(Seq(StatementVariable(1)), Nil),
-        TermVariable("v") -> Variables(Seq(StatementVariable(1)), Nil))))
+        x -> Variables(Seq(φ), Nil),
+        p -> Variables(Seq(φ), Nil))))
 
       firstSubstitution.makeSimplifications(distinctVariables.get) mustEqual secondSubstitution
     }
 
     "combine replacements when simplifying" in {
-      val firstSubstitution = StatementVariable(1)
-        .substituteFreeVariable("y", "z")
-        .substituteFreeVariable("x", "y")
-      val secondSubstitution = StatementVariable(1)
-        .substituteFreeVariable("x", "z")
+      val firstSubstitution = φ
+        .substituteFreeVariable(y, x)
+        .substituteFreeVariable(z, y)
+      val secondSubstitution = φ
+        .substituteFreeVariable(z, x)
 
       val distinctVariables = firstSubstitution.attemptSimplification(secondSubstitution)
       distinctVariables mustEqual Some(DistinctVariables(Map(
-        TermVariable("y") -> Variables(Seq(StatementVariable(1)), Nil))))
+        y -> Variables(Seq(φ), Nil))))
 
       firstSubstitution.makeSimplifications(distinctVariables.get) mustEqual secondSubstitution
     }
 
     "not allow substituting a bound variable" in {
-      ForAll(TermVariable("y"), Equals(TermVariable("y"), TermVariable("x")))
-          .substituteFreeVariable("y", "x") must throwAn[Exception]
+      ForAll(y, Equals(y, z))
+          .substituteFreeVariable(y, z) must throwAn[Exception]
     }
 
     "not allow substituting a bound variable after full substitution" in {
-      ForAll(TermVariable("z"), StatementVariable(1))
+      ForAll(x, φ)
         .applySubstitutions(Substitutions(
-          Map(StatementVariable(1) -> Equals(TermVariable("y"), TermVariable("x"))),
-          Map(TermVariable("z") -> TermVariable("y"))))
-        .substituteFreeVariable("y", "x") must throwAn[Exception]
+          Map(φ -> Equals(y, z)),
+          Map(x -> y)))
+        .substituteFreeVariable(y, z) must throwAn[Exception]
     }
   }
 }

@@ -1,7 +1,7 @@
 Functions
 import Set Theory
 
-variables (f g X Y x y S)
+variables () (f g X Y x y S)
 
 chapter Definition
 Definition of a function.

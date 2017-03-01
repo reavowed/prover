@@ -3,6 +3,15 @@ package net.prover.model
 import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {
+
+  def φ = StatementVariable("φ")
+  def ψ = StatementVariable("ψ")
+  def χ = StatementVariable("χ")
+
+  def x = TermVariable("x")
+  def y = TermVariable("y")
+  def z = TermVariable("z")
+
   def connective(
     symbol: String,
     size: Int,
@@ -12,7 +21,7 @@ trait ProverSpec extends Specification {
       symbol,
       Seq.fill(size)(Statement),
       Format.default(symbol, size),
-      (1 to size).map(StatementVariable),
+      Seq(φ, ψ, χ).take(size),
       Nil,
       DistinctVariables.empty,
       definingStatement)
@@ -26,7 +35,7 @@ trait ProverSpec extends Specification {
       symbol,
       Seq.fill(size)(Term),
       Format.default(symbol, size),
-      (1 to size).map(123 - _).map(_.toChar.toString).map(TermVariable),
+      Seq(x, y, z).take(size),
       Nil,
       DistinctVariables.empty,
       definingStatement)
@@ -40,9 +49,9 @@ trait ProverSpec extends Specification {
     StatementDefinition(
       symbol,
       Seq(Term, Statement),
-      Format(s"($symbol{}){}", false),
-      Seq(TermVariable("z"), StatementVariable(1)),
-      Seq(TermVariable("z")),
+      Format(s"($symbol{}){}", requiresBrackets = false),
+      Seq(x, φ),
+      Seq(x),
       DistinctVariables.empty,
       definingStatement)
   }
@@ -50,12 +59,12 @@ trait ProverSpec extends Specification {
 
   val Implication = connective("→", 2, None)
   val Negation = connective("¬", 1, None)
-  val Conjunction = connective("∧", 2, Some(Negation(Implication(1, Negation(2)))))
-  val Disjunction = connective("∨", 2, Some(Implication(Negation(1), 2)))
+  val Conjunction = connective("∧", 2, Some(Negation(Implication(φ, Negation(ψ)))))
+  val Disjunction = connective("∨", 2, Some(Implication(Negation(φ), ψ)))
   val Equivalence = connective("↔", 2, None)
 
   val ForAll = quantifier("∀", None, DistinctVariables.empty)
-  var Exists = quantifier("∃", Some(Negation(ForAll("z", Negation(1)))), DistinctVariables.empty)
+  var Exists = quantifier("∃", Some(Negation(ForAll(x, Negation(φ)))), DistinctVariables.empty)
   val ElementOf = predicate("∈", 2, None)
   val Equals = predicate("=", 2, None)
 
@@ -65,46 +74,46 @@ trait ProverSpec extends Specification {
     EmptySetSpecification,
     Nil,
     Nil,
-    ForAll("z", Negation(ElementOf("z", EmptySet))))
+    ForAll(x, Negation(ElementOf(x, EmptySet))))
 
   val Restate = Axiom(
     "restate",
     "Restate",
     None,
-    Seq(StatementVariable(1)),
-    StatementVariable(1),
+    Seq(φ),
+    φ,
     Nil,
     DistinctVariables.empty)
   val IntroduceImplication = Axiom(
     "introduceImplication",
     "Introduce Implication",
-    Some(StatementVariable(1)),
-    Seq(StatementVariable(2)),
-    Implication(1, 2),
+    Some(φ),
+    Seq(ψ),
+    Implication(φ, ψ),
     Nil,
     DistinctVariables.empty)
   val EliminateImplication = Axiom(
     "eliminateImplication",
     "Eliminate Implication",
     None,
-    Seq(Implication(1, 2), 1),
-    2,
+    Seq(Implication(φ, ψ), φ),
+    ψ,
     Nil,
     DistinctVariables.empty)
   val IntroduceForall = Axiom(
     "introduceForall",
     "Introduce Forall",
     None,
-    Seq(StatementVariableWithReplacement(1, "y", "z")),
-    ForAll("z", 1),
-    Seq("y"),
-    DistinctVariables(Map(TermVariable("y") -> Variables(Seq(1), Nil))))
+    Seq(StatementVariableWithReplacement(φ, y, x)),
+    ForAll(x, φ),
+    Seq(y),
+    DistinctVariables(Map(y -> Variables(Seq(φ), Nil))))
   val EliminateForall = Axiom(
     "eliminateForall",
     "Eliminate Forall",
     None,
-    Seq(ForAll("z", 1)),
-    StatementVariableWithReplacement(1, "y", "z"),
+    Seq(ForAll(x, φ)),
+    StatementVariableWithReplacement(φ, y, x),
     Nil,
     DistinctVariables.empty)
 
@@ -113,13 +122,13 @@ trait ProverSpec extends Specification {
     ForAll, Exists,
     ElementOf, Equals)
 
-  val defaultContext = statementDefinitions.foldLeft(Context.empty) { case (context, statementDefinition) =>
+  val baseContext = Context.empty.copy(variables = Variables(
+    Seq(φ, ψ, χ),
+    Seq(x, y, z)))
+
+  val defaultContext = statementDefinitions.foldLeft(baseContext) { case (context, statementDefinition) =>
     context.addStatementDefinition(statementDefinition)
   }.addTermDefinition(EmptySetDefinition)
-
-  implicit def intToStatementVariable(i: Int): StatementVariable = StatementVariable(i)
-
-  implicit def stringToTermVariable(s: String): TermVariable = TermVariable(s)
 
   implicit def stringToPartialLine(s: String): PartialLine = PartialLine(s, BookLine(s, 1, "Fake Book", "filename"))
 
@@ -129,6 +138,5 @@ trait ProverSpec extends Specification {
 
   implicit class TheoremBuilderOps(theoremBuilder: TheoremBuilder) {
     def addStep(statement: Statement): TheoremBuilder = theoremBuilder.addStep(Step(statement, ""))
-    def addStep(i: Int): TheoremBuilder = addStep(intToStatementVariable(i))
   }
 }

@@ -1,6 +1,8 @@
 Predicate Calculus
 import Propositional Calculus
 
+variables (φ) (x y)
+
 include 01.universalQuantifier.chapter
 include 02.existentialQuantifier.chapter
 include 03.equality.chapter

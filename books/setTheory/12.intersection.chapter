@@ -1,7 +1,7 @@
 chapter Intersections
 Arbitrary and binary intersections.
 
-variables (x y z y' S T)
+variables () (x y z y' S T)
 
 theorem intersectionOverClassExists An Intersection over a Class Exists
 premise ∃ x 1

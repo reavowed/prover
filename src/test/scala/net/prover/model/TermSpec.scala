@@ -9,27 +9,28 @@ class TermSpec extends ProverSpec {
     }
 
     "match a unary function to another application of the same function" in {
-      PowerSet(Seq(TermVariable("z")))
-        .calculateSubstitutions(PowerSet(Seq(TermVariable("y"))))
+      PowerSet(Seq(x))
+        .calculateSubstitutions(PowerSet(Seq(y)))
         .mustEqual(Some(Substitutions(
           Map.empty,
-          Map(TermVariable("z") -> TermVariable("y")))))
+          Map(x -> y))))
     }
   }
+
   "term apply match" should {
     "do nothing to a constant" in {
       EmptySet.applySubstitutions(Substitutions(
-        Map(StatementVariable(1) -> StatementVariable(2)),
-        Map(TermVariable("z") -> TermVariable("y")))
+        Map(φ -> ψ),
+        Map(x -> y))
       ) mustEqual EmptySet
     }
 
     "replace terms in a unary function" in {
-      PowerSet(Seq(TermVariable("z"))).applySubstitutions(
+      PowerSet(Seq(x)).applySubstitutions(
         Substitutions(
-          Map(StatementVariable(1) -> StatementVariable(2)),
-          Map(TermVariable("z") -> TermVariable("y")))
-      ) mustEqual PowerSet(Seq(TermVariable("y")))
+          Map(φ -> ψ),
+          Map(x -> y))
+      ) mustEqual PowerSet(Seq(y))
     }
   }
 

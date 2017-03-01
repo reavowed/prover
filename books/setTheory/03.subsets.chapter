@@ -33,7 +33,7 @@ subsetIsReflexive 1
 eliminateEquals p1 1 ⊆ 1 3 3
 qed
 
-variables (X Y x y)
+variables () (X Y x y)
 
 theorem elementOfSubsetIsElementOfSet An Element of a Subset Is an Element of the Set
 premise ⊆ X Y

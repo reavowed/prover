@@ -1,9 +1,9 @@
 chapter Universal Quantifier
 Introduce the universal quantifier.
 
-statement ∀ (term statement) ((∀{}){}) (1 1) () (1) ()
-axiom introduceForall (Introduce Forall) () (sub 2 1 1) (∀ 1 1) (2) (2 1)
-axiom eliminateForall (Eliminate Forall) () (∀ 1 1) (sub 2 1 1) () ()
+statement ∀ (term statement) ((∀{}){}) (x φ) () (x) ()
+axiom introduceForall (Introduce Forall) () (sub y x φ) (∀ x φ) (y) (y φ)
+axiom eliminateForall (Eliminate Forall) () (∀ x φ) (sub y x φ) () ()
 
 theorem distributeForallOverImplication Distribute Universal Quantifier over Implication
 premise ∀ 1 → 1 2

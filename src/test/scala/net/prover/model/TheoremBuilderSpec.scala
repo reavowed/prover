@@ -5,26 +5,26 @@ class TheoremBuilderSpec extends ProverSpec {
   "theorem builder" should {
     "handle simple direct rule" in {
       val updatedTheoremBuilder = Restate.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addPremise(StatementVariable(1)),
+        TheoremBuilder().addPremise(φ),
         "p1",
         defaultContext)
-      updatedTheoremBuilder.steps.head.statement mustEqual StatementVariable(1)
+      updatedTheoremBuilder.steps.head.statement mustEqual φ
     }
 
     "handle direct rule referencing fantasy hypothesis" in {
       val updatedTheoremBuilder = Restate.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addFantasy(StatementVariable(1)),
+        TheoremBuilder().addFantasy(φ),
         "f.a",
         defaultContext)
-      updatedTheoremBuilder.fantasyOption.get.steps.head.statement mustEqual StatementVariable(1)
+      updatedTheoremBuilder.fantasyOption.get.steps.head.statement mustEqual φ
     }
 
     "handle simple direct rule with a more complicated match" in {
       val updatedTheoremBuilder = Restate.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addPremise(Conjunction(StatementVariable(1), StatementVariable(2))),
+        TheoremBuilder().addPremise(Conjunction(φ, ψ)),
         "p1",
         defaultContext)
-      updatedTheoremBuilder.steps.head.statement mustEqual Conjunction(StatementVariable(1), StatementVariable(2))
+      updatedTheoremBuilder.steps.head.statement mustEqual Conjunction(φ, ψ)
     }
 
     "fail an assumption discharging rule when theorem builder has no fantasy" in {
@@ -37,11 +37,11 @@ class TheoremBuilderSpec extends ProverSpec {
 
     "handle assumption discharging rule with premise" in {
       val updatedTheoremBuilder = IntroduceImplication.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addFantasy(StatementVariable(1)).addStep(StatementVariable(2)),
+        TheoremBuilder().addFantasy(φ).addStep(ψ),
         "f.1",
         defaultContext)
       val step = updatedTheoremBuilder.steps.head
-      step.statement mustEqual Implication(StatementVariable(1), StatementVariable(2))
+      step.statement mustEqual Implication(φ, ψ)
       step.fantasy must beSome
       updatedTheoremBuilder.fantasyOption must beNone
     }
@@ -50,82 +50,82 @@ class TheoremBuilderSpec extends ProverSpec {
       val theorem = Theorem(
         "and-sym",
         "Conjunction is Symmetric",
-        Seq(Conjunction(1, 2)),
+        Seq(Conjunction(φ, ψ)),
         Nil,
-        Conjunction(2, 1),
+        Conjunction(ψ, φ),
         Nil,
         DistinctVariables.empty)
       val theoremBuilder = IntroduceImplication.readAndUpdateTheoremBuilder(
         TheoremBuilder(),
-        "and-sym ∧ 2 1",
+        "and-sym ∧ ψ φ",
         defaultContext.copy(theoremLineParsers = Seq(theorem)))
-      theoremBuilder.steps.head.statement mustEqual Implication(Conjunction(2, 1), Conjunction(1, 2))
+      theoremBuilder.steps.head.statement mustEqual Implication(Conjunction(ψ, φ), Conjunction(φ, ψ))
     }
 
     "handle assumption discharging rule applied to definition" in {
       val theoremBuilder = IntroduceImplication.readAndUpdateTheoremBuilder(
         TheoremBuilder(),
-        "unapply-∨ ∨ ¬ 1 2",
+        "unapply-∨ ∨ ¬ φ ψ",
         defaultContext)
       theoremBuilder.steps.head.statement mustEqual Implication(
-        Disjunction(Negation(1), 2),
-        Implication(Negation(Negation(1)), 2))
+        Disjunction(Negation(φ), ψ),
+        Implication(Negation(Negation(φ)), ψ))
     }
 
     "handle rule with a substitution in the conclusion" in {
       val theoremBuilder = EliminateForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addStep(ForAll("y", Equals("y", "z"))),
-        "1 3",
+        TheoremBuilder().addStep(ForAll(y, Equals(y, x))),
+        "1 z",
         defaultContext)
-      theoremBuilder.steps(1).statement mustEqual Equals("x", "z")
+      theoremBuilder.steps(1).statement mustEqual Equals(z, x)
     }
 
     "handle rule with a substitution in the premise applied to a non-substituted statement" in {
       val theoremBuilder = IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addStep(Conjunction(Equals("x", "x"), ElementOf("z", "y"))),
-        "1 ∧ = 4 4 ∈ 1 2 3 4",
+        TheoremBuilder().addStep(Conjunction(Equals(x, x), ElementOf(y, x))),
+        "1 ∧ = z z ∈ y z x z",
         defaultContext)
-      theoremBuilder.steps(1).statement mustEqual ForAll("w", Conjunction(Equals("w", "w"), ElementOf("z", "y")))
+      theoremBuilder.steps(1).statement mustEqual ForAll(z, Conjunction(Equals(z, z), ElementOf(y, z)))
     }
 
     "handle rule with a substitution in the premise applied to a substituted statement" in {
       val theoremBuilder = IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addStep(StatementVariableWithReplacement(3, "y", "z")),
+        TheoremBuilder().addStep(StatementVariableWithReplacement(φ, y, x)),
         "1",
         defaultContext)
-      theoremBuilder.steps(1).statement mustEqual ForAll("z", 3)
+      theoremBuilder.steps(1).statement mustEqual ForAll(x, φ)
     }
 
-    "add a rule's arbitrary variable to the theorem if it appears in a theorem hypothesis" in {
+    "add a rule's arbitrary variable to the theorem if it appears in a theorem premise" in {
       val theoremBuilder = IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addPremise(Equals("z", "y")),
-        "p1 = 1 3 2 3",
+        TheoremBuilder().addPremise(Equals(x, y)),
+        "p1 = x z y z",
         defaultContext)
-      theoremBuilder.arbitraryVariables mustEqual Seq(TermVariable("y"))
+      theoremBuilder.arbitraryVariables mustEqual Seq(y)
     }
 
-    "fail a rule with arbitrary variables if an arbitrary variable appears in a fantasy hypothesis" in {
+    "fail a rule with arbitrary variables if an arbitrary variable appears in a fantasy assumption" in {
       IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addFantasy(Equals("z", "y")),
-        "f.a = 1 3 2 3",
+        TheoremBuilder().addFantasy(Equals(x, y)),
+        "f.a = x z y z",
         defaultContext
       ) must throwAn[ArbitraryVariableException]
     }
 
     "disallow a rule if distinct variable requirements are not followed" in {
       IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addStep(Equals("z", "z")),
-        "1 = 2 1 1 2",
+        TheoremBuilder().addStep(Equals(z, z)),
+        "1 = y z z y",
         defaultContext
       ) must throwA[DistinctVariableViolationException]
     }
 
     "apply a rule by adding distinct variables if necessary" in {
       val updatedTheoremBuilder = IntroduceForall.readAndUpdateTheoremBuilder(
-        TheoremBuilder().addStep(Equivalence(StatementVariableWithReplacement(1, "x", "z"), Equals("x", "w"))),
-        "1 ↔ 1 = 1 4 3 1",
+        TheoremBuilder().addStep(Equivalence(StatementVariableWithReplacement(φ, y, x), Equals(y, z))),
+        "1 ↔ φ = x z y x",
         defaultContext)
-      updatedTheoremBuilder.steps(1).statement mustEqual ForAll("z", Equivalence(1, Equals("z", "w")))
+      updatedTheoremBuilder.steps(1).statement mustEqual ForAll(x, Equivalence(φ, Equals(x, z)))
     }
   }
 }

@@ -17,7 +17,7 @@ trait Statement extends JsonSerializable.Base with Component {
   def containsTerms: Boolean
 }
 
-case class StatementVariable(i: Int) extends Statement {
+case class StatementVariable(text: String) extends Statement {
   override def variables: Variables = Variables(Seq(this), Nil)
   override def calculateSubstitutions(other: Component): Option[Substitutions] = other match {
     case otherStatement: Statement =>
@@ -53,7 +53,7 @@ case class StatementVariable(i: Int) extends Statement {
 
   override def containsTerms = false
 
-  override def html: String = (944 + i).toChar.toString
+  override def html: String = text
 }
 
 case class StatementVariableWithReplacement(
@@ -254,12 +254,19 @@ object Statement extends ComponentType {
         context.statementDefinitions.find(_.symbol == s)
       }
     }
+    object SpecifiedVariable {
+      def unapply(s: String): Option[StatementVariable] = {
+        context.variables.statementVariables.find(_.text == s)
+      }
+    }
 
     def parserForStatementType(statementType: String): Parser[Statement] = statementType match {
       case ParsableStatement(statementDefinition) =>
         statementDefinition.statementParser(context)
+      case SpecifiedVariable(v) =>
+        Parser.constant(v)
       case IntParser(i) =>
-        Parser.constant(StatementVariable(i))
+        Parser.constant(StatementVariable((944 + i).toChar.toString))
       case "sub" =>
         for {
           termToReplaceWith <- Term.parser(context)

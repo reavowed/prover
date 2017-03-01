@@ -41,7 +41,7 @@ qed
 
 term × (term term) () (1 2) () (∀ 5 ↔ ∈ 5 × 1 2 ∃ 3 ∃ 4 ∧ ∧ ∈ 3 1 ∈ 4 2 = 5 orderedPair 3 4)
 
-variables (x y z x' y' X Y)
+variables () (x y z x' y' X Y)
 
 theorem orderedPairElementOfCartesianProduct Ordered Pair Is Element of Cartesian Product
 premise ∈ x X

@@ -20,88 +20,88 @@ class TheoremSpec extends ProverSpec {
       val theorem = parseTheorem(
         "imp-refl Implication is Reflexive",
         Seq(
-          "assume 1",
+          "assume φ",
           "introduceImplication f.a",
           "qed"))
-      theorem.conclusion mustEqual Implication(1, 1)
+      theorem.conclusion mustEqual Implication(φ, φ)
     }
 
     "parse a theorem with a nested fantasy" in {
       val theorem = parseTheorem(
         "imp-distr Implication Distributes over Itself",
         Seq(
-          "premise → 1 → 2 3",
-          "assume → 1 2",
-          "assume 1",
+          "premise → φ → ψ χ",
+          "assume → φ ψ",
+          "assume φ",
           "eliminateImplication p1 f.f.a",
           "eliminateImplication f.a f.f.a",
           "eliminateImplication f.f.1 f.f.2",
           "introduceImplication f.f.3",
           "introduceImplication f.1",
           "qed"))
-      theorem.conclusion mustEqual Implication(Implication(1, 2), Implication(1, 3))
+      theorem.conclusion mustEqual Implication(Implication(φ, ψ), Implication(φ, χ))
     }
 
     "parse a theorem with a definition application" in {
       val theorem = parseTheorem(
         "imp-distr Implication Distributes over Itself",
         Seq(
-          "premise ∧ 1 2",
+          "premise ∧ φ ψ",
           "unapply-∧ p1",
           "qed"))
-      theorem.conclusion mustEqual Negation(Implication(1, Negation(2)))
+      theorem.conclusion mustEqual Negation(Implication(φ, Negation(ψ)))
     }
 
     "parse a theorem with a previous theorem application" in {
       val previousTheorem = Theorem(
         "false-imp-any",
         "A False Statement Implies Anything",
-        Seq(1),
+        Seq(φ),
         Nil,
-        Implication(Negation(1), 2),
+        Implication(Negation(φ), ψ),
         Nil,
         DistinctVariables.empty)
 
       val theorem = parseTheorem(
         "or-left Disjunction from Left",
         Seq(
-          "premise 1",
-          "false-imp-any p1 2",
+          "premise φ",
+          "false-imp-any p1 ψ",
           "apply-∨ 1",
           "qed"),
         additionalTheorems = Seq(previousTheorem))
-      theorem.conclusion mustEqual Disjunction(1, 2)
+      theorem.conclusion mustEqual Disjunction(φ, ψ)
     }
 
     "parse a theorem with arbitrary variables" in {
       val theorem = parseTheorem(
         "id Title",
         Seq(
-          "premise = 1 2",
-          "introduceForall p1 = 1 3 2 3",
+          "premise = x y",
+          "introduceForall p1 = x z y z",
           "qed"))
-      theorem.arbitraryVariables mustEqual Seq(TermVariable("y"))
+      theorem.arbitraryVariables mustEqual Seq(y)
     }
 
     "parse a theorem with distinct variables" in {
       val theorem = parseTheorem(
         "id Title",
         Seq(
-          "premise sub 2 1 1",
+          "premise sub y x φ",
           "introduceForall p1",
           "qed"))
       theorem.distinctVariables mustEqual
-        DistinctVariables(Map(TermVariable("y") -> Variables(Seq(1), Nil)))
+        DistinctVariables(Map(y -> Variables(Seq(φ), Nil)))
     }
 
     "not include distinct variables if they don't appear in the hypotheses or conclusion" in {
       val theorem = parseTheorem(
         "id Title",
         Seq(
-          "premise ∀ 1 → 1 2",
-          "eliminateForall p1 2",
-          "assume ∀ 1 1",
-          "eliminateForall f.a 2",
+          "premise ∀ x → φ ψ",
+          "eliminateForall p1 y",
+          "assume ∀ x φ",
+          "eliminateForall f.a y",
           "eliminateImplication 1 f.1",
           "introduceForall f.2",
           "introduceImplication f.3",
@@ -113,8 +113,8 @@ class TheoremSpec extends ProverSpec {
       val theorem = parseTheorem(
         "id Title",
         Seq(
-          "premise ∀ 1 1",
-          "eliminateForall p1 2",
+          "premise ∀ x φ",
+          "eliminateForall p1 y",
           "introduceForall 1",
           "qed"))
       theorem.arbitraryVariables mustEqual Nil
@@ -126,55 +126,55 @@ class TheoremSpec extends ProverSpec {
       val theorem = Theorem(
         "contra",
         "Contrapositive",
-        Seq(Implication(1, 2)),
+        Seq(Implication(φ, ψ)),
         Nil,
-        Implication(Negation(2), Negation(1)),
+        Implication(Negation(ψ), Negation(φ)),
         Nil,
         DistinctVariables.empty)
-      val theoremBuilder = TheoremBuilder().addStep(Implication(1, 2))
+      val theoremBuilder = TheoremBuilder().addStep(Implication(φ, ψ))
       val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1", defaultContext)
-      updatedTheoremBuilder.steps(1).statement mustEqual Implication(Negation(2), Negation(1))
+      updatedTheoremBuilder.steps(1).statement mustEqual Implication(Negation(ψ), Negation(φ))
     }
 
     "apply to a theorem that matches its hypotheses with a free statement variable" in {
       val theorem = Theorem(
         "false-imp-all",
         "A False Statement Implies Everything",
-        Seq(Negation(1)),
+        Seq(Negation(φ)),
         Nil,
-        Implication(1, 2),
+        Implication(φ, ψ),
         Nil,
         DistinctVariables.empty)
-      val theoremBuilder = TheoremBuilder().addStep(Negation(1))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1 ¬ 2", defaultContext)
-      updatedTheoremBuilder.steps(1).statement mustEqual Implication(1, Negation(2))
+      val theoremBuilder = TheoremBuilder().addStep(Negation(φ))
+      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1 ¬ ψ", defaultContext)
+      updatedTheoremBuilder.steps(1).statement mustEqual Implication(φ, Negation(ψ))
     }
 
     "add arbitrary variables to applied theorem" in {
       val theorem = Theorem(
         "id",
         "Title",
-        Seq(Equals("z", "y")),
+        Seq(Equals(x, y)),
         Nil,
-        Equals("y", "x"),
-        Seq("z"),
+        Equals(y, z),
+        Seq(x),
         DistinctVariables.empty)
-      val theoremBuilder = TheoremBuilder().addPremise(Equals("y", "z"))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "p1 4", defaultContext)
-      updatedTheoremBuilder.arbitraryVariables mustEqual Seq(TermVariable("y"))
+      val theoremBuilder = TheoremBuilder().addPremise(Equals(y, x))
+      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "p1 z", defaultContext)
+      updatedTheoremBuilder.arbitraryVariables mustEqual Seq(y)
     }
 
     "fail a rule with arbitrary variables if an arbitrary variable appears in a fantasy assumption" in {
       val theorem = Theorem(
         "id",
         "Title",
-        Seq(Equals("z", "y")),
+        Seq(Equals(y, x)),
         Nil,
-        Equals("y", "x"),
-        Seq("z"),
+        Equals(y, z),
+        Seq(x),
         DistinctVariables.empty)
-      val theoremBuilder = TheoremBuilder().addFantasy(Equals("y", "z"))
-      theorem.readAndUpdateTheoremBuilder(theoremBuilder, "f.a 4", defaultContext) must throwAn[ArbitraryVariableException]
+      val theoremBuilder = TheoremBuilder().addFantasy(Equals(x, y))
+      theorem.readAndUpdateTheoremBuilder(theoremBuilder, "f.a z", defaultContext) must throwAn[ArbitraryVariableException]
 
     }
   }

@@ -103,7 +103,7 @@ definition-comprehension 1 4 1 2
 eliminateEqualsReverse p1 1 ∀ 4 ↔ ∈ 4 5 ∧ ∈ 4 2 sub 4 1 1 5
 qed
 
-variables (x y z y' X Y s S T)
+variables () (x y z y' X Y s S T)
 
 theorem comprehensionIsSubset Comprehension Is Subset
 premise = S comprehension x X 1
