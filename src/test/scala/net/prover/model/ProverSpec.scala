@@ -19,9 +19,8 @@ trait ProverSpec extends Specification {
   ): StatementDefinition = {
     StatementDefinition(
       symbol,
-      Seq.fill(size)(Statement),
-      Format.default(symbol, size),
       Seq(φ, ψ, χ).take(size),
+      Format.default(symbol, size),
       Nil,
       DistinctVariables.empty,
       definingStatement)
@@ -33,9 +32,8 @@ trait ProverSpec extends Specification {
   ): StatementDefinition = {
     StatementDefinition(
       symbol,
-      Seq.fill(size)(Term),
-      Format.default(symbol, size),
       Seq(x, y, z).take(size),
+      Format.default(symbol, size),
       Nil,
       DistinctVariables.empty,
       definingStatement)
@@ -48,9 +46,8 @@ trait ProverSpec extends Specification {
   ): StatementDefinition = {
     StatementDefinition(
       symbol,
-      Seq(Term, Statement),
-      Format(s"($symbol{}){}", requiresBrackets = false),
       Seq(x, φ),
+      Format(s"($symbol{}){}", requiresBrackets = false),
       Seq(x),
       DistinctVariables.empty,
       definingStatement)

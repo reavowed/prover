@@ -18,7 +18,7 @@ singletonsExist 2 3 1
 setWithMembershipConditionIsUnique 1
 qed
 
-term singleton (term) (1) format ({{}}) (∀ 2 ↔ ∈ 2 singleton 1 = 2 1)
+term singleton (x) format ({{}}) (∀ y ↔ ∈ y singleton x = y x)
 
 theorem characteriseElementsOfSingleton Characterise Elements of a Singleton
 definition-singleton 2 1

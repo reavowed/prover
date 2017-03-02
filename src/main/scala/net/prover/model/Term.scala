@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
 trait Term extends JsonSerializable.Base with Component {
+  override val componentType = Term
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeString(html)
   }

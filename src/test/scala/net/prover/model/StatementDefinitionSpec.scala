@@ -7,44 +7,44 @@ class StatementDefinitionSpec extends ProverSpec {
     }
 
     "fill in default format for a constant statement" in {
-      parseStatementDefinition("⊤ () ()").apply().html mustEqual "⊤"
+      parseStatementDefinition("⊤ ()").apply().html mustEqual "⊤"
     }
 
     "fill in default format for a unary statement" in {
-      parseStatementDefinition("¬ (statement) (φ)").apply(φ).html mustEqual "¬φ"
+      parseStatementDefinition("¬ (φ)").apply(φ).html mustEqual "¬φ"
     }
 
     "fill in default format for a binary statement" in {
-      parseStatementDefinition("→ (statement statement) (φ ψ)").apply(φ, ψ).html mustEqual "φ → ψ"
+      parseStatementDefinition("→ (φ ψ)").apply(φ, ψ).html mustEqual "φ → ψ"
     }
 
     "use a specified format" in {
       parseStatementDefinition(
-        "∀ (term statement) (x φ) format ((∀{}){})"
+        "∀ (x φ) format ((∀{}){})"
       ).apply(x, φ).html mustEqual "(∀x)φ"
     }
 
     "parse definition" in {
       parseStatementDefinition(
-        "∧ (statement statement) (φ ψ) definition (¬ → φ ¬ ψ)"
+        "∧ (φ ψ) definition (¬ → φ ¬ ψ)"
       ).definingStatement mustEqual Some(Negation(Implication(φ, Negation(ψ))))
     }
 
     "parse bound variables" in {
       parseStatementDefinition(
-        "∀ (term statement) (x φ) boundVariables (x)"
+        "∀ (x φ) boundVariables (x)"
       ).boundVariables mustEqual Seq(x)
     }
 
     "infer bound variables from a defining statement" in {
       StatementDefinition.parser(defaultContext).parseAndDiscard(
-        "∃ (term statement) (x φ) format ((∃{}){}) definition (¬ ∀ x ¬ φ)"
+        "∃ (x φ) format ((∃{}){}) definition (¬ ∀ x ¬ φ)"
       ).boundVariables mustEqual Seq(x)
     }
 
     "parse distinct variables" in {
       parseStatementDefinition(
-        "∃! (term statement) (x φ) format ((∃!{}){}) definition (∃ y ∀ x ↔ φ = x y) distinctVariables (y φ)"
+        "∃! (x φ) format ((∃!{}){}) definition (∃ y ∀ x ↔ φ = x y) distinctVariables (y φ)"
       ).distinctVariables mustEqual DistinctVariables(Map(y -> Variables(Seq(φ), Nil)))
     }
   }

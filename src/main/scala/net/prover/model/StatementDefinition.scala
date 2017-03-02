@@ -2,15 +2,16 @@ package net.prover.model
 
 case class StatementDefinition(
     symbol: String,
-    componentTypes: Seq[ComponentType],
-    format: Format,
     defaultComponents: Seq[Component],
+    format: Format,
     boundVariables: Seq[TermVariable],
     distinctVariables: DistinctVariables,
     definingStatement: Option[Statement])
   extends ChapterEntry(StatementDefinition)
 {
   val defaultStatement = DefinedStatement(defaultComponents, boundVariables, this)
+
+  private val componentTypes = defaultComponents.map(_.componentType)
 
   def statementParser(context: Context): Parser[Statement] = {
     componentTypes.componentsParser(context).map(apply)
@@ -75,18 +76,16 @@ object StatementDefinition extends SingleLineChapterEntryParser[StatementDefinit
   def parser(context: Context): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
-      componentTypes <- ComponentType.listParser
-      defaultVariables <- componentTypes.componentsParser(context).inParens
-      format <- Format.optionalParser(symbol, componentTypes.length)
+      defaultVariables <- Component.variableParser(context).listInParens(None)
+      format <- Format.optionalParser(symbol, defaultVariables.length)
       optionalDefiningStatement <- definingStatementParser(context)
       boundVariables <- boundVariablesParser(defaultVariables, optionalDefiningStatement, context)
       distinctVariables <- distinctVariablesParser(context)
     } yield {
       StatementDefinition(
         symbol,
-        componentTypes,
-        format,
         defaultVariables,
+        format,
         boundVariables,
         distinctVariables,
         optionalDefiningStatement)

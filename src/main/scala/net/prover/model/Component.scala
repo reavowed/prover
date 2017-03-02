@@ -1,6 +1,7 @@
 package net.prover.model
 
 trait Component {
+  def componentType: ComponentType
   def variables: Variables
   def calculateSubstitutions(other: Component): Option[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Component
@@ -13,6 +14,18 @@ trait Component {
   def html: String
   def safeHtml: String = html
   override def toString: String = html
+}
+
+object Component {
+  def variableParser(context: Context): Parser[Component] = {
+    for {
+      variableName <- Parser.singleWord
+    } yield {
+      context.variables.statementVariables.find(_.text == variableName)
+          .orElse(context.variables.termVariables.find(_.text == variableName))
+          .getOrElse(throw new Exception(s"Unrecognised variable name '$variableName"))
+    }
+  }
 }
 
 trait ComponentType {

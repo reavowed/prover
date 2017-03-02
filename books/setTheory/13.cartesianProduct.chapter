@@ -39,9 +39,7 @@ cartesianProductExists 5 6 1 2 3 4
 setWithMembershipConditionIsUnique 1
 qed
 
-term × (term term) (1 2) (∀ 5 ↔ ∈ 5 × 1 2 ∃ 3 ∃ 4 ∧ ∧ ∈ 3 1 ∈ 4 2 = 5 orderedPair 3 4)
-
-variables () (x y z x' y' X Y)
+term × (X Y) (∀ z ↔ ∈ z × X Y ∃ x ∃ y ∧ ∧ ∈ x X ∈ y Y = z orderedPair x y)
 
 theorem orderedPairElementOfCartesianProduct Ordered Pair Is Element of Cartesian Product
 premise ∈ x X

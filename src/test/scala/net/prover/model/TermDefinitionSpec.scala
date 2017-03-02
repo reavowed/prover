@@ -4,7 +4,7 @@ class TermDefinitionSpec extends ProverSpec {
   "term definition parser" should {
     "parse a term constant" in {
       val specification = TermSpecification("∅", Nil, Format("∅", requiresBrackets = false))
-      TermDefinition.parser(defaultContext).parseAndDiscard("∅ () () (∀ x ¬ ∈ x ∅)") mustEqual
+      TermDefinition.parser(defaultContext).parseAndDiscard("∅ () (∀ x ¬ ∈ x ∅)") mustEqual
         TermDefinition(
           specification,
           Nil,
@@ -15,7 +15,7 @@ class TermDefinitionSpec extends ProverSpec {
     "parse a term with premises" in {
       val specification = TermSpecification("intersection", Seq(Term), Format("⋂{}", requiresBrackets = false))
       TermDefinition.parser(defaultContext).parseAndDiscard(
-        "intersection (term) (x) format (⋂{}) premises (¬ = x ∅) (∀ y ↔ ∈ y intersection x ∀ z → ∈ z x ∈ z y)"
+        "intersection (x) format (⋂{}) premises (¬ = x ∅) (∀ y ↔ ∈ y intersection x ∀ z → ∈ z x ∈ z y)"
       ) mustEqual TermDefinition(
         specification,
         Seq(Negation(Equals(x, EmptySet))),

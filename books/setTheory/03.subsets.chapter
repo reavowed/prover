@@ -1,7 +1,7 @@
 chapter Subsets
 Introduce the subset relation, ⊆.
 
-statement ⊆ (term term) (1 2) definition (∀ 3 → ∈ 3 1 ∈ 3 2)
+statement ⊆ (Y X) definition (∀ x → ∈ x Y ∈ x X)
 
 theorem subsetIsReflexive Subset is Reflexive
 implicationIsReflexive ∈ 3 1
@@ -32,8 +32,6 @@ premise = 1 2
 subsetIsReflexive 1
 eliminateEquals p1 1 ⊆ 1 3 3
 qed
-
-variables () (X Y x y)
 
 theorem elementOfSubsetIsElementOfSet An Element of a Subset Is an Element of the Set
 premise ⊆ X Y

@@ -15,12 +15,12 @@ case class TermSpecification(
 case class TermDefinition(
     specification: TermSpecification,
     premises: Seq[Statement],
-    defaultComponents: Seq[Component],
+    defaultVariables: Seq[Component],
     definition: Statement)
   extends ChapterEntry(TermDefinition)
 {
   val id: String = s"definition-${specification.symbol}"
-  val defaultTerm = DefinedTerm(defaultComponents, specification)
+  val defaultTerm = DefinedTerm(defaultVariables, specification)
   val inference: Inference = new Inference {
     override val id: String = TermDefinition.this.id
     override val assumption = None
@@ -42,15 +42,15 @@ object TermDefinition extends SingleLineChapterEntryParser[TermDefinition] {
   def parser(context: Context): Parser[TermDefinition] = {
     for {
       symbol <- Parser.singleWord
-      componentTypes <- ComponentType.listParser
-      defaultComponents <- componentTypes.componentsParser(context).inParens
+      defaultVariables <- Component.variableParser(context).listInParens(None)
+      componentTypes = defaultVariables.map(_.componentType)
       format <- Format.optionalParser(symbol, componentTypes.length)
       termSpecification = TermSpecification(symbol, componentTypes, format)
       premises <- premisesParser(context)
       updatedContext = context.copy(termSpecifications = context.termSpecifications :+ termSpecification)
       definitionTemplate <- Statement.parser(updatedContext).inParens
     } yield {
-      TermDefinition(termSpecification, premises, defaultComponents, definitionTemplate)
+      TermDefinition(termSpecification, premises, defaultVariables, definitionTemplate)
     }
   }
 

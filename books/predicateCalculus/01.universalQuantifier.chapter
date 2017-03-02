@@ -1,7 +1,7 @@
 chapter Universal Quantifier
 Introduce the universal quantifier.
 
-statement ∀ (term statement) (x φ) format ((∀{}){}) boundVariables (x)
+statement ∀ (x φ) format ((∀{}){}) boundVariables (x)
 
 axiom introduceForall (Introduce Forall) () (sub y x φ) (∀ x φ) (y) (y φ)
 axiom eliminateForall (Eliminate Forall) () (∀ x φ) (sub y x φ) () ()

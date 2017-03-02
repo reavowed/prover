@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 import scala.collection.immutable.Nil
 
 trait Statement extends JsonSerializable.Base with Component {
+  override val componentType = Statement
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeString(html)
   }

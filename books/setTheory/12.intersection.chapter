@@ -1,8 +1,6 @@
 chapter Intersections
 Arbitrary and binary intersections.
 
-variables () (x y z y' S T)
-
 theorem intersectionOverClassExists An Intersection over a Class Exists
 premise ∃ x 1
 assume sub z x 1
@@ -34,7 +32,7 @@ arbitraryIntersectionsExist p1 S y x
 setWithMembershipConditionIsUnique 1
 qed
 
-term intersection (term) (1) format (⋂{}) premises (¬ = 1 ∅) (∀ 2 ↔ ∈ 2 intersection 1 ∀ 3 → ∈ 3 1 ∈ 2 3)
+term intersection (X) format (⋂{}) premises (¬ = X ∅) (∀ y ↔ ∈ y intersection X ∀ z → ∈ z X ∈ y z)
 
 theorem intersectionOverSingletonIsSet Intersection over Singleton Is Set
 singletonIsNotEmpty 1
@@ -97,7 +95,7 @@ introduceForall 5 ↔ ∀ 4 → ∈ 4 pair 1 2 ∈ 3 4 ∧ ∈ 3 1 ∈ 3 2 3' 3
 equivalenceIsTransitiveInsideForall 2 6
 qed
 
-term ∩ (term term) (1 2) (= ∩ 1 2 intersection pair 1 2)
+term ∩ (X Y) (= ∩ X Y intersection pair X Y)
 
 theorem binaryIntersectionMembershipCondition Binary Intersection Membership Condition
 definition-∩ 1 2

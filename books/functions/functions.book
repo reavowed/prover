@@ -6,7 +6,7 @@ variables () (f g X Y x y S)
 chapter Definition
 Definition of a function.
 
-statement function (term term term) (f X Y) format ({}: {} → {} in parens) definition (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f)
+statement function (f X Y) format ({}: {} → {} in parens) definition (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f)
 
 theorem functionApplicationIsUnique Function Application Is Unique
 premise function f X Y
@@ -17,7 +17,7 @@ eliminateForall 2 x
 eliminateImplication 3 p2
 qed
 
-term apply (term term) (f x) format ({}({})) premises (function f X Y, ∈ x X) (∧ ∈ apply f x Y ∈ orderedPair x apply f x f)
+term apply (f x) format ({}({})) premises (function f X Y, ∈ x X) (∧ ∈ apply f x Y ∈ orderedPair x apply f x f)
 
 theorem functionElementOfPowerSetOfProduct Function Is Element of Power Set of Product
 premise function f X Y
@@ -26,7 +26,7 @@ eliminateAndLeft 1
 subsetIsElementOfPowerSet 2
 qed
 
-term functionSet (term term) (X Y) format ({}^{}) (= functionSet X Y unrestrictedComprehension f function f X Y)
+term functionSet (X Y) format ({}^{}) (= functionSet X Y unrestrictedComprehension f function f X Y)
 
 theorem characteriseElementsOfFunctionSet Characterise Elements of Function Set
 introduceImplication functionElementOfPowerSetOfProduct function g X Y

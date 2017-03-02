@@ -1,7 +1,7 @@
 chapter Ordered Pairs
 Establish the existence of the ordered pair (x,y).
 
-term orderedPair (term term) (1 2) format  (({},{})) (= orderedPair 1 2 pair singleton 1 pair 1 2)
+term orderedPair (x y) format  (({},{})) (= orderedPair x y pair singleton x pair x y)
 
 theorem characteriseElementsOfOrderedPair Characterise Elements of Ordered Pair
 definition-orderedPair 1 2
