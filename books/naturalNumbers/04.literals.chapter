@@ -1,7 +1,7 @@
 chapter Natural Number Literals
 Define some literal natural numbers - 0, 1, 2, etc.
 
-term 0 () () () () (= 0 ∅)
+term 0 () () (= 0 ∅)
 
 theorem zeroIsNaturalNumber 0 Is a Natural Number
 definition-0
@@ -13,7 +13,7 @@ introduceForall 2 → inductive X ∈ 0 X Y X
 elementOfAllInductiveSetsIsNaturalNumber 3
 qed
 
-term 1 () () () () (= 1 succ 0)
+term 1 () () (= 1 succ 0)
 
 theorem oneIsNaturalNumber 1 Is a Natural Number
 zeroIsNaturalNumber

@@ -14,7 +14,7 @@ setWithMembershipConditionIsUnique 1
 qed
 
 
-term ℕ () () () () (∀ n ↔ ∈ n ℕ ∀ X → inductive X ∈ n X )
+term ℕ () () (∀ n ↔ ∈ n ℕ ∀ X → inductive X ∈ n X )
 
 theorem elementOfAllInductiveSetsIsNaturalNumber An Element of All Inductive Sets Is a Natural Number
 premise ∀ X → inductive X ∈ n X

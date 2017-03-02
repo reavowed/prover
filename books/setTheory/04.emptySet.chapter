@@ -20,7 +20,7 @@ introduceImplication f.3
 uniquenessCondition 1 2
 qed
 
-term ∅ () () () () (∀ 1 ¬ ∈ 1 ∅)
+term ∅ () () (∀ 1 ¬ ∈ 1 ∅)
 
 theorem setWithNoElementsIsTheEmptySet A Set with No Elements Is the Empty Set
 premise ∀ 2 ¬ ∈ 2 1

@@ -16,31 +16,16 @@ case class Format(formatString: String, requiresBrackets: Boolean) {
 }
 
 object Format {
-
-  private def parseRaw(
-    rawFormatString: String,
-    symbol: String,
-    numberOfComponents: Int
-  ): Format = rawFormatString match {
-    case f if f.nonEmpty =>
-      if (f.endsWith("in parens"))
-        Format(f.stripSuffix("in parens").trim, true)
-      else
-        Format(f, false)
-    case "" =>
-      default(symbol, numberOfComponents)
-  }
-
   def default(
     symbol: String,
     numberOfComponents: Int
   ): Format = {
     if (numberOfComponents == 0)
-      Format(symbol, false)
+      Format(symbol, requiresBrackets = false)
     else if (numberOfComponents == 1)
-      Format(s"$symbol{}", false)
+      Format(s"$symbol{}", requiresBrackets = false)
     else if (numberOfComponents == 2)
-      Format(s"{} $symbol {}", true)
+      Format(s"{} $symbol {}", requiresBrackets = true)
     else
       throw new Exception("Explicit format must be supplied with more than two components")
   }
@@ -49,7 +34,17 @@ object Format {
     for {
       rawFormat <- Parser.allInParens
     } yield {
-      parseRaw(rawFormat, symbol, numberOfComponents)
+      if (rawFormat.endsWith("in parens"))
+        Format(rawFormat.stripSuffix("in parens").trim, requiresBrackets = true)
+      else
+        Format(rawFormat, requiresBrackets = false)
     }
+  }
+
+  def optionalParser(symbol: String, numberOfComponents: Int): Parser[Format] = {
+    Parser.optional(
+      "format",
+      parser(symbol, numberOfComponents),
+      default(symbol, numberOfComponents))
   }
 }

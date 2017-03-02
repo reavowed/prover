@@ -34,14 +34,19 @@ case class TermDefinition(
 object TermDefinition extends SingleLineChapterEntryParser[TermDefinition] {
   override val name: String = "term"
 
+  def premisesParser(context: Context): Parser[Seq[Statement]] = Parser.optional(
+    "premises",
+    Statement.listParser(context),
+    Nil)
+
   def parser(context: Context): Parser[TermDefinition] = {
     for {
       symbol <- Parser.singleWord
       componentTypes <- ComponentType.listParser
-      format <- Format.parser(symbol, componentTypes.length)
-      termSpecification = TermSpecification(symbol, componentTypes, format)
       defaultComponents <- componentTypes.componentsParser(context).inParens
-      premises <- Statement.listParser(context)
+      format <- Format.optionalParser(symbol, componentTypes.length)
+      termSpecification = TermSpecification(symbol, componentTypes, format)
+      premises <- premisesParser(context)
       updatedContext = context.copy(termSpecifications = context.termSpecifications :+ termSpecification)
       definitionTemplate <- Statement.parser(updatedContext).inParens
     } yield {

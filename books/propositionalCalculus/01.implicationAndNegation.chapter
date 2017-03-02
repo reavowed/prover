@@ -1,7 +1,7 @@
 chapter Implication and Negation
 We start by introducing our two fundamental connectives, → and ¬, and proving some basic facts about them.
 
-statement → (statement statement) (φ ψ) () () () ()
+statement → (statement statement) (φ ψ)
 
 axiom introduceImplication (Introduce Implication) (1) (2) (→ 1 2) () ()
 
@@ -21,7 +21,7 @@ assume 1
 introduceImplication f.2
 qed
 
-statement ¬ (statement) (φ) () () () ()
+statement ¬ (statement) (φ)
 
 axiom introduceNegation (Introduce Negation) (1) (2, ¬ 2) (¬ 1) () ()
 axiom eliminateNegation (Eliminate Double Negation) () (¬ ¬ 1) (1) () ()

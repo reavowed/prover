@@ -1,21 +1,57 @@
 package net.prover.model
 
 class StatementDefinitionSpec extends ProverSpec {
-  "a statement definition" should {
-    "infer bound variables from a defining statement" in {
-      StatementDefinition.parser(defaultContext).parseAndDiscard(
-        "∃ (term statement) ((∃{}){}) (x φ) (¬ ∀ x ¬ φ) ()"
+  "statement definition parser" should {
+    def parseStatementDefinition(text: String): StatementDefinition = {
+      StatementDefinition.parser(defaultContext).parseAndDiscard(text)
+    }
+
+    "fill in default format for a constant statement" in {
+      parseStatementDefinition("⊤ () ()").apply().html mustEqual "⊤"
+    }
+
+    "fill in default format for a unary statement" in {
+      parseStatementDefinition("¬ (statement) (φ)").apply(φ).html mustEqual "¬φ"
+    }
+
+    "fill in default format for a binary statement" in {
+      parseStatementDefinition("→ (statement statement) (φ ψ)").apply(φ, ψ).html mustEqual "φ → ψ"
+    }
+
+    "use a specified format" in {
+      parseStatementDefinition(
+        "∀ (term statement) (x φ) format ((∀{}){})"
+      ).apply(x, φ).html mustEqual "(∀x)φ"
+    }
+
+    "parse definition" in {
+      parseStatementDefinition(
+        "∧ (statement statement) (φ ψ) definition (¬ → φ ¬ ψ)"
+      ).definingStatement mustEqual Some(Negation(Implication(φ, Negation(ψ))))
+    }
+
+    "parse bound variables" in {
+      parseStatementDefinition(
+        "∀ (term statement) (x φ) boundVariables (x)"
       ).boundVariables mustEqual Seq(x)
     }
 
-    "calculate bound variables when applying to subcomponents" in {
-      ForAll(y, φ).allBoundVariables mustEqual Seq(y)
+    "infer bound variables from a defining statement" in {
+      StatementDefinition.parser(defaultContext).parseAndDiscard(
+        "∃ (term statement) (x φ) format ((∃{}){}) definition (¬ ∀ x ¬ φ)"
+      ).boundVariables mustEqual Seq(x)
     }
 
     "parse distinct variables" in {
-      StatementDefinition.parser(defaultContext).parseAndDiscard(
-        "∃! (term statement) ((∃!{}){}) (x φ) (∃ y ∀ x ↔ φ = x y) (y φ)"
+      parseStatementDefinition(
+        "∃! (term statement) (x φ) format ((∃!{}){}) definition (∃ y ∀ x ↔ φ = x y) distinctVariables (y φ)"
       ).distinctVariables mustEqual DistinctVariables(Map(y -> Variables(Seq(φ), Nil)))
+    }
+  }
+
+  "a statement definition" should {
+    "calculate bound variables when applying to subcomponents" in {
+      ForAll(y, φ).allBoundVariables mustEqual Seq(y)
     }
   }
 }

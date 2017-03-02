@@ -3,7 +3,7 @@ Define the power set of a set - the set of all its subsets.
 
 axiom axiomOfPowerset (Axiom of Power Set) () () (∀ 1 ∃ 2 ∀ 3 ↔ ∈ 3 2 ⊆ 3 1) () ()
 
-term powerSet (term) (𝒫{}) (1) () (∀ 2 ↔ ∈ 2 powerSet 1 ⊆ 2 1)
+term powerSet (term) (1) format (𝒫{}) (∀ 2 ↔ ∈ 2 powerSet 1 ⊆ 2 1)
 
 theorem elementOfPowerSetIsSubset An Element of a Power Set is a Subset
 premise ∈ 2 powerSet 1

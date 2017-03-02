@@ -1,7 +1,7 @@
 chapter Successor function
 Show that S(n) actually defines a function on ℕ.
 
-term succFn () (S) () () (= succFn comprehension s × ℕ ℕ ∃ n ∧ ∈ n ℕ = s orderedPair n succ n)
+term succFn () () format (S) (= succFn comprehension s × ℕ ℕ ∃ n ∧ ∈ n ℕ = s orderedPair n succ n)
 
 theorem successorFunctionContainsSuccessorPair Successor Function Contains Successor Pair
 premise ∈ n ℕ

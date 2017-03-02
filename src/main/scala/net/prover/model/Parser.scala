@@ -17,6 +17,7 @@ case class Parser[+T](attemptParse: PartialLine => (T, PartialLine)) {
         (None, line)
     }
   }
+  def onlyIf(f: T => Boolean): Parser[Option[T]] = map { t => if (f(t)) Some(t) else None }
   def inParens: Parser[T] = Parser { line =>
     if (line.remainingText.head != '(') {
       throw new Exception("Open-paren expected but not found")
@@ -80,6 +81,12 @@ object Parser {
   def allInParens: Parser[String] = Parser(_.toEndOfParens).inParens
 
   implicit class OptionParserOps[T](parser: Parser[Option[T]]) {
+    def mapFlatMap[S](f: T => Parser[S]): Parser[Option[S]] = parser.flatMap {
+      case Some(t) =>
+        f(t).map(Some.apply)
+      case None =>
+        Parser.constant(None)
+    }
     def orElse(otherParser: => Parser[T]): Parser[T] = Parser { line =>
       parser.attemptParse(line) match {
         case (Some(t), remainingLine) =>
@@ -88,5 +95,13 @@ object Parser {
           otherParser.attemptParse(line)
       }
     }
+  }
+
+  def optional[T](
+    name: String,
+    parser: Parser[T],
+    default: => T
+  ): Parser[T] = {
+    Parser.singleWord.onlyIf(_ == name).mapFlatMap(_ => parser).orElse(Parser.constant(default))
   }
 }

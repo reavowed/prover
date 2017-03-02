@@ -51,21 +51,36 @@ case class StatementDefinition(
 }
 
 object StatementDefinition extends SingleLineChapterEntryParser[StatementDefinition] {
+  private def definingStatementParser(context: Context): Parser[Option[Statement]] = Parser.optional(
+    "definition",
+    Statement.parser(context).inParens.map(Some.apply),
+    None)
+
+  private def boundVariablesParser(
+    defaultVariables: Seq[Component],
+    optionalDefiningStatement: Option[Statement],
+    context: Context
+  ): Parser[Seq[TermVariable]] = {
+    Parser.optional(
+      "boundVariables",
+      Term.variableListParser(context),
+      optionalDefiningStatement.toSeq.flatMap(_.allBoundVariables.intersect(defaultVariables)))
+  }
+
+  def distinctVariablesParser(context: Context): Parser[DistinctVariables] = Parser.optional(
+    "distinctVariables",
+    DistinctVariables.parser(context),
+    DistinctVariables.empty)
 
   def parser(context: Context): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
       componentTypes <- ComponentType.listParser
       defaultVariables <- componentTypes.componentsParser(context).inParens
-      format <- Format.parser(symbol, componentTypes.length)
-      optionalDefiningStatement <- Statement.parser(context).optionalInParens
-      boundVariables <- optionalDefiningStatement match {
-        case Some(x) =>
-          Parser.constant(x.allBoundVariables.intersect(defaultVariables))
-        case None =>
-          Term.variableListParser(context)
-      }
-      distinctVariables <- DistinctVariables.parser(context)
+      format <- Format.optionalParser(symbol, componentTypes.length)
+      optionalDefiningStatement <- definingStatementParser(context)
+      boundVariables <- boundVariablesParser(defaultVariables, optionalDefiningStatement, context)
+      distinctVariables <- distinctVariablesParser(context)
     } yield {
       StatementDefinition(
         symbol,
