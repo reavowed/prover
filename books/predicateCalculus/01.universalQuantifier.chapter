@@ -1,7 +1,8 @@
 chapter Universal Quantifier
 Introduce the universal quantifier.
 
-statement ∀ (term statement) ((∀{}){}) (x φ) () (x) ()
+statement ∀ (term statement) (x φ) ((∀{}){}) () (x) ()
+
 axiom introduceForall (Introduce Forall) () (sub y x φ) (∀ x φ) (y) (y φ)
 axiom eliminateForall (Eliminate Forall) () (∀ x φ) (sub y x φ) () ()
 

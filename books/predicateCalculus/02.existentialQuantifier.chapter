@@ -1,7 +1,7 @@
 chapter Existential Quantifier
 Introduce the existential quantifier, ∃.
 
-statement ∃ (term statement) ((∃{}){}) (1 1) (¬ ∀ 1 ¬ 1) ()
+statement ∃ (term statement) (x φ) ((∃{}){}) (¬ ∀ x ¬ φ) ()
 
 theorem introduceExists Introduce Existential Quantifier
 premise sub 2 1 1

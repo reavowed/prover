@@ -51,12 +51,13 @@ case class StatementDefinition(
 }
 
 object StatementDefinition extends SingleLineChapterEntryParser[StatementDefinition] {
+
   def parser(context: Context): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
       componentTypes <- ComponentType.listParser
-      format <- Format.parser(symbol, componentTypes.length)
       defaultVariables <- componentTypes.componentsParser(context).inParens
+      format <- Format.parser(symbol, componentTypes.length)
       optionalDefiningStatement <- Statement.parser(context).optionalInParens
       boundVariables <- optionalDefiningStatement match {
         case Some(x) =>

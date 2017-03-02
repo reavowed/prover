@@ -1,7 +1,7 @@
 chapter Uniqueness Quantifier
 Introduce the uniqueness quantifier, ∃!.
 
-statement ∃! (term statement) ((∃!{}){}) (1 1) (∃ 2 ∀ 1 ↔ 1 = 1 2) (2 1)
+statement ∃! (term statement) (x φ) ((∃!{}){}) (∃ y ∀ x ↔ φ = x y) (y φ)
 
 theorem uniqueSetExists A Unique Set Exists
 premise ∃! 1 1

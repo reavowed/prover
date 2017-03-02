@@ -1,7 +1,7 @@
 chapter Conjunction and Disjunction
 We introduce two more connectives, ∧ (conjunction, or 'and') and ∨ (disjunction, or 'or'). These will not be defined with introduction and elimination rules, but in terms of the two fundamental connectives → and ¬. We can then prove introduction and elimination rules for them as theorems.
 
-statement ∧ (statement statement) () (1 2) (¬ → 1 ¬ 2) ()
+statement ∧ (statement statement) (φ ψ) () (¬ → φ ¬ ψ) ()
 
 theorem introduceAnd Introduce Conjunction
 premise 1
@@ -33,7 +33,7 @@ eliminateAndRight p1
 introduceAnd 2 1
 qed
 
-statement ∨ (statement statement) () (1 2) (→ ¬ 1 2) ()
+statement ∨ (statement statement) (φ ψ) () (→ ¬ φ ψ) ()
 
 theorem introduceOrLeft Introduce Disjunction (Left)
 premise 1
