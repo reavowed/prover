@@ -57,7 +57,7 @@
     content: ", ";
 }
 
-.theoremId {
+.inferenceId {
     font-size: small;
     font-family: monospace;
     float: right;
@@ -116,7 +116,7 @@ table {
     font-size: inherit;
 }
 
-.reference, .inferenceId {
+.reference, .stepInferenceId {
     font-family: monospace;
     color: gray;
     font-size: 0.85em;
@@ -130,6 +130,6 @@ table {
     margin-right: 10px;
 }
 
-.inferenceId {
+.stepInferenceId {
     padding-left: 25px;
 }

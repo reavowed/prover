@@ -57,29 +57,9 @@
                 </div>
             </div>
         </div>
-        <div ng-switch-when="rule">
-            <div class="result">
-                <h5>Rule: {{entry.id}}</h5>
-                <div class="resultBlock">
-                    {{entry.assumption ? entry.assumption + ' ⊢' : ''}}
-                    {{entry.premises.join(" & ")}}
-                    <span class="ruleSeparator">⇒</span>
-                    {{entry.conclusion}}
-                </div>
-                <div ng-if="entry.arbitraryVariables.length" class="arbitraryVariables">
-                    Arbitrary variables: {{entry.arbitraryVariables.join(", ")}}
-                </div>
-                <div ng-if="entry.distinctVariables.length" class="distinctVariables">
-                    Distinct variables:
-                    <span ng-repeat="requirement in entry.distinctVariables">
-                        {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
-                    </span>
-                </div>
-                </table>
-            </div>
-        </div>
         <div ng-switch-when="axiom">
             <div class="result">
+                <span class="inferenceId">{{entry.id}}</span>
                 <h5>Axiom: {{entry.title}}</h5>
                 <div ng-if="entry.premises.length">
                     Suppose
