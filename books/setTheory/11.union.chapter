@@ -13,7 +13,7 @@ arbitraryUnionsExist 2 3 4 1
 setWithMembershipConditionIsUnique 1
 qed
 
-term union (X) format (⋃{}) (∀ y ↔ ∈ y union X ∃ z ∧ ∈ y z ∈ z X)
+term union (X) format (⋃X) (∀ y ↔ ∈ y union X ∃ z ∧ ∈ y z ∈ z X)
 
 theorem characteriseElementsOfArbitraryUnion Characterise Elements of Arbitrary Union
 definition-union 2 1 3

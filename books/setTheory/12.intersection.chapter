@@ -32,7 +32,7 @@ arbitraryIntersectionsExist p1 S y x
 setWithMembershipConditionIsUnique 1
 qed
 
-term intersection (X) format (⋂{}) premises (¬ = X ∅) (∀ y ↔ ∈ y intersection X ∀ z → ∈ z X ∈ y z)
+term intersection (X) format (⋂X) premises (¬ = X ∅) (∀ y ↔ ∈ y intersection X ∀ z → ∈ z X ∈ y z)
 
 theorem intersectionOverSingletonIsSet Intersection over Singleton Is Set
 singletonIsNotEmpty 1

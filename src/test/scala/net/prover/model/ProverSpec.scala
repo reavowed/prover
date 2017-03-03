@@ -17,10 +17,11 @@ trait ProverSpec extends Specification {
     size: Int,
     definingStatement: Option[Statement]
   ): StatementDefinition = {
+    val variables = Seq(φ, ψ, χ).take(size)
     StatementDefinition(
       symbol,
-      Seq(φ, ψ, χ).take(size),
-      Format.default(symbol, size),
+      variables,
+      Format.default(symbol, variables.map(_.text)),
       Nil,
       DistinctVariables.empty,
       definingStatement)
@@ -30,10 +31,11 @@ trait ProverSpec extends Specification {
     size: Int,
     definingStatement: Option[Statement]
   ): StatementDefinition = {
+    val variables = Seq(x, y, z).take(size)
     StatementDefinition(
       symbol,
-      Seq(x, y, z).take(size),
-      Format.default(symbol, size),
+      variables,
+      Format.default(symbol, variables.map(_.text)),
       Nil,
       DistinctVariables.empty,
       definingStatement)
@@ -47,7 +49,7 @@ trait ProverSpec extends Specification {
     StatementDefinition(
       symbol,
       Seq(x, φ),
-      Format(s"($symbol{}){}", requiresBrackets = false),
+      Format(s"(${symbol}x)φ", Seq("x", "φ"), requiresBrackets = false),
       Seq(x),
       DistinctVariables.empty,
       definingStatement)
@@ -65,7 +67,7 @@ trait ProverSpec extends Specification {
   val ElementOf = predicate("∈", 2, None)
   val Equals = predicate("=", 2, None)
 
-  val EmptySetSpecification = TermSpecification("∅", Nil, Format.default("∅", 0))
+  val EmptySetSpecification = TermSpecification("∅", Nil, Format.default("∅", Nil))
   val EmptySet = DefinedTerm(Nil, EmptySetSpecification)
   val EmptySetDefinition = TermDefinition(
     EmptySetSpecification,

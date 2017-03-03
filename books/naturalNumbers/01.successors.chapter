@@ -1,7 +1,7 @@
 chapter Successors
 Define the successor pseudo-function, succ(n), which will form the basis of our inductive definition of the natural numbers.
 
-term succ (n) format (succ({})) (= succ n ∪ n singleton n)
+term succ (n) format (succ(n)) (= succ n ∪ n singleton n)
 
 theorem successorMembershipCondition Successor Membership Condition
 definition-succ x

@@ -44,7 +44,7 @@ object TermDefinition extends SingleLineChapterEntryParser[TermDefinition] {
       symbol <- Parser.singleWord
       defaultVariables <- Component.variableParser(context).listInParens(None)
       componentTypes = defaultVariables.map(_.componentType)
-      format <- Format.optionalParser(symbol, componentTypes.length)
+      format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       termSpecification = TermSpecification(symbol, componentTypes, format)
       premises <- premisesParser(context)
       updatedContext = context.copy(termSpecifications = context.termSpecifications :+ termSpecification)

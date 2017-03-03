@@ -77,7 +77,7 @@ object StatementDefinition extends SingleLineChapterEntryParser[StatementDefinit
     for {
       symbol <- Parser.singleWord
       defaultVariables <- Component.variableParser(context).listInParens(None)
-      format <- Format.optionalParser(symbol, defaultVariables.length)
+      format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       optionalDefiningStatement <- definingStatementParser(context)
       boundVariables <- boundVariablesParser(defaultVariables, optionalDefiningStatement, context)
       distinctVariables <- distinctVariablesParser(context)

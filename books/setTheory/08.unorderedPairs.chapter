@@ -87,7 +87,7 @@ unorderedPairsExist 5 4 1 2
 setWithMembershipConditionIsUnique 1
 qed
 
-term pair (x y) format ({{},{}}) (∀ z ↔ ∈ z pair x y ∨ = z x = z y)
+term pair (x y) format ({x,y}) (∀ z ↔ ∈ z pair x y ∨ = z x = z y)
 
 theorem characteriseElementsOfPair Characterise Elements of Pair
 definition-pair 3 1 2

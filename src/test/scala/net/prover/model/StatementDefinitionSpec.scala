@@ -20,8 +20,8 @@ class StatementDefinitionSpec extends ProverSpec {
 
     "use a specified format" in {
       parseStatementDefinition(
-        "∀ (x φ) format ((∀{}){})"
-      ).apply(x, φ).html mustEqual "(∀x)φ"
+        "∀ (x φ) format ((∀x)φ)"
+      ).apply(y, ψ).html mustEqual "(∀y)ψ"
     }
 
     "parse definition" in {
