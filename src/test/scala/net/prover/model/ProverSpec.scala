@@ -125,7 +125,7 @@ trait ProverSpec extends Specification {
     Seq(φ, ψ, χ),
     Seq(x, y, z)))
 
-  val defaultContext = statementDefinitions.foldLeft(baseContext) { case (context, statementDefinition) =>
+  implicit val defaultContext = statementDefinitions.foldLeft(baseContext) { case (context, statementDefinition) =>
     context.addStatementDefinition(statementDefinition)
   }.addTermDefinition(EmptySetDefinition)
 

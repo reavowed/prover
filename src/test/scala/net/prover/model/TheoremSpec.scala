@@ -7,8 +7,8 @@ class TheoremSpec extends ProverSpec {
     additionalTheorems: Seq[Theorem] = Nil
   ): Theorem = {
     Theorem.parser(
-      lines,
-      defaultContext.copy(
+      lines)(
+      implicitly[Context].copy(
         theoremLineParsers = defaultContext.theoremLineParsers ++
           Seq(IntroduceImplication, EliminateImplication, IntroduceForall, EliminateForall) ++
           additionalTheorems)
@@ -132,7 +132,7 @@ class TheoremSpec extends ProverSpec {
         Nil,
         DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addStep(Implication(φ, ψ))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1", defaultContext)
+      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1")
       updatedTheoremBuilder.steps(1).statement mustEqual Implication(Negation(ψ), Negation(φ))
     }
 
@@ -146,7 +146,7 @@ class TheoremSpec extends ProverSpec {
         Nil,
         DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addStep(Negation(φ))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1 ¬ ψ", defaultContext)
+      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1 ¬ ψ")
       updatedTheoremBuilder.steps(1).statement mustEqual Implication(φ, Negation(ψ))
     }
 
@@ -160,7 +160,7 @@ class TheoremSpec extends ProverSpec {
         Seq(x),
         DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addPremise(Equals(y, x))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "p1 z", defaultContext)
+      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "p1 z")
       updatedTheoremBuilder.arbitraryVariables mustEqual Seq(y)
     }
 
@@ -174,7 +174,7 @@ class TheoremSpec extends ProverSpec {
         Seq(x),
         DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addFantasy(Equals(x, y))
-      theorem.readAndUpdateTheoremBuilder(theoremBuilder, "f.a z", defaultContext) must throwAn[ArbitraryVariableException]
+      theorem.readAndUpdateTheoremBuilder(theoremBuilder, "f.a z") must throwAn[ArbitraryVariableException]
 
     }
   }

@@ -249,7 +249,7 @@ case class DefinedStatement(
 
 object Statement extends ComponentType {
 
-  def parser(context: Context): Parser[Statement] = {
+  def parser(implicit context: Context): Parser[Statement] = {
     object ParsableStatement {
       def unapply(s: String): Option[StatementDefinition] = {
         context.statementDefinitions.find(_.symbol == s)
@@ -263,16 +263,16 @@ object Statement extends ComponentType {
 
     def parserForStatementType(statementType: String): Parser[Statement] = statementType match {
       case ParsableStatement(statementDefinition) =>
-        statementDefinition.statementParser(context)
+        statementDefinition.statementParser
       case SpecifiedVariable(v) =>
         Parser.constant(v)
       case IntParser(i) =>
         Parser.constant(StatementVariable((944 + i).toChar.toString))
       case "sub" =>
         for {
-          termToReplaceWith <- Term.parser(context)
-          termToBeReplaced <- Term.variableParser(context)
-          statement <- parser(context)
+          termToReplaceWith <- Term.parser
+          termToBeReplaced <- Term.variableParser
+          statement <- parser
         } yield {
           statement.substituteFreeVariable(termToReplaceWith, termToBeReplaced).asInstanceOf[Statement]
         }
@@ -283,9 +283,9 @@ object Statement extends ComponentType {
     Parser.singleWord.flatMap(parserForStatementType)
   }
 
-  def listParser(context: Context): Parser[Seq[Statement]] = parser(context).listInParens(Some(","))
+  def listParser(implicit context: Context): Parser[Seq[Statement]] = parser.listInParens(Some(","))
 
-  def variableParser(context: Context): Parser[StatementVariable] = parser(context).map {
+  def variableParser(implicit context: Context): Parser[StatementVariable] = parser.map {
     case variable: StatementVariable =>
       variable
     case nonVariable =>

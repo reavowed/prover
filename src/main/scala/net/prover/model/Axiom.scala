@@ -15,15 +15,15 @@ case class Axiom(
 object Axiom extends SingleLineChapterEntryParser[Axiom] {
   override val name: String = "axiom"
 
-  def parser(context: Context): Parser[Axiom] = {
+  def parser(implicit context: Context): Parser[Axiom] = {
     for {
       id <- Parser.singleWord
       title <- Parser.allInParens
-      assumption <- Statement.parser(context).optionalInParens
-      premises <- Statement.listParser(context)
-      conclusion <- Statement.parser(context).inParens
-      arbitraryVariables <- Term.variableListParser(context)
-      distinctVariables <- DistinctVariables.parser(context)
+      assumption <- Statement.parser.optionalInParens
+      premises <- Statement.listParser
+      conclusion <- Statement.parser.inParens
+      arbitraryVariables <- Term.variableListParser
+      distinctVariables <- DistinctVariables.parser
     } yield {
       Axiom(id, title, assumption, premises, conclusion, arbitraryVariables, distinctVariables)
     }

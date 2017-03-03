@@ -7,8 +7,8 @@ case class TermSpecification(
 {
   def apply(components: Seq[Component]) = DefinedTerm(components, this)
 
-  def termParser(context: Context): Parser[Term] = {
-    componentTypes.componentsParser(context).map(apply)
+  def termParser(implicit context: Context): Parser[Term] = {
+    componentTypes.componentsParser.map(apply)
   }
 }
 
@@ -34,19 +34,19 @@ case class TermDefinition(
 object TermDefinition extends SingleLineChapterEntryParser[TermDefinition] {
   override val name: String = "term"
 
-  def premisesParser(context: Context): Parser[Seq[Statement]] = Parser.optional(
+  def premisesParser(implicit context: Context): Parser[Seq[Statement]] = Parser.optional(
     "premises",
-    Statement.listParser(context),
+    Statement.listParser,
     Nil)
 
-  def parser(context: Context): Parser[TermDefinition] = {
+  def parser(implicit context: Context): Parser[TermDefinition] = {
     for {
       symbol <- Parser.singleWord
-      defaultVariables <- Component.variableParser(context).listInParens(None)
+      defaultVariables <- Component.variableParser.listInParens(None)
       componentTypes = defaultVariables.map(_.componentType)
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       termSpecification = TermSpecification(symbol, componentTypes, format)
-      premises <- premisesParser(context)
+      premises <- premisesParser
       updatedContext = context.copy(termSpecifications = context.termSpecifications :+ termSpecification)
       definitionTemplate <- Statement.parser(updatedContext).inParens
     } yield {

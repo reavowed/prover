@@ -67,16 +67,16 @@ case class DistinctVariables(map: Map[TermVariable, Variables]) extends JsonSeri
 object DistinctVariables {
   val empty = DistinctVariables(Map.empty)
 
-  private def singleClauseParser(context: Context): Parser[(TermVariable, StatementVariable)] = {
+  private def singleClauseParser(implicit context: Context): Parser[(TermVariable, StatementVariable)] = {
     for {
-      term <- Term.variableParser(context)
-      statement <- Statement.variableParser(context)
+      term <- Term.variableParser
+      statement <- Statement.variableParser
     } yield term -> statement
   }
 
-  def parser(context: Context): Parser[DistinctVariables] = {
+  def parser(implicit context: Context): Parser[DistinctVariables] = {
     for {
-      clauses <- singleClauseParser(context).listInParens(Some(","))
+      clauses <- singleClauseParser.listInParens(Some(","))
     } yield {
       clauses.foldLeft(DistinctVariables.empty)(_ + _)
     }

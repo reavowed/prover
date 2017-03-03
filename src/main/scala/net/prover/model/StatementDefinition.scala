@@ -13,8 +13,8 @@ case class StatementDefinition(
 
   private val componentTypes = defaultComponents.map(_.componentType)
 
-  def statementParser(context: Context): Parser[Statement] = {
-    componentTypes.componentsParser(context).map(apply)
+  def statementParser(implicit context: Context): Parser[Statement] = {
+    componentTypes.componentsParser.map(apply)
   }
 
   def apply(components: Component*): Statement = {
@@ -52,35 +52,35 @@ case class StatementDefinition(
 }
 
 object StatementDefinition extends SingleLineChapterEntryParser[StatementDefinition] {
-  private def definingStatementParser(context: Context): Parser[Option[Statement]] = Parser.optional(
+  private def definingStatementParser(implicit context: Context): Parser[Option[Statement]] = Parser.optional(
     "definition",
-    Statement.parser(context).inParens.map(Some.apply),
+    Statement.parser.inParens.map(Some.apply),
     None)
 
   private def boundVariablesParser(
     defaultVariables: Seq[Component],
-    optionalDefiningStatement: Option[Statement],
-    context: Context
+    optionalDefiningStatement: Option[Statement])(
+    implicit context: Context
   ): Parser[Seq[TermVariable]] = {
     Parser.optional(
       "boundVariables",
-      Term.variableListParser(context),
+      Term.variableListParser,
       optionalDefiningStatement.toSeq.flatMap(_.allBoundVariables.intersect(defaultVariables)))
   }
 
-  def distinctVariablesParser(context: Context): Parser[DistinctVariables] = Parser.optional(
+  def distinctVariablesParser(implicit context: Context): Parser[DistinctVariables] = Parser.optional(
     "distinctVariables",
-    DistinctVariables.parser(context),
+    DistinctVariables.parser,
     DistinctVariables.empty)
 
-  def parser(context: Context): Parser[StatementDefinition] = {
+  def parser(implicit context: Context): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
-      defaultVariables <- Component.variableParser(context).listInParens(None)
+      defaultVariables <- Component.variableParser.listInParens(None)
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
-      optionalDefiningStatement <- definingStatementParser(context)
-      boundVariables <- boundVariablesParser(defaultVariables, optionalDefiningStatement, context)
-      distinctVariables <- distinctVariablesParser(context)
+      optionalDefiningStatement <- definingStatementParser
+      boundVariables <- boundVariablesParser(defaultVariables, optionalDefiningStatement)
+      distinctVariables <- distinctVariablesParser
     } yield {
       StatementDefinition(
         symbol,

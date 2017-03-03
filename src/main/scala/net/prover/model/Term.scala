@@ -117,7 +117,7 @@ object Term extends ComponentType {
     }
   }
 
-  def parser(context: Context): Parser[Term] = {
+  def parser(implicit context: Context): Parser[Term] = {
     object TermSpecificationMatcher {
       def unapply(s: String): Option[TermSpecification] = {
         context.termSpecifications.find(_.symbol == s)
@@ -132,7 +132,7 @@ object Term extends ComponentType {
     def parserForTermType(termType: String): Parser[Term] = {
       termType match {
         case TermSpecificationMatcher(termSpecification) =>
-          termSpecification.termParser(context)
+          termSpecification.termParser
         case SpecifiedVariable(variable) =>
           Parser.constant(variable)
         case IntParser(i) =>
@@ -146,13 +146,13 @@ object Term extends ComponentType {
     Parser.singleWord.flatMap(parserForTermType)
   }
 
-  def listParser(context: Context): Parser[Seq[Term]] = {
-    parser(context).listInParens(Some(","))
+  def listParser(implicit context: Context): Parser[Seq[Term]] = {
+    parser.listInParens(Some(","))
   }
 
-  def variableParser(context: Context): Parser[TermVariable] = parser(context).map(asVariable)
+  def variableParser(implicit context: Context): Parser[TermVariable] = parser.map(asVariable)
 
-  def variableListParser(context: Context): Parser[Seq[TermVariable]] = {
-    variableParser(context).listInParens(None)
+  def variableListParser(implicit context: Context): Parser[Seq[TermVariable]] = {
+    variableParser.listInParens(None)
   }
 }

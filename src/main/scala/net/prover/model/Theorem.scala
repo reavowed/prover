@@ -15,9 +15,13 @@ case class Theorem(
 
 trait TheoremLineParser {
   def id: String
-  def parser(theoremBuilder: TheoremBuilder, context: Context): Parser[TheoremBuilder]
-  def readAndUpdateTheoremBuilder(theoremBuilder: TheoremBuilder, line: PartialLine, context: Context): TheoremBuilder = {
-    parser(theoremBuilder, context).parseAndDiscard(line)
+  def parser(theoremBuilder: TheoremBuilder)(implicit context: Context): Parser[TheoremBuilder]
+  def readAndUpdateTheoremBuilder(
+    theoremBuilder: TheoremBuilder,
+    line: PartialLine)(
+    implicit context: Context
+  ): TheoremBuilder = {
+    parser(theoremBuilder).parseAndDiscard(line)
   }
 
   protected def referenceParser(theoremBuilder: TheoremBuilder): Parser[Statement] = {
@@ -28,9 +32,9 @@ trait TheoremLineParser {
 object PremiseParser extends TheoremLineParser {
   override val id: String = "premise"
 
-  override def parser(theoremBuilder: TheoremBuilder, context: Context): Parser[TheoremBuilder] = {
+  override def parser(theoremBuilder: TheoremBuilder)(implicit context: Context): Parser[TheoremBuilder] = {
     for {
-      premise <- Statement.parser(context)
+      premise <- Statement.parser
     } yield {
       theoremBuilder.addPremise(premise)
     }
@@ -39,47 +43,35 @@ object PremiseParser extends TheoremLineParser {
 
 object FantasyAssumptionParser extends TheoremLineParser {
   override val id: String = "assume"
-  override def parser(theoremBuilder: TheoremBuilder, context: Context): Parser[TheoremBuilder] = {
+  override def parser(theoremBuilder: TheoremBuilder)(implicit context: Context): Parser[TheoremBuilder] = {
     for {
-      assumption <- Statement.parser(context)
+      assumption <- Statement.parser
     } yield {
       theoremBuilder.addFantasy(assumption)
     }
   }
 }
 
-trait DirectStepParser extends TheoremLineParser {
-  def stepParser(theoremBuilder: TheoremBuilder, context: Context): Parser[Step]
-
-  override def parser(theoremBuilder: TheoremBuilder, context: Context): Parser[TheoremBuilder] = {
-    for {
-      step <- stepParser(theoremBuilder, context)
-    } yield {
-      theoremBuilder.addStep(step)
-    }
-  }
-}
-
 object Theorem extends ChapterEntryParser[Theorem] {
   override val name: String = "theorem"
-  override def parser(lines: Seq[BookLine], context: Context): Parser[(Theorem, Seq[BookLine])] = {
+  override def parser(lines: Seq[BookLine])(implicit context: Context): Parser[(Theorem, Seq[BookLine])] = {
     for {
       id <- Parser.singleWord
       title <- Parser.allRemaining
     } yield {
-      parseLines(id, title, lines, TheoremBuilder(), context)
+      parseLines(id, title, lines, TheoremBuilder())
     }
   }
 
   def lineParser(
-    theoremBuilder: TheoremBuilder,
-    context: Context
+    theoremBuilder: TheoremBuilder)(
+    implicit context: Context
   ): Parser[TheoremBuilder] = {
     val lineParsers = Seq(PremiseParser, FantasyAssumptionParser) ++ context.theoremLineParsers
     for {
       lineType <- Parser.singleWord
       lineParser = lineParsers.find(_.id == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
-      updatedTheoremBuilder <- lineParser.parser(theoremBuilder, context)
+      updatedTheoremBuilder <- lineParser.parser(theoremBuilder)
     } yield {
       updatedTheoremBuilder
     }
@@ -89,8 +81,8 @@ object Theorem extends ChapterEntryParser[Theorem] {
     id: String,
     title: String,
     linesRemaining: Seq[BookLine],
-    theoremBuilder: TheoremBuilder,
-    context: Context
+    theoremBuilder: TheoremBuilder)(
+    implicit context: Context
   ): (Theorem, Seq[BookLine]) = {
     linesRemaining match {
       case BookLine("qed", _, _, _) +: nonTheoremLines =>
@@ -109,8 +101,8 @@ object Theorem extends ChapterEntryParser[Theorem] {
           distinctVariables.filter(variables.statementVariables.contains, variables.termVariables.contains))
         (theorem, nonTheoremLines)
       case definitionLine +: otherLines =>
-        val updatedTheoremBuilder = lineParser(theoremBuilder, context).parseAndDiscard(definitionLine)
-        parseLines(id, title, otherLines, updatedTheoremBuilder, context)
+        val updatedTheoremBuilder = lineParser(theoremBuilder).parseAndDiscard(definitionLine)
+        parseLines(id, title, otherLines, updatedTheoremBuilder)
       case Nil =>
         throw new Exception("Book ended in middle of theorem")
     }

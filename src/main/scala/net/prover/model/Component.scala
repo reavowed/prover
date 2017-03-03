@@ -17,7 +17,7 @@ trait Component {
 }
 
 object Component {
-  def variableParser(context: Context): Parser[Component] = {
+  def variableParser(implicit context: Context): Parser[Component] = {
     for {
       variableName <- Parser.singleWord
     } yield {
@@ -29,7 +29,7 @@ object Component {
 }
 
 trait ComponentType {
-  def parser(context: Context): Parser[Component]
+  def parser(implicit context: Context): Parser[Component]
 }
 
 object ComponentType {
@@ -50,8 +50,8 @@ object ComponentType {
   def listParser: Parser[Seq[ComponentType]] = parser.listInParens(None)
 
   implicit class ComponentTypeSeqOps(componentTypes: Seq[ComponentType]) {
-    def componentsParser(context: Context) = {
-      componentTypes.map(_.parser(context)).traverseParser
+    def componentsParser(implicit context: Context) = {
+      componentTypes.map(_.parser).traverseParser
     }
   }
 }

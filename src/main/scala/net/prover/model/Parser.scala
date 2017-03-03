@@ -61,7 +61,7 @@ case class Parser[+T](attemptParse: PartialLine => (T, PartialLine)) {
       attemptParse(partialLine)
     } catch {
       case e @ (_:ParseException | _:ArbitraryVariableException | _:DistinctVariableViolationException) => throw e
-      case NonFatal(e) => throw new ParseException(e.getMessage, partialLine.fullLine, Some(e))
+      case NonFatal(e) => throw ParseException(e.getMessage, partialLine.fullLine, Some(e))
     }
   }
   def parseAndDiscard(line: PartialLine): T = parse(line)._1

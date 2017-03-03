@@ -9,8 +9,7 @@ trait Inference extends TheoremLineParser {
 
   private def getInitialSubstitutions(
     targetAssumption: Option[Statement],
-    targetPremises: Seq[Statement],
-    context: Context
+    targetPremises: Seq[Statement]
   ): Substitutions = {
     val assumptionSubstitutionAttempt = assumption match {
       case Some(actualAssumption) =>
@@ -29,12 +28,12 @@ trait Inference extends TheoremLineParser {
 
   def substitutionsParser(
     targetAssumption: Option[Statement],
-    targetPremises: Seq[Statement],
-    context: Context
+    targetPremises: Seq[Statement])(
+    implicit context: Context
   ): Parser[Substitutions] = {
-    val initialSubstitutions = getInitialSubstitutions(targetAssumption, targetPremises, context)
+    val initialSubstitutions = getInitialSubstitutions(targetAssumption, targetPremises)
     val requiredVariables = (premises.map(_.variables) :+ conclusion.variables).reduce(_ ++ _)
-    initialSubstitutions.expandParser(requiredVariables, context)
+    initialSubstitutions.expandParser(requiredVariables)
   }
 
   def makeSubstitutions(
@@ -75,11 +74,11 @@ trait Inference extends TheoremLineParser {
   private def matchPremises(
     targetAssumption: Option[Statement],
     targetPremises: Seq[Statement],
-    context: Context,
-    distinctVariables: DistinctVariables
+    distinctVariables: DistinctVariables)(
+    implicit context: Context
   ): Parser[Inference] = {
     for {
-      substitutions <- substitutionsParser(targetAssumption, targetPremises, context)
+      substitutions <- substitutionsParser(targetAssumption, targetPremises)
     } yield {
       val substitutedInference = makeSubstitutions(substitutions)
       val simplifiedInference = substitutedInference.simplify(targetPremises, distinctVariables)
@@ -89,8 +88,8 @@ trait Inference extends TheoremLineParser {
 
   private def applyWithInference(
     targetInference: Inference,
-    theoremBuilder: TheoremBuilder,
-    context: Context
+    theoremBuilder: TheoremBuilder)(
+    implicit context: Context
   ): Parser[TheoremBuilder] = {
     if (targetInference.assumption.nonEmpty)
         throw new Exception(
@@ -103,16 +102,14 @@ trait Inference extends TheoremLineParser {
           "Can only apply assumption-discharging inference with a single premise to an inference")
 
     for {
-      targetInferencePremise <- Statement.parser(context)
+      targetInferencePremise <- Statement.parser
       updatedTargetInference <- targetInference.matchPremises(
         None,
         Seq(targetInferencePremise),
-        context,
         theoremBuilder.distinctVariables)
       updatedInference <- matchPremises(
         Some(updatedTargetInference.premises.head),
         Seq(updatedTargetInference.conclusion),
-        context,
         theoremBuilder.distinctVariables)
     } yield {
       theoremBuilder.addStep(Step(updatedInference.conclusion, s"$id with ${targetInference.id}"))
@@ -123,14 +120,13 @@ trait Inference extends TheoremLineParser {
     premises.map(_ => theoremBuilder.referenceParser).traverseParser
   }
 
-  private def applyWithFantasy(theoremBuilder: TheoremBuilder, context: Context): Parser[TheoremBuilder] = {
+  private def applyWithFantasy(theoremBuilder: TheoremBuilder)(implicit context: Context): Parser[TheoremBuilder] = {
     theoremBuilder.replaceFantasy { fantasy =>
       for {
         targetPremises <- premisesParser(theoremBuilder)
         updatedRule <- matchPremises(
           Some(fantasy.assumption),
           targetPremises,
-          context,
           theoremBuilder.distinctVariables)
       } yield {
         Step(updatedRule.conclusion, id, Some(Step.Fantasy(fantasy.assumption, fantasy.steps)))
@@ -139,8 +135,8 @@ trait Inference extends TheoremLineParser {
   }
 
   override def parser(
-    theoremBuilder: TheoremBuilder,
-    context: Context
+    theoremBuilder: TheoremBuilder)(
+    implicit context: Context
   ): Parser[TheoremBuilder] = {
     assumption match {
       case Some(_) =>
@@ -148,14 +144,14 @@ trait Inference extends TheoremLineParser {
           Parser.singleWord.flatMapOption { id =>
             context.inferences
               .find(_.id == id)
-              .map(applyWithInference(_, theoremBuilder, context))
+              .map(applyWithInference(_, theoremBuilder))
           }
         }
-        withInferenceParser.orElse(applyWithFantasy(theoremBuilder, context))
+        withInferenceParser.orElse(applyWithFantasy(theoremBuilder))
       case None =>
         for {
           targetPremises <- premisesParser(theoremBuilder)
-          updatedInference <- matchPremises(None, targetPremises, context, theoremBuilder.distinctVariables)
+          updatedInference <- matchPremises(None, targetPremises, theoremBuilder.distinctVariables)
         } yield {
           theoremBuilder
             .addStep(Step(updatedInference.conclusion, id))

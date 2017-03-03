@@ -8,13 +8,13 @@ case class Substitutions(
   }
 
   def expandParser(
-    requiredVariables: Variables,
-    context: Context
+    requiredVariables: Variables)(
+    implicit context: Context
   ): Parser[Substitutions] = {
     val missingStatementVariables = requiredVariables.statementVariables.diff(statements.keySet.toSeq)
     val missingTermVariables = requiredVariables.termVariables.diff(terms.keySet.toSeq)
-    val parserForStatements = missingStatementVariables.map(_ -> Statement.parser(context)).traverseParserMap
-    val parserForTerms = missingTermVariables.map(_ -> Term.parser(context)).traverseParserMap
+    val parserForStatements = missingStatementVariables.map(_ -> Statement.parser).traverseParserMap
+    val parserForTerms = missingTermVariables.map(_ -> Term.parser).traverseParserMap
     for {
       statementMap <- parserForStatements
       termMap <- parserForTerms

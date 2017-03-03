@@ -1,11 +1,11 @@
 package net.prover.model
 
 trait ChapterEntryParser[T <: ChapterEntry] extends BookEntryParser {
-  def parser(lines: Seq[BookLine], context: Context): Parser[(T, Seq[BookLine])]
+  def parser(lines: Seq[BookLine])(implicit context: Context): Parser[(T, Seq[BookLine])]
   def addToContext(t: T, context: Context): Context
 
   override def parser(book: Book, lines: Seq[BookLine]): Parser[(Book, Seq[BookLine])] = {
-    parser(lines, book.fullContext) map { case (entry, updatedLines) =>
+    parser(lines)(book.fullContext) map { case (entry, updatedLines) =>
       val updatedContext = addToContext(entry, book.context)
       val updatedBook = book.copy(
         context = updatedContext,
@@ -21,8 +21,8 @@ trait ChapterEntryParser[T <: ChapterEntry] extends BookEntryParser {
 }
 
 trait SingleLineChapterEntryParser[T <: ChapterEntry] extends ChapterEntryParser[T] {
-  def parser(context: Context): Parser[T]
-  override def parser(lines: Seq[BookLine], context: Context): Parser[(T, Seq[BookLine])] = {
-    parser(context).map(_ -> lines)
+  def parser(implicit context: Context): Parser[T]
+  override def parser(lines: Seq[BookLine])(implicit context: Context): Parser[(T, Seq[BookLine])] = {
+    parser.map(entry => (entry, lines))
   }
 }
