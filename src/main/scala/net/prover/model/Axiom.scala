@@ -12,7 +12,7 @@ case class Axiom(
     with Inference
 
 
-object Axiom extends SingleLineChapterEntryParser[Axiom] {
+object Axiom extends ChapterEntryParser[Axiom] {
   override val name: String = "axiom"
 
   def parser(implicit context: Context): Parser[Axiom] = {

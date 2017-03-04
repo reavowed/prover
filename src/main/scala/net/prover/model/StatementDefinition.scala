@@ -51,7 +51,7 @@ case class StatementDefinition(
   }
 }
 
-object StatementDefinition extends SingleLineChapterEntryParser[StatementDefinition] {
+object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
   private def definingStatementParser(implicit context: Context): Parser[Option[Statement]] = Parser.optional(
     "definition",
     Statement.parser.inParens.map(Some.apply),

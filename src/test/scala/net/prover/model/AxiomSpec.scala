@@ -91,7 +91,7 @@ class AxiomSpec extends ProverSpec {
         Nil,
         DistinctVariables.empty)
 
-      axiom.readAndUpdateTheoremBuilder(TheoremBuilder(), "y x z").steps.head.statement mustEqual
+      axiom.parser(TheoremBuilder()).parseAndDiscard("y x z").steps.head.statement mustEqual
         ForAll(y, ForAll(x, ForAll(z, Implication(
           Equivalence(ElementOf(z, y), ElementOf(z, x)),
           Equivalence(ElementOf(y, z), ElementOf(x, z))))))

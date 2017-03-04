@@ -42,8 +42,8 @@ qed
 theorem implicationThenEquivalenceInsideForall Implication then Equivalence Inside Forall
 premise ∀ 1 → 1 2
 premise ∀ 1 ↔ 2 3
-eliminateForall p1 2 1
-eliminateForall p2 2 1
+eliminateForall p1 2
+eliminateForall p2 2
 implicationThenEquivalence 1 2
 introduceForall 3 → 1 3 2 1
 qed
@@ -51,8 +51,8 @@ qed
 theorem equivalenceThenImplicationInsideForall Equivalence then Implication Inside Forall
 premise ∀ 1 ↔ 1 2
 premise ∀ 1 → 2 3
-eliminateForall p1 2 1
-eliminateForall p2 2 1
+eliminateForall p1 2
+eliminateForall p2 2
 equivalenceThenImplication 1 2
 introduceForall 3 → 1 3 2 1
 qed
@@ -81,8 +81,8 @@ qed
 theorem introduceEquivalenceInsideForall Introduce Equivalence Inside Forall
 premise ∀ 1 → 1 2
 premise ∀ 1 → 2 1
-eliminateForall p1 2 1
-eliminateForall p2 2 1
+eliminateForall p1 2
+eliminateForall p2 2
 introduceEquivalence 1 2
 introduceForall 3 ↔ 1 2 2 1
 qed
@@ -90,8 +90,8 @@ qed
 theorem implicationIsTransitiveInsideForall Implication is Transitive Inside Forall
 premise ∀ 1 → 1 2
 premise ∀ 1 → 2 3
-eliminateForall p1 2 1
-eliminateForall p2 2 1
+eliminateForall p1 2
+eliminateForall p2 2
 implicationIsTransitive 1 2
 introduceForall 3 → 1 3 2 1
 qed
@@ -99,8 +99,8 @@ qed
 theorem equivalenceIsTransitiveInsideForall Equivalence is Transitive Inside Forall
 premise ∀ 1 ↔ 1 2
 premise ∀ 1 ↔ 2 3
-eliminateForall p1 2 1
-eliminateForall p2 2 1
+eliminateForall p1 2
+eliminateForall p2 2
 equivalenceIsTransitive 1 2
 introduceForall 3 ↔ 1 3 2 1
 qed
@@ -108,8 +108,8 @@ qed
 theorem equivalenceIsTransitiveInsideForallRight Equivalence is Transitive Inside Forall (Right)
 premise ∀ 1 ↔ 1 2
 premise ∀ 1 ↔ 3 2
-eliminateForall p1 2 1
-eliminateForall p2 2 1
+eliminateForall p1 2
+eliminateForall p2 2
 equivalenceIsTransitiveRight 1 2
 introduceForall 3 ↔ 1 3 2 1
 qed
@@ -117,8 +117,8 @@ qed
 theorem equivalenceIsTransitiveInsideForallLeft Equivalence is Transitive Inside Forall (Left)
 premise ∀ 1 ↔ 1 2
 premise ∀ 1 ↔ 1 3
-eliminateForall p1 2 1
-eliminateForall p2 2 1
+eliminateForall p1 2
+eliminateForall p2 2
 equivalenceIsTransitiveLeft 1 2
 introduceForall 3 ↔ 2 3 2 1
 qed
@@ -126,8 +126,8 @@ qed
 theorem modusTollensEquivalenceInsideForallLeft Modus Tollens With Equivalence Inside Forall (Left)
 premise ∀ 1 ↔ 1 2
 premise ∀ 1 ¬ 1
-eliminateForall p1 1' 1
-eliminateForall p2 1' 1
+eliminateForall p1 1'
+eliminateForall p2 1'
 modusTollensEquivalenceLeft 1 2
 introduceForall 3 ¬ 2 1' 1
 qed
@@ -135,8 +135,8 @@ qed
 theorem modusTollensEquivalenceInsideForallRight Modus Tollens With Equivalence Inside Forall (Right)
 premise ∀ 1 ↔ 1 2
 premise ∀ 1 ¬ 2
-eliminateForall p1 1' 1
-eliminateForall p2 1' 1
+eliminateForall p1 1'
+eliminateForall p2 1'
 modusTollensEquivalenceRight 1 2
 introduceForall 3 ¬ 1 1' 1
 qed
@@ -174,22 +174,22 @@ qed
 theorem combineCasesInsideForall Combine Cases Inside Forall
 premise ∀ 1 → 1 3
 premise ∀ 1 → 2 3
-eliminateForall p1 2 1
-eliminateForall p2 2 1
+eliminateForall p1 2
+eliminateForall p2 2
 combineCases 1 2
 introduceForall 3 → ∨ 1 2 3 2 1
 qed
 
 theorem introduceRedundantAndInsideForall Introduce Redundant And Inside Forall
 premise ∀ 1 → 1 2
-eliminateForall p1 2 1
+eliminateForall p1 2
 introduceRedundantAnd 1
 introduceForall 2 ↔ ∧ 2 1 1 2 1
 qed
 
 theorem eliminateRedundantAndInsideForall Eliminate Redundant And Inside Forall
 premise ∀ 1 ↔ 1 ∧ 1 2
-eliminateForall p1 2 1
+eliminateForall p1 2
 eliminateRedundantAnd 1
 introduceForall 2 → 1 2 2 1
 qed

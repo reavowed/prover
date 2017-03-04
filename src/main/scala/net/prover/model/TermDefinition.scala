@@ -31,7 +31,7 @@ case class TermDefinition(
   }
 }
 
-object TermDefinition extends SingleLineChapterEntryParser[TermDefinition] {
+object TermDefinition extends ChapterEntryParser[TermDefinition] {
   override val name: String = "term"
 
   def premisesParser(implicit context: Context): Parser[Seq[Statement]] = Parser.optional(

@@ -6,17 +6,12 @@ case class Chapter(title: String, summary: String, entries: Seq[ChapterEntry] = 
 
 object Chapter extends BookEntryParser {
   val name = "chapter"
-  override def parser(book: Book, lines: Seq[BookLine]): Parser[(Book, Seq[BookLine])] = {
+  override def parser(book: Book): Parser[Book] = {
     for {
-      title <- Parser.allRemaining
+      title <- Parser.toEndOfLine
+      summary <- Parser.toEndOfLine
     } yield {
-      lines match {
-        case BookLine(summary, _, _, _) +: linesAfterSummary =>
-          val updatedBook = book.copy(chapters = book.chapters :+ Chapter(title, summary))
-          (updatedBook, linesAfterSummary)
-        case _ =>
-          throw new Exception("Chapter summary missing")
-      }
+      book.copy(chapters = book.chapters :+ Chapter(title, summary))
     }
   }
 }

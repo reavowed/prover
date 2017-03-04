@@ -16,13 +16,6 @@ case class Theorem(
 trait TheoremLineParser {
   def id: String
   def parser(theoremBuilder: TheoremBuilder)(implicit context: Context): Parser[TheoremBuilder]
-  def readAndUpdateTheoremBuilder(
-    theoremBuilder: TheoremBuilder,
-    line: PartialLine)(
-    implicit context: Context
-  ): TheoremBuilder = {
-    parser(theoremBuilder).parseAndDiscard(line)
-  }
 
   protected def referenceParser(theoremBuilder: TheoremBuilder): Parser[Statement] = {
     Parser.singleWord.map(theoremBuilder.resolveReference)
@@ -54,38 +47,25 @@ object FantasyAssumptionParser extends TheoremLineParser {
 
 object Theorem extends ChapterEntryParser[Theorem] {
   override val name: String = "theorem"
-  override def parser(lines: Seq[BookLine])(implicit context: Context): Parser[(Theorem, Seq[BookLine])] = {
+  override def parser(implicit context: Context): Parser[Theorem] = {
     for {
       id <- Parser.singleWord
-      title <- Parser.allRemaining
+      title <- Parser.toEndOfLine
+      theorem <- parseLines(id, title, TheoremBuilder())
     } yield {
-      parseLines(id, title, lines, TheoremBuilder())
-    }
-  }
-
-  def lineParser(
-    theoremBuilder: TheoremBuilder)(
-    implicit context: Context
-  ): Parser[TheoremBuilder] = {
-    val lineParsers = Seq(PremiseParser, FantasyAssumptionParser) ++ context.theoremLineParsers
-    for {
-      lineType <- Parser.singleWord
-      lineParser = lineParsers.find(_.id == lineType).getOrElse(throw new Exception(s"Unrecognised theorem line '$lineType'"))
-      updatedTheoremBuilder <- lineParser.parser(theoremBuilder)
-    } yield {
-      updatedTheoremBuilder
+      theorem
     }
   }
 
   def parseLines(
     id: String,
     title: String,
-    linesRemaining: Seq[BookLine],
     theoremBuilder: TheoremBuilder)(
     implicit context: Context
-  ): (Theorem, Seq[BookLine]) = {
-    linesRemaining match {
-      case BookLine("qed", _, _, _) +: nonTheoremLines =>
+  ): Parser[Theorem] = {
+    val lineParsers = Seq(PremiseParser, FantasyAssumptionParser) ++ context.theoremLineParsers
+    Parser.singleWord flatMap {
+      case "qed" =>
         import theoremBuilder._
         if (fantasyOption.isDefined)
           throw new Exception("Cannot finish theorem with open assumption")
@@ -99,14 +79,15 @@ object Theorem extends ChapterEntryParser[Theorem] {
           conclusion,
           arbitraryVariables.intersect(variables.termVariables),
           distinctVariables.filter(variables.statementVariables.contains, variables.termVariables.contains))
-        (theorem, nonTheoremLines)
-      case definitionLine +: otherLines =>
-        val updatedTheoremBuilder = lineParser(theoremBuilder).parseAndDiscard(definitionLine)
-        parseLines(id, title, otherLines, updatedTheoremBuilder)
-      case Nil =>
-        throw new Exception("Book ended in middle of theorem")
+        Parser.constant(theorem)
+      case lineType =>
+        val lineParser = lineParsers.find(_.id == lineType)
+          .getOrElse(t(lineType))
+        lineParser.parser(theoremBuilder).flatMap(parseLines(id, title, _))
     }
   }
+
+  def t(lineType: String) = throw new Exception(s"Unrecognised theorem line '$lineType'")
 
   override def addToContext(theorem: Theorem, context: Context): Context = {
     context.copy(theoremLineParsers = context.theoremLineParsers :+ theorem)

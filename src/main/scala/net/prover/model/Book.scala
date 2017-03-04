@@ -1,8 +1,7 @@
 package net.prover.model
 
 import java.io.File
-import java.nio.charset.StandardCharsets
-import java.nio.file.{Files, Path}
+import java.nio.file.Path
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.apache.commons.io.FileUtils
@@ -30,68 +29,41 @@ object Book {
   val chapterEntryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, StatementDefinition, TermDefinition, Axiom, Theorem)
   val bookEntryParsers: Seq[BookEntryParser] = Seq(Chapter, BookInclude, VariableDefinitions) ++ chapterEntryParsers
 
-  private def lineParser(
-    book: Book,
-    lines: Seq[BookLine]
-  ): Parser[(Book, Seq[BookLine])] = {
-    Parser.singleWord.flatMap { entryType =>
+  private def lineParser(book: Book): Parser[Option[Book]] = {
+    Parser.singleWordIfAny.mapFlatMap { entryType =>
       bookEntryParsers.find(_.name == entryType)
         .getOrElse(throw new Exception(s"Unrecognised entry '$entryType'"))
-        .parser(book, lines)
+        .parser(book)
     }
   }
 
-  private def addLinesToBook(lines: Seq[BookLine], book: Book): Book = {
-    lines match {
-      case nextLine +: moreLines =>
-        val (updatedBook, remainingLines) = lineParser(book, moreLines).parseAndDiscard(nextLine)
-        addLinesToBook(remainingLines, updatedBook)
-      case Nil =>
+  private def parseToBook(book: Book, tokenizer: Tokenizer): Book = {
+    val (updatedBookOption, nextTokenizer) = lineParser(book).parse(tokenizer)
+    updatedBookOption match {
+      case Some(updatedBook) =>
+        parseToBook(updatedBook, nextTokenizer)
+      case None =>
         book
     }
   }
 
-  private def readImports(nextLines: Seq[BookLine], imports: Seq[String] = Nil): (Seq[String], Seq[BookLine]) = {
-    nextLines match {
-      case nextLine +: otherLines =>
-        val parser = for {
-          entryType <- Parser.singleWord
-          importTitle <- Parser.allRemaining
-        } yield {
-          if (entryType == "import") readImports(otherLines, imports :+ importTitle) else (imports, nextLines)
-        }
-        parser.parseAndDiscard(nextLine)
-      case Nil =>
-        (imports, nextLines)
-    }
+  private def importsParser: Parser[Seq[String]] = {
+    Parser
+      .singleWord.onlyIf(_ == "import")
+      .mapFlatMap(_ => Parser.toEndOfLine)
+      .whileDefined
   }
 
-  private case class PreParsedBook(title: String, path: Path, imports: Seq[String], lines: Seq[BookLine])
+  private case class PreParsedBook(title: String, path: Path, imports: Seq[String], tokenizer: StringTokenizer)
 
-  def getPlainLinesWithIndices(path: Path): Seq[(String, Int)] = {
-    val bookText = new String(Files.readAllBytes(path), StandardCharsets.UTF_8)
-    bookText.lines.zipWithIndex.filter(!_._1.isEmpty).filter(!_._1.startsWith("#")).toList
-  }
+  private def preparseBooks(bookFilePaths: Seq[Path]): Seq[PreParsedBook] = {
+    bookFilePaths.map { path =>
+      val tokenizer = Tokenizer.fromPath(path)
+      if (tokenizer.isEmpty) throw new Exception(s"Book file '$path' was empty")
 
-  def createBookLines(plainLines: Seq[(String, Int)], bookTitle: String, fileName: String): Seq[BookLine] = {
-    plainLines map { case(lineText, lineIndex) =>
-      BookLine(lineText, lineIndex + 1, bookTitle, fileName)
-    }
-  }
-
-  private def preparseBooks(bookFiles: Seq[File]): Seq[PreParsedBook] = {
-    bookFiles.map { file =>
-      val path = file.toPath
-      val plainLinesWithIndices = getPlainLinesWithIndices(path)
-      val (title, plainLinesAfterTitle) = plainLinesWithIndices match {
-        case (bookTitle, _) +: remainingLines =>
-          (bookTitle, remainingLines)
-        case _ =>
-          throw new Exception("Book must start with a title line")
-      }
-      val bookLinesAfterTitle = createBookLines(plainLinesAfterTitle, title, path.getFileName.toString)
-      val (imports, linesAfterImports) = readImports(bookLinesAfterTitle)
-      PreParsedBook(title, path, imports, linesAfterImports)
+      val (title, tokenizerAfterTitle) = Parser.toEndOfLine.parse(tokenizer)
+      val (imports, tokenizerAfterImports) = importsParser.parse(tokenizerAfterTitle)
+      PreParsedBook(title, path, imports, tokenizerAfterImports.asInstanceOf[StringTokenizer].copy(currentBook = Some(title)))
     }
   }
 
@@ -108,9 +80,7 @@ object Book {
         r
     } match {
       case Left(dependencies) =>
-        val parsedBook = addLinesToBook(
-          book.lines,
-          Book(book.title, book.path, dependencies))
+        val parsedBook = parseToBook(Book(book.title, book.path, dependencies), book.tokenizer)
         dependentBooks match {
           case dependentBook +: otherDependentBooks =>
             parseBook(dependentBook, otherDependentBooks, otherBooks, parsedBooks :+ parsedBook)
@@ -143,11 +113,12 @@ object Book {
   }
 
   def fromDirectory(pathName: String): Seq[Book] = {
-    val bookFiles = FileUtils.listFiles(new File(pathName), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)
+    val bookFilePaths = FileUtils.listFiles(new File(pathName), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)
       .asScala
-      .filter(_.getPath.endsWith(".book"))
+      .map(_.toPath)
+      .filter(_.getFileName.toString.endsWith(".book"))
       .toSeq
-    val preparsedBooks = preparseBooks(bookFiles)
+    val preparsedBooks = preparseBooks(bookFilePaths)
     parseBooks(preparsedBooks)
   }
 }

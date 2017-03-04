@@ -5,10 +5,10 @@ axiom axiomOfInfinity (Axiom of Infinity) () () (∃ X inductive X) () ()
 
 theorem naturalNumbersExist The Natural Numbers Exist
 axiomOfInfinity X
-intersectionOverClassExists 1 S s Y
+intersectionOverClassExists 1 S s
 qed
 
-theorem naturalNumbersAreUnqiue The Natural Numbers Are Unique
+theorem naturalNumbersAreUnique The Natural Numbers Are Unique
 naturalNumbersExist S s X
 setWithMembershipConditionIsUnique 1
 qed

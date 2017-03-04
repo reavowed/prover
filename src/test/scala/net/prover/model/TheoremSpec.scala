@@ -7,12 +7,11 @@ class TheoremSpec extends ProverSpec {
     additionalTheorems: Seq[Theorem] = Nil
   ): Theorem = {
     Theorem.parser(
-      lines)(
       implicitly[Context].copy(
         theoremLineParsers = defaultContext.theoremLineParsers ++
           Seq(IntroduceImplication, EliminateImplication, IntroduceForall, EliminateForall) ++
           additionalTheorems)
-    ).parseAndDiscard(firstLine)._1
+    ).parseAndDiscard((firstLine +: lines).mkString("\n"))
   }
 
   "theorem parse" should {
@@ -132,7 +131,7 @@ class TheoremSpec extends ProverSpec {
         Nil,
         DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addStep(Implication(φ, ψ))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1")
+      val updatedTheoremBuilder = theorem.parser(theoremBuilder).parseAndDiscard("1")
       updatedTheoremBuilder.steps(1).statement mustEqual Implication(Negation(ψ), Negation(φ))
     }
 
@@ -146,7 +145,7 @@ class TheoremSpec extends ProverSpec {
         Nil,
         DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addStep(Negation(φ))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "1 ¬ ψ")
+      val updatedTheoremBuilder = theorem.parser(theoremBuilder).parseAndDiscard("1 ¬ ψ")
       updatedTheoremBuilder.steps(1).statement mustEqual Implication(φ, Negation(ψ))
     }
 
@@ -160,7 +159,7 @@ class TheoremSpec extends ProverSpec {
         Seq(x),
         DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addPremise(Equals(y, x))
-      val updatedTheoremBuilder = theorem.readAndUpdateTheoremBuilder(theoremBuilder, "p1 z")
+      val updatedTheoremBuilder = theorem.parser(theoremBuilder).parseAndDiscard("p1 z")
       updatedTheoremBuilder.arbitraryVariables mustEqual Seq(y)
     }
 
@@ -174,8 +173,7 @@ class TheoremSpec extends ProverSpec {
         Seq(x),
         DistinctVariables.empty)
       val theoremBuilder = TheoremBuilder().addFantasy(Equals(x, y))
-      theorem.readAndUpdateTheoremBuilder(theoremBuilder, "f.a z") must throwAn[ArbitraryVariableException]
-
+      theorem.parser(theoremBuilder).parseAndDiscard("f.a z") must throwAn[ArbitraryVariableException]
     }
   }
 

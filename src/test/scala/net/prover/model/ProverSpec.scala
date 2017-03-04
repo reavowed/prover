@@ -1,5 +1,7 @@
 package net.prover.model
 
+import java.nio.file.Paths
+
 import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {
@@ -137,5 +139,11 @@ trait ProverSpec extends Specification {
 
   implicit class TheoremBuilderOps(theoremBuilder: TheoremBuilder) {
     def addStep(statement: Statement): TheoremBuilder = theoremBuilder.addStep(Step(statement, ""))
+  }
+
+  implicit class ParserOps[T](parser: Parser[T]) {
+    def parseAndDiscard(text: String): T = {
+      parser.parse(Tokenizer.fromString(text, Paths.get("")))._1
+    }
   }
 }

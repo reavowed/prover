@@ -48,7 +48,7 @@ theorem setComprehensionLemma4 Set Comprehension Lemma 4
 premise ∧ ∈ 5 2 sub 5 1 1
 setComprehensionLemma2 1 1 2 3 5
 replacementInference 1 4
-assume ∀ 3 ↔ ∈ 3 4' ∃ 1 ∧ ∈ 1 2 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 5 3 1
+assume ∀ 3 ↔ ∈ 3 4' ∃ 1 ∧ ∈ 1 2 ∨ ∧ 1 = 3 1 ∧ ¬ 1 = 3 5
   eliminateForall f.a 3'
   setComprehensionLemma3 p1 3'
   equivalenceIsTransitive f.1 f.2
@@ -69,7 +69,7 @@ qed
 theorem setComprehensionLemma6 Set Comprehension Lemma 6
 premise ¬ ∃ 3 ∧ ∈ 3 2 1
 notExistsIsForallNot p1
-falseStatementCharacterisesTheEmptySet 1 5
+falseStatementCharacterisesTheEmptySet 1
 introduceExists 2 ∀ 3 ↔ ∈ 3 4 ∧ ∈ 3 2 1 ∅ 4
 qed
 

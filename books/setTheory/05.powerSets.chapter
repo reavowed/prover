@@ -8,14 +8,14 @@ term powerSet (X) format (𝒫X) (∀ Y ↔ ∈ Y powerSet X ⊆ Y X)
 theorem elementOfPowerSetIsSubset An Element of a Power Set is a Subset
 premise ∈ 2 powerSet 1
 definition-powerSet 2 1
-eliminateForall 1 2 2
+eliminateForall 1 2
 modusPonensEquivalenceLeft 2 p1
 qed
 
 theorem subsetIsElementOfPowerSet A Subset is An Element of a Power Set
 premise ⊆ 2 1
 definition-powerSet 2 1
-eliminateForall 1 2 2
+eliminateForall 1 2
 modusPonensEquivalenceRight 2 p1
 qed
 
