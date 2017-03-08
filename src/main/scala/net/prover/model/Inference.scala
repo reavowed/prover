@@ -1,163 +1,88 @@
 package net.prover.model
 
-trait Inference extends TheoremLineParser {
-  def assumption: Option[Statement]
-  def premises: Seq[Statement]
-  def conclusion: Statement
-  def arbitraryVariables: Seq[TermVariable]
-  def distinctVariables: DistinctVariables
+import java.security.MessageDigest
 
-  private def getInitialSubstitutions(
-    targetAssumption: Option[Statement],
-    targetPremises: Seq[Statement]
-  ): Substitutions = {
-    val assumptionSubstitutionAttempt = assumption match {
-      case Some(actualAssumption) =>
-        actualAssumption.calculateSubstitutions(
-          targetAssumption.getOrElse(throw new Exception("No assumption provided for inference")))
-      case None =>
-        Some(Substitutions.empty)
+import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
+
+trait Inference {
+  def name: String
+  def premises: Seq[Premise]
+  def conclusion: ProvenStatement
+
+  def applySubstitutions(substitutions: Substitutions): Inference = new Inference {
+    override def name = Inference.this.name
+    override def premises = Inference.this.premises.map(_.applySubstitutions(substitutions))
+    override def conclusion = Inference.this.conclusion.applySubstitutions(substitutions)
+  }
+
+  def calculateHash(): String = {
+    val serialized = (premises.map(_.serialized) :+ conclusion.statement.serialized).mkString("\n")
+    val sha = MessageDigest.getInstance("SHA-256")
+    sha.update(serialized.getBytes("UTF-8"))
+    String.format("%064x", new java.math.BigInteger(1, sha.digest()))
+  }
+}
+
+object Inference {
+  def unapply(inference: Inference): Option[(String, Seq[Premise], ProvenStatement)] = {
+    Some(inference.name, inference.premises, inference.conclusion)
+  }
+
+  sealed trait Premise {
+    def applySubstitutions(substitutions: Substitutions): Premise
+    def serialized: String
+  }
+
+  case class DirectPremise(statement: Statement) extends Premise {
+    override def applySubstitutions(substitutions: Substitutions) = {
+      val substitutedStatement = statement.applySubstitutions(substitutions)
+      DirectPremise(substitutedStatement)
     }
-    val premiseSubstitutionAttempts = premises.zip(targetPremises).map { case (premise, targetPremise) =>
-      premise.calculateSubstitutions(targetPremise)
+    override def serialized = statement.serialized
+  }
+  case class DeducedPremise(antecedent: Statement, consequent: Statement) extends Premise {
+    override def applySubstitutions(substitutions: Substitutions) = {
+      val substitutedAntecedent = antecedent.applySubstitutions(substitutions)
+      val substitutedConsequent = consequent.applySubstitutions(substitutions)
+      DeducedPremise(substitutedAntecedent, substitutedConsequent)
     }
-    Substitutions.mergeAttempts(assumptionSubstitutionAttempt +: premiseSubstitutionAttempts)
-      .getOrElse(throw new Exception(
-        s"Could not match premises\n${targetAssumption.toSeq ++ targetPremises}\n${assumption.toSeq ++ premises}"))
-  }
 
-  def substitutionsParser(
-    targetAssumption: Option[Statement],
-    targetPremises: Seq[Statement])(
-    implicit context: Context
-  ): Parser[Substitutions] = {
-    val initialSubstitutions = getInitialSubstitutions(targetAssumption, targetPremises)
-    val requiredVariables = (premises.map(_.variables) :+ conclusion.variables).reduce(_ ++ _)
-    initialSubstitutions.expandParser(requiredVariables)
+    override def serialized = Seq("proves", antecedent.serialized, consequent.serialized).mkString(" ")
   }
+}
 
-  def makeSubstitutions(
-    substitutions: Substitutions
-  ): Inference = new Inference {
-    override val id = Inference.this.id
-    override val assumption = Inference.this.assumption.map(_.applySubstitutions(substitutions).asInstanceOf[Statement])
-    override val premises = Inference.this.premises.map(_.applySubstitutions(substitutions).asInstanceOf[Statement])
-    override val conclusion = Inference.this.conclusion.applySubstitutions(substitutions).asInstanceOf[Statement]
-    override val arbitraryVariables = Inference.this.arbitraryVariables
-      .map(_.applySubstitutions(substitutions))
-      .map(Term.asVariable)
-    override val distinctVariables = Inference.this.distinctVariables.applySubstitutions(substitutions)
-  }
+trait InferenceParser {
 
-  def simplify(targetPremises: Seq[Statement], distinctVariables: DistinctVariables): Inference = {
-    val additionalDistinctVariables = premises.zip(targetPremises)
-      .map {
-        case (premise, targetPremise) =>
-          premise.attemptSimplification(targetPremise)
-      }
-      .traverseOption
-      .getOrElse(throw new Exception(s"Could not match premises\n$targetPremises\n$premises"))
-      .foldLeft(distinctVariables)(_ ++ _)
-    new Inference {
-      override val id = Inference.this.id
-      override val assumption = Inference.this.assumption
-        .map(_.makeSimplifications(additionalDistinctVariables).asInstanceOf[Statement])
-      override val premises = Inference.this.premises
-        .map(_.makeSimplifications(additionalDistinctVariables).asInstanceOf[Statement])
-      override val conclusion = Inference.this.conclusion
-        .makeSimplifications(additionalDistinctVariables).asInstanceOf[Statement]
-      override val arbitraryVariables = Inference.this.arbitraryVariables
-      override val distinctVariables = Inference.this.distinctVariables ++ additionalDistinctVariables
-    }
-  }
 
-  private def matchPremises(
-    targetAssumption: Option[Statement],
-    targetPremises: Seq[Statement],
-    distinctVariables: DistinctVariables)(
-    implicit context: Context
-  ): Parser[Inference] = {
+  private def deducedPremiseParser(implicit context: Context): Parser[DeducedPremise] = {
     for {
-      substitutions <- substitutionsParser(targetAssumption, targetPremises)
+      antecedent <- Statement.parser
+      consequent <- Statement.parser
     } yield {
-      val substitutedInference = makeSubstitutions(substitutions)
-      val simplifiedInference = substitutedInference.simplify(targetPremises, distinctVariables)
-      simplifiedInference
+      DeducedPremise(antecedent, consequent)
     }
   }
 
-  private def applyWithInference(
-    targetInference: Inference,
-    theoremBuilder: TheoremBuilder)(
-    implicit context: Context
-  ): Parser[TheoremBuilder] = {
-    if (targetInference.assumption.nonEmpty)
-        throw new Exception(
-          "Cannot apply assumption-discharging inference to another assumption-discharging inference")
-    if (targetInference.premises.length != 1)
-        throw new Exception(
-          "Can only apply assumption-discharging inference to an inference with a single premise")
-    if (premises.length != 1)
-        throw new Exception(
-          "Can only apply assumption-discharging inference with a single premise to an inference")
+  private def directPremiseParser(implicit context: Context): Parser[DirectPremise] = {
+    Statement.parser.map(DirectPremise)
+  }
 
-    for {
-      targetInferencePremise <- Statement.parser
-      updatedTargetInference <- targetInference.matchPremises(
-        None,
-        Seq(targetInferencePremise),
-        theoremBuilder.distinctVariables)
-      updatedInference <- matchPremises(
-        Some(updatedTargetInference.premises.head),
-        Seq(updatedTargetInference.conclusion),
-        theoremBuilder.distinctVariables)
-    } yield {
-      theoremBuilder.addStep(Step(updatedInference.conclusion, s"$id with ${targetInference.id}"))
+  private def premiseParser(implicit context: Context): Parser[Option[Premise]] = {
+    Parser.singleWord.onlyIf(_ == "premise").mapFlatMap { _ =>
+      Parser.singleWord.onlyIf(_ == "proves").mapFlatMap(_ => deducedPremiseParser)
+        .orElse(directPremiseParser)
     }
   }
 
-  private def premisesParser(theoremBuilder: TheoremBuilder): Parser[Seq[Statement]] = {
-    premises.map(_ => theoremBuilder.referenceParser).traverseParser
+  def premisesParser(implicit context: Context): Parser[Seq[Premise]] = {
+    premiseParser.whileDefined
   }
 
-  private def applyWithFantasy(theoremBuilder: TheoremBuilder)(implicit context: Context): Parser[TheoremBuilder] = {
-    theoremBuilder.replaceFantasy { fantasy =>
-      for {
-        targetPremises <- premisesParser(theoremBuilder)
-        updatedRule <- matchPremises(
-          Some(fantasy.assumption),
-          targetPremises,
-          theoremBuilder.distinctVariables)
-      } yield {
-        Step(updatedRule.conclusion, id, Some(Step.Fantasy(fantasy.assumption, fantasy.steps)))
-      }
-    }
+  def arbitraryVariablesParser(implicit context: Context): Parser[Seq[TermVariable]] = {
+    Parser.optional("arbitrary-variables", Term.variableListParser, Nil)
   }
 
-  override def parser(
-    theoremBuilder: TheoremBuilder)(
-    implicit context: Context
-  ): Parser[TheoremBuilder] = {
-    assumption match {
-      case Some(_) =>
-        def withInferenceParser = {
-          Parser.singleWord.flatMapOption { id =>
-            context.inferences
-              .find(_.id == id)
-              .map(applyWithInference(_, theoremBuilder))
-          }
-        }
-        withInferenceParser.orElse(applyWithFantasy(theoremBuilder))
-      case None =>
-        for {
-          targetPremises <- premisesParser(theoremBuilder)
-          updatedInference <- matchPremises(None, targetPremises, theoremBuilder.distinctVariables)
-        } yield {
-          theoremBuilder
-            .addStep(Step(updatedInference.conclusion, id))
-            .withArbitraryVariables(updatedInference.arbitraryVariables)
-            .withDistinctVariables(updatedInference.distinctVariables)
-        }
-    }
+  def distinctVariablesParser(implicit context: Context): Parser[DistinctVariables] = {
+    Parser.optional("distinct-variables", DistinctVariables.parser, DistinctVariables.empty)
   }
 }

@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.Inference.{DirectPremise, Premise}
+
 case class TermSpecification(
     symbol: String,
     componentTypes: Seq[ComponentType],
@@ -22,12 +24,9 @@ case class TermDefinition(
   val id: String = s"definition-${specification.symbol}"
   val defaultTerm = DefinedTerm(defaultVariables, specification)
   val inference: Inference = new Inference {
-    override val id: String = TermDefinition.this.id
-    override val assumption = None
-    override val premises: Seq[Statement] = TermDefinition.this.premises
-    override val conclusion: Statement = definition
-    override val arbitraryVariables: Seq[TermVariable] = Nil
-    override val distinctVariables: DistinctVariables = DistinctVariables.empty
+    override val name: String = s"Definition of ${specification.symbol}"
+    override val premises: Seq[Premise] = TermDefinition.this.premises.map(DirectPremise)
+    override val conclusion: ProvenStatement = ProvenStatement.withNoConditions(definition)
   }
 }
 

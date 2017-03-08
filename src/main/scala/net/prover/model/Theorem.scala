@@ -1,95 +1,228 @@
 package net.prover.model
 
+import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
+
 case class Theorem(
-    id: String,
-    title: String,
-    premises: Seq[Statement],
+    name: String,
+    premises: Seq[Premise],
     steps: Seq[Step],
-    conclusion: Statement,
-    arbitraryVariables: Seq[TermVariable],
-    distinctVariables: DistinctVariables)
-  extends ChapterEntry(Theorem) with Inference
+    conclusion: ProvenStatement)
+  extends ChapterEntry(Theorem)
+    with Inference
 {
-  val assumption = None
+  val id = calculateHash()
 }
 
-trait TheoremLineParser {
-  def id: String
-  def parser(theoremBuilder: TheoremBuilder)(implicit context: Context): Parser[TheoremBuilder]
+sealed trait Step
 
-  protected def referenceParser(theoremBuilder: TheoremBuilder): Parser[Statement] = {
-    Parser.singleWord.map(theoremBuilder.resolveReference)
+case class AssumptionStep(
+    assumption: Statement,
+    steps: Seq[Step])
+  extends Step
+
+case class AssertionStep(
+    provenStatement: ProvenStatement,
+    inference: Inference,
+    references: Seq[Reference],
+    substitutions: Substitutions)
+  extends Step
+
+sealed trait Reference
+case class DirectReference(index: Int) extends Reference
+case class DeducedReference(antecedentIndex: Int, consequentIndex: Int) extends Reference
+
+case class ReferencedAssertion(provenStatement: ProvenStatement, reference: DirectReference)
+case class ReferencedDeduction(assumption: Statement, deduction: ProvenStatement, reference: Reference)
+
+sealed trait MatchedPremise {
+  def provenStatement: ProvenStatement
+  def reference: Reference
+}
+case class MatchedDirectPremise(
+    premise: DirectPremise,
+    provenStatement: ProvenStatement,
+    reference: DirectReference)
+  extends MatchedPremise
+case class MatchedDeducedPremise(
+    premise: DeducedPremise,
+    assumption: Statement,
+    provenStatement: ProvenStatement,
+    reference: Reference)
+  extends MatchedPremise
+
+case class Prover(
+    theoremPremises: Seq[Premise],
+    activeAssumptions: Seq[Statement],
+    previousSteps: Seq[Step])(
+    implicit context: Context)
+{
+  def availableInferences = context.inferences
+
+  def proveAssertion(assertion: Statement): AssertionStep = {
+    availableInferences.mapCollect { inference =>
+      inference.conclusion.statement.calculateSubstitutions(assertion, Substitutions.empty).map(inference -> _)
+    }.mapCollect { case (inference, substitutions) =>
+      matchInferencePremises(inference, substitutions).map(inference -> _)
+    }.map { case (inference, (matchedPremises, substitutions)) =>
+      makeAssertionStep(assertion, inference, matchedPremises, substitutions)
+    }.headOption.getOrElse(throw new Exception(s"Could not prove statement $assertion"))
   }
-}
 
-object PremiseParser extends TheoremLineParser {
-  override val id: String = "premise"
-
-  override def parser(theoremBuilder: TheoremBuilder)(implicit context: Context): Parser[TheoremBuilder] = {
-    for {
-      premise <- Statement.parser
-    } yield {
-      theoremBuilder.addPremise(premise)
+  private def getProvenStatements: Seq[ReferencedAssertion] = {
+    theoremPremises.zipWithIndex.collect {
+      case (DirectPremise(statement), index) =>
+        (ProvenStatement.withNoConditions(statement), index)
+    } ++ activeAssumptions.zipWithIndex.map {
+      case (statement, index) =>
+        (ProvenStatement.withNoConditions(statement), index + theoremPremises.length)
+    } ++ previousSteps.zipWithIndex.collect {
+      case (AssertionStep(provenStatement, _, _, _), index) =>
+        (provenStatement, index + theoremPremises.length + activeAssumptions.length)
+    } map { case (provenStatement, index) =>
+      ReferencedAssertion(provenStatement, DirectReference(index))
     }
   }
+
+  private def getProvenDeductions: Seq[ReferencedDeduction] = {
+    theoremPremises.zipWithIndex.collect {
+      case (DeducedPremise(assumption, deduction), index) =>
+        ReferencedDeduction(assumption, ProvenStatement.withNoConditions(deduction), DirectReference(index))
+    } ++ previousSteps.zipWithIndex.collectMany {
+      case (AssumptionStep(assumption, substeps), assumptionIndex) =>
+        substeps.zipWithIndex.collect {
+          case (AssertionStep(deduction, _ , _, _), assertionIndex) =>
+            val reference = DeducedReference(theoremPremises.length + activeAssumptions.length + assumptionIndex, assertionIndex)
+            ReferencedDeduction(assumption, deduction, reference)
+        }
+    }
+  }
+
+  private def matchInferencePremises(
+    inference: Inference,
+    substitutions: Substitutions
+  ): Option[(Seq[MatchedPremise], Substitutions)] = {
+    val initial = Seq((Seq.empty[MatchedPremise], substitutions))
+    inference.premises.foldLeft(initial) { case (acc, premise) =>
+      acc.flatMap { case (matchedPremisesSoFar, substitutionsSoFar) =>
+        matchPremise(premise, substitutionsSoFar).map { case (matchedPremise, newSubstitutions) =>
+          (matchedPremisesSoFar :+ matchedPremise, newSubstitutions)
+        }
+      }
+    }.headOption
+  }
+
+  private def matchPremise(
+    inferencePremise: Premise,
+    substitutionsSoFar: Substitutions
+  ): Seq[(MatchedPremise, Substitutions)] = {
+    inferencePremise match {
+      case directPremise @ DirectPremise(inferencePremiseStatement) =>
+        getProvenStatements.map { case ReferencedAssertion(provenStatement, reference) =>
+          inferencePremiseStatement.calculateSubstitutions(provenStatement.statement, substitutionsSoFar)
+            .map((MatchedDirectPremise(directPremise, provenStatement, reference), _))
+        } collectDefined
+      case deducedPremise @ DeducedPremise(antecedent, consequent) =>
+        getProvenDeductions.map { case ReferencedDeduction(assumption, deduction, reference) =>
+          antecedent.calculateSubstitutions(assumption, substitutionsSoFar)
+            .flatMap(consequent.calculateSubstitutions(deduction.statement, _))
+            .map((MatchedDeducedPremise(deducedPremise, assumption, deduction, reference), _))
+        } collectDefined
+    }
+  }
+
+  private def makeAssertionStep(
+    assertion: Statement,
+    inference: Inference,
+    matchedPremises: Seq[MatchedPremise],
+    substitutions: Substitutions
+  ): AssertionStep = {
+    val substitutedInference = inference.applySubstitutions(substitutions)
+    val arbitraryVariables = matchedPremises.map(_.provenStatement.arbitraryVariables)
+      .foldLeft(substitutedInference.conclusion.arbitraryVariables)(_ ++ _)
+    val distinctVariables = matchedPremises.map(_.provenStatement.distinctVariables)
+      .foldLeft(substitutedInference.conclusion.distinctVariables)(_ ++ _)
+    val provenStatement = ProvenStatement(assertion, arbitraryVariables, distinctVariables)
+    AssertionStep(provenStatement, inference, matchedPremises.map(_.reference), substitutions)
+  }
 }
 
-object FantasyAssumptionParser extends TheoremLineParser {
-  override val id: String = "assume"
-  override def parser(theoremBuilder: TheoremBuilder)(implicit context: Context): Parser[TheoremBuilder] = {
+object Theorem extends ChapterEntryParser[Theorem] with InferenceParser {
+  override val name: String = "theorem"
+
+  private def assumptionParser(
+    premises: Seq[Premise],
+    assumptions: Seq[Statement],
+    previousSteps: Seq[Step])(
+    implicit context: Context
+  ): Parser[AssumptionStep] = {
     for {
       assumption <- Statement.parser
+      steps <- stepsParser(premises, assumptions :+ assumption, previousSteps).inBraces
     } yield {
-      theoremBuilder.addFantasy(assumption)
+      AssumptionStep(assumption, steps)
     }
   }
-}
 
-object Theorem extends ChapterEntryParser[Theorem] {
-  override val name: String = "theorem"
+  private def assertionParser(
+    premises: Seq[Premise],
+    assumptions: Seq[Statement],
+    previousSteps: Seq[Step])(
+    implicit context: Context
+  ): Parser[AssertionStep] = {
+    for {
+      assertion <- Statement.parser
+    } yield {
+      Prover(premises, assumptions, previousSteps).proveAssertion(assertion)
+    }
+  }
+
+  private def stepParser(
+    premises: Seq[Premise],
+    assumptions: Seq[Statement],
+    previousSteps: Seq[Step],
+    stepsSoFar: Seq[Step])(
+    implicit context: Context
+  ): Parser[Option[Step]] = {
+    Parser.singleWord.flatMap[Option[Step]] {
+      case "assume" =>
+        assumptionParser(premises, assumptions, previousSteps ++ stepsSoFar).map(Some.apply)
+      case "prove" =>
+        assertionParser(premises, assumptions, previousSteps ++ stepsSoFar).map(Some.apply)
+      case _ =>
+        Parser.constant(None)
+    }
+  }
+
+  private def stepsParser(
+    premises: Seq[Premise],
+    assumptions: Seq[Statement],
+    previousSteps: Seq[Step])(
+    implicit context: Context
+  ): Parser[Seq[Step]] = {
+    Parser.collectWhileDefined[Step] { stepsSoFar =>
+      stepParser(premises, assumptions, previousSteps, stepsSoFar)
+    }
+  }
+
   override def parser(implicit context: Context): Parser[Theorem] = {
     for {
-      id <- Parser.singleWord
-      title <- Parser.toEndOfLine
-      theorem <- parseLines(id, title, TheoremBuilder())
+      name <- Parser.toEndOfLine
+      premises <- premisesParser
+      steps <- stepsParser(premises, Nil, Nil)
+      _ <- Parser.singleWord.onlyIf(_ == "qed").throwIfUndefined("Expected step or qed")
     } yield {
-      theorem
+      val lastProvenStatement = steps.ofType[AssertionStep].lastOption
+        .getOrElse(throw new Exception("Theorem must contain at least one assertion"))
+        .provenStatement
+      Theorem(
+        name,
+        premises,
+        steps,
+        lastProvenStatement)
     }
   }
-
-  def parseLines(
-    id: String,
-    title: String,
-    theoremBuilder: TheoremBuilder)(
-    implicit context: Context
-  ): Parser[Theorem] = {
-    val lineParsers = Seq(PremiseParser, FantasyAssumptionParser) ++ context.theoremLineParsers
-    Parser.singleWord flatMap {
-      case "qed" =>
-        import theoremBuilder._
-        if (fantasyOption.isDefined)
-          throw new Exception("Cannot finish theorem with open assumption")
-        val conclusion = steps.last.statement
-        val variables = (premises.map(_.variables) :+ conclusion.variables).reduce(_ ++ _)
-        val theorem = Theorem(
-          id,
-          title,
-          premises,
-          steps,
-          conclusion,
-          arbitraryVariables.intersect(variables.termVariables),
-          distinctVariables.filter(variables.statementVariables.contains, variables.termVariables.contains))
-        Parser.constant(theorem)
-      case lineType =>
-        val lineParser = lineParsers.find(_.id == lineType)
-          .getOrElse(t(lineType))
-        lineParser.parser(theoremBuilder).flatMap(parseLines(id, title, _))
-    }
-  }
-
-  def t(lineType: String) = throw new Exception(s"Unrecognised theorem line '$lineType'")
 
   override def addToContext(theorem: Theorem, context: Context): Context = {
-    context.copy(theoremLineParsers = context.theoremLineParsers :+ theorem)
+    context.copy(inferences = context.inferences :+ theorem)
   }
 }

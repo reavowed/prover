@@ -43,15 +43,33 @@ package object model {
       case s: S =>
         s
     }
+    def collectMany[S](f: PartialFunction[T, Seq[S]]): Seq[S] = {
+      seq.collect(f).flatten
+    }
+    def mapCollect[S](f: T => Option[S]): Seq[S] = {
+      seq.map(f).collectDefined
+    }
   }
 
-  implicit class SeqOptionsOps[T](x: Seq[Option[T]]) {
+  implicit class SeqTupleOps[S, T](x: Seq[(S, T)]) {
+    def split: (Seq[S], Seq[T]) = {
+      (x.map(_._1), x.map(_._2))
+    }
+  }
+
+  implicit class SeqOptionsOps[T](seq: Seq[Option[T]]) {
     def traverseOption: Option[Seq[T]] = {
-      x.foldLeft(Option(Seq.empty[T])) { case (sequenceOption, valueOption) =>
+      seq.foldLeft(Option(Seq.empty[T])) { case (sequenceOption, valueOption) =>
           for {
             sequence <- sequenceOption
             value <- valueOption
           } yield sequence :+ value
+      }
+    }
+
+    def collectDefined: Seq[T] = {
+      seq.collect {
+        case Some(t) => t
       }
     }
   }

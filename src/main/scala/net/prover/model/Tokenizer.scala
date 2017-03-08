@@ -32,7 +32,7 @@ case class StringTokenizer(
     currentColumn: Int)
   extends Tokenizer
 {
-  val singleCharacterTokens = "(),"
+  val singleCharacterTokens = "(){},"
 
   def isEmpty: Boolean = text.isEmpty
 
@@ -91,6 +91,8 @@ case class StringTokenizer(
       val (nextChar, nextTokenizer) = readChar()
       if (nextChar.isWhitespace) {
         nextTokenizer.readUntilEndOfWhitespace()
+      } else if (nextChar == '#') {
+        nextTokenizer.readUntilEndOfLine()._2.readUntilEndOfWhitespace()
       } else {
         this
       }

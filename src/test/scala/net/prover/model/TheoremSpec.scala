@@ -1,180 +1,92 @@
 package net.prover.model
 
+import net.prover.model.Inference.DeducedPremise
+
 class TheoremSpec extends ProverSpec {
-  def parseTheorem(
-    firstLine: String,
-    lines: Seq[String],
-    additionalTheorems: Seq[Theorem] = Nil
-  ): Theorem = {
-    Theorem.parser(
-      implicitly[Context].copy(
-        theoremLineParsers = defaultContext.theoremLineParsers ++
-          Seq(IntroduceImplication, EliminateImplication, IntroduceForall, EliminateForall) ++
-          additionalTheorems)
-    ).parseAndDiscard((firstLine +: lines).mkString("\n"))
-  }
-
-  "theorem parse" should {
-    "parse a theorem with a fantasy" in {
-      val theorem = parseTheorem(
-        "imp-refl Implication is Reflexive",
-        Seq(
-          "assume φ",
-          "introduceImplication f.a",
-          "qed"))
-      theorem.conclusion mustEqual Implication(φ, φ)
+  "theorem parser" should {
+    def parseTheorem(text: String*)(implicit context: Context): Theorem = {
+      Theorem.parser(context).parseAndDiscard(text.mkString("\n"))
+    }
+    def contextWith(inferences: Inference*): Context = {
+      implicitly[Context].copy(inferences = inferences)
     }
 
-    "parse a theorem with a nested fantasy" in {
-      val theorem = parseTheorem(
-        "imp-distr Implication Distributes over Itself",
-        Seq(
-          "premise → φ → ψ χ",
-          "assume → φ ψ",
-          "assume φ",
-          "eliminateImplication p1 f.f.a",
-          "eliminateImplication f.a f.f.a",
-          "eliminateImplication f.f.1 f.f.2",
-          "introduceImplication f.f.3",
-          "introduceImplication f.1",
-          "qed"))
-      theorem.conclusion mustEqual Implication(Implication(φ, ψ), Implication(φ, χ))
+    "not accept an unfounded assertion" in {
+      parseTheorem(
+        "Anything Is True",
+        "prove φ",
+        "qed"
+      ) must throwAn[Exception]
     }
 
-    "parse a theorem with a definition application" in {
+    "accept assertion of the conclusion of a known premiseless inference" in {
+      val previousInference = new Axiom(
+        "Implication Is Reflexive",
+        Nil,
+        Implication(φ, φ))
+
       val theorem = parseTheorem(
-        "imp-distr Implication Distributes over Itself",
-        Seq(
-          "premise ∧ φ ψ",
-          "unapply-∧ p1",
-          "qed"))
-      theorem.conclusion mustEqual Negation(Implication(φ, Negation(ψ)))
+        "X",
+        "prove → ψ ψ",
+        "qed")(
+        contextWith(previousInference))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(ψ, ψ))
     }
 
-    "parse a theorem with a previous theorem application" in {
-      val previousTheorem = Theorem(
-        "false-imp-any",
-        "A False Statement Implies Anything",
+    "accept assertion of the conclusion of an inference whose premises match proven statements" in {
+      val previousInference = new Axiom(
+        "Modus Ponens",
+        Seq(Implication(φ, ψ), φ),
+        ψ)
+
+      val theorem = parseTheorem(
+        "X",
+        "premise → → → ψ χ ψ ψ",
+        "premise → → ψ χ ψ",
+        "prove ψ",
+        "qed")(
+        contextWith(previousInference))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(ψ)
+    }
+
+    "not accept assertion of the conclusion of an inference whose premises can't be matched" in {
+      val previousInference = new Axiom(
+        "X",
         Seq(φ),
-        Nil,
-        Implication(Negation(φ), ψ),
-        Nil,
-        DistinctVariables.empty)
+        Implication(φ, φ))
 
-      val theorem = parseTheorem(
-        "or-left Disjunction from Left",
-        Seq(
-          "premise φ",
-          "false-imp-any p1 ψ",
-          "apply-∨ 1",
-          "qed"),
-        additionalTheorems = Seq(previousTheorem))
-      theorem.conclusion mustEqual Disjunction(φ, ψ)
+      parseTheorem(
+        "X",
+        "premise ψ",
+        "prove → χ χ",
+        "qed")(
+        contextWith(previousInference)
+      ) must throwAn[Exception]
     }
 
-    "parse a theorem with arbitrary variables" in {
-      val theorem = parseTheorem(
-        "id Title",
-        Seq(
-          "premise = x y",
-          "introduceForall p1 = x z y z",
-          "qed"))
-      theorem.arbitraryVariables mustEqual Seq(y)
-    }
+    "accept assertion of the conclusion of an inference with a deduced premise that matches an assumption" in {
+      val repeatAxiom = new Axiom(
+        "Repeat",
+        Seq(φ),
+        φ)
+      val deductionAxiom = new Axiom(
+        "Deduction",
+        Seq(DeducedPremise(φ, ψ)),
+        Implication(φ, ψ))
 
-    "parse a theorem with distinct variables" in {
       val theorem = parseTheorem(
-        "id Title",
-        Seq(
-          "premise sub y x φ",
-          "introduceForall p1",
-          "qed"))
-      theorem.distinctVariables mustEqual
-        DistinctVariables(Map(y -> Variables(Seq(φ), Nil)))
-    }
+        "X",
+        "premise χ",
+        "assume ψ {",
+        "  prove χ",
+        "}",
+        "prove → ψ χ",
+        "qed")(
+        contextWith(repeatAxiom, deductionAxiom))
 
-    "not include distinct variables if they don't appear in the hypotheses or conclusion" in {
-      val theorem = parseTheorem(
-        "id Title",
-        Seq(
-          "premise ∀ x → φ ψ",
-          "eliminateForall p1 y",
-          "assume ∀ x φ",
-          "eliminateForall f.a y",
-          "eliminateImplication 1 f.1",
-          "introduceForall f.2",
-          "introduceImplication f.3",
-          "qed"))
-      theorem.distinctVariables mustEqual DistinctVariables.empty
-    }
-
-    "not include arbitrary variables if they don't appear in the hypotheses" in {
-      val theorem = parseTheorem(
-        "id Title",
-        Seq(
-          "premise ∀ x φ",
-          "eliminateForall p1 y",
-          "introduceForall 1",
-          "qed"))
-      theorem.arbitraryVariables mustEqual Nil
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(ψ, χ))
     }
   }
-
-  "theorem" should {
-    "apply to a theorem that matches its hypotheses" in {
-      val theorem = Theorem(
-        "contra",
-        "Contrapositive",
-        Seq(Implication(φ, ψ)),
-        Nil,
-        Implication(Negation(ψ), Negation(φ)),
-        Nil,
-        DistinctVariables.empty)
-      val theoremBuilder = TheoremBuilder().addStep(Implication(φ, ψ))
-      val updatedTheoremBuilder = theorem.parser(theoremBuilder).parseAndDiscard("1")
-      updatedTheoremBuilder.steps(1).statement mustEqual Implication(Negation(ψ), Negation(φ))
-    }
-
-    "apply to a theorem that matches its hypotheses with a free statement variable" in {
-      val theorem = Theorem(
-        "false-imp-all",
-        "A False Statement Implies Everything",
-        Seq(Negation(φ)),
-        Nil,
-        Implication(φ, ψ),
-        Nil,
-        DistinctVariables.empty)
-      val theoremBuilder = TheoremBuilder().addStep(Negation(φ))
-      val updatedTheoremBuilder = theorem.parser(theoremBuilder).parseAndDiscard("1 ¬ ψ")
-      updatedTheoremBuilder.steps(1).statement mustEqual Implication(φ, Negation(ψ))
-    }
-
-    "add arbitrary variables to applied theorem" in {
-      val theorem = Theorem(
-        "id",
-        "Title",
-        Seq(Equals(x, y)),
-        Nil,
-        Equals(y, z),
-        Seq(x),
-        DistinctVariables.empty)
-      val theoremBuilder = TheoremBuilder().addPremise(Equals(y, x))
-      val updatedTheoremBuilder = theorem.parser(theoremBuilder).parseAndDiscard("p1 z")
-      updatedTheoremBuilder.arbitraryVariables mustEqual Seq(y)
-    }
-
-    "fail a rule with arbitrary variables if an arbitrary variable appears in a fantasy assumption" in {
-      val theorem = Theorem(
-        "id",
-        "Title",
-        Seq(Equals(y, x)),
-        Nil,
-        Equals(y, z),
-        Seq(x),
-        DistinctVariables.empty)
-      val theoremBuilder = TheoremBuilder().addFantasy(Equals(x, y))
-      theorem.parser(theoremBuilder).parseAndDiscard("f.a z") must throwAn[ArbitraryVariableException]
-    }
-  }
-
 }

@@ -3,7 +3,3 @@ Propositional Calculus
 variables (φ ψ χ) ()
 
 include 01.implicationAndNegation.chapter
-include 02.conjunctionAndDisjunction.chapter
-include 03.equivalence.chapter
-include 04.identities.chapter
-include 05.inferences.chapter

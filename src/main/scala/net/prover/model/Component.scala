@@ -3,16 +3,11 @@ package net.prover.model
 trait Component {
   def componentType: ComponentType
   def variables: Variables
-  def calculateSubstitutions(other: Component): Option[Substitutions]
+  def calculateSubstitutions(other: Component, substitutions: Substitutions): Option[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Component
-  def substituteFreeVariable(
-    termToReplaceWith: Term,
-    termToBeReplaced: TermVariable
-  ): Component
-  def attemptSimplification(other: Component): Option[DistinctVariables]
-  def makeSimplifications(distinctVariables: DistinctVariables): Component
   def html: String
   def safeHtml: String = html
+  def serialized: String
   override def toString: String = html
 }
 

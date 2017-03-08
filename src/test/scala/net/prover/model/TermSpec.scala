@@ -1,16 +1,16 @@
 package net.prover.model
 
 class TermSpec extends ProverSpec {
-  val PowerSet = TermSpecification("powerSet", Seq(Term), Format("𝒫x", Seq("x"), requiresBrackets = false))
+  val PowerSet = TermSpecification("powerSet", Seq(Term), Format("𝒫%0", requiresBrackets = false))
 
   "term match" should {
     "match a constant term to itself" in {
-      EmptySet.calculateSubstitutions(EmptySet) must beSome
+      EmptySet.calculateSubstitutions(EmptySet, Substitutions.empty) must beSome
     }
 
     "match a unary function to another application of the same function" in {
       PowerSet(Seq(x))
-        .calculateSubstitutions(PowerSet(Seq(y)))
+        .calculateSubstitutions(PowerSet(Seq(y)), Substitutions.empty)
         .mustEqual(Some(Substitutions(
           Map.empty,
           Map(x -> y))))

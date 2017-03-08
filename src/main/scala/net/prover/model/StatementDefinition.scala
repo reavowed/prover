@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.Inference.{DirectPremise, Premise}
+
 case class StatementDefinition(
     symbol: String,
     defaultComponents: Seq[Component],
@@ -22,31 +24,23 @@ case class StatementDefinition(
       components,
       boundVariables.map { v =>
         components(defaultComponents.indexOf(v))
-      }.map(_.asInstanceOf[TermVariable]),
+      }.map(_.asInstanceOf[Term]).map(Term.asVariable),
       this)
   }
 
   def forwardInference: Option[Inference] = definingStatement.map { s =>
     new Inference {
-      override val id: String = s"apply-$symbol"
-      override val assumption = None
-      override val premises: Seq[Statement] = Seq(s)
-      override val conclusion: Statement = defaultStatement
-      override val arbitraryVariables: Seq[TermVariable] = Nil
-      override val distinctVariables: DistinctVariables =
-        StatementDefinition.this.distinctVariables
+      override val name = s"Definition of $symbol"
+      override val premises: Seq[Premise] = Seq(DirectPremise(s))
+      override val conclusion: ProvenStatement = ProvenStatement(defaultStatement, Nil, distinctVariables)
     }
   }
 
   def reverseInference: Option[Inference] = definingStatement.map { s =>
     new Inference {
-      override val id: String = s"unapply-$symbol"
-      override val assumption = None
-      override val premises: Seq[Statement] = Seq(defaultStatement)
-      override val conclusion: Statement = s
-      override val arbitraryVariables: Seq[TermVariable] = Nil
-      override val distinctVariables: DistinctVariables =
-        StatementDefinition.this.distinctVariables
+      override val name = s"Definition of $symbol"
+      override val premises: Seq[Premise] = Seq(DirectPremise(defaultStatement))
+      override val conclusion: ProvenStatement = ProvenStatement(s, Nil, distinctVariables)
     }
   }
 }

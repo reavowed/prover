@@ -2,6 +2,7 @@ package net.prover.model
 
 import java.nio.file.Paths
 
+import net.prover.model.Inference.{DirectPremise, Premise}
 import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {
@@ -51,7 +52,7 @@ trait ProverSpec extends Specification {
     StatementDefinition(
       symbol,
       Seq(x, φ),
-      Format(s"(${symbol}x)φ", Seq("x", "φ"), requiresBrackets = false),
+      Format(s"($symbol%1)%2", requiresBrackets = false),
       Seq(x),
       DistinctVariables.empty,
       definingStatement)
@@ -77,47 +78,6 @@ trait ProverSpec extends Specification {
     Nil,
     ForAll(x, Negation(ElementOf(x, EmptySet))))
 
-  val Restate = Axiom(
-    "restate",
-    "Restate",
-    None,
-    Seq(φ),
-    φ,
-    Nil,
-    DistinctVariables.empty)
-  val IntroduceImplication = Axiom(
-    "introduceImplication",
-    "Introduce Implication",
-    Some(φ),
-    Seq(ψ),
-    Implication(φ, ψ),
-    Nil,
-    DistinctVariables.empty)
-  val EliminateImplication = Axiom(
-    "eliminateImplication",
-    "Eliminate Implication",
-    None,
-    Seq(Implication(φ, ψ), φ),
-    ψ,
-    Nil,
-    DistinctVariables.empty)
-  val IntroduceForall = Axiom(
-    "introduceForall",
-    "Introduce Forall",
-    None,
-    Seq(StatementVariableWithReplacement(φ, y, x)),
-    ForAll(x, φ),
-    Seq(y),
-    DistinctVariables(Map(y -> Variables(Seq(φ), Nil))))
-  val EliminateForall = Axiom(
-    "eliminateForall",
-    "Eliminate Forall",
-    None,
-    Seq(ForAll(x, φ)),
-    StatementVariableWithReplacement(φ, y, x),
-    Nil,
-    DistinctVariables.empty)
-
   val statementDefinitions = Seq(
     Implication, Negation, Conjunction, Disjunction, Equivalence,
     ForAll, Exists,
@@ -131,19 +91,12 @@ trait ProverSpec extends Specification {
     context.addStatementDefinition(statementDefinition)
   }.addTermDefinition(EmptySetDefinition)
 
-  implicit def stringToPartialLine(s: String): PartialLine = PartialLine(s, BookLine(s, 1, "Fake Book", "filename"))
-
-  implicit def stringsToLines(strings: Seq[String]): Seq[BookLine] = {
-    strings.zipWithIndex.map { case(s, i) => BookLine(s, i+1, "Fake Book", "filename")}
-  }
-
-  implicit class TheoremBuilderOps(theoremBuilder: TheoremBuilder) {
-    def addStep(statement: Statement): TheoremBuilder = theoremBuilder.addStep(Step(statement, ""))
-  }
-
   implicit class ParserOps[T](parser: Parser[T]) {
     def parseAndDiscard(text: String): T = {
       parser.parse(Tokenizer.fromString(text, Paths.get("")))._1
     }
   }
+
+  implicit def statementToPremise(statement: Statement): Premise = DirectPremise(statement)
+  implicit def statementToProvenStatement(statement: Statement): ProvenStatement = ProvenStatement.withNoConditions(statement)
 }

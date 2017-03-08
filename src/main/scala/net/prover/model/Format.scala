@@ -1,9 +1,9 @@
 package net.prover.model
 
-case class Format(formatString: String, replacementNames: Seq[String], requiresBrackets: Boolean) {
+case class Format(formatString: String, requiresBrackets: Boolean) {
   def html(components: Seq[Component]): String = {
-    components.zip(replacementNames).foldLeft(formatString) { case (htmlSoFar, (component, replacement)) =>
-      htmlSoFar.replaceFirst(replacement, component.safeHtml)
+    components.zipWithIndex.foldLeft(formatString) { case (htmlSoFar, (component, index)) =>
+      htmlSoFar.replaceFirst(s"%$index", component.safeHtml)
     }
   }
 
@@ -22,11 +22,11 @@ object Format {
   ): Format = {
     replacementNames match {
       case Nil =>
-        Format(symbol, replacementNames, requiresBrackets = false)
-      case Seq(single) =>
-        Format(s"$symbol$single", replacementNames, requiresBrackets = false)
-      case Seq(first, second) =>
-        Format(s"$first $symbol $second", replacementNames, requiresBrackets = true)
+        Format(symbol, requiresBrackets = false)
+      case Seq(_) =>
+        Format(s"$symbol%0", requiresBrackets = false)
+      case Seq(_, _) =>
+        Format(s"%0 $symbol %1", requiresBrackets = true)
       case _ =>
         throw new Exception("Explicit format must be supplied with more than two components")
     }
@@ -34,12 +34,16 @@ object Format {
 
   def parser(symbol: String, replacementNames: Seq[String]): Parser[Format] = {
     for {
-      rawFormat <- Parser.allInParens
+      rawFormatWithParens <- Parser.allInParens
     } yield {
-      if (rawFormat.endsWith("in parens"))
-        Format(rawFormat.stripSuffix("in parens").trim, replacementNames, requiresBrackets = true)
+      val (rawFormat, requiresBrackets) = if (rawFormatWithParens.endsWith("in parens"))
+        (rawFormatWithParens.stripSuffix("in parens").trim, true)
       else
-        Format(rawFormat, replacementNames, requiresBrackets = false)
+        (rawFormatWithParens, false)
+      val replacedFormat = replacementNames.zipWithIndex.foldLeft(rawFormat) { case (str, (name, index)) =>
+        str.replaceAll(name, s"%$index")
+      }
+      Format(replacedFormat, requiresBrackets)
     }
   }
 

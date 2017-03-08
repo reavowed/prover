@@ -1,50 +1,41 @@
 <div ng-if="$ctrl.theorem">
     <div class="result">
-        <span class="inferenceId">{{$ctrl.theorem.id}}</span>
-        <span class="toggleSteps"><input type="checkbox" ng-model="showSteps"></span>
         <h5 class="theoremTitle"
             data-toggle="collapse"
             data-target="#{{$ctrl.theorem.id}}-proof, #{{$ctrl.theorem.id}}-summary">
-            Theorem: {{$ctrl.theorem.title}}
+            Theorem: {{$ctrl.theorem.name}}
         </h5>
         <div id="{{$ctrl.theorem.id}}-summary" class="theoremSummary collapse in">
             <div class="resultBlock">
                 <div ng-if="$ctrl.theorem.premises.length">
-                    Suppose
-                    <span ng-if="$ctrl.theorem.premises.length > 1">
-                        {{$ctrl.theorem.premises.slice(0, $ctrl.theorem.premises.length - 1).join(", ")}}
-                        and
-                    </span>
-                    {{$ctrl.theorem.premises[$ctrl.theorem.premises.length - 1]}}.
+                    Suppose {{premiseText}}.
                 </div>
                 <div>
                     <span ng-if="$ctrl.theorem.premises.length">Then</span>
-                    {{$ctrl.theorem.conclusion}}.
+                    {{$ctrl.theorem.conclusion.statement}}.
                 </div>
             </div>
-            <div class="arbitraryVariables" ng-if="$ctrl.theorem.arbitraryVariables.length">
-                Arbitrary variables: {{$ctrl.theorem.arbitraryVariables.join(", ")}}
+            <div class="arbitraryVariables" ng-if="$ctrl.theorem.conclusion.arbitraryVariables.length">
+                Arbitrary variables: {{$ctrl.theorem.conclusion.arbitraryVariables.join(", ")}}
             </div>
-            <div class="distinctVariables" ng-if="$ctrl.theorem.distinctVariables.length">
+            <div class="distinctVariables" ng-if="$ctrl.theorem.conclusion.distinctVariables.length">
                 Distinct variables:
-                <span ng-repeat="requirement in $ctrl.theorem.distinctVariables"
+                <span ng-repeat="requirement in $ctrl.theorem.conclusion.distinctVariables"
                       class="distinctVariable">({{requirement.termVariable}} may not appear in {{requirement.variables.join(", ")}})</span>
             </div>
         </div>
         <div id="{{$ctrl.theorem.id}}-proof" class="theoremProof collapse">
             <div ng-if="$ctrl.theorem.premises.length">
                 <h5>Premises</h5>
-                <div ng-repeat="premise in $ctrl.theorem.premises" class="premise">{{premise}}</div>
+                <div ng-repeat="premise in premises" class="premise">{{premise}}</div>
                 <h5>Proof</h5>
             </div>
             <table class="proofRows">
                 <tr ng-repeat="row in proofRows" class="proofRow">
-                    <td class="referenceCell"><span class="reference">{{row.reference}}</span></td>
                     <td>
                         <span ng-repeat="i in _.range(row.indentLevel)" class="proofIndent"></span>
                         <span>{{row.prefix}} {{row.statement}}.</span>
                     </td>
-                    <td ng-show="showSteps"><span class="stepInferenceId">{{row.inferenceId}}</span></td>
                 </tr>
             </table>
         </div>

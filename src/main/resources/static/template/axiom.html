@@ -1,0 +1,20 @@
+<div ng-if="$ctrl.axiom">
+    <div class="result">
+        <h5>Axiom: {{$ctrl.axiom.name}}</h5>
+        <div ng-if="$ctrl.axiom.premises.length">
+            Suppose {{premiseText}}.
+        </div>
+        <div>
+            <span ng-if="$ctrl.axiom.premises.length">Then</span>
+            {{$ctrl.axiom.conclusion.statement}}.
+        </div>
+        <div class="arbitraryVariables" ng-if="$ctrl.axiom.conclusion.arbitraryVariables.length">
+            Arbitrary variables: {{$ctrl.axiom.conclusion.arbitraryVariables.join(", ")}}
+        </div>
+        <div class="distinctVariables" ng-if="$ctrl.axiom.conclusion.distinctVariables.length">
+            Distinct variables:
+            <span ng-repeat="requirement in $ctrl.axiom.conclusion.distinctVariables"
+                  class="distinctVariable">({{requirement.termVariable}} in {{requirement.variables.join(", ")}})</span>
+        </div>
+    </div>
+</div>

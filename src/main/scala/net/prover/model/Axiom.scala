@@ -1,35 +1,38 @@
 package net.prover.model
 
+import net.prover.model.Inference.Premise
+
 case class Axiom(
-    id: String,
-    title: String,
-    assumption: Option[Statement],
-    premises: Seq[Statement],
-    conclusion: Statement,
-    arbitraryVariables: Seq[TermVariable],
-    distinctVariables: DistinctVariables)
+    name: String,
+    premises: Seq[Premise],
+    conclusion: ProvenStatement)
   extends ChapterEntry(Axiom)
-    with Inference
+  with Inference
 
 
-object Axiom extends ChapterEntryParser[Axiom] {
+object Axiom extends ChapterEntryParser[Axiom] with InferenceParser {
   override val name: String = "axiom"
+
+  private def conclusionParser(implicit context: Context): Parser[Statement] = {
+    for {
+      _ <- Parser.singleWord.onlyIf(_ == "conclusion").map(_.getOrElse(throw new Exception("Expected axiom conclusion")))
+      conclusion <- Statement.parser
+    } yield conclusion
+  }
 
   def parser(implicit context: Context): Parser[Axiom] = {
     for {
-      id <- Parser.singleWord
-      title <- Parser.allInParens
-      assumption <- Statement.parser.optionalInParens
-      premises <- Statement.listParser
-      conclusion <- Statement.parser.inParens
-      arbitraryVariables <- Term.variableListParser
-      distinctVariables <- DistinctVariables.parser
+      name <- Parser.toEndOfLine
+      premises <- premisesParser
+      conclusion <- conclusionParser
+      arbitraryVariables <- arbitraryVariablesParser
+      distinctVariables <- distinctVariablesParser
     } yield {
-      Axiom(id, title, assumption, premises, conclusion, arbitraryVariables, distinctVariables)
+      Axiom(name, premises, ProvenStatement(conclusion, arbitraryVariables, distinctVariables))
     }
   }
 
   override def addToContext(axiom: Axiom, context: Context): Context = {
-    context.copy(theoremLineParsers = context.theoremLineParsers :+ axiom)
+    context.copy(inferences = context.inferences :+ axiom)
   }
 }

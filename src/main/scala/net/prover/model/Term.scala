@@ -12,14 +12,22 @@ trait Term extends JsonSerializable.Base with Component {
   override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
     serialize(gen, serializers)
   }
+  def applySubstitutions(substitutions: Substitutions): Term
 }
 
 case class TermVariable(text: String) extends Term {
   override def variables: Variables = Variables(Nil, Seq(this))
-  override def calculateSubstitutions(other: Component): Option[Substitutions] = {
+  override def calculateSubstitutions(other: Component, substitutions: Substitutions): Option[Substitutions] = {
     other match {
       case otherTerm: Term =>
-        Some(Substitutions(Map.empty, Map(this -> otherTerm)))
+        substitutions.terms.get(this) match {
+          case Some(`otherTerm`) =>
+            Some(substitutions)
+          case Some(_) =>
+            None
+          case None =>
+            Some(substitutions + (this, otherTerm))
+        }
       case _ =>
         None
     }
@@ -29,28 +37,8 @@ case class TermVariable(text: String) extends Term {
       throw new Exception(s"No replacement for term variable $this")
     })
   }
-  override def substituteFreeVariable(
-    termToReplaceWith: Term,
-    termToBeReplaced: TermVariable
-  ): Term = {
-    if (this == termToBeReplaced)
-      termToReplaceWith
-    else
-      this
-  }
-
-  override def attemptSimplification(other: Component): Option[DistinctVariables] = {
-    if (other == this)
-      Some(DistinctVariables.empty)
-    else
-      None
-  }
-
-  override def makeSimplifications(distinctVariables: DistinctVariables): Term = {
-    this
-  }
-
   override def html: String = text
+  override def serialized: String = text
 }
 
 case class DefinedTerm(
@@ -59,34 +47,17 @@ case class DefinedTerm(
   extends Term
 {
   override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
-  override def calculateSubstitutions(other: Component): Option[Substitutions] = other match {
+  override def calculateSubstitutions(other: Component, substitutions: Substitutions): Option[Substitutions] = other match {
     case DefinedTerm(otherSubcomponents, `termSpecification`) =>
-      val substitutionAttempts = subcomponents.zip(otherSubcomponents).map { case (component, otherComponent) =>
-        component.calculateSubstitutions(otherComponent)
-      }
-      Substitutions.mergeAttempts(substitutionAttempts)
+      subcomponents.zip(otherSubcomponents)
+        .foldLeft(Option(substitutions)) { case (substitutionsSoFarOption, (component, otherComponent)) =>
+          substitutionsSoFarOption.flatMap(component.calculateSubstitutions(otherComponent, _))
+        }
     case _ =>
       None
   }
   override def applySubstitutions(substitutions: Substitutions): Term = {
     copy(subcomponents = subcomponents.map(_.applySubstitutions(substitutions)))
-  }
-  override def substituteFreeVariable(
-    termToReplaceWith: Term,
-    termToBeReplaced: TermVariable
-  ): Term = {
-    copy(subcomponents = subcomponents.map(_.substituteFreeVariable(termToReplaceWith, termToBeReplaced)))
-  }
-  override def attemptSimplification(other: Component): Option[DistinctVariables] = other match {
-    case DefinedTerm(otherSubcomponents, `termSpecification`) =>
-      subcomponents.zip(otherSubcomponents).map { case (component, otherComponent) =>
-        component.attemptSimplification(otherComponent)
-      }.traverseOption.map(_.foldLeft(DistinctVariables.empty)(_ ++ _))
-    case _ =>
-      None
-  }
-  override def makeSimplifications(distinctVariables: DistinctVariables): Term = {
-    copy(subcomponents = subcomponents.map(_.makeSimplifications(distinctVariables)))
   }
   override def html: String = {
     termSpecification.format.html(subcomponents)
@@ -94,6 +65,7 @@ case class DefinedTerm(
   override def safeHtml: String = {
     termSpecification.format.safeHtml(subcomponents)
   }
+  override def serialized: String = (termSpecification.symbol +: subcomponents.map(_.serialized)).mkString(" ")
 
   override def equals(obj: Any): Boolean = obj match {
     case DefinedTerm(`subcomponents`, otherTermDefinition) if otherTermDefinition.symbol == termSpecification.symbol =>

@@ -13,7 +13,7 @@ class TermDefinitionSpec extends ProverSpec {
     }
 
     "parse a term with premises" in {
-      val specification = TermSpecification("intersection", Seq(Term), Format("⋂x", Seq("x"), requiresBrackets = false))
+      val specification = TermSpecification("intersection", Seq(Term), Format("⋂%0", requiresBrackets = false))
       TermDefinition.parser(defaultContext).parseAndDiscard(
         "intersection (x) format (⋂x) premises (¬ = x ∅) (∀ y ↔ ∈ y intersection x ∀ z → ∈ z x ∈ z y)"
       ) mustEqual TermDefinition(

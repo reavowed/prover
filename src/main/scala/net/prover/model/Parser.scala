@@ -24,13 +24,16 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
     else
       (None, tokenizer)
     }
-  def inParens: Parser[T] = {
+
+  private def inBrackets(openBracket: String, closeBracket: String): Parser[T] = {
     for {
-      _ <- Parser.singleWord.onlyIf(_ == "(").map(_.getOrElse(throw new Exception("Open-paren expected but not found")))
+      _ <- Parser.singleWord.onlyIf(_ == openBracket).throwIfUndefined(s"'$openBracket' expected but not found")
       t <- this
-      _ <- Parser.singleWord.onlyIf(_ == ")").map(_.getOrElse(throw new Exception("Close-paren expected but not found")))
+      _ <- Parser.singleWord.onlyIf(_ == closeBracket).throwIfUndefined(s"'$closeBracket' expected but not found")
     } yield t
   }
+
+  def inParens: Parser[T] = inBrackets("(", ")")
   def optionalInParens: Parser[Option[T]] = Parser[Option[T]] { tokenizer =>
     val (nextToken, _) = tokenizer.readNext()
     if (nextToken != ")")
@@ -38,7 +41,6 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
     else
       (None, tokenizer)
   }.inParens
-
   def listInParens(separatorOption: Option[String]) = {
     def parseNext(tokenizer: Tokenizer, acc: Seq[T] = Nil): (Seq[T], Tokenizer) = {
       val (nextToken, nextTokenizer) = tokenizer.readNext()
@@ -58,6 +60,8 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
     }
     Parser(parseNext(_, Nil)).inParens
   }
+
+  def inBraces: Parser[T] = inBrackets("{", "}")
 
   def parse(tokenizer: Tokenizer): (T, Tokenizer) = {
     try {
@@ -87,18 +91,19 @@ object Parser {
   def allInParens: Parser[String] = Parser(_.readUntilCloseParen()).inParens
 
   implicit class OptionParserOps[T](parser: Parser[Option[T]]) {
+    def mapMap[S](f: T => S): Parser[Option[S]] = parser.map(_.map(f))
     def mapFlatMap[S](f: T => Parser[S]): Parser[Option[S]] = parser.flatMap {
       case Some(t) =>
         f(t).map(Some.apply)
       case None =>
         Parser.constant(None)
     }
-    def orElse(otherParser: => Parser[T]): Parser[T] = {
-      parser.flatMap {
-        case Some(t) =>
-          Parser.constant(t)
-        case None =>
-          otherParser
+    def orElse[S >: T](otherParser: => Parser[S]): Parser[S] = Parser { tokenizer =>
+      parser.parse(tokenizer) match {
+        case (Some(t), nextTokenizer) =>
+          (t, nextTokenizer)
+        case (None, _) =>
+          otherParser.parse(tokenizer)
       }
     }
     def whileDefined: Parser[Seq[T]] = {
@@ -114,6 +119,9 @@ object Parser {
         readNext(Nil, tokenizer)
       }
     }
+    def throwIfUndefined(msg: String): Parser[T] = {
+      parser.map(_.getOrElse(throw new Exception(msg)))
+    }
   }
 
   def optional[T](
@@ -123,5 +131,20 @@ object Parser {
   ): Parser[T] = {
     Parser.singleWordIfAny.onlyIf(_.exists(_ == name)).map(_.flatten)
       .mapFlatMap(_ => parser).orElse(Parser.constant(default))
+  }
+
+  def iterateWhileDefined[T](
+    initial: T,
+    parseFn: T => Parser[Option[T]]
+  ): Parser[T] = {
+    parseFn(initial).mapFlatMap(iterateWhileDefined(_, parseFn)).orElse(Parser.constant(initial))
+  }
+
+  def collectWhileDefined[T](
+    parseFn: Seq[T] => Parser[Option[T]]
+  ): Parser[Seq[T]] = {
+    iterateWhileDefined[Seq[T]](
+      Seq.empty,
+      seq => parseFn(seq).mapMap(seq :+ _))
   }
 }

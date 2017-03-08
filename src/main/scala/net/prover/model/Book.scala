@@ -37,14 +37,8 @@ object Book {
     }
   }
 
-  private def parseToBook(book: Book, tokenizer: Tokenizer): Book = {
-    val (updatedBookOption, nextTokenizer) = lineParser(book).parse(tokenizer)
-    updatedBookOption match {
-      case Some(updatedBook) =>
-        parseToBook(updatedBook, nextTokenizer)
-      case None =>
-        book
-    }
+  private def linesParser(book: Book): Parser[Book] = {
+    Parser.iterateWhileDefined(book, lineParser)
   }
 
   private def importsParser: Parser[Seq[String]] = {
@@ -80,7 +74,8 @@ object Book {
         r
     } match {
       case Left(dependencies) =>
-        val parsedBook = parseToBook(Book(book.title, book.path, dependencies), book.tokenizer)
+        val initialBook = Book(book.title, book.path, dependencies)
+        val parsedBook = linesParser(initialBook).parse(book.tokenizer)._1
         dependentBooks match {
           case dependentBook +: otherDependentBooks =>
             parseBook(dependentBook, otherDependentBooks, otherBooks, parsedBooks :+ parsedBook)
