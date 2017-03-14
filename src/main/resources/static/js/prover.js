@@ -135,7 +135,7 @@
         }
       }
 
-      _.forEach(theorem.steps, function (step) {
+      _.forEach(theorem.proof.steps, function (step) {
         addStep(step, 0)
       });
     }]

@@ -122,6 +122,12 @@ object Parser {
     def throwIfUndefined(msg: String): Parser[T] = {
       parser.map(_.getOrElse(throw new Exception(msg)))
     }
+
+    def collectWhileDefined: Parser[Seq[T]] = {
+      iterateWhileDefined[Seq[T]](
+        Seq.empty,
+        seq => parser.mapMap(seq :+ _))
+    }
   }
 
   def optional[T](
@@ -138,13 +144,5 @@ object Parser {
     parseFn: T => Parser[Option[T]]
   ): Parser[T] = {
     parseFn(initial).mapFlatMap(iterateWhileDefined(_, parseFn)).orElse(Parser.constant(initial))
-  }
-
-  def collectWhileDefined[T](
-    parseFn: Seq[T] => Parser[Option[T]]
-  ): Parser[Seq[T]] = {
-    iterateWhileDefined[Seq[T]](
-      Seq.empty,
-      seq => parseFn(seq).mapMap(seq :+ _))
   }
 }
