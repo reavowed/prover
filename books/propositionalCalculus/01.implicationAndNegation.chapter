@@ -1,7 +1,7 @@
 chapter Implication and Negation
 We start by introducing our two fundamental connectives, → and ¬, and proving some basic facts about them.
 
-axiom Repeat
+axiom Repetition
 premise φ
 conclusion φ
 
@@ -44,11 +44,19 @@ conclusion φ
 
 theorem Proof by Self-Contradiction
 premise proves φ ¬ φ
+assume φ {
+  prove φ
+  prove ¬ φ
+}
 prove ¬ φ
 qed
 
 theorem Proof by Self-Contradiction (Inverted)
 premise proves ¬ φ φ
+assume ¬ φ {
+  prove φ
+  prove ¬ φ
+}
 prove φ
 qed
 
@@ -56,6 +64,7 @@ theorem Add Double Negative
 premise φ
 assume ¬ φ {
   prove φ
+  prove ¬ φ
 }
 prove ¬ ¬ φ
 qed
@@ -63,6 +72,7 @@ qed
 theorem Remove Double Negative
 premise ¬ ¬ φ
 assume ¬ φ {
+  prove ¬ φ
   prove ¬ ¬ φ
 }
 prove φ
@@ -106,9 +116,6 @@ qed
 
 theorem Contraposition
 premise → φ ψ
-assume ¬ ψ {
-  prove ¬ φ
-}
 prove → ¬ ψ ¬ φ
 qed
 
