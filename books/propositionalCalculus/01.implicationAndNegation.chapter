@@ -17,9 +17,6 @@ premise φ
 conclusion ψ
 
 theorem Implication Is Reflexive
-assume φ {
-  prove φ
-}
 prove → φ φ
 qed
 
@@ -47,17 +44,18 @@ conclusion φ
 
 theorem Proof by Self-Contradiction
 premise proves φ ¬ φ
-assume φ {
-  prove φ
-}
 prove ¬ φ
+qed
+
+theorem Proof by Self-Contradiction (Inverted)
+premise proves ¬ φ φ
+prove φ
 qed
 
 theorem Add Double Negative
 premise φ
 assume ¬ φ {
   prove φ
-  prove ¬ φ
 }
 prove ¬ ¬ φ
 qed
@@ -65,7 +63,6 @@ qed
 theorem Remove Double Negative
 premise ¬ ¬ φ
 assume ¬ φ {
-  prove ¬ φ
   prove ¬ ¬ φ
 }
 prove φ
