@@ -108,30 +108,31 @@
         $scope.premiseText = joinPremises($scope.premises);
       }
 
-      function addRow(prefix, statement, indentLevel) {
+      function addAssumption(assumption, steps, indentLevel) {
         $scope.proofRows.push({
-          prefix: prefix,
-          statement: statement,
+          prefix: 'Assume',
+          statement: assumption,
           indentLevel: indentLevel
         });
-      }
-
-      function addAssumption(assumption, steps, indentLevel) {
-        addRow('Assume', assumption, indentLevel);
         _.forEach(steps, function (step) {
           addStep(step, indentLevel + 1)
         });
       }
 
       function addAssertion(assertion, indentLevel) {
-        addRow('Then', assertion.statement, indentLevel);
+        $scope.proofRows.push({
+          prefix: 'Then',
+          statement: assertion.provenStatement.statement,
+          inferenceName: assertion.inference.name,
+          indentLevel: indentLevel
+        });
       }
 
       function addStep(step, indentLevel) {
         if (step.assumption) {
           addAssumption(step.assumption, step.steps, indentLevel);
         } else {
-          addAssertion(step.provenStatement, indentLevel);
+          addAssertion(step, indentLevel);
         }
       }
 

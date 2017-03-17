@@ -36,6 +36,9 @@
                         <span ng-repeat="i in _.range(row.indentLevel)" class="proofIndent"></span>
                         <span>{{row.prefix}} {{row.statement}}.</span>
                     </td>
+                    <td>
+                        <span ng-if="row.inferenceName" class="stepInferenceId">{{row.inferenceName}}</span>
+                    </td>
                 </tr>
             </table>
         </div>
