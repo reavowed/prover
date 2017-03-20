@@ -74,6 +74,14 @@ package object model {
     }
   }
 
+  implicit class IteratorOptionOps[T](iterator: Iterator[Option[T]]) {
+    def collectDefined: Iterator[T] = {
+      iterator.collect {
+        case Some(t) => t
+      }
+    }
+  }
+
   implicit class SeqParserOps[T](x: Seq[Parser[T]]) {
     def traverseParser: Parser[Seq[T]] = {
       x.foldLeft(Parser.constant(Seq.empty[T])) { case (seqParser, tParser) =>

@@ -109,6 +109,26 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Negation(φ))
     }
 
+    "accept assertion of the conclusion of an inference with a deduced premise that matches another inference" +
+      "which requires the match to account for both premise and conclusion" in {
+      val deduction = new Axiom(
+        "Deduction",
+        Seq(DeducedPremise(φ, ψ)),
+        Implication(φ, ψ))
+      val addRightConjunct = new Axiom(
+        "Add Right Conjunct",
+        Seq(φ),
+        Disjunction(φ, ψ))
+
+      val theorem = parseTheorem(
+        "X",
+        "prove → φ ∨ φ ψ",
+        "qed")(
+        contextWith(deduction, addRightConjunct))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(φ, Disjunction(φ, ψ)))
+    }
+
     "accept assertion of the conclusion of an inference with a deduced premise that partially matches another inference" in {
       val repetition = new Axiom(
         "Repetition",

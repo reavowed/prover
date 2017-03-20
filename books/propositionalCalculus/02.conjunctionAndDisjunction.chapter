@@ -1,0 +1,76 @@
+chapter Conjunction and Disjunction
+We introduce two more connectives, ∧ (conjunction, or 'and') and ∨ (disjunction, or 'or'), which are defined in terms of the two fundamental connectives → and ¬.
+
+statement ∧ (φ ψ) definition (¬ → φ ¬ ψ)
+
+theorem Conjunction
+premise φ
+premise ψ
+assume → φ ¬ ψ {
+  prove ψ
+  prove ¬ ψ
+}
+prove ¬ → φ ¬ ψ
+prove ∧ φ ψ
+qed
+
+theorem Extract Left Conjunct
+premise ∧ φ ψ
+assume ¬ φ {
+  prove → φ ¬ ψ
+  prove ¬ → φ ¬ ψ
+}
+prove φ
+qed
+
+theorem Extract Right Conjunct
+premise ∧ φ ψ
+assume ¬ ψ {
+  prove → φ ¬ ψ
+  prove ¬ → φ ¬ ψ
+}
+prove ψ
+qed
+
+theorem Reverse Conjunction
+premise ∧ φ ψ
+prove φ
+prove ψ
+prove ∧ ψ φ
+qed
+
+statement ∨ (φ ψ) definition (→ ¬ φ ψ)
+
+theorem Add Right Disjunct
+premise φ
+prove → ¬ φ ψ
+prove ∨ φ ψ
+qed
+
+theorem Add Left Disjunct
+premise ψ
+prove → ¬ φ ψ
+prove ∨ φ ψ
+qed
+
+theorem Eliminate Disjunction
+premise → φ χ
+premise → ψ χ
+premise ∨ φ ψ
+prove → ¬ φ ψ
+prove → ¬ φ χ
+prove χ
+qed
+
+theorem Combine Cases
+premise → φ χ
+premise → ψ χ
+prove → ∨ φ ψ χ
+qed
+
+theorem Reverse Disjunction
+premise ∨ φ ψ
+prove → ψ ∨ ψ φ
+prove → φ ∨ ψ φ
+prove ∨ ψ φ
+qed

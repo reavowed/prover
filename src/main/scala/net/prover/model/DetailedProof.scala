@@ -119,35 +119,60 @@ object DetailedProof {
 
 
     def proveAssertion(): AssertionStep = {
-      availableInferences.mapCollect { inference =>
+      val matchingInferences = availableInferences.map { inference =>
         inference.conclusion.statement.calculateSubstitutions(assertion, Substitutions.empty).map(inference -> _)
-      }.flatMap { case (inference, substitutions) =>
-        matchPremisesToFactsOrInferences(inference.premises, substitutions).map(inference -> _)
-      }.map { case (inference, (matchedPremises, substitutions)) =>
-        makeAssertionStep(assertion, inference, matchedPremises, substitutions)
-      }.headOption.getOrElse(throw new Exception(s"Could not prove statement $assertion"))
-    }
+      }.collect {
+        case Some(t) => t
+      }
+      val proofsViaFacts = matchingInferences.iterator.flatMap { case (inference, substitutions) =>
+        matchPremisesToFacts(inference.premises, substitutions).map(inference -> _)
+      }
+      val proofsViaDirectInferences = matchingInferences.iterator.flatMap { case (inference, substitutions) =>
+        matchPremisesToFactsOrDirectInferences(inference.premises, substitutions).map(inference -> _)
+      }
+      val proofsViaIndirectInferences = matchingInferences.iterator.flatMap { case (inference, substitutions) =>
+        matchPremisesToFactsOrIndirectInferences(inference.premises, substitutions).map(inference -> _)
+      }
 
-    private def matchPremisesToFactsOrInferences(
-      premises: Seq[Premise],
-      substitutions: Substitutions
-    ): Seq[(Seq[MatchedPremise], Substitutions)] = {
-      matchPremises(premises, substitutions, matchPremiseToFactsOrInferences)
+      val allProofs = proofsViaFacts ++ proofsViaDirectInferences ++ proofsViaIndirectInferences
+
+      val stepIterator = allProofs.map { case (inference, (matchedPremises, substitutions)) =>
+        makeAssertionStep(assertion, inference, matchedPremises, substitutions)
+      }
+      if (stepIterator.hasNext) {
+        stepIterator.next()
+      } else {
+        throw new Exception(s"Could not prove statement $assertion")
+      }
     }
 
     private def matchPremisesToFacts(
       premises: Seq[Premise],
       substitutions: Substitutions
-    ): Seq[(Seq[MatchedPremise], Substitutions)] = {
+    ): Iterator[(Seq[MatchedPremise], Substitutions)] = {
       matchPremises(premises, substitutions, matchPremiseToFacts)
+    }
+
+    private def matchPremisesToFactsOrDirectInferences(
+      premises: Seq[Premise],
+      substitutions: Substitutions
+    ): Iterator[(Seq[MatchedPremise], Substitutions)] = {
+      matchPremises(premises, substitutions, matchPremiseToFactsOrDirectInferences)
+    }
+
+    private def matchPremisesToFactsOrIndirectInferences(
+      premises: Seq[Premise],
+      substitutions: Substitutions
+    ): Iterator[(Seq[MatchedPremise], Substitutions)] = {
+      matchPremises(premises, substitutions, matchPremiseToFactsOrIndirectInferences)
     }
 
     private def matchPremises(
       premises: Seq[Premise],
       substitutions: Substitutions,
-      premiseMatcher: (Premise, Substitutions) => Seq[(MatchedPremise, Substitutions)]
-    ): Seq[(Seq[MatchedPremise], Substitutions)] = {
-      val initial = Seq((Seq.empty[MatchedPremise], substitutions))
+      premiseMatcher: (Premise, Substitutions) => Iterator[(MatchedPremise, Substitutions)]
+    ): Iterator[(Seq[MatchedPremise], Substitutions)] = {
+      val initial = Iterator((Seq.empty[MatchedPremise], substitutions))
       premises.foldLeft(initial) { case (acc, premise) =>
         acc.flatMap { case (matchedPremisesSoFar, substitutionsSoFar) =>
           premiseMatcher(premise, substitutionsSoFar).map { case (matchedPremise, newSubstitutions) =>
@@ -157,18 +182,10 @@ object DetailedProof {
       }
     }
 
-    private def matchPremiseToFactsOrInferences(
-      inferencePremise: Premise,
-      substitutionsSoFar: Substitutions
-    ): Seq[(MatchedPremise, Substitutions)] = {
-      matchPremiseToFacts(inferencePremise, substitutionsSoFar) ++
-        matchPremiseToInferences(inferencePremise, substitutionsSoFar)
-    }
-
     private def matchPremiseToFacts(
       inferencePremise: Premise,
       substitutionsSoFar: Substitutions
-    ): Seq[(MatchedPremise, Substitutions)] = {
+    ): Iterator[(MatchedPremise, Substitutions)] = {
       inferencePremise match {
         case directPremise: DirectPremise =>
           matchDirectPremiseToFacts(directPremise, substitutionsSoFar)
@@ -177,53 +194,76 @@ object DetailedProof {
       }
     }
 
-    private def matchPremiseToInferences(
+    private def matchPremiseToFactsOrDirectInferences(
       inferencePremise: Premise,
       substitutionsSoFar: Substitutions
-    ): Seq[(MatchedPremise, Substitutions)] = {
-      inferencePremise match {
-        case directPremise: DirectPremise =>
-          Nil
-        case deducedPremise: DeducedPremise =>
-          matchDeducedPremiseToInferences(deducedPremise, substitutionsSoFar)
-      }
+    ): Iterator[(MatchedPremise, Substitutions)] = {
+      matchPremiseToFacts(inferencePremise, substitutionsSoFar) ++
+        (inferencePremise match {
+          case directPremise: DirectPremise =>
+            Iterator.empty
+          case deducedPremise: DeducedPremise =>
+            matchDeducedPremiseToDirectInferences(deducedPremise, substitutionsSoFar)
+        })
+    }
+
+    private def matchPremiseToFactsOrIndirectInferences(
+      inferencePremise: Premise,
+      substitutionsSoFar: Substitutions
+    ): Iterator[(MatchedPremise, Substitutions)] = {
+      matchPremiseToFactsOrDirectInferences(inferencePremise, substitutionsSoFar) ++
+        (inferencePremise match {
+          case directPremise: DirectPremise =>
+            Iterator.empty
+          case deducedPremise: DeducedPremise =>
+            matchDeducedPremiseToIndirectInferences(deducedPremise, substitutionsSoFar)
+        })
     }
 
     private def matchDirectPremiseToFacts(
       inferencePremise: DirectPremise,
       substitutionsSoFar: Substitutions
-    ): Seq[(MatchedPremise, Substitutions)] = {
-      provenAssertions.map { case ReferencedAssertion(provenStatement, reference) =>
+    ): Iterator[(MatchedPremise, Substitutions)] = {
+      provenAssertions.iterator.map { case ReferencedAssertion(provenStatement, reference) =>
         inferencePremise.statement.calculateSubstitutions(provenStatement.statement, substitutionsSoFar)
           .map((MatchedDirectPremise(inferencePremise, provenStatement, reference), _))
-      } collectDefined
+      }.collectDefined
     }
 
     private def matchDeducedPremiseToFacts(
       inferencePremise: DeducedPremise,
       substitutionsSoFar: Substitutions
-    ): Seq[(MatchedPremise, Substitutions)] = {
-      provenDeductions.map { case ReferencedDeduction(provenAssumption, provenDeduction, reference) =>
+    ): Iterator[(MatchedPremise, Substitutions)] = {
+      provenDeductions.iterator.map { case ReferencedDeduction(provenAssumption, provenDeduction, reference) =>
         inferencePremise.antecedent.calculateSubstitutions(provenAssumption, substitutionsSoFar)
           .flatMap(inferencePremise.consequent.calculateSubstitutions(provenDeduction.statement, _))
           .map((MatchedDeducedPremise(inferencePremise, provenAssumption, provenDeduction, reference), _))
       }.collectDefined
     }
 
-    private def matchDeducedPremiseToInferences(
+    private def matchDeducedPremiseToDirectInferences(
       inferencePremise: DeducedPremise,
       substitutionsSoFar: Substitutions
-    ): Seq[(MatchedPremise, Substitutions)] = {
-      availableInferences.flatMap { inference =>
-        matchDeducedPremiseToInference(inferencePremise, inference, substitutionsSoFar)
+    ): Iterator[(MatchedPremise, Substitutions)] = {
+      availableInferences.iterator.flatMap { inference =>
+        matchDeducedPremiseToDirectInference(inferencePremise, inference, substitutionsSoFar)
       }
     }
 
-    private def matchDeducedPremiseToInference(
+    private def matchDeducedPremiseToIndirectInferences(
+      inferencePremise: DeducedPremise,
+      substitutionsSoFar: Substitutions
+    ): Iterator[(MatchedPremise, Substitutions)] = {
+      availableInferences.iterator.flatMap { inference =>
+        matchDeducedPremiseToIndirectInference(inferencePremise, inference, substitutionsSoFar)
+      }
+    }
+
+    private def matchDeducedPremiseToDirectInference(
       originalPremise: DeducedPremise,
       inference: Inference,
       startingPremiseSubstitutions: Substitutions
-    ): Seq[(MatchedPremise, Substitutions)] = {
+    ): Iterator[(MatchedPremise, Substitutions)] = {
       inference match {
         case Inference(_, Seq(DirectPremise(inferenceAssumption)), inferenceConclusion) =>
           matchDeducedPremiseToAssumptionAndConclusion(
@@ -236,25 +276,36 @@ object DetailedProof {
             val reference = InferenceReference(inference, Nil, inferenceSubstitutions)
             val matchedPremise = MatchedDeducedPremise(originalPremise, condensedAssumption, condensedConclusion, reference)
             (matchedPremise, premiseSubstitutions)
-          } toSeq
+          } toIterator
+        case _ =>
+          Iterator.empty
+      }
+    }
+
+    private def matchDeducedPremiseToIndirectInference(
+      originalPremise: DeducedPremise,
+      inference: Inference,
+      startingPremiseSubstitutions: Substitutions
+    ): Iterator[(MatchedPremise, Substitutions)] = {
+      inference match {
         case Inference(_, initialPremises :+ DirectPremise(inferenceAssumption), inferenceConclusion) =>
           for {
             (matchedInitialPremises, inferenceSubstitutionsAfterInitialPremises) <-
-              matchPremisesToFacts(initialPremises, Substitutions.empty)
+            matchPremisesToFacts(initialPremises, Substitutions.empty)
             (condensedAssumption, condensedConclusion, premiseSubstitutions, inferenceSubstitutions) <-
-              matchDeducedPremiseToAssumptionAndConclusion(
-                originalPremise,
-                inferenceAssumption,
-                inferenceConclusion,
-                startingPremiseSubstitutions,
-                inferenceSubstitutionsAfterInitialPremises)
+            matchDeducedPremiseToAssumptionAndConclusion(
+              originalPremise,
+              inferenceAssumption,
+              inferenceConclusion,
+              startingPremiseSubstitutions,
+              inferenceSubstitutionsAfterInitialPremises)
           } yield {
             val reference = InferenceReference(inference, matchedInitialPremises.map(_.reference), inferenceSubstitutions)
             val matchedPremise = MatchedDeducedPremise(originalPremise, condensedAssumption, condensedConclusion, reference)
             (matchedPremise, premiseSubstitutions)
           }
         case _ =>
-          Nil
+          Iterator.empty
       }
     }
 
@@ -266,14 +317,68 @@ object DetailedProof {
       startingInferenceSubstitutions: Substitutions
     ): Option[(Statement, ProvenStatement, Substitutions, Substitutions)] = {
       for {
-        condensedAssumption <- Try(originalPremise.antecedent.applySubstitutions(startingPremiseSubstitutions)).toOption
-        inferenceSubstitutions <- assumption.calculateSubstitutions(condensedAssumption, startingInferenceSubstitutions)
+        (premiseSubstitutions, inferenceSubstitutions) <- condenseStatements(
+          Seq((originalPremise.antecedent, assumption), (originalPremise.consequent, conclusion.statement)),
+          startingPremiseSubstitutions,
+          startingInferenceSubstitutions)
+        condensedAssumption <- Try(assumption.applySubstitutions(inferenceSubstitutions)).toOption
         condensedConclusion <- Try(conclusion.applySubstitutions(inferenceSubstitutions)).toOption
-        premiseSubstitutions <- originalPremise.consequent.calculateSubstitutions(
-          condensedConclusion.statement,
-          startingPremiseSubstitutions)
       } yield {
         (condensedAssumption, condensedConclusion, premiseSubstitutions, inferenceSubstitutions)
+      }
+    }
+
+    private def condenseStatements(
+      pairs: Seq[(Statement, Statement)],
+      initialLeftSubstitutions: Substitutions,
+      initialRightSubstitutions: Substitutions
+    ): Option[(Substitutions, Substitutions)] = {
+      condenseStatements(pairs, Nil, initialLeftSubstitutions, initialRightSubstitutions)
+    }
+
+    private def condenseStatements(
+      toMatch: Seq[(Statement, Statement)],
+      unmatched: Seq[(Statement, Statement)],
+      initialLeftSubstitutions: Substitutions,
+      initialRightSubstitutions: Substitutions
+    ): Option[(Substitutions, Substitutions)] = {
+      toMatch match {
+        case Nil =>
+          if (unmatched.isEmpty)
+            Some((initialLeftSubstitutions, initialRightSubstitutions))
+          else
+            None
+        case (left, right) +: othersToMatch =>
+          condenseEither(left, right, initialLeftSubstitutions, initialRightSubstitutions) match {
+            case Some((updatedLeftSubstitutions, updatedRightSubstitutions)) =>
+              condenseStatements(unmatched ++ othersToMatch, Nil, updatedLeftSubstitutions, updatedRightSubstitutions)
+            case None =>
+              condenseStatements(othersToMatch, unmatched :+ (left, right), initialLeftSubstitutions, initialRightSubstitutions)
+          }
+      }
+    }
+
+    private def condenseEither(
+      left: Statement,
+      right: Statement,
+      leftSubstitutions: Substitutions,
+      rightSubstitutions: Substitutions
+    ): Option[(Substitutions, Substitutions)] = {
+      condenseLeft(left, right, leftSubstitutions, rightSubstitutions).map(leftSubstitutions -> _)
+        .orElse(condenseLeft(right, left, rightSubstitutions, leftSubstitutions).map(_ -> rightSubstitutions))
+    }
+
+    private def condenseLeft(
+      left: Statement,
+      right: Statement,
+      leftSubstitutions: Substitutions,
+      rightSubstitutions: Substitutions
+    ): Option[Substitutions] = {
+      for {
+        substitutedLeft <- Try(left.applySubstitutions(leftSubstitutions)).toOption
+        updatedRightSubstitutions <- right.calculateSubstitutions(substitutedLeft, rightSubstitutions)
+      } yield {
+        updatedRightSubstitutions
       }
     }
 

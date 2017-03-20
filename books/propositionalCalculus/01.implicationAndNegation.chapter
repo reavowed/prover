@@ -109,6 +109,14 @@ assume φ {
 prove → φ ψ
 qed
 
+theorem A False Statement Implies Anything
+premise φ
+assume ¬ φ {
+  prove ψ
+}
+prove → ¬ φ ψ
+qed
+
 theorem Modus Tollens
 premise → φ ψ
 premise ¬ ψ
