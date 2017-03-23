@@ -7,9 +7,6 @@ class TheoremSpec extends ProverSpec {
     def parseTheorem(text: String*)(implicit context: Context): Theorem = {
       Theorem.parser(context).parseAndDiscard(text.mkString("\n"))
     }
-    def contextWith(inferences: Inference*): Context = {
-      implicitly[Context].copy(inferences = inferences)
-    }
 
     "not accept an unfounded assertion" in {
       parseTheorem(

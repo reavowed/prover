@@ -91,6 +91,10 @@ trait ProverSpec extends Specification {
     context.addStatementDefinition(statementDefinition)
   }.addTermDefinition(EmptySetDefinition)
 
+  def contextWith(inferences: Inference*): Context = {
+    defaultContext.copy(inferences = inferences)
+  }
+
   implicit class ParserOps[T](parser: Parser[T]) {
     def parseAndDiscard(text: String): T = {
       parser.parse(Tokenizer.fromString(text, Paths.get("")))._1

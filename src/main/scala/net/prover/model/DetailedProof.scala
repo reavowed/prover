@@ -93,30 +93,27 @@ object DetailedProof {
     }
   }
 
-  private case class Prover(
+  case class Prover(
     assertion: Statement,
     provenAssertions: Seq[ReferencedAssertion],
     provenDeductions: Seq[ReferencedDeduction])(
     implicit context: Context)
   {
-    def availableInferences: Seq[Inference] = context.inferences
+    def availableInferences: Seq[Inference] = context.inferences.reverse
 
-    sealed trait MatchedPremise {
+    sealed trait PremiseMatch {
       def provenStatement: ProvenStatement
       def reference: Reference
     }
-    case class MatchedDirectPremise(
-      premise: DirectPremise,
+    case class DirectPremiseMatch(
       provenStatement: ProvenStatement,
-      reference: DirectReference)
-      extends MatchedPremise
-    case class MatchedDeducedPremise(
-      premise: DeducedPremise,
+      reference: Reference)
+      extends PremiseMatch
+    case class DeducedPremiseMatch(
       assumption: Statement,
       provenStatement: ProvenStatement,
       reference: Reference)
-      extends MatchedPremise
-
+      extends PremiseMatch
 
     def proveAssertion(): AssertionStep = {
       val matchingInferences = availableInferences.map { inference =>
@@ -126,17 +123,17 @@ object DetailedProof {
       }
       val proofsViaFacts = matchingInferences.iterator.flatMap { case (inference, substitutions) =>
         matchPremisesToFacts(inference.premises, substitutions).map(inference -> _)
-      }
+      }.toList
       val proofsViaDirectInferences = matchingInferences.iterator.flatMap { case (inference, substitutions) =>
         matchPremisesToFactsOrDirectInferences(inference.premises, substitutions).map(inference -> _)
-      }
+      }.toList
       val proofsViaIndirectInferences = matchingInferences.iterator.flatMap { case (inference, substitutions) =>
         matchPremisesToFactsOrIndirectInferences(inference.premises, substitutions).map(inference -> _)
-      }
+      }.toList
 
       val allProofs = proofsViaFacts ++ proofsViaDirectInferences ++ proofsViaIndirectInferences
 
-      val stepIterator = allProofs.map { case (inference, (matchedPremises, substitutions)) =>
+      val stepIterator = allProofs.iterator.map { case (inference, (matchedPremises, substitutions)) =>
         makeAssertionStep(assertion, inference, matchedPremises, substitutions)
       }
       if (stepIterator.hasNext) {
@@ -149,33 +146,33 @@ object DetailedProof {
     private def matchPremisesToFacts(
       premises: Seq[Premise],
       substitutions: Substitutions
-    ): Iterator[(Seq[MatchedPremise], Substitutions)] = {
+    ): Iterator[(Seq[PremiseMatch], Substitutions)] = {
       matchPremises(premises, substitutions, matchPremiseToFacts)
     }
 
     private def matchPremisesToFactsOrDirectInferences(
       premises: Seq[Premise],
       substitutions: Substitutions
-    ): Iterator[(Seq[MatchedPremise], Substitutions)] = {
+    ): Iterator[(Seq[PremiseMatch], Substitutions)] = {
       matchPremises(premises, substitutions, matchPremiseToFactsOrDirectInferences)
     }
 
-    private def matchPremisesToFactsOrIndirectInferences(
+    def matchPremisesToFactsOrIndirectInferences(
       premises: Seq[Premise],
       substitutions: Substitutions
-    ): Iterator[(Seq[MatchedPremise], Substitutions)] = {
+    ): Iterator[(Seq[PremiseMatch], Substitutions)] = {
       matchPremises(premises, substitutions, matchPremiseToFactsOrIndirectInferences)
     }
 
     private def matchPremises(
       premises: Seq[Premise],
       substitutions: Substitutions,
-      premiseMatcher: (Premise, Substitutions) => Iterator[(MatchedPremise, Substitutions)]
-    ): Iterator[(Seq[MatchedPremise], Substitutions)] = {
-      val initial = Iterator((Seq.empty[MatchedPremise], substitutions))
+      premiseMatcher: (Premise, Substitutions) => Iterator[(PremiseMatch, Substitutions)]
+    ): Iterator[(Seq[PremiseMatch], Substitutions)] = {
+      val initial = Iterator((Seq.empty[PremiseMatch], substitutions))
       premises.foldLeft(initial) { case (acc, premise) =>
         acc.flatMap { case (matchedPremisesSoFar, substitutionsSoFar) =>
-          premiseMatcher(premise, substitutionsSoFar).map { case (matchedPremise, newSubstitutions) =>
+          premiseMatcher(premise, substitutionsSoFar).toList.map { case (matchedPremise, newSubstitutions) =>
             (matchedPremisesSoFar :+ matchedPremise, newSubstitutions)
           }
         }
@@ -185,7 +182,7 @@ object DetailedProof {
     private def matchPremiseToFacts(
       inferencePremise: Premise,
       substitutionsSoFar: Substitutions
-    ): Iterator[(MatchedPremise, Substitutions)] = {
+    ): Iterator[(PremiseMatch, Substitutions)] = {
       inferencePremise match {
         case directPremise: DirectPremise =>
           matchDirectPremiseToFacts(directPremise, substitutionsSoFar)
@@ -197,11 +194,11 @@ object DetailedProof {
     private def matchPremiseToFactsOrDirectInferences(
       inferencePremise: Premise,
       substitutionsSoFar: Substitutions
-    ): Iterator[(MatchedPremise, Substitutions)] = {
+    ): Iterator[(PremiseMatch, Substitutions)] = {
       matchPremiseToFacts(inferencePremise, substitutionsSoFar) ++
         (inferencePremise match {
           case directPremise: DirectPremise =>
-            Iterator.empty
+            matchDirectPremiseToInferences(directPremise, substitutionsSoFar)
           case deducedPremise: DeducedPremise =>
             matchDeducedPremiseToDirectInferences(deducedPremise, substitutionsSoFar)
         })
@@ -210,7 +207,7 @@ object DetailedProof {
     private def matchPremiseToFactsOrIndirectInferences(
       inferencePremise: Premise,
       substitutionsSoFar: Substitutions
-    ): Iterator[(MatchedPremise, Substitutions)] = {
+    ): Iterator[(PremiseMatch, Substitutions)] = {
       matchPremiseToFactsOrDirectInferences(inferencePremise, substitutionsSoFar) ++
         (inferencePremise match {
           case directPremise: DirectPremise =>
@@ -223,28 +220,49 @@ object DetailedProof {
     private def matchDirectPremiseToFacts(
       inferencePremise: DirectPremise,
       substitutionsSoFar: Substitutions
-    ): Iterator[(MatchedPremise, Substitutions)] = {
+    ): Iterator[(PremiseMatch, Substitutions)] = {
       provenAssertions.iterator.map { case ReferencedAssertion(provenStatement, reference) =>
         inferencePremise.statement.calculateSubstitutions(provenStatement.statement, substitutionsSoFar)
-          .map((MatchedDirectPremise(inferencePremise, provenStatement, reference), _))
+          .map((DirectPremiseMatch(provenStatement, reference), _))
       }.collectDefined
+    }
+
+    def matchDirectPremiseToInferences(
+      directPremise: DirectPremise,
+      substitutionsSoFar: Substitutions
+    ): Iterator[(PremiseMatch, Substitutions)] = {
+      availableInferences.iterator.collect {
+        case inference @ Inference(_, Nil, inferenceConclusion) =>
+          for {
+            (premiseSubstitutions, inferenceSubstitutions) <- condenseEither(
+              directPremise.statement,
+              inferenceConclusion.statement,
+              substitutionsSoFar,
+              Substitutions.empty)
+          } yield {
+            val provenStatement = inferenceConclusion.applySubstitutions(inferenceSubstitutions)
+            val reference = InferenceReference(inference, Nil, inferenceSubstitutions)
+            val matchedPremise = DirectPremiseMatch(provenStatement, reference)
+            (matchedPremise, premiseSubstitutions)
+          }
+      } collectDefined
     }
 
     private def matchDeducedPremiseToFacts(
       inferencePremise: DeducedPremise,
       substitutionsSoFar: Substitutions
-    ): Iterator[(MatchedPremise, Substitutions)] = {
+    ): Iterator[(PremiseMatch, Substitutions)] = {
       provenDeductions.iterator.map { case ReferencedDeduction(provenAssumption, provenDeduction, reference) =>
         inferencePremise.antecedent.calculateSubstitutions(provenAssumption, substitutionsSoFar)
           .flatMap(inferencePremise.consequent.calculateSubstitutions(provenDeduction.statement, _))
-          .map((MatchedDeducedPremise(inferencePremise, provenAssumption, provenDeduction, reference), _))
+          .map((DeducedPremiseMatch(provenAssumption, provenDeduction, reference), _))
       }.collectDefined
     }
 
     private def matchDeducedPremiseToDirectInferences(
       inferencePremise: DeducedPremise,
       substitutionsSoFar: Substitutions
-    ): Iterator[(MatchedPremise, Substitutions)] = {
+    ): Iterator[(PremiseMatch, Substitutions)] = {
       availableInferences.iterator.flatMap { inference =>
         matchDeducedPremiseToDirectInference(inferencePremise, inference, substitutionsSoFar)
       }
@@ -253,7 +271,7 @@ object DetailedProof {
     private def matchDeducedPremiseToIndirectInferences(
       inferencePremise: DeducedPremise,
       substitutionsSoFar: Substitutions
-    ): Iterator[(MatchedPremise, Substitutions)] = {
+    ): Iterator[(PremiseMatch, Substitutions)] = {
       availableInferences.iterator.flatMap { inference =>
         matchDeducedPremiseToIndirectInference(inferencePremise, inference, substitutionsSoFar)
       }
@@ -263,7 +281,7 @@ object DetailedProof {
       originalPremise: DeducedPremise,
       inference: Inference,
       startingPremiseSubstitutions: Substitutions
-    ): Iterator[(MatchedPremise, Substitutions)] = {
+    ): Iterator[(PremiseMatch, Substitutions)] = {
       inference match {
         case Inference(_, Seq(DirectPremise(inferenceAssumption)), inferenceConclusion) =>
           matchDeducedPremiseToAssumptionAndConclusion(
@@ -274,7 +292,7 @@ object DetailedProof {
             Substitutions.empty
           ) map { case (condensedAssumption, condensedConclusion, premiseSubstitutions, inferenceSubstitutions) =>
             val reference = InferenceReference(inference, Nil, inferenceSubstitutions)
-            val matchedPremise = MatchedDeducedPremise(originalPremise, condensedAssumption, condensedConclusion, reference)
+            val matchedPremise = DeducedPremiseMatch(condensedAssumption, condensedConclusion, reference)
             (matchedPremise, premiseSubstitutions)
           } toIterator
         case _ =>
@@ -286,22 +304,22 @@ object DetailedProof {
       originalPremise: DeducedPremise,
       inference: Inference,
       startingPremiseSubstitutions: Substitutions
-    ): Iterator[(MatchedPremise, Substitutions)] = {
+    ): Iterator[(PremiseMatch, Substitutions)] = {
       inference match {
-        case Inference(_, initialPremises :+ DirectPremise(inferenceAssumption), inferenceConclusion) =>
+        case Inference(_, initialPremises :+ DirectPremise(inferenceAssumption), inferenceConclusion) if initialPremises.nonEmpty =>
           for {
             (matchedInitialPremises, inferenceSubstitutionsAfterInitialPremises) <-
-            matchPremisesToFacts(initialPremises, Substitutions.empty)
+              matchPremisesToFacts(initialPremises, Substitutions.empty)
             (condensedAssumption, condensedConclusion, premiseSubstitutions, inferenceSubstitutions) <-
-            matchDeducedPremiseToAssumptionAndConclusion(
-              originalPremise,
-              inferenceAssumption,
-              inferenceConclusion,
-              startingPremiseSubstitutions,
-              inferenceSubstitutionsAfterInitialPremises)
+              matchDeducedPremiseToAssumptionAndConclusion(
+                originalPremise,
+                inferenceAssumption,
+                inferenceConclusion,
+                startingPremiseSubstitutions,
+                inferenceSubstitutionsAfterInitialPremises).iterator
           } yield {
             val reference = InferenceReference(inference, matchedInitialPremises.map(_.reference), inferenceSubstitutions)
-            val matchedPremise = MatchedDeducedPremise(originalPremise, condensedAssumption, condensedConclusion, reference)
+            val matchedPremise = DeducedPremiseMatch(condensedAssumption, condensedConclusion, reference)
             (matchedPremise, premiseSubstitutions)
           }
         case _ =>
@@ -385,7 +403,7 @@ object DetailedProof {
     private def makeAssertionStep(
       assertion: Statement,
       inference: Inference,
-      matchedPremises: Seq[MatchedPremise],
+      matchedPremises: Seq[PremiseMatch],
       substitutions: Substitutions
     ): AssertionStep = {
       val substitutedInference = inference.applySubstitutions(substitutions)

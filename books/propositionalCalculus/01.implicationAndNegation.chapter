@@ -5,11 +5,6 @@ axiom Repetition
 premise φ
 conclusion φ
 
-axiom Inference
-premise proves φ ψ
-premise φ
-conclusion ψ
-
 statement → (φ ψ)
 
 axiom Deduction

@@ -22,7 +22,7 @@ case class Book(
     context.combine(transitiveDependencies.map(_.context))
   }
 
-  protected def transitiveDependencies: Seq[Book] = dependencies.flatMap(_.transitiveDependencies).distinctBy(_.title) :+ this
+  protected def transitiveDependencies: Seq[Book] = (dependencies.flatMap(_.transitiveDependencies) ++ dependencies).distinctBy(_.title)
 }
 
 object Book {

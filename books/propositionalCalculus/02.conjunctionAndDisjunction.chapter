@@ -74,3 +74,16 @@ prove → ψ ∨ ψ φ
 prove → φ ∨ ψ φ
 prove ∨ ψ φ
 qed
+
+theorem Law of the Excluded Middle
+prove → ¬ φ ¬ φ
+prove ∨ φ ¬ φ
+qed
+
+theorem Law of Non-Contradiction
+assume ∧ φ ¬ φ {
+  prove φ
+  prove ¬ φ
+}
+prove ¬ ∧ φ ¬ φ
+qed
