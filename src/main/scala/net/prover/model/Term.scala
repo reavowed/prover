@@ -100,17 +100,12 @@ object Term extends ComponentType {
         context.variables.termVariables.find(_.text == s)
       }
     }
-    val primeVariableRegex = "(\\d)'".r
     def parserForTermType(termType: String): Parser[Term] = {
       termType match {
         case TermSpecificationMatcher(termSpecification) =>
           termSpecification.termParser
         case SpecifiedVariable(variable) =>
           Parser.constant(variable)
-        case IntParser(i) =>
-          Parser.constant(TermVariable((123 - i).toChar.toString))
-        case primeVariableRegex(IntParser(i)) =>
-          Parser.constant(TermVariable((123 - i).toChar.toString + "'"))
         case _ =>
           throw new Exception(s"Unrecognised term type '$termType'")
       }

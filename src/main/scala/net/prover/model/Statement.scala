@@ -104,8 +104,6 @@ object Statement extends ComponentType {
         statementDefinition.statementParser
       case SpecifiedVariable(v) =>
         Parser.constant(v)
-      case IntParser(i) =>
-        Parser.constant(StatementVariable((944 + i).toChar.toString))
       case _ =>
         throw new Exception(s"Unrecognised statement type $statementType")
     }
