@@ -5,6 +5,11 @@ axiom Repetition
 premise φ
 conclusion φ
 
+axiom Inference
+premise proves φ ψ
+premise φ
+conclusion ψ
+
 statement → (φ ψ)
 
 axiom Deduction
@@ -17,6 +22,9 @@ premise φ
 conclusion ψ
 
 theorem Implication Is Reflexive
+assume φ {
+  prove φ
+}
 prove → φ φ
 qed
 
@@ -124,6 +132,9 @@ qed
 
 theorem Contraposition
 premise → φ ψ
+assume ¬ ψ {
+  prove ¬ φ
+}
 prove → ¬ ψ ¬ φ
 qed
 

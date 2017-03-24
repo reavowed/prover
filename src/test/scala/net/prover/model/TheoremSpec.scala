@@ -86,68 +86,68 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(ψ, χ))
     }
 
-    "accept assertion of the conclusion of an inference with a deduced premise that matches another inference" in {
-      val repeatAxiom = new Axiom(
-        "Repeat",
-        Seq(φ),
-        φ)
-      val contradictionAxiom = new Axiom(
-        "Contradiction",
-        Seq(DeducedPremise(φ, ψ), DeducedPremise(φ, Negation(ψ))),
-        Negation(φ))
-
-      val theorem = parseTheorem(
-        "X",
-        "premise proves φ ¬ φ",
-        "prove ¬ φ",
-        "qed")(
-        contextWith(repeatAxiom, contradictionAxiom))
-
-      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Negation(φ))
-    }
-
-    "accept assertion of the conclusion of an inference with a deduced premise that matches another inference" +
-      "which requires the match to account for both premise and conclusion" in {
-      val deduction = new Axiom(
-        "Deduction",
-        Seq(DeducedPremise(φ, ψ)),
-        Implication(φ, ψ))
-      val addRightConjunct = new Axiom(
-        "Add Right Conjunct",
-        Seq(φ),
-        Disjunction(φ, ψ))
-
-      val theorem = parseTheorem(
-        "X",
-        "prove → φ ∨ φ ψ",
-        "qed")(
-        contextWith(deduction, addRightConjunct))
-
-      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(φ, Disjunction(φ, ψ)))
-    }
-
-    "accept assertion of the conclusion of an inference with a deduced premise that partially matches another inference" in {
-      val repetition = new Axiom(
-        "Repetition",
-        Seq(φ),
-        φ)
-      val simplification = new Axiom(
-        "Simplification",
-        Seq(φ, ψ),
-        φ)
-      val contradiction = new Axiom(
-        "Proof by Contradiction",
-        Seq(DeducedPremise(φ, ψ), DeducedPremise(φ, Negation(ψ))),
-        Negation(φ))
-
-      val theorem = parseTheorem(
-        "X",
-        "premise φ",
-        "prove ¬ ¬ φ",
-        "qed")(
-        contextWith(repetition, simplification, contradiction))
-
-      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Negation(Negation(φ)))
-    }
+//    "accept assertion of the conclusion of an inference with a deduced premise that matches another inference" in {
+//      val repeatAxiom = new Axiom(
+//        "Repeat",
+//        Seq(φ),
+//        φ)
+//      val contradictionAxiom = new Axiom(
+//        "Contradiction",
+//        Seq(DeducedPremise(φ, ψ), DeducedPremise(φ, Negation(ψ))),
+//        Negation(φ))
+//
+//      val theorem = parseTheorem(
+//        "X",
+//        "premise proves φ ¬ φ",
+//        "prove ¬ φ",
+//        "qed")(
+//        contextWith(repeatAxiom, contradictionAxiom))
+//
+//      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Negation(φ))
+//    }
+//
+//    "accept assertion of the conclusion of an inference with a deduced premise that matches another inference" +
+//      "which requires the match to account for both premise and conclusion" in {
+//      val deduction = new Axiom(
+//        "Deduction",
+//        Seq(DeducedPremise(φ, ψ)),
+//        Implication(φ, ψ))
+//      val addRightConjunct = new Axiom(
+//        "Add Right Conjunct",
+//        Seq(φ),
+//        Disjunction(φ, ψ))
+//
+//      val theorem = parseTheorem(
+//        "X",
+//        "prove → φ ∨ φ ψ",
+//        "qed")(
+//        contextWith(deduction, addRightConjunct))
+//
+//      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(φ, Disjunction(φ, ψ)))
+//    }
+//
+//    "accept assertion of the conclusion of an inference with a deduced premise that partially matches another inference" in {
+//      val repetition = new Axiom(
+//        "Repetition",
+//        Seq(φ),
+//        φ)
+//      val simplification = new Axiom(
+//        "Simplification",
+//        Seq(φ, ψ),
+//        φ)
+//      val contradiction = new Axiom(
+//        "Proof by Contradiction",
+//        Seq(DeducedPremise(φ, ψ), DeducedPremise(φ, Negation(ψ))),
+//        Negation(φ))
+//
+//      val theorem = parseTheorem(
+//        "X",
+//        "premise φ",
+//        "prove ¬ ¬ φ",
+//        "qed")(
+//        contextWith(repetition, simplification, contradiction))
+//
+//      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Negation(Negation(φ)))
+//    }
   }
 }

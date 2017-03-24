@@ -65,12 +65,21 @@ qed
 theorem Combine Cases
 premise → φ χ
 premise → ψ χ
+assume ∨ φ ψ {
+  prove χ
+}
 prove → ∨ φ ψ χ
 qed
 
 theorem Reverse Disjunction
 premise ∨ φ ψ
+assume ψ {
+  prove ∨ ψ φ
+}
 prove → ψ ∨ ψ φ
+assume φ {
+  prove ∨ ψ φ
+}
 prove → φ ∨ ψ φ
 prove ∨ ψ φ
 qed

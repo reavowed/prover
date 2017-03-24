@@ -124,16 +124,16 @@ object DetailedProof {
       val proofsViaFacts = matchingInferences.iterator.flatMap { case (inference, substitutions) =>
         matchPremisesToFacts(inference.premises, substitutions).map(inference -> _)
       }.toList
-      val proofsViaDirectInferences = matchingInferences.iterator.flatMap { case (inference, substitutions) =>
-        matchPremisesToFactsOrDirectInferences(inference.premises, substitutions).map(inference -> _)
-      }.toList
-      val proofsViaIndirectInferences = matchingInferences.iterator.flatMap { case (inference, substitutions) =>
-        matchPremisesToFactsOrIndirectInferences(inference.premises, substitutions).map(inference -> _)
-      }.toList
+//      val proofsViaDirectInferences = matchingInferences.iterator.flatMap { case (inference, substitutions) =>
+//        matchPremisesToFactsOrDirectInferences(inference.premises, substitutions).map(inference -> _)
+//      }.toList
+//      val proofsViaIndirectInferences = matchingInferences.iterator.flatMap { case (inference, substitutions) =>
+//        matchPremisesToFactsOrIndirectInferences(inference.premises, substitutions).map(inference -> _)
+//      }.toList
 
-      val allProofs = proofsViaFacts ++ proofsViaDirectInferences ++ proofsViaIndirectInferences
+//      val allProofs = proofsViaFacts ++ proofsViaDirectInferences ++ proofsViaIndirectInferences
 
-      val stepIterator = allProofs.iterator.map { case (inference, (matchedPremises, substitutions)) =>
+      val stepIterator = proofsViaFacts.iterator.map { case (inference, (matchedPremises, substitutions)) =>
         makeAssertionStep(assertion, inference, matchedPremises, substitutions)
       }
       if (stepIterator.hasNext) {
