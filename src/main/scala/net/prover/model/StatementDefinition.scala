@@ -1,7 +1,9 @@
 package net.prover.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference.{DirectPremise, Premise}
 
+@JsonIgnoreProperties(Array("symbol", "defaultComponents", "format"))
 case class StatementDefinition(
     symbol: String,
     defaultComponents: Seq[Component],

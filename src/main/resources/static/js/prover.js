@@ -108,18 +108,84 @@
         $scope.premiseText = joinPremises($scope.premises);
       }
 
+      $scope.highlightRow = function(rowData, event) {
+        if (!rowData.assertion) {
+          return;
+        }
+        var tableRow = $(event.target).closest("tr");
+        var proofContainer = tableRow.closest(".theoremProof");
+        var allTableRows = proofContainer.find("tr");
+        var rowIndex = allTableRows.index(tableRow);
+        var premises = proofContainer.find(".premise");
+
+        var previousRows = $scope.proofRows.slice(0, rowIndex);
+        var referrableRows = _.filter(previousRows, function(row) {
+          return row.indentLevel <= rowData.indentLevel;
+        });
+        if (rowData.assumption) {
+          referrableRows.push(rowData);
+        }
+
+        function highlightPremise(reference, subreference) {
+          if (reference < premises.length) {
+            premises.eq(reference).addClass("highlightPremise");
+          } else {
+            var referredRow = referrableRows[reference - premises.length];
+            var referredRowIndex = _.indexOf($scope.proofRows, referredRow);
+            var referredTableRow = allTableRows.eq(referredRowIndex);
+            var referredAssumption = referredTableRow.find(".assumption");
+            var referredAssertion = referredTableRow.find(".assertion");
+            if (referredAssumption.length) {
+              referredAssumption.addClass("highlightPremise");
+            } else {
+              referredAssertion.addClass("highlightPremise");
+            }
+            if (subreference != null) {
+              var followingRows = _.drop($scope.proofRows, referredRowIndex + 1);
+              var nestedRows = _.takeWhile(followingRows, function (row) {
+                return row.indentLevel > referredRow.indentLevel;
+              });
+              var childRows = _.filter(nestedRows, function (row) {
+                return row.indentLevel == referredRow.indentLevel + 1;
+              });
+              if (referredRow.assertion) {
+                childRows.unshift(referredRow);
+              }
+              var childRow = childRows[subreference];
+              var childRowIndex = _.indexOf($scope.proofRows, childRow);
+              var childTableRow = allTableRows.eq(childRowIndex);
+              childTableRow.find(".assertion").addClass("highlightPremise");
+            }
+          }
+        }
+
+        _.forEach(rowData.assertion.references, function(reference) {
+          if (reference.index != null) {
+            highlightPremise(reference.index);
+          } else {
+            highlightPremise(reference.antecedentIndex, reference.consequentIndex);
+          }
+        });
+        tableRow.find(".assertion").addClass("highlightConclusion");
+      };
+
+      $scope.removeHighlight = function(rowData, event) {
+        $(event.target).closest(".theoremProof").find(".highlightPremise").removeClass("highlightPremise");
+        $(event.target).closest(".theoremProof").find(".highlightConclusion").removeClass("highlightConclusion");
+      };
+
       function addAssumption(assumption, steps, indentLevel) {
         if (steps.length == 1 && steps[0].provenStatement) {
           $scope.proofRows.push({
             prefix: 'Then',
-            statement: assumption + " ⊢ " + steps[0].provenStatement.statement,
-            inferenceName: steps[0].inference.name,
+            assumption: assumption,
+            assertion: steps[0],
             indentLevel: indentLevel
           });
         } else {
           $scope.proofRows.push({
             prefix: 'Assume',
-            statement: assumption,
+            assumption: assumption,
             indentLevel: indentLevel
           });
           _.forEach(steps, function (step) {
@@ -131,8 +197,7 @@
       function addAssertion(assertion, indentLevel) {
         $scope.proofRows.push({
           prefix: 'Then',
-          statement: assertion.provenStatement.statement,
-          inferenceName: assertion.inference.name,
+          assertion: assertion,
           indentLevel: indentLevel
         });
       }

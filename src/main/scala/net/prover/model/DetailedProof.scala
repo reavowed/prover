@@ -56,7 +56,7 @@ object DetailedProof {
       case Nil =>
         accumulatedSteps
       case stepOutline +: otherStepOutlines =>
-        val step = proveStep(stepOutline, provenAssertions, provenDeductions, nextReference + 1)
+        val step = proveStep(stepOutline, provenAssertions, provenDeductions, nextReference)
         val (updatedAssertions, updatedDeductions) = step match {
           case AssumptionStep(assumption, substeps) =>
             val newDeductions = substeps.zipWithIndex.collect {
