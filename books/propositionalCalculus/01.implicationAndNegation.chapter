@@ -5,11 +5,6 @@ axiom Repetition
 premise φ
 conclusion φ
 
-axiom Inference
-premise proves φ ψ
-premise φ
-conclusion ψ
-
 statement → (φ ψ)
 
 axiom Deduction
@@ -54,7 +49,6 @@ theorem Proof by Self-Contradiction
 premise proves φ ¬ φ
 assume φ {
   prove φ
-  prove ¬ φ
 }
 prove ¬ φ
 qed
@@ -62,7 +56,6 @@ qed
 theorem Proof by Self-Contradiction (Inverted)
 premise proves ¬ φ φ
 assume ¬ φ {
-  prove φ
   prove ¬ φ
 }
 prove φ
