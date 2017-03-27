@@ -1,0 +1,12 @@
+chapter Equality
+Introduce equality and its associated rules of inference.
+
+statement = (x y)
+
+axiom Equality Is Reflexive
+conclusion = x x
+
+axiom Substitution of Equals
+premise = x y
+premise sub x z φ
+conclusion sub y z φ

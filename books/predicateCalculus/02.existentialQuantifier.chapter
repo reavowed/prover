@@ -1,0 +1,4 @@
+chapter Existential Quantifier
+Introduce the existential quantifier, ∃.
+
+statement ∃ (x φ) format ((∃x)φ) definition (¬ ∀ x ¬ φ)

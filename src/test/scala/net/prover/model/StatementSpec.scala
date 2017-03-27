@@ -28,9 +28,9 @@ class StatementSpec extends ProverSpec {
       parseStatement("∀ y χ") mustEqual ForAll(y, χ)
     }
 
-//    "parse a replacement statement" in {
-//      parseStatement("sub y x φ") mustEqual StatementVariableWithReplacement(φ, y, x)
-//    }
+    "parse a substitution statement" in {
+      parseStatement("sub y x φ") mustEqual StatementVariableWithSingleSubstitution(φ, y, x)
+    }
 
     "parse an empty list" in {
       parseStatementList("()") mustEqual Nil

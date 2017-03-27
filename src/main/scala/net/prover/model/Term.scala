@@ -13,10 +13,12 @@ trait Term extends JsonSerializable.Base with Component {
     serialize(gen, serializers)
   }
   def applySubstitutions(substitutions: Substitutions): Term
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term
 }
 
 case class TermVariable(text: String) extends Term {
   override def variables: Variables = Variables(Nil, Seq(this))
+  override def allBoundVariables = Nil
   override def calculateSubstitutions(other: Component, substitutions: Substitutions): Option[Substitutions] = {
     other match {
       case otherTerm: Term =>
@@ -37,6 +39,12 @@ case class TermVariable(text: String) extends Term {
       throw new Exception(s"No replacement for term variable $this")
     })
   }
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term = {
+    if (termToBeReplaced == this)
+      termToReplaceWith
+    else
+      this
+  }
   override def html: String = text
   override def serialized: String = text
 }
@@ -47,6 +55,7 @@ case class DefinedTerm(
   extends Term
 {
   override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
+  override def allBoundVariables = Nil
   override def calculateSubstitutions(other: Component, substitutions: Substitutions): Option[Substitutions] = other match {
     case DefinedTerm(otherSubcomponents, `termSpecification`) =>
       subcomponents.zip(otherSubcomponents)
@@ -58,6 +67,10 @@ case class DefinedTerm(
   }
   override def applySubstitutions(substitutions: Substitutions): Term = {
     copy(subcomponents = subcomponents.map(_.applySubstitutions(substitutions)))
+  }
+
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term = {
+    copy(subcomponents = subcomponents.map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced)))
   }
   override def html: String = {
     termSpecification.format.html(subcomponents)

@@ -1,0 +1,4 @@
+chapter Equivalence
+We introduce our final connective, ↔ (equivalence).
+
+statement ↔ (φ ψ) definition (∧ → φ ψ → ψ φ)

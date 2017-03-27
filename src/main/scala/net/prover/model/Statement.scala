@@ -14,13 +14,14 @@ trait Statement extends JsonSerializable.Base with Component {
   override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
     serialize(gen, serializers)
   }
-  def allBoundVariables: Seq[TermVariable]
   def containsTerms: Boolean
   def applySubstitutions(substitutions: Substitutions): Statement
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement
 }
 
 case class StatementVariable(text: String) extends Statement {
   override def variables: Variables = Variables(Seq(this), Nil)
+  override def allBoundVariables: Seq[TermVariable] = Nil
   override def calculateSubstitutions(other: Component, substitutions: Substitutions): Option[Substitutions] = other match {
     case otherStatement: Statement =>
       substitutions.statements.get(this) match {
@@ -38,13 +39,52 @@ case class StatementVariable(text: String) extends Statement {
     substitutions.statements.getOrElse(this, throw new Exception(s"No replacement for statement variable $this"))
   }
 
-  override def allBoundVariables = Nil
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable) = {
+    StatementVariableWithSingleSubstitution(this, termToReplaceWith, termToBeReplaced)
+  }
 
   override def containsTerms = false
 
   override def html: String = text
 
   override def serialized: String = text
+}
+
+case class StatementVariableWithSingleSubstitution(
+    statementVariable: StatementVariable,
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable)
+ extends Statement
+{
+  override def variables: Variables = termToReplaceWith.variables :+ statementVariable
+  override def allBoundVariables: Seq[TermVariable] = termToReplaceWith.allBoundVariables
+  override def calculateSubstitutions(other: Component, substitutions: Substitutions): Option[Substitutions] = other match {
+    case StatementVariableWithSingleSubstitution(otherStatementVariable, otherTermToReplaceWith, otherTermToBeReplaced) =>
+      for {
+        s1 <- statementVariable.calculateSubstitutions(otherStatementVariable, substitutions)
+        s2 <- termToReplaceWith.calculateSubstitutions(otherTermToReplaceWith, s1)
+        s3 <- termToBeReplaced.calculateSubstitutions(otherTermToBeReplaced, s2)
+      } yield s3
+    case _ =>
+      None
+  }
+  override def applySubstitutions(substitutions: Substitutions): Statement = {
+    statementVariable.applySubstitutions(substitutions).makeSingleSubstitution(termToReplaceWith, termToBeReplaced)
+  }
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
+    throw new Exception("Cannot make multiple substitutions")
+  }
+
+  override def containsTerms = false
+
+  override def html: String = "[" + termToReplaceWith.safeHtml + "/" + termToBeReplaced.html + "]" + statementVariable.html
+
+  override def serialized: String = Seq(
+    "sub",
+    termToReplaceWith.serialized,
+    termToBeReplaced.serialized,
+    statementVariable.serialized
+  ).mkString(" ")
 }
 
 case class DefinedStatement(
@@ -54,6 +94,9 @@ case class DefinedStatement(
  extends Statement
 {
   override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
+
+  override def allBoundVariables = boundVariables ++ subcomponents.flatMap(_.allBoundVariables)
+
   override def calculateSubstitutions(other: Component, substitutions: Substitutions): Option[Substitutions] = other match {
     case DefinedStatement(otherSubcomponents, _, `definition`) =>
       subcomponents.zip(otherSubcomponents)
@@ -63,11 +106,30 @@ case class DefinedStatement(
     case _ =>
       None
   }
+
   override def applySubstitutions(substitutions: Substitutions): Statement = {
+    val newBoundVariables = boundVariables.map(_.applySubstitutions(substitutions)).map(Term.asVariable)
+    for (variable <- variables.statementVariables) {
+      if (substitutions.statements(variable).variables.termVariables.intersect(newBoundVariables).nonEmpty)
+        throw new Exception("Cannot substitute a new instance of a bound variable")
+    }
+    for (variable <- variables.termVariables) {
+      if (substitutions.terms(variable).variables.termVariables.intersect(newBoundVariables).nonEmpty)
+        throw new Exception("Cannot substitute a new instance of a bound variable")
+    }
     copy(
       subcomponents = subcomponents.map(_.applySubstitutions(substitutions)),
       boundVariables = boundVariables.map(_.applySubstitutions(substitutions)).map(Term.asVariable))
   }
+
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
+    if (boundVariables.contains(termToBeReplaced))
+      throw new Exception("Cannot substitute for a bound variable")
+    if (termToReplaceWith.variables.termVariables.intersect(boundVariables).nonEmpty)
+      throw new Exception("Cannot substitute a new instance of a bound variable")
+    copy(subcomponents = subcomponents.map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced)))
+  }
+
   override def html: String = {
     definition.format.html(subcomponents)
   }
@@ -81,8 +143,6 @@ case class DefinedStatement(
     case _: Term =>
       true
   }
-
-  override def allBoundVariables = boundVariables ++ subcomponents.ofType[Statement].flatMap(_.allBoundVariables)
 }
 
 object Statement extends ComponentType {
@@ -104,6 +164,14 @@ object Statement extends ComponentType {
         statementDefinition.statementParser
       case SpecifiedVariable(v) =>
         Parser.constant(v)
+      case "sub" =>
+        for {
+          termToReplaceWith <- Term.parser
+          termToBeReplaced <- Term.variableParser
+          statement <- parser
+        } yield {
+          statement.makeSingleSubstitution(termToReplaceWith, termToBeReplaced)
+        }
       case _ =>
         throw new Exception(s"Unrecognised statement type $statementType")
     }

@@ -1,0 +1,14 @@
+chapter Universal Quantifier
+Introduce the universal quantifier.
+
+statement ∀ (x φ) format ((∀x)φ) boundVariables (x)
+
+axiom Generalization
+premise sub y x φ
+conclusion ∀ x φ
+arbitrary-variables (y)
+distinct-variables (y φ)
+
+axiom Specification
+premise ∀ x φ
+conclusion sub y x φ
