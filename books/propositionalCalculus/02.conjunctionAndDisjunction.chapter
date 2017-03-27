@@ -34,8 +34,8 @@ qed
 
 theorem Reverse Conjunction
 premise ∧ φ ψ
-prove φ
 prove ψ
+prove φ
 prove ∧ ψ φ
 qed
 
@@ -73,14 +73,14 @@ qed
 
 theorem Reverse Disjunction
 premise ∨ φ ψ
-assume ψ {
-  prove ∨ ψ φ
-}
-prove → ψ ∨ ψ φ
 assume φ {
   prove ∨ ψ φ
 }
 prove → φ ∨ ψ φ
+assume ψ {
+  prove ∨ ψ φ
+}
+prove → ψ ∨ ψ φ
 prove ∨ ψ φ
 qed
 

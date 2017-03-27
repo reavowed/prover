@@ -99,7 +99,7 @@ object DetailedProof {
     provenDeductions: Seq[ReferencedDeduction])(
     implicit context: Context)
   {
-    def availableInferences: Seq[Inference] = context.inferences.reverse
+    def availableInferences: Seq[Inference] = context.inferences
 
     sealed trait PremiseMatch {
       def provenStatement: ProvenStatement

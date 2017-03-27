@@ -109,14 +109,23 @@
       }
 
       function addAssumption(assumption, steps, indentLevel) {
-        $scope.proofRows.push({
-          prefix: 'Assume',
-          statement: assumption,
-          indentLevel: indentLevel
-        });
-        _.forEach(steps, function (step) {
-          addStep(step, indentLevel + 1)
-        });
+        if (steps.length == 1 && steps[0].provenStatement) {
+          $scope.proofRows.push({
+            prefix: 'Then',
+            statement: assumption + " ⊢ " + steps[0].provenStatement.statement,
+            inferenceName: steps[0].inference.name,
+            indentLevel: indentLevel
+          });
+        } else {
+          $scope.proofRows.push({
+            prefix: 'Assume',
+            statement: assumption,
+            indentLevel: indentLevel
+          });
+          _.forEach(steps, function (step) {
+            addStep(step, indentLevel + 1)
+          });
+        }
       }
 
       function addAssertion(assertion, indentLevel) {
