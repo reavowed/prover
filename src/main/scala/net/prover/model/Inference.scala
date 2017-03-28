@@ -29,11 +29,13 @@ object Inference {
   }
 
   sealed trait Premise {
+    def variables: Variables
     def applySubstitutions(substitutions: Substitutions): Premise
     def serialized: String
   }
 
   case class DirectPremise(statement: Statement) extends Premise {
+    override def variables = statement.variables
     override def applySubstitutions(substitutions: Substitutions) = {
       val substitutedStatement = statement.applySubstitutions(substitutions)
       DirectPremise(substitutedStatement)
@@ -41,6 +43,7 @@ object Inference {
     override def serialized = statement.serialized
   }
   case class DeducedPremise(antecedent: Statement, consequent: Statement) extends Premise {
+    override def variables = antecedent.variables ++ consequent.variables
     override def applySubstitutions(substitutions: Substitutions) = {
       val substitutedAntecedent = antecedent.applySubstitutions(substitutions)
       val substitutedConsequent = consequent.applySubstitutions(substitutions)
@@ -76,13 +79,5 @@ trait InferenceParser {
 
   def premisesParser(implicit context: Context): Parser[Seq[Premise]] = {
     premiseParser.whileDefined
-  }
-
-  def arbitraryVariablesParser(implicit context: Context): Parser[Seq[TermVariable]] = {
-    Parser.optional("arbitrary-variables", Term.variableListParser, Nil)
-  }
-
-  def distinctVariablesParser(implicit context: Context): Parser[DistinctVariables] = {
-    Parser.optional("distinct-variables", DistinctVariables.parser, DistinctVariables.empty)
   }
 }

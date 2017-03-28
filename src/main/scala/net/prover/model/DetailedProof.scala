@@ -39,7 +39,14 @@ object DetailedProof {
       case (DeducedPremise(assumption, conclusion), index) =>
         ReferencedDeduction(assumption, ProvenStatement.withNoConditions(conclusion), DirectReference(index))
     }
-    val detailedSteps = proveSteps(proofOutline.steps, Nil, premiseAssertions, premiseDeductions, premises.length)
+    val detailedSteps = proveSteps(
+      proofOutline.steps,
+      Nil,
+      premiseAssertions,
+      premiseDeductions,
+      premises,
+      Nil,
+      premises.length)
     DetailedProof(detailedSteps)
   }
 
@@ -48,6 +55,8 @@ object DetailedProof {
     accumulatedSteps: Seq[Step],
     provenAssertions: Seq[ReferencedAssertion],
     provenDeductions: Seq[ReferencedDeduction],
+    premises: Seq[Premise],
+    assumptions: Seq[Statement],
     nextReference: Int)(
     implicit context: Context
   ): Seq[Step] = {
@@ -55,7 +64,7 @@ object DetailedProof {
       case Nil =>
         accumulatedSteps
       case stepOutline +: otherStepOutlines =>
-        val step = proveStep(stepOutline, provenAssertions, provenDeductions, nextReference)
+        val step = proveStep(stepOutline, provenAssertions, provenDeductions, premises, assumptions, nextReference)
         val (updatedAssertions, updatedDeductions) = step match {
           case AssumptionStep(assumption, substeps) =>
             val newDeductions = substeps.zipWithIndex.collect {
@@ -67,7 +76,14 @@ object DetailedProof {
             val newAssertion = ReferencedAssertion(provenStatement, DirectReference(nextReference))
             (provenAssertions :+ newAssertion, provenDeductions)
         }
-        proveSteps(otherStepOutlines, accumulatedSteps :+ step, updatedAssertions, updatedDeductions, nextReference + 1)
+        proveSteps(
+          otherStepOutlines,
+          accumulatedSteps :+ step,
+          updatedAssertions,
+          updatedDeductions,
+          premises,
+          assumptions,
+          nextReference + 1)
     }
   }
 
@@ -75,6 +91,8 @@ object DetailedProof {
     stepOutline: ProofOutline.Step,
     provenAssertions: Seq[ReferencedAssertion],
     provenDeductions: Seq[ReferencedDeduction],
+    premises: Seq[Premise],
+    assumptions: Seq[Statement],
     nextReference: Int)(
     implicit context: Context
   ): Step = {
@@ -85,17 +103,21 @@ object DetailedProof {
           Nil,
           provenAssertions :+ ReferencedAssertion(ProvenStatement.withNoConditions(assumption), DirectReference(nextReference)),
           provenDeductions,
+          premises,
+          assumptions :+ assumption,
           nextReference + 1)
         AssumptionStep(assumption, substeps)
       case ProofOutline.AssertionStep(assertion) =>
-        Prover(assertion, provenAssertions, provenDeductions).proveAssertion()
+        Prover(assertion, provenAssertions, provenDeductions, premises, assumptions).proveAssertion()
     }
   }
 
   case class Prover(
     assertion: Statement,
     provenAssertions: Seq[ReferencedAssertion],
-    provenDeductions: Seq[ReferencedDeduction])(
+    provenDeductions: Seq[ReferencedDeduction],
+    premises: Seq[Premise],
+    assumptions: Seq[Statement])(
     implicit context: Context)
   {
     def availableInferences: Seq[Inference] = context.inferences
@@ -191,11 +213,14 @@ object DetailedProof {
       substitutions: Substitutions
     ): AssertionStep = {
       val substitutedInference = inference.applySubstitutions(substitutions)
-      val arbitraryVariables = matchedPremises.map(_.provenStatement.arbitraryVariables)
-        .foldLeft(substitutedInference.conclusion.arbitraryVariables)(_ ++ _)
-      val distinctVariables = matchedPremises.map(_.provenStatement.distinctVariables)
-        .foldLeft(substitutedInference.conclusion.distinctVariables)(_ ++ _)
-      val provenStatement = ProvenStatement(assertion, arbitraryVariables, distinctVariables)
+      val activeTermVariables =
+        (premises.map(_.variables) ++
+          assumptions.map(_.variables) :+
+          substitutedInference.conclusion.statement.variables
+        ).reduce(_ ++ _).termVariables
+      val conditions = (matchedPremises.map(_.provenStatement.conditions) :+ substitutedInference.conclusion.conditions)
+        .reduce(_ ++ _)
+      val provenStatement = ProvenStatement(assertion, conditions)
       AssertionStep(provenStatement, inference, matchedPremises.map(_.reference), substitutions)
     }
   }

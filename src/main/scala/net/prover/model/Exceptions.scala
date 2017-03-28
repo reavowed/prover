@@ -13,3 +13,6 @@ case class ParseException(
     cause.orNull)
 
 case class ArbitraryVariableException(message: String) extends Exception(message)
+
+case class DistinctVariableViolationException(variable: TermVariable)
+  extends Exception(s"Distinct variable violated: $variable")

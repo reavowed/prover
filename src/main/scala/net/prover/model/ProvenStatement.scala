@@ -2,21 +2,17 @@ package net.prover.model
 
 case class ProvenStatement(
     statement: Statement,
-    arbitraryVariables: Seq[TermVariable],
-    distinctVariables: DistinctVariables)
+    conditions: Conditions)
 {
   def applySubstitutions(substitutions: Substitutions): ProvenStatement = {
     ProvenStatement(
       statement.applySubstitutions(substitutions),
-      arbitraryVariables
-        .map(_.applySubstitutions(substitutions))
-        .map(Term.asVariable),
-      distinctVariables.applySubstitutions(substitutions))
+      conditions.applySubstitutions(substitutions))
   }
 }
 
 object ProvenStatement {
   def withNoConditions(statement: Statement): ProvenStatement = {
-    ProvenStatement(statement, Nil, DistinctVariables.empty)
+    ProvenStatement(statement, Conditions.empty)
   }
 }

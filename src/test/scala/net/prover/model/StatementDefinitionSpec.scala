@@ -44,8 +44,8 @@ class StatementDefinitionSpec extends ProverSpec {
 
     "parse distinct variables" in {
       parseStatementDefinition(
-        "∃! (x φ) format ((∃!{}){}) definition (∃ y ∀ x ↔ φ = x y) distinctVariables (y φ)"
-      ).distinctVariables mustEqual DistinctVariables(Map(y -> Variables(Seq(φ), Nil)))
+        "∃! (x φ) format ((∃!{}){}) definition (∃ y ∀ x ↔ φ = x y) distinct-variables (y φ)"
+      ).distinctVariables mustEqual Map(y -> Variables(Seq(φ), Nil))
     }
   }
 

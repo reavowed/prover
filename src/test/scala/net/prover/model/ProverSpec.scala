@@ -26,7 +26,7 @@ trait ProverSpec extends Specification {
       variables,
       Format.default(symbol, variables.map(_.text)),
       Nil,
-      DistinctVariables.empty,
+      Map.empty,
       definingStatement)
   }
   def predicate(
@@ -40,21 +40,20 @@ trait ProverSpec extends Specification {
       variables,
       Format.default(symbol, variables.map(_.text)),
       Nil,
-      DistinctVariables.empty,
+      Map.empty,
       definingStatement)
   }
 
   def quantifier(
     symbol: String,
-    definingStatement: Option[Statement],
-    distinctVariables: DistinctVariables
+    definingStatement: Option[Statement]
   ): StatementDefinition = {
     StatementDefinition(
       symbol,
       Seq(x, φ),
       Format(s"($symbol%0)%1", requiresBrackets = false),
       Seq(x),
-      DistinctVariables.empty,
+      Map.empty,
       definingStatement)
   }
 
@@ -65,8 +64,8 @@ trait ProverSpec extends Specification {
   val Disjunction = connective("∨", 2, Some(Implication(Negation(φ), ψ)))
   val Equivalence = connective("↔", 2, None)
 
-  val ForAll = quantifier("∀", None, DistinctVariables.empty)
-  var Exists = quantifier("∃", Some(Negation(ForAll(x, Negation(φ)))), DistinctVariables.empty)
+  val ForAll = quantifier("∀", None)
+  var Exists = quantifier("∃", Some(Negation(ForAll(x, Negation(φ)))))
   val ElementOf = predicate("∈", 2, None)
   val Equals = predicate("=", 2, None)
 

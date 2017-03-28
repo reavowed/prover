@@ -25,10 +25,9 @@ object Axiom extends ChapterEntryParser[Axiom] with InferenceParser {
       name <- Parser.toEndOfLine
       premises <- premisesParser
       conclusion <- conclusionParser
-      arbitraryVariables <- arbitraryVariablesParser
-      distinctVariables <- distinctVariablesParser
+      conditions <- Conditions.parser
     } yield {
-      Axiom(name, premises, ProvenStatement(conclusion, arbitraryVariables, distinctVariables))
+      Axiom(name, premises, ProvenStatement(conclusion, conditions))
     }
   }
 

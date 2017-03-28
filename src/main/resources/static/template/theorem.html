@@ -15,13 +15,16 @@
                     {{$ctrl.theorem.conclusion.statement}}.
                 </div>
             </div>
-            <div class="arbitraryVariables" ng-if="$ctrl.theorem.conclusion.arbitraryVariables.length">
-                Arbitrary variables: {{$ctrl.theorem.conclusion.arbitraryVariables.join(", ")}}
+            <div class="arbitraryVariables" ng-if="$ctrl.theorem.conclusion.conditions.arbitraryVariables.length">
+                Arbitrary variables: {{$ctrl.theorem.conclusion.conditions.arbitraryVariables.join(", ")}}
             </div>
-            <div class="distinctVariables" ng-if="$ctrl.theorem.conclusion.distinctVariables.length">
+            <div class="distinctVariables" ng-if="$ctrl.theorem.conclusion.conditions.distinctVariables.length">
                 Distinct variables:
-                <span ng-repeat="requirement in $ctrl.theorem.conclusion.distinctVariables"
-                      class="distinctVariable">({{requirement.termVariable}} may not appear in {{requirement.variables.join(", ")}})</span>
+                <span ng-repeat="requirement in $ctrl.theorem.conclusion.conditions.distinctVariables"
+                      class="distinctVariable"
+                >
+                    ({{requirement.termVariable}} may not appear in {{requirement.variables.join(", ")}})
+                </span>
             </div>
         </div>
         <div id="{{$ctrl.theorem.id}}-proof" class="theoremProof collapse">

@@ -9,7 +9,7 @@ case class StatementDefinition(
     defaultComponents: Seq[Component],
     format: Format,
     boundVariables: Seq[TermVariable],
-    distinctVariables: DistinctVariables,
+    distinctVariables: Map[TermVariable, Variables],
     definingStatement: Option[Statement])
   extends ChapterEntry(StatementDefinition)
 {
@@ -34,7 +34,7 @@ case class StatementDefinition(
     new Inference {
       override val name = s"Definition of $symbol"
       override val premises: Seq[Premise] = Seq(DirectPremise(s))
-      override val conclusion: ProvenStatement = ProvenStatement(defaultStatement, Nil, distinctVariables)
+      override val conclusion: ProvenStatement = ProvenStatement(defaultStatement, Conditions(Nil, distinctVariables))
     }
   }
 
@@ -42,7 +42,7 @@ case class StatementDefinition(
     new Inference {
       override val name = s"Definition of $symbol"
       override val premises: Seq[Premise] = Seq(DirectPremise(defaultStatement))
-      override val conclusion: ProvenStatement = ProvenStatement(s, Nil, distinctVariables)
+      override val conclusion: ProvenStatement = ProvenStatement(s, Conditions(Nil, distinctVariables))
     }
   }
 }
@@ -64,11 +64,6 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
       optionalDefiningStatement.toSeq.flatMap(_.allBoundVariables.intersect(defaultVariables)))
   }
 
-  def distinctVariablesParser(implicit context: Context): Parser[DistinctVariables] = Parser.optional(
-    "distinctVariables",
-    DistinctVariables.parser,
-    DistinctVariables.empty)
-
   def parser(implicit context: Context): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
@@ -76,7 +71,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       optionalDefiningStatement <- definingStatementParser
       boundVariables <- boundVariablesParser(defaultVariables, optionalDefiningStatement)
-      distinctVariables <- distinctVariablesParser
+      distinctVariables <- Conditions.distinctVariablesParser
     } yield {
       StatementDefinition(
         symbol,
