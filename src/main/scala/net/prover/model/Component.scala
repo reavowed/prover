@@ -4,9 +4,11 @@ trait Component {
   def componentType: ComponentType
   def variables: Variables
   def allBoundVariables: Seq[TermVariable]
-  def calculateSubstitutions(other: Component, substitutions: Substitutions): Option[Substitutions]
+  def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Option[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions): Component
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Component
+  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Component]
+  def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]]
   def html: String
   def safeHtml: String = html
   def serialized: String
@@ -20,7 +22,7 @@ object Component {
     } yield {
       context.variables.statementVariables.find(_.text == variableName)
           .orElse(context.variables.termVariables.find(_.text == variableName))
-          .getOrElse(throw new Exception(s"Unrecognised variable name '$variableName"))
+          .getOrElse(throw new Exception(s"Unrecognised variable name '$variableName'"))
     }
   }
 }

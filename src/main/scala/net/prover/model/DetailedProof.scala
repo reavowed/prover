@@ -2,7 +2,8 @@ package net.prover.model
 
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
 
-case class DetailedProof(steps: Seq[DetailedProof.Step])
+case class
+DetailedProof(steps: Seq[DetailedProof.Step])
 
 object DetailedProof {
   sealed trait Step
@@ -116,13 +117,17 @@ object DetailedProof {
     def proveAssertion(): AssertionStep = {
       val stepIterator = availableInferences.iterator
         .map { inference =>
-          inference.conclusion.statement.calculateSubstitutions(assertion, Substitutions.empty).map(inference -> _)
+          inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty).map(inference -> _)
         }
         .collectDefined
         .flatMap { case (inference, substitutions) =>
           matchPremisesToFacts(inference.premises, substitutions).map(inference -> _)
         }
         .map { case (inference, (matchedPremises, substitutions)) =>
+          substitutions.tryResolve().map((inference, matchedPremises, _))
+        }
+        .collectDefined
+        .map { case (inference, matchedPremises, substitutions) =>
           makeAssertionStep(assertion, inference, matchedPremises, substitutions)
         }
       if (stepIterator.hasNext) {
@@ -134,20 +139,12 @@ object DetailedProof {
 
     private def matchPremisesToFacts(
       premises: Seq[Premise],
-      substitutions: Substitutions
-    ): Iterator[(Seq[PremiseMatch], Substitutions)] = {
-      matchPremises(premises, substitutions, matchPremiseToFacts)
-    }
-
-    private def matchPremises(
-      premises: Seq[Premise],
-      substitutions: Substitutions,
-      premiseMatcher: (Premise, Substitutions) => Iterator[(PremiseMatch, Substitutions)]
-    ): Iterator[(Seq[PremiseMatch], Substitutions)] = {
+      substitutions: PartialSubstitutions
+    ): Iterator[(Seq[PremiseMatch], PartialSubstitutions)] = {
       val initial = Iterator((Seq.empty[PremiseMatch], substitutions))
       premises.foldLeft(initial) { case (acc, premise) =>
         acc.flatMap { case (matchedPremisesSoFar, substitutionsSoFar) =>
-          premiseMatcher(premise, substitutionsSoFar).toList.map { case (matchedPremise, newSubstitutions) =>
+          matchPremiseToFacts(premise, substitutionsSoFar).toList.map { case (matchedPremise, newSubstitutions) =>
             (matchedPremisesSoFar :+ matchedPremise, newSubstitutions)
           }
         }
@@ -156,8 +153,8 @@ object DetailedProof {
 
     private def matchPremiseToFacts(
       inferencePremise: Premise,
-      substitutionsSoFar: Substitutions
-    ): Iterator[(PremiseMatch, Substitutions)] = {
+      substitutionsSoFar: PartialSubstitutions
+    ): Iterator[(PremiseMatch, PartialSubstitutions)] = {
       inferencePremise match {
         case directPremise: DirectPremise =>
           matchDirectPremiseToFacts(directPremise, substitutionsSoFar)
@@ -168,8 +165,8 @@ object DetailedProof {
 
     private def matchDirectPremiseToFacts(
       inferencePremise: DirectPremise,
-      substitutionsSoFar: Substitutions
-    ): Iterator[(PremiseMatch, Substitutions)] = {
+      substitutionsSoFar: PartialSubstitutions
+    ): Iterator[(PremiseMatch, PartialSubstitutions)] = {
       provenAssertions.iterator.map { case ReferencedAssertion(provenStatement, reference) =>
         inferencePremise.statement.calculateSubstitutions(provenStatement.statement, substitutionsSoFar)
           .map((DirectPremiseMatch(provenStatement, reference), _))
@@ -178,8 +175,8 @@ object DetailedProof {
 
     private def matchDeducedPremiseToFacts(
       inferencePremise: DeducedPremise,
-      substitutionsSoFar: Substitutions
-    ): Iterator[(PremiseMatch, Substitutions)] = {
+      substitutionsSoFar: PartialSubstitutions
+    ): Iterator[(PremiseMatch, PartialSubstitutions)] = {
       provenDeductions.iterator.map { case ReferencedDeduction(provenAssumption, provenDeduction, reference) =>
         inferencePremise.antecedent.calculateSubstitutions(provenAssumption, substitutionsSoFar)
           .flatMap(inferencePremise.consequent.calculateSubstitutions(provenDeduction.statement, _))

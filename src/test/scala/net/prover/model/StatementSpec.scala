@@ -47,48 +47,52 @@ class StatementSpec extends ProverSpec {
 
   "statement match" should {
     "match a statement variable to anything" in {
-      φ.calculateSubstitutions(Implication(φ, ψ), Substitutions.empty) mustEqual
-        Some(Substitutions(
+      φ.calculateSubstitutions(Implication(φ, ψ), PartialSubstitutions.empty) mustEqual
+        Some(PartialSubstitutions(
           Map(φ -> Implication(φ, ψ)),
+          Map.empty,
           Map.empty))
     }
     "not match a connective to a statement variable" in {
-      Implication(φ, ψ).calculateSubstitutions(φ, Substitutions.empty) must beNone
+      Implication(φ, ψ).calculateSubstitutions(φ, PartialSubstitutions.empty) must beNone
     }
     "not match two different connectives" in {
-      Implication(φ, ψ).calculateSubstitutions(Conjunction(φ, ψ), Substitutions.empty) must beNone
+      Implication(φ, ψ).calculateSubstitutions(Conjunction(φ, ψ), PartialSubstitutions.empty) must beNone
     }
     "not match two connectives of the same type whose substatements don't match" in {
       Implication(Implication(φ, ψ), χ)
-        .calculateSubstitutions(Implication(φ, ψ), Substitutions.empty)
+        .calculateSubstitutions(Implication(φ, ψ), PartialSubstitutions.empty)
         .must(beNone)
     }
     "match two connectives of the same type that only differ in statement variable number" in {
       Implication(φ, ψ)
-        .calculateSubstitutions(Implication(φ, χ), Substitutions.empty)
-        .mustEqual(Some(Substitutions(
+        .calculateSubstitutions(Implication(φ, χ), PartialSubstitutions.empty)
+        .mustEqual(Some(PartialSubstitutions(
           Map(φ -> φ, ψ -> χ),
+          Map.empty,
           Map.empty)))
     }
     "match two connectives of the same type whose substatements are different but match" in {
       Implication(φ, ψ)
-        .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ), Substitutions.empty)
-        .mustEqual(Some(Substitutions(
+        .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ), PartialSubstitutions.empty)
+        .mustEqual(Some(PartialSubstitutions(
           Map(
             φ -> Conjunction(φ, ψ),
             ψ -> χ),
+          Map.empty,
           Map.empty)))
     }
     "match two connectives of the same type whose substatements merge correctly" in {
       Implication(φ, φ)
-        .calculateSubstitutions(Implication(Conjunction(φ, ψ), Conjunction(φ, ψ)), Substitutions.empty)
-        .mustEqual(Some(Substitutions(
+        .calculateSubstitutions(Implication(Conjunction(φ, ψ), Conjunction(φ, ψ)), PartialSubstitutions.empty)
+        .mustEqual(Some(PartialSubstitutions(
           Map(φ -> Conjunction(φ, ψ)),
+          Map.empty,
           Map.empty)))
     }
     "match two connectives of the same type whose substatements do not merge correctly" in {
       Implication(φ, φ)
-        .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ), Substitutions.empty)
+        .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ), PartialSubstitutions.empty)
         .must(beNone)
     }
   }

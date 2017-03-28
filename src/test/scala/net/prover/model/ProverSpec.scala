@@ -52,7 +52,7 @@ trait ProverSpec extends Specification {
     StatementDefinition(
       symbol,
       Seq(x, φ),
-      Format(s"($symbol%1)%2", requiresBrackets = false),
+      Format(s"($symbol%0)%1", requiresBrackets = false),
       Seq(x),
       DistinctVariables.empty,
       definingStatement)

@@ -8,7 +8,7 @@ class TheoremSpec extends ProverSpec {
       Theorem.parser(context).parseAndDiscard(text.mkString("\n"))
     }
 
-    "not accept an unfounded assertion" in {
+    "not prove an unfounded statement" in {
       parseTheorem(
         "Anything Is True",
         "prove φ",
@@ -16,7 +16,7 @@ class TheoremSpec extends ProverSpec {
       ) must throwAn[Exception]
     }
 
-    "accept assertion of the conclusion of a known premiseless inference" in {
+    "prove the conclusion of a premiseless inference" in {
       val previousInference = new Axiom(
         "Implication Is Reflexive",
         Nil,
@@ -31,7 +31,7 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(ψ, ψ))
     }
 
-    "accept assertion of the conclusion of an inference whose premises match proven statements" in {
+    "prove the conclusion of an inference whose premises match proven statements" in {
       val previousInference = new Axiom(
         "Modus Ponens",
         Seq(Implication(φ, ψ), φ),
@@ -48,7 +48,7 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(ψ)
     }
 
-    "not accept assertion of the conclusion of an inference whose premises can't be matched" in {
+    "not prove the conclusion of an inference whose premises can't be matched" in {
       val previousInference = new Axiom(
         "X",
         Seq(φ),
@@ -63,7 +63,7 @@ class TheoremSpec extends ProverSpec {
       ) must throwAn[Exception]
     }
 
-    "accept assertion of the conclusion of an inference with a deduced premise that matches an assumption" in {
+    "prove the conclusion of an inference with a deduced premise that matches an assumption" in {
       val repeatAxiom = new Axiom(
         "Repeat",
         Seq(φ),
@@ -86,68 +86,57 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(ψ, χ))
     }
 
-//    "accept assertion of the conclusion of an inference with a deduced premise that matches another inference" in {
-//      val repeatAxiom = new Axiom(
-//        "Repeat",
-//        Seq(φ),
-//        φ)
-//      val contradictionAxiom = new Axiom(
-//        "Contradiction",
-//        Seq(DeducedPremise(φ, ψ), DeducedPremise(φ, Negation(ψ))),
-//        Negation(φ))
-//
-//      val theorem = parseTheorem(
-//        "X",
-//        "premise proves φ ¬ φ",
-//        "prove ¬ φ",
-//        "qed")(
-//        contextWith(repeatAxiom, contradictionAxiom))
-//
-//      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Negation(φ))
-//    }
-//
-//    "accept assertion of the conclusion of an inference with a deduced premise that matches another inference" +
-//      "which requires the match to account for both premise and conclusion" in {
-//      val deduction = new Axiom(
-//        "Deduction",
-//        Seq(DeducedPremise(φ, ψ)),
-//        Implication(φ, ψ))
-//      val addRightConjunct = new Axiom(
-//        "Add Right Conjunct",
-//        Seq(φ),
-//        Disjunction(φ, ψ))
-//
-//      val theorem = parseTheorem(
-//        "X",
-//        "prove → φ ∨ φ ψ",
-//        "qed")(
-//        contextWith(deduction, addRightConjunct))
-//
-//      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(φ, Disjunction(φ, ψ)))
-//    }
-//
-//    "accept assertion of the conclusion of an inference with a deduced premise that partially matches another inference" in {
-//      val repetition = new Axiom(
-//        "Repetition",
-//        Seq(φ),
-//        φ)
-//      val simplification = new Axiom(
-//        "Simplification",
-//        Seq(φ, ψ),
-//        φ)
-//      val contradiction = new Axiom(
-//        "Proof by Contradiction",
-//        Seq(DeducedPremise(φ, ψ), DeducedPremise(φ, Negation(ψ))),
-//        Negation(φ))
-//
-//      val theorem = parseTheorem(
-//        "X",
-//        "premise φ",
-//        "prove ¬ ¬ φ",
-//        "qed")(
-//        contextWith(repetition, simplification, contradiction))
-//
-//      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Negation(Negation(φ)))
-//    }
+    "prove a conclusion that is a substitution" in {
+      val substitutionOfEquals = new Axiom(
+        "Substitution of Equals",
+        Seq(Equals(x, y), StatementVariableWithSingleSubstitution(φ, x, z)),
+        StatementVariableWithSingleSubstitution(φ, y, z))
+
+      val theorem = parseTheorem(
+        "X",
+        "premise = x y",
+        "premise = x x",
+        "prove = y x",
+        "qed")(
+        contextWith(substitutionOfEquals))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Equals(y, x))
+    }
+
+    "prove a conclusion that is a nested substitution" in {
+      val equivalenceOfSubstitutedEqauls = new Axiom(
+        "Equivalence of Substituted Equals",
+        Seq(Equals(x, y)),
+        Equivalence(
+          StatementVariableWithSingleSubstitution(φ, x, z),
+          StatementVariableWithSingleSubstitution(φ, y, z)))
+
+      val theorem = parseTheorem(
+        "X",
+        "premise = x y",
+        "prove ↔ ∈ z x ∈ z y",
+        "qed")(
+        contextWith(equivalenceOfSubstitutedEqauls))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
+        Equivalence(ElementOf(z, x), ElementOf(z, y)))
+    }
+
+    "prove a conclusion with a substituted premise" in {
+      val generalization = new Axiom(
+        "Generalization",
+        Seq(StatementVariableWithSingleSubstitution(φ, y, x)),
+        ForAll(x, φ))
+
+      val theorem = parseTheorem(
+        "X",
+        "premise → ∈ y x ∈ y x",
+        "prove ∀ z → ∈ z x ∈ z x",
+        "qed")(
+        contextWith(generalization))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
+        ForAll(z, Implication(ElementOf(z, x), ElementOf(z, x))))
+    }
   }
 }

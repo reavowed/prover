@@ -1,0 +1,6 @@
+Set Theory
+import Predicate Calculus
+
+variables (φ) (x y z z')
+
+include 01.extensionality.chapter

@@ -10,3 +10,27 @@ axiom Substitution of Equals
 premise = x y
 premise sub x z φ
 conclusion sub y z φ
+
+theorem Reverse Equality
+premise = x y
+prove = x x
+prove = y x
+qed
+
+theorem Substitution of Equals (Reverse)
+premise = x y
+premise sub y z φ
+prove = y x
+prove sub x z φ
+qed
+
+theorem Equivalence of Substituted Equals
+premise = x y
+assume sub x z φ {
+  prove sub y z φ
+}
+assume sub y z φ {
+  prove sub x z φ
+}
+prove ↔ sub x z φ sub y z φ
+qed

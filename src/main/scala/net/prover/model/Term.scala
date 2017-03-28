@@ -14,22 +14,19 @@ trait Term extends JsonSerializable.Base with Component {
   }
   def applySubstitutions(substitutions: Substitutions): Term
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term
+  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Term]
 }
 
 case class TermVariable(text: String) extends Term {
   override def variables: Variables = Variables(Nil, Seq(this))
   override def allBoundVariables = Nil
-  override def calculateSubstitutions(other: Component, substitutions: Substitutions): Option[Substitutions] = {
+  override def calculateSubstitutions(
+    other: Component,
+    substitutions: PartialSubstitutions
+  ): Option[PartialSubstitutions] = {
     other match {
       case otherTerm: Term =>
-        substitutions.terms.get(this) match {
-          case Some(`otherTerm`) =>
-            Some(substitutions)
-          case Some(_) =>
-            None
-          case None =>
-            Some(substitutions + (this, otherTerm))
-        }
+        substitutions.tryAdd(this, otherTerm)
       case _ =>
         None
     }
@@ -45,6 +42,27 @@ case class TermVariable(text: String) extends Term {
     else
       this
   }
+  def resolveSingleSubstitution(
+    other: Component,
+    termVariable: TermVariable,
+    thisTerm: Term,
+    otherTerm: Term
+  ): Option[Term] = {
+    if (this == thisTerm && other == otherTerm) {
+      Some(termVariable)
+    } else if (this == other) {
+      Some(this)
+    } else {
+      None
+    }
+  }
+  def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]] = {
+    if (this == termVariable) {
+      Some(Some(other.asInstanceOf[Term]))
+    } else {
+      Some(None)
+    }
+  }
   override def html: String = text
   override def serialized: String = text
 }
@@ -56,7 +74,10 @@ case class DefinedTerm(
 {
   override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
   override def allBoundVariables = Nil
-  override def calculateSubstitutions(other: Component, substitutions: Substitutions): Option[Substitutions] = other match {
+  override def calculateSubstitutions(
+    other: Component,
+    substitutions: PartialSubstitutions
+  ): Option[PartialSubstitutions] = other match {
     case DefinedTerm(otherSubcomponents, `termSpecification`) =>
       subcomponents.zip(otherSubcomponents)
         .foldLeft(Option(substitutions)) { case (substitutionsSoFarOption, (component, otherComponent)) =>
@@ -72,6 +93,52 @@ case class DefinedTerm(
   override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term = {
     copy(subcomponents = subcomponents.map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced)))
   }
+  def resolveSingleSubstitution(
+    other: Component,
+    termVariable: TermVariable,
+    thisTerm: Term,
+    otherTerm: Term
+  ): Option[Term] = {
+    if (this == thisTerm && other == otherTerm) {
+      Some(termVariable)
+    } else other match {
+      case DefinedTerm(otherSubcomponents, `termSpecification`) =>
+        subcomponents.zip(otherSubcomponents)
+          .map { case (subcomponent, otherSubcomponent) =>
+            subcomponent.resolveSingleSubstitution(otherSubcomponent, termVariable, thisTerm, otherTerm)
+          }
+          .traverseOption
+          .map { resolvedSubcomponents =>
+            copy(subcomponents = resolvedSubcomponents)
+          }
+    }
+  }
+
+  def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]] = {
+    other match {
+      case DefinedTerm(otherSubcomponents, `termSpecification`) =>
+        subcomponents.zip(otherSubcomponents)
+          .map {
+            case (subcomponent, otherSubcomponent) =>
+              subcomponent.findSubstitution(otherSubcomponent, termVariable)
+          }
+          .traverseOption
+          .flatMap {
+            _.flatten match {
+              case Seq(singleTerm) =>
+                Some(Some(singleTerm))
+              case Nil =>
+                Some(None)
+              case _ =>
+                None
+            }
+          }
+      case _ =>
+        None
+    }
+  }
+
+
   override def html: String = {
     termSpecification.format.html(subcomponents)
   }

@@ -1,0 +1,11 @@
+chapter Set Membership and Extensionality
+Introduce the set membership predicate ∈ and the Axiom of Extensionality, and explore their consequences for equality.
+
+statement ∈ (x y)
+
+theorem Equal Sets Have the Same Members
+premise = x y
+prove ↔ ∈ z' x ∈ z' y
+prove ∀ z ↔ ∈ z x ∈ z y
+qed
+

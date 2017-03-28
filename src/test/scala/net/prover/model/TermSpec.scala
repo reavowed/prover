@@ -5,15 +5,16 @@ class TermSpec extends ProverSpec {
 
   "term match" should {
     "match a constant term to itself" in {
-      EmptySet.calculateSubstitutions(EmptySet, Substitutions.empty) must beSome
+      EmptySet.calculateSubstitutions(EmptySet, PartialSubstitutions.empty) must beSome
     }
 
     "match a unary function to another application of the same function" in {
       PowerSet(Seq(x))
-        .calculateSubstitutions(PowerSet(Seq(y)), Substitutions.empty)
-        .mustEqual(Some(Substitutions(
+        .calculateSubstitutions(PowerSet(Seq(y)), PartialSubstitutions.empty)
+        .mustEqual(Some(PartialSubstitutions(
           Map.empty,
-          Map(x -> y))))
+          Map(x -> y),
+          Map.empty)))
     }
   }
 
