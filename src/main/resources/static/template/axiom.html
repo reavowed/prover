@@ -1,12 +1,14 @@
 <div ng-if="$ctrl.axiom">
     <div class="result">
         <h5>Axiom: {{$ctrl.axiom.name}}</h5>
-        <div ng-if="$ctrl.axiom.premises.length">
-            Suppose {{premiseText}}.
-        </div>
-        <div>
-            <span ng-if="$ctrl.axiom.premises.length">Then</span>
-            {{$ctrl.axiom.conclusion.statement}}.
+        <div class="resultBlock">
+            <div ng-if="$ctrl.axiom.premises.length">
+                Suppose {{premiseText}}.
+            </div>
+            <div>
+                <span ng-if="$ctrl.axiom.premises.length">Then</span>
+                {{$ctrl.axiom.conclusion.statement}}.
+            </div>
         </div>
         <div class="arbitraryVariables" ng-if="$ctrl.axiom.conclusion.conditions.arbitraryVariables.length">
             Arbitrary variables: {{$ctrl.axiom.conclusion.conditions.arbitraryVariables.join(", ")}}

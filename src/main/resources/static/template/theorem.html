@@ -5,7 +5,7 @@
             data-target="#{{$ctrl.theorem.id}}-proof, #{{$ctrl.theorem.id}}-summary">
             Theorem: {{$ctrl.theorem.name}}
         </h5>
-        <div id="{{$ctrl.theorem.id}}-summary" class="theoremSummary collapse in">
+        <div id="{{$ctrl.theorem.id}}-summary" class="collapse in">
             <div class="resultBlock">
                 <div ng-if="$ctrl.theorem.premises.length">
                     Suppose {{premiseText}}.
