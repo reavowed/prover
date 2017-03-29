@@ -1,0 +1,4 @@
+chapter Subsets
+Introduce the subset relation, ⊆.
+
+statement ⊆ (Y X) definition (∀ x → ∈ x Y ∈ x X)
