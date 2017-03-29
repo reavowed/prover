@@ -69,17 +69,26 @@ object Conditions {
     Parser.optional("arbitrary-variables", Term.variableListParser, Nil)
   }
 
-  private def distinctVariableParser(implicit context: Context): Parser[(TermVariable, Variables)] = {
+  private def variableParser(variables: Variables)(implicit context: Context): Parser[Option[Variables]] = {
+    Parser.singleWord.map { name =>
+      val statementVariableOption = context.variables.statementVariables.find(_.text == name)
+      val termVariableOption = context.variables.termVariables.find(_.text == name)
+      statementVariableOption.map(variables :+ _) orElse
+        termVariableOption.map(variables :+ _)
+    }
+  }
+
+  private def distinctVariablesClauseParser(implicit context: Context): Parser[(TermVariable, Variables)] = {
     for {
       term <- Term.variableParser
-      statement <- Statement.variableParser
-    } yield term -> Variables(Seq(statement), Seq.empty)
+      variables <- Parser.iterateWhileDefined(Variables.empty, variableParser)
+    } yield term -> variables
   }
 
   def distinctVariablesParser(implicit context: Context): Parser[Map[TermVariable, Variables]] = {
     Parser.optional(
       "distinct-variables",
-      distinctVariableParser.listInParens(Some(",")).map(_.toMap),
+      distinctVariablesClauseParser.listInParens(Some(",")).map(_.toMap),
       Map.empty)
   }
 
