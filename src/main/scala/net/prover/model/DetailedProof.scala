@@ -220,6 +220,7 @@ object DetailedProof {
         ).reduce(_ ++ _).termVariables
       val conditions = (matchedPremises.map(_.provenStatement.conditions) :+ substitutedInference.conclusion.conditions)
         .reduce(_ ++ _)
+        .restrictTo(activeTermVariables)
       val provenStatement = ProvenStatement(assertion, conditions)
       AssertionStep(provenStatement, inference, matchedPremises.map(_.reference), substitutions)
     }
