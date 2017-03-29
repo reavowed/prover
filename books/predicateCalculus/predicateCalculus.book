@@ -3,6 +3,7 @@ import Propositional Calculus
 
 variables (φ) (x y z)
 
-include 01.universalQuantifier.chapter
-include 02.existentialQuantifier.chapter
-include 03.equality.chapter
+include 01.termVariables.chapter
+include 02.universalQuantifier.chapter
+include 03.existentialQuantifier.chapter
+include 04.equality.chapter

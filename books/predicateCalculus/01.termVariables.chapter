@@ -1,0 +1,7 @@
+chapter Term Variables
+...
+
+axiom Substitution
+premise φ
+conclusion sub y x φ
+arbitrary-variables (x)

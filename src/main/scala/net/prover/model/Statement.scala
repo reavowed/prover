@@ -72,7 +72,7 @@ case class StatementVariableWithSingleSubstitution(
     termToBeReplaced: TermVariable)
  extends Statement
 {
-  override def variables: Variables = termToReplaceWith.variables :+ statementVariable
+  override def variables: Variables = termToReplaceWith.variables :+ statementVariable :+ termToBeReplaced
   override def allBoundVariables: Seq[TermVariable] = termToReplaceWith.allBoundVariables
   override def calculateSubstitutions(
     other: Component,
