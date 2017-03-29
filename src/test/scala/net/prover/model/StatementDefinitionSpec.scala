@@ -45,13 +45,13 @@ class StatementDefinitionSpec extends ProverSpec {
     "parse distinct variables" in {
       parseStatementDefinition(
         "∃! (x φ) format ((∃!{}){}) definition (∃ y ∀ x ↔ φ = x y) distinct-variables (y φ)"
-      ).distinctVariables mustEqual Map(y -> Variables(Seq(φ), Nil))
+      ).distinctVariables mustEqual Map(y -> Variables(Set(φ), Set.empty))
     }
   }
 
   "a statement definition" should {
     "calculate bound variables when applying to subcomponents" in {
-      ForAll(y, φ).allBoundVariables mustEqual Seq(y)
+      ForAll(y, φ).boundVariables mustEqual Set(y)
     }
   }
 }

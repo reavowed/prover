@@ -8,7 +8,7 @@ case class StatementDefinition(
     symbol: String,
     defaultComponents: Seq[Component],
     format: Format,
-    boundVariables: Seq[TermVariable],
+    boundVariables: Set[TermVariable],
     distinctVariables: Map[TermVariable, Variables],
     definingStatement: Option[Statement])
   extends ChapterEntry(StatementDefinition)
@@ -34,7 +34,7 @@ case class StatementDefinition(
     new Inference {
       override val name = s"Definition of $symbol"
       override val premises: Seq[Premise] = Seq(DirectPremise(s))
-      override val conclusion: ProvenStatement = ProvenStatement(defaultStatement, Conditions(Nil, distinctVariables))
+      override val conclusion: ProvenStatement = ProvenStatement(defaultStatement, Conditions(Set.empty, distinctVariables))
     }
   }
 
@@ -42,7 +42,7 @@ case class StatementDefinition(
     new Inference {
       override val name = s"Definition of $symbol"
       override val premises: Seq[Premise] = Seq(DirectPremise(defaultStatement))
-      override val conclusion: ProvenStatement = ProvenStatement(s, Conditions(Nil, distinctVariables))
+      override val conclusion: ProvenStatement = ProvenStatement(s, Conditions(Set.empty, distinctVariables))
     }
   }
 }
@@ -57,11 +57,11 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
     defaultVariables: Seq[Component],
     optionalDefiningStatement: Option[Statement])(
     implicit context: Context
-  ): Parser[Seq[TermVariable]] = {
+  ): Parser[Set[TermVariable]] = {
     Parser.optional(
       "boundVariables",
-      Term.variableListParser,
-      optionalDefiningStatement.toSeq.flatMap(_.allBoundVariables.intersect(defaultVariables)))
+      Term.variableListParser.map(_.toSet),
+      optionalDefiningStatement.map(_.boundVariables.intersect(defaultVariables.ofType[TermVariable].toSet)).getOrElse(Set.empty))
   }
 
   def parser(implicit context: Context): Parser[StatementDefinition] = {

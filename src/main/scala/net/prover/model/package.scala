@@ -43,12 +43,6 @@ package object model {
       case s: S =>
         s
     }
-    def collectMany[S](f: PartialFunction[T, Seq[S]]): Seq[S] = {
-      seq.collect(f).flatten
-    }
-    def mapCollect[S](f: T => Option[S]): Seq[S] = {
-      seq.map(f).collectDefined
-    }
   }
 
   implicit class SeqTupleOps[S, T](x: Seq[(S, T)]) {
@@ -73,6 +67,13 @@ package object model {
       }
     }
   }
+
+  implicit class IteratorOps[T](iterator: Iterator[T]) {
+    def mapCollect[S](f: T => Option[S]): Iterator[S] = {
+      iterator.map(f).collectDefined
+    }
+  }
+
 
   implicit class IteratorOptionOps[T](iterator: Iterator[Option[T]]) {
     def collectDefined: Iterator[T] = {

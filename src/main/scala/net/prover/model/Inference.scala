@@ -10,9 +10,9 @@ trait Inference {
   def conclusion: ProvenStatement
 
   def applySubstitutions(substitutions: Substitutions): Inference = new Inference {
-    override def name = Inference.this.name
-    override def premises = Inference.this.premises.map(_.applySubstitutions(substitutions))
-    override def conclusion = Inference.this.conclusion.applySubstitutions(substitutions)
+    override val name = Inference.this.name
+    override val premises = Inference.this.premises.map(_.applySubstitutions(substitutions))
+    override val conclusion = Inference.this.conclusion.applySubstitutions(substitutions)
   }
 
   def calculateHash(): String = {
@@ -29,13 +29,13 @@ object Inference {
   }
 
   sealed trait Premise {
-    def variables: Variables
+    def freeVariables: Set[TermVariable]
     def applySubstitutions(substitutions: Substitutions): Premise
     def serialized: String
   }
 
   case class DirectPremise(statement: Statement) extends Premise {
-    override def variables = statement.variables
+    override def freeVariables = statement.freeVariables
     override def applySubstitutions(substitutions: Substitutions) = {
       val substitutedStatement = statement.applySubstitutions(substitutions)
       DirectPremise(substitutedStatement)
@@ -43,7 +43,7 @@ object Inference {
     override def serialized = statement.serialized
   }
   case class DeducedPremise(antecedent: Statement, consequent: Statement) extends Premise {
-    override def variables = antecedent.variables ++ consequent.variables
+    override def freeVariables = antecedent.freeVariables ++ consequent.freeVariables
     override def applySubstitutions(substitutions: Substitutions) = {
       val substitutedAntecedent = antecedent.applySubstitutions(substitutions)
       val substitutedConsequent = consequent.applySubstitutions(substitutions)

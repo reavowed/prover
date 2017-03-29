@@ -3,7 +3,8 @@ package net.prover.model
 trait Component {
   def componentType: ComponentType
   def variables: Variables
-  def allBoundVariables: Seq[TermVariable]
+  def freeVariables: Set[TermVariable]
+  def boundVariables: Set[TermVariable]
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Option[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions): Component
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Component

@@ -5,13 +5,13 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
 case class Conditions(
-    arbitraryVariables: Seq[TermVariable],
+    arbitraryVariables: Set[TermVariable],
     distinctVariables: Map[TermVariable, Variables])
   extends JsonSerializable.Base {
 
   def ++(other: Conditions): Conditions = {
     Conditions(
-      (arbitraryVariables ++ other.arbitraryVariables).distinct,
+      arbitraryVariables ++ other.arbitraryVariables,
       (distinctVariables.keySet ++ other.distinctVariables.keySet).map { variable =>
         variable -> (
           distinctVariables.getOrElse(variable, Variables.empty) ++
@@ -19,7 +19,7 @@ case class Conditions(
       }.toMap)
   }
 
-  def restrictTo(termVariables: Seq[TermVariable]): Conditions = {
+  def restrictTo(termVariables: Set[TermVariable]): Conditions = {
     Conditions(
       arbitraryVariables.intersect(termVariables),
       distinctVariables.filterKeys(termVariables.contains))
@@ -63,18 +63,18 @@ case class Conditions(
 }
 
 object Conditions {
-  val empty = Conditions(Seq.empty, Map.empty)
+  val empty = Conditions(Set.empty, Map.empty)
 
-  def arbitraryVariablesParser(implicit context: Context): Parser[Seq[TermVariable]] = {
-    Parser.optional("arbitrary-variables", Term.variableListParser, Nil)
+  def arbitraryVariablesParser(implicit context: Context): Parser[Set[TermVariable]] = {
+    Parser.optional("arbitrary-variables", Term.variableListParser.map(_.toSet), Set.empty)
   }
 
   private def variableParser(variables: Variables)(implicit context: Context): Parser[Option[Variables]] = {
     Parser.singleWord.map { name =>
       val statementVariableOption = context.variables.statementVariables.find(_.text == name)
       val termVariableOption = context.variables.termVariables.find(_.text == name)
-      statementVariableOption.map(variables :+ _) orElse
-        termVariableOption.map(variables :+ _)
+      statementVariableOption.map(variables + _) orElse
+        termVariableOption.map(variables + _)
     }
   }
 

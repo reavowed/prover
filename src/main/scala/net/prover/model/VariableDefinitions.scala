@@ -7,8 +7,8 @@ object VariableDefinitions extends BookEntryParser {
       statementVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
       termVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
     } yield {
-      val statementVariables = statementVariableNames.map(StatementVariable)
-      val termVariables = termVariableNames.map(TermVariable)
+      val statementVariables = statementVariableNames.map(StatementVariable).toSet
+      val termVariables = termVariableNames.map(TermVariable).toSet
       val variables = Variables(statementVariables, termVariables)
       val updatedContext = book.context.copy(variables = book.context.variables ++ variables)
       val updatedBook = book.copy(context = updatedContext)

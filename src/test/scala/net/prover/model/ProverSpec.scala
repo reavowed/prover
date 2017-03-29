@@ -25,7 +25,7 @@ trait ProverSpec extends Specification {
       symbol,
       variables,
       Format.default(symbol, variables.map(_.text)),
-      Nil,
+      Set.empty,
       Map.empty,
       definingStatement)
   }
@@ -39,7 +39,7 @@ trait ProverSpec extends Specification {
       symbol,
       variables,
       Format.default(symbol, variables.map(_.text)),
-      Nil,
+      Set.empty,
       Map.empty,
       definingStatement)
   }
@@ -52,7 +52,7 @@ trait ProverSpec extends Specification {
       symbol,
       Seq(x, φ),
       Format(s"($symbol%0)%1", requiresBrackets = false),
-      Seq(x),
+      Set(x),
       Map.empty,
       definingStatement)
   }
@@ -83,8 +83,8 @@ trait ProverSpec extends Specification {
     ElementOf, Equals)
 
   val baseContext = Context.empty.copy(variables = Variables(
-    Seq(φ, ψ, χ),
-    Seq(x, y, z)))
+    Set(φ, ψ, χ),
+    Set(x, y, z)))
 
   implicit val defaultContext = statementDefinitions.foldLeft(baseContext) { case (context, statementDefinition) =>
     context.addStatementDefinition(statementDefinition)

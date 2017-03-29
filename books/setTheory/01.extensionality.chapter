@@ -5,7 +5,7 @@ statement ∈ (x y)
 
 theorem Equal Sets Have the Same Members
 premise = x y
-prove ↔ ∈ z' x ∈ z' y
+prove ↔ ∈ z x ∈ z y
 prove ∀ z ↔ ∈ z x ∈ z y
 qed
 

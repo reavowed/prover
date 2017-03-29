@@ -21,8 +21,9 @@ trait Statement extends JsonSerializable.Base with Component {
 }
 
 case class StatementVariable(text: String) extends Statement {
-  override def variables: Variables = Variables(Seq(this), Nil)
-  override def allBoundVariables: Seq[TermVariable] = Nil
+  override def variables: Variables = Variables(Set(this), Set.empty)
+  override def freeVariables: Set[TermVariable] = Set.empty
+  override def boundVariables: Set[TermVariable] = Set.empty
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
@@ -72,8 +73,9 @@ case class StatementVariableWithSingleSubstitution(
     termToBeReplaced: TermVariable)
  extends Statement
 {
-  override def variables: Variables = termToReplaceWith.variables :+ statementVariable :+ termToBeReplaced
-  override def allBoundVariables: Seq[TermVariable] = termToReplaceWith.allBoundVariables
+  override def variables: Variables = termToReplaceWith.variables + statementVariable + termToBeReplaced
+  override def freeVariables: Set[TermVariable] = termToReplaceWith.freeVariables
+  override def boundVariables: Set[TermVariable] = termToReplaceWith.boundVariables
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
@@ -125,13 +127,15 @@ case class StatementVariableWithSingleSubstitution(
 
 case class DefinedStatement(
     subcomponents: Seq[Component],
-    boundVariables: Seq[TermVariable],
+    localBoundVariables: Set[TermVariable],
     definition: StatementDefinition)
  extends Statement
 {
   override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
 
-  override def allBoundVariables = boundVariables ++ subcomponents.flatMap(_.allBoundVariables)
+  override def freeVariables: Set[TermVariable] = subcomponents.flatMap(_.freeVariables).toSet -- localBoundVariables
+
+  override def boundVariables = localBoundVariables ++ subcomponents.flatMap(_.boundVariables)
 
   override def calculateSubstitutions(
     other: Component,
@@ -147,24 +151,15 @@ case class DefinedStatement(
   }
 
   override def applySubstitutions(substitutions: Substitutions): Statement = {
-    val newBoundVariables = boundVariables.map(_.applySubstitutions(substitutions)).map(Term.asVariable)
-//    for (variable <- variables.statementVariables) {
-//      if (substitutions.statements(variable).variables.termVariables.intersect(newBoundVariables).nonEmpty)
-//        throw new Exception("Cannot substitute a new instance of a bound variable")
-//    }
-//    for (variable <- variables.termVariables) {
-//      if (substitutions.terms(variable).variables.termVariables.intersect(newBoundVariables).nonEmpty)
-//        throw new Exception("Cannot substitute a new instance of a bound variable")
-//    }
     copy(
       subcomponents = subcomponents.map(_.applySubstitutions(substitutions)),
-      boundVariables = boundVariables.map(_.applySubstitutions(substitutions)).map(Term.asVariable))
+      localBoundVariables = localBoundVariables.map(_.applySubstitutions(substitutions)).map(Term.asVariable))
   }
 
   override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
-    if (boundVariables.contains(termToBeReplaced))
+    if (localBoundVariables.contains(termToBeReplaced))
       throw new Exception("Cannot substitute for a bound variable")
-    if (termToReplaceWith.variables.termVariables.intersect(boundVariables).nonEmpty)
+    if (termToReplaceWith.variables.termVariables.intersect(localBoundVariables).nonEmpty)
       throw new Exception("Cannot substitute a new instance of a bound variable")
     copy(subcomponents = subcomponents.map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced)))
   }
@@ -176,7 +171,7 @@ case class DefinedStatement(
   ): Option[Statement] = {
     other match {
       case DefinedStatement(otherSubcomponents, otherBoundVariables, `definition`) =>
-        if (boundVariables.contains(termVariable) || otherBoundVariables.contains(termVariable))
+        if (localBoundVariables.contains(termVariable) || otherBoundVariables.contains(termVariable))
           None
         else {
           subcomponents.zip(otherSubcomponents)
