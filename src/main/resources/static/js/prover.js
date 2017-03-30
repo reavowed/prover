@@ -121,9 +121,18 @@
         var premises = proofContainer.find(".premise");
 
         var previousRows = $scope.proofRows.slice(0, rowIndex);
-        var referrableRows = _.filter(previousRows, function(row) {
-          return row.indentLevel <= rowData.indentLevel;
-        });
+        var referrableRows =  _.reduceRight(
+          previousRows,
+          function (acc, row) {
+            if (row.indentLevel <= acc.indentLevel) {
+              acc.indentLevel = row.indentLevel;
+              acc.rows.unshift(row);
+            }
+            return acc;
+          },
+          { indentLevel: rowData.indentLevel, rows: []}
+        ).rows;
+
         if (rowData.assumption) {
           referrableRows.push(rowData);
         }
