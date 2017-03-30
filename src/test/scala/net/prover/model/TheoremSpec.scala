@@ -102,6 +102,23 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Equals(y, x))
     }
 
+    "prove a conclusion that is a substitution 2" in {
+      val substitutionOfEquals = new Axiom(
+        "Substitution of Equals",
+        Seq(Equals(x, y), SubstitutedStatementVariable(φ, y, z)),
+        SubstitutedStatementVariable(φ, x, z))
+
+      val theorem = parseTheorem(
+        "X",
+        "premise = x y",
+        "premise = z y",
+        "prove = x z",
+        "qed")(
+        contextWith(substitutionOfEquals))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Equals(x, z))
+    }
+
     "prove a conclusion that is a nested substitution" in {
       val equivalenceOfSubstitutedEqauls = new Axiom(
         "Equivalence of Substituted Equals",
@@ -119,6 +136,22 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(
         Equivalence(ElementOf(z, x), ElementOf(z, y)))
+    }
+
+    "prove a conclusion that is a nested substituted variable" in {
+      val specification = new Axiom(
+        "Specification",
+        Seq(ForAll(x, φ)),
+        SubstitutedStatementVariable(φ, y, x))
+      val theorem = parseTheorem(
+        "X",
+        "premise ∀ x ¬ φ",
+        "prove ¬ sub y x φ",
+        "qed")(
+        contextWith(specification))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
+        Negation(SubstitutedStatementVariable(φ, y, x)))
     }
 
     "prove a conclusion with a substituted premise" in {

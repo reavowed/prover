@@ -60,7 +60,12 @@ case class StatementVariable(text: String) extends Statement {
         (Some(termVariable), Map.empty),
         (None, Map(termVariable -> Variables(Set(this), Set.empty))))
     } else {
-      Nil
+      other match {
+        case SubstitutedStatementVariable(variable, termToReplaceWith, `termVariable`) if variable == this =>
+          Seq((Some(termToReplaceWith), Map.empty))
+        case _ =>
+          Nil
+      }
     }
   }
   def replacePlaceholder(other: Component): Statement = this

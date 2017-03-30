@@ -51,7 +51,7 @@ case class TermVariable(text: String) extends Term {
   ): Option[Term] = {
     if (this == thisTerm && other == otherTerm) {
       Some(termVariable)
-    } else if (this == other) {
+    } else if (this == other && this != termVariable) {
       Some(this)
     } else {
       None

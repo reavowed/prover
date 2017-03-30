@@ -10,6 +10,8 @@ case class PartialSubstitutions(
     unknownSubstitutions: Map[SubstitutedStatementVariable, Statement],
     distinctVariables: Map[TermVariable, Variables]) {
 
+  private def knownSubstitutions = Substitutions(knownStatements, knownTerms)
+
   def tryAdd(statementVariable: StatementVariable, statement: Statement): Option[PartialSubstitutions] = {
     knownStatements.get(statementVariable) match {
       case Some(`statement`) =>
@@ -58,8 +60,7 @@ case class PartialSubstitutions(
     for {
       mappedStatementVariable <- knownStatements.get(substitutedStatementVariable.statementVariable)
       mappedTermToBeReplaced <- knownTerms.get(substitutedStatementVariable.termToBeReplaced).flatMap(Term.optionAsVariable)
-      mappedTermToReplaceWith <- substitutedStatementVariable.termToReplaceWith
-        .applySubstitutions(Substitutions(knownStatements, knownTerms))
+      mappedTermToReplaceWith <- substitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
       mappedStatement = mappedStatementVariable.makeSingleSubstitution(mappedTermToReplaceWith, mappedTermToBeReplaced)
       if mappedStatement == statement
     } yield this
@@ -77,11 +78,15 @@ case class PartialSubstitutions(
         }
       otherTarget = unknownSubstitutions(otherSubstitutedStatementVariable)
       sharedTermToBeReplaced = otherSubstitutedStatementVariable.termToBeReplaced
-      thisTermToReplaceWith = thisSubstitutedStatementVariable.termToReplaceWith
-      otherTermToReplaceWith = otherSubstitutedStatementVariable.termToReplaceWith
+      thisTermToReplaceWith <- thisSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
+      otherTermToReplaceWith <- otherSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
+      placeholderVariableTerm = knownTerms.getOrElse(
+        sharedTermToBeReplaced,
+        sharedTermToBeReplaced.copy(text = sharedTermToBeReplaced + "'"))
+      placeholderVariable <- Term.optionAsVariable(placeholderVariableTerm)
       resolvedStatement <- thisTarget.resolveSingleSubstitution(
         otherTarget,
-        sharedTermToBeReplaced,
+        placeholderVariable,
         thisTermToReplaceWith,
         otherTermToReplaceWith)
       substitutionsWithoutOtherSubstitutedStatementVariable =
@@ -89,7 +94,7 @@ case class PartialSubstitutions(
       substitutionsWithResolvedStatement <- substitutionsWithoutOtherSubstitutedStatementVariable
         .tryAdd(thisSubstitutedStatementVariable.statementVariable, resolvedStatement)
       substitutionsWithSharedTermToBeReplaced <- substitutionsWithResolvedStatement
-        .tryAdd(sharedTermToBeReplaced, sharedTermToBeReplaced)
+        .tryAdd(sharedTermToBeReplaced, placeholderVariable)
     } yield substitutionsWithSharedTermToBeReplaced
   }
 
