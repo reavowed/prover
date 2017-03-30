@@ -29,7 +29,7 @@ class StatementSpec extends ProverSpec {
     }
 
     "parse a substitution statement" in {
-      parseStatement("sub y x φ") mustEqual StatementVariableWithSingleSubstitution(φ, y, x)
+      parseStatement("sub y x φ") mustEqual SubstitutedStatementVariable(φ, y, x)
     }
 
     "parse an empty list" in {

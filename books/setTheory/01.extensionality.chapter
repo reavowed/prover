@@ -12,3 +12,9 @@ qed
 axiom Axiom of Extensionality
 conclusion → ∀ z ↔ ∈ z x ∈ z y = x y
 distinct-variables (z x y)
+
+theorem Sets Are Equal If They Have the Same Members
+premise ∀ z ↔ ∈ z x ∈ z y
+prove → ∀ z ↔ ∈ z x ∈ z y = x y
+prove = x y
+qed

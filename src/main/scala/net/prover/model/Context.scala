@@ -4,6 +4,7 @@ case class Context(
     statementDefinitions: Seq[StatementDefinition],
     termSpecifications: Seq[TermSpecification],
     inferences: Seq[Inference],
+    inferenceTransforms: Seq[InferenceTransform],
     variables: Variables) {
 
   def combine(others: Seq[Context]): Context = {
@@ -11,6 +12,7 @@ case class Context(
       others.flatMap(_.statementDefinitions) ++ statementDefinitions,
       others.flatMap(_.termSpecifications) ++ termSpecifications,
       others.flatMap(_.inferences) ++ inferences,
+      others.flatMap(_.inferenceTransforms) ++ inferenceTransforms,
       variables
     )
   }
@@ -28,8 +30,12 @@ case class Context(
       termSpecifications = termSpecifications :+ termDefinition.specification,
       inferences = inferences :+ termDefinition.inference)
   }
+
+  def addInferenceTransform(inferenceTransform: InferenceTransform) = {
+    copy(inferenceTransforms = inferenceTransforms :+ inferenceTransform)
+  }
 }
 
 object Context {
-  val empty = Context(Nil, Nil, Nil, Variables.empty)
+  val empty = Context(Nil, Nil, Nil, Nil, Variables.empty)
 }

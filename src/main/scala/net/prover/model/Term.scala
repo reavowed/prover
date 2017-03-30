@@ -15,6 +15,7 @@ trait Term extends JsonSerializable.Base with Component {
   def applySubstitutions(substitutions: Substitutions): Term
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Term]
+  def replacePlaceholder(other: Component): Term
 }
 
 case class TermVariable(text: String) extends Term {
@@ -64,6 +65,7 @@ case class TermVariable(text: String) extends Term {
       Some(None)
     }
   }
+  def replacePlaceholder(other: Component): Term = this
   override def html: String = text
   override def serialized: String = text
 }
@@ -140,6 +142,9 @@ case class DefinedTerm(
     }
   }
 
+  def replacePlaceholder(other: Component): Term = {
+    copy(subcomponents = subcomponents.map(_.replacePlaceholder(other)))
+  }
 
   override def html: String = {
     termSpecification.format.html(subcomponents)
@@ -158,6 +163,12 @@ case class DefinedTerm(
 
   override def hashCode(): Int = {
     subcomponents.hashCode * 41 + termSpecification.symbol.hashCode
+  }
+}
+
+object PlaceholderTerm extends Term with Placeholder {
+  def replacePlaceholder(other: Component): Term = {
+    other.asInstanceOf[Term]
   }
 }
 
@@ -188,6 +199,8 @@ object Term extends ComponentType {
           termSpecification.termParser
         case SpecifiedVariable(variable) =>
           Parser.constant(variable)
+        case "_" =>
+          Parser.constant(PlaceholderTerm)
         case _ =>
           throw new Exception(s"Unrecognised term type '$termType'")
       }

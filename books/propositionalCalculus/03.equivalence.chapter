@@ -3,11 +3,33 @@ We introduce our final connective, ↔ (equivalence).
 
 statement ↔ (φ ψ) definition (∧ → φ ψ → ψ φ)
 
+theorem Equivalence by Both Implications
+premise → φ ψ
+premise → ψ φ
+prove ∧ → φ ψ → ψ φ
+prove ↔ φ ψ
+qed
+
 theorem Equivalence by Both Cases
 premise proves φ ψ
 premise proves ψ φ
 prove → φ ψ
 prove → ψ φ
-prove ∧ → φ ψ → ψ φ
+prove ↔ φ ψ
+qed
+
+theorem True Statements Are Equivalent
+premise φ
+premise ψ
+prove → φ ψ
+prove → ψ φ
+prove ↔ φ ψ
+qed
+
+theorem False Statements Are Equivalent
+premise ¬ φ
+premise ¬ ψ
+prove → φ ψ
+prove → ψ φ
 prove ↔ φ ψ
 qed

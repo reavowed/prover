@@ -10,6 +10,7 @@ trait Component {
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Component
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Component]
   def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]]
+  def replacePlaceholder(other: Component): Component
   def html: String
   def safeHtml: String = html
   def serialized: String
@@ -26,6 +27,38 @@ object Component {
           .getOrElse(throw new Exception(s"Unrecognised variable name '$variableName'"))
     }
   }
+}
+
+trait Placeholder extends Component {
+  override def variables: Variables = Variables.empty
+  override def freeVariables: Set[TermVariable] = Set.empty
+  override def boundVariables: Set[TermVariable] = Set.empty
+  override def calculateSubstitutions(
+    other: Component,
+    substitutions: PartialSubstitutions
+  ): Nothing = {
+    throw new Exception("Cannot calculate substitutions for placeholder")
+  }
+  override def applySubstitutions(substitutions: Substitutions): Nothing = {
+    throw new Exception("Cannot apply substitutions to placeholder")
+  }
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Nothing = {
+    throw new Exception("Cannot make substitution into placeholder")
+  }
+  def resolveSingleSubstitution(
+    other: Component,
+    termVariable: TermVariable,
+    thisTerm: Term,
+    otherTerm: Term
+  ): Nothing = {
+    throw new Exception("Cannot resolve substitution for placeholder")
+  }
+  def findSubstitution(other: Component, termVariable: TermVariable): Nothing = {
+
+    throw new Exception("Cannot find substitution for placeholder")
+  }
+  override def html: String = "???"
+  override def serialized: String = "_"
 }
 
 trait ComponentType {

@@ -27,6 +27,16 @@ package object model {
           f(element, previous).mapLeft(list :+ _)
       }
     }
+    def collectFold[S](f: (Seq[S], T) => Option[S]): Option[Seq[S]] = {
+      seq.foldLeft(Option(Seq.empty[S])) { case (accOption, t) =>
+        accOption.flatMap { acc =>
+          f(acc, t).map(acc :+ _)
+        }
+      }
+    }
+    def mapWithIndex[S](f: (T, Int) => S): Seq[S] = {
+      seq.zipWithIndex.map { case (t, index) => f(t, index)}
+    }
     def distinctBy[S](f: T => S): Seq[T] = {
       val b = Seq.newBuilder[T]
       val seen = mutable.HashSet[S]()
@@ -43,6 +53,13 @@ package object model {
       case s: S =>
         s
     }
+    def toType[S: ClassTag]: Option[Seq[S]] = seq.map {
+      case s: S =>
+        Some(s)
+      case _ =>
+        None
+    }.traverseOption
+    def areAllOfType[S]: Boolean = seq.forall(_.isInstanceOf[S])
   }
 
   implicit class SeqTupleOps[S, T](x: Seq[(S, T)]) {
@@ -69,6 +86,12 @@ package object model {
   }
 
   implicit class IteratorOps[T](iterator: Iterator[T]) {
+    def nextOption(): Option[T] = {
+      if (iterator.hasNext)
+        Some(iterator.next())
+      else
+        None
+    }
     def mapCollect[S](f: T => Option[S]): Iterator[S] = {
       iterator.map(f).collectDefined
     }

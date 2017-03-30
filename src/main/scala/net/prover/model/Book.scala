@@ -26,7 +26,13 @@ case class Book(
 }
 
 object Book {
-  val chapterEntryParsers: Seq[ChapterEntryParser[_]] = Seq(Comment, StatementDefinition, TermDefinition, Axiom, Theorem)
+  val chapterEntryParsers: Seq[ChapterEntryParser[_]] = Seq(
+    Comment,
+    StatementDefinition,
+    TermDefinition,
+    Axiom,
+    Theorem,
+    InferenceTransform)
   val bookEntryParsers: Seq[BookEntryParser] = Seq(Chapter, BookInclude, VariableDefinitions) ++ chapterEntryParsers
 
   private def lineParser(book: Book): Parser[Option[Book]] = {

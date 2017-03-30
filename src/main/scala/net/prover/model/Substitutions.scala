@@ -9,7 +9,7 @@ case class Substitutions(
 case class PartialSubstitutions(
     knownStatements: Map[StatementVariable, Statement],
     knownTerms: Map[TermVariable, Term],
-    unknownSubstitutions: Map[StatementVariableWithSingleSubstitution, Statement]) {
+    unknownSubstitutions: Map[SubstitutedStatementVariable, Statement]) {
 
   def tryAdd(statementVariable: StatementVariable, statement: Statement): Option[PartialSubstitutions] = {
     knownStatements.get(statementVariable) match {
@@ -23,46 +23,61 @@ case class PartialSubstitutions(
   }
 
   def tryAdd(
-    statementVariableWithSingleSubstitution: StatementVariableWithSingleSubstitution,
+    substitutedStatementVariable: SubstitutedStatementVariable,
+    statement: Statement
+  ): Option[PartialSubstitutions] = {
+    Some(
+      tryAddDirectly(substitutedStatementVariable, statement)
+        .getOrElse(copy(unknownSubstitutions = unknownSubstitutions + (substitutedStatementVariable -> statement)))
+    )
+  }
+
+  private def tryAddDirectly(
+    substitutedStatementVariable: SubstitutedStatementVariable,
     statement: Statement
   ): Option[PartialSubstitutions] = {
     unknownSubstitutions.keySet.find(
-      s => s.statementVariable == statementVariableWithSingleSubstitution.statementVariable
+      s => s.statementVariable == substitutedStatementVariable.statementVariable
     ) match {
       case Some(other) =>
-        if (other.termToBeReplaced == statementVariableWithSingleSubstitution.termToBeReplaced) {
-          statement.resolveSingleSubstitution(
-            unknownSubstitutions(other),
-            statementVariableWithSingleSubstitution.termToBeReplaced,
-            statementVariableWithSingleSubstitution.termToReplaceWith,
-            other.termToReplaceWith
-          ).flatMap { resolvedStatement =>
-            copy(unknownSubstitutions = unknownSubstitutions - other)
-              .tryAdd(statementVariableWithSingleSubstitution.statementVariable, resolvedStatement)
-          }
-        } else {
-          None // TODO: overly conservative
-        }
+        tryAddingByMerge(substitutedStatementVariable, other, statement)
       case None =>
-        Some(
-          tryAddingByCalculatingTermToReplaceWith(statementVariableWithSingleSubstitution, statement)
-            .getOrElse(copy(unknownSubstitutions = unknownSubstitutions + (statementVariableWithSingleSubstitution -> statement))))
+        tryAddingByCalculatingTermToReplaceWith(substitutedStatementVariable, statement)
     }
   }
 
+  private def tryAddingByMerge(
+    substitutedStatementVariable: SubstitutedStatementVariable,
+    otherSubstitutedStatementVariable: SubstitutedStatementVariable,
+    statement: Statement
+  ): Option[PartialSubstitutions] = {
+    if (otherSubstitutedStatementVariable.termToBeReplaced == substitutedStatementVariable.termToBeReplaced) {
+      statement.resolveSingleSubstitution(
+        unknownSubstitutions(otherSubstitutedStatementVariable),
+        substitutedStatementVariable.termToBeReplaced,
+        substitutedStatementVariable.termToReplaceWith,
+        otherSubstitutedStatementVariable.termToReplaceWith
+      ).flatMap { resolvedStatement =>
+        copy(unknownSubstitutions = unknownSubstitutions - otherSubstitutedStatementVariable)
+          .tryAdd(substitutedStatementVariable.statementVariable, resolvedStatement)
+      }
+    } else {
+      None // TODO: overly conservative
+    }
+  }
 
   private def tryAddingByCalculatingTermToReplaceWith(
-    statementVariableWithSingleSubstitution: StatementVariableWithSingleSubstitution,
+    substitutedStatementVariable: SubstitutedStatementVariable,
     statement: Statement
   ): Option[PartialSubstitutions] = {
     (for {
-      mappedStatementVariable <- knownStatements.get(statementVariableWithSingleSubstitution.statementVariable)
-      mappedTermToBeReplaced <- knownTerms.get(statementVariableWithSingleSubstitution.termToBeReplaced)
+      mappedStatementVariable <- knownStatements.get(substitutedStatementVariable.statementVariable)
+      mappedTermToBeReplaced <- knownTerms.get(substitutedStatementVariable.termToBeReplaced)
         .flatMap(t => Try(Term.asVariable(t)).toOption)
       mappedTermToReplaceWithOption <- mappedStatementVariable.findSubstitution(statement, mappedTermToBeReplaced)
     } yield mappedTermToReplaceWithOption)
       .flatten
-      .flatMap(t => statementVariableWithSingleSubstitution.termToReplaceWith.calculateSubstitutions(t, this))
+      .flatMap(t => substitutedStatementVariable.termToReplaceWith.calculateSubstitutions(t, this))
   }
 
   def tryAdd(termVariable: TermVariable, term: Term): Option[PartialSubstitutions] = {
@@ -77,15 +92,13 @@ case class PartialSubstitutions(
   }
 
   def tryResolve(): Option[Substitutions] = {
-    val resolvedSubstitutions = Substitutions(knownStatements, knownTerms)
-    val allResolved = unknownSubstitutions.forall {
-      case (statementVariableWithSubstitutions, statement) =>
-        Try(statementVariableWithSubstitutions.applySubstitutions(resolvedSubstitutions)).toOption.contains(statement)
-    }
-    if (allResolved) {
-      Some(resolvedSubstitutions)
-    } else {
-      None
+    unknownSubstitutions.keys.toList match {
+      case Nil =>
+        Some(Substitutions(knownStatements, knownTerms))
+      case one +: more =>
+        copy(unknownSubstitutions = unknownSubstitutions.filterKeys(more.contains))
+          .tryAddDirectly(one, unknownSubstitutions(one))
+          .flatMap(_.tryResolve())
     }
   }
 }

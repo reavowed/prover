@@ -18,3 +18,5 @@ qed
 axiom Specification
 premise ∀ x φ
 conclusion sub y x φ
+
+inference-transform ∀ x _

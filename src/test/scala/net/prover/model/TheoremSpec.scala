@@ -7,7 +7,6 @@ class TheoremSpec extends ProverSpec {
     def parseTheorem(text: String*)(implicit context: Context): Theorem = {
       Theorem.parser(context).parseAndDiscard(text.mkString("\n"))
     }
-
     "not prove an unfounded statement" in {
       parseTheorem(
         "Anything Is True",
@@ -89,8 +88,8 @@ class TheoremSpec extends ProverSpec {
     "prove a conclusion that is a substitution" in {
       val substitutionOfEquals = new Axiom(
         "Substitution of Equals",
-        Seq(Equals(x, y), StatementVariableWithSingleSubstitution(φ, x, z)),
-        StatementVariableWithSingleSubstitution(φ, y, z))
+        Seq(Equals(x, y), SubstitutedStatementVariable(φ, x, z)),
+        SubstitutedStatementVariable(φ, y, z))
 
       val theorem = parseTheorem(
         "X",
@@ -108,8 +107,8 @@ class TheoremSpec extends ProverSpec {
         "Equivalence of Substituted Equals",
         Seq(Equals(x, y)),
         Equivalence(
-          StatementVariableWithSingleSubstitution(φ, x, z),
-          StatementVariableWithSingleSubstitution(φ, y, z)))
+          SubstitutedStatementVariable(φ, x, z),
+          SubstitutedStatementVariable(φ, y, z)))
 
       val theorem = parseTheorem(
         "X",
@@ -125,7 +124,7 @@ class TheoremSpec extends ProverSpec {
     "prove a conclusion with a substituted premise" in {
       val generalization = new Axiom(
         "Generalization",
-        Seq(StatementVariableWithSingleSubstitution(φ, y, x)),
+        Seq(SubstitutedStatementVariable(φ, y, x)),
         ForAll(x, φ))
 
       val theorem = parseTheorem(
@@ -137,6 +136,49 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(
         ForAll(z, Implication(ElementOf(z, x), ElementOf(z, x))))
+    }
+
+    "prove a conclusion with a no-op substitution" in {
+      val specification = new Axiom(
+        "Specification",
+        Seq(ForAll(x, φ)),
+        SubstitutedStatementVariable(φ, y, x))
+
+      val theorem = parseTheorem(
+        "X",
+        "premise ∀ x φ",
+        "prove φ",
+        "qed")(
+        contextWith(specification))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(φ)
+    }
+
+    "prove the conclusion of a transformed inference" in {
+      val falseStatementsAreEquivalent = new Axiom(
+        "False Statements Are Equivalent",
+        Seq(Negation(φ), Negation(ψ)),
+        Equivalence(φ, ψ))
+      val generalization = new Axiom(
+        "Generalization",
+        Seq(SubstitutedStatementVariable(φ, y, x)),
+        ForAll(x, φ))
+      val specification = new Axiom(
+        "Specification",
+        Seq(ForAll(x, φ)),
+        SubstitutedStatementVariable(φ, y, x))
+      val transform = new InferenceTransform(ForAll(x, PlaceholderStatement))
+
+      val theorem = parseTheorem(
+        "X",
+        "premise ∀ x ¬ ∈ x z",
+        "premise ∀ x ¬ ∈ x y",
+        "prove ∀ x ↔ ∈ x z ∈ x y",
+        "qed")(
+        contextWith(falseStatementsAreEquivalent, generalization, specification).addInferenceTransform(transform))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
+        ForAll(x, Equivalence(ElementOf(x, z), ElementOf(x, y))))
     }
   }
 }

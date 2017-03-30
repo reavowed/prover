@@ -14,10 +14,10 @@ trait Statement extends JsonSerializable.Base with Component {
   override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
     serialize(gen, serializers)
   }
-  def containsTerms: Boolean
   def applySubstitutions(substitutions: Substitutions): Statement
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Statement]
+  def replacePlaceholder(other: Component): Statement
 }
 
 case class StatementVariable(text: String) extends Statement {
@@ -38,7 +38,10 @@ case class StatementVariable(text: String) extends Statement {
   }
 
   override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable) = {
-    StatementVariableWithSingleSubstitution(this, termToReplaceWith, termToBeReplaced)
+    if (termToReplaceWith == termToBeReplaced)
+      this
+    else
+      SubstitutedStatementVariable(this, termToReplaceWith, termToBeReplaced)
   }
   def resolveSingleSubstitution(
     other: Component,
@@ -54,20 +57,17 @@ case class StatementVariable(text: String) extends Statement {
   }
   def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]] = {
     if (this == other) {
-      Some(None)
+      Some(Some(termVariable))
     } else {
       None
     }
   }
-
-  override def containsTerms = false
-
+  def replacePlaceholder(other: Component): Statement = this
   override def html: String = text
-
   override def serialized: String = text
 }
 
-case class StatementVariableWithSingleSubstitution(
+case class SubstitutedStatementVariable(
     statementVariable: StatementVariable,
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable)
@@ -80,7 +80,7 @@ case class StatementVariableWithSingleSubstitution(
     other: Component,
     substitutions: PartialSubstitutions
   ): Option[PartialSubstitutions] = other match {
-    case StatementVariableWithSingleSubstitution(otherStatementVariable, otherTermToReplaceWith, otherTermToBeReplaced) =>
+    case SubstitutedStatementVariable(otherStatementVariable, otherTermToReplaceWith, otherTermToBeReplaced) =>
       for {
         s1 <- statementVariable.calculateSubstitutions(otherStatementVariable, substitutions)
         s2 <- termToReplaceWith.calculateSubstitutions(otherTermToReplaceWith, s1)
@@ -112,11 +112,8 @@ case class StatementVariableWithSingleSubstitution(
       None
     }
   }
-
-  override def containsTerms = false
-
+  def replacePlaceholder(other: Component): Statement = this
   override def html: String = "[" + termToReplaceWith.safeHtml + "/" + termToBeReplaced.html + "]" + statementVariable.html
-
   override def serialized: String = Seq(
     "sub",
     termToReplaceWith.serialized,
@@ -212,6 +209,10 @@ case class DefinedStatement(
     }
   }
 
+  def replacePlaceholder(other: Component): Statement = {
+    copy(subcomponents = subcomponents.map(_.replacePlaceholder(other)))
+  }
+
   override def html: String = {
     definition.format.html(subcomponents)
   }
@@ -219,13 +220,14 @@ case class DefinedStatement(
     definition.format.safeHtml(subcomponents)
   }
   override def serialized: String = (definition.symbol +: subcomponents.map(_.serialized)).mkString(" ")
-  override def containsTerms: Boolean = subcomponents.exists {
-    case s: Statement =>
-      s.containsTerms
-    case _: Term =>
-      true
+}
+
+object PlaceholderStatement extends Statement with Placeholder{
+  def replacePlaceholder(other: Component): Statement = {
+    other.asInstanceOf[Statement]
   }
 }
+
 
 object Statement extends ComponentType {
 
@@ -254,6 +256,8 @@ object Statement extends ComponentType {
         } yield {
           statement.makeSingleSubstitution(termToReplaceWith, termToBeReplaced)
         }
+      case "_" =>
+        Parser.constant(PlaceholderStatement)
       case _ =>
         throw new Exception(s"Unrecognised statement type $statementType")
     }

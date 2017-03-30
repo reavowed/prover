@@ -3,3 +3,10 @@ Introduce the empty set, ∅.
 
 axiom Axiom of Empty Set
 conclusion ∃ X ∀ x ¬ ∈ x X
+
+theorem Two Empty Sets Are Equal
+premise ∀ x ¬ ∈ x X
+premise ∀ x ¬ ∈ x Y
+prove ∀ x ↔ ∈ x X ∈ x Y
+prove = X Y
+qed
