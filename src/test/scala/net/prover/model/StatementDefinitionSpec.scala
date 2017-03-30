@@ -33,13 +33,19 @@ class StatementDefinitionSpec extends ProverSpec {
     "parse bound variables" in {
       parseStatementDefinition(
         "∀ (x φ) boundVariables (x)"
-      ).boundVariables mustEqual Seq(x)
+      ).boundVariables mustEqual Set(x)
     }
 
     "infer bound variables from a defining statement" in {
       StatementDefinition.parser(defaultContext).parseAndDiscard(
         "∃ (x φ) format ((∃{}){}) definition (¬ ∀ x ¬ φ)"
-      ).boundVariables mustEqual Seq(x)
+      ).boundVariables mustEqual Set(x)
+    }
+
+    "infer bound variables that are not fully bound in the defining statement" in {
+      StatementDefinition.parser(defaultContext).parseAndDiscard(
+        "∃! (x φ) format ((∃!{}){}) definition (∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z)"
+      ).boundVariables mustEqual Set(x)
     }
 
     "parse distinct variables" in {

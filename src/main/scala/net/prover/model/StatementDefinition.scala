@@ -48,6 +48,18 @@ case class StatementDefinition(
 }
 
 object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
+  private def getDefaultBoundVariables(
+    defaultVariables: Seq[Component],
+    definingStatement: Statement
+  ): Set[TermVariable] = {
+    val variables = Variables(
+      defaultVariables.ofType[StatementVariable].toSet,
+      defaultVariables.ofType[TermVariable].toSet)
+    variables.termVariables.filter { defaultVariable =>
+      definingStatement.getPotentiallyIntersectingVariables(defaultVariable).intersect(variables).isEmpty
+    }
+  }
+
   private def definingStatementParser(implicit context: Context): Parser[Option[Statement]] = Parser.optional(
     "definition",
     Statement.parser.inParens.map(Some.apply),
@@ -61,7 +73,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
     Parser.optional(
       "boundVariables",
       Term.variableListParser.map(_.toSet),
-      optionalDefiningStatement.map(_.boundVariables.intersect(defaultVariables.ofType[TermVariable].toSet)).getOrElse(Set.empty))
+      optionalDefiningStatement.map(getDefaultBoundVariables(defaultVariables, _)).getOrElse(Set.empty))
   }
 
   def parser(implicit context: Context): Parser[StatementDefinition] = {

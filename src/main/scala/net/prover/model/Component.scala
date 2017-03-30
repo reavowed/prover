@@ -5,6 +5,7 @@ trait Component {
   def allVariables: Variables
   def presentVariables: Variables = allVariables
   def boundVariables: Set[TermVariable]
+  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Option[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Component]
@@ -71,6 +72,7 @@ object Component {
 trait Placeholder extends Component {
   override def allVariables: Variables = Variables.empty
   override def boundVariables: Set[TermVariable] = Set.empty
+  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = Variables.empty
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions

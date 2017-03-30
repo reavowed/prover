@@ -23,6 +23,7 @@ trait Statement extends JsonSerializable.Base with Component {
 case class StatementVariable(text: String) extends Statement {
   override def allVariables: Variables = Variables(Set(this), Set.empty)
   override def boundVariables: Set[TermVariable] = Set.empty
+  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = Variables(Set(this), Set.empty)
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
@@ -82,6 +83,12 @@ case class SubstitutedStatementVariable(
   override def allVariables: Variables = termToReplaceWith.allVariables + statementVariable + termToBeReplaced
   override def presentVariables: Variables = allVariables - termToBeReplaced
   override def boundVariables: Set[TermVariable] = termToReplaceWith.boundVariables
+  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = {
+    if (termVariable == termToBeReplaced)
+      termToReplaceWith.allVariables
+    else
+      termToReplaceWith.allVariables + statementVariable
+  }
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
@@ -144,6 +151,14 @@ case class DefinedStatement(
 {
   override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
   override def boundVariables = localBoundVariables ++ subcomponents.map(_.boundVariables).knownCommonValues
+  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = {
+    if (localBoundVariables.contains(termVariable))
+      Variables.empty
+    else
+      subcomponents
+        .map(_.getPotentiallyIntersectingVariables(termVariable))
+        .foldLeft(Variables.empty)(_ ++ _)
+  }
 
   override def calculateSubstitutions(
     other: Component,
