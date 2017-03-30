@@ -29,13 +29,15 @@ object Inference {
   }
 
   sealed trait Premise {
-    def freeVariables: Set[TermVariable]
+    def allVariables: Variables
+    def boundVariables: Set[TermVariable]
     def applySubstitutions(substitutions: Substitutions): Premise
     def serialized: String
   }
 
   case class DirectPremise(statement: Statement) extends Premise {
-    override def freeVariables = statement.freeVariables
+    override def allVariables: Variables = statement.allVariables
+    override def boundVariables: Set[TermVariable] = statement.boundVariables
     override def applySubstitutions(substitutions: Substitutions) = {
       val substitutedStatement = statement.applySubstitutions(substitutions)
       DirectPremise(substitutedStatement)
@@ -43,7 +45,8 @@ object Inference {
     override def serialized = statement.serialized
   }
   case class DeducedPremise(antecedent: Statement, consequent: Statement) extends Premise {
-    override def freeVariables = antecedent.freeVariables ++ consequent.freeVariables
+    override def allVariables: Variables = antecedent.allVariables ++ consequent.allVariables
+    override def boundVariables: Set[TermVariable] = antecedent.boundVariables intersect consequent.boundVariables
     override def applySubstitutions(substitutions: Substitutions) = {
       val substitutedAntecedent = antecedent.applySubstitutions(substitutions)
       val substitutedConsequent = consequent.applySubstitutions(substitutions)

@@ -9,14 +9,14 @@ conclusion ∀ x φ
 arbitrary-variables (y)
 distinct-variables (y φ)
 
-theorem Generalization
-premise φ
-prove sub y x φ
-prove ∀ x φ
-qed
-
 axiom Specification
 premise ∀ x φ
 conclusion sub y x φ
+
+theorem Generalization
+premise φ
+prove sub y x φ
+prove ∀ x φ arbitrary-variables (x) distinct-variables ()
+qed
 
 inference-transform ∀ x _

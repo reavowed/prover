@@ -106,6 +106,14 @@ object Parser {
           otherParser.parse(tokenizer)
       }
     }
+    def getOrElse[S >: T](other: => S): Parser[S] = Parser { tokenizer =>
+      parser.parse(tokenizer) match {
+        case (Some(t), nextTokenizer) =>
+          (t, nextTokenizer)
+        case (None, _) =>
+          (other, tokenizer)
+      }
+    }
     def whileDefined: Parser[Seq[T]] = {
       def readNext(acc: Seq[T], tokenizer: Tokenizer): (Seq[T], Tokenizer) = {
         parser.parse(tokenizer) match {
@@ -136,13 +144,16 @@ object Parser {
     default: => T
   ): Parser[T] = {
     Parser.singleWordIfAny.onlyIf(_.exists(_ == name)).map(_.flatten)
-      .mapFlatMap(_ => parser).orElse(Parser.constant(default))
+      .mapFlatMap(_ => parser)
+      .getOrElse(default)
   }
 
   def iterateWhileDefined[T](
     initial: T,
     parseFn: T => Parser[Option[T]]
   ): Parser[T] = {
-    parseFn(initial).mapFlatMap(iterateWhileDefined(_, parseFn)).orElse(Parser.constant(initial))
+    parseFn(initial)
+      .mapFlatMap(iterateWhileDefined(_, parseFn))
+      .getOrElse(initial)
   }
 }

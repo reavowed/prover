@@ -1,0 +1,16 @@
+chapter Uniqueness Quantifier
+Introduce the uniqueness quantifier, ∃!.
+
+statement ∃! (x φ)
+  format ((∃!x)φ)
+  definition (∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z)
+
+theorem Prove Uniqueness
+premise ∃ x φ
+premise proves ∧ sub y x φ sub z x φ = y z
+prove → ∧ sub y x φ sub z x φ = y z
+prove ∀ z → ∧ sub y x φ sub z x φ = y z
+prove ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
+prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
+prove ∃! x φ
+qed

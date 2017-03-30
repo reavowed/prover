@@ -2,8 +2,8 @@ package net.prover.model
 
 trait Component {
   def componentType: ComponentType
-  def variables: Variables
-  def freeVariables: Set[TermVariable]
+  def allVariables: Variables
+  def presentVariables: Variables = allVariables
   def boundVariables: Set[TermVariable]
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Option[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions): Component
@@ -30,8 +30,7 @@ object Component {
 }
 
 trait Placeholder extends Component {
-  override def variables: Variables = Variables.empty
-  override def freeVariables: Set[TermVariable] = Set.empty
+  override def allVariables: Variables = Variables.empty
   override def boundVariables: Set[TermVariable] = Set.empty
   override def calculateSubstitutions(
     other: Component,

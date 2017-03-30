@@ -161,8 +161,10 @@ class TheoremSpec extends ProverSpec {
         Equivalence(φ, ψ))
       val generalization = new Axiom(
         "Generalization",
-        Seq(SubstitutedStatementVariable(φ, y, x)),
-        ForAll(x, φ))
+        Seq(φ),
+        ProvenStatement(
+          ForAll(x, φ),
+          Conditions(Set(x), Map.empty)))
       val specification = new Axiom(
         "Specification",
         Seq(ForAll(x, φ)),
@@ -179,6 +181,53 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(
         ForAll(x, Equivalence(ElementOf(x, z), ElementOf(x, y))))
+    }
+
+    "carry arbitrary variable condition from inference conclusion" in {
+      val substitution = new Axiom(
+        "Substitution",
+        Seq(φ),
+        ProvenStatement(
+          SubstitutedStatementVariable(φ, y ,x),
+          Conditions(arbitraryVariables = Set(x), distinctVariables = Map.empty)))
+
+      val theorem = parseTheorem(
+        "X",
+        "premise φ",
+        "prove sub z y φ",
+        "qed")(
+        contextWith(substitution))
+
+      theorem.conclusion mustEqual ProvenStatement(
+        SubstitutedStatementVariable(φ, z, y),
+        Conditions(Set(y), Map.empty))
+    }
+
+    "only prove a statement if the conditions match when specified explicitly" in {
+      val substitution = new Axiom(
+        "Substitution",
+        Seq(φ),
+        ProvenStatement(
+          SubstitutedStatementVariable(φ, y ,x),
+          Conditions(arbitraryVariables = Set(x), distinctVariables = Map.empty)))
+      val generalization = new Axiom(
+        "Generalization",
+        Seq(SubstitutedStatementVariable(φ, y, x)),
+        ProvenStatement(
+          ForAll(x, φ),
+          Conditions(Set(y), Map(y -> Variables(Set(φ), Set.empty)))))
+
+      val theorem = parseTheorem(
+        "X",
+        "premise φ",
+        "prove sub x y φ",
+        "prove ∀ y φ arbitrary-variables(y) distinct-variables ()",
+        "qed")(
+        contextWith(substitution, generalization))
+
+      theorem.conclusion mustEqual ProvenStatement(
+        ForAll(y, φ),
+        Conditions(Set(y), Map.empty))
     }
   }
 }

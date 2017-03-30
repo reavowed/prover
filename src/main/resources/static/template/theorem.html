@@ -1,5 +1,6 @@
 <div ng-if="$ctrl.theorem">
-    <div class="result">
+    <div class="result"
+         ng-init="conditions = $ctrl.theorem.conclusion.conditions">
         <h5 class="theoremTitle"
             data-toggle="collapse"
             data-target="#{{$ctrl.theorem.id}}-proof, #{{$ctrl.theorem.id}}-summary">
@@ -15,16 +16,15 @@
                     {{$ctrl.theorem.conclusion.statement}}.
                 </div>
             </div>
-            <div class="arbitraryVariables" ng-if="$ctrl.theorem.conclusion.conditions.arbitraryVariables.length">
-                Arbitrary variables: {{$ctrl.theorem.conclusion.conditions.arbitraryVariables.join(", ")}}
-            </div>
-            <div class="distinctVariables" ng-if="$ctrl.theorem.conclusion.conditions.distinctVariables.length">
-                Distinct variables:
-                <span ng-repeat="requirement in $ctrl.theorem.conclusion.conditions.distinctVariables"
-                      class="distinctVariable"
-                >
-                    ({{requirement.termVariable}} may not appear in {{requirement.variables.join(", ")}})
-                </span>
+            <div class="conditions"
+                 ng-if="conditions.arbitraryVariables.length || conditions.distinctVariables.length">
+                <h6>Conditions</h6>
+                <div ng-if="conditions.arbitraryVariables.length">
+                    {{joinWordList(conditions.arbitraryVariables)}} must be arbitrary.
+                </div>
+                <div ng-repeat="requirement in conditions.distinctVariables" class="distinctVariable">
+                    {{requirement.termVariable}} must be distinct from {{joinWordList(requirement.variables)}}.
+                </div>
             </div>
         </div>
         <div id="{{$ctrl.theorem.id}}-proof" class="theoremProof collapse">

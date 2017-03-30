@@ -9,7 +9,8 @@ object ProofOutline {
       steps: Seq[Step])
     extends Step
   case class AssertionStep(
-      assertion: Statement)
+      assertion: Statement,
+      conditions: Option[Conditions])
     extends Step
 
   private def assumptionStepParser(implicit context: Context): Parser[AssumptionStep] = {
@@ -22,7 +23,10 @@ object ProofOutline {
   }
 
   private def assertionStepParser(implicit context: Context): Parser[AssertionStep] = {
-    Statement.parser.map(AssertionStep)
+    for {
+      assertion <- Statement.parser
+      conditions <- Conditions.optionalParser
+    } yield AssertionStep(assertion, conditions)
   }
 
   private def stepParser(implicit context: Context): Parser[Option[Step]] = {

@@ -19,10 +19,18 @@ case class Conditions(
       }.toMap)
   }
 
-  def restrictTo(termVariables: Set[TermVariable]): Conditions = {
-    Conditions(
-      arbitraryVariables.intersect(termVariables),
-      distinctVariables.filterKeys(termVariables.contains))
+  def filterOutBoundVariables(boundVariables: Set[TermVariable]): Conditions = {
+    copy(arbitraryVariables = arbitraryVariables.diff(boundVariables))
+  }
+
+  def restrictToActiveVariables(activeVariables: Variables): Conditions = {
+    copy(
+      arbitraryVariables = arbitraryVariables.intersect(activeVariables.termVariables),
+      distinctVariables = distinctVariables
+        .mapValues(_ intersect activeVariables)
+        .filter { case (termVariable, variables) =>
+          activeVariables.termVariables.contains(termVariable) && variables.nonEmpty
+        })
   }
 
   def applySubstitutions(
@@ -34,9 +42,9 @@ case class Conditions(
     distinctVariables.map { case (termVariable, Variables(statementVariables, termVariables)) =>
       val updatedTermVariable = Term.asVariable(termVariable.applySubstitutions(substitutions))
       val updatedStatementVariables = statementVariables.map(
-        _.applySubstitutions(substitutions).variables)
+        _.applySubstitutions(substitutions).presentVariables)
       val updatedTermVariables = termVariables.map(
-        _.applySubstitutions(substitutions).variables)
+        _.applySubstitutions(substitutions).presentVariables)
       val updatedOtherVariables = (updatedStatementVariables ++ updatedTermVariables).reduce(_ ++ _)
       if (updatedOtherVariables.termVariables.contains(updatedTermVariable))
         throw DistinctVariableViolationException(updatedTermVariable)
@@ -65,8 +73,11 @@ case class Conditions(
 object Conditions {
   val empty = Conditions(Set.empty, Map.empty)
 
-  def arbitraryVariablesParser(implicit context: Context): Parser[Set[TermVariable]] = {
-    Parser.optional("arbitrary-variables", Term.variableListParser.map(_.toSet), Set.empty)
+  def arbitraryVariablesParser(implicit context: Context): Parser[Option[Set[TermVariable]]] = {
+    Parser.optional(
+      "arbitrary-variables",
+      Term.variableListParser.map(_.toSet).map(Some.apply),
+      None)
   }
 
   private def variableParser(variables: Variables)(implicit context: Context): Parser[Option[Variables]] = {
@@ -85,17 +96,32 @@ object Conditions {
     } yield term -> variables
   }
 
-  def distinctVariablesParser(implicit context: Context): Parser[Map[TermVariable, Variables]] = {
+  def optionalDistinctVariablesParser(implicit context: Context): Parser[Option[Map[TermVariable, Variables]]] = {
     Parser.optional(
       "distinct-variables",
-      distinctVariablesClauseParser.listInParens(Some(",")).map(_.toMap),
-      Map.empty)
+      distinctVariablesClauseParser.listInParens(Some(",")).map(_.toMap).map(Some.apply),
+      None)
+  }
+
+  def distinctVariablesParser(implicit context: Context): Parser[Map[TermVariable, Variables]] = {
+    optionalDistinctVariablesParser.getOrElse(Map.empty)
+  }
+
+  def optionalParser(implicit context: Context): Parser[Option[Conditions]] = {
+    for {
+      arbitraryVariablesOption <- arbitraryVariablesParser
+      distinctVariablesOption <- optionalDistinctVariablesParser
+    } yield {
+      if (arbitraryVariablesOption.isEmpty && distinctVariablesOption.isEmpty)
+        None
+      else
+        Some(Conditions(
+          arbitraryVariablesOption.getOrElse(Set.empty),
+          distinctVariablesOption.getOrElse(Map.empty)))
+    }
   }
 
   def parser(implicit context: Context): Parser[Conditions] = {
-    for {
-      arbitraryVariables <- arbitraryVariablesParser
-      distinctVariables <- distinctVariablesParser
-    } yield Conditions(arbitraryVariables, distinctVariables)
+    optionalParser.getOrElse(Conditions.empty)
   }
 }

@@ -19,8 +19,7 @@ trait Term extends JsonSerializable.Base with Component {
 }
 
 case class TermVariable(text: String) extends Term {
-  override def variables: Variables = Variables(Set.empty, Set(this))
-  override def freeVariables = Set(this)
+  override def allVariables: Variables = Variables(Set.empty, Set(this))
   override def boundVariables = Set.empty
   override def calculateSubstitutions(
     other: Component,
@@ -75,9 +74,8 @@ case class DefinedTerm(
     termSpecification: TermSpecification)
   extends Term
 {
-  override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
-  override def freeVariables = subcomponents.flatMap(_.freeVariables).toSet
-  override def boundVariables = Set.empty
+  override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
+  override def boundVariables = Set.empty // TODO: derive from definition
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions

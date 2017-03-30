@@ -1,5 +1,6 @@
 <div ng-if="$ctrl.axiom">
-    <div class="result">
+    <div class="result"
+         ng-init="conditions = $ctrl.axiom.conclusion.conditions">
         <h5>Axiom: {{$ctrl.axiom.name}}</h5>
         <div class="resultBlock">
             <div ng-if="$ctrl.axiom.premises.length">
@@ -10,13 +11,15 @@
                 {{$ctrl.axiom.conclusion.statement}}.
             </div>
         </div>
-        <div class="arbitraryVariables" ng-if="$ctrl.axiom.conclusion.conditions.arbitraryVariables.length">
-            Arbitrary variables: {{$ctrl.axiom.conclusion.conditions.arbitraryVariables.join(", ")}}
-        </div>
-        <div class="distinctVariables" ng-if="$ctrl.axiom.conclusion.conditions.distinctVariables.length">
-            Distinct variables:
-            <span ng-repeat="requirement in $ctrl.axiom.conclusion.conditions.distinctVariables"
-                  class="distinctVariable">({{requirement.termVariable}} in {{requirement.variables.join(", ")}})</span>
+        <div class="conditions"
+             ng-if="conditions.arbitraryVariables.length || conditions.distinctVariables.length">
+            <h6>Conditions</h6>
+            <div ng-if="conditions.arbitraryVariables.length">
+                {{joinWordList(conditions.arbitraryVariables)}} must be arbitrary.
+            </div>
+            <div ng-repeat="requirement in conditions.distinctVariables" class="distinctVariable">
+                {{requirement.termVariable}} must be distinct from {{joinWordList(requirement.variables)}}.
+            </div>
         </div>
     </div>
 </div>

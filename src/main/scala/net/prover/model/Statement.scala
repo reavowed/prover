@@ -21,8 +21,7 @@ trait Statement extends JsonSerializable.Base with Component {
 }
 
 case class StatementVariable(text: String) extends Statement {
-  override def variables: Variables = Variables(Set(this), Set.empty)
-  override def freeVariables: Set[TermVariable] = Set.empty
+  override def allVariables: Variables = Variables(Set(this), Set.empty)
   override def boundVariables: Set[TermVariable] = Set.empty
   override def calculateSubstitutions(
     other: Component,
@@ -73,8 +72,8 @@ case class SubstitutedStatementVariable(
     termToBeReplaced: TermVariable)
  extends Statement
 {
-  override def variables: Variables = termToReplaceWith.variables + statementVariable + termToBeReplaced
-  override def freeVariables: Set[TermVariable] = termToReplaceWith.freeVariables
+  override def allVariables: Variables = termToReplaceWith.allVariables + statementVariable + termToBeReplaced
+  override def presentVariables: Variables = allVariables - termToBeReplaced
   override def boundVariables: Set[TermVariable] = termToReplaceWith.boundVariables
   override def calculateSubstitutions(
     other: Component,
@@ -92,10 +91,16 @@ case class SubstitutedStatementVariable(
       None
   }
   override def applySubstitutions(substitutions: Substitutions): Statement = {
-    statementVariable.applySubstitutions(substitutions).makeSingleSubstitution(termToReplaceWith, termToBeReplaced)
+    val updatedStatementVariable = statementVariable.applySubstitutions(substitutions)
+    val updatedTermToReplaceWith = termToReplaceWith.applySubstitutions(substitutions)
+    val updatedTermToBeReplaced = Term.asVariable(termToBeReplaced.applySubstitutions(substitutions))
+    updatedStatementVariable.makeSingleSubstitution(updatedTermToReplaceWith, updatedTermToBeReplaced)
   }
-  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
-    throw new Exception("Cannot make multiple substitutions")
+  override def makeSingleSubstitution(newTermToReplaceWith: Term, newTermToBeReplaced: TermVariable): Statement = {
+    if (newTermToBeReplaced == termToBeReplaced)
+      this
+    else
+      throw new Exception("Cannot make multiple substitutions")
   }
   def resolveSingleSubstitution(
     other: Component,
@@ -128,11 +133,8 @@ case class DefinedStatement(
     definition: StatementDefinition)
  extends Statement
 {
-  override def variables: Variables = subcomponents.map(_.variables).foldLeft(Variables.empty)(_ ++ _)
-
-  override def freeVariables: Set[TermVariable] = subcomponents.flatMap(_.freeVariables).toSet -- localBoundVariables
-
-  override def boundVariables = localBoundVariables ++ subcomponents.flatMap(_.boundVariables)
+  override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
+  override def boundVariables = localBoundVariables ++ subcomponents.map(_.boundVariables).knownCommonValues
 
   override def calculateSubstitutions(
     other: Component,
@@ -156,7 +158,7 @@ case class DefinedStatement(
   override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
     if (localBoundVariables.contains(termToBeReplaced))
       throw new Exception("Cannot substitute for a bound variable")
-    if (termToReplaceWith.variables.termVariables.intersect(localBoundVariables).nonEmpty)
+    if (termToReplaceWith.allVariables.termVariables.intersect(localBoundVariables).nonEmpty)
       throw new Exception("Cannot substitute a new instance of a bound variable")
     copy(subcomponents = subcomponents.map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced)))
   }

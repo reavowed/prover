@@ -15,10 +15,11 @@ case class Variables(statementVariables: Set[StatementVariable], termVariables: 
       statementVariables ++ otherVariables.statementVariables,
       termVariables ++ otherVariables.termVariables)
   }
-  def filter(f: StatementVariable => Boolean, g: TermVariable => Boolean): Variables = {
-    copy(statementVariables = statementVariables.filter(f), termVariables = termVariables.filter(g))
+  def intersect(otherVariables: Variables): Variables = {
+    Variables(
+      statementVariables.intersect(otherVariables.statementVariables),
+      termVariables.intersect(otherVariables.termVariables))
   }
-  def isEmpty: Boolean = statementVariables.isEmpty && termVariables.isEmpty
   def nonEmpty: Boolean = statementVariables.nonEmpty || termVariables.nonEmpty
 }
 

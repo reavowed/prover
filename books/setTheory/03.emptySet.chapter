@@ -3,10 +3,21 @@ Introduce the empty set, ∅.
 
 axiom Axiom of Empty Set
 conclusion ∃ X ∀ x ¬ ∈ x X
+distinct-variables (x X)
 
 theorem Two Empty Sets Are Equal
 premise ∀ x ¬ ∈ x X
 premise ∀ x ¬ ∈ x Y
 prove ∀ x ↔ ∈ x X ∈ x Y
 prove = X Y
+qed
+
+theorem There Exists a Unique Empty Set
+prove ∃ X ∀ x ¬ ∈ x X
+assume ∧ ∀ x ¬ ∈ x Y ∀ x ¬ ∈ x Z {
+  prove ∀ x ¬ ∈ x Y
+  prove ∀ x ¬ ∈ x Z
+  prove = Y Z
+}
+prove ∃! X ∀ x ¬ ∈ x X
 qed

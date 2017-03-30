@@ -45,6 +45,24 @@ class StatementSpec extends ProverSpec {
     }
   }
 
+  "statement general substitution" should {
+    "apply to a statement variable" in {
+      val substitutions = Substitutions(
+        Map(φ -> Implication(φ, ψ), ψ -> χ),
+        Map.empty)
+      φ.applySubstitutions(substitutions) mustEqual Implication(φ, ψ)
+    }
+
+    "apply to a substituted statement variable" in {
+      val substitutions = Substitutions(
+        Map(φ -> Implication(φ, ψ), ψ -> χ),
+        Map(x -> z, y -> y))
+
+      SubstitutedStatementVariable(φ, y, x).applySubstitutions(substitutions) mustEqual
+        Implication(SubstitutedStatementVariable(φ, y, z), SubstitutedStatementVariable(ψ, y, z))
+    }
+  }
+
   "statement match" should {
     "match a statement variable to anything" in {
       φ.calculateSubstitutions(Implication(φ, ψ), PartialSubstitutions.empty) mustEqual
@@ -97,78 +115,27 @@ class StatementSpec extends ProverSpec {
     }
   }
 
-//  "statement term substitution" should {
-//    "not do anything if substituting a variable for itself" in {
-//      val statements = Seq(
-//        φ,
-//        Implication(φ, ψ),
-//        Equals(x, y))
-//
-//      forall(statements) { s =>
-//        s.substituteFreeVariable(x, x) mustEqual s
-//      }
-//    }
-//    "not do anything if substituting an already-substituted variable" in {
-//      val statements = Seq(
-//        φ,
-//        Implication(φ, ψ),
-//        Equals(x, y))
-//
-//      forall(statements) { s =>
-//        val firstSubstitution = s.substituteFreeVariable(y, x)
-//        firstSubstitution.substituteFreeVariable(z, x) mustEqual firstSubstitution
-//        val secondSubstitution = firstSubstitution.substituteFreeVariable(EmptySet, y)
-//        secondSubstitution.substituteFreeVariable(z, x) mustEqual secondSubstitution
-//        secondSubstitution.substituteFreeVariable(z, y) mustEqual secondSubstitution
-//      }
-//    }
-//
-//    "eliminate extra replacements when simplifying" in {
-//      val a = TermVariable("a")
-//      val b = TermVariable("b")
-//      val p = TermVariable("p")
-//      val q = TermVariable("q")
-//
-//      val firstSubstitution = φ
-//        .substituteFreeVariable(y, x)
-//        .substituteFreeVariable(b, a)
-//        .substituteFreeVariable(q, p)
-//      val secondSubstitution = φ
-//        .substituteFreeVariable(b, a)
-//
-//      val distinctVariables = firstSubstitution.attemptSimplification(secondSubstitution)
-//      distinctVariables mustEqual Some(DistinctVariables(Map(
-//        x -> Variables(Seq(φ), Nil),
-//        p -> Variables(Seq(φ), Nil))))
-//
-//      firstSubstitution.makeSimplifications(distinctVariables.get) mustEqual secondSubstitution
-//    }
-//
-//    "combine replacements when simplifying" in {
-//      val firstSubstitution = φ
-//        .substituteFreeVariable(y, x)
-//        .substituteFreeVariable(z, y)
-//      val secondSubstitution = φ
-//        .substituteFreeVariable(z, x)
-//
-//      val distinctVariables = firstSubstitution.attemptSimplification(secondSubstitution)
-//      distinctVariables mustEqual Some(DistinctVariables(Map(
-//        y -> Variables(Seq(φ), Nil))))
-//
-//      firstSubstitution.makeSimplifications(distinctVariables.get) mustEqual secondSubstitution
-//    }
-//
-//    "not allow substituting a bound variable" in {
-//      ForAll(y, Equals(y, z))
-//          .substituteFreeVariable(y, z) must throwAn[Exception]
-//    }
-//
-//    "not allow substituting a bound variable after full substitution" in {
-//      ForAll(x, φ)
-//        .applySubstitutions(Substitutions(
-//          Map(φ -> Equals(y, z)),
-//          Map(x -> y)))
-//        .substituteFreeVariable(y, z) must throwAn[Exception]
-//    }
-//  }
+  "statement term substitution" should {
+    "not do anything if substituting a variable for itself" in {
+      val statements = Seq(
+        φ,
+        Implication(φ, ψ),
+        Equals(x, y))
+
+      forall(statements) { s =>
+        s.makeSingleSubstitution(x, x) mustEqual s
+      }
+    }
+    "not do anything if substituting an already-substituted variable" in {
+      val statements = Seq(
+        φ,
+        Implication(φ, ψ),
+        Equals(x, y))
+
+      forall(statements) { s =>
+        val firstSubstitution = s.makeSingleSubstitution(y, x)
+        firstSubstitution.makeSingleSubstitution(z, x) mustEqual firstSubstitution
+      }
+    }
+  }
 }

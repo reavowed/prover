@@ -82,13 +82,13 @@
     }
   }
 
-  function joinPremises(formattedPremises) {
-    if (formattedPremises.length > 1) {
-      return formattedPremises.slice(0, formattedPremises.length - 1).join(", ") +
+  function joinWordList(list) {
+    if (list.length > 1) {
+      return list.slice(0, list.length - 1).join(", ") +
         " and " +
-        formattedPremises[formattedPremises.length - 1];
+        list[list.length - 1];
     } else {
-      return formattedPremises[0];
+      return list[0];
     }
   }
 
@@ -99,13 +99,14 @@
     },
     controller: ['$scope', function ($scope) {
       var theorem = $scope.$ctrl.theorem;
+      $scope.joinWordList = joinWordList;
       $scope.proofRows = [];
       $scope.showSteps = false;
       $scope._ = _;
 
       $scope.premises = _.map(theorem.premises, formatPremise);
       if ($scope.premises.length) {
-        $scope.premiseText = joinPremises($scope.premises);
+        $scope.premiseText = joinWordList($scope.premises);
       }
 
       $scope.highlightRow = function(rowData, event) {
@@ -223,10 +224,12 @@
     },
     controller: ['$scope', function ($scope) {
       var axiom = $scope.$ctrl.axiom;
+      $scope.joinWordList = joinWordList;
       $scope.premises = _.map(axiom.premises, formatPremise);
       if ($scope.premises.length) {
-        $scope.premiseText = joinPremises($scope.premises);
+        $scope.premiseText = joinWordList($scope.premises);
       }
     }]
   });
 })();
+

@@ -7,6 +7,7 @@ import scala.util.Try
 
 case class Prover(
   assertion: Statement,
+  targetConditions: Option[Conditions],
   provenAssertions: Seq[ReferencedAssertion],
   provenDeductions: Seq[ReferencedDeduction],
   premises: Seq[Premise],
@@ -73,6 +74,7 @@ case class Prover(
             }
             val x = Prover(
               statement,
+              Some(Conditions.empty),
               provenAssertions,
               Nil,
               transformedPremises,
@@ -108,7 +110,7 @@ case class Prover(
     val initial = Iterator((Seq.empty[PremiseMatch], substitutions))
     premises.foldLeft(initial) { case (acc, premise) =>
       acc.flatMap { case (matchedPremisesSoFar, substitutionsSoFar) =>
-        matchPremiseToFacts(premise, substitutionsSoFar).toList.map { case (matchedPremise, newSubstitutions) =>
+        matchPremiseToFacts(premise, substitutionsSoFar).map { case (matchedPremise, newSubstitutions) =>
           (matchedPremisesSoFar :+ matchedPremise, newSubstitutions)
         }
       }
@@ -133,7 +135,9 @@ case class Prover(
   ): Iterator[(PremiseMatch, PartialSubstitutions)] = {
     provenAssertions.iterator.map { case ReferencedAssertion(provenStatement, reference) =>
       inferencePremise.statement.calculateSubstitutions(provenStatement.statement, substitutionsSoFar)
-        .map((DirectPremiseMatch(provenStatement, reference), _))
+        .map { newSubstitutions =>
+          (DirectPremiseMatch(provenStatement, reference), newSubstitutions)
+        }
     }.collectDefined
   }
 
@@ -156,16 +160,24 @@ case class Prover(
   ): Option[AssertionStep] = {
     for {
       substitutedInference <- Try(inference.applySubstitutions(substitutions)).toOption
-    } yield {
-      val activeTermVariables =
-        (premises.map(_.freeVariables) ++
-          assumptions.map(_.freeVariables) :+
-          substitutedInference.conclusion.statement.freeVariables
-          ).reduce(_ ++ _)
-      val conditions = (matchedPremises.map(_.provenStatement.conditions) :+ substitutedInference.conclusion.conditions)
+      boundVariables =
+        (premises.map(_.boundVariables) ++
+          assumptions.map(_.boundVariables) :+
+          substitutedInference.conclusion.statement.boundVariables
+        ).reduce(_ intersect _)
+      activeVariables =
+        (premises.map(_.allVariables) ++
+          assumptions.map(_.allVariables) :+
+          substitutedInference.conclusion.statement.allVariables
+        ).reduce(_ ++ _)
+      unrestrictedConditions = (matchedPremises.map(_.provenStatement.conditions) :+ substitutedInference.conclusion.conditions)
         .reduce(_ ++ _)
-        .restrictTo(activeTermVariables)
-      val provenStatement = ProvenStatement(assertion, conditions)
+      conditions = unrestrictedConditions
+        .filterOutBoundVariables(boundVariables)
+        .restrictToActiveVariables(activeVariables)
+      if !targetConditions.exists(_ != conditions)
+      provenStatement = ProvenStatement(assertion, conditions)
+    } yield {
       AssertionStep(provenStatement, inference, matchedPremises.map(_.reference), substitutions)
     }
   }

@@ -34,6 +34,9 @@ package object model {
         }
       }
     }
+    def mapCollect[S](f: T => Option[S]): Seq[S] = {
+      seq.map(f).collectDefined
+    }
     def mapWithIndex[S](f: (T, Int) => S): Seq[S] = {
       seq.zipWithIndex.map { case (t, index) => f(t, index)}
     }
@@ -59,7 +62,12 @@ package object model {
       case _ =>
         None
     }.traverseOption
-    def areAllOfType[S]: Boolean = seq.forall(_.isInstanceOf[S])
+    def areAllOfType[S: ClassTag]: Boolean = seq.forall {
+      case _: S =>
+        true
+      case _ =>
+        false
+    }
   }
 
   implicit class SeqTupleOps[S, T](x: Seq[(S, T)]) {
@@ -81,6 +89,17 @@ package object model {
     def collectDefined: Seq[T] = {
       seq.collect {
         case Some(t) => t
+      }
+    }
+  }
+
+  implicit class SeqSetOps[T](seq: Seq[Set[T]]) {
+    def knownCommonValues: Set[T] = {
+      seq match {
+        case Nil =>
+          Set.empty
+        case head +: tail =>
+          tail.foldLeft(head)(_ intersect _)
       }
     }
   }

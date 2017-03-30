@@ -7,3 +7,4 @@ include 01.termVariables.chapter
 include 02.universalQuantifier.chapter
 include 03.existentialQuantifier.chapter
 include 04.equality.chapter
+include 05.uniquenessQuantifier.chapter
