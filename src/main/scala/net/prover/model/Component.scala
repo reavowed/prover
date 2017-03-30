@@ -6,15 +6,54 @@ trait Component {
   def presentVariables: Variables = allVariables
   def boundVariables: Set[TermVariable]
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Option[PartialSubstitutions]
-  def applySubstitutions(substitutions: Substitutions): Component
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Component
+  def applySubstitutions(substitutions: Substitutions): Option[Component]
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Component]
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Component]
-  def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]]
+  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])]
   def replacePlaceholder(other: Component): Component
   def html: String
   def safeHtml: String = html
   def serialized: String
   override def toString: String = html
+
+  protected def findSubstitution(
+    subcomponents: Seq[Component],
+    otherSubcomponents: Seq[Component],
+    termVariable: TermVariable
+  ): Seq[(Option[Term], Map[TermVariable, Variables])] = {
+    def combine(
+      x: (Option[Term], Map[TermVariable, Variables]),
+      y: (Option[Term], Map[TermVariable, Variables])
+    ): Option[(Option[Term], Map[TermVariable, Variables])] = {
+      x._1 match {
+        case Some(t) =>
+          if (y._1.exists(_ != t))
+            None
+          else
+            Some(Some(t), x._2 ++ y._2)
+        case None =>
+          Some(y._1, x._2 ++ y._2)
+      }
+    }
+    if (subcomponents.isEmpty) {
+      Seq((None, Map.empty))
+    } else {
+      val a: Seq[Seq[(Option[Term], Map[TermVariable, Variables])]] = subcomponents.zip(otherSubcomponents)
+        .map {
+          case (subcomponent, otherSubcomponent) =>
+            subcomponent.findSubstitution(otherSubcomponent, termVariable)
+        }
+      val b = a
+        .reduce[Seq[(Option[Term], Map[TermVariable, Variables])]] { case (acc, more) =>
+          for {
+            x <- acc
+            y <- more
+            z <- combine(x, y)
+          } yield z
+        }
+      b
+    }
+  }
 }
 
 object Component {

@@ -1,6 +1,7 @@
 package net.prover
 
-import scala.collection.mutable
+import scala.collection.generic.CanBuildFrom
+import scala.collection.{TraversableLike, mutable}
 import scala.reflect.ClassTag
 import scala.util.Try
 
@@ -76,16 +77,18 @@ package object model {
     }
   }
 
-  implicit class SeqOptionsOps[T](seq: Seq[Option[T]]) {
-    def traverseOption: Option[Seq[T]] = {
-      seq.foldLeft(Option(Seq.empty[T])) { case (sequenceOption, valueOption) =>
-          for {
-            sequence <- sequenceOption
-            value <- valueOption
-          } yield sequence :+ value
+  implicit class TraversableOptionOps[T, Repr](traversable: TraversableLike[Option[T], Repr]) {
+    def traverseOption[That](implicit bf: CanBuildFrom[Repr, T, That]): Option[That] = {
+      traversable.foldLeft(Option(bf())) { case (builderOption, valueOption) =>
+        for {
+          builder <- builderOption
+          value <- valueOption
+        } yield builder += value
       }
-    }
+    }.map(_.result())
+  }
 
+  implicit class SeqOptionsOps[T](seq: Seq[Option[T]]) {
     def collectDefined: Seq[T] = {
       seq.collect {
         case Some(t) => t

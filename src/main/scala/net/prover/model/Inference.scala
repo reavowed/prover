@@ -9,10 +9,15 @@ trait Inference {
   def premises: Seq[Premise]
   def conclusion: ProvenStatement
 
-  def applySubstitutions(substitutions: Substitutions): Inference = new Inference {
-    override val name = Inference.this.name
-    override val premises = Inference.this.premises.map(_.applySubstitutions(substitutions))
-    override val conclusion = Inference.this.conclusion.applySubstitutions(substitutions)
+  def applySubstitutions(substitutions: Substitutions): Option[Inference] = {
+    for {
+      updatedPremises <- premises.map(_.applySubstitutions(substitutions)).traverseOption
+      updatedConclusion <- conclusion.applySubstitutions(substitutions)
+    } yield new Inference {
+      override val name = Inference.this.name
+      override val premises = updatedPremises
+      override val conclusion = updatedConclusion
+    }
   }
 
   def calculateHash(): String = {
@@ -31,7 +36,7 @@ object Inference {
   sealed trait Premise {
     def allVariables: Variables
     def boundVariables: Set[TermVariable]
-    def applySubstitutions(substitutions: Substitutions): Premise
+    def applySubstitutions(substitutions: Substitutions): Option[Premise]
     def serialized: String
   }
 
@@ -39,8 +44,9 @@ object Inference {
     override def allVariables: Variables = statement.allVariables
     override def boundVariables: Set[TermVariable] = statement.boundVariables
     override def applySubstitutions(substitutions: Substitutions) = {
-      val substitutedStatement = statement.applySubstitutions(substitutions)
-      DirectPremise(substitutedStatement)
+      for {
+        substitutedStatement <- statement.applySubstitutions(substitutions)
+      } yield DirectPremise(substitutedStatement)
     }
     override def serialized = statement.serialized
   }
@@ -48,9 +54,10 @@ object Inference {
     override def allVariables: Variables = antecedent.allVariables ++ consequent.allVariables
     override def boundVariables: Set[TermVariable] = antecedent.boundVariables intersect consequent.boundVariables
     override def applySubstitutions(substitutions: Substitutions) = {
-      val substitutedAntecedent = antecedent.applySubstitutions(substitutions)
-      val substitutedConsequent = consequent.applySubstitutions(substitutions)
-      DeducedPremise(substitutedAntecedent, substitutedConsequent)
+      for {
+        substitutedAntecedent <- antecedent.applySubstitutions(substitutions)
+        substitutedConsequent <- consequent.applySubstitutions(substitutions)
+      } yield DeducedPremise(substitutedAntecedent, substitutedConsequent)
     }
 
     override def serialized = Seq("proves", antecedent.serialized, consequent.serialized).mkString(" ")

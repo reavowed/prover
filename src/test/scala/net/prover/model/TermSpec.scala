@@ -19,6 +19,7 @@ class TermSpec extends ProverSpec {
         .mustEqual(Some(PartialSubstitutions(
           Map.empty,
           Map(x -> y),
+          Map.empty,
           Map.empty)))
     }
   }
@@ -28,7 +29,7 @@ class TermSpec extends ProverSpec {
       EmptySet.applySubstitutions(Substitutions(
         Map(φ -> ψ),
         Map(x -> y))
-      ) mustEqual EmptySet
+      ) mustEqual Some(EmptySet)
     }
 
     "replace terms in a unary function" in {
@@ -36,7 +37,7 @@ class TermSpec extends ProverSpec {
         Substitutions(
           Map(φ -> ψ),
           Map(x -> y))
-      ) mustEqual PowerSet(Seq(y))
+      ) mustEqual Some(PowerSet(Seq(y)))
     }
   }
 

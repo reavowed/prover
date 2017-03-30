@@ -50,7 +50,7 @@ class StatementSpec extends ProverSpec {
       val substitutions = Substitutions(
         Map(φ -> Implication(φ, ψ), ψ -> χ),
         Map.empty)
-      φ.applySubstitutions(substitutions) mustEqual Implication(φ, ψ)
+      φ.applySubstitutions(substitutions) mustEqual Some(Implication(φ, ψ))
     }
 
     "apply to a substituted statement variable" in {
@@ -59,7 +59,7 @@ class StatementSpec extends ProverSpec {
         Map(x -> z, y -> y))
 
       SubstitutedStatementVariable(φ, y, x).applySubstitutions(substitutions) mustEqual
-        Implication(SubstitutedStatementVariable(φ, y, z), SubstitutedStatementVariable(ψ, y, z))
+        Some(Implication(SubstitutedStatementVariable(φ, y, z), SubstitutedStatementVariable(ψ, y, z)))
     }
   }
 
@@ -68,6 +68,7 @@ class StatementSpec extends ProverSpec {
       φ.calculateSubstitutions(Implication(φ, ψ), PartialSubstitutions.empty) mustEqual
         Some(PartialSubstitutions(
           Map(φ -> Implication(φ, ψ)),
+          Map.empty,
           Map.empty,
           Map.empty))
     }
@@ -88,6 +89,7 @@ class StatementSpec extends ProverSpec {
         .mustEqual(Some(PartialSubstitutions(
           Map(φ -> φ, ψ -> χ),
           Map.empty,
+          Map.empty,
           Map.empty)))
     }
     "match two connectives of the same type whose substatements are different but match" in {
@@ -98,6 +100,7 @@ class StatementSpec extends ProverSpec {
             φ -> Conjunction(φ, ψ),
             ψ -> χ),
           Map.empty,
+          Map.empty,
           Map.empty)))
     }
     "match two connectives of the same type whose substatements merge correctly" in {
@@ -105,6 +108,7 @@ class StatementSpec extends ProverSpec {
         .calculateSubstitutions(Implication(Conjunction(φ, ψ), Conjunction(φ, ψ)), PartialSubstitutions.empty)
         .mustEqual(Some(PartialSubstitutions(
           Map(φ -> Conjunction(φ, ψ)),
+          Map.empty,
           Map.empty,
           Map.empty)))
     }
@@ -123,7 +127,7 @@ class StatementSpec extends ProverSpec {
         Equals(x, y))
 
       forall(statements) { s =>
-        s.makeSingleSubstitution(x, x) mustEqual s
+        s.makeSingleSubstitution(x, x).get mustEqual s
       }
     }
     "not do anything if substituting an already-substituted variable" in {
@@ -133,8 +137,8 @@ class StatementSpec extends ProverSpec {
         Equals(x, y))
 
       forall(statements) { s =>
-        val firstSubstitution = s.makeSingleSubstitution(y, x)
-        firstSubstitution.makeSingleSubstitution(z, x) mustEqual firstSubstitution
+        val firstSubstitution = s.makeSingleSubstitution(y, x).get
+        firstSubstitution.makeSingleSubstitution(z, x).get mustEqual firstSubstitution
       }
     }
   }

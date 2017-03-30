@@ -18,6 +18,56 @@ prove → ψ φ
 prove ↔ φ ψ
 qed
 
+theorem Reverse Equivalence
+premise ↔ φ ψ
+prove ∧ → φ ψ → ψ φ
+prove ∧ → ψ φ → φ ψ
+prove ↔ ψ φ
+qed
+
+theorem Modus Ponens (Equivalence)
+premise ↔ φ ψ
+premise φ
+prove ∧ → φ ψ → ψ φ
+prove → φ ψ
+prove ψ
+qed
+
+theorem Modus Ponens (Equivalence)
+premise ↔ φ ψ
+premise ψ
+prove ↔ ψ φ
+prove φ
+qed
+
+theorem Equivalence Is Transitive
+premise ↔ φ ψ
+premise ↔ ψ χ
+assume φ {
+  prove ψ
+  prove χ
+}
+assume χ {
+  prove ψ
+  prove φ
+}
+prove ↔ φ χ
+qed
+
+theorem Equivalence Is Transitive
+premise ↔ φ ψ
+premise ↔ χ ψ
+prove ↔ ψ χ
+prove ↔ φ χ
+qed
+
+theorem Equivalence Is Transitive
+premise ↔ φ ψ
+premise ↔ φ χ
+prove ↔ ψ φ
+prove ↔ ψ χ
+qed
+
 theorem True Statements Are Equivalent
 premise φ
 premise ψ

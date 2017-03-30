@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
+import scala.collection.immutable.Nil
+
 trait Term extends JsonSerializable.Base with Component {
   override val componentType = Term
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
@@ -12,8 +14,8 @@ trait Term extends JsonSerializable.Base with Component {
   override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
     serialize(gen, serializers)
   }
-  def applySubstitutions(substitutions: Substitutions): Term
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term
+  def applySubstitutions(substitutions: Substitutions): Option[Term]
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Term]
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Term]
   def replacePlaceholder(other: Component): Term
 }
@@ -32,16 +34,14 @@ case class TermVariable(text: String) extends Term {
         None
     }
   }
-  override def applySubstitutions(substitutions: Substitutions): Term = {
-    substitutions.terms.getOrElse(this, {
-      throw new Exception(s"No replacement for term variable $this")
-    })
+  override def applySubstitutions(substitutions: Substitutions): Option[Term] = {
+    substitutions.terms.get(this)
   }
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term = {
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Term] = {
     if (termToBeReplaced == this)
-      termToReplaceWith
+      Some(termToReplaceWith)
     else
-      this
+      Some(this)
   }
   def resolveSingleSubstitution(
     other: Component,
@@ -57,11 +57,11 @@ case class TermVariable(text: String) extends Term {
       None
     }
   }
-  def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]] = {
+  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])] = {
     if (this == termVariable) {
-      Some(Some(other.asInstanceOf[Term]))
+      Seq((Some(other.asInstanceOf[Term]), Map.empty))
     } else {
-      Some(None)
+      Seq((None, Map.empty))
     }
   }
   def replacePlaceholder(other: Component): Term = this
@@ -88,12 +88,20 @@ case class DefinedTerm(
     case _ =>
       None
   }
-  override def applySubstitutions(substitutions: Substitutions): Term = {
-    copy(subcomponents = subcomponents.map(_.applySubstitutions(substitutions)))
+  override def applySubstitutions(substitutions: Substitutions): Option[Term] = {
+    for {
+      updatedSubcomponents <- subcomponents.map(_.applySubstitutions(substitutions)).traverseOption
+    } yield {
+      copy(subcomponents = updatedSubcomponents)
+    }
   }
 
-  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Term = {
-    copy(subcomponents = subcomponents.map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced)))
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Term] = {
+    for {
+      updatedSubcomponents <- subcomponents
+        .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced))
+        .traverseOption
+    } yield copy(subcomponents = updatedSubcomponents)
   }
   def resolveSingleSubstitution(
     other: Component,
@@ -116,27 +124,12 @@ case class DefinedTerm(
     }
   }
 
-  def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]] = {
+  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])] = {
     other match {
       case DefinedTerm(otherSubcomponents, `definition`) =>
-        subcomponents.zip(otherSubcomponents)
-          .map {
-            case (subcomponent, otherSubcomponent) =>
-              subcomponent.findSubstitution(otherSubcomponent, termVariable)
-          }
-          .traverseOption
-          .flatMap {
-            _.flatten match {
-              case Seq(singleTerm) =>
-                Some(Some(singleTerm))
-              case Nil =>
-                Some(None)
-              case _ =>
-                None
-            }
-          }
+        findSubstitution(subcomponents, otherSubcomponents, termVariable)
       case _ =>
-        None
+        Nil
     }
   }
 
@@ -172,11 +165,15 @@ object PlaceholderTerm extends Term with Placeholder {
 
 object Term extends ComponentType {
   def asVariable(term: Term): TermVariable = {
+    optionAsVariable(term).getOrElse(throw new Exception(s"Expected term variable, got $term"))
+  }
+
+  def optionAsVariable(term: Term): Option[TermVariable] = {
     term match {
       case v: TermVariable =>
-        v
-      case x =>
-        throw new Exception(s"Expected term variable, got $x")
+        Some(v)
+      case _ =>
+        None
     }
   }
 

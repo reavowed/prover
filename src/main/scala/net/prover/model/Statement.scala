@@ -14,8 +14,8 @@ trait Statement extends JsonSerializable.Base with Component {
   override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
     serialize(gen, serializers)
   }
-  def applySubstitutions(substitutions: Substitutions): Statement
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement
+  def applySubstitutions(substitutions: Substitutions): Option[Statement]
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Statement]
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Statement]
   def replacePlaceholder(other: Component): Statement
 }
@@ -32,15 +32,15 @@ case class StatementVariable(text: String) extends Statement {
     case _ =>
       None
   }
-  override def applySubstitutions(substitutions: Substitutions): Statement = {
-    substitutions.statements.getOrElse(this, throw new Exception(s"No replacement for statement variable $this"))
+  override def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
+    substitutions.statements.get(this)
   }
 
   override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable) = {
     if (termToReplaceWith == termToBeReplaced)
-      this
+      Some(this)
     else
-      SubstitutedStatementVariable(this, termToReplaceWith, termToBeReplaced)
+      Some(SubstitutedStatementVariable(this, termToReplaceWith, termToBeReplaced))
   }
   def resolveSingleSubstitution(
     other: Component,
@@ -54,11 +54,13 @@ case class StatementVariable(text: String) extends Statement {
       None
     }
   }
-  def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]] = {
+  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])] = {
     if (this == other) {
-      Some(Some(termVariable))
+      Seq(
+        (Some(termVariable), Map.empty),
+        (None, Map(termVariable -> Variables(Set(this), Set.empty))))
     } else {
-      None
+      Nil
     }
   }
   def replacePlaceholder(other: Component): Statement = this
@@ -90,17 +92,19 @@ case class SubstitutedStatementVariable(
     case _ =>
       None
   }
-  override def applySubstitutions(substitutions: Substitutions): Statement = {
-    val updatedStatementVariable = statementVariable.applySubstitutions(substitutions)
-    val updatedTermToReplaceWith = termToReplaceWith.applySubstitutions(substitutions)
-    val updatedTermToBeReplaced = Term.asVariable(termToBeReplaced.applySubstitutions(substitutions))
-    updatedStatementVariable.makeSingleSubstitution(updatedTermToReplaceWith, updatedTermToBeReplaced)
+  override def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
+    for {
+      updatedStatementVariable <- statementVariable.applySubstitutions(substitutions)
+      updatedTermToReplaceWith <- termToReplaceWith.applySubstitutions(substitutions)
+      updatedTermToBeReplaced <- termToBeReplaced.applySubstitutions(substitutions).flatMap(Term.optionAsVariable)
+      updatedStatement <- updatedStatementVariable.makeSingleSubstitution(updatedTermToReplaceWith, updatedTermToBeReplaced)
+    } yield updatedStatement
   }
-  override def makeSingleSubstitution(newTermToReplaceWith: Term, newTermToBeReplaced: TermVariable): Statement = {
+  override def makeSingleSubstitution(newTermToReplaceWith: Term, newTermToBeReplaced: TermVariable): Option[Statement] = {
     if (newTermToBeReplaced == termToBeReplaced)
-      this
+      Some(this)
     else
-      throw new Exception("Cannot make multiple substitutions")
+      None
   }
   def resolveSingleSubstitution(
     other: Component,
@@ -110,11 +114,11 @@ case class SubstitutedStatementVariable(
   ): Option[Statement] = {
     None // TODO: overly conservative
   }
-  def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]] = {
+  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])] = {
     if (this == other) {
-      Some(None)
+      Seq((None, Map.empty))
     } else {
-      None
+      Nil
     }
   }
   def replacePlaceholder(other: Component): Statement = this
@@ -149,19 +153,31 @@ case class DefinedStatement(
       None
   }
 
-  override def applySubstitutions(substitutions: Substitutions): Statement = {
-    copy(
-      subcomponents = subcomponents.map(_.applySubstitutions(substitutions)),
-      localBoundVariables = localBoundVariables.map(_.applySubstitutions(substitutions)).map(Term.asVariable))
+  override def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
+    for {
+      updatedSubcomponents <- subcomponents.map(_.applySubstitutions(substitutions)).traverseOption
+      updatedBoundVariables <- localBoundVariables
+        .map(_.applySubstitutions(substitutions).flatMap(Term.optionAsVariable))
+        .traverseOption
+    } yield {
+      copy(
+        subcomponents = updatedSubcomponents,
+        localBoundVariables = updatedBoundVariables)
+    }
   }
 
-  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Statement] = {
     if (localBoundVariables.contains(termToBeReplaced))
       throw new Exception("Cannot substitute for a bound variable")
     if (termToReplaceWith.allVariables.termVariables.intersect(localBoundVariables).nonEmpty)
       throw new Exception("Cannot substitute a new instance of a bound variable")
-    copy(subcomponents = subcomponents.map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced)))
+    for {
+      updatedSubcomponents <- subcomponents
+        .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced))
+        .traverseOption
+    } yield copy(subcomponents = updatedSubcomponents)
   }
+
   def resolveSingleSubstitution(
     other: Component,
     termVariable: TermVariable,
@@ -186,28 +202,12 @@ case class DefinedStatement(
         None
     }
   }
-  def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]] = {
+  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])] = {
     other match {
       case DefinedStatement(otherSubcomponents, _, `definition`) =>
-        val x = subcomponents.zip(otherSubcomponents)
-          .map {
-            case (subcomponent, otherSubcomponent) =>
-              subcomponent.findSubstitution(otherSubcomponent, termVariable)
-          }
-          .traverseOption
-          .flatMap { y =>
-            y.flatten.distinct match {
-              case Seq(singleTerm) =>
-                Some(Some(singleTerm))
-              case Nil =>
-                Some(None)
-              case _ =>
-                None
-            }
-          }
-        x
+        findSubstitution(subcomponents, otherSubcomponents, termVariable)
       case _ =>
-        None
+        Nil
     }
   }
 
@@ -257,6 +257,7 @@ object Statement extends ComponentType {
           statement <- parser
         } yield {
           statement.makeSingleSubstitution(termToReplaceWith, termToBeReplaced)
+            .getOrElse(throw new Exception("Invalid substitution"))
         }
       case "_" =>
         Parser.constant(PlaceholderStatement)

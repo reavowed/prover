@@ -82,10 +82,11 @@
     }
   }
 
-  function joinWordList(list) {
+  function joinWordList(list, word) {
+    word = word || "and";
     if (list.length > 1) {
       return list.slice(0, list.length - 1).join(", ") +
-        " and " +
+        " " + word + " " +
         list[list.length - 1];
     } else {
       return list[0];

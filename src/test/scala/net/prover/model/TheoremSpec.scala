@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.Inference.DeducedPremise
+import net.prover.model.Inference.{DeducedPremise, DirectPremise}
 
 class TheoremSpec extends ProverSpec {
   "theorem parser" should {
@@ -228,6 +228,35 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(y, φ),
         Conditions(Set(y), Map.empty))
+    }
+
+    "prove a statement by simplifying substitutions using distinct variable conditions" in {
+      val proveExistence = new Axiom(
+        "Prove Existence",
+        Seq(
+          DirectPremise(Exists(x, φ)),
+          DeducedPremise(
+            Conjunction(
+              SubstitutedStatementVariable(φ, y, x),
+              SubstitutedStatementVariable(φ, z, x)),
+            Equals(y, z))),
+        ProvenStatement(
+          ExistsUnique(x, φ),
+          Conditions(Set(y, z), Map.empty)))
+
+      val theorem = parseTheorem(
+        "XXX",
+        "premise ∃ X ∀ x ↔ ∈ x X φ",
+        "premise proves",
+        "  ∧ ∀ x ↔ ∈ x Y φ ∀ x ↔ ∈ x Z φ",
+        "  = Y Z",
+        "prove ∃! X ∀ x ↔ ∈ x X φ",
+        "qed")(
+        contextWith(proveExistence))
+
+      theorem.conclusion mustEqual ProvenStatement(
+        ExistsUnique(X, ForAll(x, Equivalence(ElementOf(x, X), φ))),
+        Conditions(Set(Y, Z), Map(X -> Variables(Set(φ), Set.empty))))
     }
   }
 }

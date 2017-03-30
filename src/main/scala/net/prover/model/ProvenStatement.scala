@@ -4,10 +4,11 @@ case class ProvenStatement(
     statement: Statement,
     conditions: Conditions)
 {
-  def applySubstitutions(substitutions: Substitutions): ProvenStatement = {
-    ProvenStatement(
-      statement.applySubstitutions(substitutions),
-      conditions.applySubstitutions(substitutions))
+  def applySubstitutions(substitutions: Substitutions): Option[ProvenStatement] = {
+    for {
+      updatedStatement <- statement.applySubstitutions(substitutions)
+      updateConditions <- conditions.applySubstitutions(substitutions)
+    } yield ProvenStatement(updatedStatement, updateConditions)
   }
 }
 

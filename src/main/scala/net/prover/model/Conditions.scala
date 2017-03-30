@@ -35,21 +35,40 @@ case class Conditions(
 
   def applySubstitutions(
     substitutions: Substitutions
-  ): Conditions = Conditions(
-    arbitraryVariables
-      .map(_.applySubstitutions(substitutions))
-      .map(Term.asVariable),
-    distinctVariables.map { case (termVariable, Variables(statementVariables, termVariables)) =>
-      val updatedTermVariable = Term.asVariable(termVariable.applySubstitutions(substitutions))
-      val updatedStatementVariables = statementVariables.map(
-        _.applySubstitutions(substitutions).presentVariables)
-      val updatedTermVariables = termVariables.map(
-        _.applySubstitutions(substitutions).presentVariables)
-      val updatedOtherVariables = (updatedStatementVariables ++ updatedTermVariables).reduce(_ ++ _)
-      if (updatedOtherVariables.termVariables.contains(updatedTermVariable))
-        throw DistinctVariableViolationException(updatedTermVariable)
+  ): Option[Conditions] = {
+    for {
+      updatedArbitraryVariables <- arbitraryVariables
+        .map(_.applySubstitutions(substitutions).flatMap(Term.optionAsVariable))
+        .traverseOption
+      updatedDistinctVariables <- distinctVariables
+        .map { case (termVariable, variables) =>
+            substituteDistinctVariableCondition(termVariable, variables, substitutions)
+        }
+        .traverseOption.map(_.toMap)
+    } yield {
+      Conditions(updatedArbitraryVariables, updatedDistinctVariables)
+    }
+  }
+
+  private def substituteDistinctVariableCondition(
+    termVariable: TermVariable,
+    variables: Variables,
+    substitutions: Substitutions
+  ): Option[(TermVariable, Variables)] = {
+    for {
+      updatedTermVariable <- termVariable.applySubstitutions(substitutions).flatMap(Term.optionAsVariable)
+      updatedStatementVariables <- variables.statementVariables
+        .map(_.applySubstitutions(substitutions).map(_.presentVariables))
+        .traverseOption
+      updatedTermVariables <- variables.termVariables
+        .map(_.applySubstitutions(substitutions).map(_.presentVariables))
+        .traverseOption
+      updatedOtherVariables = (updatedStatementVariables ++ updatedTermVariables).reduce(_ ++ _)
+      if !updatedOtherVariables.termVariables.contains(updatedTermVariable)
+    } yield {
       updatedTermVariable -> updatedOtherVariables
-    })
+    }
+  }
 
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeStartObject()

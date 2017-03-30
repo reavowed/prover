@@ -14,6 +14,9 @@ trait ProverSpec extends Specification {
   def x = TermVariable("x")
   def y = TermVariable("y")
   def z = TermVariable("z")
+  def X = TermVariable("X")
+  def Y = TermVariable("Y")
+  def Z = TermVariable("Z")
 
   def connective(
     symbol: String,
@@ -65,7 +68,8 @@ trait ProverSpec extends Specification {
   val Equivalence = connective("↔", 2, None)
 
   val ForAll = quantifier("∀", None)
-  var Exists = quantifier("∃", Some(Negation(ForAll(x, Negation(φ)))))
+  val Exists = quantifier("∃", Some(Negation(ForAll(x, Negation(φ)))))
+  val ExistsUnique = quantifier("∃!", None)
   val ElementOf = predicate("∈", 2, None)
   val Equals = predicate("=", 2, None)
 
@@ -79,12 +83,12 @@ trait ProverSpec extends Specification {
 
   val statementDefinitions = Seq(
     Implication, Negation, Conjunction, Disjunction, Equivalence,
-    ForAll, Exists,
+    ForAll, Exists, ExistsUnique,
     ElementOf, Equals)
 
   val baseContext = Context.empty.copy(variables = Variables(
     Set(φ, ψ, χ),
-    Set(x, y, z)))
+    Set(x, y, z, X, Y, Z)))
 
   implicit val defaultContext = statementDefinitions.foldLeft(baseContext) { case (context, statementDefinition) =>
     context.addStatementDefinition(statementDefinition)

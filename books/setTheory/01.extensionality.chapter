@@ -13,8 +13,25 @@ axiom Axiom of Extensionality
 conclusion → ∀ z ↔ ∈ z x ∈ z y = x y
 distinct-variables (z x y)
 
-theorem Sets Are Equal If They Have the Same Members
+theorem Sets With Same Members Are Equal
 premise ∀ z ↔ ∈ z x ∈ z y
 prove → ∀ z ↔ ∈ z x ∈ z y = x y
 prove = x y
+qed
+
+theorem Sets With Same Membership Condition Are Equal
+premise ∀ z ↔ ∈ z x φ
+premise ∀ z ↔ ∈ z y φ
+prove ∀ z ↔ ∈ z x ∈ z y
+prove = x y
+qed
+
+theorem A Set with a Membership Condition Is Unique
+premise ∃ X ∀ x ↔ ∈ x X φ
+assume ∧ ∀ x ↔ ∈ x Y φ ∀ x ↔ ∈ x Z φ {
+  prove ∀ x ↔ ∈ x Y φ
+  prove ∀ x ↔ ∈ x Z φ
+  prove = Y Z
+}
+prove ∃! X ∀ x ↔ ∈ x X φ
 qed

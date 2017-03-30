@@ -47,8 +47,8 @@ case class Prover(
       .mapCollect { case (inference, (matchedPremises, substitutions)) =>
         substitutions.tryResolve().map((inference, matchedPremises, _))
       }
-      .mapCollect { case (inference, matchedPremises, substitutions) =>
-        makeAssertionStep(assertion, inference, matchedPremises, substitutions)
+      .mapCollect { case (inference, matchedPremises, (substitutions, distinctVariables)) =>
+        makeAssertionStep(assertion, inference, matchedPremises, substitutions, distinctVariables)
       }
       .nextOption()
   }
@@ -97,8 +97,8 @@ case class Prover(
       .mapCollect { case (transformedInference, (matchedPremises, substitutions)) =>
         substitutions.tryResolve().map((transformedInference, matchedPremises, _))
       }
-      .mapCollect { case (transformedInference, matchedPremises, substitutions) =>
-        makeAssertionStep(assertion, transformedInference, matchedPremises, substitutions)
+      .mapCollect { case (transformedInference, matchedPremises, (substitutions, distinctVariables)) =>
+        makeAssertionStep(assertion, transformedInference, matchedPremises, substitutions, distinctVariables)
       }
       .nextOption()
   }
@@ -156,10 +156,11 @@ case class Prover(
     assertion: Statement,
     inference: Inference,
     matchedPremises: Seq[PremiseMatch],
-    substitutions: Substitutions
+    substitutions: Substitutions,
+    distinctVariables: Map[TermVariable, Variables]
   ): Option[AssertionStep] = {
     for {
-      substitutedInference <- Try(inference.applySubstitutions(substitutions)).toOption
+      substitutedInference <- inference.applySubstitutions(substitutions)
       boundVariables =
         (premises.map(_.boundVariables) ++
           assumptions.map(_.boundVariables) :+
@@ -172,11 +173,13 @@ case class Prover(
         ).reduce(_ ++ _)
       unrestrictedConditions = (matchedPremises.map(_.provenStatement.conditions) :+ substitutedInference.conclusion.conditions)
         .reduce(_ ++ _)
-      conditions = unrestrictedConditions
+      restrictedConditions = unrestrictedConditions
         .filterOutBoundVariables(boundVariables)
         .restrictToActiveVariables(activeVariables)
-      if !targetConditions.exists(_ != conditions)
-      provenStatement = ProvenStatement(assertion, conditions)
+      expandedConditions = restrictedConditions
+        .copy(distinctVariables = restrictedConditions.distinctVariables ++ distinctVariables)
+      if !targetConditions.exists(_ != expandedConditions)
+      provenStatement = ProvenStatement(assertion, expandedConditions)
     } yield {
       AssertionStep(provenStatement, inference, matchedPremises.map(_.reference), substitutions)
     }

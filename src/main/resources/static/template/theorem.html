@@ -23,7 +23,7 @@
                     {{joinWordList(conditions.arbitraryVariables)}} must be arbitrary.
                 </div>
                 <div ng-repeat="requirement in conditions.distinctVariables" class="distinctVariable">
-                    {{requirement.termVariable}} must be distinct from {{joinWordList(requirement.variables)}}.
+                    {{requirement.termVariable}} must not appear in {{joinWordList(requirement.variables, 'or')}}.
                 </div>
             </div>
         </div>
