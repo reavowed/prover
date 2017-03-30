@@ -3,25 +3,25 @@ package net.prover.model
 class TermDefinitionSpec extends ProverSpec {
   "term definition parser" should {
     "parse a term constant" in {
-      val specification = TermSpecification("∅", Nil, Format.default("∅", Nil))
-      TermDefinition.parser(defaultContext).parseAndDiscard("∅ () (∀ x ¬ ∈ x ∅)") mustEqual
+      TermDefinition.parser(defaultContext).parseAndDiscard("∅ () (∀ x ¬ ∈ x _)") mustEqual
         TermDefinition(
-          specification,
+          "∅",
           Nil,
+          Format.default("∅", Nil),
           Nil,
-          ForAll(x, Negation(ElementOf(x, DefinedTerm(Nil, specification)))))
+          ForAll(x, Negation(ElementOf(x, PlaceholderTerm))))
     }
 
     "parse a term with premises" in {
-      val specification = TermSpecification("intersection", Seq(Term), Format("⋂%0", requiresBrackets = false))
       TermDefinition.parser(defaultContext).parseAndDiscard(
-        "intersection (x) format (⋂x) premises (¬ = x ∅) (∀ y ↔ ∈ y intersection x ∀ z → ∈ z x ∈ z y)"
+        "intersection (x) format (⋂x) premises (¬ = x ∅) (∀ y ↔ ∈ y _ ∀ z → ∈ z x ∈ z y)"
       ) mustEqual TermDefinition(
-        specification,
-        Seq(Negation(Equals(x, EmptySet))),
+        "intersection",
         Seq(x),
+        Format("⋂%0", requiresBrackets = false),
+        Seq(Negation(Equals(x, EmptySet))),
         ForAll(y, Equivalence(
-          ElementOf(y, DefinedTerm(Seq(x), specification)),
+          ElementOf(y, PlaceholderTerm),
           ForAll(z, Implication(ElementOf(z, x), ElementOf(z, y)))))
       )
     }

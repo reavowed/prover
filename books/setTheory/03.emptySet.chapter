@@ -21,3 +21,5 @@ assume ∧ ∀ x ¬ ∈ x Y ∀ x ¬ ∈ x Z {
 }
 prove ∃! X ∀ x ¬ ∈ x X
 qed
+
+term ∅ () (∀ x ¬ ∈ x _)

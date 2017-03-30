@@ -71,7 +71,7 @@ case class TermVariable(text: String) extends Term {
 
 case class DefinedTerm(
     subcomponents: Seq[Component],
-    termSpecification: TermSpecification)
+    definition: TermDefinition)
   extends Term
 {
   override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
@@ -80,7 +80,7 @@ case class DefinedTerm(
     other: Component,
     substitutions: PartialSubstitutions
   ): Option[PartialSubstitutions] = other match {
-    case DefinedTerm(otherSubcomponents, `termSpecification`) =>
+    case DefinedTerm(otherSubcomponents, `definition`) =>
       subcomponents.zip(otherSubcomponents)
         .foldLeft(Option(substitutions)) { case (substitutionsSoFarOption, (component, otherComponent)) =>
           substitutionsSoFarOption.flatMap(component.calculateSubstitutions(otherComponent, _))
@@ -104,7 +104,7 @@ case class DefinedTerm(
     if (this == thisTerm && other == otherTerm) {
       Some(termVariable)
     } else other match {
-      case DefinedTerm(otherSubcomponents, `termSpecification`) =>
+      case DefinedTerm(otherSubcomponents, `definition`) =>
         subcomponents.zip(otherSubcomponents)
           .map { case (subcomponent, otherSubcomponent) =>
             subcomponent.resolveSingleSubstitution(otherSubcomponent, termVariable, thisTerm, otherTerm)
@@ -118,7 +118,7 @@ case class DefinedTerm(
 
   def findSubstitution(other: Component, termVariable: TermVariable): Option[Option[Term]] = {
     other match {
-      case DefinedTerm(otherSubcomponents, `termSpecification`) =>
+      case DefinedTerm(otherSubcomponents, `definition`) =>
         subcomponents.zip(otherSubcomponents)
           .map {
             case (subcomponent, otherSubcomponent) =>
@@ -145,22 +145,22 @@ case class DefinedTerm(
   }
 
   override def html: String = {
-    termSpecification.format.html(subcomponents)
+    definition.format.html(subcomponents)
   }
   override def safeHtml: String = {
-    termSpecification.format.safeHtml(subcomponents)
+    definition.format.safeHtml(subcomponents)
   }
-  override def serialized: String = (termSpecification.symbol +: subcomponents.map(_.serialized)).mkString(" ")
+  override def serialized: String = (definition.symbol +: subcomponents.map(_.serialized)).mkString(" ")
 
   override def equals(obj: Any): Boolean = obj match {
-    case DefinedTerm(`subcomponents`, otherTermDefinition) if otherTermDefinition.symbol == termSpecification.symbol =>
+    case DefinedTerm(`subcomponents`, otherTermDefinition) if otherTermDefinition.symbol == definition.symbol =>
       true
     case _ =>
       false
   }
 
   override def hashCode(): Int = {
-    subcomponents.hashCode * 41 + termSpecification.symbol.hashCode
+    subcomponents.hashCode * 41 + definition.symbol.hashCode
   }
 }
 
@@ -181,9 +181,9 @@ object Term extends ComponentType {
   }
 
   def parser(implicit context: Context): Parser[Term] = {
-    object TermSpecificationMatcher {
-      def unapply(s: String): Option[TermSpecification] = {
-        context.termSpecifications.find(_.symbol == s)
+    object TermDefinitionMatcher {
+      def unapply(s: String): Option[TermDefinition] = {
+        context.termDefinitions.find(_.symbol == s)
       }
     }
     object SpecifiedVariable {
@@ -193,8 +193,8 @@ object Term extends ComponentType {
     }
     def parserForTermType(termType: String): Parser[Term] = {
       termType match {
-        case TermSpecificationMatcher(termSpecification) =>
-          termSpecification.termParser
+        case TermDefinitionMatcher(termDefinition) =>
+          termDefinition.termParser
         case SpecifiedVariable(variable) =>
           Parser.constant(variable)
         case "_" =>

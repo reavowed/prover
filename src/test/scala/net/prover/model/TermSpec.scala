@@ -1,7 +1,12 @@
 package net.prover.model
 
 class TermSpec extends ProverSpec {
-  val PowerSet = TermSpecification("powerSet", Seq(Term), Format("𝒫%0", requiresBrackets = false))
+  val PowerSet = TermDefinition(
+    "powerSet",
+    Seq(x),
+    Format("𝒫%0", requiresBrackets = false),
+    Nil,
+    φ)
 
   "term match" should {
     "match a constant term to itself" in {

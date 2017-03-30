@@ -69,13 +69,13 @@ trait ProverSpec extends Specification {
   val ElementOf = predicate("∈", 2, None)
   val Equals = predicate("=", 2, None)
 
-  val EmptySetSpecification = TermSpecification("∅", Nil, Format.default("∅", Nil))
-  val EmptySet = DefinedTerm(Nil, EmptySetSpecification)
   val EmptySetDefinition = TermDefinition(
-    EmptySetSpecification,
+    "∅",
     Nil,
+    Format.default("∅", Nil),
     Nil,
-    ForAll(x, Negation(ElementOf(x, EmptySet))))
+    ForAll(x, Negation(ElementOf(x, PlaceholderTerm))))
+  val EmptySet = DefinedTerm(Nil, EmptySetDefinition)
 
   val statementDefinitions = Seq(
     Implication, Negation, Conjunction, Disjunction, Equivalence,

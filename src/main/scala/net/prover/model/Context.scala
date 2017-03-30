@@ -2,7 +2,7 @@ package net.prover.model
 
 case class Context(
     statementDefinitions: Seq[StatementDefinition],
-    termSpecifications: Seq[TermSpecification],
+    termDefinitions: Seq[TermDefinition],
     inferences: Seq[Inference],
     inferenceTransforms: Seq[InferenceTransform],
     variables: Variables) {
@@ -10,7 +10,7 @@ case class Context(
   def combine(others: Seq[Context]): Context = {
     Context(
       others.flatMap(_.statementDefinitions) ++ statementDefinitions,
-      others.flatMap(_.termSpecifications) ++ termSpecifications,
+      others.flatMap(_.termDefinitions) ++ termDefinitions,
       others.flatMap(_.inferences) ++ inferences,
       others.flatMap(_.inferenceTransforms) ++ inferenceTransforms,
       variables
@@ -27,7 +27,7 @@ case class Context(
 
   def addTermDefinition(termDefinition: TermDefinition) = {
     copy(
-      termSpecifications = termSpecifications :+ termDefinition.specification,
+      termDefinitions = termDefinitions :+ termDefinition,
       inferences = inferences :+ termDefinition.inference)
   }
 

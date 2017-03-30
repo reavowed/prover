@@ -2,31 +2,28 @@ package net.prover.model
 
 import net.prover.model.Inference.{DirectPremise, Premise}
 
-case class TermSpecification(
+case class TermDefinition(
     symbol: String,
-    componentTypes: Seq[ComponentType],
-    format: Format)
+    defaultVariables: Seq[Component],
+    format: Format,
+    premises: Seq[Statement],
+    placeholderDefinition: Statement)
+  extends ChapterEntry(TermDefinition)
 {
+  val id: String = s"definition-$symbol"
+  val defaultTerm = DefinedTerm(defaultVariables, this)
+  val componentTypes = defaultVariables.map(_.componentType)
+  val definition = placeholderDefinition.replacePlaceholder(defaultTerm)
+  val inference: Inference = new Inference {
+    override val name: String = s"Definition of $symbol"
+    override val premises: Seq[Premise] = TermDefinition.this.premises.map(DirectPremise)
+    override val conclusion: ProvenStatement = ProvenStatement.withNoConditions(definition)
+  }
+
   def apply(components: Seq[Component]) = DefinedTerm(components, this)
 
   def termParser(implicit context: Context): Parser[Term] = {
     componentTypes.componentsParser.map(apply)
-  }
-}
-
-case class TermDefinition(
-    specification: TermSpecification,
-    premises: Seq[Statement],
-    defaultVariables: Seq[Component],
-    definition: Statement)
-  extends ChapterEntry(TermDefinition)
-{
-  val id: String = s"definition-${specification.symbol}"
-  val defaultTerm = DefinedTerm(defaultVariables, specification)
-  val inference: Inference = new Inference {
-    override val name: String = s"Definition of ${specification.symbol}"
-    override val premises: Seq[Premise] = TermDefinition.this.premises.map(DirectPremise)
-    override val conclusion: ProvenStatement = ProvenStatement.withNoConditions(definition)
   }
 }
 
@@ -42,14 +39,11 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
     for {
       symbol <- Parser.singleWord
       defaultVariables <- Component.variableParser.listInParens(None)
-      componentTypes = defaultVariables.map(_.componentType)
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
-      termSpecification = TermSpecification(symbol, componentTypes, format)
       premises <- premisesParser
-      updatedContext = context.copy(termSpecifications = context.termSpecifications :+ termSpecification)
-      definitionTemplate <- Statement.parser(updatedContext).inParens
+      definitionTemplate <- Statement.parser.inParens
     } yield {
-      TermDefinition(termSpecification, premises, defaultVariables, definitionTemplate)
+      TermDefinition(symbol, defaultVariables, format, premises, definitionTemplate)
     }
   }
 
