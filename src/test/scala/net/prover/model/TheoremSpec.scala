@@ -15,63 +15,108 @@ class TheoremSpec extends ProverSpec {
       ) must throwAn[Exception]
     }
 
-    "prove the conclusion of a premiseless inference" in {
-      val previousInference = new Axiom(
-        "Implication Is Reflexive",
-        Nil,
-        Implication(φ, φ))
+    val repetition = new Axiom(
+      "Repeat",
+      Seq(φ),
+      φ)
+    val deduction = new Axiom(
+      "Deduction",
+      Seq(DeducedPremise(φ, ψ)),
+      Implication(φ, ψ))
+    val modusPonens = new Axiom(
+      "Modus Ponens",
+      Seq(Implication(φ, ψ), φ),
+      ψ)
+    val implicationIsReflexive = new Axiom(
+      "Implication Is Reflexive",
+      Nil,
+      Implication(φ, φ))
+    val falseStatementsAreEquivalent = new Axiom(
+      "False Statements Are Equivalent",
+      Seq(Negation(φ), Negation(ψ)),
+      Equivalence(φ, ψ))
+    val substitutionOfEquals = new Axiom(
+      "Substitution of Equals",
+      Seq(Equals(x, y), SubstitutedStatementVariable(φ, x, z)),
+      SubstitutedStatementVariable(φ, y, z))
+    val substitutionOfEqualsReverse = new Axiom(
+      "Substitution of Equals",
+      Seq(Equals(x, y), SubstitutedStatementVariable(φ, y, z)),
+      SubstitutedStatementVariable(φ, x, z))
+    val equivalenceOfSubstitutedEquals = new Axiom(
+      "Equivalence of Substituted Equals",
+      Seq(Equals(x, y)),
+      Equivalence(
+        SubstitutedStatementVariable(φ, x, z),
+        SubstitutedStatementVariable(φ, y, z)))
+    val substitution = new Axiom(
+      "Substitution",
+      Seq(φ),
+      ProvenStatement(
+        SubstitutedStatementVariable(φ, y ,x),
+        Conditions(arbitraryVariables = Set(x), distinctVariables = Map.empty)))
+    val generalizationWithDifferentVariables = new Axiom(
+      "Generalization",
+      Seq(SubstitutedStatementVariable(φ, y, x)),
+      ForAll(x, φ))
+    val generalizationWithSameVariable = new Axiom(
+      "Generalization",
+      Seq(φ),
+      ProvenStatement(
+        ForAll(x, φ),
+        Conditions(Set(x), Map.empty)))
+    val specification = new Axiom(
+      "Specification",
+      Seq(ForAll(x, φ)),
+      SubstitutedStatementVariable(φ, y, x))
 
+    val proveExistence = new Axiom(
+      "Prove Existence",
+      Seq(
+        DirectPremise(Exists(x, φ)),
+        DeducedPremise(
+          Conjunction(
+            SubstitutedStatementVariable(φ, y, x),
+            SubstitutedStatementVariable(φ, z, x)),
+          Equals(y, z))),
+      ProvenStatement(
+        ExistsUnique(x, φ),
+        Conditions(Set(y, z), Map.empty)))
+
+    "prove the conclusion of a premiseless inference" in {
       val theorem = parseTheorem(
         "X",
         "prove → ψ ψ",
         "qed")(
-        contextWith(previousInference))
+        contextWith(implicationIsReflexive))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(ψ, ψ))
     }
 
     "prove the conclusion of an inference whose premises match proven statements" in {
-      val previousInference = new Axiom(
-        "Modus Ponens",
-        Seq(Implication(φ, ψ), φ),
-        ψ)
-
       val theorem = parseTheorem(
         "X",
         "premise → → → ψ χ ψ ψ",
         "premise → → ψ χ ψ",
         "prove ψ",
         "qed")(
-        contextWith(previousInference))
+        contextWith(modusPonens))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(ψ)
     }
 
     "not prove the conclusion of an inference whose premises can't be matched" in {
-      val previousInference = new Axiom(
-        "X",
-        Seq(φ),
-        Implication(φ, φ))
-
       parseTheorem(
         "X",
+        "premise → φ χ",
         "premise ψ",
-        "prove → χ χ",
+        "prove φ",
         "qed")(
-        contextWith(previousInference)
+        contextWith(modusPonens)
       ) must throwAn[Exception]
     }
 
     "prove the conclusion of an inference with a deduced premise that matches an assumption" in {
-      val repeatAxiom = new Axiom(
-        "Repeat",
-        Seq(φ),
-        φ)
-      val deductionAxiom = new Axiom(
-        "Deduction",
-        Seq(DeducedPremise(φ, ψ)),
-        Implication(φ, ψ))
-
       val theorem = parseTheorem(
         "X",
         "premise χ",
@@ -80,17 +125,12 @@ class TheoremSpec extends ProverSpec {
         "}",
         "prove → ψ χ",
         "qed")(
-        contextWith(repeatAxiom, deductionAxiom))
+        contextWith(repetition, deduction))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(ψ, χ))
     }
 
     "prove a conclusion that is a substitution" in {
-      val substitutionOfEquals = new Axiom(
-        "Substitution of Equals",
-        Seq(Equals(x, y), SubstitutedStatementVariable(φ, x, z)),
-        SubstitutedStatementVariable(φ, y, z))
-
       val theorem = parseTheorem(
         "X",
         "premise = x y",
@@ -103,36 +143,24 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove a conclusion that is a substitution 2" in {
-      val substitutionOfEquals = new Axiom(
-        "Substitution of Equals",
-        Seq(Equals(x, y), SubstitutedStatementVariable(φ, y, z)),
-        SubstitutedStatementVariable(φ, x, z))
-
       val theorem = parseTheorem(
         "X",
         "premise = x y",
         "premise = z y",
         "prove = x z",
         "qed")(
-        contextWith(substitutionOfEquals))
+        contextWith(substitutionOfEqualsReverse))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Equals(x, z))
     }
 
     "prove a conclusion that is a nested substitution" in {
-      val equivalenceOfSubstitutedEqauls = new Axiom(
-        "Equivalence of Substituted Equals",
-        Seq(Equals(x, y)),
-        Equivalence(
-          SubstitutedStatementVariable(φ, x, z),
-          SubstitutedStatementVariable(φ, y, z)))
-
       val theorem = parseTheorem(
         "X",
         "premise = x y",
         "prove ↔ ∈ z x ∈ z y",
         "qed")(
-        contextWith(equivalenceOfSubstitutedEqauls))
+        contextWith(equivalenceOfSubstitutedEquals))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(
         Equivalence(ElementOf(z, x), ElementOf(z, y)))
@@ -155,28 +183,18 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove a conclusion with a substituted premise" in {
-      val generalization = new Axiom(
-        "Generalization",
-        Seq(SubstitutedStatementVariable(φ, y, x)),
-        ForAll(x, φ))
-
       val theorem = parseTheorem(
         "X",
         "premise → ∈ y x ∈ y x",
         "prove ∀ z → ∈ z x ∈ z x",
         "qed")(
-        contextWith(generalization))
+        contextWith(generalizationWithDifferentVariables))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(
         ForAll(z, Implication(ElementOf(z, x), ElementOf(z, x))))
     }
 
     "prove a conclusion with a no-op substitution" in {
-      val specification = new Axiom(
-        "Specification",
-        Seq(ForAll(x, φ)),
-        SubstitutedStatementVariable(φ, y, x))
-
       val theorem = parseTheorem(
         "X",
         "premise ∀ x φ",
@@ -188,20 +206,6 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove the conclusion of a transformed inference" in {
-      val falseStatementsAreEquivalent = new Axiom(
-        "False Statements Are Equivalent",
-        Seq(Negation(φ), Negation(ψ)),
-        Equivalence(φ, ψ))
-      val generalization = new Axiom(
-        "Generalization",
-        Seq(φ),
-        ProvenStatement(
-          ForAll(x, φ),
-          Conditions(Set(x), Map.empty)))
-      val specification = new Axiom(
-        "Specification",
-        Seq(ForAll(x, φ)),
-        SubstitutedStatementVariable(φ, y, x))
       val transform = new InferenceTransform(ForAll(x, PlaceholderStatement))
 
       val theorem = parseTheorem(
@@ -210,20 +214,17 @@ class TheoremSpec extends ProverSpec {
         "premise ∀ x ¬ ∈ x y",
         "prove ∀ x ↔ ∈ x z ∈ x y",
         "qed")(
-        contextWith(falseStatementsAreEquivalent, generalization, specification).addInferenceTransform(transform))
+        contextWith(
+          falseStatementsAreEquivalent,
+          generalizationWithSameVariable,
+          specification
+        ).addInferenceTransform(transform))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(
         ForAll(x, Equivalence(ElementOf(x, z), ElementOf(x, y))))
     }
 
     "carry arbitrary variable condition from inference conclusion" in {
-      val substitution = new Axiom(
-        "Substitution",
-        Seq(φ),
-        ProvenStatement(
-          SubstitutedStatementVariable(φ, y ,x),
-          Conditions(arbitraryVariables = Set(x), distinctVariables = Map.empty)))
-
       val theorem = parseTheorem(
         "X",
         "premise φ",
@@ -237,26 +238,13 @@ class TheoremSpec extends ProverSpec {
     }
 
     "only prove a statement if the conditions match when specified explicitly" in {
-      val substitution = new Axiom(
-        "Substitution",
-        Seq(φ),
-        ProvenStatement(
-          SubstitutedStatementVariable(φ, y ,x),
-          Conditions(arbitraryVariables = Set(x), distinctVariables = Map.empty)))
-      val generalization = new Axiom(
-        "Generalization",
-        Seq(SubstitutedStatementVariable(φ, y, x)),
-        ProvenStatement(
-          ForAll(x, φ),
-          Conditions(Set(y), Map(y -> Variables(Set(φ), Set.empty)))))
-
       val theorem = parseTheorem(
         "X",
         "premise φ",
         "prove sub x y φ",
         "prove ∀ y φ arbitrary-variables(y) distinct-variables ()",
         "qed")(
-        contextWith(substitution, generalization))
+        contextWith(substitution, generalizationWithDifferentVariables))
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(y, φ),
@@ -264,19 +252,6 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove a statement by simplifying substitutions using distinct variable conditions" in {
-      val proveExistence = new Axiom(
-        "Prove Existence",
-        Seq(
-          DirectPremise(Exists(x, φ)),
-          DeducedPremise(
-            Conjunction(
-              SubstitutedStatementVariable(φ, y, x),
-              SubstitutedStatementVariable(φ, z, x)),
-            Equals(y, z))),
-        ProvenStatement(
-          ExistsUnique(x, φ),
-          Conditions(Set(y, z), Map.empty)))
-
       val theorem = parseTheorem(
         "XXX",
         "premise ∃ X ∀ x ↔ ∈ x X φ",
@@ -290,6 +265,52 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement(
         ExistsUnique(X, ForAll(x, Equivalence(ElementOf(x, X), φ))),
         Conditions(Set(Y, Z), Map(X -> Variables(Set(φ), Set.empty))))
+    }
+
+    "not prove a conclusion that violates an arbitrary variable condition" in {
+      parseTheorem(
+        "XXX",
+        "assume = x y {",
+        "  prove ∀ x = x y",
+        "}",
+        "prove → = x y ∀ x = x y",
+        "qed")(
+        contextWith(deduction, generalizationWithSameVariable)
+      ) must throwAn[Exception]
+    }
+
+    "allow arbitrary variables that only appear bound" in {
+      val theorem = parseTheorem(
+        "XXX",
+        "assume ∀ x = x y {",
+        "  prove = x y",
+        "  prove ↔ = x z = y z",
+        "  prove ∀ x ↔ = x z = y z",
+        "}",
+        "prove → ∀ x = x y ∀ x ↔ = x z = y z",
+        "qed")(
+        contextWith(generalizationWithSameVariable, specification, equivalenceOfSubstitutedEquals, deduction))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
+        Implication(
+          ForAll(x, Equals(x, y)),
+          ForAll(x, Equivalence(Equals(x, z), Equals(y, z)))))
+    }
+
+    "not add distinctness conditions to arbitrary variables for statement variables that are bound" in {
+      val theorem = parseTheorem(
+        "XXX",
+        "assume ∀ x φ {",
+        "  prove ∀ x ∀ x φ",
+        "}",
+        "prove → ∀ x φ ∀ x ∀ x φ",
+        "qed")(
+        contextWith(generalizationWithSameVariable, deduction))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
+        Implication(
+          ForAll(x, φ),
+          ForAll(x, ForAll(x, φ))))
     }
   }
 }

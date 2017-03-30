@@ -150,6 +150,7 @@ case class DefinedStatement(
  extends Statement
 {
   override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
+  override def presentVariables: Variables = allVariables -- localBoundVariables
   override def boundVariables = localBoundVariables ++ subcomponents.map(_.boundVariables).knownCommonValues
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = {
     if (localBoundVariables.contains(termVariable))
@@ -188,10 +189,10 @@ case class DefinedStatement(
 
   override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Statement] = {
     if (localBoundVariables.contains(termToBeReplaced))
-      throw new Exception("Cannot substitute for a bound variable")
+      None
     if (termToReplaceWith.allVariables.termVariables.intersect(localBoundVariables).nonEmpty)
-      throw new Exception("Cannot substitute a new instance of a bound variable")
-    for {
+      None
+    else for {
       updatedSubcomponents <- subcomponents
         .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced))
         .traverseOption

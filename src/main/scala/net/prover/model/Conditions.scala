@@ -19,6 +19,24 @@ case class Conditions(
       }.toMap)
   }
 
+  def addDistinctVariables(newDistinctVariables: Map[TermVariable, Variables]): Conditions = {
+    copy(distinctVariables = distinctVariables ++ newDistinctVariables)
+  }
+
+  def addDistinctVariables(variables: Set[TermVariable], statements: Seq[Statement]): Option[Conditions] = {
+    variables
+      .map { termVariable =>
+        val variables = statements.map(_.presentVariables).reduceOption(_ ++ _).getOrElse(Variables.empty)
+        if (variables.termVariables.contains(termVariable))
+          None
+        else
+          Some(termVariable -> variables)
+      }
+      .traverseOption
+      .map(_.toMap.filter(_._2.nonEmpty))
+      .map(addDistinctVariables)
+  }
+
   def filterOutBoundVariables(boundVariables: Set[TermVariable]): Conditions = {
     copy(arbitraryVariables = arbitraryVariables.diff(boundVariables))
   }

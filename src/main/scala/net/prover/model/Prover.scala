@@ -72,7 +72,7 @@ case class Prover(
             } ++ assertions.mapWithIndex { (step, index) =>
               ReferencedAssertion(step.provenStatement, DirectReference(transformedPremises.length + index))
             }
-            val x = Prover(
+            Prover(
               statement,
               Some(Conditions.empty),
               provenAssertions,
@@ -80,7 +80,6 @@ case class Prover(
               transformedPremises,
               Nil
             ).proveAssertionWithNoTransforms()
-            x
           }
         } yield {
           val transformedInference = new Inference {
@@ -133,23 +132,23 @@ case class Prover(
     inferencePremise: DirectPremise,
     substitutionsSoFar: PartialSubstitutions
   ): Iterator[(PremiseMatch, PartialSubstitutions)] = {
-    provenAssertions.iterator.map { case ReferencedAssertion(provenStatement, reference) =>
+    provenAssertions.iterator.mapCollect { case ReferencedAssertion(provenStatement, reference) =>
       inferencePremise.statement.calculateSubstitutions(provenStatement.statement, substitutionsSoFar)
         .map { newSubstitutions =>
           (DirectPremiseMatch(provenStatement, reference), newSubstitutions)
         }
-    }.collectDefined
+    }
   }
 
   private def matchDeducedPremiseToFacts(
     inferencePremise: DeducedPremise,
     substitutionsSoFar: PartialSubstitutions
   ): Iterator[(PremiseMatch, PartialSubstitutions)] = {
-    provenDeductions.iterator.map { case ReferencedDeduction(provenAssumption, provenDeduction, reference) =>
+    provenDeductions.iterator.mapCollect { case ReferencedDeduction(provenAssumption, provenDeduction, reference) =>
       inferencePremise.antecedent.calculateSubstitutions(provenAssumption, substitutionsSoFar)
         .flatMap(inferencePremise.consequent.calculateSubstitutions(provenDeduction.statement, _))
         .map((DeducedPremiseMatch(provenAssumption, provenDeduction, reference), _))
-    }.collectDefined
+    }
   }
 
   private def makeAssertionStep(
@@ -176,8 +175,9 @@ case class Prover(
       restrictedConditions = unrestrictedConditions
         .filterOutBoundVariables(boundVariables)
         .restrictToActiveVariables(activeVariables)
-      expandedConditions = restrictedConditions
-        .copy(distinctVariables = restrictedConditions.distinctVariables ++ distinctVariables)
+      expandedConditions <- restrictedConditions
+        .addDistinctVariables(distinctVariables)
+        .addDistinctVariables(restrictedConditions.arbitraryVariables, assumptions)
       if !targetConditions.exists(_ != expandedConditions)
       provenStatement = ProvenStatement(assertion, expandedConditions)
     } yield {

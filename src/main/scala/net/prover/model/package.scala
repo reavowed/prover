@@ -3,7 +3,6 @@ package net.prover
 import scala.collection.generic.CanBuildFrom
 import scala.collection.{TraversableLike, mutable}
 import scala.reflect.ClassTag
-import scala.util.Try
 
 package object model {
   implicit class StringOps(s: String) {
@@ -22,21 +21,12 @@ package object model {
   }
 
   implicit class SeqOps[T](seq: Seq[T]) {
-    def mapFold[S, U](initial: S)(f: (T, S) => (U, S)): (Seq[U], S) = {
-      seq.foldLeft((Seq.empty[U], initial)) {
-        case ((list, previous), element) =>
-          f(element, previous).mapLeft(list :+ _)
-      }
-    }
     def collectFold[S](f: (Seq[S], T) => Option[S]): Option[Seq[S]] = {
       seq.foldLeft(Option(Seq.empty[S])) { case (accOption, t) =>
         accOption.flatMap { acc =>
           f(acc, t).map(acc :+ _)
         }
       }
-    }
-    def mapCollect[S](f: T => Option[S]): Seq[S] = {
-      seq.map(f).collectDefined
     }
     def mapWithIndex[S](f: (T, Int) => S): Seq[S] = {
       seq.zipWithIndex.map { case (t, index) => f(t, index)}
@@ -71,12 +61,6 @@ package object model {
     }
   }
 
-  implicit class SeqTupleOps[S, T](x: Seq[(S, T)]) {
-    def split: (Seq[S], Seq[T]) = {
-      (x.map(_._1), x.map(_._2))
-    }
-  }
-
   implicit class TraversableOptionOps[T, Repr](traversable: TraversableLike[Option[T], Repr]) {
     def traverseOption[That](implicit bf: CanBuildFrom[Repr, T, That]): Option[That] = {
       traversable.foldLeft(Option(bf())) { case (builderOption, valueOption) =>
@@ -86,14 +70,6 @@ package object model {
         } yield builder += value
       }
     }.map(_.result())
-  }
-
-  implicit class SeqOptionsOps[T](seq: Seq[Option[T]]) {
-    def collectDefined: Seq[T] = {
-      seq.collect {
-        case Some(t) => t
-      }
-    }
   }
 
   implicit class SeqSetOps[T](seq: Seq[Set[T]]) {
@@ -115,14 +91,7 @@ package object model {
         None
     }
     def mapCollect[S](f: T => Option[S]): Iterator[S] = {
-      iterator.map(f).collectDefined
-    }
-  }
-
-
-  implicit class IteratorOptionOps[T](iterator: Iterator[Option[T]]) {
-    def collectDefined: Iterator[T] = {
-      iterator.collect {
+      iterator.map(f).collect {
         case Some(t) => t
       }
     }
@@ -151,12 +120,6 @@ package object model {
           map + (s -> t)
         }
       }
-    }
-  }
-
-  object IntParser {
-    def unapply(s: String): Option[Int] = {
-      Try(s.toInt).toOption
     }
   }
 }
