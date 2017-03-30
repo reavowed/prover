@@ -20,7 +20,7 @@ class BookController {
       books
     } catch {
       case NonFatal(e) =>
-        BookController.logger.error("Error getting books", e)
+        BookController.logger.error("Error getting books\n{}", e.getMessage)
         new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }

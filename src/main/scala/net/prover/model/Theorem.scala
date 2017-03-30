@@ -21,7 +21,7 @@ object Theorem extends ChapterEntryParser[Theorem] with InferenceParser {
       name <- Parser.toEndOfLine
       premises <- premisesParser
       proofOutline <- ProofOutline.parser
-      _ <- Parser.singleWord.onlyIf(_ == "qed").throwIfUndefined("Expected step or qed")
+      _ <- Parser.singleWord.matchOrThrow(_ == "qed", word => s"Expected step or qed, found '$word'")
     } yield {
       val detailedProof = DetailedProof.fillInOutline(premises, proofOutline)
       val conclusion = detailedProof.steps.ofType[DetailedProof.AssertionStep].lastOption

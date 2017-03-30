@@ -24,12 +24,19 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
     else
       (None, tokenizer)
     }
+  def matchOrThrow(f: T => Boolean, g: T => String): Parser[T] = Parser { tokenizer =>
+    val (t, nextTokenizer) = attemptParse(tokenizer)
+    if (f(t))
+      (t, nextTokenizer)
+    else
+      throw new Exception(g(t))
+  }
 
   private def inBrackets(openBracket: String, closeBracket: String): Parser[T] = {
     for {
-      _ <- Parser.singleWord.onlyIf(_ == openBracket).throwIfUndefined(s"'$openBracket' expected but not found")
+      _ <- Parser.singleWord.matchOrThrow(_ == openBracket, word => s"'$openBracket' expected but found '$word'")
       t <- this
-      _ <- Parser.singleWord.onlyIf(_ == closeBracket).throwIfUndefined(s"'$closeBracket' expected but not found")
+      _ <- Parser.singleWord.matchOrThrow(_ == closeBracket, word => s"'$closeBracket' expected but found '$word'")
     } yield t
   }
 
@@ -126,9 +133,6 @@ object Parser {
       Parser { tokenizer =>
         readNext(Nil, tokenizer)
       }
-    }
-    def throwIfUndefined(msg: String): Parser[T] = {
-      parser.map(_.getOrElse(throw new Exception(msg)))
     }
 
     def collectWhileDefined: Parser[Seq[T]] = {
