@@ -36,11 +36,15 @@
             </div>
             <h5>Proof</h5>
             <table class="proofRows">
-                <tr ng-repeat="row in proofRows" class="proofRow">
+                <tr ng-repeat="row in proofRows"
+                    class="proofRow {{row.assertion ? 'hasAssertion' : ''}}"
+                    ng-mouseenter="highlightRow(row, $event)"
+                    ng-mouseleave="removeHighlight(row, $event)"
+                >
                     <td>
                         <span ng-repeat="i in _.range(row.indentLevel)" class="proofIndent"></span>
                         <span>{{row.prefix}}</span>
-                        <span ng-if="row.assumption" class="assumption">{{row.assumption}}</span><span ng-if="row.assumption && row.assertion"> ⊢ </span><span ng-if="row.assertion" class="assertion" ng-mouseenter="highlightRow(row, $event)" ng-mouseleave="removeHighlight(row, $event)">{{row.assertion.provenStatement.statement}}</span>.
+                        <span ng-if="row.assumption" class="assumption">{{row.assumption}}</span><span ng-if="row.assumption && row.assertion"> ⊢ </span><span ng-if="row.assertion" class="assertion">{{row.assertion.provenStatement.statement}}</span>.
                     </td>
                     <td>
                         <span ng-if="row.assertion" class="stepInferenceId">{{row.assertion.inference.name}}</span>
