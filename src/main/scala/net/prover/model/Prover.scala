@@ -160,21 +160,10 @@ case class Prover(
   ): Option[AssertionStep] = {
     for {
       substitutedInference <- inference.applySubstitutions(substitutions)
-      boundVariables =
-        (premises.map(_.boundVariables) ++
-          assumptions.map(_.boundVariables) :+
-          substitutedInference.conclusion.statement.boundVariables
-        ).reduce(_ intersect _)
-      activeVariables =
-        (premises.map(_.allVariables) ++
-          assumptions.map(_.allVariables) :+
-          substitutedInference.conclusion.statement.allVariables
-        ).reduce(_ ++ _)
       unrestrictedConditions = (matchedPremises.map(_.provenStatement.conditions) :+ substitutedInference.conclusion.conditions)
         .reduce(_ ++ _)
       restrictedConditions = unrestrictedConditions
-        .filterOutBoundVariables(boundVariables)
-        .restrictToActiveVariables(activeVariables)
+        .restrictToStatements(premises.flatMap(_.statements) ++ assumptions :+ substitutedInference.conclusion.statement)
       expandedConditions <- restrictedConditions
         .addDistinctVariables(distinctVariables)
         .addDistinctVariables(restrictedConditions.arbitraryVariables, assumptions)

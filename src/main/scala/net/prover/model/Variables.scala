@@ -23,6 +23,11 @@ case class Variables(statementVariables: Set[StatementVariable], termVariables: 
       statementVariables.intersect(otherVariables.statementVariables),
       termVariables.intersect(otherVariables.termVariables))
   }
+  def diff(otherVariables: Variables): Variables = {
+    Variables(
+      statementVariables.diff(otherVariables.statementVariables),
+      termVariables.diff(otherVariables.termVariables))
+  }
   def isEmpty: Boolean = statementVariables.isEmpty && termVariables.isEmpty
   def nonEmpty: Boolean = statementVariables.nonEmpty || termVariables.nonEmpty
 }

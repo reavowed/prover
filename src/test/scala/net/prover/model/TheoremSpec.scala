@@ -58,7 +58,9 @@ class TheoremSpec extends ProverSpec {
     val generalizationWithDifferentVariables = new Axiom(
       "Generalization",
       Seq(SubstitutedStatementVariable(φ, y, x)),
-      ForAll(x, φ))
+      ProvenStatement(
+        ForAll(x, φ),
+        Conditions(arbitraryVariables = Set(y), distinctVariables = Map(y -> Variables(Set(φ), Set.empty)))))
     val generalizationWithSameVariable = new Axiom(
       "Generalization",
       Seq(φ),
@@ -190,8 +192,9 @@ class TheoremSpec extends ProverSpec {
         "qed")(
         contextWith(generalizationWithDifferentVariables))
 
-      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
-        ForAll(z, Implication(ElementOf(z, x), ElementOf(z, x))))
+      theorem.conclusion mustEqual ProvenStatement(
+        ForAll(z, Implication(ElementOf(z, x), ElementOf(z, x))),
+        Conditions(Set(y), Map(y -> Variables(Set.empty, Set(x, z)))))
     }
 
     "prove a conclusion with a no-op substitution" in {

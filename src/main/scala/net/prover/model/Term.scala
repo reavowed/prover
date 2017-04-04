@@ -127,6 +127,8 @@ case class DefinedTerm(
           .map { resolvedSubcomponents =>
             copy(subcomponents = resolvedSubcomponents)
           }
+      case _ =>
+        None
     }
   }
 

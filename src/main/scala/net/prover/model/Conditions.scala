@@ -37,6 +37,23 @@ case class Conditions(
       .map(addDistinctVariables)
   }
 
+  def restrictToStatements(statements: Seq[Statement]): Conditions = {
+    val activeVariables = statements.map(_.allVariables).reduce(_ ++ _)
+    val updatedDistinctVariables = distinctVariables
+      .mapValues(_ intersect activeVariables)
+      .filter { case (termVariable, variables) =>
+        activeVariables.termVariables.contains(termVariable) && variables.nonEmpty
+      }
+    val updatedArbitraryVariables = arbitraryVariables
+      .intersect(activeVariables.termVariables)
+      .filter { v =>
+        val threats = statements.map(_.getPotentiallyIntersectingVariables(v)).reduce(_ ++ _)
+        val protectors = distinctVariables.getOrElse(v, Variables.empty)
+        threats.diff(protectors).nonEmpty
+      }
+    Conditions(updatedArbitraryVariables, updatedDistinctVariables)
+  }
+
   def filterOutBoundVariables(boundVariables: Set[TermVariable]): Conditions = {
     copy(arbitraryVariables = arbitraryVariables.diff(boundVariables))
   }
