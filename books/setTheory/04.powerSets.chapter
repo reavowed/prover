@@ -11,3 +11,27 @@ prove ∃! Z ∀ Y ↔ ∈ Y Z ⊆ Y X
 qed
 
 term powerSet (X) format (𝒫X) (∀ Y ↔ ∈ Y _ ⊆ Y X)
+
+theorem Subset Is in Power Set
+premise ⊆ Y X
+prove ∀ Y ↔ ∈ Y powerSet X ⊆ Y X
+prove ↔ ∈ Y powerSet X ⊆ Y X
+prove ∈ Y powerSet X
+qed
+
+theorem Element of Power Set Is Subset
+premise ∈ Y powerSet X
+prove ∀ Y ↔ ∈ Y powerSet X ⊆ Y X
+prove ↔ ∈ Y powerSet X ⊆ Y X
+prove ⊆ Y X
+qed
+
+theorem ∅ Is in Any Power Set
+prove ⊆ ∅ X
+prove ∈ ∅ powerSet X
+qed
+
+theorem Any Set Is in Its Own Power Set
+prove ⊆ X X
+prove ∈ X powerSet X
+qed

@@ -2,3 +2,17 @@ chapter Subsets
 Introduce the subset relation, ⊆.
 
 statement ⊆ (Y X) definition (∀ x → ∈ x Y ∈ x X)
+
+theorem Subset is Antisymmetric
+premise ⊆ X Y
+premise ⊆ Y X
+prove ∀ x → ∈ x X ∈ x Y
+prove ∀ x → ∈ x Y ∈ x X
+prove ∀ x ↔ ∈ x X ∈ x Y
+prove = X Y
+qed
+
+theorem Any Set Is a Subset of Itself
+prove ∀ x → ∈ x X ∈ x X
+prove ⊆ X X
+qed

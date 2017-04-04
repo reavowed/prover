@@ -1,0 +1,22 @@
+chapter Propositional Logic Identities
+Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
+
+theorem And Is Symmetric
+assume ∧ φ ψ {
+  prove ∧ ψ φ
+}
+assume ∧ ψ φ {
+  prove ∧ φ ψ
+}
+prove ↔ ∧ φ ψ ∧ ψ φ
+qed
+
+theorem Or Is Symmetric
+assume ∨ φ ψ {
+  prove ∨ ψ φ
+}
+assume ∨ ψ φ {
+  prove ∨ φ ψ
+}
+prove ↔ ∨ φ ψ ∨ ψ φ
+qed

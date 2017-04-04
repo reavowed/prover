@@ -1,9 +1,12 @@
 Set Theory
 import Predicate Calculus
 
-variables (φ) (x y z X Y Z)
+variables (φ ψ) (x y z X Y Z a b)
 
 include 01.extensionality.chapter
 include 02.subsets.chapter
 include 03.emptySet.chapter
 include 04.powerSets.chapter
+include 05.replacement.chapter
+include 06.singletons.chapter
+include 07.unorderedPairs.chapter

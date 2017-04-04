@@ -1,0 +1,79 @@
+chapter Singletons
+Establish the existence of the singleton set {x}.
+
+theorem Singletons Exist
+prove ∃! Y = Y X
+prove → ∈ x powerSet ∅ ∃! Y = Y X
+prove ∀ x → ∈ x powerSet ∅ ∃! Y = Y X
+prove ∃ Z ∀ Y ↔ ∈ Y Z ∃ x ∧ ∈ x powerSet ∅ = Y X
+prove ∈ ∅ powerSet ∅
+prove ∃ x ∈ x powerSet ∅
+prove ↔ ∃ x ∧ ∈ x powerSet ∅ = Y X = Y X
+prove ∀ Y ↔ ∃ x ∧ ∈ x powerSet ∅ = Y X = Y X
+prove ∃ Z ∀ Y ↔ ∈ Y Z = Y X
+qed
+
+theorem Singletons Are Unique
+prove ∃ Z ∀ Y ↔ ∈ Y Z = Y X
+prove ∃! Z ∀ Y ↔ ∈ Y Z = Y X
+qed
+
+term singleton (x)
+  format ({x})
+  (∀ y ↔ ∈ y _ = y x)
+
+theorem A Set Is an Element of Its Singleton
+prove ∀ y ↔ ∈ y singleton x = y x
+prove ↔ ∈ x singleton x = x x
+prove = x x
+prove ∈ x singleton x
+qed
+
+theorem Singleton is Subset if Set is Element
+premise ∈ x X
+prove ∀ y ↔ ∈ y singleton x = y x
+assume = y x {
+  prove ∈ y X
+}
+prove → = y x ∈ y X
+prove ∀ y → = y x ∈ y X
+prove ∀ y → ∈ y singleton x ∈ y X
+prove ⊆ singleton x X
+qed
+
+theorem A Singleton is Not the Empty Set
+prove ∈ x singleton x
+prove ¬ = singleton x ∅
+qed
+
+theorem Subsets of a Singleton
+premise ⊆ y singleton x
+prove ∀ z → ∈ z y ∈ z singleton x
+prove ∀ z ↔ ∈ z singleton x = z x
+prove ∀ z → ∈ z y = z x
+assume ∃ z ∈ z y {
+  assume ∈ z y {
+    prove = z x
+    prove ∈ x y
+  }
+  prove ∈ x y
+  prove ⊆ singleton x y
+  prove = y singleton x
+  prove ∨ = y ∅ = y singleton x
+}
+assume ¬ ∃ z ∈ z y {
+  prove = y ∅
+  prove ∨ = y ∅ = y singleton x
+}
+prove ∨ = y ∅ = y singleton x
+prove ¬ = singleton x ∅
+prove ¬ = ∅ singleton x
+prove ⊕ = y ∅ = y singleton x
+qed
+
+theorem Elements of Powerset of Singleton
+premise ∈ x powerSet singleton ∅
+prove ⊆ x singleton ∅
+prove ⊕ = x ∅ = x singleton ∅
+qed
+

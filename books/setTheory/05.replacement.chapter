@@ -1,0 +1,11 @@
+chapter Replacement
+Introduce the Axiom of Replacement.
+
+axiom Axiom of Replacement
+conclusion → ∀ x → ∈ x X ∃! y φ ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X φ
+
+theorem Replacement
+premise ∀ x → ∈ x X ∃! y φ
+prove → ∀ x → ∈ x X ∃! y φ ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X φ
+prove ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X φ
+qed

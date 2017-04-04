@@ -1,0 +1,90 @@
+chapter Disjunction
+Introduce the "or" or "disjuction" connective, ∨.
+
+statement ∨ (φ ψ) definition (→ ¬ φ ψ)
+
+theorem Add Right Disjunct
+premise φ
+prove → ¬ φ ψ
+prove ∨ φ ψ
+qed
+
+theorem Add Left Disjunct
+premise ψ
+prove → ¬ φ ψ
+prove ∨ φ ψ
+qed
+
+theorem Proof by Cases
+premise ∨ φ ψ
+premise → φ χ
+premise → ψ χ
+prove → ¬ φ ψ
+prove → ¬ φ χ
+prove χ
+qed
+
+theorem Proof by Cases
+premise ∨ φ ψ
+premise proves φ χ
+premise proves ψ χ
+prove → φ χ
+prove → ψ χ
+prove χ
+qed
+
+theorem Combine Cases
+premise proves φ χ
+premise proves ψ χ
+assume ∨ φ ψ {
+  prove χ
+}
+prove → ∨ φ ψ χ
+qed
+
+theorem Reverse Disjunction
+premise ∨ φ ψ
+assume φ {
+  prove ∨ ψ φ
+}
+prove → φ ∨ ψ φ
+assume ψ {
+  prove ∨ ψ φ
+}
+prove → ψ ∨ ψ φ
+prove ∨ ψ φ
+qed
+
+theorem One Disjunct Must Be True
+premise ∨ φ ψ
+premise ¬ φ
+prove → ¬ φ ψ
+prove ψ
+qed
+
+theorem One Disjunct Must Be True
+premise ∨ φ ψ
+premise ¬ ψ
+prove ∨ ψ φ
+prove φ
+qed
+
+theorem Disjunction of Two Falsehoods Is False
+premise ¬ φ
+premise ¬ ψ
+assume φ {
+  prove ¬ ∨ φ ψ
+}
+assume ψ {
+  prove ¬ ∨ φ ψ
+}
+assume ∨ φ ψ {
+  prove ¬ ∨ φ ψ
+}
+prove ¬ ∨ φ ψ
+qed
+
+theorem Law of the Excluded Middle
+prove → ¬ φ ¬ φ
+prove ∨ φ ¬ φ
+qed

@@ -1,5 +1,5 @@
 chapter Equivalence
-We introduce our final connective, ↔ (equivalence).
+Introduce the equivalence connective, ↔.
 
 statement ↔ (φ ψ) definition (∧ → φ ψ → ψ φ)
 
@@ -25,10 +25,21 @@ prove ∧ → ψ φ → φ ψ
 prove ↔ ψ φ
 qed
 
+theorem Forward Implication from Equivalence
+premise ↔ φ ψ
+prove ∧ → φ ψ → ψ φ
+prove → φ ψ
+qed
+
+theorem Reverse Implication from Equivalence
+premise ↔ φ ψ
+prove ∧ → φ ψ → ψ φ
+prove → ψ φ
+qed
+
 theorem Modus Ponens (Equivalence)
 premise ↔ φ ψ
 premise φ
-prove ∧ → φ ψ → ψ φ
 prove → φ ψ
 prove ψ
 qed
@@ -36,7 +47,7 @@ qed
 theorem Modus Ponens (Equivalence)
 premise ↔ φ ψ
 premise ψ
-prove ↔ ψ φ
+prove → ψ φ
 prove φ
 qed
 
@@ -82,4 +93,18 @@ premise ¬ ψ
 prove → φ ψ
 prove → ψ φ
 prove ↔ φ ψ
+qed
+
+theorem Implication then Equivalence
+premise → φ ψ
+premise ↔ ψ χ
+prove → ψ χ
+prove → φ χ
+qed
+
+theorem Equivalence then Implication
+premise ↔ φ ψ
+premise → ψ χ
+prove → φ ψ
+prove → φ χ
 qed

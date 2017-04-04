@@ -34,3 +34,44 @@ assume sub y z φ {
 }
 prove ↔ sub x z φ sub y z φ
 qed
+
+theorem Equality Is Symmetric
+assume = x y {
+  prove = y x
+}
+assume = y x {
+  prove = x y
+}
+prove ↔ = x y = y x
+qed
+
+theorem Reverse Equality Inside Negation
+premise ¬ = x y
+assume = y x {
+  prove = x y
+}
+prove ¬ = y x
+qed
+
+theorem Equality Is Transitive
+premise = x y
+premise = y z
+prove = x z
+qed
+
+theorem Every Set Exists
+prove = x x
+prove ∃ y = y x
+qed
+
+theorem Exclusive Or for Equality
+premise ∨ = x y = x z
+premise ¬ = y z
+assume ∧ = x y = x z {
+  prove = x y
+  prove = x z
+  prove = y z
+}
+prove ¬ ∧ = x y = x z
+prove ⊕ = x y = x z
+qed

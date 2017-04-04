@@ -35,3 +35,13 @@ assume ∧ ∀ x ↔ ∈ x Y φ ∀ x ↔ ∈ x Z φ {
 }
 prove ∃! X ∀ x ↔ ∈ x X φ
 qed
+
+theorem Replace Equivalent Membership Condition
+premise ∃ X ∀ x ↔ ∈ x X φ
+premise ∀ x ↔ φ ψ
+assume ∀ x ↔ ∈ x X φ {
+  prove ∀ x ↔ ∈ x X ψ
+  prove ∃ X ∀ x ↔ ∈ x X ψ
+}
+prove ∃ X ∀ x ↔ ∈ x X ψ
+qed

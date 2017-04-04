@@ -1,0 +1,81 @@
+chapter Unordered Pairs
+Establish the existence of the unordered pair {x,y}.
+
+theorem Unordered Pair Lemma 1
+premise ⊕ φ ψ
+prove ∨ φ ψ
+assume φ {
+  prove ¬ ψ
+  prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
+  prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
+  prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
+}
+assume ψ {
+  prove ¬ φ
+  prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
+  prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
+  prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
+}
+prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
+qed
+
+theorem Unordered Pair Lemma 2
+assume ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b {
+  prove ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b
+  assume ∧ = x ∅ = y a {
+    prove = y a
+    prove ∨ = y a = y b
+  }
+  assume ∧ = x singleton ∅ = y b {
+    prove = y b
+    prove ∨ = y a = y b
+  }
+  prove ∨ = y a = y b
+}
+assume ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b {
+  prove ∨ = y a = y b
+}
+assume ∨ = y a = y b {
+  assume = y a {
+    prove = ∅ ∅
+    prove ∧ = ∅ ∅ = y a
+    prove ∨ ∧ = ∅ ∅ = y a  ∧ = ∅ singleton ∅ = y b
+    prove ∈ ∅ powerSet singleton ∅
+    prove ∧ ∈ ∅ powerSet singleton ∅ ∨ ∧ = ∅ ∅ = y a  ∧ = ∅ singleton ∅ = y b
+    prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b
+  }
+  assume = y b {
+    prove = singleton ∅ singleton ∅
+    prove ∧ = singleton ∅ singleton ∅ = y b
+    prove ∨ ∧ = singleton ∅ ∅ = y a  ∧ = singleton ∅ singleton ∅ = y b
+    prove ∈ singleton ∅ powerSet singleton ∅
+    prove ∧ ∈ singleton ∅ powerSet singleton ∅ ∨ ∧ = singleton ∅ ∅ = y a  ∧ = singleton ∅ singleton ∅ = y b
+    prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b
+  }
+  prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b
+}
+prove ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b ∨ = y a = y b
+prove ∀ y ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b ∨ = y a = y b
+qed
+
+theorem Unordered Pairs Exist
+assume ∈ x powerSet singleton ∅ {
+  prove ⊆ x singleton ∅
+  prove ⊕ = x ∅ = x singleton ∅
+  prove ∃! y ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b
+}
+prove → ∈ x powerSet singleton ∅ ∃! y ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b
+prove ∀ x → ∈ x powerSet singleton ∅ ∃! y ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b
+prove ∃ X ∀ y ↔ ∈ y X ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b
+prove ∀ y ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x ∅ = y a ∧ = x singleton ∅ = y b ∨ = y a = y b
+prove ∃ X ∀ y ↔ ∈ y X ∨ = y a = y b
+qed
+
+theorem Unordered Pairs are Unique
+prove ∃ X ∀ y ↔ ∈ y X ∨ = y a = y b
+prove ∃! X ∀ y ↔ ∈ y X ∨ = y a = y b
+qed
+
+term pair (x y)
+  format ({x,y})
+  (∀ z ↔ ∈ z _ ∨ = z x = z y)

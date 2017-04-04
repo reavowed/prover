@@ -1,10 +1,11 @@
 Predicate Calculus
 import Propositional Calculus
 
-variables (φ) (x y z)
+variables (φ ψ) (x y z a b)
 
 include 01.termVariables.chapter
 include 02.universalQuantifier.chapter
 include 03.existentialQuantifier.chapter
 include 04.equality.chapter
 include 05.uniquenessQuantifier.chapter
+include 06.inferences.chapter

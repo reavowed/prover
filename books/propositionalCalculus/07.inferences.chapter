@@ -1,0 +1,32 @@
+chapter Useful Inferences
+Some inferences that can be used to reduce boilerplate in proofs.
+
+comment A set of more complicated structural facts that are surprisingly useful later on.
+
+theorem Disjoined Conjuct Equivalence
+premise φ
+premise ¬ χ
+assume ∧ φ ψ {
+  prove ψ
+}
+assume ∧ χ ω {
+  prove χ
+  prove ψ
+}
+assume ∨ ∧ φ ψ ∧ χ ω {
+  prove ψ
+}
+assume ψ {
+  prove ∧ φ ψ
+  prove ∨ ∧ φ ψ ∧ χ ω
+}
+prove ↔ ∨ ∧ φ ψ ∧ χ ω ψ
+qed
+
+theorem Disjoined Conjuct Equivalence
+premise ¬ φ
+premise χ
+prove ↔ ∨ ∧ χ ω ∧ φ ψ ω
+prove ↔ ∨ ∧ χ ω ∧ φ ψ ∨ ∧ φ ψ ∧ χ ω
+prove ↔ ∨ ∧ φ ψ ∧ χ ω ω
+qed

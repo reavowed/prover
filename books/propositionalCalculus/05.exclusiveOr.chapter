@@ -1,0 +1,81 @@
+chapter Exclusive Or
+Introduce the exclusive or connective, ⊕.
+
+statement ⊕ (φ ψ)
+  definition (∨ ∧ φ ¬ ψ ∧ ¬ φ ψ)
+
+theorem Reverse Exclusive Or
+premise ⊕ φ ψ
+prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ
+assume ∧ φ ¬ ψ {
+  prove ∧ ¬ ψ φ
+  prove ∨ ∧ ψ ¬ φ ∧ ¬ ψ φ
+}
+assume ∧ ¬ φ ψ {
+  prove ∧ ψ ¬ φ
+  prove ∨ ∧ ψ ¬ φ ∧ ¬ ψ φ
+}
+prove ∨ ∧ ψ ¬ φ ∧ ¬ ψ φ
+prove ⊕ ψ φ
+qed
+
+theorem Or from Exclusive Or
+premise ⊕ φ ψ
+prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ
+assume ∧ φ ¬ ψ {
+  prove φ
+  prove ∨ φ ψ
+}
+assume ∧ ¬ φ ψ {
+  prove ψ
+  prove ∨ φ ψ
+}
+prove ∨ φ ψ
+qed
+
+theorem Negated And from Exclusive Or
+premise ⊕ φ ψ
+prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ
+assume ∧ φ ψ {
+  prove φ
+  prove ψ
+  prove ¬ ∧ φ ¬ ψ
+  prove ¬ ∧ ¬ φ ψ
+  prove ¬ ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ
+}
+prove ¬ ∧ φ ψ
+qed
+
+theorem Exclusive Or from Or and Negated And
+premise ∨ φ ψ
+premise ¬ ∧ φ ψ
+assume φ {
+  prove ¬ ψ
+  prove ∧ φ ¬ ψ
+  prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ
+  prove ⊕ φ ψ
+}
+assume ψ {
+  prove ¬ φ
+  prove ∧ ¬ φ ψ
+  prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ
+  prove ⊕ φ ψ
+}
+prove ⊕ φ ψ
+qed
+
+theorem Only One Part of an Exclusive Or Is True
+premise ⊕ φ ψ
+premise φ
+prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ
+prove ¬ ∧ ¬ φ ψ
+prove ∧ φ ¬ ψ
+prove ¬ ψ
+qed
+
+theorem Only One Part of an Exclusive Or Is True
+premise ⊕ φ ψ
+premise ψ
+prove ⊕ ψ φ
+prove ¬ φ
+qed

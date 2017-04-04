@@ -45,6 +45,42 @@ premise proves ¬ φ ψ
 premise proves ¬ φ ¬ ψ
 conclusion φ
 
+theorem Proof by Contradiction
+premise proves φ ψ
+premise ¬ ψ
+assume φ {
+  prove ¬ ψ
+}
+prove ¬ φ
+qed
+
+theorem Proof by Contradiction
+premise proves φ ¬ ψ
+premise ψ
+assume φ {
+  prove ψ
+}
+prove ¬ φ
+qed
+
+theorem Proof by Contradiction
+premise proves ¬ φ ψ
+premise ¬ ψ
+assume ¬ φ {
+  prove ¬ ψ
+}
+prove φ
+qed
+
+theorem Proof by Contradiction
+premise proves ¬ φ ¬ ψ
+premise ψ
+assume ¬ φ {
+  prove ψ
+}
+prove φ
+qed
+
 theorem Proof by Self-Contradiction
 premise proves φ ¬ φ
 assume φ {
@@ -140,3 +176,12 @@ assume ¬ ψ {
 }
 prove ψ
 qed
+
+theorem Proof by Cases
+premise proves φ ψ
+premise proves ¬ φ ψ
+prove → φ ψ
+prove → ¬ φ ψ
+prove ψ
+qed
+

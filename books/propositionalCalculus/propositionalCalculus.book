@@ -1,7 +1,11 @@
 Propositional Calculus
 
-variables (φ ψ χ) ()
+variables (φ ψ χ ω) ()
 
 include 01.implicationAndNegation.chapter
-include 02.conjunctionAndDisjunction.chapter
-include 03.equivalence.chapter
+include 02.conjunction.chapter
+include 03.disjunction.chapter
+include 04.equivalence.chapter
+include 05.exclusiveOr.chapter
+include 06.identities.chapter
+include 07.inferences.chapter
