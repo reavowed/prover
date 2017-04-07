@@ -17,7 +17,7 @@ trait Term extends JsonSerializable.Base with Component {
   def applySubstitutions(substitutions: Substitutions): Option[Term]
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Term]
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Term]
-  def replacePlaceholder(other: Component): Term
+  def replacePlaceholder(other: Component): Option[Term]
 }
 
 case class TermVariable(text: String) extends Term {
@@ -65,7 +65,7 @@ case class TermVariable(text: String) extends Term {
       Seq((None, Map.empty))
     }
   }
-  def replacePlaceholder(other: Component): Term = this
+  override def replacePlaceholder(other: Component) = Some(this)
   override def html: String = text
   override def serialized: String = text
 }
@@ -141,8 +141,10 @@ case class DefinedTerm(
     }
   }
 
-  def replacePlaceholder(other: Component): Term = {
-    copy(subcomponents = subcomponents.map(_.replacePlaceholder(other)))
+  override def replacePlaceholder(other: Component) = {
+    for {
+      updatedSubcomponents <- subcomponents.map(_.replacePlaceholder(other)).traverseOption
+    } yield copy(subcomponents = updatedSubcomponents)
   }
 
   override def html: String = {
@@ -165,9 +167,9 @@ case class DefinedTerm(
   }
 }
 
-object PlaceholderTerm extends Term with Placeholder {
-  def replacePlaceholder(other: Component): Term = {
-    other.asInstanceOf[Term]
+object PlaceholderTerm extends Term with Placeholder[Term] {
+  def replacePlaceholder(other: Component) = {
+    Some(other.asInstanceOf[Term])
   }
 }
 

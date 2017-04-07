@@ -13,7 +13,8 @@ case class TermDefinition(
   val id: String = s"definition-$symbol"
   val defaultTerm = DefinedTerm(defaultVariables, this)
   val componentTypes = defaultVariables.map(_.componentType)
-  val definition = placeholderDefinition.replacePlaceholder(defaultTerm)
+  val definition = placeholderDefinition.replacePlaceholder(defaultTerm).getOrElse(
+    throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultTerm'"))
   val inference: Inference = new Inference {
     override val name: String = s"Definition of $symbol"
     override val premises: Seq[Premise] = TermDefinition.this.premises.map(DirectPremise)

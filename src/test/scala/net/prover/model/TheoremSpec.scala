@@ -209,7 +209,7 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove the conclusion of a transformed inference" in {
-      val transform = new InferenceTransform(ForAll(x, PlaceholderStatement))
+      val transform = SimpleInferenceTransform(ForAll(x, PlaceholderStatement))
 
       val theorem = parseTheorem(
         "X",
@@ -225,6 +225,21 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(
         ForAll(x, Equivalence(ElementOf(x, z), ElementOf(x, y))))
+    }
+
+    "prove the conclusion of a partially transformed inference" in {
+      val transform = PartialInferenceTransform(ForAll(x, PlaceholderStatement), SubstitutedPlaceholderStatement(y, x))
+
+      val theorem = parseTheorem(
+        "X",
+        "premise ∀ y → φ ψ",
+        "premise sub z y φ",
+        "prove sub z y ψ",
+        "qed")(
+        contextWith(modusPonens, specification).addInferenceTransform(transform))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
+        SubstitutedStatementVariable(ψ, z, y))
     }
 
     "carry arbitrary variable condition from inference conclusion" in {

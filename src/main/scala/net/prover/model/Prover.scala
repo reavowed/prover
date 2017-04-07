@@ -3,8 +3,6 @@ package net.prover.model
 import net.prover.model.DetailedProof._
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
 
-import scala.util.Try
-
 case class Prover(
   assertion: Statement,
   targetConditions: Option[Conditions],
@@ -59,13 +57,18 @@ case class Prover(
         availableInferences.iterator.map(transform -> _)
       }
       .mapCollect { case (transform, inference) =>
+        inference.premises.toType[DirectPremise].map((transform, inference, _))
+      }
+      .flatMap { case (transform, inference, inferencePremises) =>
+        val conclusion = inference.conclusion.statement
+        transform.transform(inferencePremises, conclusion)
+          .map((inference, _))
+          .iterator
+      }
+      .mapCollect { case (inference, (transformedPremises, statementsToProve)) =>
+        val transformedConclusion = statementsToProve.last
         for {
-          inferencePremises <- inference.premises.toType[DirectPremise]
-          conclusion = inference.conclusion.statement
-          transformedConclusion = transform.transformStatement(conclusion)
           substitutions <- transformedConclusion.calculateSubstitutions(assertion, PartialSubstitutions.empty)
-          transformedPremises = inferencePremises.map(transform.transformPremise)
-          statementsToProve = inferencePremises.map(_.statement) :+ conclusion :+ transformedConclusion
           proofSteps <- statementsToProve.collectFold[AssertionStep] { case (assertions, statement) =>
             val provenAssertions = transformedPremises.mapWithIndex { (premise, index) =>
               ReferencedAssertion(ProvenStatement.withNoConditions(premise.statement), DirectReference(index))

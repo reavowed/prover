@@ -19,11 +19,5 @@ prove sub y x φ
 prove ∀ x φ arbitrary-variables (x) distinct-variables ()
 qed
 
-inference-transform ∀ x _
-
-theorem Modus Ponens (Generalized)
-premise ∀ x → φ ψ
-premise sub y x φ
-prove → sub y x φ sub y x ψ
-prove sub y x ψ
-qed
+inference-transform (∀ x _) ()
+inference-transform (∀ x _) (sub y x _)

@@ -11,7 +11,7 @@ trait Component {
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Component]
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Component]
   def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])]
-  def replacePlaceholder(other: Component): Component
+  def replacePlaceholder(other: Component): Option[Component]
   def html: String
   def safeHtml: String = html
   def serialized: String
@@ -69,20 +69,20 @@ object Component {
   }
 }
 
-trait Placeholder extends Component {
+trait Placeholder[T <: Component] extends Component {
   override def allVariables: Variables = Variables.empty
   override def boundVariables: Set[TermVariable] = Set.empty
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = Variables.empty
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
-  ): Nothing = {
+  ) = {
     throw new Exception("Cannot calculate substitutions for placeholder")
   }
-  override def applySubstitutions(substitutions: Substitutions): Nothing = {
+  override def applySubstitutions(substitutions: Substitutions) = {
     throw new Exception("Cannot apply substitutions to placeholder")
   }
-  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Nothing = {
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[T] = {
     throw new Exception("Cannot make substitution into placeholder")
   }
   def resolveSingleSubstitution(
@@ -90,10 +90,10 @@ trait Placeholder extends Component {
     termVariable: TermVariable,
     thisTerm: Term,
     otherTerm: Term
-  ): Nothing = {
+  ) = {
     throw new Exception("Cannot resolve substitution for placeholder")
   }
-  def findSubstitution(other: Component, termVariable: TermVariable): Nothing = {
+  def findSubstitution(other: Component, termVariable: TermVariable) = {
 
     throw new Exception("Cannot find substitution for placeholder")
   }

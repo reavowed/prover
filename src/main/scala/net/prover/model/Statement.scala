@@ -17,7 +17,7 @@ trait Statement extends JsonSerializable.Base with Component {
   def applySubstitutions(substitutions: Substitutions): Option[Statement]
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Statement]
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Statement]
-  def replacePlaceholder(other: Component): Statement
+  def replacePlaceholder(other: Component): Option[Statement]
 }
 
 case class StatementVariable(text: String) extends Statement {
@@ -69,7 +69,7 @@ case class StatementVariable(text: String) extends Statement {
       }
     }
   }
-  def replacePlaceholder(other: Component): Statement = this
+  override def replacePlaceholder(other: Component) = Some(this)
   override def html: String = text
   override def serialized: String = text
 }
@@ -133,7 +133,7 @@ case class SubstitutedStatementVariable(
       Nil
     }
   }
-  def replacePlaceholder(other: Component): Statement = this
+  override def replacePlaceholder(other: Component) = Some(this)
   override def html: String = "[" + termToReplaceWith.safeHtml + "/" + termToBeReplaced.html + "]" + statementVariable.html
   override def serialized: String = Seq(
     "sub",
@@ -232,8 +232,10 @@ case class DefinedStatement(
     }
   }
 
-  def replacePlaceholder(other: Component): Statement = {
-    copy(subcomponents = subcomponents.map(_.replacePlaceholder(other)))
+  override def replacePlaceholder(other: Component) = {
+    for {
+      updatedSubcomponents <- subcomponents.map(_.replacePlaceholder(other)).traverseOption
+    } yield copy(subcomponents = updatedSubcomponents)
   }
 
   override def html: String = {
@@ -245,12 +247,23 @@ case class DefinedStatement(
   override def serialized: String = (definition.symbol +: subcomponents.map(_.serialized)).mkString(" ")
 }
 
-object PlaceholderStatement extends Statement with Placeholder{
-  def replacePlaceholder(other: Component): Statement = {
-    other.asInstanceOf[Statement]
+object PlaceholderStatement extends Statement with Placeholder[Statement] {
+  override def replacePlaceholder(other: Component) = {
+    Some(other.asInstanceOf[Statement])
+  }
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Statement] = {
+    Some(SubstitutedPlaceholderStatement(termToReplaceWith, termToBeReplaced))
   }
 }
 
+case class SubstitutedPlaceholderStatement(
+  termToReplaceWith: Term,
+  termToBeReplaced: TermVariable)
+extends Statement with Placeholder[Statement] {
+  override def replacePlaceholder(other: Component): Option[Statement] = {
+    other.asInstanceOf[Statement].makeSingleSubstitution(termToReplaceWith, termToBeReplaced)
+  }
+}
 
 object Statement extends ComponentType {
 

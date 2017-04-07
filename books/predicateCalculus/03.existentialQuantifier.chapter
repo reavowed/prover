@@ -7,7 +7,6 @@ theorem Existence
 premise sub y x φ
 assume ∀ x ¬ φ {
   prove ¬ sub y x φ
-  prove sub y x φ
 }
 prove ¬ ∀ x ¬ φ
 prove ∃ x φ
@@ -16,7 +15,6 @@ qed
 theorem Proof by Existence
 premise ∃ x φ
 premise proves sub y x φ ψ
-prove → sub y x φ ψ
 assume ¬ ψ {
   prove ¬ sub y x φ
   prove ∀ x ¬ φ
@@ -28,7 +26,6 @@ qed
 theorem Proof by Existence
 premise ∃ x φ
 premise proves φ ψ
-prove → φ ψ
 assume ¬ ψ {
   prove ¬ φ
   prove ∀ x ¬ φ arbitrary-variables (x) distinct-variables (x ψ)
