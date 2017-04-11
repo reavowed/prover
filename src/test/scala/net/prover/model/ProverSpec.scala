@@ -76,6 +76,7 @@ trait ProverSpec extends Specification {
   val EmptySetDefinition = TermDefinition(
     "∅",
     Nil,
+    "∅",
     Format.default("∅", Nil),
     Nil,
     ForAll(x, Negation(ElementOf(x, PlaceholderTerm))))

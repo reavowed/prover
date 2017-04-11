@@ -5,6 +5,7 @@ import net.prover.model.Inference.{DirectPremise, Premise}
 case class TermDefinition(
     symbol: String,
     defaultVariables: Seq[Component],
+    name: String,
     format: Format,
     premises: Seq[Statement],
     placeholderDefinition: Statement)
@@ -16,7 +17,7 @@ case class TermDefinition(
   val definition = placeholderDefinition.replacePlaceholder(defaultTerm).getOrElse(
     throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultTerm'"))
   val inference: Inference = new Inference {
-    override val name: String = s"Definition of $symbol"
+    override val name: String = s"Definition of ${TermDefinition.this.name}"
     override val premises: Seq[Premise] = TermDefinition.this.premises.map(DirectPremise)
     override val conclusion: ProvenStatement = ProvenStatement.withNoConditions(definition)
   }
@@ -36,15 +37,21 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
     Statement.listParser,
     Nil)
 
+  def nameParser(implicit context: Context): Parser[Option[String]] = Parser.optional(
+    "name",
+    Parser.allInParens.map(Some.apply),
+    None)
+
   def parser(implicit context: Context): Parser[TermDefinition] = {
     for {
       symbol <- Parser.singleWord
       defaultVariables <- Component.variableParser.listInParens(None)
+      name <- nameParser.getOrElse(symbol)
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       premises <- premisesParser
       definitionTemplate <- Statement.parser.inParens
     } yield {
-      TermDefinition(symbol, defaultVariables, format, premises, definitionTemplate)
+      TermDefinition(symbol, defaultVariables, name, format, premises, definitionTemplate)
     }
   }
 

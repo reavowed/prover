@@ -4,6 +4,7 @@ class TermSpec extends ProverSpec {
   val PowerSet = TermDefinition(
     "powerSet",
     Seq(x),
+    "Power Set",
     Format("𝒫%0", requiresBrackets = false),
     Nil,
     φ)

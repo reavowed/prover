@@ -77,5 +77,52 @@ prove ∃! X ∀ y ↔ ∈ y X ∨ = y a = y b
 qed
 
 term pair (x y)
+  name (Unordered Pair)
   format ({x,y})
   (∀ z ↔ ∈ z _ ∨ = z x = z y)
+
+theorem Elements of Unordered Pair
+premise ∈ z pair x y
+prove ∀ z ↔ ∈ z pair x y ∨ = z x = z y
+prove ∨ = z x = z y
+qed
+
+theorem First Element of Unordered Pair
+prove ∀ z ↔ ∈ z pair x y ∨ = z x = z y
+prove = x x
+prove ∨ = x x = x y
+prove ∈ x pair x y
+qed
+
+theorem Second Element of Unordered Pair
+prove ∀ z ↔ ∈ z pair x y ∨ = z x = z y
+prove = y y
+prove ∨ = y x = y y
+prove ∈ y pair x y
+qed
+
+theorem Reverse Unordered Pair
+prove ∀ z ↔ ∈ z pair x y ∨ = z x = z y
+prove ∀ z ↔ ∈ z pair y x ∨ = z y = z x
+prove ∀ z ↔ ∨ = z x = z y ∨ = z y = z x
+prove = pair x y pair y x
+qed
+
+theorem Repated Pair Is Singleton
+prove ∀ y ↔ ∈ y pair x x ∨ = y x = y x
+prove ∀ y ↔ ∨ = y x = y x = y x
+prove ∀ y ↔ ∈ y pair x x = y x
+prove ∀ y ↔ ∈ y singleton x = y x
+prove = pair x x singleton x
+qed
+
+theorem Sets Are Equal If Pair Is Singleton
+premise = pair a b singleton x
+prove ∈ a pair a b
+prove ∈ a singleton x
+prove = a x
+prove ∈ b pair a b
+prove ∈ b singleton x
+prove = b x
+prove ∧ = a x = b x
+qed

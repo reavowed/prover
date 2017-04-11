@@ -7,6 +7,7 @@ class TermDefinitionSpec extends ProverSpec {
         TermDefinition(
           "∅",
           Nil,
+          "∅",
           Format.default("∅", Nil),
           Nil,
           ForAll(x, Negation(ElementOf(x, PlaceholderTerm))))
@@ -18,6 +19,7 @@ class TermDefinitionSpec extends ProverSpec {
       ) mustEqual TermDefinition(
         "intersection",
         Seq(x),
+        "intersection",
         Format("⋂%0", requiresBrackets = false),
         Seq(Negation(Equals(x, EmptySet))),
         ForAll(y, Equivalence(

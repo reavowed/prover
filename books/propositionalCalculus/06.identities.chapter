@@ -20,3 +20,24 @@ assume ∨ ψ φ {
 }
 prove ↔ ∨ φ ψ ∨ ψ φ
 qed
+
+theorem And Is Idempotent
+assume ∧ φ φ {
+  prove φ
+}
+assume φ {
+  prove ∧ φ φ
+}
+prove ↔ ∧ φ φ φ
+qed
+
+theorem Or Is Idempotent
+assume ∨ φ φ {
+  prove → φ φ
+  prove φ
+}
+assume φ {
+  prove ∨ φ φ
+}
+prove ↔ ∨ φ φ φ
+qed

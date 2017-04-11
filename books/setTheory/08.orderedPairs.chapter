@@ -1,0 +1,99 @@
+chapter Ordered Pairs
+Establish the existence of the ordered pair (x,y).
+
+term orderedPair (x y)
+  name (Ordered Pair)
+  format ((x,y))
+  (= _ pair singleton x pair x y)
+
+theorem Elements of Ordered Pair
+premise ∈ z orderedPair x y
+prove = orderedPair x y pair singleton x pair x y
+prove ∈ z pair singleton x pair x y
+prove ∨ = z singleton x = z pair x y
+qed
+
+theorem Singleton of First Coordinate Is Element of Ordered Pair
+prove = orderedPair x y pair singleton x pair x y
+prove ∈ singleton x pair singleton x pair x y
+prove ∈ singleton x orderedPair x y
+qed
+
+theorem Pair Is Element of Ordered Pair
+prove = orderedPair x y pair singleton x pair x y
+prove ∈ pair x y pair singleton x pair x y
+prove ∈ pair x y orderedPair x y
+qed
+
+theorem Ordered Pair with Same Coordinates Is Double Singleton
+prove = orderedPair x x pair singleton x pair x x
+prove = pair x x singleton x
+prove = orderedPair x x pair singleton x singleton x
+prove = pair singleton x singleton x singleton singleton x
+prove = orderedPair x x singleton singleton x
+qed
+
+theorem Ordered Pair has Same Coordinates If It Is a Double Singleton
+premise = orderedPair x y singleton singleton z
+prove ∈ pair x y orderedPair x y
+prove ∈ pair x y singleton singleton z
+prove = pair x y singleton z
+prove ∧ = x z = y z
+prove = x z
+prove = y z
+prove = x y
+qed
+
+theorem First Coordinates of Equal Ordered Pairs Are Equal
+premise = orderedPair x y orderedPair a b
+prove ∈ singleton x orderedPair x y
+prove ∈ singleton x orderedPair a b
+prove ∨ = singleton x singleton a = singleton x pair a b
+assume = singleton x singleton a {
+  prove = x a
+}
+assume = singleton x pair a b {
+  prove = pair a b singleton x
+  prove ∧ = a x = b x
+  prove = a x
+  prove = x a
+}
+prove = x a
+qed
+
+theorem Second Coordinates of Equal Ordered Pairs Are Equal - Lemma 1
+premise = orderedPair x y orderedPair a b
+premise = y x
+prove = x a
+prove = orderedPair x y orderedPair x b
+prove = orderedPair x x singleton singleton x
+prove = orderedPair x y singleton singleton x
+prove = orderedPair x b singleton singleton x
+prove = x b
+prove = y b
+qed
+
+theorem Second Coordinates of Equal Ordered Pairs Are Equal
+premise = orderedPair x y orderedPair a b
+prove = x a
+prove = orderedPair x y orderedPair x b
+prove ∈ pair x y orderedPair x y
+prove ∈ pair x y orderedPair x b
+prove ∨ = pair x y singleton x = pair x y pair x b
+assume = pair x y singleton x {
+  prove ∧ = x x = y x
+  prove = y x
+  prove = y b
+}
+assume = pair x y pair x b {
+  prove ∈ y pair x y
+  prove ∈ y pair x b
+  prove ∨ = y x = y b
+  assume = y x {
+    prove = y b
+  }
+  prove = y b
+}
+prove = y b
+qed
+

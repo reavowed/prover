@@ -40,7 +40,7 @@ theorem A Set with an Element Is Not the Empty Set
 premise ∈ y x
 assume = x ∅ {
   prove ∈ y ∅
-  prove ∀ x ¬ ∈ x ∅
+  prove ∀ y ¬ ∈ y ∅
   prove ¬ ∈ y ∅
 }
 prove ¬ = x ∅

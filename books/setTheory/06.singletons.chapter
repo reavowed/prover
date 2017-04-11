@@ -19,6 +19,7 @@ prove ∃! Z ∀ Y ↔ ∈ Y Z = Y X
 qed
 
 term singleton (x)
+  name (Singleton)
   format ({x})
   (∀ y ↔ ∈ y _ = y x)
 
@@ -27,6 +28,23 @@ prove ∀ y ↔ ∈ y singleton x = y x
 prove ↔ ∈ x singleton x = x x
 prove = x x
 prove ∈ x singleton x
+qed
+
+theorem Element of Singleton
+premise ∈ y singleton x
+prove ∀ y ↔ ∈ y singleton x = y x
+prove = y x
+qed
+
+theorem Sets Are Equal If Singletons Are Equal
+premise = singleton x singleton y
+prove ∀ z ↔ ∈ z singleton x = z x
+prove ∀ z ↔ ∈ z singleton y = z x
+prove ∀ z ↔ ∈ z singleton y = z y
+prove ∀ z ↔ = z x = z y
+prove ↔ = x x = x y
+prove = x x
+prove = x y
 qed
 
 theorem Singleton is Subset if Set is Element

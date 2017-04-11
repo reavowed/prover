@@ -88,3 +88,12 @@ theorem Law of the Excluded Middle
 prove → ¬ φ ¬ φ
 prove ∨ φ ¬ φ
 qed
+
+theorem Eliminate Redundant Or
+premise ∨ φ ψ
+premise proves φ ψ
+assume ψ {
+  prove ψ
+}
+prove ψ
+qed
