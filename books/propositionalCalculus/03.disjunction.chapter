@@ -84,6 +84,20 @@ assume ∨ φ ψ {
 prove ¬ ∨ φ ψ
 qed
 
+theorem Proof by Cases
+premise proves φ ψ
+premise proves ¬ φ χ
+assume φ {
+  prove ψ
+  prove ∨ ψ χ
+}
+assume ¬ φ {
+  prove χ
+  prove ∨ ψ χ
+}
+prove ∨ ψ χ
+qed
+
 theorem Law of the Excluded Middle
 prove → ¬ φ ¬ φ
 prove ∨ φ ¬ φ

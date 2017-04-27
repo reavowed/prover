@@ -59,6 +59,12 @@ premise = y z
 prove = x z
 qed
 
+theorem Sets Are Equal If Always Equal to the Same Thing
+premise ∀ z ↔ = z x = z y
+prove = x x
+prove = x y
+qed
+
 theorem Every Set Exists
 prove = x x
 prove ∃ y = y x

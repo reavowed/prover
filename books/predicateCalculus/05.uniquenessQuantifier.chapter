@@ -27,7 +27,6 @@ qed
 
 theorem Alternate Definition of Uniqueness
 premise ∀ x ↔ φ = x y
-prove ↔ sub y x φ = y y
 prove = y y
 prove sub y x φ
 prove ∃ x φ

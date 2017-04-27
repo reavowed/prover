@@ -25,7 +25,6 @@ term singleton (x)
 
 theorem A Set Is an Element of Its Singleton
 prove ∀ y ↔ ∈ y singleton x = y x
-prove ↔ ∈ x singleton x = x x
 prove = x x
 prove ∈ x singleton x
 qed
@@ -42,8 +41,6 @@ prove ∀ z ↔ ∈ z singleton x = z x
 prove ∀ z ↔ ∈ z singleton y = z x
 prove ∀ z ↔ ∈ z singleton y = z y
 prove ∀ z ↔ = z x = z y
-prove ↔ = x x = x y
-prove = x x
 prove = x y
 qed
 
@@ -77,21 +74,18 @@ assume ∃ z ∈ z y {
   prove ∈ x y
   prove ⊆ singleton x y
   prove = y singleton x
-  prove ∨ = y ∅ = y singleton x
 }
 assume ¬ ∃ z ∈ z y {
   prove = y ∅
-  prove ∨ = y ∅ = y singleton x
 }
-prove ∨ = y ∅ = y singleton x
+prove ∨ = y singleton x = y ∅
 prove ¬ = singleton x ∅
-prove ¬ = ∅ singleton x
-prove ⊕ = y ∅ = y singleton x
+prove ⊕ = y singleton x = y ∅
 qed
 
 theorem Elements of Powerset of Singleton
 premise ∈ x powerSet singleton ∅
 prove ⊆ x singleton ∅
-prove ⊕ = x ∅ = x singleton ∅
+prove ⊕ = x singleton ∅ = x ∅
 qed
 
