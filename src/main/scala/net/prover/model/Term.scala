@@ -14,14 +14,15 @@ trait Term extends JsonSerializable.Base with Component {
   override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
     serialize(gen, serializers)
   }
-  def applySubstitutions(substitutions: Substitutions): Option[Term]
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Term]
+  def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Term]
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Term]
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Term]
   def replacePlaceholder(other: Component): Option[Term]
 }
 
 case class TermVariable(text: String) extends Term {
   override def allVariables: Variables = Variables(Set.empty, Set(this))
+  override def presentVariables: Variables = allVariables
   override def boundVariables = Set.empty
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = Variables(Set.empty, Set(this))
   override def calculateSubstitutions(
@@ -35,10 +36,13 @@ case class TermVariable(text: String) extends Term {
         None
     }
   }
-  override def applySubstitutions(substitutions: Substitutions): Option[Term] = {
+  def applySubstitutions(substitutions: Substitutions): Option[Term] = {
     substitutions.terms.get(this)
   }
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Term] = {
+  override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Term] = {
+    applySubstitutions(substitutions)
+  }
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Term] = {
     if (termToBeReplaced == this)
       Some(termToReplaceWith)
     else
@@ -76,6 +80,7 @@ case class DefinedTerm(
   extends Term
 {
   override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
+  override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _)
   override def boundVariables = Set.empty // TODO: derive from definition
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = {
     subcomponents
@@ -94,18 +99,18 @@ case class DefinedTerm(
     case _ =>
       None
   }
-  override def applySubstitutions(substitutions: Substitutions): Option[Term] = {
+  override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Term] = {
     for {
-      updatedSubcomponents <- subcomponents.map(_.applySubstitutions(substitutions)).traverseOption
+      updatedSubcomponents <- subcomponents.map(_.applySubstitutions(substitutions, distinctVariables)).traverseOption
     } yield {
       copy(subcomponents = updatedSubcomponents)
     }
   }
 
-  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Term] = {
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Term] = {
     for {
       updatedSubcomponents <- subcomponents
-        .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced))
+        .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables))
         .traverseOption
     } yield copy(subcomponents = updatedSubcomponents)
   }

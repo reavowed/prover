@@ -3,12 +3,12 @@ package net.prover.model
 trait Component {
   def componentType: ComponentType
   def allVariables: Variables
-  def presentVariables: Variables = allVariables
+  def presentVariables: Variables
   def boundVariables: Set[TermVariable]
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Option[PartialSubstitutions]
-  def applySubstitutions(substitutions: Substitutions): Option[Component]
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Component]
+  def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Component]
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Component]
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Component]
   def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])]
   def replacePlaceholder(other: Component): Option[Component]
@@ -71,6 +71,7 @@ object Component {
 
 trait Placeholder[T <: Component] extends Component {
   override def allVariables: Variables = Variables.empty
+  override def presentVariables: Variables = Variables.empty
   override def boundVariables: Set[TermVariable] = Set.empty
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = Variables.empty
   override def calculateSubstitutions(
@@ -79,10 +80,10 @@ trait Placeholder[T <: Component] extends Component {
   ) = {
     throw new Exception("Cannot calculate substitutions for placeholder")
   }
-  override def applySubstitutions(substitutions: Substitutions) = {
+  override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]) = {
     throw new Exception("Cannot apply substitutions to placeholder")
   }
-  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[T] = {
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[T] = {
     throw new Exception("Cannot make substitution into placeholder")
   }
   def resolveSingleSubstitution(

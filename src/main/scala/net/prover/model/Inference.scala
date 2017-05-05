@@ -9,10 +9,10 @@ trait Inference {
   def premises: Seq[Premise]
   def conclusion: ProvenStatement
 
-  def applySubstitutions(substitutions: Substitutions): Option[Inference] = {
+  def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Inference] = {
     for {
-      updatedPremises <- premises.map(_.applySubstitutions(substitutions)).traverseOption
-      updatedConclusion <- conclusion.applySubstitutions(substitutions)
+      updatedPremises <- premises.map(_.applySubstitutions(substitutions, distinctVariables)).traverseOption
+      updatedConclusion <- conclusion.applySubstitutions(substitutions, distinctVariables)
     } yield new Inference {
       override val name = Inference.this.name
       override val premises = updatedPremises
@@ -35,25 +35,25 @@ object Inference {
 
   sealed trait Premise {
     def statements: Seq[Statement]
-    def applySubstitutions(substitutions: Substitutions): Option[Premise]
+    def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Premise]
     def serialized: String
   }
 
   case class DirectPremise(statement: Statement) extends Premise {
     override def statements = Seq(statement)
-    override def applySubstitutions(substitutions: Substitutions) = {
+    override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]) = {
       for {
-        substitutedStatement <- statement.applySubstitutions(substitutions)
+        substitutedStatement <- statement.applySubstitutions(substitutions, distinctVariables)
       } yield DirectPremise(substitutedStatement)
     }
     override def serialized = statement.serialized
   }
   case class DeducedPremise(antecedent: Statement, consequent: Statement) extends Premise {
     override def statements = Seq(antecedent, consequent)
-    override def applySubstitutions(substitutions: Substitutions) = {
+    override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]) = {
       for {
-        substitutedAntecedent <- antecedent.applySubstitutions(substitutions)
-        substitutedConsequent <- consequent.applySubstitutions(substitutions)
+        substitutedAntecedent <- antecedent.applySubstitutions(substitutions, distinctVariables)
+        substitutedConsequent <- consequent.applySubstitutions(substitutions, distinctVariables)
       } yield DeducedPremise(substitutedAntecedent, substitutedConsequent)
     }
 

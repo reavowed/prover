@@ -17,6 +17,7 @@ trait ProverSpec extends Specification {
   def X = TermVariable("X")
   def Y = TermVariable("Y")
   def Z = TermVariable("Z")
+  def a = TermVariable("a")
 
   def connective(
     symbol: String,
@@ -89,7 +90,7 @@ trait ProverSpec extends Specification {
 
   val baseContext = Context.empty.copy(variables = Variables(
     Set(φ, ψ, χ),
-    Set(x, y, z, X, Y, Z)))
+    Set(x, y, z, X, Y, Z, a)))
 
   implicit val defaultContext = statementDefinitions.foldLeft(baseContext) { case (context, statementDefinition) =>
     context.addStatementDefinition(statementDefinition)

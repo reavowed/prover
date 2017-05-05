@@ -162,7 +162,7 @@ case class Prover(
     distinctVariables: Map[TermVariable, Variables]
   ): Option[AssertionStep] = {
     for {
-      substitutedInference <- inference.applySubstitutions(substitutions)
+      substitutedInference <- inference.applySubstitutions(substitutions, distinctVariables)
       unrestrictedConditions = (matchedPremises.map(_.provenStatement.conditions) :+ substitutedInference.conclusion.conditions)
         .reduce(_ ++ _)
       restrictedConditions = unrestrictedConditions

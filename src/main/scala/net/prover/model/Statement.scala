@@ -14,14 +14,15 @@ trait Statement extends JsonSerializable.Base with Component {
   override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
     serialize(gen, serializers)
   }
-  def applySubstitutions(substitutions: Substitutions): Option[Statement]
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Statement]
+  def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Statement]
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Statement]
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Statement]
   def replacePlaceholder(other: Component): Option[Statement]
 }
 
 case class StatementVariable(text: String) extends Statement {
   override def allVariables: Variables = Variables(Set(this), Set.empty)
+  override def presentVariables: Variables = allVariables
   override def boundVariables: Set[TermVariable] = Set.empty
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = Variables(Set(this), Set.empty)
   override def calculateSubstitutions(
@@ -33,12 +34,17 @@ case class StatementVariable(text: String) extends Statement {
     case _ =>
       None
   }
-  override def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
+  def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
     substitutions.statements.get(this)
   }
+  override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Statement] = {
+    applySubstitutions(substitutions)
+  }
 
-  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable) = {
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]) = {
     if (termToReplaceWith == termToBeReplaced)
+      Some(this)
+    else if (distinctVariables.areDistinct(termToBeReplaced, this))
       Some(this)
     else
       Some(SubstitutedStatementVariable(this, termToReplaceWith, termToBeReplaced))
@@ -104,17 +110,19 @@ case class SubstitutedStatementVariable(
     case _ =>
       None
   }
-  override def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
+  override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Statement] = {
     for {
       updatedStatementVariable <- statementVariable.applySubstitutions(substitutions)
-      updatedTermToReplaceWith <- termToReplaceWith.applySubstitutions(substitutions)
+      updatedTermToReplaceWith <- termToReplaceWith.applySubstitutions(substitutions, distinctVariables)
       updatedTermToBeReplaced <- termToBeReplaced.applySubstitutions(substitutions).flatMap(Term.optionAsVariable)
-      updatedStatement <- updatedStatementVariable.makeSingleSubstitution(updatedTermToReplaceWith, updatedTermToBeReplaced)
+      updatedStatement <- updatedStatementVariable.makeSingleSubstitution(updatedTermToReplaceWith, updatedTermToBeReplaced, distinctVariables)
     } yield updatedStatement
   }
-  override def makeSingleSubstitution(newTermToReplaceWith: Term, newTermToBeReplaced: TermVariable): Option[Statement] = {
+  override def makeSingleSubstitution(newTermToReplaceWith: Term, newTermToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Statement] = {
     if (newTermToBeReplaced == termToBeReplaced)
       Some(this)
+    else if (newTermToBeReplaced == termToReplaceWith && distinctVariables.areDistinct(newTermToBeReplaced, statementVariable))
+      Some(SubstitutedStatementVariable(statementVariable, newTermToReplaceWith, termToBeReplaced))
     else
       None
   }
@@ -130,7 +138,12 @@ case class SubstitutedStatementVariable(
     if (this == other) {
       Seq((None, Map.empty))
     } else {
-      Nil
+      other match {
+        case SubstitutedStatementVariable(`statementVariable`, otherTermToReplaceWith: TermVariable, `termToBeReplaced`) if termToReplaceWith == termVariable =>
+          Seq((Some(otherTermToReplaceWith), Map(termVariable -> Variables(Set(statementVariable), Set.empty))))
+        case _ =>
+          Nil
+      }
     }
   }
   override def replacePlaceholder(other: Component) = Some(this)
@@ -150,7 +163,7 @@ case class DefinedStatement(
  extends Statement
 {
   override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
-  override def presentVariables: Variables = allVariables -- localBoundVariables
+  override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _) -- localBoundVariables
   override def boundVariables = localBoundVariables ++ subcomponents.map(_.boundVariables).knownCommonValues
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = {
     if (localBoundVariables.contains(termVariable))
@@ -174,11 +187,11 @@ case class DefinedStatement(
       None
   }
 
-  override def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
+  override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Statement] = {
     for {
-      updatedSubcomponents <- subcomponents.map(_.applySubstitutions(substitutions)).traverseOption
+      updatedSubcomponents <- subcomponents.map(_.applySubstitutions(substitutions, distinctVariables)).traverseOption
       updatedBoundVariables <- localBoundVariables
-        .map(_.applySubstitutions(substitutions).flatMap(Term.optionAsVariable))
+        .map(_.applySubstitutions(substitutions, distinctVariables).flatMap(Term.optionAsVariable))
         .traverseOption
     } yield {
       copy(
@@ -187,14 +200,14 @@ case class DefinedStatement(
     }
   }
 
-  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Statement] = {
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Statement] = {
     if (localBoundVariables.contains(termToBeReplaced))
       None
-    if (termToReplaceWith.allVariables.termVariables.intersect(localBoundVariables).nonEmpty)
+    else if (termToReplaceWith.allVariables.termVariables.intersect(localBoundVariables).nonEmpty)
       None
     else for {
       updatedSubcomponents <- subcomponents
-        .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced))
+        .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables))
         .traverseOption
     } yield copy(subcomponents = updatedSubcomponents)
   }
@@ -251,7 +264,7 @@ object PlaceholderStatement extends Statement with Placeholder[Statement] {
   override def replacePlaceholder(other: Component) = {
     Some(other.asInstanceOf[Statement])
   }
-  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable): Option[Statement] = {
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Statement] = {
     Some(SubstitutedPlaceholderStatement(termToReplaceWith, termToBeReplaced))
   }
 }
@@ -261,7 +274,7 @@ case class SubstitutedPlaceholderStatement(
   termToBeReplaced: TermVariable)
 extends Statement with Placeholder[Statement] {
   override def replacePlaceholder(other: Component): Option[Statement] = {
-    other.asInstanceOf[Statement].makeSingleSubstitution(termToReplaceWith, termToBeReplaced)
+    other.asInstanceOf[Statement].makeSingleSubstitution(termToReplaceWith, termToBeReplaced, Map.empty)
   }
 }
 
@@ -290,7 +303,7 @@ object Statement extends ComponentType {
           termToBeReplaced <- Term.variableParser
           statement <- parser
         } yield {
-          statement.makeSingleSubstitution(termToReplaceWith, termToBeReplaced)
+          statement.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, Map.empty)
             .getOrElse(throw new Exception("Invalid substitution"))
         }
       case "_" =>

@@ -27,9 +27,11 @@ class TermSpec extends ProverSpec {
 
   "term apply match" should {
     "do nothing to a constant" in {
-      EmptySet.applySubstitutions(Substitutions(
-        Map(φ -> ψ),
-        Map(x -> y))
+      EmptySet.applySubstitutions(
+        Substitutions(
+          Map(φ -> ψ),
+          Map(x -> y)),
+        Map.empty
       ) mustEqual Some(EmptySet)
     }
 
@@ -37,7 +39,8 @@ class TermSpec extends ProverSpec {
       PowerSet(Seq(x)).applySubstitutions(
         Substitutions(
           Map(φ -> ψ),
-          Map(x -> y))
+          Map(x -> y)),
+        Map.empty
       ) mustEqual Some(PowerSet(Seq(y)))
     }
   }

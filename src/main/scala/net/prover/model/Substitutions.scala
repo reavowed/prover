@@ -60,8 +60,8 @@ case class PartialSubstitutions(
     for {
       mappedStatementVariable <- knownStatements.get(substitutedStatementVariable.statementVariable)
       mappedTermToBeReplaced <- knownTerms.get(substitutedStatementVariable.termToBeReplaced).flatMap(Term.optionAsVariable)
-      mappedTermToReplaceWith <- substitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
-      mappedStatement = mappedStatementVariable.makeSingleSubstitution(mappedTermToReplaceWith, mappedTermToBeReplaced)
+      mappedTermToReplaceWith <- substitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions, distinctVariables)
+      mappedStatement = mappedStatementVariable.makeSingleSubstitution(mappedTermToReplaceWith, mappedTermToBeReplaced, distinctVariables)
       if mappedStatement == statement
     } yield this
   }
@@ -78,8 +78,8 @@ case class PartialSubstitutions(
         }
       otherTarget = unknownSubstitutions(otherSubstitutedStatementVariable)
       sharedTermToBeReplaced = otherSubstitutedStatementVariable.termToBeReplaced
-      thisTermToReplaceWith <- thisSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
-      otherTermToReplaceWith <- otherSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
+      thisTermToReplaceWith <- thisSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions, distinctVariables)
+      otherTermToReplaceWith <- otherSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions, distinctVariables)
       placeholderVariableTerm = knownTerms.getOrElse(
         sharedTermToBeReplaced,
         sharedTermToBeReplaced.copy(text = sharedTermToBeReplaced + "'"))

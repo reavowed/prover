@@ -71,9 +71,16 @@ class TheoremSpec extends ProverSpec {
       "Specification",
       Seq(ForAll(x, φ)),
       SubstitutedStatementVariable(φ, y, x))
-
+    val existence = new Axiom(
+      "Existence",
+      Seq(SubstitutedStatementVariable(φ, y, x)),
+      Exists(x, φ))
     val proveExistence = new Axiom(
       "Prove Existence",
+      Seq(DeducedPremise(φ, ψ), DirectPremise(Exists(x, φ))),
+      ProvenStatement(ψ, Conditions(Set(x), Map(x -> Variables(Set(ψ), Set.empty)))))
+    val proveUniqueness = new Axiom(
+      "Prove Uniqueness",
       Seq(
         DirectPremise(Exists(x, φ)),
         DeducedPremise(
@@ -278,7 +285,7 @@ class TheoremSpec extends ProverSpec {
         "  = Y Z",
         "prove ∃! X ∀ x ↔ ∈ x X φ",
         "qed")(
-        contextWith(proveExistence))
+        contextWith(proveUniqueness))
 
       theorem.conclusion mustEqual ProvenStatement(
         ExistsUnique(X, ForAll(x, Equivalence(ElementOf(x, X), φ))),
@@ -329,6 +336,33 @@ class TheoremSpec extends ProverSpec {
         Implication(
           ForAll(x, φ),
           ForAll(x, ForAll(x, φ))))
+    }
+
+    "add distinct conditions to simplify substitutions" in {
+      val theorem = parseTheorem(
+        "XXX",
+        "premise ∧ sub z x φ = z z",
+        "prove ∃ y ∧ sub y x φ = y z",
+        "qed")(
+        contextWith(existence))
+
+      theorem.conclusion mustEqual ProvenStatement(
+        Exists(y, Conjunction(SubstitutedStatementVariable(φ, y, x), Equals(y, z))),
+        Conditions(Set.empty, Map(y -> Variables(Set(φ), Set.empty))))
+    }
+
+    "apply distinct variable conditions to compound statements correctly" in {
+      val theorem = parseTheorem(
+        "XXX",
+        "premise proves φ ∧ ψ sub z x χ",
+        "premise ∃ x φ",
+        "prove ∧ ψ sub z x χ",
+        "qed")(
+        contextWith(proveExistence))
+
+      theorem.conclusion mustEqual ProvenStatement(
+        Conjunction(ψ, SubstitutedStatementVariable(χ, z, x)),
+        Conditions(Set(x), Map(x -> Variables(Set(ψ, χ), Set(z)))))
     }
   }
 }

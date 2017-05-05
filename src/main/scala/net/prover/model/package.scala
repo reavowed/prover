@@ -122,4 +122,10 @@ package object model {
       }
     }
   }
+
+  implicit class DistinctVariableOps(map: Map[TermVariable, Variables]) {
+    def areDistinct(termVariable: TermVariable, statementVariable: StatementVariable): Boolean = {
+      map.get(termVariable).exists(_.statementVariables.contains(statementVariable))
+    }
+  }
 }

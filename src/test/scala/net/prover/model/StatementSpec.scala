@@ -50,7 +50,7 @@ class StatementSpec extends ProverSpec {
       val substitutions = Substitutions(
         Map(φ -> Implication(φ, ψ), ψ -> χ),
         Map.empty)
-      φ.applySubstitutions(substitutions) mustEqual Some(Implication(φ, ψ))
+      φ.applySubstitutions(substitutions, Map.empty) mustEqual Some(Implication(φ, ψ))
     }
 
     "apply to a substituted statement variable" in {
@@ -58,7 +58,7 @@ class StatementSpec extends ProverSpec {
         Map(φ -> Implication(φ, ψ), ψ -> χ),
         Map(x -> z, y -> y))
 
-      SubstitutedStatementVariable(φ, y, x).applySubstitutions(substitutions) mustEqual
+      SubstitutedStatementVariable(φ, y, x).applySubstitutions(substitutions, Map.empty) mustEqual
         Some(Implication(SubstitutedStatementVariable(φ, y, z), SubstitutedStatementVariable(ψ, y, z)))
     }
   }
@@ -127,7 +127,7 @@ class StatementSpec extends ProverSpec {
         Equals(x, y))
 
       forall(statements) { s =>
-        s.makeSingleSubstitution(x, x).get mustEqual s
+        s.makeSingleSubstitution(x, x, Map.empty).get mustEqual s
       }
     }
     "not do anything if substituting an already-substituted variable" in {
@@ -137,9 +137,20 @@ class StatementSpec extends ProverSpec {
         Equals(x, y))
 
       forall(statements) { s =>
-        val firstSubstitution = s.makeSingleSubstitution(y, x).get
-        firstSubstitution.makeSingleSubstitution(z, x).get mustEqual firstSubstitution
+        val firstSubstitution = s.makeSingleSubstitution(y, x, Map.empty).get
+        firstSubstitution.makeSingleSubstitution(z, x, Map.empty).get mustEqual firstSubstitution
       }
+    }
+
+    "not do anything if substituting for a variable that is distinct" in {
+      φ.makeSingleSubstitution(y, x, Map(x -> Variables(Set(φ), Set.empty))).get mustEqual φ
+    }
+
+    "combine substitutions under a distinct condition" in {
+      SubstitutedStatementVariable(φ, y, x)
+        .makeSingleSubstitution(z, y, Map(y -> Variables(Set(φ), Set.empty)))
+        .get
+        .mustEqual(SubstitutedStatementVariable(φ, z, x))
     }
   }
 }
