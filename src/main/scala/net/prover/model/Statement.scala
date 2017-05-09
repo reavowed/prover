@@ -87,7 +87,7 @@ case class SubstitutedStatementVariable(
  extends Statement
 {
   override def allVariables: Variables = termToReplaceWith.allVariables + statementVariable + termToBeReplaced
-  override def presentVariables: Variables = allVariables - termToBeReplaced
+  override def presentVariables: Variables = termToReplaceWith.allVariables + statementVariable
   override def boundVariables: Set[TermVariable] = termToReplaceWith.boundVariables
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = {
     if (termVariable == termToBeReplaced)
@@ -124,7 +124,14 @@ case class SubstitutedStatementVariable(
     else if (newTermToBeReplaced == termToReplaceWith && distinctVariables.areDistinct(newTermToBeReplaced, statementVariable))
       Some(SubstitutedStatementVariable(statementVariable, newTermToReplaceWith, termToBeReplaced))
     else
-      None
+      termToReplaceWith match {
+        case termVariableToReplaceWith: TermVariable
+          if distinctVariables.areDistinct(newTermToBeReplaced, statementVariable) && distinctVariables.areDistinct(newTermToBeReplaced, termVariableToReplaceWith)
+        =>
+          Some(this)
+        case _ =>
+          None
+      }
   }
   def resolveSingleSubstitution(
     other: Component,
@@ -136,7 +143,10 @@ case class SubstitutedStatementVariable(
   }
   def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])] = {
     if (this == other) {
-      Seq((None, Map.empty))
+      if (termVariable == termToBeReplaced)
+        Seq((None, Map.empty))
+      else
+        Seq((None, Map(termVariable -> presentVariables)))
     } else {
       other match {
         case `statementVariable` if termToReplaceWith == termVariable =>

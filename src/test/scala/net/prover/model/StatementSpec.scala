@@ -143,14 +143,21 @@ class StatementSpec extends ProverSpec {
     }
 
     "not do anything if substituting for a variable that is distinct" in {
-      φ.makeSingleSubstitution(y, x, Map(x -> Variables(Set(φ), Set.empty))).get mustEqual φ
+      φ
+        .makeSingleSubstitution(y, x, Map(x -> Variables(Set(φ), Set.empty)))
+        .mustEqual(Some(φ))
+    }
+
+    "not do anything if making a double substitution that is known to be distinct from the first" in {
+      SubstitutedStatementVariable(φ, y, x)
+        .makeSingleSubstitution(Y, X, Map(X -> Variables(Set(φ), Set.empty), y -> Variables(Set.empty, Set(X))))
+        .mustEqual(Some(SubstitutedStatementVariable(φ, y, x)))
     }
 
     "combine substitutions under a distinct condition" in {
       SubstitutedStatementVariable(φ, y, x)
         .makeSingleSubstitution(z, y, Map(y -> Variables(Set(φ), Set.empty)))
-        .get
-        .mustEqual(SubstitutedStatementVariable(φ, z, x))
+        .mustEqual(Some(SubstitutedStatementVariable(φ, z, x)))
     }
   }
 }

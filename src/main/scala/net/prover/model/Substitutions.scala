@@ -10,7 +10,7 @@ case class PartialSubstitutions(
     unknownSubstitutions: Map[SubstitutedStatementVariable, Statement],
     distinctVariables: Map[TermVariable, Variables]) {
 
-  private def knownSubstitutions = Substitutions(knownStatements, knownTerms)
+  def knownSubstitutions = Substitutions(knownStatements, knownTerms)
 
   def tryAdd(statementVariable: StatementVariable, statement: Statement): Option[PartialSubstitutions] = {
     knownStatements.get(statementVariable) match {
