@@ -26,7 +26,7 @@ case class Conditions(
   def addDistinctVariables(variables: Set[TermVariable], statements: Seq[Statement]): Option[Conditions] = {
     variables
       .map { termVariable =>
-        val variables = statements.map(_.presentVariables).reduceOption(_ ++ _).getOrElse(Variables.empty)
+        val variables = statements.map(_.getPotentiallyIntersectingVariables(termVariable)).reduceOption(_ ++ _).getOrElse(Variables.empty)
         if (variables.termVariables.contains(termVariable))
           None
         else
@@ -49,7 +49,8 @@ case class Conditions(
       .filter { v =>
         val threats = statements.map(_.getPotentiallyIntersectingVariables(v)).reduce(_ ++ _)
         val protectors = distinctVariables.getOrElse(v, Variables.empty)
-        threats.diff(protectors).nonEmpty
+        !(threats.statementVariables.forall(w => protectors.statementVariables.contains(w)) &&
+          threats.termVariables.forall(w => protectors.termVariables.contains(w) || distinctVariables.getOrElse(w, Variables.empty).termVariables.contains(v)))
       }
     Conditions(updatedArbitraryVariables, updatedDistinctVariables)
   }
@@ -93,10 +94,10 @@ case class Conditions(
     for {
       updatedTermVariable <- termVariable.applySubstitutions(substitutions).flatMap(Term.optionAsVariable)
       updatedStatementVariables <- variables.statementVariables
-        .map(_.applySubstitutions(substitutions).map(_.presentVariables))
+        .map(_.applySubstitutions(substitutions).map(_.getPotentiallyIntersectingVariables(updatedTermVariable)))
         .traverseOption
       updatedTermVariables <- variables.termVariables
-        .map(_.applySubstitutions(substitutions).map(_.presentVariables))
+        .map(_.applySubstitutions(substitutions).map(_.getPotentiallyIntersectingVariables(updatedTermVariable)))
         .traverseOption
       updatedOtherVariables = (updatedStatementVariables ++ updatedTermVariables).reduce(_ ++ _)
       if !updatedOtherVariables.termVariables.contains(updatedTermVariable)

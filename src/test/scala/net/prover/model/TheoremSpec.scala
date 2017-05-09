@@ -362,7 +362,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         Conjunction(ψ, SubstitutedStatementVariable(χ, z, x)),
-        Conditions(Set(x), Map(x -> Variables(Set(ψ, χ), Set(z)))))
+        Conditions(Set(x), Map(x -> Variables(Set(ψ), Set(z)))))
     }
 
     "apply distinct variable conditions to reverse a substitution" in {
