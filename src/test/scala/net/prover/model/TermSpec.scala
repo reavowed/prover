@@ -11,13 +11,13 @@ class TermSpec extends ProverSpec {
 
   "term match" should {
     "match a constant term to itself" in {
-      EmptySet.calculateSubstitutions(EmptySet, PartialSubstitutions.empty) must beSome
+      EmptySet.calculateSubstitutions(EmptySet, PartialSubstitutions.empty) mustEqual Seq(PartialSubstitutions.empty)
     }
 
     "match a unary function to another application of the same function" in {
       PowerSet(Seq(x))
         .calculateSubstitutions(PowerSet(Seq(y)), PartialSubstitutions.empty)
-        .mustEqual(Some(PartialSubstitutions(
+        .mustEqual(Seq(PartialSubstitutions(
           Map.empty,
           Map(x -> y),
           Map.empty,

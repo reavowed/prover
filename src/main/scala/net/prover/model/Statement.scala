@@ -28,11 +28,11 @@ case class StatementVariable(text: String) extends Statement {
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
-  ): Option[PartialSubstitutions] = other match {
+  ): Seq[PartialSubstitutions] = other match {
     case otherStatement: Statement =>
-      substitutions.tryAdd(this, otherStatement)
+      substitutions.tryAdd(this, otherStatement).toSeq
     case _ =>
-      None
+      Nil
   }
   def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
     substitutions.statements.get(this)
@@ -98,7 +98,7 @@ case class SubstitutedStatementVariable(
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
-  ): Option[PartialSubstitutions] = other match {
+  ): Seq[PartialSubstitutions] = other match {
     case SubstitutedStatementVariable(otherStatementVariable, otherTermToReplaceWith, otherTermToBeReplaced) =>
       for {
         s1 <- statementVariable.calculateSubstitutions(otherStatementVariable, substitutions)
@@ -108,7 +108,7 @@ case class SubstitutedStatementVariable(
     case statement: Statement =>
       substitutions.tryAdd(this, statement)
     case _ =>
-      None
+      Nil
   }
   override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Statement] = {
     for {
@@ -139,6 +139,8 @@ case class SubstitutedStatementVariable(
       Seq((None, Map.empty))
     } else {
       other match {
+        case `statementVariable` if termToReplaceWith == termVariable =>
+          Seq((Some(termToBeReplaced), Map(termVariable -> Variables(Set(statementVariable), Set.empty))))
         case SubstitutedStatementVariable(`statementVariable`, otherTermToReplaceWith: TermVariable, `termToBeReplaced`) if termToReplaceWith == termVariable =>
           Seq((Some(otherTermToReplaceWith), Map(termVariable -> Variables(Set(statementVariable), Set.empty))))
         case _ =>
@@ -177,14 +179,14 @@ case class DefinedStatement(
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
-  ): Option[PartialSubstitutions] = other match {
+  ): Seq[PartialSubstitutions] = other match {
     case DefinedStatement(otherSubcomponents, _, `definition`) =>
       subcomponents.zip(otherSubcomponents)
-        .foldLeft(Option(substitutions)) { case (substitutionsSoFarOption, (component, otherComponent)) =>
-          substitutionsSoFarOption.flatMap(component.calculateSubstitutions(otherComponent, _))
+        .foldLeft(Seq(substitutions)) { case (substitutionsSoFar, (component, otherComponent)) =>
+          substitutionsSoFar.flatMap(component.calculateSubstitutions(otherComponent, _))
         }
     case _ =>
-      None
+      Nil
   }
 
   override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Statement] = {

@@ -127,5 +127,16 @@ package object model {
     def areDistinct(termVariable: TermVariable, statementVariable: StatementVariable): Boolean = {
       map.get(termVariable).exists(_.statementVariables.contains(statementVariable))
     }
+    def merge(otherMap: Map[TermVariable, Variables]): Map[TermVariable, Variables] = {
+      otherMap.foldLeft(map) { case (currentMap, (termVariable, variables)) =>
+        val updatedVariables = currentMap.get(termVariable) match {
+          case Some(otherVariables) =>
+            otherVariables ++ variables
+          case None =>
+            variables
+        }
+        currentMap.updated(termVariable, updatedVariables)
+      }
+    }
   }
 }

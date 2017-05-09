@@ -6,7 +6,7 @@ trait Component {
   def presentVariables: Variables
   def boundVariables: Set[TermVariable]
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables
-  def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Option[PartialSubstitutions]
+  def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Seq[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Component]
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Component]
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Component]
@@ -31,9 +31,9 @@ trait Component {
           if (y._1.exists(_ != t))
             None
           else
-            Some(Some(t), x._2 ++ y._2)
+            Some(Some(t), x._2 merge y._2)
         case None =>
-          Some(y._1, x._2 ++ y._2)
+          Some(y._1, x._2 merge y._2)
       }
     }
     if (subcomponents.isEmpty) {

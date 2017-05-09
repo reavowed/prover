@@ -364,5 +364,18 @@ class TheoremSpec extends ProverSpec {
         Conjunction(ψ, SubstitutedStatementVariable(χ, z, x)),
         Conditions(Set(x), Map(x -> Variables(Set(ψ, χ), Set(z)))))
     }
+
+    "apply distinct variable conditions to reverse a substitution" in {
+      val theorem = parseTheorem(
+        "XXX",
+        "premise ∧ φ = x z",
+        "prove ∃ y ∧ sub y x φ = y z",
+        "qed")(
+        contextWith(existence))
+
+      theorem.conclusion mustEqual ProvenStatement(
+        Exists(y, Conjunction(SubstitutedStatementVariable(φ, y, x), Equals(y, z))),
+        Conditions(Set.empty, Map(y -> Variables(Set(φ), Set.empty))))
+    }
   }
 }

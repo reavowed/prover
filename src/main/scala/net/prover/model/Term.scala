@@ -28,12 +28,12 @@ case class TermVariable(text: String) extends Term {
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
-  ): Option[PartialSubstitutions] = {
+  ): Seq[PartialSubstitutions] = {
     other match {
       case otherTerm: Term =>
-        substitutions.tryAdd(this, otherTerm)
+        substitutions.tryAdd(this, otherTerm).toSeq
       case _ =>
-        None
+        Nil
     }
   }
   def applySubstitutions(substitutions: Substitutions): Option[Term] = {
@@ -90,14 +90,14 @@ case class DefinedTerm(
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
-  ): Option[PartialSubstitutions] = other match {
+  ): Seq[PartialSubstitutions] = other match {
     case DefinedTerm(otherSubcomponents, `definition`) =>
       subcomponents.zip(otherSubcomponents)
-        .foldLeft(Option(substitutions)) { case (substitutionsSoFarOption, (component, otherComponent)) =>
-          substitutionsSoFarOption.flatMap(component.calculateSubstitutions(otherComponent, _))
+        .foldLeft(Seq(substitutions)) { case (substitutionsSoFar, (component, otherComponent)) =>
+          substitutionsSoFar.flatMap(component.calculateSubstitutions(otherComponent, _))
         }
     case _ =>
-      None
+      Nil
   }
   override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Term] = {
     for {

@@ -36,13 +36,13 @@ case class Prover(
 
   def proveAssertionWithNoTransforms(): Option[AssertionStep] = {
     availableInferences.iterator
-      .mapCollect { inference =>
+      .flatMap { inference =>
         inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty).map(inference -> _)
       }
       .flatMap { case (inference, substitutions) =>
         matchPremisesToFacts(inference.premises, substitutions).map(inference -> _)
       }
-      .mapCollect { case (inference, (matchedPremises, substitutions)) =>
+      .flatMap { case (inference, (matchedPremises, substitutions)) =>
         substitutions.tryResolve().map((inference, matchedPremises, _))
       }
       .mapCollect { case (inference, matchedPremises, (substitutions, distinctVariables)) =>
@@ -65,7 +65,7 @@ case class Prover(
           .map((inference, _))
           .iterator
       }
-      .mapCollect { case (inference, (transformedPremises, statementsToProve)) =>
+      .flatMap { case (inference, (transformedPremises, statementsToProve)) =>
         val transformedConclusion = statementsToProve.last
         for {
           substitutions <- transformedConclusion.calculateSubstitutions(assertion, PartialSubstitutions.empty)
@@ -83,7 +83,7 @@ case class Prover(
               transformedPremises,
               Nil
             ).proveAssertionWithNoTransforms()
-          }
+          }.toSeq
         } yield {
           val transformedInference = new Inference {
             val name = inference.name
@@ -96,7 +96,7 @@ case class Prover(
       .flatMap { case (substitutions, transformedInference) =>
         matchPremisesToFacts(transformedInference.premises, substitutions).map((transformedInference, _))
       }
-      .mapCollect { case (transformedInference, (matchedPremises, substitutions)) =>
+      .flatMap { case (transformedInference, (matchedPremises, substitutions)) =>
         substitutions.tryResolve().map((transformedInference, matchedPremises, _))
       }
       .mapCollect { case (transformedInference, matchedPremises, (substitutions, distinctVariables)) =>
@@ -135,7 +135,7 @@ case class Prover(
     inferencePremise: DirectPremise,
     substitutionsSoFar: PartialSubstitutions
   ): Iterator[(PremiseMatch, PartialSubstitutions)] = {
-    provenAssertions.iterator.mapCollect { case ReferencedAssertion(provenStatement, reference) =>
+    provenAssertions.iterator.flatMap { case ReferencedAssertion(provenStatement, reference) =>
       inferencePremise.statement.calculateSubstitutions(provenStatement.statement, substitutionsSoFar)
         .map { newSubstitutions =>
           (DirectPremiseMatch(provenStatement, reference), newSubstitutions)
@@ -147,7 +147,7 @@ case class Prover(
     inferencePremise: DeducedPremise,
     substitutionsSoFar: PartialSubstitutions
   ): Iterator[(PremiseMatch, PartialSubstitutions)] = {
-    provenDeductions.iterator.mapCollect { case ReferencedDeduction(provenAssumption, provenDeduction, reference) =>
+    provenDeductions.iterator.flatMap { case ReferencedDeduction(provenAssumption, provenDeduction, reference) =>
       inferencePremise.antecedent.calculateSubstitutions(provenAssumption, substitutionsSoFar)
         .flatMap(inferencePremise.consequent.calculateSubstitutions(provenDeduction.statement, _))
         .map((DeducedPremiseMatch(provenAssumption, provenDeduction, reference), _))
