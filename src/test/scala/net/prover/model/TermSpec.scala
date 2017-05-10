@@ -15,8 +15,8 @@ class TermSpec extends ProverSpec {
     }
 
     "match a unary function to another application of the same function" in {
-      PowerSet(Seq(x))
-        .calculateSubstitutions(PowerSet(Seq(y)), PartialSubstitutions.empty)
+      PowerSet(x)
+        .calculateSubstitutions(PowerSet(y), PartialSubstitutions.empty)
         .mustEqual(Seq(PartialSubstitutions(
           Map.empty,
           Map(x -> y),
@@ -36,12 +36,12 @@ class TermSpec extends ProverSpec {
     }
 
     "replace terms in a unary function" in {
-      PowerSet(Seq(x)).applySubstitutions(
+      PowerSet(x).applySubstitutions(
         Substitutions(
           Map(φ -> ψ),
           Map(x -> y)),
         Map.empty
-      ) mustEqual Some(PowerSet(Seq(y)))
+      ) mustEqual Some(PowerSet(y))
     }
   }
 

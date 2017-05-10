@@ -377,5 +377,33 @@ class TheoremSpec extends ProverSpec {
         Exists(y, Conjunction(SubstitutedStatementVariable(φ, y, x), Equals(y, z))),
         Conditions(Set.empty, Map(y -> Variables(Set(φ), Set.empty))))
     }
+
+    "prove a statement requiring a complicated resolution of a substitution" in {
+      val theorem = parseTheorem(
+        "XXX",
+        "premise = Y comprehension x X φ",
+        "premise ∀ y ↔ ∈ y comprehension x X φ ∧ ∈ y X sub y x φ",
+        "prove ∀ y ↔ ∈ y comprehension x X φ ∧ ∈ y X sub y x φ",
+        "qed")(
+        contextWith(substitutionOfEqualsReverse))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
+        ForAll(y, Equivalence(ElementOf(y, Comprehension(x, X, φ)), Conjunction(ElementOf(y, X), SubstitutedStatementVariable(φ, y, x)))))
+    }
+
+    "prove a statement that requires additional distinct variable conditions to be added in the resolution of a substitution in the conclusion" in {
+      val axiom = Axiom(
+        "XXX",
+        Seq(Equals(Y, Comprehension(x, X, φ))),
+        ForAll(y, Equivalence(ElementOf(y, Y), Conjunction(ElementOf(y, X), SubstitutedStatementVariable(φ, y, x)))))
+      val theorem = parseTheorem(
+        "XXX",
+        "premise = Z comprehension x Y ∀ X → φ ∈ x X",
+        "prove ∀ y ↔ ∈ y Z ∧ ∈ y Y ∀ X → φ ∈ y X",
+        "qed")(
+        contextWith(axiom))
+
+      ok
+    }
   }
 }

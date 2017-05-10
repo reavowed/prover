@@ -9,7 +9,13 @@ trait Component {
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Seq[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Component]
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Component]
-  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Component]
+  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[(Component, Map[TermVariable, Variables])]
+  def validateSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    target: Component,
+    distinctVariables: Map[TermVariable, Variables]
+  ): Option[Map[TermVariable, Variables]]
   def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])]
   def replacePlaceholder(other: Component): Option[Component]
   def html: String
@@ -55,6 +61,37 @@ trait Component {
       b
     }
   }
+
+  protected def resolveSubstitution(
+    subcomponents: Seq[Component],
+    otherSubcomponents: Seq[Component],
+    termVariable: TermVariable,
+    thisTerm: Term,
+    otherTerm: Term
+  ): Option[(Seq[Component], Map[TermVariable, Variables])] = {
+    subcomponents.zip(otherSubcomponents)
+      .map { case (subcomponent, otherSubcomponent) =>
+        subcomponent.resolveSingleSubstitution(otherSubcomponent, termVariable, thisTerm, otherTerm)
+      }
+      .traverseOption
+      .map(_.split)
+      .map(_.mapRight(_.foldLeft(Map.empty[TermVariable, Variables])(_ merge _)))
+  }
+
+  protected def validateSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    subcomponents: Seq[Component],
+    otherSubcomponents: Seq[Component],
+    distinctVariables: Map[TermVariable, Variables]
+  ): Option[Map[TermVariable, Variables]] = {
+    subcomponents.zip(otherSubcomponents)
+      .map { case (subcomponent, otherSubcomponent) =>
+        subcomponent.validateSubstitution(termToReplaceWith, termToBeReplaced, otherSubcomponent, distinctVariables)
+      }
+      .traverseOption
+      .map(_.foldLeft(Map.empty[TermVariable, Variables])(_ merge _))
+  }
 }
 
 object Component {
@@ -93,6 +130,9 @@ trait Placeholder[T <: Component] extends Component {
     otherTerm: Term
   ) = {
     throw new Exception("Cannot resolve substitution for placeholder")
+  }
+  override def validateSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, target: Component, distinctVariables: Map[TermVariable, Variables]) = {
+    throw new Exception("Cannot validate substitution for placeholder")
   }
   def findSubstitution(other: Component, termVariable: TermVariable) = {
 

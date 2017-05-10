@@ -16,7 +16,7 @@ trait Term extends JsonSerializable.Base with Component {
   }
   def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Term]
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Term]
-  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Term]
+  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[(Term, Map[TermVariable, Variables])]
   def replacePlaceholder(other: Component): Option[Term]
 }
 
@@ -48,16 +48,28 @@ case class TermVariable(text: String) extends Term {
     else
       Some(this)
   }
+  def validateSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    target: Component,
+    distinctVariables: Map[TermVariable, Variables]
+  ): Option[Map[TermVariable, Variables]] = {
+    if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
+      Some(Map.empty)
+    } else {
+      None
+    }
+  }
   def resolveSingleSubstitution(
     other: Component,
     termVariable: TermVariable,
     thisTerm: Term,
     otherTerm: Term
-  ): Option[Term] = {
+  ): Option[(Term, Map[TermVariable, Variables])] = {
     if (this == thisTerm && other == otherTerm) {
-      Some(termVariable)
+      Some((termVariable, Map.empty))
     } else if (this == other && this != termVariable) {
-      Some(this)
+      Some((this, Map.empty))
     } else {
       None
     }
@@ -109,31 +121,43 @@ case class DefinedTerm(
     }
   }
 
-  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Term] = {
+  override def makeSingleSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    distinctVariables: Map[TermVariable, Variables]
+  ): Option[Term] = {
     for {
       updatedSubcomponents <- subcomponents
         .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables))
         .traverseOption
     } yield copy(subcomponents = updatedSubcomponents)
   }
+  def validateSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    target: Component,
+    distinctVariables: Map[TermVariable, Variables]
+  ): Option[Map[TermVariable, Variables]] = {
+    target match {
+      case DefinedTerm(otherSubcomponents, `definition`) =>
+        validateSubstitution(termToReplaceWith, termToBeReplaced, subcomponents, otherSubcomponents, distinctVariables)
+      case _ =>
+        None
+    }
+  }
+
   def resolveSingleSubstitution(
     other: Component,
     termVariable: TermVariable,
     thisTerm: Term,
     otherTerm: Term
-  ): Option[Term] = {
+  ): Option[(Term, Map[TermVariable, Variables])] = {
     if (this == thisTerm && other == otherTerm) {
-      Some(termVariable)
+      Some((termVariable, Map.empty))
     } else other match {
       case DefinedTerm(otherSubcomponents, `definition`) =>
-        subcomponents.zip(otherSubcomponents)
-          .map { case (subcomponent, otherSubcomponent) =>
-            subcomponent.resolveSingleSubstitution(otherSubcomponent, termVariable, thisTerm, otherTerm)
-          }
-          .traverseOption
-          .map { resolvedSubcomponents =>
-            copy(subcomponents = resolvedSubcomponents)
-          }
+        resolveSubstitution(subcomponents, otherSubcomponents, termVariable, thisTerm, otherTerm)
+          .map(_.mapLeft { resolvedSubcomponents => copy(subcomponents = resolvedSubcomponents)})
       case _ =>
         None
     }

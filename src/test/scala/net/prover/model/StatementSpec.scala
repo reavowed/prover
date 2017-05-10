@@ -178,4 +178,12 @@ class StatementSpec extends ProverSpec {
         .mustEqual(Nil)
     }
   }
+
+  "statement resolving a substitution" should {
+    "allow substitutions into a substituted statement variable with distinct conditions" in {
+      SubstitutedStatementVariable(φ, y, x)
+        .resolveSingleSubstitution(SubstitutedStatementVariable(φ, y, x), z, X, Y)
+          .mustEqual(Some((SubstitutedStatementVariable(φ, y, x), Map(z -> Variables(Set(φ), Set(y))))))
+    }
+  }
 }

@@ -74,10 +74,8 @@ case class PartialSubstitutions(
     substitutedTermToBeReplaced: TermVariable,
     targetStatement: Statement
   ): Seq[PartialSubstitutions] = {
-    if (substitutedBaseStatement.makeSingleSubstitution(substitutedTermToReplaceWith, substitutedTermToBeReplaced, distinctVariables).contains(targetStatement))
-      Seq(this)
-    else
-      Nil
+    substitutedBaseStatement.validateSubstitution(substitutedTermToReplaceWith, substitutedTermToBeReplaced, targetStatement, distinctVariables).toSeq
+        .map(this.withDistinctVariables)
   }
 
   private def tryAddingByCalculatingTermToReplaceWith(
@@ -117,7 +115,7 @@ case class PartialSubstitutions(
         sharedTermToBeReplaced,
         sharedTermToBeReplaced.copy(text = sharedTermToBeReplaced + "'"))
       placeholderVariable <- Term.optionAsVariable(placeholderVariableTerm)
-      resolvedStatement <- newTargetStatement.resolveSingleSubstitution(
+      (resolvedStatement, additionalDistinctVariables) <- newTargetStatement.resolveSingleSubstitution(
         otherTargetStatement,
         placeholderVariable,
         thisTermToReplaceWith,
@@ -128,7 +126,7 @@ case class PartialSubstitutions(
         .tryAdd(newSubstitutedStatementVariable.statementVariable, resolvedStatement)
       substitutionsWithSharedTermToBeReplaced <- substitutionsWithResolvedStatement
         .tryAdd(sharedTermToBeReplaced, placeholderVariable)
-    } yield substitutionsWithSharedTermToBeReplaced
+    } yield substitutionsWithSharedTermToBeReplaced.withDistinctVariables(additionalDistinctVariables)
   }
 
   def withDistinctVariables(additionalDistinctVariables: Map[TermVariable, Variables]): PartialSubstitutions = {

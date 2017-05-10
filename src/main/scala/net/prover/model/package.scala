@@ -61,6 +61,12 @@ package object model {
     }
   }
 
+  implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {
+    def split: (Seq[S], Seq[T]) = {
+      (seq.map(_._1), seq.map(_._2))
+    }
+  }
+
   implicit class TraversableOptionOps[T, Repr](traversable: TraversableLike[Option[T], Repr]) {
     def traverseOption[That](implicit bf: CanBuildFrom[Repr, T, That]): Option[That] = {
       traversable.foldLeft(Option(bf())) { case (builderOption, valueOption) =>
@@ -143,6 +149,12 @@ package object model {
         }
         currentMap.updated(termVariable, updatedVariables)
       }
+    }
+
+    def add(termVariable: TermVariable, statementVariable: StatementVariable): Map[TermVariable, Variables] = {
+      map.updated(
+        termVariable,
+        map.getOrElse(termVariable, Variables.empty) + statementVariable)
     }
   }
 }

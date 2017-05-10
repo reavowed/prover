@@ -83,18 +83,33 @@ trait ProverSpec extends Specification {
     ForAll(x, Negation(ElementOf(x, PlaceholderTerm))))
   val EmptySet = DefinedTerm(Nil, EmptySetDefinition)
 
+  val Comprehension = TermDefinition(
+    "comprehension",
+    Seq(x, y, φ),
+    "Set Comprehension",
+    Format("{%0 ∈ %1 | %2}", requiresBrackets = false),
+    Nil,
+    ForAll(z, Equivalence(ElementOf(z, PlaceholderTerm), Conjunction(ElementOf(z, y), SubstitutedStatementVariable(φ, z, x)))))
+
   val statementDefinitions = Seq(
     Implication, Negation, Conjunction, Disjunction, Equivalence,
     ForAll, Exists, ExistsUnique,
     ElementOf, Equals)
 
+  val termDefinitions = Seq(EmptySetDefinition, Comprehension)
+
   val baseContext = Context.empty.copy(variables = Variables(
     Set(φ, ψ, χ),
     Set(x, y, z, X, Y, Z, a)))
 
-  implicit val defaultContext = statementDefinitions.foldLeft(baseContext) { case (context, statementDefinition) =>
+  val contextWithStatements = statementDefinitions.foldLeft(baseContext) { case (context, statementDefinition) =>
     context.addStatementDefinition(statementDefinition)
-  }.addTermDefinition(EmptySetDefinition)
+  }
+  val contextWithTerms = termDefinitions.foldLeft(contextWithStatements) { case (context, termDefinition) =>
+    context.addTermDefinition(termDefinition)
+  }
+
+  implicit val defaultContext = contextWithTerms
 
   def contextWith(inferences: Inference*): Context = {
     defaultContext.copy(inferences = inferences)

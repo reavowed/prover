@@ -16,7 +16,7 @@ trait Statement extends JsonSerializable.Base with Component {
   }
   def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Statement]
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Statement]
-  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[Statement]
+  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[(Statement, Map[TermVariable, Variables])]
   def replacePlaceholder(other: Component): Option[Statement]
 }
 
@@ -40,7 +40,20 @@ case class StatementVariable(text: String) extends Statement {
   override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Statement] = {
     applySubstitutions(substitutions)
   }
-
+  override def validateSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    target: Component,
+    distinctVariables: Map[TermVariable, Variables]
+  ): Option[Map[TermVariable, Variables]] = {
+    if (target == this) {
+      Some(Map(termToBeReplaced -> Variables(Set(this), Set.empty)))
+    } else if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
+      Some(Map.empty)
+    } else {
+      None
+    }
+  }
   override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]) = {
     if (termToReplaceWith == termToBeReplaced)
       Some(this)
@@ -54,9 +67,9 @@ case class StatementVariable(text: String) extends Statement {
     termVariable: TermVariable,
     thisTerm: Term,
     otherTerm: Term
-  ): Option[Statement] = {
+  ): Option[(Statement, Map[TermVariable, Variables])] = {
     if (this == other) {
-      Some(this)
+      Some((this, Map.empty))
     } else {
       None
     }
@@ -133,14 +146,31 @@ case class SubstitutedStatementVariable(
           None
       }
   }
+  def validateSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    target: Component,
+    distinctVariables: Map[TermVariable, Variables]
+  ): Option[Map[TermVariable, Variables]] = {
+    if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
+      Some(Map.empty)
+    } else {
+      None
+    }
+  }
   def resolveSingleSubstitution(
     other: Component,
     termVariable: TermVariable,
     thisTerm: Term,
     otherTerm: Term
-  ): Option[Statement] = {
-    None // TODO: overly conservative
+  ): Option[(Statement, Map[TermVariable, Variables])] = {
+    if (other == this) {
+      Some((this, Map(termVariable -> presentVariables)))
+    } else {
+      None
+    }
   }
+
   def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])] = {
     if (this == other) {
       if (termVariable == termToBeReplaced)
@@ -223,26 +253,33 @@ case class DefinedStatement(
         .traverseOption
     } yield copy(subcomponents = updatedSubcomponents)
   }
+  def validateSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    target: Component,
+    distinctVariables: Map[TermVariable, Variables]
+  ): Option[Map[TermVariable, Variables]] = {
+    target match {
+      case DefinedStatement(otherSubcomponents, otherBoundVariables, `definition`) =>
+        validateSubstitution(termToReplaceWith, termToBeReplaced, subcomponents, otherSubcomponents, distinctVariables)
+      case _ =>
+        None
+    }
+  }
 
   def resolveSingleSubstitution(
     other: Component,
     termVariable: TermVariable,
     thisTerm: Term,
     otherTerm: Term
-  ): Option[Statement] = {
+  ): Option[(Statement, Map[TermVariable, Variables])] = {
     other match {
       case DefinedStatement(otherSubcomponents, otherBoundVariables, `definition`) =>
         if (localBoundVariables.contains(termVariable) || otherBoundVariables.contains(termVariable))
           None
         else {
-          subcomponents.zip(otherSubcomponents)
-            .map { case (subcomponent, otherSubcomponent) =>
-              subcomponent.resolveSingleSubstitution(otherSubcomponent, termVariable, thisTerm, otherTerm)
-            }
-            .traverseOption
-            .map { resolvedSubcomponents =>
-              copy(subcomponents = resolvedSubcomponents)
-            }
+          resolveSubstitution(subcomponents, otherSubcomponents, termVariable, thisTerm, otherTerm)
+              .map(_.mapLeft { resolvedSubcomponents => copy(subcomponents = resolvedSubcomponents)})
         }
       case _ =>
         None

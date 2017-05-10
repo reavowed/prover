@@ -22,7 +22,7 @@ case class TermDefinition(
     override val conclusion: ProvenStatement = ProvenStatement.withNoConditions(definition)
   }
 
-  def apply(components: Seq[Component]) = DefinedTerm(components, this)
+  def apply(components: Component*): DefinedTerm = DefinedTerm(components, this)
 
   def termParser(implicit context: Context): Parser[Term] = {
     componentTypes.componentsParser.map(apply)
