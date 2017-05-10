@@ -1,24 +1,7 @@
 chapter Unordered Pairs
-Establish the existence of the unordered pair {x,y}.
+Establish the existence of the unordered pair {x, y}.
 
-theorem Unordered Pair Lemma 1
-premise ⊕ φ ψ
-assume φ {
-  prove ¬ ψ
-  prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
-  prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
-  prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
-}
-assume ψ {
-  prove ¬ φ
-  prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
-  prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
-  prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
-}
-prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
-qed
-
-theorem Unordered Pair Lemma 2
+theorem Unordered Pair Existence Lemma
 assume ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b {
   prove ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
   assume ∧ = x singleton ∅ = y a {
@@ -76,7 +59,7 @@ qed
 
 term pair (x y)
   name (Unordered Pair)
-  format ({x,y})
+  format ({x, y})
   (∀ z ↔ ∈ z _ ∨ = z x = z y)
 
 theorem Elements of Unordered Pair

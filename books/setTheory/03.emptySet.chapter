@@ -51,3 +51,9 @@ prove ∀ x ¬ ∈ x ∅
 prove ∀ x → ∈ x ∅ ∈ x X
 prove ⊆ ∅ X
 qed
+
+theorem A False Statement Is a Membership Condition for the Empty Set
+premise ∀ x ¬ φ
+prove ∀ x ¬ ∈ x ∅
+prove ∀ x ↔ ∈ x ∅ φ
+qed

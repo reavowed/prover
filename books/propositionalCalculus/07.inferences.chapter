@@ -30,3 +30,14 @@ prove ↔ ∨ ∧ χ ω ∧ φ ψ ω
 prove ↔ ∨ ∧ χ ω ∧ φ ψ ∨ ∧ φ ψ ∧ χ ω
 prove ↔ ∨ ∧ φ ψ ∧ χ ω ω
 qed
+
+theorem Disjoined Conjuct Equivalence
+premise φ
+prove ¬ ¬ φ
+prove ↔ ∨ ∧ φ ψ ∧ ¬ φ χ ψ
+qed
+
+theorem Disjoined Conjuct Equivalence
+premise ¬ φ
+prove ↔ ∨ ∧ φ ψ ∧ ¬ φ χ χ
+qed

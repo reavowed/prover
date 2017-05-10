@@ -87,3 +87,18 @@ premise proves ψ χ
 prove ∨ φ ψ
 prove χ
 qed
+
+theorem Exclusive Middle
+assume φ {
+  prove ¬ ¬ φ
+  prove ∧ φ ¬ ¬ φ
+  prove ∨ ∧ φ ¬ ¬ φ ∧ ¬ φ ¬ φ
+  prove ⊕ φ ¬ φ
+}
+assume ¬ φ {
+  prove ∧ ¬ φ ¬ φ
+  prove ∨ ∧ φ ¬ ¬ φ ∧ ¬ φ ¬ φ
+  prove ⊕ φ ¬ φ
+}
+prove ⊕ φ ¬ φ
+qed

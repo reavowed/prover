@@ -21,3 +21,9 @@ qed
 
 inference-transform (∀ x _) ()
 inference-transform (∀ x _) (sub y x _)
+
+theorem Rename Universally Quantified Variable
+premise ∀ x φ
+prove sub y x φ
+prove ∀ y sub y x φ
+qed

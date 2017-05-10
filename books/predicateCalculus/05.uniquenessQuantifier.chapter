@@ -41,3 +41,25 @@ assume ∧ sub a x φ sub b x φ {
 }
 prove ∃! x φ
 qed
+
+theorem Uniqueness by Two Cases
+premise ⊕ φ ψ
+assume φ {
+  prove ¬ ψ
+  prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
+  prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
+  prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
+}
+assume ψ {
+  prove ¬ φ
+  prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
+  prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
+  prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
+}
+prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
+qed
+
+theorem Uniqueness by Two Cases
+prove ⊕ φ ¬ φ
+prove ∃! z ∨ ∧ φ = z x ∧ ¬ φ = z y
+qed
