@@ -65,8 +65,10 @@ case class TermVariable(text: String) extends Term {
   def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])] = {
     if (this == termVariable) {
       Seq((Some(other.asInstanceOf[Term]), Map.empty))
-    } else {
+    } else if (this == other) {
       Seq((None, Map.empty))
+    } else {
+      Nil
     }
   }
   override def replacePlaceholder(other: Component) = Some(this)

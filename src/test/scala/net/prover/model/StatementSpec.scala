@@ -160,4 +160,22 @@ class StatementSpec extends ProverSpec {
         .mustEqual(Some(SubstitutedStatementVariable(φ, z, x)))
     }
   }
+
+  "statement finding a substitution" should {
+    "find no substitution required if target statement is the same and variable is not present" in {
+      Equals(x, y)
+        .findSubstitution(Equals(x, y), z)
+        .mustEqual(Seq((None, Map.empty)))
+    }
+    "find a substitution if the variable has changed appropriately" in {
+      Equals(x, y)
+        .findSubstitution(Equals(x, z), y)
+        .mustEqual(Seq((Some(z), Map.empty)))
+    }
+    "find no valid substitution if one variable has changed appropriately but the other doesn't match" in {
+      Equals(x, y)
+        .findSubstitution(Equals(y, z), x)
+        .mustEqual(Nil)
+    }
+  }
 }
