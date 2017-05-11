@@ -3,13 +3,13 @@ package net.prover.model
 class ConditionsSpec extends ProverSpec {
   "conditions" should {
     "correctly apply distinct variable condition to a statement with the term variable substituted out" in {
-      Conditions(Set.empty, Map(x -> Variables(Set(φ), Set.empty)))
-        .applySubstitutions(Substitutions(Map(φ -> SubstitutedStatementVariable(φ, z, y)), Map(x -> y))).get
-        .distinctVariables mustEqual Map(y -> Variables(Set.empty, Set(z)))
+      Conditions(Set.empty, DistinctVariables(x -> φ))
+        .applySubstitutions(Substitutions(Map(φ -> SubstitutedStatementVariable(φ, z, y)), Map(x -> y), DistinctVariables.empty)).get
+        .distinctVariables mustEqual DistinctVariables(y -> z)
     }
 
     "remove arbitrary variables under distinct variable conditions" in {
-      Conditions(Set(x), Map(y -> Variables(Set.empty, Set(x))))
+      Conditions(Set(x), DistinctVariables(y -> x))
         .restrictToStatements(Seq(ForAll(x, φ), Exists(y, ForAll(x, ψ))))
         .arbitraryVariables must beEmpty
     }
@@ -17,7 +17,7 @@ class ConditionsSpec extends ProverSpec {
     "only add present variables to distinct conditions" in {
       Conditions.empty
           .addDistinctVariables(Set(x), Seq(SubstitutedStatementVariable(φ, y, x))).get
-          .distinctVariables mustEqual Map(x -> Variables(Set.empty, Set(y)))
+          .distinctVariables mustEqual DistinctVariables(x -> y)
     }
   }
 }

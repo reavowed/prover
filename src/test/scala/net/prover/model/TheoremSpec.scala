@@ -54,19 +54,19 @@ class TheoremSpec extends ProverSpec {
       Seq(φ),
       ProvenStatement(
         SubstitutedStatementVariable(φ, y ,x),
-        Conditions(arbitraryVariables = Set(x), distinctVariables = Map.empty)))
+        Conditions(Set(x), DistinctVariables.empty)))
     val generalizationWithDifferentVariables = new Axiom(
       "Generalization",
       Seq(SubstitutedStatementVariable(φ, y, x)),
       ProvenStatement(
         ForAll(x, φ),
-        Conditions(arbitraryVariables = Set(y), distinctVariables = Map(y -> Variables(Set(φ), Set.empty)))))
+        Conditions(Set(y), DistinctVariables(y -> φ))))
     val generalizationWithSameVariable = new Axiom(
       "Generalization",
       Seq(φ),
       ProvenStatement(
         ForAll(x, φ),
-        Conditions(Set(x), Map.empty)))
+        Conditions(Set(x), DistinctVariables.empty)))
     val specification = new Axiom(
       "Specification",
       Seq(ForAll(x, φ)),
@@ -78,7 +78,7 @@ class TheoremSpec extends ProverSpec {
     val proveExistence = new Axiom(
       "Prove Existence",
       Seq(DeducedPremise(φ, ψ), DirectPremise(Exists(x, φ))),
-      ProvenStatement(ψ, Conditions(Set(x), Map(x -> Variables(Set(ψ), Set.empty)))))
+      ProvenStatement(ψ, Conditions(Set(x), DistinctVariables(x -> ψ))))
     val proveUniqueness = new Axiom(
       "Prove Uniqueness",
       Seq(
@@ -90,7 +90,7 @@ class TheoremSpec extends ProverSpec {
           Equals(y, z))),
       ProvenStatement(
         ExistsUnique(x, φ),
-        Conditions(Set(y, z), Map.empty)))
+        Conditions(Set(y, z), DistinctVariables.empty)))
 
     "prove the conclusion of a premiseless inference" in {
       val theorem = parseTheorem(
@@ -201,7 +201,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(z, Implication(ElementOf(z, x), ElementOf(z, x))),
-        Conditions(Set(y), Map(y -> Variables(Set.empty, Set(x, z)))))
+        Conditions(Set(y), DistinctVariables(y -> Variables(Set.empty, Set(x, z)))))
     }
 
     "prove a conclusion with a no-op substitution" in {
@@ -259,7 +259,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         SubstitutedStatementVariable(φ, z, y),
-        Conditions(Set(y), Map.empty))
+        Conditions(Set(y), DistinctVariables.empty))
     }
 
     "only prove a statement if the conditions match when specified explicitly" in {
@@ -273,7 +273,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(y, φ),
-        Conditions(Set(y), Map.empty))
+        Conditions(Set(y), DistinctVariables.empty))
     }
 
     "prove a statement by simplifying substitutions using distinct variable conditions" in {
@@ -289,7 +289,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ExistsUnique(X, ForAll(x, Equivalence(ElementOf(x, X), φ))),
-        Conditions(Set(Y, Z), Map(X -> Variables(Set(φ), Set.empty))))
+        Conditions(Set(Y, Z), DistinctVariables(X -> Variables(Set(φ), Set.empty))))
     }
 
     "not prove a conclusion that violates an arbitrary variable condition" in {
@@ -348,7 +348,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         Exists(y, Conjunction(SubstitutedStatementVariable(φ, y, x), Equals(y, z))),
-        Conditions(Set.empty, Map(y -> Variables(Set(φ), Set.empty))))
+        Conditions(Set.empty, DistinctVariables(y -> φ)))
     }
 
     "apply distinct variable conditions to compound statements correctly" in {
@@ -362,7 +362,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         Conjunction(ψ, SubstitutedStatementVariable(χ, z, x)),
-        Conditions(Set(x), Map(x -> Variables(Set(ψ), Set(z)))))
+        Conditions(Set(x), DistinctVariables(x -> Variables(Set(ψ), Set(z)))))
     }
 
     "apply distinct variable conditions to reverse a substitution" in {
@@ -375,7 +375,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         Exists(y, Conjunction(SubstitutedStatementVariable(φ, y, x), Equals(y, z))),
-        Conditions(Set.empty, Map(y -> Variables(Set(φ), Set.empty))))
+        Conditions(Set.empty, DistinctVariables(y -> φ)))
     }
 
     "prove a statement requiring a complicated resolution of a substitution" in {

@@ -7,7 +7,8 @@ class TermSpec extends ProverSpec {
     "Power Set",
     Format("𝒫%0", requiresBrackets = false),
     Nil,
-    φ)
+    φ,
+    DistinctVariables.empty)
 
   "term match" should {
     "match a constant term to itself" in {
@@ -21,7 +22,7 @@ class TermSpec extends ProverSpec {
           Map.empty,
           Map(x -> y),
           Map.empty,
-          Map.empty)))
+          DistinctVariables.empty)))
     }
   }
 
@@ -30,18 +31,18 @@ class TermSpec extends ProverSpec {
       EmptySet.applySubstitutions(
         Substitutions(
           Map(φ -> ψ),
-          Map(x -> y)),
-        Map.empty
-      ) mustEqual Some(EmptySet)
+          Map(x -> y),
+          DistinctVariables.empty)
+      ) must beSome(EmptySet)
     }
 
     "replace terms in a unary function" in {
       PowerSet(x).applySubstitutions(
         Substitutions(
           Map(φ -> ψ),
-          Map(x -> y)),
-        Map.empty
-      ) mustEqual Some(PowerSet(y))
+          Map(x -> y),
+          DistinctVariables.empty)
+      ) must beSome(PowerSet(y))
     }
   }
 

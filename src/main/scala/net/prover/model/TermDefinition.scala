@@ -8,7 +8,8 @@ case class TermDefinition(
     name: String,
     format: Format,
     premises: Seq[Statement],
-    placeholderDefinition: Statement)
+    placeholderDefinition: Statement,
+    distinctVariables: DistinctVariables)
   extends ChapterEntry(TermDefinition)
 {
   val id: String = s"definition-$symbol"
@@ -19,7 +20,7 @@ case class TermDefinition(
   val inference: Inference = new Inference {
     override val name: String = s"Definition of ${TermDefinition.this.name}"
     override val premises: Seq[Premise] = TermDefinition.this.premises.map(DirectPremise)
-    override val conclusion: ProvenStatement = ProvenStatement.withNoConditions(definition)
+    override val conclusion: ProvenStatement = ProvenStatement(definition, Conditions(Set.empty, distinctVariables))
   }
 
   def apply(components: Component*): DefinedTerm = DefinedTerm(components, this)
@@ -50,8 +51,9 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       premises <- premisesParser
       definitionTemplate <- Statement.parser.inParens
+      distinctVariables <- Conditions.distinctVariablesParser
     } yield {
-      TermDefinition(symbol, defaultVariables, name, format, premises, definitionTemplate)
+      TermDefinition(symbol, defaultVariables, name, format, premises, definitionTemplate, distinctVariables)
     }
   }
 

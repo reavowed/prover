@@ -9,7 +9,6 @@ case class StatementDefinition(
     defaultComponents: Seq[Component],
     format: Format,
     boundVariables: Set[TermVariable],
-    distinctVariables: Map[TermVariable, Variables],
     definingStatement: Option[Statement])
   extends ChapterEntry(StatementDefinition)
 {
@@ -34,7 +33,7 @@ case class StatementDefinition(
     new Inference {
       override val name = s"Definition of $symbol"
       override val premises: Seq[Premise] = Seq(DirectPremise(s))
-      override val conclusion: ProvenStatement = ProvenStatement(defaultStatement, Conditions(Set.empty, distinctVariables))
+      override val conclusion: ProvenStatement = ProvenStatement.withNoConditions(defaultStatement)
     }
   }
 
@@ -42,7 +41,7 @@ case class StatementDefinition(
     new Inference {
       override val name = s"Definition of $symbol"
       override val premises: Seq[Premise] = Seq(DirectPremise(defaultStatement))
-      override val conclusion: ProvenStatement = ProvenStatement(s, Conditions(Set.empty, distinctVariables))
+      override val conclusion: ProvenStatement = ProvenStatement.withNoConditions(s)
     }
   }
 }
@@ -83,14 +82,12 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       optionalDefiningStatement <- definingStatementParser
       boundVariables <- boundVariablesParser(defaultVariables, optionalDefiningStatement)
-      distinctVariables <- Conditions.distinctVariablesParser
     } yield {
       StatementDefinition(
         symbol,
         defaultVariables,
         format,
         boundVariables,
-        distinctVariables,
         optionalDefiningStatement)
     }
   }

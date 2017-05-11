@@ -32,11 +32,11 @@
                 <div ng-if="entry.boundVariables.length" class="boundVariables">
                     Bound variables: {{entry.boundVariables.join(", ")}}
                 </div>
-                <div ng-if="entry.distinctVariables.length" class="distinctVariables">
-                    Distinct variables:
-                    <span ng-repeat="requirement in entry.distinctVariables">
-                        {{requirement.termVariable}} must not appear in {{requirement.variables.join(", ")}}
-                    </span>
+                <div class="conditions" ng-if="entry.distinctVariables.length" class="distinctVariables">
+                    <h6>Conditions</h6>
+                    <div ng-repeat="requirement in entry.distinctVariables" class="distinctVariable">
+                        {{requirement.termVariable}} must not appear in {{joinWordList(requirement.variables, 'or')}}.
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,6 +54,12 @@
                 <div>
                     <span ng-if="entry.premises.length">Then</span>
                     {{entry.defaultTerm}} is defined by {{ entry.definition }}
+                </div>
+                <div class="conditions" ng-if="entry.distinctVariables.length" class="distinctVariables">
+                    <h6>Conditions</h6>
+                    <div ng-repeat="requirement in entry.distinctVariables" class="distinctVariable">
+                        {{requirement.termVariable}} must not appear in {{joinWordList(requirement.variables, 'or')}}.
+                    </div>
                 </div>
             </div>
         </div>

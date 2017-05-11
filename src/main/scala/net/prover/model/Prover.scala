@@ -45,8 +45,8 @@ case class Prover(
       .flatMap { case (inference, (matchedPremises, substitutions)) =>
         substitutions.tryResolve().map((inference, matchedPremises, _))
       }
-      .mapCollect { case (inference, matchedPremises, (substitutions, distinctVariables)) =>
-        makeAssertionStep(assertion, inference, matchedPremises, substitutions, distinctVariables)
+      .mapCollect { case (inference, matchedPremises, substitutions) =>
+        makeAssertionStep(assertion, inference, matchedPremises, substitutions)
       }
       .nextOption()
   }
@@ -99,8 +99,8 @@ case class Prover(
       .flatMap { case (transformedInference, (matchedPremises, substitutions)) =>
         substitutions.tryResolve().map((transformedInference, matchedPremises, _))
       }
-      .mapCollect { case (transformedInference, matchedPremises, (substitutions, distinctVariables)) =>
-        makeAssertionStep(assertion, transformedInference, matchedPremises, substitutions, distinctVariables)
+      .mapCollect { case (transformedInference, matchedPremises, substitutions) =>
+        makeAssertionStep(assertion, transformedInference, matchedPremises, substitutions)
       }
       .nextOption()
   }
@@ -158,14 +158,13 @@ case class Prover(
     assertion: Statement,
     inference: Inference,
     matchedPremises: Seq[PremiseMatch],
-    substitutions: Substitutions,
-    distinctVariables: Map[TermVariable, Variables]
+    substitutions: Substitutions
   ): Option[AssertionStep] = {
     for {
-      substitutedInference <- inference.applySubstitutions(substitutions, distinctVariables)
+      substitutedInference <- inference.applySubstitutions(substitutions)
       combinedConditions = (matchedPremises.map(_.provenStatement.conditions) :+ substitutedInference.conclusion.conditions)
         .reduce(_ ++ _)
-        .addDistinctVariables(distinctVariables)
+        .addDistinctVariables(substitutions.distinctVariables)
         .restrictToStatements(premises.flatMap(_.statements) ++ assumptions :+ substitutedInference.conclusion.statement)
       conditionsWithArbitraryVariableRestrictions <- combinedConditions
         .addDistinctVariables(combinedConditions.arbitraryVariables, assumptions)

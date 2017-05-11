@@ -14,9 +14,9 @@ trait Term extends JsonSerializable.Base with Component {
   override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
     serialize(gen, serializers)
   }
-  def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Term]
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Term]
-  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[(Term, Map[TermVariable, Variables])]
+  def applySubstitutions(substitutions: Substitutions): Option[Term]
+  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Term]
+  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[(Term, DistinctVariables)]
   def replacePlaceholder(other: Component): Option[Term]
 }
 
@@ -24,7 +24,7 @@ case class TermVariable(text: String) extends Term {
   override def allVariables: Variables = Variables(Set.empty, Set(this))
   override def presentVariables: Variables = allVariables
   override def boundVariables = Set.empty
-  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = Variables(Set.empty, Set(this))
+  override def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = Variables(Set.empty, Set(this))
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
@@ -36,49 +36,46 @@ case class TermVariable(text: String) extends Term {
         Nil
     }
   }
-  def applySubstitutions(substitutions: Substitutions): Option[Term] = {
+  override def applySubstitutions(substitutions: Substitutions): Option[Term] = {
     substitutions.terms.get(this)
   }
-  override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Term] = {
-    applySubstitutions(substitutions)
-  }
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: Map[TermVariable, Variables]): Option[Term] = {
+  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Term] = {
     if (termToBeReplaced == this)
       Some(termToReplaceWith)
     else
       Some(this)
   }
-  def validateSubstitution(
+  override def validateSubstitution(
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable,
     target: Component,
-    distinctVariables: Map[TermVariable, Variables]
-  ): Option[Map[TermVariable, Variables]] = {
+    distinctVariables: DistinctVariables
+  ): Option[DistinctVariables] = {
     if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
-      Some(Map.empty)
+      Some(DistinctVariables.empty)
     } else {
       None
     }
   }
-  def resolveSingleSubstitution(
+  override def resolveSingleSubstitution(
     other: Component,
     termVariable: TermVariable,
     thisTerm: Term,
     otherTerm: Term
-  ): Option[(Term, Map[TermVariable, Variables])] = {
+  ): Option[(Term, DistinctVariables)] = {
     if (this == thisTerm && other == otherTerm) {
-      Some((termVariable, Map.empty))
+      Some((termVariable, DistinctVariables.empty))
     } else if (this == other && this != termVariable) {
-      Some((this, Map.empty))
+      Some((this, DistinctVariables.empty))
     } else {
       None
     }
   }
-  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])] = {
+  override def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], DistinctVariables)] = {
     if (this == termVariable) {
-      Seq((Some(other.asInstanceOf[Term]), Map.empty))
+      Seq((Some(other.asInstanceOf[Term]), DistinctVariables.empty))
     } else if (this == other) {
-      Seq((None, Map.empty))
+      Seq((None, DistinctVariables.empty))
     } else {
       Nil
     }
@@ -113,9 +110,9 @@ case class DefinedTerm(
     case _ =>
       Nil
   }
-  override def applySubstitutions(substitutions: Substitutions, distinctVariables: Map[TermVariable, Variables]): Option[Term] = {
+  override def applySubstitutions(substitutions: Substitutions): Option[Term] = {
     for {
-      updatedSubcomponents <- subcomponents.map(_.applySubstitutions(substitutions, distinctVariables)).traverseOption
+      updatedSubcomponents <- subcomponents.map(_.applySubstitutions(substitutions)).traverseOption
     } yield {
       copy(subcomponents = updatedSubcomponents)
     }
@@ -124,7 +121,7 @@ case class DefinedTerm(
   override def makeSingleSubstitution(
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable,
-    distinctVariables: Map[TermVariable, Variables]
+    distinctVariables: DistinctVariables
   ): Option[Term] = {
     for {
       updatedSubcomponents <- subcomponents
@@ -136,8 +133,8 @@ case class DefinedTerm(
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable,
     target: Component,
-    distinctVariables: Map[TermVariable, Variables]
-  ): Option[Map[TermVariable, Variables]] = {
+    distinctVariables: DistinctVariables
+  ): Option[DistinctVariables] = {
     target match {
       case DefinedTerm(otherSubcomponents, `definition`) =>
         validateSubstitution(termToReplaceWith, termToBeReplaced, subcomponents, otherSubcomponents, distinctVariables)
@@ -151,9 +148,9 @@ case class DefinedTerm(
     termVariable: TermVariable,
     thisTerm: Term,
     otherTerm: Term
-  ): Option[(Term, Map[TermVariable, Variables])] = {
+  ): Option[(Term, DistinctVariables)] = {
     if (this == thisTerm && other == otherTerm) {
-      Some((termVariable, Map.empty))
+      Some((termVariable, DistinctVariables.empty))
     } else other match {
       case DefinedTerm(otherSubcomponents, `definition`) =>
         resolveSubstitution(subcomponents, otherSubcomponents, termVariable, thisTerm, otherTerm)
@@ -163,7 +160,7 @@ case class DefinedTerm(
     }
   }
 
-  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], Map[TermVariable, Variables])] = {
+  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], DistinctVariables)] = {
     other match {
       case DefinedTerm(otherSubcomponents, `definition`) =>
         findSubstitution(subcomponents, otherSubcomponents, termVariable)

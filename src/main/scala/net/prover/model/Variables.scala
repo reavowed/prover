@@ -34,4 +34,12 @@ case class Variables(statementVariables: Set[StatementVariable], termVariables: 
 
 object Variables {
   val empty = Variables(Set.empty, Set.empty)
+
+  def apply(statementVariable: StatementVariable): Variables = {
+    Variables(Set(statementVariable), Set.empty)
+  }
+
+  def apply(termVariable: TermVariable): Variables = {
+    Variables(Set.empty, Set(termVariable))
+  }
 }

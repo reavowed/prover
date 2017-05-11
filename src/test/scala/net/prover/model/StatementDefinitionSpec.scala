@@ -27,7 +27,7 @@ class StatementDefinitionSpec extends ProverSpec {
     "parse definition" in {
       parseStatementDefinition(
         "∧ (φ ψ) definition (¬ → φ ¬ ψ)"
-      ).definingStatement mustEqual Some(Negation(Implication(φ, Negation(ψ))))
+      ).definingStatement must beSome(Negation(Implication(φ, Negation(ψ))))
     }
 
     "parse bound variables" in {
@@ -46,12 +46,6 @@ class StatementDefinitionSpec extends ProverSpec {
       StatementDefinition.parser(defaultContext).parseAndDiscard(
         "∃! (x φ) format ((∃!{}){}) definition (∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z)"
       ).boundVariables mustEqual Set(x)
-    }
-
-    "parse distinct variables" in {
-      parseStatementDefinition(
-        "∃! (x φ) format ((∃!{}){}) definition (∃ y ∀ x ↔ φ = x y) distinct-variables (y φ)"
-      ).distinctVariables mustEqual Map(y -> Variables(Set(φ), Set.empty))
     }
   }
 

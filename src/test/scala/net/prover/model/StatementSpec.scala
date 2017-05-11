@@ -49,17 +49,19 @@ class StatementSpec extends ProverSpec {
     "apply to a statement variable" in {
       val substitutions = Substitutions(
         Map(φ -> Implication(φ, ψ), ψ -> χ),
-        Map.empty)
-      φ.applySubstitutions(substitutions, Map.empty) mustEqual Some(Implication(φ, ψ))
+        Map.empty,
+        DistinctVariables.empty)
+      φ.applySubstitutions(substitutions) must beSome(Implication(φ, ψ))
     }
 
     "apply to a substituted statement variable" in {
       val substitutions = Substitutions(
         Map(φ -> Implication(φ, ψ), ψ -> χ),
-        Map(x -> z, y -> y))
+        Map(x -> z, y -> y),
+        DistinctVariables.empty)
 
-      SubstitutedStatementVariable(φ, y, x).applySubstitutions(substitutions, Map.empty) mustEqual
-        Some(Implication(SubstitutedStatementVariable(φ, y, z), SubstitutedStatementVariable(ψ, y, z)))
+      SubstitutedStatementVariable(φ, y, x).applySubstitutions(substitutions) must
+        beSome(Implication(SubstitutedStatementVariable(φ, y, z), SubstitutedStatementVariable(ψ, y, z)))
     }
   }
 
@@ -70,7 +72,7 @@ class StatementSpec extends ProverSpec {
           Map(φ -> Implication(φ, ψ)),
           Map.empty,
           Map.empty,
-          Map.empty))
+          DistinctVariables.empty))
     }
     "not match a connective to a statement variable" in {
       Implication(φ, ψ).calculateSubstitutions(φ, PartialSubstitutions.empty) must beEmpty
@@ -90,7 +92,7 @@ class StatementSpec extends ProverSpec {
           Map(φ -> φ, ψ -> χ),
           Map.empty,
           Map.empty,
-          Map.empty)))
+          DistinctVariables.empty)))
     }
     "match two connectives of the same type whose substatements are different but match" in {
       Implication(φ, ψ)
@@ -101,7 +103,7 @@ class StatementSpec extends ProverSpec {
             ψ -> χ),
           Map.empty,
           Map.empty,
-          Map.empty)))
+          DistinctVariables.empty)))
     }
     "match two connectives of the same type whose substatements merge correctly" in {
       Implication(φ, φ)
@@ -110,7 +112,7 @@ class StatementSpec extends ProverSpec {
           Map(φ -> Conjunction(φ, ψ)),
           Map.empty,
           Map.empty,
-          Map.empty)))
+          DistinctVariables.empty)))
     }
     "match two connectives of the same type whose substatements do not merge correctly" in {
       Implication(φ, φ)
@@ -127,7 +129,7 @@ class StatementSpec extends ProverSpec {
         Equals(x, y))
 
       forall(statements) { s =>
-        s.makeSingleSubstitution(x, x, Map.empty).get mustEqual s
+        s.makeSingleSubstitution(x, x, DistinctVariables.empty).get mustEqual s
       }
     }
     "not do anything if substituting an already-substituted variable" in {
@@ -137,26 +139,26 @@ class StatementSpec extends ProverSpec {
         Equals(x, y))
 
       forall(statements) { s =>
-        val firstSubstitution = s.makeSingleSubstitution(y, x, Map.empty).get
-        firstSubstitution.makeSingleSubstitution(z, x, Map.empty).get mustEqual firstSubstitution
+        val firstSubstitution = s.makeSingleSubstitution(y, x, DistinctVariables.empty).get
+        firstSubstitution.makeSingleSubstitution(z, x, DistinctVariables.empty).get mustEqual firstSubstitution
       }
     }
 
     "not do anything if substituting for a variable that is distinct" in {
       φ
-        .makeSingleSubstitution(y, x, Map(x -> Variables(Set(φ), Set.empty)))
+        .makeSingleSubstitution(y, x, DistinctVariables(x -> Variables(Set(φ), Set.empty)))
         .mustEqual(Some(φ))
     }
 
     "not do anything if making a double substitution that is known to be distinct from the first" in {
       SubstitutedStatementVariable(φ, y, x)
-        .makeSingleSubstitution(Y, X, Map(X -> Variables(Set(φ), Set.empty), y -> Variables(Set.empty, Set(X))))
+        .makeSingleSubstitution(Y, X, DistinctVariables(X -> φ) ++ DistinctVariables(y -> X))
         .mustEqual(Some(SubstitutedStatementVariable(φ, y, x)))
     }
 
     "combine substitutions under a distinct condition" in {
       SubstitutedStatementVariable(φ, y, x)
-        .makeSingleSubstitution(z, y, Map(y -> Variables(Set(φ), Set.empty)))
+        .makeSingleSubstitution(z, y, DistinctVariables(y -> φ))
         .mustEqual(Some(SubstitutedStatementVariable(φ, z, x)))
     }
   }
@@ -165,12 +167,12 @@ class StatementSpec extends ProverSpec {
     "find no substitution required if target statement is the same and variable is not present" in {
       Equals(x, y)
         .findSubstitution(Equals(x, y), z)
-        .mustEqual(Seq((None, Map.empty)))
+        .mustEqual(Seq((None, DistinctVariables.empty)))
     }
     "find a substitution if the variable has changed appropriately" in {
       Equals(x, y)
         .findSubstitution(Equals(x, z), y)
-        .mustEqual(Seq((Some(z), Map.empty)))
+        .mustEqual(Seq((Some(z), DistinctVariables.empty)))
     }
     "find no valid substitution if one variable has changed appropriately but the other doesn't match" in {
       Equals(x, y)
@@ -183,7 +185,7 @@ class StatementSpec extends ProverSpec {
     "allow substitutions into a substituted statement variable with distinct conditions" in {
       SubstitutedStatementVariable(φ, y, x)
         .resolveSingleSubstitution(SubstitutedStatementVariable(φ, y, x), z, X, Y)
-          .mustEqual(Some((SubstitutedStatementVariable(φ, y, x), Map(z -> Variables(Set(φ), Set(y))))))
+          .mustEqual(Some((SubstitutedStatementVariable(φ, y, x), DistinctVariables(z -> Variables(Set(φ), Set(y))))))
     }
   }
 }

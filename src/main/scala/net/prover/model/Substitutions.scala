@@ -2,21 +2,22 @@ package net.prover.model
 
 case class Substitutions(
     statements: Map[StatementVariable, Statement],
-    terms: Map[TermVariable, Term])
+    terms: Map[TermVariable, Term],
+    distinctVariables: DistinctVariables)
 
 case class PartialSubstitutions(
     knownStatements: Map[StatementVariable, Statement],
     knownTerms: Map[TermVariable, Term],
     unknownSubstitutions: Map[SubstitutedStatementVariable, Statement],
-    distinctVariables: Map[TermVariable, Variables]) {
+    distinctVariables: DistinctVariables) {
 
-  def knownSubstitutions = Substitutions(knownStatements, knownTerms)
+  def knownSubstitutions = Substitutions(knownStatements, knownTerms, distinctVariables)
 
   def tryAdd(statementVariable: StatementVariable, statement: Statement): Option[PartialSubstitutions] = {
     knownStatements.get(statementVariable) match {
       case Some(`statement`) =>
         Some(this)
-      case Some(otherStatement) =>
+      case Some(_) =>
         None
       case None =>
         Some(copy(knownStatements = knownStatements + (statementVariable -> statement)))
@@ -50,7 +51,7 @@ case class PartialSubstitutions(
     targetStatement: Statement
   ): Seq[PartialSubstitutions] = {
     val substitutedBaseStatementOption = knownStatements.get(substitutedStatementVariable.statementVariable)
-    val substitutedTermToReplaceWithOption = substitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions, distinctVariables)
+    val substitutedTermToReplaceWithOption = substitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
     val substitutedTermToBeReplacedOption = knownTerms.get(substitutedStatementVariable.termToBeReplaced).flatMap(Term.optionAsVariable)
 
     (substitutedBaseStatementOption, substitutedTermToReplaceWithOption, substitutedTermToBeReplacedOption) match {
@@ -75,7 +76,7 @@ case class PartialSubstitutions(
     targetStatement: Statement
   ): Seq[PartialSubstitutions] = {
     substitutedBaseStatement.validateSubstitution(substitutedTermToReplaceWith, substitutedTermToBeReplaced, targetStatement, distinctVariables).toSeq
-        .map(this.withDistinctVariables)
+        .map(withDistinctVariables)
   }
 
   private def tryAddingByCalculatingTermToReplaceWith(
@@ -109,8 +110,8 @@ case class PartialSubstitutions(
     val otherTargetStatement = unknownSubstitutions(otherSubstitutedStatementVariable)
     val sharedTermToBeReplaced = otherSubstitutedStatementVariable.termToBeReplaced
     for {
-      thisTermToReplaceWith <- newSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions, distinctVariables)
-      otherTermToReplaceWith <- otherSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions, distinctVariables)
+      thisTermToReplaceWith <- newSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
+      otherTermToReplaceWith <- otherSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
       placeholderVariableTerm = knownTerms.getOrElse(
         sharedTermToBeReplaced,
         sharedTermToBeReplaced.copy(text = sharedTermToBeReplaced + "'"))
@@ -129,14 +130,14 @@ case class PartialSubstitutions(
     } yield substitutionsWithSharedTermToBeReplaced.withDistinctVariables(additionalDistinctVariables)
   }
 
-  def withDistinctVariables(additionalDistinctVariables: Map[TermVariable, Variables]): PartialSubstitutions = {
-    copy(distinctVariables = distinctVariables.merge(additionalDistinctVariables))
+  def withDistinctVariables(additionalDistinctVariables: DistinctVariables): PartialSubstitutions = {
+    copy(distinctVariables = distinctVariables ++ additionalDistinctVariables)
   }
 
-  def tryResolve(): Seq[(Substitutions, Map[TermVariable, Variables])] = {
+  def tryResolve(): Seq[Substitutions] = {
     unknownSubstitutions.keys.toList match {
       case Nil =>
-        Seq((Substitutions(knownStatements, knownTerms), distinctVariables))
+        Seq(Substitutions(knownStatements, knownTerms, distinctVariables))
       case one +: more =>
         copy(unknownSubstitutions = unknownSubstitutions.filterKeys(more.contains))
           .tryAddingDirectly(one, unknownSubstitutions(one))
@@ -146,5 +147,5 @@ case class PartialSubstitutions(
 }
 
 object PartialSubstitutions {
-  val empty: PartialSubstitutions = PartialSubstitutions(Map.empty, Map.empty, Map.empty, Map.empty)
+  val empty: PartialSubstitutions = PartialSubstitutions(Map.empty, Map.empty, Map.empty, DistinctVariables.empty)
 }

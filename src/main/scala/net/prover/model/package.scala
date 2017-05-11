@@ -128,33 +128,4 @@ package object model {
       }
     }
   }
-
-  implicit class DistinctVariableOps(map: Map[TermVariable, Variables]) {
-    def areDistinct(termVariable: TermVariable, statementVariable: StatementVariable): Boolean = {
-      map.get(termVariable).exists(_.statementVariables.contains(statementVariable))
-    }
-
-    def areDistinct(termVariable: TermVariable, otherTermVariable: TermVariable): Boolean = {
-      map.get(termVariable).exists(_.termVariables.contains(otherTermVariable)) ||
-        map.get(otherTermVariable).exists(_.termVariables.contains(termVariable))
-    }
-
-    def merge(otherMap: Map[TermVariable, Variables]): Map[TermVariable, Variables] = {
-      otherMap.foldLeft(map) { case (currentMap, (termVariable, variables)) =>
-        val updatedVariables = currentMap.get(termVariable) match {
-          case Some(otherVariables) =>
-            otherVariables ++ variables
-          case None =>
-            variables
-        }
-        currentMap.updated(termVariable, updatedVariables)
-      }
-    }
-
-    def add(termVariable: TermVariable, statementVariable: StatementVariable): Map[TermVariable, Variables] = {
-      map.updated(
-        termVariable,
-        map.getOrElse(termVariable, Variables.empty) + statementVariable)
-    }
-  }
 }

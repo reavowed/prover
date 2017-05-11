@@ -49,6 +49,7 @@
     templateUrl: 'template/chapter.html',
     controller: ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
       $scope.chapter = null;
+      $scope.joinWordList = joinWordList;
       $http.get('/books').then(function (response) {
         var books = response.data;
         var book = _.find(books, ['key', $routeParams.bookKey]);

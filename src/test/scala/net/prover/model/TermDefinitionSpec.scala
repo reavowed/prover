@@ -10,7 +10,8 @@ class TermDefinitionSpec extends ProverSpec {
           "∅",
           Format.default("∅", Nil),
           Nil,
-          ForAll(x, Negation(ElementOf(x, PlaceholderTerm))))
+          ForAll(x, Negation(ElementOf(x, PlaceholderTerm))),
+          DistinctVariables.empty)
     }
 
     "parse a term with premises" in {
@@ -24,8 +25,8 @@ class TermDefinitionSpec extends ProverSpec {
         Seq(Negation(Equals(x, EmptySet))),
         ForAll(y, Equivalence(
           ElementOf(y, PlaceholderTerm),
-          ForAll(z, Implication(ElementOf(z, x), ElementOf(z, y)))))
-      )
+          ForAll(z, Implication(ElementOf(z, x), ElementOf(z, y))))),
+        DistinctVariables.empty)
     }
   }
 }

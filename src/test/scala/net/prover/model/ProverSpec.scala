@@ -18,6 +18,7 @@ trait ProverSpec extends Specification {
   def Y = TermVariable("Y")
   def Z = TermVariable("Z")
   def a = TermVariable("a")
+  def n = TermVariable("n")
 
   def connective(
     symbol: String,
@@ -30,7 +31,6 @@ trait ProverSpec extends Specification {
       variables,
       Format.default(symbol, variables.map(_.text)),
       Set.empty,
-      Map.empty,
       definingStatement)
   }
   def predicate(
@@ -44,7 +44,6 @@ trait ProverSpec extends Specification {
       variables,
       Format.default(symbol, variables.map(_.text)),
       Set.empty,
-      Map.empty,
       definingStatement)
   }
 
@@ -57,7 +56,6 @@ trait ProverSpec extends Specification {
       Seq(x, φ),
       Format(s"($symbol%0)%1", requiresBrackets = false),
       Set(x),
-      Map.empty,
       definingStatement)
   }
 
@@ -80,7 +78,8 @@ trait ProverSpec extends Specification {
     "∅",
     Format.default("∅", Nil),
     Nil,
-    ForAll(x, Negation(ElementOf(x, PlaceholderTerm))))
+    ForAll(x, Negation(ElementOf(x, PlaceholderTerm))),
+    DistinctVariables.empty)
   val EmptySet = DefinedTerm(Nil, EmptySetDefinition)
 
   val Comprehension = TermDefinition(
@@ -89,7 +88,8 @@ trait ProverSpec extends Specification {
     "Set Comprehension",
     Format("{%0 ∈ %1 | %2}", requiresBrackets = false),
     Nil,
-    ForAll(z, Equivalence(ElementOf(z, PlaceholderTerm), Conjunction(ElementOf(z, y), SubstitutedStatementVariable(φ, z, x)))))
+    ForAll(z, Equivalence(ElementOf(z, PlaceholderTerm), Conjunction(ElementOf(z, y), SubstitutedStatementVariable(φ, z, x)))),
+    DistinctVariables.empty)
 
   val statementDefinitions = Seq(
     Implication, Negation, Conjunction, Disjunction, Equivalence,
@@ -100,7 +100,7 @@ trait ProverSpec extends Specification {
 
   val baseContext = Context.empty.copy(variables = Variables(
     Set(φ, ψ, χ),
-    Set(x, y, z, X, Y, Z, a)))
+    Set(x, y, z, X, Y, Z, a, n)))
 
   val contextWithStatements = statementDefinitions.foldLeft(baseContext) { case (context, statementDefinition) =>
     context.addStatementDefinition(statementDefinition)
