@@ -71,13 +71,13 @@ case class TermVariable(text: String) extends Term {
       None
     }
   }
-  override def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], DistinctVariables)] = {
+  override def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
     if (this == termVariable) {
-      Seq((Some(other.asInstanceOf[Term]), DistinctVariables.empty))
+      (Seq((other.asInstanceOf[Term], DistinctVariables.empty)), None)
     } else if (this == other) {
-      Seq((None, DistinctVariables.empty))
+      (Nil, Some(DistinctVariables.empty))
     } else {
-      Nil
+      (Nil, None)
     }
   }
   override def replacePlaceholder(other: Component) = Some(this)
@@ -160,12 +160,12 @@ case class DefinedTerm(
     }
   }
 
-  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], DistinctVariables)] = {
+  def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
     other match {
       case DefinedTerm(otherSubcomponents, `definition`) =>
         findSubstitution(subcomponents, otherSubcomponents, termVariable)
       case _ =>
-        Nil
+        (Nil, None)
     }
   }
 

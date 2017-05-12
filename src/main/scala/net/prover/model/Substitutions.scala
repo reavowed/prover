@@ -86,8 +86,8 @@ case class PartialSubstitutions(
     targetStatement: Statement
   ): Seq[PartialSubstitutions] = {
     for {
-      (substitutedTermToReplaceWithOption, newDistinctVariables) <- substitutedBaseStatement.findSubstitution(targetStatement, substitutedTermToBeReplaced)
-      substitutedTermToReplaceWith <- substitutedTermToReplaceWithOption.toSeq
+      (substitutedTermToReplaceWith, newDistinctVariables) <- substitutedBaseStatement
+        .findSubstitution(targetStatement, substitutedTermToBeReplaced)._1
       updatedSubstitutions <- termToReplaceWith.calculateSubstitutions(substitutedTermToReplaceWith, this)
     } yield {
       updatedSubstitutions.withDistinctVariables(newDistinctVariables)
@@ -137,7 +137,7 @@ case class PartialSubstitutions(
   def tryResolve(): Seq[Substitutions] = {
     unknownSubstitutions.keys.toList match {
       case Nil =>
-        Seq(Substitutions(knownStatements, knownTerms, distinctVariables))
+        Seq(knownSubstitutions)
       case one +: more =>
         copy(unknownSubstitutions = unknownSubstitutions.filterKeys(more.contains))
           .tryAddingDirectly(one, unknownSubstitutions(one))

@@ -71,17 +71,15 @@ case class StatementVariable(text: String) extends Statement {
       None
     }
   }
-  override def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], DistinctVariables)] = {
+  override def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
     if (this == other) {
-      Seq(
-        (Some(termVariable), DistinctVariables.empty),
-        (None, DistinctVariables(termVariable -> this)))
+      (Seq((termVariable, DistinctVariables.empty)), Some(DistinctVariables(termVariable -> this)))
     } else {
       other match {
         case SubstitutedStatementVariable(variable, termToReplaceWith, `termVariable`) if variable == this =>
-          Seq((Some(termToReplaceWith), DistinctVariables.empty))
+          (Seq((termToReplaceWith, DistinctVariables.empty)), None)
         case _ =>
-          Nil
+          (Nil, None)
       }
     }
   }
@@ -132,7 +130,9 @@ case class SubstitutedStatementVariable(
     } yield updatedStatement
   }
   override def makeSingleSubstitution(newTermToReplaceWith: Term, newTermToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Statement] = {
-    if (newTermToBeReplaced == termToBeReplaced)
+    if (newTermToReplaceWith == newTermToBeReplaced)
+      Some(this)
+    else if (newTermToBeReplaced == termToBeReplaced)
       Some(this)
     else if (newTermToBeReplaced == termToReplaceWith && distinctVariables.areDistinct(newTermToBeReplaced, statementVariable))
       Some(SubstitutedStatementVariable(statementVariable, newTermToReplaceWith, termToBeReplaced))
@@ -170,20 +170,22 @@ case class SubstitutedStatementVariable(
       None
     }
   }
-  override def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], DistinctVariables)] = {
+  override def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
     if (this == other) {
-      if (termVariable == termToBeReplaced)
-        Seq((None, DistinctVariables.empty))
+      if (presentVariables.termVariables.contains(termVariable))
+        (Seq((termVariable, DistinctVariables.empty)), None)
+      else if (termVariable == termToBeReplaced)
+        (Seq((termVariable, DistinctVariables.empty)), Some(DistinctVariables(termVariable -> termToReplaceWith.presentVariables)))
       else
-        Seq((None, DistinctVariables(termVariable -> presentVariables)))
+        (Seq((termVariable, DistinctVariables.empty)), Some(DistinctVariables(termVariable -> presentVariables)))
     } else {
       other match {
         case `statementVariable` if termToReplaceWith == termVariable =>
-          Seq((Some(termToBeReplaced), DistinctVariables(termVariable -> statementVariable)))
+          (Seq((termToBeReplaced, DistinctVariables(termVariable -> statementVariable))), None)
         case SubstitutedStatementVariable(`statementVariable`, otherTermToReplaceWith: TermVariable, `termToBeReplaced`) if termToReplaceWith == termVariable =>
-          Seq((Some(otherTermToReplaceWith), DistinctVariables(termVariable -> statementVariable)))
+          (Seq((otherTermToReplaceWith, DistinctVariables(termVariable -> statementVariable))), None)
         case _ =>
-          Nil
+          (Nil, None)
       }
     }
   }
@@ -284,12 +286,12 @@ case class DefinedStatement(
         None
     }
   }
-  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], DistinctVariables)] = {
+  def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
     other match {
       case DefinedStatement(otherSubcomponents, _, `definition`) =>
         findSubstitution(subcomponents, otherSubcomponents, termVariable)
       case _ =>
-        Nil
+        (Nil, None)
     }
   }
 

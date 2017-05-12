@@ -396,6 +396,7 @@ class TheoremSpec extends ProverSpec {
         "XXX",
         Seq(Equals(Y, Comprehension(x, X, φ))),
         ForAll(y, Equivalence(ElementOf(y, Y), Conjunction(ElementOf(y, X), SubstitutedStatementVariable(φ, y, x)))))
+
       val theorem = parseTheorem(
         "XXX",
         "premise = Z comprehension x Y ∀ X → φ ∈ x X",
@@ -403,7 +404,9 @@ class TheoremSpec extends ProverSpec {
         "qed")(
         contextWith(axiom))
 
-      ok
+      theorem.conclusion mustEqual ProvenStatement(
+        ForAll(y, Equivalence(ElementOf(y, Z), Conjunction(ElementOf(y, Y), ForAll(X, Implication(φ, ElementOf(y, X)))))),
+        Conditions(Set.empty, DistinctVariables(x -> φ)))
     }
   }
 }

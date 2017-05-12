@@ -16,7 +16,7 @@ trait Component {
     target: Component,
     distinctVariables: DistinctVariables
   ): Option[DistinctVariables]
-  def findSubstitution(other: Component, termVariable: TermVariable): Seq[(Option[Term], DistinctVariables)]
+  def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables])
   def replacePlaceholder(other: Component): Option[Component]
   def html: String
   def safeHtml: String = html
@@ -27,36 +27,35 @@ trait Component {
     subcomponents: Seq[Component],
     otherSubcomponents: Seq[Component],
     termVariable: TermVariable
-  ): Seq[(Option[Term], DistinctVariables)] = {
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
     def combine(
-      x: (Option[Term], DistinctVariables),
-      y: (Option[Term], DistinctVariables)
-    ): Option[(Option[Term], DistinctVariables)] = {
-      x._1 match {
-        case Some(t) =>
-          if (y._1.exists(_ != t))
-            None
-          else
-            Some(Some(t), x._2 ++ y._2)
-        case None =>
-          Some(y._1, x._2 ++ y._2)
+      x: (Seq[(Term, DistinctVariables)], Option[DistinctVariables]),
+      y: (Seq[(Term, DistinctVariables)], Option[DistinctVariables])
+    ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+      val terms = (x._1.map(_._1) ++ y._1.map(_._1)).distinct
+      val termSubstitutions = terms.map { term =>
+        for {
+          xSide <- x._1.find(_._1 == term).map(_._2).orElse(x._2)
+          ySide <- y._1.find(_._1 == term).map(_._2).orElse(y._2)
+        } yield (term, xSide ++ ySide)
+      } collect {
+        case Some(z) => z
       }
+      val avoidingSubstitutions = for {
+        xSide <- x._2
+        ySide <- y._2
+      } yield xSide ++ ySide
+      (termSubstitutions, avoidingSubstitutions)
     }
     if (subcomponents.isEmpty) {
-      Seq((None, DistinctVariables.empty))
+      (Nil, Some(DistinctVariables.empty))
     } else {
       subcomponents.zip(otherSubcomponents)
         .map {
           case (subcomponent, otherSubcomponent) =>
             subcomponent.findSubstitution(otherSubcomponent, termVariable)
         }
-        .reduce[Seq[(Option[Term], DistinctVariables)]] { case (acc, more) =>
-          for {
-            x <- acc
-            y <- more
-            z <- combine(x, y)
-          } yield z
-        }
+        .reduce(combine)
     }
   }
 

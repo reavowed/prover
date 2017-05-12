@@ -126,10 +126,13 @@ class StatementSpec extends ProverSpec {
       val statements = Seq(
         φ,
         Implication(φ, ψ),
-        Equals(x, y))
+        Equals(x, y),
+        SubstitutedStatementVariable(φ, y, x),
+        SubstitutedStatementVariable(φ, x, y),
+        SubstitutedStatementVariable(φ, y, z))
 
       forall(statements) { s =>
-        s.makeSingleSubstitution(x, x, DistinctVariables.empty).get mustEqual s
+        s.makeSingleSubstitution(x, x, DistinctVariables.empty) must beSome(s)
       }
     }
     "not do anything if substituting an already-substituted variable" in {
@@ -167,17 +170,27 @@ class StatementSpec extends ProverSpec {
     "find no substitution required if target statement is the same and variable is not present" in {
       Equals(x, y)
         .findSubstitution(Equals(x, y), z)
-        .mustEqual(Seq((None, DistinctVariables.empty)))
+        .mustEqual((Nil, Some(DistinctVariables.empty)))
     }
     "find a substitution if the variable has changed appropriately" in {
       Equals(x, y)
         .findSubstitution(Equals(x, z), y)
-        .mustEqual(Seq((Some(z), DistinctVariables.empty)))
+        .mustEqual((Seq((z, DistinctVariables.empty)), None))
     }
     "find no valid substitution if one variable has changed appropriately but the other doesn't match" in {
       Equals(x, y)
         .findSubstitution(Equals(y, z), x)
-        .mustEqual(Nil)
+        .mustEqual((Nil, None))
+    }
+    "find a nilpotent substitution" in {
+      SubstitutedStatementVariable(φ, y, x)
+        .findSubstitution(SubstitutedStatementVariable(φ, y, x), y)
+        .mustEqual((Seq((y, DistinctVariables.empty)), None))
+    }
+    "find a nilpotent substitution and a distinct variable condition" in {
+      SubstitutedStatementVariable(φ, y, x)
+        .findSubstitution(SubstitutedStatementVariable(φ, y, x), z)
+        .mustEqual((Seq((z, DistinctVariables.empty)), Some(DistinctVariables(z -> φ) ++ DistinctVariables(z -> y))))
     }
   }
 
