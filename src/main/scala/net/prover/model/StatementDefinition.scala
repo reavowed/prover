@@ -30,19 +30,17 @@ case class StatementDefinition(
   }
 
   def forwardInference: Option[Inference] = definingStatement.map { s =>
-    new Inference {
-      override val name = s"Definition of $symbol"
-      override val premises: Seq[Premise] = Seq(DirectPremise(s))
-      override val conclusion: ProvenStatement = ProvenStatement.withNoConditions(defaultStatement)
-    }
+    DerivedInference(
+      s"Definition of $symbol",
+      Seq(DirectPremise(s)),
+      ProvenStatement.withNoConditions(defaultStatement))
   }
 
   def reverseInference: Option[Inference] = definingStatement.map { s =>
-    new Inference {
-      override val name = s"Definition of $symbol"
-      override val premises: Seq[Premise] = Seq(DirectPremise(defaultStatement))
-      override val conclusion: ProvenStatement = ProvenStatement.withNoConditions(s)
-    }
+    DerivedInference(
+      s"Definition of $symbol",
+      Seq(DirectPremise(defaultStatement)),
+      ProvenStatement.withNoConditions(s))
   }
 }
 

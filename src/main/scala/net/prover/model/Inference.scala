@@ -13,11 +13,7 @@ trait Inference {
     for {
       updatedPremises <- premises.map(_.applySubstitutions(substitutions)).traverseOption
       updatedConclusion <- conclusion.applySubstitutions(substitutions)
-    } yield new Inference {
-      override val name = Inference.this.name
-      override val premises = updatedPremises
-      override val conclusion = updatedConclusion
-    }
+    } yield DerivedInference(name, updatedPremises, updatedConclusion)
   }
 
   def calculateHash(): String = {
@@ -27,6 +23,12 @@ trait Inference {
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))
   }
 }
+
+case class DerivedInference(
+    name: String,
+    premises: Seq[Premise],
+    conclusion: ProvenStatement)
+  extends Inference
 
 object Inference {
   def unapply(inference: Inference): Option[(String, Seq[Premise], ProvenStatement)] = {

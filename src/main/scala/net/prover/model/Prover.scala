@@ -85,11 +85,10 @@ case class Prover(
             ).proveAssertionWithNoTransforms()
           }.toSeq
         } yield {
-          val transformedInference = new Inference {
-            val name = inference.name
-            val premises = transformedPremises
-            val conclusion = proofSteps.last.provenStatement
-          }
+          val transformedInference = DerivedInference(
+            inference.name,
+            transformedPremises,
+            proofSteps.last.provenStatement)
           (substitutions, transformedInference)
         }
       }
