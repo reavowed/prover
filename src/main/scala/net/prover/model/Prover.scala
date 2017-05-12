@@ -9,7 +9,8 @@ case class Prover(
   provenAssertions: Seq[ReferencedAssertion],
   provenDeductions: Seq[ReferencedDeduction],
   premises: Seq[Premise],
-  assumptions: Seq[Statement])(
+  assumptions: Seq[Statement],
+  debug: Boolean)(
   implicit context: Context)
 {
   def availableInferences: Seq[Inference] = context.inferences
@@ -81,7 +82,8 @@ case class Prover(
               provenAssertions,
               Nil,
               transformedPremises,
-              Nil
+              Nil,
+              false
             ).proveAssertionWithNoTransforms()
           }.toSeq
         } yield {

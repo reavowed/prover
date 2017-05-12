@@ -10,7 +10,8 @@ object ProofOutline {
     extends Step
   case class AssertionStep(
       assertion: Statement,
-      conditions: Option[Conditions])
+      conditions: Option[Conditions],
+      debug: Boolean = false)
     extends Step
 
   private def assumptionStepParser(implicit context: Context): Parser[AssumptionStep] = {
@@ -26,7 +27,8 @@ object ProofOutline {
     for {
       assertion <- Statement.parser
       conditions <- Conditions.optionalParser
-    } yield AssertionStep(assertion, conditions)
+      debug <- Parser.optional("debug", Parser.constant(true), false)
+    } yield AssertionStep(assertion, conditions, debug)
   }
 
   private def stepParser(implicit context: Context): Parser[Option[Step]] = {
