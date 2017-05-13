@@ -11,7 +11,8 @@ class TheoremSpec extends ProverSpec {
       parseTheorem(
         "Anything Is True",
         "prove φ",
-        "qed"
+        "qed")(
+        contextWith()
       ) must throwAn[Exception]
     }
 

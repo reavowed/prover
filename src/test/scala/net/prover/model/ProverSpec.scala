@@ -91,12 +91,21 @@ trait ProverSpec extends Specification {
     ForAll(z, Equivalence(ElementOf(z, PlaceholderTerm), Conjunction(ElementOf(z, y), SubstitutedStatementVariable(φ, z, x)))),
     DistinctVariables.empty)
 
+  val PowerSet = TermDefinition(
+    "powerSet",
+    Seq(x),
+    "Power Set",
+    Format("𝒫%0", requiresBrackets = false),
+    Nil,
+    ForAll(y, Equivalence(ElementOf(Y, PlaceholderTerm), φ)),
+    DistinctVariables.empty)
+
   val statementDefinitions = Seq(
     Implication, Negation, Conjunction, Disjunction, Equivalence,
     ForAll, Exists, ExistsUnique,
     ElementOf, Equals)
 
-  val termDefinitions = Seq(EmptySetDefinition, Comprehension)
+  val termDefinitions = Seq(EmptySetDefinition, Comprehension, PowerSet)
 
   val baseContext = Context.empty.copy(variables = Variables(
     Set(φ, ψ, χ),

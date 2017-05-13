@@ -44,27 +44,32 @@ case class DistinctVariables(private val map: Map[TermVariable, Variables]) exte
         substituteSingleVariableCondition(termVariable, variables, substitutions)
       }
       .traverseOption
-      .map(_.toMap)
+      .map(_.foldTogether)
   }
 
   private def substituteSingleVariableCondition(
     termVariable: TermVariable,
     variables: Variables,
     substitutions: Substitutions
-  ): Option[(TermVariable, Variables)] = {
+  ): Option[DistinctVariables] = {
     for {
-      updatedTermVariable <- termVariable.applySubstitutions(substitutions).flatMap(Term.optionAsVariable)
-      updatedStatementVariables <- variables.statementVariables
-        .map(_.applySubstitutions(substitutions).map(_.getPotentiallyIntersectingVariables(updatedTermVariable)))
-        .traverseOption
-      updatedTermVariables <- variables.termVariables
-        .map(_.applySubstitutions(substitutions).map(_.getPotentiallyIntersectingVariables(updatedTermVariable)))
-        .traverseOption
-      updatedOtherVariables = (updatedStatementVariables ++ updatedTermVariables).reduce(_ ++ _)
-      if !updatedOtherVariables.termVariables.contains(updatedTermVariable)
-    } yield {
-      updatedTermVariable -> updatedOtherVariables
-    }
+      substitutedBaseTerm <- termVariable.applySubstitutions(substitutions)
+      substitutedStatements <- variables.statementVariables.map(_.applySubstitutions(substitutions)).traverseOption
+      substitutedTerms <- variables.termVariables.map(_.applySubstitutions(substitutions)).traverseOption
+      result <- (
+        for {
+          substitutedTermVariable <- substitutedBaseTerm.presentVariables.termVariables
+          component <- substitutedStatements ++ substitutedTerms
+          newVariables = component.getPotentiallyIntersectingVariables(substitutedTermVariable)
+        } yield {
+          if (newVariables.termVariables.contains(substitutedTermVariable)) {
+            None
+          } else {
+            Some(DistinctVariables(substitutedTermVariable -> newVariables))
+          }
+        }
+      ).traverseOption.map(_.foldTogether)
+    } yield result
   }
 
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
@@ -112,4 +117,10 @@ object DistinctVariables {
   }
 
   private implicit def fromMap(map: Map[TermVariable, Variables]): DistinctVariables = new DistinctVariables(map)
+
+  implicit class DistinctVariableSeqOps(seq: Traversable[DistinctVariables]) {
+    def foldTogether: DistinctVariables = {
+      seq.foldLeft(DistinctVariables.empty)(_ ++ _)
+    }
+  }
 }

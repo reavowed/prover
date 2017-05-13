@@ -72,7 +72,7 @@ trait Component {
       }
       .traverseOption
       .map(_.split)
-      .map(_.mapRight(_.foldLeft(DistinctVariables.empty)(_ ++ _)))
+      .map(_.mapRight(_.foldTogether))
   }
 
   protected def validateSubstitution(
@@ -87,7 +87,7 @@ trait Component {
         subcomponent.validateSubstitution(termToReplaceWith, termToBeReplaced, otherSubcomponent, distinctVariables)
       }
       .traverseOption
-      .map(_.foldLeft(DistinctVariables.empty)(_ ++ _))
+      .map(_.foldTogether)
   }
 }
 

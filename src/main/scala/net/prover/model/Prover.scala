@@ -163,14 +163,13 @@ case class Prover(
   ): Option[AssertionStep] = {
     for {
       substitutedInference <- inference.applySubstitutions(substitutions)
-      combinedConditions = (matchedPremises.map(_.provenStatement.conditions) :+ substitutedInference.conclusion.conditions)
+      combinedConditions <- (matchedPremises.map(_.provenStatement.conditions) :+ substitutedInference.conclusion.conditions)
         .reduce(_ ++ _)
         .addDistinctVariables(substitutions.distinctVariables)
         .restrictToStatements(premises.flatMap(_.statements) ++ assumptions :+ substitutedInference.conclusion.statement)
-      conditionsWithArbitraryVariableRestrictions <- combinedConditions
-        .addDistinctVariables(combinedConditions.arbitraryVariables, assumptions)
-      if !targetConditions.exists(_ != conditionsWithArbitraryVariableRestrictions)
-      provenStatement = ProvenStatement(assertion, conditionsWithArbitraryVariableRestrictions)
+        .addDistinctVariables(substitutedInference.conclusion.conditions.arbitraryVariables, assumptions)
+      if !targetConditions.exists(_ != combinedConditions)
+      provenStatement = ProvenStatement(assertion, combinedConditions)
     } yield {
       AssertionStep(provenStatement, inference, matchedPremises.map(_.reference), substitutions)
     }
