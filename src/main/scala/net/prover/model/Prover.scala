@@ -5,7 +5,7 @@ import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
 
 case class Prover(
   assertion: Statement,
-  targetConditions: Option[Conditions],
+  nonDistinctVariables: Set[(Variable, Variable)],
   provenAssertions: Seq[ReferencedAssertion],
   provenDeductions: Seq[ReferencedDeduction],
   premises: Seq[Premise],
@@ -62,12 +62,19 @@ case class Prover(
       }
       .flatMap { case (transform, inference, inferencePremises) =>
         val conclusion = inference.conclusion.statement
-        transform.transform(inferencePremises, conclusion)
-          .map((inference, _))
-          .iterator
+        transform.transform(inferencePremises, conclusion).iterator
+          .map { case (transformedPremises, statementsToProve) =>
+            (inference, inferencePremises, transformedPremises, statementsToProve)
+          }
       }
-      .flatMap { case (inference, (transformedPremises, statementsToProve)) =>
+      .flatMap { case (inference, inferencePremises, transformedPremises, statementsToProve) =>
         val transformedConclusion = statementsToProve.last
+        val oldVariables = (inferencePremises.map(_.statement) :+ inference.conclusion.statement).map(_.allVariables).foldTogether
+        val newVariables = (transformedPremises.map(_.statement) :+ transformedConclusion).map(_.allVariables).foldTogether diff oldVariables
+        val newNonDistinctVariables = for {
+          newVariable <- newVariables.all
+          oldVariable <- oldVariables.all
+        } yield newVariable -> oldVariable
         for {
           substitutions <- transformedConclusion.calculateSubstitutions(assertion, PartialSubstitutions.empty)
           proofSteps <- statementsToProve.collectFold[AssertionStep] { case (assertions, statement) =>
@@ -78,7 +85,7 @@ case class Prover(
             }
             Prover(
               statement,
-              Some(Conditions.empty),
+              newNonDistinctVariables,
               provenAssertions,
               Nil,
               transformedPremises,
@@ -168,7 +175,9 @@ case class Prover(
         .addDistinctVariables(substitutions.distinctVariables)
         .restrictToStatements(premises.flatMap(_.statements) ++ assumptions :+ substitutedInference.conclusion.statement)
         .addDistinctVariables(substitutedInference.conclusion.conditions.arbitraryVariables, assumptions)
-      if !targetConditions.exists(_ != combinedConditions)
+      if !nonDistinctVariables.exists { case (first, second) =>
+        combinedConditions.distinctVariables.areDistinct(first, second)
+      }
       provenStatement = ProvenStatement(assertion, combinedConditions)
     } yield {
       AssertionStep(provenStatement, inference, matchedPremises.map(_.reference), substitutions)

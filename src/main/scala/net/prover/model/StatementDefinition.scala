@@ -1,7 +1,7 @@
 package net.prover.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import net.prover.model.Inference.{DirectPremise, Premise}
+import net.prover.model.Inference.DirectPremise
 
 @JsonIgnoreProperties(Array("symbol", "defaultComponents", "format"))
 case class StatementDefinition(
@@ -46,7 +46,7 @@ case class StatementDefinition(
 
 object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
   private def getDefaultBoundVariables(
-    defaultVariables: Seq[Component],
+    defaultVariables: Seq[Variable],
     definingStatement: Statement
   ): Set[TermVariable] = {
     val variables = Variables(
@@ -63,7 +63,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
     None)
 
   private def boundVariablesParser(
-    defaultVariables: Seq[Component],
+    defaultVariables: Seq[Variable],
     optionalDefiningStatement: Option[Statement])(
     implicit context: Context
   ): Parser[Set[TermVariable]] = {

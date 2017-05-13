@@ -5,7 +5,7 @@ trait Component {
   def allVariables: Variables
   def presentVariables: Variables
   def boundVariables: Set[TermVariable]
-  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables
+  def getPotentiallyIntersectingVariables(variable: Variable): Variables
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Seq[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Component]
@@ -92,7 +92,7 @@ trait Component {
 }
 
 object Component {
-  def variableParser(implicit context: Context): Parser[Component] = {
+  def variableParser(implicit context: Context): Parser[Variable] = {
     for {
       variableName <- Parser.singleWord
     } yield {
@@ -103,11 +103,13 @@ object Component {
   }
 }
 
+trait Variable extends Component
+
 trait Placeholder[T <: Component] extends Component {
   override def allVariables: Variables = Variables.empty
   override def presentVariables: Variables = Variables.empty
   override def boundVariables: Set[TermVariable] = Set.empty
-  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = Variables.empty
+  def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables.empty
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions

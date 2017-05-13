@@ -10,7 +10,7 @@ object ProofOutline {
     extends Step
   case class AssertionStep(
       assertion: Statement,
-      conditions: Option[Conditions],
+      nonDistinctVariables: Set[(Variable, Variable)],
       debug: Boolean = false)
     extends Step
 
@@ -26,9 +26,9 @@ object ProofOutline {
   private def assertionStepParser(implicit context: Context): Parser[AssertionStep] = {
     for {
       assertion <- Statement.parser
-      conditions <- Conditions.optionalParser
+      nonDistinctVariables <- Parser.optional("non-distinct", Conditions.variablePairListParser, Nil).map(_.toSet)
       debug <- Parser.optional("debug", Parser.constant(true), false)
-    } yield AssertionStep(assertion, conditions, debug)
+    } yield AssertionStep(assertion, nonDistinctVariables, debug)
   }
 
   private def stepParser(implicit context: Context): Parser[Option[Step]] = {

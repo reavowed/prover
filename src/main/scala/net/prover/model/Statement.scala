@@ -20,11 +20,11 @@ trait Statement extends JsonSerializable.Base with Component {
   def replacePlaceholder(other: Component): Option[Statement]
 }
 
-case class StatementVariable(text: String) extends Statement {
-  override def allVariables: Variables = Variables(Set(this), Set.empty)
-  override def presentVariables: Variables = allVariables
+case class StatementVariable(text: String) extends Statement with Variable {
+  override def allVariables: Variables = Variables(this)
+  override def presentVariables: Variables = Variables(this)
   override def boundVariables: Set[TermVariable] = Set.empty
-  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = Variables(Set(this), Set.empty)
+  def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables(this)
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
@@ -97,8 +97,8 @@ case class SubstitutedStatementVariable(
   override def allVariables: Variables = termToReplaceWith.allVariables + statementVariable + termToBeReplaced
   override def presentVariables: Variables = termToReplaceWith.allVariables + statementVariable
   override def boundVariables: Set[TermVariable] = termToReplaceWith.boundVariables
-  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = {
-    if (termVariable == termToBeReplaced)
+  def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
+    if (variable == termToBeReplaced)
       termToReplaceWith.allVariables
     else
       termToReplaceWith.allVariables + statementVariable
@@ -208,13 +208,15 @@ case class DefinedStatement(
   override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
   override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _) -- localBoundVariables
   override def boundVariables = localBoundVariables ++ subcomponents.map(_.boundVariables).knownCommonValues
-  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = {
-    if (localBoundVariables.contains(termVariable))
-      Variables.empty
-    else
-      subcomponents
-        .map(_.getPotentiallyIntersectingVariables(termVariable))
-        .foldLeft(Variables.empty)(_ ++ _)
+  def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
+    variable match {
+      case termVariable: TermVariable if localBoundVariables.contains(termVariable) =>
+        Variables.empty
+      case _ =>
+        subcomponents
+          .map(_.getPotentiallyIntersectingVariables(variable))
+          .foldLeft(Variables.empty)(_ ++ _)
+    }
   }
 
   override def calculateSubstitutions(

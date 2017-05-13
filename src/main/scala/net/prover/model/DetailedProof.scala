@@ -106,8 +106,8 @@ object DetailedProof {
           assumptions :+ assumption,
           nextReference + 1)
         AssumptionStep(assumption, substeps)
-      case ProofOutline.AssertionStep(assertion, conditions, debug) =>
-        Prover(assertion, conditions, provenAssertions, provenDeductions, premises, assumptions, debug).proveAssertion()
+      case ProofOutline.AssertionStep(assertion, nonDistinctVariables, debug) =>
+        Prover(assertion, nonDistinctVariables, provenAssertions, provenDeductions, premises, assumptions, debug).proveAssertion()
     }
   }
 }

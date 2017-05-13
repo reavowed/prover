@@ -34,9 +34,7 @@
                 </div>
                 <div class="conditions" ng-if="entry.distinctVariables.length" class="distinctVariables">
                     <h6>Conditions</h6>
-                    <div ng-repeat="requirement in entry.distinctVariables" class="distinctVariable">
-                        {{requirement.termVariable}} must not appear in {{joinWordList(requirement.variables, 'or')}}.
-                    </div>
+                    <distinct-variables distinct-variables="entry.distinctVariables"></distinct-variables>
                 </div>
             </div>
         </div>
@@ -57,9 +55,7 @@
                 </div>
                 <div class="conditions" ng-if="entry.distinctVariables.length" class="distinctVariables">
                     <h6>Conditions</h6>
-                    <div ng-repeat="requirement in entry.distinctVariables" class="distinctVariable">
-                        {{requirement.termVariable}} must not appear in {{joinWordList(requirement.variables, 'or')}}.
-                    </div>
+                    <distinct-variables distinct-variables="entry.distinctVariables"></distinct-variables>
                 </div>
             </div>
         </div>

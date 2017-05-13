@@ -242,5 +242,26 @@
       }
     }]
   });
+
+  proverApp.component('arbitraryVariables', {
+    templateUrl: 'template/arbitraryVariables.html',
+    bindings: {
+      arbitraryVariables: '<'
+    },
+    controller: ['$scope', function ($scope) {
+      $scope.text = joinWordList($scope.$ctrl.arbitraryVariables);
+    }]
+  });
+  proverApp.component('distinctVariables', {
+    templateUrl: 'template/distinctVariables.html',
+    bindings: {
+      distinctVariables: '<'
+    },
+    controller: ['$scope', function ($scope) {
+      $scope.text = joinWordList(_.map($scope.$ctrl.distinctVariables, function(condition) {
+        return "(" + condition[0] + ", " + condition[1] + ")";
+      }));
+    }]
+  });
 })();
 

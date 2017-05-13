@@ -19,12 +19,8 @@
             <div class="conditions"
                  ng-if="conditions.arbitraryVariables.length || conditions.distinctVariables.length">
                 <h6>Conditions</h6>
-                <div ng-if="conditions.arbitraryVariables.length">
-                    {{joinWordList(conditions.arbitraryVariables)}} must be arbitrary.
-                </div>
-                <div ng-repeat="requirement in conditions.distinctVariables" class="distinctVariable">
-                    {{requirement.termVariable}} must not appear in {{joinWordList(requirement.variables, 'or')}}.
-                </div>
+                <arbitrary-variables arbitrary-variables="conditions.arbitraryVariables"></arbitrary-variables>
+                <distinct-variables distinct-variables="conditions.distinctVariables"></distinct-variables>
             </div>
         </div>
         <div id="{{$ctrl.theorem.id}}-proof" class="theoremProof collapse">

@@ -20,11 +20,11 @@ trait Term extends JsonSerializable.Base with Component {
   def replacePlaceholder(other: Component): Option[Term]
 }
 
-case class TermVariable(text: String) extends Term {
-  override def allVariables: Variables = Variables(Set.empty, Set(this))
-  override def presentVariables: Variables = allVariables
+case class TermVariable(text: String) extends Term with Variable {
+  override def allVariables: Variables = Variables(this)
+  override def presentVariables: Variables = Variables(this)
   override def boundVariables = Set.empty
-  override def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = Variables(Set.empty, Set(this))
+  override def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables(this)
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
@@ -93,9 +93,9 @@ case class DefinedTerm(
   override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
   override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _)
   override def boundVariables = Set.empty // TODO: derive from definition
-  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Variables = {
+  def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
     subcomponents
-      .map(_.getPotentiallyIntersectingVariables(termVariable))
+      .map(_.getPotentiallyIntersectingVariables(variable))
       .foldLeft(Variables.empty)(_ ++ _) // TODO: derive from definition (?)
   }
   override def calculateSubstitutions(

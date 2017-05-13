@@ -202,7 +202,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(z, Implication(ElementOf(z, x), ElementOf(z, x))),
-        Conditions(Set(y), DistinctVariables(y -> Variables(Set.empty, Set(x, z)))))
+        Conditions(Set(y), DistinctVariables(y -> x, y -> z)))
     }
 
     "prove a conclusion with a no-op substitution" in {
@@ -263,12 +263,12 @@ class TheoremSpec extends ProverSpec {
         Conditions(Set(y), DistinctVariables.empty))
     }
 
-    "only prove a statement if the conditions match when specified explicitly" in {
+    "only prove a statement if non-distinct conditions are met" in {
       val theorem = parseTheorem(
         "X",
         "premise φ",
         "prove sub x y φ",
-        "prove ∀ y φ arbitrary-variables(y) distinct-variables ()",
+        "prove ∀ y φ non-distinct (y φ)",
         "qed")(
         contextWith(substitution, generalizationWithDifferentVariables))
 
@@ -290,7 +290,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ExistsUnique(X, ForAll(x, Equivalence(ElementOf(x, X), φ))),
-        Conditions(Set(Y, Z), DistinctVariables(X -> Variables(Set(φ), Set.empty))))
+        Conditions(Set(Y, Z), DistinctVariables(X -> φ)))
     }
 
     "not prove a conclusion that violates an arbitrary variable condition" in {
@@ -363,7 +363,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         Conjunction(ψ, SubstitutedStatementVariable(χ, z, x)),
-        Conditions(Set(x), DistinctVariables(x -> Variables(Set(ψ), Set(z)))))
+        Conditions(Set(x), DistinctVariables(x -> ψ, x -> z)))
     }
 
     "apply distinct variable conditions to reverse a substitution" in {

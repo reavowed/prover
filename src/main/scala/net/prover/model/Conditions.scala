@@ -63,26 +63,21 @@ object Conditions {
       None)
   }
 
-  private def variableParser(variables: Variables)(implicit context: Context): Parser[Option[Variables]] = {
-    Parser.singleWord.map { name =>
-      val statementVariableOption = context.variables.statementVariables.find(_.text == name)
-      val termVariableOption = context.variables.termVariables.find(_.text == name)
-      statementVariableOption.map(variables + _) orElse
-        termVariableOption.map(variables + _)
-    }
+  def variablePairParser(implicit context: Context): Parser[(Variable, Variable)] = {
+    for {
+      first <- Component.variableParser
+      second <- Component.variableParser
+    } yield first -> second
   }
 
-  private def distinctVariablesClauseParser(implicit context: Context): Parser[(TermVariable, Variables)] = {
-    for {
-      term <- Term.variableParser
-      variables <- Parser.iterateWhileDefined(Variables.empty, variableParser)
-    } yield term -> variables
+  def variablePairListParser(implicit context: Context): Parser[Seq[(Variable, Variable)]] = {
+    variablePairParser.listInParens(Some(","))
   }
 
   def optionalDistinctVariablesParser(implicit context: Context): Parser[Option[DistinctVariables]] = {
     Parser.optional(
       "distinct-variables",
-      distinctVariablesClauseParser.listInParens(Some(",")).map(_.toMap).map(new DistinctVariables(_)).map(Some.apply),
+      variablePairListParser.map(DistinctVariables(_: _*)).map(Some.apply),
       None)
   }
 

@@ -30,6 +30,17 @@ case class Variables(statementVariables: Set[StatementVariable], termVariables: 
   }
   def isEmpty: Boolean = statementVariables.isEmpty && termVariables.isEmpty
   def nonEmpty: Boolean = statementVariables.nonEmpty || termVariables.nonEmpty
+
+  def contains(variable: Variable): Boolean = variable match {
+    case termVariable: TermVariable =>
+      termVariables.contains(termVariable)
+    case statementVariable: StatementVariable =>
+      statementVariables.contains(statementVariable)
+    case _ =>
+      false
+  }
+
+  def all: Set[Variable] = statementVariables ++ termVariables
 }
 
 object Variables {
@@ -41,5 +52,11 @@ object Variables {
 
   def apply(termVariable: TermVariable): Variables = {
     Variables(Set.empty, Set(termVariable))
+  }
+
+  implicit class VariablesSeqOps(seq: Traversable[Variables]) {
+    def foldTogether: Variables = {
+      seq.foldLeft(Variables.empty)(_ ++ _)
+    }
   }
 }
