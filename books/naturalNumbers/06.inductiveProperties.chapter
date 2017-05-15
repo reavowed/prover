@@ -1,0 +1,128 @@
+chapter Inductive Properties
+Some basic inductive properties of ℕ.
+
+theorem A Natural Number is Either 0 or a Successor
+premise ∈ n ℕ
+prove = 0 0
+prove ∨ = 0 0 ∃ m ∧ ∈ m ℕ = successor m 0
+assume ∧ ∈ x ℕ ∨ = x 0 ∃ m ∧ ∈ m ℕ = successor m x {
+  prove ∈ x ℕ
+  prove = successor x successor x
+  prove ∧ ∈ x ℕ = successor x successor x
+  prove ∃ m ∧ ∈ m ℕ = successor m successor x
+  prove ∨ = successor x 0 ∃ m ∧ ∈ m ℕ = successor m successor x
+}
+prove ∨ = n 0 ∃ m ∧ ∈ m ℕ = successor m n
+qed
+
+theorem Every Element of a Natural Number Is a Natural Number
+premise ∈ n ℕ
+prove ∀ x ¬ ∈ x ∅
+prove = 0 ∅
+prove ∀ x ¬ ∈ x 0
+prove ∀ x → ∈ x 0 ∈ x ℕ
+assume ∧ ∈ m ℕ ∀ x → ∈ x m ∈ x ℕ {
+  prove ∈ m ℕ
+  prove ∀ x → ∈ x m ∈ x ℕ
+  assume ∈ x m {
+    prove ∈ x ℕ
+  }
+  assume = x m {
+    prove ∈ x ℕ
+  }
+  assume ∈ x successor m {
+    prove ∨ ∈ x m = x m
+    prove ∈ x ℕ
+  }
+  prove → ∈ x successor m ∈ x ℕ
+  prove ∀ x → ∈ x successor m ∈ x ℕ
+}
+prove ∀ x → ∈ x n ∈ x ℕ
+qed
+
+theorem A Natural Number Either Is 0 or Contains 0
+premise ∈ n ℕ
+prove = 0 0
+prove ∨ = 0 0 ∈ 0 0
+assume ∧ ∈ m ℕ ∨ = m 0 ∈ 0 m {
+  prove ∨ = m 0 ∈ 0 m
+  assume = m 0 {
+    prove ∈ m successor m
+    prove ∈ 0 successor m
+  }
+  assume ∈ 0 m {
+    prove ∈ 0 successor m
+  }
+  prove ∈ 0 successor m
+  prove ∨ = successor m 0 ∈ 0 successor m
+}
+prove ∨ = n 0 ∈ 0 n
+qed
+
+theorem A Natural Number Either Contains Or Is The Successor of an Element
+premise ∈ n ℕ
+premise ∈ m n
+prove ∀ x ¬ ∈ x ∅
+prove = 0 ∅
+prove ∀ x ¬ ∈ x 0
+prove ∀ x → ∈ x 0 ∨ ∈ successor x 0 = successor x 0
+assume ∧ ∈ y ℕ ∀ x → ∈ x y ∨ ∈ successor x y = successor x y {
+  prove ∀ x → ∈ x y ∨ ∈ successor x y = successor x y
+  assume ∈ x successor y {
+    prove ∨ ∈ x y = x y
+    assume ∈ x y {
+      prove ∨ ∈ successor x y = successor x y
+      assume ∈ successor x y {
+        prove ∈ successor x successor y
+      }
+      assume = successor x y {
+        prove ∈ y successor y
+        prove ∈ successor x successor y
+      }
+      prove ∈ successor x successor y
+    }
+    assume = x y {
+      prove = successor x successor x
+      prove = successor x successor y
+    }
+    prove ∨ ∈ successor x successor y = successor x successor y
+  }
+  prove → ∈ x successor y ∨ ∈ successor x successor y = successor x successor y
+  prove ∀ x → ∈ x successor y ∨ ∈ successor x successor y = successor x successor y
+}
+prove ∀ x → ∈ x n ∨ ∈ successor x n = successor x n
+prove ∨ ∈ successor m n = successor m n
+qed
+
+theorem Natural Number Trichotomy
+premise ∈ n ℕ
+premise ∈ m ℕ
+prove ∨ = n 0 ∈ 0 n
+prove ∨ ∈ n 0 ∨ = n 0 ∈ 0 n
+assume ∧ ∈ x ℕ ∨ ∈ n x ∨ = n x ∈ x n {
+  prove ∨ ∈ n x ∨ = n x ∈ x n
+  assume ∈ n x {
+    prove ∈ n successor x
+    prove ∨ ∈ n successor x ∨ = n successor x ∈ successor x n
+  }
+  assume = n x {
+    prove ∈ n successor n
+    prove ∈ n successor x
+    prove ∨ ∈ n successor x ∨ = n successor x ∈ successor x n
+  }
+  assume ∈ x n {
+    prove ∨ ∈ successor x n = successor x n
+    prove ∨ = successor x n ∈ successor x n
+    assume = successor x n {
+      prove = n successor x
+    }
+    prove ∨ = n successor x ∈ successor x n
+    prove ∨ ∈ n successor x ∨ = n successor x ∈ successor x n
+  }
+  assume ∨ = n x ∈ x n {
+    prove ∨ ∈ n successor x ∨ = n successor x ∈ successor x n
+  }
+  prove ∨ ∈ n successor x ∨ = n successor x ∈ successor x n
+}
+prove ∨ ∈ n m ∨ = n m ∈ m n
+qed

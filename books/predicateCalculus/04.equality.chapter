@@ -81,3 +81,19 @@ assume ∧ = x y = x z {
 prove ¬ ∧ = x y = x z
 prove ⊕ = x y = x z
 qed
+
+theorem Proof by Renamed Set
+premise proves = a x φ
+prove ∃ y = y x
+prove φ
+qed
+
+theorem Proof by Existence of Renamed Set
+premise proves = a x φ
+assume = a x {
+  prove φ
+  prove ∃ b sub b a φ
+}
+prove ∃ y = y x
+prove ∃ b sub b a φ
+qed

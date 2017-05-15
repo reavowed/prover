@@ -1,11 +1,12 @@
 Natural Numbers
-import Functions
+import Set Theory
 
-variables () (n n' m m' x x' y y' X Y s S t T f g F)
+variables (φ) (n m x y X S)
 
 include 01.successors.chapter
 include 02.inductiveSets.chapter
 include 03.definitionOfNaturals.chapter
 include 04.literals.chapter
 include 05.induction.chapter
-include 06.successorFunction.chapter
+include 06.inductiveProperties.chapter
+# include 06.successorFunction.chapter

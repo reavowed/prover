@@ -1,0 +1,19 @@
+chapter Intersections
+Arbitrary and binary intersections.
+
+theorem Intersection over a Class
+premise ∃ X φ
+assume sub Y X φ {
+  assume ∀ X → φ ∈ y X {
+    prove ∈ y Y
+  }
+  prove ↔ ∧ ∈ y Y ∀ X → φ ∈ y X ∀ X → φ ∈ y X
+  prove ∀ y ↔ ∧ ∈ y Y ∀ X → φ ∈ y X ∀ X → φ ∈ y X
+  assume = S comprehension x Y ∀ X → φ ∈ x X {
+    prove ∀ y ↔ ∈ y S ∧ ∈ y Y ∀ X → φ ∈ y X
+    prove ∀ y ↔ ∈ y S ∀ X → φ ∈ y X
+  }
+  prove ∃ Z ∀ y ↔ ∈ y Z ∀ X → φ ∈ y X
+}
+prove ∃ Z ∀ y ↔ ∈ y Z ∀ X → φ ∈ y X
+qed

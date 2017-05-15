@@ -3,7 +3,7 @@ Define the power set of a set - the set of all its subsets.
 
 axiom Axiom of Power Set
 conclusion ∃ Z ∀ Y ↔ ∈ Y Z ⊆ Y X
-distinct-variables (Z Y X, Y Z X)
+distinct-variables (Z Y, Z X, Y X)
 
 theorem Power Sets Are Unique
 prove ∃ Z ∀ Y ↔ ∈ Y Z ⊆ Y X

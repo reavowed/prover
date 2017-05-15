@@ -41,3 +41,24 @@ theorem Disjoined Conjuct Equivalence
 premise ¬ φ
 prove ↔ ∨ ∧ φ ψ ∧ ¬ φ χ χ
 qed
+
+comment Some tricks to simplify redundant statements.
+
+theorem Redundant And
+premise proves φ ψ
+assume ∧ φ ψ {
+  prove φ
+}
+assume φ {
+  prove ψ
+  prove ∧ φ ψ
+}
+prove ↔ ∧ φ ψ φ
+qed
+
+theorem Redundant And
+premise proves φ ψ
+prove ↔ ∧ φ ψ φ
+prove ↔ ∧ φ ψ ∧ ψ φ
+prove ↔ ∧ ψ φ φ
+qed

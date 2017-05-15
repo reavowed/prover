@@ -1,0 +1,29 @@
+chapter Successors
+Define the successor pseudo-function, successor(n), which will form the basis of our inductive definition of the natural numbers.
+
+term successor (n) format (successor(n)) (= _ ∪ n singleton n)
+
+theorem Characterise Element of Successor
+premise ∈ m successor n
+prove = successor n ∪ n singleton n
+prove ∈ m ∪ n singleton n
+prove ∨ ∈ m n ∈ m singleton n
+assume ∈ m singleton n {
+  prove = m n
+}
+prove ∨ ∈ m n = m n
+qed
+
+theorem A Set Is an Element of Its Successor
+prove = successor n ∪ n singleton n
+prove ∈ n singleton n
+prove ∈ n ∪ n singleton n
+prove ∈ n successor n
+qed
+
+theorem An Element of a Set Is an Element of Its Successor
+premise ∈ m n
+prove = successor n ∪ n singleton n
+prove ∈ m ∪ n singleton n
+prove ∈ m successor n
+qed

@@ -1,0 +1,24 @@
+chapter Natural Number Literals
+Define some literal natural numbers - 0, 1, 2, etc.
+
+term 0 () (= _ ∅)
+
+theorem 0 Is a Natural Number
+prove = 0 ∅
+assume inductive X {
+  prove ∈ ∅ X
+  prove ∈ 0 X
+}
+prove → inductive X ∈ 0 X
+prove ∀ X → inductive X ∈ 0 X
+prove ∈ 0 ℕ
+qed
+
+term 1 () (= _ successor 0)
+
+theorem 1 Is a Natural Number
+prove ∈ 0 ℕ
+prove ∈ successor 0 ℕ
+prove = 1 successor 0
+prove ∈ 1 ℕ
+qed

@@ -1,0 +1,77 @@
+chapter Unions
+Arbitrary and binary unions of sets.
+
+axiom Axiom of Union
+conclusion ∀ X ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
+
+theorem Arbitrary Unions are Unique
+prove ∀ X ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
+prove ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
+prove ∃! Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
+qed
+
+term union (X)
+  name (Arbitrary Union)
+  format (⋃X)
+  (∀ y ↔ ∈ y _ ∃ x ∧ ∈ y x ∈ x X)
+
+term ∪ (X Y)
+  (= _ union pair X Y)
+
+theorem Membership Condition for Binary Union
+prove = ∪ X Y union pair X Y
+prove ∀ y ↔ ∈ y union pair X Y ∃ x ∧ ∈ y x ∈ x pair X Y
+prove ∀ y ↔ ∈ y ∪ X Y ∃ x ∧ ∈ y x ∈ x pair X Y
+assume ∧ ∈ y x ∈ x pair X Y {
+  prove ∈ y x
+  prove ∈ x pair X Y
+  prove ∨ = x X = x Y
+  assume = x X {
+    prove ∈ y X
+  }
+  assume = x Y {
+    prove ∈ y Y
+  }
+  prove ∨ ∈ y X ∈ y Y
+}
+assume ∃ x ∧ ∈ y x ∈ x pair X Y {
+  prove ∨ ∈ y X ∈ y Y
+}
+assume ∈ y X {
+  prove ∈ X pair X Y
+  prove ∧ ∈ y X ∈ X pair X Y
+  prove ∃ x ∧ ∈ y x ∈ x pair X Y
+}
+assume ∈ y Y {
+  prove ∈ Y pair X Y
+  prove ∧ ∈ y Y ∈ Y pair X Y
+  prove ∃ x ∧ ∈ y x ∈ x pair X Y
+}
+assume ∨ ∈ y X ∈ y Y {
+  prove ∃ x ∧ ∈ y x ∈ x pair X Y
+}
+prove ↔ ∃ x ∧ ∈ y x ∈ x pair X Y ∨ ∈ y X ∈ y Y
+prove ∀ y ↔ ∃ x ∧ ∈ y x ∈ x pair X Y ∨ ∈ y X ∈ y Y
+prove ∀ y ↔ ∈ y ∪ X Y ∨ ∈ y X ∈ y Y
+qed
+
+theorem Characterise Element of Binary Union
+premise ∈ x ∪ X Y
+prove ∀ x ↔ ∈ x ∪ X Y ∨ ∈ x X ∈ x Y
+prove ∨ ∈ x X ∈ x Y
+qed
+
+theorem Element Transfers to Binary Union
+premise ∈ x X
+prove ∀ y ↔ ∈ y ∪ X Y ∨ ∈ y X ∈ y Y
+prove ∨ ∈ x X ∈ x Y
+prove ∈ x ∪ X Y
+qed
+
+theorem Element Transfers to Binary Union
+premise ∈ y Y
+prove ∀ y ↔ ∈ y ∪ X Y ∨ ∈ y X ∈ y Y
+prove ∨ ∈ y X ∈ y Y
+prove ∈ y ∪ X Y
+qed
+

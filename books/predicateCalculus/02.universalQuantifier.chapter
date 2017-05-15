@@ -16,7 +16,7 @@ conclusion sub y x φ
 theorem Generalization
 premise φ
 prove sub y x φ
-prove ∀ x φ arbitrary-variables (x) distinct-variables ()
+prove ∀ x φ non-distinct (x φ)
 qed
 
 inference-transform (∀ x _) ()

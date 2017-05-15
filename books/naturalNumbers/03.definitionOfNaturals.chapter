@@ -1,0 +1,42 @@
+chapter Definition of the Natural Numbers
+Define the set of natural numbers, ℕ.
+
+axiom Axiom of Infinity
+conclusion ∃ X inductive X
+
+theorem The Natural Numbers Exist
+prove ∃ X inductive X
+prove ∃ S ∀ n ↔ ∈ n S ∀ X → inductive X ∈ n X
+prove ∃! S ∀ n ↔ ∈ n S ∀ X → inductive X ∈ n X
+qed
+
+term ℕ ()
+  (∀ n ↔ ∈ n _ ∀ X → inductive X ∈ n X)
+  distinct-variables (n X)
+
+theorem An Element of All Inductive Sets Is a Natural Number
+premise ∀ X → inductive X ∈ n X
+prove ∀ n ↔ ∈ n ℕ ∀ X → inductive X ∈ n X
+prove ∈ n ℕ
+qed
+
+theorem A Natural Number is an Element of Any Inductive Set
+premise ∈ n ℕ
+premise inductive X
+prove ∀ n ↔ ∈ n ℕ ∀ X → inductive X ∈ n X
+prove ∀ X → inductive X ∈ n X
+prove ∈ n X
+qed
+
+theorem A Successor of a Natural Number Is a Natural Number
+premise ∈ n ℕ
+assume inductive X {
+  prove ∈ n X
+  prove ∧ ∈ ∅ X ∀ n → ∈ n X ∈ successor n X
+  prove ∀ n → ∈ n X ∈ successor n X
+  prove ∈ successor n X
+}
+prove → inductive X ∈ successor n X
+prove ∀ X → inductive X ∈ successor n X
+prove ∈ successor n ℕ
+qed

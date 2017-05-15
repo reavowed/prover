@@ -28,7 +28,7 @@ premise ∃ x φ
 premise proves φ ψ
 assume ¬ ψ {
   prove ¬ φ
-  prove ∀ x ¬ φ arbitrary-variables (x) distinct-variables (x ψ)
+  prove ∀ x ¬ φ non-distinct (x φ)
   prove ¬ ∀ x ¬ φ
 }
 prove ψ

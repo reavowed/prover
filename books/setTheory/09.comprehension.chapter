@@ -76,3 +76,45 @@ prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
 qed
 
 term comprehension (x X φ) format ({x ∈ X | φ}) (∀ y ↔ ∈ y _ ∧ ∈ y X sub y x φ)
+
+theorem Membership Condition for a Comprehension
+premise = S comprehension x X φ
+prove ∀ y ↔ ∈ y comprehension x X φ ∧ ∈ y X sub y x φ
+prove ∀ y ↔ ∈ y S ∧ ∈ y X sub y x φ
+qed
+
+theorem An Element of a Comprehension Is an Element of Its Domain
+premise = S comprehension x X φ
+premise ∈ y S
+prove ∈ y comprehension x X φ
+prove ∀ y ↔ ∈ y comprehension x X φ ∧ ∈ y X sub y x φ
+prove ∧ ∈ y X sub y x φ
+prove ∈ y X
+qed
+
+theorem An Element of a Comprehension Satisfies Its Condition
+premise = S comprehension x X φ
+premise ∈ y S
+prove ∀ y ↔ ∈ y S ∧ ∈ y X sub y x φ
+prove  ∧ ∈ y X sub y x φ
+prove sub y x φ
+qed
+
+theorem A Comprehension Is a Subset of Its Domain
+premise = S comprehension x X φ
+assume ∈ y S {
+  prove ∈ y X
+}
+prove → ∈ y S ∈ y X
+prove ∀ y → ∈ y S ∈ y X
+prove ⊆ S X
+qed
+
+theorem Element of a Comprehension
+premise = S comprehension x X φ
+premise ∈ y X
+premise sub y x φ
+prove ∀ y ↔ ∈ y S ∧ ∈ y X sub y x φ
+prove ∧ ∈ y X sub y x φ
+prove ∈ y S
+qed

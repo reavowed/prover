@@ -1,0 +1,97 @@
+chapter Induction
+Proof by induction.
+
+theorem ℕ is a Subset of Any Inductive Set
+premise inductive X
+assume ∈ n ℕ {
+  prove ∈ n X
+}
+prove → ∈ n ℕ ∈ n X
+prove ∀ n → ∈ n ℕ ∈ n X
+prove ⊆ ℕ X
+qed
+
+theorem An Inductive Subset of ℕ is ℕ
+premise ⊆ S ℕ
+premise inductive S
+prove ⊆ ℕ S
+prove = S ℕ
+qed
+
+theorem Proof by Induction
+premise ⊆ S ℕ
+premise ∈ 0 S
+premise proves ∈ n S ∈ successor n S
+prove → ∈ n S ∈ successor n S
+prove ∀ n → ∈ n S ∈ successor n S
+prove = 0 ∅
+prove ∈ ∅ S
+prove ∧ ∈ ∅ S ∀ n → ∈ n S ∈ successor n S
+prove inductive S
+prove ⊆ S ℕ
+prove = S ℕ
+qed
+
+theorem Proof by Induction over Comprehension
+premise = S comprehension n ℕ φ
+premise ∈ 0 S
+premise proves ∈ m S ∈ successor m S
+prove ⊆ S ℕ
+prove = S ℕ
+qed
+
+theorem 0 as Element of a Comprehension over ℕ
+premise = S comprehension n ℕ φ
+premise sub 0 n φ
+prove ∈ 0 ℕ
+prove ∈ 0 S
+qed
+
+theorem Successor as Element of a Comprehension over ℕ
+premise = S comprehension n ℕ φ
+premise ∈ m S
+premise sub successor m n φ
+prove ∈ m ℕ
+prove ∈ successor m ℕ
+prove ∈ successor m S
+qed
+
+theorem An Inductive Property Holds for All Natural Numbers
+premise proves = S comprehension n ℕ φ = S ℕ
+assume = S comprehension n ℕ φ {
+  prove = S ℕ
+  assume ∈ m ℕ {
+    prove ∈ m S
+    prove sub m n φ
+  }
+  prove → ∈ m ℕ sub m n φ
+  prove ∀ n → ∈ n ℕ φ
+}
+prove ∀ n → ∈ n ℕ φ
+qed
+
+theorem Proof by Induction on Property
+premise sub 0 n φ
+premise proves ∧ ∈ m ℕ sub m n φ sub successor m n φ
+assume = S comprehension n ℕ φ {
+  prove ∈ 0 S
+  assume ∈ m S {
+    prove ∈ m ℕ
+    prove sub m n φ
+    prove ∧ ∈ m ℕ sub m n φ
+    prove sub successor m n φ
+    prove ∈ successor m S
+  }
+  prove = S ℕ
+}
+prove ∀ n → ∈ n ℕ φ
+qed
+
+theorem An Inductive Property Applies to Any Natural Number
+premise ∈ n ℕ
+premise sub 0 n φ
+premise proves ∧ ∈ m ℕ sub m n φ sub successor m n φ
+prove ∀ n → ∈ n ℕ φ
+prove → ∈ n ℕ φ
+prove φ non-distinct (n φ)
+qed
