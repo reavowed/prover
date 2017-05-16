@@ -246,11 +246,7 @@ case class DefinedStatement(
   }
 
   override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Statement] = {
-    if (localBoundVariables.contains(termToBeReplaced))
-      None
-    else if (termToReplaceWith.allVariables.termVariables.intersect(localBoundVariables).nonEmpty)
-      None
-    else for {
+    for {
       updatedSubcomponents <- subcomponents
         .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables))
         .traverseOption

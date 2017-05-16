@@ -63,6 +63,16 @@ class StatementSpec extends ProverSpec {
       SubstitutedStatementVariable(φ, y, x).applySubstitutions(substitutions) must
         beSome(Implication(SubstitutedStatementVariable(φ, y, z), SubstitutedStatementVariable(ψ, y, z)))
     }
+
+    "allow substituting a term into a statement in which a variable of that term is bound" in {
+      val substitutions = Substitutions(
+        Map(φ -> ForAll(x, Equals(z, OrderedPair(x, y)))),
+        Map(x -> z, y -> OrderedPair(x, y)),
+        DistinctVariables.empty)
+
+      SubstitutedStatementVariable(φ, y, x).applySubstitutions(substitutions) must
+        beSome(ForAll(x, Equals(OrderedPair(x, y), OrderedPair(x, y))))
+    }
   }
 
   "statement match" should {

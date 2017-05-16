@@ -100,12 +100,21 @@ trait ProverSpec extends Specification {
     ForAll(y, Equivalence(ElementOf(Y, PlaceholderTerm), φ)),
     DistinctVariables.empty)
 
+  val OrderedPair = TermDefinition(
+    "orderedPair",
+    Seq(x, y),
+    "Ordered Pair",
+    Format("(%0, %1)", requiresBrackets = false),
+    Nil,
+    φ,
+    DistinctVariables.empty)
+
   val statementDefinitions = Seq(
     Implication, Negation, Conjunction, Disjunction, Equivalence,
     ForAll, Exists, ExistsUnique,
     ElementOf, Equals)
 
-  val termDefinitions = Seq(EmptySetDefinition, Comprehension, PowerSet)
+  val termDefinitions = Seq(EmptySetDefinition, Comprehension, PowerSet, OrderedPair)
 
   val baseContext = Context.empty.copy(variables = Variables(
     Set(φ, ψ, χ),
