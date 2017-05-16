@@ -20,7 +20,7 @@ prove ∀ n ↔ ∈ n ℕ ∀ X → inductive X ∈ n X
 prove ∈ n ℕ
 qed
 
-theorem A Natural Number is an Element of Any Inductive Set
+theorem A Natural Number Is an Element of Any Inductive Set
 premise ∈ n ℕ
 premise inductive X
 prove ∀ n ↔ ∈ n ℕ ∀ X → inductive X ∈ n X

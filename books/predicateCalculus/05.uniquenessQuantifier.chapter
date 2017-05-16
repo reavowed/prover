@@ -15,7 +15,7 @@ prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
 prove ∃! x φ
 qed
 
-theorem Every Set is Unique
+theorem Every Set Is Unique
 prove ∃ y = y x
 assume ∧ = y x = z x {
   prove = y x

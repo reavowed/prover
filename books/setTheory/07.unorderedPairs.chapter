@@ -107,3 +107,29 @@ prove ∈ b singleton x
 prove = b x
 prove ∧ = a x = b x
 qed
+
+theorem Unordered Pair Is Subset
+premise ∈ x X
+premise ∈ y X
+prove ∀ z ↔ ∈ z pair x y ∨ = z x = z y
+assume = z x {
+  prove ∈ z X
+}
+assume = z y {
+  prove ∈ z X
+}
+assume ∨ = z x = z y {
+  prove ∈ z X
+}
+prove → ∨ = z x = z y ∈ z X
+prove ∀ z → ∨ = z x = z y ∈ z X
+prove ∀ z → ∈ z pair x y ∈ z X
+prove ⊆ pair x y X
+qed
+
+theorem Unordered Pair Is Element of Power Set
+premise ∈ x X
+premise ∈ y X
+prove ⊆ pair x y X
+prove ∈ pair x y powerSet X
+qed

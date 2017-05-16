@@ -3,7 +3,7 @@ Introduce the subset relation, ⊆.
 
 statement ⊆ (Y X) definition (∀ x → ∈ x Y ∈ x X)
 
-theorem Subset is Antisymmetric
+theorem Subset Is Antisymmetric
 premise ⊆ X Y
 premise ⊆ Y X
 prove ∀ x → ∈ x X ∈ x Y

@@ -44,7 +44,7 @@ prove ∀ z ↔ = z x = z y
 prove = x y
 qed
 
-theorem Singleton is Subset if Set is Element
+theorem Singleton Is Subset
 premise ∈ x X
 prove ∀ y ↔ ∈ y singleton x = y x
 assume = y x {
@@ -56,7 +56,13 @@ prove ∀ y → ∈ y singleton x ∈ y X
 prove ⊆ singleton x X
 qed
 
-theorem A Singleton is Not the Empty Set
+theorem Singleton Is in Power Set
+premise ∈ x X
+prove ⊆ singleton x X
+prove ∈ singleton x powerSet X
+qed
+
+theorem A Singleton Is Not the Empty Set
 prove ∈ x singleton x
 prove ¬ = singleton x ∅
 qed

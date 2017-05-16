@@ -1,7 +1,7 @@
 chapter Induction
 Proof by induction.
 
-theorem ℕ is a Subset of Any Inductive Set
+theorem ℕ Is a Subset of Any Inductive Set
 premise inductive X
 assume ∈ n ℕ {
   prove ∈ n X
@@ -11,7 +11,7 @@ prove ∀ n → ∈ n ℕ ∈ n X
 prove ⊆ ℕ X
 qed
 
-theorem An Inductive Subset of ℕ is ℕ
+theorem An Inductive Subset of ℕ Is ℕ
 premise ⊆ S ℕ
 premise inductive S
 prove ⊆ ℕ S

@@ -74,4 +74,3 @@ prove ∀ y ↔ ∈ y ∪ X Y ∨ ∈ y X ∈ y Y
 prove ∨ ∈ y X ∈ y Y
 prove ∈ y ∪ X Y
 qed
-

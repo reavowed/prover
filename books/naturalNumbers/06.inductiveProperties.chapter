@@ -1,7 +1,7 @@
 chapter Inductive Properties
 Some basic inductive properties of ℕ.
 
-theorem A Natural Number is Either 0 or a Successor
+theorem A Natural Number Is Either 0 or a Successor
 premise ∈ n ℕ
 prove = 0 0
 prove ∨ = 0 0 ∃ m ∧ ∈ m ℕ = successor m 0
