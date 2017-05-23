@@ -4,7 +4,7 @@ Arbitrary and binary unions of sets.
 axiom Axiom of Union
 conclusion ∀ X ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
 
-theorem Arbitrary Unions are Unique
+theorem Arbitrary Unions Are Unique
 prove ∀ X ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
 prove ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
 prove ∃! Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
@@ -73,4 +73,31 @@ premise ∈ y Y
 prove ∀ y ↔ ∈ y ∪ X Y ∨ ∈ y X ∈ y Y
 prove ∨ ∈ y X ∈ y Y
 prove ∈ y ∪ X Y
+qed
+
+theorem The Empty Set Is an Identity for Binary Union
+prove ∀ x ↔ ∈ x ∪ ∅ X ∨ ∈ x ∅ ∈ x X
+prove ∀ x ¬ ∈ x ∅
+prove ∀ x ↔ ∨ ∈ x ∅ ∈ x X ∈ x X
+prove ∀ x ↔ ∈ x ∪ ∅ X ∈ x X
+prove = ∪ ∅ X X
+qed
+
+theorem The Empty Set Is an Identity for Binary Union
+prove ∀ x ↔ ∈ x ∪ X ∅ ∨ ∈ x X ∈ x ∅
+prove ∀ x ¬ ∈ x ∅
+prove ∀ x ↔ ∨ ∈ x X ∈ x ∅ ∈ x X
+prove ∀ x ↔ ∈ x ∪ X ∅ ∈ x X
+prove = ∪ X ∅ X
+qed
+
+theorem A Union of a Non-Empty Set Is Non-Empty
+premise ¬ = X ∅
+prove ∃ x ∈ x X
+assume ∈ x X {
+  prove ∈ x ∪ X Y
+  prove ∃ x ∈ x ∪ X Y
+}
+prove ∃ x ∈ x ∪ X Y
+prove ¬ = ∪ X Y ∅
 qed

@@ -34,10 +34,27 @@ assume ¬ ψ {
 prove ψ
 qed
 
+theorem Not Exists Not Is For All
+premise ¬ ∃ x ¬ φ
+assume ¬ sub y x φ {
+  prove ∃ x ¬ φ
+}
+prove sub y x φ
+prove ∀ x φ
+qed
+
 theorem Not Exists Is For All Not
 premise ¬ ∃ x φ
 assume ¬ ∀ x ¬ φ {
   prove ∃ x φ
 }
 prove ∀ x ¬ φ
+qed
+
+theorem For All Not Is Not Exists
+premise ∀ x ¬ φ
+assume ∃ x φ {
+  prove ¬ ∀ x ¬ φ
+}
+prove ¬ ∃ x φ
 qed

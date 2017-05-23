@@ -27,3 +27,29 @@ prove = successor n ∪ n singleton n
 prove ∈ m ∪ n singleton n
 prove ∈ m successor n
 qed
+
+theorem Successors Are Non-Empty
+prove ∈ n successor n
+prove ¬ = successor n ∅
+qed
+
+theorem Successors Are Unique
+premise = successor n successor m
+prove ∈ n successor n
+prove ∈ n successor m
+prove ∨ ∈ n m = n m
+prove ∈ m successor m
+prove ∈ m successor n
+prove ∨ ∈ m n = m n
+assume = m n {
+  prove = n m
+}
+prove ∨ ∈ m n = n m
+assume ¬ = n m {
+  prove ∈ n m
+  prove ∈ m n
+  prove ∧ ∈ n m ∈ m n
+  prove ¬ ∧ ∈ n m ∈ m n
+}
+prove = n m
+qed

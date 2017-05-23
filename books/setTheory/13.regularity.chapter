@@ -1,0 +1,52 @@
+chapter Regularity
+Introduce the Axiom of Regularity.
+
+axiom Axiom of Regularity
+conclusion ∀ x → ¬ = x ∅ ∃ y ∧ ∈ y x = ∩ y x ∅
+
+theorem Regularity
+premise ¬ = x ∅
+prove ∀ x → ¬ = x ∅ ∃ y ∧ ∈ y x = ∩ y x ∅
+prove ∃ y ∧ ∈ y x = ∩ y x ∅
+qed
+
+theorem No Set Contains Itself
+prove ¬ = singleton x ∅
+prove ∃ y ∧ ∈ y singleton x = ∩ y singleton x ∅
+assume ∧ ∈ y singleton x = ∩ y singleton x ∅ {
+  prove ∈ y singleton x
+  prove = ∩ y singleton x ∅
+  prove = y x
+  prove = ∩ x singleton x ∅
+}
+prove = ∩ x singleton x ∅
+prove ∈ x singleton x
+prove ¬ ∈ x x
+qed
+
+theorem No Two Sets Contain Each Other
+prove ¬ = pair x y ∅
+prove ∃ z ∧ ∈ z pair x y = ∩ z pair x y ∅
+assume ∧ ∈ z pair x y = ∩ z pair x y ∅ {
+  prove ∈ z pair x y
+  prove = ∩ z pair x y ∅
+  prove ∨ = z x = z y
+  assume = z x {
+    prove = ∩ x pair x y ∅
+    prove ∈ y pair x y
+    prove ¬ ∈ y x
+  }
+  assume = z y {
+    prove = ∩ y pair x y ∅
+    prove ∈ x pair x y
+    prove ¬ ∈ x y
+  }
+  prove ∨ ¬ ∈ y x ¬ ∈ x y
+}
+prove ∨ ¬ ∈ y x ¬ ∈ x y
+qed
+
+theorem No Two Sets Contain Each Other
+prove ∨ ¬ ∈ y x ¬ ∈ x y
+prove ¬ ∧ ∈ y x ∈ x y
+qed

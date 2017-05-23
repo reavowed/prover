@@ -62,3 +62,26 @@ prove ↔ ∧ φ ψ φ
 prove ↔ ∧ φ ψ ∧ ψ φ
 prove ↔ ∧ ψ φ φ
 qed
+
+theorem Redundant Or
+premise ¬ φ
+assume ∨ φ ψ {
+  prove ψ
+}
+assume ψ {
+  prove ∨ φ ψ
+}
+prove ↔ ∨ φ ψ ψ
+qed
+
+theorem Redundant Or
+premise ¬ ψ
+assume ∨ φ ψ {
+  prove φ
+}
+assume φ {
+  prove ∨ φ ψ
+}
+prove ↔ ∨ φ ψ φ
+qed
+

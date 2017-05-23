@@ -1,7 +1,7 @@
 Natural Numbers
-import Set Theory
+import Functions
 
-variables (φ) (n m x y X S)
+variables (φ) (n m x y a b X S f)
 
 include 01.successors.chapter
 include 02.inductiveSets.chapter
@@ -9,4 +9,4 @@ include 03.definitionOfNaturals.chapter
 include 04.literals.chapter
 include 05.induction.chapter
 include 06.inductiveProperties.chapter
-# include 06.successorFunction.chapter
+include 07.successorFunction.chapter

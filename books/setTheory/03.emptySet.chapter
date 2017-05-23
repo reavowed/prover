@@ -24,6 +24,11 @@ qed
 
 term ∅ () (∀ x ¬ ∈ x _)
 
+theorem The Empty Set Has No Elements
+prove ∀ x ¬ ∈ x ∅
+prove ¬ ∃ x ∈ x ∅
+qed
+
 theorem A Set with No Elements Is the Empty Set
 premise ∀ y ¬ ∈ y x
 prove ∀ y ¬ ∈ y ∅
@@ -37,13 +42,26 @@ prove = x ∅
 qed
 
 theorem A Set with an Element Is Not the Empty Set
-premise ∈ y x
+premise ∃ y ∈ y x
 assume = x ∅ {
-  prove ∈ y ∅
-  prove ∀ y ¬ ∈ y ∅
-  prove ¬ ∈ y ∅
+  prove ∃ y ∈ y ∅
+  prove ¬ ∃ y ∈ y ∅
 }
 prove ¬ = x ∅
+qed
+
+theorem A Set with an Element Is Not the Empty Set
+premise ∈ y x
+prove ∃ y ∈ y x
+prove ¬ = x ∅
+qed
+
+theorem A Set That Is Not the Empty Set Has an Element
+premise ¬ = x ∅
+assume ¬ ∃ y ∈ y x {
+  prove = x ∅
+}
+prove ∃ y ∈ y x
 qed
 
 theorem The Empty Set Is a Subset of Any Set

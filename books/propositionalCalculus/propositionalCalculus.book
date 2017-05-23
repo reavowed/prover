@@ -8,4 +8,5 @@ include 03.disjunction.chapter
 include 04.equivalence.chapter
 include 05.exclusiveOr.chapter
 include 06.identities.chapter
-include 07.inferences.chapter
+include 07.deMorgansLaws.chapter
+include 08.inferences.chapter

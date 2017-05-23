@@ -3,17 +3,101 @@ Arbitrary and binary intersections.
 
 theorem Intersection over a Class
 premise ∃ X φ
-assume sub Y X φ {
+assume sub Z X φ {
   assume ∀ X → φ ∈ y X {
-    prove ∈ y Y
+    prove ∈ y Z
   }
-  prove ↔ ∧ ∈ y Y ∀ X → φ ∈ y X ∀ X → φ ∈ y X
-  prove ∀ y ↔ ∧ ∈ y Y ∀ X → φ ∈ y X ∀ X → φ ∈ y X
-  assume = S comprehension x Y ∀ X → φ ∈ x X {
-    prove ∀ y ↔ ∈ y S ∧ ∈ y Y ∀ X → φ ∈ y X
+  prove ↔ ∧ ∈ y Z ∀ X → φ ∈ y X ∀ X → φ ∈ y X
+  prove ∀ y ↔ ∧ ∈ y Z ∀ X → φ ∈ y X ∀ X → φ ∈ y X
+  assume = S comprehension x Z ∀ X → φ ∈ x X {
+    prove ∀ y ↔ ∈ y S ∧ ∈ y Z ∀ X → φ ∈ y X
     prove ∀ y ↔ ∈ y S ∀ X → φ ∈ y X
   }
-  prove ∃ Z ∀ y ↔ ∈ y Z ∀ X → φ ∈ y X
+  prove ∃ Y ∀ y ↔ ∈ y Y ∀ X → φ ∈ y X
 }
-prove ∃ Z ∀ y ↔ ∈ y Z ∀ X → φ ∈ y X
+prove ∃ Y ∀ y ↔ ∈ y Y ∀ X → φ ∈ y X
+qed
+
+theorem Arbitrary Intersections Are Unique
+premise ¬ = X ∅
+prove ∃ x ∈ x X
+prove ∃ Y ∀ y ↔ ∈ y Y ∀ x → ∈ x X ∈ y x
+prove ∃! Y ∀ y ↔ ∈ y Y ∀ x → ∈ x X ∈ y x
+qed
+
+term intersection (X)
+  name (Arbitrary Intersection)
+  format (⋂X)
+  premises (¬ = X ∅)
+  (∀ y ↔ ∈ y _ ∀ x → ∈ x X ∈ y x)
+
+term ∩ (X Y)
+  (= _ intersection pair X Y)
+
+theorem Membership Condition for Binary Intersection
+prove ∈ X pair X Y
+prove ¬ = pair X Y ∅
+prove ∀ y ↔ ∈ y intersection pair X Y ∀ x → ∈ x pair X Y ∈ y x
+assume ∀ x → ∈ x pair X Y ∈ y x {
+  prove ∈ X pair X Y
+  prove ∈ y X
+  prove ∈ Y pair X Y
+  prove ∈ y Y
+  prove ∧ ∈ y X ∈ y Y
+}
+assume ∧ ∈ y X ∈ y Y {
+  prove ∈ y X
+  prove ∈ y Y
+  assume = x X {
+    prove ∈ y x
+  }
+  assume = x Y {
+    prove ∈ y x
+  }
+  assume ∨ = x X = x Y {
+    prove ∈ y x
+  }
+  prove ∀ x → ∨ = x X = x Y ∈ y x
+  prove ∀ x ↔ ∈ x pair X Y ∨ = x X = x Y
+  prove ∀ x → ∈ x pair X Y ∈ y x
+}
+prove ↔ ∀ x → ∈ x pair X Y ∈ y x ∧ ∈ y X ∈ y Y
+prove ∀ y ↔ ∀ x → ∈ x pair X Y ∈ y x ∧ ∈ y X ∈ y Y
+prove ∀ y ↔ ∈ y intersection pair X Y ∧ ∈ y X ∈ y Y
+prove = ∩ X Y intersection pair X Y
+prove ∀ y ↔ ∈ y ∩ X Y ∧ ∈ y X ∈ y Y
+qed
+
+theorem Binary Intersection Is Symmetric
+prove ∀ y ↔ ∈ y ∩ X Y ∧ ∈ y X ∈ y Y
+prove ∀ y ↔ ∈ y ∩ Y X ∧ ∈ y Y ∈ y X
+prove ∀ y ↔ ∧ ∈ y X ∈ y Y ∧ ∈ y Y ∈ y X
+prove = ∩ X Y ∩ Y X
+qed
+
+
+theorem An Element of Two Sets Is an Element of Their Intersection
+premise ∈ x X
+premise ∈ x Y
+prove ∀ x ↔ ∈ x ∩ X Y ∧ ∈ x X ∈ x Y
+prove ∧ ∈ x X ∈ x Y
+prove ∈ x ∩ X Y
+qed
+
+theorem A Set Can Only Be an Element of One of a Disjoint Pair
+premise = ∩ X Y ∅
+premise ∈ x X
+assume ∈ x Y {
+  prove ∈ x ∩ X Y
+  prove ¬ = ∩ X Y ∅
+}
+prove ¬ ∈ x Y
+qed
+
+theorem A Set Can Only Be an Element of One of a Disjoint Pair
+premise = ∩ X Y ∅
+premise ∈ y Y
+prove = ∩ X Y ∩ Y X
+prove = ∩ Y X ∅
+prove ¬ ∈ y X
 qed

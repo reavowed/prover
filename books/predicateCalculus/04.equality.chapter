@@ -17,7 +17,7 @@ prove = x x
 prove = y x
 qed
 
-theorem Substitution of Equals (Reverse)
+theorem Substitution of Equals
 premise = x y
 premise sub y z φ
 prove = y x

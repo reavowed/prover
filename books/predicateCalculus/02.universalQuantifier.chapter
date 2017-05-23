@@ -27,3 +27,9 @@ premise ∀ x φ
 prove sub y x φ
 prove ∀ y sub y x φ
 qed
+
+theorem Generalized Deduction
+premise proves φ ψ
+prove → φ ψ
+prove ∀ x → φ ψ non-distinct (x φ, x ψ)
+qed

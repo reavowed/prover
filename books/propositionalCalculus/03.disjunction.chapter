@@ -69,6 +69,20 @@ prove ∨ ψ φ
 prove φ
 qed
 
+theorem One Disjunct Must Be True
+premise ∨ ¬ φ ψ
+premise φ
+prove ¬ ¬ φ
+prove ψ
+qed
+
+theorem One Disjunct Must Be True
+premise ∨ φ ¬ ψ
+premise ψ
+prove ¬ ¬ ψ
+prove φ
+qed
+
 theorem Disjunction of Two Falsehoods Is False
 premise ¬ φ
 premise ¬ ψ

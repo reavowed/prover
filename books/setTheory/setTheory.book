@@ -15,3 +15,4 @@ include 09.comprehension.chapter
 include 10.unions.chapter
 include 11.intersections.chapter
 include 12.cartesianProduct.chapter
+include 13.regularity.chapter

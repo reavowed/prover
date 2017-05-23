@@ -39,14 +39,68 @@ prove ∀ z ↔ ∧ ∈ z powerSet powerSet ∪ X Y ∃ x ∧ ∈ x X ∃ y ∧ 
 prove ∀ z ↔ ∈ z × X Y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y
 qed
 
+theorem Membership Condition for Cartesian Product
+assume ∈ orderedPair x y × X Y {
+  prove ∀ z ↔ ∈ z × X Y ∃ a ∧ ∈ a X ∃ b ∧ ∈ b Y = z orderedPair a b
+  prove ∃ a ∧ ∈ a X ∃ b ∧ ∈ b Y = orderedPair x y orderedPair a b
+  assume ∧ ∈ a X ∃ b ∧ ∈ b Y = orderedPair x y orderedPair a b {
+    prove ∈ a X
+    prove ∃ b ∧ ∈ b Y = orderedPair x y orderedPair a b
+    assume ∧ ∈ b Y = orderedPair x y orderedPair a b {
+      prove ∈ b Y
+      prove = orderedPair x y orderedPair a b
+      prove = x a
+      prove = y b
+      prove ∈ x X
+      prove ∈ y Y
+      prove ∧ ∈ x X ∈ y Y
+    }
+    prove ∧ ∈ x X ∈ y Y
+  }
+  prove ∧ ∈ x X ∈ y Y
+}
+assume ∧ ∈ x X ∈ y Y {
+  prove ∈ x X
+  prove ∈ y Y
+  prove = orderedPair x y orderedPair x y
+  prove ∧ ∈ y Y = orderedPair x y orderedPair x y
+  prove ∃ y ∧ ∈ y Y = orderedPair x y orderedPair x y
+  prove ∧ ∈ x X ∃ y ∧ ∈ y Y = orderedPair x y orderedPair x y
+  prove ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = orderedPair x y orderedPair x y
+  prove ∀ z ↔ ∈ z × X Y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y
+  prove ∈ orderedPair x y × X Y
+}
+prove ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
+prove ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
+prove ∀ x ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
+qed
+
 theorem Ordered Pair Is Element of Cartesian Product
 premise ∈ x X
 premise ∈ y Y
-prove = orderedPair x y orderedPair x y
-prove ∧ ∈ y Y = orderedPair x y orderedPair x y
-prove ∃ y ∧ ∈ y Y = orderedPair x y orderedPair x y
-prove ∧ ∈ x X ∃ y ∧ ∈ y Y = orderedPair x y orderedPair x y
-prove ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = orderedPair x y orderedPair x y
-prove ∀ z ↔ ∈ z × X Y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y
+prove ∧ ∈ x X ∈ y Y
+prove ∀ x ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
+prove ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
+prove ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
 prove ∈ orderedPair x y × X Y
+qed
+
+theorem Coordinates of Element of Cartesian Product
+premise ∈ orderedPair x y × X Y
+prove ∀ x ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
+prove ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
+prove ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
+prove ∧ ∈ x X ∈ y Y
+qed
+
+theorem First Coordinate of Element of Cartesian Product
+premise ∈ orderedPair x y × X Y
+prove ∧ ∈ x X ∈ y Y
+prove ∈ x X
+qed
+
+theorem Second Coordinate of Element of Cartesian Product
+premise ∈ orderedPair x y × X Y
+prove ∧ ∈ x X ∈ y Y
+prove ∈ y Y
 qed

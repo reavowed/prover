@@ -52,7 +52,7 @@ prove ∀ y ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅
 prove ∃ X ∀ y ↔ ∈ y X ∨ = y a = y b
 qed
 
-theorem Unordered Pairs are Unique
+theorem Unordered Pairs Are Unique
 prove ∃ X ∀ y ↔ ∈ y X ∨ = y a = y b
 prove ∃! X ∀ y ↔ ∈ y X ∨ = y a = y b
 qed
@@ -80,6 +80,11 @@ prove ∀ z ↔ ∈ z pair x y ∨ = z x = z y
 prove = y y
 prove ∨ = y x = y y
 prove ∈ y pair x y
+qed
+
+theorem An Unordered Pair Is Not the Empty Set
+prove ∈ x pair x y
+prove ¬ = pair x y ∅
 qed
 
 theorem Reverse Unordered Pair
