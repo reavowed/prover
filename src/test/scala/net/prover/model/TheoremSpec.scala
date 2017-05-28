@@ -384,12 +384,13 @@ class TheoremSpec extends ProverSpec {
         "XXX",
         "premise = Y comprehension x X φ",
         "premise ∀ y ↔ ∈ y comprehension x X φ ∧ ∈ y X sub y x φ",
-        "prove ∀ y ↔ ∈ y comprehension x X φ ∧ ∈ y X sub y x φ",
+        "prove ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ",
         "qed")(
         contextWith(substitutionOfEqualsReverse))
 
-      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
-        ForAll(y, Equivalence(ElementOf(y, Comprehension(x, X, φ)), Conjunction(ElementOf(y, X), SubstitutedStatementVariable(φ, y, x)))))
+      theorem.conclusion mustEqual ProvenStatement(
+        ForAll(y, Equivalence(ElementOf(y, Y), Conjunction(ElementOf(y, X), SubstitutedStatementVariable(φ, y, x)))),
+        Conditions(Set.empty, DistinctVariables(y -> x, y -> X, y -> Y)))
     }
 
     "prove a statement that requires additional distinct variable conditions to be added in the resolution of a substitution in the conclusion" in {
@@ -421,6 +422,20 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement(
         ExistsUnique(y, ψ),
         Conditions(Set.empty, DistinctVariables(x -> y)))
+    }
+
+    "add distinct variables to preserve validity of a substitution" in {
+      val theorem = parseTheorem(
+        "XXX",
+        "premise ∃ y ∈ y x",
+        "premise = x ∅",
+        "prove ∃ y ∈ y ∅",
+        "qed")(
+        contextWith(substitutionOfEquals))
+
+      theorem.conclusion mustEqual ProvenStatement(
+        Exists(y, ElementOf(y, EmptySet)),
+        Conditions(Set.empty, DistinctVariables(y -> x)))
     }
   }
 }

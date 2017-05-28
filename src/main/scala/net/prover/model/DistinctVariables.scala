@@ -94,6 +94,8 @@ object DistinctVariables {
         false
     }
 
+    override def hashCode(): Int = first.hashCode() * second.hashCode()
+
     def getMatch(variable: Variable): Option[Variable] = {
       if (variable == first)
         Some(second)

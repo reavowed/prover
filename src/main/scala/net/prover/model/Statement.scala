@@ -274,11 +274,27 @@ case class DefinedStatement(
   ): Option[(Statement, DistinctVariables)] = {
     other match {
       case DefinedStatement(otherSubcomponents, otherBoundVariables, `definition`) =>
-        if (localBoundVariables.contains(termVariable) || otherBoundVariables.contains(termVariable))
+        if (
+          localBoundVariables.contains(termVariable) ||
+          thisTerm.presentVariables.termVariables.exists(localBoundVariables.contains) ||
+          otherBoundVariables.contains(termVariable) ||
+          otherTerm.presentVariables.termVariables.exists(otherBoundVariables.contains)
+        )
           None
         else {
           resolveSubstitution(subcomponents, otherSubcomponents, termVariable, thisTerm, otherTerm)
-              .map(_.mapLeft { resolvedSubcomponents => copy(subcomponents = resolvedSubcomponents)})
+            .map { case (resolvedSubcomponents, resolutionDistinctVariables) =>
+              val thisDistinctPairs = for {
+                boundVariable <- localBoundVariables
+                variable <- thisTerm.presentVariables.termVariables -- localBoundVariables
+              } yield boundVariable -> variable
+              val otherDistinctPairs = for {
+                boundVariable <- otherBoundVariables
+                variable <- otherTerm.presentVariables.termVariables -- otherBoundVariables
+              } yield boundVariable -> variable
+              val additionalDistinctVariables = DistinctVariables((thisDistinctPairs ++ otherDistinctPairs).toSeq :_*)
+              (copy(subcomponents = resolvedSubcomponents), resolutionDistinctVariables ++ additionalDistinctVariables)
+            }
         }
       case _ =>
         None
