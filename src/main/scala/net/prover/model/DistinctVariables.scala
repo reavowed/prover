@@ -6,6 +6,10 @@ import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 import net.prover.model.DistinctVariables.DistinctPair
 
 case class DistinctVariables(distinctPairs: Set[DistinctPair]) extends JsonSerializable.Base {
+  def +(first: Variable, second: Variable): DistinctVariables = {
+    DistinctVariables(distinctPairs + DistinctPair(first, second))
+  }
+
   def ++(other: DistinctVariables): DistinctVariables = {
     DistinctVariables(distinctPairs ++ other.distinctPairs)
   }

@@ -89,8 +89,29 @@ case class PartialSubstitutions(
       (substitutedTermToReplaceWith, newDistinctVariables) <- substitutedBaseStatement
         .findSubstitution(targetStatement, substitutedTermToBeReplaced)._1
       updatedSubstitutions <- termToReplaceWith.calculateSubstitutions(substitutedTermToReplaceWith, this)
+      additionalDistinctVariables = getAdditionalDistinctVariableConditionsForTermReplacement(
+        substitutedBaseStatement,
+        substitutedTermToBeReplaced,
+        substitutedTermToReplaceWith)
     } yield {
-      updatedSubstitutions.withDistinctVariables(newDistinctVariables)
+      updatedSubstitutions.withDistinctVariables(newDistinctVariables ++ additionalDistinctVariables)
+    }
+  }
+
+  private def getAdditionalDistinctVariableConditionsForTermReplacement(
+    substitutedBaseStatement: Statement,
+    substitutedTermToBeReplaced: TermVariable,
+    substitutedTermToReplaceWith: Term
+  ): DistinctVariables = {
+    if (substitutedTermToBeReplaced == substitutedTermToReplaceWith)
+        DistinctVariables.empty
+    else {
+      val variablesRequiringCondition = (substitutedBaseStatement.presentVariables.termVariables - substitutedTermToBeReplaced) --
+        Term.optionAsVariable(substitutedTermToReplaceWith).toSet
+      variablesRequiringCondition
+        .foldLeft(DistinctVariables.empty) { case (variables, variable) =>
+          variables + (variable, substitutedTermToBeReplaced)
+        }
     }
   }
 

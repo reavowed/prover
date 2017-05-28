@@ -129,6 +129,48 @@ class StatementSpec extends ProverSpec {
         .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ), PartialSubstitutions.empty)
         .must(beEmpty)
     }
+
+    "find a distinct variable condition to ensure substitution validity" in {
+      SubstitutedStatementVariable(φ, y, x)
+        .calculateSubstitutions(Equals(z, y), PartialSubstitutions(Map(φ -> Equals(x, y)), Map(x -> x), Map.empty, DistinctVariables.empty))
+        .mustEqual(Seq(PartialSubstitutions(
+          Map(φ -> Equals(x, y)),
+          Map(x -> x, y -> z),
+          Map.empty,
+          DistinctVariables(y -> x))))
+    }
+
+    "not add distinct variable conditions for substitution validity if replacing a term with itself" in {
+      SubstitutedStatementVariable(φ, y, x)
+        .calculateSubstitutions(Equals(x, y), PartialSubstitutions(Map(φ -> Equals(x, y)), Map(x -> x), Map.empty, DistinctVariables.empty))
+        .mustEqual(Seq(PartialSubstitutions(
+          Map(φ -> Equals(x, y)),
+          Map(x -> x, y -> x),
+          Map.empty,
+          DistinctVariables.empty)))
+    }
+
+    "not add distinct variable conditions for substitution validity for the variable being substituted" in {
+      SubstitutedStatementVariable(φ, y, x)
+        .calculateSubstitutions(Equals(y, y), PartialSubstitutions(Map(φ -> Equals(x, y)), Map(x -> x), Map.empty, DistinctVariables.empty))
+        .mustEqual(Seq(PartialSubstitutions(
+          Map(φ -> Equals(x, y)),
+          Map(x -> x, y -> y),
+          Map.empty,
+          DistinctVariables.empty)))
+    }
+
+    "find a distinct variable condition to ensure substitution validity when required variable is bound" in {
+      SubstitutedStatementVariable(φ, y, x)
+        .calculateSubstitutions(
+          ForAll(y, Equals(z, y)),
+          PartialSubstitutions(Map(φ -> ForAll(y, Equals(x, y))), Map(x -> x), Map.empty, DistinctVariables.empty))
+        .mustEqual(Seq(PartialSubstitutions(
+          Map(φ -> ForAll(y, Equals(x, y))),
+          Map(x -> x, y -> z),
+          Map.empty,
+          DistinctVariables(y -> x))))
+    }
   }
 
   "statement term substitution" should {
@@ -145,6 +187,7 @@ class StatementSpec extends ProverSpec {
         s.makeSingleSubstitution(x, x, DistinctVariables.empty) must beSome(s)
       }
     }
+
     "not do anything if substituting an already-substituted variable" in {
       val statements = Seq(
         φ,

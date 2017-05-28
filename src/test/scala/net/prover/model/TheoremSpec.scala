@@ -202,7 +202,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(z, Implication(ElementOf(z, x), ElementOf(z, x))),
-        Conditions(Set(y), DistinctVariables(y -> x, y -> z)))
+        Conditions(Set(y), DistinctVariables(x -> y, x -> z, y -> z)))
     }
 
     "prove a conclusion with a no-op substitution" in {
@@ -290,7 +290,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ExistsUnique(X, ForAll(x, Equivalence(ElementOf(x, X), φ))),
-        Conditions(Set(Y, Z), DistinctVariables(X -> φ)))
+        Conditions(Set(Y, Z), DistinctVariables(X -> φ, X -> x)))
     }
 
     "not prove a conclusion that violates an arbitrary variable condition" in {
@@ -376,7 +376,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         Exists(y, Conjunction(SubstitutedStatementVariable(φ, y, x), Equals(y, z))),
-        Conditions(Set.empty, DistinctVariables(y -> φ)))
+        Conditions(Set.empty, DistinctVariables(y -> φ, y -> z)))
     }
 
     "prove a statement requiring a complicated resolution of a substitution" in {
@@ -408,6 +408,19 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(y, Equivalence(ElementOf(y, Z), Conjunction(ElementOf(y, Y), ForAll(X, Implication(φ, ElementOf(y, X)))))),
         Conditions(Set.empty, DistinctVariables(x -> φ)))
+    }
+
+    "add distinct variable conditions from a statement definition" in {
+      val theorem = parseTheorem(
+        "XXX",
+        "premise ∃ x ∀ y ↔ ψ = y x",
+        "prove ∃! y ψ",
+        "qed")(
+        contextWith(ExistsUnique.forwardInference.get))
+
+      theorem.conclusion mustEqual ProvenStatement(
+        ExistsUnique(y, ψ),
+        Conditions(Set.empty, DistinctVariables(x -> y)))
     }
   }
 }

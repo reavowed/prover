@@ -8,8 +8,9 @@ case class StatementDefinition(
     symbol: String,
     defaultComponents: Seq[Component],
     format: Format,
+    definingStatement: Option[Statement],
     boundVariables: Set[TermVariable],
-    definingStatement: Option[Statement])
+    distinctVariables: DistinctVariables)
   extends ChapterEntry(StatementDefinition)
 {
   val defaultStatement = DefinedStatement(defaultComponents, boundVariables, this)
@@ -33,30 +34,18 @@ case class StatementDefinition(
     DerivedInference(
       s"Definition of $symbol",
       Seq(DirectPremise(s)),
-      ProvenStatement.withNoConditions(defaultStatement))
+      ProvenStatement(defaultStatement, Conditions(Set.empty, distinctVariables)))
   }
 
   def reverseInference: Option[Inference] = definingStatement.map { s =>
     DerivedInference(
       s"Definition of $symbol",
       Seq(DirectPremise(defaultStatement)),
-      ProvenStatement.withNoConditions(s))
+      ProvenStatement(s, Conditions(Set.empty , distinctVariables)))
   }
 }
 
 object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
-  private def getDefaultBoundVariables(
-    defaultVariables: Seq[Variable],
-    definingStatement: Statement
-  ): Set[TermVariable] = {
-    val variables = Variables(
-      defaultVariables.ofType[StatementVariable].toSet,
-      defaultVariables.ofType[TermVariable].toSet)
-    variables.termVariables.filter { defaultVariable =>
-      definingStatement.getPotentiallyIntersectingVariables(defaultVariable).intersect(variables).isEmpty
-    }
-  }
-
   private def definingStatementParser(implicit context: Context): Parser[Option[Statement]] = Parser.optional(
     "definition",
     Statement.parser.inParens.map(Some.apply),
@@ -67,10 +56,21 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
     optionalDefiningStatement: Option[Statement])(
     implicit context: Context
   ): Parser[Set[TermVariable]] = {
-    Parser.optional(
-      "boundVariables",
-      Term.variableListParser.map(_.toSet),
-      optionalDefiningStatement.map(getDefaultBoundVariables(defaultVariables, _)).getOrElse(Set.empty))
+    optionalDefiningStatement match {
+      case Some(definingStatement) =>
+        val variables = Variables(
+          defaultVariables.ofType[StatementVariable].toSet,
+          defaultVariables.ofType[TermVariable].toSet)
+        val boundVariables = variables.termVariables.filter { defaultVariable =>
+          definingStatement.getPotentiallyIntersectingVariables(defaultVariable).intersect(variables).isEmpty
+        }
+        Parser.constant(boundVariables)
+      case None =>
+        Parser.optional(
+          "boundVariables",
+          Term.variableListParser.map(_.toSet),
+          Set.empty)
+    }
   }
 
   def parser(implicit context: Context): Parser[StatementDefinition] = {
@@ -80,13 +80,15 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       optionalDefiningStatement <- definingStatementParser
       boundVariables <- boundVariablesParser(defaultVariables, optionalDefiningStatement)
+      distinctVariables <- Conditions.distinctVariablesParser
     } yield {
       StatementDefinition(
         symbol,
         defaultVariables,
         format,
+        optionalDefiningStatement,
         boundVariables,
-        optionalDefiningStatement)
+        distinctVariables)
     }
   }
 

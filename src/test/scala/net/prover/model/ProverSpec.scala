@@ -30,8 +30,9 @@ trait ProverSpec extends Specification {
       symbol,
       variables,
       Format.default(symbol, variables.map(_.text)),
+      definingStatement,
       Set.empty,
-      definingStatement)
+      DistinctVariables.empty)
   }
   def predicate(
     symbol: String,
@@ -43,20 +44,23 @@ trait ProverSpec extends Specification {
       symbol,
       variables,
       Format.default(symbol, variables.map(_.text)),
+      definingStatement,
       Set.empty,
-      definingStatement)
+      DistinctVariables.empty)
   }
 
   def quantifier(
     symbol: String,
-    definingStatement: Option[Statement]
+    definingStatement: Option[Statement],
+    distinctVariables: DistinctVariables = DistinctVariables.empty
   ): StatementDefinition = {
     StatementDefinition(
       symbol,
       Seq(x, φ),
       Format(s"($symbol%0)%1", requiresBrackets = false),
+      definingStatement,
       Set(x),
-      definingStatement)
+      distinctVariables)
   }
 
 
@@ -68,9 +72,9 @@ trait ProverSpec extends Specification {
 
   val ForAll = quantifier("∀", None)
   val Exists = quantifier("∃", Some(Negation(ForAll(x, Negation(φ)))))
-  val ExistsUnique = quantifier("∃!", None)
-  val ElementOf = predicate("∈", 2, None)
   val Equals = predicate("=", 2, None)
+  val ExistsUnique = quantifier("∃!", Some(Exists(y, ForAll(x, Equivalence(φ, Equals(x, y))))), DistinctVariables(x -> y))
+  val ElementOf = predicate("∈", 2, None)
 
   val EmptySetDefinition = TermDefinition(
     "∅",

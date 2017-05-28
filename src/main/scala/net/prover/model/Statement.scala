@@ -206,7 +206,7 @@ case class DefinedStatement(
  extends Statement
 {
   override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
-  override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _) -- localBoundVariables
+  override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _)
   override def boundVariables = localBoundVariables ++ subcomponents.map(_.boundVariables).knownCommonValues
   def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
     variable match {
