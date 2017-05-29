@@ -1,5 +1,5 @@
 chapter Unordered Pairs
-Establish the existence of the unordered pair {x, y}.
+Establish the existence of the unordered pair {a, b}.
 
 theorem Unordered Pair Existence Lemma
 assume ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b {
@@ -40,101 +40,98 @@ prove ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a
 prove ∀ y ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b ∨ = y a = y b
 qed
 
-theorem Unordered Pairs Exist
+theorem Unordered Pair Existence
 assume ∈ x powerSet singleton ∅ {
   prove ⊕ = x singleton ∅ = x ∅
   prove ∃! y ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
 }
 prove → ∈ x powerSet singleton ∅ ∃! y ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
 prove ∀ x → ∈ x powerSet singleton ∅ ∃! y ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
-prove ∃ X ∀ y ↔ ∈ y X ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
+prove ∃ z ∀ y ↔ ∈ y z ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
 prove ∀ y ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b ∨ = y a = y b
-prove ∃ X ∀ y ↔ ∈ y X ∨ = y a = y b
+prove ∃ z ∀ y ↔ ∈ y z ∨ = y a = y b
+prove ∃! z ∀ y ↔ ∈ y z ∨ = y a = y b
 qed
 
-theorem Unordered Pairs Are Unique
-prove ∃ X ∀ y ↔ ∈ y X ∨ = y a = y b
-prove ∃! X ∀ y ↔ ∈ y X ∨ = y a = y b
-qed
-
-term pair (x y)
+term pair (a b)
   name (Unordered Pair)
-  format ({x, y})
-  (∀ z ↔ ∈ z _ ∨ = z x = z y)
+  format ({a, b})
+  (∀ x ↔ ∈ x _ ∨ = x a = x b)
+  distinct-variables (x a, x b)
 
 theorem Elements of Unordered Pair
-premise ∈ z pair x y
-prove ∀ z ↔ ∈ z pair x y ∨ = z x = z y
-prove ∨ = z x = z y
+premise ∈ c pair a b
+prove ∀ x ↔ ∈ x pair a b ∨ = x a = x b
+prove ∨ = c a = c b
 qed
 
 theorem First Element of Unordered Pair
-prove ∀ z ↔ ∈ z pair x y ∨ = z x = z y
-prove = x x
-prove ∨ = x x = x y
-prove ∈ x pair x y
+prove ∀ x ↔ ∈ x pair a b ∨ = x a = x b
+prove = a a
+prove ∨ = a a = a b
+prove ∈ a pair a b
 qed
 
 theorem Second Element of Unordered Pair
-prove ∀ z ↔ ∈ z pair x y ∨ = z x = z y
-prove = y y
-prove ∨ = y x = y y
-prove ∈ y pair x y
+prove ∀ x ↔ ∈ x pair a b ∨ = x a = x b
+prove = b b
+prove ∨ = b a = b b
+prove ∈ b pair a b
 qed
 
 theorem An Unordered Pair Is Not the Empty Set
-prove ∈ x pair x y
-prove ¬ = pair x y ∅
+prove ∈ a pair a b
+prove ¬ = pair a b ∅
 qed
 
 theorem Reverse Unordered Pair
-prove ∀ z ↔ ∈ z pair x y ∨ = z x = z y
-prove ∀ z ↔ ∈ z pair y x ∨ = z y = z x
-prove ∀ z ↔ ∨ = z x = z y ∨ = z y = z x
-prove = pair x y pair y x
+prove ∀ x ↔ ∈ x pair a b ∨ = x a = x b
+prove ∀ x ↔ ∈ x pair b a ∨ = x b = x a
+prove ∀ x ↔ ∨ = x a = x b ∨ = x b = x a
+prove = pair a b pair b a
 qed
 
 theorem Repeated Pair Is Singleton
-prove ∀ y ↔ ∈ y pair x x ∨ = y x = y x
-prove ∀ y ↔ ∨ = y x = y x = y x
-prove ∀ y ↔ ∈ y pair x x = y x
-prove ∀ y ↔ ∈ y singleton x = y x
-prove = pair x x singleton x
+prove ∀ x ↔ ∈ x pair a a ∨ = x a = x a
+prove ∀ x ↔ ∨ = x a = x a = x a
+prove ∀ x ↔ ∈ x pair a a = x a
+prove ∀ x ↔ ∈ x singleton a = x a
+prove = pair a a singleton a
 qed
 
 theorem Sets Are Equal If Pair Is Singleton
-premise = pair a b singleton x
+premise = pair a b singleton c
 prove ∈ a pair a b
-prove ∈ a singleton x
-prove = a x
+prove ∈ a singleton c
+prove = a c
 prove ∈ b pair a b
-prove ∈ b singleton x
-prove = b x
-prove ∧ = a x = b x
+prove ∈ b singleton c
+prove = b c
+prove ∧ = a c = b c
 qed
 
 theorem Unordered Pair Is Subset
-premise ∈ x X
-premise ∈ y X
-prove ∀ z ↔ ∈ z pair x y ∨ = z x = z y
-assume = z x {
-  prove ∈ z X
+premise ∈ a S
+premise ∈ b S
+prove ∀ x ↔ ∈ x pair a b ∨ = x a = x b
+assume = x a {
+  prove ∈ x S
 }
-assume = z y {
-  prove ∈ z X
+assume = x b {
+  prove ∈ x S
 }
-assume ∨ = z x = z y {
-  prove ∈ z X
+assume ∨ = x a = x b {
+  prove ∈ x S
 }
-prove → ∨ = z x = z y ∈ z X
-prove ∀ z → ∨ = z x = z y ∈ z X
-prove ∀ z → ∈ z pair x y ∈ z X
-prove ⊆ pair x y X
+prove → ∨ = x a = x b ∈ x S
+prove ∀ x → ∨ = x a = x b ∈ x S
+prove ∀ x → ∈ x pair a b ∈ x S
+prove ⊆ pair a b S
 qed
 
 theorem Unordered Pair Is Element of Power Set
-premise ∈ x X
-premise ∈ y X
-prove ⊆ pair x y X
-prove ∈ pair x y powerSet X
+premise ∈ a S
+premise ∈ b S
+prove ⊆ pair a b S
+prove ∈ pair a b powerSet S
 qed

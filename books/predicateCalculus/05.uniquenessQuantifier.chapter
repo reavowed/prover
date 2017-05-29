@@ -4,6 +4,7 @@ Introduce the uniqueness quantifier, ∃!.
 statement ∃! (x φ)
   format ((∃!x)φ)
   definition (∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z)
+  distinct-variables (y φ, z φ)
 
 theorem Prove Uniqueness
 premise ∃ x φ
@@ -17,10 +18,10 @@ qed
 
 theorem Every Set Is Unique
 prove ∃ y = y x
-assume ∧ = y x = z x {
-  prove = y x
-  prove = z x
-  prove = y z
+assume ∧ = a x = b x {
+  prove = a x
+  prove = b x
+  prove = a b
 }
 prove ∃! y = y x
 qed

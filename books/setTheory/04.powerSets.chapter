@@ -2,39 +2,38 @@ chapter Power Sets
 Define the power set of a set - the set of all its subsets.
 
 axiom Axiom of Power Set
-conclusion ∃ Z ∀ Y ↔ ∈ Y Z ⊆ Y X
-distinct-variables (Z Y, Z X, Y X)
+conclusion ∃ y ∀ x ↔ ∈ x y ⊆ x a
+distinct-variables (a x, a y, x y)
 
 theorem Power Sets Are Unique
-prove ∃ Z ∀ Y ↔ ∈ Y Z ⊆ Y X
-prove ∃! Z ∀ Y ↔ ∈ Y Z ⊆ Y X
+prove ∃ b ∀ x ↔ ∈ x b ⊆ x a
+prove ∃! b ∀ x ↔ ∈ x b ⊆ x a
 qed
 
-term powerSet (X)
+term powerSet (a)
   name (Power Set)
-  format (𝒫X)
-  (∀ Y ↔ ∈ Y _ ⊆ Y X)
+  format (𝒫a)
+  (∀ x ↔ ∈ x _ ⊆ x a)
+  distinct-variables (x a)
 
 theorem Subset Is in Power Set
-premise ⊆ Y X
-prove ∀ Y ↔ ∈ Y powerSet X ⊆ Y X
-prove ↔ ∈ Y powerSet X ⊆ Y X
-prove ∈ Y powerSet X
+premise ⊆ b a
+prove ∀ x ↔ ∈ x powerSet a ⊆ x a
+prove ∈ b powerSet a
 qed
 
 theorem Element of Power Set Is Subset
-premise ∈ Y powerSet X
-prove ∀ Y ↔ ∈ Y powerSet X ⊆ Y X
-prove ↔ ∈ Y powerSet X ⊆ Y X
-prove ⊆ Y X
+premise ∈ b powerSet a
+prove ∀ x ↔ ∈ x powerSet a ⊆ x a
+prove ⊆ b a
 qed
 
 theorem ∅ Is in Any Power Set
-prove ⊆ ∅ X
-prove ∈ ∅ powerSet X
+prove ⊆ ∅ a
+prove ∈ ∅ powerSet a
 qed
 
 theorem Any Set Is in Its Own Power Set
-prove ⊆ X X
-prove ∈ X powerSet X
+prove ⊆ a a
+prove ∈ a powerSet a
 qed

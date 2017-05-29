@@ -1,99 +1,99 @@
 chapter Ordered Pairs
-Establish the existence of the ordered pair (x, y).
+Establish the existence of the ordered pair (a, b).
 
-term orderedPair (x y)
+term orderedPair (a b)
   name (Ordered Pair)
-  format ((x, y))
-  (= _ pair singleton x pair x y)
+  format ((a, b))
+  (= _ pair singleton a pair a b)
 
 theorem Elements of Ordered Pair
-premise ∈ z orderedPair x y
-prove = orderedPair x y pair singleton x pair x y
-prove ∈ z pair singleton x pair x y
-prove ∨ = z singleton x = z pair x y
+premise ∈ c orderedPair a b
+prove = orderedPair a b pair singleton a pair a b
+prove ∈ c pair singleton a pair a b
+prove ∨ = c singleton a = c pair a b
 qed
 
 theorem Singleton of First Coordinate Is Element of Ordered Pair
-prove = orderedPair x y pair singleton x pair x y
-prove ∈ singleton x pair singleton x pair x y
-prove ∈ singleton x orderedPair x y
+prove = orderedPair a b pair singleton a pair a b
+prove ∈ singleton a pair singleton a pair a b
+prove ∈ singleton a orderedPair a b
 qed
 
 theorem Pair Is Element of Ordered Pair
-prove = orderedPair x y pair singleton x pair x y
-prove ∈ pair x y pair singleton x pair x y
-prove ∈ pair x y orderedPair x y
+prove = orderedPair a b pair singleton a pair a b
+prove ∈ pair a b pair singleton a pair a b
+prove ∈ pair a b orderedPair a b
 qed
 
 theorem Ordered Pair with Same Coordinates Is Double Singleton
-prove = orderedPair x x pair singleton x pair x x
-prove = pair x x singleton x
-prove = orderedPair x x pair singleton x singleton x
-prove = pair singleton x singleton x singleton singleton x
-prove = orderedPair x x singleton singleton x
+prove = orderedPair a a pair singleton a pair a a
+prove = pair a a singleton a
+prove = orderedPair a a pair singleton a singleton a
+prove = pair singleton a singleton a singleton singleton a
+prove = orderedPair a a singleton singleton a
 qed
 
 theorem Ordered Pair has Same Coordinates If It Is a Double Singleton
-premise = orderedPair x y singleton singleton z
-prove ∈ pair x y orderedPair x y
-prove ∈ pair x y singleton singleton z
-prove = pair x y singleton z
-prove ∧ = x z = y z
-prove = x z
-prove = y z
-prove = x y
+premise = orderedPair a b singleton singleton c
+prove ∈ pair a b orderedPair a b
+prove ∈ pair a b singleton singleton c
+prove = pair a b singleton c
+prove ∧ = a c = b c
+prove = a c
+prove = b c
+prove = a b
 qed
 
 theorem First Coordinates of Equal Ordered Pairs Are Equal
-premise = orderedPair x y orderedPair a b
-prove ∈ singleton x orderedPair x y
-prove ∈ singleton x orderedPair a b
-prove ∨ = singleton x singleton a = singleton x pair a b
-assume = singleton x singleton a {
-  prove = x a
+premise = orderedPair a b orderedPair c d
+prove ∈ singleton a orderedPair a b
+prove ∈ singleton a orderedPair c d
+prove ∨ = singleton a singleton c = singleton a pair c d
+assume = singleton a singleton c {
+  prove = a c
 }
-assume = singleton x pair a b {
-  prove = pair a b singleton x
-  prove ∧ = a x = b x
-  prove = a x
-  prove = x a
+assume = singleton a pair c d{
+  prove = pair c d singleton a
+  prove ∧ = c a = d a
+  prove = c a
+  prove = a c
 }
-prove = x a
+prove = a c
 qed
 
 theorem Second Coordinates of Equal Ordered Pairs Are Equal - Lemma 1
-premise = orderedPair x y orderedPair a b
-premise = y x
-prove = x a
-prove = orderedPair x y orderedPair x b
-prove = orderedPair x x singleton singleton x
-prove = orderedPair x y singleton singleton x
-prove = orderedPair x b singleton singleton x
-prove = x b
-prove = y b
+premise = orderedPair a b orderedPair c d
+premise = b a
+prove = a c
+prove = orderedPair a b orderedPair a d
+prove = orderedPair a a singleton singleton a
+prove = orderedPair a b singleton singleton a
+prove = orderedPair a d singleton singleton a
+prove = a d
+prove = b d
 qed
 
 theorem Second Coordinates of Equal Ordered Pairs Are Equal
-premise = orderedPair x y orderedPair a b
-prove = x a
-prove = orderedPair x y orderedPair x b
-prove ∈ pair x y orderedPair x y
-prove ∈ pair x y orderedPair x b
-prove ∨ = pair x y singleton x = pair x y pair x b
-assume = pair x y singleton x {
-  prove ∧ = x x = y x
-  prove = y x
-  prove = y b
+premise = orderedPair a b orderedPair c d
+prove = a c
+prove = orderedPair a b orderedPair a d
+prove ∈ pair a b orderedPair a b
+prove ∈ pair a b orderedPair a d
+prove ∨ = pair a b singleton a = pair a b pair a d
+assume = pair a b singleton a {
+  prove ∧ = a a = b a
+  prove = b a
+  prove = b d
 }
-assume = pair x y pair x b {
-  prove ∈ y pair x y
-  prove ∈ y pair x b
-  prove ∨ = y x = y b
-  assume = y x {
-    prove = y b
+assume = pair a b pair a d {
+  prove ∈ b pair a b
+  prove ∈ b pair a d
+  prove ∨ = b a = b d
+  assume = b a {
+    prove = b d
   }
-  prove = y b
+  prove = b d
 }
-prove = y b
+prove = b d
 qed
 

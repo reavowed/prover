@@ -1,97 +1,94 @@
 chapter Singletons
-Establish the existence of the singleton set {x}.
+Establish the existence of the singleton set {a}.
 
-theorem Singletons Exist
-prove ∃! Y = Y X
-prove → ∈ x powerSet ∅ ∃! Y = Y X
-prove ∀ x → ∈ x powerSet ∅ ∃! Y = Y X
-prove ∃ Z ∀ Y ↔ ∈ Y Z ∃ x ∧ ∈ x powerSet ∅ = Y X
+theorem Singleton Existence
+prove ∃! x = x a
+prove → ∈ y powerSet ∅ ∃! x = x a
+prove ∀ y → ∈ y powerSet ∅ ∃! x = x a
+prove ∃ b ∀ x ↔ ∈ x b ∃ y ∧ ∈ y powerSet ∅ = x a
 prove ∈ ∅ powerSet ∅
-prove ∃ x ∈ x powerSet ∅
-prove ↔ ∃ x ∧ ∈ x powerSet ∅ = Y X = Y X
-prove ∀ Y ↔ ∃ x ∧ ∈ x powerSet ∅ = Y X = Y X
-prove ∃ Z ∀ Y ↔ ∈ Y Z = Y X
+prove ∃ y ∈ y powerSet ∅
+prove ↔ ∃ y ∧ ∈ y powerSet ∅ = x a = x a
+prove ∀ x ↔ ∃ y ∧ ∈ y powerSet ∅ = x a = x a
+prove ∃ b ∀ x ↔ ∈ x b = x a
+prove ∃! b ∀ x ↔ ∈ x b = x a
 qed
 
-theorem Singletons Are Unique
-prove ∃ Z ∀ Y ↔ ∈ Y Z = Y X
-prove ∃! Z ∀ Y ↔ ∈ Y Z = Y X
-qed
-
-term singleton (x)
+term singleton (a)
   name (Singleton)
-  format ({x})
-  (∀ y ↔ ∈ y _ = y x)
+  format ({a})
+  (∀ x ↔ ∈ x _ = x a)
+  distinct-variables (x a)
 
 theorem A Set Is an Element of Its Singleton
-prove ∀ y ↔ ∈ y singleton x = y x
-prove = x x
-prove ∈ x singleton x
+prove ∀ x ↔ ∈ x singleton a = x a
+prove = a a
+prove ∈ a singleton a
 qed
 
 theorem Element of Singleton
-premise ∈ y singleton x
-prove ∀ y ↔ ∈ y singleton x = y x
-prove = y x
+premise ∈ b singleton a
+prove ∀ x ↔ ∈ x singleton a = x a
+prove = b a
 qed
 
 theorem Sets Are Equal If Singletons Are Equal
-premise = singleton x singleton y
-prove ∀ z ↔ ∈ z singleton x = z x
-prove ∀ z ↔ ∈ z singleton y = z x
-prove ∀ z ↔ ∈ z singleton y = z y
-prove ∀ z ↔ = z x = z y
-prove = x y
+premise = singleton a singleton b
+prove ∀ x ↔ ∈ x singleton a = x a
+prove ∀ x ↔ ∈ x singleton b = x a
+prove ∀ x ↔ ∈ x singleton b = x b
+prove ∀ x ↔ = x a = x b
+prove = a b
 qed
 
 theorem Singleton Is Subset
-premise ∈ x X
-prove ∀ y ↔ ∈ y singleton x = y x
-assume = y x {
-  prove ∈ y X
+premise ∈ a S
+prove ∀ x ↔ ∈ x singleton a = x a
+assume = x a {
+  prove ∈ x S
 }
-prove → = y x ∈ y X
-prove ∀ y → = y x ∈ y X
-prove ∀ y → ∈ y singleton x ∈ y X
-prove ⊆ singleton x X
+prove → = x a ∈ x S
+prove ∀ x → = x a ∈ x S
+prove ∀ x → ∈ x singleton a ∈ x S
+prove ⊆ singleton a S
 qed
 
 theorem Singleton Is in Power Set
-premise ∈ x X
-prove ⊆ singleton x X
-prove ∈ singleton x powerSet X
+premise ∈ a S
+prove ⊆ singleton a S
+prove ∈ singleton a powerSet S
 qed
 
 theorem A Singleton Is Not the Empty Set
-prove ∈ x singleton x
-prove ¬ = singleton x ∅
+prove ∈ a singleton a
+prove ¬ = singleton a ∅
 qed
 
 theorem Subsets of a Singleton
-premise ⊆ y singleton x
-prove ∀ z → ∈ z y ∈ z singleton x
-prove ∀ z ↔ ∈ z singleton x = z x
-prove ∀ z → ∈ z y = z x
-assume ∃ z ∈ z y {
-  assume ∈ z y {
-    prove = z x
-    prove ∈ x y
+premise ⊆ S singleton a
+prove ∀ x → ∈ x S ∈ x singleton a
+prove ∀ x ↔ ∈ x singleton a = x a
+prove ∀ x → ∈ x S = x a
+assume ∃ y ∈ y S {
+  assume ∈ b S {
+    prove = b a
+    prove ∈ a S
   }
-  prove ∈ x y
-  prove ⊆ singleton x y
-  prove = y singleton x
+  prove ∈ a S
+  prove ⊆ singleton a S
+  prove = S singleton a
 }
-assume ¬ ∃ z ∈ z y {
-  prove = y ∅
+assume ¬ ∃ y ∈ y S {
+  prove = S ∅
 }
-prove ∨ = y singleton x = y ∅
-prove ¬ = singleton x ∅
-prove ⊕ = y singleton x = y ∅
+prove ∨ = S singleton a = S ∅
+prove ¬ = singleton a ∅
+prove ⊕ = S singleton a = S ∅
 qed
 
 theorem Elements of Powerset of Singleton
-premise ∈ x powerSet singleton ∅
-prove ⊆ x singleton ∅
-prove ⊕ = x singleton ∅ = x ∅
+premise ∈ S powerSet singleton a
+prove ⊆ S singleton a
+prove ⊕ = S singleton a = S ∅
 qed
 

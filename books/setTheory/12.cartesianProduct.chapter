@@ -1,106 +1,106 @@
 chapter Cartesian Product
-Introduce the Cartesian product of two sets, z×y.
+Introduce the Cartesian product of two sets, a×b.
 
 theorem Ordered Pair Is Element of Double Power Set of Union
-premise ∈ x X
-premise ∈ y Y
-prove ∈ x ∪ X Y
-prove ∈ y ∪ X Y
-prove ∈ singleton x powerSet ∪ X Y
-prove ∈ pair x y powerSet ∪ X Y
-prove ∈ pair singleton x pair x y powerSet powerSet ∪ X Y
-prove = orderedPair x y pair singleton x pair x y
-prove ∈ orderedPair x y powerSet powerSet ∪ X Y
+premise ∈ a A
+premise ∈ b B
+prove ∈ a ∪ A B
+prove ∈ b ∪ A B
+prove ∈ singleton a powerSet ∪ A B
+prove ∈ pair a b powerSet ∪ A B
+prove ∈ pair singleton a pair a b powerSet powerSet ∪ A B
+prove = orderedPair a b pair singleton a pair a b
+prove ∈ orderedPair a b powerSet powerSet ∪ A B
 qed
 
-term × (X Y)
+term × (A B)
   name (Cartesian Product)
-  (= _ comprehension z powerSet powerSet ∪ X Y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y)
+  (= _ comprehension x powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b)
 
 theorem Membership Condition for Cartesian Product
-prove = × X Y comprehension z powerSet powerSet ∪ X Y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y
-prove ∀ z ↔ ∈ z × X Y ∧ ∈ z powerSet powerSet ∪ X Y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y
-assume ∧ ∈ a X ∃ y ∧ ∈ y Y = z orderedPair a y {
-  prove ∈ a X
-  prove ∃ y ∧ ∈ y Y = z orderedPair a y
-  assume ∧ ∈ b Y = z orderedPair a b {
-    prove ∈ b Y
-    prove = z orderedPair a b
-    prove ∈ orderedPair a b powerSet powerSet ∪ X Y
-    prove ∈ z powerSet powerSet ∪ X Y
+prove = × A B comprehension y powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = y orderedPair a b
+prove ∀ x ↔ ∈ x × A B ∧ ∈ x powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
+assume ∧ ∈ c A ∃ b ∧ ∈ b B = x orderedPair c b {
+  prove ∈ c A
+  prove ∃ b ∧ ∈ b B = x orderedPair c b
+  assume ∧ ∈ d B = x orderedPair c d {
+    prove ∈ d B
+    prove = x orderedPair c d
+    prove ∈ orderedPair c d powerSet powerSet ∪ A B
+    prove ∈ x powerSet powerSet ∪ A B
   }
-  prove ∈ z powerSet powerSet ∪ X Y
+  prove ∈ x powerSet powerSet ∪ A B
 }
-assume ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y {
-  prove ∈ z powerSet powerSet ∪ X Y
+assume ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b {
+  prove ∈ x powerSet powerSet ∪ A B
 }
-prove ↔ ∧ ∈ z powerSet powerSet ∪ X Y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y
-prove ∀ z ↔ ∧ ∈ z powerSet powerSet ∪ X Y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y
-prove ∀ z ↔ ∈ z × X Y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y
+prove ↔ ∧ ∈ x powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
+prove ∀ x ↔ ∧ ∈ x powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
+prove ∀ x ↔ ∈ x × A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
 qed
 
 theorem Membership Condition for Cartesian Product
-assume ∈ orderedPair x y × X Y {
-  prove ∀ z ↔ ∈ z × X Y ∃ a ∧ ∈ a X ∃ b ∧ ∈ b Y = z orderedPair a b
-  prove ∃ a ∧ ∈ a X ∃ b ∧ ∈ b Y = orderedPair x y orderedPair a b
-  assume ∧ ∈ a X ∃ b ∧ ∈ b Y = orderedPair x y orderedPair a b {
-    prove ∈ a X
-    prove ∃ b ∧ ∈ b Y = orderedPair x y orderedPair a b
-    assume ∧ ∈ b Y = orderedPair x y orderedPair a b {
-      prove ∈ b Y
-      prove = orderedPair x y orderedPair a b
-      prove = x a
-      prove = y b
-      prove ∈ x X
-      prove ∈ y Y
-      prove ∧ ∈ x X ∈ y Y
+assume ∈ orderedPair a b × A B {
+  prove ∀ x ↔ ∈ x × A B ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = x orderedPair c d
+  prove ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d
+  assume ∧ ∈ c A ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d {
+    prove ∈ c A
+    prove ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d
+    assume ∧ ∈ d B = orderedPair a b orderedPair c d {
+      prove ∈ d B
+      prove = orderedPair a b orderedPair c d
+      prove = a c
+      prove = b d
+      prove ∈ a A
+      prove ∈ b B
+      prove ∧ ∈ a A ∈ b B
     }
-    prove ∧ ∈ x X ∈ y Y
+    prove ∧ ∈ a A ∈ b B
   }
-  prove ∧ ∈ x X ∈ y Y
+  prove ∧ ∈ a A ∈ b B
 }
-assume ∧ ∈ x X ∈ y Y {
-  prove ∈ x X
-  prove ∈ y Y
-  prove = orderedPair x y orderedPair x y
-  prove ∧ ∈ y Y = orderedPair x y orderedPair x y
-  prove ∃ y ∧ ∈ y Y = orderedPair x y orderedPair x y
-  prove ∧ ∈ x X ∃ y ∧ ∈ y Y = orderedPair x y orderedPair x y
-  prove ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = orderedPair x y orderedPair x y
-  prove ∀ z ↔ ∈ z × X Y ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y
-  prove ∈ orderedPair x y × X Y
+assume ∧ ∈ a A ∈ b B {
+  prove ∈ a A
+  prove ∈ b B
+  prove = orderedPair a b orderedPair a b
+  prove ∧ ∈ b B = orderedPair a b orderedPair a b
+  prove ∃ d ∧ ∈ d B = orderedPair a b orderedPair a d
+  prove ∧ ∈ a A ∃ d ∧ ∈ d B = orderedPair a b orderedPair a d
+  prove ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d
+  prove ∀ x ↔ ∈ x × A B ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = x orderedPair c d
+  prove ∈ orderedPair a b × A B
 }
-prove ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
-prove ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
-prove ∀ x ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
+prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
+prove ∀ b ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
+prove ∀ a ∀ b ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
 qed
 
 theorem Ordered Pair Is Element of Cartesian Product
-premise ∈ x X
-premise ∈ y Y
-prove ∧ ∈ x X ∈ y Y
-prove ∀ x ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
-prove ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
-prove ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
-prove ∈ orderedPair x y × X Y
+premise ∈ a A
+premise ∈ b B
+prove ∧ ∈ a A ∈ b B
+prove ∀ a ∀ b ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
+prove ∀ b ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
+prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
+prove ∈ orderedPair a b × A B
 qed
 
 theorem Coordinates of Element of Cartesian Product
-premise ∈ orderedPair x y × X Y
-prove ∀ x ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
-prove ∀ y ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
-prove ↔ ∈ orderedPair x y × X Y ∧ ∈ x X ∈ y Y
-prove ∧ ∈ x X ∈ y Y
+premise ∈ orderedPair a b × A B
+prove ∀ a ∀ b ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
+prove ∀ b ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
+prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
+prove ∧ ∈ a A ∈ b B
 qed
 
 theorem First Coordinate of Element of Cartesian Product
-premise ∈ orderedPair x y × X Y
-prove ∧ ∈ x X ∈ y Y
-prove ∈ x X
+premise ∈ orderedPair a b × A B
+prove ∧ ∈ a A ∈ b B
+prove ∈ a A
 qed
 
 theorem Second Coordinate of Element of Cartesian Product
-premise ∈ orderedPair x y × X Y
-prove ∧ ∈ x X ∈ y Y
-prove ∈ y Y
+premise ∈ orderedPair a b × A B
+prove ∧ ∈ a A ∈ b B
+prove ∈ b B
 qed

@@ -1,103 +1,104 @@
 chapter Unions
-Arbitrary and binary unions of sets.
+Arbitrary and binary unions.
 
 axiom Axiom of Union
-conclusion ∀ X ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
+conclusion ∃ b ∀ y ↔ ∈ y b ∃ x ∧ ∈ x a ∈ y x
+distinct-variables (x y, x a, x b, y a, y b, a b)
 
-theorem Arbitrary Unions Are Unique
-prove ∀ X ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
-prove ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
-prove ∃! Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∈ y x
+theorem Arbitrary Unions Exist
+prove ∃ b ∀ y ↔ ∈ y b ∃ x ∧ ∈ x a ∈ y x
+prove ∃! b ∀ y ↔ ∈ y b ∃ x ∧ ∈ x a ∈ y x
 qed
 
-term union (X)
+term union (a)
   name (Arbitrary Union)
-  format (⋃X)
-  (∀ y ↔ ∈ y _ ∃ x ∧ ∈ y x ∈ x X)
+  format (⋃a)
+  (∀ y ↔ ∈ y _ ∃ x ∧ ∈ y x ∈ x a)
+  distinct-variables (x y, x a, y a)
 
-term ∪ (X Y)
-  (= _ union pair X Y)
+term ∪ (a b)
+  (= _ union pair a b)
 
 theorem Membership Condition for Binary Union
-prove = ∪ X Y union pair X Y
-prove ∀ y ↔ ∈ y union pair X Y ∃ x ∧ ∈ y x ∈ x pair X Y
-prove ∀ y ↔ ∈ y ∪ X Y ∃ x ∧ ∈ y x ∈ x pair X Y
-assume ∧ ∈ y x ∈ x pair X Y {
-  prove ∈ y x
-  prove ∈ x pair X Y
-  prove ∨ = x X = x Y
-  assume = x X {
-    prove ∈ y X
+prove = ∪ a b union pair a b
+prove ∀ x ↔ ∈ x union pair a b ∃ y ∧ ∈ x y ∈ y pair a b
+prove ∀ x ↔ ∈ x ∪ a b ∃ y ∧ ∈ x y ∈ y pair a b
+assume ∧ ∈ x y ∈ y pair a b {
+  prove ∈ x y
+  prove ∈ y pair a b
+  prove ∨ = y a = y b
+  assume = y a {
+    prove ∈ x a
   }
-  assume = x Y {
-    prove ∈ y Y
+  assume = y b {
+    prove ∈ x b
   }
-  prove ∨ ∈ y X ∈ y Y
+  prove ∨ ∈ x a ∈ x b
 }
-assume ∃ x ∧ ∈ y x ∈ x pair X Y {
-  prove ∨ ∈ y X ∈ y Y
+assume ∃ y ∧ ∈ x y ∈ y pair a b {
+  prove ∨ ∈ x a ∈ x b
 }
-assume ∈ y X {
-  prove ∈ X pair X Y
-  prove ∧ ∈ y X ∈ X pair X Y
-  prove ∃ x ∧ ∈ y x ∈ x pair X Y
+assume ∈ x a {
+  prove ∈ a pair a b
+  prove ∧ ∈ x a ∈ a pair a b
+  prove ∃ y ∧ ∈ x y ∈ y pair a b
 }
-assume ∈ y Y {
-  prove ∈ Y pair X Y
-  prove ∧ ∈ y Y ∈ Y pair X Y
-  prove ∃ x ∧ ∈ y x ∈ x pair X Y
+assume ∈ x b {
+  prove ∈ b pair a b
+  prove ∧ ∈ x b ∈ b pair a b
+  prove ∃ y ∧ ∈ x y ∈ y pair a b
 }
-assume ∨ ∈ y X ∈ y Y {
-  prove ∃ x ∧ ∈ y x ∈ x pair X Y
+assume ∨ ∈ x a ∈ x b {
+  prove ∃ y ∧ ∈ x y ∈ y pair a b
 }
-prove ↔ ∃ x ∧ ∈ y x ∈ x pair X Y ∨ ∈ y X ∈ y Y
-prove ∀ y ↔ ∃ x ∧ ∈ y x ∈ x pair X Y ∨ ∈ y X ∈ y Y
-prove ∀ y ↔ ∈ y ∪ X Y ∨ ∈ y X ∈ y Y
+prove ↔ ∃ y ∧ ∈ x y ∈ y pair a b ∨ ∈ x a ∈ x b
+prove ∀ x ↔ ∃ y ∧ ∈ x y ∈ y pair a b ∨ ∈ x a ∈ x b
+prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
 qed
 
-theorem Characterise Element of Binary Union
-premise ∈ x ∪ X Y
-prove ∀ x ↔ ∈ x ∪ X Y ∨ ∈ x X ∈ x Y
-prove ∨ ∈ x X ∈ x Y
+theorem Element of Binary Union
+premise ∈ c ∪ a b
+prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
+prove ∨ ∈ c a ∈ c b
 qed
 
 theorem Element Transfers to Binary Union
-premise ∈ x X
-prove ∀ y ↔ ∈ y ∪ X Y ∨ ∈ y X ∈ y Y
-prove ∨ ∈ x X ∈ x Y
-prove ∈ x ∪ X Y
+premise ∈ c a
+prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
+prove ∨ ∈ c a ∈ c b
+prove ∈ c ∪ a b
 qed
 
 theorem Element Transfers to Binary Union
-premise ∈ y Y
-prove ∀ y ↔ ∈ y ∪ X Y ∨ ∈ y X ∈ y Y
-prove ∨ ∈ y X ∈ y Y
-prove ∈ y ∪ X Y
+premise ∈ c b
+prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
+prove ∨ ∈ c a ∈ c b
+prove ∈ c ∪ a b
 qed
 
 theorem The Empty Set Is an Identity for Binary Union
-prove ∀ x ↔ ∈ x ∪ ∅ X ∨ ∈ x ∅ ∈ x X
+prove ∀ x ↔ ∈ x ∪ ∅ a ∨ ∈ x ∅ ∈ x a
 prove ∀ x ¬ ∈ x ∅
-prove ∀ x ↔ ∨ ∈ x ∅ ∈ x X ∈ x X
-prove ∀ x ↔ ∈ x ∪ ∅ X ∈ x X
-prove = ∪ ∅ X X
+prove ∀ x ↔ ∨ ∈ x ∅ ∈ x a ∈ x a
+prove ∀ x ↔ ∈ x ∪ ∅ a ∈ x a
+prove = ∪ ∅ a a
 qed
 
 theorem The Empty Set Is an Identity for Binary Union
-prove ∀ x ↔ ∈ x ∪ X ∅ ∨ ∈ x X ∈ x ∅
+prove ∀ x ↔ ∈ x ∪ a ∅ ∨ ∈ x a ∈ x ∅
 prove ∀ x ¬ ∈ x ∅
-prove ∀ x ↔ ∨ ∈ x X ∈ x ∅ ∈ x X
-prove ∀ x ↔ ∈ x ∪ X ∅ ∈ x X
-prove = ∪ X ∅ X
+prove ∀ x ↔ ∨ ∈ x a ∈ x ∅ ∈ x a
+prove ∀ x ↔ ∈ x ∪ a ∅ ∈ x a
+prove = ∪ a ∅ a
 qed
 
 theorem A Union of a Non-Empty Set Is Non-Empty
-premise ¬ = X ∅
-prove ∃ x ∈ x X
-assume ∈ x X {
-  prove ∈ x ∪ X Y
-  prove ∃ x ∈ x ∪ X Y
+premise ¬ = a ∅
+prove ∃ x ∈ x a
+assume ∈ x a {
+  prove ∈ x ∪ a b
+  prove ∃ x ∈ x ∪ a b
 }
-prove ∃ x ∈ x ∪ X Y
-prove ¬ = ∪ X Y ∅
+prove ∃ x ∈ x ∪ a b
+prove ¬ = ∪ a b ∅
 qed

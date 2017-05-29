@@ -1,7 +1,7 @@
 Functions
 import Set Theory
 
-variables () (f x y X Y)
+variables () (f x y X Y a b A B)
 
 chapter Definition
 Definition of a function.
@@ -10,14 +10,9 @@ statement function (f X Y)
   format (f: X → Y in parens)
   definition (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f)
 
-term apply (f x)
+term apply (f a)
   name (Function Application)
-  format (f(x))
-  premises (function f X Y, ∈ x X)
-  (∧ ∈ _ Y ∈ orderedPair x _ f)
+  format (f(a))
+  premises (function f A B, ∈ a A)
+  (∧ ∈ _ B ∈ orderedPair a _ f)
 
-theorem Function Application Is Unique
-premise function f X Y
-premise ∈ orderedPair x y f
-prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f
-qed

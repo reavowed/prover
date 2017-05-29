@@ -2,102 +2,102 @@ chapter Intersections
 Arbitrary and binary intersections.
 
 theorem Intersection over a Class
-premise ∃ X φ
-assume sub Z X φ {
-  assume ∀ X → φ ∈ y X {
-    prove ∈ y Z
+premise ∃ x φ
+assume sub a x φ {
+  assume ∀ x → φ ∈ y x {
+    prove ∈ y a
   }
-  prove ↔ ∧ ∈ y Z ∀ X → φ ∈ y X ∀ X → φ ∈ y X
-  prove ∀ y ↔ ∧ ∈ y Z ∀ X → φ ∈ y X ∀ X → φ ∈ y X
-  assume = S comprehension x Z ∀ X → φ ∈ x X {
-    prove ∀ y ↔ ∈ y S ∧ ∈ y Z ∀ X → φ ∈ y X
-    prove ∀ y ↔ ∈ y S ∀ X → φ ∈ y X
+  prove ↔ ∧ ∈ y a ∀ x → φ ∈ y x ∀ x → φ ∈ y x
+  prove ∀ y ↔ ∧ ∈ y a ∀ x → φ ∈ y x ∀ x → φ ∈ y x
+  assume = S comprehension z a ∀ x → φ ∈ z x {
+    prove ∀ y ↔ ∈ y S ∧ ∈ y a ∀ x → φ ∈ y x
+    prove ∀ y ↔ ∈ y S ∀ x → φ ∈ y x
   }
-  prove ∃ Y ∀ y ↔ ∈ y Y ∀ X → φ ∈ y X
+  prove ∃ Y ∀ y ↔ ∈ y Y ∀ x → φ ∈ y x
 }
-prove ∃ Y ∀ y ↔ ∈ y Y ∀ X → φ ∈ y X
+prove ∃ Y ∀ y ↔ ∈ y Y ∀ x → φ ∈ y x
 qed
 
 theorem Arbitrary Intersections Are Unique
-premise ¬ = X ∅
-prove ∃ x ∈ x X
-prove ∃ Y ∀ y ↔ ∈ y Y ∀ x → ∈ x X ∈ y x
-prove ∃! Y ∀ y ↔ ∈ y Y ∀ x → ∈ x X ∈ y x
+premise ¬ = a ∅
+prove ∃ x ∈ x a
+prove ∃ Y ∀ y ↔ ∈ y Y ∀ x → ∈ x a ∈ y x
+prove ∃! Y ∀ y ↔ ∈ y Y ∀ x → ∈ x a ∈ y x
 qed
 
-term intersection (X)
+term intersection (a)
   name (Arbitrary Intersection)
-  format (⋂X)
-  premises (¬ = X ∅)
-  (∀ y ↔ ∈ y _ ∀ x → ∈ x X ∈ y x)
+  format (⋂a)
+  premises (¬ = a ∅)
+  (∀ y ↔ ∈ y _ ∀ x → ∈ x a ∈ y x)
+  distinct-variables (x y, x a, y a)
 
-term ∩ (X Y)
-  (= _ intersection pair X Y)
+term ∩ (a b)
+  (= _ intersection pair a b)
 
 theorem Membership Condition for Binary Intersection
-prove ∈ X pair X Y
-prove ¬ = pair X Y ∅
-prove ∀ y ↔ ∈ y intersection pair X Y ∀ x → ∈ x pair X Y ∈ y x
-assume ∀ x → ∈ x pair X Y ∈ y x {
-  prove ∈ X pair X Y
-  prove ∈ y X
-  prove ∈ Y pair X Y
-  prove ∈ y Y
-  prove ∧ ∈ y X ∈ y Y
+prove ∈ a pair a b
+prove ¬ = pair a b ∅
+prove ∀ x ↔ ∈ x intersection pair a b ∀ y → ∈ y pair a b ∈ x y
+assume ∀ y → ∈ y pair a b ∈ x y {
+  prove ∈ a pair a b
+  prove ∈ x a
+  prove ∈ b pair a b
+  prove ∈ x b
+  prove ∧ ∈ x a ∈ x b
 }
-assume ∧ ∈ y X ∈ y Y {
-  prove ∈ y X
-  prove ∈ y Y
-  assume = x X {
-    prove ∈ y x
+assume ∧ ∈ x a ∈ x b {
+  prove ∈ x a
+  prove ∈ x b
+  assume = y a {
+    prove ∈ x y
   }
-  assume = x Y {
-    prove ∈ y x
+  assume = y b {
+    prove ∈ x y
   }
-  assume ∨ = x X = x Y {
-    prove ∈ y x
+  assume ∨ = y a = y b {
+    prove ∈ x y
   }
-  prove ∀ x → ∨ = x X = x Y ∈ y x
-  prove ∀ x ↔ ∈ x pair X Y ∨ = x X = x Y
-  prove ∀ x → ∈ x pair X Y ∈ y x
+  prove ∀ y → ∨ = y a = y b ∈ x y
+  prove ∀ y ↔ ∈ y pair a b ∨ = y a = y b
+  prove ∀ y → ∈ y pair a b ∈ x y
 }
-prove ↔ ∀ x → ∈ x pair X Y ∈ y x ∧ ∈ y X ∈ y Y
-prove ∀ y ↔ ∀ x → ∈ x pair X Y ∈ y x ∧ ∈ y X ∈ y Y
-prove ∀ y ↔ ∈ y intersection pair X Y ∧ ∈ y X ∈ y Y
-prove = ∩ X Y intersection pair X Y
-prove ∀ y ↔ ∈ y ∩ X Y ∧ ∈ y X ∈ y Y
+prove ↔ ∀ y → ∈ y pair a b ∈ x y ∧ ∈ x a ∈ x b
+prove ∀ x ↔ ∀ y → ∈ y pair a b ∈ x y ∧ ∈ x a ∈ x b
+prove ∀ x ↔ ∈ x intersection pair a b ∧ ∈ x a ∈ x b
+prove = ∩ a b intersection pair a b
+prove ∀ x ↔ ∈ x ∩ a b ∧ ∈ x a ∈ x b
 qed
 
 theorem Binary Intersection Is Symmetric
-prove ∀ y ↔ ∈ y ∩ X Y ∧ ∈ y X ∈ y Y
-prove ∀ y ↔ ∈ y ∩ Y X ∧ ∈ y Y ∈ y X
-prove ∀ y ↔ ∧ ∈ y X ∈ y Y ∧ ∈ y Y ∈ y X
-prove = ∩ X Y ∩ Y X
+prove ∀ x ↔ ∈ x ∩ a b ∧ ∈ x a ∈ x b
+prove ∀ x ↔ ∈ x ∩ b a ∧ ∈ x b ∈ x a
+prove ∀ x ↔ ∧ ∈ x a ∈ x b ∧ ∈ x b ∈ x a
+prove = ∩ a b ∩ b a
 qed
-
 
 theorem An Element of Two Sets Is an Element of Their Intersection
-premise ∈ x X
-premise ∈ x Y
-prove ∀ x ↔ ∈ x ∩ X Y ∧ ∈ x X ∈ x Y
-prove ∧ ∈ x X ∈ x Y
-prove ∈ x ∩ X Y
+premise ∈ c a
+premise ∈ c b
+prove ∀ x ↔ ∈ x ∩ a b ∧ ∈ x a ∈ x b
+prove ∧ ∈ c a ∈ c b
+prove ∈ c ∩ a b
 qed
 
 theorem A Set Can Only Be an Element of One of a Disjoint Pair
-premise = ∩ X Y ∅
-premise ∈ x X
-assume ∈ x Y {
-  prove ∈ x ∩ X Y
-  prove ¬ = ∩ X Y ∅
+premise = ∩ a b ∅
+premise ∈ c a
+assume ∈ c b {
+  prove ∈ c ∩ a b
+  prove ¬ = ∩ a b ∅
 }
-prove ¬ ∈ x Y
+prove ¬ ∈ c b
 qed
 
 theorem A Set Can Only Be an Element of One of a Disjoint Pair
-premise = ∩ X Y ∅
-premise ∈ y Y
-prove = ∩ X Y ∩ Y X
-prove = ∩ Y X ∅
-prove ¬ ∈ y X
+premise = ∩ a b ∅
+premise ∈ c b
+prove = ∩ a b ∩ b a
+prove = ∩ b a ∅
+prove ¬ ∈ c a
 qed

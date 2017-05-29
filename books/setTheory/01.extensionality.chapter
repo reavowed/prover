@@ -1,55 +1,55 @@
 chapter Set Membership and Extensionality
 Introduce the set membership predicate ∈ and the Axiom of Extensionality, and explore their consequences for equality.
 
-statement ∈ (x y)
+statement ∈ (a b)
 
 theorem Equal Sets Have the Same Members
-premise = x y
-prove ↔ ∈ z x ∈ z y
-prove ∀ z ↔ ∈ z x ∈ z y
+premise = a b
+prove ↔ ∈ x a ∈ x b
+prove ∀ x ↔ ∈ x a ∈ x b
 qed
 
 axiom Axiom of Extensionality
-conclusion → ∀ z ↔ ∈ z x ∈ z y = x y
-distinct-variables (z x, z y)
+conclusion → ∀ x ↔ ∈ x a ∈ x b = a b
+distinct-variables (x a, x b)
 
 theorem Sets with Same Members Are Equal
-premise ∀ z ↔ ∈ z x ∈ z y
-prove → ∀ z ↔ ∈ z x ∈ z y = x y
-prove = x y
+premise ∀ x ↔ ∈ x a ∈ x b
+prove → ∀ x ↔ ∈ x a ∈ x b = a b
+prove = a b
 qed
 
 theorem Sets with Same Membership Condition Are Equal
-premise ∀ z ↔ ∈ z x φ
-premise ∀ z ↔ ∈ z y φ
-prove ∀ z ↔ ∈ z x ∈ z y
-prove = x y
+premise ∀ x ↔ ∈ x a φ
+premise ∀ x ↔ ∈ x b φ
+prove ∀ x ↔ ∈ x a ∈ x b
+prove = a b
 qed
 
 theorem Sets with Equivalent Membership Conditions Are Equal
-premise ∀ z ↔ ∈ z x φ
-premise ∀ z ↔ ∈ z y ψ
-premise ∀ z ↔ φ ψ
-prove ∀ z ↔ ∈ z x ψ
-prove = x y
+premise ∀ x ↔ ∈ x a φ
+premise ∀ x ↔ ∈ x b ψ
+premise ∀ x ↔ φ ψ
+prove ∀ x ↔ ∈ x a ψ
+prove = a b
 qed
 
 theorem A Set with a Membership Condition Is Unique
-premise ∃ X ∀ x ↔ ∈ x X φ
-assume ∧ ∀ x ↔ ∈ x Y φ ∀ x ↔ ∈ x Z φ {
-  prove ∀ x ↔ ∈ x Y φ
-  prove ∀ x ↔ ∈ x Z φ
-  prove = Y Z
+premise ∃ y ∀ x ↔ ∈ x y φ
+assume ∧ ∀ x ↔ ∈ x a φ ∀ x ↔ ∈ x b φ {
+  prove ∀ x ↔ ∈ x a φ
+  prove ∀ x ↔ ∈ x b φ
+  prove = a b
 }
-prove ∃! X ∀ x ↔ ∈ x X φ
+prove ∃! y ∀ x ↔ ∈ x y φ
 qed
 
 theorem Replace Equivalent Membership Condition
-premise ∃ X ∀ x ↔ ∈ x X φ
+premise ∃ y ∀ x ↔ ∈ x y φ
 premise ∀ x ↔ φ ψ
-assume ∀ x ↔ ∈ x Y φ {
-  prove ∀ x ↔ ∈ x Y ψ
-  prove ∃ X ∀ x ↔ ∈ x X ψ
+assume ∀ x ↔ ∈ x z φ {
+  prove ∀ x ↔ ∈ x z ψ
+  prove ∃ y ∀ x ↔ ∈ x y ψ
 }
-prove ∃ X ∀ x ↔ ∈ x X ψ
+prove ∃ y ∀ x ↔ ∈ x y ψ
 qed

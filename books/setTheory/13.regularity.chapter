@@ -5,48 +5,48 @@ axiom Axiom of Regularity
 conclusion ∀ x → ¬ = x ∅ ∃ y ∧ ∈ y x = ∩ y x ∅
 
 theorem Regularity
-premise ¬ = x ∅
-prove ∀ x → ¬ = x ∅ ∃ y ∧ ∈ y x = ∩ y x ∅
-prove ∃ y ∧ ∈ y x = ∩ y x ∅
+premise ¬ = a ∅
+prove ∀ y → ¬ = y ∅ ∃ x ∧ ∈ x y = ∩ x y ∅
+prove ∃ x ∧ ∈ x a = ∩ x a ∅
 qed
 
 theorem No Set Contains Itself
-prove ¬ = singleton x ∅
-prove ∃ y ∧ ∈ y singleton x = ∩ y singleton x ∅
-assume ∧ ∈ y singleton x = ∩ y singleton x ∅ {
-  prove ∈ y singleton x
-  prove = ∩ y singleton x ∅
-  prove = y x
-  prove = ∩ x singleton x ∅
+prove ¬ = singleton a ∅
+prove ∃ y ∧ ∈ y singleton a = ∩ y singleton a ∅
+assume ∧ ∈ y singleton a = ∩ y singleton a ∅ {
+  prove ∈ y singleton a
+  prove = ∩ y singleton a ∅
+  prove = y a
+  prove = ∩ a singleton a ∅
 }
-prove = ∩ x singleton x ∅
-prove ∈ x singleton x
-prove ¬ ∈ x x
+prove = ∩ a singleton a ∅
+prove ∈ a singleton a
+prove ¬ ∈ a a
 qed
 
 theorem No Two Sets Contain Each Other
-prove ¬ = pair x y ∅
-prove ∃ z ∧ ∈ z pair x y = ∩ z pair x y ∅
-assume ∧ ∈ z pair x y = ∩ z pair x y ∅ {
-  prove ∈ z pair x y
-  prove = ∩ z pair x y ∅
-  prove ∨ = z x = z y
-  assume = z x {
-    prove = ∩ x pair x y ∅
-    prove ∈ y pair x y
-    prove ¬ ∈ y x
+prove ¬ = pair a b ∅
+prove ∃ x ∧ ∈ x pair a b = ∩ x pair a b ∅
+assume ∧ ∈ c pair a b = ∩ c pair a b ∅ {
+  prove ∈ c pair a b
+  prove = ∩ c pair a b ∅
+  prove ∨ = c a = c b
+  assume = c a {
+    prove = ∩ a pair a b ∅
+    prove ∈ b pair a b
+    prove ¬ ∈ b a
   }
-  assume = z y {
-    prove = ∩ y pair x y ∅
-    prove ∈ x pair x y
-    prove ¬ ∈ x y
+  assume = c b {
+    prove = ∩ b pair a b ∅
+    prove ∈ a pair a b
+    prove ¬ ∈ a b
   }
-  prove ∨ ¬ ∈ y x ¬ ∈ x y
+  prove ∨ ¬ ∈ b a ¬ ∈ a b
 }
-prove ∨ ¬ ∈ y x ¬ ∈ x y
+prove ∨ ¬ ∈ b a ¬ ∈ a b
 qed
 
 theorem No Two Sets Contain Each Other
-prove ∨ ¬ ∈ y x ¬ ∈ x y
-prove ¬ ∧ ∈ y x ∈ x y
+prove ∨ ¬ ∈ b a ¬ ∈ a b
+prove ¬ ∧ ∈ b a ∈ a b
 qed

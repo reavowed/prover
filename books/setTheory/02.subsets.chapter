@@ -1,18 +1,20 @@
 chapter Subsets
 Introduce the subset relation, ⊆.
 
-statement ⊆ (Y X) definition (∀ x → ∈ x Y ∈ x X)
+statement ⊆ (a b)
+  definition (∀ x → ∈ x a ∈ x b)
+  distinct-variables (x a, x b)
 
 theorem Subset Is Antisymmetric
-premise ⊆ X Y
-premise ⊆ Y X
-prove ∀ x → ∈ x X ∈ x Y
-prove ∀ x → ∈ x Y ∈ x X
-prove ∀ x ↔ ∈ x X ∈ x Y
-prove = X Y
+premise ⊆ a b
+premise ⊆ b a
+prove ∀ x → ∈ x a ∈ x b
+prove ∀ x → ∈ x b ∈ x a
+prove ∀ x ↔ ∈ x a ∈ x b
+prove = a b
 qed
 
 theorem Any Set Is a Subset of Itself
-prove ∀ x → ∈ x X ∈ x X
-prove ⊆ X X
+prove ∀ x → ∈ x a ∈ x a
+prove ⊆ a a
 qed

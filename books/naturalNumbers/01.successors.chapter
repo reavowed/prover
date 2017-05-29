@@ -1,55 +1,55 @@
 chapter Successors
-Define the successor pseudo-function, successor(n), which will form the basis of our inductive definition of the natural numbers.
+Define the successor pseudo-function which will form the basis of our inductive definition of the natural numbers.
 
-term successor (n) format (successor(n)) (= _ ∪ n singleton n)
+term successor (a) format (successor(a)) (= _ ∪ a singleton a)
 
-theorem Characterise Element of Successor
-premise ∈ m successor n
-prove = successor n ∪ n singleton n
-prove ∈ m ∪ n singleton n
-prove ∨ ∈ m n ∈ m singleton n
-assume ∈ m singleton n {
-  prove = m n
+theorem Element of Successor
+premise ∈ a successor b
+prove = successor b ∪ b singleton b
+prove ∈ a ∪ b singleton b
+prove ∨ ∈ a b ∈ a singleton b
+assume ∈ a singleton b {
+  prove = a b
 }
-prove ∨ ∈ m n = m n
+prove ∨ ∈ a b = a b
 qed
 
 theorem A Set Is an Element of Its Successor
-prove = successor n ∪ n singleton n
-prove ∈ n singleton n
-prove ∈ n ∪ n singleton n
-prove ∈ n successor n
+prove = successor a ∪ a singleton a
+prove ∈ a singleton a
+prove ∈ a ∪ a singleton a
+prove ∈ a successor a
 qed
 
 theorem An Element of a Set Is an Element of Its Successor
-premise ∈ m n
-prove = successor n ∪ n singleton n
-prove ∈ m ∪ n singleton n
-prove ∈ m successor n
+premise ∈ a b
+prove = successor b ∪ b singleton b
+prove ∈ a ∪ b singleton b
+prove ∈ a successor b
 qed
 
 theorem Successors Are Non-Empty
-prove ∈ n successor n
-prove ¬ = successor n ∅
+prove ∈ a successor a
+prove ¬ = successor a ∅
 qed
 
 theorem Successors Are Unique
-premise = successor n successor m
-prove ∈ n successor n
-prove ∈ n successor m
-prove ∨ ∈ n m = n m
-prove ∈ m successor m
-prove ∈ m successor n
-prove ∨ ∈ m n = m n
-assume = m n {
-  prove = n m
+premise = successor a successor b
+prove ∈ a successor a
+prove ∈ a successor b
+prove ∨ ∈ a b = a b
+prove ∈ b successor b
+prove ∈ b successor a
+prove ∨ ∈ b a = b a
+assume = b a {
+  prove = a b
 }
-prove ∨ ∈ m n = n m
-assume ¬ = n m {
-  prove ∈ n m
-  prove ∈ m n
-  prove ∧ ∈ n m ∈ m n
-  prove ¬ ∧ ∈ n m ∈ m n
+prove ∨ ∈ b a = a b
+assume ¬ = a b {
+  prove ∈ a b
+  prove ∈ b a
+  prove ∧ ∈ a b ∈ b a
+  prove ¬ ∧ ∈ a b ∈ b a
 }
-prove = n m
+prove = a b
 qed
