@@ -186,6 +186,27 @@
         $(event.target).closest(".theoremProof").find(".highlightConclusion").removeClass("highlightConclusion");
       };
 
+      $scope.popoverRow = function(rowData, event) {
+        if (rowData.assertion) {
+          var rowElement = $(event.target).closest('.proofRowStatement');
+          var conditions = rowData.assertion.provenStatement.conditions;
+          var html = "";
+          if (conditions.arbitraryVariables.length) {
+            html += "<div>Arbitrary variables: " + joinWordList(conditions.arbitraryVariables) + "</div>"
+          }
+          if (conditions.distinctVariables.length) {
+            var text = joinWordList(_.map(conditions.distinctVariables, function(condition) {
+              return "(" + condition[0] + ", " + condition[1] + ")";
+            }));
+            html += "<div> Distinct variables: " + text + "</div>"
+          }
+          if (!html.length) {
+            html = "No conditions.";
+          }
+          rowElement.popover({content: html, html: true, placement: 'bottom', container: 'body'}).popover('show');
+        }
+      };
+
       function addAssumption(assumption, steps, indentLevel) {
         if (steps.length == 1 && steps[0].provenStatement) {
           $scope.proofRows.push({

@@ -118,6 +118,10 @@ table {
     cursor: hand;
 }
 
+.proofRow.hasAssertion td:focus {
+    outline: none;
+}
+
 .highlightPremise {
     color: red;
 }
