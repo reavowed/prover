@@ -39,8 +39,7 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
 
   def nameParser(implicit context: Context): Parser[Option[String]] = Parser.optional(
     "name",
-    Parser.allInParens.map(Some.apply),
-    None)
+    Parser.allInParens)
 
   def parser(implicit context: Context): Parser[TermDefinition] = {
     for {

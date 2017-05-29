@@ -152,6 +152,13 @@ object Parser {
       .getOrElse(default)
   }
 
+  def optional[T](
+    name: String,
+    parser: Parser[T]
+  ): Parser[Option[T]] = {
+    optional(name, parser.map(Some.apply), None)
+  }
+
   def iterateWhileDefined[T](
     initial: T,
     parseFn: T => Parser[Option[T]]

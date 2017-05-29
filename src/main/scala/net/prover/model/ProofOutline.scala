@@ -26,7 +26,7 @@ object ProofOutline {
   private def assertionStepParser(implicit context: Context): Parser[AssertionStep] = {
     for {
       assertion <- Statement.parser
-      nonDistinctVariables <- Parser.optional("non-distinct", Conditions.variablePairListParser, Nil).map(_.toSet)
+      nonDistinctVariables <- Parser.optional("non-distinct", Conditions.variablePairListParser.map(_.toSet), Set.empty[(Variable, Variable)])
       debug <- Parser.optional("debug", Parser.constant(true), false)
     } yield AssertionStep(assertion, nonDistinctVariables, debug)
   }

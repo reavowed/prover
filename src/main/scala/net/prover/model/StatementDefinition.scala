@@ -7,6 +7,7 @@ import net.prover.model.Inference.DirectPremise
 case class StatementDefinition(
     symbol: String,
     defaultComponents: Seq[Component],
+    name: String,
     format: Format,
     definingStatement: Option[Statement],
     boundVariables: Set[TermVariable],
@@ -32,24 +33,27 @@ case class StatementDefinition(
 
   def forwardInference: Option[Inference] = definingStatement.map { s =>
     DerivedInference(
-      s"Definition of $symbol",
+      s"Definition of $name",
       Seq(DirectPremise(s)),
       ProvenStatement(defaultStatement, Conditions(Set.empty, distinctVariables)))
   }
 
   def reverseInference: Option[Inference] = definingStatement.map { s =>
     DerivedInference(
-      s"Definition of $symbol",
+      s"Definition of $name",
       Seq(DirectPremise(defaultStatement)),
       ProvenStatement(s, Conditions(Set.empty , distinctVariables)))
   }
 }
 
 object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
+  def nameParser(implicit context: Context): Parser[Option[String]] = Parser.optional(
+    "name",
+    Parser.allInParens)
+
   private def definingStatementParser(implicit context: Context): Parser[Option[Statement]] = Parser.optional(
     "definition",
-    Statement.parser.inParens.map(Some.apply),
-    None)
+    Statement.parser.inParens)
 
   private def boundVariablesParser(
     defaultVariables: Seq[Variable],
@@ -77,6 +81,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
     for {
       symbol <- Parser.singleWord
       defaultVariables <- Component.variableParser.listInParens(None)
+      name <- nameParser.getOrElse(symbol)
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       optionalDefiningStatement <- definingStatementParser
       boundVariables <- boundVariablesParser(defaultVariables, optionalDefiningStatement)
@@ -85,6 +90,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
       StatementDefinition(
         symbol,
         defaultVariables,
+        name,
         format,
         optionalDefiningStatement,
         boundVariables,

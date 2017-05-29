@@ -47,6 +47,16 @@ case class Prover(
         substitutions.tryResolve().map((inference, matchedPremises, _))
       }
       .mapCollect { case (inference, matchedPremises, substitutions) =>
+        if (debug) {
+          println(inference)
+          println(substitutions)
+          println(inference.conclusion)
+          inference.premises.foreach { p =>
+            println(p.applySubstitutions(substitutions))
+          }
+          println(inference.conclusion.applySubstitutions(substitutions))
+          println()
+        }
         makeAssertionStep(assertion, inference, matchedPremises, substitutions)
       }
       .nextOption()

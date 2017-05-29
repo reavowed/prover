@@ -29,6 +29,7 @@ trait ProverSpec extends Specification {
     StatementDefinition(
       symbol,
       variables,
+      symbol,
       Format.default(symbol, variables.map(_.text)),
       definingStatement,
       Set.empty,
@@ -43,6 +44,7 @@ trait ProverSpec extends Specification {
     StatementDefinition(
       symbol,
       variables,
+      symbol,
       Format.default(symbol, variables.map(_.text)),
       definingStatement,
       Set.empty,
@@ -57,6 +59,7 @@ trait ProverSpec extends Specification {
     StatementDefinition(
       symbol,
       Seq(x, φ),
+      symbol,
       Format(s"($symbol%0)%1", requiresBrackets = false),
       definingStatement,
       Set(x),

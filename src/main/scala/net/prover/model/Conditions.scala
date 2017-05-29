@@ -59,8 +59,7 @@ object Conditions {
   def arbitraryVariablesParser(implicit context: Context): Parser[Option[Set[TermVariable]]] = {
     Parser.optional(
       "arbitrary-variables",
-      Term.variableListParser.map(_.toSet).map(Some.apply),
-      None)
+      Term.variableListParser.map(_.toSet))
   }
 
   def variablePairParser(implicit context: Context): Parser[(Variable, Variable)] = {
@@ -77,8 +76,7 @@ object Conditions {
   def optionalDistinctVariablesParser(implicit context: Context): Parser[Option[DistinctVariables]] = {
     Parser.optional(
       "distinct-variables",
-      variablePairListParser.map(DistinctVariables(_: _*)).map(Some.apply),
-      None)
+      variablePairListParser.map(DistinctVariables(_: _*)))
   }
 
   def distinctVariablesParser(implicit context: Context): Parser[DistinctVariables] = {
