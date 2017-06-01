@@ -3,18 +3,16 @@ Some inferences that can be used to reduce boilerplate in proofs.
 
 theorem Redundant And in Existential Quantifier
 premise ∃ x φ
-assume ∧ sub y x φ ψ {
-  prove ψ
-}
 assume ∃ x ∧ φ ψ {
-  prove ψ
+  let y ∧ sub y x φ ψ {
+    prove ψ
+  }
 }
 assume ψ {
-  assume sub y x φ {
+  let y sub y x φ {
     prove ∧ sub y x φ ψ
     prove ∃ x ∧ φ ψ
   }
-  prove ∃ x ∧ φ ψ
 }
 prove ↔ ∃ x ∧ φ ψ ψ
 qed

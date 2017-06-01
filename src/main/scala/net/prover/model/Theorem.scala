@@ -24,8 +24,8 @@ object Theorem extends ChapterEntryParser[Theorem] with InferenceParser {
       _ <- Parser.singleWord.matchOrThrow(_ == "qed", word => s"Expected step or qed, found '$word'")
     } yield {
       val detailedProof = DetailedProof.fillInOutline(premises, proofOutline)
-      val conclusion = detailedProof.steps.ofType[DetailedProof.AssertionStep].lastOption
-        .getOrElse(throw new Exception("Theorem must contain at least one assertion"))
+      val conclusion = detailedProof.steps.ofType[DetailedProof.StepWithProvenStatement].lastOption
+        .getOrElse(throw new Exception("Theorem must contain at least one top-level proven statement"))
         .provenStatement
       Theorem(
         name,

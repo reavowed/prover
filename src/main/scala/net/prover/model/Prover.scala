@@ -5,6 +5,7 @@ import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
 
 case class Prover(
   assertion: Statement,
+  nonArbitraryVariables: Set[TermVariable],
   nonDistinctVariables: Set[(Variable, Variable)],
   provenAssertions: Seq[ReferencedAssertion],
   provenDeductions: Seq[ReferencedDeduction],
@@ -95,6 +96,7 @@ case class Prover(
             }
             Prover(
               statement,
+              Set.empty,
               newNonDistinctVariables,
               provenAssertions,
               Nil,
@@ -188,9 +190,10 @@ case class Prover(
       if !nonDistinctVariables.exists { case (first, second) =>
         combinedConditions.distinctVariables.areDistinct(first, second)
       }
+      if nonArbitraryVariables.intersect(combinedConditions.arbitraryVariables).isEmpty
       provenStatement = ProvenStatement(assertion, combinedConditions)
     } yield {
-      AssertionStep(provenStatement, inference, matchedPremises.map(_.reference), substitutions)
+      AssertionStep(provenStatement, inference.name, matchedPremises.map(_.reference))
     }
   }
 }

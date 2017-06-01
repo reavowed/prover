@@ -17,27 +17,29 @@ qed
 
 theorem Every Element of a Natural Number Is a Natural Number
 premise ∈ n ℕ
-prove ∀ m ¬ ∈ m ∅
+premise ∈ m n
+prove ∀ x ¬ ∈ x ∅
 prove = 0 ∅
-prove ∀ m ¬ ∈ m 0
-prove ∀ m → ∈ m 0 ∈ m ℕ
-assume ∧ ∈ a ℕ ∀ m → ∈ m a ∈ m ℕ {
+prove ∀ x ¬ ∈ x 0
+prove ∀ x → ∈ x 0 ∈ x ℕ
+assume ∧ ∈ a ℕ ∀ x → ∈ x a ∈ x ℕ {
   prove ∈ a ℕ
-  prove ∀ m → ∈ m a ∈ m ℕ
-  assume ∈ m a {
-    prove ∈ m ℕ
+  prove ∀ x → ∈ x a ∈ x ℕ
+  assume ∈ x a {
+    prove ∈ x ℕ
   }
-  assume = m a {
-    prove ∈ m ℕ
+  assume = x a {
+    prove ∈ x ℕ
   }
-  assume ∈ m successor a {
-    prove ∨ ∈ m a = m a
-    prove ∈ m ℕ
+  assume ∈ x successor a {
+    prove ∨ ∈ x a = x a
+    prove ∈ x ℕ
   }
-  prove → ∈ m successor a ∈ m ℕ
-  prove ∀ m → ∈ m successor a ∈ m ℕ
+  prove → ∈ x successor a ∈ x ℕ
+  prove ∀ x → ∈ x successor a ∈ x ℕ
 }
-prove ∀ m → ∈ m n ∈ m ℕ
+prove ∀ x → ∈ x n ∈ x ℕ
+prove ∈ m ℕ
 qed
 
 theorem A Natural Number Either Is 0 or Contains 0
@@ -61,40 +63,35 @@ qed
 
 theorem A Natural Number Either Contains Or Is The Successor of an Element
 premise ∈ n ℕ
-prove ∀ m ¬ ∈ m ∅
-prove = 0 ∅
-prove ∀ m ¬ ∈ m 0
-prove ∀ m → ∈ m 0 ∨ ∈ successor m 0 = successor m 0
-assume ∧ ∈ a ℕ ∀ m → ∈ m a ∨ ∈ successor m a = successor m a {
-  prove ∀ m → ∈ m a ∨ ∈ successor m a = successor m a
-  assume ∈ m successor a {
-    prove ∨ ∈ m a = m a
-    assume ∈ m a {
-      prove ∨ ∈ successor m a = successor m a
-      assume ∈ successor m a {
-        prove ∈ successor m successor a
-      }
-      assume = successor m a {
-        prove ∈ a successor a
-        prove ∈ successor m successor a
-      }
-      prove ∈ successor m successor a
-    }
-    assume = m a {
-      prove = successor m successor m
-      prove = successor m successor a
-    }
-    prove ∨ ∈ successor m successor a = successor m successor a
-  }
-  prove → ∈ m successor a ∨ ∈ successor m successor a = successor m successor a
-  prove ∀ m → ∈ m successor a ∨ ∈ successor m successor a = successor m successor a
-}
-prove ∀ m → ∈ m n ∨ ∈ successor m n = successor m n
-qed
-
-theorem A Natural Number Either Contains Or Is The Successor of an Element
-premise ∈ n ℕ
 premise ∈ m n
+prove ∀ x ¬ ∈ x ∅
+prove = 0 ∅
+prove ∀ x ¬ ∈ x 0
+prove ∀ x → ∈ x 0 ∨ ∈ successor x 0 = successor x 0
+assume ∧ ∈ a ℕ ∀ x → ∈ x a ∨ ∈ successor x a = successor x a {
+  prove ∀ x → ∈ x a ∨ ∈ successor x a = successor x a
+  assume ∈ x successor a {
+    prove ∨ ∈ x a = x a
+    assume ∈ x a {
+      prove ∨ ∈ successor x a = successor x a
+      assume ∈ successor x a {
+        prove ∈ successor x successor a
+      }
+      assume = successor x a {
+        prove ∈ a successor a
+        prove ∈ successor x successor a
+      }
+      prove ∈ successor x successor a
+    }
+    assume = x a {
+      prove = successor x successor x
+      prove = successor x successor a
+    }
+    prove ∨ ∈ successor x successor a = successor x successor a
+  }
+  prove → ∈ x successor a ∨ ∈ successor x successor a = successor x successor a
+  prove ∀ x → ∈ x successor a ∨ ∈ successor x successor a = successor x successor a
+}
 prove ∀ x → ∈ x n ∨ ∈ successor x n = successor x n
 prove ∨ ∈ successor m n = successor m n
 qed

@@ -23,20 +23,19 @@ theorem Membership Condition for Binary Union
 prove = ∪ a b union pair a b
 prove ∀ x ↔ ∈ x union pair a b ∃ y ∧ ∈ x y ∈ y pair a b
 prove ∀ x ↔ ∈ x ∪ a b ∃ y ∧ ∈ x y ∈ y pair a b
-assume ∧ ∈ x y ∈ y pair a b {
-  prove ∈ x y
-  prove ∈ y pair a b
-  prove ∨ = y a = y b
-  assume = y a {
-    prove ∈ x a
-  }
-  assume = y b {
-    prove ∈ x b
-  }
-  prove ∨ ∈ x a ∈ x b
-}
 assume ∃ y ∧ ∈ x y ∈ y pair a b {
-  prove ∨ ∈ x a ∈ x b
+  let y ∧ ∈ x y ∈ y pair a b {
+    prove ∈ x y
+    prove ∈ y pair a b
+    prove ∨ = y a = y b
+    assume = y a {
+      prove ∈ x a
+    }
+    assume = y b {
+      prove ∈ x b
+    }
+    prove ∨ ∈ x a ∈ x b
+  }
 }
 assume ∈ x a {
   prove ∈ a pair a b
@@ -95,10 +94,9 @@ qed
 theorem A Union of a Non-Empty Set Is Non-Empty
 premise ¬ = a ∅
 prove ∃ x ∈ x a
-assume ∈ x a {
+let x ∈ x a {
   prove ∈ x ∪ a b
   prove ∃ x ∈ x ∪ a b
 }
-prove ∃ x ∈ x ∪ a b
 prove ¬ = ∪ a b ∅
 qed

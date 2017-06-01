@@ -112,7 +112,7 @@
       }
 
       $scope.highlightRow = function(rowData, event) {
-        if (!rowData.assertion) {
+        if (!rowData.references) {
           return;
         }
         var tableRow = $(event.target).closest("tr");
@@ -121,19 +121,7 @@
         var rowIndex = allTableRows.index(tableRow);
         var premises = proofContainer.find(".premise");
 
-        var previousRows = $scope.proofRows.slice(0, rowIndex);
-        var referrableRows =  _.reduceRight(
-          previousRows,
-          function (acc, row) {
-            if (row.indentLevel <= acc.indentLevel) {
-              acc.indentLevel = row.indentLevel;
-              acc.rows.unshift(row);
-            }
-            return acc;
-          },
-          { indentLevel: rowData.indentLevel, rows: []}
-        ).rows;
-
+        var referrableRows = $scope.proofRows.slice(0, rowIndex);
         if (rowData.assumption) {
           referrableRows.push(rowData);
         }
@@ -142,7 +130,8 @@
           if (reference < premises.length) {
             premises.eq(reference).addClass("highlightPremise");
           } else {
-            var referredRow = referrableRows[reference - premises.length];
+            var referredRow = _.findLast(referrableRows, function(row) { return row.reference === reference; });
+            if (referredRow == null || (referredRow === rowData && !rowData.assertion)) return;
             var referredRowIndex = _.indexOf($scope.proofRows, referredRow);
             var referredTableRow = allTableRows.eq(referredRowIndex);
             var referredAssumption = referredTableRow.find(".assumption");
@@ -155,15 +144,19 @@
             if (subreference != null) {
               var followingRows = _.drop($scope.proofRows, referredRowIndex + 1);
               var nestedRows = _.takeWhile(followingRows, function (row) {
-                return row.indentLevel > referredRow.indentLevel;
+                return row.conceptualIndentLevel > referredRow.conceptualIndentLevel;
               });
               var childRows = _.filter(nestedRows, function (row) {
-                return row.indentLevel == referredRow.indentLevel + 1;
+                return row.conceptualIndentLevel === referredRow.conceptualIndentLevel + 1;
               });
-              if (referredRow.assertion) {
-                childRows.unshift(referredRow);
+              var childRow = _.findLast(childRows, function(row) { return row.reference === subreference; });
+              if (childRow == null) {
+                if (referredRow.assertion && subreference === reference + 1) {
+                  childRow = referredRow
+                } else {
+                  return
+                }
               }
-              var childRow = childRows[subreference];
               var childRowIndex = _.indexOf($scope.proofRows, childRow);
               var childTableRow = allTableRows.eq(childRowIndex);
               childTableRow.find(".assertion").addClass("highlightPremise");
@@ -171,7 +164,7 @@
           }
         }
 
-        _.forEach(rowData.assertion.references, function(reference) {
+        _.forEach(rowData.references, function(reference) {
           if (reference.index != null) {
             highlightPremise(reference.index);
           } else {
@@ -187,15 +180,14 @@
       };
 
       $scope.popoverRow = function(rowData, event) {
-        if (rowData.assertion) {
+        if (rowData.conditions) {
           var rowElement = $(event.target).closest('.proofRowStatement');
-          var conditions = rowData.assertion.provenStatement.conditions;
           var html = "";
-          if (conditions.arbitraryVariables.length) {
-            html += "<div>Arbitrary variables: " + joinWordList(conditions.arbitraryVariables) + "</div>"
+          if (rowData.conditions.arbitraryVariables.length) {
+            html += "<div>Arbitrary variables: " + joinWordList(rowData.conditions.arbitraryVariables) + "</div>"
           }
-          if (conditions.distinctVariables.length) {
-            var text = joinWordList(_.map(conditions.distinctVariables, function(condition) {
+          if (rowData.conditions.distinctVariables.length) {
+            var text = joinWordList(_.map(rowData.conditions.distinctVariables, function(condition) {
               return "(" + condition[0] + ", " + condition[1] + ")";
             }));
             html += "<div> Distinct variables: " + text + "</div>"
@@ -207,44 +199,76 @@
         }
       };
 
-      function addAssumption(assumption, steps, indentLevel) {
+      function addAssumption(assumption, steps, reference, visibleIndentLevel, conceptualIndentLevel) {
         if (steps.length == 1 && steps[0].provenStatement) {
           $scope.proofRows.push({
             prefix: 'Then',
             assumption: assumption,
-            assertion: steps[0],
-            indentLevel: indentLevel
+            assertion: steps[0].provenStatement.statement,
+            references: steps[0].references,
+            conditions: steps[0].provenStatement.conditions,
+            reference: reference,
+            inferenceName: steps[0].inferenceName,
+            visibleIndentLevel: visibleIndentLevel,
+            conceptualIndentLevel: conceptualIndentLevel
           });
         } else {
           $scope.proofRows.push({
             prefix: 'Assume',
             assumption: assumption,
-            indentLevel: indentLevel
+            reference: reference,
+            visibleIndentLevel: visibleIndentLevel,
+            conceptualIndentLevel: conceptualIndentLevel,
           });
-          _.forEach(steps, function (step) {
-            addStep(step, indentLevel + 1)
+          _.forEach(steps, function (step, index) {
+            addStep(step, reference + index + 1, visibleIndentLevel + 1, conceptualIndentLevel + 1)
           });
         }
       }
 
-      function addAssertion(assertion, indentLevel) {
+      function addNaming(variable, assumptionStep, assertionStep, reference, visibleIndentLevel, conceptualIndentLevel, override) {
         $scope.proofRows.push({
-          prefix: 'Then',
-          assertion: assertion,
-          indentLevel: indentLevel
+          prefix: 'Let ' + variable + ' be such that',
+          assumption: assumptionStep.assumption,
+          inferenceName: assertionStep.inferenceName,
+          references: assertionStep.references,
+          reference: reference,
+          visibleIndentLevel: visibleIndentLevel,
+          conceptualIndentLevel: conceptualIndentLevel
+        });
+        _.forEach(assumptionStep.steps, function (step, index) {
+          var localOverride = index === assumptionStep.steps.length - 1 ?
+            (override || {conditions: assertionStep.provenStatement.conditions, level: conceptualIndentLevel, reference: reference}) :
+            null;
+          addStep(step, reference + index + 1, visibleIndentLevel, conceptualIndentLevel + 1, localOverride)
         });
       }
 
-      function addStep(step, indentLevel) {
+      function addAssertion(assertionStep, reference, visibleIndentLevel, conceptualIndentLevel, override) {
+        $scope.proofRows.push({
+          prefix: 'Then',
+          assertion: assertionStep.provenStatement.statement,
+          references: assertionStep.references,
+          conditions: override ? override.conditions : assertionStep.provenStatement.conditions,
+          inferenceName: assertionStep.inferenceName,
+          reference: override ? override.reference : reference,
+          visibleIndentLevel: visibleIndentLevel,
+          conceptualIndentLevel: override ? override.level : conceptualIndentLevel
+        });
+      }
+
+      function addStep(step, reference, visibleIndentLevel, conceptualIndentLevel, override) {
         if (step.assumption) {
-          addAssumption(step.assumption, step.steps, indentLevel);
+          addAssumption(step.assumption, step.steps, reference, visibleIndentLevel, conceptualIndentLevel, override);
+        } else if (step.variable) {
+          addNaming(step.variable, step.assumptionStep, step.assertionStep, reference, visibleIndentLevel, conceptualIndentLevel, override)
         } else {
-          addAssertion(step, indentLevel);
+          addAssertion(step, reference, visibleIndentLevel, conceptualIndentLevel, override);
         }
       }
 
-      _.forEach(theorem.proof.steps, function (step) {
-        addStep(step, 0)
+      _.forEach(theorem.proof.steps, function (step, index) {
+        addStep(step, theorem.premises.length + index, 0, 0)
       });
     }]
   });

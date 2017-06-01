@@ -6,16 +6,33 @@ case class DetailedProof(steps: Seq[DetailedProof.Step])
 
 object DetailedProof {
   sealed trait Step
+  sealed trait StepWithProvenStatement extends Step {
+    def provenStatement: ProvenStatement
+  }
+  object StepWithProvenStatement {
+    def unapply(step: Step): Option[ProvenStatement] = step match {
+      case stepWithProvenStatement: StepWithProvenStatement =>
+        Some(stepWithProvenStatement.provenStatement)
+      case _ =>
+        None
+    }
+  }
   case class AssumptionStep(
       assumption: Statement,
       steps: Seq[Step])
     extends Step
+  case class NamingStep(
+      variable: TermVariable,
+      assumptionStep: AssumptionStep,
+      assertionStep: AssertionStep)
+    extends StepWithProvenStatement {
+    override def provenStatement: ProvenStatement = assertionStep.provenStatement
+  }
   case class AssertionStep(
       provenStatement: ProvenStatement,
-      inference: Inference,
-      references: Seq[Reference],
-      substitutions: Substitutions)
-    extends Step
+      inferenceName: String,
+      references: Seq[Reference])
+    extends StepWithProvenStatement
 
   sealed trait Reference
   case class DirectReference(index: Int) extends Reference
@@ -66,14 +83,17 @@ object DetailedProof {
         val step = proveStep(stepOutline, provenAssertions, provenDeductions, premises, assumptions, nextReference)
         val (updatedAssertions, updatedDeductions) = step match {
           case AssumptionStep(assumption, substeps) =>
-            val newDeductions = substeps.zipWithIndex.collect {
-              case (AssertionStep(deduction, _, _, _), index) =>
-                ReferencedDeduction(assumption, deduction, DeducedReference(nextReference, index))
+            val newProvenDeductions = substeps.zipWithIndex.collect {
+              case (StepWithProvenStatement(deduction), index) =>
+                ReferencedDeduction(assumption, deduction, DeducedReference(nextReference, nextReference + index + 1))
             }
-            (provenAssertions, provenDeductions ++ newDeductions)
-          case AssertionStep(provenStatement, _, _, _) =>
-            val newAssertion = ReferencedAssertion(provenStatement, DirectReference(nextReference))
-            (provenAssertions :+ newAssertion, provenDeductions)
+            (provenAssertions, provenDeductions ++ newProvenDeductions)
+          case NamingStep(_, _, assertion) =>
+            val newProvenAssertion = ReferencedAssertion(assertion.provenStatement, DirectReference(nextReference))
+            (provenAssertions :+ newProvenAssertion, provenDeductions)
+          case AssertionStep(provenStatement, _, _) =>
+            val newProvenAssertion = ReferencedAssertion(provenStatement, DirectReference(nextReference))
+            (provenAssertions :+ newProvenAssertion, provenDeductions)
         }
         proveSteps(
           otherStepOutlines,
@@ -97,17 +117,64 @@ object DetailedProof {
   ): Step = {
     stepOutline match {
       case ProofOutline.AssumptionStep(assumption, substepOutlines) =>
-        val substeps = proveSteps(
-          substepOutlines,
-          Nil,
-          provenAssertions :+ ReferencedAssertion(ProvenStatement.withNoConditions(assumption), DirectReference(nextReference)),
-          provenDeductions,
+        proveAssumptionStep(assumption, substepOutlines, provenAssertions, provenDeductions, premises, assumptions, nextReference)
+      case ProofOutline.NamingStep(variable, namingStatement, substepOutlines) =>
+        val assumptionStep = proveAssumptionStep(namingStatement, substepOutlines, provenAssertions, provenDeductions, premises, assumptions, nextReference)
+        val finalAssertionStatement = assumptionStep.steps match {
+          case _ :+ StepWithProvenStatement(statement) =>
+            statement
+          case _ =>
+            throw new Exception("Let step must end with an assertion")
+        }
+        val assertionStep = proveAssertionStep(
+          finalAssertionStatement.statement,
+          Set.empty,
+          Set.empty,
+          false,
+          provenAssertions,
+          provenDeductions :+ ReferencedDeduction(namingStatement, finalAssertionStatement, DeducedReference(nextReference, nextReference + assumptionStep.steps.length)),
           premises,
-          assumptions :+ assumption,
-          nextReference + 1)
-        AssumptionStep(assumption, substeps)
-      case ProofOutline.AssertionStep(assertion, nonDistinctVariables, debug) =>
-        Prover(assertion, nonDistinctVariables, provenAssertions, provenDeductions, premises, assumptions, debug).proveAssertion()
+          assumptions,
+          nextReference)
+        NamingStep(variable, assumptionStep, assertionStep)
+      case ProofOutline.AssertionStep(assertion, nonArbitraryVariables, nonDistinctVariables, debug) =>
+        proveAssertionStep(assertion, nonArbitraryVariables, nonDistinctVariables, debug, provenAssertions, provenDeductions, premises, assumptions, nextReference)
     }
+  }
+
+  private def proveAssumptionStep(
+    assumption: Statement,
+    substepOutlines: Seq[ProofOutline.Step],
+    provenAssertions: Seq[ReferencedAssertion],
+    provenDeductions: Seq[ReferencedDeduction],
+    premises: Seq[Premise],
+    assumptions: Seq[Statement],
+    nextReference: Int)(
+    implicit context: Context
+  ): AssumptionStep = {
+    val substeps = proveSteps(
+      substepOutlines,
+      Nil,
+      provenAssertions :+ ReferencedAssertion(ProvenStatement.withNoConditions(assumption), DirectReference(nextReference)),
+      provenDeductions,
+      premises,
+      assumptions :+ assumption,
+      nextReference + 1)
+    AssumptionStep(assumption, substeps)
+  }
+
+  private def proveAssertionStep(
+    assertion: Statement,
+    nonArbitraryVariables: Set[TermVariable],
+    nonDistinctVariables: Set[(Variable, Variable)],
+    debug: Boolean,
+    provenAssertions: Seq[ReferencedAssertion],
+    provenDeductions: Seq[ReferencedDeduction],
+    premises: Seq[Premise],
+    assumptions: Seq[Statement],
+    nextReference: Int)(
+    implicit context: Context
+  ): AssertionStep = {
+    Prover(assertion, nonArbitraryVariables, nonDistinctVariables, provenAssertions, provenDeductions, premises, assumptions, debug).proveAssertion()
   }
 }

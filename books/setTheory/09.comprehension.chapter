@@ -13,27 +13,26 @@ theorem Comprehensions Exist for Non-Empty Sets Lemma
 premise ∧ ∈ a X sub a x φ
 prove ∈ a X
 prove sub a x φ
-assume ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a {
-  prove ∈ x X
-  prove ∨ ∧ φ = y x ∧ ¬ φ = y a
-  assume φ {
-    prove ↔ ∨ ∧ φ = y x ∧ ¬ φ = y a = y x
-    prove = y x
-    prove ∈ y X
-    prove sub y x φ
-    prove ∧ ∈ y X sub y x φ
-  }
-  assume ¬ φ {
-    prove ↔ ∨ ∧ φ = y x ∧ ¬ φ = y a = y a
-    prove = y a
-    prove ∈ y X
-    prove sub y x φ
-    prove ∧ ∈ y X sub y x φ
-  }
-  prove ∧ ∈ y X sub y x φ
-}
 assume ∃ x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a {
-  prove ∧ ∈ y X sub y x φ
+  let x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a {
+    prove ∈ x X
+    prove ∨ ∧ φ = y x ∧ ¬ φ = y a
+    assume φ {
+      prove ↔ ∨ ∧ φ = y x ∧ ¬ φ = y a = y x
+      prove = y x
+      prove ∈ y X
+      prove sub y x φ
+      prove ∧ ∈ y X sub y x φ
+    }
+    assume ¬ φ {
+      prove ↔ ∨ ∧ φ = y x ∧ ¬ φ = y a = y a
+      prove = y a
+      prove ∈ y X
+      prove sub y x φ
+      prove ∧ ∈ y X sub y x φ
+    }
+    prove ∧ ∈ y X sub y x φ
+  }
 }
 assume ∧ ∈ y X sub y x φ {
   prove ∈ y X
@@ -50,7 +49,7 @@ qed
 
 theorem Comprehensions Exist for Non-Empty Sets
 premise ∃ y ∧ ∈ y X sub y x φ
-assume ∧ ∈ a X sub a x φ {
+let a ∧ ∈ a X sub a x φ {
   prove ∃! y ∨ ∧ φ = y x ∧ ¬ φ = y a
   prove → ∈ x X ∃! y ∨ ∧ φ = y x ∧ ¬ φ = y a
   prove ∀ x → ∈ x X ∃! y ∨ ∧ φ = y x ∧ ¬ φ = y a
@@ -58,7 +57,6 @@ assume ∧ ∈ a X sub a x φ {
   prove ∀ y ↔ ∃ x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a ∧ ∈ y X sub y x φ
   prove ∃ Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
 }
-prove ∃ Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
 prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
 qed
 
@@ -72,7 +70,10 @@ assume ∃ y ∧ ∈ y X sub y x φ {
 prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
 qed
 
-term comprehension (x X φ) format ({x ∈ X | φ}) (∀ y ↔ ∈ y _ ∧ ∈ y X sub y x φ)
+term comprehension (x X φ)
+  format ({x ∈ X | φ})
+  (∀ y ↔ ∈ y _ ∧ ∈ y X sub y x φ)
+  distinct-variables (x y, x X, y X, y φ)
 
 theorem Membership Condition for a Comprehension
 premise = S comprehension x X φ
@@ -115,4 +116,15 @@ premise sub a x φ
 prove ∀ y ↔ ∈ y S ∧ ∈ y X sub y x φ
 prove ∧ ∈ a X sub a x φ
 prove ∈ a S
+qed
+
+theorem Universal Property from Comprehension
+premise = S comprehension x X φ
+premise = S X
+assume ∈ y X {
+  prove ∈ y S
+  prove sub y x φ
+}
+prove → ∈ y X sub y x φ
+prove ∀ x → ∈ x X φ
 qed

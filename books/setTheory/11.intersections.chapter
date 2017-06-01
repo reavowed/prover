@@ -3,19 +3,18 @@ Arbitrary and binary intersections.
 
 theorem Intersection over a Class
 premise ∃ x φ
-assume sub a x φ {
+let a sub a x φ {
   assume ∀ x → φ ∈ y x {
     prove ∈ y a
   }
   prove ↔ ∧ ∈ y a ∀ x → φ ∈ y x ∀ x → φ ∈ y x
   prove ∀ y ↔ ∧ ∈ y a ∀ x → φ ∈ y x ∀ x → φ ∈ y x
-  assume = S comprehension z a ∀ x → φ ∈ z x {
+  let S = S comprehension z a ∀ x → φ ∈ z x {
     prove ∀ y ↔ ∈ y S ∧ ∈ y a ∀ x → φ ∈ y x
     prove ∀ y ↔ ∈ y S ∀ x → φ ∈ y x
+    prove ∃ Y ∀ y ↔ ∈ y Y ∀ x → φ ∈ y x
   }
-  prove ∃ Y ∀ y ↔ ∈ y Y ∀ x → φ ∈ y x
 }
-prove ∃ Y ∀ y ↔ ∈ y Y ∀ x → φ ∈ y x
 qed
 
 theorem Arbitrary Intersections Are Unique

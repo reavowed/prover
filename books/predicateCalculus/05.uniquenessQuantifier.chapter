@@ -34,8 +34,6 @@ prove ∃ x φ
 assume ∧ sub a x φ sub b x φ {
   prove sub a x φ
   prove sub b x φ
-  prove ↔ sub a x φ = a y
-  prove ↔ sub b x φ = b y
   prove = a y
   prove = b y
   prove = a b

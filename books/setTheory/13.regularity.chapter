@@ -3,6 +3,7 @@ Introduce the Axiom of Regularity.
 
 axiom Axiom of Regularity
 conclusion ∀ x → ¬ = x ∅ ∃ y ∧ ∈ y x = ∩ y x ∅
+distinct-variables (x y)
 
 theorem Regularity
 premise ¬ = a ∅
@@ -13,13 +14,12 @@ qed
 theorem No Set Contains Itself
 prove ¬ = singleton a ∅
 prove ∃ y ∧ ∈ y singleton a = ∩ y singleton a ∅
-assume ∧ ∈ y singleton a = ∩ y singleton a ∅ {
+let y ∧ ∈ y singleton a = ∩ y singleton a ∅ {
   prove ∈ y singleton a
   prove = ∩ y singleton a ∅
   prove = y a
   prove = ∩ a singleton a ∅
 }
-prove = ∩ a singleton a ∅
 prove ∈ a singleton a
 prove ¬ ∈ a a
 qed
@@ -27,7 +27,7 @@ qed
 theorem No Two Sets Contain Each Other
 prove ¬ = pair a b ∅
 prove ∃ x ∧ ∈ x pair a b = ∩ x pair a b ∅
-assume ∧ ∈ c pair a b = ∩ c pair a b ∅ {
+let c ∧ ∈ c pair a b = ∩ c pair a b ∅ {
   prove ∈ c pair a b
   prove = ∩ c pair a b ∅
   prove ∨ = c a = c b
@@ -43,7 +43,6 @@ assume ∧ ∈ c pair a b = ∩ c pair a b ∅ {
   }
   prove ∨ ¬ ∈ b a ¬ ∈ a b
 }
-prove ∨ ¬ ∈ b a ¬ ∈ a b
 qed
 
 theorem No Two Sets Contain Each Other

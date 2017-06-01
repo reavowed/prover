@@ -38,12 +38,12 @@
                     ng-mouseleave="removeHighlight(row, $event)"
                 >
                     <td class="proofRowStatement" ng-click="popoverRow(row, $event)" data-trigger="focus" tabindex="0">
-                        <span ng-repeat="i in _.range(row.indentLevel)" class="proofIndent"></span>
+                        <span ng-repeat="i in _.range(row.visibleIndentLevel)" class="proofIndent"></span>
                         <span>{{row.prefix}}</span>
-                        <span ng-if="row.assumption" class="assumption">{{row.assumption}}</span><span ng-if="row.assumption && row.assertion"> ⊢ </span><span ng-if="row.assertion" class="assertion">{{row.assertion.provenStatement.statement}}</span>.
+                        <span ng-if="row.assumption" class="assumption">{{row.assumption}}</span><span ng-if="row.assumption && row.assertion"> ⊢ </span><span ng-if="row.assertion" class="assertion">{{row.assertion}}</span>.
                     </td>
                     <td>
-                        <span ng-if="row.assertion" class="stepInferenceId">{{row.assertion.inference.name}}</span>
+                        <span ng-if="row.inferenceName" class="stepInferenceId">{{row.inferenceName}}</span>
                     </td>
                 </tr>
             </table>

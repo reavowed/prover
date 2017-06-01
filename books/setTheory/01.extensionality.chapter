@@ -47,9 +47,8 @@ qed
 theorem Replace Equivalent Membership Condition
 premise ∃ y ∀ x ↔ ∈ x y φ
 premise ∀ x ↔ φ ψ
-assume ∀ x ↔ ∈ x z φ {
+let z ∀ x ↔ ∈ x z φ {
   prove ∀ x ↔ ∈ x z ψ
   prove ∃ y ∀ x ↔ ∈ x y ψ
 }
-prove ∃ y ∀ x ↔ ∈ x y ψ
 qed

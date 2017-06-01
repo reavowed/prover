@@ -1,17 +1,24 @@
 chapter Singletons
 Establish the existence of the singleton set {a}.
 
-theorem Singleton Existence
-prove ∃! x = x a
-prove → ∈ y powerSet ∅ ∃! x = x a
-prove ∀ y → ∈ y powerSet ∅ ∃! x = x a
-prove ∃ b ∀ x ↔ ∈ x b ∃ y ∧ ∈ y powerSet ∅ = x a
+theorem There Exists a Set with an Element
 prove ∈ ∅ powerSet ∅
 prove ∃ y ∈ y powerSet ∅
-prove ↔ ∃ y ∧ ∈ y powerSet ∅ = x a = x a
-prove ∀ x ↔ ∃ y ∧ ∈ y powerSet ∅ = x a = x a
-prove ∃ b ∀ x ↔ ∈ x b = x a
-prove ∃! b ∀ x ↔ ∈ x b = x a
+prove ∃ x ∃ y ∈ y x
+qed
+
+theorem Singleton Existence
+prove ∃ x ∃ y ∈ y x
+let c ∃ y ∈ y c {
+  prove ∃! x = x a
+  prove → ∈ y c ∃! x = x a
+  prove ∀ y → ∈ y c ∃! x = x a
+  prove ∃ b ∀ x ↔ ∈ x b ∃ y ∧ ∈ y c = x a
+  prove ↔ ∃ y ∧ ∈ y c = x a = x a
+  prove ∀ x ↔ ∃ y ∧ ∈ y c = x a = x a
+  prove ∃ b ∀ x ↔ ∈ x b = x a
+  prove ∃! b ∀ x ↔ ∈ x b = x a
+}
 qed
 
 term singleton (a)
@@ -70,11 +77,10 @@ prove ∀ x → ∈ x S ∈ x singleton a
 prove ∀ x ↔ ∈ x singleton a = x a
 prove ∀ x → ∈ x S = x a
 assume ∃ y ∈ y S {
-  assume ∈ b S {
+  let b ∈ b S {
     prove = b a
     prove ∈ a S
   }
-  prove ∈ a S
   prove ⊆ singleton a S
   prove = S singleton a
 }

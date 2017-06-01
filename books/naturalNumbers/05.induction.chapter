@@ -56,24 +56,10 @@ prove ∈ successor m ℕ
 prove ∈ successor m S
 qed
 
-theorem An Inductive Property Holds for All Natural Numbers
-premise proves = S comprehension n ℕ φ = S ℕ
-assume = S comprehension n ℕ φ {
-  prove = S ℕ
-  assume ∈ m ℕ {
-    prove ∈ m S
-    prove sub m n φ
-  }
-  prove → ∈ m ℕ sub m n φ
-  prove ∀ n → ∈ n ℕ φ
-}
-prove ∀ n → ∈ n ℕ φ
-qed
-
 theorem Proof by Induction on Property
 premise sub 0 n φ
 premise proves ∧ ∈ m ℕ sub m n φ sub successor m n φ
-assume = S comprehension n ℕ φ {
+let S = S comprehension n ℕ φ {
   prove ∈ 0 S
   assume ∈ m S {
     prove ∈ m ℕ
@@ -83,8 +69,8 @@ assume = S comprehension n ℕ φ {
     prove ∈ successor m S
   }
   prove = S ℕ
+  prove ∀ n → ∈ n ℕ φ
 }
-prove ∀ n → ∈ n ℕ φ
 qed
 
 theorem An Inductive Property Applies to Any Natural Number
@@ -92,6 +78,5 @@ premise ∈ n ℕ
 premise sub 0 n φ
 premise proves ∧ ∈ m ℕ sub m n φ sub successor m n φ
 prove ∀ n → ∈ n ℕ φ
-prove → ∈ n ℕ φ
 prove φ non-distinct (n φ)
 qed
