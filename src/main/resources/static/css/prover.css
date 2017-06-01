@@ -118,7 +118,7 @@ table {
     cursor: hand;
 }
 
-.proofRow.hasAssertion td:focus {
+.proofRow td:focus {
     outline: none;
 }
 
