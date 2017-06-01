@@ -130,6 +130,12 @@ class StatementSpec extends ProverSpec {
         .must(beEmpty)
     }
 
+    "allow substitution of a variable for itself in a statement variable" in {
+      SubstitutedStatementVariable(φ, y, x)
+        .calculateSubstitutions(ψ, PartialSubstitutions(Map(φ -> ψ), Map(y -> z, x -> z), Map.empty, DistinctVariables.empty))
+        .mustEqual(Seq(PartialSubstitutions(Map(φ -> ψ), Map(y -> z, x -> z), Map.empty, DistinctVariables.empty)))
+    }
+
     "find a distinct variable condition to ensure substitution validity" in {
       SubstitutedStatementVariable(φ, y, x)
         .calculateSubstitutions(Equals(z, y), PartialSubstitutions(Map(φ -> Equals(x, y)), Map(x -> x), Map.empty, DistinctVariables.empty))

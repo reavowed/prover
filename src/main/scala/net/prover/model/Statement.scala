@@ -44,7 +44,10 @@ case class StatementVariable(text: String) extends Statement with Variable {
     distinctVariables: DistinctVariables
   ): Option[DistinctVariables] = {
     if (target == this) {
-      Some(DistinctVariables(termToBeReplaced -> this))
+      if (termToBeReplaced == termToReplaceWith)
+        Some(DistinctVariables.empty)
+      else
+        Some(DistinctVariables(termToBeReplaced -> this))
     } else if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
       Some(DistinctVariables.empty)
     } else {
