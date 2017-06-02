@@ -86,10 +86,12 @@ trait InferenceParser {
   }
 
   private def premiseParser(implicit context: Context): Parser[Option[Premise]] = {
-    Parser.singleWord.onlyIf(_ == "premise").mapFlatMap { _ =>
-      Parser.singleWord.onlyIf(_ == "proves").mapFlatMap(_ => deducedPremiseParser)
-        .orElse(directPremiseParser)
-    }
+    Parser.optionalWord("premise")
+      .mapFlatMap { _ =>
+        Parser.optionalWord("proves")
+          .mapFlatMap(_ => deducedPremiseParser)
+          .orElse(directPremiseParser)
+      }
   }
 
   def premisesParser(implicit context: Context): Parser[Seq[Premise]] = {

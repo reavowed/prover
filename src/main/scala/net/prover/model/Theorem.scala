@@ -22,7 +22,7 @@ object Theorem extends ChapterEntryParser[Theorem] with InferenceParser {
       name <- Parser.toEndOfLine
       premises <- premisesParser
       proofOutline <- ProofOutline.parser
-      _ <- Parser.singleWord.matchOrThrow(_ == "qed", word => s"Expected step or qed, found '$word'")
+      _ <- Parser.requiredWord("qed")
     } yield {
       getFromCache(name, premises, proofOutline) getOrElse prove(name, premises, proofOutline)
     }

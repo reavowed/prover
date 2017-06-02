@@ -12,13 +12,12 @@ case class Axiom(
   val id = calculateHash()
 }
 
-
 object Axiom extends ChapterEntryParser[Axiom] with InferenceParser {
   override val name: String = "axiom"
 
   private def conclusionParser(implicit context: Context): Parser[Statement] = {
     for {
-      _ <- Parser.singleWord.onlyIf(_ == "conclusion").map(_.getOrElse(throw new Exception("Expected axiom conclusion")))
+      _ <- Parser.requiredWord("conclusion")
       conclusion <- Statement.parser
     } yield conclusion
   }

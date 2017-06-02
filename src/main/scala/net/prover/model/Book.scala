@@ -53,7 +53,7 @@ object Book {
 
   private def importsParser: Parser[Seq[String]] = {
     Parser
-      .singleWord.onlyIf(_ == "import")
+      .optionalWord("import")
       .mapFlatMap(_ => Parser.toEndOfLine)
       .whileDefined
   }

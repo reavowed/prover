@@ -23,20 +23,13 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
       (Some(t), nextTokenizer)
     else
       (None, tokenizer)
-    }
-  def matchOrThrow(f: T => Boolean, g: T => String): Parser[T] = Parser { tokenizer =>
-    val (t, nextTokenizer) = attemptParse(tokenizer)
-    if (f(t))
-      (t, nextTokenizer)
-    else
-      throw new Exception(g(t))
   }
 
   private def inBrackets(openBracket: String, closeBracket: String): Parser[T] = {
     for {
-      _ <- Parser.singleWord.matchOrThrow(_ == openBracket, word => s"'$openBracket' expected but found '$word'")
+      _ <- Parser.requiredWord(openBracket)
       t <- this
-      _ <- Parser.singleWord.matchOrThrow(_ == closeBracket, word => s"'$closeBracket' expected but found '$word'")
+      _ <- Parser.requiredWord(closeBracket)
     } yield t
   }
 
@@ -86,6 +79,22 @@ object Parser {
   def toEndOfLine: Parser[String] = Parser { t => t.readUntilEndOfLine() }
 
   def singleWord: Parser[String] = Parser { t => t.readNext() }
+
+  def optionalWord(expectedWord: String): Parser[Option[Unit]] = Parser { tokenizer =>
+    val (word, nextTokenizer) = tokenizer.readNext()
+    if (word == expectedWord)
+      (Some(()), nextTokenizer)
+    else
+      (None, tokenizer)
+  }
+
+  def requiredWord(expectedWord: String): Parser[Unit] = Parser { tokenizer =>
+    val (word, nextTokenizer) = tokenizer.readNext()
+    if (word == expectedWord)
+      ((), nextTokenizer)
+    else
+      throw new Exception(s"Expected '$expectedWord' but found '$word'")
+  }
 
   def singleWordIfAny: Parser[Option[String]] = Parser { t =>
     if (t.isEmpty) {
