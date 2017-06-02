@@ -7,7 +7,10 @@ case class Axiom(
     premises: Seq[Premise],
     conclusion: ProvenStatement)
   extends ChapterEntry(Axiom)
-  with Inference
+  with Inference {
+
+  val id = calculateHash()
+}
 
 
 object Axiom extends ChapterEntryParser[Axiom] with InferenceParser {

@@ -5,7 +5,8 @@ case class Context(
     termDefinitions: Seq[TermDefinition],
     inferences: Seq[Inference],
     inferenceTransforms: Seq[InferenceTransform],
-    variables: Variables) {
+    variables: Variables,
+    theoremCache: Map[String, Theorem]) {
 
   def combine(others: Seq[Context]): Context = {
     Context(
@@ -13,8 +14,8 @@ case class Context(
       others.flatMap(_.termDefinitions) ++ termDefinitions,
       others.flatMap(_.inferences) ++ inferences,
       others.flatMap(_.inferenceTransforms) ++ inferenceTransforms,
-      variables
-    )
+      variables,
+      theoremCache)
   }
 
   def addStatementDefinition(statementDefinition: StatementDefinition): Context = {
@@ -34,8 +35,10 @@ case class Context(
   def addInferenceTransform(inferenceTransform: InferenceTransform) = {
     copy(inferenceTransforms = inferenceTransforms :+ inferenceTransform)
   }
+
+  def withTheoremCache(theoremCache: Map[String, Theorem]): Context = copy(theoremCache = theoremCache)
 }
 
 object Context {
-  val empty = Context(Nil, Nil, Nil, Nil, Variables.empty)
+  val empty = Context(Nil, Nil, Nil, Nil, Variables.empty, Map.empty)
 }

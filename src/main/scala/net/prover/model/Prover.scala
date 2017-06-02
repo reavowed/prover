@@ -107,6 +107,7 @@ case class Prover(
           }.toSeq
         } yield {
           val transformedInference = DerivedInference(
+            Some(inference.id),
             inference.name,
             transformedPremises,
             proofSteps.last.provenStatement)
@@ -193,7 +194,7 @@ case class Prover(
       if nonArbitraryVariables.intersect(combinedConditions.arbitraryVariables).isEmpty
       provenStatement = ProvenStatement(assertion, combinedConditions)
     } yield {
-      AssertionStep(provenStatement, inference.name, matchedPremises.map(_.reference))
+      AssertionStep(provenStatement, InferenceSummary(inference.id, inference.name), matchedPremises.map(_.reference))
     }
   }
 }

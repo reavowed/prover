@@ -4,6 +4,9 @@ case class ProofOutline(steps: Seq[ProofOutline.Step])
 
 object ProofOutline {
   sealed trait Step
+  sealed trait StepWithAssertion extends Step {
+    def assertion: Statement
+  }
   case class AssumptionStep(
       assumption: Statement,
       steps: Seq[Step])
@@ -12,13 +15,17 @@ object ProofOutline {
       termVariable: TermVariable,
       statement: Statement,
       steps: Seq[Step])
-    extends Step
+    extends StepWithAssertion {
+    override def assertion: Statement = steps.ofType[StepWithAssertion].lastOption
+      .getOrElse(throw new Exception("Naming step must contain a step with an assertion"))
+      .assertion
+  }
   case class AssertionStep(
       assertion: Statement,
       nonArbitraryVariables: Set[TermVariable],
       nonDistinctVariables: Set[(Variable, Variable)],
       debug: Boolean = false)
-    extends Step
+    extends StepWithAssertion
 
   private def assumptionStepParser(implicit context: Context): Parser[AssumptionStep] = {
     for {

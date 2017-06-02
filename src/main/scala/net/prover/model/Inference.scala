@@ -5,6 +5,7 @@ import java.security.MessageDigest
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
 
 trait Inference {
+  def id: String
   def name: String
   def premises: Seq[Premise]
   def conclusion: ProvenStatement
@@ -13,26 +14,33 @@ trait Inference {
     for {
       updatedPremises <- premises.map(_.applySubstitutions(substitutions)).traverseOption
       updatedConclusion <- conclusion.applySubstitutions(substitutions)
-    } yield DerivedInference(name, updatedPremises, updatedConclusion)
+    } yield DerivedInference(Some(id), name, updatedPremises, updatedConclusion)
   }
 
   def calculateHash(): String = {
-    val serialized = (premises.map(_.serialized) :+ conclusion.statement.serialized).mkString("\n")
-    val sha = MessageDigest.getInstance("SHA-256")
-    sha.update(serialized.getBytes("UTF-8"))
-    String.format("%064x", new java.math.BigInteger(1, sha.digest()))
+    Inference.calculateHash(premises, conclusion.statement)
   }
 }
 
 case class DerivedInference(
+    idOption: Option[String],
     name: String,
     premises: Seq[Premise],
     conclusion: ProvenStatement)
-  extends Inference
+  extends Inference {
+  def id: String = idOption.getOrElse(calculateHash())
+}
 
 object Inference {
   def unapply(inference: Inference): Option[(String, Seq[Premise], ProvenStatement)] = {
     Some(inference.name, inference.premises, inference.conclusion)
+  }
+
+  def calculateHash(premises: Seq[Premise], conclusion: Statement): String = {
+    val serialized = (premises.map(_.serialized) :+ conclusion.serialized).mkString("\n")
+    val sha = MessageDigest.getInstance("SHA-256")
+    sha.update(serialized.getBytes("UTF-8"))
+    String.format("%064x", new java.math.BigInteger(1, sha.digest()))
   }
 
   sealed trait Premise {
@@ -64,8 +72,6 @@ object Inference {
 }
 
 trait InferenceParser {
-
-
   private def deducedPremiseParser(implicit context: Context): Parser[DeducedPremise] = {
     for {
       antecedent <- Statement.parser

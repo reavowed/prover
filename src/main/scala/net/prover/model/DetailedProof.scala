@@ -2,10 +2,14 @@ package net.prover.model
 
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
 
-case class DetailedProof(steps: Seq[DetailedProof.Step])
+case class DetailedProof(steps: Seq[DetailedProof.Step]) {
+  def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
+}
 
 object DetailedProof {
-  sealed trait Step
+  sealed trait Step {
+    def referencedInferenceIds: Set[String]
+  }
   sealed trait StepWithProvenStatement extends Step {
     def provenStatement: ProvenStatement
   }
@@ -20,19 +24,24 @@ object DetailedProof {
   case class AssumptionStep(
       assumption: Statement,
       steps: Seq[Step])
-    extends Step
+    extends Step {
+    override def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
+  }
   case class NamingStep(
       variable: TermVariable,
       assumptionStep: AssumptionStep,
       assertionStep: AssertionStep)
     extends StepWithProvenStatement {
     override def provenStatement: ProvenStatement = assertionStep.provenStatement
+    override def referencedInferenceIds: Set[String] = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
   }
   case class AssertionStep(
       provenStatement: ProvenStatement,
-      inferenceName: String,
+      inference: InferenceSummary,
       references: Seq[Reference])
-    extends StepWithProvenStatement
+    extends StepWithProvenStatement {
+    override def referencedInferenceIds: Set[String] = Set(inference.id)
+  }
 
   sealed trait Reference
   case class DirectReference(index: Int) extends Reference
@@ -41,6 +50,8 @@ object DetailedProof {
 
   case class ReferencedAssertion(provenStatement: ProvenStatement, reference: DirectReference)
   case class ReferencedDeduction(assumption: Statement, deduction: ProvenStatement, reference: Reference)
+
+  case class InferenceSummary(id: String, name: String)
 
   def fillInOutline(
     premises: Seq[Premise],

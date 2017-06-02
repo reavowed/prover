@@ -2,6 +2,10 @@ package net.prover.model
 
 case class Chapter(title: String, summary: String, entries: Seq[ChapterEntry] = Nil) {
   val key: String = title.formatAsKey
+
+  def theoremCache: Map[String, Theorem] = {
+    entries.ofType[Theorem].map(t => (t.id, t)).toMap
+  }
 }
 
 object Chapter extends BookEntryParser {

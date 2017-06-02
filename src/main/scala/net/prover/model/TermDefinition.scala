@@ -18,6 +18,7 @@ case class TermDefinition(
   val definition = placeholderDefinition.replacePlaceholder(defaultTerm).getOrElse(
     throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultTerm'"))
   val inference: Inference = DerivedInference(
+    None,
     s"Definition of ${TermDefinition.this.name}",
     TermDefinition.this.premises.map(DirectPremise),
     ProvenStatement(definition, Conditions(Set.empty, distinctVariables)))
