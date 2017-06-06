@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "bootstrap" % "3.3.7",
   "org.webjars" % "angularjs" % "1.5.8",
   "org.webjars" % "lodash" % "4.15.0",
+  "org.webjars.bower" % "mark.js" % "8.4.0",
   "commons-io" % "commons-io" % "2.5")
 
 libraryDependencies ++= Seq(

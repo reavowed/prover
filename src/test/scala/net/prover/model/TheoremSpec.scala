@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.model.DetailedProof.{AssertionStep, DirectReference}
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, RearrangementType}
 
 class TheoremSpec extends ProverSpec {
@@ -457,6 +458,7 @@ class TheoremSpec extends ProverSpec {
         contextWith(extractLeftConjunct, anythingImpliesATrueStatement))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(χ, φ))
+      theorem.proof.steps.last.asInstanceOf[AssertionStep].references.head.asInstanceOf[DirectReference].html mustEqual "φ"
     }
 
     "prove a statement by rearranging" in {

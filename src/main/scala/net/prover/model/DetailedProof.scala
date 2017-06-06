@@ -44,9 +44,8 @@ object DetailedProof {
   }
 
   sealed trait Reference
-  case class DirectReference(index: Int) extends Reference
+  case class DirectReference(index: Int, html: String) extends Reference
   case class DeducedReference(antecedentIndex: Int, consequentIndex: Int) extends Reference
-  case class InferenceReference(inference: Inference, premiseReferences: Seq[Reference], substitutions: Substitutions) extends Reference
 
   case class ReferencedAssertion(provenStatement: ProvenStatement, reference: DirectReference)
   case class ReferencedDeduction(assumption: Statement, deduction: ProvenStatement, reference: Reference)
@@ -60,11 +59,11 @@ object DetailedProof {
   ): DetailedProof = {
     val premiseAssertions = premises.zipWithIndex.collect {
       case (DirectPremise(premise), index) =>
-        ReferencedAssertion(ProvenStatement.withNoConditions(premise), DirectReference(index))
+        ReferencedAssertion(ProvenStatement.withNoConditions(premise), DirectReference(index, premise.html))
     }
     val premiseDeductions = premises.zipWithIndex.collect {
-      case (DeducedPremise(assumption, conclusion), index) =>
-        ReferencedDeduction(assumption, ProvenStatement.withNoConditions(conclusion), DirectReference(index))
+      case (premise @ DeducedPremise(assumption, conclusion), index) =>
+        ReferencedDeduction(assumption, ProvenStatement.withNoConditions(conclusion), DirectReference(index, premise.html))
     }
     val detailedSteps = proveSteps(
       proofOutline.steps,
@@ -100,10 +99,12 @@ object DetailedProof {
             }
             (provenAssertions, provenDeductions ++ newProvenDeductions)
           case NamingStep(_, _, assertion) =>
-            val newProvenAssertion = ReferencedAssertion(assertion.provenStatement, DirectReference(nextReference))
+            val newProvenAssertion = ReferencedAssertion(
+              assertion.provenStatement,
+              DirectReference(nextReference, assertion.provenStatement.statement.html))
             (provenAssertions :+ newProvenAssertion, provenDeductions)
           case AssertionStep(provenStatement, _, _) =>
-            val newProvenAssertion = ReferencedAssertion(provenStatement, DirectReference(nextReference))
+            val newProvenAssertion = ReferencedAssertion(provenStatement, DirectReference(nextReference, provenStatement.statement.html))
             (provenAssertions :+ newProvenAssertion, provenDeductions)
         }
         proveSteps(
@@ -166,7 +167,7 @@ object DetailedProof {
     val substeps = proveSteps(
       substepOutlines,
       Nil,
-      provenAssertions :+ ReferencedAssertion(ProvenStatement.withNoConditions(assumption), DirectReference(nextReference)),
+      provenAssertions :+ ReferencedAssertion(ProvenStatement.withNoConditions(assumption), DirectReference(nextReference, assumption.html)),
       provenDeductions,
       premises,
       assumptions :+ assumption,

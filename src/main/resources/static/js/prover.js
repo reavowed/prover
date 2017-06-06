@@ -126,9 +126,14 @@
           referrableRows.push(rowData);
         }
 
-        function highlightPremise(reference, subreference) {
+        function markElement(element, htmlToHighlight) {
+          htmlToHighlight = htmlToHighlight || element.html();
+          element.mark(htmlToHighlight, {element: "span", className: "highlightPremise", separateWordSearch: false});
+        }
+
+        function highlightPremise(reference, subreference, htmlToHighlight) {
           if (reference < premises.length) {
-            premises.eq(reference).addClass("highlightPremise");
+            markElement(premises.eq(reference), htmlToHighlight);
           } else {
             var referredRow = _.findLast(referrableRows, function(row) { return row.reference === reference; });
             if (referredRow == null || (referredRow === rowData && !rowData.assertion)) return;
@@ -137,9 +142,9 @@
             var referredAssumption = referredTableRow.find(".assumption");
             var referredAssertion = referredTableRow.find(".assertion");
             if (referredAssumption.length) {
-              referredAssumption.addClass("highlightPremise");
+              markElement(referredAssumption, subreference != null ? null : htmlToHighlight);
             } else {
-              referredAssertion.addClass("highlightPremise");
+              markElement(referredAssertion, htmlToHighlight);
             }
             if (subreference != null) {
               var followingRows = _.drop($scope.proofRows, referredRowIndex + 1);
@@ -159,24 +164,26 @@
               }
               var childRowIndex = _.indexOf($scope.proofRows, childRow);
               var childTableRow = allTableRows.eq(childRowIndex);
-              childTableRow.find(".assertion").addClass("highlightPremise");
+              markElement(childTableRow.find(".assertion"), htmlToHighlight);
             }
           }
         }
 
         _.forEach(rowData.references, function(reference) {
           if (reference.index != null) {
-            highlightPremise(reference.index);
+            highlightPremise(reference.index, null, reference.html);
           } else {
-            highlightPremise(reference.antecedentIndex, reference.consequentIndex);
+            highlightPremise(reference.antecedentIndex, reference.consequentIndex, null);
           }
         });
         tableRow.find(".assertion").addClass("highlightConclusion");
       };
 
       $scope.removeHighlight = function(rowData, event) {
-        $(event.target).closest(".theoremProof").find(".highlightPremise").removeClass("highlightPremise");
+        $(event.target).closest(".theoremProof").find(".assumption").unmark();
+        $(event.target).closest(".theoremProof").find(".assertion").unmark();
         $(event.target).closest(".theoremProof").find(".highlightConclusion").removeClass("highlightConclusion");
+        $(".premise").unmark();
       };
 
       $scope.popoverRow = function(rowData, event) {

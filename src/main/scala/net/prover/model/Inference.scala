@@ -67,6 +67,7 @@ object Inference {
   sealed trait Premise {
     def statements: Seq[Statement]
     def applySubstitutions(substitutions: Substitutions): Option[Premise]
+    def html: String
     def serialized: String
   }
 
@@ -77,6 +78,7 @@ object Inference {
         substitutedStatement <- statement.applySubstitutions(substitutions)
       } yield DirectPremise(substitutedStatement)
     }
+    override def html = statement.html
     override def serialized = statement.serialized
   }
   case class DeducedPremise(antecedent: Statement, consequent: Statement) extends Premise {
@@ -88,6 +90,7 @@ object Inference {
       } yield DeducedPremise(substitutedAntecedent, substitutedConsequent)
     }
 
+    override def html = antecedent.html + " ⊢ " + consequent.html
     override def serialized = Seq("proves", antecedent.serialized, consequent.serialized).mkString(" ")
   }
 }

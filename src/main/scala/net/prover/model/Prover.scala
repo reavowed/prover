@@ -113,6 +113,9 @@ case class Prover(
       .find { case (provenStatement, _) =>
           provenStatement.statement == statement
       }
+      .map { case (provenStatement, reference) =>
+        (provenStatement, reference.copy(html = statement.html))
+      }
   }
 
   def proveAssertionFromTransformedInferences(): Option[AssertionStep] = {
@@ -142,9 +145,9 @@ case class Prover(
           substitutions <- transformedConclusion.calculateSubstitutions(assertion, PartialSubstitutions.empty)
           proofSteps <- statementsToProve.collectFold[AssertionStep] { case (assertions, statement) =>
             val provenAssertions = transformedPremises.mapWithIndex { (premise, index) =>
-              ReferencedAssertion(ProvenStatement.withNoConditions(premise.statement), DirectReference(index))
+              ReferencedAssertion(ProvenStatement.withNoConditions(premise.statement), DirectReference(index, premise.html))
             } ++ assertions.mapWithIndex { (step, index) =>
-              ReferencedAssertion(step.provenStatement, DirectReference(transformedPremises.length + index))
+              ReferencedAssertion(step.provenStatement, DirectReference(transformedPremises.length + index, step.provenStatement.statement.html))
             }
             Prover(
               statement,
@@ -215,7 +218,9 @@ case class Prover(
     provenAssertions.iterator
       .flatMap { case ReferencedAssertion(provenStatement, reference) =>
         if (inference.allowsRearrangement)
-          getAllSimplifications(provenStatement).map((_, reference))
+          getAllSimplifications(provenStatement).map { x =>
+            (x, reference.copy(html = x.statement.html))
+          }
         else
           Seq((provenStatement, reference))
       }
