@@ -38,9 +38,6 @@ premise = orderedPair a b singleton singleton c
 prove ∈ pair a b orderedPair a b
 prove ∈ pair a b singleton singleton c
 prove = pair a b singleton c
-prove ∧ = a c = b c
-prove = a c
-prove = b c
 prove = a b
 qed
 
@@ -54,7 +51,6 @@ assume = singleton a singleton c {
 }
 assume = singleton a pair c d{
   prove = pair c d singleton a
-  prove ∧ = c a = d a
   prove = c a
   prove = a c
 }
@@ -81,7 +77,6 @@ prove ∈ pair a b orderedPair a b
 prove ∈ pair a b orderedPair a d
 prove ∨ = pair a b singleton a = pair a b pair a d
 assume = pair a b singleton a {
-  prove ∧ = a a = b a
   prove = b a
   prove = b d
 }

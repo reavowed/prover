@@ -15,8 +15,6 @@ theorem No Set Contains Itself
 prove ¬ = singleton a ∅
 prove ∃ y ∧ ∈ y singleton a = ∩ y singleton a ∅
 let y ∧ ∈ y singleton a = ∩ y singleton a ∅ {
-  prove ∈ y singleton a
-  prove = ∩ y singleton a ∅
   prove = y a
   prove = ∩ a singleton a ∅
 }
@@ -28,8 +26,6 @@ theorem No Two Sets Contain Each Other
 prove ¬ = pair a b ∅
 prove ∃ x ∧ ∈ x pair a b = ∩ x pair a b ∅
 let c ∧ ∈ c pair a b = ∩ c pair a b ∅ {
-  prove ∈ c pair a b
-  prove = ∩ c pair a b ∅
   prove ∨ = c a = c b
   assume = c a {
     prove = ∩ a pair a b ∅

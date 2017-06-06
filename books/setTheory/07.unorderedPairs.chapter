@@ -2,35 +2,27 @@ chapter Unordered Pairs
 Establish the existence of the unordered pair {a, b}.
 
 theorem Unordered Pair Existence Lemma
-assume ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b {
-  prove ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
-  assume ∧ = x singleton ∅ = y a {
-    prove = y a
-    prove ∨ = y a = y b
-  }
-  assume ∧ = x ∅ = y b {
-    prove = y b
-    prove ∨ = y a = y b
-  }
-  prove ∨ = y a = y b
-}
 assume ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b {
-  prove ∨ = y a = y b
+  let x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b {
+    assume ∧ = x singleton ∅ = y a {
+      prove ∨ = y a = y b
+    }
+    assume ∧ = x ∅ = y b {
+      prove ∨ = y a = y b
+    }
+    prove ∨ = y a = y b
+  }
 }
 assume ∨ = y a = y b {
   assume = y a {
-    prove = singleton ∅ singleton ∅
-    prove ∧ = singleton ∅ singleton ∅ = y a
-    prove ∨ ∧ = singleton ∅ singleton ∅ = y a ∧ = singleton ∅ ∅ = y b
     prove ∈ singleton ∅ powerSet singleton ∅
+    prove = singleton ∅ singleton ∅
     prove ∧ ∈ singleton ∅ powerSet singleton ∅ ∨ ∧ = singleton ∅ singleton ∅ = y a  ∧ = singleton ∅ ∅ = y b
     prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
   }
   assume = y b {
-    prove = ∅ ∅
-    prove ∧ = ∅ ∅ = y b
-    prove ∨ ∧ = ∅ singleton ∅ = y a ∧ = ∅ ∅ = y b
     prove ∈ ∅ powerSet singleton ∅
+    prove = ∅ ∅
     prove ∧ ∈ ∅ powerSet singleton ∅ ∨ ∧ = ∅ singleton ∅ = y a ∧ = ∅ ∅ = y b
     prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
   }
@@ -45,7 +37,6 @@ assume ∈ x powerSet singleton ∅ {
   prove ⊕ = x singleton ∅ = x ∅
   prove ∃! y ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
 }
-prove → ∈ x powerSet singleton ∅ ∃! y ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
 prove ∀ x → ∈ x powerSet singleton ∅ ∃! y ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
 prove ∃ z ∀ y ↔ ∈ y z ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
 prove ∀ y ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b ∨ = y a = y b
@@ -104,10 +95,20 @@ premise = pair a b singleton c
 prove ∈ a pair a b
 prove ∈ a singleton c
 prove = a c
+qed
+
+theorem Sets Are Equal If Pair Is Singleton
+premise = pair a b singleton c
 prove ∈ b pair a b
 prove ∈ b singleton c
 prove = b c
-prove ∧ = a c = b c
+qed
+
+theorem Sets Are Equal If Pair Is Singleton
+premise = pair a b singleton c
+prove = a c
+prove = b c
+prove = a b
 qed
 
 theorem Unordered Pair Is Subset
@@ -123,7 +124,6 @@ assume = x b {
 assume ∨ = x a = x b {
   prove ∈ x S
 }
-prove → ∨ = x a = x b ∈ x S
 prove ∀ x → ∨ = x a = x b ∈ x S
 prove ∀ x → ∈ x pair a b ∈ x S
 prove ⊆ pair a b S

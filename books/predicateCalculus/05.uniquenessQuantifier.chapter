@@ -19,8 +19,6 @@ qed
 theorem Every Set Is Unique
 prove ∃ y = y x
 assume ∧ = a x = b x {
-  prove = a x
-  prove = b x
   prove = a b
 }
 prove ∃! y = y x
@@ -32,8 +30,6 @@ prove = y y
 prove sub y x φ
 prove ∃ x φ
 assume ∧ sub a x φ sub b x φ {
-  prove sub a x φ
-  prove sub b x φ
   prove = a y
   prove = b y
   prove = a b

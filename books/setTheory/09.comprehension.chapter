@@ -15,8 +15,6 @@ prove ∈ a X
 prove sub a x φ
 assume ∃ x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a {
   let x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a {
-    prove ∈ x X
-    prove ∨ ∧ φ = y x ∧ ¬ φ = y a
     assume φ {
       prove ↔ ∨ ∧ φ = y x ∧ ¬ φ = y a = y x
       prove = y x
@@ -35,11 +33,7 @@ assume ∃ x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a {
   }
 }
 assume ∧ ∈ y X sub y x φ {
-  prove ∈ y X
-  prove sub y x φ
   prove = y y
-  prove ∧ sub y x φ = y y
-  prove ∨ ∧ sub y x φ = y y ∧ ¬ sub y x φ = y a
   prove ∧ ∈ y X ∨ ∧ sub y x φ = y y ∧ ¬ sub y x φ = y a
   prove ∃ x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a
 }
@@ -104,7 +98,6 @@ premise = S comprehension x X φ
 assume ∈ y S {
   prove ∈ y X
 }
-prove → ∈ y S ∈ y X
 prove ∀ y → ∈ y S ∈ y X
 prove ⊆ S X
 qed
@@ -125,6 +118,5 @@ assume ∈ y X {
   prove ∈ y S
   prove sub y x φ
 }
-prove → ∈ y X sub y x φ
 prove ∀ x → ∈ x X φ
 qed

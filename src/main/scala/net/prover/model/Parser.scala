@@ -81,11 +81,15 @@ object Parser {
   def singleWord: Parser[String] = Parser { t => t.readNext() }
 
   def optionalWord(expectedWord: String): Parser[Option[Unit]] = Parser { tokenizer =>
-    val (word, nextTokenizer) = tokenizer.readNext()
-    if (word == expectedWord)
-      (Some(()), nextTokenizer)
-    else
+    if (tokenizer.isEmpty) {
       (None, tokenizer)
+    } else {
+      val (word, nextTokenizer) = tokenizer.readNext()
+      if (word == expectedWord)
+        (Some(()), nextTokenizer)
+      else
+        (None, tokenizer)
+    }
   }
 
   def requiredWord(expectedWord: String): Parser[Unit] = Parser { tokenizer =>
@@ -130,6 +134,8 @@ object Parser {
           (other, tokenizer)
       }
     }
+    def isDefined: Parser[Boolean] = parser.map(_.isDefined)
+    def isUndefined: Parser[Boolean] = parser.map(_.isEmpty)
     def whileDefined: Parser[Seq[T]] = {
       def readNext(acc: Seq[T], tokenizer: Tokenizer): (Seq[T], Tokenizer) = {
         parser.parse(tokenizer) match {
@@ -156,7 +162,7 @@ object Parser {
     parser: Parser[T],
     default: => T
   ): Parser[T] = {
-    Parser.singleWordIfAny.onlyIf(_.exists(_ == name)).map(_.flatten)
+    Parser.optionalWord(name)
       .mapFlatMap(_ => parser)
       .getOrElse(default)
   }

@@ -51,6 +51,10 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
       Conditions(updatedArbitraryVariables, updatedDistinctVariables)
     }
   }
+
+  def isEmpty: Boolean = {
+    arbitraryVariables.isEmpty && distinctVariables.distinctPairs.isEmpty
+  }
 }
 
 object Conditions {

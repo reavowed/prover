@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.Inference.{DirectPremise, Premise}
+import net.prover.model.Inference.{DirectPremise, Premise, RearrangementType}
 
 case class TermDefinition(
     symbol: String,
@@ -21,7 +21,9 @@ case class TermDefinition(
     None,
     s"Definition of ${TermDefinition.this.name}",
     TermDefinition.this.premises.map(DirectPremise),
-    ProvenStatement(definition, Conditions(Set.empty, distinctVariables)))
+    ProvenStatement(definition, Conditions(Set.empty, distinctVariables)),
+    RearrangementType.NotRearrangement,
+    allowsRearrangement = true)
 
   def apply(components: Component*): DefinedTerm = DefinedTerm(components, this)
 

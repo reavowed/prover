@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.Inference.{DeducedPremise, DirectPremise}
+import net.prover.model.Inference.{DeducedPremise, DirectPremise, RearrangementType}
 
 class TheoremSpec extends ProverSpec {
   "theorem parser" should {
@@ -436,6 +436,55 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement(
         Exists(y, ElementOf(y, EmptySet)),
         Conditions(Set.empty, DistinctVariables(y -> x)))
+    }
+
+    "prove an inference conclusion by simplifying a premise" in {
+      val extractLeftConjunct = Axiom(
+        "Extract Left Conjunct",
+        Seq(Conjunction(φ, ψ)),
+        φ,
+        rearrangementType = RearrangementType.Simplification)
+      val anythingImpliesATrueStatement = Axiom(
+        "Anything Implies a True Statement",
+        Seq(φ),
+        Implication(ψ, φ))
+
+      val theorem = parseTheorem(
+        "XXX",
+        "premise ∧ φ ψ",
+        "prove → χ φ",
+        "qed")(
+        contextWith(extractLeftConjunct, anythingImpliesATrueStatement))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(χ, φ))
+    }
+
+    "prove a statement by rearranging" in {
+      val extractLeftConjunct = Axiom(
+        "Extract Left Conjunct",
+        Seq(Conjunction(φ, ψ)),
+        φ,
+        rearrangementType = RearrangementType.Simplification)
+      val combineConjunction = Axiom(
+        "Combine Conjunction",
+        Seq(φ, ψ),
+        Conjunction(φ, ψ),
+        rearrangementType = RearrangementType.Expansion)
+      val addRightDisjunct = Axiom(
+        "Add Left Disjunct",
+        Seq(ψ),
+        Disjunction(φ, ψ),
+        rearrangementType = RearrangementType.Expansion)
+
+      val theorem = parseTheorem(
+        "XXX",
+        "premise ∧ φ ψ",
+        "premise χ",
+        "prove ∨ ψ ∧ χ φ",
+        "qed")(
+        contextWith(extractLeftConjunct, combineConjunction, addRightDisjunct))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Disjunction(ψ, Conjunction(χ, φ)))
     }
   }
 }

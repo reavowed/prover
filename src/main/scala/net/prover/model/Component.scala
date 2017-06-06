@@ -103,7 +103,9 @@ object Component {
   }
 }
 
-trait Variable extends Component
+trait Variable extends Component {
+  def text: String
+}
 
 trait Placeholder[T <: Component] extends Component {
   override def allVariables: Variables = Variables.empty

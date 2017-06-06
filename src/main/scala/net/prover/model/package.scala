@@ -59,6 +59,11 @@ package object model {
       case _ =>
         false
     }
+    def mapCollect[S](f: T => Option[S]): Seq[S] = {
+      seq.map(f).collect {
+        case Some(t) => t
+      }
+    }
   }
 
   implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {

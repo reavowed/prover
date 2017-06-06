@@ -2,10 +2,12 @@ chapter Implication and Negation
 We start by introducing our two fundamental connectives, → and ¬, and proving some basic facts about them.
 
 axiom Repetition
+disallow-rearrangement
 premise φ
 conclusion φ
 
 axiom Inference
+disallow-rearrangement
 premise proves φ ψ
 premise φ
 conclusion ψ

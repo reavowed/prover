@@ -6,10 +6,8 @@ let S = S comprehension x × ℕ ℕ ∃ n ∧ ∈ n ℕ = x orderedPair n succe
   prove ⊆ S × ℕ ℕ
   assume ∈ a ℕ {
     assume ∧ ∈ b ℕ ∈ orderedPair a b S {
-      prove ∈ orderedPair a b S
       prove ∃ n ∧ ∈ n ℕ = orderedPair a b orderedPair n successor n
       let n ∧ ∈ n ℕ = orderedPair a b orderedPair n successor n {
-        prove = orderedPair a b orderedPair n successor n
         prove = a n
         prove = b successor n
         prove = b successor a
@@ -26,26 +24,21 @@ let S = S comprehension x × ℕ ℕ ∃ n ∧ ∈ n ℕ = x orderedPair n succe
       prove ∈ orderedPair a b S
       prove ∧ ∈ b ℕ ∈ orderedPair a b S
     }
-    prove ↔ ∧ ∈ b ℕ ∈ orderedPair a b S = b successor a
     prove ∀ b ↔ ∧ ∈ b ℕ ∈ orderedPair a b S = b successor a
     prove ∃! b ∧ ∈ b ℕ ∈ orderedPair a b S
   }
-  prove → ∈ a ℕ ∃! b ∧ ∈ b ℕ ∈ orderedPair a b S
   prove ∀ a → ∈ a ℕ ∃! b ∧ ∈ b ℕ ∈ orderedPair a b S
   prove ∧ ⊆ S × ℕ ℕ ∀ a → ∈ a ℕ ∃! b ∧ ∈ b ℕ ∈ orderedPair a b S
   prove function S ℕ ℕ
   assume ∈ a ℕ {
     prove ∧ ∈ apply S a ℕ ∈ orderedPair a apply S a S
-    prove ∈ orderedPair a apply S a S
     prove ∃ n ∧ ∈ n ℕ = orderedPair a apply S a orderedPair n successor n
     let n ∧ ∈ n ℕ = orderedPair a apply S a orderedPair n successor n {
-      prove = orderedPair a apply S a orderedPair n successor n
       prove = a n
       prove = apply S a successor n
       prove = apply S a successor a
     }
   }
-  prove → ∈ a ℕ = apply S a successor a
   prove ∀ n → ∈ n ℕ = apply S n successor n
   prove ∧ function S ℕ ℕ ∀ n → ∈ n ℕ = apply S n successor n
   prove ∃ f ∧ function f ℕ ℕ ∀ n → ∈ n ℕ = apply f n successor n

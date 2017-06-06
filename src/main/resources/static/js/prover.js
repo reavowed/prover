@@ -208,7 +208,7 @@
             references: steps[0].references,
             conditions: steps[0].provenStatement.conditions,
             reference: reference,
-            inferenceName: steps[0].inferenceName,
+            inferenceName: steps[0].inference.name,
             visibleIndentLevel: visibleIndentLevel,
             conceptualIndentLevel: conceptualIndentLevel
           });
@@ -230,7 +230,7 @@
         $scope.proofRows.push({
           prefix: 'Let ' + variable + ' be such that',
           assumption: assumptionStep.assumption,
-          inferenceName: assertionStep.inferenceName,
+          inferenceName: assertionStep.inference.name,
           references: assertionStep.references,
           reference: reference,
           visibleIndentLevel: visibleIndentLevel,
@@ -250,7 +250,7 @@
           assertion: assertionStep.provenStatement.statement,
           references: assertionStep.references,
           conditions: override ? override.conditions : assertionStep.provenStatement.conditions,
-          inferenceName: assertionStep.inferenceName,
+          inferenceName: assertionStep.inference.name,
           reference: override ? override.reference : reference,
           visibleIndentLevel: visibleIndentLevel,
           conceptualIndentLevel: override ? override.level : conceptualIndentLevel

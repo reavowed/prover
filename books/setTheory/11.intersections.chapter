@@ -35,7 +35,6 @@ term ∩ (a b)
   (= _ intersection pair a b)
 
 theorem Membership Condition for Binary Intersection
-prove ∈ a pair a b
 prove ¬ = pair a b ∅
 prove ∀ x ↔ ∈ x intersection pair a b ∀ y → ∈ y pair a b ∈ x y
 assume ∀ y → ∈ y pair a b ∈ x y {
@@ -46,8 +45,6 @@ assume ∀ y → ∈ y pair a b ∈ x y {
   prove ∧ ∈ x a ∈ x b
 }
 assume ∧ ∈ x a ∈ x b {
-  prove ∈ x a
-  prove ∈ x b
   assume = y a {
     prove ∈ x y
   }
@@ -61,7 +58,6 @@ assume ∧ ∈ x a ∈ x b {
   prove ∀ y ↔ ∈ y pair a b ∨ = y a = y b
   prove ∀ y → ∈ y pair a b ∈ x y
 }
-prove ↔ ∀ y → ∈ y pair a b ∈ x y ∧ ∈ x a ∈ x b
 prove ∀ x ↔ ∀ y → ∈ y pair a b ∈ x y ∧ ∈ x a ∈ x b
 prove ∀ x ↔ ∈ x intersection pair a b ∧ ∈ x a ∈ x b
 prove = ∩ a b intersection pair a b

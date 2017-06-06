@@ -6,7 +6,6 @@ premise ∈ n ℕ
 prove = 0 0
 prove ∨ = 0 0 ∃ m ∧ ∈ m ℕ = successor m 0
 assume ∧ ∈ a ℕ ∨ = a 0 ∃ m ∧ ∈ m ℕ = successor m a {
-  prove ∈ a ℕ
   prove = successor a successor a
   prove ∧ ∈ a ℕ = successor a successor a
   prove ∃ m ∧ ∈ m ℕ = successor m successor a
@@ -23,8 +22,6 @@ prove = 0 ∅
 prove ∀ x ¬ ∈ x 0
 prove ∀ x → ∈ x 0 ∈ x ℕ
 assume ∧ ∈ a ℕ ∀ x → ∈ x a ∈ x ℕ {
-  prove ∈ a ℕ
-  prove ∀ x → ∈ x a ∈ x ℕ
   assume ∈ x a {
     prove ∈ x ℕ
   }
@@ -35,7 +32,6 @@ assume ∧ ∈ a ℕ ∀ x → ∈ x a ∈ x ℕ {
     prove ∨ ∈ x a = x a
     prove ∈ x ℕ
   }
-  prove → ∈ x successor a ∈ x ℕ
   prove ∀ x → ∈ x successor a ∈ x ℕ
 }
 prove ∀ x → ∈ x n ∈ x ℕ
@@ -47,7 +43,6 @@ premise ∈ n ℕ
 prove = 0 0
 prove ∨ = 0 0 ∈ 0 0
 assume ∧ ∈ m ℕ ∨ = m 0 ∈ 0 m {
-  prove ∨ = m 0 ∈ 0 m
   assume = m 0 {
     prove ∈ m successor m
     prove ∈ 0 successor m
@@ -69,7 +64,6 @@ prove = 0 ∅
 prove ∀ x ¬ ∈ x 0
 prove ∀ x → ∈ x 0 ∨ ∈ successor x 0 = successor x 0
 assume ∧ ∈ a ℕ ∀ x → ∈ x a ∨ ∈ successor x a = successor x a {
-  prove ∀ x → ∈ x a ∨ ∈ successor x a = successor x a
   assume ∈ x successor a {
     prove ∨ ∈ x a = x a
     assume ∈ x a {
@@ -89,7 +83,6 @@ assume ∧ ∈ a ℕ ∀ x → ∈ x a ∨ ∈ successor x a = successor x a {
     }
     prove ∨ ∈ successor x successor a = successor x successor a
   }
-  prove → ∈ x successor a ∨ ∈ successor x successor a = successor x successor a
   prove ∀ x → ∈ x successor a ∨ ∈ successor x successor a = successor x successor a
 }
 prove ∀ x → ∈ x n ∨ ∈ successor x n = successor x n
@@ -102,7 +95,6 @@ premise ∈ m ℕ
 prove ∨ = n 0 ∈ 0 n
 prove ∨ ∈ n 0 ∨ = n 0 ∈ 0 n
 assume ∧ ∈ a ℕ ∨ ∈ n a ∨ = n a ∈ a n {
-  prove ∨ ∈ n a ∨ = n a ∈ a n
   assume ∈ n a {
     prove ∈ n successor a
     prove ∨ ∈ n successor a ∨ = n successor a ∈ successor a n

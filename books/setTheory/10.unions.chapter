@@ -25,8 +25,6 @@ prove ∀ x ↔ ∈ x union pair a b ∃ y ∧ ∈ x y ∈ y pair a b
 prove ∀ x ↔ ∈ x ∪ a b ∃ y ∧ ∈ x y ∈ y pair a b
 assume ∃ y ∧ ∈ x y ∈ y pair a b {
   let y ∧ ∈ x y ∈ y pair a b {
-    prove ∈ x y
-    prove ∈ y pair a b
     prove ∨ = y a = y b
     assume = y a {
       prove ∈ x a

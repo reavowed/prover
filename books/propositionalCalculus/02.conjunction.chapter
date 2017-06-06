@@ -4,6 +4,7 @@ Introduce the "and" or "conjuction" connective, ∧.
 statement ∧ (φ ψ) definition (¬ → φ ¬ ψ)
 
 theorem Combine Conjunction
+expansion
 premise φ
 premise ψ
 assume → φ ¬ ψ {
@@ -15,6 +16,7 @@ prove ∧ φ ψ
 qed
 
 theorem Extract Left Conjunct
+simplification
 premise ∧ φ ψ
 assume ¬ φ {
   prove → φ ¬ ψ
@@ -24,6 +26,7 @@ prove φ
 qed
 
 theorem Extract Right Conjunct
+simplification
 premise ∧ φ ψ
 assume ¬ ψ {
   prove → φ ¬ ψ

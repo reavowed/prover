@@ -20,19 +20,13 @@ term × (A B)
 theorem Membership Condition for Cartesian Product
 prove = × A B comprehension y powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = y orderedPair a b
 prove ∀ x ↔ ∈ x × A B ∧ ∈ x powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
-assume ∧ ∈ c A ∃ b ∧ ∈ b B = x orderedPair c b {
-  prove ∈ c A
-  prove ∃ b ∧ ∈ b B = x orderedPair c b
-  assume ∧ ∈ d B = x orderedPair c d {
-    prove ∈ d B
-    prove = x orderedPair c d
-    prove ∈ orderedPair c d powerSet powerSet ∪ A B
-    prove ∈ x powerSet powerSet ∪ A B
-  }
-  prove ∈ x powerSet powerSet ∪ A B
-}
 assume ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b {
-  prove ∈ x powerSet powerSet ∪ A B
+  let c ∧ ∈ c A ∃ b ∧ ∈ b B = x orderedPair c b {
+    let d ∧ ∈ d B = x orderedPair c d {
+      prove ∈ orderedPair c d powerSet powerSet ∪ A B
+      prove ∈ x powerSet powerSet ∪ A B
+    }
+  }
 }
 prove ↔ ∧ ∈ x powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
 prove ∀ x ↔ ∧ ∈ x powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
@@ -43,21 +37,15 @@ theorem Membership Condition for Cartesian Product
 assume ∈ orderedPair a b × A B {
   prove ∀ x ↔ ∈ x × A B ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = x orderedPair c d
   prove ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d
-  assume ∧ ∈ c A ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d {
-    prove ∈ c A
-    prove ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d
-    assume ∧ ∈ d B = orderedPair a b orderedPair c d {
-      prove ∈ d B
-      prove = orderedPair a b orderedPair c d
+  let c ∧ ∈ c A ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d {
+    let d ∧ ∈ d B = orderedPair a b orderedPair c d {
       prove = a c
       prove = b d
       prove ∈ a A
       prove ∈ b B
       prove ∧ ∈ a A ∈ b B
     }
-    prove ∧ ∈ a A ∈ b B
   }
-  prove ∧ ∈ a A ∈ b B
 }
 assume ∧ ∈ a A ∈ b B {
   prove ∈ a A
@@ -70,7 +58,6 @@ assume ∧ ∈ a A ∈ b B {
   prove ∀ x ↔ ∈ x × A B ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = x orderedPair c d
   prove ∈ orderedPair a b × A B
 }
-prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
 prove ∀ b ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
 prove ∀ a ∀ b ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
 qed

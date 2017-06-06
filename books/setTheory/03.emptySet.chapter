@@ -15,8 +15,6 @@ qed
 theorem There Exists a Unique Empty Set
 prove ∃ y ∀ x ¬ ∈ x y
 assume ∧ ∀ x ¬ ∈ x a ∀ x ¬ ∈ x b {
-  prove ∀ x ¬ ∈ x a
-  prove ∀ x ¬ ∈ x b
   prove = a b
 }
 prove ∃! y ∀ x ¬ ∈ x y

@@ -37,8 +37,6 @@ qed
 theorem A Set with a Membership Condition Is Unique
 premise ∃ y ∀ x ↔ ∈ x y φ
 assume ∧ ∀ x ↔ ∈ x a φ ∀ x ↔ ∈ x b φ {
-  prove ∀ x ↔ ∈ x a φ
-  prove ∀ x ↔ ∈ x b φ
   prove = a b
 }
 prove ∃! y ∀ x ↔ ∈ x y φ

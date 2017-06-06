@@ -74,8 +74,6 @@ theorem Exclusive Or for Equality
 premise ∨ = x y = x z
 premise ¬ = y z
 assume ∧ = x y = x z {
-  prove = x y
-  prove = x z
   prove = y z
 }
 prove ¬ ∧ = x y = x z

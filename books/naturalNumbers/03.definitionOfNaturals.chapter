@@ -33,7 +33,6 @@ premise ∈ n ℕ
 assume inductive X {
   prove ∈ n X
   prove ∧ ∈ ∅ X ∀ n → ∈ n X ∈ successor n X
-  prove ∀ n → ∈ n X ∈ successor n X
   prove ∈ successor n X
 }
 prove → inductive X ∈ successor n X

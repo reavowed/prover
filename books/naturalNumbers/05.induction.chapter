@@ -6,7 +6,6 @@ premise inductive X
 assume ∈ n ℕ {
   prove ∈ n X
 }
-prove → ∈ n ℕ ∈ n X
 prove ∀ n → ∈ n ℕ ∈ n X
 prove ⊆ ℕ X
 qed
@@ -22,13 +21,11 @@ theorem Proof by Induction
 premise ⊆ S ℕ
 premise ∈ 0 S
 premise proves ∈ n S ∈ successor n S
-prove → ∈ n S ∈ successor n S
 prove ∀ n → ∈ n S ∈ successor n S
 prove = 0 ∅
 prove ∈ ∅ S
 prove ∧ ∈ ∅ S ∀ n → ∈ n S ∈ successor n S
 prove inductive S
-prove ⊆ S ℕ
 prove = S ℕ
 qed
 

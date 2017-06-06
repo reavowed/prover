@@ -1,7 +1,7 @@
 package net.prover.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import net.prover.model.Inference.DirectPremise
+import net.prover.model.Inference.{DirectPremise, RearrangementType}
 
 @JsonIgnoreProperties(Array("symbol", "defaultComponents", "format"))
 case class StatementDefinition(
@@ -36,7 +36,9 @@ case class StatementDefinition(
       None,
       s"Definition of $name",
       Seq(DirectPremise(s)),
-      ProvenStatement(defaultStatement, Conditions(Set.empty, distinctVariables)))
+      ProvenStatement(defaultStatement, Conditions(Set.empty, distinctVariables)),
+      RearrangementType.NotRearrangement,
+      allowsRearrangement = true)
   }
 
   def reverseInference: Option[Inference] = definingStatement.map { s =>
@@ -44,7 +46,9 @@ case class StatementDefinition(
       None,
       s"Definition of $name",
       Seq(DirectPremise(defaultStatement)),
-      ProvenStatement(s, Conditions(Set.empty , distinctVariables)))
+      ProvenStatement(s, Conditions(Set.empty , distinctVariables)),
+      RearrangementType.NotRearrangement,
+      allowsRearrangement = true)
   }
 }
 

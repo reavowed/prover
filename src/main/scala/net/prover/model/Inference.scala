@@ -2,19 +2,23 @@ package net.prover.model
 
 import java.security.MessageDigest
 
-import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
 
+@JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
   def id: String
   def name: String
   def premises: Seq[Premise]
   def conclusion: ProvenStatement
+  def rearrangementType: RearrangementType
+  def allowsRearrangement: Boolean
 
   def applySubstitutions(substitutions: Substitutions): Option[Inference] = {
     for {
       updatedPremises <- premises.map(_.applySubstitutions(substitutions)).traverseOption
       updatedConclusion <- conclusion.applySubstitutions(substitutions)
-    } yield DerivedInference(Some(id), name, updatedPremises, updatedConclusion)
+    } yield DerivedInference(Some(id), name, updatedPremises, updatedConclusion, rearrangementType, allowsRearrangement)
   }
 
   def calculateHash(): String = {
@@ -26,12 +30,29 @@ case class DerivedInference(
     idOption: Option[String],
     name: String,
     premises: Seq[Premise],
-    conclusion: ProvenStatement)
+    conclusion: ProvenStatement,
+    rearrangementType: RearrangementType,
+    allowsRearrangement: Boolean)
   extends Inference {
   def id: String = idOption.getOrElse(calculateHash())
 }
 
 object Inference {
+  sealed trait RearrangementType
+  object RearrangementType {
+    object NotRearrangement extends RearrangementType
+    object Simplification extends RearrangementType
+    object Expansion extends RearrangementType
+
+    def parser: Parser[RearrangementType] = {
+      Parser.singleWord.map {
+        case "simplification" => Some(Simplification)
+        case "expansion" => Some(Expansion)
+        case _ => None
+      }.getOrElse(NotRearrangement)
+    }
+  }
+
   def unapply(inference: Inference): Option[(String, Seq[Premise], ProvenStatement)] = {
     Some(inference.name, inference.premises, inference.conclusion)
   }

@@ -1,12 +1,15 @@
 package net.prover.model
 
-import net.prover.model.Inference.Premise
+import net.prover.model.Inference.{Premise, RearrangementType}
 
 case class Theorem(
     name: String,
     premises: Seq[Premise],
     conclusion: ProvenStatement,
-    proof: DetailedProof)
+    proofOutline: ProofOutline,
+    proof: DetailedProof,
+    rearrangementType: RearrangementType,
+    allowsRearrangement: Boolean = true)
   extends ChapterEntry(Theorem)
     with Inference
 {
@@ -17,45 +20,51 @@ case class Theorem(
 object Theorem extends ChapterEntryParser[Theorem] with InferenceParser {
   override val name: String = "theorem"
 
+
   override def parser(implicit context: Context): Parser[Theorem] = {
     for {
       name <- Parser.toEndOfLine
+      rearrangementType <- RearrangementType.parser
+      allowsRearrangement <- Parser.optionalWord("disallow-rearrangement").isUndefined
       premises <- premisesParser
       proofOutline <- ProofOutline.parser
       _ <- Parser.requiredWord("qed")
     } yield {
-      getFromCache(name, premises, proofOutline) getOrElse prove(name, premises, proofOutline)
+      val detailedProof = getProofFromCache(premises, proofOutline) getOrElse prove(premises, proofOutline)
+      val conclusion = detailedProof.steps.ofType[DetailedProof.StepWithProvenStatement].lastOption
+        .getOrElse(throw new Exception("Theorem must contain at least one top-level proven statement"))
+        .provenStatement
+      Theorem(
+        name,
+        premises,
+        conclusion,
+        proofOutline,
+        detailedProof,
+        rearrangementType,
+        allowsRearrangement)
     }
   }
 
-  private def getFromCache(
-    name: String,
+  private def getProofFromCache(
     premises: Seq[Premise],
     proofOutline: ProofOutline)(
     implicit context: Context
-  ): Option[Theorem] = {
+  ): Option[DetailedProof] = {
     val id = Inference.calculateHash(premises, proofOutline.steps.ofType[ProofOutline.StepWithAssertion].last.assertion)
     context.theoremCache.get(id)
-      .filter {
-        _.referencedInferenceIds.forall(id => context.inferences.exists(_.id == id))
+      .filter { cachedTheorem =>
+        cachedTheorem.proofOutline == proofOutline &&
+        cachedTheorem.referencedInferenceIds.forall(id => context.inferences.exists(_.id == id))
       }
+      .map(_.proof)
   }
 
   private def prove(
-    name: String,
     premises: Seq[Premise],
     proofOutline: ProofOutline)(
     implicit context: Context
-  ): Theorem = {
-    val detailedProof = DetailedProof.fillInOutline(premises, proofOutline)
-    val conclusion = detailedProof.steps.ofType[DetailedProof.StepWithProvenStatement].lastOption
-      .getOrElse(throw new Exception("Theorem must contain at least one top-level proven statement"))
-      .provenStatement
-    Theorem(
-      name,
-      premises,
-      conclusion,
-      detailedProof)
+  ): DetailedProof = {
+    DetailedProof.fillInOutline(premises, proofOutline)
   }
 
   override def addToContext(theorem: Theorem, context: Context): Context = {

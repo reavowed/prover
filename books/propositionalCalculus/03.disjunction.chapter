@@ -4,12 +4,14 @@ Introduce the "or" or "disjuction" connective, ∨.
 statement ∨ (φ ψ) definition (→ ¬ φ ψ)
 
 theorem Add Right Disjunct
+expansion
 premise φ
 prove → ¬ φ ψ
 prove ∨ φ ψ
 qed
 
 theorem Add Left Disjunct
+expansion
 premise ψ
 prove → ¬ φ ψ
 prove ∨ φ ψ

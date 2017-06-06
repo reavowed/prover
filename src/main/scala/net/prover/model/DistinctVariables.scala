@@ -62,10 +62,10 @@ case class DistinctVariables(distinctPairs: Set[DistinctPair]) extends JsonSeria
 
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeStartArray()
-    distinctPairs.foreach { case DistinctPair(first, second) =>
+    distinctPairs.map(_.sortedTuple).toSeq.sorted.foreach { case (first, second) =>
       gen.writeStartArray()
-      gen.writeString(first.toString)
-      gen.writeString(second.toString)
+      gen.writeString(first)
+      gen.writeString(second)
       gen.writeEndArray()
     }
     gen.writeEndArray()
@@ -106,6 +106,14 @@ object DistinctVariables {
     }
 
     def isClash: Boolean = first == second
+
+    def sortedTuple: (String, String) = {
+      if (first.text < second.text) {
+        (first.text, second.text)
+      } else {
+        (second.text, first.text)
+      }
+    }
   }
 
   def byStatements(termVariables: Set[TermVariable], statements: Seq[Statement]): Option[DistinctVariables] = {

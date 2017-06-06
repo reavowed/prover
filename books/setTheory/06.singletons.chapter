@@ -48,7 +48,7 @@ prove ∀ x ↔ = x a = x b
 prove = a b
 qed
 
-theorem Singleton Is Subset
+theorem Singleton of Element Is Subset
 premise ∈ a S
 prove ∀ x ↔ ∈ x singleton a = x a
 assume = x a {
