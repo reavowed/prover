@@ -1,19 +1,7 @@
 Functions
 import Set Theory
 
-variables () (f x y X Y a b A B)
+variables () (f g x y z X Y a b A B)
 
-chapter Definition
-Definition of a function.
-
-statement function (f X Y)
-  name (a function)
-  format (f: X → Y in parens)
-  definition (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f)
-
-term apply (f a)
-  name (Function Application)
-  format (f(a))
-  premises (function f A B, ∈ a A)
-  (∧ ∈ _ B ∈ orderedPair a _ f)
-
+include 01.definitionOfFunction.chapter
+include 02.basicFunctions.chapter

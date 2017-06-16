@@ -36,6 +36,15 @@ prove χ
 qed
 
 theorem Combine Cases
+premise → φ χ
+premise → ψ χ
+assume ∨ φ ψ {
+  prove χ
+}
+prove → ∨ φ ψ χ
+qed
+
+theorem Combine Cases
 premise proves φ χ
 premise proves ψ χ
 assume ∨ φ ψ {
@@ -159,4 +168,13 @@ assume ψ {
   prove ψ
 }
 prove ψ
+qed
+
+theorem Eliminate Redundant Or
+premise ∨ φ ψ
+premise proves ψ φ
+assume φ {
+  prove φ
+}
+prove φ
 qed

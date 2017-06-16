@@ -16,6 +16,21 @@ term union (a)
   (∀ y ↔ ∈ y _ ∃ x ∧ ∈ y x ∈ x a)
   distinct-variables (x y, x a, y a)
 
+theorem Element of Arbitrary Union
+premise ∈ x union A
+prove ∀ y ↔ ∈ y union A ∃ a ∧ ∈ y a ∈ a A
+prove ∃ a ∧ ∈ x a ∈ a A
+qed
+
+theorem Element of Element Is Element of Union
+premise ∈ x a
+premise ∈ a A
+prove ∧ ∈ x a ∈ a A
+prove ∃ b ∧ ∈ x b ∈ b A
+prove ∀ y ↔ ∈ y union A ∃ b ∧ ∈ y b ∈ b A
+prove ∈ x union A
+qed
+
 term ∪ (a b)
   (= _ union pair a b)
 
@@ -59,6 +74,13 @@ prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
 prove ∨ ∈ c a ∈ c b
 qed
 
+theorem Binary Union Is Symmetric
+prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
+prove ∀ x ↔ ∈ x ∪ b a ∨ ∈ x b ∈ x a
+prove ∀ x ↔ ∨ ∈ x a ∈ x b ∨ ∈ x b ∈ x a
+prove = ∪ a b ∪ b a
+qed
+
 theorem Element Transfers to Binary Union
 premise ∈ c a
 prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
@@ -94,7 +116,120 @@ premise ¬ = a ∅
 prove ∃ x ∈ x a
 let x ∈ x a {
   prove ∈ x ∪ a b
-  prove ∃ x ∈ x ∪ a b
+  prove ¬ = ∪ a b ∅
 }
-prove ¬ = ∪ a b ∅
+qed
+
+theorem A Union of a Non-Empty Set Is Non-Empty
+premise ¬ = a ∅
+prove ∃ x ∈ x a
+let x ∈ x a {
+  prove ∈ x ∪ b a
+  prove ¬ = ∪ b a ∅
+}
+qed
+
+theorem Set Is in One Part of a Binary Union
+premise ∈ a ∪ b c
+premise ¬ ∈ a b
+prove ∨ ∈ a b ∈ a c
+prove ∈ a c
+qed
+
+theorem Set Is in One Part of a Binary Union
+premise ∈ a ∪ b c
+premise ¬ ∈ a c
+prove ∨ ∈ a b ∈ a c
+prove ∈ a b
+qed
+
+theorem Union Membership Equivalence If Not In One Set
+premise ¬ ∈ a c
+assume ∈ a b {
+  prove ∈ a ∪ b c
+}
+assume ∈ a ∪ b c {
+  prove ∈ a b
+}
+prove ↔ ∈ a b ∈ a ∪ b c
+qed
+
+theorem Union Membership Equivalence If Not In One Set
+premise ¬ ∈ a b
+assume ∈ a c {
+  prove ∈ a ∪ b c
+}
+assume ∈ a ∪ b c {
+  prove ∈ a c
+}
+prove ↔ ∈ a c ∈ a ∪ b c
+qed
+
+theorem Union of Subsets Is a Subset
+premise ⊆ A X
+premise ⊆ B X
+prove ∀ x → ∈ x A ∈ x X
+prove ∀ x → ∈ x B ∈ x X
+prove ∀ x → ∨ ∈ x A ∈ x B ∈ x X
+prove ∀ x ↔ ∈ x ∪ A B ∨ ∈ x A ∈ x B
+prove ∀ x → ∈ x ∪ A B ∈ x X
+prove ⊆ ∪ A B X
+qed
+
+theorem Subset Transfers to Union
+premise ⊆ X A
+assume ∈ x X {
+  prove ∈ x A
+  prove ∈ x ∪ A B
+}
+prove ⊆ X ∪ A B
+qed
+
+
+theorem Subset Transfers to Union
+premise ⊆ X A
+assume ∈ x X {
+  prove ∈ x A
+  prove ∈ x ∪ B A
+}
+prove ⊆ X ∪ B A
+qed
+
+theorem Set Is Subset of Its Union
+prove ⊆ A A
+prove ⊆ A ∪ A B
+qed
+
+theorem Set Is Subset of Its Union
+prove ⊆ B B
+prove ⊆ B ∪ A B
+qed
+
+theorem Redundant Union with Subset
+premise ⊆ A B
+prove ∀ x ↔ ∈ x ∪ A B ∨ ∈ x A ∈ x B
+assume ∈ x ∪ A B {
+  prove ∨ ∈ x A ∈ x B
+  assume ∈ x A {
+    prove ∈ x B
+  }
+  prove ∈ x B
+}
+assume ∈ x B {
+  prove ∈ x ∪ A B
+}
+prove = ∪ A B B
+qed
+
+theorem Redundant Union with Subset
+premise ⊆ A B
+prove = ∪ A B B
+prove = ∪ B A ∪ A B
+prove = ∪ B A B
+qed
+
+theorem Redundant Union with Singleton
+premise ∈ a A
+prove ⊆ singleton a A
+prove = ∪ A singleton a A
 qed

@@ -58,3 +58,12 @@ assume ∃ x φ {
 }
 prove ¬ ∃ x φ
 qed
+
+theorem Existence Equivalence
+premise ∃ x φ
+premise ∀ x ↔ φ ψ
+let y sub y x φ {
+  prove sub y x ψ
+  prove ∃ x ψ
+}
+qed

@@ -64,6 +64,12 @@ prove = ∩ a b intersection pair a b
 prove ∀ x ↔ ∈ x ∩ a b ∧ ∈ x a ∈ x b
 qed
 
+theorem Element of Binary Intersection
+premise ∈ x ∩ A B
+prove ∀ y ↔ ∈ y ∩ A B ∧ ∈ y A ∈ y B
+prove ∧ ∈ x A ∈ x B
+qed
+
 theorem Binary Intersection Is Symmetric
 prove ∀ x ↔ ∈ x ∩ a b ∧ ∈ x a ∈ x b
 prove ∀ x ↔ ∈ x ∩ b a ∧ ∈ x b ∈ x a
@@ -95,4 +101,37 @@ premise ∈ c b
 prove = ∩ a b ∩ b a
 prove = ∩ b a ∅
 prove ¬ ∈ c a
+qed
+
+theorem Element Transfers from Intersection
+premise ∈ x ∩ A B
+prove ∀ y ↔ ∈ y ∩ A B ∧ ∈ y A ∈ y B
+prove ∧ ∈ x A ∈ x B
+prove ∈ x A
+qed
+
+theorem Element Transfers from Intersection
+premise ∈ x ∩ A B
+prove ∀ y ↔ ∈ y ∩ A B ∧ ∈ y A ∈ y B
+prove ∧ ∈ x A ∈ x B
+prove ∈ x B
+qed
+
+theorem Disjoint Pair
+premise proves ∈ x A ¬ ∈ x B
+assume ∈ x ∩ A B {
+  prove ∈ x A
+  prove ∈ x B
+  prove ¬ ∈ x B
+}
+prove ¬ ∈ x ∩ A B
+prove ∀ x ¬ ∈ x ∩ A B
+prove = ∩ A B ∅
+qed
+
+theorem Disjoint Pair
+premise proves ∈ x A ¬ ∈ x B
+prove = ∩ A B ∅
+prove = ∩ B A ∩ A B
+prove = ∩ B A ∅
 qed

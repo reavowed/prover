@@ -22,6 +22,15 @@ prove ∈ a singleton a
 prove ¬ ∈ a a
 qed
 
+theorem No Set Contains Itself
+premise ∈ a b
+assume = a b {
+  prove ∈ b b
+}
+prove ¬ ∈ b b
+prove ¬ = a b
+qed
+
 theorem No Two Sets Contain Each Other
 prove ¬ = pair a b ∅
 prove ∃ x ∧ ∈ x pair a b = ∩ x pair a b ∅

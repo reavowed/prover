@@ -1,7 +1,7 @@
 Set Theory
 import Predicate Calculus
 
-variables (φ ψ χ) (x y z X Y a b c d A B S)
+variables (φ ψ χ) (x y z X Y a b c d A B C D S)
 
 include 01.extensionality.chapter
 include 02.subsets.chapter

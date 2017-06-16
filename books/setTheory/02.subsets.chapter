@@ -5,6 +5,19 @@ statement ⊆ (a b)
   definition (∀ x → ∈ x a ∈ x b)
   distinct-variables (x a, x b)
 
+theorem Definition of ⊆
+premise ⊆ A B
+premise ∈ x A
+prove ∀ y → ∈ y A ∈ y B
+prove ∈ x B
+qed
+
+theorem Subset Deduction
+premise proves ∈ x A ∈ x B
+prove ∀ x → ∈ x A ∈ x B
+prove ⊆ A B
+qed
+
 theorem Subset Is Antisymmetric
 premise ⊆ a b
 premise ⊆ b a
@@ -14,7 +27,24 @@ prove ∀ x ↔ ∈ x a ∈ x b
 prove = a b
 qed
 
+theorem Subset Is Transitive
+premise ⊆ a b
+premise ⊆ b c
+assume ∈ x a {
+  prove ∈ x b
+  prove ∈ x c
+}
+prove ⊆ a c
+qed
+
 theorem Any Set Is a Subset of Itself
 prove ∀ x → ∈ x a ∈ x a
 prove ⊆ a a
+qed
+
+theorem Element Transfers to Superset
+premise ⊆ A B
+premise ∈ a A
+prove ∀ x → ∈ x A ∈ x B
+prove ∈ a B
 qed

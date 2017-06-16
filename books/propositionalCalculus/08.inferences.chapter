@@ -64,6 +64,28 @@ prove ↔ ∧ ψ φ φ
 qed
 
 theorem Redundant Or
+premise proves φ ψ
+assume ∨ φ ψ {
+  prove ψ
+}
+assume ψ {
+  prove ∨ φ ψ
+}
+prove ↔ ∨ φ ψ ψ
+qed
+
+theorem Redundant Or
+premise proves φ ψ
+assume ∨ ψ φ {
+  prove ψ
+}
+assume ψ {
+  prove ∨ ψ φ
+}
+prove ↔ ∨ ψ φ ψ
+qed
+
+theorem Redundant Or
 premise ¬ φ
 assume ∨ φ ψ {
   prove ψ
@@ -75,13 +97,27 @@ prove ↔ ∨ φ ψ ψ
 qed
 
 theorem Redundant Or
-premise ¬ ψ
-assume ∨ φ ψ {
-  prove φ
+premise ¬ φ
+assume ∨ ψ φ {
+  prove ψ
 }
-assume φ {
-  prove ∨ φ ψ
+assume ψ {
+  prove ∨ ψ φ
 }
-prove ↔ ∨ φ ψ φ
+prove ↔ ∨ ψ φ ψ
 qed
 
+comment Adding extra conjunctions to equivalences.
+
+theorem Add Conjunction to Equivalence
+premise ↔ φ ψ
+assume ∧ χ φ {
+  prove ψ
+  prove ∧ χ ψ
+}
+assume ∧ χ ψ {
+  prove φ
+  prove ∧ χ φ
+}
+prove ↔ ∧ χ φ ∧ χ ψ
+qed

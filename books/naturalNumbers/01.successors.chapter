@@ -28,6 +28,13 @@ prove ∈ a ∪ b singleton b
 prove ∈ a successor b
 qed
 
+theorem A Set Is a Subset of Its Successor
+assume ∈ x a {
+  prove ∈ x successor a
+}
+prove ⊆ a successor a
+qed
+
 theorem Successors Are Non-Empty
 prove ∈ a successor a
 prove ¬ = successor a ∅

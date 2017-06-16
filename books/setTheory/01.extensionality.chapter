@@ -19,6 +19,13 @@ prove → ∀ x ↔ ∈ x a ∈ x b = a b
 prove = a b
 qed
 
+theorem Sets with Same Members Are Equal
+premise proves ∈ x a ∈ x b
+premise proves ∈ x b ∈ x a
+prove ∀ x ↔ ∈ x a ∈ x b
+prove = a b
+qed
+
 theorem Sets with Same Membership Condition Are Equal
 premise ∀ x ↔ ∈ x a φ
 premise ∀ x ↔ ∈ x b φ

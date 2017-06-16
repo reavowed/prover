@@ -14,6 +14,21 @@ prove ∀ X → inductive X ∈ 0 X
 prove ∈ 0 ℕ
 qed
 
+theorem 0 Is Not the Successor of Any Natural Number
+prove = 0 ∅
+prove ∈ n successor n
+prove ¬ = successor n ∅
+prove ¬ = successor n 0
+qed
+
+theorem 0 Is Not the Successor of Any Natural Number
+assume = 0 successor n {
+  prove = successor n 0
+}
+prove ¬ = successor n 0
+prove ¬ = 0 successor n
+qed
+
 term 1 () (= _ successor 0)
 
 theorem 1 Is a Natural Number
@@ -21,4 +36,14 @@ prove ∈ 0 ℕ
 prove ∈ successor 0 ℕ
 prove = 1 successor 0
 prove ∈ 1 ℕ
+qed
+
+theorem 1 Is the Singleton of 0
+prove = 1 successor 0
+prove = successor 0 ∪ 0 singleton 0
+prove = 1 ∪ 0 singleton 0
+prove = 0 ∅
+prove = 1 ∪ ∅ singleton 0
+prove = ∪ ∅ singleton 0 singleton 0
+prove = 1 singleton 0
 qed

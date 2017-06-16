@@ -38,6 +38,14 @@ prove ∀ x → ∈ x n ∈ x ℕ
 prove ∈ m ℕ
 qed
 
+theorem A Natural Number Is a Subset of the Natural Numbers
+premise ∈ n ℕ
+assume ∈ m n {
+  prove ∈ m ℕ
+}
+prove ⊆ n ℕ
+qed
+
 theorem A Natural Number Either Is 0 or Contains 0
 premise ∈ n ℕ
 prove = 0 0

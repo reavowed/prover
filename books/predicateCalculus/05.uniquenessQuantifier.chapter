@@ -16,6 +16,13 @@ prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
 prove ∃! x φ
 qed
 
+theorem Proof by Unique Existence
+premise ∃! x φ
+premise proves φ ψ
+prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
+prove ψ non-distinct (x φ)
+qed
+
 theorem Every Set Is Unique
 prove ∃ y = y x
 assume ∧ = a x = b x {
@@ -24,7 +31,19 @@ assume ∧ = a x = b x {
 prove ∃! y = y x
 qed
 
-theorem Alternate Definition of Uniqueness
+theorem Unique Value
+premise ∃! x φ
+premise sub y x φ
+premise sub z x φ
+prove ∧ ∃ x φ ∀ a ∀ b → ∧ sub a x φ sub b x φ = a b
+prove ∀ a ∀ b → ∧ sub a x φ sub b x φ = a b
+prove ∀ b → ∧ sub y x φ sub b x φ = y b
+prove → ∧ sub y x φ sub z x φ = y z
+prove ∧ sub y x φ sub z x φ
+prove = y z
+qed
+
+theorem Uniqueness by Exhibiting Unique Value
 premise ∀ x ↔ φ = x y
 prove = y y
 prove sub y x φ
@@ -34,6 +53,13 @@ assume ∧ sub a x φ sub b x φ {
   prove = b y
   prove = a b
 }
+prove ∃! x φ
+qed
+
+theorem Uniqueness by Exhibiting Unique Value
+premise proves φ = x y
+premise proves = x y φ
+prove ∀ x ↔ φ = x y
 prove ∃! x φ
 qed
 
@@ -57,4 +83,22 @@ qed
 theorem Uniqueness by Two Cases
 prove ⊕ φ ¬ φ
 prove ∃! z ∨ ∧ φ = z x ∧ ¬ φ = z y
+qed
+
+theorem Uniqueness Equivalence
+premise ∃! x φ
+premise ∀ x ↔ φ ψ
+prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
+prove ∃ x ψ
+assume ∧ sub y x ψ sub z x ψ {
+  prove sub y x φ
+  prove sub z x φ
+  prove ∧ sub y x φ sub z x φ
+  prove ∀ z → ∧ sub y x φ sub z x φ = y z
+  prove → ∧ sub y x φ sub z x φ = y z
+  prove = y z
+}
+prove ∀ z → ∧ sub y x ψ sub z x ψ = y z
+prove ∀ y ∀ z → ∧ sub y x ψ sub z x ψ = y z
+prove ∃! x ψ
 qed
