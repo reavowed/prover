@@ -44,7 +44,7 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
     "name",
     Parser.allInParens)
 
-  def parser(implicit context: Context): Parser[TermDefinition] = {
+  def parser(book: Book, chapter: Chapter)(implicit context: Context): Parser[TermDefinition] = {
     for {
       symbol <- Parser.singleWord
       defaultVariables <- Component.variableParser.listInParens(None)

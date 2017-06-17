@@ -3,7 +3,7 @@ package net.prover.model
 class StatementDefinitionSpec extends ProverSpec {
   "statement definition parser" should {
     def parseStatementDefinition(text: String): StatementDefinition = {
-      StatementDefinition.parser(defaultContext).parseAndDiscard(text)
+      StatementDefinition.parser(stubBook, stubChapter)(defaultContext).parseAndDiscard(text)
     }
 
     "fill in default format for a constant statement" in {
@@ -37,13 +37,13 @@ class StatementDefinitionSpec extends ProverSpec {
     }
 
     "infer bound variables from a defining statement" in {
-      StatementDefinition.parser(defaultContext).parseAndDiscard(
+      StatementDefinition.parser(stubBook, stubChapter)(defaultContext).parseAndDiscard(
         "∃ (x φ) format ((∃{}){}) definition (¬ ∀ x ¬ φ)"
       ).boundVariables mustEqual Set(x)
     }
 
     "infer bound variables that are not fully bound in the defining statement" in {
-      StatementDefinition.parser(defaultContext).parseAndDiscard(
+      StatementDefinition.parser(stubBook, stubChapter)(defaultContext).parseAndDiscard(
         "∃! (x φ) format ((∃!{}){}) definition (∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z)"
       ).boundVariables mustEqual Set(x)
     }

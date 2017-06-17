@@ -6,6 +6,11 @@ import net.prover.model.Inference.{Premise, RearrangementType}
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement", "proofOutline"))
 case class Theorem(
     name: String,
+    key: String,
+    chapterKey: String,
+    chapterTitle: String,
+    bookKey: String,
+    bookTitle: String,
     premises: Seq[Premise],
     conclusion: ProvenStatement,
     proofOutline: ProofOutline,
@@ -16,14 +21,14 @@ case class Theorem(
     with Inference
 {
   val id = calculateHash()
+  def keyOption = Some(key)
   def referencedInferenceIds: Set[String] = proof.referencedInferenceIds
 }
 
 object Theorem extends ChapterEntryParser[Theorem] with InferenceParser {
   override val name: String = "theorem"
 
-
-  override def parser(implicit context: Context): Parser[Theorem] = {
+  override def parser(book: Book, chapter: Chapter)(implicit context: Context): Parser[Theorem] = {
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
@@ -38,6 +43,11 @@ object Theorem extends ChapterEntryParser[Theorem] with InferenceParser {
         .provenStatement
       Theorem(
         name,
+        context.nextInferenceKey(name),
+        chapter.key,
+        chapter.title,
+        book.key,
+        book.title,
         premises,
         conclusion,
         proofOutline,

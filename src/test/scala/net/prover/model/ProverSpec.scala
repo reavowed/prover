@@ -136,6 +136,9 @@ trait ProverSpec extends Specification {
 
   implicit val defaultContext = contextWithTerms
 
+  val stubBook = Book("", Paths.get(""), Nil, Nil, defaultContext)
+  val stubChapter = Chapter("", "", "", "")
+
   def contextWith(inferences: Inference*): Context = {
     defaultContext.copy(inferences = inferences)
   }

@@ -6,14 +6,6 @@
         <div ng-switch-when="comment">
             <p>{{entry.text}}</p>
         </div>
-        <div ng-switch-when="quantifier">
-            <div class="result">
-                <h5>Quantifier: {{entry.defaultStatement}}</h5>
-                <div ng-if="entry.definingStatement">
-                    {{entry.defaultStatement}} is defined to mean {{entry.definingStatement}}
-                </div>
-            </div>
-        </div>
         <div ng-switch-when="statement">
             <div class="result">
                 <h5>Statement Definition: {{entry.defaultStatement}}</h5>
@@ -60,10 +52,10 @@
             </div>
         </div>
         <div ng-switch-when="axiom">
-            <axiom axiom="entry"></axiom>
+            <chapter-inference inference="entry"></chapter-inference>
         </div>
         <div ng-switch-when="theorem">
-            <theorem theorem="entry"></theorem>
+            <chapter-inference inference="entry"></chapter-inference>
         </div>
     </div>
 </div>

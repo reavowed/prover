@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.model.{Book, Chapter}
+import net.prover.model.{Book, Chapter, Inference}
 import org.slf4j.LoggerFactory
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation.{GetMapping, PathVariable, RequestMapping, RestController}
@@ -29,10 +29,10 @@ class BookController {
     }
   }
 
-  @GetMapping(Array("/{bookName}"))
-  def getBook(@PathVariable("bookName") bookName: String) = {
+  @GetMapping(Array("/{bookKey}"))
+  def getBook(@PathVariable("bookKey") bookKey: String) = {
     try {
-      books.find(_.key == bookName) match {
+      books.find(_.key == bookKey) match {
         case Some(book) =>
           new ResponseEntity[Book](book, HttpStatus.OK)
         case None =>
@@ -45,12 +45,34 @@ class BookController {
     }
   }
 
-  @GetMapping(Array("/{bookName}/{chapterName}"))
-  def getChapter(@PathVariable("bookName") bookName: String, @PathVariable("chapterName") chapterName: String) = {
+  @GetMapping(Array("/{bookKey}/{chapterKey}"))
+  def getChapter(@PathVariable("bookKey") bookKey: String, @PathVariable("chapterKey") chapterKey: String) = {
     try {
-      books.find(_.key == bookName).flatMap(_.chapters.find(_.key == chapterName)) match {
+      books.find(_.key == bookKey).flatMap(_.chapters.find(_.key == chapterKey)) match {
         case Some(chapter) =>
           new ResponseEntity[Chapter](chapter, HttpStatus.OK)
+        case None =>
+          new ResponseEntity(HttpStatus.NOT_FOUND)
+      }
+    } catch {
+      case NonFatal(e) =>
+        BookController.logger.error("Error getting books\n{}", e.getMessage)
+        new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  @GetMapping(Array("/{bookKey}/{chapterKey}/{inferenceKey}"))
+  def getInference(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("inferenceKey") inferenceKey: String
+  ) = {
+    try {
+      books.find(_.key == bookKey)
+        .flatMap(_.chapters.find(_.key == chapterKey))
+        .flatMap(_.entries.ofType[Inference].find(_.keyOption.contains(inferenceKey)))  match {
+        case Some(inference) =>
+          new ResponseEntity[Inference](inference, HttpStatus.OK)
         case None =>
           new ResponseEntity(HttpStatus.NOT_FOUND)
       }

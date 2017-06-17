@@ -1,12 +1,21 @@
 package net.prover.model
 
 import net.prover.model.DetailedProof.{AssertionStep, DirectReference}
-import net.prover.model.Inference.{DeducedPremise, DirectPremise, RearrangementType}
+import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
 
 class TheoremSpec extends ProverSpec {
+
+  def axiom(
+    premises: Seq[Premise],
+    conclusion: ProvenStatement,
+    rearrangementType: RearrangementType = RearrangementType.NotRearrangement
+  ): Axiom = {
+    Axiom("", "", "", "", "", "", premises, conclusion, rearrangementType)
+  }
+
   "theorem parser" should {
     def parseTheorem(text: String*)(implicit context: Context): Theorem = {
-      Theorem.parser(context).parseAndDiscard(text.mkString("\n"))
+      Theorem.parser(stubBook, stubChapter)(context).parseAndDiscard(text.mkString("\n"))
     }
     "not prove an unfounded statement" in {
       parseTheorem(
@@ -17,72 +26,37 @@ class TheoremSpec extends ProverSpec {
       ) must throwAn[Exception]
     }
 
-    val repetition = new Axiom(
-      "Repeat",
-      Seq(φ),
-      φ)
-    val deduction = new Axiom(
-      "Deduction",
-      Seq(DeducedPremise(φ, ψ)),
-      Implication(φ, ψ))
-    val modusPonens = new Axiom(
-      "Modus Ponens",
-      Seq(Implication(φ, ψ), φ),
-      ψ)
-    val implicationIsReflexive = new Axiom(
-      "Implication Is Reflexive",
-      Nil,
-      Implication(φ, φ))
-    val falseStatementsAreEquivalent = new Axiom(
-      "False Statements Are Equivalent",
-      Seq(Negation(φ), Negation(ψ)),
-      Equivalence(φ, ψ))
-    val substitutionOfEquals = new Axiom(
-      "Substitution of Equals",
-      Seq(Equals(x, y), SubstitutedStatementVariable(φ, x, z)),
-      SubstitutedStatementVariable(φ, y, z))
-    val substitutionOfEqualsReverse = new Axiom(
-      "Substitution of Equals",
-      Seq(Equals(x, y), SubstitutedStatementVariable(φ, y, z)),
-      SubstitutedStatementVariable(φ, x, z))
-    val equivalenceOfSubstitutedEquals = new Axiom(
-      "Equivalence of Substituted Equals",
+    val repetition = axiom(Seq(φ), φ)
+    val deduction = axiom(Seq(DeducedPremise(φ, ψ)), Implication(φ, ψ))
+    val modusPonens = axiom(Seq(Implication(φ, ψ), φ), ψ)
+    val implicationIsReflexive = axiom(Nil, Implication(φ, φ))
+    val falseStatementsAreEquivalent = axiom(Seq(Negation(φ), Negation(ψ)), Equivalence(φ, ψ))
+    val substitutionOfEquals = axiom(Seq(Equals(x, y), SubstitutedStatementVariable(φ, x, z)), SubstitutedStatementVariable(φ, y, z))
+    val substitutionOfEqualsReverse = axiom(Seq(Equals(x, y), SubstitutedStatementVariable(φ, y, z)), SubstitutedStatementVariable(φ, x, z))
+    val equivalenceOfSubstitutedEquals = axiom(
       Seq(Equals(x, y)),
       Equivalence(
         SubstitutedStatementVariable(φ, x, z),
         SubstitutedStatementVariable(φ, y, z)))
-    val substitution = new Axiom(
-      "Substitution",
+    val substitution = axiom(
       Seq(φ),
       ProvenStatement(
         SubstitutedStatementVariable(φ, y ,x),
         Conditions(Set(x), DistinctVariables.empty)))
-    val generalizationWithDifferentVariables = new Axiom(
-      "Generalization",
+    val generalizationWithDifferentVariables = axiom(
       Seq(SubstitutedStatementVariable(φ, y, x)),
       ProvenStatement(
         ForAll(x, φ),
         Conditions(Set(y), DistinctVariables(y -> φ))))
-    val generalizationWithSameVariable = new Axiom(
-      "Generalization",
+    val generalizationWithSameVariable = axiom(
       Seq(φ),
       ProvenStatement(
         ForAll(x, φ),
         Conditions(Set(x), DistinctVariables.empty)))
-    val specification = new Axiom(
-      "Specification",
-      Seq(ForAll(x, φ)),
-      SubstitutedStatementVariable(φ, y, x))
-    val existence = new Axiom(
-      "Existence",
-      Seq(SubstitutedStatementVariable(φ, y, x)),
-      Exists(x, φ))
-    val proveExistence = new Axiom(
-      "Prove Existence",
-      Seq(DeducedPremise(φ, ψ), DirectPremise(Exists(x, φ))),
-      ProvenStatement(ψ, Conditions(Set(x), DistinctVariables(x -> ψ))))
-    val proveUniqueness = new Axiom(
-      "Prove Uniqueness",
+    val specification = axiom(Seq(ForAll(x, φ)), SubstitutedStatementVariable(φ, y, x))
+    val existence = axiom(Seq(SubstitutedStatementVariable(φ, y, x)), Exists(x, φ))
+    val proveExistence = axiom(Seq(DeducedPremise(φ, ψ), DirectPremise(Exists(x, φ))), ProvenStatement(ψ, Conditions(Set(x), DistinctVariables(x -> ψ))))
+    val proveUniqueness = axiom(
       Seq(
         DirectPremise(Exists(x, φ)),
         DeducedPremise(
@@ -178,10 +152,7 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove a conclusion that is a nested substituted variable" in {
-      val specification = new Axiom(
-        "Specification",
-        Seq(ForAll(x, φ)),
-        SubstitutedStatementVariable(φ, y, x))
+      val specification = axiom(Seq(ForAll(x, φ)), SubstitutedStatementVariable(φ, y, x))
       val theorem = parseTheorem(
         "X",
         "premise ∀ x ¬ φ",
@@ -395,8 +366,7 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove a statement that requires additional distinct variable conditions to be added in the resolution of a substitution in the conclusion" in {
-      val axiom = Axiom(
-        "XXX",
+      val elementOfComprehension = axiom(
         Seq(Equals(Y, Comprehension(x, X, φ))),
         ForAll(y, Equivalence(ElementOf(y, Y), Conjunction(ElementOf(y, X), SubstitutedStatementVariable(φ, y, x)))))
 
@@ -405,7 +375,7 @@ class TheoremSpec extends ProverSpec {
         "premise = Z comprehension x Y ∀ X → φ ∈ x X",
         "prove ∀ y ↔ ∈ y Z ∧ ∈ y Y ∀ X → φ ∈ y X",
         "qed")(
-        contextWith(axiom))
+        contextWith(elementOfComprehension))
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(y, Equivalence(ElementOf(y, Z), Conjunction(ElementOf(y, Y), ForAll(X, Implication(φ, ElementOf(y, X)))))),
@@ -440,13 +410,11 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove an inference conclusion by simplifying a premise" in {
-      val extractLeftConjunct = Axiom(
-        "Extract Left Conjunct",
+      val extractLeftConjunct = axiom(
         Seq(Conjunction(φ, ψ)),
         φ,
         rearrangementType = RearrangementType.Simplification)
-      val anythingImpliesATrueStatement = Axiom(
-        "Anything Implies a True Statement",
+      val anythingImpliesATrueStatement = axiom(
         Seq(φ),
         Implication(ψ, φ))
 
@@ -462,18 +430,15 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove a statement by rearranging" in {
-      val extractLeftConjunct = Axiom(
-        "Extract Left Conjunct",
+      val extractLeftConjunct = axiom(
         Seq(Conjunction(φ, ψ)),
         φ,
         rearrangementType = RearrangementType.Simplification)
-      val combineConjunction = Axiom(
-        "Combine Conjunction",
+      val combineConjunction = axiom(
         Seq(φ, ψ),
         Conjunction(φ, ψ),
         rearrangementType = RearrangementType.Expansion)
-      val addRightDisjunct = Axiom(
-        "Add Left Disjunct",
+      val addRightDisjunct = axiom(
         Seq(ψ),
         Disjunction(φ, ψ),
         rearrangementType = RearrangementType.Expansion)

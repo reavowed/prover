@@ -83,7 +83,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
     }
   }
 
-  def parser(implicit context: Context): Parser[StatementDefinition] = {
+  def parser(book: Book, chapter: Chapter)(implicit context: Context): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
       defaultVariables <- Component.variableParser.listInParens(None)

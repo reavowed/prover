@@ -4,14 +4,20 @@ import net.prover.model.Inference.{Premise, RearrangementType}
 
 case class Axiom(
     name: String,
+    key: String,
+    chapterKey: String,
+    chapterTitle: String,
+    bookKey: String,
+    bookTitle: String,
     premises: Seq[Premise],
     conclusion: ProvenStatement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement,
     allowsRearrangement: Boolean = true)
   extends ChapterEntry(Axiom)
-  with Inference {
-
+  with Inference
+{
   val id = calculateHash()
+  def keyOption = Some(key)
 }
 
 object Axiom extends ChapterEntryParser[Axiom] with InferenceParser {
@@ -24,7 +30,7 @@ object Axiom extends ChapterEntryParser[Axiom] with InferenceParser {
     } yield conclusion
   }
 
-  def parser(implicit context: Context): Parser[Axiom] = {
+  def parser(book: Book, chapter: Chapter)(implicit context: Context): Parser[Axiom] = {
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
@@ -33,7 +39,17 @@ object Axiom extends ChapterEntryParser[Axiom] with InferenceParser {
       conclusion <- conclusionParser
       conditions <- Conditions.parser
     } yield {
-      Axiom(name, premises, ProvenStatement(conclusion, conditions), rearrangementType, allowsRearrangement)
+      Axiom(
+        name,
+        context.nextInferenceKey(name),
+        chapter.key,
+        chapter.title,
+        book.key,
+        book.title,
+        premises,
+        ProvenStatement(conclusion, conditions),
+        rearrangementType,
+        allowsRearrangement)
     }
   }
 

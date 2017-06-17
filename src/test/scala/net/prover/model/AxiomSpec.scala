@@ -5,7 +5,7 @@ import net.prover.model.Inference.{DeducedPremise, DirectPremise}
 class AxiomSpec extends ProverSpec {
 
   def parseAxiom(text: String*): Axiom = {
-    Axiom.parser(defaultContext).parseAndDiscard(text.mkString("\n"))
+    Axiom.parser(stubBook, stubChapter)(defaultContext).parseAndDiscard(text.mkString("\n"))
   }
 
   "axiom parser" should {
@@ -15,6 +15,11 @@ class AxiomSpec extends ProverSpec {
         "conclusion ∀ x ∀ y ∀ z → ↔ ∈ z x ∈ z y ↔ ∈ x z ∈ y z"
       ) mustEqual Axiom(
         "Axiom of Extensionality",
+        "axiom-of-extensionality",
+        "",
+        "",
+        "",
+        "",
         Nil,
         ForAll(x, ForAll(y, ForAll(z, Implication(
           Equivalence(ElementOf(z, x), ElementOf(z, y)),
@@ -28,6 +33,11 @@ class AxiomSpec extends ProverSpec {
         "conclusion φ"
       ) mustEqual Axiom(
         "Restate",
+        "restate",
+        "",
+        "",
+        "",
+        "",
         Seq(DirectPremise(φ)),
         φ)
     }
@@ -40,6 +50,11 @@ class AxiomSpec extends ProverSpec {
         "conclusion ψ"
       ) mustEqual Axiom(
         "Eliminate Implication",
+        "eliminate-implication",
+        "",
+        "",
+        "",
+        "",
         Seq(DirectPremise(Implication(φ, ψ)), DirectPremise(φ)),
         ψ)
     }
@@ -51,6 +66,11 @@ class AxiomSpec extends ProverSpec {
         "conclusion → φ ψ"
       ) mustEqual Axiom(
         "Deduction",
+        "deduction",
+        "",
+        "",
+        "",
+        "",
         Seq(DeducedPremise(φ, ψ)),
         Implication(φ, ψ))
     }

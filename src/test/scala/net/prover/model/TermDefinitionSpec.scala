@@ -3,7 +3,7 @@ package net.prover.model
 class TermDefinitionSpec extends ProverSpec {
   "term definition parser" should {
     "parse a term constant" in {
-      TermDefinition.parser(defaultContext).parseAndDiscard("∅ () (∀ x ¬ ∈ x _)") mustEqual
+      TermDefinition.parser(stubBook, stubChapter)(defaultContext).parseAndDiscard("∅ () (∀ x ¬ ∈ x _)") mustEqual
         TermDefinition(
           "∅",
           Nil,
@@ -15,7 +15,7 @@ class TermDefinitionSpec extends ProverSpec {
     }
 
     "parse a term with premises" in {
-      TermDefinition.parser(defaultContext).parseAndDiscard(
+      TermDefinition.parser(stubBook, stubChapter)(defaultContext).parseAndDiscard(
         "intersection (x) format (⋂x) premises (¬ = x ∅) (∀ y ↔ ∈ y _ ∀ z → ∈ z x ∈ z y)"
       ) mustEqual TermDefinition(
         "intersection",

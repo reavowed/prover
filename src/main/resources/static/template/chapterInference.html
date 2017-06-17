@@ -1,14 +1,18 @@
-<div ng-if="$ctrl.axiom">
+<div ng-if="$ctrl.inference">
     <div class="result"
-         ng-init="conditions = $ctrl.axiom.conclusion.conditions">
-        <h5>Axiom: {{$ctrl.axiom.name}}</h5>
+         ng-init="conditions = $ctrl.inference.conclusion.conditions">
+        <h5>
+            <a href="#/{{$ctrl.inference.bookKey}}/{{$ctrl.inference.chapterKey}}/{{$ctrl.inference.key}}" class="inference-title">
+                {{$ctrl.inference.type == "axiom" ? "Axiom" : "Theorem"}}: {{$ctrl.inference.name}}
+            </a>
+        </h5>
         <div class="resultBlock">
-            <div ng-if="$ctrl.axiom.premises.length">
+            <div ng-if="$ctrl.inference.premises.length">
                 Suppose {{premiseText}}.
             </div>
             <div>
-                <span ng-if="$ctrl.axiom.premises.length">Then</span>
-                {{$ctrl.axiom.conclusion.statement}}.
+                <span ng-if="$ctrl.inference.premises.length">Then</span>
+                {{$ctrl.inference.conclusion.statement}}.
             </div>
         </div>
         <div class="conditions"

@@ -1,0 +1,46 @@
+<div class="inference" ng-if="inference" ng-init="conditions = inference.conclusion.conditions">
+    <h3>
+        {{inference.type == "axiom" ? "Axiom" : "Theorem"}}: {{inference.name}}
+    </h3>
+    <div ng-if="premises.length">
+        Suppose
+        <span ng-if="premises.length > 2" ng-repeat="premise in premises.slice(0, premises.length - 2)">
+            <span class="premise">{{premise}}</span>,
+        </span>
+        <span ng-if="premises.length > 1" ng-init="premise = premises[premises.length-2]">
+            <sspan class="premise">{{premise}}</sspan> and
+        </span>
+        <span ng-if="premises.length > 0" ng-init="premise = premises[premises.length-1]">
+            <span class="premise">{{premise}}</span>.
+        </span>
+    </div>
+    <div>
+        <span ng-if="inference.premises.length">Then</span>
+        {{inference.conclusion.statement}}.
+    </div>
+    <div class="theoremProof" ng-if="inference.proof">
+        <h4>Proof</h4>
+        <table class="proofRows">
+            <tr ng-repeat="row in proofRows"
+                class="proofRow {{row.assertion ? 'hasAssertion' : ''}}"
+                ng-mouseenter="highlightRow(row, $event)"
+                ng-mouseleave="removeHighlight(row, $event)"
+            >
+                <td class="proofRowStatement" ng-click="popoverRow(row, $event)" data-trigger="focus" tabindex="0">
+                    <span ng-repeat="i in _.range(row.visibleIndentLevel)" class="proofIndent"></span>
+                    <span>{{row.prefix}}</span>
+                    <span ng-if="row.assumption" class="assumption">{{row.assumption}}</span><span ng-if="row.assumption && row.assertion"> ⊢ </span><span ng-if="row.assertion" class="assertion">{{row.assertion}}</span>.
+                </td>
+                <td>
+                    <span ng-if="row.inferenceName" class="stepInferenceId">{{row.inferenceName}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="conditions"
+         ng-if="conditions.arbitraryVariables.length || conditions.distinctVariables.length">
+        <h6>Conditions</h6>
+        <arbitrary-variables arbitrary-variables="conditions.arbitraryVariables"></arbitrary-variables>
+        <distinct-variables distinct-variables="conditions.distinctVariables"></distinct-variables>
+    </div>
+</div>

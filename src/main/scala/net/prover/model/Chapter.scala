@@ -1,6 +1,12 @@
 package net.prover.model
 
-case class Chapter(title: String, summary: String, entries: Seq[ChapterEntry] = Nil) {
+case class Chapter(
+  title: String,
+  summary: String,
+  bookKey: String,
+  bookTitle: String,
+  entries: Seq[ChapterEntry] = Nil)
+{
   val key: String = title.formatAsKey
 
   def theoremCache: Map[String, Theorem] = {
@@ -15,7 +21,7 @@ object Chapter extends BookEntryParser {
       title <- Parser.toEndOfLine
       summary <- Parser.toEndOfLine
     } yield {
-      book.copy(chapters = book.chapters :+ Chapter(title, summary))
+      book.copy(chapters = book.chapters :+ Chapter(title, summary, book.key, book.title))
     }
   }
 }

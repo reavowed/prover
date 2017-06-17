@@ -37,6 +37,15 @@ case class Context(
   }
 
   def withTheoremCache(theoremCache: Map[String, Theorem]): Context = copy(theoremCache = theoremCache)
+
+  def nextInferenceKey(name: String): String = {
+    inferences.count(_.name == name) match {
+      case 0 =>
+        name.formatAsKey
+      case n =>
+        (name + " " + (n+1)).formatAsKey
+    }
+  }
 }
 
 object Context {

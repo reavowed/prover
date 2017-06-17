@@ -8,6 +8,7 @@ import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, Rearr
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
   def id: String
+  def keyOption: Option[String]
   def name: String
   def premises: Seq[Premise]
   def conclusion: ProvenStatement
@@ -34,7 +35,8 @@ case class DerivedInference(
     rearrangementType: RearrangementType,
     allowsRearrangement: Boolean)
   extends Inference {
-  def id: String = idOption.getOrElse(calculateHash())
+  override def id: String = idOption.getOrElse(calculateHash())
+  override def keyOption: Option[String] = None
 }
 
 object Inference {
