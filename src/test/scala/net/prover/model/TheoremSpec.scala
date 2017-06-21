@@ -295,22 +295,6 @@ class TheoremSpec extends ProverSpec {
           ForAll(x, Equivalence(Equals(x, z), Equals(y, z)))))
     }
 
-    "not add distinctness conditions to arbitrary variables for statement variables that are bound" in {
-      val theorem = parseTheorem(
-        "XXX",
-        "assume ∀ x φ {",
-        "  prove ∀ x ∀ x φ",
-        "}",
-        "prove → ∀ x φ ∀ x ∀ x φ",
-        "qed")(
-        contextWith(generalizationWithSameVariable, deduction))
-
-      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
-        Implication(
-          ForAll(x, φ),
-          ForAll(x, ForAll(x, φ))))
-    }
-
     "add distinct conditions to simplify substitutions" in {
       val theorem = parseTheorem(
         "XXX",

@@ -29,16 +29,6 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
     Conditions(updatedArbitraryVariables, updatedDistinctVariables)
   }
 
-  def filterOutBoundVariables(boundVariables: Set[TermVariable]): Conditions = {
-    copy(arbitraryVariables = arbitraryVariables.diff(boundVariables))
-  }
-
-  def restrictToActiveVariables(activeVariables: Variables): Conditions = {
-    copy(
-      arbitraryVariables = arbitraryVariables.intersect(activeVariables.termVariables),
-      distinctVariables = distinctVariables.restrictTo(activeVariables))
-  }
-
   def applySubstitutions(
     substitutions: Substitutions
   ): Option[Conditions] = {

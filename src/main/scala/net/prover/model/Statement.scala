@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
 import scala.collection.immutable.Nil
+import scala.util.Try
 
 trait Statement extends JsonSerializable.Base with Component {
   override val componentType = Statement
@@ -23,7 +24,7 @@ trait Statement extends JsonSerializable.Base with Component {
 case class StatementVariable(text: String) extends Statement with Variable {
   override def allVariables: Variables = Variables(this)
   override def presentVariables: Variables = Variables(this)
-  override def boundVariables: Set[TermVariable] = Set.empty
+  override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set.empty)
   def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables(this)
   override def calculateSubstitutions(
     other: Component,
@@ -99,7 +100,7 @@ case class SubstitutedStatementVariable(
 {
   override def allVariables: Variables = termToReplaceWith.allVariables + statementVariable + termToBeReplaced
   override def presentVariables: Variables = termToReplaceWith.allVariables + statementVariable
-  override def boundVariables: Set[TermVariable] = termToReplaceWith.boundVariables
+  override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = termToReplaceWith.boundAndFreeVariables
   def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
     if (variable == termToBeReplaced)
       termToReplaceWith.allVariables
@@ -210,7 +211,11 @@ case class DefinedStatement(
 {
   override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
   override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _)
-  override def boundVariables = localBoundVariables ++ subcomponents.map(_.boundVariables).knownCommonValues
+  override val boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = {
+    val (mergedBound, mergedFree) = mergeBoundAndFreeVariables(subcomponents)
+    mergedBound.intersect(localBoundVariables).headOption.foreach { v => throw new Exception(s"Variable $v is bound twice in $this")}
+    (mergedBound ++ localBoundVariables, mergedFree -- localBoundVariables)
+  }
   def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
     variable match {
       case termVariable: TermVariable if localBoundVariables.contains(termVariable) =>
@@ -315,7 +320,8 @@ case class DefinedStatement(
   override def replacePlaceholder(other: Component) = {
     for {
       updatedSubcomponents <- subcomponents.map(_.replacePlaceholder(other)).traverseOption
-    } yield copy(subcomponents = updatedSubcomponents)
+      updated <- Try(copy(subcomponents = updatedSubcomponents)).toOption
+    } yield updated
   }
 
   override def html: String = {

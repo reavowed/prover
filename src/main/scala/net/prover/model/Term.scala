@@ -23,7 +23,7 @@ trait Term extends JsonSerializable.Base with Component {
 case class TermVariable(text: String) extends Term with Variable {
   override def allVariables: Variables = Variables(this)
   override def presentVariables: Variables = Variables(this)
-  override def boundVariables = Set.empty
+  override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set(this))
   override def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables(this)
   override def calculateSubstitutions(
     other: Component,
@@ -92,7 +92,7 @@ case class DefinedTerm(
 {
   override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
   override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _)
-  override def boundVariables = Set.empty // TODO: derive from definition
+  override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = mergeBoundAndFreeVariables(subcomponents)
   def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
     subcomponents
       .map(_.getPotentiallyIntersectingVariables(variable))

@@ -4,7 +4,7 @@ trait Component {
   def componentType: ComponentType
   def allVariables: Variables
   def presentVariables: Variables
-  def boundVariables: Set[TermVariable]
+  def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable])
   def getPotentiallyIntersectingVariables(variable: Variable): Variables
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Seq[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
@@ -89,6 +89,20 @@ trait Component {
       .traverseOption
       .map(_.foldTogether)
   }
+
+  protected def mergeBoundAndFreeVariables(
+    subcomponents: Seq[Component]
+  ): (Set[TermVariable], Set[TermVariable]) = {
+    subcomponents.foldLeft((Set.empty[TermVariable], Set.empty[TermVariable])) { case ((boundVariables, freeVariables), subcomponent) =>
+      val (subcomponentBound, subcomponentFree) = subcomponent.boundAndFreeVariables
+      val newBound = boundVariables ++ subcomponentBound
+      val newFree = freeVariables ++ subcomponentFree
+      newBound.intersect(newFree).headOption.foreach { v =>
+        throw new Exception(s"Variable $v appears both bound and free in $this")
+      }
+      (newBound, newFree)
+    }
+  }
 }
 
 object Component {
@@ -110,7 +124,7 @@ trait Variable extends Component {
 trait Placeholder[T <: Component] extends Component {
   override def allVariables: Variables = Variables.empty
   override def presentVariables: Variables = Variables.empty
-  override def boundVariables: Set[TermVariable] = Set.empty
+  override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set.empty)
   def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables.empty
   override def calculateSubstitutions(
     other: Component,
