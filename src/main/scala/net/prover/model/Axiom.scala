@@ -14,11 +14,7 @@ case class Axiom(
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement,
     allowsRearrangement: Boolean = true)
   extends ChapterEntry(Axiom)
-  with Inference
-{
-  val id = calculateHash()
-  def keyOption = Some(key)
-}
+  with EntryInference
 
 object Axiom extends ChapterEntryParser[Axiom] with InferenceParser {
   override val name: String = "axiom"

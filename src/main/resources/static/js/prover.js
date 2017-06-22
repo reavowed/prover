@@ -268,6 +268,7 @@
             prefix: 'Let ' + variable + ' be such that',
             assumption: assumptionStep.assumption,
             inferenceName: assertionStep.inference.name,
+            inferenceLink : getLink(assertionStep.inference),
             references: assertionStep.references,
             reference: reference,
             visibleIndentLevel: visibleIndentLevel,
@@ -292,10 +293,17 @@
             references: assertionStep.references,
             conditions: override ? override.conditions : assertionStep.provenStatement.conditions,
             inferenceName: assertionStep.inference.name,
+            inferenceLink : getLink(assertionStep.inference),
             reference: override ? override.reference : reference,
             visibleIndentLevel: visibleIndentLevel,
             conceptualIndentLevel: override ? override.level : conceptualIndentLevel
           });
+        }
+
+        function getLink(inference) {
+          return inference.key ?
+            '#/' + inference.bookKey + '/' + inference.chapterKey + '/' + inference.key :
+            null
         }
 
         function addStep(step, reference, visibleIndentLevel, conceptualIndentLevel, override) {

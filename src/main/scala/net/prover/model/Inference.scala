@@ -3,7 +3,7 @@ package net.prover.model
 import java.security.MessageDigest
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
+import net.prover.model.Inference._
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
@@ -14,29 +14,38 @@ trait Inference {
   def conclusion: ProvenStatement
   def rearrangementType: RearrangementType
   def allowsRearrangement: Boolean
-
-  def applySubstitutions(substitutions: Substitutions): Option[Inference] = {
-    for {
-      updatedPremises <- premises.map(_.applySubstitutions(substitutions)).traverseOption
-      updatedConclusion <- conclusion.applySubstitutions(substitutions)
-    } yield DerivedInference(Some(id), name, updatedPremises, updatedConclusion, rearrangementType, allowsRearrangement)
-  }
+  def summary: Inference.Summary
 
   def calculateHash(): String = {
     Inference.calculateHash(premises, conclusion.statement)
   }
 }
 
-case class DerivedInference(
-    idOption: Option[String],
-    name: String,
-    premises: Seq[Premise],
-    conclusion: ProvenStatement,
-    rearrangementType: RearrangementType,
-    allowsRearrangement: Boolean)
-  extends Inference {
-  override def id: String = idOption.getOrElse(calculateHash())
-  override def keyOption: Option[String] = None
+trait EntryInference extends Inference {
+  def key: String
+  def chapterKey: String
+  def bookKey: String
+
+  val id = calculateHash()
+  override def keyOption = Some(key)
+  override def summary = Inference.EntrySummary(name, id, key, chapterKey, bookKey)
+}
+
+case class DefinitionInference(
+    nameOfDefinedStatement: String,
+    premisesStatements: Seq[Statement],
+    conclusionStatement: Statement,
+    distinctVariables: DistinctVariables)
+  extends Inference
+{
+  override def id = calculateHash()
+  override def premises = premisesStatements.map(DirectPremise)
+  override def conclusion = ProvenStatement(conclusionStatement, Conditions(Set.empty, distinctVariables))
+  override def name: String = s"Definition of $nameOfDefinedStatement"
+  override def summary: Inference.Summary = StubSummary(name)
+  override def allowsRearrangement = true
+  override def rearrangementType = RearrangementType.NotRearrangement
+  override def keyOption = None
 }
 
 object Inference {
@@ -94,6 +103,17 @@ object Inference {
 
     override def html = antecedent.html + " ⊢ " + consequent.html
     override def serialized = Seq("proves", antecedent.serialized, consequent.serialized).mkString(" ")
+  }
+
+  trait Summary {
+    def name: String
+    def id: Option[String]
+  }
+  case class StubSummary(name: String) extends Summary {
+    override def id = None
+  }
+  case class EntrySummary(name: String, inferenceId: String, key: String, chapterKey: String, bookKey: String) extends Summary {
+    override def id = Some(inferenceId)
   }
 }
 

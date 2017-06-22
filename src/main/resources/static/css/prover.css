@@ -116,7 +116,7 @@ table {
     padding-left: 25px;
 }
 
-.proofRow.hasAssertion {
+.proofRowStatement.hasConditions {
     cursor: hand;
 }
 

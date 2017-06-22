@@ -32,23 +32,11 @@ case class StatementDefinition(
   }
 
   def forwardInference: Option[Inference] = definingStatement.map { s =>
-    DerivedInference(
-      None,
-      s"Definition of $name",
-      Seq(DirectPremise(s)),
-      ProvenStatement(defaultStatement, Conditions(Set.empty, distinctVariables)),
-      RearrangementType.NotRearrangement,
-      allowsRearrangement = true)
+    DefinitionInference(name, Seq(s), defaultStatement, distinctVariables)
   }
 
   def reverseInference: Option[Inference] = definingStatement.map { s =>
-    DerivedInference(
-      None,
-      s"Definition of $name",
-      Seq(DirectPremise(defaultStatement)),
-      ProvenStatement(s, Conditions(Set.empty , distinctVariables)),
-      RearrangementType.NotRearrangement,
-      allowsRearrangement = true)
+    DefinitionInference(name, Seq(defaultStatement), s, distinctVariables)
   }
 }
 

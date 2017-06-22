@@ -17,13 +17,11 @@ case class TermDefinition(
   val componentTypes = defaultVariables.map(_.componentType)
   val definition = placeholderDefinition.replacePlaceholder(defaultTerm).getOrElse(
     throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultTerm'"))
-  val inference: Inference = DerivedInference(
-    None,
-    s"Definition of ${TermDefinition.this.name}",
-    TermDefinition.this.premises.map(DirectPremise),
-    ProvenStatement(definition, Conditions(Set.empty, distinctVariables)),
-    RearrangementType.NotRearrangement,
-    allowsRearrangement = true)
+  val inference: Inference = DefinitionInference(
+    name,
+    premises,
+    definition,
+    distinctVariables)
 
   def apply(components: Component*): DefinedTerm = DefinedTerm(components, this)
 

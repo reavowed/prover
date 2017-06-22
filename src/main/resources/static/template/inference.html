@@ -22,17 +22,19 @@
         <h4>Proof</h4>
         <table class="proofRows">
             <tr ng-repeat="row in proofRows"
-                class="proofRow {{row.assertion ? 'hasAssertion' : ''}}"
+                class="proofRow"
                 ng-mouseenter="highlightRow(row, $event)"
                 ng-mouseleave="removeHighlight(row, $event)"
             >
-                <td class="proofRowStatement" ng-click="popoverRow(row, $event)" data-trigger="focus" tabindex="0">
+                <td class="proofRowStatement {{row.conditions ? 'hasConditions' : ''}}"
+                    ng-click="popoverRow(row, $event)" data-trigger="focus" tabindex="0">
                     <span ng-repeat="i in _.range(row.visibleIndentLevel)" class="proofIndent"></span>
                     <span>{{row.prefix}}</span>
                     <span ng-if="row.assumption" class="assumption">{{row.assumption}}</span><span ng-if="row.assumption && row.assertion"> ⊢ </span><span ng-if="row.assertion" class="assertion">{{row.assertion}}</span>.
                 </td>
                 <td>
-                    <span ng-if="row.inferenceName" class="stepInferenceId">{{row.inferenceName}}</span>
+                    <a ng-if="row.inferenceLink && row.inferenceName" class="stepInferenceId" href="{{row.inferenceLink}}">{{row.inferenceName}}</a>
+                    <span ng-if="!row.inferenceLink && row.inferenceName" class="stepInferenceId">{{row.inferenceName}}</span>
                 </td>
             </tr>
         </table>

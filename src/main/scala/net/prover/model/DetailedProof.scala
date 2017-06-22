@@ -37,10 +37,10 @@ object DetailedProof {
   }
   case class AssertionStep(
       provenStatement: ProvenStatement,
-      inference: InferenceSummary,
+      inference: Inference.Summary,
       references: Seq[Reference])
     extends StepWithProvenStatement {
-    override def referencedInferenceIds: Set[String] = Set(inference.id)
+    override def referencedInferenceIds: Set[String] = inference.id.toSet
   }
 
   sealed trait Reference
@@ -49,8 +49,6 @@ object DetailedProof {
 
   case class ReferencedAssertion(provenStatement: ProvenStatement, reference: DirectReference)
   case class ReferencedDeduction(assumption: Statement, deduction: ProvenStatement, reference: Reference)
-
-  case class InferenceSummary(id: String, name: String)
 
   def fillInOutline(
     premises: Seq[Premise],

@@ -18,10 +18,8 @@ case class Theorem(
     rearrangementType: RearrangementType,
     allowsRearrangement: Boolean = true)
   extends ChapterEntry(Theorem)
-    with Inference
+    with EntryInference
 {
-  val id = calculateHash()
-  def keyOption = Some(key)
   def referencedInferenceIds: Set[String] = proof.referencedInferenceIds
 }
 
