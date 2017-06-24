@@ -2,25 +2,34 @@
     <h3>
         {{inference.type == "axiom" ? "Axiom" : "Theorem"}}: {{inference.name}}
     </h3>
-    <div ng-if="premises.length">
-        Suppose
-        <span ng-if="premises.length > 2" ng-repeat="premise in premises.slice(0, premises.length - 2)">
-            <span class="premise">{{premise}}</span>,
-        </span>
-        <span ng-if="premises.length > 1" ng-init="premise = premises[premises.length-2]">
-            <sspan class="premise">{{premise}}</sspan> and
-        </span>
-        <span ng-if="premises.length > 0" ng-init="premise = premises[premises.length-1]">
-            <span class="premise">{{premise}}</span>.
-        </span>
-    </div>
-    <div>
-        <span ng-if="inference.premises.length">Then</span>
-        {{inference.conclusion.statement}}.
-    </div>
+    <p>
+        <div ng-if="premises.length">
+            Suppose
+            <span ng-if="premises.length > 2" ng-repeat="premise in premises.slice(0, premises.length - 2)">
+                <span class="premise">{{premise}}</span>,
+            </span>
+            <span ng-if="premises.length > 1" ng-init="premise = premises[premises.length-2]">
+                <sspan class="premise">{{premise}}</sspan> and
+            </span>
+            <span ng-if="premises.length > 0" ng-init="premise = premises[premises.length-1]">
+                <span class="premise">{{premise}}</span>.
+            </span>
+        </div>
+        <div>
+            <span ng-if="inference.premises.length">Then</span>
+            {{inference.conclusion.statement}}.
+        </div>
+    </p>
+    <p class="conditions"
+         ng-if="conditions.arbitraryVariables.length || conditions.distinctVariables.length">
+        <u>Conditions</u>
+        <arbitrary-variables arbitrary-variables="conditions.arbitraryVariables"></arbitrary-variables>
+        <distinct-variables distinct-variables="conditions.distinctVariables"></distinct-variables>
+    </p>
     <div class="theoremProof" ng-if="inference.proof">
+        <hr/>
         <h4>Proof</h4>
-        <table class="proofRows">
+        <table class="table-condensed proofRows">
             <tr ng-repeat="row in proofRows"
                 class="proofRow"
                 ng-mouseenter="highlightRow(row, $event)"
@@ -39,10 +48,20 @@
             </tr>
         </table>
     </div>
-    <div class="conditions"
-         ng-if="conditions.arbitraryVariables.length || conditions.distinctVariables.length">
-        <h6>Conditions</h6>
-        <arbitrary-variables arbitrary-variables="conditions.arbitraryVariables"></arbitrary-variables>
-        <distinct-variables distinct-variables="conditions.distinctVariables"></distinct-variables>
+    <hr/>
+    <div ng-if="bookUsages.length">
+        <h4>Usages</h4>
+        <div ng-repeat="bookUsage in bookUsages">
+            <div ng-repeat="chapterUsage in bookUsage.chapterUsages">
+                <div><label>{{bookUsage.bookTitle}} - {{chapterUsage.chapterTitle}}</label></div>
+                <p>
+                    <span class="usage" ng-repeat="inferenceSummary in chapterUsage.inferenceSummaries">
+                    <a class="usage-link"
+                       href="#/{{inferenceSummary.bookKey}}/{{inferenceSummary.chapterKey}}/{{inferenceSummary.key}}"
+                    >{{inferenceSummary.name}}</a>
+                    </span>
+                </p>
+            </div>
+        </div>
     </div>
 </div>

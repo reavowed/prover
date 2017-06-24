@@ -103,7 +103,8 @@
     controller: ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
       $scope.inference = null;
       $http.get('/books/' + $routeParams.bookKey + '/' + $routeParams.chapterKey + '/' + $routeParams.inferenceKey).then(function (response) {
-        $scope.inference = response.data;
+        $scope.inference = response.data.inference;
+        $scope.bookUsages = response.data.bookUsages;
         $scope.joinWordList = joinWordList;
         $scope.proofRows = [];
         $scope.showSteps = false;

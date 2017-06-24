@@ -19,7 +19,6 @@ assume ∈ x singleton a {
     prove = y b
   }
   assume = y b {
-    prove ∈ b singleton b
     prove ∈ y singleton b
     prove ∈ orderedPair a b singleton orderedPair a b
     prove ∈ orderedPair x b singleton orderedPair a b

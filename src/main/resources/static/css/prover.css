@@ -98,7 +98,7 @@ table {
     font-size: inherit;
 }
 
-.reference, .stepInferenceId {
+.stepInferenceId, .usage-link {
     font-family: monospace;
     color: gray;
     font-size: 0.85em;
@@ -130,4 +130,8 @@ table {
 
 .highlightConclusion {
     color: blue;
+}
+
+.usage:not(:last-child)::after {
+    content: '|'
 }
