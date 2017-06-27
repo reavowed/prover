@@ -7,6 +7,12 @@ case class Variables(statementVariables: Set[StatementVariable], termVariables: 
   def +(statementVariable: StatementVariable): Variables = {
     copy(statementVariables = statementVariables + statementVariable)
   }
+  def +(variable: Variable): Variables = variable match {
+    case sv: StatementVariable =>
+      this + sv
+    case tv: TermVariable =>
+      this + tv
+  }
   def -(termVariable: TermVariable): Variables = {
     copy(termVariables = termVariables - termVariable)
   }
@@ -17,6 +23,11 @@ case class Variables(statementVariables: Set[StatementVariable], termVariables: 
   }
   def --(otherTermVariables: Set[TermVariable]): Variables = {
     copy(termVariables = termVariables -- otherTermVariables)
+  }
+  def --(otherVariables: Variables): Variables = {
+    Variables(
+      statementVariables -- otherVariables.statementVariables,
+      termVariables -- otherVariables.termVariables)
   }
   def intersect(otherVariables: Variables): Variables = {
     Variables(

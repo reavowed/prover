@@ -6,7 +6,7 @@ import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, Rearr
 case class Prover(
   assertion: Statement,
   nonArbitraryVariables: Set[TermVariable],
-  nonDistinctVariables: Set[(Variable, Variable)],
+  nonDistinctVariables: Set[(TermVariable, Variable)],
   provenAssertions: Seq[ReferencedAssertion],
   provenDeductions: Seq[ReferencedDeduction],
   premises: Seq[Premise],
@@ -113,12 +113,15 @@ case class Prover(
   }
 
   def proveAssertionFromTransformedInferences(): Option[TransformedInferenceStep] = {
-    context.inferenceTransforms.iterator
-      .flatMap { transform =>
-        availableInferences.iterator.map(transform -> _)
+    availableInferences.iterator
+      .mapCollect { inference =>
+        inference.premises.toType[DirectPremise].map((inference, _))
       }
-      .mapCollect { case (transform, inference) =>
-        inference.premises.toType[DirectPremise].map((transform, inference, _))
+      .filter { case (inference, inferencePremises) =>
+        inferencePremises.forall(_.statement.allVariables.termVariables.isEmpty) && inference.conclusion.statement.allVariables.termVariables.isEmpty
+      }
+      .flatMap { case (inference, inferencePremises) =>
+        context.inferenceTransforms.iterator.map(transform => (transform, inference, inferencePremises))
       }
       .flatMap { case (transform, inference, inferencePremises) =>
         val conclusion = inference.conclusion.statement
@@ -132,11 +135,12 @@ case class Prover(
         val oldVariables = (inferencePremises.map(_.statement) :+ inference.conclusion.statement).map(_.allVariables).foldTogether
         val newVariables = (transformedPremises.map(_.statement) :+ transformedConclusion).map(_.allVariables).foldTogether diff oldVariables
         val newNonDistinctVariables = for {
-          newVariable <- newVariables.all
+          newVariable <- newVariables.termVariables
           oldVariable <- oldVariables.all
         } yield newVariable -> oldVariable
         for {
           substitutions <- transformedConclusion.calculateSubstitutions(assertion, PartialSubstitutions.empty)
+          if newVariables.statementVariables.isEmpty
           proofSteps <- statementsToProve.collectFold[AssertionStep] { case (assertions, statement) =>
             val provenAssertions = transformedPremises.mapWithIndex { (premise, index) =>
               ReferencedAssertion(ProvenStatement.withNoConditions(premise.statement), DirectReference(index, premise.html))
@@ -280,11 +284,12 @@ case class Prover(
   ): Option[ProvenStatement] = {
     for {
       substitutedConclusion <- inferenceConclusion.applySubstitutions(substitutions)
-      combinedConditions <- (matchedPremises.map(_.provenStatement.conditions) :+ substitutedConclusion.conditions)
+      combinedConditions = (matchedPremises.map(_.provenStatement.conditions) :+ substitutedConclusion.conditions)
         .reduce(_ ++ _)
         .addDistinctVariables(substitutions.distinctVariables)
         .restrictToStatements(premises.flatMap(_.statements) ++ assumptions :+ substitutedConclusion.statement)
         .addDistinctVariables(substitutedConclusion.conditions.arbitraryVariables, assumptions)
+        .removeImplicitDistinctVariables(assertion.implicitDistinctVariables)
       if !nonDistinctVariables.exists { case (first, second) =>
         combinedConditions.distinctVariables.areDistinct(first, second)
       }

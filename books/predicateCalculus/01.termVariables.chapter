@@ -1,7 +1,0 @@
-chapter Term Variables
-Introduce term variables and the special behaviour surrounding them - substitution, arbitrariness, binding, etc.
-
-axiom Substitution
-premise φ
-conclusion sub y x φ
-arbitrary-variables (x)

@@ -18,6 +18,7 @@ trait Component {
   def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable])
   def boundVariables: Set[TermVariable] = boundAndFreeVariables._1
   def freeVariables: Set[TermVariable] = boundAndFreeVariables._2
+  def implicitDistinctVariables: DistinctVariables
   def getPotentiallyIntersectingVariables(variable: Variable): Variables
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Seq[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
@@ -138,7 +139,8 @@ trait Placeholder[T <: Component] extends Component {
   override def allVariables: Variables = Variables.empty
   override def presentVariables: Variables = Variables.empty
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set.empty)
-  def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables.empty
+  override def implicitDistinctVariables: DistinctVariables = DistinctVariables.empty
+  override def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables.empty
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions

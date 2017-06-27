@@ -25,6 +25,7 @@ case class StatementVariable(text: String) extends Statement with Variable {
   override def allVariables: Variables = Variables(this)
   override def presentVariables: Variables = Variables(this)
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set.empty)
+  override def implicitDistinctVariables: DistinctVariables = DistinctVariables.empty
   def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables(this)
   override def calculateSubstitutions(
     other: Component,
@@ -101,6 +102,7 @@ case class SubstitutedStatementVariable(
   override def allVariables: Variables = termToReplaceWith.allVariables + statementVariable + termToBeReplaced
   override def presentVariables: Variables = termToReplaceWith.allVariables + statementVariable
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = termToReplaceWith.boundAndFreeVariables
+  override def implicitDistinctVariables: DistinctVariables = DistinctVariables.empty
   def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
     if (variable == termToBeReplaced)
       termToReplaceWith.allVariables
@@ -215,6 +217,17 @@ case class DefinedStatement(
     val (mergedBound, mergedFree) = mergeBoundAndFreeVariables(subcomponents)
     mergedBound.intersect(localBoundVariables).headOption.foreach { v => throw new Exception(s"Variable $v is bound twice in $this")}
     (mergedBound ++ localBoundVariables, mergedFree -- localBoundVariables)
+  }
+  override def implicitDistinctVariables: DistinctVariables = {
+    val subcomponentImplicitDistinctVariables = subcomponents.map(_.implicitDistinctVariables).foldTogether
+    val implicitPairs = for {
+      localBoundVariable <- localBoundVariables
+      subcomponentTermVariable <- subcomponents.map(_.presentVariables).foldTogether.termVariables -- localBoundVariables
+    } yield (localBoundVariable, subcomponentTermVariable)
+    val newImplicitDistinctVariables =  implicitPairs.foldLeft(DistinctVariables.empty) { case (dv, (bv, tv)) =>
+        dv + (bv, tv)
+    }
+    subcomponentImplicitDistinctVariables ++ newImplicitDistinctVariables
   }
   def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
     variable match {

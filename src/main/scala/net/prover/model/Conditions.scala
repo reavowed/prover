@@ -11,8 +11,8 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
     copy(distinctVariables = distinctVariables ++ newDistinctVariables)
   }
 
-  def addDistinctVariables(termVariables: Set[TermVariable], statements: Seq[Statement]): Option[Conditions] = {
-    DistinctVariables.byStatements(termVariables, statements).map(addDistinctVariables)
+  def addDistinctVariables(termVariables: Set[TermVariable], statements: Seq[Statement]): Conditions = {
+    addDistinctVariables(DistinctVariables.byStatements(termVariables, statements))
   }
 
   def restrictToStatements(statements: Seq[Statement]): Conditions = {
@@ -33,6 +33,10 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
     Conditions(updatedArbitraryVariables, updatedDistinctVariables)
   }
 
+  def removeImplicitDistinctVariables(implicitDistinctVariables: DistinctVariables): Conditions = {
+    copy(distinctVariables = distinctVariables -- implicitDistinctVariables)
+  }
+
   def applySubstitutions(
     substitutions: Substitutions
   ): Option[Conditions] = {
@@ -47,7 +51,7 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
   }
 
   def isEmpty: Boolean = {
-    arbitraryVariables.isEmpty && distinctVariables.distinctPairs.isEmpty
+    arbitraryVariables.isEmpty && distinctVariables.conditions.isEmpty
   }
 }
 
@@ -60,14 +64,14 @@ object Conditions {
       Term.variableListParser.map(_.toSet))
   }
 
-  def variablePairParser(implicit context: Context): Parser[(Variable, Variable)] = {
+  def variablePairParser(implicit context: Context): Parser[(TermVariable, Variable)] = {
     for {
-      first <- Component.variableParser
+      first <- Term.variableParser
       second <- Component.variableParser
     } yield first -> second
   }
 
-  def variablePairListParser(implicit context: Context): Parser[Seq[(Variable, Variable)]] = {
+  def variablePairListParser(implicit context: Context): Parser[Seq[(TermVariable, Variable)]] = {
     variablePairParser.listInParens(Some(","))
   }
 

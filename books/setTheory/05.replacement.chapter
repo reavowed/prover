@@ -3,7 +3,6 @@ Introduce the Axiom of Replacement.
 
 axiom Axiom of Replacement
 conclusion → ∀ x → ∈ x a ∃! y φ ∃ b ∀ y ↔ ∈ y b ∃ x ∧ ∈ x a φ
-distinct-variables (x y, x a, x b, y a, y b, a b)
 
 theorem Replacement
 premise ∀ x → ∈ x a ∃! y φ

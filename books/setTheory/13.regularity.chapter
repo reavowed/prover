@@ -3,7 +3,6 @@ Introduce the Axiom of Regularity.
 
 axiom Axiom of Regularity
 conclusion ∀ x → ¬ = x ∅ ∃ y ∧ ∈ y x = ∩ y x ∅
-distinct-variables (x y)
 
 theorem Regularity
 premise ¬ = a ∅

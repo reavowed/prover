@@ -23,7 +23,7 @@ object ProofOutline {
   case class AssertionStep(
       assertion: Statement,
       nonArbitraryVariables: Set[TermVariable],
-      nonDistinctVariables: Set[(Variable, Variable)],
+      nonDistinctVariables: Set[(TermVariable, Variable)],
       debug: Boolean = false)
     extends StepWithAssertion
 
@@ -50,7 +50,7 @@ object ProofOutline {
     for {
       assertion <- Statement.parser
       nonArbitraryVariables <- Parser.optional("non-arbitrary", Term.variableParser.listInParens(None).map(_.toSet), Set.empty[TermVariable])
-      nonDistinctVariables <- Parser.optional("non-distinct", Conditions.variablePairListParser.map(_.toSet), Set.empty[(Variable, Variable)])
+      nonDistinctVariables <- Parser.optional("non-distinct", Conditions.variablePairListParser.map(_.toSet), Set.empty[(TermVariable, Variable)])
       debug <- Parser.optional("debug", Parser.constant(true), false)
     } yield AssertionStep(assertion, nonArbitraryVariables, nonDistinctVariables, debug)
   }

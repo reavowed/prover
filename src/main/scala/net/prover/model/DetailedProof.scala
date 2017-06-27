@@ -179,7 +179,7 @@ object DetailedProof {
   private def proveAssertionStep(
     assertion: Statement,
     nonArbitraryVariables: Set[TermVariable],
-    nonDistinctVariables: Set[(Variable, Variable)],
+    nonDistinctVariables: Set[(TermVariable, Variable)],
     debug: Boolean,
     provenAssertions: Seq[ReferencedAssertion],
     provenDeductions: Seq[ReferencedDeduction],

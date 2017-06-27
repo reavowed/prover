@@ -3,7 +3,6 @@ Arbitrary and binary unions.
 
 axiom Axiom of Union
 conclusion ∃ b ∀ y ↔ ∈ y b ∃ x ∧ ∈ x a ∈ y x
-distinct-variables (x y, x a, x b, y a, y b, a b)
 
 theorem Arbitrary Unions Exist
 prove ∃ b ∀ y ↔ ∈ y b ∃ x ∧ ∈ x a ∈ y x

@@ -16,7 +16,7 @@ class ConditionsSpec extends ProverSpec {
 
     "correctly apply distinct variable condition to a term variable substituted for a function" in {
       Conditions(Set.empty, DistinctVariables(x -> y))
-        .applySubstitutions(Substitutions(Map.empty, Map(x -> PowerSet(x), y -> y), DistinctVariables.empty)).get
+        .applySubstitutions(Substitutions(Map.empty, Map(x -> x, y -> PowerSet(y)), DistinctVariables.empty)).get
         .distinctVariables mustEqual DistinctVariables(x -> y)
     }
 
@@ -40,7 +40,7 @@ class ConditionsSpec extends ProverSpec {
 
     "only add present variables to distinct conditions" in {
       Conditions.empty
-          .addDistinctVariables(Set(x), Seq(SubstitutedStatementVariable(φ, y, x))).get
+          .addDistinctVariables(Set(x), Seq(SubstitutedStatementVariable(φ, y, x)))
           .distinctVariables mustEqual DistinctVariables(x -> y)
     }
   }

@@ -3,72 +3,87 @@ package net.prover.model
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
-import net.prover.model.DistinctVariables.DistinctPair
 
-case class DistinctVariables(distinctPairs: Set[DistinctPair]) extends JsonSerializable.Base {
-  def +(first: Variable, second: Variable): DistinctVariables = {
-    DistinctVariables(distinctPairs + DistinctPair(first, second))
+case class DistinctVariables(conditions: Map[TermVariable, Variables]) extends JsonSerializable.Base {
+  def +(first: TermVariable, second: Variable): DistinctVariables = {
+    DistinctVariables(conditions.updated(first, get(first) + second))
+  }
+
+  def +(termVariable: TermVariable, variables: Variables): DistinctVariables = {
+    if (variables.isEmpty) {
+      this
+    } else {
+      DistinctVariables(conditions.updated(termVariable, get(termVariable) ++ variables))
+    }
   }
 
   def ++(other: DistinctVariables): DistinctVariables = {
-    DistinctVariables(distinctPairs ++ other.distinctPairs)
+    val updatedConditions = (conditions.keySet ++ other.conditions.keySet).map { v =>
+      v -> (get(v) ++ other.get(v))
+    }.toMap
+    DistinctVariables(updatedConditions)
   }
 
-  def get(variable: Variable): Variables = {
-    distinctPairs.map(_.getMatch(variable).map(_.allVariables).getOrElse(Variables.empty)).foldTogether
+  def --(other: DistinctVariables): DistinctVariables = {
+    val updatedConditions = (conditions.keySet ++ other.conditions.keySet)
+      .map { v =>
+        v -> (get(v) -- other.get(v))
+      }
+      .filter { case (tv, vs) =>
+        vs.nonEmpty
+      }
+      .toMap
+    DistinctVariables(updatedConditions)
   }
 
-  def areDistinct(first: Variable, second: Variable): Boolean = {
-    distinctPairs.contains(DistinctPair(first, second))
+  def get(variable: TermVariable): Variables = {
+    conditions.getOrElse(variable, Variables.empty)
+  }
+
+  def areDistinct(first: TermVariable, second: TermVariable): Boolean = {
+    get(first).contains(second) || get(second).contains(first)
+  }
+
+  def areDistinct(first: TermVariable, second: Variable): Boolean = {
+    get(first).contains(second)
   }
 
   def restrictTo(activeVariables: Variables): DistinctVariables = {
-    DistinctVariables(distinctPairs.filter { pair =>
-      activeVariables.contains(pair.first) && activeVariables.contains(pair.second)
-    })
+    val restrictedConditions = conditions
+      .mapValues { v => v.intersect(activeVariables) }
+      .filter { p => activeVariables.contains(p._1) && p._2.nonEmpty }
+    DistinctVariables(restrictedConditions)
   }
 
   def applySubstitutions(substitutions: Substitutions): Option[DistinctVariables] = {
-    distinctPairs
-      .map { case DistinctPair(first, second) =>
-        substituteSinglePair(first, second, substitutions)
+    conditions
+      .map { case (termVariable, variables) =>
+        for {
+          updatedTermVariable <- termVariable.applySubstitutions(substitutions).flatMap(Term.optionAsVariable)
+          updatedVariables <- for {
+            substitutedStatementVariables <- variables.statementVariables.map(_.applySubstitutions(substitutions)).traverseOption
+            substitutedTermVariables <- variables.termVariables.map(_.applySubstitutions(substitutions)).traverseOption
+          } yield {
+            (substitutedStatementVariables ++ substitutedTermVariables).map(_.getPotentiallyIntersectingVariables(updatedTermVariable)).foldTogether
+          }
+          if !updatedVariables.contains(updatedTermVariable)
+        } yield (updatedTermVariable, updatedVariables)
       }
       .traverseOption
-      .map(_.foldTogether)
-  }
-
-  private def substituteSinglePair(
-    first: Variable,
-    second: Variable,
-    substitutions: Substitutions
-  ): Option[DistinctVariables] = {
-    for {
-      substitutedFirst <- first.applySubstitutions(substitutions)
-      substitutedSecond <- second.applySubstitutions(substitutions)
-      result <- (
-        for {
-          // TODO: This isn't necessarily symmetric? What happens if after substitutions we get that
-          // [y/x]φ is distinct from [b/a]ψ? What are the correct conditions then?
-          newFirst <- substitutedFirst.presentVariables.all
-          newSecond <- substitutedSecond.getPotentiallyIntersectingVariables(newFirst).all
-        } yield {
-          if (newFirst == newSecond) {
-            None
-          } else {
-            Some(DistinctPair(newFirst, newSecond))
-          }
-        }
-      ).traverseOption.map(DistinctVariables(_))
-    } yield result
+      .map(_.foldLeft(DistinctVariables.empty) { case (dv, (tv, vs)) =>
+          dv + (tv, vs)
+      })
   }
 
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeStartArray()
-    distinctPairs.map(_.sortedTuple).toSeq.sorted.foreach { case (first, second) =>
-      gen.writeStartArray()
-      gen.writeString(first)
-      gen.writeString(second)
-      gen.writeEndArray()
+    conditions.toSeq.map(_.mapLeft(_.text)).sortBy(_._1).foreach { case (termVariable, variables) =>
+      variables.all.map(_.text).toSeq.sorted.foreach { variableText =>
+        gen.writeStartArray()
+        gen.writeString(termVariable)
+        gen.writeString(variableText)
+        gen.writeEndArray()
+      }
     }
     gen.writeEndArray()
   }
@@ -78,60 +93,20 @@ case class DistinctVariables(distinctPairs: Set[DistinctPair]) extends JsonSeria
 }
 
 object DistinctVariables {
-  val empty: DistinctVariables = DistinctVariables(Set.empty[DistinctPair])
+  val empty: DistinctVariables = DistinctVariables(Map.empty[TermVariable, Variables])
 
-  def apply(pairs: (Variable, Variable)*): DistinctVariables = {
-    DistinctVariables(pairs.map(pair => DistinctPair(pair._1, pair._2)).toSet)
+  def apply(pairs: (TermVariable, Variable)*): DistinctVariables = {
+    pairs.foldLeft(DistinctVariables.empty) { case (dv, (tv, v)) => dv + (tv, v) }
   }
 
-  def apply(pair: (Variable, Variables)): DistinctVariables = {
-    apply(pair._2.all.map(pair._1 -> _).toSeq: _*)
+  def apply(pair: (TermVariable, Variables)): DistinctVariables = {
+    DistinctVariables.empty + (pair._1, pair._2)
   }
 
-  case class DistinctPair(first: Variable, second: Variable) {
-    override def equals(obj: Any): Boolean = obj match {
-      case DistinctPair(`first`, `second`) | DistinctPair(`second`, `first`) =>
-        true
-      case _ =>
-        false
+  def byStatements(termVariables: Set[TermVariable], statements: Seq[Statement]): DistinctVariables = {
+    termVariables.foldLeft(DistinctVariables.empty) { case (dv, tv) =>
+      dv + (tv, statements.map(_.getPotentiallyIntersectingVariables(tv)).foldTogether)
     }
-
-    override def hashCode(): Int = first.hashCode() * second.hashCode()
-
-    def getMatch(variable: Variable): Option[Variable] = {
-      if (variable == first)
-        Some(second)
-      else if (variable == second)
-        Some(first)
-      else
-        None
-    }
-
-    def isClash: Boolean = first == second
-
-    def sortedTuple: (String, String) = {
-      if (first.text < second.text) {
-        (first.text, second.text)
-      } else {
-        (second.text, first.text)
-      }
-    }
-  }
-
-  def byStatements(termVariables: Set[TermVariable], statements: Seq[Statement]): Option[DistinctVariables] = {
-    val pairOptions = for {
-      termVariable <- termVariables
-      otherVariable <- statements.map(_.getPotentiallyIntersectingVariables(termVariable))
-        .reduceOption(_ ++ _)
-        .getOrElse(Variables.empty)
-        .all
-    } yield {
-      if (termVariable == otherVariable)
-        None
-      else
-        Some(DistinctPair(termVariable, otherVariable))
-    }
-    pairOptions.traverseOption.map(DistinctVariables(_))
   }
 
   implicit class DistinctVariableSeqOps(seq: Traversable[DistinctVariables]) {

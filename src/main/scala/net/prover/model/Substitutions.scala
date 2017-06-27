@@ -110,7 +110,7 @@ case class PartialSubstitutions(
         Term.optionAsVariable(substitutedTermToReplaceWith).toSet
       variablesRequiringCondition
         .foldLeft(DistinctVariables.empty) { case (variables, variable) =>
-          variables + (variable, substitutedTermToBeReplaced)
+          variables + (substitutedTermToBeReplaced, variable)
         }
     }
   }

@@ -3,7 +3,6 @@ Introduce the empty set, ∅.
 
 axiom Axiom of Empty Set
 conclusion ∃ y ∀ x ¬ ∈ x y
-distinct-variables (x y)
 
 theorem Two Empty Sets Are Equal
 premise ∀ x ¬ ∈ x a

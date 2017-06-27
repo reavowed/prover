@@ -36,10 +36,10 @@ qed
 
 theorem Not Exists Not Is For All
 premise ¬ ∃ x ¬ φ
-assume ¬ sub y x φ {
+assume ¬ φ {
   prove ∃ x ¬ φ
 }
-prove sub y x φ
+prove φ
 prove ∀ x φ
 qed
 

@@ -11,7 +11,6 @@ qed
 
 axiom Axiom of Extensionality
 conclusion → ∀ x ↔ ∈ x a ∈ x b = a b
-distinct-variables (x a, x b)
 
 theorem Sets with Same Members Are Equal
 premise ∀ x ↔ ∈ x a ∈ x b

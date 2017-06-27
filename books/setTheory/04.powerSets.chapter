@@ -3,7 +3,6 @@ Define the power set of a set - the set of all its subsets.
 
 axiom Axiom of Power Set
 conclusion ∃ y ∀ x ↔ ∈ x y ⊆ x a
-distinct-variables (a x, a y, x y)
 
 theorem Power Sets Are Unique
 prove ∃ b ∀ x ↔ ∈ x b ⊆ x a

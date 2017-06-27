@@ -7,9 +7,9 @@ let S = S comprehension x × ℕ ℕ ∃ n ∧ ∈ n ℕ = x orderedPair n succe
   assume ∈ a ℕ {
     assume ∧ ∈ b ℕ ∈ orderedPair a b S {
       prove ∃ n ∧ ∈ n ℕ = orderedPair a b orderedPair n successor n
-      let n ∧ ∈ n ℕ = orderedPair a b orderedPair n successor n {
-        prove = a n
-        prove = b successor n
+      let x ∧ ∈ x ℕ = orderedPair a b orderedPair x successor x {
+        prove = a x
+        prove = b successor x
         prove = b successor a
       }
     }
@@ -24,20 +24,20 @@ let S = S comprehension x × ℕ ℕ ∃ n ∧ ∈ n ℕ = x orderedPair n succe
       prove ∈ orderedPair a b S
       prove ∧ ∈ b ℕ ∈ orderedPair a b S
     }
-    prove ∀ b ↔ ∧ ∈ b ℕ ∈ orderedPair a b S = b successor a
     prove ∃! b ∧ ∈ b ℕ ∈ orderedPair a b S
   }
   prove ∀ a → ∈ a ℕ ∃! b ∧ ∈ b ℕ ∈ orderedPair a b S
   prove function S ℕ ℕ
-  assume ∈ a ℕ {
-    prove ∧ ∈ apply S a ℕ ∈ orderedPair a apply S a S
-    prove ∃ n ∧ ∈ n ℕ = orderedPair a apply S a orderedPair n successor n
-    let n ∧ ∈ n ℕ = orderedPair a apply S a orderedPair n successor n {
-      prove = a n
-      prove = apply S a successor n
-      prove = apply S a successor a
+  assume ∈ m ℕ {
+    prove ∧ ∈ apply S m ℕ ∈ orderedPair m apply S m S
+    prove ∃ n ∧ ∈ n ℕ = orderedPair m apply S m orderedPair n successor n
+    let x ∧ ∈ x ℕ = orderedPair m apply S m orderedPair x successor x {
+      prove = m x
+      prove = apply S m successor x
+      prove = apply S m successor m
     }
   }
+  prove ∀ m → ∈ m ℕ = apply S m successor m
   prove ∀ n → ∈ n ℕ = apply S n successor n
   prove ∧ function S ℕ ℕ ∀ n → ∈ n ℕ = apply S n successor n
   prove ∃ f ∧ function f ℕ ℕ ∀ n → ∈ n ℕ = apply f n successor n
@@ -71,18 +71,18 @@ premise ∈ x X
 premise = S comprehension g powerSet × ℕ X ∃ n ∧ ∈ n ℕ ∧ function g n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply g a x ∃ b ∧ = a successor b = apply g a apply f apply g b
 assume ∧ ∈ y X ∈ orderedPair 0 y union S {
   prove ∃ g ∧ ∈ orderedPair 0 y g ∈ g S
-  let g ∧ ∈ orderedPair 0 y g ∈ g S {
-    prove ∃ n ∧ ∈ n ℕ ∧ function g n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply g a x ∃ b ∧ = a successor b = apply g a apply f apply g b
-    let n ∧ ∈ n ℕ ∧ function g n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply g a x ∃ b ∧ = a successor b = apply g a apply f apply g b {
-      prove ∈ 0 n
-      prove ∨ ∧ = 0 0 = apply g 0 x ∃ b ∧ = 0 successor b = apply g 0 apply f apply g b
+  let h ∧ ∈ orderedPair 0 y h ∈ h S {
+    prove ∃ n ∧ ∈ n ℕ ∧ function h n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply h a x ∃ b ∧ = a successor b = apply h a apply f apply h b
+    let m ∧ ∈ m ℕ ∧ function h m X ∀ a → ∈ a m ∨ ∧ = a 0 = apply h a x ∃ b ∧ = a successor b = apply h a apply f apply h b {
+      prove ∈ 0 m
+      prove ∨ ∧ = 0 0 = apply h 0 x ∃ b ∧ = 0 successor b = apply h 0 apply f apply h b
       prove ¬ = 0 successor b
-      prove ¬ ∧ = 0 successor b = apply g 0 apply f apply g b
-      prove ∀ b ¬ ∧ = 0 successor b = apply g 0 apply f apply g b
-      prove ¬ ∃ b ∧ = 0 successor b = apply g 0 apply f apply g b
-      prove ∧ = 0 0 = apply g 0 x
-      prove = apply g 0 x
-      prove = y apply g 0
+      prove ¬ ∧ = 0 successor b = apply h 0 apply f apply h b
+      prove ∀ b ¬ ∧ = 0 successor b = apply h 0 apply f apply h b
+      prove ¬ ∃ b ∧ = 0 successor b = apply h 0 apply f apply h b
+      prove ∧ = 0 0 = apply h 0 x
+      prove = apply h 0 x
+      prove = y apply h 0
       prove = y x
     }
   }

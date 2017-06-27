@@ -143,7 +143,7 @@ class StatementSpec extends ProverSpec {
           Map(φ -> Equals(x, y)),
           Map(x -> x, y -> z),
           Map.empty,
-          DistinctVariables(y -> x))))
+          DistinctVariables(x -> y))))
     }
 
     "not add distinct variable conditions for substitution validity if replacing a term with itself" in {
@@ -175,7 +175,7 @@ class StatementSpec extends ProverSpec {
           Map(φ -> ForAll(y, Equals(x, y))),
           Map(x -> x, y -> z),
           Map.empty,
-          DistinctVariables(y -> x))))
+          DistinctVariables(x -> y))))
     }
   }
 

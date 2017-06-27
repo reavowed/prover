@@ -174,7 +174,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(z, Implication(ElementOf(z, x), ElementOf(z, x))),
-        Conditions(Set(y), DistinctVariables(x -> y, x -> z, y -> z)))
+        Conditions(Set(y), DistinctVariables(y -> x, y -> z)))
     }
 
     "prove a conclusion with a no-op substitution" in {
@@ -252,17 +252,14 @@ class TheoremSpec extends ProverSpec {
     "prove a statement by simplifying substitutions using distinct variable conditions" in {
       val theorem = parseTheorem(
         "XXX",
-        "premise ∃ X ∀ x ↔ ∈ x X φ",
-        "premise proves",
-        "  ∧ ∀ x ↔ ∈ x Y φ ∀ x ↔ ∈ x Z φ",
-        "  = Y Z",
-        "prove ∃! X ∀ x ↔ ∈ x X φ",
+        "premise φ",
+        "prove ∀ x φ",
         "qed")(
-        contextWith(proveUniqueness))
+        contextWith(generalizationWithDifferentVariables))
 
       theorem.conclusion mustEqual ProvenStatement(
-        ExistsUnique(X, ForAll(x, Equivalence(ElementOf(x, X), φ))),
-        Conditions(Set(Y, Z), DistinctVariables(X -> φ, X -> x)))
+        ForAll(x, φ),
+        Conditions(Set(x), DistinctVariables(x -> φ)))
     }
 
     "not prove a conclusion that violates an arbitrary variable condition" in {
@@ -332,7 +329,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         Exists(y, Conjunction(SubstitutedStatementVariable(φ, y, x), Equals(y, z))),
-        Conditions(Set.empty, DistinctVariables(y -> φ, y -> z)))
+        Conditions(Set.empty, DistinctVariables(y -> φ)))
     }
 
     "prove a statement requiring a complicated resolution of a substitution" in {
@@ -346,7 +343,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(y, Equivalence(ElementOf(y, Y), Conjunction(ElementOf(y, X), SubstitutedStatementVariable(φ, y, x)))),
-        Conditions(Set.empty, DistinctVariables(y -> x, y -> X, y -> Y)))
+        Conditions(Set.empty, DistinctVariables(y -> x)))
     }
 
     "prove a statement that requires additional distinct variable conditions to be added in the resolution of a substitution in the conclusion" in {
@@ -376,7 +373,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ExistsUnique(y, ψ),
-        Conditions(Set.empty, DistinctVariables(x -> y)))
+        Conditions(Set.empty, DistinctVariables(y -> x)))
     }
 
     "add distinct variables to preserve validity of a substitution" in {

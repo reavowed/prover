@@ -4,23 +4,23 @@ Introduce the universal quantifier.
 statement ∀ (x φ) format ((∀x)φ) boundVariables (x)
 
 axiom Generalization
-premise sub y x φ
+premise φ
 conclusion ∀ x φ
-arbitrary-variables (y)
-distinct-variables (y φ)
+arbitrary-variables (x)
 
 axiom Specification
 premise ∀ x φ
 conclusion sub y x φ
 
-theorem Generalization
-premise φ
-prove sub y x φ
-prove ∀ x φ non-distinct (x φ)
-qed
-
 inference-transform (∀ x _) ()
 inference-transform (∀ x _) (sub y x _)
+
+theorem Renamed Generalization
+premise sub y x φ
+prove ∀ y sub y x φ
+prove φ
+prove ∀ x φ
+qed
 
 theorem Rename Universally Quantified Variable
 premise ∀ x φ
@@ -29,29 +29,21 @@ prove ∀ y sub y x φ
 qed
 
 theorem Generalized Deduction
+premise proves φ ψ
+prove → φ ψ
+prove ∀ x → φ ψ
+qed
+
+theorem Renamed Generalized Deduction
 premise proves sub y x φ sub y x ψ
 prove → sub y x φ sub y x ψ
 prove ∀ x → φ ψ
 qed
 
-theorem Generalized Deduction
-premise proves φ ψ
-prove → φ ψ
-prove ∀ x → φ ψ non-distinct (x φ, x ψ)
-qed
-
-theorem Generalized Equivalence
-premise proves sub y x φ sub y x ψ
-premise proves sub y x ψ sub y x φ
-prove ∀ x → φ ψ
-prove ∀ x → ψ φ
-prove ∀ x ↔ φ ψ
-qed
-
 theorem Generalized Equivalence
 premise proves φ ψ
 premise proves ψ φ
-prove ∀ x → φ ψ non-distinct (x φ, x ψ)
-prove ∀ x → ψ φ non-distinct (x φ, x ψ)
-prove ∀ x ↔ φ ψ non-distinct (x φ, x ψ)
+prove ∀ x → φ ψ
+prove ∀ x → ψ φ
+prove ∀ x ↔ φ ψ
 qed

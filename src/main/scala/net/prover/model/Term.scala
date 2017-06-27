@@ -24,6 +24,7 @@ case class TermVariable(text: String) extends Term with Variable {
   override def allVariables: Variables = Variables(this)
   override def presentVariables: Variables = Variables(this)
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set(this))
+  override def implicitDistinctVariables: DistinctVariables = DistinctVariables.empty
   override def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables(this)
   override def calculateSubstitutions(
     other: Component,
@@ -93,6 +94,7 @@ case class DefinedTerm(
   override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
   override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _)
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = mergeBoundAndFreeVariables(subcomponents)
+  override def implicitDistinctVariables: DistinctVariables = subcomponents.map(_.implicitDistinctVariables).foldTogether
   def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
     subcomponents
       .map(_.getPotentiallyIntersectingVariables(variable))
@@ -112,6 +114,7 @@ case class DefinedTerm(
   }
   override def applySubstitutions(substitutions: Substitutions): Option[Term] = {
     for {
+      _ <- implicitDistinctVariables.applySubstitutions(substitutions)
       updatedSubcomponents <- subcomponents.map(_.applySubstitutions(substitutions)).traverseOption
     } yield {
       copy(subcomponents = updatedSubcomponents)
