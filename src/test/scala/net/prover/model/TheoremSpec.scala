@@ -56,17 +56,6 @@ class TheoremSpec extends ProverSpec {
     val specification = axiom(Seq(ForAll(x, φ)), SubstitutedStatementVariable(φ, y, x))
     val existence = axiom(Seq(SubstitutedStatementVariable(φ, y, x)), Exists(x, φ))
     val proveExistence = axiom(Seq(DeducedPremise(φ, ψ), DirectPremise(Exists(x, φ))), ProvenStatement(ψ, Conditions(Set(x), DistinctVariables(x -> ψ))))
-    val proveUniqueness = axiom(
-      Seq(
-        DirectPremise(Exists(x, φ)),
-        DeducedPremise(
-          Conjunction(
-            SubstitutedStatementVariable(φ, y, x),
-            SubstitutedStatementVariable(φ, z, x)),
-          Equals(y, z))),
-      ProvenStatement(
-        ExistsUnique(x, φ),
-        Conditions(Set(y, z), DistinctVariables.empty)))
 
     "prove the conclusion of a premiseless inference" in {
       val theorem = parseTheorem(

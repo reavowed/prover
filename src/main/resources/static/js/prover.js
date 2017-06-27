@@ -257,7 +257,7 @@
               assumption: assumption,
               reference: reference,
               visibleIndentLevel: visibleIndentLevel,
-              conceptualIndentLevel: conceptualIndentLevel,
+              conceptualIndentLevel: conceptualIndentLevel
             });
             _.forEach(steps, function (step, index) {
               addStep(step, reference + index + 1, visibleIndentLevel + 1, conceptualIndentLevel + 1)

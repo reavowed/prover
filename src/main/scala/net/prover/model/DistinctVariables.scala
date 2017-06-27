@@ -29,7 +29,7 @@ case class DistinctVariables(conditions: Map[TermVariable, Variables]) extends J
       .map { v =>
         v -> (get(v) -- other.get(v))
       }
-      .filter { case (tv, vs) =>
+      .filter { case (_, vs) =>
         vs.nonEmpty
       }
       .toMap

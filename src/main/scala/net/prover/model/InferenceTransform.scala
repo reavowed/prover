@@ -56,8 +56,8 @@ extends InferenceTransform {
             }
           }
         }
-        .map { case (premises, statements) =>
-          (premises, statements :+ transformedConclusion)
+        .map { case (transformedPremises, statements) =>
+          (transformedPremises, statements :+ transformedConclusion)
         }
     }).toSeq.flatten
   }

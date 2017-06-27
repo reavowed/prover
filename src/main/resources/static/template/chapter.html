@@ -24,7 +24,7 @@
                 <div ng-if="entry.boundVariables.length" class="boundVariables">
                     Bound variables: {{entry.boundVariables.join(", ")}}
                 </div>
-                <div class="conditions" ng-if="entry.distinctVariables.length" class="distinctVariables">
+                <div class="conditions" ng-if="entry.distinctVariables.length">
                     <h6>Conditions</h6>
                     <distinct-variables distinct-variables="entry.distinctVariables"></distinct-variables>
                 </div>
@@ -45,7 +45,7 @@
                     <span ng-if="entry.premises.length">Then</span>
                     {{entry.defaultTerm}} is defined by {{ entry.definition }}
                 </div>
-                <div class="conditions" ng-if="entry.distinctVariables.length" class="distinctVariables">
+                <div class="conditions" ng-if="entry.distinctVariables.length">
                     <h6>Conditions</h6>
                     <distinct-variables distinct-variables="entry.distinctVariables"></distinct-variables>
                 </div>
