@@ -30,7 +30,7 @@ object DetailedProof {
   case class NamingStep(
       variable: TermVariable,
       assumptionStep: AssumptionStep,
-      assertionStep: AssertionStep)
+      assertionStep: StepWithProvenStatement)
     extends StepWithProvenStatement {
     override def provenStatement: ProvenStatement = assertionStep.provenStatement
     override def referencedInferenceIds: Set[String] = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
@@ -41,6 +41,14 @@ object DetailedProof {
       references: Seq[Reference])
     extends StepWithProvenStatement {
     override def referencedInferenceIds: Set[String] = inference.id.toSet
+  }
+  case class TransformedInferenceStep(
+      provenStatement: ProvenStatement,
+      inference: Inference.Summary,
+      transformationProof: DetailedProof,
+      references: Seq[Reference])
+    extends StepWithProvenStatement {
+    override def referencedInferenceIds: Set[String] = transformationProof.referencedInferenceIds ++ inference.id.toSet
   }
 
   sealed trait Reference
@@ -96,12 +104,7 @@ object DetailedProof {
                 ReferencedDeduction(assumption, deduction, DeducedReference(nextReference, nextReference + index + 1))
             }
             (provenAssertions, provenDeductions ++ newProvenDeductions)
-          case NamingStep(_, _, assertion) =>
-            val newProvenAssertion = ReferencedAssertion(
-              assertion.provenStatement,
-              DirectReference(nextReference, assertion.provenStatement.statement.html))
-            (provenAssertions :+ newProvenAssertion, provenDeductions)
-          case AssertionStep(provenStatement, _, _) =>
+          case StepWithProvenStatement(provenStatement) =>
             val newProvenAssertion = ReferencedAssertion(provenStatement, DirectReference(nextReference, provenStatement.statement.html))
             (provenAssertions :+ newProvenAssertion, provenDeductions)
         }
@@ -184,7 +187,7 @@ object DetailedProof {
     assumptions: Seq[Statement],
     nextReference: Int)(
     implicit context: Context
-  ): AssertionStep = {
+  ): StepWithProvenStatement = {
     Prover(assertion, nonArbitraryVariables, nonDistinctVariables, provenAssertions, provenDeductions, premises, assumptions, debug).proveAssertion()
   }
 }
