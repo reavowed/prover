@@ -1,7 +1,6 @@
 package net.prover.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import net.prover.model.Inference.{DirectPremise, RearrangementType}
 
 @JsonIgnoreProperties(Array("symbol", "defaultComponents", "format"))
 case class StatementDefinition(
@@ -56,12 +55,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
   ): Parser[Set[TermVariable]] = {
     optionalDefiningStatement match {
       case Some(definingStatement) =>
-        val variables = Variables(
-          defaultVariables.ofType[StatementVariable].toSet,
-          defaultVariables.ofType[TermVariable].toSet)
-        val boundVariables = variables.termVariables.filter { defaultVariable =>
-          definingStatement.getPotentiallyIntersectingVariables(defaultVariable).intersect(variables).isEmpty
-        }
+        val boundVariables = definingStatement.boundVariables.intersect(defaultVariables.ofType[TermVariable].toSet)
         Parser.constant(boundVariables)
       case None =>
         Parser.optional(

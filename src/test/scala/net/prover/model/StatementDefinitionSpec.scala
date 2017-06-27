@@ -51,7 +51,7 @@ class StatementDefinitionSpec extends ProverSpec {
 
   "a statement definition" should {
     "calculate bound variables when applying to subcomponents" in {
-      ForAll(y, φ).boundAndFreeVariables mustEqual (Set(y), Set.empty)
+      ForAll(y, φ).boundVariables mustEqual Set(y)
     }
   }
 }

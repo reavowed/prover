@@ -5,6 +5,13 @@ import scala.collection.{TraversableLike, mutable}
 import scala.reflect.ClassTag
 
 package object model {
+  implicit class AnyOps[T](t: T) {
+    def asOptionalInstanceOf[S]: Option[S] = t match {
+      case s: S => Some(s)
+      case _ => None
+    }
+  }
+
   implicit class StringOps(s: String) {
     def splitByWhitespace(max: Int = 0): Seq[String] = {
       s.trim.split("\\s+", max).toSeq

@@ -26,10 +26,16 @@ class ConditionsSpec extends ProverSpec {
         .must(beNone)
     }
 
-    "remove arbitrary variables under distinct variable conditions" in {
-      Conditions(Set(x), DistinctVariables(y -> x))
+    "remove arbitrary variable that only appears bound" in {
+      Conditions(Set(x), DistinctVariables.empty)
         .restrictToStatements(Seq(ForAll(x, φ), Exists(y, ForAll(x, ψ))))
         .arbitraryVariables must beEmpty
+    }
+
+    "remove arbitrary variable if its only possible appearance is another arbitrary variable" in {
+      Conditions(Set(x, y), DistinctVariables.empty)
+        .restrictToStatements(Seq(SubstitutedStatementVariable(φ, y, x)))
+        .arbitraryVariables mustEqual Set(y)
     }
 
     "only add present variables to distinct conditions" in {

@@ -15,7 +15,7 @@ case class DistinctVariables(distinctPairs: Set[DistinctPair]) extends JsonSeria
   }
 
   def get(variable: Variable): Variables = {
-    distinctPairs.map(_.getMatch(variable).map(_.presentVariables).getOrElse(Variables.empty)).foldTogether
+    distinctPairs.map(_.getMatch(variable).map(_.allVariables).getOrElse(Variables.empty)).foldTogether
   }
 
   def areDistinct(first: Variable, second: Variable): Boolean = {
@@ -47,6 +47,8 @@ case class DistinctVariables(distinctPairs: Set[DistinctPair]) extends JsonSeria
       substitutedSecond <- second.applySubstitutions(substitutions)
       result <- (
         for {
+          // TODO: This isn't necessarily symmetric? What happens if after substitutions we get that
+          // [y/x]φ is distinct from [b/a]ψ? What are the correct conditions then?
           newFirst <- substitutedFirst.presentVariables.all
           newSecond <- substitutedSecond.getPotentiallyIntersectingVariables(newFirst).all
         } yield {

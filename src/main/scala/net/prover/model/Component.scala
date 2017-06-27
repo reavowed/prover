@@ -2,9 +2,22 @@ package net.prover.model
 
 trait Component {
   def componentType: ComponentType
+
+  /**
+    * All the variables that appear syntactically in this component and must
+    * be supplied in a general substitution.
+    */
   def allVariables: Variables
+
+  /**
+    * The variables that definitely appear in this component and to which
+    * distinct variable conditions must be carried over. Mostly the same as
+    * `allVariables`, except that `x` is not present in [y/x]φ.
+    */
   def presentVariables: Variables
   def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable])
+  def boundVariables: Set[TermVariable] = boundAndFreeVariables._1
+  def freeVariables: Set[TermVariable] = boundAndFreeVariables._2
   def getPotentiallyIntersectingVariables(variable: Variable): Variables
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Seq[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
