@@ -247,6 +247,7 @@
               conditions: steps[0].provenStatement.conditions,
               reference: reference,
               inferenceName: steps[0].inference.name,
+              inferenceLink : getLink(steps[0].inference),
               visibleIndentLevel: visibleIndentLevel,
               conceptualIndentLevel: conceptualIndentLevel
             });
