@@ -8,10 +8,16 @@ class ConditionsSpec extends ProverSpec {
         .distinctVariables mustEqual DistinctVariables(y -> z)
     }
 
-    "correctly apply distinct variable condition to a compound statement with the term variable substituted out" in {
+    "correctly apply distinct variable condition to a compound statement with the term variable substituted out by a free variable" in {
+      Conditions(Set.empty, DistinctVariables(x -> φ))
+        .applySubstitutions(Substitutions(Map(φ -> SubstitutedStatementVariable(φ, z, y)), Map(x -> y), DistinctVariables.empty)).get
+        .distinctVariables mustEqual DistinctVariables(y -> z)
+    }
+
+    "correctly apply distinct variable condition to a compound statement with the term variable substituted out by a bound variable" in {
       Conditions(Set.empty, DistinctVariables(x -> φ))
         .applySubstitutions(Substitutions(Map(φ -> ForAll(z, SubstitutedStatementVariable(φ, z, y))), Map(x -> y), DistinctVariables.empty)).get
-        .distinctVariables mustEqual DistinctVariables(y -> z)
+        .distinctVariables mustEqual DistinctVariables.empty
     }
 
     "correctly apply distinct variable condition to a term variable substituted for a function" in {

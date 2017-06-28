@@ -82,7 +82,7 @@ trait DefinedComponent[T <: Component] extends Component {
       case _ =>
         subcomponents
           .map(_.getPotentiallyIntersectingVariables(variable))
-          .foldLeft(Variables.empty)(_ ++ _)
+          .foldLeft(Variables.empty)(_ ++ _) -- localBoundVariables
     }
   }
 

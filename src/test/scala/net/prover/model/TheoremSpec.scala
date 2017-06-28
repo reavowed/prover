@@ -352,19 +352,6 @@ class TheoremSpec extends ProverSpec {
         Conditions(Set.empty, DistinctVariables(x -> φ)))
     }
 
-    "add distinct variable conditions from a statement definition" in {
-      val theorem = parseTheorem(
-        "XXX",
-        "premise ∃ x ∀ y ↔ ψ = y x",
-        "prove ∃! y ψ",
-        "qed")(
-        contextWith(ExistsUnique.forwardInference.get))
-
-      theorem.conclusion mustEqual ProvenStatement(
-        ExistsUnique(y, ψ),
-        Conditions(Set.empty, DistinctVariables(y -> x)))
-    }
-
     "add distinct variables to preserve validity of a substitution" in {
       val theorem = parseTheorem(
         "XXX",

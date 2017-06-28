@@ -39,6 +39,9 @@ case class Variables(statementVariables: Set[StatementVariable], termVariables: 
       statementVariables.diff(otherVariables.statementVariables),
       termVariables.diff(otherVariables.termVariables))
   }
+  def filter(f: Variable => Boolean): Variables = {
+    Variables(statementVariables.filter(f), termVariables.filter(f))
+  }
   def isEmpty: Boolean = statementVariables.isEmpty && termVariables.isEmpty
   def nonEmpty: Boolean = statementVariables.nonEmpty || termVariables.nonEmpty
 

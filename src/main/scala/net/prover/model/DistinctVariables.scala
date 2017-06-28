@@ -48,10 +48,19 @@ case class DistinctVariables(conditions: Map[TermVariable, Variables]) extends J
     get(first).contains(second)
   }
 
-  def restrictTo(activeVariables: Variables): DistinctVariables = {
+  def restrictTo(statements: Seq[Statement]): DistinctVariables = {
+    val activeVariables = statements.map(_.allVariables).foldTogether
     val restrictedConditions = conditions
-      .mapValues { v => v.intersect(activeVariables) }
-      .filter { p => activeVariables.contains(p._1) && p._2.nonEmpty }
+      .filterKeys { activeVariables.contains }
+      .mapValues { _.filter(activeVariables.contains) }
+      .map { case (termVariable, variables) =>
+        termVariable -> variables.filter { variable =>
+          statements.exists { s =>
+            !s.boundVariables.contains(termVariable) && (s.presentVariables.contains(termVariable) || s.presentVariables.contains(variable))
+          }
+        }
+      }
+      .filter { p => p._2.nonEmpty }
     DistinctVariables(restrictedConditions)
   }
 
@@ -104,16 +113,17 @@ object DistinctVariables {
   }
 
   def byStatements(termVariables: Set[TermVariable], statements: Seq[Statement]): Option[DistinctVariables] = {
-    termVariables.foldLeft(Option(DistinctVariables.empty)) { case (distinctVariablesOption, termVariable) =>
-      distinctVariablesOption.flatMap { distinctVariables =>
+    termVariables
+      .map { termVariable =>
         val newVariables = statements.map(_.getPotentiallyIntersectingVariables(termVariable)).foldTogether
         if (newVariables.contains(termVariable)) {
           None
         } else {
-          Some(distinctVariables + (termVariable, newVariables))
+          Some(DistinctVariables(termVariable -> newVariables))
         }
       }
-    }
+      .traverseOption
+      .map(_.foldTogether)
   }
 
   implicit class DistinctVariableSeqOps(seq: Traversable[DistinctVariables]) {
