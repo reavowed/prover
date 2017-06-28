@@ -232,3 +232,16 @@ premise ∈ a A
 prove ⊆ singleton a A
 prove = ∪ A singleton a A
 qed
+
+theorem Union of Subsets Is Subset
+premise ⊆ A powerSet B
+assume ∈ y union A {
+  prove ∃ a ∧ ∈ y a ∈ a A
+  let a ∧ ∈ y a ∈ a A {
+    prove ∈ a powerSet B
+    prove ⊆ a B
+    prove ∈ y B
+  }
+}
+prove ⊆ union A B
+qed

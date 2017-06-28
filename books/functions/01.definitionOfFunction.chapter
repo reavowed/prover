@@ -4,35 +4,35 @@ Definition of a function.
 statement function (f X Y)
   name (a function)
   format (f: X → Y in parens)
-  definition (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f)
+  definition (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f)
 
 theorem Definition of a Function
 premise ⊆ f × X Y
-premise ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f
-prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f
+premise ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
+prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
 prove function f X Y
 qed
 
 theorem Definition of a Function
 premise ⊆ f × X Y
-premise proves ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f
-prove ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f
-prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f
+premise proves ∈ x X ∃! y ∈ orderedPair x y f
+prove ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
+prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
 prove function f X Y
 qed
 
 theorem Function Is Subset of Product
 premise function f X Y
-prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f
+prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
 prove ⊆ f × X Y
 qed
 
 theorem Function Application Is Unique
 premise function f X Y
 premise ∈ x X
-prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f
-prove ∀ x → ∈ x X ∃! y ∧ ∈ y Y ∈ orderedPair x y f
-prove ∃! y ∧ ∈ y Y ∈ orderedPair x y f
+prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
+prove ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
+prove ∃! y ∈ orderedPair x y f
 qed
 
 theorem First Coordinate of Element of Function Is Element of Domain
@@ -54,26 +54,9 @@ qed
 theorem Extend Function Range to Superset
 premise function f A X
 premise ⊆ X Y
-prove ⊆ f × A X
+prove ∧ ⊆ f × A X ∀ x → ∈ x A ∃! y ∈ orderedPair x y f
 prove ⊆ × A X × A Y
 prove ⊆ f × A Y
-assume ∈ a A {
-  prove ∃! x ∧ ∈ x X ∈ orderedPair a x f
-  let x ∧ ∈ x X ∈ orderedPair a x f {
-    assume ∧ ∈ y Y ∈ orderedPair a y f {
-      prove ∈ y X
-      prove ∧ ∈ y X ∈ orderedPair a y f
-      prove = y x
-    }
-    assume = y x {
-      prove ∈ y X
-      prove ∈ y Y
-      prove ∈ orderedPair a y f
-      prove ∧ ∈ y Y ∈ orderedPair a y f
-    }
-    prove ∃! y ∧ ∈ y Y ∈ orderedPair a y f
-  }
-}
 prove function f A Y
 qed
 
@@ -81,29 +64,29 @@ term apply (f a)
   name (Function Application)
   format (f(a))
   premises (function f A B, ∈ a A)
-  (∧ ∈ _ B ∈ orderedPair a _ f)
+  (∈ orderedPair a _ f)
 
 theorem Function Application Is Element of Range
 premise function f X Y
 premise ∈ x X
-prove ∧ ∈ apply f x Y ∈ orderedPair x apply f x f
-prove ∈ apply f x Y
-qed
-
-theorem Function Application as Element of Function
-premise function f X Y
-premise ∈ x X
-prove ∧ ∈ apply f x Y ∈ orderedPair x apply f x f
+prove ⊆ f × X Y
 prove ∈ orderedPair x apply f x f
+prove ∈ orderedPair x apply f x × X Y
+prove ∈ apply f x Y
 qed
 
 theorem Uniqueness of Function Application
 premise function f X Y
 premise ∈ orderedPair x y f
 prove ∈ x X
-prove ∈ y Y
-prove ∃! z ∧ ∈ z Y ∈ orderedPair x z f
-prove ∧ ∈ y Y ∈ orderedPair x y f
-prove ∧ ∈ apply f x Y ∈ orderedPair x apply f x f
+prove ∃! z ∈ orderedPair x z f
+prove ∈ orderedPair x apply f x f
 prove = y apply f x
+qed
+
+theorem Uniqueness of Function Application
+premise function f X Y
+premise ∈ orderedPair x y f
+prove = y apply f x
+prove = apply f x y
 qed

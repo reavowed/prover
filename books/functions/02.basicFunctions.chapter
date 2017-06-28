@@ -4,7 +4,7 @@ Define some basic functions.
 theorem The Empty Set Is a Function with Empty Domain
 prove ⊆ ∅ × ∅ X
 prove ∀ x ¬ ∈ x ∅
-prove ∀ x → ∈ x ∅ ∃! y ∧ ∈ y X ∈ orderedPair x y ∅
+prove ∀ x → ∈ x ∅ ∃! y ∈ orderedPair x y ∅
 prove function ∅ ∅ X
 qed
 
@@ -15,17 +15,16 @@ prove ∈ orderedPair a b × singleton a singleton b
 prove ⊆ singleton orderedPair a b × singleton a singleton b
 assume ∈ x singleton a {
   prove = x a
-  assume ∧ ∈ y singleton b ∈ orderedPair x y singleton orderedPair a b {
+  assume ∈ orderedPair x y singleton orderedPair a b {
+    prove = orderedPair x y orderedPair a b
     prove = y b
   }
   assume = y b {
-    prove ∈ y singleton b
     prove ∈ orderedPair a b singleton orderedPair a b
     prove ∈ orderedPair x b singleton orderedPair a b
     prove ∈ orderedPair x y singleton orderedPair a b
-    prove ∧ ∈ y singleton b ∈ orderedPair x y singleton orderedPair a b
   }
-  prove ∃! y ∧ ∈ y singleton b ∈ orderedPair x y singleton orderedPair a b
+  prove ∃! y ∈ orderedPair x y singleton orderedPair a b
 }
 prove function singleton orderedPair a b singleton a singleton b
 qed
@@ -55,7 +54,7 @@ prove ⊆ ∪ f g × ∪ A B ∪ X Y
 assume ∈ x ∪ A B {
   prove ∨ ∈ x A ∈ x B
   assume ∈ x A {
-    assume ∧ ∈ y ∪ X Y ∈ orderedPair x y ∪ f g {
+    assume ∈ orderedPair x y ∪ f g {
       prove ∨ ∈ orderedPair x y f ∈ orderedPair x y g
       assume ∈ orderedPair x y f {
         prove = y apply f x
@@ -70,18 +69,14 @@ assume ∈ x ∪ A B {
       prove = y apply f x
     }
     assume = y apply f x {
-      prove ∈ apply f x X
-      prove ∈ y X
-      prove ∈ y ∪ X Y
       prove ∈ orderedPair x apply f x f
       prove ∈ orderedPair x y f
       prove ∈ orderedPair x y ∪ f g
-      prove ∧ ∈ y ∪ X Y ∈ orderedPair x y ∪ f g
     }
-    prove ∃! y ∧ ∈ y ∪ X Y ∈ orderedPair x y ∪ f g
+    prove ∃! y ∈ orderedPair x y ∪ f g
   }
   assume ∈ x B {
-    assume ∧ ∈ y ∪ X Y ∈ orderedPair x y ∪ f g {
+    assume ∈ orderedPair x y ∪ f g {
       prove ∨ ∈ orderedPair x y f ∈ orderedPair x y g
       assume ∈ orderedPair x y f {
         prove ∈ x A
@@ -96,17 +91,14 @@ assume ∈ x ∪ A B {
       prove = y apply g x
     }
     assume = y apply g x {
-      prove ∈ apply g x Y
-      prove ∈ y Y
-      prove ∈ y ∪ X Y
       prove ∈ orderedPair x apply g x g
       prove ∈ orderedPair x y g
       prove ∈ orderedPair x y ∪ f g
-      prove ∧ ∈ y ∪ X Y ∈ orderedPair x y ∪ f g
+      prove ∈ orderedPair x y ∪ f g
     }
-    prove ∃! y ∧ ∈ y ∪ X Y ∈ orderedPair x y ∪ f g
+    prove ∃! y ∈ orderedPair x y ∪ f g
   }
-  prove ∃! y ∧ ∈ y ∪ X Y ∈ orderedPair x y ∪ f g
+  prove ∃! y ∈ orderedPair x y ∪ f g
 }
 prove function ∪ f g ∪ A B ∪ X Y
 qed

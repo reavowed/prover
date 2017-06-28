@@ -1,0 +1,44 @@
+chapter Natural Functions
+Functions on the natural numbers.
+
+theorem A Successor Function Exists
+let S = S comprehension x × ℕ ℕ ∃ n ∧ ∈ n ℕ = x orderedPair n successor n {
+  prove ⊆ S × ℕ ℕ
+  assume ∈ a ℕ {
+    assume ∈ orderedPair a b S {
+      prove ∃ n ∧ ∈ n ℕ = orderedPair a b orderedPair n successor n
+      let x ∧ ∈ x ℕ = orderedPair a b orderedPair x successor x {
+        prove = a x
+        prove = b successor x
+        prove = b successor a
+      }
+    }
+    assume = b successor a {
+      prove ∈ successor a ℕ
+      prove ∈ b ℕ
+      prove ∈ orderedPair a b × ℕ ℕ
+      prove = orderedPair a successor a orderedPair a successor a
+      prove = orderedPair a b orderedPair a successor a
+      prove ∧ ∈ a ℕ = orderedPair a b orderedPair a successor a
+      prove ∃ n ∧ ∈ n ℕ = orderedPair a b orderedPair n successor n
+      prove ∈ orderedPair a b S
+    }
+    prove ∃! b ∈ orderedPair a b S
+  }
+  prove ∀ a → ∈ a ℕ ∃! b ∈ orderedPair a b S
+  prove function S ℕ ℕ
+  assume ∈ m ℕ {
+    prove ∈ orderedPair m apply S m S
+    prove ∃ n ∧ ∈ n ℕ = orderedPair m apply S m orderedPair n successor n
+    let x ∧ ∈ x ℕ = orderedPair m apply S m orderedPair x successor x {
+      prove = m x
+      prove = apply S m successor x
+      prove = apply S m successor m
+    }
+  }
+  prove ∀ m → ∈ m ℕ = apply S m successor m
+  prove ∀ n → ∈ n ℕ = apply S n successor n
+  prove ∧ function S ℕ ℕ ∀ n → ∈ n ℕ = apply S n successor n
+  prove ∃ f ∧ function f ℕ ℕ ∀ n → ∈ n ℕ = apply f n successor n
+}
+qed

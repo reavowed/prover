@@ -9,4 +9,5 @@ include 03.definitionOfNaturals.chapter
 include 04.literals.chapter
 include 05.induction.chapter
 include 06.inductiveProperties.chapter
-include 07.successorFunction.chapter
+include 07.recursionTheorem.chapter
+include 08.naturalFunctions.chapter

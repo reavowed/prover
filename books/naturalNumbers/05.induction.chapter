@@ -70,6 +70,16 @@ let S = S comprehension n ℕ φ {
 }
 qed
 
+theorem Proof by Induction on Property
+premise sub 0 n φ
+premise proves sub m n φ sub successor m n φ
+assume ∧ ∈ m ℕ sub m n φ {
+  prove sub m n φ
+  prove sub successor m n φ
+}
+prove ∀ n → ∈ n ℕ φ
+qed
+
 theorem An Inductive Property Applies to Any Natural Number
 premise ∈ n ℕ
 premise sub 0 n φ
