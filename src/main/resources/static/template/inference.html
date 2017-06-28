@@ -6,18 +6,17 @@
         <div ng-if="premises.length">
             Suppose
             <span ng-if="premises.length > 2" ng-repeat="premise in premises.slice(0, premises.length - 2)">
-                <span class="premise">{{premise}}</span>,
+                <span class="premise" ng-bind-html="premise"></span>,
             </span>
             <span ng-if="premises.length > 1" ng-init="premise = premises[premises.length-2]">
-                <span class="premise">{{premise}}</span> and
+                <span class="premise" ng-bind-html="premise"></span> and
             </span>
             <span ng-if="premises.length > 0" ng-init="premise = premises[premises.length-1]">
-                <span class="premise">{{premise}}</span>.
+                <span class="premise" ng-bind-html="premise"></span>.
             </span>
         </div>
         <div>
-            <span ng-if="inference.premises.length">Then</span>
-            {{inference.conclusion.statement}}.
+            <span ng-if="inference.premises.length">Then</span> <span ng-bind-html="conclusion"></span>.
         </div>
     </p>
     <p class="conditions"
@@ -38,8 +37,8 @@
                 <td class="proofRowStatement {{row.conditions ? 'hasConditions' : ''}}"
                     ng-click="popoverRow(row, $event)" data-trigger="focus" tabindex="0">
                     <span ng-repeat="i in _.range(row.visibleIndentLevel)" class="proofIndent"></span>
-                    <span>{{row.prefix}}</span>
-                    <span ng-if="row.assumption" class="assumption">{{row.assumption}}</span><span ng-if="row.assumption && row.assertion"> ⊢ </span><span ng-if="row.assertion" class="assertion">{{row.assertion}}</span>.
+                    <span ng-bind-html="row.prefix"></span>
+                    <span ng-if="row.assumption" class="assumption" ng-bind-html="row.assumption"></span><span ng-if="row.assumption && row.assertion"> ⊢ </span><span ng-if="row.assertion" class="assertion" ng-bind-html="row.assertion"></span>.
                 </td>
                 <td>
                     <a ng-if="row.inferenceLink && row.inferenceName" class="stepInferenceId" href="{{row.inferenceLink}}">{{row.inferenceName}}</a>

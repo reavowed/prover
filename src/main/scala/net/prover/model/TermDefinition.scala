@@ -45,7 +45,7 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
   def parser(book: Book, chapter: Chapter)(implicit context: Context): Parser[TermDefinition] = {
     for {
       symbol <- Parser.singleWord
-      defaultVariables <- Component.variableParser.listInParens(None)
+      defaultVariables <- Variable.parser.listInParens(None)
       name <- nameParser.getOrElse(symbol)
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       premises <- premisesParser

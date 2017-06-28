@@ -119,20 +119,20 @@ trait Component {
   }
 }
 
-object Component {
-  def variableParser(implicit context: Context): Parser[Variable] = {
+trait Variable extends Component {
+  def text: String
+}
+
+object Variable {
+  def parser(implicit context: Context): Parser[Variable] = {
     for {
       variableName <- Parser.singleWord
     } yield {
-      context.variables.statementVariables.find(_.text == variableName)
-          .orElse(context.variables.termVariables.find(_.text == variableName))
-          .getOrElse(throw new Exception(s"Unrecognised variable name '$variableName'"))
+      context.statementVariableNames.find(_ == variableName).map(StatementVariable)
+        .orElse(Term.findVariable(variableName))
+        .getOrElse(throw new Exception(s"Unrecognised variable name '$variableName'"))
     }
   }
-}
-
-trait Variable extends Component {
-  def text: String
 }
 
 trait Placeholder[T <: Component] extends Component {

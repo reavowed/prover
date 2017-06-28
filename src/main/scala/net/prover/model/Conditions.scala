@@ -67,7 +67,7 @@ object Conditions {
   def variablePairParser(implicit context: Context): Parser[(TermVariable, Variable)] = {
     for {
       first <- Term.variableParser
-      second <- Component.variableParser
+      second <- Variable.parser
     } yield first -> second
   }
 

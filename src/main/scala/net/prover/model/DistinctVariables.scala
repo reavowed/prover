@@ -77,11 +77,11 @@ case class DistinctVariables(conditions: Map[TermVariable, Variables]) extends J
 
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeStartArray()
-    conditions.toSeq.map(_.mapLeft(_.text)).sortBy(_._1).foreach { case (termVariable, variables) =>
-      variables.all.map(_.text).toSeq.sorted.foreach { variableText =>
+    conditions.toSeq.sortBy(_._1.text).foreach { case (termVariable, variables) =>
+      variables.all.toSeq.sortBy(_.text).foreach { variable =>
         gen.writeStartArray()
-        gen.writeString(termVariable)
-        gen.writeString(variableText)
+        gen.writeString(termVariable.html)
+        gen.writeString(variable.html)
         gen.writeEndArray()
       }
     }

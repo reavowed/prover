@@ -123,9 +123,9 @@ trait ProverSpec extends Specification {
 
   val termDefinitions = Seq(EmptySetDefinition, Comprehension, PowerSet, OrderedPair)
 
-  val baseContext = Context.empty.copy(variables = Variables(
-    Set(φ, ψ, χ),
-    Set(x, y, z, X, Y, Z, a, n)))
+  val baseContext = Context.empty.copy(
+    statementVariableNames = Set(φ, ψ, χ).map(_.text),
+    termVariableNames = Set(x, y, z, X, Y, Z, a, n).map(_.text))
 
   val contextWithStatements = statementDefinitions.foldLeft(baseContext) { case (context, statementDefinition) =>
     context.addStatementDefinition(statementDefinition)

@@ -100,7 +100,7 @@
 
   proverApp.component('inference', {
     templateUrl: 'template/inference.html',
-    controller: ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+    controller: ['$scope', '$http', '$routeParams', '$sce', function ($scope, $http, $routeParams, $sce) {
       $scope.inference = null;
       $http.get('/books/' + $routeParams.bookKey + '/' + $routeParams.chapterKey + '/' + $routeParams.inferenceKey).then(function (response) {
         $scope.inference = response.data.inference;
@@ -128,13 +128,26 @@
           }
         ];
 
-        $scope.premises = _.map($scope.inference.premises, formatPremise);
+        $scope.premises = _.map(_.map($scope.inference.premises, formatPremise), $sce.trustAsHtml);
         if ($scope.premises.length) {
           $scope.premiseText = joinWordList($scope.premises);
         }
+        $scope.conclusion = $sce.trustAsHtml($scope.inference.conclusion.statement);
+
         if ($scope.inference.proof) {
           _.forEach($scope.inference.proof.steps, function (step, index) {
             addStep(step, $scope.inference.premises.length + index, 0, 0)
+          });
+          _.forEach($scope.proofRows, function (row) {
+            if (row.prefix) {
+              row.prefix = $sce.trustAsHtml(row.prefix);
+            }
+            if (row.assumption) {
+              row.assumption = $sce.trustAsHtml(row.assumption);
+            }
+            if (row.assertion) {
+              row.assertion = $sce.trustAsHtml(row.assertion);
+            }
           });
         }
 
@@ -155,7 +168,8 @@
 
           function markElement(element, htmlToHighlight) {
             htmlToHighlight = htmlToHighlight || element.html();
-            element.mark(htmlToHighlight, {element: "span", className: "highlightPremise", separateWordSearch: false});
+            var textToHighlight = $('<div>' + htmlToHighlight + '</div>').text();
+            element.mark(textToHighlight, {element: "span", className: "highlightPremise", separateWordSearch: false, acrossElements: true});
           }
 
           function highlightPremise(reference, subreference, htmlToHighlight) {
@@ -317,7 +331,6 @@
             addAssertion(step, reference, visibleIndentLevel, conceptualIndentLevel, override);
           }
         }
-
       });
     }]
   });
@@ -327,13 +340,14 @@
     bindings: {
       inference: '<'
     },
-    controller: ['$scope', function ($scope) {
+    controller: ['$scope', '$sce', function ($scope, $sce) {
       this.$onInit = function() {
         $scope.joinWordList = joinWordList;
         $scope.premises = _.map($scope.$ctrl.inference.premises, formatPremise);
         if ($scope.premises.length) {
-          $scope.premiseText = joinWordList($scope.premises);
+          $scope.premiseText = $sce.trustAsHtml(joinWordList($scope.premises));
         }
+        $scope.conclusion = $sce.trustAsHtml($scope.$ctrl.inference.conclusion.statement);
       };
     }]
   });
@@ -343,22 +357,23 @@
     bindings: {
       arbitraryVariables: '<'
     },
-    controller: ['$scope', function ($scope) {
+    controller: ['$scope', '$sce', function ($scope, $sce) {
       this.$onInit = function() {
-        $scope.text = joinWordList($scope.$ctrl.arbitraryVariables);
+        $scope.text = $sce.trustAsHtml(joinWordList($scope.$ctrl.arbitraryVariables));
       }
     }]
   });
+
   proverApp.component('distinctVariables', {
     templateUrl: 'template/distinctVariables.html',
     bindings: {
       distinctVariables: '<'
     },
-    controller: ['$scope', function ($scope) {
+    controller: ['$scope', '$sce', function ($scope, $sce) {
       this.$onInit = function() {
-        $scope.text = joinWordList(_.map($scope.$ctrl.distinctVariables, function (condition) {
+        $scope.text = $sce.trustAsHtml(joinWordList(_.map($scope.$ctrl.distinctVariables, function (condition) {
           return "(" + condition[0] + ", " + condition[1] + ")";
-        }));
+        })));
       }
     }]
   });

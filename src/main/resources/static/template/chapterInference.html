@@ -8,11 +8,11 @@
         </h5>
         <div class="resultBlock">
             <div ng-if="$ctrl.inference.premises.length">
-                Suppose {{premiseText}}.
+                Suppose <span ng-bind-html="premiseText"></span>.
             </div>
             <div>
                 <span ng-if="$ctrl.inference.premises.length">Then</span>
-                {{$ctrl.inference.conclusion.statement}}.
+                <span ng-bind-html="conclusion"></span>.
             </div>
         </div>
         <div class="conditions"

@@ -374,7 +374,7 @@ object Statement extends ComponentType {
     }
     object SpecifiedVariable {
       def unapply(s: String): Option[StatementVariable] = {
-        context.variables.statementVariables.find(_.text == s)
+        context.statementVariableNames.find(_ == s).map(StatementVariable)
       }
     }
 

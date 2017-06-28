@@ -82,7 +82,14 @@ case class TermVariable(text: String) extends Term with Variable {
     }
   }
   override def replacePlaceholder(other: Component) = Some(this)
-  override def html: String = text
+  override def html: String = {
+    if (text.contains("_")) {
+      val index = text.indexOf('_')
+      s"${text.substring(0, index)}<sub>${text.substring(index + 1)}</sub>"
+    } else {
+      text
+    }
+  }
   override def serialized: String = text
 }
 
@@ -218,6 +225,25 @@ object Term extends ComponentType {
     }
   }
 
+  def findVariable(name: String)(implicit context: Context): Option[TermVariable] = {
+    def findDirectly(name: String): Option[TermVariable] = {
+      context.termVariableNames.find(_ == name).map(TermVariable)
+    }
+    def findPrime(name: String): Option[TermVariable] = {
+      context.termVariableNames.find(_ + "'" == name).map(_ => TermVariable(name))
+    }
+    def findWithSuffix(name: String): Option[TermVariable] = {
+      val index = name.indexOf('_')
+      if (index >= 0) {
+        val prefix = name.substring(0, index)
+        context.termVariableNames.find(_ == prefix).map(_ => TermVariable(name))
+      } else {
+        None
+      }
+    }
+    findDirectly(name) orElse findPrime(name) orElse findWithSuffix(name)
+  }
+
   def parser(implicit context: Context): Parser[Term] = {
     object TermDefinitionMatcher {
       def unapply(s: String): Option[TermDefinition] = {
@@ -226,7 +252,7 @@ object Term extends ComponentType {
     }
     object SpecifiedVariable {
       def unapply(s: String): Option[TermVariable] = {
-        context.variables.termVariables.find(_.text == s)
+        findVariable(s)
       }
     }
     def parserForTermType(termType: String): Parser[Term] = {
