@@ -13,7 +13,7 @@ case class StatementDefinition(
     distinctVariables: DistinctVariables)
   extends ChapterEntry(StatementDefinition)
 {
-  val defaultStatement = DefinedStatement(defaultComponents, boundVariables, this)
+  val defaultValue = DefinedStatement(defaultComponents, boundVariables, this)
 
   private val componentTypes = defaultComponents.map(_.componentType)
 
@@ -31,11 +31,11 @@ case class StatementDefinition(
   }
 
   def forwardInference: Option[Inference] = definingStatement.map { s =>
-    DefinitionInference(name, Seq(s), defaultStatement, distinctVariables)
+    DefinitionInference(name, Seq(s), defaultValue, distinctVariables)
   }
 
   def reverseInference: Option[Inference] = definingStatement.map { s =>
-    DefinitionInference(name, Seq(defaultStatement), s, distinctVariables)
+    DefinitionInference(name, Seq(defaultValue), s, distinctVariables)
   }
 }
 

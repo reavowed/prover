@@ -13,14 +13,14 @@ case class TermDefinition(
   extends ChapterEntry(TermDefinition)
 {
   val id: String = s"definition-$symbol"
-  val defaultTerm = DefinedTerm(defaultVariables, this)
+  val defaultValue = DefinedTerm(defaultVariables, this)
   val componentTypes = defaultVariables.map(_.componentType)
-  val definition = placeholderDefinition.replacePlaceholder(defaultTerm).getOrElse(
-    throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultTerm'"))
+  val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue).getOrElse(
+    throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultValue'"))
   val inference: Inference = DefinitionInference(
     name,
     premises,
-    definition,
+    definingStatement,
     distinctVariables)
 
   def apply(components: Component*): DefinedTerm = DefinedTerm(components, this)

@@ -7,49 +7,10 @@
             <p>{{entry.text}}</p>
         </div>
         <div ng-switch-when="statement">
-            <div class="result">
-                <h5>Statement Definition: {{entry.defaultStatement}}</h5>
-                <div ng-if="entry.premises.length">
-                    Suppose
-                    <span ng-if="entry.premises.length > 1">
-                        {{entry.premises.slice(0, entry.premises.length - 1).join(", ")}}
-                        and
-                    </span>
-                    {{entry.premises[entry.premises.length - 1]}}.
-                </div>
-                <div ng-if="entry.definingStatement">
-                    <span ng-if="entry.premises.length">Then</span>
-                    "{{entry.defaultStatement}}" is defined to mean "{{ entry.definingStatement }}"
-                </div>
-                <div ng-if="entry.boundVariables.length" class="boundVariables">
-                    Bound variables: {{entry.boundVariables.join(", ")}}
-                </div>
-                <div class="conditions" ng-if="entry.distinctVariables.length">
-                    <h6>Conditions</h6>
-                    <distinct-variables distinct-variables="entry.distinctVariables"></distinct-variables>
-                </div>
-            </div>
+            <chapter-definition definition="entry"></chapter-definition>
         </div>
         <div ng-switch-when="term">
-            <div class="result">
-                <h5>Term Definition: {{entry.defaultTerm}}</h5>
-                <div ng-if="entry.premises.length">
-                    Suppose
-                    <span ng-if="entry.premises.length > 1">
-                        {{entry.premises.slice(0, entry.premises.length - 1).join(", ")}}
-                        and
-                    </span>
-                    {{entry.premises[entry.premises.length - 1]}}.
-                </div>
-                <div>
-                    <span ng-if="entry.premises.length">Then</span>
-                    {{entry.defaultTerm}} is defined by {{ entry.definition }}
-                </div>
-                <div class="conditions" ng-if="entry.distinctVariables.length">
-                    <h6>Conditions</h6>
-                    <distinct-variables distinct-variables="entry.distinctVariables"></distinct-variables>
-                </div>
-            </div>
+            <chapter-definition definition="entry"></chapter-definition>
         </div>
         <div ng-switch-when="axiom">
             <chapter-inference inference="entry"></chapter-inference>

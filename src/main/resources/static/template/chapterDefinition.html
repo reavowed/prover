@@ -1,0 +1,14 @@
+<div class="result">
+    <h5>{{entry.type == "term" ? "Term" : "Statement"}} Definition: <span ng-bind-html="defaultValue"></span></h5>
+    <div ng-if="premises.length">
+        Suppose <span ng-bind-html="premiseText"></span>.
+    </div>
+    <div>
+        <span ng-if="premises.length">Then</span>
+        <span ng-bind-html="defaultValue"></span> is defined by <span ng-bind-html="definingStatement"></span>
+    </div>
+    <div class="conditions" ng-if="$ctrl.definition.distinctVariables.length">
+        <h6>Conditions</h6>
+        <distinct-variables distinct-variables="entry.distinctVariables"></distinct-variables>
+    </div>
+</div>

@@ -352,6 +352,24 @@
     }]
   });
 
+  proverApp.component('chapterDefinition', {
+    templateUrl: 'template/chapterDefinition.html',
+    bindings: {
+      definition: '<'
+    },
+    controller: ['$scope', '$sce', function ($scope, $sce) {
+      this.$onInit = function() {
+        var definition = $scope.$ctrl.definition;
+        $scope.premises = _.map(definition.premises, formatPremise);
+        if ($scope.premises.length) {
+          $scope.premiseText = $sce.trustAsHtml(joinWordList($scope.premises));
+        }
+        $scope.defaultValue = $sce.trustAsHtml(definition.defaultValue);
+        $scope.definingStatement = $sce.trustAsHtml(definition.definingStatement);
+      };
+    }]
+  });
+
   proverApp.component('arbitraryVariables', {
     templateUrl: 'template/arbitraryVariables.html',
     bindings: {
