@@ -86,8 +86,9 @@ trait ProverSpec extends Specification {
     Format.default("∅", Nil),
     Nil,
     ForAll(x, Negation(ElementOf(x, PlaceholderTerm))),
+    Set.empty,
     DistinctVariables.empty)
-  val EmptySet = DefinedTerm(Nil, EmptySetDefinition)
+  val EmptySet = EmptySetDefinition()
 
   val Comprehension = TermDefinition(
     "comprehension",
@@ -96,6 +97,7 @@ trait ProverSpec extends Specification {
     Format("{%0 ∈ %1 | %2}", requiresBrackets = false),
     Nil,
     ForAll(z, Equivalence(ElementOf(z, PlaceholderTerm), Conjunction(ElementOf(z, y), SubstitutedStatementVariable(φ, z, x)))),
+    Set(x),
     DistinctVariables.empty)
 
   val PowerSet = TermDefinition(
@@ -105,6 +107,7 @@ trait ProverSpec extends Specification {
     Format("𝒫%0", requiresBrackets = false),
     Nil,
     ForAll(y, Equivalence(ElementOf(Y, PlaceholderTerm), φ)),
+    Set.empty,
     DistinctVariables.empty)
 
   val OrderedPair = TermDefinition(
@@ -114,6 +117,7 @@ trait ProverSpec extends Specification {
     Format("(%0, %1)", requiresBrackets = false),
     Nil,
     φ,
+    Set.empty,
     DistinctVariables.empty)
 
   val statementDefinitions = Seq(

@@ -82,78 +82,27 @@ case class TermVariable(text: String) extends Term with Variable {
     }
   }
   override def replacePlaceholder(other: Component) = Some(this)
-  override def html: String = {
-    if (text.contains("_")) {
-      val index = text.indexOf('_')
-      s"${text.substring(0, index)}<sub>${text.substring(index + 1)}</sub>"
-    } else {
-      text
-    }
-  }
+  override def html: String = Html.format(text)
   override def serialized: String = text
 }
 
 case class DefinedTerm(
     subcomponents: Seq[Component],
+    localBoundVariables: Set[TermVariable],
     definition: TermDefinition)
-  extends Term
+  extends Term with DefinedComponent[Term]
 {
-  override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
-  override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _)
-  override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = mergeBoundAndFreeVariables(subcomponents)
-  override def implicitDistinctVariables: DistinctVariables = subcomponents.map(_.implicitDistinctVariables).foldTogether
-  def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
-    subcomponents
-      .map(_.getPotentiallyIntersectingVariables(variable))
-      .foldLeft(Variables.empty)(_ ++ _) // TODO: derive from definition (?)
-  }
-  override def calculateSubstitutions(
-    other: Component,
-    substitutions: PartialSubstitutions
-  ): Seq[PartialSubstitutions] = other match {
-    case DefinedTerm(otherSubcomponents, `definition`) =>
-      subcomponents.zip(otherSubcomponents)
-        .foldLeft(Seq(substitutions)) { case (substitutionsSoFar, (component, otherComponent)) =>
-          substitutionsSoFar.flatMap(component.calculateSubstitutions(otherComponent, _))
-        }
+  override def getMatch(other: Component): Option[(Seq[Component], Set[TermVariable])] = other match {
+    case DefinedTerm(otherSubcomponents, otherBoundVariables, `definition`) =>
+      Some((otherSubcomponents, otherBoundVariables))
     case _ =>
-      Nil
+      None
   }
-  override def applySubstitutions(substitutions: Substitutions): Option[Term] = {
-    for {
-      _ <- implicitDistinctVariables.applySubstitutions(substitutions)
-      updatedSubcomponents <- subcomponents.map(_.applySubstitutions(substitutions)).traverseOption
-    } yield {
-      copy(subcomponents = updatedSubcomponents)
-    }
+  override def update(newSubcomponents: Seq[Component], newBoundVariables: Set[TermVariable]): Term = {
+    copy(subcomponents = newSubcomponents, localBoundVariables = newBoundVariables)
   }
 
-  override def makeSingleSubstitution(
-    termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
-    distinctVariables: DistinctVariables
-  ): Option[Term] = {
-    for {
-      updatedSubcomponents <- subcomponents
-        .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables))
-        .traverseOption
-    } yield copy(subcomponents = updatedSubcomponents)
-  }
-  def validateSubstitution(
-    termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
-    target: Component,
-    distinctVariables: DistinctVariables
-  ): Option[DistinctVariables] = {
-    target match {
-      case DefinedTerm(otherSubcomponents, `definition`) =>
-        validateSubstitution(termToReplaceWith, termToBeReplaced, subcomponents, otherSubcomponents, distinctVariables)
-      case _ =>
-        None
-    }
-  }
-
-  def resolveSingleSubstitution(
+  override def resolveSingleSubstitution(
     other: Component,
     termVariable: TermVariable,
     thisTerm: Term,
@@ -161,28 +110,9 @@ case class DefinedTerm(
   ): Option[(Term, DistinctVariables)] = {
     if (this == thisTerm && other == otherTerm) {
       Some((termVariable, DistinctVariables.empty))
-    } else other match {
-      case DefinedTerm(otherSubcomponents, `definition`) =>
-        resolveSubstitution(subcomponents, otherSubcomponents, termVariable, thisTerm, otherTerm)
-          .map(_.mapLeft { resolvedSubcomponents => copy(subcomponents = resolvedSubcomponents)})
-      case _ =>
-        None
+    } else {
+      super.resolveSingleSubstitution(other, termVariable, thisTerm, otherTerm)
     }
-  }
-
-  def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
-    other match {
-      case DefinedTerm(otherSubcomponents, `definition`) =>
-        findSubstitution(subcomponents, otherSubcomponents, termVariable)
-      case _ =>
-        (Nil, None)
-    }
-  }
-
-  override def replacePlaceholder(other: Component) = {
-    for {
-      updatedSubcomponents <- subcomponents.map(_.replacePlaceholder(other)).traverseOption
-    } yield copy(subcomponents = updatedSubcomponents)
   }
 
   override def html: String = {
@@ -192,17 +122,6 @@ case class DefinedTerm(
     definition.format.safeHtml(subcomponents)
   }
   override def serialized: String = (definition.symbol +: subcomponents.map(_.serialized)).mkString(" ")
-
-  override def equals(obj: Any): Boolean = obj match {
-    case DefinedTerm(`subcomponents`, otherTermDefinition) if otherTermDefinition.symbol == definition.symbol =>
-      true
-    case _ =>
-      false
-  }
-
-  override def hashCode(): Int = {
-    subcomponents.hashCode * 41 + definition.symbol.hashCode
-  }
 }
 
 object PlaceholderTerm extends Term with Placeholder[Term] {

@@ -1,7 +1,5 @@
 package net.prover.model
 
-import net.prover.model.Inference.{DirectPremise, Premise, RearrangementType}
-
 case class TermDefinition(
     symbol: String,
     defaultVariables: Seq[Component],
@@ -9,11 +7,12 @@ case class TermDefinition(
     format: Format,
     premises: Seq[Statement],
     placeholderDefinition: Statement,
+    boundVariables: Set[TermVariable],
     distinctVariables: DistinctVariables)
   extends ChapterEntry(TermDefinition)
 {
   val id: String = s"definition-$symbol"
-  val defaultValue = DefinedTerm(defaultVariables, this)
+  val defaultValue = DefinedTerm(defaultVariables, boundVariables, this)
   val componentTypes = defaultVariables.map(_.componentType)
   val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue).getOrElse(
     throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultValue'"))
@@ -23,7 +22,11 @@ case class TermDefinition(
     definingStatement,
     distinctVariables)
 
-  def apply(components: Component*): DefinedTerm = DefinedTerm(components, this)
+  def apply(components: Component*): DefinedTerm = DefinedTerm(
+    components,
+    boundVariables.map { v =>
+      components(defaultVariables.indexOf(v))
+    }.map(_.asInstanceOf[Term]).map(Term.asVariable), this)
 
   def termParser(implicit context: Context): Parser[Term] = {
     componentTypes.componentsParser.map(apply)
@@ -50,9 +53,12 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       premises <- premisesParser
       definitionTemplate <- Statement.parser.inParens
+      boundVariables = defaultVariables.ofType[TermVariable].toSet.filter { v =>
+        definitionTemplate.boundVariables.contains(v) || !definitionTemplate.presentVariables.termVariables.contains(v)
+      }
       distinctVariables <- Conditions.distinctVariablesParser
     } yield {
-      TermDefinition(symbol, defaultVariables, name, format, premises, definitionTemplate, distinctVariables)
+      TermDefinition(symbol, defaultVariables, name, format, premises, definitionTemplate, boundVariables, distinctVariables)
     }
   }
 

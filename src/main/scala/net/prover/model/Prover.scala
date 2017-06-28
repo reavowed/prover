@@ -284,12 +284,12 @@ case class Prover(
   ): Option[ProvenStatement] = {
     for {
       substitutedConclusion <- inferenceConclusion.applySubstitutions(substitutions)
-      combinedConditions = (matchedPremises.map(_.provenStatement.conditions) :+ substitutedConclusion.conditions)
+      combinedConditions <- (matchedPremises.map(_.provenStatement.conditions) :+ substitutedConclusion.conditions)
         .reduce(_ ++ _)
         .addDistinctVariables(substitutions.distinctVariables)
         .restrictToStatements(premises.flatMap(_.statements) ++ assumptions :+ substitutedConclusion.statement)
         .addDistinctVariables(substitutedConclusion.conditions.arbitraryVariables, assumptions)
-        .removeImplicitDistinctVariables(assertion.implicitDistinctVariables)
+        .map(_.removeImplicitDistinctVariables(assertion.implicitDistinctVariables))
       if !nonDistinctVariables.exists { case (first, second) =>
         combinedConditions.distinctVariables.areDistinct(first, second)
       }

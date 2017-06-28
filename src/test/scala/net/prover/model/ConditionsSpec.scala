@@ -41,7 +41,13 @@ class ConditionsSpec extends ProverSpec {
     "only add present variables to distinct conditions" in {
       Conditions.empty
           .addDistinctVariables(Set(x), Seq(SubstitutedStatementVariable(φ, y, x)))
-          .distinctVariables mustEqual DistinctVariables(x -> y)
+          .map(_.distinctVariables) must beSome(DistinctVariables(x -> y))
+    }
+
+    "not add distinct conditions where an arbitrary variable appears in an assumption" in {
+      Conditions.empty
+        .addDistinctVariables(Set(x), Seq(Equals(x, y)))
+        .must(beNone)
     }
   }
 }

@@ -11,8 +11,8 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
     copy(distinctVariables = distinctVariables ++ newDistinctVariables)
   }
 
-  def addDistinctVariables(termVariables: Set[TermVariable], statements: Seq[Statement]): Conditions = {
-    addDistinctVariables(DistinctVariables.byStatements(termVariables, statements))
+  def addDistinctVariables(termVariables: Set[TermVariable], statements: Seq[Statement]): Option[Conditions] = {
+    DistinctVariables.byStatements(termVariables, statements).map(addDistinctVariables)
   }
 
   def restrictToStatements(statements: Seq[Statement]): Conditions = {

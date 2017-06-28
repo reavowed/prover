@@ -103,9 +103,16 @@ object DistinctVariables {
     DistinctVariables.empty + (pair._1, pair._2)
   }
 
-  def byStatements(termVariables: Set[TermVariable], statements: Seq[Statement]): DistinctVariables = {
-    termVariables.foldLeft(DistinctVariables.empty) { case (dv, tv) =>
-      dv + (tv, statements.map(_.getPotentiallyIntersectingVariables(tv)).foldTogether)
+  def byStatements(termVariables: Set[TermVariable], statements: Seq[Statement]): Option[DistinctVariables] = {
+    termVariables.foldLeft(Option(DistinctVariables.empty)) { case (distinctVariablesOption, termVariable) =>
+      distinctVariablesOption.flatMap { distinctVariables =>
+        val newVariables = statements.map(_.getPotentiallyIntersectingVariables(termVariable)).foldTogether
+        if (newVariables.contains(termVariable)) {
+          None
+        } else {
+          Some(distinctVariables + (termVariable, newVariables))
+        }
+      }
     }
   }
 

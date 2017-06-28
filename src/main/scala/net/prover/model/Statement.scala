@@ -209,132 +209,16 @@ case class DefinedStatement(
     subcomponents: Seq[Component],
     localBoundVariables: Set[TermVariable],
     definition: StatementDefinition)
- extends Statement
+ extends Statement with DefinedComponent[Statement]
 {
-  override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
-  override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _)
-  override val boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = {
-    val (mergedBound, mergedFree) = mergeBoundAndFreeVariables(subcomponents)
-    mergedBound.intersect(localBoundVariables).headOption.foreach { v => throw new Exception(s"Variable $v is bound twice in $this")}
-    (mergedBound ++ localBoundVariables, mergedFree -- localBoundVariables)
-  }
-  override def implicitDistinctVariables: DistinctVariables = {
-    val subcomponentImplicitDistinctVariables = subcomponents.map(_.implicitDistinctVariables).foldTogether
-    val implicitPairs = for {
-      localBoundVariable <- localBoundVariables
-      subcomponentTermVariable <- subcomponents.map(_.presentVariables).foldTogether.termVariables -- localBoundVariables
-    } yield (localBoundVariable, subcomponentTermVariable)
-    val newImplicitDistinctVariables =  implicitPairs.foldLeft(DistinctVariables.empty) { case (dv, (bv, tv)) =>
-        dv + (bv, tv)
-    }
-    subcomponentImplicitDistinctVariables ++ newImplicitDistinctVariables
-  }
-  def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
-    variable match {
-      case termVariable: TermVariable if localBoundVariables.contains(termVariable) =>
-        Variables.empty
-      case _ =>
-        subcomponents
-          .map(_.getPotentiallyIntersectingVariables(variable))
-          .foldLeft(Variables.empty)(_ ++ _)
-    }
-  }
-
-  override def calculateSubstitutions(
-    other: Component,
-    substitutions: PartialSubstitutions
-  ): Seq[PartialSubstitutions] = other match {
-    case DefinedStatement(otherSubcomponents, _, `definition`) =>
-      subcomponents.zip(otherSubcomponents)
-        .foldLeft(Seq(substitutions)) { case (substitutionsSoFar, (component, otherComponent)) =>
-          substitutionsSoFar.flatMap(component.calculateSubstitutions(otherComponent, _))
-        }
+  override def getMatch(other: Component): Option[(Seq[Component], Set[TermVariable])] = other match {
+    case DefinedStatement(otherSubcomponents, otherBoundVariables, `definition`) =>
+      Some((otherSubcomponents, otherBoundVariables))
     case _ =>
-      Nil
+      None
   }
-
-  override def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
-    for {
-      updatedSubcomponents <- subcomponents.map(_.applySubstitutions(substitutions)).traverseOption
-      updatedBoundVariables <- localBoundVariables
-        .map(_.applySubstitutions(substitutions).flatMap(Term.optionAsVariable))
-        .traverseOption
-    } yield {
-      copy(
-        subcomponents = updatedSubcomponents,
-        localBoundVariables = updatedBoundVariables)
-    }
-  }
-
-  override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Statement] = {
-    for {
-      updatedSubcomponents <- subcomponents
-        .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables))
-        .traverseOption
-    } yield copy(subcomponents = updatedSubcomponents)
-  }
-  override def validateSubstitution(
-    termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
-    target: Component,
-    distinctVariables: DistinctVariables
-  ): Option[DistinctVariables] = {
-    target match {
-      case DefinedStatement(otherSubcomponents, _, `definition`) =>
-        validateSubstitution(termToReplaceWith, termToBeReplaced, subcomponents, otherSubcomponents, distinctVariables)
-      case _ =>
-        None
-    }
-  }
-
-  def resolveSingleSubstitution(
-    other: Component,
-    termVariable: TermVariable,
-    thisTerm: Term,
-    otherTerm: Term
-  ): Option[(Statement, DistinctVariables)] = {
-    other match {
-      case DefinedStatement(otherSubcomponents, otherBoundVariables, `definition`) =>
-        if (
-          localBoundVariables.contains(termVariable) ||
-          thisTerm.presentVariables.termVariables.exists(localBoundVariables.contains) ||
-          otherBoundVariables.contains(termVariable) ||
-          otherTerm.presentVariables.termVariables.exists(otherBoundVariables.contains)
-        )
-          None
-        else {
-          resolveSubstitution(subcomponents, otherSubcomponents, termVariable, thisTerm, otherTerm)
-            .map { case (resolvedSubcomponents, resolutionDistinctVariables) =>
-              val thisDistinctPairs = for {
-                boundVariable <- localBoundVariables
-                variable <- thisTerm.presentVariables.termVariables -- localBoundVariables
-              } yield boundVariable -> variable
-              val otherDistinctPairs = for {
-                boundVariable <- otherBoundVariables
-                variable <- otherTerm.presentVariables.termVariables -- otherBoundVariables
-              } yield boundVariable -> variable
-              val additionalDistinctVariables = DistinctVariables((thisDistinctPairs ++ otherDistinctPairs).toSeq :_*)
-              (copy(subcomponents = resolvedSubcomponents), resolutionDistinctVariables ++ additionalDistinctVariables)
-            }
-        }
-      case _ =>
-        None
-    }
-  }
-  def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
-    other match {
-      case DefinedStatement(otherSubcomponents, _, `definition`) =>
-        findSubstitution(subcomponents, otherSubcomponents, termVariable)
-      case _ =>
-        (Nil, None)
-    }
-  }
-
-  override def replacePlaceholder(other: Component) = {
-    for {
-      updatedSubcomponents <- subcomponents.map(_.replacePlaceholder(other)).traverseOption
-      updated <- Try(copy(subcomponents = updatedSubcomponents)).toOption
-    } yield updated
+  override def update(newSubcomponents: Seq[Component], newBoundVariables: Set[TermVariable]): Statement = {
+    copy(subcomponents = newSubcomponents, localBoundVariables = newBoundVariables)
   }
 
   override def html: String = {

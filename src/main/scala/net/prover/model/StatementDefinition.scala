@@ -2,10 +2,10 @@ package net.prover.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-@JsonIgnoreProperties(Array("symbol", "defaultComponents", "format"))
+@JsonIgnoreProperties(Array("symbol", "defaultVariables", "format"))
 case class StatementDefinition(
     symbol: String,
-    defaultComponents: Seq[Component],
+    defaultVariables: Seq[Component],
     name: String,
     format: Format,
     definingStatement: Option[Statement],
@@ -13,9 +13,9 @@ case class StatementDefinition(
     distinctVariables: DistinctVariables)
   extends ChapterEntry(StatementDefinition)
 {
-  val defaultValue = DefinedStatement(defaultComponents, boundVariables, this)
+  val defaultValue = DefinedStatement(defaultVariables, boundVariables, this)
 
-  private val componentTypes = defaultComponents.map(_.componentType)
+  private val componentTypes = defaultVariables.map(_.componentType)
 
   def statementParser(implicit context: Context): Parser[Statement] = {
     componentTypes.componentsParser.map(apply)
@@ -25,7 +25,7 @@ case class StatementDefinition(
     DefinedStatement(
       components,
       boundVariables.map { v =>
-        components(defaultComponents.indexOf(v))
+        components(defaultVariables.indexOf(v))
       }.map(_.asInstanceOf[Term]).map(Term.asVariable),
       this)
   }
@@ -55,7 +55,9 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
   ): Parser[Set[TermVariable]] = {
     optionalDefiningStatement match {
       case Some(definingStatement) =>
-        val boundVariables = definingStatement.boundVariables.intersect(defaultVariables.ofType[TermVariable].toSet)
+        val boundVariables = defaultVariables.ofType[TermVariable].toSet.filter { v =>
+          definingStatement.boundVariables.contains(v) || !definingStatement.presentVariables.termVariables.contains(v)
+        }
         Parser.constant(boundVariables)
       case None =>
         Parser.optional(
