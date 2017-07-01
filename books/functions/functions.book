@@ -1,7 +1,7 @@
 Functions
 import Set Theory
 
-variables () (f g x y z X Y a b A B)
+variables () (f g x y z X Y a b A B S)
 
 include 01.definitionOfFunction.chapter
 include 02.basicFunctions.chapter

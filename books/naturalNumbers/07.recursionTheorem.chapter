@@ -1,6 +1,23 @@
 chapter Recursion Theorem
 Prove the recursion theorem for recursively constructing functions on ℕ.
 
+theorem An Inductive Function Is Unique
+premise ∃ f ∧ function f ℕ X ∧ = apply f 0 f_0 ∀ n → ∈ n ℕ = apply f successor n f_n+1
+let g ∧ function g ℕ X ∧ = apply g 0 f_0 ∀ n → ∈ n ℕ = apply g successor n f_n+1 {
+  assume ∧ function f ℕ X ∧ = apply f 0 f_0 ∀ n → ∈ n ℕ = apply f successor n f_n+1 {
+    prove = apply f 0 apply g 0
+    assume ∧ ∈ m ℕ = apply f m apply g m {
+      prove = apply f successor m f_n+1
+      prove = apply g successor m f_n+1
+      prove = apply f successor m apply g successor m
+    }
+    prove ∀ n → ∈ n ℕ = apply f n apply g n
+    prove = f g
+  }
+  prove ∃! f ∧ function f ℕ X ∧ = apply f 0 f_0 ∀ n → ∈ n ℕ = apply f successor n f_n+1
+}
+qed
+
 theorem 𝒫(ℕ × X) Contains All Functions from a Natural Number to X
 premise ∈ n ℕ
 premise function f n X
@@ -238,5 +255,6 @@ let S = S comprehension g powerSet × ℕ X ∃ n ∧ ∈ n ℕ ∧ function g n
   prove ∀ m → ∈ m ℕ = apply union S successor m apply f apply union S m
   prove ∧ function union S ℕ X ∧ = apply union S 0 g_0 ∀ m → ∈ m ℕ = apply union S successor m apply f apply union S m
   prove ∃ g ∧ function g ℕ X ∧ = apply g 0 g_0 ∀ m → ∈ m ℕ = apply g successor m apply f apply g m
+  prove ∃! g ∧ function g ℕ X ∧ = apply g 0 g_0 ∀ m → ∈ m ℕ = apply g successor m apply f apply g m
 }
 qed

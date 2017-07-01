@@ -17,7 +17,12 @@ class BookController {
     _books = Some(newBooks)
     newBooks
   }
-  getBooks
+  try {
+    getBooks
+  } catch {
+    case NonFatal(e) =>
+      BookController.logger.error("Error getting books\n{}", e.getMessage)
+  }
 
   @GetMapping(Array(""))
   def get = {

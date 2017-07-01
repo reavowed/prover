@@ -36,9 +36,9 @@ let S = S comprehension x × ℕ ℕ ∃ n ∧ ∈ n ℕ = x orderedPair n succe
       prove = apply S m successor m
     }
   }
-  prove ∀ m → ∈ m ℕ = apply S m successor m
   prove ∀ n → ∈ n ℕ = apply S n successor n
   prove ∧ function S ℕ ℕ ∀ n → ∈ n ℕ = apply S n successor n
   prove ∃ f ∧ function f ℕ ℕ ∀ n → ∈ n ℕ = apply f n successor n
+  prove ∃! f ∧ function f ℕ ℕ ∀ n → ∈ n ℕ = apply f n successor n
 }
 qed

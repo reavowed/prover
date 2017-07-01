@@ -21,18 +21,24 @@ prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
 prove function f X Y
 qed
 
-theorem Function Is Subset of Product
-premise function f X Y
-prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-prove ⊆ f × X Y
-qed
-
 theorem Function Application Is Unique
 premise function f X Y
 premise ∈ x X
 prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
 prove ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
 prove ∃! y ∈ orderedPair x y f
+qed
+
+term apply (f a)
+  name (Function Application)
+  format (f(a))
+  premises (function f A B, ∈ a A)
+  (∈ orderedPair a _ f)
+
+theorem Function Is Subset of Product
+premise function f X Y
+prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
+prove ⊆ f × X Y
 qed
 
 theorem First Coordinate of Element of Function Is Element of Domain
@@ -60,12 +66,6 @@ prove ⊆ f × A Y
 prove function f A Y
 qed
 
-term apply (f a)
-  name (Function Application)
-  format (f(a))
-  premises (function f A B, ∈ a A)
-  (∈ orderedPair a _ f)
-
 theorem Function Application Is Element of Range
 premise function f X Y
 premise ∈ x X
@@ -89,4 +89,96 @@ premise function f X Y
 premise ∈ orderedPair x y f
 prove = y apply f x
 prove = apply f x y
+qed
+
+theorem Element of Function
+premise function f X Y
+prove ⊆ f × X Y
+assume ∈ z f {
+  prove ∈ z × X Y
+  prove ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y
+  let x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y {
+    let y ∧ ∈ y Y = z orderedPair x y {
+      prove ∈ orderedPair x y f
+      prove = y apply f x
+      prove = z orderedPair x apply f x
+      prove ∧ ∈ x X = z orderedPair x apply f x
+      prove ∃ x ∧ ∈ x X = z orderedPair x apply f x
+    }
+  }
+}
+assume ∃ x ∧ ∈ x X = z orderedPair x apply f x {
+  let x ∧ ∈ x X = z orderedPair x apply f x {
+    prove ∈ orderedPair x apply f x f
+    prove ∈ z f
+  }
+}
+prove ∀ z ↔ ∈ z f ∃ x ∧ ∈ x X = z orderedPair x apply f x
+qed
+
+theorem Functions with Same Values Are Equal
+premise function f X Y
+premise function g X Y
+premise ∀ x → ∈ x X = apply f x apply g x
+prove ∀ z ↔ ∈ z f ∃ x ∧ ∈ x X = z orderedPair x apply f x
+prove ∀ z ↔ ∈ z g ∃ x ∧ ∈ x X = z orderedPair x apply g x
+assume ∃ x ∧ ∈ x X = z orderedPair x apply f x {
+  let x ∧ ∈ x X = z orderedPair x apply f x {
+    prove = apply f x apply g x
+    prove ∧ ∈ x X = z orderedPair x apply g x
+    prove ∃ x ∧ ∈ x X = z orderedPair x apply g x
+  }
+}
+assume ∃ x ∧ ∈ x X = z orderedPair x apply g x {
+  let x ∧ ∈ x X = z orderedPair x apply g x {
+    prove = apply f x apply g x
+    prove ∧ ∈ x X = z orderedPair x apply f x
+    prove ∃ x ∧ ∈ x X = z orderedPair x apply f x
+  }
+}
+prove ∀ z ↔ ∃ x ∧ ∈ x X = z orderedPair x apply f x ∃ x ∧ ∈ x X = z orderedPair x apply g x
+prove = f g
+qed
+
+theorem Function With Specified Values Is Unique
+premise ∃ f ∧ function f X Y ∀ x → ∈ x X = apply f x f_x
+let g ∧ function g X Y ∀ x → ∈ x X = apply g x f_x {
+  assume ∧ function f X Y ∀ x → ∈ x X = apply f x f_x {
+    assume ∈ x X {
+      prove = apply f x f_x
+      prove = apply g x f_x
+      prove = apply f x apply g x
+    }
+    prove ∀ x → ∈ x X = apply f x apply g x
+    prove = f g
+  }
+  prove ∃! f ∧ function f X Y ∀ x → ∈ x X = apply f x f_x
+}
+qed
+
+theorem Function Space Is Unique
+let S = S comprehension f powerSet × X Y function f X Y {
+  assume function f X Y {
+    prove ⊆ f × X Y
+    prove ∈ f powerSet × X Y
+    prove ∈ f S
+  }
+  assume ∈ f S {
+    prove function f X Y
+  }
+  prove ∀ f ↔ ∈ f S function f X Y
+  prove ∃ S ∀ f ↔ ∈ f S function f X Y
+  prove ∃! S ∀ f ↔ ∈ f S function f X Y
+}
+qed
+
+term functionSpace (X Y)
+  name (Function Space)
+  format (Y^X)
+  (∀ f ↔ ∈ f _ function f X Y)
+
+theorem Element of Function Space Is Function
+premise ∈ f functionSpace X Y
+prove ∀ f ↔ ∈ f functionSpace X Y function f X Y
+prove function f X Y
 qed

@@ -1,10 +1,10 @@
 <div class="result">
-    <h5>{{entry.type == "term" ? "Term" : "Statement"}} Definition: <span ng-bind-html="defaultValue"></span></h5>
-    <div ng-if="premises.length">
+    <h5>{{$ctrl.definition.type == "term" ? "Term" : "Statement"}} Definition: <span ng-bind-html="defaultValue"></span></h5>
+    <div ng-if="premiseText">
         Suppose <span ng-bind-html="premiseText"></span>.
     </div>
-    <div>
-        <span ng-if="premises.length">Then</span>
+    <div ng-if="definingStatement">
+        <span ng-if="premiseText">Then</span>
         <span ng-bind-html="defaultValue"></span> is defined by <span ng-bind-html="definingStatement"></span>
     </div>
     <div class="conditions" ng-if="$ctrl.definition.distinctVariables.length">

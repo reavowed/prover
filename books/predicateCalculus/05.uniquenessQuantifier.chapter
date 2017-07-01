@@ -70,6 +70,15 @@ prove ∀ x ↔ φ = x y
 prove ∃! x φ
 qed
 
+theorem Uniqueness by Exhibiting Unique Value
+premise sub y x φ
+premise proves φ = x y
+assume = x y {
+  prove φ
+}
+prove ∃! x φ
+qed
+
 theorem Existence of Unique Value
 premise ∃! x φ
 let x_0 sub x_0 x φ {
@@ -110,6 +119,19 @@ qed
 theorem Uniqueness by Two Cases
 prove ⊕ φ ¬ φ
 prove ∃! z ∨ ∧ φ = z x ∧ ¬ φ = z y
+qed
+
+theorem Uniqueness Equivalence
+premise ∃! x φ
+premise ∀ x ↔ φ ψ
+let y sub y x φ {
+  prove sub y x ψ
+  assume ψ {
+    prove φ
+    prove = x y
+  }
+  prove ∃! x ψ
+}
 qed
 
 theorem Uniqueness Equivalence

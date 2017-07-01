@@ -360,8 +360,7 @@
     controller: ['$scope', '$sce', function ($scope, $sce) {
       this.$onInit = function() {
         var definition = $scope.$ctrl.definition;
-        $scope.premises = _.map(definition.premises, formatPremise);
-        if ($scope.premises.length) {
+        if ($scope.premises && $scope.premises.length) {
           $scope.premiseText = $sce.trustAsHtml(joinWordList($scope.premises));
         }
         $scope.defaultValue = $sce.trustAsHtml(definition.defaultValue);

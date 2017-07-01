@@ -2,9 +2,10 @@ package net.prover.model
 
 case class Format(formatString: String, requiresBrackets: Boolean) {
   def html(components: Seq[Component]): String = {
-    components.zipWithIndex.foldLeft(formatString) { case (htmlSoFar, (component, index)) =>
+    val replacedText = components.zipWithIndex.foldLeft(formatString) { case (htmlSoFar, (component, index)) =>
       htmlSoFar.replaceFirst(s"%$index", component.safeHtml)
     }
+    Html.format(replacedText)
   }
 
   def safeHtml(components: Seq[Component]) = {
