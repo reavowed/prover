@@ -43,12 +43,12 @@ class TheoremSpec extends ProverSpec {
       ProvenStatement(
         SubstitutedStatementVariable(φ, y ,x),
         Conditions(Set(x), DistinctVariables.empty)))
-    val generalizationWithDifferentVariables = axiom(
+    val renamedGeneralization = axiom(
       Seq(SubstitutedStatementVariable(φ, y, x)),
       ProvenStatement(
         ForAll(x, φ),
         Conditions(Set(y), DistinctVariables(y -> φ))))
-    val generalizationWithSameVariable = axiom(
+    val generalization = axiom(
       Seq(φ),
       ProvenStatement(
         ForAll(x, φ),
@@ -159,7 +159,7 @@ class TheoremSpec extends ProverSpec {
         "premise → ∈ y x ∈ y x",
         "prove ∀ z → ∈ z x ∈ z x",
         "qed")(
-        contextWith(generalizationWithDifferentVariables))
+        contextWith(renamedGeneralization))
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(z, Implication(ElementOf(z, x), ElementOf(z, x))),
@@ -188,7 +188,7 @@ class TheoremSpec extends ProverSpec {
         "qed")(
         contextWith(
           falseStatementsAreEquivalent,
-          generalizationWithSameVariable,
+          generalization,
           specification
         ).addInferenceTransform(transform))
 
@@ -231,7 +231,7 @@ class TheoremSpec extends ProverSpec {
         "prove sub x y φ",
         "prove ∀ y φ non-distinct (y φ)",
         "qed")(
-        contextWith(substitution, generalizationWithDifferentVariables))
+        contextWith(substitution, renamedGeneralization))
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(y, φ),
@@ -244,7 +244,7 @@ class TheoremSpec extends ProverSpec {
         "premise φ",
         "prove ∀ x φ",
         "qed")(
-        contextWith(generalizationWithDifferentVariables))
+        contextWith(renamedGeneralization))
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(x, φ),
@@ -259,7 +259,7 @@ class TheoremSpec extends ProverSpec {
         "}",
         "prove → = x y ∀ x = x y",
         "qed")(
-        contextWith(deduction, generalizationWithSameVariable)
+        contextWith(deduction, generalization)
       ) must throwAn[Exception]
     }
 
@@ -273,7 +273,7 @@ class TheoremSpec extends ProverSpec {
         "}",
         "prove → ∀ x = x y ∀ x ↔ = x z = y z",
         "qed")(
-        contextWith(generalizationWithSameVariable, specification, equivalenceOfSubstitutedEquals, deduction))
+        contextWith(generalization, specification, equivalenceOfSubstitutedEquals, deduction))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(
         Implication(

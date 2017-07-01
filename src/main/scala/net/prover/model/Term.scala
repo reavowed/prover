@@ -81,11 +81,14 @@ case class TermVariable(text: String) extends Term with Variable {
       None
     }
   }
-  override def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
-    if (this == termVariable) {
-      (Seq((other.asInstanceOf[Term], DistinctVariables.empty)), None)
-    } else if (this == other) {
-      (Nil, Some(DistinctVariables.empty))
+  override def findSubstitution(
+    target: Component,
+    termVariableToBeReplaced: TermVariable
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+    if (this == termVariableToBeReplaced) {
+      (Seq((target.asInstanceOf[Term], DistinctVariables.empty)), None)
+    } else if (this == target) {
+      (Seq((termVariableToBeReplaced, DistinctVariables.empty)), Some(DistinctVariables(termVariableToBeReplaced -> this)))
     } else {
       (Nil, None)
     }

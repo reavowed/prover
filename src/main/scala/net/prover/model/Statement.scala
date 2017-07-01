@@ -75,12 +75,15 @@ case class StatementVariable(text: String) extends Statement with Variable {
       None
     }
   }
-  override def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
-    if (this == other) {
-      (Seq((termVariable, DistinctVariables.empty)), Some(DistinctVariables(termVariable -> this)))
+  override def findSubstitution(
+    target: Component,
+    termVariableToBeReplaced: TermVariable
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+    if (this == target) {
+      (Seq((termVariableToBeReplaced, DistinctVariables.empty)), Some(DistinctVariables(termVariableToBeReplaced -> this)))
     } else {
-      other match {
-        case SubstitutedStatementVariable(variable, termToReplaceWith, `termVariable`) if variable == this =>
+      target match {
+        case SubstitutedStatementVariable(variable, termToReplaceWith, `termVariableToBeReplaced`) if variable == this =>
           (Seq((termToReplaceWith, DistinctVariables.empty)), None)
         case _ =>
           (Nil, None)

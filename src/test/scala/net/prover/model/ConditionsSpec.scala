@@ -1,7 +1,7 @@
 package net.prover.model
 
 class ConditionsSpec extends ProverSpec {
-  "conditions" should {
+  "substituting conditions" should {
     "correctly apply distinct variable condition to a statement with the term variable substituted out" in {
       Conditions(Set.empty, DistinctVariables(x -> φ))
         .applySubstitutions(Substitutions(Map(φ -> SubstitutedStatementVariable(φ, z, y), x -> y), DistinctVariables.empty)).get
@@ -31,7 +31,9 @@ class ConditionsSpec extends ProverSpec {
         .applySubstitutions(Substitutions(Map(x -> y, y -> y), DistinctVariables.empty))
         .must(beNone)
     }
+  }
 
+  "restricting conditions" should {
     "remove arbitrary variable that only appears bound" in {
       Conditions(Set(x), DistinctVariables.empty)
         .restrictToStatements(Seq(ForAll(x, φ), Exists(y, ForAll(x, ψ))))
@@ -44,16 +46,18 @@ class ConditionsSpec extends ProverSpec {
         .arbitraryVariables mustEqual Set(y)
     }
 
-    "only add present variables to distinct conditions" in {
-      Conditions.empty
+    "enforcing arbitrary variables in conditions" should {
+      "only add present variables to distinct conditions" in {
+        Conditions.empty
           .addDistinctVariables(Set(x), Seq(SubstitutedStatementVariable(φ, y, x)))
           .map(_.distinctVariables) must beSome(DistinctVariables(x -> y))
-    }
+      }
 
-    "not add distinct conditions where an arbitrary variable appears in an assumption" in {
-      Conditions.empty
-        .addDistinctVariables(Set(x), Seq(Equals(x, y)))
-        .must(beNone)
+      "not add distinct conditions where an arbitrary variable appears in an assumption" in {
+        Conditions.empty
+          .addDistinctVariables(Set(x), Seq(Equals(x, y)))
+          .must(beNone)
+      }
     }
   }
 }

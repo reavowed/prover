@@ -156,15 +156,6 @@ class StatementSpec extends ProverSpec {
           DistinctVariables.empty)))
     }
 
-    "not add distinct variable conditions for substitution validity for the variable being substituted" in {
-      SubstitutedStatementVariable(φ, y, x)
-        .calculateSubstitutions(Equals(y, y), PartialSubstitutions(Map(φ -> Equals(x, y), x -> x), Map.empty, DistinctVariables.empty))
-        .mustEqual(Seq(PartialSubstitutions(
-          Map(φ -> Equals(x, y), x -> x, y -> y),
-          Map.empty,
-          DistinctVariables.empty)))
-    }
-
     "find a distinct variable condition to ensure substitution validity when required variable is bound" in {
       SubstitutedStatementVariable(φ, y, x)
         .calculateSubstitutions(
@@ -236,15 +227,10 @@ class StatementSpec extends ProverSpec {
   }
 
   "statement finding a substitution" should {
-    "find no substitution required if target statement is the same and variable is not present" in {
-      Equals(x, y)
-        .findSubstitution(Equals(x, y), z)
-        .mustEqual((Nil, Some(DistinctVariables.empty)))
-    }
     "find a substitution if the variable has changed appropriately" in {
       Equals(x, y)
         .findSubstitution(Equals(x, z), y)
-        .mustEqual((Seq((z, DistinctVariables.empty)), None))
+        .mustEqual((Seq((z, DistinctVariables(y -> x))), None))
     }
     "find no valid substitution if one variable has changed appropriately but the other doesn't match" in {
       Equals(x, y)

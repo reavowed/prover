@@ -7,7 +7,13 @@ import scala.util.Try
 
 package object model {
   implicit class AnyOps[T](t: T) {
-    def asOptionalInstanceOf[S]: Option[S] = Try(t.asInstanceOf[S]).toOption
+    def asOptionalInstanceOf[S : ClassTag]: Option[S] = {
+      if (implicitly[ClassTag[S]].runtimeClass.isInstance(t)) {
+        Some(t.asInstanceOf[S])
+      } else {
+        None
+      }
+    }
   }
 
   implicit class StringOps(s: String) {

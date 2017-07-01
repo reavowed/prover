@@ -96,6 +96,8 @@ case class DistinctVariables(conditions: Map[TermVariable, Set[Variable]]) exten
   override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
     serialize(gen, serializers)
   }
+
+  def isEmpty: Boolean = conditions.isEmpty
 }
 
 object DistinctVariables {

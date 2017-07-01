@@ -33,7 +33,7 @@ trait Component {
     target: Component,
     distinctVariables: DistinctVariables
   ): Option[DistinctVariables]
-  def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables])
+  def findSubstitution(target: Component, termVariableToBeReplaced: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables])
   def replacePlaceholder(other: Component): Option[Component]
   def html: String
   def safeHtml: String = html
@@ -138,20 +138,23 @@ trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Compon
     }
   }
 
-  override def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
-    if (this == other) {
-      if (presentVariables.contains(termVariable))
-        (Seq((termVariable, DistinctVariables.empty)), None)
-      else if (termVariable == termToBeReplaced)
-        (Seq((termVariable, DistinctVariables.empty)), Some(DistinctVariables(termVariable -> termToReplaceWith.presentVariables)))
+  override def findSubstitution(
+    target: Component,
+    termVariableToBeReplaced: TermVariable
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+    if (this == target) {
+      if (presentVariables.contains(termVariableToBeReplaced))
+        (Seq((termVariableToBeReplaced, DistinctVariables.empty)), None)
+      else if (termVariableToBeReplaced == termToBeReplaced)
+        (Seq((termVariableToBeReplaced, DistinctVariables.empty)), Some(DistinctVariables(termVariableToBeReplaced -> termToReplaceWith.presentVariables)))
       else
-        (Seq((termVariable, DistinctVariables.empty)), Some(DistinctVariables(termVariable -> presentVariables)))
+        (Seq((termVariableToBeReplaced, DistinctVariables.empty)), Some(DistinctVariables(termVariableToBeReplaced -> presentVariables)))
     } else {
-      other match {
-        case `variable` if termToReplaceWith == termVariable =>
-          (Seq((termToBeReplaced, DistinctVariables(termVariable -> variable))), None)
-        case SubstitutedStatementVariable(`variable`, otherTermToReplaceWith: TermVariable, `termToBeReplaced`) if termToReplaceWith == termVariable =>
-          (Seq((otherTermToReplaceWith, DistinctVariables(termVariable -> variable))), None)
+      target match {
+        case `variable` if termToReplaceWith == termVariableToBeReplaced =>
+          (Seq((termToBeReplaced, DistinctVariables(termVariableToBeReplaced -> variable))), None)
+        case SubstitutedStatementVariable(`variable`, otherTermToReplaceWith: TermVariable, `termToBeReplaced`) if termToReplaceWith == termVariableToBeReplaced =>
+          (Seq((otherTermToReplaceWith, DistinctVariables(termVariableToBeReplaced -> variable))), None)
         case _ =>
           (Nil, None)
       }
@@ -312,10 +315,13 @@ trait DefinedComponent[T <: Component] extends Component {
         }
     }
   }
-  def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
-    getMatch(other)
+  override def findSubstitution(
+    target: Component,
+    termVariableToBeReplaced: TermVariable
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+    getMatch(target)
       .map {
-        case (otherSubcomponents, _) =>
+        case (targetSubcomponents, _) =>
           def combine(
             x: (Seq[(Term, DistinctVariables)], Option[DistinctVariables]),
             y: (Seq[(Term, DistinctVariables)], Option[DistinctVariables])
@@ -338,12 +344,12 @@ trait DefinedComponent[T <: Component] extends Component {
           if (subcomponents.isEmpty) {
             (Nil, Some(DistinctVariables.empty))
           } else {
-            subcomponents.zip(otherSubcomponents)
+            val x = subcomponents.zip(targetSubcomponents)
               .map {
-                case (subcomponent, otherSubcomponent) =>
-                  subcomponent.findSubstitution(otherSubcomponent, termVariable)
+                case (subcomponent, targetSubcomponent) =>
+                  subcomponent.findSubstitution(targetSubcomponent, termVariableToBeReplaced)
               }
-              .reduce(combine)
+              x.reduce(combine)
           }
       }
       .getOrElse((Nil, None))
@@ -402,7 +408,7 @@ trait Placeholder[T <: Component] extends Component {
   override def validateSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, target: Component, distinctVariables: DistinctVariables) = {
     throw new Exception("Cannot validate substitution for placeholder")
   }
-  def findSubstitution(other: Component, termVariable: TermVariable) = {
+  def findSubstitution(target: Component, termVariableToBeReplaced: TermVariable) = {
 
     throw new Exception("Cannot find substitution for placeholder")
   }
