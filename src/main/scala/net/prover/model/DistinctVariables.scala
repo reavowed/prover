@@ -4,12 +4,12 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
-case class DistinctVariables(conditions: Map[TermVariable, Variables]) extends JsonSerializable.Base {
+case class DistinctVariables(conditions: Map[TermVariable, Set[Variable]]) extends JsonSerializable.Base {
   def +(first: TermVariable, second: Variable): DistinctVariables = {
     DistinctVariables(conditions.updated(first, get(first) + second))
   }
 
-  def +(termVariable: TermVariable, variables: Variables): DistinctVariables = {
+  def +(termVariable: TermVariable, variables: Set[Variable]): DistinctVariables = {
     if (variables.isEmpty) {
       this
     } else {
@@ -36,8 +36,8 @@ case class DistinctVariables(conditions: Map[TermVariable, Variables]) extends J
     DistinctVariables(updatedConditions)
   }
 
-  def get(variable: TermVariable): Variables = {
-    conditions.getOrElse(variable, Variables.empty)
+  def get(variable: TermVariable): Set[Variable] = {
+    conditions.getOrElse(variable, Set.empty)
   }
 
   def areDistinct(first: TermVariable, second: TermVariable): Boolean = {
@@ -49,10 +49,10 @@ case class DistinctVariables(conditions: Map[TermVariable, Variables]) extends J
   }
 
   def restrictTo(statements: Seq[Statement]): DistinctVariables = {
-    val activeVariables = statements.map(_.allVariables).foldTogether
+    val activeVariables = statements.flatMap(_.allVariables).toSet
     val restrictedConditions = conditions
       .filterKeys { activeVariables.contains }
-      .mapValues { _.filter(activeVariables.contains) }
+      .mapValues { _.intersect(activeVariables) }
       .map { case (termVariable, variables) =>
         termVariable -> variables.filter { variable =>
           statements.exists { s =>
@@ -69,25 +69,22 @@ case class DistinctVariables(conditions: Map[TermVariable, Variables]) extends J
       .map { case (termVariable, variables) =>
         for {
           updatedTermVariable <- termVariable.applySubstitutions(substitutions).flatMap(Term.optionAsVariable)
-          updatedVariables <- for {
-            substitutedStatementVariables <- variables.statementVariables.map(_.applySubstitutions(substitutions)).traverseOption
-            substitutedTermVariables <- variables.termVariables.map(_.applySubstitutions(substitutions)).traverseOption
-          } yield {
-            (substitutedStatementVariables ++ substitutedTermVariables).map(_.getPotentiallyIntersectingVariables(updatedTermVariable)).foldTogether
-          }
+          substitutedVariables <- variables.map(_.applySubstitutions(substitutions)).traverseOption
+          updatedVariables = substitutedVariables.flatMap(_.getPotentiallyIntersectingVariables(updatedTermVariable))
           if !updatedVariables.contains(updatedTermVariable)
         } yield (updatedTermVariable, updatedVariables)
       }
       .traverseOption
-      .map(_.foldLeft(DistinctVariables.empty) { case (dv, (tv, vs)) =>
-          dv + (tv, vs)
+      .map(_.map { case (termVariable, variables) =>
+        DistinctVariables(termVariable -> variables)
       })
+      .map(_.foldTogether)
   }
 
   override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeStartArray()
     conditions.toSeq.sortBy(_._1.text).foreach { case (termVariable, variables) =>
-      variables.all.toSeq.sortBy(_.text).foreach { variable =>
+      variables.toSeq.sortBy(_.text).foreach { variable =>
         gen.writeStartArray()
         gen.writeString(termVariable.html)
         gen.writeString(variable.html)
@@ -102,20 +99,20 @@ case class DistinctVariables(conditions: Map[TermVariable, Variables]) extends J
 }
 
 object DistinctVariables {
-  val empty: DistinctVariables = DistinctVariables(Map.empty[TermVariable, Variables])
+  val empty: DistinctVariables = DistinctVariables(Map.empty[TermVariable, Set[Variable]])
 
   def apply(pairs: (TermVariable, Variable)*): DistinctVariables = {
     pairs.foldLeft(DistinctVariables.empty) { case (dv, (tv, v)) => dv + (tv, v) }
   }
 
-  def apply(pair: (TermVariable, Variables)): DistinctVariables = {
+  def apply(pair: (TermVariable, Set[Variable])): DistinctVariables = {
     DistinctVariables.empty + (pair._1, pair._2)
   }
 
   def byStatements(termVariables: Set[TermVariable], statements: Seq[Statement]): Option[DistinctVariables] = {
     termVariables
       .map { termVariable =>
-        val newVariables = statements.map(_.getPotentiallyIntersectingVariables(termVariable)).foldTogether
+        val newVariables = statements.flatMap(_.getPotentiallyIntersectingVariables(termVariable)).toSet
         if (newVariables.contains(termVariable)) {
           None
         } else {

@@ -16,13 +16,15 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
   }
 
   def restrictToStatements(statements: Seq[Statement]): Conditions = {
-    val activeVariables = statements.map(_.allVariables).foldTogether
+    val activeVariables = statements.flatMap(_.allVariables).toSet
     val updatedDistinctVariables = distinctVariables.restrictTo(statements)
     val updatedArbitraryVariables = arbitraryVariables
-      .intersect(activeVariables.termVariables)
+      .intersect(activeVariables.ofType[TermVariable])
       .filter { v =>
         statements.exists { s =>
-          (s.presentVariables.contains(v) || s.getPotentiallyIntersectingVariables(v).statementVariables.nonEmpty) && !s.boundVariables.contains(v)
+          (s.presentVariables.contains(v) ||
+            s.getPotentiallyIntersectingVariables(v).ofType[StatementVariable].nonEmpty) &&
+            !s.boundVariables.contains(v)
         }
       }
     Conditions(updatedArbitraryVariables, updatedDistinctVariables)

@@ -10,19 +10,19 @@ trait Component {
     * All the variables that appear syntactically in this component and must
     * be supplied in a general substitution.
     */
-  def allVariables: Variables
+  def allVariables: Set[Variable]
 
   /**
     * The variables that definitely appear in this component and to which
     * distinct variable conditions must be carried over. Mostly the same as
     * `allVariables`, except that `x` is not present in [y/x]φ.
     */
-  def presentVariables: Variables
+  def presentVariables: Set[Variable]
   def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable])
   def boundVariables: Set[TermVariable] = boundAndFreeVariables._1
   def freeVariables: Set[TermVariable] = boundAndFreeVariables._2
   def implicitDistinctVariables: DistinctVariables
-  def getPotentiallyIntersectingVariables(variable: Variable): Variables
+  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Set[Variable]
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Seq[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Component]
@@ -41,6 +41,144 @@ trait Component {
   override def toString: String = html
 }
 
+trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Component {
+  val variable: TVariable
+  val termToReplaceWith: Term
+  val termToBeReplaced: TermVariable
+
+  def update(updatedVariable: TVariable, updatedTermToReplaceWith: Term, updatedTermToBeReplaced: TermVariable): T
+
+  override def allVariables: Set[Variable] = termToReplaceWith.allVariables + termToBeReplaced + variable
+  override def presentVariables: Set[Variable] = termToReplaceWith.allVariables + variable
+  override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = termToReplaceWith.boundAndFreeVariables
+  override def implicitDistinctVariables: DistinctVariables = DistinctVariables.empty
+  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Set[Variable] = {
+    if (termVariable == termToBeReplaced)
+      termToReplaceWith.allVariables
+    else
+      termToReplaceWith.allVariables + variable
+  }
+  override def calculateSubstitutions(
+    other: Component,
+    substitutions: PartialSubstitutions
+  ): Seq[PartialSubstitutions] = other match {
+    case SubstitutedVariable(otherVariable, otherTermToReplaceWith, otherTermToBeReplaced) =>
+      for {
+        s1 <- variable.calculateSubstitutions(otherVariable, substitutions)
+        s2 <- termToReplaceWith.calculateSubstitutions(otherTermToReplaceWith, s1)
+        s3 <- termToBeReplaced.calculateSubstitutions(otherTermToBeReplaced, s2)
+      } yield s3
+    case statement: Statement =>
+      substitutions.tryAdd(this, statement)
+    case _ =>
+      Nil
+  }
+  override def applySubstitutions(substitutions: Substitutions): Option[T] = {
+    for {
+      updatedVariable <- variable.applySubstitutions(substitutions)
+      updatedTermToReplaceWith <- termToReplaceWith.applySubstitutions(substitutions)
+      updatedTermToBeReplaced <- termToBeReplaced.applySubstitutions(substitutions).flatMap(Term.optionAsVariable)
+      updatedStatement <- updatedVariable.makeSingleSubstitution(
+        updatedTermToReplaceWith,
+        updatedTermToBeReplaced,
+        substitutions.distinctVariables)
+    } yield updatedStatement.asInstanceOf[T]
+  }
+  override def makeSingleSubstitution(
+    newTermToReplaceWith: Term,
+    newTermToBeReplaced: TermVariable,
+    distinctVariables: DistinctVariables
+  ): Option[T] = {
+    if (newTermToReplaceWith == newTermToBeReplaced)
+      Some(this.asInstanceOf[T])
+    else if (newTermToBeReplaced == termToBeReplaced)
+      Some(this.asInstanceOf[T])
+    else if (newTermToBeReplaced == termToReplaceWith && distinctVariables.areDistinct(newTermToBeReplaced, variable))
+      if (newTermToReplaceWith == termToBeReplaced)
+        Some(variable.asInstanceOf[T])
+      else
+        Some(update(variable, newTermToReplaceWith, termToBeReplaced))
+    else
+      termToReplaceWith match {
+        case termVariableToReplaceWith: TermVariable
+          if distinctVariables.areDistinct(newTermToBeReplaced, variable) && distinctVariables.areDistinct(newTermToBeReplaced, termVariableToReplaceWith)
+        =>
+          Some(this.asInstanceOf[T])
+        case _ =>
+          None
+      }
+  }
+  override def validateSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    target: Component,
+    distinctVariables: DistinctVariables
+  ): Option[DistinctVariables] = {
+    if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
+      Some(DistinctVariables.empty)
+    } else {
+      None
+    }
+  }
+  override def resolveSingleSubstitution(
+    other: Component,
+    termVariable: TermVariable,
+    thisTerm: Term,
+    otherTerm: Term
+  ): Option[(T, DistinctVariables)] = {
+    if (other == this) {
+      Some((this.asInstanceOf[T], DistinctVariables(termVariable -> getPotentiallyIntersectingVariables(termVariable))))
+    } else {
+      other match {
+        case SubstitutedVariable(`variable`, `otherTerm`, `termToBeReplaced`) if termToReplaceWith == thisTerm =>
+          Some((update(variable, termVariable, termToBeReplaced), DistinctVariables(termVariable -> variable)))
+        case _ =>
+          None
+      }
+    }
+  }
+
+  override def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+    if (this == other) {
+      if (presentVariables.contains(termVariable))
+        (Seq((termVariable, DistinctVariables.empty)), None)
+      else if (termVariable == termToBeReplaced)
+        (Seq((termVariable, DistinctVariables.empty)), Some(DistinctVariables(termVariable -> termToReplaceWith.presentVariables)))
+      else
+        (Seq((termVariable, DistinctVariables.empty)), Some(DistinctVariables(termVariable -> presentVariables)))
+    } else {
+      other match {
+        case `variable` if termToReplaceWith == termVariable =>
+          (Seq((termToBeReplaced, DistinctVariables(termVariable -> variable))), None)
+        case SubstitutedStatementVariable(`variable`, otherTermToReplaceWith: TermVariable, `termToBeReplaced`) if termToReplaceWith == termVariable =>
+          (Seq((otherTermToReplaceWith, DistinctVariables(termVariable -> variable))), None)
+        case _ =>
+          (Nil, None)
+      }
+    }
+  }
+  override def replacePlaceholder(other: Component): Option[T] = Some(this.asInstanceOf[T])
+
+  override def html: String = "[" + termToReplaceWith.safeHtml + "/" + termToBeReplaced.html + "]" + variable.html
+  override def serialized: String = Seq(
+    "sub",
+    termToReplaceWith.serialized,
+    termToBeReplaced.serialized,
+    variable.serialized
+  ).mkString(" ")
+}
+
+object SubstitutedVariable {
+  def unapply(component: Component): Option[(Variable, Term, TermVariable)] = {
+    component match {
+      case substitutedVariable: SubstitutedVariable[Component, _] =>
+        Some((substitutedVariable.variable, substitutedVariable.termToReplaceWith, substitutedVariable.termToBeReplaced))
+      case _ =>
+        None
+    }
+  }
+}
+
 trait DefinedComponent[T <: Component] extends Component {
   def subcomponents: Seq[Component]
   def localBoundVariables: Set[TermVariable]
@@ -48,8 +186,8 @@ trait DefinedComponent[T <: Component] extends Component {
   def getMatch(other: Component): Option[(Seq[Component], Set[TermVariable])]
   def update(newSubcomponents: Seq[Component], newBoundVariables: Set[TermVariable]): T
 
-  override def allVariables: Variables = subcomponents.map(_.allVariables).foldLeft(Variables.empty)(_ ++ _)
-  override def presentVariables: Variables = subcomponents.map(_.presentVariables).foldLeft(Variables.empty)(_ ++ _)
+  override def allVariables: Set[Variable] = subcomponents.flatMap(_.allVariables).toSet
+  override def presentVariables: Set[Variable] = subcomponents.flatMap(_.presentVariables).toSet
   override val boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = {
     val (mergedBound, mergedFree) = subcomponents.foldLeft((Set.empty[TermVariable], Set.empty[TermVariable])) {
       case ((boundVariables, freeVariables), subcomponent) =>
@@ -68,22 +206,18 @@ trait DefinedComponent[T <: Component] extends Component {
     val subcomponentImplicitDistinctVariables = subcomponents.map(_.implicitDistinctVariables).foldTogether
     val implicitPairs = for {
       localBoundVariable <- localBoundVariables
-      subcomponentTermVariable <- subcomponents.map(_.presentVariables).foldTogether.termVariables -- localBoundVariables
+      subcomponentTermVariable <- subcomponents.flatMap(_.presentVariables).toSet.ofType[TermVariable]-- localBoundVariables
     } yield (localBoundVariable, subcomponentTermVariable)
     val newImplicitDistinctVariables =  implicitPairs.foldLeft(DistinctVariables.empty) { case (dv, (bv, tv)) =>
       dv + (bv, tv)
     }
     subcomponentImplicitDistinctVariables ++ newImplicitDistinctVariables
   }
-  def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
-    variable match {
-      case termVariable: TermVariable if localBoundVariables.contains(termVariable) =>
-        Variables.empty
-      case _ =>
-        subcomponents
-          .map(_.getPotentiallyIntersectingVariables(variable))
-          .foldLeft(Variables.empty)(_ ++ _) -- localBoundVariables
-    }
+  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Set[Variable] = {
+    if (localBoundVariables.contains(termVariable))
+      Set.empty
+    else
+      subcomponents.flatMap(_.getPotentiallyIntersectingVariables(termVariable)).toSet -- localBoundVariables
   }
 
   override def calculateSubstitutions(
@@ -111,11 +245,16 @@ trait DefinedComponent[T <: Component] extends Component {
     }
   }
   override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[T] = {
-    for {
-      updatedSubcomponents <- subcomponents
-        .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables))
-        .traverseOption
-    } yield update(updatedSubcomponents, localBoundVariables)
+    if (termToReplaceWith == termToBeReplaced)
+      Some(this.asInstanceOf[T])
+    else if (localBoundVariables.contains(termToBeReplaced) || localBoundVariables.exists(v => !distinctVariables.areDistinct(v, termToBeReplaced)))
+      None
+    else
+      for {
+        updatedSubcomponents <- subcomponents
+          .map(_.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables))
+          .traverseOption
+      } yield update(updatedSubcomponents, localBoundVariables)
   }
   override def validateSubstitution(
     termToReplaceWith: Term,
@@ -145,9 +284,9 @@ trait DefinedComponent[T <: Component] extends Component {
       case (otherSubcomponents, otherBoundVariables) =>
         if (
           localBoundVariables.contains(termVariable) ||
-            thisTerm.presentVariables.termVariables.exists(localBoundVariables.contains) ||
+            thisTerm.presentVariables.ofType[TermVariable].exists(localBoundVariables.contains) ||
             otherBoundVariables.contains(termVariable) ||
-            otherTerm.presentVariables.termVariables.exists(otherBoundVariables.contains)
+            otherTerm.presentVariables.ofType[TermVariable].exists(otherBoundVariables.contains)
         )
           None
         else {
@@ -161,11 +300,11 @@ trait DefinedComponent[T <: Component] extends Component {
             .map { case (resolvedSubcomponents, resolutionDistinctVariables) =>
               val thisDistinctPairs = for {
                 boundVariable <- localBoundVariables
-                variable <- thisTerm.presentVariables.termVariables -- localBoundVariables
+                variable <- thisTerm.presentVariables.ofType[TermVariable] -- localBoundVariables
               } yield boundVariable -> variable
               val otherDistinctPairs = for {
                 boundVariable <- otherBoundVariables
-                variable <- otherTerm.presentVariables.termVariables -- otherBoundVariables
+                variable <- otherTerm.presentVariables.ofType[TermVariable] -- otherBoundVariables
               } yield boundVariable -> variable
               val additionalDistinctVariables = DistinctVariables((thisDistinctPairs ++ otherDistinctPairs).toSeq :_*)
               (update(resolvedSubcomponents, localBoundVariables), resolutionDistinctVariables ++ additionalDistinctVariables)
@@ -235,11 +374,11 @@ object Variable {
 }
 
 trait Placeholder[T <: Component] extends Component {
-  override def allVariables: Variables = Variables.empty
-  override def presentVariables: Variables = Variables.empty
+  override def allVariables: Set[Variable] = Set.empty
+  override def presentVariables: Set[Variable] = Set.empty
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set.empty)
   override def implicitDistinctVariables: DistinctVariables = DistinctVariables.empty
-  override def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables.empty
+  override def getPotentiallyIntersectingVariables(termVariable: TermVariable): Set[Variable] = Set.empty
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions

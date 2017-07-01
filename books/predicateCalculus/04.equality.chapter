@@ -24,6 +24,18 @@ prove = y x
 prove sub x z φ
 qed
 
+theorem Substitution of Equals
+premise = x y
+prove = sub x z X sub x z X
+prove = sub x z X sub y z X
+qed
+
+theorem Substitution of Equals
+premise = x y
+prove = y x
+prove = sub y z X sub x z X
+qed
+
 theorem Equivalence of Substituted Equals
 premise = x y
 assume sub x z φ {

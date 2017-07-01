@@ -54,7 +54,7 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
       premises <- premisesParser
       definitionTemplate <- Statement.parser.inParens
       boundVariables = defaultVariables.ofType[TermVariable].toSet.filter { v =>
-        definitionTemplate.boundVariables.contains(v) || !definitionTemplate.presentVariables.termVariables.contains(v)
+        definitionTemplate.boundVariables.contains(v) || !definitionTemplate.presentVariables.contains(v)
       }
       distinctVariables <- Conditions.distinctVariablesParser
     } yield {

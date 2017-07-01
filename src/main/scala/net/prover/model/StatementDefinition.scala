@@ -56,7 +56,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
     optionalDefiningStatement match {
       case Some(definingStatement) =>
         val boundVariables = defaultVariables.ofType[TermVariable].toSet.filter { v =>
-          definingStatement.boundVariables.contains(v) || !definingStatement.presentVariables.termVariables.contains(v)
+          definingStatement.boundVariables.contains(v) || !definingStatement.presentVariables.contains(v)
         }
         Parser.constant(boundVariables)
       case None =>

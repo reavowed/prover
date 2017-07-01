@@ -4,31 +4,31 @@ class ConditionsSpec extends ProverSpec {
   "conditions" should {
     "correctly apply distinct variable condition to a statement with the term variable substituted out" in {
       Conditions(Set.empty, DistinctVariables(x -> φ))
-        .applySubstitutions(Substitutions(Map(φ -> SubstitutedStatementVariable(φ, z, y)), Map(x -> y), DistinctVariables.empty)).get
+        .applySubstitutions(Substitutions(Map(φ -> SubstitutedStatementVariable(φ, z, y), x -> y), DistinctVariables.empty)).get
         .distinctVariables mustEqual DistinctVariables(y -> z)
     }
 
     "correctly apply distinct variable condition to a compound statement with the term variable substituted out by a free variable" in {
       Conditions(Set.empty, DistinctVariables(x -> φ))
-        .applySubstitutions(Substitutions(Map(φ -> SubstitutedStatementVariable(φ, z, y)), Map(x -> y), DistinctVariables.empty)).get
+        .applySubstitutions(Substitutions(Map(φ -> SubstitutedStatementVariable(φ, z, y), x -> y), DistinctVariables.empty)).get
         .distinctVariables mustEqual DistinctVariables(y -> z)
     }
 
     "correctly apply distinct variable condition to a compound statement with the term variable substituted out by a bound variable" in {
       Conditions(Set.empty, DistinctVariables(x -> φ))
-        .applySubstitutions(Substitutions(Map(φ -> ForAll(z, SubstitutedStatementVariable(φ, z, y))), Map(x -> y), DistinctVariables.empty)).get
+        .applySubstitutions(Substitutions(Map(φ -> ForAll(z, SubstitutedStatementVariable(φ, z, y)), x -> y), DistinctVariables.empty)).get
         .distinctVariables mustEqual DistinctVariables.empty
     }
 
     "correctly apply distinct variable condition to a term variable substituted for a function" in {
       Conditions(Set.empty, DistinctVariables(x -> y))
-        .applySubstitutions(Substitutions(Map.empty, Map(x -> x, y -> PowerSet(y)), DistinctVariables.empty)).get
+        .applySubstitutions(Substitutions(Map(x -> x, y -> PowerSet(y)), DistinctVariables.empty)).get
         .distinctVariables mustEqual DistinctVariables(x -> y)
     }
 
     "not allow a substitution that violates distinct variables" in {
       Conditions(Set.empty, DistinctVariables(x -> y))
-        .applySubstitutions(Substitutions(Map.empty, Map(x -> y, y -> y), DistinctVariables.empty))
+        .applySubstitutions(Substitutions(Map(x -> y, y -> y), DistinctVariables.empty))
         .must(beNone)
     }
 

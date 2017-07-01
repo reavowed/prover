@@ -21,11 +21,11 @@ trait Term extends JsonSerializable.Base with Component {
 }
 
 case class TermVariable(text: String) extends Term with Variable {
-  override def allVariables: Variables = Variables(this)
-  override def presentVariables: Variables = Variables(this)
+  override def allVariables: Set[Variable] = Set(this)
+  override def presentVariables: Set[Variable] = Set(this)
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set(this))
   override def implicitDistinctVariables: DistinctVariables = DistinctVariables.empty
-  override def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables(this)
+  override def getPotentiallyIntersectingVariables(termVariable: TermVariable): Set[Variable] = Set(this)
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
@@ -38,13 +38,17 @@ case class TermVariable(text: String) extends Term with Variable {
     }
   }
   override def applySubstitutions(substitutions: Substitutions): Option[Term] = {
-    substitutions.terms.get(this)
+    substitutions.componentsByVariable.get(this).map(_.asInstanceOf[Term])
   }
   override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Term] = {
     if (termToBeReplaced == this)
       Some(termToReplaceWith)
-    else
+    else if (termToBeReplaced == termToReplaceWith)
       Some(this)
+    else if (distinctVariables.areDistinct(this, termToBeReplaced))
+      Some(this)
+    else
+      Some(SubstitutedTermVariable(this, termToReplaceWith, termToBeReplaced))
   }
   override def validateSubstitution(
     termToReplaceWith: Term,
@@ -52,7 +56,12 @@ case class TermVariable(text: String) extends Term with Variable {
     target: Component,
     distinctVariables: DistinctVariables
   ): Option[DistinctVariables] = {
-    if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
+    if (target == this) {
+      if (termToBeReplaced == termToReplaceWith)
+        Some(DistinctVariables.empty)
+      else
+        Some(DistinctVariables(termToBeReplaced -> this))
+    } else if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
       Some(DistinctVariables.empty)
     } else {
       None
@@ -67,7 +76,7 @@ case class TermVariable(text: String) extends Term with Variable {
     if (this == thisTerm && other == otherTerm) {
       Some((termVariable, DistinctVariables.empty))
     } else if (this == other && this != termVariable) {
-      Some((this, DistinctVariables.empty))
+      Some((this, DistinctVariables(termVariable -> this)))
     } else {
       None
     }
@@ -84,6 +93,21 @@ case class TermVariable(text: String) extends Term with Variable {
   override def replacePlaceholder(other: Component) = Some(this)
   override def html: String = Html.format(text)
   override def serialized: String = text
+}
+
+case class SubstitutedTermVariable(
+  variable: TermVariable,
+  termToReplaceWith: Term,
+  termToBeReplaced: TermVariable)
+  extends Term with SubstitutedVariable[Term, TermVariable]
+{
+  override def update(
+    updatedVariable: TermVariable,
+    updatedTermToReplaceWith: Term,
+    updatedTermToBeReplaced: TermVariable
+  ): SubstitutedTermVariable = {
+    SubstitutedTermVariable(updatedVariable, updatedTermToReplaceWith, updatedTermToBeReplaced)
+  }
 }
 
 case class DefinedTerm(
@@ -180,6 +204,15 @@ object Term extends ComponentType {
           termDefinition.termParser
         case SpecifiedVariable(variable) =>
           Parser.constant(variable)
+        case "sub" =>
+          for {
+            termToReplaceWith <- parser
+            termToBeReplaced <- variableParser
+            term <- parser
+          } yield {
+            term.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, DistinctVariables.empty)
+              .getOrElse(throw new Exception("Invalid substitution"))
+          }
         case "_" =>
           Parser.constant(PlaceholderTerm)
         case _ =>

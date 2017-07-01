@@ -12,7 +12,9 @@ prove ¬ ∀ x ¬ φ
 prove ∃ x φ
 qed
 
-theorem Proof by Existence
+comment If something exists, we can name that something with an arbitrary variable for free.
+
+theorem Arbitrary Value for Existence
 premise ∃ x φ
 premise proves sub y x φ ψ
 assume ¬ ψ {
@@ -23,7 +25,7 @@ assume ¬ ψ {
 prove ψ
 qed
 
-theorem Proof by Existence
+theorem Arbitrary Value for Existence
 premise ∃ x φ
 premise proves φ ψ
 assume ¬ ψ {
@@ -33,6 +35,19 @@ assume ¬ ψ {
 }
 prove ψ
 qed
+
+comment Swapping an existence condition with an equivalent one.
+
+theorem Existence Equivalence
+premise ∃ x φ
+premise ∀ x ↔ φ ψ
+let y sub y x φ {
+  prove sub y x ψ
+  prove ∃ x ψ
+}
+qed
+
+comment Swapping between universal and existential quantifiers.
 
 theorem Not Exists Not Is For All
 premise ¬ ∃ x ¬ φ
@@ -57,13 +72,4 @@ assume ∃ x φ {
   prove ¬ ∀ x ¬ φ
 }
 prove ¬ ∃ x φ
-qed
-
-theorem Existence Equivalence
-premise ∃ x φ
-premise ∀ x ↔ φ ψ
-let y sub y x φ {
-  prove sub y x ψ
-  prove ∃ x ψ
-}
 qed

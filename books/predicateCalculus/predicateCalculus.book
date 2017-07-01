@@ -1,7 +1,7 @@
 Predicate Calculus
 import Propositional Calculus
 
-variables (φ ψ) (x y z a b)
+variables (φ ψ) (x y z a b X)
 
 include 02.universalQuantifier.chapter
 include 03.existentialQuantifier.chapter

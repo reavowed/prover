@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 
 import scala.collection.immutable.Nil
-import scala.util.Try
 
 trait Statement extends JsonSerializable.Base with Component {
   override val componentType = Statement
@@ -22,11 +21,11 @@ trait Statement extends JsonSerializable.Base with Component {
 }
 
 case class StatementVariable(text: String) extends Statement with Variable {
-  override def allVariables: Variables = Variables(this)
-  override def presentVariables: Variables = Variables(this)
+  override def allVariables: Set[Variable] = Set(this)
+  override def presentVariables: Set[Variable] = Set(this)
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set.empty)
   override def implicitDistinctVariables: DistinctVariables = DistinctVariables.empty
-  def getPotentiallyIntersectingVariables(variable: Variable): Variables = Variables(this)
+  def getPotentiallyIntersectingVariables(termVariable: TermVariable): Set[Variable] = Set(this)
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
@@ -37,7 +36,7 @@ case class StatementVariable(text: String) extends Statement with Variable {
       Nil
   }
   def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
-    substitutions.statements.get(this)
+    substitutions.componentsByVariable.get(this).map(_.asInstanceOf[Statement])
   }
   override def validateSubstitution(
     termToReplaceWith: Term,
@@ -94,114 +93,24 @@ case class StatementVariable(text: String) extends Statement with Variable {
 }
 
 case class SubstitutedStatementVariable(
-    statementVariable: StatementVariable,
+    variable: StatementVariable,
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable)
- extends Statement
+ extends Statement with SubstitutedVariable[Statement, StatementVariable]
 {
-  override def allVariables: Variables = termToReplaceWith.allVariables + statementVariable + termToBeReplaced
-  override def presentVariables: Variables = termToReplaceWith.allVariables + statementVariable
-  override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = termToReplaceWith.boundAndFreeVariables
-  override def implicitDistinctVariables: DistinctVariables = DistinctVariables.empty
-  def getPotentiallyIntersectingVariables(variable: Variable): Variables = {
-    if (variable == termToBeReplaced)
-      termToReplaceWith.allVariables
-    else
-      termToReplaceWith.allVariables + statementVariable
+  override def update(
+    updatedVariable: StatementVariable,
+    updatedTermToReplaceWith: Term,
+    updatedTermToBeReplaced: TermVariable
+  ): SubstitutedStatementVariable = {
+    SubstitutedStatementVariable(updatedVariable, updatedTermToReplaceWith, updatedTermToBeReplaced)
   }
-  override def calculateSubstitutions(
-    other: Component,
-    substitutions: PartialSubstitutions
-  ): Seq[PartialSubstitutions] = other match {
-    case SubstitutedStatementVariable(otherStatementVariable, otherTermToReplaceWith, otherTermToBeReplaced) =>
-      for {
-        s1 <- statementVariable.calculateSubstitutions(otherStatementVariable, substitutions)
-        s2 <- termToReplaceWith.calculateSubstitutions(otherTermToReplaceWith, s1)
-        s3 <- termToBeReplaced.calculateSubstitutions(otherTermToBeReplaced, s2)
-      } yield s3
-    case statement: Statement =>
-      substitutions.tryAdd(this, statement)
-    case _ =>
-      Nil
-  }
-  override def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
-    for {
-      updatedStatementVariable <- statementVariable.applySubstitutions(substitutions)
-      updatedTermToReplaceWith <- termToReplaceWith.applySubstitutions(substitutions)
-      updatedTermToBeReplaced <- termToBeReplaced.applySubstitutions(substitutions).flatMap(Term.optionAsVariable)
-      updatedStatement <- updatedStatementVariable.makeSingleSubstitution(
-        updatedTermToReplaceWith,
-        updatedTermToBeReplaced,
-        substitutions.distinctVariables)
-    } yield updatedStatement
-  }
-  override def makeSingleSubstitution(newTermToReplaceWith: Term, newTermToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Statement] = {
-    if (newTermToReplaceWith == newTermToBeReplaced)
-      Some(this)
-    else if (newTermToBeReplaced == termToBeReplaced)
-      Some(this)
-    else if (newTermToBeReplaced == termToReplaceWith && distinctVariables.areDistinct(newTermToBeReplaced, statementVariable))
-      Some(SubstitutedStatementVariable(statementVariable, newTermToReplaceWith, termToBeReplaced))
-    else
-      termToReplaceWith match {
-        case termVariableToReplaceWith: TermVariable
-          if distinctVariables.areDistinct(newTermToBeReplaced, statementVariable) && distinctVariables.areDistinct(newTermToBeReplaced, termVariableToReplaceWith)
-        =>
-          Some(this)
-        case _ =>
-          None
-      }
-  }
-  override def validateSubstitution(
-    termToReplaceWith: Term,
-    termToBeReplaced: TermVariable,
-    target: Component,
-    distinctVariables: DistinctVariables
-  ): Option[DistinctVariables] = {
-    if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
-      Some(DistinctVariables.empty)
-    } else {
-      None
-    }
-  }
-  override def resolveSingleSubstitution(
-    other: Component,
-    termVariable: TermVariable,
-    thisTerm: Term,
-    otherTerm: Term
-  ): Option[(Statement, DistinctVariables)] = {
-    if (other == this) {
-      Some((this, DistinctVariables(termVariable -> presentVariables)))
-    } else {
-      None
-    }
-  }
-  override def findSubstitution(other: Component, termVariable: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
-    if (this == other) {
-      if (presentVariables.termVariables.contains(termVariable))
-        (Seq((termVariable, DistinctVariables.empty)), None)
-      else if (termVariable == termToBeReplaced)
-        (Seq((termVariable, DistinctVariables.empty)), Some(DistinctVariables(termVariable -> termToReplaceWith.presentVariables)))
-      else
-        (Seq((termVariable, DistinctVariables.empty)), Some(DistinctVariables(termVariable -> presentVariables)))
-    } else {
-      other match {
-        case `statementVariable` if termToReplaceWith == termVariable =>
-          (Seq((termToBeReplaced, DistinctVariables(termVariable -> statementVariable))), None)
-        case SubstitutedStatementVariable(`statementVariable`, otherTermToReplaceWith: TermVariable, `termToBeReplaced`) if termToReplaceWith == termVariable =>
-          (Seq((otherTermToReplaceWith, DistinctVariables(termVariable -> statementVariable))), None)
-        case _ =>
-          (Nil, None)
-      }
-    }
-  }
-  override def replacePlaceholder(other: Component) = Some(this)
-  override def html: String = "[" + termToReplaceWith.safeHtml + "/" + termToBeReplaced.html + "]" + statementVariable.html
+  override def html: String = "[" + termToReplaceWith.safeHtml + "/" + termToBeReplaced.html + "]" + variable.html
   override def serialized: String = Seq(
     "sub",
     termToReplaceWith.serialized,
     termToBeReplaced.serialized,
-    statementVariable.serialized
+    variable.serialized
   ).mkString(" ")
 }
 

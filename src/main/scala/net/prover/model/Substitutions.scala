@@ -1,68 +1,59 @@
 package net.prover.model
 
 case class Substitutions(
-    statements: Map[StatementVariable, Statement],
-    terms: Map[TermVariable, Term],
+    componentsByVariable: Map[Variable, Component],
     distinctVariables: DistinctVariables)
 
 case class PartialSubstitutions(
-    knownStatements: Map[StatementVariable, Statement],
-    knownTerms: Map[TermVariable, Term],
-    unknownSubstitutions: Map[SubstitutedStatementVariable, Statement],
+    known: Map[Variable, Component],
+    unknown: Map[SubstitutedVariable[Component, _ <: Variable], Component],
     distinctVariables: DistinctVariables) {
 
-  def knownSubstitutions = Substitutions(knownStatements, knownTerms, distinctVariables)
+  def knownSubstitutions = Substitutions(known, distinctVariables)
 
-  def tryAdd(statementVariable: StatementVariable, statement: Statement): Option[PartialSubstitutions] = {
-    knownStatements.get(statementVariable) match {
-      case Some(`statement`) =>
+  def tryAdd(variable: Variable, component: Component): Option[PartialSubstitutions] = {
+    known.get(variable) match {
+      case Some(`component`) =>
         Some(this)
       case Some(_) =>
         None
       case None =>
-        Some(copy(knownStatements = knownStatements + (statementVariable -> statement)))
-    }
-  }
-
-  def tryAdd(termVariable: TermVariable, term: Term): Option[PartialSubstitutions] = {
-    knownTerms.get(termVariable) match {
-      case Some(`term`) =>
-        Some(this)
-      case Some(_) =>
-        None
-      case None =>
-        Some(copy(knownTerms = knownTerms + (termVariable -> term)))
+        Some(copy(known = known + (variable -> component)))
     }
   }
 
   def tryAdd(
-    substitutedStatementVariable: SubstitutedStatementVariable,
-    statement: Statement
+    substitutedVariable: SubstitutedVariable[Component, _ <: Variable],
+    component: Component
   ): Seq[PartialSubstitutions] = {
-    val directAttempts = tryAddingDirectly(substitutedStatementVariable, statement)
+    val directAttempts = tryAddingDirectly(substitutedVariable, component)
     if (directAttempts.nonEmpty)
       directAttempts
     else
-      Seq(copy(unknownSubstitutions = unknownSubstitutions + (substitutedStatementVariable -> statement)))
+      Seq(copy(unknown = unknown + (substitutedVariable -> component)))
   }
 
   private def tryAddingDirectly(
-    substitutedStatementVariable: SubstitutedStatementVariable,
-    targetStatement: Statement
+    substitutedVariable: SubstitutedVariable[Component, _ <: Variable],
+    targetComponent: Component
   ): Seq[PartialSubstitutions] = {
-    val substitutedBaseStatementOption = knownStatements.get(substitutedStatementVariable.statementVariable)
-    val substitutedTermToReplaceWithOption = substitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
-    val substitutedTermToBeReplacedOption = knownTerms.get(substitutedStatementVariable.termToBeReplaced).flatMap(Term.optionAsVariable)
+    val substitutedBaseComponentOption = known.get(substitutedVariable.variable)
+    val substitutedTermToReplaceWithOption = substitutedVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
+    val substitutedTermToBeReplacedOption = known.get(substitutedVariable.termToBeReplaced).map(_.asInstanceOf[Term]).flatMap(Term.optionAsVariable)
 
-    (substitutedBaseStatementOption, substitutedTermToReplaceWithOption, substitutedTermToBeReplacedOption) match {
-      case (Some(substitutedBaseStatement), Some(substitutedTermToReplaceWith), Some(substitutedTermToBeReplaced)) =>
-        tryNotAddingAtAll(substitutedBaseStatement, substitutedTermToReplaceWith, substitutedTermToBeReplaced, targetStatement)
-      case (Some(substitutedBaseStatement), None, Some(substitutedTermToBeReplaced)) =>
-        tryAddingByCalculatingTermToReplaceWith(substitutedBaseStatement, substitutedTermToBeReplaced, substitutedStatementVariable.termToReplaceWith, targetStatement)
+    (substitutedBaseComponentOption, substitutedTermToReplaceWithOption, substitutedTermToBeReplacedOption) match {
+      case (Some(substitutedBaseComponent), Some(substitutedTermToReplaceWith), Some(substitutedTermToBeReplaced)) =>
+        tryNotAddingAtAll(substitutedBaseComponent, substitutedTermToReplaceWith, substitutedTermToBeReplaced, targetComponent)
+      case (Some(substitutedBaseComponent), None, Some(substitutedTermToBeReplaced)) =>
+        tryAddingByCalculatingTermToReplaceWith(
+          substitutedBaseComponent,
+          substitutedTermToBeReplaced,
+          substitutedVariable.termToReplaceWith,
+          targetComponent)
       case _ =>
-        findMergableSubstitution(substitutedStatementVariable) match {
+        findMergableSubstitution(substitutedVariable) match {
           case Some(otherSubstitutedStatementVariable) =>
-            tryAddingByMerge(substitutedStatementVariable, targetStatement, otherSubstitutedStatementVariable).toSeq
+            tryAddingByMerge(substitutedVariable, targetComponent, otherSubstitutedStatementVariable).toSeq
           case _ =>
             Nil
         }
@@ -70,27 +61,29 @@ case class PartialSubstitutions(
   }
 
   private def tryNotAddingAtAll(
-    substitutedBaseStatement: Statement,
+    substitutedBaseComponent: Component,
     substitutedTermToReplaceWith: Term,
     substitutedTermToBeReplaced: TermVariable,
-    targetStatement: Statement
+    targetComponent: Component
   ): Seq[PartialSubstitutions] = {
-    substitutedBaseStatement.validateSubstitution(substitutedTermToReplaceWith, substitutedTermToBeReplaced, targetStatement, distinctVariables).toSeq
-        .map(withDistinctVariables)
+    substitutedBaseComponent
+      .validateSubstitution(substitutedTermToReplaceWith, substitutedTermToBeReplaced, targetComponent, distinctVariables)
+      .toSeq
+      .map(withDistinctVariables)
   }
 
   private def tryAddingByCalculatingTermToReplaceWith(
-    substitutedBaseStatement: Statement,
+    substitutedBaseComponent: Component,
     substitutedTermToBeReplaced: TermVariable,
     termToReplaceWith: Term,
-    targetStatement: Statement
+    targetComponent: Component
   ): Seq[PartialSubstitutions] = {
     for {
-      (substitutedTermToReplaceWith, newDistinctVariables) <- substitutedBaseStatement
-        .findSubstitution(targetStatement, substitutedTermToBeReplaced)._1
+      (substitutedTermToReplaceWith, newDistinctVariables) <- substitutedBaseComponent
+        .findSubstitution(targetComponent, substitutedTermToBeReplaced)._1
       updatedSubstitutions <- termToReplaceWith.calculateSubstitutions(substitutedTermToReplaceWith, this)
       additionalDistinctVariables = getAdditionalDistinctVariableConditionsForTermReplacement(
-        substitutedBaseStatement,
+        substitutedBaseComponent,
         substitutedTermToBeReplaced,
         substitutedTermToReplaceWith)
     } yield {
@@ -99,14 +92,14 @@ case class PartialSubstitutions(
   }
 
   private def getAdditionalDistinctVariableConditionsForTermReplacement(
-    substitutedBaseStatement: Statement,
+    substitutedBaseComponent: Component,
     substitutedTermToBeReplaced: TermVariable,
     substitutedTermToReplaceWith: Term
   ): DistinctVariables = {
     if (substitutedTermToBeReplaced == substitutedTermToReplaceWith)
         DistinctVariables.empty
     else {
-      val variablesRequiringCondition = (substitutedBaseStatement.presentVariables.termVariables - substitutedTermToBeReplaced) --
+      val variablesRequiringCondition = (substitutedBaseComponent.presentVariables.ofType[TermVariable] - substitutedTermToBeReplaced) --
         Term.optionAsVariable(substitutedTermToReplaceWith).toSet
       variablesRequiringCondition
         .foldLeft(DistinctVariables.empty) { case (variables, variable) =>
@@ -115,37 +108,40 @@ case class PartialSubstitutions(
     }
   }
 
-  private def findMergableSubstitution(substitutedStatementVariable: SubstitutedStatementVariable): Option[SubstitutedStatementVariable] = {
-    unknownSubstitutions.keySet
+  private def findMergableSubstitution(
+    substitutedVariable: SubstitutedVariable[Component, _ <: Variable]
+  ): Option[SubstitutedVariable[Component, _ <: Variable]] = {
+    unknown.keySet
       .find { s =>
-        s.statementVariable == substitutedStatementVariable.statementVariable &&
-          s.termToBeReplaced == substitutedStatementVariable.termToBeReplaced
+        s.variable == substitutedVariable.variable &&
+          s.termToBeReplaced == substitutedVariable.termToBeReplaced
       }
   }
 
   private def tryAddingByMerge(
-    newSubstitutedStatementVariable: SubstitutedStatementVariable,
-    newTargetStatement: Statement,
-    otherSubstitutedStatementVariable: SubstitutedStatementVariable
+    newSubstitutedVariable: SubstitutedVariable[Component, _ <: Variable],
+    newTargetComponent: Component,
+    otherSubstitutedVariable: SubstitutedVariable[Component, _ <: Variable]
   ): Option[PartialSubstitutions] = {
-    val otherTargetStatement = unknownSubstitutions(otherSubstitutedStatementVariable)
-    val sharedTermToBeReplaced = otherSubstitutedStatementVariable.termToBeReplaced
+    val otherTargetComponent = unknown(otherSubstitutedVariable)
+    val sharedTermToBeReplaced = otherSubstitutedVariable.termToBeReplaced
     for {
-      thisTermToReplaceWith <- newSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
-      otherTermToReplaceWith <- otherSubstitutedStatementVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
-      placeholderVariableTerm = knownTerms.getOrElse(
+      thisTermToReplaceWith <- newSubstitutedVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
+      otherTermToReplaceWith <- otherSubstitutedVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
+      placeholderVariableTerm = known.getOrElse(
         sharedTermToBeReplaced,
-        sharedTermToBeReplaced.copy(text = sharedTermToBeReplaced + "'"))
+        sharedTermToBeReplaced.copy(text = sharedTermToBeReplaced + "'")
+      ).asInstanceOf[Term]
       placeholderVariable <- Term.optionAsVariable(placeholderVariableTerm)
-      (resolvedStatement, additionalDistinctVariables) <- newTargetStatement.resolveSingleSubstitution(
-        otherTargetStatement,
+      (resolvedStatement, additionalDistinctVariables) <- newTargetComponent.resolveSingleSubstitution(
+        otherTargetComponent,
         placeholderVariable,
         thisTermToReplaceWith,
         otherTermToReplaceWith)
       substitutionsWithoutOtherSubstitutedStatementVariable =
-        copy(unknownSubstitutions = unknownSubstitutions - otherSubstitutedStatementVariable)
+        copy(unknown = unknown - otherSubstitutedVariable)
       substitutionsWithResolvedStatement <- substitutionsWithoutOtherSubstitutedStatementVariable
-        .tryAdd(newSubstitutedStatementVariable.statementVariable, resolvedStatement)
+        .tryAdd(newSubstitutedVariable.variable, resolvedStatement)
       substitutionsWithSharedTermToBeReplaced <- substitutionsWithResolvedStatement
         .tryAdd(sharedTermToBeReplaced, placeholderVariable)
     } yield substitutionsWithSharedTermToBeReplaced.withDistinctVariables(additionalDistinctVariables)
@@ -156,17 +152,17 @@ case class PartialSubstitutions(
   }
 
   def tryResolve(): Seq[Substitutions] = {
-    unknownSubstitutions.keys.toList match {
+    unknown.keys.toList match {
       case Nil =>
         Seq(knownSubstitutions)
       case one +: more =>
-        copy(unknownSubstitutions = unknownSubstitutions.filterKeys(more.contains))
-          .tryAddingDirectly(one, unknownSubstitutions(one))
+        copy(unknown = unknown.filterKeys(more.contains))
+          .tryAddingDirectly(one, unknown(one))
           .flatMap(_.tryResolve())
     }
   }
 }
 
 object PartialSubstitutions {
-  val empty: PartialSubstitutions = PartialSubstitutions(Map.empty, Map.empty, Map.empty, DistinctVariables.empty)
+  val empty: PartialSubstitutions = PartialSubstitutions(Map.empty, Map.empty, DistinctVariables.empty)
 }

@@ -22,6 +22,8 @@ prove φ
 prove ∀ x φ
 qed
 
+comment Some inferences to simplify deductions.
+
 theorem Generalized Deduction
 premise proves φ ψ
 prove → φ ψ
@@ -34,7 +36,7 @@ prove → sub y x φ sub y x ψ
 prove ∀ x → φ ψ
 qed
 
-theorem Generalized Equivalence
+theorem Generalized Equivalence Deduction
 premise proves φ ψ
 premise proves ψ φ
 prove ∀ x → φ ψ
@@ -42,7 +44,7 @@ prove ∀ x → ψ φ
 prove ∀ x ↔ φ ψ
 qed
 
-theorem Renamed Generalized Equivalence
+theorem Renamed Generalized Equivalence Deduction
 premise proves sub y x φ sub y x ψ
 premise proves sub y x ψ sub y x φ
 prove ∀ x → φ ψ

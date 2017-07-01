@@ -10,7 +10,6 @@ class TermSpec extends ProverSpec {
       PowerSet(x)
         .calculateSubstitutions(PowerSet(y), PartialSubstitutions.empty)
         .mustEqual(Seq(PartialSubstitutions(
-          Map.empty,
           Map(x -> y),
           Map.empty,
           DistinctVariables.empty)))
@@ -21,8 +20,7 @@ class TermSpec extends ProverSpec {
     "do nothing to a constant" in {
       EmptySet.applySubstitutions(
         Substitutions(
-          Map(φ -> ψ),
-          Map(x -> y),
+          Map(φ -> ψ, x -> y),
           DistinctVariables.empty)
       ) must beSome(EmptySet)
     }
@@ -30,8 +28,7 @@ class TermSpec extends ProverSpec {
     "replace terms in a unary function" in {
       PowerSet(x).applySubstitutions(
         Substitutions(
-          Map(φ -> ψ),
-          Map(x -> y),
+          Map(φ -> ψ, x -> y),
           DistinctVariables.empty)
       ) must beSome(PowerSet(y))
     }

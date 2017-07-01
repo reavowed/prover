@@ -3,13 +3,11 @@ package net.prover
 import scala.collection.generic.CanBuildFrom
 import scala.collection.{TraversableLike, mutable}
 import scala.reflect.ClassTag
+import scala.util.Try
 
 package object model {
   implicit class AnyOps[T](t: T) {
-    def asOptionalInstanceOf[S]: Option[S] = t match {
-      case s: S => Some(s)
-      case _ => None
-    }
+    def asOptionalInstanceOf[S]: Option[S] = Try(t.asInstanceOf[S]).toOption
   }
 
   implicit class StringOps(s: String) {
@@ -76,6 +74,15 @@ package object model {
   implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {
     def split: (Seq[S], Seq[T]) = {
       (seq.map(_._1), seq.map(_._2))
+    }
+  }
+
+  implicit class SetOps[T](set: Set[T]) {
+    def ofType[S : ClassTag]: Set[S] = {
+      set
+        .collect {
+          case s if implicitly[ClassTag[S]].runtimeClass.isInstance(s) => s.asInstanceOf[S]
+        }
     }
   }
 

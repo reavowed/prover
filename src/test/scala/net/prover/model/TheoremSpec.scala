@@ -349,21 +349,20 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(y, Equivalence(ElementOf(y, Z), Conjunction(ElementOf(y, Y), ForAll(X, Implication(φ, ElementOf(y, X)))))),
-        Conditions(Set.empty, DistinctVariables(x -> φ)))
+        Conditions(Set.empty, DistinctVariables(x -> φ, x -> X)))
     }
 
     "add distinct variables to preserve validity of a substitution" in {
       val theorem = parseTheorem(
         "XXX",
-        "premise ∃ y ∈ y x",
-        "premise = x ∅",
-        "prove ∃ y ∈ y ∅",
+        "premise ∀ x = x y",
+        "prove = z y",
         "qed")(
-        contextWith(substitutionOfEquals))
+        contextWith(specification))
 
       theorem.conclusion mustEqual ProvenStatement(
-        Exists(y, ElementOf(y, EmptySet)),
-        Conditions(Set.empty, DistinctVariables(y -> x)))
+        Equals(z, y),
+        Conditions(Set.empty, DistinctVariables(x -> y)))
     }
 
     "prove an inference conclusion by simplifying a premise" in {
@@ -409,6 +408,19 @@ class TheoremSpec extends ProverSpec {
         contextWith(extractLeftConjunct, combineConjunction, addRightDisjunct))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Disjunction(ψ, Conjunction(χ, φ)))
+    }
+
+    "resolve substitutions involving substituted term variables" in {
+      val theorem = parseTheorem(
+        "XXX",
+        "premise = x y",
+        "premise = sub x a z sub x a z",
+        "prove = sub x a z sub y a z",
+        "qed")(
+        contextWith(substitutionOfEquals))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(
+        Equals(SubstitutedTermVariable(z, x, a), SubstitutedTermVariable(z, y, a)))
     }
   }
 }

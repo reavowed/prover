@@ -118,7 +118,8 @@ case class Prover(
         inference.premises.toType[DirectPremise].map((inference, _))
       }
       .filter { case (inference, inferencePremises) =>
-        inferencePremises.forall(_.statement.allVariables.termVariables.isEmpty) && inference.conclusion.statement.allVariables.termVariables.isEmpty
+        inferencePremises.forall(_.statement.allVariables.ofType[TermVariable].isEmpty) &&
+          inference.conclusion.statement.allVariables.ofType[TermVariable].isEmpty
       }
       .flatMap { case (inference, inferencePremises) =>
         context.inferenceTransforms.iterator.map(transform => (transform, inference, inferencePremises))
@@ -132,15 +133,15 @@ case class Prover(
       }
       .flatMap { case (inference, inferencePremises, transformedPremises, statementsToProve) =>
         val transformedConclusion = statementsToProve.last
-        val oldVariables = (inferencePremises.map(_.statement) :+ inference.conclusion.statement).map(_.allVariables).foldTogether
-        val newVariables = (transformedPremises.map(_.statement) :+ transformedConclusion).map(_.allVariables).foldTogether diff oldVariables
+        val oldVariables = (inferencePremises.map(_.statement) :+ inference.conclusion.statement).flatMap(_.allVariables).toSet
+        val newVariables = (transformedPremises.map(_.statement) :+ transformedConclusion).flatMap(_.allVariables).toSet diff oldVariables
         val newNonDistinctVariables = for {
-          newVariable <- newVariables.termVariables
-          oldVariable <- oldVariables.all
+          newVariable <- newVariables.ofType[TermVariable]
+          oldVariable <- oldVariables
         } yield newVariable -> oldVariable
         for {
           substitutions <- transformedConclusion.calculateSubstitutions(assertion, PartialSubstitutions.empty)
-          if newVariables.statementVariables.isEmpty
+          if newVariables.ofType[StatementVariable].isEmpty
           proofSteps <- statementsToProve.collectFold[AssertionStep] { case (assertions, statement) =>
             val provenAssertions = transformedPremises.mapWithIndex { (premise, index) =>
               ReferencedAssertion(ProvenStatement.withNoConditions(premise.statement), DirectReference(index, premise.html))
@@ -284,6 +285,7 @@ case class Prover(
   ): Option[ProvenStatement] = {
     for {
       substitutedConclusion <- inferenceConclusion.applySubstitutions(substitutions)
+      if substitutedConclusion.statement == assertion
       combinedConditions <- (matchedPremises.map(_.provenStatement.conditions) :+ substitutedConclusion.conditions)
         .reduce(_ ++ _)
         .addDistinctVariables(substitutions.distinctVariables)

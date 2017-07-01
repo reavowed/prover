@@ -131,8 +131,6 @@ qed
 
 theorem Natural Number Transitivity
 premise ∈ n ℕ
-premise ∈ m n
-premise ∈ x m
 assume ∧ ∈ m' 0 ∈ x' m' {
   prove ∀ x ¬ ∈ x ∅
   prove ¬ ∈ m' ∅
@@ -160,7 +158,14 @@ assume ∧ ∈ n' ℕ ∀ x ∀ m → ∧ ∈ m n' ∈ x m ∈ x n' {
   prove ∀ x ∀ m → ∧ ∈ m successor n' ∈ x m ∈ x successor n'
 }
 prove ∀ x ∀ m → ∧ ∈ m n ∈ x m ∈ x n
-prove ∀ m → ∧ ∈ m n ∈ x m ∈ x n
+qed
+
+theorem Natural Number Transitivity
+premise ∈ n ℕ
+premise ∈ m n
+premise ∈ x m
+prove ∀ x' ∀ m' → ∧ ∈ m' n ∈ x' m' ∈ x' n
+prove ∀ m' → ∧ ∈ m' n ∈ x m' ∈ x n
 prove ∧ ∈ m n ∈ x m
 prove ∈ x n
 qed

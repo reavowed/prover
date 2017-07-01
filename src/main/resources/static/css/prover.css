@@ -65,11 +65,6 @@
     margin-top: 5px;
 }
 
-.theoremProof tr:last-of-type .proofRowStatement::after {
-    content: " □";
-    font-size: 1.5em;
-}
-
 .comment + .comment {
     margin-top: 15px;
 }
