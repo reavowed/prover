@@ -53,13 +53,6 @@ case class DistinctVariables(conditions: Map[TermVariable, Set[Variable]]) exten
     val restrictedConditions = conditions
       .filterKeys { activeVariables.contains }
       .mapValues { _.intersect(activeVariables) }
-      .map { case (termVariable, variables) =>
-        termVariable -> variables.filter { variable =>
-          statements.exists { s =>
-            !s.boundVariables.contains(termVariable) && (s.presentVariables.contains(termVariable) || s.presentVariables.contains(variable))
-          }
-        }
-      }
       .filter { p => p._2.nonEmpty }
     DistinctVariables(restrictedConditions)
   }

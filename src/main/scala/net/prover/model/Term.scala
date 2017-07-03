@@ -89,8 +89,13 @@ case class TermVariable(text: String) extends Term with Variable {
       (Seq((target.asInstanceOf[Term], DistinctVariables.empty)), None)
     } else if (this == target) {
       (Seq((termVariableToBeReplaced, DistinctVariables.empty)), Some(DistinctVariables(termVariableToBeReplaced -> this)))
-    } else {
-      (Nil, None)
+    }  else {
+      target match {
+        case SubstitutedTermVariable(variable, termToReplaceWith, `termVariableToBeReplaced`) if variable == this =>
+          (Seq((termToReplaceWith, DistinctVariables.empty)), None)
+        case _ =>
+          (Nil, None)
+      }
     }
   }
   override def replacePlaceholder(other: Component) = Some(this)

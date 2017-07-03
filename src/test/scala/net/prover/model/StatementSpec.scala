@@ -237,6 +237,11 @@ class StatementSpec extends ProverSpec {
         .findSubstitution(Equals(y, z), x)
         .mustEqual((Nil, None))
     }
+    "require a distinct variable condition even if every variable either changes or is the target" in {
+      Equals(x, y)
+        .findSubstitution(Equals(y, y), x)
+        .mustEqual((Seq((y, DistinctVariables(x -> y))), None))
+    }
     "find a nilpotent substitution" in {
       SubstitutedStatementVariable(φ, y, x)
         .findSubstitution(SubstitutedStatementVariable(φ, y, x), y)

@@ -46,18 +46,36 @@ class ConditionsSpec extends ProverSpec {
         .arbitraryVariables mustEqual Set(y)
     }
 
-    "enforcing arbitrary variables in conditions" should {
-      "only add present variables to distinct conditions" in {
-        Conditions.empty
-          .addDistinctVariables(Set(x), Seq(SubstitutedStatementVariable(φ, y, x)))
-          .map(_.distinctVariables) must beSome(DistinctVariables(x -> y))
-      }
+    "remove arbitrary variable that appears either bound or distinct" in {
+      Conditions(Set(x), DistinctVariables(x -> φ))
+        .restrictToStatements(Seq(ForAll(x, Equals(x, x)), φ))
+        .arbitraryVariables must beEmpty
+    }
 
-      "not add distinct conditions where an arbitrary variable appears in an assumption" in {
-        Conditions.empty
-          .addDistinctVariables(Set(x), Seq(Equals(x, y)))
-          .must(beNone)
-      }
+    "retain arbitrary variable that might intersect a statement variable" in {
+      Conditions(Set(x), DistinctVariables.empty)
+        .restrictToStatements(Seq(ForAll(x, φ), φ))
+        .arbitraryVariables must contain(x)
+    }
+
+    "retain distinct condition for a statement variable bound by a term variable" in {
+      Conditions(Set.empty, DistinctVariables(x -> φ))
+        .restrictToStatements(Seq(Exists(x, φ)))
+        .distinctVariables mustEqual DistinctVariables(x -> φ)
+    }
+  }
+
+  "enforcing arbitrary variables in conditions" should {
+    "only add present variables to distinct conditions" in {
+      Conditions.empty
+        .addDistinctVariables(Set(x), Seq(SubstitutedStatementVariable(φ, y, x)))
+        .map(_.distinctVariables) must beSome(DistinctVariables(x -> y))
+    }
+
+    "not add distinct conditions where an arbitrary variable appears in an assumption" in {
+      Conditions.empty
+        .addDistinctVariables(Set(x), Seq(Equals(x, y)))
+        .must(beNone)
     }
   }
 }

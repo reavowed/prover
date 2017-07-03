@@ -248,7 +248,7 @@ class TheoremSpec extends ProverSpec {
 
       theorem.conclusion mustEqual ProvenStatement(
         ForAll(x, φ),
-        Conditions(Set(x), DistinctVariables(x -> φ)))
+        Conditions(Set.empty, DistinctVariables(x -> φ)))
     }
 
     "not prove a conclusion that violates an arbitrary variable condition" in {

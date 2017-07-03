@@ -20,11 +20,13 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
     val updatedDistinctVariables = distinctVariables.restrictTo(statements)
     val updatedArbitraryVariables = arbitraryVariables
       .intersect(activeVariables.ofType[TermVariable])
-      .filter { v =>
-        statements.exists { s =>
-          (s.presentVariables.contains(v) ||
-            s.getPotentiallyIntersectingVariables(v).ofType[StatementVariable].nonEmpty) &&
-            !s.boundVariables.contains(v)
+      .filter { arbitraryVariable =>
+        statements.exists { statement =>
+          (statement.presentVariables.contains(arbitraryVariable) ||
+            statement.getPotentiallyIntersectingVariables(arbitraryVariable)
+              .ofType[StatementVariable]
+              .exists { statementVariable => !distinctVariables.areDistinct(arbitraryVariable, statementVariable) }) &&
+            !statement.boundVariables.contains(arbitraryVariable)
         }
       }
     Conditions(updatedArbitraryVariables, updatedDistinctVariables)
