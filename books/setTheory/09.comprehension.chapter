@@ -67,7 +67,7 @@ qed
 term comprehension (x X φ)
   format ({x ∈ X | φ})
   (∀ y ↔ ∈ y _ ∧ ∈ y X sub y x φ)
-  distinct-variables (x y, x X, y X, y φ)
+  distinct-variables (y φ)
 
 theorem Membership Condition for a Comprehension
 premise = S comprehension x X φ

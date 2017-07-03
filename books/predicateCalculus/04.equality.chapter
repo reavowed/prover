@@ -11,6 +11,8 @@ premise = x y
 premise sub x z φ
 conclusion sub y z φ
 
+comment We first have to prove that equality is symmetric before we can prove the reversed version of the second axiom.
+
 theorem Reverse Equality
 premise = x y
 prove = x x
@@ -24,6 +26,8 @@ prove = y x
 prove sub x z φ
 qed
 
+comment Now we can also prove that the substitution axiom works when substituting into equal terms.
+
 theorem Substitution of Equals
 premise = x y
 prove = sub x z X sub x z X
@@ -34,6 +38,24 @@ theorem Substitution of Equals
 premise = x y
 prove = y x
 prove = sub y z X sub x z X
+qed
+
+comment Basic facts about equality.
+
+theorem Equality Is Symmetric
+assume = x y {
+  prove = y x
+}
+assume = y x {
+  prove = x y
+}
+prove ↔ = x y = y x
+qed
+
+theorem Equality Is Transitive
+premise = x y
+premise = y z
+prove = x z
 qed
 
 theorem Equivalence of Substituted Equals
@@ -47,28 +69,13 @@ assume sub y z φ {
 prove ↔ sub x z φ sub y z φ
 qed
 
-theorem Equality Is Symmetric
+theorem Distinguishable Terms Are Not Equal
+premise sub x z φ
+premise ¬ sub y z φ
 assume = x y {
-  prove = y x
+  prove sub y z φ
 }
-assume = y x {
-  prove = x y
-}
-prove ↔ = x y = y x
-qed
-
-theorem Reverse Equality Inside Negation
-premise ¬ = x y
-assume = y x {
-  prove = x y
-}
-prove ¬ = y x
-qed
-
-theorem Equality Is Transitive
-premise = x y
-premise = y z
-prove = x z
+prove ¬ = x y
 qed
 
 theorem Sets Are Equal If Always Equal to the Same Thing
@@ -82,6 +89,12 @@ prove = x x
 prove ∃ y = y x
 qed
 
+theorem Proof by Renamed Set
+premise proves = a x φ
+prove ∃ y = y x
+prove φ
+qed
+
 theorem Exclusive Or for Equality
 premise ∨ = x y = x z
 premise ¬ = y z
@@ -90,10 +103,4 @@ assume ∧ = x y = x z {
 }
 prove ¬ ∧ = x y = x z
 prove ⊕ = x y = x z
-qed
-
-theorem Proof by Renamed Set
-premise proves = a x φ
-prove ∃ y = y x
-prove φ
 qed

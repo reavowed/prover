@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.DetailedProof.{AssertionStep, DirectReference}
+import net.prover.model.DetailedProof.{AssertionStep, DirectReference, SimplifiedReference}
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
 
 class TheoremSpec extends ProverSpec {
@@ -52,7 +52,8 @@ class TheoremSpec extends ProverSpec {
       Seq(φ),
       ProvenStatement(
         ForAll(x, φ),
-        Conditions(Set(x), DistinctVariables.empty)))
+        Conditions(Set(x), DistinctVariables.empty)),
+      RearrangementType.Expansion)
     val specification = axiom(Seq(ForAll(x, φ)), SubstitutedStatementVariable(φ, y, x))
     val existence = axiom(Seq(SubstitutedStatementVariable(φ, y, x)), Exists(x, φ))
     val proveExistence = axiom(Seq(DeducedPremise(φ, ψ), DirectPremise(Exists(x, φ))), ProvenStatement(ψ, Conditions(Set(x), DistinctVariables(x -> ψ))))
@@ -382,7 +383,7 @@ class TheoremSpec extends ProverSpec {
         contextWith(extractLeftConjunct, anythingImpliesATrueStatement))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Implication(χ, φ))
-      theorem.proof.steps.last.asInstanceOf[AssertionStep].references.head.asInstanceOf[DirectReference].html mustEqual "φ"
+      theorem.proof.steps.last.asInstanceOf[AssertionStep].references.head.asInstanceOf[SimplifiedReference].html mustEqual "φ"
     }
 
     "prove a statement by rearranging" in {
@@ -408,6 +409,24 @@ class TheoremSpec extends ProverSpec {
         contextWith(extractLeftConjunct, combineConjunction, addRightDisjunct))
 
       theorem.conclusion mustEqual ProvenStatement.withNoConditions(Disjunction(ψ, Conjunction(χ, φ)))
+    }
+
+    "add conditions when proving a statement by rearranging " in {
+      val addNegatedConjunct = axiom(
+        Seq(Negation(φ)),
+        Negation(Conjunction(φ, ψ)),
+        RearrangementType.Expansion)
+
+      val theorem = parseTheorem(
+        "XXX",
+        "premise ¬ = x y",
+        "prove ∀ x ¬ ∧ = x y φ",
+        "qed")(
+        contextWith(addNegatedConjunct, generalization))
+
+      theorem.conclusion mustEqual ProvenStatement(
+        ForAll(x, Negation(Conjunction(Equals(x, y), φ))),
+        Conditions(Set(x), DistinctVariables.empty))
     }
 
     "resolve substitutions involving substituted term variables" in {

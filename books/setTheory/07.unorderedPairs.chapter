@@ -48,7 +48,6 @@ term pair (a b)
   name (Unordered Pair)
   format ({a, b})
   (∀ x ↔ ∈ x _ ∨ = x a = x b)
-  distinct-variables (x a, x b)
 
 theorem Elements of Unordered Pair
 premise ∈ c pair a b

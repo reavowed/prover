@@ -3,7 +3,6 @@ Introduce the subset relation, ⊆.
 
 statement ⊆ (a b)
   definition (∀ x → ∈ x a ∈ x b)
-  distinct-variables (x a, x b)
 
 theorem Definition of ⊆
 premise ⊆ A B
@@ -44,7 +43,7 @@ qed
 
 theorem Element Transfers to Superset
 premise ⊆ A B
-premise ∈ a A
+premise ∈ x A
 prove ∀ x → ∈ x A ∈ x B
-prove ∈ a B
+prove ∈ x B
 qed

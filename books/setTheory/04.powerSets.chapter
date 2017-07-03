@@ -13,7 +13,6 @@ term powerSet (a)
   name (Power Set)
   format (𝒫a)
   (∀ x ↔ ∈ x _ ⊆ x a)
-  distinct-variables (x a)
 
 theorem Subset Is in Power Set
 premise ⊆ b a

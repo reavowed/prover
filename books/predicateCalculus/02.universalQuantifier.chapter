@@ -4,6 +4,7 @@ Introduce the universal quantifier.
 statement ∀ (x φ) format ((∀x)φ) boundVariables (x)
 
 axiom Generalization
+expansion
 premise φ
 conclusion ∀ x φ
 arbitrary-variables (x)

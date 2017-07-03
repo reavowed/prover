@@ -53,6 +53,7 @@ qed
 comment Some inferences for negated conjunctions.
 
 theorem Add Negated Conjunct
+expansion
 premise ¬ φ
 assume ∧ φ ψ {
   prove φ
@@ -61,6 +62,7 @@ prove ¬ ∧ φ ψ
 qed
 
 theorem Add Negated Conjunct
+expansion
 premise ¬ ψ
 assume ∧ φ ψ {
   prove ψ

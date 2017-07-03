@@ -16,13 +16,6 @@ prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
 prove ∃! x φ
 qed
 
-theorem Proof by Unique Existence
-premise ∃! x φ
-premise proves φ ψ
-prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
-prove ψ non-distinct (x φ)
-qed
-
 theorem Proof by Renamed Unique Existence
 premise ∃! x φ
 premise proves sub y x φ ψ
@@ -81,14 +74,14 @@ qed
 
 theorem Existence of Unique Value
 premise ∃! x φ
-let x_0 sub x_0 x φ {
+let y sub y x φ {
   assume φ {
-    prove = x x_0
+    prove = x y
   }
-  assume = x x_0  {
+  assume = x y  {
     prove φ
   }
-  prove ∀ x ↔ φ = x x_0
+  prove ∀ x ↔ φ = x y
   prove ∃ y ∀ x ↔ φ = x y
 }
 qed

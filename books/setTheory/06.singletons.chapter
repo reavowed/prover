@@ -25,7 +25,6 @@ term singleton (a)
   name (Singleton)
   format ({a})
   (∀ x ↔ ∈ x _ = x a)
-  distinct-variables (x a)
 
 theorem A Set Is an Element of Its Singleton
 prove ∀ x ↔ ∈ x singleton a = x a

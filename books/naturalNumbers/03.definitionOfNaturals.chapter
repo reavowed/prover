@@ -12,7 +12,6 @@ qed
 
 term ℕ ()
   (∀ n ↔ ∈ n _ ∀ X → inductive X ∈ n X)
-  distinct-variables (n X)
 
 theorem An Element of All Inductive Sets Is a Natural Number
 premise ∀ X → inductive X ∈ n X

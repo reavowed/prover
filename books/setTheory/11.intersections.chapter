@@ -29,7 +29,6 @@ term intersection (a)
   format (⋂a)
   premises (¬ = a ∅)
   (∀ y ↔ ∈ y _ ∀ x → ∈ x a ∈ y x)
-  distinct-variables (x y, x a, y a)
 
 term ∩ (a b)
   (= _ intersection pair a b)

@@ -40,10 +40,7 @@ qed
 
 theorem A Set with an Element Is Not the Empty Set
 premise ∃ x ∈ x a
-assume = a ∅ {
-  prove ∃ x ∈ x ∅
-  prove ¬ ∃ x ∈ x ∅
-}
+prove ¬ ∃ x ∈ x ∅
 prove ¬ = a ∅
 qed
 

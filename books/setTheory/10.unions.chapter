@@ -13,7 +13,6 @@ term union (a)
   name (Arbitrary Union)
   format (⋃a)
   (∀ y ↔ ∈ y _ ∃ x ∧ ∈ y x ∈ x a)
-  distinct-variables (x y, x a, y a)
 
 theorem Element of Arbitrary Union
 premise ∈ x union A

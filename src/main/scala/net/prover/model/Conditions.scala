@@ -101,4 +101,10 @@ object Conditions {
   def parser(implicit context: Context): Parser[Conditions] = {
     optionalParser.getOrElse(Conditions.empty)
   }
+
+  implicit class ConditionsSeqOps(seq: Traversable[Conditions]) {
+    def foldTogether: Conditions = {
+      seq.foldLeft(Conditions.empty)(_ ++ _)
+    }
+  }
 }

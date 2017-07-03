@@ -48,15 +48,12 @@ assume ∈ orderedPair 0 x union S {
   let h ∧ ∈ orderedPair 0 x h ∈ h S {
     prove ∃ n ∧ ∈ n ℕ ∧ function h n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply h a g_0 ∃ b ∧ = a successor b = apply h a apply f apply h b
     let m ∧ ∈ m ℕ ∧ function h m X ∀ a → ∈ a m ∨ ∧ = a 0 = apply h a g_0 ∃ b ∧ = a successor b = apply h a apply f apply h b {
+      prove = x apply h 0
       prove ∈ 0 m
       prove ∨ ∧ = 0 0 = apply h 0 g_0 ∃ b ∧ = 0 successor b = apply h 0 apply f apply h b
       prove ¬ = 0 successor b
-      prove ¬ ∧ = 0 successor b = apply h 0 apply f apply h b
-      prove ∀ b ¬ ∧ = 0 successor b = apply h 0 apply f apply h b
       prove ¬ ∃ b ∧ = 0 successor b = apply h 0 apply f apply h b
       prove ∧ = 0 0 = apply h 0 g_0
-      prove = apply h 0 g_0
-      prove = x apply h 0
       prove = x g_0
     }
   }

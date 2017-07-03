@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
+import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, Summary}
 
 case class DetailedProof(steps: Seq[DetailedProof.Step]) {
   def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
@@ -51,9 +51,18 @@ object DetailedProof {
     override def referencedInferenceIds: Set[String] = transformationProof.referencedInferenceIds ++ inference.id.toSet
   }
 
+  case class Simplification(result: Statement, previous: Seq[Statement])
+
+  case class Rearrangement(
+    inference: Inference.Summary,
+    substitutions: Substitutions,
+    provenStatement: ProvenStatement,
+    references: Seq[Reference])
+
   sealed trait Reference
   case class DirectReference(index: Int, html: String) extends Reference
   case class DeducedReference(antecedentIndex: Int, consequentIndex: Int) extends Reference
+  case class SimplifiedReference(index: Int, html: String, simplification: Simplification) extends Reference
 
   case class ReferencedAssertion(provenStatement: ProvenStatement, reference: DirectReference)
   case class ReferencedDeduction(assumption: Statement, deduction: ProvenStatement, reference: Reference)
