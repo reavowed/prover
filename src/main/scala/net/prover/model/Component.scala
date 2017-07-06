@@ -1,7 +1,7 @@
 package net.prover.model
 
 import scala.collection.immutable.Nil
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 trait Component {
   def componentType: ComponentType
@@ -275,19 +275,9 @@ trait DefinedComponent[T <: Component] extends Component {
   override def allVariables: Set[Variable] = subcomponents.flatMap(_.allVariables).toSet
   override def presentVariables: Set[Variable] = subcomponents.flatMap(_.presentVariables).toSet
   override val boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = {
-    val (mergedBound, mergedFree) = subcomponents.foldLeft((Set.empty[TermVariable], Set.empty[TermVariable])) {
-      case ((boundVariables, freeVariables), subcomponent) =>
-        val (subcomponentBound, subcomponentFree) = subcomponent.boundAndFreeVariables
-        val newBound = boundVariables ++ subcomponentBound
-        val newFree = freeVariables ++ subcomponentFree
-        newBound.intersect(newFree).headOption.foreach { v =>
-          throw new Exception(s"Variable $v appears both bound and free in $this")
-        }
-        (newBound, newFree)
-    }
-    mergedBound.intersect(localBoundVariables).headOption.foreach { v => throw new Exception(s"Variable $v is bound twice in $this")}
-    (mergedBound ++ localBoundVariables, mergedFree -- localBoundVariables)
+    DefinedComponent.tryBoundAndFree(subcomponents, localBoundVariables).get
   }
+
   override def implicitDistinctVariables: DistinctVariables = {
     val subcomponentImplicitDistinctVariables = subcomponents.map(_.implicitDistinctVariables).foldTogether
     val implicitPairs = for {
@@ -326,6 +316,7 @@ trait DefinedComponent[T <: Component] extends Component {
       updatedBoundVariables <- localBoundVariables
         .map(_.applySubstitutions(substitutions).flatMap(Term.optionAsVariable))
         .traverseOption
+      _ <- DefinedComponent.tryBoundAndFree(updatedSubcomponents, updatedBoundVariables).toOption
     } yield {
       update(updatedSubcomponents, updatedBoundVariables)
     }
@@ -506,6 +497,32 @@ trait DefinedComponent[T <: Component] extends Component {
                   otherSubstitutionsSoFar)
             }
       }
+  }
+}
+
+object DefinedComponent {
+  def tryBoundAndFree(subcomponents: Seq[Component], localBoundVariables: Set[TermVariable]): Try[(Set[TermVariable], Set[TermVariable])] = {
+    for {
+      (mergedBound, mergedFree) <- subcomponents.foldLeft(Try((Set.empty[TermVariable], Set.empty[TermVariable]))) {
+        case (Success((boundVariables, freeVariables)), subcomponent) =>
+          val (subcomponentBound, subcomponentFree) = subcomponent.boundAndFreeVariables
+          val newBound = boundVariables ++ subcomponentBound
+          val newFree = freeVariables ++ subcomponentFree
+          newBound.intersect(newFree).headOption match {
+            case Some(v) =>
+              Failure(new Exception(s"Variable $v appears both bound and free in $this"))
+            case None =>
+              Success((newBound, newFree))
+          }
+        case (failure, _) => failure
+      }
+      _ <- mergedBound.intersect(localBoundVariables).headOption match {
+        case Some(v) => Failure(new Exception(s"Variable $v is bound twice in $this"))
+        case None => Success(())
+      }
+    } yield {
+      (mergedBound ++ localBoundVariables, mergedFree -- localBoundVariables)
+    }
   }
 }
 
