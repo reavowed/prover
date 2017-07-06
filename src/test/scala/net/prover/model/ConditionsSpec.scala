@@ -36,7 +36,7 @@ class ConditionsSpec extends ProverSpec {
   "restricting conditions" should {
     "remove arbitrary variable that only appears bound" in {
       Conditions(Set(x), DistinctVariables.empty)
-        .restrictToStatements(Seq(ForAll(x, φ), Exists(y, ForAll(x, ψ))))
+        .restrictToStatements(Seq(ForAll(x, φ), Negation(Exists(x, Negation(φ)))))
         .arbitraryVariables must beEmpty
     }
 

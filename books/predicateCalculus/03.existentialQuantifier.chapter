@@ -15,7 +15,7 @@ qed
 comment If something exists, we can name that something with an arbitrary variable for free.
 
 theorem Arbitrary Value for Existence
-premise ∃ x φ
+premise ∃ x φ elidable
 premise proves sub y x φ ψ
 assume ¬ ψ {
   prove ¬ sub y x φ
@@ -26,7 +26,7 @@ prove ψ
 qed
 
 theorem Arbitrary Value for Existence
-premise ∃ x φ
+premise ∃ x φ elidable
 premise proves φ ψ
 assume ¬ ψ {
   prove ¬ φ

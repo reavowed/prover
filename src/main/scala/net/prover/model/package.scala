@@ -29,6 +29,7 @@ package object model {
     def mapBoth[U, R](f: S => U, g: T => R): (U, R) = (f(tuple._1), g(tuple._2))
     def optionMapLeft[R](f: S => Option[R]): Option[(R, T)] = f(tuple._1).map((_, tuple._2))
     def optionMapRight[R](f: T => Option[R]): Option[(S, R)] = f(tuple._2).map((tuple._1, _))
+    def reverse: (T, S) = (tuple._2, tuple._1)
   }
 
   implicit class SeqOps[T](seq: Seq[T]) {
@@ -38,6 +39,27 @@ package object model {
           f(acc, t).map(acc :+ _)
         }
       }
+    }
+    def foldInAnyOrder[S](acc: S)(f: (S, T) => Option[S]): Option[S] = {
+      def helper(left: Seq[T], failed: Seq[T], current: S): Option[S] = {
+        left match {
+          case head +: tail =>
+            f(current, head) match {
+              case Some(next) =>
+                helper(failed ++ tail, Nil, next)
+              case None =>
+                helper(tail, failed :+ head, current)
+            }
+          case Nil =>
+            failed match {
+              case Nil =>
+                Some(current)
+              case _ =>
+                None
+            }
+        }
+      }
+      helper(seq, Nil, acc)
     }
     def mapWithIndex[S](f: (T, Int) => S): Seq[S] = {
       seq.zipWithIndex.map { case (t, index) => f(t, index)}
@@ -70,9 +92,9 @@ package object model {
       case _ =>
         false
     }
-    def mapCollect[S](f: T => Option[S]): Seq[S] = {
-      seq.map(f).collect {
-        case Some(t) => t
+    def mapCollect[S](f: PartialFunction[T, Option[S]]): Seq[S] = {
+      seq.map(f.lift).collect {
+        case Some(Some(t)) => t
       }
     }
   }

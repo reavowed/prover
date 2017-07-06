@@ -63,6 +63,9 @@ object DetailedProof {
   case class DirectReference(index: Int, html: String) extends Reference
   case class DeducedReference(antecedentIndex: Int, consequentIndex: Int) extends Reference
   case class SimplifiedReference(index: Int, html: String, simplification: Simplification) extends Reference
+  case class ElidedReference(inference: Summary, substitutions: Substitutions, references: Seq[Reference]) extends Reference {
+    val referenceType = "elided"
+  }
 
   case class ReferencedAssertion(provenStatement: ProvenStatement, reference: DirectReference)
   case class ReferencedDeduction(assumption: Statement, deduction: ProvenStatement, reference: Reference)

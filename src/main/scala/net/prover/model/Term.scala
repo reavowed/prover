@@ -50,7 +50,7 @@ case class TermVariable(text: String) extends Term with Variable {
     else
       Some(SubstitutedTermVariable(this, termToReplaceWith, termToBeReplaced))
   }
-  override def validateSubstitution(
+  override def validateSingleSubstitution(
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable,
     target: Component,
@@ -97,6 +97,45 @@ case class TermVariable(text: String) extends Term with Variable {
           (Nil, None)
       }
     }
+  }
+  override def findDoubleSubstitution(
+    target: Component,
+    firstTermVariable: TermVariable,
+    firstTerm: Term,
+    secondTermVariable: TermVariable
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+    if (firstTermVariable == firstTerm) {
+      this.findSubstitution(target, secondTermVariable)
+    } else if (this == firstTermVariable) {
+      firstTerm.findSubstitution(target, secondTermVariable)
+    } else {
+      val (termsStraight, noTermStraight) = this.findSubstitution(target, secondTermVariable)
+      val (termsSubbed, noTermSubbed) = SubstitutedTermVariable(this, firstTerm, firstTermVariable).findSubstitution(target, secondTermVariable)
+      val jointTerms = termsStraight.map(_.mapRight(_ ++ DistinctVariables(firstTermVariable -> this))) ++ termsSubbed
+      (jointTerms, noTermStraight.map(_ ++ DistinctVariables(firstTermVariable -> this)) orElse noTermSubbed)
+    }
+  }
+  override def condenseWithSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    other: Component,
+    thisSubstitutions: PartialSubstitutions,
+    otherSubstitutions: PartialSubstitutions
+  ): Option[(PartialSubstitutions, PartialSubstitutions)] = {
+    def tryWith(thisTarget: Term, additionalDistinctVariables: DistinctVariables): Option[(PartialSubstitutions, PartialSubstitutions)] = {
+      other.calculateSubstitutions(thisTarget, otherSubstitutions)
+        .map(thisSubstitutions.withDistinctVariables(additionalDistinctVariables) -> _)
+        .headOption
+    }
+    super.condenseWithSubstitution(termToReplaceWith, termToBeReplaced, other, thisSubstitutions, otherSubstitutions) orElse
+      (if (termToBeReplaced == termToReplaceWith) {
+        tryWith(this, DistinctVariables.empty)
+      } else if (this == termToBeReplaced) {
+        tryWith(termToReplaceWith, DistinctVariables.empty)
+      } else {
+        tryWith(this, DistinctVariables(termToBeReplaced -> this)) orElse
+          tryWith(SubstitutedTermVariable(this, termToReplaceWith, termToBeReplaced), DistinctVariables.empty)
+      })
   }
   override def replacePlaceholder(other: Component) = Some(this)
   override def html: String = Html.format(text)
@@ -163,12 +202,12 @@ object PlaceholderTerm extends Term with Placeholder[Term] {
 }
 
 object Term extends ComponentType {
-  def asVariable(term: Term): TermVariable = {
-    optionAsVariable(term).getOrElse(throw new Exception(s"Expected term variable, got $term"))
+  def asVariable(component: Component): TermVariable = {
+    optionAsVariable(component).getOrElse(throw new Exception(s"Expected term variable, got $component"))
   }
 
-  def optionAsVariable(term: Term): Option[TermVariable] = {
-    term match {
+  def optionAsVariable(component: Component): Option[TermVariable] = {
+    component match {
       case v: TermVariable =>
         Some(v)
       case _ =>

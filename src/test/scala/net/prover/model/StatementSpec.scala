@@ -191,7 +191,7 @@ class StatementSpec extends ProverSpec {
 
       forall(statements) { s =>
         val firstSubstitution = s.makeSingleSubstitution(a, z, DistinctVariables.empty).get
-        firstSubstitution.makeSingleSubstitution(n, z, DistinctVariables.empty).get mustEqual firstSubstitution
+        firstSubstitution.makeSingleSubstitution(n, z, DistinctVariables(z -> a)).get mustEqual firstSubstitution
       }
     }
 
@@ -270,6 +270,34 @@ class StatementSpec extends ProverSpec {
     "not return substituted variable if the term variable matches the one being replaced" in {
       SubstitutedStatementVariable(φ, y, x)
         .getPotentiallyIntersectingVariables(x) must not contain(φ)
+    }
+  }
+
+  "statement condensing" should {
+    "condense a statement variable with a known substitution to a matching compound statement" in {
+      val premise = φ
+      val premiseSubstitutions = PartialSubstitutions(
+        Map(φ -> Conjunction(φ, ψ)),
+        Map.empty,
+        DistinctVariables.empty)
+      val conclusion = Conjunction(χ, φ)
+      val conclusionSubstitutions = PartialSubstitutions.empty
+      premise.condense(conclusion, premiseSubstitutions, conclusionSubstitutions) must beSome((
+        PartialSubstitutions(Map(φ -> Conjunction(φ, ψ)), Map.empty, DistinctVariables.empty),
+        PartialSubstitutions(Map(χ -> φ, φ -> ψ), Map.empty, DistinctVariables.empty)))
+    }
+
+    "condense a compound statement to a statement variable with a known matching substitution" in {
+      val premise = φ
+      val premiseSubstitutions = PartialSubstitutions(
+        Map(φ -> Conjunction(φ, ψ)),
+        Map.empty,
+        DistinctVariables.empty)
+      val conclusion = Conjunction(χ, φ)
+      val conclusionSubstitutions = PartialSubstitutions.empty
+      conclusion.condense(premise, conclusionSubstitutions, premiseSubstitutions) must beSome((
+        PartialSubstitutions(Map(χ -> φ, φ -> ψ), Map.empty, DistinctVariables.empty),
+        PartialSubstitutions(Map(φ -> Conjunction(φ, ψ)), Map.empty, DistinctVariables.empty)))
     }
   }
 }

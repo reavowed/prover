@@ -27,14 +27,66 @@ trait Component {
   def applySubstitutions(substitutions: Substitutions): Option[Component]
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Component]
   def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[(Component, DistinctVariables)]
-  def validateSubstitution(
+  def validateSingleSubstitution(
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable,
     target: Component,
     distinctVariables: DistinctVariables
   ): Option[DistinctVariables]
   def findSubstitution(target: Component, termVariableToBeReplaced: TermVariable): (Seq[(Term, DistinctVariables)], Option[DistinctVariables])
+  def findDoubleSubstitution(
+    target: Component,
+    firstTermVariable: TermVariable,
+    firstTerm: Term,
+    secondTermVariable: TermVariable
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables])
   def replacePlaceholder(other: Component): Option[Component]
+  def condense(
+    other: Component,
+    thisSubstitutions: PartialSubstitutions,
+    otherSubstitutions: PartialSubstitutions
+  ): Option[(PartialSubstitutions, PartialSubstitutions)] = {
+    condenseOneWay(other, thisSubstitutions, otherSubstitutions) orElse
+      other.condenseOneWay(this, otherSubstitutions, thisSubstitutions).map(_.reverse)
+  }
+  protected def condenseOneWay(
+    other: Component,
+    thisSubstitutions: PartialSubstitutions,
+    otherSubstitutions: PartialSubstitutions
+  ): Option[(PartialSubstitutions, PartialSubstitutions)] = {
+    for {
+      thisSubstituted <- applySubstitutions(thisSubstitutions.knownSubstitutions)
+      updatedOtherSubstitutions <- other.calculateSubstitutions(thisSubstituted, otherSubstitutions).headOption
+    } yield (thisSubstitutions, updatedOtherSubstitutions)
+  }
+  def condenseWithSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    other: Component,
+    thisSubstitutions: PartialSubstitutions,
+    otherSubstitutions: PartialSubstitutions
+  ): Option[(PartialSubstitutions, PartialSubstitutions)] = {
+    other match {
+      case statementVariable: StatementVariable =>
+        otherSubstitutions.unknown.toSeq.mapCollect {
+          case (SubstitutedStatementVariable(`statementVariable`, otherTermToReplaceWith, otherTermToBeReplaced), otherTarget) =>
+            otherSubstitutions.known.get(otherTermToBeReplaced).flatMap(Term.optionAsVariable).flatMap { substitutedTermToBeReplaced =>
+              for {
+                (substitutedOtherTermToReplaceWith, newDistinctVariables) <-
+                  findDoubleSubstitution(otherTarget, termToBeReplaced, termToReplaceWith, substitutedTermToBeReplaced)
+                    ._1.headOption
+                updatedOtherSubstitutions <- otherTermToReplaceWith
+                  .calculateSubstitutions(
+                    substitutedOtherTermToReplaceWith,
+                    otherSubstitutions.withDistinctVariables(newDistinctVariables))
+                  .headOption
+              } yield (thisSubstitutions.withDistinctVariables(newDistinctVariables), updatedOtherSubstitutions)
+            }
+        }.headOption
+      case _ =>
+        None
+    }
+  }
   def html: String
   def safeHtml: String = html
   def serialized: String
@@ -54,9 +106,9 @@ trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Compon
   override def implicitDistinctVariables: DistinctVariables = DistinctVariables.empty
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Set[Variable] = {
     if (termVariable == termToBeReplaced)
-      termToReplaceWith.allVariables
+      termToReplaceWith.getPotentiallyIntersectingVariables(termVariable)
     else
-      termToReplaceWith.allVariables + variable
+      termToReplaceWith.getPotentiallyIntersectingVariables(termVariable) + variable
   }
   override def calculateSubstitutions(
     other: Component,
@@ -91,7 +143,7 @@ trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Compon
   ): Option[T] = {
     if (newTermToReplaceWith == newTermToBeReplaced)
       Some(this.asInstanceOf[T])
-    else if (newTermToBeReplaced == termToBeReplaced)
+    else if (newTermToBeReplaced == termToBeReplaced && distinctVariables.areDistinct(termToBeReplaced, termToReplaceWith))
       Some(this.asInstanceOf[T])
     else if (newTermToBeReplaced == termToReplaceWith && distinctVariables.areDistinct(newTermToBeReplaced, variable))
       if (newTermToReplaceWith == termToBeReplaced)
@@ -108,7 +160,7 @@ trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Compon
           None
       }
   }
-  override def validateSubstitution(
+  override def validateSingleSubstitution(
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable,
     target: Component,
@@ -143,24 +195,55 @@ trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Compon
     termVariableToBeReplaced: TermVariable
   ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
     if (this == target) {
-      if (presentVariables.contains(termVariableToBeReplaced))
-        (Seq((termVariableToBeReplaced, DistinctVariables.empty)), None)
-      else if (termVariableToBeReplaced == termToBeReplaced)
-        (Seq((termVariableToBeReplaced, DistinctVariables.empty)), Some(DistinctVariables(termVariableToBeReplaced -> termToReplaceWith.presentVariables)))
-      else
-        (Seq((termVariableToBeReplaced, DistinctVariables.empty)), Some(DistinctVariables(termVariableToBeReplaced -> presentVariables)))
-    } else {
+      (Seq((termVariableToBeReplaced, DistinctVariables.empty)), DistinctVariables.attempt(termVariableToBeReplaced, this))
+    } else if (termToReplaceWith == termVariableToBeReplaced) {
       target match {
-        case `variable` if termToReplaceWith == termVariableToBeReplaced =>
+        // [x/y][y/x]φ is φ if y is distinct from φ
+        case `variable` =>
           (Seq((termToBeReplaced, DistinctVariables(termVariableToBeReplaced -> variable))), None)
-        case SubstitutedStatementVariable(`variable`, otherTermToReplaceWith: TermVariable, `termToBeReplaced`) if termToReplaceWith == termVariableToBeReplaced =>
+        // [z/y][y/x]φ is [z/x]φ if y is distinct from φ
+        case SubstitutedStatementVariable(`variable`, otherTermToReplaceWith: TermVariable, `termToBeReplaced`) =>
           (Seq((otherTermToReplaceWith, DistinctVariables(termVariableToBeReplaced -> variable))), None)
         case _ =>
           (Nil, None)
       }
+    } else {
+      (Nil, None)
     }
   }
+  override def findDoubleSubstitution(
+    target: Component,
+    firstTermVariable: TermVariable,
+    firstTerm: Term,
+    secondTermVariable: TermVariable
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+    makeSingleSubstitution(firstTerm, firstTermVariable, DistinctVariables.empty) match {
+      case Some(substituted) =>
+        substituted.findSubstitution(target, secondTermVariable)
+      case None =>
+        (Nil, None)
+    }
+  }
+
   override def replacePlaceholder(other: Component): Option[T] = Some(this.asInstanceOf[T])
+
+  protected override def condenseOneWay(
+    other: Component,
+    thisSubstitutions: PartialSubstitutions,
+    otherSubstitutions: PartialSubstitutions
+  ): Option[(PartialSubstitutions, PartialSubstitutions)] = {
+    super.condenseOneWay(other, thisSubstitutions, otherSubstitutions) orElse (for {
+      updatedVariable <- variable.applySubstitutions(thisSubstitutions.knownSubstitutions)
+      updatedTermToReplaceWith <- termToReplaceWith.applySubstitutions(thisSubstitutions.knownSubstitutions)
+      updatedTermToBeReplaced <- termToBeReplaced.applySubstitutions(thisSubstitutions.knownSubstitutions).flatMap(Term.optionAsVariable)
+      result <- updatedVariable.condenseWithSubstitution(
+        updatedTermToReplaceWith,
+        updatedTermToBeReplaced,
+        other,
+        thisSubstitutions,
+        otherSubstitutions)
+    } yield result)
+  }
 
   override def html: String = "[" + termToReplaceWith.safeHtml + "/" + termToBeReplaced.html + "]" + variable.html
   override def serialized: String = Seq(
@@ -247,6 +330,7 @@ trait DefinedComponent[T <: Component] extends Component {
       update(updatedSubcomponents, updatedBoundVariables)
     }
   }
+
   override def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[T] = {
     if (termToReplaceWith == termToBeReplaced)
       Some(this.asInstanceOf[T])
@@ -259,7 +343,7 @@ trait DefinedComponent[T <: Component] extends Component {
           .traverseOption
       } yield update(updatedSubcomponents, localBoundVariables)
   }
-  override def validateSubstitution(
+  override def validateSingleSubstitution(
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable,
     target: Component,
@@ -270,7 +354,7 @@ trait DefinedComponent[T <: Component] extends Component {
         case (otherSubcomponents, _) =>
           subcomponents.zip(otherSubcomponents)
             .map { case (subcomponent, otherSubcomponent) =>
-              subcomponent.validateSubstitution(termToReplaceWith, termToBeReplaced, otherSubcomponent, distinctVariables)
+              subcomponent.validateSingleSubstitution(termToReplaceWith, termToBeReplaced, otherSubcomponent, distinctVariables)
             }
             .traverseOption
             .map(_.foldTogether)
@@ -315,6 +399,25 @@ trait DefinedComponent[T <: Component] extends Component {
         }
     }
   }
+  private def combineFoundSubstitutions(
+    x: (Seq[(Term, DistinctVariables)], Option[DistinctVariables]),
+    y: (Seq[(Term, DistinctVariables)], Option[DistinctVariables])
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+    val terms = (x._1.map(_._1) ++ y._1.map(_._1)).distinct
+    val termSubstitutions = terms.map { term =>
+      for {
+        xSide <- x._1.find(_._1 == term).map(_._2).orElse(x._2)
+        ySide <- y._1.find(_._1 == term).map(_._2).orElse(y._2)
+      } yield (term, xSide ++ ySide)
+    } collect {
+      case Some(z) => z
+    }
+    val avoidingSubstitutions = for {
+      xSide <- x._2
+      ySide <- y._2
+    } yield xSide ++ ySide
+    (termSubstitutions, avoidingSubstitutions)
+  }
   override def findSubstitution(
     target: Component,
     termVariableToBeReplaced: TermVariable
@@ -322,25 +425,6 @@ trait DefinedComponent[T <: Component] extends Component {
     getMatch(target)
       .map {
         case (targetSubcomponents, _) =>
-          def combine(
-            x: (Seq[(Term, DistinctVariables)], Option[DistinctVariables]),
-            y: (Seq[(Term, DistinctVariables)], Option[DistinctVariables])
-          ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
-            val terms = (x._1.map(_._1) ++ y._1.map(_._1)).distinct
-            val termSubstitutions = terms.map { term =>
-              for {
-                xSide <- x._1.find(_._1 == term).map(_._2).orElse(x._2)
-                ySide <- y._1.find(_._1 == term).map(_._2).orElse(y._2)
-              } yield (term, xSide ++ ySide)
-            } collect {
-              case Some(z) => z
-            }
-            val avoidingSubstitutions = for {
-              xSide <- x._2
-              ySide <- y._2
-            } yield xSide ++ ySide
-            (termSubstitutions, avoidingSubstitutions)
-          }
           if (subcomponents.isEmpty) {
             (Nil, Some(DistinctVariables.empty))
           } else {
@@ -349,10 +433,34 @@ trait DefinedComponent[T <: Component] extends Component {
                 case (subcomponent, targetSubcomponent) =>
                   subcomponent.findSubstitution(targetSubcomponent, termVariableToBeReplaced)
               }
-              x.reduce(combine)
+              x.reduce(combineFoundSubstitutions)
           }
       }
       .getOrElse((Nil, None))
+  }
+  override def findDoubleSubstitution(
+    target: Component,
+    firstTermVariable: TermVariable,
+    firstTerm: Term,
+    secondTermVariable: TermVariable
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+    getMatch(target)
+      .map {
+        case (targetSubcomponents, _) =>
+          if (subcomponents.isEmpty) {
+            (Nil, Some(DistinctVariables.empty))
+          } else {
+            val x = subcomponents.zip(targetSubcomponents)
+              .map {
+                case (subcomponent, targetSubcomponent) =>
+                  subcomponent.findDoubleSubstitution(targetSubcomponent, firstTermVariable, firstTerm, secondTermVariable)
+              }
+            val y = x.reduce(combineFoundSubstitutions)
+            y
+          }
+      }
+      .getOrElse((Nil, None))
+
   }
 
   override def replacePlaceholder(other: Component) = {
@@ -360,6 +468,44 @@ trait DefinedComponent[T <: Component] extends Component {
       updatedSubcomponents <- subcomponents.map(_.replacePlaceholder(other)).traverseOption
       updated <- Try(update(updatedSubcomponents, localBoundVariables)).toOption
     } yield updated
+  }
+
+  override def condense(
+    other: Component,
+    thisSubstitutions: PartialSubstitutions,
+    otherSubstitutions: PartialSubstitutions
+  ): Option[(PartialSubstitutions, PartialSubstitutions)] = {
+    super.condense(other, thisSubstitutions, otherSubstitutions) orElse
+      getMatch(other).flatMap {
+        case (otherSubcomponents, _) =>
+          subcomponents.zip(otherSubcomponents)
+            .foldInAnyOrder((thisSubstitutions, otherSubstitutions)) {
+              case ((thisSubstitutionsSoFar, otherSubstitutionsSoFar), (thisSubcomponent, otherSubcomponent)) =>
+                thisSubcomponent.condense(otherSubcomponent, thisSubstitutionsSoFar, otherSubstitutionsSoFar)
+            }
+      }
+  }
+  override def condenseWithSubstitution(
+    termToReplaceWith: Term,
+    termToBeReplaced: TermVariable,
+    other: Component,
+    thisSubstitutions: PartialSubstitutions,
+    otherSubstitutions: PartialSubstitutions
+  ): Option[(PartialSubstitutions, PartialSubstitutions)] = {
+    super.condenseWithSubstitution(termToReplaceWith, termToBeReplaced, other, thisSubstitutions, otherSubstitutions) orElse
+      getMatch(other).flatMap {
+        case (otherSubcomponents, _) =>
+          subcomponents.zip(otherSubcomponents)
+            .foldInAnyOrder((thisSubstitutions, otherSubstitutions)) {
+              case ((thisSubstitutionsSoFar, otherSubstitutionsSoFar), (thisSubcomponent, otherSubcomponent)) =>
+                thisSubcomponent.condenseWithSubstitution(
+                  termToReplaceWith,
+                  termToBeReplaced,
+                  otherSubcomponent,
+                  thisSubstitutionsSoFar,
+                  otherSubstitutionsSoFar)
+            }
+      }
   }
 }
 
@@ -405,12 +551,19 @@ trait Placeholder[T <: Component] extends Component {
   ) = {
     throw new Exception("Cannot resolve substitution for placeholder")
   }
-  override def validateSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, target: Component, distinctVariables: DistinctVariables) = {
+  override def validateSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, target: Component, distinctVariables: DistinctVariables) = {
     throw new Exception("Cannot validate substitution for placeholder")
   }
-  def findSubstitution(target: Component, termVariableToBeReplaced: TermVariable) = {
-
+  override def findSubstitution(target: Component, termVariableToBeReplaced: TermVariable) = {
     throw new Exception("Cannot find substitution for placeholder")
+  }
+  override def findDoubleSubstitution(
+    target: Component,
+    firstTermVariable: TermVariable,
+    firstTerm: Term,
+    secondTermVariable: TermVariable
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+    throw new Exception("Cannot find double substitution for placeholder")
   }
   override def html: String = "???"
   override def serialized: String = "_"

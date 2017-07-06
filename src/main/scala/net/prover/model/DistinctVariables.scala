@@ -40,12 +40,12 @@ case class DistinctVariables(conditions: Map[TermVariable, Set[Variable]]) exten
     conditions.getOrElse(variable, Set.empty)
   }
 
-  def areDistinct(first: TermVariable, second: TermVariable): Boolean = {
-    get(first).contains(second) || get(second).contains(first)
+  def areDistinct(first: TermVariable, second: Variable): Boolean = {
+    get(first).contains(second) || (second.isInstanceOf[TermVariable] && get(second.asInstanceOf[TermVariable]).contains(first))
   }
 
-  def areDistinct(first: TermVariable, second: Variable): Boolean = {
-    get(first).contains(second)
+  def areDistinct(variable: TermVariable, component: Component): Boolean = {
+    component.getPotentiallyIntersectingVariables(variable).forall(areDistinct(variable, _))
   }
 
   def restrictTo(statements: Seq[Statement]): DistinctVariables = {
@@ -102,6 +102,14 @@ object DistinctVariables {
 
   def apply(pair: (TermVariable, Set[Variable])): DistinctVariables = {
     DistinctVariables.empty + (pair._1, pair._2)
+  }
+
+  def attempt(termVariable: TermVariable, component: Component): Option[DistinctVariables] = {
+    val variables = component.getPotentiallyIntersectingVariables(termVariable)
+    if (variables.contains(termVariable))
+      None
+    else
+      Some(DistinctVariables.empty + (termVariable, variables))
   }
 
   def byStatements(termVariables: Set[TermVariable], statements: Seq[Statement]): Option[DistinctVariables] = {

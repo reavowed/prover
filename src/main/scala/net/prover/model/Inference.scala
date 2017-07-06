@@ -39,7 +39,7 @@ case class DefinitionInference(
   extends Inference
 {
   override def id = calculateHash()
-  override def premises = premisesStatements.map(DirectPremise)
+  override def premises = premisesStatements.map(DirectPremise.apply)
   override def conclusion = ProvenStatement(conclusionStatement, Conditions(Set.empty, distinctVariables))
   override def name: String = s"Definition of $nameOfDefinedStatement"
   override def summary: Inference.Summary = StubSummary(name)
@@ -82,7 +82,7 @@ object Inference {
     def serialized: String
   }
 
-  case class DirectPremise(statement: Statement) extends Premise {
+  case class DirectPremise(statement: Statement, isElidable: Boolean) extends Premise {
     override def statements = Seq(statement)
     override def applySubstitutions(substitutions: Substitutions) = {
       for {
@@ -92,6 +92,14 @@ object Inference {
     override def html = statement.html
     override def serialized = statement.serialized
   }
+  object DirectPremise {
+    def apply(statement: Statement): DirectPremise = DirectPremise(statement, isElidable = false)
+    def unapply(obj: Object): Option[Statement] = obj match {
+      case directPremise: DirectPremise => Some(directPremise.statement)
+      case _ => None
+    }
+  }
+
   case class DeducedPremise(antecedent: Statement, consequent: Statement) extends Premise {
     override def statements = Seq(antecedent, consequent)
     override def applySubstitutions(substitutions: Substitutions) = {
@@ -128,7 +136,12 @@ trait InferenceParser {
   }
 
   private def directPremiseParser(implicit context: Context): Parser[DirectPremise] = {
-    Statement.parser.map(DirectPremise)
+    for {
+      statement <- Statement.parser
+      isElidable <- Parser.optionalWord("elidable").isDefined
+    } yield {
+      DirectPremise(statement, isElidable)
+    }
   }
 
   private def premiseParser(implicit context: Context): Parser[Option[Premise]] = {

@@ -38,7 +38,7 @@ case class StatementVariable(text: String) extends Statement with Variable {
   def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
     substitutions.componentsByVariable.get(this).map(_.asInstanceOf[Statement])
   }
-  override def validateSubstitution(
+  override def validateSingleSubstitution(
     termToReplaceWith: Term,
     termToBeReplaced: TermVariable,
     target: Component,
@@ -90,7 +90,20 @@ case class StatementVariable(text: String) extends Statement with Variable {
       }
     }
   }
+  override def findDoubleSubstitution(
+    target: Component,
+    firstTermVariable: TermVariable,
+    firstTerm: Term,
+    secondTermVariable: TermVariable
+  ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
+    if (firstTerm == firstTermVariable) {
+      findSubstitution(target, secondTermVariable)
+    } else {
+      SubstitutedStatementVariable(this, firstTerm, firstTermVariable).findSubstitution(target, secondTermVariable)
+    }
+  }
   override def replacePlaceholder(other: Component) = Some(this)
+
   override def html: String = text
   override def serialized: String = text
 }

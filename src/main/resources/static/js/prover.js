@@ -257,10 +257,10 @@
               prefix: 'Then',
               assumption: assumption,
               assertion: steps[0].provenStatement.statement,
-              references: steps[0].references,
+              references: getReferences(steps[0]),
               conditions: steps[0].provenStatement.conditions,
               reference: reference,
-              inferenceName: steps[0].inference.name,
+              inference: getInference(steps[0]),
               inferenceLink : getLink(steps[0].inference),
               visibleIndentLevel: visibleIndentLevel,
               conceptualIndentLevel: conceptualIndentLevel
@@ -283,9 +283,8 @@
           $scope.proofRows.push({
             prefix: 'Let ' + variable + ' be such that',
             assumption: assumptionStep.assumption,
-            inferenceName: assertionStep.inference.name,
-            inferenceLink : getLink(assertionStep.inference),
-            references: assertionStep.references,
+            inference: getInference(assertionStep),
+            references: getReferences(assertionStep),
             reference: reference,
             visibleIndentLevel: visibleIndentLevel,
             conceptualIndentLevel: conceptualIndentLevel
@@ -306,20 +305,28 @@
           $scope.proofRows.push({
             prefix: 'Then',
             assertion: assertionStep.provenStatement.statement,
-            references: assertionStep.references,
+            references: getReferences(assertionStep),
             conditions: override ? override.conditions : assertionStep.provenStatement.conditions,
-            inferenceName: assertionStep.inference.name,
-            inferenceLink : getLink(assertionStep.inference),
+            inference: getInference(assertionStep),
             reference: override ? override.reference : reference,
             visibleIndentLevel: visibleIndentLevel,
             conceptualIndentLevel: override ? override.level : conceptualIndentLevel
           });
         }
 
-        function getLink(inference) {
-          return inference.key ?
-            '#/' + inference.bookKey + '/' + inference.chapterKey + '/' + inference.key :
-            null
+        function getInference(step) {
+          var elidedReference = _.find(step.references, function(r) { return r.referenceType === 'elided'; });
+          var inference = elidedReference ? elidedReference.inference : step.inference;
+          return {
+            name: inference.name,
+            link: inference.key ? '#/' + inference.bookKey + '/' + inference.chapterKey + '/' + inference.key : null
+          }
+        }
+
+        function getReferences(step) {
+          var baseReferences = step.references;
+          var elidedReference = _.find(step.references, function(r) { return r.referenceType === 'elided'; });
+          return elidedReference ? baseReferences.concat(elidedReference.references) : baseReferences;
         }
 
         function addStep(step, reference, visibleIndentLevel, conceptualIndentLevel, override) {

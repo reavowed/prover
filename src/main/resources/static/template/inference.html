@@ -41,8 +41,8 @@
                     <span ng-if="row.assumption" class="assumption" ng-bind-html="row.assumption"></span><span ng-if="row.assumption && row.assertion"> ⊢ </span><span ng-if="row.assertion" class="assertion" ng-bind-html="row.assertion"></span>.
                 </td>
                 <td>
-                    <a ng-if="row.inferenceLink && row.inferenceName" class="stepInferenceId" href="{{row.inferenceLink}}">{{row.inferenceName}}</a>
-                    <span ng-if="!row.inferenceLink && row.inferenceName" class="stepInferenceId">{{row.inferenceName}}</span>
+                    <a ng-if="row.inference.link && row.inference.name" class="stepInferenceId" href="{{row.inference.link}}">{{row.inference.name}}</a>
+                    <span ng-if="!row.inference.link && row.inference.name" class="stepInferenceId">{{row.inference.name}}</span>
                 </td>
             </tr>
         </table>

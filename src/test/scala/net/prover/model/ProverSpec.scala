@@ -120,12 +120,22 @@ trait ProverSpec extends Specification {
     Set.empty,
     DistinctVariables.empty)
 
+  val Union = TermDefinition(
+    "union",
+    Seq(x),
+    "Arbitrary Union",
+    Format("⋃%0", requiresBrackets = true),
+    Nil,
+    φ,
+    Set.empty,
+    DistinctVariables.empty)
+
   val statementDefinitions = Seq(
     Implication, Negation, Conjunction, Disjunction, Equivalence,
     ForAll, Exists, ExistsUnique,
     ElementOf, Equals)
 
-  val termDefinitions = Seq(EmptySetDefinition, Comprehension, PowerSet, OrderedPair)
+  val termDefinitions = Seq(EmptySetDefinition, Comprehension, PowerSet, OrderedPair, Union)
 
   val baseContext = Context.empty.copy(
     statementVariableNames = Set(φ, ψ, χ).map(_.text),

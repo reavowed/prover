@@ -44,9 +44,7 @@ premise function f X X
 premise ∈ g_0 X
 premise = S comprehension g powerSet × ℕ X ∃ n ∧ ∈ n ℕ ∧ function g n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply g a g_0 ∃ b ∧ = a successor b = apply g a apply f apply g b
 assume ∈ orderedPair 0 x union S {
-  prove ∃ g ∧ ∈ orderedPair 0 x g ∈ g S
   let h ∧ ∈ orderedPair 0 x h ∈ h S {
-    prove ∃ n ∧ ∈ n ℕ ∧ function h n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply h a g_0 ∃ b ∧ = a successor b = apply h a apply f apply h b
     let m ∧ ∈ m ℕ ∧ function h m X ∀ a → ∈ a m ∨ ∧ = a 0 = apply h a g_0 ∃ b ∧ = a successor b = apply h a apply f apply h b {
       prove = x apply h 0
       prove ∈ 0 m

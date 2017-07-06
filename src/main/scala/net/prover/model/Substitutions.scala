@@ -67,7 +67,7 @@ case class PartialSubstitutions(
     targetComponent: Component
   ): Seq[PartialSubstitutions] = {
     substitutedBaseComponent
-      .validateSubstitution(substitutedTermToReplaceWith, substitutedTermToBeReplaced, targetComponent, distinctVariables)
+      .validateSingleSubstitution(substitutedTermToReplaceWith, substitutedTermToBeReplaced, targetComponent, distinctVariables)
       .toSeq
       .map(withDistinctVariables)
   }
