@@ -9,16 +9,11 @@ prove ↔ ∈ x a ∈ x b
 prove ∀ x ↔ ∈ x a ∈ x b
 qed
 
-axiom Axiom of Extensionality
-conclusion → ∀ x ↔ ∈ x a ∈ x b = a b
-
-theorem Sets with Same Members Are Equal
+axiom Extensionality
 premise ∀ x ↔ ∈ x a ∈ x b
-prove → ∀ x ↔ ∈ x a ∈ x b = a b
-prove = a b
-qed
+conclusion = a b
 
-theorem Sets with Same Members Are Equal
+theorem Extensionality
 premise proves ∈ x a ∈ x b
 premise proves ∈ x b ∈ x a
 prove ∀ x ↔ ∈ x a ∈ x b
@@ -53,6 +48,16 @@ premise ∃ y ∀ x ↔ ∈ x y φ
 premise ∀ x ↔ φ ψ
 let z ∀ x ↔ ∈ x z φ {
   prove ∀ x ↔ ∈ x z ψ
+  prove ∃ y ∀ x ↔ ∈ x y ψ
+}
+qed
+
+theorem Replace Equivalent Membership Condition
+premise ∃ y ∀ x ↔ ∈ x y φ
+premise ∀ y ∀ x ↔ φ ψ
+let z ∀ x ↔ ∈ x z sub z y φ {
+  prove ∀ x ↔ sub z y φ sub z y ψ
+  prove ∀ x ↔ ∈ x z sub z y ψ
   prove ∃ y ∀ x ↔ ∈ x y ψ
 }
 qed
