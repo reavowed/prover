@@ -9,8 +9,8 @@ case class Chapter(
 {
   val key: String = title.formatAsKey
 
-  def theoremCache: Map[String, Theorem] = {
-    entries.ofType[Theorem].map(t => (t.id, t)).toMap
+  def theoremCache: Seq[Theorem] = {
+    entries.ofType[Theorem]
   }
 }
 

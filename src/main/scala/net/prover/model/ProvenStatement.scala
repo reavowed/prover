@@ -10,6 +10,13 @@ case class ProvenStatement(
       updateConditions <- conditions.applySubstitutions(substitutions)
     } yield ProvenStatement(updatedStatement, updateConditions)
   }
+
+  def serialized: String = {
+    if (conditions.isEmpty)
+      statement.serialized
+    else
+      s"${statement.serialized} ${conditions.serialized}"
+  }
 }
 
 object ProvenStatement {

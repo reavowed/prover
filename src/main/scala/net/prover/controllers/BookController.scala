@@ -12,7 +12,7 @@ import scala.util.control.NonFatal
 class BookController {
   private var _books: Option[Seq[Book]] = None
   def getBooks: Seq[Book] = {
-    val theoremCache = _books.map(_.flatMap(_.theoremCache).toMap).getOrElse(Map.empty)
+    val theoremCache = _books.toSeq.flatMap(_.flatMap(_.theoremCache))
     val newBooks = Book.fromDirectory("books", theoremCache)
     _books = Some(newBooks)
     newBooks

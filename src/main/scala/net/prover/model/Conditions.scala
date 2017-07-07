@@ -52,6 +52,19 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
   def isEmpty: Boolean = {
     arbitraryVariables.isEmpty && distinctVariables.conditions.isEmpty
   }
+
+  def serialized: String = {
+    val arbitrary =
+      if (arbitraryVariables.nonEmpty)
+        Some(s"arbitrary-variables (${arbitraryVariables.map(_.text).mkString(", ")})")
+      else
+        None
+    val distinct =
+      if (distinctVariables.nonEmpty)
+        Some(s"distinct-variables (${distinctVariables.serialized})")
+      else None
+    (arbitrary.toSeq ++ distinct.toSeq).mkString(" ")
+  }
 }
 
 object Conditions {

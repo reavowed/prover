@@ -90,7 +90,16 @@ case class DistinctVariables(conditions: Map[TermVariable, Set[Variable]]) exten
     serialize(gen, serializers)
   }
 
+  def serialized: String = {
+    conditions.toSeq.sortBy(_._1.text).flatMap { case (termVariable, variables) =>
+      variables.toSeq.sortBy(_.text).map { variable =>
+        s"$termVariable $variable"
+      }
+    }.mkString(" ")
+  }
+
   def isEmpty: Boolean = conditions.isEmpty
+  def nonEmpty: Boolean = conditions.nonEmpty
 }
 
 object DistinctVariables {

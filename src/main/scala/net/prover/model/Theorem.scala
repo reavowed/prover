@@ -60,11 +60,11 @@ object Theorem extends ChapterEntryParser[Theorem] with InferenceParser {
     proofOutline: ProofOutline)(
     implicit context: Context
   ): Option[DetailedProof] = {
-    val id = Inference.calculateHash(premises, proofOutline.steps.ofType[ProofOutline.StepWithAssertion].last.assertion)
-    context.theoremCache.get(id)
-      .filter { cachedTheorem =>
-        cachedTheorem.proofOutline == proofOutline &&
-        cachedTheorem.referencedInferenceIds.forall(id => context.inferences.exists(_.id == id))
+    context.theoremCache
+      .find { cachedTheorem =>
+        cachedTheorem.premises == premises &&
+          cachedTheorem.proofOutline == proofOutline &&
+          cachedTheorem.referencedInferenceIds.forall(id => context.inferences.exists(_.id == id))
       }
       .map(_.proof)
   }

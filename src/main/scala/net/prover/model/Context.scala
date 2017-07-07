@@ -7,7 +7,7 @@ case class Context(
     inferenceTransforms: Seq[InferenceTransform],
     statementVariableNames: Set[String],
     termVariableNames: Set[String],
-    theoremCache: Map[String, Theorem]) {
+    theoremCache: Seq[Theorem]) {
 
   def combine(others: Seq[Context]): Context = {
     Context(
@@ -38,7 +38,7 @@ case class Context(
     copy(inferenceTransforms = inferenceTransforms :+ inferenceTransform)
   }
 
-  def withTheoremCache(theoremCache: Map[String, Theorem]): Context = copy(theoremCache = theoremCache)
+  def withTheoremCache(theoremCache: Seq[Theorem]): Context = copy(theoremCache = theoremCache)
 
   def nextInferenceKey(name: String): String = {
     inferences.count(_.name == name) match {
@@ -51,5 +51,12 @@ case class Context(
 }
 
 object Context {
-  val empty = Context(Nil, Nil, Nil, Nil, Set.empty, Set.empty, Map.empty)
+  val empty = Context(
+    statementDefinitions = Nil,
+    termDefinitions = Nil,
+    inferences = Nil,
+    inferenceTransforms = Nil,
+    statementVariableNames = Set.empty,
+    termVariableNames = Set.empty,
+    theoremCache = Nil)
 }

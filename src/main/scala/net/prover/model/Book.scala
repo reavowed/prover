@@ -22,8 +22,8 @@ case class Book(
     context.combine(transitiveDependencies.map(_.context))
   }
 
-  def theoremCache: Map[String, Theorem] = {
-    chapters.flatMap(_.theoremCache).toMap
+  def theoremCache: Seq[Theorem] = {
+    chapters.flatMap(_.theoremCache)
   }
 
   protected def transitiveDependencies: Seq[Book] = (dependencies.flatMap(_.transitiveDependencies) ++ dependencies).distinctBy(_.title)
@@ -76,7 +76,7 @@ object Book {
     dependentBooks: Seq[PreParsedBook],
     otherBooks: Seq[PreParsedBook],
     parsedBooks: Seq[Book],
-    theoremCache: Map[String, Theorem]
+    theoremCache: Seq[Theorem]
   ): (Seq[Book], Seq[PreParsedBook]) = {
     book.imports.foldLeft[Either[Seq[Book], String]](Left(Nil)) {
       case (Left(books), title) =>
@@ -108,7 +108,7 @@ object Book {
     }
   }
 
-  private def parseBooks(books: Seq[PreParsedBook], theoremCache: Map[String, Theorem], parsedBooks: Seq[Book] = Nil): Seq[Book] = {
+  private def parseBooks(books: Seq[PreParsedBook], theoremCache: Seq[Theorem], parsedBooks: Seq[Book] = Nil): Seq[Book] = {
     books match {
       case Nil =>
         parsedBooks
@@ -118,7 +118,7 @@ object Book {
     }
   }
 
-  def fromDirectory(pathName: String, theoremCache: Map[String, Theorem]): Seq[Book] = {
+  def fromDirectory(pathName: String, theoremCache: Seq[Theorem]): Seq[Book] = {
     val bookFilePaths = FileUtils.listFiles(new File(pathName), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)
       .asScala
       .map(_.toPath)

@@ -17,7 +17,7 @@ trait Inference {
   def summary: Inference.Summary
 
   def calculateHash(): String = {
-    Inference.calculateHash(premises, conclusion.statement)
+    Inference.calculateHash(premises, conclusion)
   }
 }
 
@@ -68,7 +68,7 @@ object Inference {
     Some(inference.name, inference.premises, inference.conclusion)
   }
 
-  def calculateHash(premises: Seq[Premise], conclusion: Statement): String = {
+  def calculateHash(premises: Seq[Premise], conclusion: ProvenStatement): String = {
     val serialized = (premises.map(_.serialized) :+ conclusion.serialized).mkString("\n")
     val sha = MessageDigest.getInstance("SHA-256")
     sha.update(serialized.getBytes("UTF-8"))
