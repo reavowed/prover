@@ -59,7 +59,7 @@ qed
 
 theorem Extend Function Range to Superset
 premise function f A X
-premise ⊆ X Y
+premise ⊆ X Y elidable
 prove ∧ ⊆ f × A X ∀ x → ∈ x A ∃! y ∈ orderedPair x y f
 prove ⊆ × A X × A Y
 prove ⊆ f × A Y

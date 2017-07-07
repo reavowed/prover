@@ -58,21 +58,17 @@ assume ∈ orderedPair 0 x union S {
 }
 assume = x g_0 {
   prove function singleton orderedPair 0 g_0 singleton 0 singleton g_0
-  prove = 1 singleton 0
   prove function singleton orderedPair 0 g_0 1 singleton g_0
-  prove ⊆ singleton g_0 X
   prove function singleton orderedPair 0 g_0 1 X
   assume ∈ a 1 {
     prove ∈ a singleton 0
     prove = a 0
     prove ∈ orderedPair 0 g_0 singleton orderedPair 0 g_0
-    prove = g_0 apply singleton orderedPair 0 g_0 0
     prove = apply singleton orderedPair 0 g_0 0 g_0
     prove = apply singleton orderedPair 0 g_0 a g_0
     prove ∨ ∧ = a 0 = apply singleton orderedPair 0 g_0 a g_0 ∃ b ∧ = a successor b = apply singleton orderedPair 0 g_0 a apply f apply singleton orderedPair 0 g_0 b
   }
   prove ∀ a → ∈ a 1 ∨ ∧ = a 0 = apply singleton orderedPair 0 g_0 a g_0 ∃ b ∧ = a successor b = apply singleton orderedPair 0 g_0 a apply f apply singleton orderedPair 0 g_0 b
-  prove ∈ 0 ℕ
   prove ∈ 1 ℕ
   prove ∧ ∈ 1 ℕ ∧ function singleton orderedPair 0 g_0 1 X ∀ a → ∈ a 1 ∨ ∧ = a 0 = apply singleton orderedPair 0 g_0 a g_0 ∃ b ∧ = a successor b = apply singleton orderedPair 0 g_0 a apply f apply singleton orderedPair 0 g_0 b
   prove ∃ n ∧ ∈ n ℕ ∧ function singleton orderedPair 0 g_0 n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply singleton orderedPair 0 g_0 a g_0 ∃ b ∧ = a successor b = apply singleton orderedPair 0 g_0 a apply f apply singleton orderedPair 0 g_0 b

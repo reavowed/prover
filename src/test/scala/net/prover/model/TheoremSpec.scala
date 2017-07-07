@@ -35,7 +35,11 @@ class TheoremSpec extends ProverSpec {
     val extractLeftConjunct = axiom(Seq(Conjunction(φ, ψ)), φ, RearrangementType.Simplification)
     val combineConjunction = axiom(Seq(φ, ψ), Conjunction(φ, ψ), RearrangementType.Expansion)
     val addRightDisjunct = axiom(Seq(ψ), Disjunction(φ, ψ), rearrangementType = RearrangementType.Expansion)
-    val substitutionOfEquals = axiom(Seq(Equals(x, y), SubstitutedStatementVariable(φ, x, z)), SubstitutedStatementVariable(φ, y, z))
+    val substitutionOfEquals = axiom(
+      Seq(
+        DirectPremise(Equals(x, y), isElidable = true),
+        SubstitutedStatementVariable(φ, x, z)),
+      SubstitutedStatementVariable(φ, y, z))
     val substitutionOfEqualsReverse = axiom(Seq(Equals(x, y), SubstitutedStatementVariable(φ, y, z)), SubstitutedStatementVariable(φ, x, z))
     val equivalenceOfSubstitutedEquals = axiom(
       Seq(Equals(x, y)),
@@ -465,6 +469,7 @@ class TheoremSpec extends ProverSpec {
       val elementOfComprehension = axiom(
         Seq(Equals(X, Comprehension(y, Y, φ)), ElementOf(x, X)),
         SubstitutedStatementVariable(φ, x, y))
+
       val theorem = parseTheorem(
         "XXX",
         "premise = Z comprehension x X ∃ y ∧ ∈ y x = x x",
@@ -479,6 +484,21 @@ class TheoremSpec extends ProverSpec {
       theorem.conclusion mustEqual ProvenStatement(
         Exists(n, ElementOf(n, z)),
         Conditions(Set.empty, DistinctVariables(x -> y, y -> z)))
+    }
+
+    "prove an elided premise by working out substitution targets" in {
+      val pairIsSymmetric = axiom(
+        Nil,
+        Equals(Pair(x, y), Pair(y, x)))
+
+      val theorem = parseTheorem(
+        "XXX",
+        "premise = x pair y z ",
+        "prove = x pair z y",
+        "qed")(
+        contextWith(pairIsSymmetric, substitutionOfEquals))
+
+      theorem.conclusion mustEqual ProvenStatement.withNoConditions(Equals(x, Pair(z, y)))
     }
   }
 }

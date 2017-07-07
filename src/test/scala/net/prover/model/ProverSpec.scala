@@ -110,6 +110,16 @@ trait ProverSpec extends Specification {
     Set.empty,
     DistinctVariables.empty)
 
+  val Pair = TermDefinition(
+    "pair",
+    Seq(x, y),
+    "Unordered Pair",
+    Format("{%0, %1}", requiresBrackets = false),
+    Nil,
+    φ,
+    Set.empty,
+    DistinctVariables.empty)
+
   val OrderedPair = TermDefinition(
     "orderedPair",
     Seq(x, y),
@@ -135,7 +145,7 @@ trait ProverSpec extends Specification {
     ForAll, Exists, ExistsUnique,
     ElementOf, Equals)
 
-  val termDefinitions = Seq(EmptySetDefinition, Comprehension, PowerSet, OrderedPair, Union)
+  val termDefinitions = Seq(EmptySetDefinition, Comprehension, PowerSet, Pair, OrderedPair, Union)
 
   val baseContext = Context.empty.copy(
     statementVariableNames = Set(φ, ψ, χ).map(_.text),

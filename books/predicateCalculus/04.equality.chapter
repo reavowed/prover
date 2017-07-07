@@ -7,7 +7,7 @@ axiom Equality Is Reflexive
 conclusion = x x
 
 axiom Substitution of Equals
-premise = x y
+premise = x y elidable
 premise sub x z φ
 conclusion sub y z φ
 
@@ -20,7 +20,7 @@ prove = y x
 qed
 
 theorem Substitution of Equals
-premise = x y
+premise = x y elidable
 premise sub y z φ
 prove = y x
 prove sub x z φ

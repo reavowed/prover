@@ -23,6 +23,13 @@ trait Component {
   def freeVariables: Set[TermVariable] = boundAndFreeVariables._2
   def implicitDistinctVariables: DistinctVariables
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Set[Variable]
+  def getDifferences(other: Component): Set[(Component, Component)] = {
+    if (this == other)
+      Set.empty
+    else
+      getInternalDifferences(other) + (this -> other)
+  }
+  def getInternalDifferences(other: Component): Set[(Component, Component)] = Set.empty
   def calculateSubstitutions(other: Component, substitutions: PartialSubstitutions): Seq[PartialSubstitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
   def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Component]
@@ -294,6 +301,16 @@ trait DefinedComponent[T <: Component] extends Component {
       Set.empty
     else
       subcomponents.flatMap(_.getPotentiallyIntersectingVariables(termVariable)).toSet -- localBoundVariables
+  }
+  override def getInternalDifferences(other: Component): Set[(Component, Component)] = {
+    getMatch(other)
+      .map {
+        case (otherSubcomponents, _) =>
+          subcomponents.zip(otherSubcomponents)
+            .map { case (a, b) => a.getDifferences(b) }
+            .foldLeft(Set.empty[(Component, Component)])(_ ++ _)
+      }
+      .getOrElse(Set.empty)
   }
 
   override def calculateSubstitutions(
