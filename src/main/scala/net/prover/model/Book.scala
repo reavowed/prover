@@ -1,7 +1,7 @@
 package net.prover.model
 
 import java.io.File
-import java.nio.file.Path
+import java.nio.file.{Files, Path, Paths}
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.apache.commons.io.FileUtils
@@ -60,71 +60,41 @@ object Book {
 
   private case class PreParsedBook(title: String, path: Path, imports: Seq[String], tokenizer: StringTokenizer)
 
-  private def preparseBooks(bookFilePaths: Seq[Path]): Seq[PreParsedBook] = {
-    bookFilePaths.map { path =>
-      val tokenizer = Tokenizer.fromPath(path)
-      if (tokenizer.isEmpty) throw new Exception(s"Book file '$path' was empty")
+  private def getPreParsedBooks(bookDirectoryPathName: String): Seq[PreParsedBook] = {
+    FileUtils.listFiles(new File(bookDirectoryPathName), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)
+      .asScala
+      .map(_.toPath)
+      .filter(_.getFileName.toString.endsWith(".book")).toSeq
+      .map { path =>
+        val tokenizer = Tokenizer.fromPath(path)
+        if (tokenizer.isEmpty) throw new Exception(s"Book file '$path' was empty")
 
-      val (title, tokenizerAfterTitle) = Parser.toEndOfLine.parse(tokenizer)
-      val (imports, tokenizerAfterImports) = importsParser.parse(tokenizerAfterTitle)
-      PreParsedBook(title, path, imports, tokenizerAfterImports.asInstanceOf[StringTokenizer].copy(currentBook = Some(title)))
-    }
+        val (title, tokenizerAfterTitle) = Parser.toEndOfLine.parse(tokenizer)
+        val (imports, tokenizerAfterImports) = importsParser.parse(tokenizerAfterTitle)
+        PreParsedBook(title, path, imports, tokenizerAfterImports.asInstanceOf[StringTokenizer].copy(currentBook = Some(title)))
+      }
   }
 
   private def parseBook(
     book: PreParsedBook,
-    dependentBooks: Seq[PreParsedBook],
-    otherBooks: Seq[PreParsedBook],
-    parsedBooks: Seq[Book],
+    previousBooks: Seq[Book],
     theoremCache: Seq[Theorem]
-  ): (Seq[Book], Seq[PreParsedBook]) = {
-    book.imports.foldLeft[Either[Seq[Book], String]](Left(Nil)) {
-      case (Left(books), title) =>
-        parsedBooks.find(_.title == title).map(b => Left(books :+ b)).getOrElse(Right(title))
-      case (r @ Right(_), _) =>
-        r
-    } match {
-      case Left(dependencies) =>
-        val initialBook = Book(book.title, book.path, dependencies, Nil, Context.empty.withTheoremCache(theoremCache))
-        val parsedBook = linesParser(initialBook).parse(book.tokenizer)._1
-        dependentBooks match {
-          case dependentBook +: otherDependentBooks =>
-            parseBook(dependentBook, otherDependentBooks, otherBooks, parsedBooks :+ parsedBook, theoremCache)
-          case Nil =>
-            (parsedBooks :+ parsedBook, otherBooks)
-        }
-      case Right(title) =>
-        otherBooks.partition(_.title == title) match {
-          case (Seq(dependency), otherOtherBooks) =>
-            parseBook(dependency, book +: dependentBooks, otherOtherBooks, parsedBooks, theoremCache)
-          case (Nil, _) =>
-            dependentBooks.find(_.title == title) match {
-              case Some(_) =>
-                throw new Exception(s"Circular dependency detected in book '$title'")
-              case None =>
-                throw new Exception(s"Unrecognised book '$title'")
-            }
-        }
+  ): Book = {
+    val dependencies = book.imports.map { title =>
+      previousBooks.find(_.title == title).getOrElse(throw new Exception(s"Could not find imported book '$title'"))
     }
+    linesParser(Book(book.title, book.path, dependencies, Nil, Context.empty.withTheoremCache(theoremCache)))
+      .parse(book.tokenizer)._1
   }
 
-  private def parseBooks(books: Seq[PreParsedBook], theoremCache: Seq[Theorem], parsedBooks: Seq[Book] = Nil): Seq[Book] = {
-    books match {
-      case Nil =>
-        parsedBooks
-      case book +: otherBooks =>
-        val (moreParsedBooks, remainingUnparsedBooks) = parseBook(book, Nil, otherBooks, parsedBooks, theoremCache)
-        parseBooks(remainingUnparsedBooks, theoremCache, moreParsedBooks)
-    }
-  }
-
-  def fromDirectory(pathName: String, theoremCache: Seq[Theorem]): Seq[Book] = {
-    val bookFilePaths = FileUtils.listFiles(new File(pathName), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)
+  def fromDirectory(bookDirectoryPathName: String, theoremCache: Seq[Theorem]): Seq[Book] = {
+    val preparsedBooks = getPreParsedBooks(bookDirectoryPathName)
+    Files
+      .readAllLines(Paths.get(bookDirectoryPathName, "books.list"))
       .asScala
-      .map(_.toPath)
-      .filter(_.getFileName.toString.endsWith(".book"))
-      .toSeq
-    val preparsedBooks = preparseBooks(bookFilePaths)
-    parseBooks(preparsedBooks, theoremCache)
+      .foldLeft(Seq.empty[Book]) { case (previousBooks, bookTitle) =>
+        val preParsedBook = preparsedBooks.find(_.title == bookTitle).getOrElse(throw new Exception(s"Could not find book '$bookTitle'"))
+        previousBooks :+ parseBook(preParsedBook, previousBooks, theoremCache)
+      }
   }
 }
