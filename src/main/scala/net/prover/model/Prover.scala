@@ -33,7 +33,6 @@ case class Prover(
   def proveAssertion(): StepWithProvenStatement = {
     proveAssertionDirectlyFromInferences()
       .orElse(proveAssertionByRearranging())
-      .orElse(proveAssertionByEliding())
       .orElse(proveAssertionFromTransformedInferences())
       .getOrElse {
         throw new Exception(s"Could not prove statement $assertion")
@@ -41,23 +40,7 @@ case class Prover(
   }
 
   def proveAssertionDirectlyFromInferences(): Option[AssertionStep] = {
-    availableInferences.iterator
-      .flatMap { inference =>
-        inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty).map(inference -> _)
-      }
-      .flatMap { case (inference, substitutions) =>
-        matchPremisesToFacts(inference.premises, substitutions, inference.allowsRearrangement).map(inference -> _)
-      }
-      .flatMap { case (inference, (matchedPremises, substitutions)) =>
-        substitutions.tryResolve().map((inference, matchedPremises, _))
-      }
-      .mapCollect { case (inference, matchedPremises, substitutions) =>
-        proveStatement(inference.conclusion, matchedPremises.map(_.provenStatement), substitutions)
-          .filter { p =>
-            p.statement == assertion
-          }
-          .map(p => AssertionStep(p, inference.summary, matchedPremises.map(_.reference)))
-      }
+    (availableInferences.iterator.flatMap(proveUsingInference) ++ availableInferences.iterator.flatMap(proveUsingElidedInference))
       .nextOption()
   }
 
@@ -94,57 +77,6 @@ case class Prover(
     }
   }
 
-  def proveAssertionByEliding(): Option[AssertionStep] = {
-    availableInferences.iterator
-      .mapCollect { inference =>
-        val (prePremises, elidableAndPostPremises) = inference.premises.span {
-          case directPremise: DirectPremise if directPremise.isElidable =>
-            false
-          case _ =>
-            true
-        }
-        elidableAndPostPremises match {
-          case (elidablePremise: DirectPremise) +: postPremises =>
-            Some((inference, prePremises, elidablePremise, postPremises))
-          case _ =>
-            None
-        }
-      }
-      .flatMap { case (inference, prePremises, elidablePremise, postPremises) =>
-        inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty)
-          .map {(inference, prePremises, elidablePremise, postPremises, _)}
-      }
-      .flatMap { case (inference, prePremises, elidablePremise, postPremises, substitutionsAfterConclusion) =>
-        matchPremisesToFacts(prePremises, substitutionsAfterConclusion, inference.allowsRearrangement)
-          .map { case (prePremiseMatches, substitutionsAfterPrePremises) =>
-            (inference, prePremiseMatches, elidablePremise, postPremises, substitutionsAfterPrePremises)
-          }
-      }
-      .flatMap { case (inference, prePremiseMatches, elidablePremise, postPremises, substitutionsAfterPrePremises) =>
-        matchPremisesToFacts(postPremises, substitutionsAfterPrePremises, inference.allowsRearrangement)
-          .map { case (postPremiseMatches, substitutionsAfterPostPremises) =>
-            (inference, prePremiseMatches, elidablePremise, postPremiseMatches, substitutionsAfterPostPremises)
-          }
-      }
-      .flatMap { case (inference, prePremiseMatches, elidablePremise, postPremiseMatches, substitutionsAfterPostPremises) =>
-        matchElidablePremise(elidablePremise, substitutionsAfterPostPremises)
-          .map { case (elidedPremiseMatch, substitutionsAfterElidedPremise) =>
-            (inference, (prePremiseMatches :+ elidedPremiseMatch) ++ postPremiseMatches, substitutionsAfterElidedPremise)
-          }
-      }
-      .flatMap { case (inference, matchedPremises, substitutions) =>
-        substitutions.tryResolve().map((inference, matchedPremises, _))
-      }
-      .mapCollect { case (inference, matchedPremises, substitutions) =>
-        proveStatement(inference.conclusion, matchedPremises.map(_.provenStatement), substitutions)
-          .filter { p =>
-            p.statement == assertion
-          }
-          .map(p => AssertionStep(p, inference.summary, matchedPremises.map(_.reference)))
-      }
-      .nextOption()
-  }
-
   def findStatementInFacts(statement: Statement): Option[(Conditions, Reference)] = {
     val directIterator = provenAssertions.iterator
       .collect { case ReferencedAssertion(provenStatement, reference) if provenStatement.statement == statement =>
@@ -179,7 +111,7 @@ case class Prover(
             (inference, inferencePremises, transformedPremises, statementsToProve)
           }
       }
-      .flatMap { case (inference, inferencePremises, transformedPremises, statementsToProve) =>
+      .mapCollect { case (inference, inferencePremises, transformedPremises, statementsToProve) =>
         val transformedConclusion = statementsToProve.last
         val oldVariables = (inferencePremises.map(_.statement) :+ inference.conclusion.statement).flatMap(_.allVariables).toSet
         val newVariables = (transformedPremises.map(_.statement) :+ transformedConclusion).flatMap(_.allVariables).toSet diff oldVariables
@@ -187,10 +119,8 @@ case class Prover(
           newVariable <- newVariables.ofType[TermVariable]
           oldVariable <- oldVariables
         } yield newVariable -> oldVariable
-        for {
-          substitutions <- transformedConclusion.calculateSubstitutions(assertion, PartialSubstitutions.empty)
-          if newVariables.ofType[StatementVariable].isEmpty
-          proofSteps <- statementsToProve.collectFold[AssertionStep] { case (assertions, statement) =>
+        if (newVariables.ofType[StatementVariable].isEmpty) {
+          statementsToProve.collectFold[AssertionStep] { case (assertions, statement) =>
             val provenAssertions = transformedPremises.mapWithIndex { (premise, index) =>
               ReferencedAssertion(ProvenStatement.withNoConditions(premise.statement), DirectReference(index, premise.html))
             } ++ assertions.mapWithIndex { (step, index) =>
@@ -204,24 +134,21 @@ case class Prover(
               Nil,
               transformedPremises,
               Nil,
-              false
+              debug = false
             ).proveAssertionDirectlyFromInferences()
-          }.toSeq
-        } yield {
-          (substitutions, transformedPremises, DetailedProof(proofSteps), proofSteps.last.provenStatement, inference.summary, inference.allowsRearrangement)
+          }.map { proofSteps =>
+            (TransformedInference(inference, transformedPremises, proofSteps.last.provenStatement), DetailedProof(proofSteps))
+          }
+        } else {
+          None
         }
       }
-      .flatMap { case (substitutions, transformedPremises, transformationProof,  transformedConclusion, inferenceSummary, rearrangementAllowed) =>
-        matchPremisesToFacts(transformedPremises, substitutions, rearrangementAllowed)
-          .map((transformedConclusion, inferenceSummary, transformationProof, _))
+      .flatMap { case (transformedInference, transformationProof) =>
+        (proveUsingInference(transformedInference) ++ proveUsingElidedInference(transformedInference))
+          .map((transformedInference, transformationProof, _))
       }
-      .flatMap { case (transformedConclusion, inferenceSummary, transformationProof, (matchedPremises, substitutions)) =>
-        substitutions.tryResolve().map((transformedConclusion, inferenceSummary, transformationProof, matchedPremises, _))
-      }
-      .mapCollect { case (transformedConclusion, inferenceSummary, transformationProof, matchedPremises, substitutions) =>
-        proveStatement(transformedConclusion, matchedPremises.map(_.provenStatement), substitutions)
-          .filter(_.statement == assertion)
-          .map(s => TransformedInferenceStep(s, inferenceSummary, transformationProof, matchedPremises.map(_.reference)))
+      .map { case (transformedInference, transformationProof, assertionStep) =>
+        TransformedInferenceStep(assertionStep.provenStatement, transformedInference.summary, transformationProof, assertionStep.references)
       }
       .nextOption()
   }
@@ -365,6 +292,70 @@ case class Prover(
             ElidedReference(inference.summary, inferenceSubstitutions, matchedPremises.map(_.reference)),
             premiseSubstitutions)
       }
+  }
+
+  private def proveUsingInference(inference: Inference): Iterator[AssertionStep] = {
+    inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty).iterator
+      .flatMap { substitutions =>
+        matchPremisesToFacts(inference.premises, substitutions, inference.allowsRearrangement)
+      }
+      .flatMap { case (matchedPremises, substitutions) =>
+        substitutions.tryResolve().map((matchedPremises, _))
+      }
+      .mapCollect { case (matchedPremises, substitutions) =>
+        proveStatement(inference.conclusion, matchedPremises.map(_.provenStatement), substitutions)
+          .filter(_.statement == assertion)
+          .map(p => AssertionStep(p, inference.summary, matchedPremises.map(_.reference)))
+      }
+  }
+
+  private def proveUsingElidedInference(inference: Inference): Iterator[AssertionStep] = {
+    splitPremisesAtElidable(inference.premises).iterator
+      .flatMap { case (prePremises, elidablePremise, postPremises) =>
+        inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty)
+          .map {(prePremises, elidablePremise, postPremises, _)}
+      }
+      .flatMap { case (prePremises, elidablePremise, postPremises, substitutionsAfterConclusion) =>
+        matchPremisesToFacts(prePremises, substitutionsAfterConclusion, inference.allowsRearrangement)
+          .map { case (prePremiseMatches, substitutionsAfterPrePremises) =>
+            (prePremiseMatches, elidablePremise, postPremises, substitutionsAfterPrePremises)
+          }
+      }
+      .flatMap { case (prePremiseMatches, elidablePremise, postPremises, substitutionsAfterPrePremises) =>
+        matchPremisesToFacts(postPremises, substitutionsAfterPrePremises, inference.allowsRearrangement)
+          .map { case (postPremiseMatches, substitutionsAfterPostPremises) =>
+            (prePremiseMatches, elidablePremise, postPremiseMatches, substitutionsAfterPostPremises)
+          }
+      }
+      .flatMap { case (prePremiseMatches, elidablePremise, postPremiseMatches, substitutionsAfterPostPremises) =>
+        matchElidablePremise(elidablePremise, substitutionsAfterPostPremises)
+          .map { case (elidedPremiseMatch, substitutionsAfterElidedPremise) =>
+            ((prePremiseMatches :+ elidedPremiseMatch) ++ postPremiseMatches, substitutionsAfterElidedPremise)
+          }
+      }
+      .flatMap { case (matchedPremises, substitutions) =>
+        substitutions.tryResolve().map((matchedPremises, _))
+      }
+      .mapCollect { case (matchedPremises, substitutions) =>
+        proveStatement(inference.conclusion, matchedPremises.map(_.provenStatement), substitutions)
+          .filter(_.statement == assertion)
+          .map(p => AssertionStep(p, inference.summary, matchedPremises.map(_.reference)))
+      }
+  }
+
+  private def splitPremisesAtElidable(premises: Seq[Premise]): Option[(Seq[Premise], DirectPremise, Seq[Premise])] = {
+    val (prePremises, elidableAndPostPremises) = premises.span {
+      case directPremise: DirectPremise if directPremise.isElidable =>
+        false
+      case _ =>
+        true
+    }
+    elidableAndPostPremises match {
+      case (elidablePremise: DirectPremise) +: postPremises =>
+        Some((prePremises, elidablePremise, postPremises))
+      case _ =>
+        None
+    }
   }
 
   private def proveStatement(

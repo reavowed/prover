@@ -7,7 +7,7 @@ import net.prover.model.Inference._
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
-  def id: String
+  val id: String = calculateHash()
   def keyOption: Option[String]
   def name: String
   def premises: Seq[Premise]
@@ -26,7 +26,6 @@ trait EntryInference extends Inference {
   def chapterKey: String
   def bookKey: String
 
-  val id = calculateHash()
   override def keyOption = Some(key)
   override def summary = Inference.EntrySummary(name, id, key, chapterKey, bookKey)
 }
@@ -38,13 +37,20 @@ case class DefinitionInference(
     distinctVariables: DistinctVariables)
   extends Inference
 {
-  override def id = calculateHash()
   override def premises = premisesStatements.map(DirectPremise.apply)
   override def conclusion = ProvenStatement(conclusionStatement, Conditions(Set.empty, distinctVariables))
   override def name: String = s"Definition of $nameOfDefinedStatement"
   override def summary: Inference.Summary = StubSummary(name)
   override def allowsRearrangement = true
   override def rearrangementType = RearrangementType.NotRearrangement
+  override def keyOption = None
+}
+
+case class TransformedInference(baseInference: Inference, premises: Seq[Premise], conclusion: ProvenStatement) extends Inference {
+  override def name: String = baseInference.name
+  override def summary: Summary = baseInference.summary
+  override def allowsRearrangement: Boolean = baseInference.allowsRearrangement
+  override def rearrangementType: RearrangementType = baseInference.rearrangementType
   override def keyOption = None
 }
 
