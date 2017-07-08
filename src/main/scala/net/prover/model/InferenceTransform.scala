@@ -1,6 +1,8 @@
 package net.prover.model
 
 import net.prover.model.Inference.DirectPremise
+import net.prover.model.components.Statement
+import net.prover.model.entries.ChapterEntryParser
 
 abstract class InferenceTransform extends ChapterEntry(InferenceTransform) {
   def transform(premises: Seq[DirectPremise], conclusion: Statement): Seq[(Seq[DirectPremise], Seq[Statement])]

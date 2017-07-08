@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.entries.StatementDefinition
+
 class StatementDefinitionSpec extends ProverSpec {
   "statement definition parser" should {
     def parseStatementDefinition(text: String): StatementDefinition = {

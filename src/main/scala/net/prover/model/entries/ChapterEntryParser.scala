@@ -1,4 +1,6 @@
-package net.prover.model
+package net.prover.model.entries
+
+import net.prover.model.{Book, Chapter, ChapterEntry, Context, Parser}
 
 trait ChapterEntryParser[T <: ChapterEntry] extends BookEntryParser {
   def parser(book: Book, chapter: Chapter)(implicit context: Context): Parser[T]

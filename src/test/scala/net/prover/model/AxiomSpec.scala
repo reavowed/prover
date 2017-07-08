@@ -1,6 +1,7 @@
 package net.prover.model
 
 import net.prover.model.Inference.{DeducedPremise, DirectPremise}
+import net.prover.model.entries.Axiom
 
 class AxiomSpec extends ProverSpec {
 

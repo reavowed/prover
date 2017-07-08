@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.entries.{BookEntryParser, ChapterEntryParser, Theorem}
+
 case class Chapter(
   title: String,
   summary: String,

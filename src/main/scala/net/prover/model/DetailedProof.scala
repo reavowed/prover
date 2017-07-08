@@ -1,6 +1,7 @@
 package net.prover.model
 
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, Summary}
+import net.prover.model.components.{Statement, TermVariable, Variable}
 
 case class DetailedProof(steps: Seq[DetailedProof.Step]) {
   def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet

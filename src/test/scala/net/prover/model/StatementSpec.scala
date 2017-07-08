@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.components.{Statement, SubstitutedStatementVariable}
+
 class StatementSpec extends ProverSpec {
 
   def parseStatement(line: String): Statement = {

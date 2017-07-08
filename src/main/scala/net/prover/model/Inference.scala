@@ -4,6 +4,7 @@ import java.security.MessageDigest
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference._
+import net.prover.model.components.Statement
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {

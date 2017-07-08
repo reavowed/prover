@@ -4,6 +4,7 @@ import java.io.File
 import java.nio.file.{Files, Path, Paths}
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.prover.model.entries._
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 

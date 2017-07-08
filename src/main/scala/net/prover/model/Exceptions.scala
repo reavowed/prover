@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.components.TermVariable
+
 case class ReferenceResolveException(
     reference: String,
     message: String)

@@ -1,4 +1,6 @@
-package net.prover.model
+package net.prover.model.entries
+
+import net.prover.model.{Book, Chapter, ChapterEntry, Context, Parser}
 
 case class Comment(text: String) extends ChapterEntry(Comment)
 

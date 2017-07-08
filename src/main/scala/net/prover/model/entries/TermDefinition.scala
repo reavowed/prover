@@ -1,4 +1,7 @@
-package net.prover.model
+package net.prover.model.entries
+
+import net.prover.model.components._
+import net.prover.model.{Book, Chapter, ChapterEntry, Conditions, Context, DefinitionInference, DistinctVariables, Format, Inference, Parser}
 
 case class TermDefinition(
     symbol: String,

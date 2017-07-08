@@ -3,6 +3,8 @@ package net.prover.model
 import java.nio.file.Paths
 
 import net.prover.model.Inference.{DirectPremise, Premise}
+import net.prover.model.components._
+import net.prover.model.entries.{StatementDefinition, TermDefinition}
 import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {

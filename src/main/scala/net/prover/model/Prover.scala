@@ -2,6 +2,7 @@ package net.prover.model
 
 import net.prover.model.DetailedProof._
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
+import net.prover.model.components.{Statement, StatementVariable, TermVariable, Variable}
 
 case class Prover(
   assertion: Statement,

@@ -2,6 +2,8 @@ package net.prover.model
 
 import net.prover.model.DetailedProof.{AssertionStep, SimplifiedReference}
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
+import net.prover.model.components.{PlaceholderStatement, SubstitutedPlaceholderStatement, SubstitutedStatementVariable, SubstitutedTermVariable}
+import net.prover.model.entries.{Axiom, Theorem}
 
 class TheoremSpec extends ProverSpec {
 

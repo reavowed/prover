@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.components.SubstitutedStatementVariable
+
 class ConditionsSpec extends ProverSpec {
   "substituting conditions" should {
     "correctly apply distinct variable condition to a statement with the term variable substituted out" in {

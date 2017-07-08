@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.components.Statement
+
 case class ProvenStatement(
     statement: Statement,
     conditions: Conditions)

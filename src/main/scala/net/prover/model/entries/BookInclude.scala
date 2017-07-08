@@ -1,4 +1,6 @@
-package net.prover.model
+package net.prover.model.entries
+
+import net.prover.model.{Book, Parser, Tokenizer}
 
 object BookInclude extends BookEntryParser {
   override def name: String = "include"

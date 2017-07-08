@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.components.{Statement, Term, TermVariable, Variable}
+
 case class ProofOutline(steps: Seq[ProofOutline.Step])
 
 object ProofOutline {

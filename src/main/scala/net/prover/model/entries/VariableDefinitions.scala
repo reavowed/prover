@@ -1,4 +1,6 @@
-package net.prover.model
+package net.prover.model.entries
+
+import net.prover.model._
 
 object VariableDefinitions extends BookEntryParser {
   override def name: String = "variables"

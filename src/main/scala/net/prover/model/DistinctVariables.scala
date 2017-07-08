@@ -3,6 +3,7 @@ package net.prover.model
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
+import net.prover.model.components._
 
 case class DistinctVariables(conditions: Map[TermVariable, Set[Variable]]) extends JsonSerializable.Base {
   def +(first: TermVariable, second: Variable): DistinctVariables = {

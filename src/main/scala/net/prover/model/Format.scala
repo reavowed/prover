@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.components.Component
+
 case class Format(formatString: String, requiresBrackets: Boolean) {
   def html(components: Seq[Component]): String = {
     val replacedText = components.zipWithIndex.foldLeft(formatString) { case (htmlSoFar, (component, index)) =>

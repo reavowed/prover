@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.components._
+
 case class Substitutions(
     componentsByVariable: Map[Variable, Component],
     distinctVariables: DistinctVariables)

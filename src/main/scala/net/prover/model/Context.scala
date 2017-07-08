@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.entries.{StatementDefinition, TermDefinition, Theorem}
+
 case class Context(
     statementDefinitions: Seq[StatementDefinition],
     termDefinitions: Seq[TermDefinition],

@@ -1,5 +1,8 @@
 package net.prover.model
 
+import net.prover.model.components.PlaceholderTerm
+import net.prover.model.entries.TermDefinition
+
 class TermDefinitionSpec extends ProverSpec {
   "term definition parser" should {
     "parse a term constant" in {

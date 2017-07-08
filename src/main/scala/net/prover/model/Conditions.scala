@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.components._
+
 case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: DistinctVariables) {
   def ++(other: Conditions): Conditions = {
     Conditions(

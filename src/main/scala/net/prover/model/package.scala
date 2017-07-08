@@ -3,7 +3,6 @@ package net.prover
 import scala.collection.generic.CanBuildFrom
 import scala.collection.{TraversableLike, mutable}
 import scala.reflect.ClassTag
-import scala.util.Try
 
 package object model {
   implicit class AnyOps[T](t: T) {

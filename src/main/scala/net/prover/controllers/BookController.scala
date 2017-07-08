@@ -1,6 +1,7 @@
 package net.prover.controllers
 
-import net.prover.model.{Book, Chapter, Inference, Theorem}
+import net.prover.model.entries.Theorem
+import net.prover.model.{Book, Chapter, Inference}
 import org.slf4j.LoggerFactory
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation.{GetMapping, PathVariable, RequestMapping, RestController}
