@@ -1,8 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.model.Inference.{Premise, RearrangementType}
-import net.prover.model.components.Statement
-import net.prover.model.{Book, Chapter, ChapterEntry, Conditions, Context, EntryInference, InferenceParser, Parser, ProvenStatement}
+import net.prover.model.{EntryInference, Inference, ProvenStatement}
 
 case class Axiom(
     name: String,
@@ -15,43 +14,8 @@ case class Axiom(
     conclusion: ProvenStatement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement,
     allowsRearrangement: Boolean = true)
-  extends ChapterEntry(Axiom)
-  with EntryInference
-
-object Axiom extends ChapterEntryParser[Axiom] with InferenceParser {
-  override val name: String = "axiom"
-
-  private def conclusionParser(implicit context: Context): Parser[Statement] = {
-    for {
-      _ <- Parser.requiredWord("conclusion")
-      conclusion <- Statement.parser
-    } yield conclusion
-  }
-
-  def parser(book: Book, chapter: Chapter)(implicit context: Context): Parser[Axiom] = {
-    for {
-      name <- Parser.toEndOfLine
-      rearrangementType <- RearrangementType.parser
-      allowsRearrangement <- Parser.optionalWord("disallow-rearrangement").isUndefined
-      premises <- premisesParser
-      conclusion <- conclusionParser
-      conditions <- Conditions.parser
-    } yield {
-      Axiom(
-        name,
-        context.nextInferenceKey(name),
-        chapter.key,
-        chapter.title,
-        book.key,
-        book.title,
-        premises,
-        ProvenStatement(conclusion, conditions),
-        rearrangementType,
-        allowsRearrangement)
-    }
-  }
-
-  override def addToContext(axiom: Axiom, context: Context): Context = {
-    context.copy(inferences = context.inferences :+ axiom)
-  }
+  extends ChapterEntry(AxiomOutline)
+    with EntryInference
+{
+  override def inferences: Seq[Inference] = Seq(this)
 }

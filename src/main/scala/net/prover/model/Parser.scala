@@ -151,9 +151,9 @@ object Parser {
     }
 
     def collectWhileDefined: Parser[Seq[T]] = {
-      iterateWhileDefined[Seq[T]](
-        Seq.empty,
-        seq => parser.mapMap(seq :+ _))
+      iterateWhileDefined[Seq[T]](Seq.empty) { seq =>
+        parser.mapMap(seq :+ _)
+      }
     }
   }
 
@@ -175,11 +175,11 @@ object Parser {
   }
 
   def iterateWhileDefined[T](
-    initial: T,
+    initial: T)(
     parseFn: T => Parser[Option[T]]
   ): Parser[T] = {
     parseFn(initial)
-      .mapFlatMap(iterateWhileDefined(_, parseFn))
+      .mapFlatMap(iterateWhileDefined(_)(parseFn))
       .getOrElse(initial)
   }
 }

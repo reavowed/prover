@@ -72,34 +72,34 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
 object Conditions {
   val empty = Conditions(Set.empty, DistinctVariables.empty)
 
-  def arbitraryVariablesParser(implicit context: Context): Parser[Option[Set[TermVariable]]] = {
+  def arbitraryVariablesParser(implicit context: ParsingContext): Parser[Option[Set[TermVariable]]] = {
     Parser.optional(
       "arbitrary-variables",
       Term.variableListParser.map(_.toSet))
   }
 
-  def variablePairParser(implicit context: Context): Parser[(TermVariable, Variable)] = {
+  def variablePairParser(implicit context: ParsingContext): Parser[(TermVariable, Variable)] = {
     for {
       first <- Term.variableParser
       second <- Variable.parser
     } yield first -> second
   }
 
-  def variablePairListParser(implicit context: Context): Parser[Seq[(TermVariable, Variable)]] = {
+  def variablePairListParser(implicit context: ParsingContext): Parser[Seq[(TermVariable, Variable)]] = {
     variablePairParser.listInParens(Some(","))
   }
 
-  def optionalDistinctVariablesParser(implicit context: Context): Parser[Option[DistinctVariables]] = {
+  def optionalDistinctVariablesParser(implicit context: ParsingContext): Parser[Option[DistinctVariables]] = {
     Parser.optional(
       "distinct-variables",
       variablePairListParser.map(DistinctVariables(_: _*)))
   }
 
-  def distinctVariablesParser(implicit context: Context): Parser[DistinctVariables] = {
+  def distinctVariablesParser(implicit context: ParsingContext): Parser[DistinctVariables] = {
     optionalDistinctVariablesParser.getOrElse(DistinctVariables.empty)
   }
 
-  def optionalParser(implicit context: Context): Parser[Option[Conditions]] = {
+  def optionalParser(implicit context: ParsingContext): Parser[Option[Conditions]] = {
     for {
       arbitraryVariablesOption <- arbitraryVariablesParser
       distinctVariablesOption <- optionalDistinctVariablesParser
@@ -113,7 +113,7 @@ object Conditions {
     }
   }
 
-  def parser(implicit context: Context): Parser[Conditions] = {
+  def parser(implicit context: ParsingContext): Parser[Conditions] = {
     optionalParser.getOrElse(Conditions.empty)
   }
 

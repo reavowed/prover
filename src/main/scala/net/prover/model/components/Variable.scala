@@ -1,13 +1,13 @@
 package net.prover.model.components
 
-import net.prover.model.{Context, Parser}
+import net.prover.model.{Parser, ParsingContext}
 
 trait Variable extends Component {
   def text: String
 }
 
 object Variable {
-  def parser(implicit context: Context): Parser[Variable] = {
+  def parser(implicit context: ParsingContext): Parser[Variable] = {
     for {
       variableName <- Parser.singleWord
     } yield {

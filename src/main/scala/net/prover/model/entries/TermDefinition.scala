@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.model.components._
-import net.prover.model.{Book, Chapter, ChapterEntry, Conditions, Context, DefinitionInference, DistinctVariables, Format, Inference, Parser}
+import net.prover.model.{Conditions, DefinitionInference, DistinctVariables, Format, Inference, Parser, ParsingContext}
 
 case class TermDefinition(
     symbol: String,
@@ -19,11 +19,7 @@ case class TermDefinition(
   val componentTypes = defaultVariables.map(_.componentType)
   val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue).getOrElse(
     throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultValue'"))
-  val inference: Inference = DefinitionInference(
-    name,
-    premises,
-    definingStatement,
-    distinctVariables)
+  override def inferences: Seq[Inference] = Seq(DefinitionInference(name, premises, definingStatement, distinctVariables))
 
   def apply(components: Component*): DefinedTerm = DefinedTerm(
     components,
@@ -31,7 +27,7 @@ case class TermDefinition(
       components(defaultVariables.indexOf(v))
     }.map(_.asInstanceOf[Term]).map(Term.asVariable), this)
 
-  def termParser(implicit context: Context): Parser[Term] = {
+  def termParser(implicit context: ParsingContext): Parser[Term] = {
     componentTypes.componentsParser.map(apply)
   }
 }
@@ -39,16 +35,16 @@ case class TermDefinition(
 object TermDefinition extends ChapterEntryParser[TermDefinition] {
   override val name: String = "term"
 
-  def premisesParser(implicit context: Context): Parser[Seq[Statement]] = Parser.optional(
+  def premisesParser(implicit context: ParsingContext): Parser[Seq[Statement]] = Parser.optional(
     "premises",
     Statement.listParser,
     Nil)
 
-  def nameParser(implicit context: Context): Parser[Option[String]] = Parser.optional(
+  def nameParser(implicit context: ParsingContext): Parser[Option[String]] = Parser.optional(
     "name",
     Parser.allInParens)
 
-  def parser(book: Book, chapter: Chapter)(implicit context: Context): Parser[TermDefinition] = {
+  def parser(implicit context: ParsingContext): Parser[TermDefinition] = {
     for {
       symbol <- Parser.singleWord
       defaultVariables <- Variable.parser.listInParens(None)
@@ -63,10 +59,6 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
     } yield {
       TermDefinition(symbol, defaultVariables, name, format, premises, definitionTemplate, boundVariables, distinctVariables)
     }
-  }
-
-  override def addToContext(termDefinition: TermDefinition, context: Context): Context = {
-    context.addTermDefinition(termDefinition)
   }
 }
 

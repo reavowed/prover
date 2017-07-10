@@ -5,31 +5,42 @@ import net.prover.model.components.{Statement, Term, TermVariable, Variable}
 case class ProofOutline(steps: Seq[ProofOutline.Step])
 
 object ProofOutline {
-  sealed trait Step
-  sealed trait StepWithAssertion extends Step {
-    def assertion: Statement
-  }
-  case class AssumptionStep(
-      assumption: Statement,
-      steps: Seq[Step])
-    extends Step
-  case class NamingStep(
-      termVariable: TermVariable,
-      statement: Statement,
-      steps: Seq[Step])
-    extends StepWithAssertion {
-    override def assertion: Statement = steps.ofType[StepWithAssertion].lastOption
-      .getOrElse(throw new Exception("Naming step must contain a step with an assertion"))
-      .assertion
-  }
-  case class AssertionStep(
-      assertion: Statement,
-      nonArbitraryVariables: Set[TermVariable],
-      nonDistinctVariables: Set[(TermVariable, Variable)],
-      debug: Boolean = false)
-    extends StepWithAssertion
 
-  private def assumptionStepParser(implicit context: Context): Parser[AssumptionStep] = {
+  case class Location(fileName: String, lineNumber: Int)
+
+  sealed trait Step
+
+  sealed trait StepWithAssertion extends Step {
+    def innermostAssertionStep: AssertionStep
+  }
+
+  case class AssumptionStep(
+    assumption: Statement,
+    steps: Seq[Step])
+    extends Step
+
+  case class NamingStep(
+    termVariable: TermVariable,
+    statement: Statement,
+    steps: Seq[Step])
+    extends StepWithAssertion {
+    def innermostAssertionStep = steps.ofType[StepWithAssertion].lastOption
+      .getOrElse(throw new Exception("Naming step must contain a step with an assertion"))
+      .innermostAssertionStep
+  }
+
+  case class AssertionStep(
+    assertion: Statement,
+    nonArbitraryVariables: Set[TermVariable] = Set.empty,
+    nonDistinctVariables: Set[(TermVariable, Variable)] = Set.empty,
+    location: Location,
+    debug: Boolean = false)
+    extends StepWithAssertion
+  {
+    override def innermostAssertionStep = this
+  }
+
+  private def assumptionStepParser(implicit context: ParsingContext): Parser[AssumptionStep] = {
     for {
       assumption <- Statement.parser
       steps <- stepsParser.inBraces
@@ -38,7 +49,7 @@ object ProofOutline {
     }
   }
 
-  private def namingStepParser(implicit context: Context): Parser[NamingStep] = {
+  private def namingStepParser(implicit context: ParsingContext): Parser[NamingStep] = {
     for {
       termVariable <- Term.variableParser
       statement <- Statement.parser
@@ -48,16 +59,22 @@ object ProofOutline {
     }
   }
 
-  private def assertionStepParser(implicit context: Context): Parser[AssertionStep] = {
-    for {
+  private def assertionStepParser(implicit context: ParsingContext): Parser[AssertionStep] = Parser { tokenizer =>
+    val innerParser = for {
       assertion <- Statement.parser
       nonArbitraryVariables <- Parser.optional("non-arbitrary", Term.variableParser.listInParens(None).map(_.toSet), Set.empty[TermVariable])
       nonDistinctVariables <- Parser.optional("non-distinct", Conditions.variablePairListParser.map(_.toSet), Set.empty[(TermVariable, Variable)])
       debug <- Parser.optional("debug", Parser.constant(true), false)
-    } yield AssertionStep(assertion, nonArbitraryVariables, nonDistinctVariables, debug)
+    } yield AssertionStep(
+      assertion,
+      nonArbitraryVariables,
+      nonDistinctVariables,
+      Location(tokenizer.currentFile, tokenizer.currentLine),
+      debug)
+    innerParser.parse(tokenizer)
   }
 
-  private def stepParser(implicit context: Context): Parser[Option[Step]] = {
+  private def stepParser(implicit context: ParsingContext): Parser[Option[Step]] = {
     Parser.singleWord.flatMap {
       case "assume" =>
         assumptionStepParser.map(Some.apply)
@@ -70,11 +87,11 @@ object ProofOutline {
     }
   }
 
-  private def stepsParser(implicit context: Context): Parser[Seq[Step]] = {
+  private def stepsParser(implicit context: ParsingContext): Parser[Seq[Step]] = {
     stepParser.collectWhileDefined
   }
 
-  def parser(implicit context: Context): Parser[ProofOutline] = {
+  def parser(implicit context: ParsingContext): Parser[ProofOutline] = {
     stepsParser.map(ProofOutline.apply)
   }
 }

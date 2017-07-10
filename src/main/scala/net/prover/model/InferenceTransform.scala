@@ -2,7 +2,7 @@ package net.prover.model
 
 import net.prover.model.Inference.DirectPremise
 import net.prover.model.components.Statement
-import net.prover.model.entries.ChapterEntryParser
+import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
 
 abstract class InferenceTransform extends ChapterEntry(InferenceTransform) {
   def transform(premises: Seq[DirectPremise], conclusion: Statement): Seq[(Seq[DirectPremise], Seq[Statement])]
@@ -67,7 +67,7 @@ extends InferenceTransform {
 
 object InferenceTransform extends ChapterEntryParser[InferenceTransform] {
   override def name: String = "inference-transform"
-  override def parser(book: Book, chapter: Chapter)(implicit context: Context): Parser[InferenceTransform] = {
+  override def parser(implicit context: ParsingContext): Parser[InferenceTransform] = {
     for {
       placeholderStatement <- Statement.parser.inParens
       conclusionPlaceholderStatementOption <- Statement.parser.optionalInParens
@@ -79,9 +79,5 @@ object InferenceTransform extends ChapterEntryParser[InferenceTransform] {
           SimpleInferenceTransform(placeholderStatement)
       }
     }
-  }
-
-  override def addToContext(transform: InferenceTransform, context: Context): Context = {
-    context.addInferenceTransform(transform)
   }
 }

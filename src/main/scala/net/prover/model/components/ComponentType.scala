@@ -1,9 +1,9 @@
 package net.prover.model.components
 
-import net.prover.model.{Context, Parser}
+import net.prover.model.{Parser, ParsingContext}
 
 trait ComponentType {
-  def parser(implicit context: Context): Parser[Component]
+  def parser(implicit context: ParsingContext): Parser[Component]
 }
 
 object ComponentType {
@@ -24,7 +24,7 @@ object ComponentType {
   def listParser: Parser[Seq[ComponentType]] = parser.listInParens(None)
 
   implicit class ComponentTypeSeqOps(componentTypes: Seq[ComponentType]) {
-    def componentsParser(implicit context: Context) = {
+    def componentsParser(implicit context: ParsingContext) = {
       componentTypes.map(_.parser).traverseParser
     }
   }

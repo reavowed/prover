@@ -1,12 +1,12 @@
 package net.prover.model
 
 import net.prover.model.Inference.{DeducedPremise, DirectPremise}
-import net.prover.model.entries.Axiom
+import net.prover.model.entries.{Axiom, AxiomOutline}
 
 class AxiomSpec extends ProverSpec {
 
   def parseAxiom(text: String*): Axiom = {
-    Axiom.parser(stubBook, stubChapter)(defaultContext).parseAndDiscard(text.mkString("\n"))
+    AxiomOutline.parser.parseAndDiscard(text.mkString("\n")).expand("", "", _.formatAsKey)
   }
 
   "axiom parser" should {

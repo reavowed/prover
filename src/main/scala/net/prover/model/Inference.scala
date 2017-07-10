@@ -133,7 +133,7 @@ object Inference {
 }
 
 trait InferenceParser {
-  private def deducedPremiseParser(implicit context: Context): Parser[DeducedPremise] = {
+  private def deducedPremiseParser(implicit context: ParsingContext): Parser[DeducedPremise] = {
     for {
       antecedent <- Statement.parser
       consequent <- Statement.parser
@@ -142,7 +142,7 @@ trait InferenceParser {
     }
   }
 
-  private def directPremiseParser(implicit context: Context): Parser[DirectPremise] = {
+  private def directPremiseParser(implicit context: ParsingContext): Parser[DirectPremise] = {
     for {
       statement <- Statement.parser
       isElidable <- Parser.optionalWord("elidable").isDefined
@@ -151,7 +151,7 @@ trait InferenceParser {
     }
   }
 
-  private def premiseParser(implicit context: Context): Parser[Option[Premise]] = {
+  private def premiseParser(implicit context: ParsingContext): Parser[Option[Premise]] = {
     Parser.optionalWord("premise")
       .mapFlatMap { _ =>
         Parser.optionalWord("proves")
@@ -160,7 +160,7 @@ trait InferenceParser {
       }
   }
 
-  def premisesParser(implicit context: Context): Parser[Seq[Premise]] = {
+  def premisesParser(implicit context: ParsingContext): Parser[Seq[Premise]] = {
     premiseParser.whileDefined
   }
 }

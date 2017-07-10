@@ -1,33 +1,63 @@
 package net.prover.model
 
-import net.prover.model.entries.{BookEntryParser, ChapterEntryParser, Theorem}
+import net.prover.model.entries._
 
 case class Chapter(
   title: String,
   summary: String,
-  bookKey: String,
   bookTitle: String,
   entries: Seq[ChapterEntry] = Nil)
 {
   val key: String = title.formatAsKey
+  val bookKey: String = bookTitle.formatAsKey
 
-  def theoremCache: Seq[Theorem] = {
+  def statementDefinitions: Seq[StatementDefinition] = {
+    entries.ofType[StatementDefinition]
+  }
+  def termDefinitions: Seq[TermDefinition] = {
+    entries.ofType[TermDefinition]
+  }
+
+  def inferences: Seq[Inference] = {
+    entries.flatMap(_.inferences)
+  }
+  def inferenceTransforms: Seq[InferenceTransform] = {
+    entries.ofType[InferenceTransform]
+  }
+  def theorems: Seq[Theorem] = {
     entries.ofType[Theorem]
   }
-}
 
-object Chapter extends BookEntryParser {
-  val name = "chapter"
-  override def parser(book: Book): Parser[Book] = {
-    for {
-      title <- Parser.toEndOfLine
-      summary <- Parser.toEndOfLine
-    } yield {
-      book.copy(chapters = book.chapters :+ Chapter(title, summary, book.key, book.title))
-    }
+  def expandOutlines(
+    previousInferences: Seq[Inference],
+    previousInferenceTransforms: Seq[InferenceTransform],
+    theoremCache: Seq[Theorem]
+  ): Chapter = {
+    copy(entries = entries.mapFold[ChapterEntry] { case (entry, previousEntries) =>
+      def inferencesSoFar = previousEntries.flatMap(_.inferences)
+      def inferenceTransformsSoFar = previousEntries.ofType[InferenceTransform]
+      def nextInferenceKey(name: String): String = {
+        inferencesSoFar.count(_.name == name) match {
+          case 0 =>
+            name.formatAsKey
+          case n =>
+            (name + " " + (n+1)).formatAsKey
+        }
+      }
+      entry match {
+        case axiomOutline: AxiomOutline =>
+          axiomOutline.expand(title, bookTitle, nextInferenceKey)
+        case theoremOutline: TheoremOutline =>
+          theoremOutline.prove(
+            previousInferences ++ inferencesSoFar,
+            previousInferenceTransforms ++ inferenceTransformsSoFar,
+            theoremCache,
+            title,
+            bookTitle,
+            nextInferenceKey)
+        case other =>
+          other
+      }
+    })
   }
-}
-
-abstract class ChapterEntry(chapterEntryParser: ChapterEntryParser[_]) {
-  val `type`: String = chapterEntryParser.name
 }

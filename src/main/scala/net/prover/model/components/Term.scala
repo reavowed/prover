@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 import net.prover.model.entries.TermDefinition
-import net.prover.model.{Context, DistinctVariables, Parser, Substitutions}
+import net.prover.model.{DistinctVariables, Parser, ParsingContext, Substitutions}
 
 trait Term extends JsonSerializable.Base with Component {
   override val componentType = Term
@@ -34,7 +34,7 @@ object Term extends ComponentType {
     }
   }
 
-  def findVariable(name: String)(implicit context: Context): Option[TermVariable] = {
+  def findVariable(name: String)(implicit context: ParsingContext): Option[TermVariable] = {
     def findDirectly(name: String): Option[TermVariable] = {
       context.termVariableNames.find(_ == name).map(TermVariable)
     }
@@ -53,7 +53,7 @@ object Term extends ComponentType {
     findDirectly(name) orElse findPrime(name) orElse findWithSuffix(name)
   }
 
-  def parser(implicit context: Context): Parser[Term] = {
+  def parser(implicit context: ParsingContext): Parser[Term] = {
     object TermDefinitionMatcher {
       def unapply(s: String): Option[TermDefinition] = {
         context.termDefinitions.find(_.symbol == s)
@@ -88,13 +88,13 @@ object Term extends ComponentType {
     Parser.singleWord.flatMap(parserForTermType)
   }
 
-  def listParser(implicit context: Context): Parser[Seq[Term]] = {
+  def listParser(implicit context: ParsingContext): Parser[Seq[Term]] = {
     parser.listInParens(Some(","))
   }
 
-  def variableParser(implicit context: Context): Parser[TermVariable] = parser.map(asVariable)
+  def variableParser(implicit context: ParsingContext): Parser[TermVariable] = parser.map(asVariable)
 
-  def variableListParser(implicit context: Context): Parser[Seq[TermVariable]] = {
+  def variableListParser(implicit context: ParsingContext): Parser[Seq[TermVariable]] = {
     variableParser.listInParens(None)
   }
 }

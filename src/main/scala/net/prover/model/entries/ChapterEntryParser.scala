@@ -1,22 +1,17 @@
 package net.prover.model.entries
 
-import net.prover.model.{Book, Chapter, ChapterEntry, Context, Parser}
+import net.prover.model.{Chapter, Parser, ParsingContext}
 
-trait ChapterEntryParser[T <: ChapterEntry] extends BookEntryParser {
-  def parser(book: Book, chapter: Chapter)(implicit context: Context): Parser[T]
-  def addToContext(t: T, context: Context): Context
+trait ChapterEntryParser[T <: ChapterEntry] {
+  def name: String
+  def parser(implicit context: ParsingContext): Parser[T]
+  def addToContext(t: T, context: ParsingContext): ParsingContext = context
 
-  override def parser(book: Book): Parser[Book] = {
-    book.chapters match {
-      case previousChapters :+ currentChapter =>
-        parser(book, currentChapter)(book.fullContext) map { entry =>
-          book.copy(
-            context = addToContext(entry, book.context),
-            chapters = previousChapters :+ currentChapter.copy(entries = currentChapter.entries :+ entry))
-        }
-      case _ =>
-        throw new Exception("First entry of book must be a chapter")
-
+  def parseToChapter(chapter: Chapter, context: ParsingContext): Parser[(Chapter, ParsingContext)] = {
+    for {
+      t <- parser(context)
+    } yield {
+      (chapter.copy(entries = chapter.entries :+ t), context.add(t))
     }
   }
 }

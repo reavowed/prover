@@ -8,14 +8,10 @@ case class Prover(
   assertion: Statement,
   nonArbitraryVariables: Set[TermVariable],
   nonDistinctVariables: Set[(TermVariable, Variable)],
-  provenAssertions: Seq[ReferencedAssertion],
-  provenDeductions: Seq[ReferencedDeduction],
-  premises: Seq[Premise],
-  assumptions: Seq[Statement],
-  debug: Boolean)(
-  implicit context: Context)
+  context: ProvingContext,
+  debug: Boolean)
 {
-  def availableInferences: Seq[Inference] = context.inferences
+  import context._
 
   sealed trait PremiseMatch {
     def provenStatement: ProvenStatement
@@ -31,13 +27,10 @@ case class Prover(
     reference: Reference)
     extends PremiseMatch
 
-  def proveAssertion(): StepWithProvenStatement = {
+  def proveAssertion(): Option[StepWithProvenStatement] = {
     proveAssertionDirectlyFromInferences()
       .orElse(proveAssertionByRearranging())
       .orElse(proveAssertionFromTransformedInferences())
-      .getOrElse {
-        throw new Exception(s"Could not prove statement $assertion")
-      }
   }
 
   def proveAssertionDirectlyFromInferences(): Option[AssertionStep] = {
@@ -103,7 +96,7 @@ case class Prover(
           inference.conclusion.statement.allVariables.ofType[TermVariable].isEmpty
       }
       .flatMap { case (inference, inferencePremises) =>
-        context.inferenceTransforms.iterator.map(transform => (transform, inference, inferencePremises))
+        inferenceTransforms.iterator.map(transform => (transform, inference, inferencePremises))
       }
       .flatMap { case (transform, inference, inferencePremises) =>
         val conclusion = inference.conclusion.statement
@@ -127,16 +120,16 @@ case class Prover(
             } ++ assertions.mapWithIndex { (step, index) =>
               ReferencedAssertion(step.provenStatement, DirectReference(transformedPremises.length + index, step.provenStatement.statement.html))
             }
-            Prover(
-              statement,
-              Set.empty,
-              newNonDistinctVariables,
+            val localContext = ProvingContext(
               provenAssertions,
               Nil,
               transformedPremises,
               Nil,
-              debug = false
-            ).proveAssertionDirectlyFromInferences()
+              availableInferences,
+              Nil,
+              bookName,
+              theoremName)
+            Prover(statement, Set.empty, newNonDistinctVariables, localContext, debug = false).proveAssertionDirectlyFromInferences()
           }.map { proofSteps =>
             (TransformedInference(inference, transformedPremises, proofSteps.last.provenStatement), DetailedProof(proofSteps))
           }

@@ -32,6 +32,17 @@ package object model {
   }
 
   implicit class SeqOps[T](seq: Seq[T]) {
+    def mapFold[S](f: (T, Seq[S]) => S): Seq[S] = {
+      seq.foldLeft(Seq.empty[S]) { case (acc, t) =>
+        acc :+ f(t, acc)
+      }
+    }
+    def mapAndFold[R, S](f: (T, Seq[S]) => (R, S)): (Seq[R], Seq[S]) = {
+      seq.foldLeft((Seq.empty[R], Seq.empty[S])) { case ((rs, ss), t) =>
+        val (r, s) = f(t, ss)
+        (rs :+ r, ss :+ s)
+      }
+    }
     def collectFold[S](f: (Seq[S], T) => Option[S]): Option[Seq[S]] = {
       seq.foldLeft(Option(Seq.empty[S])) { case (accOption, t) =>
         accOption.flatMap { acc =>

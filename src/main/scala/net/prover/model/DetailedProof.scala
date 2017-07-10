@@ -1,10 +1,16 @@
 package net.prover.model
 
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, Summary}
-import net.prover.model.components.{Statement, TermVariable, Variable}
+import net.prover.model.ProofOutline.StepWithAssertion
+import net.prover.model.components.{Statement, TermVariable}
 
 case class DetailedProof(steps: Seq[DetailedProof.Step]) {
   def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
+  val conclusion: ProvenStatement = {
+    steps.ofType[DetailedProof.StepWithProvenStatement].lastOption
+      .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))
+      .provenStatement
+  }
 }
 
 object DetailedProof {
@@ -73,8 +79,11 @@ object DetailedProof {
 
   def fillInOutline(
     premises: Seq[Premise],
-    proofOutline: ProofOutline)(
-    implicit context: Context
+    proofOutline: ProofOutline,
+    availableInferences: Seq[Inference],
+    inferenceTransforms: Seq[InferenceTransform],
+    bookName: String,
+    theoremName: String
   ): DetailedProof = {
     val premiseAssertions = premises.zipWithIndex.collect {
       case (DirectPremise(premise), index) =>
@@ -84,13 +93,19 @@ object DetailedProof {
       case (premise @ DeducedPremise(assumption, conclusion), index) =>
         ReferencedDeduction(assumption, ProvenStatement.withNoConditions(conclusion), DirectReference(index, premise.html))
     }
-    val detailedSteps = proveSteps(
-      proofOutline.steps,
-      Nil,
+    val context = ProvingContext(
       premiseAssertions,
       premiseDeductions,
       premises,
       Nil,
+      availableInferences,
+      inferenceTransforms,
+      bookName,
+      theoremName)
+    val (detailedSteps, _) = proveSteps(
+      proofOutline.steps,
+      Nil,
+      context,
       premises.length)
     DetailedProof(detailedSteps)
   }
@@ -98,109 +113,101 @@ object DetailedProof {
   private def proveSteps(
     stepOutlines: Seq[ProofOutline.Step],
     accumulatedSteps: Seq[Step],
-    provenAssertions: Seq[ReferencedAssertion],
-    provenDeductions: Seq[ReferencedDeduction],
-    premises: Seq[Premise],
-    assumptions: Seq[Statement],
-    nextReference: Int)(
-    implicit context: Context
-  ): Seq[Step] = {
+    context: ProvingContext,
+    nextReference: Int
+  ): (Seq[Step], ProvingContext) = {
     stepOutlines match {
       case Nil =>
-        accumulatedSteps
+        (accumulatedSteps, context)
       case stepOutline +: otherStepOutlines =>
-        val step = proveStep(stepOutline, provenAssertions, provenDeductions, premises, assumptions, nextReference)
-        val (updatedAssertions, updatedDeductions) = step match {
-          case AssumptionStep(assumption, substeps) =>
-            val newProvenDeductions = substeps.zipWithIndex.collect {
-              case (StepWithProvenStatement(deduction), index) =>
-                ReferencedDeduction(assumption, deduction, DeducedReference(nextReference, nextReference + index + 1))
-            }
-            (provenAssertions, provenDeductions ++ newProvenDeductions)
-          case StepWithProvenStatement(provenStatement) =>
-            val newProvenAssertion = ReferencedAssertion(provenStatement, DirectReference(nextReference, provenStatement.statement.html))
-            (provenAssertions :+ newProvenAssertion, provenDeductions)
-        }
+        val (step, updatedContext) = proveStep(stepOutline, context, nextReference)
         proveSteps(
           otherStepOutlines,
           accumulatedSteps :+ step,
-          updatedAssertions,
-          updatedDeductions,
-          premises,
-          assumptions,
+          updatedContext,
           nextReference + 1)
     }
   }
 
   private def proveStep(
     stepOutline: ProofOutline.Step,
-    provenAssertions: Seq[ReferencedAssertion],
-    provenDeductions: Seq[ReferencedDeduction],
-    premises: Seq[Premise],
-    assumptions: Seq[Statement],
-    nextReference: Int)(
-    implicit context: Context
-  ): Step = {
+    context: ProvingContext,
+    nextReference: Int
+  ): (Step, ProvingContext) = {
     stepOutline match {
       case ProofOutline.AssumptionStep(assumption, substepOutlines) =>
-        proveAssumptionStep(assumption, substepOutlines, provenAssertions, provenDeductions, premises, assumptions, nextReference)
+        proveAssumptionStep(assumption, substepOutlines, context, nextReference)
       case ProofOutline.NamingStep(variable, namingStatement, substepOutlines) =>
-        val assumptionStep = proveAssumptionStep(namingStatement, substepOutlines, provenAssertions, provenDeductions, premises, assumptions, nextReference)
-        val finalAssertionStatement = assumptionStep.steps match {
-          case _ :+ StepWithProvenStatement(statement) =>
-            statement
+        val finalStepWithAssertion = substepOutlines match {
+          case _ :+ (step: StepWithAssertion) =>
+            step.innermostAssertionStep
           case _ =>
-            throw new Exception("Let step must end with an assertion")
+            throw new Exception("Naming step must end with an assertion")
         }
-        val assertionStep = proveAssertionStep(
-          finalAssertionStatement.statement,
-          Set.empty,
-          Set.empty,
-          false,
-          provenAssertions,
-          provenDeductions :+ ReferencedDeduction(namingStatement, finalAssertionStatement, DeducedReference(nextReference, nextReference + assumptionStep.steps.length)),
-          premises,
-          assumptions,
-          nextReference)
-        NamingStep(variable, assumptionStep, assertionStep)
-      case ProofOutline.AssertionStep(assertion, nonArbitraryVariables, nonDistinctVariables, debug) =>
-        proveAssertionStep(assertion, nonArbitraryVariables, nonDistinctVariables, debug, provenAssertions, provenDeductions, premises, assumptions, nextReference)
+        val (assumptionStep, assumptionContext) = proveAssumptionStep(namingStatement, substepOutlines, context, nextReference)
+        val (assertionStep, updatedContext) = proveAssertionStep(
+          finalStepWithAssertion,
+          assumptionContext,
+          nextReference
+        ).getOrElse(
+          throw new Exception(Seq(
+            s"Could not extract assertion ${finalStepWithAssertion.assertion} from naming step for $variable",
+            s"${context.bookName} - ${context.theoremName}",
+            s"${finalStepWithAssertion.location.fileName} line ${finalStepWithAssertion.location.lineNumber}"
+          ).mkString("\n")))
+        (NamingStep(variable, assumptionStep, assertionStep), updatedContext)
+      case assertionStep: ProofOutline.AssertionStep =>
+        proveAssertionStep(assertionStep, context, nextReference)
+          .getOrElse(throw new Exception(
+            Seq(
+              s"Could not prove assertion ${assertionStep.assertion}",
+              s"${context.bookName} - ${context.theoremName}",
+              s"${assertionStep.location.fileName} line ${assertionStep.location.lineNumber}"
+            ).mkString("\n")))
     }
   }
 
   private def proveAssumptionStep(
     assumption: Statement,
     substepOutlines: Seq[ProofOutline.Step],
-    provenAssertions: Seq[ReferencedAssertion],
-    provenDeductions: Seq[ReferencedDeduction],
-    premises: Seq[Premise],
-    assumptions: Seq[Statement],
-    nextReference: Int)(
-    implicit context: Context
-  ): AssumptionStep = {
-    val substeps = proveSteps(
+    context: ProvingContext,
+    nextReference: Int
+  ): (AssumptionStep, ProvingContext) = {
+    val referencedAssumption = ReferencedAssertion(ProvenStatement.withNoConditions(assumption), DirectReference(nextReference, assumption.html))
+    val contextWithAssumption = context.copy(
+      provenAssertions = context.provenAssertions :+ referencedAssumption,
+      assumptions = context.assumptions :+ assumption)
+    val (substeps, _) = proveSteps(
       substepOutlines,
       Nil,
-      provenAssertions :+ ReferencedAssertion(ProvenStatement.withNoConditions(assumption), DirectReference(nextReference, assumption.html)),
-      provenDeductions,
-      premises,
-      assumptions :+ assumption,
+      contextWithAssumption,
       nextReference + 1)
-    AssumptionStep(assumption, substeps)
+    val assumptionStep = AssumptionStep(assumption, substeps)
+    val newProvenDeductions = assumptionStep.steps.zipWithIndex.collect {
+      case (StepWithProvenStatement(deduction), index) =>
+        ReferencedDeduction(assumption, deduction, DeducedReference(nextReference, nextReference + index + 1))
+    }
+    (assumptionStep, context.copy(provenDeductions = context.provenDeductions ++ newProvenDeductions))
   }
 
   private def proveAssertionStep(
-    assertion: Statement,
-    nonArbitraryVariables: Set[TermVariable],
-    nonDistinctVariables: Set[(TermVariable, Variable)],
-    debug: Boolean,
-    provenAssertions: Seq[ReferencedAssertion],
-    provenDeductions: Seq[ReferencedDeduction],
-    premises: Seq[Premise],
-    assumptions: Seq[Statement],
-    nextReference: Int)(
-    implicit context: Context
-  ): StepWithProvenStatement = {
-    Prover(assertion, nonArbitraryVariables, nonDistinctVariables, provenAssertions, provenDeductions, premises, assumptions, debug).proveAssertion()
+    stepOutline: ProofOutline.AssertionStep,
+    context: ProvingContext,
+    nextReference: Int
+  ):  Option[(StepWithProvenStatement, ProvingContext)] = {
+    for {
+      assertionStep <- Prover(
+        stepOutline.assertion,
+        stepOutline.nonArbitraryVariables,
+        stepOutline.nonDistinctVariables,
+        context,
+        stepOutline.debug
+      ).proveAssertion()
+    } yield {
+      val newProvenAssertion = ReferencedAssertion(
+        assertionStep.provenStatement,
+        DirectReference(nextReference, assertionStep.provenStatement.statement.html))
+      (assertionStep, context.copy(provenAssertions = context.provenAssertions :+ newProvenAssertion))
+    }
   }
 }

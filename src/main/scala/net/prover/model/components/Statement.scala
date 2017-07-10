@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 import net.prover.model.entries.StatementDefinition
-import net.prover.model.{Context, DistinctVariables, Parser, Substitutions}
+import net.prover.model.{DistinctVariables, Parser, ParsingContext, Substitutions}
 
 trait Statement extends JsonSerializable.Base with Component {
   override val componentType = Statement
@@ -22,7 +22,7 @@ trait Statement extends JsonSerializable.Base with Component {
 
 object Statement extends ComponentType {
 
-  def parser(implicit context: Context): Parser[Statement] = {
+  def parser(implicit context: ParsingContext): Parser[Statement] = {
     object ParsableStatement {
       def unapply(s: String): Option[StatementDefinition] = {
         context.statementDefinitions.find(_.symbol == s)
@@ -57,9 +57,9 @@ object Statement extends ComponentType {
     Parser.singleWord.flatMap(parserForStatementType)
   }
 
-  def listParser(implicit context: Context): Parser[Seq[Statement]] = parser.listInParens(Some(","))
+  def listParser(implicit context: ParsingContext): Parser[Seq[Statement]] = parser.listInParens(Some(","))
 
-  def variableParser(implicit context: Context): Parser[StatementVariable] = parser.map {
+  def variableParser(implicit context: ParsingContext): Parser[StatementVariable] = parser.map {
     case variable: StatementVariable =>
       variable
     case nonVariable =>

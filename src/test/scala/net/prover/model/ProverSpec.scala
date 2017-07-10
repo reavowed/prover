@@ -2,7 +2,7 @@ package net.prover.model
 
 import java.nio.file.Paths
 
-import net.prover.model.Inference.{DirectPremise, Premise}
+import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
 import net.prover.model.components._
 import net.prover.model.entries.{StatementDefinition, TermDefinition}
 import org.specs2.mutable.Specification
@@ -142,32 +142,17 @@ trait ProverSpec extends Specification {
     Set.empty,
     DistinctVariables.empty)
 
-  val statementDefinitions = Seq(
-    Implication, Negation, Conjunction, Disjunction, Equivalence,
-    ForAll, Exists, ExistsUnique,
-    ElementOf, Equals)
-
-  val termDefinitions = Seq(EmptySetDefinition, Comprehension, PowerSet, Pair, OrderedPair, Union)
-
-  val baseContext = Context.empty.copy(
+  implicit val defaultContext = ParsingContext(
+    statementDefinitions = Seq(
+      Implication, Negation, Conjunction, Disjunction, Equivalence,
+      ForAll, Exists, ExistsUnique,
+      ElementOf, Equals),
+    termDefinitions = Seq(EmptySetDefinition, Comprehension, PowerSet, Pair, OrderedPair, Union),
     statementVariableNames = Set(φ, ψ, χ).map(_.text),
     termVariableNames = Set(x, y, z, X, Y, Z, a, n).map(_.text))
 
-  val contextWithStatements = statementDefinitions.foldLeft(baseContext) { case (context, statementDefinition) =>
-    context.addStatementDefinition(statementDefinition)
-  }
-  val contextWithTerms = termDefinitions.foldLeft(contextWithStatements) { case (context, termDefinition) =>
-    context.addTermDefinition(termDefinition)
-  }
-
-  implicit val defaultContext = contextWithTerms
-
-  val stubBook = Book("", Paths.get(""), Nil, Nil, defaultContext)
-  val stubChapter = Chapter("", "", "", "")
-
-  def contextWith(inferences: Inference*): Context = {
-    defaultContext.copy(inferences = inferences)
-  }
+  val stubBook = Book("", Paths.get(""), Nil, Nil)
+  val stubChapter = Chapter("", "", "")
 
   implicit class ParserOps[T](parser: Parser[T]) {
     def parseAndDiscard(text: String): T = {
@@ -176,5 +161,6 @@ trait ProverSpec extends Specification {
   }
 
   implicit def statementToPremise(statement: Statement): Premise = DirectPremise(statement)
+  implicit def statementPairToPremise(tuple: (Statement, Statement)): Premise = DeducedPremise(tuple._1, tuple._2)
   implicit def statementToProvenStatement(statement: Statement): ProvenStatement = ProvenStatement.withNoConditions(statement)
 }
