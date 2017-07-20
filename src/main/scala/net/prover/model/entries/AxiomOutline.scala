@@ -13,13 +13,13 @@ case class AxiomOutline(
   extends ChapterEntry(AxiomOutline)
 {
   def expand(
+    key: String,
     chapterTitle: String,
-    bookTitle: String,
-    nextInferenceKey: String => String
+    bookTitle: String
   ): Axiom = {
     Axiom(
       name,
-      nextInferenceKey(name),
+      key,
       chapterTitle.formatAsKey,
       chapterTitle,
       bookTitle.formatAsKey,
@@ -31,7 +31,7 @@ case class AxiomOutline(
   }
 }
 
-object AxiomOutline extends ChapterEntryParser[AxiomOutline] with InferenceParser {
+object AxiomOutline extends ChapterEntryParser[AxiomOutline] {
   override val name: String = "axiom"
 
   private def conclusionParser(implicit context: ParsingContext): Parser[Statement] = {
@@ -41,12 +41,12 @@ object AxiomOutline extends ChapterEntryParser[AxiomOutline] with InferenceParse
     } yield conclusion
   }
 
-  def parser(implicit context: ParsingContext): Parser[AxiomOutline] = {
+  def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[AxiomOutline] = {
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
       allowsRearrangement <- Parser.optionalWord("disallow-rearrangement").isUndefined
-      premises <- premisesParser
+      premises <- Inference.premisesParser
       conclusion <- conclusionParser
       conditions <- Conditions.parser
     } yield {

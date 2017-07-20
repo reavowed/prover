@@ -3,6 +3,7 @@ package net.prover
 import scala.collection.generic.CanBuildFrom
 import scala.collection.{TraversableLike, mutable}
 import scala.reflect.ClassTag
+import scala.util.{Failure, Try}
 
 package object model {
   implicit class AnyOps[T](t: T) {
@@ -102,10 +103,21 @@ package object model {
       case _ =>
         false
     }
-    def mapCollect[S](f: PartialFunction[T, Option[S]]): Seq[S] = {
-      seq.map(f.lift).collect {
-        case Some(Some(t)) => t
+    def mapCollect[S](f: T => Option[S]): Seq[S] = {
+      seq.map(f).collect {
+        case Some(t) => t
       }
+    }
+    def zipStrict[S, That](other: Seq[S])(implicit bf: CanBuildFrom[Seq[T], (T, S), That]): Option[That] = {
+      val b = bf(seq)
+      val these = seq.iterator
+      val those = other.iterator
+      while (these.hasNext && those.hasNext)
+        b += ((these.next(), those.next()))
+      if (these.hasNext || those.hasNext)
+        None
+      else
+       Some(b.result())
     }
   }
 
@@ -183,6 +195,23 @@ package object model {
           map + (s -> t)
         }
       }
+    }
+  }
+
+  implicit class OptionOps[T](x: Option[T]) {
+    def ifEmpty(action: => Unit): Option[T] = {
+      if (x.isEmpty) action
+      x
+    }
+  }
+  implicit class TrytionOps[T](x: Try[T]) {
+    def ifFailed(action: Throwable => Unit): Try[T] = {
+      x match {
+        case Failure(e) =>
+          action(e)
+        case _ =>
+      }
+      x
     }
   }
 }

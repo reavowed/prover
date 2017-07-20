@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.model.Inference.Premise
 import net.prover.model.components._
 
 case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: DistinctVariables) {
@@ -58,7 +59,7 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
   def serialized: String = {
     val arbitrary =
       if (arbitraryVariables.nonEmpty)
-        Some(s"arbitrary-variables (${arbitraryVariables.map(_.text).mkString(", ")})")
+        Some(s"arbitrary-variables (${arbitraryVariables.map(_.text).mkString(" ")})")
       else
         None
     val distinct =
@@ -72,27 +73,30 @@ case class Conditions(arbitraryVariables: Set[TermVariable], distinctVariables: 
 object Conditions {
   val empty = Conditions(Set.empty, DistinctVariables.empty)
 
+  def combine(
+    conclusion: ProvenStatement,
+    premiseConditions: Seq[Conditions],
+    premises: Seq[Premise],
+    assumptions: Seq[Statement],
+    substitutions: Substitutions
+  ): Option[Conditions] = {
+    (premiseConditions :+ conclusion.conditions).foldTogether
+      .addDistinctVariables(substitutions.distinctVariables)
+      .restrictToStatements(premises.flatMap(_.statements) ++ assumptions :+ conclusion.statement)
+      .addDistinctVariables(conclusion.conditions.arbitraryVariables, assumptions)
+      .map(_.removeImplicitDistinctVariables(conclusion.statement.implicitDistinctVariables))
+  }
+
   def arbitraryVariablesParser(implicit context: ParsingContext): Parser[Option[Set[TermVariable]]] = {
     Parser.optional(
       "arbitrary-variables",
       Term.variableListParser.map(_.toSet))
   }
 
-  def variablePairParser(implicit context: ParsingContext): Parser[(TermVariable, Variable)] = {
-    for {
-      first <- Term.variableParser
-      second <- Variable.parser
-    } yield first -> second
-  }
-
-  def variablePairListParser(implicit context: ParsingContext): Parser[Seq[(TermVariable, Variable)]] = {
-    variablePairParser.listInParens(Some(","))
-  }
-
   def optionalDistinctVariablesParser(implicit context: ParsingContext): Parser[Option[DistinctVariables]] = {
     Parser.optional(
       "distinct-variables",
-      variablePairListParser.map(DistinctVariables(_: _*)))
+      DistinctVariables.parser)
   }
 
   def distinctVariablesParser(implicit context: ParsingContext): Parser[DistinctVariables] = {

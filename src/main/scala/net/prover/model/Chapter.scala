@@ -31,7 +31,7 @@ case class Chapter(
   def expandOutlines(
     previousInferences: Seq[Inference],
     previousInferenceTransforms: Seq[InferenceTransform],
-    theoremCache: Seq[Theorem]
+    cachedProofs: Seq[CachedProof]
   ): Chapter = {
     copy(entries = entries.mapFold[ChapterEntry] { case (entry, previousEntries) =>
       def inferencesSoFar = previousEntries.flatMap(_.inferences)
@@ -46,15 +46,15 @@ case class Chapter(
       }
       entry match {
         case axiomOutline: AxiomOutline =>
-          axiomOutline.expand(title, bookTitle, nextInferenceKey)
+          axiomOutline.expand(nextInferenceKey(axiomOutline.name), title, bookTitle)
         case theoremOutline: TheoremOutline =>
           theoremOutline.prove(
-            previousInferences ++ inferencesSoFar,
-            previousInferenceTransforms ++ inferenceTransformsSoFar,
-            theoremCache,
+            nextInferenceKey(theoremOutline.name),
             title,
             bookTitle,
-            nextInferenceKey)
+            previousInferences ++ inferencesSoFar,
+            previousInferenceTransforms ++ inferenceTransformsSoFar,
+            cachedProofs)
         case other =>
           other
       }

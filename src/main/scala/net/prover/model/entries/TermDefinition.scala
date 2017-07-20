@@ -11,7 +11,9 @@ case class TermDefinition(
     premises: Seq[Statement],
     placeholderDefinition: Statement,
     boundVariables: Set[TermVariable],
-    distinctVariables: DistinctVariables)
+    distinctVariables: DistinctVariables,
+    chapterKey: String,
+    bookKey: String)
   extends ChapterEntry(TermDefinition)
 {
   val id: String = s"definition-$symbol"
@@ -19,7 +21,7 @@ case class TermDefinition(
   val componentTypes = defaultVariables.map(_.componentType)
   val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue).getOrElse(
     throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultValue'"))
-  override def inferences: Seq[Inference] = Seq(DefinitionInference(name, premises, definingStatement, distinctVariables))
+  override def inferences: Seq[Inference] = Seq(DefinitionInference(name, chapterKey, bookKey, premises, definingStatement, distinctVariables))
 
   def apply(components: Component*): DefinedTerm = DefinedTerm(
     components,
@@ -44,7 +46,7 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
     "name",
     Parser.allInParens)
 
-  def parser(implicit context: ParsingContext): Parser[TermDefinition] = {
+  def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[TermDefinition] = {
     for {
       symbol <- Parser.singleWord
       defaultVariables <- Variable.parser.listInParens(None)
@@ -57,7 +59,17 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
       }
       distinctVariables <- Conditions.distinctVariablesParser
     } yield {
-      TermDefinition(symbol, defaultVariables, name, format, premises, definitionTemplate, boundVariables, distinctVariables)
+      TermDefinition(
+        symbol,
+        defaultVariables,
+        name,
+        format,
+        premises,
+        definitionTemplate,
+        boundVariables,
+        distinctVariables,
+        chapterKey,
+        bookKey)
     }
   }
 }

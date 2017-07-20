@@ -1,28 +1,26 @@
 package net.prover.controllers
 
+import java.nio.file.{Files, Paths}
+
 import net.prover.model.entries.Theorem
-import net.prover.model.{Book, Chapter, Inference}
+import net.prover.model.{Book, CachedProof, Chapter, Inference}
 import org.slf4j.LoggerFactory
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation.{GetMapping, PathVariable, RequestMapping, RestController}
 
+import scala.util.Try
 import scala.util.control.NonFatal
 
 @RestController
 @RequestMapping(Array("/books"))
 class BookController {
-  private var _books: Option[Seq[Book]] = None
-  def getBooks: Seq[Book] = {
-    val theoremCache = _books.toSeq.flatMap(_.flatMap(_.theorems))
-    val newBooks = Book.fromDirectory("books", theoremCache)
-    _books = Some(newBooks)
-    newBooks
-  }
+  def getBooks: Seq[Book] = Book.fromDirectory(Paths.get("books"), Paths.get("cache"))
+
   try {
     getBooks
   } catch {
     case NonFatal(e) =>
-      BookController.logger.error("Error getting books\n{}", e.getMessage)
+      BookController.logger.error("Error getting books", e)
   }
 
   @GetMapping(Array(""))
@@ -76,9 +74,14 @@ class BookController {
   ) = {
     try {
       val books = getBooks
-      books.find(_.key == bookKey)
-        .flatMap(_.chapters.find(_.key == chapterKey))
-        .flatMap(_.entries.ofType[Inference].find(_.keyOption.contains(inferenceKey)))  match {
+      val inferenceOption = for {
+        book <- books.find(_.key == bookKey)
+        chapter <- book.chapters.find(_.key == chapterKey)
+        inference <- chapter.entries.ofType[Inference].find(_.keyOption.contains(inferenceKey))
+      } yield {
+        inference
+      }
+      inferenceOption match {
         case Some(inference) =>
           new ResponseEntity[InferenceWithUsages](InferenceWithUsages(inference, getUsages(inference, books)), HttpStatus.OK)
         case None =>
@@ -86,7 +89,7 @@ class BookController {
       }
     } catch {
       case NonFatal(e) =>
-        BookController.logger.error("Error getting books\n{}", e.getMessage)
+        BookController.logger.error(s"Error getting books", e)
         new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }

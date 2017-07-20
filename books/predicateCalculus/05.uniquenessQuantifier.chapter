@@ -117,19 +117,6 @@ qed
 theorem Uniqueness Equivalence
 premise ∃! x φ
 premise ∀ x ↔ φ ψ
-let y sub y x φ {
-  prove sub y x ψ
-  assume ψ {
-    prove φ
-    prove = x y
-  }
-  prove ∃! x ψ
-}
-qed
-
-theorem Uniqueness Equivalence
-premise ∃! x φ
-premise ∀ x ↔ φ ψ
 prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
 prove ∃ x ψ
 assume ∧ sub y x ψ sub z x ψ {
@@ -140,7 +127,5 @@ assume ∧ sub y x ψ sub z x ψ {
   prove → ∧ sub y x φ sub z x φ = y z
   prove = y z
 }
-prove ∀ z → ∧ sub y x ψ sub z x ψ = y z
-prove ∀ y ∀ z → ∧ sub y x ψ sub z x ψ = y z
 prove ∃! x ψ
 qed

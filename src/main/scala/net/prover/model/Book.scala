@@ -1,42 +1,47 @@
 package net.prover.model
 
-import java.io.File
 import java.nio.file.{Files, Path, Paths}
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.entries._
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
+import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
+import scala.util.Try
 
 @JsonIgnoreProperties(Array("path", "dependencies", "existingTheoremCache", "context", "fullContext"))
 case class Book(
     title: String,
     path: Path,
     dependencies: Seq[Book],
-    chapters: Seq[Chapter]) {
+    chapters: Seq[Chapter],
+    statementVariableNames: Set[String],
+    termVariableNames: Set[String]) {
   val key: String = title.formatAsKey
 
   def inferences: Seq[Inference] = chapters.flatMap(_.inferences)
   def inferenceTransforms: Seq[InferenceTransform] = chapters.flatMap(_.inferenceTransforms)
   def theorems: Seq[Theorem] = chapters.flatMap(_.theorems)
 
-  def expandOutlines(theoremCache: Seq[Theorem]): Book = {
+  def expandOutlines(cachedProofs: Seq[CachedProof]): Book = {
     val previousInferences = transitiveDependencies.flatMap(_.inferences)
     val previousInferenceTransforms = transitiveDependencies.flatMap(_.inferenceTransforms)
     copy(chapters = chapters.mapFold[Chapter] { case (chapter, expandedChapters) =>
         chapter.expandOutlines(
           previousInferences ++ expandedChapters.flatMap(_.inferences),
           previousInferenceTransforms ++ expandedChapters.flatMap(_.inferenceTransforms),
-          theoremCache)
+          cachedProofs)
     })
   }
 
-  protected def transitiveDependencies: Seq[Book] = Book.transitiveDependencies(dependencies)
+  def transitiveDependencies: Seq[Book] = Book.transitiveDependencies(dependencies)
 }
 
 object Book {
+  val logger = LoggerFactory.getLogger(Book.getClass)
+
   def transitiveDependencies(books: Seq[Book]): Seq[Book] = {
     (books.flatMap(_.transitiveDependencies) ++ books).distinctBy(_.title)
   }
@@ -138,13 +143,20 @@ object Book {
     ((), nextTokenizer.addTokenizer(includeTokenizer))
   }
 
+  private def getAllFiles(directoryPath: Path): Seq[Path] = {
+    if (directoryPath.toFile.isDirectory)
+      FileUtils.listFiles(directoryPath.toFile, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE).asScala
+        .map(_.toPath)
+        .toSeq
+    else
+      Nil
+  }
+
   private case class PreParsedBook(title: String, path: Path, imports: Seq[String], tokenizer: StringTokenizer)
 
-  private def getPreParsedBooks(bookDirectoryPathName: String): Seq[PreParsedBook] = {
-    FileUtils.listFiles(new File(bookDirectoryPathName), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)
-      .asScala
-      .map(_.toPath)
-      .filter(_.getFileName.toString.endsWith(".book")).toSeq
+  private def getPreParsedBooks(bookDirectoryPath: Path): Seq[PreParsedBook] = {
+    getAllFiles(bookDirectoryPath)
+      .filter(_.getFileName.toString.endsWith(".book"))
       .map { path =>
         val tokenizer = Tokenizer.fromPath(path)
         if (tokenizer.isEmpty) throw new Exception(s"Book file '$path' was empty")
@@ -156,34 +168,62 @@ object Book {
   }
 
   private def parseBook(
-    book: PreParsedBook,
+    preParsedBook: PreParsedBook,
     previousBooks: Seq[Book],
-    theoremCache: Seq[Theorem]
+    cacheDirectoryPath: Path
   ): Book = {
-    val dependencies = book.imports.map { title =>
+    import preParsedBook._
+
+    val dependencies = imports.map { title =>
       previousBooks.find(_.title == title).getOrElse(throw new Exception(s"Could not find imported book '$title'"))
     }
     val transitiveDependencies = Book.transitiveDependencies(dependencies)
     val context = ParsingContext(
       transitiveDependencies.flatMap(_.chapters.flatMap(_.statementDefinitions)),
       transitiveDependencies.flatMap(_.chapters.flatMap(_.termDefinitions)),
-      Set.empty,
-      Set.empty)
-    val chapters = linesParser(book.title, book.path, context)
-      .parse(book.tokenizer)._1._1
+      transitiveDependencies.flatMap(_.statementVariableNames).toSet,
+      transitiveDependencies.flatMap(_.termVariableNames).toSet)
 
-    val b = Book(book.title, book.path, dependencies, chapters).expandOutlines(theoremCache)
-    b
+    val (chapters, updatedParsingContext) = linesParser(title, path, context).parse(tokenizer)._1
+    val bookCacheDirectoryPath = cacheDirectoryPath.resolve(title.formatAsKey)
+
+    val cachedProofs = getAllFiles(bookCacheDirectoryPath).flatMap { path =>
+      val serializedProof = new String(Files.readAllBytes(path), "UTF-8")
+      Try {
+        CachedProof.parser(path.getFileName.toString)(updatedParsingContext).parseAndDiscard(serializedProof, path)
+      }.ifFailed { e =>
+        logger.info(s"Error parsing cached proof $path\n${e.getMessage}")
+      }.toOption
+    }
+
+    val book = Book(
+      title,
+      path,
+      dependencies,
+      chapters,
+      updatedParsingContext.statementVariableNames,
+      updatedParsingContext.termVariableNames
+    ).expandOutlines(cachedProofs)
+    for {
+      chapter <- book.chapters
+      theorem <- chapter.theorems
+    } {
+      val cachePath = cacheDirectoryPath.resolve(Paths.get(book.key, chapter.key, theorem.key))
+      Files.createDirectories(cachePath.getParent)
+      Files.write(cachePath, CachedProof(theorem.key, theorem.premises, theorem.proof).serialized.getBytes("UTF-8"))
+    }
+    book
   }
 
-  def fromDirectory(bookDirectoryPathName: String, theoremCache: Seq[Theorem]): Seq[Book] = {
-    val preparsedBooks = getPreParsedBooks(bookDirectoryPathName)
+  def fromDirectory(outlineDirectoryPath: Path, cacheDirectoryPath: Path): Seq[Book] = {
+    val preparsedBooks = getPreParsedBooks(outlineDirectoryPath)
     Files
-      .readAllLines(Paths.get(bookDirectoryPathName, "books.list"))
+      .readAllLines(outlineDirectoryPath.resolve("books.list"))
       .asScala
+      .filter(s => !s.startsWith("#"))
       .foldLeft(Seq.empty[Book]) { case (previousBooks, bookTitle) =>
         val preParsedBook = preparsedBooks.find(_.title == bookTitle).getOrElse(throw new Exception(s"Could not find book '$bookTitle'"))
-        previousBooks :+ parseBook(preParsedBook, previousBooks, theoremCache)
+        previousBooks :+ parseBook(preParsedBook, previousBooks, cacheDirectoryPath)
       }
   }
 }

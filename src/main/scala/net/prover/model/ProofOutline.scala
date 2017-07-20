@@ -63,7 +63,7 @@ object ProofOutline {
     val innerParser = for {
       assertion <- Statement.parser
       nonArbitraryVariables <- Parser.optional("non-arbitrary", Term.variableParser.listInParens(None).map(_.toSet), Set.empty[TermVariable])
-      nonDistinctVariables <- Parser.optional("non-distinct", Conditions.variablePairListParser.map(_.toSet), Set.empty[(TermVariable, Variable)])
+      nonDistinctVariables <- Parser.optional("non-distinct", DistinctVariables.variablePairsParser.map(_.toSet), Set.empty[(TermVariable, Variable)])
       debug <- Parser.optional("debug", Parser.constant(true), false)
     } yield AssertionStep(
       assertion,

@@ -67,7 +67,7 @@ extends InferenceTransform {
 
 object InferenceTransform extends ChapterEntryParser[InferenceTransform] {
   override def name: String = "inference-transform"
-  override def parser(implicit context: ParsingContext): Parser[InferenceTransform] = {
+  override def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[InferenceTransform] = {
     for {
       placeholderStatement <- Statement.parser.inParens
       conclusionPlaceholderStatementOption <- Statement.parser.optionalInParens

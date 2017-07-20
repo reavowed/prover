@@ -1,6 +1,8 @@
 package net.prover.model
 
-import net.prover.model.DetailedProof.SimplifiedReference
+import java.nio.file.Paths
+
+import net.prover.model.Proof.SimplificationReference
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
 import net.prover.model.ProofOutline.{AssertionStep, AssumptionStep, NamingStep}
 import net.prover.model.components._
@@ -9,11 +11,12 @@ import net.prover.model.entries.Axiom
 class TheoremSpec extends ProverSpec {
 
   def axiom(
+    name: String,
     premises: Seq[Premise],
     conclusion: ProvenStatement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement
   ): Axiom = {
-    Axiom("", "", "", "", "", "", premises, conclusion, rearrangementType)
+    Axiom(name, name.formatAsKey, "test-chapter", "Test Chapter", "test-book", "Test Book", premises, conclusion, rearrangementType)
   }
 
   "theorem parser" should {
@@ -40,14 +43,12 @@ class TheoremSpec extends ProverSpec {
       proofSteps: Seq[ProofOutline.Step],
       inferences: Seq[Inference],
       inferenceTransforms: Seq[InferenceTransform]
-    ): DetailedProof = {
-      DetailedProof.fillInOutline(
+    ): Proof = {
+      Proof.fillInOutline(
         premises,
         ProofOutline(proofSteps),
         inferences,
-        inferenceTransforms,
-        "Test Book",
-        "Test Theorem")
+        inferenceTransforms)
     }
 
     def checkProof(
@@ -61,51 +62,64 @@ class TheoremSpec extends ProverSpec {
       proof.conclusion mustEqual ProvenStatement(
         proofSteps.ofType[ProofOutline.StepWithAssertion].last.innermostAssertionStep.assertion,
         conditions)
+      proof.matchesOutline(ProofOutline(proofSteps)) must beTrue
+      val serializedProof = proof.serialized
+      val deserializedProof = Proof.parser.parse(Tokenizer.fromString(serializedProof, Paths.get("")))._1
+      CachedProof("", premises, deserializedProof).validate(inferences, inferenceTransforms) must beSome(proof)
     }
 
     "not prove an unfounded statement" in {
       prove(Nil, Seq(φ), Nil, Nil) must throwAn[Exception]
     }
 
-    val repetition = axiom(Seq(φ), φ)
-    val deduction = axiom(Seq(DeducedPremise(φ, ψ)), Implication(φ, ψ))
-    val modusPonens = axiom(Seq(Implication(φ, ψ), φ), ψ)
-    val implicationIsReflexive = axiom(Nil, Implication(φ, φ))
-    val falseStatementsAreEquivalent = axiom(Seq(Negation(φ), Negation(ψ)), Equivalence(φ, ψ))
-    val extractRightConjunct = axiom(Seq(Conjunction(φ, ψ)), ψ, RearrangementType.Simplification)
-    val extractLeftConjunct = axiom(Seq(Conjunction(φ, ψ)), φ, RearrangementType.Simplification)
-    val combineConjunction = axiom(Seq(φ, ψ), Conjunction(φ, ψ), RearrangementType.Expansion)
-    val addRightDisjunct = axiom(Seq(ψ), Disjunction(φ, ψ), rearrangementType = RearrangementType.Expansion)
+    val repetition = axiom("Repetition", Seq(φ), φ)
+    val deduction = axiom("Deduction", Seq(DeducedPremise(φ, ψ)), Implication(φ, ψ))
+    val modusPonens = axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
+    val implicationIsReflexive = axiom("Implication Is Reflexive", Nil, Implication(φ, φ))
+    val falseStatementsAreEquivalent = axiom("False Statements Are Equivalent", Seq(Negation(φ), Negation(ψ)), Equivalence(φ, ψ))
+    val extractRightConjunct = axiom("Extract Right Conjunct", Seq(Conjunction(φ, ψ)), ψ, RearrangementType.Simplification)
+    val extractLeftConjunct = axiom("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), φ, RearrangementType.Simplification)
+    val combineConjunction = axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ), RearrangementType.Expansion)
+    val addRightDisjunct = axiom("Add Right Disjunct", Seq(ψ), Disjunction(φ, ψ), rearrangementType = RearrangementType.Expansion)
     val substitutionOfEquals = axiom(
+      "Substitution of Equals",
       Seq(
         DirectPremise(Equals(x, y), isElidable = true),
         SubstitutedStatementVariable(φ, x, z)),
       SubstitutedStatementVariable(φ, y, z))
-    val substitutionOfEqualsReverse = axiom(Seq(Equals(x, y), SubstitutedStatementVariable(φ, y, z)), SubstitutedStatementVariable(φ, x, z))
+    val substitutionOfEqualsReverse = axiom(
+      "Substitution of Equals",
+      Seq(Equals(x, y), SubstitutedStatementVariable(φ, y, z)),
+      SubstitutedStatementVariable(φ, x, z))
     val equivalenceOfSubstitutedEquals = axiom(
+      "Equivalence of Substituted Equals",
       Seq(Equals(x, y)),
       Equivalence(
         SubstitutedStatementVariable(φ, x, z),
         SubstitutedStatementVariable(φ, y, z)))
     val substitution = axiom(
+      "Substitution",
       Seq(φ),
       ProvenStatement(
         SubstitutedStatementVariable(φ, y ,x),
         Conditions(Set(x), DistinctVariables.empty)))
     val renamedGeneralization = axiom(
+      "Renamed Generalization",
       Seq(SubstitutedStatementVariable(φ, y, x)),
       ProvenStatement(
         ForAll(x, φ),
         Conditions(Set(y), DistinctVariables(y -> φ))))
     val generalization = axiom(
+      "Generalization",
       Seq(φ),
       ProvenStatement(
         ForAll(x, φ),
         Conditions(Set(x), DistinctVariables.empty)),
       RearrangementType.Expansion)
-    val specification = axiom(Seq(ForAll(x, φ)), SubstitutedStatementVariable(φ, y, x))
-    val existence = axiom(Seq(SubstitutedStatementVariable(φ, y, x)), Exists(x, φ))
+    val specification = axiom("Specification", Seq(ForAll(x, φ)), SubstitutedStatementVariable(φ, y, x))
+    val existence = axiom("Existence", Seq(SubstitutedStatementVariable(φ, y, x)), Exists(x, φ))
     val nameExistence = axiom(
+      "Name Existence",
       Seq(
         DirectPremise(Exists(x, φ), isElidable = true),
         DeducedPremise(φ, ψ)),
@@ -113,6 +127,7 @@ class TheoremSpec extends ProverSpec {
         ψ,
         Conditions(Set(x), DistinctVariables(x -> ψ))))
     val nameExistenceRenamed = axiom(
+      "Name Existence (Renamed)",
       Seq(
         DirectPremise(Exists(x, φ), isElidable = true),
         DeducedPremise(SubstitutedStatementVariable(φ, y, x), ψ)),
@@ -178,7 +193,6 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove a conclusion that is a nested substituted variable" in {
-      val specification = axiom(Seq(ForAll(x, φ)), SubstitutedStatementVariable(φ, y, x))
       checkProof(
         Seq(ForAll(x, Negation(φ))),
         Seq(Negation(SubstitutedStatementVariable(φ, y, x))),
@@ -316,6 +330,7 @@ class TheoremSpec extends ProverSpec {
 
     "prove a statement that requires additional distinct variable conditions to be added in the resolution of a substitution in the conclusion" in {
       val elementOfComprehension = axiom(
+        "Element of Comprehension",
         Seq(Equals(Y, Comprehension(x, X, φ))),
         ForAll(y, Equivalence(ElementOf(y, Y), Conjunction(ElementOf(y, X), SubstitutedStatementVariable(φ, y, x)))))
 
@@ -338,6 +353,7 @@ class TheoremSpec extends ProverSpec {
 
     "prove an inference conclusion by simplifying a premise" in {
       val anythingImpliesATrueStatement = axiom(
+        "Anything Implies a True Statement",
         Seq(φ),
         Implication(ψ, φ))
 
@@ -347,7 +363,7 @@ class TheoremSpec extends ProverSpec {
         Seq(extractLeftConjunct, anythingImpliesATrueStatement),
         Nil)
       proof.conclusion mustEqual ProvenStatement.withNoConditions(Implication(χ, φ))
-      proof.steps.last.asInstanceOf[DetailedProof.AssertionStep].references.head.asInstanceOf[SimplifiedReference].html mustEqual "φ"
+      proof.steps.last.asInstanceOf[Proof.AssertionStep].references.head.asInstanceOf[SimplificationReference].statement mustEqual φ
     }
 
     "prove a statement by rearranging" in {
@@ -360,6 +376,7 @@ class TheoremSpec extends ProverSpec {
 
     "add conditions when proving a statement by rearranging " in {
       val addNegatedConjunct = axiom(
+        "Add Negated Conjunct",
         Seq(Negation(φ)),
         Negation(Conjunction(φ, ψ)),
         RearrangementType.Expansion)
@@ -382,6 +399,7 @@ class TheoremSpec extends ProverSpec {
 
     "prove a naming step using an elided premise" in {
       val elementOfUnion = axiom(
+        "Element of Union",
         Seq(ElementOf(a, Union(x))),
         Exists(y, Conjunction(ElementOf(a, y), ElementOf(y, x))))
       checkProof(
@@ -395,6 +413,7 @@ class TheoremSpec extends ProverSpec {
 
     "prove an elided premise using a double substitution" in {
       val elementOfComprehension = axiom(
+        "Element of Comprehension",
         Seq(Equals(X, Comprehension(y, Y, φ)), ElementOf(x, X)),
         SubstitutedStatementVariable(φ, x, y))
 
@@ -410,6 +429,7 @@ class TheoremSpec extends ProverSpec {
 
     "prove an elided premise by working out substitution targets" in {
       val pairIsSymmetric = axiom(
+        "Pair Is Symmetric",
         Nil,
         Equals(Pair(x, y), Pair(y, x)))
 

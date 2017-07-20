@@ -8,7 +8,6 @@ expansion
 premise φ
 premise ψ
 assume → φ ¬ ψ {
-  prove ψ
   prove ¬ ψ
 }
 prove ¬ → φ ¬ ψ

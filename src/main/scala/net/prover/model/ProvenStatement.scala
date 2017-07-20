@@ -25,4 +25,13 @@ object ProvenStatement {
   def withNoConditions(statement: Statement): ProvenStatement = {
     ProvenStatement(statement, Conditions.empty)
   }
+
+  def parser(implicit parsingContext: ParsingContext): Parser[ProvenStatement] = {
+    for {
+      statement <- Statement.parser
+      conditions <- Conditions.parser
+    } yield {
+      ProvenStatement(statement, conditions)
+    }
+  }
 }

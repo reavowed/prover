@@ -172,12 +172,12 @@
             element.mark(textToHighlight, {element: "span", className: "highlightPremise", separateWordSearch: false, acrossElements: true});
           }
 
-          function highlightPremise(reference, subreference, htmlToHighlight) {
-            if (reference < premises.length) {
-              markElement(premises.eq(reference), htmlToHighlight);
+          function highlightPremise(index, subindex, htmlToHighlight) {
+            if (index < premises.length) {
+              markElement(premises.eq(index), htmlToHighlight);
             } else {
               var referredRow = _.findLast(referrableRows, function (row) {
-                return row.reference === reference;
+                return row.reference === index;
               });
               if (referredRow == null || (referredRow === rowData && !rowData.assertion)) return;
               var referredRowIndex = _.indexOf($scope.proofRows, referredRow);
@@ -185,11 +185,11 @@
               var referredAssumption = referredTableRow.find(".assumption");
               var referredAssertion = referredTableRow.find(".assertion");
               if (referredAssumption.length) {
-                markElement(referredAssumption, subreference != null ? null : htmlToHighlight);
+                markElement(referredAssumption, subindex != null ? null : htmlToHighlight);
               } else {
                 markElement(referredAssertion, htmlToHighlight);
               }
-              if (subreference != null) {
+              if (subindex != null) {
                 var followingRows = _.drop($scope.proofRows, referredRowIndex + 1);
                 var nestedRows = _.takeWhile(followingRows, function (row) {
                   return row.conceptualIndentLevel > referredRow.conceptualIndentLevel;
@@ -198,10 +198,10 @@
                   return row.conceptualIndentLevel === referredRow.conceptualIndentLevel + 1;
                 });
                 var childRow = _.findLast(childRows, function (row) {
-                  return row.reference === subreference;
+                  return row.reference === subindex;
                 });
                 if (childRow == null) {
-                  if (referredRow.assertion && subreference === reference + 1) {
+                  if (referredRow.assertion && subindex === index + 1) {
                     childRow = referredRow
                   } else {
                     return
@@ -214,13 +214,28 @@
             }
           }
 
-          _.forEach(rowData.references, function (reference) {
-            if (reference.index != null) {
-              highlightPremise(reference.index, null, reference.html);
+          function highlightReferences(references) {
+            _.forEach(references, function (reference) {
+              highlightReference(reference);
+            });
+          }
+
+          function highlightReference(reference, html) {
+            if (reference.referenceType === "direct") {
+              highlightPremise(reference.index, null, html);
+            } else if (reference.referenceType === "deduced") {
+              highlightPremise(reference.antecedentIndex, reference.consequentIndex, html);
+            } else if (reference.referenceType === "simplification") {
+              highlightReference(reference.reference, html || reference.statement);
+            } else if (reference.referenceType === "inference") {
+              highlightReferences(reference.references);
             } else {
-              highlightPremise(reference.antecedentIndex, reference.consequentIndex, null);
+              throw "Unrecognised reference type " + reference.referenceType;
             }
-          });
+          }
+
+          highlightReferences(rowData.references);
+
           tableRow.find(".assertion").addClass("highlightConclusion");
         };
 
@@ -252,30 +267,16 @@
         };
 
         function addAssumption(assumption, steps, reference, visibleIndentLevel, conceptualIndentLevel) {
-          if (steps.length == 1 && steps[0].provenStatement) {
-            $scope.proofRows.push({
-              prefix: 'Then',
-              assumption: assumption,
-              assertion: steps[0].provenStatement.statement,
-              references: getReferences(steps[0]),
-              conditions: steps[0].provenStatement.conditions,
-              reference: reference,
-              inference: getInference(steps[0]),
-              visibleIndentLevel: visibleIndentLevel,
-              conceptualIndentLevel: conceptualIndentLevel
-            });
-          } else {
-            $scope.proofRows.push({
-              prefix: 'Assume',
-              assumption: assumption,
-              reference: reference,
-              visibleIndentLevel: visibleIndentLevel,
-              conceptualIndentLevel: conceptualIndentLevel
-            });
-            _.forEach(steps, function (step, index) {
-              addStep(step, reference + index + 1, visibleIndentLevel + 1, conceptualIndentLevel + 1)
-            });
-          }
+          $scope.proofRows.push({
+            prefix: 'Assume',
+            assumption: assumption,
+            reference: reference,
+            visibleIndentLevel: visibleIndentLevel,
+            conceptualIndentLevel: conceptualIndentLevel
+          });
+          _.forEach(steps, function (step, index) {
+            addStep(step, reference + index + 1, visibleIndentLevel + 1, conceptualIndentLevel + 1)
+          });
         }
 
         function addNaming(variable, assumptionStep, assertionStep, reference, visibleIndentLevel, conceptualIndentLevel, override) {
@@ -313,6 +314,19 @@
           });
         }
 
+        function addRearrangement(rearrangementStep, reference, visibleIndentLevel, conceptualIndentLevel, override) {
+          $scope.proofRows.push({
+            prefix: 'Then',
+            assertion: rearrangementStep.provenStatement.statement,
+            references: getReferences(rearrangementStep),
+            conditions: override ? override.conditions : rearrangementStep.provenStatement.conditions,
+            inference: { name: "Rearrangement" },
+            reference: override ? override.reference : reference,
+            visibleIndentLevel: visibleIndentLevel,
+            conceptualIndentLevel: override ? override.level : conceptualIndentLevel
+          });
+        }
+
         function getInference(step) {
           var elidedReference = _.find(step.references, function(r) { return r.referenceType === 'elided'; });
           var inference = elidedReference ? elidedReference.inference : step.inference;
@@ -323,18 +337,20 @@
         }
 
         function getReferences(step) {
-          var baseReferences = step.references;
-          var elidedReference = _.find(step.references, function(r) { return r.referenceType === 'elided'; });
-          return elidedReference ? baseReferences.concat(elidedReference.references) : baseReferences;
+          var baseReferences = step.references || (step.reference ? [step.reference] : []);
+          var innerReferences = _.flatMap(step.references, getReferences);
+          return baseReferences.concat(innerReferences);
         }
 
         function addStep(step, reference, visibleIndentLevel, conceptualIndentLevel, override) {
-          if (step.assumption) {
+          if (step.type === "assumption") {
             addAssumption(step.assumption, step.steps, reference, visibleIndentLevel, conceptualIndentLevel, override);
-          } else if (step.variable) {
-            addNaming(step.variable, step.assumptionStep, step.assertionStep, reference, visibleIndentLevel, conceptualIndentLevel, override)
-          } else {
+          } else if (step.type === "assertion") {
             addAssertion(step, reference, visibleIndentLevel, conceptualIndentLevel, override);
+          } else if (step.type === "naming") {
+            addNaming(step.variable, step.assumptionStep, step.assertionStep, reference, visibleIndentLevel, conceptualIndentLevel, override);
+          } else if (step.type === "rearrange") {
+            addRearrangement(step, reference, visibleIndentLevel, conceptualIndentLevel, override);
           }
         }
       });

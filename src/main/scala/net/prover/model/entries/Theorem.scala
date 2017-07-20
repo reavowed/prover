@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference.{Premise, RearrangementType}
-import net.prover.model.{DetailedProof, EntryInference, Inference, ProofOutline, ProvenStatement}
+import net.prover.model.{Proof, EntryInference, Inference, ProofOutline, ProvenStatement}
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement", "proofOutline"))
 case class Theorem(
@@ -15,7 +15,7 @@ case class Theorem(
     premises: Seq[Premise],
     conclusion: ProvenStatement,
     proofOutline: ProofOutline,
-    proof: DetailedProof,
+    proof: Proof,
     rearrangementType: RearrangementType,
     allowsRearrangement: Boolean = true)
   extends ChapterEntry(TheoremOutline)

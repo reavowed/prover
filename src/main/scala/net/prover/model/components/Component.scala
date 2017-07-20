@@ -1,6 +1,6 @@
 package net.prover.model.components
 
-import net.prover.model.{DistinctVariables, PartialSubstitutions, Substitutions}
+import net.prover.model.{DistinctVariables, Parser, ParsingContext, PartialSubstitutions, Substitutions}
 
 trait Component {
   def componentType: ComponentType
@@ -88,6 +88,8 @@ trait Component {
                   .headOption
               } yield (thisSubstitutions.withDistinctVariables(newDistinctVariables), updatedOtherSubstitutions)
             }
+          case _ =>
+            None
         }.headOption
       case _ =>
         None
@@ -97,4 +99,10 @@ trait Component {
   def safeHtml: String = html
   def serialized: String
   override def toString: String = html
+}
+
+object Component {
+  def parser(implicit parsingContext: ParsingContext): Parser[Component] = {
+    Statement.parser.tryOrElse(Term.parser)
+  }
 }

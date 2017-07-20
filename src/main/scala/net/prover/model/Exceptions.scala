@@ -14,6 +14,13 @@ case class ParseException(
     message,
     cause.orNull)
 
+case class ProvingException(
+    message: String,
+    fileName: String,
+    lineNumber: Int)
+  extends Exception(
+    s"Proof error at $fileName line $lineNumber: $message")
+
 case class ArbitraryVariableException(message: String) extends Exception(message)
 
 case class DistinctVariableViolationException(variable: TermVariable)

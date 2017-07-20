@@ -1,15 +1,14 @@
 package net.prover.model.entries
 
-import net.prover.model.{Chapter, Parser, ParsingContext}
+import net.prover.model._
 
 trait ChapterEntryParser[T <: ChapterEntry] {
   def name: String
-  def parser(implicit context: ParsingContext): Parser[T]
-  def addToContext(t: T, context: ParsingContext): ParsingContext = context
+  def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[T]
 
   def parseToChapter(chapter: Chapter, context: ParsingContext): Parser[(Chapter, ParsingContext)] = {
     for {
-      t <- parser(context)
+      t <- parser(chapter.title.formatAsKey, chapter.bookTitle.formatAsKey)(context)
     } yield {
       (chapter.copy(entries = chapter.entries :+ t), context.add(t))
     }

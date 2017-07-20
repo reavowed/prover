@@ -94,9 +94,9 @@ case class DistinctVariables(conditions: Map[TermVariable, Set[Variable]]) exten
   def serialized: String = {
     conditions.toSeq.sortBy(_._1.text).flatMap { case (termVariable, variables) =>
       variables.toSeq.sortBy(_.text).map { variable =>
-        s"$termVariable $variable"
+        s"${termVariable.text} ${variable.text}"
       }
-    }.mkString(" ")
+    }.mkString(", ")
   }
 
   def isEmpty: Boolean = conditions.isEmpty
@@ -140,5 +140,20 @@ object DistinctVariables {
     def foldTogether: DistinctVariables = {
       seq.foldLeft(DistinctVariables.empty)(_ ++ _)
     }
+  }
+
+  def parser(implicit context: ParsingContext): Parser[DistinctVariables] = {
+    variablePairsParser.map(DistinctVariables(_: _*))
+  }
+
+  def variablePairsParser(implicit context: ParsingContext): Parser[Seq[(TermVariable, Variable)]] = {
+    variablePairParser.listInParens(Some(","))
+  }
+
+  private def variablePairParser(implicit context: ParsingContext): Parser[(TermVariable, Variable)] = {
+    for {
+      first <- Term.variableParser
+      second <- Variable.parser
+    } yield first -> second
   }
 }

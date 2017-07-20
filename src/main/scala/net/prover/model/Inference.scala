@@ -28,11 +28,13 @@ trait EntryInference extends Inference {
   def bookKey: String
 
   override def keyOption = Some(key)
-  override def summary = Inference.EntrySummary(name, id, key, chapterKey, bookKey)
+  override def summary = Summary(name, id, key, chapterKey, bookKey)
 }
 
 case class DefinitionInference(
-    nameOfDefinedStatement: String,
+    nameOfDefinition: String,
+    chapterKey: String,
+    bookKey: String,
     premisesStatements: Seq[Statement],
     conclusionStatement: Statement,
     distinctVariables: DistinctVariables)
@@ -40,14 +42,14 @@ case class DefinitionInference(
 {
   override def premises = premisesStatements.map(DirectPremise.apply)
   override def conclusion = ProvenStatement(conclusionStatement, Conditions(Set.empty, distinctVariables))
-  override def name: String = s"Definition of $nameOfDefinedStatement"
-  override def summary: Inference.Summary = StubSummary(name)
+  override def name: String = s"Definition of $nameOfDefinition"
+  override def summary: Inference.Summary = Summary(name, id, name.formatAsKey, chapterKey, bookKey)
   override def allowsRearrangement = true
   override def rearrangementType = RearrangementType.NotRearrangement
   override def keyOption = None
 }
 
-case class TransformedInference(baseInference: Inference, premises: Seq[Premise], conclusion: ProvenStatement) extends Inference {
+case class TransformedInference(baseInference: Inference, premises: Seq[DirectPremise], conclusion: ProvenStatement) extends Inference {
   override def name: String = baseInference.name
   override def summary: Summary = baseInference.summary
   override def allowsRearrangement: Boolean = baseInference.allowsRearrangement
@@ -85,6 +87,7 @@ object Inference {
   sealed trait Premise {
     def statements: Seq[Statement]
     def applySubstitutions(substitutions: Substitutions): Option[Premise]
+    def matches(other: Premise): Boolean
     def html: String
     def serialized: String
   }
@@ -96,8 +99,14 @@ object Inference {
         substitutedStatement <- statement.applySubstitutions(substitutions)
       } yield DirectPremise(substitutedStatement)
     }
+    override def matches(other: Premise): Boolean = other match {
+      case DirectPremise(`statement`) =>
+        true
+      case _ =>
+        false
+    }
     override def html = statement.html
-    override def serialized = statement.serialized
+    override def serialized = s"premise ${statement.serialized}"
   }
   object DirectPremise {
     def apply(statement: Statement): DirectPremise = DirectPremise(statement, isElidable = false)
@@ -115,24 +124,29 @@ object Inference {
         substitutedConsequent <- consequent.applySubstitutions(substitutions)
       } yield DeducedPremise(substitutedAntecedent, substitutedConsequent)
     }
+    override def matches(other: Premise): Boolean = other match {
+      case DeducedPremise(`antecedent`, `consequent`) =>
+        true
+      case _ =>
+        false
+    }
 
     override def html = antecedent.html + " ⊢ " + consequent.html
-    override def serialized = Seq("proves", antecedent.serialized, consequent.serialized).mkString(" ")
+    override def serialized = Seq("premise", "proves", antecedent.serialized, consequent.serialized).mkString(" ")
   }
 
-  trait Summary {
-    def name: String
-    def id: Option[String]
+  case class Summary(name: String, id: String, key: String, chapterKey: String, bookKey: String) {
+    def serialized: String = s"$id ($name)"
   }
-  case class StubSummary(name: String) extends Summary {
-    override def id = None
+  object Summary {
+    def parser: Parser[Summary] = {
+      for {
+        id <- Parser.singleWord
+        _ <- Parser.toEndOfLine
+      } yield Inference.Summary("", id, "", "", "")
+    }
   }
-  case class EntrySummary(name: String, inferenceId: String, key: String, chapterKey: String, bookKey: String) extends Summary {
-    override def id = Some(inferenceId)
-  }
-}
 
-trait InferenceParser {
   private def deducedPremiseParser(implicit context: ParsingContext): Parser[DeducedPremise] = {
     for {
       antecedent <- Statement.parser

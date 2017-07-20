@@ -6,7 +6,8 @@ import net.prover.model.entries.{Axiom, AxiomOutline}
 class AxiomSpec extends ProverSpec {
 
   def parseAxiom(text: String*): Axiom = {
-    AxiomOutline.parser.parseAndDiscard(text.mkString("\n")).expand("", "", _.formatAsKey)
+    val outline = AxiomOutline.parser("", "").parseAndDiscard(text.mkString("\n"))
+    outline.expand(outline.name.formatAsKey, "Test Chapter", "Test Book")
   }
 
   "axiom parser" should {
@@ -17,10 +18,10 @@ class AxiomSpec extends ProverSpec {
       ) mustEqual Axiom(
         "Axiom of Extensionality",
         "axiom-of-extensionality",
-        "",
-        "",
-        "",
-        "",
+        "test-chapter",
+        "Test Chapter",
+        "test-book",
+        "Test Book",
         Nil,
         ForAll(x, ForAll(y, ForAll(z, Implication(
           Equivalence(ElementOf(z, x), ElementOf(z, y)),
@@ -35,10 +36,10 @@ class AxiomSpec extends ProverSpec {
       ) mustEqual Axiom(
         "Restate",
         "restate",
-        "",
-        "",
-        "",
-        "",
+        "test-chapter",
+        "Test Chapter",
+        "test-book",
+        "Test Book",
         Seq(DirectPremise(φ)),
         φ)
     }
@@ -52,10 +53,10 @@ class AxiomSpec extends ProverSpec {
       ) mustEqual Axiom(
         "Eliminate Implication",
         "eliminate-implication",
-        "",
-        "",
-        "",
-        "",
+        "test-chapter",
+        "Test Chapter",
+        "test-book",
+        "Test Book",
         Seq(DirectPremise(Implication(φ, ψ)), DirectPremise(φ)),
         ψ)
     }
@@ -68,10 +69,10 @@ class AxiomSpec extends ProverSpec {
       ) mustEqual Axiom(
         "Deduction",
         "deduction",
-        "",
-        "",
-        "",
-        "",
+        "test-chapter",
+        "Test Chapter",
+        "test-book",
+        "Test Book",
         Seq(DeducedPremise(φ, ψ)),
         Implication(φ, ψ))
     }

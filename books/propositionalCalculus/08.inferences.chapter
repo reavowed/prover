@@ -10,14 +10,12 @@ assume ∧ φ ψ {
   prove ψ
 }
 assume ∧ χ ω {
-  prove χ
   prove ψ
 }
 assume ∨ ∧ φ ψ ∧ χ ω {
   prove ψ
 }
 assume ψ {
-  prove ∧ φ ψ
   prove ∨ ∧ φ ψ ∧ χ ω
 }
 prove ↔ ∨ ∧ φ ψ ∧ χ ω ψ

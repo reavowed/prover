@@ -35,7 +35,9 @@ trait ProverSpec extends Specification {
       Format.default(symbol, variables.map(_.text)),
       definingStatement,
       Set.empty,
-      DistinctVariables.empty)
+      DistinctVariables.empty,
+      "",
+      "")
   }
   def predicate(
     symbol: String,
@@ -50,7 +52,9 @@ trait ProverSpec extends Specification {
       Format.default(symbol, variables.map(_.text)),
       definingStatement,
       Set.empty,
-      DistinctVariables.empty)
+      DistinctVariables.empty,
+      "",
+      "")
   }
 
   def quantifier(
@@ -65,9 +69,10 @@ trait ProverSpec extends Specification {
       Format(s"($symbol%0)%1", requiresBrackets = false),
       definingStatement,
       Set(x),
-      distinctVariables)
+      distinctVariables,
+      "",
+      "")
   }
-
 
   val Implication = connective("→", 2, None)
   val Negation = connective("¬", 1, None)
@@ -89,7 +94,9 @@ trait ProverSpec extends Specification {
     Nil,
     ForAll(x, Negation(ElementOf(x, PlaceholderTerm))),
     Set.empty,
-    DistinctVariables.empty)
+    DistinctVariables.empty,
+    "",
+    "")
   val EmptySet = EmptySetDefinition()
 
   val Comprehension = TermDefinition(
@@ -100,7 +107,9 @@ trait ProverSpec extends Specification {
     Nil,
     ForAll(z, Equivalence(ElementOf(z, PlaceholderTerm), Conjunction(ElementOf(z, y), SubstitutedStatementVariable(φ, z, x)))),
     Set(x),
-    DistinctVariables.empty)
+    DistinctVariables.empty,
+    "",
+    "")
 
   val PowerSet = TermDefinition(
     "powerSet",
@@ -110,7 +119,9 @@ trait ProverSpec extends Specification {
     Nil,
     ForAll(y, Equivalence(ElementOf(Y, PlaceholderTerm), φ)),
     Set.empty,
-    DistinctVariables.empty)
+    DistinctVariables.empty,
+    "",
+    "")
 
   val Pair = TermDefinition(
     "pair",
@@ -120,7 +131,9 @@ trait ProverSpec extends Specification {
     Nil,
     φ,
     Set.empty,
-    DistinctVariables.empty)
+    DistinctVariables.empty,
+    "",
+    "")
 
   val OrderedPair = TermDefinition(
     "orderedPair",
@@ -130,7 +143,9 @@ trait ProverSpec extends Specification {
     Nil,
     φ,
     Set.empty,
-    DistinctVariables.empty)
+    DistinctVariables.empty,
+    "",
+    "")
 
   val Union = TermDefinition(
     "union",
@@ -140,7 +155,9 @@ trait ProverSpec extends Specification {
     Nil,
     φ,
     Set.empty,
-    DistinctVariables.empty)
+    DistinctVariables.empty,
+    "",
+    "")
 
   implicit val defaultContext = ParsingContext(
     statementDefinitions = Seq(
@@ -151,12 +168,12 @@ trait ProverSpec extends Specification {
     statementVariableNames = Set(φ, ψ, χ).map(_.text),
     termVariableNames = Set(x, y, z, X, Y, Z, a, n).map(_.text))
 
-  val stubBook = Book("", Paths.get(""), Nil, Nil)
+  val stubBook = Book("", Paths.get(""), Nil, Nil, Set.empty, Set.empty)
   val stubChapter = Chapter("", "", "")
 
   implicit class ParserOps[T](parser: Parser[T]) {
     def parseAndDiscard(text: String): T = {
-      parser.parse(Tokenizer.fromString(text, Paths.get("")))._1
+      parser.parseAndDiscard(text, Paths.get(""))
     }
   }
 
