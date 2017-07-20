@@ -1,7 +1,7 @@
 package net.prover.controllers
 
 import net.prover.model.entries.Theorem
-import net.prover.model.{Book, Chapter, Inference}
+import net.prover.model.{Book, Chapter, EntryInference, Inference}
 import net.prover.services.BookService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -70,13 +70,17 @@ class BookController @Autowired() (bookService: BookService) {
       val inferenceOption = for {
         book <- books.find(_.key == bookKey)
         chapter <- book.chapters.find(_.key == chapterKey)
-        inference <- chapter.entries.ofType[Inference].find(_.keyOption.contains(inferenceKey))
+        inferences = chapter.entries.ofType[EntryInference]
+        inference <- inferences.find(_.keyOption.contains(inferenceKey))
       } yield {
-        inference
+        val index = inferences.indexOf(inference)
+        val previous = if (index > 0) Some(inferences(index - 1).summary) else None
+        val next = if (index < inferences.length - 1) Some(inferences(index + 1).summary) else None
+        InferenceWithUsages(inference, getUsages(inference, books), previous, next)
       }
       inferenceOption match {
         case Some(inference) =>
-          new ResponseEntity[InferenceWithUsages](InferenceWithUsages(inference, getUsages(inference, books)), HttpStatus.OK)
+          new ResponseEntity[InferenceWithUsages](inference, HttpStatus.OK)
         case None =>
           new ResponseEntity(HttpStatus.NOT_FOUND)
       }
@@ -87,7 +91,7 @@ class BookController @Autowired() (bookService: BookService) {
     }
   }
 
-  case class InferenceWithUsages(inference: Inference, bookUsages: Seq[BookUsages])
+  case class InferenceWithUsages(inference: Inference, bookUsages: Seq[BookUsages], previous: Option[Inference.Summary], next: Option[Inference.Summary])
   case class BookUsages(bookTitle: String, bookKey: String, chapterUsages: Seq[ChapterUsages])
   case class ChapterUsages(chapterTitle: String, chapterKey: String, inferenceSummaries: Seq[Inference.Summary])
 

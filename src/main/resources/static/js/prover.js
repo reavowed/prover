@@ -105,6 +105,10 @@
       $http.get('/books/' + $routeParams.bookKey + '/' + $routeParams.chapterKey + '/' + $routeParams.inferenceKey).then(function (response) {
         $scope.inference = response.data.inference;
         $scope.bookUsages = response.data.bookUsages;
+        $scope.previous = response.data.previous;
+        if ($scope.previous) $scope.previous.link = getInferenceLink($scope.previous);
+        $scope.next = response.data.next;
+        if ($scope.next) $scope.next.link = getInferenceLink($scope.next);
         $scope.joinWordList = joinWordList;
         $scope.proofRows = [];
         $scope.showSteps = false;
@@ -332,8 +336,12 @@
           var inference = elidedReference ? elidedReference.inference : step.inference;
           return {
             name: inference.name,
-            link: inference.key ? '#/' + inference.bookKey + '/' + inference.chapterKey + '/' + inference.key : null
+            link: getInferenceLink(inference)
           }
+        }
+
+        function getInferenceLink(inference) {
+          return inference.key ? '#/' + inference.bookKey + '/' + inference.chapterKey + '/' + inference.key : null;
         }
 
         function getReferences(step) {
