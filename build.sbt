@@ -8,6 +8,7 @@ libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.3.2",
   "org.springframework.boot" % "spring-boot-starter-web" % "1.4.2.RELEASE",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.8.4",
+  "com.typesafe.akka" %% "akka-actor" % "2.5.3",
   "org.webjars" % "jquery" % "3.1.1",
   "org.webjars" % "bootstrap" % "3.3.7",
   "org.webjars" % "angularjs" % "1.6.4",

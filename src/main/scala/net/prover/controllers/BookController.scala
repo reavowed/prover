@@ -1,27 +1,20 @@
 package net.prover.controllers
 
-import java.nio.file.{Files, Paths}
-
 import net.prover.model.entries.Theorem
-import net.prover.model.{Book, CachedProof, Chapter, Inference}
+import net.prover.model.{Book, Chapter, Inference}
+import net.prover.services.BookService
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation.{GetMapping, PathVariable, RequestMapping, RestController}
 
-import scala.util.Try
 import scala.util.control.NonFatal
 
 @RestController
 @RequestMapping(Array("/books"))
-class BookController {
-  def getBooks: Seq[Book] = Book.fromDirectory(Paths.get("books"), Paths.get("cache"))
+class BookController @Autowired() (bookService: BookService) {
 
-  try {
-    getBooks
-  } catch {
-    case NonFatal(e) =>
-      BookController.logger.error("Error getting books", e)
-  }
+  def getBooks: Seq[Book] = bookService.books.get()
 
   @GetMapping(Array(""))
   def get = {

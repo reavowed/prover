@@ -1,6 +1,7 @@
 package net.prover.model
 
 import java.nio.file.{Files, Path, Paths}
+import java.time.Instant
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.entries._
@@ -37,6 +38,17 @@ case class Book(
   }
 
   def transitiveDependencies: Seq[Book] = Book.transitiveDependencies(dependencies)
+
+  def cacheTheorems(cacheDirectoryPath: Path) = {
+    for {
+      chapter <- chapters
+      theorem <- chapter.theorems
+    } {
+      val cachePath = cacheDirectoryPath.resolve(Paths.get(key, chapter.key, theorem.key))
+      Files.createDirectories(cachePath.getParent)
+      Files.write(cachePath, CachedProof(theorem.key, theorem.premises, theorem.proof).serialized.getBytes("UTF-8"))
+    }
+  }
 }
 
 object Book {
@@ -54,7 +66,45 @@ object Book {
     TheoremOutline,
     InferenceTransform)
 
-  private def importsParser: Parser[Seq[String]] = {
+  def parser(path: Path, cacheDirectoryPath: Path, availableDependencies: Map[String, Book]): Parser[(Book, Map[Path, Instant])] = {
+    for {
+      title <- Parser.toEndOfLine
+      imports <- importsParser
+      dependencies = imports.map { importTitle =>
+        availableDependencies.getOrElse(importTitle, throw new Exception(s"Could not find imported book '$title'"))
+      }
+      transitiveDependencies = Book.transitiveDependencies(dependencies)
+      context = ParsingContext(
+        transitiveDependencies.flatMap(_.chapters.flatMap(_.statementDefinitions)),
+        transitiveDependencies.flatMap(_.chapters.flatMap(_.termDefinitions)),
+        transitiveDependencies.flatMap(_.statementVariableNames).toSet,
+        transitiveDependencies.flatMap(_.termVariableNames).toSet)
+      chaptersFileModificationTimesAndUpdatedParsingContext <- linesParser(title, path, context)
+    } yield {
+      val (chapters, fileModificationTimes, updatedParsingContext) = chaptersFileModificationTimesAndUpdatedParsingContext
+      val bookCacheDirectoryPath = cacheDirectoryPath.resolve(title.formatAsKey)
+      val cachedProofs = getAllFiles(bookCacheDirectoryPath).mapCollect { path =>
+        val serializedProof = new String(Files.readAllBytes(path), "UTF-8")
+        Try {
+          CachedProof.parser(path.getFileName.toString)(updatedParsingContext).parseAndDiscard(serializedProof, path)
+        }.ifFailed { e =>
+          logger.info(s"Error parsing cached proof $path\n${e.getMessage}")
+        }.toOption
+      }
+      val book = Book(
+        title,
+        path,
+        dependencies,
+        chapters,
+        updatedParsingContext.statementVariableNames,
+        updatedParsingContext.termVariableNames
+      ).expandOutlines(cachedProofs)
+      book.cacheTheorems(cacheDirectoryPath)
+      (book, fileModificationTimes)
+    }
+  }
+
+  def importsParser: Parser[Seq[String]] = {
     Parser
       .optionalWord("import")
       .mapFlatMap(_ => Parser.toEndOfLine)
@@ -65,9 +115,9 @@ object Book {
     bookTitle: String,
     bookPath: Path,
     context: ParsingContext
-  ): Parser[(Seq[Chapter], ParsingContext)] = {
-    Parser.iterateWhileDefined((Seq.empty[Chapter], context)) { case (chapters, currentContext) =>
-      lineParser(bookTitle, bookPath, chapters, currentContext)
+  ): Parser[(Seq[Chapter], Map[Path, Instant], ParsingContext)] = {
+    Parser.iterateWhileDefined((Seq.empty[Chapter], Map.empty[Path, Instant], context)) { case (chapters, fileModificationTimes, currentContext) =>
+      lineParser(bookTitle, bookPath, chapters, fileModificationTimes, currentContext)
     }
   }
 
@@ -75,26 +125,27 @@ object Book {
     bookTitle: String,
     bookPath: Path,
     chapters: Seq[Chapter],
+    fileModificationTimes: Map[Path, Instant],
     context: ParsingContext
-  ): Parser[Option[(Seq[Chapter], ParsingContext)]] = {
+  ): Parser[Option[(Seq[Chapter], Map[Path, Instant], ParsingContext)]] = {
     Parser.singleWordIfAny.mapFlatMap {
       case "chapter" =>
         for {
           chapter <- chapterParser(bookTitle)
         } yield {
-          (chapters :+ chapter, context)
+          (chapters :+ chapter, fileModificationTimes, context)
         }
       case "variables" =>
         for {
           updatedContext <- variableDefinitionsParser(context)
         } yield {
-          (chapters, updatedContext)
+          (chapters, fileModificationTimes, updatedContext)
         }
       case "include" =>
         for {
-          _ <- includeParser(bookPath, bookTitle)
+          newModificationTime <- includeParser(bookPath, bookTitle)
         } yield {
-          (chapters, context)
+          (chapters, fileModificationTimes + newModificationTime, context)
         }
       case key =>
         chapterEntryParsers.find(_.name == key) match {
@@ -106,7 +157,7 @@ object Book {
                   updatedChapter = chaptersAndContext._1
                   updatedContext = chaptersAndContext._2
                 } yield {
-                  (previousChapters :+ updatedChapter, updatedContext)
+                  (previousChapters :+ updatedChapter, fileModificationTimes, updatedContext)
                 }
               case Nil =>
                 throw new Exception(s"Cannot parse chapter entry '$key' outside of a chapter")
@@ -137,10 +188,12 @@ object Book {
     }
   }
 
-  def includeParser(bookPath: Path, bookTitle: String): Parser[Unit] = Parser { tokenizer =>
+  def includeParser(bookPath: Path, bookTitle: String): Parser[(Path, Instant)] = Parser { tokenizer =>
     val (pathText, nextTokenizer) = Parser.toEndOfLine.parse(tokenizer)
-    val includeTokenizer = Tokenizer.fromPath(bookPath.getParent.resolve(pathText)).copy(currentBook = Some(bookTitle))
-    ((), nextTokenizer.addTokenizer(includeTokenizer))
+    val includedPath = bookPath.getParent.resolve(pathText)
+    val modificationTime = Files.getLastModifiedTime(includedPath).toInstant
+    val includeTokenizer = Tokenizer.fromPath(includedPath).copy(currentBook = Some(bookTitle))
+    ((includedPath, modificationTime), nextTokenizer.addTokenizer(includeTokenizer))
   }
 
   private def getAllFiles(directoryPath: Path): Seq[Path] = {
@@ -152,78 +205,18 @@ object Book {
       Nil
   }
 
-  private case class PreParsedBook(title: String, path: Path, imports: Seq[String], tokenizer: StringTokenizer)
-
-  private def getPreParsedBooks(bookDirectoryPath: Path): Seq[PreParsedBook] = {
-    getAllFiles(bookDirectoryPath)
-      .filter(_.getFileName.toString.endsWith(".book"))
-      .map { path =>
-        val tokenizer = Tokenizer.fromPath(path)
-        if (tokenizer.isEmpty) throw new Exception(s"Book file '$path' was empty")
-
-        val (title, tokenizerAfterTitle) = Parser.toEndOfLine.parse(tokenizer)
-        val (imports, tokenizerAfterImports) = importsParser.parse(tokenizerAfterTitle)
-        PreParsedBook(title, path, imports, tokenizerAfterImports.asInstanceOf[StringTokenizer].copy(currentBook = Some(title)))
-      }
-  }
-
-  private def parseBook(
-    preParsedBook: PreParsedBook,
-    previousBooks: Seq[Book],
-    cacheDirectoryPath: Path
-  ): Book = {
-    import preParsedBook._
-
-    val dependencies = imports.map { title =>
-      previousBooks.find(_.title == title).getOrElse(throw new Exception(s"Could not find imported book '$title'"))
-    }
-    val transitiveDependencies = Book.transitiveDependencies(dependencies)
-    val context = ParsingContext(
-      transitiveDependencies.flatMap(_.chapters.flatMap(_.statementDefinitions)),
-      transitiveDependencies.flatMap(_.chapters.flatMap(_.termDefinitions)),
-      transitiveDependencies.flatMap(_.statementVariableNames).toSet,
-      transitiveDependencies.flatMap(_.termVariableNames).toSet)
-
-    val (chapters, updatedParsingContext) = linesParser(title, path, context).parse(tokenizer)._1
-    val bookCacheDirectoryPath = cacheDirectoryPath.resolve(title.formatAsKey)
-
-    val cachedProofs = getAllFiles(bookCacheDirectoryPath).flatMap { path =>
-      val serializedProof = new String(Files.readAllBytes(path), "UTF-8")
-      Try {
-        CachedProof.parser(path.getFileName.toString)(updatedParsingContext).parseAndDiscard(serializedProof, path)
-      }.ifFailed { e =>
-        logger.info(s"Error parsing cached proof $path\n${e.getMessage}")
-      }.toOption
-    }
-
-    val book = Book(
-      title,
-      path,
-      dependencies,
-      chapters,
-      updatedParsingContext.statementVariableNames,
-      updatedParsingContext.termVariableNames
-    ).expandOutlines(cachedProofs)
-    for {
-      chapter <- book.chapters
-      theorem <- chapter.theorems
-    } {
-      val cachePath = cacheDirectoryPath.resolve(Paths.get(book.key, chapter.key, theorem.key))
-      Files.createDirectories(cachePath.getParent)
-      Files.write(cachePath, CachedProof(theorem.key, theorem.premises, theorem.proof).serialized.getBytes("UTF-8"))
-    }
-    book
-  }
-
   def fromDirectory(outlineDirectoryPath: Path, cacheDirectoryPath: Path): Seq[Book] = {
-    val preparsedBooks = getPreParsedBooks(outlineDirectoryPath)
     Files
       .readAllLines(outlineDirectoryPath.resolve("books.list"))
       .asScala
       .filter(s => !s.startsWith("#"))
-      .foldLeft(Seq.empty[Book]) { case (previousBooks, bookTitle) =>
-        val preParsedBook = preparsedBooks.find(_.title == bookTitle).getOrElse(throw new Exception(s"Could not find book '$bookTitle'"))
-        previousBooks :+ parseBook(preParsedBook, previousBooks, cacheDirectoryPath)
+      .map(_.formatAsKey)
+      .map(key => outlineDirectoryPath.resolve(key).resolve(key + ".book"))
+      .foldLeft(Map.empty[String, Book]) { case (previousBooks, bookPath) =>
+        val tokenizer = Tokenizer.fromPath(bookPath)
+        val book = parser(bookPath, cacheDirectoryPath, previousBooks).parse(tokenizer)._1._1
+        previousBooks.updated(book.title, book)
       }
+      .values.toSeq
   }
 }

@@ -7,6 +7,14 @@ import scala.util.{Failure, Try}
 
 package object model {
   implicit class AnyOps[T](t: T) {
+    def ifDefined[S](f: T => Option[S])(action: => Unit): T = {
+      f(t).ifDefined(action)
+      t
+    }
+    def ifEmpty[S](f: T => Option[S])(action: => Unit): T = {
+      f(t).ifEmpty(action)
+      t
+    }
     def asOptionalInstanceOf[S : ClassTag]: Option[S] = {
       if (implicitly[ClassTag[S]].runtimeClass.isInstance(t)) {
         Some(t.asInstanceOf[S])
@@ -199,6 +207,10 @@ package object model {
   }
 
   implicit class OptionOps[T](x: Option[T]) {
+    def ifDefined(action: => Unit): Option[T] = {
+      if (x.nonEmpty) action
+      x
+    }
     def ifEmpty(action: => Unit): Option[T] = {
       if (x.isEmpty) action
       x
