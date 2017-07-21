@@ -86,7 +86,7 @@ class BookService {
         }
       if (changedBooks.nonEmpty) BookService.logger.info(s"Updated ${changedBooks.size} books")
       allBookData = newBookData
-      books.getAndSet(newBookData.mapCollect(_.book))
+      newBookData.map(_.book).traverseOption.foreach(books.getAndSet)
     }
 
     override def receive: Receive = {
