@@ -9,6 +9,9 @@ case class DefinedTerm(
     definition: TermDefinition)
   extends Term with DefinedComponent[Term]
 {
+  def format = definition.format
+  def symbol = definition.symbol
+
   override def getMatch(other: Component): Option[(Seq[Component], Set[TermVariable])] = other match {
     case DefinedTerm(otherSubcomponents, otherBoundVariables, `definition`) =>
       Some((otherSubcomponents, otherBoundVariables))
@@ -31,12 +34,4 @@ case class DefinedTerm(
       super.resolveSingleSubstitution(other, termVariable, thisTerm, otherTerm)
     }
   }
-
-  override def html: String = {
-    definition.format.html(subcomponents)
-  }
-  override def safeHtml: String = {
-    definition.format.safeHtml(subcomponents)
-  }
-  override def serialized: String = (definition.symbol +: subcomponents.map(_.serialized)).mkString(" ")
 }

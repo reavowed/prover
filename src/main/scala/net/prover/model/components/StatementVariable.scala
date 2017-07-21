@@ -5,8 +5,8 @@ import net.prover.model.{DistinctVariables, PartialSubstitutions, Substitutions}
 import scala.collection.immutable.Nil
 
 case class StatementVariable(text: String) extends Statement with Variable {
-  def sub(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
-    SubstitutedStatementVariable(this, termToReplaceWith, termToBeReplaced)
+  def sub(termToReplaceWith: Term, termToBeReplaced: TermVariable): SubstitutedStatementVariable = {
+    SubstitutedStatementVariable(this, termToReplaceWith, termToBeReplaced, Nil)
   }
 
   override def allVariables: Set[Variable] = Set(this)
@@ -71,7 +71,7 @@ case class StatementVariable(text: String) extends Statement with Variable {
       (Seq((termVariableToBeReplaced, DistinctVariables.empty)), Some(DistinctVariables(termVariableToBeReplaced -> this)))
     } else {
       target match {
-        case SubstitutedStatementVariable(variable, termToReplaceWith, `termVariableToBeReplaced`) if variable == this =>
+        case SubstitutedVariable(termToReplaceWith, `termVariableToBeReplaced`, tail) if tail == this =>
           (Seq((termToReplaceWith, DistinctVariables.empty)), None)
         case _ =>
           (Nil, None)
@@ -86,12 +86,17 @@ case class StatementVariable(text: String) extends Statement with Variable {
   ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
     if (firstTerm == firstTermVariable) {
       findSubstitution(target, secondTermVariable)
-    } else {
-      sub(firstTerm, firstTermVariable).findSubstitution(target, secondTermVariable)
+    } else target match {
+      case SubstitutedVariable(secondTerm, `secondTermVariable`, tail) if tail == this =>
+        (Seq((secondTerm, DistinctVariables(firstTermVariable -> this))), None)
+      case _ =>
+        // Just try assuming that the first substitution went through
+        sub(firstTerm, firstTermVariable).findSubstitution(target, secondTermVariable)
     }
   }
   override def replacePlaceholder(other: Component) = Some(this)
 
+  override def toString: String = text
   override def html: String = text
   override def serialized: String = text
 }

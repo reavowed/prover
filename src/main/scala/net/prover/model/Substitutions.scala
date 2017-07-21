@@ -69,18 +69,18 @@ case class PartialSubstitutions(
     substitutedVariable: SubstitutedVariable[Component, _ <: Variable],
     target: Component
   ): Seq[PartialSubstitutions] = {
-    val substitutedBaseComponentOption = known.get(substitutedVariable.variable)
-    val substitutedTermToReplaceWithOption = substitutedVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
-    val substitutedTermToBeReplacedOption = known.get(substitutedVariable.termToBeReplaced).map(_.asInstanceOf[Term]).flatMap(Term.optionAsVariable)
+    val substitutedTailOption = substitutedVariable.tail.applySubstitutions(knownSubstitutions)
+    val substitutedTermToReplaceWithOption = substitutedVariable.firstTerm.applySubstitutions(knownSubstitutions)
+    val substitutedTermToBeReplacedOption = known.get(substitutedVariable.firstVariable).map(_.asInstanceOf[Term]).flatMap(Term.optionAsVariable)
 
-    (substitutedBaseComponentOption, substitutedTermToReplaceWithOption, substitutedTermToBeReplacedOption) match {
-      case (Some(substitutedBaseComponent), Some(substitutedTermToReplaceWith), Some(substitutedTermToBeReplaced)) =>
-        tryNotAddingAtAll(substitutedBaseComponent, substitutedTermToReplaceWith, substitutedTermToBeReplaced, target)
-      case (Some(substitutedBaseComponent), None, Some(substitutedTermToBeReplaced)) =>
+    (substitutedTailOption, substitutedTermToReplaceWithOption, substitutedTermToBeReplacedOption) match {
+      case (Some(substitutedTail), Some(substitutedTermToReplaceWith), Some(substitutedTermToBeReplaced)) =>
+        tryNotAddingAtAll(substitutedTail, substitutedTermToReplaceWith, substitutedTermToBeReplaced, target)
+      case (Some(substitutedTail), None, Some(substitutedTermToBeReplaced)) =>
         tryAddingByCalculatingTermToReplaceWith(
-          substitutedBaseComponent,
+          substitutedTail,
           substitutedTermToBeReplaced,
-          substitutedVariable.termToReplaceWith,
+          substitutedVariable.firstTerm,
           target)
       case _ =>
         findMergableSubstitution(substitutedVariable) match {
@@ -145,8 +145,8 @@ case class PartialSubstitutions(
   ): Option[SubstitutedVariable[Component, _ <: Variable]] = {
     unknown.keySet
       .find { s =>
-        s.variable == substitutedVariable.variable &&
-          s.termToBeReplaced == substitutedVariable.termToBeReplaced
+        s.tail == substitutedVariable.tail &&
+          s.firstVariable == substitutedVariable.firstVariable
       }
   }
 
@@ -156,10 +156,10 @@ case class PartialSubstitutions(
     thisTarget: Component
   ): Option[PartialSubstitutions] = {
     val otherTarget = unknown(otherSubstitutedVariable)
-    val sharedTermToBeReplaced = otherSubstitutedVariable.termToBeReplaced
+    val sharedTermToBeReplaced = otherSubstitutedVariable.firstVariable
     for {
-      thisTermToReplaceWith <- newSubstitutedVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
-      otherTermToReplaceWith <- otherSubstitutedVariable.termToReplaceWith.applySubstitutions(knownSubstitutions)
+      thisTermToReplaceWith <- newSubstitutedVariable.firstTerm.applySubstitutions(knownSubstitutions)
+      otherTermToReplaceWith <- otherSubstitutedVariable.firstTerm.applySubstitutions(knownSubstitutions)
       placeholderVariableTerm = known.getOrElse(
         sharedTermToBeReplaced,
         sharedTermToBeReplaced.copy(text = sharedTermToBeReplaced + "'")
@@ -187,8 +187,8 @@ case class PartialSubstitutions(
     val otherTarget = unknown(otherSubstitutedVariable)
     for {
       (a, b) <- thisTarget.getDifferences(otherTarget).toSeq
-      s1 <- newSubstitutedVariable.termToReplaceWith.calculateSubstitutions(a, this)
-      s2 <- otherSubstitutedVariable.termToReplaceWith.calculateSubstitutions(b, s1)
+      s1 <- newSubstitutedVariable.firstTerm.calculateSubstitutions(a, this)
+      s2 <- otherSubstitutedVariable.firstTerm.calculateSubstitutions(b, s1)
     } yield s2.copy(unknown = s2.unknown + (newSubstitutedVariable -> thisTarget))
   }
 

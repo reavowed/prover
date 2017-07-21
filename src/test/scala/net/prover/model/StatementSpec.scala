@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.components.{Statement, SubstitutedStatementVariable}
+import net.prover.model.components.Statement
 
 class StatementSpec extends ProverSpec {
 
@@ -215,6 +215,12 @@ class StatementSpec extends ProverSpec {
         .mustEqual(Some(φ.sub(z, x)))
     }
 
+    "combine separated substitutions under appropriate distinct conditions" in {
+      φ.sub(y, x).sub(a, n)
+        .makeSingleSubstitution(z, y, DistinctVariables(y -> φ, y -> n, y -> a, n -> z))
+        .mustEqual(Some(φ.sub(z, x).sub(a, n)))
+    }
+
     "not allow substitution inside bound variable without a distinct condition" in {
       ForAll(x, φ).makeSingleSubstitution(z, y, DistinctVariables.empty) must beNone
     }
@@ -254,6 +260,11 @@ class StatementSpec extends ProverSpec {
         .findSubstitution(φ.sub(y, x), z)
         .mustEqual((Seq((z, DistinctVariables.empty)), Some(DistinctVariables(z -> φ) ++ DistinctVariables(z -> y))))
     }
+    "find a double substitution" in {
+      φ.sub(y, x)
+        .findSubstitution(φ.sub(y, x).sub(a, b), b)
+        .mustEqual((Seq((a, DistinctVariables.empty)), None))
+    }
   }
 
   "statement resolving a substitution" should {
@@ -261,6 +272,12 @@ class StatementSpec extends ProverSpec {
       φ.sub(y, x)
         .resolveSingleSubstitution(φ.sub(y, x), z, X, Y)
           .mustEqual(Some((φ.sub(y, x), DistinctVariables(z -> φ, z -> y))))
+    }
+
+    "resolve a substitution that is inside another by adding distinct conditions" in {
+      φ.sub(y, x).sub(a, n)
+        .resolveSingleSubstitution(φ.sub(z, x).sub(a, n), X, y, z)
+        .mustEqual(Some((φ.sub(X, x).sub(a, n), DistinctVariables(X -> φ, X -> a, X -> n, n -> y, n -> z))))
     }
   }
 
@@ -300,6 +317,28 @@ class StatementSpec extends ProverSpec {
       conclusion.condense(premise, conclusionSubstitutions, premiseSubstitutions) must beSome((
         PartialSubstitutions(Map(χ -> φ, φ -> ψ), Map.empty, DistinctVariables.empty),
         PartialSubstitutions(Map(φ -> Conjunction(φ, ψ)), Map.empty, DistinctVariables.empty)))
+    }
+
+    "condense a substitution containing another substitution" in {
+      val premise = Exists(x, φ)
+      val premiseSubstitutions = PartialSubstitutions(
+        Map.empty,
+        Map(φ.sub(y, x) -> Conjunction(Equals(x, z), φ.sub(b, a))),
+        DistinctVariables.empty)
+      val conclusion = φ.sub(y, x)
+      val conclusionSubstitutions = PartialSubstitutions(
+        Map(φ -> Exists(a, Conjunction(Equals(y, z), φ)), x -> y, y -> x),
+        Map.empty,
+        DistinctVariables.empty)
+      premise.condense(conclusion, premiseSubstitutions, conclusionSubstitutions) must beSome((
+        PartialSubstitutions(
+          Map(y -> b, x -> a),
+          Map(φ.sub(y, x) -> Conjunction(Equals(x, z), φ.sub(b, a))),
+          DistinctVariables(a -> x, a -> z , y -> z, y -> φ)), // TODO: y conditions only applicable to conclusion?
+        PartialSubstitutions(
+          Map(φ -> Exists(a, Conjunction(Equals(y, z), φ)), x -> y, y -> x),
+          Map.empty,
+          DistinctVariables(y -> a, y -> z, y -> φ, a -> x, a -> z))))
     }
   }
 }

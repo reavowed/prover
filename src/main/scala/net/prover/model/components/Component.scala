@@ -75,7 +75,7 @@ trait Component {
     other match {
       case statementVariable: StatementVariable =>
         otherSubstitutions.unknown.toSeq.mapCollect {
-          case (SubstitutedStatementVariable(`statementVariable`, otherTermToReplaceWith, otherTermToBeReplaced), otherTarget) =>
+          case (SubstitutedStatementVariable(`statementVariable`, otherTermToReplaceWith, otherTermToBeReplaced, Nil), otherTarget) =>
             otherSubstitutions.known.get(otherTermToBeReplaced).flatMap(Term.optionAsVariable).flatMap { substitutedTermToBeReplaced =>
               for {
                 (substitutedOtherTermToReplaceWith, newDistinctVariables) <-
@@ -95,10 +95,10 @@ trait Component {
         None
     }
   }
+  def safeToString: String = toString
   def html: String
   def safeHtml: String = html
   def serialized: String
-  override def toString: String = html
 }
 
 object Component {

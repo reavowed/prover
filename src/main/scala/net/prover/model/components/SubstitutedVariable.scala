@@ -5,71 +5,107 @@ import net.prover.model.{DistinctVariables, PartialSubstitutions, Substitutions}
 import scala.collection.immutable.Nil
 
 trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Component {
+  def sub(termToReplaceWith: Term, termToBeReplaced: TermVariable): T = {
+    update((termToReplaceWith, termToBeReplaced) +: allReplacements)
+  }
+
   val variable: TVariable
-  val termToReplaceWith: Term
-  val termToBeReplaced: TermVariable
+  val firstTerm: Term
+  val firstVariable: TermVariable
+  val tailReplacements: Seq[(Term, TermVariable)]
+  def tail: T = update(tailReplacements)
+  def allReplacements: Seq[(Term, TermVariable)] = (firstTerm, firstVariable) +: tailReplacements
 
-  def update(updatedVariable: TVariable, updatedTermToReplaceWith: Term, updatedTermToBeReplaced: TermVariable): T
+  def update(updatedReplacements: Seq[(Term, TermVariable)]): T
 
-  override def allVariables: Set[Variable] = termToReplaceWith.allVariables + termToBeReplaced + variable
-  override def presentVariables: Set[Variable] = termToReplaceWith.allVariables + variable
-  override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = termToReplaceWith.boundAndFreeVariables
-  override def implicitDistinctVariables: DistinctVariables = DistinctVariables.empty
+  override def allVariables: Set[Variable] = allReplacements.flatMap { case (term, termVariable) =>
+    term.allVariables + termVariable
+  }.toSet + variable
+  override def presentVariables: Set[Variable] = allReplacements.flatMap { case (term, termVariable) =>
+    term.presentVariables
+  }.toSet + variable
+  override def implicitDistinctVariables: DistinctVariables = allReplacements.map(_._1.implicitDistinctVariables).foldTogether
   def getPotentiallyIntersectingVariables(termVariable: TermVariable): Set[Variable] = {
-    if (termVariable == termToBeReplaced)
-      termToReplaceWith.getPotentiallyIntersectingVariables(termVariable)
-    else
-      termToReplaceWith.getPotentiallyIntersectingVariables(termVariable) + variable
+    allReplacements.foldRight(Set[Variable](variable)) { case ((rTerm, rTermVariable), variables) =>
+      if(rTermVariable == termVariable)
+        rTerm.getPotentiallyIntersectingVariables(termVariable)
+      else
+        variables ++ rTerm.getPotentiallyIntersectingVariables(termVariable)
+    }
   }
   override def calculateSubstitutions(
     other: Component,
     substitutions: PartialSubstitutions
-  ): Seq[PartialSubstitutions] = other match {
-    case SubstitutedVariable(otherVariable, otherTermToReplaceWith, otherTermToBeReplaced) =>
-      for {
-        s1 <- variable.calculateSubstitutions(otherVariable, substitutions)
-        s2 <- termToReplaceWith.calculateSubstitutions(otherTermToReplaceWith, s1)
-        s3 <- termToBeReplaced.calculateSubstitutions(otherTermToBeReplaced, s2)
-      } yield s3
-    case statement: Statement =>
-      substitutions.tryAdd(this, statement)
-    case _ =>
-      Nil
+  ): Seq[PartialSubstitutions] = {
+    other match {
+      case SubstitutedVariable(otherTerm, otherTermVariable, otherTail) =>
+        (for {
+          s1 <- tail.calculateSubstitutions(otherTail, substitutions)
+          s2 <- firstTerm.calculateSubstitutions(otherTerm, s1)
+          s3 <- firstVariable.calculateSubstitutions(otherTermVariable, s2)
+        } yield s3) ++ substitutions.tryAdd(this, other)
+      case _ =>
+        substitutions.tryAdd(this, other)
+    }
   }
   override def applySubstitutions(substitutions: Substitutions): Option[T] = {
     for {
-      updatedVariable <- variable.applySubstitutions(substitutions)
-      updatedTermToReplaceWith <- termToReplaceWith.applySubstitutions(substitutions)
-      updatedTermToBeReplaced <- termToBeReplaced.applySubstitutions(substitutions).flatMap(Term.optionAsVariable)
-      updatedStatement <- updatedVariable.makeSingleSubstitution(
-        updatedTermToReplaceWith,
-        updatedTermToBeReplaced,
-        substitutions.distinctVariables)
-    } yield updatedStatement.asInstanceOf[T]
+      updatedTail <- tail.applySubstitutions(substitutions)
+      updatedTerm <- firstTerm.applySubstitutions(substitutions)
+      updatedTermVariable <- firstVariable.applySubstitutions(substitutions).flatMap(Term.optionAsVariable)
+      updated <- updatedTail.makeSingleSubstitution(updatedTerm, updatedTermVariable, substitutions.distinctVariables)
+    } yield updated.asInstanceOf[T]
   }
   override def makeSingleSubstitution(
     newTermToReplaceWith: Term,
     newTermToBeReplaced: TermVariable,
     distinctVariables: DistinctVariables
   ): Option[T] = {
-    if (newTermToReplaceWith == newTermToBeReplaced)
-      Some(this.asInstanceOf[T])
-    else if (newTermToBeReplaced == termToBeReplaced && distinctVariables.areDistinct(termToBeReplaced, termToReplaceWith))
-      Some(this.asInstanceOf[T])
-    else if (newTermToBeReplaced == termToReplaceWith && distinctVariables.areDistinct(newTermToBeReplaced, variable))
-      if (newTermToReplaceWith == termToBeReplaced)
-        Some(variable.asInstanceOf[T])
-      else
-        Some(update(variable, newTermToReplaceWith, termToBeReplaced))
-    else
-      termToReplaceWith match {
-        case termVariableToReplaceWith: TermVariable
-          if distinctVariables.areDistinct(newTermToBeReplaced, variable) && distinctVariables.areDistinct(newTermToBeReplaced, termVariableToReplaceWith)
-        =>
-          Some(this.asInstanceOf[T])
-        case _ =>
-          None
+    def isSubstitutionAlreadyMade: Boolean = {
+      def helper(remainingReplacements: Seq[(Term, TermVariable)]): Boolean = {
+        remainingReplacements match {
+          case (term, termVariable) +: replacementsTail if distinctVariables.areDistinct(newTermToBeReplaced, term) =>
+            if (termVariable == newTermToBeReplaced)
+              true
+            else
+              helper(replacementsTail)
+          case Nil if distinctVariables.areDistinct(newTermToBeReplaced, variable) =>
+            true
+          case _ =>
+            false
+        }
       }
+      helper(allReplacements)
+    }
+    def trySimplify: Option[T] = {
+      def helper(remainingReplacements: Seq[(Term, TermVariable)]): Option[Seq[(Term, TermVariable)]] = {
+        remainingReplacements match {
+          case (`newTermToBeReplaced`, termVariable) +: replacementsTail
+            if distinctVariables.areDistinct(newTermToBeReplaced, update(replacementsTail))
+          =>
+            if (newTermToReplaceWith == termVariable)
+            // substituting [x/y] into [y/x]φ with (y,φ) distinct is just φ
+              Some(replacementsTail)
+            else
+            // substituting [z/y] into [y/x]φ with (y,φ) distinct is [z/x]φ
+              Some((newTermToReplaceWith, termVariable) +: replacementsTail)
+          case (term, termVariable) +: replacementsTail
+            if distinctVariables.areDistinct(newTermToBeReplaced, term) &&
+              distinctVariables.areDistinct(newTermToBeReplaced, termVariable) &&
+              distinctVariables.areDistinct(termVariable, newTermToReplaceWith)
+          =>
+            helper(replacementsTail).map((term, termVariable) +: _)
+          case _ =>
+            None
+        }
+      }
+      helper(allReplacements).map(update)
+    }
+
+    if (newTermToReplaceWith == newTermToBeReplaced || isSubstitutionAlreadyMade)
+      Some(this.asInstanceOf[T])
+    else
+      trySimplify orElse Some(update((newTermToReplaceWith, newTermToBeReplaced) +: allReplacements))
   }
   override def validateSingleSubstitution(
     termToReplaceWith: Term,
@@ -90,11 +126,23 @@ trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Compon
     otherTerm: Term
   ): Option[(T, DistinctVariables)] = {
     if (other == this) {
-      Some((this.asInstanceOf[T], DistinctVariables(termVariable -> getPotentiallyIntersectingVariables(termVariable))))
+      DistinctVariables.attempt(termVariable -> this).map(this.asInstanceOf[T] -> _)
     } else {
       other match {
-        case SubstitutedVariable(`variable`, `otherTerm`, `termToBeReplaced`) if termToReplaceWith == thisTerm =>
-          Some((update(variable, termVariable, termToBeReplaced), DistinctVariables(termVariable -> variable)))
+        case SubstitutedVariable(`otherTerm`, `firstVariable`, otherTail) if tail == otherTail && firstTerm == thisTerm =>
+          DistinctVariables.attempt(termVariable -> tail).map(update((termVariable, firstVariable) +: tailReplacements) -> _)
+        case SubstitutedVariable(`firstTerm`, `firstVariable`, SubstitutedVariable(`otherTerm`, innerVariable, innerTail)) =>
+          for {
+            validationDistinctVariables <- innerTail.validateSingleSubstitution(thisTerm, innerVariable, tail, DistinctVariables.empty)
+            innerSubstituted <- innerTail.makeSingleSubstitution(termVariable, innerVariable, DistinctVariables.empty)
+            result <- innerSubstituted.makeSingleSubstitution(firstTerm, firstVariable, DistinctVariables.empty)
+            distinctVariables <- DistinctVariables.attempt(
+              termVariable -> innerTail,
+              termVariable -> firstTerm,
+              termVariable -> firstVariable,
+              firstVariable -> thisTerm,
+              firstVariable -> otherTerm)
+          } yield (result.asInstanceOf[T], distinctVariables ++ validationDistinctVariables)
         case _ =>
           None
       }
@@ -106,20 +154,18 @@ trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Compon
     termVariableToBeReplaced: TermVariable
   ): (Seq[(Term, DistinctVariables)], Option[DistinctVariables]) = {
     if (this == target) {
-      (Seq((termVariableToBeReplaced, DistinctVariables.empty)), DistinctVariables.attempt(termVariableToBeReplaced, this))
-    } else if (termToReplaceWith == termVariableToBeReplaced) {
-      target match {
+      (Seq((termVariableToBeReplaced, DistinctVariables.empty)), DistinctVariables.attempt(termVariableToBeReplaced -> this))
+    } else target match {
+      case SubstitutedVariable(term, `termVariableToBeReplaced`, otherTail) if otherTail == this =>
+        (Seq((term, DistinctVariables.empty)), None)
+      case x if x == tail && firstTerm == termVariableToBeReplaced =>
         // [x/y][y/x]φ is φ if y is distinct from φ
-        case `variable` =>
-          (Seq((termToBeReplaced, DistinctVariables(termVariableToBeReplaced -> variable))), None)
+        (Seq((firstVariable, DistinctVariables(termVariableToBeReplaced -> variable))), None)
+      case SubstitutedVariable(otherTerm, `firstVariable`, otherTail) if tail == otherTail && firstTerm == termVariableToBeReplaced =>
         // [z/y][y/x]φ is [z/x]φ if y is distinct from φ
-        case SubstitutedStatementVariable(`variable`, otherTermToReplaceWith: TermVariable, `termToBeReplaced`) =>
-          (Seq((otherTermToReplaceWith, DistinctVariables(termVariableToBeReplaced -> variable))), None)
-        case _ =>
-          (Nil, None)
-      }
-    } else {
-      (Nil, None)
+        (Seq((otherTerm, DistinctVariables(termVariableToBeReplaced -> variable))), None)
+      case _ =>
+        (Nil, None)
     }
   }
   override def findDoubleSubstitution(
@@ -144,10 +190,10 @@ trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Compon
     otherSubstitutions: PartialSubstitutions
   ): Option[(PartialSubstitutions, PartialSubstitutions)] = {
     super.condenseOneWay(other, thisSubstitutions, otherSubstitutions) orElse (for {
-      updatedVariable <- variable.applySubstitutions(thisSubstitutions.knownSubstitutions)
-      updatedTermToReplaceWith <- termToReplaceWith.applySubstitutions(thisSubstitutions.knownSubstitutions)
-      updatedTermToBeReplaced <- termToBeReplaced.applySubstitutions(thisSubstitutions.knownSubstitutions).flatMap(Term.optionAsVariable)
-      result <- updatedVariable.condenseWithSubstitution(
+      updatedTail <- tail.applySubstitutions(thisSubstitutions.knownSubstitutions)
+      updatedTermToReplaceWith <- firstTerm.applySubstitutions(thisSubstitutions.knownSubstitutions)
+      updatedTermToBeReplaced <- firstVariable.applySubstitutions(thisSubstitutions.knownSubstitutions).flatMap(Term.optionAsVariable)
+      result <- updatedTail.condenseWithSubstitution(
         updatedTermToReplaceWith,
         updatedTermToBeReplaced,
         other,
@@ -156,22 +202,23 @@ trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Compon
     } yield result)
   }
 
-  override def html: String = "[" + termToReplaceWith.safeHtml + "/" + termToBeReplaced.html + "]" + variable.html
+  override def toString: String = "[" + firstTerm.safeToString + "/" + firstVariable.toString + "]" + tail.toString
+  override def html: String = "[" + firstTerm.safeHtml + "/" + firstVariable.html + "]" + tail.html
   override def serialized: String = Seq(
     "sub",
-    termToReplaceWith.serialized,
-    termToBeReplaced.serialized,
-    variable.serialized
+    firstTerm.serialized,
+    firstVariable.serialized,
+    tail.serialized
   ).mkString(" ")
 }
 
 object SubstitutedVariable {
-  def unapply(component: Component): Option[(Variable, Term, TermVariable)] = {
-    component match {
-      case substitutedVariable: SubstitutedVariable[Component, _] =>
-        Some((substitutedVariable.variable, substitutedVariable.termToReplaceWith, substitutedVariable.termToBeReplaced))
-      case _ =>
-        None
-    }
+  def unapply(
+    substitutedVariable: SubstitutedVariable[Component, _ <: Variable]
+  ): Option[(Term, TermVariable, Component)] = {
+    Some((
+      substitutedVariable.firstTerm,
+      substitutedVariable.firstVariable,
+      substitutedVariable.tail))
   }
 }

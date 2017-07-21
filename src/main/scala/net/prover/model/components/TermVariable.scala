@@ -5,6 +5,10 @@ import net.prover.model.{DistinctVariables, Html, PartialSubstitutions, Substitu
 import scala.collection.immutable.Nil
 
 case class TermVariable(text: String) extends Term with Variable {
+  def sub(termToReplaceWith: Term, termToBeReplaced: TermVariable): SubstitutedTermVariable = {
+    SubstitutedTermVariable(this, termToReplaceWith, termToBeReplaced, Nil)
+  }
+
   override def allVariables: Set[Variable] = Set(this)
   override def presentVariables: Set[Variable] = Set(this)
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set(this))
@@ -32,7 +36,7 @@ case class TermVariable(text: String) extends Term with Variable {
     else if (distinctVariables.areDistinct(this, termToBeReplaced))
       Some(this)
     else
-      Some(SubstitutedTermVariable(this, termToReplaceWith, termToBeReplaced))
+      Some(sub(termToReplaceWith, termToBeReplaced))
   }
   override def validateSingleSubstitution(
     termToReplaceWith: Term,
@@ -75,7 +79,7 @@ case class TermVariable(text: String) extends Term with Variable {
       (Seq((termVariableToBeReplaced, DistinctVariables.empty)), Some(DistinctVariables(termVariableToBeReplaced -> this)))
     }  else {
       target match {
-        case SubstitutedTermVariable(variable, termToReplaceWith, `termVariableToBeReplaced`) if variable == this =>
+        case SubstitutedVariable(termToReplaceWith, `termVariableToBeReplaced`, tail) if tail == this =>
           (Seq((termToReplaceWith, DistinctVariables.empty)), None)
         case _ =>
           (Nil, None)
@@ -94,7 +98,7 @@ case class TermVariable(text: String) extends Term with Variable {
       firstTerm.findSubstitution(target, secondTermVariable)
     } else {
       val (termsStraight, noTermStraight) = this.findSubstitution(target, secondTermVariable)
-      val (termsSubbed, noTermSubbed) = SubstitutedTermVariable(this, firstTerm, firstTermVariable).findSubstitution(target, secondTermVariable)
+      val (termsSubbed, noTermSubbed) = sub(firstTerm, firstTermVariable).findSubstitution(target, secondTermVariable)
       val jointTerms = termsStraight.map(_.mapRight(_ ++ DistinctVariables(firstTermVariable -> this))) ++ termsSubbed
       (jointTerms, noTermStraight.map(_ ++ DistinctVariables(firstTermVariable -> this)) orElse noTermSubbed)
     }
@@ -118,10 +122,11 @@ case class TermVariable(text: String) extends Term with Variable {
         tryWith(termToReplaceWith, DistinctVariables.empty)
       } else {
         tryWith(this, DistinctVariables(termToBeReplaced -> this)) orElse
-          tryWith(SubstitutedTermVariable(this, termToReplaceWith, termToBeReplaced), DistinctVariables.empty)
+          tryWith(sub(termToReplaceWith, termToBeReplaced), DistinctVariables.empty)
       })
   }
   override def replacePlaceholder(other: Component) = Some(this)
+  override def toString: String = text
   override def html: String = Html.format(text)
   override def serialized: String = text
 }

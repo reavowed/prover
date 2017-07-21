@@ -43,5 +43,6 @@ trait Placeholder[T <: Component] extends Component {
     throw new Exception("Cannot find double substitution for placeholder")
   }
   override def html: String = "???"
+  override def toString: String = "_"
   override def serialized: String = "_"
 }

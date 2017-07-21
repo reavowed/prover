@@ -9,18 +9,19 @@ import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {
 
-  def φ = StatementVariable("φ")
-  def ψ = StatementVariable("ψ")
-  def χ = StatementVariable("χ")
+  val φ = StatementVariable("φ")
+  val ψ = StatementVariable("ψ")
+  val χ = StatementVariable("χ")
 
-  def x = TermVariable("x")
-  def y = TermVariable("y")
-  def z = TermVariable("z")
-  def X = TermVariable("X")
-  def Y = TermVariable("Y")
-  def Z = TermVariable("Z")
-  def a = TermVariable("a")
-  def n = TermVariable("n")
+  val x = TermVariable("x")
+  val y = TermVariable("y")
+  val z = TermVariable("z")
+  val X = TermVariable("X")
+  val Y = TermVariable("Y")
+  val Z = TermVariable("Z")
+  val a = TermVariable("a")
+  val b = TermVariable("b")
+  val n = TermVariable("n")
 
   def connective(
     symbol: String,

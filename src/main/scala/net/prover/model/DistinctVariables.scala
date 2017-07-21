@@ -114,12 +114,14 @@ object DistinctVariables {
     DistinctVariables.empty + (pair._1, pair._2)
   }
 
-  def attempt(termVariable: TermVariable, component: Component): Option[DistinctVariables] = {
-    val variables = component.getPotentiallyIntersectingVariables(termVariable)
-    if (variables.contains(termVariable))
-      None
-    else
-      Some(DistinctVariables.empty + (termVariable, variables))
+  def attempt(pairs: (TermVariable, Component)*): Option[DistinctVariables] = {
+    pairs.map { case (termVariable, component) =>
+      val variables = component.getPotentiallyIntersectingVariables(termVariable)
+      if (variables.contains(termVariable))
+        None
+      else
+        Some(DistinctVariables.empty + (termVariable, variables))
+    }.traverseOption.map(_.foldTogether)
   }
 
   def byStatements(termVariables: Set[TermVariable], statements: Seq[Statement]): Option[DistinctVariables] = {

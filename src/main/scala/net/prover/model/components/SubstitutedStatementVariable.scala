@@ -2,22 +2,20 @@ package net.prover.model.components
 
 case class SubstitutedStatementVariable(
     variable: StatementVariable,
-    termToReplaceWith: Term,
-    termToBeReplaced: TermVariable)
- extends Statement with SubstitutedVariable[Statement, StatementVariable]
+    firstTerm: Term,
+    firstVariable: TermVariable,
+    tailReplacements: Seq[(Term, TermVariable)])
+  extends Statement with SubstitutedVariable[Statement, StatementVariable]
 {
-  override def update(
-    updatedVariable: StatementVariable,
-    updatedTermToReplaceWith: Term,
-    updatedTermToBeReplaced: TermVariable
-  ): SubstitutedStatementVariable = {
-    SubstitutedStatementVariable(updatedVariable, updatedTermToReplaceWith, updatedTermToBeReplaced)
+  override val boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = {
+    DefinedComponent.tryBoundAndFree(allReplacements.map(_._1), Set.empty).get
   }
-  override def html: String = "[" + termToReplaceWith.safeHtml + "/" + termToBeReplaced.html + "]" + variable.html
-  override def serialized: String = Seq(
-    "sub",
-    termToReplaceWith.serialized,
-    termToBeReplaced.serialized,
-    variable.serialized
-  ).mkString(" ")
+  override def update(updatedReplacements: Seq[(Term, TermVariable)]): Statement = {
+    updatedReplacements match {
+      case (updatedFirstTerm, updatedFirstVariable) +: updatedTailReplacements =>
+        SubstitutedStatementVariable(variable, updatedFirstTerm, updatedFirstVariable, updatedTailReplacements)
+      case Nil =>
+        variable
+    }
+  }
 }

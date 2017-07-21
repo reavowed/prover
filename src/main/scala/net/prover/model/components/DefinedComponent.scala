@@ -8,6 +8,8 @@ import scala.util.{Failure, Success, Try}
 trait DefinedComponent[T <: Component] extends Component {
   def subcomponents: Seq[Component]
   def localBoundVariables: Set[TermVariable]
+  def format: Format
+  def symbol: String
 
   def getMatch(other: Component): Option[(Seq[Component], Set[TermVariable])]
   def update(newSubcomponents: Seq[Component], newBoundVariables: Set[TermVariable]): T
@@ -174,7 +176,8 @@ trait DefinedComponent[T <: Component] extends Component {
                 case (subcomponent, targetSubcomponent) =>
                   subcomponent.findSubstitution(targetSubcomponent, termVariableToBeReplaced)
               }
-              x.reduce(combineFoundSubstitutions)
+            val y = x.reduce(combineFoundSubstitutions)
+            y
           }
       }
       .getOrElse((Nil, None))
@@ -248,6 +251,20 @@ trait DefinedComponent[T <: Component] extends Component {
             }
       }
   }
+
+  override def toString: String = {
+    format(subcomponents.map(_.toString))
+  }
+  override def safeToString: String = {
+    format.safe(subcomponents.map(_.toString))
+  }
+  override def html: String = {
+    Html.format(format(subcomponents.map(_.safeHtml)))
+  }
+  override def safeHtml: String = {
+    Html.format(format.safe(subcomponents.map(_.safeHtml)))
+  }
+  override def serialized: String = (symbol +: subcomponents.map(_.serialized)).mkString(" ")
 }
 
 object DefinedComponent {

@@ -6,7 +6,7 @@ import net.prover.model.Proof.SimplificationReference
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
 import net.prover.model.ProofOutline.{AssertionStep, AssumptionStep, NamingStep}
 import net.prover.model.components._
-import net.prover.model.entries.Axiom
+import net.prover.model.entries.{Axiom, TermDefinition}
 
 class TheoremSpec extends ProverSpec {
 
@@ -118,22 +118,22 @@ class TheoremSpec extends ProverSpec {
       RearrangementType.Expansion)
     val specification = axiom("Specification", Seq(ForAll(x, φ)), φ.sub(y, x))
     val existence = axiom("Existence", Seq(φ.sub(y, x)), Exists(x, φ))
-    val nameExistence = axiom(
-      "Name Existence",
+    val valueForExistence = axiom(
+      "Value for Existence",
       Seq(
         DirectPremise(Exists(x, φ), isElidable = true),
         DeducedPremise(φ, ψ)),
       ProvenStatement(
         ψ,
         Conditions(Set(x), DistinctVariables(x -> ψ))))
-    val nameExistenceRenamed = axiom(
-      "Name Existence (Renamed)",
+    val renamedValueForExistence = axiom(
+      "Renamed Value for Existence",
       Seq(
         DirectPremise(Exists(x, φ), isElidable = true),
         DeducedPremise(φ.sub(y, x), ψ)),
       ProvenStatement(
         ψ,
-        Conditions(Set(x), DistinctVariables(y -> φ, y -> ψ))))
+        Conditions(Set(y), DistinctVariables(y -> φ, y -> ψ))))
 
     "prove the conclusion of a premiseless inference" in {
       checkProof(
@@ -301,7 +301,7 @@ class TheoremSpec extends ProverSpec {
       checkProof(
         Seq(φ -> Conjunction(ψ, χ.sub(z, x)), Exists(x, φ)),
         Seq(Conjunction(ψ, χ.sub(z, x))),
-        Seq(nameExistence),
+        Seq(valueForExistence),
         Nil,
         Conditions(Set(x), DistinctVariables(x -> ψ, x -> z)))
     }
@@ -391,8 +391,8 @@ class TheoremSpec extends ProverSpec {
 
     "resolve substitutions involving substituted term variables" in {
       checkProof(
-        Seq(Equals(x, y), Equals(SubstitutedTermVariable(z, x, a), SubstitutedTermVariable(z, x, a))),
-        Seq(Equals(SubstitutedTermVariable(z, x, a), SubstitutedTermVariable(z, y, a))),
+        Seq(Equals(x, y), Equals(z.sub(x, a), z.sub(x, a))),
+        Seq(Equals(z.sub(x, a), z.sub(y, a))),
         Seq(substitutionOfEquals),
         Nil)
     }
@@ -407,7 +407,7 @@ class TheoremSpec extends ProverSpec {
         Seq(NamingStep(x, Conjunction(ElementOf(n, x), ElementOf(x, y)), Seq(
           ElementOf(x, y),
           Exists(z, ElementOf(z, y))))),
-        Seq(elementOfUnion, nameExistence, existence, extractRightConjunct),
+        Seq(elementOfUnion, valueForExistence, existence, extractRightConjunct),
         Nil)
     }
 
@@ -422,7 +422,7 @@ class TheoremSpec extends ProverSpec {
         Seq(NamingStep(a, Conjunction(ElementOf(a, z), Equals(z, z)), Seq(
           ElementOf(a, z),
           Exists(n, ElementOf(n, z))))),
-        Seq(elementOfComprehension, extractLeftConjunct, existence, nameExistenceRenamed),
+        Seq(elementOfComprehension, extractLeftConjunct, existence, renamedValueForExistence),
         Nil,
         Conditions(Set.empty, DistinctVariables(x -> y, y -> z)))
     }
@@ -438,6 +438,15 @@ class TheoremSpec extends ProverSpec {
         Seq(Equals(x, Pair(z, y))),
         Seq(pairIsSymmetric, substitutionOfEquals),
         Nil)
+    }
+
+    "prove a statement requiring calculation of a double substitution" in {
+      checkProof(
+        Seq(Equals(x, y), φ.sub(x, z).sub(a, n)),
+        Seq(φ.sub(y, z).sub(a, n)),
+        Seq(substitutionOfEquals),
+        Nil,
+        Conditions(Set.empty, DistinctVariables(n -> x, n -> y)))
     }
   }
 }

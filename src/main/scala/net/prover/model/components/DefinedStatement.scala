@@ -8,6 +8,9 @@ case class DefinedStatement(
     definition: StatementDefinition)
  extends Statement with DefinedComponent[Statement]
 {
+  def format = definition.format
+  def symbol = definition.symbol
+
   override def getMatch(other: Component): Option[(Seq[Component], Set[TermVariable])] = other match {
     case DefinedStatement(otherSubcomponents, otherBoundVariables, `definition`) =>
       Some((otherSubcomponents, otherBoundVariables))
@@ -17,12 +20,4 @@ case class DefinedStatement(
   override def update(newSubcomponents: Seq[Component], newBoundVariables: Set[TermVariable]): Statement = {
     copy(subcomponents = newSubcomponents, localBoundVariables = newBoundVariables)
   }
-
-  override def html: String = {
-    definition.format.html(subcomponents)
-  }
-  override def safeHtml: String = {
-    definition.format.safeHtml(subcomponents)
-  }
-  override def serialized: String = (definition.symbol +: subcomponents.map(_.serialized)).mkString(" ")
 }
