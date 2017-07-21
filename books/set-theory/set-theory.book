@@ -1,7 +1,7 @@
 Set Theory
 import Predicate Calculus
 
-variables () (S)
+variables () (s S)
 
 include 01.extensionality.chapter
 include 02.subsets.chapter

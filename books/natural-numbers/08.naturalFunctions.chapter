@@ -42,3 +42,21 @@ let S = S comprehension x × ℕ ℕ ∃ n ∧ ∈ n ℕ = x orderedPair n succe
   prove ∃! f ∧ function f ℕ ℕ ∀ n → ∈ n ℕ = apply f n successor n
 }
 qed
+
+theorem Curried Addition
+premise ∈ a ℕ
+let f_succ ∧ function f_succ ℕ ℕ ∀ n → ∈ n ℕ = apply f_succ n successor n {
+  let g ∧ function g ℕ ℕ ∧ = apply g 0 a ∀ m → ∈ m ℕ = apply g successor m apply f_succ apply g m {
+    assume ∈ n ℕ {
+      prove ∈ apply g n ℕ
+      prove = apply f_succ apply g n successor apply g n
+      prove = apply g successor n apply f_succ apply g n
+      prove = apply g successor n successor apply g n
+    }
+    prove ∀ m → ∈ m ℕ = apply g successor m successor apply g m
+    prove ∧ function g ℕ ℕ ∧ = apply g 0 a ∀ m → ∈ m ℕ = apply g successor m successor apply g m
+    prove ∃ f ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m
+    prove ∃! f ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m
+  }
+}
+qed

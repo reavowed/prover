@@ -16,9 +16,16 @@ prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
 prove ∃! x φ
 qed
 
-theorem Proof by Renamed Unique Existence
-premise ∃! x φ
+theorem Value for Unique Existence
+premise ∃! x φ elidable
 premise proves sub y x φ ψ
+prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
+prove ψ non-distinct (x φ)
+qed
+
+theorem Value for Unique Existence
+premise ∃! x φ elidable
+premise proves  φ ψ
 prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
 prove ψ non-distinct (x φ)
 qed
