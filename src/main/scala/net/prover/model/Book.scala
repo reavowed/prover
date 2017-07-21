@@ -10,7 +10,8 @@ import org.apache.commons.io.filefilter.TrueFileFilter
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
+import scala.util.control.NonFatal
 
 @JsonIgnoreProperties(Array("path", "dependencies", "existingTheoremCache", "context", "fullContext"))
 case class Book(
@@ -66,7 +67,41 @@ object Book {
     TheoremOutline,
     InferenceTransform)
 
-  def parser(path: Path, cacheDirectoryPath: Path, availableDependencies: Seq[Book]): Parser[(Book, Map[Path, Instant])] = {
+  def parseBook(title: String, bookDirectoryPath: Path, cacheDirectoryPath: Path, availableDependencies: Seq[Book]): (Option[Book], Map[Path, Instant]) = {
+    val key = title.formatAsKey
+    val path = bookDirectoryPath.resolve(key).resolve(key + ".book")
+    val bookModificationTime = Files.getLastModifiedTime(path).toInstant
+    val parser = Book.parser(path, cacheDirectoryPath, availableDependencies)
+    val (outlineBookAndContextOption, modificationTimes) = Try(parser.parse(Tokenizer.fromPath(path))._1) match {
+      case Success((outlineBook, context, subModificationTimes)) =>
+        (Some((outlineBook, context)), subModificationTimes.updated(path, bookModificationTime))
+      case Failure(ExceptionWithModificationTimes(_, subModificationTimes)) =>
+        (None, subModificationTimes.updated(path, bookModificationTime))
+      case _ =>
+        (None, Map(path -> bookModificationTime))
+    }
+    val bookOption = outlineBookAndContextOption.flatMap { case (bookOutline, context) =>
+      Try {
+        val bookCacheDirectoryPath = cacheDirectoryPath.resolve(title.formatAsKey)
+        val cachedProofs = getAllFiles(bookCacheDirectoryPath).mapCollect { path =>
+          val serializedProof = new String(Files.readAllBytes(path), "UTF-8")
+          Try {
+            CachedProof.parser(path.getFileName.toString)(context).parseAndDiscard(serializedProof, path)
+          }.ifFailed { e =>
+            logger.info(s"Error parsing cached proof $path\n${e.getMessage}")
+          }.toOption
+        }
+        val book = bookOutline.expandOutlines(cachedProofs)
+        book.cacheTheorems(cacheDirectoryPath)
+        book
+      }.ifFailed { e =>
+        logger.warn(s"Error expanding book '${bookOutline.title}'\n${e.getMessage}")
+      }.toOption
+    }
+    (bookOption, modificationTimes)
+  }
+
+  def parser(path: Path, cacheDirectoryPath: Path, availableDependencies: Seq[Book]): Parser[(Book, ParsingContext, Map[Path, Instant])] = {
     for {
       title <- Parser.toEndOfLine
       imports <- importsParser
@@ -82,25 +117,16 @@ object Book {
       chaptersFileModificationTimesAndUpdatedParsingContext <- linesParser(title, path, context)
     } yield {
       val (chapters, fileModificationTimes, updatedParsingContext) = chaptersFileModificationTimesAndUpdatedParsingContext
-      val bookCacheDirectoryPath = cacheDirectoryPath.resolve(title.formatAsKey)
-      val cachedProofs = getAllFiles(bookCacheDirectoryPath).mapCollect { path =>
-        val serializedProof = new String(Files.readAllBytes(path), "UTF-8")
-        Try {
-          CachedProof.parser(path.getFileName.toString)(updatedParsingContext).parseAndDiscard(serializedProof, path)
-        }.ifFailed { e =>
-          logger.info(s"Error parsing cached proof $path\n${e.getMessage}")
-        }.toOption
-      }
-      val book = Book(
-        title,
-        path,
-        dependencies,
-        chapters,
-        updatedParsingContext.statementVariableNames,
-        updatedParsingContext.termVariableNames
-      ).expandOutlines(cachedProofs)
-      book.cacheTheorems(cacheDirectoryPath)
-      (book, fileModificationTimes)
+      (
+        Book(
+          title,
+          path,
+          dependencies,
+          chapters,
+          updatedParsingContext.statementVariableNames,
+          updatedParsingContext.termVariableNames),
+        updatedParsingContext,
+        fileModificationTimes)
     }
   }
 
@@ -110,6 +136,8 @@ object Book {
       .mapFlatMap(_ => Parser.toEndOfLine)
       .whileDefined
   }
+
+  case class ExceptionWithModificationTimes(cause: Throwable, modificationTimes: Map[Path, Instant]) extends Exception(cause)
 
   private def linesParser(
     bookTitle: String,
@@ -128,7 +156,7 @@ object Book {
     fileModificationTimes: Map[Path, Instant],
     context: ParsingContext
   ): Parser[Option[(Seq[Chapter], Map[Path, Instant], ParsingContext)]] = {
-    Parser.singleWordIfAny.mapFlatMap {
+    val unsafeParser = Parser.singleWordIfAny.mapFlatMap {
       case "chapter" =>
         for {
           chapter <- chapterParser(bookTitle)
@@ -165,6 +193,14 @@ object Book {
           case None =>
             throw new Exception(s"Unrecognised entry $key")
         }
+    }
+    Parser { tokenizer =>
+     try {
+       unsafeParser.parse(tokenizer)
+     } catch {
+       case NonFatal(e) =>
+         throw ExceptionWithModificationTimes(e, fileModificationTimes)
+     }
     }
   }
 

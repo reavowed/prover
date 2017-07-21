@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service
 
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
-import scala.util.Try
 
 @Service
 class BookService {
@@ -39,24 +38,23 @@ class BookService {
     }
 
     private def parseBook(title: String, currentBookData: Seq[BookData]): BookData = {
-      val key = title.formatAsKey
-      val path = bookDirectoryPath.resolve(key).resolve(key + ".book")
-      val bookModificationTime = Files.getLastModifiedTime(path).toInstant
       val availableBooks = currentBookData.mapCollect(_.book)
-      val parser = Book.parser(path, cacheDirectoryPath, availableBooks)
-      Try(parser.parse(Tokenizer.fromPath(path))._1).toOption match {
-        case Some((book, modificationTimes)) =>
-          BookData(title, Some(book), modificationTimes.updated(path, bookModificationTime))
-        case None =>
-          BookData(title, None, Map(path -> bookModificationTime))
-      }
+      val (bookOption, modificationTimes) = Book.parseBook(title, bookDirectoryPath, cacheDirectoryPath, availableBooks)
+      BookData(title, bookOption, modificationTimes)
     }
 
     private def isClean(bookData: BookData, dirtyBooks: Seq[String]) = {
-      bookData.book.forall(_.dependencies.forall { dependency => !dirtyBooks.contains(dependency.title) }) &&
-        bookData.lastModificationTimesOfFiles.forall { case (path, instant) =>
-          Files.getLastModifiedTime(path).toInstant == instant
-        }
+      // We always need to recheck if any of the book's files have changed
+      bookData.lastModificationTimesOfFiles.forall { case (path, instant) =>
+        Files.getLastModifiedTime(path).toInstant == instant
+      } && (bookData.book match {
+        case Some(b) =>
+          // If the last parse was successful, only recheck if dependencies are dirty
+          b.dependencies.forall { dependency => !dirtyBooks.contains(dependency.title) }
+        case None =>
+          // Otherwise we can't guarantee the dependencies, so recheck if any book is dirty
+          dirtyBooks.isEmpty
+      })
     }
 
     private def updateBooks(): Unit = {
