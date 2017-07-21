@@ -31,13 +31,21 @@ case class Prover(
 
   def proveAssertion(): Option[StepWithProvenStatement] = {
     proveAssertionDirectlyFromInferences()
+      .orElse(proveAssertionDirectlyFromInferencesWithSimplification())
       .orElse(proveAssertionByRearranging())
       .orElse(proveAssertionFromTransformedInferences())
   }
 
   def proveAssertionDirectlyFromInferences(): Option[AssertionStep] = {
-    (availableInferences.iterator.flatMap(proveUsingInference) ++ availableInferences.iterator.flatMap(proveUsingElidedInference))
-      .nextOption()
+    (availableInferences.iterator.flatMap(proveUsingInference(_, allowRearrangement = false)) ++
+      availableInferences.iterator.flatMap(proveUsingElidedInference(_, allowRearrangement = false))
+    ).nextOption()
+  }
+
+  def proveAssertionDirectlyFromInferencesWithSimplification(): Option[AssertionStep] = {
+    (availableInferences.iterator.flatMap(proveUsingInference(_, allowRearrangement = true)) ++
+      availableInferences.iterator.flatMap(proveUsingElidedInference(_, allowRearrangement = true))
+      ).nextOption()
   }
 
   def proveAssertionByRearranging(): Option[RearrangementStep] = {
@@ -121,8 +129,9 @@ case class Prover(
         }
       }
       .flatMap { case (transformedInference, transformationSteps) =>
-        (proveUsingInference(transformedInference) ++ proveUsingElidedInference(transformedInference))
-          .map((transformedInference, transformationSteps, _))
+        (proveUsingInference(transformedInference, allowRearrangement = true) ++
+          proveUsingElidedInference(transformedInference, allowRearrangement = true)
+        ).map((transformedInference, transformationSteps, _))
       }
       .map { case (transformedInference, transformationSteps, assertionStep) =>
         TransformedInferenceStep(
@@ -167,9 +176,9 @@ case class Prover(
   private def matchDirectPremiseToFacts(
     premiseStatement: Statement,
     substitutionsSoFar: PartialSubstitutions,
-    rearrangementAllowed: Boolean
+    allowRearrangement: Boolean
   ): Iterator[(PremiseMatch, PartialSubstitutions)] = {
-    val assertions = if (rearrangementAllowed) allSimplifiedAssertions else provenAssertions
+    val assertions = if (allowRearrangement) allSimplifiedAssertions else provenAssertions
     assertions.iterator.flatMap { case ReferencedAssertion(provenStatement, reference) =>
       matchDirectPremiseToFact(premiseStatement, provenStatement, reference, substitutionsSoFar)
     }
@@ -267,10 +276,10 @@ case class Prover(
       }
   }
 
-  private def proveUsingInference(inference: Inference): Iterator[AssertionStep] = {
+  private def proveUsingInference(inference: Inference, allowRearrangement: Boolean): Iterator[AssertionStep] = {
     inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty).iterator
       .flatMap { substitutions =>
-        matchPremisesToFacts(inference.premises, substitutions, inference.allowsRearrangement)
+        matchPremisesToFacts(inference.premises, substitutions, allowRearrangement && inference.allowsRearrangement)
       }
       .flatMap { case (matchedPremises, substitutions) =>
         substitutions.tryResolve().map((matchedPremises, _))
@@ -282,20 +291,20 @@ case class Prover(
       }
   }
 
-  private def proveUsingElidedInference(inference: Inference): Iterator[AssertionStep] = {
+  private def proveUsingElidedInference(inference: Inference, allowRearrangement: Boolean): Iterator[AssertionStep] = {
     splitPremisesAtElidable(inference.premises).iterator
       .flatMap { case (prePremises, elidablePremise, postPremises) =>
         inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty)
           .map {(prePremises, elidablePremise, postPremises, _)}
       }
       .flatMap { case (prePremises, elidablePremise, postPremises, substitutionsAfterConclusion) =>
-        matchPremisesToFacts(prePremises, substitutionsAfterConclusion, inference.allowsRearrangement)
+        matchPremisesToFacts(prePremises, substitutionsAfterConclusion, allowRearrangement && inference.allowsRearrangement)
           .map { case (prePremiseMatches, substitutionsAfterPrePremises) =>
             (prePremiseMatches, elidablePremise, postPremises, substitutionsAfterPrePremises)
           }
       }
       .flatMap { case (prePremiseMatches, elidablePremise, postPremises, substitutionsAfterPrePremises) =>
-        matchPremisesToFacts(postPremises, substitutionsAfterPrePremises, inference.allowsRearrangement)
+        matchPremisesToFacts(postPremises, substitutionsAfterPrePremises, allowRearrangement && inference.allowsRearrangement)
           .map { case (postPremiseMatches, substitutionsAfterPostPremises) =>
             (prePremiseMatches, elidablePremise, postPremiseMatches, substitutionsAfterPostPremises)
           }
