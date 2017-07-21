@@ -66,6 +66,8 @@ object Term extends ComponentType {
     }
     def parserForTermType(termType: String): Parser[Term] = {
       termType match {
+        case "_" =>
+          Parser.constant(PlaceholderTerm)
         case TermDefinitionMatcher(termDefinition) =>
           termDefinition.termParser
         case SpecifiedVariable(variable) =>
@@ -79,8 +81,6 @@ object Term extends ComponentType {
             term.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, DistinctVariables.empty)
               .getOrElse(throw new Exception("Invalid substitution"))
           }
-        case "_" =>
-          Parser.constant(PlaceholderTerm)
         case _ =>
           throw new Exception(s"Unrecognised term type '$termType'")
       }

@@ -35,6 +35,8 @@ object Statement extends ComponentType {
     }
 
     def parserForStatementType(statementType: String): Parser[Statement] = statementType match {
+      case "_" =>
+        Parser.constant(PlaceholderStatement)
       case ParsableStatement(statementDefinition) =>
         statementDefinition.statementParser
       case SpecifiedVariable(v) =>
@@ -48,8 +50,6 @@ object Statement extends ComponentType {
           statement.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, DistinctVariables.empty)
             .getOrElse(throw new Exception("Invalid substitution"))
         }
-      case "_" =>
-        Parser.constant(PlaceholderStatement)
       case _ =>
         throw new Exception(s"Unrecognised statement type $statementType")
     }

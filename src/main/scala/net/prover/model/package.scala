@@ -26,7 +26,7 @@ package object model {
 
   implicit class StringOps(s: String) {
     def splitByWhitespace(max: Int = 0): Seq[String] = {
-      s.trim.split("\\s+", max).toSeq
+      s.trim.split("\\s+", max).toSeq.filter(_.nonEmpty)
     }
     def formatAsKey: String = splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase).mkString("-")
   }

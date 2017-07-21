@@ -2,14 +2,7 @@ package net.prover.model
 
 object Html {
   def format(text: String): String = {
-    if (text.contains("_")) {
-      val index = text.indexOf('_')
-      s"${text.substring(0, index)}<sub>${text.substring(index + 1)}</sub>"
-    } else if (text.contains("^")) {
-      val index = text.indexOf('^')
-      s"${text.substring(0, index)}<sup>${text.substring(index + 1)}</sup>"
-    } else {
-      text
-    }
+    text.replaceAll("_(\\w+)", "<sub>$1</sub>")
+      .replaceAll("\\^(\\w+)", "<sup>$1</sup>")
   }
 }
