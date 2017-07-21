@@ -65,7 +65,7 @@ class TheoremSpec extends ProverSpec {
       proof.matchesOutline(ProofOutline(proofSteps)) must beTrue
       val serializedProof = proof.serialized
       val deserializedProof = Proof.parser.parse(Tokenizer.fromString(serializedProof, Paths.get("")))._1
-      CachedProof("", premises, deserializedProof).validate(inferences, inferenceTransforms) must beSome(proof)
+      CachedProof(Paths.get(""), premises, deserializedProof).validate(inferences, inferenceTransforms) must beSome(proof)
     }
 
     "not prove an unfounded statement" in {

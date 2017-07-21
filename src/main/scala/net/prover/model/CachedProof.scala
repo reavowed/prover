@@ -1,11 +1,13 @@
 package net.prover.model
 
+import java.nio.file.Path
+
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
 import net.prover.model.Proof._
 import net.prover.model.components.Statement
 import org.slf4j.LoggerFactory
 
-case class CachedProof(key: String, premises: Seq[Premise], proof: Proof) {
+case class CachedProof(path: Path, premises: Seq[Premise], proof: Proof) {
   def validate(
     availableInferences: Seq[Inference],
     inferenceTransforms: Seq[InferenceTransform]
@@ -22,11 +24,11 @@ case class CachedProof(key: String, premises: Seq[Premise], proof: Proof) {
 object CachedProof {
   val logger = LoggerFactory.getLogger(CachedProof.getClass)
 
-  def parser(key: String)(implicit parsingContext: ParsingContext): Parser[CachedProof] = {
+  def parser(path: Path)(implicit parsingContext: ParsingContext): Parser[CachedProof] = {
     for {
       premises <- Inference.premisesParser
       proof <- Proof.parser
-    } yield CachedProof(key, premises, proof)
+    } yield CachedProof(path, premises, proof)
   }
 
   private def validateSteps(

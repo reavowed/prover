@@ -2,6 +2,7 @@ package net.prover.model
 
 import java.nio.file.{Files, Path, Paths}
 import java.time.Instant
+import java.util
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.entries._
@@ -41,13 +42,37 @@ case class Book(
   def transitiveDependencies: Seq[Book] = Book.transitiveDependencies(dependencies)
 
   def cacheTheorems(cacheDirectoryPath: Path) = {
-    for {
+    val bookCachePath = cacheDirectoryPath.resolve(key)
+    val cachedProofs = for {
       chapter <- chapters
       theorem <- chapter.theorems
-    } {
-      val cachePath = cacheDirectoryPath.resolve(Paths.get(key, chapter.key, theorem.key))
-      Files.createDirectories(cachePath.getParent)
-      Files.write(cachePath, CachedProof(theorem.key, theorem.premises, theorem.proof).serialized.getBytes("UTF-8"))
+    } yield {
+      val cachePath = bookCachePath.resolve(Paths.get(chapter.key, theorem.key))
+      CachedProof(cachePath, theorem.premises, theorem.proof)
+    }
+    val existingFiles = Book.getAllFiles(bookCachePath)
+    val (filesAdded, filesUpdated, filesToRemove) = cachedProofs
+      .foldLeft((0, 0, existingFiles)) { case ((add, update, remaining), cachedProof) =>
+        if (remaining.contains(cachedProof.path)) {
+          val currentContent = Files.readAllBytes(cachedProof.path)
+          val newContent = cachedProof.serialized.getBytes("UTF-8")
+          if (util.Arrays.equals(currentContent, newContent))
+            (add, update, remaining.filter(_ != cachedProof.path))
+          else {
+            Files.createDirectories(cachedProof.path.getParent)
+            Files.write(cachedProof.path, newContent)
+            (add, update + 1, remaining.filter(_ != cachedProof.path))
+          }
+        } else {
+          Files.createDirectories(cachedProof.path.getParent)
+          Files.write(cachedProof.path, cachedProof.serialized.getBytes("UTF-8"))
+          (add + 1, update, remaining)
+        }
+      }
+    filesToRemove.foreach(Files.delete)
+    if (filesAdded != 0 || filesUpdated != 0 || filesToRemove.nonEmpty) {
+      Book.logger.info(s"Updated cache ${bookCachePath.toString}: " +
+        s"$filesAdded added, $filesUpdated updated, ${filesToRemove.size} removed")
     }
   }
 }
@@ -86,7 +111,7 @@ object Book {
         val cachedProofs = getAllFiles(bookCacheDirectoryPath).mapCollect { path =>
           val serializedProof = new String(Files.readAllBytes(path), "UTF-8")
           Try {
-            CachedProof.parser(path.getFileName.toString)(context).parseAndDiscard(serializedProof, path)
+            CachedProof.parser(path)(context).parseAndDiscard(serializedProof, path)
           }.ifFailed { e =>
             logger.info(s"Error parsing cached proof $path\n${e.getMessage}")
           }.toOption
