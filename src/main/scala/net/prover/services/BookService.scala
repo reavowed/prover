@@ -25,10 +25,11 @@ class BookService {
 
   class BookManagementActor extends Actor {
     case class BookData(
+      title: String,
       book: Option[Book],
       lastModificationTimesOfFiles: Map[Path, Instant])
 
-    var bookDataByTitle: Map[String, BookData] = Map.empty
+    var allBookData: Seq[BookData] = Nil
 
     private def getBookList: Seq[String] = {
       Files
@@ -37,20 +38,17 @@ class BookService {
         .filter(s => !s.startsWith("#"))
     }
 
-    private def parseBook(title: String, currentBookDataByTitle: Map[String, BookData]): BookData = {
+    private def parseBook(title: String, currentBookData: Seq[BookData]): BookData = {
       val key = title.formatAsKey
       val path = bookDirectoryPath.resolve(key).resolve(key + ".book")
       val bookModificationTime = Files.getLastModifiedTime(path).toInstant
-      val availableBooks = currentBookDataByTitle.toSeq.mapCollect {
-        case (bookTitle, bookData) =>
-          bookData.book.map(bookTitle -> _)
-      }.toMap
+      val availableBooks = currentBookData.mapCollect(_.book)
       val parser = Book.parser(path, cacheDirectoryPath, availableBooks)
       Try(parser.parse(Tokenizer.fromPath(path))._1).toOption match {
         case Some((book, modificationTimes)) =>
-          BookData(Some(book), modificationTimes.updated(path, bookModificationTime))
+          BookData(title, Some(book), modificationTimes.updated(path, bookModificationTime))
         case None =>
-          BookData(None, Map(path -> bookModificationTime))
+          BookData(title, None, Map(path -> bookModificationTime))
       }
     }
 
@@ -62,30 +60,33 @@ class BookService {
     }
 
     private def updateBooks(): Unit = {
-      bookDataByTitle = getBookList.foldLeft((Seq.empty[String], Map.empty[String, BookData])) { case ((dirtyBooks, bookDataSoFar), bookTitle) =>
-        bookDataByTitle.get(bookTitle) match {
-          case Some(bookData) if isClean(bookData, dirtyBooks) =>
-            (dirtyBooks, bookDataSoFar.updated(bookTitle, bookData))
-          case Some(BookData(Some(book), _)) =>
-            BookService.logger.info(s"Book '$bookTitle' has changed - rechecking")
-            val bookData = parseBook(bookTitle, bookDataSoFar).ifEmpty(_.book) {
-              BookService.logger.warn(s"Book '$bookTitle' is now invalid")
-            }
-            (dirtyBooks :+ bookTitle, bookDataSoFar.updated(bookTitle, bookData))
-          case Some(BookData(None, _)) =>
-            val bookData = parseBook(bookTitle, bookDataSoFar).ifDefined(_.book) {
-              BookService.logger.info(s"Book '$bookTitle' is now valid again")
-            }
-            (dirtyBooks :+ bookTitle, bookDataSoFar.updated(bookTitle, bookData))
-          case None =>
-            BookService.logger.info(s"Book '$bookTitle' is new - rechecking")
-            val bookData = parseBook(bookTitle, bookDataSoFar).ifEmpty(_.book) {
-              BookService.logger.warn(s"Book '$bookTitle' was invalid")
-            }
-            (dirtyBooks :+ bookTitle, bookDataSoFar.updated(bookTitle, bookData))
+      val (changedBooks, newBookData) = getBookList
+        .foldLeft((Seq.empty[String], Seq.empty[BookData])) { case ((dirtyBooks, bookDataSoFar), bookTitle) =>
+          allBookData.find(_.title == bookTitle) match {
+            case Some(bookData) if isClean(bookData, dirtyBooks) =>
+              (dirtyBooks, bookDataSoFar :+ bookData)
+            case Some(BookData(_, Some(book), _)) =>
+              BookService.logger.info(s"Book '$bookTitle' has changed - rechecking")
+              val bookData = parseBook(bookTitle, bookDataSoFar).ifEmpty(_.book) {
+                BookService.logger.warn(s"Book '$bookTitle' is now invalid")
+              }
+              (dirtyBooks :+ bookTitle, bookDataSoFar :+ bookData)
+            case Some(BookData(_, None, _)) =>
+              val bookData = parseBook(bookTitle, bookDataSoFar).ifDefined(_.book) {
+                BookService.logger.info(s"Book '$bookTitle' is now valid again")
+              }
+              (dirtyBooks :+ bookTitle, bookDataSoFar :+ bookData)
+            case None =>
+              BookService.logger.info(s"Book '$bookTitle' is new - rechecking")
+              val bookData = parseBook(bookTitle, bookDataSoFar).ifEmpty(_.book) {
+                BookService.logger.warn(s"Book '$bookTitle' was invalid")
+              }
+              (dirtyBooks :+ bookTitle, bookDataSoFar :+ bookData)
+          }
         }
-      }._2
-      books.getAndSet(bookDataByTitle.values.toSeq.mapCollect(_.book))
+      if (changedBooks.nonEmpty) BookService.logger.info(s"Updated ${changedBooks.size} books")
+      allBookData = newBookData
+      books.getAndSet(newBookData.mapCollect(_.book))
     }
 
     override def receive: Receive = {

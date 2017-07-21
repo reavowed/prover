@@ -66,12 +66,12 @@ object Book {
     TheoremOutline,
     InferenceTransform)
 
-  def parser(path: Path, cacheDirectoryPath: Path, availableDependencies: Map[String, Book]): Parser[(Book, Map[Path, Instant])] = {
+  def parser(path: Path, cacheDirectoryPath: Path, availableDependencies: Seq[Book]): Parser[(Book, Map[Path, Instant])] = {
     for {
       title <- Parser.toEndOfLine
       imports <- importsParser
       dependencies = imports.map { importTitle =>
-        availableDependencies.getOrElse(importTitle, throw new Exception(s"Could not find imported book '$title'"))
+        availableDependencies.find(_.title == importTitle).getOrElse(throw new Exception(s"Could not find imported book '$title'"))
       }
       transitiveDependencies = Book.transitiveDependencies(dependencies)
       context = ParsingContext(
@@ -203,20 +203,5 @@ object Book {
         .toSeq
     else
       Nil
-  }
-
-  def fromDirectory(outlineDirectoryPath: Path, cacheDirectoryPath: Path): Seq[Book] = {
-    Files
-      .readAllLines(outlineDirectoryPath.resolve("books.list"))
-      .asScala
-      .filter(s => !s.startsWith("#"))
-      .map(_.formatAsKey)
-      .map(key => outlineDirectoryPath.resolve(key).resolve(key + ".book"))
-      .foldLeft(Map.empty[String, Book]) { case (previousBooks, bookPath) =>
-        val tokenizer = Tokenizer.fromPath(bookPath)
-        val book = parser(bookPath, cacheDirectoryPath, previousBooks).parse(tokenizer)._1._1
-        previousBooks.updated(book.title, book)
-      }
-      .values.toSeq
   }
 }
