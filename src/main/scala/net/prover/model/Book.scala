@@ -162,7 +162,9 @@ object Book {
       .whileDefined
   }
 
-  case class ExceptionWithModificationTimes(cause: Throwable, modificationTimes: Map[Path, Instant]) extends Exception(cause)
+  case class ExceptionWithModificationTimes(cause: Throwable, modificationTimes: Map[Path, Instant])
+    extends Exception(cause)
+    with ParseException.NoWrap
 
   private def linesParser(
     bookTitle: String,

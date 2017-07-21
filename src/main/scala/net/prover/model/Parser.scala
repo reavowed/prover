@@ -73,7 +73,7 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
     try {
       attemptParse(tokenizer)
     } catch {
-      case e @ (_:ParseException | _:ArbitraryVariableException | _:DistinctVariableViolationException) => throw e
+      case e @ (_:ParseException | _:ParseException.NoWrap) => throw e
       case NonFatal(e) => tokenizer.throwParseException(e.getMessage, Some(e))
     }
   }

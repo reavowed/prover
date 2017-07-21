@@ -14,6 +14,10 @@ case class ParseException(
     message,
     cause.orNull)
 
+object ParseException {
+    trait NoWrap
+}
+
 case class ProvingException(
     message: String,
     fileName: String,
@@ -21,7 +25,10 @@ case class ProvingException(
   extends Exception(
     s"Proof error at $fileName line $lineNumber: $message")
 
-case class ArbitraryVariableException(message: String) extends Exception(message)
+case class ArbitraryVariableException(message: String)
+  extends Exception(message)
+  with ParseException.NoWrap
 
 case class DistinctVariableViolationException(variable: TermVariable)
   extends Exception(s"Distinct variable violated: $variable")
+  with ParseException.NoWrap
