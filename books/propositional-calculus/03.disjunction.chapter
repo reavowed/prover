@@ -17,6 +17,11 @@ prove → ¬ φ ψ
 prove ∨ φ ψ
 qed
 
+theorem Law of the Excluded Middle
+prove → ¬ φ ¬ φ
+prove ∨ φ ¬ φ
+qed
+
 theorem Proof by Cases
 premise ∨ φ ψ
 premise → φ χ
@@ -33,6 +38,28 @@ premise proves ψ χ
 prove → φ χ
 prove → ψ χ
 prove χ
+qed
+
+theorem Proof by Separate Cases
+premise ∨ φ ψ
+premise proves φ χ
+premise proves ψ ω
+assume φ {
+  prove χ
+  prove ∨ χ ω
+}
+assume ψ {
+  prove ω
+  prove ∨ χ ω
+}
+prove ∨ χ ω
+qed
+
+theorem Proof by Separate Cases
+premise proves φ ψ
+premise proves ¬ φ χ
+prove ∨ φ ¬ φ
+prove ∨ ψ χ
 qed
 
 theorem Combine Cases
@@ -58,11 +85,9 @@ premise ∨ φ ψ
 assume φ {
   prove ∨ ψ φ
 }
-prove → φ ∨ ψ φ
 assume ψ {
   prove ∨ ψ φ
 }
-prove → ψ ∨ ψ φ
 prove ∨ ψ φ
 qed
 
@@ -97,48 +122,13 @@ qed
 theorem Disjunction of Two Falsehoods Is False
 premise ¬ φ
 premise ¬ ψ
-assume φ {
-  prove ¬ ∨ φ ψ
-}
-assume ψ {
-  prove ¬ ∨ φ ψ
-}
 assume ∨ φ ψ {
-  prove ¬ ∨ φ ψ
+  prove ψ
 }
 prove ¬ ∨ φ ψ
 qed
 
-theorem Proof by Cases
-premise proves φ ψ
-premise proves ¬ φ χ
-assume φ {
-  prove ψ
-  prove ∨ ψ χ
-}
-assume ¬ φ {
-  prove χ
-  prove ∨ ψ χ
-}
-prove ∨ ψ χ
-qed
-
-theorem Proof by Separate Cases
-premise proves φ χ
-premise proves ψ ω
-premise ∨ φ ψ
-assume φ {
-  prove χ
-  prove ∨ χ ω
-}
-assume ψ {
-  prove ω
-  prove ∨ χ ω
-}
-prove ∨ χ ω
-qed
-
-theorem Deduction from Disjunct
+theorem Deduction in Left Disjunct
 premise ∨ φ ψ
 premise proves φ χ
 assume ψ {
@@ -147,18 +137,13 @@ assume ψ {
 prove ∨ χ ψ
 qed
 
-theorem Deduction from Disjunct
+theorem Deduction in Right Disjunct
 premise ∨ φ ψ
 premise proves ψ χ
 assume φ {
   prove φ
 }
 prove ∨ φ χ
-qed
-
-theorem Law of the Excluded Middle
-prove → ¬ φ ¬ φ
-prove ∨ φ ¬ φ
 qed
 
 theorem Eliminate Redundant Or

@@ -3,7 +3,7 @@ Some inferences that can be used to reduce boilerplate in proofs.
 
 comment A set of more complicated structural facts that are surprisingly useful later on.
 
-theorem Disjoined Conjuct Equivalence
+theorem Disjoined Conjunct Equivalence
 premise φ
 premise ¬ χ
 assume ∧ φ ψ {
@@ -21,7 +21,7 @@ assume ψ {
 prove ↔ ∨ ∧ φ ψ ∧ χ ω ψ
 qed
 
-theorem Disjoined Conjuct Equivalence
+theorem Disjoined Conjunct Equivalence
 premise ¬ φ
 premise χ
 prove ↔ ∨ ∧ χ ω ∧ φ ψ ω
@@ -29,15 +29,10 @@ prove ↔ ∨ ∧ χ ω ∧ φ ψ ∨ ∧ φ ψ ∧ χ ω
 prove ↔ ∨ ∧ φ ψ ∧ χ ω ω
 qed
 
-theorem Disjoined Conjuct Equivalence
+theorem Disjoined Conjunct Equivalence
 premise φ
 prove ¬ ¬ φ
 prove ↔ ∨ ∧ φ ψ ∧ ¬ φ χ ψ
-qed
-
-theorem Disjoined Conjuct Equivalence
-premise ¬ φ
-prove ↔ ∨ ∧ φ ψ ∧ ¬ φ χ χ
 qed
 
 comment Some tricks to simplify redundant statements.

@@ -23,11 +23,9 @@ theorem Or from Exclusive Or
 premise ⊕ φ ψ
 prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ
 assume ∧ φ ¬ ψ {
-  prove φ
   prove ∨ φ ψ
 }
 assume ∧ ¬ φ ψ {
-  prove ψ
   prove ∨ φ ψ
 }
 prove ∨ φ ψ
@@ -37,8 +35,6 @@ theorem Negated And from Exclusive Or
 premise ⊕ φ ψ
 prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ
 assume ∧ φ ψ {
-  prove φ
-  prove ψ
   prove ¬ ∧ φ ¬ ψ
   prove ¬ ∧ ¬ φ ψ
   prove ¬ ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ

@@ -47,7 +47,7 @@ premise proves φ ψ
 premise proves φ ¬ ψ
 conclusion ¬ φ
 
-axiom Proof by Contradiction (Inverted)
+axiom Proof by Contradiction
 premise proves ¬ φ ψ
 premise proves ¬ φ ¬ ψ
 conclusion φ
@@ -96,7 +96,7 @@ assume φ {
 prove ¬ φ
 qed
 
-theorem Proof by Self-Contradiction (Inverted)
+theorem Proof by Self-Contradiction
 premise proves ¬ φ φ
 assume ¬ φ {
   prove ¬ φ
