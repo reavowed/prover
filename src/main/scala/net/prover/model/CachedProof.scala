@@ -283,10 +283,14 @@ object CachedProof {
             Seq(simplificationReference),
             context)
         } yield (provenStatement, SimplificationReference(simplifiedStatement, validatedInferenceSummary, substitutions, validatedReferences.head))
-      case InferenceReference(inferenceSummary, substitutions, references) =>
+      case ElidedReference(inferenceSummary, substitutions, references) =>
         for {
           (statement, validatedInferenceSummary, validatedReferences) <- validateInference(inferenceSummary, substitutions, references, context)
-        } yield (statement, InferenceReference(validatedInferenceSummary, substitutions, validatedReferences))
+        } yield (statement, ElidedReference(validatedInferenceSummary, substitutions, validatedReferences))
+      case ExpandedReference(inferenceSummary, substitutions, references) =>
+        for {
+          (statement, validatedInferenceSummary, validatedReferences) <- validateInference(inferenceSummary, substitutions, references, context)
+        } yield (statement, ExpandedReference(validatedInferenceSummary, substitutions, validatedReferences))
       case _ =>
         CachedProof.logger.info(s"Unrecognised reference '${reference.serialized}'")
         None

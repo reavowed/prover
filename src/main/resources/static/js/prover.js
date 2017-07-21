@@ -231,7 +231,7 @@
               highlightPremise(reference.antecedentIndex, reference.consequentIndex, html);
             } else if (reference.referenceType === "simplification") {
               highlightReference(reference.reference, html || reference.statement);
-            } else if (reference.referenceType === "inference") {
+            } else if (reference.referenceType === "elided" || reference.referenceType === "expanded") {
               highlightReferences(reference.references);
             } else {
               throw "Unrecognised reference type " + reference.referenceType;

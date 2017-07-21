@@ -100,9 +100,11 @@ object Book {
     val (outlineBookAndContextOption, modificationTimes) = Try(parser.parse(Tokenizer.fromPath(path))._1) match {
       case Success((outlineBook, context, subModificationTimes)) =>
         (Some((outlineBook, context)), subModificationTimes.updated(path, bookModificationTime))
-      case Failure(ExceptionWithModificationTimes(_, subModificationTimes)) =>
+      case Failure(ExceptionWithModificationTimes(e, subModificationTimes)) =>
+        logger.error(s"Error parsing book '$title'\n${e.getMessage}")
         (None, subModificationTimes.updated(path, bookModificationTime))
-      case _ =>
+      case Failure(e) =>
+        logger.error(s"Error parsing book '$title'\n${e.getMessage}")
         (None, Map(path -> bookModificationTime))
     }
     val bookOption = outlineBookAndContextOption.flatMap { case (bookOutline, context) =>

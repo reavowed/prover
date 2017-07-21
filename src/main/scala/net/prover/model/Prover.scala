@@ -64,7 +64,7 @@ case class Prover(
             substitutedPremises <- infencePremises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
             referencedPremises <- substitutedPremises.map(getStatementByRearranging).traverseOption.toSeq
             provenStatement <- proveStatement(conclusion, referencedPremises.map(_.provenStatement), substitutions)
-          } yield ReferencedAssertion(provenStatement, InferenceReference(summary, substitutions, referencedPremises.map(_.reference)))
+          } yield ReferencedAssertion(provenStatement, ExpandedReference(summary, substitutions, referencedPremises.map(_.reference)))
         }
     }
     def getStatementByRearranging(statement: Statement): Option[ReferencedAssertion] = {
@@ -271,7 +271,7 @@ case class Prover(
           matchDirectPremiseToFact(
             premise.statement,
             provenConclusion,
-            InferenceReference(inference.summary, inferenceSubstitutions, matchedPremises.map(_.reference)),
+            ElidedReference(inference.summary, inferenceSubstitutions, matchedPremises.map(_.reference)),
             premiseSubstitutions)
       }
   }

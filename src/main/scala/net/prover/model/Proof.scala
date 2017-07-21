@@ -182,11 +182,18 @@ object Proof {
       s"simplification ${statement.serialized}" +: (Seq(inference.serialized, substitutions.serialized) ++ reference.serializedLines).indent
     }
   }
-  case class InferenceReference(inference: Summary, substitutions: Substitutions, references: Seq[Reference]) extends Reference {
-    val referenceType = "inference"
+  case class ElidedReference(inference: Summary, substitutions: Substitutions, references: Seq[Reference]) extends Reference {
+    val referenceType = "elided"
     def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inference.id
     def serializedLines = {
-      "inference {" +: (Seq(inference.serialized, substitutions.serialized) ++ references.flatMap(_.serializedLines)).indent :+ "}"
+      "elided {" +: (Seq(inference.serialized, substitutions.serialized) ++ references.flatMap(_.serializedLines)).indent :+ "}"
+    }
+  }
+  case class ExpandedReference(inference: Summary, substitutions: Substitutions, references: Seq[Reference]) extends Reference {
+    val referenceType = "expanded"
+    def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inference.id
+    def serializedLines = {
+      "expanded {" +: (Seq(inference.serialized, substitutions.serialized) ++ references.flatMap(_.serializedLines)).indent :+ "}"
     }
   }
 
@@ -401,7 +408,8 @@ object Proof {
       case "direct" => directReferenceParser
       case "deduced" => deducedReferenceParser
       case "simplification" => simplificationReferenceParser
-      case "inference" => inferenceReferenceParser
+      case "elided" => elidedReferenceParser
+      case "expanded" => expandedReferenceParser
     }
   }
   def directReferenceParser: Parser[DirectReference] = {
@@ -427,11 +435,18 @@ object Proof {
       reference <- referenceParser.getOrElse(throw new Exception("Missing reference for simplification"))
     } yield SimplificationReference(statement, inferenceSummary, substitutions, reference)
   }
-  def inferenceReferenceParser(implicit parsingContext: ParsingContext): Parser[InferenceReference] = {
+  def elidedReferenceParser(implicit parsingContext: ParsingContext): Parser[ElidedReference] = {
     (for {
       inferenceSummary <- Inference.Summary.parser
       substitutions <- Substitutions.parser
       references <- referencesParser
-    } yield InferenceReference(inferenceSummary, substitutions, references)).inBraces
+    } yield ElidedReference(inferenceSummary, substitutions, references)).inBraces
+  }
+  def expandedReferenceParser(implicit parsingContext: ParsingContext): Parser[ExpandedReference] = {
+    (for {
+      inferenceSummary <- Inference.Summary.parser
+      substitutions <- Substitutions.parser
+      references <- referencesParser
+    } yield ExpandedReference(inferenceSummary, substitutions, references)).inBraces
   }
 }
