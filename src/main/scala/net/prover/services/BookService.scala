@@ -70,6 +70,7 @@ class BookService {
               }
               (dirtyBooks :+ bookTitle, bookDataSoFar :+ bookData)
             case Some(BookData(_, None, _)) =>
+              BookService.logger.info(s"Book '$bookTitle' has changed - attempting to revalidate")
               val bookData = parseBook(bookTitle, bookDataSoFar).ifDefined(_.book) {
                 BookService.logger.info(s"Book '$bookTitle' is now valid again")
               }

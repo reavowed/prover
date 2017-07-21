@@ -4,6 +4,7 @@ import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, Summa
 import net.prover.model.Proof.Step
 import net.prover.model.ProofOutline.StepWithAssertion
 import net.prover.model.components.{Statement, Term, TermVariable}
+import org.slf4j.LoggerFactory
 
 case class Proof(steps: Seq[Proof.Step]) {
   def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
@@ -19,6 +20,8 @@ case class Proof(steps: Seq[Proof.Step]) {
 }
 
 object Proof {
+  val logger = LoggerFactory.getLogger(Proof.getClass)
+
   implicit class SeqStringOps(seq: Seq[String]) {
     def indent: Seq[String] = seq.map("  " + _)
   }
@@ -274,6 +277,9 @@ object Proof {
         (NamingStep(variable, assumptionStep, assertionStep), updatedContext)
       case assertionStep: ProofOutline.AssertionStep =>
         proveAssertionStep(assertionStep, context, nextReference)
+          .ifDefined {
+            logger.info(s"Proved assertion ${assertionStep.assertion}")
+          }
           .getOrElse(throw ProvingException(
             s"Could not prove assertion ${assertionStep.assertion}",
             assertionStep.location.fileName,
