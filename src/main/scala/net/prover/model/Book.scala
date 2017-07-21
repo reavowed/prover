@@ -133,7 +133,7 @@ object Book {
       title <- Parser.toEndOfLine
       imports <- importsParser
       dependencies = imports.map { importTitle =>
-        availableDependencies.find(_.title == importTitle).getOrElse(throw new Exception(s"Could not find imported book '$title'"))
+        availableDependencies.find(_.title == importTitle).getOrElse(throw new Exception(s"Could not find imported book '$importTitle'"))
       }
       transitiveDependencies = Book.transitiveDependencies(dependencies)
       context = ParsingContext(
@@ -256,6 +256,9 @@ object Book {
   def includeParser(bookPath: Path, bookTitle: String): Parser[(Path, Instant)] = Parser { tokenizer =>
     val (pathText, nextTokenizer) = Parser.toEndOfLine.parse(tokenizer)
     val includedPath = bookPath.getParent.resolve(pathText)
+    if (!Files.exists(includedPath)) {
+      throw new Exception(s"Included file $includedPath does not exist")
+    }
     val modificationTime = Files.getLastModifiedTime(includedPath).toInstant
     val includeTokenizer = Tokenizer.fromPath(includedPath).copy(currentBook = Some(bookTitle))
     ((includedPath, modificationTime), nextTokenizer.addTokenizer(includeTokenizer))
