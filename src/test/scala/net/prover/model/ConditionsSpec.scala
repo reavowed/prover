@@ -6,19 +6,19 @@ class ConditionsSpec extends ProverSpec {
   "substituting conditions" should {
     "correctly apply distinct variable condition to a statement with the term variable substituted out" in {
       Conditions(Set.empty, DistinctVariables(x -> φ))
-        .applySubstitutions(Substitutions(Map(φ -> SubstitutedStatementVariable(φ, z, y), x -> y), DistinctVariables.empty)).get
+        .applySubstitutions(Substitutions(Map(φ -> φ.sub(z, y), x -> y), DistinctVariables.empty)).get
         .distinctVariables mustEqual DistinctVariables(y -> z)
     }
 
     "correctly apply distinct variable condition to a compound statement with the term variable substituted out by a free variable" in {
       Conditions(Set.empty, DistinctVariables(x -> φ))
-        .applySubstitutions(Substitutions(Map(φ -> SubstitutedStatementVariable(φ, z, y), x -> y), DistinctVariables.empty)).get
+        .applySubstitutions(Substitutions(Map(φ -> φ.sub(z, y), x -> y), DistinctVariables.empty)).get
         .distinctVariables mustEqual DistinctVariables(y -> z)
     }
 
     "correctly apply distinct variable condition to a compound statement with the term variable substituted out by a bound variable" in {
       Conditions(Set.empty, DistinctVariables(x -> φ))
-        .applySubstitutions(Substitutions(Map(φ -> ForAll(z, SubstitutedStatementVariable(φ, z, y)), x -> y), DistinctVariables.empty)).get
+        .applySubstitutions(Substitutions(Map(φ -> ForAll(z, φ.sub(z, y)), x -> y), DistinctVariables.empty)).get
         .distinctVariables mustEqual DistinctVariables.empty
     }
 
@@ -44,7 +44,7 @@ class ConditionsSpec extends ProverSpec {
 
     "remove arbitrary variable if its only possible appearance is another arbitrary variable" in {
       Conditions(Set(x, y), DistinctVariables.empty)
-        .restrictToStatements(Seq(SubstitutedStatementVariable(φ, y, x)))
+        .restrictToStatements(Seq(φ.sub(y, x)))
         .arbitraryVariables mustEqual Set(y)
     }
 
@@ -70,7 +70,7 @@ class ConditionsSpec extends ProverSpec {
   "enforcing arbitrary variables in conditions" should {
     "only add present variables to distinct conditions" in {
       Conditions.empty
-        .addDistinctVariables(Set(x), Seq(SubstitutedStatementVariable(φ, y, x)))
+        .addDistinctVariables(Set(x), Seq(φ.sub(y, x)))
         .map(_.distinctVariables) must beSome(DistinctVariables(x -> y))
     }
 

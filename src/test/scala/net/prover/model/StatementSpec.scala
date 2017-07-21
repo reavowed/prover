@@ -31,7 +31,7 @@ class StatementSpec extends ProverSpec {
     }
 
     "parse a substitution statement" in {
-      parseStatement("sub y x φ") mustEqual SubstitutedStatementVariable(φ, y, x)
+      parseStatement("sub y x φ") mustEqual φ.sub(y, x)
     }
 
     "parse an empty list" in {
@@ -60,8 +60,8 @@ class StatementSpec extends ProverSpec {
         Map(φ -> Implication(φ, ψ), ψ -> χ, x -> z, y -> y),
         DistinctVariables.empty)
 
-      SubstitutedStatementVariable(φ, y, x).applySubstitutions(substitutions) must
-        beSome(Implication(SubstitutedStatementVariable(φ, y, z), SubstitutedStatementVariable(ψ, y, z)))
+      φ.sub(y, x).applySubstitutions(substitutions) must
+        beSome(Implication(φ.sub(y, z), ψ.sub(y, z)))
     }
 
     "allow substituting a term into a statement in which a variable of that term is bound" in {
@@ -69,16 +69,16 @@ class StatementSpec extends ProverSpec {
         Map(φ -> ForAll(x, Equals(z, OrderedPair(x, y))), x -> z, y -> OrderedPair(x, y)),
         DistinctVariables(x -> z, y -> z))
 
-      SubstitutedStatementVariable(φ, y, x).applySubstitutions(substitutions) must
+      φ.sub(y, x).applySubstitutions(substitutions) must
         beSome(ForAll(x, Equals(OrderedPair(x, y), OrderedPair(x, y))))
     }
 
     "cancel out a single substitution with the right distinct variable condition" in {
       val substitutions = Substitutions(
-        Map(φ -> SubstitutedStatementVariable(φ, y, x), x -> y, y -> x),
+        Map(φ -> φ.sub(y, x), x -> y, y -> x),
         DistinctVariables(y -> φ))
 
-      SubstitutedStatementVariable(φ, y, x).applySubstitutions(substitutions) must beSome(φ)
+      φ.sub(y, x).applySubstitutions(substitutions) must beSome(φ)
 
     }
   }
@@ -135,13 +135,13 @@ class StatementSpec extends ProverSpec {
     }
 
     "allow substitution of a variable for itself in a statement variable" in {
-      SubstitutedStatementVariable(φ, y, x)
+      φ.sub(y, x)
         .calculateSubstitutions(ψ, PartialSubstitutions(Map(φ -> ψ, y -> z, x -> z), Map.empty, DistinctVariables.empty))
         .mustEqual(Seq(PartialSubstitutions(Map(φ -> ψ, y -> z, x -> z), Map.empty, DistinctVariables.empty)))
     }
 
     "find a distinct variable condition to ensure substitution validity" in {
-      SubstitutedStatementVariable(φ, y, x)
+      φ.sub(y, x)
         .calculateSubstitutions(Equals(z, y), PartialSubstitutions(Map(φ -> Equals(x, y), x -> x), Map.empty, DistinctVariables.empty))
         .mustEqual(Seq(PartialSubstitutions(
           Map(φ -> Equals(x, y), x -> x, y -> z),
@@ -150,7 +150,7 @@ class StatementSpec extends ProverSpec {
     }
 
     "not add distinct variable conditions for substitution validity if replacing a term with itself" in {
-      SubstitutedStatementVariable(φ, y, x)
+      φ.sub(y, x)
         .calculateSubstitutions(Equals(x, y), PartialSubstitutions(Map(φ -> Equals(x, y), x -> x), Map.empty, DistinctVariables.empty))
         .mustEqual(Seq(PartialSubstitutions(
           Map(φ -> Equals(x, y), x -> x, y -> x),
@@ -159,7 +159,7 @@ class StatementSpec extends ProverSpec {
     }
 
     "find a distinct variable condition to ensure substitution validity when required variable is bound" in {
-      SubstitutedStatementVariable(φ, y, x)
+      φ.sub(y, x)
         .calculateSubstitutions(
           ForAll(y, Equals(z, y)),
           PartialSubstitutions(Map(φ -> ForAll(y, Equals(x, y)), x -> x), Map.empty, DistinctVariables.empty))
@@ -176,9 +176,9 @@ class StatementSpec extends ProverSpec {
         φ,
         Implication(φ, ψ),
         Equals(x, y),
-        SubstitutedStatementVariable(φ, y, x),
-        SubstitutedStatementVariable(φ, x, y),
-        SubstitutedStatementVariable(φ, y, z))
+        φ.sub(y, x),
+        φ.sub(x, y),
+        φ.sub(y, z))
 
       forall(statements) { s =>
         s.makeSingleSubstitution(x, x, DistinctVariables.empty) must beSome(s)
@@ -204,15 +204,15 @@ class StatementSpec extends ProverSpec {
     }
 
     "not do anything if making a double substitution that is known to be distinct from the first" in {
-      SubstitutedStatementVariable(φ, y, x)
+      φ.sub(y, x)
         .makeSingleSubstitution(Y, X, DistinctVariables(X -> φ, y -> X))
-        .mustEqual(Some(SubstitutedStatementVariable(φ, y, x)))
+        .mustEqual(Some(φ.sub(y, x)))
     }
 
     "combine substitutions under a distinct condition" in {
-      SubstitutedStatementVariable(φ, y, x)
+      φ.sub(y, x)
         .makeSingleSubstitution(z, y, DistinctVariables(y -> φ))
-        .mustEqual(Some(SubstitutedStatementVariable(φ, z, x)))
+        .mustEqual(Some(φ.sub(z, x)))
     }
 
     "not allow substitution inside bound variable without a distinct condition" in {
@@ -220,7 +220,7 @@ class StatementSpec extends ProverSpec {
     }
 
     "allow substitution inside bound variable without a distinct condition" in {
-      ForAll(x, φ).makeSingleSubstitution(z, y, DistinctVariables(y -> x)) must beSome(ForAll(x, SubstitutedStatementVariable(φ, z, y)))
+      ForAll(x, φ).makeSingleSubstitution(z, y, DistinctVariables(y -> x)) must beSome(ForAll(x, φ.sub(z, y)))
     }
 
     "allow redundant substitution inside bound variable without a distinct condition" in {
@@ -245,32 +245,32 @@ class StatementSpec extends ProverSpec {
         .mustEqual((Seq((y, DistinctVariables(x -> y))), None))
     }
     "find a nilpotent substitution" in {
-      SubstitutedStatementVariable(φ, y, x)
-        .findSubstitution(SubstitutedStatementVariable(φ, y, x), y)
+      φ.sub(y, x)
+        .findSubstitution(φ.sub(y, x), y)
         .mustEqual((Seq((y, DistinctVariables.empty)), None))
     }
     "find a nilpotent substitution and a distinct variable condition" in {
-      SubstitutedStatementVariable(φ, y, x)
-        .findSubstitution(SubstitutedStatementVariable(φ, y, x), z)
+      φ.sub(y, x)
+        .findSubstitution(φ.sub(y, x), z)
         .mustEqual((Seq((z, DistinctVariables.empty)), Some(DistinctVariables(z -> φ) ++ DistinctVariables(z -> y))))
     }
   }
 
   "statement resolving a substitution" should {
     "allow substitutions into a substituted statement variable with distinct conditions" in {
-      SubstitutedStatementVariable(φ, y, x)
-        .resolveSingleSubstitution(SubstitutedStatementVariable(φ, y, x), z, X, Y)
-          .mustEqual(Some((SubstitutedStatementVariable(φ, y, x), DistinctVariables(z -> φ, z -> y))))
+      φ.sub(y, x)
+        .resolveSingleSubstitution(φ.sub(y, x), z, X, Y)
+          .mustEqual(Some((φ.sub(y, x), DistinctVariables(z -> φ, z -> y))))
     }
   }
 
   "statement intersecting variables" should {
     "return substituted variable if the term variable does not match the one being replaced" in {
-      SubstitutedStatementVariable(φ, y, x)
+      φ.sub(y, x)
         .getPotentiallyIntersectingVariables(z) must contain(φ)
     }
     "not return substituted variable if the term variable matches the one being replaced" in {
-      SubstitutedStatementVariable(φ, y, x)
+      φ.sub(y, x)
         .getPotentiallyIntersectingVariables(x) must not contain(φ)
     }
   }

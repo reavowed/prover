@@ -5,6 +5,10 @@ import net.prover.model.{DistinctVariables, PartialSubstitutions, Substitutions}
 import scala.collection.immutable.Nil
 
 case class StatementVariable(text: String) extends Statement with Variable {
+  def sub(termToReplaceWith: Term, termToBeReplaced: TermVariable): Statement = {
+    SubstitutedStatementVariable(this, termToReplaceWith, termToBeReplaced)
+  }
+
   override def allVariables: Set[Variable] = Set(this)
   override def presentVariables: Set[Variable] = Set(this)
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set.empty)
@@ -45,7 +49,7 @@ case class StatementVariable(text: String) extends Statement with Variable {
     else if (distinctVariables.areDistinct(termToBeReplaced, this))
       Some(this)
     else
-      Some(SubstitutedStatementVariable(this, termToReplaceWith, termToBeReplaced))
+      Some(sub(termToReplaceWith, termToBeReplaced))
   }
   override def resolveSingleSubstitution(
     other: Component,
@@ -83,7 +87,7 @@ case class StatementVariable(text: String) extends Statement with Variable {
     if (firstTerm == firstTermVariable) {
       findSubstitution(target, secondTermVariable)
     } else {
-      SubstitutedStatementVariable(this, firstTerm, firstTermVariable).findSubstitution(target, secondTermVariable)
+      sub(firstTerm, firstTermVariable).findSubstitution(target, secondTermVariable)
     }
   }
   override def replacePlaceholder(other: Component) = Some(this)

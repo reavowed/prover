@@ -105,7 +105,7 @@ trait ProverSpec extends Specification {
     "Set Comprehension",
     Format("{%0 ∈ %1 | %2}", requiresBrackets = false),
     Nil,
-    ForAll(z, Equivalence(ElementOf(z, PlaceholderTerm), Conjunction(ElementOf(z, y), SubstitutedStatementVariable(φ, z, x)))),
+    ForAll(z, Equivalence(ElementOf(z, PlaceholderTerm), Conjunction(ElementOf(z, y), φ.sub(z, x)))),
     Set(x),
     DistinctVariables.empty,
     "",

@@ -85,27 +85,27 @@ class TheoremSpec extends ProverSpec {
       "Substitution of Equals",
       Seq(
         DirectPremise(Equals(x, y), isElidable = true),
-        SubstitutedStatementVariable(φ, x, z)),
-      SubstitutedStatementVariable(φ, y, z))
+        φ.sub(x, z)),
+      φ.sub(y, z))
     val substitutionOfEqualsReverse = axiom(
       "Substitution of Equals",
-      Seq(Equals(x, y), SubstitutedStatementVariable(φ, y, z)),
-      SubstitutedStatementVariable(φ, x, z))
+      Seq(Equals(x, y), φ.sub(y, z)),
+      φ.sub(x, z))
     val equivalenceOfSubstitutedEquals = axiom(
       "Equivalence of Substituted Equals",
       Seq(Equals(x, y)),
       Equivalence(
-        SubstitutedStatementVariable(φ, x, z),
-        SubstitutedStatementVariable(φ, y, z)))
+        φ.sub(x, z),
+        φ.sub(y, z)))
     val substitution = axiom(
       "Substitution",
       Seq(φ),
       ProvenStatement(
-        SubstitutedStatementVariable(φ, y ,x),
+        φ.sub(y, x),
         Conditions(Set(x), DistinctVariables.empty)))
     val renamedGeneralization = axiom(
       "Renamed Generalization",
-      Seq(SubstitutedStatementVariable(φ, y, x)),
+      Seq(φ.sub(y, x)),
       ProvenStatement(
         ForAll(x, φ),
         Conditions(Set(y), DistinctVariables(y -> φ))))
@@ -116,8 +116,8 @@ class TheoremSpec extends ProverSpec {
         ForAll(x, φ),
         Conditions(Set(x), DistinctVariables.empty)),
       RearrangementType.Expansion)
-    val specification = axiom("Specification", Seq(ForAll(x, φ)), SubstitutedStatementVariable(φ, y, x))
-    val existence = axiom("Existence", Seq(SubstitutedStatementVariable(φ, y, x)), Exists(x, φ))
+    val specification = axiom("Specification", Seq(ForAll(x, φ)), φ.sub(y, x))
+    val existence = axiom("Existence", Seq(φ.sub(y, x)), Exists(x, φ))
     val nameExistence = axiom(
       "Name Existence",
       Seq(
@@ -130,7 +130,7 @@ class TheoremSpec extends ProverSpec {
       "Name Existence (Renamed)",
       Seq(
         DirectPremise(Exists(x, φ), isElidable = true),
-        DeducedPremise(SubstitutedStatementVariable(φ, y, x), ψ)),
+        DeducedPremise(φ.sub(y, x), ψ)),
       ProvenStatement(
         ψ,
         Conditions(Set(x), DistinctVariables(y -> φ, y -> ψ))))
@@ -195,7 +195,7 @@ class TheoremSpec extends ProverSpec {
     "prove a conclusion that is a nested substituted variable" in {
       checkProof(
         Seq(ForAll(x, Negation(φ))),
-        Seq(Negation(SubstitutedStatementVariable(φ, y, x))),
+        Seq(Negation(φ.sub(y, x))),
         Seq(specification),
         Nil)
     }
@@ -229,8 +229,8 @@ class TheoremSpec extends ProverSpec {
     "prove the conclusion of a partially transformed inference" in {
       val transform = PartialInferenceTransform(ForAll(x, PlaceholderStatement), SubstitutedPlaceholderStatement(y, x))
       checkProof(
-        Seq(ForAll(y, Implication(φ, ψ)), SubstitutedStatementVariable(φ, z, y)),
-        Seq(SubstitutedStatementVariable(ψ, z, y)),
+        Seq(ForAll(y, Implication(φ, ψ)), φ.sub(z, y)),
+        Seq(ψ.sub(z, y)),
         Seq(modusPonens, specification),
         Seq(transform))
     }
@@ -238,7 +238,7 @@ class TheoremSpec extends ProverSpec {
     "carry arbitrary variable condition from inference conclusion" in {
       checkProof(
         Seq(φ),
-        Seq(SubstitutedStatementVariable(φ, z, y)),
+        Seq(φ.sub(z, y)),
         Seq(substitution),
         Nil,
         Conditions(Set(y), DistinctVariables.empty))
@@ -248,7 +248,7 @@ class TheoremSpec extends ProverSpec {
       checkProof(
         Seq(φ),
         Seq(
-          assertionStepFromStatement(SubstitutedStatementVariable(φ, x, y)),
+          assertionStepFromStatement(φ.sub(x, y)),
           assertionStepWithNonDistinctVariables(ForAll(y, φ), Set(y -> φ))),
         Seq(substitution, renamedGeneralization),
         Nil,
@@ -290,8 +290,8 @@ class TheoremSpec extends ProverSpec {
 
     "add distinct conditions to simplify substitutions" in {
       checkProof(
-        Seq(Conjunction(SubstitutedStatementVariable(φ, z, x), Equals(z, z))),
-        Seq(Exists(y, Conjunction(SubstitutedStatementVariable(φ, y, x), Equals(y, z)))),
+        Seq(Conjunction(φ.sub(z, x), Equals(z, z))),
+        Seq(Exists(y, Conjunction(φ.sub(y, x), Equals(y, z)))),
         Seq(existence),
         Nil,
         Conditions(Set.empty, DistinctVariables(y -> φ)))
@@ -299,8 +299,8 @@ class TheoremSpec extends ProverSpec {
 
     "apply distinct variable conditions to compound statements correctly" in {
       checkProof(
-        Seq(φ -> Conjunction(ψ, SubstitutedStatementVariable(χ, z, x)), Exists(x, φ)),
-        Seq(Conjunction(ψ, SubstitutedStatementVariable(χ, z, x))),
+        Seq(φ -> Conjunction(ψ, χ.sub(z, x)), Exists(x, φ)),
+        Seq(Conjunction(ψ, χ.sub(z, x))),
         Seq(nameExistence),
         Nil,
         Conditions(Set(x), DistinctVariables(x -> ψ, x -> z)))
@@ -309,7 +309,7 @@ class TheoremSpec extends ProverSpec {
     "apply distinct variable conditions to reverse a substitution" in {
       checkProof(
         Seq(Conjunction(φ, Equals(x, z))),
-        Seq(Exists(y, Conjunction(SubstitutedStatementVariable(φ, y, x), Equals(y, z)))),
+        Seq(Exists(y, Conjunction(φ.sub(y, x), Equals(y, z)))),
         Seq(existence),
         Nil,
         Conditions(Set.empty, DistinctVariables(y -> φ)))
@@ -321,8 +321,8 @@ class TheoremSpec extends ProverSpec {
           Equals(Y, Comprehension(x, X, φ)),
           ForAll(y, Equivalence(
             ElementOf(y, Comprehension(x, X, φ)),
-            Conjunction(ElementOf(y, X), SubstitutedStatementVariable(φ, y, x))))),
-        Seq(ForAll(y, Equivalence(ElementOf(y, Y), Conjunction(ElementOf(y, X), SubstitutedStatementVariable(φ, y, x))))),
+            Conjunction(ElementOf(y, X), φ.sub(y, x))))),
+        Seq(ForAll(y, Equivalence(ElementOf(y, Y), Conjunction(ElementOf(y, X), φ.sub(y, x))))),
         Seq(substitutionOfEqualsReverse),
         Nil,
         Conditions(Set.empty, DistinctVariables(y -> x)))
@@ -332,7 +332,7 @@ class TheoremSpec extends ProverSpec {
       val elementOfComprehension = axiom(
         "Element of Comprehension",
         Seq(Equals(Y, Comprehension(x, X, φ))),
-        ForAll(y, Equivalence(ElementOf(y, Y), Conjunction(ElementOf(y, X), SubstitutedStatementVariable(φ, y, x)))))
+        ForAll(y, Equivalence(ElementOf(y, Y), Conjunction(ElementOf(y, X), φ.sub(y, x)))))
 
       checkProof(
         Seq(Equals(Z, Comprehension(x, Y, ForAll(X, Implication(φ, ElementOf(x, X)))))),
@@ -415,7 +415,7 @@ class TheoremSpec extends ProverSpec {
       val elementOfComprehension = axiom(
         "Element of Comprehension",
         Seq(Equals(X, Comprehension(y, Y, φ)), ElementOf(x, X)),
-        SubstitutedStatementVariable(φ, x, y))
+        φ.sub(x, y))
 
       checkProof(
         Seq(Equals(Z, Comprehension(x, X, Exists(y, Conjunction(ElementOf(y, x), Equals(x, x))))), ElementOf(z, Z)),
