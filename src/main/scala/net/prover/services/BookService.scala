@@ -46,7 +46,7 @@ class BookService {
     private def isClean(bookData: BookData, dirtyBooks: Seq[String]) = {
       // We always need to recheck if any of the book's files have changed
       bookData.lastModificationTimesOfFiles.forall { case (path, instant) =>
-        Files.getLastModifiedTime(path).toInstant == instant
+        Files.exists(path) && Files.getLastModifiedTime(path).toInstant == instant
       } && (bookData.book match {
         case Some(b) =>
           // If the last parse was successful, only recheck if dependencies are dirty
