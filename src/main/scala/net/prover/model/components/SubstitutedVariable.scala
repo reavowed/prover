@@ -113,10 +113,16 @@ trait SubstitutedVariable[+T <: Component, TVariable <: Variable] extends Compon
     target: Component,
     distinctVariables: DistinctVariables
   ): Option[DistinctVariables] = {
-    if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
-      Some(DistinctVariables.empty)
-    } else {
-      None
+    target match {
+      case SubstitutedVariable(`termToReplaceWith`, `firstVariable`, otherTail) if otherTail == tail && termToBeReplaced == firstTerm =>
+        // Validating [x/y] into [y/z]φ to make [x/z]φ
+        DistinctVariables.attempt(termToBeReplaced -> tail)
+      case _ =>
+        if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
+          Some(DistinctVariables.empty)
+        } else {
+          None
+        }
     }
   }
   override def resolveSingleSubstitution(

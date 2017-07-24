@@ -281,6 +281,14 @@ class StatementSpec extends ProverSpec {
     }
   }
 
+  "statement validating a substitution" should {
+    "allow an elided double substitution" in {
+      φ.sub(y, z)
+        .validateSingleSubstitution(x, y, φ.sub(x, z), DistinctVariables.empty)
+        .must(beSome(DistinctVariables(y -> φ)))
+    }
+  }
+
   "statement intersecting variables" should {
     "return substituted variable if the term variable does not match the one being replaced" in {
       φ.sub(y, x)

@@ -136,6 +136,14 @@ class TheoremSpec extends ProverSpec {
       ProvenStatement(
         ψ,
         Conditions(Set(y), DistinctVariables(y -> φ, y -> ψ))))
+    val elementOfComprehension = axiom(
+      "Element of Comprehension Meets Condition",
+      Seq(Equals(X, Comprehension(y, Y, φ)), ElementOf(x, Y), φ.sub(x, y)),
+      ElementOf(x, X))
+    val elementOfComprehensionMeetsCondition = axiom(
+      "Element of Comprehension Meets Condition",
+      Seq(Equals(X, Comprehension(y, Y, φ)), ElementOf(x, X)),
+      φ.sub(x, y))
 
     "prove the conclusion of a premiseless inference" in {
       checkProof(
@@ -414,17 +422,12 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove an elided premise using a double substitution" in {
-      val elementOfComprehension = axiom(
-        "Element of Comprehension",
-        Seq(Equals(X, Comprehension(y, Y, φ)), ElementOf(x, X)),
-        φ.sub(x, y))
-
       checkProof(
         Seq(Equals(Z, Comprehension(x, X, Exists(y, Conjunction(ElementOf(y, x), Equals(x, x))))), ElementOf(z, Z)),
         Seq(NamingStep(a, Conjunction(ElementOf(a, z), Equals(z, z)), Seq(
           ElementOf(a, z),
           Exists(n, ElementOf(n, z))))),
-        Seq(elementOfComprehension, extractLeftConjunct, existence, renamedValueForExistence),
+        Seq(elementOfComprehensionMeetsCondition, extractLeftConjunct, existence, renamedValueForExistence),
         Nil,
         Conditions(Set.empty, DistinctVariables(x -> y, y -> z)))
     }
