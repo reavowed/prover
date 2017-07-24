@@ -51,6 +51,10 @@ case class Prover(
     ).nextOption()
   }
 
+  private def proveUsingInferences(): Option[AssertionStep] = {
+    availableInferences.iterator.flatMap(proveUsingInference(_)).nextOption()
+  }
+
   private def proveUsingInference(
     inference: Inference,
     initialSubstitutions: Option[Substitutions] = None
@@ -115,32 +119,32 @@ case class Prover(
     availableInferences.iterator
       // Match the premises first, since we don't know what the conclusion should look like
       .flatMap { inference =>
-      matchPremisesToFacts(inference.premises, PartialSubstitutions.empty, inference.allowsRearrangement)
-        .map(inference -> _)
-    }
+        matchPremisesToFacts(inference.premises, PartialSubstitutions.empty, inference.allowsRearrangement)
+          .map(inference -> _)
+      }
       // Work out the conclusion by condensing it with the premise
       .mapCollect { case (inference, (matchedPremises, inferenceSubstitutions)) =>
-      premise.statement.condense(inference.conclusion.statement, premiseSubstitutionsSoFar, inferenceSubstitutions)
-        .map((inference, matchedPremises, _))
-    }
+        premise.statement.condense(inference.conclusion.statement, premiseSubstitutionsSoFar, inferenceSubstitutions)
+          .map((inference, matchedPremises, _))
+      }
       // Now our inference substitutions should be fully determined
       .flatMap { case (inference, matchedPremises, (premiseSubstitutions, inferenceSubstitutions)) =>
-      inferenceSubstitutions.tryResolve()
-        .map((inference, matchedPremises, premiseSubstitutions, _))
-    }
+        inferenceSubstitutions.tryResolve()
+          .map((inference, matchedPremises, premiseSubstitutions, _))
+      }
       // So confirm the proof of the inference
       .mapCollect { case (inference, matchedPremises, premiseSubstitutions, inferenceSubstitutions) =>
-      proveStatement(inference.conclusion, matchedPremises.map(_.provenStatement), inferenceSubstitutions)
-        .map((inference, matchedPremises, premiseSubstitutions, inferenceSubstitutions, _))
-    }
+        proveStatement(inference.conclusion, matchedPremises.map(_.provenStatement), inferenceSubstitutions)
+          .map((inference, matchedPremises, premiseSubstitutions, inferenceSubstitutions, _))
+      }
       // And finally match the premise to our computed conclusion
       .flatMap { case (inference, matchedPremises, premiseSubstitutions, inferenceSubstitutions, provenConclusion) =>
-      matchDirectPremiseToFact(
-        premise.statement,
-        provenConclusion,
-        ElidedReference(inference.summary, inferenceSubstitutions, matchedPremises.map(_.reference)),
-        premiseSubstitutions)
-    }
+        matchDirectPremiseToFact(
+          premise.statement,
+          provenConclusion,
+          ElidedReference(inference.summary, inferenceSubstitutions, matchedPremises.map(_.reference)),
+          premiseSubstitutions)
+      }
   }
 
   private def splitPremisesAtElidable(premises: Seq[Premise]): Option[(Seq[Premise], DirectPremise, Seq[Premise])] = {
@@ -237,7 +241,7 @@ case class Prover(
               availableInferences,
               Nil,
               assertionHints)
-            Prover(statement, Set.empty, newNonDistinctVariables, localContext, debug = false).proveAssertionDirectlyFromInferences()
+            Prover(statement, Set.empty, newNonDistinctVariables, localContext, debug = false).proveUsingInferences()
           }.map { proofSteps =>
             (TransformedInference(inference, transformedPremises, proofSteps.last.provenStatement), proofSteps)
           }

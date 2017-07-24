@@ -48,7 +48,7 @@ case class TermVariable(text: String) extends Term with Variable {
       if (termToBeReplaced == termToReplaceWith)
         Some(DistinctVariables.empty)
       else
-        Some(DistinctVariables(termToBeReplaced -> this))
+        DistinctVariables.attempt(termToBeReplaced -> this)
     } else if (makeSingleSubstitution(termToReplaceWith, termToBeReplaced, distinctVariables).contains(target)) {
       Some(DistinctVariables.empty)
     } else {

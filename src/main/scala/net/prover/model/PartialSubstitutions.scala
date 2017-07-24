@@ -24,38 +24,34 @@ case class PartialSubstitutions(
     substitutedVariable: SubstitutedVariable[Component, _ <: Variable],
     component: Component
   ): Seq[PartialSubstitutions] = {
-    val directAttempts = tryAddingDirectly(substitutedVariable, component)
-    if (directAttempts.nonEmpty)
-      directAttempts
-    else {
+    tryAddingDirectly(substitutedVariable, component) getOrElse
       findMergableSubstitution(substitutedVariable).toSeq.flatMap(tryAddingPotentialSubstitutions(substitutedVariable, _, component)) :+
         copy(unknown = unknown + (substitutedVariable -> component))
-    }
   }
 
   private def tryAddingDirectly(
     substitutedVariable: SubstitutedVariable[Component, _ <: Variable],
     target: Component
-  ): Seq[PartialSubstitutions] = {
+  ): Option[Seq[PartialSubstitutions]] = {
     val substitutedTailOption = substitutedVariable.tail.applySubstitutions(knownSubstitutions)
     val substitutedTermToReplaceWithOption = substitutedVariable.firstTerm.applySubstitutions(knownSubstitutions)
     val substitutedTermToBeReplacedOption = known.get(substitutedVariable.firstVariable).map(_.asInstanceOf[Term]).flatMap(Term.optionAsVariable)
 
     (substitutedTailOption, substitutedTermToReplaceWithOption, substitutedTermToBeReplacedOption) match {
       case (Some(substitutedTail), Some(substitutedTermToReplaceWith), Some(substitutedTermToBeReplaced)) =>
-        tryNotAddingAtAll(substitutedTail, substitutedTermToReplaceWith, substitutedTermToBeReplaced, target)
+        Some(tryNotAddingAtAll(substitutedTail, substitutedTermToReplaceWith, substitutedTermToBeReplaced, target))
       case (Some(substitutedTail), None, Some(substitutedTermToBeReplaced)) =>
-        tryAddingByCalculatingTermToReplaceWith(
+        Some(tryAddingByCalculatingTermToReplaceWith(
           substitutedTail,
           substitutedTermToBeReplaced,
           substitutedVariable.firstTerm,
-          target)
+          target))
       case _ =>
         findMergableSubstitution(substitutedVariable) match {
           case Some(otherSubstitutedVariable) =>
-            tryAddingByMerge(substitutedVariable, otherSubstitutedVariable, target).toSeq
+            Some(tryAddingByMerge(substitutedVariable, otherSubstitutedVariable, target).toSeq)
           case _ =>
-            Nil
+            None
         }
     }
   }
@@ -170,7 +166,7 @@ case class PartialSubstitutions(
         Seq(knownSubstitutions)
       case one +: more =>
         copy(unknown = unknown.filterKeys(more.contains))
-          .tryAddingDirectly(one, unknown(one))
+          .tryAddingDirectly(one, unknown(one)).toSeq.flatten
           .flatMap(_.tryResolve())
     }
   }
