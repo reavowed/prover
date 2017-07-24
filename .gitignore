@@ -1,6 +1,7 @@
 # Project-specific
 .idea/
 cache/
+*.sublime-*
 
 # Created by https://www.gitignore.io/api/intellij,sbt
 
