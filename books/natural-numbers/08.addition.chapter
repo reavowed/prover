@@ -1,0 +1,210 @@
+chapter Addition
+Define addition on the natural numbers.
+
+theorem A Successor Function Exists
+let S = S comprehension x × ℕ ℕ ∃ n ∧ ∈ n ℕ = x orderedPair n successor n {
+  prove ⊆ S × ℕ ℕ
+  assume ∈ a ℕ {
+    assume ∈ orderedPair a b S {
+      prove ∃ n ∧ ∈ n ℕ = orderedPair a b orderedPair n successor n
+      let x ∧ ∈ x ℕ = orderedPair a b orderedPair x successor x {
+        prove = a x
+        prove = b successor x
+        prove = b successor a
+      }
+    }
+    assume = b successor a {
+      prove ∈ successor a ℕ
+      prove ∈ b ℕ
+      prove ∈ orderedPair a b × ℕ ℕ
+      prove = orderedPair a successor a orderedPair a successor a
+      prove = orderedPair a b orderedPair a successor a
+      prove ∧ ∈ a ℕ = orderedPair a b orderedPair a successor a
+      prove ∃ n ∧ ∈ n ℕ = orderedPair a b orderedPair n successor n
+      prove ∈ orderedPair a b S
+    }
+    prove ∃! b ∈ orderedPair a b S
+  }
+  prove ∀ a → ∈ a ℕ ∃! b ∈ orderedPair a b S
+  prove function S ℕ ℕ
+  assume ∈ m ℕ {
+    prove ∈ orderedPair m apply S m S
+    prove ∃ n ∧ ∈ n ℕ = orderedPair m apply S m orderedPair n successor n
+    let x ∧ ∈ x ℕ = orderedPair m apply S m orderedPair x successor x {
+      prove = m x
+      prove = apply S m successor x
+      prove = apply S m successor m
+    }
+  }
+  prove ∀ n → ∈ n ℕ = apply S n successor n
+  prove ∧ function S ℕ ℕ ∀ n → ∈ n ℕ = apply S n successor n
+  prove ∃ f ∧ function f ℕ ℕ ∀ n → ∈ n ℕ = apply f n successor n
+  prove ∃! f ∧ function f ℕ ℕ ∀ n → ∈ n ℕ = apply f n successor n
+}
+qed
+
+theorem Curried Addition
+premise ∈ a ℕ
+let f_+ ∧ function f_+ ℕ ℕ ∀ n → ∈ n ℕ = apply f_+ n successor n {
+  let g ∧ function g ℕ ℕ ∧ = apply g 0 a ∀ m → ∈ m ℕ = apply g successor m apply f_+ apply g m {
+    assume ∈ n ℕ {
+      prove ∈ apply g n ℕ
+      prove = apply f_+ apply g n successor apply g n
+      prove = apply g successor n apply f_+ apply g n
+      prove = apply g successor n successor apply g n
+    }
+    prove ∀ m → ∈ m ℕ = apply g successor m successor apply g m
+    prove ∧ function g ℕ ℕ ∧ = apply g 0 a ∀ m → ∈ m ℕ = apply g successor m successor apply g m
+    prove ∃ f ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m
+    prove ∃! f ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m
+  }
+}
+qed
+
+theorem Addition Exists
+assume ∈ a ℕ {
+  prove ∃! f ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m
+}
+prove ∀ a → ∈ a ℕ ∃! f ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m
+prove ∃! g ∧ function g × ℕ ℕ ℕ ∀ a → ∈ a ℕ ∀ f → ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m ∀ b → ∈ b ℕ = apply g orderedPair a b apply f b
+assume ∧ function g × ℕ ℕ ℕ ∀ a → ∈ a ℕ ∀ f → ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m ∀ b → ∈ b ℕ = apply g orderedPair a b apply f b {
+  assume ∈ n ℕ {
+    prove ∃! f ∧ function f ℕ ℕ ∧ = apply f 0 n ∀ m → ∈ m ℕ = apply f successor m successor apply f m
+    prove ∀ f → ∧ function f ℕ ℕ ∧ = apply f 0 n ∀ m → ∈ m ℕ = apply f successor m successor apply f m ∀ b → ∈ b ℕ = apply g orderedPair n b apply f b
+    let f_n ∧ function f_n ℕ ℕ ∧ = apply f_n 0 n ∀ m → ∈ m ℕ = apply f_n successor m successor apply f_n m {
+      prove ∀ b → ∈ b ℕ = apply g orderedPair n b apply f_n b
+      prove ∈ 0 ℕ
+      prove = apply g orderedPair n 0 apply f_n 0
+      prove = apply g orderedPair n 0 n
+      assume ∈ m ℕ {
+        prove = apply g orderedPair n m apply f_n m
+        prove ∈ successor m ℕ
+        prove = apply g orderedPair n successor m apply f_n successor m
+        prove = apply f_n successor m successor apply f_n m
+        prove = apply g orderedPair n successor m successor apply f_n m
+        prove = apply g orderedPair n successor m successor apply g orderedPair n m
+      }
+      prove ∀ m → ∈ m ℕ = apply g orderedPair n successor m successor apply g orderedPair n m
+      prove ∧ = apply g orderedPair n 0 n ∀ m → ∈ m ℕ = apply g orderedPair n successor m successor apply g orderedPair n m
+    }
+  }
+  prove ∀ n → ∈ n ℕ ∧ = apply g orderedPair n 0 n ∀ m → ∈ m ℕ = apply g orderedPair n successor m successor apply g orderedPair n m
+  prove ∧ function g × ℕ ℕ ℕ ∀ n → ∈ n ℕ ∧ = apply g orderedPair n 0 n ∀ m → ∈ m ℕ = apply g orderedPair n successor m successor apply g orderedPair n m
+}
+assume ∧ function g × ℕ ℕ ℕ ∀ n → ∈ n ℕ ∧ = apply g orderedPair n 0 n ∀ m → ∈ m ℕ = apply g orderedPair n successor m successor apply g orderedPair n m {
+  assume ∈ a ℕ {
+    prove ∧ = apply g orderedPair a 0 a ∀ m → ∈ m ℕ = apply g orderedPair a successor m successor apply g orderedPair a m
+    assume ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m {
+      prove = apply g orderedPair a 0 apply f 0
+      assume ∧ ∈ m ℕ = apply g orderedPair a m apply f m {
+        prove = apply g orderedPair a successor m successor apply g orderedPair a m
+        prove = apply g orderedPair a successor m successor apply f m
+        prove = apply f successor m successor apply f m
+        prove = apply g orderedPair a successor m apply f successor m
+      }
+      prove ∀ b → ∈ b ℕ = apply g orderedPair a b apply f b
+    }
+    prove ∀ f → ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m ∀ b → ∈ b ℕ = apply g orderedPair a b apply f b
+  }
+  prove ∀ a → ∈ a ℕ ∀ f → ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m ∀ b → ∈ b ℕ = apply g orderedPair a b apply f b  
+  prove ∧ function g × ℕ ℕ ℕ ∀ a → ∈ a ℕ ∀ f → ∧ function f ℕ ℕ ∧ = apply f 0 a ∀ m → ∈ m ℕ = apply f successor m successor apply f m ∀ b → ∈ b ℕ = apply g orderedPair a b apply f b  
+}
+prove ∃! g ∧ function g × ℕ ℕ ℕ ∀ n → ∈ n ℕ ∧ = apply g orderedPair n 0 n ∀ m → ∈ m ℕ = apply g orderedPair n successor m successor apply g orderedPair n m
+qed
+
+term + ()
+  name (Addition on ℕ)
+  (∧ function _ × ℕ ℕ ℕ ∀ n → ∈ n ℕ ∧ = apply _ orderedPair n 0 n ∀ m → ∈ m ℕ = apply _ orderedPair n successor m successor apply _ orderedPair n m)
+
+theorem Definition of Addition on ℕ
+prove ∧ function + × ℕ ℕ ℕ ∀ n → ∈ n ℕ ∧ = apply + orderedPair n 0 n ∀ m → ∈ m ℕ = apply + orderedPair n successor m successor apply + orderedPair n m
+assume ∈ n ℕ {
+  prove ∧ = apply + orderedPair n 0 n ∀ m → ∈ m ℕ = apply + orderedPair n successor m successor apply + orderedPair n m
+  prove = binaryApply + n 0 apply + orderedPair n 0
+  prove = binaryApply + n 0 n
+  assume ∈ m ℕ {
+    prove = apply + orderedPair n successor m successor apply + orderedPair n m
+    prove = binaryApply + n m apply + orderedPair n m
+    prove = successor binaryApply + n m successor apply + orderedPair n m
+    prove = binaryApply + n successor m apply + orderedPair n successor m
+    prove = binaryApply + n successor m successor apply + orderedPair n m
+    prove = binaryApply + n successor m successor binaryApply + n m
+  }
+  prove ∀ m → ∈ m ℕ = binaryApply + n successor m successor binaryApply + n m
+  prove ∧ = binaryApply + n 0 n ∀ m → ∈ m ℕ = binaryApply + n successor m successor binaryApply + n m
+}
+prove ∀ n → ∈ n ℕ ∧ = binaryApply + n 0 n ∀ m → ∈ m ℕ = binaryApply + n successor m successor binaryApply + n m
+qed
+
+theorem Addition - Induct on Right Operand
+premise ∈ n ℕ
+premise ∈ m ℕ
+prove ∀ n → ∈ n ℕ ∧ = binaryApply + n 0 n ∀ m → ∈ m ℕ = binaryApply + n successor m successor binaryApply + n m
+prove ∧ = binaryApply + n 0 n ∀ m → ∈ m ℕ = binaryApply + n successor m successor binaryApply + n m
+prove = binaryApply + n successor m successor binaryApply + n m
+qed
+
+theorem 0 Is a Right Identity for Addition
+premise ∈ n ℕ
+prove ∀ n → ∈ n ℕ ∧ = binaryApply + n 0 n ∀ m → ∈ m ℕ = binaryApply + n successor m successor binaryApply + n m
+prove ∧ = binaryApply + n 0 n ∀ m → ∈ m ℕ = binaryApply + n successor m successor binaryApply + n m
+prove = binaryApply + n 0 n
+qed
+
+theorem 0 Is a Left Identity for Addition
+premise ∈ n ℕ
+prove ∈ 0 ℕ
+prove = binaryApply + 0 0 0
+assume ∧ ∈ m ℕ = binaryApply + 0 m m {
+  prove = binaryApply + 0 successor m successor binaryApply + 0 m
+  prove = binaryApply + 0 successor m successor m
+}
+prove = binaryApply + 0 n n
+qed
+
+theorem Addition - Induct on Left Operand
+premise ∈ n ℕ
+premise ∈ m ℕ
+assume ∈ x ℕ {
+  prove ∈ successor x ℕ
+  prove = binaryApply + successor x 0 successor x
+  prove = binaryApply + successor x 0 successor binaryApply + x 0
+}
+prove ∀ x → ∈ x ℕ = binaryApply + successor x 0 successor binaryApply + x 0
+assume ∧ ∈ y ℕ ∀ x → ∈ x ℕ = binaryApply + successor x y successor binaryApply + x y {
+  assume ∈ x ℕ {
+    prove ∈ successor x ℕ
+    prove = binaryApply + successor x y successor binaryApply + x y
+    prove = binaryApply + successor x successor y successor binaryApply + successor x y
+    prove = binaryApply + successor x successor y successor successor binaryApply + x y
+    prove = binaryApply + successor x successor y successor binaryApply + x successor y
+  }
+  prove ∀ x → ∈ x ℕ = binaryApply + successor x successor y successor binaryApply + x successor y
+}
+prove ∀ y → ∈ y ℕ ∀ x → ∈ x ℕ = binaryApply + successor x y successor binaryApply + x y
+prove ∀ x → ∈ x ℕ = binaryApply + successor x m successor binaryApply + x m
+prove = binaryApply + successor n m successor binaryApply + n m
+qed
+
+theorem Addition Is Commutative
+premise ∈ n ℕ
+premise ∈ m ℕ
+assume ∈ x ℕ {
+  prove = binaryApply + x 0 x
+  prove = binaryApply + x 0 binaryApply + 0 x
+}
+prove ∀ x → ∈ x ℕ = binaryApply + x 0 binaryApply + 0 x
+assume ∧ ∈ y ℕ ∀ x → ∈ x ℕ = binaryApply + x y binaryApply + y x {
+  assume ∈ x ℕ {
+    prove ∈ successor x ℕ
+    prove = binaryApply + x y binaryApply + y x
+    prove = binaryApply + x successor y successor binaryApply + x y
+    prove = binaryApply + x successor y successor binaryApply + y x
+    prove = binaryApply + x successor y binaryApply + successor y x
+  }
+  prove ∀ x → ∈ x ℕ = binaryApply + x successor y binaryApply + successor y x
+}
+prove ∀ y → ∈ y ℕ ∀ x → ∈ x ℕ = binaryApply + x y binaryApply + y x
+prove ∀ x → ∈ x ℕ = binaryApply + x m binaryApply + m x
+prove = binaryApply + n m binaryApply + m n
+qed

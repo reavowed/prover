@@ -136,3 +136,11 @@ assume ∧ sub y x ψ sub z x ψ {
 }
 prove ∃! x ψ
 qed
+
+theorem Uniqueness Equivalence
+premise ∃! x φ
+premise proves φ ψ
+premise proves ψ φ
+prove ∀ x ↔ φ ψ
+prove ∃! x ψ
+qed

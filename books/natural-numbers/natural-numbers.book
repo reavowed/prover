@@ -10,4 +10,4 @@ include 04.literals.chapter
 include 05.induction.chapter
 include 06.inductiveProperties.chapter
 include 07.recursionTheorem.chapter
-include 08.naturalFunctions.chapter
+include 08.addition.chapter

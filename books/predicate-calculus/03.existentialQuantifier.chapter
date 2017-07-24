@@ -25,7 +25,7 @@ assume ¬ ψ {
 prove ψ
 qed
 
-theorem Arbitrary Value for Existence
+theorem Renamed Value for Existence
 premise ∃ x φ elidable
 premise proves φ ψ
 assume ¬ ψ {

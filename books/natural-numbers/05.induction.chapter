@@ -55,6 +55,23 @@ qed
 
 theorem Proof by Induction on Property
 premise sub 0 n φ
+premise proves ∧ ∈ n ℕ φ sub successor n n φ
+let S = S comprehension n ℕ φ {
+  prove ∈ 0 S
+  assume ∈ n S {
+    prove ∈ n ℕ
+    prove φ
+    prove ∧ ∈ n ℕ φ
+    prove sub successor n n φ
+    prove ∈ successor n S non-distinct (n φ)
+  }
+  prove = S ℕ
+  prove ∀ n → ∈ n ℕ φ
+}
+qed
+
+theorem Proof by Induction on Property
+premise sub 0 n φ
 premise proves ∧ ∈ m ℕ sub m n φ sub successor m n φ
 let S = S comprehension n ℕ φ {
   prove ∈ 0 S
@@ -68,16 +85,6 @@ let S = S comprehension n ℕ φ {
   prove = S ℕ
   prove ∀ n → ∈ n ℕ φ
 }
-qed
-
-theorem Proof by Induction on Property
-premise sub 0 n φ
-premise proves sub m n φ sub successor m n φ
-assume ∧ ∈ m ℕ sub m n φ {
-  prove sub m n φ
-  prove sub successor m n φ
-}
-prove ∀ n → ∈ n ℕ φ
 qed
 
 theorem An Inductive Property Applies to Any Natural Number

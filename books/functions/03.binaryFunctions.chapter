@@ -1,0 +1,98 @@
+chapter Binary Functions
+Introduce the concept of a binary function - a function whose domain is the product of two other sets.
+
+term binaryApply (∘ x y)
+  name (Binary Function Application)
+  format (x ∘ y in parens)
+  (= _ apply ∘ orderedPair x y)
+
+theorem Binary Function from Curried Functions
+premise ∀ a → ∈ a A ∃! f ∧ function f B X φ
+let S = S comprehension s × × A B X ∃ a ∧ ∈ a A ∃ f ∧ function f B X ∧ φ ∃ b ∧ ∈ b B = s orderedPair orderedPair a b apply f b {
+  prove ⊆ S × × A B X
+  assume ∈ y × A B {
+    let a_1 ∧ ∈ a_1 A ∃ b ∧ ∈ b B = y orderedPair a_1 b {
+    let b_1 ∧ ∈ b_1 B = y orderedPair a_1 b_1 {
+    prove ∃! f ∧ function f B X sub a_1 a φ
+    let f_1 ∧ function f_1 B X sub f_1 f sub a_1 a φ {
+      prove ∈ apply f_1 b_1 X
+      prove ∈ orderedPair y apply f_1 b_1 × × A B X
+      prove = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b_1 apply f_1 b_1
+      prove ∧ ∈ b_1 B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b_1 apply f_1 b_1
+      prove ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b apply f_1 b
+      prove ∧ function f_1 B X ∧ sub f_1 f sub a_1 a φ ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b apply f_1 b
+      prove ∃ f ∧ function f B X ∧ sub a_1 a φ ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b apply f b
+
+      prove ∧ ∈ a_1 A ∃ f ∧ function f B X ∧ sub a_1 a φ ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b apply f b
+      prove ∃ a ∧ ∈ a A ∃ f ∧ function f B X ∧ φ ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a b apply f b
+
+      prove ∈ orderedPair y apply f_1 b_1 S
+      assume ∈ orderedPair y x S {
+        prove ∃ a ∧ ∈ a A ∃ f ∧ function f B X ∧ φ ∃ b ∧ ∈ b B = orderedPair y x orderedPair orderedPair a b apply f b
+        let a' ∧ ∈ a' A ∃ f ∧ function f B X ∧ sub a' a φ ∃ b ∧ ∈ b B = orderedPair y x orderedPair orderedPair a' b apply f b {
+        let f' ∧ function f' B X ∧ sub f' f sub a' a φ ∃ b ∧ ∈ b B = orderedPair y x orderedPair orderedPair a' b apply f' b {
+        let b' ∧ ∈ b' B = orderedPair y x orderedPair orderedPair a' b' apply f' b' {
+          prove = y orderedPair a' b'
+          prove = orderedPair a_1 b_1 orderedPair a' b'
+          prove = a_1 a'
+          prove = b_1 b'
+          prove ∧ function f' B X sub f' f sub a' a φ
+          prove ∧ function f' B X sub f' f sub a_1 a φ
+          prove = f_1 f'
+          prove = x apply f' b'
+          prove = x apply f' b_1
+          prove = x apply f_1 b_1
+        }}}
+      }
+      prove ∃! x ∈ orderedPair y x S
+    }}}
+  }
+  prove function S × A B X
+  assume ∈ a_1 A {
+    prove ∃! f ∧ function f B X sub a_1 a φ
+    assume ∧ function f_1 B X sub f_1 f sub a_1 a φ {
+      assume ∈ b_1 B {
+        prove ∈ orderedPair a_1 b_1 × A B
+        prove ∈ orderedPair orderedPair a_1 b_1 apply S orderedPair a_1 b_1 S
+        prove ∃ a ∧ ∈ a A ∃ f ∧ function f B X ∧ φ ∃ b ∧ ∈ b B = orderedPair orderedPair a_1 b_1 apply S orderedPair a_1 b_1 orderedPair orderedPair a b apply f b
+        let a_2 ∧ ∈ a_2 A ∃ f ∧ function f B X ∧ sub a_2 a φ ∃ b ∧ ∈ b B = orderedPair orderedPair a_1 b_1 apply S orderedPair a_1 b_1 orderedPair orderedPair a_2 b apply f b {
+        let f_2 ∧ function f_2 B X ∧ sub f_2 f sub a_2 a φ ∃ b ∧ ∈ b B = orderedPair orderedPair a_1 b_1 apply S orderedPair a_1 b_1 orderedPair orderedPair a_2 b apply f_2 b {
+        let b_2 ∧ ∈ b_2 B = orderedPair orderedPair a_1 b_1 apply S orderedPair a_1 b_1 orderedPair orderedPair a_2 b_2 apply f_2 b_2 {
+        prove = orderedPair a_1 b_1 orderedPair a_2 b_2
+        prove = a_1 a_2
+        prove = b_1 b_2
+        prove ∧ function f_2 B X sub f_2 f sub a_2 a φ
+        prove ∧ function f_2 B X sub f_2 f sub a_1 a φ
+        prove = f_1 f_2
+        prove = apply S orderedPair a_1 b_1 apply f_2 b_2
+        prove = apply S orderedPair a_1 b_1 apply f_1 b_2
+        prove = apply S orderedPair a_1 b_1 apply f_1 b_1
+        }}}
+      }
+      prove ∀ b → ∈ b B = apply S orderedPair a_1 b apply f_1 b
+    }
+    prove ∀ f → ∧ function f B X sub a_1 a φ ∀ b → ∈ b B = apply S orderedPair a_1 b apply f b
+  }
+  prove ∀ a → ∈ a A ∀ f → ∧ function f B X φ ∀ b → ∈ b B = apply S orderedPair a b apply f b
+  prove ∧ function S × A B X ∀ a → ∈ a A ∀ f → ∧ function f B X φ ∀ b → ∈ b B = apply S orderedPair a b apply f b
+  assume ∧ function g × A B X ∀ a → ∈ a A ∀ f → ∧ function f B X φ ∀ b → ∈ b B = apply g orderedPair a b apply f b {
+    assume ∈ y × A B {
+      let a' ∧ ∈ a' A ∃ b ∧ ∈ b B = y orderedPair a' b {
+      let b' ∧ ∈ b' B = y orderedPair a' b' {
+      prove ∀ f → ∧ function f B X sub a' a φ ∀ b → ∈ b B = apply S orderedPair a' b apply f b
+      prove ∀ f → ∧ function f B X sub a' a φ ∀ b → ∈ b B = apply g orderedPair a' b apply f b
+      prove ∃! f ∧ function f B X sub a' a φ
+      let f' ∧ function f' B X sub f' f sub a' a φ {
+      prove ∀ b → ∈ b B = apply S orderedPair a' b apply f' b
+      prove ∀ b → ∈ b B = apply g orderedPair a' b apply f' b
+      prove = apply S orderedPair a' b' apply f' b'
+      prove = apply g orderedPair a' b' apply f' b'
+      prove = apply g orderedPair a' b' apply S orderedPair a' b'
+      prove = apply g y apply S y
+      }}}
+    }
+    prove = g S
+  }
+  prove ∃! g ∧ function g × A B X ∀ a → ∈ a A ∀ f → ∧ function f B X φ ∀ b → ∈ b B = apply g orderedPair a b apply f b
+}
+qed

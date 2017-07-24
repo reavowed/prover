@@ -118,5 +118,5 @@ assume ∈ y X {
   prove ∈ y S
   prove sub y x φ
 }
-prove ∀ x → ∈ x X φ
+prove ∀ y → ∈ y X sub y x φ
 qed

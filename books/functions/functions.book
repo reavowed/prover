@@ -1,7 +1,8 @@
 Functions
 import Set Theory
 
-variables () (f g h)
+variables () (f g h ∘)
 
 include 01.definitionOfFunction.chapter
 include 02.basicFunctions.chapter
+include 03.binaryFunctions.chapter

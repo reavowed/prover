@@ -140,6 +140,14 @@ prove ∀ z ↔ ∃ x ∧ ∈ x X = z orderedPair x apply f x ∃ x ∧ ∈ x X 
 prove = f g
 qed
 
+theorem Functions with Same Values Are Equal
+premise function f X Y
+premise function g X Y
+premise proves ∈ x X = apply f x apply g x
+prove ∀ x → ∈ x X = apply f x apply g x
+prove = f g
+qed
+
 theorem Function With Specified Values Is Unique
 premise ∃ f ∧ function f X Y ∀ x → ∈ x X = apply f x f_x
 let g ∧ function g X Y ∀ x → ∈ x X = apply g x f_x {

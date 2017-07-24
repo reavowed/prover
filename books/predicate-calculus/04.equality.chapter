@@ -29,13 +29,13 @@ qed
 comment Now we can also prove that the substitution axiom works when substituting into equal terms.
 
 theorem Substitution of Equals
-premise = x y
+premise = x y elidable
 prove = sub x z X sub x z X
 prove = sub x z X sub y z X
 qed
 
 theorem Substitution of Equals
-premise = x y
+premise = x y elidable
 prove = y x
 prove = sub y z X sub x z X
 qed
