@@ -1,8 +1,9 @@
-package net.prover.model
+package net.prover.model.proof
 
-import net.prover.model.Proof.{DirectReference, ReferencedAssertion, ReferencedDeduction}
 import net.prover.model.Inference.Premise
 import net.prover.model.components.Statement
+import net.prover.model.proof.Proof._
+import net.prover.model.{Inference, InferenceTransform, ProvenStatement}
 
 case class ProvingContext(
   provenAssertions: Seq[ReferencedAssertion],
@@ -10,7 +11,8 @@ case class ProvingContext(
   premises: Seq[Premise],
   assumptions: Seq[Statement],
   availableInferences: Seq[Inference],
-  inferenceTransforms: Seq[InferenceTransform])
+  inferenceTransforms: Seq[InferenceTransform],
+  assertionHints: Seq[AssertionHint])
 {
   def addAssumption(statement: Statement, reference: Int) = {
     addAssertion(ProvenStatement.withNoConditions(statement), reference)

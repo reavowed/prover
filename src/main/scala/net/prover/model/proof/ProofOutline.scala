@@ -1,6 +1,7 @@
-package net.prover.model
+package net.prover.model.proof
 
 import net.prover.model.components.{Statement, Term, TermVariable, Variable}
+import net.prover.model.{DistinctVariables, Parser, ParsingContext}
 
 case class ProofOutline(steps: Seq[ProofOutline.Step])
 

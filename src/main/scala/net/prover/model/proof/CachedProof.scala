@@ -1,18 +1,16 @@
-package net.prover.model
+package net.prover.model.proof
 
 import java.nio.file.Path
 
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
-import net.prover.model.Proof._
+import net.prover.model._
 import net.prover.model.components.Statement
+import net.prover.model.proof.Proof._
 import org.slf4j.LoggerFactory
 
 case class CachedProof(path: Path, premises: Seq[Premise], proof: Proof) {
-  def validate(
-    availableInferences: Seq[Inference],
-    inferenceTransforms: Seq[InferenceTransform]
-  ): Option[Proof] = {
-    val context = Proof.getInitialContext(premises, availableInferences, inferenceTransforms)
+  def validate(availableInferences: Seq[Inference]): Option[Proof] = {
+    val context = Proof.getInitialContext(premises, availableInferences, Nil, Nil)
     for {
       (validatedSteps, _) <- CachedProof.validateSteps(proof.steps, context, premises.length)
     } yield Proof(validatedSteps)
@@ -121,7 +119,7 @@ object CachedProof {
     nextReference: Int
   ): Option[(TransformedInferenceStep, ProvingContext)] = {
     import transformedInferenceStep._
-    val transformationContext = Proof.getInitialContext(premises, context.availableInferences, Nil)
+    val transformationContext = Proof.getInitialContext(premises, context.availableInferences, Nil, Nil)
     for {
       (validatedTransformationSteps, _) <- validateSteps(transformationSteps, transformationContext, premises.length)
       validatedTransformationAssertionSteps <- validatedTransformationSteps.toType[AssertionStep]

@@ -2,7 +2,8 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference.{Premise, RearrangementType}
-import net.prover.model.{Proof, EntryInference, Inference, ProofOutline, ProvenStatement}
+import net.prover.model.proof.{Proof, ProofOutline}
+import net.prover.model.{EntryInference, Inference, ProvenStatement}
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement", "proofOutline"))
 case class Theorem(

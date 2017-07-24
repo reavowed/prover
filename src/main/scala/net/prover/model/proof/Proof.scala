@@ -1,9 +1,10 @@
-package net.prover.model
+package net.prover.model.proof
 
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, Summary}
-import net.prover.model.Proof.Step
-import net.prover.model.ProofOutline.StepWithAssertion
 import net.prover.model.components.{Statement, Term, TermVariable}
+import net.prover.model.proof.Proof.Step
+import net.prover.model.proof.ProofOutline.StepWithAssertion
+import net.prover.model.{Inference, InferenceTransform, Parser, ParsingContext, ProvenStatement, ProvingException, Substitutions}
 import org.slf4j.LoggerFactory
 
 case class Proof(steps: Seq[Proof.Step]) {
@@ -15,6 +16,9 @@ case class Proof(steps: Seq[Proof.Step]) {
   }
   def matchesOutline(outline: ProofOutline): Boolean = {
     Step.matchOutlines(steps, outline.steps)
+  }
+  def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+    steps.flatMap(_.getAssertionHints(availableInferences))
   }
   def serialized: String = steps.flatMap(_.serializedLines).mkString("\n")
 }
@@ -30,6 +34,7 @@ object Proof {
     def `type`: String
     def referencedInferenceIds: Set[String]
     def matchesOutline(stepOutline: ProofOutline.Step): Boolean
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
     def serialized: String = serializedLines.mkString("\n")
     def serializedLines: Seq[String]
   }
@@ -74,6 +79,9 @@ object Proof {
       case _ =>
         false
     }
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      steps.flatMap(_.getAssertionHints(availableInferences))
+    }
     override def serializedLines = s"assume ${assumption.serialized} {" +: steps.flatMap(_.serializedLines).indent :+ "}"
   }
   case class NamingStep(
@@ -90,6 +98,9 @@ object Proof {
         assumptionStep.assumption == statement && Step.matchOutlines(assumptionStep.steps, stepOutlines)
       case _ =>
         false
+    }
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      assumptionStep.getAssertionHints(availableInferences) ++ assertionStep.getAssertionHints(availableInferences)
     }
     override def serializedLines = {
       Seq(s"name ${variable.text} ${assumptionStep.assumption.serialized} {") ++
@@ -108,6 +119,10 @@ object Proof {
     override val `type` = "assertion"
     override def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inference.id
     override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = Step.matchAssertionOutline(provenStatement, stepOutline)
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      AssertionHint.attempt(inference, availableInferences, substitutions, provenStatement).toSeq ++
+        references.flatMap(_.getAssertionHints(availableInferences))
+    }
     override def serializedLines: Seq[String] = {
       s"assert ${provenStatement.serialized}" +:
         (Seq(inference.serialized, substitutions.serialized) ++ references.flatMap(_.serializedLines)).indent
@@ -121,6 +136,9 @@ object Proof {
     override val `type` = "rearrange"
     override def referencedInferenceIds: Set[String] = reference.referencedInferenceIds
     override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = Step.matchAssertionOutline(provenStatement, stepOutline)
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      reference.getAssertionHints(availableInferences)
+    }
     override def serializedLines = {
       s"rearrange ${provenStatement.serialized}" +: reference.serializedLines.indent
     }
@@ -137,6 +155,10 @@ object Proof {
     override val `type` = "assertion"
     override def referencedInferenceIds: Set[String] = transformationSteps.flatMap(_.referencedInferenceIds).toSet + inference.id
     override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = Step.matchAssertionOutline(provenStatement, stepOutline)
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      AssertionHint.attempt(inference, availableInferences, substitutions, provenStatement).toSeq ++
+        references.flatMap(_.getAssertionHints(availableInferences))
+    }
     override def serializedLines: Seq[String] = {
       s"proveWithTransform ${provenStatement.serialized}" +:
         (Seq(inference.serialized) ++
@@ -155,6 +177,7 @@ object Proof {
     references: Seq[Reference])
 
   sealed trait Reference {
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
     def referenceType: String
     def referencedInferenceIds: Set[String]
     def serialized: String = serializedLines.mkString("\n")
@@ -164,11 +187,13 @@ object Proof {
     val referenceType = "direct"
     def referencedInferenceIds: Set[String] = Set.empty
     def serializedLines = Seq(s"direct $index")
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = Nil
   }
   case class DeducedReference(antecedentIndex: Int, consequentIndex: Int) extends Reference {
     val referenceType = "deduced"
     def referencedInferenceIds: Set[String] = Set.empty
     def serializedLines = Seq(s"deduced $antecedentIndex $consequentIndex")
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = Nil
   }
   case class SimplificationReference(
     statement: Statement,
@@ -181,6 +206,9 @@ object Proof {
     def serializedLines = {
       s"simplification ${statement.serialized}" +: (Seq(inference.serialized, substitutions.serialized) ++ reference.serializedLines).indent
     }
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      AssertionHint.attempt(inference, availableInferences, substitutions).toSeq ++ reference.getAssertionHints(availableInferences)
+    }
   }
   case class ElidedReference(inference: Summary, substitutions: Substitutions, references: Seq[Reference]) extends Reference {
     val referenceType = "elided"
@@ -188,12 +216,20 @@ object Proof {
     def serializedLines = {
       "elided {" +: (Seq(inference.serialized, substitutions.serialized) ++ references.flatMap(_.serializedLines)).indent :+ "}"
     }
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      AssertionHint.attempt(inference, availableInferences, substitutions).toSeq ++
+        references.flatMap(_.getAssertionHints(availableInferences))
+    }
   }
   case class ExpandedReference(inference: Summary, substitutions: Substitutions, references: Seq[Reference]) extends Reference {
     val referenceType = "expanded"
     def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inference.id
     def serializedLines = {
       "expanded {" +: (Seq(inference.serialized, substitutions.serialized) ++ references.flatMap(_.serializedLines)).indent :+ "}"
+    }
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      AssertionHint.attempt(inference, availableInferences, substitutions).toSeq ++
+        references.flatMap(_.getAssertionHints(availableInferences))
     }
   }
 
@@ -203,14 +239,15 @@ object Proof {
   def getInitialContext(
     premises: Seq[Premise],
     availableInferences: Seq[Inference],
-    inferenceTransforms: Seq[InferenceTransform]
+    inferenceTransforms: Seq[InferenceTransform],
+    assertionHints: Seq[AssertionHint]
   ): ProvingContext = {
     val premiseAssertions = premises.zipWithIndex.collect {
       case (DirectPremise(premise), index) =>
         ReferencedAssertion(ProvenStatement.withNoConditions(premise), DirectReference(index))
     }
     val premiseDeductions = premises.zipWithIndex.collect {
-      case (premise @ DeducedPremise(assumption, conclusion), index) =>
+      case (DeducedPremise(assumption, conclusion), index) =>
         ReferencedDeduction(assumption, ProvenStatement.withNoConditions(conclusion), DirectReference(index))
     }
     ProvingContext(
@@ -219,16 +256,18 @@ object Proof {
       premises,
       Nil,
       availableInferences,
-      inferenceTransforms)
+      inferenceTransforms,
+      assertionHints)
   }
 
   def fillInOutline(
     premises: Seq[Premise],
     proofOutline: ProofOutline,
     availableInferences: Seq[Inference],
-    inferenceTransforms: Seq[InferenceTransform]
+    inferenceTransforms: Seq[InferenceTransform],
+    assertionHints: Seq[AssertionHint]
   ): Proof = {
-    val context = getInitialContext(premises, availableInferences, inferenceTransforms)
+    val context = getInitialContext(premises, availableInferences, inferenceTransforms, assertionHints)
     val (detailedSteps, _) = proveSteps(
       proofOutline.steps,
       Nil,

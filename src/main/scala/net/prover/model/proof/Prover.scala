@@ -1,8 +1,9 @@
-package net.prover.model
+package net.prover.model.proof
 
-import net.prover.model.Proof._
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
 import net.prover.model.components.{Statement, StatementVariable, TermVariable, Variable}
+import net.prover.model.proof.Proof._
+import net.prover.model.{Conditions, Inference, PartialSubstitutions, ProvenStatement, Substitutions, TransformedInference}
 
 case class Prover(
   assertion: Statement,
@@ -27,20 +28,35 @@ case class Prover(
     reference: Reference)
     extends PremiseMatch
 
+  val applicableHints = assertionHints.filter(_.conclusion.statement == assertion)
   lazy val allSimplifiedAssertions = provenAssertions ++ provenAssertions.flatMap(getAllSimplifications)
 
   def proveAssertion(): Option[StepWithProvenStatement] = {
-    proveAssertionDirectlyFromInferences()
+    proveAssertionUsingHints()
+      .orElse(proveAssertionDirectlyFromInferences())
       .orElse(proveAssertionByRearranging())
       .orElse(proveAssertionFromTransformedInferences())
   }
 
-  def proveAssertionDirectlyFromInferences(): Option[AssertionStep] = {
-    (availableInferences.iterator.flatMap(proveUsingInference) ++ availableInferences.iterator.flatMap(proveUsingElidedInference)).nextOption()
+  def proveAssertionUsingHints(): Option[StepWithProvenStatement] = {
+    (applicableHints.iterator.flatMap(h => proveUsingInference(h.inference, Some(h.substitutions))) ++
+      applicableHints.iterator.flatMap(h => proveUsingElidedInference(h.inference, Some(h.substitutions))) ++
+      applicableHints.iterator.flatMap(h => proveAssertionFromTransformedInference(h.inference, Some(h.substitutions)))
+    ).nextOption()
   }
 
-  private def proveUsingInference(inference: Inference): Iterator[AssertionStep] = {
-    inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty).iterator
+  def proveAssertionDirectlyFromInferences(): Option[AssertionStep] = {
+    (availableInferences.iterator.flatMap(proveUsingInference(_)) ++
+      availableInferences.iterator.flatMap(proveUsingElidedInference(_))
+    ).nextOption()
+  }
+
+  private def proveUsingInference(
+    inference: Inference,
+    initialSubstitutions: Option[Substitutions] = None
+  ): Iterator[AssertionStep] = {
+    initialSubstitutions.map(_.toPartial).map(Iterator(_))
+      .getOrElse(inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty).iterator)
       .flatMap { substitutions =>
         matchPremisesToFacts(inference.premises, substitutions, inference.allowsRearrangement)
       }
@@ -54,10 +70,14 @@ case class Prover(
       }
   }
 
-  private def proveUsingElidedInference(inference: Inference): Iterator[AssertionStep] = {
+  private def proveUsingElidedInference(
+    inference: Inference,
+    initialSubstitutions: Option[Substitutions] = None
+  ): Iterator[AssertionStep] = {
     splitPremisesAtElidable(inference.premises).iterator
       .flatMap { case (prePremises, elidablePremise, postPremises) =>
-        inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty)
+        initialSubstitutions.map(_.toPartial).map(Iterator(_))
+          .getOrElse(inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty).iterator)
           .map {(prePremises, elidablePremise, postPremises, _)}
       }
       .flatMap { case (prePremises, elidablePremise, postPremises, substitutionsAfterConclusion) =>
@@ -171,24 +191,30 @@ case class Prover(
 
   def proveAssertionFromTransformedInferences(): Option[TransformedInferenceStep] = {
     availableInferences.iterator
-      .mapCollect { inference =>
-        inference.premises.toType[DirectPremise].map((inference, _))
-      }
-      .filter { case (inference, inferencePremises) =>
+      .mapCollect(proveAssertionFromTransformedInference(_))
+      .nextOption()
+  }
+
+  def proveAssertionFromTransformedInference(
+    inference: Inference,
+    initialSubstitutions: Option[Substitutions] = None
+  ): Option[TransformedInferenceStep] = {
+    inference.premises.toType[DirectPremise].iterator
+      .filter { inferencePremises =>
         inferencePremises.forall(_.statement.allVariables.ofType[TermVariable].isEmpty) &&
           inference.conclusion.statement.allVariables.ofType[TermVariable].isEmpty
       }
-      .flatMap { case (inference, inferencePremises) =>
-        inferenceTransforms.iterator.map(transform => (transform, inference, inferencePremises))
+      .flatMap { inferencePremises =>
+        inferenceTransforms.iterator.map(transform => (transform, inferencePremises))
       }
-      .flatMap { case (transform, inference, inferencePremises) =>
+      .flatMap { case (transform, inferencePremises) =>
         val conclusion = inference.conclusion.statement
         transform.transform(inferencePremises, conclusion).iterator
           .map { case (transformedPremises, statementsToProve) =>
-            (inference, inferencePremises, transformedPremises, statementsToProve)
+            (inferencePremises, transformedPremises, statementsToProve)
           }
       }
-      .mapCollect { case (inference, inferencePremises, transformedPremises, statementsToProve) =>
+      .mapCollect { case (inferencePremises, transformedPremises, statementsToProve) =>
         val transformedConclusion = statementsToProve.last
         val oldVariables = (inferencePremises.map(_.statement) :+ inference.conclusion.statement).flatMap(_.allVariables).toSet
         val newVariables = (transformedPremises.map(_.statement) :+ transformedConclusion).flatMap(_.allVariables).toSet diff oldVariables
@@ -209,7 +235,8 @@ case class Prover(
               transformedPremises,
               Nil,
               availableInferences,
-              Nil)
+              Nil,
+              assertionHints)
             Prover(statement, Set.empty, newNonDistinctVariables, localContext, debug = false).proveAssertionDirectlyFromInferences()
           }.map { proofSteps =>
             (TransformedInference(inference, transformedPremises, proofSteps.last.provenStatement), proofSteps)
@@ -219,7 +246,7 @@ case class Prover(
         }
       }
       .flatMap { case (transformedInference, transformationSteps) =>
-        (proveUsingInference(transformedInference) ++ proveUsingElidedInference(transformedInference))
+        (proveUsingInference(transformedInference, initialSubstitutions) ++ proveUsingElidedInference(transformedInference, initialSubstitutions))
           .map((transformedInference, transformationSteps, _))
       }
       .map { case (transformedInference, transformationSteps, assertionStep) =>

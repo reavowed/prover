@@ -1,6 +1,7 @@
 package net.prover.model
 
 import net.prover.model.entries._
+import net.prover.model.proof.CachedProof
 
 case class Chapter(
   title: String,

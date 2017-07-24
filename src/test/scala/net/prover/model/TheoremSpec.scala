@@ -2,11 +2,12 @@ package net.prover.model
 
 import java.nio.file.Paths
 
-import net.prover.model.Proof.SimplificationReference
 import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
-import net.prover.model.ProofOutline.{AssertionStep, AssumptionStep, NamingStep}
 import net.prover.model.components._
-import net.prover.model.entries.{Axiom, TermDefinition}
+import net.prover.model.entries.Axiom
+import net.prover.model.proof.Proof.SimplificationReference
+import net.prover.model.proof.ProofOutline.{AssertionStep, AssumptionStep, NamingStep}
+import net.prover.model.proof.{CachedProof, Proof, ProofOutline}
 
 class TheoremSpec extends ProverSpec {
 
@@ -48,7 +49,8 @@ class TheoremSpec extends ProverSpec {
         premises,
         ProofOutline(proofSteps),
         inferences,
-        inferenceTransforms)
+        inferenceTransforms,
+        Nil)
     }
 
     def checkProof(
@@ -65,7 +67,7 @@ class TheoremSpec extends ProverSpec {
       proof.matchesOutline(ProofOutline(proofSteps)) must beTrue
       val serializedProof = proof.serialized
       val deserializedProof = Proof.parser.parse(Tokenizer.fromString(serializedProof, Paths.get("")))._1
-      CachedProof(Paths.get(""), premises, deserializedProof).validate(inferences, inferenceTransforms) must beSome(proof)
+      CachedProof(Paths.get(""), premises, deserializedProof).validate(inferences) must beSome(proof)
     }
 
     "not prove an unfounded statement" in {

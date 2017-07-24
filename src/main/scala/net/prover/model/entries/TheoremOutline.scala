@@ -1,7 +1,8 @@
 package net.prover.model.entries
 
-import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
+import net.prover.model.Inference.{Premise, RearrangementType}
 import net.prover.model._
+import net.prover.model.proof.{AssertionHint, CachedProof, Proof, ProofOutline}
 import org.slf4j.LoggerFactory
 
 import scala.util.control.NonFatal
@@ -52,29 +53,28 @@ case class TheoremOutline(
         }) && cachedProof.proof.matchesOutline(proofOutline)
       } match {
         case Some(cachedProof) =>
-          cachedProof.validate(availableInferences, inferenceTransforms) match {
+          cachedProof.validate(availableInferences) match {
             case Some(validProof) =>
               validProof
             case None =>
               TheoremOutline.logger.info(s"Cached proof for theorem $key was invalid - reproving")
-              prove(availableInferences, inferenceTransforms, bookTitle)
+              prove(availableInferences, inferenceTransforms, cachedProof.proof.getAssertionHints(availableInferences), bookTitle)
           }
         case None =>
           TheoremOutline.logger.info(s"No cached proof for theorem $key - proving directly")
-          cachedProofs.find { cachedProof =>
-            cachedProof.premises == premises && cachedProof.proof.matchesOutline(proofOutline)
-          }
-          prove(availableInferences, inferenceTransforms, bookTitle)
+          val assertionHints = cachedProofs.filter(_.premises == premises).flatMap(_.proof.getAssertionHints(availableInferences))
+          prove(availableInferences, inferenceTransforms, assertionHints, bookTitle)
       }
   }
 
   private def prove(
     availableInferences: Seq[Inference],
     inferenceTransforms: Seq[InferenceTransform],
+    assertionHints: Seq[AssertionHint],
     bookName: String
   ): Proof = {
     try {
-      Proof.fillInOutline(premises, proofOutline, availableInferences, inferenceTransforms)
+      Proof.fillInOutline(premises, proofOutline, availableInferences, inferenceTransforms, assertionHints)
     } catch {
       case NonFatal(e) =>
         throw new Exception(s"Error proving theorem $name in book $bookName\n${e.getMessage}")
