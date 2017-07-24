@@ -253,10 +253,10 @@ trait DefinedComponent[T <: Component] extends Component {
   }
 
   override def toString: String = {
-    format(subcomponents.map(_.toString))
+    format(subcomponents.map(_.safeToString))
   }
   override def safeToString: String = {
-    format.safe(subcomponents.map(_.toString))
+    format.safe(subcomponents.map(_.safeToString))
   }
   override def html: String = {
     Html.format(format(subcomponents.map(_.safeHtml)))
