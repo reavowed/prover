@@ -450,5 +450,18 @@ class TheoremSpec extends ProverSpec {
         Nil,
         Conditions(Set.empty, DistinctVariables(n -> x, n -> y)))
     }
+
+    "substitute into a term" in {
+      val ax = axiom(
+        "Substitution of Equals",
+        Seq(Equals(x, y)),
+        Equals(a.sub(x, z), a.sub(y, z)))
+
+      checkProof(
+        Seq(Equals(a, b)),
+        Seq(Equals(PowerSet(a), PowerSet(b))),
+        Seq(ax),
+        Nil)
+    }
   }
 }

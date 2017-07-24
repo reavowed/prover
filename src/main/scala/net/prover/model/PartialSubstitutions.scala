@@ -49,7 +49,7 @@ case class PartialSubstitutions(
       case _ =>
         findMergableSubstitution(substitutedVariable) match {
           case Some(otherSubstitutedVariable) =>
-            Some(tryAddingByMerge(substitutedVariable, otherSubstitutedVariable, target).toSeq)
+            tryAddingByMerge(substitutedVariable, otherSubstitutedVariable, target).map(Seq(_))
           case _ =>
             None
         }

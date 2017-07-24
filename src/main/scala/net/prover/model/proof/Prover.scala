@@ -60,7 +60,9 @@ case class Prover(
     initialSubstitutions: Option[Substitutions] = None
   ): Iterator[AssertionStep] = {
     initialSubstitutions.map(_.toPartial).map(Iterator(_))
-      .getOrElse(inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty).iterator)
+      .getOrElse {
+        inference.conclusion.statement.calculateSubstitutions(assertion, PartialSubstitutions.empty).iterator
+      }
       .flatMap { substitutions =>
         matchPremisesToFacts(inference.premises, substitutions, inference.allowsRearrangement)
       }
