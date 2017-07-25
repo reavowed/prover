@@ -51,10 +51,6 @@ case class Prover(
     ).nextOption()
   }
 
-  private def proveUsingInferences(): Option[AssertionStep] = {
-    availableInferences.iterator.flatMap(proveUsingInference(_)).nextOption()
-  }
-
   private def proveUsingInference(
     inference: Inference,
     initialSubstitutions: Option[Substitutions] = None
@@ -211,9 +207,10 @@ case class Prover(
           inference.conclusion.statement.allVariables.ofType[TermVariable].isEmpty
       }
       .flatMap { inferencePremises =>
-        inferenceTransforms.iterator.map(transform => (transform, inferencePremises))
+        inferenceTransforms.iterator
+          .map(inferencePremises -> _)
       }
-      .flatMap { case (transform, inferencePremises) =>
+      .flatMap { case (inferencePremises, transform) =>
         val conclusion = inference.conclusion.statement
         transform.transform(inferencePremises, conclusion).iterator
           .map { case (transformedPremises, statementsToProve) =>
@@ -243,7 +240,7 @@ case class Prover(
               availableInferences,
               Nil,
               assertionHints)
-            Prover(statement, Set.empty, newNonDistinctVariables, localContext, debug = false).proveUsingInferences()
+            Prover(statement, Set.empty, newNonDistinctVariables, localContext, debug = false).proveAssertionDirectlyFromInferences()
           }.map { proofSteps =>
             (TransformedInference(inference, transformedPremises, proofSteps.last.provenStatement), proofSteps)
           }
