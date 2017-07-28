@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
-import net.prover.model.components.{Statement, Term, TermVariable, Variable}
-import net.prover.model.{DistinctVariables, Parser, ParsingContext}
+import net.prover.model.components.{Statement, Term, TermVariable}
+import net.prover.model.{Parser, ParsingContext}
 
 case class ProofOutline(steps: Seq[ProofOutline.Step])
 
@@ -32,8 +32,6 @@ object ProofOutline {
 
   case class AssertionStep(
     assertion: Statement,
-    nonArbitraryVariables: Set[TermVariable] = Set.empty,
-    nonDistinctVariables: Set[(TermVariable, Variable)] = Set.empty,
     location: Location,
     debug: Boolean = false)
     extends StepWithAssertion
@@ -63,13 +61,9 @@ object ProofOutline {
   private def assertionStepParser(implicit context: ParsingContext): Parser[AssertionStep] = Parser { tokenizer =>
     val innerParser = for {
       assertion <- Statement.parser
-      nonArbitraryVariables <- Parser.optional("non-arbitrary", Term.variableParser.listInParens(None).map(_.toSet), Set.empty[TermVariable])
-      nonDistinctVariables <- Parser.optional("non-distinct", DistinctVariables.variablePairsParser.map(_.toSet), Set.empty[(TermVariable, Variable)])
       debug <- Parser.optional("debug", Parser.constant(true), false)
     } yield AssertionStep(
       assertion,
-      nonArbitraryVariables,
-      nonDistinctVariables,
       Location(tokenizer.currentFile, tokenizer.currentLine),
       debug)
     innerParser.parse(tokenizer)

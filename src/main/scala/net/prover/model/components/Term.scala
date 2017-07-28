@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 import net.prover.model.entries.TermDefinition
-import net.prover.model.{DistinctVariables, Parser, ParsingContext, Substitutions}
+import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Term extends JsonSerializable.Base with Component {
   override val componentType = Term
@@ -15,8 +15,6 @@ trait Term extends JsonSerializable.Base with Component {
     serialize(gen, serializers)
   }
   def applySubstitutions(substitutions: Substitutions): Option[Term]
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Term]
-  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[(Term, DistinctVariables)]
   def replacePlaceholder(other: Component): Option[Term]
 }
 
@@ -72,15 +70,6 @@ object Term extends ComponentType {
           termDefinition.termParser
         case SpecifiedVariable(variable) =>
           Parser.constant(variable)
-        case "sub" =>
-          for {
-            termToReplaceWith <- parser
-            termToBeReplaced <- variableParser
-            term <- parser
-          } yield {
-            term.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, DistinctVariables.empty)
-              .getOrElse(throw new Exception("Invalid substitution"))
-          }
         case _ =>
           throw new Exception(s"Unrecognised term type '$termType'")
       }

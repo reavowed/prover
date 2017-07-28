@@ -20,10 +20,9 @@ case class TheoremOutline(
     chapterTitle: String,
     bookTitle: String,
     availableInferences: Seq[Inference],
-    inferenceTransforms: Seq[InferenceTransform],
     cachedProofs: Seq[CachedProof]
   ): Theorem = {
-    val detailedProof = getProof(cachedProofs, availableInferences, inferenceTransforms, key, bookTitle)
+    val detailedProof = getProof(cachedProofs, availableInferences, key, bookTitle)
     Theorem(
       name,
       key,
@@ -42,7 +41,6 @@ case class TheoremOutline(
   private def getProof(
     cachedProofs: Seq[CachedProof],
     availableInferences: Seq[Inference],
-    inferenceTransforms: Seq[InferenceTransform],
     key: String,
     bookTitle: String
   ): Proof = {
@@ -58,23 +56,22 @@ case class TheoremOutline(
               validProof
             case None =>
               TheoremOutline.logger.info(s"Cached proof for theorem $key was invalid - reproving")
-              prove(availableInferences, inferenceTransforms, cachedProof.proof.getAssertionHints(availableInferences), bookTitle)
+              prove(availableInferences, cachedProof.proof.getAssertionHints(availableInferences), bookTitle)
           }
         case None =>
           TheoremOutline.logger.info(s"No cached proof for theorem $key - proving directly")
           val assertionHints = cachedProofs.filter(_.premises == premises).flatMap(_.proof.getAssertionHints(availableInferences))
-          prove(availableInferences, inferenceTransforms, assertionHints, bookTitle)
+          prove(availableInferences, assertionHints, bookTitle)
       }
   }
 
   private def prove(
     availableInferences: Seq[Inference],
-    inferenceTransforms: Seq[InferenceTransform],
     assertionHints: Seq[AssertionHint],
     bookName: String
   ): Proof = {
     try {
-      Proof.fillInOutline(premises, proofOutline, availableInferences, inferenceTransforms, assertionHints)
+      Proof.fillInOutline(premises, proofOutline, availableInferences, assertionHints)
     } catch {
       case NonFatal(e) =>
         throw new Exception(s"Error proving theorem $name in book $bookName\n${e.getMessage}")

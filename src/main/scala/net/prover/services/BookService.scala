@@ -63,7 +63,7 @@ class BookService {
           allBookData.find(_.title == bookTitle) match {
             case Some(bookData) if isClean(bookData, dirtyBooks) =>
               (dirtyBooks, bookDataSoFar :+ bookData)
-            case Some(BookData(_, Some(book), _)) =>
+            case Some(BookData(_, Some(_), _)) =>
               BookService.logger.info(s"Book '$bookTitle' has changed - rechecking")
               val bookData = parseBook(bookTitle, bookDataSoFar).ifEmpty(_.book) {
                 BookService.logger.warn(s"Book '$bookTitle' is now invalid")

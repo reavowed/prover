@@ -36,7 +36,6 @@ trait ProverSpec extends Specification {
       Format.default(symbol, variables.map(_.text)),
       definingStatement,
       Set.empty,
-      DistinctVariables.empty,
       "",
       "")
   }
@@ -53,15 +52,13 @@ trait ProverSpec extends Specification {
       Format.default(symbol, variables.map(_.text)),
       definingStatement,
       Set.empty,
-      DistinctVariables.empty,
       "",
       "")
   }
 
   def quantifier(
     symbol: String,
-    definingStatement: Option[Statement],
-    distinctVariables: DistinctVariables = DistinctVariables.empty
+    definingStatement: Option[Statement]
   ): StatementDefinition = {
     StatementDefinition(
       symbol,
@@ -70,7 +67,6 @@ trait ProverSpec extends Specification {
       Format(s"($symbol%0)%1", requiresBrackets = false),
       definingStatement,
       Set(x),
-      distinctVariables,
       "",
       "")
   }
@@ -84,7 +80,7 @@ trait ProverSpec extends Specification {
   val ForAll = quantifier("∀", None)
   val Exists = quantifier("∃", Some(Negation(ForAll(x, Negation(φ)))))
   val Equals = predicate("=", 2, None)
-  val ExistsUnique = quantifier("∃!", Some(Exists(y, ForAll(x, Equivalence(φ, Equals(x, y))))), DistinctVariables(x -> y))
+  val ExistsUnique = quantifier("∃!", Some(Exists(y, ForAll(x, Equivalence(φ, Equals(x, y))))))
   val ElementOf = predicate("∈", 2, None)
 
   val EmptySetDefinition = TermDefinition(
@@ -95,22 +91,9 @@ trait ProverSpec extends Specification {
     Nil,
     ForAll(x, Negation(ElementOf(x, PlaceholderTerm))),
     Set.empty,
-    DistinctVariables.empty,
     "",
     "")
   val EmptySet = EmptySetDefinition()
-
-  val Comprehension = TermDefinition(
-    "comprehension",
-    Seq(x, y, φ),
-    "Set Comprehension",
-    Format("{%0 ∈ %1 | %2}", requiresBrackets = false),
-    Nil,
-    ForAll(z, Equivalence(ElementOf(z, PlaceholderTerm), Conjunction(ElementOf(z, y), φ.sub(z, x)))),
-    Set(x),
-    DistinctVariables.empty,
-    "",
-    "")
 
   val PowerSet = TermDefinition(
     "powerSet",
@@ -120,43 +103,6 @@ trait ProverSpec extends Specification {
     Nil,
     ForAll(y, Equivalence(ElementOf(Y, PlaceholderTerm), φ)),
     Set.empty,
-    DistinctVariables.empty,
-    "",
-    "")
-
-  val Pair = TermDefinition(
-    "pair",
-    Seq(x, y),
-    "Unordered Pair",
-    Format("{%0, %1}", requiresBrackets = false),
-    Nil,
-    φ,
-    Set.empty,
-    DistinctVariables.empty,
-    "",
-    "")
-
-  val OrderedPair = TermDefinition(
-    "orderedPair",
-    Seq(x, y),
-    "Ordered Pair",
-    Format("(%0, %1)", requiresBrackets = false),
-    Nil,
-    φ,
-    Set.empty,
-    DistinctVariables.empty,
-    "",
-    "")
-
-  val Union = TermDefinition(
-    "union",
-    Seq(x),
-    "Arbitrary Union",
-    Format("⋃%0", requiresBrackets = true),
-    Nil,
-    φ,
-    Set.empty,
-    DistinctVariables.empty,
     "",
     "")
 
@@ -165,7 +111,7 @@ trait ProverSpec extends Specification {
       Implication, Negation, Conjunction, Disjunction, Equivalence,
       ForAll, Exists, ExistsUnique,
       ElementOf, Equals),
-    termDefinitions = Seq(EmptySetDefinition, Comprehension, PowerSet, Pair, OrderedPair, Union),
+    termDefinitions = Seq(EmptySetDefinition, PowerSet),
     statementVariableNames = Set(φ, ψ, χ).map(_.text),
     termVariableNames = Set(x, y, z, X, Y, Z, a, b, n).map(_.text))
 
@@ -180,5 +126,4 @@ trait ProverSpec extends Specification {
 
   implicit def statementToPremise(statement: Statement): Premise = DirectPremise(statement)
   implicit def statementPairToPremise(tuple: (Statement, Statement)): Premise = DeducedPremise(tuple._1, tuple._2)
-  implicit def statementToProvenStatement(statement: Statement): ProvenStatement = ProvenStatement.withNoConditions(statement)
 }

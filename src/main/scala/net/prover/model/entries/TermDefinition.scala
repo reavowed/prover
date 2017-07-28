@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.model.components._
-import net.prover.model.{Conditions, DefinitionInference, DistinctVariables, Format, Inference, Parser, ParsingContext}
+import net.prover.model.{DefinitionInference, Format, Inference, Parser, ParsingContext}
 
 case class TermDefinition(
     symbol: String,
@@ -11,7 +11,6 @@ case class TermDefinition(
     premises: Seq[Statement],
     placeholderDefinition: Statement,
     boundVariables: Set[TermVariable],
-    distinctVariables: DistinctVariables,
     chapterKey: String,
     bookKey: String)
   extends ChapterEntry(TermDefinition)
@@ -21,7 +20,7 @@ case class TermDefinition(
   val componentTypes = defaultVariables.map(_.componentType)
   val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue).getOrElse(
     throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultValue'"))
-  override def inferences: Seq[Inference] = Seq(DefinitionInference(name, chapterKey, bookKey, premises, definingStatement, distinctVariables))
+  override def inferences: Seq[Inference] = Seq(DefinitionInference(name, chapterKey, bookKey, premises, definingStatement))
 
   def apply(components: Component*): DefinedTerm = DefinedTerm(
     components,
@@ -54,10 +53,7 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       premises <- premisesParser
       definitionTemplate <- Statement.parser.inParens
-      boundVariables = defaultVariables.ofType[TermVariable].toSet.filter { v =>
-        definitionTemplate.boundVariables.contains(v) || !definitionTemplate.presentVariables.contains(v)
-      }
-      distinctVariables <- Conditions.distinctVariablesParser
+      boundVariables = defaultVariables.ofType[TermVariable].toSet.intersect(definitionTemplate.boundVariables)
     } yield {
       TermDefinition(
         symbol,
@@ -67,7 +63,6 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
         premises,
         definitionTemplate,
         boundVariables,
-        distinctVariables,
         chapterKey,
         bookKey)
     }

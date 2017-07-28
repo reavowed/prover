@@ -7,7 +7,7 @@ import net.prover.model.components.Statement
 case class AxiomOutline(
     name: String,
     premises: Seq[Premise],
-    conclusion: ProvenStatement,
+    conclusion: Statement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement,
     allowsRearrangement: Boolean = true)
   extends ChapterEntry(AxiomOutline)
@@ -48,12 +48,11 @@ object AxiomOutline extends ChapterEntryParser[AxiomOutline] {
       allowsRearrangement <- Parser.optionalWord("disallow-rearrangement").isUndefined
       premises <- Inference.premisesParser
       conclusion <- conclusionParser
-      conditions <- Conditions.parser
     } yield {
       AxiomOutline(
         name,
         premises,
-        ProvenStatement(conclusion, conditions),
+        conclusion,
         rearrangementType,
         allowsRearrangement)
     }

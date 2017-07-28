@@ -12,7 +12,7 @@ trait Inference {
   def keyOption: Option[String]
   def name: String
   def premises: Seq[Premise]
-  def conclusion: ProvenStatement
+  def conclusion: Statement
   def rearrangementType: RearrangementType
   def allowsRearrangement: Boolean
   def summary: Inference.Summary
@@ -36,24 +36,14 @@ case class DefinitionInference(
     chapterKey: String,
     bookKey: String,
     premisesStatements: Seq[Statement],
-    conclusionStatement: Statement,
-    distinctVariables: DistinctVariables)
+    conclusion: Statement)
   extends Inference
 {
   override def premises = premisesStatements.map(DirectPremise.apply)
-  override def conclusion = ProvenStatement(conclusionStatement, Conditions(Set.empty, distinctVariables))
   override def name: String = s"Definition of $nameOfDefinition"
   override def summary: Inference.Summary = Summary(name, id, name.formatAsKey, chapterKey, bookKey)
   override def allowsRearrangement = true
   override def rearrangementType = RearrangementType.NotRearrangement
-  override def keyOption = None
-}
-
-case class TransformedInference(baseInference: Inference, premises: Seq[DirectPremise], conclusion: ProvenStatement) extends Inference {
-  override def name: String = baseInference.name
-  override def summary: Summary = baseInference.summary
-  override def allowsRearrangement: Boolean = baseInference.allowsRearrangement
-  override def rearrangementType: RearrangementType = baseInference.rearrangementType
   override def keyOption = None
 }
 
@@ -73,11 +63,11 @@ object Inference {
     }
   }
 
-  def unapply(inference: Inference): Option[(String, Seq[Premise], ProvenStatement)] = {
+  def unapply(inference: Inference): Option[(String, Seq[Premise], Statement)] = {
     Some(inference.name, inference.premises, inference.conclusion)
   }
 
-  def calculateHash(premises: Seq[Premise], conclusion: ProvenStatement): String = {
+  def calculateHash(premises: Seq[Premise], conclusion: Statement): String = {
     val serialized = (premises.map(_.serialized) :+ conclusion.serialized).mkString("\n")
     val sha = MessageDigest.getInstance("SHA-256")
     sha.update(serialized.getBytes("UTF-8"))

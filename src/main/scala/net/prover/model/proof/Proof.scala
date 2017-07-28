@@ -4,15 +4,15 @@ import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, Summa
 import net.prover.model.components.{Statement, Term, TermVariable}
 import net.prover.model.proof.Proof.Step
 import net.prover.model.proof.ProofOutline.StepWithAssertion
-import net.prover.model.{Inference, InferenceTransform, Parser, ParsingContext, ProvenStatement, ProvingException, Substitutions}
+import net.prover.model.{Inference, Parser, ParsingContext, ProvingException, Substitutions}
 import org.slf4j.LoggerFactory
 
 case class Proof(steps: Seq[Proof.Step]) {
   def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
-  val conclusion: ProvenStatement = {
+  val conclusion: Statement = {
     steps.ofType[Proof.StepWithProvenStatement].lastOption
       .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))
-      .provenStatement
+      .statement
   }
   def matchesOutline(outline: ProofOutline): Boolean = {
     Step.matchOutlines(steps, outline.steps)
@@ -44,24 +44,21 @@ object Proof {
         step.matchesOutline(stepOutline)
       })
     }
-    def matchAssertionOutline(provenStatement: ProvenStatement, stepOutline: ProofOutline.Step): Boolean = stepOutline match {
-      case ProofOutline.AssertionStep(provenStatement.statement, nonArbitraryVariables, nonDistinctVariables, _, _) =>
-        provenStatement.conditions.arbitraryVariables.intersect(nonArbitraryVariables).isEmpty &&
-          nonDistinctVariables.forall { case (termVariable, variable) =>
-            !provenStatement.conditions.distinctVariables.areDistinct(termVariable, variable)
-          }
+    def matchAssertionOutline(provenStatement: Statement, stepOutline: ProofOutline.Step): Boolean = stepOutline match {
+      case ProofOutline.AssertionStep(`provenStatement`, _, _) =>
+        true
       case _ =>
         false
     }
   }
 
   sealed trait StepWithProvenStatement extends Step {
-    def provenStatement: ProvenStatement
+    def statement: Statement
   }
   object StepWithProvenStatement {
-    def unapply(step: Step): Option[ProvenStatement] = step match {
+    def unapply(step: Step): Option[Statement] = step match {
       case stepWithProvenStatement: StepWithProvenStatement =>
-        Some(stepWithProvenStatement.provenStatement)
+        Some(stepWithProvenStatement.statement)
       case _ =>
         None
     }
@@ -91,7 +88,7 @@ object Proof {
     extends StepWithProvenStatement
   {
     override val `type` = "naming"
-    override def provenStatement: ProvenStatement = assertionStep.provenStatement
+    override def statement: Statement = assertionStep.statement
     override def referencedInferenceIds: Set[String] = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
     override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = stepOutline match {
       case ProofOutline.NamingStep(`variable`, statement, stepOutlines) =>
@@ -110,7 +107,7 @@ object Proof {
     }
   }
   case class AssertionStep(
-      provenStatement: ProvenStatement,
+      statement: Statement,
       inference: Inference.Summary,
       substitutions: Substitutions,
       references: Seq[Reference])
@@ -118,62 +115,36 @@ object Proof {
   {
     override val `type` = "assertion"
     override def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inference.id
-    override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = Step.matchAssertionOutline(provenStatement, stepOutline)
+    override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = Step.matchAssertionOutline(statement, stepOutline)
     def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      AssertionHint.attempt(inference, availableInferences, substitutions, provenStatement).toSeq ++
+      AssertionHint.attempt(inference, availableInferences, substitutions, statement).toSeq ++
         references.flatMap(_.getAssertionHints(availableInferences))
     }
     override def serializedLines: Seq[String] = {
-      s"assert ${provenStatement.serialized}" +:
+      s"assert ${statement.serialized}" +:
         (Seq(inference.serialized, substitutions.serialized) ++ references.flatMap(_.serializedLines)).indent
     }
   }
   case class RearrangementStep(
-      provenStatement: ProvenStatement,
+      statement: Statement,
       reference: Reference)
     extends StepWithProvenStatement
   {
     override val `type` = "rearrange"
     override def referencedInferenceIds: Set[String] = reference.referencedInferenceIds
-    override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = Step.matchAssertionOutline(provenStatement, stepOutline)
+    override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = Step.matchAssertionOutline(statement, stepOutline)
     def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
       reference.getAssertionHints(availableInferences)
     }
     override def serializedLines = {
-      s"rearrange ${provenStatement.serialized}" +: reference.serializedLines.indent
-    }
-  }
-  case class TransformedInferenceStep(
-      provenStatement: ProvenStatement,
-      inference: Inference.Summary,
-      premises: Seq[DirectPremise],
-      transformationSteps: Seq[AssertionStep],
-      substitutions: Substitutions,
-      references: Seq[Reference])
-    extends StepWithProvenStatement
-  {
-    override val `type` = "assertion"
-    override def referencedInferenceIds: Set[String] = transformationSteps.flatMap(_.referencedInferenceIds).toSet + inference.id
-    override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = Step.matchAssertionOutline(provenStatement, stepOutline)
-    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      AssertionHint.attempt(inference, availableInferences, substitutions, provenStatement).toSeq ++
-        references.flatMap(_.getAssertionHints(availableInferences))
-    }
-    override def serializedLines: Seq[String] = {
-      s"proveWithTransform ${provenStatement.serialized}" +:
-        (Seq(inference.serialized) ++
-          premises.map(_.serialized) ++
-          transformationSteps.flatMap(_.serializedLines) ++
-          Seq("qed", substitutions.serialized) ++
-          references.flatMap(_.serializedLines)
-        ).indent
+      s"rearrange ${statement.serialized}" +: reference.serializedLines.indent
     }
   }
 
   case class Rearrangement(
     inference: Inference.Summary,
     substitutions: Substitutions,
-    provenStatement: ProvenStatement,
+    provenStatement: Statement,
     references: Seq[Reference])
 
   sealed trait Reference {
@@ -233,22 +204,21 @@ object Proof {
     }
   }
 
-  case class ReferencedAssertion(provenStatement: ProvenStatement, reference: Reference)
-  case class ReferencedDeduction(assumption: Statement, deduction: ProvenStatement, reference: Reference)
+  case class ReferencedAssertion(statement: Statement, reference: Reference)
+  case class ReferencedDeduction(antecedent: Statement, consequent: Statement, reference: Reference)
 
   def getInitialContext(
     premises: Seq[Premise],
     availableInferences: Seq[Inference],
-    inferenceTransforms: Seq[InferenceTransform],
     assertionHints: Seq[AssertionHint]
   ): ProvingContext = {
     val premiseAssertions = premises.zipWithIndex.collect {
       case (DirectPremise(premise), index) =>
-        ReferencedAssertion(ProvenStatement.withNoConditions(premise), DirectReference(index))
+        ReferencedAssertion(premise, DirectReference(index))
     }
     val premiseDeductions = premises.zipWithIndex.collect {
       case (DeducedPremise(assumption, conclusion), index) =>
-        ReferencedDeduction(assumption, ProvenStatement.withNoConditions(conclusion), DirectReference(index))
+        ReferencedDeduction(assumption, conclusion, DirectReference(index))
     }
     ProvingContext(
       premiseAssertions,
@@ -256,7 +226,6 @@ object Proof {
       premises,
       Nil,
       availableInferences,
-      inferenceTransforms,
       assertionHints)
   }
 
@@ -264,10 +233,9 @@ object Proof {
     premises: Seq[Premise],
     proofOutline: ProofOutline,
     availableInferences: Seq[Inference],
-    inferenceTransforms: Seq[InferenceTransform],
     assertionHints: Seq[AssertionHint]
   ): Proof = {
-    val context = getInitialContext(premises, availableInferences, inferenceTransforms, assertionHints)
+    val context = getInitialContext(premises, availableInferences, assertionHints)
     val (detailedSteps, _) = proveSteps(
       proofOutline.steps,
       Nil,
@@ -361,13 +329,11 @@ object Proof {
     for {
       assertionStep <- Prover(
         stepOutline.assertion,
-        stepOutline.nonArbitraryVariables,
-        stepOutline.nonDistinctVariables,
         context,
         stepOutline.debug
       ).proveAssertion()
     } yield {
-      (assertionStep, context.addAssertion(assertionStep.provenStatement, nextReference))
+      (assertionStep, context.addAssertion(assertionStep.statement, nextReference))
     }
   }
 
@@ -387,7 +353,6 @@ object Proof {
     Parser.selectWord {
       case "assume" => assumptionStepParser
       case "assert" => assertionStepParser
-      case "proveWithTransform" => transformedInferenceStepParser
       case "rearrange" => rearrangementStepParser
       case "name" => namingStepParser
     }
@@ -402,7 +367,7 @@ object Proof {
 
   def assertionStepParser(implicit parsingContext: ParsingContext): Parser[AssertionStep] = {
     for {
-      assertion <- ProvenStatement.parser
+      assertion <- Statement.parser
       inferenceSummary <- Inference.Summary.parser
       substitutions <- Substitutions.parser
       references <- referencesParser
@@ -411,21 +376,9 @@ object Proof {
     }
   }
 
-  def transformedInferenceStepParser(implicit parsingContext: ParsingContext): Parser[TransformedInferenceStep] = {
-    for {
-      provenStatement <- ProvenStatement.parser
-      inferenceSummary <- Inference.Summary.parser
-      premises <- Inference.premisesParser.map(_.ofType[DirectPremise])
-      transformationSteps <- stepsParser.map(_.ofType[AssertionStep])
-      _ <- Parser.requiredWord("qed")
-      substitutions <- Substitutions.parser
-      references <- referencesParser
-    } yield TransformedInferenceStep(provenStatement, inferenceSummary, premises, transformationSteps, substitutions, references)
-  }
-
   def rearrangementStepParser(implicit parsingContext: ParsingContext): Parser[RearrangementStep] = {
     for {
-      provenStatement <- ProvenStatement.parser
+      provenStatement <- Statement.parser
       reference <- referenceParser.getOrElse(throw new Exception("Rearrangement step missing reference"))
     } yield RearrangementStep(provenStatement, reference)
   }

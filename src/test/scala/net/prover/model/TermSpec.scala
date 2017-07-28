@@ -3,34 +3,23 @@ package net.prover.model
 class TermSpec extends ProverSpec {
   "term match" should {
     "match a constant term to itself" in {
-      EmptySet.calculateSubstitutions(EmptySet, PartialSubstitutions.empty) mustEqual Seq(PartialSubstitutions.empty)
+      EmptySet.calculateSubstitutions(EmptySet, Substitutions.empty) mustEqual Seq(Substitutions.empty)
     }
 
     "match a unary function to another application of the same function" in {
       PowerSet(x)
-        .calculateSubstitutions(PowerSet(y), PartialSubstitutions.empty)
-        .mustEqual(Seq(PartialSubstitutions(
-          Map(x -> y),
-          Map.empty,
-          DistinctVariables.empty)))
+        .calculateSubstitutions(PowerSet(y), Substitutions.empty)
+        .mustEqual(Seq(Substitutions(Map(x -> y))))
     }
   }
 
   "term apply match" should {
     "do nothing to a constant" in {
-      EmptySet.applySubstitutions(
-        Substitutions(
-          Map(φ -> ψ, x -> y),
-          DistinctVariables.empty)
-      ) must beSome(EmptySet)
+      EmptySet.applySubstitutions(Substitutions(Map(φ -> ψ, x -> y))) must beSome(EmptySet)
     }
 
     "replace terms in a unary function" in {
-      PowerSet(x).applySubstitutions(
-        Substitutions(
-          Map(φ -> ψ, x -> y),
-          DistinctVariables.empty)
-      ) must beSome(PowerSet(y))
+      PowerSet(x).applySubstitutions(Substitutions(Map(φ -> ψ, x -> y))) must beSome(PowerSet(y))
     }
   }
 

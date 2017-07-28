@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 
 case class CachedProof(path: Path, premises: Seq[Premise], proof: Proof) {
   def validate(availableInferences: Seq[Inference]): Option[Proof] = {
-    val context = Proof.getInitialContext(premises, availableInferences, Nil, Nil)
+    val context = Proof.getInitialContext(premises, availableInferences, Nil)
     for {
       (validatedSteps, _) <- CachedProof.validateSteps(proof.steps, context, premises.length)
     } yield Proof(validatedSteps)
@@ -67,8 +67,6 @@ object CachedProof {
         validateAssumptionStep(assumptionStep, context, nextReference)
       case assertionStep: AssertionStep =>
         validateAssertionStep(assertionStep, context, nextReference)
-      case transformedInferenceStep: TransformedInferenceStep =>
-        validateTransformedInferenceStep(transformedInferenceStep, context, nextReference)
       case rearrangementStep: RearrangementStep =>
         validateRearrangementStep(rearrangementStep, context, nextReference)
       case namingStep: NamingStep =>
@@ -87,12 +85,12 @@ object CachedProof {
     for {
       (validatedProvenStatement, validatedInferenceSummary, validatedReferences) <-
         validateInference(inference, substitutions, references, context)
-      _ = if (validatedProvenStatement != provenStatement)
-        CachedProof.logger.info(s"Inference conclusion '${validatedProvenStatement.serialized}' was not '${provenStatement.serialized}'")
-      if validatedProvenStatement == provenStatement
+      _ = if (validatedProvenStatement != statement)
+        CachedProof.logger.info(s"Inference conclusion '${validatedProvenStatement.serialized}' was not '${statement.serialized}'")
+      if validatedProvenStatement == statement
     } yield (
-      AssertionStep(provenStatement, validatedInferenceSummary, substitutions, validatedReferences),
-      context.addAssertion(provenStatement, nextReference))
+      AssertionStep(statement, validatedInferenceSummary, substitutions, validatedReferences),
+      context.addAssertion(statement, nextReference))
   }
 
   private def validateAssumptionStep(
@@ -113,33 +111,6 @@ object CachedProof {
     }
   }
 
-  def validateTransformedInferenceStep(
-    transformedInferenceStep: TransformedInferenceStep,
-    context: ProvingContext,
-    nextReference: Int
-  ): Option[(TransformedInferenceStep, ProvingContext)] = {
-    import transformedInferenceStep._
-    val transformationContext = Proof.getInitialContext(premises, context.availableInferences, Nil, Nil)
-    for {
-      (validatedTransformationSteps, _) <- validateSteps(transformationSteps, transformationContext, premises.length)
-      validatedTransformationAssertionSteps <- validatedTransformationSteps.toType[AssertionStep]
-      validatedAssertionSteps <- validatedTransformationSteps.toType[AssertionStep]
-      fullInference <- context.availableInferences.find(_.id == inference.id)
-      transformedInference = TransformedInference(fullInference, premises, validatedAssertionSteps.last.provenStatement)
-      (conclusion, validatedReferences) <- validateInference(transformedInference, substitutions, references, context)
-      if conclusion == provenStatement
-    } yield {
-      (TransformedInferenceStep(
-        provenStatement,
-        transformedInference.summary,
-        premises,
-        validatedTransformationAssertionSteps,
-        substitutions,
-        validatedReferences),
-        context.addAssertion(provenStatement, nextReference))
-    }
-  }
-
   def validateRearrangementStep(
     rearrangementStep: RearrangementStep,
     context: ProvingContext,
@@ -148,12 +119,12 @@ object CachedProof {
     import rearrangementStep._
     for {
       (referencedStatement, validatedReference) <- validateDirectReference(reference, context)
-      _ = if (referencedStatement != provenStatement)
-        CachedProof.logger.info(s"Rearrangement result '${referencedStatement.serialized}' was not '${provenStatement.serialized}'")
-      if referencedStatement == provenStatement
+      _ = if (referencedStatement != statement)
+        CachedProof.logger.info(s"Rearrangement result '${referencedStatement.serialized}' was not '${statement.serialized}'")
+      if referencedStatement == statement
     } yield (
       RearrangementStep(referencedStatement, validatedReference),
-      context.addAssertion(provenStatement, nextReference))
+      context.addAssertion(statement, nextReference))
   }
 
   def validateNamingStep(
@@ -173,7 +144,7 @@ object CachedProof {
     substitutions: Substitutions,
     references: Seq[Reference],
     context: ProvingContext
-  ): Option[(ProvenStatement, Inference.Summary, Seq[Reference])] = {
+  ): Option[(Statement, Inference.Summary, Seq[Reference])] = {
     for {
       inference <- context.availableInferences.find(_.id == inferenceSummary.id).ifEmpty {
         CachedProof.logger.info(s"Could not find inference ${inferenceSummary.id}")
@@ -187,7 +158,7 @@ object CachedProof {
     substitutions: Substitutions,
     references: Seq[Reference],
     context: ProvingContext
-  ): Option[(ProvenStatement, Seq[Reference])] = {
+  ): Option[(Statement, Seq[Reference])] = {
     for {
       substitutedPremises <- inference.premises.map(_.applySubstitutions(substitutions)).traverseOption.ifEmpty {
         CachedProof.logger.info(
@@ -203,25 +174,15 @@ object CachedProof {
           substitutions.serialized
         ).mkString("\n"))
       }
-      (premiseConditions, validatedReferences) <- validatePremises(substitutedPremises, references, context).map(_.split)
-      conditions <- Conditions
-        .combine(
-          substitutedConclusion,
-          premiseConditions,
-          context.premises,
-          context.assumptions,
-          substitutions)
-        .ifEmpty {
-          CachedProof.logger.info("Invalid conditions")
-        }
-    } yield (ProvenStatement(substitutedConclusion.statement, conditions), validatedReferences)
+      validatedReferences <- validatePremises(substitutedPremises, references, context)
+    } yield (substitutedConclusion, validatedReferences)
   }
 
   private def validatePremises(
     premises: Seq[Premise],
     references: Seq[Reference],
     context: ProvingContext
-  ): Option[Seq[(Conditions, Reference)]] = {
+  ): Option[Seq[Reference]] = {
     for {
       premisesWithReferences <- premises.zipStrict(references)
       resolvedPremises <- premisesWithReferences.map { case (premise, reference) =>
@@ -239,13 +200,13 @@ object CachedProof {
     statement: Statement,
     reference: Reference,
     context: ProvingContext
-  ): Option[(Conditions, Reference)] = {
+  ): Option[Reference] = {
     for {
-      (referencedProvenStatement, validatedReference) <- validateDirectReference(reference, context)
-      _ = if (referencedProvenStatement.statement != statement)
-        CachedProof.logger.info(s"Reference '${reference.serialized}' was to ${referencedProvenStatement.statement}, not $statement")
-      if referencedProvenStatement.statement == statement
-    } yield (referencedProvenStatement.conditions, validatedReference)
+      (referencedStatement, validatedReference) <- validateDirectReference(reference, context)
+      _ = if (referencedStatement != statement)
+        CachedProof.logger.info(s"Reference '${reference.serialized}' was to $referencedStatement, not $statement")
+      if referencedStatement == statement
+    } yield validatedReference
   }
 
   private def validateDeducedPremise(
@@ -253,23 +214,21 @@ object CachedProof {
     consequent: Statement,
     reference: Reference,
     context: ProvingContext
-  ): Option[(Conditions, Reference)] = {
+  ): Option[Reference] = {
     context.provenDeductions
       .find(_.reference == reference)
-      .map(_.deduction.conditions)
-      .map(_ -> reference)
+      .map(_.reference)
       .ifEmpty {
         CachedProof.logger.info(s"Deduced premise '${reference.serialized}' did not exist")
       }
   }
 
-  private def validateDirectReference(reference: Reference, context: ProvingContext): Option[(ProvenStatement, Reference)] = {
+  private def validateDirectReference(reference: Reference, context: ProvingContext): Option[(Statement, Reference)] = {
     reference match {
-      case DirectReference(index) =>
+      case DirectReference(_) =>
         context.provenAssertions
           .find(_.reference == reference)
-          .map(_.provenStatement)
-          .map(_ -> reference)
+          .map(_.statement -> reference)
           .ifEmpty {
             CachedProof.logger.info(s"Direct premise '${reference.serialized}' did not exist")
           }

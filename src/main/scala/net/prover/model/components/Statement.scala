@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer
 import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 import net.prover.model.entries.StatementDefinition
-import net.prover.model.{DistinctVariables, Parser, ParsingContext, Substitutions}
+import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Statement extends JsonSerializable.Base with Component {
   override val componentType = Statement
@@ -15,8 +15,6 @@ trait Statement extends JsonSerializable.Base with Component {
     serialize(gen, serializers)
   }
   def applySubstitutions(substitutions: Substitutions): Option[Statement]
-  def makeSingleSubstitution(termToReplaceWith: Term, termToBeReplaced: TermVariable, distinctVariables: DistinctVariables): Option[Statement]
-  def resolveSingleSubstitution(other: Component, termVariable: TermVariable, thisTerm: Term, otherTerm: Term): Option[(Statement, DistinctVariables)]
   def replacePlaceholder(other: Component): Option[Statement]
 }
 
@@ -41,15 +39,6 @@ object Statement extends ComponentType {
         statementDefinition.statementParser
       case SpecifiedVariable(v) =>
         Parser.constant(v)
-      case "sub" =>
-        for {
-          termToReplaceWith <- Term.parser
-          termToBeReplaced <- Term.variableParser
-          statement <- parser
-        } yield {
-          statement.makeSingleSubstitution(termToReplaceWith, termToBeReplaced, DistinctVariables.empty)
-            .getOrElse(throw new Exception("Invalid substitution"))
-        }
       case _ =>
         throw new Exception(s"Unrecognised statement type $statementType")
     }

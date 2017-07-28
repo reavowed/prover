@@ -15,7 +15,6 @@ class TermDefinitionSpec extends ProverSpec {
           Nil,
           ForAll(x, Negation(ElementOf(x, PlaceholderTerm))),
           Set.empty,
-          DistinctVariables.empty,
           "",
           "")
     }
@@ -33,7 +32,6 @@ class TermDefinitionSpec extends ProverSpec {
           ElementOf(y, PlaceholderTerm),
           ForAll(z, Implication(ElementOf(z, x), ElementOf(z, y))))),
         Set.empty,
-        DistinctVariables.empty,
         "",
         "")
     }

@@ -1,6 +1,5 @@
 package net.prover.model.components
 
-import net.prover.model.DistinctVariables
 import net.prover.model.entries.TermDefinition
 
 case class DefinedTerm(
@@ -20,18 +19,5 @@ case class DefinedTerm(
   }
   override def update(newSubcomponents: Seq[Component], newBoundVariables: Set[TermVariable]): Term = {
     copy(subcomponents = newSubcomponents, localBoundVariables = newBoundVariables)
-  }
-
-  override def resolveSingleSubstitution(
-    other: Component,
-    termVariable: TermVariable,
-    thisTerm: Term,
-    otherTerm: Term
-  ): Option[(Term, DistinctVariables)] = {
-    if (this == thisTerm && other == otherTerm) {
-      Some((termVariable, DistinctVariables.empty))
-    } else {
-      super.resolveSingleSubstitution(other, termVariable, thisTerm, otherTerm)
-    }
   }
 }

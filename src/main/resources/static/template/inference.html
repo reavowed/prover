@@ -1,4 +1,4 @@
-<div class="inference" ng-if="inference" ng-init="conditions = inference.conclusion.conditions">
+<div class="inference" ng-if="inference">
     <div>
         <a class="inferenceLink pull-left" ng-if="previous" href="{{previous.link}}">&laquo; {{previous.name}}</a>
         <a class="inferenceLink pull-right" ng-if="next" href="{{next.link}}">{{next.name}} &raquo;</a>
@@ -23,12 +23,6 @@
             <span ng-if="inference.premises.length">Then</span> <span ng-bind-html="conclusion"></span>.
         </div>
     </p>
-    <p class="conditions"
-         ng-if="conditions.arbitraryVariables.length || conditions.distinctVariables.length">
-        <u>Conditions</u>
-        <arbitrary-variables arbitrary-variables="conditions.arbitraryVariables"></arbitrary-variables>
-        <distinct-variables distinct-variables="conditions.distinctVariables"></distinct-variables>
-    </p>
     <div class="theoremProof" ng-if="inference.proof">
         <hr/>
         <h4>Proof</h4>
@@ -38,9 +32,8 @@
                 ng-mouseenter="highlightRow(row, $event)"
                 ng-mouseleave="removeHighlight(row, $event)"
             >
-                <td class="proofRowStatement {{row.conditions ? 'hasConditions' : ''}}"
-                    ng-click="popoverRow(row, $event)" data-trigger="focus" tabindex="0">
-                    <span ng-repeat="i in _.range(row.visibleIndentLevel)" class="proofIndent"></span>
+                <td class="proofRowStatement">
+                    <span ng-repeat="_ in _.range(row.visibleIndentLevel)" class="proofIndent"></span>
                     <span ng-bind-html="row.prefix"></span>
                     <span ng-if="row.assumption" class="assumption" ng-bind-html="row.assumption"></span><span ng-if="row.assumption && row.assertion"> ⊢ </span><span ng-if="row.assertion" class="assertion" ng-bind-html="row.assertion"></span>.
                 </td>

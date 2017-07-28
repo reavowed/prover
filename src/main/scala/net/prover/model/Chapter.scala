@@ -22,21 +22,16 @@ case class Chapter(
   def inferences: Seq[Inference] = {
     entries.flatMap(_.inferences)
   }
-  def inferenceTransforms: Seq[InferenceTransform] = {
-    entries.ofType[InferenceTransform]
-  }
   def theorems: Seq[Theorem] = {
     entries.ofType[Theorem]
   }
 
   def expandOutlines(
     previousInferences: Seq[Inference],
-    previousInferenceTransforms: Seq[InferenceTransform],
     cachedProofs: Seq[CachedProof]
   ): Chapter = {
     copy(entries = entries.mapFold[ChapterEntry] { case (entry, previousEntries) =>
       def inferencesSoFar = previousEntries.flatMap(_.inferences)
-      def inferenceTransformsSoFar = previousEntries.ofType[InferenceTransform]
       def nextInferenceKey(name: String): String = {
         inferencesSoFar.count(_.name == name) match {
           case 0 =>
@@ -54,7 +49,6 @@ case class Chapter(
             title,
             bookTitle,
             previousInferences ++ inferencesSoFar,
-            previousInferenceTransforms ++ inferenceTransformsSoFar,
             cachedProofs)
         case other =>
           other

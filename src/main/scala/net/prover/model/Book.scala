@@ -26,16 +26,13 @@ case class Book(
   val key: String = title.formatAsKey
 
   def inferences: Seq[Inference] = chapters.flatMap(_.inferences)
-  def inferenceTransforms: Seq[InferenceTransform] = chapters.flatMap(_.inferenceTransforms)
   def theorems: Seq[Theorem] = chapters.flatMap(_.theorems)
 
   def expandOutlines(cachedProofs: Seq[CachedProof]): Book = {
     val previousInferences = transitiveDependencies.flatMap(_.inferences)
-    val previousInferenceTransforms = transitiveDependencies.flatMap(_.inferenceTransforms)
     copy(chapters = chapters.mapFold[Chapter] { case (chapter, expandedChapters) =>
         chapter.expandOutlines(
           previousInferences ++ expandedChapters.flatMap(_.inferences),
-          previousInferenceTransforms ++ expandedChapters.flatMap(_.inferenceTransforms),
           cachedProofs)
     })
   }
@@ -90,8 +87,7 @@ object Book {
     StatementDefinition,
     TermDefinition,
     AxiomOutline,
-    TheoremOutline,
-    InferenceTransform)
+    TheoremOutline)
 
   def parseBook(title: String, bookDirectoryPath: Path, cacheDirectoryPath: Path, availableDependencies: Seq[Book]): (Option[Book], Map[Path, Instant]) = {
     val key = title.formatAsKey

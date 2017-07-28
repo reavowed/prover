@@ -1,10 +1,11 @@
 package net.prover.model.proof
 
-import net.prover.model.{Inference, ProvenStatement, Substitutions}
+import net.prover.model.components.Statement
+import net.prover.model.{Inference, Substitutions}
 
 case class AssertionHint(
   inference: Inference,
-  conclusion: ProvenStatement,
+  conclusion: Statement,
   substitutions: Substitutions)
 
 object AssertionHint {
@@ -12,7 +13,7 @@ object AssertionHint {
     inferenceSummary: Inference.Summary,
     availableInferences: Seq[Inference],
     substitutions: Substitutions,
-    conclusion: ProvenStatement
+    conclusion: Statement
   ): Option[AssertionHint] = {
     for {
       inference <- availableInferences.find(_.id == inferenceSummary.id)

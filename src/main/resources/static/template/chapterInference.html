@@ -1,6 +1,5 @@
 <div ng-if="$ctrl.inference">
-    <div class="result"
-         ng-init="conditions = $ctrl.inference.conclusion.conditions">
+    <div class="result">
         <h5>
             <a href="#/{{$ctrl.inference.bookKey}}/{{$ctrl.inference.chapterKey}}/{{$ctrl.inference.key}}" class="inference-title">
                 {{$ctrl.inference.type == "axiom" ? "Axiom" : "Theorem"}}: {{$ctrl.inference.name}}
@@ -14,12 +13,6 @@
                 <span ng-if="$ctrl.inference.premises.length">Then</span>
                 <span ng-bind-html="conclusion"></span>.
             </div>
-        </div>
-        <div class="conditions"
-             ng-if="conditions.arbitraryVariables.length || conditions.distinctVariables.length">
-            <h6>Conditions</h6>
-            <arbitrary-variables arbitrary-variables="conditions.arbitraryVariables"></arbitrary-variables>
-            <distinct-variables distinct-variables="conditions.distinctVariables"></distinct-variables>
         </div>
     </div>
 </div>

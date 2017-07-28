@@ -1,7 +1,8 @@
 package net.prover.model.entries
 
 import net.prover.model.Inference.{Premise, RearrangementType}
-import net.prover.model.{EntryInference, Inference, ProvenStatement}
+import net.prover.model.components.Statement
+import net.prover.model.{EntryInference, Inference}
 
 case class Axiom(
     name: String,
@@ -11,7 +12,7 @@ case class Axiom(
     bookKey: String,
     bookTitle: String,
     premises: Seq[Premise],
-    conclusion: ProvenStatement,
+    conclusion: Statement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement,
     allowsRearrangement: Boolean = true)
   extends ChapterEntry(AxiomOutline)

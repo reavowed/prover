@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.components._
-import net.prover.model.{Conditions, DefinitionInference, DistinctVariables, Format, Inference, Parser, ParsingContext}
+import net.prover.model.{DefinitionInference, Format, Inference, Parser, ParsingContext}
 
 @JsonIgnoreProperties(Array("symbol", "defaultVariables", "format"))
 case class StatementDefinition(
@@ -12,7 +12,6 @@ case class StatementDefinition(
     format: Format,
     definingStatement: Option[Statement],
     boundVariables: Set[TermVariable],
-    distinctVariables: DistinctVariables,
     chapterKey: String,
     bookKey: String)
   extends ChapterEntry(StatementDefinition)
@@ -37,8 +36,8 @@ case class StatementDefinition(
   override def inferences: Seq[Inference] = {
     definingStatement.toSeq.flatMap { s =>
       Seq(
-        DefinitionInference(name, chapterKey, bookKey, Seq(s), defaultValue, distinctVariables),
-        DefinitionInference(name, chapterKey, bookKey, Seq(defaultValue), s, distinctVariables))
+        DefinitionInference(name, chapterKey, bookKey, Seq(s), defaultValue),
+        DefinitionInference(name, chapterKey, bookKey, Seq(defaultValue), s))
     }
   }
 }
@@ -61,9 +60,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
   ): Parser[Set[TermVariable]] = {
     optionalDefiningStatement match {
       case Some(definingStatement) =>
-        val boundVariables = defaultVariables.ofType[TermVariable].toSet.filter { v =>
-          definingStatement.boundVariables.contains(v) || !definingStatement.presentVariables.contains(v)
-        }
+        val boundVariables = defaultVariables.ofType[TermVariable].toSet.intersect(definingStatement.boundVariables)
         Parser.constant(boundVariables)
       case None =>
         Parser.optional(
@@ -81,7 +78,6 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
       format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
       optionalDefiningStatement <- definingStatementParser
       boundVariables <- boundVariablesParser(defaultVariables, optionalDefiningStatement)
-      distinctVariables <- Conditions.distinctVariablesParser
     } yield {
       StatementDefinition(
         symbol,
@@ -90,7 +86,6 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
         format,
         optionalDefiningStatement,
         boundVariables,
-        distinctVariables,
         chapterKey,
         bookKey)
     }

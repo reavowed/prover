@@ -136,7 +136,7 @@
         if ($scope.premises.length) {
           $scope.premiseText = joinWordList($scope.premises);
         }
-        $scope.conclusion = $sce.trustAsHtml($scope.inference.conclusion.statement);
+        $scope.conclusion = $sce.trustAsHtml($scope.inference.conclusion);
 
         if ($scope.inference.proof) {
           _.forEach($scope.inference.proof.steps, function (step, index) {
@@ -250,26 +250,6 @@
           $(".premise").unmark();
         };
 
-        $scope.popoverRow = function (rowData, event) {
-          if (rowData.conditions) {
-            var rowElement = $(event.target).closest('.proofRowStatement');
-            var html = "";
-            if (rowData.conditions.arbitraryVariables.length) {
-              html += "<div>Arbitrary variables: " + joinWordList(rowData.conditions.arbitraryVariables) + "</div>"
-            }
-            if (rowData.conditions.distinctVariables.length) {
-              var text = joinWordList(_.map(rowData.conditions.distinctVariables, function (condition) {
-                return "(" + condition[0] + ", " + condition[1] + ")";
-              }));
-              html += "<div> Distinct variables: " + text + "</div>"
-            }
-            if (!html.length) {
-              html = "No conditions.";
-            }
-            rowElement.popover({content: html, html: true, placement: 'bottom', container: 'body'}).popover('show');
-          }
-        };
-
         function addAssumption(assumption, steps, reference, visibleIndentLevel, conceptualIndentLevel) {
           $scope.proofRows.push({
             prefix: 'Assume',
@@ -296,7 +276,6 @@
           _.forEach(assumptionStep.steps, function (step, index) {
             var localOverride = index === assumptionStep.steps.length - 1 ?
               (override || {
-                conditions: assertionStep.provenStatement.conditions,
                 level: conceptualIndentLevel,
                 reference: reference
               }) :
@@ -308,9 +287,8 @@
         function addAssertion(assertionStep, reference, visibleIndentLevel, conceptualIndentLevel, override) {
           $scope.proofRows.push({
             prefix: 'Then',
-            assertion: assertionStep.provenStatement.statement,
+            assertion: assertionStep.statement,
             references: getReferences(assertionStep),
-            conditions: override ? override.conditions : assertionStep.provenStatement.conditions,
             inference: getInference(assertionStep),
             reference: override ? override.reference : reference,
             visibleIndentLevel: visibleIndentLevel,
@@ -321,9 +299,8 @@
         function addRearrangement(rearrangementStep, reference, visibleIndentLevel, conceptualIndentLevel, override) {
           $scope.proofRows.push({
             prefix: 'Then',
-            assertion: rearrangementStep.provenStatement.statement,
+            assertion: rearrangementStep.provenStatement,
             references: getReferences(rearrangementStep),
-            conditions: override ? override.conditions : rearrangementStep.provenStatement.conditions,
             inference: { name: "Rearrangement" },
             reference: override ? override.reference : reference,
             visibleIndentLevel: visibleIndentLevel,
@@ -373,11 +350,11 @@
     controller: ['$scope', '$sce', function ($scope, $sce) {
       this.$onInit = function() {
         $scope.joinWordList = joinWordList;
-        $scope.premises = _.map($scope.$ctrl.inference.premises, formatPremise);
-        if ($scope.premises.length) {
-          $scope.premiseText = $sce.trustAsHtml(joinWordList($scope.premises));
+        if ($scope.$ctrl.inference.premises.length) {
+          var formattedPremises = _.map($scope.$ctrl.inference.premises, formatPremise);
+          $scope.premiseText = $sce.trustAsHtml(joinWordList(formattedPremises));
         }
-        $scope.conclusion = $sce.trustAsHtml($scope.$ctrl.inference.conclusion.statement);
+        $scope.conclusion = $sce.trustAsHtml($scope.$ctrl.inference.conclusion);
       };
     }]
   });
@@ -396,32 +373,6 @@
         $scope.defaultValue = $sce.trustAsHtml(definition.defaultValue);
         $scope.definingStatement = $sce.trustAsHtml(definition.definingStatement);
       };
-    }]
-  });
-
-  proverApp.component('arbitraryVariables', {
-    templateUrl: 'template/arbitraryVariables.html',
-    bindings: {
-      arbitraryVariables: '<'
-    },
-    controller: ['$scope', '$sce', function ($scope, $sce) {
-      this.$onInit = function() {
-        $scope.text = $sce.trustAsHtml(joinWordList($scope.$ctrl.arbitraryVariables));
-      }
-    }]
-  });
-
-  proverApp.component('distinctVariables', {
-    templateUrl: 'template/distinctVariables.html',
-    bindings: {
-      distinctVariables: '<'
-    },
-    controller: ['$scope', '$sce', function ($scope, $sce) {
-      this.$onInit = function() {
-        $scope.text = $sce.trustAsHtml(joinWordList(_.map($scope.$ctrl.distinctVariables, function (condition) {
-          return "(" + condition[0] + ", " + condition[1] + ")";
-        })));
-      }
     }]
   });
 })();

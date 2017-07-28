@@ -92,10 +92,6 @@ table {
     padding-left: 25px;
 }
 
-.proofRowStatement.hasConditions {
-    cursor: hand;
-}
-
 .proofRow td:focus {
     outline: none;
 }
