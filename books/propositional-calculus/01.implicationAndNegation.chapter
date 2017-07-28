@@ -19,7 +19,7 @@ premise proves φ ψ
 conclusion → φ ψ
 
 axiom Modus Ponens
-premise → φ ψ
+premise → φ ψ elidable
 premise φ
 conclusion ψ
 

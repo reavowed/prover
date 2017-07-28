@@ -27,9 +27,7 @@ qed
 
 theorem Ordered Pair with Same Coordinates Is Double Singleton
 prove = orderedPair a a pair singleton a pair a a
-prove = pair a a singleton a
 prove = orderedPair a a pair singleton a singleton a
-prove = pair singleton a singleton a singleton singleton a
 prove = orderedPair a a singleton singleton a
 qed
 
