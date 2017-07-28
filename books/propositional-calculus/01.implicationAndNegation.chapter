@@ -40,58 +40,49 @@ assume φ {
 prove → φ χ
 qed
 
-statement ¬ (φ)
+statement ⊥ ()
 
-axiom Proof by Contradiction
-premise proves φ ψ
-premise proves φ ¬ ψ
-conclusion ¬ φ
+statement ¬ (φ) definition (→ φ ⊥)
 
-axiom Proof by Contradiction
-premise proves ¬ φ ψ
-premise proves ¬ φ ¬ ψ
+axiom Principle of Explosion
+premise ⊥
 conclusion φ
 
-theorem Proof by Contradiction
-premise proves φ ψ
-premise ¬ ψ
-assume φ {
-  prove ¬ ψ
-}
+axiom Remove Double Negative
+premise ¬ ¬ φ
+conclusion φ
+
+theorem Contradiction Deduction
+premise proves φ ⊥
+prove → φ ⊥
 prove ¬ φ
 qed
 
-theorem Proof by Contradiction
-premise proves φ ¬ ψ
-premise ψ
-assume φ {
-  prove ψ
-}
-prove ¬ φ
-qed
-
-theorem Proof by Contradiction
-premise proves ¬ φ ψ
-premise ¬ ψ
-assume ¬ φ {
-  prove ¬ ψ
-}
+theorem Contradiction Deduction
+premise proves ¬ φ ⊥
+prove ¬ ¬ φ
 prove φ
 qed
 
-theorem Proof by Contradiction
-premise proves ¬ φ ¬ ψ
-premise ψ
-assume ¬ φ {
-  prove ψ
-}
-prove φ
+theorem Contradiction
+premise φ
+premise ¬ φ
+prove → φ ⊥
+prove ⊥
+qed
+
+theorem Principle of Explosion
+premise φ
+premise ¬ φ
+prove ⊥
+prove ψ
 qed
 
 theorem Proof by Self-Contradiction
 premise proves φ ¬ φ
 assume φ {
-  prove φ
+  prove ¬ φ
+  prove ⊥
 }
 prove ¬ φ
 qed
@@ -99,7 +90,48 @@ qed
 theorem Proof by Self-Contradiction
 premise proves ¬ φ φ
 assume ¬ φ {
-  prove ¬ φ
+  prove φ
+  prove ⊥
+}
+prove φ
+qed
+
+theorem Proof by Contradiction
+premise proves φ ψ
+premise ¬ ψ
+assume φ {
+  prove ψ
+  prove ⊥
+}
+prove ¬ φ
+qed
+
+theorem Proof by Contradiction
+premise proves φ ¬ ψ
+premise ψ
+assume φ {
+  prove ¬ ψ
+  prove ⊥
+}
+prove ¬ φ
+qed
+
+theorem Proof by Contradiction
+premise proves ¬ φ ψ
+premise ¬ ψ
+assume ¬ φ {
+  prove ψ
+  prove ⊥
+}
+prove φ
+qed
+
+theorem Proof by Contradiction
+premise proves ¬ φ ¬ ψ
+premise ψ
+assume ¬ φ {
+  prove ¬ ψ
+  prove ⊥
 }
 prove φ
 qed
@@ -107,29 +139,9 @@ qed
 theorem Add Double Negative
 premise φ
 assume ¬ φ {
-  prove φ
-  prove ¬ φ
+  prove ⊥
 }
 prove ¬ ¬ φ
-qed
-
-theorem Remove Double Negative
-premise ¬ ¬ φ
-assume ¬ φ {
-  prove ¬ φ
-  prove ¬ ¬ φ
-}
-prove φ
-qed
-
-theorem Principle of Explosion
-premise φ
-premise ¬ φ
-assume ¬ ψ {
-  prove φ
-  prove ¬ φ
-}
-prove ψ
 qed
 
 theorem Anything Implies A True Statement
@@ -161,9 +173,30 @@ premise → φ ψ
 premise ¬ ψ
 assume φ {
   prove ψ
-  prove ¬ ψ
+  prove ⊥
 }
 prove ¬ φ
+qed
+
+theorem Modus Tollens
+premise → φ ¬ ψ
+premise ψ
+prove ¬ ¬ ψ
+prove ¬ φ
+qed
+
+theorem Modus Tollens
+premise → ¬ φ ψ
+premise ¬ ψ
+prove ¬ ¬ φ
+prove φ
+qed
+
+theorem Modus Tollens
+premise → ¬ φ ¬ ψ
+premise ψ
+prove ¬ ¬ φ
+prove φ
 qed
 
 theorem Contraposition
@@ -180,6 +213,7 @@ premise → ¬ φ ψ
 assume ¬ ψ {
   prove ¬ φ
   prove ¬ ¬ φ
+  prove ⊥
 }
 prove ψ
 qed

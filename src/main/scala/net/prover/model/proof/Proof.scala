@@ -1,10 +1,10 @@
 package net.prover.model.proof
 
-import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, Summary}
+import net.prover.model.Inference.Summary
 import net.prover.model.components.{Statement, Term, TermVariable}
 import net.prover.model.proof.Proof.Step
 import net.prover.model.proof.ProofOutline.StepWithAssertion
-import net.prover.model.{Inference, Parser, ParsingContext, ProvingException, Substitutions}
+import net.prover.model.{Inference, Parser, ParsingContext, Premise, ProvingException, Substitutions}
 import org.slf4j.LoggerFactory
 
 case class Proof(steps: Seq[Proof.Step]) {
@@ -213,11 +213,11 @@ object Proof {
     assertionHints: Seq[AssertionHint]
   ): ProvingContext = {
     val premiseAssertions = premises.zipWithIndex.collect {
-      case (DirectPremise(premise), index) =>
+      case (Premise.DirectPremise(premise), index) =>
         ReferencedAssertion(premise, DirectReference(index))
     }
     val premiseDeductions = premises.zipWithIndex.collect {
-      case (DeducedPremise(assumption, conclusion), index) =>
+      case (Premise.DeducedPremise(assumption, conclusion), index) =>
         ReferencedDeduction(assumption, conclusion, DirectReference(index))
     }
     ProvingContext(
@@ -314,11 +314,13 @@ object Proof {
       contextWithAssumption,
       nextReference + 1)
     val assumptionStep = AssumptionStep(assumption, substeps)
-    val newProvenDeductions = assumptionStep.steps.zipWithIndex.collect {
-      case (StepWithProvenStatement(deduction), index) =>
-        ReferencedDeduction(assumption, deduction, DeducedReference(nextReference, nextReference + index + 1))
+    val updatedContext = substeps.ofType[StepWithProvenStatement].lastOption match {
+      case Some(StepWithProvenStatement(provenStatement)) =>
+        context.add(ReferencedDeduction(assumption, provenStatement, DirectReference(nextReference)))
+      case None =>
+        context
     }
-    (assumptionStep, context.add(newProvenDeductions))
+    (assumptionStep, updatedContext)
   }
 
   private def proveAssertionStep(
@@ -398,7 +400,6 @@ object Proof {
   def referenceParser(implicit parsingContext: ParsingContext): Parser[Option[Reference]] = {
     Parser.selectWord {
       case "direct" => directReferenceParser
-      case "deduced" => deducedReferenceParser
       case "simplification" => simplificationReferenceParser
       case "elided" => elidedReferenceParser
       case "expanded" => expandedReferenceParser
@@ -409,14 +410,6 @@ object Proof {
       index <- Parser.int
     } yield {
       DirectReference(index)
-    }
-  }
-  def deducedReferenceParser: Parser[DeducedReference] = {
-    for {
-      antecedentIndex <- Parser.int
-      consequentIndex <- Parser.int
-    } yield {
-      DeducedReference(antecedentIndex, consequentIndex)
     }
   }
   def simplificationReferenceParser(implicit parsingContext: ParsingContext): Parser[SimplificationReference] = {

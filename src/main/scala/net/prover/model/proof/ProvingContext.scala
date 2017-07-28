@@ -1,7 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.Inference
-import net.prover.model.Inference.Premise
+import net.prover.model.{Inference, Premise}
 import net.prover.model.components.Statement
 import net.prover.model.proof.Proof._
 

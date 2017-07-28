@@ -2,11 +2,11 @@ package net.prover.model
 
 import java.nio.file.Paths
 
-import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
+import net.prover.model.Inference.RearrangementType
 import net.prover.model.components._
 import net.prover.model.entries.Axiom
 import net.prover.model.proof.Proof.SimplificationReference
-import net.prover.model.proof.ProofOutline.{AssertionStep, AssumptionStep, NamingStep}
+import net.prover.model.proof.ProofOutline.{AssertionStep, AssumptionStep}
 import net.prover.model.proof.{CachedProof, Proof, ProofOutline}
 
 class TheoremSpec extends ProverSpec {
@@ -63,7 +63,7 @@ class TheoremSpec extends ProverSpec {
     }
 
     val repetition = axiom("Repetition", Seq(φ), φ)
-    val deduction = axiom("Deduction", Seq(DeducedPremise(φ, ψ)), Implication(φ, ψ))
+    val deduction = axiom("Deduction", Seq(Premise.DeducedPremise(φ, ψ)), Implication(φ, ψ))
     val modusPonens = axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
     val implicationIsReflexive = axiom("Implication Is Reflexive", Nil, Implication(φ, φ))
     val extractLeftConjunct = axiom("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), φ, RearrangementType.Simplification)

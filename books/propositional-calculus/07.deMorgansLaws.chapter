@@ -4,9 +4,8 @@ De Morgan's Laws for conjunction and disjunction.
 theorem De Morgan's Law
 premise ∨ ¬ φ ¬ ψ
 assume ∧ φ ψ {
-  prove φ
-  prove ψ
   prove ¬ ψ
+  prove ⊥
 }
 prove ¬ ∧ φ ψ
 qed

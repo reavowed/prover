@@ -39,7 +39,7 @@ case class DefinitionInference(
     conclusion: Statement)
   extends Inference
 {
-  override def premises = premisesStatements.map(DirectPremise.apply)
+  override def premises = premisesStatements.map(Premise.DirectPremise.apply)
   override def name: String = s"Definition of $nameOfDefinition"
   override def summary: Inference.Summary = Summary(name, id, name.formatAsKey, chapterKey, bookKey)
   override def allowsRearrangement = true
@@ -74,57 +74,6 @@ object Inference {
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))
   }
 
-  sealed trait Premise {
-    def statements: Seq[Statement]
-    def applySubstitutions(substitutions: Substitutions): Option[Premise]
-    def matches(other: Premise): Boolean
-    def html: String
-    def serialized: String
-  }
-
-  case class DirectPremise(statement: Statement, isElidable: Boolean) extends Premise {
-    override def statements = Seq(statement)
-    override def applySubstitutions(substitutions: Substitutions) = {
-      for {
-        substitutedStatement <- statement.applySubstitutions(substitutions)
-      } yield DirectPremise(substitutedStatement)
-    }
-    override def matches(other: Premise): Boolean = other match {
-      case DirectPremise(`statement`) =>
-        true
-      case _ =>
-        false
-    }
-    override def html = statement.html
-    override def serialized = s"premise ${statement.serialized}"
-  }
-  object DirectPremise {
-    def apply(statement: Statement): DirectPremise = DirectPremise(statement, isElidable = false)
-    def unapply(obj: Object): Option[Statement] = obj match {
-      case directPremise: DirectPremise => Some(directPremise.statement)
-      case _ => None
-    }
-  }
-
-  case class DeducedPremise(antecedent: Statement, consequent: Statement) extends Premise {
-    override def statements = Seq(antecedent, consequent)
-    override def applySubstitutions(substitutions: Substitutions) = {
-      for {
-        substitutedAntecedent <- antecedent.applySubstitutions(substitutions)
-        substitutedConsequent <- consequent.applySubstitutions(substitutions)
-      } yield DeducedPremise(substitutedAntecedent, substitutedConsequent)
-    }
-    override def matches(other: Premise): Boolean = other match {
-      case DeducedPremise(`antecedent`, `consequent`) =>
-        true
-      case _ =>
-        false
-    }
-
-    override def html = antecedent.html + " ⊢ " + consequent.html
-    override def serialized = Seq("premise", "proves", antecedent.serialized, consequent.serialized).mkString(" ")
-  }
-
   case class Summary(name: String, id: String, key: String, chapterKey: String, bookKey: String) {
     def serialized: String = s"$id ($name)"
   }
@@ -135,36 +84,5 @@ object Inference {
         _ <- Parser.toEndOfLine
       } yield Inference.Summary("", id, "", "", "")
     }
-  }
-
-  private def deducedPremiseParser(implicit context: ParsingContext): Parser[DeducedPremise] = {
-    for {
-      antecedent <- Statement.parser
-      consequent <- Statement.parser
-    } yield {
-      DeducedPremise(antecedent, consequent)
-    }
-  }
-
-  private def directPremiseParser(implicit context: ParsingContext): Parser[DirectPremise] = {
-    for {
-      statement <- Statement.parser
-      isElidable <- Parser.optionalWord("elidable").isDefined
-    } yield {
-      DirectPremise(statement, isElidable)
-    }
-  }
-
-  private def premiseParser(implicit context: ParsingContext): Parser[Option[Premise]] = {
-    Parser.optionalWord("premise")
-      .mapFlatMap { _ =>
-        Parser.optionalWord("proves")
-          .mapFlatMap(_ => deducedPremiseParser)
-          .orElse(directPremiseParser)
-      }
-  }
-
-  def premisesParser(implicit context: ParsingContext): Parser[Seq[Premise]] = {
-    premiseParser.whileDefined
   }
 }

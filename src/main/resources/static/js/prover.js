@@ -155,100 +155,17 @@
           });
         }
 
-        $scope.highlightRow = function (rowData, event) {
-          if (!rowData.references) {
-            return;
+        function addStep(step, reference, visibleIndentLevel, conceptualIndentLevel, override) {
+          if (step.type === "assumption") {
+            addAssumption(step.assumption, step.steps, reference, visibleIndentLevel, conceptualIndentLevel, override);
+          } else if (step.type === "assertion") {
+            addAssertion(step, reference, visibleIndentLevel, conceptualIndentLevel, override);
+          } else if (step.type === "naming") {
+            addNaming(step.variable, step.assumptionStep, step.assertionStep, reference, visibleIndentLevel, conceptualIndentLevel, override);
+          } else if (step.type === "rearrange") {
+            addRearrangement(step, reference, visibleIndentLevel, conceptualIndentLevel, override);
           }
-          var tableRow = $(event.target).closest("tr");
-          var proofContainer = tableRow.closest(".theoremProof");
-          var allTableRows = proofContainer.find("tr");
-          var rowIndex = allTableRows.index(tableRow);
-          var premises = proofContainer.closest(".inference").find(".premise");
-
-          var referrableRows = $scope.proofRows.slice(0, rowIndex);
-          if (rowData.assumption) {
-            referrableRows.push(rowData);
-          }
-
-          function markElement(element, htmlToHighlight) {
-            htmlToHighlight = htmlToHighlight || element.html();
-            var textToHighlight = $('<div>' + htmlToHighlight + '</div>').text();
-            element.mark(textToHighlight, {element: "span", className: "highlightPremise", separateWordSearch: false, acrossElements: true});
-          }
-
-          function highlightPremise(index, subindex, htmlToHighlight) {
-            if (index < premises.length) {
-              markElement(premises.eq(index), htmlToHighlight);
-            } else {
-              var referredRow = _.findLast(referrableRows, function (row) {
-                return row.reference === index;
-              });
-              if (referredRow == null || (referredRow === rowData && !rowData.assertion)) return;
-              var referredRowIndex = _.indexOf($scope.proofRows, referredRow);
-              var referredTableRow = allTableRows.eq(referredRowIndex);
-              var referredAssumption = referredTableRow.find(".assumption");
-              var referredAssertion = referredTableRow.find(".assertion");
-              if (referredAssumption.length) {
-                markElement(referredAssumption, subindex != null ? null : htmlToHighlight);
-              } else {
-                markElement(referredAssertion, htmlToHighlight);
-              }
-              if (subindex != null) {
-                var followingRows = _.drop($scope.proofRows, referredRowIndex + 1);
-                var nestedRows = _.takeWhile(followingRows, function (row) {
-                  return row.conceptualIndentLevel > referredRow.conceptualIndentLevel;
-                });
-                var childRows = _.filter(nestedRows, function (row) {
-                  return row.conceptualIndentLevel === referredRow.conceptualIndentLevel + 1;
-                });
-                var childRow = _.findLast(childRows, function (row) {
-                  return row.reference === subindex;
-                });
-                if (childRow == null) {
-                  if (referredRow.assertion && subindex === index + 1) {
-                    childRow = referredRow
-                  } else {
-                    return
-                  }
-                }
-                var childRowIndex = _.indexOf($scope.proofRows, childRow);
-                var childTableRow = allTableRows.eq(childRowIndex);
-                markElement(childTableRow.find(".assertion"), htmlToHighlight);
-              }
-            }
-          }
-
-          function highlightReferences(references) {
-            _.forEach(references, function (reference) {
-              highlightReference(reference);
-            });
-          }
-
-          function highlightReference(reference, html) {
-            if (reference.referenceType === "direct") {
-              highlightPremise(reference.index, null, html);
-            } else if (reference.referenceType === "deduced") {
-              highlightPremise(reference.antecedentIndex, reference.consequentIndex, html);
-            } else if (reference.referenceType === "simplification") {
-              highlightReference(reference.reference, html || reference.statement);
-            } else if (reference.referenceType === "elided" || reference.referenceType === "expanded") {
-              highlightReferences(reference.references);
-            } else {
-              throw "Unrecognised reference type " + reference.referenceType;
-            }
-          }
-
-          highlightReferences(rowData.references);
-
-          tableRow.find(".assertion").addClass("highlightConclusion");
-        };
-
-        $scope.removeHighlight = function (rowData, event) {
-          $(event.target).closest(".theoremProof").find(".assumption").unmark();
-          $(event.target).closest(".theoremProof").find(".assertion").unmark();
-          $(event.target).closest(".theoremProof").find(".highlightConclusion").removeClass("highlightConclusion");
-          $(".premise").unmark();
-        };
+        }
 
         function addAssumption(assumption, steps, reference, visibleIndentLevel, conceptualIndentLevel) {
           $scope.proofRows.push({
@@ -299,7 +216,7 @@
         function addRearrangement(rearrangementStep, reference, visibleIndentLevel, conceptualIndentLevel, override) {
           $scope.proofRows.push({
             prefix: 'Then',
-            assertion: rearrangementStep.provenStatement,
+            assertion: rearrangementStep.statement,
             references: getReferences(rearrangementStep),
             inference: { name: "Rearrangement" },
             reference: override ? override.reference : reference,
@@ -327,17 +244,94 @@
           return baseReferences.concat(innerReferences);
         }
 
-        function addStep(step, reference, visibleIndentLevel, conceptualIndentLevel, override) {
-          if (step.type === "assumption") {
-            addAssumption(step.assumption, step.steps, reference, visibleIndentLevel, conceptualIndentLevel, override);
-          } else if (step.type === "assertion") {
-            addAssertion(step, reference, visibleIndentLevel, conceptualIndentLevel, override);
-          } else if (step.type === "naming") {
-            addNaming(step.variable, step.assumptionStep, step.assertionStep, reference, visibleIndentLevel, conceptualIndentLevel, override);
-          } else if (step.type === "rearrange") {
-            addRearrangement(step, reference, visibleIndentLevel, conceptualIndentLevel, override);
+        $scope.highlightRow = function (rowData, event) {
+          if (!rowData.references) {
+            return;
           }
-        }
+          var tableRow = $(event.target).closest("tr");
+          var proofContainer = tableRow.closest(".theoremProof");
+          var allTableRows = proofContainer.find("tr");
+          var rowIndex = allTableRows.index(tableRow);
+          var premises = proofContainer.closest(".inference").find(".premise");
+
+          var referrableRows = $scope.proofRows.slice(0, rowIndex);
+          if (rowData.assumption) {
+            referrableRows.push(rowData);
+          }
+
+          function markElement(element, htmlToHighlight) {
+            htmlToHighlight = htmlToHighlight || element.html();
+            var textToHighlight = $('<div>' + htmlToHighlight + '</div>').text();
+            element.mark(textToHighlight, {element: "span", className: "highlightPremise", separateWordSearch: false, acrossElements: true});
+          }
+
+          function highlightRow(rowReference, htmlToHighlight) {
+            if (rowReference < premises.length) {
+              markElement(premises.eq(rowReference), htmlToHighlight);
+            } else {
+              var referredRow = _.findLast(referrableRows, function (row) {
+                return row.reference === rowReference;
+              });
+              if (referredRow == null || (referredRow === rowData && !rowData.assertion)) return;
+              var referredRowIndex = _.indexOf($scope.proofRows, referredRow);
+              var referredTableRow = allTableRows.eq(referredRowIndex);
+
+              var childRows = _($scope.proofRows)
+                .drop(referredRowIndex + 1)
+                .takeWhile(function (row) {
+                  return row.conceptualIndentLevel > referredRow.conceptualIndentLevel;
+                });
+
+              if (childRows.some()) {
+                var lastChild = childRows
+                  .filter(function (row) {
+                    return row.conceptualIndentLevel === referredRow.conceptualIndentLevel + 1;
+                  })
+                  .findLast();
+                var lastChildIndex = _.indexOf($scope.proofRows, lastChild);
+
+                if (rowReference > lastChildIndex) {
+                  var lastChildRow = allTableRows.eq(lastChildIndex);
+                  markElement(referredTableRow.find(".assumption"), null);
+                  markElement(lastChildRow.find(".assertion"), htmlToHighlight);
+                } else {
+                  markElement(referredTableRow.find(".assumption"), htmlToHighlight);
+                }
+              } else {
+                markElement(referredTableRow.find(".assertion"), htmlToHighlight);
+              }
+            }
+          }
+
+          function highlightReferences(references) {
+            _.forEach(references, function (reference) {
+              highlightReference(reference);
+            });
+          }
+
+          function highlightReference(reference, html) {
+            if (reference.referenceType === "direct") {
+              highlightRow(reference.index, html);
+            } else if (reference.referenceType === "simplification") {
+              highlightReference(reference.reference, html || reference.statement);
+            } else if (reference.referenceType === "elided" || reference.referenceType === "expanded") {
+              highlightReferences(reference.references);
+            } else {
+              throw "Unrecognised reference type " + reference.referenceType;
+            }
+          }
+
+          highlightReferences(rowData.references);
+
+          tableRow.find(".assertion").addClass("highlightConclusion");
+        };
+
+        $scope.removeHighlight = function (rowData, event) {
+          $(event.target).closest(".theoremProof").find(".assumption").unmark();
+          $(event.target).closest(".theoremProof").find(".assertion").unmark();
+          $(event.target).closest(".theoremProof").find(".highlightConclusion").removeClass("highlightConclusion");
+          $(".premise").unmark();
+        };
       });
     }]
   });

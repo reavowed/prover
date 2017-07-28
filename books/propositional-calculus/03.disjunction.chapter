@@ -101,7 +101,7 @@ qed
 theorem One Disjunct Must Be True
 premise ∨ φ ψ
 premise ¬ ψ
-prove ∨ ψ φ
+prove → ¬ φ ψ
 prove φ
 qed
 

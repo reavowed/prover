@@ -17,9 +17,9 @@ qed
 theorem Extract Left Conjunct
 simplification
 premise ∧ φ ψ
+prove ¬ → φ ¬ ψ
 assume ¬ φ {
   prove → φ ¬ ψ
-  prove ¬ → φ ¬ ψ
 }
 prove φ
 qed
@@ -27,9 +27,9 @@ qed
 theorem Extract Right Conjunct
 simplification
 premise ∧ φ ψ
+prove ¬ → φ ¬ ψ
 assume ¬ ψ {
   prove → φ ¬ ψ
-  prove ¬ → φ ¬ ψ
 }
 prove ψ
 qed
@@ -43,8 +43,7 @@ qed
 
 theorem Law of Non-Contradiction
 assume ∧ φ ¬ φ {
-  prove φ
-  prove ¬ φ
+  prove ⊥
 }
 prove ¬ ∧ φ ¬ φ
 qed
@@ -55,7 +54,7 @@ theorem Add Negated Conjunct
 expansion
 premise ¬ φ
 assume ∧ φ ψ {
-  prove φ
+  prove ⊥
 }
 prove ¬ ∧ φ ψ
 qed
@@ -64,7 +63,7 @@ theorem Add Negated Conjunct
 expansion
 premise ¬ ψ
 assume ∧ φ ψ {
-  prove ψ
+  prove ⊥
 }
 prove ¬ ∧ φ ψ
 qed
@@ -72,7 +71,7 @@ qed
 theorem Add Negated Conjunct
 premise φ
 assume ∧ ¬ φ ψ {
-  prove ¬ φ
+  prove ⊥
 }
 prove ¬ ∧ ¬ φ ψ
 qed
@@ -80,7 +79,7 @@ qed
 theorem Add Negated Conjunct
 premise ψ
 assume ∧ φ ¬ ψ {
-  prove ¬ ψ
+  prove ⊥
 }
 prove ¬ ∧ φ ¬ ψ
 qed

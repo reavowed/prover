@@ -1,6 +1,6 @@
 package net.prover.model.entries
 
-import net.prover.model.Inference.{Premise, RearrangementType}
+import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.proof.{AssertionHint, CachedProof, Proof, ProofOutline}
 import org.slf4j.LoggerFactory
@@ -88,7 +88,7 @@ object TheoremOutline extends ChapterEntryParser[TheoremOutline] {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
       allowsRearrangement <- Parser.optionalWord("disallow-rearrangement").isUndefined
-      premises <- Inference.premisesParser
+      premises <- Premise.listParser
       proofOutline <- ProofOutline.parser
       _ <- Parser.requiredWord("qed")
     } yield {

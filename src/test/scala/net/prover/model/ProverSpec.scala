@@ -2,7 +2,6 @@ package net.prover.model
 
 import java.nio.file.Paths
 
-import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
 import net.prover.model.components._
 import net.prover.model.entries.{StatementDefinition, TermDefinition}
 import org.specs2.mutable.Specification
@@ -124,6 +123,6 @@ trait ProverSpec extends Specification {
     }
   }
 
-  implicit def statementToPremise(statement: Statement): Premise = DirectPremise(statement)
-  implicit def statementPairToPremise(tuple: (Statement, Statement)): Premise = DeducedPremise(tuple._1, tuple._2)
+  implicit def statementToPremise(statement: Statement): Premise = Premise.DirectPremise(statement)
+  implicit def statementPairToPremise(tuple: (Statement, Statement)): Premise = Premise.DeducedPremise(tuple._1, tuple._2)
 }

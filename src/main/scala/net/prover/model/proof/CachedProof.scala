@@ -2,7 +2,6 @@ package net.prover.model.proof
 
 import java.nio.file.Path
 
-import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise}
 import net.prover.model._
 import net.prover.model.components.Statement
 import net.prover.model.proof.Proof._
@@ -24,7 +23,7 @@ object CachedProof {
 
   def parser(path: Path)(implicit parsingContext: ParsingContext): Parser[CachedProof] = {
     for {
-      premises <- Inference.premisesParser
+      premises <- Premise.listParser
       proof <- Proof.parser
     } yield CachedProof(path, premises, proof)
   }
@@ -103,11 +102,13 @@ object CachedProof {
     for {
       (validatedSubsteps, _) <- validateSteps(steps, assumptionContext, nextReference + 1)
     } yield {
-      val newDeductions = assumptionStep.steps.zipWithIndex.collect {
-        case (StepWithProvenStatement(deduction), index) =>
-          ReferencedDeduction(assumption, deduction, DeducedReference(nextReference, nextReference + index + 1))
+      val updatedContext = assumptionStep.steps.ofType[StepWithProvenStatement].lastOption match {
+        case Some(StepWithProvenStatement(provenStatement)) =>
+          context.add(ReferencedDeduction(assumption, provenStatement, DirectReference(nextReference)))
+        case None =>
+          context
       }
-      (AssumptionStep(assumption, validatedSubsteps), context.add(newDeductions))
+      (AssumptionStep(assumption, validatedSubsteps), updatedContext)
     }
   }
 
@@ -187,9 +188,9 @@ object CachedProof {
       premisesWithReferences <- premises.zipStrict(references)
       resolvedPremises <- premisesWithReferences.map { case (premise, reference) =>
         premise match {
-          case DirectPremise(statement) =>
+          case Premise.DirectPremise(statement) =>
             validateDirectPremise(statement, reference, context)
-          case DeducedPremise(antecedent, consequent) =>
+          case Premise.DeducedPremise(antecedent, consequent) =>
             validateDeducedPremise(antecedent, consequent, reference, context)
         }
       }.traverseOption

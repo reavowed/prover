@@ -1,9 +1,9 @@
 package net.prover.model.proof
 
-import net.prover.model.Inference.{DeducedPremise, DirectPremise, Premise, RearrangementType}
+import net.prover.model.Inference.RearrangementType
 import net.prover.model.components.Statement
 import net.prover.model.proof.Proof._
-import net.prover.model.{Inference, Substitutions}
+import net.prover.model.{Inference, Premise, Substitutions}
 
 case class Prover(
   assertion: Statement,
@@ -87,7 +87,7 @@ case class Prover(
           }
       }
       .flatMap { case (prePremiseMatches, elidablePremise, postPremiseMatches, substitutionsAfterPostPremises) =>
-        matchElidablePremise(elidablePremise, substitutionsAfterPostPremises)
+        matchElidablePremise(elidablePremise.statement, substitutionsAfterPostPremises)
           .map { case (elidedPremiseMatch, substitutionsAfterElidedPremise) =>
             ((prePremiseMatches :+ elidedPremiseMatch) ++ postPremiseMatches, substitutionsAfterElidedPremise)
           }
@@ -100,7 +100,7 @@ case class Prover(
   }
 
   private def matchElidablePremise(
-    premise: DirectPremise,
+    premise: Statement,
     premiseSubstitutionsSoFar: Substitutions
   ): Iterator[(PremiseMatch, Substitutions)] = {
     availableInferences.iterator
@@ -111,7 +111,7 @@ case class Prover(
       }
       // Work out the substitutions by condensing the conclusion with the premise
       .mapCollect { case (inference, (matchedPremises, inferenceSubstitutions)) =>
-        premise.statement.condense(inference.conclusion, premiseSubstitutionsSoFar, inferenceSubstitutions)
+        premise.condense(inference.conclusion, premiseSubstitutionsSoFar, inferenceSubstitutions)
           .map((inference, matchedPremises, _))
       }
       // Confirm the final conclusion of the inference
@@ -122,22 +122,22 @@ case class Prover(
       // And finally match the premise to our computed conclusion
       .flatMap { case (inference, matchedPremises, premiseSubstitutions, inferenceSubstitutions, provenConclusion) =>
         matchDirectPremiseToFact(
-          premise.statement,
+          premise,
           provenConclusion,
           ElidedReference(inference.summary, inferenceSubstitutions, matchedPremises.map(_.reference)),
           premiseSubstitutions)
       }
   }
 
-  private def splitPremisesAtElidable(premises: Seq[Premise]): Option[(Seq[Premise], DirectPremise, Seq[Premise])] = {
+  private def splitPremisesAtElidable(premises: Seq[Premise]): Option[(Seq[Premise], Premise.DirectPremise, Seq[Premise])] = {
     val (prePremises, elidableAndPostPremises) = premises.span {
-      case directPremise: DirectPremise if directPremise.isElidable =>
+      case directPremise: Premise.DirectPremise if directPremise.isElidable =>
         false
       case _ =>
         true
     }
     elidableAndPostPremises match {
-      case (elidablePremise: DirectPremise) +: postPremises =>
+      case (elidablePremise: Premise.DirectPremise) +: postPremises =>
         Some((prePremises, elidablePremise, postPremises))
       case _ =>
         None
@@ -148,7 +148,7 @@ case class Prover(
     val expansions = availableInferences
       .filter(_.rearrangementType == RearrangementType.Expansion)
       .mapCollect { inference =>
-        inference.premises.toType[DirectPremise]
+        inference.premises.toType[Premise.DirectPremise]
           .map(_.map(_.statement))
           .map((inference.summary, _, inference.conclusion))
       }
@@ -197,9 +197,9 @@ case class Prover(
     rearrangementAllowed: Boolean
   ): Iterator[(PremiseMatch, Substitutions)] = {
     inferencePremise match {
-      case DirectPremise(premiseStatement) =>
+      case Premise.DirectPremise(premiseStatement) =>
         matchDirectPremiseToFacts(premiseStatement, substitutionsSoFar, rearrangementAllowed)
-      case deducedPremise: DeducedPremise =>
+      case deducedPremise: Premise.DeducedPremise =>
         matchDeducedPremiseToFacts(deducedPremise, substitutionsSoFar)
     }
   }
@@ -244,7 +244,7 @@ case class Prover(
     availableInferences
       .filter(_.rearrangementType == RearrangementType.Simplification)
       .collect {
-        case inference @ Inference(_, Seq(DirectPremise(premiseStatement)), conclusion) =>
+        case inference @ Inference(_, Seq(Premise.DirectPremise(premiseStatement)), conclusion) =>
           (inference.summary, premiseStatement, conclusion)
       }
       .flatMap { case (summary, premiseStatement, conclusion) =>
@@ -261,7 +261,7 @@ case class Prover(
   }
 
   private def matchDeducedPremiseToFacts(
-    inferencePremise: DeducedPremise,
+    inferencePremise: Premise.DeducedPremise,
     substitutionsSoFar: Substitutions
   ): Iterator[(PremiseMatch, Substitutions)] = {
     provenDeductions.iterator.flatMap { case ReferencedDeduction(antecedent, consequent, reference) =>

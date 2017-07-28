@@ -1,6 +1,5 @@
 package net.prover.model
 
-import net.prover.model.Inference.{DeducedPremise, DirectPremise}
 import net.prover.model.entries.{Axiom, AxiomOutline}
 
 class AxiomSpec extends ProverSpec {
@@ -40,7 +39,7 @@ class AxiomSpec extends ProverSpec {
         "Test Chapter",
         "test-book",
         "Test Book",
-        Seq(DirectPremise(φ)),
+        Seq(Premise.DirectPremise(φ)),
         φ)
     }
 
@@ -57,7 +56,7 @@ class AxiomSpec extends ProverSpec {
         "Test Chapter",
         "test-book",
         "Test Book",
-        Seq(DirectPremise(Implication(φ, ψ)), DirectPremise(φ)),
+        Seq(Premise.DirectPremise(Implication(φ, ψ)), Premise.DirectPremise(φ)),
         ψ)
     }
 
@@ -73,24 +72,8 @@ class AxiomSpec extends ProverSpec {
         "Test Chapter",
         "test-book",
         "Test Book",
-        Seq(DeducedPremise(φ, ψ)),
+        Seq(Premise.DeducedPremise(φ, ψ)),
         Implication(φ, ψ))
     }
-
-//    "parse an axiom with arbitrary and distinct variables" in {
-//      parseAxiom(
-//        "Introduce Forall",
-//        "premise sub y x φ",
-//        "conclusion ∀ x φ",
-//        "arbitrary-variables (y)",
-//        "distinct-variables (y φ)"
-//      ) mustEqual Axiom(
-//        "Introduce Forall",
-//        Seq(DirectPremise(StatementVariableWithReplacement(φ, y, x))),
-//        ProvenStatement(
-//          ForAll(x, φ),
-//          Seq(y),
-//          DistinctVariables(Map(y -> Variables(Seq(φ), Nil)))))
-//    }
   }
 }
