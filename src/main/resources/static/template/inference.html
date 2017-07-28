@@ -1,7 +1,9 @@
 <div class="inference" ng-if="inference">
-    <div>
+    <div class="inference-links">
         <a class="inferenceLink pull-left" ng-if="previous" href="{{previous.link}}">&laquo; {{previous.name}}</a>
         <a class="inferenceLink pull-right" ng-if="next" href="{{next.link}}">{{next.name}} &raquo;</a>
+    </div>
+    <div class="inference-title">
         <h3>
             {{inference.type == "axiom" ? "Axiom" : "Theorem"}}: {{inference.name}}
         </h3>

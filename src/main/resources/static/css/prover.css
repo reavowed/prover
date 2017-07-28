@@ -51,14 +51,22 @@
     margin-bottom: 3px;
 }
 
-.inference-title {
+.inference-entry-title {
     text-decoration: none;
     color: inherit;
 }
 
-.inference-title:hover {
+.inference-entry-title:hover {
     text-decoration: underline;
     color: inherit;
+}
+
+.inference-links {
+    margin-top: 10px;
+}
+
+.inference-title {
+    clear: both;
 }
 
 .proofRows {
