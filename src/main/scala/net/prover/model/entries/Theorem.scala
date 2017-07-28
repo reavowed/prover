@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference.RearrangementType
 import net.prover.model.components.Statement
 import net.prover.model.proof.{Proof, ProofOutline}
-import net.prover.model.{EntryInference, Inference, Premise}
+import net.prover.model.{Inference, Premise}
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement", "proofOutline"))
 case class Theorem(
@@ -21,7 +21,7 @@ case class Theorem(
     rearrangementType: RearrangementType,
     allowsRearrangement: Boolean = true)
   extends ChapterEntry(TheoremOutline)
-    with EntryInference
+    with Inference.Entry
 {
   def referencedInferenceIds: Set[String] = proof.referencedInferenceIds
   override def inferences: Seq[Inference] = Seq(this)

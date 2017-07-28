@@ -1,11 +1,12 @@
 package net.prover.model
 
-import net.prover.model.components.Statement
+import net.prover.model.components.{Statement, Variable}
 
 sealed trait Premise {
   def statements: Seq[Statement]
   def applySubstitutions(substitutions: Substitutions): Option[Premise]
   def matches(other: Premise): Boolean
+  def variables: Seq[Variable]
   def html: String
   def serialized: String
 }
@@ -25,6 +26,7 @@ object Premise {
       case _ =>
         false
     }
+    override def variables = statement.variables
     override def html = statement.html
     override def serialized = s"premise ${statement.serialized}"
   }
@@ -60,6 +62,7 @@ object Premise {
         false
     }
 
+    override def variables = (antecedent.variables ++ consequent.variables).distinct
     override def html = antecedent.html + " ⊢ " + consequent.html
     override def serialized = Seq("premise", "proves", antecedent.serialized, consequent.serialized).mkString(" ")
   }

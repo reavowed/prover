@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.components._
-import net.prover.model.{DefinitionInference, Format, Inference, Parser, ParsingContext}
+import net.prover.model.{Format, Inference, Parser, ParsingContext}
 
 @JsonIgnoreProperties(Array("symbol", "defaultVariables", "format"))
 case class StatementDefinition(
@@ -36,8 +36,8 @@ case class StatementDefinition(
   override def inferences: Seq[Inference] = {
     definingStatement.toSeq.flatMap { s =>
       Seq(
-        DefinitionInference(name, chapterKey, bookKey, Seq(s), defaultValue),
-        DefinitionInference(name, chapterKey, bookKey, Seq(defaultValue), s))
+        Inference.Definition(name, chapterKey, bookKey, Seq(s), defaultValue),
+        Inference.Definition(name, chapterKey, bookKey, Seq(defaultValue), s))
     }
   }
 }

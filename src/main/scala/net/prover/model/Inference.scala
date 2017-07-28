@@ -4,7 +4,7 @@ import java.security.MessageDigest
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference._
-import net.prover.model.components.Statement
+import net.prover.model.components.{Component, Statement, Variable}
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
@@ -17,37 +17,43 @@ trait Inference {
   def allowsRearrangement: Boolean
   def summary: Inference.Summary
 
+  def variables: Seq[Variable] = (premises.flatMap(_.variables) ++ conclusion.variables).distinct
+  def specifySubstitutions(substitutions: Substitutions): Option[Inference.Substitutions] = {
+    variables.map(substitutions.componentsByVariable.get).traverseOption.map(Inference.Substitutions.apply)
+  }
+  def generalizeSubstitutions(inferenceSubstitutions: Inference.Substitutions): Option[Substitutions] = {
+    variables.zipStrict(inferenceSubstitutions.components).map(_.toMap).map(Substitutions.apply)
+  }
   def calculateHash(): String = {
     Inference.calculateHash(premises, conclusion)
   }
 }
 
-trait EntryInference extends Inference {
-  def key: String
-  def chapterKey: String
-  def bookKey: String
+object Inference {
+  trait Entry extends Inference {
+    def key: String
+    def chapterKey: String
+    def bookKey: String
 
-  override def keyOption = Some(key)
-  override def summary = Summary(name, id, key, chapterKey, bookKey)
-}
-
-case class DefinitionInference(
+    override def keyOption = Some(key)
+    override def summary = Summary(name, id, key, chapterKey, bookKey)
+  }
+  case class Definition(
     nameOfDefinition: String,
     chapterKey: String,
     bookKey: String,
     premisesStatements: Seq[Statement],
     conclusion: Statement)
-  extends Inference
-{
-  override def premises = premisesStatements.map(Premise.DirectPremise.apply)
-  override def name: String = s"Definition of $nameOfDefinition"
-  override def summary: Inference.Summary = Summary(name, id, name.formatAsKey, chapterKey, bookKey)
-  override def allowsRearrangement = true
-  override def rearrangementType = RearrangementType.NotRearrangement
-  override def keyOption = None
-}
+    extends Inference
+  {
+    override def premises = premisesStatements.map(Premise.DirectPremise.apply)
+    override def name: String = s"Definition of $nameOfDefinition"
+    override def summary: Inference.Summary = Summary(name, id, name.formatAsKey, chapterKey, bookKey)
+    override def allowsRearrangement = true
+    override def rearrangementType = RearrangementType.NotRearrangement
+    override def keyOption = None
+  }
 
-object Inference {
   sealed trait RearrangementType
   object RearrangementType {
     object NotRearrangement extends RearrangementType
@@ -60,6 +66,15 @@ object Inference {
         case "expansion" => Some(Expansion)
         case _ => None
       }.getOrElse(NotRearrangement)
+    }
+  }
+
+  case class Substitutions(components: Seq[Component]) {
+    def serialized: String = "(" + components.map(_.serialized).mkString(", ") + ")"
+  }
+  object Substitutions {
+    def parser(implicit parsingContext: ParsingContext): Parser[Substitutions] = {
+      Component.parser.listInParens(Some(",")).map(Substitutions.apply)
     }
   }
 

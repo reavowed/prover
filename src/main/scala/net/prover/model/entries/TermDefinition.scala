@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.model.components._
-import net.prover.model.{DefinitionInference, Format, Inference, Parser, ParsingContext}
+import net.prover.model.{Format, Inference, Parser, ParsingContext}
 
 case class TermDefinition(
     symbol: String,
@@ -20,7 +20,7 @@ case class TermDefinition(
   val componentTypes = defaultVariables.map(_.componentType)
   val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue).getOrElse(
     throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultValue'"))
-  override def inferences: Seq[Inference] = Seq(DefinitionInference(name, chapterKey, bookKey, premises, definingStatement))
+  override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
 
   def apply(components: Component*): DefinedTerm = DefinedTerm(
     components,

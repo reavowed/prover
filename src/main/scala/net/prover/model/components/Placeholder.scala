@@ -3,7 +3,7 @@ package net.prover.model.components
 import net.prover.model.Substitutions
 
 trait Placeholder[T <: Component] extends Component {
-  override def variables: Set[Variable] = Set.empty
+  override def variables: Seq[Variable] = Nil
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set.empty)
   override def calculateSubstitutions(
     other: Component,

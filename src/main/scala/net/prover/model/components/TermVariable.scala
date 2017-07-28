@@ -5,7 +5,7 @@ import net.prover.model.{Html, Substitutions}
 import scala.collection.immutable.Nil
 
 case class TermVariable(text: String) extends Term with Variable {
-  override def variables: Set[Variable] = Set(this)
+  override def variables: Seq[Variable] = Seq(this)
   override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set(this))
   override def calculateSubstitutions(
     other: Component,

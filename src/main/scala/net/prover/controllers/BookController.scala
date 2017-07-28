@@ -1,7 +1,7 @@
 package net.prover.controllers
 
 import net.prover.model.entries.Theorem
-import net.prover.model.{Book, Chapter, EntryInference, Inference}
+import net.prover.model.{Book, Chapter, Inference}
 import net.prover.services.BookService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -70,7 +70,7 @@ class BookController @Autowired() (bookService: BookService) {
       val inferenceOption = for {
         book <- books.find(_.key == bookKey)
         chapter <- book.chapters.find(_.key == chapterKey)
-        inferences = chapter.entries.ofType[EntryInference]
+        inferences = chapter.entries.ofType[Inference.Entry]
         inference <- inferences.find(_.keyOption.contains(inferenceKey))
       } yield {
         val index = inferences.indexOf(inference)

@@ -14,20 +14,9 @@ trait DefinedComponent[T <: Component] extends Component {
   def getMatch(other: Component): Option[(Seq[Component], Set[TermVariable])]
   def update(newSubcomponents: Seq[Component], newBoundVariables: Set[TermVariable]): T
 
-  override def variables: Set[Variable] = subcomponents.flatMap(_.variables).toSet
+  override def variables: Seq[Variable] = subcomponents.flatMap(_.variables).distinct
   override val boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = {
     DefinedComponent.tryBoundAndFree(subcomponents, localBoundVariables).get
-  }
-
-  override def getInternalDifferences(other: Component): Set[(Component, Component)] = {
-    getMatch(other)
-      .map {
-        case (otherSubcomponents, _) =>
-          subcomponents.zip(otherSubcomponents)
-            .map { case (a, b) => a.getDifferences(b) }
-            .foldLeft(Set.empty[(Component, Component)])(_ ++ _)
-      }
-      .getOrElse(Set.empty)
   }
 
   override def calculateSubstitutions(

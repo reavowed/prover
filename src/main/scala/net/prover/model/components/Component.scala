@@ -5,17 +5,10 @@ import net.prover.model.{Parser, ParsingContext, Substitutions}
 trait Component {
   def componentType: ComponentType
 
-  def variables: Set[Variable]
+  def variables: Seq[Variable]
   def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable])
   def boundVariables: Set[TermVariable] = boundAndFreeVariables._1
   def freeVariables: Set[TermVariable] = boundAndFreeVariables._2
-  def getDifferences(other: Component): Set[(Component, Component)] = {
-    if (this == other)
-      Set.empty
-    else
-      getInternalDifferences(other) + (this -> other)
-  }
-  def getInternalDifferences(other: Component): Set[(Component, Component)] = Set.empty
   def calculateSubstitutions(other: Component, substitutions: Substitutions): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
   def replacePlaceholder(other: Component): Option[Component]

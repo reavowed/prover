@@ -109,7 +109,7 @@ object Proof {
   case class AssertionStep(
       statement: Statement,
       inference: Inference.Summary,
-      substitutions: Substitutions,
+      substitutions: Inference.Substitutions,
       references: Seq[Reference])
     extends StepWithProvenStatement
   {
@@ -169,7 +169,7 @@ object Proof {
   case class SimplificationReference(
     statement: Statement,
     inference: Summary,
-    substitutions: Substitutions,
+    substitutions: Inference.Substitutions,
     reference: Reference
   ) extends Reference {
     val referenceType = "simplification"
@@ -181,7 +181,7 @@ object Proof {
       AssertionHint.attempt(inference, availableInferences, substitutions).toSeq ++ reference.getAssertionHints(availableInferences)
     }
   }
-  case class ElidedReference(inference: Summary, substitutions: Substitutions, references: Seq[Reference]) extends Reference {
+  case class ElidedReference(inference: Summary, substitutions: Inference.Substitutions, references: Seq[Reference]) extends Reference {
     val referenceType = "elided"
     def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inference.id
     def serializedLines = {
@@ -192,7 +192,7 @@ object Proof {
         references.flatMap(_.getAssertionHints(availableInferences))
     }
   }
-  case class ExpandedReference(inference: Summary, substitutions: Substitutions, references: Seq[Reference]) extends Reference {
+  case class ExpandedReference(inference: Summary, substitutions: Inference.Substitutions, references: Seq[Reference]) extends Reference {
     val referenceType = "expanded"
     def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inference.id
     def serializedLines = {
@@ -371,7 +371,7 @@ object Proof {
     for {
       assertion <- Statement.parser
       inferenceSummary <- Inference.Summary.parser
-      substitutions <- Substitutions.parser
+      substitutions <- Inference.Substitutions.parser
       references <- referencesParser
     } yield {
       AssertionStep(assertion, inferenceSummary, substitutions, references)
@@ -416,21 +416,21 @@ object Proof {
     for {
       statement <- Statement.parser
       inferenceSummary <- Inference.Summary.parser
-      substitutions <- Substitutions.parser
+      substitutions <- Inference.Substitutions.parser
       reference <- referenceParser.getOrElse(throw new Exception("Missing reference for simplification"))
     } yield SimplificationReference(statement, inferenceSummary, substitutions, reference)
   }
   def elidedReferenceParser(implicit parsingContext: ParsingContext): Parser[ElidedReference] = {
     (for {
       inferenceSummary <- Inference.Summary.parser
-      substitutions <- Substitutions.parser
+      substitutions <- Inference.Substitutions.parser
       references <- referencesParser
     } yield ElidedReference(inferenceSummary, substitutions, references)).inBraces
   }
   def expandedReferenceParser(implicit parsingContext: ParsingContext): Parser[ExpandedReference] = {
     (for {
       inferenceSummary <- Inference.Summary.parser
-      substitutions <- Substitutions.parser
+      substitutions <- Inference.Substitutions.parser
       references <- referencesParser
     } yield ExpandedReference(inferenceSummary, substitutions, references)).inBraces
   }

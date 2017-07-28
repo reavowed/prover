@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import net.prover.model.Inference.RearrangementType
 import net.prover.model.components.Statement
-import net.prover.model.{EntryInference, Inference, Premise}
+import net.prover.model.{Inference, Premise}
 
 case class Axiom(
     name: String,
@@ -16,7 +16,7 @@ case class Axiom(
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement,
     allowsRearrangement: Boolean = true)
   extends ChapterEntry(AxiomOutline)
-    with EntryInference
+    with Inference.Entry
 {
   override def inferences: Seq[Inference] = Seq(this)
 }

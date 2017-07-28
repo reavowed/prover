@@ -142,7 +142,7 @@ object CachedProof {
 
   private def validateInference(
     inferenceSummary: Inference.Summary,
-    substitutions: Substitutions,
+    substitutions: Inference.Substitutions,
     references: Seq[Reference],
     context: ProvingContext
   ): Option[(Statement, Inference.Summary, Seq[Reference])] = {
@@ -156,11 +156,12 @@ object CachedProof {
 
   private def validateInference(
     inference: Inference,
-    substitutions: Substitutions,
+    inferenceSubstitutions: Inference.Substitutions,
     references: Seq[Reference],
     context: ProvingContext
   ): Option[(Statement, Seq[Reference])] = {
     for {
+      substitutions <- inference.generalizeSubstitutions(inferenceSubstitutions)
       substitutedPremises <- inference.premises.map(_.applySubstitutions(substitutions)).traverseOption.ifEmpty {
         CachedProof.logger.info(
           (Seq(s"Could not substitute premises into premises of inference '${inference.name}'") ++
