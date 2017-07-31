@@ -78,6 +78,14 @@ prove ⊥
 prove ψ
 qed
 
+theorem Add Double Negative
+premise φ
+assume ¬ φ {
+  prove ⊥
+}
+prove ¬ ¬ φ
+qed
+
 theorem Proof by Self-Contradiction
 premise proves φ ¬ φ
 assume φ {
@@ -136,44 +144,11 @@ assume ¬ φ {
 prove φ
 qed
 
-theorem Add Double Negative
-premise φ
-assume ¬ φ {
-  prove ⊥
-}
-prove ¬ ¬ φ
-qed
-
-theorem Anything Implies A True Statement
-premise φ
-assume ψ {
-  prove φ
-}
-prove → ψ φ
-qed
-
-theorem A False Statement Implies Anything
-premise ¬ φ
-assume φ {
-  prove ψ
-}
-prove → φ ψ
-qed
-
-theorem A False Statement Implies Anything
-premise φ
-assume ¬ φ {
-  prove ψ
-}
-prove → ¬ φ ψ
-qed
-
 theorem Modus Tollens
 premise → φ ψ
 premise ¬ ψ
 assume φ {
   prove ψ
-  prove ⊥
 }
 prove ¬ φ
 qed
@@ -181,7 +156,9 @@ qed
 theorem Modus Tollens
 premise → φ ¬ ψ
 premise ψ
-prove ¬ ¬ ψ
+assume φ {
+  prove ¬ ψ
+}
 prove ¬ φ
 qed
 
@@ -207,6 +184,30 @@ assume ¬ ψ {
 prove → ¬ ψ ¬ φ
 qed
 
+theorem Contraposition
+premise → φ ¬ ψ
+assume ψ {
+  prove ¬ φ
+}
+prove → ψ ¬ φ
+qed
+
+theorem Contraposition
+premise → ¬ φ ψ
+assume ¬ ψ {
+  prove φ
+}
+prove → ¬ ψ φ
+qed
+
+theorem Contraposition
+premise → ¬ φ ¬ ψ
+assume ψ {
+  prove φ
+}
+prove → ψ φ
+qed
+
 theorem Proof by Cases
 premise → φ ψ
 premise → ¬ φ ψ
@@ -226,3 +227,26 @@ prove → ¬ φ ψ
 prove ψ
 qed
 
+theorem Anything Implies A True Statement
+premise φ
+assume ψ {
+  prove φ
+}
+prove → ψ φ
+qed
+
+theorem A False Statement Implies Anything
+premise ¬ φ
+assume φ {
+  prove ψ
+}
+prove → φ ψ
+qed
+
+theorem A False Statement Implies Anything
+premise φ
+assume ¬ φ {
+  prove ψ
+}
+prove → ¬ φ ψ
+qed
