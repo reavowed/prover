@@ -265,40 +265,40 @@
             element.mark(textToHighlight, {element: "span", className: "highlightPremise", separateWordSearch: false, acrossElements: true});
           }
 
-          function highlightRow(rowReference, htmlToHighlight) {
-            if (rowReference < premises.length) {
-              markElement(premises.eq(rowReference), htmlToHighlight);
+          function highlightRow(referenceToHighlight, htmlToHighlight) {
+            if (referenceToHighlight < premises.length) {
+              markElement(premises.eq(referenceToHighlight), htmlToHighlight);
             } else {
-              var referredRow = _.findLast(referrableRows, function (row) {
-                return row.reference === rowReference;
+              var rowToHighlight = _.findLast(referrableRows, function (row) {
+                return row.reference === referenceToHighlight;
               });
-              if (referredRow == null || (referredRow === rowData && !rowData.assertion)) return;
-              var referredRowIndex = _.indexOf($scope.proofRows, referredRow);
-              var referredTableRow = allTableRows.eq(referredRowIndex);
+              if (rowToHighlight == null) return;
+              var indexOfRowToHighlight = _.indexOf($scope.proofRows, rowToHighlight);
+              var tableRowToHighlight = allTableRows.eq(indexOfRowToHighlight);
 
               var childRows = _($scope.proofRows)
-                .drop(referredRowIndex + 1)
+                .drop(indexOfRowToHighlight + 1)
                 .takeWhile(function (row) {
-                  return row.conceptualIndentLevel > referredRow.conceptualIndentLevel;
+                  return row.conceptualIndentLevel > rowToHighlight.conceptualIndentLevel;
                 });
 
               if (childRows.some()) {
                 var lastChild = childRows
                   .filter(function (row) {
-                    return row.conceptualIndentLevel === referredRow.conceptualIndentLevel + 1;
+                    return row.conceptualIndentLevel === rowToHighlight.conceptualIndentLevel + 1;
                   })
                   .findLast();
                 var lastChildIndex = _.indexOf($scope.proofRows, lastChild);
 
-                if (rowReference > lastChildIndex) {
+                if (rowIndex > lastChildIndex) {
                   var lastChildRow = allTableRows.eq(lastChildIndex);
-                  markElement(referredTableRow.find(".assumption"), null);
+                  markElement(tableRowToHighlight.find(".assumption"), null);
                   markElement(lastChildRow.find(".assertion"), htmlToHighlight);
                 } else {
-                  markElement(referredTableRow.find(".assumption"), htmlToHighlight);
+                  markElement(tableRowToHighlight.find(".assumption"), htmlToHighlight);
                 }
               } else {
-                markElement(referredTableRow.find(".assertion"), htmlToHighlight);
+                markElement(tableRowToHighlight.find(".assertion"), htmlToHighlight);
               }
             }
           }
