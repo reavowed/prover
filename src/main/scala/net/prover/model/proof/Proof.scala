@@ -51,7 +51,6 @@ object Proof {
         false
     }
   }
-
   sealed trait StepWithProvenStatement extends Step {
     def statement: Statement
   }
@@ -63,6 +62,7 @@ object Proof {
         None
     }
   }
+
   case class AssumptionStep(
       assumption: Statement,
       steps: Seq[Step])
@@ -80,31 +80,6 @@ object Proof {
       steps.flatMap(_.getAssertionHints(availableInferences))
     }
     override def serializedLines = s"assume ${assumption.serialized} {" +: steps.flatMap(_.serializedLines).indent :+ "}"
-  }
-  case class NamingStep(
-      variable: TermVariable,
-      assumptionStep: AssumptionStep,
-      assertionStep: StepWithProvenStatement)
-    extends StepWithProvenStatement
-  {
-    override val `type` = "naming"
-    override def statement: Statement = assertionStep.statement
-    override def referencedInferenceIds: Set[String] = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
-    override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = stepOutline match {
-      case ProofOutline.NamingStep(`variable`, statement, stepOutlines) =>
-        assumptionStep.assumption == statement && Step.matchOutlines(assumptionStep.steps, stepOutlines)
-      case _ =>
-        false
-    }
-    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      assumptionStep.getAssertionHints(availableInferences) ++ assertionStep.getAssertionHints(availableInferences)
-    }
-    override def serializedLines = {
-      Seq(s"name ${variable.text} ${assumptionStep.assumption.serialized} {") ++
-        assumptionStep.steps.flatMap(_.serializedLines).indent ++
-        Seq("}") ++
-        assertionStep.serializedLines
-    }
   }
   case class AssertionStep(
       statement: Statement,
@@ -140,6 +115,31 @@ object Proof {
       s"rearrange ${statement.serialized}" +: reference.serializedLines.indent
     }
   }
+  case class NamingStep(
+    variable: TermVariable,
+    assumptionStep: AssumptionStep,
+    assertionStep: StepWithProvenStatement)
+    extends StepWithProvenStatement
+  {
+    override val `type` = "naming"
+    override def statement: Statement = assertionStep.statement
+    override def referencedInferenceIds: Set[String] = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
+    override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = stepOutline match {
+      case ProofOutline.NamingStep(`variable`, statement, stepOutlines) =>
+        assumptionStep.assumption == statement && Step.matchOutlines(assumptionStep.steps, stepOutlines)
+      case _ =>
+        false
+    }
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      assumptionStep.getAssertionHints(availableInferences) ++ assertionStep.getAssertionHints(availableInferences)
+    }
+    override def serializedLines = {
+      Seq(s"name ${variable.text} ${assumptionStep.assumption.serialized} {") ++
+        assumptionStep.steps.flatMap(_.serializedLines).indent ++
+        Seq("}") ++
+        assertionStep.serializedLines
+    }
+  }
 
   case class Rearrangement(
     inference: Inference.Summary,
@@ -158,12 +158,6 @@ object Proof {
     val referenceType = "direct"
     def referencedInferenceIds: Set[String] = Set.empty
     def serializedLines = Seq(s"direct $index")
-    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = Nil
-  }
-  case class DeducedReference(antecedentIndex: Int, consequentIndex: Int) extends Reference {
-    val referenceType = "deduced"
-    def referencedInferenceIds: Set[String] = Set.empty
-    def serializedLines = Seq(s"deduced $antecedentIndex $consequentIndex")
     def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = Nil
   }
   case class SimplificationReference(

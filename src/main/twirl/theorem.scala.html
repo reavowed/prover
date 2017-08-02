@@ -1,0 +1,17 @@
+@(
+  theorem: net.prover.model.entries.Theorem,
+  chapter: net.prover.model.Chapter,
+  book: net.prover.model.Book,
+  previousOption: Option[net.prover.model.Inference.Entry],
+  nextOption: Option[net.prover.model.Inference.Entry],
+  usages: Seq[(net.prover.model.Book, net.prover.model.Chapter, Seq[net.prover.model.entries.Theorem])])
+
+@html.inference("Theorem", theorem, chapter, book, previousOption, nextOption, usages) {
+  <div class="theoremProof">
+    <hr/>
+    <h4>Proof</h4>
+    <table class="table-condensed proofRows">
+      @theorem.proof.steps.map { step => @html.step(step, 0) }
+    </table>
+  </div>
+}

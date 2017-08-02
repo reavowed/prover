@@ -1,0 +1,53 @@
+@(
+  description: String,
+  inference: net.prover.model.Inference.Entry,
+  chapter: net.prover.model.Chapter,
+  book: net.prover.model.Book,
+  previousOption: Option[net.prover.model.Inference.Entry],
+  nextOption: Option[net.prover.model.Inference.Entry],
+  usages: Seq[(net.prover.model.Book, net.prover.model.Chapter, Seq[net.prover.model.entries.Theorem])])(
+  content: Html)
+
+@html.main(Seq(
+  ("Books", Some("/")),
+  (book.title, Some("/books/" + book.key)),
+  (chapter.title, Some("/books/" + book.key + "/" + chapter.key)),
+  (inference.name, None))) {
+  <div class="inference">
+    <div class="inference-links">
+      @previousOption.map { previous =>
+        <a class="inferenceLink pull-left" href="/books/@book.key/@chapter.key/@previous.key">&laquo; @previous.name</a>
+      }
+      @nextOption.map { next =>
+        <a class="inferenceLink pull-right" href="/books/@book.key/@chapter.key/@next.key">@next.name &raquo;</a>
+      }
+    </div>
+    <div class="inference-title">
+      <h3>
+        @description: @inference.name
+      </h3>
+    </div>
+    <p>
+      @html.premises(inference.premises)
+      <div>
+        @if(inference.premises.nonEmpty) { Then } @inference.conclusion.html.
+      </div>
+    </p>
+
+    @content
+
+    @if(usages.nonEmpty) {
+      <hr />
+      @for((usageBook, usageChapter, inferences) <- usages) {
+        <div><label>@usageBook.title - @usageChapter.title</label></div>
+        <p>
+        @for(inference <- inferences) {
+          <span class="usage">
+            <a class="usage-link" href="#/@usageBook.key/@usageChapter.key/@inference.key">@inference.name</a>
+          </span>
+        }
+        </p>
+      }
+    }
+  </div>
+}

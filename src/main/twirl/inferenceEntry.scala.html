@@ -1,0 +1,14 @@
+@(description: String, inference: net.prover.model.Inference.Entry, chapter: net.prover.model.Chapter, book: net.prover.model.Book)
+<div class="result">
+  <h5>
+    <a href="/books/@book.key/@chapter.key/@inference.key" class="inference-entry-title">
+      @description: @inference.name
+    </a>
+  </h5>
+  <div class="resultBlock">
+    @html.premises(inference.premises)
+    <div>
+      @if(inference.premises.nonEmpty) { Then } @{inference.conclusion.html}.
+    </div>
+  </div>
+</div>

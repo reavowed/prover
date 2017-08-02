@@ -1,0 +1,17 @@
+@(premises: Seq[net.prover.model.Premise])
+@premises match {
+  case Nil => {}
+  case Seq(premise) => {
+    <div class="premises">
+      Suppose @Html(html.premise(premise).body.trim()).
+    </div>
+  }
+  case initPremises :+ tailPremise => {
+    <div class="premises">
+      Suppose
+      @Html(initPremises.map { premise => html.premise(premise).body.trim() }.mkString(", "))
+      and
+      @Html(html.premise(tailPremise).body.trim()).
+    </div>
+  }
+}

@@ -1,0 +1,8 @@
+@(books: Seq[net.prover.model.Book])
+@main(Nil) {
+  @for(book <- books) {
+    <div>
+      <h3><a href="/books/@book.key">@book.title</a></h3>
+    </div>
+  }
+}

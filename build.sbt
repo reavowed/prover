@@ -19,3 +19,7 @@ libraryDependencies ++= Seq(
 libraryDependencies ++= Seq(
   "org.specs2" %% "specs2-core" % "3.8.6" % "test",
   "org.specs2" %% "specs2-mock" % "3.8.6" % "test")
+
+lazy val root = (project in file(".")).enablePlugins(SbtTwirl)
+
+TwirlKeys.templateImports += "net.prover.model._"

@@ -1,0 +1,28 @@
+@(step: net.prover.model.proof.Proof.Step, indentLevel: Int)
+@step match {
+  case assertionStep: net.prover.model.proof.Proof.AssertionStep => {
+    <tr class="proofRow">
+      <td>@for(_ <- 1 to indentLevel) { &nbsp;&nbsp; } Then @assertionStep.statement.html. </td>
+      @defining(assertionStep.inference) { inference =>
+        <td><a class="stepInferenceId" href="/books/@inference.bookKey/@inference.chapterKey/@inference.key">@inference.name</a><td>
+      }
+    </tr>
+  }
+  case assumptionStep: net.prover.model.proof.Proof.AssumptionStep => {
+    <tr class="proofRow">
+      <td>@for(_ <- 1 to indentLevel) { &nbsp;&nbsp; } Assume @assumptionStep.assumption.html. </td>
+    </tr>
+    @assumptionStep.steps.map { substep => @html.step(substep, indentLevel + 1) }
+  }
+  case rearrangmentStep: net.prover.model.proof.Proof.RearrangementStep => {
+    <tr class="proofRow">
+      <td>@for(_ <- 1 to indentLevel) { &nbsp;&nbsp; } Then @rearrangmentStep.statement.html. </td>
+      <td><a class="stepInferenceId">Rearrangement</a><td>
+    </tr>
+  }
+  case _ => {
+    <tr class="proofRow">
+      <td>@for(_ <- 1 to indentLevel) { &nbsp;&nbsp; } Unknown step @step.getClass.getCanonicalName </td>
+    </tr>
+  }
+}
