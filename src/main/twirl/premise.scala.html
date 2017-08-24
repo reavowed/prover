@@ -1,5 +1,5 @@
 @(premise: net.prover.model.Premise)
-@premise match {
-  case net.prover.model.Premise.DirectPremise(statement) => {<span class="premise">@statement.html</span>}
-  case net.prover.model.Premise.DeducedPremise(antecedent, consequent) => {<span class="premise">@antecedent.html ⊢ @consequent.html</span>}
+@premise.fact match {
+  case net.prover.model.proof.Fact.Direct(statement) => {<span class="premise">@statement.html</span>}
+  case net.prover.model.proof.Fact.Deduced(antecedent, consequent) => {<span class="premise">@antecedent.html ⊢ @consequent.html</span>}
 }

@@ -226,4 +226,8 @@ package object model {
       x
     }
   }
+
+  implicit class SeqStringOps(seq: Seq[String]) {
+    def indent: Seq[String] = seq.map("  " + _)
+  }
 }

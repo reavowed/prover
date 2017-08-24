@@ -2,27 +2,21 @@ package net.prover.model.proof
 
 import net.prover.model.{Inference, Premise}
 import net.prover.model.components.Statement
-import net.prover.model.proof.Proof._
 
 case class ProvingContext(
-  provenAssertions: Seq[ReferencedAssertion],
-  provenDeductions: Seq[ReferencedDeduction],
+  referencedFacts: Seq[ReferencedFact],
   premises: Seq[Premise],
   assumptions: Seq[Statement],
   availableInferences: Seq[Inference],
   assertionHints: Seq[AssertionHint])
 {
-  def addAssumption(statement: Statement, reference: Int) = {
-    addAssertion(statement, reference)
-      .copy(assumptions = assumptions :+ statement)
+  def addFact(fact: Fact, reference: Reference.Direct) = {
+    copy(referencedFacts = referencedFacts :+ ReferencedFact(fact, reference))
   }
-  def addAssertion(statement: Statement, reference: Int) = {
-    copy(provenAssertions = provenAssertions :+ ReferencedAssertion(statement, DirectReference(reference)))
+  def addFact(referencedFact: ReferencedFact) = {
+    copy(referencedFacts = referencedFacts :+ referencedFact)
   }
-  def add(referencedDeduction: ReferencedDeduction): ProvingContext = {
-    copy(provenDeductions = provenDeductions :+ referencedDeduction)
-  }
-  def add(referencedDeductions: Seq[ReferencedDeduction]): ProvingContext = {
-    copy(provenDeductions = provenDeductions ++ referencedDeductions)
+  def addFact(referencedFact: Option[ReferencedFact]) = {
+    copy(referencedFacts = referencedFacts ++ referencedFact.toSeq)
   }
 }

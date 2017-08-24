@@ -5,6 +5,7 @@ import java.security.MessageDigest
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference._
 import net.prover.model.components.{Component, Statement, Variable}
+import net.prover.model.proof.Fact
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
@@ -39,14 +40,16 @@ object Inference {
     override def summary = Summary(name, id, key, chapterKey, bookKey)
   }
   case class Definition(
-    nameOfDefinition: String,
-    chapterKey: String,
-    bookKey: String,
-    premisesStatements: Seq[Statement],
-    conclusion: Statement)
+      nameOfDefinition: String,
+      chapterKey: String,
+      bookKey: String,
+      premiseStatements: Seq[Statement],
+      conclusion: Statement)
     extends Inference
   {
-    override def premises = premisesStatements.map(Premise.DirectPremise.apply)
+    override def premises = premiseStatements.map(Fact.Direct.apply).zipWithIndex.map { case (premiseStatement, index) =>
+      Premise(premiseStatement, index)(isElidable = false)
+    }
     override def name: String = s"Definition of $nameOfDefinition"
     override def summary: Inference.Summary = Summary(name, id, name.formatAsKey, chapterKey, bookKey)
     override def allowsRearrangement = true
@@ -96,7 +99,7 @@ object Inference {
     def parser: Parser[Summary] = {
       for {
         id <- Parser.singleWord
-        _ <- Parser.toEndOfLine
+        _ <- Parser.allInParens
       } yield Inference.Summary("", id, "", "", "")
     }
   }

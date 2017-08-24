@@ -4,6 +4,7 @@ import java.nio.file.Paths
 
 import net.prover.model.components._
 import net.prover.model.entries.{StatementDefinition, TermDefinition}
+import net.prover.model.proof.Fact
 import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {
@@ -123,6 +124,19 @@ trait ProverSpec extends Specification {
     }
   }
 
-  implicit def statementToPremise(statement: Statement): Premise = Premise.DirectPremise(statement)
-  implicit def statementPairToPremise(tuple: (Statement, Statement)): Premise = Premise.DeducedPremise(tuple._1, tuple._2)
+  trait PremiseConverter[-T] {
+    def convertToPremise(t: T, index: Int): Premise
+  }
+  // An awkward little hack to allow Nil to work - you can't define a PremiseConverter[Nothing] as per
+  // https://issues.scala-lang.org/browse/SI-4982.
+  trait LowPriorityPremiseConverter {
+    implicit val statementConverter: PremiseConverter[Statement] = (statement, index) => Premise(Fact.Direct(statement), index)(false)
+  }
+  object PremiseConverter extends LowPriorityPremiseConverter {
+    implicit val factConverter: PremiseConverter[Fact] = (fact, index) => Premise(fact, index)(false)
+  }
+  implicit def allToPremise[T : PremiseConverter](ts: Seq[T]): Seq[Premise] = {
+    val converter = implicitly[PremiseConverter[T]]
+    ts.mapWithIndex(converter.convertToPremise)
+  }
 }

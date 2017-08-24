@@ -7,26 +7,14 @@ import net.prover.model.{Inference, Premise, Substitutions}
 
 case class Prover(
   assertion: Statement,
+  reference: Reference.Direct,
   context: ProvingContext,
   debug: Boolean)
 {
   import context._
 
-  sealed trait PremiseMatch {
-    def reference: Reference
-  }
-  case class DirectPremiseMatch(
-    statement: Statement,
-    reference: Reference)
-    extends PremiseMatch
-  case class DeducedPremiseMatch(
-    antecedent: Statement,
-    consequent: Statement,
-    reference: Reference)
-    extends PremiseMatch
-
   val applicableHints = assertionHints.filter(_.conclusion == assertion)
-  lazy val allSimplifiedAssertions = provenAssertions ++ provenAssertions.flatMap(getAllSimplifications)
+  lazy val allSimplifiedFacts = referencedFacts ++ referencedFacts.flatMap(getAllSimplifications)
 
   def proveAssertion(): Option[StepWithProvenStatement] = {
     proveAssertionUsingHints()
@@ -57,8 +45,8 @@ case class Prover(
       .flatMap { substitutions =>
         matchPremisesToFacts(inference.premises, substitutions, inference.allowsRearrangement)
       }
-      .mapCollect { case (matchedPremises, substitutions) =>
-        makeAssertion(inference, substitutions, matchedPremises.map(_.reference))
+      .mapCollect { case (premiseReferences, substitutions) =>
+        makeAssertion(inference, substitutions, premiseReferences)
       }
   }
 
@@ -78,20 +66,20 @@ case class Prover(
             (prePremiseMatches, elidablePremise, postPremises, substitutionsAfterPrePremises)
           }
       }
-      .flatMap { case (prePremiseMatches, elidablePremise, postPremises, substitutionsAfterPrePremises) =>
+      .flatMap { case (prePremiseReferences, elidablePremise, postPremises, substitutionsAfterPrePremises) =>
         matchPremisesToFacts(postPremises, substitutionsAfterPrePremises, inference.allowsRearrangement)
-          .map { case (postPremiseMatches, substitutionsAfterPostPremises) =>
-            (prePremiseMatches, elidablePremise, postPremiseMatches, substitutionsAfterPostPremises)
+          .map { case (postPremiseReferences, substitutionsAfterPostPremises) =>
+            (prePremiseReferences, elidablePremise, postPremiseReferences, substitutionsAfterPostPremises)
           }
       }
-      .flatMap { case (prePremiseMatches, elidablePremise, postPremiseMatches, substitutionsAfterPostPremises) =>
-        matchElidablePremise(elidablePremise.statement, substitutionsAfterPostPremises)
-          .map { case (elidedPremiseMatch, substitutionsAfterElidedPremise) =>
-            ((prePremiseMatches :+ elidedPremiseMatch) ++ postPremiseMatches, substitutionsAfterElidedPremise)
+      .flatMap { case (prePremiseReferences, elidablePremise, postPremiseReferences, substitutionsAfterPostPremises) =>
+        matchElidablePremise(elidablePremise, substitutionsAfterPostPremises)
+          .map { case (elidedPremiseReference, substitutionsAfterElidedPremise) =>
+            ((prePremiseReferences :+ elidedPremiseReference) ++ postPremiseReferences, substitutionsAfterElidedPremise)
           }
       }
-      .mapCollect { case (matchedPremises, substitutions) =>
-        makeAssertion(inference, substitutions, matchedPremises.map(_.reference))
+      .mapCollect { case (premiseReferences, substitutions) =>
+        makeAssertion(inference, substitutions, premiseReferences)
       }
   }
 
@@ -99,13 +87,13 @@ case class Prover(
     Option(substitutions)
       .filter(s => inference.conclusion.applySubstitutions(s).contains(assertion))
       .flatMap(inference.specifySubstitutions)
-      .map(s => AssertionStep(assertion, inference.summary, s, references))
+      .map(s => AssertionStep(assertion, InferenceApplication(inference.summary, s, references), reference))
   }
 
   private def matchElidablePremise(
     premise: Statement,
     premiseSubstitutionsSoFar: Substitutions
-  ): Iterator[(PremiseMatch, Substitutions)] = {
+  ): Iterator[(Reference, Substitutions)] = {
     availableInferences.iterator
       // Match the premises first, since we don't know what the conclusion should look like
       .flatMap { inference =>
@@ -113,39 +101,38 @@ case class Prover(
           .map(inference -> _)
       }
       // Work out the substitutions by condensing the conclusion with the premise
-      .mapCollect { case (inference, (matchedPremises, inferenceSubstitutions)) =>
+      .mapCollect { case (inference, (premiseReferences, inferenceSubstitutions)) =>
         premise.condense(inference.conclusion, premiseSubstitutionsSoFar, inferenceSubstitutions)
-          .map((inference, matchedPremises, _))
+          .map((inference, premiseReferences, _))
       }
       // Confirm the final conclusion of the inference
-      .mapCollect { case (inference, matchedPremises, (premiseSubstitutions, inferenceSubstitutions)) =>
+      .mapCollect { case (inference, premiseReferences, (premiseSubstitutions, inferenceSubstitutions)) =>
         inference.conclusion.applySubstitutions(inferenceSubstitutions)
-          .map((inference, matchedPremises, premiseSubstitutions, inferenceSubstitutions, _))
+          .map((inference, premiseReferences, premiseSubstitutions, inferenceSubstitutions, _))
       }
-      .mapCollect { case (inference, matchedPremises, premiseSubstitutions, inferenceSubstitutions, provenConclusion) =>
+      .mapCollect { case (inference, premiseReferences, premiseSubstitutions, inferenceSubstitutions, provenConclusion) =>
         inference.specifySubstitutions(inferenceSubstitutions)
-          .map((inference, matchedPremises, premiseSubstitutions, _, provenConclusion))
+          .map((inference, premiseReferences, premiseSubstitutions, _, provenConclusion))
       }
       // And finally match the premise to our computed conclusion
-      .flatMap { case (inference, matchedPremises, premiseSubstitutions, inferenceSubstitutions, provenConclusion) =>
-        matchDirectPremiseToFact(
-          premise,
-          provenConclusion,
-          ElidedReference(inference.summary, inferenceSubstitutions, matchedPremises.map(_.reference)),
-          premiseSubstitutions)
+      .flatMap { case (inference, premiseReferences, premiseSubstitutions, inferenceSubstitutions, provenConclusion) =>
+        premise.calculateSubstitutions(provenConclusion, premiseSubstitutions).iterator
+          .map { substitutions =>
+            Reference.Elided(InferenceApplication(inference.summary, inferenceSubstitutions, premiseReferences)) -> substitutions
+          }
       }
   }
 
-  private def splitPremisesAtElidable(premises: Seq[Premise]): Option[(Seq[Premise], Premise.DirectPremise, Seq[Premise])] = {
+  private def splitPremisesAtElidable(premises: Seq[Premise]): Option[(Seq[Premise], Statement, Seq[Premise])] = {
     val (prePremises, elidableAndPostPremises) = premises.span {
-      case directPremise: Premise.DirectPremise if directPremise.isElidable =>
+      case premise if premise.isElidable =>
         false
       case _ =>
         true
     }
     elidableAndPostPremises match {
-      case (elidablePremise: Premise.DirectPremise) +: postPremises =>
-        Some((prePremises, elidablePremise, postPremises))
+      case Premise(Fact.Direct(premiseStatement), _) +: postPremises =>
+        Some((prePremises, premiseStatement, postPremises))
       case _ =>
         None
     }
@@ -155,91 +142,76 @@ case class Prover(
     val expansions = availableInferences
       .filter(_.rearrangementType == RearrangementType.Expansion)
       .mapCollect { inference =>
-        inference.premises.toType[Premise.DirectPremise]
+        inference.premises.map(_.fact).toType[Fact.Direct]
           .map(_.map(_.statement))
           .map((inference, _))
       }
-    def findStatementByExpanding(statement: Statement): Iterator[ReferencedAssertion] = {
+    def findStatementByExpanding(statement: Statement): Option[Reference.Expansion] = {
       expansions.iterator
         .flatMap { case (inference, inferencePremises) =>
           for {
             substitutions <- inference.conclusion.calculateSubstitutions(statement, Substitutions.empty)
             substitutedPremises <- inferencePremises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
-            x = substitutedPremises.map(getStatementByRearranging)
-            referencedPremises <- x.traverseOption.toSeq
+            premiseReferences <- substitutedPremises.map(getStatementByRearranging).traverseOption.toSeq
             if inference.conclusion.applySubstitutions(substitutions).contains(statement)
             inferenceSubstitutions <- inference.specifySubstitutions(substitutions)
-          } yield ReferencedAssertion(
-            statement,
-            ExpandedReference(inference.summary, inferenceSubstitutions, referencedPremises.map(_.reference)))
+          } yield Reference.Expansion(InferenceApplication(inference.summary, inferenceSubstitutions, premiseReferences))
         }
+        .nextOption()
     }
-    def getStatementByRearranging(statement: Statement): Option[ReferencedAssertion] = {
-      findStatementInFacts(statement) orElse findStatementByExpanding(statement).nextOption()
+    def getStatementByRearranging(statement: Statement): Option[Reference] = {
+      findStatementInFacts(statement) orElse findStatementByExpanding(statement)
     }
-    getStatementByRearranging(assertion).map { case ReferencedAssertion(statement, references) =>
-      RearrangementStep(statement, references)
+    findStatementByExpanding(assertion).map { rearrangement =>
+      RearrangementStep(assertion, rearrangement, reference)
     }
   }
 
-  def findStatementInFacts(statement: Statement): Option[ReferencedAssertion] = {
-    allSimplifiedAssertions.find(_.statement == statement)
+  def findStatementInFacts(statement: Statement): Option[Reference] = {
+    allSimplifiedFacts.find(_.fact == Fact.Direct(statement)).map(_.reference)
   }
 
   private def matchPremisesToFacts(
     premises: Seq[Premise],
     substitutions: Substitutions,
     rearrangementAllowed: Boolean
-  ): Iterator[(Seq[PremiseMatch], Substitutions)] = {
-    val initial = Iterator((Seq.empty[PremiseMatch], substitutions))
+  ): Iterator[(Seq[Reference], Substitutions)] = {
+    val initial = Iterator((Seq.empty[Reference], substitutions))
     premises.foldLeft(initial) { case (acc, premise) =>
-      acc.flatMap { case (matchedPremisesSoFar, substitutionsSoFar) =>
-        matchPremiseToFacts(premise, substitutionsSoFar, rearrangementAllowed).map { case (matchedPremise, newSubstitutions) =>
-          (matchedPremisesSoFar :+ matchedPremise, newSubstitutions)
+      acc.flatMap { case (referencesSoFar, substitutionsSoFar) =>
+        matchPremiseToFacts(premise, substitutionsSoFar, rearrangementAllowed).map { case (premiseReference, newSubstitutions) =>
+          (referencesSoFar :+ premiseReference, newSubstitutions)
         }
       }
     }
   }
 
   private def matchPremiseToFacts(
-    inferencePremise: Premise,
-    substitutionsSoFar: Substitutions,
-    rearrangementAllowed: Boolean
-  ): Iterator[(PremiseMatch, Substitutions)] = {
-    inferencePremise match {
-      case Premise.DirectPremise(premiseStatement) =>
-        matchDirectPremiseToFacts(premiseStatement, substitutionsSoFar, rearrangementAllowed)
-      case deducedPremise: Premise.DeducedPremise =>
-        matchDeducedPremiseToFacts(deducedPremise, substitutionsSoFar)
-    }
-  }
-
-  private def matchDirectPremiseToFacts(
-    premiseStatement: Statement,
+    premise: Premise,
     substitutionsSoFar: Substitutions,
     allowRearrangement: Boolean
-  ): Iterator[(PremiseMatch, Substitutions)] = {
-    val assertions = if (allowRearrangement) allSimplifiedAssertions else provenAssertions
-    assertions.iterator.flatMap { case ReferencedAssertion(provenStatement, reference) =>
-      matchDirectPremiseToFact(premiseStatement, provenStatement, reference, substitutionsSoFar)
+  ): Iterator[(Reference, Substitutions)] = {
+    val facts = if (allowRearrangement) allSimplifiedFacts else referencedFacts
+    facts.iterator.flatMap { case ReferencedFact(fact, reference) =>
+      matchPremiseToFact(premise.fact, fact, reference, substitutionsSoFar)
     }
   }
 
-  private def matchDirectPremiseToFact(
-    premiseStatement: Statement,
-    knownStatement: Statement,
+  private def matchPremiseToFact(
+    premiseFact: Fact,
+    knownFact: Fact,
     reference: Reference,
     substitutionsSoFar: Substitutions
-  ): Iterator[(PremiseMatch, Substitutions)] = {
-    premiseStatement.calculateSubstitutions(knownStatement, substitutionsSoFar)
+  ): Iterator[(Reference, Substitutions)] = {
+    premiseFact.calculateSubstitutions(knownFact, substitutionsSoFar)
       .toIterator
       .map { newSubstitutions =>
-        (DirectPremiseMatch(knownStatement, reference), newSubstitutions)
+        (reference, newSubstitutions)
       }
   }
 
-  private def getAllSimplifications(referencedAssertion: ReferencedAssertion): Seq[ReferencedAssertion] = {
-    def helper(next: Seq[ReferencedAssertion], acc: Seq[ReferencedAssertion]): Seq[ReferencedAssertion] = {
+  private def getAllSimplifications(referencedFact: ReferencedFact): Seq[ReferencedFact] = {
+    def helper(next: Seq[ReferencedFact], acc: Seq[ReferencedFact]): Seq[ReferencedFact] = {
       if (next.isEmpty)
         acc
       else {
@@ -247,43 +219,37 @@ case class Prover(
         helper(newSimplifications, next ++ acc)
       }
     }
-    helper(getNextLevelSimplifications(referencedAssertion), Nil)
+    helper(getNextLevelSimplifications(referencedFact), Nil)
   }
 
-  private def getNextLevelSimplifications(referencedAssertion: ReferencedAssertion): Seq[ReferencedAssertion] = {
-    availableInferences
-      .filter(_.rearrangementType == RearrangementType.Simplification)
-      .collect {
-        case inference @ Inference(_, Seq(Premise.DirectPremise(premiseStatement)), _) =>
-          (inference, premiseStatement)
-      }
-      .flatMap { case (inference, premiseStatement) =>
-        premiseStatement.calculateSubstitutions(referencedAssertion.statement, Substitutions.empty)
-          .map((inference, _))
-      }
-      .mapCollect { case (inference, substitutions) =>
-        inference.conclusion.applySubstitutions(substitutions)
-          .map((inference, substitutions, _))
-      }
-      .mapCollect { case (inference, substitutions, conclusion) =>
-        inference.specifySubstitutions(substitutions)
-          .map((inference, _, conclusion))
-      }
-      .map { case (inference, substitutions, conclusion) =>
-         ReferencedAssertion(
-           conclusion,
-           SimplificationReference(conclusion, inference.summary, substitutions, referencedAssertion.reference))
-      }
-  }
-
-  private def matchDeducedPremiseToFacts(
-    inferencePremise: Premise.DeducedPremise,
-    substitutionsSoFar: Substitutions
-  ): Iterator[(PremiseMatch, Substitutions)] = {
-    provenDeductions.iterator.flatMap { case ReferencedDeduction(antecedent, consequent, reference) =>
-      inferencePremise.antecedent.calculateSubstitutions(antecedent, substitutionsSoFar)
-        .flatMap(inferencePremise.consequent.calculateSubstitutions(consequent, _))
-        .map((DeducedPremiseMatch(antecedent, consequent, reference), _))
+  private def getNextLevelSimplifications(referencedFact: ReferencedFact): Seq[ReferencedFact] = {
+    referencedFact match {
+      case ReferencedFact(Fact.Direct(statement), factReference) =>
+        availableInferences
+          .filter(_.rearrangementType == RearrangementType.Simplification)
+          .collect {
+            case inference @ Inference(_, Seq(Premise(Fact.Direct(premiseStatement), _)), _) =>
+              (inference, premiseStatement)
+          }
+          .flatMap { case (inference, premiseStatement) =>
+            premiseStatement.calculateSubstitutions(statement, Substitutions.empty)
+              .map((inference, _))
+          }
+          .mapCollect { case (inference, substitutions) =>
+            inference.conclusion.applySubstitutions(substitutions)
+              .map((inference, substitutions, _))
+          }
+          .mapCollect { case (inference, substitutions, conclusion) =>
+            inference.specifySubstitutions(substitutions)
+              .map((inference, _, conclusion))
+          }
+          .map { case (inference, substitutions, conclusion) =>
+            ReferencedFact(
+              Fact.Direct(conclusion),
+              Reference.Simplification(InferenceApplication(inference.summary, substitutions, Seq(factReference))))
+          }
+      case _ =>
+        Nil
     }
   }
 }

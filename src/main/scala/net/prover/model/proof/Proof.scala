@@ -1,10 +1,9 @@
 package net.prover.model.proof
 
-import net.prover.model.Inference.Summary
 import net.prover.model.components.{Statement, Term, TermVariable}
 import net.prover.model.proof.Proof.Step
 import net.prover.model.proof.ProofOutline.StepWithAssertion
-import net.prover.model.{Inference, Parser, ParsingContext, Premise, ProvingException, Substitutions}
+import net.prover.model._
 import org.slf4j.LoggerFactory
 
 case class Proof(steps: Seq[Proof.Step]) {
@@ -26,12 +25,11 @@ case class Proof(steps: Seq[Proof.Step]) {
 object Proof {
   val logger = LoggerFactory.getLogger(Proof.getClass)
 
-  implicit class SeqStringOps(seq: Seq[String]) {
-    def indent: Seq[String] = seq.map("  " + _)
-  }
-
   sealed trait Step {
     def `type`: String
+    def reference: Reference.Direct
+    def fact: Option[Fact]
+    def referencedFact: Option[ReferencedFact] = fact.map { f => ReferencedFact(f, reference)}
     def referencedInferenceIds: Set[String]
     def matchesOutline(stepOutline: ProofOutline.Step): Boolean
     def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
@@ -53,6 +51,7 @@ object Proof {
   }
   sealed trait StepWithProvenStatement extends Step {
     def statement: Statement
+    override def fact = Some(Fact.Direct(statement))
   }
   object StepWithProvenStatement {
     def unapply(step: Step): Option[Statement] = step match {
@@ -65,10 +64,12 @@ object Proof {
 
   case class AssumptionStep(
       assumption: Statement,
-      steps: Seq[Step])
+      steps: Seq[Step],
+      reference: Reference.Direct)
     extends Step
   {
     override val `type` = "assumption"
+    override val fact = steps.ofType[StepWithProvenStatement].lastOption.map(lastSubstep => Fact.Deduced(assumption, lastSubstep.statement))
     override def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
     override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = stepOutline match {
       case ProofOutline.AssumptionStep(`assumption`, stepOutlines) =>
@@ -83,42 +84,41 @@ object Proof {
   }
   case class AssertionStep(
       statement: Statement,
-      inference: Inference.Summary,
-      substitutions: Inference.Substitutions,
-      references: Seq[Reference])
+      inferenceApplication: InferenceApplication,
+      reference: Reference.Direct)
     extends StepWithProvenStatement
   {
     override val `type` = "assertion"
-    override def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inference.id
+    override def referencedInferenceIds: Set[String] = inferenceApplication.referencedInferenceIds
     override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = Step.matchAssertionOutline(statement, stepOutline)
     def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      AssertionHint.attempt(inference, availableInferences, substitutions, statement).toSeq ++
-        references.flatMap(_.getAssertionHints(availableInferences))
+      inferenceApplication.getAssertionHints(availableInferences)
     }
     override def serializedLines: Seq[String] = {
-      s"assert ${statement.serialized}" +:
-        (Seq(inference.serialized, substitutions.serialized) ++ references.flatMap(_.serializedLines)).indent
+      s"assert ${statement.serialized}" +: inferenceApplication.serializedLines.indent
     }
   }
   case class RearrangementStep(
       statement: Statement,
-      reference: Reference)
+      rearrangement: Reference.Rearrangement,
+      reference: Reference.Direct)
     extends StepWithProvenStatement
   {
     override val `type` = "rearrange"
-    override def referencedInferenceIds: Set[String] = reference.referencedInferenceIds
+    override def referencedInferenceIds: Set[String] = rearrangement.referencedInferenceIds
     override def matchesOutline(stepOutline: ProofOutline.Step): Boolean = Step.matchAssertionOutline(statement, stepOutline)
     def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      reference.getAssertionHints(availableInferences)
+      rearrangement.getAssertionHints(availableInferences)
     }
     override def serializedLines = {
-      s"rearrange ${statement.serialized}" +: reference.serializedLines.indent
+      s"rearrange ${statement.serialized}" +: rearrangement.serializedLines.indent
     }
   }
   case class NamingStep(
-    variable: TermVariable,
-    assumptionStep: AssumptionStep,
-    assertionStep: StepWithProvenStatement)
+      variable: TermVariable,
+      assumptionStep: AssumptionStep,
+      assertionStep: StepWithProvenStatement,
+      reference: Reference.Direct)
     extends StepWithProvenStatement
   {
     override val `type` = "naming"
@@ -141,82 +141,13 @@ object Proof {
     }
   }
 
-  case class Rearrangement(
-    inference: Inference.Summary,
-    substitutions: Substitutions,
-    provenStatement: Statement,
-    references: Seq[Reference])
-
-  sealed trait Reference {
-    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
-    def referenceType: String
-    def referencedInferenceIds: Set[String]
-    def serialized: String = serializedLines.mkString("\n")
-    def serializedLines: Seq[String]
-  }
-  case class DirectReference(index: Int) extends Reference {
-    val referenceType = "direct"
-    def referencedInferenceIds: Set[String] = Set.empty
-    def serializedLines = Seq(s"direct $index")
-    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = Nil
-  }
-  case class SimplificationReference(
-    statement: Statement,
-    inference: Summary,
-    substitutions: Inference.Substitutions,
-    reference: Reference
-  ) extends Reference {
-    val referenceType = "simplification"
-    def referencedInferenceIds: Set[String] = reference.referencedInferenceIds + inference.id
-    def serializedLines = {
-      s"simplification ${statement.serialized}" +: (Seq(inference.serialized, substitutions.serialized) ++ reference.serializedLines).indent
-    }
-    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      AssertionHint.attempt(inference, availableInferences, substitutions).toSeq ++ reference.getAssertionHints(availableInferences)
-    }
-  }
-  case class ElidedReference(inference: Summary, substitutions: Inference.Substitutions, references: Seq[Reference]) extends Reference {
-    val referenceType = "elided"
-    def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inference.id
-    def serializedLines = {
-      "elided {" +: (Seq(inference.serialized, substitutions.serialized) ++ references.flatMap(_.serializedLines)).indent :+ "}"
-    }
-    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      AssertionHint.attempt(inference, availableInferences, substitutions).toSeq ++
-        references.flatMap(_.getAssertionHints(availableInferences))
-    }
-  }
-  case class ExpandedReference(inference: Summary, substitutions: Inference.Substitutions, references: Seq[Reference]) extends Reference {
-    val referenceType = "expanded"
-    def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inference.id
-    def serializedLines = {
-      "expanded {" +: (Seq(inference.serialized, substitutions.serialized) ++ references.flatMap(_.serializedLines)).indent :+ "}"
-    }
-    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      AssertionHint.attempt(inference, availableInferences, substitutions).toSeq ++
-        references.flatMap(_.getAssertionHints(availableInferences))
-    }
-  }
-
-  case class ReferencedAssertion(statement: Statement, reference: Reference)
-  case class ReferencedDeduction(antecedent: Statement, consequent: Statement, reference: Reference)
-
   def getInitialContext(
     premises: Seq[Premise],
     availableInferences: Seq[Inference],
     assertionHints: Seq[AssertionHint]
   ): ProvingContext = {
-    val premiseAssertions = premises.zipWithIndex.collect {
-      case (Premise.DirectPremise(premise), index) =>
-        ReferencedAssertion(premise, DirectReference(index))
-    }
-    val premiseDeductions = premises.zipWithIndex.collect {
-      case (Premise.DeducedPremise(assumption, conclusion), index) =>
-        ReferencedDeduction(assumption, conclusion, DirectReference(index))
-    }
     ProvingContext(
-      premiseAssertions,
-      premiseDeductions,
+      premises.map(_.referencedFact),
       premises,
       Nil,
       availableInferences,
@@ -230,11 +161,11 @@ object Proof {
     assertionHints: Seq[AssertionHint]
   ): Proof = {
     val context = getInitialContext(premises, availableInferences, assertionHints)
-    val (detailedSteps, _) = proveSteps(
+    val detailedSteps = proveSteps(
       proofOutline.steps,
       Nil,
       context,
-      premises.length)
+      None)
     Proof(detailedSteps)
   }
 
@@ -242,49 +173,26 @@ object Proof {
     stepOutlines: Seq[ProofOutline.Step],
     accumulatedSteps: Seq[Step],
     context: ProvingContext,
-    nextReference: Int
-  ): (Seq[Step], ProvingContext) = {
-    stepOutlines match {
-      case Nil =>
-        (accumulatedSteps, context)
-      case stepOutline +: otherStepOutlines =>
-        val (step, updatedContext) = proveStep(stepOutline, context, nextReference)
-        proveSteps(
-          otherStepOutlines,
-          accumulatedSteps :+ step,
-          updatedContext,
-          nextReference + 1)
+    baseReference: Option[Reference.Direct]
+  ): Seq[Step] = {
+    stepOutlines.zipWithIndex.foldLeft(Seq.empty[Step]) { case (steps, (stepOutline, index)) =>
+      val updatedContext = context.copy(referencedFacts = context.referencedFacts ++ steps.mapCollect(_.referencedFact))
+      steps :+ proveStep(stepOutline, updatedContext, Reference.nextReference(baseReference, index))
     }
   }
 
   private def proveStep(
     stepOutline: ProofOutline.Step,
     context: ProvingContext,
-    nextReference: Int
-  ): (Step, ProvingContext) = {
+    reference: Reference.Direct
+  ): Step = {
     stepOutline match {
       case ProofOutline.AssumptionStep(assumption, substepOutlines) =>
-        proveAssumptionStep(assumption, substepOutlines, context, nextReference)
+        proveAssumptionStep(assumption, substepOutlines, context, reference)
       case ProofOutline.NamingStep(variable, namingStatement, substepOutlines) =>
-        val finalStepWithAssertion = substepOutlines match {
-          case _ :+ (step: StepWithAssertion) =>
-            step.innermostAssertionStep
-          case _ =>
-            throw new Exception("Naming step must end with an assertion")
-        }
-        val (assumptionStep, assumptionContext) = proveAssumptionStep(namingStatement, substepOutlines, context, nextReference)
-        val (assertionStep, updatedContext) = proveAssertionStep(
-          finalStepWithAssertion,
-          assumptionContext,
-          nextReference
-        ).getOrElse(
-          throw ProvingException(
-            s"Could not extract assertion ${finalStepWithAssertion.assertion} from naming step for $variable",
-            finalStepWithAssertion.location.fileName,
-            finalStepWithAssertion.location.lineNumber))
-        (NamingStep(variable, assumptionStep, assertionStep), updatedContext)
+        proveNamingStep(variable, namingStatement, substepOutlines, context, reference)
       case assertionStep: ProofOutline.AssertionStep =>
-        proveAssertionStep(assertionStep, context, nextReference)
+        proveAssertionStep(assertionStep, context, reference)
           .ifDefined {
             logger.info(s"Proved assertion ${assertionStep.assertion}")
           }
@@ -299,133 +207,114 @@ object Proof {
     assumption: Statement,
     substepOutlines: Seq[ProofOutline.Step],
     context: ProvingContext,
-    nextReference: Int
-  ): (AssumptionStep, ProvingContext) = {
-    val contextWithAssumption = context.addAssumption(assumption, nextReference)
-    val (substeps, _) = proveSteps(
+    reference: Reference.Direct
+  ): AssumptionStep = {
+    val contextWithAssumption = context.addFact(Fact.Direct(assumption), reference)
+    val substeps = proveSteps(
       substepOutlines,
       Nil,
       contextWithAssumption,
-      nextReference + 1)
-    val assumptionStep = AssumptionStep(assumption, substeps)
-    val updatedContext = substeps.ofType[StepWithProvenStatement].lastOption match {
-      case Some(StepWithProvenStatement(provenStatement)) =>
-        context.add(ReferencedDeduction(assumption, provenStatement, DirectReference(nextReference)))
-      case None =>
-        context
-    }
-    (assumptionStep, updatedContext)
+      Some(reference))
+    AssumptionStep(assumption, substeps, reference)
   }
 
   private def proveAssertionStep(
     stepOutline: ProofOutline.AssertionStep,
     context: ProvingContext,
-    nextReference: Int
-  ):  Option[(StepWithProvenStatement, ProvingContext)] = {
-    for {
-      assertionStep <- Prover(
-        stepOutline.assertion,
-        context,
-        stepOutline.debug
-      ).proveAssertion()
-    } yield {
-      (assertionStep, context.addAssertion(assertionStep.statement, nextReference))
+    reference: Reference.Direct
+  ):  Option[StepWithProvenStatement] = {
+    Prover(
+      stepOutline.assertion,
+      reference,
+      context,
+      stepOutline.debug
+    ).proveAssertion()
+  }
+
+  def proveNamingStep(
+    variable: TermVariable,
+    namingStatement: Statement,
+    substepOutlines: Seq[ProofOutline.Step],
+    context: ProvingContext,
+    reference: Reference.Direct
+  ): NamingStep = {
+    val finalStepWithAssertion = substepOutlines match {
+      case _ :+ (step: StepWithAssertion) =>
+        step.innermostAssertionStep
+      case _ =>
+        throw new Exception("Naming step must end with an assertion")
     }
+    val assumptionStep = proveAssumptionStep(namingStatement, substepOutlines, context, reference)
+    val assertionStep = proveAssertionStep(
+      finalStepWithAssertion,
+      context.addFact(assumptionStep.referencedFact),
+      reference
+    ).getOrElse(
+      throw ProvingException(
+        s"Could not extract assertion ${finalStepWithAssertion.assertion} from naming step for $variable",
+        finalStepWithAssertion.location.fileName,
+        finalStepWithAssertion.location.lineNumber))
+    NamingStep(variable, assumptionStep, assertionStep, reference)
   }
 
   def parser(implicit parsingContext: ParsingContext): Parser[Proof] = {
     for {
-      steps <- stepsParser
+      steps <- stepsParser(None)
     } yield {
       Proof(steps)
     }
   }
 
-  def stepsParser(implicit parsingContext: ParsingContext): Parser[Seq[Step]] = {
-    stepParser.collectWhileDefined
+  def stepsParser(baseReference: Option[Reference.Direct])(implicit parsingContext: ParsingContext): Parser[Seq[Step]] = {
+    Parser.iterateWhileDefined((Seq.empty[Step], 0)) { case (steps, index) =>
+      stepParser(Reference.nextReference(baseReference, index)).mapMap {step =>
+        (steps :+ step, index + 1)
+      }
+    }.map(_._1)
   }
 
-  def stepParser(implicit parsingContext: ParsingContext): Parser[Option[Step]] = {
+  def stepParser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Option[Step]] = {
     Parser.selectWord {
-      case "assume" => assumptionStepParser
-      case "assert" => assertionStepParser
-      case "rearrange" => rearrangementStepParser
-      case "name" => namingStepParser
+      case "assume" => assumptionStepParser(reference)
+      case "assert" => assertionStepParser(reference)
+      case "rearrange" => rearrangementStepParser(reference)
+      case "name" => namingStepParser(reference)
     }
   }
 
-  def assumptionStepParser(implicit parsingContext: ParsingContext): Parser[AssumptionStep] = {
+  def assumptionStepParser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[AssumptionStep] = {
     for {
       assumption <- Statement.parser
-      steps <- stepParser.collectWhileDefined.inBraces
-    } yield AssumptionStep(assumption, steps)
+      steps <- stepsParser(Some(reference)).inBraces
+    } yield AssumptionStep(assumption, steps, reference)
   }
 
-  def assertionStepParser(implicit parsingContext: ParsingContext): Parser[AssertionStep] = {
+  def assertionStepParser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[AssertionStep] = {
     for {
       assertion <- Statement.parser
-      inferenceSummary <- Inference.Summary.parser
-      substitutions <- Inference.Substitutions.parser
-      references <- referencesParser
+      inferenceApplication <- InferenceApplication.parser
     } yield {
-      AssertionStep(assertion, inferenceSummary, substitutions, references)
+      AssertionStep(assertion, inferenceApplication, reference)
     }
   }
 
-  def rearrangementStepParser(implicit parsingContext: ParsingContext): Parser[RearrangementStep] = {
+  def rearrangementStepParser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[RearrangementStep] = {
     for {
       provenStatement <- Statement.parser
-      reference <- referenceParser.getOrElse(throw new Exception("Rearrangement step missing reference"))
-    } yield RearrangementStep(provenStatement, reference)
+      rearrangement <- Reference.parser.getOrElse(throw new Exception("Rearrangement step missing reference"))
+        .map { r =>
+          r.asOptionalInstanceOf[Reference.Rearrangement]
+          .getOrElse(throw new Exception("Rerrangment step had non-rearrangement reference"))
+        }
+    } yield RearrangementStep(provenStatement, rearrangement, reference)
   }
 
-  def namingStepParser(implicit parsingContext: ParsingContext): Parser[NamingStep] = {
+  def namingStepParser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[NamingStep] = {
     for {
       variable <- Term.variableParser
-      assumptionStep <- assumptionStepParser
+      assumptionStep <- assumptionStepParser(reference)
       _ <- Parser.requiredWord("assert")
-      assertionStep <- assertionStepParser
-    } yield NamingStep(variable, assumptionStep, assertionStep)
-  }
-
-  def referencesParser(implicit parsingContext: ParsingContext): Parser[Seq[Reference]] = {
-    referenceParser.collectWhileDefined
-  }
-  def referenceParser(implicit parsingContext: ParsingContext): Parser[Option[Reference]] = {
-    Parser.selectWord {
-      case "direct" => directReferenceParser
-      case "simplification" => simplificationReferenceParser
-      case "elided" => elidedReferenceParser
-      case "expanded" => expandedReferenceParser
-    }
-  }
-  def directReferenceParser: Parser[DirectReference] = {
-    for {
-      index <- Parser.int
-    } yield {
-      DirectReference(index)
-    }
-  }
-  def simplificationReferenceParser(implicit parsingContext: ParsingContext): Parser[SimplificationReference] = {
-    for {
-      statement <- Statement.parser
-      inferenceSummary <- Inference.Summary.parser
-      substitutions <- Inference.Substitutions.parser
-      reference <- referenceParser.getOrElse(throw new Exception("Missing reference for simplification"))
-    } yield SimplificationReference(statement, inferenceSummary, substitutions, reference)
-  }
-  def elidedReferenceParser(implicit parsingContext: ParsingContext): Parser[ElidedReference] = {
-    (for {
-      inferenceSummary <- Inference.Summary.parser
-      substitutions <- Inference.Substitutions.parser
-      references <- referencesParser
-    } yield ElidedReference(inferenceSummary, substitutions, references)).inBraces
-  }
-  def expandedReferenceParser(implicit parsingContext: ParsingContext): Parser[ExpandedReference] = {
-    (for {
-      inferenceSummary <- Inference.Summary.parser
-      substitutions <- Inference.Substitutions.parser
-      references <- referencesParser
-    } yield ExpandedReference(inferenceSummary, substitutions, references)).inBraces
+      assertionStep <- assertionStepParser(reference)
+    } yield NamingStep(variable, assumptionStep, assertionStep, reference)
   }
 }

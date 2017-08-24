@@ -5,19 +5,18 @@ import java.nio.file.Paths
 import net.prover.model.Inference.RearrangementType
 import net.prover.model.components._
 import net.prover.model.entries.Axiom
-import net.prover.model.proof.Proof.SimplificationReference
 import net.prover.model.proof.ProofOutline.{AssertionStep, AssumptionStep}
-import net.prover.model.proof.{CachedProof, Proof, ProofOutline}
+import net.prover.model.proof._
 
 class TheoremSpec extends ProverSpec {
 
-  def axiom(
+  def axiom[T : PremiseConverter](
     name: String,
-    premises: Seq[Premise],
+    premiseSources: Seq[T],
     conclusion: Statement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement
   ): Axiom = {
-    Axiom(name, name.formatAsKey, "test-chapter", "Test Chapter", "test-book", "Test Book", premises, conclusion, rearrangementType)
+    Axiom(name, name.formatAsKey, "test-chapter", "Test Chapter", "test-book", "Test Book", premiseSources, conclusion, rearrangementType)
   }
 
   "theorem parser" should {
@@ -33,29 +32,29 @@ class TheoremSpec extends ProverSpec {
       AssumptionStep(tuple._1, tuple._2.map(assertionStepFromStatement))
     }
 
-    def prove(
-      premises: Seq[Premise],
+    def prove[T : PremiseConverter](
+      premiseSources: Seq[T],
       proofSteps: Seq[ProofOutline.Step],
       inferences: Seq[Inference]
     ): Proof = {
       Proof.fillInOutline(
-        premises,
+        premiseSources,
         ProofOutline(proofSteps),
         inferences,
         Nil)
     }
 
-    def checkProof(
-      premises: Seq[Premise],
+    def checkProof[T : PremiseConverter](
+      premiseSources: Seq[T],
       proofSteps: Seq[ProofOutline.Step],
       inferences: Seq[Inference]
     ) = {
-      val proof = prove(premises, proofSteps, inferences)
+      val proof = prove(premiseSources, proofSteps, inferences)
       proof.conclusion mustEqual proofSteps.ofType[ProofOutline.StepWithAssertion].last.innermostAssertionStep.assertion
       proof.matchesOutline(ProofOutline(proofSteps)) must beTrue
       val serializedProof = proof.serialized
       val deserializedProof = Proof.parser.parse(Tokenizer.fromString(serializedProof, Paths.get("")))._1
-      CachedProof(Paths.get(""), premises, deserializedProof).validate(inferences) must beSome(proof)
+      CachedProof(Paths.get(""), premiseSources, deserializedProof).validate(inferences) must beSome(proof)
     }
 
     "not prove an unfounded statement" in {
@@ -63,12 +62,12 @@ class TheoremSpec extends ProverSpec {
     }
 
     val repetition = axiom("Repetition", Seq(φ), φ)
-    val deduction = axiom("Deduction", Seq(Premise.DeducedPremise(φ, ψ)), Implication(φ, ψ))
+    val deduction = axiom("Deduction", Seq(Fact.Deduced(φ, ψ)), Implication(φ, ψ))
     val modusPonens = axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
     val implicationIsReflexive = axiom("Implication Is Reflexive", Nil, Implication(φ, φ))
     val extractLeftConjunct = axiom("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), φ, RearrangementType.Simplification)
     val combineConjunction = axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ), RearrangementType.Expansion)
-    val addRightDisjunct = axiom("Add Right Disjunct", Seq(ψ), Disjunction(φ, ψ), rearrangementType = RearrangementType.Expansion)
+    val addRightDisjunct = axiom("Add Right Disjunct", Seq(ψ), Disjunction(φ, ψ), RearrangementType.Expansion)
 
     "prove the conclusion of a premiseless inference" in {
       checkProof(
@@ -105,12 +104,10 @@ class TheoremSpec extends ProverSpec {
         Seq(φ),
         Implication(ψ, φ))
 
-      val proof = prove(
+      checkProof(
         Seq(Conjunction(φ, ψ)),
         Seq(Implication(χ, φ)),
         Seq(extractLeftConjunct, anythingImpliesATrueStatement))
-      proof.conclusion mustEqual Implication(χ, φ)
-      proof.steps.last.asInstanceOf[Proof.AssertionStep].references.head.asInstanceOf[SimplificationReference].statement mustEqual φ
     }
 
     "prove a statement by rearranging" in {

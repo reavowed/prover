@@ -3,7 +3,7 @@
   case assertionStep: net.prover.model.proof.Proof.AssertionStep => {
     <tr class="proofRow">
       <td>@for(_ <- 1 to indentLevel) { &nbsp;&nbsp; } Then @assertionStep.statement.html. </td>
-      @defining(assertionStep.inference) { inference =>
+      @defining(assertionStep.inferenceApplication.inferenceSummary) { inference =>
         <td><a class="stepInferenceId" href="/books/@inference.bookKey/@inference.chapterKey/@inference.key">@inference.name</a><td>
       }
     </tr>

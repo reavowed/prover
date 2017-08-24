@@ -46,9 +46,7 @@ case class TheoremOutline(
   ): Proof = {
     cachedProofs
       .find { cachedProof =>
-        premises.zipStrict(cachedProof.premises).exists(_.forall {
-          case (p1, p2) => p1.matches(p2)
-        }) && cachedProof.proof.matchesOutline(proofOutline)
+        premises == cachedProof.premises && cachedProof.proof.matchesOutline(proofOutline)
       } match {
         case Some(cachedProof) =>
           cachedProof.validate(availableInferences) match {

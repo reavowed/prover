@@ -1,6 +1,8 @@
 package net.prover.model
 
+import net.prover.model.components.Statement
 import net.prover.model.entries.{Axiom, AxiomOutline}
+import net.prover.model.proof.Fact
 
 class AxiomSpec extends ProverSpec {
 
@@ -9,18 +11,26 @@ class AxiomSpec extends ProverSpec {
     outline.expand(outline.name.formatAsKey, "Test Chapter", "Test Book")
   }
 
+  def axiom[T : PremiseConverter](title: String, key: String, premises: Seq[T], conclusion: Statement): Axiom = {
+    Axiom(
+      title,
+      key,
+      "test-chapter",
+      "Test Chapter",
+      "test-book",
+      "Test Book",
+      premises,
+      conclusion)
+  }
+
   "axiom parser" should {
     "parse an axiom with no premises" in {
       parseAxiom(
         "Axiom of Extensionality",
         "conclusion ∀ x ∀ y ∀ z → ↔ ∈ z x ∈ z y ↔ ∈ x z ∈ y z"
-      ) mustEqual Axiom(
+      ) mustEqual axiom(
         "Axiom of Extensionality",
         "axiom-of-extensionality",
-        "test-chapter",
-        "Test Chapter",
-        "test-book",
-        "Test Book",
         Nil,
         ForAll(x, ForAll(y, ForAll(z, Implication(
           Equivalence(ElementOf(z, x), ElementOf(z, y)),
@@ -32,14 +42,10 @@ class AxiomSpec extends ProverSpec {
         "Restate",
         "premise φ",
         "conclusion φ"
-      ) mustEqual Axiom(
+      ) mustEqual axiom(
         "Restate",
         "restate",
-        "test-chapter",
-        "Test Chapter",
-        "test-book",
-        "Test Book",
-        Seq(Premise.DirectPremise(φ)),
+        Seq(φ),
         φ)
     }
 
@@ -49,14 +55,10 @@ class AxiomSpec extends ProverSpec {
         "premise → φ ψ",
         "premise φ",
         "conclusion ψ"
-      ) mustEqual Axiom(
+      ) mustEqual axiom(
         "Eliminate Implication",
         "eliminate-implication",
-        "test-chapter",
-        "Test Chapter",
-        "test-book",
-        "Test Book",
-        Seq(Premise.DirectPremise(Implication(φ, ψ)), Premise.DirectPremise(φ)),
+        Seq(Implication(φ, ψ), φ),
         ψ)
     }
 
@@ -65,14 +67,10 @@ class AxiomSpec extends ProverSpec {
         "Deduction",
         "premise proves φ ψ",
         "conclusion → φ ψ"
-      ) mustEqual Axiom(
+      ) mustEqual axiom(
         "Deduction",
         "deduction",
-        "test-chapter",
-        "Test Chapter",
-        "test-book",
-        "Test Book",
-        Seq(Premise.DeducedPremise(φ, ψ)),
+        Seq(Fact.Deduced(φ, ψ)),
         Implication(φ, ψ))
     }
   }
