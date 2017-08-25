@@ -61,8 +61,6 @@ object CachedProof {
         validateAssumptionStep(assumptionStep, context)
       case assertionStep: Step.Assertion =>
         validateAssertionStep(assertionStep, context)
-      case rearrangementStep: Step.Rearrangement =>
-        validateRearrangementStep(rearrangementStep, context)
       case namingStep: Step.Naming =>
         validateNamingStep(namingStep, context)
       case _ =>
@@ -81,7 +79,7 @@ object CachedProof {
       _ = if (validatedConclusion != statement)
         CachedProof.logger.info(s"Inference conclusion '${validatedConclusion.serialized}' was not '${statement.serialized}'")
       if validatedConclusion == statement
-    } yield Step.Assertion(statement, validatedInferenceApplication, reference)
+    } yield Step.Assertion(statement, validatedInferenceApplication, reference, isRearrangement)
   }
 
   private def validateAssumptionStep(
@@ -93,22 +91,6 @@ object CachedProof {
     for {
       validatedSubsteps <- validateSteps(steps, assumptionContext)
     } yield Step.Assumption(assumption, validatedSubsteps, reference)
-  }
-
-  def validateRearrangementStep(
-    rearrangementStep: Step.Rearrangement,
-    context: ProvingContext
-  ): Option[Step.Rearrangement] = {
-    import rearrangementStep._
-    for {
-      (validatedRearrangement, rearrangedFact) <- validateReference(rearrangement, context)
-        .map(_.mapLeft(_.asInstanceOf[Reference.Rearrangement]))
-        .map(_.mapRight(_.asInstanceOf[Fact.Direct]))
-      _ = if (rearrangedFact.statement != statement)
-        CachedProof.logger.info(s"Rearrangement '${rearrangement.serialized}' was to ${rearrangedFact.statement.serialized}," +
-          s" not ${statement.serialized}")
-      if rearrangedFact.statement == statement
-    } yield Step.Rearrangement(statement, validatedRearrangement, reference)
   }
 
   def validateNamingStep(

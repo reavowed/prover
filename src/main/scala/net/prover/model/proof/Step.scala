@@ -21,19 +21,11 @@ object Step {
     def statement: Statement
     override def fact = Some(Fact.Direct(statement))
   }
-  object WithProvenStatement {
-    def unapply(step: Step): Option[Statement] = step match {
-      case stepWithProvenStatement: WithProvenStatement =>
-        Some(stepWithProvenStatement.statement)
-      case _ =>
-        None
-    }
-  }
 
   case class Assumption(
-    assumption: Statement,
-    steps: Seq[Step],
-    reference: Reference.Direct)
+      assumption: Statement,
+      steps: Seq[Step],
+      reference: Reference.Direct)
     extends Step
   {
     override val `type` = "assumption"
@@ -60,9 +52,10 @@ object Step {
   }
 
   case class Assertion(
-    statement: Statement,
-    inferenceApplication: InferenceApplication,
-    reference: Reference.Direct)
+      statement: Statement,
+      inferenceApplication: InferenceApplication,
+      reference: Reference.Direct,
+      isRearrangement: Boolean)
     extends Step.WithProvenStatement
   {
     override val `type` = "assertion"
@@ -72,54 +65,26 @@ object Step {
       inferenceApplication.getAssertionHints(availableInferences)
     }
     override def serializedLines: Seq[String] = {
-      s"assert ${statement.serialized}" +: inferenceApplication.serializedLines.indent
+      s"assert ${if (isRearrangement) "rearranging " else ""}${statement.serialized}" +: inferenceApplication.serializedLines.indent
     }
   }
   object Assertion {
     def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Step.Assertion] = {
       for {
+        isRearrangement <- Parser.optionalWord("rearranging").isDefined
         assertion <- Statement.parser
         inferenceApplication <- InferenceApplication.parser
       } yield {
-        Step.Assertion(assertion, inferenceApplication, reference)
+        Step.Assertion(assertion, inferenceApplication, reference, isRearrangement)
       }
     }
   }
 
-  case class Rearrangement(
-    statement: Statement,
-    rearrangement: Reference.Rearrangement,
-    reference: Reference.Direct)
-    extends Step.WithProvenStatement
-  {
-    override val `type` = "rearrange"
-    override def referencedInferenceIds: Set[String] = rearrangement.referencedInferenceIds
-    override def matchesOutline(stepOutline: StepOutline): Boolean = Step.matchAssertionOutline(statement, stepOutline)
-    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      rearrangement.getAssertionHints(availableInferences)
-    }
-    override def serializedLines = {
-      s"rearrange ${statement.serialized}" +: rearrangement.serializedLines.indent
-    }
-  }
-  object Rearrangement {
-    def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Step.Rearrangement] = {
-      for {
-        provenStatement <- Statement.parser
-        rearrangement <- Reference.parser.getOrElse(throw new Exception("Rearrangement step missing reference"))
-          .map { r =>
-            r.asOptionalInstanceOf[Reference.Rearrangement]
-              .getOrElse(throw new Exception("Rerrangment step had non-rearrangement reference"))
-          }
-      } yield Step.Rearrangement(provenStatement, rearrangement, reference)
-    }
-  }
-
   case class Naming(
-    variable: TermVariable,
-    assumptionStep: Step.Assumption,
-    assertionStep: Step.WithProvenStatement,
-    reference: Reference.Direct)
+      variable: TermVariable,
+      assumptionStep: Step.Assumption,
+      assertionStep: Step.WithProvenStatement,
+      reference: Reference.Direct)
     extends Step.WithProvenStatement
   {
     override val `type` = "naming"
@@ -156,7 +121,6 @@ object Step {
     Parser.selectWord {
       case "assume" => Assumption.parser(reference)
       case "assert" => Assertion.parser(reference)
-      case "rearrange" => Rearrangement.parser(reference)
       case "name" => Naming.parser(reference)
     }
   }

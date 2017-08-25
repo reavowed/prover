@@ -15,13 +15,13 @@ case class Prover(
   val applicableHints = assertionHints.filter(_.conclusion == assertion)
   lazy val allSimplifiedFacts = referencedFacts ++ referencedFacts.flatMap(getAllSimplifications)
 
-  def proveAssertion(): Option[Step.WithProvenStatement] = {
+  def proveAssertion(): Option[Step.Assertion] = {
     proveAssertionUsingHints()
       .orElse(proveAssertionDirectlyFromInferences())
       .orElse(proveAssertionByRearranging())
   }
 
-  def proveAssertionUsingHints(): Option[Step.WithProvenStatement] = {
+  def proveAssertionUsingHints(): Option[Step.Assertion] = {
     (applicableHints.iterator.flatMap(h => proveUsingInference(h.inference, Some(h.substitutions))) ++
       applicableHints.iterator.flatMap(h => proveUsingElidedInference(h.inference, Some(h.substitutions)))
     ).nextOption()
@@ -86,7 +86,7 @@ case class Prover(
     Option(substitutions)
       .filter(s => inference.conclusion.applySubstitutions(s).contains(assertion))
       .flatMap(inference.specifySubstitutions)
-      .map(s => Step.Assertion(assertion, InferenceApplication(inference.summary, s, references), reference))
+      .map(s => Step.Assertion(assertion, InferenceApplication(inference.summary, s, references), reference, isRearrangement = false))
   }
 
   private def matchElidablePremise(
@@ -137,7 +137,7 @@ case class Prover(
     }
   }
 
-  def proveAssertionByRearranging(): Option[Step.Rearrangement] = {
+  def proveAssertionByRearranging(): Option[Step.Assertion] = {
     val expansions = availableInferences
       .filter(_.rearrangementType == RearrangementType.Expansion)
       .mapCollect { inference =>
@@ -145,7 +145,7 @@ case class Prover(
           .map(_.map(_.statement))
           .map((inference, _))
       }
-    def findStatementByExpanding(statement: Statement): Option[Reference.Expansion] = {
+    def findStatementByExpanding(statement: Statement): Option[InferenceApplication] = {
       expansions.iterator
         .flatMap { case (inference, inferencePremises) =>
           for {
@@ -154,15 +154,15 @@ case class Prover(
             premiseReferences <- substitutedPremises.map(getStatementByRearranging).traverseOption.toSeq
             if inference.conclusion.applySubstitutions(substitutions).contains(statement)
             inferenceSubstitutions <- inference.specifySubstitutions(substitutions)
-          } yield Reference.Expansion(InferenceApplication(inference.summary, inferenceSubstitutions, premiseReferences))
+          } yield InferenceApplication(inference.summary, inferenceSubstitutions, premiseReferences)
         }
         .nextOption()
     }
     def getStatementByRearranging(statement: Statement): Option[Reference] = {
-      findStatementInFacts(statement) orElse findStatementByExpanding(statement)
+      findStatementInFacts(statement) orElse findStatementByExpanding(statement).map(Reference.Expansion(_))
     }
-    findStatementByExpanding(assertion).map { rearrangement =>
-      Step.Rearrangement(assertion, rearrangement, reference)
+    findStatementByExpanding(assertion).map { inferenceApplication =>
+      Step.Assertion(assertion, inferenceApplication, reference, isRearrangement = true)
     }
   }
 
