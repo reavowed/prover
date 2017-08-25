@@ -4,7 +4,6 @@ import java.nio.file.Path
 
 import net.prover.model._
 import net.prover.model.components.Statement
-import net.prover.model.proof.Proof._
 import org.slf4j.LoggerFactory
 
 case class CachedProof(path: Path, premises: Seq[Premise], proof: Proof) {
@@ -58,13 +57,13 @@ object CachedProof {
     context: ProvingContext
   ): Option[Step] = {
     step match {
-      case assumptionStep: AssumptionStep =>
+      case assumptionStep: Step.Assumption =>
         validateAssumptionStep(assumptionStep, context)
-      case assertionStep: AssertionStep =>
+      case assertionStep: Step.Assertion =>
         validateAssertionStep(assertionStep, context)
-      case rearrangementStep: RearrangementStep =>
+      case rearrangementStep: Step.Rearrangement =>
         validateRearrangementStep(rearrangementStep, context)
-      case namingStep: NamingStep =>
+      case namingStep: Step.Naming =>
         validateNamingStep(namingStep, context)
       case _ =>
         None
@@ -72,9 +71,9 @@ object CachedProof {
   }
 
   private def validateAssertionStep(
-    assertionStep: AssertionStep,
+    assertionStep: Step.Assertion,
     context: ProvingContext
-  ): Option[AssertionStep] = {
+  ): Option[Step.Assertion] = {
     import assertionStep._
     for {
       (validatedConclusion, validatedInferenceApplication) <-
@@ -82,24 +81,24 @@ object CachedProof {
       _ = if (validatedConclusion != statement)
         CachedProof.logger.info(s"Inference conclusion '${validatedConclusion.serialized}' was not '${statement.serialized}'")
       if validatedConclusion == statement
-    } yield AssertionStep(statement, validatedInferenceApplication, reference)
+    } yield Step.Assertion(statement, validatedInferenceApplication, reference)
   }
 
   private def validateAssumptionStep(
-    assumptionStep: AssumptionStep,
+    assumptionStep: Step.Assumption,
     context: ProvingContext
-  ): Option[AssumptionStep] = {
+  ): Option[Step.Assumption] = {
     import assumptionStep._
     val assumptionContext = context.addFact(Fact.Direct(assumption), reference)
     for {
       validatedSubsteps <- validateSteps(steps, assumptionContext)
-    } yield AssumptionStep(assumption, validatedSubsteps, reference)
+    } yield Step.Assumption(assumption, validatedSubsteps, reference)
   }
 
   def validateRearrangementStep(
-    rearrangementStep: RearrangementStep,
+    rearrangementStep: Step.Rearrangement,
     context: ProvingContext
-  ): Option[RearrangementStep] = {
+  ): Option[Step.Rearrangement] = {
     import rearrangementStep._
     for {
       (validatedRearrangement, rearrangedFact) <- validateReference(rearrangement, context)
@@ -109,19 +108,19 @@ object CachedProof {
         CachedProof.logger.info(s"Rearrangement '${rearrangement.serialized}' was to ${rearrangedFact.statement.serialized}," +
           s" not ${statement.serialized}")
       if rearrangedFact.statement == statement
-    } yield RearrangementStep(statement, validatedRearrangement, reference)
+    } yield Step.Rearrangement(statement, validatedRearrangement, reference)
   }
 
   def validateNamingStep(
-    namingStep: NamingStep,
+    namingStep: Step.Naming,
     context: ProvingContext
-  ): Option[NamingStep] = {
+  ): Option[Step.Naming] = {
     import namingStep._
     for {
       validatedAssumptionStep <- validateAssumptionStep(assumptionStep, context)
       deduction = validatedAssumptionStep.referencedFact.getOrElse(throw new Exception("Naming step assumption must prove a fact"))
       validatedAssertionStep <- validateStep(assertionStep, context.addFact(deduction))
-    } yield NamingStep(variable, validatedAssumptionStep, validatedAssertionStep.asInstanceOf[StepWithProvenStatement], reference)
+    } yield Step.Naming(variable, validatedAssumptionStep, validatedAssertionStep.asInstanceOf[Step.WithProvenStatement], reference)
   }
 
   private def validateInferenceApplication(

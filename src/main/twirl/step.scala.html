@@ -1,6 +1,6 @@
-@(step: net.prover.model.proof.Proof.Step, indentLevel: Int)
+@(step: net.prover.model.proof.Step, indentLevel: Int)
 @step match {
-  case assertionStep: net.prover.model.proof.Proof.AssertionStep => {
+  case assertionStep: net.prover.model.proof.Step.Assertion => {
     <tr class="proofRow">
       <td>@for(_ <- 1 to indentLevel) { &nbsp;&nbsp; } Then @assertionStep.statement.html. </td>
       @defining(assertionStep.inferenceApplication.inferenceSummary) { inference =>
@@ -8,13 +8,13 @@
       }
     </tr>
   }
-  case assumptionStep: net.prover.model.proof.Proof.AssumptionStep => {
+  case assumptionStep: net.prover.model.proof.Step.Assumption => {
     <tr class="proofRow">
       <td>@for(_ <- 1 to indentLevel) { &nbsp;&nbsp; } Assume @assumptionStep.assumption.html. </td>
     </tr>
     @assumptionStep.steps.map { substep => @html.step(substep, indentLevel + 1) }
   }
-  case rearrangmentStep: net.prover.model.proof.Proof.RearrangementStep => {
+  case rearrangmentStep: net.prover.model.proof.Step.Rearrangement => {
     <tr class="proofRow">
       <td>@for(_ <- 1 to indentLevel) { &nbsp;&nbsp; } Then @rearrangmentStep.statement.html. </td>
       <td><a class="stepInferenceId">Rearrangement</a><td>

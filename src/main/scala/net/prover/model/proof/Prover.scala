@@ -2,7 +2,6 @@ package net.prover.model.proof
 
 import net.prover.model.Inference.RearrangementType
 import net.prover.model.components.Statement
-import net.prover.model.proof.Proof._
 import net.prover.model.{Inference, Premise, Substitutions}
 
 case class Prover(
@@ -16,19 +15,19 @@ case class Prover(
   val applicableHints = assertionHints.filter(_.conclusion == assertion)
   lazy val allSimplifiedFacts = referencedFacts ++ referencedFacts.flatMap(getAllSimplifications)
 
-  def proveAssertion(): Option[StepWithProvenStatement] = {
+  def proveAssertion(): Option[Step.WithProvenStatement] = {
     proveAssertionUsingHints()
       .orElse(proveAssertionDirectlyFromInferences())
       .orElse(proveAssertionByRearranging())
   }
 
-  def proveAssertionUsingHints(): Option[StepWithProvenStatement] = {
+  def proveAssertionUsingHints(): Option[Step.WithProvenStatement] = {
     (applicableHints.iterator.flatMap(h => proveUsingInference(h.inference, Some(h.substitutions))) ++
       applicableHints.iterator.flatMap(h => proveUsingElidedInference(h.inference, Some(h.substitutions)))
     ).nextOption()
   }
 
-  def proveAssertionDirectlyFromInferences(): Option[AssertionStep] = {
+  def proveAssertionDirectlyFromInferences(): Option[Step.Assertion] = {
     (availableInferences.iterator.flatMap(proveUsingInference(_)) ++
       availableInferences.iterator.flatMap(proveUsingElidedInference(_))
     ).nextOption()
@@ -37,7 +36,7 @@ case class Prover(
   private def proveUsingInference(
     inference: Inference,
     initialSubstitutions: Option[Substitutions] = None
-  ): Iterator[AssertionStep] = {
+  ): Iterator[Step.Assertion] = {
     initialSubstitutions.map(Iterator(_))
       .getOrElse {
         inference.conclusion.calculateSubstitutions(assertion, Substitutions.empty).iterator
@@ -53,7 +52,7 @@ case class Prover(
   private def proveUsingElidedInference(
     inference: Inference,
     initialSubstitutions: Option[Substitutions] = None
-  ): Iterator[AssertionStep] = {
+  ): Iterator[Step.Assertion] = {
     splitPremisesAtElidable(inference.premises).iterator
       .flatMap { case (prePremises, elidablePremise, postPremises) =>
         initialSubstitutions.map(Iterator(_))
@@ -83,11 +82,11 @@ case class Prover(
       }
   }
 
-  private def makeAssertion(inference: Inference, substitutions: Substitutions, references: Seq[Reference]): Option[AssertionStep] = {
+  private def makeAssertion(inference: Inference, substitutions: Substitutions, references: Seq[Reference]): Option[Step.Assertion] = {
     Option(substitutions)
       .filter(s => inference.conclusion.applySubstitutions(s).contains(assertion))
       .flatMap(inference.specifySubstitutions)
-      .map(s => AssertionStep(assertion, InferenceApplication(inference.summary, s, references), reference))
+      .map(s => Step.Assertion(assertion, InferenceApplication(inference.summary, s, references), reference))
   }
 
   private def matchElidablePremise(
@@ -138,7 +137,7 @@ case class Prover(
     }
   }
 
-  def proveAssertionByRearranging(): Option[RearrangementStep] = {
+  def proveAssertionByRearranging(): Option[Step.Rearrangement] = {
     val expansions = availableInferences
       .filter(_.rearrangementType == RearrangementType.Expansion)
       .mapCollect { inference =>
@@ -163,7 +162,7 @@ case class Prover(
       findStatementInFacts(statement) orElse findStatementByExpanding(statement)
     }
     findStatementByExpanding(assertion).map { rearrangement =>
-      RearrangementStep(assertion, rearrangement, reference)
+      Step.Rearrangement(assertion, rearrangement, reference)
     }
   }
 
@@ -192,21 +191,21 @@ case class Prover(
     allowRearrangement: Boolean
   ): Iterator[(Reference, Substitutions)] = {
     val facts = if (allowRearrangement) allSimplifiedFacts else referencedFacts
-    facts.iterator.flatMap { case ReferencedFact(fact, reference) =>
-      matchPremiseToFact(premise.fact, fact, reference, substitutionsSoFar)
+    facts.iterator.flatMap { case ReferencedFact(fact, factReference) =>
+      matchPremiseToFact(premise.fact, fact, factReference, substitutionsSoFar)
     }
   }
 
   private def matchPremiseToFact(
     premiseFact: Fact,
     knownFact: Fact,
-    reference: Reference,
+    factReference: Reference,
     substitutionsSoFar: Substitutions
   ): Iterator[(Reference, Substitutions)] = {
     premiseFact.calculateSubstitutions(knownFact, substitutionsSoFar)
       .toIterator
       .map { newSubstitutions =>
-        (reference, newSubstitutions)
+        (factReference, newSubstitutions)
       }
   }
 

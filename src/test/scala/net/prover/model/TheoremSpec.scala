@@ -5,7 +5,6 @@ import java.nio.file.Paths
 import net.prover.model.Inference.RearrangementType
 import net.prover.model.components._
 import net.prover.model.entries.Axiom
-import net.prover.model.proof.ProofOutline.{AssertionStep, AssumptionStep}
 import net.prover.model.proof._
 
 class TheoremSpec extends ProverSpec {
@@ -20,21 +19,21 @@ class TheoremSpec extends ProverSpec {
   }
 
   "theorem parser" should {
-    implicit def assertionStepFromStatement(statement: Statement): ProofOutline.Step = {
-      AssertionStep(statement, location = ProofOutline.Location("test.book", 1))
+    implicit def assertionStepFromStatement(statement: Statement): StepOutline = {
+      StepOutline.Assertion(statement, StepOutline.Location("test.book", 1))
     }
 
-    implicit def assumptionStepFromStatementPair(tuple: (Statement, Statement)): ProofOutline.Step = {
-      AssumptionStep(tuple._1, Seq(assertionStepFromStatement(tuple._2)))
+    implicit def assumptionStepFromStatementPair(tuple: (Statement, Statement)): StepOutline = {
+      StepOutline.Assumption(tuple._1, Seq(assertionStepFromStatement(tuple._2)))
     }
 
-    implicit def assumptionStepFromStatementAndStatements(tuple: (Statement, Seq[Statement])): ProofOutline.Step = {
-      AssumptionStep(tuple._1, tuple._2.map(assertionStepFromStatement))
+    implicit def assumptionStepFromStatementAndStatements(tuple: (Statement, Seq[Statement])): StepOutline = {
+      StepOutline.Assumption(tuple._1, tuple._2.map(assertionStepFromStatement))
     }
 
     def prove[T : PremiseConverter](
       premiseSources: Seq[T],
-      proofSteps: Seq[ProofOutline.Step],
+      proofSteps: Seq[StepOutline],
       inferences: Seq[Inference]
     ): Proof = {
       Proof.fillInOutline(
@@ -46,11 +45,11 @@ class TheoremSpec extends ProverSpec {
 
     def checkProof[T : PremiseConverter](
       premiseSources: Seq[T],
-      proofSteps: Seq[ProofOutline.Step],
+      proofSteps: Seq[StepOutline],
       inferences: Seq[Inference]
     ) = {
       val proof = prove(premiseSources, proofSteps, inferences)
-      proof.conclusion mustEqual proofSteps.ofType[ProofOutline.StepWithAssertion].last.innermostAssertionStep.assertion
+      proof.conclusion mustEqual proofSteps.ofType[StepOutline.WithAssertion].last.innermostAssertionStep.assertion
       proof.matchesOutline(ProofOutline(proofSteps)) must beTrue
       val serializedProof = proof.serialized
       val deserializedProof = Proof.parser.parse(Tokenizer.fromString(serializedProof, Paths.get("")))._1
