@@ -59,7 +59,7 @@ object Proof {
   ): Seq[Step] = {
     stepOutlines.zipWithIndex.foldLeft(Seq.empty[Step]) { case (steps, (stepOutline, index)) =>
       val updatedContext = context.copy(referencedFacts = context.referencedFacts ++ steps.mapCollect(_.referencedFact))
-      steps :+ proveStep(stepOutline, updatedContext, Reference.nextReference(baseReference, index))
+      steps :+ proveStep(stepOutline, updatedContext, Reference.nextReference(baseReference, index.toString))
     }
   }
 
@@ -91,7 +91,7 @@ object Proof {
     context: ProvingContext,
     reference: Reference.Direct
   ): Step.Assumption = {
-    val contextWithAssumption = context.addFact(Fact.Direct(assumption), reference)
+    val contextWithAssumption = context.addFact(Fact.Direct(assumption), reference.withSuffix("a"))
     val substeps = proveSteps(
       substepOutlines,
       Nil,
@@ -127,9 +127,13 @@ object Proof {
         throw new Exception("Naming step must end with an assertion")
     }
     val assumptionStep = proveAssumptionStep(namingStatement, substepOutlines, context, reference)
+    val deduction = assumptionStep.referencedFact.getOrElse(throw ProvingException(
+      "Naming step did not have a conclusion",
+      finalStepWithAssertion.location.fileName,
+      finalStepWithAssertion.location.lineNumber))
     val assertionStep = proveAssertionStep(
       finalStepWithAssertion,
-      context.addFact(assumptionStep.referencedFact),
+      context.addFact(deduction.fact, deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")),
       reference
     ).getOrElse(
       throw ProvingException(

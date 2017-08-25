@@ -89,7 +89,7 @@ object CachedProof {
     context: ProvingContext
   ): Option[Step.Assumption] = {
     import assumptionStep._
-    val assumptionContext = context.addFact(Fact.Direct(assumption), reference)
+    val assumptionContext = context.addFact(Fact.Direct(assumption), reference.withSuffix("a"))
     for {
       validatedSubsteps <- validateSteps(steps, assumptionContext)
     } yield Step.Assumption(assumption, validatedSubsteps, reference)
@@ -119,7 +119,9 @@ object CachedProof {
     for {
       validatedAssumptionStep <- validateAssumptionStep(assumptionStep, context)
       deduction = validatedAssumptionStep.referencedFact.getOrElse(throw new Exception("Naming step assumption must prove a fact"))
-      validatedAssertionStep <- validateStep(assertionStep, context.addFact(deduction))
+      validatedAssertionStep <- validateStep(
+        assertionStep,
+        context.addFact(deduction.fact, deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")))
     } yield Step.Naming(variable, validatedAssumptionStep, validatedAssertionStep.asInstanceOf[Step.WithProvenStatement], reference)
   }
 

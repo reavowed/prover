@@ -162,7 +162,7 @@ object Step {
   }
   def listParser(baseReference: Option[Reference.Direct])(implicit parsingContext: ParsingContext): Parser[Seq[Step]] = {
     Parser.iterateWhileDefined((Seq.empty[Step], 0)) { case (steps, index) =>
-      parser(Reference.nextReference(baseReference, index)).mapMap {step =>
+      parser(Reference.nextReference(baseReference, index.toString)).mapMap {step =>
         (steps :+ step, index + 1)
       }
     }.map(_._1)

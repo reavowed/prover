@@ -14,6 +14,7 @@ object Reference {
     def serializedLines: Seq[String] = Seq(s"direct $value")
     override val referencedInferenceIds: Set[String] = Set.empty
     override def getAssertionHints(availableInferences: Seq[Inference]) = Nil
+    def withSuffix(suffix: String): Direct = Direct(value + suffix)
   }
   object Direct {
     def parser(implicit parsingContext: ParsingContext): Parser[Direct] = {
@@ -75,12 +76,12 @@ object Reference {
     parser.collectWhileDefined
   }
 
-  def nextReference(baseReference: Option[Reference.Direct], i: Int): Reference.Direct = {
+  def nextReference(baseReference: Option[Reference.Direct], suffix: String): Reference.Direct = {
     baseReference match {
-      case Some(Reference.Direct(value)) =>
-        Reference.Direct(s"$value.$i")
+      case Some(value) =>
+        value.withSuffix("." + suffix)
       case None =>
-        Reference.Direct(i.toString)
+        Reference.Direct(suffix)
     }
   }
 }
