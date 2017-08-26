@@ -1,4 +1,5 @@
-@(breadcrumbs: Seq[(String, Option[String])])(content: Html)
+@import net.prover.viewmodel.Breadcrumb
+@(breadcrumbs: Seq[Breadcrumb])(content: Html)
 
 <html>
   <head>
@@ -6,12 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.css"/>
     <link rel="stylesheet" href="/css/prover.css"/>
+    <script src="/webjars/jquery/3.1.1/jquery.js"></script>
+    <script src="/webjars/lodash/4.15.0/lodash.js"></script>
   </head>
   <body>
     <header class="navbar navbar-static-top navbar-inverse">
       <div class="container">
         <div class="navbar-header">
-          <a href="#/" class="navbar-brand">Prover</a>
+          <a href="/books" class="navbar-brand">Prover</a>
         </div>
       </div>
     </header>
@@ -21,13 +24,10 @@
           <ol class="breadcrumb">
             @for(breadcrumb <- breadcrumbs) {
               <li>
-                @breadcrumb._2 match {
-                  case Some(link) => {
-                    <a href="@link">@breadcrumb._1</a>
-                  }
-                  case None => {
-                    <span>@breadcrumb._1</span>
-                  }
+                @if(breadcrumb != breadcrumbs.last) {
+                    <a href="@breadcrumb.link">@breadcrumb.text</a>
+                } else {
+                  <span>@breadcrumb.text</span>
                 }
               </li>
             }

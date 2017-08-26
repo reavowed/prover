@@ -8,7 +8,7 @@ trait ChapterEntryParser[T <: ChapterEntry] {
 
   def parseToChapter(chapter: Chapter, context: ParsingContext): Parser[(Chapter, ParsingContext)] = {
     for {
-      t <- parser(chapter.title.formatAsKey, chapter.bookTitle.formatAsKey)(context)
+      t <- parser(chapter.key, chapter.bookKey)(context)
     } yield {
       (chapter.copy(entries = chapter.entries :+ t), context.add(t))
     }

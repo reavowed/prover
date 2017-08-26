@@ -1,9 +1,12 @@
+@import net.prover.model.{Book, Chapter, Inference}
+@import net.prover.model.entries.{Axiom, Theorem}
+@import net.prover.model.proof.ReferenceMap
 @(
-  axiom: net.prover.model.entries.Axiom,
-  chapter: net.prover.model.Chapter,
-  book: net.prover.model.Book,
-  previousOption: Option[net.prover.model.Inference.Entry],
-  nextOption: Option[net.prover.model.Inference.Entry],
-  usages: Seq[(net.prover.model.Book, net.prover.model.Chapter, Seq[net.prover.model.entries.Theorem])])
+  axiom: Axiom,
+  chapter: Chapter,
+  book: Book,
+  previousOption: Option[Inference.Entry],
+  nextOption: Option[Inference.Entry],
+  usages: Seq[(Book, Chapter, Seq[Theorem])])
 
-@html.inference("Axiom", axiom, chapter, book, previousOption, nextOption, usages) { }
+@html.inference("Axiom", axiom, ReferenceMap.empty, chapter, book, previousOption, nextOption, usages) { }

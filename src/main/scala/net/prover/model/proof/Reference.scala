@@ -6,6 +6,7 @@ sealed trait Reference {
   def serialized: String = serializedLines.mkString("\n")
   def serializedLines: Seq[String]
   def referencedInferenceIds: Set[String]
+  def directReferences: Set[String]
   def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
 }
 
@@ -13,6 +14,7 @@ object Reference {
   case class Direct(value: String) extends Reference {
     def serializedLines: Seq[String] = Seq(s"direct $value")
     override val referencedInferenceIds: Set[String] = Set.empty
+    override val directReferences: Set[String] = Set(value)
     override def getAssertionHints(availableInferences: Seq[Inference]) = Nil
     def withSuffix(suffix: String): Direct = Direct(value + suffix)
   }
@@ -24,6 +26,7 @@ object Reference {
 
   sealed trait ApplyingInference extends Reference {
     def inferenceApplication: InferenceApplication
+    override def directReferences: Set[String] = inferenceApplication.directReferences
     override def referencedInferenceIds: Set[String] = inferenceApplication.referencedInferenceIds
     override def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
       inferenceApplication.getAssertionHints(availableInferences)

@@ -1,18 +1,19 @@
+@import net.prover.model.{Book, Chapter, Inference}
+@import net.prover.model.entries.Theorem
+@import net.prover.model.proof.ReferenceMap
+@import net.prover.viewmodel.Breadcrumb
 @(
   description: String,
-  inference: net.prover.model.Inference.Entry,
-  chapter: net.prover.model.Chapter,
-  book: net.prover.model.Book,
-  previousOption: Option[net.prover.model.Inference.Entry],
-  nextOption: Option[net.prover.model.Inference.Entry],
-  usages: Seq[(net.prover.model.Book, net.prover.model.Chapter, Seq[net.prover.model.entries.Theorem])])(
+  inference: Inference.Entry,
+  referenceMap: ReferenceMap,
+  chapter: Chapter,
+  book: Book,
+  previousOption: Option[Inference.Entry],
+  nextOption: Option[Inference.Entry],
+  usages: Seq[(Book, Chapter, Seq[Theorem])])(
   content: Html)
 
-@html.main(Seq(
-  ("Books", Some("/")),
-  (book.title, Some("/books/" + book.key)),
-  (chapter.title, Some("/books/" + book.key + "/" + chapter.key)),
-  (inference.name, None))) {
+@html.main(Seq(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter), Breadcrumb.Inference(inference))) {
   <div class="inference">
     <div class="inference-links">
       @previousOption.map { previous =>
@@ -30,7 +31,7 @@
     </div>
 
     <p>
-      @html.premises(inference.premises)
+      @html.premises(inference.premises, referenceMap)
       <div>
         @if(inference.premises.nonEmpty) { Then } @inference.conclusion.html.
       </div>

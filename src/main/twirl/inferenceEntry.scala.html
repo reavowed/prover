@@ -1,4 +1,7 @@
-@(description: String, inference: net.prover.model.Inference.Entry, chapter: net.prover.model.Chapter, book: net.prover.model.Book)
+@import net.prover.model.{Book, Chapter, Inference}
+@import net.prover.model.proof.ReferenceMap
+@(description: String, inference: Inference.Entry, chapter: Chapter, book: Book)
+
 <div class="result">
   <h5>
     <a href="/books/@book.key/@chapter.key/@inference.key" class="inference-entry-title">
@@ -6,7 +9,7 @@
     </a>
   </h5>
   <div class="resultBlock">
-    @html.premises(inference.premises)
+    @html.premises(inference.premises, ReferenceMap.empty)
     <div>
       @if(inference.premises.nonEmpty) { Then } @{inference.conclusion.html}.
     </div>

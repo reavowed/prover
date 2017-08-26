@@ -87,7 +87,7 @@ object CachedProof {
     context: ProvingContext
   ): Option[Step.Assumption] = {
     import assumptionStep._
-    val assumptionContext = context.addFact(Fact.Direct(assumption), reference.withSuffix("a"))
+    val assumptionContext = context.addFact(Fact.Direct(assumption), assumptionReference)
     for {
       validatedSubsteps <- validateSteps(steps, assumptionContext)
     } yield Step.Assumption(assumption, validatedSubsteps, reference)

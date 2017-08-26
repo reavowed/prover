@@ -4,7 +4,8 @@ import net.prover.model.components.Variable
 import net.prover.model.proof.{Fact, Reference, ReferencedFact}
 
 case class Premise(fact: Fact, index: Int)(val isElidable: Boolean) {
-  def referencedFact = ReferencedFact(fact, Reference.Direct(s"p$index"))
+  def reference = Reference.Direct(s"p$index")
+  def referencedFact = ReferencedFact(fact, reference)
   def variables: Seq[Variable] = fact.variables
   def serialized: String = s"premise ${fact.serialized}"
 }

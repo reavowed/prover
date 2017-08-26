@@ -1,7 +1,9 @@
-@(definition: net.prover.model.entries.StatementDefinition)
+@import net.prover.model.entries.StatementDefinition
+@(definition: StatementDefinition)
+
 <div class="result">
   <h5>Statement Definition: @definition.defaultValue.html</h5>
   @definition.definingStatement.map { definingStatement =>
-    <div>@definition.defaultValue.html is defined by @{definingStatement.html}.</div>
+    <div>@definition.defaultValue.html is defined by @{definingStatement.html}. </div>
   }
 </div>

@@ -9,6 +9,7 @@ sealed trait Step {
   def fact: Option[Fact]
   def referencedFact: Option[ReferencedFact] = fact.map { f => ReferencedFact(f, reference)}
   def referencedInferenceIds: Set[String]
+  def referenceMap: ReferenceMap
   def matchesOutline(stepOutline: StepOutline): Boolean
   def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
   def serialized: String = serializedLines.mkString("\n")
@@ -28,9 +29,11 @@ object Step {
       reference: Reference.Direct)
     extends Step
   {
+    def assumptionReference = reference.withSuffix("a")
     override val `type` = "assumption"
     override val fact = steps.ofType[Step.WithProvenStatement].lastOption.map(lastSubstep => Fact.Deduced(assumption, lastSubstep.statement))
     override def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
+    override def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
       case StepOutline.Assumption(`assumption`, stepOutlines) =>
         Step.matchOutlines(steps, stepOutlines)
@@ -60,6 +63,7 @@ object Step {
   {
     override val `type` = "assertion"
     override def referencedInferenceIds: Set[String] = inferenceApplication.referencedInferenceIds
+    override def referenceMap: ReferenceMap = ReferenceMap(reference.value -> inferenceApplication.directReferences)
     override def matchesOutline(stepOutline: StepOutline): Boolean = Step.matchAssertionOutline(statement, stepOutline)
     def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
       inferenceApplication.getAssertionHints(availableInferences)
@@ -90,6 +94,7 @@ object Step {
     override val `type` = "naming"
     override def statement: Statement = assertionStep.statement
     override def referencedInferenceIds: Set[String] = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
+    override def referenceMap: ReferenceMap = assertionStep.referenceMap
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
       case StepOutline.Naming(`variable`, statement, stepOutlines) =>
         assumptionStep.assumption == statement && Step.matchOutlines(assumptionStep.steps, stepOutlines)

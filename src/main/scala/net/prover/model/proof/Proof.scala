@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 
 case class Proof(steps: Seq[Step]) {
   def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
+  def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
   val conclusion: Statement = {
     steps.ofType[Step.WithProvenStatement].lastOption
       .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))

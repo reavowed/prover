@@ -1,5 +1,7 @@
+@import net.prover.viewmodel.Breadcrumb
 @(book: net.prover.model.Book)
-@main(Seq(("Books", Some("/")), (book.title, None))) {
+
+@html.main(Seq(Breadcrumb.Root, Breadcrumb.Book(book))) {
   <div class="book">
     <h3>@book.title</h3>
     @for(chapter <- book.chapters) {

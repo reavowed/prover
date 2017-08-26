@@ -1,5 +1,8 @@
-@(premise: net.prover.model.Premise)
-@premise.fact match {
-  case net.prover.model.proof.Fact.Direct(statement) => {<span class="premise">@statement.html</span>}
-  case net.prover.model.proof.Fact.Deduced(antecedent, consequent) => {<span class="premise">@antecedent.html ⊢ @consequent.html</span>}
-}
+@import net.prover.model.Premise
+@import net.prover.model.proof.{Fact, ReferenceMap}
+@(premise: Premise, referenceMap: ReferenceMap)
+
+<span class="premise @{referenceMap.getReferrers(premise.reference.value).map("highlight-" + _).mkString(" ")}">@premise.fact match {
+  case Fact.Direct(statement) => {@statement.html}
+  case Fact.Deduced(antecedent, consequent) => {@antecedent.html ⊢ @consequent.html}
+}</span>

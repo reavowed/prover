@@ -1,8 +1,18 @@
-@(step: net.prover.model.proof.Step, indentLevel: Int)
+@import net.prover.model.proof.Step
+@import net.prover.model.proof.ReferenceMap
+@(
+  step: Step,
+  indentLevel: Int,
+  referenceMap: ReferenceMap,
+  additionalReference: Option[String] = None)
+
 @step match {
-  case assertionStep: net.prover.model.proof.Step.Assertion => {
-    <tr class="proofRow">
-      <td>@for(_ <- 1 to indentLevel) { &nbsp;&nbsp; } Then @assertionStep.statement.html. </td>
+  case assertionStep: Step.Assertion => {
+    <tr class="proofRow" data-reference="@assertionStep.reference.value">
+      <td>
+        @for(_ <- 1 to indentLevel) { &nbsp;&nbsp; }
+        Then @html.referencedStatement(assertionStep.statement, Seq(assertionStep.reference.value) ++ additionalReference, referenceMap)
+      </td>
       @if(assertionStep.isRearrangement) {
         <td><span class="stepInferenceId">Rearrangement</span><td>
       } else {
@@ -12,11 +22,22 @@
       }
     </tr>
   }
-  case assumptionStep: net.prover.model.proof.Step.Assumption => {
+  case assumptionStep: Step.Assumption => {
     <tr class="proofRow">
-      <td>@for(_ <- 1 to indentLevel) { &nbsp;&nbsp; } Assume @assumptionStep.assumption.html. </td>
+      <td>
+        @for(_ <- 1 to indentLevel) { &nbsp;&nbsp; }
+        Assume @html.referencedStatement(
+          assumptionStep.assumption,
+          Seq(assumptionStep.assumptionReference.value, assumptionStep.reference.value),
+          referenceMap)
+      </td>
     </tr>
-    @assumptionStep.steps.map { substep => @html.step(substep, indentLevel + 1) }
+    @assumptionStep.steps.map { substep => @html.step(
+      substep,
+      indentLevel + 1,
+      referenceMap,
+      Some(assumptionStep.reference.value).filter(_ => assumptionStep.steps.ofType[Step.WithProvenStatement].lastOption.contains(substep)))
+    }
   }
   case _ => {
     <tr class="proofRow">

@@ -1,24 +1,28 @@
-@(chapter: net.prover.model.Chapter, book: net.prover.model.Book)
-@html.main(Seq(("Books", Some("/")), (book.title, Some("/books/" + book.key)), (chapter.title, None))) {
+@import net.prover.model.{Book, Chapter}
+@import net.prover.model.entries.{Axiom, Comment, StatementDefinition, Theorem}
+@import net.prover.viewmodel.Breadcrumb
+@(chapter: Chapter, book: Book)
+
+@html.main(Seq(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter))) {
   <div class="chapter">
     <h3>@chapter.title</h3>
     <p class="comment">@chapter.summary</p>
     @for(entry <- chapter.entries) {
       @entry match {
-        case comment: net.prover.model.entries.Comment => {
+        case comment: Comment => {
           <p>@comment.text</p>
         }
-        case statementDefinition: net.prover.model.entries.StatementDefinition => {
+        case statementDefinition: StatementDefinition => {
           @html.statementDefinitionEntry(statementDefinition)
         }
-        case axiom: net.prover.model.entries.Axiom => {
+        case axiom: Axiom => {
           @html.inferenceEntry("Axiom", axiom, chapter, book)
         }
-        case theorem: net.prover.model.entries.Theorem => {
+        case theorem: Theorem => {
           @html.inferenceEntry("Theorem", theorem, chapter, book)
         }
-        case _ => {
-          <p>Something</p>
+        case x => {
+          <p>Unknown entry type @x.getClass.getName</p>
         }
       }
     }

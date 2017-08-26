@@ -1,0 +1,4 @@
+@import net.prover.model.components.Statement
+@import net.prover.model.proof.ReferenceMap
+@(statement: Statement, references: Seq[String], referenceMap: ReferenceMap)
+<span class="@{referenceMap.getReferrers(references: _*).map("highlight-" + _).mkString(" ")} conclusion-@{references.head}">@statement.html</span>.

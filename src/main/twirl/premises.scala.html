@@ -1,17 +1,20 @@
-@(premises: Seq[net.prover.model.Premise])
+@import net.prover.model.Premise
+@import net.prover.model.proof.ReferenceMap
+@(premises: Seq[Premise], referenceMap: ReferenceMap)
+
 @premises match {
   case Nil => {}
   case Seq(premise) => {
     <div class="premises">
-      Suppose @Html(html.premise(premise).body.trim()).
+      Suppose @Html(html.premise(premise, referenceMap).body.trim()).
     </div>
   }
   case initPremises :+ tailPremise => {
     <div class="premises">
       Suppose
-      @Html(initPremises.map { premise => html.premise(premise).body.trim() }.mkString(", "))
+      @Html(initPremises.map { premise => html.premise(premise, referenceMap).body.trim() }.mkString(", "))
       and
-      @Html(html.premise(tailPremise).body.trim()).
+      @Html(html.premise(tailPremise, referenceMap).body.trim()).
     </div>
   }
 }

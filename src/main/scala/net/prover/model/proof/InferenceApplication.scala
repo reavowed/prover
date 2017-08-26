@@ -8,6 +8,7 @@ case class InferenceApplication(
     references: Seq[Reference])
 {
   def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inferenceSummary.id
+  def directReferences: Set[String] = references.flatMap(_.directReferences).toSet
   def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
     AssertionHint.attempt(inferenceSummary, availableInferences, substitutions).toSeq ++
       references.flatMap(_.getAssertionHints(availableInferences))

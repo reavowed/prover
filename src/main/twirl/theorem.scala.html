@@ -1,17 +1,38 @@
+@import net.prover.model.entries.Theorem
+@import net.prover.model.Chapter
 @(
-  theorem: net.prover.model.entries.Theorem,
-  chapter: net.prover.model.Chapter,
+  theorem: Theorem,
+  chapter: Chapter,
   book: net.prover.model.Book,
   previousOption: Option[net.prover.model.Inference.Entry],
   nextOption: Option[net.prover.model.Inference.Entry],
-  usages: Seq[(net.prover.model.Book, net.prover.model.Chapter, Seq[net.prover.model.entries.Theorem])])
+  usages: Seq[(net.prover.model.Book, Chapter, Seq[Theorem])])
 
-@html.inference("Theorem", theorem, chapter, book, previousOption, nextOption, usages) {
+@html.inference("Theorem", theorem, theorem.proof.referenceMap, chapter, book, previousOption, nextOption, usages) {
   <div class="theoremProof">
     <hr/>
     <h4>Proof</h4>
     <table class="table-condensed proofRows">
-      @theorem.proof.steps.map { step => @html.step(step, 0) }
+      @theorem.proof.steps.map { step => @html.step(step, 0, theorem.proof.referenceMap) }
     </table>
   </div>
+  <script type="text/javascript">
+    $(function() {
+      $("[data-reference]").each(function() {
+        var $this = $(this);
+        var escapedReference = _.replace($this.attr("data-reference"), ".", "\\.");
+        var $premises = $(".highlight-" + escapedReference);
+        var $conclusion = $this.find('.conclusion-' + escapedReference);
+        $(this)
+          .on("mouseenter", function() {
+            $premises.addClass("highlightPremise");
+            $conclusion.addClass("highlightConclusion");
+          })
+          .on("mouseleave", function() {
+            $premises.removeClass("highlightPremise");
+            $conclusion.removeClass("highlightConclusion");
+          })
+      })
+    })
+  </script>
 }

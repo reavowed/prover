@@ -1,6 +1,5 @@
 package net.prover.model
 
-
 case class Format(formatString: String, requiresBrackets: Boolean) {
   def apply(components: Seq[String]): String = {
     components.zipWithIndex.foldLeft(formatString) { case (htmlSoFar, (component, index)) =>
