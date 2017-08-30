@@ -22,7 +22,7 @@ class BookController @Autowired() (bookService: BookService) {
       html.books(getBooks).body
     } catch {
       case NonFatal(e) =>
-        BookController.logger.error("Error getting books\n{}", e.getMessage)
+        BookController.logger.error("Error getting books", e)
         new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
@@ -38,7 +38,7 @@ class BookController @Autowired() (bookService: BookService) {
       }
     } catch {
       case NonFatal(e) =>
-        BookController.logger.error("Error getting books\n{}", e.getMessage)
+        BookController.logger.error("Error getting books", e)
         new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
@@ -52,7 +52,7 @@ class BookController @Autowired() (bookService: BookService) {
       } yield html.chapter(chapter, book).body) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {
       case NonFatal(e) =>
-        BookController.logger.error("Error getting books\n{}", e.getMessage)
+        BookController.logger.error("Error getting books", e)
         new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }

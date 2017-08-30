@@ -1,54 +1,54 @@
 chapter Universal Quantifier
-Introduce the universal quantifier.
+Introduce the universal quantifier, ∀.
 
-statement ∀ (x φ) format ((∀x)φ) boundVariables (x)
+statement ∀ (x φ) format ((∀x)φ)
 
-axiom Generalization
-expansion
-premise φ
-conclusion ∀ x φ
-arbitrary-variables (x)
+# axiom Generalization
+# expansion
+# premise φ
+# conclusion ∀ x φ
+# arbitrary-variables (x)
 
-axiom Specification
-premise ∀ x φ
-conclusion sub y x φ
+# axiom Specification
+# premise ∀ x φ
+# conclusion sub y x φ
 
-inference-transform (∀ x _) ()
-inference-transform (∀ x _) (sub y x _)
+# inference-transform (∀ x _) ()
+# inference-transform (∀ x _) (sub y x _)
 
-theorem Renamed Generalization
-premise sub y x φ
-prove ∀ y sub y x φ
-prove φ
-prove ∀ x φ
-qed
+# theorem Renamed Generalization
+# premise sub y x φ
+# prove ∀ y sub y x φ
+# prove φ
+# prove ∀ x φ
+# qed
 
-comment Some inferences to simplify deductions.
+# comment Some inferences to simplify deductions.
 
-theorem Generalized Deduction
-premise proves φ ψ
-prove → φ ψ
-prove ∀ x → φ ψ
-qed
+# theorem Generalized Deduction
+# premise proves φ ψ
+# prove → φ ψ
+# prove ∀ x → φ ψ
+# qed
 
-theorem Renamed Generalized Deduction
-premise proves sub y x φ sub y x ψ
-prove → sub y x φ sub y x ψ
-prove ∀ x → φ ψ
-qed
+# theorem Renamed Generalized Deduction
+# premise proves sub y x φ sub y x ψ
+# prove → sub y x φ sub y x ψ
+# prove ∀ x → φ ψ
+# qed
 
-theorem Generalized Equivalence Deduction
-premise proves φ ψ
-premise proves ψ φ
-prove ∀ x → φ ψ
-prove ∀ x → ψ φ
-prove ∀ x ↔ φ ψ
-qed
+# theorem Generalized Equivalence Deduction
+# premise proves φ ψ
+# premise proves ψ φ
+# prove ∀ x → φ ψ
+# prove ∀ x → ψ φ
+# prove ∀ x ↔ φ ψ
+# qed
 
-theorem Renamed Generalized Equivalence Deduction
-premise proves sub y x φ sub y x ψ
-premise proves sub y x ψ sub y x φ
-prove ∀ x → φ ψ
-prove ∀ x → ψ φ
-prove ∀ x ↔ φ ψ
-qed
+# theorem Renamed Generalized Equivalence Deduction
+# premise proves sub y x φ sub y x ψ
+# premise proves sub y x ψ sub y x φ
+# prove ∀ x → φ ψ
+# prove ∀ x → ψ φ
+# prove ∀ x ↔ φ ψ
+# qed

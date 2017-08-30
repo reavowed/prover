@@ -4,7 +4,7 @@ import Propositional Calculus
 variables () (x y z X Y Z a b c d A B C D)
 
 include 02.universalQuantifier.chapter
-include 03.existentialQuantifier.chapter
-include 04.equality.chapter
-include 05.uniquenessQuantifier.chapter
-include 06.inferences.chapter
+# include 03.existentialQuantifier.chapter
+# include 04.equality.chapter
+# include 05.uniquenessQuantifier.chapter
+# include 06.inferences.chapter
