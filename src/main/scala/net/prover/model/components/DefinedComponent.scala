@@ -68,6 +68,13 @@ trait DefinedComponent[T <: Component] extends Component {
       }
   }
 
+  override def findSubcomponent(other: Component): Option[Seq[Int]] = {
+    super.findSubcomponent(other) orElse
+      subcomponents.zipWithIndex.mapFind { case (subcomponent, index) =>
+        subcomponent.findSubcomponent(other).map(index +: _)
+      }
+  }
+
   override def toString: String = {
     format(subcomponents.map(_.safeToString))
   }

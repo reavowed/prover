@@ -116,8 +116,17 @@ object CachedProof {
       inference <- context.availableInferences.find(_.id == inferenceSummary.id).ifEmpty {
         CachedProof.logger.info(s"Could not find inference ${inferenceSummary.id}")
       }
-      (conclusion, validatedReferences) <- validateInference(inference, substitutions, references, context)
+      (conclusion, validatedReferences, _) <- validateInference(inference, substitutions, references, context)
     } yield (conclusion, InferenceApplication(inference.summary, substitutions, validatedReferences))
+  }
+
+  private def findInference(
+    inferenceSummary: Inference.Summary,
+    context: ProvingContext
+  ): Option[Inference] = {
+    context.availableInferences.find(_.id == inferenceSummary.id).ifEmpty {
+      CachedProof.logger.info(s"Could not find inference ${inferenceSummary.id}")
+    }
   }
 
   private def validateInference(
@@ -125,7 +134,7 @@ object CachedProof {
     inferenceSubstitutions: Inference.Substitutions,
     references: Seq[Reference],
     context: ProvingContext
-  ): Option[(Statement, Seq[Reference])] = {
+  ): Option[(Statement, Seq[Reference], Substitutions)] = {
     for {
       substitutions <- inference.generalizeSubstitutions(inferenceSubstitutions)
       substitutedPremiseFacts <- inference.premises.map(_.fact.applySubstitutions(substitutions)).traverseOption.ifEmpty {
@@ -143,7 +152,7 @@ object CachedProof {
         ).mkString("\n"))
       }
       validatedReferences <- validateReferences(references, substitutedPremiseFacts, context)
-    } yield (substitutedConclusion, validatedReferences)
+    } yield (substitutedConclusion, validatedReferences, substitutions)
   }
 
   private def validateReferences(
@@ -204,9 +213,30 @@ object CachedProof {
   }
 
   private def validateSimplificationReference(reference: Reference.Simplification, context: ProvingContext): Option[(Reference, Fact)] = {
+    import reference._
     for {
-      (statement, validatedApplication) <- validateInferenceApplication(reference.inferenceApplication, context)
-    } yield (Reference.Simplification(validatedApplication), Fact.Direct(statement))
+      inference <- findInference(inferenceSummary, context)
+      (conclusion, validatedInferenceReferences, substitutions) <- validateInference(
+        inference,
+        inferenceSubstitutions,
+        Seq(inferenceReference),
+        context)
+      validatedInferenceReference = validatedInferenceReferences.head
+      premise <- inference.premises match {
+        case Seq(Premise(Fact.Direct(premise), _)) =>
+          Some(premise)
+        case _ =>
+          None
+      }
+      substitutedPremise <- premise.applySubstitutions(substitutions)
+      validatedSimplificationPath <- substitutedPremise.findSubcomponent(conclusion)
+    } yield (
+      Reference.Simplification(
+        inference.summary,
+        inferenceSubstitutions,
+        validatedInferenceReference,
+        validatedSimplificationPath),
+      Fact.Direct(conclusion))
   }
 
   private def validateElidedReference(reference: Reference.Elided, context: ProvingContext): Option[(Reference, Fact)] = {

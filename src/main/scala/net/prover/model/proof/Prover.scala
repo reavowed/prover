@@ -231,21 +231,25 @@ case class Prover(
               (inference, premiseStatement)
           }
           .flatMap { case (inference, premiseStatement) =>
+            premiseStatement.findSubcomponent(inference.conclusion)
+              .map((inference, premiseStatement, _))
+          }
+          .flatMap { case (inference, premiseStatement, simplificationPath) =>
             premiseStatement.calculateSubstitutions(statement, Substitutions.empty)
-              .map((inference, _))
+              .map((inference, simplificationPath, _))
           }
-          .mapCollect { case (inference, substitutions) =>
+          .mapCollect { case (inference, simplificationPath, substitutions) =>
             inference.conclusion.applySubstitutions(substitutions)
-              .map((inference, substitutions, _))
+              .map((inference, simplificationPath, substitutions, _))
           }
-          .mapCollect { case (inference, substitutions, conclusion) =>
+          .mapCollect { case (inference, simplificationPath, substitutions, conclusion) =>
             inference.specifySubstitutions(substitutions)
-              .map((inference, _, conclusion))
+              .map((inference, simplificationPath, _, conclusion))
           }
-          .map { case (inference, substitutions, conclusion) =>
+          .map { case (inference, simplificationPath, substitutions, conclusion) =>
             ReferencedFact(
               Fact.Direct(conclusion),
-              Reference.Simplification(InferenceApplication(inference.summary, substitutions, Seq(factReference))))
+              Reference.Simplification(inference.summary, substitutions, factReference, simplificationPath))
           }
       case _ =>
         Nil

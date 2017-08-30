@@ -32,9 +32,8 @@ object Reference {
       inferenceApplication.getAssertionHints(availableInferences)
     }
   }
-  sealed trait Rearrangement extends ApplyingInference
 
-  case class Expansion(inferenceApplication: InferenceApplication) extends Rearrangement {
+  case class Expansion(inferenceApplication: InferenceApplication) extends ApplyingInference {
     override def serializedLines = {
       "expansion" +: inferenceApplication.serializedLines.indent
     }
@@ -45,14 +44,28 @@ object Reference {
     }
   }
 
-  case class Simplification(inferenceApplication: InferenceApplication) extends Rearrangement {
+  case class Simplification(
+      inferenceSummary: Inference.Summary,
+      inferenceSubstitutions: Inference.Substitutions,
+      inferenceReference: Reference,
+      simplificationPath: Seq[Int]) extends ApplyingInference {
+    override def inferenceApplication: InferenceApplication = InferenceApplication(
+      inferenceSummary,
+      inferenceSubstitutions,
+      Seq(inferenceReference))
     override def serializedLines = {
-      "simplification" +: inferenceApplication.serializedLines.indent
+      Seq("simplification", inferenceSummary.serialized, inferenceSubstitutions.serialized).mkString(" ") +:
+        (inferenceReference.serializedLines :+ "(" + simplificationPath.mkString(" ") + ")").indent
     }
   }
   object Simplification {
     def parser(implicit parsingContext: ParsingContext): Parser[Simplification] = {
-      InferenceApplication.parser.map(Simplification.apply)
+      for {
+        inferenceSummary <- Inference.Summary.parser
+        substitutions <- Inference.Substitutions.parser
+        reference <- Reference.parser.getOrElse(throw new Exception("Invalid reference for simplification"))
+        simplificationPath <- Parser.int.listInParens(None)
+      } yield Simplification(inferenceSummary, substitutions, reference, simplificationPath)
     }
   }
 

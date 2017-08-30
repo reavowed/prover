@@ -30,6 +30,13 @@ trait Component {
       updatedOtherSubstitutions <- other.calculateSubstitutions(thisSubstituted, otherSubstitutions).headOption
     } yield (thisSubstitutions, updatedOtherSubstitutions)
   }
+  def findSubcomponent(other: Component): Option[Seq[Int]] = {
+    if (this == other) {
+      Some(Nil)
+    } else {
+      None
+    }
+  }
   def safeToString: String = toString
   def html: String
   def safeHtml: String = html

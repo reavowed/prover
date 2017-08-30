@@ -127,6 +127,9 @@ package object model {
       else
        Some(b.result())
     }
+    def mapFind[S](f: T => Option[S]): Option[S] = {
+      seq.find { t => f(t).isDefined }.flatMap(f)
+    }
   }
 
   implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {
@@ -216,7 +219,7 @@ package object model {
       x
     }
   }
-  implicit class TrytionOps[T](x: Try[T]) {
+  implicit class TryOps[T](x: Try[T]) {
     def ifFailed(action: Throwable => Unit): Try[T] = {
       x match {
         case Failure(e) =>
