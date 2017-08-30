@@ -44,10 +44,6 @@ statement ⊥ ()
 
 statement ¬ (φ) definition (→ φ ⊥)
 
-axiom Principle of Explosion
-premise ⊥
-conclusion φ
-
 axiom Remove Double Negative
 premise ¬ ¬ φ
 conclusion φ
@@ -69,6 +65,14 @@ premise φ
 premise ¬ φ
 prove → φ ⊥
 prove ⊥
+qed
+
+theorem Principle of Explosion
+premise ⊥
+assume ¬ φ {
+  prove ⊥
+}
+prove φ
 qed
 
 theorem Principle of Explosion
