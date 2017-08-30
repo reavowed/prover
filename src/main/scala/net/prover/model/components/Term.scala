@@ -1,19 +1,10 @@
 package net.prover.model.components
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.jsontype.TypeSerializer
-import com.fasterxml.jackson.databind.{JsonSerializable, SerializerProvider}
 import net.prover.model.entries.TermDefinition
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
-trait Term extends JsonSerializable.Base with Component {
+trait Term extends Component {
   override val componentType = Term
-  override def serialize(gen: JsonGenerator, serializers: SerializerProvider): Unit = {
-    gen.writeString(html)
-  }
-  override def serializeWithType(gen: JsonGenerator, serializers: SerializerProvider, typeSer: TypeSerializer): Unit = {
-    serialize(gen, serializers)
-  }
   def applySubstitutions(substitutions: Substitutions): Option[Term]
   def replacePlaceholder(other: Component): Option[Term]
 }

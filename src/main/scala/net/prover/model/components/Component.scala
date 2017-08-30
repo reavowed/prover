@@ -4,11 +4,7 @@ import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Component {
   def componentType: ComponentType
-
   def variables: Seq[Variable]
-  def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable])
-  def boundVariables: Set[TermVariable] = boundAndFreeVariables._1
-  def freeVariables: Set[TermVariable] = boundAndFreeVariables._2
   def calculateSubstitutions(other: Component, substitutions: Substitutions): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
   def replacePlaceholder(other: Component): Option[Component]
@@ -38,8 +34,6 @@ trait Component {
     }
   }
   def safeToString: String = toString
-  def html: String
-  def safeHtml: String = html
   def serialized: String
 }
 

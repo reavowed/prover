@@ -6,7 +6,6 @@ import scala.collection.immutable.Nil
 
 case class TermVariable(text: String) extends Term with Variable {
   override def variables: Seq[Variable] = Seq(this)
-  override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set(this))
   override def calculateSubstitutions(
     other: Component,
     substitutions: Substitutions
@@ -23,6 +22,5 @@ case class TermVariable(text: String) extends Term with Variable {
   }
   override def replacePlaceholder(other: Component) = Some(this)
   override def toString: String = text
-  override def html: String = Html.format(text)
   override def serialized: String = text
 }

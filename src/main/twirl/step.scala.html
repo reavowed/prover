@@ -11,7 +11,11 @@
     <tr class="proofRow" data-reference="@assertionStep.reference.value">
       <td>
         @for(_ <- 1 to indentLevel) { &nbsp;&nbsp; }
-        Then @html.referencedStatement(assertionStep.statement, Seq(assertionStep.reference.value) ++ additionalReference, referenceMap)
+        Then @Html(html.referencedStatement(
+          assertionStep.statement,
+          Some(assertionStep.reference.value),
+          referenceMap.getReferrers(Seq(assertionStep.reference.value) ++ additionalReference: _*)
+        ).body.trim).
       </td>
       @if(assertionStep.isRearrangement) {
         <td><span class="stepInferenceId">Rearrangement</span><td>
@@ -26,10 +30,11 @@
     <tr class="proofRow">
       <td>
         @for(_ <- 1 to indentLevel) { &nbsp;&nbsp; }
-        Assume @html.referencedStatement(
+        Assume @Html(html.referencedStatement(
           assumptionStep.assumption,
-          Seq(assumptionStep.assumptionReference.value, assumptionStep.reference.value),
-          referenceMap)
+          Some(assumptionStep.assumptionReference.value),
+          referenceMap.getReferrers(assumptionStep.assumptionReference.value, assumptionStep.reference.value)
+        ).body.trim).
       </td>
     </tr>
     @assumptionStep.steps.map { substep => @html.step(

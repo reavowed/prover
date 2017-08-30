@@ -1,17 +1,18 @@
 package net.prover.model
 
 case class Format(formatString: String, requiresBrackets: Boolean) {
-  def apply(components: Seq[String]): String = {
-    components.zipWithIndex.foldLeft(formatString) { case (htmlSoFar, (component, index)) =>
+  def apply(components: Seq[String], safe: Boolean = false): String = {
+    val inner = components.zipWithIndex.foldLeft(formatString) { case (htmlSoFar, (component, index)) =>
       htmlSoFar.replaceFirst(s"%$index", component)
     }
+    if (safe && requiresBrackets)
+      "(" + inner + ")"
+    else
+      inner
   }
 
   def safe(components: Seq[String]) = {
-    if (requiresBrackets)
-      "(" + apply(components) + ")"
-    else
-      apply(components)
+    apply(components, safe = true)
   }
 }
 

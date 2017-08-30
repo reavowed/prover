@@ -10,23 +10,18 @@ case class TermDefinition(
     format: Format,
     premises: Seq[Statement],
     placeholderDefinition: Statement,
-    boundVariables: Set[TermVariable],
     chapterKey: String,
     bookKey: String)
   extends ChapterEntry(TermDefinition)
 {
   val id: String = s"definition-$symbol"
-  val defaultValue = DefinedTerm(defaultVariables, boundVariables, this)
+  val defaultValue = DefinedTerm(defaultVariables, this)
   val componentTypes = defaultVariables.map(_.componentType)
   val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue).getOrElse(
     throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultValue'"))
   override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
 
-  def apply(components: Component*): DefinedTerm = DefinedTerm(
-    components,
-    boundVariables.map { v =>
-      components(defaultVariables.indexOf(v))
-    }.map(_.asInstanceOf[Term]).map(Term.asVariable), this)
+  def apply(components: Component*): DefinedTerm = DefinedTerm(components, this)
 
   def termParser(implicit context: ParsingContext): Parser[Term] = {
     componentTypes.componentsParser.map(apply)
@@ -50,10 +45,9 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
       symbol <- Parser.singleWord
       defaultVariables <- Variable.parser.listInParens(None)
       name <- nameParser.getOrElse(symbol)
-      format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
+      format <- Format.optionalParser(symbol, defaultVariables.map(_.text))
       premises <- premisesParser
       definitionTemplate <- Statement.parser.inParens
-      boundVariables = defaultVariables.ofType[TermVariable].toSet.intersect(definitionTemplate.boundVariables)
     } yield {
       TermDefinition(
         symbol,
@@ -62,7 +56,6 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
         format,
         premises,
         definitionTemplate,
-        boundVariables,
         chapterKey,
         bookKey)
     }

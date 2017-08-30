@@ -11,7 +11,7 @@
   <div class="resultBlock">
     @html.premises(inference.premises, ReferenceMap.empty)
     <div>
-      @if(inference.premises.nonEmpty) { Then } @{inference.conclusion.html}.
+      @if(inference.premises.nonEmpty) { Then } @html.referencedStatement(inference.conclusion).
     </div>
   </div>
 </div>

@@ -1,4 +1,17 @@
-@import net.prover.model.components.Statement
-@import net.prover.model.proof.ReferenceMap
-@(statement: Statement, references: Seq[String], referenceMap: ReferenceMap)
-<span class="@{referenceMap.getReferrers(references: _*).map("highlight-" + _).mkString(" ")} conclusion-@{references.head}">@statement.html</span>.
+@import net.prover.model.components.{Statement, StatementVariable, DefinedStatement}
+@import net.prover.model._
+@(statement: Statement, reference: Option[String] = None, referrers: Set[(String, Seq[Int])] = Set.empty, safe: Boolean = false)
+@* This file is incredibly whitespace sensitive! *@
+@defining(referrers.filter(_._2.isEmpty).map(_._1)) { topLevelReferrers =>
+  <span class="@topLevelReferrers.map("highlight-" + _).mkString(" ") @reference.map("conclusion-" + _)">@statement match {
+    case StatementVariable(text) => {@text}
+    case DefinedStatement(components, definition) => {@defining(
+      components.zipWithIndex.map { x =>
+        html.referencedStatement(
+          x._1.asInstanceOf[Statement],
+          None,
+          referrers.filter(_._2.headOption.contains(x._2)).map(_.mapRight(_.tail)),
+          true
+        ).body.trim()
+      }
+    ){ componentsHtml =>@Html(definition.format.apply(componentsHtml, safe))}}}</span>}

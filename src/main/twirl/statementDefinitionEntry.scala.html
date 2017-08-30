@@ -2,8 +2,8 @@
 @(definition: StatementDefinition)
 
 <div class="result">
-  <h5>Statement Definition: @definition.defaultValue.html</h5>
+  <h5>Statement Definition: @html.referencedStatement(definition.defaultValue)</h5>
   @definition.definingStatement.map { definingStatement =>
-    <div>@definition.defaultValue.html is defined by @{definingStatement.html}. </div>
+    <div>@html.referencedStatement(definition.defaultValue) is defined by @html.referencedStatement(definingStatement). </div>
   }
 </div>

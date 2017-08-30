@@ -6,7 +6,6 @@ import scala.collection.immutable.Nil
 
 case class StatementVariable(text: String) extends Statement with Variable {
   override def variables: Seq[Variable] = Seq(this)
-  override def boundAndFreeVariables: (Set[TermVariable], Set[TermVariable]) = (Set.empty, Set.empty)
   override def calculateSubstitutions(
     other: Component,
     substitutions: Substitutions
@@ -22,6 +21,5 @@ case class StatementVariable(text: String) extends Statement with Variable {
   override def replacePlaceholder(other: Component) = Some(this)
 
   override def toString: String = text
-  override def html: String = text
   override def serialized: String = text
 }

@@ -221,7 +221,7 @@ object CachedProof {
         inferenceSubstitutions,
         Seq(inferenceReference),
         context)
-      validatedInferenceReference = validatedInferenceReferences.head
+      validatedInferenceReference <- validatedInferenceReferences.headOption.flatMap(_.asOptionalInstanceOf[Reference.ToFact])
       premise <- inference.premises match {
         case Seq(Premise(Fact.Direct(premise), _)) =>
           Some(premise)

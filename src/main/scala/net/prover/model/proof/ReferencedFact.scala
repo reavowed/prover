@@ -1,3 +1,3 @@
 package net.prover.model.proof
 
-case class ReferencedFact(fact: Fact, reference: Reference)
+case class ReferencedFact(fact: Fact, reference: Reference.ToFact)

@@ -6,17 +6,22 @@ sealed trait Reference {
   def serialized: String = serializedLines.mkString("\n")
   def serializedLines: Seq[String]
   def referencedInferenceIds: Set[String]
-  def directReferences: Set[String]
+  def factReferences: Set[Reference.ToFact] = Set.empty
   def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
 }
 
 object Reference {
-  case class Direct(value: String) extends Reference {
+  sealed trait ToFact extends Reference {
+    override def factReferences: Set[Reference.ToFact] = Set(this)
+    def valueAndPath: (String, Seq[Int])
+  }
+
+  case class Direct(value: String) extends ToFact {
     def serializedLines: Seq[String] = Seq(s"direct $value")
     override val referencedInferenceIds: Set[String] = Set.empty
-    override val directReferences: Set[String] = Set(value)
     override def getAssertionHints(availableInferences: Seq[Inference]) = Nil
     def withSuffix(suffix: String): Direct = Direct(value + suffix)
+    override def valueAndPath: (String, Seq[Int]) = (value, Nil)
   }
   object Direct {
     def parser(implicit parsingContext: ParsingContext): Parser[Direct] = {
@@ -26,7 +31,7 @@ object Reference {
 
   sealed trait ApplyingInference extends Reference {
     def inferenceApplication: InferenceApplication
-    override def directReferences: Set[String] = inferenceApplication.directReferences
+    override def factReferences: Set[Reference.ToFact] = inferenceApplication.directReferences
     override def referencedInferenceIds: Set[String] = inferenceApplication.referencedInferenceIds
     override def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
       inferenceApplication.getAssertionHints(availableInferences)
@@ -47,23 +52,28 @@ object Reference {
   case class Simplification(
       inferenceSummary: Inference.Summary,
       inferenceSubstitutions: Inference.Substitutions,
-      inferenceReference: Reference,
-      simplificationPath: Seq[Int]) extends ApplyingInference {
-    override def inferenceApplication: InferenceApplication = InferenceApplication(
-      inferenceSummary,
-      inferenceSubstitutions,
-      Seq(inferenceReference))
+      inferenceReference: Reference.ToFact,
+      simplificationPath: Seq[Int])
+    extends ToFact
+  {
+    override def referencedInferenceIds: Set[String] = inferenceReference.referencedInferenceIds
+    override def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      InferenceApplication(inferenceSummary, inferenceSubstitutions, Seq(inferenceReference)).getAssertionHints(availableInferences)
+    }
     override def serializedLines = {
       Seq("simplification", inferenceSummary.serialized, inferenceSubstitutions.serialized).mkString(" ") +:
         (inferenceReference.serializedLines :+ "(" + simplificationPath.mkString(" ") + ")").indent
     }
+    override def valueAndPath: (String, Seq[Int]) = inferenceReference.valueAndPath.mapRight(simplificationPath ++ _)
   }
   object Simplification {
     def parser(implicit parsingContext: ParsingContext): Parser[Simplification] = {
       for {
         inferenceSummary <- Inference.Summary.parser
         substitutions <- Inference.Substitutions.parser
-        reference <- Reference.parser.getOrElse(throw new Exception("Invalid reference for simplification"))
+        reference <- Reference.parser
+          .getOrElse(throw new Exception("Invalid reference for simplification"))
+          .map(_.asInstanceOf[Reference.ToFact])
         simplificationPath <- Parser.int.listInParens(None)
       } yield Simplification(inferenceSummary, substitutions, reference, simplificationPath)
     }

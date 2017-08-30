@@ -4,20 +4,19 @@ import net.prover.model.entries.TermDefinition
 
 case class DefinedTerm(
     subcomponents: Seq[Component],
-    localBoundVariables: Set[TermVariable],
     definition: TermDefinition)
   extends Term with DefinedComponent[Term]
 {
   def format = definition.format
   def symbol = definition.symbol
 
-  override def getMatch(other: Component): Option[(Seq[Component], Set[TermVariable])] = other match {
-    case DefinedTerm(otherSubcomponents, otherBoundVariables, `definition`) =>
-      Some((otherSubcomponents, otherBoundVariables))
+  override def getMatch(other: Component): Option[Seq[Component]] = other match {
+    case DefinedTerm(otherSubcomponents, `definition`) =>
+      Some(otherSubcomponents)
     case _ =>
       None
   }
-  override def update(newSubcomponents: Seq[Component], newBoundVariables: Set[TermVariable]): Term = {
-    copy(subcomponents = newSubcomponents, localBoundVariables = newBoundVariables)
+  override def update(newSubcomponents: Seq[Component]): Term = {
+    copy(subcomponents = newSubcomponents)
   }
 }

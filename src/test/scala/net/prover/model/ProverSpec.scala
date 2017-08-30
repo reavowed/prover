@@ -35,7 +35,6 @@ trait ProverSpec extends Specification {
       symbol,
       Format.default(symbol, variables.map(_.text)),
       definingStatement,
-      Set.empty,
       "",
       "")
   }
@@ -51,7 +50,6 @@ trait ProverSpec extends Specification {
       symbol,
       Format.default(symbol, variables.map(_.text)),
       definingStatement,
-      Set.empty,
       "",
       "")
   }
@@ -66,7 +64,6 @@ trait ProverSpec extends Specification {
       symbol,
       Format(s"($symbol%0)%1", requiresBrackets = false),
       definingStatement,
-      Set(x),
       "",
       "")
   }
@@ -90,7 +87,6 @@ trait ProverSpec extends Specification {
     Format.default("∅", Nil),
     Nil,
     ForAll(x, Negation(ElementOf(x, PlaceholderTerm))),
-    Set.empty,
     "",
     "")
   val EmptySet = EmptySetDefinition()
@@ -102,7 +98,6 @@ trait ProverSpec extends Specification {
     Format("𝒫%0", requiresBrackets = false),
     Nil,
     ForAll(y, Equivalence(ElementOf(Y, PlaceholderTerm), φ)),
-    Set.empty,
     "",
     "")
 

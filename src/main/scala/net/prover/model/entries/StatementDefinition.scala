@@ -11,12 +11,11 @@ case class StatementDefinition(
     name: String,
     format: Format,
     definingStatement: Option[Statement],
-    boundVariables: Set[TermVariable],
     chapterKey: String,
     bookKey: String)
   extends ChapterEntry(StatementDefinition)
 {
-  val defaultValue = DefinedStatement(defaultVariables, boundVariables, this)
+  val defaultValue = DefinedStatement(defaultVariables, this)
 
   private val componentTypes = defaultVariables.map(_.componentType)
 
@@ -25,12 +24,7 @@ case class StatementDefinition(
   }
 
   def apply(components: Component*): Statement = {
-    DefinedStatement(
-      components,
-      boundVariables.map { v =>
-        components(defaultVariables.indexOf(v))
-      }.map(_.asInstanceOf[Term]).map(Term.asVariable),
-      this)
+    DefinedStatement(components, this)
   }
 
   override def inferences: Seq[Inference] = {
@@ -53,31 +47,13 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
     "definition",
     Statement.parser.inParens)
 
-  private def boundVariablesParser(
-    defaultVariables: Seq[Variable],
-    optionalDefiningStatement: Option[Statement])(
-    implicit context: ParsingContext
-  ): Parser[Set[TermVariable]] = {
-    optionalDefiningStatement match {
-      case Some(definingStatement) =>
-        val boundVariables = defaultVariables.ofType[TermVariable].toSet.intersect(definingStatement.boundVariables)
-        Parser.constant(boundVariables)
-      case None =>
-        Parser.optional(
-          "boundVariables",
-          Term.variableListParser.map(_.toSet),
-          Set.empty)
-    }
-  }
-
   def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
       defaultVariables <- Variable.parser.listInParens(None)
       name <- nameParser.getOrElse(symbol)
-      format <- Format.optionalParser(symbol, defaultVariables.map(_.html))
+      format <- Format.optionalParser(symbol, defaultVariables.map(_.text))
       optionalDefiningStatement <- definingStatementParser
-      boundVariables <- boundVariablesParser(defaultVariables, optionalDefiningStatement)
     } yield {
       StatementDefinition(
         symbol,
@@ -85,7 +61,6 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
         name,
         format,
         optionalDefiningStatement,
-        boundVariables,
         chapterKey,
         bookKey)
     }
