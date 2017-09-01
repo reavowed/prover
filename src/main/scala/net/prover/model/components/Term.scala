@@ -23,49 +23,23 @@ object Term extends ComponentType {
     }
   }
 
-  def findVariable(name: String)(implicit context: ParsingContext): Option[TermVariable] = {
-    def findDirectly(name: String): Option[TermVariable] = {
-      context.termVariableNames.find(_ == name).map(TermVariable)
-    }
-    def findPrime(name: String): Option[TermVariable] = {
-      context.termVariableNames.find(_ + "'" == name).map(_ => TermVariable(name))
-    }
-    def findWithSuffix(name: String): Option[TermVariable] = {
-      val index = name.indexOf('_')
-      if (index >= 0) {
-        val prefix = name.substring(0, index)
-        context.termVariableNames.find(_ == prefix).map(_ => TermVariable(name))
-      } else {
-        None
-      }
-    }
-    findDirectly(name) orElse findPrime(name) orElse findWithSuffix(name)
-  }
-
   def parser(implicit context: ParsingContext): Parser[Term] = {
     object TermDefinitionMatcher {
       def unapply(s: String): Option[TermDefinition] = {
         context.termDefinitions.find(_.symbol == s)
       }
     }
-    object SpecifiedVariable {
-      def unapply(s: String): Option[TermVariable] = {
-        findVariable(s)
-      }
+
+    Parser.selectWord("term") {
+      case "_" =>
+        Parser.constant(PlaceholderTerm)
+      case TermDefinitionMatcher(termDefinition) =>
+        termDefinition.termParser
+      case context.RecognisedTermVariable(variable) =>
+        Parser.constant(variable)
+      case context.RecognisedBoundVariable(variable) =>
+        Parser.constant(variable)
     }
-    def parserForTermType(termType: String): Parser[Term] = {
-      termType match {
-        case "_" =>
-          Parser.constant(PlaceholderTerm)
-        case TermDefinitionMatcher(termDefinition) =>
-          termDefinition.termParser
-        case SpecifiedVariable(variable) =>
-          Parser.constant(variable)
-        case _ =>
-          throw new Exception(s"Unrecognised term type '$termType'")
-      }
-    }
-    Parser.singleWord.flatMap(parserForTermType)
   }
 
   def listParser(implicit context: ParsingContext): Parser[Seq[Term]] = {

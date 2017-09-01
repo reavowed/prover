@@ -9,4 +9,7 @@
   case Fact.Deduced(antecedent, consequent) => {<span
     class="@referenceMap.getReferrers(premise.reference.value).map("highlight-" + _._1).mkString(" ")"
   >@html.referencedStatement(antecedent) ⊢ @html.referencedStatement(consequent)</span>}
+  case boundFact@Fact.Bound(statement) => {<span
+  class="@referenceMap.getReferrers(premise.reference.value).map("highlight-" + _._1).mkString(" ")"
+  >@boundFact.variableName ⊢ @html.referencedStatement(statement)</span>}
 }</span>

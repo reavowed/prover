@@ -3,25 +3,13 @@ Introduce the universal quantifier, ∀.
 
 statement ∀ (x φ) format ((∀x)φ)
 
-# axiom Generalization
-# expansion
-# premise φ
-# conclusion ∀ x φ
-# arbitrary-variables (x)
+axiom Generalization
+premise binding x with x φ
+conclusion ∀ x with x φ
 
-# axiom Specification
-# premise ∀ x φ
-# conclusion sub y x φ
-
-# inference-transform (∀ x _) ()
-# inference-transform (∀ x _) (sub y x _)
-
-# theorem Renamed Generalization
-# premise sub y x φ
-# prove ∀ y sub y x φ
-# prove φ
-# prove ∀ x φ
-# qed
+axiom Specification
+premise ∀ x with x φ
+conclusion with y φ
 
 # comment Some inferences to simplify deductions.
 

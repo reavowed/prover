@@ -1,11 +1,12 @@
 @import net.prover.model._
-@import net.prover.model.components.{Component, DefinedStatement, DefinedTerm, StatementVariable, TermVariable}
+@import net.prover.model.components.{Component, DefinedStatement, DefinedTerm, StatementVariable, TermVariable, Predicate}
 @(component: Component, reference: Option[String] = None, referrers: Set[(String, Seq[Int])] = Set.empty, safe: Boolean = false)
 @* This file is incredibly whitespace sensitive! *@
 @defining(referrers.filter(_._2.isEmpty).map(_._1)) { topLevelReferrers =>
   <span class="@topLevelReferrers.map("highlight-" + _).mkString(" ") @reference.map("conclusion-" + _)">@component match {
     case StatementVariable(text) => {@text}
     case TermVariable(text) => {@text}
+    case Predicate(text, argument) => {@if(safe){(}@(text)(@argument.text)@if(safe){)}}
     case DefinedStatement(components, definition) => {@defining(
       components.zipWithIndex.map { x =>
         html.referencedStatement(

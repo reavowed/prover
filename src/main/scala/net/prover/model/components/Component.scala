@@ -4,7 +4,7 @@ import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Component {
   def componentType: ComponentType
-  def variables: Seq[Variable]
+  def variablesRequiringSubstitution: Seq[Variable]
   def calculateSubstitutions(other: Component, substitutions: Substitutions): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
   def replacePlaceholder(other: Component): Option[Component]

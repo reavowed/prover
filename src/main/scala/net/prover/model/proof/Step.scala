@@ -123,7 +123,7 @@ object Step {
   }
 
   def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Option[Step]] = {
-    Parser.selectWord {
+    Parser.selectOptionalWord {
       case "assume" => Assumption.parser(reference)
       case "assert" => Assertion.parser(reference)
       case "name" => Naming.parser(reference)

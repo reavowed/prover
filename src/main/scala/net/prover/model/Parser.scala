@@ -1,6 +1,6 @@
 package net.prover.model
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
 
 import scala.util.Try
 import scala.util.control.NonFatal
@@ -38,6 +38,28 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
       _ <- Parser.requiredWord(closeBracket)
     } yield t
   }
+  private def listInBrackets(openBracket: String, closeBracket: String, separatorOption: Option[String]) = {
+    def parseNext(tokenizer: Tokenizer, acc: Seq[T] = Nil): (Seq[T], Tokenizer) = {
+      val (nextToken, nextTokenizer) = tokenizer.readNext()
+      if (nextToken == closeBracket) {
+        (acc, nextTokenizer)
+      } else {
+        val tokenizerToUse = separatorOption match {
+          case Some(separator) if acc.nonEmpty =>
+            if (nextToken == separator) nextTokenizer
+            else throw new Exception("Expected separator or close bracket after list item")
+          case _ =>
+            tokenizer
+        }
+        val (next, remainingTokenizer) = parse(tokenizerToUse)
+        parseNext(remainingTokenizer, acc :+ next)
+      }
+    }
+    for {
+      _ <- Parser.requiredWord(openBracket)
+      list <- Parser(parseNext(_, Nil))
+    } yield list
+  }
 
   def inParens: Parser[T] = inBrackets("(", ")")
   def optionalInParens: Parser[Option[T]] = Parser[Option[T]] { tokenizer =>
@@ -47,27 +69,10 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
     else
       (None, tokenizer)
   }.inParens
-  def listInParens(separatorOption: Option[String]) = {
-    def parseNext(tokenizer: Tokenizer, acc: Seq[T] = Nil): (Seq[T], Tokenizer) = {
-      val (nextToken, nextTokenizer) = tokenizer.readNext()
-      if (nextToken == ")") {
-        (acc, tokenizer)
-      } else {
-        val tokenizerToUse = separatorOption match {
-          case Some(separator) if acc.nonEmpty =>
-            if (nextToken == separator) nextTokenizer
-            else throw new Exception("Expected separator or end-paren after list item")
-          case _ =>
-            tokenizer
-        }
-        val (next, remainingTokenizer) = parse(tokenizerToUse)
-        parseNext(remainingTokenizer, acc :+ next)
-      }
-    }
-    Parser(parseNext(_, Nil)).inParens
-  }
+  def listInParens(separatorOption: Option[String]) = listInBrackets("(", ")", separatorOption)
 
   def inBraces: Parser[T] = inBrackets("{", "}")
+  def listInBraces(separatorOption: Option[String]) = listInBrackets("{", "}", separatorOption)
 
   def parse(tokenizer: Tokenizer): (T, Tokenizer) = {
     try {
@@ -101,15 +106,21 @@ object Parser {
     }
   }
 
-  def selectWord[T](f: PartialFunction[String, Parser[T]]): Parser[Option[T]] = Parser { tokenizer =>
-    if (tokenizer.isEmpty) {
-      (None, tokenizer)
-    } else {
-      val (word, nextTokenizer) = tokenizer.readNext()
-      if (f.isDefinedAt(word))
-        f(word).attemptParse(nextTokenizer).mapLeft(Some.apply)
-      else
-        (None, tokenizer)
+  def selectWord[T](name: String)(f: PartialFunction[String, Parser[T]]): Parser[T] = {
+    Parser.singleWordIfAny.flatMap {
+      case Some(word) if f.isDefinedAt(word) => f(word)
+      case Some(unknownWord) => throw new Exception(s"Expected $name but found '$unknownWord'")
+      case None => throw new Exception(s"Expected $name but found end of file")
+    }
+  }
+
+  def selectOptionalWord[T](f: PartialFunction[String, Parser[T]]): Parser[Option[T]] = {
+    Parser.singleWordIfAny.flatMapFlatMap { word =>
+      if (f.isDefinedAt(word)) {
+        f(word).map(Some.apply)
+      } else {
+        Parser.constant(None)
+      }
     }
   }
 

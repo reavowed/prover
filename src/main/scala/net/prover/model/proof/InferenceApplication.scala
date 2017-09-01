@@ -24,7 +24,7 @@ object InferenceApplication {
     for {
       inferenceSummary <- Inference.Summary.parser
       substitutions <- Inference.Substitutions.parser
-      references <- Reference.listParser.inBraces
+      references <- Reference.parser.listInBraces(None)
     } yield InferenceApplication(inferenceSummary, substitutions, references)
   }
 

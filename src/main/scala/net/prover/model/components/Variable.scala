@@ -12,7 +12,7 @@ object Variable {
       variableName <- Parser.singleWord
     } yield {
       context.statementVariableNames.find(_ == variableName).map(StatementVariable)
-        .orElse(Term.findVariable(variableName))
+        .orElse(context.RecognisedTermVariable.unapply(variableName))
         .getOrElse(throw new Exception(s"Unrecognised variable name '$variableName'"))
     }
   }

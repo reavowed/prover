@@ -71,7 +71,7 @@ object StepOutline {
   }
 
   def parser(implicit context: ParsingContext): Parser[Option[StepOutline]] = {
-    Parser.selectWord {
+    Parser.selectOptionalWord {
       case "assume" => Assumption.parser
       case "let" => Naming.parser
       case "prove" => Assertion.parser

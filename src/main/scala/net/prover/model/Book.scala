@@ -136,8 +136,9 @@ object Book {
       context = ParsingContext(
         transitiveDependencies.flatMap(_.chapters.flatMap(_.statementDefinitions)),
         transitiveDependencies.flatMap(_.chapters.flatMap(_.termDefinitions)),
-        transitiveDependencies.flatMap(_.statementVariableNames).toSet,
-        transitiveDependencies.flatMap(_.termVariableNames).toSet)
+        Set.empty,
+        Set.empty,
+        Seq.empty)
       chaptersFileModificationTimesAndUpdatedParsingContext <- linesParser(title, path, context)
     } yield {
       val (chapters, fileModificationTimes, updatedParsingContext) = chaptersFileModificationTimesAndUpdatedParsingContext

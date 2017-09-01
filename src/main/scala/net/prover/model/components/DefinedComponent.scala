@@ -13,7 +13,9 @@ trait DefinedComponent[T <: Component] extends Component {
   def getMatch(other: Component): Option[Seq[Component]]
   def update(newSubcomponents: Seq[Component]): T
 
-  override def variables: Seq[Variable] = subcomponents.flatMap(_.variables).distinct
+  override def variablesRequiringSubstitution: Seq[Variable] = {
+    subcomponents.flatMap(_.variablesRequiringSubstitution).distinct
+  }
 
   override def calculateSubstitutions(
     other: Component,

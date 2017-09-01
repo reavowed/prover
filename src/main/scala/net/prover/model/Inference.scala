@@ -18,12 +18,17 @@ trait Inference {
   def allowsRearrangement: Boolean
   def summary: Inference.Summary
 
-  def variables: Seq[Variable] = (premises.flatMap(_.variables) ++ conclusion.variables).distinct
+  def variablesRequiringSubstitution: Seq[Variable] = {
+    (
+      premises.flatMap(_.variablesRequiringSubstitution) ++
+      conclusion.variablesRequiringSubstitution
+    ).distinct
+  }
   def specifySubstitutions(substitutions: Substitutions): Option[Inference.Substitutions] = {
-    variables.map(substitutions.componentsByVariable.get).traverseOption.map(Inference.Substitutions.apply)
+    variablesRequiringSubstitution.map(substitutions.componentsByVariable.get).traverseOption.map(Inference.Substitutions.apply)
   }
   def generalizeSubstitutions(inferenceSubstitutions: Inference.Substitutions): Option[Substitutions] = {
-    variables.zipStrict(inferenceSubstitutions.components).map(_.toMap).map(Substitutions.apply)
+    variablesRequiringSubstitution.zipStrict(inferenceSubstitutions.components).map(_.toMap).map(Substitutions.apply)
   }
   def calculateHash(): String = {
     Inference.calculateHash(premises, conclusion)

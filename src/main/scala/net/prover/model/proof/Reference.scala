@@ -71,9 +71,7 @@ object Reference {
       for {
         inferenceSummary <- Inference.Summary.parser
         substitutions <- Inference.Substitutions.parser
-        reference <- Reference.parser
-          .getOrElse(throw new Exception("Invalid reference for simplification"))
-          .map(_.asInstanceOf[Reference.ToFact])
+        reference <- Reference.parser.map(_.asInstanceOf[Reference.ToFact])
         simplificationPath <- Parser.int.listInParens(None)
       } yield Simplification(inferenceSummary, substitutions, reference, simplificationPath)
     }
@@ -90,16 +88,13 @@ object Reference {
     }
   }
 
-  def parser(implicit parsingContext: ParsingContext): Parser[Option[Reference]] = {
-    Parser.selectWord {
+  def parser(implicit parsingContext: ParsingContext): Parser[Reference] = {
+    Parser.selectWord("reference") {
       case "direct" => Direct.parser
       case "expansion" => Expansion.parser
       case "simplification" => Simplification.parser
       case "elided" => Elided.parser
     }
-  }
-  def listParser(implicit parsingContext: ParsingContext): Parser[Seq[Reference]] = {
-    parser.collectWhileDefined
   }
 
   def nextReference(baseReference: Option[Reference.Direct], suffix: String): Reference.Direct = {

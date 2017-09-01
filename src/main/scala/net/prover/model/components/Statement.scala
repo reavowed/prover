@@ -23,18 +23,19 @@ object Statement extends ComponentType {
       }
     }
 
-    def parserForStatementType(statementType: String): Parser[Statement] = statementType match {
+    Parser.selectWord("statement") {
       case "_" =>
         Parser.constant(PlaceholderStatement)
+      case "with" =>
+        for {
+          argument <- Term.variableParser
+          text <- Parser.singleWord
+        } yield Predicate(text, argument)
       case ParsableStatement(statementDefinition) =>
         statementDefinition.statementParser
       case SpecifiedVariable(v) =>
         Parser.constant(v)
-      case _ =>
-        throw new Exception(s"Unrecognised statement type $statementType")
     }
-
-    Parser.singleWord.flatMap(parserForStatementType)
   }
 
   def listParser(implicit context: ParsingContext): Parser[Seq[Statement]] = parser.listInParens(Some(","))

@@ -108,7 +108,8 @@ trait ProverSpec extends Specification {
       ElementOf, Equals),
     termDefinitions = Seq(EmptySetDefinition, PowerSet),
     statementVariableNames = Set(φ, ψ, χ).map(_.text),
-    termVariableNames = Set(x, y, z, X, Y, Z, a, b, n).map(_.text))
+    termVariableNames = Set(x, y, z, X, Y, Z, a, b, n).map(_.text),
+    Seq.empty)
 
   val stubBook = Book("", Paths.get(""), Nil, Nil, Set.empty, Set.empty)
   val stubChapter = Chapter("", "", "")
