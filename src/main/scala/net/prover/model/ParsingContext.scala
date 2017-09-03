@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.components.{BoundVariable, TermVariable}
+import net.prover.model.components.{BoundVariable, StatementVariable, TermVariable}
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 
 case class ParsingContext(
@@ -29,6 +29,21 @@ case class ParsingContext(
 
   def addBoundVariable(variableName: String): ParsingContext = {
     copy(boundVariableNames = boundVariableNames :+ variableName)
+  }
+
+  object RecognisedStatementVariable {
+    def unapply(string: String): Option[StatementVariable] = {
+      if (statementVariableNames.contains(string)) {
+        Some(StatementVariable(string))
+      } else {
+        None
+      }
+    }
+  }
+  object RecognisedStatementDefinition {
+    def unapply(string: String): Option[StatementDefinition] = {
+      statementDefinitions.find(_.symbol == string)
+    }
   }
 
   object RecognisedTermVariable {

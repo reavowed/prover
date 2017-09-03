@@ -1,18 +1,18 @@
 Set Theory
 import Predicate Calculus
 
-variables () (s S)
+variables () (x y a b)
 
 include 01.extensionality.chapter
-include 02.subsets.chapter
-include 03.emptySet.chapter
-include 04.powerSets.chapter
-include 05.replacement.chapter
-include 06.singletons.chapter
-include 07.unorderedPairs.chapter
-include 08.orderedPairs.chapter
-include 09.comprehension.chapter
-include 10.unions.chapter
-include 11.intersections.chapter
-include 12.cartesianProduct.chapter
-include 13.regularity.chapter
+# include 02.subsets.chapter
+# include 03.emptySet.chapter
+# include 04.powerSets.chapter
+# include 05.replacement.chapter
+# include 06.singletons.chapter
+# include 07.unorderedPairs.chapter
+# include 08.orderedPairs.chapter
+# include 09.comprehension.chapter
+# include 10.unions.chapter
+# include 11.intersections.chapter
+# include 12.cartesianProduct.chapter
+# include 13.regularity.chapter

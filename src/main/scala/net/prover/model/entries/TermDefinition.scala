@@ -17,8 +17,7 @@ case class TermDefinition(
   val id: String = s"definition-$symbol"
   val defaultValue = DefinedTerm(defaultVariables, this)
   val componentTypes = defaultVariables.map(_.componentType)
-  val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue).getOrElse(
-    throw new Exception(s"Invalid placeholder statement / term combo '$placeholderDefinition' / '$defaultValue'"))
+  val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue)
   override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
 
   def apply(components: Component*): DefinedTerm = DefinedTerm(components, this)

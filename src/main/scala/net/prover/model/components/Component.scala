@@ -4,28 +4,11 @@ import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Component {
   def componentType: ComponentType
-  def variablesRequiringSubstitution: Seq[Variable]
+  def requiredSubstitutions: Substitutions.Required
   def calculateSubstitutions(other: Component, substitutions: Substitutions): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
-  def replacePlaceholder(other: Component): Option[Component]
-  def condense(
-    other: Component,
-    thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions
-  ): Option[(Substitutions, Substitutions)] = {
-    condenseOneWay(other, thisSubstitutions, otherSubstitutions) orElse
-      other.condenseOneWay(this, otherSubstitutions, thisSubstitutions).map(_.reverse)
-  }
-  protected def condenseOneWay(
-    other: Component,
-    thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions
-  ): Option[(Substitutions, Substitutions)] = {
-    for {
-      thisSubstituted <- applySubstitutions(thisSubstitutions)
-      updatedOtherSubstitutions <- other.calculateSubstitutions(thisSubstituted, otherSubstitutions).headOption
-    } yield (thisSubstitutions, updatedOtherSubstitutions)
-  }
+  def replacePlaceholder(other: Component): Component
+  def calculateApplicatives(argument: Term, substitutions: Substitutions): Seq[(Applicative[Component], Substitutions)]
   def findSubcomponent(other: Component): Option[Seq[Int]] = {
     if (this == other) {
       Some(Nil)

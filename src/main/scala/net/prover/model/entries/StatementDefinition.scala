@@ -16,8 +16,7 @@ case class StatementDefinition(
   extends ChapterEntry(StatementDefinition)
 {
   val defaultValue = DefinedStatement(defaultVariables, this)
-
-  private val componentTypes = defaultVariables.map(_.componentType)
+  val componentTypes = defaultVariables.map(_.componentType)
 
   def statementParser(implicit context: ParsingContext): Parser[Statement] = {
     componentTypes.componentsParser.map(apply)

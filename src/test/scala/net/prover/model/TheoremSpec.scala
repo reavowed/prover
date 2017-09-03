@@ -115,5 +115,16 @@ class TheoremSpec extends ProverSpec {
         Seq(Disjunction(ψ, Conjunction(χ, φ))),
         Seq(extractLeftConjunct, combineConjunction, addRightDisjunct))
     }
+
+    "prove an inference conclusion with a predicate" in {
+      val substitutionOfEquals = axiom(
+        "Substitution of Equals",
+        Seq(Equals(x, y), PredicateApplication("φ", x)),
+        PredicateApplication("φ", y))
+      checkProof(
+        Seq(Equals(x, y), Equals(x, x)),
+        Seq(Equals(y, x)),
+        Seq(substitutionOfEquals))
+    }
   }
 }

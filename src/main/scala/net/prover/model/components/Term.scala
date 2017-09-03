@@ -6,7 +6,10 @@ import net.prover.model.{Parser, ParsingContext, Substitutions}
 trait Term extends Component {
   override val componentType = Term
   def applySubstitutions(substitutions: Substitutions): Option[Term]
-  def replacePlaceholder(other: Component): Option[Term]
+  def replacePlaceholder(other: Component): Term
+  def calculateApplicatives(argument: Term, substitutions: Substitutions): Seq[(Function, Substitutions)] = {
+    argument.calculateSubstitutions(this, substitutions).map(Function.Identity -> _) ++ Seq((Function.Constant(this), substitutions))
+  }
 }
 
 object Term extends ComponentType {
@@ -51,4 +54,6 @@ object Term extends ComponentType {
   def variableListParser(implicit context: ParsingContext): Parser[Seq[TermVariable]] = {
     variableParser.listInParens(None)
   }
+
+  def applicativeParser(implicit context: ParsingContext) = Function.parser
 }

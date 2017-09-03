@@ -2,9 +2,11 @@ package net.prover.model
 
 import net.prover.model.components._
 
-case class Substitutions(componentsByVariable: Map[Variable, Component])
+case class Substitutions(
+  componentsByVariable: Map[Variable, Component],
+  predicatesByName: Map[String, Predicate])
 {
-  def tryAdd(variable: Variable, component: Component): Option[Substitutions] = {
+  def addVariable(variable: Variable, component: Component): Option[Substitutions] = {
     componentsByVariable.get(variable) match {
       case Some(`component`) =>
         Some(this)
@@ -12,6 +14,17 @@ case class Substitutions(componentsByVariable: Map[Variable, Component])
         None
       case None =>
         Some(copy(componentsByVariable = componentsByVariable.updated(variable, component)))
+    }
+  }
+
+  def addPredicate(name: String, predicate: Predicate): Option[Substitutions] = {
+    predicatesByName.get(name) match {
+      case Some(`predicate`) =>
+        Some(this)
+      case Some(_) =>
+        None
+      case None =>
+        Some(copy(predicatesByName = predicatesByName.updated(name, predicate)))
     }
   }
 
@@ -25,19 +38,24 @@ case class Substitutions(componentsByVariable: Map[Variable, Component])
 }
 
 object Substitutions {
-  val empty = Substitutions(Map.empty)
-  def parser(implicit parsingContext: ParsingContext): Parser[Substitutions] = {
-    for {
-      componentsByVariable <- pairParser.listInParens(Some(",")).map(_.toMap)
-    } yield {
-      Substitutions(componentsByVariable)
+  val empty = Substitutions(Map.empty, Map.empty)
+
+  case class Required(variables: Seq[Variable], predicates: Seq[String]) {
+    def ++(other: Required): Required = {
+      Required(
+        (variables ++ other.variables).distinct,
+        (predicates ++ other.predicates).distinct)
     }
   }
-  private def pairParser(implicit parsingContext: ParsingContext): Parser[(Variable, Component)] = {
-    for {
-      variable <- Variable.parser
-      _ <- Parser.requiredWord("->")
-      component <- Component.parser
-    } yield (variable, component)
+
+  object Required {
+    val empty = Required(Seq.empty, Seq.empty)
+    implicit class RequiredSeqOps(seq: Seq[Required]) {
+      def foldTogether: Required = {
+        Required(
+          seq.flatMap(_.variables).distinct,
+          seq.flatMap(_.predicates).distinct)
+      }
+    }
   }
 }

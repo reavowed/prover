@@ -141,14 +141,14 @@ object CachedProof {
         CachedProof.logger.info(
           (Seq(s"Could not substitute into premises of inference '${inference.name}'") ++
             inference.premises.map(_.serialized)
-            :+ substitutions.serialized
+            :+ substitutions.toString
           ).mkString("\n"))
       }
       substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions).ifEmpty {
         CachedProof.logger.info(Seq(
           s"Could not substitute into conclusion inference '${inference.name}'",
           inference.conclusion.serialized,
-          substitutions.serialized
+          substitutions.toString
         ).mkString("\n"))
       }
       validatedReferences <- validateReferences(references, substitutedPremiseFacts, context)

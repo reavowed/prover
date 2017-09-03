@@ -3,7 +3,6 @@ package net.prover.model.components
 import net.prover.model._
 
 import scala.collection.immutable.Nil
-import scala.util.Try
 
 trait DefinedComponent[T <: Component] extends Component {
   def subcomponents: Seq[Component]
@@ -13,9 +12,7 @@ trait DefinedComponent[T <: Component] extends Component {
   def getMatch(other: Component): Option[Seq[Component]]
   def update(newSubcomponents: Seq[Component]): T
 
-  override def variablesRequiringSubstitution: Seq[Variable] = {
-    subcomponents.flatMap(_.variablesRequiringSubstitution).distinct
-  }
+  override def requiredSubstitutions = subcomponents.map(_.requiredSubstitutions).foldTogether
 
   override def calculateSubstitutions(
     other: Component,
@@ -39,25 +36,8 @@ trait DefinedComponent[T <: Component] extends Component {
   }
 
   override def replacePlaceholder(other: Component) = {
-    for {
-      updatedSubcomponents <- subcomponents.map(_.replacePlaceholder(other)).traverseOption
-      updated <- Try(update(updatedSubcomponents)).toOption
-    } yield updated
-  }
-
-  override def condense(
-    other: Component,
-    thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions
-  ): Option[(Substitutions, Substitutions)] = {
-    super.condense(other, thisSubstitutions, otherSubstitutions) orElse
-      getMatch(other).flatMap { otherSubcomponents =>
-        subcomponents.zip(otherSubcomponents)
-          .foldInAnyOrder((thisSubstitutions, otherSubstitutions)) {
-            case ((thisSubstitutionsSoFar, otherSubstitutionsSoFar), (thisSubcomponent, otherSubcomponent)) =>
-              thisSubcomponent.condense(otherSubcomponent, thisSubstitutionsSoFar, otherSubstitutionsSoFar)
-          }
-      }
+    val updatedSubcomponents = subcomponents.map(_.replacePlaceholder(other))
+    update(updatedSubcomponents)
   }
 
   override def findSubcomponent(other: Component): Option[Seq[Int]] = {

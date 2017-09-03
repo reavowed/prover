@@ -1,5 +1,6 @@
 package net.prover.model.components
 
+import net.prover.model.Substitutions
 import net.prover.model.entries.StatementDefinition
 
 case class DefinedStatement(
@@ -18,5 +19,16 @@ case class DefinedStatement(
   }
   override def update(newSubcomponents: Seq[Component]): Statement = {
     copy(subcomponents = newSubcomponents)
+  }
+
+  override def calculateApplicatives(argument: Term, substitutions: Substitutions): Seq[(Predicate, Substitutions)] = {
+    super.calculateApplicatives(argument, substitutions) ++
+      subcomponents.foldLeft(Seq((Seq.empty[Applicative[Component]], substitutions))) { case (predicatesAndSubstitutionsSoFar, subcomponent) =>
+        for {
+          (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar
+          (predicate, newSubstitutions) <- subcomponent.calculateApplicatives(argument, substitutionsSoFar)
+        } yield (predicatesSoFar :+ predicate, newSubstitutions)
+      }.map(_.mapLeft(Predicate.Defined(_, definition)))
+        .filter(!_._1.isConstant)
   }
 }

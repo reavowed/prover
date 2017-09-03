@@ -8,8 +8,8 @@ conclusion = x x
 
 axiom Substitution of Equals
 premise = x y elidable
-premise sub x z φ
-conclusion sub y z φ
+premise with x φ
+conclusion with y φ
 
 comment We first have to prove that equality is symmetric before we can prove the reversed version of the second axiom.
 
@@ -19,88 +19,88 @@ prove = x x
 prove = y x
 qed
 
-theorem Substitution of Equals
-premise = x y elidable
-premise sub y z φ
-prove = y x
-prove sub x z φ
-qed
+# theorem Substitution of Equals
+# premise = x y elidable
+# premise sub y z φ
+# prove = y x
+# prove sub x z φ
+# qed
 
-comment Now we can also prove that the substitution axiom works when substituting into equal terms.
+# comment Now we can also prove that the substitution axiom works when substituting into equal terms.
 
-theorem Substitution of Equals
-premise = x y elidable
-prove = sub x z X sub x z X
-prove = sub x z X sub y z X
-qed
+# theorem Substitution of Equals
+# premise = x y elidable
+# prove = sub x z X sub x z X
+# prove = sub x z X sub y z X
+# qed
 
-theorem Substitution of Equals
-premise = x y elidable
-prove = y x
-prove = sub y z X sub x z X
-qed
+# theorem Substitution of Equals
+# premise = x y elidable
+# prove = y x
+# prove = sub y z X sub x z X
+# qed
 
-comment Basic facts about equality.
+# comment Basic facts about equality.
 
-theorem Equality Is Symmetric
-assume = x y {
-  prove = y x
-}
-assume = y x {
-  prove = x y
-}
-prove ↔ = x y = y x
-qed
+# theorem Equality Is Symmetric
+# assume = x y {
+#   prove = y x
+# }
+# assume = y x {
+#   prove = x y
+# }
+# prove ↔ = x y = y x
+# qed
 
-theorem Equality Is Transitive
-premise = x y
-premise = y z
-prove = x z
-qed
+# theorem Equality Is Transitive
+# premise = x y
+# premise = y z
+# prove = x z
+# qed
 
-theorem Equivalence of Substituted Equals
-premise = x y
-assume sub x z φ {
-  prove sub y z φ
-}
-assume sub y z φ {
-  prove sub x z φ
-}
-prove ↔ sub x z φ sub y z φ
-qed
+# theorem Equivalence of Substituted Equals
+# premise = x y
+# assume sub x z φ {
+#   prove sub y z φ
+# }
+# assume sub y z φ {
+#   prove sub x z φ
+# }
+# prove ↔ sub x z φ sub y z φ
+# qed
 
-theorem Distinguishable Terms Are Not Equal
-premise sub x z φ
-premise ¬ sub y z φ
-assume = x y {
-  prove sub y z φ
-}
-prove ¬ = x y
-qed
+# theorem Distinguishable Terms Are Not Equal
+# premise sub x z φ
+# premise ¬ sub y z φ
+# assume = x y {
+#   prove sub y z φ
+# }
+# prove ¬ = x y
+# qed
 
-theorem Sets Are Equal If Always Equal to the Same Thing
-premise ∀ z ↔ = z x = z y
-prove = x x
-prove = x y
-qed
+# theorem Sets Are Equal If Always Equal to the Same Thing
+# premise ∀ z ↔ = z x = z y
+# prove = x x
+# prove = x y
+# qed
 
-theorem Every Set Exists
-prove = x x
-prove ∃ y = y x
-qed
+# theorem Every Set Exists
+# prove = x x
+# prove ∃ y = y x
+# qed
 
-theorem Proof by Renamed Set
-premise proves = a x φ
-prove ∃ y = y x
-prove φ
-qed
+# theorem Proof by Renamed Set
+# premise proves = a x φ
+# prove ∃ y = y x
+# prove φ
+# qed
 
-theorem Exclusive Or for Equality
-premise ∨ = x y = x z
-premise ¬ = y z
-assume ∧ = x y = x z {
-  prove = y z
-}
-prove ¬ ∧ = x y = x z
-prove ⊕ = x y = x z
-qed
+# theorem Exclusive Or for Equality
+# premise ∨ = x y = x z
+# premise ¬ = y z
+# assume ∧ = x y = x z {
+#   prove = y z
+# }
+# prove ¬ ∧ = x y = x z
+# prove ⊕ = x y = x z
+# qed

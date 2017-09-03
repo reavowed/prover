@@ -4,7 +4,7 @@ import net.prover.model.components._
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 sealed trait Fact {
-  def variablesRequiringSubstitution: Seq[Variable]
+  def requiredSubstitutions: Substitutions.Required
   def serialized: String
   def applySubstitutions(substitutions: Substitutions): Option[Fact]
   def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions]
@@ -12,7 +12,7 @@ sealed trait Fact {
 
 object Fact {
   case class Direct(statement: Statement) extends Fact {
-    override def variablesRequiringSubstitution = statement.variablesRequiringSubstitution
+    override def requiredSubstitutions = statement.requiredSubstitutions
     override def serialized = statement.serialized
     override def applySubstitutions(substitutions: Substitutions): Option[Direct] = {
       for {
@@ -34,7 +34,7 @@ object Fact {
     }
   }
   case class Deduced(antecedent: Statement, consequent: Statement) extends Fact {
-    override def variablesRequiringSubstitution = (antecedent.variablesRequiringSubstitution ++ consequent.variablesRequiringSubstitution).distinct
+    override def requiredSubstitutions = antecedent.requiredSubstitutions ++ consequent.requiredSubstitutions
     override def serialized = s"proves ${antecedent.serialized} ${consequent.serialized}"
     override def applySubstitutions(substitutions: Substitutions): Option[Deduced] = {
       for {
@@ -62,7 +62,7 @@ object Fact {
   }
 
   case class Bound(statement: Statement)(val variableName: String) extends Fact {
-    override def variablesRequiringSubstitution = statement.variablesRequiringSubstitution
+    override def requiredSubstitutions = statement.requiredSubstitutions
     override def serialized: String = s"binding $variableName ${statement.serialized}"
     override def applySubstitutions(substitutions: Substitutions): Option[Bound] = {
       for {

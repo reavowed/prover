@@ -4,7 +4,7 @@ import java.security.MessageDigest
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference._
-import net.prover.model.components.{Component, Statement, Variable}
+import net.prover.model.components._
 import net.prover.model.proof.Fact
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
@@ -18,17 +18,21 @@ trait Inference {
   def allowsRearrangement: Boolean
   def summary: Inference.Summary
 
-  def variablesRequiringSubstitution: Seq[Variable] = {
-    (
-      premises.flatMap(_.variablesRequiringSubstitution) ++
-      conclusion.variablesRequiringSubstitution
-    ).distinct
+  def requiredSubstitutions: Substitutions.Required = {
+    (premises.map(_.requiredSubstitutions) :+ conclusion.requiredSubstitutions).foldTogether
   }
+
   def specifySubstitutions(substitutions: Substitutions): Option[Inference.Substitutions] = {
-    variablesRequiringSubstitution.map(substitutions.componentsByVariable.get).traverseOption.map(Inference.Substitutions.apply)
+    for {
+      components <- requiredSubstitutions.variables.map(substitutions.componentsByVariable.get).traverseOption
+      predicates <- requiredSubstitutions.predicates.map(name => substitutions.predicatesByName.get(name)).traverseOption
+    } yield Inference.Substitutions(components, predicates)
   }
   def generalizeSubstitutions(inferenceSubstitutions: Inference.Substitutions): Option[Substitutions] = {
-    variablesRequiringSubstitution.zipStrict(inferenceSubstitutions.components).map(_.toMap).map(Substitutions.apply)
+    for {
+      componentsByVariable <- requiredSubstitutions.variables.zipStrict(inferenceSubstitutions.components).map(_.toMap)
+      predicatesByName <- requiredSubstitutions.predicates.zipStrict(inferenceSubstitutions.predicates).map(_.toMap)
+    } yield Substitutions(componentsByVariable, predicatesByName)
   }
   def calculateHash(): String = {
     Inference.calculateHash(premises, conclusion)
@@ -77,12 +81,15 @@ object Inference {
     }
   }
 
-  case class Substitutions(components: Seq[Component]) {
-    def serialized: String = "(" + components.map(_.serialized).mkString(", ") + ")"
+  case class Substitutions(components: Seq[Component], predicates: Seq[Predicate]) {
+    def serialized: String = "(" + components.map(_.serialized).mkString(", ") + ") (" + predicates.map(_.serialized).mkString(", ")  + ")"
   }
   object Substitutions {
     def parser(implicit parsingContext: ParsingContext): Parser[Substitutions] = {
-      Component.parser.listInParens(Some(",")).map(Substitutions.apply)
+      for {
+        components <- Component.parser.listInParens(Some(","))
+        predicates <- Predicate.parser.listInParens(Some(","))
+      } yield Substitutions(components, predicates)
     }
   }
 
