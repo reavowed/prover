@@ -126,5 +126,16 @@ class TheoremSpec extends ProverSpec {
         Seq(Equals(y, x)),
         Seq(substitutionOfEquals))
     }
+
+    "prove an inference substituting a named predicate for another named predicate" in {
+      val substitutionOfEquals = axiom(
+        "Substitution of Equals",
+        Seq(Equals(x, y), PredicateApplication("φ", x)),
+        PredicateApplication("φ", y))
+      checkProof(
+        Seq(Equals(y, x), PredicateApplication("φ", y)),
+        Seq(PredicateApplication("φ", x)),
+        Seq(substitutionOfEquals))
+    }
   }
 }

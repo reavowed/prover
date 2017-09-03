@@ -6,7 +6,7 @@
   <span class="@topLevelReferrers.map("highlight-" + _).mkString(" ") @reference.map("conclusion-" + _)">@component match {
     case StatementVariable(text) => {@text}
     case TermVariable(text) => {@text}
-    case PredicateApplication(text, argument) => {@if(safe){(}@(text)(@html.referencedStatement(argument))@if(safe){)}}
+    case PredicateApplication(text, argument) => {@(text)(@Html(html.referencedStatement(argument).body.trim))}
     case DefinedStatement(components, definition) => {@defining(
       components.zipWithIndex.map { x =>
         html.referencedStatement(

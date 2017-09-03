@@ -19,12 +19,12 @@ prove = x x
 prove = y x
 qed
 
-# theorem Substitution of Equals
-# premise = x y elidable
-# premise sub y z φ
-# prove = y x
-# prove sub x z φ
-# qed
+theorem Substitution of Equals
+premise = x y elidable
+premise with y φ
+prove = y x
+prove with x φ
+qed
 
 # comment Now we can also prove that the substitution axiom works when substituting into equal terms.
 
@@ -40,34 +40,34 @@ qed
 # prove = sub y z X sub x z X
 # qed
 
-# comment Basic facts about equality.
+comment Basic facts about equality.
 
-# theorem Equality Is Symmetric
-# assume = x y {
-#   prove = y x
-# }
-# assume = y x {
-#   prove = x y
-# }
-# prove ↔ = x y = y x
-# qed
+theorem Equality Is Symmetric
+assume = x y {
+  prove = y x
+}
+assume = y x {
+  prove = x y
+}
+prove ↔ = x y = y x
+qed
 
-# theorem Equality Is Transitive
-# premise = x y
-# premise = y z
-# prove = x z
-# qed
+theorem Equality Is Transitive
+premise = x y
+premise = y z
+prove = x z
+qed
 
-# theorem Equivalence of Substituted Equals
-# premise = x y
-# assume sub x z φ {
-#   prove sub y z φ
-# }
-# assume sub y z φ {
-#   prove sub x z φ
-# }
-# prove ↔ sub x z φ sub y z φ
-# qed
+theorem Equivalence of Substituted Equals
+premise = x y
+assume with x φ {
+  prove with y φ
+}
+assume with y φ {
+  prove with x φ
+}
+prove ↔ with x φ with y φ
+qed
 
 # theorem Distinguishable Terms Are Not Equal
 # premise sub x z φ

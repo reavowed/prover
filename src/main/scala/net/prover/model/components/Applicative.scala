@@ -30,11 +30,22 @@ object Predicate {
       }
     }
   }
+  case class Named(name: String) extends Predicate {
+    override def apply(term: Term): Statement = PredicateApplication(name, term)
+    override def isConstant: Boolean = false
+    override def serialized: String = s"named $name"
+  }
+  object Named {
+    def parser(implicit context: ParsingContext): Parser[Named] = {
+      Parser.singleWord.map(Named.apply)
+    }
+  }
 
   def parser(implicit parsingContext: ParsingContext): Parser[Predicate] = {
     Parser.selectWord("predicate") {
       case "constant" => Statement.parser.map(Constant.apply)
       case "defined" => Defined.parser
+      case "named" => Named.parser
     }
   }
 }
