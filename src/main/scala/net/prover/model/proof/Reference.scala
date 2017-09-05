@@ -89,7 +89,7 @@ object Reference {
   }
 
   def parser(implicit parsingContext: ParsingContext): Parser[Reference] = {
-    Parser.selectWord("reference") {
+    Parser.selectWordParser("reference") {
       case "direct" => Direct.parser
       case "expansion" => Expansion.parser
       case "simplification" => Simplification.parser

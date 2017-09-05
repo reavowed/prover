@@ -21,7 +21,7 @@ object Fact {
     }
     def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions] = otherFact match {
       case Direct(otherStatement) =>
-        statement.calculateSubstitutions(otherStatement, substitutionsSoFar)
+        statement.calculateSubstitutions(otherStatement, substitutionsSoFar, 0)
       case _ =>
         Nil
     }
@@ -45,8 +45,8 @@ object Fact {
     def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions] = otherFact match {
       case Deduced(otherAntecedent, otherConsequent) =>
         for {
-          s1 <- antecedent.calculateSubstitutions(otherAntecedent, substitutionsSoFar)
-          s2 <- consequent.calculateSubstitutions(otherConsequent, s1)
+          s1 <- antecedent.calculateSubstitutions(otherAntecedent, substitutionsSoFar, 0)
+          s2 <- consequent.calculateSubstitutions(otherConsequent, s1, 0)
         } yield s2
       case _ =>
         Nil
@@ -61,17 +61,17 @@ object Fact {
     }
   }
 
-  case class Bound(statement: Statement)(val variableName: String) extends Fact {
+  case class Bound(statement: Statement)(val boundVariableName: String) extends Fact {
     override def requiredSubstitutions = statement.requiredSubstitutions
-    override def serialized: String = s"binding $variableName ${statement.serialized}"
+    override def serialized: String = s"binding $boundVariableName ${statement.serialized}"
     override def applySubstitutions(substitutions: Substitutions): Option[Bound] = {
       for {
         updatedStatement <- statement.applySubstitutions(substitutions)
-      } yield Bound(updatedStatement)(variableName)
+      } yield Bound(updatedStatement)(boundVariableName)
     }
     def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions] = otherFact match {
       case Bound(otherStatement) =>
-        statement.calculateSubstitutions(otherStatement, substitutionsSoFar)
+        statement.calculateSubstitutions(otherStatement, substitutionsSoFar, 0)
       case _ =>
         Nil
     }
@@ -80,7 +80,8 @@ object Fact {
     def parser(implicit parsingContext: ParsingContext): Parser[Bound] = {
       for {
         variableName <- Parser.singleWord
-        statementWithBinding <- Statement.parser(parsingContext.addBoundVariable(variableName))
+        updatedContext = parsingContext.addBoundVariable(variableName)
+        statementWithBinding <- Statement.parser(updatedContext)
       } yield {
         Bound(statementWithBinding)(variableName)
       }

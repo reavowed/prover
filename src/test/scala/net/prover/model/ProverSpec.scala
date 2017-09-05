@@ -31,6 +31,7 @@ trait ProverSpec extends Specification {
     val variables = Seq(φ, ψ, χ).take(size)
     StatementDefinition(
       symbol,
+      Nil,
       variables,
       symbol,
       Format.default(symbol, variables.map(_.text)),
@@ -46,6 +47,7 @@ trait ProverSpec extends Specification {
     val variables = Seq(x, y, z).take(size)
     StatementDefinition(
       symbol,
+      Nil,
       variables,
       symbol,
       Format.default(symbol, variables.map(_.text)),
@@ -60,7 +62,8 @@ trait ProverSpec extends Specification {
   ): StatementDefinition = {
     StatementDefinition(
       symbol,
-      Seq(x, φ),
+      Seq("x"),
+      Seq(φ),
       symbol,
       Format(s"($symbol%0)%1", requiresBrackets = false),
       definingStatement,
@@ -119,6 +122,14 @@ trait ProverSpec extends Specification {
       parser.parseAndDiscard(text, Paths.get(""))
     }
   }
+  implicit class StatementDefinitionOps(statementDefinition: StatementDefinition) {
+    def apply(components: Component*): DefinedStatement = {
+      DefinedStatement(components, statementDefinition)(statementDefinition.boundVariableNames)
+    }
+    def apply(boundVariableNames: String*)(components: Component*): DefinedStatement = {
+      DefinedStatement(components, statementDefinition)(boundVariableNames)
+    }
+  }
 
   trait PremiseConverter[-T] {
     def convertToPremise(t: T, index: Int): Premise
@@ -135,4 +146,6 @@ trait ProverSpec extends Specification {
     val converter = implicitly[PremiseConverter[T]]
     ts.mapWithIndex(converter.convertToPremise)
   }
+  implicit def statementToPredicate(statement: Statement): Predicate = Predicate.Constant(statement)
+  implicit def termToFunction(term: Term): Function = Function.Constant(term)
 }

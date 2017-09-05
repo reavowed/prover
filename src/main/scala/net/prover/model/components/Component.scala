@@ -4,11 +4,12 @@ import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Component {
   def componentType: ComponentType
+  def boundVariables: Set[Int]
   def requiredSubstitutions: Substitutions.Required
-  def calculateSubstitutions(other: Component, substitutions: Substitutions): Seq[Substitutions]
+  def calculateSubstitutions(other: Component, substitutions: Substitutions, boundVariableCount: Int): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Component]
   def replacePlaceholder(other: Component): Component
-  def calculateApplicatives(argument: Term, substitutions: Substitutions): Seq[(Applicative[Component], Substitutions)]
+  def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Applicative[Component], Substitutions)]
   def findSubcomponent(other: Component): Option[Seq[Int]] = {
     if (this == other) {
       Some(Nil)

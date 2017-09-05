@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.components.{BoundVariable, StatementVariable, TermVariable}
+import net.prover.model.components.{BoundVariable, StatementVariable, TermVariable, Variable}
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 
 case class ParsingContext(
@@ -28,7 +28,16 @@ case class ParsingContext(
   }
 
   def addBoundVariable(variableName: String): ParsingContext = {
-    copy(boundVariableNames = boundVariableNames :+ variableName)
+    copy(boundVariableNames = variableName +: boundVariableNames)
+  }
+
+  def addBoundVariables(variableNames: Seq[String]): ParsingContext = {
+    variableNames.foldLeft(this)(_.addBoundVariable(_))
+  }
+
+  def lookupBoundVariable(variableName: String): BoundVariable = {
+    RecognisedBoundVariable.unapply(variableName)
+      .getOrElse(throw new Exception(s"Unrecognised bound variable '$variableName'"))
   }
 
   object RecognisedStatementVariable {
@@ -63,7 +72,15 @@ case class ParsingContext(
   }
   object RecognisedBoundVariable {
     def unapply(string: String): Option[BoundVariable] = {
-      boundVariableNames.zipWithIndex.find(_._1 == string).map(_._2).map(BoundVariable.apply)
+      boundVariableNames.zipWithIndex
+        .find(_._1 == string)
+        .map { case (name, index) => BoundVariable(index)(name) }
+    }
+  }
+
+  object RecognisedVariable {
+    def unapply(string: String): Option[Variable] = {
+      RecognisedStatementVariable.unapply(string) orElse RecognisedTermVariable.unapply(string)
     }
   }
 }

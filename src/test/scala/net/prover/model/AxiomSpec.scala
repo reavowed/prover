@@ -26,15 +26,13 @@ class AxiomSpec extends ProverSpec {
   "axiom parser" should {
     "parse an axiom with no premises" in {
       parseAxiom(
-        "Axiom of Extensionality",
-        "conclusion ∀ x ∀ y ∀ z → ↔ ∈ z x ∈ z y ↔ ∈ x z ∈ y z"
+        "Equality Is Reflexive",
+        "conclusion = x x"
       ) mustEqual axiom(
-        "Axiom of Extensionality",
-        "axiom-of-extensionality",
+        "Equality Is Reflexive",
+        "equality-is-reflexive",
         Nil,
-        ForAll(x, ForAll(y, ForAll(z, Implication(
-          Equivalence(ElementOf(z, x), ElementOf(z, y)),
-          Equivalence(ElementOf(x, z), ElementOf(y, z)))))))
+        Equals(x, x))
     }
 
     "parse an axiom with a single premise" in {

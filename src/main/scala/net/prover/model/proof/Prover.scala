@@ -35,7 +35,7 @@ case class Prover(
   ): Iterator[Step.Assertion] = {
     initialSubstitutions.map(Iterator(_))
       .getOrElse {
-        inference.conclusion.calculateSubstitutions(assertion, Substitutions.empty).iterator
+        inference.conclusion.calculateSubstitutions(assertion, Substitutions.empty, 0).iterator
       }
       .flatMap { substitutions =>
         matchPremisesToFacts(inference.premises, substitutions, inference.allowsRearrangement)
@@ -145,7 +145,7 @@ case class Prover(
       expansions.iterator
         .flatMap { case (inference, inferencePremises) =>
           for {
-            substitutions <- inference.conclusion.calculateSubstitutions(statement, Substitutions.empty)
+            substitutions <- inference.conclusion.calculateSubstitutions(statement, Substitutions.empty, 0)
             substitutedPremises <- inferencePremises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
             premiseReferences <- substitutedPremises.map(getStatementByRearranging).traverseOption.toSeq
             if inference.conclusion.applySubstitutions(substitutions).contains(statement)
@@ -231,7 +231,7 @@ case class Prover(
               .map((inference, premiseStatement, _))
           }
           .flatMap { case (inference, premiseStatement, simplificationPath) =>
-            premiseStatement.calculateSubstitutions(statement, Substitutions.empty)
+            premiseStatement.calculateSubstitutions(statement, Substitutions.empty, 0)
               .map((inference, simplificationPath, _))
           }
           .mapCollect { case (inference, simplificationPath, substitutions) =>

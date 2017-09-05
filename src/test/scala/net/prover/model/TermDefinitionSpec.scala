@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.components.PlaceholderTerm
+import net.prover.model.components.{BoundVariable, PlaceholderTerm}
 import net.prover.model.entries.TermDefinition
 
 class TermDefinitionSpec extends ProverSpec {
@@ -13,7 +13,7 @@ class TermDefinitionSpec extends ProverSpec {
           "∅",
           Format.default("∅", Nil),
           Nil,
-          ForAll(x, Negation(ElementOf(x, PlaceholderTerm))),
+          ForAll("x")(Negation(ElementOf(BoundVariable(0)("x"), PlaceholderTerm))),
           "",
           "")
     }
@@ -27,9 +27,9 @@ class TermDefinitionSpec extends ProverSpec {
         "intersection",
         Format("⋂%0", requiresBrackets = false),
         Seq(Negation(Equals(x, EmptySet))),
-        ForAll(y, Equivalence(
-          ElementOf(y, PlaceholderTerm),
-          ForAll(z, Implication(ElementOf(z, x), ElementOf(z, y))))),
+        ForAll("y")(Equivalence(
+          ElementOf(BoundVariable(0)("y"), PlaceholderTerm),
+          ForAll("z")(Implication(ElementOf(BoundVariable(0)("z"), x), ElementOf(BoundVariable(0)("z"), BoundVariable(1)("y")))))),
         "",
         "")
     }

@@ -1,10 +1,9 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.components.{Statement, Term, TermVariable}
+import net.prover.model.components.{BoundVariable, Statement, Term, TermVariable}
 
 sealed trait Step {
-  def `type`: String
   def reference: Reference.Direct
   def fact: Option[Fact]
   def referencedFact: Option[ReferencedFact] = fact.map { f => ReferencedFact(f, reference)}
@@ -30,7 +29,6 @@ object Step {
     extends Step
   {
     def assumptionReference = reference.withSuffix("a")
-    override val `type` = "assumption"
     override val fact = steps.ofType[Step.WithProvenStatement].lastOption.map(lastSubstep => Fact.Deduced(assumption, lastSubstep.statement))
     override def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
     override def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
@@ -61,7 +59,6 @@ object Step {
       isRearrangement: Boolean)
     extends Step.WithProvenStatement
   {
-    override val `type` = "assertion"
     override def referencedInferenceIds: Set[String] = inferenceApplication.referencedInferenceIds
     override def referenceMap: ReferenceMap = ReferenceMap(reference.value -> inferenceApplication.directReferences)
     override def matchesOutline(stepOutline: StepOutline): Boolean = Step.matchAssertionOutline(statement, stepOutline)
@@ -91,7 +88,6 @@ object Step {
       reference: Reference.Direct)
     extends Step.WithProvenStatement
   {
-    override val `type` = "naming"
     override def statement: Statement = assertionStep.statement
     override def referencedInferenceIds: Set[String] = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
     override def referenceMap: ReferenceMap = assertionStep.referenceMap
@@ -122,11 +118,41 @@ object Step {
     }
   }
 
+  case class ScopedVariable(boundVariableName: String, substeps: Seq[Step], reference: Reference.Direct) extends Step {
+    override def fact: Option[Fact] = {
+      substeps.ofType[Step.WithProvenStatement].lastOption
+        .map(_.statement)
+        .map(Fact.Bound(_)(boundVariableName))
+    }
+    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
+    override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether
+    override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
+      case StepOutline.ScopedVariable(`boundVariableName`, substepOutlines) =>
+        Step.matchOutlines(substeps, substepOutlines)
+      case _ =>
+        false
+    }
+    override def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      substeps.flatMap(_.getAssertionHints(availableInferences))
+    }
+    def serializedLines: Seq[String] = Seq(s"take $boundVariableName {") ++ substeps.flatMap(_.serializedLines).indent ++ Seq("}")
+  }
+  object ScopedVariable {
+    def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Step.ScopedVariable] = {
+      for {
+        variableName <- Parser.singleWord
+        updatedContext = parsingContext.addBoundVariable(variableName)
+        steps <- listParser(Some(reference))(updatedContext).inBraces
+      } yield Step.ScopedVariable(variableName, steps, reference)
+    }
+  }
+
   def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Option[Step]] = {
     Parser.selectOptionalWord {
       case "assume" => Assumption.parser(reference)
       case "assert" => Assertion.parser(reference)
       case "name" => Naming.parser(reference)
+      case "take" => ScopedVariable.parser(reference)
     }
   }
   def listParser(baseReference: Option[Reference.Direct])(implicit parsingContext: ParsingContext): Parser[Seq[Step]] = {

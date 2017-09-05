@@ -7,6 +7,7 @@ import net.prover.model.{Format, Inference, Parser, ParsingContext}
 @JsonIgnoreProperties(Array("symbol", "defaultVariables", "format"))
 case class StatementDefinition(
     symbol: String,
+    boundVariableNames: Seq[String],
     defaultVariables: Seq[Component],
     name: String,
     format: Format,
@@ -15,15 +16,20 @@ case class StatementDefinition(
     bookKey: String)
   extends ChapterEntry(StatementDefinition)
 {
-  val defaultValue = DefinedStatement(defaultVariables, this)
+  val defaultValue = {
+    DefinedStatement(
+      defaultVariables,
+      this)(
+      boundVariableNames)
+  }
   val componentTypes = defaultVariables.map(_.componentType)
 
   def statementParser(implicit context: ParsingContext): Parser[Statement] = {
-    componentTypes.componentsParser.map(apply)
-  }
-
-  def apply(components: Component*): Statement = {
-    DefinedStatement(components, this)
+    for {
+      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
+      updatedContext = context.addBoundVariables(newBoundVariableNames)
+      components <- componentTypes.componentsParser(updatedContext)
+    } yield DefinedStatement(components, this)(newBoundVariableNames)
   }
 
   override def inferences: Seq[Inference] = {
@@ -46,16 +52,40 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
     "definition",
     Statement.parser.inParens)
 
+  private def boundAndDefaultVariablesParser(implicit context: ParsingContext): Parser[(Seq[String], Seq[Variable])] = {
+    val boundVariablePattern = "\\$(.*)".r
+    Parser
+      .selectWord("bound variable or variable") {
+        case boundVariablePattern(boundVariableName) =>
+          Left(boundVariableName)
+        case context.RecognisedVariable(variable) =>
+          Right(variable)
+      }
+      .listInParens(None)
+      .map { list =>
+        val boundVariables = list.collect {
+          case Left(x) => x
+        }
+        val defaultVariables = list.collect {
+          case Right(x) => x
+        }
+        (boundVariables, defaultVariables)
+      }
+  }
+
   def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
-      defaultVariables <- Variable.parser.listInParens(None)
+      boundAndDefaultVariables <- boundAndDefaultVariablesParser
+      boundVariables = boundAndDefaultVariables._1
+      defaultVariables = boundAndDefaultVariables._2
       name <- nameParser.getOrElse(symbol)
-      format <- Format.optionalParser(symbol, defaultVariables.map(_.text))
+      format <- Format.optionalParser(symbol, boundVariables ++ defaultVariables.map(_.text))
       optionalDefiningStatement <- definingStatementParser
     } yield {
       StatementDefinition(
         symbol,
+        boundVariables,
         defaultVariables,
         name,
         format,

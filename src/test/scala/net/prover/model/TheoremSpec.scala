@@ -137,5 +137,39 @@ class TheoremSpec extends ProverSpec {
         Seq(PredicateApplication("φ", x)),
         Seq(substitutionOfEquals))
     }
+
+    "prove an inference with a scoped variable" in {
+      val equalityIsReflexive = axiom(
+        "Equality Is Reflexive",
+        Nil,
+        Equals(x, x))
+      val generalization = axiom(
+        "Generalization",
+        Seq(Fact.Bound(PredicateApplication("φ", BoundVariable(0)("x")))("x")),
+        ForAll("x")(PredicateApplication("φ", BoundVariable(0)("x"))))
+      checkProof(
+        Nil,
+        Seq(
+          StepOutline.ScopedVariable("y", Seq(Equals(BoundVariable(0)("y"), BoundVariable(0)("y")))),
+          ForAll("y")(Equals(BoundVariable(0)("y"), BoundVariable(0)("y")))),
+        Seq(equalityIsReflexive, generalization))
+    }
+
+    "prove a conclusion containing a bound variable" in {
+      val equalityIsReflexive = axiom(
+        "Equivalence of Substituted Equals",
+        Seq(Equals(a, b)),
+        Equivalence(PredicateApplication("φ", x), PredicateApplication("φ", y)))
+      val generalization = axiom(
+        "Generalization",
+        Seq(Fact.Bound(PredicateApplication("φ", BoundVariable(0)("x")))("x")),
+        ForAll("x")(PredicateApplication("φ", BoundVariable(0)("x"))))
+      checkProof(
+        Seq(Equals(x, y)),
+        Seq(
+          StepOutline.ScopedVariable("z", Seq(Equivalence(ElementOf(BoundVariable(0)("z"), a), ElementOf(BoundVariable(0)("z"), b)))),
+          ForAll("z")(Equivalence(ElementOf(BoundVariable(0)("z"), a), ElementOf(BoundVariable(0)("z"), b)))),
+        Seq(equalityIsReflexive, generalization))
+    }
   }
 }

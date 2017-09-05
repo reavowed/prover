@@ -44,6 +44,14 @@
       Some(assumptionStep.reference.value).filter(_ => assumptionStep.steps.ofType[Step.WithProvenStatement].lastOption.contains(substep)))
     }
   }
+  case scopedVariableStep: Step.ScopedVariable => {
+    @scopedVariableStep.substeps.map { substep => @html.step(
+      substep,
+      indentLevel,
+      referenceMap,
+      Some(scopedVariableStep.reference.value).filter(_ => scopedVariableStep.substeps.ofType[Step.WithProvenStatement].lastOption.contains(substep)))
+    }
+  }
   case _ => {
     <tr class="proofRow">
       <td>@for(_ <- 1 to indentLevel) { &nbsp;&nbsp; } Unknown step @step.getClass.getCanonicalName </td>

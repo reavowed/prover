@@ -70,11 +70,23 @@ object StepOutline {
     }
   }
 
+  case class ScopedVariable(boundVariableName: String, steps: Seq[StepOutline]) extends StepOutline
+  object ScopedVariable {
+    def parser(implicit context: ParsingContext): Parser[ScopedVariable] = {
+      for {
+        variableName <- Parser.singleWord
+        updatedContext = context.addBoundVariable(variableName)
+        steps <- listParser(updatedContext).inBraces
+      } yield ScopedVariable(variableName, steps)
+    }
+  }
+
   def parser(implicit context: ParsingContext): Parser[Option[StepOutline]] = {
     Parser.selectOptionalWord {
       case "assume" => Assumption.parser
       case "let" => Naming.parser
       case "prove" => Assertion.parser
+      case "take" => ScopedVariable.parser
     }
   }
   def listParser(implicit context: ParsingContext): Parser[Seq[StepOutline]] = {

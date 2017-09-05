@@ -2,15 +2,20 @@ package net.prover.model.components
 import net.prover.model.Substitutions
 
 case class PredicateApplication(predicateName: String, argument: Term) extends Statement {
-  override def requiredSubstitutions = Substitutions.Required(Nil, Seq(predicateName))
-  override def calculateSubstitutions(other: Component, substitutions: Substitutions): Seq[Substitutions] = {
+  override def boundVariables = argument.boundVariables
+  override def requiredSubstitutions = argument.requiredSubstitutions ++ Substitutions.Required(Nil, Seq(predicateName))
+  override def calculateSubstitutions(other: Component, substitutions: Substitutions, boundVariableCount: Int) = {
     other match {
       case PredicateApplication(otherName, otherArgument) =>
-        argument.calculateSubstitutions(otherArgument, substitutions).flatMap(_.addPredicate(predicateName, Predicate.Named(otherName)))
+        argument
+          .calculateSubstitutions(otherArgument, substitutions, boundVariableCount)
+          .flatMap(_.addPredicate(predicateName, Predicate.Named(otherName)))
       case statement: Statement =>
-        statement.calculateApplicatives(argument, substitutions).flatMap { case (predicate, newSubstitutions) =>
-          newSubstitutions.addPredicate(predicateName, predicate)
-        }
+        statement
+          .calculateApplicatives(argument, substitutions, boundVariableCount)
+          .flatMap { case (predicate, newSubstitutions) =>
+            newSubstitutions.addPredicate(predicateName, predicate)
+          }
       case _ =>
         Nil
     }
@@ -22,5 +27,8 @@ case class PredicateApplication(predicateName: String, argument: Term) extends S
     } yield predicate(updatedArgument)
   }
   override def replacePlaceholder(other: Component) = this
+  override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = ???
+
+  override def toString: String = s"$predicateName($argument)"
   override def serialized: String = s"with ${argument.serialized} $predicateName"
 }

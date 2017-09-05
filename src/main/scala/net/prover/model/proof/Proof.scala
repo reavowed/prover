@@ -83,6 +83,8 @@ object Proof {
             s"Could not prove assertion ${assertionStep.assertion}",
             assertionStep.location.fileName,
             assertionStep.location.lineNumber))
+      case StepOutline.ScopedVariable(boundVariableName, substepOutlines) =>
+        proveScopedVariableStep(boundVariableName, substepOutlines, context, reference)
     }
   }
 
@@ -142,6 +144,16 @@ object Proof {
         finalStepWithAssertion.location.fileName,
         finalStepWithAssertion.location.lineNumber))
     Step.Naming(variable, assumptionStep, assertionStep, reference)
+  }
+
+  def proveScopedVariableStep(
+    boundVariableName: String,
+    substepOutlines: Seq[StepOutline],
+    context: ProvingContext,
+    reference: Reference.Direct
+  ): Step.ScopedVariable = {
+    val substeps = proveSteps(substepOutlines, Nil, context, Some(reference))
+    Step.ScopedVariable(boundVariableName, substeps, reference)
   }
 
   def parser(implicit parsingContext: ParsingContext): Parser[Proof] = {

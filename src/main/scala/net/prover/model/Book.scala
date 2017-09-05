@@ -112,14 +112,14 @@ object Book {
           Try {
             CachedProof.parser(path)(context).parseAndDiscard(serializedProof, path)
           }.ifFailed { e =>
-            logger.info(s"Error parsing cached proof $path\n${e.getMessage}")
+            logger.info(s"Error parsing cached proof $path", e)
           }.toOption
         }
         val book = bookOutline.expandOutlines(cachedProofs)
         book.cacheTheorems(cacheDirectoryPath)
         book
       }.ifFailed { e =>
-        logger.warn(s"Error expanding book '${bookOutline.title}'\n${e.getMessage}")
+        logger.warn(s"Error expanding book '${bookOutline.title}", e)
       }.toOption
     }
     (bookOption, modificationTimes)

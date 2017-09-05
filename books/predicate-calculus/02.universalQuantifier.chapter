@@ -1,7 +1,7 @@
 chapter Universal Quantifier
 Introduce the universal quantifier, ∀.
 
-statement ∀ (x φ) format ((∀x)φ)
+statement ∀ ($x φ) format ((∀x)φ)
 
 axiom Generalization
 premise binding x with x φ

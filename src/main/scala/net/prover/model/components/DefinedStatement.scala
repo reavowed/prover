@@ -5,7 +5,8 @@ import net.prover.model.entries.StatementDefinition
 
 case class DefinedStatement(
     subcomponents: Seq[Component],
-    definition: StatementDefinition)
+    definition: StatementDefinition)(
+    val scopedBoundVariableNames: Seq[String])
  extends Statement with DefinedComponent[Statement]
 {
   def format = definition.format
@@ -18,17 +19,18 @@ case class DefinedStatement(
       None
   }
   override def update(newSubcomponents: Seq[Component]): Statement = {
-    copy(subcomponents = newSubcomponents)
+    copy(subcomponents = newSubcomponents)(scopedBoundVariableNames)
   }
 
-  override def calculateApplicatives(argument: Term, substitutions: Substitutions): Seq[(Predicate, Substitutions)] = {
-    super.calculateApplicatives(argument, substitutions) ++
-      subcomponents.foldLeft(Seq((Seq.empty[Applicative[Component]], substitutions))) { case (predicatesAndSubstitutionsSoFar, subcomponent) =>
-        for {
-          (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar
-          (predicate, newSubstitutions) <- subcomponent.calculateApplicatives(argument, substitutionsSoFar)
-        } yield (predicatesSoFar :+ predicate, newSubstitutions)
-      }.map(_.mapLeft(Predicate.Defined(_, definition)))
-        .filter(!_._1.isConstant)
+  override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
+    subcomponents.foldLeft(Seq((Seq.empty[Applicative[Component]], substitutions))) { case (predicatesAndSubstitutionsSoFar, subcomponent) =>
+      for {
+        (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar
+        (predicate, newSubstitutions) <- subcomponent.calculateApplicatives(
+          argument,
+          substitutionsSoFar,
+          boundVariableCount + scopedBoundVariableNames.length)
+      } yield (predicatesSoFar :+ predicate, newSubstitutions)
+    }.map(_.mapLeft(components => Predicate.Defined(definition, components)(scopedBoundVariableNames)))
   }
 }

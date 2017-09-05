@@ -3,11 +3,13 @@ Introduce the set membership predicate ∈ and the Axiom of Extensionality, and 
 
 statement ∈ (a b)
 
-# theorem Equal Sets Have the Same Members
-# premise = a b
-# prove ↔ ∈ x a ∈ x b
-# prove ∀ x ↔ ∈ x a ∈ x b
-# qed
+theorem Equal Sets Have the Same Members
+premise = a b
+take x {
+  prove ↔ ∈ x a ∈ x b
+}
+prove ∀ y ↔ ∈ y a ∈ y b
+qed
 
 # axiom Extensionality
 # premise ∀ x ↔ ∈ x a ∈ x b

@@ -94,6 +94,13 @@ object Parser {
 
   def singleWord: Parser[String] = Parser { t => t.readNext() }
 
+  def nWords(n: Int): Parser[Seq[String]] = (1 to n).foldLeft(Parser.constant(Seq.empty[String])) { case (parserSoFar, _) =>
+    for {
+      wordsSoFar <- parserSoFar
+      newWord <- Parser.singleWord
+    } yield wordsSoFar :+ newWord
+  }
+
   def optionalWord(expectedWord: String): Parser[Option[Unit]] = Parser { tokenizer =>
     if (tokenizer.isEmpty) {
       (None, tokenizer)
@@ -106,13 +113,22 @@ object Parser {
     }
   }
 
-  def selectWord[T](name: String)(f: PartialFunction[String, Parser[T]]): Parser[T] = {
+  def selectWord[T](name: String)(f: PartialFunction[String, T]): Parser[T] = {
+    Parser.singleWordIfAny.map {
+      case Some(word) if f.isDefinedAt(word) => f(word)
+      case Some(unknownWord) => throw new Exception(s"Expected $name but found '$unknownWord'")
+      case None => throw new Exception(s"Expected $name but found end of file")
+    }
+  }
+
+  def selectWordParser[T](name: String)(f: PartialFunction[String, Parser[T]]): Parser[T] = {
     Parser.singleWordIfAny.flatMap {
       case Some(word) if f.isDefinedAt(word) => f(word)
       case Some(unknownWord) => throw new Exception(s"Expected $name but found '$unknownWord'")
       case None => throw new Exception(s"Expected $name but found end of file")
     }
   }
+
 
   def selectOptionalWord[T](f: PartialFunction[String, Parser[T]]): Parser[Option[T]] = {
     Parser.singleWordIfAny.flatMapFlatMap { word =>

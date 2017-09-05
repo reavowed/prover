@@ -1,6 +1,7 @@
 package net.prover.model
 
-import net.prover.model.components.Statement
+import net.prover.model.components.Predicate.Defined
+import net.prover.model.components.{BoundVariable, Predicate, PredicateApplication, Statement}
 
 class StatementSpec extends ProverSpec {
 
@@ -27,7 +28,7 @@ class StatementSpec extends ProverSpec {
     }
 
     "parse a quantified statement" in {
-      parseStatement("∀ y χ") mustEqual ForAll(y, χ)
+      parseStatement("∀ y χ") mustEqual ForAll("y")(χ)
     }
 
     "parse an empty list" in {
@@ -52,39 +53,49 @@ class StatementSpec extends ProverSpec {
 
   "statement match" should {
     "match a statement variable to anything" in {
-      φ.calculateSubstitutions(Implication(φ, ψ), Substitutions.empty) mustEqual
+      φ.calculateSubstitutions(Implication(φ, ψ), Substitutions.empty, 0) mustEqual
         Seq(Substitutions(Map(φ -> Implication(φ, ψ)), Map.empty))
     }
     "not match a defined statement to a statement variable" in {
-      Implication(φ, ψ).calculateSubstitutions(φ, Substitutions.empty) must beEmpty
+      Implication(φ, ψ).calculateSubstitutions(φ, Substitutions.empty, 0) must beEmpty
     }
     "not match two different defined statements" in {
-      Implication(φ, ψ).calculateSubstitutions(Conjunction(φ, ψ), Substitutions.empty) must beEmpty
+      Implication(φ, ψ).calculateSubstitutions(Conjunction(φ, ψ), Substitutions.empty, 0) must beEmpty
     }
     "not match two defined statements of the same type whose subcomponents don't match" in {
       Implication(Implication(φ, ψ), χ)
-        .calculateSubstitutions(Implication(φ, ψ), Substitutions.empty)
+        .calculateSubstitutions(Implication(φ, ψ), Substitutions.empty, 0)
         .must(beEmpty)
     }
     "match two defined statements of the same type whose subcomponents are different statement variables" in {
       Implication(φ, ψ)
-        .calculateSubstitutions(Implication(φ, χ), Substitutions.empty)
+        .calculateSubstitutions(Implication(φ, χ), Substitutions.empty, 0)
         .mustEqual(Seq(Substitutions(Map(φ -> φ, ψ -> χ), Map.empty)))
     }
     "match two defined statements of the same type whose subcomponents are different but match" in {
       Implication(φ, ψ)
-        .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ), Substitutions.empty)
+        .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ), Substitutions.empty, 0)
         .mustEqual(Seq(Substitutions(Map(φ -> Conjunction(φ, ψ), ψ -> χ), Map.empty)))
     }
     "match two connectives of the same type whose subcomponents merge correctly" in {
       Implication(φ, φ)
-        .calculateSubstitutions(Implication(Conjunction(φ, ψ), Conjunction(φ, ψ)), Substitutions.empty)
+        .calculateSubstitutions(Implication(Conjunction(φ, ψ), Conjunction(φ, ψ)), Substitutions.empty, 0)
         .mustEqual(Seq(Substitutions(Map(φ -> Conjunction(φ, ψ)), Map.empty)))
     }
     "match two connectives of the same type whose substatements do not merge correctly" in {
       Implication(φ, φ)
-        .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ), Substitutions.empty)
+        .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ), Substitutions.empty, 0)
         .must(beEmpty)
+    }
+    "match a predicate twice with a constant bound variable" in {
+      Equivalence(PredicateApplication("φ", x), PredicateApplication("φ", y))
+        .calculateSubstitutions(
+          Equivalence(ElementOf(BoundVariable(0)("z"), a), ElementOf(BoundVariable(0)("z"), b)),
+          Substitutions.empty,
+          0)
+        .mustEqual(Seq(Substitutions(
+          Map(x -> a, y -> b),
+          Map("φ" -> Defined(ElementOf, Seq(BoundVariable(0)("z"), components.Function.Identity))(Nil)))))
     }
   }
 

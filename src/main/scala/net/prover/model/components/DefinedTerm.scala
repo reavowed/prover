@@ -9,6 +9,7 @@ case class DefinedTerm(
 {
   def format = definition.format
   def symbol = definition.symbol
+  def scopedBoundVariableNames = Nil
 
   override def getMatch(other: Component): Option[Seq[Component]] = other match {
     case DefinedTerm(otherSubcomponents, `definition`) =>

@@ -63,6 +63,8 @@ object CachedProof {
         validateAssertionStep(assertionStep, context)
       case namingStep: Step.Naming =>
         validateNamingStep(namingStep, context)
+      case scopedVariableStep: Step.ScopedVariable =>
+        validateScopedVariableStep(scopedVariableStep, context)
       case _ =>
         None
     }
@@ -105,6 +107,16 @@ object CachedProof {
         assertionStep,
         context.addFact(deduction.fact, deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")))
     } yield Step.Naming(variable, validatedAssumptionStep, validatedAssertionStep.asInstanceOf[Step.WithProvenStatement], reference)
+  }
+
+  def validateScopedVariableStep(
+    scopedVariableStep: Step.ScopedVariable,
+    context: ProvingContext
+  ): Option[Step] = {
+    import scopedVariableStep._
+    for {
+      validatedSubsteps <- validateSteps(substeps, context)
+    } yield Step.ScopedVariable(boundVariableName, validatedSubsteps, reference)
   }
 
   private def validateInferenceApplication(

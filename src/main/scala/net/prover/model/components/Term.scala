@@ -7,8 +7,8 @@ trait Term extends Component {
   override val componentType = Term
   def applySubstitutions(substitutions: Substitutions): Option[Term]
   def replacePlaceholder(other: Component): Term
-  def calculateApplicatives(argument: Term, substitutions: Substitutions): Seq[(Function, Substitutions)] = {
-    argument.calculateSubstitutions(this, substitutions).map(Function.Identity -> _) ++ Seq((Function.Constant(this), substitutions))
+  def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Function, Substitutions)] = {
+    argument.calculateSubstitutions(this, substitutions, boundVariableCount).map(Function.Identity -> _)
   }
 }
 
@@ -33,14 +33,14 @@ object Term extends ComponentType {
       }
     }
 
-    Parser.selectWord("term") {
+    Parser.selectWordParser("term") {
       case "_" =>
         Parser.constant(PlaceholderTerm)
+      case context.RecognisedBoundVariable(variable) =>
+        Parser.constant(variable)
       case TermDefinitionMatcher(termDefinition) =>
         termDefinition.termParser
       case context.RecognisedTermVariable(variable) =>
-        Parser.constant(variable)
-      case context.RecognisedBoundVariable(variable) =>
         Parser.constant(variable)
     }
   }
