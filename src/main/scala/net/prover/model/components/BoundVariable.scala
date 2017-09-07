@@ -16,6 +16,8 @@ case class BoundVariable(level: Int)(val text: String) extends Term {
   override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
     if (argument == this) {
       Seq((Function.Identity, substitutions))
+    } else if (level >= boundVariableCount) {
+      super.calculateApplicatives(argument, substitutions, boundVariableCount) :+ (Function.Constant(this), substitutions)
     } else {
       Seq((Function.Constant(this), substitutions))
     }

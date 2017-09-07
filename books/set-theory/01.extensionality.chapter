@@ -11,9 +11,9 @@ take x {
 prove ∀ y ↔ ∈ y a ∈ y b
 qed
 
-# axiom Extensionality
-# premise ∀ x ↔ ∈ x a ∈ x b
-# conclusion = a b
+axiom Extensionality
+premise ∀ x ↔ ∈ x a ∈ x b
+conclusion = a b
 
 # theorem Extensionality
 # premise proves ∈ x a ∈ x b
@@ -22,12 +22,17 @@ qed
 # prove = a b
 # qed
 
-# theorem Sets with Same Membership Condition Are Equal
-# premise ∀ x ↔ ∈ x a φ
-# premise ∀ x ↔ ∈ x b φ
-# prove ∀ x ↔ ∈ x a ∈ x b
-# prove = a b
-# qed
+theorem Sets with Same Membership Condition Are Equal
+premise ∀ x ↔ ∈ x a φ
+premise ∀ x ↔ ∈ x b φ
+take x {
+  prove ↔ ∈ x a φ
+  prove ↔ ∈ x b φ
+  prove ↔ ∈ x a ∈ x b
+}
+prove ∀ x ↔ ∈ x a ∈ x b
+prove = a b
+qed
 
 # theorem Sets with Equivalent Membership Conditions Are Equal
 # premise ∀ x ↔ ∈ x a φ

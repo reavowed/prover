@@ -97,6 +97,20 @@ class StatementSpec extends ProverSpec {
           Map(x -> a, y -> b),
           Map("φ" -> Defined(ElementOf, Seq(BoundVariable(0)("z"), components.Function.Identity))(Nil)))))
     }
+    "match a predicate to a bound variable outside the current scope" in {
+      PredicateApplication("φ", x)
+        .calculateSubstitutions(ElementOf(BoundVariable(0)("y"), z), Substitutions.empty, 0)
+        .must(contain(Substitutions(
+          Map(x -> BoundVariable(0)("y")),
+          Map("φ" -> Defined(ElementOf, Seq(components.Function.Identity, components.Function.Constant(z)))(Nil)))))
+    }
+    "not match a predicate to a bound variable outside the current scope" in {
+      PredicateApplication("φ", x)
+        .calculateSubstitutions(ElementOf(BoundVariable(0)("y"), z), Substitutions.empty, 1)
+        .must(not(contain(Substitutions(
+          Map(x -> BoundVariable(0)("y")),
+          Map("φ" -> Defined(ElementOf, Seq(components.Function.Identity, components.Function.Constant(z)))(Nil))))))
+    }
   }
 
 //  "statement condensing" should {
