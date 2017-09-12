@@ -20,9 +20,10 @@ case class TheoremOutline(
     chapterTitle: String,
     bookTitle: String,
     availableInferences: Seq[Inference],
+    transformations: Seq[StatementDefinition],
     cachedProofs: Seq[CachedProof]
   ): Theorem = {
-    val detailedProof = getProof(cachedProofs, availableInferences, key, bookTitle)
+    val detailedProof = getProof(cachedProofs, availableInferences, transformations, key, bookTitle)
     Theorem(
       name,
       key,
@@ -41,35 +42,37 @@ case class TheoremOutline(
   private def getProof(
     cachedProofs: Seq[CachedProof],
     availableInferences: Seq[Inference],
+    transformations: Seq[StatementDefinition],
     key: String,
     bookTitle: String
   ): Proof = {
     cachedProofs
       .find { cachedProof =>
-        premises == cachedProof.premises && cachedProof.proof.matchesOutline(proofOutline)
+        premises == cachedProof.premises && cachedProof.matchesOutline(proofOutline)
       } match {
         case Some(cachedProof) =>
-          cachedProof.validate(availableInferences) match {
+          cachedProof.validate(availableInferences, transformations) match {
             case Some(validProof) =>
               validProof
             case None =>
               TheoremOutline.logger.info(s"Cached proof for theorem $key was invalid - reproving")
-              prove(availableInferences, cachedProof.proof.getAssertionHints(availableInferences), bookTitle)
+              prove(availableInferences, cachedProof.getAssertionHints(availableInferences), transformations, bookTitle)
           }
         case None =>
           TheoremOutline.logger.info(s"No cached proof for theorem $key - proving directly")
-          val assertionHints = cachedProofs.filter(_.premises == premises).flatMap(_.proof.getAssertionHints(availableInferences))
-          prove(availableInferences, assertionHints, bookTitle)
+          val assertionHints = cachedProofs.filter(_.premises == premises).flatMap(_.getAssertionHints(availableInferences))
+          prove(availableInferences, assertionHints, transformations, bookTitle)
       }
   }
 
   private def prove(
     availableInferences: Seq[Inference],
     assertionHints: Seq[AssertionHint],
+    transformations: Seq[StatementDefinition],
     bookName: String
   ): Proof = {
     try {
-      Proof.fillInOutline(premises, proofOutline, availableInferences, assertionHints)
+      Proof.fillInOutline(premises, proofOutline, availableInferences, assertionHints, transformations)
     } catch {
       case NonFatal(e) =>
         throw new Exception(s"Error proving theorem $name in book $bookName", e)

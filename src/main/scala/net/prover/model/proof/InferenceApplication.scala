@@ -1,31 +1,48 @@
 package net.prover.model.proof
 
 import net.prover.model._
+import net.prover.model.components.Statement
+import net.prover.model.entries.StatementDefinition
 
-case class InferenceApplication(
-    inferenceSummary: Inference.Summary,
-    substitutions: Inference.Substitutions,
-    references: Seq[Reference])
-{
-  def referencedInferenceIds: Set[String] = references.flatMap(_.referencedInferenceIds).toSet + inferenceSummary.id
-  def directReferences: Set[Reference.ToFact] = references.flatMap(_.factReferences).toSet
-  def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-    AssertionHint.attempt(inferenceSummary, availableInferences, substitutions).toSeq ++
-      references.flatMap(_.getAssertionHints(availableInferences))
-  }
-  def serializedLines: Seq[String] = Seq(inferenceSummary.serialized + " " + substitutions.serialized + " {") ++
-    references.flatMap(_.serializedLines).indent :+
-    "}"
+sealed trait InferenceApplication {
+  def inference: Inference
+  def referencedInferenceIds: Set[String]
+  def directReferences: Set[Reference.ToFact]
+  def cached: CachedInferenceApplication
 }
 
 object InferenceApplication {
-
-  def parser(implicit parsingContext: ParsingContext): Parser[InferenceApplication] = {
-    for {
-      inferenceSummary <- Inference.Summary.parser
-      substitutions <- Inference.Substitutions.parser
-      references <- Reference.parser.listInBraces(None)
-    } yield InferenceApplication(inferenceSummary, substitutions, references)
+  case class Direct(
+      inference: Inference,
+      substitutions: Substitutions,
+      references: Seq[Reference])
+    extends InferenceApplication
+  {
+    def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet + inference.id
+    def directReferences = references.flatMap(_.factReferences).toSet
+    def cached = CachedInferenceApplication.Direct(inference.id, inference.specifySubstitutions(substitutions).get, references.map(_.cached))
   }
 
+  case class Transformed(
+      inference: Inference,
+      substitutions: Substitutions,
+      references: Seq[Reference],
+      transformation: StatementDefinition,
+      transformedPremises: Seq[Premise],
+      transformedConclusion: Statement,
+      transformationProof: Seq[Step])
+    extends InferenceApplication
+  {
+    def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet ++
+      transformationProof.flatMap(_.referencedInferenceIds) +
+      inference.id
+    def directReferences = references.flatMap(_.factReferences).toSet
+    def cached = CachedInferenceApplication.Transformed(
+      inference.id,
+      Inference.Transformed(inference, transformedPremises, transformedConclusion).specifySubstitutions(substitutions).get,
+      references.map(_.cached),
+      transformation,
+      transformedPremises,
+      transformationProof.map(_.cached))
+  }
 }

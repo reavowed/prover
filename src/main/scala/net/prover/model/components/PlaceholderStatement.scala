@@ -7,4 +7,5 @@ object PlaceholderStatement extends Statement with Placeholder[Statement] {
   override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
     Seq((Predicate.Constant(this), substitutions))
   }
+  override def makeApplicative(argument: Term) = Some(this)
 }

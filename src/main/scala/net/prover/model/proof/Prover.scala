@@ -1,8 +1,11 @@
 package net.prover.model.proof
 
 import net.prover.model.Inference.RearrangementType
-import net.prover.model.components.Statement
-import net.prover.model.{Inference, Premise, Substitutions}
+import net.prover.model.components.{BoundVariable, DefinedStatement, Statement}
+import net.prover.model.entries.StatementDefinition
+import net.prover.model._
+
+import scala.util.Try
 
 case class Prover(
   assertion: Statement,
@@ -12,8 +15,22 @@ case class Prover(
 {
   import context._
 
+  case class Transformation(statementDefinition: StatementDefinition, variableName: String) {
+    val boundVariable = BoundVariable(0)(variableName)
+    def apply(statement: Statement): Option[DefinedStatement] = {
+      statement.makeApplicative(boundVariable).map(s => DefinedStatement(Seq(s), statementDefinition)(statementDefinition.boundVariableNames))
+    }
+  }
+
   val applicableHints = assertionHints.filter(_.conclusion == assertion)
   lazy val allSimplifiedFacts = referencedFacts ++ referencedFacts.flatMap(getAllSimplifications)
+  lazy val transformations: Seq[Transformation] = transformationStatementDefinitions.mapCollect { statementDefinition =>
+    for {
+      variableName <- statementDefinition.boundVariableNames.single
+    } yield {
+      Transformation(statementDefinition, variableName)
+    }
+  }
 
   def proveAssertion(): Option[Step.Assertion] = {
     proveAssertionUsingHints()
@@ -22,17 +39,17 @@ case class Prover(
   }
 
   def proveAssertionUsingHints(): Option[Step.Assertion] = {
-    applicableHints.iterator.flatMap(h => proveUsingInference(h.inference, Some(h.substitutions))).nextOption()
+    applicableHints.iterator.findFirst(h => proveUsingInference(h.inference, Some(h.substitutions)))
   }
 
   def proveAssertionDirectlyFromInferences(): Option[Step.Assertion] = {
-    availableInferences.iterator.flatMap(proveUsingInference(_)).nextOption()
+    availableInferences.iterator.findFirst(i => proveUsingInference(i) orElse proveUsingTransformedInference(i))
   }
 
   private def proveUsingInference(
     inference: Inference,
     initialSubstitutions: Option[Substitutions] = None
-  ): Iterator[Step.Assertion] = {
+  ): Option[Step.Assertion] = {
     initialSubstitutions.map(Iterator(_))
       .getOrElse {
         inference.conclusion.calculateSubstitutions(assertion, Substitutions.empty, 0).iterator
@@ -40,9 +57,48 @@ case class Prover(
       .flatMap { substitutions =>
         matchPremisesToFacts(inference.premises, substitutions, inference.allowsRearrangement)
       }
-      .mapCollect { case (premiseReferences, substitutions) =>
-        makeAssertion(inference, substitutions, premiseReferences)
+      .map { case (premiseReferences, substitutions) =>
+        Step.Assertion(assertion, InferenceApplication.Direct(inference, substitutions, premiseReferences), reference, isRearrangement = false)
       }
+      .headOption
+  }
+
+  private def proveUsingTransformedInference(
+    inference: Inference
+  ): Option[Step.Assertion] = {
+    val iterator = for {
+      transformation <- transformations.iterator
+      premiseStatements <- inference.premises.map(_.fact.asOptionalInstanceOf[Fact.Direct].map(_.statement)).traverseOption.iterator
+      transformedConclusion <- transformation(inference.conclusion).iterator
+      transformedPremiseStatements <- premiseStatements.map(transformation.apply).traverseOption.iterator
+      transformedPremises = transformedPremiseStatements.zipWithIndex.map { case (s, i) => Premise(Fact.Direct(s), i)(isElidable = false) }
+      conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(assertion, Substitutions.empty, 0)
+      (premiseReferences, premiseSubstitutions) <- matchPremisesToFacts(transformedPremises, conclusionSubstitutions, inference.allowsRearrangement)
+      transformationProofAttempt = Try(Proof.fillInOutline(
+        transformedPremises,
+        ProofOutline(Seq(
+          StepOutline.ScopedVariable(
+            transformation.variableName,
+            (transformedPremiseStatements :+ transformedConclusion)
+              .map(s => StepOutline.Assertion(s.subcomponents.head.asInstanceOf[Statement], None))),
+          StepOutline.Assertion(transformedConclusion, None))),
+        availableInferences,
+        assertionHints,
+        Nil))
+      transformationProof <- transformationProofAttempt.toOption
+    } yield Step.Assertion(
+      assertion,
+      InferenceApplication.Transformed(
+        inference,
+        premiseSubstitutions,
+        premiseReferences,
+        transformation.statementDefinition,
+        transformedPremises,
+        transformedConclusion,
+        transformationProof.steps),
+      reference,
+      isRearrangement = false)
+    iterator.headOption
   }
 
 //  private def proveUsingElidedInference(
@@ -77,13 +133,6 @@ case class Prover(
 //        makeAssertion(inference, substitutions, premiseReferences)
 //      }
 //  }
-
-  private def makeAssertion(inference: Inference, substitutions: Substitutions, references: Seq[Reference]): Option[Step.Assertion] = {
-    Option(substitutions)
-      .filter(s => inference.conclusion.applySubstitutions(s).contains(assertion))
-      .flatMap(inference.specifySubstitutions)
-      .map(s => Step.Assertion(assertion, InferenceApplication(inference.summary, s, references), reference, isRearrangement = false))
-  }
 
 //  private def matchElidablePremise(
 //    premise: Statement,
@@ -143,19 +192,19 @@ case class Prover(
       }
     def findStatementByExpanding(statement: Statement): Option[InferenceApplication] = {
       expansions.iterator
-        .flatMap { case (inference, inferencePremises) =>
-          for {
-            substitutions <- inference.conclusion.calculateSubstitutions(statement, Substitutions.empty, 0)
-            substitutedPremises <- inferencePremises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
-            premiseReferences <- substitutedPremises.map(getStatementByRearranging).traverseOption.toSeq
-            if inference.conclusion.applySubstitutions(substitutions).contains(statement)
-            inferenceSubstitutions <- inference.specifySubstitutions(substitutions)
-          } yield InferenceApplication(inference.summary, inferenceSubstitutions, premiseReferences)
+        .findFirst { case (inference, inferencePremises) =>
+          (
+            for {
+              substitutions <- inference.conclusion.calculateSubstitutions(statement, Substitutions.empty, 0)
+              substitutedPremises <- inferencePremises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
+              premiseReferences <- substitutedPremises.map(getStatementByRearranging).traverseOption.toSeq
+              if inference.conclusion.applySubstitutions(substitutions).contains(statement)
+            } yield InferenceApplication.Direct(inference, substitutions, premiseReferences)
+          ).headOption
         }
-        .nextOption()
     }
     def getStatementByRearranging(statement: Statement): Option[Reference] = {
-      findStatementInFacts(statement) orElse findStatementByExpanding(statement).map(Reference.Expansion(_))
+      findStatementInFacts(statement) orElse findStatementByExpanding(statement).map(Reference.Expansion)
     }
     findStatementByExpanding(assertion).map { inferenceApplication =>
       Step.Assertion(assertion, inferenceApplication, reference, isRearrangement = true)
@@ -238,14 +287,10 @@ case class Prover(
             inference.conclusion.applySubstitutions(substitutions)
               .map((inference, simplificationPath, substitutions, _))
           }
-          .mapCollect { case (inference, simplificationPath, substitutions, conclusion) =>
-            inference.specifySubstitutions(substitutions)
-              .map((inference, simplificationPath, _, conclusion))
-          }
           .map { case (inference, simplificationPath, substitutions, conclusion) =>
             ReferencedFact(
               Fact.Direct(conclusion),
-              Reference.Simplification(inference.summary, substitutions, factReference, simplificationPath))
+              Reference.Simplification(inference, substitutions, factReference, simplificationPath))
           }
       case _ =>
         Nil

@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.{Parser, ParsingContext}
+import net.prover.model.{FileLocation, Parser, ParsingContext}
 import net.prover.model.components.{Statement, Term, TermVariable}
 
 sealed trait StepOutline
@@ -10,11 +10,9 @@ object StepOutline {
     def innermostAssertionStep: StepOutline.Assertion
   }
 
-  case class Location(fileName: String, lineNumber: Int)
-
   case class Assertion(
       assertion: Statement,
-      location: Location,
+      location: Option[FileLocation],
       debug: Boolean = false)
     extends StepOutline.WithAssertion
   {
@@ -27,7 +25,7 @@ object StepOutline {
         debug <- Parser.optional("debug", Parser.constant(true), false)
       } yield Assertion(
         assertion,
-        Location(tokenizer.currentFile, tokenizer.currentLine),
+        Some(FileLocation(tokenizer.currentFile, tokenizer.currentLine)),
         debug)
       innerParser.parse(tokenizer)
     }

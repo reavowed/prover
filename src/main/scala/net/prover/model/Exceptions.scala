@@ -20,10 +20,9 @@ object ParseException {
 
 case class ProvingException(
     message: String,
-    fileName: String,
-    lineNumber: Int)
+    location: Option[FileLocation])
   extends Exception(
-    s"Proof error at $fileName line $lineNumber: $message")
+    s"Proof error at ${location.map(l => s"${l.fileName} line ${l.lineNumber}").getOrElse("<unknown>")}: $message")
 
 case class ArbitraryVariableException(message: String)
   extends Exception(message)

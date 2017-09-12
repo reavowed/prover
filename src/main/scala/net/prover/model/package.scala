@@ -41,6 +41,12 @@ package object model {
   }
 
   implicit class SeqOps[T](seq: Seq[T]) {
+    def single: Option[T]= {
+      seq match {
+        case Seq(singleElement) => Some(singleElement)
+        case _ => None
+      }
+    }
     def mapFold[S](f: (T, Seq[S]) => S): Seq[S] = {
       seq.foldLeft(Seq.empty[S]) { case (acc, t) =>
         acc :+ f(t, acc)
@@ -170,16 +176,14 @@ package object model {
   }
 
   implicit class IteratorOps[T](iterator: Iterator[T]) {
-    def nextOption(): Option[T] = {
+    def headOption: Option[T] = {
       if (iterator.hasNext)
         Some(iterator.next())
       else
         None
     }
-    def mapCollect[S](f: T => Option[S]): Iterator[S] = {
-      iterator.map(f).collect {
-        case Some(t) => t
-      }
+    def findFirst[S](f: T => Option[S]): Option[S] = {
+      iterator.map(f).collect { case Some(t) => t }.headOption
     }
   }
 

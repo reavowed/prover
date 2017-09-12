@@ -10,23 +10,23 @@ case class AssertionHint(
 
 object AssertionHint {
   def attempt(
-    inferenceSummary: Inference.Summary,
+    inferenceId: String,
     availableInferences: Seq[Inference],
     inferenceSubstitutions: Inference.Substitutions,
     conclusion: Statement
   ): Option[AssertionHint] = {
     for {
-      inference <- availableInferences.find(_.id == inferenceSummary.id)
+      inference <- availableInferences.find(_.id == inferenceId)
       substitutions <- inference.generalizeSubstitutions(inferenceSubstitutions)
     } yield AssertionHint(inference, conclusion, substitutions)
   }
   def attempt(
-    inferenceSummary: Inference.Summary,
+    inferenceId: String,
     availableInferences: Seq[Inference],
     inferenceSubstitutions: Inference.Substitutions
   ): Option[AssertionHint] = {
     for {
-      inference <- availableInferences.find(_.id == inferenceSummary.id)
+      inference <- availableInferences.find(_.id == inferenceId)
       substitutions <- inference.generalizeSubstitutions(inferenceSubstitutions)
       conclusion <- inference.conclusion.applySubstitutions(substitutions)
     } yield AssertionHint(inference, conclusion, substitutions)

@@ -7,6 +7,7 @@ trait Statement extends Component {
   def applySubstitutions(substitutions: Substitutions): Option[Statement]
   def replacePlaceholder(other: Component): Statement
   def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Predicate, Substitutions)]
+  def makeApplicative(argument: Term): Option[Statement]
 }
 
 object Statement extends ComponentType {

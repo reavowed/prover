@@ -33,4 +33,8 @@ case class DefinedStatement(
       } yield (predicatesSoFar :+ predicate, newSubstitutions)
     }.map(_.mapLeft(components => Predicate.Defined(definition, components)(scopedBoundVariableNames)))
   }
+
+  override def makeApplicative(argument: Term) = {
+    subcomponents.map(_.makeApplicative(argument)).traverseOption.map(update)
+  }
 }

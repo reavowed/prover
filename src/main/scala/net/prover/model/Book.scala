@@ -27,12 +27,15 @@ case class Book(
 
   def inferences: Seq[Inference] = chapters.flatMap(_.inferences)
   def theorems: Seq[Theorem] = chapters.flatMap(_.theorems)
+  def transformations: Seq[StatementDefinition] = chapters.flatMap(_.transformations)
 
   def expandOutlines(cachedProofs: Seq[CachedProof]): Book = {
     val previousInferences = transitiveDependencies.flatMap(_.inferences)
+    val previousTransformations = transitiveDependencies.flatMap(_.transformations)
     copy(chapters = chapters.mapFold[Chapter] { case (chapter, expandedChapters) =>
         chapter.expandOutlines(
           previousInferences ++ expandedChapters.flatMap(_.inferences),
+          previousTransformations ++ expandedChapters.flatMap(_.transformations),
           cachedProofs)
     })
   }
@@ -46,7 +49,7 @@ case class Book(
       theorem <- chapter.theorems
     } yield {
       val cachePath = bookCachePath.resolve(Paths.get(chapter.key, theorem.key))
-      CachedProof(cachePath, theorem.premises, theorem.proof)
+      CachedProof(cachePath, theorem.premises, theorem.proof.steps.map(_.cached))
     }
     val existingFiles = Book.getAllFiles(bookCachePath)
     val (filesAdded, filesUpdated, filesToRemove) = cachedProofs

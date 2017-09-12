@@ -10,6 +10,7 @@ trait Term extends Component {
   def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Function, Substitutions)] = {
     argument.calculateSubstitutions(this, substitutions, boundVariableCount).map(Function.Identity -> _)
   }
+  def makeApplicative(argument: Term): Option[Term] = None
 }
 
 object Term extends ComponentType {

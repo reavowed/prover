@@ -13,7 +13,8 @@ case class StatementDefinition(
     format: Format,
     definingStatement: Option[Statement],
     chapterKey: String,
-    bookKey: String)
+    bookKey: String,
+    isTransformation: Boolean = false)
   extends ChapterEntry(StatementDefinition)
 {
   val defaultValue = {
@@ -82,6 +83,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
       name <- nameParser.getOrElse(symbol)
       format <- Format.optionalParser(symbol, boundVariables ++ defaultVariables.map(_.text))
       optionalDefiningStatement <- definingStatementParser
+      isTransformation <- Parser.optionalWord("transformation").isDefined
     } yield {
       StatementDefinition(
         symbol,
@@ -91,7 +93,8 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
         format,
         optionalDefiningStatement,
         chapterKey,
-        bookKey)
+        bookKey,
+        isTransformation)
     }
   }
 }

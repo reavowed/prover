@@ -4,7 +4,7 @@ import java.nio.file.Paths
 
 import net.prover.model.Inference.RearrangementType
 import net.prover.model.components._
-import net.prover.model.entries.Axiom
+import net.prover.model.entries.{Axiom, StatementDefinition}
 import net.prover.model.proof._
 
 class TheoremSpec extends ProverSpec {
@@ -20,7 +20,7 @@ class TheoremSpec extends ProverSpec {
 
   "theorem parser" should {
     implicit def assertionStepFromStatement(statement: Statement): StepOutline = {
-      StepOutline.Assertion(statement, StepOutline.Location("test.book", 1))
+      StepOutline.Assertion(statement, Some(FileLocation("test.book", 1)))
     }
 
     implicit def assumptionStepFromStatementPair(tuple: (Statement, Statement)): StepOutline = {
@@ -34,26 +34,31 @@ class TheoremSpec extends ProverSpec {
     def prove[T : PremiseConverter](
       premiseSources: Seq[T],
       proofSteps: Seq[StepOutline],
-      inferences: Seq[Inference]
+      inferences: Seq[Inference],
+      transformations: Seq[StatementDefinition] = Nil
     ): Proof = {
       Proof.fillInOutline(
         premiseSources,
         ProofOutline(proofSteps),
         inferences,
-        Nil)
+        Nil,
+        transformations)
     }
 
     def checkProof[T : PremiseConverter](
       premiseSources: Seq[T],
       proofSteps: Seq[StepOutline],
-      inferences: Seq[Inference]
+      inferences: Seq[Inference],
+      transformations: Seq[StatementDefinition] = Nil
     ) = {
-      val proof = prove(premiseSources, proofSteps, inferences)
+      val proof = prove(premiseSources, proofSteps, inferences, transformations)
       proof.conclusion mustEqual proofSteps.ofType[StepOutline.WithAssertion].last.innermostAssertionStep.assertion
-      proof.matchesOutline(ProofOutline(proofSteps)) must beTrue
-      val serializedProof = proof.serialized
-      val deserializedProof = Proof.parser.parse(Tokenizer.fromString(serializedProof, Paths.get("")))._1
-      CachedProof(Paths.get(""), premiseSources, deserializedProof).validate(inferences) must beSome(proof)
+      val cachedProof = CachedProof(Paths.get(""), premiseSources, proof.steps.map(_.cached))
+      cachedProof.steps.matchOutlines(proofSteps) must beTrue
+      val serializedProof = cachedProof.serialized
+      val deserializedProof = CachedProof.parser(Paths.get("")).parse(Tokenizer.fromString(serializedProof, Paths.get("")))._1
+      deserializedProof mustEqual cachedProof
+      deserializedProof.validate(inferences, transformations) must beSome(proof)
     }
 
     "not prove an unfounded statement" in {
@@ -170,6 +175,25 @@ class TheoremSpec extends ProverSpec {
           StepOutline.ScopedVariable("z", Seq(Equivalence(ElementOf(BoundVariable(0)("z"), a), ElementOf(BoundVariable(0)("z"), b)))),
           ForAll("z")(Equivalence(ElementOf(BoundVariable(0)("z"), a), ElementOf(BoundVariable(0)("z"), b)))),
         Seq(equalityIsReflexive, generalization))
+    }
+
+    "prove a transformed inference" in {
+      val generalization = axiom(
+        "Generalization",
+        Seq(Fact.Bound(PredicateApplication("φ", BoundVariable(0)("x")))("x")),
+        ForAll("x")(PredicateApplication("φ", BoundVariable(0)("x"))))
+      val specification = axiom(
+        "Specification",
+        Seq(ForAll("x")(PredicateApplication("φ", BoundVariable(0)("x")))),
+        PredicateApplication("φ", y))
+      checkProof(
+        Seq(
+          ForAll("x")(PredicateApplication("φ", BoundVariable(0)("x"))),
+          ForAll("x")(Implication(PredicateApplication("φ", BoundVariable(0)("x")), PredicateApplication("ψ", BoundVariable(0)("x"))))),
+        Seq(
+          ForAll("x")(PredicateApplication("ψ", BoundVariable(0)("x")))),
+        Seq(generalization, specification, modusPonens),
+        Seq(ForAll))
     }
   }
 }

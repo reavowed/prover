@@ -25,9 +25,13 @@ case class Chapter(
   def theorems: Seq[Theorem] = {
     entries.ofType[Theorem]
   }
+  def transformations: Seq[StatementDefinition] = {
+    statementDefinitions.filter(_.isTransformation)
+  }
 
   def expandOutlines(
     previousInferences: Seq[Inference],
+    previousTransformations: Seq[StatementDefinition],
     cachedProofs: Seq[CachedProof]
   ): Chapter = {
     copy(entries = entries.mapFold[ChapterEntry] { case (entry, previousEntries) =>
@@ -40,6 +44,7 @@ case class Chapter(
             (name + " " + (n+1)).formatAsKey
         }
       }
+      def transformations = previousEntries.ofType[StatementDefinition].filter(_.isTransformation)
       entry match {
         case axiomOutline: AxiomOutline =>
           axiomOutline.expand(nextInferenceKey(axiomOutline.name), title, bookTitle)
@@ -49,6 +54,7 @@ case class Chapter(
             title,
             bookTitle,
             previousInferences ++ inferencesSoFar,
+            previousTransformations ++ transformations,
             cachedProofs)
         case other =>
           other

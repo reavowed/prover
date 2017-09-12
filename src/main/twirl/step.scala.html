@@ -20,8 +20,16 @@
       @if(assertionStep.isRearrangement) {
         <td><span class="stepInferenceId">Rearrangement</span><td>
       } else {
-        @defining(assertionStep.inferenceApplication.inferenceSummary) { inference =>
-          <td><a class="stepInferenceId" href="/books/@inference.bookKey/@inference.chapterKey/@inference.key">@inference.name</a><td>
+        @defining(assertionStep.inferenceApplication.inference) { inference =>
+          @inference.keyOption match {
+            case Some(key) => {
+              <td><a class="stepInferenceId" href="/books/@inference.bookKey/@inference.chapterKey/@key">@inference.name</a><td>
+            }
+            case None => {
+              <td class="stepInferenceId">@inference.name<td>
+            }
+          }
+
         }
       }
     </tr>

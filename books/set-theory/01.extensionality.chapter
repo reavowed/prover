@@ -23,24 +23,19 @@ conclusion = a b
 # qed
 
 theorem Sets with Same Membership Condition Are Equal
-premise ∀ x ↔ ∈ x a φ
-premise ∀ x ↔ ∈ x b φ
-take x {
-  prove ↔ ∈ x a φ
-  prove ↔ ∈ x b φ
-  prove ↔ ∈ x a ∈ x b
-}
+premise ∀ x ↔ ∈ x a with x φ
+premise ∀ x ↔ ∈ x b with x φ
 prove ∀ x ↔ ∈ x a ∈ x b
 prove = a b
 qed
 
-# theorem Sets with Equivalent Membership Conditions Are Equal
-# premise ∀ x ↔ ∈ x a φ
-# premise ∀ x ↔ ∈ x b ψ
-# premise ∀ x ↔ φ ψ
-# prove ∀ x ↔ ∈ x a ψ
-# prove = a b
-# qed
+theorem Sets with Equivalent Membership Conditions Are Equal
+premise ∀ x ↔ ∈ x a with x φ
+premise ∀ x ↔ ∈ x b with x ψ
+premise ∀ x ↔ with x φ with x ψ
+prove ∀ x ↔ ∈ x a with x ψ
+prove = a b
+qed
 
 # theorem A Set with a Membership Condition Is Unique
 # premise ∃ y ∀ x ↔ ∈ x y φ

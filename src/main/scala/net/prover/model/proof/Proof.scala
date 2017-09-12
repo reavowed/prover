@@ -2,6 +2,7 @@ package net.prover.model.proof
 
 import net.prover.model.components.{Statement, TermVariable}
 import net.prover.model._
+import net.prover.model.entries.StatementDefinition
 import org.slf4j.LoggerFactory
 
 case class Proof(steps: Seq[Step]) {
@@ -12,13 +13,6 @@ case class Proof(steps: Seq[Step]) {
       .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))
       .statement
   }
-  def matchesOutline(outline: ProofOutline): Boolean = {
-    Step.matchOutlines(steps, outline.steps)
-  }
-  def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-    steps.flatMap(_.getAssertionHints(availableInferences))
-  }
-  def serialized: String = steps.flatMap(_.serializedLines).mkString("\n")
 }
 
 object Proof {
@@ -27,23 +21,26 @@ object Proof {
   def getInitialContext(
     premises: Seq[Premise],
     availableInferences: Seq[Inference],
-    assertionHints: Seq[AssertionHint]
+    assertionHints: Seq[AssertionHint],
+    transformations: Seq[StatementDefinition]
   ): ProvingContext = {
     ProvingContext(
       premises.map(_.referencedFact),
       premises,
       Nil,
       availableInferences,
-      assertionHints)
+      assertionHints,
+      transformations)
   }
 
   def fillInOutline(
     premises: Seq[Premise],
     proofOutline: ProofOutline,
     availableInferences: Seq[Inference],
-    assertionHints: Seq[AssertionHint]
+    assertionHints: Seq[AssertionHint],
+    transformations: Seq[StatementDefinition]
   ): Proof = {
-    val context = getInitialContext(premises, availableInferences, assertionHints)
+    val context = getInitialContext(premises, availableInferences, assertionHints, transformations)
     val detailedSteps = proveSteps(
       proofOutline.steps,
       Nil,
@@ -81,8 +78,7 @@ object Proof {
           }
           .getOrElse(throw ProvingException(
             s"Could not prove assertion ${assertionStep.assertion}",
-            assertionStep.location.fileName,
-            assertionStep.location.lineNumber))
+            assertionStep.location))
       case StepOutline.ScopedVariable(boundVariableName, substepOutlines) =>
         proveScopedVariableStep(boundVariableName, substepOutlines, context, reference)
     }
@@ -107,7 +103,7 @@ object Proof {
     stepOutline: StepOutline.Assertion,
     context: ProvingContext,
     reference: Reference.Direct
-  ):  Option[Step.WithProvenStatement] = {
+  ): Option[Step.Assertion] = {
     Prover(
       stepOutline.assertion,
       reference,
@@ -132,8 +128,7 @@ object Proof {
     val assumptionStep = proveAssumptionStep(namingStatement, substepOutlines, context, reference)
     val deduction = assumptionStep.referencedFact.getOrElse(throw ProvingException(
       "Naming step did not have a conclusion",
-      finalStepWithAssertion.location.fileName,
-      finalStepWithAssertion.location.lineNumber))
+      finalStepWithAssertion.location))
     val assertionStep = proveAssertionStep(
       finalStepWithAssertion,
       context.addFact(deduction.fact, deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")),
@@ -141,8 +136,7 @@ object Proof {
     ).getOrElse(
       throw ProvingException(
         s"Could not extract assertion ${finalStepWithAssertion.assertion} from naming step for $variable",
-        finalStepWithAssertion.location.fileName,
-        finalStepWithAssertion.location.lineNumber))
+        finalStepWithAssertion.location))
     Step.Naming(variable, assumptionStep, assertionStep, reference)
   }
 
@@ -154,11 +148,5 @@ object Proof {
   ): Step.ScopedVariable = {
     val substeps = proveSteps(substepOutlines, Nil, context, Some(reference))
     Step.ScopedVariable(boundVariableName, substeps, reference)
-  }
-
-  def parser(implicit parsingContext: ParsingContext): Parser[Proof] = {
-    for {
-      steps <- Step.listParser(None)
-    } yield Proof(steps)
   }
 }

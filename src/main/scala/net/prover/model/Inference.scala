@@ -5,18 +5,19 @@ import java.security.MessageDigest
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference._
 import net.prover.model.components._
-import net.prover.model.proof.Fact
+import net.prover.model.proof.{Fact, Proof}
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
   val id: String = calculateHash()
+  def chapterKey: String
+  def bookKey: String
   def keyOption: Option[String]
   def name: String
   def premises: Seq[Premise]
   def conclusion: Statement
   def rearrangementType: RearrangementType
   def allowsRearrangement: Boolean
-  def summary: Inference.Summary
 
   def requiredSubstitutions: Substitutions.Required = {
     (premises.map(_.requiredSubstitutions) :+ conclusion.requiredSubstitutions).foldTogether
@@ -42,12 +43,9 @@ trait Inference {
 object Inference {
   trait Entry extends Inference {
     def key: String
-    def chapterKey: String
-    def bookKey: String
-
     override def keyOption = Some(key)
-    override def summary = Summary(name, id, key, chapterKey, bookKey)
   }
+
   case class Definition(
       nameOfDefinition: String,
       chapterKey: String,
@@ -60,10 +58,23 @@ object Inference {
       Premise(premiseStatement, index)(isElidable = false)
     }
     override def name: String = s"Definition of $nameOfDefinition"
-    override def summary: Inference.Summary = Summary(name, id, name.formatAsKey, chapterKey, bookKey)
     override def allowsRearrangement = true
     override def rearrangementType = RearrangementType.NotRearrangement
     override def keyOption = None
+  }
+
+  case class Transformed(
+      inner: Inference,
+      premises: Seq[Premise],
+      conclusion: Statement)
+    extends Inference
+  {
+    override def keyOption = inner.keyOption
+    override def chapterKey = inner.chapterKey
+    override def bookKey = inner.bookKey
+    override def name = inner.name
+    override def rearrangementType = inner.rearrangementType
+    override def allowsRearrangement = inner.allowsRearrangement
   }
 
   sealed trait RearrangementType
@@ -102,17 +113,5 @@ object Inference {
     val sha = MessageDigest.getInstance("SHA-256")
     sha.update(serialized.getBytes("UTF-8"))
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))
-  }
-
-  case class Summary(name: String, id: String, key: String, chapterKey: String, bookKey: String) {
-    def serialized: String = s"$id ($name)"
-  }
-  object Summary {
-    def parser: Parser[Summary] = {
-      for {
-        id <- Parser.singleWord
-        _ <- Parser.allInParens
-      } yield Inference.Summary("", id, "", "", "")
-    }
   }
 }

@@ -10,6 +10,7 @@ trait Component {
   def applySubstitutions(substitutions: Substitutions): Option[Component]
   def replacePlaceholder(other: Component): Component
   def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Applicative[Component], Substitutions)]
+  def makeApplicative(argument: Term): Option[Component]
   def findSubcomponent(other: Component): Option[Seq[Int]] = {
     if (this == other) {
       Some(Nil)

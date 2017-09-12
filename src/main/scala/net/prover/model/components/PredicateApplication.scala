@@ -27,7 +27,10 @@ case class PredicateApplication(predicateName: String, argument: Term) extends S
     } yield predicate(updatedArgument)
   }
   override def replacePlaceholder(other: Component) = this
-  override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = ???
+  override def calculateApplicatives(targetArgument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
+    targetArgument.calculateSubstitutions(argument, substitutions, boundVariableCount).map(Predicate.Named(predicateName) -> _)
+  }
+  override def makeApplicative(argument: Term) = None
 
   override def toString: String = s"$predicateName($argument)"
   override def serialized: String = s"with ${argument.serialized} $predicateName"
