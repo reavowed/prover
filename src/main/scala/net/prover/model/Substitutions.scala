@@ -27,14 +27,6 @@ case class Substitutions(
         Some(copy(predicatesByName = predicatesByName.updated(name, predicate)))
     }
   }
-
-  def serialized: String = {
-    val serializedComponentsByVariable = componentsByVariable.toSeq
-      .sortBy { case (variable, _) => variable.text }
-      .map { case (variable, component) => s"${variable.serialized} -> ${component.serialized}"}
-      .mkString(", ")
-    s"($serializedComponentsByVariable)"
-  }
 }
 
 object Substitutions {

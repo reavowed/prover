@@ -5,7 +5,7 @@ import net.prover.model.{Format, Inference, Parser, ParsingContext}
 
 case class TermDefinition(
     symbol: String,
-    defaultVariables: Seq[Component],
+    defaultVariables: Seq[Variable],
     name: String,
     format: Format,
     premises: Seq[Statement],

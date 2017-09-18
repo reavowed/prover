@@ -8,7 +8,7 @@ import net.prover.model.{Format, Inference, Parser, ParsingContext}
 case class StatementDefinition(
     symbol: String,
     boundVariableNames: Seq[String],
-    defaultVariables: Seq[Component],
+    defaultVariables: Seq[Variable],
     name: String,
     format: Format,
     definingStatement: Option[Statement],
