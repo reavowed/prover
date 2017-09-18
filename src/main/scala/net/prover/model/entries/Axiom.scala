@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.model.Inference.RearrangementType
-import net.prover.model.components.Statement
+import net.prover.model.expressions.Statement
 import net.prover.model.{Inference, Premise}
 
 case class Axiom(

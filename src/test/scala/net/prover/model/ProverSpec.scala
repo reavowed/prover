@@ -2,7 +2,7 @@ package net.prover.model
 
 import java.nio.file.Paths
 
-import net.prover.model.components._
+import net.prover.model.expressions._
 import net.prover.model.entries.{StatementDefinition, TermDefinition}
 import net.prover.model.proof.Fact
 import org.specs2.mutable.Specification
@@ -123,10 +123,10 @@ trait ProverSpec extends Specification {
     }
   }
   implicit class StatementDefinitionOps(statementDefinition: StatementDefinition) {
-    def apply(components: Component*): DefinedStatement = {
+    def apply(components: Expression*): DefinedStatement = {
       DefinedStatement(components, statementDefinition)(statementDefinition.boundVariableNames)
     }
-    def apply(boundVariableNames: String*)(components: Component*): DefinedStatement = {
+    def apply(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
       DefinedStatement(components, statementDefinition)(boundVariableNames)
     }
   }

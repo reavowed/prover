@@ -1,16 +1,16 @@
-package net.prover.model.components
+package net.prover.model.expressions
 
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
-trait Statement extends Component {
-  override val componentType = Statement
+trait Statement extends Expression {
+  override val expressionType = Statement
   def applySubstitutions(substitutions: Substitutions): Option[Statement]
-  def replacePlaceholder(other: Component): Statement
+  def replacePlaceholder(other: Expression): Statement
   def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Predicate, Substitutions)]
   def makeApplicative(argument: Term): Option[Statement]
 }
 
-object Statement extends ComponentType {
+object Statement extends ExpressionType {
 
   def parser(implicit context: ParsingContext): Parser[Statement] = {
     Parser.selectWordParser("statement") {

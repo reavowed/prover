@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.components._
+import net.prover.model.expressions._
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 sealed trait Fact {

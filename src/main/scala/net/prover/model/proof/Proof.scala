@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.components.{Statement, TermVariable}
+import net.prover.model.expressions.{Statement, TermVariable}
 import net.prover.model._
 import net.prover.model.entries.StatementDefinition
 import org.slf4j.LoggerFactory

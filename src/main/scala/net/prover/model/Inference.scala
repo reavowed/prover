@@ -4,7 +4,7 @@ import java.security.MessageDigest
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference._
-import net.prover.model.components._
+import net.prover.model.expressions._
 import net.prover.model.proof.{Fact, Proof}
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
@@ -25,15 +25,15 @@ trait Inference {
 
   def specifySubstitutions(substitutions: Substitutions): Option[Inference.Substitutions] = {
     for {
-      components <- requiredSubstitutions.variables.map(substitutions.componentsByVariable.get).traverseOption
+      expressions <- requiredSubstitutions.variables.map(substitutions.expressionsByVariable.get).traverseOption
       predicates <- requiredSubstitutions.predicates.map(name => substitutions.predicatesByName.get(name)).traverseOption
-    } yield Inference.Substitutions(components, predicates)
+    } yield Inference.Substitutions(expressions, predicates)
   }
   def generalizeSubstitutions(inferenceSubstitutions: Inference.Substitutions): Option[Substitutions] = {
     for {
-      componentsByVariable <- requiredSubstitutions.variables.zipStrict(inferenceSubstitutions.components).map(_.toMap)
+      expressionsByVariable <- requiredSubstitutions.variables.zipStrict(inferenceSubstitutions.expressions).map(_.toMap)
       predicatesByName <- requiredSubstitutions.predicates.zipStrict(inferenceSubstitutions.predicates).map(_.toMap)
-    } yield Substitutions(componentsByVariable, predicatesByName)
+    } yield Substitutions(expressionsByVariable, predicatesByName)
   }
   def calculateHash(): String = {
     Inference.calculateHash(premises, conclusion)
@@ -92,15 +92,15 @@ object Inference {
     }
   }
 
-  case class Substitutions(components: Seq[Component], predicates: Seq[Predicate]) {
-    def serialized: String = "(" + components.map(_.serialized).mkString(", ") + ") (" + predicates.map(_.serialized).mkString(", ")  + ")"
+  case class Substitutions(expressions: Seq[Expression], predicates: Seq[Predicate]) {
+    def serialized: String = "(" + expressions.map(_.serialized).mkString(", ") + ") (" + predicates.map(_.serialized).mkString(", ")  + ")"
   }
   object Substitutions {
     def parser(implicit parsingContext: ParsingContext): Parser[Substitutions] = {
       for {
-        components <- Component.parser.listInParens(Some(","))
+        expressions <- Expression.parser.listInParens(Some(","))
         predicates <- Predicate.parser.listInParens(Some(","))
-      } yield Substitutions(components, predicates)
+      } yield Substitutions(expressions, predicates)
     }
   }
 

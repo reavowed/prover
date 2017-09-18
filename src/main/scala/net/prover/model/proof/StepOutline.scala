@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model.{FileLocation, Parser, ParsingContext}
-import net.prover.model.components.{Statement, Term, TermVariable}
+import net.prover.model.expressions.{Statement, Term, TermVariable}
 
 sealed trait StepOutline
 

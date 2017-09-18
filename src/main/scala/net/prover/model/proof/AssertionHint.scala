@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.components.Statement
+import net.prover.model.expressions.Statement
 import net.prover.model.{Inference, Substitutions}
 
 case class AssertionHint(

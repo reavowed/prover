@@ -1,4 +1,4 @@
-package net.prover.model.components
+package net.prover.model.expressions
 
 import net.prover.model.{Html, Substitutions}
 
@@ -7,7 +7,7 @@ import scala.collection.immutable.Nil
 case class TermVariable(text: String) extends Term with Variable {
   override def boundVariables = Set.empty
   override def requiredSubstitutions = Substitutions.Required(Seq(this), Nil)
-  override def calculateSubstitutions(other: Component, substitutions: Substitutions, boundVariableCount: Int) = {
+  override def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int) = {
     other match {
       case otherTerm: Term if otherTerm.boundVariables.forall(_ >= boundVariableCount) =>
         substitutions.addVariable(this, otherTerm).toSeq
@@ -16,9 +16,9 @@ case class TermVariable(text: String) extends Term with Variable {
     }
   }
   override def applySubstitutions(substitutions: Substitutions): Option[Term] = {
-    substitutions.componentsByVariable.get(this).map(_.asInstanceOf[Term])
+    substitutions.expressionsByVariable.get(this).map(_.asInstanceOf[Term])
   }
-  override def replacePlaceholder(other: Component) = this
+  override def replacePlaceholder(other: Expression) = this
   override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
     super.calculateApplicatives(argument, substitutions, boundVariableCount) :+ (Function.Constant(this), substitutions)
   }

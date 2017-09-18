@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.components.BoundVariable
+import net.prover.model.expressions.BoundVariable
 
 class TermSpec extends ProverSpec {
   "term match" should {

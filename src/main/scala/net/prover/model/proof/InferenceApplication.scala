@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.components.Statement
+import net.prover.model.expressions.Statement
 import net.prover.model.entries.StatementDefinition
 
 sealed trait InferenceApplication {

@@ -1,30 +1,30 @@
 @import net.prover.model._
-@import net.prover.model.components._
-@(component: Component, reference: Option[String] = None, referrers: Set[(String, Seq[Int])] = Set.empty, safe: Boolean = false)
+@import net.prover.model.expressions._
+@(expression: Expression, reference: Option[String] = None, referrers: Set[(String, Seq[Int])] = Set.empty, safe: Boolean = false)
 @* This file is incredibly whitespace sensitive! *@
 @defining(referrers.filter(_._2.isEmpty).map(_._1)) { topLevelReferrers =>
-  <span class="@topLevelReferrers.map("highlight-" + _).mkString(" ") @reference.map("conclusion-" + _)">@component match {
+  <span class="@topLevelReferrers.map("highlight-" + _).mkString(" ") @reference.map("conclusion-" + _)">@expression match {
     case StatementVariable(text) => {@text}
     case TermVariable(text) => {@text}
     case boundVariable: BoundVariable => {@boundVariable.text}
     case PredicateApplication(text, argument) => {@(text)(@Html(html.referencedStatement(argument).body.trim))}
     case definedStatement @ DefinedStatement(components, definition) => {@defining(
       definedStatement.scopedBoundVariableNames ++
-      components.zipWithIndex.map { x =>
+      components.zipWithIndex.map { case (component, index) =>
         html.referencedStatement(
-          x._1,
+          component,
           None,
-          referrers.filter(_._2.headOption.contains(x._2)).map(_.mapRight(_.tail)),
+          referrers.filter(_._2.headOption.contains(index)).map(_.mapRight(_.tail)),
           true
         ).body.trim()
       }
     ){ componentsHtml =>@Html(definition.format.apply(componentsHtml, safe))}}
     case DefinedTerm(components, definition) => {@defining(
-      components.zipWithIndex.map { x =>
+      components.zipWithIndex.map { case (component, index) =>
         html.referencedStatement(
-          x._1,
+          component,
           None,
-          referrers.filter(_._2.headOption.contains(x._2)).map(_.mapRight(_.tail)),
+          referrers.filter(_._2.headOption.contains(index)).map(_.mapRight(_.tail)),
           true
         ).body.trim()
       }

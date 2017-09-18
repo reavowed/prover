@@ -3,7 +3,7 @@ package net.prover.model
 import java.nio.file.Paths
 
 import net.prover.model.Inference.RearrangementType
-import net.prover.model.components._
+import net.prover.model.expressions._
 import net.prover.model.entries.{Axiom, StatementDefinition}
 import net.prover.model.proof._
 

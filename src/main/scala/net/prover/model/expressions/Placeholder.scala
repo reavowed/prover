@@ -1,11 +1,11 @@
-package net.prover.model.components
+package net.prover.model.expressions
 
 import net.prover.model.Substitutions
 
-trait Placeholder[T <: Component] extends Component {
+trait Placeholder[T <: Expression] extends Expression {
   override def boundVariables = Set.empty
   override def requiredSubstitutions = Substitutions.Required.empty
-  override def calculateSubstitutions(other: Component, substitutions: Substitutions, boundVariableCount: Int) = {
+  override def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int) = {
     throw new Exception("Cannot calculate substitutions for placeholder")
   }
   override def applySubstitutions(substitutions: Substitutions) = {

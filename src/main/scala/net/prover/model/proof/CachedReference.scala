@@ -78,7 +78,7 @@ object CachedReference {
         premise <- inferenceApplication.inference.premises.single.flatMap(_.fact.asOptionalInstanceOf[Fact.Direct]).map(_.statement)
         reference <- inferenceApplication.references.single.flatMap(_.asOptionalInstanceOf[Reference.ToFact])
         substitutedPremise <- premise.applySubstitutions(inferenceApplication.substitutions)
-        validatedSimplificationPath <- substitutedPremise.findSubcomponent(conclusion)
+        validatedSimplificationPath <- substitutedPremise.findComponentPath(conclusion)
       } yield (
         Reference.Simplification(
           inferenceApplication.inference,

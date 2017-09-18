@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference.RearrangementType
-import net.prover.model.components.Statement
+import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Proof, ProofOutline}
 import net.prover.model.{Inference, Premise}
 

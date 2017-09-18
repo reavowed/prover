@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.components.{Statement, Term, TermVariable}
+import net.prover.model.expressions.{Statement, Term, TermVariable}
 import net.prover.model._
 
 sealed trait CachedStep {

@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import net.prover.model.components._
+import net.prover.model.expressions._
 import net.prover.model.{Format, Inference, Parser, ParsingContext}
 
 @JsonIgnoreProperties(Array("symbol", "defaultVariables", "format"))
@@ -23,13 +23,13 @@ case class StatementDefinition(
       this)(
       boundVariableNames)
   }
-  val componentTypes = defaultVariables.map(_.componentType)
+  val expressionTypes = defaultVariables.map(_.expressionType)
 
   def statementParser(implicit context: ParsingContext): Parser[Statement] = {
     for {
       newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
       updatedContext = context.addBoundVariables(newBoundVariableNames)
-      components <- componentTypes.componentsParser(updatedContext)
+      components <- expressionTypes.expressionsParser(updatedContext)
     } yield DefinedStatement(components, this)(newBoundVariableNames)
   }
 

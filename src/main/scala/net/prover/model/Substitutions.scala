@@ -1,19 +1,19 @@
 package net.prover.model
 
-import net.prover.model.components._
+import net.prover.model.expressions._
 
 case class Substitutions(
-  componentsByVariable: Map[Variable, Component],
+  expressionsByVariable: Map[Variable, Expression],
   predicatesByName: Map[String, Predicate])
 {
-  def addVariable(variable: Variable, component: Component): Option[Substitutions] = {
-    componentsByVariable.get(variable) match {
-      case Some(`component`) =>
+  def addVariable(variable: Variable, expression: Expression): Option[Substitutions] = {
+    expressionsByVariable.get(variable) match {
+      case Some(`expression`) =>
         Some(this)
       case Some(_) =>
         None
       case None =>
-        Some(copy(componentsByVariable = componentsByVariable.updated(variable, component)))
+        Some(copy(expressionsByVariable = expressionsByVariable.updated(variable, expression)))
     }
   }
 

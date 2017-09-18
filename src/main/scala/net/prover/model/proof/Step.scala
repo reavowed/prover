@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.components.{Statement, TermVariable}
+import net.prover.model.expressions.{Statement, TermVariable}
 
 sealed trait Step {
   def reference: Reference.Direct

@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.components.{BoundVariable, PlaceholderTerm}
+import net.prover.model.expressions.{BoundVariable, PlaceholderTerm}
 import net.prover.model.entries.TermDefinition
 
 class TermDefinitionSpec extends ProverSpec {

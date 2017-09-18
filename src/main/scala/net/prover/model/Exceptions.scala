@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.components.TermVariable
+import net.prover.model.expressions.TermVariable
 
 case class ReferenceResolveException(
     reference: String,

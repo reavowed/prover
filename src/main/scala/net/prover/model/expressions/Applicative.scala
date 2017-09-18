@@ -1,9 +1,9 @@
-package net.prover.model.components
+package net.prover.model.expressions
 
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.{Parser, ParsingContext}
 
-sealed trait Applicative[+T <: Component] {
+sealed trait Applicative[+T <: Expression] {
   def apply(term: Term): T
   def serialized: String
   def safeToString: String
@@ -20,7 +20,7 @@ object Predicate {
   }
   case class Defined(
       definition: StatementDefinition,
-      components: Seq[Applicative[Component]])(
+      components: Seq[Applicative[Expression]])(
       scopedBoundVariableNames: Seq[String])
     extends Predicate
   {
@@ -37,7 +37,7 @@ object Predicate {
         }
         boundVariableNames <- Parser.nWords(definition.boundVariableNames.length)
         updatedContext = context.addBoundVariables(boundVariableNames)
-        components <- definition.componentTypes.applicativesParser(updatedContext)
+        components <- definition.expressionTypes.applicativesParser(updatedContext)
       } yield Defined(definition, components)(boundVariableNames)
     }
   }

@@ -1,9 +1,9 @@
-package net.prover.model.components
+package net.prover.model.expressions
 
 import net.prover.model.Substitutions
 
 object PlaceholderStatement extends Statement with Placeholder[Statement] {
-  override def replacePlaceholder(other: Component) = other.asInstanceOf[Statement]
+  override def replacePlaceholder(other: Expression) = other.asInstanceOf[Statement]
   override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
     Seq((Predicate.Constant(this), substitutions))
   }

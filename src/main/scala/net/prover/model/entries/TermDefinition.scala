@@ -1,6 +1,6 @@
 package net.prover.model.entries
 
-import net.prover.model.components._
+import net.prover.model.expressions._
 import net.prover.model.{Format, Inference, Parser, ParsingContext}
 
 case class TermDefinition(
@@ -16,14 +16,14 @@ case class TermDefinition(
 {
   val id: String = s"definition-$symbol"
   val defaultValue = DefinedTerm(defaultVariables, this)
-  val componentTypes = defaultVariables.map(_.componentType)
+  val expressionTypes = defaultVariables.map(_.expressionType)
   val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue)
   override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
 
-  def apply(components: Component*): DefinedTerm = DefinedTerm(components, this)
+  def apply(components: Expression*): DefinedTerm = DefinedTerm(components, this)
 
   def termParser(implicit context: ParsingContext): Parser[Term] = {
-    componentTypes.componentsParser.map(apply)
+    expressionTypes.expressionsParser.map(apply)
   }
 }
 

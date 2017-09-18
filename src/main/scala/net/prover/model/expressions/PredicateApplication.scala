@@ -1,10 +1,10 @@
-package net.prover.model.components
+package net.prover.model.expressions
 import net.prover.model.Substitutions
 
 case class PredicateApplication(predicateName: String, argument: Term) extends Statement {
   override def boundVariables = argument.boundVariables
   override def requiredSubstitutions = argument.requiredSubstitutions ++ Substitutions.Required(Nil, Seq(predicateName))
-  override def calculateSubstitutions(other: Component, substitutions: Substitutions, boundVariableCount: Int) = {
+  override def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int) = {
     other match {
       case PredicateApplication(otherName, otherArgument) =>
         argument
@@ -26,7 +26,7 @@ case class PredicateApplication(predicateName: String, argument: Term) extends S
       updatedArgument <- argument.applySubstitutions(substitutions)
     } yield predicate(updatedArgument)
   }
-  override def replacePlaceholder(other: Component) = this
+  override def replacePlaceholder(other: Expression) = this
   override def calculateApplicatives(targetArgument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
     targetArgument.calculateSubstitutions(argument, substitutions, boundVariableCount).map(Predicate.Named(predicateName) -> _)
   }

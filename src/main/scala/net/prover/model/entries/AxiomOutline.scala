@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
-import net.prover.model.components.Statement
+import net.prover.model.expressions.Statement
 
 case class AxiomOutline(
     name: String,

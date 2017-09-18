@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.components.Statement
+import net.prover.model.expressions.Statement
 import net.prover.model.entries.{Axiom, AxiomOutline}
 import net.prover.model.proof.Fact
 

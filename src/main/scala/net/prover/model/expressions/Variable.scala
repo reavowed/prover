@@ -1,8 +1,8 @@
-package net.prover.model.components
+package net.prover.model.expressions
 
 import net.prover.model.{Parser, ParsingContext}
 
-trait Variable extends Component {
+trait Variable extends Expression {
   def text: String
 }
 

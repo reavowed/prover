@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model.Inference.RearrangementType
-import net.prover.model.components.{BoundVariable, DefinedStatement, Statement}
+import net.prover.model.expressions.{BoundVariable, DefinedStatement, Statement}
 import net.prover.model.entries.StatementDefinition
 import net.prover.model._
 
@@ -80,7 +80,7 @@ case class Prover(
           StepOutline.ScopedVariable(
             transformation.variableName,
             (transformedPremiseStatements :+ transformedConclusion)
-              .map(s => StepOutline.Assertion(s.subcomponents.head.asInstanceOf[Statement], None))),
+              .map(s => StepOutline.Assertion(s.components.head.asInstanceOf[Statement], None))),
           StepOutline.Assertion(transformedConclusion, None))),
         availableInferences,
         assertionHints,
@@ -276,7 +276,7 @@ case class Prover(
               (inference, premiseStatement)
           }
           .flatMap { case (inference, premiseStatement) =>
-            premiseStatement.findSubcomponent(inference.conclusion)
+            premiseStatement.findComponentPath(inference.conclusion)
               .map((inference, premiseStatement, _))
           }
           .flatMap { case (inference, premiseStatement, simplificationPath) =>

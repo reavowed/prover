@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.components.{BoundVariable, StatementVariable, TermVariable, Variable}
+import net.prover.model.expressions.{BoundVariable, StatementVariable, TermVariable, Variable}
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 
 case class ParsingContext(

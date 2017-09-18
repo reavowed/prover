@@ -1,7 +1,7 @@
 package net.prover.model
 
-import net.prover.model.components.Predicate.Defined
-import net.prover.model.components.{BoundVariable, Predicate, PredicateApplication, Statement}
+import net.prover.model.expressions.Predicate.Defined
+import net.prover.model.expressions.{BoundVariable, Predicate, PredicateApplication, Statement}
 
 class StatementSpec extends ProverSpec {
 
@@ -62,22 +62,22 @@ class StatementSpec extends ProverSpec {
     "not match two different defined statements" in {
       Implication(φ, ψ).calculateSubstitutions(Conjunction(φ, ψ), Substitutions.empty, 0) must beEmpty
     }
-    "not match two defined statements of the same type whose subcomponents don't match" in {
+    "not match two defined statements of the same type whose components don't match" in {
       Implication(Implication(φ, ψ), χ)
         .calculateSubstitutions(Implication(φ, ψ), Substitutions.empty, 0)
         .must(beEmpty)
     }
-    "match two defined statements of the same type whose subcomponents are different statement variables" in {
+    "match two defined statements of the same type whose components are different statement variables" in {
       Implication(φ, ψ)
         .calculateSubstitutions(Implication(φ, χ), Substitutions.empty, 0)
         .mustEqual(Seq(Substitutions(Map(φ -> φ, ψ -> χ), Map.empty)))
     }
-    "match two defined statements of the same type whose subcomponents are different but match" in {
+    "match two defined statements of the same type whose components are different but match" in {
       Implication(φ, ψ)
         .calculateSubstitutions(Implication(Conjunction(φ, ψ), χ), Substitutions.empty, 0)
         .mustEqual(Seq(Substitutions(Map(φ -> Conjunction(φ, ψ), ψ -> χ), Map.empty)))
     }
-    "match two connectives of the same type whose subcomponents merge correctly" in {
+    "match two connectives of the same type whose components merge correctly" in {
       Implication(φ, φ)
         .calculateSubstitutions(Implication(Conjunction(φ, ψ), Conjunction(φ, ψ)), Substitutions.empty, 0)
         .mustEqual(Seq(Substitutions(Map(φ -> Conjunction(φ, ψ)), Map.empty)))
@@ -95,21 +95,21 @@ class StatementSpec extends ProverSpec {
           0)
         .mustEqual(Seq(Substitutions(
           Map(x -> a, y -> b),
-          Map("φ" -> Defined(ElementOf, Seq(BoundVariable(0)("z"), components.Function.Identity))(Nil)))))
+          Map("φ" -> Defined(ElementOf, Seq(BoundVariable(0)("z"), expressions.Function.Identity))(Nil)))))
     }
     "match a predicate to a bound variable outside the current scope" in {
       PredicateApplication("φ", x)
         .calculateSubstitutions(ElementOf(BoundVariable(0)("y"), z), Substitutions.empty, 0)
         .must(contain(Substitutions(
           Map(x -> BoundVariable(0)("y")),
-          Map("φ" -> Defined(ElementOf, Seq(components.Function.Identity, components.Function.Constant(z)))(Nil)))))
+          Map("φ" -> Defined(ElementOf, Seq(expressions.Function.Identity, expressions.Function.Constant(z)))(Nil)))))
     }
     "not match a predicate to a bound variable outside the current scope" in {
       PredicateApplication("φ", x)
         .calculateSubstitutions(ElementOf(BoundVariable(0)("y"), z), Substitutions.empty, 1)
         .must(not(contain(Substitutions(
           Map(x -> BoundVariable(0)("y")),
-          Map("φ" -> Defined(ElementOf, Seq(components.Function.Identity, components.Function.Constant(z)))(Nil))))))
+          Map("φ" -> Defined(ElementOf, Seq(expressions.Function.Identity, expressions.Function.Constant(z)))(Nil))))))
     }
   }
 

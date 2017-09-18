@@ -1,29 +1,29 @@
-package net.prover.model.components
+package net.prover.model.expressions
 
 import net.prover.model.Substitutions
 import net.prover.model.entries.StatementDefinition
 
 case class DefinedStatement(
-    subcomponents: Seq[Component],
+    components: Seq[Expression],
     definition: StatementDefinition)(
     val scopedBoundVariableNames: Seq[String])
- extends Statement with DefinedComponent[Statement]
+ extends Statement with DefinedExpression[Statement]
 {
   def format = definition.format
   def symbol = definition.symbol
 
-  override def getMatch(other: Component): Option[(Seq[Component])] = other match {
+  override def getMatch(other: Expression): Option[(Seq[Expression])] = other match {
     case DefinedStatement(otherSubcomponents, `definition`) =>
       Some(otherSubcomponents)
     case _ =>
       None
   }
-  override def update(newSubcomponents: Seq[Component]): Statement = {
-    copy(subcomponents = newSubcomponents)(scopedBoundVariableNames)
+  override def update(newSubcomponents: Seq[Expression]): Statement = {
+    copy(components = newSubcomponents)(scopedBoundVariableNames)
   }
 
   override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
-    subcomponents.foldLeft(Seq((Seq.empty[Applicative[Component]], substitutions))) { case (predicatesAndSubstitutionsSoFar, subcomponent) =>
+    components.foldLeft(Seq((Seq.empty[Applicative[Expression]], substitutions))) { case (predicatesAndSubstitutionsSoFar, subcomponent) =>
       for {
         (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar
         (predicate, newSubstitutions) <- subcomponent.calculateApplicatives(
@@ -35,6 +35,6 @@ case class DefinedStatement(
   }
 
   override def makeApplicative(argument: Term) = {
-    subcomponents.map(_.makeApplicative(argument)).traverseOption.map(update)
+    components.map(_.makeApplicative(argument)).traverseOption.map(update)
   }
 }
