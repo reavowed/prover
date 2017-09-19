@@ -9,7 +9,7 @@ trait Expression {
   def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Expression]
   def replacePlaceholder(other: Expression): Expression
-  def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Applicative[Expression], Substitutions)]
+  def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(ExpressionFunction[Expression], Substitutions)]
   def makeApplicative(argument: Term): Option[Expression]
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
     if (this == other) {

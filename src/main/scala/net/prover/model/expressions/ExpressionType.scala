@@ -4,7 +4,7 @@ import net.prover.model.{Parser, ParsingContext}
 
 trait ExpressionType {
   def parser(implicit context: ParsingContext): Parser[Expression]
-  def applicativeParser(implicit context: ParsingContext): Parser[Applicative[Expression]]
+  def applicativeParser(implicit context: ParsingContext): Parser[ExpressionFunction[Expression]]
 }
 
 object ExpressionType {

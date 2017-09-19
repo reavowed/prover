@@ -23,7 +23,7 @@ case class DefinedStatement(
   }
 
   override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
-    components.foldLeft(Seq((Seq.empty[Applicative[Expression]], substitutions))) { case (predicatesAndSubstitutionsSoFar, subcomponent) =>
+    components.foldLeft(Seq((Seq.empty[ExpressionFunction[Expression]], substitutions))) { case (predicatesAndSubstitutionsSoFar, subcomponent) =>
       for {
         (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar
         (predicate, newSubstitutions) <- subcomponent.calculateApplicatives(

@@ -3,13 +3,13 @@ package net.prover.model.expressions
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.{Parser, ParsingContext}
 
-sealed trait Applicative[+T <: Expression] {
+sealed trait ExpressionFunction[+T <: Expression] {
   def apply(term: Term): T
   def serialized: String
   def safeToString: String
 }
 
-sealed trait Predicate extends Applicative[Statement]
+sealed trait Predicate extends ExpressionFunction[Statement]
 
 object Predicate {
   case class Constant(statement: Statement) extends Predicate {
@@ -20,7 +20,7 @@ object Predicate {
   }
   case class Defined(
       definition: StatementDefinition,
-      components: Seq[Applicative[Expression]])(
+      components: Seq[ExpressionFunction[Expression]])(
       scopedBoundVariableNames: Seq[String])
     extends Predicate
   {
@@ -62,7 +62,7 @@ object Predicate {
   }
 }
 
-sealed trait Function extends Applicative[Term]
+sealed trait Function extends ExpressionFunction[Term]
 
 object Function {
   case class Constant(term: Term) extends Function {
