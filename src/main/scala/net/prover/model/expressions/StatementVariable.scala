@@ -1,6 +1,6 @@
 package net.prover.model.expressions
 
-import net.prover.model.Substitutions
+import net.prover.model.{ParsingContext, Substitutions}
 
 import scala.collection.immutable.Nil
 
@@ -26,4 +26,7 @@ case class StatementVariable(text: String) extends Statement with Variable {
 
   override def toString: String = text
   override def serialized: String = text
+
+  override def expressionParser(implicit context: ParsingContext) = Statement.parser
+  override def applicativeParser(implicit context: ParsingContext) = Predicate.parser
 }

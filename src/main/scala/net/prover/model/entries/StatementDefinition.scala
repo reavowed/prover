@@ -23,13 +23,12 @@ case class StatementDefinition(
       this)(
       boundVariableNames)
   }
-  val expressionTypes = defaultVariables.map(_.expressionType)
 
   def statementParser(implicit context: ParsingContext): Parser[Statement] = {
     for {
       newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
       updatedContext = context.addBoundVariables(newBoundVariableNames)
-      components <- expressionTypes.expressionsParser(updatedContext)
+      components <- defaultVariables.expressionsParser(updatedContext)
     } yield DefinedStatement(components, this)(newBoundVariableNames)
   }
 

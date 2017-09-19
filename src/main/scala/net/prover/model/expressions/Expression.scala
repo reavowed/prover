@@ -3,7 +3,6 @@ package net.prover.model.expressions
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Expression {
-  def expressionType: ExpressionType
   def boundVariables: Set[Int]
   def requiredSubstitutions: Substitutions.Required
   def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int): Seq[Substitutions]

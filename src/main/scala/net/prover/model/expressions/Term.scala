@@ -4,7 +4,6 @@ import net.prover.model.entries.TermDefinition
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Term extends Expression {
-  override val expressionType = Term
   def applySubstitutions(substitutions: Substitutions): Option[Term]
   def replacePlaceholder(other: Expression): Term
   def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Function, Substitutions)] = {
@@ -13,7 +12,7 @@ trait Term extends Expression {
   def makeApplicative(argument: Term): Option[Term] = None
 }
 
-object Term extends ExpressionType {
+object Term {
   def asVariable(expression: Expression): TermVariable = {
     optionAsVariable(expression).getOrElse(throw new Exception(s"Expected term variable, got $expression"))
   }

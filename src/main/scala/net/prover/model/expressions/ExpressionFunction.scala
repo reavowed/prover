@@ -37,7 +37,7 @@ object Predicate {
         }
         boundVariableNames <- Parser.nWords(definition.boundVariableNames.length)
         updatedContext = context.addBoundVariables(boundVariableNames)
-        components <- definition.expressionTypes.applicativesParser(updatedContext)
+        components <- definition.defaultVariables.applicativesParser(updatedContext)
       } yield Defined(definition, components)(boundVariableNames)
     }
   }

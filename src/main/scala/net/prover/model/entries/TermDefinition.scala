@@ -16,14 +16,13 @@ case class TermDefinition(
 {
   val id: String = s"definition-$symbol"
   val defaultValue = DefinedTerm(defaultVariables, this)
-  val expressionTypes = defaultVariables.map(_.expressionType)
   val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue)
   override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
 
   def apply(components: Expression*): DefinedTerm = DefinedTerm(components, this)
 
   def termParser(implicit context: ParsingContext): Parser[Term] = {
-    expressionTypes.expressionsParser.map(apply)
+    defaultVariables.expressionsParser.map(apply)
   }
 }
 

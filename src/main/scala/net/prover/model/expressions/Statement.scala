@@ -3,15 +3,13 @@ package net.prover.model.expressions
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Statement extends Expression {
-  override val expressionType = Statement
   def applySubstitutions(substitutions: Substitutions): Option[Statement]
   def replacePlaceholder(other: Expression): Statement
   def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Predicate, Substitutions)]
   def makeApplicative(argument: Term): Option[Statement]
 }
 
-object Statement extends ExpressionType {
-
+object Statement {
   def parser(implicit context: ParsingContext): Parser[Statement] = {
     Parser.selectWordParser("statement") {
       case "_" =>
@@ -27,7 +25,6 @@ object Statement extends ExpressionType {
         Parser.constant(statementVariable)
     }
   }
-  def applicativeParser(implicit context: ParsingContext) = Predicate.parser
 
   def listParser(implicit context: ParsingContext): Parser[Seq[Statement]] = parser.listInParens(Some(","))
 

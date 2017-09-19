@@ -1,6 +1,6 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Html, Substitutions}
+import net.prover.model.{Html, ParsingContext, Substitutions}
 
 import scala.collection.immutable.Nil
 
@@ -24,4 +24,7 @@ case class TermVariable(text: String) extends Term with Variable {
   }
   override def toString: String = text
   override def serialized: String = text
+
+  override def expressionParser(implicit context: ParsingContext) = Term.parser
+  override def applicativeParser(implicit context: ParsingContext) = Function.parser
 }
