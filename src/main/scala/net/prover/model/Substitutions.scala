@@ -4,7 +4,7 @@ import net.prover.model.expressions._
 
 case class Substitutions(
   expressionsByVariable: Map[Variable, Expression],
-  predicatesByName: Map[String, Predicate])
+  predicatesByName: Map[PredicateVariable, Predicate])
 {
   def addVariable(variable: Variable, expression: Expression): Option[Substitutions] = {
     expressionsByVariable.get(variable) match {
@@ -17,7 +17,7 @@ case class Substitutions(
     }
   }
 
-  def addPredicate(name: String, predicate: Predicate): Option[Substitutions] = {
+  def addPredicate(name: PredicateVariable, predicate: Predicate): Option[Substitutions] = {
     predicatesByName.get(name) match {
       case Some(`predicate`) =>
         Some(this)
@@ -32,7 +32,7 @@ case class Substitutions(
 object Substitutions {
   val empty = Substitutions(Map.empty, Map.empty)
 
-  case class Required(variables: Seq[Variable], predicates: Seq[String]) {
+  case class Required(variables: Seq[Variable], predicates: Seq[PredicateVariable]) {
     def ++(other: Required): Required = {
       Required(
         (variables ++ other.variables).distinct,

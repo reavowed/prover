@@ -146,6 +146,12 @@ trait ProverSpec extends Specification {
     val converter = implicitly[PremiseConverter[T]]
     ts.mapWithIndex(converter.convertToPremise)
   }
+  implicit def statementVariableToPredicateVariable(statementVariable: StatementVariable): PredicateVariable = {
+    PredicateVariable(statementVariable.text)
+  }
+  implicit def x(t: (StatementVariable, Predicate)): (PredicateVariable, Predicate) = {
+    statementVariableToPredicateVariable(t._1) -> t._2
+  }
   implicit def statementToPredicate(statement: Statement): Predicate = ConstantPredicate(statement)
   implicit def termToFunction(term: Term): Function = ConstantFunction(term)
 }

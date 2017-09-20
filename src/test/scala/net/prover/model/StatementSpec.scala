@@ -87,28 +87,28 @@ class StatementSpec extends ProverSpec {
         .must(beEmpty)
     }
     "match a predicate twice with a constant bound variable" in {
-      Equivalence(PredicateApplication("φ", x), PredicateApplication("φ", y))
+      Equivalence(φ(x), φ(y))
         .calculateSubstitutions(
           Equivalence(ElementOf(BoundVariable(0)("z"), a), ElementOf(BoundVariable(0)("z"), b)),
           Substitutions.empty,
           0)
         .mustEqual(Seq(Substitutions(
           Map(x -> a, y -> b),
-          Map("φ" -> DefinedPredicate(ElementOf, Seq(BoundVariable(0)("z"), IdentityFunction))(Nil)))))
+          Map(φ -> DefinedPredicate(ElementOf, Seq(BoundVariable(0)("z"), IdentityFunction))(Nil)))))
     }
     "match a predicate to a bound variable outside the current scope" in {
-      PredicateApplication("φ", x)
+      φ(x)
         .calculateSubstitutions(ElementOf(BoundVariable(0)("y"), z), Substitutions.empty, 0)
         .must(contain(Substitutions(
           Map(x -> BoundVariable(0)("y")),
-          Map("φ" -> DefinedPredicate(ElementOf, Seq(IdentityFunction, ConstantFunction(z)))(Nil)))))
+          Map(φ -> DefinedPredicate(ElementOf, Seq(IdentityFunction, ConstantFunction(z)))(Nil)))))
     }
     "not match a predicate to a bound variable outside the current scope" in {
-      PredicateApplication("φ", x)
+      φ(x)
         .calculateSubstitutions(ElementOf(BoundVariable(0)("y"), z), Substitutions.empty, 1)
         .must(not(contain(Substitutions(
           Map(x -> BoundVariable(0)("y")),
-          Map("φ" -> DefinedPredicate(ElementOf, Seq(IdentityFunction, ConstantFunction(z)))(Nil))))))
+          Map(φ -> DefinedPredicate(ElementOf, Seq(IdentityFunction, ConstantFunction(z)))(Nil))))))
     }
   }
 

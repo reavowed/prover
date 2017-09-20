@@ -18,7 +18,7 @@ object Statement {
         for {
           argument <- Term.parser
           text <- Parser.singleWord
-        } yield PredicateApplication(text, argument)
+        } yield PredicateApplication(PredicateVariable(text), argument)
       case context.RecognisedStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
       case context.RecognisedStatementVariable(statementVariable) =>

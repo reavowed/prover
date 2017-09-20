@@ -22,7 +22,7 @@ case class StatementVariable(text: String) extends Statement with Variable {
   override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
     Seq((ConstantPredicate(this), substitutions))
   }
-  override def makeApplicative(argument: Term) = Some(PredicateApplication(text, argument))
+  override def makeApplicative(argument: Term) = Some(PredicateVariable(text).apply(argument))
 
   override def toString: String = text
   override def serialized: String = text

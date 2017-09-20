@@ -124,8 +124,8 @@ class TheoremSpec extends ProverSpec {
     "prove an inference conclusion with a predicate" in {
       val substitutionOfEquals = axiom(
         "Substitution of Equals",
-        Seq(Equals(x, y), PredicateApplication("φ", x)),
-        PredicateApplication("φ", y))
+        Seq(Equals(x, y), φ(x)),
+        φ(y))
       checkProof(
         Seq(Equals(x, y), Equals(x, x)),
         Seq(Equals(y, x)),
@@ -135,11 +135,11 @@ class TheoremSpec extends ProverSpec {
     "prove an inference substituting a named predicate for another named predicate" in {
       val substitutionOfEquals = axiom(
         "Substitution of Equals",
-        Seq(Equals(x, y), PredicateApplication("φ", x)),
-        PredicateApplication("φ", y))
+        Seq(Equals(x, y), φ(x)),
+        φ(y))
       checkProof(
-        Seq(Equals(y, x), PredicateApplication("φ", y)),
-        Seq(PredicateApplication("φ", x)),
+        Seq(Equals(y, x), φ(y)),
+        Seq(φ(x)),
         Seq(substitutionOfEquals))
     }
 
@@ -150,8 +150,8 @@ class TheoremSpec extends ProverSpec {
         Equals(x, x))
       val generalization = axiom(
         "Generalization",
-        Seq(Fact.Bound(PredicateApplication("φ", BoundVariable(0)("x")))("x")),
-        ForAll("x")(PredicateApplication("φ", BoundVariable(0)("x"))))
+        Seq(Fact.Bound(φ(BoundVariable(0)("x")))("x")),
+        ForAll("x")(φ(BoundVariable(0)("x"))))
       checkProof(
         Nil,
         Seq(
@@ -164,11 +164,11 @@ class TheoremSpec extends ProverSpec {
       val equalityIsReflexive = axiom(
         "Equivalence of Substituted Equals",
         Seq(Equals(a, b)),
-        Equivalence(PredicateApplication("φ", x), PredicateApplication("φ", y)))
+        Equivalence(φ(x), φ(y)))
       val generalization = axiom(
         "Generalization",
-        Seq(Fact.Bound(PredicateApplication("φ", BoundVariable(0)("x")))("x")),
-        ForAll("x")(PredicateApplication("φ", BoundVariable(0)("x"))))
+        Seq(Fact.Bound(φ(BoundVariable(0)("x")))("x")),
+        ForAll("x")(φ(BoundVariable(0)("x"))))
       checkProof(
         Seq(Equals(x, y)),
         Seq(
@@ -180,18 +180,18 @@ class TheoremSpec extends ProverSpec {
     "prove a transformed inference" in {
       val generalization = axiom(
         "Generalization",
-        Seq(Fact.Bound(PredicateApplication("φ", BoundVariable(0)("x")))("x")),
-        ForAll("x")(PredicateApplication("φ", BoundVariable(0)("x"))))
+        Seq(Fact.Bound(φ(BoundVariable(0)("x")))("x")),
+        ForAll("x")(φ(BoundVariable(0)("x"))))
       val specification = axiom(
         "Specification",
-        Seq(ForAll("x")(PredicateApplication("φ", BoundVariable(0)("x")))),
-        PredicateApplication("φ", y))
+        Seq(ForAll("x")(φ(BoundVariable(0)("x")))),
+        φ(y))
       checkProof(
         Seq(
-          ForAll("x")(PredicateApplication("φ", BoundVariable(0)("x"))),
-          ForAll("x")(Implication(PredicateApplication("φ", BoundVariable(0)("x")), PredicateApplication("ψ", BoundVariable(0)("x"))))),
+          ForAll("x")(φ(BoundVariable(0)("x"))),
+          ForAll("x")(Implication(φ(BoundVariable(0)("x")), ψ(BoundVariable(0)("x"))))),
         Seq(
-          ForAll("x")(PredicateApplication("ψ", BoundVariable(0)("x")))),
+          ForAll("x")(ψ(BoundVariable(0)("x")))),
         Seq(generalization, specification, modusPonens),
         Seq(ForAll))
     }
