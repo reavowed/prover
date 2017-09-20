@@ -20,7 +20,7 @@ case class TermVariable(text: String) extends Term with Variable {
   }
   override def replacePlaceholder(other: Expression) = this
   override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
-    super.calculateApplicatives(argument, substitutions, boundVariableCount) :+ (Function.Constant(this), substitutions)
+    super.calculateApplicatives(argument, substitutions, boundVariableCount) :+ (ConstantFunction(this), substitutions)
   }
   override def toString: String = text
   override def serialized: String = text

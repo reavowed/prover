@@ -20,7 +20,7 @@ case class StatementVariable(text: String) extends Statement with Variable {
   }
   override def replacePlaceholder(other: Expression) = this
   override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
-    Seq((Predicate.Constant(this), substitutions))
+    Seq((ConstantPredicate(this), substitutions))
   }
   override def makeApplicative(argument: Term) = Some(PredicateApplication(text, argument))
 

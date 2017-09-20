@@ -1,7 +1,6 @@
 package net.prover.model
 
-import net.prover.model.expressions.Predicate.Defined
-import net.prover.model.expressions.{BoundVariable, Predicate, PredicateApplication, Statement}
+import net.prover.model.expressions._
 
 class StatementSpec extends ProverSpec {
 
@@ -95,21 +94,21 @@ class StatementSpec extends ProverSpec {
           0)
         .mustEqual(Seq(Substitutions(
           Map(x -> a, y -> b),
-          Map("φ" -> Defined(ElementOf, Seq(BoundVariable(0)("z"), expressions.Function.Identity))(Nil)))))
+          Map("φ" -> DefinedPredicate(ElementOf, Seq(BoundVariable(0)("z"), IdentityFunction))(Nil)))))
     }
     "match a predicate to a bound variable outside the current scope" in {
       PredicateApplication("φ", x)
         .calculateSubstitutions(ElementOf(BoundVariable(0)("y"), z), Substitutions.empty, 0)
         .must(contain(Substitutions(
           Map(x -> BoundVariable(0)("y")),
-          Map("φ" -> Defined(ElementOf, Seq(expressions.Function.Identity, expressions.Function.Constant(z)))(Nil)))))
+          Map("φ" -> DefinedPredicate(ElementOf, Seq(IdentityFunction, ConstantFunction(z)))(Nil)))))
     }
     "not match a predicate to a bound variable outside the current scope" in {
       PredicateApplication("φ", x)
         .calculateSubstitutions(ElementOf(BoundVariable(0)("y"), z), Substitutions.empty, 1)
         .must(not(contain(Substitutions(
           Map(x -> BoundVariable(0)("y")),
-          Map("φ" -> Defined(ElementOf, Seq(expressions.Function.Identity, expressions.Function.Constant(z)))(Nil))))))
+          Map("φ" -> DefinedPredicate(ElementOf, Seq(IdentityFunction, ConstantFunction(z)))(Nil))))))
     }
   }
 

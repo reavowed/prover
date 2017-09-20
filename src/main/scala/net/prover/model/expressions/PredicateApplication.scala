@@ -9,7 +9,7 @@ case class PredicateApplication(predicateName: String, argument: Term) extends S
       case PredicateApplication(otherName, otherArgument) =>
         argument
           .calculateSubstitutions(otherArgument, substitutions, boundVariableCount)
-          .flatMap(_.addPredicate(predicateName, Predicate.Named(otherName)))
+          .flatMap(_.addPredicate(predicateName, PredicateVariable(otherName)))
       case statement: Statement =>
         statement
           .calculateApplicatives(argument, substitutions, boundVariableCount)
@@ -28,7 +28,7 @@ case class PredicateApplication(predicateName: String, argument: Term) extends S
   }
   override def replacePlaceholder(other: Expression) = this
   override def calculateApplicatives(targetArgument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
-    targetArgument.calculateSubstitutions(argument, substitutions, boundVariableCount).map(Predicate.Named(predicateName) -> _)
+    targetArgument.calculateSubstitutions(argument, substitutions, boundVariableCount).map(PredicateVariable(predicateName) -> _)
   }
   override def makeApplicative(argument: Term) = None
 

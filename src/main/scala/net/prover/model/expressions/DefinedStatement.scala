@@ -31,7 +31,7 @@ case class DefinedStatement(
           substitutionsSoFar,
           boundVariableCount + scopedBoundVariableNames.length)
       } yield (predicatesSoFar :+ predicate, newSubstitutions)
-    }.map(_.mapLeft(components => Predicate.Defined(definition, components)(scopedBoundVariableNames)))
+    }.map(_.mapLeft(components => DefinedPredicate(definition, components)(scopedBoundVariableNames)))
   }
 
   override def makeApplicative(argument: Term) = {
