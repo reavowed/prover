@@ -129,8 +129,11 @@ object Parser {
     }
   }
 
+  def selectOptionalWord[T](f: PartialFunction[String, T]): Parser[Option[T]] = {
+    Parser.singleWordIfAny.mapFlatMap(f.lift)
+  }
 
-  def selectOptionalWord[T](f: PartialFunction[String, Parser[T]]): Parser[Option[T]] = {
+  def selectOptionalWordParser[T](f: PartialFunction[String, Parser[T]]): Parser[Option[T]] = {
     Parser.singleWordIfAny.flatMapFlatMap { word =>
       if (f.isDefinedAt(word)) {
         f(word).map(Some.apply)
@@ -162,7 +165,8 @@ object Parser {
 
   implicit class OptionParserOps[T](parser: Parser[Option[T]]) {
     def mapMap[S](f: T => S): Parser[Option[S]] = parser.map(_.map(f))
-    def mapFlatMap[S](f: T => Parser[S]): Parser[Option[S]] = parser.flatMap {
+    def mapFlatMap[S](f: T => Option[S]): Parser[Option[S]] = parser.map(_.flatMap(f))
+    def flatMapMap[S](f: T => Parser[S]): Parser[Option[S]] = parser.flatMap {
       case Some(t) =>
         f(t).map(Some.apply)
       case None =>
@@ -219,7 +223,7 @@ object Parser {
     default: => T
   ): Parser[T] = {
     Parser.optionalWord(name)
-      .mapFlatMap(_ => parser)
+      .flatMapMap(_ => parser)
       .getOrElse(default)
   }
 
@@ -235,7 +239,7 @@ object Parser {
     parseFn: T => Parser[Option[T]]
   ): Parser[T] = {
     parseFn(initial)
-      .mapFlatMap(iterateWhileDefined(_)(parseFn))
+      .flatMapMap(iterateWhileDefined(_)(parseFn))
       .getOrElse(initial)
   }
 }

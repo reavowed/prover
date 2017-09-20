@@ -54,23 +54,14 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
 
   private def boundAndDefaultVariablesParser(implicit context: ParsingContext): Parser[(Seq[String], Seq[Variable])] = {
     val boundVariablePattern = "\\$(.*)".r
-    Parser
-      .selectWord("bound variable or variable") {
-        case boundVariablePattern(boundVariableName) =>
-          Left(boundVariableName)
-        case context.RecognisedVariable(variable) =>
-          Right(variable)
-      }
-      .listInParens(None)
-      .map { list =>
-        val boundVariables = list.collect {
-          case Left(x) => x
-        }
-        val defaultVariables = list.collect {
-          case Right(x) => x
-        }
-        (boundVariables, defaultVariables)
-      }
+    (for {
+      boundVariables <- Parser.selectOptionalWord {
+        case boundVariablePattern(boundVariableName) => boundVariableName
+      }.collectWhileDefined
+      variables <- Parser.selectOptionalWord {
+        case context.RecognisedVariable(variable) => variable
+      }.collectWhileDefined
+    } yield (boundVariables, variables)).inParens
   }
 
   def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[StatementDefinition] = {

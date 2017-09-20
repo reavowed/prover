@@ -162,7 +162,7 @@ object CachedStep {
 
 
   def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Option[CachedStep]] = {
-    Parser.selectOptionalWord {
+    Parser.selectOptionalWordParser {
       case "assume" => Assumption.parser(reference)
       case "assert" => Assertion.parser(reference)
       case "name" => Naming.parser(reference)

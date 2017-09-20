@@ -161,7 +161,7 @@ object Book {
   def importsParser: Parser[Seq[String]] = {
     Parser
       .optionalWord("import")
-      .mapFlatMap(_ => Parser.toEndOfLine)
+      .flatMapMap(_ => Parser.toEndOfLine)
       .whileDefined
   }
 
@@ -186,7 +186,7 @@ object Book {
     fileModificationTimes: Map[Path, Instant],
     context: ParsingContext
   ): Parser[Option[(Seq[Chapter], Map[Path, Instant], ParsingContext)]] = {
-    val unsafeParser = Parser.singleWordIfAny.mapFlatMap {
+    val unsafeParser = Parser.singleWordIfAny.flatMapMap {
       case "chapter" =>
         for {
           chapter <- chapterParser(bookTitle)

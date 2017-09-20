@@ -89,7 +89,7 @@ object Fact {
   }
 
   def parser(implicit parsingContext: ParsingContext): Parser[Fact] = {
-    Parser.selectOptionalWord {
+    Parser.selectOptionalWordParser {
       case "proves" => Deduced.parser
       case "binding" => Bound.parser
     }.orElse(Direct.parser)
