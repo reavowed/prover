@@ -61,29 +61,29 @@ object Fact {
     }
   }
 
-  case class Bound(statement: Statement)(val boundVariableName: String) extends Fact {
+  case class ScopedVariable(statement: Statement)(val variableName: String) extends Fact {
     override def requiredSubstitutions = statement.requiredSubstitutions
-    override def serialized: String = s"binding $boundVariableName ${statement.serialized}"
-    override def applySubstitutions(substitutions: Substitutions): Option[Bound] = {
+    override def serialized: String = s"binding $variableName ${statement.serialized}"
+    override def applySubstitutions(substitutions: Substitutions): Option[ScopedVariable] = {
       for {
         updatedStatement <- statement.applySubstitutions(substitutions)
-      } yield Bound(updatedStatement)(boundVariableName)
+      } yield ScopedVariable(updatedStatement)(variableName)
     }
     def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions] = otherFact match {
-      case Bound(otherStatement) =>
+      case ScopedVariable(otherStatement) =>
         statement.calculateSubstitutions(otherStatement, substitutionsSoFar, 0)
       case _ =>
         Nil
     }
   }
-  object Bound {
-    def parser(implicit parsingContext: ParsingContext): Parser[Bound] = {
+  object ScopedVariable {
+    def parser(implicit parsingContext: ParsingContext): Parser[ScopedVariable] = {
       for {
         variableName <- Parser.singleWord
         updatedContext = parsingContext.addBoundVariable(variableName)
         statementWithBinding <- Statement.parser(updatedContext)
       } yield {
-        Bound(statementWithBinding)(variableName)
+        ScopedVariable(statementWithBinding)(variableName)
       }
     }
   }
@@ -91,7 +91,7 @@ object Fact {
   def parser(implicit parsingContext: ParsingContext): Parser[Fact] = {
     Parser.selectOptionalWordParser {
       case "proves" => Deduced.parser
-      case "binding" => Bound.parser
+      case "binding" => ScopedVariable.parser
     }.orElse(Direct.parser)
   }
 }

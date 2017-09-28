@@ -57,14 +57,14 @@ object Step {
     override def cached = CachedStep.Naming(variable, assumptionStep.cached, assertionStep.cached, reference)
   }
 
-  case class ScopedVariable(boundVariableName: String, substeps: Seq[Step], reference: Reference.Direct) extends Step {
+  case class ScopedVariable(variableName: String, substeps: Seq[Step], reference: Reference.Direct) extends Step {
     override def fact: Option[Fact] = {
       substeps.ofType[Step.WithProvenStatement].lastOption
         .map(_.statement)
-        .map(Fact.Bound(_)(boundVariableName))
+        .map(Fact.ScopedVariable(_)(variableName))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether
-    override def cached = CachedStep.ScopedVariable(boundVariableName, substeps.map(_.cached), reference)
+    override def cached = CachedStep.ScopedVariable(variableName, substeps.map(_.cached), reference)
   }
 }

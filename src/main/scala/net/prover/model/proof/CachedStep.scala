@@ -128,7 +128,7 @@ object CachedStep {
   }
 
   case class ScopedVariable(
-      boundVariableName: String,
+      variableName: String,
       substeps: Seq[CachedStep],
       reference: Reference.Direct)
     extends CachedStep
@@ -139,15 +139,15 @@ object CachedStep {
     override def validate(context: ProvingContext): Option[Step] = {
       for {
         validatedSubsteps <- substeps.validate(context)
-      } yield Step.ScopedVariable(boundVariableName, validatedSubsteps, reference)
+      } yield Step.ScopedVariable(variableName, validatedSubsteps, reference)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
-      case StepOutline.ScopedVariable(`boundVariableName`, substepOutlines) =>
+      case StepOutline.ScopedVariable(`variableName`, substepOutlines) =>
         substeps.matchOutlines(substepOutlines)
       case _ =>
         false
     }
-    def serializedLines: Seq[String] = Seq(s"take $boundVariableName {") ++ substeps.flatMap(_.serializedLines).indent ++ Seq("}")
+    def serializedLines: Seq[String] = Seq(s"take $variableName {") ++ substeps.flatMap(_.serializedLines).indent ++ Seq("}")
   }
 
   object ScopedVariable {

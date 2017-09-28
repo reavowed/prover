@@ -150,7 +150,7 @@ class TheoremSpec extends ProverSpec {
         Equals(x, x))
       val generalization = axiom(
         "Generalization",
-        Seq(Fact.Bound(φ(BoundVariable(0)("x")))("x")),
+        Seq(Fact.ScopedVariable(φ(BoundVariable(0)("x")))("x")),
         ForAll("x")(φ(BoundVariable(0)("x"))))
       checkProof(
         Nil,
@@ -167,7 +167,7 @@ class TheoremSpec extends ProverSpec {
         Equivalence(φ(x), φ(y)))
       val generalization = axiom(
         "Generalization",
-        Seq(Fact.Bound(φ(BoundVariable(0)("x")))("x")),
+        Seq(Fact.ScopedVariable(φ(BoundVariable(0)("x")))("x")),
         ForAll("x")(φ(BoundVariable(0)("x"))))
       checkProof(
         Seq(Equals(x, y)),
@@ -180,7 +180,7 @@ class TheoremSpec extends ProverSpec {
     "prove a transformed inference" in {
       val generalization = axiom(
         "Generalization",
-        Seq(Fact.Bound(φ(BoundVariable(0)("x")))("x")),
+        Seq(Fact.ScopedVariable(φ(BoundVariable(0)("x")))("x")),
         ForAll("x")(φ(BoundVariable(0)("x"))))
       val specification = axiom(
         "Specification",

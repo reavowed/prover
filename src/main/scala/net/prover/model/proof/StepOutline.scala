@@ -68,7 +68,7 @@ object StepOutline {
     }
   }
 
-  case class ScopedVariable(boundVariableName: String, steps: Seq[StepOutline]) extends StepOutline
+  case class ScopedVariable(variableName: String, steps: Seq[StepOutline]) extends StepOutline
   object ScopedVariable {
     def parser(implicit context: ParsingContext): Parser[ScopedVariable] = {
       for {
