@@ -25,4 +25,17 @@ object Expression {
   def parser(implicit parsingContext: ParsingContext): Parser[Expression] = {
     Statement.parser.tryOrElse(Term.parser)
   }
+
+  implicit class ExpressionSeqOps(expressions: Seq[Expression]) {
+    def calculateSubstitutions(
+      otherExpressions: Seq[Expression],
+      substitutions: Substitutions,
+      boundVariableCount: Int
+    ): Seq[Substitutions] = {
+      expressions.zipStrict(otherExpressions).toSeq.flatten
+        .foldLeft(Seq(substitutions)) { case (substitutionsSoFar, (expression, otherExpression)) =>
+          substitutionsSoFar.flatMap(expression.calculateSubstitutions(otherExpression, _, boundVariableCount))
+        }
+    }
+  }
 }

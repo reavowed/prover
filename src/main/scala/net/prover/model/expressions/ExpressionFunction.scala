@@ -1,7 +1,13 @@
 package net.prover.model.expressions
 
-trait ExpressionFunction[+T <: Expression] {
+import net.prover.model.Substitutions
+
+trait ExpressionFunction[+T <: Expression] extends Expression {
   def apply(term: Term): T
-  def serialized: String
-  def safeToString: String
+
+  def applySubstitutions(substitutions: Substitutions): Option[ExpressionFunction[T]]
+  def replacePlaceholder(other: Expression): ExpressionFunction[T]
+
+  override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = ???
+  override def makeApplicative(argument: Term) = ???
 }

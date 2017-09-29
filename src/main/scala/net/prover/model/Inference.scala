@@ -15,7 +15,7 @@ trait Inference {
   def keyOption: Option[String]
   def name: String
   def premises: Seq[Premise]
-  def conclusion: Statement
+  def conclusion: Assertable
   def rearrangementType: RearrangementType
   def allowsRearrangement: Boolean
 
@@ -66,7 +66,7 @@ object Inference {
   case class Transformed(
       inner: Inference,
       premises: Seq[Premise],
-      conclusion: Statement)
+      conclusion: Assertable)
     extends Inference
   {
     override def keyOption = inner.keyOption
@@ -104,11 +104,11 @@ object Inference {
     }
   }
 
-  def unapply(inference: Inference): Option[(String, Seq[Premise], Statement)] = {
+  def unapply(inference: Inference): Option[(String, Seq[Premise], Assertable)] = {
     Some(inference.name, inference.premises, inference.conclusion)
   }
 
-  def calculateHash(premises: Seq[Premise], conclusion: Statement): String = {
+  def calculateHash(premises: Seq[Premise], conclusion: Assertable): String = {
     val serialized = (premises.map(_.serialized) :+ conclusion.serialized).mkString("\n")
     val sha = MessageDigest.getInstance("SHA-256")
     sha.update(serialized.getBytes("UTF-8"))

@@ -1,12 +1,12 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.expressions.Statement
 import net.prover.model.entries.StatementDefinition
+import net.prover.model.expressions.Assertable
 
 sealed trait CachedInferenceApplication {
   def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
-  def validate(context: ProvingContext): Option[(Statement, InferenceApplication)]
+  def validate(context: ProvingContext): Option[(Assertable, InferenceApplication)]
   def serializedLines: Seq[String]
 }
 
@@ -22,7 +22,7 @@ object CachedInferenceApplication {
         cachedReferences.flatMap(_.getAssertionHints(availableInferences))
     }
 
-    override def validate(context: ProvingContext): Option[(Statement, InferenceApplication.Direct)] = {
+    override def validate(context: ProvingContext): Option[(Assertable, InferenceApplication.Direct)] = {
       for {
         inference <- context.availableInferences.find(_.id == inferenceId).ifEmpty {
           CachedProof.logger.info(s"Could not find inference $inferenceId")
@@ -74,7 +74,7 @@ object CachedInferenceApplication {
         cachedReferences.flatMap(_.getAssertionHints(availableInferences)) ++
         transformationProof.flatMap(_.getAssertionHints(availableInferences))
     }
-    override def validate(context: ProvingContext): Option[(Statement, InferenceApplication.Transformed)] = {
+    override def validate(context: ProvingContext): Option[(Assertable, InferenceApplication.Transformed)] = {
       for {
         inference <- context.availableInferences.find(_.id == inferenceId).ifEmpty {
           CachedProof.logger.info(s"Could not find inference $inferenceId")
@@ -84,7 +84,7 @@ object CachedInferenceApplication {
           context.availableInferences,
           context.assertionHints,
           Nil))
-        transformedConclusion <- validatedTransformationProof.ofType[Step.WithProvenStatement].lastOption.map(_.statement)
+        transformedConclusion <- validatedTransformationProof.ofType[Step.WithAssertion].lastOption.map(_.assertion)
         transformedInference = Inference.Transformed(inference, transformedPremises, transformedConclusion)
         substitutions <- transformedInference.generalizeSubstitutions(localSubstitutions)
         substitutedPremiseFacts <- transformedPremises.map(_.fact.applySubstitutions(substitutions)).traverseOption.ifEmpty {

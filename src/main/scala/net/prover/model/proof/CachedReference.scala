@@ -75,7 +75,7 @@ object CachedReference {
     override def validate(context: ProvingContext): Option[(Reference, Fact)] = {
       for {
         (conclusion, inferenceApplication) <- cachedInferenceApplication.validate(context)
-        premise <- inferenceApplication.inference.premises.single.flatMap(_.fact.asOptionalInstanceOf[Fact.Direct]).map(_.statement)
+        premise <- inferenceApplication.inference.premises.single.flatMap(_.fact.asOptionalInstanceOf[Fact.Direct]).map(_.assertion)
         reference <- inferenceApplication.references.single.flatMap(_.asOptionalInstanceOf[Reference.ToFact])
         substitutedPremise <- premise.applySubstitutions(inferenceApplication.substitutions)
         validatedSimplificationPath <- substitutedPremise.findComponentPath(conclusion)

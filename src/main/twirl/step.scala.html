@@ -12,7 +12,7 @@
       <td>
         @for(_ <- 1 to indentLevel) { &nbsp;&nbsp; }
         Then @Html(html.referencedStatement(
-          assertionStep.statement,
+          assertionStep.assertion,
           Some(assertionStep.reference.value),
           referenceMap.getReferrers(Seq(assertionStep.reference.value) ++ additionalReference: _*)
         ).body.trim).
@@ -49,7 +49,7 @@
       substep,
       indentLevel + 1,
       referenceMap,
-      Some(assumptionStep.reference.value).filter(_ => assumptionStep.steps.ofType[Step.WithProvenStatement].lastOption.contains(substep)))
+      Some(assumptionStep.reference.value).filter(_ => assumptionStep.steps.ofType[Step.WithAssertion].lastOption.contains(substep)))
     }
   }
   case scopedVariableStep: Step.ScopedVariable => {
@@ -57,7 +57,7 @@
       substep,
       indentLevel,
       referenceMap,
-      Some(scopedVariableStep.reference.value).filter(_ => scopedVariableStep.substeps.ofType[Step.WithProvenStatement].lastOption.contains(substep)))
+      Some(scopedVariableStep.reference.value).filter(_ => scopedVariableStep.substeps.ofType[Step.WithAssertion].lastOption.contains(substep)))
     }
   }
   case _ => {

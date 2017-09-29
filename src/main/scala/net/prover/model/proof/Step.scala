@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.expressions.{Statement, TermVariable}
+import net.prover.model.expressions.{Assertable, Predicate, TermVariable}
 
 sealed trait Step {
   def reference: Reference.Direct
@@ -14,31 +14,31 @@ sealed trait Step {
 
 object Step {
 
-  sealed trait WithProvenStatement extends Step {
-    def statement: Statement
-    override def fact = Some(Fact.Direct(statement))
+  sealed trait WithAssertion extends Step {
+    def assertion: Assertable
+    override def fact = Some(Fact.Direct(assertion))
   }
 
   case class Assertion(
-    statement: Statement,
+    assertion: Assertable,
     inferenceApplication: InferenceApplication,
     reference: Reference.Direct,
     isRearrangement: Boolean)
-    extends Step.WithProvenStatement
+    extends Step.WithAssertion
   {
-    override def referencedInferenceIds: Set[String] = inferenceApplication.referencedInferenceIds
-    override def referenceMap: ReferenceMap = ReferenceMap(reference.value -> inferenceApplication.directReferences)
-    override def cached = CachedStep.Assertion(statement, inferenceApplication.cached, reference, isRearrangement)
+    override def referencedInferenceIds = inferenceApplication.referencedInferenceIds
+    override def referenceMap = ReferenceMap(reference.value -> inferenceApplication.directReferences)
+    override def cached = CachedStep.Assertion(assertion, inferenceApplication.cached, reference, isRearrangement)
   }
 
   case class Assumption(
-      assumption: Statement,
+      assumption: Assertable,
       steps: Seq[Step],
       reference: Reference.Direct)
     extends Step
   {
     def assumptionReference = reference.withSuffix("a")
-    override val fact = steps.ofType[Step.WithProvenStatement].lastOption.map(lastSubstep => Fact.Deduced(assumption, lastSubstep.statement))
+    override val fact = steps.ofType[Step.WithAssertion].lastOption.map(lastSubstep => Fact.Deduced(assumption, lastSubstep.assertion))
     override def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
     override def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
     override def cached = CachedStep.Assumption(assumption, steps.map(_.cached), reference)
@@ -49,18 +49,18 @@ object Step {
       assumptionStep: Step.Assumption,
       assertionStep: Step.Assertion,
       reference: Reference.Direct)
-    extends Step.WithProvenStatement
+    extends Step.WithAssertion
   {
-    override def statement: Statement = assertionStep.statement
-    override def referencedInferenceIds: Set[String] = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
-    override def referenceMap: ReferenceMap = assertionStep.referenceMap
+    override def assertion = assertionStep.assertion
+    override def referencedInferenceIds = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
+    override def referenceMap = assertionStep.referenceMap
     override def cached = CachedStep.Naming(variable, assumptionStep.cached, assertionStep.cached, reference)
   }
 
   case class ScopedVariable(variableName: String, substeps: Seq[Step], reference: Reference.Direct) extends Step {
     override def fact: Option[Fact] = {
-      substeps.ofType[Step.WithProvenStatement].lastOption
-        .map(_.statement)
+      substeps.ofType[Step.WithAssertion].lastOption
+        .map(_.assertion)
         .map(Fact.ScopedVariable(_)(variableName))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet

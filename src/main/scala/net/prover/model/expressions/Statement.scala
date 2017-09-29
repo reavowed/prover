@@ -2,7 +2,7 @@ package net.prover.model.expressions
 
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
-trait Statement extends Expression {
+trait Statement extends Assertable {
   def applySubstitutions(substitutions: Substitutions): Option[Statement]
   def replacePlaceholder(other: Expression): Statement
   def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Predicate, Substitutions)]

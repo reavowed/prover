@@ -18,10 +18,7 @@ trait DefinedExpression[T <: Expression] extends Expression {
 
   override def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int) = {
     getMatch(other).map { otherComponents =>
-      components.zip(otherComponents)
-        .foldLeft(Seq(substitutions)) { case (substitutionsSoFar, (component, otherComponent)) =>
-          substitutionsSoFar.flatMap(component.calculateSubstitutions(otherComponent, _, boundVariableCount + scopedBoundVariableNames.length))
-        }
+      components.calculateSubstitutions(otherComponents, substitutions, boundVariableCount + scopedBoundVariableNames.length)
     }
     .getOrElse(Nil)
   }

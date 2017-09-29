@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.expressions.{Statement, TermVariable}
+import net.prover.model.expressions.{Assertable, Statement, TermVariable}
 import net.prover.model._
 import net.prover.model.entries.StatementDefinition
 import org.slf4j.LoggerFactory
@@ -9,9 +9,9 @@ case class Proof(steps: Seq[Step]) {
   def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
   def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
   val conclusion: Statement = {
-    steps.ofType[Step.WithProvenStatement].lastOption
+    steps.ofType[Step.WithAssertion].lastOption
+      .flatMap(_.assertion.asOptionalInstanceOf[Statement])
       .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))
-      .statement
   }
 }
 
@@ -85,7 +85,7 @@ object Proof {
   }
 
   private def proveAssumptionStep(
-    assumption: Statement,
+    assumption: Assertable,
     substepOutlines: Seq[StepOutline],
     context: ProvingContext,
     reference: Reference.Direct
@@ -114,7 +114,7 @@ object Proof {
 
   def proveNamingStep(
     variable: TermVariable,
-    namingStatement: Statement,
+    definingAssumption: Assertable,
     substepOutlines: Seq[StepOutline],
     context: ProvingContext,
     reference: Reference.Direct
@@ -125,7 +125,7 @@ object Proof {
       case _ =>
         throw new Exception("Naming step must end with an assertion")
     }
-    val assumptionStep = proveAssumptionStep(namingStatement, substepOutlines, context, reference)
+    val assumptionStep = proveAssumptionStep(definingAssumption, substepOutlines, context, reference)
     val deduction = assumptionStep.referencedFact.getOrElse(throw ProvingException(
       "Naming step did not have a conclusion",
       finalStepWithAssertion.location))

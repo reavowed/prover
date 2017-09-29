@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.expressions.Statement
+import net.prover.model.expressions.{Assertable, Statement}
 import net.prover.model.entries.StatementDefinition
 
 sealed trait InferenceApplication {
@@ -29,7 +29,7 @@ object InferenceApplication {
       references: Seq[Reference],
       transformation: StatementDefinition,
       transformedPremises: Seq[Premise],
-      transformedConclusion: Statement,
+      transformedConclusion: Assertable,
       transformationProof: Seq[Step])
     extends InferenceApplication
   {

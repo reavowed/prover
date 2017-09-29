@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.expressions.{Statement, Term, TermVariable}
+import net.prover.model.expressions.{Assertable, Statement, Term, TermVariable}
 import net.prover.model._
 
 sealed trait CachedStep {
@@ -13,7 +13,7 @@ sealed trait CachedStep {
 
 object CachedStep {
   case class Assertion(
-      statement: Statement,
+      assertion: Assertable,
       cachedInferenceApplication: CachedInferenceApplication,
       reference: Reference.Direct,
       isRearrangement: Boolean)
@@ -25,19 +25,19 @@ object CachedStep {
     def validate(context: ProvingContext): Option[Step.Assertion] = {
       for {
         (conclusion, inferenceApplication) <- cachedInferenceApplication.validate(context)
-        _ = if (conclusion != statement)
-          CachedProof.logger.info(s"Inference conclusion '${conclusion.serialized}' was not '${statement.serialized}'")
-        if conclusion == statement
-      } yield Step.Assertion(statement, inferenceApplication, reference, isRearrangement)
+        _ = if (conclusion != assertion)
+          CachedProof.logger.info(s"Inference conclusion '${conclusion.serialized}' was not '${assertion.serialized}'")
+        if conclusion == assertion
+      } yield Step.Assertion(assertion, inferenceApplication, reference, isRearrangement)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
-      case StepOutline.Assertion(`statement`, _, _) =>
+      case StepOutline.Assertion(`assertion`, _, _) =>
         true
       case _ =>
         false
     }
     override def serializedLines: Seq[String] = {
-      Seq(s"assert ${if (isRearrangement) "rearranging " else ""}${statement.serialized}") ++
+      Seq(s"assert ${if (isRearrangement) "rearranging " else ""}${assertion.serialized}") ++
         cachedInferenceApplication.serializedLines.indent
     }
   }
@@ -54,7 +54,7 @@ object CachedStep {
   }
 
   case class Assumption(
-      assumption: Statement,
+      assumption: Assertable,
       steps: Seq[CachedStep],
       reference: Reference.Direct)
     extends CachedStep

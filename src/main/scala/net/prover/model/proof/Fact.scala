@@ -11,17 +11,17 @@ sealed trait Fact {
 }
 
 object Fact {
-  case class Direct(statement: Statement) extends Fact {
-    override def requiredSubstitutions = statement.requiredSubstitutions
-    override def serialized = statement.serialized
+  case class Direct(assertion: Assertable) extends Fact {
+    override def requiredSubstitutions = assertion.requiredSubstitutions
+    override def serialized = assertion.serialized
     override def applySubstitutions(substitutions: Substitutions): Option[Direct] = {
       for {
-        substitutedStatement <- statement.applySubstitutions(substitutions)
-      } yield Direct(substitutedStatement)
+        substitutedAssertion <- assertion.applySubstitutions(substitutions)
+      } yield Direct(substitutedAssertion)
     }
     def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions] = otherFact match {
-      case Direct(otherStatement) =>
-        statement.calculateSubstitutions(otherStatement, substitutionsSoFar, 0)
+      case Direct(otherAssertion) =>
+        assertion.calculateSubstitutions(otherAssertion, substitutionsSoFar, 0)
       case _ =>
         Nil
     }
@@ -29,11 +29,11 @@ object Fact {
   object Direct {
     def parser(implicit parsingContext: ParsingContext): Parser[Direct] = {
       for {
-        statement <- Statement.parser
-      } yield Direct(statement)
+        assertion <- Assertable.parser
+      } yield Direct(assertion)
     }
   }
-  case class Deduced(antecedent: Statement, consequent: Statement) extends Fact {
+  case class Deduced(antecedent: Assertable, consequent: Assertable) extends Fact {
     override def requiredSubstitutions = antecedent.requiredSubstitutions ++ consequent.requiredSubstitutions
     override def serialized = s"proves ${antecedent.serialized} ${consequent.serialized}"
     override def applySubstitutions(substitutions: Substitutions): Option[Deduced] = {
@@ -55,23 +55,23 @@ object Fact {
   object Deduced {
     def parser(implicit parsingContext: ParsingContext): Parser[Deduced] = {
       for {
-        antecedent <- Statement.parser
-        consequent <- Statement.parser
+        antecedent <- Assertable.parser
+        consequent <- Assertable.parser
       } yield Deduced(antecedent, consequent)
     }
   }
 
-  case class ScopedVariable(statement: Statement)(val variableName: String) extends Fact {
-    override def requiredSubstitutions = statement.requiredSubstitutions
-    override def serialized: String = s"binding $variableName ${statement.serialized}"
+  case class ScopedVariable(assertion: Assertable)(val variableName: String) extends Fact {
+    override def requiredSubstitutions = assertion.requiredSubstitutions
+    override def serialized: String = s"binding $variableName ${assertion.serialized}"
     override def applySubstitutions(substitutions: Substitutions): Option[ScopedVariable] = {
       for {
-        updatedStatement <- statement.applySubstitutions(substitutions)
-      } yield ScopedVariable(updatedStatement)(variableName)
+        updatedAssertion <- assertion.applySubstitutions(substitutions)
+      } yield ScopedVariable(updatedAssertion)(variableName)
     }
     def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions] = otherFact match {
-      case ScopedVariable(otherStatement) =>
-        statement.calculateSubstitutions(otherStatement, substitutionsSoFar, 0)
+      case ScopedVariable(otherPredicate) =>
+        assertion.calculateSubstitutions(otherPredicate, substitutionsSoFar, 0)
       case _ =>
         Nil
     }
@@ -80,10 +80,9 @@ object Fact {
     def parser(implicit parsingContext: ParsingContext): Parser[ScopedVariable] = {
       for {
         variableName <- Parser.singleWord
-        updatedContext = parsingContext.addBoundVariable(variableName)
-        statementWithBinding <- Statement.parser(updatedContext)
+        predicate <- Assertable.parser
       } yield {
-        ScopedVariable(statementWithBinding)(variableName)
+        ScopedVariable(predicate)(variableName)
       }
     }
   }
