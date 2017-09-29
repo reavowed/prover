@@ -34,7 +34,7 @@ trait ProverSpec extends Specification {
       Nil,
       variables,
       symbol,
-      Format.default(symbol, variables.map(_.text)),
+      Format.default(symbol, variables.map(_.name)),
       definingStatement,
       "",
       "")
@@ -50,7 +50,7 @@ trait ProverSpec extends Specification {
       Nil,
       variables,
       symbol,
-      Format.default(symbol, variables.map(_.text)),
+      Format.default(symbol, variables.map(_.name)),
       definingStatement,
       "",
       "")
@@ -110,8 +110,8 @@ trait ProverSpec extends Specification {
       ForAll, Exists, ExistsUnique,
       ElementOf, Equals),
     termDefinitions = Seq(EmptySetDefinition, PowerSet),
-    statementVariableNames = Set(φ, ψ, χ).map(_.text),
-    termVariableNames = Set(x, y, z, X, Y, Z, a, b, n).map(_.text),
+    statementVariableNames = Set(φ, ψ, χ).map(_.name),
+    termVariableNames = Set(x, y, z, X, Y, Z, a, b, n).map(_.name),
     Seq.empty)
 
   val stubBook = Book("", Paths.get(""), Nil, Nil, Set.empty, Set.empty)
@@ -147,7 +147,7 @@ trait ProverSpec extends Specification {
     ts.mapWithIndex(converter.convertToPremise)
   }
   implicit def statementVariableToPredicateVariable(statementVariable: StatementVariable): PredicateVariable = {
-    PredicateVariable(statementVariable.text)
+    PredicateVariable(statementVariable.name)
   }
   implicit def x(t: (StatementVariable, Predicate)): (PredicateVariable, Predicate) = {
     statementVariableToPredicateVariable(t._1) -> t._2

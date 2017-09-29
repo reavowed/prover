@@ -4,7 +4,7 @@ import net.prover.model.{ParsingContext, Substitutions}
 
 import scala.collection.immutable.Nil
 
-case class StatementVariable(text: String) extends Statement with Variable {
+case class StatementVariable(name: String) extends Statement with Variable {
   override def boundVariables = Set.empty
   override def requiredSubstitutions = Substitutions.Required(Seq(this), Nil)
   override def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int) = {
@@ -22,10 +22,10 @@ case class StatementVariable(text: String) extends Statement with Variable {
   override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
     Seq((ConstantPredicate(this), substitutions))
   }
-  override def makeApplicative(argument: Term) = Some(PredicateVariable(text).apply(argument))
+  override def makeApplicative(argument: Term) = Some(PredicateVariable(name).apply(argument))
 
-  override def toString: String = text
-  override def serialized: String = text
+  override def toString: String = name
+  override def serialized: String = name
 
   override def expressionParser(implicit context: ParsingContext) = Statement.parser
   override def applicativeParser(implicit context: ParsingContext) = Predicate.parser

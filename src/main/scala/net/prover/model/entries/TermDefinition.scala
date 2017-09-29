@@ -43,7 +43,7 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
       symbol <- Parser.singleWord
       defaultVariables <- Variable.parser.listInParens(None)
       name <- nameParser.getOrElse(symbol)
-      format <- Format.optionalParser(symbol, defaultVariables.map(_.text))
+      format <- Format.optionalParser(symbol, defaultVariables.map(_.name))
       premises <- premisesParser
       definitionTemplate <- Statement.parser.inParens
     } yield {

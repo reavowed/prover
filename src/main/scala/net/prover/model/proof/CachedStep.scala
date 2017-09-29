@@ -110,7 +110,7 @@ object CachedStep {
         false
     }
     override def serializedLines = {
-      Seq(s"name ${variable.text} ${assumptionStep.assumption.serialized} {") ++
+      Seq(s"name ${variable.name} ${assumptionStep.assumption.serialized} {") ++
         assumptionStep.steps.flatMap(_.serializedLines).indent ++
         Seq("}") ++
         assertionStep.serializedLines

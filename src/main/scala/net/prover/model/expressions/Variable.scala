@@ -3,7 +3,7 @@ package net.prover.model.expressions
 import net.prover.model.{Parser, ParsingContext}
 
 trait Variable extends Expression {
-  def text: String
+  def name: String
   def expressionParser(implicit context: ParsingContext): Parser[Expression]
   def applicativeParser(implicit context: ParsingContext): Parser[ExpressionFunction[Expression]]
 }

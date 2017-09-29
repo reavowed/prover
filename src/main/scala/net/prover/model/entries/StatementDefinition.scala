@@ -71,7 +71,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
       boundVariables = boundAndDefaultVariables._1
       defaultVariables = boundAndDefaultVariables._2
       name <- nameParser.getOrElse(symbol)
-      format <- Format.optionalParser(symbol, boundVariables ++ defaultVariables.map(_.text))
+      format <- Format.optionalParser(symbol, boundVariables ++ defaultVariables.map(_.name))
       optionalDefiningStatement <- definingStatementParser
       isTransformation <- Parser.optionalWord("transformation").isDefined
     } yield {
