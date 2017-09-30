@@ -52,15 +52,23 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
     "definition",
     Statement.parser.inParens)
 
-  private def boundAndDefaultVariablesParser(implicit context: ParsingContext): Parser[(Seq[String], Seq[Variable])] = {
+  private def boundVariablesParser(implicit context: ParsingContext): Parser[Seq[String]] = {
     val boundVariablePattern = "\\$(.*)".r
+    Parser.selectOptionalWord {
+      case boundVariablePattern(variableName) => variableName
+    }.collectWhileDefined
+  }
+
+  private def variablesParser(implicit context: ParsingContext): Parser[Seq[Variable]] = {
+    Parser.selectOptionalWord {
+      case context.RecognisedVariable(variable) => variable
+    }.collectWhileDefined
+  }
+
+  private def boundAndDefaultVariablesParser(implicit context: ParsingContext): Parser[(Seq[String], Seq[Variable])] = {
     (for {
-      boundVariables <- Parser.selectOptionalWord {
-        case boundVariablePattern(boundVariableName) => boundVariableName
-      }.collectWhileDefined
-      variables <- Parser.selectOptionalWord {
-        case context.RecognisedVariable(variable) => variable
-      }.collectWhileDefined
+      boundVariables <- boundVariablesParser
+      variables <- variablesParser
     } yield (boundVariables, variables)).inParens
   }
 
