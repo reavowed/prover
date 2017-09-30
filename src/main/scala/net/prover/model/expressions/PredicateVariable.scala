@@ -2,7 +2,7 @@ package net.prover.model.expressions
 
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
-case class PredicateVariable(name: String) extends Predicate {
+case class PredicateVariable(name: String) extends Predicate with Variable {
   override def apply(term: Term) = PredicateApplication(this, term)
 
   override def boundVariables = Set.empty
@@ -14,6 +14,9 @@ case class PredicateVariable(name: String) extends Predicate {
   override def serialized = s"named $name"
   override def toString = name
   override def safeToString = name
+
+  def expressionParser(implicit context: ParsingContext) = Predicate.parser
+  def applicativeParser(implicit context: ParsingContext) = ???
 }
 
 object PredicateVariable {

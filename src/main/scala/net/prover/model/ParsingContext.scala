@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.expressions.{BoundVariable, StatementVariable, TermVariable, Variable}
+import net.prover.model.expressions._
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 
 case class ParsingContext(
@@ -70,6 +70,19 @@ case class ParsingContext(
       }
     }
   }
+
+  object RecognisedPredicateVariable {
+    def unapply(string: String): Option[PredicateVariable] = {
+      val predicatePattern = "@(.*)".r
+      string match {
+        case predicatePattern(name) if statementVariableNames.contains(name) =>
+          Some(PredicateVariable(name))
+        case _ =>
+          None
+      }
+    }
+  }
+
   object RecognisedBoundVariable {
     def unapply(string: String): Option[BoundVariable] = {
       boundVariableNames.zipWithIndex
@@ -80,7 +93,9 @@ case class ParsingContext(
 
   object RecognisedVariable {
     def unapply(string: String): Option[Variable] = {
-      RecognisedStatementVariable.unapply(string) orElse RecognisedTermVariable.unapply(string)
+      RecognisedStatementVariable.unapply(string) orElse
+        RecognisedTermVariable.unapply(string) orElse
+        RecognisedPredicateVariable.unapply(string)
     }
   }
 }
