@@ -80,7 +80,8 @@ object Fact {
     def parser(implicit parsingContext: ParsingContext): Parser[ScopedVariable] = {
       for {
         variableName <- Parser.singleWord
-        predicate <- Assertable.parser
+        updatedContext = parsingContext.addBoundVariable(variableName)
+        predicate <- Assertable.parser(updatedContext)
       } yield {
         ScopedVariable(predicate)(variableName)
       }
