@@ -8,7 +8,11 @@ trait Expression {
   def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Expression]
   def replacePlaceholder(other: Expression): Expression
-  def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(ExpressionFunction[Expression], Substitutions)]
+  def calculateApplicatives(
+    arguments: Seq[Term],
+    substitutions: Substitutions,
+    boundVariableCount: Int
+  ): Seq[(ExpressionFunction[Expression], Substitutions)]
   def makeApplicative(argument: Term): Option[Expression]
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
     if (this == other) {
@@ -27,6 +31,8 @@ object Expression {
   }
 
   implicit class ExpressionSeqOps(expressions: Seq[Expression]) {
+    def boundVariables: Set[Int] = expressions.flatMap(_.boundVariables).toSet
+    def requiredSubstitutions: Substitutions.Required = expressions.map(_.requiredSubstitutions).foldTogether
     def calculateSubstitutions(
       otherExpressions: Seq[Expression],
       substitutions: Substitutions,
@@ -36,6 +42,9 @@ object Expression {
         .foldLeft(Seq(substitutions)) { case (substitutionsSoFar, (expression, otherExpression)) =>
           substitutionsSoFar.flatMap(expression.calculateSubstitutions(otherExpression, _, boundVariableCount))
         }
+    }
+    def applySubstitutions(substitutions: Substitutions): Option[Seq[Expression]] = {
+      expressions.map(_.applySubstitutions(substitutions)).traverseOption
     }
   }
 }

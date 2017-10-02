@@ -19,10 +19,10 @@ case class StatementVariable(name: String) extends Statement with Variable {
     substitutions.expressionsByVariable.get(this).map(_.asInstanceOf[Statement])
   }
   override def replacePlaceholder(other: Expression) = this
-  override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
+  override def calculateApplicatives(arguments: Seq[Term], substitutions: Substitutions, boundVariableCount: Int) = {
     Seq((ConstantPredicate(this), substitutions))
   }
-  override def makeApplicative(argument: Term) = Some(PredicateVariable(name).apply(argument))
+  override def makeApplicative(argument: Term) = Some(PredicateVariable(name).apply(Seq(argument)))
 
   override def toString: String = name
   override def serialized: String = name

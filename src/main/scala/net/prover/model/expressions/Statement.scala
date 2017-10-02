@@ -5,7 +5,7 @@ import net.prover.model.{Parser, ParsingContext, Substitutions}
 trait Statement extends Assertable {
   def applySubstitutions(substitutions: Substitutions): Option[Statement]
   def replacePlaceholder(other: Expression): Statement
-  def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Predicate, Substitutions)]
+  def calculateApplicatives(arguments: Seq[Term], substitutions: Substitutions, boundVariableCount: Int): Seq[(Predicate, Substitutions)]
   def makeApplicative(argument: Term): Option[Statement]
 }
 
@@ -16,9 +16,9 @@ object Statement {
         Parser.constant(PlaceholderStatement)
       case "with" =>
         for {
-          argument <- Term.parser
+          arguments <- Term.parser.listOrSingle(None)
           text <- Parser.singleWord
-        } yield PredicateApplication(PredicateVariable(text), argument)
+        } yield PredicateApplication(PredicateVariable(text), arguments)
       case context.RecognisedStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
       case context.RecognisedStatementVariable(statementVariable) =>

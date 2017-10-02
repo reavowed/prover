@@ -85,6 +85,9 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
   def parseAndDiscard(text: String, path: Path): T = {
     parse(Tokenizer.fromString(text, path))._1
   }
+  def listOrSingle(separatorOption: Option[String]): Parser[Seq[T]] = {
+    listInParens(separatorOption).tryOrElse(map(Seq(_)))
+  }
 }
 
 object Parser {

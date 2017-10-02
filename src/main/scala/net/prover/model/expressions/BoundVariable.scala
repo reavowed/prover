@@ -13,11 +13,11 @@ case class BoundVariable(level: Int)(val text: String) extends Term {
   }
   override def applySubstitutions(substitutions: Substitutions): Option[BoundVariable] = Some(this)
   override def replacePlaceholder(other: Expression) = this
-  override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
-    if (argument == this) {
+  override def calculateApplicatives(arguments: Seq[Term], substitutions: Substitutions, boundVariableCount: Int) = {
+    if (arguments == Seq(this)) {
       Seq((IdentityFunction, substitutions))
     } else if (level >= boundVariableCount) {
-      super.calculateApplicatives(argument, substitutions, boundVariableCount) :+ (ConstantFunction(this), substitutions)
+      super.calculateApplicatives(arguments, substitutions, boundVariableCount) :+ (ConstantFunction(this), substitutions)
     } else {
       Seq((ConstantFunction(this), substitutions))
     }

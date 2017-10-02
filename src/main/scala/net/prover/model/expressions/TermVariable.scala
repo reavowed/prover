@@ -19,8 +19,8 @@ case class TermVariable(name: String) extends Term with Variable {
     substitutions.expressionsByVariable.get(this).map(_.asInstanceOf[Term])
   }
   override def replacePlaceholder(other: Expression) = this
-  override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
-    super.calculateApplicatives(argument, substitutions, boundVariableCount) :+ (ConstantFunction(this), substitutions)
+  override def calculateApplicatives(arguments: Seq[Term], substitutions: Substitutions, boundVariableCount: Int) = {
+    super.calculateApplicatives(arguments, substitutions, boundVariableCount) :+ (ConstantFunction(this), substitutions)
   }
   override def toString: String = name
   override def serialized: String = name

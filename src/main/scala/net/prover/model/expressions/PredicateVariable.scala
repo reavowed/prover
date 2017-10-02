@@ -3,7 +3,7 @@ package net.prover.model.expressions
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 case class PredicateVariable(name: String) extends Predicate with Variable {
-  override def apply(term: Term) = PredicateApplication(this, term)
+  override def apply(arguments: Seq[Term]) = PredicateApplication(this, arguments)
 
   override def boundVariables = Set.empty
   override def requiredSubstitutions = Substitutions.Required(Nil, Seq(this))

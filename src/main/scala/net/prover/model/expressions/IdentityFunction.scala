@@ -3,7 +3,7 @@ package net.prover.model.expressions
 import net.prover.model.Substitutions
 
 case object IdentityFunction extends Function {
-  override def apply(term: Term): Term = term
+  override def apply(arguments: Seq[Term]): Term = arguments.head
 
   override def boundVariables = Set.empty
   override def requiredSubstitutions = Substitutions.Required.empty

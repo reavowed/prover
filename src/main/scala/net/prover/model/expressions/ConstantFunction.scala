@@ -3,7 +3,7 @@ package net.prover.model.expressions
 import net.prover.model.Substitutions
 
 case class ConstantFunction(term: Term) extends Function {
-  override def apply(otherTerm: Term) = term
+  override def apply(arguments: Seq[Term]) = term
 
   override def boundVariables = term.boundVariables
   override def requiredSubstitutions = term.requiredSubstitutions

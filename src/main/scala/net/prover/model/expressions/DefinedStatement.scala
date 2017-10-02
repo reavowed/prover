@@ -22,12 +22,12 @@ case class DefinedStatement(
     copy(components = newSubcomponents)(scopedBoundVariableNames)
   }
 
-  override def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int) = {
+  override def calculateApplicatives(arguments: Seq[Term], substitutions: Substitutions, boundVariableCount: Int) = {
     components.foldLeft(Seq((Seq.empty[ExpressionFunction[Expression]], substitutions))) { case (predicatesAndSubstitutionsSoFar, subcomponent) =>
       for {
         (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar
         (predicate, newSubstitutions) <- subcomponent.calculateApplicatives(
-          argument,
+          arguments,
           substitutionsSoFar,
           boundVariableCount + scopedBoundVariableNames.length)
       } yield (predicatesSoFar :+ predicate, newSubstitutions)

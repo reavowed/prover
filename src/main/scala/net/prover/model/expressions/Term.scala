@@ -6,8 +6,8 @@ import net.prover.model.{Parser, ParsingContext, Substitutions}
 trait Term extends Expression {
   def applySubstitutions(substitutions: Substitutions): Option[Term]
   def replacePlaceholder(other: Expression): Term
-  def calculateApplicatives(argument: Term, substitutions: Substitutions, boundVariableCount: Int): Seq[(Function, Substitutions)] = {
-    argument.calculateSubstitutions(this, substitutions, boundVariableCount).map(IdentityFunction -> _)
+  def calculateApplicatives(arguments: Seq[Term], substitutions: Substitutions, boundVariableCount: Int): Seq[(Function, Substitutions)] = {
+    arguments.calculateSubstitutions(Seq(this), substitutions, boundVariableCount).map(IdentityFunction -> _)
   }
   def makeApplicative(argument: Term): Option[Term] = None
 }

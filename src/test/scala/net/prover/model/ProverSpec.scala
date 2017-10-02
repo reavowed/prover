@@ -122,6 +122,10 @@ trait ProverSpec extends Specification {
       parser.parseAndDiscard(text, Paths.get(""))
     }
   }
+  implicit class StatementVariableOps(statementVariable: StatementVariable) {
+    def ! : PredicateVariable = PredicateVariable(statementVariable.name)
+    def apply(terms: Term*) = PredicateApplication(this.!, terms)
+  }
   implicit class StatementDefinitionOps(statementDefinition: StatementDefinition) {
     def apply(components: Expression*): DefinedStatement = {
       DefinedStatement(components, statementDefinition)(statementDefinition.boundVariableNames)
@@ -145,12 +149,6 @@ trait ProverSpec extends Specification {
   implicit def allToPremise[T : PremiseConverter](ts: Seq[T]): Seq[Premise] = {
     val converter = implicitly[PremiseConverter[T]]
     ts.mapWithIndex(converter.convertToPremise)
-  }
-  implicit def statementVariableToPredicateVariable(statementVariable: StatementVariable): PredicateVariable = {
-    PredicateVariable(statementVariable.name)
-  }
-  implicit def x(t: (StatementVariable, Predicate)): (PredicateVariable, Predicate) = {
-    statementVariableToPredicateVariable(t._1) -> t._2
   }
   implicit def statementToPredicate(statement: Statement): Predicate = ConstantPredicate(statement)
   implicit def termToFunction(term: Term): Function = ConstantFunction(term)

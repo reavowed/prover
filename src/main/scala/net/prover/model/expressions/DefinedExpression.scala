@@ -13,8 +13,8 @@ trait DefinedExpression[T <: Expression] extends Expression {
   def getMatch(other: Expression): Option[Seq[Expression]]
   def update(newComponents: Seq[Expression]): T
 
-  override def boundVariables = components.flatMap(_.boundVariables).toSet
-  override def requiredSubstitutions = components.map(_.requiredSubstitutions).foldTogether
+  override def boundVariables = components.boundVariables
+  override def requiredSubstitutions = components.requiredSubstitutions
 
   override def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int) = {
     getMatch(other).map { otherComponents =>
@@ -24,11 +24,7 @@ trait DefinedExpression[T <: Expression] extends Expression {
   }
 
   override def applySubstitutions(substitutions: Substitutions): Option[T] = {
-    for {
-      updatedComponents <- components.map(_.applySubstitutions(substitutions)).traverseOption
-    } yield {
-      update(updatedComponents)
-    }
+    components.applySubstitutions(substitutions).map(update)
   }
 
   override def replacePlaceholder(other: Expression) = {

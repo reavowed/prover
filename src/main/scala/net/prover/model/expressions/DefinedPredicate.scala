@@ -9,7 +9,7 @@ case class DefinedPredicate(
     scopedBoundVariableNames: Seq[String])
   extends Predicate
 {
-  override def apply(term: Term) = DefinedStatement(components.map(_(term)), definition)(scopedBoundVariableNames)
+  override def apply(arguments: Seq[Term]) = DefinedStatement(components.map(_(arguments)), definition)(scopedBoundVariableNames)
 
   override def boundVariables = components.flatMap(_.boundVariables).toSet
   override def requiredSubstitutions = components.map(_.requiredSubstitutions).foldTogether

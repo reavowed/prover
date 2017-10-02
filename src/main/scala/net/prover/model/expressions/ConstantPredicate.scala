@@ -3,7 +3,7 @@ package net.prover.model.expressions
 import net.prover.model.Substitutions
 
 case class ConstantPredicate(statement: Statement) extends Predicate {
-  override def apply(term: Term) = statement
+  override def apply(arguments: Seq[Term]) = statement
 
   override def boundVariables = statement.boundVariables
   override def requiredSubstitutions = statement.requiredSubstitutions

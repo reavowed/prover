@@ -7,7 +7,10 @@
     case StatementVariable(text) => {@text}
     case TermVariable(text) => {@text}
     case boundVariable: BoundVariable => {@boundVariable.text}
-    case PredicateApplication(text, argument) => {@(text)(@Html(html.referencedStatement(argument).body.trim))}
+    case PredicateApplication(text, arguments) => {@defining(
+      arguments.map(argument => html.referencedStatement(argument).body.trim).mkString(", ")
+    ){ argumentsHtml=>@{text}(@Html(argumentsHtml))
+    }}
     case definedStatement @ DefinedStatement(components, definition) => {@defining(
       definedStatement.scopedBoundVariableNames ++
       components.zipWithIndex.map { case (component, index) =>
