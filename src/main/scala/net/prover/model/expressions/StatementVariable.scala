@@ -5,28 +5,35 @@ import net.prover.model.{ParsingContext, Substitutions}
 import scala.collection.immutable.Nil
 
 case class StatementVariable(name: String) extends Statement with Variable {
-  override def boundVariables = Set.empty
   override def requiredSubstitutions = Substitutions.Required(Seq(this), Nil)
-  override def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int) = {
+  override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {
     other match {
-      case otherStatement: Statement =>
+      case otherStatement: Assertable =>
         substitutions.addVariable(this, otherStatement).toSeq
       case _ =>
         Nil
     }
   }
-  def applySubstitutions(substitutions: Substitutions): Option[Statement] = {
-    substitutions.expressionsByVariable.get(this).map(_.asInstanceOf[Statement])
+  def applySubstitutions(substitutions: Substitutions) = {
+    substitutions.expressionsByVariable.get(this).map(_.asInstanceOf[Assertable])
   }
   override def replacePlaceholder(other: Expression) = this
-  override def calculateApplicatives(arguments: Seq[Term], substitutions: Substitutions, boundVariableCount: Int) = {
-    Seq((ConstantPredicate(this), substitutions))
+  override def calculateApplicatives(arguments: Seq[Objectable], substitutions: Substitutions) = {
+    Seq((ConstantPredicate(this, 1), substitutions))
   }
-  override def makeApplicative(argument: Term) = Some(PredicateVariable(name).apply(Seq(argument)))
+  override def makeApplicative = Some(MetaPredicateApplication(PredicateVariable(name), Seq(FunctionParameter.anonymous(0)), 0))
+  override def increaseDepth(additionalDepth: Int) = ConstantPredicate(this, additionalDepth)
 
   override def toString: String = name
   override def serialized: String = name
 
-  override def expressionParser(implicit context: ParsingContext) = Statement.parser
-  override def applicativeParser(implicit context: ParsingContext) = Predicate.parser
+  override def expression = this
+  override def expressionParser(parameterList: Seq[String])(implicit context: ParsingContext) = Assertable.parser
+  override def depthDifference(expression: Expression): Option[Int] = {
+    expression match {
+      case _: Statement => Some(0)
+      case predicate: Predicate => Some(predicate.depth)
+      case _ => None
+    }
+  }
 }

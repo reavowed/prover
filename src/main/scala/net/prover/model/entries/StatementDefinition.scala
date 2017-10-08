@@ -19,7 +19,7 @@ case class StatementDefinition(
 {
   val defaultValue = {
     DefinedStatement(
-      defaultVariables,
+      defaultVariables.map(_.expression),
       this)(
       boundVariableNames)
   }
@@ -27,8 +27,7 @@ case class StatementDefinition(
   def statementParser(implicit context: ParsingContext): Parser[Statement] = {
     for {
       newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
-      updatedContext = context.addBoundVariables(newBoundVariableNames)
-      components <- defaultVariables.expressionsParser(updatedContext)
+      components <- defaultVariables.expressionsParser(newBoundVariableNames)
     } yield DefinedStatement(components, this)(newBoundVariableNames)
   }
 
@@ -60,8 +59,14 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
   }
 
   private def variablesParser(implicit context: ParsingContext): Parser[Seq[Variable]] = {
-    Parser.selectOptionalWord {
-      case context.RecognisedVariable(variable) => variable
+    Parser.selectOptionalWordParser {
+      case context.RecognisedVariable(variable) =>
+        Parser.constant(variable)
+      case "with" =>
+        for {
+          parameters <- Parser.selectWord("parameter") { case context.RecognisedParameter(p) => p }.listOrSingle(Some(", "))
+          variable <- PredicateVariable.parser
+        } yield PredicateApplicationVariable(variable, parameters, context.parameterDepth)
     }.collectWhileDefined
   }
 

@@ -19,15 +19,15 @@ class TheoremSpec extends ProverSpec {
   }
 
   "theorem parser" should {
-    implicit def assertionStepFromStatement(statement: Statement): StepOutline = {
-      StepOutline.Assertion(statement, Some(FileLocation("test.book", 1)))
+    implicit def assertionStepFromStatement(assertion: Assertable): StepOutline = {
+      StepOutline.Assertion(assertion, Some(FileLocation("test.book", 1)))
     }
 
-    implicit def assumptionStepFromStatementPair(tuple: (Statement, Statement)): StepOutline = {
+    implicit def assumptionStepFromStatementPair(tuple: (Assertable, Assertable)): StepOutline = {
       StepOutline.Assumption(tuple._1, Seq(assertionStepFromStatement(tuple._2)))
     }
 
-    implicit def assumptionStepFromStatementAndStatements(tuple: (Statement, Seq[Statement])): StepOutline = {
+    implicit def assumptionStepFromStatementAndStatements(tuple: (Assertable, Seq[Assertable])): StepOutline = {
       StepOutline.Assumption(tuple._1, tuple._2.map(assertionStepFromStatement))
     }
 
@@ -72,6 +72,15 @@ class TheoremSpec extends ProverSpec {
     val extractLeftConjunct = axiom("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), φ, RearrangementType.Simplification)
     val combineConjunction = axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ), RearrangementType.Expansion)
     val addRightDisjunct = axiom("Add Right Disjunct", Seq(ψ), Disjunction(φ, ψ), RearrangementType.Expansion)
+
+    val generalization = axiom(
+      "Generalization",
+      Seq(Fact.ScopedVariable(φ.!(FunctionParameter("x", 0)))("x")),
+      ForAll("x")(φ.!(FunctionParameter("x", 0))))
+    val specification = axiom(
+      "Specification",
+      Seq(ForAll("x")(φ.!(FunctionParameter("x", 0)))),
+      φ(x))
 
     "prove the conclusion of a premiseless inference" in {
       checkProof(
@@ -148,50 +157,38 @@ class TheoremSpec extends ProverSpec {
         "Equality Is Reflexive",
         Nil,
         Equals(x, x))
-      val generalization = axiom(
-        "Generalization",
-        Seq(Fact.ScopedVariable(φ(BoundVariable(0)("x")))("x")),
-        ForAll("x")(φ(BoundVariable(0)("x"))))
       checkProof(
         Nil,
         Seq(
-          StepOutline.ScopedVariable("y", Seq(Equals(BoundVariable(0)("y"), BoundVariable(0)("y")))),
-          ForAll("y")(Equals(BoundVariable(0)("y"), BoundVariable(0)("y")))),
+          StepOutline.ScopedVariable("y", Seq(Equals.!(FunctionParameter("y", 0), FunctionParameter("y", 0)))),
+          ForAll("y")(Equals.!(FunctionParameter("y", 0), FunctionParameter("y", 0)))),
         Seq(equalityIsReflexive, generalization))
     }
 
     "prove a conclusion containing a bound variable" in {
-      val equalityIsReflexive = axiom(
+      val equivalenceOfSubstitutedEquals = axiom(
         "Equivalence of Substituted Equals",
         Seq(Equals(a, b)),
-        Equivalence(φ(x), φ(y)))
-      val generalization = axiom(
-        "Generalization",
-        Seq(Fact.ScopedVariable(φ(BoundVariable(0)("x")))("x")),
-        ForAll("x")(φ(BoundVariable(0)("x"))))
+        Equivalence(φ(a), φ(b)))
       checkProof(
         Seq(Equals(x, y)),
         Seq(
-          StepOutline.ScopedVariable("z", Seq(Equivalence(ElementOf(BoundVariable(0)("z"), a), ElementOf(BoundVariable(0)("z"), b)))),
-          ForAll("z")(Equivalence(ElementOf(BoundVariable(0)("z"), a), ElementOf(BoundVariable(0)("z"), b)))),
-        Seq(equalityIsReflexive, generalization))
+          StepOutline.ScopedVariable("z", Seq(Equivalence.!(
+            ElementOf.!(FunctionParameter("z", 0), ConstantFunction(x, 1)),
+            ElementOf.!(FunctionParameter("z", 0), ConstantFunction(y, 1))))),
+          ForAll("z")(Equivalence.!(
+            ElementOf.!(FunctionParameter("z", 0), ConstantFunction(x, 1)),
+            ElementOf.!(FunctionParameter("z", 0), ConstantFunction(y, 1))))),
+        Seq(equivalenceOfSubstitutedEquals, generalization))
     }
 
     "prove a transformed inference" in {
-      val generalization = axiom(
-        "Generalization",
-        Seq(Fact.ScopedVariable(φ(BoundVariable(0)("x")))("x")),
-        ForAll("x")(φ(BoundVariable(0)("x"))))
-      val specification = axiom(
-        "Specification",
-        Seq(ForAll("x")(φ(BoundVariable(0)("x")))),
-        φ(y))
       checkProof(
         Seq(
-          ForAll("x")(φ(BoundVariable(0)("x"))),
-          ForAll("x")(Implication(φ(BoundVariable(0)("x")), ψ(BoundVariable(0)("x"))))),
+          ForAll("x")(φ.!(FunctionParameter("x", 0))),
+          ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.!(FunctionParameter("x", 0))))),
         Seq(
-          ForAll("x")(ψ(BoundVariable(0)("x")))),
+          ForAll("x")(ψ.!(FunctionParameter("x", 0)))),
         Seq(generalization, specification, modusPonens),
         Seq(ForAll))
     }

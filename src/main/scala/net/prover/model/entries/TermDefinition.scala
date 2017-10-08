@@ -15,14 +15,14 @@ case class TermDefinition(
   extends ChapterEntry(TermDefinition)
 {
   val id: String = s"definition-$symbol"
-  val defaultValue = DefinedTerm(defaultVariables, this)
+  val defaultValue = DefinedTerm(defaultVariables.map(_.expression), this)
   val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue)
   override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
 
   def apply(components: Expression*): DefinedTerm = DefinedTerm(components, this)
 
   def termParser(implicit context: ParsingContext): Parser[Term] = {
-    defaultVariables.expressionsParser.map(apply)
+    defaultVariables.expressionsParser(Nil).map(apply)
   }
 }
 

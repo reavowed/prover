@@ -1,12 +1,10 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Parser, ParsingContext, Substitutions}
+import net.prover.model.{Parser, ParsingContext}
 
 trait Statement extends Assertable {
-  def applySubstitutions(substitutions: Substitutions): Option[Statement]
+  def depth: Int = 0
   def replacePlaceholder(other: Expression): Statement
-  def calculateApplicatives(arguments: Seq[Term], substitutions: Substitutions, boundVariableCount: Int): Seq[(Predicate, Substitutions)]
-  def makeApplicative(argument: Term): Option[Statement]
 }
 
 object Statement {

@@ -1,9 +1,11 @@
 package net.prover.model
 
+import java.util.regex.Matcher
+
 case class Format(formatString: String, requiresBrackets: Boolean) {
   def apply(components: Seq[String], safe: Boolean = false): String = {
     val inner = components.zipWithIndex.foldLeft(formatString) { case (htmlSoFar, (component, index)) =>
-      htmlSoFar.replaceFirst(s"%$index", component)
+      htmlSoFar.replaceFirst(s"%$index", Matcher.quoteReplacement(component))
     }
     if (safe && requiresBrackets)
       "(" + inner + ")"

@@ -63,7 +63,7 @@ trait ProverSpec extends Specification {
     StatementDefinition(
       symbol,
       Seq("x"),
-      Seq(φ),
+      Seq(PredicateApplicationVariable(φ.!, Seq(FunctionParameter("x", 0)), 1)),
       symbol,
       Format(s"($symbol%0)%1", requiresBrackets = false),
       definingStatement,
@@ -89,7 +89,7 @@ trait ProverSpec extends Specification {
     "∅",
     Format.default("∅", Nil),
     Nil,
-    ForAll(x, Negation(ElementOf(x, PlaceholderTerm))),
+    ForAll("x")(Negation.!(ElementOf.!(FunctionParameter("x", 0), ConstantFunction(PlaceholderTerm, 0)))),
     "",
     "")
   val EmptySet = EmptySetDefinition()
@@ -100,7 +100,9 @@ trait ProverSpec extends Specification {
     "Power Set",
     Format("𝒫%0", requiresBrackets = false),
     Nil,
-    ForAll(y, Equivalence(ElementOf(Y, PlaceholderTerm), φ)),
+    ForAll("y")(Equivalence.!(
+      ElementOf.!(FunctionParameter("y", 0), ConstantFunction(PlaceholderTerm, 0)),
+      Equals.!(FunctionParameter("y", 0), ConstantFunction(x, 0)))),
     "",
     "")
 
@@ -123,8 +125,10 @@ trait ProverSpec extends Specification {
     }
   }
   implicit class StatementVariableOps(statementVariable: StatementVariable) {
-    def ! : PredicateVariable = PredicateVariable(statementVariable.name)
     def apply(terms: Term*) = PredicateApplication(this.!, terms)
+    def ! : PredicateVariable = PredicateVariable(statementVariable.name)
+    def !(functions: Function*): MetaPredicateApplication = MetaPredicateApplication(this.!, functions, 1)
+
   }
   implicit class StatementDefinitionOps(statementDefinition: StatementDefinition) {
     def apply(components: Expression*): DefinedStatement = {
@@ -132,6 +136,31 @@ trait ProverSpec extends Specification {
     }
     def apply(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
       DefinedStatement(components, statementDefinition)(boundVariableNames)
+    }
+    def !(components: ExpressionFunction[Expression]*): DefinedPredicate = {
+      DefinedPredicate(components, statementDefinition, 1)(statementDefinition.boundVariableNames)
+    }
+    def !(boundVariableNames: String*)(components: ExpressionFunction[Expression]*): DefinedPredicate = {
+      DefinedPredicate(components, statementDefinition, 1)(boundVariableNames)
+    }
+    def !!(components: ExpressionFunction[Expression]*): DefinedPredicate = {
+      DefinedPredicate(components, statementDefinition, 2)(statementDefinition.boundVariableNames)
+    }
+  }
+  implicit class DefinedTermOps(definedTerm: DefinedTerm) {
+    def ! : DefinedFunction = {
+      definedTerm.increaseDepth(1)
+    }
+  }
+  implicit class TermDefinitionOps(termDefinition: TermDefinition) {
+    def apply(components: Expression*): DefinedTerm = {
+      DefinedTerm(components, termDefinition)
+    }
+    def !(components: ExpressionFunction[Expression]*): DefinedFunction = {
+      DefinedFunction(components, termDefinition, 1)
+    }
+    def !!(components: ExpressionFunction[Expression]*): DefinedFunction = {
+      DefinedFunction(components, termDefinition, 2)
     }
   }
 
@@ -150,6 +179,4 @@ trait ProverSpec extends Specification {
     val converter = implicitly[PremiseConverter[T]]
     ts.mapWithIndex(converter.convertToPremise)
   }
-  implicit def statementToPredicate(statement: Statement): Predicate = ConstantPredicate(statement)
-  implicit def termToFunction(term: Term): Function = ConstantFunction(term)
 }

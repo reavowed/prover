@@ -32,6 +32,18 @@ case class Substitutions(
 object Substitutions {
   val empty = Substitutions(Map.empty, Map.empty)
 
+//  case class PredicateDetails(predicate: Predicate, arity: Int) {
+//    def serialized: String = s"$arity ${predicate.serialized}"
+//  }
+//  object PredicateDetails {
+//    def parser(implicit parsingContext: ParsingContext): Parser[PredicateDetails] = {
+//      for {
+//        arity <- Parser.int
+//        predicate <- Predicate.parser(parsingContext.addParameterList((0 until arity).map(i => s"$$$i")))
+//      } yield PredicateDetails(predicate, arity)
+//    }
+//  }
+
   case class Required(variables: Seq[Variable], predicates: Seq[PredicateVariable]) {
     def ++(other: Required): Required = {
       Required(

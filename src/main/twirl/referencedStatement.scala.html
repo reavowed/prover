@@ -6,7 +6,6 @@
   <span class="@topLevelReferrers.map("highlight-" + _).mkString(" ") @reference.map("conclusion-" + _)">@expression match {
     case StatementVariable(text) => {@text}
     case TermVariable(text) => {@text}
-    case boundVariable: BoundVariable => {@boundVariable.text}
     case PredicateApplication(text, arguments) => {@defining(
       arguments.map(argument => html.referencedStatement(argument).body.trim).mkString(", ")
     ){ argumentsHtml=>@{text}(@Html(argumentsHtml))

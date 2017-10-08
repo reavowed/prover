@@ -1,7 +1,7 @@
 package net.prover.model
 
-import net.prover.model.expressions.{BoundVariable, PlaceholderTerm}
 import net.prover.model.entries.TermDefinition
+import net.prover.model.expressions.{ConstantFunction, FunctionParameter, PlaceholderTerm}
 
 class TermDefinitionSpec extends ProverSpec {
   "term definition parser" should {
@@ -13,23 +13,26 @@ class TermDefinitionSpec extends ProverSpec {
           "∅",
           Format.default("∅", Nil),
           Nil,
-          ForAll("x")(Negation(ElementOf(BoundVariable(0)("x"), PlaceholderTerm))),
+          ForAll("x")(Negation.!(ElementOf.!(FunctionParameter("x", 0), ConstantFunction(PlaceholderTerm, 1)))),
           "",
           "")
     }
 
     "parse a term with premises" in {
-      TermDefinition.parser("", "").parseAndDiscard(
+      val res = TermDefinition.parser("", "").parseAndDiscard(
         "intersection (x) format (⋂x) premises (¬ = x ∅) (∀ y ↔ ∈ y _ ∀ z → ∈ z x ∈ z y)"
-      ) mustEqual TermDefinition(
+      )
+      res mustEqual TermDefinition(
         "intersection",
         Seq(x),
         "intersection",
         Format("⋂%0", requiresBrackets = false),
         Seq(Negation(Equals(x, EmptySet))),
-        ForAll("y")(Equivalence(
-          ElementOf(BoundVariable(0)("y"), PlaceholderTerm),
-          ForAll("z")(Implication(ElementOf(BoundVariable(0)("z"), x), ElementOf(BoundVariable(0)("z"), BoundVariable(1)("y")))))),
+        ForAll("y")(Equivalence.!(
+          ElementOf.!(FunctionParameter("y", 0), ConstantFunction(PlaceholderTerm, 1)),
+          ForAll.!("z")(Implication.!!(
+            ElementOf.!!(FunctionParameter("z", 0, 1, 2), ConstantFunction(x, 2)),
+            ElementOf.!!(FunctionParameter("z", 0, 1, 2), FunctionParameter("y", 0, 2)))))),
         "",
         "")
     }

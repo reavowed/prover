@@ -1,12 +1,12 @@
 package net.prover.model
 
-import net.prover.model.expressions.Variable
 import net.prover.model.proof.{Fact, Reference, ReferencedFact}
 
 case class Premise(fact: Fact, index: Int)(val isElidable: Boolean) {
   def reference = Reference.Direct(s"p$index")
   def referencedFact = ReferencedFact(fact, reference)
   def requiredSubstitutions: Substitutions.Required = fact.requiredSubstitutions
+  def increaseDepth(additionalDepth: Int): Premise = Premise(fact.increaseDepth(additionalDepth), index)(isElidable)
   def serialized: String = s"premise ${fact.serialized}"
 }
 

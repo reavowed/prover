@@ -32,7 +32,7 @@ object StepOutline {
   }
 
   case class Assumption(
-      assumption: Statement,
+      assumption: Assertable,
       steps: Seq[StepOutline])
     extends StepOutline
   object Assumption {
@@ -73,7 +73,7 @@ object StepOutline {
     def parser(implicit context: ParsingContext): Parser[ScopedVariable] = {
       for {
         variableName <- Parser.singleWord
-        updatedContext = context.addBoundVariable(variableName)
+        updatedContext = context.addParameterList(Seq(variableName))
         steps <- listParser(updatedContext).inBraces
       } yield ScopedVariable(variableName, steps)
     }

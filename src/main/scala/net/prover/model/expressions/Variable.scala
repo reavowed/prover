@@ -2,10 +2,11 @@ package net.prover.model.expressions
 
 import net.prover.model.{Parser, ParsingContext}
 
-trait Variable extends Expression {
+trait Variable {
   def name: String
-  def expressionParser(implicit context: ParsingContext): Parser[Expression]
-  def applicativeParser(implicit context: ParsingContext): Parser[ExpressionFunction[Expression]]
+  def expression: Expression
+  def expressionParser(parameterList: Seq[String])(implicit context: ParsingContext): Parser[Expression]
+  def depthDifference(expression: Expression): Option[Int]
 }
 
 object Variable {
@@ -20,11 +21,8 @@ object Variable {
   }
 
   implicit class VariableSeqOps(variables: Seq[Variable]) {
-    def expressionsParser(implicit context: ParsingContext) = {
-      variables.map(_.expressionParser).traverseParser
-    }
-    def applicativesParser(implicit context: ParsingContext) = {
-      variables.map(_.applicativeParser).traverseParser
+    def expressionsParser(parameterList: Seq[String])(implicit context: ParsingContext) = {
+      variables.map(_.expressionParser(parameterList)).traverseParser
     }
   }
 }

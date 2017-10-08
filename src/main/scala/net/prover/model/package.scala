@@ -89,6 +89,9 @@ package object model {
     def mapWithIndex[S](f: (T, Int) => S): Seq[S] = {
       seq.zipWithIndex.map { case (t, index) => f(t, index)}
     }
+    def flatMapWithIndex[S](f: (T, Int) => Seq[S]): Seq[S] = {
+      seq.zipWithIndex.flatMap { case (t, index) => f(t, index)}
+    }
     def distinctBy[S](f: T => S): Seq[T] = {
       val b = Seq.newBuilder[T]
       val seen = mutable.HashSet[S]()
@@ -135,6 +138,9 @@ package object model {
     }
     def mapFind[S](f: T => Option[S]): Option[S] = {
       seq.find { t => f(t).isDefined }.flatMap(f)
+    }
+    def findIndex(f: T => Boolean): Option[Int] = {
+      seq.zipWithIndex.find(x => f(x._1)).map(_._2)
     }
   }
 

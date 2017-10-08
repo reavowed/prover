@@ -1,22 +1,39 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Parser, ParsingContext, Substitutions}
+import net.prover.model._
 import net.prover.model.entries.StatementDefinition
 
 case class DefinedPredicate(
+    components: Seq[ExpressionFunction[Expression]],
     definition: StatementDefinition,
-    components: Seq[ExpressionFunction[Expression]])(
+    depth: Int)(
     scopedBoundVariableNames: Seq[String])
   extends Predicate
 {
-  override def apply(arguments: Seq[Term]) = DefinedStatement(components.map(_(arguments)), definition)(scopedBoundVariableNames)
+  override def apply(arguments: Seq[Objectable]) = {
+    if (depth == 1) {
+      DefinedStatement(components.map(_(arguments)), definition)(scopedBoundVariableNames)
+    } else {
+      DefinedPredicate(
+        components.map(_(arguments).asInstanceOf[ExpressionFunction[Expression]]),
+        definition,
+        depth - 1)(
+        scopedBoundVariableNames)
+    }
+  }
+  override def increaseDepth(additionalDepth: Int) = {
+    DefinedPredicate(
+      components.map(_.increaseDepth(additionalDepth)),
+      definition,
+      depth + additionalDepth)(
+      scopedBoundVariableNames)
+  }
 
-  override def boundVariables = components.flatMap(_.boundVariables).toSet
   override def requiredSubstitutions = components.map(_.requiredSubstitutions).foldTogether
-  override def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int) = {
+  override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {
     other match {
-      case DefinedPredicate(`definition`, otherComponents) =>
-        components.calculateSubstitutions(otherComponents, substitutions, boundVariableCount + scopedBoundVariableNames.length)
+      case DefinedPredicate(otherComponents, `definition`, `depth`) =>
+        components.calculateSubstitutions(otherComponents, substitutions)
       case _ =>
         Nil
     }
@@ -28,24 +45,31 @@ case class DefinedPredicate(
       copy(components = updatedComponents)(scopedBoundVariableNames)
     }
   }
+  override def calculateApplicatives(arguments: Seq[Objectable], substitutions: Substitutions) = {
+    components.foldLeft(Seq((Seq.empty[ExpressionFunction[Expression]], substitutions))) { case (predicatesAndSubstitutionsSoFar, subcomponent) =>
+      for {
+        (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar
+        (predicate, newSubstitutions) <- subcomponent.calculateApplicatives(
+          arguments,
+          substitutionsSoFar)
+      } yield (predicatesSoFar :+ predicate, newSubstitutions)
+    }.map(_.mapLeft(DefinedPredicate(_, definition, depth + 1)(scopedBoundVariableNames)))
+  }
+
   override def replacePlaceholder(other: Expression) = {
     copy(components = components.map(_.replacePlaceholder(other)))(scopedBoundVariableNames)
   }
 
-  override def serialized = s"defined ${definition.symbol} ${components.map(_.serialized).mkString(" ")}"
+  override def serialized = (Seq(definition.symbol) ++ scopedBoundVariableNames ++ components.map(_.serialized)).mkString(" ")
   override def toString = definition.format(scopedBoundVariableNames ++ components.map(_.safeToString))
   override def safeToString = definition.format.safe(scopedBoundVariableNames ++ components.map(_.safeToString))
 }
 
 object DefinedPredicate {
-  def parser(implicit context: ParsingContext): Parser[DefinedPredicate] = {
+  def parser(definition: StatementDefinition)(implicit context: ParsingContext): Parser[DefinedPredicate] = {
     for {
-      definition <- Parser.selectWord("statement type") {
-        case context.RecognisedStatementDefinition(statementDefinition) => statementDefinition
-      }
       boundVariableNames <- Parser.nWords(definition.boundVariableNames.length)
-      updatedContext = context.addBoundVariables(boundVariableNames)
-      components <- definition.defaultVariables.applicativesParser(updatedContext)
-    } yield DefinedPredicate(definition, components)(boundVariableNames)
+      components <- definition.defaultVariables.expressionsParser(boundVariableNames).map(_.map(_.asInstanceOf[ExpressionFunction[Expression]]))
+    } yield DefinedPredicate(components, definition, context.parameterDepth)(boundVariableNames)
   }
 }

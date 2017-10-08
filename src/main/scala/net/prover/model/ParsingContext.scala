@@ -3,12 +3,16 @@ package net.prover.model
 import net.prover.model.expressions._
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 
+import scala.util.Try
+
 case class ParsingContext(
     statementDefinitions: Seq[StatementDefinition],
     termDefinitions: Seq[TermDefinition],
     statementVariableNames: Set[String],
     termVariableNames: Set[String],
-    boundVariableNames: Seq[String]) {
+    parameterLists: Seq[Seq[String]])
+{
+  def parameterDepth: Int = parameterLists.length
 
   def add(chapterEntry: ChapterEntry): ParsingContext = chapterEntry match {
     case statementDefinition: StatementDefinition =>
@@ -27,17 +31,8 @@ case class ParsingContext(
     copy(termDefinitions = termDefinitions :+ termDefinition)
   }
 
-  def addBoundVariable(variableName: String): ParsingContext = {
-    copy(boundVariableNames = variableName +: boundVariableNames)
-  }
-
-  def addBoundVariables(variableNames: Seq[String]): ParsingContext = {
-    variableNames.foldLeft(this)(_.addBoundVariable(_))
-  }
-
-  def lookupBoundVariable(variableName: String): BoundVariable = {
-    RecognisedBoundVariable.unapply(variableName)
-      .getOrElse(throw new Exception(s"Unrecognised bound variable '$variableName'"))
+  def addParameterList(parameterList: Seq[String]) = {
+    copy(parameterLists = parameterList +: parameterLists)
   }
 
   object RecognisedStatementVariable {
@@ -83,19 +78,30 @@ case class ParsingContext(
     }
   }
 
-  object RecognisedBoundVariable {
-    def unapply(string: String): Option[BoundVariable] = {
-      boundVariableNames.zipWithIndex
-        .find(_._1 == string)
-        .map { case (name, index) => BoundVariable(index)(name) }
-    }
-  }
-
   object RecognisedVariable {
     def unapply(string: String): Option[Variable] = {
       RecognisedStatementVariable.unapply(string) orElse
-        RecognisedTermVariable.unapply(string) orElse
-        RecognisedPredicateVariable.unapply(string)
+        RecognisedTermVariable.unapply(string)
+    }
+  }
+
+  object RecognisedParameter {
+    val literalPattern = "(\\$+)(\\.*)(.*)".r
+    def unapply(string: String): Option[FunctionParameter] = {
+      parameterLists.zipWithIndex.mapFind {
+        case (parameterList, depth) =>
+          parameterList.findIndex(_ == string).map(index => FunctionParameter(index, depth + 1, parameterDepth)(Some(string)))
+      } orElse (string match {
+        case literalPattern(dollars, dots, indexString) =>
+          val level = dollars.length
+          val depth = level + dots.length
+          for {
+            index <- Try(indexString.toInt).toOption
+            name = parameterLists.lift(level).flatMap(_.lift(index)).getOrElse(dollars + index)
+          } yield FunctionParameter(index, level, depth)(None)
+        case _ =>
+          None
+      })
     }
   }
 }
@@ -106,5 +112,5 @@ object ParsingContext {
     termDefinitions = Nil,
     statementVariableNames = Set.empty,
     termVariableNames = Set.empty,
-    boundVariableNames = Seq.empty)
+    parameterLists = Seq.empty)
 }

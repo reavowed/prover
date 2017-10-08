@@ -4,30 +4,42 @@ import net.prover.model._
 
 import scala.collection.immutable.Nil
 
-trait DefinedExpression[T <: Expression] extends Expression {
+trait DefinedExpression[Applicable <: Expression, NonApplicable <: Applicable] extends Expression {
   def components: Seq[Expression]
   def scopedBoundVariableNames: Seq[String]
   def format: Format
   def symbol: String
+  def defaultVariables: Seq[Variable]
 
   def getMatch(other: Expression): Option[Seq[Expression]]
-  def update(newComponents: Seq[Expression]): T
+  def update(newComponents: Seq[Expression]): NonApplicable
+  def updateApplicable(newComponents: Seq[Expression], depth: Int): Applicable
 
-  override def boundVariables = components.boundVariables
   override def requiredSubstitutions = components.requiredSubstitutions
 
-  override def calculateSubstitutions(other: Expression, substitutions: Substitutions, boundVariableCount: Int) = {
-    getMatch(other).map { otherComponents =>
-      components.calculateSubstitutions(otherComponents, substitutions, boundVariableCount + scopedBoundVariableNames.length)
+  override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {
+    getMatch(other)
+      .map(components.calculateSubstitutions(_, substitutions))
+      .getOrElse(Nil)
+  }
+
+  override def applySubstitutions(substitutions: Substitutions): Option[Applicable] = {
+    components.applySubstitutions(substitutions).map { newSubcomponents =>
+      if (newSubcomponents.isEmpty)
+        update(newSubcomponents)
+      else
+        defaultVariables.head.depthDifference(newSubcomponents.head) match {
+          case Some(0) =>
+            update(newSubcomponents)
+          case Some(n) =>
+            updateApplicable(newSubcomponents, n)
+          case None =>
+            throw new Exception("Invalid subcomponent")
+        }
     }
-    .getOrElse(Nil)
   }
 
-  override def applySubstitutions(substitutions: Substitutions): Option[T] = {
-    components.applySubstitutions(substitutions).map(update)
-  }
-
-  override def replacePlaceholder(other: Expression) = {
+  override def replacePlaceholder(other: Expression): NonApplicable = {
     val updatedComponents = components.map(_.replacePlaceholder(other))
     update(updatedComponents)
   }

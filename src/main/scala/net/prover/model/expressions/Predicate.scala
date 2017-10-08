@@ -1,8 +1,8 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Parser, ParsingContext, Substitutions}
+import net.prover.model._
 
-trait Predicate extends ExpressionFunction[Statement] with Assertable {
+trait Predicate extends ExpressionFunction[Assertable] with Assertable {
   def applySubstitutions(substitutions: Substitutions): Option[Predicate]
   def replacePlaceholder(other: Expression): Predicate
 }
@@ -10,9 +10,17 @@ trait Predicate extends ExpressionFunction[Statement] with Assertable {
 object Predicate {
   def parser(implicit parsingContext: ParsingContext): Parser[Predicate] = {
     Parser.selectWordParser("predicate") {
-      case "constant" => Statement.parser.map(ConstantPredicate.apply)
-      case "defined" => DefinedPredicate.parser
-      case "named" => PredicateVariable.parser
+      case parsingContext.RecognisedStatementDefinition(definition) =>
+        DefinedPredicate.parser(definition)
+      case parsingContext.RecognisedStatementVariable(variable) =>
+        Parser.constant(ConstantPredicate(variable, parsingContext.parameterDepth))
+      case "with" =>
+        for {
+          arguments <- Objectable.parser.listOrSingle(Some(",")).map(_.map(_.asInstanceOf[Function]))
+          name <- Parser.singleWord
+        } yield {
+            MetaPredicateApplication(PredicateVariable(name), arguments, parsingContext.parameterDepth)
+        }
     }
   }
 }

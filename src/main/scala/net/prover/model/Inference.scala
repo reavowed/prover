@@ -93,13 +93,17 @@ object Inference {
   }
 
   case class Substitutions(expressions: Seq[Expression], predicates: Seq[Predicate]) {
-    def serialized: String = "(" + expressions.map(_.serialized).mkString(", ") + ") (" + predicates.map(_.serialized).mkString(", ")  + ")"
+    def serialized: String = "(" + expressions.map(_.serialized).mkString(", ") + ")" +
+      " (" + predicates.map(p => p.depth + " " + p.serialized).mkString(", ")  + ")"
   }
   object Substitutions {
     def parser(implicit parsingContext: ParsingContext): Parser[Substitutions] = {
       for {
         expressions <- Expression.parser.listInParens(Some(","))
-        predicates <- Predicate.parser.listInParens(Some(","))
+        predicates <- (for {
+          depth <- Parser.int
+          predicate <- Predicate.parser((parsingContext.parameterDepth until depth).foldLeft(parsingContext) {case (c, _) => c.addParameterList(Nil) })
+        } yield predicate).listInParens(Some(","))
       } yield Substitutions(expressions, predicates)
     }
   }

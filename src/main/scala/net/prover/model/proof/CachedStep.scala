@@ -45,7 +45,7 @@ object CachedStep {
     def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Assertion] = {
       for {
         isRearrangement <- Parser.optionalWord("rearranging").isDefined
-        assertion <- Statement.parser
+        assertion <- Assertable.parser
         cachedInferenceApplication <- CachedInferenceApplication.parser
       } yield {
         Assertion(assertion, cachedInferenceApplication, reference, isRearrangement)
@@ -154,7 +154,7 @@ object CachedStep {
     def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[ScopedVariable] = {
       for {
         variableName <- Parser.singleWord
-        updatedContext = parsingContext.addBoundVariable(variableName)
+        updatedContext = parsingContext.addParameterList(Seq(variableName))
         steps <- listParser(Some(reference))(updatedContext).inBraces
       } yield ScopedVariable(variableName, steps, reference)
     }

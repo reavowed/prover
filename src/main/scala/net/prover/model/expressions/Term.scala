@@ -3,13 +3,9 @@ package net.prover.model.expressions
 import net.prover.model.entries.TermDefinition
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
-trait Term extends Expression {
-  def applySubstitutions(substitutions: Substitutions): Option[Term]
+trait Term extends Objectable {
+  def depth: Int = 0
   def replacePlaceholder(other: Expression): Term
-  def calculateApplicatives(arguments: Seq[Term], substitutions: Substitutions, boundVariableCount: Int): Seq[(Function, Substitutions)] = {
-    arguments.calculateSubstitutions(Seq(this), substitutions, boundVariableCount).map(IdentityFunction -> _)
-  }
-  def makeApplicative(argument: Term): Option[Term] = None
 }
 
 object Term {
@@ -36,8 +32,6 @@ object Term {
     Parser.selectWordParser("term") {
       case "_" =>
         Parser.constant(PlaceholderTerm)
-      case context.RecognisedBoundVariable(variable) =>
-        Parser.constant(variable)
       case TermDefinitionMatcher(termDefinition) =>
         termDefinition.termParser
       case context.RecognisedTermVariable(variable) =>

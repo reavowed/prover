@@ -1,9 +1,9 @@
 package net.prover.model.proof
 
 import net.prover.model.Inference.RearrangementType
-import net.prover.model.expressions.{Assertable, BoundVariable, DefinedStatement, Statement}
-import net.prover.model.entries.StatementDefinition
 import net.prover.model._
+import net.prover.model.entries.StatementDefinition
+import net.prover.model.expressions.{Assertable, DefinedStatement, Statement}
 
 import scala.util.Try
 
@@ -16,9 +16,8 @@ case class Prover(
   import context._
 
   case class Transformation(statementDefinition: StatementDefinition, variableName: String) {
-    val boundVariable = BoundVariable(0)(variableName)
     def apply(statement: Assertable): Option[DefinedStatement] = {
-      statement.makeApplicative(boundVariable).map(s => DefinedStatement(Seq(s), statementDefinition)(statementDefinition.boundVariableNames))
+      statement.makeApplicative.map(s => DefinedStatement(Seq(s), statementDefinition)(statementDefinition.boundVariableNames))
     }
   }
 
@@ -52,7 +51,7 @@ case class Prover(
   ): Option[Step.Assertion] = {
     initialSubstitutions.map(Iterator(_))
       .getOrElse {
-        inference.conclusion.calculateSubstitutions(assertionToProve, Substitutions.empty, 0).iterator
+        inference.conclusion.calculateSubstitutions(assertionToProve, Substitutions.empty).iterator
       }
       .flatMap { substitutions =>
         matchPremisesToFacts(inference.premises, substitutions, inference.allowsRearrangement)
@@ -72,7 +71,7 @@ case class Prover(
       transformedConclusion <- transformation(inference.conclusion).iterator
       transformedPremiseStatements <- premiseStatements.map(transformation.apply).traverseOption.iterator
       transformedPremises = transformedPremiseStatements.zipWithIndex.map { case (s, i) => Premise(Fact.Direct(s), i)(isElidable = false) }
-      conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(assertionToProve, Substitutions.empty, 0)
+      conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(assertionToProve, Substitutions.empty)
       (premiseReferences, premiseSubstitutions) <- matchPremisesToFacts(transformedPremises, conclusionSubstitutions, inference.allowsRearrangement)
       transformationProofAttempt = Try(Proof.fillInOutline(
         transformedPremises,
@@ -195,7 +194,7 @@ case class Prover(
         .findFirst { case (inference, inferencePremises) =>
           (
             for {
-              substitutions <- inference.conclusion.calculateSubstitutions(assertion, Substitutions.empty, 0)
+              substitutions <- inference.conclusion.calculateSubstitutions(assertion, Substitutions.empty)
               substitutedPremises <- inferencePremises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
               premiseReferences <- substitutedPremises.map(getAssertionByRearranging).traverseOption.toSeq
               if inference.conclusion.applySubstitutions(substitutions).contains(assertion)
@@ -280,7 +279,7 @@ case class Prover(
               .map((inference, premiseStatement, _))
           }
           .flatMap { case (inference, premiseStatement, simplificationPath) =>
-            premiseStatement.calculateSubstitutions(statement, Substitutions.empty, 0)
+            premiseStatement.calculateSubstitutions(statement, Substitutions.empty)
               .map((inference, simplificationPath, _))
           }
           .mapCollect { case (inference, simplificationPath, substitutions) =>
