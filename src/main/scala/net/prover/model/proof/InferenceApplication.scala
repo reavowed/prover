@@ -23,7 +23,7 @@ object InferenceApplication {
     def directReferences = references.flatMap(_.factReferences).toSet
     def cached = CachedInferenceApplication.Direct(
       inference.id,
-      inference.specifySubstitutions(substitutions).get,
+      inference.specifySubstitutions(substitutions),
       references.map(_.cached),
       depth)
   }
@@ -45,7 +45,7 @@ object InferenceApplication {
     def directReferences = references.flatMap(_.factReferences).toSet
     def cached = CachedInferenceApplication.Transformed(
       inference.id,
-      Inference.Transformed(inference, transformedPremises, transformedConclusion).specifySubstitutions(substitutions).get,
+      Inference.Transformed(inference, transformedPremises, transformedConclusion).specifySubstitutions(substitutions),
       references.map(_.cached),
       transformation,
       transformedPremises,

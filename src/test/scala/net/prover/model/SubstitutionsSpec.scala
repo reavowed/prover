@@ -111,6 +111,14 @@ class SubstitutionsSpec extends ProverSpec {
         Substitutions(predicates = Map(φ -> φ.!(FunctionParameter.anonymous(0)))))
     }
 
+    "match a bound connective to itself" in {
+      testSubstitutions(
+        ForAll("x")(ElementOf.!(FunctionParameter("x", 0), a.^)),
+        ForAll("x")(ElementOf.!(FunctionParameter("x", 0), b.^)),
+        0,
+        Substitutions(terms = Map(a -> b)))
+    }
+
     "match a bound predicate application to a bound predicate" in {
       testSubstitutions(
         ForAll("x")(φ.!(FunctionParameter("x", 0))),

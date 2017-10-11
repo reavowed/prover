@@ -13,6 +13,12 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
   def getMatch(other: Expression): Option[Seq[Expression]]
   def update(newComponents: Seq[Expression], newDepth: Int): ExpressionType
 
+  override def reduceDepth(difference: Int): Option[ExpressionType] = {
+    if (depth >= difference)
+      components.map(_.reduceDepth(difference)).traverseOption.map(update(_, depth - difference))
+    else
+      None
+  }
   override def specify(targetArguments: Seq[Term]): ExpressionType = {
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
     update(components.map(_.specify(targetArguments)), depth - 1)

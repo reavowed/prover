@@ -44,7 +44,7 @@ object Reference {
     override def valueAndPath: (String, Seq[Int]) = inferenceReference.valueAndPath.mapRight(simplificationPath ++ _)
     override def cached = CachedReference.Simplification(
       inference.id,
-      inference.specifySubstitutions(substitutions).get,
+      inference.specifySubstitutions(substitutions),
       inferenceReference.cached,
       simplificationPath,
       depth)

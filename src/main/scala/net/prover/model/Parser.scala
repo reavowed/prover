@@ -30,6 +30,7 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
   def tryOrElse[S >: T](otherParser: => Parser[S]): Parser[S] = Parser { tokenizer =>
     Try(attemptParse(tokenizer)).toOption.getOrElse(otherParser.attemptParse(tokenizer))
   }
+  def withNone(noneWord: String): Parser[Option[T]] = map(Some.apply).tryOrElse(Parser.requiredWord(noneWord).map(_ => None))
 
   private def inBrackets(openBracket: String, closeBracket: String): Parser[T] = {
     for {

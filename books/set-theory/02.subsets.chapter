@@ -1,49 +1,49 @@
 chapter Subsets
 Introduce the subset relation, ⊆.
 
-statement ⊆ (a b)
-  definition (∀ x → ∈ x a ∈ x b)
+statement ⊆ (A B)
+  definition (∀ x → ∈ x A ∈ x B)
 
 theorem Definition of ⊆
 premise ⊆ A B
-premise ∈ x A
-prove ∀ y → ∈ y A ∈ y B
-prove ∈ x B
-qed
-
-theorem Subset Deduction
-premise proves ∈ x A ∈ x B
+premise ∈ a A
 prove ∀ x → ∈ x A ∈ x B
-prove ⊆ A B
+prove ∈ a B
 qed
 
-theorem Subset Is Antisymmetric
-premise ⊆ a b
-premise ⊆ b a
-prove ∀ x → ∈ x a ∈ x b
-prove ∀ x → ∈ x b ∈ x a
-prove ∀ x ↔ ∈ x a ∈ x b
-prove = a b
-qed
+# theorem Subset Deduction
+# premise proves ∈ x A ∈ x B
+# prove ∀ x → ∈ x A ∈ x B
+# prove ⊆ A B
+# qed
 
-theorem Subset Is Transitive
-premise ⊆ a b
-premise ⊆ b c
-assume ∈ x a {
-  prove ∈ x b
-  prove ∈ x c
-}
-prove ⊆ a c
-qed
+# theorem Subset Is Antisymmetric
+# premise ⊆ A B
+# premise ⊆ B A
+# prove ∀ x → ∈ x A ∈ x B
+# prove ∀ x → ∈ x B ∈ x A
+# prove ∀ x ↔ ∈ x A ∈ x B
+# prove = A B
+# qed
 
-theorem Any Set Is a Subset of Itself
-prove ∀ x → ∈ x a ∈ x a
-prove ⊆ a a
-qed
+# theorem Subset Is Transitive
+# premise ⊆ a b
+# premise ⊆ b c
+# assume ∈ x a {
+#   prove ∈ x b
+#   prove ∈ x c
+# }
+# prove ⊆ a c
+# qed
 
-theorem Element Transfers to Superset
-premise ⊆ A B
-premise ∈ x A
-prove ∀ x → ∈ x A ∈ x B
-prove ∈ x B
-qed
+# theorem Any Set Is a Subset of Itself
+# prove ∀ x → ∈ x a ∈ x a
+# prove ⊆ a a
+# qed
+
+# theorem Element Transfers to Superset
+# premise ⊆ A B
+# premise ∈ x A
+# prove ∀ x → ∈ x A ∈ x B
+# prove ∈ x B
+# qed

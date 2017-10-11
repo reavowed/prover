@@ -23,21 +23,27 @@ trait Inference {
     (premises.map(_.requiredSubstitutions) :+ conclusion.requiredSubstitutions).foldTogether
   }
 
-  def specifySubstitutions(substitutions: Substitutions): Option[Inference.Substitutions] = {
-    for {
-      statements <- requiredSubstitutions.statements.map(substitutions.statements.get).traverseOption
-      terms <- requiredSubstitutions.terms.map(substitutions.terms.get).traverseOption
-      predicates <- requiredSubstitutions.predicates.map(name => substitutions.predicates.get(name)).traverseOption
-      functions <- requiredSubstitutions.functions.map(name => substitutions.functions.get(name)).traverseOption
-    } yield Inference.Substitutions(statements, terms, predicates, functions)
+  def specifySubstitutions(substitutions: Substitutions): Inference.Substitutions = {
+    Inference.Substitutions(
+      requiredSubstitutions.statements.map(substitutions.statements.get),
+      requiredSubstitutions.terms.map(substitutions.terms.get),
+      requiredSubstitutions.predicates.map(substitutions.predicates.get),
+      requiredSubstitutions.functions.map(substitutions.functions.get))
   }
   def generalizeSubstitutions(inferenceSubstitutions: Inference.Substitutions, depth: Int): Option[Substitutions] = {
+    def zipAndMap[T](
+      f: Substitutions.Required => Seq[String],
+      g: Inference.Substitutions => Seq[Option[T]]
+    ): Option[Map[String, T]] = {
+      f(requiredSubstitutions).zipStrict(g(inferenceSubstitutions))
+        .map(_.collect { case (name, Some(t)) => (name, t) }.toMap)
+    }
     for {
-      statementsByName <- requiredSubstitutions.statements.zipStrict(inferenceSubstitutions.statements).map(_.toMap)
-      termsByName <- requiredSubstitutions.terms.zipStrict(inferenceSubstitutions.terms).map(_.toMap)
-      predicatesByName <- requiredSubstitutions.predicates.zipStrict(inferenceSubstitutions.predicates).map(_.toMap)
-      functionsByName <- requiredSubstitutions.functions.zipStrict(inferenceSubstitutions.functions).map(_.toMap)
-    } yield Substitutions(statementsByName, termsByName, predicatesByName, functionsByName, depth)
+      statements <- zipAndMap(_.statements, _.statements)
+      terms <- zipAndMap(_.terms, _.terms)
+      predicates <- zipAndMap(_.predicates, _.predicates)
+      functions <- zipAndMap(_.functions, _.functions)
+    } yield Substitutions(statements, terms, predicates, functions, depth)
   }
   def calculateHash(): String = {
     Inference.calculateHash(premises, conclusion)
@@ -97,22 +103,22 @@ object Inference {
   }
 
   case class Substitutions(
-      statements: Seq[Statement],
-      terms: Seq[Term],
-      predicates: Seq[Statement],
-      functions: Seq[Term])
+      statements: Seq[Option[Statement]],
+      terms: Seq[Option[Term]],
+      predicates: Seq[Option[Statement]],
+      functions: Seq[Option[Term]])
   {
     def serialized: String = Seq(statements, terms, predicates, functions)
-      .map(x => "(" + x.map(_.serialized).mkString(", ") + ")")
+      .map(x => "(" + x.map(_.map(_.serialized).getOrElse("%")).mkString(", ") + ")")
       .mkString(" ")
   }
   object Substitutions {
     def parser(implicit parsingContext: ParsingContext): Parser[Substitutions] = {
       for {
-        statements <- Statement.parser.listInParens(Some(","))
-        terms <- Term.parser.listInParens(Some(","))
-        predicates <- Statement.parser(parsingContext.addParameterList(Nil)).listInParens(Some(","))
-        functions <- Term.parser(parsingContext.addParameterList(Nil)).listInParens(Some(","))
+        statements <- Statement.parser.withNone("%").listInParens(Some(","))
+        terms <- Term.parser.withNone("%").listInParens(Some(","))
+        predicates <- Statement.parser(parsingContext.addParameterList(Nil)).withNone("%").listInParens(Some(","))
+        functions <- Term.parser(parsingContext.addParameterList(Nil)).withNone("%").listInParens(Some(","))
       } yield Substitutions(statements, terms, predicates, functions)
     }
   }

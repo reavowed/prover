@@ -10,15 +10,24 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   def name: String
   def substitutionsLens: Lens[Substitutions, Map[String, ExpressionType]]
   def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[String]]
-  def increaseDepth(additionalDepth: Int): ExpressionType
+  def setDepth(newDepth: Int): ExpressionType
 
+  override def increaseDepth(difference: Int): ExpressionType = {
+    setDepth(depth + difference)
+  }
+  override def reduceDepth(difference: Int): Option[ExpressionType] = {
+    if (depth >= difference)
+      Some(setDepth(depth - difference))
+    else
+      None
+  }
   override def specify(targetArguments: Seq[Term]) = {
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
-    increaseDepth(-1)
+    setDepth(depth - 1)
   }
   def specifyWithSubstitutions(targetArguments: Seq[Term], substitutions: Substitutions) = {
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
-    Some(increaseDepth(-1))
+    Some(setDepth(depth - 1))
   }
 
   override def requiredSubstitutions = requiredSubstitutionsLens.set(Seq(name))(Substitutions.Required.empty)
@@ -27,8 +36,11 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     substitutions: Substitutions
   ): Seq[Substitutions] = {
     other match {
-      case _ if other.isRuntimeInstance[ExpressionType] && other.depth == substitutions.depth =>
-        substitutions.update(name, other.asInstanceOf[ExpressionType], substitutionsLens, 0).toSeq
+      case _ if other.isRuntimeInstance[ExpressionType] && other.depth == depth + substitutions.depth =>
+        (for {
+          reducedOther <- other.reduceDepth(depth)
+          result <- substitutions.update(name, reducedOther.asInstanceOf[ExpressionType], substitutionsLens, 0)
+        } yield result).toSeq
       case _ =>
         Nil
     }

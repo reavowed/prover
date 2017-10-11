@@ -79,8 +79,8 @@ case class ParsingContext(
           val depth = level + dots.length
           for {
             index <- Try(indexString.toInt).toOption
-            name = parameterLists.lift(level).flatMap(_.lift(index)).getOrElse(dollars + index)
-          } yield FunctionParameter(index, level, depth)(None)
+            name = parameterLists.lift(level - 1).flatMap(_.lift(index))
+          } yield FunctionParameter(index, level, depth)(name)
         case _ =>
           None
       })

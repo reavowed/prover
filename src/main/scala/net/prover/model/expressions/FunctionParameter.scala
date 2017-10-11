@@ -20,6 +20,12 @@ case class FunctionParameter(index: Int, level: Int, depth: Int)(val name: Optio
   override def increaseDepth(additionalDepth: Int) = {
     FunctionParameter(index, level, depth + additionalDepth)(name)
   }
+  override def reduceDepth(difference: Int) = {
+    if (depth >= difference)
+      Some(FunctionParameter(index, level, depth - difference)(name))
+    else
+      None
+  }
 
   override def requiredSubstitutions = Substitutions.Required.empty
   override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {

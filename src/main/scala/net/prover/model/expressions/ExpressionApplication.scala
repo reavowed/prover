@@ -24,8 +24,16 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   def increaseDepth(additionalDepth: Int) = {
     update(arguments.map(_.increaseDepth(additionalDepth)), depth + additionalDepth)
   }
+  override def reduceDepth(difference: Int): Option[ExpressionType] = {
+    if (depth >= difference)
+      arguments.map(_.reduceDepth(difference)).traverseOption.map(update(_, depth - difference))
+    else
+      None
+  }
 
-  override def requiredSubstitutions = requiredSubstitutionsLens.set(Seq(variableName))(Substitutions.Required.empty)
+  override def requiredSubstitutions = {
+    (arguments.map(_.requiredSubstitutions) :+ requiredSubstitutionsLens.set(Seq(variableName))(Substitutions.Required.empty)).foldTogether
+  }
   override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {
     other match {
       case otherWithMatchingType if otherWithMatchingType.isRuntimeInstance[ExpressionType] =>

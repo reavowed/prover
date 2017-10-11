@@ -188,5 +188,15 @@ class TheoremSpec extends ProverSpec {
         Seq(generalization, specification, modusPonens),
         Seq(ForAll))
     }
+
+    "prove a partially transformed inference" in {
+      checkProof(
+        Seq(
+          ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.!(FunctionParameter("x", 0)))),
+          φ(a)),
+        Seq(ψ(a)),
+        Seq(generalization, specification, modusPonens),
+        Seq(ForAll))
+    }
   }
 }

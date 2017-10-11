@@ -28,7 +28,7 @@ object CachedProof {
   def parser(path: Path)(implicit parsingContext: ParsingContext): Parser[CachedProof] = {
     for {
       premises <- Premise.listParser
-      steps <- CachedStep.listParser(None)
+      steps <- CachedStep.listParser(None)(parsingContext.copy(termVariableNames = parsingContext.termVariableNames + "_"))
     } yield CachedProof(path, premises, steps)
   }
 }
