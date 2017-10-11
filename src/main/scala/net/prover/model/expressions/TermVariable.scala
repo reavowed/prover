@@ -1,37 +1,24 @@
 package net.prover.model.expressions
 
-import net.prover.model.{ParsingContext, Substitutions}
+import monocle.macros.GenLens
+import net.prover.model._
 
-import scala.collection.immutable.Nil
+case class TermVariable(name: String, depth: Int) extends ExpressionVariable[Term] with Term {
+  override def increaseDepth(additionalDepth: Int) = {
+    if (depth + additionalDepth < 0) throw new Exception("Invalid depth increase")
+    copy(depth = depth + additionalDepth)
+  }
+  override def substitutionsLens = GenLens[Substitutions](_.terms)
+  override def requiredSubstitutionsLens = GenLens[Substitutions.Required](_.terms)
 
-case class TermVariable(name: String) extends Term with Variable {
-  override def requiredSubstitutions = Substitutions.Required(Seq(this), Nil)
-  override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {
-    other match {
-      case otherTerm: Objectable =>
-        substitutions.addVariable(this, otherTerm).toSeq
-      case _ =>
-        Nil
-    }
+  override def calculateApplicatives(baseArguments: Seq[Term], substitutions: Substitutions) = {
+    super[Term].calculateApplicatives(baseArguments, substitutions) ++
+      super[ExpressionVariable].calculateApplicatives(baseArguments, substitutions)
   }
-  override def applySubstitutions(substitutions: Substitutions) = {
-    substitutions.expressionsByVariable.get(this).map(_.asInstanceOf[Objectable])
+  override def makeApplicative(names: Seq[String]) = {
+    Some(FunctionApplication(name, names.mapWithIndex{ (n, i) => FunctionParameter(n, i) }, depth + 1))
   }
-  override def replacePlaceholder(other: Expression) = this
-  override def calculateApplicatives(arguments: Seq[Objectable], substitutions: Substitutions) = {
-    super.calculateApplicatives(arguments, substitutions) :+ (ConstantFunction(this, 1), substitutions)
-  }
-  override def increaseDepth(additionalDepth: Int) = ConstantFunction(this, additionalDepth)
+
   override def toString: String = name
   override def serialized: String = name
-
-  override def expression = this
-  override def expressionParser(parameterList: Seq[String])(implicit context: ParsingContext) = Objectable.parser
-  override def depthDifference(expression: Expression): Option[Int] = {
-    expression match {
-      case _: Term => Some(0)
-      case function: Function => Some(function.depth)
-      case _ => None
-    }
-  }
 }

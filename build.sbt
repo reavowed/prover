@@ -4,6 +4,8 @@ version := "0.1"
 
 scalaVersion := "2.12.0"
 
+val monocleVersion = "1.4.0"
+
 libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.3.2",
   "org.springframework.boot" % "spring-boot-starter-web" % "1.4.2.RELEASE",
@@ -14,7 +16,9 @@ libraryDependencies ++= Seq(
   "org.webjars" % "angularjs" % "1.6.4",
   "org.webjars" % "lodash" % "4.15.0",
   "org.webjars.bower" % "mark.js" % "8.4.0",
-  "commons-io" % "commons-io" % "2.5")
+  "commons-io" % "commons-io" % "2.5",
+  "com.github.julien-truffaut" %% "monocle-core" % monocleVersion,
+  "com.github.julien-truffaut" %% "monocle-macro" % monocleVersion)
 
 libraryDependencies ++= Seq(
   "org.specs2" %% "specs2-core" % "3.8.6" % "test",

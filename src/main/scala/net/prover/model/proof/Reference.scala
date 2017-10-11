@@ -36,7 +36,8 @@ object Reference {
       inference: Inference,
       substitutions: Substitutions,
       inferenceReference: Reference.ToFact,
-      simplificationPath: Seq[Int])
+      simplificationPath: Seq[Int],
+      depth: Int)
     extends ToFact
   {
     override def referencedInferenceIds: Set[String] = inferenceReference.referencedInferenceIds
@@ -45,7 +46,8 @@ object Reference {
       inference.id,
       inference.specifySubstitutions(substitutions).get,
       inferenceReference.cached,
-      simplificationPath)
+      simplificationPath,
+      depth)
   }
 
   case class Elided(inferenceApplication: InferenceApplication) extends ApplyingInference {

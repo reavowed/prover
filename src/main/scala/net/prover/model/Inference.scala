@@ -15,7 +15,7 @@ trait Inference {
   def keyOption: Option[String]
   def name: String
   def premises: Seq[Premise]
-  def conclusion: Assertable
+  def conclusion: Statement
   def rearrangementType: RearrangementType
   def allowsRearrangement: Boolean
 
@@ -25,15 +25,19 @@ trait Inference {
 
   def specifySubstitutions(substitutions: Substitutions): Option[Inference.Substitutions] = {
     for {
-      expressions <- requiredSubstitutions.variables.map(substitutions.expressionsByVariable.get).traverseOption
-      predicates <- requiredSubstitutions.predicates.map(name => substitutions.predicatesByName.get(name)).traverseOption
-    } yield Inference.Substitutions(expressions, predicates)
+      statements <- requiredSubstitutions.statements.map(substitutions.statements.get).traverseOption
+      terms <- requiredSubstitutions.terms.map(substitutions.terms.get).traverseOption
+      predicates <- requiredSubstitutions.predicates.map(name => substitutions.predicates.get(name)).traverseOption
+      functions <- requiredSubstitutions.functions.map(name => substitutions.functions.get(name)).traverseOption
+    } yield Inference.Substitutions(statements, terms, predicates, functions)
   }
-  def generalizeSubstitutions(inferenceSubstitutions: Inference.Substitutions): Option[Substitutions] = {
+  def generalizeSubstitutions(inferenceSubstitutions: Inference.Substitutions, depth: Int): Option[Substitutions] = {
     for {
-      expressionsByVariable <- requiredSubstitutions.variables.zipStrict(inferenceSubstitutions.expressions).map(_.toMap)
+      statementsByName <- requiredSubstitutions.statements.zipStrict(inferenceSubstitutions.statements).map(_.toMap)
+      termsByName <- requiredSubstitutions.terms.zipStrict(inferenceSubstitutions.terms).map(_.toMap)
       predicatesByName <- requiredSubstitutions.predicates.zipStrict(inferenceSubstitutions.predicates).map(_.toMap)
-    } yield Substitutions(expressionsByVariable, predicatesByName)
+      functionsByName <- requiredSubstitutions.functions.zipStrict(inferenceSubstitutions.functions).map(_.toMap)
+    } yield Substitutions(statementsByName, termsByName, predicatesByName, functionsByName, depth)
   }
   def calculateHash(): String = {
     Inference.calculateHash(premises, conclusion)
@@ -66,7 +70,7 @@ object Inference {
   case class Transformed(
       inner: Inference,
       premises: Seq[Premise],
-      conclusion: Assertable)
+      conclusion: Statement)
     extends Inference
   {
     override def keyOption = inner.keyOption
@@ -92,27 +96,32 @@ object Inference {
     }
   }
 
-  case class Substitutions(expressions: Seq[Expression], predicates: Seq[Predicate]) {
-    def serialized: String = "(" + expressions.map(_.serialized).mkString(", ") + ")" +
-      " (" + predicates.map(p => p.depth + " " + p.serialized).mkString(", ")  + ")"
+  case class Substitutions(
+      statements: Seq[Statement],
+      terms: Seq[Term],
+      predicates: Seq[Statement],
+      functions: Seq[Term])
+  {
+    def serialized: String = Seq(statements, terms, predicates, functions)
+      .map(x => "(" + x.map(_.serialized).mkString(", ") + ")")
+      .mkString(" ")
   }
   object Substitutions {
     def parser(implicit parsingContext: ParsingContext): Parser[Substitutions] = {
       for {
-        expressions <- Expression.parser.listInParens(Some(","))
-        predicates <- (for {
-          depth <- Parser.int
-          predicate <- Predicate.parser((parsingContext.parameterDepth until depth).foldLeft(parsingContext) {case (c, _) => c.addParameterList(Nil) })
-        } yield predicate).listInParens(Some(","))
-      } yield Substitutions(expressions, predicates)
+        statements <- Statement.parser.listInParens(Some(","))
+        terms <- Term.parser.listInParens(Some(","))
+        predicates <- Statement.parser(parsingContext.addParameterList(Nil)).listInParens(Some(","))
+        functions <- Term.parser(parsingContext.addParameterList(Nil)).listInParens(Some(","))
+      } yield Substitutions(statements, terms, predicates, functions)
     }
   }
 
-  def unapply(inference: Inference): Option[(String, Seq[Premise], Assertable)] = {
+  def unapply(inference: Inference): Option[(String, Seq[Premise], Statement)] = {
     Some(inference.name, inference.premises, inference.conclusion)
   }
 
-  def calculateHash(premises: Seq[Premise], conclusion: Assertable): String = {
+  def calculateHash(premises: Seq[Premise], conclusion: Statement): String = {
     val serialized = (premises.map(_.serialized) :+ conclusion.serialized).mkString("\n")
     val sha = MessageDigest.getInstance("SHA-256")
     sha.update(serialized.getBytes("UTF-8"))

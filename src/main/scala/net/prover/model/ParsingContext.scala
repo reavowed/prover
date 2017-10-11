@@ -32,16 +32,12 @@ case class ParsingContext(
   }
 
   def addParameterList(parameterList: Seq[String]) = {
-    copy(parameterLists = parameterList +: parameterLists)
+    copy(parameterLists = parameterLists :+ parameterList)
   }
 
   object RecognisedStatementVariable {
-    def unapply(string: String): Option[StatementVariable] = {
-      if (statementVariableNames.contains(string)) {
-        Some(StatementVariable(string))
-      } else {
-        None
-      }
+    def unapply(string: String): Option[String] = {
+      Some(string).filter(statementVariableNames.contains)
     }
   }
   object RecognisedStatementDefinition {
@@ -51,7 +47,7 @@ case class ParsingContext(
   }
 
   object RecognisedTermVariable {
-    def unapply(string: String): Option[TermVariable] = {
+    def unapply(string: String): Option[String] = {
       def existsDirectly: Boolean = termVariableNames.contains(string)
       def existsWithPrime: Boolean = termVariableNames.exists(_ + "'" == string)
       def existsWithSubscript: Boolean = {
@@ -59,29 +55,15 @@ case class ParsingContext(
         (index >= 0) && termVariableNames.contains(string.substring(0, index))
       }
       if (existsDirectly || existsWithPrime || existsWithSubscript) {
-        Some(TermVariable(string))
+        Some(string)
       } else {
         None
       }
     }
   }
-
-  object RecognisedPredicateVariable {
-    def unapply(string: String): Option[PredicateVariable] = {
-      val predicatePattern = "@(.*)".r
-      string match {
-        case predicatePattern(name) if statementVariableNames.contains(name) =>
-          Some(PredicateVariable(name))
-        case _ =>
-          None
-      }
-    }
-  }
-
-  object RecognisedVariable {
-    def unapply(string: String): Option[Variable] = {
-      RecognisedStatementVariable.unapply(string) orElse
-        RecognisedTermVariable.unapply(string)
+  object RecognisedTermDefinition {
+    def unapply(s: String): Option[TermDefinition] = {
+      termDefinitions.find(_.symbol == s)
     }
   }
 
@@ -90,7 +72,7 @@ case class ParsingContext(
     def unapply(string: String): Option[FunctionParameter] = {
       parameterLists.zipWithIndex.mapFind {
         case (parameterList, depth) =>
-          parameterList.findIndex(_ == string).map(index => FunctionParameter(index, depth + 1, parameterDepth)(Some(string)))
+          parameterList.findIndexWhere(_ == string).map(index => FunctionParameter(index, depth + 1, parameterDepth)(Some(string)))
       } orElse (string match {
         case literalPattern(dollars, dots, indexString) =>
           val level = dollars.length

@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model.{FileLocation, Parser, ParsingContext}
-import net.prover.model.expressions.{Assertable, Statement, Term, TermVariable}
+import net.prover.model.expressions.{Statement, Term, TermVariable}
 
 sealed trait StepOutline
 
@@ -11,7 +11,7 @@ object StepOutline {
   }
 
   case class Assertion(
-      assertion: Assertable,
+      assertion: Statement,
       location: Option[FileLocation],
       debug: Boolean = false)
     extends StepOutline.WithAssertion
@@ -21,7 +21,7 @@ object StepOutline {
   object Assertion {
     def parser(implicit context: ParsingContext): Parser[Assertion] = Parser { tokenizer =>
       val innerParser = for {
-        assertion <- Assertable.parser
+        assertion <- Statement.parser
         debug <- Parser.optional("debug", Parser.constant(true), false)
       } yield Assertion(
         assertion,
@@ -32,7 +32,7 @@ object StepOutline {
   }
 
   case class Assumption(
-      assumption: Assertable,
+      assumption: Statement,
       steps: Seq[StepOutline])
     extends StepOutline
   object Assumption {
@@ -48,7 +48,7 @@ object StepOutline {
 
   case class Naming(
       termVariable: TermVariable,
-      definingAssumption: Assertable,
+      definingAssumption: Statement,
       steps: Seq[StepOutline])
     extends StepOutline.WithAssertion
   {
@@ -60,7 +60,7 @@ object StepOutline {
     def parser(implicit context: ParsingContext): Parser[Naming] = {
       for {
         termVariable <- Term.variableParser
-        definingAssumption <- Assertable.parser
+        definingAssumption <- Statement.parser
         steps <- listParser.inBraces
       } yield {
         Naming(termVariable, definingAssumption, steps)

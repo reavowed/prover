@@ -3,12 +3,12 @@ package net.prover.model.proof
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.entries.StatementDefinition
-import net.prover.model.expressions.{Assertable, DefinedStatement, Statement}
+import net.prover.model.expressions.{DefinedStatement, Statement}
 
 import scala.util.Try
 
 case class Prover(
-  assertionToProve: Assertable,
+  assertionToProve: Statement,
   reference: Reference.Direct,
   context: ProvingContext,
   debug: Boolean)
@@ -16,8 +16,10 @@ case class Prover(
   import context._
 
   case class Transformation(statementDefinition: StatementDefinition, variableName: String) {
-    def apply(statement: Assertable): Option[DefinedStatement] = {
-      statement.makeApplicative.map(s => DefinedStatement(Seq(s), statementDefinition)(statementDefinition.boundVariableNames))
+    def apply(statement: Statement): Option[DefinedStatement] = {
+      statement
+        .makeApplicative(statementDefinition.boundVariableNames)
+        .map(s => DefinedStatement(Seq(s), statementDefinition, s.depth - 1)(statementDefinition.boundVariableNames))
     }
   }
 
@@ -51,13 +53,13 @@ case class Prover(
   ): Option[Step.Assertion] = {
     initialSubstitutions.map(Iterator(_))
       .getOrElse {
-        inference.conclusion.calculateSubstitutions(assertionToProve, Substitutions.empty).iterator
+        inference.conclusion.calculateSubstitutions(assertionToProve, Substitutions.emptyWithDepth(depth)).iterator
       }
       .flatMap { substitutions =>
         matchPremisesToFacts(inference.premises, substitutions, inference.allowsRearrangement)
       }
       .map { case (premiseReferences, substitutions) =>
-        Step.Assertion(assertionToProve, InferenceApplication.Direct(inference, substitutions, premiseReferences), reference, isRearrangement = false)
+        Step.Assertion(assertionToProve, InferenceApplication.Direct(inference, substitutions, premiseReferences, depth), reference, isRearrangement = false)
       }
       .headOption
   }
@@ -71,7 +73,7 @@ case class Prover(
       transformedConclusion <- transformation(inference.conclusion).iterator
       transformedPremiseStatements <- premiseStatements.map(transformation.apply).traverseOption.iterator
       transformedPremises = transformedPremiseStatements.zipWithIndex.map { case (s, i) => Premise(Fact.Direct(s), i)(isElidable = false) }
-      conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(assertionToProve, Substitutions.empty)
+      conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(assertionToProve, Substitutions.emptyWithDepth(depth))
       (premiseReferences, premiseSubstitutions) <- matchPremisesToFacts(transformedPremises, conclusionSubstitutions, inference.allowsRearrangement)
       transformationProofAttempt = Try(Proof.fillInOutline(
         transformedPremises,
@@ -94,7 +96,8 @@ case class Prover(
         transformation.statementDefinition,
         transformedPremises,
         transformedConclusion,
-        transformationProof.steps),
+        transformationProof.steps,
+        depth),
       reference,
       isRearrangement = false)
     iterator.headOption
@@ -189,20 +192,20 @@ case class Prover(
           .map(_.map(_.assertion))
           .map((inference, _))
       }
-    def findAssertionByExpanding(assertion: Assertable): Option[InferenceApplication] = {
+    def findAssertionByExpanding(assertion: Statement): Option[InferenceApplication] = {
       expansions.iterator
         .findFirst { case (inference, inferencePremises) =>
           (
             for {
-              substitutions <- inference.conclusion.calculateSubstitutions(assertion, Substitutions.empty)
+              substitutions <- inference.conclusion.calculateSubstitutions(assertion, Substitutions.emptyWithDepth(depth))
               substitutedPremises <- inferencePremises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
               premiseReferences <- substitutedPremises.map(getAssertionByRearranging).traverseOption.toSeq
               if inference.conclusion.applySubstitutions(substitutions).contains(assertion)
-            } yield InferenceApplication.Direct(inference, substitutions, premiseReferences)
+            } yield InferenceApplication.Direct(inference, substitutions, premiseReferences, depth)
           ).headOption
         }
     }
-    def getAssertionByRearranging(assertion: Assertable): Option[Reference] = {
+    def getAssertionByRearranging(assertion: Statement): Option[Reference] = {
       findAssertionInFacts(assertion) orElse findAssertionByExpanding(assertion).map(Reference.Expansion)
     }
     findAssertionByExpanding(assertionToProve).map { inferenceApplication =>
@@ -210,7 +213,7 @@ case class Prover(
     }
   }
 
-  def findAssertionInFacts(assertion: Assertable): Option[Reference] = {
+  def findAssertionInFacts(assertion: Statement): Option[Reference] = {
     allSimplifiedFacts.find(_.fact == Fact.Direct(assertion)).map(_.reference)
   }
 
@@ -279,7 +282,7 @@ case class Prover(
               .map((inference, premiseStatement, _))
           }
           .flatMap { case (inference, premiseStatement, simplificationPath) =>
-            premiseStatement.calculateSubstitutions(statement, Substitutions.empty)
+            premiseStatement.calculateSubstitutions(statement, Substitutions.emptyWithDepth(depth))
               .map((inference, simplificationPath, _))
           }
           .mapCollect { case (inference, simplificationPath, substitutions) =>
@@ -289,7 +292,7 @@ case class Prover(
           .map { case (inference, simplificationPath, substitutions, conclusion) =>
             ReferencedFact(
               Fact.Direct(conclusion),
-              Reference.Simplification(inference, substitutions, factReference, simplificationPath))
+              Reference.Simplification(inference, substitutions, factReference, simplificationPath, depth))
           }
       case _ =>
         Nil

@@ -1,29 +1,29 @@
 chapter Equality
 Introduce equality and its associated rules of inference.
 
-statement = (x y)
+statement = (a b)
 
 axiom Equality Is Reflexive
-conclusion = x x
+conclusion = a a
 
 axiom Substitution of Equals
-premise = x y elidable
-premise with x φ
-conclusion with y φ
+premise = a b elidable
+premise with a φ
+conclusion with b φ
 
 comment We first have to prove that equality is symmetric before we can prove the reversed version of the second axiom.
 
 theorem Reverse Equality
-premise = x y
-prove = x x
-prove = y x
+premise = a b
+prove = a a
+prove = b a
 qed
 
 theorem Substitution of Equals
-premise = x y elidable
-premise with y φ
-prove = y x
-prove with x φ
+premise = a b elidable
+premise with b φ
+prove = b a
+prove with a φ
 qed
 
 # comment Now we can also prove that the substitution axiom works when substituting into equal terms.
@@ -43,30 +43,30 @@ qed
 comment Basic facts about equality.
 
 theorem Equality Is Symmetric
-assume = x y {
-  prove = y x
+assume = a b {
+  prove = b a
 }
-assume = y x {
-  prove = x y
+assume = b a {
+  prove = a b
 }
-prove ↔ = x y = y x
+prove ↔ = a b = b a
 qed
 
 theorem Equality Is Transitive
-premise = x y
-premise = y z
-prove = x z
+premise = a b
+premise = b c
+prove = a c
 qed
 
 theorem Equivalence of Substituted Equals
-premise = x y
-assume with x φ {
-  prove with y φ
+premise = a b
+assume with a φ {
+  prove with b φ
 }
-assume with y φ {
-  prove with x φ
+assume with b φ {
+  prove with a φ
 }
-prove ↔ with x φ with y φ
+prove ↔ with a φ with b φ
 qed
 
 # theorem Distinguishable Terms Are Not Equal

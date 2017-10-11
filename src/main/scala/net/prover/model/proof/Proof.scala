@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.expressions.{Assertable, Statement, TermVariable}
+import net.prover.model.expressions.{Statement, TermVariable}
 import net.prover.model._
 import net.prover.model.entries.StatementDefinition
 import org.slf4j.LoggerFactory
@@ -30,7 +30,8 @@ object Proof {
       Nil,
       availableInferences,
       assertionHints,
-      transformations)
+      transformations,
+      0)
   }
 
   def fillInOutline(
@@ -85,7 +86,7 @@ object Proof {
   }
 
   private def proveAssumptionStep(
-    assumption: Assertable,
+    assumption: Statement,
     substepOutlines: Seq[StepOutline],
     context: ProvingContext,
     reference: Reference.Direct
@@ -114,7 +115,7 @@ object Proof {
 
   def proveNamingStep(
     variable: TermVariable,
-    definingAssumption: Assertable,
+    definingAssumption: Statement,
     substepOutlines: Seq[StepOutline],
     context: ProvingContext,
     reference: Reference.Direct

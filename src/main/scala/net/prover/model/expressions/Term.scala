@@ -1,11 +1,23 @@
 package net.prover.model.expressions
 
-import net.prover.model.entries.TermDefinition
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
-trait Term extends Objectable {
-  def depth: Int = 0
-  def replacePlaceholder(other: Expression): Term
+trait Term extends Expression {
+  def increaseDepth(additionalDepth: Int): Term
+  def specify(arguments: Seq[Term]): Term
+  def specifyWithSubstitutions(arguments: Seq[Term], substitutions: Substitutions): Option[Term]
+  def applySubstitutions(substitutions: Substitutions): Option[Term]
+
+  def calculateApplicatives(
+    baseArguments: Seq[Term],
+    substitutions: Substitutions
+  ): Seq[(Term, Substitutions)] = {
+    baseArguments.flatMapWithIndex { case (argument, index) =>
+      argument.calculateSubstitutions(this, substitutions).map(FunctionParameter.anonymous(index, 1, substitutions.depth + 1) -> _)
+    }
+  }
+
+  def makeApplicative(names: Seq[String]): Option[Term]
 }
 
 object Term {
@@ -23,19 +35,14 @@ object Term {
   }
 
   def parser(implicit context: ParsingContext): Parser[Term] = {
-    object TermDefinitionMatcher {
-      def unapply(s: String): Option[TermDefinition] = {
-        context.termDefinitions.find(_.symbol == s)
-      }
-    }
 
     Parser.selectWordParser("term") {
-      case "_" =>
-        Parser.constant(PlaceholderTerm)
-      case TermDefinitionMatcher(termDefinition) =>
+      case context.RecognisedParameter(parameter) =>
+        Parser.constant(parameter)
+      case context.RecognisedTermDefinition(termDefinition) =>
         termDefinition.termParser
-      case context.RecognisedTermVariable(variable) =>
-        Parser.constant(variable)
+      case context.RecognisedTermVariable(name) =>
+        Parser.constant(TermVariable(name, context.parameterDepth))
     }
   }
 
@@ -48,6 +55,4 @@ object Term {
   def variableListParser(implicit context: ParsingContext): Parser[Seq[TermVariable]] = {
     variableParser.listInParens(None)
   }
-
-  def applicativeParser(implicit context: ParsingContext) = Function.parser
 }

@@ -2,11 +2,11 @@ package net.prover.model.proof
 
 import net.prover.model._
 import net.prover.model.entries.StatementDefinition
-import net.prover.model.expressions.Assertable
+import net.prover.model.expressions.Statement
 
 sealed trait CachedInferenceApplication {
   def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
-  def validate(context: ProvingContext): Option[(Assertable, InferenceApplication)]
+  def validate(context: ProvingContext): Option[(Statement, InferenceApplication)]
   def serializedLines: Seq[String]
 }
 
@@ -14,20 +14,21 @@ object CachedInferenceApplication {
   case class Direct(
       inferenceId: String,
       localSubstitutions: Inference.Substitutions,
-      cachedReferences: Seq[CachedReference])
+      cachedReferences: Seq[CachedReference],
+      depth: Int)
     extends CachedInferenceApplication
   {
     override def getAssertionHints(availableInferences: Seq[Inference]) = {
-      AssertionHint.attempt(inferenceId, availableInferences, localSubstitutions).toSeq ++
+      AssertionHint.attempt(inferenceId, availableInferences, localSubstitutions, depth).toSeq ++
         cachedReferences.flatMap(_.getAssertionHints(availableInferences))
     }
 
-    override def validate(context: ProvingContext): Option[(Assertable, InferenceApplication.Direct)] = {
+    override def validate(context: ProvingContext): Option[(Statement, InferenceApplication.Direct)] = {
       for {
         inference <- context.availableInferences.find(_.id == inferenceId).ifEmpty {
           CachedProof.logger.info(s"Could not find inference $inferenceId")
         }
-        substitutions <- inference.generalizeSubstitutions(localSubstitutions)
+        substitutions <- inference.generalizeSubstitutions(localSubstitutions, depth)
         substitutedPremiseFacts <- inference.premises.map(_.fact.applySubstitutions(substitutions)).traverseOption.ifEmpty {
           CachedProof.logger.info(
             (Seq(s"Could not substitute into premises of inference '${inference.name}'") ++
@@ -43,7 +44,7 @@ object CachedInferenceApplication {
           ).mkString("\n"))
         }
         validatedReferences <- cachedReferences.validate(substitutedPremiseFacts, context)
-      } yield (substitutedConclusion, InferenceApplication.Direct(inference, substitutions, validatedReferences))
+      } yield (substitutedConclusion, InferenceApplication.Direct(inference, substitutions, validatedReferences, depth))
     }
 
     override def serializedLines = Seq(s"direct $inferenceId ${localSubstitutions.serialized} {") ++
@@ -56,7 +57,7 @@ object CachedInferenceApplication {
         inferenceId <- Parser.singleWord
         substitutions <- Inference.Substitutions.parser
         references <- CachedReference.parser.listInBraces(None)
-      } yield Direct(inferenceId, substitutions, references)
+      } yield Direct(inferenceId, substitutions, references, parsingContext.parameterDepth)
     }
   }
 
@@ -66,15 +67,16 @@ object CachedInferenceApplication {
       cachedReferences: Seq[CachedReference],
       transformation: StatementDefinition,
       transformedPremises: Seq[Premise],
-      transformationProof: Seq[CachedStep])
+      transformationProof: Seq[CachedStep],
+      depth: Int)
     extends CachedInferenceApplication
   {
     override def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      AssertionHint.attempt(inferenceId, availableInferences, localSubstitutions).toSeq ++
+      AssertionHint.attempt(inferenceId, availableInferences, localSubstitutions, depth).toSeq ++
         cachedReferences.flatMap(_.getAssertionHints(availableInferences)) ++
         transformationProof.flatMap(_.getAssertionHints(availableInferences))
     }
-    override def validate(context: ProvingContext): Option[(Assertable, InferenceApplication.Transformed)] = {
+    override def validate(context: ProvingContext): Option[(Statement, InferenceApplication.Transformed)] = {
       for {
         inference <- context.availableInferences.find(_.id == inferenceId).ifEmpty {
           CachedProof.logger.info(s"Could not find inference $inferenceId")
@@ -86,7 +88,7 @@ object CachedInferenceApplication {
           Nil))
         transformedConclusion <- validatedTransformationProof.ofType[Step.WithAssertion].lastOption.map(_.assertion)
         transformedInference = Inference.Transformed(inference, transformedPremises, transformedConclusion)
-        substitutions <- transformedInference.generalizeSubstitutions(localSubstitutions)
+        substitutions <- transformedInference.generalizeSubstitutions(localSubstitutions, depth)
         substitutedPremiseFacts <- transformedPremises.map(_.fact.applySubstitutions(substitutions)).traverseOption.ifEmpty {
           CachedProof.logger.info(
             (Seq(s"Could not substitute into premises of transformed inference '${inference.name}'") ++
@@ -109,7 +111,8 @@ object CachedInferenceApplication {
         transformation,
         transformedPremises,
         transformedConclusion,
-        validatedTransformationProof))
+        validatedTransformationProof,
+        depth))
     }
     override def serializedLines = Seq(s"transformed ${transformation.symbol} $inferenceId ${localSubstitutions.serialized} {") ++
       cachedReferences.flatMap(_.serializedLines).indent ++
@@ -130,7 +133,14 @@ object CachedInferenceApplication {
         references <- CachedReference.parser.listInBraces(None)
         transformedPremises <- Premise.listParser
         transformationProof <- CachedStep.listParser(None).inBraces
-      } yield Transformed(inferenceId, substitutions, references, transformation, transformedPremises, transformationProof)
+      } yield Transformed(
+        inferenceId,
+        substitutions,
+        references,
+        transformation,
+        transformedPremises,
+        transformationProof,
+        parsingContext.parameterDepth)
     }
   }
 

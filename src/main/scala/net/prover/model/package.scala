@@ -16,11 +16,14 @@ package object model {
       t
     }
     def asOptionalInstanceOf[S : ClassTag]: Option[S] = {
-      if (implicitly[ClassTag[S]].runtimeClass.isInstance(t)) {
+      if (isRuntimeInstance[S]) {
         Some(t.asInstanceOf[S])
       } else {
         None
       }
+    }
+    def isRuntimeInstance[S : ClassTag]: Boolean = {
+      implicitly[ClassTag[S]].runtimeClass.isInstance(t)
     }
   }
 
@@ -139,8 +142,19 @@ package object model {
     def mapFind[S](f: T => Option[S]): Option[S] = {
       seq.find { t => f(t).isDefined }.flatMap(f)
     }
-    def findIndex(f: T => Boolean): Option[Int] = {
-      seq.zipWithIndex.find(x => f(x._1)).map(_._2)
+    def findIndex(obj: T): Option[Int] = {
+      val index = seq.indexOf(obj)
+      if (index == -1)
+        None
+      else
+        Some(index)
+    }
+    def findIndexWhere(f: T => Boolean): Option[Int] = {
+      val index = seq.indexWhere(f)
+      if (index == -1)
+        None
+      else
+        Some(index)
     }
   }
 

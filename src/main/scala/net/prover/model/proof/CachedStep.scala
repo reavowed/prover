@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
-import net.prover.model.expressions.{Assertable, Statement, Term, TermVariable}
 import net.prover.model._
+import net.prover.model.expressions.{Statement, Term, TermVariable}
 
 sealed trait CachedStep {
   def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
@@ -13,7 +13,7 @@ sealed trait CachedStep {
 
 object CachedStep {
   case class Assertion(
-      assertion: Assertable,
+      assertion: Statement,
       cachedInferenceApplication: CachedInferenceApplication,
       reference: Reference.Direct,
       isRearrangement: Boolean)
@@ -45,7 +45,7 @@ object CachedStep {
     def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Assertion] = {
       for {
         isRearrangement <- Parser.optionalWord("rearranging").isDefined
-        assertion <- Assertable.parser
+        assertion <- Statement.parser
         cachedInferenceApplication <- CachedInferenceApplication.parser
       } yield {
         Assertion(assertion, cachedInferenceApplication, reference, isRearrangement)
@@ -54,7 +54,7 @@ object CachedStep {
   }
 
   case class Assumption(
-      assumption: Assertable,
+      assumption: Statement,
       steps: Seq[CachedStep],
       reference: Reference.Direct)
     extends CachedStep
@@ -138,7 +138,7 @@ object CachedStep {
     }
     override def validate(context: ProvingContext): Option[Step] = {
       for {
-        validatedSubsteps <- substeps.validate(context)
+        validatedSubsteps <- substeps.validate(context.increaseDepth(1))
       } yield Step.ScopedVariable(variableName, validatedSubsteps, reference)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {

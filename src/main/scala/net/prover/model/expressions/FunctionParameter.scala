@@ -2,30 +2,47 @@ package net.prover.model.expressions
 
 import net.prover.model.Substitutions
 
-case class FunctionParameter(index: Int, level: Int, depth: Int)(val name: Option[String]) extends Function {
-  override def apply(arguments: Seq[Objectable]): Objectable = {
+case class FunctionParameter(index: Int, level: Int, depth: Int)(val name: Option[String]) extends Term {
+  override def specify(targetArguments: Seq[Term]): Term = {
     if (level == 1) {
-      arguments(index)
+      targetArguments(index)
     } else {
       FunctionParameter(index, level - 1, depth - 1)(name)
     }
   }
+  def specifyWithSubstitutions(targetArguments: Seq[Term], substitutions: Substitutions) = {
+    if (level == 1) {
+      targetArguments(index).applySubstitutions(substitutions)
+    } else {
+      Some(FunctionParameter(index, level - 1, depth - 1)(name))
+    }
+  }
   override def increaseDepth(additionalDepth: Int) = {
-    FunctionParameter(index, level + additionalDepth, depth + additionalDepth)(name)
+    FunctionParameter(index, level, depth + additionalDepth)(name)
   }
 
   override def requiredSubstitutions = Substitutions.Required.empty
   override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {
-    if (other == this)
-      Seq(substitutions)
-    else
-      Nil
+    other match {
+      case FunctionParameter(`index`, otherLevel, otherDepth)
+        if otherLevel == level + substitutions.depth && otherDepth == depth + substitutions.depth
+      =>
+        Seq(substitutions)
+      case _ =>
+        Nil
+    }
   }
-  override def applySubstitutions(substitutions: Substitutions) = Some(this)
-  override def calculateApplicatives(arguments: Seq[Objectable], substitutions: Substitutions): Seq[(Function, Substitutions)] = {
-    super.calculateApplicatives(arguments, substitutions) ++ Seq(FunctionParameter(index, level + 1, depth + 1)(name) -> substitutions)
+  override def applySubstitutions(substitutions: Substitutions) = {
+    Some(FunctionParameter(index, level + substitutions.depth, depth + substitutions.depth)(name))
   }
-  override def replacePlaceholder(other: Expression) = this
+  override def calculateApplicatives(baseArguments: Seq[Term], substitutions: Substitutions): Seq[(Term, Substitutions)] = {
+    super.calculateApplicatives(baseArguments, substitutions) ++
+      (if (level <= substitutions.depth)
+        Seq(FunctionParameter(index, level + 1, substitutions.depth + 1)(name) -> substitutions)
+      else
+        Nil)
+  }
+  override def makeApplicative(names: Seq[String]) = None
 
   override def serialized: String = ((1 to level).map(_ => "$") ++ (0 until (depth - level)).map(_ => ".")).mkString("") + index
   override def toString = name.getOrElse(serialized)

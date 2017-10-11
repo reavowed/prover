@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.expressions.{Assertable, Predicate, TermVariable}
+import net.prover.model.expressions.{Statement, TermVariable}
 
 sealed trait Step {
   def reference: Reference.Direct
@@ -15,12 +15,12 @@ sealed trait Step {
 object Step {
 
   sealed trait WithAssertion extends Step {
-    def assertion: Assertable
+    def assertion: Statement
     override def fact = Some(Fact.Direct(assertion))
   }
 
   case class Assertion(
-    assertion: Assertable,
+    assertion: Statement,
     inferenceApplication: InferenceApplication,
     reference: Reference.Direct,
     isRearrangement: Boolean)
@@ -32,7 +32,7 @@ object Step {
   }
 
   case class Assumption(
-      assumption: Assertable,
+      assumption: Statement,
       steps: Seq[Step],
       reference: Reference.Direct)
     extends Step

@@ -64,10 +64,11 @@ object CachedReference {
       inferenceId: String,
       inferenceSubstitutions: Inference.Substitutions,
       inferenceReference: CachedReference.ToFact,
-      simplificationPath: Seq[Int])
+      simplificationPath: Seq[Int],
+      depth: Int)
     extends ToFact
   {
-    private def cachedInferenceApplication = CachedInferenceApplication.Direct(inferenceId, inferenceSubstitutions, Seq(inferenceReference))
+    private def cachedInferenceApplication = CachedInferenceApplication.Direct(inferenceId, inferenceSubstitutions, Seq(inferenceReference), depth)
     override def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
       cachedInferenceApplication.getAssertionHints(availableInferences)
     }
@@ -84,7 +85,8 @@ object CachedReference {
           inferenceApplication.inference,
           inferenceApplication.substitutions,
           reference,
-          validatedSimplificationPath),
+          validatedSimplificationPath,
+          context.depth),
         Fact.Direct(conclusion))
     }
     override def serializedLines = {
@@ -100,7 +102,7 @@ object CachedReference {
         substitutions <- Inference.Substitutions.parser
         reference <- CachedReference.parser.map(_.asInstanceOf[CachedReference.ToFact])
         simplificationPath <- Parser.int.listInParens(None)
-      } yield Simplification(inferenceId, substitutions, reference, simplificationPath)
+      } yield Simplification(inferenceId, substitutions, reference, simplificationPath, parsingContext.parameterDepth)
     }
   }
   case class Elided(cachedInferenceApplication: CachedInferenceApplication) extends CachedReference {

@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.expressions.{Assertable, Statement}
+import net.prover.model.expressions.Statement
 import net.prover.model.entries.StatementDefinition
 
 sealed trait InferenceApplication {
@@ -15,12 +15,17 @@ object InferenceApplication {
   case class Direct(
       inference: Inference,
       substitutions: Substitutions,
-      references: Seq[Reference])
+      references: Seq[Reference],
+      depth: Int)
     extends InferenceApplication
   {
     def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet + inference.id
     def directReferences = references.flatMap(_.factReferences).toSet
-    def cached = CachedInferenceApplication.Direct(inference.id, inference.specifySubstitutions(substitutions).get, references.map(_.cached))
+    def cached = CachedInferenceApplication.Direct(
+      inference.id,
+      inference.specifySubstitutions(substitutions).get,
+      references.map(_.cached),
+      depth)
   }
 
   case class Transformed(
@@ -29,8 +34,9 @@ object InferenceApplication {
       references: Seq[Reference],
       transformation: StatementDefinition,
       transformedPremises: Seq[Premise],
-      transformedConclusion: Assertable,
-      transformationProof: Seq[Step])
+      transformedConclusion: Statement,
+      transformationProof: Seq[Step],
+      depth: Int)
     extends InferenceApplication
   {
     def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet ++
@@ -43,6 +49,7 @@ object InferenceApplication {
       references.map(_.cached),
       transformation,
       transformedPremises,
-      transformationProof.map(_.cached))
+      transformationProof.map(_.cached),
+      depth)
   }
 }

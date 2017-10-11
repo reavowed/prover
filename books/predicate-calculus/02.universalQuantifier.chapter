@@ -1,7 +1,7 @@
 chapter Universal Quantifier
 Introduce the universal quantifier, ∀.
 
-statement ∀ ($x φ)
+statement ∀ ($x with x φ)
   format ((∀x)φ)
   transformation
 
@@ -11,7 +11,7 @@ conclusion ∀ x with x φ
 
 axiom Specification
 premise ∀ x with x φ
-conclusion with y φ
+conclusion with a φ
 
 # comment Some inferences to simplify deductions.
 

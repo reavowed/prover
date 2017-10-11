@@ -4,15 +4,17 @@ import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Expression {
   def depth: Int
+  def increaseDepth(additionalDepth: Int): Expression
+  def specify(targetArguments: Seq[Term]): Expression
+  def specifyWithSubstitutions(targetArguments: Seq[Term], substitutions: Substitutions): Option[Expression]
+
   def requiredSubstitutions: Substitutions.Required
   def calculateSubstitutions(other: Expression, substitutions: Substitutions): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Expression]
 
-  def calculateApplicatives(arguments: Seq[Objectable], substitutions: Substitutions): Seq[(ExpressionFunction[Expression], Substitutions)]
-  def makeApplicative: Option[ExpressionFunction[Expression]]
-  def increaseDepth(additionalDepth: Int): ExpressionFunction[Expression]
+  def calculateApplicatives(targetArguments: Seq[Term], substitutions: Substitutions): Seq[(Expression, Substitutions)]
+  def makeApplicative(names: Seq[String]): Option[Expression]
 
-  def replacePlaceholder(other: Expression): Expression
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
     if (this == other) {
       Some(Nil)
@@ -26,7 +28,7 @@ trait Expression {
 
 object Expression {
   def parser(implicit parsingContext: ParsingContext): Parser[Expression] = {
-    Assertable.parser.tryOrElse(Objectable.parser)
+    Statement.parser.tryOrElse(Term.parser)
   }
 
   implicit class ExpressionSeqOps(expressions: Seq[Expression]) {
@@ -37,8 +39,8 @@ object Expression {
           substitutionsSoFar.flatMap(expression.calculateSubstitutions(otherExpression, _))
         }
     }
-    def calculateApplicatives(arguments: Seq[Objectable], substitutions: Substitutions): Seq[(Seq[ExpressionFunction[Expression]], Substitutions)] = {
-      expressions.foldLeft(Seq((Seq.empty[ExpressionFunction[Expression]], substitutions))) { case (predicatesAndSubstitutionsSoFar, expression) =>
+    def calculateApplicatives(arguments: Seq[Term], substitutions: Substitutions): Seq[(Seq[Expression], Substitutions)] = {
+      expressions.foldLeft(Seq((Seq.empty[Expression], substitutions))) { case (predicatesAndSubstitutionsSoFar, expression) =>
         for {
           (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar
           (predicate, newSubstitutions) <- expression.calculateApplicatives(

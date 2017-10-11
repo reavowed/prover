@@ -1,7 +1,7 @@
 package net.prover.model
 
 import net.prover.model.entries.TermDefinition
-import net.prover.model.expressions.{ConstantFunction, FunctionParameter, PlaceholderTerm}
+import net.prover.model.expressions.FunctionParameter
 
 class TermDefinitionSpec extends ProverSpec {
   "term definition parser" should {
@@ -10,29 +10,30 @@ class TermDefinitionSpec extends ProverSpec {
         TermDefinition(
           "∅",
           Nil,
+          Nil,
           "∅",
           Format.default("∅", Nil),
           Nil,
-          ForAll("x")(Negation.!(ElementOf.!(FunctionParameter("x", 0), ConstantFunction(PlaceholderTerm, 1)))),
+          ForAll.!("x")(Negation.!!(ElementOf.!!(FunctionParameter("x", 0, 2), FunctionParameter("_", 0, 1, 2)))),
           "",
           "")
     }
 
     "parse a term with premises" in {
-      val res = TermDefinition.parser("", "").parseAndDiscard(
-        "intersection (x) format (⋂x) premises (¬ = x ∅) (∀ y ↔ ∈ y _ ∀ z → ∈ z x ∈ z y)"
-      )
-      res mustEqual TermDefinition(
+      TermDefinition.parser("", "").parseAndDiscard(
+        "intersection (a) format (⋂a) premises (¬ = a ∅) (∀ x ↔ ∈ x _ ∀ y → ∈ y a ∈ x y)"
+      ) mustEqual TermDefinition(
         "intersection",
-        Seq(x),
+        Nil,
+        Seq(a),
         "intersection",
         Format("⋂%0", requiresBrackets = false),
-        Seq(Negation(Equals(x, EmptySet))),
-        ForAll("y")(Equivalence.!(
-          ElementOf.!(FunctionParameter("y", 0), ConstantFunction(PlaceholderTerm, 1)),
-          ForAll.!("z")(Implication.!!(
-            ElementOf.!!(FunctionParameter("z", 0, 1, 2), ConstantFunction(x, 2)),
-            ElementOf.!!(FunctionParameter("z", 0, 1, 2), FunctionParameter("y", 0, 2)))))),
+        Seq(Negation(Equals(a, EmptySet))),
+        ForAll.!("x")(Equivalence.!!(
+          ElementOf.!!(FunctionParameter("x", 0, 2), FunctionParameter.anonymous(0, 1, 2)),
+          ForAll.!!("y")(Implication.!!!(
+            ElementOf.!!!(FunctionParameter("y", 0, 3), a.^^^),
+            ElementOf.!!!(FunctionParameter("x", 0, 2, 3), FunctionParameter("y", 0, 3)))))),
         "",
         "")
     }

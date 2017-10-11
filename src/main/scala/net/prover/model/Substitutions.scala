@@ -1,64 +1,53 @@
 package net.prover.model
 
+import monocle.Lens
 import net.prover.model.expressions._
 
 case class Substitutions(
-  expressionsByVariable: Map[Variable, Expression],
-  predicatesByName: Map[PredicateVariable, Predicate])
+    statements: Map[String, Statement] = Map.empty,
+    terms: Map[String, Term] = Map.empty,
+    predicates: Map[String, Statement] = Map.empty,
+    functions: Map[String, Term] = Map.empty,
+    depth: Int = 0)
 {
-  def addVariable(variable: Variable, expression: Expression): Option[Substitutions] = {
-    expressionsByVariable.get(variable) match {
+  def update[T <: Expression](
+    name: String,
+    expression: T,
+    lens: Lens[Substitutions, Map[String, T]],
+    additionalDepth: Int
+  ): Option[Substitutions] = {
+    if (expression.depth != depth + additionalDepth) throw new Exception("Depth mismatch")
+    val map = lens.get(this)
+    map.get(name) match {
       case Some(`expression`) =>
         Some(this)
       case Some(_) =>
         None
       case None =>
-        Some(copy(expressionsByVariable = expressionsByVariable.updated(variable, expression)))
-    }
-  }
-
-  def addPredicate(name: PredicateVariable, predicate: Predicate): Option[Substitutions] = {
-    predicatesByName.get(name) match {
-      case Some(`predicate`) =>
-        Some(this)
-      case Some(_) =>
-        None
-      case None =>
-        Some(copy(predicatesByName = predicatesByName.updated(name, predicate)))
+        Some(lens.set(map.updated(name, expression))(this))
     }
   }
 }
 
 object Substitutions {
-  val empty = Substitutions(Map.empty, Map.empty)
+  val empty = Substitutions(Map.empty, Map.empty, Map.empty, Map.empty)
+  def emptyWithDepth(depth: Int) = empty.copy(depth = depth)
 
-//  case class PredicateDetails(predicate: Predicate, arity: Int) {
-//    def serialized: String = s"$arity ${predicate.serialized}"
-//  }
-//  object PredicateDetails {
-//    def parser(implicit parsingContext: ParsingContext): Parser[PredicateDetails] = {
-//      for {
-//        arity <- Parser.int
-//        predicate <- Predicate.parser(parsingContext.addParameterList((0 until arity).map(i => s"$$$i")))
-//      } yield PredicateDetails(predicate, arity)
-//    }
-//  }
-
-  case class Required(variables: Seq[Variable], predicates: Seq[PredicateVariable]) {
+  case class Required(statements: Seq[String], terms: Seq[String], predicates: Seq[String], functions: Seq[String]) {
     def ++(other: Required): Required = {
       Required(
-        (variables ++ other.variables).distinct,
-        (predicates ++ other.predicates).distinct)
+        (statements ++ other.statements).distinct,
+        (terms ++ other.terms).distinct,
+        (predicates ++ other.predicates).distinct,
+        (functions ++ other.functions).distinct)
     }
   }
 
   object Required {
-    val empty = Required(Seq.empty, Seq.empty)
+    val empty = Required(Seq.empty, Seq.empty, Seq.empty, Seq.empty)
     implicit class RequiredSeqOps(seq: Seq[Required]) {
       def foldTogether: Required = {
-        Required(
-          seq.flatMap(_.variables).distinct,
-          seq.flatMap(_.predicates).distinct)
+        seq.fold(empty)(_ ++ _)
       }
     }
   }

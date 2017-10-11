@@ -1,16 +1,17 @@
 package net.prover.model.proof
 
-import net.prover.model.{Inference, Premise}
-import net.prover.model.expressions.{Assertable, Statement}
 import net.prover.model.entries.StatementDefinition
+import net.prover.model.expressions.Statement
+import net.prover.model.{Inference, Premise}
 
 case class ProvingContext(
   referencedFacts: Seq[ReferencedFact],
   premises: Seq[Premise],
-  assumptions: Seq[Assertable],
+  assumptions: Seq[Statement],
   availableInferences: Seq[Inference],
   assertionHints: Seq[AssertionHint],
-  transformationStatementDefinitions: Seq[StatementDefinition])
+  transformationStatementDefinitions: Seq[StatementDefinition],
+  depth: Int)
 {
   def addFact(fact: Fact, reference: Reference.Direct) = {
     copy(referencedFacts = referencedFacts :+ ReferencedFact(fact, reference))
@@ -28,6 +29,7 @@ case class ProvingContext(
       assumptions.map(_.increaseDepth(additionalDepth)),
       availableInferences,
       assertionHints,
-      transformationStatementDefinitions)
+      transformationStatementDefinitions,
+      depth + additionalDepth)
   }
 }

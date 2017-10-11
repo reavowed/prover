@@ -1,26 +1,29 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Parser, ParsingContext}
+import net.prover.model.{Parser, ParsingContext, Substitutions}
 
-trait Statement extends Assertable {
-  def depth: Int = 0
-  def replacePlaceholder(other: Expression): Statement
+trait Statement extends Expression {
+  def increaseDepth(additionalDepth: Int): Statement
+  def specify(arguments: Seq[Term]): Statement
+  def specifyWithSubstitutions(arguments: Seq[Term], substitutions: Substitutions): Option[Statement]
+  def applySubstitutions(substitutions: Substitutions): Option[Statement]
+
+  def calculateApplicatives(baseArguments: Seq[Term], substitutions: Substitutions): Seq[(Statement, Substitutions)]
+  def makeApplicative(names: Seq[String]): Option[Statement]
 }
 
 object Statement {
   def parser(implicit context: ParsingContext): Parser[Statement] = {
     Parser.selectWordParser("statement") {
-      case "_" =>
-        Parser.constant(PlaceholderStatement)
       case "with" =>
         for {
           arguments <- Term.parser.listOrSingle(None)
-          text <- Parser.singleWord
-        } yield PredicateApplication(PredicateVariable(text), arguments)
+          name <- Parser.singleWord
+        } yield PredicateApplication(name, arguments, context.parameterDepth)
       case context.RecognisedStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
-      case context.RecognisedStatementVariable(statementVariable) =>
-        Parser.constant(statementVariable)
+      case context.RecognisedStatementVariable(name) =>
+        Parser.constant(StatementVariable(name, context.parameterDepth))
     }
   }
 

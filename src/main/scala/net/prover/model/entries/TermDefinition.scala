@@ -1,29 +1,40 @@
 package net.prover.model.entries
 
+import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 import net.prover.model.{Format, Inference, Parser, ParsingContext}
 
 case class TermDefinition(
     symbol: String,
-    defaultVariables: Seq[Variable],
+    boundVariableNames: Seq[String],
+    componentTypes: Seq[ComponentType],
     name: String,
     format: Format,
     premises: Seq[Statement],
-    placeholderDefinition: Statement,
+    definitionPredicate: Statement,
     chapterKey: String,
     bookKey: String)
   extends ChapterEntry(TermDefinition)
+    with ExpressionDefinition
 {
   val id: String = s"definition-$symbol"
-  val defaultValue = DefinedTerm(defaultVariables.map(_.expression), this)
-  val definingStatement = placeholderDefinition.replacePlaceholder(defaultValue)
-  override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
-
-  def apply(components: Expression*): DefinedTerm = DefinedTerm(components, this)
+  val defaultValue = {
+    DefinedTerm(
+      componentTypes.map(_.expression),
+      this,
+      0)(
+      boundVariableNames)
+  }
+  val definingStatement = definitionPredicate.specify(Seq(defaultValue))
 
   def termParser(implicit context: ParsingContext): Parser[Term] = {
-    defaultVariables.expressionsParser(Nil).map(apply)
+    for {
+      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
+      components <- componentTypes.map(_.expressionParser(newBoundVariableNames)).traverseParser
+    } yield DefinedTerm(components, this, context.parameterDepth)(newBoundVariableNames)
   }
+
+  override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
 }
 
 object TermDefinition extends ChapterEntryParser[TermDefinition] {
@@ -41,19 +52,22 @@ object TermDefinition extends ChapterEntryParser[TermDefinition] {
   def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[TermDefinition] = {
     for {
       symbol <- Parser.singleWord
-      defaultVariables <- Variable.parser.listInParens(None)
+      boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
+      boundVariables = boundVariablesAndComponentTypes._1
+      componentTypes = boundVariablesAndComponentTypes._2
       name <- nameParser.getOrElse(symbol)
-      format <- Format.optionalParser(symbol, defaultVariables.map(_.name))
+      format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
       premises <- premisesParser
-      definitionTemplate <- Statement.parser.inParens
+      definitionPredicate <- Statement.parser(context.addParameterList(Seq("_"))).inParens
     } yield {
       TermDefinition(
         symbol,
-        defaultVariables,
+        boundVariables,
+        componentTypes,
         name,
         format,
         premises,
-        definitionTemplate,
+        definitionPredicate,
         chapterKey,
         bookKey)
     }

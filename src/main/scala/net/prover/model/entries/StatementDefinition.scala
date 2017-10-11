@@ -1,6 +1,7 @@
 package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 import net.prover.model.{Format, Inference, Parser, ParsingContext}
 
@@ -8,7 +9,7 @@ import net.prover.model.{Format, Inference, Parser, ParsingContext}
 case class StatementDefinition(
     symbol: String,
     boundVariableNames: Seq[String],
-    defaultVariables: Seq[Variable],
+    componentTypes: Seq[ComponentType],
     name: String,
     format: Format,
     definingStatement: Option[Statement],
@@ -16,19 +17,21 @@ case class StatementDefinition(
     bookKey: String,
     isTransformation: Boolean = false)
   extends ChapterEntry(StatementDefinition)
+    with ExpressionDefinition
 {
   val defaultValue = {
     DefinedStatement(
-      defaultVariables.map(_.expression),
-      this)(
+      componentTypes.map(_.expression),
+      this,
+      0)(
       boundVariableNames)
   }
 
   def statementParser(implicit context: ParsingContext): Parser[Statement] = {
     for {
       newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
-      components <- defaultVariables.expressionsParser(newBoundVariableNames)
-    } yield DefinedStatement(components, this)(newBoundVariableNames)
+      components <- componentTypes.map(_.expressionParser(newBoundVariableNames)).traverseParser
+    } yield DefinedStatement(components, this, context.parameterDepth)(newBoundVariableNames)
   }
 
   override def inferences: Seq[Inference] = {
@@ -43,6 +46,7 @@ case class StatementDefinition(
 object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
   override val name: String = "statement"
 
+
   def nameParser(implicit context: ParsingContext): Parser[Option[String]] = Parser.optional(
     "name",
     Parser.allInParens)
@@ -51,47 +55,21 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
     "definition",
     Statement.parser.inParens)
 
-  private def boundVariablesParser(implicit context: ParsingContext): Parser[Seq[String]] = {
-    val boundVariablePattern = "\\$(.*)".r
-    Parser.selectOptionalWord {
-      case boundVariablePattern(variableName) => variableName
-    }.collectWhileDefined
-  }
-
-  private def variablesParser(implicit context: ParsingContext): Parser[Seq[Variable]] = {
-    Parser.selectOptionalWordParser {
-      case context.RecognisedVariable(variable) =>
-        Parser.constant(variable)
-      case "with" =>
-        for {
-          parameters <- Parser.selectWord("parameter") { case context.RecognisedParameter(p) => p }.listOrSingle(Some(", "))
-          variable <- PredicateVariable.parser
-        } yield PredicateApplicationVariable(variable, parameters, context.parameterDepth)
-    }.collectWhileDefined
-  }
-
-  private def boundAndDefaultVariablesParser(implicit context: ParsingContext): Parser[(Seq[String], Seq[Variable])] = {
-    (for {
-      boundVariables <- boundVariablesParser
-      variables <- variablesParser
-    } yield (boundVariables, variables)).inParens
-  }
-
   def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
-      boundAndDefaultVariables <- boundAndDefaultVariablesParser
-      boundVariables = boundAndDefaultVariables._1
-      defaultVariables = boundAndDefaultVariables._2
+      boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
+      boundVariables = boundVariablesAndComponentTypes._1
+      componentTypes = boundVariablesAndComponentTypes._2
       name <- nameParser.getOrElse(symbol)
-      format <- Format.optionalParser(symbol, boundVariables ++ defaultVariables.map(_.name))
+      format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
       optionalDefiningStatement <- definingStatementParser
       isTransformation <- Parser.optionalWord("transformation").isDefined
     } yield {
       StatementDefinition(
         symbol,
         boundVariables,
-        defaultVariables,
+        componentTypes,
         name,
         format,
         optionalDefiningStatement,

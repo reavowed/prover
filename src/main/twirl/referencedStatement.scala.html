@@ -4,24 +4,14 @@
 @* This file is incredibly whitespace sensitive! *@
 @defining(referrers.filter(_._2.isEmpty).map(_._1)) { topLevelReferrers =>
   <span class="@topLevelReferrers.map("highlight-" + _).mkString(" ") @reference.map("conclusion-" + _)">@expression match {
-    case StatementVariable(text) => {@text}
-    case TermVariable(text) => {@text}
-    case PredicateApplication(text, arguments) => {@defining(
+    case ExpressionVariable(text) => {@text}
+    case parameter: FunctionParameter => {@parameter.name}
+    case ExpressionApplication(text, arguments) => {@defining(
       arguments.map(argument => html.referencedStatement(argument).body.trim).mkString(", ")
     ){ argumentsHtml=>@{text}(@Html(argumentsHtml))
     }}
-    case definedStatement @ DefinedStatement(components, definition) => {@defining(
-      definedStatement.scopedBoundVariableNames ++
-      components.zipWithIndex.map { case (component, index) =>
-        html.referencedStatement(
-          component,
-          None,
-          referrers.filter(_._2.headOption.contains(index)).map(_.mapRight(_.tail)),
-          true
-        ).body.trim()
-      }
-    ){ componentsHtml =>@Html(definition.format.apply(componentsHtml, safe))}}
-    case DefinedTerm(components, definition) => {@defining(
+    case definedExpression @ DefinedExpression(definition, components) => {@defining(
+      definedExpression.scopedBoundVariableNames ++
       components.zipWithIndex.map { case (component, index) =>
         html.referencedStatement(
           component,

@@ -19,15 +19,15 @@ class TheoremSpec extends ProverSpec {
   }
 
   "theorem parser" should {
-    implicit def assertionStepFromStatement(assertion: Assertable): StepOutline = {
+    implicit def assertionStepFromStatement(assertion: Statement): StepOutline = {
       StepOutline.Assertion(assertion, Some(FileLocation("test.book", 1)))
     }
 
-    implicit def assumptionStepFromStatementPair(tuple: (Assertable, Assertable)): StepOutline = {
+    implicit def assumptionStepFromStatementPair(tuple: (Statement, Statement)): StepOutline = {
       StepOutline.Assumption(tuple._1, Seq(assertionStepFromStatement(tuple._2)))
     }
 
-    implicit def assumptionStepFromStatementAndStatements(tuple: (Assertable, Seq[Assertable])): StepOutline = {
+    implicit def assumptionStepFromStatementAndStatements(tuple: (Statement, Seq[Statement])): StepOutline = {
       StepOutline.Assumption(tuple._1, tuple._2.map(assertionStepFromStatement))
     }
 
@@ -80,7 +80,11 @@ class TheoremSpec extends ProverSpec {
     val specification = axiom(
       "Specification",
       Seq(ForAll("x")(φ.!(FunctionParameter("x", 0)))),
-      φ(x))
+      φ(a))
+    val substitutionOfEquals = axiom(
+      "Substitution of Equals",
+      Seq(Equals(a, b), φ(a)),
+      φ(b))
 
     "prove the conclusion of a premiseless inference" in {
       checkProof(
@@ -131,24 +135,16 @@ class TheoremSpec extends ProverSpec {
     }
 
     "prove an inference conclusion with a predicate" in {
-      val substitutionOfEquals = axiom(
-        "Substitution of Equals",
-        Seq(Equals(x, y), φ(x)),
-        φ(y))
       checkProof(
-        Seq(Equals(x, y), Equals(x, x)),
-        Seq(Equals(y, x)),
+        Seq(Equals(a, b), Equals(a, a)),
+        Seq(Equals(b, a)),
         Seq(substitutionOfEquals))
     }
 
     "prove an inference substituting a named predicate for another named predicate" in {
-      val substitutionOfEquals = axiom(
-        "Substitution of Equals",
-        Seq(Equals(x, y), φ(x)),
-        φ(y))
       checkProof(
-        Seq(Equals(y, x), φ(y)),
-        Seq(φ(x)),
+        Seq(Equals(b, a), φ(b)),
+        Seq(φ(a)),
         Seq(substitutionOfEquals))
     }
 
@@ -156,7 +152,7 @@ class TheoremSpec extends ProverSpec {
       val equalityIsReflexive = axiom(
         "Equality Is Reflexive",
         Nil,
-        Equals(x, x))
+        Equals(a, a))
       checkProof(
         Nil,
         Seq(
@@ -171,14 +167,14 @@ class TheoremSpec extends ProverSpec {
         Seq(Equals(a, b)),
         Equivalence(φ(a), φ(b)))
       checkProof(
-        Seq(Equals(x, y)),
+        Seq(Equals(b, c)),
         Seq(
-          StepOutline.ScopedVariable("z", Seq(Equivalence.!(
-            ElementOf.!(FunctionParameter("z", 0), ConstantFunction(x, 1)),
-            ElementOf.!(FunctionParameter("z", 0), ConstantFunction(y, 1))))),
-          ForAll("z")(Equivalence.!(
-            ElementOf.!(FunctionParameter("z", 0), ConstantFunction(x, 1)),
-            ElementOf.!(FunctionParameter("z", 0), ConstantFunction(y, 1))))),
+          StepOutline.ScopedVariable("x", Seq(Equivalence.!(
+            ElementOf.!(FunctionParameter("x", 0), b.^),
+            ElementOf.!(FunctionParameter("x", 0), c.^)))),
+          ForAll("x")(Equivalence.!(
+            ElementOf.!(FunctionParameter("x", 0), b.^),
+            ElementOf.!(FunctionParameter("x", 0), c.^)))),
         Seq(equivalenceOfSubstitutedEquals, generalization))
     }
 

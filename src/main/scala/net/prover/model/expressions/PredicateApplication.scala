@@ -1,37 +1,17 @@
 package net.prover.model.expressions
+
+import monocle.macros.GenLens
 import net.prover.model.Substitutions
 
-case class PredicateApplication(variable: PredicateVariable, arguments: Seq[Term]) extends Statement {
-  override def requiredSubstitutions = arguments.requiredSubstitutions ++ Substitutions.Required(Nil, Seq(variable))
-  override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {
-    other match {
-      case assertable: Assertable =>
-        assertable
-          .calculateApplicatives(arguments, substitutions)
-          .flatMap { case (predicate, newSubstitutions) =>
-            newSubstitutions.addPredicate(variable, predicate)
-          }
-      case _ =>
-        Nil
-    }
-  }
-  override def applySubstitutions(substitutions: Substitutions) = {
-    for {
-      predicate <- substitutions.predicatesByName.get(variable)
-      updatedArguments <- arguments.applySubstitutions(substitutions).map(_.map(_.asInstanceOf[Objectable]))
-    } yield predicate(updatedArguments)
-  }
-  override def replacePlaceholder(other: Expression) = copy(arguments = arguments.map(_.replacePlaceholder(other)))
-  override def calculateApplicatives(targetArguments: Seq[Objectable], substitutions: Substitutions) = {
-    arguments.calculateApplicatives(targetArguments, substitutions).map(_.mapLeft { functions =>
-      MetaPredicateApplication(variable, functions.map(_.asInstanceOf[Function]), 1)
-    })
-  }
-  override def makeApplicative = None
-  override def increaseDepth(additionalDepth: Int) = {
-    MetaPredicateApplication(variable, arguments.map(_.increaseDepth(additionalDepth)), additionalDepth)
-  }
+case class PredicateApplication(
+    variableName: String,
+    arguments: Seq[Term],
+    depth: Int)
+  extends ExpressionApplication[Statement]
+    with Statement
+{
+  override def substitutionsLens = GenLens[Substitutions](_.predicates)
+  override def requiredSubstitutionsLens = GenLens[Substitutions.Required](_.predicates)
 
-  override def toString: String = s"${variable.name}(${arguments.map(_.toString).mkString(", ")})"
-  override def serialized: String = s"with (${arguments.map(_.serialized).mkString(", ")}) ${variable.name}"
+  def update(newArguments: Seq[Term], newDepth: Int) = PredicateApplication(variableName, newArguments, newDepth)
 }

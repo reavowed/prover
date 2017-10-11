@@ -27,12 +27,12 @@ class AxiomSpec extends ProverSpec {
     "parse an axiom with no premises" in {
       parseAxiom(
         "Equality Is Reflexive",
-        "conclusion = x x"
+        "conclusion = a a"
       ) mustEqual axiom(
         "Equality Is Reflexive",
         "equality-is-reflexive",
         Nil,
-        Equals(x, x))
+        Equals(a, a))
     }
 
     "parse an axiom with a single premise" in {

@@ -12,7 +12,7 @@ sealed trait Fact {
 }
 
 object Fact {
-  case class Direct(assertion: Assertable) extends Fact {
+  case class Direct(assertion: Statement) extends Fact {
     override def requiredSubstitutions = assertion.requiredSubstitutions
     def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions] = otherFact match {
       case Direct(otherAssertion) =>
@@ -33,11 +33,11 @@ object Fact {
   object Direct {
     def parser(implicit parsingContext: ParsingContext): Parser[Direct] = {
       for {
-        assertion <- Assertable.parser
+        assertion <- Statement.parser
       } yield Direct(assertion)
     }
   }
-  case class Deduced(antecedent: Assertable, consequent: Assertable) extends Fact {
+  case class Deduced(antecedent: Statement, consequent: Statement) extends Fact {
     override def requiredSubstitutions = antecedent.requiredSubstitutions ++ consequent.requiredSubstitutions
     def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions] = otherFact match {
       case Deduced(otherAntecedent, otherConsequent) =>
@@ -62,13 +62,13 @@ object Fact {
   object Deduced {
     def parser(implicit parsingContext: ParsingContext): Parser[Deduced] = {
       for {
-        antecedent <- Assertable.parser
-        consequent <- Assertable.parser
+        antecedent <- Statement.parser
+        consequent <- Statement.parser
       } yield Deduced(antecedent, consequent)
     }
   }
 
-  case class ScopedVariable(assertion: Assertable)(val variableName: String) extends Fact {
+  case class ScopedVariable(assertion: Statement)(val variableName: String) extends Fact {
     override def requiredSubstitutions = assertion.requiredSubstitutions
     def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions] = otherFact match {
       case ScopedVariable(otherPredicate) =>
@@ -91,7 +91,7 @@ object Fact {
       for {
         variableName <- Parser.singleWord
         updatedContext = parsingContext.addParameterList(Seq(variableName))
-        predicate <- Assertable.parser(updatedContext)
+        predicate <- Statement.parser(updatedContext)
       } yield {
         ScopedVariable(predicate)(variableName)
       }
