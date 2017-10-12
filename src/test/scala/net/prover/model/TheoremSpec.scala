@@ -224,5 +224,18 @@ class TheoremSpec extends ProverSpec {
         Seq(deduction, generalization, Subset.inferences.head),
         Seq(ForAll))
     }
+
+    "apply a transformation with applied and unapplied statements" in {
+      val modusTollens = axiom("Modus Tollens", Seq(Implication(φ, ψ), Negation(ψ)), Negation(φ))
+      checkProof(
+        Seq(
+          ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.^)),
+          Negation(ψ)),
+        Seq(
+          StepOutline.ScopedVariable("x", Seq(Negation.!(φ.!(FunctionParameter("x", 0))))),
+          ForAll("x")(Negation.!(φ.!(FunctionParameter("x", 0))))),
+        Seq(specification, generalization, modusTollens),
+        Seq(ForAll))
+    }
   }
 }

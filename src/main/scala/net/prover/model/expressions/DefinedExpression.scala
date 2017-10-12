@@ -23,9 +23,15 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
     update(components.map(_.specify(targetArguments)), depth - 1)
   }
-  def specifyWithSubstitutions(targetArguments: Seq[Term], substitutions: Substitutions) = {
+  def specifyWithSubstitutions(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions,
+    outerDepth: Int
+  ) = {
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
-    components.map(_.specifyWithSubstitutions(targetArguments, substitutions)).traverseOption.map(update(_, depth - 1))
+    components
+      .map(_.specifyWithSubstitutions(targetArguments, substitutions, outerDepth)).traverseOption
+      .map(update(_, depth + outerDepth - 1))
   }
   override def increaseDepth(additionalDepth: Int): ExpressionType = {
     update(components.map(_.increaseDepth(additionalDepth)), depth + additionalDepth)
@@ -40,16 +46,9 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
   override def applySubstitutions(substitutions: Substitutions): Option[ExpressionType] = {
     components.applySubstitutions(substitutions).map(update(_, depth + substitutions.depth))
   }
-
   override def calculateApplicatives(baseArguments: Seq[Term], substitutions: Substitutions): Seq[(ExpressionType, Substitutions)] = {
     components.calculateApplicatives(baseArguments, substitutions)
       .map(_.mapLeft(update(_, substitutions.depth + 1)))
-  }
-  override def makeApplicative(names: Seq[String]): Option[ExpressionType] = {
-    if (scopedBoundVariableNames.isEmpty)
-      components.map(_.makeApplicative(names)).traverseOption.map(update(_, depth + 1))
-    else
-      None
   }
 
   override def findComponentPath(other: Expression): Option[Seq[Int]] = {

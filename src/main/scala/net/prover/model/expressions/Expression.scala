@@ -7,14 +7,16 @@ trait Expression {
   def increaseDepth(additionalDepth: Int): Expression
   def reduceDepth(difference: Int): Option[Expression]
   def specify(targetArguments: Seq[Term]): Expression
-  def specifyWithSubstitutions(targetArguments: Seq[Term], substitutions: Substitutions): Option[Expression]
+  def specifyWithSubstitutions(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions,
+    outerDepth: Int
+  ): Option[Expression]
 
   def requiredSubstitutions: Substitutions.Required
   def calculateSubstitutions(other: Expression, substitutions: Substitutions): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Expression]
-
   def calculateApplicatives(targetArguments: Seq[Term], substitutions: Substitutions): Seq[(Expression, Substitutions)]
-  def makeApplicative(names: Seq[String]): Option[Expression]
 
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
     if (this == other) {

@@ -10,19 +10,23 @@ case class FunctionParameter(index: Int, level: Int, depth: Int)(val name: Optio
       FunctionParameter(index, level - 1, depth - 1)(name)
     }
   }
-  def specifyWithSubstitutions(targetArguments: Seq[Term], substitutions: Substitutions) = {
+  def specifyWithSubstitutions(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions,
+    outerDepth: Int
+  ) = {
     if (level == 1) {
       targetArguments(index).applySubstitutions(substitutions)
     } else {
-      Some(FunctionParameter(index, level - 1, depth - 1)(name))
+      Some(FunctionParameter(index, level - 1, depth + outerDepth - 1)(name))
     }
   }
   override def increaseDepth(additionalDepth: Int) = {
-    FunctionParameter(index, level, depth + additionalDepth)(name)
+    FunctionParameter(index, level + additionalDepth, depth + additionalDepth)(name)
   }
   override def reduceDepth(difference: Int) = {
-    if (depth >= difference)
-      Some(FunctionParameter(index, level, depth - difference)(name))
+    if (level > difference)
+      Some(FunctionParameter(index, level - difference, depth - difference)(name))
     else
       None
   }
@@ -48,7 +52,6 @@ case class FunctionParameter(index: Int, level: Int, depth: Int)(val name: Optio
       else
         Nil)
   }
-  override def makeApplicative(names: Seq[String]) = None
 
   override def serialized: String = ((1 to level).map(_ => "$") ++ (0 until (depth - level)).map(_ => ".")).mkString("") + index
   override def toString = name.getOrElse(serialized)

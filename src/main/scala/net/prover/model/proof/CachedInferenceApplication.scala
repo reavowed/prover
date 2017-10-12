@@ -131,8 +131,9 @@ object CachedInferenceApplication {
         inferenceId <- Parser.singleWord
         substitutions <- Inference.Substitutions.parser
         references <- CachedReference.parser.listInBraces(None)
-        transformedPremises <- Premise.listParser
-        transformationProof <- CachedStep.listParser(None).inBraces
+        resetCcntext = parsingContext.copy(parameterLists = Nil)
+        transformedPremises <- Premise.listParser(resetCcntext)
+        transformationProof <- CachedStep.listParser(None)(resetCcntext).inBraces
       } yield Transformed(
         inferenceId,
         substitutions,

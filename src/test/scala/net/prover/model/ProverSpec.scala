@@ -128,9 +128,8 @@ trait ProverSpec extends Specification {
     }
   }
   implicit class StatementOps(statement: Statement) {
-    def ^ : Statement = {
-      statement.increaseDepth(1)
-    }
+    def ^ : Statement = statement.increaseDepth(1)
+    def ^^ : Statement = statement.increaseDepth(2)
   }
   implicit class StatementVariableOps(statementVariable: StatementVariable) {
     def apply(terms: Term*) = PredicateApplication(statementVariable.name, terms, 0)

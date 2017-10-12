@@ -14,7 +14,6 @@ case class TermVariable(name: String, depth: Int) extends ExpressionVariable[Ter
     super[Term].calculateApplicatives(baseArguments, substitutions) ++
       super[ExpressionVariable].calculateApplicatives(baseArguments, substitutions)
   }
-  override def makeApplicative(names: Seq[String]) = None
   override def toString: String = name
   override def serialized: String = name
 }

@@ -155,5 +155,13 @@ class SubstitutionsSpec extends ProverSpec {
         1,
         Substitutions(depth = 1))
     }
+
+    "match a first-order predicate application to a second-order predicate application" in {
+      testSubstitutions(
+        φ.!(FunctionParameter("x", 0)),
+        φ.!!(FunctionParameter("x", 0, 2, 2)),
+        1,
+        Substitutions(predicates = Map(φ -> φ.!!(FunctionParameter.anonymous(0, 1, 2))), depth = 1))
+    }
   }
 }

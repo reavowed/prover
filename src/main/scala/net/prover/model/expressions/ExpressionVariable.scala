@@ -25,9 +25,13 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
     setDepth(depth - 1)
   }
-  def specifyWithSubstitutions(targetArguments: Seq[Term], substitutions: Substitutions) = {
+  def specifyWithSubstitutions(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions,
+    outerDepth: Int
+  ) = {
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
-    Some(setDepth(depth - 1))
+    Some(setDepth(depth + outerDepth - 1))
   }
 
   override def requiredSubstitutions = requiredSubstitutionsLens.set(Seq(name))(Substitutions.Required.empty)

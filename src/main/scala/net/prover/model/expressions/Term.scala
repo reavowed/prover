@@ -6,9 +6,12 @@ trait Term extends Expression {
   def increaseDepth(additionalDepth: Int): Term
   def reduceDepth(difference: Int): Option[Term]
   def specify(arguments: Seq[Term]): Term
-  def specifyWithSubstitutions(arguments: Seq[Term], substitutions: Substitutions): Option[Term]
+  def specifyWithSubstitutions(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions,
+    outerDepth: Int
+  ): Option[Term]
   def applySubstitutions(substitutions: Substitutions): Option[Term]
-
   def calculateApplicatives(
     baseArguments: Seq[Term],
     substitutions: Substitutions
@@ -17,8 +20,6 @@ trait Term extends Expression {
       argument.calculateSubstitutions(this, substitutions).map(FunctionParameter.anonymous(index, 1, substitutions.depth + 1) -> _)
     }
   }
-
-  def makeApplicative(names: Seq[String]): Option[Term]
 }
 
 object Term {

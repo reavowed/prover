@@ -17,9 +17,15 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
     update(arguments.map(_.specify(targetArguments)), depth - 1)
   }
-  def specifyWithSubstitutions(targetArguments: Seq[Term], substitutions: Substitutions) = {
+  def specifyWithSubstitutions(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions,
+    outerDepth: Int
+  ) = {
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
-    arguments.map(_.specifyWithSubstitutions(targetArguments, substitutions)).traverseOption.map(update(_, depth - 1))
+    arguments
+      .map(_.specifyWithSubstitutions(targetArguments, substitutions, outerDepth)).traverseOption
+      .map(update(_, depth + outerDepth - 1))
   }
   def increaseDepth(additionalDepth: Int) = {
     update(arguments.map(_.increaseDepth(additionalDepth)), depth + additionalDepth)
@@ -49,10 +55,9 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   override def applySubstitutions(substitutions: Substitutions): Option[ExpressionType] = {
     for {
       predicate <- substitutionsLens.get(substitutions).get(variableName)
-      result <- predicate.increaseDepth(depth).specifyWithSubstitutions(arguments, substitutions)
+      result <- predicate.specifyWithSubstitutions(arguments, substitutions, depth)
     } yield result.asInstanceOf[ExpressionType]
   }
-
   override def calculateApplicatives(
     baseArguments: Seq[Term],
     substitutions: Substitutions
@@ -61,7 +66,6 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
       update(newArguments.map(_.asInstanceOf[Term]), substitutions.depth + 1)
     })
   }
-  override def makeApplicative(names: Seq[String]): Option[ExpressionType] = None
 
   override def toString = s"$variableName(${arguments.map(_.toString).mkString(", ")})"
   override def safeToString = toString

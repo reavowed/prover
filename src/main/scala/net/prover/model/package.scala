@@ -156,6 +156,14 @@ package object model {
       else
         Some(index)
     }
+    def foldProduct[S](f: T => Seq[S]): Seq[Seq[S]] = {
+      seq.foldLeft(Seq(Seq.empty[S])) { case (acc, t) =>
+        for {
+          ss <- acc
+          s <- f(t)
+        } yield ss :+ s
+      }
+    }
   }
 
   implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {
