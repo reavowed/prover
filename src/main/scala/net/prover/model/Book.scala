@@ -115,7 +115,7 @@ object Book {
           Try {
             CachedProof.parser(path)(context).parseAndDiscard(serializedProof, path)
           }.ifFailed { e =>
-            logger.info(s"Error parsing cached proof $path", e)
+            logger.info(s"Error parsing cached proof $path\n${e.getMessage}")
           }.toOption
         }
         val book = bookOutline.expandOutlines(cachedProofs)
