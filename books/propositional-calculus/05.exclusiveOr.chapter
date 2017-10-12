@@ -78,8 +78,8 @@ qed
 
 theorem Proof by Cases
 premise ⊕ φ ψ
-premise proves φ χ
-premise proves ψ χ
+premise → φ χ
+premise → ψ χ
 prove ∨ φ ψ
 prove χ
 qed

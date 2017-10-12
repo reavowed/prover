@@ -31,19 +31,10 @@ prove → ¬ φ χ
 prove χ
 qed
 
-theorem Proof by Cases
-premise ∨ φ ψ
-premise proves φ χ
-premise proves ψ χ
-prove → φ χ
-prove → ψ χ
-prove χ
-qed
-
 theorem Proof by Separate Cases
 premise ∨ φ ψ
-premise proves φ χ
-premise proves ψ ω
+premise → φ χ
+premise → ψ ω
 assume φ {
   prove χ
   prove ∨ χ ω
@@ -56,8 +47,8 @@ prove ∨ χ ω
 qed
 
 theorem Proof by Separate Cases
-premise proves φ ψ
-premise proves ¬ φ χ
+premise → φ ψ
+premise → ¬ φ χ
 prove ∨ φ ¬ φ
 prove ∨ ψ χ
 qed
@@ -65,15 +56,6 @@ qed
 theorem Combine Cases
 premise → φ χ
 premise → ψ χ
-assume ∨ φ ψ {
-  prove χ
-}
-prove → ∨ φ ψ χ
-qed
-
-theorem Combine Cases
-premise proves φ χ
-premise proves ψ χ
 assume ∨ φ ψ {
   prove χ
 }
@@ -130,36 +112,28 @@ qed
 
 theorem Deduction in Left Disjunct
 premise ∨ φ ψ
-premise proves φ χ
-assume ψ {
-  prove ψ
-}
+premise → φ χ
+prove → ψ ψ
 prove ∨ χ ψ
 qed
 
 theorem Deduction in Right Disjunct
 premise ∨ φ ψ
-premise proves ψ χ
-assume φ {
-  prove φ
-}
+premise → ψ χ
+prove → φ φ
 prove ∨ φ χ
 qed
 
 theorem Eliminate Redundant Or
 premise ∨ φ ψ
-premise proves φ ψ
-assume ψ {
-  prove ψ
-}
+premise → φ ψ
+prove → ψ ψ
 prove ψ
 qed
 
 theorem Eliminate Redundant Or
 premise ∨ φ ψ
-premise proves ψ φ
-assume φ {
-  prove φ
-}
+premise → ψ φ
+prove → φ φ
 prove φ
 qed

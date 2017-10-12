@@ -15,6 +15,7 @@ conclusion ψ
 statement → (φ ψ)
 
 axiom Deduction
+contraction
 premise proves φ ψ
 conclusion → φ ψ
 
@@ -48,14 +49,8 @@ axiom Remove Double Negative
 premise ¬ ¬ φ
 conclusion φ
 
-theorem Contradiction Deduction
-premise proves φ ⊥
-prove → φ ⊥
-prove ¬ φ
-qed
-
-theorem Contradiction Deduction
-premise proves ¬ φ ⊥
+theorem Self-Contradiction
+premise → ¬ φ ⊥
 prove ¬ ¬ φ
 prove φ
 qed
@@ -91,7 +86,7 @@ prove ¬ ¬ φ
 qed
 
 theorem Proof by Self-Contradiction
-premise proves φ ¬ φ
+premise → φ ¬ φ
 assume φ {
   prove ¬ φ
   prove ⊥
@@ -100,49 +95,9 @@ prove ¬ φ
 qed
 
 theorem Proof by Self-Contradiction
-premise proves ¬ φ φ
+premise → ¬ φ φ
 assume ¬ φ {
   prove φ
-  prove ⊥
-}
-prove φ
-qed
-
-theorem Proof by Contradiction
-premise proves φ ψ
-premise ¬ ψ
-assume φ {
-  prove ψ
-  prove ⊥
-}
-prove ¬ φ
-qed
-
-theorem Proof by Contradiction
-premise proves φ ¬ ψ
-premise ψ
-assume φ {
-  prove ¬ ψ
-  prove ⊥
-}
-prove ¬ φ
-qed
-
-theorem Proof by Contradiction
-premise proves ¬ φ ψ
-premise ¬ ψ
-assume ¬ φ {
-  prove ψ
-  prove ⊥
-}
-prove φ
-qed
-
-theorem Proof by Contradiction
-premise proves ¬ φ ¬ ψ
-premise ψ
-assume ¬ φ {
-  prove ¬ ψ
   prove ⊥
 }
 prove φ
@@ -153,6 +108,7 @@ premise → φ ψ
 premise ¬ ψ
 assume φ {
   prove ψ
+  prove ⊥
 }
 prove ¬ φ
 qed
@@ -162,6 +118,7 @@ premise → φ ¬ ψ
 premise ψ
 assume φ {
   prove ¬ ψ
+  prove ⊥
 }
 prove ¬ φ
 qed
@@ -169,14 +126,20 @@ qed
 theorem Modus Tollens
 premise → ¬ φ ψ
 premise ¬ ψ
-prove ¬ ¬ φ
+assume ¬ φ {
+  prove ψ
+  prove ⊥
+}
 prove φ
 qed
 
 theorem Modus Tollens
 premise → ¬ φ ¬ ψ
 premise ψ
-prove ¬ ¬ φ
+assume ¬ φ {
+  prove ¬ ψ
+  prove ⊥
+}
 prove φ
 qed
 
@@ -220,14 +183,6 @@ assume ¬ ψ {
   prove ¬ ¬ φ
   prove ⊥
 }
-prove ψ
-qed
-
-theorem Proof by Cases
-premise proves φ ψ
-premise proves ¬ φ ψ
-prove → φ ψ
-prove → ¬ φ ψ
 prove ψ
 qed
 

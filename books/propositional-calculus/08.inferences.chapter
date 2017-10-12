@@ -38,7 +38,7 @@ qed
 comment Some tricks to simplify redundant statements.
 
 theorem Redundant And
-premise proves φ ψ
+premise → φ ψ
 assume ∧ φ ψ {
   prove φ
 }
@@ -50,14 +50,14 @@ prove ↔ ∧ φ ψ φ
 qed
 
 theorem Redundant And
-premise proves φ ψ
+premise → φ ψ
 prove ↔ ∧ φ ψ φ
 prove ↔ ∧ φ ψ ∧ ψ φ
 prove ↔ ∧ ψ φ φ
 qed
 
 theorem Redundant Or
-premise proves φ ψ
+premise → φ ψ
 assume ∨ φ ψ {
   prove ψ
 }
@@ -68,7 +68,7 @@ prove ↔ ∨ φ ψ ψ
 qed
 
 theorem Redundant Or
-premise proves φ ψ
+premise → φ ψ
 assume ∨ ψ φ {
   prove ψ
 }
