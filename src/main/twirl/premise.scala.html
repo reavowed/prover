@@ -11,5 +11,5 @@
   >@html.referencedStatement(antecedent) ⊢ @html.referencedStatement(consequent)</span>}
   case boundFact@Fact.ScopedVariable(statement) => {<span
   class="@referenceMap.getReferrers(premise.reference.value).map("highlight-" + _._1).mkString(" ")"
-  >@boundFact.variableName ⊢ @html.referencedStatement(statement)</span>}
+  >@boundFact.variableName : @html.referencedStatement(statement)</span>}
 }</span>

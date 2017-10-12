@@ -8,8 +8,7 @@
     case parameter: FunctionParameter => {@parameter.name}
     case ExpressionApplication(text, arguments) => {@defining(
       arguments.map(argument => html.referencedStatement(argument).body.trim).mkString(", ")
-    ){ argumentsHtml=>@{text}(@Html(argumentsHtml))
-    }}
+    ){argumentsHtml=>@{text}(@Html(argumentsHtml))}}
     case definedExpression @ DefinedExpression(definition, components) => {@defining(
       definedExpression.scopedBoundVariableNames ++
       components.zipWithIndex.map { case (component, index) =>
