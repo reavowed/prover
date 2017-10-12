@@ -90,7 +90,8 @@ case class Prover(
   }
 
   def proveAssertionDirectlyFromInferences(): Option[Step.Assertion] = {
-    availableInferences.iterator.findFirst(i => proveUsingInference(i) orElse proveUsingTransformedInference(i))
+    availableInferences.iterator.findFirst(proveUsingInference(_)) orElse
+      availableInferences.iterator.findFirst(proveUsingTransformedInference)
   }
 
   private def proveUsingInference(
