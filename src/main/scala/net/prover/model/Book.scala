@@ -122,7 +122,7 @@ object Book {
         book.cacheTheorems(cacheDirectoryPath)
         book
       }.ifFailed { e =>
-        logger.warn(s"Error expanding book '${bookOutline.title}", e)
+        logger.warn(s"Error expanding book '${bookOutline.title}'\n${e.getMessage}")
       }.toOption
     }
     (bookOption, modificationTimes)

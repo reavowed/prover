@@ -75,7 +75,7 @@ case class TheoremOutline(
       Proof.fillInOutline(premises, proofOutline, availableInferences, assertionHints, transformations)
     } catch {
       case NonFatal(e) =>
-        throw new Exception(s"Error proving theorem $name in book $bookName", e)
+        throw new Exception(s"Error proving theorem $name in book $bookName\n${e.getMessage}", e)
     }
   }
 }

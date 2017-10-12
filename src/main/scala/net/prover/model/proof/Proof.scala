@@ -74,9 +74,6 @@ object Proof {
         proveNamingStep(variable, namingStatement, substepOutlines, context, reference)
       case assertionStep: StepOutline.Assertion =>
         proveAssertionStep(assertionStep, context, reference)
-          .ifDefined {
-            logger.info(s"Proved assertion ${assertionStep.assertion}")
-          }
           .getOrElse(throw ProvingException(
             s"Could not prove assertion ${assertionStep.assertion}",
             assertionStep.location))
