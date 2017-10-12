@@ -92,11 +92,13 @@ object Inference {
     object NotRearrangement extends RearrangementType
     object Simplification extends RearrangementType
     object Expansion extends RearrangementType
+    object Contraction extends RearrangementType
 
     def parser: Parser[RearrangementType] = {
       Parser.singleWord.map {
         case "simplification" => Some(Simplification)
         case "expansion" => Some(Expansion)
+        case "contraction" => Some(Contraction)
         case _ => None
       }.getOrElse(NotRearrangement)
     }

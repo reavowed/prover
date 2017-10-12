@@ -305,7 +305,29 @@ case class Prover(
         helper(newSimplifications, next ++ acc)
       }
     }
-    helper(getNextLevelSimplifications(referencedFact), Nil)
+    helper(referencedFact +: getContractions(referencedFact), Nil)
+  }
+
+  private def getContractions(referencedFact: ReferencedFact): Seq[ReferencedFact] = {
+    availableInferences
+      .filter(_.rearrangementType == RearrangementType.Contraction)
+      .collect {
+        case inference @ Inference(_, Seq(Premise(premiseFact, _)), _) =>
+          (inference, premiseFact)
+      }
+      .flatMap { case (inference, premiseFact) =>
+        premiseFact.calculateSubstitutions(referencedFact.fact, Substitutions.emptyWithDepth(depth))
+          .map((inference, _))
+      }
+      .mapCollect { case (inference, substitutions) =>
+        inference.conclusion.applySubstitutions(substitutions)
+          .map((inference, substitutions, _))
+      }
+      .map { case (inference, substitutions, conclusion) =>
+        ReferencedFact(
+          Fact.Direct(conclusion),
+          Reference.Contraction(inference, substitutions, referencedFact.reference, depth))
+      }
   }
 
   private def getNextLevelSimplifications(referencedFact: ReferencedFact): Seq[ReferencedFact] = {

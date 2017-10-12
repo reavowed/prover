@@ -9,13 +9,13 @@ import net.prover.model.proof._
 
 class TheoremSpec extends ProverSpec {
 
-  def axiom[T : PremiseConverter](
+  def axiom(
     name: String,
-    premiseSources: Seq[T],
+    premises: Seq[PremiseMagnet],
     conclusion: Statement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement
   ): Axiom = {
-    Axiom(name, name.formatAsKey, "test-chapter", "Test Chapter", "test-book", "Test Book", premiseSources, conclusion, rearrangementType)
+    Axiom(name, name.formatAsKey, "test-chapter", "Test Chapter", "test-book", "Test Book", premises, conclusion, rearrangementType)
   }
 
   "theorem parser" should {
@@ -31,29 +31,29 @@ class TheoremSpec extends ProverSpec {
       StepOutline.Assumption(tuple._1, tuple._2.map(assertionStepFromStatement))
     }
 
-    def prove[T : PremiseConverter](
-      premiseSources: Seq[T],
+    def prove(
+      premises: Seq[PremiseMagnet],
       proofSteps: Seq[StepOutline],
       inferences: Seq[Inference],
       transformations: Seq[StatementDefinition] = Nil
     ): Proof = {
       Proof.fillInOutline(
-        premiseSources,
+        premises,
         ProofOutline(proofSteps),
         inferences,
         Nil,
         transformations)
     }
 
-    def checkProof[T : PremiseConverter](
-      premiseSources: Seq[T],
+    def checkProof(
+      premises: Seq[PremiseMagnet],
       proofSteps: Seq[StepOutline],
       inferences: Seq[Inference],
       transformations: Seq[StatementDefinition] = Nil
     ) = {
-      val proof = prove(premiseSources, proofSteps, inferences, transformations)
+      val proof = prove(premises, proofSteps, inferences, transformations)
       proof.conclusion mustEqual proofSteps.ofType[StepOutline.WithAssertion].last.innermostAssertionStep.assertion
-      val cachedProof = CachedProof(Paths.get(""), premiseSources, proof.steps.map(_.cached))
+      val cachedProof = CachedProof(Paths.get(""), premises, proof.steps.map(_.cached))
       cachedProof.steps.matchOutlines(proofSteps) must beTrue
       val serializedProof = cachedProof.serialized
       val deserializedProof = CachedProof.parser(Paths.get("")).parse(Tokenizer.fromString(serializedProof, Paths.get("")))._1
@@ -75,8 +75,9 @@ class TheoremSpec extends ProverSpec {
 
     val generalization = axiom(
       "Generalization",
-      Seq(Fact.ScopedVariable(φ.!(FunctionParameter("x", 0)))("x")),
-      ForAll("x")(φ.!(FunctionParameter("x", 0))))
+      Seq(Fact.ScopedVariable(φ.!(FunctionParameter("x", 0)))("x").elidable),
+      ForAll("x")(φ.!(FunctionParameter("x", 0))),
+      RearrangementType.Contraction)
     val specification = axiom(
       "Specification",
       Seq(ForAll("x")(φ.!(FunctionParameter("x", 0)))),
@@ -196,6 +197,18 @@ class TheoremSpec extends ProverSpec {
           φ(a)),
         Seq(ψ(a)),
         Seq(generalization, specification, modusPonens),
+        Seq(ForAll))
+    }
+
+    "prove a conclusion using a contracted premise" in {
+      checkProof(
+        Seq(
+          Fact.ScopedVariable(Implication.!(
+            ElementOf.!(FunctionParameter("x", 0), a.^),
+            ElementOf.!(FunctionParameter("x", 0), a.^)))(
+            "x")),
+        Seq(Subset(a, a)),
+        Seq(generalization, Subset.inferences.head),
         Seq(ForAll))
     }
   }

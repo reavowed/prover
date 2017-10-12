@@ -80,6 +80,9 @@ trait ProverSpec extends Specification {
     φ.!(FunctionParameter("x", 0, 1, 2)),
     Equals(FunctionParameter("x", 0, 2, 2), FunctionParameter("y", 0, 1, 2)))))))
   val ElementOf = predicate("∈", 2, None)
+  val Subset = predicate("⊆", 2, Some(ForAll("x")(Implication.!(
+      ElementOf.!(FunctionParameter("x", 0), a.^),
+      ElementOf.!(FunctionParameter("x", 0), b.^)))))
 
   val EmptySetDefinition = TermDefinition(
     "∅",
@@ -96,13 +99,13 @@ trait ProverSpec extends Specification {
   val PowerSet = TermDefinition(
     "powerSet",
     Nil,
-    Seq(ExpressionDefinition.TermComponent("a")),
+    Seq(a),
     "Power Set",
     Format("𝒫%0", requiresBrackets = false),
     Nil,
     ForAll.!("y")(Equivalence.!!(
       ElementOf.!!(FunctionParameter("y", 0, 2), FunctionParameter.anonymous(0, 1, 2)),
-      Equals.!!(FunctionParameter("y", 0, 2), StatementVariable("a", 2)))),
+      Subset.!!(FunctionParameter("y", 0, 2), StatementVariable("a", 2)))),
     "",
     "")
 
@@ -110,7 +113,7 @@ trait ProverSpec extends Specification {
     statementDefinitions = Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
       ForAll, Exists, ExistsUnique,
-      ElementOf, Equals),
+      ElementOf, Equals, Subset),
     termDefinitions = Seq(EmptySetDefinition, PowerSet),
     statementVariableNames = Set(φ, ψ, χ).map(_.name),
     termVariableNames = Set(a, b, c, n).map(_.name),
@@ -192,19 +195,20 @@ trait ProverSpec extends Specification {
     }
   }
 
-  trait PremiseConverter[-T] {
-    def convertToPremise(t: T, index: Int): Premise
+  trait PremiseMagnet {
+    def elidable: PremiseMagnet
+    def toPremise(index: Int): Premise
   }
-  // An awkward little hack to allow Nil to work - you can't define a PremiseConverter[Nothing] as per
-  // https://issues.scala-lang.org/browse/SI-4982.
-  trait LowPriorityPremiseConverter {
-    implicit val statementConverter: PremiseConverter[Statement] = (statement, index) => Premise(Fact.Direct(statement), index)(false)
+  implicit class FromFact(fact: Fact)(implicit isElidable: Boolean = false) extends PremiseMagnet {
+    def elidable: PremiseMagnet = FromFact(fact)(isElidable = true)
+    def toPremise(index: Int) = Premise(fact, index)(isElidable)
   }
-  object PremiseConverter extends LowPriorityPremiseConverter {
-    implicit val factConverter: PremiseConverter[Fact] = (fact, index) => Premise(fact, index)(false)
+  implicit class FromStatement(statement: Statement)(implicit isElidable: Boolean = false) extends PremiseMagnet {
+    def elidable: PremiseMagnet = FromStatement(statement)(isElidable = true)
+    def toPremise(index: Int) = Premise(Fact.Direct(statement), index)(isElidable)
   }
-  implicit def allToPremise[T : PremiseConverter](ts: Seq[T]): Seq[Premise] = {
-    val converter = implicitly[PremiseConverter[T]]
-    ts.mapWithIndex(converter.convertToPremise)
+
+  implicit def allToPremise(magnets: Seq[PremiseMagnet]): Seq[Premise] = {
+    magnets.mapWithIndex(_.toPremise(_))
   }
 }

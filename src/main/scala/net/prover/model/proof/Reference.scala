@@ -32,6 +32,22 @@ object Reference {
     override def cached = CachedReference.Expansion(inferenceApplication.cached)
   }
 
+  case class Contraction(
+    inference: Inference,
+    substitutions: Substitutions,
+    inferenceReference: Reference.ToFact,
+    depth: Int)
+    extends ToFact
+  {
+    override def referencedInferenceIds: Set[String] = inferenceReference.referencedInferenceIds
+    override def valueAndPath: (String, Seq[Int]) = inferenceReference.valueAndPath
+    override def cached = CachedReference.Contraction(
+      inference.id,
+      inference.specifySubstitutions(substitutions),
+      inferenceReference.cached,
+      depth)
+  }
+
   case class Simplification(
       inference: Inference,
       substitutions: Substitutions,

@@ -11,7 +11,7 @@ class AxiomSpec extends ProverSpec {
     outline.expand(outline.name.formatAsKey, "Test Chapter", "Test Book")
   }
 
-  def axiom[T : PremiseConverter](title: String, key: String, premises: Seq[T], conclusion: Statement): Axiom = {
+  def axiom(title: String, key: String, premises: Seq[PremiseMagnet], conclusion: Statement): Axiom = {
     Axiom(
       title,
       key,

@@ -11,20 +11,14 @@ prove ∀ x → ∈ x A ∈ x B
 prove ∈ a B
 qed
 
-# theorem Subset Deduction
-# premise proves ∈ x A ∈ x B
-# prove ∀ x → ∈ x A ∈ x B
-# prove ⊆ A B
-# qed
-
-# theorem Subset Is Antisymmetric
-# premise ⊆ A B
-# premise ⊆ B A
-# prove ∀ x → ∈ x A ∈ x B
-# prove ∀ x → ∈ x B ∈ x A
-# prove ∀ x ↔ ∈ x A ∈ x B
-# prove = A B
-# qed
+theorem Subset Is Antisymmetric
+premise ⊆ A B
+premise ⊆ B A
+prove ∀ x → ∈ x A ∈ x B
+prove ∀ x → ∈ x B ∈ x A
+prove ∀ x ↔ ∈ x A ∈ x B
+prove = A B
+qed
 
 # theorem Subset Is Transitive
 # premise ⊆ a b

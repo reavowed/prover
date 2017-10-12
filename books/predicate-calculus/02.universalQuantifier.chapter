@@ -6,6 +6,7 @@ statement ∀ ($x with x φ)
   transformation
 
 axiom Generalization
+contraction
 premise binding x with x φ
 conclusion ∀ x with x φ
 

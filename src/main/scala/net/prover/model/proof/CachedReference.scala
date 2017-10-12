@@ -59,6 +59,43 @@ object CachedReference {
       CachedInferenceApplication.parser.map(Expansion.apply)
     }
   }
+  case class Contraction(
+      inferenceId: String,
+      inferenceSubstitutions: Inference.Substitutions,
+      inferenceReference: CachedReference.ToFact,
+      depth: Int)
+    extends ToFact
+  {
+    private def cachedInferenceApplication = CachedInferenceApplication.Direct(inferenceId, inferenceSubstitutions, Seq(inferenceReference), depth)
+    override def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+      cachedInferenceApplication.getAssertionHints(availableInferences)
+    }
+
+    override def validate(context: ProvingContext): Option[(Reference, Fact)] = {
+      for {
+        (conclusion, inferenceApplication) <- cachedInferenceApplication.validate(context)
+        reference <- inferenceApplication.references.single.flatMap(_.asOptionalInstanceOf[Reference.ToFact])
+      } yield (
+        Reference.Contraction(
+          inferenceApplication.inference,
+          inferenceApplication.substitutions,
+          reference,
+          context.depth),
+        Fact.Direct(conclusion))
+    }
+    override def serializedLines = {
+      Seq(s"contraction $inferenceId ${inferenceSubstitutions.serialized}") ++ inferenceReference.serializedLines.indent
+    }
+  }
+  object Contraction {
+    def parser(implicit parsingContext: ParsingContext): Parser[Contraction] = {
+      for {
+        inferenceId <- Parser.singleWord
+        substitutions <- Inference.Substitutions.parser
+        reference <- CachedReference.parser.map(_.asInstanceOf[CachedReference.ToFact])
+      } yield Contraction(inferenceId, substitutions, reference, parsingContext.parameterDepth)
+    }
+  }
 
   case class Simplification(
       inferenceId: String,
@@ -94,7 +131,6 @@ object CachedReference {
         (inferenceReference.serializedLines :+ s"(${simplificationPath.mkString(" ")})").indent
     }
   }
-
   object Simplification {
     def parser(implicit parsingContext: ParsingContext): Parser[Simplification] = {
       for {
@@ -105,6 +141,7 @@ object CachedReference {
       } yield Simplification(inferenceId, substitutions, reference, simplificationPath, parsingContext.parameterDepth)
     }
   }
+
   case class Elided(cachedInferenceApplication: CachedInferenceApplication) extends CachedReference {
     override def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
       cachedInferenceApplication.getAssertionHints(availableInferences)
@@ -130,6 +167,7 @@ object CachedReference {
       case "direct" => Direct.parser
       case "expansion" => Expansion.parser
       case "simplification" => Simplification.parser
+      case "contraction" => Contraction.parser
       case "elided" => Elided.parser
     }
   }
