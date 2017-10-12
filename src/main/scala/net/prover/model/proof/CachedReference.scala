@@ -21,10 +21,12 @@ sealed trait CachedReference {
 }
 
 object CachedReference {
-  sealed trait ToFact extends CachedReference
+  sealed trait ToFact extends CachedReference {
+    def validate(provingContext: ProvingContext): Option[(Reference.ToFact, Fact)]
+  }
   case class Direct(value: String) extends ToFact {
     override def getAssertionHints(availableInferences: Seq[Inference]) = Nil
-    override def validate(context: ProvingContext): Option[(Reference, Fact)] = {
+    override def validate(context: ProvingContext) = {
       context.referencedFacts
         .find(_.reference == Reference.Direct(value))
         .map(_.fact)
@@ -63,6 +65,8 @@ object CachedReference {
       inferenceId: String,
       inferenceSubstitutions: Inference.Substitutions,
       inferenceReference: CachedReference.ToFact,
+      level: Int,
+      additionalDepth: Int,
       depth: Int)
     extends ToFact
   {
@@ -71,29 +75,58 @@ object CachedReference {
       cachedInferenceApplication.getAssertionHints(availableInferences)
     }
 
-    override def validate(context: ProvingContext): Option[(Reference, Fact)] = {
+    override def validate(context: ProvingContext) = {
       for {
-        (conclusion, inferenceApplication) <- cachedInferenceApplication.validate(context)
-        reference <- inferenceApplication.references.single.flatMap(_.asOptionalInstanceOf[Reference.ToFact])
-      } yield (
-        Reference.Contraction(
-          inferenceApplication.inference,
-          inferenceApplication.substitutions,
-          reference,
-          context.depth),
-        Fact.Direct(conclusion))
+        inference <- context.availableInferences.find(_.id == inferenceId).ifEmpty {
+          CachedProof.logger.info(s"Could not find inference $inferenceId")
+        }
+        substitutions <- inference.generalizeSubstitutions(inferenceSubstitutions, depth)
+        premise <- inference.premises.single
+        substitutedPremiseFact <- premise.fact.applySubstitutions(substitutions).ifEmpty {
+          CachedProof.logger.info(
+            (Seq(s"Could not substitute into premises of inference '${inference.name}'") ++
+              inference.premises.map(_.serialized)
+              :+ substitutions.toString
+              ).mkString("\n"))
+        }
+        substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions).ifEmpty {
+          CachedProof.logger.info(Seq(
+            s"Could not substitute into conclusion of inference '${inference.name}'",
+            inference.conclusion.serialized,
+            substitutions.toString
+          ).mkString("\n"))
+        }
+        (validatedReference, referencedFact) <- inferenceReference.validate(context)
+        (referencedChildFact, _, referencedFactUpdater) <- referencedFact.iteratedChildDetails(level)
+        _ = if (referencedChildFact != substitutedPremiseFact)
+          CachedProof.logger.info(s"Reference '$serialized' at level '$level' was to '${referencedFact.serialized}'," +
+            s" not '${substitutedPremiseFact.serialized}'")
+        if referencedChildFact == substitutedPremiseFact
+      } yield {
+        (Reference.Contraction(
+          inference,
+          substitutions,
+          validatedReference,
+          level,
+          additionalDepth,
+          depth),
+          referencedFactUpdater(Fact.Direct(substitutedConclusion)))
+      }
     }
     override def serializedLines = {
-      Seq(s"contraction $inferenceId ${inferenceSubstitutions.serialized}") ++ inferenceReference.serializedLines.indent
+      Seq(s"contraction $level $additionalDepth $inferenceId ${inferenceSubstitutions.serialized}") ++ inferenceReference.serializedLines.indent
     }
   }
   object Contraction {
     def parser(implicit parsingContext: ParsingContext): Parser[Contraction] = {
       for {
+        level <- Parser.int
+        additionalDepth <- Parser.int
+        updatedContext = (1 to additionalDepth).foldLeft(parsingContext){ case (c, _) => c.addParameterList(Nil) }
         inferenceId <- Parser.singleWord
-        substitutions <- Inference.Substitutions.parser
-        reference <- CachedReference.parser.map(_.asInstanceOf[CachedReference.ToFact])
-      } yield Contraction(inferenceId, substitutions, reference, parsingContext.parameterDepth)
+        substitutions <- Inference.Substitutions.parser(updatedContext)
+        reference <- CachedReference.parser(updatedContext).map(_.asInstanceOf[CachedReference.ToFact])
+      } yield Contraction(inferenceId, substitutions, reference, level, additionalDepth, updatedContext.parameterDepth)
     }
   }
 
@@ -110,7 +143,7 @@ object CachedReference {
       cachedInferenceApplication.getAssertionHints(availableInferences)
     }
 
-    override def validate(context: ProvingContext): Option[(Reference, Fact)] = {
+    override def validate(context: ProvingContext) = {
       for {
         (conclusion, inferenceApplication) <- cachedInferenceApplication.validate(context)
         premise <- inferenceApplication.inference.premises.single.flatMap(_.fact.asOptionalInstanceOf[Fact.Direct]).map(_.assertion)
@@ -123,7 +156,7 @@ object CachedReference {
           inferenceApplication.substitutions,
           reference,
           validatedSimplificationPath,
-          context.depth),
+          depth),
         Fact.Direct(conclusion))
     }
     override def serializedLines = {

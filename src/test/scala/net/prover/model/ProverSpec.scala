@@ -207,8 +207,9 @@ trait ProverSpec extends Specification {
     def elidable: PremiseMagnet = FromStatement(statement)(isElidable = true)
     def toPremise(index: Int) = Premise(Fact.Direct(statement), index)(isElidable)
   }
-
   implicit def allToPremise(magnets: Seq[PremiseMagnet]): Seq[Premise] = {
     magnets.mapWithIndex(_.toPremise(_))
   }
+
+  implicit def statementToFact(statement: Statement): Fact.Direct = Fact.Direct(statement)
 }

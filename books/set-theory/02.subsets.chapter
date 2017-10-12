@@ -20,15 +20,17 @@ prove ∀ x ↔ ∈ x A ∈ x B
 prove = A B
 qed
 
-# theorem Subset Is Transitive
-# premise ⊆ a b
-# premise ⊆ b c
-# assume ∈ x a {
-#   prove ∈ x b
-#   prove ∈ x c
-# }
-# prove ⊆ a c
-# qed
+theorem Subset Is Transitive
+premise ⊆ A B
+premise ⊆ B C
+take x {
+	assume ∈ x A {
+	  prove ∈ x B
+	  prove ∈ x C
+	}
+}
+prove ⊆ A C
+qed
 
 # theorem Any Set Is a Subset of Itself
 # prove ∀ x → ∈ x a ∈ x a

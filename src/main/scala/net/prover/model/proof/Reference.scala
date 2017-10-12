@@ -36,6 +36,8 @@ object Reference {
     inference: Inference,
     substitutions: Substitutions,
     inferenceReference: Reference.ToFact,
+    level: Int,
+    additionalDepth: Int,
     depth: Int)
     extends ToFact
   {
@@ -45,6 +47,8 @@ object Reference {
       inference.id,
       inference.specifySubstitutions(substitutions),
       inferenceReference.cached,
+      level,
+      additionalDepth,
       depth)
   }
 

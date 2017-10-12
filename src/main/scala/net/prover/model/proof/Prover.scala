@@ -308,7 +308,16 @@ case class Prover(
     helper(referencedFact +: getContractions(referencedFact), Nil)
   }
 
-  private def getContractions(referencedFact: ReferencedFact): Seq[ReferencedFact] = {
+  private def getContractions(referencedFact: ReferencedFact, level: Int = 0, additionalDepth: Int = 0): Seq[ReferencedFact] = {
+    def nextLevelContractions =
+      for {
+        (childFact, moreDepth, updater) <- referencedFact.childDetails.toSeq
+        innerFact <- getContractions(childFact, level + 1, additionalDepth + moreDepth)
+      } yield updater(innerFact)
+    (referencedFact +: nextLevelContractions).flatMap(getTopLevelContractions(_, level, additionalDepth))
+  }
+
+  def getTopLevelContractions(referencedFact: ReferencedFact, level: Int, additionalDepth: Int): Seq[ReferencedFact] = {
     availableInferences
       .filter(_.rearrangementType == RearrangementType.Contraction)
       .collect {
@@ -316,7 +325,7 @@ case class Prover(
           (inference, premiseFact)
       }
       .flatMap { case (inference, premiseFact) =>
-        premiseFact.calculateSubstitutions(referencedFact.fact, Substitutions.emptyWithDepth(depth))
+        premiseFact.calculateSubstitutions(referencedFact.fact, Substitutions.emptyWithDepth(depth + additionalDepth))
           .map((inference, _))
       }
       .mapCollect { case (inference, substitutions) =>
@@ -326,7 +335,7 @@ case class Prover(
       .map { case (inference, substitutions, conclusion) =>
         ReferencedFact(
           Fact.Direct(conclusion),
-          Reference.Contraction(inference, substitutions, referencedFact.reference, depth))
+          Reference.Contraction(inference, substitutions, referencedFact.reference, level, additionalDepth, depth + additionalDepth))
       }
   }
 

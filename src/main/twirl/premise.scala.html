@@ -1,15 +1,4 @@
 @import net.prover.model.Premise
-@import net.prover.model.proof.{Fact, ReferenceMap}
+@import net.prover.model.proof.ReferenceMap
 @(premise: Premise, referenceMap: ReferenceMap)
-<span class="premise">@premise.fact match {
-  case Fact.Direct(statement) => {@html.referencedStatement(
-    statement,
-    Some(premise.reference.value),
-    referenceMap.getReferrers(premise.reference.value))}
-  case Fact.Deduced(antecedent, consequent) => {<span
-    class="@referenceMap.getReferrers(premise.reference.value).map("highlight-" + _._1).mkString(" ")"
-  >@html.referencedStatement(antecedent) ⊢ @html.referencedStatement(consequent)</span>}
-  case boundFact@Fact.ScopedVariable(statement) => {<span
-  class="@referenceMap.getReferrers(premise.reference.value).map("highlight-" + _._1).mkString(" ")"
-  >@boundFact.variableName : @html.referencedStatement(statement)</span>}
-}</span>
+<span class="premise">@html.fact(premise.fact, premise.reference.value, referenceMap)</span>

@@ -7,7 +7,6 @@
   previousOption: Option[net.prover.model.Inference.Entry],
   nextOption: Option[net.prover.model.Inference.Entry],
   usages: Seq[(net.prover.model.Book, Chapter, Seq[Theorem])])
-
 @html.inference("Theorem", theorem, theorem.proof.referenceMap, chapter, book, previousOption, nextOption, usages) {
   <div class="theoremProof">
     <hr/>
@@ -20,7 +19,7 @@
     $(function() {
       $("[data-reference]").each(function() {
         var $this = $(this);
-        var escapedReference = _.replace($this.attr("data-reference"), ".", "\\.");
+        var escapedReference = _.replace($this.attr("data-reference"), /\./g, "\\.");
         var $premises = $(".highlight-" + escapedReference);
         var $conclusion = $this.find('.conclusion-' + escapedReference);
         $(this)

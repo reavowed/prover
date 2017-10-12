@@ -4,7 +4,7 @@
   step: Step,
   indentLevel: Int,
   referenceMap: ReferenceMap,
-  additionalReference: Option[String] = None)
+  additionalReferences: Seq[String] = Nil)
 
 @step match {
   case assertionStep: Step.Assertion => {
@@ -14,7 +14,7 @@
         Then @Html(html.referencedStatement(
           assertionStep.assertion,
           Some(assertionStep.reference.value),
-          referenceMap.getReferrers(Seq(assertionStep.reference.value) ++ additionalReference: _*)
+          referenceMap.getReferrers(Seq(assertionStep.reference.value) ++ additionalReferences: _*)
         ).body.trim).
       </td>
       @if(assertionStep.isRearrangement) {
@@ -41,7 +41,7 @@
         Assume @Html(html.referencedStatement(
           assumptionStep.assumption,
           Some(assumptionStep.assumptionReference.value),
-          referenceMap.getReferrers(assumptionStep.assumptionReference.value, assumptionStep.reference.value)
+          referenceMap.getReferrers(Seq(assumptionStep.assumptionReference.value, assumptionStep.reference.value) ++ additionalReferences: _*)
         ).body.trim).
       </td>
     </tr>
@@ -49,7 +49,7 @@
       substep,
       indentLevel + 1,
       referenceMap,
-      Some(assumptionStep.reference.value).filter(_ => assumptionStep.steps.ofType[Step.WithAssertion].lastOption.contains(substep)))
+      if (assumptionStep.steps.lastOption.contains(substep)) additionalReferences :+ assumptionStep.reference.value else Nil)
     }
   }
   case scopedVariableStep: Step.ScopedVariable => {
@@ -57,7 +57,7 @@
       substep,
       indentLevel,
       referenceMap,
-      Some(scopedVariableStep.reference.value).filter(_ => scopedVariableStep.substeps.ofType[Step.WithAssertion].lastOption.contains(substep)))
+      if (scopedVariableStep.substeps.lastOption.contains(substep)) additionalReferences :+ scopedVariableStep.reference.value else Nil)
     }
   }
   case _ => {

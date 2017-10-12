@@ -1,6 +1,5 @@
 package net.prover.model.proof
 
-import net.prover.model._
 import net.prover.model.expressions.{Statement, TermVariable}
 
 sealed trait Step {
@@ -38,7 +37,7 @@ object Step {
     extends Step
   {
     def assumptionReference = reference.withSuffix("a")
-    override val fact = steps.ofType[Step.WithAssertion].lastOption.map(lastSubstep => Fact.Deduced(assumption, lastSubstep.assertion))
+    override val fact = steps.lastOption.flatMap(_.fact).map(Fact.Deduced(assumption, _))
     override def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
     override def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
     override def cached = CachedStep.Assumption(assumption, steps.map(_.cached), reference)
@@ -59,8 +58,7 @@ object Step {
 
   case class ScopedVariable(variableName: String, substeps: Seq[Step], reference: Reference.Direct) extends Step {
     override def fact: Option[Fact] = {
-      substeps.ofType[Step.WithAssertion].lastOption
-        .map(_.assertion)
+      substeps.lastOption.flatMap(_.fact)
         .map(Fact.ScopedVariable(_)(variableName))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet

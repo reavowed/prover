@@ -3,11 +3,24 @@ package net.prover.model.proof
 import net.prover.model.expressions._
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
+import scalaz.Endo
+import scalaz.Scalaz._
+
 sealed trait Fact {
   def requiredSubstitutions: Substitutions.Required
   def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Fact]
   def increaseDepth(additionalDepth: Int): Fact
+  def childDetails: Option[(Fact, Int, Fact => Fact)]
+  def iteratedChildDetails(level: Int): Option[(Fact, Int, Fact => Fact)] = {
+    def helper(acc: Option[(Fact, Int, Fact => Fact)]): Option[(Fact, Int, Fact => Fact)] = {
+      for {
+        (fact, accLevel, updater) <- acc
+        (childFact, childLevel, childUpdater) <- fact.childDetails
+      } yield (childFact, accLevel + childLevel, childUpdater andThen updater)
+    }
+    Endo(helper).multiply(level).apply(Some((this, 0, identity[Fact])))
+  }
   def serialized: String
 }
 
@@ -28,6 +41,7 @@ object Fact {
     override def increaseDepth(additionalDepth: Int) = {
       Direct(assertion.increaseDepth(additionalDepth))
     }
+    override def childDetails = None
     override def serialized = assertion.serialized
   }
   object Direct {
@@ -37,7 +51,7 @@ object Fact {
       } yield Direct(assertion)
     }
   }
-  case class Deduced(antecedent: Statement, consequent: Statement) extends Fact {
+  case class Deduced(antecedent: Statement, consequent: Fact) extends Fact {
     override def requiredSubstitutions = antecedent.requiredSubstitutions ++ consequent.requiredSubstitutions
     def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions] = otherFact match {
       case Deduced(otherAntecedent, otherConsequent) =>
@@ -57,43 +71,45 @@ object Fact {
     override def increaseDepth(additionalDepth: Int) = {
       Deduced(antecedent.increaseDepth(additionalDepth), consequent.increaseDepth(additionalDepth))
     }
+    override def childDetails = Some((consequent, 0, Deduced(antecedent, _)))
     override def serialized = s"proves ${antecedent.serialized} ${consequent.serialized}"
   }
   object Deduced {
     def parser(implicit parsingContext: ParsingContext): Parser[Deduced] = {
       for {
         antecedent <- Statement.parser
-        consequent <- Statement.parser
+        consequent <- Fact.parser
       } yield Deduced(antecedent, consequent)
     }
   }
 
-  case class ScopedVariable(assertion: Statement)(val variableName: String) extends Fact {
-    override def requiredSubstitutions = assertion.requiredSubstitutions
+  case class ScopedVariable(scopedFact: Fact)(val variableName: String) extends Fact {
+    override def requiredSubstitutions = scopedFact.requiredSubstitutions
     def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions] = otherFact match {
-      case ScopedVariable(otherPredicate) =>
-        assertion.calculateSubstitutions(otherPredicate, substitutionsSoFar)
+      case ScopedVariable(otherFact) =>
+        scopedFact.calculateSubstitutions(otherFact, substitutionsSoFar)
       case _ =>
         Nil
     }
     override def applySubstitutions(substitutions: Substitutions): Option[ScopedVariable] = {
       for {
-        updatedAssertion <- assertion.applySubstitutions(substitutions)
-      } yield ScopedVariable(updatedAssertion)(variableName)
+        updatedFact <- scopedFact.applySubstitutions(substitutions)
+      } yield ScopedVariable(updatedFact)(variableName)
     }
     override def increaseDepth(additionalDepth: Int) = {
-      ScopedVariable(assertion.increaseDepth(additionalDepth))(variableName)
+      ScopedVariable(scopedFact.increaseDepth(additionalDepth))(variableName)
     }
-    override def serialized: String = s"binding $variableName ${assertion.serialized}"
+    override def childDetails = Some((scopedFact, 1, ScopedVariable(_)(variableName)))
+    override def serialized: String = s"binding $variableName ${scopedFact.serialized}"
   }
   object ScopedVariable {
     def parser(implicit parsingContext: ParsingContext): Parser[ScopedVariable] = {
       for {
         variableName <- Parser.singleWord
         updatedContext = parsingContext.addParameterList(Seq(variableName))
-        predicate <- Statement.parser(updatedContext)
+        scopedFact <- Fact.parser(updatedContext)
       } yield {
-        ScopedVariable(predicate)(variableName)
+        ScopedVariable(scopedFact)(variableName)
       }
     }
   }

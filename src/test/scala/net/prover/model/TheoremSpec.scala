@@ -66,7 +66,7 @@ class TheoremSpec extends ProverSpec {
     }
 
     val repetition = axiom("Repetition", Seq(φ), φ)
-    val deduction = axiom("Deduction", Seq(Fact.Deduced(φ, ψ)), Implication(φ, ψ))
+    val deduction = axiom("Deduction", Seq(Fact.Deduced(φ, ψ)), Implication(φ, ψ), RearrangementType.Contraction)
     val modusPonens = axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
     val implicationIsReflexive = axiom("Implication Is Reflexive", Nil, Implication(φ, φ))
     val extractLeftConjunct = axiom("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), φ, RearrangementType.Simplification)
@@ -209,6 +209,19 @@ class TheoremSpec extends ProverSpec {
             "x")),
         Seq(Subset(a, a)),
         Seq(generalization, Subset.inferences.head),
+        Seq(ForAll))
+    }
+
+    "prove a conclusion using a multiply-contracted premise" in {
+      checkProof(
+        Seq(
+          Fact.ScopedVariable(
+            Fact.Deduced(
+              ElementOf.!(FunctionParameter("x", 0), a.^),
+              ElementOf.!(FunctionParameter("x", 0), a.^)))(
+            "x")),
+        Seq(Subset(a, a)),
+        Seq(deduction, generalization, Subset.inferences.head),
         Seq(ForAll))
     }
   }

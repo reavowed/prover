@@ -1,0 +1,13 @@
+@import net.prover.model.proof.{Fact, ReferenceMap}
+@(fact: Fact, reference: String, referenceMap: ReferenceMap)
+@fact match {
+  case Fact.Direct(statement) => {@html.referencedStatement(
+      statement,
+      Some(reference),
+      referenceMap.getReferrers(reference))}
+  case Fact.Deduced(antecedent, consequent) => {<span
+      class="@referenceMap.getReferrers(reference).map("highlight-" + _._1).mkString(" ")"
+    >@html.referencedStatement(antecedent) ⊢ @html.fact(consequent, reference, referenceMap)</span>}
+  case boundFact@Fact.ScopedVariable(scopedFact) => {<span
+class="@referenceMap.getReferrers(reference).map("highlight-" + _._1).mkString(" ")"
+>@boundFact.variableName : @html.fact(scopedFact, reference, referenceMap)</span>}}
