@@ -99,7 +99,7 @@ object CachedReference {
         (validatedReference, referencedFact) <- inferenceReference.validate(context)
         (referencedChildFact, _, referencedFactUpdater) <- referencedFact.iteratedChildDetails(level)
         _ = if (referencedChildFact != substitutedPremiseFact)
-          CachedProof.logger.info(s"Reference '$serialized' at level '$level' was to '${referencedFact.serialized}'," +
+          CachedProof.logger.info(s"Reference '$serialized' at level '$level' was to '${referencedChildFact.serialized}'," +
             s" not '${substitutedPremiseFact.serialized}'")
         if referencedChildFact == substitutedPremiseFact
       } yield {
@@ -122,10 +122,10 @@ object CachedReference {
       for {
         level <- Parser.int
         additionalDepth <- Parser.int
-        updatedContext = (1 to additionalDepth).foldLeft(parsingContext){ case (c, _) => c.addParameterList(Nil) }
         inferenceId <- Parser.singleWord
+        updatedContext = (1 to additionalDepth).foldLeft(parsingContext){ case (c, _) => c.addParameterList(Nil) }
         substitutions <- Inference.Substitutions.parser(updatedContext)
-        reference <- CachedReference.parser(updatedContext).map(_.asInstanceOf[CachedReference.ToFact])
+        reference <- CachedReference.parser.map(_.asInstanceOf[CachedReference.ToFact])
       } yield Contraction(inferenceId, substitutions, reference, level, additionalDepth, updatedContext.parameterDepth)
     }
   }

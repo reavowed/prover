@@ -252,7 +252,7 @@ case class Prover(
         helper(newSimplifications, next ++ acc)
       }
     }
-    helper(referencedFact +: getContractions(referencedFact), Nil)
+    helper(getContractions(referencedFact), Nil)
   }
 
   private def getContractions(referencedFact: ReferencedFact, level: Int = 0, additionalDepth: Int = 0): Seq[ReferencedFact] = {
@@ -265,7 +265,7 @@ case class Prover(
   }
 
   def getTopLevelContractions(referencedFact: ReferencedFact, level: Int, additionalDepth: Int): Seq[ReferencedFact] = {
-    availableInferences
+    referencedFact +: availableInferences
       .filter(_.rearrangementType == RearrangementType.Contraction)
       .collect {
         case inference @ Inference(_, Seq(Premise(premiseFact, _)), _) =>

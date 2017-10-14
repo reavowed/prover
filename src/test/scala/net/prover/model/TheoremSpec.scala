@@ -236,5 +236,13 @@ class TheoremSpec extends ProverSpec {
         Seq(specification, generalization, modusTollens),
         Seq(ForAll))
     }
+
+    "prove a conclusion using a sub-contraction" in {
+      checkProof(
+        Seq(
+          Fact.ScopedVariable(Fact.ScopedVariable(φ.^^)("y"))("x")),
+        Seq(ForAll("x")(ForAll.!("y")(φ.^^))),
+        Seq(generalization))
+    }
   }
 }
