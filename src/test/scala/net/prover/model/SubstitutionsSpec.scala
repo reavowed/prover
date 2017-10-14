@@ -60,7 +60,8 @@ class SubstitutionsSpec extends ProverSpec {
         φ(a),
         ElementOf(b, EmptySet),
         Substitutions(predicates = Map(φ -> ElementOf.!(b.^, EmptySet.^))),
-        Substitutions(terms = Map(a -> b), predicates = Map(φ -> ElementOf.!(FunctionParameter.anonymous(0), EmptySet.^))))
+        Substitutions(terms = Map(a -> b), predicates = Map(φ -> ElementOf.!(FunctionParameter.anonymous(0), EmptySet.^))),
+        Substitutions(terms = Map(a -> EmptySet), predicates = Map(φ -> ElementOf.!(b.^, FunctionParameter.anonymous(0)))))
     }
 
     "match a predicate application to another predicate application" in {
@@ -171,6 +172,17 @@ class SubstitutionsSpec extends ProverSpec {
           predicates = Map(φ -> Exists.!("x")(ElementOf.!!(FunctionParameter("x", 0, 2), FunctionParameter.anonymous(0, 1, 2))))),
         Substitutions(
           predicates = Map(φ -> Exists.!("x")(ElementOf.!!(FunctionParameter("x", 0, 2), a.^^)))))
+    }
+
+    "match a predicate application on a variable to a bound statement containing no variables" in {
+      testSubstitutions(
+        φ(a),
+        Exists("x")(ElementOf.!(FunctionParameter("x", 0, 1), EmptySet.^)),
+        Substitutions(
+          terms = Map(a -> EmptySet),
+          predicates = Map(φ -> Exists.!("x")(ElementOf.!!(FunctionParameter("x", 0, 2), FunctionParameter.anonymous(0, 1, 2))))),
+        Substitutions(
+          predicates = Map(φ -> Exists.!("x")(ElementOf.!!(FunctionParameter("x", 0, 2), EmptySet.^^)))))
     }
   }
 }

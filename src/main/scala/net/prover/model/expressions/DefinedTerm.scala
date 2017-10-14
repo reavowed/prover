@@ -1,5 +1,6 @@
 package net.prover.model.expressions
 
+import net.prover.model.Substitutions
 import net.prover.model.entries.TermDefinition
 
 case class DefinedTerm(
@@ -17,5 +18,10 @@ case class DefinedTerm(
   }
   override def update(newComponents: Seq[Expression], newDepth: Int) = {
     DefinedTerm(newComponents, definition, newDepth)(scopedBoundVariableNames)
+  }
+
+  override def calculateApplicatives(baseArguments: ArgumentList, substitutions: Substitutions) = {
+    super[Term].calculateApplicatives(baseArguments, substitutions) ++
+      super[DefinedExpression].calculateApplicatives(baseArguments, substitutions)
   }
 }
