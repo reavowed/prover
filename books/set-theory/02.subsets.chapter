@@ -32,14 +32,7 @@ take x {
 prove ⊆ A C
 qed
 
-# theorem Any Set Is a Subset of Itself
-# prove ∀ x → ∈ x a ∈ x a
-# prove ⊆ a a
-# qed
-
-# theorem Element Transfers to Superset
-# premise ⊆ A B
-# premise ∈ x A
-# prove ∀ x → ∈ x A ∈ x B
-# prove ∈ x B
-# qed
+theorem Any Set Is a Subset of Itself
+prove ∀ x → ∈ x A ∈ x A
+prove ⊆ A A
+qed

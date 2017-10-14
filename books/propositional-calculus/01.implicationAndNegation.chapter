@@ -71,6 +71,7 @@ prove φ
 qed
 
 theorem Principle of Explosion
+disallow-rearrangement
 premise φ
 premise ¬ φ
 prove ⊥

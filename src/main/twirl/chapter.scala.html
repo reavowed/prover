@@ -1,6 +1,7 @@
 @import net.prover.model.{Book, Chapter}
 @import net.prover.model.entries.{Axiom, Comment, StatementDefinition, Theorem}
 @import net.prover.viewmodel.Breadcrumb
+@import net.prover.model.entries.TermDefinition
 @(chapter: Chapter, book: Book)
 
 @html.main(Seq(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter))) {
@@ -14,6 +15,9 @@
         }
         case statementDefinition: StatementDefinition => {
           @html.statementDefinitionEntry(statementDefinition)
+        }
+        case termDefinition: TermDefinition => {
+          @html.termDefinitionEntry(termDefinition)
         }
         case axiom: Axiom => {
           @html.inferenceEntry("Axiom", axiom, chapter, book)

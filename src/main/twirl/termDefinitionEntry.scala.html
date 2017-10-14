@@ -1,0 +1,7 @@
+@import net.prover.model.entries.TermDefinition
+@(definition: TermDefinition)
+
+<div class="result">
+  <h5>Term Definition: @html.referencedStatement(definition.defaultValue)</h5>
+  <div>@html.referencedStatement(definition.defaultValue) is defined by @html.referencedStatement(definition.definingStatement). </div>
+</div>

@@ -5,7 +5,7 @@ variables () (a b A B C)
 
 include 01.extensionality.chapter
 include 02.subsets.chapter
-# include 03.emptySet.chapter
+include 03.emptySet.chapter
 # include 04.powerSets.chapter
 # include 05.replacement.chapter
 # include 06.singletons.chapter

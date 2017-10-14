@@ -2,7 +2,7 @@ chapter Empty Set
 Introduce the empty set, ∅.
 
 axiom Axiom of Empty Set
-conclusion ∃ y ∀ x ¬ ∈ x y
+conclusion ∃ X ∀ x ¬ ∈ x X
 
 theorem Two Empty Sets Are Equal
 premise ∀ x ¬ ∈ x a
@@ -12,60 +12,64 @@ prove = a b
 qed
 
 theorem There Exists a Unique Empty Set
-prove ∃ y ∀ x ¬ ∈ x y
-assume ∧ ∀ x ¬ ∈ x a ∀ x ¬ ∈ x b {
-  prove = a b
+prove ∃ X ∀ x ¬ ∈ x X
+take X { 
+  take Y {
+    assume ∧ ∀ x ¬ ∈ x X ∀ x ¬ ∈ x Y {
+      prove = X Y
+    }
+  }
 }
-prove ∃! y ∀ x ¬ ∈ x y
+prove ∃! X ∀ x ¬ ∈ x X
 qed
 
 term ∅ () (∀ x ¬ ∈ x _)
 
-theorem The Empty Set Has No Elements
-prove ∀ x ¬ ∈ x ∅
-prove ¬ ∃ x ∈ x ∅
-qed
+# theorem The Empty Set Has No Elements
+# prove ∀ x ¬ ∈ x ∅
+# prove ¬ ∃ x ∈ x ∅
+# qed
 
-theorem A Set with No Elements Is the Empty Set
-premise ∀ x ¬ ∈ x a
-prove ∀ x ¬ ∈ x ∅
-prove = a ∅
-qed
+# theorem A Set with No Elements Is the Empty Set
+# premise ∀ x ¬ ∈ x a
+# prove ∀ x ¬ ∈ x ∅
+# prove = a ∅
+# qed
 
-theorem A Set with No Elements Is the Empty Set
-premise ¬ ∃ x ∈ x a
-prove ∀ x ¬ ∈ x a
-prove = a ∅
-qed
+# theorem A Set with No Elements Is the Empty Set
+# premise ¬ ∃ x ∈ x a
+# prove ∀ x ¬ ∈ x a
+# prove = a ∅
+# qed
 
-theorem A Set with an Element Is Not the Empty Set
-premise ∃ x ∈ x a
-prove ¬ ∃ x ∈ x ∅
-prove ¬ = a ∅
-qed
+# theorem A Set with an Element Is Not the Empty Set
+# premise ∃ x ∈ x a
+# prove ¬ ∃ x ∈ x ∅
+# prove ¬ = a ∅
+# qed
 
-theorem A Set with an Element Is Not the Empty Set
-premise ∈ b a
-prove ∃ x ∈ x a
-prove ¬ = a ∅
-qed
+# theorem A Set with an Element Is Not the Empty Set
+# premise ∈ b a
+# prove ∃ x ∈ x a
+# prove ¬ = a ∅
+# qed
 
-theorem A Set That Is Not the Empty Set Has an Element
-premise ¬ = a ∅
-assume ¬ ∃ x ∈ x a {
-  prove = a ∅
-}
-prove ∃ x ∈ x a
-qed
+# theorem A Set That Is Not the Empty Set Has an Element
+# premise ¬ = a ∅
+# assume ¬ ∃ x ∈ x a {
+#   prove = a ∅
+# }
+# prove ∃ x ∈ x a
+# qed
 
-theorem The Empty Set Is a Subset of Any Set
-prove ∀ x ¬ ∈ x ∅
-prove ∀ x → ∈ x ∅ ∈ x a
-prove ⊆ ∅ a
-qed
+# theorem The Empty Set Is a Subset of Any Set
+# prove ∀ x ¬ ∈ x ∅
+# prove ∀ x → ∈ x ∅ ∈ x a
+# prove ⊆ ∅ a
+# qed
 
-theorem A False Statement Is a Membership Condition for the Empty Set
-premise ∀ x ¬ φ
-prove ∀ x ¬ ∈ x ∅
-prove ∀ x ↔ ∈ x ∅ φ
-qed
+# theorem A False Statement Is a Membership Condition for the Empty Set
+# premise ∀ x ¬ φ
+# prove ∀ x ¬ ∈ x ∅
+# prove ∀ x ↔ ∈ x ∅ φ
+# qed

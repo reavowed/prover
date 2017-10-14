@@ -1,76 +1,80 @@
 chapter Existential Quantifier
 Introduce the existential quantifier, ∃.
 
-statement ∃ (x φ) format ((∃x)φ) definition (¬ ∀ x ¬ φ)
+statement ∃ ($x with x φ)
+  format ((∃x)φ)
+  definition (¬ ∀ x ¬ with x φ)
 
 theorem Existence
-premise sub y x φ
-assume ∀ x ¬ φ {
-  prove ¬ sub y x φ
+premise with a φ
+assume ∀ x ¬ with x φ {
+  prove ¬ with a φ
 }
-prove ¬ ∀ x ¬ φ
-prove ∃ x φ
+prove ¬ ∀ x ¬ with x φ
+prove ∃ x with x φ
 qed
 
 comment If something exists, we can name that something with an arbitrary variable for free.
 
 theorem Value for Existence
-premise ∃ x φ elidable
-premise proves sub y x φ ψ
+premise ∃ x with x φ elidable
+premise ∀ x → with x φ ψ
+prove ¬ ∀ x ¬ with x φ
 assume ¬ ψ {
-  prove ¬ sub y x φ
-  prove ∀ x ¬ φ
-  prove ¬ ∀ x ¬ φ
+  take x {
+    prove ¬ with x φ
+  }
+  prove ∀ x ¬ with x φ
 }
 prove ψ
 qed
 
-theorem Renamed Value for Existence
-premise ∃ x φ elidable
-premise proves φ ψ
-assume ¬ ψ {
-  prove ¬ φ
-  prove ∀ x ¬ φ non-distinct (x φ)
-  prove ¬ ∀ x ¬ φ
-}
-prove ψ
-qed
+# theorem Renamed Value for Existence
+# premise ∃ x φ elidable
+# premise proves φ ψ
+# assume ¬ ψ {
+#   prove ¬ φ
+#   prove ∀ x ¬ φ non-distinct (x φ)
+#   prove ¬ ∀ x ¬ φ
+# }
+# prove ψ
+# qed
 
-comment Swapping an existence condition with an equivalent one.
+# comment Swapping an existence condition with an equivalent one.
 
-theorem Existence Equivalence
-premise ∃ x φ
-premise ∀ x ↔ φ ψ
-let y sub y x φ {
-  prove sub y x ψ
-  prove ∃ x ψ
-}
-qed
+# theorem Existence Equivalence
+# premise ∃ x φ
+# premise ∀ x ↔ φ ψ
+# let y sub y x φ {
+#   prove sub y x ψ
+#   prove ∃ x ψ
+# }
+# qed
 
-comment Swapping between universal and existential quantifiers.
+# comment Swapping between universal and existential quantifiers.
 
-theorem Not Exists Not Is For All
-premise ¬ ∃ x ¬ φ
-assume ¬ φ {
-  prove ∃ x ¬ φ
-}
-prove φ
-prove ∀ x φ
-qed
+# theorem Not Exists Not Is For All
+# premise ¬ ∃ x ¬ φ
+# assume ¬ φ {
+#   prove ∃ x ¬ φ
+# }
+# prove φ
+# prove ∀ x φ
+# qed
 
-theorem Not Exists Is For All Not
-premise ¬ ∃ x φ
-assume ¬ ∀ x ¬ φ {
-  prove ∃ x φ
-}
-prove ∀ x ¬ φ
-qed
+# theorem Not Exists Is For All Not
+# premise ¬ ∃ x φ
+# assume ¬ ∀ x ¬ φ {
+#   prove ∃ x φ
+# }
+# prove ∀ x ¬ φ
+# qed
 
-theorem For All Not Is Not Exists
-expansion
-premise ∀ x ¬ φ
-assume ∃ x φ {
-  prove ¬ ∀ x ¬ φ
-}
-prove ¬ ∃ x φ
-qed
+# theorem For All Not Is Not Exists
+# expansion
+# premise ∀ x ¬ φ
+# assume ∃ x φ {
+#   prove ¬ ∀ x ¬ φ
+# }
+# prove ¬ ∃ x φ
+# qed

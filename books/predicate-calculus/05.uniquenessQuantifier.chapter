@@ -1,146 +1,142 @@
 chapter Uniqueness Quantifier
 Introduce the uniqueness quantifier, ∃!.
 
-statement ∃! (x φ)
+statement ∃! ($x with x φ)
   format ((∃!x)φ)
-  definition (∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z)
-  distinct-variables (y φ, z φ)
+  definition (∧ ∃ x with x φ ∀ x ∀ y → ∧ with x φ with y φ = x y)
 
-theorem Prove Uniqueness
-premise ∃ x φ
-premise proves ∧ sub y x φ sub z x φ = y z
-prove → ∧ sub y x φ sub z x φ = y z
-prove ∀ z → ∧ sub y x φ sub z x φ = y z
-prove ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
-prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
-prove ∃! x φ
+theorem Definition of ∃!
+premise ∃ x with x φ
+premise ∀ x ∀ y → ∧ with x φ with y φ = x y
+prove ∧ ∃ x with x φ ∀ x ∀ y → ∧ with x φ with y φ = x y
+prove ∃! x with x φ
 qed
 
-theorem Value for Unique Existence
-premise ∃! x φ elidable
-premise proves sub y x φ ψ
-prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
-prove ψ non-distinct (x φ)
-qed
+# theorem Value for Unique Existence
+# premise ∃! x φ elidable
+# premise proves sub y x φ ψ
+# prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
+# prove ψ non-distinct (x φ)
+# qed
 
-theorem Value for Unique Existence
-premise ∃! x φ elidable
-premise proves  φ ψ
-prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
-prove ψ non-distinct (x φ)
-qed
+# theorem Value for Unique Existence
+# premise ∃! x φ elidable
+# premise proves  φ ψ
+# prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
+# prove ψ non-distinct (x φ)
+# qed
 
-theorem Every Set Is Unique
-prove ∃ y = y x
-assume ∧ = a x = b x {
-  prove = a b
-}
-prove ∃! y = y x
-qed
+# theorem Every Set Is Unique
+# prove ∃ y = y x
+# assume ∧ = a x = b x {
+#   prove = a b
+# }
+# prove ∃! y = y x
+# qed
 
-theorem Unique Value
-premise ∃! x φ
-premise sub y x φ
-premise sub z x φ
-prove ∧ ∃ x φ ∀ a ∀ b → ∧ sub a x φ sub b x φ = a b
-prove ∀ a ∀ b → ∧ sub a x φ sub b x φ = a b
-prove ∀ b → ∧ sub y x φ sub b x φ = y b
-prove → ∧ sub y x φ sub z x φ = y z
-prove ∧ sub y x φ sub z x φ
-prove = y z
-qed
+# theorem Unique Value
+# premise ∃! x φ
+# premise sub y x φ
+# premise sub z x φ
+# prove ∧ ∃ x φ ∀ a ∀ b → ∧ sub a x φ sub b x φ = a b
+# prove ∀ a ∀ b → ∧ sub a x φ sub b x φ = a b
+# prove ∀ b → ∧ sub y x φ sub b x φ = y b
+# prove → ∧ sub y x φ sub z x φ = y z
+# prove ∧ sub y x φ sub z x φ
+# prove = y z
+# qed
 
-theorem Uniqueness by Exhibiting Unique Value
-premise ∀ x ↔ φ = x y
-prove = y y
-prove sub y x φ
-prove ∃ x φ
-assume ∧ sub a x φ sub b x φ {
-  prove = a y
-  prove = b y
-  prove = a b
-}
-prove ∃! x φ
-qed
+# theorem Uniqueness by Exhibiting Unique Value
+# premise ∀ x ↔ φ = x y
+# prove = y y
+# prove sub y x φ
+# prove ∃ x φ
+# assume ∧ sub a x φ sub b x φ {
+#   prove = a y
+#   prove = b y
+#   prove = a b
+# }
+# prove ∃! x φ
+# qed
 
-theorem Uniqueness by Exhibiting Unique Value
-premise proves φ = x y
-premise proves = x y φ
-prove ∀ x ↔ φ = x y
-prove ∃! x φ
-qed
+# theorem Uniqueness by Exhibiting Unique Value
+# premise proves φ = x y
+# premise proves = x y φ
+# prove ∀ x ↔ φ = x y
+# prove ∃! x φ
+# qed
 
-theorem Uniqueness by Exhibiting Unique Value
-premise sub y x φ
-premise proves φ = x y
-assume = x y {
-  prove φ
-}
-prove ∃! x φ
-qed
+# theorem Uniqueness by Exhibiting Unique Value
+# premise sub y x φ
+# premise proves φ = x y
+# assume = x y {
+#   prove φ
+# }
+# prove ∃! x φ
+# qed
 
-theorem Existence of Unique Value
-premise ∃! x φ
-let y sub y x φ {
-  assume φ {
-    prove = x y
-  }
-  assume = x y  {
-    prove φ
-  }
-  prove ∀ x ↔ φ = x y
-  prove ∃ y ∀ x ↔ φ = x y
-}
-qed
+# theorem Existence of Unique Value
+# premise ∃! x φ
+# let y sub y x φ {
+#   assume φ {
+#     prove = x y
+#   }
+#   assume = x y  {
+#     prove φ
+#   }
+#   prove ∀ x ↔ φ = x y
+#   prove ∃ y ∀ x ↔ φ = x y
+# }
+# qed
 
-theorem Unique Value Satisifies Condition
-premise ∀ x ↔ φ = x y
-prove = y y
-prove sub y x φ
-qed
+# theorem Unique Value Satisifies Condition
+# premise ∀ x ↔ φ = x y
+# prove = y y
+# prove sub y x φ
+# qed
 
-theorem Uniqueness by Two Cases
-premise ⊕ φ ψ
-assume φ {
-  prove ¬ ψ
-  prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
-  prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
-  prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
-}
-assume ψ {
-  prove ¬ φ
-  prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
-  prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
-  prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
-}
-prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
-qed
+# theorem Uniqueness by Two Cases
+# premise ⊕ φ ψ
+# assume φ {
+#   prove ¬ ψ
+#   prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
+#   prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
+#   prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
+# }
+# assume ψ {
+#   prove ¬ φ
+#   prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
+#   prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
+#   prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
+# }
+# prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
+# qed
 
-theorem Uniqueness by Two Cases
-prove ⊕ φ ¬ φ
-prove ∃! z ∨ ∧ φ = z x ∧ ¬ φ = z y
-qed
+# theorem Uniqueness by Two Cases
+# prove ⊕ φ ¬ φ
+# prove ∃! z ∨ ∧ φ = z x ∧ ¬ φ = z y
+# qed
 
-theorem Uniqueness Equivalence
-premise ∃! x φ
-premise ∀ x ↔ φ ψ
-prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
-prove ∃ x ψ
-assume ∧ sub y x ψ sub z x ψ {
-  prove sub y x φ
-  prove sub z x φ
-  prove ∧ sub y x φ sub z x φ
-  prove ∀ z → ∧ sub y x φ sub z x φ = y z
-  prove → ∧ sub y x φ sub z x φ = y z
-  prove = y z
-}
-prove ∃! x ψ
-qed
+# theorem Uniqueness Equivalence
+# premise ∃! x φ
+# premise ∀ x ↔ φ ψ
+# prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
+# prove ∃ x ψ
+# assume ∧ sub y x ψ sub z x ψ {
+#   prove sub y x φ
+#   prove sub z x φ
+#   prove ∧ sub y x φ sub z x φ
+#   prove ∀ z → ∧ sub y x φ sub z x φ = y z
+#   prove → ∧ sub y x φ sub z x φ = y z
+#   prove = y z
+# }
+# prove ∃! x ψ
+# qed
 
-theorem Uniqueness Equivalence
-premise ∃! x φ
-premise proves φ ψ
-premise proves ψ φ
-prove ∀ x ↔ φ ψ
-prove ∃! x ψ
-qed
+# theorem Uniqueness Equivalence
+# premise ∃! x φ
+# premise proves φ ψ
+# premise proves ψ φ
+# prove ∀ x ↔ φ ψ
+# prove ∃! x ψ
+# qed
