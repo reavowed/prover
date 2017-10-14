@@ -7,38 +7,36 @@ import scala.reflect.ClassTag
 
 abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] extends Expression {
   def variableName: String
-  def arguments: Seq[Term]
+  def arguments: ArgumentList
   def substitutionsLens: Lens[Substitutions, Map[String, ExpressionType]]
   def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[String]]
 
-  def update(newArguments: Seq[Term], newDepth: Int): ExpressionType
+  override def depth = arguments.depth
 
-  def specify(targetArguments: Seq[Term]) = {
-    if (depth == 0) throw new Exception("Cannot specify base-level expression")
-    update(arguments.map(_.specify(targetArguments)), depth - 1)
+  def update(newArguments: ArgumentList): ExpressionType
+
+  def specify(targetArguments: ArgumentList) = {
+    update(arguments.specify(targetArguments))
   }
   def specifyWithSubstitutions(
-    targetArguments: Seq[Term],
+    targetArguments: ArgumentList,
     substitutions: Substitutions,
     outerDepth: Int
   ) = {
-    if (depth == 0) throw new Exception("Cannot specify base-level expression")
-    arguments
-      .map(_.specifyWithSubstitutions(targetArguments, substitutions, outerDepth)).traverseOption
-      .map(update(_, depth + outerDepth - 1))
+    arguments.specifyWithSubstitutions(targetArguments, substitutions, outerDepth).map(update)
   }
-  def increaseDepth(additionalDepth: Int) = {
-    update(arguments.map(_.increaseDepth(additionalDepth)), depth + additionalDepth)
+  def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
+    update(arguments.increaseDepth(additionalDepth, insertionPoint))
   }
   override def reduceDepth(difference: Int): Option[ExpressionType] = {
     if (depth >= difference)
-      arguments.map(_.reduceDepth(difference)).traverseOption.map(update(_, depth - difference))
+      arguments.reduceDepth(difference).map(update)
     else
       None
   }
 
   override def requiredSubstitutions = {
-    (arguments.map(_.requiredSubstitutions) :+ requiredSubstitutionsLens.set(Seq(variableName))(Substitutions.Required.empty)).foldTogether
+    arguments.requiredSubstitutions ++ requiredSubstitutionsLens.set(Seq(variableName))(Substitutions.Required.empty)
   }
   override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {
     other match {
@@ -59,23 +57,21 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
     } yield result.asInstanceOf[ExpressionType]
   }
   override def calculateApplicatives(
-    baseArguments: Seq[Term],
+    baseArguments: ArgumentList,
     substitutions: Substitutions
   ): Seq[(ExpressionType, Substitutions)] = {
-    arguments.calculateApplicatives(baseArguments, substitutions).map(_.mapLeft { newArguments =>
-      update(newArguments.map(_.asInstanceOf[Term]), substitutions.depth + 1)
-    })
+    arguments.calculateApplicatives(baseArguments, substitutions).map(_.mapLeft(update))
   }
 
-  override def toString = s"$variableName(${arguments.map(_.toString).mkString(", ")})"
+  override def toString = s"$variableName(${arguments.terms.map(_.toString).mkString(", ")})"
   override def safeToString = toString
-  override def serialized = s"with (${arguments.map(_.serialized).mkString(", ")}) $variableName"
+  override def serialized = s"with (${arguments.terms.map(_.serialized).mkString(", ")}) $variableName"
 }
 
 object ExpressionApplication {
   def unapply(expression: Expression): Option[(String, Seq[Term])] = expression match {
     case expressionApplication: ExpressionApplication[_] =>
-      Some((expressionApplication.variableName, expressionApplication.arguments))
+      Some((expressionApplication.variableName, expressionApplication.arguments.terms))
     case _ =>
       None
   }

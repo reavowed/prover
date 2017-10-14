@@ -22,11 +22,11 @@ case class ProvingContext(
   def addFact(referencedFact: Option[ReferencedFact]) = {
     copy(referencedFacts = referencedFacts ++ referencedFact.toSeq)
   }
-  def increaseDepth(additionalDepth: Int) = {
+  def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
     ProvingContext(
-      referencedFacts.map(_.increaseDepth(additionalDepth)),
-      premises.map(_.increaseDepth(additionalDepth)),
-      assumptions.map(_.increaseDepth(additionalDepth)),
+      referencedFacts.map(_.increaseDepth(additionalDepth, insertionPoint)),
+      premises.map(_.increaseDepth(additionalDepth, insertionPoint)),
+      assumptions.map(_.increaseDepth(additionalDepth, insertionPoint)),
       availableInferences,
       assertionHints,
       transformationStatementDefinitions,

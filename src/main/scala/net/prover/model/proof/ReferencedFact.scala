@@ -1,7 +1,9 @@
 package net.prover.model.proof
 
 case class ReferencedFact(fact: Fact, reference: Reference.ToFact) {
-  def increaseDepth(additionalDepth: Int) = ReferencedFact(fact.increaseDepth(additionalDepth), reference)
+  def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
+    ReferencedFact(fact.increaseDepth(additionalDepth, insertionPoint), reference)
+  }
   def childDetails: Option[(ReferencedFact, Int, ReferencedFact => ReferencedFact)] = {
     for {
       (childFact, level, childUpdater) <- fact.childDetails

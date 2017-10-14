@@ -70,6 +70,7 @@ class TheoremSpec extends ProverSpec {
     val modusPonens = axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
     val implicationIsReflexive = axiom("Implication Is Reflexive", Nil, Implication(φ, φ))
     val extractLeftConjunct = axiom("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), φ, RearrangementType.Simplification)
+    val extractRightConjunct = axiom("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), ψ, RearrangementType.Simplification)
     val combineConjunction = axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ), RearrangementType.Expansion)
     val addRightDisjunct = axiom("Add Right Disjunct", Seq(ψ), Disjunction(φ, ψ), RearrangementType.Expansion)
 
@@ -208,8 +209,7 @@ class TheoremSpec extends ProverSpec {
             ElementOf.!(FunctionParameter("x", 0), a.^)))(
             "x")),
         Seq(Subset(a, a)),
-        Seq(generalization, Subset.inferences.head),
-        Seq(ForAll))
+        Seq(generalization, Subset.inferences.head))
     }
 
     "prove a conclusion using a multiply-contracted premise" in {
@@ -221,8 +221,7 @@ class TheoremSpec extends ProverSpec {
               ElementOf.!(FunctionParameter("x", 0), a.^)))(
             "x")),
         Seq(Subset(a, a)),
-        Seq(deduction, generalization, Subset.inferences.head),
-        Seq(ForAll))
+        Seq(deduction, generalization, Subset.inferences.head))
     }
 
     "apply a transformation with applied and unapplied statements" in {

@@ -25,7 +25,7 @@ case class TermDefinition(
       0)(
       boundVariableNames)
   }
-  val definingStatement = definitionPredicate.specify(Seq(defaultValue))
+  val definingStatement = definitionPredicate.specify(ArgumentList(Seq(defaultValue), 0))
 
   def termParser(implicit context: ParsingContext): Parser[Term] = {
     for {

@@ -144,7 +144,7 @@ object Proof {
     context: ProvingContext,
     reference: Reference.Direct
   ): Step.ScopedVariable = {
-    val substeps = proveSteps(substepOutlines, Nil, context.increaseDepth(1), Some(reference))
+    val substeps = proveSteps(substepOutlines, Nil, context.increaseDepth(1, context.depth), Some(reference))
     Step.ScopedVariable(boundVariableName, substeps, reference)
   }
 }

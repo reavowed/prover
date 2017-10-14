@@ -50,13 +50,13 @@ object ExpressionDefinition {
     override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = Term.parser
   }
   case class PredicateComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-    override def expression = PredicateApplication(name, arguments.map(a => FunctionParameter(a.name, a.index)), 1)
+    override def expression = PredicateApplication(name, ArgumentList(arguments.map(a => FunctionParameter(a.name, a.index)), 1))
     override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
       Statement.parser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))
     }
   }
   case class FunctionComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-    override def expression = FunctionApplication(name, arguments.map(a => FunctionParameter(a.name, a.index)), 1)
+    override def expression = FunctionApplication(name, ArgumentList(arguments.map(a => FunctionParameter(a.name, a.index)), 1))
     override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
       Term.parser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))
     }

@@ -12,7 +12,7 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[String]]
   def setDepth(newDepth: Int): ExpressionType
 
-  override def increaseDepth(difference: Int): ExpressionType = {
+  override def increaseDepth(difference: Int, insertionPoint: Int): ExpressionType = {
     setDepth(depth + difference)
   }
   override def reduceDepth(difference: Int): Option[ExpressionType] = {
@@ -21,12 +21,12 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     else
       None
   }
-  override def specify(targetArguments: Seq[Term]) = {
+  override def specify(targetArguments: ArgumentList) = {
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
     setDepth(depth - 1)
   }
   def specifyWithSubstitutions(
-    targetArguments: Seq[Term],
+    targetArguments: ArgumentList,
     substitutions: Substitutions,
     outerDepth: Int
   ) = {
@@ -50,14 +50,14 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     }
   }
   def applySubstitutions(substitutions: Substitutions): Option[ExpressionType] = {
-    substitutionsLens.get(substitutions).get(name).map(_.increaseDepth(depth).asInstanceOf[ExpressionType])
+    substitutionsLens.get(substitutions).get(name).map(_.increaseDepth(depth, substitutions.depth).asInstanceOf[ExpressionType])
   }
 
   def calculateApplicatives(
-    baseArguments: Seq[Term],
+    baseArguments: ArgumentList,
     substitutions: Substitutions
   ): Seq[(ExpressionType, Substitutions)] = {
-    Seq((increaseDepth(substitutions.depth + 1 - depth), substitutions))
+    Seq((setDepth(depth - baseArguments.depth + 1), substitutions))
   }
 }
 

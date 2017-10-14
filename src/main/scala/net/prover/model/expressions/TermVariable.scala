@@ -10,7 +10,7 @@ case class TermVariable(name: String, depth: Int) extends ExpressionVariable[Ter
   override def substitutionsLens = GenLens[Substitutions](_.terms)
   override def requiredSubstitutionsLens = GenLens[Substitutions.Required](_.terms)
 
-  override def calculateApplicatives(baseArguments: Seq[Term], substitutions: Substitutions) = {
+  override def calculateApplicatives(baseArguments: ArgumentList, substitutions: Substitutions) = {
     super[Term].calculateApplicatives(baseArguments, substitutions) ++
       super[ExpressionVariable].calculateApplicatives(baseArguments, substitutions)
   }

@@ -138,7 +138,7 @@ object CachedStep {
     }
     override def validate(context: ProvingContext): Option[Step] = {
       for {
-        validatedSubsteps <- substeps.validate(context.increaseDepth(1))
+        validatedSubsteps <- substeps.validate(context.increaseDepth(1, context.depth))
       } yield Step.ScopedVariable(variableName, validatedSubsteps, reference)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {

@@ -3,21 +3,21 @@ package net.prover.model.expressions
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Term extends Expression {
-  def increaseDepth(additionalDepth: Int): Term
+  def increaseDepth(additionalDepth: Int, insertionPoint: Int): Term
   def reduceDepth(difference: Int): Option[Term]
-  def specify(arguments: Seq[Term]): Term
+  def specify(arguments: ArgumentList): Term
   def specifyWithSubstitutions(
-    targetArguments: Seq[Term],
+    targetArguments: ArgumentList,
     substitutions: Substitutions,
     outerDepth: Int
   ): Option[Term]
   def applySubstitutions(substitutions: Substitutions): Option[Term]
   def calculateApplicatives(
-    baseArguments: Seq[Term],
+    baseArguments: ArgumentList,
     substitutions: Substitutions
   ): Seq[(Term, Substitutions)] = {
-    baseArguments.flatMapWithIndex { case (argument, index) =>
-      argument.calculateSubstitutions(this, substitutions).map(FunctionParameter.anonymous(index, 1, substitutions.depth + 1) -> _)
+    baseArguments.terms.flatMapWithIndex { case (argument, index) =>
+      argument.calculateSubstitutions(this, substitutions).map(FunctionParameter.anonymous(index, 1, depth - baseArguments.depth + 1) -> _)
     }
   }
 }

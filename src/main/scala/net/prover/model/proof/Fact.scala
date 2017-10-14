@@ -10,7 +10,7 @@ sealed trait Fact {
   def requiredSubstitutions: Substitutions.Required
   def calculateSubstitutions(otherFact: Fact, substitutionsSoFar: Substitutions): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Fact]
-  def increaseDepth(additionalDepth: Int): Fact
+  def increaseDepth(additionalDepth: Int, insertionPoint: Int): Fact
   def childDetails: Option[(Fact, Int, Fact => Fact)]
   def iteratedChildDetails(level: Int): Option[(Fact, Int, Fact => Fact)] = {
     def helper(acc: Option[(Fact, Int, Fact => Fact)]): Option[(Fact, Int, Fact => Fact)] = {
@@ -38,8 +38,8 @@ object Fact {
         substitutedAssertion <- assertion.applySubstitutions(substitutions)
       } yield Direct(substitutedAssertion)
     }
-    override def increaseDepth(additionalDepth: Int) = {
-      Direct(assertion.increaseDepth(additionalDepth))
+    override def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
+      Direct(assertion.increaseDepth(additionalDepth, insertionPoint))
     }
     override def childDetails = None
     override def serialized = assertion.serialized
@@ -68,8 +68,10 @@ object Fact {
         substitutedConsequent <- consequent.applySubstitutions(substitutions)
       } yield Deduced(substitutedAntecedent, substitutedConsequent)
     }
-    override def increaseDepth(additionalDepth: Int) = {
-      Deduced(antecedent.increaseDepth(additionalDepth), consequent.increaseDepth(additionalDepth))
+    override def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
+      Deduced(
+        antecedent.increaseDepth(additionalDepth, insertionPoint),
+        consequent.increaseDepth(additionalDepth, insertionPoint))
     }
     override def childDetails = Some((consequent, 0, Deduced(antecedent, _)))
     override def serialized = s"proves ${antecedent.serialized} ${consequent.serialized}"
@@ -96,8 +98,8 @@ object Fact {
         updatedFact <- scopedFact.applySubstitutions(substitutions)
       } yield ScopedVariable(updatedFact)(variableName)
     }
-    override def increaseDepth(additionalDepth: Int) = {
-      ScopedVariable(scopedFact.increaseDepth(additionalDepth))(variableName)
+    override def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
+      ScopedVariable(scopedFact.increaseDepth(additionalDepth, insertionPoint))(variableName)
     }
     override def childDetails = Some((scopedFact, 1, ScopedVariable(_)(variableName)))
     override def serialized: String = s"binding $variableName ${scopedFact.serialized}"

@@ -4,11 +4,11 @@ import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Expression {
   def depth: Int
-  def increaseDepth(additionalDepth: Int): Expression
+  def increaseDepth(additionalDepth: Int, insertionPoint: Int): Expression
   def reduceDepth(difference: Int): Option[Expression]
-  def specify(targetArguments: Seq[Term]): Expression
+  def specify(targetArguments: ArgumentList): Expression
   def specifyWithSubstitutions(
-    targetArguments: Seq[Term],
+    targetArguments: ArgumentList,
     substitutions: Substitutions,
     outerDepth: Int
   ): Option[Expression]
@@ -16,7 +16,7 @@ trait Expression {
   def requiredSubstitutions: Substitutions.Required
   def calculateSubstitutions(other: Expression, substitutions: Substitutions): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Expression]
-  def calculateApplicatives(targetArguments: Seq[Term], substitutions: Substitutions): Seq[(Expression, Substitutions)]
+  def calculateApplicatives(targetArguments: ArgumentList, substitutions: Substitutions): Seq[(Expression, Substitutions)]
 
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
     if (this == other) {
@@ -42,7 +42,7 @@ object Expression {
           substitutionsSoFar.flatMap(expression.calculateSubstitutions(otherExpression, _))
         }
     }
-    def calculateApplicatives(arguments: Seq[Term], substitutions: Substitutions): Seq[(Seq[Expression], Substitutions)] = {
+    def calculateApplicatives(arguments: ArgumentList, substitutions: Substitutions): Seq[(Seq[Expression], Substitutions)] = {
       expressions.foldLeft(Seq((Seq.empty[Expression], substitutions))) { case (predicatesAndSubstitutionsSoFar, expression) =>
         for {
           (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar

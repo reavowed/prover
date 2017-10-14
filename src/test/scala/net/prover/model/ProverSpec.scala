@@ -128,13 +128,13 @@ trait ProverSpec extends Specification {
     }
   }
   implicit class StatementOps(statement: Statement) {
-    def ^ : Statement = statement.increaseDepth(1)
-    def ^^ : Statement = statement.increaseDepth(2)
+    def ^ : Statement = statement.increaseDepth(1, 0)
+    def ^^ : Statement = statement.increaseDepth(2, 0)
   }
   implicit class StatementVariableOps(statementVariable: StatementVariable) {
-    def apply(terms: Term*) = PredicateApplication(statementVariable.name, terms, 0)
-    def !(terms: Term*) = PredicateApplication(statementVariable.name, terms, 1)
-    def !!(terms: Term*) = PredicateApplication(statementVariable.name, terms, 2)
+    def apply(terms: Term*) = PredicateApplication(statementVariable.name, ArgumentList(terms, 0))
+    def !(terms: Term*) = PredicateApplication(statementVariable.name, ArgumentList(terms, 1))
+    def !!(terms: Term*) = PredicateApplication(statementVariable.name, ArgumentList(terms, 2))
   }
   implicit def statementVariableToComponentType(statementVariable: StatementVariable): StatementComponent = StatementComponent(statementVariable.name)
   implicit def termVariableToComponentType(termVariable: TermVariable): TermComponent = TermComponent(termVariable.name)
@@ -167,13 +167,13 @@ trait ProverSpec extends Specification {
   }
   implicit class TermOps(term: Term) {
     def ^ : Term = {
-      term.increaseDepth(1)
+      term.increaseDepth(1, 0)
     }
     def ^^ : Term = {
-      term.increaseDepth(2)
+      term.increaseDepth(2, 0)
     }
     def ^^^ : Term = {
-      term.increaseDepth(3)
+      term.increaseDepth(3, 0)
     }
   }
   implicit class TermDefinitionOps(termDefinition: TermDefinition) {

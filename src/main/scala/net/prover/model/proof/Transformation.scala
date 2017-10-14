@@ -10,10 +10,10 @@ case class Transformation(statementDefinition: StatementDefinition, variableName
       DefinedStatement(Seq(statement), statementDefinition, statement.depth - 1)(statementDefinition.boundVariableNames)
     }
     def toSpecified(statement: Statement): Statement = {
-      statement.specify(Seq(TermVariable("_", 0)))
+      statement.specify(ArgumentList(Seq(TermVariable("_", 0)), 0))
     }
     def toBound(statement: Statement): Statement = {
-      statement.increaseDepth(1).specify(Seq(FunctionParameter(variableName, 0)))
+      statement.increaseDepth(1, 0).specify(ArgumentList(Seq(FunctionParameter(variableName, 0)), 1))
     }
     def transformNext(s: Statement) = {
       Seq((toFull(s), Some(s)), (toSpecified(s), None))
@@ -52,7 +52,7 @@ case class Transformation(statementDefinition: StatementDefinition, variableName
     else {
       val possibleSubstitutions = requiredSubstitutions.statements
         .foldProduct(s => Seq(
-          s -> PredicateApplication(s, Seq(FunctionParameter(variableName, 0)), 1),
+          s -> PredicateApplication(s, ArgumentList(Seq(FunctionParameter(variableName, 0)), 1)),
           s -> StatementVariable(s, 1)))
         .map(ss => Substitutions(statements = ss.toMap, depth = 1))
       for {
