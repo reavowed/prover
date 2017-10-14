@@ -89,7 +89,7 @@ class SubstitutionsSpec extends ProverSpec {
       testSubstitutions(
         φ.!(FunctionParameter("x", 0, 1)),
         ElementOf.!(FunctionParameter("x", 0, 1), a.^),
-        Substitutions(predicates = Map(φ -> ElementOf.!(FunctionParameter("x", 0, 1), a.^))))
+        Substitutions(predicates = Map(φ -> ElementOf.!(FunctionParameter.anonymous(0, 1), a.^))))
     }
 
     "match a bound predicate application to itself" in {
@@ -160,6 +160,17 @@ class SubstitutionsSpec extends ProverSpec {
         ForAll.!("X")(ForAll.!!("x")(Negation.!!!(ElementOf.!!!(FunctionParameter("x", 0, 3, 3), FunctionParameter("Y", 0, 1, 3))))),
         Substitutions(
           predicates = Map(φ -> ForAll.!!("x")(Negation.!!!(ElementOf.!!!(FunctionParameter("x", 0, 3, 3), FunctionParameter("Y", 0, 2, 3)))))))
+    }
+
+    "match a predicate application on a variable to a bound statement containing the variable" in {
+      testSubstitutions(
+        φ(a),
+        Exists("x")(ElementOf.!(FunctionParameter("x", 0, 1), a.^)),
+        Substitutions(
+          terms = Map(a -> a),
+          predicates = Map(φ -> Exists.!("x")(ElementOf.!!(FunctionParameter("x", 0, 2), FunctionParameter.anonymous(0, 1, 2))))),
+        Substitutions(
+          predicates = Map(φ -> Exists.!("x")(ElementOf.!!(FunctionParameter("x", 0, 2), a.^^)))))
     }
   }
 }

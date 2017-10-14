@@ -5,7 +5,8 @@ import net.prover.model.Substitutions
 case class FunctionParameter(index: Int, level: Int, depth: Int)(val name: Option[String]) extends Term {
   override def specify(targetArguments: ArgumentList): Term = {
     if (level == 1) {
-      targetArguments(index)
+      val result = targetArguments(index)
+      result.increaseDepth(depth - result.depth - 1, result.depth)
     } else {
       FunctionParameter(index, level - 1, depth - 1)(name)
     }

@@ -16,6 +16,7 @@ object ExpressionDefinition {
 
   sealed trait ComponentType {
     def name: String
+    def depthDifference: Int
     def expression: Expression
     def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext): Parser[Expression]
   }
@@ -42,20 +43,24 @@ object ExpressionDefinition {
   }
 
   case class StatementComponent(name: String) extends ComponentType {
+    override def depthDifference = 0
     override def expression = StatementVariable(name, 0)
     override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = Statement.parser
   }
   case class TermComponent(name: String) extends ComponentType {
+    override def depthDifference = 0
     override def expression = TermVariable(name, 0)
     override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = Term.parser
   }
   case class PredicateComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
+    override def depthDifference = 1
     override def expression = PredicateApplication(name, ArgumentList(arguments.map(a => FunctionParameter(a.name, a.index)), 1))
     override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
       Statement.parser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))
     }
   }
   case class FunctionComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
+    override def depthDifference = 1
     override def expression = FunctionApplication(name, ArgumentList(arguments.map(a => FunctionParameter(a.name, a.index)), 1))
     override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
       Term.parser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))

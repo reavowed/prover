@@ -16,9 +16,10 @@ trait Term extends Expression {
     baseArguments: ArgumentList,
     substitutions: Substitutions
   ): Seq[(Term, Substitutions)] = {
-    baseArguments.terms.flatMapWithIndex { case (argument, index) =>
-      argument.calculateSubstitutions(this, substitutions).map(FunctionParameter.anonymous(index, 1, depth - baseArguments.depth + 1) -> _)
-    }
+    for {
+      (argument, index) <- baseArguments.increaseDepth(depth - substitutions.depth, baseArguments.depth).terms.zipWithIndex
+      updatedSubstitutions <- argument.calculateSubstitutions(this, substitutions)
+    } yield FunctionParameter.anonymous(index, 1, depth - baseArguments.depth + 1) -> updatedSubstitutions
   }
 }
 
