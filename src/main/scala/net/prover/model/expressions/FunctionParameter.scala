@@ -33,9 +33,11 @@ case class FunctionParameter(index: Int, level: Int, depth: Int)(val name: Optio
       depth + additionalDepth)(
       name)
   }
-  override def reduceDepth(difference: Int) = {
-    if (level <= depth - difference)
+  override def reduceDepth(difference: Int, insertionPoint: Int) = {
+    if (level <= insertionPoint)
       Some(FunctionParameter(index, level, depth - difference)(name))
+    else if (level > insertionPoint + difference)
+      Some(FunctionParameter(index, level - difference, depth - difference)(name))
     else
       None
   }

@@ -13,9 +13,9 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
   def getMatch(other: Expression): Option[Seq[Expression]]
   def update(newComponents: Seq[Expression], newDepth: Int): ExpressionType
 
-  override def reduceDepth(difference: Int): Option[ExpressionType] = {
+  override def reduceDepth(difference: Int, insertionPoint: Int): Option[ExpressionType] = {
     if (depth >= difference)
-      components.map(_.reduceDepth(difference)).traverseOption.map(update(_, depth - difference))
+      components.map(_.reduceDepth(difference, insertionPoint)).traverseOption.map(update(_, depth - difference))
     else
       None
   }

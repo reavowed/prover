@@ -5,7 +5,7 @@ import net.prover.model.{Parser, ParsingContext, Substitutions}
 trait Expression {
   def depth: Int
   def increaseDepth(additionalDepth: Int, insertionPoint: Int): Expression
-  def reduceDepth(difference: Int): Option[Expression]
+  def reduceDepth(difference: Int, insertionPoint: Int): Option[Expression]
   def specify(targetArguments: ArgumentList): Expression
   def specifyWithSubstitutions(
     targetArguments: ArgumentList,

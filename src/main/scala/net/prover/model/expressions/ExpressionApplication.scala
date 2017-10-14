@@ -28,9 +28,9 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
     update(arguments.increaseDepth(additionalDepth, insertionPoint))
   }
-  override def reduceDepth(difference: Int): Option[ExpressionType] = {
+  override def reduceDepth(difference: Int, insertionPoint: Int): Option[ExpressionType] = {
     if (depth >= difference)
-      arguments.reduceDepth(difference).map(update)
+      arguments.reduceDepth(difference, insertionPoint).map(update)
     else
       None
   }

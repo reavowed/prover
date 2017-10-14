@@ -8,9 +8,9 @@ case class ArgumentList(terms: Seq[Term], depth: Int) {
   def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
     ArgumentList(terms.map(_.increaseDepth(additionalDepth, insertionPoint)), depth + additionalDepth)
   }
-  def reduceDepth(difference: Int) = {
+  def reduceDepth(difference: Int, insertionPoint: Int) = {
     terms
-      .map(_.reduceDepth(difference)).traverseOption
+      .map(_.reduceDepth(difference, insertionPoint)).traverseOption
       .map(ArgumentList(_, depth - difference))
   }
   def specify(targetArguments: ArgumentList) = {

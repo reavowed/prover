@@ -184,5 +184,14 @@ class SubstitutionsSpec extends ProverSpec {
         Substitutions(
           predicates = Map(φ -> Exists.!("x")(ElementOf.!!(FunctionParameter("x", 0, 2), EmptySet.^^)))))
     }
+
+    "match a bound statement variable to a statement" in {
+      testSubstitutions(
+        ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.^)),
+        ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), Exists.!("y")(Conjunction.!!(φ.!!(FunctionParameter("y", 0, 2)), ψ.^^)))),
+        Substitutions(
+          statements = Map(ψ -> Exists("y")(Conjunction.!(φ.!(FunctionParameter("y", 0)), ψ.^))),
+          predicates = Map(φ -> φ.!(FunctionParameter("x", 0)))))
+    }
   }
 }

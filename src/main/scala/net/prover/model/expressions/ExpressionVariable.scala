@@ -15,7 +15,7 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   override def increaseDepth(difference: Int, insertionPoint: Int): ExpressionType = {
     setDepth(depth + difference)
   }
-  override def reduceDepth(difference: Int): Option[ExpressionType] = {
+  override def reduceDepth(difference: Int, insertionPoint: Int): Option[ExpressionType] = {
     if (depth >= difference)
       Some(setDepth(depth - difference))
     else
@@ -40,9 +40,9 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     substitutions: Substitutions
   ): Seq[Substitutions] = {
     other match {
-      case _ if other.isRuntimeInstance[ExpressionType] && other.depth == depth + substitutions.depth =>
+      case _ if other.isRuntimeInstance[ExpressionType] && other.depth >= depth + substitutions.depth =>
         (for {
-          reducedOther <- other.reduceDepth(depth)
+          reducedOther <- other.reduceDepth(depth, substitutions.depth)
           result <- substitutions.update(name, reducedOther.asInstanceOf[ExpressionType], substitutionsLens, 0)
         } yield result).toSeq
       case _ =>
