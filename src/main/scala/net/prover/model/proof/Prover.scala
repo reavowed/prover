@@ -16,7 +16,7 @@ case class Prover(
   import context._
 
   val applicableHints = assertionHints.filter(_.conclusion == assertionToProve)
-  lazy val allSimplifiedFacts = referencedFacts ++ referencedFacts.flatMap(getAllSimplifications)
+  lazy val allSimplifiedFacts = referencedFacts.flatMap(getAllSimplifications)
   lazy val transformations: Seq[Transformation] = transformationStatementDefinitions.mapCollect { statementDefinition =>
     for {
       variableName <- statementDefinition.boundVariableNames.single
@@ -257,11 +257,10 @@ case class Prover(
 
   private def getContractions(referencedFact: ReferencedFact, level: Int = 0, additionalDepth: Int = 0): Seq[ReferencedFact] = {
     def nextLevelContractions =
-      for {
-        (childFact, moreDepth, updater) <- referencedFact.childDetails.toSeq
-        innerFact <- getContractions(childFact, level + 1, additionalDepth + moreDepth)
-      } yield updater(innerFact)
-    (referencedFact +: nextLevelContractions).flatMap(getTopLevelContractions(_, level, additionalDepth))
+      referencedFact.childDetails.map { case (childFact, moreDepth, updater) =>
+        getContractions(childFact, level + 1, additionalDepth + moreDepth).map(updater)
+      }.getOrElse(Seq(referencedFact))
+    nextLevelContractions.flatMap(getTopLevelContractions(_, level, additionalDepth))
   }
 
   def getTopLevelContractions(referencedFact: ReferencedFact, level: Int, additionalDepth: Int): Seq[ReferencedFact] = {
