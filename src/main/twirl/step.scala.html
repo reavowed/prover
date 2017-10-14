@@ -29,7 +29,6 @@
               <td class="stepInferenceId">@inference.name<td>
             }
           }
-
         }
       }
     </tr>
@@ -58,6 +57,36 @@
       indentLevel,
       referenceMap,
       if (scopedVariableStep.substeps.lastOption.contains(substep)) additionalReferences :+ scopedVariableStep.reference.value else Nil)
+    }
+  }
+  case namingStep: Step.Naming => {
+    <tr class="proofRow" data-reference="@namingStep.assertionStep.reference.value">
+      <td>
+        @for(_ <- 1 to indentLevel) { &nbsp;&nbsp; }
+        Let @{namingStep.variableName} be such that @Html(html.referencedStatement(
+          namingStep.assumptionStep.assumption,
+          Some(namingStep.assumptionStep.assumptionReference.value),
+          referenceMap.getReferrers(
+            namingStep.assumptionStep.assumptionReference.value,
+            namingStep.assumptionStep.reference.value
+          )).body.trim).
+      </td>
+      @defining(namingStep.assertionStep.inferenceApplication.inference) { inference =>
+        @inference.keyOption match {
+          case Some(key) => {
+            <td><a class="stepInferenceId" href="/books/@inference.bookKey/@inference.chapterKey/@key">@inference.name</a><td>
+          }
+          case None => {
+            <td class="stepInferenceId">@inference.name<td>
+            }
+        }
+      }
+    </tr>
+    @namingStep.assumptionStep.steps.map { substep => @html.step(
+      substep,
+      indentLevel,
+      referenceMap,
+      if (namingStep.assumptionStep.steps.lastOption.contains(substep)) additionalReferences :+ namingStep.assumptionStep.reference.value else Nil)
     }
   }
   case _ => {

@@ -47,7 +47,7 @@ object StepOutline {
   }
 
   case class Naming(
-      termVariable: TermVariable,
+      variableName: String,
       definingAssumption: Statement,
       steps: Seq[StepOutline])
     extends StepOutline.WithAssertion
@@ -59,11 +59,12 @@ object StepOutline {
   object Naming {
     def parser(implicit context: ParsingContext): Parser[Naming] = {
       for {
-        termVariable <- Term.variableParser
-        definingAssumption <- Statement.parser
-        steps <- listParser.inBraces
+        variableName <- Parser.singleWord
+        updatedContext = context.addParameterList(Seq(variableName))
+        definingAssumption <- Statement.parser(updatedContext)
+        steps <- listParser(updatedContext).inBraces
       } yield {
-        Naming(termVariable, definingAssumption, steps)
+        Naming(variableName, definingAssumption, steps)
       }
     }
   }

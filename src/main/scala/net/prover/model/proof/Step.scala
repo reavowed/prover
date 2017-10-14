@@ -44,7 +44,7 @@ object Step {
   }
 
   case class Naming(
-      variable: TermVariable,
+      variableName: String,
       assumptionStep: Step.Assumption,
       assertionStep: Step.Assertion,
       reference: Reference.Direct)
@@ -52,8 +52,8 @@ object Step {
   {
     override def assertion = assertionStep.assertion
     override def referencedInferenceIds = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
-    override def referenceMap = assertionStep.referenceMap
-    override def cached = CachedStep.Naming(variable, assumptionStep.cached, assertionStep.cached, reference)
+    override def referenceMap = assumptionStep.referenceMap ++ assertionStep.referenceMap
+    override def cached = CachedStep.Naming(variableName, assumptionStep.cached, assertionStep.cached, reference)
   }
 
   case class ScopedVariable(variableName: String, substeps: Seq[Step], reference: Reference.Direct) extends Step {

@@ -1,9 +1,11 @@
 package net.prover.model.proof
 
-import net.prover.model.expressions.{Statement, TermVariable}
+import net.prover.model.expressions.{ArgumentList, Statement, TermVariable}
 import net.prover.model._
 import net.prover.model.entries.StatementDefinition
 import org.slf4j.LoggerFactory
+
+import scala.util.Try
 
 case class Proof(steps: Seq[Step]) {
   def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
@@ -70,8 +72,8 @@ object Proof {
     stepOutline match {
       case StepOutline.Assumption(assumption, substepOutlines) =>
         proveAssumptionStep(assumption, substepOutlines, context, reference)
-      case StepOutline.Naming(variable, namingStatement, substepOutlines) =>
-        proveNamingStep(variable, namingStatement, substepOutlines, context, reference)
+      case StepOutline.Naming(variableName, namingStatement, substepOutlines) =>
+        proveNamingStep(variableName, namingStatement, substepOutlines, context, reference)
       case assertionStep: StepOutline.Assertion =>
         proveAssertionStep(assertionStep, context, reference)
           .getOrElse(throw ProvingException(
@@ -111,7 +113,7 @@ object Proof {
   }
 
   def proveNamingStep(
-    variable: TermVariable,
+    variableName: String,
     definingAssumption: Statement,
     substepOutlines: Seq[StepOutline],
     context: ProvingContext,
@@ -123,19 +125,23 @@ object Proof {
       case _ =>
         throw new Exception("Naming step must end with an assertion")
     }
-    val assumptionStep = proveAssumptionStep(definingAssumption, substepOutlines, context, reference)
+    val assumptionStep = proveAssumptionStep(definingAssumption, substepOutlines, context.increaseDepth(1, context.depth), reference)
     val deduction = assumptionStep.referencedFact.getOrElse(throw ProvingException(
       "Naming step did not have a conclusion",
       finalStepWithAssertion.location))
+    val outerAssertion = Try(finalStepWithAssertion.assertion.specify(ArgumentList(Nil, context.depth)))
+      .getOrElse(throw ProvingException(
+        s"Assertion ${finalStepWithAssertion.assertion} was not independent of $variableName",
+        finalStepWithAssertion.location))
     val assertionStep = proveAssertionStep(
-      finalStepWithAssertion,
-      context.addFact(deduction.fact, deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")),
+      StepOutline.Assertion(outerAssertion, None),
+      context.addFact(Fact.ScopedVariable(deduction.fact)(variableName), deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")),
       reference
     ).getOrElse(
       throw ProvingException(
-        s"Could not extract assertion ${finalStepWithAssertion.assertion} from naming step for $variable",
+        s"Could not extract assertion ${finalStepWithAssertion.assertion} from naming step for $variableName",
         finalStepWithAssertion.location))
-    Step.Naming(variable, assumptionStep, assertionStep, reference)
+    Step.Naming(variableName, assumptionStep, assertionStep, reference)
   }
 
   def proveScopedVariableStep(

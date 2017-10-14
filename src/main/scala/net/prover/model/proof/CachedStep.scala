@@ -86,7 +86,7 @@ object CachedStep {
   }
 
   case class Naming(
-      variable: TermVariable,
+      variableName: String,
       assumptionStep: Assumption,
       assertionStep: Assertion,
       reference: Reference.Direct)
@@ -101,16 +101,16 @@ object CachedStep {
         deduction = validatedAssumptionStep.referencedFact.getOrElse(throw new Exception("Naming step assumption must prove a fact"))
         validatedAssertionStep <- assertionStep.validate(
           context.addFact(deduction.fact, deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")))
-      } yield Step.Naming(variable, validatedAssumptionStep, validatedAssertionStep.asInstanceOf[Step.Assertion], reference)
+      } yield Step.Naming(variableName, validatedAssumptionStep, validatedAssertionStep.asInstanceOf[Step.Assertion], reference)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
-      case StepOutline.Naming(`variable`, statement, stepOutlines) =>
+      case StepOutline.Naming(`variableName`, statement, stepOutlines) =>
         assumptionStep.assumption == statement &&assumptionStep.steps.matchOutlines(stepOutlines)
       case _ =>
         false
     }
     override def serializedLines = {
-      Seq(s"name ${variable.name} ${assumptionStep.assumption.serialized} {") ++
+      Seq(s"name $variableName ${assumptionStep.assumption.serialized} {") ++
         assumptionStep.steps.flatMap(_.serializedLines).indent ++
         Seq("}") ++
         assertionStep.serializedLines
@@ -119,11 +119,11 @@ object CachedStep {
   object Naming {
     def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Naming] = {
       for {
-        variable <- Term.variableParser
+        variableName <- Parser.singleWord
         assumptionStep <- Assumption.parser(reference)
         _ <- Parser.requiredWord("assert")
         assertionStep <- Assertion.parser(reference)
-      } yield Naming(variable, assumptionStep, assertionStep, reference)
+      } yield Naming(variableName, assumptionStep, assertionStep, reference)
     }
   }
 
