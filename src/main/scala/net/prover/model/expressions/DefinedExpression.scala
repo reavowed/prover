@@ -51,6 +51,21 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
       .map(_.mapLeft(update(_, depth - baseArguments.depth + 1)))
   }
 
+  override def condense(
+    other: Expression,
+    thisSubstitutions: Substitutions,
+    otherSubstitutions: Substitutions
+  ): Option[(Substitutions, Substitutions)] = {
+    super.condense(other, thisSubstitutions, otherSubstitutions) orElse
+      getMatch(other).flatMap { otherComponents =>
+        components.zip(otherComponents)
+          .foldInAnyOrder((thisSubstitutions, otherSubstitutions)) {
+            case ((thisSubstitutionsSoFar, otherSubstitutionsSoFar), (component, otherComponent)) =>
+              component.condense(otherComponent, thisSubstitutionsSoFar, otherSubstitutionsSoFar)
+          }
+      }
+  }
+
   override def findComponentPath(other: Expression): Option[Seq[Int]] = {
     super.findComponentPath(other) orElse
       components.zipWithIndex.mapFind { case (subcomponent, index) =>

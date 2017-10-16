@@ -1,5 +1,6 @@
 @import net.prover.model.proof.Step
 @import net.prover.model.proof.ReferenceMap
+@import net.prover.model.HtmlHelper
 @(
   step: Step,
   indentLevel: Int,
@@ -20,7 +21,7 @@
       @if(assertionStep.isRearrangement) {
         <td><span class="stepInferenceId">Rearrangement</span><td>
       } else {
-        @defining(assertionStep.inferenceApplication.inference) { inference =>
+        @defining(HtmlHelper.findInferenceToDisplay(assertionStep.inferenceApplication)) { inference =>
           @inference.keyOption match {
             case Some(key) => {
               <td><a class="stepInferenceId" href="/books/@inference.bookKey/@inference.chapterKey/@key">@inference.name</a><td>

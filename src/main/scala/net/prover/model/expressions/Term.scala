@@ -38,8 +38,12 @@ object Term {
   }
 
   def parser(implicit context: ParsingContext): Parser[Term] = {
-
     Parser.selectWordParser("term") {
+      case "with" =>
+        for {
+          arguments <- Term.parser.listOrSingle(None)
+          name <- Parser.singleWord
+        } yield FunctionApplication(name, ArgumentList(arguments, context.parameterDepth))
       case context.RecognisedParameter(parameter) =>
         Parser.constant(parameter)
       case context.RecognisedTermDefinition(termDefinition) =>

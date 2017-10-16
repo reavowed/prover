@@ -18,6 +18,25 @@ trait Expression {
   def applySubstitutions(substitutions: Substitutions): Option[Expression]
   def calculateApplicatives(targetArguments: ArgumentList, substitutions: Substitutions): Seq[(Expression, Substitutions)]
 
+  def condense(
+    other: Expression,
+    thisSubstitutions: Substitutions,
+    otherSubstitutions: Substitutions
+  ): Option[(Substitutions, Substitutions)] = {
+    condenseOneWay(other, thisSubstitutions, otherSubstitutions) orElse
+      other.condenseOneWay(this, otherSubstitutions, thisSubstitutions).map(_.reverse)
+  }
+  protected def condenseOneWay(
+    other: Expression,
+    thisSubstitutions: Substitutions,
+    otherSubstitutions: Substitutions
+  ): Option[(Substitutions, Substitutions)] = {
+    for {
+      thisSubstituted <- applySubstitutions(thisSubstitutions)
+      updatedOtherSubstitutions <- other.calculateSubstitutions(thisSubstituted, otherSubstitutions).headOption
+    } yield (thisSubstitutions, updatedOtherSubstitutions)
+  }
+
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
     if (this == other) {
       Some(Nil)

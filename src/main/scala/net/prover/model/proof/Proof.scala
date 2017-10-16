@@ -129,7 +129,7 @@ object Proof {
     val deduction = assumptionStep.referencedFact.getOrElse(throw ProvingException(
       "Naming step did not have a conclusion",
       finalStepWithAssertion.location))
-    val outerAssertion = Try(finalStepWithAssertion.assertion.specify(ArgumentList(Nil, context.depth)))
+    val outerAssertion = finalStepWithAssertion.assertion.reduceDepth(1, context.depth)
       .getOrElse(throw ProvingException(
         s"Assertion ${finalStepWithAssertion.assertion} was not independent of $variableName",
         finalStepWithAssertion.location))

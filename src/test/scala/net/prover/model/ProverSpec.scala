@@ -109,12 +109,34 @@ trait ProverSpec extends Specification {
     "",
     "")
 
+  val Singleton = TermDefinition(
+    "singleton",
+    Nil,
+    Seq(a),
+    "Singleton",
+    Format("{%0}", requiresBrackets = false),
+    Nil,
+    φ.^,
+    "",
+    "")
+
+  val Pair = TermDefinition(
+    "pair",
+    Nil,
+    Seq(a, b),
+    "Unordered Pair",
+    Format("{%0, %1}", requiresBrackets = false),
+    Nil,
+    φ.^,
+    "",
+    "")
+
   implicit val defaultContext = ParsingContext(
     statementDefinitions = Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
       ForAll, Exists, ExistsUnique,
       ElementOf, Equals, Subset),
-    termDefinitions = Seq(EmptySetDefinition, PowerSet),
+    termDefinitions = Seq(EmptySetDefinition, PowerSet, Singleton, Pair),
     statementVariableNames = Set(φ, ψ, χ).map(_.name),
     termVariableNames = Set(a, b, c, n).map(_.name),
     Seq.empty)

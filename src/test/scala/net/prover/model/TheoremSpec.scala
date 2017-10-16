@@ -85,7 +85,7 @@ class TheoremSpec extends ProverSpec {
       φ(a))
     val substitutionOfEquals = axiom(
       "Substitution of Equals",
-      Seq(Equals(a, b), φ(a)),
+      Seq(Equals(a, b).elidable, φ(a)),
       φ(b))
 
     "prove the conclusion of a premiseless inference" in {
@@ -262,6 +262,17 @@ class TheoremSpec extends ProverSpec {
           Seq(ψ.^))),
         Seq(extractRightConjunct, valueForExistence, deduction, generalization),
         Seq(ForAll))
+    }
+
+    "prove with an elided premise" in {
+      val repeatedPairIsSingleton = axiom(
+        "Repeated Pair Is Singleton",
+        Nil,
+        Equals(Pair(a, a), Singleton(a)))
+      checkProof(
+        Seq(Equals(b, Pair(a,a))),
+        Seq(Equals(b, Singleton(a))),
+        Seq(repeatedPairIsSingleton, substitutionOfEquals))
     }
   }
 }

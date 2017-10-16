@@ -16,7 +16,9 @@ case class Substitutions(
     lens: Lens[Substitutions, Map[String, T]],
     additionalDepth: Int
   ): Option[Substitutions] = {
-    if (expression.depth != depth + additionalDepth) throw new Exception("Depth mismatch")
+    if (expression.depth != depth + additionalDepth) {
+      throw new Exception("Depth mismatch")
+    }
     val map = lens.get(this)
     map.get(name) match {
       case Some(`expression`) =>

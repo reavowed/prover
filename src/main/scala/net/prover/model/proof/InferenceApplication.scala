@@ -7,6 +7,7 @@ import net.prover.model.entries.StatementDefinition
 sealed trait InferenceApplication {
   def inference: Inference
   def referencedInferenceIds: Set[String]
+  def references: Seq[Reference]
   def directReferences: Set[Reference.ToFact]
   def cached: CachedInferenceApplication
 }
