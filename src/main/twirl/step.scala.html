@@ -87,7 +87,10 @@
       substep,
       indentLevel,
       referenceMap,
-      if (namingStep.assumptionStep.steps.lastOption.contains(substep)) additionalReferences :+ namingStep.assumptionStep.reference.value else Nil)
+      if (namingStep.assumptionStep.steps.lastOption.contains(substep))
+        additionalReferences ++ Seq(namingStep.reference.value, namingStep.assumptionStep.reference.value)
+      else
+        Nil)
     }
   }
   case _ => {

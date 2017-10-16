@@ -124,9 +124,9 @@ object CachedStep {
       for {
         variableName <- Parser.singleWord
         updatedContext = parsingContext.addParameterList(Seq(variableName))
-        assumptionStep <- Assumption.parser(reference)(updatedContext)
+        assumptionStep <- Assumption.parser(reference.withSuffix(".0"))(updatedContext)
         _ <- Parser.requiredWord("assert")
-        assertionStep <- Assertion.parser(reference)
+        assertionStep <- Assertion.parser(reference.withSuffix(".1"))
       } yield Naming(variableName, assumptionStep, assertionStep, reference)
     }
   }

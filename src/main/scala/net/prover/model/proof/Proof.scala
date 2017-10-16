@@ -125,7 +125,11 @@ object Proof {
       case _ =>
         throw new Exception("Naming step must end with an assertion")
     }
-    val assumptionStep = proveAssumptionStep(definingAssumption, substepOutlines, context.increaseDepth(1, context.depth), reference)
+    val assumptionStep = proveAssumptionStep(
+      definingAssumption,
+      substepOutlines,
+      context.increaseDepth(1, context.depth),
+      reference.withSuffix(".0"))
     val deduction = assumptionStep.referencedFact.getOrElse(throw ProvingException(
       "Naming step did not have a conclusion",
       finalStepWithAssertion.location))
@@ -136,7 +140,7 @@ object Proof {
     val assertionStep = proveAssertionStep(
       StepOutline.Assertion(outerAssertion, None),
       context.addFact(Fact.ScopedVariable(deduction.fact)(variableName), deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")),
-      reference
+      reference.withSuffix(".1")
     ).getOrElse(
       throw ProvingException(
         s"Could not extract assertion ${finalStepWithAssertion.assertion} from naming step for $variableName",
