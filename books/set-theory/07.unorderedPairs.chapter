@@ -2,42 +2,45 @@ chapter Unordered Pairs
 Establish the existence of the unordered pair {a, b}.
 
 theorem Unordered Pair Existence Lemma
-assume ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b {
-  let x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b {
-    assume ∧ = x singleton ∅ = y a {
+take y {
+  assume ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b {
+    let x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b {
+      assume ∧ = x singleton ∅ = y a {
+        prove ∨ = y a = y b
+      }
+      assume ∧ = x ∅ = y b {
+        prove ∨ = y a = y b
+      }
       prove ∨ = y a = y b
     }
-    assume ∧ = x ∅ = y b {
-      prove ∨ = y a = y b
+  }
+  assume ∨ = y a = y b {
+    assume = y a {
+      prove ∈ singleton ∅ powerSet singleton ∅
+      prove = singleton ∅ singleton ∅
+      prove ∧ ∈ singleton ∅ powerSet singleton ∅ ∨ ∧ = singleton ∅ singleton ∅ = y a  ∧ = singleton ∅ ∅ = y b
+      prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
     }
-    prove ∨ = y a = y b
-  }
-}
-assume ∨ = y a = y b {
-  assume = y a {
-    prove ∈ singleton ∅ powerSet singleton ∅
-    prove = singleton ∅ singleton ∅
-    prove ∧ ∈ singleton ∅ powerSet singleton ∅ ∨ ∧ = singleton ∅ singleton ∅ = y a  ∧ = singleton ∅ ∅ = y b
+    assume = y b {
+      prove ∈ ∅ powerSet singleton ∅
+      prove = ∅ ∅
+      prove ∧ ∈ ∅ powerSet singleton ∅ ∨ ∧ = ∅ singleton ∅ = y a ∧ = ∅ ∅ = y b
+      prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
+    }
     prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
   }
-  assume = y b {
-    prove ∈ ∅ powerSet singleton ∅
-    prove = ∅ ∅
-    prove ∧ ∈ ∅ powerSet singleton ∅ ∨ ∧ = ∅ singleton ∅ = y a ∧ = ∅ ∅ = y b
-    prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
-  }
-  prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
+  prove ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b ∨ = y a = y b
 }
-prove ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b ∨ = y a = y b
 prove ∀ y ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b ∨ = y a = y b
 qed
 
 theorem Unordered Pair Existence
-assume ∈ x powerSet singleton ∅ {
-  prove ⊕ = x singleton ∅ = x ∅
-  prove ∃! y ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
+take x {
+  assume ∈ x powerSet singleton ∅ {
+    prove ⊕ = x singleton ∅ = x ∅
+    prove ∃! y ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
+  }
 }
-prove ∀ x → ∈ x powerSet singleton ∅ ∃! y ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
 prove ∃ z ∀ y ↔ ∈ y z ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
 prove ∀ y ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b ∨ = y a = y b
 prove ∃ z ∀ y ↔ ∈ y z ∨ = y a = y b
@@ -114,14 +117,16 @@ theorem Unordered Pair Is Subset
 premise ∈ a S
 premise ∈ b S
 prove ∀ x ↔ ∈ x pair a b ∨ = x a = x b
-assume = x a {
-  prove ∈ x S
-}
-assume = x b {
-  prove ∈ x S
-}
-assume ∨ = x a = x b {
-  prove ∈ x S
+take x {
+  assume = x a {
+    prove ∈ x S
+  }
+  assume = x b {
+    prove ∈ x S
+  }
+  assume ∨ = x a = x b {
+    prove ∈ x S
+  }
 }
 prove ∀ x → ∨ = x a = x b ∈ x S
 prove ∀ x → ∈ x pair a b ∈ x S

@@ -25,51 +25,51 @@ qed
 
 term ∅ () (∀ x ¬ ∈ x _)
 
-# theorem The Empty Set Has No Elements
-# prove ∀ x ¬ ∈ x ∅
-# prove ¬ ∃ x ∈ x ∅
-# qed
+theorem The Empty Set Has No Elements
+prove ∀ x ¬ ∈ x ∅
+prove ¬ ∃ x ∈ x ∅
+qed
 
-# theorem A Set with No Elements Is the Empty Set
-# premise ∀ x ¬ ∈ x a
-# prove ∀ x ¬ ∈ x ∅
-# prove = a ∅
-# qed
+theorem A Set with No Elements Is the Empty Set
+premise ∀ x ¬ ∈ x a
+prove ∀ x ¬ ∈ x ∅
+prove = a ∅
+qed
 
-# theorem A Set with No Elements Is the Empty Set
-# premise ¬ ∃ x ∈ x a
-# prove ∀ x ¬ ∈ x a
-# prove = a ∅
-# qed
+theorem A Set with No Elements Is the Empty Set
+premise ¬ ∃ x ∈ x a
+prove ∀ x ¬ ∈ x a
+prove = a ∅
+qed
 
-# theorem A Set with an Element Is Not the Empty Set
-# premise ∃ x ∈ x a
-# prove ¬ ∃ x ∈ x ∅
-# prove ¬ = a ∅
-# qed
+theorem A Set with an Element Is Not the Empty Set
+premise ∃ x ∈ x a
+prove ¬ ∃ x ∈ x ∅
+prove ¬ = a ∅
+qed
 
-# theorem A Set with an Element Is Not the Empty Set
-# premise ∈ b a
-# prove ∃ x ∈ x a
-# prove ¬ = a ∅
-# qed
+theorem A Set with an Element Is Not the Empty Set
+premise ∈ b a
+prove ∃ x ∈ x a
+prove ¬ = a ∅
+qed
 
-# theorem A Set That Is Not the Empty Set Has an Element
-# premise ¬ = a ∅
-# assume ¬ ∃ x ∈ x a {
-#   prove = a ∅
-# }
-# prove ∃ x ∈ x a
-# qed
+theorem A Set That Is Not the Empty Set Has an Element
+premise ¬ = a ∅
+assume ¬ ∃ x ∈ x a {
+  prove = a ∅
+}
+prove ∃ x ∈ x a
+qed
 
-# theorem The Empty Set Is a Subset of Any Set
-# prove ∀ x ¬ ∈ x ∅
-# prove ∀ x → ∈ x ∅ ∈ x a
-# prove ⊆ ∅ a
-# qed
+theorem The Empty Set Is a Subset of Any Set
+prove ∀ x ¬ ∈ x ∅
+prove ∀ x → ∈ x ∅ ∈ x a
+prove ⊆ ∅ a
+qed
 
-# theorem A False Statement Is a Membership Condition for the Empty Set
-# premise ∀ x ¬ φ
-# prove ∀ x ¬ ∈ x ∅
-# prove ∀ x ↔ ∈ x ∅ φ
-# qed
+theorem A False Statement Is a Membership Condition for the Empty Set
+premise ∀ x ¬ with x φ
+prove ∀ x ¬ ∈ x ∅
+prove ∀ x ↔ ∈ x ∅ with x φ
+qed

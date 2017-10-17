@@ -9,15 +9,18 @@ qed
 
 theorem Singleton Existence
 prove ∃ x ∃ y ∈ y x
-let c ∃ y ∈ y c {
+let b ∃ y ∈ y b {
   prove ∃! x = x a
-  prove → ∈ y c ∃! x = x a
-  prove ∀ y → ∈ y c ∃! x = x a
-  prove ∃ b ∀ x ↔ ∈ x b ∃ y ∧ ∈ y c = x a
-  prove ↔ ∃ y ∧ ∈ y c = x a = x a
-  prove ∀ x ↔ ∃ y ∧ ∈ y c = x a = x a
-  prove ∃ b ∀ x ↔ ∈ x b = x a
-  prove ∃! b ∀ x ↔ ∈ x b = x a
+  take y {
+    prove → ∈ y b ∃! x = x a
+  }
+  prove ∀ y → ∈ y b ∃! x = x a
+  prove ∃ z ∀ x ↔ ∈ x z ∃ y ∧ ∈ y b = x a
+  take x {
+    prove ↔ ∃ y ∧ ∈ y b = x a = x a
+  }
+  prove ∃ z ∀ x ↔ ∈ x z = x a
+  prove ∃! z ∀ x ↔ ∈ x z = x a
 }
 qed
 
@@ -50,11 +53,11 @@ qed
 theorem Singleton of Element Is Subset
 premise ∈ a S
 prove ∀ x ↔ ∈ x singleton a = x a
-assume = x a {
-  prove ∈ x S
+take x {
+  assume = x a {
+    prove ∈ x S
+  }
 }
-prove → = x a ∈ x S
-prove ∀ x → = x a ∈ x S
 prove ∀ x → ∈ x singleton a ∈ x S
 prove ⊆ singleton a S
 qed

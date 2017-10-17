@@ -1,10 +1,10 @@
 Predicate Calculus
 import Propositional Calculus
 
-variables (φ ψ) (a b c)
+variables (φ ψ) (a b c F)
 
 include 02.universalQuantifier.chapter
 include 03.existentialQuantifier.chapter
 include 04.equality.chapter
 include 05.uniquenessQuantifier.chapter
-# include 06.inferences.chapter
+include 06.inferences.chapter

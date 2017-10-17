@@ -2,31 +2,31 @@ chapter Unions
 Arbitrary and binary unions.
 
 axiom Axiom of Union
-conclusion ∃ b ∀ y ↔ ∈ y b ∃ x ∧ ∈ x a ∈ y x
+conclusion ∃ x ∀ y ↔ ∈ y x ∃ z ∧ ∈ z a ∈ y z
 
 theorem Arbitrary Unions Exist
-prove ∃ b ∀ y ↔ ∈ y b ∃ x ∧ ∈ x a ∈ y x
-prove ∃! b ∀ y ↔ ∈ y b ∃ x ∧ ∈ x a ∈ y x
+prove ∃ x ∀ y ↔ ∈ y x ∃ z ∧ ∈ z a ∈ y z
+prove ∃! x ∀ y ↔ ∈ y x ∃ z ∧ ∈ z a ∈ y z
 qed
 
 term union (a)
   name (Arbitrary Union)
   format (⋃a)
-  (∀ y ↔ ∈ y _ ∃ x ∧ ∈ y x ∈ x a)
+  (∀ x ↔ ∈ x _ ∃ y ∧ ∈ x y ∈ y a)
 
 theorem Element of Arbitrary Union
-premise ∈ x union A
-prove ∀ y ↔ ∈ y union A ∃ a ∧ ∈ y a ∈ a A
-prove ∃ a ∧ ∈ x a ∈ a A
+premise ∈ a union A
+prove ∀ y ↔ ∈ y union A ∃ x ∧ ∈ y x ∈ x A
+prove ∃ x ∧ ∈ a x ∈ x A
 qed
 
 theorem Element of Element Is Element of Union
-premise ∈ x a
+premise ∈ b a
 premise ∈ a A
-prove ∧ ∈ x a ∈ a A
-prove ∃ b ∧ ∈ x b ∈ b A
-prove ∀ y ↔ ∈ y union A ∃ b ∧ ∈ y b ∈ b A
-prove ∈ x union A
+prove ∧ ∈ b a ∈ a A
+prove ∃ x ∧ ∈ b x ∈ x A
+prove ∀ y ↔ ∈ y union A ∃ x ∧ ∈ y x ∈ x A
+prove ∈ b union A
 qed
 
 term ∪ (a b)
@@ -36,33 +36,34 @@ theorem Membership Condition for Binary Union
 prove = ∪ a b union pair a b
 prove ∀ x ↔ ∈ x union pair a b ∃ y ∧ ∈ x y ∈ y pair a b
 prove ∀ x ↔ ∈ x ∪ a b ∃ y ∧ ∈ x y ∈ y pair a b
-assume ∃ y ∧ ∈ x y ∈ y pair a b {
-  let y ∧ ∈ x y ∈ y pair a b {
-    prove ∨ = y a = y b
-    assume = y a {
-      prove ∈ x a
+take x {
+  assume ∃ y ∧ ∈ x y ∈ y pair a b {
+    let y ∧ ∈ x y ∈ y pair a b {
+      prove ∨ = y a = y b
+      assume = y a {
+        prove ∈ x a
+      }
+      assume = y b {
+        prove ∈ x b
+      }
+      prove ∨ ∈ x a ∈ x b
     }
-    assume = y b {
-      prove ∈ x b
-    }
-    prove ∨ ∈ x a ∈ x b
   }
+  assume ∈ x a {
+    prove ∈ a pair a b
+    prove ∧ ∈ x a ∈ a pair a b
+    prove ∃ y ∧ ∈ x y ∈ y pair a b
+  }
+  assume ∈ x b {
+    prove ∈ b pair a b
+    prove ∧ ∈ x b ∈ b pair a b
+    prove ∃ y ∧ ∈ x y ∈ y pair a b
+  }
+  assume ∨ ∈ x a ∈ x b {
+    prove ∃ y ∧ ∈ x y ∈ y pair a b
+  }
+  prove ↔ ∃ y ∧ ∈ x y ∈ y pair a b ∨ ∈ x a ∈ x b
 }
-assume ∈ x a {
-  prove ∈ a pair a b
-  prove ∧ ∈ x a ∈ a pair a b
-  prove ∃ y ∧ ∈ x y ∈ y pair a b
-}
-assume ∈ x b {
-  prove ∈ b pair a b
-  prove ∧ ∈ x b ∈ b pair a b
-  prove ∃ y ∧ ∈ x y ∈ y pair a b
-}
-assume ∨ ∈ x a ∈ x b {
-  prove ∃ y ∧ ∈ x y ∈ y pair a b
-}
-prove ↔ ∃ y ∧ ∈ x y ∈ y pair a b ∨ ∈ x a ∈ x b
-prove ∀ x ↔ ∃ y ∧ ∈ x y ∈ y pair a b ∨ ∈ x a ∈ x b
 prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
 qed
 
@@ -176,19 +177,22 @@ qed
 
 theorem Subset Transfers to Union
 premise ⊆ X A
-assume ∈ x X {
-  prove ∈ x A
-  prove ∈ x ∪ A B
+take x {
+  assume ∈ x X {
+    prove ∈ x A
+    prove ∈ x ∪ A B
+  }
 }
 prove ⊆ X ∪ A B
 qed
 
-
 theorem Subset Transfers to Union
 premise ⊆ X A
-assume ∈ x X {
-  prove ∈ x A
-  prove ∈ x ∪ B A
+take x {
+  assume ∈ x X {
+    prove ∈ x A
+    prove ∈ x ∪ B A
+  }
 }
 prove ⊆ X ∪ B A
 qed
@@ -206,15 +210,18 @@ qed
 theorem Redundant Union with Subset
 premise ⊆ A B
 prove ∀ x ↔ ∈ x ∪ A B ∨ ∈ x A ∈ x B
-assume ∈ x ∪ A B {
-  prove ∨ ∈ x A ∈ x B
-  assume ∈ x A {
+take x {
+  assume ∈ x ∪ A B {
+    prove ∨ ∈ x A ∈ x B
+    assume ∈ x A {
+      prove ∈ x B
+    }
     prove ∈ x B
   }
-  prove ∈ x B
-}
-assume ∈ x B {
-  prove ∈ x ∪ A B
+  assume ∈ x B {
+    prove ∈ x ∪ A B
+  }
+  prove ↔ ∈ x ∪ A B ∈ x B
 }
 prove = ∪ A B B
 qed
@@ -234,12 +241,14 @@ qed
 
 theorem Union of Subsets Is Subset
 premise ⊆ A powerSet B
-assume ∈ y union A {
-  prove ∃ a ∧ ∈ y a ∈ a A
-  let a ∧ ∈ y a ∈ a A {
-    prove ∈ a powerSet B
-    prove ⊆ a B
-    prove ∈ y B
+take y {
+  assume ∈ y union A {
+    prove ∃ a ∧ ∈ y a ∈ a A
+    let a ∧ ∈ y a ∈ a A {
+      prove ∈ a powerSet B
+      prove ⊆ a B
+      prove ∈ y B
+    }
   }
 }
 prove ⊆ union A B

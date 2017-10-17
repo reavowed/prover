@@ -12,110 +12,109 @@ prove ∧ ∃ x with x φ ∀ x ∀ y → ∧ with x φ with y φ = x y
 prove ∃! x with x φ
 qed
 
-# theorem Value for Unique Existence
-# premise ∃! x φ elidable
-# premise proves sub y x φ ψ
-# prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
-# prove ψ non-distinct (x φ)
-# qed
+theorem Value for Unique Existence
+premise ∃! x with x φ elidable
+premise ∀ x → with x φ ψ
+prove ∧ ∃ x with x φ ∀ x ∀ y → ∧ with x φ with y φ = x y
+prove ψ
+qed
 
-# theorem Value for Unique Existence
-# premise ∃! x φ elidable
-# premise proves  φ ψ
-# prove ∧ ∃ x φ ∀ y ∀ z → ∧ sub y x φ sub z x φ = y z
-# prove ψ non-distinct (x φ)
-# qed
+theorem Every Set Is Unique
+prove ∃ x = x a
+take x { take y {
+  assume ∧ = x a = y a {
+    prove = x y
+  }
+}}
+prove ∃! y = y a
+qed
 
-# theorem Every Set Is Unique
-# prove ∃ y = y x
-# assume ∧ = a x = b x {
-#   prove = a b
-# }
-# prove ∃! y = y x
-# qed
+theorem Two Values Satisfying Unique Condition Are Equal
+premise ∃! x with x φ
+premise with a φ
+premise with b φ
+prove ∧ ∃ x with x φ ∀ x ∀ y → ∧ with x φ with y φ = x y
+prove ∀ x ∀ y → ∧ with x φ with y φ = x y
+prove ∀ y → ∧ with a φ with y φ = a y
+prove → ∧ with a φ with b φ = a b
+prove ∧ with a φ with b φ
+prove = a b
+qed
 
-# theorem Unique Value
-# premise ∃! x φ
-# premise sub y x φ
-# premise sub z x φ
-# prove ∧ ∃ x φ ∀ a ∀ b → ∧ sub a x φ sub b x φ = a b
-# prove ∀ a ∀ b → ∧ sub a x φ sub b x φ = a b
-# prove ∀ b → ∧ sub y x φ sub b x φ = y b
-# prove → ∧ sub y x φ sub z x φ = y z
-# prove ∧ sub y x φ sub z x φ
-# prove = y z
-# qed
+theorem Uniqueness by Exhibiting Unique Value
+premise ∀ x ↔ with x φ = x a
+prove = a a
+prove with a φ
+prove ∃ x with x φ
+take x { take y {
+  assume ∧ with x φ with y φ {
+    prove = x a
+    prove = y a
+    prove = x y
+  }
+}}
+prove ∃! x with x φ
+qed
 
-# theorem Uniqueness by Exhibiting Unique Value
-# premise ∀ x ↔ φ = x y
-# prove = y y
-# prove sub y x φ
-# prove ∃ x φ
-# assume ∧ sub a x φ sub b x φ {
-#   prove = a y
-#   prove = b y
-#   prove = a b
-# }
-# prove ∃! x φ
-# qed
+theorem Uniqueness by Exhibiting Unique Value
+premise ∀ x → with x φ = x a
+premise with a φ
+take x {
+  assume = x a {
+    prove with x φ
+  }
+}
+prove ∀ x ↔ with x φ = x a
+prove ∃! x with x φ
+qed
 
-# theorem Uniqueness by Exhibiting Unique Value
-# premise proves φ = x y
-# premise proves = x y φ
-# prove ∀ x ↔ φ = x y
-# prove ∃! x φ
-# qed
+theorem Existence of Unique Value
+premise ∃! x with x φ
+let a with a φ {
+  take x {
+    assume with x φ {
+      prove = x a
+    }
+    assume = x a  {
+      prove with x φ
+    }
+    prove ↔ with x φ = x a
+  }
+  prove ∃ y ∀ x ↔ with x φ = x y
+}
+qed
 
-# theorem Uniqueness by Exhibiting Unique Value
-# premise sub y x φ
-# premise proves φ = x y
-# assume = x y {
-#   prove φ
-# }
-# prove ∃! x φ
-# qed
+theorem Unique Value Satisifies Condition
+premise ∀ x ↔ with x φ = x a
+prove = a a
+prove with a φ
+qed
 
-# theorem Existence of Unique Value
-# premise ∃! x φ
-# let y sub y x φ {
-#   assume φ {
-#     prove = x y
-#   }
-#   assume = x y  {
-#     prove φ
-#   }
-#   prove ∀ x ↔ φ = x y
-#   prove ∃ y ∀ x ↔ φ = x y
-# }
-# qed
+theorem Uniqueness by Two Cases
+premise ⊕ φ ψ
+assume φ {
+  prove ¬ ψ
+  take x {
+    prove ↔ ∨ ∧ φ = x a ∧ ψ = x b = x a
+  }
+  prove ∀ x ↔ ∨ ∧ φ = x a ∧ ψ = x b = x a
+  prove ∃! x ∨ ∧ φ = x a ∧ ψ = x b
+}
+assume ψ {
+  prove ¬ φ
+  take x {
+    prove ↔ ∨ ∧ φ = x a ∧ ψ = x b = x b
+  }
+  prove ∀ x ↔ ∨ ∧ φ = x a ∧ ψ = x b = x b
+  prove ∃! x ∨ ∧ φ = x a ∧ ψ = x b
+}
+prove ∃! x ∨ ∧ φ = x a ∧ ψ = x b
+qed
 
-# theorem Unique Value Satisifies Condition
-# premise ∀ x ↔ φ = x y
-# prove = y y
-# prove sub y x φ
-# qed
-
-# theorem Uniqueness by Two Cases
-# premise ⊕ φ ψ
-# assume φ {
-#   prove ¬ ψ
-#   prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
-#   prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z x
-#   prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
-# }
-# assume ψ {
-#   prove ¬ φ
-#   prove ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
-#   prove ∀ z ↔ ∨ ∧ φ = z x ∧ ψ = z y = z y
-#   prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
-# }
-# prove ∃! z ∨ ∧ φ = z x ∧ ψ = z y
-# qed
-
-# theorem Uniqueness by Two Cases
-# prove ⊕ φ ¬ φ
-# prove ∃! z ∨ ∧ φ = z x ∧ ¬ φ = z y
-# qed
+theorem Uniqueness by Two Cases
+prove ⊕ φ ¬ φ
+prove ∃! x ∨ ∧ φ = x a ∧ ¬ φ = x b
+qed
 
 # theorem Uniqueness Equivalence
 # premise ∃! x φ

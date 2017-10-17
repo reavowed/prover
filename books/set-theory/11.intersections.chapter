@@ -2,17 +2,19 @@ chapter Intersections
 Arbitrary and binary intersections.
 
 theorem Intersection over a Class
-premise ∃ x φ
-let a sub a x φ {
-  assume ∀ x → φ ∈ y x {
-    prove ∈ y a
+premise ∃ x with x φ
+let a with a φ {
+  take y {
+    assume ∀ x → with x φ ∈ y x {
+      prove ∈ y a
+    }
+    prove ↔ ∧ ∈ y a ∀ x → with x φ ∈ y x ∀ x → with x φ ∈ y x
   }
-  prove ↔ ∧ ∈ y a ∀ x → φ ∈ y x ∀ x → φ ∈ y x
-  prove ∀ y ↔ ∧ ∈ y a ∀ x → φ ∈ y x ∀ x → φ ∈ y x
-  let S = S comprehension z a ∀ x → φ ∈ z x {
-    prove ∀ y ↔ ∈ y S ∧ ∈ y a ∀ x → φ ∈ y x
-    prove ∀ y ↔ ∈ y S ∀ x → φ ∈ y x
-    prove ∃ Y ∀ y ↔ ∈ y Y ∀ x → φ ∈ y x
+  prove ∀ y ↔ ∧ ∈ y a ∀ x → with x φ ∈ y x ∀ x → with x φ ∈ y x
+  let S = S comprehension z a ∀ x → with x φ ∈ z x {
+    prove ∀ y ↔ ∈ y S ∧ ∈ y a ∀ x → with x φ ∈ y x
+    prove ∀ y ↔ ∈ y S ∀ x → with x φ ∈ y x
+    prove ∃ Y ∀ y ↔ ∈ y Y ∀ x → with x φ ∈ y x
   }
 }
 qed
@@ -36,37 +38,41 @@ term ∩ (a b)
 theorem Membership Condition for Binary Intersection
 prove ¬ = pair a b ∅
 prove ∀ x ↔ ∈ x intersection pair a b ∀ y → ∈ y pair a b ∈ x y
-assume ∀ y → ∈ y pair a b ∈ x y {
-  prove ∈ a pair a b
-  prove ∈ x a
-  prove ∈ b pair a b
-  prove ∈ x b
-  prove ∧ ∈ x a ∈ x b
+take x {
+  assume ∀ y → ∈ y pair a b ∈ x y {
+    prove ∈ a pair a b
+    prove ∈ x a
+    prove ∈ b pair a b
+    prove ∈ x b
+    prove ∧ ∈ x a ∈ x b
+  }
+  assume ∧ ∈ x a ∈ x b {
+    take y {
+      assume = y a {
+        prove ∈ x y
+      }
+      assume = y b {
+        prove ∈ x y
+      }
+      assume ∨ = y a = y b {
+        prove ∈ x y
+      }
+    }
+    prove ∀ y → ∨ = y a = y b ∈ x y
+    prove ∀ y ↔ ∈ y pair a b ∨ = y a = y b
+    prove ∀ y → ∈ y pair a b ∈ x y
+  }
+  prove ↔ ∀ y → ∈ y pair a b ∈ x y ∧ ∈ x a ∈ x b
 }
-assume ∧ ∈ x a ∈ x b {
-  assume = y a {
-    prove ∈ x y
-  }
-  assume = y b {
-    prove ∈ x y
-  }
-  assume ∨ = y a = y b {
-    prove ∈ x y
-  }
-  prove ∀ y → ∨ = y a = y b ∈ x y
-  prove ∀ y ↔ ∈ y pair a b ∨ = y a = y b
-  prove ∀ y → ∈ y pair a b ∈ x y
-}
-prove ∀ x ↔ ∀ y → ∈ y pair a b ∈ x y ∧ ∈ x a ∈ x b
 prove ∀ x ↔ ∈ x intersection pair a b ∧ ∈ x a ∈ x b
 prove = ∩ a b intersection pair a b
 prove ∀ x ↔ ∈ x ∩ a b ∧ ∈ x a ∈ x b
 qed
 
 theorem Element of Binary Intersection
-premise ∈ x ∩ A B
+premise ∈ a ∩ A B
 prove ∀ y ↔ ∈ y ∩ A B ∧ ∈ y A ∈ y B
-prove ∧ ∈ x A ∈ x B
+prove ∧ ∈ a A ∈ a B
 qed
 
 theorem Binary Intersection Is Symmetric
@@ -77,59 +83,61 @@ prove = ∩ a b ∩ b a
 qed
 
 theorem An Element of Two Sets Is an Element of Their Intersection
-premise ∈ c a
-premise ∈ c b
-prove ∀ x ↔ ∈ x ∩ a b ∧ ∈ x a ∈ x b
-prove ∧ ∈ c a ∈ c b
-prove ∈ c ∩ a b
+premise ∈ a A
+premise ∈ a B
+prove ∀ x ↔ ∈ x ∩ A B ∧ ∈ x A ∈ x B
+prove ∧ ∈ a A ∈ a B
+prove ∈ a ∩ A B
 qed
 
 theorem A Set Can Only Be an Element of One of a Disjoint Pair
-premise = ∩ a b ∅
-premise ∈ c a
-assume ∈ c b {
-  prove ∈ c ∩ a b
-  prove ¬ = ∩ a b ∅
+premise = ∩ A B ∅
+premise ∈ a A
+assume ∈ a B {
+  prove ∈ a ∩ A B
+  prove ¬ = ∩ A B ∅
 }
-prove ¬ ∈ c b
+prove ¬ ∈ a B
 qed
 
 theorem A Set Can Only Be an Element of One of a Disjoint Pair
-premise = ∩ a b ∅
-premise ∈ c b
-prove = ∩ a b ∩ b a
-prove = ∩ b a ∅
-prove ¬ ∈ c a
+premise = ∩ A B ∅
+premise ∈ a B
+prove = ∩ A B ∩ B A
+prove = ∩ B A ∅
+prove ¬ ∈ a A
 qed
 
 theorem Element Transfers from Intersection
-premise ∈ x ∩ A B
-prove ∀ y ↔ ∈ y ∩ A B ∧ ∈ y A ∈ y B
-prove ∧ ∈ x A ∈ x B
-prove ∈ x A
+premise ∈ a ∩ A B
+prove ∀ x ↔ ∈ x ∩ A B ∧ ∈ x A ∈ x B
+prove ∧ ∈ a A ∈ a B
+prove ∈ a A
 qed
 
 theorem Element Transfers from Intersection
-premise ∈ x ∩ A B
-prove ∀ y ↔ ∈ y ∩ A B ∧ ∈ y A ∈ y B
-prove ∧ ∈ x A ∈ x B
-prove ∈ x B
+premise ∈ a ∩ A B
+prove ∀ x ↔ ∈ x ∩ A B ∧ ∈ x A ∈ x B
+prove ∧ ∈ a A ∈ a B
+prove ∈ a B
 qed
 
 theorem Disjoint Pair
-premise proves ∈ x A ¬ ∈ x B
-assume ∈ x ∩ A B {
-  prove ∈ x A
-  prove ∈ x B
-  prove ¬ ∈ x B
+premise ∀ x → ∈ x A ¬ ∈ x B
+take x {
+  assume ∈ x ∩ A B {
+    prove ∈ x A
+    prove ∈ x B
+    prove ¬ ∈ x B
+    prove ⊥
+  }
+  prove ¬ ∈ x ∩ A B
 }
-prove ¬ ∈ x ∩ A B
-prove ∀ x ¬ ∈ x ∩ A B
 prove = ∩ A B ∅
 qed
 
 theorem Disjoint Pair
-premise proves ∈ x A ¬ ∈ x B
+premise ∀ x → ∈ x A ¬ ∈ x B
 prove = ∩ A B ∅
 prove = ∩ B A ∩ A B
 prove = ∩ B A ∅

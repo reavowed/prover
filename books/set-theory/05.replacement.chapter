@@ -2,5 +2,5 @@ chapter Replacement
 Introduce the Axiom of Replacement.
 
 axiom Axiom of Replacement
-premise ∀ x → ∈ x a ∃! y φ
-conclusion ∃ b ∀ y ↔ ∈ y b ∃ x ∧ ∈ x a φ
+premise ∀ x → ∈ x a ∃! y with (x y) φ
+conclusion ∃ z ∀ y ↔ ∈ y z ∃ x ∧ ∈ x a with (x y) φ

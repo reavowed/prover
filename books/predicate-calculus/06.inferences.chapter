@@ -2,17 +2,17 @@ chapter Useful Inferences
 Some inferences that can be used to reduce boilerplate in proofs.
 
 theorem Redundant And in Existential Quantifier
-premise ∃ x φ
-assume ∃ x ∧ φ ψ {
-  let y ∧ sub y x φ ψ {
+premise ∃ a with a φ
+assume ∃ x ∧ with x φ ψ {
+  let a ∧ with a φ ψ {
     prove ψ
   }
 }
 assume ψ {
-  let y sub y x φ {
-    prove ∧ sub y x φ ψ
-    prove ∃ x ∧ φ ψ
+  let a with a φ {
+    prove ∧ with a φ ψ
+    prove ∃ x ∧ with x φ ψ
   }
 }
-prove ↔ ∃ x ∧ φ ψ ψ
+prove ↔ ∃ x ∧ with x φ ψ ψ
 qed

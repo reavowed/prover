@@ -1,122 +1,128 @@
 chapter Comprehension
-Introduce set comprehension, {x ∈ X | φ}.
+Introduce set comprehension, {x ∈ A | φ(x)}.
 
 theorem Comprehensions Exist for Empty Sets
-premise ¬ ∃ y ∧ ∈ y X sub y x φ
-prove ∀ y ¬ ∧ ∈ y X sub y x φ
-prove ∀ y ↔ ∈ y ∅ ∧ ∈ y X sub y x φ
-prove ∃ Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
-prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
+premise ¬ ∃ x ∧ ∈ x A with x φ
+prove ∀ x ¬ ∧ ∈ x A with x φ
+prove ∀ x ↔ ∈ x ∅ ∧ ∈ x A with x φ
+prove ∃ y ∀ x ↔ ∈ x y ∧ ∈ x A with x φ
+prove ∃! y ∀ x ↔ ∈ x y ∧ ∈ x A with x φ
 qed
 
 theorem Comprehensions Exist for Non-Empty Sets Lemma
-premise ∧ ∈ a X sub a x φ
-prove ∈ a X
-prove sub a x φ
-assume ∃ x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a {
-  let x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a {
-    assume φ {
-      prove ↔ ∨ ∧ φ = y x ∧ ¬ φ = y a = y x
-      prove = y x
-      prove ∈ y X
-      prove sub y x φ
-      prove ∧ ∈ y X sub y x φ
+premise ∧ ∈ a A with a φ
+prove ∈ a A
+prove with a φ
+take y {
+  assume ∃ x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a {
+    let x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a {
+      assume with x φ {
+        prove ↔ ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a = y x
+        prove = y x
+        prove ∈ y A
+        prove with y φ
+        prove ∧ ∈ y A with y φ
+      }
+      assume ¬ with x φ {
+        prove ↔ ∨ ∧ with x  φ = y x ∧ ¬ with x φ = y a = y a
+        prove = y a
+        prove ∈ y A
+        prove with y φ
+        prove ∧ ∈ y A with y φ
+      }
+      prove ∧ ∈ y A with y φ 
     }
-    assume ¬ φ {
-      prove ↔ ∨ ∧ φ = y x ∧ ¬ φ = y a = y a
-      prove = y a
-      prove ∈ y X
-      prove sub y x φ
-      prove ∧ ∈ y X sub y x φ
-    }
-    prove ∧ ∈ y X sub y x φ
   }
+  assume ∧ ∈ y A with y φ {
+    prove = y y
+    prove ∧ ∈ y A ∨ ∧ with y φ = y y ∧ ¬ with y φ = y a
+    prove ∃ x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a
+  }
+  prove ↔ ∃ x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a ∧ ∈ y A with y φ
 }
-assume ∧ ∈ y X sub y x φ {
-  prove = y y
-  prove ∧ ∈ y X ∨ ∧ sub y x φ = y y ∧ ¬ sub y x φ = y a
-  prove ∃ x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a
-}
-prove ↔ ∃ x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a ∧ ∈ y X sub y x φ
-prove ∀ y ↔ ∃ x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a ∧ ∈ y X sub y x φ
+prove ∀ y ↔ ∃ x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a ∧ ∈ y A with y φ
 qed
 
 theorem Comprehensions Exist for Non-Empty Sets
-premise ∃ y ∧ ∈ y X sub y x φ
-let a ∧ ∈ a X sub a x φ {
-  prove ∃! y ∨ ∧ φ = y x ∧ ¬ φ = y a
-  prove → ∈ x X ∃! y ∨ ∧ φ = y x ∧ ¬ φ = y a
-  prove ∀ x → ∈ x X ∃! y ∨ ∧ φ = y x ∧ ¬ φ = y a
-  prove ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a
-  prove ∀ y ↔ ∃ x ∧ ∈ x X ∨ ∧ φ = y x ∧ ¬ φ = y a ∧ ∈ y X sub y x φ
-  prove ∃ Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
+premise ∃ y ∧ ∈ y A with y φ
+let a ∧ ∈ a A with a φ {
+  take x {
+    prove ∃! y ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a
+    prove → ∈ x A ∃! y ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a
+  }
+  prove ∃ Y ∀ y ↔ ∈ y Y ∃ x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a
+  prove ∀ y ↔ ∃ x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a ∧ ∈ y A with y φ
+  prove ∃ Y ∀ y ↔ ∈ y Y ∧ ∈ y A with y φ
 }
-prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
+prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y A with y φ
 qed
 
 theorem Comprehensions Exist
-assume ¬ ∃ y ∧ ∈ y X sub y x φ {
-  prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
+assume ¬ ∃ y ∧ ∈ y X with y φ {
+  prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y X with y φ
 }
-assume ∃ y ∧ ∈ y X sub y x φ {
-  prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
+assume ∃ y ∧ ∈ y X with y φ {
+  prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y X with y φ
 }
-prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y X sub y x φ
+prove ∃! Y ∀ y ↔ ∈ y Y ∧ ∈ y X with y φ
 qed
 
-term comprehension (x X φ)
-  format ({x ∈ X | φ})
-  (∀ y ↔ ∈ y _ ∧ ∈ y X sub y x φ)
-  distinct-variables (y φ)
+term comprehension ($x A with x φ)
+  name (Comprehension)
+  format ({x ∈ A | φ})
+  (∀ y ↔ ∈ y _ ∧ ∈ y A with y φ)
 
 theorem Membership Condition for a Comprehension
-premise = S comprehension x X φ
-prove ∀ y ↔ ∈ y comprehension x X φ ∧ ∈ y X sub y x φ
-prove ∀ y ↔ ∈ y S ∧ ∈ y X sub y x φ
+premise = S comprehension x A with x φ
+prove ∀ y ↔ ∈ y comprehension x A with x φ ∧ ∈ y A with y φ
+prove ∀ y ↔ ∈ y S ∧ ∈ y A with y φ
 qed
 
 theorem An Element of a Comprehension Is an Element of Its Domain
-premise = S comprehension x X φ
+premise = S comprehension x A with x φ
 premise ∈ a S
-prove ∀ y ↔ ∈ y S ∧ ∈ y X sub y x φ
-prove ↔ ∈ a S ∧ ∈ a X sub a x φ
-prove ∧ ∈ a X sub a x φ
-prove ∈ a X
+prove ∀ y ↔ ∈ y S ∧ ∈ y A with y φ
+prove ↔ ∈ a S ∧ ∈ a A with a φ
+prove ∧ ∈ a A with a φ
+prove ∈ a A
 qed
 
 theorem An Element of a Comprehension Satisfies Its Condition
-premise = S comprehension x X φ
+premise = S comprehension x A with x φ
 premise ∈ a S
-prove ∀ y ↔ ∈ y S ∧ ∈ y X sub y x φ
-prove ↔ ∈ a S ∧ ∈ a X sub a x φ
-prove ∧ ∈ a X sub a x φ
-prove sub a x φ
+prove ∀ y ↔ ∈ y S ∧ ∈ y A with y φ
+prove ↔ ∈ a S ∧ ∈ a A with a φ
+prove ∧ ∈ a A with a φ
+prove with a φ
 qed
 
 theorem A Comprehension Is a Subset of Its Domain
-premise = S comprehension x X φ
-assume ∈ y S {
-  prove ∈ y X
+premise = S comprehension x A with x φ
+take y {
+  assume ∈ y S {
+    prove ∈ y A
+  }
 }
-prove ∀ y → ∈ y S ∈ y X
-prove ⊆ S X
+prove ⊆ S A
 qed
 
 theorem Element of a Comprehension
-premise = S comprehension x X φ
-premise ∈ a X
-premise sub a x φ
-prove ∀ y ↔ ∈ y S ∧ ∈ y X sub y x φ
-prove ∧ ∈ a X sub a x φ
+premise = S comprehension x A with x φ
+premise ∈ a A
+premise with a φ
+prove ∀ y ↔ ∈ y S ∧ ∈ y A with y φ
+prove ∧ ∈ a A with a φ
 prove ∈ a S
 qed
 
 theorem Universal Property from Comprehension
-premise = S comprehension x X φ
-premise = S X
-assume ∈ y X {
-  prove ∈ y S
-  prove sub y x φ
+premise = S comprehension x A with x φ
+premise = S A
+take y {
+  assume ∈ y A {
+    prove ∈ y S
+    prove with y φ
+  }
 }
-prove ∀ y → ∈ y X sub y x φ
+prove ∀ y → ∈ y A with y φ
 qed

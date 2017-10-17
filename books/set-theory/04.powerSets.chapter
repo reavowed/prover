@@ -2,11 +2,11 @@ chapter Power Sets
 Define the power set of a set - the set of all its subsets.
 
 axiom Axiom of Power Set
-conclusion ∃ y ∀ x ↔ ∈ x y ⊆ x a
+conclusion ∃ x ∀ y ↔ ∈ y x ⊆ y a
 
 theorem Power Sets Are Unique
-prove ∃ b ∀ x ↔ ∈ x b ⊆ x a
-prove ∃! b ∀ x ↔ ∈ x b ⊆ x a
+prove ∃ x ∀ y ↔ ∈ y x ⊆ y a
+prove ∃! x ∀ y ↔ ∈ y x ⊆ y a
 qed
 
 term powerSet (a)

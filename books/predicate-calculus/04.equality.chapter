@@ -26,19 +26,19 @@ prove = b a
 prove with a φ
 qed
 
-# comment Now we can also prove that the substitution axiom works when substituting into equal terms.
+comment Now we can also prove that the substitution axiom works when substituting into equal terms.
 
-# theorem Substitution of Equals
-# premise = x y elidable
-# prove = sub x z X sub x z X
-# prove = sub x z X sub y z X
-# qed
+theorem Substitution of Equals
+premise = a b elidable
+prove = with a F with a F
+prove = with a F with b F
+qed
 
-# theorem Substitution of Equals
-# premise = x y elidable
-# prove = y x
-# prove = sub y z X sub x z X
-# qed
+theorem Substitution of Equals
+premise = a b elidable
+prove = b a
+prove = with b F with a F
+qed
 
 comment Basic facts about equality.
 
@@ -69,38 +69,38 @@ assume with b φ {
 prove ↔ with a φ with b φ
 qed
 
-# theorem Distinguishable Terms Are Not Equal
-# premise sub x z φ
-# premise ¬ sub y z φ
-# assume = x y {
-#   prove sub y z φ
-# }
-# prove ¬ = x y
-# qed
+theorem Distinguishable Terms Are Not Equal
+premise with a φ
+premise ¬ with b φ
+assume = a b {
+  prove with b φ
+}
+prove ¬ = a b
+qed
 
-# theorem Sets Are Equal If Always Equal to the Same Thing
-# premise ∀ z ↔ = z x = z y
-# prove = x x
-# prove = x y
-# qed
+theorem Sets Are Equal If Always Equal to the Same Thing
+premise ∀ x ↔ = x a = x b
+prove = a a
+prove = a b
+qed
 
-# theorem Every Set Exists
-# prove = x x
-# prove ∃ y = y x
-# qed
+theorem Every Set Exists
+prove = a a
+prove ∃ x = x a
+qed
 
-# theorem Proof by Renamed Set
-# premise proves = a x φ
-# prove ∃ y = y x
-# prove φ
-# qed
+theorem Renamed Set
+premise ∀ x → = x a φ
+prove ∃ x = x a
+prove φ
+qed
 
-# theorem Exclusive Or for Equality
-# premise ∨ = x y = x z
-# premise ¬ = y z
-# assume ∧ = x y = x z {
-#   prove = y z
-# }
-# prove ¬ ∧ = x y = x z
-# prove ⊕ = x y = x z
-# qed
+theorem Exclusive Or for Equality
+premise ∨ = a b = a c
+premise ¬ = b c
+assume ∧ = a b = a c {
+  prove = b c
+}
+prove ¬ ∧ = a b = a c
+prove ⊕ = a b = a c
+qed
