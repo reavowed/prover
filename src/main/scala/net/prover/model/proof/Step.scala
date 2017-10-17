@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.expressions.{Statement, TermVariable}
+import net.prover.model.expressions.Statement
 
 sealed trait Step {
   def reference: Reference.Direct
@@ -9,6 +9,7 @@ sealed trait Step {
   def referencedInferenceIds: Set[String]
   def referenceMap: ReferenceMap
   def cached: CachedStep
+  def length: Int
 }
 
 object Step {
@@ -28,6 +29,7 @@ object Step {
     override def referencedInferenceIds = inferenceApplication.referencedInferenceIds
     override def referenceMap = ReferenceMap(reference.value -> inferenceApplication.directReferences)
     override def cached = CachedStep.Assertion(assertion, inferenceApplication.cached, reference, isRearrangement)
+    override def length = 1
   }
 
   case class Assumption(
@@ -41,6 +43,7 @@ object Step {
     override def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
     override def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
     override def cached = CachedStep.Assumption(assumption, steps.map(_.cached), reference)
+    override def length = steps.map(_.length).sum
   }
 
   case class Naming(
@@ -54,6 +57,7 @@ object Step {
     override def referencedInferenceIds = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
     override def referenceMap = assumptionStep.referenceMap ++ assertionStep.referenceMap
     override def cached = CachedStep.Naming(variableName, assumptionStep.cached, assertionStep.cached, reference)
+    override def length = assumptionStep.length + 1
   }
 
   case class ScopedVariable(variableName: String, substeps: Seq[Step], reference: Reference.Direct) extends Step {
@@ -64,5 +68,6 @@ object Step {
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether
     override def cached = CachedStep.ScopedVariable(variableName, substeps.map(_.cached), reference)
+    override def length = substeps.map(_.length).sum
   }
 }

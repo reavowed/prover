@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 case class Proof(steps: Seq[Step]) {
   def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
   def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
+  def length: Int = steps.map(_.length).sum
   val conclusion: Statement = {
     steps.ofType[Step.WithAssertion].lastOption
       .flatMap(_.assertion.asOptionalInstanceOf[Statement])
