@@ -2,7 +2,6 @@ package net.prover.model.proof
 
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
-import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions._
 
 import scala.util.Try
@@ -72,9 +71,8 @@ case class Prover(
       conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(assertionToProve, Substitutions.emptyWithDepth(depth))
       (premiseReferences, premiseSubstitutions) <- matchPremisesToFacts(transformedPremises, conclusionSubstitutions, inference.allowsRearrangement)
       proofOutline = ProofOutline(stepsToProve :+ StepOutline.Assertion(transformedConclusion, None))
-      transformationProofAttempt = Try(Proof.fillInOutline(
+      transformationProofAttempt = Try(proofOutline.fillIn(
         transformedPremises,
-        proofOutline,
         availableInferences,
         assertionHints,
         Nil))

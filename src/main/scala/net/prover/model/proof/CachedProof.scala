@@ -11,7 +11,7 @@ case class CachedProof(path: Path, premises: Seq[Premise], steps: Seq[CachedStep
     steps.flatMap(_.getAssertionHints(availableInferences))
   }
   def validate(availableInferences: Seq[Inference], transformations: Seq[StatementDefinition]): Option[Proof] = {
-    val context = Proof.getInitialContext(premises, availableInferences, Nil, transformations)
+    val context = ProvingContext.getInitial(premises, availableInferences, Nil, transformations)
     for {
       validatedSteps <- steps.validate(context)
     } yield Proof(validatedSteps)

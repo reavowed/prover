@@ -1,9 +1,11 @@
 package net.prover.model.proof
 
-import net.prover.model.{FileLocation, Parser, ParsingContext}
-import net.prover.model.expressions.{Statement, Term, TermVariable}
+import net.prover.model.expressions.Statement
+import net.prover.model.{FileLocation, Parser, ParsingContext, ProvingException}
 
-sealed trait StepOutline
+sealed trait StepOutline {
+  def prove(reference: Reference.Direct)(implicit context: ProvingContext): Step
+}
 
 object StepOutline {
   sealed trait WithAssertion extends StepOutline {
@@ -17,17 +19,25 @@ object StepOutline {
     extends StepOutline.WithAssertion
   {
     override def innermostAssertionStep = this
+    override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
+      tryProve(reference)(context)
+        .getOrElse(throw ProvingException(s"Could not prove assertion '$assertion'", location))
+    }
+    def tryProve(reference: Reference.Direct)(implicit context: ProvingContext) = {
+      Prover(assertion, reference, context, debug)
+        .proveAssertion()
+    }
   }
   object Assertion {
-    def parser(implicit context: ParsingContext): Parser[Assertion] = Parser { tokenizer =>
-      val innerParser = for {
+    def parser(implicit context: ParsingContext): Parser[Assertion] = {
+      for {
+        location <- Parser.location
         assertion <- Statement.parser
         debug <- Parser.optional("debug", Parser.constant(true), false)
       } yield Assertion(
         assertion,
-        Some(FileLocation(tokenizer.currentFile, tokenizer.currentLine)),
+        Some(location),
         debug)
-      innerParser.parse(tokenizer)
     }
   }
 
@@ -35,6 +45,13 @@ object StepOutline {
       assumption: Statement,
       steps: Seq[StepOutline])
     extends StepOutline
+  {
+    override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
+      val contextWithAssumption = context.addFact(Fact.Direct(assumption), reference.withSuffix("a"))
+      val substeps = steps.prove(Some(reference))(contextWithAssumption)
+      Step.Assumption(assumption, substeps, reference)
+    }
+  }
   object Assumption {
     def parser(implicit context: ParsingContext): Parser[Assumption] = {
       for {
@@ -49,27 +66,61 @@ object StepOutline {
   case class Naming(
       variableName: String,
       definingAssumption: Statement,
-      steps: Seq[StepOutline])
+      steps: Seq[StepOutline],
+      location: Option[FileLocation])
     extends StepOutline.WithAssertion
   {
     def innermostAssertionStep = steps.ofType[StepOutline.WithAssertion].lastOption
       .getOrElse(throw new Exception("Naming step must contain a step with an assertion"))
       .innermostAssertionStep
+    override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
+      val assumptionStep = Assumption(definingAssumption, steps)
+        .prove(reference.withSuffix(".0"))(context.increaseDepth(1, context.depth))
+      val deduction = assumptionStep.referencedFact.getOrElse(throw ProvingException(
+        "Naming step did not have a conclusion",
+        location))
+      val innerAssertion = assumptionStep
+        .steps.ofType[Step.WithAssertion].lastOption
+        .map(_.assertion)
+        .getOrElse(throw ProvingException(
+          "Naming step did not have a conclusion",
+          location))
+      val outerAssertion = innerAssertion.reduceDepth(1, context.depth)
+        .getOrElse(throw ProvingException(
+          s"Assertion $innerAssertion was not independent of $variableName",
+          location))
+      val assertionStep = Assertion(outerAssertion, None)
+        .tryProve(
+          reference.withSuffix(".1"))(
+          context.addFact(
+            Fact.ScopedVariable(deduction.fact)(variableName),
+            deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")))
+        .getOrElse(throw ProvingException(
+          s"Could not extract assertion $innerAssertion from naming step for $variableName",
+          location))
+      Step.Naming(variableName, assumptionStep, assertionStep, reference)
+    }
   }
   object Naming {
     def parser(implicit context: ParsingContext): Parser[Naming] = {
       for {
+        location <- Parser.location
         variableName <- Parser.singleWord
         updatedContext = context.addParameterList(Seq(variableName))
         definingAssumption <- Statement.parser(updatedContext)
         steps <- listParser(updatedContext).inBraces
       } yield {
-        Naming(variableName, definingAssumption, steps)
+        Naming(variableName, definingAssumption, steps, Some(location))
       }
     }
   }
 
-  case class ScopedVariable(variableName: String, steps: Seq[StepOutline]) extends StepOutline
+  case class ScopedVariable(variableName: String, steps: Seq[StepOutline]) extends StepOutline {
+    override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
+      val provenSteps = steps.prove(Some(reference))(context.increaseDepth(1, context.depth))
+      Step.ScopedVariable(variableName, provenSteps, reference)
+    }
+  }
   object ScopedVariable {
     def parser(implicit context: ParsingContext): Parser[ScopedVariable] = {
       for {
@@ -77,6 +128,15 @@ object StepOutline {
         updatedContext = context.addParameterList(Seq(variableName))
         steps <- listParser(updatedContext).inBraces
       } yield ScopedVariable(variableName, steps)
+    }
+  }
+
+  implicit class StepOutlineSeqOps(stepOutlines: Seq[StepOutline]) {
+    def prove(baseReference: Option[Reference.Direct])(implicit context: ProvingContext): Seq[Step] = {
+      stepOutlines.zipWithIndex.foldLeft(Seq.empty[Step]) { case (steps, (stepOutline, index)) =>
+        val updatedContext = context.copy(referencedFacts = context.referencedFacts ++ steps.mapCollect(_.referencedFact))
+        steps :+ stepOutline.prove(Reference.nextReference(baseReference, index.toString))(updatedContext)
+      }
     }
   }
 

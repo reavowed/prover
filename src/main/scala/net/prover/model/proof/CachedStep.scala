@@ -107,7 +107,7 @@ object CachedStep {
       } yield Step.Naming(variableName, validatedAssumptionStep, validatedAssertionStep.asInstanceOf[Step.Assertion], reference)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
-      case StepOutline.Naming(`variableName`, statement, stepOutlines) =>
+      case StepOutline.Naming(`variableName`, statement, stepOutlines, _) =>
         assumptionStep.assumption == statement && assumptionStep.steps.matchOutlines(stepOutlines)
       case _ =>
         false

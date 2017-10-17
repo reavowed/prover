@@ -92,11 +92,15 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
 }
 
 object Parser {
+  def location: Parser[FileLocation] = Parser { tokenizer =>
+    (FileLocation(tokenizer.currentFile, tokenizer.currentLine), tokenizer)
+  }
+
   def constant[T](t: T): Parser[T] = Parser { (t, _) }
 
-  def toEndOfLine: Parser[String] = Parser { t => t.readUntilEndOfLine() }
+  def toEndOfLine: Parser[String] = Parser { tokenizer => tokenizer.readUntilEndOfLine() }
 
-  def singleWord: Parser[String] = Parser { t => t.readNext() }
+  def singleWord: Parser[String] = Parser { tokenizer => tokenizer.readNext() }
 
   def nWords(n: Int): Parser[Seq[String]] = (1 to n).foldLeft(Parser.constant(Seq.empty[String])) { case (parserSoFar, _) =>
     for {

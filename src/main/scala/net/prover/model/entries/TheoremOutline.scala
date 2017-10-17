@@ -72,7 +72,7 @@ case class TheoremOutline(
     bookName: String
   ): Proof = {
     try {
-      Proof.fillInOutline(premises, proofOutline, availableInferences, assertionHints, transformations)
+      proofOutline.fillIn(premises, availableInferences, assertionHints, transformations)
     } catch {
       case NonFatal(e) =>
         throw new Exception(s"Error proving theorem $name in book $bookName\n${e.getMessage}")

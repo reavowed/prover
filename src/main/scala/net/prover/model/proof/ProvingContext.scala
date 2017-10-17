@@ -33,3 +33,21 @@ case class ProvingContext(
       depth + additionalDepth)
   }
 }
+
+object ProvingContext {
+  def getInitial(
+    premises: Seq[Premise],
+    availableInferences: Seq[Inference],
+    assertionHints: Seq[AssertionHint],
+    transformations: Seq[StatementDefinition]
+  ): ProvingContext = {
+    ProvingContext(
+      premises.map(_.referencedFact),
+      premises,
+      Nil,
+      availableInferences,
+      assertionHints,
+      transformations,
+      0)
+  }
+}

@@ -81,7 +81,7 @@ object CachedInferenceApplication {
         inference <- context.availableInferences.find(_.id == inferenceId).ifEmpty {
           CachedProof.logger.info(s"Could not find inference $inferenceId")
         }
-        validatedTransformationProof <- transformationProof.validate(Proof.getInitialContext(
+        validatedTransformationProof <- transformationProof.validate(ProvingContext.getInitial(
           transformedPremises,
           context.availableInferences,
           context.assertionHints,

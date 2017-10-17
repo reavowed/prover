@@ -37,12 +37,8 @@ class TheoremSpec extends ProverSpec {
       inferences: Seq[Inference],
       transformations: Seq[StatementDefinition] = Nil
     ): Proof = {
-      Proof.fillInOutline(
-        premises,
-        ProofOutline(proofSteps),
-        inferences,
-        Nil,
-        transformations)
+      ProofOutline(proofSteps)
+        .fillIn(premises, inferences, Nil, transformations)
     }
 
     def checkProof(
@@ -259,7 +255,8 @@ class TheoremSpec extends ProverSpec {
         Seq(StepOutline.Naming(
           "a",
           Conjunction.!(φ.!(FunctionParameter("a", 0)), ψ.^),
-          Seq(ψ.^))),
+          Seq(ψ.^),
+          None)),
         Seq(extractRightConjunct, valueForExistence, deduction, generalization),
         Seq(ForAll))
     }
