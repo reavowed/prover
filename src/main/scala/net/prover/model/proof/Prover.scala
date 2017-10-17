@@ -15,7 +15,12 @@ case class Prover(
   import context._
 
   val applicableHints = assertionHints.filter(_.conclusion == assertionToProve)
-  lazy val allSimplifiedFacts = referencedFacts.flatMap(getAllSimplifications)
+  val allSimplifiedFacts = {
+    val contractions = referencedFacts.flatMap(getContractions(_))
+    val simplifications = (referencedFacts ++ contractions).flatMap(getAllSimplifications)
+    referencedFacts ++ contractions ++ simplifications
+  }
+
   lazy val transformations: Seq[Transformation] = transformationStatementDefinitions.mapCollect { statementDefinition =>
     for {
       variableName <- statementDefinition.boundVariableNames.single
@@ -239,22 +244,22 @@ case class Prover(
         acc
       else {
         val newSimplifications = next.flatMap(getNextLevelSimplifications)
-        helper(newSimplifications, next ++ acc)
+        helper(newSimplifications, acc ++ newSimplifications)
       }
     }
-    helper(getContractions(referencedFact), Nil)
+    helper(Seq(referencedFact), Nil)
   }
 
   private def getContractions(referencedFact: ReferencedFact, level: Int = 0, additionalDepth: Int = 0): Seq[ReferencedFact] = {
-    def nextLevelContractions =
-      referencedFact.childDetails.map { case (childFact, moreDepth, updater) =>
-        getContractions(childFact, level + 1, additionalDepth + moreDepth).map(updater)
-      }.getOrElse(Seq(referencedFact))
-    nextLevelContractions.flatMap(getTopLevelContractions(_, level, additionalDepth))
+    val nextLevelContractions = for {
+      (childFact, moreDepth, updater) <- referencedFact.childDetails.toSeq
+      contractedChild <- getContractions(childFact, level + 1, additionalDepth + moreDepth)
+    } yield updater(contractedChild)
+    (referencedFact +: nextLevelContractions).flatMap(getTopLevelContractions(_, level, additionalDepth)) ++ nextLevelContractions
   }
 
   def getTopLevelContractions(referencedFact: ReferencedFact, level: Int, additionalDepth: Int): Seq[ReferencedFact] = {
-    referencedFact +: availableInferences
+    availableInferences
       .filter(_.rearrangementType == RearrangementType.Contraction)
       .collect {
         case inference @ Inference(_, Seq(Premise(premiseFact, _)), _) =>
