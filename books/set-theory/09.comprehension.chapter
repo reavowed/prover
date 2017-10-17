@@ -11,8 +11,6 @@ qed
 
 theorem Comprehensions Exist for Non-Empty Sets Lemma
 premise ∧ ∈ a A with a φ
-prove ∈ a A
-prove with a φ
 take y {
   assume ∃ x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a {
     let x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a {

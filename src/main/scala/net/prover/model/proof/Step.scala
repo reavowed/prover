@@ -10,6 +10,7 @@ sealed trait Step {
   def referenceMap: ReferenceMap
   def cached: CachedStep
   def length: Int
+  def intermediateReferences: Seq[String]
 }
 
 object Step {
@@ -30,6 +31,7 @@ object Step {
     override def referenceMap = ReferenceMap(reference.value -> inferenceApplication.directReferences)
     override def cached = CachedStep.Assertion(assertion, inferenceApplication.cached, reference, isRearrangement)
     override def length = 1
+    override def intermediateReferences = Seq(reference.value)
   }
 
   case class Assumption(
@@ -44,6 +46,7 @@ object Step {
     override def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
     override def cached = CachedStep.Assumption(assumption, steps.map(_.cached), reference)
     override def length = steps.map(_.length).sum
+    override def intermediateReferences = steps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
   }
 
   case class Naming(
@@ -58,6 +61,7 @@ object Step {
     override def referenceMap = assumptionStep.referenceMap ++ assertionStep.referenceMap
     override def cached = CachedStep.Naming(variableName, assumptionStep.cached, assertionStep.cached, reference)
     override def length = assumptionStep.length + 1
+    override def intermediateReferences = assumptionStep.steps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
   }
 
   case class ScopedVariable(variableName: String, substeps: Seq[Step], reference: Reference.Direct) extends Step {
@@ -69,5 +73,6 @@ object Step {
     override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether
     override def cached = CachedStep.ScopedVariable(variableName, substeps.map(_.cached), reference)
     override def length = substeps.map(_.length).sum
+    override def intermediateReferences = substeps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
   }
 }

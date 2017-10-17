@@ -16,6 +16,16 @@ class StatsController @Autowired() (bookService: BookService) {
     getBooks.flatMap(_.theorems)
       .sortBy(theorem => -1 * theorem.proof.length)
       .take(10)
-      .map(t => (s"/books/${t.bookKey}/${t.chapterKey}/${t.key}", t.proof.length))
+      .map(theorem => (s"/books/${theorem.bookKey}/${theorem.chapterKey}/${theorem.key}", theorem.proof.length))
+  }
+
+  @GetMapping(value = Array("unusedLines"))
+  def getUnusedLines = {
+    for {
+      theorem <- getBooks.flatMap(_.theorems)
+      reference <- theorem.proof.steps.flatMap(_.intermediateReferences)
+      if theorem.proof.referenceMap.getReferrers(reference).isEmpty
+      if !theorem.proof.steps.lastOption.exists(_.reference.value == reference)
+    } yield (s"/books/${theorem.bookKey}/${theorem.chapterKey}/${theorem.key}", reference)
   }
 }

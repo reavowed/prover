@@ -34,7 +34,6 @@ premise ∃! x with x φ
 premise with a φ
 premise with b φ
 prove ∧ ∃ x with x φ ∀ x ∀ y → ∧ with x φ with y φ = x y
-prove ∀ x ∀ y → ∧ with x φ with y φ = x y
 prove ∀ y → ∧ with a φ with y φ = a y
 prove → ∧ with a φ with b φ = a b
 prove ∧ with a φ with b φ
@@ -97,7 +96,6 @@ assume φ {
   take x {
     prove ↔ ∨ ∧ φ = x a ∧ ψ = x b = x a
   }
-  prove ∀ x ↔ ∨ ∧ φ = x a ∧ ψ = x b = x a
   prove ∃! x ∨ ∧ φ = x a ∧ ψ = x b
 }
 assume ψ {
@@ -105,7 +103,6 @@ assume ψ {
   take x {
     prove ↔ ∨ ∧ φ = x a ∧ ψ = x b = x b
   }
-  prove ∀ x ↔ ∨ ∧ φ = x a ∧ ψ = x b = x b
   prove ∃! x ∨ ∧ φ = x a ∧ ψ = x b
 }
 prove ∃! x ∨ ∧ φ = x a ∧ ψ = x b

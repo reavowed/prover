@@ -128,7 +128,6 @@ take x {
     prove ∈ x S
   }
 }
-prove ∀ x → ∨ = x a = x b ∈ x S
 prove ∀ x → ∈ x pair a b ∈ x S
 prove ⊆ pair a b S
 qed

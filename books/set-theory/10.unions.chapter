@@ -209,7 +209,6 @@ qed
 
 theorem Redundant Union with Subset
 premise ⊆ A B
-prove ∀ x ↔ ∈ x ∪ A B ∨ ∈ x A ∈ x B
 take x {
   assume ∈ x ∪ A B {
     prove ∨ ∈ x A ∈ x B

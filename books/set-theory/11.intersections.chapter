@@ -10,7 +10,6 @@ let a with a φ {
     }
     prove ↔ ∧ ∈ y a ∀ x → with x φ ∈ y x ∀ x → with x φ ∈ y x
   }
-  prove ∀ y ↔ ∧ ∈ y a ∀ x → with x φ ∈ y x ∀ x → with x φ ∈ y x
   let S = S comprehension z a ∀ x → with x φ ∈ z x {
     prove ∀ y ↔ ∈ y S ∧ ∈ y a ∀ x → with x φ ∈ y x
     prove ∀ y ↔ ∈ y S ∀ x → with x φ ∈ y x
@@ -109,14 +108,12 @@ qed
 
 theorem Element Transfers from Intersection
 premise ∈ a ∩ A B
-prove ∀ x ↔ ∈ x ∩ A B ∧ ∈ x A ∈ x B
 prove ∧ ∈ a A ∈ a B
 prove ∈ a A
 qed
 
 theorem Element Transfers from Intersection
 premise ∈ a ∩ A B
-prove ∀ x ↔ ∈ x ∩ A B ∧ ∈ x A ∈ x B
 prove ∧ ∈ a A ∈ a B
 prove ∈ a B
 qed
