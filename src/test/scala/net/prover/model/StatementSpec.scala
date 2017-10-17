@@ -49,26 +49,26 @@ class StatementSpec extends ProverSpec {
     }
   }
 
-//  "statement condensing" should {
-//    "condense a statement variable with a known substitution to a matching compound statement" in {
-//      val premise = φ
-//      val premiseSubstitutions = Substitutions(
-//        Map(φ -> Conjunction(φ, ψ)), Map.empty)
-//      val conclusion = Conjunction(χ, φ)
-//      val conclusionSubstitutions = Substitutions.empty
-//      premise.condense(conclusion, premiseSubstitutions, conclusionSubstitutions) must beSome((
-//        Substitutions(Map(φ -> Conjunction(φ, ψ)), Map.empty),
-//        Substitutions(Map(χ -> φ, φ -> ψ), Map.empty)))
-//    }
-//
-//    "condense a compound statement to a statement variable with a known matching substitution" in {
-//      val premise = φ
-//      val premiseSubstitutions = Substitutions(Map(φ -> Conjunction(φ, ψ)), Map.empty)
-//      val conclusion = Conjunction(χ, φ)
-//      val conclusionSubstitutions = Substitutions.empty
-//      conclusion.condense(premise, conclusionSubstitutions, premiseSubstitutions) must beSome((
-//        Substitutions(Map(χ -> φ, φ -> ψ), Map.empty),
-//        Substitutions(Map(φ -> Conjunction(φ, ψ)), Map.empty)))
-//    }
-//  }
+  "statement condensing" should {
+    "condense a statement variable with a known substitution to a matching compound statement" in {
+      val premise = φ
+      val premiseSubstitutions = Substitutions(
+        Map(φ -> Conjunction(φ, ψ)), Map.empty)
+      val conclusion = Conjunction(χ, φ)
+      val conclusionSubstitutions = Substitutions.empty
+      premise.condense(conclusion, premiseSubstitutions, conclusionSubstitutions) must beSome((
+        Substitutions(statements = Map(φ -> Conjunction(φ, ψ))),
+        Substitutions(statements = Map(χ -> φ, φ -> ψ))))
+    }
+
+    "condense a compound statement to a statement variable with a known matching substitution" in {
+      val premise = φ
+      val premiseSubstitutions = Substitutions(Map(φ -> Conjunction(φ, ψ)), Map.empty)
+      val conclusion = Conjunction(χ, φ)
+      val conclusionSubstitutions = Substitutions.empty
+      conclusion.condense(premise, conclusionSubstitutions, premiseSubstitutions) must beSome((
+        Substitutions(statements = Map(χ -> φ, φ -> ψ)),
+        Substitutions(statements = Map(φ -> Conjunction(φ, ψ)))))
+    }
+  }
 }
