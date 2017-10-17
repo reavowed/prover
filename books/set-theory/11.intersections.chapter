@@ -58,7 +58,6 @@ take x {
         prove ∈ x y
       }
     }
-    prove ∀ y → ∨ = y a = y b ∈ x y
     prove ∀ y ↔ ∈ y pair a b ∨ = y a = y b
     prove ∀ y → ∈ y pair a b ∈ x y
   }

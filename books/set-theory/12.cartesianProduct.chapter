@@ -43,7 +43,6 @@ qed
 theorem Membership Condition for Cartesian Product
 take a { take b {
   assume ∈ orderedPair a b × A B {
-    prove ∀ x ↔ ∈ x × A B ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = x orderedPair c d
     prove ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d
     let c ∧ ∈ c A ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d {
       let d ∧ ∈ d B = orderedPair a b orderedPair c d {
