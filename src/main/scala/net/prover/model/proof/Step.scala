@@ -1,10 +1,11 @@
 package net.prover.model.proof
 
-import net.prover.model.expressions.Statement
+import net.prover.model.entries.StatementDefinition
+import net.prover.model.expressions.{DefinedStatement, Statement}
 
 sealed trait Step {
   def reference: Reference.Direct
-  def fact: Option[Fact]
+  def fact: Option[Statement]
   def referencedFact: Option[ReferencedFact] = fact.map { f => ReferencedFact(f, reference)}
   def referencedInferenceIds: Set[String]
   def referenceMap: ReferenceMap
@@ -14,10 +15,9 @@ sealed trait Step {
 }
 
 object Step {
-
   sealed trait WithAssertion extends Step {
     def assertion: Statement
-    override def fact = Some(Fact.Direct(assertion))
+    override def fact = Some(assertion)
   }
 
   case class Assertion(
@@ -37,11 +37,14 @@ object Step {
   case class Assumption(
       assumption: Statement,
       steps: Seq[Step],
+      deductionStatement: StatementDefinition,
       reference: Reference.Direct)
     extends Step
   {
     def assumptionReference = reference.withSuffix("a")
-    override val fact = steps.lastOption.flatMap(_.fact).map(Fact.Deduced(assumption, _))
+    override val fact = steps.flatMap(_.fact).lastOption.map { consequent =>
+      DefinedStatement(Seq(assumption, consequent), deductionStatement, consequent.depth)(Nil)
+    }
     override def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
     override def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
     override def cached = CachedStep.Assumption(assumption, steps.map(_.cached), reference)
@@ -64,10 +67,16 @@ object Step {
     override def intermediateReferences = assumptionStep.steps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
   }
 
-  case class ScopedVariable(variableName: String, substeps: Seq[Step], reference: Reference.Direct) extends Step {
-    override def fact: Option[Fact] = {
+  case class ScopedVariable(
+      variableName: String,
+      substeps: Seq[Step],
+      scopingStatement: StatementDefinition,
+      reference: Reference.Direct)
+    extends Step
+  {
+    override def fact = {
       substeps.lastOption.flatMap(_.fact)
-        .map(Fact.ScopedVariable(_)(variableName))
+        .map { statement => DefinedStatement(Seq(statement), scopingStatement, statement.depth - 1)(Seq(variableName))}
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether

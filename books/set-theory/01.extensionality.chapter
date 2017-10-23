@@ -8,7 +8,6 @@ premise = a b
 take x {
   prove ↔ ∈ x a ∈ x b
 }
-prove ∀ x ↔ ∈ x a ∈ x b
 qed
 
 axiom Extensionality
@@ -16,8 +15,8 @@ premise ∀ x ↔ ∈ x a ∈ x b
 conclusion = a b
 
 theorem Extensionality
-premise binding x → ∈ x a ∈ x b
-premise binding x → ∈ x b ∈ x a
+premise ∀ x → ∈ x a ∈ x b
+premise ∀ x → ∈ x b ∈ x a
 prove ∀ x ↔ ∈ x a ∈ x b
 prove = a b
 qed

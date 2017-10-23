@@ -29,7 +29,7 @@ object CachedInferenceApplication {
           CachedProof.logger.info(s"Could not find inference $inferenceId")
         }
         substitutions <- inference.generalizeSubstitutions(localSubstitutions, depth)
-        substitutedPremiseFacts <- inference.premises.map(_.fact.applySubstitutions(substitutions)).traverseOption.ifEmpty {
+        substitutedPremiseFacts <- inference.premises.map(_.statement.applySubstitutions(substitutions)).traverseOption.ifEmpty {
           CachedProof.logger.info(
             (Seq(s"Could not substitute into premises of inference '${inference.name}'") ++
               inference.premises.map(_.serialized)
@@ -83,13 +83,13 @@ object CachedInferenceApplication {
         }
         validatedTransformationProof <- transformationProof.validate(ProvingContext.getInitial(
           transformedPremises,
-          context.availableInferences,
           context.assertionHints,
-          Nil))
-        transformedConclusion <- validatedTransformationProof.ofType[Step.WithAssertion].lastOption.map(_.assertion)
+          context.availableInferences,
+          context.deductionStatement.toSeq ++ context.scopingStatement.toSeq))
+        transformedConclusion <- validatedTransformationProof.flatMap(_.fact).lastOption
         transformedInference = Inference.Transformed(inference, transformedPremises, transformedConclusion)
         substitutions <- transformedInference.generalizeSubstitutions(localSubstitutions, depth)
-        substitutedPremiseFacts <- transformedPremises.map(_.fact.applySubstitutions(substitutions)).traverseOption.ifEmpty {
+        substitutedPremiseFacts <- transformedPremises.map(_.statement.applySubstitutions(substitutions)).traverseOption.ifEmpty {
           CachedProof.logger.info(
             (Seq(s"Could not substitute into premises of transformed inference '${inference.name}'") ++
               inference.premises.map(_.serialized)

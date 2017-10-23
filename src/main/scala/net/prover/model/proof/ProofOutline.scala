@@ -1,17 +1,10 @@
 package net.prover.model.proof
 
-import net.prover.model.entries.StatementDefinition
-import net.prover.model.{Inference, Parser, ParsingContext, Premise}
+import net.prover.model.{Parser, ParsingContext}
 
 case class ProofOutline(steps: Seq[StepOutline]) {
-  def fillIn(
-    premises: Seq[Premise],
-    availableInferences: Seq[Inference],
-    assertionHints: Seq[AssertionHint],
-    transformations: Seq[StatementDefinition]
-  ): Proof = {
-    val context = ProvingContext.getInitial(premises, availableInferences, assertionHints, transformations)
-    val detailedSteps = steps.prove(None)(context)
+  def fillIn(implicit provingContext: ProvingContext): Proof = {
+    val detailedSteps = steps.prove(None)
     Proof(detailedSteps)
   }
 }

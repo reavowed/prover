@@ -59,7 +59,6 @@ premise → ψ χ
 assume ∨ φ ψ {
   prove χ
 }
-prove → ∨ φ ψ χ
 qed
 
 theorem Reverse Disjunction

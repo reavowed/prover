@@ -3,15 +3,14 @@ package net.prover.model.proof
 import java.nio.file.Path
 
 import net.prover.model._
-import net.prover.model.entries.StatementDefinition
 import org.slf4j.LoggerFactory
 
 case class CachedProof(path: Path, premises: Seq[Premise], steps: Seq[CachedStep]) {
   def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
     steps.flatMap(_.getAssertionHints(availableInferences))
   }
-  def validate(availableInferences: Seq[Inference], transformations: Seq[StatementDefinition]): Option[Proof] = {
-    val context = ProvingContext.getInitial(premises, availableInferences, Nil, transformations)
+  def validate(proofEntries: ProofEntries): Option[Proof] = {
+    val context = ProvingContext.getInitial(premises, Nil, proofEntries)
     for {
       validatedSteps <- steps.validate(context)
     } yield Proof(validatedSteps)

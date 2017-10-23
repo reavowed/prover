@@ -1,7 +1,7 @@
 package net.prover.model
 
 import net.prover.model.entries._
-import net.prover.model.proof.CachedProof
+import net.prover.model.proof.{CachedProof, ProofEntries}
 
 case class Chapter(
   title: String,
@@ -25,17 +25,14 @@ case class Chapter(
   def theorems: Seq[Theorem] = {
     entries.ofType[Theorem]
   }
-  def transformations: Seq[StatementDefinition] = {
-    statementDefinitions.filter(_.isTransformation)
-  }
 
   def expandOutlines(
-    previousInferences: Seq[Inference],
-    previousTransformations: Seq[StatementDefinition],
+    previousProofEntries: ProofEntries,
     cachedProofs: Seq[CachedProof]
   ): Chapter = {
     copy(entries = entries.mapFold[ChapterEntry] { case (entry, previousEntries) =>
       def inferencesSoFar = previousEntries.flatMap(_.inferences)
+      def statementDefinitionsSoFar = previousEntries.ofType[StatementDefinition]
       def nextInferenceKey(name: String): String = {
         inferencesSoFar.count(_.name == name) match {
           case 0 =>
@@ -44,7 +41,6 @@ case class Chapter(
             (name + " " + (n+1)).formatAsKey
         }
       }
-      def transformations = previousEntries.ofType[StatementDefinition].filter(_.isTransformation)
       entry match {
         case axiomOutline: AxiomOutline =>
           axiomOutline.expand(nextInferenceKey(axiomOutline.name), title, bookTitle)
@@ -53,8 +49,7 @@ case class Chapter(
             nextInferenceKey(theoremOutline.name),
             title,
             bookTitle,
-            previousInferences ++ inferencesSoFar,
-            previousTransformations ++ transformations,
+            previousProofEntries ++ ProofEntries(inferencesSoFar, statementDefinitionsSoFar),
             cachedProofs)
         case other =>
           other

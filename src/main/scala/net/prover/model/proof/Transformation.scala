@@ -23,28 +23,24 @@ case class Transformation(statementDefinition: StatementDefinition, variableName
         for {
           (premises, toProve) <- acc
           (nextPremiseStatement, nextToProve) <- transformNext(premise)
-          nextPremise = Premise(Fact.Direct(nextPremiseStatement), index)(isElidable = false)
+          nextPremise = Premise(nextPremiseStatement, index)(isElidable = false)
         } yield (premises :+ nextPremise, toProve ++ nextToProve)
       }
     premisesAndStatementsToProve.headOption.map { case (p, toProve) =>
       val boundSubsteps = (toProve :+ applicableConclusion).map(toBound)
-      val steps =
-        if (boundSubsteps.nonEmpty)
-          Seq(StepOutline.ScopedVariable(variableName, boundSubsteps.map(s => StepOutline.Assertion(s, None))))
-        else
-          Nil
+      val steps = Seq(StepOutline.ScopedVariable(variableName, boundSubsteps.map(s => StepOutline.Assertion(s, None)), None))
       (p, toFull(applicableConclusion), steps)
     } ++ premisesAndStatementsToProve.drop(1).map { case (p, toProve) =>
-      (p, toSpecified(applicableConclusion), toProve.map(s => StepOutline.Assertion(toSpecified(s), None)))
+      (p, toSpecified(applicableConclusion), (toProve :+ applicableConclusion).map(s => StepOutline.Assertion(toSpecified(s), None)))
     }
   }
 
   def applyToInference(
-    premiseStatements: Seq[Statement],
+    premises: Seq[Premise],
     conclusion: Statement
   ): Seq[(Seq[Premise], Statement, Seq[StepOutline])] = {
     val requiredSubstitutions =(
-      premiseStatements.map(_.requiredSubstitutions) :+
+      premises.map(_.requiredSubstitutions) :+
         conclusion.requiredSubstitutions
     ).foldTogether
     if (requiredSubstitutions.terms.nonEmpty || requiredSubstitutions.predicates.nonEmpty || requiredSubstitutions.functions.nonEmpty)
@@ -58,7 +54,7 @@ case class Transformation(statementDefinition: StatementDefinition, variableName
       for {
         substitutions <- possibleSubstitutions
         applicableConclusion <- conclusion.applySubstitutions(substitutions).toSeq
-        applicablePremiseStatements <- premiseStatements.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
+        applicablePremiseStatements <- premises.map(_.statement.applySubstitutions(substitutions)).traverseOption.toSeq
         (premises, conclusion, stepsToProve) <- transformAll(applicablePremiseStatements, applicableConclusion)
       } yield (premises, conclusion, stepsToProve)
     }

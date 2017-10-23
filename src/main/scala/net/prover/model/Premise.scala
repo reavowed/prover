@@ -1,21 +1,22 @@
 package net.prover.model
 
-import net.prover.model.proof.{Fact, Reference, ReferencedFact}
+import net.prover.model.expressions.Statement
+import net.prover.model.proof.{Reference, ReferencedFact}
 
-case class Premise(fact: Fact, index: Int)(val isElidable: Boolean) {
+case class Premise(statement: Statement, index: Int)(val isElidable: Boolean) {
   def reference = Reference.Direct(s"p$index")
-  def referencedFact = ReferencedFact(fact, reference)
-  def requiredSubstitutions: Substitutions.Required = fact.requiredSubstitutions
+  def referencedFact = ReferencedFact(statement, reference)
+  def requiredSubstitutions: Substitutions.Required = statement.requiredSubstitutions
   def increaseDepth(additionalDepth: Int, insertionPoint: Int): Premise = {
-    Premise(fact.increaseDepth(additionalDepth, insertionPoint), index)(isElidable)
+    Premise(statement.increaseDepth(additionalDepth, insertionPoint), index)(isElidable)
   }
-  def serialized: String = s"premise ${fact.serialized}"
+  def serialized: String = s"premise ${statement.serialized}"
 }
 
 object Premise {
     def parser(index: Int)(implicit context: ParsingContext): Parser[Option[Premise]] = {
       Parser.optional("premise", for {
-          fact <- Fact.parser
+          fact <- Statement.parser
           isElidable <- Parser.optionalWord("elidable").isDefined
       } yield Premise(fact, index)(isElidable))
     }

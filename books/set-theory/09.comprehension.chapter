@@ -38,7 +38,6 @@ take y {
   }
   prove ↔ ∃ x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a ∧ ∈ y A with y φ
 }
-prove ∀ y ↔ ∃ x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a ∧ ∈ y A with y φ
 qed
 
 theorem Comprehensions Exist for Non-Empty Sets
@@ -122,5 +121,4 @@ take y {
     prove with y φ
   }
 }
-prove ∀ y → ∈ y A with y φ
 qed

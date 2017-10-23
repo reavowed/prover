@@ -5,7 +5,6 @@ import java.nio.file.Paths
 import net.prover.model.entries.ExpressionDefinition.{ComponentType, StatementComponent, TermComponent}
 import net.prover.model.expressions._
 import net.prover.model.entries.{ExpressionDefinition, StatementDefinition, TermDefinition}
-import net.prover.model.proof.Fact
 import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {
@@ -33,7 +32,8 @@ trait ProverSpec extends Specification {
       Format.default(symbol, componentTypes.map(_.name)),
       definingStatement,
       "",
-      "")
+      "",
+      None)
   }
   def predicate(
     symbol: String,
@@ -49,7 +49,8 @@ trait ProverSpec extends Specification {
       Format.default(symbol, componentTypes.map(_.name)),
       definingStatement,
       "",
-      "")
+      "",
+      None)
   }
 
   def quantifier(
@@ -64,16 +65,17 @@ trait ProverSpec extends Specification {
       Format(s"($symbol%0)%1", requiresBrackets = false),
       definingStatement,
       "",
-      "")
+      "",
+      None)
   }
 
-  val Implication = connective("→", 2, None)
+  val Implication = connective("→", 2, None).copy(structureType = Some(StatementDefinition.StructureType.Deduction))
   val Negation = connective("¬", 1, None)
   val Conjunction = connective("∧", 2, Some(Negation(Implication(φ, Negation(ψ)))))
   val Disjunction = connective("∨", 2, Some(Implication(Negation(φ), ψ)))
   val Equivalence = connective("↔", 2, None)
 
-  val ForAll = quantifier("∀", None)
+  val ForAll = quantifier("∀", None).copy(structureType = Some(StatementDefinition.StructureType.Scoping))
   val Exists = quantifier("∃", Some(Negation(ForAll("x")(Negation.!(φ.!(FunctionParameter("x", 0)))))))
   val Equals = predicate("=", 2, None)
   val ExistsUnique = quantifier("∃!", Some(Exists("y")(ForAll("x")(Equivalence(
@@ -220,17 +222,11 @@ trait ProverSpec extends Specification {
     def elidable: PremiseMagnet
     def toPremise(index: Int): Premise
   }
-  implicit class FromFact(fact: Fact)(implicit isElidable: Boolean = false) extends PremiseMagnet {
-    def elidable: PremiseMagnet = FromFact(fact)(isElidable = true)
-    def toPremise(index: Int) = Premise(fact, index)(isElidable)
-  }
   implicit class FromStatement(statement: Statement)(implicit isElidable: Boolean = false) extends PremiseMagnet {
     def elidable: PremiseMagnet = FromStatement(statement)(isElidable = true)
-    def toPremise(index: Int) = Premise(Fact.Direct(statement), index)(isElidable)
+    def toPremise(index: Int) = Premise(statement, index)(isElidable)
   }
   implicit def allToPremise(magnets: Seq[PremiseMagnet]): Seq[Premise] = {
     magnets.mapWithIndex(_.toPremise(_))
   }
-
-  implicit def statementToFact(statement: Statement): Fact.Direct = Fact.Direct(statement)
 }

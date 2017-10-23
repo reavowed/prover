@@ -31,7 +31,6 @@ take y {
   }
   prove ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b ∨ = y a = y b
 }
-prove ∀ y ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b ∨ = y a = y b
 qed
 
 theorem Unordered Pair Existence

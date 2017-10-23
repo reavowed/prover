@@ -1,6 +1,5 @@
 package net.prover.model.proof
 
-import net.prover.model._
 import net.prover.model.expressions.Statement
 import org.slf4j.LoggerFactory
 
@@ -9,8 +8,7 @@ case class Proof(steps: Seq[Step]) {
   def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
   def length: Int = steps.map(_.length).sum
   val conclusion: Statement = {
-    steps.ofType[Step.WithAssertion].lastOption
-      .flatMap(_.assertion.asOptionalInstanceOf[Statement])
+    steps.flatMap(_.fact).lastOption
       .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))
   }
 }

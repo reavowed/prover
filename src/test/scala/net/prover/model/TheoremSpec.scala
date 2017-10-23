@@ -20,41 +20,39 @@ class TheoremSpec extends ProverSpec {
 
   "theorem parser" should {
     implicit def assertionStepFromStatement(assertion: Statement): StepOutline = {
-      StepOutline.Assertion(assertion, Some(FileLocation("test.book", 1)))
+      StepOutline.Assertion(assertion, None)
     }
 
     implicit def assumptionStepFromStatementPair(tuple: (Statement, Statement)): StepOutline = {
-      StepOutline.Assumption(tuple._1, Seq(assertionStepFromStatement(tuple._2)))
+      StepOutline.Assumption(tuple._1, Seq(assertionStepFromStatement(tuple._2)), None)
     }
 
     implicit def assumptionStepFromStatementAndStatements(tuple: (Statement, Seq[Statement])): StepOutline = {
-      StepOutline.Assumption(tuple._1, tuple._2.map(assertionStepFromStatement))
+      StepOutline.Assumption(tuple._1, tuple._2.map(assertionStepFromStatement), None)
     }
 
     def prove(
       premises: Seq[PremiseMagnet],
       proofSteps: Seq[StepOutline],
-      inferences: Seq[Inference],
-      transformations: Seq[StatementDefinition] = Nil
+      inferences: Seq[Inference]
     ): Proof = {
       ProofOutline(proofSteps)
-        .fillIn(premises, inferences, Nil, transformations)
+        .fillIn(ProvingContext.getInitial(premises, Nil, inferences, defaultContext.statementDefinitions))
     }
 
     def checkProof(
       premises: Seq[PremiseMagnet],
       proofSteps: Seq[StepOutline],
-      inferences: Seq[Inference],
-      transformations: Seq[StatementDefinition] = Nil
+      inferences: Seq[Inference]
     ) = {
-      val proof = prove(premises, proofSteps, inferences, transformations)
+      val proof = prove(premises, proofSteps, inferences)
 //      proof.conclusion mustEqual proofSteps.ofType[StepOutline.WithAssertion].last.innermostAssertionStep.assertion
       val cachedProof = CachedProof(Paths.get(""), premises, proof.steps.map(_.cached))
       cachedProof.steps.matchOutlines(proofSteps) must beTrue
       val serializedProof = cachedProof.serialized
       val deserializedProof = CachedProof.parser(Paths.get("")).parse(Tokenizer.fromString(serializedProof, Paths.get("")))._1
       deserializedProof mustEqual cachedProof
-      deserializedProof.validate(inferences, transformations) must beSome(proof)
+      deserializedProof.validate(ProofEntries(inferences, defaultContext.statementDefinitions)) must beSome(proof)
     }
 
     "not prove an unfounded statement" in {
@@ -62,7 +60,6 @@ class TheoremSpec extends ProverSpec {
     }
 
     val repetition = axiom("Repetition", Seq(φ), φ)
-    val deduction = axiom("Deduction", Seq(Fact.Deduced(φ, ψ)), Implication(φ, ψ), RearrangementType.Contraction)
     val modusPonens = axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
     val implicationIsReflexive = axiom("Implication Is Reflexive", Nil, Implication(φ, φ))
     val extractLeftConjunct = axiom("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), φ, RearrangementType.Simplification)
@@ -70,11 +67,6 @@ class TheoremSpec extends ProverSpec {
     val combineConjunction = axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ), RearrangementType.Expansion)
     val addRightDisjunct = axiom("Add Right Disjunct", Seq(ψ), Disjunction(φ, ψ), RearrangementType.Expansion)
 
-    val generalization = axiom(
-      "Generalization",
-      Seq(Fact.ScopedVariable(φ.!(FunctionParameter("x", 0)))("x").elidable),
-      ForAll("x")(φ.!(FunctionParameter("x", 0))),
-      RearrangementType.Contraction)
     val specification = axiom(
       "Specification",
       Seq(ForAll("x")(φ.!(FunctionParameter("x", 0)))),
@@ -104,13 +96,6 @@ class TheoremSpec extends ProverSpec {
         Seq(φ),
         Seq(modusPonens)
       ) must throwAn[Exception]
-    }
-
-    "prove the conclusion of an inference with a deduced premise that matches an assumption" in {
-      checkProof(
-        Seq(χ),
-        Seq(ψ -> χ, Implication(ψ, χ)),
-        Seq(repetition, deduction))
     }
 
     "prove an inference conclusion by simplifying a premise" in {
@@ -153,10 +138,8 @@ class TheoremSpec extends ProverSpec {
         Equals(a, a))
       checkProof(
         Nil,
-        Seq(
-          StepOutline.ScopedVariable("y", Seq(Equals.!(FunctionParameter("y", 0), FunctionParameter("y", 0)))),
-          ForAll("y")(Equals.!(FunctionParameter("y", 0), FunctionParameter("y", 0)))),
-        Seq(equalityIsReflexive, generalization))
+        Seq(StepOutline.ScopedVariable("y", Seq(Equals.!(FunctionParameter("y", 0), FunctionParameter("y", 0))), None)),
+        Seq(equalityIsReflexive))
     }
 
     "prove a conclusion containing a bound variable" in {
@@ -167,13 +150,13 @@ class TheoremSpec extends ProverSpec {
       checkProof(
         Seq(Equals(b, c)),
         Seq(
-          StepOutline.ScopedVariable("x", Seq(Equivalence.!(
-            ElementOf.!(FunctionParameter("x", 0), b.^),
-            ElementOf.!(FunctionParameter("x", 0), c.^)))),
-          ForAll("x")(Equivalence.!(
-            ElementOf.!(FunctionParameter("x", 0), b.^),
-            ElementOf.!(FunctionParameter("x", 0), c.^)))),
-        Seq(equivalenceOfSubstitutedEquals, generalization))
+          StepOutline.ScopedVariable(
+            "x",
+            Seq(Equivalence.!(
+              ElementOf.!(FunctionParameter("x", 0), b.^),
+              ElementOf.!(FunctionParameter("x", 0), c.^))),
+            None)),
+        Seq(equivalenceOfSubstitutedEquals))
     }
 
     "prove a transformed inference" in {
@@ -183,8 +166,7 @@ class TheoremSpec extends ProverSpec {
           ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.!(FunctionParameter("x", 0))))),
         Seq(
           ForAll("x")(ψ.!(FunctionParameter("x", 0)))),
-        Seq(generalization, specification, modusPonens),
-        Seq(ForAll))
+        Seq(specification, modusPonens))
     }
 
     "prove a partially transformed inference" in {
@@ -193,31 +175,7 @@ class TheoremSpec extends ProverSpec {
           ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.!(FunctionParameter("x", 0)))),
           φ(a)),
         Seq(ψ(a)),
-        Seq(generalization, specification, modusPonens),
-        Seq(ForAll))
-    }
-
-    "prove a conclusion using a contracted premise" in {
-      checkProof(
-        Seq(
-          Fact.ScopedVariable(Implication.!(
-            ElementOf.!(FunctionParameter("x", 0), a.^),
-            ElementOf.!(FunctionParameter("x", 0), a.^)))(
-            "x")),
-        Seq(Subset(a, a)),
-        Seq(generalization, Subset.inferences.head))
-    }
-
-    "prove a conclusion using a multiply-contracted premise" in {
-      checkProof(
-        Seq(
-          Fact.ScopedVariable(
-            Fact.Deduced(
-              ElementOf.!(FunctionParameter("x", 0), a.^),
-              ElementOf.!(FunctionParameter("x", 0), a.^)))(
-            "x")),
-        Seq(Subset(a, a)),
-        Seq(deduction, generalization, Subset.inferences.head))
+        Seq(specification, modusPonens))
     }
 
     "apply a transformation with applied and unapplied statements" in {
@@ -227,18 +185,8 @@ class TheoremSpec extends ProverSpec {
           ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.^)),
           Negation(ψ)),
         Seq(
-          StepOutline.ScopedVariable("x", Seq(Negation.!(φ.!(FunctionParameter("x", 0))))),
-          ForAll("x")(Negation.!(φ.!(FunctionParameter("x", 0))))),
-        Seq(specification, generalization, modusTollens),
-        Seq(ForAll))
-    }
-
-    "prove a conclusion using a sub-contraction" in {
-      checkProof(
-        Seq(
-          Fact.ScopedVariable(Fact.ScopedVariable(φ.^^)("y"))("x")),
-        Seq(ForAll("x")(ForAll.!("y")(φ.^^))),
-        Seq(generalization))
+          StepOutline.ScopedVariable("x", Seq(Negation.!(φ.!(FunctionParameter("x", 0)))), None)),
+        Seq(specification, modusTollens))
     }
 
     "prove a naming step" in {
@@ -257,8 +205,7 @@ class TheoremSpec extends ProverSpec {
           Conjunction.!(φ.!(FunctionParameter("a", 0)), ψ.^),
           Seq(ψ.^),
           None)),
-        Seq(extractRightConjunct, valueForExistence, deduction, generalization),
-        Seq(ForAll))
+        Seq(extractRightConjunct, valueForExistence))
     }
 
     "prove with an elided premise" in {

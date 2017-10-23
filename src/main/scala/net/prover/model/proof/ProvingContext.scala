@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model.entries.StatementDefinition
-import net.prover.model.expressions.Statement
+import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.{Inference, Premise}
 
 case class ProvingContext(
@@ -10,11 +10,13 @@ case class ProvingContext(
   assumptions: Seq[Statement],
   availableInferences: Seq[Inference],
   assertionHints: Seq[AssertionHint],
-  transformationStatementDefinitions: Seq[StatementDefinition],
-  depth: Int)
+  deductionStatement: Option[StatementDefinition],
+  scopingStatement: Option[StatementDefinition],
+  depth: Int,
+  allowTransformations: Boolean = true)
 {
-  def addFact(fact: Fact, reference: Reference.Direct) = {
-    copy(referencedFacts = referencedFacts :+ ReferencedFact(fact, reference))
+  def addFact(statement: Statement, reference: Reference.Direct) = {
+    copy(referencedFacts = referencedFacts :+ ReferencedFact(statement, reference))
   }
   def addFact(referencedFact: ReferencedFact) = {
     copy(referencedFacts = referencedFacts :+ referencedFact)
@@ -29,17 +31,38 @@ case class ProvingContext(
       assumptions.map(_.increaseDepth(additionalDepth, insertionPoint)),
       availableInferences,
       assertionHints,
-      transformationStatementDefinitions,
+      deductionStatement,
+      scopingStatement,
       depth + additionalDepth)
+  }
+
+  def deduced(antecedent: Statement, consequent: Statement): Option[Statement] = {
+    deductionStatement.map { definition =>
+      DefinedStatement(Seq(antecedent, consequent), definition, antecedent.depth - 1)(Nil)
+    }
+  }
+
+  def scoped(inner: Statement, variableName: String): Option[Statement] = {
+    scopingStatement.map { definition =>
+      DefinedStatement(Seq(inner), definition, inner.depth - 1)(Seq(variableName))
+    }
   }
 }
 
 object ProvingContext {
   def getInitial(
     premises: Seq[Premise],
-    availableInferences: Seq[Inference],
     assertionHints: Seq[AssertionHint],
-    transformations: Seq[StatementDefinition]
+    proofEntries: ProofEntries
+  ): ProvingContext = {
+    getInitial(premises, assertionHints, proofEntries.availableInferences, proofEntries.statementDefinitions)
+  }
+
+  def getInitial(
+    premises: Seq[Premise],
+    assertionHints: Seq[AssertionHint],
+    availableInferences: Seq[Inference],
+    statementDefinitions: Seq[StatementDefinition]
   ): ProvingContext = {
     ProvingContext(
       premises.map(_.referencedFact),
@@ -47,7 +70,8 @@ object ProvingContext {
       Nil,
       availableInferences,
       assertionHints,
-      transformations,
+      statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Deduction)),
+      statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Scoping)),
       0)
   }
 }

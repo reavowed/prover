@@ -2,6 +2,7 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.entries.ExpressionDefinition.ComponentType
+import net.prover.model.entries.StatementDefinition.StructureType
 import net.prover.model.expressions._
 import net.prover.model.{Format, Inference, Parser, ParsingContext}
 
@@ -15,7 +16,7 @@ case class StatementDefinition(
     definingStatement: Option[Statement],
     chapterKey: String,
     bookKey: String,
-    isTransformation: Boolean = false)
+    structureType: Option[StructureType])
   extends ChapterEntry(StatementDefinition)
     with ExpressionDefinition
 {
@@ -46,6 +47,15 @@ case class StatementDefinition(
 object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
   override val name: String = "statement"
 
+  sealed trait StructureType
+  object StructureType {
+    case object Deduction extends StructureType
+    case object Scoping extends StructureType
+    def parser: Parser[Option[StructureType]] = Parser.selectOptionalWord {
+      case "deduction" => Deduction
+      case "scoping" => Scoping
+    }
+  }
 
   def nameParser(implicit context: ParsingContext): Parser[Option[String]] = Parser.optional(
     "name",
@@ -54,6 +64,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
   private def definingStatementParser(implicit context: ParsingContext): Parser[Option[Statement]] = Parser.optional(
     "definition",
     Statement.parser.inParens)
+
 
   def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[StatementDefinition] = {
     for {
@@ -64,7 +75,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
       name <- nameParser.getOrElse(symbol)
       format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
       optionalDefiningStatement <- definingStatementParser
-      isTransformation <- Parser.optionalWord("transformation").isDefined
+      structureType <- StructureType.parser
     } yield {
       StatementDefinition(
         symbol,
@@ -75,7 +86,7 @@ object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
         optionalDefiningStatement,
         chapterKey,
         bookKey,
-        isTransformation)
+        structureType)
     }
   }
 }

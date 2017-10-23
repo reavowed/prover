@@ -9,19 +9,17 @@ import scala.util.Try
 case class Prover(
   assertionToProve: Statement,
   reference: Reference.Direct,
-  context: ProvingContext,
-  debug: Boolean)
+  context: ProvingContext)
 {
   import context._
 
   val applicableHints = assertionHints.filter(_.conclusion == assertionToProve)
   val allSimplifiedFacts = {
-    val contractions = referencedFacts.flatMap(getContractions(_))
-    val simplifications = (referencedFacts ++ contractions).flatMap(getAllSimplifications)
-    referencedFacts ++ contractions ++ simplifications
+    val simplifications = referencedFacts.flatMap(getAllSimplifications)
+    referencedFacts ++ simplifications
   }
 
-  lazy val transformations: Seq[Transformation] = transformationStatementDefinitions.mapCollect { statementDefinition =>
+  lazy val transformations: Seq[Transformation] = scopingStatement.toSeq.flatMap { statementDefinition =>
     for {
       variableName <- statementDefinition.boundVariableNames.single
     } yield {
@@ -71,16 +69,16 @@ case class Prover(
   ): Option[Step.Assertion] = {
     (for {
       transformation <- transformations.iterator
-      premiseStatements <- inference.premises.map(_.fact.asOptionalInstanceOf[Fact.Direct].map(_.assertion)).traverseOption.iterator
-      (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyToInference(premiseStatements, inference.conclusion)
+      if allowTransformations
+      (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyToInference(inference.premises, inference.conclusion)
       conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(assertionToProve, Substitutions.emptyWithDepth(depth))
       (premiseReferences, premiseSubstitutions) <- matchPremisesToFacts(transformedPremises, conclusionSubstitutions, inference.allowsRearrangement)
-      proofOutline = ProofOutline(stepsToProve :+ StepOutline.Assertion(transformedConclusion, None))
-      transformationProofAttempt = Try(proofOutline.fillIn(
+      transformationProofAttempt = Try(ProofOutline(stepsToProve).fillIn(ProvingContext.getInitial(
         transformedPremises,
-        availableInferences,
         assertionHints,
-        Nil))
+        availableInferences,
+        deductionStatement.toSeq ++ scopingStatement.toSeq
+      ).copy(allowTransformations = false)))
       transformationProof <- transformationProofAttempt.toOption
     } yield Step.Assertion(
       assertionToProve,
@@ -159,7 +157,7 @@ case class Prover(
         true
     }
     elidableAndPostPremises match {
-      case Premise(Fact.Direct(premiseStatement), _) +: postPremises =>
+      case Premise(premiseStatement, _) +: postPremises =>
         Some((prePremises, premiseStatement, postPremises))
       case _ =>
         None
@@ -169,23 +167,16 @@ case class Prover(
   def proveAssertionByRearranging(): Option[Step.Assertion] = {
     val expansions = availableInferences
       .filter(_.rearrangementType == RearrangementType.Expansion)
-      .mapCollect { inference =>
-        inference.premises.map(_.fact).toType[Fact.Direct]
-          .map(_.map(_.assertion))
-          .map((inference, _))
-      }
     def findAssertionByExpanding(assertion: Statement): Option[InferenceApplication] = {
       expansions.iterator
-        .findFirst { case (inference, inferencePremises) =>
-          (
-            for {
-              substitutions <- inference.conclusion.calculateSubstitutions(assertion, Substitutions.emptyWithDepth(depth))
-              substitutedPremises <- inferencePremises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
-              premiseReferences <- substitutedPremises.map(getAssertionByRearranging).traverseOption.toSeq
-              if inference.conclusion.applySubstitutions(substitutions).contains(assertion)
-            } yield InferenceApplication.Direct(inference, substitutions, premiseReferences, depth)
-          ).headOption
-        }
+        .findFirst { inference => (
+          for {
+            substitutions <- inference.conclusion.calculateSubstitutions(assertion, Substitutions.emptyWithDepth(depth))
+            substitutedPremises <- inference.premises.map(_.statement.applySubstitutions(substitutions)).traverseOption.toSeq
+            premiseReferences <- substitutedPremises.map(getAssertionByRearranging).traverseOption.toSeq
+            if inference.conclusion.applySubstitutions(substitutions).contains(assertion)
+          } yield InferenceApplication.Direct(inference, substitutions, premiseReferences, depth)
+        ).headOption}
     }
     def getAssertionByRearranging(assertion: Statement): Option[Reference] = {
       findAssertionInFacts(assertion) orElse findAssertionByExpanding(assertion).map(Reference.Expansion)
@@ -196,7 +187,7 @@ case class Prover(
   }
 
   def findAssertionInFacts(assertion: Statement): Option[Reference] = {
-    allSimplifiedFacts.find(_.fact == Fact.Direct(assertion)).map(_.reference)
+    allSimplifiedFacts.find(_.statement == assertion).map(_.reference)
   }
 
   private def matchPremisesToFacts(
@@ -221,17 +212,17 @@ case class Prover(
   ): Iterator[(Reference, Substitutions)] = {
     val facts = if (allowRearrangement) allSimplifiedFacts else referencedFacts
     facts.iterator.flatMap { case ReferencedFact(fact, factReference) =>
-      matchPremiseToFact(premise.fact, fact, factReference, substitutionsSoFar)
+      matchPremiseToFact(premise.statement, fact, factReference, substitutionsSoFar)
     }
   }
 
   private def matchPremiseToFact(
-    premiseFact: Fact,
-    knownFact: Fact,
+    premiseStatement: Statement,
+    knownStatement: Statement,
     factReference: Reference,
     substitutionsSoFar: Substitutions
   ): Iterator[(Reference, Substitutions)] = {
-    premiseFact.calculateSubstitutions(knownFact, substitutionsSoFar)
+    premiseStatement.calculateSubstitutions(knownStatement, substitutionsSoFar)
       .toIterator
       .map { newSubstitutions =>
         (factReference, newSubstitutions)
@@ -250,64 +241,29 @@ case class Prover(
     helper(Seq(referencedFact), Nil)
   }
 
-  private def getContractions(referencedFact: ReferencedFact, level: Int = 0, additionalDepth: Int = 0): Seq[ReferencedFact] = {
-    val nextLevelContractions = for {
-      (childFact, moreDepth, updater) <- referencedFact.childDetails.toSeq
-      contractedChild <- getContractions(childFact, level + 1, additionalDepth + moreDepth)
-    } yield updater(contractedChild)
-    (referencedFact +: nextLevelContractions).flatMap(getTopLevelContractions(_, level, additionalDepth)) ++ nextLevelContractions
-  }
-
-  def getTopLevelContractions(referencedFact: ReferencedFact, level: Int, additionalDepth: Int): Seq[ReferencedFact] = {
-    availableInferences
-      .filter(_.rearrangementType == RearrangementType.Contraction)
-      .collect {
-        case inference @ Inference(_, Seq(Premise(premiseFact, _)), _) =>
-          (inference, premiseFact)
-      }
-      .flatMap { case (inference, premiseFact) =>
-        premiseFact.calculateSubstitutions(referencedFact.fact, Substitutions.emptyWithDepth(depth + additionalDepth))
-          .map((inference, _))
-      }
-      .mapCollect { case (inference, substitutions) =>
-        inference.conclusion.applySubstitutions(substitutions)
-          .map((inference, substitutions, _))
-      }
-      .map { case (inference, substitutions, conclusion) =>
-        ReferencedFact(
-          Fact.Direct(conclusion),
-          Reference.Contraction(inference, substitutions, referencedFact.reference, level, additionalDepth, depth + additionalDepth))
-      }
-  }
-
   private def getNextLevelSimplifications(referencedFact: ReferencedFact): Seq[ReferencedFact] = {
-    referencedFact match {
-      case ReferencedFact(Fact.Direct(statement), factReference) =>
-        availableInferences
-          .filter(_.rearrangementType == RearrangementType.Simplification)
-          .collect {
-            case inference @ Inference(_, Seq(Premise(Fact.Direct(premiseStatement), _)), _) =>
-              (inference, premiseStatement)
-          }
-          .flatMap { case (inference, premiseStatement) =>
-            premiseStatement.findComponentPath(inference.conclusion)
-              .map((inference, premiseStatement, _))
-          }
-          .flatMap { case (inference, premiseStatement, simplificationPath) =>
-            premiseStatement.calculateSubstitutions(statement, Substitutions.emptyWithDepth(depth))
-              .map((inference, simplificationPath, _))
-          }
-          .mapCollect { case (inference, simplificationPath, substitutions) =>
-            inference.conclusion.applySubstitutions(substitutions)
-              .map((inference, simplificationPath, substitutions, _))
-          }
-          .map { case (inference, simplificationPath, substitutions, conclusion) =>
-            ReferencedFact(
-              Fact.Direct(conclusion),
-              Reference.Simplification(inference, substitutions, factReference, simplificationPath, depth))
-          }
-      case _ =>
-        Nil
+    availableInferences
+      .filter(_.rearrangementType == RearrangementType.Simplification)
+      .collect {
+        case inference @ Inference(_, Seq(Premise(premiseStatement, _)), _) =>
+          (inference, premiseStatement)
+      }
+      .flatMap { case (inference, premiseStatement) =>
+        premiseStatement.findComponentPath(inference.conclusion)
+          .map((inference, premiseStatement, _))
+      }
+      .flatMap { case (inference, premiseStatement, simplificationPath) =>
+        premiseStatement.calculateSubstitutions(referencedFact.statement, Substitutions.emptyWithDepth(depth))
+          .map((inference, simplificationPath, _))
+      }
+      .mapCollect { case (inference, simplificationPath, substitutions) =>
+        inference.conclusion.applySubstitutions(substitutions)
+          .map((inference, simplificationPath, substitutions, _))
+      }
+      .map { case (inference, simplificationPath, substitutions, conclusion) =>
+        ReferencedFact(
+          conclusion,
+          Reference.Simplification(inference, substitutions, referencedFact.reference, simplificationPath, depth))
     }
   }
 }

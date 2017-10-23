@@ -24,7 +24,6 @@ assume ¬ ψ {
   take x {
     prove ¬ with x φ
   }
-  prove ∀ x ¬ with x φ
 }
 prove ψ
 qed
@@ -44,13 +43,12 @@ comment Swapping between universal and existential quantifiers.
 
 theorem Not Exists Not Is For All
 premise ¬ ∃ x ¬ with x φ
-take y {
-  assume ¬ with y φ {
-    prove ∃ x ¬ with x φ
+take x {
+  assume ¬ with x φ {
+    prove ∃ y ¬ with y φ
   }
-  prove with y φ
+  prove with x φ
 }
-prove ∀ x with x φ
 qed
 
 theorem Not Exists Is For All Not

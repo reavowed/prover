@@ -14,8 +14,7 @@ object StepOutline {
 
   case class Assertion(
       assertion: Statement,
-      location: Option[FileLocation],
-      debug: Boolean = false)
+      location: Option[FileLocation])
     extends StepOutline.WithAssertion
   {
     override def innermostAssertionStep = this
@@ -24,7 +23,7 @@ object StepOutline {
         .getOrElse(throw ProvingException(s"Could not prove assertion '$assertion'", location))
     }
     def tryProve(reference: Reference.Direct)(implicit context: ProvingContext) = {
-      Prover(assertion, reference, context, debug)
+      Prover(assertion, reference, context)
         .proveAssertion()
     }
   }
@@ -33,32 +32,34 @@ object StepOutline {
       for {
         location <- Parser.location
         assertion <- Statement.parser
-        debug <- Parser.optional("debug", Parser.constant(true), false)
       } yield Assertion(
         assertion,
-        Some(location),
-        debug)
+        Some(location))
     }
   }
 
   case class Assumption(
       assumption: Statement,
-      steps: Seq[StepOutline])
+      steps: Seq[StepOutline],
+      location: Option[FileLocation])
     extends StepOutline
   {
     override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
-      val contextWithAssumption = context.addFact(Fact.Direct(assumption), reference.withSuffix("a"))
+      val contextWithAssumption = context.addFact(assumption, reference.withSuffix("a"))
       val substeps = steps.prove(Some(reference))(contextWithAssumption)
-      Step.Assumption(assumption, substeps, reference)
+      val deductionStatement = context.deductionStatement
+        .getOrElse(throw ProvingException("Cannot prove a deduction without an appropriate statement definition", location))
+      Step.Assumption(assumption, substeps, deductionStatement, reference)
     }
   }
   object Assumption {
     def parser(implicit context: ParsingContext): Parser[Assumption] = {
       for {
+        location <- Parser.location
         assumption <- Statement.parser
         steps <- listParser.inBraces
       } yield {
-        Assumption(assumption, steps)
+        Assumption(assumption, steps, Some(location))
       }
     }
   }
@@ -74,14 +75,15 @@ object StepOutline {
       .getOrElse(throw new Exception("Naming step must contain a step with an assertion"))
       .innermostAssertionStep
     override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
-      val assumptionStep = Assumption(definingAssumption, steps)
+      val assumptionStep = Assumption(definingAssumption, steps, None)
         .prove(reference.withSuffix(".0"))(context.increaseDepth(1, context.depth))
       val deduction = assumptionStep.referencedFact.getOrElse(throw ProvingException(
         "Naming step did not have a conclusion",
         location))
+      val scopedDeduction = context.scoped(deduction.statement, variableName)
+        .getOrElse(throw ProvingException("Cannot prove a scoped statement without an appropriate statement definition", location))
       val innerAssertion = assumptionStep
-        .steps.ofType[Step.WithAssertion].lastOption
-        .map(_.assertion)
+        .steps.flatMap(_.fact).lastOption
         .getOrElse(throw ProvingException(
           "Naming step did not have a conclusion",
           location))
@@ -93,7 +95,7 @@ object StepOutline {
         .tryProve(
           reference.withSuffix(".1"))(
           context.addFact(
-            Fact.ScopedVariable(deduction.fact)(variableName),
+            scopedDeduction,
             deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")))
         .getOrElse(throw ProvingException(
           s"Could not extract assertion $innerAssertion from naming step for $variableName",
@@ -115,19 +117,27 @@ object StepOutline {
     }
   }
 
-  case class ScopedVariable(variableName: String, steps: Seq[StepOutline]) extends StepOutline {
+  case class ScopedVariable(
+      variableName: String,
+      steps: Seq[StepOutline],
+      location: Option[FileLocation])
+    extends StepOutline
+  {
     override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
       val provenSteps = steps.prove(Some(reference))(context.increaseDepth(1, context.depth))
-      Step.ScopedVariable(variableName, provenSteps, reference)
+      val scopingStatement = context.scopingStatement
+        .getOrElse(throw ProvingException("Cannot prove a deduction without an appropriate statement definition", location))
+      Step.ScopedVariable(variableName, provenSteps, scopingStatement, reference)
     }
   }
   object ScopedVariable {
     def parser(implicit context: ParsingContext): Parser[ScopedVariable] = {
       for {
+        location <- Parser.location
         variableName <- Parser.singleWord
         updatedContext = context.addParameterList(Seq(variableName))
         steps <- listParser(updatedContext).inBraces
-      } yield ScopedVariable(variableName, steps)
+      } yield ScopedVariable(variableName, steps, Some(location))
     }
   }
 

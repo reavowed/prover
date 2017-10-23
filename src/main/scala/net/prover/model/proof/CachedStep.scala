@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.expressions.{Statement, Term, TermVariable}
+import net.prover.model.expressions.{DefinedStatement, Statement}
 
 sealed trait CachedStep {
   def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
@@ -63,13 +63,14 @@ object CachedStep {
       steps.flatMap(_.getAssertionHints(availableInferences))
     }
     override def validate(context: ProvingContext): Option[Step.Assumption] = {
-      val assumptionContext = context.addFact(Fact.Direct(assumption), reference.withSuffix("a"))
+      val assumptionContext = context.addFact(assumption, reference.withSuffix("a"))
       for {
+        deductionStatement <- context.deductionStatement
         validatedSubsteps <- steps.validate(assumptionContext)
-      } yield Step.Assumption(assumption, validatedSubsteps, reference)
+      } yield Step.Assumption(assumption, validatedSubsteps, deductionStatement, reference)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
-      case StepOutline.Assumption(`assumption`, stepOutlines) =>
+      case StepOutline.Assumption(`assumption`, stepOutlines, _) =>
         steps.matchOutlines(stepOutlines)
       case _ =>
         false
@@ -100,9 +101,10 @@ object CachedStep {
       for {
         validatedAssumptionStep <- assumptionStep.validate(innerContext)
         deduction <- validatedAssumptionStep.referencedFact
+        scopingStatement <- context.scopingStatement
         validatedAssertionStep <- assertionStep.validate(
           context.addFact(
-            Fact.ScopedVariable(deduction.fact)(variableName),
+            DefinedStatement(Seq(deduction.statement), scopingStatement, deduction.statement.depth - 1)(Seq(variableName)),
             deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")))
       } yield Step.Naming(variableName, validatedAssumptionStep, validatedAssertionStep.asInstanceOf[Step.Assertion], reference)
     }
@@ -142,11 +144,12 @@ object CachedStep {
     }
     override def validate(context: ProvingContext): Option[Step] = {
       for {
+        scopingStatment <- context.scopingStatement
         validatedSubsteps <- substeps.validate(context.increaseDepth(1, context.depth))
-      } yield Step.ScopedVariable(variableName, validatedSubsteps, reference)
+      } yield Step.ScopedVariable(variableName, validatedSubsteps, scopingStatment, reference)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
-      case StepOutline.ScopedVariable(`variableName`, substepOutlines) =>
+      case StepOutline.ScopedVariable(`variableName`, substepOutlines, _) =>
         substeps.matchOutlines(substepOutlines)
       case _ =>
         false

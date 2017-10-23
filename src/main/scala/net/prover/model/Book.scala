@@ -6,7 +6,7 @@ import java.util
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.entries._
-import net.prover.model.proof.CachedProof
+import net.prover.model.proof.{CachedProof, ProofEntries}
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 import org.slf4j.LoggerFactory
@@ -27,15 +27,16 @@ case class Book(
 
   def inferences: Seq[Inference] = chapters.flatMap(_.inferences)
   def theorems: Seq[Theorem] = chapters.flatMap(_.theorems)
-  def transformations: Seq[StatementDefinition] = chapters.flatMap(_.transformations)
+  def statementDefinitions: Seq[StatementDefinition] = chapters.flatMap(_.statementDefinitions)
 
   def expandOutlines(cachedProofs: Seq[CachedProof]): Book = {
     val previousInferences = transitiveDependencies.flatMap(_.inferences)
-    val previousTransformations = transitiveDependencies.flatMap(_.transformations)
+    val previousStatementDefinitions = transitiveDependencies.flatMap(_.statementDefinitions)
     copy(chapters = chapters.mapFold[Chapter] { case (chapter, expandedChapters) =>
         chapter.expandOutlines(
-          previousInferences ++ expandedChapters.flatMap(_.inferences),
-          previousTransformations ++ expandedChapters.flatMap(_.transformations),
+          ProofEntries(
+            previousInferences ++ expandedChapters.flatMap(_.inferences),
+            previousStatementDefinitions ++ expandedChapters.flatMap(_.statementDefinitions)),
           cachedProofs)
     })
   }

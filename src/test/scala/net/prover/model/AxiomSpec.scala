@@ -2,7 +2,6 @@ package net.prover.model
 
 import net.prover.model.expressions.Statement
 import net.prover.model.entries.{Axiom, AxiomOutline}
-import net.prover.model.proof.Fact
 
 class AxiomSpec extends ProverSpec {
 
@@ -58,18 +57,6 @@ class AxiomSpec extends ProverSpec {
         "eliminate-implication",
         Seq(Implication(φ, ψ), φ),
         ψ)
-    }
-
-    "parse an axiom with a deduced premise" in {
-      parseAxiom(
-        "Deduction",
-        "premise proves φ ψ",
-        "conclusion → φ ψ"
-      ) mustEqual axiom(
-        "Deduction",
-        "deduction",
-        Seq(Fact.Deduced(φ, ψ)),
-        Implication(φ, ψ))
     }
   }
 }

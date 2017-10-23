@@ -109,16 +109,8 @@ object Parser {
     } yield wordsSoFar :+ newWord
   }
 
-  def optionalWord(expectedWord: String): Parser[Option[Unit]] = Parser { tokenizer =>
-    if (tokenizer.isEmpty) {
-      (None, tokenizer)
-    } else {
-      val (word, nextTokenizer) = tokenizer.readNext()
-      if (word == expectedWord)
-        (Some(()), nextTokenizer)
-      else
-        (None, tokenizer)
-    }
+  def optionalWord(expectedWord: String): Parser[Option[Unit]] = selectOptionalWord {
+    case `expectedWord` => ()
   }
 
   def selectWord[T](name: String)(f: PartialFunction[String, T]): Parser[T] = {
@@ -137,17 +129,27 @@ object Parser {
     }
   }
 
-  def selectOptionalWord[T](f: PartialFunction[String, T]): Parser[Option[T]] = {
-    Parser.singleWordIfAny.mapFlatMap(f.lift)
+  def selectOptionalWord[T](f: PartialFunction[String, T]): Parser[Option[T]] = Parser { tokenizer =>
+    if (tokenizer.isEmpty) {
+      (None, tokenizer)
+    } else {
+      val (word, nextTokenizer) = tokenizer.readNext()
+      if (f.isDefinedAt(word))
+        (Some(f(word)), nextTokenizer)
+      else
+        (None, tokenizer)
+    }
   }
 
-  def selectOptionalWordParser[T](f: PartialFunction[String, Parser[T]]): Parser[Option[T]] = {
-    Parser.singleWordIfAny.flatMapFlatMap { word =>
-      if (f.isDefinedAt(word)) {
-        f(word).map(Some.apply)
-      } else {
-        Parser.constant(None)
-      }
+  def selectOptionalWordParser[T](f: PartialFunction[String, Parser[T]]): Parser[Option[T]] = Parser { tokenizer =>
+    if (tokenizer.isEmpty) {
+      (None, tokenizer)
+    } else {
+      val (word, nextTokenizer) = tokenizer.readNext()
+      if (f.isDefinedAt(word))
+        f(word).parse(nextTokenizer).mapLeft(Some(_))
+      else
+        (None, tokenizer)
     }
   }
 

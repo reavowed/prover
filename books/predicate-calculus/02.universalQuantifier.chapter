@@ -3,12 +3,7 @@ Introduce the universal quantifier, ∀.
 
 statement ∀ ($x with x φ)
   format ((∀x)φ)
-  transformation
-
-axiom Generalization
-contraction
-premise binding x with x φ
-conclusion ∀ x with x φ
+  scoping
 
 axiom Specification
 premise ∀ x with x φ
