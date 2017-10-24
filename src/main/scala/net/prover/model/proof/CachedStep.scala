@@ -63,7 +63,7 @@ object CachedStep {
       steps.flatMap(_.getAssertionHints(availableInferences))
     }
     override def validate(context: ProvingContext): Option[Step.Assumption] = {
-      val assumptionContext = context.addFact(assumption, reference)
+      val assumptionContext = context.addProvenStatement(assumption, reference)
       for {
         deductionStatement <- context.deductionStatement
         validatedSubsteps <- steps.validate(assumptionContext)
@@ -100,10 +100,10 @@ object CachedStep {
       val innerContext = context.increaseDepth(1, context.depth)
       for {
         validatedAssumptionStep <- assumptionStep.validate(innerContext)
-        deduction <- validatedAssumptionStep.facts.lastOption
+        deduction <- validatedAssumptionStep.provenStatements.lastOption
         scopingStatement <- context.scopingStatement
         validatedAssertionStep <- assertionStep.validate(
-          context.addFact(
+          context.addProvenStatement(
             DefinedStatement(Seq(deduction.statement), scopingStatement, deduction.statement.depth - 1)(Seq(variableName)),
             reference.withSuffix("d")))
       } yield Step.Naming(variableName, validatedAssumptionStep, validatedAssertionStep.asInstanceOf[Step.Assertion], reference)
@@ -200,7 +200,7 @@ object CachedStep {
               result <- helper(
                 otherStepsToValidate,
                 validatedSteps :+ validatedStep,
-                currentContext.addFacts(validatedStep.facts))
+                currentContext.addProvenStatement(validatedStep.provenStatements))
             } yield result
         }
       }

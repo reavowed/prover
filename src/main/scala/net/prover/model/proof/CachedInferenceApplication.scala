@@ -29,7 +29,7 @@ object CachedInferenceApplication {
           CachedProof.logger.info(s"Could not find inference $inferenceId")
         }
         substitutions <- inference.generalizeSubstitutions(localSubstitutions, depth)
-        substitutedPremiseFacts <- inference.premises.map(_.statement.applySubstitutions(substitutions)).traverseOption.ifEmpty {
+        substitutedPremiseStatements <- inference.premises.map(_.statement.applySubstitutions(substitutions)).traverseOption.ifEmpty {
           CachedProof.logger.info(
             (Seq(s"Could not substitute into premises of inference '${inference.name}'") ++
               inference.premises.map(_.serialized)
@@ -43,7 +43,7 @@ object CachedInferenceApplication {
             substitutions.toString
           ).mkString("\n"))
         }
-        validatedReferences <- cachedReferences.validate(substitutedPremiseFacts, context)
+        validatedReferences <- cachedReferences.validate(substitutedPremiseStatements, context)
       } yield (substitutedConclusion, InferenceApplication.Direct(inference, substitutions, validatedReferences, depth))
     }
 
@@ -86,10 +86,10 @@ object CachedInferenceApplication {
           context.assertionHints,
           context.availableInferences,
           context.deductionStatement.toSeq ++ context.scopingStatement.toSeq))
-        transformedConclusion <- validatedTransformationProof.flatMap(_.facts).lastOption.map(_.statement)
+        transformedConclusion <- validatedTransformationProof.flatMap(_.provenStatements).lastOption.map(_.statement)
         transformedInference = Inference.Transformed(inference, transformedPremises, transformedConclusion)
         substitutions <- transformedInference.generalizeSubstitutions(localSubstitutions, depth)
-        substitutedPremiseFacts <- transformedPremises.map(_.statement.applySubstitutions(substitutions)).traverseOption.ifEmpty {
+        substitutedPremiseStatements <- transformedPremises.map(_.statement.applySubstitutions(substitutions)).traverseOption.ifEmpty {
           CachedProof.logger.info(
             (Seq(s"Could not substitute into premises of transformed inference '${inference.name}'") ++
               inference.premises.map(_.serialized)
@@ -103,7 +103,7 @@ object CachedInferenceApplication {
             substitutions.toString
           ).mkString("\n"))
         }
-        validatedReferences <- cachedReferences.validate(substitutedPremiseFacts, context)
+        validatedReferences <- cachedReferences.validate(substitutedPremiseStatements, context)
     } yield (substitutedConclusion, InferenceApplication.Transformed(
         inference,
         substitutions,

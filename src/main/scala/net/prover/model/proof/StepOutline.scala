@@ -45,7 +45,7 @@ object StepOutline {
     extends StepOutline
   {
     override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
-      val contextWithAssumption = context.addFact(assumption, reference)
+      val contextWithAssumption = context.addProvenStatement(assumption, reference)
       val substeps = steps.prove(Some(reference))(contextWithAssumption)
       val deductionStatement = context.deductionStatement
         .getOrElse(throw ProvingException("Cannot prove a deduction without an appropriate statement definition", location))
@@ -77,13 +77,13 @@ object StepOutline {
     override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
       val assumptionStep = Assumption(definingAssumption, steps, None)
         .prove(reference.withSuffix(".0"))(context.increaseDepth(1, context.depth))
-      val deduction = assumptionStep.facts.lastOption.getOrElse(throw ProvingException(
+      val deduction = assumptionStep.provenStatements.lastOption.getOrElse(throw ProvingException(
         "Naming step did not have a conclusion",
         location))
       val scopedDeduction = context.scoped(deduction.statement, variableName)
         .getOrElse(throw ProvingException("Cannot prove a scoped statement without an appropriate statement definition", location))
       val innerAssertion = assumptionStep
-        .steps.flatMap(_.facts).lastOption
+        .steps.flatMap(_.provenStatements).lastOption
         .getOrElse(throw ProvingException(
           "Naming step did not have a conclusion",
           location))
@@ -94,7 +94,7 @@ object StepOutline {
       val assertionStep = Assertion(outerAssertion, None)
         .tryProve(
           reference.withSuffix(".1"))(
-          context.addFact(
+          context.addProvenStatement(
             scopedDeduction,
             reference.withSuffix("d")))
         .getOrElse(throw ProvingException(
@@ -144,7 +144,7 @@ object StepOutline {
   implicit class StepOutlineSeqOps(stepOutlines: Seq[StepOutline]) {
     def prove(baseReference: Option[Reference.Direct])(implicit context: ProvingContext): Seq[Step] = {
       stepOutlines.zipWithIndex.foldLeft(Seq.empty[Step]) { case (steps, (stepOutline, index)) =>
-        val updatedContext = context.addFacts(steps.flatMap(_.facts))
+        val updatedContext = context.addProvenStatement(steps.flatMap(_.provenStatements))
         steps :+ stepOutline.prove(Reference.nextReference(baseReference, index.toString))(updatedContext)
       }
     }

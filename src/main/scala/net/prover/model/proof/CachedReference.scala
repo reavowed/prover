@@ -11,10 +11,10 @@ sealed trait CachedReference {
     context: ProvingContext
   ): Option[Reference] = {
     for {
-      (validatedReference, referencedFact) <- validate(context)
-      _ = if (referencedFact != premiseStatement)
-        CachedProof.logger.info(s"Reference '$serialized' was to '${referencedFact.serialized}', not '${premiseStatement.serialized}'")
-      if referencedFact == premiseStatement
+      (validatedReference, validatedStatement) <- validate(context)
+      _ = if (validatedStatement != premiseStatement)
+        CachedProof.logger.info(s"Reference '$serialized' was to '${validatedStatement.serialized}', not '${premiseStatement.serialized}'")
+      if validatedStatement == premiseStatement
     } yield validatedReference
   }
   def serializedLines: Seq[String]
@@ -32,7 +32,7 @@ object CachedReference {
   case class Direct(value: String) extends Compoundable with ToSingleLine {
     override def unvalidated = Reference.Direct(value)
     override def validate(context: ProvingContext) = {
-      context.referencedFacts
+      context.provenStatements
         .find(_.reference == unvalidated)
         .map(_.statement)
         .ifEmpty {
@@ -55,7 +55,7 @@ object CachedReference {
     }
     override def unvalidated = Reference.Compound(first.unvalidated, other.unvalidated)
     override def validate(context: ProvingContext) = {
-      context.referencedFacts
+      context.provenStatements
         .find(_.reference == unvalidated)
         .map(_.statement)
         .ifEmpty {
@@ -170,9 +170,9 @@ object CachedReference {
   implicit class CachedReferenceSeqOps(cachedReferences: Seq[CachedReference]) {
     def validate(premiseStatements: Seq[Statement], provingContext: ProvingContext): Option[Seq[Reference]] = {
       for {
-        premiseFactsWithCachedReferences <- premiseStatements.zipStrict(cachedReferences)
-        validatedReferences <- premiseFactsWithCachedReferences.map { case (premiseFact, cachedReference) =>
-          cachedReference.validate(premiseFact, provingContext)
+        premiseStatementsWithCachedReferences <- premiseStatements.zipStrict(cachedReferences)
+        validatedReferences <- premiseStatementsWithCachedReferences.map { case (premiseStatement, cachedReference) =>
+          cachedReference.validate(premiseStatement, provingContext)
         }.traverseOption
       } yield validatedReferences
     }

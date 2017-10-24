@@ -5,7 +5,7 @@ import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.{Inference, Premise}
 
 case class ProvingContext(
-  referencedFacts: Seq[ProvenFact],
+  provenStatements: Seq[ProvenStatement],
   premises: Seq[Premise],
   assumptions: Seq[Statement],
   availableInferences: Seq[Inference],
@@ -15,15 +15,15 @@ case class ProvingContext(
   depth: Int,
   allowTransformations: Boolean = true)
 {
-  def addFact(statement: Statement, reference: Reference.Direct) = {
-    copy(referencedFacts = referencedFacts :+ ProvenFact(statement, reference))
+  def addProvenStatement(statement: Statement, reference: Reference.Direct) = {
+    copy(provenStatements = provenStatements :+ ProvenStatement(statement, reference))
   }
-  def addFacts(facts: Seq[ProvenFact]) = {
-    copy(referencedFacts = referencedFacts ++ facts)
+  def addProvenStatement(newProvenStatements: Seq[ProvenStatement]) = {
+    copy(provenStatements = provenStatements ++ newProvenStatements)
   }
   def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
     ProvingContext(
-      referencedFacts.map(_.increaseDepth(additionalDepth, insertionPoint)),
+      provenStatements.map(_.increaseDepth(additionalDepth, insertionPoint)),
       premises.map(_.increaseDepth(additionalDepth, insertionPoint)),
       assumptions.map(_.increaseDepth(additionalDepth, insertionPoint)),
       availableInferences,
@@ -62,7 +62,7 @@ object ProvingContext {
     statementDefinitions: Seq[StatementDefinition]
   ): ProvingContext = {
     ProvingContext(
-      premises.map(_.referencedFact),
+      premises.map(_.provenStatement),
       premises,
       Nil,
       availableInferences,

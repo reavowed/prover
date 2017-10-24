@@ -5,7 +5,7 @@ import net.prover.model.expressions.{DefinedStatement, Statement}
 
 sealed trait Step {
   def reference: Reference.Direct
-  def facts: Seq[ProvenFact]
+  def provenStatements: Seq[ProvenStatement]
   def referencedInferenceIds: Set[String]
   def referenceMap: ReferenceMap
   def cached: CachedStep
@@ -21,7 +21,7 @@ object Step {
     isRearrangement: Boolean)
     extends Step
   {
-    override def facts = Seq(ProvenFact(assertion, reference))
+    override def provenStatements = Seq(ProvenStatement(assertion, reference))
     override def referencedInferenceIds = inferenceApplication.referencedInferenceIds
     override def referenceMap = ReferenceMap(reference.value -> inferenceApplication.lineReferences)
     override def cached = CachedStep.Assertion(assertion, inferenceApplication.cached, reference, isRearrangement)
@@ -36,10 +36,10 @@ object Step {
       reference: Reference.Direct)
     extends Step
   {
-    override def facts = steps.flatMap(_.facts).map { fact =>
-      ProvenFact(
-        DefinedStatement(Seq(assumption, fact.statement), deductionStatement, assumption.depth)(Nil),
-        fact.reference.add(reference))
+    override def provenStatements = steps.flatMap(_.provenStatements).map { innerProvenStatement =>
+      ProvenStatement(
+        DefinedStatement(Seq(assumption, innerProvenStatement.statement), deductionStatement, assumption.depth)(Nil),
+        innerProvenStatement.reference.add(reference))
     }
     override def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
     override def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
@@ -55,7 +55,7 @@ object Step {
       reference: Reference.Direct)
     extends Step
   {
-    override def facts = Seq(ProvenFact(assertionStep.assertion, reference))
+    override def provenStatements = Seq(ProvenStatement(assertionStep.assertion, reference))
     override def referencedInferenceIds = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
     override def referenceMap = assumptionStep.referenceMap ++ assertionStep.referenceMap
     override def cached = CachedStep.Naming(variableName, assumptionStep.cached, assertionStep.cached, reference)
@@ -70,12 +70,16 @@ object Step {
       reference: Reference.Direct)
     extends Step
   {
-    override def facts = {
-      substeps.flatMap(_.facts)
-        .map { fact =>
-          ProvenFact(
-            DefinedStatement(Seq(fact.statement), scopingStatement, fact.statement.depth - 1)(Seq(variableName)),
-            fact.reference.add(reference))
+    override def provenStatements = {
+      substeps.flatMap(_.provenStatements)
+        .map { innerProvenStatement =>
+          ProvenStatement(
+            DefinedStatement(
+              Seq(innerProvenStatement.statement),
+              scopingStatement,
+              innerProvenStatement.statement.depth - 1)(
+              Seq(variableName)),
+            innerProvenStatement.reference.add(reference))
         }
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
