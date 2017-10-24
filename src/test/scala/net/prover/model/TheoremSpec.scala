@@ -46,7 +46,6 @@ class TheoremSpec extends ProverSpec {
       inferences: Seq[Inference]
     ) = {
       val proof = prove(premises, proofSteps, inferences)
-//      proof.conclusion mustEqual proofSteps.ofType[StepOutline.WithAssertion].last.innermostAssertionStep.assertion
       val cachedProof = CachedProof(Paths.get(""), premises, proof.steps.map(_.cached))
       cachedProof.steps.matchOutlines(proofSteps) must beTrue
       val serializedProof = cachedProof.serialized

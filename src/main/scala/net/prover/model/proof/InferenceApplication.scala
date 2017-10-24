@@ -8,7 +8,7 @@ sealed trait InferenceApplication {
   def inference: Inference
   def referencedInferenceIds: Set[String]
   def references: Seq[Reference]
-  def directReferences: Set[Reference.ToFact]
+  def lineReferences: Set[(String, Seq[Int])]
   def cached: CachedInferenceApplication
 }
 
@@ -21,7 +21,7 @@ object InferenceApplication {
     extends InferenceApplication
   {
     def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet + inference.id
-    def directReferences = references.flatMap(_.factReferences).toSet
+    def lineReferences = references.flatMap(_.lineReferences).toSet
     def cached = CachedInferenceApplication.Direct(
       inference.id,
       inference.specifySubstitutions(substitutions),
@@ -43,7 +43,7 @@ object InferenceApplication {
     def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet ++
       transformationProof.flatMap(_.referencedInferenceIds) +
       inference.id
-    def directReferences = references.flatMap(_.factReferences).toSet
+    def lineReferences = references.flatMap(_.lineReferences).toSet
     def cached = CachedInferenceApplication.Transformed(
       inference.id,
       Inference.Transformed(inference, transformedPremises, transformedConclusion).specifySubstitutions(substitutions),

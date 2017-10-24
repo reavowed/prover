@@ -31,7 +31,7 @@ object CachedStep {
       } yield Step.Assertion(assertion, inferenceApplication, reference, isRearrangement)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
-      case StepOutline.Assertion(`assertion`, _, _) =>
+      case StepOutline.Assertion(`assertion`, _) =>
         true
       case _ =>
         false
@@ -63,7 +63,7 @@ object CachedStep {
       steps.flatMap(_.getAssertionHints(availableInferences))
     }
     override def validate(context: ProvingContext): Option[Step.Assumption] = {
-      val assumptionContext = context.addFact(assumption, reference.withSuffix("a"))
+      val assumptionContext = context.addFact(assumption, reference)
       for {
         deductionStatement <- context.deductionStatement
         validatedSubsteps <- steps.validate(assumptionContext)
@@ -100,12 +100,12 @@ object CachedStep {
       val innerContext = context.increaseDepth(1, context.depth)
       for {
         validatedAssumptionStep <- assumptionStep.validate(innerContext)
-        deduction <- validatedAssumptionStep.referencedFact
+        deduction <- validatedAssumptionStep.facts.lastOption
         scopingStatement <- context.scopingStatement
         validatedAssertionStep <- assertionStep.validate(
           context.addFact(
             DefinedStatement(Seq(deduction.statement), scopingStatement, deduction.statement.depth - 1)(Seq(variableName)),
-            deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")))
+            reference.withSuffix("d")))
       } yield Step.Naming(variableName, validatedAssumptionStep, validatedAssertionStep.asInstanceOf[Step.Assertion], reference)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
@@ -200,7 +200,7 @@ object CachedStep {
               result <- helper(
                 otherStepsToValidate,
                 validatedSteps :+ validatedStep,
-                currentContext.addFact(validatedStep.referencedFact))
+                currentContext.addFacts(validatedStep.facts))
             } yield result
         }
       }

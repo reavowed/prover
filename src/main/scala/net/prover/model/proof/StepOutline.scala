@@ -45,7 +45,7 @@ object StepOutline {
     extends StepOutline
   {
     override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
-      val contextWithAssumption = context.addFact(assumption, reference.withSuffix("a"))
+      val contextWithAssumption = context.addFact(assumption, reference)
       val substeps = steps.prove(Some(reference))(contextWithAssumption)
       val deductionStatement = context.deductionStatement
         .getOrElse(throw ProvingException("Cannot prove a deduction without an appropriate statement definition", location))
@@ -77,17 +77,17 @@ object StepOutline {
     override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
       val assumptionStep = Assumption(definingAssumption, steps, None)
         .prove(reference.withSuffix(".0"))(context.increaseDepth(1, context.depth))
-      val deduction = assumptionStep.referencedFact.getOrElse(throw ProvingException(
+      val deduction = assumptionStep.facts.lastOption.getOrElse(throw ProvingException(
         "Naming step did not have a conclusion",
         location))
       val scopedDeduction = context.scoped(deduction.statement, variableName)
         .getOrElse(throw ProvingException("Cannot prove a scoped statement without an appropriate statement definition", location))
       val innerAssertion = assumptionStep
-        .steps.flatMap(_.fact).lastOption
+        .steps.flatMap(_.facts).lastOption
         .getOrElse(throw ProvingException(
           "Naming step did not have a conclusion",
           location))
-      val outerAssertion = innerAssertion.reduceDepth(1, context.depth)
+      val outerAssertion = innerAssertion.statement.reduceDepth(1, context.depth)
         .getOrElse(throw ProvingException(
           s"Assertion $innerAssertion was not independent of $variableName",
           location))
@@ -96,7 +96,7 @@ object StepOutline {
           reference.withSuffix(".1"))(
           context.addFact(
             scopedDeduction,
-            deduction.reference.asInstanceOf[Reference.Direct].withSuffix("d")))
+            reference.withSuffix("d")))
         .getOrElse(throw ProvingException(
           s"Could not extract assertion $innerAssertion from naming step for $variableName",
           location))
@@ -144,7 +144,7 @@ object StepOutline {
   implicit class StepOutlineSeqOps(stepOutlines: Seq[StepOutline]) {
     def prove(baseReference: Option[Reference.Direct])(implicit context: ProvingContext): Seq[Step] = {
       stepOutlines.zipWithIndex.foldLeft(Seq.empty[Step]) { case (steps, (stepOutline, index)) =>
-        val updatedContext = context.copy(referencedFacts = context.referencedFacts ++ steps.mapCollect(_.referencedFact))
+        val updatedContext = context.addFacts(steps.flatMap(_.facts))
         steps :+ stepOutline.prove(Reference.nextReference(baseReference, index.toString))(updatedContext)
       }
     }

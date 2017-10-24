@@ -1,11 +1,11 @@
 package net.prover.model
 
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Reference, ReferencedFact}
+import net.prover.model.proof.{Reference, ProvenFact}
 
 case class Premise(statement: Statement, index: Int)(val isElidable: Boolean) {
   def reference = Reference.Direct(s"p$index")
-  def referencedFact = ReferencedFact(statement, reference)
+  def referencedFact = ProvenFact(statement, reference)
   def requiredSubstitutions: Substitutions.Required = statement.requiredSubstitutions
   def increaseDepth(additionalDepth: Int, insertionPoint: Int): Premise = {
     Premise(statement.increaseDepth(additionalDepth, insertionPoint), index)(isElidable)

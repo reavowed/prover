@@ -15,8 +15,12 @@ case class Prover(
 
   val applicableHints = assertionHints.filter(_.conclusion == assertionToProve)
   val allSimplifiedFacts = {
-    val simplifications = referencedFacts.flatMap(getAllSimplifications)
-    referencedFacts ++ simplifications
+    val simplifications = for {
+      fact <- referencedFacts
+      reference <- fact.reference.asOptionalInstanceOf[Reference.ToSingleLine].toSeq
+      simplification <- getAllSimplifications(fact.statement, reference)
+    } yield simplification
+    referencedFacts.map(f => f.statement -> f.reference) ++ simplifications
   }
 
   lazy val transformations: Seq[Transformation] = scopingStatement.toSeq.flatMap { statementDefinition =>
@@ -187,7 +191,7 @@ case class Prover(
   }
 
   def findAssertionInFacts(assertion: Statement): Option[Reference] = {
-    allSimplifiedFacts.find(_.statement == assertion).map(_.reference)
+    allSimplifiedFacts.find(_._1 == assertion).map(_._2)
   }
 
   private def matchPremisesToFacts(
@@ -210,8 +214,8 @@ case class Prover(
     substitutionsSoFar: Substitutions,
     allowRearrangement: Boolean
   ): Iterator[(Reference, Substitutions)] = {
-    val facts = if (allowRearrangement) allSimplifiedFacts else referencedFacts
-    facts.iterator.flatMap { case ReferencedFact(fact, factReference) =>
+    val facts = if (allowRearrangement) allSimplifiedFacts else referencedFacts.map(f => f.statement -> f.reference)
+    facts.iterator.flatMap { case (fact, factReference) =>
       matchPremiseToFact(premise.statement, fact, factReference, substitutionsSoFar)
     }
   }
@@ -229,41 +233,35 @@ case class Prover(
       }
   }
 
-  private def getAllSimplifications(referencedFact: ReferencedFact): Seq[ReferencedFact] = {
-    def helper(next: Seq[ReferencedFact], acc: Seq[ReferencedFact]): Seq[ReferencedFact] = {
+  private def getAllSimplifications(
+    statement: Statement,
+    reference: Reference.ToSingleLine
+  ): Seq[(Statement, Reference)] = {
+    def helper(
+      next: Seq[(Statement, Reference.ToSingleLine)],
+      acc: Seq[(Statement, Reference.ToSingleLine)]
+    ): Seq[(Statement, Reference.ToSingleLine)] = {
       if (next.isEmpty)
         acc
       else {
-        val newSimplifications = next.flatMap(getNextLevelSimplifications)
+        val newSimplifications = next.flatMap((getNextLevelSimplifications _).tupled)
         helper(newSimplifications, acc ++ newSimplifications)
       }
     }
-    helper(Seq(referencedFact), Nil)
+    helper(Seq((statement, reference)), Nil)
   }
 
-  private def getNextLevelSimplifications(referencedFact: ReferencedFact): Seq[ReferencedFact] = {
-    availableInferences
-      .filter(_.rearrangementType == RearrangementType.Simplification)
-      .collect {
-        case inference @ Inference(_, Seq(Premise(premiseStatement, _)), _) =>
-          (inference, premiseStatement)
-      }
-      .flatMap { case (inference, premiseStatement) =>
-        premiseStatement.findComponentPath(inference.conclusion)
-          .map((inference, premiseStatement, _))
-      }
-      .flatMap { case (inference, premiseStatement, simplificationPath) =>
-        premiseStatement.calculateSubstitutions(referencedFact.statement, Substitutions.emptyWithDepth(depth))
-          .map((inference, simplificationPath, _))
-      }
-      .mapCollect { case (inference, simplificationPath, substitutions) =>
-        inference.conclusion.applySubstitutions(substitutions)
-          .map((inference, simplificationPath, substitutions, _))
-      }
-      .map { case (inference, simplificationPath, substitutions, conclusion) =>
-        ReferencedFact(
-          conclusion,
-          Reference.Simplification(inference, substitutions, referencedFact.reference, simplificationPath, depth))
-    }
+  private def getNextLevelSimplifications(
+    statement: Statement,
+    reference: Reference.ToSingleLine
+  ): Seq[(Statement, Reference.ToSingleLine)] = {
+    for {
+      inference <- availableInferences
+      if inference.rearrangementType == RearrangementType.Simplification
+      premise <- inference.premises.single.toSeq
+      simplificationPath <- premise.statement.findComponentPath(inference.conclusion).toSeq
+      substitutions <- premise.statement.calculateSubstitutions(statement, Substitutions.emptyWithDepth(depth))
+      conclusion <- inference.conclusion.applySubstitutions(substitutions).toSeq
+    } yield conclusion -> Reference.Simplification(inference, substitutions, reference, simplificationPath, depth)
   }
 }

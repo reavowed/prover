@@ -5,7 +5,7 @@ import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.{Inference, Premise}
 
 case class ProvingContext(
-  referencedFacts: Seq[ReferencedFact],
+  referencedFacts: Seq[ProvenFact],
   premises: Seq[Premise],
   assumptions: Seq[Statement],
   availableInferences: Seq[Inference],
@@ -16,13 +16,10 @@ case class ProvingContext(
   allowTransformations: Boolean = true)
 {
   def addFact(statement: Statement, reference: Reference.Direct) = {
-    copy(referencedFacts = referencedFacts :+ ReferencedFact(statement, reference))
+    copy(referencedFacts = referencedFacts :+ ProvenFact(statement, reference))
   }
-  def addFact(referencedFact: ReferencedFact) = {
-    copy(referencedFacts = referencedFacts :+ referencedFact)
-  }
-  def addFact(referencedFact: Option[ReferencedFact]) = {
-    copy(referencedFacts = referencedFacts ++ referencedFact.toSeq)
+  def addFacts(facts: Seq[ProvenFact]) = {
+    copy(referencedFacts = referencedFacts ++ facts)
   }
   def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
     ProvingContext(

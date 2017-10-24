@@ -8,8 +8,9 @@ case class Proof(steps: Seq[Step]) {
   def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
   def length: Int = steps.map(_.length).sum
   val conclusion: Statement = {
-    steps.flatMap(_.fact).lastOption
+    steps.flatMap(_.facts).lastOption
       .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))
+      .statement
   }
 }
 

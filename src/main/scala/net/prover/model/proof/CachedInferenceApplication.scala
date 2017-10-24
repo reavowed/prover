@@ -86,7 +86,7 @@ object CachedInferenceApplication {
           context.assertionHints,
           context.availableInferences,
           context.deductionStatement.toSeq ++ context.scopingStatement.toSeq))
-        transformedConclusion <- validatedTransformationProof.flatMap(_.fact).lastOption
+        transformedConclusion <- validatedTransformationProof.flatMap(_.facts).lastOption.map(_.statement)
         transformedInference = Inference.Transformed(inference, transformedPremises, transformedConclusion)
         substitutions <- transformedInference.generalizeSubstitutions(localSubstitutions, depth)
         substitutedPremiseFacts <- transformedPremises.map(_.statement.applySubstitutions(substitutions)).traverseOption.ifEmpty {

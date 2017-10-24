@@ -4,8 +4,7 @@
 @(
   step: Step,
   indentLevel: Int,
-  referenceMap: ReferenceMap,
-  additionalReferences: Seq[String] = Nil)
+  referenceMap: ReferenceMap)
 
 @step match {
   case assertionStep: Step.Assertion => {
@@ -15,7 +14,7 @@
         Then @Html(html.referencedStatement(
           assertionStep.assertion,
           Some(assertionStep.reference.value),
-          referenceMap.getReferrers(Seq(assertionStep.reference.value) ++ additionalReferences: _*)
+          referenceMap.getReferrers(assertionStep.reference.value)
         ).body.trim).
       </td>
       @if(assertionStep.isRearrangement) {
@@ -40,24 +39,22 @@
         @for(_ <- 1 to indentLevel) { &nbsp;&nbsp; }
         Assume @Html(html.referencedStatement(
           assumptionStep.assumption,
-          Some(assumptionStep.assumptionReference.value),
-          referenceMap.getReferrers(Seq(assumptionStep.assumptionReference.value, assumptionStep.reference.value) ++ additionalReferences: _*)
+          None,
+          referenceMap.getReferrers(assumptionStep.reference.value)
         ).body.trim).
       </td>
     </tr>
     @assumptionStep.steps.map { substep => @html.step(
       substep,
       indentLevel + 1,
-      referenceMap,
-      if (assumptionStep.steps.lastOption.contains(substep)) additionalReferences :+ assumptionStep.reference.value else Nil)
+      referenceMap)
     }
   }
   case scopedVariableStep: Step.ScopedVariable => {
     @scopedVariableStep.substeps.map { substep => @html.step(
       substep,
       indentLevel,
-      referenceMap,
-      if (scopedVariableStep.substeps.lastOption.contains(substep)) additionalReferences :+ scopedVariableStep.reference.value else Nil)
+      referenceMap)
     }
   }
   case namingStep: Step.Naming => {
@@ -66,11 +63,9 @@
         @for(_ <- 1 to indentLevel) { &nbsp;&nbsp; }
         Let @{namingStep.variableName} be such that @Html(html.referencedStatement(
           namingStep.assumptionStep.assumption,
-          Some(namingStep.assumptionStep.assumptionReference.value),
-          referenceMap.getReferrers(
-            namingStep.assumptionStep.assumptionReference.value,
-            namingStep.assumptionStep.reference.value
-          )).body.trim).
+          Some(namingStep.assumptionStep.reference.value),
+          referenceMap.getReferrers(namingStep.assumptionStep.reference.value)
+        ).body.trim).
       </td>
       @defining(namingStep.assertionStep.inferenceApplication.inference) { inference =>
         @inference.keyOption match {
@@ -86,11 +81,7 @@
     @namingStep.assumptionStep.steps.map { substep => @html.step(
       substep,
       indentLevel,
-      referenceMap,
-      if (namingStep.assumptionStep.steps.lastOption.contains(substep))
-        additionalReferences ++ Seq(namingStep.reference.value, namingStep.assumptionStep.reference.value)
-      else
-        Nil)
+      referenceMap)
     }
   }
   case _ => {

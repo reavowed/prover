@@ -3,29 +3,40 @@ package net.prover.model.proof
 import net.prover.model._
 
 sealed trait Reference {
+  def lineReferences: Set[(String, Seq[Int])]
   def referencedInferenceIds: Set[String]
-  def factReferences: Set[Reference.ToFact] = Set.empty
   def cached: CachedReference
 }
 
 object Reference {
-  sealed trait ToFact extends Reference {
-    override def factReferences: Set[Reference.ToFact] = Set(this)
-    def valueAndPath: (String, Seq[Int])
-    def cached: CachedReference.ToFact
+  sealed trait Compoundable extends Reference {
+    def add(other: Direct) = Compound(other, this)
+    def cached: CachedReference.Compoundable
+  }
+  sealed trait ToSingleLine extends Reference {
+    def lineReference: (String, Seq[Int])
+    override def lineReferences = Set(lineReference)
+    def cached: CachedReference.ToSingleLine
   }
 
-  case class Direct(value: String) extends ToFact {
-    override val referencedInferenceIds: Set[String] = Set.empty
-    def withSuffix(suffix: String): Direct = Direct(value + suffix)
-    override def valueAndPath: (String, Seq[Int]) = (value, Nil)
+  case class Direct(value: String) extends Compoundable with ToSingleLine {
+    override def referencedInferenceIds = Set.empty
+    def lineReference = (value, Seq.empty[Int])
+    override def lineReferences = Set(lineReference)
     override def cached = CachedReference.Direct(value)
+    def withSuffix(suffix: String): Direct = Direct(value + suffix)
+  }
+
+  case class Compound(first: Direct, other: Compoundable) extends Compoundable {
+    override def lineReferences = other.lineReferences + first.lineReference
+    def referencedInferenceIds = first.referencedInferenceIds ++ other.referencedInferenceIds
+    def cached = CachedReference.Compound(first.cached, other.cached)
   }
 
   sealed trait ApplyingInference extends Reference {
     def inferenceApplication: InferenceApplication
-    override def factReferences: Set[Reference.ToFact] = inferenceApplication.directReferences
-    override def referencedInferenceIds: Set[String] = inferenceApplication.referencedInferenceIds
+    override def lineReferences = inferenceApplication.lineReferences
+    override def referencedInferenceIds = inferenceApplication.referencedInferenceIds
   }
 
   case class Expansion(inferenceApplication: InferenceApplication) extends ApplyingInference {
@@ -35,13 +46,13 @@ object Reference {
   case class Simplification(
       inference: Inference,
       substitutions: Substitutions,
-      inferenceReference: Reference.ToFact,
+      inferenceReference: Reference.ToSingleLine,
       simplificationPath: Seq[Int],
       depth: Int)
-    extends ToFact
+    extends ToSingleLine
   {
-    override def referencedInferenceIds: Set[String] = inferenceReference.referencedInferenceIds
-    override def valueAndPath: (String, Seq[Int]) = inferenceReference.valueAndPath.mapRight(simplificationPath ++ _)
+    override def referencedInferenceIds = inferenceReference.referencedInferenceIds
+    override def lineReference = inferenceReference.lineReference.mapRight(simplificationPath ++ _)
     override def cached = CachedReference.Simplification(
       inference.id,
       inference.specifySubstitutions(substitutions),
