@@ -55,8 +55,6 @@ take a { take b {
     }
   }
   assume ∧ ∈ a A ∈ b B {
-    prove ∈ a A
-    prove ∈ b B
     prove = orderedPair a b orderedPair a b
     prove ∧ ∈ b B = orderedPair a b orderedPair a b
     prove ∃ d ∧ ∈ d B = orderedPair a b orderedPair a d

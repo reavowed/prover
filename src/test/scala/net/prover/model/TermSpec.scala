@@ -3,12 +3,12 @@ package net.prover.model
 class TermSpec extends ProverSpec {
   "term match" should {
     "match a constant term to itself" in {
-      EmptySet.calculateSubstitutions(EmptySet, Substitutions.empty) mustEqual Seq(Substitutions.empty)
+      EmptySet.calculateSubstitutions(EmptySet, Substitutions.empty, Nil) mustEqual Seq(Substitutions.empty)
     }
 
     "match a unary function to another application of the same function" in {
       PowerSet(a)
-        .calculateSubstitutions(PowerSet(b), Substitutions.empty)
+        .calculateSubstitutions(PowerSet(b), Substitutions.empty, Nil)
         .mustEqual(Seq(Substitutions(Map.empty, Map(a -> b), Map.empty, Map.empty)))
     }
   }

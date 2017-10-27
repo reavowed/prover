@@ -25,6 +25,9 @@ package object model {
     def isRuntimeInstance[S : ClassTag]: Boolean = {
       implicitly[ClassTag[S]].runtimeClass.isInstance(t)
     }
+    def onlyIf(f: T => Boolean): Option[T] = {
+      Some(t).filter(f)
+    }
   }
 
   implicit class StringOps(s: String) {
@@ -67,27 +70,6 @@ package object model {
           f(acc, t).map(acc :+ _)
         }
       }
-    }
-    def foldInAnyOrder[S](acc: S)(f: (S, T) => Option[S]): Option[S] = {
-      def helper(left: Seq[T], failed: Seq[T], current: S): Option[S] = {
-        left match {
-          case head +: tail =>
-            f(current, head) match {
-              case Some(next) =>
-                helper(failed ++ tail, Nil, next)
-              case None =>
-                helper(tail, failed :+ head, current)
-            }
-          case Nil =>
-            failed match {
-              case Nil =>
-                Some(current)
-              case _ =>
-                None
-            }
-        }
-      }
-      helper(seq, Nil, acc)
     }
     def mapWithIndex[S](f: (T, Int) => S): Seq[S] = {
       seq.zipWithIndex.map { case (t, index) => f(t, index)}
@@ -162,6 +144,11 @@ package object model {
           ss <- acc
           s <- f(t)
         } yield ss :+ s
+      }
+    }
+    def flatMapFoldProduct[S](init: S)(f: (S, T) => Seq[S]): Seq[S] = {
+      seq.foldLeft(Seq(init)) { case (acc, t) =>
+        acc.flatMap(f(_, t))
       }
     }
   }
@@ -264,5 +251,23 @@ package object model {
 
   implicit class SeqStringOps(seq: Seq[String]) {
     def indent: Seq[String] = seq.map("  " + _)
+  }
+
+  implicit class MapOps[S, T](map: Map[S, T]) {
+    def tryAdd(key: S, value: T): Option[Map[S, T]] = {
+      map.get(key) match {
+        case Some(`value`) =>
+          Some(map)
+        case Some(_) =>
+          None
+        case None =>
+          Some(map.updated(key, value))
+      }
+    }
+    def merge(other: Map[S, T]): Option[Map[S, T]] = {
+      other.foldLeft(Option(map)) { case (mapOptionSoFar, (key, value)) =>
+        mapOptionSoFar.flatMap(_.tryAdd(key, value))
+      }
+    }
   }
 }

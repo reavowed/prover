@@ -61,3 +61,13 @@ case class Transformation(statementDefinition: StatementDefinition, variableName
 
   }
 }
+
+object Transformation {
+  def apply(statementDefinition: StatementDefinition): Option[Transformation] = {
+    for {
+      variableName <- statementDefinition.boundVariableNames.single
+    } yield {
+      Transformation(statementDefinition, variableName)
+    }
+  }
+}

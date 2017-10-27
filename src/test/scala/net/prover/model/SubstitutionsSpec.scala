@@ -7,7 +7,7 @@ class SubstitutionsSpec extends ProverSpec {
   def testSubstitutions(source: Expression, targetExpression: Expression, rawSubstitutions: Substitutions*) = {
     val substitutionsDepth = targetExpression.depth - source.depth
     val expectedSubstitutions = rawSubstitutions.map(_.copy(depth = substitutionsDepth))
-    val calculatedSubstitutions = source.calculateSubstitutions(targetExpression, Substitutions(depth = substitutionsDepth))
+    val calculatedSubstitutions = source.calculateSubstitutions(targetExpression, Substitutions(depth = substitutionsDepth), Nil)
     calculatedSubstitutions.must(contain(exactly(expectedSubstitutions: _*)))
     Result.foreach(expectedSubstitutions) { expectedSubstitution =>
       val substitutedExpression = source.applySubstitutions(expectedSubstitution)

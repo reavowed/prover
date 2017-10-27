@@ -1,7 +1,7 @@
 package net.prover.model.expressions
 
 import monocle.Lens
-import net.prover.model.Substitutions
+import net.prover.model._
 
 import scala.collection.immutable.Nil
 import scala.reflect.ClassTag
@@ -37,12 +37,19 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   override def requiredSubstitutions = requiredSubstitutionsLens.set(Seq(name))(Substitutions.Required.empty)
   override def calculateSubstitutions(
     other: Expression,
-    substitutions: Substitutions
+    substitutions: Substitutions,
+    applicativeHints: Seq[(Substitutions, ArgumentList)]
   ): Seq[Substitutions] = {
     other match {
       case _ if other.isRuntimeInstance[ExpressionType] && other.depth >= depth + substitutions.depth =>
         (for {
           reducedOther <- other.reduceDepth(depth, substitutions.depth)
+          if applicativeHints.forall { hint =>
+            val applicatives = reducedOther.calculateApplicatives(hint._2, Substitutions.empty)
+            substitutionsLens.get(hint._1).get(name).forall { s =>
+              applicatives.exists(_._1 == s)
+            }
+          }
           result <- substitutions.update(name, reducedOther.asInstanceOf[ExpressionType], substitutionsLens, 0)
         } yield result).toSeq
       case _ =>
@@ -58,6 +65,24 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     substitutions: Substitutions
   ): Seq[(ExpressionType, Substitutions)] = {
     Seq((setDepth(depth - baseArguments.depth + 1), substitutions))
+  }
+
+  override def condense(
+    other: Expression,
+    thisSubstitutions: Substitutions,
+    otherSubstitutions: Substitutions,
+    applicativeHints: Seq[(Substitutions, ArgumentList)]
+  ) = {
+    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints) ++
+      applicativeHints
+        .foldProduct { case (substitutions, argumentList) =>
+          for {
+            applicative <- substitutionsLens.get(substitutions).get(name).toSeq
+            newHintSubstitutions <- other.calculateSubstitutions(applicative, Substitutions.emptyWithDepth(1), Nil)
+          } yield newHintSubstitutions -> argumentList
+        }
+        .filter(_.nonEmpty)
+        .map((thisSubstitutions, otherSubstitutions, _))
   }
 }
 

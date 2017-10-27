@@ -19,15 +19,9 @@ case class Substitutions(
     if (expression.depth != depth + additionalDepth) {
       throw new Exception("Depth mismatch")
     }
-    val map = lens.get(this)
-    map.get(name) match {
-      case Some(`expression`) =>
-        Some(this)
-      case Some(_) =>
-        None
-      case None =>
-        Some(lens.set(map.updated(name, expression))(this))
-    }
+    lens.get(this)
+      .tryAdd(name, expression)
+      .map(lens.set(_)(this))
   }
 }
 

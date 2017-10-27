@@ -43,7 +43,11 @@ case class FunctionParameter(index: Int, level: Int, depth: Int)(val name: Optio
   }
 
   override def requiredSubstitutions = Substitutions.Required.empty
-  override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {
+  override def calculateSubstitutions(
+    other: Expression,
+    substitutions: Substitutions,
+    applicativeHints: Seq[(Substitutions, ArgumentList)]
+  ) = {
     other match {
       case FunctionParameter(`index`, otherLevel, _) if otherLevel == level + substitutions.depth
       =>

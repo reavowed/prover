@@ -38,9 +38,13 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
   }
 
   override def requiredSubstitutions = components.requiredSubstitutions
-  override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {
+  override def calculateSubstitutions(
+    other: Expression,
+    substitutions: Substitutions,
+    applicativeHints: Seq[(Substitutions, ArgumentList)]
+  ) = {
     getMatch(other)
-      .map(components.calculateSubstitutions(_, substitutions))
+      .map(components.calculateSubstitutions(_, substitutions, applicativeHints))
       .getOrElse(Nil)
   }
   override def applySubstitutions(substitutions: Substitutions): Option[ExpressionType] = {
@@ -54,14 +58,16 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
   override def condense(
     other: Expression,
     thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions
-  ): Option[(Substitutions, Substitutions)] = {
-    super.condense(other, thisSubstitutions, otherSubstitutions) orElse
-      getMatch(other).flatMap { otherComponents =>
+    otherSubstitutions: Substitutions,
+    applicativeHints: Seq[(Substitutions, ArgumentList)]
+  ): Seq[(Substitutions, Substitutions, Seq[(Substitutions, ArgumentList)])] = {
+    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints) ++
+      getMatch(other).toSeq.flatMap { otherComponents =>
         components.zip(otherComponents)
-          .foldInAnyOrder((thisSubstitutions, otherSubstitutions)) {
-            case ((thisSubstitutionsSoFar, otherSubstitutionsSoFar), (component, otherComponent)) =>
-              component.condense(otherComponent, thisSubstitutionsSoFar, otherSubstitutionsSoFar)
+          .flatMapFoldProduct((thisSubstitutions, otherSubstitutions, Seq.empty[(Substitutions, ArgumentList)]))
+          { case ((thisSubstitutionsSoFar, otherSubstitutionsSoFar, applicativeHintsSoFar), (component, otherComponent)) =>
+            component.condense(otherComponent, thisSubstitutionsSoFar, otherSubstitutionsSoFar, applicativeHints)
+              .map(t => (t._1, t._2, applicativeHintsSoFar ++ t._3))
           }
       }
   }

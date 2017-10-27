@@ -70,6 +70,10 @@ class TheoremSpec extends ProverSpec {
       "Specification",
       Seq(ForAll("x")(φ.!(FunctionParameter("x", 0)))),
       φ(a))
+    val existence = axiom(
+      "Existence",
+      Seq(φ(a)),
+      Exists("x")(φ.!(FunctionParameter("x", 0))))
     val substitutionOfEquals = axiom(
       "Substitution of Equals",
       Seq(Equals(a, b).elidable, φ(a)),
@@ -216,6 +220,26 @@ class TheoremSpec extends ProverSpec {
         Seq(Equals(b, Pair(a,a))),
         Seq(Equals(b, Singleton(a))),
         Seq(repeatedPairIsSingleton, substitutionOfEquals))
+    }
+
+    "prove by expanding a premise" in {
+      checkProof(
+        Seq(ElementOf(a, b), ElementOf(b, Pair(b, c))),
+        Seq(Exists("x")(Conjunction.!(
+          ElementOf.!(a.^, FunctionParameter("x", 0)),
+          ElementOf.!(FunctionParameter("x", 0), Pair.!(b.^, c.^))))),
+        Seq(combineConjunction, existence))
+    }
+
+    "prove by doubly-expanding a premise" in {
+      checkProof(
+        Seq(ElementOf(a, b), ElementOf(b, Pair(b, c)), φ),
+        Seq(Exists("x")(Conjunction.!(
+          Conjunction.!(
+            ElementOf.!(a.^, FunctionParameter("x", 0)),
+            φ.^),
+          ElementOf.!(FunctionParameter("x", 0), Pair.!(b.^, c.^))))),
+        Seq(combineConjunction, existence))
     }
   }
 }

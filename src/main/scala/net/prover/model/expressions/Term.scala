@@ -18,7 +18,7 @@ trait Term extends Expression {
   ): Seq[(Term, Substitutions)] = {
     for {
       (argument, index) <- baseArguments.increaseDepth(depth - substitutions.depth, baseArguments.depth).terms.zipWithIndex
-      updatedSubstitutions <- argument.calculateSubstitutions(this, substitutions)
+      updatedSubstitutions <- argument.calculateSubstitutions(this, substitutions, Nil) // TODO: Should almost certainly have hints here
     } yield FunctionParameter.anonymous(index, 1, depth - baseArguments.depth + 1) -> updatedSubstitutions
   }
 }

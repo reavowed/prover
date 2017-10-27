@@ -38,7 +38,11 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   override def requiredSubstitutions = {
     arguments.requiredSubstitutions ++ requiredSubstitutionsLens.set(Seq(variableName))(Substitutions.Required.empty)
   }
-  override def calculateSubstitutions(other: Expression, substitutions: Substitutions) = {
+  override def calculateSubstitutions(
+    other: Expression,
+    substitutions: Substitutions,
+    applicativeHints: Seq[(Substitutions, ArgumentList)]
+  ) = {
     other match {
       case otherWithMatchingType if otherWithMatchingType.isRuntimeInstance[ExpressionType] =>
         otherWithMatchingType.asInstanceOf[ExpressionType]
@@ -61,6 +65,22 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
     substitutions: Substitutions
   ): Seq[(ExpressionType, Substitutions)] = {
     arguments.calculateApplicatives(baseArguments, substitutions).map(_.mapLeft(update))
+  }
+
+  override def condense(
+    other: Expression,
+    thisSubstitutions: Substitutions,
+    otherSubstitutions: Substitutions,
+    applicativeHints: Seq[(Substitutions, ArgumentList)]
+  ): Seq[(Substitutions, Substitutions, Seq[(Substitutions, ArgumentList)])] = {
+    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints) ++
+      (for {
+        predicate <- substitutionsLens.get(thisSubstitutions).get(variableName).toSeq
+        predicateSubstitutions <- other.calculateSubstitutions(
+          predicate.increaseDepth(depth, thisSubstitutions.depth),
+          Substitutions.emptyWithDepth(thisSubstitutions.depth + 1),
+          Nil)
+      } yield (thisSubstitutions, otherSubstitutions, Seq((predicateSubstitutions, arguments))))
   }
 
   override def toString = s"$variableName(${arguments.terms.map(_.toString).mkString(", ")})"

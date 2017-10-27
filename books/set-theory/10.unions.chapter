@@ -33,7 +33,6 @@ term ∪ (a b)
   (= _ union pair a b)
 
 theorem Membership Condition for Binary Union
-prove = ∪ a b union pair a b
 prove ∀ x ↔ ∈ x union pair a b ∃ y ∧ ∈ x y ∈ y pair a b
 prove ∀ x ↔ ∈ x ∪ a b ∃ y ∧ ∈ x y ∈ y pair a b
 take x {
@@ -51,12 +50,10 @@ take x {
   }
   assume ∈ x a {
     prove ∈ a pair a b
-    prove ∧ ∈ x a ∈ a pair a b
     prove ∃ y ∧ ∈ x y ∈ y pair a b
   }
   assume ∈ x b {
     prove ∈ b pair a b
-    prove ∧ ∈ x b ∈ b pair a b
     prove ∃ y ∧ ∈ x y ∈ y pair a b
   }
   assume ∨ ∈ x a ∈ x b {
@@ -220,7 +217,6 @@ take x {
   assume ∈ x B {
     prove ∈ x ∪ A B
   }
-  prove ↔ ∈ x ∪ A B ∈ x B
 }
 prove = ∪ A B B
 qed

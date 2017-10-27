@@ -29,8 +29,12 @@ case class ArgumentList(terms: Seq[Term], depth: Int) {
   }
 
   def requiredSubstitutions = terms.requiredSubstitutions
-  def calculateSubstitutions(other: ArgumentList, substitutions: Substitutions) = {
-    terms.calculateSubstitutions(other.terms, substitutions)
+  def calculateSubstitutions(
+    other: ArgumentList,
+    substitutions: Substitutions,
+    applicativeHints: Seq[(Substitutions, ArgumentList)]
+  ) = {
+    terms.calculateSubstitutions(other.terms, substitutions, applicativeHints)
   }
   def applySubstitutions(substitutions: Substitutions) = {
     terms

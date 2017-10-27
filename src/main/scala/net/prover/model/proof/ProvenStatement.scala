@@ -6,4 +6,5 @@ case class ProvenStatement(statement: Statement, reference: Reference.Compoundab
   def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
     ProvenStatement(statement.increaseDepth(additionalDepth, insertionPoint), reference)
   }
+  def toReferencedStatement: ReferencedStatement = ReferencedStatement(statement, reference)
 }

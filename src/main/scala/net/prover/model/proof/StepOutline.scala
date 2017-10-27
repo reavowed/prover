@@ -23,8 +23,7 @@ object StepOutline {
         .getOrElse(throw ProvingException(s"Could not prove assertion '$assertion'", location))
     }
     def tryProve(reference: Reference.Direct)(implicit context: ProvingContext) = {
-      Prover(assertion, reference, context)
-        .proveAssertion()
+      Prover(assertion, reference).proveAssertion()
     }
   }
   object Assertion {

@@ -14,26 +14,34 @@ trait Expression {
   ): Option[Expression]
 
   def requiredSubstitutions: Substitutions.Required
-  def calculateSubstitutions(other: Expression, substitutions: Substitutions): Seq[Substitutions]
+  def calculateSubstitutions(
+    other: Expression,
+    substitutions: Substitutions,
+    applicativeHints: Seq[(Substitutions, ArgumentList)]
+  ): Seq[Substitutions]
   def applySubstitutions(substitutions: Substitutions): Option[Expression]
+
   def calculateApplicatives(targetArguments: ArgumentList, substitutions: Substitutions): Seq[(Expression, Substitutions)]
 
   def condense(
     other: Expression,
     thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions
-  ): Option[(Substitutions, Substitutions)] = {
-    condenseOneWay(other, thisSubstitutions, otherSubstitutions) orElse
-      other.condenseOneWay(this, otherSubstitutions, thisSubstitutions).map(_.reverse)
+    otherSubstitutions: Substitutions,
+    applicativeHints: Seq[(Substitutions, ArgumentList)]
+  ): Seq[(Substitutions, Substitutions, Seq[(Substitutions, ArgumentList)])] = {
+    (condenseOneWay(other, thisSubstitutions, otherSubstitutions, applicativeHints) ++
+      other.condenseOneWay(this, otherSubstitutions, thisSubstitutions, Nil).map(_.reverse))
+        .map(t => (t._1, t._2, Nil))
   }
-  protected def condenseOneWay(
+  private def condenseOneWay(
     other: Expression,
     thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions
-  ): Option[(Substitutions, Substitutions)] = {
+    otherSubstitutions: Substitutions,
+    applicativeHints: Seq[(Substitutions, ArgumentList)]
+  ): Seq[(Substitutions, Substitutions)] = {
     for {
-      thisSubstituted <- applySubstitutions(thisSubstitutions)
-      updatedOtherSubstitutions <- other.calculateSubstitutions(thisSubstituted, otherSubstitutions).headOption
+      thisSubstituted <- applySubstitutions(thisSubstitutions).toSeq
+      updatedOtherSubstitutions <- other.calculateSubstitutions(thisSubstituted, otherSubstitutions, applicativeHints)
     } yield (thisSubstitutions, updatedOtherSubstitutions)
   }
 
@@ -55,10 +63,14 @@ object Expression {
 
   implicit class ExpressionSeqOps(expressions: Seq[Expression]) {
     def requiredSubstitutions: Substitutions.Required = expressions.map(_.requiredSubstitutions).foldTogether
-    def calculateSubstitutions(otherExpressions: Seq[Expression], substitutions: Substitutions): Seq[Substitutions] = {
+    def calculateSubstitutions(
+      otherExpressions: Seq[Expression],
+      substitutions: Substitutions,
+      applicativeHints: Seq[(Substitutions, ArgumentList)]
+    ): Seq[Substitutions] = {
       expressions.zipStrict(otherExpressions).toSeq.flatten
         .foldLeft(Seq(substitutions)) { case (substitutionsSoFar, (expression, otherExpression)) =>
-          substitutionsSoFar.flatMap(expression.calculateSubstitutions(otherExpression, _))
+          substitutionsSoFar.flatMap(expression.calculateSubstitutions(otherExpression, _, applicativeHints))
         }
     }
     def calculateApplicatives(arguments: ArgumentList, substitutions: Substitutions): Seq[(Seq[Expression], Substitutions)] = {

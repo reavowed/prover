@@ -2,7 +2,7 @@ package net.prover.model.proof
 
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions.{DefinedStatement, Statement}
-import net.prover.model.{Inference, Premise}
+import net.prover.model.{Inference, Premise, Substitutions}
 
 case class ProvingContext(
   provenStatements: Seq[ProvenStatement],
@@ -15,6 +15,9 @@ case class ProvingContext(
   depth: Int,
   allowTransformations: Boolean = true)
 {
+  def resetWithPremises(newPremises: Seq[Premise]): ProvingContext = {
+    ProvingContext.getInitial(newPremises, assertionHints, availableInferences, deductionStatement.toSeq ++ scopingStatement.toSeq)
+  }
   def addProvenStatement(statement: Statement, reference: Reference.Direct) = {
     copy(provenStatements = provenStatements :+ ProvenStatement(statement, reference))
   }
@@ -43,6 +46,9 @@ case class ProvingContext(
     scopingStatement.map { definition =>
       DefinedStatement(Seq(inner), definition, inner.depth - 1)(Seq(variableName))
     }
+  }
+  def defaultSubstitutions: Substitutions = {
+    Substitutions.emptyWithDepth(depth)
   }
 }
 
