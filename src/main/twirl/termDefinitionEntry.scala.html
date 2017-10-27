@@ -3,5 +3,27 @@
 
 <div class="result">
   <h5>Term Definition: @html.referencedStatement(definition.defaultValue)</h5>
-  <div>@html.referencedStatement(definition.defaultValue) is defined by @html.referencedStatement(definition.definingStatement). </div>
+  <div>
+    @definition.premises match {
+      case Nil => {}
+      case Seq(premise) => {
+        <div class="premises">
+          Suppose @Html(html.referencedStatement(premise).body.trim()).
+        </div>
+      }
+      case initPremises :+ tailPremise => {
+        <div class="premises">
+        Suppose
+          @Html(initPremises.map { premise => html.referencedStatement(premise).body.trim() }.mkString(", "))
+          and
+          @Html(html.referencedStatement(tailPremise).body.trim()).
+        </div>
+      }
+    }
+
+    <div>
+      @if(definition.premises.nonEmpty) { Then }
+      @html.referencedStatement(definition.defaultValue) is defined by @html.referencedStatement(definition.definingStatement).
+    </div>
+  </div>
 </div>
