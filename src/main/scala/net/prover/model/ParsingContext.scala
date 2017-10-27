@@ -70,7 +70,7 @@ case class ParsingContext(
   object RecognisedParameter {
     val literalPattern = "(\\$+)(\\.*)(.*)".r
     def unapply(string: String): Option[FunctionParameter] = {
-      parameterLists.zipWithIndex.mapFind {
+      parameterLists.zipWithIndex.reverse.mapFind {
         case (parameterList, depth) =>
           parameterList.findIndexWhere(_ == string).map(index => FunctionParameter(index, depth + 1, parameterDepth)(Some(string)))
       } orElse (string match {
