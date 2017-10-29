@@ -4,7 +4,7 @@
 @* This file is incredibly whitespace sensitive! *@
 @defining(referrers.filter(_._2.isEmpty).map(_._1)) { topLevelReferrers =>
   <span class="@topLevelReferrers.map("highlight-" + _).mkString(" ") @reference.map("conclusion-" + _)">@expression match {
-    case ExpressionVariable(text) => {@HtmlHelper.format(text)}
+    case ExpressionVariable(text) => {@Html(HtmlHelper.format(text))}
     case parameter: FunctionParameter => {@parameter.name}
     case ExpressionApplication(text, arguments) => {@defining(
       arguments.map(argument => html.referencedStatement(argument).body.trim).mkString(", ")

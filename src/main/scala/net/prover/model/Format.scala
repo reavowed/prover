@@ -46,7 +46,7 @@ object Format {
       val replacedFormat = replacementNames.zipWithIndex.foldLeft(rawFormat) { case (str, (name, index)) =>
         str.replaceAll(name, s"%$index")
       }
-      Format(replacedFormat, requiresBrackets)
+      Format(HtmlHelper.format(replacedFormat), requiresBrackets)
     }
   }
 
