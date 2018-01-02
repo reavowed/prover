@@ -20,10 +20,9 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   }
   def specifyWithSubstitutions(
     targetArguments: ArgumentList,
-    substitutions: Substitutions,
-    outerDepth: Int
+    substitutions: Substitutions
   ) = {
-    arguments.specifyWithSubstitutions(targetArguments, substitutions, outerDepth).map(update)
+    arguments.specifyWithSubstitutions(targetArguments, substitutions).map(update)
   }
   def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
     update(arguments.increaseDepth(additionalDepth, insertionPoint))
@@ -41,23 +40,30 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)]
+    applicativeHints: Seq[(Substitutions, ArgumentList)],
+    structuralHints: Seq[Substitutions]
   ) = {
-    other match {
-      case otherWithMatchingType if otherWithMatchingType.isRuntimeInstance[ExpressionType] =>
-        otherWithMatchingType.asInstanceOf[ExpressionType]
-          .calculateApplicatives(arguments, substitutions)
-          .flatMap { case (result, newSubstitutions) =>
-            newSubstitutions.update(variableName, result.asInstanceOf[ExpressionType], substitutionsLens, 1)
+    if (other.isRuntimeInstance[ExpressionType]) {
+      for {
+        (applicative, applicativeSubstitutions) <- other.calculateApplicatives(arguments, substitutions)
+        if structuralHints.forall { structuralHint =>
+          substitutionsLens.get(structuralHint).get(variableName).forall { s =>
+            s.matchesStructure(applicative)
           }
-      case _ =>
-        Nil
-    }
+        }
+        substitutionsWithApplicative <- applicativeSubstitutions.update(
+          variableName,
+          applicative.asInstanceOf[ExpressionType],
+          substitutionsLens,
+          1)
+      } yield substitutionsWithApplicative
+    } else Nil
   }
+
   override def applySubstitutions(substitutions: Substitutions): Option[ExpressionType] = {
     for {
       predicate <- substitutionsLens.get(substitutions).get(variableName)
-      result <- predicate.specifyWithSubstitutions(arguments, substitutions, depth)
+      result <- predicate.specifyWithSubstitutions(arguments, substitutions)
     } yield result.asInstanceOf[ExpressionType]
   }
   override def calculateApplicatives(
@@ -71,17 +77,42 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
     other: Expression,
     thisSubstitutions: Substitutions,
     otherSubstitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)]
-  ): Seq[(Substitutions, Substitutions, Seq[(Substitutions, ArgumentList)])] = {
-    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints) ++
-      (for {
-        predicate <- substitutionsLens.get(thisSubstitutions).get(variableName).toSeq
-        predicateSubstitutions <- other.calculateSubstitutions(
-          predicate.increaseDepth(depth, thisSubstitutions.depth),
-          Substitutions.emptyWithDepth(thisSubstitutions.depth + 1),
-          Nil)
-      } yield (thisSubstitutions, otherSubstitutions, Seq((predicateSubstitutions, arguments))))
+    applicativeHints: Seq[(Substitutions, ArgumentList)],
+    structuralHints: Seq[Substitutions]
+  ) = {
+    val base = super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints)
+    if (base.nonEmpty)
+      base
+    else for {
+      predicate <- substitutionsLens.get(thisSubstitutions).get(variableName).toSeq
+      predicateSubstitutions <- other.calculateSubstitutions(
+        predicate.increaseDepth(depth, thisSubstitutions.depth),
+        Substitutions.emptyWithDepth(thisSubstitutions.depth + 1),
+        Nil,
+        Nil)
+    } yield (thisSubstitutions, otherSubstitutions, Seq((predicateSubstitutions, arguments)), Nil)
   }
+
+  override protected def condenseReverse(
+    other: Expression,
+    thisSubstitutions: Substitutions,
+    otherSubstitutions: Substitutions
+  ) = {
+    val base = super.condenseReverse(other, thisSubstitutions, otherSubstitutions)
+    if (base.nonEmpty)
+      base
+    else
+      for {
+        (applicative, newSubstitutions) <- other.calculateApplicatives(arguments, Substitutions.empty)
+        updatedSubstitutions <- newSubstitutions.update(
+          variableName,
+          applicative.asInstanceOf[ExpressionType],
+          substitutionsLens,
+          1)
+      } yield (thisSubstitutions, otherSubstitutions, Nil, Seq(updatedSubstitutions))
+  }
+
+  def matchesStructure(other: Expression): Boolean = false // TODO: Probably these can match?
 
   override def toString = s"$variableName(${arguments.terms.map(_.toString).mkString(", ")})"
   override def safeToString = toString

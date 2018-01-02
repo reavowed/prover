@@ -58,7 +58,6 @@ case class Transformation(statementDefinition: StatementDefinition, variableName
         (premises, conclusion, stepsToProve) <- transformAll(applicablePremiseStatements, applicableConclusion)
       } yield (premises, conclusion, stepsToProve)
     }
-
   }
 }
 

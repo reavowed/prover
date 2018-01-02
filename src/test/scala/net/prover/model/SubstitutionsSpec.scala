@@ -7,7 +7,7 @@ class SubstitutionsSpec extends ProverSpec {
   def testSubstitutions(source: Expression, targetExpression: Expression, rawSubstitutions: Substitutions*) = {
     val substitutionsDepth = targetExpression.depth - source.depth
     val expectedSubstitutions = rawSubstitutions.map(_.copy(depth = substitutionsDepth))
-    val calculatedSubstitutions = source.calculateSubstitutions(targetExpression, Substitutions(depth = substitutionsDepth), Nil)
+    val calculatedSubstitutions = source.calculateSubstitutions(targetExpression, Substitutions(depth = substitutionsDepth), Nil, Nil)
     calculatedSubstitutions.must(contain(exactly(expectedSubstitutions: _*)))
     Result.foreach(expectedSubstitutions) { expectedSubstitution =>
       val substitutedExpression = source.applySubstitutions(expectedSubstitution)
@@ -155,7 +155,7 @@ class SubstitutionsSpec extends ProverSpec {
           predicates = Map(φ -> ForAll.!!("x")(Negation.!!!(ElementOf.!!!(FunctionParameter("x", 0, 3, 3), FunctionParameter.anonymous(0, 1, 3)))))))
     }
 
-    "match a bound predicate application to a 1st-order bound application referencing its 1st level argument" in {
+    "match a bound predicate application to a 1st-order bound application referencing its external argument" in {
       testSubstitutions(
         ForAll("x")(φ.!(FunctionParameter("x", 0, 1, 1))),
         ForAll.!("X")(ForAll.!!("x")(Negation.!!!(ElementOf.!!!(FunctionParameter("x", 0, 3, 3), FunctionParameter("Y", 0, 1, 3))))),

@@ -6,11 +6,7 @@ trait Statement extends Expression {
   def increaseDepth(additionalDepth: Int, insertionPoint: Int): Statement
   def reduceDepth(difference: Int, insertionPoint: Int): Option[Statement]
   def specify(arguments: ArgumentList): Statement
-  def specifyWithSubstitutions(
-    targetArguments: ArgumentList,
-    substitutions: Substitutions,
-    outerDepth: Int
-  ): Option[Statement]
+  def specifyWithSubstitutions(targetArguments: ArgumentList, substitutions: Substitutions): Option[Statement]
   def applySubstitutions(substitutions: Substitutions): Option[Statement]
   def calculateApplicatives(baseArguments: ArgumentList, substitutions: Substitutions): Seq[(Statement, Substitutions)]
 }

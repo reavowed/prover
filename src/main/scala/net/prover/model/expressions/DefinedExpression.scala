@@ -25,13 +25,12 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
   }
   def specifyWithSubstitutions(
     targetArguments: ArgumentList,
-    substitutions: Substitutions,
-    outerDepth: Int
+    substitutions: Substitutions
   ) = {
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
     components
-      .map(_.specifyWithSubstitutions(targetArguments, substitutions, outerDepth)).traverseOption
-      .map(update(_, depth + outerDepth - 1))
+      .map(_.specifyWithSubstitutions(targetArguments, substitutions)).traverseOption
+      .map(update(_, depth + targetArguments.depth - 1))
   }
   override def increaseDepth(additionalDepth: Int, insertionPoint: Int): ExpressionType = {
     update(components.map(_.increaseDepth(additionalDepth, insertionPoint)), depth + additionalDepth)
@@ -41,10 +40,11 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)]
+    applicativeHints: Seq[(Substitutions, ArgumentList)],
+    structuralHints: Seq[Substitutions]
   ) = {
     getMatch(other)
-      .map(components.calculateSubstitutions(_, substitutions, applicativeHints))
+      .map(components.calculateSubstitutions(_, substitutions, applicativeHints, structuralHints))
       .getOrElse(Nil)
   }
   override def applySubstitutions(substitutions: Substitutions): Option[ExpressionType] = {
@@ -59,19 +59,29 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
     other: Expression,
     thisSubstitutions: Substitutions,
     otherSubstitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)]
-  ): Seq[(Substitutions, Substitutions, Seq[(Substitutions, ArgumentList)])] = {
-    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints) ++
+    applicativeHints: Seq[(Substitutions, ArgumentList)],
+    structuralHints: Seq[Substitutions]
+  ) = {
+    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints) ++
       getMatch(other).toSeq.flatMap { otherComponents =>
         components.zip(otherComponents)
-          .flatMapFoldProduct((thisSubstitutions, otherSubstitutions, Seq.empty[(Substitutions, ArgumentList)]))
-          { case ((thisSubstitutionsSoFar, otherSubstitutionsSoFar, applicativeHintsSoFar), (component, otherComponent)) =>
-            component.condense(otherComponent, thisSubstitutionsSoFar, otherSubstitutionsSoFar, applicativeHints)
-              .map(t => (t._1, t._2, applicativeHintsSoFar ++ t._3))
+          .flatMapFoldProduct((thisSubstitutions, otherSubstitutions, Seq.empty[(Substitutions, ArgumentList)], Seq.empty[Substitutions]))
+          { case ((thisSubstitutionsSoFar, otherSubstitutionsSoFar, applicativeHintsSoFar, structuralHintsSoFar), (component, otherComponent)) =>
+            component.condense(otherComponent, thisSubstitutionsSoFar, otherSubstitutionsSoFar, applicativeHints, structuralHints)
+              .map(t => (t._1, t._2, applicativeHintsSoFar ++ t._3, structuralHintsSoFar ++ t._4))
           }
       }
   }
 
+  def matchesStructure(other: Expression): Boolean = {
+    getMatch(other).exists { otherComponents =>
+      components.zipStrict(otherComponents).exists { componentsAndOtherComponents =>
+        componentsAndOtherComponents.forall { case (component, otherComponent) =>
+          component.matchesStructure(otherComponent)
+        }
+      }
+    }
+  }
   override def findComponentPath(other: Expression): Option[Seq[Int]] = {
     super.findComponentPath(other) orElse
       components.zipWithIndex.mapFind { case (subcomponent, index) =>

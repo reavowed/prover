@@ -19,22 +19,22 @@ case class ArgumentList(terms: Seq[Term], depth: Int) {
   }
   def specifyWithSubstitutions(
     targetArguments: ArgumentList,
-    substitutions: Substitutions,
-    outerDepth: Int
+    substitutions: Substitutions
   ) = {
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
     terms
-      .map(_.specifyWithSubstitutions(targetArguments, substitutions, outerDepth)).traverseOption
-      .map(ArgumentList(_, depth + outerDepth - 1))
+      .map(_.specifyWithSubstitutions(targetArguments, substitutions)).traverseOption
+      .map(ArgumentList(_, depth + targetArguments.depth - 1))
   }
 
   def requiredSubstitutions = terms.requiredSubstitutions
   def calculateSubstitutions(
     other: ArgumentList,
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)]
+    applicativeHints: Seq[(Substitutions, ArgumentList)],
+    structuralHints: Seq[Substitutions]
   ) = {
-    terms.calculateSubstitutions(other.terms, substitutions, applicativeHints)
+    terms.calculateSubstitutions(other.terms, substitutions, applicativeHints, structuralHints)
   }
   def applySubstitutions(substitutions: Substitutions) = {
     terms

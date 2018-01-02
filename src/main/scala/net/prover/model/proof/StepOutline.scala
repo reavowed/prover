@@ -24,6 +24,7 @@ object StepOutline {
     }
     def tryProve(reference: Reference.Direct)(implicit context: ProvingContext) = {
       Prover(assertion, reference).proveAssertion()
+          .ifDefined(location.foreach(x => Proof.logger.info(s"Proved statement $assertion (line ${x.lineNumber})")))
     }
   }
   object Assertion {

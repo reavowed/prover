@@ -92,14 +92,14 @@ object CachedInferenceApplication {
         substitutedPremiseStatements <- transformedPremises.map(_.statement.applySubstitutions(substitutions)).traverseOption.ifEmpty {
           CachedProof.logger.info(
             (Seq(s"Could not substitute into premises of transformed inference '${inference.name}'") ++
-              inference.premises.map(_.serialized)
+              transformedPremises.map(_.serialized)
               :+ substitutions.toString
               ).mkString("\n"))
         }
         substitutedConclusion <- transformedConclusion.applySubstitutions(substitutions).ifEmpty {
           CachedProof.logger.info(Seq(
             s"Could not substitute into conclusion of transformed inference '${inference.name}'",
-            inference.conclusion.serialized,
+            transformedConclusion.serialized,
             substitutions.toString
           ).mkString("\n"))
         }

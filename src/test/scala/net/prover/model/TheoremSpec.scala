@@ -34,18 +34,20 @@ class TheoremSpec extends ProverSpec {
     def prove(
       premises: Seq[PremiseMagnet],
       proofSteps: Seq[StepOutline],
-      inferences: Seq[Inference]
+      inferences: Seq[Inference],
+      depth: Int = 0
     ): Proof = {
       ProofOutline(proofSteps)
-        .fillIn(ProvingContext.getInitial(premises, Nil, inferences, defaultContext.statementDefinitions))
+        .fillIn(ProvingContext.getInitial(premises, Nil, inferences, defaultContext.statementDefinitions, depth))
     }
 
     def checkProof(
       premises: Seq[PremiseMagnet],
       proofSteps: Seq[StepOutline],
-      inferences: Seq[Inference]
+      inferences: Seq[Inference],
+      depth: Int = 0
     ) = {
-      val proof = prove(premises, proofSteps, inferences)
+      val proof = prove(premises, proofSteps, inferences, depth)
       val cachedProof = CachedProof(Paths.get(""), premises, proof.steps.map(_.cached))
       cachedProof.steps.matchOutlines(proofSteps) must beTrue
       val serializedProof = cachedProof.serialized
@@ -65,6 +67,11 @@ class TheoremSpec extends ProverSpec {
     val extractRightConjunct = axiom("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), ψ, RearrangementType.Simplification)
     val combineConjunction = axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ), RearrangementType.Expansion)
     val addRightDisjunct = axiom("Add Right Disjunct", Seq(ψ), Disjunction(φ, ψ), RearrangementType.Expansion)
+    val combineEquivalence = axiom(
+      "Combine Equivalence",
+      Seq(Implication(φ, ψ), Implication(ψ, φ)),
+      Equivalence(φ, ψ),
+      RearrangementType.Expansion)
 
     val specification = axiom(
       "Specification",
@@ -240,6 +247,19 @@ class TheoremSpec extends ProverSpec {
             φ.^),
           ElementOf.!(FunctionParameter("x", 0), Pair.!(b.^, c.^))))),
         Seq(combineConjunction, existence))
+    }
+
+    "prove by expanding with a transform" in {
+      val uniqueValueForExistence = axiom(
+        "Unique Value for Existence",
+        Seq(ForAll("x")(Equivalence.!(φ.!(FunctionParameter("x", 0)), Equals.!(FunctionParameter("x", 0), a.^)))),
+        ExistsUnique("x")(φ.!(FunctionParameter("x", 0))))
+      checkProof(
+        Seq(
+          ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0, 1)), Equals.!(FunctionParameter("x", 0, 1), b.^))),
+          ForAll("x")(Implication.!(Equals.!(FunctionParameter("x", 0, 1), b.^), φ.!(FunctionParameter("x", 0, 1))))),
+        Seq(ExistsUnique("x")(φ.!(FunctionParameter("x", 0, 1)))),
+        Seq(uniqueValueForExistence, combineEquivalence, specification))
     }
   }
 }

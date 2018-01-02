@@ -27,18 +27,18 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   }
   def specifyWithSubstitutions(
     targetArguments: ArgumentList,
-    substitutions: Substitutions,
-    outerDepth: Int
+    substitutions: Substitutions
   ) = {
     if (depth == 0) throw new Exception("Cannot specify base-level expression")
-    Some(setDepth(depth + outerDepth - 1))
+    Some(setDepth(depth + targetArguments.depth - 1))
   }
 
   override def requiredSubstitutions = requiredSubstitutionsLens.set(Seq(name))(Substitutions.Required.empty)
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)]
+    applicativeHints: Seq[(Substitutions, ArgumentList)],
+    structuralHints: Seq[Substitutions]
   ): Seq[Substitutions] = {
     other match {
       case _ if other.isRuntimeInstance[ExpressionType] && other.depth >= depth + substitutions.depth =>
@@ -71,19 +71,26 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     other: Expression,
     thisSubstitutions: Substitutions,
     otherSubstitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)]
+    applicativeHints: Seq[(Substitutions, ArgumentList)],
+    structuralHints: Seq[Substitutions]
   ) = {
-    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints) ++
+    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints) ++
       applicativeHints
-        .foldProduct { case (substitutions, argumentList) =>
+        .foldProduct { case (hintSubstitutions, hintArgumentList) =>
           for {
-            applicative <- substitutionsLens.get(substitutions).get(name).toSeq
-            newHintSubstitutions <- other.calculateSubstitutions(applicative, Substitutions.emptyWithDepth(1), Nil)
-          } yield newHintSubstitutions -> argumentList
+            hintApplicative <- substitutionsLens.get(hintSubstitutions).get(name).toSeq
+            newHintSubstitutions <- other.calculateSubstitutions(
+              hintApplicative.increaseDepth(depth - thisSubstitutions.depth, thisSubstitutions.depth + 1),
+              Substitutions.emptyWithDepth(1),
+              Nil,
+              Nil)
+          } yield newHintSubstitutions -> hintArgumentList
         }
         .filter(_.nonEmpty)
-        .map((thisSubstitutions, otherSubstitutions, _))
+        .map((thisSubstitutions, otherSubstitutions, _, Nil))
   }
+
+  def matchesStructure(other: Expression): Boolean = other.isRuntimeInstance[ExpressionType]
 }
 
 object ExpressionVariable {

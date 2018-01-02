@@ -65,7 +65,8 @@ object ProvingContext {
     premises: Seq[Premise],
     assertionHints: Seq[AssertionHint],
     availableInferences: Seq[Inference],
-    statementDefinitions: Seq[StatementDefinition]
+    statementDefinitions: Seq[StatementDefinition],
+    depth: Int = 0
   ): ProvingContext = {
     ProvingContext(
       premises.map(_.provenStatement),
@@ -75,6 +76,6 @@ object ProvingContext {
       assertionHints,
       statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Deduction)),
       statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Scoping)),
-      0)
+      depth)
   }
 }

@@ -93,7 +93,7 @@ case class Prover(
       if inference.rearrangementType == RearrangementType.Simplification
       premise <- inference.premises.single.toSeq
       simplificationPath <- premise.statement.findComponentPath(inference.conclusion).toSeq
-      substitutions <- premise.statement.calculateSubstitutions(statement, defaultSubstitutions, Nil)
+      substitutions <- premise.statement.calculateSubstitutions(statement, defaultSubstitutions, Nil, Nil)
       conclusion <- inference.conclusion.applySubstitutions(substitutions).toSeq
     } yield conclusion -> Reference.Simplification(
       inference,
@@ -103,7 +103,9 @@ case class Prover(
       depth)
   }
 
-  def proverForInference(inference: Inference): InferenceProver = InferenceProver(inference, provenStatements, simplifications)
+  def proverForInference(inference: Inference): InferenceProver = {
+    InferenceProver(inference, provenStatements, simplifications)
+  }
 }
 
 object Prover {
@@ -124,7 +126,7 @@ object Prover {
     (for {
       inference <- provingContext.availableInferences.iterator
       if inference.rearrangementType == RearrangementType.Expansion
-      substitutions <- inference.conclusion.calculateSubstitutions(assertion, provingContext.defaultSubstitutions, Nil)
+      substitutions <- inference.conclusion.calculateSubstitutions(assertion, provingContext.defaultSubstitutions, Nil, Nil)
       substitutedPremises <- inference.premises.map(_.statement.applySubstitutions(substitutions)).traverseOption.toSeq
       premiseReferences <- substitutedPremises.map(findAssertionWithPossibleExpansions(_, referencedStatements)).traverseOption.toSeq
       if inference.conclusion.applySubstitutions(substitutions).contains(assertion)
