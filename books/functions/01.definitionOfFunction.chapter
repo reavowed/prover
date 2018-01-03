@@ -1,32 +1,31 @@
 chapter Definition of a Function
 Definition of a function.
 
-statement function (f X Y)
+statement function (f A B)
   name (a function)
-  format (f: X → Y in parens)
-  definition (∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f)
+  format (f: A → B in parens)
+  definition (∧ ⊆ f × A B ∀ x → ∈ x A ∃! y ∈ orderedPair x y f)
 
-theorem Definition of a Function
-premise ⊆ f × X Y
-premise ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-prove function f X Y
-qed
+# theorem Definition of a Function
+# premise ⊆ f × X Y
+# premise ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
+# prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
+# prove function f X Y
+# qed
 
-theorem Definition of a Function
-premise ⊆ f × X Y
-premise proves ∈ x X ∃! y ∈ orderedPair x y f
-prove ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-prove function f X Y
-qed
+# theorem Definition of a Function
+# premise ⊆ f × X Y
+# premise proves ∈ x X ∃! y ∈ orderedPair x y f
+# prove ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
+# prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
+# prove function f X Y
+# qed
 
 theorem Function Application Is Unique
-premise function f X Y
-premise ∈ x X
-prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-prove ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-prove ∃! y ∈ orderedPair x y f
+premise function f A B
+premise ∈ a A
+prove ∧ ⊆ f × A B ∀ x → ∈ x A ∃! y ∈ orderedPair x y f
+prove ∃! y ∈ orderedPair a y f
 qed
 
 term apply (f a)
@@ -36,157 +35,147 @@ term apply (f a)
   (∈ orderedPair a _ f)
 
 theorem Function Is Subset of Product
-premise function f X Y
-prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-prove ⊆ f × X Y
+premise function f A B
+prove ∧ ⊆ f × A B ∀ x → ∈ x A ∃! y ∈ orderedPair x y f
+prove ⊆ f × A B
 qed
 
 theorem First Coordinate of Element of Function Is Element of Domain
-premise function f X Y
-premise ∈ orderedPair x y f
-prove ⊆ f × X Y
-prove ∈ orderedPair x y × X Y
-prove ∈ x X
+premise function f A B
+premise ∈ orderedPair a b f
+prove ⊆ f × A B
+prove ∈ orderedPair a b × A B
+prove ∈ a A
 qed
 
 theorem Second Coordinate of Element of Function Is Element of Range
-premise function f X Y
-premise ∈ orderedPair x y f
-prove ⊆ f × X Y
-prove ∈ orderedPair x y × X Y
-prove ∈ y Y
-qed
-
-theorem Extend Function Range to Superset
-premise function f A X
-premise ⊆ X Y elidable
-prove ∧ ⊆ f × A X ∀ x → ∈ x A ∃! y ∈ orderedPair x y f
-prove ⊆ × A X × A Y
-prove ⊆ f × A Y
-prove function f A Y
+premise function f A B
+premise ∈ orderedPair a b f
+prove ⊆ f × A B
+prove ∈ orderedPair a b × A B
+prove ∈ b B
 qed
 
 theorem Function Application Is Element of Range
-premise function f X Y
-premise ∈ x X
-prove ⊆ f × X Y
-prove ∈ orderedPair x apply f x f
-prove ∈ orderedPair x apply f x × X Y
-prove ∈ apply f x Y
+premise function f A B
+premise ∈ a A
+prove ∈ orderedPair a apply f a f
+prove ∈ apply f a B
+qed
+
+theorem Extend Function Range to Superset
+premise function f A B
+premise ⊆ B C elidable
+prove ∧ ⊆ f × A B ∀ x → ∈ x A ∃! y ∈ orderedPair x y f
+prove ⊆ × A B × A C
+prove ⊆ f × A C
+prove function f A C
 qed
 
 theorem Uniqueness of Function Application
-premise function f X Y
-premise ∈ orderedPair x y f
-prove ∈ x X
-prove ∃! z ∈ orderedPair x z f
-prove ∈ orderedPair x apply f x f
-prove = y apply f x
-qed
-
-theorem Uniqueness of Function Application
-premise function f X Y
-premise ∈ orderedPair x y f
-prove = y apply f x
-prove = apply f x y
+premise function f A B
+premise ∈ orderedPair a b f
+prove ∈ a A
+prove ∃! x ∈ orderedPair a x f
+prove ∈ orderedPair a apply f a f
+prove = b apply f a
 qed
 
 theorem Element of Function
-premise function f X Y
-prove ⊆ f × X Y
-assume ∈ z f {
-  prove ∈ z × X Y
-  prove ∃ x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y
-  let x ∧ ∈ x X ∃ y ∧ ∈ y Y = z orderedPair x y {
-    let y ∧ ∈ y Y = z orderedPair x y {
-      prove ∈ orderedPair x y f
-      prove = y apply f x
-      prove = z orderedPair x apply f x
-      prove ∧ ∈ x X = z orderedPair x apply f x
-      prove ∃ x ∧ ∈ x X = z orderedPair x apply f x
+premise function f A B
+prove ⊆ f × A B
+take x {
+  assume ∈ x f {
+    prove ∈ x × A B
+    prove ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
+    let a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b {
+      let b ∧ ∈ b B = x orderedPair a b {
+        prove ∈ orderedPair a b f
+        prove = b apply f a
+        prove = x orderedPair a apply f a
+        prove ∧ ∈ a A = x orderedPair a apply f a
+        prove ∃ a ∧ ∈ a A = x orderedPair a apply f a
+      }
+    }
+  }
+  assume ∃ a ∧ ∈ a A = x orderedPair a apply f a {
+    let a ∧ ∈ a A = x orderedPair a apply f a {
+      prove ∈ orderedPair a apply f a f
+      prove ∈ x f
     }
   }
 }
-assume ∃ x ∧ ∈ x X = z orderedPair x apply f x {
-  let x ∧ ∈ x X = z orderedPair x apply f x {
-    prove ∈ orderedPair x apply f x f
-    prove ∈ z f
-  }
-}
-prove ∀ z ↔ ∈ z f ∃ x ∧ ∈ x X = z orderedPair x apply f x
+prove ∀ x ↔ ∈ x f ∃ a ∧ ∈ a A = x orderedPair a apply f a
 qed
 
 theorem Functions with Same Values Are Equal
-premise function f X Y
-premise function g X Y
-premise ∀ x → ∈ x X = apply f x apply g x
-prove ∀ z ↔ ∈ z f ∃ x ∧ ∈ x X = z orderedPair x apply f x
-prove ∀ z ↔ ∈ z g ∃ x ∧ ∈ x X = z orderedPair x apply g x
-assume ∃ x ∧ ∈ x X = z orderedPair x apply f x {
-  let x ∧ ∈ x X = z orderedPair x apply f x {
-    prove = apply f x apply g x
-    prove ∧ ∈ x X = z orderedPair x apply g x
-    prove ∃ x ∧ ∈ x X = z orderedPair x apply g x
+premise function f A B
+premise function g A B
+premise ∀ x → ∈ x A = apply f x apply g x
+prove ∀ x ↔ ∈ x f ∃ a ∧ ∈ a A = x orderedPair a apply f a
+prove ∀ x ↔ ∈ x g ∃ a ∧ ∈ a A = x orderedPair a apply g a
+take x {
+  assume ∃ a ∧ ∈ a A = x orderedPair a apply f a {
+    let a ∧ ∈ a A = x orderedPair a apply f a {
+      prove = apply f a apply g a
+      prove ∧ ∈ a A = x orderedPair a apply g a
+      prove ∃ a ∧ ∈ a A = x orderedPair a apply g a
+    }
+  }
+  assume ∃ a ∧ ∈ a A = x orderedPair a apply g a {
+    let a ∧ ∈ a A = x orderedPair a apply g a {
+      prove = apply f a apply g a
+      prove ∧ ∈ a A = x orderedPair a apply f a
+      prove ∃ a ∧ ∈ a A = x orderedPair a apply f a
+    }
   }
 }
-assume ∃ x ∧ ∈ x X = z orderedPair x apply g x {
-  let x ∧ ∈ x X = z orderedPair x apply g x {
-    prove = apply f x apply g x
-    prove ∧ ∈ x X = z orderedPair x apply f x
-    prove ∃ x ∧ ∈ x X = z orderedPair x apply f x
-  }
-}
-prove ∀ z ↔ ∃ x ∧ ∈ x X = z orderedPair x apply f x ∃ x ∧ ∈ x X = z orderedPair x apply g x
-prove = f g
-qed
-
-theorem Functions with Same Values Are Equal
-premise function f X Y
-premise function g X Y
-premise proves ∈ x X = apply f x apply g x
-prove ∀ x → ∈ x X = apply f x apply g x
+prove ∀ x ↔ ∃ a ∧ ∈ a A = x orderedPair a apply f a ∃ a ∧ ∈ a A = x orderedPair a apply g a
 prove = f g
 qed
 
 theorem Function With Specified Values Is Unique
-premise ∃ f ∧ function f X Y ∀ x → ∈ x X = apply f x f_x
-let g ∧ function g X Y ∀ x → ∈ x X = apply g x f_x {
-  assume ∧ function f X Y ∀ x → ∈ x X = apply f x f_x {
-    assume ∈ x X {
-      prove = apply f x f_x
-      prove = apply g x f_x
-      prove = apply f x apply g x
+premise ∃ f ∧ function f A B ∀ x → ∈ x A = apply f x with x F
+take f { take g {
+  assume ∧ ∧ function f A B ∀ x → ∈ x A = apply f x with x F ∧ function g A B ∀ x → ∈ x A = apply g x with x F {
+    take x {
+      assume ∈ x A {
+        prove = apply f x with x F
+        prove = apply g x with x F
+        prove = apply f x apply g x
+      }
     }
-    prove ∀ x → ∈ x X = apply f x apply g x
     prove = f g
   }
-  prove ∃! f ∧ function f X Y ∀ x → ∈ x X = apply f x f_x
-}
+}}
+prove ∃! f ∧ function f A B ∀ x → ∈ x A = apply f x with x F
 qed
 
 theorem Function Space Is Unique
-let S = S comprehension f powerSet × X Y function f X Y {
-  assume function f X Y {
-    prove ⊆ f × X Y
-    prove ∈ f powerSet × X Y
-    prove ∈ f S
+let S = S comprehension f powerSet × A B function f A B {
+  take f {
+    assume function f A B {
+      prove ⊆ f × A B
+      prove ∈ f powerSet × A B
+      prove ∈ f S
+    }
+    assume ∈ f S {
+      prove function f A B
+    }
   }
-  assume ∈ f S {
-    prove function f X Y
-  }
-  prove ∀ f ↔ ∈ f S function f X Y
-  prove ∃ S ∀ f ↔ ∈ f S function f X Y
-  prove ∃! S ∀ f ↔ ∈ f S function f X Y
+  prove ∀ f ↔ ∈ f S function f A B
+  prove ∃ S ∀ f ↔ ∈ f S function f A B
+  prove ∃! S ∀ f ↔ ∈ f S function f A B
 }
 qed
 
-term functionSpace (X Y)
+term functionSpace (A B)
   name (Function Space)
-  format (Y^X)
-  (∀ f ↔ ∈ f _ function f X Y)
+  format (B^A)
+  (∀ f ↔ ∈ f _ function f A B)
 
 theorem Element of Function Space Is Function
-premise ∈ f functionSpace X Y
-prove ∀ f ↔ ∈ f functionSpace X Y function f X Y
-prove function f X Y
+premise ∈ f functionSpace A B
+prove ∀ f ↔ ∈ f functionSpace A B function f A B
+prove function f A B
 qed

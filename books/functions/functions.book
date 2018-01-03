@@ -1,7 +1,7 @@
 Functions
 import Set Theory
 
-variables () (f g h ∘)
+variables (φ) (f g h ∘ A B C D a b F S)
 
 include 01.definitionOfFunction.chapter
 include 02.basicFunctions.chapter

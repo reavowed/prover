@@ -2,10 +2,10 @@ chapter Basic Functions
 Define some basic functions.
 
 theorem The Empty Set Is a Function with Empty Domain
-prove ⊆ ∅ × ∅ X
+prove ⊆ ∅ × ∅ A
 prove ∀ x ¬ ∈ x ∅
 prove ∀ x → ∈ x ∅ ∃! y ∈ orderedPair x y ∅
-prove function ∅ ∅ X
+prove function ∅ ∅ A
 qed
 
 theorem Function with a Singleton Domain
@@ -13,122 +13,134 @@ prove ∈ a singleton a
 prove ∈ b singleton b
 prove ∈ orderedPair a b × singleton a singleton b
 prove ⊆ singleton orderedPair a b × singleton a singleton b
-assume ∈ x singleton a {
-  prove = x a
-  assume ∈ orderedPair x y singleton orderedPair a b {
-    prove = orderedPair x y orderedPair a b
-    prove = y b
+take x {
+  assume ∈ x singleton a {
+    prove = x a
+    take y {
+      assume ∈ orderedPair x y singleton orderedPair a b {
+        prove = orderedPair x y orderedPair a b
+        prove = y b
+      }
+      assume = y b {
+        prove ∈ orderedPair a b singleton orderedPair a b
+        prove ∈ orderedPair x b singleton orderedPair a b
+        prove ∈ orderedPair x y singleton orderedPair a b
+      }
+    }
+#     prove ∀ y ↔ ∈ orderedPair x y singleton orderedPair a b = y b
+    prove ∃! y ∈ orderedPair x y singleton orderedPair a b
   }
-  assume = y b {
-    prove ∈ orderedPair a b singleton orderedPair a b
-    prove ∈ orderedPair x b singleton orderedPair a b
-    prove ∈ orderedPair x y singleton orderedPair a b
-  }
-  prove ∃! y ∈ orderedPair x y singleton orderedPair a b
 }
 prove function singleton orderedPair a b singleton a singleton b
 qed
 
 theorem Combine Functions
-premise function f A X
-premise function g B Y
-premise ∀ z → ∈ z ∩ A B = apply f z apply g z
-prove ⊆ f × A X
-prove ⊆ A ∪ A B
-prove ⊆ × A X × ∪ A B X
-prove ⊆ f × ∪ A B X
-prove ⊆ X ∪ X Y
-prove ⊆ × ∪ A B X × ∪ A B ∪ X Y
-prove ⊆ f × ∪ A B ∪ X Y
+premise function f A B
+premise function g C D
+premise ∀ x → ∈ x ∩ A C = apply f x apply g x
+prove ⊆ f × A B
+prove ⊆ A ∪ A C
+prove ⊆ × A B × ∪ A C B
+prove ⊆ f × ∪ A C B
+prove ⊆ B ∪ B D
+prove ⊆ × ∪ A C B × ∪ A C ∪ B D
+prove ⊆ f × ∪ A C ∪ B D
 
-prove ⊆ g × B Y
-prove ⊆ B ∪ A B
-prove ⊆ × B Y × ∪ A B Y
-prove ⊆ g × ∪ A B Y
-prove ⊆ Y ∪ X Y
-prove ⊆ × ∪ A B Y × ∪ A B ∪ X Y
-prove ⊆ g × ∪ A B ∪ X Y
+prove ⊆ g × C D
+prove ⊆ C ∪ A C
+prove ⊆ × C D × ∪ A C D
+prove ⊆ g × ∪ A C D
+prove ⊆ D ∪ B D
+prove ⊆ × ∪ A C D × ∪ A C ∪ B D
+prove ⊆ g × ∪ A C ∪ B D
 
-prove ⊆ ∪ f g × ∪ A B ∪ X Y
+prove ⊆ ∪ f g × ∪ A C ∪ B D
 
-assume ∈ x ∪ A B {
-  prove ∨ ∈ x A ∈ x B
-  assume ∈ x A {
-    assume ∈ orderedPair x y ∪ f g {
-      prove ∨ ∈ orderedPair x y f ∈ orderedPair x y g
-      assume ∈ orderedPair x y f {
-        prove = y apply f x
+take x {
+  assume ∈ x ∪ A C {
+    prove ∨ ∈ x A ∈ x C
+    assume ∈ x A {
+      take y {
+        assume ∈ orderedPair x y ∪ f g {
+          prove ∨ ∈ orderedPair x y f ∈ orderedPair x y g
+          assume ∈ orderedPair x y f {
+            prove = y apply f x
+          }
+          assume ∈ orderedPair x y g {
+            prove ∈ x C
+            prove ∈ x ∩ A C
+            prove = apply f x apply g x
+            prove = y apply g x
+            prove = y apply f x
+          }
+          prove = y apply f x
+        }
+        assume = y apply f x {
+          prove ∈ orderedPair x apply f x f
+          prove ∈ orderedPair x y f
+          prove ∈ orderedPair x y ∪ f g
+        }
       }
-      assume ∈ orderedPair x y g {
-        prove ∈ x B
-        prove ∈ x ∩ A B
-        prove = apply f x apply g x
-        prove = y apply g x
-        prove = y apply f x
-      }
-      prove = y apply f x
+      prove ∀ y ↔ ∈ orderedPair x y ∪ f g = y apply f x
+      prove ∃! y ∈ orderedPair x y ∪ f g
     }
-    assume = y apply f x {
-      prove ∈ orderedPair x apply f x f
-      prove ∈ orderedPair x y f
-      prove ∈ orderedPair x y ∪ f g
+    assume ∈ x C {
+      take y {
+        assume ∈ orderedPair x y ∪ f g {
+          prove ∨ ∈ orderedPair x y f ∈ orderedPair x y g
+          assume ∈ orderedPair x y f {
+            prove ∈ x A
+            prove ∈ x ∩ A C
+            prove = apply f x apply g x
+            prove = y apply f x
+            prove = y apply g x
+          }
+          assume ∈ orderedPair x y g {
+            prove = y apply g x
+          }
+          prove = y apply g x
+        }
+        assume = y apply g x {
+          prove ∈ orderedPair x apply g x g
+          prove ∈ orderedPair x y g
+          prove ∈ orderedPair x y ∪ f g
+          prove ∈ orderedPair x y ∪ f g
+        }
+      }
+      prove ∃! y ∈ orderedPair x y ∪ f g
     }
     prove ∃! y ∈ orderedPair x y ∪ f g
   }
-  assume ∈ x B {
-    assume ∈ orderedPair x y ∪ f g {
-      prove ∨ ∈ orderedPair x y f ∈ orderedPair x y g
-      assume ∈ orderedPair x y f {
-        prove ∈ x A
-        prove ∈ x ∩ A B
-        prove = apply f x apply g x
-        prove = y apply f x
-        prove = y apply g x
-      }
-      assume ∈ orderedPair x y g {
-        prove = y apply g x
-      }
-      prove = y apply g x
-    }
-    assume = y apply g x {
-      prove ∈ orderedPair x apply g x g
-      prove ∈ orderedPair x y g
-      prove ∈ orderedPair x y ∪ f g
-      prove ∈ orderedPair x y ∪ f g
-    }
-    prove ∃! y ∈ orderedPair x y ∪ f g
-  }
-  prove ∃! y ∈ orderedPair x y ∪ f g
 }
-prove function ∪ f g ∪ A B ∪ X Y
+prove function ∪ f g ∪ A C ∪ B D
 qed
 
 theorem Combine Disjoint Functions
-premise function f A X
-premise function g B Y
-premise = ∩ A B ∅
+premise function f A B
+premise function g C D
+premise = ∩ A C ∅
 prove ∀ x ¬ ∈ x ∅
-prove ∀ x ¬ ∈ x ∩ A B
-prove ∀ x → ∈ x ∩ A B = apply f x apply g x
-prove function ∪ f g ∪ A B ∪ X Y
+prove ∀ x ¬ ∈ x ∩ A C
+prove ∀ x → ∈ x ∩ A C = apply f x apply g x
+prove function ∪ f g ∪ A C ∪ B D
 qed
 
 theorem Extending a Function by One Value
 premise function f A B
 premise ¬ ∈ a A
 premise ∈ b B
-premise = g ∪ f singleton orderedPair a b
-assume ∈ x A {
-  assume ∈ x singleton a {
-    prove = x a
-    prove ∈ a A
+take x {
+  assume ∈ x A {
+    assume ∈ x singleton a {
+      prove = x a
+      prove ∈ a A
+    }
+    prove ¬ ∈ x singleton a
   }
-  prove ¬ ∈ x singleton a
 }
 prove = ∩ A singleton a ∅
 prove function singleton orderedPair a b singleton a singleton b
 prove function ∪ f singleton orderedPair a b ∪ A singleton a ∪ B singleton b
-prove function g ∪ A singleton a ∪ B singleton b
 prove = ∪ B singleton b B
-prove function g ∪ A singleton a B
+prove function ∪ f singleton orderedPair a b ∪ A singleton a B
 qed
