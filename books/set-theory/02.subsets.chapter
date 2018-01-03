@@ -22,7 +22,7 @@ qed
 
 theorem Subset Is Transitive
 premise ⊆ A B
-premise ⊆ B C
+premise ⊆ B C elidable
 take x {
 	assume ∈ x A {
 	  prove ∈ x B

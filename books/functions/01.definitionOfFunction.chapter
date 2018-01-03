@@ -6,21 +6,6 @@ statement function (f A B)
   format (f: A → B in parens)
   definition (∧ ⊆ f × A B ∀ x → ∈ x A ∃! y ∈ orderedPair x y f)
 
-# theorem Definition of a Function
-# premise ⊆ f × X Y
-# premise ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-# prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-# prove function f X Y
-# qed
-
-# theorem Definition of a Function
-# premise ⊆ f × X Y
-# premise proves ∈ x X ∃! y ∈ orderedPair x y f
-# prove ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-# prove ∧ ⊆ f × X Y ∀ x → ∈ x X ∃! y ∈ orderedPair x y f
-# prove function f X Y
-# qed
-
 theorem Function Application Is Unique
 premise function f A B
 premise ∈ a A
@@ -67,7 +52,7 @@ theorem Extend Function Range to Superset
 premise function f A B
 premise ⊆ B C elidable
 prove ∧ ⊆ f × A B ∀ x → ∈ x A ∃! y ∈ orderedPair x y f
-prove ⊆ × A B × A C
+# prove ⊆ × A B × A C
 prove ⊆ f × A C
 prove function f A C
 qed

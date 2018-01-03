@@ -39,18 +39,14 @@ premise function f A B
 premise function g C D
 premise ∀ x → ∈ x ∩ A C = apply f x apply g x
 prove ⊆ f × A B
-prove ⊆ A ∪ A C
 prove ⊆ × A B × ∪ A C B
 prove ⊆ f × ∪ A C B
-prove ⊆ B ∪ B D
 prove ⊆ × ∪ A C B × ∪ A C ∪ B D
 prove ⊆ f × ∪ A C ∪ B D
 
 prove ⊆ g × C D
-prove ⊆ C ∪ A C
 prove ⊆ × C D × ∪ A C D
 prove ⊆ g × ∪ A C D
-prove ⊆ D ∪ B D
 prove ⊆ × ∪ A C D × ∪ A C ∪ B D
 prove ⊆ g × ∪ A C ∪ B D
 
@@ -75,13 +71,9 @@ take x {
           }
           prove = y apply f x
         }
-        assume = y apply f x {
-          prove ∈ orderedPair x apply f x f
-          prove ∈ orderedPair x y f
-          prove ∈ orderedPair x y ∪ f g
-        }
       }
-      prove ∀ y ↔ ∈ orderedPair x y ∪ f g = y apply f x
+      prove ∈ orderedPair x apply f x f
+      prove ∈ orderedPair x apply f x ∪ f g
       prove ∃! y ∈ orderedPair x y ∪ f g
     }
     assume ∈ x C {
@@ -100,13 +92,9 @@ take x {
           }
           prove = y apply g x
         }
-        assume = y apply g x {
-          prove ∈ orderedPair x apply g x g
-          prove ∈ orderedPair x y g
-          prove ∈ orderedPair x y ∪ f g
-          prove ∈ orderedPair x y ∪ f g
-        }
       }
+      prove ∈ orderedPair x apply g x g
+      prove ∈ orderedPair x apply g x ∪ f g
       prove ∃! y ∈ orderedPair x y ∪ f g
     }
     prove ∃! y ∈ orderedPair x y ∪ f g
@@ -141,6 +129,5 @@ take x {
 prove = ∩ A singleton a ∅
 prove function singleton orderedPair a b singleton a singleton b
 prove function ∪ f singleton orderedPair a b ∪ A singleton a ∪ B singleton b
-prove = ∪ B singleton b B
 prove function ∪ f singleton orderedPair a b ∪ A singleton a B
 qed

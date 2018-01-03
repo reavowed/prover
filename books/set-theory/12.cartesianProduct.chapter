@@ -117,13 +117,13 @@ prove ⊆ × A B × C D
 qed
 
 theorem Product Preserves Subset
-premise ⊆ A B
+premise ⊆ A B elidable
 prove ⊆ C C
 prove ⊆ × A C × B C
 qed
 
 theorem Product Preserves Subset
-premise ⊆ A B
+premise ⊆ A B elidable
 prove ⊆ C C
 prove ⊆ × C A × C B
 qed
