@@ -61,7 +61,7 @@
     <tr class="proofRow" data-reference="@namingStep.assertionStep.reference.value">
       <td>
         @for(_ <- 1 to indentLevel) { &nbsp;&nbsp; }
-        Let @{namingStep.variableName} be such that @Html(html.referencedStatement(
+        Let @{Html(HtmlHelper.format(namingStep.variableName))} be such that @Html(html.referencedStatement(
           namingStep.assumptionStep.assumption,
           Some(namingStep.assumptionStep.reference.value),
           referenceMap.getReferrers(namingStep.assumptionStep.reference.value)
