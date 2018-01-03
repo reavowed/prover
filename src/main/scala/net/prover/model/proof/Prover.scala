@@ -33,12 +33,13 @@ case class Prover(
   }
 
   def proveAssertionUsingHints(): Option[Step.Assertion] = {
-    applicableHints.iterator.findFirst(h => proveDirectly(h.inference, Some(h.substitutions)))
+    applicableHints.iterator.findFirst(h => proveDirectly(h.inference, Some(h.substitutions))) orElse
+      applicableHints.iterator.findFirst(h => proveUsingTransformedInference(h.inference, Some(h.substitutions)))
   }
 
   def proveAssertionDirectlyFromInferences(): Option[Step.Assertion] = {
     availableInferences.iterator.findFirst(proveDirectly(_)) orElse
-      availableInferences.iterator.findFirst(proveUsingTransformedInference) orElse
+      availableInferences.iterator.findFirst(proveUsingTransformedInference(_)) orElse
       availableInferences.iterator.findFirst(proveUsingElidedInference)
   }
 
@@ -49,7 +50,10 @@ case class Prover(
     proverForInference(inference).proveDirectly(assertionToProve, reference, initialSubstitutions)
   }
 
-  private def proveUsingTransformedInference(inference: Inference): Option[Step.Assertion] = {
+  private def proveUsingTransformedInference(
+    inference: Inference,
+    initialSubstitutions: Option[Substitutions] = None
+  ): Option[Step.Assertion] = {
     proverForInference(inference).proveWithTransformation(assertionToProve, reference)
   }
 

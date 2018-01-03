@@ -32,13 +32,15 @@ case class InferenceProver(
 
   def proveWithTransformation(
     assertionToProve: Statement,
-    reference: Reference.Direct
+    reference: Reference.Direct,
+    initialSubstitutionsOption: Option[Substitutions] = None
   ): Option[Step.Assertion] = {
     (for {
-      transformation <- provingContext.scopingStatement.flatMap(Transformation.apply).toSeq
+      initialSubstitutions <- Iterator(initialSubstitutionsOption.getOrElse(provingContext.defaultSubstitutions))
+      transformation <- provingContext.scopingStatement.flatMap(Transformation.apply).iterator
       if provingContext.allowTransformations
       (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyToInference(inference.premises, inference.conclusion)
-      conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(assertionToProve, provingContext.defaultSubstitutions, Nil, Nil)
+      conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(assertionToProve, initialSubstitutions, Nil, Nil)
       (premiseReferences, premiseSubstitutions) <- matchPremisesToProvenStatements(
         transformedPremises,
         conclusionSubstitutions)
