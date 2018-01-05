@@ -52,7 +52,7 @@ object Reference {
     extends ToSingleLine
   {
     override def referencedInferenceIds = inferenceReference.referencedInferenceIds
-    override def lineReference = inferenceReference.lineReference.mapRight(simplificationPath ++ _)
+    override def lineReference = inferenceReference.lineReference.mapRight(_ ++ simplificationPath)
     override def cached = CachedReference.Simplification(
       inference.id,
       inference.specifySubstitutions(substitutions),
