@@ -4,7 +4,8 @@
 @(
   step: Step,
   indentLevel: Int,
-  referenceMap: ReferenceMap)
+  referenceMap: ReferenceMap,
+  overrideReferenceOption: Option[String] = None)
 
 @step match {
   case assertionStep: Step.Assertion => {
@@ -14,7 +15,8 @@
         Then @Html(html.referencedStatement(
           assertionStep.assertion,
           Some(assertionStep.reference.value),
-          referenceMap.getReferrers(assertionStep.reference.value)
+          referenceMap.getReferrers(assertionStep.reference.value) ++
+              overrideReferenceOption.toSeq.flatMap(referenceMap.getReferrers)
         ).body.trim).
       </td>
       @if(assertionStep.isRearrangement) {
@@ -40,21 +42,24 @@
         Assume @Html(html.referencedStatement(
           assumptionStep.assumption,
           None,
-          referenceMap.getReferrers(assumptionStep.reference.value)
+          referenceMap.getReferrers(assumptionStep.reference.value) ++
+              overrideReferenceOption.toSeq.flatMap(referenceMap.getReferrers)
         ).body.trim).
       </td>
     </tr>
-    @assumptionStep.steps.map { substep => @html.step(
+    @assumptionStep.steps.mapWithIndex { case (substep, index) => @html.step(
       substep,
       indentLevel + 1,
-      referenceMap)
+      referenceMap,
+      if (index == assumptionStep.steps.length - 1) overrideReferenceOption else None)
     }
   }
   case scopedVariableStep: Step.ScopedVariable => {
-    @scopedVariableStep.substeps.map { substep => @html.step(
+    @scopedVariableStep.substeps.mapWithIndex { case (substep, index) => @html.step(
       substep,
       indentLevel,
-      referenceMap)
+      referenceMap,
+      if (index == scopedVariableStep.substeps.length - 1) overrideReferenceOption else None)
     }
   }
   case namingStep: Step.Naming => {
@@ -78,11 +83,16 @@
         }
       }
     </tr>
-    @namingStep.assumptionStep.steps.map { substep => @html.step(
+    @namingStep.assumptionStep.steps.init.map { substep => @html.step(
       substep,
       indentLevel,
       referenceMap)
     }
+    @html.step(
+      namingStep.assumptionStep.steps.last,
+      indentLevel,
+      referenceMap,
+      Some(overrideReferenceOption.getOrElse(namingStep.reference.value)))
   }
   case _ => {
     <tr class="proofRow">
