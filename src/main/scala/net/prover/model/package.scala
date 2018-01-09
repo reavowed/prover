@@ -151,6 +151,20 @@ package object model {
         acc.flatMap(f(_, t))
       }
     }
+    def splitAtAll(f: T => Boolean): Seq[(Seq[T], T, Seq[T])] = {
+      def helper(previous: Seq[T], next: Seq[T], acc: Seq[(Seq[T], T, Seq[T])]): Seq[(Seq[T], T, Seq[T])] = {
+        next match {
+          case t +: more =>
+            if (f(t))
+              helper(previous :+ t, more, acc :+ (previous, t, more))
+            else
+              helper(previous :+ t, more, acc)
+          case Nil =>
+            acc
+        }
+      }
+      helper(Nil, seq, Nil)
+    }
   }
 
   implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {

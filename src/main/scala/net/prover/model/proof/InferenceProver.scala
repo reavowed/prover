@@ -70,7 +70,7 @@ case class InferenceProver(
   ): Option[Step.Assertion] = {
     val initialSubstitutions = initialSubstitutionsOption.getOrElse(provingContext.defaultSubstitutions)
     (for {
-      (prePremises, elidablePremise, postPremises) <- splitPremisesAtElidable(inference.premises).iterator
+      (prePremises, elidablePremise, postPremises) <- inference.premises.splitAtAll(_.isElidable).iterator
       substitutionsAfterConclusion <- inference.conclusion.calculateSubstitutions(assertionToProve, initialSubstitutions, Nil, Nil)
       (prePremiseReferences, substitutionsAfterPrePremises) <- matchPremisesToProvenStatements(
         prePremises,
@@ -79,7 +79,7 @@ case class InferenceProver(
         postPremises,
         substitutionsAfterPrePremises)
       (elidedPremiseReference, substitutionsAfterElidedPremise) <- matchElidablePremise(
-        elidablePremise,
+        elidablePremise.statement,
         substitutionsAfterPostPremises)
     } yield Step.Assertion(
       assertionToProve,
@@ -116,21 +116,6 @@ case class InferenceProver(
     } yield Reference.Elided(
       InferenceApplication.Direct(inference, inferenceSubstitutions, premiseReferences, provingContext.depth)
     ) -> finalSubstitutions
-  }
-
-  private def splitPremisesAtElidable(premises: Seq[Premise]): Option[(Seq[Premise], Statement, Seq[Premise])] = {
-    val (prePremises, elidableAndPostPremises) = premises.span {
-      case premise if premise.isElidable =>
-        false
-      case _ =>
-        true
-    }
-    elidableAndPostPremises match {
-      case Premise(premiseStatement, _) +: postPremises =>
-        Some((prePremises, premiseStatement, postPremises))
-      case _ =>
-        None
-    }
   }
 
   private def matchPremisesToProvenStatements(
