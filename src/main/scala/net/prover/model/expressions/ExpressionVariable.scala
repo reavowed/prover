@@ -80,8 +80,8 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
           for {
             hintApplicative <- substitutionsLens.get(hintSubstitutions).get(name).toSeq
             newHintSubstitutions <- other.calculateSubstitutions(
-              hintApplicative.increaseDepth(depth - thisSubstitutions.depth, thisSubstitutions.depth + 1),
-              Substitutions.emptyWithDepth(1),
+              hintApplicative.increaseDepth(depth, thisSubstitutions.depth + 1),
+              Substitutions.emptyWithDepth(thisSubstitutions.depth + 1),
               Nil,
               Nil)
           } yield newHintSubstitutions -> hintArgumentList
