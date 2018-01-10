@@ -6,7 +6,7 @@ import net.prover.model._
 import org.slf4j.LoggerFactory
 
 case class CachedProof(path: Path, premises: Seq[Premise], steps: Seq[CachedStep]) {
-  def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+  def getAssertionHints(availableInferences: Seq[Inference]): Seq[CachedStep.Assertion] = {
     steps.flatMap(_.getAssertionHints(availableInferences))
   }
   def validate(proofEntries: ProofEntries): Option[Proof] = {

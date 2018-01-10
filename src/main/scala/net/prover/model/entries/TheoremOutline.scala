@@ -65,7 +65,7 @@ case class TheoremOutline(
   }
 
   private def prove(
-    assertionHints: Seq[AssertionHint],
+    assertionHints: Seq[CachedStep.Assertion],
     proofEntries: ProofEntries,
     bookName: String
   ): Proof = {

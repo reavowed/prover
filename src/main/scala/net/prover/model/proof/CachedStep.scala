@@ -4,7 +4,7 @@ import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement}
 
 sealed trait CachedStep {
-  def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
+  def getAssertionHints(availableInferences: Seq[Inference]): Seq[CachedStep.Assertion]
   def validate(context: ProvingContext): Option[Step]
   def matchesOutline(stepOutline: StepOutline): Boolean
   def serializedLines: Seq[String]
@@ -19,12 +19,12 @@ object CachedStep {
       isRearrangement: Boolean)
     extends CachedStep
   {
-    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      cachedInferenceApplication.getAssertionHints(availableInferences)
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[Assertion] = {
+      Seq(this)
     }
     def validate(context: ProvingContext): Option[Step.Assertion] = {
       for {
-        (conclusion, inferenceApplication) <- cachedInferenceApplication.validate(context)
+        (conclusion, inferenceApplication) <- cachedInferenceApplication.validate()(context)
         _ = if (conclusion != assertion)
           CachedProof.logger.info(s"Inference conclusion '${conclusion.serialized}' was not '${assertion.serialized}'")
         if conclusion == assertion
@@ -59,7 +59,7 @@ object CachedStep {
       reference: Reference.Direct)
     extends CachedStep
   {
-    def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+    def getAssertionHints(availableInferences: Seq[Inference]): Seq[Assertion] = {
       steps.flatMap(_.getAssertionHints(availableInferences))
     }
     override def validate(context: ProvingContext): Option[Step.Assumption] = {
@@ -93,7 +93,7 @@ object CachedStep {
       reference: Reference.Direct)
     extends CachedStep
   {
-    override def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+    override def getAssertionHints(availableInferences: Seq[Inference]): Seq[Assertion] = {
       assumptionStep.getAssertionHints(availableInferences) ++ assertionStep.getAssertionHints(availableInferences)
     }
     override def validate(context: ProvingContext): Option[Step.Naming] = {
@@ -139,7 +139,7 @@ object CachedStep {
       reference: Reference.Direct)
     extends CachedStep
   {
-    override def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
+    override def getAssertionHints(availableInferences: Seq[Inference]): Seq[Assertion] = {
       substeps.flatMap(_.getAssertionHints(availableInferences))
     }
     override def validate(context: ProvingContext): Option[Step] = {

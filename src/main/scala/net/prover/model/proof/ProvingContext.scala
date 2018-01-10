@@ -9,7 +9,7 @@ case class ProvingContext(
   premises: Seq[Premise],
   assumptions: Seq[Statement],
   availableInferences: Seq[Inference],
-  assertionHints: Seq[AssertionHint],
+  assertionHints: Seq[CachedStep.Assertion],
   deductionStatement: Option[StatementDefinition],
   scopingStatement: Option[StatementDefinition],
   depth: Int,
@@ -55,7 +55,7 @@ case class ProvingContext(
 object ProvingContext {
   def getInitial(
     premises: Seq[Premise],
-    assertionHints: Seq[AssertionHint],
+    assertionHints: Seq[CachedStep.Assertion],
     proofEntries: ProofEntries
   ): ProvingContext = {
     getInitial(premises, assertionHints, proofEntries.availableInferences, proofEntries.statementDefinitions)
@@ -63,7 +63,7 @@ object ProvingContext {
 
   def getInitial(
     premises: Seq[Premise],
-    assertionHints: Seq[AssertionHint],
+    assertionHints: Seq[CachedStep.Assertion],
     availableInferences: Seq[Inference],
     statementDefinitions: Seq[StatementDefinition],
     depth: Int = 0

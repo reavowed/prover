@@ -5,8 +5,7 @@ import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions.Statement
 
 sealed trait CachedInferenceApplication {
-  def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint]
-  def validate(context: ProvingContext): Option[(Statement, InferenceApplication)]
+  def validate()(implicit context: ProvingContext): Option[(Statement, InferenceApplication)]
   def serializedLines: Seq[String]
 }
 
@@ -18,12 +17,7 @@ object CachedInferenceApplication {
       depth: Int)
     extends CachedInferenceApplication
   {
-    override def getAssertionHints(availableInferences: Seq[Inference]) = {
-      AssertionHint.attempt(inferenceId, availableInferences, localSubstitutions, depth).toSeq ++
-        cachedReferences.flatMap(_.getAssertionHints(availableInferences))
-    }
-
-    override def validate(context: ProvingContext): Option[(Statement, InferenceApplication.Direct)] = {
+    override def validate()(implicit context: ProvingContext): Option[(Statement, InferenceApplication.Direct)] = {
       for {
         inference <- context.availableInferences.find(_.id == inferenceId).ifEmpty {
           CachedProof.logger.info(s"Could not find inference $inferenceId")
@@ -43,7 +37,7 @@ object CachedInferenceApplication {
             substitutions.toString
           ).mkString("\n"))
         }
-        validatedReferences <- cachedReferences.validate(substitutedPremiseStatements, context)
+        validatedReferences <- cachedReferences.validate(substitutedPremiseStatements)
       } yield (substitutedConclusion, InferenceApplication.Direct(inference, substitutions, validatedReferences, depth))
     }
 
@@ -71,12 +65,7 @@ object CachedInferenceApplication {
       depth: Int)
     extends CachedInferenceApplication
   {
-    override def getAssertionHints(availableInferences: Seq[Inference]): Seq[AssertionHint] = {
-      AssertionHint.attempt(inferenceId, availableInferences, localSubstitutions, depth).toSeq ++
-        cachedReferences.flatMap(_.getAssertionHints(availableInferences)) ++
-        transformationProof.flatMap(_.getAssertionHints(availableInferences))
-    }
-    override def validate(context: ProvingContext): Option[(Statement, InferenceApplication.Transformed)] = {
+    override def validate()(implicit context: ProvingContext): Option[(Statement, InferenceApplication.Transformed)] = {
       for {
         inference <- context.availableInferences.find(_.id == inferenceId).ifEmpty {
           CachedProof.logger.info(s"Could not find inference $inferenceId")
@@ -103,7 +92,7 @@ object CachedInferenceApplication {
             substitutions.toString
           ).mkString("\n"))
         }
-        validatedReferences <- cachedReferences.validate(substitutedPremiseStatements, context)
+        validatedReferences <- cachedReferences.validate(substitutedPremiseStatements)
     } yield (substitutedConclusion, InferenceApplication.Transformed(
         inference,
         substitutions,

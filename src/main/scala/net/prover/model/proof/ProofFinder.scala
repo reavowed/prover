@@ -4,14 +4,13 @@ import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.expressions._
 
-case class Prover(
+case class ProofFinder(
   assertionToProve: Statement,
   reference: Reference.Direct)(
   implicit context: ProvingContext)
 {
   import context._
 
-  val applicableHints = assertionHints.filter(_.conclusion == assertionToProve)
   val simplifications = for {
     provenStatement <- provenStatements
     reference <- provenStatement.reference.asOptionalInstanceOf[Reference.ToSingleLine].toSeq
@@ -27,33 +26,17 @@ case class Prover(
   }
 
   def proveAssertion(): Option[Step.Assertion] = {
-    proveAssertionUsingHints()
-      .orElse(proveAssertionDirectlyFromInferences())
-      .orElse(proveAssertionByRearranging())
+    availableInferences.iterator.findFirst(proveDirectly) orElse
+      availableInferences.iterator.findFirst(proveUsingTransformedInference) orElse
+      availableInferences.iterator.findFirst(proveUsingElidedInference) orElse
+      proveAssertionByRearranging()
   }
 
-  def proveAssertionUsingHints(): Option[Step.Assertion] = {
-    applicableHints.iterator.findFirst(h => proveDirectly(h.inference, Some(h.substitutions))) orElse
-      applicableHints.iterator.findFirst(h => proveUsingTransformedInference(h.inference, Some(h.substitutions)))
+  private def proveDirectly(inference: Inference): Option[Step.Assertion] = {
+    proverForInference(inference).proveDirectly(assertionToProve, reference)
   }
 
-  def proveAssertionDirectlyFromInferences(): Option[Step.Assertion] = {
-    availableInferences.iterator.findFirst(proveDirectly(_)) orElse
-      availableInferences.iterator.findFirst(proveUsingTransformedInference(_)) orElse
-      availableInferences.iterator.findFirst(proveUsingElidedInference)
-  }
-
-  private def proveDirectly(
-    inference: Inference,
-    initialSubstitutions: Option[Substitutions] = None
-  ): Option[Step.Assertion] = {
-    proverForInference(inference).proveDirectly(assertionToProve, reference, initialSubstitutions)
-  }
-
-  private def proveUsingTransformedInference(
-    inference: Inference,
-    initialSubstitutions: Option[Substitutions] = None
-  ): Option[Step.Assertion] = {
+  private def proveUsingTransformedInference(inference: Inference): Option[Step.Assertion] = {
     proverForInference(inference).proveWithTransformation(assertionToProve, reference)
   }
 
@@ -62,7 +45,7 @@ case class Prover(
   }
 
   def proveAssertionByRearranging(): Option[Step.Assertion] = {
-    Prover.findAssertionByExpanding(
+    ProofFinder.findAssertionByExpanding(
       assertionToProve,
       provenStatements.map(_.toReferencedStatement) ++ simplifications
     ).map { inferenceApplication =>
@@ -112,7 +95,7 @@ case class Prover(
   }
 }
 
-object Prover {
+object ProofFinder {
   def findAssertionWithPossibleExpansions(
     assertion: Statement,
     referencedStatements: Seq[ReferencedStatement])(

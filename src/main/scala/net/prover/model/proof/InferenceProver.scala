@@ -13,12 +13,12 @@ case class InferenceProver(
 {
   def proveDirectly(
     assertionToProve: Statement,
-    reference: Reference.Direct,
-    initialSubstitutionsOption: Option[Substitutions] = None
+    reference: Reference.Direct
   ): Option[Step.Assertion] = {
     (for {
-      initialSubstitutions <- Iterator(initialSubstitutionsOption.getOrElse(provingContext.defaultSubstitutions))
-      conclusionSubstitutions <- inference.conclusion.calculateSubstitutions(assertionToProve, initialSubstitutions, Nil, Nil)
+      conclusionSubstitutions <- inference.conclusion
+        .calculateSubstitutions(assertionToProve, provingContext.defaultSubstitutions, Nil, Nil)
+        .iterator
       (premiseReferences, premiseSubstitutions) <- matchPremisesToProvenStatements(
         inference.premises,
         conclusionSubstitutions)
@@ -32,15 +32,13 @@ case class InferenceProver(
 
   def proveWithTransformation(
     assertionToProve: Statement,
-    reference: Reference.Direct,
-    initialSubstitutionsOption: Option[Substitutions] = None
+    reference: Reference.Direct
   ): Option[Step.Assertion] = {
     (for {
-      initialSubstitutions <- Iterator(initialSubstitutionsOption.getOrElse(provingContext.defaultSubstitutions))
       transformation <- provingContext.scopingStatement.flatMap(Transformation.apply).iterator
       if provingContext.allowTransformations
       (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyToInference(inference.premises, inference.conclusion)
-      conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(assertionToProve, initialSubstitutions, Nil, Nil)
+      conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(assertionToProve, provingContext.defaultSubstitutions, Nil, Nil)
       (premiseReferences, premiseSubstitutions) <- matchPremisesToProvenStatements(
         transformedPremises,
         conclusionSubstitutions)
@@ -65,13 +63,11 @@ case class InferenceProver(
 
   def proveByEliding(
     assertionToProve: Statement,
-    reference: Reference.Direct,
-    initialSubstitutionsOption: Option[Substitutions] = None
+    reference: Reference.Direct
   ): Option[Step.Assertion] = {
-    val initialSubstitutions = initialSubstitutionsOption.getOrElse(provingContext.defaultSubstitutions)
     (for {
       (prePremises, elidablePremise, postPremises) <- inference.premises.splitAtAll(_.isElidable).iterator
-      substitutionsAfterConclusion <- inference.conclusion.calculateSubstitutions(assertionToProve, initialSubstitutions, Nil, Nil)
+      substitutionsAfterConclusion <- inference.conclusion.calculateSubstitutions(assertionToProve, provingContext.defaultSubstitutions, Nil, Nil)
       (prePremiseReferences, substitutionsAfterPrePremises) <- matchPremisesToProvenStatements(
         prePremises,
         substitutionsAfterConclusion)
