@@ -5,7 +5,7 @@ import net.prover.model._
 import net.prover.model.expressions._
 
 case class ProofFinder(
-  assertionToProve: Statement,
+  statementToProve: Statement,
   reference: Reference.Direct)(
   implicit context: ProvingContext)
 {
@@ -25,31 +25,31 @@ case class ProofFinder(
     }
   }
 
-  def proveAssertion(): Option[Step.Assertion] = {
-    availableInferences.iterator.findFirst(proveDirectly) orElse
-      availableInferences.iterator.findFirst(proveUsingTransformedInference) orElse
-      availableInferences.iterator.findFirst(proveUsingElidedInference) orElse
-      proveAssertionByRearranging()
+  def findProof(): Option[Step.Assertion] = {
+    availableInferences.iterator.findFirst(findDirectProof) orElse
+      availableInferences.iterator.findFirst(findProofUsingTransform) orElse
+      availableInferences.iterator.findFirst(findProofByEliding) orElse
+      findProofByRearranging()
   }
 
-  private def proveDirectly(inference: Inference): Option[Step.Assertion] = {
-    proverForInference(inference).proveDirectly(assertionToProve, reference)
+  private def findDirectProof(inference: Inference): Option[Step.Assertion] = {
+    getProofFinderForInference(inference).findDirectProof(statementToProve, reference)
   }
 
-  private def proveUsingTransformedInference(inference: Inference): Option[Step.Assertion] = {
-    proverForInference(inference).proveWithTransformation(assertionToProve, reference)
+  private def findProofUsingTransform(inference: Inference): Option[Step.Assertion] = {
+    getProofFinderForInference(inference).findProofUsingTransform(statementToProve, reference)
   }
 
-  private def proveUsingElidedInference(inference: Inference): Option[Step.Assertion] = {
-    proverForInference(inference).proveByEliding(assertionToProve, reference)
+  private def findProofByEliding(inference: Inference): Option[Step.Assertion] = {
+    getProofFinderForInference(inference).findProofByEliding(statementToProve, reference)
   }
 
-  def proveAssertionByRearranging(): Option[Step.Assertion] = {
+  def findProofByRearranging(): Option[Step.Assertion] = {
     ProofFinder.findAssertionByExpanding(
-      assertionToProve,
+      statementToProve,
       provenStatements.map(_.toReferencedStatement) ++ simplifications
     ).map { inferenceApplication =>
-      Step.Assertion(assertionToProve, inferenceApplication, reference, isRearrangement = true)
+      Step.Assertion(statementToProve, inferenceApplication, reference, isRearrangement = true)
     }
   }
 
@@ -90,8 +90,8 @@ case class ProofFinder(
       depth)
   }
 
-  def proverForInference(inference: Inference): InferenceProver = {
-    InferenceProver(inference, provenStatements, simplifications)
+  def getProofFinderForInference(inference: Inference): InferenceProofFinder = {
+    InferenceProofFinder(inference, provenStatements, simplifications)
   }
 }
 

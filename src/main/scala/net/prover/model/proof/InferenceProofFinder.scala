@@ -6,12 +6,12 @@ import net.prover.model.{Inference, Premise, Substitutions}
 
 import scala.util.Try
 
-case class InferenceProver(
+case class InferenceProofFinder(
   inference: Inference,
   referencedStatements: Seq[ReferencedStatement])(
   implicit provingContext: ProvingContext)
 {
-  def proveDirectly(
+  def findDirectProof(
     assertionToProve: Statement,
     reference: Reference.Direct
   ): Option[Step.Assertion] = {
@@ -30,7 +30,7 @@ case class InferenceProver(
     ).headOption
   }
 
-  def proveWithTransformation(
+  def findProofUsingTransform(
     assertionToProve: Statement,
     reference: Reference.Direct
   ): Option[Step.Assertion] = {
@@ -61,7 +61,7 @@ case class InferenceProver(
     ).headOption
   }
 
-  def proveByEliding(
+  def findProofByEliding(
     assertionToProve: Statement,
     reference: Reference.Direct
   ): Option[Step.Assertion] = {
@@ -231,18 +231,18 @@ case class InferenceProver(
   }
 }
 
-object InferenceProver {
+object InferenceProofFinder {
   def apply(
     inference: Inference,
     provenStatements: Seq[ProvenStatement],
     simplifications: Seq[ReferencedStatement])(
    implicit provingContext: ProvingContext
-  ): InferenceProver = {
+  ): InferenceProofFinder = {
     val baseStatements = provenStatements.map(_.toReferencedStatement)
     val provenStatementsToUse = if (inference.allowsRearrangement)
       baseStatements ++ simplifications
     else
       baseStatements
-    InferenceProver(inference, provenStatementsToUse)
+    InferenceProofFinder(inference, provenStatementsToUse)
   }
 }
