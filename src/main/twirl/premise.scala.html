@@ -1,7 +1,4 @@
 @import net.prover.model.Premise
-@import net.prover.model.proof.ReferenceMap
+@import net.prover.model.proof.{ReferenceMap, ProofLine}
 @(premise: Premise, referenceMap: ReferenceMap)
-<span class="premise">@html.referencedStatement(
-  premise.statement,
-  Some(premise.reference.value),
-  referenceMap.getReferrers(premise.reference.value))</span>
+<span class="premise">@html.expression(ProofLine.Expression.create(premise.statement, referenceMap.getReferrers(premise.reference.value)))</span>

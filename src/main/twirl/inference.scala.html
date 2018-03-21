@@ -33,7 +33,7 @@
     <p>
       @html.premises(inference.premises, referenceMap)
       <div>
-        @if(inference.premises.nonEmpty) { Then } @html.referencedStatement(inference.conclusion).
+        @if(inference.premises.nonEmpty) { Then } @html.expression(inference.conclusion).
       </div>
     </p>
 

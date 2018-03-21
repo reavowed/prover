@@ -12,7 +12,22 @@
     <hr/>
     <h4>Proof</h4>
     <table class="table-condensed proofRows">
-      @theorem.proof.steps.map { step => @html.step(step, 0, theorem.proof.referenceMap) }
+      @theorem.proof.lines.map { line =>
+        <tr class="proofRow" data-reference="@line.reference.getOrElse("")">
+          <td>
+            @for(_ <- 1 to line.indentLevel) { &nbsp;&nbsp; }
+            @line.prefix
+            <span class="@line.reference.map("conclusion-" + _).getOrElse("")">@Html(html.expression(line.expression).body.trim())</span>.
+          </td>
+          @line.inferenceLink.map { inferenceLink =>
+            <td>
+              <a class="stepInferenceId" href="@{inferenceLink.key.map{case (bk, ck, k) => {s"/books/$bk/$ck/$k"}}}">
+                @inferenceLink.name
+              </a>
+            </td>
+          }
+        </tr>
+      }
     </table>
   </div>
   <script type="text/javascript">

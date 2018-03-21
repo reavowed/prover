@@ -12,6 +12,7 @@ case class Proof(steps: Seq[Step]) {
       .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))
       .statement
   }
+  val lines = steps.flatMap(_.getLines(referenceMap, 0, None))
 }
 
 object Proof {

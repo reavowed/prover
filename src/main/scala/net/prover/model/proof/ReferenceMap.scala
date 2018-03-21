@@ -12,6 +12,9 @@ case class ReferenceMap(map: Map[String, Set[(String, Seq[Int])]]) {
       map(key).filter(_._1 == value).map(key -> _._2)
     }
   }
+  def getReferrers(value: String, additionalValue: Option[String]): Set[(String, Seq[Int])] = {
+    getReferrers(value) ++ additionalValue.toSeq.flatMap(getReferrers)
+  }
 }
 
 object ReferenceMap {

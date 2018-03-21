@@ -99,9 +99,9 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
 }
 
 object DefinedExpression {
-  def unapply(expression: DefinedExpression[_]): Option[(ExpressionDefinition, Seq[Expression])] = expression match {
+  def unapply(expression: DefinedExpression[_]): Option[(ExpressionDefinition, Seq[String], Seq[Expression])] = expression match {
     case definedExpression: DefinedExpression[_] =>
-      Some((definedExpression.definition, definedExpression.components))
+      Some((definedExpression.definition, definedExpression.scopedBoundVariableNames, definedExpression.components))
     case _ =>
       None
   }

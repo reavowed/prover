@@ -1,5 +1,5 @@
-@import net.prover.model.{Book, Chapter, Inference}
 @import net.prover.model.proof.ReferenceMap
+@import net.prover.model.{Book, Chapter, Inference}
 @(description: String, inference: Inference.Entry, chapter: Chapter, book: Book)
 
 <div class="result">
@@ -11,7 +11,7 @@
   <div class="resultBlock">
     @html.premises(inference.premises, ReferenceMap.empty)
     <div>
-      @if(inference.premises.nonEmpty) { Then } @html.referencedStatement(inference.conclusion).
+      @if(inference.premises.nonEmpty) { Then } @html.expression(inference.conclusion).
     </div>
   </div>
 </div>

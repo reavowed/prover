@@ -1,29 +1,30 @@
 @import net.prover.model.entries.TermDefinition
+
 @(definition: TermDefinition)
 
 <div class="result">
-  <h5>Term Definition: @html.referencedStatement(definition.defaultValue)</h5>
+  <h5>Term Definition: @html.expression(definition.defaultValue)</h5>
   <div>
     @definition.premises match {
       case Nil => {}
       case Seq(premise) => {
         <div class="premises">
-          Suppose @Html(html.referencedStatement(premise).body.trim()).
+          Suppose @Html(html.expression(premise).body.trim()).
         </div>
       }
       case initPremises :+ tailPremise => {
         <div class="premises">
         Suppose
-          @Html(initPremises.map { premise => html.referencedStatement(premise).body.trim() }.mkString(", "))
+          @Html(initPremises.map { premise => html.expression(premise).body.trim() }.mkString(", "))
           and
-          @Html(html.referencedStatement(tailPremise).body.trim()).
+          @Html(html.expression(tailPremise).body.trim()).
         </div>
       }
     }
 
     <div>
       @if(definition.premises.nonEmpty) { Then }
-      @html.referencedStatement(definition.defaultValue) is defined by @html.referencedStatement(definition.definingStatement).
+      @html.expression(definition.defaultValue) is defined by @html.expression(definition.definingStatement).
     </div>
   </div>
 </div>
