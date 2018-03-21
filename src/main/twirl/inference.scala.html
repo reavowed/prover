@@ -15,7 +15,7 @@
 
 @html.main(Seq(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter), Breadcrumb.Inference(inference))) {
   <div class="inference">
-    <div class="inference-links">
+    <div class="inferenceLinks">
       @previousOption.map { previous =>
         <a class="inferenceLink pull-left" href="/books/@book.key/@chapter.key/@previous.key">&laquo; @previous.name</a>
       }
@@ -24,10 +24,13 @@
       }
     </div>
 
-    <div class="inference-title">
+    <div class="inferenceTitle">
       <h3>
         @description: @inference.name
       </h3>
+      <div class="inferenceId">
+        @inference.id
+      </div>
     </div>
 
     <p>
@@ -46,7 +49,7 @@
         <p>
         @for(inference <- inferences) {
           <span class="usage">
-            <a class="usage-link" href="/books/@usageBook.key/@usageChapter.key/@inference.key">@inference.name</a>
+            <a class="usageLink" href="/books/@usageBook.key/@usageChapter.key/@inference.key">@inference.name</a>
           </span>
         }
         </p>

@@ -51,21 +51,21 @@
     margin-bottom: 3px;
 }
 
-.inference-entry-title {
+.inferenceEntryTitle {
     text-decoration: none;
     color: inherit;
 }
 
-.inference-entry-title:hover {
+.inferenceEntryTitle:hover {
     text-decoration: underline;
     color: inherit;
 }
 
-.inference-links {
+.inferenceLinks {
     margin-top: 10px;
 }
 
-.inference-title {
+.inferenceTitle {
     clear: both;
 }
 
@@ -90,10 +90,15 @@ table {
     font-size: inherit;
 }
 
-.stepInferenceId, .usage-link, .inferenceLink {
+.stepInferenceId, .usageLink, .inferenceLink, .inferenceId {
     font-family: monospace;
     color: gray;
     font-size: 0.85em;
+}
+
+.inferenceId {
+    text-align: center;
+    margin-top: -10px;
 }
 
 .stepInferenceId {
