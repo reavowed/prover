@@ -97,7 +97,7 @@ object Step {
       val innerLines = assumptionStep.steps.flatMapWithIndex((step, index) =>
         step.getLines(
           referenceMap,
-          indentLevel + 1,
+          indentLevel,
           if (index == assumptionStep.steps.length - 1) Some(additionalReference.getOrElse(reference.value)) else None))
       firstLine +: innerLines
     }
