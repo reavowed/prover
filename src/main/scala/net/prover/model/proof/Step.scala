@@ -13,6 +13,7 @@ sealed trait Step {
   def length: Int
   def intermediateReferences: Seq[String]
   def getLines(referenceMap: ReferenceMap, indentLevel: Int, additionalReference: Option[String]): Seq[ProofLine]
+  def isSingleScopedAssertion: Boolean = false
 }
 
 object Step {
@@ -40,6 +41,7 @@ object Step {
         else
           Some(ProofLine.InferenceLink(HtmlHelper.findInferenceToDisplay(inferenceApplication)))))
     }
+    override def isSingleScopedAssertion = true
   }
 
   case class Assumption(
@@ -126,8 +128,23 @@ object Step {
     override def length = substeps.map(_.length).sum
     override def intermediateReferences = substeps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
     override def getLines(referenceMap: ReferenceMap, indentLevel: Int, additionalReference: Option[String]) = {
-      substeps.flatMapWithIndex((step, index) =>
-        step.getLines(referenceMap, indentLevel, if (index == substeps.length - 1) additionalReference else None))
+      val steps = substeps.flatMapWithIndex { (step, index) =>
+        step.getLines(referenceMap, indentLevel, if (index == substeps.length - 1) additionalReference else None)
+      }
+      if (isSingleScopedAssertion)
+        steps.map { step =>
+          step.copy(expression = ProofLine.Expression.Nested(
+            scopingStatement.format,
+            Seq(variableName),
+            Seq(step.expression),
+            step.expression.referrers))
+        }
+      else
+        steps
+    }
+    override def isSingleScopedAssertion = substeps match {
+      case Seq(singleStep) if singleStep.isSingleScopedAssertion => true
+      case _ => false
     }
   }
 }

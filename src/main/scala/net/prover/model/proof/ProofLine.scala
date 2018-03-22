@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.expressions.{DefinedExpression, ExpressionApplication, ExpressionVariable, FunctionParameter}
+import net.prover.model.expressions._
 
 case class ProofLine(
   prefix: String,
@@ -11,7 +11,9 @@ case class ProofLine(
   inferenceLink: Option[ProofLine.InferenceLink])
 
 object ProofLine {
-  trait Expression
+  trait Expression {
+    def referrers: Set[String]
+  }
   object Expression {
     case class Plain(text: String, referrers: Set[String]) extends Expression
     case class Nested(
@@ -20,7 +22,6 @@ object ProofLine {
         components: Seq[Expression],
         referrers: Set[String])
       extends Expression
-
     def create(source: expressions.Expression, referrers: Set[(String, Seq[Int])]): Expression = {
       val topLevelReferrers = referrers.filter(_._2.isEmpty).map(_._1)
       source match {
