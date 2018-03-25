@@ -27,9 +27,9 @@ case class ProofFinder(
 
   def findProof(): Option[Step.Assertion] = {
     availableInferences.iterator.findFirst(findDirectProof) orElse
+      findProofByRearranging() orElse
       availableInferences.iterator.findFirst(findProofUsingTransform) orElse
-      availableInferences.iterator.findFirst(findProofByEliding) orElse
-      findProofByRearranging()
+      availableInferences.iterator.findFirst(findProofByEliding)
   }
 
   private def findDirectProof(inference: Inference): Option[Step.Assertion] = {
