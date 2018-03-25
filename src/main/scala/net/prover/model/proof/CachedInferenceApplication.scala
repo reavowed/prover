@@ -19,9 +19,7 @@ object CachedInferenceApplication {
   {
     override def validate()(implicit context: ProvingContext): Option[(Statement, InferenceApplication.Direct)] = {
       for {
-        inference <- context.availableInferences.find(_.id == inferenceId).ifEmpty {
-          CachedProof.logger.info(s"Could not find inference $inferenceId")
-        }
+        inference <- context.availableInferences.find(_.id == inferenceId)
         substitutions <- inference.generalizeSubstitutions(localSubstitutions, depth)
         substitutedPremiseStatements <- inference.premises.map(_.statement.applySubstitutions(substitutions)).traverseOption.ifEmpty {
           CachedProof.logger.info(
@@ -67,9 +65,7 @@ object CachedInferenceApplication {
   {
     override def validate()(implicit context: ProvingContext): Option[(Statement, InferenceApplication.Transformed)] = {
       for {
-        inference <- context.availableInferences.find(_.id == inferenceId).ifEmpty {
-          CachedProof.logger.info(s"Could not find inference $inferenceId")
-        }
+        inference <- context.availableInferences.find(_.id == inferenceId)
         validatedTransformationProof <- transformationProof.validate(ProvingContext.getInitial(
           transformedPremises,
           context.assertionHints,
