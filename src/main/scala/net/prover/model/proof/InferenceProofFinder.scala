@@ -137,12 +137,16 @@ case class InferenceProofFinder(
     applicativeHints: Seq[(Substitutions, ArgumentList)],
     structuralHints: Seq[Substitutions]
   ): Iterator[(Reference, Substitutions)] = {
-    referencedStatements.iterator
+    val directMatches = referencedStatements.iterator
       .flatMap {
         matchPremiseToProvenStatement(premise.statement, _, substitutionsSoFar, applicativeHints, structuralHints)
-      } ++
-      matchPremiseToRearrangedProvenStatements(premise.statement, substitutionsSoFar, applicativeHints, structuralHints) ++
-      matchPremiseToTransformedRearrangedProvenStatements(premise.statement, substitutionsSoFar, applicativeHints, structuralHints)
+      }
+    if (inference.allowsRearrangement && inference.rearrangementType == Inference.RearrangementType.NotRearrangement)
+      directMatches ++
+        matchPremiseToRearrangedProvenStatements(premise.statement, substitutionsSoFar, applicativeHints, structuralHints) ++
+        matchPremiseToTransformedRearrangedProvenStatements(premise.statement, substitutionsSoFar, applicativeHints, structuralHints)
+    else
+      directMatches
   }
 
   private def matchPremiseToProvenStatement(
