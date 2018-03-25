@@ -91,7 +91,7 @@ object Step {
       val firstLine = ProofLine(
         s"Let $variableName be such that",
         ProofLine.Expression.create(assumptionStep.assumption, referenceMap.getReferrers(assumptionStep.reference.value)),
-        Some(assumptionStep.reference.value),
+        Some(assertionStep.reference.value),
         indentLevel,
         Some(ProofLine.InferenceLink(HtmlHelper.findInferenceToDisplay(assertionStep.inferenceApplication))))
       val innerLines = assumptionStep.steps.flatMapWithIndex((step, index) =>
