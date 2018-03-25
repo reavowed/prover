@@ -31,6 +31,7 @@ object StepOutline {
       context.assertionHints
           .filter(_.assertion == assertion)
           .mapFind(_.validate(context))
+          .map(_.copy(reference = reference))
     }
   }
   object Assertion {
