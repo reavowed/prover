@@ -1,5 +1,5 @@
+@import net.prover.model.{Chapter, HtmlHelper}
 @import net.prover.model.entries.Theorem
-@import net.prover.model.Chapter
 @(
   theorem: Theorem,
   chapter: Chapter,
@@ -16,7 +16,7 @@
         <tr class="proofRow" data-reference="@line.reference.getOrElse("")">
           <td>
             @for(_ <- 1 to line.indentLevel) { &nbsp;&nbsp; }
-            @line.prefix
+            @Html(HtmlHelper.format(line.prefix))
             <span class="@line.reference.map("conclusion-" + _).getOrElse("")">@Html(html.expression(line.expression).body.trim())</span>.
           </td>
           @line.inferenceLink.map { inferenceLink =>
