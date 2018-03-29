@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.expressions.{Expression, FunctionParameter}
+import net.prover.model.expressions.{ArgumentList, Expression, FunctionParameter}
 import org.specs2.execute.Result
 
 class SubstitutionsSpec extends ProverSpec {
@@ -192,6 +192,17 @@ class SubstitutionsSpec extends ProverSpec {
         Substitutions(
           statements = Map(ψ -> Exists("y")(Conjunction.!(φ.!(FunctionParameter("y", 0)), ψ.^))),
           predicates = Map(φ -> φ.!(FunctionParameter("x", 0)))))
+    }
+  }
+
+  "validating hints" should {
+    "allow applicative hints to have arguments in external bound variables" in {
+      φ.calculateSubstitutions(
+        ElementOf.!(FunctionParameter("x", 0), a.^),
+        Substitutions.emptyWithDepth(1),
+        Seq(Substitutions(statements = Map(φ -> ElementOf.!!(FunctionParameter("x", 0, 1, 2), a.^^)), depth = 2) -> ArgumentList(Seq(a), 0)),
+        Nil
+      ) mustEqual Seq(Substitutions(statements = Map(φ -> ElementOf.!(FunctionParameter("x", 0), a.^)), depth = 1))
     }
   }
 }

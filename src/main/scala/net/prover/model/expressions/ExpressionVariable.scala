@@ -45,7 +45,7 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
         (for {
           reducedOther <- other.reduceDepth(depth, substitutions.depth)
           if applicativeHints.forall { hint =>
-            val applicatives = reducedOther.calculateApplicatives(hint._2, Substitutions.empty)
+            val applicatives = other.calculateApplicatives(hint._2, Substitutions.emptyWithDepth(substitutions.depth))
             substitutionsLens.get(hint._1).get(name).forall { s =>
               applicatives.exists(_._1 == s)
             }
