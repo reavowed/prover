@@ -8,7 +8,8 @@ import scala.util.Try
 
 case class InferenceProofFinder(
   inference: Inference,
-  referencedStatements: Seq[ReferencedStatement])(
+  referencedStatements: Seq[ReferencedStatement],
+  allowRearrangment: Boolean)(
   implicit provingContext: ProvingContext)
 {
   def findDirectProof(
@@ -141,7 +142,7 @@ case class InferenceProofFinder(
       .flatMap {
         matchPremiseToProvenStatement(premise.statement, _, substitutionsSoFar, applicativeHints, structuralHints)
       }
-    if (inference.allowsRearrangement && inference.rearrangementType == Inference.RearrangementType.NotRearrangement)
+    if (allowRearrangment && inference.allowsRearrangement)
       directMatches ++
         matchPremiseToRearrangedProvenStatements(premise.statement, substitutionsSoFar, applicativeHints, structuralHints) ++
         matchPremiseToTransformedRearrangedProvenStatements(premise.statement, substitutionsSoFar, applicativeHints, structuralHints)
@@ -239,14 +240,15 @@ object InferenceProofFinder {
   def apply(
     inference: Inference,
     provenStatements: Seq[ProvenStatement],
-    simplifications: Seq[ReferencedStatement])(
+    simplifications: Seq[ReferencedStatement],
+    allowRearrangment: Boolean)(
    implicit provingContext: ProvingContext
   ): InferenceProofFinder = {
     val baseStatements = provenStatements.map(_.toReferencedStatement)
-    val provenStatementsToUse = if (inference.allowsRearrangement)
+    val provenStatementsToUse = if (allowRearrangment && inference.allowsRearrangement)
       baseStatements ++ simplifications
     else
       baseStatements
-    InferenceProofFinder(inference, provenStatementsToUse)
+    InferenceProofFinder(inference, provenStatementsToUse, allowRearrangment)
   }
 }
