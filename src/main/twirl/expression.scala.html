@@ -4,8 +4,8 @@
 @expression match {
   case Expression.Plain(text, referrers) => {<span class="@referrers.map("highlight-" + _).mkString(" ")">@Html(HtmlHelper.format(text))</span>}
   case Expression.Nested(definitionFormat, boundVariableNames, components, referrers) => {
-    <span class="@referrers.map("highlight-" + _).mkString(" ")">@Html(definitionFormat.apply(
-      boundVariableNames.map(HtmlHelper.format) ++ components.map(html.expression.apply(_, true).body.trim()),
+    <span class="@referrers.map("highlight-" + _).mkString(" ")">@Html(definitionFormat.formatHtml(
+      boundVariableNames.map(HtmlHelper.format) ++ components.map(html.expression.apply(_, safe = true).body.trim()),
       safe
     ))</span>}
   case _ => {}

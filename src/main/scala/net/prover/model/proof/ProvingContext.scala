@@ -50,6 +50,8 @@ case class ProvingContext(
   def defaultSubstitutions: Substitutions = {
     Substitutions.emptyWithDepth(depth)
   }
+
+  override def toString = s"ProvingContext[${provenStatements.length} statements]"
 }
 
 object ProvingContext {

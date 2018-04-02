@@ -90,10 +90,10 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression {
   }
 
   override def toString: String = {
-    definition.format(scopedBoundVariableNames ++ components.map(_.safeToString))
+    definition.format.formatText(scopedBoundVariableNames ++ components.map(_.safeToString), safe = false)
   }
   override def safeToString: String = {
-    definition.format.safe(scopedBoundVariableNames ++ components.map(_.safeToString))
+    definition.format.formatText(scopedBoundVariableNames ++ components.map(_.safeToString), safe = true)
   }
   override def serialized: String = (Seq(definition.symbol) ++ scopedBoundVariableNames ++ components.map(_.serialized)).mkString(" ")
 }
