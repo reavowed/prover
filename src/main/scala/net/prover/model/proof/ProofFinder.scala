@@ -137,30 +137,31 @@ object ProofFinder {
     referencedStatements: Seq[ReferencedStatement])(
     implicit provingContext: ProvingContext
   ): Option[InferenceApplication] = {
-    (for {
-      transformation <- provingContext.scopingStatement.flatMap(Transformation.apply).iterator
-      if provingContext.allowTransformations
-      inference <- provingContext.availableInferences
-      if inference.rearrangementType == RearrangementType.Expansion
-      (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyToInference(inference.premises, inference.conclusion)
-        .headOption.toSeq
-      substitutions <- transformedConclusion.calculateSubstitutions(assertion, provingContext.defaultSubstitutions, Nil, Nil)
-      substitutedPremises <- transformedPremises.map(_.statement.applySubstitutions(substitutions)).traverseOption.toSeq
-      premiseReferences <- substitutedPremises.map(findAssertionWithPossibleExpansions(_, referencedStatements)).traverseOption.toSeq
-      if transformedConclusion.applySubstitutions(substitutions).contains(assertion)
-      transformationProofAttempt = Try(ProofOutline(stepsToProve)
-        .fillIn(provingContext.resetWithPremises(transformedPremises).copy(allowTransformations = false)))
-      transformationProof <- transformationProofAttempt.toOption
-    } yield InferenceApplication.Transformed(
-      inference,
-      substitutions,
-      premiseReferences,
-      transformation.statementDefinition,
-      transformedPremises,
-      transformedConclusion,
-      transformationProof.steps,
-      provingContext.depth)
-    ).headOption
+    if (provingContext.allowTransformations) {
+      (for {
+        transformation <- provingContext.scopingStatement.flatMap(Transformation.apply).iterator
+        inference <- provingContext.availableInferences
+        if inference.rearrangementType == RearrangementType.Expansion
+        (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyToInference(inference.premises, inference.conclusion)
+          .headOption.toSeq
+        substitutions <- transformedConclusion.calculateSubstitutions(assertion, provingContext.defaultSubstitutions, Nil, Nil)
+        substitutedPremises <- transformedPremises.map(_.statement.applySubstitutions(substitutions)).traverseOption.toSeq
+        premiseReferences <- substitutedPremises.map(findAssertionWithPossibleExpansions(_, referencedStatements)).traverseOption.toSeq
+        if transformedConclusion.applySubstitutions(substitutions).contains(assertion)
+        transformationProofAttempt = Try(ProofOutline(stepsToProve)
+          .fillIn(provingContext.resetWithPremises(transformedPremises).copy(allowTransformations = false)))
+        transformationProof <- transformationProofAttempt.toOption
+      } yield InferenceApplication.Transformed(
+        inference,
+        substitutions,
+        premiseReferences,
+        transformation.statementDefinition,
+        transformedPremises,
+        transformedConclusion,
+        transformationProof.steps,
+        provingContext.depth)
+        ).headOption
+    } else None
   }
 
   def findAssertionDirectly(assertion: Statement, referencedStatements: Seq[ReferencedStatement]): Option[Reference] = {
