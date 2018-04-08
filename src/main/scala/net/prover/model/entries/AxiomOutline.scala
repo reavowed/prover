@@ -10,7 +10,7 @@ case class AxiomOutline(
     conclusion: Statement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement,
     allowsRearrangement: Boolean = true)
-  extends ChapterEntry(AxiomOutline)
+  extends ChapterEntryOutline
 {
   def expand(
     key: String,

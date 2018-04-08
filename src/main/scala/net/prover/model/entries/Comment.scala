@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import net.prover.model.{Parser, ParsingContext}
 
-case class Comment(text: String) extends ChapterEntry(Comment)
+case class Comment(text: String) extends ChapterEntry.SelfOutline
 
 object Comment extends ChapterEntryParser[Comment] {
   override val name: String = "comment"

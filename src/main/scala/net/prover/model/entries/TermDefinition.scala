@@ -14,7 +14,7 @@ case class TermDefinition(
     definitionPredicate: Statement,
     chapterKey: String,
     bookKey: String)
-  extends ChapterEntry(TermDefinition)
+  extends ChapterEntry.SelfOutline
     with ExpressionDefinition
 {
   val id: String = s"definition-$symbol"

@@ -20,7 +20,7 @@ case class Theorem(
     proof: Proof,
     rearrangementType: RearrangementType,
     allowsRearrangement: Boolean = true)
-  extends ChapterEntry(TheoremOutline)
+  extends ChapterEntry
     with Inference.Entry
 {
   def referencedInferenceIds: Set[String] = proof.referencedInferenceIds

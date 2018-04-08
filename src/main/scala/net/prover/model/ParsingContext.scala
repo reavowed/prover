@@ -1,7 +1,7 @@
 package net.prover.model
 
+import net.prover.model.entries.{ChapterEntryOutline, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
-import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 
 import scala.util.Try
 
@@ -14,7 +14,7 @@ case class ParsingContext(
 {
   def parameterDepth: Int = parameterLists.length
 
-  def add(chapterEntry: ChapterEntry): ParsingContext = chapterEntry match {
+  def add(chapterEntry: ChapterEntryOutline): ParsingContext = chapterEntry match {
     case statementDefinition: StatementDefinition =>
       copy(statementDefinitions = statementDefinitions :+ statementDefinition)
     case termDefinition: TermDefinition =>

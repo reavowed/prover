@@ -13,7 +13,7 @@ case class TheoremOutline(
     proofOutline: ProofOutline,
     rearrangementType: RearrangementType,
     allowsRearrangement: Boolean = true)
-  extends ChapterEntry(TheoremOutline)
+  extends ChapterEntryOutline
 {
   def prove(
     key: String,

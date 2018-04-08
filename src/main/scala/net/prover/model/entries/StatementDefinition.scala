@@ -17,7 +17,7 @@ case class StatementDefinition(
     chapterKey: String,
     bookKey: String,
     structureType: Option[StructureType])
-  extends ChapterEntry(StatementDefinition)
+  extends ChapterEntry.SelfOutline
     with ExpressionDefinition
 {
   val defaultValue = {

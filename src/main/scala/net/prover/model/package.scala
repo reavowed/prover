@@ -1,5 +1,11 @@
 package net.prover
 
+import java.nio.file.Path
+
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.filefilter.TrueFileFilter
+
+import scala.collection.JavaConverters._
 import scala.collection.generic.CanBuildFrom
 import scala.collection.{TraversableLike, mutable}
 import scala.reflect.ClassTag
@@ -252,6 +258,7 @@ package object model {
       x
     }
   }
+
   implicit class TryOps[T](x: Try[T]) {
     def ifFailed(action: Throwable => Unit): Try[T] = {
       x match {
@@ -282,6 +289,17 @@ package object model {
       other.foldLeft(Option(map)) { case (mapOptionSoFar, (key, value)) =>
         mapOptionSoFar.flatMap(_.tryAdd(key, value))
       }
+    }
+  }
+
+  implicit class PathOps(path: Path) {
+    def getAllChildFiles: Seq[Path] = {
+      if (path.toFile.isDirectory)
+        FileUtils.listFiles(path.toFile, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE).asScala
+          .map(_.toPath)
+          .toSeq
+      else
+        Nil
     }
   }
 }

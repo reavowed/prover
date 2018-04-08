@@ -143,7 +143,7 @@ trait ProverSpec extends Specification {
     termVariableNames = Set(a, b, c, n).map(_.name),
     Seq.empty)
 
-  val stubBook = Book("", Paths.get(""), Nil, Nil, Set.empty, Set.empty)
+  val stubBook = Book("", Nil, Nil)
   val stubChapter = Chapter("", "", "")
 
   implicit class ParserOps[T](parser: Parser[T]) {

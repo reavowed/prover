@@ -15,7 +15,7 @@ case class Axiom(
     conclusion: Statement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement,
     allowsRearrangement: Boolean = true)
-  extends ChapterEntry(AxiomOutline)
+  extends ChapterEntry
     with Inference.Entry
 {
   override def inferences: Seq[Inference] = Seq(this)
