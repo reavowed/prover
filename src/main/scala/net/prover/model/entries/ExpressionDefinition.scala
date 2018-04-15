@@ -19,6 +19,7 @@ object ExpressionDefinition {
     def depthDifference: Int
     def expression: Expression
     def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext): Parser[Expression]
+    def templateParser(boundVariableNames: Seq[String])(implicit context: ParsingContext): Parser[Template]
   }
   object ComponentType {
     def listParser(boundVariableNames: Seq[String])(implicit context: ParsingContext): Parser[Seq[ComponentType]] = {
@@ -46,11 +47,13 @@ object ExpressionDefinition {
     override def depthDifference = 0
     override def expression = StatementVariable(name, 0)
     override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = Statement.parser
+    override def templateParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = Statement.templateParser
   }
   case class TermComponent(name: String) extends ComponentType {
     override def depthDifference = 0
     override def expression = TermVariable(name, 0)
     override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = Term.parser
+    override def templateParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = Term.templateParser
   }
   case class PredicateComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
     override def depthDifference = 1
@@ -58,12 +61,18 @@ object ExpressionDefinition {
     override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
       Statement.parser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))
     }
+    override def templateParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
+      Statement.templateParser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))
+    }
   }
   case class FunctionComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
     override def depthDifference = 1
     override def expression = FunctionApplication(name, ArgumentList(arguments.map(a => FunctionParameter(a.name, a.index)), 1))
     override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
       Term.parser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))
+    }
+    override def templateParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
+      Term.templateParser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))
     }
   }
 

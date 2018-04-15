@@ -1,5 +1,6 @@
 package net.prover.model.proof
 
+import net.prover.model.DisplayContext
 import net.prover.model.expressions.Statement
 import org.slf4j.LoggerFactory
 
@@ -12,7 +13,8 @@ case class Proof(steps: Seq[Step]) {
       .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))
       .statement
   }
-  val lines = steps.flatMap(_.getLines(referenceMap, 0, None))
+
+  def getLines(implicit displayContext: DisplayContext) = steps.flatMap(_.getLines(referenceMap, 0, None))
 }
 
 object Proof {

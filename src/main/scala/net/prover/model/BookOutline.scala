@@ -102,7 +102,8 @@ object BookOutline {
     StatementDefinition,
     TermDefinition,
     AxiomOutline,
-    TheoremOutline)
+    TheoremOutline,
+    Shorthand)
 
   def parse(title: String, bookDirectoryPath: Path, availableDependencies: Seq[BookOutline]): (Option[BookOutline], Map[Path, Instant]) = {
     val key = title.formatAsKey

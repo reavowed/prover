@@ -1,6 +1,6 @@
 @import net.prover.model.proof.ReferenceMap
-@import net.prover.model.{Book, Chapter, Inference}
-@(description: String, inference: Inference.Entry, chapter: Chapter, book: Book)
+@import net.prover.model.{Book, Chapter, DisplayContext, Inference}
+@(description: String, inference: Inference.Entry, chapter: Chapter, book: Book)(implicit displayContext: DisplayContext)
 
 <div class="result">
   <h5>

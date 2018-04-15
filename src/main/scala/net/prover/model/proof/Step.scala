@@ -1,8 +1,8 @@
 package net.prover.model.proof
 
-import net.prover.model.HtmlHelper
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions.{DefinedStatement, Statement}
+import net.prover.model.{DisplayContext, HtmlHelper}
 
 sealed trait Step {
   def reference: Reference.Direct
@@ -12,7 +12,12 @@ sealed trait Step {
   def cached: CachedStep
   def length: Int
   def intermediateReferences: Seq[String]
-  def getLines(referenceMap: ReferenceMap, indentLevel: Int, additionalReference: Option[String]): Seq[ProofLine]
+  def getLines(
+    referenceMap: ReferenceMap,
+    indentLevel: Int,
+    additionalReference: Option[String])(
+    implicit displayContext: DisplayContext
+  ): Seq[ProofLine]
   def isSingleScopedAssertion: Boolean = false
 }
 
@@ -30,7 +35,12 @@ object Step {
     override def cached = CachedStep.Assertion(assertion, inferenceApplication.cached, reference, isRearrangement)
     override def length = 1
     override def intermediateReferences = Seq(reference.value)
-    override def getLines(referenceMap: ReferenceMap, indentLevel: Int, additionalReference: Option[String]) = {
+    override def getLines(
+      referenceMap: ReferenceMap,
+      indentLevel: Int,
+      additionalReference: Option[String])(
+      implicit displayContext: DisplayContext
+    ) = {
       Seq(ProofLine(
         "Then",
         ProofLine.Expression.create(assertion, referenceMap.getReferrers(reference.value, additionalReference)),
@@ -61,7 +71,12 @@ object Step {
     override def cached = CachedStep.Assumption(assumption, steps.map(_.cached), reference)
     override def length = steps.map(_.length).sum
     override def intermediateReferences = steps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
-    override def getLines(referenceMap: ReferenceMap, indentLevel: Int, additionalReference: Option[String]) = {
+    override def getLines(
+      referenceMap: ReferenceMap,
+      indentLevel: Int,
+      additionalReference: Option[String])(
+      implicit displayContext: DisplayContext
+    ) = {
       val assumptionLine = ProofLine(
         "Assume",
         ProofLine.Expression.create(assumption, referenceMap.getReferrers(reference.value, additionalReference)),
@@ -87,7 +102,12 @@ object Step {
     override def cached = CachedStep.Naming(variableName, assumptionStep.cached, assertionStep.cached, reference)
     override def length = assumptionStep.length + 1
     override def intermediateReferences = assumptionStep.steps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
-    override def getLines(referenceMap: ReferenceMap, indentLevel: Int, additionalReference: Option[String]) = {
+    override def getLines(
+      referenceMap: ReferenceMap,
+      indentLevel: Int,
+      additionalReference: Option[String])(
+      implicit displayContext: DisplayContext
+    ) = {
       val firstLine = ProofLine(
         s"Let $variableName be such that",
         ProofLine.Expression.create(assumptionStep.assumption, referenceMap.getReferrers(assumptionStep.reference.value)),
@@ -127,7 +147,12 @@ object Step {
     override def cached = CachedStep.ScopedVariable(variableName, substeps.map(_.cached), reference)
     override def length = substeps.map(_.length).sum
     override def intermediateReferences = substeps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
-    override def getLines(referenceMap: ReferenceMap, indentLevel: Int, additionalReference: Option[String]) = {
+    override def getLines(
+      referenceMap: ReferenceMap,
+      indentLevel: Int,
+      additionalReference: Option[String])(
+      implicit displayContext: DisplayContext
+    ) = {
       val steps = substeps.flatMapWithIndex { (step, index) =>
         step.getLines(referenceMap, indentLevel, if (index == substeps.length - 1) additionalReference else None)
       }
@@ -135,8 +160,7 @@ object Step {
         steps.map { step =>
           step.copy(expression = ProofLine.Expression.Nested(
             scopingStatement.format,
-            Seq(variableName),
-            Seq(step.expression),
+            Seq(ProofLine.Expression.Plain(variableName, Set.empty), step.expression),
             step.expression.referrers))
         }
       else

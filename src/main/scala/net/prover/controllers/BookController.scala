@@ -1,7 +1,7 @@
 package net.prover.controllers
 
 import net.prover.model.entries.{Axiom, Theorem}
-import net.prover.model.{Book, Chapter, Inference}
+import net.prover.model.{Book, Chapter, DisplayContext, Inference}
 import net.prover.services.BookService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -74,6 +74,7 @@ class BookController @Autowired() (bookService: BookService) {
         val index = inferences.indexOf(inference)
         val previous = if (index > 0) Some(inferences(index - 1)) else None
         val next = if (index < inferences.length - 1) Some(inferences(index + 1)) else None
+        implicit val displayContext = DisplayContext((book.dependencies.transitive :+ book).flatMap(_.shorthands))
         inference match {
           case axiom: Axiom =>
             html.axiom(axiom, chapter, book, previous, next, getUsages(axiom, books)).body

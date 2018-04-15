@@ -34,6 +34,13 @@ case class TermDefinition(
     } yield DefinedTerm(components, this, context.parameterDepth)(newBoundVariableNames)
   }
 
+  def templateParser(implicit context: ParsingContext): Parser[Template] = {
+    for {
+      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
+      components <- componentTypes.map(_.templateParser(newBoundVariableNames)).traverseParser
+    } yield Template.DefinedTerm(this, newBoundVariableNames, components)
+  }
+
   override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
 }
 

@@ -1,6 +1,6 @@
-@import net.prover.model.Premise
+@import net.prover.model.{DisplayContext, Premise}
 @import net.prover.model.proof.ReferenceMap
-@(premises: Seq[Premise], referenceMap: ReferenceMap)
+@(premises: Seq[Premise], referenceMap: ReferenceMap)(implicit displayContext: DisplayContext)
 
 @premises match {
   case Nil => {}

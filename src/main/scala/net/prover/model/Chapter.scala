@@ -22,4 +22,8 @@ case class Chapter(
   def theorems: Seq[Theorem] = {
     entries.ofType[Theorem]
   }
+
+  def shorthands: Seq[Shorthand] = {
+    entries.ofType[Shorthand]
+  }
 }

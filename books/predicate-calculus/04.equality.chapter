@@ -3,6 +3,8 @@ Introduce equality and its associated rules of inference.
 
 statement = (a b)
 
+shorthand ¬ = a b as (a ≠ b in parens)
+
 axiom Equality Is Reflexive
 conclusion = a a
 

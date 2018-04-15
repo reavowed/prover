@@ -42,7 +42,7 @@ object Format {
     }
   }
 
-  def parser(symbol: String, replacementNames: Seq[String]): Parser[Format] = {
+  def parser(replacementNames: Seq[String]): Parser[Format] = {
     for {
       rawFormatWithParens <- Parser.allInParens
     } yield {
@@ -60,7 +60,7 @@ object Format {
   def optionalParser(symbol: String, replacementNames: Seq[String]): Parser[Format] = {
     Parser.optional(
       "format",
-      parser(symbol, replacementNames),
+      parser(replacementNames),
       default(symbol, replacementNames))
   }
 }

@@ -58,4 +58,15 @@ object Term {
   def variableListParser(implicit context: ParsingContext): Parser[Seq[TermVariable]] = {
     variableParser.listInParens(None)
   }
+
+  def templateParser(implicit context: ParsingContext): Parser[Template] = {
+    Parser.selectWordParser("term template") {
+      case context.RecognisedTermVariable(name) =>
+        Parser.constant(Template.TermVariable(name))
+      case context.RecognisedTermDefinition(definition) =>
+        definition.templateParser
+      case context.RecognisedParameter(parameter) =>
+        Parser.constant(Template.FunctionParameter(parameter))
+    }
+  }
 }

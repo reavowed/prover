@@ -9,10 +9,14 @@ case class Book(
     dependencies: Seq[Book],
     chapters: Seq[Chapter]) {
   val key: String = title.formatAsKey
+  implicit def displayContext: DisplayContext = DisplayContext(allTransitive(_.shorthands))
 
   def inferences: Seq[Inference] = chapters.flatMap(_.inferences)
   def theorems: Seq[Theorem] = chapters.flatMap(_.theorems)
   def statementDefinitions: Seq[StatementDefinition] = chapters.flatMap(_.statementDefinitions)
+  def shorthands: Seq[Shorthand] = chapters.flatMap(_.shorthands)
+
+  def allTransitive[T](f: Book => Seq[T]): Seq[T] = (dependencies.transitive :+ this).flatMap(f)
 }
 
 object Book {

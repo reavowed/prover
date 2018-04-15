@@ -1,5 +1,6 @@
+@import net.prover.model.DisplayContext
 @import net.prover.model.entries.StatementDefinition
-@(definition: StatementDefinition)
+@(definition: StatementDefinition)(implicit displayContext: DisplayContext)
 
 <div class="result">
   <h5>Statement Definition: @html.expression(definition.defaultValue)</h5>

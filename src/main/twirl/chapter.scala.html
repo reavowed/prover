@@ -2,8 +2,9 @@
 @import net.prover.model.entries.{Axiom, Comment, StatementDefinition, Theorem}
 @import net.prover.viewmodel.Breadcrumb
 @import net.prover.model.entries.TermDefinition
+@import net.prover.model.DisplayContext
 @(chapter: Chapter, book: Book)
-
+@import book.displayContext
 @html.main(Seq(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter))) {
   <div class="chapter">
     <h3>@chapter.title</h3>
@@ -25,9 +26,7 @@
         case theorem: Theorem => {
           @html.inferenceEntry("Theorem", theorem, chapter, book)
         }
-        case x => {
-          <p>Unknown entry type @x.getClass.getName</p>
-        }
+        case _ => {}
       }
     }
   </div>

@@ -1,6 +1,6 @@
+@import net.prover.model.DisplayContext
 @import net.prover.model.entries.TermDefinition
-
-@(definition: TermDefinition)
+@(definition: TermDefinition)(implicit displayContext: DisplayContext)
 
 <div class="result">
   <h5>Term Definition: @html.expression(definition.defaultValue)</h5>

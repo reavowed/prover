@@ -128,7 +128,7 @@ package object model {
        Some(b.result())
     }
     def mapFind[S](f: T => Option[S]): Option[S] = {
-      seq.find { t => f(t).isDefined }.flatMap(f)
+      seq.iterator.map(f).find(_.isDefined).flatten
     }
     def findIndex(obj: T): Option[Int] = {
       val index = seq.indexOf(obj)

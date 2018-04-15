@@ -1,6 +1,6 @@
-@import net.prover.model.{Book, Chapter, Inference}
 @import net.prover.model.entries.Theorem
 @import net.prover.model.proof.ReferenceMap
+@import net.prover.model.{Book, Chapter, DisplayContext, Inference}
 @import net.prover.viewmodel.Breadcrumb
 @(
   description: String,
@@ -11,7 +11,8 @@
   previousOption: Option[Inference.Entry],
   nextOption: Option[Inference.Entry],
   usages: Seq[(Book, Chapter, Seq[Theorem])])(
-  content: Html)
+  content: Html)(
+  implicit displayContext: DisplayContext)
 
 @html.main(Seq(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter), Breadcrumb.Inference(inference))) {
   <div class="inference">

@@ -35,6 +35,13 @@ case class StatementDefinition(
     } yield DefinedStatement(components, this, context.parameterDepth)(newBoundVariableNames)
   }
 
+  def templateParser(implicit context: ParsingContext): Parser[Template] = {
+    for {
+      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
+      components <- componentTypes.map(_.templateParser(newBoundVariableNames)).traverseParser
+    } yield Template.DefinedStatement(this, newBoundVariableNames, components)
+  }
+
   override def inferences: Seq[Inference] = {
     definingStatement.toSeq.flatMap { s =>
       Seq(

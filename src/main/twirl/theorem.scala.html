@@ -1,18 +1,21 @@
 @import net.prover.model.{Chapter, HtmlHelper}
 @import net.prover.model.entries.Theorem
+@import net.prover.model.proof.ProofLine
+@import net.prover.model.DisplayContext
 @(
   theorem: Theorem,
   chapter: Chapter,
   book: net.prover.model.Book,
   previousOption: Option[net.prover.model.Inference.Entry],
   nextOption: Option[net.prover.model.Inference.Entry],
-  usages: Seq[(net.prover.model.Book, Chapter, Seq[Theorem])])
+  usages: Seq[(net.prover.model.Book, Chapter, Seq[Theorem])])(
+  implicit displayContext: DisplayContext)
 @html.inference("Theorem", theorem, theorem.proof.referenceMap, chapter, book, previousOption, nextOption, usages) {
   <div class="theoremProof">
     <hr/>
     <h4>Proof</h4>
     <table class="table-condensed proofRows">
-      @theorem.proof.lines.map { line =>
+      @theorem.proof.getLines.map { line =>
         <tr class="proofRow" data-reference="@line.reference.getOrElse("")">
           <td>
             @for(_ <- 1 to line.indentLevel) { &nbsp;&nbsp; }

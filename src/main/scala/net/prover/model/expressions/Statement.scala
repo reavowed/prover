@@ -34,4 +34,13 @@ object Statement {
     case nonVariable =>
       throw new Exception(s"Expected statement variable, got $nonVariable")
   }
+
+  def templateParser(implicit context: ParsingContext): Parser[Template] = {
+    Parser.selectWordParser("statement template") {
+      case context.RecognisedStatementVariable(name) =>
+        Parser.constant(Template.StatementVariable(name))
+      case context.RecognisedStatementDefinition(definition) =>
+        definition.templateParser
+    }
+  }
 }
