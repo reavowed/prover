@@ -70,7 +70,6 @@ qed
 theorem Ordered Pair Is Element of Cartesian Product
 premise ∈ a A
 premise ∈ b B
-prove ∧ ∈ a A ∈ b B
 prove ∀ x ∀ y ↔ ∈ orderedPair x y × A B ∧ ∈ x A ∈ y B
 prove ∀ y ↔ ∈ orderedPair a y × A B ∧ ∈ a A ∈ y B
 prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B

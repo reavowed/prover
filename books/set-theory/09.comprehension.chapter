@@ -15,17 +15,12 @@ take y {
   assume ∃ x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a {
     let x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a {
       assume with x φ {
-        prove ↔ ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a = y x
         prove = y x
-        prove ∈ y A
-        prove with y φ
+        prove ∧ ∈ x A with x φ
         prove ∧ ∈ y A with y φ
       }
       assume ¬ with x φ {
-        prove ↔ ∨ ∧ with x  φ = y x ∧ ¬ with x φ = y a = y a
         prove = y a
-        prove ∈ y A
-        prove with y φ
         prove ∧ ∈ y A with y φ
       }
       prove ∧ ∈ y A with y φ 
@@ -108,7 +103,6 @@ premise = S comprehension x A with x φ
 premise ∈ a A
 premise with a φ
 prove ∀ y ↔ ∈ y S ∧ ∈ y A with y φ
-prove ∧ ∈ a A with a φ
 prove ∈ a S
 qed
 

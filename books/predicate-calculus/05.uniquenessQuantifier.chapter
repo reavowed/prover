@@ -5,13 +5,6 @@ statement ∃! ($x with x φ)
   format ((∃!x)φ)
   definition (∧ ∃ x with x φ ∀ x ∀ y → ∧ with x φ with y φ = x y)
 
-theorem Definition of ∃!
-premise ∃ x with x φ
-premise ∀ x ∀ y → ∧ with x φ with y φ = x y
-prove ∧ ∃ x with x φ ∀ x ∀ y → ∧ with x φ with y φ = x y
-prove ∃! x with x φ
-qed
-
 theorem Value for Unique Existence
 premise ∃! x with x φ elidable
 premise ∀ x → with x φ ψ
@@ -36,15 +29,12 @@ premise with b φ
 prove ∧ ∃ x with x φ ∀ x ∀ y → ∧ with x φ with y φ = x y
 prove ∀ y → ∧ with a φ with y φ = a y
 prove → ∧ with a φ with b φ = a b
-prove ∧ with a φ with b φ
 prove = a b
 qed
 
 theorem Uniqueness by Exhibiting Unique Value
-premise ∀ x ↔ with x φ = x a
-prove = a a
-prove with a φ
-prove ∃ x with x φ
+premise ∃ x with x φ
+premise ∀ x → with x φ = x a
 take x { take y {
   assume ∧ with x φ with y φ {
     prove = x a
@@ -52,6 +42,15 @@ take x { take y {
     prove = x y
   }
 }}
+prove ∃! x with x φ
+qed
+
+theorem Uniqueness by Exhibiting Unique Value
+premise ∀ x ↔ with x φ = x a
+prove = a a
+prove with a φ
+prove ∃ x with x φ
+prove ∀ x → with x φ = x a
 prove ∃! x with x φ
 qed
 

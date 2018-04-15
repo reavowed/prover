@@ -23,7 +23,6 @@ qed
 theorem Element of Element Is Element of Union
 premise ∈ b a
 premise ∈ a A
-prove ∧ ∈ b a ∈ a A
 prove ∃ x ∧ ∈ b x ∈ x A
 prove ∀ y ↔ ∈ y union A ∃ x ∧ ∈ y x ∈ x A
 prove ∈ b union A
@@ -80,14 +79,12 @@ qed
 theorem Element Transfers to Binary Union
 premise ∈ c a
 prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
-prove ∨ ∈ c a ∈ c b
 prove ∈ c ∪ a b
 qed
 
 theorem Element Transfers to Binary Union
 premise ∈ c b
 prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
-prove ∨ ∈ c a ∈ c b
 prove ∈ c ∪ a b
 qed
 

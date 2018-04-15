@@ -10,7 +10,7 @@ conclusion = a a
 
 axiom Substitution of Equals
 premise = a b elidable
-premise with a φ
+premise with a φ elidable
 conclusion with b φ
 
 comment We first have to prove that equality is symmetric before we can prove the reversed version of the second axiom.
@@ -23,7 +23,7 @@ qed
 
 theorem Substitution of Equals
 premise = a b elidable
-premise with b φ
+premise with b φ elidable
 prove = b a
 prove with a φ
 qed

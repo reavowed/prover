@@ -27,7 +27,6 @@ take x {
         prove ∈ orderedPair x y singleton orderedPair a b
       }
     }
-#     prove ∀ y ↔ ∈ orderedPair x y singleton orderedPair a b = y b
     prove ∃! y ∈ orderedPair x y singleton orderedPair a b
   }
 }
@@ -107,7 +106,6 @@ theorem Combine Disjoint Functions
 premise function f A B
 premise function g C D
 premise = ∩ A C ∅
-prove ∀ x ¬ ∈ x ∅
 prove ∀ x ¬ ∈ x ∩ A C
 prove ∀ x → ∈ x ∩ A C = apply f x apply g x
 prove function ∪ f g ∪ A C ∪ B D

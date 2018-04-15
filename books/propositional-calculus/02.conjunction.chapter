@@ -36,8 +36,8 @@ qed
 
 theorem Reverse Conjunction
 premise ∧ φ ψ
-prove ψ
 prove φ
+prove ψ
 prove ∧ ψ φ
 qed
 

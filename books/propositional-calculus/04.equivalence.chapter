@@ -31,14 +31,14 @@ prove → ψ φ
 qed
 
 theorem Modus Ponens (Equivalence)
-premise ↔ φ ψ
+premise ↔ φ ψ elidable
 premise φ
 prove → φ ψ
 prove ψ
 qed
 
 theorem Modus Ponens (Equivalence)
-premise ↔ φ ψ
+premise ↔ φ ψ elidable
 premise ψ
 prove → ψ φ
 prove φ

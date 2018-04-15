@@ -19,12 +19,8 @@ take y {
       prove ∈ apply f_1 b_1 C
       prove ∈ orderedPair y apply f_1 b_1 × × A B C
       prove = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b_1 apply f_1 b_1
-      prove ∧ ∈ b_1 B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b_1 apply f_1 b_1
       prove ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b apply f_1 b
-      prove ∧ function f_1 B C ∧ with (f_1 a_1) φ ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b apply f_1 b
       prove ∃ f ∧ function f B C ∧ with (f a_1) φ ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b apply f b
-
-      prove ∧ ∈ a_1 A ∃ f ∧ function f B C ∧ with (f a_1) φ ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b apply f b
       prove ∃ a ∧ ∈ a A ∃ f ∧ function f B C ∧ with (f a) φ ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a b apply f b
 
       prove ∈ orderedPair y apply f_1 b_1 S
@@ -38,8 +34,7 @@ take y {
             prove = orderedPair a_1 b_1 orderedPair a' b'
             prove = a_1 a'
             prove = b_1 b'
-            prove ∧ function f' B C with (f' a') φ
-            prove ∧ function f' B C with (f' a_1) φ
+            prove with (f' a_1) φ
             prove = f_1 f'
             prove = x apply f' b'
             prove = x apply f' b_1
@@ -77,13 +72,10 @@ take a_1 {
             }}}
           }
         }
-        prove ∀ b → ∈ b B = apply S orderedPair a_1 b apply f_1 b
       }
     }
-    prove ∀ f → ∧ function f B C with (f a_1) φ ∀ b → ∈ b B = apply S orderedPair a_1 b apply f b
   }
 }
-prove ∀ a → ∈ a A ∀ f → ∧ function f B C with (f a) φ ∀ b → ∈ b B = apply S orderedPair a b apply f b
 prove ∧ function S × A B C ∀ a → ∈ a A ∀ f → ∧ function f B C with (f a) φ ∀ b → ∈ b B = apply S orderedPair a b apply f b
 take g {
   assume ∧ function g × A B C ∀ a → ∈ a A ∀ f → ∧ function f B C with (f a) φ ∀ b → ∈ b B = apply g orderedPair a b apply f b {

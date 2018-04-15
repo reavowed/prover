@@ -84,7 +84,6 @@ theorem An Element of Two Sets Is an Element of Their Intersection
 premise ∈ a A
 premise ∈ a B
 prove ∀ x ↔ ∈ x ∩ A B ∧ ∈ x A ∈ x B
-prove ∧ ∈ a A ∈ a B
 prove ∈ a ∩ A B
 qed
 

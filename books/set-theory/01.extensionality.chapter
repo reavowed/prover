@@ -8,23 +8,9 @@ shorthand ∃ x ∧ ∈ x a φ as ((∃x ∈ a)φ)
 shorthand ∃! x ∧ ∈ x a φ as ((∃!x ∈ a)φ)
 shorthand ¬ ∈ a b as (a ∉ b in parens)
 
-theorem Equal Sets Have the Same Members
-premise = a b
-take x {
-  prove ↔ ∈ x a ∈ x b
-}
-qed
-
 axiom Extensionality
 premise ∀ x ↔ ∈ x a ∈ x b
 conclusion = a b
-
-theorem Extensionality
-premise ∀ x → ∈ x a ∈ x b
-premise ∀ x → ∈ x b ∈ x a
-prove ∀ x ↔ ∈ x a ∈ x b
-prove = a b
-qed
 
 theorem Sets with Same Membership Condition Are Equal
 premise ∀ x ↔ ∈ x a with x φ
