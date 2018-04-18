@@ -2,7 +2,7 @@ package net.prover.model.proof
 
 import net.prover.model.Inference.RearrangementType
 import net.prover.model.expressions.{ArgumentList, Statement}
-import net.prover.model.{Inference, Premise, Substitutions}
+import net.prover.model._
 
 import scala.util.Try
 
@@ -36,37 +36,87 @@ case class InferenceProofFinder(
     reference: Reference.Direct
   ): Option[Step.Assertion] = {
     if (provingContext.allowTransformations) {
-      (for {
-        transformation <- provingContext.scopingStatement.flatMap(Transformation.apply).iterator
-        (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyToInference(
-          inference.premises,
-          inference.conclusion)
-        conclusionSubstitutions <- transformedConclusion.calculateSubstitutions(
-          assertionToProve,
-          provingContext.defaultSubstitutions,
-          Nil,
-          Nil)
-        (premiseReferences, premiseSubstitutions) <- matchPremisesToProvenStatements(
-          transformedPremises,
-          conclusionSubstitutions)
-        transformationProofAttempt = Try(ProofOutline(stepsToProve)
-          .fillIn(provingContext.resetWithPremises(transformedPremises).copy(allowTransformations = false)))
-        transformationProof <- transformationProofAttempt.toOption
-      } yield Step.Assertion(
-          assertionToProve,
-          InferenceApplication.Transformed(
-            inference,
-            premiseSubstitutions,
-            premiseReferences,
-            transformation.statementDefinition,
-            transformedPremises,
-            transformedConclusion,
-            transformationProof.steps,
-            provingContext.depth),
-          reference,
-          isRearrangement = false)
-      ).headOption
+      for {
+        transformation <- provingContext.scopingStatement.flatMap(Transformation.apply)
+        transformationSubstitutions <- transformation.getSubstitutions(inference)
+        result <- findProofUsingFullTransform(assertionToProve, reference, transformation, transformationSubstitutions) orElse
+          findProofUsingPartialTransform(assertionToProve, reference, transformation, transformationSubstitutions)
+      } yield result
     } else None
+  }
+
+  def findProofUsingFullTransform(
+    assertionToProve: Statement,
+    reference: Reference.Direct,
+    transformation: Transformation,
+    transformationSubstitutions: Substitutions
+  ): Option[Step.Assertion] = {
+    (for {
+      (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyFully(inference, transformationSubstitutions).iterator
+      conclusionSubstitutions <- transformedConclusion
+        .calculateSubstitutions(assertionToProve, provingContext.defaultSubstitutions, Nil, Nil)
+        .iterator
+      (premiseReferences, premiseSubstitutions) <- matchPremisesToProvenStatements(
+        transformedPremises,
+        conclusionSubstitutions)
+      transformationProofAttempt = Try(ProofOutline(stepsToProve)
+        .fillIn(provingContext.resetWithPremises(transformedPremises).copy(allowTransformations = false)))
+      transformationProof <- transformationProofAttempt.toOption
+    } yield Step.Assertion(
+      assertionToProve,
+      InferenceApplication.Transformed(
+        inference,
+        premiseSubstitutions,
+        premiseReferences,
+        transformation.statementDefinition,
+        transformedPremises,
+        transformedConclusion,
+        transformationProof.steps,
+        provingContext.depth),
+      reference,
+      isRearrangement = false)
+      ).headOption
+  }
+
+  def findProofUsingPartialTransform(
+    assertionToProve: Statement,
+    reference: Reference.Direct,
+    transformation: Transformation,
+    transformationSubstitutions: Substitutions
+  ): Option[Step.Assertion] = {
+    (for {
+      (transformedPremisesAndSteps, transformedConclusion, conclusionStepToProve) <- transformation
+        .applyPartially(inference, transformationSubstitutions)
+        .iterator
+      conclusionSubstitutions <- transformedConclusion
+        .calculateSubstitutions(assertionToProve, provingContext.defaultSubstitutions, Nil, Nil)
+        .iterator
+      (transformedPremises, premiseReferences, premiseStepsToProve, premiseSubstitutions) <- transformedPremisesAndSteps
+        .foldLeft(Iterator((Seq.empty[Premise], Seq.empty[Reference], Seq.empty[StepOutline], conclusionSubstitutions))) { case (acc, premisesAndSteps) =>
+            for {
+              (premisesSoFar, referencesSoFar, stepOutlinesSoFar, substitutionsSoFar) <- acc
+              (premise, stepOption) <- premisesAndSteps
+              (reference, substitutions) <- matchPremiseToProvenStatements(premise, substitutionsSoFar, Nil, Nil)
+            } yield (premisesSoFar :+ premise, referencesSoFar :+ reference, stepOutlinesSoFar ++ stepOption, substitutions)
+        }
+      stepsToProve = premiseStepsToProve :+ conclusionStepToProve
+      transformationProofAttempt = Try(ProofOutline(stepsToProve)
+        .fillIn(provingContext.resetWithPremises(transformedPremises).copy(allowTransformations = false)))
+      transformationProof <- transformationProofAttempt.toOption
+    } yield Step.Assertion(
+      assertionToProve,
+      InferenceApplication.Transformed(
+        inference,
+        premiseSubstitutions,
+        premiseReferences,
+        transformation.statementDefinition,
+        transformedPremises,
+        transformedConclusion,
+        transformationProof.steps,
+        provingContext.depth),
+      reference,
+      isRearrangement = false)
+    ).headOption
   }
 
   def findProofByEliding(
@@ -210,15 +260,13 @@ case class InferenceProofFinder(
         transformation <- provingContext.scopingStatement.flatMap(Transformation.apply).iterator
         inference <- provingContext.availableInferences
         if inference.rearrangementType == RearrangementType.Expansion
-        (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyToInference(inference.premises, inference.conclusion)
-          .headOption.toSeq
+        (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyFully(inference).iterator
         (partialPremiseSubstitutions, inferenceConclusionSubstitutions, newApplicativeHints, newStructuralHints) <- premiseStatement.condense(
           transformedConclusion,
           substitutionsSoFar,
           provingContext.defaultSubstitutions,
           applicativeHints,
-          structuralHints
-        )
+          structuralHints)
         (premiseReferences, inferenceSubstitutions) <- matchPremisesToProvenStatements(
           transformedPremises,
           inferenceConclusionSubstitutions,

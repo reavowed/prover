@@ -142,8 +142,7 @@ object ProofFinder {
         transformation <- provingContext.scopingStatement.flatMap(Transformation.apply).iterator
         inference <- provingContext.availableInferences
         if inference.rearrangementType == RearrangementType.Expansion
-        (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyToInference(inference.premises, inference.conclusion)
-          .headOption.toSeq
+        (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyFully(inference).iterator
         substitutions <- transformedConclusion.calculateSubstitutions(assertion, provingContext.defaultSubstitutions, Nil, Nil)
         substitutedPremises <- transformedPremises.map(_.statement.applySubstitutions(substitutions)).traverseOption.toSeq
         premiseReferences <- substitutedPremises.map(findAssertionWithPossibleExpansions(_, referencedStatements)).traverseOption.toSeq

@@ -1,15 +1,16 @@
 package net.prover.model
 
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Reference, ProvenStatement}
+import net.prover.model.proof.{ProvenStatement, Reference}
 
 case class Premise(statement: Statement, index: Int)(val isElidable: Boolean) {
   def reference = Reference.Direct(s"p$index")
   def provenStatement = ProvenStatement(statement, reference)
   def requiredSubstitutions: Substitutions.Required = statement.requiredSubstitutions
   def increaseDepth(additionalDepth: Int, insertionPoint: Int): Premise = {
-    Premise(statement.increaseDepth(additionalDepth, insertionPoint), index)(isElidable)
+    withStatement(statement.increaseDepth(additionalDepth, insertionPoint))
   }
+  def withStatement(newStatement: Statement) = copy(statement = newStatement)(isElidable)
   def serialized: String = s"premise ${statement.serialized}"
 }
 
