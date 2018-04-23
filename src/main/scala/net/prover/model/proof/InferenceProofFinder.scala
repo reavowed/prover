@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model.Inference.RearrangementType
-import net.prover.model.expressions.{ArgumentList, Statement}
+import net.prover.model.expressions.{ArgumentList, Statement, StatementVariable}
 import net.prover.model._
 
 import scala.util.Try
@@ -153,18 +153,19 @@ case class InferenceProofFinder(
   ): Iterator[(Reference, Substitutions)] = {
     for {
       inference <- provingContext.availableInferences.iterator
-      // Match the premises first, since we don't know what the conclusion should look like
-      (premiseReferences, inferenceSubstitutionsAfterPremises) <- matchPremisesToProvenStatements(
-        inference.premises,
-        provingContext.defaultSubstitutions)
-      // Work out the substitutions by condensing the conclusion with the premise
-      (premiseSubstitutions, inferenceSubstitutions, _, _) <- premise.condense(
+      if !inference.conclusion.isInstanceOf[StatementVariable]
+      (premiseSubstitutions, inferenceSubstitutionsAfterCondensing, applicativeHints, structuralHints) <- premise.condense(
         inference.conclusion,
         premiseSubstitutionsSoFar,
-        inferenceSubstitutionsAfterPremises,
+        provingContext.defaultSubstitutions,
         Nil,
         Nil
       ).iterator
+      (premiseReferences, inferenceSubstitutions) <- matchPremisesToProvenStatements(
+        inference.premises,
+        inferenceSubstitutionsAfterCondensing,
+        applicativeHints,
+        structuralHints)
       provenConclusion <- inference.conclusion.applySubstitutions(inferenceSubstitutions).iterator
       finalSubstitutions <- premise.calculateSubstitutions(provenConclusion, premiseSubstitutions, Nil, Nil).iterator
     } yield Reference.Elided(
