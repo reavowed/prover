@@ -22,7 +22,7 @@ case class Book(
 object Book {
   implicit class BookSeqOps(books: Seq[Book]) {
     def transitive: Seq[Book] = {
-      (books ++ books.flatMap(_.dependencies.transitive)).distinctBy(_.title)
+      (books.flatMap(_.dependencies.transitive) ++ books).distinctBy(_.title)
     }
   }
 }

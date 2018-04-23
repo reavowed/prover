@@ -257,7 +257,7 @@ object BookOutline {
 
   implicit class BookOutlineSeqOps(bookOutlines: Seq[BookOutline]) {
     def transitive: Seq[BookOutline] = {
-      (bookOutlines ++ bookOutlines.flatMap(_.dependencyOutlines.transitive)).distinctBy(_.title)
+      (bookOutlines.flatMap(_.dependencyOutlines.transitive) ++ bookOutlines).distinctBy(_.title)
     }
   }
 
