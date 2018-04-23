@@ -90,7 +90,7 @@ object StepOutline {
       val scopedDeduction = context.scoped(deduction.statement, variableName)
         .getOrElse(throw ProvingException("Cannot prove a scoped statement without an appropriate statement definition", location))
       val innerAssertion = assumptionStep
-        .steps.flatMap(_.provenStatements).lastOption
+        .substeps.flatMap(_.provenStatements).lastOption
         .getOrElse(throw ProvingException(
           "Naming step did not have a conclusion",
           location))

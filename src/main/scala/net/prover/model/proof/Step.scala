@@ -18,7 +18,7 @@ sealed trait Step {
     additionalReference: Option[String])(
     implicit displayContext: DisplayContext
   ): Seq[ProofLine]
-  def isSingleScopedAssertion: Boolean = false
+  def isSingleAssertion: Boolean = false
 }
 
 object Step {
@@ -51,41 +51,59 @@ object Step {
         else
           Some(ProofLine.InferenceLink(HtmlHelper.findInferenceToDisplay(inferenceApplication)))))
     }
-    override def isSingleScopedAssertion = true
+    override def isSingleAssertion = true
   }
 
   case class Assumption(
       assumption: Statement,
-      steps: Seq[Step],
+      substeps: Seq[Step],
       deductionStatement: StatementDefinition,
       reference: Reference.Direct)
     extends Step
   {
-    override def provenStatements = steps.flatMap(_.provenStatements).map { innerProvenStatement =>
+    override def provenStatements = substeps.flatMap(_.provenStatements).map { innerProvenStatement =>
       ProvenStatement(
         DefinedStatement(Seq(assumption, innerProvenStatement.statement), deductionStatement, assumption.depth)(Nil),
         innerProvenStatement.reference.add(reference))
     }
-    override def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
-    override def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
-    override def cached = CachedStep.Assumption(assumption, steps.map(_.cached), reference)
-    override def length = steps.map(_.length).sum
-    override def intermediateReferences = steps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
+    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
+    override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether
+    override def cached = CachedStep.Assumption(assumption, substeps.map(_.cached), reference)
+    override def length = substeps.map(_.length).sum
+    override def intermediateReferences = substeps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
     override def getLines(
       referenceMap: ReferenceMap,
       indentLevel: Int,
       additionalReference: Option[String])(
       implicit displayContext: DisplayContext
     ) = {
-      val assumptionLine = ProofLine(
-        "Assume",
-        ProofLine.Expression.create(assumption, referenceMap.getReferrers(reference.value, additionalReference)),
-        None,
-        indentLevel,
-        None)
-      val innerLines = steps.flatMapWithIndex((step, index) =>
-        step.getLines(referenceMap, indentLevel + 1, if (index == steps.length - 1) additionalReference else None))
-      assumptionLine +: innerLines
+      val substepLines = substeps.flatMapWithIndex((step, index) =>
+        step.getLines(referenceMap, indentLevel + 1, if (index == substeps.length - 1) additionalReference else None))
+      if (isSingleAssertion) {
+        substepLines.map { step =>
+          ProofLine(
+            "Then",
+            ProofLine.Expression.Nested(
+              deductionStatement.format,
+              Seq(ProofLine.Expression.create(assumption, Set.empty), step.expression),
+              step.expression.referrers),
+            Some(reference.value),
+            indentLevel,
+            step.inferenceLink)
+        }
+      } else {
+        val assumptionLine = ProofLine(
+          "Assume",
+          ProofLine.Expression.create(assumption, referenceMap.getReferrers(reference.value, additionalReference)),
+          None,
+          indentLevel,
+          None)
+        assumptionLine +: substepLines
+      }
+    }
+    override def isSingleAssertion = substeps match {
+      case Seq(singleStep) if singleStep.isSingleAssertion => true
+      case _ => false
     }
   }
 
@@ -101,7 +119,7 @@ object Step {
     override def referenceMap = assumptionStep.referenceMap ++ assertionStep.referenceMap
     override def cached = CachedStep.Naming(variableName, assumptionStep.cached, assertionStep.cached, reference)
     override def length = assumptionStep.length + 1
-    override def intermediateReferences = assumptionStep.steps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
+    override def intermediateReferences = assumptionStep.substeps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
     override def getLines(
       referenceMap: ReferenceMap,
       indentLevel: Int,
@@ -114,11 +132,11 @@ object Step {
         Some(assertionStep.reference.value),
         indentLevel,
         Some(ProofLine.InferenceLink(HtmlHelper.findInferenceToDisplay(assertionStep.inferenceApplication))))
-      val innerLines = assumptionStep.steps.flatMapWithIndex((step, index) =>
+      val innerLines = assumptionStep.substeps.flatMapWithIndex((step, index) =>
         step.getLines(
           referenceMap,
           indentLevel,
-          if (index == assumptionStep.steps.length - 1) Some(additionalReference.getOrElse(reference.value)) else None))
+          if (index == assumptionStep.substeps.length - 1) Some(additionalReference.getOrElse(reference.value)) else None))
       firstLine +: innerLines
     }
   }
@@ -153,21 +171,21 @@ object Step {
       additionalReference: Option[String])(
       implicit displayContext: DisplayContext
     ) = {
-      val steps = substeps.flatMapWithIndex { (step, index) =>
+      val substepLines = substeps.flatMapWithIndex { (step, index) =>
         step.getLines(referenceMap, indentLevel, if (index == substeps.length - 1) additionalReference else None)
       }
-      if (isSingleScopedAssertion)
-        steps.map { step =>
-          step.copy(expression = ProofLine.Expression.Nested(
+      if (isSingleAssertion)
+        substepLines.map { substepLine =>
+          substepLine.copy(expression = ProofLine.Expression.Nested(
             scopingStatement.format,
-            Seq(ProofLine.Expression.Plain(variableName, Set.empty), step.expression),
-            step.expression.referrers))
+            Seq(ProofLine.Expression.Plain(variableName, Set.empty), substepLine.expression),
+            substepLine.expression.referrers))
         }
       else
-        steps
+        substepLines
     }
-    override def isSingleScopedAssertion = substeps match {
-      case Seq(singleStep) if singleStep.isSingleScopedAssertion => true
+    override def isSingleAssertion = substeps match {
+      case Seq(singleStep) if singleStep.isSingleAssertion => true
       case _ => false
     }
   }
