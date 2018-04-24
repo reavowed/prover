@@ -28,6 +28,7 @@ case class ProofFinder(
   }
 
   def findProof(): Option[Step.Assertion] = {
+    Proof.logger.info(s"Proving statement $statementToProve")
     availableInferences.iterator.findFirst(findDirectProof(_, allowRearrangement = false)) orElse
       findProofByRearranging() orElse
       availableInferences.iterator.findFirst(findDirectProof(_, allowRearrangement = true)) orElse

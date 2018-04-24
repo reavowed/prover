@@ -25,7 +25,6 @@ object StepOutline {
     def tryProve(reference: Reference.Direct)(implicit context: ProvingContext) = {
       findProofByHint(reference) orElse
         ProofFinder(assertion, reference).findProof()
-          .ifDefined(location.foreach(x => Proof.logger.info(s"$x Proved statement $assertion")))
     }
     private def findProofByHint(reference: Reference.Direct)(implicit context: ProvingContext) = {
       context.assertionHints
