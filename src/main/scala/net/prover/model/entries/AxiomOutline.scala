@@ -8,8 +8,7 @@ case class AxiomOutline(
     name: String,
     premises: Seq[Premise],
     conclusion: Statement,
-    rearrangementType: RearrangementType = RearrangementType.NotRearrangement,
-    allowsRearrangement: Boolean = true)
+    rearrangementType: RearrangementType = RearrangementType.NotRearrangement)
   extends ChapterEntryOutline
 {
   def expand(
@@ -26,8 +25,7 @@ case class AxiomOutline(
       bookTitle,
       premises,
       conclusion,
-      rearrangementType,
-      allowsRearrangement)
+      rearrangementType)
   }
 }
 
@@ -45,7 +43,6 @@ object AxiomOutline extends ChapterEntryParser[AxiomOutline] {
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
-      allowsRearrangement <- Parser.optionalWord("disallow-rearrangement").isUndefined
       premises <- Premise.listParser
       conclusion <- conclusionParser
     } yield {
@@ -53,8 +50,7 @@ object AxiomOutline extends ChapterEntryParser[AxiomOutline] {
         name,
         premises,
         conclusion,
-        rearrangementType,
-        allowsRearrangement)
+        rearrangementType)
     }
   }
 }

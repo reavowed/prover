@@ -11,8 +11,7 @@ case class TheoremOutline(
     name: String,
     premises: Seq[Premise],
     proofOutline: ProofOutline,
-    rearrangementType: RearrangementType,
-    allowsRearrangement: Boolean = true)
+    rearrangementType: RearrangementType)
   extends ChapterEntryOutline
 {
   def prove(
@@ -34,8 +33,7 @@ case class TheoremOutline(
       detailedProof.conclusion,
       proofOutline,
       detailedProof,
-      rearrangementType,
-      allowsRearrangement)
+      rearrangementType)
   }
 
   private def getProof(
@@ -86,7 +84,6 @@ object TheoremOutline extends ChapterEntryParser[TheoremOutline] {
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
-      allowsRearrangement <- Parser.optionalWord("disallow-rearrangement").isUndefined
       premises <- Premise.listParser
       proofOutline <- ProofOutline.parser
       _ <- Parser.requiredWord("qed")
@@ -95,8 +92,7 @@ object TheoremOutline extends ChapterEntryParser[TheoremOutline] {
         name,
         premises,
         proofOutline,
-        rearrangementType,
-        allowsRearrangement)
+        rearrangementType)
     }
   }
 }

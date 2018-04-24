@@ -2,7 +2,6 @@ chapter Implication and Negation
 We start by introducing our two fundamental connectives, → and ¬, and proving some basic facts about them.
 
 axiom Repetition
-disallow-rearrangement
 premise φ
 conclusion φ
 
@@ -58,7 +57,6 @@ prove φ
 qed
 
 theorem Principle of Explosion
-disallow-rearrangement
 premise φ
 premise ¬ φ
 prove ⊥

@@ -13,8 +13,7 @@ case class Axiom(
     bookTitle: String,
     premises: Seq[Premise],
     conclusion: Statement,
-    rearrangementType: RearrangementType = RearrangementType.NotRearrangement,
-    allowsRearrangement: Boolean = true)
+    rearrangementType: RearrangementType = RearrangementType.NotRearrangement)
   extends ChapterEntry
     with Inference.Entry
 {

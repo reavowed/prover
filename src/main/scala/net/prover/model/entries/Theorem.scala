@@ -18,8 +18,7 @@ case class Theorem(
     conclusion: Statement,
     proofOutline: ProofOutline,
     proof: Proof,
-    rearrangementType: RearrangementType,
-    allowsRearrangement: Boolean = true)
+    rearrangementType: RearrangementType)
   extends ChapterEntry
     with Inference.Entry
 {

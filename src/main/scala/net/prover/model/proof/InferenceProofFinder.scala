@@ -200,7 +200,7 @@ case class InferenceProofFinder(
       .flatMap {
         matchPremiseToProvenStatement(premise.statement, _, substitutionsSoFar, applicativeHints, structuralHints)
       }
-    if (allowRearrangment && inference.allowsRearrangement)
+    if (allowRearrangment)
       directMatches ++
         matchPremiseToRearrangedProvenStatements(premise.statement, substitutionsSoFar, applicativeHints, structuralHints) ++
         matchPremiseToTransformedRearrangedProvenStatements(premise.statement, substitutionsSoFar, applicativeHints, structuralHints)
@@ -302,7 +302,7 @@ object InferenceProofFinder {
    implicit provingContext: ProvingContext
   ): InferenceProofFinder = {
     val baseStatements = provenStatements.map(_.toReferencedStatement)
-    val provenStatementsToUse = if (allowRearrangment && inference.allowsRearrangement)
+    val provenStatementsToUse = if (allowRearrangment)
       baseStatements ++ simplifications
     else
       baseStatements

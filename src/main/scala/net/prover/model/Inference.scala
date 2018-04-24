@@ -16,7 +16,6 @@ trait Inference {
   def premises: Seq[Premise]
   def conclusion: Statement
   def rearrangementType: RearrangementType
-  def allowsRearrangement: Boolean
 
   def requiredSubstitutions: Substitutions.Required = {
     (premises.map(_.requiredSubstitutions) :+ conclusion.requiredSubstitutions).foldTogether
@@ -67,7 +66,6 @@ object Inference {
       Premise(premiseStatement, index)(isElidable = false)
     }
     override def name: String = s"Definition of $nameOfDefinition"
-    override def allowsRearrangement = true
     override def rearrangementType = RearrangementType.NotRearrangement
     override def keyOption = None
   }
@@ -83,7 +81,6 @@ object Inference {
     override def bookKey = inner.bookKey
     override def name = inner.name
     override def rearrangementType = inner.rearrangementType
-    override def allowsRearrangement = inner.allowsRearrangement
   }
 
   sealed trait RearrangementType
