@@ -20,7 +20,7 @@ class TheoremSpec extends ProverSpec {
 
   "theorem parser" should {
     implicit def assertionStepFromStatement(assertion: Statement): StepOutline = {
-      StepOutline.Assertion(assertion, None)
+      StepOutline.Assertion(assertion, None, None)
     }
 
     implicit def assumptionStepFromStatementPair(tuple: (Statement, Statement)): StepOutline = {
@@ -29,6 +29,10 @@ class TheoremSpec extends ProverSpec {
 
     implicit def assumptionStepFromStatementAndStatements(tuple: (Statement, Seq[Statement])): StepOutline = {
       StepOutline.Assumption(tuple._1, tuple._2.map(assertionStepFromStatement), None)
+    }
+
+    implicit class ElidingStatementOps(statement: Statement) {
+      def via(elidedStatement: Statement): StepOutline = StepOutline.Assertion(statement, Some(elidedStatement), None)
     }
 
     def prove(
@@ -225,7 +229,7 @@ class TheoremSpec extends ProverSpec {
         Equals(Pair(a, a), Singleton(a)))
       checkProof(
         Seq(Equals(b, Pair(a,a))),
-        Seq(Equals(b, Singleton(a))),
+        Seq(Equals(b, Singleton(a)) via Equals(Pair(a, a), Singleton(a))),
         Seq(repeatedPairIsSingleton, substitutionOfEquals))
     }
 

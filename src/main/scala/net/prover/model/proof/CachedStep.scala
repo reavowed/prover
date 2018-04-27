@@ -30,7 +30,7 @@ object CachedStep {
       } yield Step.Assertion(assertion, inferenceApplication, reference)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
-      case StepOutline.Assertion(`assertion`, _) =>
+      case StepOutline.Assertion(`assertion`, _, _) =>
         true
       case _ =>
         false

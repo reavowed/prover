@@ -39,7 +39,7 @@ case class Transformation(statementDefinition: StatementDefinition, boundVariabl
         }
       }.traverseOption.map(_.split)
       statementsToProve = premiseStatementsToProve :+ conclusionStatementToProve
-      stepsToProve = Seq(StepOutline.ScopedVariable(boundVariableName, statementsToProve.map(s => StepOutline.Assertion(s, None)), None))
+      stepsToProve = Seq(StepOutline.ScopedVariable(boundVariableName, statementsToProve.map(s => StepOutline.Assertion(s, None, None)), None))
     } yield (transformedPremises, transformedConclusion, stepsToProve)
   }
 
@@ -49,11 +49,11 @@ case class Transformation(statementDefinition: StatementDefinition, boundVariabl
       transformedPremisesAndSteps <- inference.premises.map { premise =>
         premise.statement.applySubstitutions(transformationSubstitutions).map { statement =>
           Seq(
-            premise.withStatement(generalise(statement)) -> Some(StepOutline.Assertion(specify(statement), None)),
+            premise.withStatement(generalise(statement)) -> Some(StepOutline.Assertion(specify(statement), None, None)),
             premise.withStatement(specify(statement)) -> None)
         }
       }.traverseOption
-    } yield (transformedPremisesAndSteps, transformedConclusion, StepOutline.Assertion(transformedConclusion, None))
+    } yield (transformedPremisesAndSteps, transformedConclusion, StepOutline.Assertion(transformedConclusion, None, None))
   }
 }
 

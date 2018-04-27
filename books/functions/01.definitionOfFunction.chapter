@@ -57,6 +57,7 @@ premise function f A B
 premise ⊆ B C elidable
 prove ∧ ⊆ f × A B ∀ x → ∈ x A ∃! y ∈ orderedPair x y f
 prove ⊆ f × A C
+  via ⊆ × A B × A C
 prove function f A C
 qed
 

@@ -29,8 +29,7 @@ case class ProofFinder(statementToProve: Statement)(implicit context: ProvingCon
     availableInferences.iterator.findFirst(findDirectProof(_, allowRearrangement = false)) orElse
       findProofByRearranging() orElse
       availableInferences.iterator.findFirst(findDirectProof(_, allowRearrangement = true)) orElse
-      availableInferences.iterator.findFirst(findProofUsingTransform) orElse
-      availableInferences.iterator.findFirst(findProofByEliding)
+      availableInferences.iterator.findFirst(findProofUsingTransform)
   }
 
   private def findDirectProof(inference: Inference, allowRearrangement: Boolean): Option[InferenceApplication] = {
@@ -41,14 +40,22 @@ case class ProofFinder(statementToProve: Statement)(implicit context: ProvingCon
     getProofFinderForInference(inference).findProofUsingTransform(statementToProve)
   }
 
-  private def findProofByEliding(inference: Inference): Option[InferenceApplication] = {
-    getProofFinderForInference(inference).findProofByEliding(statementToProve)
-  }
-
   def findProofByRearranging(): Option[InferenceApplication] = {
+    Proof.logger.info("  by rearranging")
     ProofFinder.findAssertionByExpanding(
       statementToProve,
       provenStatements.map(_.toReferencedStatement) ++ simplifications)
+  }
+
+  def findProofByEliding(elidedStatement: Statement): Option[InferenceApplication] = {
+    for {
+      elidedReference <- ProofFinder(elidedStatement).findProof().map(Reference.Elided.apply)
+      result <- availableInferences.iterator.findFirst(findProofByEliding(_, elidedStatement, elidedReference))
+    } yield result
+  }
+
+  private def findProofByEliding(inference: Inference, elidedStatement: Statement, elidedReference: Reference.Elided): Option[InferenceApplication] = {
+    getProofFinderForInference(inference).findProofByEliding(statementToProve, elidedStatement, elidedReference)
   }
 
   private def getAllSimplifications(

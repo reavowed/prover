@@ -39,14 +39,18 @@ premise function g C D
 premise ∀ x → ∈ x ∩ A C = apply f x apply g x
 prove ⊆ f × A B
 prove ⊆ × A B × ∪ A C B
+  via ⊆ A ∪ A C
 prove ⊆ f × ∪ A C B
 prove ⊆ × ∪ A C B × ∪ A C ∪ B D
+  via ⊆ B ∪ B D
 prove ⊆ f × ∪ A C ∪ B D
 
 prove ⊆ g × C D
 prove ⊆ × C D × ∪ A C D
+  via ⊆ C ∪ A C
 prove ⊆ g × ∪ A C D
 prove ⊆ × ∪ A C D × ∪ A C ∪ B D
+  via ⊆ D ∪ B D
 prove ⊆ g × ∪ A C ∪ B D
 
 prove ⊆ ∪ f g × ∪ A C ∪ B D
@@ -107,6 +111,7 @@ premise function f A B
 premise function g C D
 premise = ∩ A C ∅
 prove ∀ x ¬ ∈ x ∩ A C
+  via ∀ x ¬ ∈ x ∅
 prove ∀ x → ∈ x ∩ A C = apply f x apply g x
 prove function ∪ f g ∪ A C ∪ B D
 qed
@@ -128,4 +133,5 @@ prove = ∩ A singleton a ∅
 prove function singleton orderedPair a b singleton a singleton b
 prove function ∪ f singleton orderedPair a b ∪ A singleton a ∪ B singleton b
 prove function ∪ f singleton orderedPair a b ∪ A singleton a B
+  via = ∪ B singleton b B
 qed

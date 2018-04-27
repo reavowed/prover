@@ -15,12 +15,14 @@ take y {
   assume ∃ x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a {
     let x ∧ ∈ x A ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a {
       assume with x φ {
-        prove = y x
+        prove = y x 
+          via ↔ ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a = y x
         prove ∧ ∈ x A with x φ
         prove ∧ ∈ y A with y φ
       }
       assume ¬ with x φ {
-        prove = y a
+        prove = y a 
+          via ↔ ∨ ∧ with x φ = y x ∧ ¬ with x φ = y a = y a
         prove ∧ ∈ y A with y φ
       }
       prove ∧ ∈ y A with y φ 

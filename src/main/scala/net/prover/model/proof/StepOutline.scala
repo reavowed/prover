@@ -14,6 +14,7 @@ object StepOutline {
 
   case class Assertion(
       assertion: Statement,
+      elidedStatementOption: Option[Statement],
       location: Option[FileLocation])
     extends StepOutline.WithAssertion
   {
@@ -23,7 +24,12 @@ object StepOutline {
         .getOrElse(throw ProvingException(s"Could not prove assertion '$assertion'", location))
     }
     def tryProve(reference: Reference.Direct)(implicit context: ProvingContext) = {
-      (findProofByHint(reference) orElse ProofFinder(assertion).findProof()).map(Step.Assertion(assertion, _, reference))
+      (findProofByHint(reference) orElse (elidedStatementOption match {
+        case Some(elidedStatement) =>
+          ProofFinder(assertion).findProofByEliding(elidedStatement)
+        case None =>
+          ProofFinder(assertion).findProof()
+      })).map(Step.Assertion(assertion, _, reference))
     }
     private def findProofByHint(reference: Reference.Direct)(implicit context: ProvingContext) = {
       context.assertionHints
@@ -37,8 +43,10 @@ object StepOutline {
       for {
         location <- Parser.location
         assertion <- Statement.parser
+        elidedStatementOption <- Parser.optionalWord("via").flatMapMap(_ => Statement.parser)
       } yield Assertion(
         assertion,
+        elidedStatementOption,
         Some(location))
     }
   }
@@ -96,7 +104,7 @@ object StepOutline {
         .getOrElse(throw ProvingException(
           s"Assertion $innerAssertion was not independent of $variableName",
           location))
-      val assertionStep = Assertion(outerAssertion, None)
+      val assertionStep = Assertion(outerAssertion, None, None)
         .tryProve(
           reference.withSuffix(".1"))(
           context.addProvenStatement(

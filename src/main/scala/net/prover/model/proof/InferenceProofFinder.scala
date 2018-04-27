@@ -1,8 +1,8 @@
 package net.prover.model.proof
 
 import net.prover.model.Inference.RearrangementType
-import net.prover.model.expressions.{ArgumentList, Statement, StatementVariable}
 import net.prover.model._
+import net.prover.model.expressions.{ArgumentList, Statement, StatementVariable}
 
 import scala.util.Try
 
@@ -101,23 +101,25 @@ case class InferenceProofFinder(
     ).headOption
   }
 
-  def findProofByEliding(assertionToProve: Statement): Option[InferenceApplication] = {
+  def findProofByEliding(
+    assertionToProve: Statement,
+    elidedStatement: Statement,
+    elidedReference: Reference.Elided
+  ): Option[InferenceApplication] = {
     (for {
       (prePremises, elidablePremise, postPremises) <- inference.premises.splitAtAll(_.isElidable).iterator
       substitutionsAfterConclusion <- inference.conclusion.calculateSubstitutions(assertionToProve, provingContext.defaultSubstitutions, Nil, Nil)
+      substitutionsAfterElidedPremise <- elidablePremise.statement.calculateSubstitutions(elidedStatement, substitutionsAfterConclusion, Nil, Nil)
       (prePremiseReferences, substitutionsAfterPrePremises) <- matchPremisesToProvenStatements(
         prePremises,
-        substitutionsAfterConclusion)
+        substitutionsAfterElidedPremise)
       (postPremiseReferences, substitutionsAfterPostPremises) <- matchPremisesToProvenStatements(
         postPremises,
         substitutionsAfterPrePremises)
-      (elidedPremiseReference, substitutionsAfterElidedPremise) <- matchElidablePremise(
-        elidablePremise.statement,
-        substitutionsAfterPostPremises)
     } yield InferenceApplication.Direct(
       inference,
-      substitutionsAfterElidedPremise,
-      (prePremiseReferences :+ elidedPremiseReference) ++ postPremiseReferences,
+      substitutionsAfterPostPremises,
+      (prePremiseReferences :+ elidedReference) ++ postPremiseReferences,
       isRearrangement = false,
       provingContext.depth)
     ).headOption

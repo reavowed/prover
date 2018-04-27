@@ -82,16 +82,16 @@ object Step {
       val substepLines = substeps.flatMapWithIndex((step, index) =>
         step.getLines(referenceMap, indentLevel + 1, if (index == substeps.length - 1) additionalReference else None))
       if (isSingleAssertion) {
-        substepLines.map { step =>
+        substepLines.map { substepLine =>
           ProofLine(
             "Then",
             ProofLine.Expression.Nested(
               deductionStatement.format,
-              Seq(ProofLine.Expression.create(assumption, Set.empty), step.expression),
-              step.expression.referrers),
-            Some(reference.value),
+              Seq(ProofLine.Expression.create(assumption, Set.empty), substepLine.expression),
+              substepLine.expression.referrers),
+            substepLine.reference,
             indentLevel,
-            step.inferenceLink)
+            substepLine.inferenceLink)
         }
       } else {
         val assumptionLine = ProofLine(
