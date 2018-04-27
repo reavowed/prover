@@ -2,9 +2,13 @@ chapter Definition of a Function
 Definition of a function.
 
 statement function (f A B)
-  name (a function)
+  name (a Function)
   format (f: A → B in parens)
   definition (∧ ⊆ f × A B ∀ x → ∈ x A ∃! y ∈ orderedPair x y f)
+
+shorthand ∀ f → function f A B φ as ((∀f: A → B)φ)
+shorthand ∃ f ∧ function f A B φ as ((∃f: A → B)φ)
+shorthand ∃! f ∧ function f A B φ as ((∃!f: A → B)φ)
 
 theorem Function Application Is Unique
 premise function f A B
@@ -52,7 +56,6 @@ theorem Extend Function Range to Superset
 premise function f A B
 premise ⊆ B C elidable
 prove ∧ ⊆ f × A B ∀ x → ∈ x A ∃! y ∈ orderedPair x y f
-# prove ⊆ × A B × A C
 prove ⊆ f × A C
 prove function f A C
 qed

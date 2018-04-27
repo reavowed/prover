@@ -60,7 +60,6 @@ prove ∀ x ¬ with x φ
 qed
 
 theorem For All Not Is Not Exists
-expansion
 premise ∀ x ¬ with x φ
 assume ∃ x with x φ {
   prove ¬ ∀ x ¬ with x φ
