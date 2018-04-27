@@ -23,14 +23,13 @@ object StepOutline {
         .getOrElse(throw ProvingException(s"Could not prove assertion '$assertion'", location))
     }
     def tryProve(reference: Reference.Direct)(implicit context: ProvingContext) = {
-      findProofByHint(reference) orElse
-        ProofFinder(assertion, reference).findProof()
+      (findProofByHint(reference) orElse ProofFinder(assertion).findProof()).map(Step.Assertion(assertion, _, reference))
     }
     private def findProofByHint(reference: Reference.Direct)(implicit context: ProvingContext) = {
       context.assertionHints
           .filter(_.assertion == assertion)
           .mapFind(_.validate(context))
-          .map(_.copy(reference = reference))
+          .map(_.inferenceApplication)
     }
   }
   object Assertion {

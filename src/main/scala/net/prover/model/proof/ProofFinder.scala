@@ -6,10 +6,7 @@ import net.prover.model.expressions._
 
 import scala.util.Try
 
-case class ProofFinder(
-  statementToProve: Statement,
-  reference: Reference.Direct)(
-  implicit context: ProvingContext)
+case class ProofFinder(statementToProve: Statement)(implicit context: ProvingContext)
 {
   import context._
 
@@ -27,7 +24,7 @@ case class ProofFinder(
     }
   }
 
-  def findProof(): Option[Step.Assertion] = {
+  def findProof(): Option[InferenceApplication] = {
     Proof.logger.info(s"Proving statement $statementToProve")
     availableInferences.iterator.findFirst(findDirectProof(_, allowRearrangement = false)) orElse
       findProofByRearranging() orElse
@@ -36,25 +33,22 @@ case class ProofFinder(
       availableInferences.iterator.findFirst(findProofByEliding)
   }
 
-  private def findDirectProof(inference: Inference, allowRearrangement: Boolean): Option[Step.Assertion] = {
-    getProofFinderForInference(inference, allowRearrangement).findDirectProof(statementToProve, reference)
+  private def findDirectProof(inference: Inference, allowRearrangement: Boolean): Option[InferenceApplication] = {
+    getProofFinderForInference(inference, allowRearrangement).findDirectProof(statementToProve)
   }
 
-  private def findProofUsingTransform(inference: Inference): Option[Step.Assertion] = {
-    getProofFinderForInference(inference).findProofUsingTransform(statementToProve, reference)
+  private def findProofUsingTransform(inference: Inference): Option[InferenceApplication] = {
+    getProofFinderForInference(inference).findProofUsingTransform(statementToProve)
   }
 
-  private def findProofByEliding(inference: Inference): Option[Step.Assertion] = {
-    getProofFinderForInference(inference).findProofByEliding(statementToProve, reference)
+  private def findProofByEliding(inference: Inference): Option[InferenceApplication] = {
+    getProofFinderForInference(inference).findProofByEliding(statementToProve)
   }
 
-  def findProofByRearranging(): Option[Step.Assertion] = {
+  def findProofByRearranging(): Option[InferenceApplication] = {
     ProofFinder.findAssertionByExpanding(
       statementToProve,
-      provenStatements.map(_.toReferencedStatement) ++ simplifications
-    ).map { inferenceApplication =>
-      Step.Assertion(statementToProve, inferenceApplication, reference, isRearrangement = true)
-    }
+      provenStatements.map(_.toReferencedStatement) ++ simplifications)
   }
 
   private def getAllSimplifications(
@@ -130,7 +124,7 @@ object ProofFinder {
       substitutedPremises <- inference.premises.map(_.statement.applySubstitutions(substitutions)).traverseOption.toSeq
       premiseReferences <- substitutedPremises.map(findAssertionWithPossibleExpansions(_, referencedStatements)).traverseOption.toSeq
       if inference.conclusion.applySubstitutions(substitutions).contains(assertion)
-    } yield InferenceApplication.Direct(inference, substitutions, premiseReferences, provingContext.depth)).headOption
+    } yield InferenceApplication.Direct(inference, substitutions, premiseReferences, isRearrangement = true, provingContext.depth)).headOption
   }
 
   def findAssertionByExpandingWithTransformation(
@@ -159,8 +153,9 @@ object ProofFinder {
         transformedPremises,
         transformedConclusion,
         transformationProof.steps,
+        isRearrangement = true,
         provingContext.depth)
-        ).headOption
+      ).headOption
     } else None
   }
 

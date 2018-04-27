@@ -24,16 +24,15 @@ sealed trait Step {
 
 object Step {
   case class Assertion(
-    assertion: Statement,
-    inferenceApplication: InferenceApplication,
-    reference: Reference.Direct,
-    isRearrangement: Boolean)
+      assertion: Statement,
+      inferenceApplication: InferenceApplication,
+      reference: Reference.Direct)
     extends Step
   {
     override def provenStatements = Seq(ProvenStatement(assertion, reference))
     override def referencedInferenceIds = inferenceApplication.referencedInferenceIds
     override def referenceMap = ReferenceMap(reference.value -> inferenceApplication.lineReferences)
-    override def cached = CachedStep.Assertion(assertion, inferenceApplication.cached, reference, isRearrangement)
+    override def cached = CachedStep.Assertion(assertion, inferenceApplication.cached, reference)
     override def length = 1
     override def intermediateReferences = Nil
     override def lastReference = Some(reference.value)
@@ -48,7 +47,7 @@ object Step {
         ProofLine.Expression.create(assertion, referenceMap.getReferrers(reference.value, additionalReference)),
         Some(reference.value),
         indentLevel,
-        if (isRearrangement)
+        if (inferenceApplication.isRearrangement)
           Some(ProofLine.InferenceLink("Rearrangement", None))
         else
           Some(ProofLine.InferenceLink(HtmlHelper.findInferenceToDisplay(inferenceApplication)))))

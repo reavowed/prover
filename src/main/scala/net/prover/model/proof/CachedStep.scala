@@ -15,8 +15,7 @@ object CachedStep {
   case class Assertion(
       assertion: Statement,
       cachedInferenceApplication: CachedInferenceApplication,
-      reference: Reference.Direct,
-      isRearrangement: Boolean)
+      reference: Reference.Direct)
     extends CachedStep
   {
     def getAssertionHints(availableInferences: Seq[Inference]): Seq[Assertion] = {
@@ -28,7 +27,7 @@ object CachedStep {
         _ = if (conclusion != assertion)
           CachedProof.logger.info(s"Inference conclusion '${conclusion.serialized}' was not '${assertion.serialized}'")
         if conclusion == assertion
-      } yield Step.Assertion(assertion, inferenceApplication, reference, isRearrangement)
+      } yield Step.Assertion(assertion, inferenceApplication, reference)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
       case StepOutline.Assertion(`assertion`, _) =>
@@ -37,18 +36,17 @@ object CachedStep {
         false
     }
     override def serializedLines: Seq[String] = {
-      Seq(s"assert ${if (isRearrangement) "rearranging " else ""}${assertion.serialized}") ++
+      Seq(s"assert ${assertion.serialized}") ++
         cachedInferenceApplication.serializedLines.indent
     }
   }
   object Assertion {
     def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Assertion] = {
       for {
-        isRearrangement <- Parser.optionalWord("rearranging").isDefined
         assertion <- Statement.parser
         cachedInferenceApplication <- CachedInferenceApplication.parser
       } yield {
-        Assertion(assertion, cachedInferenceApplication, reference, isRearrangement)
+        Assertion(assertion, cachedInferenceApplication, reference)
       }
     }
   }

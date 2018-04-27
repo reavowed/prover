@@ -74,7 +74,12 @@ object CachedReference {
       depth: Int)
     extends ToSingleLine
   {
-    private def cachedInferenceApplication = CachedInferenceApplication.Direct(inferenceId, inferenceSubstitutions, Seq(inferenceReference), depth)
+    private def cachedInferenceApplication = CachedInferenceApplication.Direct(
+      inferenceId,
+      inferenceSubstitutions,
+      Seq(inferenceReference),
+      isRearrangement = true,
+      depth)
     override def validate()(implicit context: ProvingContext) = {
       for {
         (conclusion, inferenceApplication) <- cachedInferenceApplication.validate()

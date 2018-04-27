@@ -14,6 +14,7 @@ object CachedInferenceApplication {
       inferenceId: String,
       localSubstitutions: Inference.Substitutions,
       cachedReferences: Seq[CachedReference],
+      isRearrangement: Boolean,
       depth: Int)
     extends CachedInferenceApplication
   {
@@ -36,20 +37,21 @@ object CachedInferenceApplication {
           ).mkString("\n"))
         }
         validatedReferences <- cachedReferences.validate(substitutedPremiseStatements)
-      } yield (substitutedConclusion, InferenceApplication.Direct(inference, substitutions, validatedReferences, depth))
+      } yield (substitutedConclusion, InferenceApplication.Direct(inference, substitutions, validatedReferences, isRearrangement, depth))
     }
 
-    override def serializedLines = Seq(s"direct $inferenceId ${localSubstitutions.serialized} {") ++
+    override def serializedLines = Seq(s"direct ${if (isRearrangement) "rearranged " else ""}$inferenceId ${localSubstitutions.serialized} {") ++
       cachedReferences.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
   object Direct {
     def parser(implicit parsingContext: ParsingContext): Parser[Direct] = {
       for {
+        isRearrangement <- Parser.optionalWord("rearranged").isDefined
         inferenceId <- Parser.singleWord
         substitutions <- Inference.Substitutions.parser
         references <- CachedReference.parser.listInBraces(None)
-      } yield Direct(inferenceId, substitutions, references, parsingContext.parameterDepth)
+      } yield Direct(inferenceId, substitutions, references, isRearrangement, parsingContext.parameterDepth)
     }
   }
 
@@ -60,6 +62,7 @@ object CachedInferenceApplication {
       transformation: StatementDefinition,
       transformedPremises: Seq[Premise],
       transformationProof: Seq[CachedStep],
+      isRearrangement: Boolean,
       depth: Int)
     extends CachedInferenceApplication
   {
@@ -97,9 +100,10 @@ object CachedInferenceApplication {
         transformedPremises,
         transformedConclusion,
         validatedTransformationProof,
+        isRearrangement,
         depth))
     }
-    override def serializedLines = Seq(s"transformed ${transformation.symbol} $inferenceId ${localSubstitutions.serialized} {") ++
+    override def serializedLines = Seq(s"transformed ${if (isRearrangement) "rearranged " else ""}${transformation.symbol} $inferenceId ${localSubstitutions.serialized} {") ++
       cachedReferences.flatMap(_.serializedLines).indent ++
       Seq("}") ++
       transformedPremises.map(_.serialized) ++
@@ -110,6 +114,7 @@ object CachedInferenceApplication {
   object Transformed {
     def parser(implicit parsingContext: ParsingContext): Parser[Transformed] = {
       for {
+        isRearrangement <- Parser.optionalWord("rearranged").isDefined
         symbol <- Parser.singleWord
         transformation = parsingContext.statementDefinitions.find(_.symbol == symbol)
           .getOrElse(throw new Exception(s"Unrecognised statement type $symbol"))
@@ -126,6 +131,7 @@ object CachedInferenceApplication {
         transformation,
         transformedPremises,
         transformationProof,
+        isRearrangement,
         parsingContext.parameterDepth)
     }
   }

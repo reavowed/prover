@@ -10,6 +10,7 @@ sealed trait InferenceApplication {
   def references: Seq[Reference]
   def lineReferences: Set[(String, Seq[Int])]
   def cached: CachedInferenceApplication
+  def isRearrangement: Boolean
 }
 
 object InferenceApplication {
@@ -17,15 +18,17 @@ object InferenceApplication {
       inference: Inference,
       substitutions: Substitutions,
       references: Seq[Reference],
+      isRearrangement: Boolean,
       depth: Int)
     extends InferenceApplication
   {
-    def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet + inference.id
-    def lineReferences = references.flatMap(_.lineReferences).toSet
-    def cached = CachedInferenceApplication.Direct(
+    override def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet + inference.id
+    override def lineReferences = references.flatMap(_.lineReferences).toSet
+    override def cached = CachedInferenceApplication.Direct(
       inference.id,
       inference.specifySubstitutions(substitutions),
       references.map(_.cached),
+      isRearrangement,
       depth)
   }
 
@@ -37,20 +40,22 @@ object InferenceApplication {
       transformedPremises: Seq[Premise],
       transformedConclusion: Statement,
       transformationProof: Seq[Step],
+      isRearrangement: Boolean,
       depth: Int)
     extends InferenceApplication
   {
-    def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet ++
+    override def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet ++
       transformationProof.flatMap(_.referencedInferenceIds) +
       inference.id
-    def lineReferences = references.flatMap(_.lineReferences).toSet
-    def cached = CachedInferenceApplication.Transformed(
+    override def lineReferences = references.flatMap(_.lineReferences).toSet
+    override def cached = CachedInferenceApplication.Transformed(
       inference.id,
       Inference.Transformed(inference, transformedPremises, transformedConclusion).specifySubstitutions(substitutions),
       references.map(_.cached),
       transformation,
       transformedPremises,
       transformationProof.map(_.cached),
+      isRearrangement,
       depth)
   }
 }
