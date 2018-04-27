@@ -12,6 +12,7 @@ sealed trait Step {
   def cached: CachedStep
   def length: Int
   def intermediateReferences: Seq[String]
+  def lastReference: Option[String]
   def getLines(
     referenceMap: ReferenceMap,
     indentLevel: Int,
@@ -34,7 +35,8 @@ object Step {
     override def referenceMap = ReferenceMap(reference.value -> inferenceApplication.lineReferences)
     override def cached = CachedStep.Assertion(assertion, inferenceApplication.cached, reference, isRearrangement)
     override def length = 1
-    override def intermediateReferences = Seq(reference.value)
+    override def intermediateReferences = Nil
+    override def lastReference = Some(reference.value)
     override def getLines(
       referenceMap: ReferenceMap,
       indentLevel: Int,
@@ -70,7 +72,8 @@ object Step {
     override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether
     override def cached = CachedStep.Assumption(assumption, substeps.map(_.cached), reference)
     override def length = substeps.map(_.length).sum
-    override def intermediateReferences = substeps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
+    override def intermediateReferences = substeps.intermediateReferences
+    override def lastReference = substeps.lastOption.flatMap(_.lastReference)
     override def getLines(
       referenceMap: ReferenceMap,
       indentLevel: Int,
@@ -119,7 +122,8 @@ object Step {
     override def referenceMap = assumptionStep.referenceMap ++ assertionStep.referenceMap
     override def cached = CachedStep.Naming(variableName, assumptionStep.cached, assertionStep.cached, reference)
     override def length = assumptionStep.length + 1
-    override def intermediateReferences = assumptionStep.substeps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
+    override def intermediateReferences = assumptionStep.intermediateReferences
+    override def lastReference = Some(reference.value)
     override def getLines(
       referenceMap: ReferenceMap,
       indentLevel: Int,
@@ -164,7 +168,8 @@ object Step {
     override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether
     override def cached = CachedStep.ScopedVariable(variableName, substeps.map(_.cached), reference)
     override def length = substeps.map(_.length).sum
-    override def intermediateReferences = substeps.dropRight(1).flatMap(_.intermediateReferences) :+ reference.value
+    override def intermediateReferences = substeps.intermediateReferences
+    override def lastReference = substeps.lastOption.flatMap(_.lastReference)
     override def getLines(
       referenceMap: ReferenceMap,
       indentLevel: Int,
@@ -187,6 +192,14 @@ object Step {
     override def isSingleAssertion = substeps match {
       case Seq(singleStep) if singleStep.isSingleAssertion => true
       case _ => false
+    }
+  }
+
+  implicit class StepSeqOps(steps: Seq[Step]) {
+    def intermediateReferences: Seq[String] = {
+      steps.dropRight(1).flatMap { step =>
+        step.intermediateReferences ++ step.lastReference.toSeq
+      } ++ steps.lastOption.toSeq.flatMap(_.intermediateReferences)
     }
   }
 }

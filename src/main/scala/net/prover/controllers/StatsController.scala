@@ -23,9 +23,8 @@ class StatsController @Autowired() (bookService: BookService) {
   def getUnusedLines = {
     for {
       theorem <- getBooks.flatMap(_.theorems)
-      reference <- theorem.proof.steps.flatMap(_.intermediateReferences)
+      reference <- theorem.proof.steps.intermediateReferences
       if theorem.proof.referenceMap.getReferrers(reference).isEmpty
-      if !theorem.proof.steps.lastOption.exists(_.reference.value == reference)
     } yield (s"/books/${theorem.bookKey}/${theorem.chapterKey}/${theorem.key}", reference)
   }
 }

@@ -23,9 +23,6 @@ qed
 
 theorem No Set Contains Itself
 premise ∈ a b
-assume = a b {
-  prove ∈ b b
-}
 prove ¬ ∈ b b
 prove ¬ = a b
 qed
