@@ -49,7 +49,7 @@ case class BookOutline(
     val transitiveDependencies = dependencies.transitive
     val previousInferences = transitiveDependencies.flatMap(_.inferences)
     val previousStatementDefinitions = transitiveDependencies.flatMap(_.statementDefinitions)
-    chapterOutlines.mapFold[Chapter] { case (chapterOutline, expandedChapters) =>
+    chapterOutlines.mapFold[Chapter] { case (expandedChapters, chapterOutline) =>
       chapterOutline.expand(
         ProofEntries(
           previousInferences ++ expandedChapters.flatMap(_.inferences),

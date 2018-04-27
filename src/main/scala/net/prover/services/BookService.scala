@@ -84,7 +84,7 @@ class BookService {
       val oldBooks = books.get()
       if (dirtyBooks.nonEmpty) {
         newBookData.map(_.bookOutline).traverseOption.foreach { bookOutlines =>
-          val booksOption = bookOutlines.collectFold[Book] { (previousBooks, bookOutline) =>
+          val booksOption = bookOutlines.mapFoldOption[Book] { (previousBooks, bookOutline) =>
             oldBooks.find(_.title == bookOutline.title) match {
               case Some(book) if !dirtyBooks.contains(book.title) =>
                 Some(book)

@@ -23,7 +23,7 @@ case class ChapterOutline(
     previousProofEntries: ProofEntries,
     cachedProofs: Seq[CachedProof]
   ): Chapter = {
-    val entries = entryOutlines.mapFold[ChapterEntry] { case (entry, previousEntries) =>
+    val entries = entryOutlines.mapFold[ChapterEntry] { case (previousEntries, entry) =>
       def inferencesSoFar = previousEntries.flatMap(_.inferences)
       def statementDefinitionsSoFar = previousEntries.ofType[StatementDefinition]
       def nextInferenceKey(name: String): String = {

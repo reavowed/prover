@@ -59,9 +59,9 @@ package object model {
         case _ => None
       }
     }
-    def mapFold[S](f: (T, Seq[S]) => S): Seq[S] = {
+    def mapFold[S](f: (Seq[S], T) => S): Seq[S] = {
       seq.foldLeft(Seq.empty[S]) { case (acc, t) =>
-        acc :+ f(t, acc)
+        acc :+ f(acc, t)
       }
     }
     def mapAndFold[R, S](f: (T, Seq[S]) => (R, S)): (Seq[R], Seq[S]) = {
@@ -70,7 +70,7 @@ package object model {
         (rs :+ r, ss :+ s)
       }
     }
-    def collectFold[S](f: (Seq[S], T) => Option[S]): Option[Seq[S]] = {
+    def mapFoldOption[S](f: (Seq[S], T) => Option[S]): Option[Seq[S]] = {
       seq.foldLeft(Option(Seq.empty[S])) { case (accOption, t) =>
         accOption.flatMap { acc =>
           f(acc, t).map(acc :+ _)
