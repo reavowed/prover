@@ -1,7 +1,7 @@
 Natural Numbers
 import Functions
 
-variables () (n m)
+variables (φ) (n m a A S f g)
 
 include 01.successors.chapter
 include 02.inductiveSets.chapter
@@ -10,4 +10,4 @@ include 04.literals.chapter
 include 05.induction.chapter
 include 06.inductiveProperties.chapter
 include 07.recursionTheorem.chapter
-include 08.addition.chapter
+# include 08.addition.chapter

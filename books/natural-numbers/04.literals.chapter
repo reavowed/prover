@@ -5,12 +5,12 @@ term 0 () (= _ ∅)
 
 theorem 0 Is a Natural Number
 prove = 0 ∅
-assume inductive X {
-  prove ∈ ∅ X
-  prove ∈ 0 X
+take X {
+  assume inductive X {
+    prove ∈ ∅ X
+    prove ∈ 0 X
+  }
 }
-prove → inductive X ∈ 0 X
-prove ∀ X → inductive X ∈ 0 X
 prove ∈ 0 ℕ
 qed
 

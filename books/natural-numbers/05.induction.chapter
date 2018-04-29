@@ -2,12 +2,13 @@ chapter Induction
 Proof by induction.
 
 theorem ℕ Is a Subset of Any Inductive Set
-premise inductive X
-assume ∈ n ℕ {
-  prove ∈ n X
+premise inductive S
+take n {
+  assume ∈ n ℕ {
+    prove ∈ n S
+  }
 }
-prove ∀ n → ∈ n ℕ ∈ n X
-prove ⊆ ℕ X
+prove ⊆ ℕ S
 qed
 
 theorem An Inductive Subset of ℕ Is ℕ
@@ -20,77 +21,59 @@ qed
 theorem Proof by Induction
 premise ⊆ S ℕ
 premise ∈ 0 S
-premise proves ∈ n S ∈ successor n S
-prove ∀ n → ∈ n S ∈ successor n S
+premise ∀ n → ∈ n S ∈ successor n S
 prove = 0 ∅
 prove ∈ ∅ S
-prove ∧ ∈ ∅ S ∀ n → ∈ n S ∈ successor n S
 prove inductive S
 prove = S ℕ
 qed
 
 theorem Proof by Induction over Comprehension
-premise = S comprehension n ℕ φ
+premise = S comprehension n ℕ with n φ
 premise ∈ 0 S
-premise proves ∈ m S ∈ successor m S
+premise ∀ n → ∈ n S ∈ successor n S
 prove ⊆ S ℕ
 prove = S ℕ
 qed
 
 theorem 0 as Element of a Comprehension over ℕ
-premise = S comprehension n ℕ φ
-premise sub 0 n φ
+premise = S comprehension n ℕ with n φ
+premise with 0 φ
 prove ∈ 0 ℕ
 prove ∈ 0 S
 qed
 
 theorem Successor as Element of a Comprehension over ℕ
-premise = S comprehension n ℕ φ
+premise = S comprehension n ℕ with n φ
 premise ∈ m S
-premise sub successor m n φ
+premise with successor m φ
 prove ∈ m ℕ
 prove ∈ successor m ℕ
 prove ∈ successor m S
 qed
 
 theorem Proof by Induction on Property
-premise sub 0 n φ
-premise proves ∧ ∈ n ℕ φ sub successor n n φ
-let S = S comprehension n ℕ φ {
+premise with 0 φ
+premise ∀ n → ∧ ∈ n ℕ with n φ with successor n φ
+let S = S comprehension n ℕ with n φ {
   prove ∈ 0 S
-  assume ∈ n S {
-    prove ∈ n ℕ
-    prove φ
-    prove ∧ ∈ n ℕ φ
-    prove sub successor n n φ
-    prove ∈ successor n S non-distinct (n φ)
+  take n {
+    assume ∈ n S {
+      prove ∈ n ℕ
+      prove with n φ
+      prove with successor n φ
+      prove ∈ successor n S
+    }
   }
   prove = S ℕ
-  prove ∀ n → ∈ n ℕ φ
-}
-qed
-
-theorem Proof by Induction on Property
-premise sub 0 n φ
-premise proves ∧ ∈ m ℕ sub m n φ sub successor m n φ
-let S = S comprehension n ℕ φ {
-  prove ∈ 0 S
-  assume ∈ m S {
-    prove ∈ m ℕ
-    prove sub m n φ
-    prove ∧ ∈ m ℕ sub m n φ
-    prove sub successor m n φ
-    prove ∈ successor m S
-  }
-  prove = S ℕ
-  prove ∀ n → ∈ n ℕ φ
+  prove ∀ n → ∈ n ℕ with n φ
 }
 qed
 
 theorem An Inductive Property Applies to Any Natural Number
+premise with 0 φ
+premise ∀ n → ∧ ∈ n ℕ with n φ with successor n φ
 premise ∈ n ℕ
-premise sub 0 n φ
-premise proves ∧ ∈ m ℕ sub m n φ sub successor m n φ
-prove ∀ n → ∈ n ℕ φ
-prove φ non-distinct (n φ)
+prove ∀ n → ∈ n ℕ with n φ
+prove with n φ
 qed

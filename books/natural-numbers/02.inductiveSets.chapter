@@ -1,12 +1,12 @@
 chapter Inductive Sets
 Define the concept of an inductive set - effectively, a set that contains every natural number.
 
-statement inductive (X)
-  format (X is inductive in parens)
-  definition (∧ ∈ ∅ X ∀ n → ∈ n X ∈ successor n X)
+statement inductive (S)
+  format (S is inductive in parens)
+  definition (∧ ∈ ∅ S ∀ n → ∈ n S ∈ successor n S)
 
 theorem An Inductive Set Contains the Empty Set
-premise inductive X
-prove ∧ ∈ ∅ X ∀ n → ∈ n X ∈ successor n X
-prove ∈ ∅ X
+premise inductive S
+prove ∧ ∈ ∅ S ∀ n → ∈ n S ∈ successor n S
+prove ∈ ∅ S
 qed
