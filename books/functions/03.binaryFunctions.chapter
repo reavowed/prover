@@ -12,6 +12,7 @@ let S = S comprehension s × × A B C ∃ a ∧ ∈ a A ∃ f ∧ function f B C
 prove ⊆ S × × A B C
 take y {
   assume ∈ y × A B {
+    prove ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = y orderedPair a b
     let a_1 ∧ ∈ a_1 A ∃ b ∧ ∈ b B = y orderedPair a_1 b {
     let b_1 ∧ ∈ b_1 B = y orderedPair a_1 b_1 {
     prove ∃! f ∧ function f B C with (f a_1) φ
@@ -81,6 +82,7 @@ take g {
   assume ∧ function g × A B C ∀ a → ∈ a A ∀ f → ∧ function f B C with (f a) φ ∀ b → ∈ b B = apply g orderedPair a b apply f b {
     take y {
       assume ∈ y × A B {
+        prove ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = y orderedPair a b
         let a' ∧ ∈ a' A ∃ b ∧ ∈ b B = y orderedPair a' b {
         let b' ∧ ∈ b' B = y orderedPair a' b' {
         prove ∀ f → ∧ function f B C with (f a') φ ∀ b → ∈ b B = apply S orderedPair a' b apply f b

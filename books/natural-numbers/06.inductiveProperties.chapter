@@ -21,6 +21,7 @@ premise ∈ n ℕ
 premise ∈ m n
 prove ∀ x ¬ ∈ x ∅
 prove ∀ x ¬ ∈ x 0
+  via = 0 ∅
 prove ∀ x → ∈ x 0 ∈ x ℕ
 take a {
   assume ∧ ∈ a ℕ ∀ x → ∈ x a ∈ x ℕ {
@@ -77,6 +78,7 @@ premise ∈ n ℕ
 premise ∈ m n
 prove ∀ x ¬ ∈ x ∅
 prove ∀ x ¬ ∈ x 0
+  via = 0 ∅
 prove ∀ x → ∈ x 0 ∨ ∈ successor x 0 = successor x 0
 take a {
   assume ∧ ∈ a ℕ ∀ x → ∈ x a ∨ ∈ successor x a = successor x a {
@@ -146,6 +148,7 @@ premise ∈ n ℕ
 premise ∈ m n
 prove ∀ m ¬ ∈ m ∅
 prove ∀ m ¬ ∈ m 0
+  via = 0 ∅
 prove ∀ m → ∈ m 0 ⊆ m 0
 take n {
   assume ∧ ∈ n ℕ ∀ m → ∈ m n ⊆ m n {
@@ -155,9 +158,11 @@ take n {
         assume ∈ m n {
           prove ⊆ m n
           prove ⊆ m successor n
+            via ⊆ n successor n
         }
         assume = m n {
           prove ⊆ m successor n
+            via ⊆ n successor n
         }
         prove ⊆ m successor n
       }
