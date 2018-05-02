@@ -1,4 +1,3 @@
-chapter Conjunction
 Introduce the "and" or "conjuction" connective, ∧.
 
 statement ∧ (φ ψ) definition (¬ → φ ¬ ψ)

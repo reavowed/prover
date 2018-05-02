@@ -4,11 +4,10 @@ import java.nio.file.{Files, Path, Paths}
 import java.time.Instant
 import java.util
 
-import net.prover.model.entries._
+import net.prover.model._
 import net.prover.model.proof.{CachedProof, ProofEntries}
 import org.slf4j.LoggerFactory
 
-import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 
 case class BookOutline(
@@ -97,14 +96,6 @@ case class BookOutline(
 object BookOutline {
   val logger = LoggerFactory.getLogger(BookOutline.getClass)
 
-  val chapterEntryParsers: Seq[ChapterEntryParser[_]] = Seq(
-    Comment,
-    StatementDefinition,
-    TermDefinition,
-    AxiomOutline,
-    TheoremOutline,
-    Shorthand)
-
   def parse(title: String, bookDirectoryPath: Path, availableDependencies: Seq[BookOutline]): (Option[BookOutline], Map[Path, Instant]) = {
     val key = title.formatAsKey
     val path = bookDirectoryPath.resolve(key).resolve(key + ".book")
@@ -129,24 +120,32 @@ object BookOutline {
         availableDependencies.find(_.title == importTitle).getOrElse(throw new Exception(s"Could not find imported book '$importTitle'"))
       }
       transitiveDependencies = dependencies.transitive
-      context = ParsingContext(
+      statementAndTermVariableNames <- variableDefinitionsParser
+      chapterTitles <- chapterTitlesParser
+    } yield {
+      val (statementVariableNames, termVariableNames) = statementAndTermVariableNames
+      val initialContext = ParsingContext(
         transitiveDependencies.flatMap(_.chapterOutlines.flatMap(_.statementDefinitions)),
         transitiveDependencies.flatMap(_.chapterOutlines.flatMap(_.termDefinitions)),
-        Set.empty,
-        Set.empty,
+        statementVariableNames,
+        termVariableNames,
         Seq.empty)
-      chapterOutlinesFileModificationTimesAndUpdatedParsingContext <- linesParser(title, path, context)
-    } yield {
-      val (chapterOutlines, fileModificationTimes, updatedParsingContext) = chapterOutlinesFileModificationTimesAndUpdatedParsingContext
+      val (updatedParsingContext, (chapterOutlines, chapterModificationTimes)) = chapterTitles.zipWithIndex
+        .mapFold(initialContext) { case (context, (chapterTitle, index)) =>
+          val fileName = "%02d".format(index + 1) + "." + chapterTitle.camelCase + ".chapter"
+          val chapterPath = path.getParent.resolve(fileName)
+          val (chapterOutline, newContext) = ChapterOutline.parser(chapterTitle, title)(context).parseAndDiscard(chapterPath)
+          (newContext, (chapterOutline, (chapterPath, Files.getLastModifiedTime(chapterPath).toInstant)))
+        }.mapRight(_.split)
       (BookOutline(
           title,
           path,
           dependencies,
           chapterOutlines,
-          updatedParsingContext.statementVariableNames,
-          updatedParsingContext.termVariableNames,
+          statementVariableNames,
+          termVariableNames,
           updatedParsingContext),
-        fileModificationTimes)
+        chapterModificationTimes.toMap)
     }
   }
 
@@ -157,102 +156,19 @@ object BookOutline {
       .whileDefined
   }
 
-  private def linesParser(
-    bookTitle: String,
-    bookPath: Path,
-    context: ParsingContext
-  ): Parser[(Seq[ChapterOutline], Map[Path, Instant], ParsingContext)] = {
-    Parser.iterateWhileDefined(
-      (Seq.empty[ChapterOutline], Map.empty[Path, Instant], context)
-    ) { case (chapterOutlines, fileModificationTimes, currentContext) =>
-      lineParser(bookTitle, bookPath, chapterOutlines, fileModificationTimes, currentContext)
-    }
-  }
-
-  private def lineParser(
-    bookTitle: String,
-    bookPath: Path,
-    chapterOutlines: Seq[ChapterOutline],
-    fileModificationTimes: Map[Path, Instant],
-    context: ParsingContext
-  ): Parser[Option[(Seq[ChapterOutline], Map[Path, Instant], ParsingContext)]] = {
-    val unsafeParser = Parser.singleWordIfAny.flatMapMap {
-      case "chapter" =>
-        for {
-          chapterOutline <- chapterOutlineParser(bookTitle)
-        } yield {
-          (chapterOutlines :+ chapterOutline, fileModificationTimes, context)
-        }
-      case "variables" =>
-        for {
-          updatedContext <- variableDefinitionsParser(context)
-        } yield {
-          (chapterOutlines, fileModificationTimes, updatedContext)
-        }
-      case "include" =>
-        for {
-          newModificationTime <- includeParser(bookPath, bookTitle)
-        } yield {
-          (chapterOutlines, fileModificationTimes + newModificationTime, context)
-        }
-      case key =>
-        chapterEntryParsers.find(_.name == key) match {
-          case Some(chapterEntryParser) =>
-            chapterOutlines match {
-              case previousChapters :+ currentChapter =>
-                for {
-                  chaptersAndContext <- chapterEntryParser.parseToChapterOutline(currentChapter, context)
-                  updatedChapter = chaptersAndContext._1
-                  updatedContext = chaptersAndContext._2
-                } yield {
-                  (previousChapters :+ updatedChapter, fileModificationTimes, updatedContext)
-                }
-              case Nil =>
-                throw new Exception(s"Cannot parse chapter entry '$key' outside of a chapter")
-            }
-          case None =>
-            throw new Exception(s"Unrecognised entry $key")
-        }
-    }
-    Parser { tokenizer =>
-      try {
-        unsafeParser.parse(tokenizer)
-      } catch {
-        case NonFatal(e) =>
-          throw ExceptionWithModificationTimes(e, fileModificationTimes)
+  def variableDefinitionsParser: Parser[(Set[String], Set[String])] = {
+    Parser.optionalWord("variables").flatMapMap { _ =>
+      for {
+        newStatementVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
+        newTermVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
+      } yield {
+        (newStatementVariableNames.toSet, newTermVariableNames.toSet)
       }
-    }
+    }.getOrElse((Set.empty, Set.empty))
   }
 
-  def chapterOutlineParser(bookTitle: String): Parser[ChapterOutline] = {
-    for {
-      title <- Parser.toEndOfLine
-      summary <- Parser.toEndOfLine
-    } yield {
-      ChapterOutline(title, summary, bookTitle)
-    }
-  }
-
-  def variableDefinitionsParser(context: ParsingContext): Parser[ParsingContext] = {
-    for {
-      newStatementVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
-      newTermVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
-    } yield {
-      context.copy(
-        statementVariableNames = context.statementVariableNames ++ newStatementVariableNames,
-        termVariableNames = context.termVariableNames ++ newTermVariableNames)
-    }
-  }
-
-  def includeParser(bookPath: Path, bookTitle: String): Parser[(Path, Instant)] = Parser { tokenizer =>
-    val (pathText, nextTokenizer) = Parser.toEndOfLine.parse(tokenizer)
-    val includedPath = bookPath.getParent.resolve(pathText)
-    if (!Files.exists(includedPath)) {
-      throw new Exception(s"Included file $includedPath does not exist")
-    }
-    val modificationTime = Files.getLastModifiedTime(includedPath).toInstant
-    val includeTokenizer = Tokenizer.fromPath(includedPath).copy(currentBook = Some(bookTitle))
-    ((includedPath, modificationTime), nextTokenizer.addTokenizer(includeTokenizer))
+  def chapterTitlesParser: Parser[Seq[String]] = {
+    Parser.optionalWord("chapter").flatMapMap(_ => Parser.toEndOfLine).whileDefined
   }
 
   implicit class BookOutlineSeqOps(bookOutlines: Seq[BookOutline]) {

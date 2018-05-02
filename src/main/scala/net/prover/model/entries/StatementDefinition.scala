@@ -51,7 +51,7 @@ case class StatementDefinition(
   }
 }
 
-object StatementDefinition extends ChapterEntryParser[StatementDefinition] {
+object StatementDefinition extends ChapterEntryParser {
   override val name: String = "statement"
 
   sealed trait StructureType

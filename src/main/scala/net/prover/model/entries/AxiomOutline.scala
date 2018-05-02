@@ -29,7 +29,7 @@ case class AxiomOutline(
   }
 }
 
-object AxiomOutline extends ChapterEntryParser[AxiomOutline] {
+object AxiomOutline extends ChapterEntryParser {
   override val name: String = "axiom"
 
   private def conclusionParser(implicit context: ParsingContext): Parser[Statement] = {

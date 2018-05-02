@@ -5,7 +5,7 @@ import net.prover.model.expressions.{Expression, Template}
 
 case class Shorthand(template: Template, format: Format) extends ChapterEntry.SelfOutline
 
-object Shorthand extends ChapterEntryParser[Shorthand] {
+object Shorthand extends ChapterEntryParser {
   override def name = "shorthand"
   override def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext) = {
     for {

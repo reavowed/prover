@@ -1,4 +1,3 @@
-chapter Propositional Logic Identities
 Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
 
 theorem And Is Symmetric

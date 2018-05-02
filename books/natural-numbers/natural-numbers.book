@@ -3,11 +3,10 @@ import Functions
 
 variables (φ) (n m a A S f g)
 
-include 01.successors.chapter
-include 02.inductiveSets.chapter
-include 03.definitionOfNaturals.chapter
-include 04.literals.chapter
-include 05.induction.chapter
-include 06.inductiveProperties.chapter
-include 07.recursionTheorem.chapter
-# include 08.addition.chapter
+chapter Successors
+chapter Inductive Sets
+chapter Definition of the Natural Numbers
+chapter Natural Number Literals
+chapter Induction
+chapter Inductive Properties
+chapter The Recursion Theorem

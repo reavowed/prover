@@ -1,4 +1,3 @@
-chapter Comprehension
 Introduce set comprehension, {x ∈ A | φ(x)}.
 
 theorem Comprehensions Exist for Empty Sets

@@ -51,3 +51,33 @@ case class ChapterOutline(
     Chapter(title, summary, bookTitle, entries)
   }
 }
+
+object ChapterOutline {
+
+  val chapterEntryParsers: Seq[ChapterEntryParser] = Seq(
+    Comment,
+    StatementDefinition,
+    TermDefinition,
+    AxiomOutline,
+    TheoremOutline,
+    Shorthand)
+
+  def chapterEntryParser(chapterKey: String, bookKey: String)(context: ParsingContext): Parser[Option[ChapterEntryOutline]] = {
+    Parser.singleWordIfAny.flatMapFlatMapReverse { key =>
+      chapterEntryParsers.find(_.name == key).map(_.parser(chapterKey, bookKey)(context))
+    }
+  }
+
+  def parser(title: String, bookTitle: String)(context: ParsingContext): Parser[(ChapterOutline, ParsingContext)] = {
+    val key = title.formatAsKey
+    val bookKey = bookTitle.formatAsKey
+    for {
+      summary <- Parser.toEndOfLine
+      entriesAndContext <- Parser.iterateMapFoldWhileDefined(context) { currentContext =>
+        chapterEntryParser(key, bookKey)(currentContext).mapMap { entry =>
+          (entry, currentContext.add(entry))
+        }
+      }
+    } yield ChapterOutline(title, summary, bookTitle, entriesAndContext._1) -> entriesAndContext._2
+  }
+}

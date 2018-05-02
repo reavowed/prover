@@ -2,9 +2,9 @@ package net.prover.model.entries
 
 import net.prover.model._
 
-trait ChapterEntryParser[T <: ChapterEntryOutline] {
+trait ChapterEntryParser {
   def name: String
-  def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[T]
+  def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[ChapterEntryOutline]
 
   def parseToChapterOutline(chapterOutline: ChapterOutline, context: ParsingContext): Parser[(ChapterOutline, ParsingContext)] = {
     for {

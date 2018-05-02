@@ -40,6 +40,13 @@ package object model {
     def splitByWhitespace(max: Int = 0): Seq[String] = {
       s.trim.split("\\s+", max).toSeq.filter(_.nonEmpty)
     }
+    def capitalise: String = {
+      s.headOption.map(_.toUpper).getOrElse("") + s.drop(1)
+    }
+    def camelCase: String = {
+      val words = splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase)
+      words.headOption.getOrElse("") + words.drop(1).map(_.capitalise).mkString("")
+    }
     def formatAsKey: String = splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase).mkString("-")
   }
 
@@ -59,15 +66,14 @@ package object model {
         case _ => None
       }
     }
+    def mapFold[R, S](initial: R)(f: (R, T) => (R, S)): (R, Seq[S]) = {
+      seq.foldLeft((initial, Seq.empty[S])) { case ((acc, ss), t) =>
+          f(acc, t).mapRight(ss :+ _)
+      }
+    }
     def mapFold[S](f: (Seq[S], T) => S): Seq[S] = {
       seq.foldLeft(Seq.empty[S]) { case (acc, t) =>
         acc :+ f(acc, t)
-      }
-    }
-    def mapAndFold[R, S](f: (T, Seq[S]) => (R, S)): (Seq[R], Seq[S]) = {
-      seq.foldLeft((Seq.empty[R], Seq.empty[S])) { case ((rs, ss), t) =>
-        val (r, s) = f(t, ss)
-        (rs :+ r, ss :+ s)
       }
     }
     def mapFoldOption[S](f: (Seq[S], T) => Option[S]): Option[Seq[S]] = {

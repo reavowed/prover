@@ -1,4 +1,3 @@
-chapter Disjunction
 Introduce the "or" or "disjuction" connective, ∨.
 
 statement ∨ (φ ψ) definition (→ ¬ φ ψ)

@@ -1,4 +1,3 @@
-chapter Binary Functions
 Introduce the concept of a binary function - a function whose domain is the product of two other sets.
 
 term binaryApply (∘ a b)

@@ -1,4 +1,3 @@
-chapter Recursion Theorem
 Prove the recursion theorem for recursively constructing functions on ℕ.
 
 theorem An Inductive Function Is Unique

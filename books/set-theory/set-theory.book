@@ -3,16 +3,16 @@ import Predicate Calculus
 
 variables (φ) (a b c d A B C D S X)
 
-include 01.extensionality.chapter
-include 02.subsets.chapter
-include 03.emptySet.chapter
-include 04.powerSets.chapter
-include 05.replacement.chapter
-include 06.singletons.chapter
-include 07.unorderedPairs.chapter
-include 08.orderedPairs.chapter
-include 09.comprehension.chapter
-include 10.unions.chapter
-include 11.intersections.chapter
-include 12.cartesianProduct.chapter
-include 13.regularity.chapter
+chapter Extensionality
+chapter Subsets
+chapter Empty Set
+chapter Power Sets
+chapter Replacement
+chapter Singletons
+chapter Unordered Pairs
+chapter Ordered Pairs
+chapter Comprehension
+chapter Unions
+chapter Intersections
+chapter Cartesian Product
+chapter Regularity

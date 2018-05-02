@@ -86,8 +86,22 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
   def parseAndDiscard(text: String, path: Path): T = {
     parse(Tokenizer.fromString(text, path))._1
   }
+  def parseAndDiscard(path: Path): T = {
+    parse(Tokenizer.fromPath(path))._1
+  }
   def listOrSingle(separatorOption: Option[String]): Parser[Seq[T]] = {
     listInParens(separatorOption).tryOrElse(map(Seq(_)))
+  }
+  def toEndOfFile: Parser[Seq[T]] = Parser { tokenizer =>
+    def helper(parsed: Seq[T], currentTokenizer: Tokenizer): (Seq[T], Tokenizer) = {
+      if (currentTokenizer.isEmpty) {
+        (parsed, currentTokenizer)
+      } else {
+        val (next, nextTokenizer) = parse(currentTokenizer)
+        helper(parsed :+ next, nextTokenizer)
+      }
+    }
+    helper(Nil, tokenizer)
   }
 }
 
@@ -188,6 +202,12 @@ object Parser {
       case None =>
         Parser.constant(None)
     }
+    def flatMapFlatMapReverse[S](f: T => Option[Parser[S]]): Parser[Option[S]] = parser.flatMap {
+      case Some(t) =>
+        f(t).map(_.map(Some.apply)).getOrElse(Parser.constant(None))
+      case None =>
+        Parser.constant(None)
+    }
     def orElse[S >: T](otherParser: => Parser[S]): Parser[S] = Parser { tokenizer =>
       parser.parse(tokenizer) match {
         case (Some(t), nextTokenizer) =>
@@ -251,5 +271,14 @@ object Parser {
     parseFn(initial)
       .flatMapMap(iterateWhileDefined(_)(parseFn))
       .getOrElse(initial)
+  }
+
+  def iterateMapFoldWhileDefined[T, R](
+    initial: R)(
+    parseFn: R => Parser[Option[(T, R)]]
+  ): Parser[(Seq[T], R)] = {
+    iterateWhileDefined((Seq.empty[T], initial)) { case (ts, acc) =>
+      parseFn(acc).mapMap(_.mapLeft(ts :+ _))
+    }
   }
 }

@@ -76,7 +76,7 @@ case class TheoremOutline(
   }
 }
 
-object TheoremOutline extends ChapterEntryParser[TheoremOutline] {
+object TheoremOutline extends ChapterEntryParser {
   val logger = LoggerFactory.getLogger(TheoremOutline.getClass)
   override val name: String = "theorem"
 

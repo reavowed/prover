@@ -1,4 +1,3 @@
-chapter Successors
 Define the successor pseudo-function which will form the basis of our inductive definition of the natural numbers.
 
 term successor (n)

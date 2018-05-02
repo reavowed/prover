@@ -1,4 +1,3 @@
-chapter Inductive Properties
 Some basic inductive properties of ℕ.
 
 theorem A Natural Number Is Either 0 or a Successor

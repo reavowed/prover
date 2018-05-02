@@ -44,7 +44,7 @@ case class TermDefinition(
   override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
 }
 
-object TermDefinition extends ChapterEntryParser[TermDefinition] {
+object TermDefinition extends ChapterEntryParser {
   override val name: String = "term"
 
   def premisesParser(implicit context: ParsingContext): Parser[Seq[Statement]] = Parser.optional(

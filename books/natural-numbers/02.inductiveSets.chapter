@@ -1,4 +1,3 @@
-chapter Inductive Sets
 Define the concept of an inductive set - effectively, a set that contains every natural number.
 
 statement inductive (S)

@@ -1,4 +1,3 @@
-chapter Implication and Negation
 We start by introducing our two fundamental connectives, → and ¬, and proving some basic facts about them.
 
 axiom Repetition
