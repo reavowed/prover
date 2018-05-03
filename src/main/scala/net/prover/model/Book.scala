@@ -29,7 +29,7 @@ case class Book(
       Seq("") ++
       chapters.map(c => s"chapter ${c.title}")++
       Seq("")
-    ).mkString(System.getProperty("line.separator"))
+    ).mkString("\n")
   }
 }
 
