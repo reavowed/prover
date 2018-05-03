@@ -2,60 +2,60 @@ Establish the existence of the singleton set {a}.
 
 theorem There Exists a Set with an Element
 prove ∈ ∅ powerSet ∅
-prove ∃ y ∈ y powerSet ∅
-prove ∃ x ∃ y ∈ y x
+prove ∃ y ∈ $0 powerSet ∅
+prove ∃ x ∃ y ∈ $$0 $.0
 qed
 
 theorem Singleton Existence
-prove ∃ x ∃ y ∈ y x
-let b ∃ y ∈ y b {
-  prove ∃! x = x a
+prove ∃ x ∃ y ∈ $$0 $.0
+let b ∃ y ∈ $$0 $.0 {
+  prove ∃! x = $$0 a
   take y {
-    prove → ∈ y b ∃! x = x a
+    prove → ∈ $$0 $.0 ∃! x = $$$0 a
   }
-  prove ∃ z ∀ x ↔ ∈ x z ∃ y ∧ ∈ y b = x a
+  prove ∃ z ∀ x ↔ ∈ $$$0 $$.0 ∃ y ∧ ∈ $$$$0 $...0 = $$$.0 a
   take x {
-    prove ↔ ∃ y ∧ ∈ y b = x a = x a
+    prove ↔ ∃ y ∧ ∈ $$$0 $..0 = $$.0 a = $$0 a
   }
-  prove ∃ z ∀ x ↔ ∈ x z = x a
-  prove ∃! z ∀ x ↔ ∈ x z = x a
+  prove ∃ z ∀ x ↔ ∈ $$$0 $$.0 = $$$0 a
+  prove ∃! z ∀ x ↔ ∈ $$$0 $$.0 = $$$0 a
 }
 qed
 
 term singleton (a)
   name (Singleton)
   format ({a})
-  (∀ x ↔ ∈ x _ = x a)
+  (∀ x ↔ ∈ $$0 $.0 = $$0 a)
 
 theorem A Set Is an Element of Its Singleton
-prove ∀ x ↔ ∈ x singleton a = x a
+prove ∀ x ↔ ∈ $0 singleton a = $0 a
 prove ∈ a singleton a
 qed
 
 theorem Element of Singleton
 premise ∈ b singleton a
-prove ∀ x ↔ ∈ x singleton a = x a
+prove ∀ x ↔ ∈ $0 singleton a = $0 a
 prove = b a
 qed
 
 theorem Sets Are Equal If Singletons Are Equal
 premise = singleton a singleton b
-prove ∀ x ↔ ∈ x singleton a = x a
-prove ∀ x ↔ ∈ x singleton b = x a
-prove ∀ x ↔ ∈ x singleton b = x b
-prove ∀ x ↔ = x a = x b
+prove ∀ x ↔ ∈ $0 singleton a = $0 a
+prove ∀ x ↔ ∈ $0 singleton b = $0 a
+prove ∀ x ↔ ∈ $0 singleton b = $0 b
+prove ∀ x ↔ = $0 a = $0 b
 prove = a b
 qed
 
 theorem Singleton of Element Is Subset
 premise ∈ a S
-prove ∀ x ↔ ∈ x singleton a = x a
+prove ∀ x ↔ ∈ $0 singleton a = $0 a
 take x {
-  assume = x a {
-    prove ∈ x S
+  assume = $0 a {
+    prove ∈ $0 S
   }
 }
-prove ∀ x → ∈ x singleton a ∈ x S
+prove ∀ x → ∈ $0 singleton a ∈ $0 S
 prove ⊆ singleton a S
 qed
 
@@ -72,18 +72,18 @@ qed
 
 theorem Subsets of a Singleton
 premise ⊆ S singleton a
-prove ∀ x → ∈ x S ∈ x singleton a
-prove ∀ x ↔ ∈ x singleton a = x a
-prove ∀ x → ∈ x S = x a
-assume ∃ y ∈ y S {
-  let b ∈ b S {
-    prove = b a
+prove ∀ x → ∈ $0 S ∈ $0 singleton a
+prove ∀ x ↔ ∈ $0 singleton a = $0 a
+prove ∀ x → ∈ $0 S = $0 a
+assume ∃ y ∈ $0 S {
+  let b ∈ $0 S {
+    prove = $0 a
     prove ∈ a S
   }
   prove ⊆ singleton a S
   prove = S singleton a
 }
-assume ¬ ∃ y ∈ y S {
+assume ¬ ∃ y ∈ $0 S {
   prove = S ∅
 }
 prove ∨ = S singleton a = S ∅
@@ -96,4 +96,3 @@ premise ∈ S powerSet singleton a
 prove ⊆ S singleton a
 prove ⊕ = S singleton a = S ∅
 qed
-

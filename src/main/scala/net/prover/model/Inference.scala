@@ -83,11 +83,19 @@ object Inference {
     override def rearrangementType = inner.rearrangementType
   }
 
-  sealed trait RearrangementType
+  sealed trait RearrangementType {
+    def serialized: Option[String]
+  }
   object RearrangementType {
-    object NotRearrangement extends RearrangementType
-    object Simplification extends RearrangementType
-    object Expansion extends RearrangementType
+    object NotRearrangement extends RearrangementType {
+      override def serialized = None
+    }
+    object Simplification extends RearrangementType {
+      override def serialized = Some("simplification")
+    }
+    object Expansion extends RearrangementType {
+      override def serialized = Some("expansion")
+    }
 
     def parser: Parser[RearrangementType] = {
       Parser.singleWord.map {
@@ -124,7 +132,7 @@ object Inference {
   }
 
   def calculateHash(premises: Seq[Premise], conclusion: Statement): String = {
-    val serialized = (premises.map(_.serialized) :+ conclusion.serialized).mkString("\n")
+    val serialized = (premises.map(_.serializedForHash) :+ conclusion.serialized).mkString("\n")
     val sha = MessageDigest.getInstance("SHA-256")
     sha.update(serialized.getBytes("UTF-8"))
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))

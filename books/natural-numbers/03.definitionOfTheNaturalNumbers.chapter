@@ -1,38 +1,38 @@
 Define the set of natural numbers, ℕ.
 
 axiom Axiom of Infinity
-conclusion ∃ X inductive X
+conclusion ∃ X inductive $0
 
 theorem The Natural Numbers Exist
-prove ∃ X inductive X
-prove ∃ Y ∀ n ↔ ∈ n Y ∀ X → inductive X ∈ n X
-prove ∃! Y ∀ n ↔ ∈ n Y ∀ X → inductive X ∈ n X
+prove ∃ X inductive $0
+prove ∃ Y ∀ n ↔ ∈ $$0 $.0 ∀ X → inductive $$$0 ∈ $$.0 $$$0
+prove ∃! Y ∀ n ↔ ∈ $$0 $.0 ∀ X → inductive $$$0 ∈ $$.0 $$$0
 qed
 
 term ℕ ()
-  (∀ n ↔ ∈ n _ ∀ X → inductive X ∈ n X)
+  (∀ n ↔ ∈ $$0 $.0 ∀ X → inductive $$$0 ∈ $$.0 $$$0)
 
 theorem An Element of All Inductive Sets Is a Natural Number
-premise ∀ X → inductive X ∈ n X
-prove ∀ n ↔ ∈ n ℕ ∀ X → inductive X ∈ n X
+premise ∀ X → inductive $0 ∈ n $0
+prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $$0 ∈ $.0 $$0
 prove ∈ n ℕ
 qed
 
 theorem A Natural Number Is an Element of Any Inductive Set
 premise ∈ n ℕ
 premise inductive S
-prove ∀ n ↔ ∈ n ℕ ∀ X → inductive X ∈ n X
-prove ∀ X → inductive X ∈ n X
+prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $$0 ∈ $.0 $$0
+prove ∀ X → inductive $0 ∈ n $0
 prove ∈ n S
 qed
 
 theorem A Successor of a Natural Number Is a Natural Number
 premise ∈ n ℕ
 take X {
-  assume inductive X {
-    prove ∈ n X
-    prove ∧ ∈ ∅ X ∀ n → ∈ n X ∈ successor n X
-    prove ∈ successor n X
+  assume inductive $0 {
+    prove ∈ n $0
+    prove ∧ ∈ ∅ $0 ∀ n → ∈ $$0 $.0 ∈ successor $$0 $.0
+    prove ∈ successor n $0
   }
 }
 prove ∈ successor n ℕ

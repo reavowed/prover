@@ -1,5 +1,5 @@
 Introduce the Axiom of Replacement.
 
 axiom Axiom of Replacement
-premise ∀ x → ∈ x a ∃! y with (x y) φ
-conclusion ∃ z ∀ y ↔ ∈ y z ∃ x ∧ ∈ x a with (x y) φ
+premise ∀ x → ∈ $0 a ∃! y with ($.0 $$0) φ
+conclusion ∃ z ∀ y ↔ ∈ $$0 $.0 ∃ x ∧ ∈ $$$0 a with ($$$0 $$.0) φ

@@ -1,123 +1,123 @@
 Arbitrary and binary unions.
 
 axiom Axiom of Union
-conclusion ∃ x ∀ y ↔ ∈ y x ∃ z ∧ ∈ z a ∈ y z
+conclusion ∃ x ∀ y ↔ ∈ $$0 $.0 ∃ z ∧ ∈ $$$0 a ∈ $$.0 $$$0
 
 theorem Arbitrary Unions Exist
-prove ∃ x ∀ y ↔ ∈ y x ∃ z ∧ ∈ z a ∈ y z
-prove ∃! x ∀ y ↔ ∈ y x ∃ z ∧ ∈ z a ∈ y z
+prove ∃ x ∀ y ↔ ∈ $$0 $.0 ∃ z ∧ ∈ $$$0 a ∈ $$.0 $$$0
+prove ∃! x ∀ y ↔ ∈ $$0 $.0 ∃ z ∧ ∈ $$$0 a ∈ $$.0 $$$0
 qed
 
 term union (a)
   name (Arbitrary Union)
   format (⋃a)
-  (∀ x ↔ ∈ x _ ∃ y ∧ ∈ x y ∈ y a)
+  (∀ x ↔ ∈ $$0 $.0 ∃ y ∧ ∈ $$.0 $$$0 ∈ $$$0 a)
 
 theorem Element of Arbitrary Union
 premise ∈ a union A
-prove ∀ y ↔ ∈ y union A ∃ x ∧ ∈ y x ∈ x A
-prove ∃ x ∧ ∈ a x ∈ x A
+prove ∀ y ↔ ∈ $0 union A ∃ x ∧ ∈ $.0 $$0 ∈ $$0 A
+prove ∃ x ∧ ∈ a $0 ∈ $0 A
 qed
 
 theorem Element of Element Is Element of Union
 premise ∈ b a
 premise ∈ a A
-prove ∃ x ∧ ∈ b x ∈ x A
-prove ∀ y ↔ ∈ y union A ∃ x ∧ ∈ y x ∈ x A
+prove ∃ x ∧ ∈ b $0 ∈ $0 A
+prove ∀ y ↔ ∈ $0 union A ∃ x ∧ ∈ $.0 $$0 ∈ $$0 A
 prove ∈ b union A
 qed
 
 term ∪ (a b)
-  (= _ union pair a b)
+  (= $0 union pair a b)
 
 theorem Membership Condition for Binary Union
-prove ∀ x ↔ ∈ x union pair a b ∃ y ∧ ∈ x y ∈ y pair a b
-prove ∀ x ↔ ∈ x ∪ a b ∃ y ∧ ∈ x y ∈ y pair a b
+prove ∀ x ↔ ∈ $0 union pair a b ∃ y ∧ ∈ $.0 $$0 ∈ $$0 pair a b
+prove ∀ x ↔ ∈ $0 ∪ a b ∃ y ∧ ∈ $.0 $$0 ∈ $$0 pair a b
   via = ∪ a b union pair a b
 take x {
-  assume ∃ y ∧ ∈ x y ∈ y pair a b {
-    let y ∧ ∈ x y ∈ y pair a b {
-      prove ∨ = y a = y b
-      assume = y a {
-        prove ∈ x a
+  assume ∃ y ∧ ∈ $.0 $$0 ∈ $$0 pair a b {
+    let y ∧ ∈ $.0 $$0 ∈ $$0 pair a b {
+      prove ∨ = $$0 a = $$0 b
+      assume = $$0 a {
+        prove ∈ $.0 a
       }
-      assume = y b {
-        prove ∈ x b
+      assume = $$0 b {
+        prove ∈ $.0 b
       }
-      prove ∨ ∈ x a ∈ x b
+      prove ∨ ∈ $.0 a ∈ $.0 b
     }
   }
-  assume ∈ x a {
+  assume ∈ $0 a {
     prove ∈ a pair a b
-    prove ∃ y ∧ ∈ x y ∈ y pair a b
+    prove ∃ y ∧ ∈ $.0 $$0 ∈ $$0 pair a b
   }
-  assume ∈ x b {
+  assume ∈ $0 b {
     prove ∈ b pair a b
-    prove ∃ y ∧ ∈ x y ∈ y pair a b
+    prove ∃ y ∧ ∈ $.0 $$0 ∈ $$0 pair a b
   }
-  assume ∨ ∈ x a ∈ x b {
-    prove ∃ y ∧ ∈ x y ∈ y pair a b
+  assume ∨ ∈ $0 a ∈ $0 b {
+    prove ∃ y ∧ ∈ $.0 $$0 ∈ $$0 pair a b
   }
-  prove ↔ ∃ y ∧ ∈ x y ∈ y pair a b ∨ ∈ x a ∈ x b
+  prove ↔ ∃ y ∧ ∈ $.0 $$0 ∈ $$0 pair a b ∨ ∈ $0 a ∈ $0 b
 }
-prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
+prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
 qed
 
 theorem Element of Binary Union
 premise ∈ c ∪ a b
-prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
+prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
 prove ∨ ∈ c a ∈ c b
 qed
 
 theorem Binary Union Is Symmetric
-prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
-prove ∀ x ↔ ∈ x ∪ b a ∨ ∈ x b ∈ x a
-prove ∀ x ↔ ∨ ∈ x a ∈ x b ∨ ∈ x b ∈ x a
+prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
+prove ∀ x ↔ ∈ $0 ∪ b a ∨ ∈ $0 b ∈ $0 a
+prove ∀ x ↔ ∨ ∈ $0 a ∈ $0 b ∨ ∈ $0 b ∈ $0 a
 prove = ∪ a b ∪ b a
 qed
 
 theorem Element Transfers to Binary Union
 premise ∈ c a
-prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
+prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
 prove ∈ c ∪ a b
 qed
 
 theorem Element Transfers to Binary Union
 premise ∈ c b
-prove ∀ x ↔ ∈ x ∪ a b ∨ ∈ x a ∈ x b
+prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
 prove ∈ c ∪ a b
 qed
 
 theorem The Empty Set Is an Identity for Binary Union
-prove ∀ x ↔ ∈ x ∪ ∅ a ∨ ∈ x ∅ ∈ x a
-prove ∀ x ¬ ∈ x ∅
-prove ∀ x ↔ ∨ ∈ x ∅ ∈ x a ∈ x a
-prove ∀ x ↔ ∈ x ∪ ∅ a ∈ x a
+prove ∀ x ↔ ∈ $0 ∪ ∅ a ∨ ∈ $0 ∅ ∈ $0 a
+prove ∀ x ¬ ∈ $0 ∅
+prove ∀ x ↔ ∨ ∈ $0 ∅ ∈ $0 a ∈ $0 a
+prove ∀ x ↔ ∈ $0 ∪ ∅ a ∈ $0 a
 prove = ∪ ∅ a a
 qed
 
 theorem The Empty Set Is an Identity for Binary Union
-prove ∀ x ↔ ∈ x ∪ a ∅ ∨ ∈ x a ∈ x ∅
-prove ∀ x ¬ ∈ x ∅
-prove ∀ x ↔ ∨ ∈ x a ∈ x ∅ ∈ x a
-prove ∀ x ↔ ∈ x ∪ a ∅ ∈ x a
+prove ∀ x ↔ ∈ $0 ∪ a ∅ ∨ ∈ $0 a ∈ $0 ∅
+prove ∀ x ¬ ∈ $0 ∅
+prove ∀ x ↔ ∨ ∈ $0 a ∈ $0 ∅ ∈ $0 a
+prove ∀ x ↔ ∈ $0 ∪ a ∅ ∈ $0 a
 prove = ∪ a ∅ a
 qed
 
 theorem A Union of a Non-Empty Set Is Non-Empty
 premise ¬ = a ∅
-prove ∃ x ∈ x a
-let x ∈ x a {
-  prove ∈ x ∪ a b
+prove ∃ x ∈ $0 a
+let x ∈ $0 a {
+  prove ∈ $0 ∪ a b
   prove ¬ = ∪ a b ∅
 }
 qed
 
 theorem A Union of a Non-Empty Set Is Non-Empty
 premise ¬ = a ∅
-prove ∃ x ∈ x a
-let x ∈ x a {
-  prove ∈ x ∪ b a
+prove ∃ x ∈ $0 a
+let x ∈ $0 a {
+  prove ∈ $0 ∪ b a
   prove ¬ = ∪ b a ∅
 }
 qed
@@ -161,20 +161,20 @@ qed
 theorem Union of Subsets Is a Subset
 premise ⊆ A X
 premise ⊆ B X
-prove ∀ x → ∈ x A ∈ x X
-prove ∀ x → ∈ x B ∈ x X
-prove ∀ x → ∨ ∈ x A ∈ x B ∈ x X
-prove ∀ x ↔ ∈ x ∪ A B ∨ ∈ x A ∈ x B
-prove ∀ x → ∈ x ∪ A B ∈ x X
+prove ∀ x → ∈ $0 A ∈ $0 X
+prove ∀ x → ∈ $0 B ∈ $0 X
+prove ∀ x → ∨ ∈ $0 A ∈ $0 B ∈ $0 X
+prove ∀ x ↔ ∈ $0 ∪ A B ∨ ∈ $0 A ∈ $0 B
+prove ∀ x → ∈ $0 ∪ A B ∈ $0 X
 prove ⊆ ∪ A B X
 qed
 
 theorem Subset Transfers to Union
 premise ⊆ X A
 take x {
-  assume ∈ x X {
-    prove ∈ x A
-    prove ∈ x ∪ A B
+  assume ∈ $0 X {
+    prove ∈ $0 A
+    prove ∈ $0 ∪ A B
   }
 }
 prove ⊆ X ∪ A B
@@ -183,9 +183,9 @@ qed
 theorem Subset Transfers to Union
 premise ⊆ X A
 take x {
-  assume ∈ x X {
-    prove ∈ x A
-    prove ∈ x ∪ B A
+  assume ∈ $0 X {
+    prove ∈ $0 A
+    prove ∈ $0 ∪ B A
   }
 }
 prove ⊆ X ∪ B A
@@ -204,15 +204,15 @@ qed
 theorem Redundant Union with Subset
 premise ⊆ A B
 take x {
-  assume ∈ x ∪ A B {
-    prove ∨ ∈ x A ∈ x B
-    assume ∈ x A {
-      prove ∈ x B
+  assume ∈ $0 ∪ A B {
+    prove ∨ ∈ $0 A ∈ $0 B
+    assume ∈ $0 A {
+      prove ∈ $0 B
     }
-    prove ∈ x B
+    prove ∈ $0 B
   }
-  assume ∈ x B {
-    prove ∈ x ∪ A B
+  assume ∈ $0 B {
+    prove ∈ $0 ∪ A B
   }
 }
 prove = ∪ A B B
@@ -234,12 +234,12 @@ qed
 theorem Union of Subsets Is Subset
 premise ⊆ A powerSet B
 take y {
-  assume ∈ y union A {
-    prove ∃ a ∧ ∈ y a ∈ a A
-    let a ∧ ∈ y a ∈ a A {
-      prove ∈ a powerSet B
-      prove ⊆ a B
-      prove ∈ y B
+  assume ∈ $0 union A {
+    prove ∃ a ∧ ∈ $.0 $$0 ∈ $$0 A
+    let a ∧ ∈ $.0 $$0 ∈ $$0 A {
+      prove ∈ $$0 powerSet B
+      prove ⊆ $$0 B
+      prove ∈ $.0 B
     }
   }
 }

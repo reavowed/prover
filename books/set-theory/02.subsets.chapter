@@ -1,21 +1,21 @@
 Introduce the subset relation, ⊆.
 
 statement ⊆ (A B)
-  definition (∀ x → ∈ x A ∈ x B)
+  definition (∀ x → ∈ $0 A ∈ $0 B)
 
 theorem Definition of ⊆
 premise ⊆ A B
 premise ∈ a A
-prove ∀ x → ∈ x A ∈ x B
+prove ∀ x → ∈ $0 A ∈ $0 B
 prove ∈ a B
 qed
 
 theorem Subset Is Antisymmetric
 premise ⊆ A B
 premise ⊆ B A
-prove ∀ x → ∈ x A ∈ x B
-prove ∀ x → ∈ x B ∈ x A
-prove ∀ x ↔ ∈ x A ∈ x B
+prove ∀ x → ∈ $0 A ∈ $0 B
+prove ∀ x → ∈ $0 B ∈ $0 A
+prove ∀ x ↔ ∈ $0 A ∈ $0 B
 prove = A B
 qed
 
@@ -23,15 +23,15 @@ theorem Subset Is Transitive
 premise ⊆ A B
 premise ⊆ B C elidable
 take x {
-	assume ∈ x A {
-	  prove ∈ x B
-	  prove ∈ x C
-	}
+  assume ∈ $0 A {
+    prove ∈ $0 B
+    prove ∈ $0 C
+  }
 }
 prove ⊆ A C
 qed
 
 theorem Any Set Is a Subset of Itself
-prove ∀ x → ∈ x A ∈ x A
+prove ∀ x → ∈ $0 A ∈ $0 A
 prove ⊆ A A
 qed

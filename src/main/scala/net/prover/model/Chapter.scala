@@ -26,4 +26,9 @@ case class Chapter(
   def shorthands: Seq[Shorthand] = {
     entries.ofType[Shorthand]
   }
+
+  def serialized: String = {
+    val entryTexts = entries.map(_.serializedLines.mkString("\n"))
+    (summary +: entryTexts).mkString("\n\n") + "\n"
+  }
 }

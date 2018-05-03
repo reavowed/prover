@@ -14,71 +14,73 @@ qed
 
 term × (A B)
   name (Cartesian Product)
-  (= _ comprehension x powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b)
+  (= $0 comprehension x powerSet powerSet ∪ A B ∃ a ∧ ∈ $$$0 A ∃ b ∧ ∈ $$$$0 B = $$..0 orderedPair $$$.0 $$$$0)
 
 theorem Membership Condition for Cartesian Product
-prove = × A B comprehension y powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = y orderedPair a b
-prove ∀ x ↔ ∈ x × A B ∧ ∈ x powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
+prove = × A B comprehension y powerSet powerSet ∪ A B ∃ a ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0
+prove ∀ x ↔ ∈ $0 × A B ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0
 take x {
-  assume ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b {
-    let c ∧ ∈ c A ∃ b ∧ ∈ b B = x orderedPair c b {
-      let d ∧ ∈ d B = x orderedPair c d {
-        prove ∈ orderedPair c d powerSet powerSet ∪ A B
-        prove ∈ x powerSet powerSet ∪ A B
+  assume ∃ a ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0 {
+    let c ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0 {
+      let d ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0 {
+        prove ∈ orderedPair $$.0 $$$0 powerSet powerSet ∪ A B
+        prove ∈ $..0 powerSet powerSet ∪ A B
       }
     }
   }
-  prove ↔ ∧ ∈ x powerSet powerSet ∪ A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
+  prove ↔ ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0 ∃ a ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0
 }
-prove ∀ x ↔ ∈ x × A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
+prove ∀ x ↔ ∈ $0 × A B ∃ a ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0
 qed
 
 theorem Element of Cartesian Product
 premise ∈ X × A B
-prove ∀ x ↔ ∈ x × A B ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
-prove ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = X orderedPair a b
+prove ∀ x ↔ ∈ $0 × A B ∃ a ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0
+prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $$0 B = X orderedPair $.0 $$0
 qed
 
 theorem Membership Condition for Cartesian Product
-take a { take b {
-  assume ∈ orderedPair a b × A B {
-    prove ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d
-    let c ∧ ∈ c A ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d {
-      let d ∧ ∈ d B = orderedPair a b orderedPair c d {
-        prove = a c
-        prove = b d
-        prove ∈ a A
-        prove ∈ b B
-        prove ∧ ∈ a A ∈ b B
+take a {
+  take b {
+    assume ∈ orderedPair $.0 $$0 × A B {
+      prove ∃ c ∧ ∈ $$$0 A ∃ d ∧ ∈ $$$$0 B = orderedPair $...0 $$..0 orderedPair $$$.0 $$$$0
+      let c ∧ ∈ $$$0 A ∃ d ∧ ∈ $$$$0 B = orderedPair $...0 $$..0 orderedPair $$$.0 $$$$0 {
+        let d ∧ ∈ $$$$0 B = orderedPair $...0 $$..0 orderedPair $$$.0 $$$$0 {
+          prove = $...0 $$$.0
+          prove = $$..0 $$$$0
+          prove ∈ $...0 A
+          prove ∈ $$..0 B
+          prove ∧ ∈ $...0 A ∈ $$..0 B
+        }
       }
     }
+    assume ∧ ∈ $.0 A ∈ $$0 B {
+      prove = orderedPair $.0 $$0 orderedPair $.0 $$0
+      prove ∧ ∈ $$0 B = orderedPair $.0 $$0 orderedPair $.0 $$0
+      prove ∃ d ∧ ∈ $$$0 B = orderedPair $..0 $$.0 orderedPair $..0 $$$0
+      prove ∧ ∈ $.0 A ∃ d ∧ ∈ $$$0 B = orderedPair $..0 $$.0 orderedPair $..0 $$$0
+      prove ∃ c ∧ ∈ $$$0 A ∃ d ∧ ∈ $$$$0 B = orderedPair $...0 $$..0 orderedPair $$$.0 $$$$0
+      prove ∀ x ↔ ∈ $$$0 × A B ∃ c ∧ ∈ $$$$0 A ∃ d ∧ ∈ $$$$$0 B = $$$..0 orderedPair $$$$.0 $$$$$0
+      prove ∈ orderedPair $.0 $$0 × A B
+    }
+    prove ↔ ∈ orderedPair $.0 $$0 × A B ∧ ∈ $.0 A ∈ $$0 B
   }
-  assume ∧ ∈ a A ∈ b B {
-    prove = orderedPair a b orderedPair a b
-    prove ∧ ∈ b B = orderedPair a b orderedPair a b
-    prove ∃ d ∧ ∈ d B = orderedPair a b orderedPair a d
-    prove ∧ ∈ a A ∃ d ∧ ∈ d B = orderedPair a b orderedPair a d
-    prove ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = orderedPair a b orderedPair c d
-    prove ∀ x ↔ ∈ x × A B ∃ c ∧ ∈ c A ∃ d ∧ ∈ d B = x orderedPair c d
-    prove ∈ orderedPair a b × A B
-  }
-  prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
-}}
+}
 qed
 
 theorem Ordered Pair Is Element of Cartesian Product
 premise ∈ a A
 premise ∈ b B
-prove ∀ x ∀ y ↔ ∈ orderedPair x y × A B ∧ ∈ x A ∈ y B
-prove ∀ y ↔ ∈ orderedPair a y × A B ∧ ∈ a A ∈ y B
+prove ∀ x ∀ y ↔ ∈ orderedPair $.0 $$0 × A B ∧ ∈ $.0 A ∈ $$0 B
+prove ∀ y ↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B
 prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
 prove ∈ orderedPair a b × A B
 qed
 
 theorem Coordinates of Element of Cartesian Product
 premise ∈ orderedPair a b × A B
-prove ∀ x ∀ y ↔ ∈ orderedPair x y × A B ∧ ∈ x A ∈ y B
-prove ∀ y ↔ ∈ orderedPair a y × A B ∧ ∈ a A ∈ y B
+prove ∀ x ∀ y ↔ ∈ orderedPair $.0 $$0 × A B ∧ ∈ $.0 A ∈ $$0 B
+prove ∀ y ↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B
 prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
 prove ∧ ∈ a A ∈ b B
 qed
@@ -99,14 +101,14 @@ theorem Product of Subsets Is Subset of Product
 premise ⊆ A C
 premise ⊆ B D
 take x {
-  assume ∈ x × A B {
-    prove ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b
-    let a ∧ ∈ a A ∃ b ∧ ∈ b B = x orderedPair a b {
-      let b ∧ ∈ b B = x orderedPair a b {
-        prove ∈ a C
-        prove ∈ b D
-        prove ∈ orderedPair a b × C D
-        prove ∈ x × C D
+  assume ∈ $0 × A B {
+    prove ∃ a ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0
+    let a ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0 {
+      let b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0 {
+        prove ∈ $$.0 C
+        prove ∈ $$$0 D
+        prove ∈ orderedPair $$.0 $$$0 × C D
+        prove ∈ $..0 × C D
       }
     }
   }

@@ -95,21 +95,18 @@ case class BookOutline(
 object BookOutline {
   val logger = LoggerFactory.getLogger(BookOutline.getClass)
 
-  def parse(title: String, path: Path, availableDependencies: Seq[BookOutline]): (Option[BookOutline], Map[Path, Instant]) = {
+  def parse(title: String, path: Path, availableDependencies: Seq[BookOutline], getChapterPath: (String, Int) => Path): Option[BookOutline] = {
     val key = title.formatAsKey
-    Try(parser(path, availableDependencies).parse(Tokenizer.fromPath(path))._1) match {
-      case Success((bookOutline, subModificationTimes)) =>
-        (Some(bookOutline), subModificationTimes)
-      case Failure(ExceptionWithModificationTimes(e, subModificationTimes)) =>
-        logger.error(s"Error parsing book '$title'\n${e.getMessage}")
-        (None, subModificationTimes)
+    Try(parser(path, availableDependencies, getChapterPath).parse(Tokenizer.fromPath(path))._1) match {
+      case Success(bookOutline) =>
+        Some(bookOutline)
       case Failure(e) =>
         logger.error(s"Error parsing book '$title'\n${e.getMessage}")
-        (None, Map.empty)
+        None
     }
   }
 
-  def parser(path: Path, availableDependencies: Seq[BookOutline]): Parser[(BookOutline, Map[Path, Instant])] = {
+  def parser(path: Path, availableDependencies: Seq[BookOutline], getChapterPath: (String, Int) => Path): Parser[BookOutline] = {
     for {
       title <- Parser.toEndOfLine
       imports <- importsParser
@@ -127,22 +124,19 @@ object BookOutline {
         statementVariableNames.toSet,
         termVariableNames.toSet,
         Seq.empty)
-      val (updatedParsingContext, (chapterOutlines, chapterModificationTimes)) = chapterTitles.zipWithIndex
-        .mapFold(initialContext) { case (context, (chapterTitle, index)) =>
-          val fileName = "%02d".format(index + 1) + "." + chapterTitle.camelCase + ".chapter"
-          val chapterPath = path.getParent.resolve(fileName)
+      val (updatedParsingContext, chapterOutlines) = chapterTitles.zipWithIndex.mapFold(initialContext) { case (context, (chapterTitle, index)) =>
+          val chapterPath = getChapterPath(chapterTitle, index)
           val (chapterOutline, newContext) = ChapterOutline.parser(chapterTitle, title)(context).parseAndDiscard(chapterPath)
-          (newContext, (chapterOutline, (chapterPath, Files.getLastModifiedTime(chapterPath).toInstant)))
-        }.mapRight(_.split)
-      (BookOutline(
+          (newContext, chapterOutline)
+        }
+      BookOutline(
           title,
           path,
           dependencies,
           chapterOutlines,
           statementVariableNames,
           termVariableNames,
-          updatedParsingContext),
-        chapterModificationTimes.toMap)
+          updatedParsingContext)
     }
   }
 

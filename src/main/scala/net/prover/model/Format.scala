@@ -2,7 +2,11 @@ package net.prover.model
 
 import java.util.regex.Matcher
 
-case class Format(formatString: String, requiresBrackets: Boolean) {
+trait Format {
+  def formatString: String
+  def requiresBrackets: Boolean
+  def serialized: Option[String]
+
   def formatHtml(components: Seq[String], safe: Boolean = false): String = {
     formatInternal(HtmlHelper.format(formatString), components, safe)
   }
@@ -26,34 +30,42 @@ case class Format(formatString: String, requiresBrackets: Boolean) {
 }
 
 object Format {
+  case class Default(formatString: String, requiresBrackets: Boolean) extends Format {
+    override def serialized = None
+  }
+  case class Explicit(formatString: String, originalValue: String, requiresBrackets: Boolean) extends Format {
+    override def serialized = Some(originalValue)
+  }
+
   def default(
     symbol: String,
     replacementNames: Seq[String]
   ): Format = {
-    replacementNames match {
+    val formatString = replacementNames match {
       case Nil =>
-        Format(symbol, requiresBrackets = false)
-      case Seq(_) =>
-        Format(s"$symbol%0", requiresBrackets = false)
-      case Seq(_, _) =>
-        Format(s"%0 $symbol %1", requiresBrackets = true)
+        symbol
+      case Seq(a) =>
+        s"$symbol%0"
+      case Seq(a, b) =>
+        s"%0 $symbol %1"
       case _ =>
         throw new Exception("Explicit format must be supplied with more than two components")
     }
+    Format.Default(formatString, requiresBrackets = false)
   }
 
-  def parser(replacementNames: Seq[String]): Parser[Format] = {
+  def parser(replacementNames: Seq[String]): Parser[Format.Explicit] = {
     for {
-      rawFormatWithParens <- Parser.allInParens
+      originalString <- Parser.allInParens
     } yield {
-      val (rawFormat, requiresBrackets) = if (rawFormatWithParens.endsWith("in parens"))
-        (rawFormatWithParens.stripSuffix("in parens").trim, true)
+      val (rawString, requiresBrackets) = if (originalString.endsWith("in parens"))
+        (originalString.stripSuffix("in parens").trim, true)
       else
-        (rawFormatWithParens, false)
-      val replacedFormat = replacementNames.zipWithIndex.foldLeft(rawFormat) { case (str, (name, index)) =>
+        (originalString, false)
+      val replacedFormat = replacementNames.zipWithIndex.foldLeft(rawString) { case (str, (name, index)) =>
         str.replaceAll(name, s"%$index")
       }
-      Format(replacedFormat, requiresBrackets)
+      Format.Explicit(replacedFormat, originalString, requiresBrackets)
     }
   }
 

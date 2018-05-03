@@ -63,7 +63,7 @@ object ProofLine {
             }},
             topLevelReferrers)
         case ExpressionApplication(text, arguments) => Nested(
-          Format(text + "(" + arguments.indices.map(i => s"%$i").mkString(", ") + ")", requiresBrackets = false),
+          Format.Default(text + "(" + arguments.indices.map(i => s"%$i").mkString(", ") + ")", requiresBrackets = false),
           arguments.mapWithIndex((argument, index) => {
             create(argument, referrers.filter(_._2.headOption.contains(index)).map(_.mapRight(_.tail)))
           }),

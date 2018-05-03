@@ -4,7 +4,8 @@ axiom Repetition
 premise φ
 conclusion φ
 
-statement → (φ ψ) deduction
+statement → (φ ψ)
+  deduction
 
 axiom Modus Ponens
 premise → φ ψ elidable
@@ -28,7 +29,8 @@ qed
 
 statement ⊥ ()
 
-statement ¬ (φ) definition (→ φ ⊥)
+statement ¬ (φ)
+  definition (→ φ ⊥)
 
 axiom Remove Double Negative
 premise ¬ ¬ φ

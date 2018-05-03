@@ -3,7 +3,7 @@ Define the successor pseudo-function which will form the basis of our inductive 
 term successor (n)
   name (a Successor)
   format (n^+)
-  (= _ ∪ n singleton n)
+  (= $0 ∪ n singleton n)
 
 theorem Element of Successor
 premise ∈ n successor m
@@ -32,8 +32,8 @@ qed
 
 theorem A Set Is a Subset of Its Successor
 take x {
-  assume ∈ x n {
-    prove ∈ x successor n
+  assume ∈ $0 n {
+    prove ∈ $0 successor n
   }
 }
 prove ⊆ n successor n

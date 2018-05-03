@@ -3,103 +3,110 @@ Introduce the concept of a binary function - a function whose domain is the prod
 term binaryApply (∘ a b)
   name (Binary Function Application)
   format (a ∘ b in parens)
-  (= _ apply ∘ orderedPair a b)
+  (= $0 apply ∘ orderedPair a b)
 
 theorem Binary Function from Curried Functions
-premise ∀ a → ∈ a A ∃! f ∧ function f B C with (f a) φ
-let S = S comprehension s × × A B C ∃ a ∧ ∈ a A ∃ f ∧ function f B C ∧ with (f a) φ ∃ b ∧ ∈ b B = s orderedPair orderedPair a b apply f b {
-prove ⊆ S × × A B C
-take y {
-  assume ∈ y × A B {
-    prove ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = y orderedPair a b
-    let a_1 ∧ ∈ a_1 A ∃ b ∧ ∈ b B = y orderedPair a_1 b {
-    let b_1 ∧ ∈ b_1 B = y orderedPair a_1 b_1 {
-    prove ∃! f ∧ function f B C with (f a_1) φ
-    let f_1 ∧ function f_1 B C with (f_1 a_1) φ {
-      prove ∈ apply f_1 b_1 C
-      prove ∈ orderedPair y apply f_1 b_1 × × A B C
-      prove = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b_1 apply f_1 b_1
-      prove ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b apply f_1 b
-      prove ∃ f ∧ function f B C ∧ with (f a_1) φ ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a_1 b apply f b
-      prove ∃ a ∧ ∈ a A ∃ f ∧ function f B C ∧ with (f a) φ ∃ b ∧ ∈ b B = orderedPair y apply f_1 b_1 orderedPair orderedPair a b apply f b
-
-      prove ∈ orderedPair y apply f_1 b_1 S
-      take x {
-        assume ∈ orderedPair y x S {
-          prove ∃ a ∧ ∈ a A ∃ f ∧ function f B C ∧ with (f a) φ ∃ b ∧ ∈ b B = orderedPair y x orderedPair orderedPair a b apply f b
-          let a' ∧ ∈ a' A ∃ f ∧ function f B C ∧ with (f a') φ ∃ b ∧ ∈ b B = orderedPair y x orderedPair orderedPair a' b apply f b {
-          let f' ∧ function f' B C ∧ with (f' a') φ ∃ b ∧ ∈ b B = orderedPair y x orderedPair orderedPair a' b apply f' b {
-          let b' ∧ ∈ b' B = orderedPair y x orderedPair orderedPair a' b' apply f' b' {
-            prove = y orderedPair a' b'
-            prove = orderedPair a_1 b_1 orderedPair a' b'
-            prove = a_1 a'
-            prove = b_1 b'
-            prove with (f' a_1) φ
-            prove = f_1 f'
-            prove = x apply f' b'
-            prove = x apply f' b_1
-            prove = x apply f_1 b_1
-          }}}
-        }
-      }
-      prove ∃! x ∈ orderedPair y x S
-    }}}
-  }
-} 
-prove function S × A B C
-take a_1 {
-  assume ∈ a_1 A {
-    prove ∃! f ∧ function f B C with (f a_1) φ
-    take f_1 {
-      assume ∧ function f_1 B C with (f_1 a_1) φ {
-        take b_1 {
-          assume ∈ b_1 B {
-            prove ∈ orderedPair a_1 b_1 × A B
-            prove ∈ orderedPair orderedPair a_1 b_1 apply S orderedPair a_1 b_1 S
-            prove ∃ a ∧ ∈ a A ∃ f ∧ function f B C ∧ with (f a) φ ∃ b ∧ ∈ b B = orderedPair orderedPair a_1 b_1 apply S orderedPair a_1 b_1 orderedPair orderedPair a b apply f b
-            let a_2 ∧ ∈ a_2 A ∃ f ∧ function f B C ∧ with (f a_2) φ ∃ b ∧ ∈ b B = orderedPair orderedPair a_1 b_1 apply S orderedPair a_1 b_1 orderedPair orderedPair a_2 b apply f b {
-            let f_2 ∧ function f_2 B C ∧ with (f_2 a_2) φ ∃ b ∧ ∈ b B = orderedPair orderedPair a_1 b_1 apply S orderedPair a_1 b_1 orderedPair orderedPair a_2 b apply f_2 b {
-            let b_2 ∧ ∈ b_2 B = orderedPair orderedPair a_1 b_1 apply S orderedPair a_1 b_1 orderedPair orderedPair a_2 b_2 apply f_2 b_2 {
-            prove = orderedPair a_1 b_1 orderedPair a_2 b_2
-            prove = a_1 a_2
-            prove = b_1 b_2
-            prove ∧ function f_2 B C with (f_2 a_2) φ
-            prove ∧ function f_2 B C with (f_2 a_1) φ
-            prove = f_1 f_2
-            prove = apply S orderedPair a_1 b_1 apply f_2 b_2
-            prove = apply S orderedPair a_1 b_1 apply f_1 b_2
-            prove = apply S orderedPair a_1 b_1 apply f_1 b_1
-            }}}
+premise ∀ a → ∈ $0 A ∃! f ∧ function $$0 B C with ($$0 $.0) φ
+let S = $0 comprehension s × × A B C ∃ a ∧ ∈ $$$0 A ∃ f ∧ function $$$$0 B C ∧ with ($$$$0 $$$.0) φ ∃ b ∧ ∈ $$$$$0 B = $$...0 orderedPair orderedPair $$$..0 $$$$$0 apply $$$$.0 $$$$$0 {
+  prove ⊆ $0 × × A B C
+  take y {
+    assume ∈ $$0 × A B {
+      prove ∃ a ∧ ∈ $$$0 A ∃ b ∧ ∈ $$$$0 B = $$..0 orderedPair $$$.0 $$$$0
+      let a_1 ∧ ∈ $$$0 A ∃ b ∧ ∈ $$$$0 B = $$..0 orderedPair $$$.0 $$$$0 {
+        let b_1 ∧ ∈ $$$$0 B = $$..0 orderedPair $$$.0 $$$$0 {
+          prove ∃! f ∧ function $$$$$0 B C with ($$$$$0 $$$..0) φ
+          let f_1 ∧ function $$$$$0 B C with ($$$$$0 $$$..0) φ {
+            prove ∈ apply $$$$$0 $$$$.0 C
+            prove ∈ orderedPair $$...0 apply $$$$$0 $$$$.0 × × A B C
+            prove = orderedPair $$...0 apply $$$$$0 $$$$.0 orderedPair orderedPair $$$..0 $$$$.0 apply $$$$$0 $$$$.0
+            prove ∃ b ∧ ∈ $$$$$$0 B = orderedPair $$....0 apply $$$$$.0 $$$$..0 orderedPair orderedPair $$$...0 $$$$$$0 apply $$$$$.0 $$$$$$0
+            prove ∃ f ∧ function $$$$$$0 B C ∧ with ($$$$$$0 $$$...0) φ ∃ b ∧ ∈ $$$$$$$0 B = orderedPair $$.....0 apply $$$$$..0 $$$$...0 orderedPair orderedPair $$$....0 $$$$$$$0 apply $$$$$$.0 $$$$$$$0
+            prove ∃ a ∧ ∈ $$$$$$0 A ∃ f ∧ function $$$$$$$0 B C ∧ with ($$$$$$$0 $$$$$$.0) φ ∃ b ∧ ∈ $$$$$$$$0 B = orderedPair $$......0 apply $$$$$...0 $$$$....0 orderedPair orderedPair $$$$$$..0 $$$$$$$$0 apply $$$$$$$.0 $$$$$$$$0
+            prove ∈ orderedPair $$...0 apply $$$$$0 $$$$.0 $....0
+            take x {
+              assume ∈ orderedPair $$....0 $$$$$$0 $.....0 {
+                prove ∃ a ∧ ∈ $$$$$$$0 A ∃ f ∧ function $$$$$$$$0 B C ∧ with ($$$$$$$$0 $$$$$$$.0) φ ∃ b ∧ ∈ $$$$$$$$$0 B = orderedPair $$.......0 $$$$$$...0 orderedPair orderedPair $$$$$$$..0 $$$$$$$$$0 apply $$$$$$$$.0 $$$$$$$$$0
+                let a' ∧ ∈ $$$$$$$0 A ∃ f ∧ function $$$$$$$$0 B C ∧ with ($$$$$$$$0 $$$$$$$.0) φ ∃ b ∧ ∈ $$$$$$$$$0 B = orderedPair $$.......0 $$$$$$...0 orderedPair orderedPair $$$$$$$..0 $$$$$$$$$0 apply $$$$$$$$.0 $$$$$$$$$0 {
+                  let f' ∧ function $$$$$$$$0 B C ∧ with ($$$$$$$$0 $$$$$$$.0) φ ∃ b ∧ ∈ $$$$$$$$$0 B = orderedPair $$.......0 $$$$$$...0 orderedPair orderedPair $$$$$$$..0 $$$$$$$$$0 apply $$$$$$$$.0 $$$$$$$$$0 {
+                    let b' ∧ ∈ $$$$$$$$$0 B = orderedPair $$.......0 $$$$$$...0 orderedPair orderedPair $$$$$$$..0 $$$$$$$$$0 apply $$$$$$$$.0 $$$$$$$$$0 {
+                      prove = $$.......0 orderedPair $$$$$$$..0 $$$$$$$$$0
+                      prove = orderedPair $$$......0 $$$$.....0 orderedPair $$$$$$$..0 $$$$$$$$$0
+                      prove = $$$......0 $$$$$$$..0
+                      prove = $$$$.....0 $$$$$$$$$0
+                      prove with ($$$$$$$$.0 $$$......0) φ
+                      prove = $$$$$....0 $$$$$$$$.0
+                      prove = $$$$$$...0 apply $$$$$$$$.0 $$$$$$$$$0
+                      prove = $$$$$$...0 apply $$$$$$$$.0 $$$$.....0
+                      prove = $$$$$$...0 apply $$$$$....0 $$$$.....0
+                    }
+                  }
+                }
+              }
+            }
+            prove ∃! x ∈ orderedPair $$....0 $$$$$$0 $.....0
           }
         }
       }
     }
   }
-}
-prove ∧ function S × A B C ∀ a → ∈ a A ∀ f → ∧ function f B C with (f a) φ ∀ b → ∈ b B = apply S orderedPair a b apply f b
-take g {
-  assume ∧ function g × A B C ∀ a → ∈ a A ∀ f → ∧ function f B C with (f a) φ ∀ b → ∈ b B = apply g orderedPair a b apply f b {
-    take y {
-      assume ∈ y × A B {
-        prove ∃ a ∧ ∈ a A ∃ b ∧ ∈ b B = y orderedPair a b
-        let a' ∧ ∈ a' A ∃ b ∧ ∈ b B = y orderedPair a' b {
-        let b' ∧ ∈ b' B = y orderedPair a' b' {
-        prove ∀ f → ∧ function f B C with (f a') φ ∀ b → ∈ b B = apply S orderedPair a' b apply f b
-        prove ∀ f → ∧ function f B C with (f a') φ ∀ b → ∈ b B = apply g orderedPair a' b apply f b
-        prove ∃! f ∧ function f B C with (f a') φ
-        let f' ∧ function f' B C with (f' a') φ {
-        prove ∀ b → ∈ b B = apply S orderedPair a' b apply f' b
-        prove ∀ b → ∈ b B = apply g orderedPair a' b apply f' b
-        prove = apply S orderedPair a' b' apply f' b'
-        prove = apply g orderedPair a' b' apply f' b'
-        prove = apply g orderedPair a' b' apply S orderedPair a' b'
-        prove = apply g y apply S y
-        }}}
+  prove function $0 × A B C
+  take a_1 {
+    assume ∈ $$0 A {
+      prove ∃! f ∧ function $$$0 B C with ($$$0 $$.0) φ
+      take f_1 {
+        assume ∧ function $$$0 B C with ($$$0 $$.0) φ {
+          take b_1 {
+            assume ∈ $$$$0 B {
+              prove ∈ orderedPair $$..0 $$$$0 × A B
+              prove ∈ orderedPair orderedPair $$..0 $$$$0 apply $...0 orderedPair $$..0 $$$$0 $...0
+              prove ∃ a ∧ ∈ $$$$$0 A ∃ f ∧ function $$$$$$0 B C ∧ with ($$$$$$0 $$$$$.0) φ ∃ b ∧ ∈ $$$$$$$0 B = orderedPair orderedPair $$.....0 $$$$...0 apply $......0 orderedPair $$.....0 $$$$...0 orderedPair orderedPair $$$$$..0 $$$$$$$0 apply $$$$$$.0 $$$$$$$0
+              let a_2 ∧ ∈ $$$$$0 A ∃ f ∧ function $$$$$$0 B C ∧ with ($$$$$$0 $$$$$.0) φ ∃ b ∧ ∈ $$$$$$$0 B = orderedPair orderedPair $$.....0 $$$$...0 apply $......0 orderedPair $$.....0 $$$$...0 orderedPair orderedPair $$$$$..0 $$$$$$$0 apply $$$$$$.0 $$$$$$$0 {
+                let f_2 ∧ function $$$$$$0 B C ∧ with ($$$$$$0 $$$$$.0) φ ∃ b ∧ ∈ $$$$$$$0 B = orderedPair orderedPair $$.....0 $$$$...0 apply $......0 orderedPair $$.....0 $$$$...0 orderedPair orderedPair $$$$$..0 $$$$$$$0 apply $$$$$$.0 $$$$$$$0 {
+                  let b_2 ∧ ∈ $$$$$$$0 B = orderedPair orderedPair $$.....0 $$$$...0 apply $......0 orderedPair $$.....0 $$$$...0 orderedPair orderedPair $$$$$..0 $$$$$$$0 apply $$$$$$.0 $$$$$$$0 {
+                    prove = orderedPair $$.....0 $$$$...0 orderedPair $$$$$..0 $$$$$$$0
+                    prove = $$.....0 $$$$$..0
+                    prove = $$$$...0 $$$$$$$0
+                    prove ∧ function $$$$$$.0 B C with ($$$$$$.0 $$$$$..0) φ
+                    prove ∧ function $$$$$$.0 B C with ($$$$$$.0 $$.....0) φ
+                    prove = $$$....0 $$$$$$.0
+                    prove = apply $......0 orderedPair $$.....0 $$$$...0 apply $$$$$$.0 $$$$$$$0
+                    prove = apply $......0 orderedPair $$.....0 $$$$...0 apply $$$....0 $$$$$$$0
+                    prove = apply $......0 orderedPair $$.....0 $$$$...0 apply $$$....0 $$$$...0
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
-    prove = g S
   }
-}
-prove ∃! g ∧ function g × A B C ∀ a → ∈ a A ∀ f → ∧ function f B C with (f a) φ ∀ b → ∈ b B = apply g orderedPair a b apply f b
+  prove ∧ function $0 × A B C ∀ a → ∈ $$0 A ∀ f → ∧ function $$$0 B C with ($$$0 $$.0) φ ∀ b → ∈ $$$$0 B = apply $...0 orderedPair $$..0 $$$$0 apply $$$.0 $$$$0
+  take g {
+    assume ∧ function $$0 × A B C ∀ a → ∈ $$$0 A ∀ f → ∧ function $$$$0 B C with ($$$$0 $$$.0) φ ∀ b → ∈ $$$$$0 B = apply $$...0 orderedPair $$$..0 $$$$$0 apply $$$$.0 $$$$$0 {
+      take y {
+        assume ∈ $$$0 × A B {
+          prove ∃ a ∧ ∈ $$$$0 A ∃ b ∧ ∈ $$$$$0 B = $$$..0 orderedPair $$$$.0 $$$$$0
+          let a' ∧ ∈ $$$$0 A ∃ b ∧ ∈ $$$$$0 B = $$$..0 orderedPair $$$$.0 $$$$$0 {
+            let b' ∧ ∈ $$$$$0 B = $$$..0 orderedPair $$$$.0 $$$$$0 {
+              prove ∀ f → ∧ function $$$$$$0 B C with ($$$$$$0 $$$$..0) φ ∀ b → ∈ $$$$$$$0 B = apply $......0 orderedPair $$$$...0 $$$$$$$0 apply $$$$$$.0 $$$$$$$0
+              prove ∀ f → ∧ function $$$$$$0 B C with ($$$$$$0 $$$$..0) φ ∀ b → ∈ $$$$$$$0 B = apply $$.....0 orderedPair $$$$...0 $$$$$$$0 apply $$$$$$.0 $$$$$$$0
+              prove ∃! f ∧ function $$$$$$0 B C with ($$$$$$0 $$$$..0) φ
+              let f' ∧ function $$$$$$0 B C with ($$$$$$0 $$$$..0) φ {
+                prove ∀ b → ∈ $$$$$$$0 B = apply $......0 orderedPair $$$$...0 $$$$$$$0 apply $$$$$$.0 $$$$$$$0
+                prove ∀ b → ∈ $$$$$$$0 B = apply $$.....0 orderedPair $$$$...0 $$$$$$$0 apply $$$$$$.0 $$$$$$$0
+                prove = apply $.....0 orderedPair $$$$..0 $$$$$.0 apply $$$$$$0 $$$$$.0
+                prove = apply $$....0 orderedPair $$$$..0 $$$$$.0 apply $$$$$$0 $$$$$.0
+                prove = apply $$....0 orderedPair $$$$..0 $$$$$.0 apply $.....0 orderedPair $$$$..0 $$$$$.0
+                prove = apply $$....0 $$$...0 apply $.....0 $$$...0
+              }
+            }
+          }
+        }
+      }
+      prove = $$0 $.0
+    }
+  }
+  prove ∃! g ∧ function $$0 × A B C ∀ a → ∈ $$$0 A ∀ f → ∧ function $$$$0 B C with ($$$$0 $$$.0) φ ∀ b → ∈ $$$$$0 B = apply $$...0 orderedPair $$$..0 $$$$$0 apply $$$$.0 $$$$$0
 }
 qed

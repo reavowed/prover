@@ -9,11 +9,9 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Rest
 @RequestMapping(Array("/stats"))
 class StatsController @Autowired() (bookService: BookService) {
 
-  def getBooks: Seq[Book] = bookService.books.get()
-
   @GetMapping(value = Array("longestProofs"))
   def getLongestProofs = {
-    getBooks.flatMap(_.theorems)
+    bookService.books.flatMap(_.theorems)
       .sortBy(theorem => -1 * theorem.proof.length)
       .take(10)
       .map(theorem => (s"/books/${theorem.bookKey}/${theorem.chapterKey}/${theorem.key}", theorem.proof.length))
@@ -22,7 +20,7 @@ class StatsController @Autowired() (bookService: BookService) {
   @GetMapping(value = Array("unusedLines"))
   def getUnusedLines = {
     for {
-      theorem <- getBooks.flatMap(_.theorems)
+      theorem <- bookService.books.flatMap(_.theorems)
       reference <- theorem.proof.steps.intermediateReferences
       if theorem.proof.referenceMap.getReferrers(reference).isEmpty
     } yield (s"/books/${theorem.bookKey}/${theorem.chapterKey}/${theorem.key}", reference)

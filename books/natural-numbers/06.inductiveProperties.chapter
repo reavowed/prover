@@ -3,50 +3,50 @@ Some basic inductive properties of ℕ.
 theorem A Natural Number Is Either 0 or a Successor
 premise ∈ n ℕ
 prove = 0 0
-prove ∨ = 0 0 ∃ m ∧ ∈ m ℕ = 0 successor m
+prove ∨ = 0 0 ∃ m ∧ ∈ $0 ℕ = 0 successor $0
 take a {
-  assume ∧ ∈ a ℕ ∨ = a 0 ∃ m ∧ ∈ m ℕ = a successor m {
-    prove = successor a successor a
-    prove ∧ ∈ a ℕ = successor a successor a
-    prove ∃ m ∧ ∈ m ℕ = successor a successor m
-    prove ∨ = successor a 0 ∃ m ∧ ∈ m ℕ = successor a successor m
+  assume ∧ ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $$0 ℕ = $.0 successor $$0 {
+    prove = successor $0 successor $0
+    prove ∧ ∈ $0 ℕ = successor $0 successor $0
+    prove ∃ m ∧ ∈ $$0 ℕ = successor $.0 successor $$0
+    prove ∨ = successor $0 0 ∃ m ∧ ∈ $$0 ℕ = successor $.0 successor $$0
   }
 }
-prove ∨ = n 0 ∃ m ∧ ∈ m ℕ = n successor m
+prove ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0
 qed
 
 theorem Every Element of a Natural Number Is a Natural Number
 premise ∈ n ℕ
 premise ∈ m n
-prove ∀ x ¬ ∈ x ∅
-prove ∀ x ¬ ∈ x 0
+prove ∀ x ¬ ∈ $0 ∅
+prove ∀ x ¬ ∈ $0 0
   via = 0 ∅
-prove ∀ x → ∈ x 0 ∈ x ℕ
+prove ∀ x → ∈ $0 0 ∈ $0 ℕ
 take a {
-  assume ∧ ∈ a ℕ ∀ x → ∈ x a ∈ x ℕ {
+  assume ∧ ∈ $0 ℕ ∀ x → ∈ $$0 $.0 ∈ $$0 ℕ {
     take x {
-      assume ∈ x a {
-        prove ∈ x ℕ
+      assume ∈ $$0 $.0 {
+        prove ∈ $$0 ℕ
       }
-      assume = x a {
-        prove ∈ x ℕ
+      assume = $$0 $.0 {
+        prove ∈ $$0 ℕ
       }
-      assume ∈ x successor a {
-        prove ∨ ∈ x a = x a
-        prove ∈ x ℕ
+      assume ∈ $$0 successor $.0 {
+        prove ∨ ∈ $$0 $.0 = $$0 $.0
+        prove ∈ $$0 ℕ
       }
     }
   }
 }
-prove ∀ x → ∈ x n ∈ x ℕ
+prove ∀ x → ∈ $0 n ∈ $0 ℕ
 prove ∈ m ℕ
 qed
 
 theorem A Natural Number Is a Subset of the Natural Numbers
 premise ∈ n ℕ
 take m {
-  assume ∈ m n {
-    prove ∈ m ℕ
+  assume ∈ $0 n {
+    prove ∈ $0 ℕ
   }
 }
 prove ⊆ n ℕ
@@ -57,16 +57,16 @@ premise ∈ n ℕ
 prove = 0 0
 prove ∨ = 0 0 ∈ 0 0
 take m {
-  assume ∧ ∈ m ℕ ∨ = m 0 ∈ 0 m {
-    assume = m 0 {
-      prove ∈ m successor m
-      prove ∈ 0 successor m
+  assume ∧ ∈ $0 ℕ ∨ = $0 0 ∈ 0 $0 {
+    assume = $0 0 {
+      prove ∈ $0 successor $0
+      prove ∈ 0 successor $0
     }
-    assume ∈ 0 m {
-      prove ∈ 0 successor m
+    assume ∈ 0 $0 {
+      prove ∈ 0 successor $0
     }
-    prove ∈ 0 successor m
-    prove ∨ = successor m 0 ∈ 0 successor m
+    prove ∈ 0 successor $0
+    prove ∨ = successor $0 0 ∈ 0 successor $0
   }
 }
 prove ∨ = n 0 ∈ 0 n
@@ -75,36 +75,36 @@ qed
 theorem A Natural Number Either Contains Or Is The Successor of an Element
 premise ∈ n ℕ
 premise ∈ m n
-prove ∀ x ¬ ∈ x ∅
-prove ∀ x ¬ ∈ x 0
+prove ∀ x ¬ ∈ $0 ∅
+prove ∀ x ¬ ∈ $0 0
   via = 0 ∅
-prove ∀ x → ∈ x 0 ∨ ∈ successor x 0 = successor x 0
+prove ∀ x → ∈ $0 0 ∨ ∈ successor $0 0 = successor $0 0
 take a {
-  assume ∧ ∈ a ℕ ∀ x → ∈ x a ∨ ∈ successor x a = successor x a {
+  assume ∧ ∈ $0 ℕ ∀ x → ∈ $$0 $.0 ∨ ∈ successor $$0 $.0 = successor $$0 $.0 {
     take x {
-    assume ∈ x successor a {
-        prove ∨ ∈ x a = x a
-        assume ∈ x a {
-          prove ∨ ∈ successor x a = successor x a
-          assume ∈ successor x a {
-            prove ∈ successor x successor a
+      assume ∈ $$0 successor $.0 {
+        prove ∨ ∈ $$0 $.0 = $$0 $.0
+        assume ∈ $$0 $.0 {
+          prove ∨ ∈ successor $$0 $.0 = successor $$0 $.0
+          assume ∈ successor $$0 $.0 {
+            prove ∈ successor $$0 successor $.0
           }
-          assume = successor x a {
-            prove ∈ a successor a
-            prove ∈ successor x successor a
+          assume = successor $$0 $.0 {
+            prove ∈ $.0 successor $.0
+            prove ∈ successor $$0 successor $.0
           }
-          prove ∈ successor x successor a
+          prove ∈ successor $$0 successor $.0
         }
-        assume = x a {
-          prove = successor x successor x
-          prove = successor x successor a
+        assume = $$0 $.0 {
+          prove = successor $$0 successor $$0
+          prove = successor $$0 successor $.0
         }
-        prove ∨ ∈ successor x successor a = successor x successor a
+        prove ∨ ∈ successor $$0 successor $.0 = successor $$0 successor $.0
       }
     }
   }
 }
-prove ∀ x → ∈ x n ∨ ∈ successor x n = successor x n
+prove ∀ x → ∈ $0 n ∨ ∈ successor $0 n = successor $0 n
 prove ∨ ∈ successor m n = successor m n
 qed
 
@@ -114,29 +114,29 @@ premise ∈ m ℕ
 prove ∨ = n 0 ∈ 0 n
 prove ∨ ∈ n 0 ∨ = n 0 ∈ 0 n
 take a {
-  assume ∧ ∈ a ℕ ∨ ∈ n a ∨ = n a ∈ a n {
-    assume ∈ n a {
-      prove ∈ n successor a
-      prove ∨ ∈ n successor a ∨ = n successor a ∈ successor a n
+  assume ∧ ∈ $0 ℕ ∨ ∈ n $0 ∨ = n $0 ∈ $0 n {
+    assume ∈ n $0 {
+      prove ∈ n successor $0
+      prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n
     }
-    assume = n a {
+    assume = n $0 {
       prove ∈ n successor n
-      prove ∈ n successor a
-      prove ∨ ∈ n successor a ∨ = n successor a ∈ successor a n
+      prove ∈ n successor $0
+      prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n
     }
-    assume ∈ a n {
-      prove ∨ ∈ successor a n = successor a n
-      prove ∨ = successor a n ∈ successor a n
-      assume = successor a n {
-        prove = n successor a
+    assume ∈ $0 n {
+      prove ∨ ∈ successor $0 n = successor $0 n
+      prove ∨ = successor $0 n ∈ successor $0 n
+      assume = successor $0 n {
+        prove = n successor $0
       }
-      prove ∨ = n successor a ∈ successor a n
-      prove ∨ ∈ n successor a ∨ = n successor a ∈ successor a n
+      prove ∨ = n successor $0 ∈ successor $0 n
+      prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n
     }
-    assume ∨ = n a ∈ a n {
-      prove ∨ ∈ n successor a ∨ = n successor a ∈ successor a n
+    assume ∨ = n $0 ∈ $0 n {
+      prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n
     }
-    prove ∨ ∈ n successor a ∨ = n successor a ∈ successor a n
+    prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n
   }
 }
 prove ∨ ∈ n m ∨ = n m ∈ m n
@@ -145,30 +145,30 @@ qed
 theorem Natural Number Transitivity
 premise ∈ n ℕ
 premise ∈ m n
-prove ∀ m ¬ ∈ m ∅
-prove ∀ m ¬ ∈ m 0
+prove ∀ m ¬ ∈ $0 ∅
+prove ∀ m ¬ ∈ $0 0
   via = 0 ∅
-prove ∀ m → ∈ m 0 ⊆ m 0
+prove ∀ m → ∈ $0 0 ⊆ $0 0
 take n {
-  assume ∧ ∈ n ℕ ∀ m → ∈ m n ⊆ m n {
+  assume ∧ ∈ $0 ℕ ∀ m → ∈ $$0 $.0 ⊆ $$0 $.0 {
     take m {
-      assume ∈ m successor n {
-        prove ∨ ∈ m n = m n
-        assume ∈ m n {
-          prove ⊆ m n
-          prove ⊆ m successor n
-            via ⊆ n successor n
+      assume ∈ $$0 successor $.0 {
+        prove ∨ ∈ $$0 $.0 = $$0 $.0
+        assume ∈ $$0 $.0 {
+          prove ⊆ $$0 $.0
+          prove ⊆ $$0 successor $.0
+            via ⊆ $.0 successor $.0
         }
-        assume = m n {
-          prove ⊆ m successor n
-            via ⊆ n successor n
+        assume = $$0 $.0 {
+          prove ⊆ $$0 successor $.0
+            via ⊆ $.0 successor $.0
         }
-        prove ⊆ m successor n
+        prove ⊆ $$0 successor $.0
       }
     }
-  } 
+  }
 }
-prove ∀ m → ∈ m n ⊆ m n
+prove ∀ m → ∈ $0 n ⊆ $0 n
 prove ⊆ m n
 qed
 

@@ -3,54 +3,49 @@ Introduce the set membership predicate ∈ and the Axiom of Extensionality, and 
 statement ∈ (a b)
 
 shorthand ∀ x → ∈ x a φ as ((∀x ∈ a)φ)
+
 shorthand ∃ x ∧ ∈ x a φ as ((∃x ∈ a)φ)
+
 shorthand ∃! x ∧ ∈ x a φ as ((∃!x ∈ a)φ)
+
 shorthand ¬ ∈ a b as (a ∉ b in parens)
 
 axiom Extensionality
-premise ∀ x ↔ ∈ x a ∈ x b
+premise ∀ x ↔ ∈ $0 a ∈ $0 b
 conclusion = a b
 
 theorem Sets with Same Membership Condition Are Equal
-premise ∀ x ↔ ∈ x a with x φ
-premise ∀ x ↔ ∈ x b with x φ
-prove ∀ x ↔ ∈ x a ∈ x b
+premise ∀ x ↔ ∈ $0 a with ($0) φ
+premise ∀ x ↔ ∈ $0 b with ($0) φ
+prove ∀ x ↔ ∈ $0 a ∈ $0 b
 prove = a b
 qed
 
 theorem Sets with Equivalent Membership Conditions Are Equal
-premise ∀ x ↔ ∈ x a with x φ
-premise ∀ x ↔ ∈ x b with x ψ
-premise ∀ x ↔ with x φ with x ψ
-prove ∀ x ↔ ∈ x a with x ψ
+premise ∀ x ↔ ∈ $0 a with ($0) φ
+premise ∀ x ↔ ∈ $0 b with ($0) ψ
+premise ∀ x ↔ with ($0) φ with ($0) ψ
+prove ∀ x ↔ ∈ $0 a with ($0) ψ
 prove = a b
 qed
 
 theorem A Set with a Membership Condition Is Unique
-premise ∃ x ∀ y ↔ ∈ y x with y φ
-take z_1 { take z_2 {
-  assume ∧ ∀ y ↔ ∈ y z_1 with y φ ∀ y ↔ ∈ y z_2 with y φ {
-    prove = z_1 z_2
+premise ∃ x ∀ y ↔ ∈ $$0 $.0 with ($$0) φ
+take z_1 {
+  take z_2 {
+    assume ∧ ∀ y ↔ ∈ $$$0 $..0 with ($$$0) φ ∀ y ↔ ∈ $$$0 $$.0 with ($$$0) φ {
+      prove = $.0 $$0
+    }
   }
-}}
-prove ∃! x ∀ y ↔ ∈ y x with y φ
+}
+prove ∃! x ∀ y ↔ ∈ $$0 $.0 with ($$0) φ
 qed
 
 theorem Replace Equivalent Membership Condition
-premise ∃ x ∀ y ↔ ∈ y x with y φ
-premise ∀ y ↔ with y φ with y ψ
-let a ∀ y ↔ ∈ y a with y φ {
-  prove ∀ y ↔ ∈ y a with y ψ
-  prove ∃ x ∀ y ↔ ∈ y x with y ψ
+premise ∃ x ∀ y ↔ ∈ $$0 $.0 with ($$0) φ
+premise ∀ y ↔ with ($0) φ with ($0) ψ
+let a ∀ y ↔ ∈ $$0 $.0 with ($$0) φ {
+  prove ∀ y ↔ ∈ $$0 $.0 with ($$0) ψ
+  prove ∃ x ∀ y ↔ ∈ $$$0 $$.0 with ($$$0) ψ
 }
 qed
-
-# theorem Replace Equivalent Membership Condition
-# premise ∃ y ∀ x ↔ ∈ x y φ
-# premise ∀ y ∀ x ↔ φ ψ
-# let z ∀ x ↔ ∈ x z sub z y φ {
-#   prove ∀ x ↔ sub z y φ sub z y ψ
-#   prove ∀ x ↔ ∈ x z sub z y ψ
-#   prove ∃ y ∀ x ↔ ∈ x y ψ
-# }
-# qed

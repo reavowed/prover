@@ -88,7 +88,6 @@ case class FunctionParameter(index: Int, level: Int, depth: Int)(val name: Optio
 
   override def serialized: String = ((1 to level).map(_ => "$") ++ (0 until (depth - level)).map(_ => ".")).mkString("") + index
   override def toString = name.getOrElse(serialized)
-  override def safeToString = name.getOrElse(serialized)
 }
 
 object FunctionParameter {

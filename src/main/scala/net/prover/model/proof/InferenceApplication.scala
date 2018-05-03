@@ -11,6 +11,7 @@ sealed trait InferenceApplication {
   def lineReferences: Set[(String, Seq[Int])]
   def cached: CachedInferenceApplication
   def isRearrangement: Boolean
+  def conclusion: Statement
 }
 
 object InferenceApplication {
@@ -30,6 +31,7 @@ object InferenceApplication {
       references.map(_.cached),
       isRearrangement,
       depth)
+    override def conclusion = inference.conclusion.applySubstitutions(substitutions).get
   }
 
   case class Transformed(
@@ -57,5 +59,6 @@ object InferenceApplication {
       transformationProof.map(_.cached),
       isRearrangement,
       depth)
+    override def conclusion = transformedConclusion.applySubstitutions(substitutions).get
   }
 }

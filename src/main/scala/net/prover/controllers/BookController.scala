@@ -14,12 +14,10 @@ import scala.util.control.NonFatal
 @RequestMapping(Array("/books"))
 class BookController @Autowired() (bookService: BookService) {
 
-  def getBooks: Seq[Book] = bookService.books.get()
-
   @GetMapping(value = Array(""), produces = Array("text/html;charset=UTF-8"))
   def get = {
     try {
-      html.books(getBooks).body
+      html.books(bookService.books).body
     } catch {
       case NonFatal(e) =>
         BookController.logger.error("Error getting books", e)
@@ -30,7 +28,7 @@ class BookController @Autowired() (bookService: BookService) {
   @GetMapping(value = Array("/{bookKey}"), produces = Array("text/html;charset=UTF-8"))
   def getBook(@PathVariable("bookKey") bookKey: String) = {
     try {
-      getBooks.find(_.key == bookKey) match {
+      bookService.books.find(_.key == bookKey) match {
         case Some(book) =>
           html.book(book).body
         case None =>
@@ -47,7 +45,7 @@ class BookController @Autowired() (bookService: BookService) {
   def getChapter(@PathVariable("bookKey") bookKey: String, @PathVariable("chapterKey") chapterKey: String) = {
     try {
       (for {
-        book <- getBooks.find(_.key == bookKey)
+        book <- bookService.books.find(_.key == bookKey)
         chapter <- book.chapters.find(_.key == chapterKey)
       } yield html.chapter(chapter, book).body) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {
@@ -64,7 +62,7 @@ class BookController @Autowired() (bookService: BookService) {
     @PathVariable("inferenceKey") inferenceKey: String
   ) = {
     try {
-      val books = getBooks
+      val books = bookService.books
       (for {
         book <- books.find(_.key == bookKey)
         chapter <- book.chapters.find(_.key == chapterKey)

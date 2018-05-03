@@ -2,8 +2,8 @@ Define some basic functions.
 
 theorem The Empty Set Is a Function with Empty Domain
 prove ⊆ ∅ × ∅ A
-prove ∀ x ¬ ∈ x ∅
-prove ∀ x → ∈ x ∅ ∃! y ∈ orderedPair x y ∅
+prove ∀ x ¬ ∈ $0 ∅
+prove ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $.0 $$0 ∅
 prove function ∅ ∅ A
 qed
 
@@ -13,20 +13,20 @@ prove ∈ b singleton b
 prove ∈ orderedPair a b × singleton a singleton b
 prove ⊆ singleton orderedPair a b × singleton a singleton b
 take x {
-  assume ∈ x singleton a {
-    prove = x a
+  assume ∈ $0 singleton a {
+    prove = $0 a
     take y {
-      assume ∈ orderedPair x y singleton orderedPair a b {
-        prove = orderedPair x y orderedPair a b
-        prove = y b
+      assume ∈ orderedPair $.0 $$0 singleton orderedPair a b {
+        prove = orderedPair $.0 $$0 orderedPair a b
+        prove = $$0 b
       }
-      assume = y b {
+      assume = $$0 b {
         prove ∈ orderedPair a b singleton orderedPair a b
-        prove ∈ orderedPair x b singleton orderedPair a b
-        prove ∈ orderedPair x y singleton orderedPair a b
+        prove ∈ orderedPair $.0 b singleton orderedPair a b
+        prove ∈ orderedPair $.0 $$0 singleton orderedPair a b
       }
     }
-    prove ∃! y ∈ orderedPair x y singleton orderedPair a b
+    prove ∃! y ∈ orderedPair $.0 $$0 singleton orderedPair a b
   }
 }
 prove function singleton orderedPair a b singleton a singleton b
@@ -35,7 +35,7 @@ qed
 theorem Combine Functions
 premise function f A B
 premise function g C D
-premise ∀ x → ∈ x ∩ A C = apply f x apply g x
+premise ∀ x → ∈ $0 ∩ A C = apply f $0 apply g $0
 prove ⊆ f × A B
 prove ⊆ × A B × ∪ A C B
   via ⊆ A ∪ A C
@@ -43,7 +43,6 @@ prove ⊆ f × ∪ A C B
 prove ⊆ × ∪ A C B × ∪ A C ∪ B D
   via ⊆ B ∪ B D
 prove ⊆ f × ∪ A C ∪ B D
-
 prove ⊆ g × C D
 prove ⊆ × C D × ∪ A C D
   via ⊆ C ∪ A C
@@ -51,55 +50,53 @@ prove ⊆ g × ∪ A C D
 prove ⊆ × ∪ A C D × ∪ A C ∪ B D
   via ⊆ D ∪ B D
 prove ⊆ g × ∪ A C ∪ B D
-
 prove ⊆ ∪ f g × ∪ A C ∪ B D
-
 take x {
-  assume ∈ x ∪ A C {
-    prove ∨ ∈ x A ∈ x C
-    assume ∈ x A {
+  assume ∈ $0 ∪ A C {
+    prove ∨ ∈ $0 A ∈ $0 C
+    assume ∈ $0 A {
       take y {
-        assume ∈ orderedPair x y ∪ f g {
-          prove ∨ ∈ orderedPair x y f ∈ orderedPair x y g
-          assume ∈ orderedPair x y f {
-            prove = y apply f x
+        assume ∈ orderedPair $.0 $$0 ∪ f g {
+          prove ∨ ∈ orderedPair $.0 $$0 f ∈ orderedPair $.0 $$0 g
+          assume ∈ orderedPair $.0 $$0 f {
+            prove = $$0 apply f $.0
           }
-          assume ∈ orderedPair x y g {
-            prove ∈ x C
-            prove ∈ x ∩ A C
-            prove = apply f x apply g x
-            prove = y apply g x
-            prove = y apply f x
+          assume ∈ orderedPair $.0 $$0 g {
+            prove ∈ $.0 C
+            prove ∈ $.0 ∩ A C
+            prove = apply f $.0 apply g $.0
+            prove = $$0 apply g $.0
+            prove = $$0 apply f $.0
           }
-          prove = y apply f x
+          prove = $$0 apply f $.0
         }
       }
-      prove ∈ orderedPair x apply f x f
-      prove ∈ orderedPair x apply f x ∪ f g
-      prove ∃! y ∈ orderedPair x y ∪ f g
+      prove ∈ orderedPair $0 apply f $0 f
+      prove ∈ orderedPair $0 apply f $0 ∪ f g
+      prove ∃! y ∈ orderedPair $.0 $$0 ∪ f g
     }
-    assume ∈ x C {
+    assume ∈ $0 C {
       take y {
-        assume ∈ orderedPair x y ∪ f g {
-          prove ∨ ∈ orderedPair x y f ∈ orderedPair x y g
-          assume ∈ orderedPair x y f {
-            prove ∈ x A
-            prove ∈ x ∩ A C
-            prove = apply f x apply g x
-            prove = y apply f x
-            prove = y apply g x
+        assume ∈ orderedPair $.0 $$0 ∪ f g {
+          prove ∨ ∈ orderedPair $.0 $$0 f ∈ orderedPair $.0 $$0 g
+          assume ∈ orderedPair $.0 $$0 f {
+            prove ∈ $.0 A
+            prove ∈ $.0 ∩ A C
+            prove = apply f $.0 apply g $.0
+            prove = $$0 apply f $.0
+            prove = $$0 apply g $.0
           }
-          assume ∈ orderedPair x y g {
-            prove = y apply g x
+          assume ∈ orderedPair $.0 $$0 g {
+            prove = $$0 apply g $.0
           }
-          prove = y apply g x
+          prove = $$0 apply g $.0
         }
       }
-      prove ∈ orderedPair x apply g x g
-      prove ∈ orderedPair x apply g x ∪ f g
-      prove ∃! y ∈ orderedPair x y ∪ f g
+      prove ∈ orderedPair $0 apply g $0 g
+      prove ∈ orderedPair $0 apply g $0 ∪ f g
+      prove ∃! y ∈ orderedPair $.0 $$0 ∪ f g
     }
-    prove ∃! y ∈ orderedPair x y ∪ f g
+    prove ∃! y ∈ orderedPair $.0 $$0 ∪ f g
   }
 }
 prove function ∪ f g ∪ A C ∪ B D
@@ -109,9 +106,9 @@ theorem Combine Disjoint Functions
 premise function f A B
 premise function g C D
 premise = ∩ A C ∅
-prove ∀ x ¬ ∈ x ∩ A C
-  via ∀ x ¬ ∈ x ∅
-prove ∀ x → ∈ x ∩ A C = apply f x apply g x
+prove ∀ x ¬ ∈ $0 ∩ A C
+  via ∀ x ¬ ∈ $0 ∅
+prove ∀ x → ∈ $0 ∩ A C = apply f $0 apply g $0
 prove function ∪ f g ∪ A C ∪ B D
 qed
 
@@ -120,12 +117,12 @@ premise function f A B
 premise ¬ ∈ a A
 premise ∈ b B
 take x {
-  assume ∈ x A {
-    assume ∈ x singleton a {
-      prove = x a
+  assume ∈ $0 A {
+    assume ∈ $0 singleton a {
+      prove = $0 a
       prove ∈ a A
     }
-    prove ¬ ∈ x singleton a
+    prove ¬ ∈ $0 singleton a
   }
 }
 prove = ∩ A singleton a ∅

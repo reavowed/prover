@@ -1,19 +1,19 @@
 Introduce the Axiom of Regularity.
 
 axiom Axiom of Regularity
-conclusion ∀ x → ¬ = x ∅ ∃ y ∧ ∈ y x = ∩ y x ∅
+conclusion ∀ x → ¬ = $0 ∅ ∃ y ∧ ∈ $$0 $.0 = ∩ $$0 $.0 ∅
 
 theorem Regularity
 premise ¬ = a ∅
-prove ∀ y → ¬ = y ∅ ∃ x ∧ ∈ x y = ∩ x y ∅
-prove ∃ x ∧ ∈ x a = ∩ x a ∅
+prove ∀ y → ¬ = $0 ∅ ∃ x ∧ ∈ $$0 $.0 = ∩ $$0 $.0 ∅
+prove ∃ x ∧ ∈ $0 a = ∩ $0 a ∅
 qed
 
 theorem No Set Contains Itself
 prove ¬ = singleton a ∅
-prove ∃ y ∧ ∈ y singleton a = ∩ y singleton a ∅
-let y ∧ ∈ y singleton a = ∩ y singleton a ∅ {
-  prove = y a
+prove ∃ y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅
+let y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ {
+  prove = $0 a
   prove = ∩ a singleton a ∅
 }
 prove ∈ a singleton a
@@ -28,15 +28,15 @@ qed
 
 theorem No Two Sets Contain Each Other
 prove ¬ = pair a b ∅
-prove ∃ x ∧ ∈ x pair a b = ∩ x pair a b ∅
-let c ∧ ∈ c pair a b = ∩ c pair a b ∅ {
-  prove ∨ = c a = c b
-  assume = c a {
+prove ∃ x ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅
+let c ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ {
+  prove ∨ = $0 a = $0 b
+  assume = $0 a {
     prove = ∩ a pair a b ∅
     prove ∈ b pair a b
     prove ¬ ∈ b a
   }
-  assume = c b {
+  assume = $0 b {
     prove = ∩ b pair a b ∅
     prove ∈ a pair a b
     prove ¬ ∈ a b

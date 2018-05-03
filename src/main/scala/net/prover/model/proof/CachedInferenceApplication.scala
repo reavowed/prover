@@ -5,6 +5,7 @@ import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions.Statement
 
 sealed trait CachedInferenceApplication {
+  def cachedReferences: Seq[CachedReference]
   def validate()(implicit context: ProvingContext): Option[(Statement, InferenceApplication)]
   def serializedLines: Seq[String]
 }

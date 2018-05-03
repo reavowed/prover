@@ -2,69 +2,69 @@ Establish the existence of the unordered pair {a, b}.
 
 theorem Unordered Pair Existence Lemma
 take y {
-  assume ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b {
-    let x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b {
-      assume ∧ = x singleton ∅ = y a {
-        prove ∨ = y a = y b
+  assume ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b {
+    let x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b {
+      assume ∧ = $$0 singleton ∅ = $.0 a {
+        prove ∨ = $.0 a = $.0 b
       }
-      assume ∧ = x ∅ = y b {
-        prove ∨ = y a = y b
+      assume ∧ = $$0 ∅ = $.0 b {
+        prove ∨ = $.0 a = $.0 b
       }
-      prove ∨ = y a = y b
+      prove ∨ = $.0 a = $.0 b
     }
   }
-  assume ∨ = y a = y b {
-    assume = y a {
+  assume ∨ = $0 a = $0 b {
+    assume = $0 a {
       prove ∈ singleton ∅ powerSet singleton ∅
       prove = singleton ∅ singleton ∅
-      prove ∧ ∈ singleton ∅ powerSet singleton ∅ ∨ ∧ = singleton ∅ singleton ∅ = y a  ∧ = singleton ∅ ∅ = y b
-      prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
+      prove ∧ ∈ singleton ∅ powerSet singleton ∅ ∨ ∧ = singleton ∅ singleton ∅ = $0 a ∧ = singleton ∅ ∅ = $0 b
+      prove ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b
     }
-    assume = y b {
+    assume = $0 b {
       prove ∈ ∅ powerSet singleton ∅
       prove = ∅ ∅
-      prove ∧ ∈ ∅ powerSet singleton ∅ ∨ ∧ = ∅ singleton ∅ = y a ∧ = ∅ ∅ = y b
-      prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
+      prove ∧ ∈ ∅ powerSet singleton ∅ ∨ ∧ = ∅ singleton ∅ = $0 a ∧ = ∅ ∅ = $0 b
+      prove ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b
     }
-    prove ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
+    prove ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b
   }
-  prove ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b ∨ = y a = y b
+  prove ↔ ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b ∨ = $0 a = $0 b
 }
 qed
 
 theorem Unordered Pair Existence
 take x {
-  assume ∈ x powerSet singleton ∅ {
-    prove ⊕ = x singleton ∅ = x ∅
-    prove ∃! y ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
+  assume ∈ $0 powerSet singleton ∅ {
+    prove ⊕ = $0 singleton ∅ = $0 ∅
+    prove ∃! y ∨ ∧ = $.0 singleton ∅ = $$0 a ∧ = $.0 ∅ = $$0 b
   }
 }
-prove ∃ z ∀ y ↔ ∈ y z ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b
-prove ∀ y ↔ ∃ x ∧ ∈ x powerSet singleton ∅ ∨ ∧ = x singleton ∅ = y a ∧ = x ∅ = y b ∨ = y a = y b
-prove ∃ z ∀ y ↔ ∈ y z ∨ = y a = y b
-prove ∃! z ∀ y ↔ ∈ y z ∨ = y a = y b
+prove ∃ z ∀ y ↔ ∈ $$0 $.0 ∃ x ∧ ∈ $$$0 powerSet singleton ∅ ∨ ∧ = $$$0 singleton ∅ = $$.0 a ∧ = $$$0 ∅ = $$.0 b
+prove ∀ y ↔ ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b ∨ = $0 a = $0 b
+prove ∃ z ∀ y ↔ ∈ $$0 $.0 ∨ = $$0 a = $$0 b
+prove ∃! z ∀ y ↔ ∈ $$0 $.0 ∨ = $$0 a = $$0 b
 qed
 
 term pair (a b)
   name (Unordered Pair)
   format ({a, b})
-  (∀ x ↔ ∈ x _ ∨ = x a = x b)
+  (∀ x ↔ ∈ $$0 $.0 ∨ = $$0 a = $$0 b)
 
 theorem Elements of Unordered Pair
 premise ∈ c pair a b
-prove ∀ x ↔ ∈ x pair a b ∨ = x a = x b
+prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b
 prove ∨ = c a = c b
 qed
 
 theorem First Element of Unordered Pair
-prove ∀ x ↔ ∈ x pair a b ∨ = x a = x b
+prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b
 prove = a a
 prove ∨ = a a = a b
 prove ∈ a pair a b
 qed
 
 theorem Second Element of Unordered Pair
-prove ∀ x ↔ ∈ x pair a b ∨ = x a = x b
+prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b
 prove = b b
 prove ∨ = b a = b b
 prove ∈ b pair a b
@@ -76,17 +76,17 @@ prove ¬ = pair a b ∅
 qed
 
 theorem Reverse Unordered Pair
-prove ∀ x ↔ ∈ x pair a b ∨ = x a = x b
-prove ∀ x ↔ ∈ x pair b a ∨ = x b = x a
-prove ∀ x ↔ ∨ = x a = x b ∨ = x b = x a
+prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b
+prove ∀ x ↔ ∈ $0 pair b a ∨ = $0 b = $0 a
+prove ∀ x ↔ ∨ = $0 a = $0 b ∨ = $0 b = $0 a
 prove = pair a b pair b a
 qed
 
 theorem Repeated Pair Is Singleton
-prove ∀ x ↔ ∈ x pair a a ∨ = x a = x a
-prove ∀ x ↔ ∨ = x a = x a = x a
-prove ∀ x ↔ ∈ x pair a a = x a
-prove ∀ x ↔ ∈ x singleton a = x a
+prove ∀ x ↔ ∈ $0 pair a a ∨ = $0 a = $0 a
+prove ∀ x ↔ ∨ = $0 a = $0 a = $0 a
+prove ∀ x ↔ ∈ $0 pair a a = $0 a
+prove ∀ x ↔ ∈ $0 singleton a = $0 a
 prove = pair a a singleton a
 qed
 
@@ -114,19 +114,19 @@ qed
 theorem Unordered Pair Is Subset
 premise ∈ a S
 premise ∈ b S
-prove ∀ x ↔ ∈ x pair a b ∨ = x a = x b
+prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b
 take x {
-  assume = x a {
-    prove ∈ x S
+  assume = $0 a {
+    prove ∈ $0 S
   }
-  assume = x b {
-    prove ∈ x S
+  assume = $0 b {
+    prove ∈ $0 S
   }
-  assume ∨ = x a = x b {
-    prove ∈ x S
+  assume ∨ = $0 a = $0 b {
+    prove ∈ $0 S
   }
 }
-prove ∀ x → ∈ x pair a b ∈ x S
+prove ∀ x → ∈ $0 pair a b ∈ $0 S
 prove ⊆ pair a b S
 qed
 

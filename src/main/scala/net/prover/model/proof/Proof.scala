@@ -15,6 +15,7 @@ case class Proof(steps: Seq[Step]) {
   }
 
   def getLines(implicit displayContext: DisplayContext) = steps.flatMap(_.getLines(referenceMap, 0, None))
+  def serializedLines = steps.flatMap(_.serializedLines) :+ "qed"
 }
 
 object Proof {

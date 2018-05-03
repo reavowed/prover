@@ -18,4 +18,10 @@ case class Axiom(
     with Inference.Entry
 {
   override def inferences: Seq[Inference] = Seq(this)
+  override def serializedLines: Seq[String] = {
+    Seq(s"axiom $name") ++
+      rearrangementType.serialized.toSeq ++
+      premises.map(_.serialized) ++
+      Seq(s"conclusion ${conclusion.serialized}")
+  }
 }

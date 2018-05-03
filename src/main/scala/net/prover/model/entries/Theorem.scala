@@ -24,4 +24,9 @@ case class Theorem(
 {
   def referencedInferenceIds: Set[String] = proof.referencedInferenceIds
   override def inferences: Seq[Inference] = Seq(this)
+
+  override def serializedLines = Seq(s"theorem $name") ++
+    rearrangementType.serialized.toSeq ++
+    premises.map(_.serialized) ++
+    proof.serializedLines
 }

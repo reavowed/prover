@@ -1,6 +1,7 @@
 Introduce the equivalence connective, ↔.
 
-statement ↔ (φ ψ) definition (∧ → φ ψ → ψ φ)
+statement ↔ (φ ψ)
+  definition (∧ → φ ψ → ψ φ)
 
 theorem Equivalence by Both Cases
 expansion

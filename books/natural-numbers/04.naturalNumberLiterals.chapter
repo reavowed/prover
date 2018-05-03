@@ -1,13 +1,14 @@
 Define some literal natural numbers - 0, 1, 2, etc.
 
-term 0 () (= _ ∅)
+term 0 ()
+  (= $0 ∅)
 
 theorem 0 Is a Natural Number
 prove = 0 ∅
 take X {
-  assume inductive X {
-    prove ∈ ∅ X
-    prove ∈ 0 X
+  assume inductive $0 {
+    prove ∈ ∅ $0
+    prove ∈ 0 $0
   }
 }
 prove ∈ 0 ℕ
@@ -28,7 +29,8 @@ prove ¬ = successor n 0
 prove ¬ = 0 successor n
 qed
 
-term 1 () (= _ successor 0)
+term 1 ()
+  (= $0 successor 0)
 
 theorem 1 Is a Natural Number
 prove ∈ 0 ℕ

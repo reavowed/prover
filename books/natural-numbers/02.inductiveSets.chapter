@@ -2,10 +2,10 @@ Define the concept of an inductive set - effectively, a set that contains every 
 
 statement inductive (S)
   format (S is inductive in parens)
-  definition (∧ ∈ ∅ S ∀ n → ∈ n S ∈ successor n S)
+  definition (∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S)
 
 theorem An Inductive Set Contains the Empty Set
 premise inductive S
-prove ∧ ∈ ∅ S ∀ n → ∈ n S ∈ successor n S
+prove ∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S
 prove ∈ ∅ S
 qed

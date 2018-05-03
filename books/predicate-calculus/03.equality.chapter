@@ -9,8 +9,8 @@ conclusion = a a
 
 axiom Substitution of Equals
 premise = a b elidable
-premise with a φ elidable
-conclusion with b φ
+premise with (a) φ elidable
+conclusion with (b) φ
 
 comment We first have to prove that equality is symmetric before we can prove the reversed version of the second axiom.
 
@@ -22,23 +22,23 @@ qed
 
 theorem Substitution of Equals
 premise = a b elidable
-premise with b φ elidable
+premise with (b) φ elidable
 prove = b a
-prove with a φ
+prove with (a) φ
 qed
 
 comment Now we can also prove that the substitution axiom works when substituting into equal terms.
 
 theorem Substitution of Equals
 premise = a b elidable
-prove = with a F with a F
-prove = with a F with b F
+prove = with (a) F with (a) F
+prove = with (a) F with (b) F
 qed
 
 theorem Substitution of Equals
 premise = a b elidable
 prove = b a
-prove = with b F with a F
+prove = with (b) F with (a) F
 qed
 
 comment Basic facts about equality.
@@ -61,38 +61,38 @@ qed
 
 theorem Equivalence of Substituted Equals
 premise = a b
-assume with a φ {
-  prove with b φ
+assume with (a) φ {
+  prove with (b) φ
 }
-assume with b φ {
-  prove with a φ
+assume with (b) φ {
+  prove with (a) φ
 }
-prove ↔ with a φ with b φ
+prove ↔ with (a) φ with (b) φ
 qed
 
 theorem Distinguishable Terms Are Not Equal
-premise with a φ
-premise ¬ with b φ
+premise with (a) φ
+premise ¬ with (b) φ
 assume = a b {
-  prove with b φ
+  prove with (b) φ
 }
 prove ¬ = a b
 qed
 
 theorem Sets Are Equal If Always Equal to the Same Thing
-premise ∀ x ↔ = x a = x b
+premise ∀ x ↔ = $0 a = $0 b
 prove = a a
 prove = a b
 qed
 
 theorem Every Set Exists
 prove = a a
-prove ∃ x = x a
+prove ∃ x = $0 a
 qed
 
 theorem Renamed Set
-premise ∀ x → = x a φ
-prove ∃ x = x a
+premise ∀ x → = $0 a φ
+prove ∃ x = $0 a
 prove φ
 qed
 

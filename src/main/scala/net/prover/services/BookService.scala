@@ -18,111 +18,59 @@ class BookService {
   val bookDirectoryPath = Paths.get("books")
   val bookListPath = bookDirectoryPath.resolve("books.list")
   val cacheDirectoryPath = Paths.get("cache")
-  val system = ActorSystem("BookService")
-  import system.dispatcher
 
-  val books = new AtomicReference[Seq[Book]](Nil)
+  val books = getBooks.getOrElse(Nil)
 
-  class BookManagementActor extends Actor {
-    case class BookData(
-      title: String,
-      bookOutline: Option[BookOutline],
-      lastModificationTimesOfFiles: Map[Path, Instant])
-    {
-      def haveFilesChanged = {
-        lastModificationTimesOfFiles.exists { case (path, instant) =>
-          !Files.exists(path) || Files.getLastModifiedTime(path).toInstant != instant
-        }
-      }
-
-      def haveDependenciesChanged(changedBookTitles: Seq[String]) = {
-        bookOutline match {
-          case Some(b) => b.dependencyOutlines.exists(d => changedBookTitles.contains(d.title))
-          case None => changedBookTitles.nonEmpty
-        }
-      }
-    }
-
-    var allBookData: Seq[BookData] = Nil
-
-    private def getBookList: Seq[String] = {
-      Files
-        .readAllLines(bookListPath)
-        .asScala
-        .filter(s => !s.startsWith("#"))
-    }
-
-    private def getBookPath(title: String): Path = {
-      val key = title.formatAsKey
-      bookDirectoryPath.resolve(key).resolve(key + ".book")
-    }
-
-    private def parseBook(title: String, previousBookData: Seq[BookData]): BookData = {
-      val previousBookOutlines = previousBookData.mapCollect(_.bookOutline)
-      val (bookOption, modificationTimes) = BookOutline.parse(title, getBookPath(title), previousBookOutlines)
-      bookOption.ifEmpty { BookService.logger.info(s"Failed to parse book $title")}
-      BookData(title, bookOption, modificationTimes)
-    }
-
-    private def parseAllBooks(): (Seq[String], Seq[BookData]) = {
-      getBookList.foldLeft(
-        (Seq.empty[String], Seq.empty[BookData])
-      ) { case ((dirtyBooks, bookDataSoFar), bookTitle) =>
-          allBookData.find(_.title == bookTitle) match {
-            case Some(bookData) if bookData.haveFilesChanged =>
-              BookService.logger.info(s"Book '$bookTitle' has changed")
-              val newBookData = parseBook(bookTitle, bookDataSoFar)
-              (dirtyBooks :+ bookTitle, bookDataSoFar :+ newBookData)
-            case Some(bookData) if bookData.haveDependenciesChanged(dirtyBooks) =>
-              (dirtyBooks :+ bookTitle, bookDataSoFar :+ bookData)
-            case Some(bookData) =>
-              (dirtyBooks, bookDataSoFar :+ bookData)
-            case None =>
-              BookService.logger.info(s"Book '$bookTitle' is new")
-              val bookData = parseBook(bookTitle, bookDataSoFar)
-              (dirtyBooks :+ bookTitle, bookDataSoFar :+ bookData)
-          }
-        }
-    }
-
-    def proveBooks(dirtyBooks: Seq[String], newBookData: Seq[BookData]): Unit = {
-      val oldBooks = books.get()
-      if (dirtyBooks.nonEmpty) {
-        newBookData.map(_.bookOutline).traverseOption.foreach { bookOutlines =>
-          val booksOption = bookOutlines.mapFoldOption[Book] { (previousBooks, bookOutline) =>
-            oldBooks.find(_.title == bookOutline.title) match {
-              case Some(book) if !dirtyBooks.contains(book.title) =>
-                Some(book)
-              case _ =>
-                BookService.logger.info(s"Proving book ${bookOutline.title}")
-                bookOutline.proveTheorems(cacheDirectoryPath, previousBooks)
-            }
-          }
-          booksOption.foreach { newBooks =>
-            books.set(newBooks)
-            newBooks.foreach { book =>
-              Files.write(getBookPath(book.title), book.serialized.getBytes("UTF-8"))
-            }
-          }
-        }
-        BookService.logger.info(s"Updated ${dirtyBooks.length} books")
-      }
-    }
-
-    override def receive: Receive = {
-      case BookManagementActor.PollMessage =>
-        val (dirtyBooks, newBookData) = parseAllBooks()
-        allBookData = newBookData
-        proveBooks(dirtyBooks, newBookData)
-        system.scheduler.scheduleOnce(1.second, self, BookManagementActor.PollMessage)
-    }
-  }
-  object BookManagementActor {
-    object PollMessage
+  def getBooks: Option[Seq[Book]] = {
+    for {
+      bookOutlines <- parseAllBooks()
+      books <- proveBooks(bookOutlines)
+    } yield books
   }
 
-  val serviceActor = system.actorOf(Props(new BookManagementActor))
-  serviceActor ! BookManagementActor.PollMessage
+  private def getBookList: Seq[String] = {
+    Files
+      .readAllLines(bookListPath)
+      .asScala
+      .filter(s => !s.startsWith("#"))
+  }
+
+  private def getBookPath(title: String): Path = {
+    val key = title.formatAsKey
+    bookDirectoryPath.resolve(key).resolve(key + ".book")
+  }
+
+  private def getChapterPath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
+    bookDirectoryPath.resolve(bookTitle.formatAsKey).resolve("%02d".format(chapterIndex + 1) + "." + chapterTitle.camelCase + ".chapter")
+  }
+
+  private def parseBook(title: String, previousBookOutlines: Seq[BookOutline]): Option[BookOutline] = {
+    BookOutline.parse(title, getBookPath(title), previousBookOutlines, getChapterPath(title, _, _))
+      .ifEmpty { BookService.logger.info(s"Failed to parse book $title") }
+  }
+
+  private def parseAllBooks(): Option[Seq[BookOutline]] = {
+    getBookList.mapFoldOption[BookOutline] { case (booksSoFar, bookTitle) =>
+      parseBook(bookTitle, booksSoFar)
+    }
+  }
+
+  def proveBooks(bookOutlines: Seq[BookOutline]): Option[Seq[Book]] = {
+    val booksOption = bookOutlines.mapFoldOption[Book] { case (previousBooks, bookOutline) =>
+        BookService.logger.info(s"Proving book ${bookOutline.title}")
+        bookOutline.proveTheorems(cacheDirectoryPath, previousBooks)
+    }
+    booksOption.foreach { newBooks =>
+      BookService.logger.info(s"Proved ${newBooks.length} books")
+      newBooks.foreach { book =>
+        Files.write(getBookPath(book.title), book.serialized.getBytes("UTF-8"))
+        book.chapters.zipWithIndex.foreach { case (chapter, index) =>
+          Files.write(getChapterPath(book.title, chapter.title, index), chapter.serialized.getBytes("UTF-8"))
+        }
+      }
+    }
+    booksOption
+  }
 }
 
 object BookService {

@@ -1,74 +1,75 @@
 Introduce the empty set, ∅.
 
 axiom Axiom of Empty Set
-conclusion ∃ X ∀ x ¬ ∈ x X
+conclusion ∃ X ∀ x ¬ ∈ $$0 $.0
 
 theorem Two Empty Sets Are Equal
-premise ∀ x ¬ ∈ x a
-premise ∀ x ¬ ∈ x b
-prove ∀ x ↔ ∈ x a ∈ x b
+premise ∀ x ¬ ∈ $0 a
+premise ∀ x ¬ ∈ $0 b
+prove ∀ x ↔ ∈ $0 a ∈ $0 b
 prove = a b
 qed
 
 theorem There Exists a Unique Empty Set
-prove ∃ X ∀ x ¬ ∈ x X
-take X { 
+prove ∃ X ∀ x ¬ ∈ $$0 $.0
+take X {
   take Y {
-    assume ∧ ∀ x ¬ ∈ x X ∀ x ¬ ∈ x Y {
-      prove = X Y
+    assume ∧ ∀ x ¬ ∈ $$$0 $..0 ∀ x ¬ ∈ $$$0 $$.0 {
+      prove = $.0 $$0
     }
   }
 }
-prove ∃! X ∀ x ¬ ∈ x X
+prove ∃! X ∀ x ¬ ∈ $$0 $.0
 qed
 
-term ∅ () (∀ x ¬ ∈ x _)
+term ∅ ()
+  (∀ x ¬ ∈ $$0 $.0)
 
 theorem The Empty Set Has No Elements
-prove ∀ x ¬ ∈ x ∅
-prove ¬ ∃ x ∈ x ∅
+prove ∀ x ¬ ∈ $0 ∅
+prove ¬ ∃ x ∈ $0 ∅
 qed
 
 theorem A Set with No Elements Is the Empty Set
-premise ∀ x ¬ ∈ x a
-prove ∀ x ¬ ∈ x ∅
+premise ∀ x ¬ ∈ $0 a
+prove ∀ x ¬ ∈ $0 ∅
 prove = a ∅
 qed
 
 theorem A Set with No Elements Is the Empty Set
-premise ¬ ∃ x ∈ x a
-prove ∀ x ¬ ∈ x a
+premise ¬ ∃ x ∈ $0 a
+prove ∀ x ¬ ∈ $0 a
 prove = a ∅
 qed
 
 theorem A Set with an Element Is Not the Empty Set
-premise ∃ x ∈ x a
-prove ¬ ∃ x ∈ x ∅
+premise ∃ x ∈ $0 a
+prove ¬ ∃ x ∈ $0 ∅
 prove ¬ = a ∅
 qed
 
 theorem A Set with an Element Is Not the Empty Set
 premise ∈ b a
-prove ∃ x ∈ x a
+prove ∃ x ∈ $0 a
 prove ¬ = a ∅
 qed
 
 theorem A Set That Is Not the Empty Set Has an Element
 premise ¬ = a ∅
-assume ¬ ∃ x ∈ x a {
+assume ¬ ∃ x ∈ $0 a {
   prove = a ∅
 }
-prove ∃ x ∈ x a
+prove ∃ x ∈ $0 a
 qed
 
 theorem The Empty Set Is a Subset of Any Set
-prove ∀ x ¬ ∈ x ∅
-prove ∀ x → ∈ x ∅ ∈ x a
+prove ∀ x ¬ ∈ $0 ∅
+prove ∀ x → ∈ $0 ∅ ∈ $0 a
 prove ⊆ ∅ a
 qed
 
 theorem A False Statement Is a Membership Condition for the Empty Set
-premise ∀ x ¬ with x φ
-prove ∀ x ¬ ∈ x ∅
-prove ∀ x ↔ ∈ x ∅ with x φ
+premise ∀ x ¬ with ($0) φ
+prove ∀ x ¬ ∈ $0 ∅
+prove ∀ x ↔ ∈ $0 ∅ with ($0) φ
 qed

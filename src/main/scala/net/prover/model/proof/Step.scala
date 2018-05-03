@@ -2,7 +2,7 @@ package net.prover.model.proof
 
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions.{DefinedStatement, Statement}
-import net.prover.model.{DisplayContext, HtmlHelper}
+import net.prover.model._
 
 sealed trait Step {
   def reference: Reference.Direct
@@ -20,6 +20,7 @@ sealed trait Step {
     implicit displayContext: DisplayContext
   ): Seq[ProofLine]
   def isSingleAssertion: Boolean = false
+  def serializedLines: Seq[String]
 }
 
 object Step {
@@ -53,6 +54,10 @@ object Step {
           Some(ProofLine.InferenceLink(HtmlHelper.findInferenceToDisplay(inferenceApplication)))))
     }
     override def isSingleAssertion = true
+
+    def elidedStatementOption = inferenceApplication.references.ofType[Reference.Elided].headOption.map(_.inferenceApplication.conclusion)
+    override def serializedLines = Seq(s"prove ${assertion.serialized}") ++
+      elidedStatementOption.map(s => s"via ${s.serialized}").toSeq.indent
   }
 
   case class Assumption(
@@ -107,6 +112,9 @@ object Step {
       case Seq(singleStep) if singleStep.isSingleAssertion => true
       case _ => false
     }
+    override def serializedLines = Seq(s"assume ${assumption.serialized} {") ++
+      substeps.flatMap(_.serializedLines).indent ++
+      Seq("}")
   }
 
   case class Naming(
@@ -142,6 +150,9 @@ object Step {
           if (index == assumptionStep.substeps.length - 1) Some(additionalReference.getOrElse(reference.value)) else None))
       firstLine +: innerLines
     }
+    override def serializedLines = Seq(s"let $variableName ${assumptionStep.assumption.serialized} {") ++
+      assumptionStep.substeps.flatMap(_.serializedLines).indent ++
+      Seq("}")
   }
 
   case class ScopedVariable(
@@ -192,6 +203,9 @@ object Step {
       case Seq(singleStep) if singleStep.isSingleAssertion => true
       case _ => false
     }
+    override def serializedLines = Seq(s"take $variableName {") ++
+      substeps.flatMap(_.serializedLines).indent ++
+      Seq("}")
   }
 
   implicit class StepSeqOps(steps: Seq[Step]) {

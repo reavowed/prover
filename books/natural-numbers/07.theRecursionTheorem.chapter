@@ -1,23 +1,23 @@
 Prove the recursion theorem for recursively constructing functions on ℕ.
 
 theorem An Inductive Function Is Unique
-premise ∃ f ∧ function f ℕ A ∧ = apply f 0 a_0 ∀ n → ∈ n ℕ = apply f successor n with n a
-let f' ∧ function f' ℕ A ∧ = apply f' 0 a_0 ∀ n → ∈ n ℕ = apply f' successor n with n a {
+premise ∃ f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $$0 ℕ = apply $.0 successor $$0 with ($$0) a
+let f' ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $$0 ℕ = apply $.0 successor $$0 with ($$0) a {
   take f {
-    assume ∧ function f ℕ A ∧ = apply f 0 a_0 ∀ n → ∈ n ℕ = apply f successor n with n a {
-      prove = apply f 0 apply f' 0
+    assume ∧ function $$0 ℕ A ∧ = apply $$0 0 a_0 ∀ n → ∈ $$$0 ℕ = apply $$.0 successor $$$0 with ($$$0) a {
+      prove = apply $$0 0 apply $.0 0
       take n {
-        assume ∧ ∈ n ℕ = apply f n apply f' n {
-          prove = apply f successor n with n a
-          prove = apply f' successor n with n a
-          prove = apply f successor n apply f' successor n
+        assume ∧ ∈ $$$0 ℕ = apply $$.0 $$$0 apply $..0 $$$0 {
+          prove = apply $$.0 successor $$$0 with ($$$0) a
+          prove = apply $..0 successor $$$0 with ($$$0) a
+          prove = apply $$.0 successor $$$0 apply $..0 successor $$$0
         }
       }
-      prove ∀ n → ∈ n ℕ = apply f n apply f' n
-      prove = f f'
+      prove ∀ n → ∈ $$$0 ℕ = apply $$.0 $$$0 apply $..0 $$$0
+      prove = $$0 $.0
     }
   }
-  prove ∃! f ∧ function f ℕ A ∧ = apply f 0 a_0 ∀ n → ∈ n ℕ = apply f successor n with n a
+  prove ∃! f ∧ function $$0 ℕ A ∧ = apply $$0 0 a_0 ∀ n → ∈ $$$0 ℕ = apply $$.0 successor $$$0 with ($$$0) a
 }
 qed
 
@@ -38,218 +38,7 @@ premise ∈ a A
 premise = g ∪ f singleton orderedPair n a
 prove ¬ ∈ n n
 prove function g ∪ n singleton n A
-  via  function ∪ f singleton orderedPair n a ∪ n singleton n A
+  via function ∪ f singleton orderedPair n a ∪ n singleton n A
 prove function g successor n A
   via = successor n ∪ n singleton n
 qed
-
-# theorem Recursion Theorem - Base Case
-# premise function f X X
-# premise ∈ g_0 X
-# premise = S comprehension g powerSet × ℕ X ∃ n ∧ ∈ n ℕ ∧ function g n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply g a g_0 ∃ b ∧ = a successor b = apply g a apply f apply g b
-# assume ∈ orderedPair 0 x union S {
-#   let h ∧ ∈ orderedPair 0 x h ∈ h S {
-#     let m ∧ ∈ m ℕ ∧ function h m X ∀ a → ∈ a m ∨ ∧ = a 0 = apply h a g_0 ∃ b ∧ = a successor b = apply h a apply f apply h b {
-#       prove = x apply h 0
-#       prove ∈ 0 m
-#       prove ∨ ∧ = 0 0 = apply h 0 g_0 ∃ b ∧ = 0 successor b = apply h 0 apply f apply h b
-#       prove ¬ = 0 successor b
-#       prove ¬ ∃ b ∧ = 0 successor b = apply h 0 apply f apply h b
-#       prove ∧ = 0 0 = apply h 0 g_0
-#       prove = x g_0
-#     }
-#   }
-# }
-# assume = x g_0 {
-#   prove function singleton orderedPair 0 g_0 singleton 0 singleton g_0
-#   prove function singleton orderedPair 0 g_0 1 singleton g_0
-#   prove function singleton orderedPair 0 g_0 1 X
-#   assume ∈ a 1 {
-#     prove ∈ a singleton 0
-#     prove = a 0
-#     prove ∈ orderedPair 0 g_0 singleton orderedPair 0 g_0
-#     prove = apply singleton orderedPair 0 g_0 0 g_0
-#     prove = apply singleton orderedPair 0 g_0 a g_0
-#     prove ∨ ∧ = a 0 = apply singleton orderedPair 0 g_0 a g_0 ∃ b ∧ = a successor b = apply singleton orderedPair 0 g_0 a apply f apply singleton orderedPair 0 g_0 b
-#   }
-#   prove ∀ a → ∈ a 1 ∨ ∧ = a 0 = apply singleton orderedPair 0 g_0 a g_0 ∃ b ∧ = a successor b = apply singleton orderedPair 0 g_0 a apply f apply singleton orderedPair 0 g_0 b
-#   prove ∈ 1 ℕ
-#   prove ∧ ∈ 1 ℕ ∧ function singleton orderedPair 0 g_0 1 X ∀ a → ∈ a 1 ∨ ∧ = a 0 = apply singleton orderedPair 0 g_0 a g_0 ∃ b ∧ = a successor b = apply singleton orderedPair 0 g_0 a apply f apply singleton orderedPair 0 g_0 b
-#   prove ∃ n ∧ ∈ n ℕ ∧ function singleton orderedPair 0 g_0 n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply singleton orderedPair 0 g_0 a g_0 ∃ b ∧ = a successor b = apply singleton orderedPair 0 g_0 a apply f apply singleton orderedPair 0 g_0 b
-#   prove ∈ singleton orderedPair 0 g_0 powerSet × ℕ X
-#   prove ∈ singleton orderedPair 0 g_0 S
-#   prove ∈ singleton orderedPair 0 x S
-#   prove ∈ orderedPair 0 x singleton orderedPair 0 x
-#   prove ∈ orderedPair 0 x union S
-# }
-# prove ∀ x ↔ ∈ orderedPair 0 x union S = x g_0
-# qed
-#
-# theorem Recursion Theorem - Inductive Case
-# premise function f X X
-# premise ∈ x X
-# premise = S comprehension g powerSet × ℕ X ∃ n ∧ ∈ n ℕ ∧ function g n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply g a x ∃ b ∧ = a successor b = apply g a apply f apply g b
-# premise ∈ m ℕ
-# premise ∀ y ↔ ∈ orderedPair m y union S = y y_m
-# prove ∈ orderedPair m y_m union S
-# prove ∃ g ∧ ∈ orderedPair m y_m g ∈ g S
-# let g_n ∧ ∈ orderedPair m y_m g_n ∈ g_n S {
-#   prove ∃ n ∧ ∈ n ℕ ∧ function g_n n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply g_n a x ∃ b ∧ = a successor b = apply g_n a apply f apply g_n b
-#   let m_n ∧ ∈ m_n ℕ ∧ function g_n m_n X ∀ a → ∈ a m_n ∨ ∧ = a 0 = apply g_n a x ∃ b ∧ = a successor b = apply g_n a apply f apply g_n b {
-#     prove ∈ successor m_n ℕ
-#     prove = y_m apply g_n m
-#     assume ∈ orderedPair successor m y union S {
-#       prove ∃ g ∧ ∈ orderedPair successor m y g ∈ g S
-#       let g_n+1 ∧ ∈ orderedPair successor m y g_n+1 ∈ g_n+1 S {
-#         prove ∃ n ∧ ∈ n ℕ ∧ function g_n+1 n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply g_n+1 a x ∃ b ∧ = a successor b = apply g_n+1 a apply f apply g_n+1 b
-#         let m_n+1 ∧ ∈ m_n+1 ℕ ∧ function g_n+1 m_n+1 X ∀ a → ∈ a m_n+1 ∨ ∧ = a 0 = apply g_n+1 a x ∃ b ∧ = a successor b = apply g_n+1 a apply f apply g_n+1 b {
-#           prove ∈ successor m m_n+1
-#           prove ∈ m m_n+1
-#           prove ∨ ∧ = successor m 0 = apply g_n+1 successor m x ∃ b ∧ = successor m successor b = apply g_n+1 successor m apply f apply g_n+1 b
-#           prove ¬ = successor m 0
-#           prove ¬ ∧ = successor m 0 = apply g_n+1 successor m x
-#           prove ∃ b ∧ = successor m successor b = apply g_n+1 successor m apply f apply g_n+1 b
-#           let b ∧ = successor m successor b = apply g_n+1 successor m apply f apply g_n+1 b {
-#             prove = m b
-#             prove ∈ apply g_n+1 m X
-#             prove ∈ orderedPair m apply g_n+1 m g_n+1
-#             prove ∈ orderedPair m apply g_n+1 m union S
-#             prove ∧ ∈ apply g_n+1 m X ∈ orderedPair m apply g_n+1 m union S
-#             prove = apply g_n+1 m y_m
-#             prove = apply g_n+1 b y_m
-#             prove = apply f apply g_n+1 b apply f apply g_n+1 b
-#             prove = apply f apply g_n+1 b apply f y_m
-#             prove = apply g_n+1 successor m apply f y_m
-#             prove = y apply g_n+1 successor m
-#             prove = y apply f y_m
-#           }
-#         }
-#       }
-#     }
-#     assume = y apply f y_m {
-#       prove ∈ y_m X
-#       prove ∈ apply f y_m X
-#       prove ∈ y X
-#       prove ∈ m m_n
-#       prove ∨ ∈ successor m m_n = successor m m_n
-#       assume ∈ successor m m_n {
-#         prove ∨ ∧ = successor m 0 = apply g_n successor m x ∃ b ∧ = successor m successor b = apply g_n successor m apply f apply g_n b
-#         prove ¬ = successor m 0
-#         prove ¬ ∧ = successor m 0 = apply g_n successor m x
-#         prove ∃ b ∧ = successor m successor b = apply g_n successor m apply f apply g_n b
-#         let b ∧ = successor m successor b = apply g_n successor m apply f apply g_n b {
-#           prove = m b
-#           prove = y_m apply g_n b
-#           prove = apply f apply g_n b apply f apply g_n b
-#           prove = apply f y_m apply f apply g_n b
-#           prove = apply f y_m apply g_n successor m
-#           prove = y apply g_n successor m
-#           prove ∈ orderedPair successor m apply g_n successor m g_n
-#           prove ∈ orderedPair successor m y g_n
-#           prove ∈ orderedPair successor m y union S
-#         }
-#       }
-#       assume = successor m m_n {
-#         let g_n+1 = g_n+1 ∪ g_n singleton orderedPair m_n y {
-#           prove function g_n+1 successor m_n X
-#           prove ∈ orderedPair m_n y singleton orderedPair m_n y
-#           prove ∈ orderedPair m_n y ∪ g_n singleton orderedPair m_n y
-#           prove ∈ orderedPair m_n y g_n+1
-#           prove = y apply g_n+1 m_n
-#           assume ∈ a successor m_n {
-#             prove ∨ ∈ a m_n = a m_n
-#             assume ∈ a m_n {
-#               prove ∈ orderedPair a apply g_n a g_n
-#               prove ∈ orderedPair a apply g_n a ∪ g_n singleton orderedPair m_n y
-#               prove ∈ orderedPair a apply g_n a g_n+1
-#               prove = apply g_n a apply g_n+1 a
-#               prove ∨ ∧ = a 0 = apply g_n a x ∃ b ∧ = a successor b = apply g_n a apply f apply g_n b
-#               assume ∧ = a 0 = apply g_n a x {
-#                 prove ∧ = a 0 = apply g_n+1 a x
-#               }
-#               assume ∃ b ∧ = a successor b = apply g_n a apply f apply g_n b {
-#                 let b ∧ = a successor b = apply g_n a apply f apply g_n b {
-#                   prove ∈ successor b successor m_n
-#                   prove ∈ b m_n
-#                   prove ∈ orderedPair b apply g_n b g_n
-#                   prove ∈ orderedPair b apply g_n b ∪ g_n singleton orderedPair m_n y
-#                   prove ∈ orderedPair b apply g_n b g_n+1
-#                   prove = apply g_n b apply g_n+1 b
-#                   prove ∧ = a successor b = apply g_n a apply f apply g_n+1 b
-#                   prove ∧ = a successor b = apply g_n+1 a apply f apply g_n+1 b
-#                   prove ∃ b ∧ = a successor b = apply g_n+1 a apply f apply g_n+1 b
-#                 }
-#               }
-#               prove ∨ ∧ = a 0 = apply g_n+1 a x ∃ b ∧ = a successor b = apply g_n+1 a apply f apply g_n+1 b
-#             }
-#             assume = a m_n {
-#               prove = a successor m
-#               prove = y apply g_n+1 a
-#               prove = y apply f apply g_n m
-#               prove ∈ m successor m
-#               prove ∈ m m_n
-#               prove ∈ orderedPair m apply g_n m g_n
-#               prove ∈ orderedPair m apply g_n m ∪ g_n singleton orderedPair m_n y
-#               prove ∈ orderedPair m apply g_n m g_n+1
-#               prove = apply g_n m apply g_n+1 m
-#               prove = y apply f apply g_n+1 m
-#               prove = apply g_n+1 a apply f apply g_n+1 m
-#               prove ∧ = a successor m = apply g_n+1 a apply f apply g_n+1 m
-#               prove ∃ b ∧ = a successor b = apply g_n+1 a apply f apply g_n+1 b
-#               prove ∨ ∧ = a 0 = apply g_n+1 a x ∃ b ∧ = a successor b = apply g_n+1 a apply f apply g_n+1 b
-#             }
-#             prove ∨ ∧ = a 0 = apply g_n+1 a x ∃ b ∧ = a successor b = apply g_n+1 a apply f apply g_n+1 b
-#           }
-#           prove ∀ a → ∈ a successor m_n ∨ ∧ = a 0 = apply g_n+1 a x ∃ b ∧ = a successor b = apply g_n+1 a apply f apply g_n+1 b
-#           prove ∧ ∈ successor m_n ℕ ∧ function g_n+1 successor m_n X ∀ a → ∈ a successor m_n ∨ ∧ = a 0 = apply g_n+1 a x ∃ b ∧ = a successor b = apply g_n+1 a apply f apply g_n+1 b
-#           prove ∃ n ∧ ∈ n ℕ ∧ function g_n+1 n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply g_n+1 a x ∃ b ∧ = a successor b = apply g_n+1 a apply f apply g_n+1 b
-#           prove ∈ g_n+1 powerSet × ℕ X
-#           prove ∈ g_n+1 S
-#           prove ∈ orderedPair m_n y union S
-#           prove ∈ orderedPair successor m y union S
-#         }
-#       }
-#       prove ∈ orderedPair successor m y union S
-#     }
-#     prove ∀ y ↔ ∈ orderedPair successor m y union S = y apply f y_m
-#   }
-# }
-# qed
-#
-# theorem Recursion Theorem
-# premise function f X X
-# premise ∈ g_0 X
-# let S = S comprehension g powerSet × ℕ X ∃ n ∧ ∈ n ℕ ∧ function g n X ∀ a → ∈ a n ∨ ∧ = a 0 = apply g a g_0 ∃ b ∧ = a successor b = apply g a apply f apply g b {
-#   prove ⊆ S powerSet × ℕ X
-#   prove ⊆ union S × ℕ X
-#   prove ∀ y ↔ ∈ orderedPair 0 y union S = y g_0
-#   prove ∃! y ∈ orderedPair 0 y union S
-#   assume ∧ ∈ m ℕ ∃! y ∈ orderedPair m y union S {
-#     prove ∃ y_m ∀ y ↔ ∈ orderedPair m y union S = y y_m
-#     let y_m ∀ y ↔ ∈ orderedPair m y union S = y y_m {
-#       prove ∀ y ↔ ∈ orderedPair successor m y union S = y apply f y_m
-#       prove ∃! y ∈ orderedPair successor m y union S
-#     }
-#   }
-#   prove ∀ n → ∈ n ℕ ∃! y ∈ orderedPair n y union S
-#   prove function union S ℕ X
-#   prove ∈ orderedPair 0 g_0 union S
-#   prove = apply union S 0 g_0
-#   assume ∈ n ℕ {
-#     prove ∃! y ∈ orderedPair n y union S
-#     prove ∃ y_m ∀ y ↔ ∈ orderedPair n y union S = y y_m
-#     let y_m ∀ y ↔ ∈ orderedPair n y union S = y y_m {
-#       prove ∈ orderedPair n y_m union S
-#       prove = apply union S n y_m
-#       prove ∀ y ↔ ∈ orderedPair successor n y union S = y apply f y_m
-#       prove ∈ orderedPair successor n apply f y_m union S
-#       prove = apply union S successor n apply f y_m
-#       prove = apply union S successor n apply f apply union S n
-#     }
-#   }
-#   prove ∀ m → ∈ m ℕ = apply union S successor m apply f apply union S m
-#   prove ∧ function union S ℕ X ∧ = apply union S 0 g_0 ∀ m → ∈ m ℕ = apply union S successor m apply f apply union S m
-#   prove ∃ g ∧ function g ℕ X ∧ = apply g 0 g_0 ∀ m → ∈ m ℕ = apply g successor m apply f apply g m
-#   prove ∃! g ∧ function g ℕ X ∧ = apply g 0 g_0 ∀ m → ∈ m ℕ = apply g successor m apply f apply g m
-# }
-# qed

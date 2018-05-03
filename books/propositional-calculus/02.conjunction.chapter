@@ -1,6 +1,7 @@
 Introduce the "and" or "conjuction" connective, ∧.
 
-statement ∧ (φ ψ) definition (¬ → φ ¬ ψ)
+statement ∧ (φ ψ)
+  definition (¬ → φ ¬ ψ)
 
 theorem Extract Left Conjunct
 simplification

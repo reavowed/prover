@@ -7,6 +7,7 @@ import net.prover.model.entries.{StatementDefinition, TermDefinition}
 sealed trait Template {
   def names: Seq[String]
   def matchExpression(expression: Expression): Option[Seq[Either[String, Expression]]]
+  def serialized: String
 }
 
 object Template {
@@ -16,6 +17,7 @@ object Template {
       case statement: Statement => Some(Seq(Right(statement)))
       case _ => None
     }
+    override def serialized = name
   }
   case class TermVariable(name: String) extends Template {
     override def names = Seq(name)
@@ -23,6 +25,7 @@ object Template {
       case term: Term => Some(Seq(Right(term)))
       case _ => None
     }
+    override def serialized = name
   }
   case class FunctionParameter(parameter: expressions.FunctionParameter) extends Template {
     override def names = Nil
@@ -30,6 +33,7 @@ object Template {
       case expressions.FunctionParameter(parameter.index, level, depth) if (depth - level) == (parameter.depth - parameter.level) => Some(Nil)
       case _ => None
     }
+    override def serialized = parameter.toString
   }
   case class DefinedStatement(
       definition: StatementDefinition,
@@ -47,6 +51,7 @@ object Template {
       case _ =>
         None
     }
+    override def serialized = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
   }
   case class DefinedTerm(
       definition: TermDefinition,
@@ -64,6 +69,7 @@ object Template {
       case _ =>
         None
     }
+    override def serialized = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
   }
 
   def parser(implicit context: ParsingContext): Parser[Template] = {
