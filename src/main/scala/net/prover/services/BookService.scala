@@ -52,9 +52,14 @@ class BookService {
         .filter(s => !s.startsWith("#"))
     }
 
+    private def getBookPath(title: String): Path = {
+      val key = title.formatAsKey
+      bookDirectoryPath.resolve(key).resolve(key + ".book")
+    }
+
     private def parseBook(title: String, previousBookData: Seq[BookData]): BookData = {
       val previousBookOutlines = previousBookData.mapCollect(_.bookOutline)
-      val (bookOption, modificationTimes) = BookOutline.parse(title, bookDirectoryPath, previousBookOutlines)
+      val (bookOption, modificationTimes) = BookOutline.parse(title, getBookPath(title), previousBookOutlines)
       bookOption.ifEmpty { BookService.logger.info(s"Failed to parse book $title")}
       BookData(title, bookOption, modificationTimes)
     }
@@ -95,6 +100,9 @@ class BookService {
           }
           booksOption.foreach { newBooks =>
             books.set(newBooks)
+            newBooks.foreach { book =>
+              Files.write(getBookPath(book.title), book.serialized.getBytes("UTF-8"))
+            }
           }
         }
         BookService.logger.info(s"Updated ${dirtyBooks.length} books")

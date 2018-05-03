@@ -4,7 +4,6 @@ import java.nio.file.{Files, Path, Paths}
 import java.time.Instant
 import java.util
 
-import net.prover.model._
 import net.prover.model.proof.{CachedProof, ProofEntries}
 import org.slf4j.LoggerFactory
 
@@ -15,8 +14,8 @@ case class BookOutline(
   path: Path,
   dependencyOutlines: Seq[BookOutline],
   chapterOutlines: Seq[ChapterOutline],
-  statementVariableNames: Set[String],
-  termVariableNames: Set[String],
+  statementVariableNames: Seq[String],
+  termVariableNames: Seq[String],
   parsingContext: ParsingContext)
 {
   val key: String = title.formatAsKey
@@ -38,7 +37,7 @@ case class BookOutline(
       }
       val chapters = expandChapters(cachedProofs, dependencies)
       cacheTheorems(chapters, cacheDirectoryPath)
-      Book(title, dependencies, chapters)
+      Book(title, dependencies, chapters, statementVariableNames, termVariableNames)
     }.ifFailed { e =>
       BookOutline.logger.warn(s"Error expanding book '$title'\n${e.getMessage}")
     }.toOption
@@ -96,19 +95,17 @@ case class BookOutline(
 object BookOutline {
   val logger = LoggerFactory.getLogger(BookOutline.getClass)
 
-  def parse(title: String, bookDirectoryPath: Path, availableDependencies: Seq[BookOutline]): (Option[BookOutline], Map[Path, Instant]) = {
+  def parse(title: String, path: Path, availableDependencies: Seq[BookOutline]): (Option[BookOutline], Map[Path, Instant]) = {
     val key = title.formatAsKey
-    val path = bookDirectoryPath.resolve(key).resolve(key + ".book")
-    val bookModificationTime = Files.getLastModifiedTime(path).toInstant
     Try(parser(path, availableDependencies).parse(Tokenizer.fromPath(path))._1) match {
       case Success((bookOutline, subModificationTimes)) =>
-        (Some(bookOutline), subModificationTimes.updated(path, bookModificationTime))
+        (Some(bookOutline), subModificationTimes)
       case Failure(ExceptionWithModificationTimes(e, subModificationTimes)) =>
         logger.error(s"Error parsing book '$title'\n${e.getMessage}")
-        (None, subModificationTimes.updated(path, bookModificationTime))
+        (None, subModificationTimes)
       case Failure(e) =>
         logger.error(s"Error parsing book '$title'\n${e.getMessage}")
-        (None, Map(path -> bookModificationTime))
+        (None, Map.empty)
     }
   }
 
@@ -127,8 +124,8 @@ object BookOutline {
       val initialContext = ParsingContext(
         transitiveDependencies.flatMap(_.chapterOutlines.flatMap(_.statementDefinitions)),
         transitiveDependencies.flatMap(_.chapterOutlines.flatMap(_.termDefinitions)),
-        statementVariableNames,
-        termVariableNames,
+        statementVariableNames.toSet,
+        termVariableNames.toSet,
         Seq.empty)
       val (updatedParsingContext, (chapterOutlines, chapterModificationTimes)) = chapterTitles.zipWithIndex
         .mapFold(initialContext) { case (context, (chapterTitle, index)) =>
@@ -156,15 +153,15 @@ object BookOutline {
       .whileDefined
   }
 
-  def variableDefinitionsParser: Parser[(Set[String], Set[String])] = {
+  def variableDefinitionsParser: Parser[(Seq[String], Seq[String])] = {
     Parser.optionalWord("variables").flatMapMap { _ =>
       for {
-        newStatementVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
-        newTermVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
+        statementVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
+        termVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
       } yield {
-        (newStatementVariableNames.toSet, newTermVariableNames.toSet)
+        (statementVariableNames, termVariableNames)
       }
-    }.getOrElse((Set.empty, Set.empty))
+    }.getOrElse((Nil, Nil))
   }
 
   def chapterTitlesParser: Parser[Seq[String]] = {

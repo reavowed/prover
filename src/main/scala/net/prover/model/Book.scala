@@ -7,7 +7,9 @@ import net.prover.model.entries._
 case class Book(
     title: String,
     dependencies: Seq[Book],
-    chapters: Seq[Chapter]) {
+    chapters: Seq[Chapter],
+    statementVariableNames: Seq[String],
+    termVariableNames: Seq[String]) {
   val key: String = title.formatAsKey
   implicit def displayContext: DisplayContext = DisplayContext(allTransitive(_.shorthands))
 
@@ -17,6 +19,18 @@ case class Book(
   def shorthands: Seq[Shorthand] = chapters.flatMap(_.shorthands)
 
   def allTransitive[T](f: Book => Seq[T]): Seq[T] = (dependencies.transitive :+ this).flatMap(f)
+
+  def serialized: String = {
+    (
+      Seq(title) ++
+      dependencies.map(d => s"import ${d.title}") ++
+      Seq("") ++
+      Seq(s"variables (${statementVariableNames.mkString(" ")}) (${termVariableNames.mkString(" ")})" ) ++
+      Seq("") ++
+      chapters.map(c => s"chapter ${c.title}")++
+      Seq("")
+    ).mkString(System.getProperty("line.separator"))
+  }
 }
 
 object Book {
