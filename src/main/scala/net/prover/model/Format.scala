@@ -41,17 +41,17 @@ object Format {
     symbol: String,
     replacementNames: Seq[String]
   ): Format = {
-    val formatString = replacementNames match {
+    val (formatString, requiresBrackets) = replacementNames match {
       case Nil =>
-        symbol
+        (symbol, false)
       case Seq(a) =>
-        s"$symbol%0"
+        (s"$symbol%0", false)
       case Seq(a, b) =>
-        s"%0 $symbol %1"
+        (s"%0 $symbol %1", true)
       case _ =>
         throw new Exception("Explicit format must be supplied with more than two components")
     }
-    Format.Default(formatString, requiresBrackets = false)
+    Format.Default(formatString, requiresBrackets)
   }
 
   def parser(replacementNames: Seq[String]): Parser[Format.Explicit] = {
