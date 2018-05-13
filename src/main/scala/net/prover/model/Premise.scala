@@ -12,7 +12,7 @@ case class Premise(statement: Statement, index: Int)(val isElidable: Boolean) {
   }
   def withStatement(newStatement: Statement) = copy(statement = newStatement)(isElidable)
   def serialized: String = s"premise ${statement.serialized}" + (if (isElidable) " elidable" else "")
-  def serializedForHash: String = s"premise ${statement.serialized}"
+  def serializedForHash: String = s"premise ${statement.serializedForHash}"
 }
 
 object Premise {

@@ -141,6 +141,7 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
   }
   def safeToString: String = toString
   def serialized: String
+  def serializedForHash: String
 }
 
 object Expression {

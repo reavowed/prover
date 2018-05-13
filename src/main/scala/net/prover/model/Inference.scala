@@ -132,7 +132,7 @@ object Inference {
   }
 
   def calculateHash(premises: Seq[Premise], conclusion: Statement): String = {
-    val serialized = (premises.map(_.serializedForHash) :+ conclusion.serialized).mkString("\n")
+    val serialized = (premises.map(_.serializedForHash) :+ conclusion.serializedForHash).mkString("\n")
     val sha = MessageDigest.getInstance("SHA-256")
     sha.update(serialized.getBytes("UTF-8"))
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))

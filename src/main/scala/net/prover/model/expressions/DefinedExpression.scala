@@ -118,6 +118,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     definition.format.formatText(scopedBoundVariableNames ++ components.map(_.safeToString), safe = true)
   }
   override def serialized: String = (Seq(definition.symbol) ++ scopedBoundVariableNames ++ components.map(_.serialized)).mkString(" ")
+  override def serializedForHash: String = (Seq(definition.symbol) ++ components.map(_.serializedForHash)).mkString(" ")
 }
 
 object DefinedExpression {

@@ -133,6 +133,7 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   override def toString = s"$variableName(${arguments.map(_.toString).mkString(", ")})"
   override def safeToString = toString
   override def serialized = s"with (${arguments.map(_.serialized).mkString(" ")}) $variableName"
+  override def serializedForHash = s"with (${arguments.map(_.serializedForHash).mkString(" ")}) $variableName"
 }
 
 object ExpressionApplication {

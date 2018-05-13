@@ -94,7 +94,8 @@ case class FunctionParameter(index: Int, level: Int)(val name: Option[String]) e
     }
   }
 
-  override def serialized: String = (0 to level).map(_ => "$").mkString("") + index
+  override def serialized = (0 to level).map(_ => "$").mkString("") + index
+  override def serializedForHash = serialized
   override def toString = serialized
 }
 
