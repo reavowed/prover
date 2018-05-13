@@ -7,8 +7,7 @@ case class Substitutions(
     statements: Map[String, Statement] = Map.empty,
     terms: Map[String, Term] = Map.empty,
     predicates: Map[String, Statement] = Map.empty,
-    functions: Map[String, Term] = Map.empty,
-    depth: Int = 0)
+    functions: Map[String, Term] = Map.empty)
 {
   def update[T <: Expression](
     name: String,
@@ -16,9 +15,6 @@ case class Substitutions(
     lens: Lens[Substitutions, Map[String, T]],
     additionalDepth: Int
   ): Option[Substitutions] = {
-    if (expression.depth != depth + additionalDepth) {
-      throw new Exception("Depth mismatch")
-    }
     lens.get(this)
       .tryAdd(name, expression)
       .map(lens.set(_)(this))
@@ -27,7 +23,6 @@ case class Substitutions(
 
 object Substitutions {
   val empty = Substitutions(Map.empty, Map.empty, Map.empty, Map.empty)
-  def emptyWithDepth(depth: Int) = empty.copy(depth = depth)
 
   case class Required(statements: Seq[String], terms: Seq[String], predicates: Seq[String], functions: Seq[String]) {
     def ++(other: Required): Required = {

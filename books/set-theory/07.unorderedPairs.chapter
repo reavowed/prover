@@ -2,15 +2,15 @@ Establish the existence of the unordered pair {a, b}.
 
 theorem Unordered Pair Existence Lemma
 take y {
-  assume ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b {
-    let x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b {
-      assume ∧ = $$0 singleton ∅ = $.0 a {
-        prove ∨ = $.0 a = $.0 b
+  assume ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b {
+    let x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b {
+      assume ∧ = $0 singleton ∅ = $$0 a {
+        prove ∨ = $$0 a = $$0 b
       }
-      assume ∧ = $$0 ∅ = $.0 b {
-        prove ∨ = $.0 a = $.0 b
+      assume ∧ = $0 ∅ = $$0 b {
+        prove ∨ = $$0 a = $$0 b
       }
-      prove ∨ = $.0 a = $.0 b
+      prove ∨ = $$0 a = $$0 b
     }
   }
   assume ∨ = $0 a = $0 b {
@@ -18,17 +18,17 @@ take y {
       prove ∈ singleton ∅ powerSet singleton ∅
       prove = singleton ∅ singleton ∅
       prove ∧ ∈ singleton ∅ powerSet singleton ∅ ∨ ∧ = singleton ∅ singleton ∅ = $0 a ∧ = singleton ∅ ∅ = $0 b
-      prove ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b
+      prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b
     }
     assume = $0 b {
       prove ∈ ∅ powerSet singleton ∅
       prove = ∅ ∅
       prove ∧ ∈ ∅ powerSet singleton ∅ ∨ ∧ = ∅ singleton ∅ = $0 a ∧ = ∅ ∅ = $0 b
-      prove ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b
+      prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b
     }
-    prove ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b
+    prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b
   }
-  prove ↔ ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b ∨ = $0 a = $0 b
+  prove ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b ∨ = $0 a = $0 b
 }
 qed
 
@@ -36,19 +36,19 @@ theorem Unordered Pair Existence
 take x {
   assume ∈ $0 powerSet singleton ∅ {
     prove ⊕ = $0 singleton ∅ = $0 ∅
-    prove ∃! y ∨ ∧ = $.0 singleton ∅ = $$0 a ∧ = $.0 ∅ = $$0 b
+    prove ∃! y ∨ ∧ = $$0 singleton ∅ = $0 a ∧ = $$0 ∅ = $0 b
   }
 }
-prove ∃ z ∀ y ↔ ∈ $$0 $.0 ∃ x ∧ ∈ $$$0 powerSet singleton ∅ ∨ ∧ = $$$0 singleton ∅ = $$.0 a ∧ = $$$0 ∅ = $$.0 b
-prove ∀ y ↔ ∃ x ∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $.0 a ∧ = $$0 ∅ = $.0 b ∨ = $0 a = $0 b
-prove ∃ z ∀ y ↔ ∈ $$0 $.0 ∨ = $$0 a = $$0 b
-prove ∃! z ∀ y ↔ ∈ $$0 $.0 ∨ = $$0 a = $$0 b
+prove ∃ z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b
+prove ∀ y ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b ∨ = $0 a = $0 b
+prove ∃ z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b
+prove ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b
 qed
 
 term pair (a b)
   name (Unordered Pair)
   format ({a, b})
-  (∀ x ↔ ∈ $$0 $.0 ∨ = $$0 a = $$0 b)
+  (∀ x ↔ ∈ $0 $$0 ∨ = $0 a = $0 b)
 
 theorem Elements of Unordered Pair
 premise ∈ c pair a b

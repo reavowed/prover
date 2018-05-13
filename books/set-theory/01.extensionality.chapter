@@ -2,11 +2,11 @@ Introduce the set membership predicate ∈ and the Axiom of Extensionality, and 
 
 statement ∈ (a b)
 
-shorthand ∀ x → ∈ x a φ as ((∀x ∈ a)φ)
+shorthand ∀ x → ∈ $0 a φ as ((∀x ∈ a)φ)
 
-shorthand ∃ x ∧ ∈ x a φ as ((∃x ∈ a)φ)
+shorthand ∃ x ∧ ∈ $0 a φ as ((∃x ∈ a)φ)
 
-shorthand ∃! x ∧ ∈ x a φ as ((∃!x ∈ a)φ)
+shorthand ∃! x ∧ ∈ $0 a φ as ((∃!x ∈ a)φ)
 
 shorthand ¬ ∈ a b as (a ∉ b in parens)
 
@@ -30,22 +30,22 @@ prove = a b
 qed
 
 theorem A Set with a Membership Condition Is Unique
-premise ∃ x ∀ y ↔ ∈ $$0 $.0 with ($$0) φ
+premise ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 take z_1 {
   take z_2 {
-    assume ∧ ∀ y ↔ ∈ $$$0 $..0 with ($$$0) φ ∀ y ↔ ∈ $$$0 $$.0 with ($$$0) φ {
-      prove = $.0 $$0
+    assume ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ {
+      prove = $$0 $0
     }
   }
 }
-prove ∃! x ∀ y ↔ ∈ $$0 $.0 with ($$0) φ
+prove ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 qed
 
 theorem Replace Equivalent Membership Condition
-premise ∃ x ∀ y ↔ ∈ $$0 $.0 with ($$0) φ
+premise ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 premise ∀ y ↔ with ($0) φ with ($0) ψ
-let a ∀ y ↔ ∈ $$0 $.0 with ($$0) φ {
-  prove ∀ y ↔ ∈ $$0 $.0 with ($$0) ψ
-  prove ∃ x ∀ y ↔ ∈ $$$0 $$.0 with ($$$0) ψ
+let a ∀ y ↔ ∈ $0 $$0 with ($0) φ {
+  prove ∀ y ↔ ∈ $0 $$0 with ($0) ψ
+  prove ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ
 }
 qed

@@ -4,35 +4,35 @@ theorem Comprehensions Exist for Empty Sets
 premise ¬ ∃ x ∧ ∈ $0 A with ($0) φ
 prove ∀ x ¬ ∧ ∈ $0 A with ($0) φ
 prove ∀ x ↔ ∈ $0 ∅ ∧ ∈ $0 A with ($0) φ
-prove ∃ y ∀ x ↔ ∈ $$0 $.0 ∧ ∈ $$0 A with ($$0) φ
-prove ∃! y ∀ x ↔ ∈ $$0 $.0 ∧ ∈ $$0 A with ($$0) φ
+prove ∃ y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
+prove ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 qed
 
 theorem Comprehensions Exist for Non-Empty Sets Lemma
 premise ∧ ∈ a A with (a) φ
 take y {
-  assume ∃ x ∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $.0 $$0 ∧ ¬ with ($$0) φ = $.0 a {
-    let x ∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $.0 $$0 ∧ ¬ with ($$0) φ = $.0 a {
-      assume with ($$0) φ {
-        prove = $.0 $$0
-          via ↔ ∨ ∧ with ($$0) φ = $.0 $$0 ∧ ¬ with ($$0) φ = $.0 a = $.0 $$0
+  assume ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a {
+    let x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a {
+      assume with ($0) φ {
+        prove = $$0 $0
+          via ↔ ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 $0
+        prove ∧ ∈ $0 A with ($0) φ
         prove ∧ ∈ $$0 A with ($$0) φ
-        prove ∧ ∈ $.0 A with ($.0) φ
       }
-      assume ¬ with ($$0) φ {
-        prove = $.0 a
-          via ↔ ∨ ∧ with ($$0) φ = $.0 $$0 ∧ ¬ with ($$0) φ = $.0 a = $.0 a
-        prove ∧ ∈ $.0 A with ($.0) φ
+      assume ¬ with ($0) φ {
+        prove = $$0 a
+          via ↔ ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 a
+        prove ∧ ∈ $$0 A with ($$0) φ
       }
-      prove ∧ ∈ $.0 A with ($.0) φ
+      prove ∧ ∈ $$0 A with ($$0) φ
     }
   }
   assume ∧ ∈ $0 A with ($0) φ {
     prove = $0 $0
     prove ∧ ∈ $0 A ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a
-    prove ∃ x ∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $.0 $$0 ∧ ¬ with ($$0) φ = $.0 a
+    prove ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a
   }
-  prove ↔ ∃ x ∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $.0 $$0 ∧ ¬ with ($$0) φ = $.0 a ∧ ∈ $0 A with ($0) φ
+  prove ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a ∧ ∈ $0 A with ($0) φ
 }
 qed
 
@@ -40,34 +40,34 @@ theorem Comprehensions Exist for Non-Empty Sets
 premise ∃ y ∧ ∈ $0 A with ($0) φ
 let a ∧ ∈ $0 A with ($0) φ {
   take x {
-    prove ∃! y ∨ ∧ with ($$.0) φ = $$$0 $$.0 ∧ ¬ with ($$.0) φ = $$$0 $..0
-    prove → ∈ $$0 A ∃! y ∨ ∧ with ($$.0) φ = $$$0 $$.0 ∧ ¬ with ($$.0) φ = $$$0 $..0
+    prove ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0
+    prove → ∈ $0 A ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0
   }
-  prove ∃ Y ∀ y ↔ ∈ $$$0 $$.0 ∃ x ∧ ∈ $$$$0 A ∨ ∧ with ($$$$0) φ = $$$.0 $$$$0 ∧ ¬ with ($$$$0) φ = $$$.0 $...0
-  prove ∀ y ↔ ∃ x ∧ ∈ $$$0 A ∨ ∧ with ($$$0) φ = $$.0 $$$0 ∧ ¬ with ($$$0) φ = $$.0 $..0 ∧ ∈ $$0 A with ($$0) φ
-  prove ∃ Y ∀ y ↔ ∈ $$$0 $$.0 ∧ ∈ $$$0 A with ($$$0) φ
+  prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$$0
+  prove ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$0 ∧ ∈ $0 A with ($0) φ
+  prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 }
-prove ∃! Y ∀ y ↔ ∈ $$0 $.0 ∧ ∈ $$0 A with ($$0) φ
+prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 qed
 
 theorem Comprehensions Exist
 assume ¬ ∃ y ∧ ∈ $0 X with ($0) φ {
-  prove ∃! Y ∀ y ↔ ∈ $$0 $.0 ∧ ∈ $$0 X with ($$0) φ
+  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ
 }
 assume ∃ y ∧ ∈ $0 X with ($0) φ {
-  prove ∃! Y ∀ y ↔ ∈ $$0 $.0 ∧ ∈ $$0 X with ($$0) φ
+  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ
 }
-prove ∃! Y ∀ y ↔ ∈ $$0 $.0 ∧ ∈ $$0 X with ($$0) φ
+prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ
 qed
 
 term comprehension ($x A with x φ)
   name (Comprehension)
   format ({x ∈ A | φ})
-  (∀ y ↔ ∈ $$0 $.0 ∧ ∈ $$0 A with ($$0) φ)
+  (∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ)
 
 theorem Membership Condition for a Comprehension
 premise = S comprehension x A with ($0) φ
-prove ∀ y ↔ ∈ $0 comprehension x A with ($$0) φ ∧ ∈ $0 A with ($0) φ
+prove ∀ y ↔ ∈ $0 comprehension x A with ($0) φ ∧ ∈ $0 A with ($0) φ
 prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ
 qed
 

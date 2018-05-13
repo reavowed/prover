@@ -1,16 +1,16 @@
 package net.prover.model
 
-import net.prover.model.expressions.{ArgumentList, Expression, FunctionParameter}
+import net.prover.model.entries.ExpressionDefinition.{ComponentArgument, PredicateComponent}
+import net.prover.model.entries.TermDefinition
+import net.prover.model.expressions.{Expression, FunctionParameter}
 import org.specs2.execute.Result
 
 class SubstitutionsSpec extends ProverSpec {
-  def testSubstitutions(source: Expression, targetExpression: Expression, rawSubstitutions: Substitutions*) = {
-    val substitutionsDepth = targetExpression.depth - source.depth
-    val expectedSubstitutions = rawSubstitutions.map(_.copy(depth = substitutionsDepth))
-    val calculatedSubstitutions = source.calculateSubstitutions(targetExpression, Substitutions(depth = substitutionsDepth), Nil, Nil)
+  def testSubstitutions(externalDepth: Int, source: Expression, targetExpression: Expression, expectedSubstitutions: Substitutions*) = {
+    val calculatedSubstitutions = source.calculateSubstitutions(targetExpression, Substitutions.empty, Nil, Nil, 0, externalDepth)
     calculatedSubstitutions.must(contain(exactly(expectedSubstitutions: _*)))
     Result.foreach(expectedSubstitutions) { expectedSubstitution =>
-      val substitutedExpression = source.applySubstitutions(expectedSubstitution)
+      val substitutedExpression = source.applySubstitutions(expectedSubstitution, 0, externalDepth)
       substitutedExpression must beSome(targetExpression)
     }
   }
@@ -18,6 +18,7 @@ class SubstitutionsSpec extends ProverSpec {
   "calculating substitutions" should {
     "match the target statement for a statement variable" in {
       testSubstitutions(
+        0,
         φ,
         Equals(a, b),
         Substitutions(statements = Map(φ -> Equals(a, b))))
@@ -25,6 +26,7 @@ class SubstitutionsSpec extends ProverSpec {
 
     "match components for a defined statement" in {
       testSubstitutions(
+        0,
         Implication(φ, ψ),
         Implication(Equals(a, b), Negation(χ)),
         Substitutions(statements = Map(φ -> Equals(a, b), ψ -> Negation(χ))))
@@ -32,18 +34,21 @@ class SubstitutionsSpec extends ProverSpec {
 
     "not match a defined statement to a statement variable" in {
       testSubstitutions(
+        0,
         Implication(φ, ψ),
         χ)
     }
 
     "not match a defined statement to a different defined statement" in {
       testSubstitutions(
+        0,
         Implication(φ, ψ),
         Conjunction(ψ, χ))
     }
 
     "match two connectives of the same type whose components merge correctly" in {
       testSubstitutions(
+        0,
         Implication(φ, φ),
         Implication(Conjunction(φ, ψ), Conjunction(φ, ψ)),
         Substitutions(statements = Map(φ -> Conjunction(φ, ψ))))
@@ -51,158 +56,170 @@ class SubstitutionsSpec extends ProverSpec {
 
     "not match two connectives of the same type whose components do not merge correctly" in {
       testSubstitutions(
+        0,
         Implication(φ, φ),
         Implication(Conjunction(φ, ψ), χ))
     }
 
     "match a predicate application to a defined statement" in {
       testSubstitutions(
+        0,
         φ(a),
         ElementOf(b, EmptySet),
-        Substitutions(predicates = Map(φ -> ElementOf.!(b.^, EmptySet.^))),
-        Substitutions(terms = Map(a -> b), predicates = Map(φ -> ElementOf.!(FunctionParameter.anonymous(0), EmptySet.^))),
-        Substitutions(terms = Map(a -> EmptySet), predicates = Map(φ -> ElementOf.!(b.^, FunctionParameter.anonymous(0)))))
+        Substitutions(predicates = Map(φ -> ElementOf(b, EmptySet))),
+        Substitutions(terms = Map(a -> b), predicates = Map(φ -> ElementOf(FunctionParameter.anonymous(0, 0), EmptySet))),
+        Substitutions(terms = Map(a -> EmptySet), predicates = Map(φ -> ElementOf(b, FunctionParameter.anonymous(0, 0)))))
     }
 
     "match a predicate application to another predicate application" in {
       testSubstitutions(
+        0,
         φ(a),
         ψ(b),
-        Substitutions(predicates = Map(φ -> ψ.!(b.^))),
-        Substitutions(terms = Map(a -> b), predicates = Map(φ -> ψ.!(FunctionParameter.anonymous(0)))))
+        Substitutions(predicates = Map(φ -> ψ(b))),
+        Substitutions(terms = Map(a -> b), predicates = Map(φ -> ψ(FunctionParameter.anonymous(0, 0)))))
     }
 
     "match a predicate application to a defined predicate" in {
       testSubstitutions(
+        1,
         φ(a),
-        ElementOf.!(FunctionParameter.anonymous(0), b.^),
+        ElementOf(FunctionParameter.anonymous(0, 0), b),
         Substitutions(
-          predicates = Map(φ -> ElementOf.!!(FunctionParameter.anonymous(0, 2), b.^^))),
+          predicates = Map(φ -> ElementOf(FunctionParameter.anonymous(0, 0), b))),
         Substitutions(
-          terms = Map(a -> FunctionParameter.anonymous(0)),
-          predicates = Map(φ -> ElementOf.!!(FunctionParameter.anonymous(0, 1, 2), b.^^))),
+          terms = Map(a -> FunctionParameter.anonymous(0, 0)),
+          predicates = Map(φ -> ElementOf(FunctionParameter.anonymous(0, 1), b))),
         Substitutions(
-          terms = Map(a -> b.^),
-          predicates = Map(φ -> ElementOf.!!(FunctionParameter.anonymous(0, 2), FunctionParameter.anonymous(0, 1, 2)))))
-    }
-
-    "match a 1st order predicate application to a 1st order predicate" in {
-      testSubstitutions(
-        φ.!(FunctionParameter("x", 0, 1)),
-        ElementOf.!(FunctionParameter("x", 0, 1), a.^),
-        Substitutions(predicates = Map(φ -> ElementOf.!(FunctionParameter.anonymous(0, 1), a.^))))
+          terms = Map(a -> b),
+          predicates = Map(φ -> ElementOf(FunctionParameter.anonymous(0, 0), FunctionParameter.anonymous(0, 1)))))
     }
 
     "match a bound predicate application to itself" in {
       testSubstitutions(
-        ForAll("x")(φ.!(FunctionParameter("x", 0))),
-        ForAll("x")(φ.!(FunctionParameter("x", 0))),
-        Substitutions(predicates = Map(φ -> φ.!(FunctionParameter.anonymous(0)))))
+        0,
+        ForAll("x")(φ(FunctionParameter("x", 0, 0))),
+        ForAll("x")(φ(FunctionParameter("x", 0, 0))),
+        Substitutions(predicates = Map(φ -> φ(FunctionParameter.anonymous(0, 0)))))
     }
 
     "match a bound connective to itself" in {
       testSubstitutions(
-        ForAll("x")(ElementOf.!(FunctionParameter("x", 0), a.^)),
-        ForAll("x")(ElementOf.!(FunctionParameter("x", 0), b.^)),
+        0,
+        ForAll("x")(ElementOf(FunctionParameter("x", 0, 0), a)),
+        ForAll("x")(ElementOf(FunctionParameter("x", 0, 0), b)),
         Substitutions(terms = Map(a -> b)))
     }
 
     "match a bound predicate application to a bound predicate" in {
       testSubstitutions(
-        ForAll("x")(φ.!(FunctionParameter("x", 0))),
-        ForAll("x")(Equals.!(FunctionParameter("x", 0), FunctionParameter("x", 0))),
-        Substitutions(predicates = Map(φ -> Equals.!(FunctionParameter.anonymous(0), FunctionParameter.anonymous(0)))))
+        0,
+        ForAll("x")(φ(FunctionParameter("x", 0, 0))),
+        ForAll("x")(Equals(FunctionParameter("x", 0, 0), a)),
+        Substitutions(predicates = Map(φ -> Equals(FunctionParameter.anonymous(0, 0), a))))
     }
 
     "match a predicate application to a higher-order predicate application" in {
       testSubstitutions(
+        1,
         φ(a),
-        ψ.!(FunctionParameter("x", 0)),
+        ψ(FunctionParameter("x", 0, 0)),
         Substitutions(
-          terms = Map(a -> FunctionParameter("x", 0)),
-          predicates = Map(φ -> ψ.!!(FunctionParameter.anonymous(0, 1, 2)))),
+          terms = Map(a -> FunctionParameter("x", 0, 0)),
+          predicates = Map(φ -> ψ(FunctionParameter.anonymous(0, 1)))),
         Substitutions(
-          predicates = Map(φ -> ψ.!!(FunctionParameter.anonymous(0, 2)))))
+          predicates = Map(φ -> ψ(FunctionParameter.anonymous(0, 0)))))
     }
 
     "match a bound statement to a higher-order bound statement" in {
       testSubstitutions(
-        ForAll("x")(Equals.!(FunctionParameter("x", 0), FunctionParameter("x", 0))),
-        ForAll.!("x")(Equals.!!(FunctionParameter("x", 0, 2), FunctionParameter("x", 0, 2))),
+        1,
+        ForAll("x")(Equals(FunctionParameter("x", 0, 0), FunctionParameter("x", 0, 0))),
+        ForAll("x")(Equals(FunctionParameter("x", 0, 0), FunctionParameter("x", 0, 0))),
         Substitutions.empty)
-    }
-
-    "match a first-order predicate application to a second-order predicate application" in {
-      testSubstitutions(
-        φ.!(FunctionParameter("x", 0)),
-        φ.!!(FunctionParameter("x", 0, 2, 2)),
-        Substitutions(predicates = Map(φ -> φ.!!(FunctionParameter.anonymous(0, 1, 2)))))
     }
 
     "match a 1st order bound statement to a 3rd order one" in {
       testSubstitutions(
-        ForAll("x")(Negation.!(ElementOf.!(FunctionParameter("x", 0, 1, 1), a.^))),
-        ForAll.!!("x")(Negation.!!!(ElementOf.!!!(FunctionParameter("x", 0, 3, 3), FunctionParameter("X", 0, 1, 3)))),
-        Substitutions(terms = Map(a -> FunctionParameter("X", 0, 1, 2)))
+        2,
+        ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), a))),
+        ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter("y", 0, 2)))),
+        Substitutions(terms = Map(a -> FunctionParameter("y", 0, 1)))
       )
     }
 
     "match a bound predicate application to a 1st-order bound application" in {
       testSubstitutions(
-        ForAll("x")(φ.!(FunctionParameter("x", 0, 1, 1))),
-        ForAll.!("X")(ForAll.!!("x")(Negation.!!!(ElementOf.!!!(FunctionParameter("x", 0, 3, 3), FunctionParameter("X", 0, 2, 3))))),
+        1,
+        ForAll("x")(φ(FunctionParameter("x", 0, 0))),
+        ForAll("X")(ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter("X", 0, 1))))),
         Substitutions(
-          predicates = Map(φ -> ForAll.!!("x")(Negation.!!!(ElementOf.!!!(FunctionParameter("x", 0, 3, 3), FunctionParameter.anonymous(0, 1, 3)))))))
+          predicates = Map(φ -> ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter.anonymous(0, 2)))))))
     }
 
     "match a bound predicate application to a 1st-order bound application referencing its external argument" in {
       testSubstitutions(
-        ForAll("x")(φ.!(FunctionParameter("x", 0, 1, 1))),
-        ForAll.!("X")(ForAll.!!("x")(Negation.!!!(ElementOf.!!!(FunctionParameter("x", 0, 3, 3), FunctionParameter("Y", 0, 1, 3))))),
+        1,
+        ForAll("x")(φ(FunctionParameter("x", 0, 0))),
+        ForAll("X")(ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter("Y", 0, 2))))),
         Substitutions(
-          predicates = Map(φ -> ForAll.!!("x")(Negation.!!!(ElementOf.!!!(FunctionParameter("x", 0, 3, 3), FunctionParameter("Y", 0, 2, 3)))))))
+          predicates = Map(φ -> ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter("Y", 0, 1)))))))
     }
 
     "match a predicate application on a variable to a bound statement containing the variable" in {
       testSubstitutions(
+        0,
         φ(a),
-        Exists("x")(ElementOf.!(FunctionParameter("x", 0, 1), a.^)),
+        Exists("x")(ElementOf(FunctionParameter("x", 0, 0), a)),
         Substitutions(
           terms = Map(a -> a),
-          predicates = Map(φ -> Exists.!("x")(ElementOf.!!(FunctionParameter("x", 0, 2), FunctionParameter.anonymous(0, 1, 2))))),
+          predicates = Map(φ -> Exists("x")(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter.anonymous(0, 1))))),
         Substitutions(
-          predicates = Map(φ -> Exists.!("x")(ElementOf.!!(FunctionParameter("x", 0, 2), a.^^)))))
+          predicates = Map(φ -> Exists("x")(ElementOf(FunctionParameter("x", 0, 0), a)))))
     }
 
     "match a predicate application on a variable to a bound statement containing no variables" in {
       testSubstitutions(
+        0,
         φ(a),
-        Exists("x")(ElementOf.!(FunctionParameter("x", 0, 1), EmptySet.^)),
+        Exists("x")(ElementOf(FunctionParameter("x", 0, 0), EmptySet)),
         Substitutions(
           terms = Map(a -> EmptySet),
-          predicates = Map(φ -> Exists.!("x")(ElementOf.!!(FunctionParameter("x", 0, 2), FunctionParameter.anonymous(0, 1, 2))))),
+          predicates = Map(φ -> Exists("x")(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter.anonymous(0, 1))))),
         Substitutions(
-          predicates = Map(φ -> Exists.!("x")(ElementOf.!!(FunctionParameter("x", 0, 2), EmptySet.^^)))))
+          predicates = Map(φ -> Exists("x")(ElementOf(FunctionParameter("x", 0, 0), EmptySet)))))
     }
 
     "match a bound statement variable to a statement" in {
       testSubstitutions(
-        ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.^)),
-        ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), Exists.!("y")(Conjunction.!!(φ.!!(FunctionParameter("y", 0, 2)), ψ.^^)))),
+        0,
+        ForAll("x")(Implication(φ(FunctionParameter("x", 0, 0)), ψ)),
+        ForAll("x")(Implication(φ(FunctionParameter("x", 0, 0)), Exists("y")(Conjunction(φ(FunctionParameter("y", 0, 0)), ψ)))),
         Substitutions(
-          statements = Map(ψ -> Exists("y")(Conjunction.!(φ.!(FunctionParameter("y", 0)), ψ.^))),
-          predicates = Map(φ -> φ.!(FunctionParameter("x", 0)))))
+          statements = Map(ψ -> Exists("y")(Conjunction(φ(FunctionParameter("y", 0, 0)), ψ))),
+          predicates = Map(φ -> φ(FunctionParameter("x", 0, 0)))))
+    }
+
+    "match two bound statements with a large shared context" in {
+      testSubstitutions(
+        1,
+        ForAll("x")(ForAll("y")(φ(FunctionParameter("y", 0, 0)))),
+        ForAll("x")(ForAll("y")(Exists("z")(ElementOf(FunctionParameter("y", 0, 1), FunctionParameter("a", 0, 3))))),
+        Substitutions(
+          predicates = Map(φ -> Exists("y")(ElementOf(FunctionParameter.anonymous(0, 2), FunctionParameter("a", 0, 1))))))
     }
   }
 
   "validating hints" should {
     "allow applicative hints to have arguments in external bound variables" in {
       φ.calculateSubstitutions(
-        ElementOf.!(FunctionParameter("x", 0), a.^),
-        Substitutions.emptyWithDepth(1),
-        Seq(Substitutions(statements = Map(φ -> ElementOf.!!(FunctionParameter("x", 0, 1, 2), a.^^)), depth = 2) -> ArgumentList(Seq(a), 0)),
-        Nil
-      ) mustEqual Seq(Substitutions(statements = Map(φ -> ElementOf.!(FunctionParameter("x", 0), a.^)), depth = 1))
+        ElementOf(FunctionParameter("x", 0, 0), a),
+        Substitutions.empty,
+        Seq(Substitutions(statements = Map(φ -> ElementOf(FunctionParameter("x", 0, 0), a))) -> Seq(a)),
+        Nil,
+        0,
+        1
+      ) mustEqual Seq(Substitutions(statements = Map(φ -> ElementOf(FunctionParameter("x", 0, 0), a))))
     }
   }
 }

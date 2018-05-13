@@ -10,6 +10,31 @@ trait ExpressionDefinition {
   def componentTypes: Seq[ComponentType]
   def format: Format
 
+  private def updateContext(context: ParsingContext, newBoundVariableNames: Seq[String], componentType: ComponentType): ParsingContext = {
+    if (boundVariableNames.isEmpty)
+      context
+    else
+      context.addParameterList(componentType.arguments.map(a => newBoundVariableNames(a.index) -> a.index))
+  }
+
+  protected def componentExpressionParser(implicit context: ParsingContext): Parser[(Seq[String], Seq[Expression])] = {
+    for {
+      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
+      components <- componentTypes.map { componentType =>
+        componentType.expressionParser(updateContext(context, newBoundVariableNames, componentType))
+      }.traverseParser
+    } yield (newBoundVariableNames, components)
+  }
+
+  protected def componentTemplateParser(implicit context: ParsingContext): Parser[(Seq[String], Seq[Template])] = {
+    for {
+      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
+      components <- componentTypes.map { componentType =>
+        componentType.templateParser(updateContext(context, newBoundVariableNames, componentType))
+      }.traverseParser
+    } yield (newBoundVariableNames, components)
+  }
+
   protected def serializedComponents = "(" + (boundVariableNames.map("$" + _) ++ componentTypes.map(_.serialized)).mkString(" ") + ")"
 }
 
@@ -19,10 +44,10 @@ object ExpressionDefinition {
 
   sealed trait ComponentType {
     def name: String
-    def depthDifference: Int
     def expression: Expression
-    def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext): Parser[Expression]
-    def templateParser(boundVariableNames: Seq[String])(implicit context: ParsingContext): Parser[Template]
+    def arguments: Seq[ComponentArgument]
+    def expressionParser(implicit context: ParsingContext): Parser[Expression]
+    def templateParser(implicit context: ParsingContext): Parser[Template]
     def serialized: String
   }
   object ComponentType {
@@ -48,42 +73,32 @@ object ExpressionDefinition {
   }
 
   case class StatementComponent(name: String) extends ComponentType {
-    override def depthDifference = 0
-    override def expression = StatementVariable(name, 0)
-    override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = Statement.parser
-    override def templateParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = Statement.templateParser
+    override def arguments = Nil
+    override def expression = StatementVariable(name)
+    override def expressionParser(implicit context: ParsingContext) = Statement.parser
+    override def templateParser(implicit context: ParsingContext) = Statement.templateParser
     override def serialized = name
   }
   case class TermComponent(name: String) extends ComponentType {
-    override def depthDifference = 0
-    override def expression = TermVariable(name, 0)
-    override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = Term.parser
-    override def templateParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = Term.templateParser
+    override def arguments = Nil
+    override def expression = TermVariable(name)
+    override def expressionParser(implicit context: ParsingContext) = Term.parser
+    override def templateParser(implicit context: ParsingContext) = Term.templateParser
     override def serialized = name
   }
   case class PredicateComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-    override def depthDifference = 1
-    override def expression = PredicateApplication(name, ArgumentList(arguments.map(a => FunctionParameter(a.name, a.index)), 1))
-    override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
-      Statement.parser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))
-    }
-    override def templateParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
-      Statement.templateParser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))
-    }
+    override def expression = PredicateApplication(name, arguments.map(a => FunctionParameter(a.name, a.index, 0)))
+    override def expressionParser(implicit context: ParsingContext) = Statement.parser
+    override def templateParser(implicit context: ParsingContext) = Statement.templateParser
     override def serialized = "with " + (arguments match {
       case Seq(single) => single.name
       case multiple => "(" + multiple.map(_.name).mkString(" ") + ")"
     }) + " " + name
   }
   case class FunctionComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-    override def depthDifference = 1
-    override def expression = FunctionApplication(name, ArgumentList(arguments.map(a => FunctionParameter(a.name, a.index)), 1))
-    override def expressionParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
-      Term.parser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))
-    }
-    override def templateParser(boundVariableNames: Seq[String])(implicit context: ParsingContext) = {
-      Term.templateParser(context.addParameterList(arguments.map { a => boundVariableNames(a.index) }))
-    }
+    override def expression = FunctionApplication(name, arguments.map(a => FunctionParameter(a.name, a.index, 0)))
+    override def expressionParser(implicit context: ParsingContext) = Term.parser
+    override def templateParser(implicit context: ParsingContext) = Term.templateParser
     override def serialized = "with " + (arguments match {
       case Seq(single) => single.name
       case multiple => "(" + multiple.map(_.name).mkString(" ") + ")"

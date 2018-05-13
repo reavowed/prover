@@ -19,26 +19,20 @@ case class TermDefinition(
 {
   def name = explicitName.getOrElse(symbol)
   val defaultValue = {
-    DefinedTerm(
-      componentTypes.map(_.expression),
-      this,
-      0)(
-      boundVariableNames)
+    DefinedTerm(componentTypes.map(_.expression), this)(boundVariableNames)
   }
-  val definingStatement = definitionPredicate.specify(ArgumentList(Seq(defaultValue), 0))
+  val definingStatement = definitionPredicate.specify(Seq(defaultValue), 0, 0)
 
   def termParser(implicit context: ParsingContext): Parser[Term] = {
-    for {
-      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
-      components <- componentTypes.map(_.expressionParser(newBoundVariableNames)).traverseParser
-    } yield DefinedTerm(components, this, context.parameterDepth)(newBoundVariableNames)
+    componentExpressionParser.map { case (newBoundVariableNames, components) =>
+      DefinedTerm(components, this)(newBoundVariableNames)
+    }
   }
 
   def templateParser(implicit context: ParsingContext): Parser[Template] = {
-    for {
-      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
-      components <- componentTypes.map(_.templateParser(newBoundVariableNames)).traverseParser
-    } yield Template.DefinedTerm(this, newBoundVariableNames, components)
+    componentTemplateParser.map { case (newBoundVariableNames, components) =>
+      Template.DefinedTerm(this, newBoundVariableNames, components)
+    }
   }
 
   override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
@@ -71,7 +65,7 @@ object TermDefinition extends ChapterEntryParser {
       name <- nameParser
       format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
       premises <- premisesParser
-      definitionPredicate <- Statement.parser(context.addParameterList(Seq("_"))).inParens
+      definitionPredicate <- Statement.parser(context.addParameters("_")).inParens
     } yield {
       TermDefinition(
         symbol,

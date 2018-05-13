@@ -19,8 +19,7 @@ object InferenceApplication {
       inference: Inference,
       substitutions: Substitutions,
       references: Seq[Reference],
-      isRearrangement: Boolean,
-      depth: Int)
+      isRearrangement: Boolean)
     extends InferenceApplication
   {
     override def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet + inference.id
@@ -29,9 +28,8 @@ object InferenceApplication {
       inference.id,
       inference.specifySubstitutions(substitutions),
       references.map(_.cached),
-      isRearrangement,
-      depth)
-    override def conclusion = inference.conclusion.applySubstitutions(substitutions).get
+      isRearrangement)
+    override def conclusion = inference.conclusion.applySubstitutions(substitutions, 0, 0).get
   }
 
   case class Transformed(
@@ -42,8 +40,7 @@ object InferenceApplication {
       transformedPremises: Seq[Premise],
       transformedConclusion: Statement,
       transformationProof: Seq[Step],
-      isRearrangement: Boolean,
-      depth: Int)
+      isRearrangement: Boolean)
     extends InferenceApplication
   {
     override def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet ++
@@ -57,8 +54,7 @@ object InferenceApplication {
       transformation,
       transformedPremises,
       transformationProof.map(_.cached),
-      isRearrangement,
-      depth)
-    override def conclusion = transformedConclusion.applySubstitutions(substitutions).get
+      isRearrangement)
+    override def conclusion = transformedConclusion.applySubstitutions(substitutions, 0, 0).get
   }
 }

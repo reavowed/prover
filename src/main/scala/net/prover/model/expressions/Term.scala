@@ -2,20 +2,20 @@ package net.prover.model.expressions
 
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
-trait Term extends Expression {
-  def increaseDepth(additionalDepth: Int, insertionPoint: Int): Term
-  def reduceDepth(difference: Int, insertionPoint: Int): Option[Term]
-  def specify(arguments: ArgumentList): Term
-  def specifyWithSubstitutions(targetArguments: ArgumentList, substitutions: Substitutions): Option[Term]
-  def applySubstitutions(substitutions: Substitutions): Option[Term]
+trait Term extends Expression with TypedExpression[Term] {
   def calculateApplicatives(
-    baseArguments: ArgumentList,
-    substitutions: Substitutions
+    baseArguments: Seq[Term],
+    substitutions: Substitutions,
+    internalDepth: Int,
+    previousInternalDepth: Int,
+    externalDepth: Int
   ): Seq[(Term, Substitutions)] = {
     for {
-      (argument, index) <- baseArguments.increaseDepth(depth - substitutions.depth, baseArguments.depth).terms.zipWithIndex
-      updatedSubstitutions <- argument.calculateSubstitutions(this, substitutions, Nil, Nil) // TODO: Should almost certainly have hints here
-    } yield FunctionParameter.anonymous(index, 1, depth - baseArguments.depth + 1) -> updatedSubstitutions
+      (argument, index) <- baseArguments.zipWithIndex
+      updatedSubstitutions <- argument
+        .insertExternalParameters(internalDepth)
+        .calculateSubstitutions(this, substitutions, Nil, Nil, previousInternalDepth + internalDepth, externalDepth)
+    } yield FunctionParameter.anonymous(index, externalDepth + internalDepth) -> updatedSubstitutions
   }
 }
 
@@ -39,13 +39,13 @@ object Term {
         for {
           arguments <- Term.parser.listOrSingle(None)
           name <- Parser.singleWord
-        } yield FunctionApplication(name, ArgumentList(arguments, context.parameterDepth))
+        } yield FunctionApplication(name, arguments)
       case context.RecognisedParameter(parameter) =>
         Parser.constant(parameter)
       case context.RecognisedTermDefinition(termDefinition) =>
         termDefinition.termParser
       case context.RecognisedTermVariable(name) =>
-        Parser.constant(TermVariable(name, context.parameterDepth))
+        Parser.constant(TermVariable(name))
     }
   }
 

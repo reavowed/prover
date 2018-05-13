@@ -1,11 +1,11 @@
 Introduce the Axiom of Regularity.
 
 axiom Axiom of Regularity
-conclusion ∀ x → ¬ = $0 ∅ ∃ y ∧ ∈ $$0 $.0 = ∩ $$0 $.0 ∅
+conclusion ∀ x → ¬ = $0 ∅ ∃ y ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅
 
 theorem Regularity
 premise ¬ = a ∅
-prove ∀ y → ¬ = $0 ∅ ∃ x ∧ ∈ $$0 $.0 = ∩ $$0 $.0 ∅
+prove ∀ y → ¬ = $0 ∅ ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅
 prove ∃ x ∧ ∈ $0 a = ∩ $0 a ∅
 qed
 

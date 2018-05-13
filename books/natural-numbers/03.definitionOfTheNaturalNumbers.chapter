@@ -5,23 +5,23 @@ conclusion ∃ X inductive $0
 
 theorem The Natural Numbers Exist
 prove ∃ X inductive $0
-prove ∃ Y ∀ n ↔ ∈ $$0 $.0 ∀ X → inductive $$$0 ∈ $$.0 $$$0
-prove ∃! Y ∀ n ↔ ∈ $$0 $.0 ∀ X → inductive $$$0 ∈ $$.0 $$$0
+prove ∃ Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0
+prove ∃! Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0
 qed
 
 term ℕ ()
-  (∀ n ↔ ∈ $$0 $.0 ∀ X → inductive $$$0 ∈ $$.0 $$$0)
+  (∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0)
 
 theorem An Element of All Inductive Sets Is a Natural Number
 premise ∀ X → inductive $0 ∈ n $0
-prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $$0 ∈ $.0 $$0
+prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0
 prove ∈ n ℕ
 qed
 
 theorem A Natural Number Is an Element of Any Inductive Set
 premise ∈ n ℕ
 premise inductive S
-prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $$0 ∈ $.0 $$0
+prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0
 prove ∀ X → inductive $0 ∈ n $0
 prove ∈ n S
 qed
@@ -31,7 +31,7 @@ premise ∈ n ℕ
 take X {
   assume inductive $0 {
     prove ∈ n $0
-    prove ∧ ∈ ∅ $0 ∀ n → ∈ $$0 $.0 ∈ successor $$0 $.0
+    prove ∧ ∈ ∅ $0 ∀ n → ∈ $0 $$0 ∈ successor $0 $$0
     prove ∈ successor n $0
   }
 }

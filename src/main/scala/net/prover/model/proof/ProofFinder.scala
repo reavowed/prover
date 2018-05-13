@@ -6,9 +6,9 @@ import net.prover.model.expressions._
 
 import scala.util.Try
 
-case class ProofFinder(statementToProve: Statement)(implicit context: ProvingContext)
+case class ProofFinder(statementToProve: Statement)(implicit provingContext: ProvingContext)
 {
-  import context._
+  import provingContext._
 
   val simplifications = for {
     provenStatement <- provenStatements
@@ -85,14 +85,13 @@ case class ProofFinder(statementToProve: Statement)(implicit context: ProvingCon
       if inference.rearrangementType == RearrangementType.Simplification
       premise <- inference.premises.single.toSeq
       simplificationPath <- premise.statement.findComponentPath(inference.conclusion).toSeq
-      substitutions <- premise.statement.calculateSubstitutions(statement, defaultSubstitutions, Nil, Nil)
-      conclusion <- inference.conclusion.applySubstitutions(substitutions).toSeq
+      substitutions <- premise.statement.calculateSubstitutions(statement, Substitutions.empty, Nil, Nil, 0, depth)
+      conclusion <- inference.conclusion.applySubstitutions(substitutions, 0, depth).toSeq
     } yield conclusion -> Reference.Simplification(
       inference,
       substitutions,
       reference,
-      simplificationPath,
-      depth)
+      simplificationPath)
   }
 
   def getProofFinderForInference(inference: Inference, allowRearrangement: Boolean = true): InferenceProofFinder = {
@@ -127,11 +126,11 @@ object ProofFinder {
     (for {
       inference <- provingContext.availableInferences.iterator
       if inference.rearrangementType == RearrangementType.Expansion
-      substitutions <- inference.conclusion.calculateSubstitutions(assertion, provingContext.defaultSubstitutions, Nil, Nil)
-      substitutedPremises <- inference.premises.map(_.statement.applySubstitutions(substitutions)).traverseOption.toSeq
+      substitutions <- inference.conclusion.calculateSubstitutions(assertion, Substitutions.empty, Nil, Nil, 0, provingContext.depth)
+      substitutedPremises <- inference.premises.map(_.statement.applySubstitutions(substitutions, 0, provingContext.depth)).traverseOption.toSeq
       premiseReferences <- substitutedPremises.map(findAssertionWithPossibleExpansions(_, referencedStatements)).traverseOption.toSeq
-      if inference.conclusion.applySubstitutions(substitutions).contains(assertion)
-    } yield InferenceApplication.Direct(inference, substitutions, premiseReferences, isRearrangement = true, provingContext.depth)).headOption
+      if inference.conclusion.applySubstitutions(substitutions, 0, provingContext.depth).contains(assertion)
+    } yield InferenceApplication.Direct(inference, substitutions, premiseReferences, isRearrangement = true)).headOption
   }
 
   def findAssertionByExpandingWithTransformation(
@@ -145,10 +144,10 @@ object ProofFinder {
         inference <- provingContext.availableInferences
         if inference.rearrangementType == RearrangementType.Expansion
         (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyFully(inference).iterator
-        substitutions <- transformedConclusion.calculateSubstitutions(assertion, provingContext.defaultSubstitutions, Nil, Nil)
-        substitutedPremises <- transformedPremises.map(_.statement.applySubstitutions(substitutions)).traverseOption.toSeq
+        substitutions <- transformedConclusion.calculateSubstitutions(assertion, Substitutions.empty, Nil, Nil, 0, provingContext.depth)
+        substitutedPremises <- transformedPremises.map(_.statement.applySubstitutions(substitutions, 0, provingContext.depth)).traverseOption.toSeq
         premiseReferences <- substitutedPremises.map(findAssertionWithPossibleExpansions(_, referencedStatements)).traverseOption.toSeq
-        if transformedConclusion.applySubstitutions(substitutions).contains(assertion)
+        if transformedConclusion.applySubstitutions(substitutions, 0, provingContext.depth).contains(assertion)
         transformationProofAttempt = Try(ProofOutline(stepsToProve)
           .fillIn(provingContext.resetWithPremises(transformedPremises).copy(allowTransformations = false)))
         transformationProof <- transformationProofAttempt.toOption
@@ -160,8 +159,7 @@ object ProofFinder {
         transformedPremises,
         transformedConclusion,
         transformationProof.steps,
-        isRearrangement = true,
-        provingContext.depth)
+        isRearrangement = true)
       ).headOption
     } else None
   }

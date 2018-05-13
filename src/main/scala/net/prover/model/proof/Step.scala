@@ -69,7 +69,7 @@ object Step {
   {
     override def provenStatements = substeps.flatMap(_.provenStatements).map { innerProvenStatement =>
       ProvenStatement(
-        DefinedStatement(Seq(assumption, innerProvenStatement.statement), deductionStatement, assumption.depth)(Nil),
+        DefinedStatement(Seq(assumption, innerProvenStatement.statement), deductionStatement)(Nil),
         innerProvenStatement.reference.add(reference))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
@@ -168,8 +168,7 @@ object Step {
           ProvenStatement(
             DefinedStatement(
               Seq(innerProvenStatement.statement),
-              scopingStatement,
-              innerProvenStatement.statement.depth - 1)(
+              scopingStatement)(
               Seq(variableName)),
             innerProvenStatement.reference.add(reference))
         }

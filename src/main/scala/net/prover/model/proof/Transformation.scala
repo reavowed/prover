@@ -6,10 +6,10 @@ import net.prover.model.expressions._
 
 case class Transformation(statementDefinition: StatementDefinition, boundVariableName: String) {
   private def generalise(statement: Statement): Statement = {
-    DefinedStatement(Seq(statement), statementDefinition, statement.depth - 1)(statementDefinition.boundVariableNames)
+    DefinedStatement(Seq(statement), statementDefinition)(statementDefinition.boundVariableNames)
   }
   private def specify(statement: Statement): Statement = {
-    statement.specify(ArgumentList(Seq(TermVariable("_", 0)), 0))
+    statement.specify(Seq(TermVariable("_")), 0, 0)
   }
 
   def getSubstitutions(inference: Inference): Option[Substitutions] = {
@@ -17,12 +17,10 @@ case class Transformation(statementDefinition: StatementDefinition, boundVariabl
     if (requiredSubstitutions.terms.nonEmpty || requiredSubstitutions.predicates.nonEmpty || requiredSubstitutions.functions.nonEmpty)
       None
     else
-      Some(
-        Substitutions(statements =
-          requiredSubstitutions.statements.map { name =>
-            name -> PredicateApplication(name, ArgumentList(Seq(FunctionParameter(boundVariableName, 0)), 1))
-          }.toMap,
-        depth = 1))
+      Some(Substitutions(
+        statements = requiredSubstitutions.statements.map { name =>
+            name -> PredicateApplication(name, Seq(FunctionParameter(boundVariableName, 0, 0)))
+        }.toMap))
   }
 
   def applyFully(inference: Inference): Option[(Seq[Premise], Statement, Seq[StepOutline])] = {
@@ -31,10 +29,10 @@ case class Transformation(statementDefinition: StatementDefinition, boundVariabl
 
   def applyFully(inference: Inference, transformationSubstitutions: Substitutions): Option[(Seq[Premise], Statement, Seq[StepOutline])] = {
     for {
-      conclusionStatementToProve <- inference.conclusion.applySubstitutions(transformationSubstitutions)
+      conclusionStatementToProve <- inference.conclusion.applySubstitutions(transformationSubstitutions, 0, 0)
       transformedConclusion = generalise(conclusionStatementToProve)
       (transformedPremises, premiseStatementsToProve) <- inference.premises.map { premise =>
-        premise.statement.applySubstitutions(transformationSubstitutions).map { statementToProve =>
+        premise.statement.applySubstitutions(transformationSubstitutions, 0, 0).map { statementToProve =>
           premise.withStatement(generalise(statementToProve)) -> statementToProve
         }
       }.traverseOption.map(_.split)
@@ -45,9 +43,9 @@ case class Transformation(statementDefinition: StatementDefinition, boundVariabl
 
   def applyPartially(inference: Inference,  transformationSubstitutions: Substitutions): Option[(Seq[Seq[(Premise, Option[StepOutline])]], Statement, StepOutline)] = {
     for {
-      transformedConclusion <- inference.conclusion.applySubstitutions(transformationSubstitutions).map(specify)
+      transformedConclusion <- inference.conclusion.applySubstitutions(transformationSubstitutions, 0, 0).map(specify)
       transformedPremisesAndSteps <- inference.premises.map { premise =>
-        premise.statement.applySubstitutions(transformationSubstitutions).map { statement =>
+        premise.statement.applySubstitutions(transformationSubstitutions, 0, 0).map { statement =>
           Seq(
             premise.withStatement(generalise(statement)) -> Some(StepOutline.Assertion(specify(statement), None, None)),
             premise.withStatement(specify(statement)) -> None)

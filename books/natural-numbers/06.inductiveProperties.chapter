@@ -5,11 +5,11 @@ premise ∈ n ℕ
 prove = 0 0
 prove ∨ = 0 0 ∃ m ∧ ∈ $0 ℕ = 0 successor $0
 take a {
-  assume ∧ ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $$0 ℕ = $.0 successor $$0 {
+  assume ∧ ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0 {
     prove = successor $0 successor $0
     prove ∧ ∈ $0 ℕ = successor $0 successor $0
-    prove ∃ m ∧ ∈ $$0 ℕ = successor $.0 successor $$0
-    prove ∨ = successor $0 0 ∃ m ∧ ∈ $$0 ℕ = successor $.0 successor $$0
+    prove ∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0
+    prove ∨ = successor $0 0 ∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0
   }
 }
 prove ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0
@@ -23,17 +23,17 @@ prove ∀ x ¬ ∈ $0 0
   via = 0 ∅
 prove ∀ x → ∈ $0 0 ∈ $0 ℕ
 take a {
-  assume ∧ ∈ $0 ℕ ∀ x → ∈ $$0 $.0 ∈ $$0 ℕ {
+  assume ∧ ∈ $0 ℕ ∀ x → ∈ $0 $$0 ∈ $0 ℕ {
     take x {
-      assume ∈ $$0 $.0 {
-        prove ∈ $$0 ℕ
+      assume ∈ $0 $$0 {
+        prove ∈ $0 ℕ
       }
-      assume = $$0 $.0 {
-        prove ∈ $$0 ℕ
+      assume = $0 $$0 {
+        prove ∈ $0 ℕ
       }
-      assume ∈ $$0 successor $.0 {
-        prove ∨ ∈ $$0 $.0 = $$0 $.0
-        prove ∈ $$0 ℕ
+      assume ∈ $0 successor $$0 {
+        prove ∨ ∈ $0 $$0 = $0 $$0
+        prove ∈ $0 ℕ
       }
     }
   }
@@ -80,26 +80,26 @@ prove ∀ x ¬ ∈ $0 0
   via = 0 ∅
 prove ∀ x → ∈ $0 0 ∨ ∈ successor $0 0 = successor $0 0
 take a {
-  assume ∧ ∈ $0 ℕ ∀ x → ∈ $$0 $.0 ∨ ∈ successor $$0 $.0 = successor $$0 $.0 {
+  assume ∧ ∈ $0 ℕ ∀ x → ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 {
     take x {
-      assume ∈ $$0 successor $.0 {
-        prove ∨ ∈ $$0 $.0 = $$0 $.0
-        assume ∈ $$0 $.0 {
-          prove ∨ ∈ successor $$0 $.0 = successor $$0 $.0
-          assume ∈ successor $$0 $.0 {
-            prove ∈ successor $$0 successor $.0
+      assume ∈ $0 successor $$0 {
+        prove ∨ ∈ $0 $$0 = $0 $$0
+        assume ∈ $0 $$0 {
+          prove ∨ ∈ successor $0 $$0 = successor $0 $$0
+          assume ∈ successor $0 $$0 {
+            prove ∈ successor $0 successor $$0
           }
-          assume = successor $$0 $.0 {
-            prove ∈ $.0 successor $.0
-            prove ∈ successor $$0 successor $.0
+          assume = successor $0 $$0 {
+            prove ∈ $$0 successor $$0
+            prove ∈ successor $0 successor $$0
           }
-          prove ∈ successor $$0 successor $.0
+          prove ∈ successor $0 successor $$0
         }
-        assume = $$0 $.0 {
-          prove = successor $$0 successor $$0
-          prove = successor $$0 successor $.0
+        assume = $0 $$0 {
+          prove = successor $0 successor $0
+          prove = successor $0 successor $$0
         }
-        prove ∨ ∈ successor $$0 successor $.0 = successor $$0 successor $.0
+        prove ∨ ∈ successor $0 successor $$0 = successor $0 successor $$0
       }
     }
   }
@@ -150,20 +150,20 @@ prove ∀ m ¬ ∈ $0 0
   via = 0 ∅
 prove ∀ m → ∈ $0 0 ⊆ $0 0
 take n {
-  assume ∧ ∈ $0 ℕ ∀ m → ∈ $$0 $.0 ⊆ $$0 $.0 {
+  assume ∧ ∈ $0 ℕ ∀ m → ∈ $0 $$0 ⊆ $0 $$0 {
     take m {
-      assume ∈ $$0 successor $.0 {
-        prove ∨ ∈ $$0 $.0 = $$0 $.0
-        assume ∈ $$0 $.0 {
-          prove ⊆ $$0 $.0
-          prove ⊆ $$0 successor $.0
-            via ⊆ $.0 successor $.0
+      assume ∈ $0 successor $$0 {
+        prove ∨ ∈ $0 $$0 = $0 $$0
+        assume ∈ $0 $$0 {
+          prove ⊆ $0 $$0
+          prove ⊆ $0 successor $$0
+            via ⊆ $$0 successor $$0
         }
-        assume = $$0 $.0 {
-          prove ⊆ $$0 successor $.0
-            via ⊆ $.0 successor $.0
+        assume = $0 $$0 {
+          prove ⊆ $0 successor $$0
+            via ⊆ $$0 successor $$0
         }
-        prove ⊆ $$0 successor $.0
+        prove ⊆ $0 successor $$0
       }
     }
   }

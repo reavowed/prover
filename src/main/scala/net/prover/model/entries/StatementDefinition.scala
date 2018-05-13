@@ -23,25 +23,19 @@ case class StatementDefinition(
   def name = explicitName.getOrElse(symbol)
 
   val defaultValue = {
-    DefinedStatement(
-      componentTypes.map(_.expression),
-      this,
-      0)(
-      boundVariableNames)
+    DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)
   }
 
   def statementParser(implicit context: ParsingContext): Parser[Statement] = {
-    for {
-      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
-      components <- componentTypes.map(_.expressionParser(newBoundVariableNames)).traverseParser
-    } yield DefinedStatement(components, this, context.parameterDepth)(newBoundVariableNames)
+    componentExpressionParser.map { case (newBoundVariableNames, components) =>
+      DefinedStatement(components, this)(newBoundVariableNames)
+    }
   }
 
   def templateParser(implicit context: ParsingContext): Parser[Template] = {
-    for {
-      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
-      components <- componentTypes.map(_.templateParser(newBoundVariableNames)).traverseParser
-    } yield Template.DefinedStatement(this, newBoundVariableNames, components)
+    componentTemplateParser.map { case (newBoundVariableNames, components) =>
+      Template.DefinedStatement(this, newBoundVariableNames, components)
+    }
   }
 
   override def inferences: Seq[Inference] = {

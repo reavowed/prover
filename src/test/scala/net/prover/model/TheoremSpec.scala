@@ -79,12 +79,12 @@ class TheoremSpec extends ProverSpec {
 
     val specification = axiom(
       "Specification",
-      Seq(ForAll("x")(φ.!(FunctionParameter("x", 0)))),
+      Seq(ForAll("x")(φ(FunctionParameter("x", 0, 0)))),
       φ(a))
     val existence = axiom(
       "Existence",
       Seq(φ(a)),
-      Exists("x")(φ.!(FunctionParameter("x", 0))))
+      Exists("x")(φ(FunctionParameter("x", 0, 0))))
     val substitutionOfEquals = axiom(
       "Substitution of Equals",
       Seq(Equals(a, b).elidable, φ(a)),
@@ -152,7 +152,7 @@ class TheoremSpec extends ProverSpec {
         Equals(a, a))
       checkProof(
         Nil,
-        Seq(StepOutline.ScopedVariable("y", Seq(Equals.!(FunctionParameter("y", 0), FunctionParameter("y", 0))), None)),
+        Seq(StepOutline.ScopedVariable("y", Seq(Equals(FunctionParameter("y", 0, 0), FunctionParameter("y", 0, 0))), None)),
         Seq(equalityIsReflexive))
     }
 
@@ -166,9 +166,9 @@ class TheoremSpec extends ProverSpec {
         Seq(
           StepOutline.ScopedVariable(
             "x",
-            Seq(Equivalence.!(
-              ElementOf.!(FunctionParameter("x", 0), b.^),
-              ElementOf.!(FunctionParameter("x", 0), c.^))),
+            Seq(Equivalence(
+              ElementOf(FunctionParameter("x", 0, 0), b),
+              ElementOf(FunctionParameter("x", 0, 0), c))),
             None)),
         Seq(equivalenceOfSubstitutedEquals))
     }
@@ -176,17 +176,17 @@ class TheoremSpec extends ProverSpec {
     "prove a transformed inference" in {
       checkProof(
         Seq(
-          ForAll("x")(φ.!(FunctionParameter("x", 0))),
-          ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.!(FunctionParameter("x", 0))))),
+          ForAll("x")(φ(FunctionParameter("x", 0, 0))),
+          ForAll("x")(Implication(φ(FunctionParameter("x", 0, 0)), ψ(FunctionParameter("x", 0, 0))))),
         Seq(
-          ForAll("x")(ψ.!(FunctionParameter("x", 0)))),
+          ForAll("x")(ψ(FunctionParameter("x", 0, 0)))),
         Seq(specification, modusPonens))
     }
 
     "prove a partially transformed inference" in {
       checkProof(
         Seq(
-          ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.!(FunctionParameter("x", 0)))),
+          ForAll("x")(Implication(φ(FunctionParameter("x", 0, 0)), ψ(FunctionParameter("x", 0, 0)))),
           φ(a)),
         Seq(ψ(a)),
         Seq(specification, modusPonens))
@@ -196,10 +196,10 @@ class TheoremSpec extends ProverSpec {
       val modusTollens = axiom("Modus Tollens", Seq(Implication(φ, ψ), Negation(ψ)), Negation(φ))
       checkProof(
         Seq(
-          ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.^)),
+          ForAll("x")(Implication(φ(FunctionParameter("x", 0, 0)), ψ)),
           Negation(ψ)),
         Seq(
-          StepOutline.ScopedVariable("x", Seq(Negation.!(φ.!(FunctionParameter("x", 0)))), None)),
+          StepOutline.ScopedVariable("x", Seq(Negation(φ(FunctionParameter("x", 0, 0)))), None)),
         Seq(specification, modusTollens))
     }
 
@@ -207,17 +207,17 @@ class TheoremSpec extends ProverSpec {
       val valueForExistence = axiom(
         "Value for Existence",
         Seq(
-          Exists("x")(φ.!(FunctionParameter("x", 0))),
-          ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0)), ψ.^))),
+          Exists("x")(φ(FunctionParameter("x", 0, 0))),
+          ForAll("x")(Implication(φ(FunctionParameter("x", 0, 0)), ψ))),
         ψ)
       checkProof(
         Seq(
-          Exists("x")(Conjunction.!(φ.!(FunctionParameter("x", 0)), ψ.^)),
-          ForAll("x")(φ.!(FunctionParameter("x", 0)))),
+          Exists("x")(Conjunction(φ(FunctionParameter("x", 0, 0)), ψ)),
+          ForAll("x")(φ(FunctionParameter("x", 0, 0)))),
         Seq(StepOutline.Naming(
           "a",
-          Conjunction.!(φ.!(FunctionParameter("a", 0)), ψ.^),
-          Seq(ψ.^),
+          Conjunction(φ(FunctionParameter("a", 0, 0)), ψ),
+          Seq(ψ),
           None)),
         Seq(extractRightConjunct, valueForExistence))
     }
@@ -236,33 +236,33 @@ class TheoremSpec extends ProverSpec {
     "prove by expanding a premise" in {
       checkProof(
         Seq(ElementOf(a, b), ElementOf(b, Pair(b, c))),
-        Seq(Exists("x")(Conjunction.!(
-          ElementOf.!(a.^, FunctionParameter("x", 0)),
-          ElementOf.!(FunctionParameter("x", 0), Pair.!(b.^, c.^))))),
+        Seq(Exists("x")(Conjunction(
+          ElementOf(a, FunctionParameter("x", 0, 0)),
+          ElementOf(FunctionParameter("x", 0, 0), Pair(b, c))))),
         Seq(combineConjunction, existence))
     }
 
     "prove by doubly-expanding a premise" in {
       checkProof(
         Seq(ElementOf(a, b), ElementOf(b, Pair(b, c)), φ),
-        Seq(Exists("x")(Conjunction.!(
-          Conjunction.!(
-            ElementOf.!(a.^, FunctionParameter("x", 0)),
-            φ.^),
-          ElementOf.!(FunctionParameter("x", 0), Pair.!(b.^, c.^))))),
+        Seq(Exists("x")(Conjunction(
+          Conjunction(
+            ElementOf(a, FunctionParameter("x", 0, 0)),
+            φ),
+          ElementOf(FunctionParameter("x", 0, 0), Pair(b, c))))),
         Seq(combineConjunction, existence))
     }
 
     "prove by expanding with a transform" in {
       val uniqueValueForExistence = axiom(
         "Unique Value for Existence",
-        Seq(ForAll("x")(Equivalence.!(φ.!(FunctionParameter("x", 0)), Equals.!(FunctionParameter("x", 0), a.^)))),
-        ExistsUnique("x")(φ.!(FunctionParameter("x", 0))))
+        Seq(ForAll("x")(Equivalence(φ(FunctionParameter("x", 0, 0)), Equals(FunctionParameter("x", 0, 0), a)))),
+        ExistsUnique("x")(φ(FunctionParameter("x", 0, 0))))
       checkProof(
         Seq(
-          ForAll("x")(Implication.!(φ.!(FunctionParameter("x", 0, 1)), Equals.!(FunctionParameter("x", 0, 1), b.^))),
-          ForAll("x")(Implication.!(Equals.!(FunctionParameter("x", 0, 1), b.^), φ.!(FunctionParameter("x", 0, 1))))),
-        Seq(ExistsUnique("x")(φ.!(FunctionParameter("x", 0, 1)))),
+          ForAll("x")(Implication(φ(FunctionParameter("x", 0, 0)), Equals(FunctionParameter("x", 0, 0), b))),
+          ForAll("x")(Implication(Equals(FunctionParameter("x", 0, 0), b), φ(FunctionParameter("x", 0, 0))))),
+        Seq(ExistsUnique("x")(φ(FunctionParameter("x", 0, 0)))),
         Seq(uniqueValueForExistence, combineEquivalence, specification))
     }
   }

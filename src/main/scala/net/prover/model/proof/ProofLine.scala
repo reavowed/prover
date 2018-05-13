@@ -69,7 +69,7 @@ object ProofLine {
           }),
           topLevelReferrers)
         case functionParameter: FunctionParameter =>
-          Plain(functionParameter.toString, topLevelReferrers)
+          Plain(functionParameter.name.getOrElse(throw new Exception("Function parameter for display did not have a name")), topLevelReferrers)
       }
     }
 

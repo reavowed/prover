@@ -28,7 +28,7 @@ trait Inference {
       requiredSubstitutions.predicates.map(substitutions.predicates.get),
       requiredSubstitutions.functions.map(substitutions.functions.get))
   }
-  def generalizeSubstitutions(inferenceSubstitutions: Inference.Substitutions, depth: Int): Option[Substitutions] = {
+  def generalizeSubstitutions(inferenceSubstitutions: Inference.Substitutions): Option[Substitutions] = {
     def zipAndMap[T](
       f: Substitutions.Required => Seq[String],
       g: Inference.Substitutions => Seq[Option[T]]
@@ -41,7 +41,7 @@ trait Inference {
       terms <- zipAndMap(_.terms, _.terms)
       predicates <- zipAndMap(_.predicates, _.predicates)
       functions <- zipAndMap(_.functions, _.functions)
-    } yield Substitutions(statements, terms, predicates, functions, depth)
+    } yield Substitutions(statements, terms, predicates, functions)
   }
   def calculateHash(): String = {
     Inference.calculateHash(premises, conclusion)
@@ -121,8 +121,8 @@ object Inference {
       for {
         statements <- Statement.parser.withNone("%").listInParens(Some(","))
         terms <- Term.parser.withNone("%").listInParens(Some(","))
-        predicates <- Statement.parser(parsingContext.addParameterList(Nil)).withNone("%").listInParens(Some(","))
-        functions <- Term.parser(parsingContext.addParameterList(Nil)).withNone("%").listInParens(Some(","))
+        predicates <- Statement.parser(parsingContext.addParameters()).withNone("%").listInParens(Some(","))
+        functions <- Term.parser(parsingContext.addParameters()).withNone("%").listInParens(Some(","))
       } yield Substitutions(statements, terms, predicates, functions)
     }
   }

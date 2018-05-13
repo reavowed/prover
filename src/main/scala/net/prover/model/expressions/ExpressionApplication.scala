@@ -5,33 +5,36 @@ import net.prover.model._
 
 import scala.reflect.ClassTag
 
-abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] extends Expression {
+abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] extends Expression with TypedExpression[ExpressionType] {
   def variableName: String
-  def arguments: ArgumentList
+  def arguments: Seq[Term]
   def substitutionsLens: Lens[Substitutions, Map[String, ExpressionType]]
   def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[String]]
 
-  override def depth = arguments.depth
+  def update(newArguments: Seq[Term]): ExpressionType
 
-  def update(newArguments: ArgumentList): ExpressionType
+  def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {
+    update(arguments.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)))
+  }
+  def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType] = {
+    arguments.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption.map(update)
+  }
 
-  def specify(targetArguments: ArgumentList) = {
-    update(arguments.specify(targetArguments))
+  def specify(
+    targetArguments: Seq[Term],
+    internalDepth: Int,
+    externalDepth: Int
+  ) = {
+    update(arguments.map(_.specify(targetArguments, internalDepth, externalDepth)))
   }
   def specifyWithSubstitutions(
-    targetArguments: ArgumentList,
-    substitutions: Substitutions
+    targetArguments: Seq[Term],
+    substitutions: Substitutions,
+    internalDepth: Int,
+    previousInternalDepth: Int,
+    externalDepth: Int
   ) = {
-    arguments.specifyWithSubstitutions(targetArguments, substitutions).map(update)
-  }
-  def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
-    update(arguments.increaseDepth(additionalDepth, insertionPoint))
-  }
-  override def reduceDepth(difference: Int, insertionPoint: Int): Option[ExpressionType] = {
-    if (depth >= difference)
-      arguments.reduceDepth(difference, insertionPoint).map(update)
-    else
-      None
+    arguments.map(_.specifyWithSubstitutions(targetArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)).traverseOption.map(update)
   }
 
   override def requiredSubstitutions = {
@@ -40,12 +43,14 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)],
-    structuralHints: Seq[Substitutions]
+    applicativeHints: Seq[(Substitutions, Seq[Term])],
+    structuralHints: Seq[Substitutions],
+    internalDepth: Int,
+    externalDepth: Int
   ) = {
     if (other.isRuntimeInstance[ExpressionType]) {
       for {
-        (applicative, applicativeSubstitutions) <- other.calculateApplicatives(arguments, substitutions)
+        (applicative, applicativeSubstitutions) <- other.calculateApplicatives(arguments, substitutions, 0, internalDepth, externalDepth)
         if structuralHints.forall { structuralHint =>
           substitutionsLens.get(structuralHint).get(variableName).forall { s =>
             s.matchesStructure(applicative)
@@ -60,50 +65,61 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
     } else Nil
   }
 
-  override def applySubstitutions(substitutions: Substitutions): Option[ExpressionType] = {
+  override def applySubstitutions(substitutions: Substitutions, internalDepth: Int, externalDepth: Int): Option[ExpressionType] = {
     for {
       predicate <- substitutionsLens.get(substitutions).get(variableName)
-      result <- predicate.specifyWithSubstitutions(arguments, substitutions)
+      result <- predicate.specifyWithSubstitutions(arguments, substitutions, 0, internalDepth, externalDepth)
     } yield result.asInstanceOf[ExpressionType]
   }
+
   override def calculateApplicatives(
-    baseArguments: ArgumentList,
-    substitutions: Substitutions
+    baseArguments: Seq[Term],
+    substitutions: Substitutions,
+    internalDepth: Int,
+    previousInternalDepth: Int,
+    externalDepth: Int
   ): Seq[(ExpressionType, Substitutions)] = {
-    arguments.calculateApplicatives(baseArguments, substitutions).map(_.mapLeft(update))
+    arguments.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
+      .map(_.mapLeft(newArguments => update(newArguments.map(_.asInstanceOf[Term]))))
   }
 
   override def condense(
     other: Expression,
     thisSubstitutions: Substitutions,
     otherSubstitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)],
-    structuralHints: Seq[Substitutions]
+    applicativeHints: Seq[(Substitutions, Seq[Term])],
+    structuralHints: Seq[Substitutions],
+    internalDepth: Int,
+    externalDepth: Int
   ) = {
-    val base = super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints)
+    val base = super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints, internalDepth, externalDepth)
     if (base.nonEmpty)
       base
     else for {
       predicate <- substitutionsLens.get(thisSubstitutions).get(variableName).toSeq
       predicateSubstitutions <- other.calculateSubstitutions(
-        predicate.increaseDepth(depth, thisSubstitutions.depth),
-        Substitutions.emptyWithDepth(thisSubstitutions.depth + 1),
+        predicate.insertExternalParameters(internalDepth),
+        Substitutions.empty,
         Nil,
-        Nil)
+        Nil,
+        internalDepth,
+        externalDepth)
     } yield (thisSubstitutions, otherSubstitutions, Seq((predicateSubstitutions, arguments)), Nil)
   }
 
   override protected def condenseReverse(
     other: Expression,
     thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions
+    otherSubstitutions: Substitutions,
+    internalDepth: Int,
+    externalDepth: Int
   ) = {
-    val base = super.condenseReverse(other, thisSubstitutions, otherSubstitutions)
+    val base = super.condenseReverse(other, thisSubstitutions, otherSubstitutions, internalDepth, externalDepth)
     if (base.nonEmpty)
       base
     else
       for {
-        (applicative, newSubstitutions) <- other.calculateApplicatives(arguments, Substitutions.empty)
+        (applicative, newSubstitutions) <- other.calculateApplicatives(arguments, Substitutions.empty, 0, internalDepth, externalDepth)
         updatedSubstitutions <- newSubstitutions.update(
           variableName,
           applicative.asInstanceOf[ExpressionType],
@@ -114,15 +130,15 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
 
   def matchesStructure(other: Expression): Boolean = false // TODO: Probably these can match?
 
-  override def toString = s"$variableName(${arguments.terms.map(_.toString).mkString(", ")})"
+  override def toString = s"$variableName(${arguments.map(_.toString).mkString(", ")})"
   override def safeToString = toString
-  override def serialized = s"with (${arguments.terms.map(_.serialized).mkString(" ")}) $variableName"
+  override def serialized = s"with (${arguments.map(_.serialized).mkString(" ")}) $variableName"
 }
 
 object ExpressionApplication {
   def unapply(expression: Expression): Option[(String, Seq[Term])] = expression match {
     case expressionApplication: ExpressionApplication[_] =>
-      Some((expressionApplication.variableName, expressionApplication.arguments.terms))
+      Some((expressionApplication.variableName, expressionApplication.arguments))
     case _ =>
       None
   }

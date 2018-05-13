@@ -47,8 +47,7 @@ object Reference {
       inference: Inference,
       substitutions: Substitutions,
       inferenceReference: Reference.ToSingleLine,
-      simplificationPath: Seq[Int],
-      depth: Int)
+      simplificationPath: Seq[Int])
     extends ToSingleLine
   {
     override def referencedInferenceIds = inferenceReference.referencedInferenceIds
@@ -57,8 +56,7 @@ object Reference {
       inference.id,
       inference.specifySubstitutions(substitutions),
       inferenceReference.cached,
-      simplificationPath,
-      depth)
+      simplificationPath)
   }
 
   case class Elided(inferenceApplication: InferenceApplication) extends ApplyingInference {

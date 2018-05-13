@@ -3,7 +3,7 @@ Define some basic functions.
 theorem The Empty Set Is a Function with Empty Domain
 prove ⊆ ∅ × ∅ A
 prove ∀ x ¬ ∈ $0 ∅
-prove ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $.0 $$0 ∅
+prove ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅
 prove function ∅ ∅ A
 qed
 
@@ -16,17 +16,17 @@ take x {
   assume ∈ $0 singleton a {
     prove = $0 a
     take y {
-      assume ∈ orderedPair $.0 $$0 singleton orderedPair a b {
-        prove = orderedPair $.0 $$0 orderedPair a b
-        prove = $$0 b
+      assume ∈ orderedPair $$0 $0 singleton orderedPair a b {
+        prove = orderedPair $$0 $0 orderedPair a b
+        prove = $0 b
       }
-      assume = $$0 b {
+      assume = $0 b {
         prove ∈ orderedPair a b singleton orderedPair a b
-        prove ∈ orderedPair $.0 b singleton orderedPair a b
-        prove ∈ orderedPair $.0 $$0 singleton orderedPair a b
+        prove ∈ orderedPair $$0 b singleton orderedPair a b
+        prove ∈ orderedPair $$0 $0 singleton orderedPair a b
       }
     }
-    prove ∃! y ∈ orderedPair $.0 $$0 singleton orderedPair a b
+    prove ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b
   }
 }
 prove function singleton orderedPair a b singleton a singleton b
@@ -56,47 +56,47 @@ take x {
     prove ∨ ∈ $0 A ∈ $0 C
     assume ∈ $0 A {
       take y {
-        assume ∈ orderedPair $.0 $$0 ∪ f g {
-          prove ∨ ∈ orderedPair $.0 $$0 f ∈ orderedPair $.0 $$0 g
-          assume ∈ orderedPair $.0 $$0 f {
-            prove = $$0 apply f $.0
+        assume ∈ orderedPair $$0 $0 ∪ f g {
+          prove ∨ ∈ orderedPair $$0 $0 f ∈ orderedPair $$0 $0 g
+          assume ∈ orderedPair $$0 $0 f {
+            prove = $0 apply f $$0
           }
-          assume ∈ orderedPair $.0 $$0 g {
-            prove ∈ $.0 C
-            prove ∈ $.0 ∩ A C
-            prove = apply f $.0 apply g $.0
-            prove = $$0 apply g $.0
-            prove = $$0 apply f $.0
+          assume ∈ orderedPair $$0 $0 g {
+            prove ∈ $$0 C
+            prove ∈ $$0 ∩ A C
+            prove = apply f $$0 apply g $$0
+            prove = $0 apply g $$0
+            prove = $0 apply f $$0
           }
-          prove = $$0 apply f $.0
+          prove = $0 apply f $$0
         }
       }
       prove ∈ orderedPair $0 apply f $0 f
       prove ∈ orderedPair $0 apply f $0 ∪ f g
-      prove ∃! y ∈ orderedPair $.0 $$0 ∪ f g
+      prove ∃! y ∈ orderedPair $$0 $0 ∪ f g
     }
     assume ∈ $0 C {
       take y {
-        assume ∈ orderedPair $.0 $$0 ∪ f g {
-          prove ∨ ∈ orderedPair $.0 $$0 f ∈ orderedPair $.0 $$0 g
-          assume ∈ orderedPair $.0 $$0 f {
-            prove ∈ $.0 A
-            prove ∈ $.0 ∩ A C
-            prove = apply f $.0 apply g $.0
-            prove = $$0 apply f $.0
-            prove = $$0 apply g $.0
+        assume ∈ orderedPair $$0 $0 ∪ f g {
+          prove ∨ ∈ orderedPair $$0 $0 f ∈ orderedPair $$0 $0 g
+          assume ∈ orderedPair $$0 $0 f {
+            prove ∈ $$0 A
+            prove ∈ $$0 ∩ A C
+            prove = apply f $$0 apply g $$0
+            prove = $0 apply f $$0
+            prove = $0 apply g $$0
           }
-          assume ∈ orderedPair $.0 $$0 g {
-            prove = $$0 apply g $.0
+          assume ∈ orderedPair $$0 $0 g {
+            prove = $0 apply g $$0
           }
-          prove = $$0 apply g $.0
+          prove = $0 apply g $$0
         }
       }
       prove ∈ orderedPair $0 apply g $0 g
       prove ∈ orderedPair $0 apply g $0 ∪ f g
-      prove ∃! y ∈ orderedPair $.0 $$0 ∪ f g
+      prove ∃! y ∈ orderedPair $$0 $0 ∪ f g
     }
-    prove ∃! y ∈ orderedPair $.0 $$0 ∪ f g
+    prove ∃! y ∈ orderedPair $$0 $0 ∪ f g
   }
 }
 prove function ∪ f g ∪ A C ∪ B D

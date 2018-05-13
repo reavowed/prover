@@ -6,85 +6,98 @@ import net.prover.model._
 import scala.collection.immutable.Nil
 import scala.reflect.ClassTag
 
-abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] extends Expression {
+abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] extends Expression with TypedExpression[ExpressionType] { this: ExpressionType =>
   def name: String
   def substitutionsLens: Lens[Substitutions, Map[String, ExpressionType]]
   def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[String]]
-  def setDepth(newDepth: Int): ExpressionType
 
-  override def increaseDepth(difference: Int, insertionPoint: Int): ExpressionType = {
-    setDepth(depth + difference)
-  }
-  override def reduceDepth(difference: Int, insertionPoint: Int): Option[ExpressionType] = {
-    if (depth >= difference)
-      Some(setDepth(depth - difference))
-    else
-      None
-  }
-  override def specify(targetArguments: ArgumentList) = {
-    if (depth == 0) throw new Exception("Cannot specify base-level expression")
-    setDepth(depth - 1)
-  }
-  def specifyWithSubstitutions(
-    targetArguments: ArgumentList,
-    substitutions: Substitutions
+  override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = this
+  override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0) = Some(this)
+
+  override def specify(
+    targetArguments: Seq[Term],
+    internalDepth: Int,
+    externalDepth: Int
   ) = {
-    if (depth == 0) throw new Exception("Cannot specify base-level expression")
-    Some(setDepth(depth + targetArguments.depth - 1))
+    this
+  }
+  override def specifyWithSubstitutions(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions,
+    internalDepth: Int,
+    previousInternalDepth: Int,
+    externalDepth: Int
+  ) = {
+    Some(this)
   }
 
   override def requiredSubstitutions = requiredSubstitutionsLens.set(Seq(name))(Substitutions.Required.empty)
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)],
-    structuralHints: Seq[Substitutions]
+    applicativeHints: Seq[(Substitutions, Seq[Term])],
+    structuralHints: Seq[Substitutions],
+    internalDepth: Int,
+    externalDepth: Int
   ): Seq[Substitutions] = {
     other match {
-      case _ if other.isRuntimeInstance[ExpressionType] && other.depth >= depth + substitutions.depth =>
-        (for {
-          reducedOther <- other.reduceDepth(depth, substitutions.depth)
-          if applicativeHints.forall { hint =>
-            val applicatives = other.calculateApplicatives(hint._2, Substitutions.emptyWithDepth(substitutions.depth))
+      case _
+        if other.isRuntimeInstance[ExpressionType] &&
+          applicativeHints.forall { hint =>
+            val applicatives = other.calculateApplicatives(hint._2, Substitutions.empty, 0, internalDepth, externalDepth)
             substitutionsLens.get(hint._1).get(name).forall { s =>
               applicatives.exists(_._1 == s)
             }
           }
+      =>
+        (for {
+          reducedOther <- other.removeExternalParameters(internalDepth)
           result <- substitutions.update(name, reducedOther.asInstanceOf[ExpressionType], substitutionsLens, 0)
         } yield result).toSeq
       case _ =>
         Nil
     }
   }
-  def applySubstitutions(substitutions: Substitutions): Option[ExpressionType] = {
-    substitutionsLens.get(substitutions).get(name).map(_.increaseDepth(depth, substitutions.depth).asInstanceOf[ExpressionType])
+  def applySubstitutions(
+    substitutions: Substitutions,
+    internalDepth: Int,
+    externalDepth: Int
+  ): Option[ExpressionType] = {
+    substitutionsLens.get(substitutions).get(name).map(_.insertExternalParameters(internalDepth).asInstanceOf[ExpressionType])
   }
 
   def calculateApplicatives(
-    baseArguments: ArgumentList,
-    substitutions: Substitutions
+    baseArguments: Seq[Term],
+    substitutions: Substitutions,
+    internalDepth: Int,
+    previousInternalDepth: Int,
+    externalDepth: Int
   ): Seq[(ExpressionType, Substitutions)] = {
-    Seq((setDepth(depth - baseArguments.depth + 1), substitutions))
+    Seq((this, substitutions))
   }
 
   override def condense(
     other: Expression,
     thisSubstitutions: Substitutions,
     otherSubstitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)],
-    structuralHints: Seq[Substitutions]
+    applicativeHints: Seq[(Substitutions, Seq[Term])],
+    structuralHints: Seq[Substitutions],
+    internalDepth: Int,
+    externalDepth: Int
   ) = {
-    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints) ++
+    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints, internalDepth, externalDepth) ++
       applicativeHints
-        .foldProduct { case (hintSubstitutions, hintArgumentList) =>
+        .foldProduct { case (hintSubstitutions, hintArguments) =>
           for {
             hintApplicative <- substitutionsLens.get(hintSubstitutions).get(name).toSeq
             newHintSubstitutions <- other.calculateSubstitutions(
-              hintApplicative.increaseDepth(depth, thisSubstitutions.depth + 1),
-              Substitutions.emptyWithDepth(thisSubstitutions.depth + 1),
+              hintApplicative.insertExternalParameters(internalDepth),
+              Substitutions.empty,
               Nil,
-              Nil)
-          } yield newHintSubstitutions -> hintArgumentList
+              Nil,
+              internalDepth,
+              externalDepth)
+          } yield newHintSubstitutions -> hintArguments
         }
         .filter(_.nonEmpty)
         .map((thisSubstitutions, otherSubstitutions, _, Nil))

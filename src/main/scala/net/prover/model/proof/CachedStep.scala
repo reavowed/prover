@@ -95,14 +95,14 @@ object CachedStep {
       assumptionStep.getAssertionHints(availableInferences) ++ assertionStep.getAssertionHints(availableInferences)
     }
     override def validate(context: ProvingContext): Option[Step.Naming] = {
-      val innerContext = context.increaseDepth(1, context.depth)
+      val innerContext = context.insertExternalParameter()
       for {
         validatedAssumptionStep <- assumptionStep.validate(innerContext)
         deduction <- validatedAssumptionStep.provenStatements.lastOption
         scopingStatement <- context.scopingStatement
         validatedAssertionStep <- assertionStep.validate(
           context.addProvenStatement(
-            DefinedStatement(Seq(deduction.statement), scopingStatement, deduction.statement.depth - 1)(Seq(variableName)),
+            DefinedStatement(Seq(deduction.statement), scopingStatement)(Seq(variableName)),
             reference.withSuffix("d")))
       } yield Step.Naming(variableName, validatedAssumptionStep, validatedAssertionStep.asInstanceOf[Step.Assertion], reference)
     }
@@ -123,7 +123,7 @@ object CachedStep {
     def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[Naming] = {
       for {
         variableName <- Parser.singleWord
-        updatedContext = parsingContext.addParameterList(Seq(variableName))
+        updatedContext = parsingContext.addParameters(variableName)
         assumptionStep <- Assumption.parser(reference.withSuffix(".0"))(updatedContext)
         _ <- Parser.requiredWord("assert")
         assertionStep <- Assertion.parser(reference.withSuffix(".1"))
@@ -143,7 +143,7 @@ object CachedStep {
     override def validate(context: ProvingContext): Option[Step] = {
       for {
         scopingStatment <- context.scopingStatement
-        validatedSubsteps <- substeps.validate(context.increaseDepth(1, context.depth))
+        validatedSubsteps <- substeps.validate(context.insertExternalParameter())
       } yield Step.ScopedVariable(variableName, validatedSubsteps, scopingStatment, reference)
     }
     override def matchesOutline(stepOutline: StepOutline): Boolean = stepOutline match {
@@ -159,7 +159,7 @@ object CachedStep {
     def parser(reference: Reference.Direct)(implicit parsingContext: ParsingContext): Parser[ScopedVariable] = {
       for {
         variableName <- Parser.singleWord
-        updatedContext = parsingContext.addParameterList(Seq(variableName))
+        updatedContext = parsingContext.addParameters(variableName)
         steps <- listParser(Some(reference))(updatedContext).inBraces
       } yield ScopedVariable(variableName, steps, reference)
     }

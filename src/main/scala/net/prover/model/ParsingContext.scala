@@ -10,10 +10,8 @@ case class ParsingContext(
     termDefinitions: Seq[TermDefinition],
     statementVariableNames: Set[String],
     termVariableNames: Set[String],
-    parameterLists: Seq[Seq[String]])
+    parameterLists: Seq[Seq[(String, Int)]])
 {
-  def parameterDepth: Int = parameterLists.length
-
   def add(chapterEntry: ChapterEntryOutline): ParsingContext = chapterEntry match {
     case statementDefinition: StatementDefinition =>
       copy(statementDefinitions = statementDefinitions :+ statementDefinition)
@@ -31,8 +29,12 @@ case class ParsingContext(
     copy(termDefinitions = termDefinitions :+ termDefinition)
   }
 
-  def addParameterList(parameterList: Seq[String]) = {
-    copy(parameterLists = parameterLists :+ parameterList)
+  def addParameters(parameters: String *) = {
+    copy(parameterLists = parameterLists :+ parameters.zipWithIndex)
+  }
+
+  def addParameterList(parameters: Seq[(String, Int)]) = {
+    copy(parameterLists = parameterLists :+ parameters)
   }
 
   object RecognisedStatementVariable {
@@ -68,19 +70,18 @@ case class ParsingContext(
   }
 
   object RecognisedParameter {
-    val literalPattern = "(\\$+)(\\.*)(.*)".r
+    val literalPattern = "(\\$+)(.*)".r
     def unapply(string: String): Option[FunctionParameter] = {
-      parameterLists.zipWithIndex.reverse.mapFind {
-        case (parameterList, depth) =>
-          parameterList.findIndexWhere(_ == string).map(index => FunctionParameter(index, depth + 1, parameterDepth)(Some(string)))
+      parameterLists.reverse.zipWithIndex.mapFind {
+        case (parameterList, level) =>
+          parameterList.find(_._1 == string).map(_._2).map(index => FunctionParameter(index, level)(Some(string)))
       } orElse (string match {
-        case literalPattern(dollars, dots, indexString) =>
-          val level = dollars.length
-          val depth = level + dots.length
+        case literalPattern(dollars, indexString) =>
+          val level = dollars.length - 1
           for {
             index <- Try(indexString.toInt).toOption
-            name = parameterLists.lift(level - 1).flatMap(_.lift(index))
-          } yield FunctionParameter(index, level, depth)(name)
+            name = parameterLists.reverse.lift(level).flatMap(_.lift(index)).map(_._1)
+          } yield FunctionParameter(index, level)(name)
         case _ =>
           None
       })

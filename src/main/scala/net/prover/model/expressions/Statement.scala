@@ -1,15 +1,8 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Parser, ParsingContext, Substitutions}
+import net.prover.model.{Parser, ParsingContext}
 
-trait Statement extends Expression {
-  def increaseDepth(additionalDepth: Int, insertionPoint: Int): Statement
-  def reduceDepth(difference: Int, insertionPoint: Int): Option[Statement]
-  def specify(arguments: ArgumentList): Statement
-  def specifyWithSubstitutions(targetArguments: ArgumentList, substitutions: Substitutions): Option[Statement]
-  def applySubstitutions(substitutions: Substitutions): Option[Statement]
-  def calculateApplicatives(baseArguments: ArgumentList, substitutions: Substitutions): Seq[(Statement, Substitutions)]
-}
+trait Statement extends Expression with TypedExpression[Statement]
 
 object Statement {
   def parser(implicit context: ParsingContext): Parser[Statement] = {
@@ -18,11 +11,11 @@ object Statement {
         for {
           arguments <- Term.parser.listOrSingle(None)
           name <- Parser.singleWord
-        } yield PredicateApplication(name, ArgumentList(arguments, context.parameterDepth))
+        } yield PredicateApplication(name, arguments)
       case context.RecognisedStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
       case context.RecognisedStatementVariable(name) =>
-        Parser.constant(StatementVariable(name, context.parameterDepth))
+        Parser.constant(StatementVariable(name))
     }
   }
 

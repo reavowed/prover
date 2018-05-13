@@ -27,13 +27,13 @@ class StatementSpec extends ProverSpec {
     }
 
     "parse a bound predicate application" in {
-      parseStatement("∀ y with y χ") mustEqual ForAll("y")(χ.!(FunctionParameter("y", 0)))
+      parseStatement("∀ y with y χ") mustEqual ForAll("y")(χ(FunctionParameter("y", 0, 0)))
     }
 
     "parse a bound defined statement" in {
-      parseStatement("∀ y ↔ ∈ y a ∈ y b") mustEqual ForAll("y")(Equivalence.!(
-        ElementOf.!(FunctionParameter("y", 0), a.^),
-        ElementOf.!(FunctionParameter("y", 0), b.^)))
+      parseStatement("∀ y ↔ ∈ y a ∈ y b") mustEqual ForAll("y")(Equivalence(
+        ElementOf(FunctionParameter("y", 0, 0), a),
+        ElementOf(FunctionParameter("y", 0, 0), b)))
     }
 
     "parse an empty list" in {
@@ -56,7 +56,7 @@ class StatementSpec extends ProverSpec {
         Map(φ -> Conjunction(φ, ψ)), Map.empty)
       val conclusion = Conjunction(χ, φ)
       val conclusionSubstitutions = Substitutions.empty
-      premise.condense(conclusion, premiseSubstitutions, conclusionSubstitutions, Nil, Nil) mustEqual Seq((
+      premise.condense(conclusion, premiseSubstitutions, conclusionSubstitutions, Nil, Nil, 0 , 0) mustEqual Seq((
         Substitutions(statements = Map(φ -> Conjunction(φ, ψ))),
         Substitutions(statements = Map(χ -> φ, φ -> ψ)),
         Nil,
@@ -68,7 +68,7 @@ class StatementSpec extends ProverSpec {
       val premiseSubstitutions = Substitutions(Map(φ -> Conjunction(φ, ψ)), Map.empty)
       val conclusion = Conjunction(χ, φ)
       val conclusionSubstitutions = Substitutions.empty
-      conclusion.condense(premise, conclusionSubstitutions, premiseSubstitutions, Nil, Nil) mustEqual Seq((
+      conclusion.condense(premise, conclusionSubstitutions, premiseSubstitutions, Nil, Nil, 0, 0) mustEqual Seq((
         Substitutions(statements = Map(χ -> φ, φ -> ψ)),
         Substitutions(statements = Map(φ -> Conjunction(φ, ψ))),
         Nil,

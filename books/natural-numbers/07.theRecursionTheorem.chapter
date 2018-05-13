@@ -1,23 +1,23 @@
 Prove the recursion theorem for recursively constructing functions on ℕ.
 
 theorem An Inductive Function Is Unique
-premise ∃ f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $$0 ℕ = apply $.0 successor $$0 with ($$0) a
-let f' ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $$0 ℕ = apply $.0 successor $$0 with ($$0) a {
+premise ∃ f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a
+let f' ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a {
   take f {
-    assume ∧ function $$0 ℕ A ∧ = apply $$0 0 a_0 ∀ n → ∈ $$$0 ℕ = apply $$.0 successor $$$0 with ($$$0) a {
-      prove = apply $$0 0 apply $.0 0
+    assume ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a {
+      prove = apply $0 0 apply $$0 0
       take n {
-        assume ∧ ∈ $$$0 ℕ = apply $$.0 $$$0 apply $..0 $$$0 {
-          prove = apply $$.0 successor $$$0 with ($$$0) a
-          prove = apply $..0 successor $$$0 with ($$$0) a
-          prove = apply $$.0 successor $$$0 apply $..0 successor $$$0
+        assume ∧ ∈ $0 ℕ = apply $$0 $0 apply $$$0 $0 {
+          prove = apply $$0 successor $0 with ($0) a
+          prove = apply $$$0 successor $0 with ($0) a
+          prove = apply $$0 successor $0 apply $$$0 successor $0
         }
       }
-      prove ∀ n → ∈ $$$0 ℕ = apply $$.0 $$$0 apply $..0 $$$0
-      prove = $$0 $.0
+      prove ∀ n → ∈ $0 ℕ = apply $$0 $0 apply $$$0 $0
+      prove = $0 $$0
     }
   }
-  prove ∃! f ∧ function $$0 ℕ A ∧ = apply $$0 0 a_0 ∀ n → ∈ $$$0 ℕ = apply $$.0 successor $$$0 with ($$$0) a
+  prove ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a
 }
 qed
 

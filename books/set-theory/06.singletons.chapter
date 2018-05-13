@@ -3,29 +3,29 @@ Establish the existence of the singleton set {a}.
 theorem There Exists a Set with an Element
 prove ∈ ∅ powerSet ∅
 prove ∃ y ∈ $0 powerSet ∅
-prove ∃ x ∃ y ∈ $$0 $.0
+prove ∃ x ∃ y ∈ $0 $$0
 qed
 
 theorem Singleton Existence
-prove ∃ x ∃ y ∈ $$0 $.0
-let b ∃ y ∈ $$0 $.0 {
-  prove ∃! x = $$0 a
+prove ∃ x ∃ y ∈ $0 $$0
+let b ∃ y ∈ $0 $$0 {
+  prove ∃! x = $0 a
   take y {
-    prove → ∈ $$0 $.0 ∃! x = $$$0 a
+    prove → ∈ $0 $$0 ∃! x = $0 a
   }
-  prove ∃ z ∀ x ↔ ∈ $$$0 $$.0 ∃ y ∧ ∈ $$$$0 $...0 = $$$.0 a
+  prove ∃ z ∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $0 $$$$0 = $$0 a
   take x {
-    prove ↔ ∃ y ∧ ∈ $$$0 $..0 = $$.0 a = $$0 a
+    prove ↔ ∃ y ∧ ∈ $0 $$$0 = $$0 a = $0 a
   }
-  prove ∃ z ∀ x ↔ ∈ $$$0 $$.0 = $$$0 a
-  prove ∃! z ∀ x ↔ ∈ $$$0 $$.0 = $$$0 a
+  prove ∃ z ∀ x ↔ ∈ $0 $$0 = $0 a
+  prove ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a
 }
 qed
 
 term singleton (a)
   name (Singleton)
   format ({a})
-  (∀ x ↔ ∈ $$0 $.0 = $$0 a)
+  (∀ x ↔ ∈ $0 $$0 = $0 a)
 
 theorem A Set Is an Element of Its Singleton
 prove ∀ x ↔ ∈ $0 singleton a = $0 a

@@ -15,11 +15,11 @@ class TermDefinitionSpec extends ProverSpec {
           None,
           Format.default("∅", Nil),
           Nil,
-          ForAll.!("x")(Negation.!!(ElementOf.!!(FunctionParameter("x", 0, 2), FunctionParameter("_", 0, 1, 2)))),
+          ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter("_", 0, 1)))),
           "",
           "")
       definition.definingStatement mustEqual
-        ForAll("x")(Negation.!(ElementOf.!(FunctionParameter("x", 0, 1), DefinedTerm(Nil, definition, 0)(Nil).^)))
+        ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), DefinedTerm(Nil, definition)(Nil))))
     }
 
     "parse a term with premises" in {
@@ -32,11 +32,11 @@ class TermDefinitionSpec extends ProverSpec {
         None,
         Format.Explicit("⋂%0", "⋂a", requiresBrackets = false),
         Seq(Negation(Equals(a, EmptySet))),
-        ForAll.!("x")(Equivalence.!!(
-          ElementOf.!!(FunctionParameter("x", 0, 2), FunctionParameter.anonymous(0, 1, 2)),
-          ForAll.!!("y")(Implication.!!!(
-            ElementOf.!!!(FunctionParameter("y", 0, 3), a.^^^),
-            ElementOf.!!!(FunctionParameter("x", 0, 2, 3), FunctionParameter("y", 0, 3)))))),
+        ForAll("x")(Equivalence(
+          ElementOf(FunctionParameter("x", 0, 0), FunctionParameter.anonymous(0, 1)),
+          ForAll("y")(Implication(
+            ElementOf(FunctionParameter("y", 0, 0), a),
+            ElementOf(FunctionParameter("x", 0, 1), FunctionParameter("y", 0, 0)))))),
         "",
         "")
     }

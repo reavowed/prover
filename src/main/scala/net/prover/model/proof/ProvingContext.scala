@@ -24,31 +24,28 @@ case class ProvingContext(
   def addProvenStatement(newProvenStatements: Seq[ProvenStatement]) = {
     copy(provenStatements = provenStatements ++ newProvenStatements)
   }
-  def increaseDepth(additionalDepth: Int, insertionPoint: Int) = {
+  def insertExternalParameter() = {
     ProvingContext(
-      provenStatements.map(_.increaseDepth(additionalDepth, insertionPoint)),
-      premises.map(_.increaseDepth(additionalDepth, insertionPoint)),
-      assumptions.map(_.increaseDepth(additionalDepth, insertionPoint)),
+      provenStatements.map(_.insertExternalParameters(1)),
+      premises.map(_.insertExternalParameters(1)),
+      assumptions.map(_.insertExternalParameters(1)),
       availableInferences,
       assertionHints,
       deductionStatement,
       scopingStatement,
-      depth + additionalDepth)
+      depth + 1)
   }
 
   def deduced(antecedent: Statement, consequent: Statement): Option[Statement] = {
     deductionStatement.map { definition =>
-      DefinedStatement(Seq(antecedent, consequent), definition, antecedent.depth - 1)(Nil)
+      DefinedStatement(Seq(antecedent, consequent), definition)(Nil)
     }
   }
 
   def scoped(inner: Statement, variableName: String): Option[Statement] = {
     scopingStatement.map { definition =>
-      DefinedStatement(Seq(inner), definition, inner.depth - 1)(Seq(variableName))
+      DefinedStatement(Seq(inner), definition)(Seq(variableName))
     }
-  }
-  def defaultSubstitutions: Substitutions = {
-    Substitutions.emptyWithDepth(depth)
   }
 
   override def toString = s"ProvingContext[${provenStatements.length} statements]"

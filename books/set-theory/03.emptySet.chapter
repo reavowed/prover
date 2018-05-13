@@ -1,7 +1,7 @@
 Introduce the empty set, ∅.
 
 axiom Axiom of Empty Set
-conclusion ∃ X ∀ x ¬ ∈ $$0 $.0
+conclusion ∃ X ∀ x ¬ ∈ $0 $$0
 
 theorem Two Empty Sets Are Equal
 premise ∀ x ¬ ∈ $0 a
@@ -11,19 +11,19 @@ prove = a b
 qed
 
 theorem There Exists a Unique Empty Set
-prove ∃ X ∀ x ¬ ∈ $$0 $.0
+prove ∃ X ∀ x ¬ ∈ $0 $$0
 take X {
   take Y {
-    assume ∧ ∀ x ¬ ∈ $$$0 $..0 ∀ x ¬ ∈ $$$0 $$.0 {
-      prove = $.0 $$0
+    assume ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 {
+      prove = $$0 $0
     }
   }
 }
-prove ∃! X ∀ x ¬ ∈ $$0 $.0
+prove ∃! X ∀ x ¬ ∈ $0 $$0
 qed
 
 term ∅ ()
-  (∀ x ¬ ∈ $$0 $.0)
+  (∀ x ¬ ∈ $0 $$0)
 
 theorem The Empty Set Has No Elements
 prove ∀ x ¬ ∈ $0 ∅

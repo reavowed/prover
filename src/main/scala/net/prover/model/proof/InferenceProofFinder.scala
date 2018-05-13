@@ -2,7 +2,7 @@ package net.prover.model.proof
 
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
-import net.prover.model.expressions.{ArgumentList, Statement, StatementVariable}
+import net.prover.model.expressions.{Statement, StatementVariable, Term}
 
 import scala.util.Try
 
@@ -15,12 +15,12 @@ case class InferenceProofFinder(
   def findDirectProof(assertionToProve: Statement): Option[InferenceApplication] = {
     (for {
       conclusionSubstitutions <- inference.conclusion
-        .calculateSubstitutions(assertionToProve, provingContext.defaultSubstitutions, Nil, Nil)
+        .calculateSubstitutions(assertionToProve, Substitutions.empty, Nil, Nil, 0, provingContext.depth)
         .iterator
       (premiseReferences, premiseSubstitutions) <- matchPremisesToProvenStatements(
         inference.premises,
         conclusionSubstitutions)
-    } yield InferenceApplication.Direct(inference, premiseSubstitutions, premiseReferences, isRearrangement = false, provingContext.depth))
+    } yield InferenceApplication.Direct(inference, premiseSubstitutions, premiseReferences, isRearrangement = false))
       .headOption
   }
 
@@ -43,7 +43,7 @@ case class InferenceProofFinder(
     (for {
       (transformedPremises, transformedConclusion, stepsToProve) <- transformation.applyFully(inference, transformationSubstitutions).iterator
       conclusionSubstitutions <- transformedConclusion
-        .calculateSubstitutions(assertionToProve, provingContext.defaultSubstitutions, Nil, Nil)
+        .calculateSubstitutions(assertionToProve, Substitutions.empty, Nil, Nil, 0, provingContext.depth)
         .iterator
       (premiseReferences, premiseSubstitutions) <- matchPremisesToProvenStatements(
         transformedPremises,
@@ -59,8 +59,7 @@ case class InferenceProofFinder(
       transformedPremises,
       transformedConclusion,
       transformationProof.steps,
-      isRearrangement = false,
-      provingContext.depth)
+      isRearrangement = false)
     ).headOption
   }
 
@@ -74,7 +73,7 @@ case class InferenceProofFinder(
         .applyPartially(inference, transformationSubstitutions)
         .iterator
       conclusionSubstitutions <- transformedConclusion
-        .calculateSubstitutions(assertionToProve, provingContext.defaultSubstitutions, Nil, Nil)
+        .calculateSubstitutions(assertionToProve, Substitutions.empty, Nil, Nil, 0, provingContext.depth)
         .iterator
       (transformedPremises, premiseReferences, premiseStepsToProve, premiseSubstitutions) <- transformedPremisesAndSteps
         .foldLeft(Iterator((Seq.empty[Premise], Seq.empty[Reference], Seq.empty[StepOutline], conclusionSubstitutions))) { case (acc, premisesAndSteps) =>
@@ -96,8 +95,7 @@ case class InferenceProofFinder(
       transformedPremises,
       transformedConclusion,
       transformationProof.steps,
-      isRearrangement = false,
-      provingContext.depth)
+      isRearrangement = false)
     ).headOption
   }
 
@@ -108,8 +106,8 @@ case class InferenceProofFinder(
   ): Option[InferenceApplication] = {
     (for {
       (prePremises, elidablePremise, postPremises) <- inference.premises.splitAtAll(_.isElidable).iterator
-      substitutionsAfterConclusion <- inference.conclusion.calculateSubstitutions(assertionToProve, provingContext.defaultSubstitutions, Nil, Nil)
-      substitutionsAfterElidedPremise <- elidablePremise.statement.calculateSubstitutions(elidedStatement, substitutionsAfterConclusion, Nil, Nil)
+      substitutionsAfterConclusion <- inference.conclusion.calculateSubstitutions(assertionToProve, Substitutions.empty, Nil, Nil, 0, provingContext.depth)
+      substitutionsAfterElidedPremise <- elidablePremise.statement.calculateSubstitutions(elidedStatement, substitutionsAfterConclusion, Nil, Nil, 0, provingContext.depth)
       (prePremiseReferences, substitutionsAfterPrePremises) <- matchPremisesToProvenStatements(
         prePremises,
         substitutionsAfterElidedPremise)
@@ -120,8 +118,7 @@ case class InferenceProofFinder(
       inference,
       substitutionsAfterPostPremises,
       (prePremiseReferences :+ elidedReference) ++ postPremiseReferences,
-      isRearrangement = false,
-      provingContext.depth)
+      isRearrangement = false)
     ).headOption
   }
 
@@ -135,26 +132,28 @@ case class InferenceProofFinder(
       (premiseSubstitutions, inferenceSubstitutionsAfterCondensing, applicativeHints, structuralHints) <- premise.condense(
         inference.conclusion,
         premiseSubstitutionsSoFar,
-        provingContext.defaultSubstitutions,
+        Substitutions.empty,
         Nil,
-        Nil
+        Nil,
+        0,
+        provingContext.depth
       ).iterator
       (premiseReferences, inferenceSubstitutions) <- matchPremisesToProvenStatements(
         inference.premises,
         inferenceSubstitutionsAfterCondensing,
         applicativeHints,
         structuralHints)
-      provenConclusion <- inference.conclusion.applySubstitutions(inferenceSubstitutions).iterator
-      finalSubstitutions <- premise.calculateSubstitutions(provenConclusion, premiseSubstitutions, Nil, Nil).iterator
+      provenConclusion <- inference.conclusion.applySubstitutions(inferenceSubstitutions, 0, provingContext.depth).iterator
+      finalSubstitutions <- premise.calculateSubstitutions(provenConclusion, premiseSubstitutions, Nil, Nil, 0, provingContext.depth).iterator
     } yield Reference.Elided(
-      InferenceApplication.Direct(inference, inferenceSubstitutions, premiseReferences, isRearrangement = false, provingContext.depth)
+      InferenceApplication.Direct(inference, inferenceSubstitutions, premiseReferences, isRearrangement = false)
     ) -> finalSubstitutions
   }
 
   private def matchPremisesToProvenStatements(
     premises: Seq[Premise],
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)] = Nil,
+    applicativeHints: Seq[(Substitutions, Seq[Term])] = Nil,
     structuralHints: Seq[Substitutions] = Nil
   ): Iterator[(Seq[Reference], Substitutions)] = {
     val initial = Iterator((Seq.empty[Reference], substitutions))
@@ -171,7 +170,7 @@ case class InferenceProofFinder(
   private def matchPremiseToProvenStatements(
     premise: Premise,
     substitutionsSoFar: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)],
+    applicativeHints: Seq[(Substitutions, Seq[Term])],
     structuralHints: Seq[Substitutions]
   ): Iterator[(Reference, Substitutions)] = {
     val directMatches = referencedStatements.iterator
@@ -190,10 +189,10 @@ case class InferenceProofFinder(
     premiseStatement: Statement,
     provenStatement: ReferencedStatement,
     substitutionsSoFar: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)],
+    applicativeHints: Seq[(Substitutions, Seq[Term])],
     structuralHints: Seq[Substitutions]
   ): Iterator[(Reference, Substitutions)] = {
-    premiseStatement.calculateSubstitutions(provenStatement.statement, substitutionsSoFar, applicativeHints, structuralHints)
+    premiseStatement.calculateSubstitutions(provenStatement.statement, substitutionsSoFar, applicativeHints, structuralHints, 0, provingContext.depth)
       .toIterator
       .map { newSubstitutions =>
         (provenStatement.reference, newSubstitutions)
@@ -203,7 +202,7 @@ case class InferenceProofFinder(
   def matchPremiseToRearrangedProvenStatements(
     premiseStatement: Statement,
     substitutionsSoFar: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)],
+    applicativeHints: Seq[(Substitutions, Seq[Term])],
     structuralHints: Seq[Substitutions]
   ): Iterator[(Reference, Substitutions)] = {
     for {
@@ -212,26 +211,28 @@ case class InferenceProofFinder(
       (partialPremiseSubstitutions, inferenceConclusionSubstitutions, newApplicativeHints, newStructuralHints) <- premiseStatement.condense(
         inference.conclusion,
         substitutionsSoFar,
-        provingContext.defaultSubstitutions,
+        Substitutions.empty,
         applicativeHints,
-        structuralHints
+        structuralHints,
+        0,
+        provingContext.depth
       ).iterator
       (premiseReferences, inferenceSubstitutions) <- matchPremisesToProvenStatements(
         inference.premises,
         inferenceConclusionSubstitutions,
         newApplicativeHints,
         newStructuralHints)
-      conclusion <- inference.conclusion.applySubstitutions(inferenceSubstitutions).toSeq
-      premiseSubstitutions <- premiseStatement.calculateSubstitutions(conclusion, partialPremiseSubstitutions, Nil, Nil)
+      conclusion <- inference.conclusion.applySubstitutions(inferenceSubstitutions, 0, provingContext.depth).toSeq
+      premiseSubstitutions <- premiseStatement.calculateSubstitutions(conclusion, partialPremiseSubstitutions, Nil, Nil, 0, provingContext.depth)
     } yield Reference.Expansion(
-      InferenceApplication.Direct(inference, inferenceSubstitutions, premiseReferences, isRearrangement = true, provingContext.depth)
+      InferenceApplication.Direct(inference, inferenceSubstitutions, premiseReferences, isRearrangement = true)
     ) -> premiseSubstitutions
   }
 
   def matchPremiseToTransformedRearrangedProvenStatements(
     premiseStatement: Statement,
     substitutionsSoFar: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)],
+    applicativeHints: Seq[(Substitutions, Seq[Term])],
     structuralHints: Seq[Substitutions]
   ): Iterator[(Reference, Substitutions)] = {
     if (provingContext.allowTransformations) {
@@ -243,16 +244,18 @@ case class InferenceProofFinder(
         (partialPremiseSubstitutions, inferenceConclusionSubstitutions, newApplicativeHints, newStructuralHints) <- premiseStatement.condense(
           transformedConclusion,
           substitutionsSoFar,
-          provingContext.defaultSubstitutions,
+          Substitutions.empty,
           applicativeHints,
-          structuralHints)
+          structuralHints,
+          0,
+          provingContext.depth)
         (premiseReferences, inferenceSubstitutions) <- matchPremisesToProvenStatements(
           transformedPremises,
           inferenceConclusionSubstitutions,
           newApplicativeHints,
           newStructuralHints)
-        conclusion <- transformedConclusion.applySubstitutions(inferenceSubstitutions).toSeq
-        premiseSubstitutions <- premiseStatement.calculateSubstitutions(conclusion, partialPremiseSubstitutions, Nil, Nil)
+        conclusion <- transformedConclusion.applySubstitutions(inferenceSubstitutions, 0, provingContext.depth).toSeq
+        premiseSubstitutions <- premiseStatement.calculateSubstitutions(conclusion, partialPremiseSubstitutions, Nil, Nil, 0, provingContext.depth)
         transformationProofAttempt = Try(ProofOutline(stepsToProve)
           .fillIn(provingContext.resetWithPremises(transformedPremises).copy(allowTransformations = false)))
         transformationProof <- transformationProofAttempt.toOption
@@ -265,8 +268,7 @@ case class InferenceProofFinder(
           transformedPremises,
           transformedConclusion,
           transformationProof.steps,
-          isRearrangement = true,
-          provingContext.depth)
+          isRearrangement = true)
       ) -> premiseSubstitutions
     } else Iterator.empty
   }

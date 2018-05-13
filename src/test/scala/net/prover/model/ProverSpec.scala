@@ -9,14 +9,14 @@ import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {
 
-  val φ = StatementVariable("φ", 0)
-  val ψ = StatementVariable("ψ", 0)
-  val χ = StatementVariable("χ", 0)
+  val φ = StatementVariable("φ")
+  val ψ = StatementVariable("ψ")
+  val χ = StatementVariable("χ")
 
-  val a = TermVariable("a", 0)
-  val b = TermVariable("b", 0)
-  val c = TermVariable("c", 0)
-  val n = TermVariable("n", 0)
+  val a = TermVariable("a")
+  val b = TermVariable("b")
+  val c = TermVariable("c")
+  val n = TermVariable("n")
 
   def connective(
     symbol: String,
@@ -76,15 +76,15 @@ trait ProverSpec extends Specification {
   val Equivalence = connective("↔", 2, None)
 
   val ForAll = quantifier("∀", None).copy(structureType = Some(StatementDefinition.StructureType.Scoping))
-  val Exists = quantifier("∃", Some(Negation(ForAll("x")(Negation.!(φ.!(FunctionParameter("x", 0)))))))
+  val Exists = quantifier("∃", Some(Negation(ForAll("x")(Negation(φ(FunctionParameter("x", 0, 0)))))))
   val Equals = predicate("=", 2, None)
   val ExistsUnique = quantifier("∃!", Some(Exists("y")(ForAll("x")(Equivalence(
-    φ.!(FunctionParameter("x", 0, 1, 2)),
-    Equals(FunctionParameter("x", 0, 2, 2), FunctionParameter("y", 0, 1, 2)))))))
+    φ(FunctionParameter("x", 0, 0)),
+    Equals(FunctionParameter("x", 0, 0), FunctionParameter("y", 0, 1)))))))
   val ElementOf = predicate("∈", 2, None)
-  val Subset = predicate("⊆", 2, Some(ForAll("x")(Implication.!(
-      ElementOf.!(FunctionParameter("x", 0), a.^),
-      ElementOf.!(FunctionParameter("x", 0), b.^)))))
+  val Subset = predicate("⊆", 2, Some(ForAll("x")(Implication(
+      ElementOf(FunctionParameter("x", 0, 0), a),
+      ElementOf(FunctionParameter("x", 0, 0), b)))))
 
   val EmptySetDefinition = TermDefinition(
     "∅",
@@ -93,10 +93,10 @@ trait ProverSpec extends Specification {
     None,
     Format.default("∅", Nil),
     Nil,
-    ForAll.!("x")(Negation.!!(ElementOf.!!(FunctionParameter("x", 0, 2), FunctionParameter.anonymous(0, 1)))),
+    ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter.anonymous(0, 1)))),
     "",
     "")
-  val EmptySet = DefinedTerm(Nil, EmptySetDefinition, 0)(Nil)
+  val EmptySet = DefinedTerm(Nil, EmptySetDefinition)(Nil)
 
   val PowerSet = TermDefinition(
     "powerSet",
@@ -105,9 +105,9 @@ trait ProverSpec extends Specification {
     Some("Power Set"),
     Format.Explicit("𝒫%0", "𝒫a", requiresBrackets = false),
     Nil,
-    ForAll.!("y")(Equivalence.!!(
-      ElementOf.!!(FunctionParameter("y", 0, 2), FunctionParameter.anonymous(0, 1, 2)),
-      Subset.!!(FunctionParameter("y", 0, 2), StatementVariable("a", 2)))),
+    ForAll("y")(Equivalence(
+      ElementOf(FunctionParameter("y", 0, 0), FunctionParameter.anonymous(0, 1)),
+      Subset(FunctionParameter("y", 0, 0), a))),
     "",
     "")
 
@@ -118,7 +118,7 @@ trait ProverSpec extends Specification {
     Some("Singleton"),
     Format.Explicit("{%0}", "{a}", requiresBrackets = false),
     Nil,
-    φ.^,
+    φ,
     "",
     "")
 
@@ -129,7 +129,7 @@ trait ProverSpec extends Specification {
     Some("Unordered Pair"),
     Format.Explicit("{%0, %1}", "{a, b}", requiresBrackets = false),
     Nil,
-    φ.^,
+    φ,
     "",
     "")
 
@@ -151,70 +151,26 @@ trait ProverSpec extends Specification {
       parser.parseAndDiscard(text, Paths.get(""))
     }
   }
-  implicit class StatementOps(statement: Statement) {
-    def ^ : Statement = statement.increaseDepth(1, 0)
-    def ^^ : Statement = statement.increaseDepth(2, 0)
-  }
   implicit class StatementVariableOps(statementVariable: StatementVariable) {
-    def apply(terms: Term*) = PredicateApplication(statementVariable.name, ArgumentList(terms, 0))
-    def !(terms: Term*) = PredicateApplication(statementVariable.name, ArgumentList(terms, 1))
-    def !!(terms: Term*) = PredicateApplication(statementVariable.name, ArgumentList(terms, 2))
+    def apply(terms: Term*) = PredicateApplication(statementVariable.name, terms)
   }
   implicit def statementVariableToComponentType(statementVariable: StatementVariable): StatementComponent = StatementComponent(statementVariable.name)
   implicit def termVariableToComponentType(termVariable: TermVariable): TermComponent = TermComponent(termVariable.name)
   implicit def variableTupleToString[T](tuple: (ExpressionVariable[_], T)): (String, T) = (tuple._1.name, tuple._2)
   implicit class StatementDefinitionOps(statementDefinition: StatementDefinition) {
     def apply(components: Expression*): DefinedStatement = {
-      DefinedStatement(components, statementDefinition, 0)(statementDefinition.boundVariableNames)
+      DefinedStatement(components, statementDefinition)(statementDefinition.boundVariableNames)
     }
     def apply(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
-      DefinedStatement(components, statementDefinition, 0)(boundVariableNames)
-    }
-    def !(components: Expression*): DefinedStatement = {
-      DefinedStatement(components, statementDefinition, 1)(statementDefinition.boundVariableNames)
-    }
-    def !(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
-      DefinedStatement(components, statementDefinition, 1)(boundVariableNames)
-    }
-    def !!(components: Expression*): DefinedStatement = {
-      DefinedStatement(components, statementDefinition, 2)(statementDefinition.boundVariableNames)
-    }
-    def !!(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
-      DefinedStatement(components, statementDefinition, 2)(boundVariableNames)
-    }
-    def !!!(components: Expression*): DefinedStatement = {
-      DefinedStatement(components, statementDefinition, 3)(statementDefinition.boundVariableNames)
-    }
-    def !!!(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
-      DefinedStatement(components, statementDefinition, 3)(boundVariableNames)
-    }
-  }
-  implicit class TermOps(term: Term) {
-    def ^ : Term = {
-      term.increaseDepth(1, 0)
-    }
-    def ^^ : Term = {
-      term.increaseDepth(2, 0)
-    }
-    def ^^^ : Term = {
-      term.increaseDepth(3, 0)
+      DefinedStatement(components, statementDefinition)(boundVariableNames)
     }
   }
   implicit class TermDefinitionOps(termDefinition: TermDefinition) {
     def apply(components: Expression*): DefinedTerm = {
-      DefinedTerm(components, termDefinition, 0)(termDefinition.boundVariableNames)
+      DefinedTerm(components, termDefinition)(termDefinition.boundVariableNames)
     }
     def apply(boundVariableNames: String*)(components: Expression*): DefinedTerm = {
-      DefinedTerm(components, termDefinition, 0)(boundVariableNames)
-    }
-    def !(components: Expression*): DefinedTerm = {
-      DefinedTerm(components, termDefinition, 1)(termDefinition.boundVariableNames)
-    }
-    def !(boundVariableNames: String*)(components: Expression*): DefinedTerm = {
-      DefinedTerm(components, termDefinition, 1)(boundVariableNames)
-    }
-    def !!(components: Expression*): DefinedTerm = {
-      DefinedTerm(components, termDefinition, 2)(termDefinition.boundVariableNames)
+      DefinedTerm(components, termDefinition)(boundVariableNames)
     }
   }
 

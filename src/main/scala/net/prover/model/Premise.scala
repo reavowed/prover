@@ -7,8 +7,8 @@ case class Premise(statement: Statement, index: Int)(val isElidable: Boolean) {
   def reference = Reference.Direct(s"p$index")
   def provenStatement = ProvenStatement(statement, reference)
   def requiredSubstitutions: Substitutions.Required = statement.requiredSubstitutions
-  def increaseDepth(additionalDepth: Int, insertionPoint: Int): Premise = {
-    withStatement(statement.increaseDepth(additionalDepth, insertionPoint))
+  def insertExternalParameters(numberOfParametersToInsert: Int): Premise = {
+    withStatement(statement.insertExternalParameters(numberOfParametersToInsert))
   }
   def withStatement(newStatement: Statement) = copy(statement = newStatement)(isElidable)
   def serialized: String = s"premise ${statement.serialized}" + (if (isElidable) " elidable" else "")

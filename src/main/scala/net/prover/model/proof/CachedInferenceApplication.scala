@@ -15,22 +15,21 @@ object CachedInferenceApplication {
       inferenceId: String,
       localSubstitutions: Inference.Substitutions,
       cachedReferences: Seq[CachedReference],
-      isRearrangement: Boolean,
-      depth: Int)
+      isRearrangement: Boolean)
     extends CachedInferenceApplication
   {
     override def validate()(implicit context: ProvingContext): Option[(Statement, InferenceApplication.Direct)] = {
       for {
         inference <- context.availableInferences.find(_.id == inferenceId)
-        substitutions <- inference.generalizeSubstitutions(localSubstitutions, depth)
-        substitutedPremiseStatements <- inference.premises.map(_.statement.applySubstitutions(substitutions)).traverseOption.ifEmpty {
+        substitutions <- inference.generalizeSubstitutions(localSubstitutions)
+        substitutedPremiseStatements <- inference.premises.map(_.statement.applySubstitutions(substitutions, 0, context.depth)).traverseOption.ifEmpty {
           CachedProof.logger.info(
             (Seq(s"Could not substitute into premises of inference '${inference.name}'") ++
               inference.premises.map(_.serialized)
               :+ substitutions.toString
               ).mkString("\n"))
         }
-        substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions).ifEmpty {
+        substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions, 0, context.depth).ifEmpty {
           CachedProof.logger.info(Seq(
             s"Could not substitute into conclusion of inference '${inference.name}'",
             inference.conclusion.serialized,
@@ -38,7 +37,7 @@ object CachedInferenceApplication {
           ).mkString("\n"))
         }
         validatedReferences <- cachedReferences.validate(substitutedPremiseStatements)
-      } yield (substitutedConclusion, InferenceApplication.Direct(inference, substitutions, validatedReferences, isRearrangement, depth))
+      } yield (substitutedConclusion, InferenceApplication.Direct(inference, substitutions, validatedReferences, isRearrangement))
     }
 
     override def serializedLines = Seq(s"direct ${if (isRearrangement) "rearranged " else ""}$inferenceId ${localSubstitutions.serialized} {") ++
@@ -52,7 +51,7 @@ object CachedInferenceApplication {
         inferenceId <- Parser.singleWord
         substitutions <- Inference.Substitutions.parser
         references <- CachedReference.parser.listInBraces(None)
-      } yield Direct(inferenceId, substitutions, references, isRearrangement, parsingContext.parameterDepth)
+      } yield Direct(inferenceId, substitutions, references, isRearrangement)
     }
   }
 
@@ -63,8 +62,7 @@ object CachedInferenceApplication {
       transformation: StatementDefinition,
       transformedPremises: Seq[Premise],
       transformationProof: Seq[CachedStep],
-      isRearrangement: Boolean,
-      depth: Int)
+      isRearrangement: Boolean)
     extends CachedInferenceApplication
   {
     override def validate()(implicit context: ProvingContext): Option[(Statement, InferenceApplication.Transformed)] = {
@@ -77,15 +75,15 @@ object CachedInferenceApplication {
           context.deductionStatement.toSeq ++ context.scopingStatement.toSeq))
         transformedConclusion <- validatedTransformationProof.flatMap(_.provenStatements).lastOption.map(_.statement)
         transformedInference = Inference.Transformed(inference, transformedPremises, transformedConclusion)
-        substitutions <- transformedInference.generalizeSubstitutions(localSubstitutions, depth)
-        substitutedPremiseStatements <- transformedPremises.map(_.statement.applySubstitutions(substitutions)).traverseOption.ifEmpty {
+        substitutions <- transformedInference.generalizeSubstitutions(localSubstitutions)
+        substitutedPremiseStatements <- transformedPremises.map(_.statement.applySubstitutions(substitutions, 0, context.depth)).traverseOption.ifEmpty {
           CachedProof.logger.info(
             (Seq(s"Could not substitute into premises of transformed inference '${inference.name}'") ++
               transformedPremises.map(_.serialized)
               :+ substitutions.toString
               ).mkString("\n"))
         }
-        substitutedConclusion <- transformedConclusion.applySubstitutions(substitutions).ifEmpty {
+        substitutedConclusion <- transformedConclusion.applySubstitutions(substitutions, 0, context.depth).ifEmpty {
           CachedProof.logger.info(Seq(
             s"Could not substitute into conclusion of transformed inference '${inference.name}'",
             transformedConclusion.serialized,
@@ -101,8 +99,7 @@ object CachedInferenceApplication {
         transformedPremises,
         transformedConclusion,
         validatedTransformationProof,
-        isRearrangement,
-        depth))
+        isRearrangement))
     }
     override def serializedLines = Seq(s"transformed ${if (isRearrangement) "rearranged " else ""}${transformation.symbol} $inferenceId ${localSubstitutions.serialized} {") ++
       cachedReferences.flatMap(_.serializedLines).indent ++
@@ -132,8 +129,7 @@ object CachedInferenceApplication {
         transformation,
         transformedPremises,
         transformationProof,
-        isRearrangement,
-        parsingContext.parameterDepth)
+        isRearrangement)
     }
   }
 

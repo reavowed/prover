@@ -5,69 +5,91 @@ import net.prover.model.entries.ExpressionDefinition
 
 import scala.collection.immutable.Nil
 
-trait DefinedExpression[ExpressionType <: Expression] extends Expression {
+trait DefinedExpression[ExpressionType <: Expression] extends Expression with TypedExpression[ExpressionType] {
   def components: Seq[Expression]
   def scopedBoundVariableNames: Seq[String]
   def definition: ExpressionDefinition
 
   def getMatch(other: Expression): Option[Seq[Expression]]
-  def update(newComponents: Seq[Expression], newDepth: Int): ExpressionType
+  def update(newComponents: Seq[Expression]): ExpressionType
 
-  override def reduceDepth(difference: Int, insertionPoint: Int): Option[ExpressionType] = {
-    if (depth >= difference)
-      components.map(_.reduceDepth(difference, insertionPoint)).traverseOption.map(update(_, depth - difference))
-    else
-      None
+  private def increaseDepth(internalDepth: Int) = if (scopedBoundVariableNames.nonEmpty) internalDepth + 1 else internalDepth
+
+  override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {
+    update(components.map(_.insertExternalParameters(numberOfParametersToInsert, increaseDepth(internalDepth))))
   }
-  override def specify(targetArguments: ArgumentList): ExpressionType = {
-    if (depth == 0) throw new Exception("Cannot specify base-level expression")
-    update(components.map(_.specify(targetArguments)), depth - 1)
+  override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType] = {
+    components
+      .map(_.removeExternalParameters(numberOfParametersToRemove, increaseDepth(internalDepth)))
+      .traverseOption
+      .map(update)
+  }
+
+  override def specify(
+    targetArguments: Seq[Term],
+    internalDepth: Int,
+    externalDepth: Int
+  ): ExpressionType = {
+    update(components.map(_.specify(targetArguments, increaseDepth(internalDepth), externalDepth)))
   }
   def specifyWithSubstitutions(
-    targetArguments: ArgumentList,
-    substitutions: Substitutions
+    targetArguments: Seq[Term],
+    substitutions: Substitutions,
+    internalDepth: Int,
+    previousInternalDepth: Int,
+    externalDepth: Int
   ) = {
-    if (depth == 0) throw new Exception("Cannot specify base-level expression")
     components
-      .map(_.specifyWithSubstitutions(targetArguments, substitutions)).traverseOption
-      .map(update(_, depth + targetArguments.depth - 1))
-  }
-  override def increaseDepth(additionalDepth: Int, insertionPoint: Int): ExpressionType = {
-    update(components.map(_.increaseDepth(additionalDepth, insertionPoint)), depth + additionalDepth)
+      .map(_.specifyWithSubstitutions(targetArguments, substitutions, increaseDepth(internalDepth), previousInternalDepth, externalDepth)).traverseOption
+      .map(update)
   }
 
   override def requiredSubstitutions = components.requiredSubstitutions
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)],
-    structuralHints: Seq[Substitutions]
+    applicativeHints: Seq[(Substitutions, Seq[Term])],
+    structuralHints: Seq[Substitutions],
+    internalDepth: Int,
+    externalDepth: Int
   ) = {
     getMatch(other)
-      .map(components.calculateSubstitutions(_, substitutions, applicativeHints, structuralHints))
+      .map(components.calculateSubstitutions(_, substitutions, applicativeHints, structuralHints, increaseDepth(internalDepth), externalDepth))
       .getOrElse(Nil)
   }
-  override def applySubstitutions(substitutions: Substitutions): Option[ExpressionType] = {
-    components.applySubstitutions(substitutions).map(update(_, depth + substitutions.depth))
+  override def applySubstitutions(
+    substitutions: Substitutions,
+    internalDepth: Int,
+    externalDepth: Int
+  ): Option[ExpressionType] = {
+    components.applySubstitutions(substitutions, increaseDepth(internalDepth), externalDepth).map(update)
   }
-  override def calculateApplicatives(baseArguments: ArgumentList, substitutions: Substitutions): Seq[(ExpressionType, Substitutions)] = {
-    components.calculateApplicatives(baseArguments, substitutions)
-      .map(_.mapLeft(update(_, depth - baseArguments.depth + 1)))
+  override def calculateApplicatives(
+    baseArguments: Seq[Term],
+    substitutions: Substitutions,
+    internalDepth: Int,
+    previousInternalDepth: Int,
+    externalDepth: Int
+  ): Seq[(ExpressionType, Substitutions)] = {
+    components.calculateApplicatives(baseArguments, substitutions, increaseDepth(internalDepth), previousInternalDepth, externalDepth)
+      .map(_.mapLeft(update))
   }
 
   override def condense(
     other: Expression,
     thisSubstitutions: Substitutions,
     otherSubstitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, ArgumentList)],
-    structuralHints: Seq[Substitutions]
+    applicativeHints: Seq[(Substitutions, Seq[Term])],
+    structuralHints: Seq[Substitutions],
+    internalDepth: Int,
+    externalDepth: Int
   ) = {
-    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints) ++
+    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints, increaseDepth(internalDepth), externalDepth) ++
       getMatch(other).toSeq.flatMap { otherComponents =>
         components.zip(otherComponents)
-          .flatMapFoldProduct((thisSubstitutions, otherSubstitutions, Seq.empty[(Substitutions, ArgumentList)], Seq.empty[Substitutions]))
+          .flatMapFoldProduct((thisSubstitutions, otherSubstitutions, Seq.empty[(Substitutions, Seq[Term])], Seq.empty[Substitutions]))
           { case ((thisSubstitutionsSoFar, otherSubstitutionsSoFar, applicativeHintsSoFar, structuralHintsSoFar), (component, otherComponent)) =>
-            component.condense(otherComponent, thisSubstitutionsSoFar, otherSubstitutionsSoFar, applicativeHints, structuralHints)
+            component.condense(otherComponent, thisSubstitutionsSoFar, otherSubstitutionsSoFar, applicativeHints, structuralHints, increaseDepth(internalDepth), externalDepth)
               .map(t => (t._1, t._2, applicativeHintsSoFar ++ t._3, structuralHintsSoFar ++ t._4))
           }
       }

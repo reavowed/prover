@@ -3,7 +3,7 @@ Definition of a function.
 statement function (f A B)
   name (a Function)
   format (f: A → B in parens)
-  definition (∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $.0 $$0 f)
+  definition (∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f)
 
 shorthand ∀ f → function f A B φ as ((∀f: A → B)φ)
 
@@ -14,7 +14,7 @@ shorthand ∃! f ∧ function f A B φ as ((∃!f: A → B)φ)
 theorem Function Application Is Unique
 premise function f A B
 premise ∈ a A
-prove ∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $.0 $$0 f
+prove ∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
 prove ∃! y ∈ orderedPair a $0 f
 qed
 
@@ -26,7 +26,7 @@ term apply (f a)
 
 theorem Function Is Subset of Product
 premise function f A B
-prove ∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $.0 $$0 f
+prove ∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
 prove ⊆ f × A B
 qed
 
@@ -56,7 +56,7 @@ qed
 theorem Extend Function Range to Superset
 premise function f A B
 premise ⊆ B C elidable
-prove ∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $.0 $$0 f
+prove ∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
 prove ⊆ f × A C
   via ⊆ × A B × A C
 prove function f A C
@@ -77,94 +77,94 @@ prove ⊆ f × A B
 take x {
   assume ∈ $0 f {
     prove ∈ $0 × A B
-    prove ∃ a ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0
-    let a ∧ ∈ $$0 A ∃ b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0 {
-      let b ∧ ∈ $$$0 B = $..0 orderedPair $$.0 $$$0 {
-        prove ∈ orderedPair $$.0 $$$0 f
-        prove = $$$0 apply f $$.0
-        prove = $..0 orderedPair $$.0 apply f $$.0
-        prove ∧ ∈ $$.0 A = $..0 orderedPair $$.0 apply f $$.0
-        prove ∃ a ∧ ∈ $$$$0 A = $...0 orderedPair $$$$0 apply f $$$$0
+    prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0
+    let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
+      let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
+        prove ∈ orderedPair $$0 $0 f
+        prove = $0 apply f $$0
+        prove = $$$0 orderedPair $$0 apply f $$0
+        prove ∧ ∈ $$0 A = $$$0 orderedPair $$0 apply f $$0
+        prove ∃ a ∧ ∈ $0 A = $$$$0 orderedPair $0 apply f $0
       }
     }
   }
-  assume ∃ a ∧ ∈ $$0 A = $.0 orderedPair $$0 apply f $$0 {
-    let a ∧ ∈ $$0 A = $.0 orderedPair $$0 apply f $$0 {
-      prove ∈ orderedPair $$0 apply f $$0 f
-      prove ∈ $.0 f
+  assume ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 {
+    let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 {
+      prove ∈ orderedPair $0 apply f $0 f
+      prove ∈ $$0 f
     }
   }
 }
-prove ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $$0 A = $.0 orderedPair $$0 apply f $$0
+prove ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
 qed
 
 theorem Functions with Same Values Are Equal
 premise function f A B
 premise function g A B
 premise ∀ x → ∈ $0 A = apply f $0 apply g $0
-prove ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $$0 A = $.0 orderedPair $$0 apply f $$0
-prove ∀ x ↔ ∈ $0 g ∃ a ∧ ∈ $$0 A = $.0 orderedPair $$0 apply g $$0
+prove ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
+prove ∀ x ↔ ∈ $0 g ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0
 take x {
-  assume ∃ a ∧ ∈ $$0 A = $.0 orderedPair $$0 apply f $$0 {
-    let a ∧ ∈ $$0 A = $.0 orderedPair $$0 apply f $$0 {
-      prove = apply f $$0 apply g $$0
-      prove ∧ ∈ $$0 A = $.0 orderedPair $$0 apply g $$0
-      prove ∃ a ∧ ∈ $$$0 A = $..0 orderedPair $$$0 apply g $$$0
+  assume ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 {
+    let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 {
+      prove = apply f $0 apply g $0
+      prove ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0
+      prove ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply g $0
     }
   }
-  assume ∃ a ∧ ∈ $$0 A = $.0 orderedPair $$0 apply g $$0 {
-    let a ∧ ∈ $$0 A = $.0 orderedPair $$0 apply g $$0 {
-      prove = apply f $$0 apply g $$0
-      prove ∧ ∈ $$0 A = $.0 orderedPair $$0 apply f $$0
-      prove ∃ a ∧ ∈ $$$0 A = $..0 orderedPair $$$0 apply f $$$0
+  assume ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 {
+    let a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 {
+      prove = apply f $0 apply g $0
+      prove ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
+      prove ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0
     }
   }
 }
-prove ∀ x ↔ ∃ a ∧ ∈ $$0 A = $.0 orderedPair $$0 apply f $$0 ∃ a ∧ ∈ $$0 A = $.0 orderedPair $$0 apply g $$0
+prove ∀ x ↔ ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0
 prove = f g
 qed
 
 theorem Function With Specified Values Is Unique
-premise ∃ f ∧ function $0 A B ∀ x → ∈ $$0 A = apply $.0 $$0 with ($$0) F
+premise ∃ f ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F
 take f {
   take g {
-    assume ∧ ∧ function $.0 A B ∀ x → ∈ $$$0 A = apply $..0 $$$0 with ($$$0) F ∧ function $$0 A B ∀ x → ∈ $$$0 A = apply $$.0 $$$0 with ($$$0) F {
+    assume ∧ ∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F {
       take x {
-        assume ∈ $$$0 A {
-          prove = apply $..0 $$$0 with ($$$0) F
-          prove = apply $$.0 $$$0 with ($$$0) F
-          prove = apply $..0 $$$0 apply $$.0 $$$0
+        assume ∈ $0 A {
+          prove = apply $$$0 $0 with ($0) F
+          prove = apply $$0 $0 with ($0) F
+          prove = apply $$$0 $0 apply $$0 $0
         }
       }
-      prove = $.0 $$0
+      prove = $$0 $0
     }
   }
 }
-prove ∃! f ∧ function $0 A B ∀ x → ∈ $$0 A = apply $.0 $$0 with ($$0) F
+prove ∃! f ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F
 qed
 
 theorem Function Space Is Unique
-let S = $0 comprehension f powerSet × A B function $$0 A B {
+let S = $0 comprehension f powerSet × A B function $0 A B {
   take f {
-    assume function $$0 A B {
-      prove ⊆ $$0 × A B
-      prove ∈ $$0 powerSet × A B
-      prove ∈ $$0 $.0
+    assume function $0 A B {
+      prove ⊆ $0 × A B
+      prove ∈ $0 powerSet × A B
+      prove ∈ $0 $$0
     }
-    assume ∈ $$0 $.0 {
-      prove function $$0 A B
+    assume ∈ $0 $$0 {
+      prove function $0 A B
     }
   }
-  prove ∀ f ↔ ∈ $$0 $.0 function $$0 A B
-  prove ∃ S ∀ f ↔ ∈ $$$0 $$.0 function $$$0 A B
-  prove ∃! S ∀ f ↔ ∈ $$$0 $$.0 function $$$0 A B
+  prove ∀ f ↔ ∈ $0 $$0 function $0 A B
+  prove ∃ S ∀ f ↔ ∈ $0 $$0 function $0 A B
+  prove ∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B
 }
 qed
 
 term functionSpace (A B)
   name (Function Space)
   format (B^A)
-  (∀ f ↔ ∈ $$0 $.0 function $$0 A B)
+  (∀ f ↔ ∈ $0 $$0 function $0 A B)
 
 theorem Element of Function Space Is Function
 premise ∈ f functionSpace A B

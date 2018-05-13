@@ -30,7 +30,7 @@ object Template {
   case class FunctionParameter(parameter: expressions.FunctionParameter) extends Template {
     override def names = Nil
     override def matchExpression(expression: Expression) = expression match {
-      case expressions.FunctionParameter(parameter.index, level, depth) if (depth - level) == (parameter.depth - parameter.level) => Some(Nil)
+      case expressions.FunctionParameter(parameter.index, parameter.level) => Some(Nil)
       case _ => None
     }
     override def serialized = parameter.toString
@@ -43,7 +43,7 @@ object Template {
   {
     override def names = boundVariableNames ++ components.flatMap(_.names)
     override def matchExpression(expression: Expression) = expression match {
-      case definedStatement @ expressions.DefinedStatement(matchedComponents, `definition`, _) =>
+      case definedStatement @ expressions.DefinedStatement(matchedComponents, `definition`) =>
         for {
           pairs <- components.zipStrict(matchedComponents)
           submatches <- pairs.map { case (a, b) => a.matchExpression(b) }.traverseOption
@@ -61,7 +61,7 @@ object Template {
   {
     override def names = boundVariableNames ++ components.flatMap(_.names)
     override def matchExpression(expression: Expression) = expression match {
-      case definedTerm @ expressions.DefinedTerm(matchedComponents, `definition`, _) =>
+      case definedTerm @ expressions.DefinedTerm(matchedComponents, `definition`) =>
         for {
           pairs <- components.zipStrict(matchedComponents)
           submatches <- pairs.map { case (a, b) => a.matchExpression(b) }.traverseOption

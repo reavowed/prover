@@ -89,7 +89,7 @@ object StepOutline {
       .innermostAssertionStep
     override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
       val assumptionStep = Assumption(definingAssumption, steps, None)
-        .prove(reference.withSuffix(".0"))(context.increaseDepth(1, context.depth))
+        .prove(reference.withSuffix(".0"))(context.insertExternalParameter())
       val deduction = assumptionStep.provenStatements.lastOption.getOrElse(throw ProvingException(
         "Naming step did not have a conclusion",
         location))
@@ -100,7 +100,7 @@ object StepOutline {
         .getOrElse(throw ProvingException(
           "Naming step did not have a conclusion",
           location))
-      val outerAssertion = innerAssertion.statement.reduceDepth(1, context.depth)
+      val outerAssertion = innerAssertion.statement.removeExternalParameters(1, 0)
         .getOrElse(throw ProvingException(
           s"Assertion $innerAssertion was not independent of $variableName",
           location))
@@ -121,7 +121,7 @@ object StepOutline {
       for {
         location <- Parser.location
         variableName <- Parser.singleWord
-        updatedContext = context.addParameterList(Seq(variableName))
+        updatedContext = context.addParameters(variableName)
         definingAssumption <- Statement.parser(updatedContext)
         steps <- listParser(updatedContext).inBraces
       } yield {
@@ -137,7 +137,7 @@ object StepOutline {
     extends StepOutline
   {
     override def prove(reference: Reference.Direct)(implicit context: ProvingContext) = {
-      val provenSteps = steps.prove(Some(reference))(context.increaseDepth(1, context.depth))
+      val provenSteps = steps.prove(Some(reference))(context.insertExternalParameter())
       val scopingStatement = context.scopingStatement
         .getOrElse(throw ProvingException("Cannot prove a deduction without an appropriate statement definition", location))
       Step.ScopedVariable(variableName, provenSteps, scopingStatement, reference)
@@ -148,7 +148,7 @@ object StepOutline {
       for {
         location <- Parser.location
         variableName <- Parser.singleWord
-        updatedContext = context.addParameterList(Seq(variableName))
+        updatedContext = context.addParameters(variableName)
         steps <- listParser(updatedContext).inBraces
       } yield ScopedVariable(variableName, steps, Some(location))
     }

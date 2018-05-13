@@ -2,12 +2,12 @@ Introduce the uniqueness quantifier, ∃!.
 
 statement ∃! ($x with x φ)
   format ((∃!x)φ)
-  definition (∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($.0) φ with ($$0) φ = $.0 $$0)
+  definition (∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0)
 
 theorem Value for Unique Existence
 premise ∃! x with ($0) φ elidable
 premise ∀ x → with ($0) φ ψ
-prove ∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($.0) φ with ($$0) φ = $.0 $$0
+prove ∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0
 prove ψ
 qed
 
@@ -15,8 +15,8 @@ theorem Every Set Is Unique
 prove ∃ x = $0 a
 take x {
   take y {
-    assume ∧ = $.0 a = $$0 a {
-      prove = $.0 $$0
+    assume ∧ = $$0 a = $0 a {
+      prove = $$0 $0
     }
   }
 }
@@ -27,7 +27,7 @@ theorem Two Values Satisfying Unique Condition Are Equal
 premise ∃! x with ($0) φ
 premise with (a) φ
 premise with (b) φ
-prove ∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($.0) φ with ($$0) φ = $.0 $$0
+prove ∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0
 prove ∀ y → ∧ with (a) φ with ($0) φ = a $0
 prove → ∧ with (a) φ with (b) φ = a b
 prove = a b
@@ -38,10 +38,10 @@ premise ∃ x with ($0) φ
 premise ∀ x → with ($0) φ = $0 a
 take x {
   take y {
-    assume ∧ with ($.0) φ with ($$0) φ {
-      prove = $.0 a
+    assume ∧ with ($$0) φ with ($0) φ {
       prove = $$0 a
-      prove = $.0 $$0
+      prove = $0 a
+      prove = $$0 $0
     }
   }
 }
@@ -73,15 +73,15 @@ theorem Existence of Unique Value
 premise ∃! x with ($0) φ
 let a with ($0) φ {
   take x {
-    assume with ($$0) φ {
-      prove = $$0 $.0
+    assume with ($0) φ {
+      prove = $0 $$0
     }
-    assume = $$0 $.0 {
-      prove with ($$0) φ
+    assume = $0 $$0 {
+      prove with ($0) φ
     }
-    prove ↔ with ($$0) φ = $$0 $.0
+    prove ↔ with ($0) φ = $0 $$0
   }
-  prove ∃ y ∀ x ↔ with ($$$0) φ = $$$0 $$.0
+  prove ∃ y ∀ x ↔ with ($0) φ = $0 $$0
 }
 qed
 

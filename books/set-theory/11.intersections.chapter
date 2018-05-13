@@ -4,15 +4,15 @@ theorem Intersection over a Class
 premise ∃ x with ($0) φ
 let a with ($0) φ {
   take y {
-    assume ∀ x → with ($$$0) φ ∈ $$.0 $$$0 {
-      prove ∈ $$0 $.0
+    assume ∀ x → with ($0) φ ∈ $$0 $0 {
+      prove ∈ $0 $$0
     }
-    prove ↔ ∧ ∈ $$0 $.0 ∀ x → with ($$$0) φ ∈ $$.0 $$$0 ∀ x → with ($$$0) φ ∈ $$.0 $$$0
+    prove ↔ ∧ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 ∀ x → with ($0) φ ∈ $$0 $0
   }
-  let S = $$0 comprehension z $.0 ∀ x → with ($$$$0) φ ∈ $$$.0 $$$$0 {
-    prove ∀ y ↔ ∈ $$$0 $$.0 ∧ ∈ $$$0 $..0 ∀ x → with ($$$$0) φ ∈ $$$.0 $$$$0
-    prove ∀ y ↔ ∈ $$$0 $$.0 ∀ x → with ($$$$0) φ ∈ $$$.0 $$$$0
-    prove ∃ Y ∀ y ↔ ∈ $$$$0 $$$.0 ∀ x → with ($$$$$0) φ ∈ $$$$.0 $$$$$0
+  let S = $0 comprehension z $$$0 ∀ x → with ($0) φ ∈ $$0 $0 {
+    prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0
+    prove ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
+    prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
   }
 }
 qed
@@ -20,24 +20,24 @@ qed
 theorem Arbitrary Intersections Are Unique
 premise ¬ = a ∅
 prove ∃ x ∈ $0 a
-prove ∃ Y ∀ y ↔ ∈ $$0 $.0 ∀ x → ∈ $$$0 a ∈ $$.0 $$$0
-prove ∃! Y ∀ y ↔ ∈ $$0 $.0 ∀ x → ∈ $$$0 a ∈ $$.0 $$$0
+prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 a ∈ $$0 $0
+prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 a ∈ $$0 $0
 qed
 
 term intersection (a)
   name (Arbitrary Intersection)
   format (⋂a)
   premises (¬ = a ∅)
-  (∀ y ↔ ∈ $$0 $.0 ∀ x → ∈ $$$0 a ∈ $$.0 $$$0)
+  (∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 a ∈ $$0 $0)
 
 term ∩ (a b)
   (= $0 intersection pair a b)
 
 theorem Membership Condition for Binary Intersection
 prove ¬ = pair a b ∅
-prove ∀ x ↔ ∈ $0 intersection pair a b ∀ y → ∈ $$0 pair a b ∈ $.0 $$0
+prove ∀ x ↔ ∈ $0 intersection pair a b ∀ y → ∈ $0 pair a b ∈ $$0 $0
 take x {
-  assume ∀ y → ∈ $$0 pair a b ∈ $.0 $$0 {
+  assume ∀ y → ∈ $0 pair a b ∈ $$0 $0 {
     prove ∈ a pair a b
     prove ∈ $0 a
     prove ∈ b pair a b
@@ -46,20 +46,20 @@ take x {
   }
   assume ∧ ∈ $0 a ∈ $0 b {
     take y {
-      assume = $$0 a {
-        prove ∈ $.0 $$0
+      assume = $0 a {
+        prove ∈ $$0 $0
       }
-      assume = $$0 b {
-        prove ∈ $.0 $$0
+      assume = $0 b {
+        prove ∈ $$0 $0
       }
-      assume ∨ = $$0 a = $$0 b {
-        prove ∈ $.0 $$0
+      assume ∨ = $0 a = $0 b {
+        prove ∈ $$0 $0
       }
     }
-    prove ∀ y ↔ ∈ $$0 pair a b ∨ = $$0 a = $$0 b
-    prove ∀ y → ∈ $$0 pair a b ∈ $.0 $$0
+    prove ∀ y ↔ ∈ $0 pair a b ∨ = $0 a = $0 b
+    prove ∀ y → ∈ $0 pair a b ∈ $$0 $0
   }
-  prove ↔ ∀ y → ∈ $$0 pair a b ∈ $.0 $$0 ∧ ∈ $0 a ∈ $0 b
+  prove ↔ ∀ y → ∈ $0 pair a b ∈ $$0 $0 ∧ ∈ $0 a ∈ $0 b
 }
 prove ∀ x ↔ ∈ $0 intersection pair a b ∧ ∈ $0 a ∈ $0 b
 prove = ∩ a b intersection pair a b

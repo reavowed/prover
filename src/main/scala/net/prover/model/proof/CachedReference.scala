@@ -70,30 +70,27 @@ object CachedReference {
       inferenceId: String,
       inferenceSubstitutions: Inference.Substitutions,
       inferenceReference: CachedReference.ToSingleLine,
-      simplificationPath: Seq[Int],
-      depth: Int)
+      simplificationPath: Seq[Int])
     extends ToSingleLine
   {
     private def cachedInferenceApplication = CachedInferenceApplication.Direct(
       inferenceId,
       inferenceSubstitutions,
       Seq(inferenceReference),
-      isRearrangement = true,
-      depth)
+      isRearrangement = true)
     override def validate()(implicit context: ProvingContext) = {
       for {
         (conclusion, inferenceApplication) <- cachedInferenceApplication.validate()
         premise <- inferenceApplication.inference.premises.single.map(_.statement)
         reference <- inferenceApplication.references.single.flatMap(_.asOptionalInstanceOf[Reference.ToSingleLine])
-        substitutedPremise <- premise.applySubstitutions(inferenceApplication.substitutions)
+        substitutedPremise <- premise.applySubstitutions(inferenceApplication.substitutions, 0, 0)
         validatedSimplificationPath <- substitutedPremise.findComponentPath(conclusion)
       } yield (
         Reference.Simplification(
           inferenceApplication.inference,
           inferenceApplication.substitutions,
           reference,
-          validatedSimplificationPath,
-          depth),
+          validatedSimplificationPath),
         conclusion)
     }
     override def serializedLines = {
@@ -108,7 +105,7 @@ object CachedReference {
         substitutions <- Inference.Substitutions.parser
         reference <- CachedReference.parser.map(_.asInstanceOf[CachedReference.ToSingleLine])
         simplificationPath <- Parser.int.listInParens(None)
-      } yield Simplification(inferenceId, substitutions, reference, simplificationPath, parsingContext.parameterDepth)
+      } yield Simplification(inferenceId, substitutions, reference, simplificationPath)
     }
   }
 
