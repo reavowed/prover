@@ -4,36 +4,40 @@ axiom Axiom of Infinity
 conclusion ∃ X inductive $0
 
 theorem The Natural Numbers Exist
-prove ∃ X inductive $0
-prove ∃ Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0
-prove ∃! Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0
-qed
+{
+  assert ∃ X inductive $0 direct bfdf6d068ad4edf797fca0b9cf9945bf0e12f0a0abe1a2f692f69e1e5e9973e6 () () () () ()
+  assert ∃ Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0 direct abba1013aa8f6c308803b75be9ad5743dbacab674c1314b1a8b0e4550d3e8153 () () (inductive $0) () (direct 0)
+  assert ∃! Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0 direct 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∀ X → inductive $0 ∈ $$0 $0) () (direct 1)
+}
 
 term ℕ ()
   (∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0)
 
 theorem An Element of All Inductive Sets Is a Natural Number
 premise ∀ X → inductive $0 ∈ n $0
-prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0
-prove ∈ n ℕ
-qed
+{
+  assert ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0 direct 69ab0035b05f277d98392c7b596d7e0dfef8953dd2f283a416a33e3c3ffcec6f () () () () ()
+  assert ∈ n ℕ transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (n) (∈ $0 ℕ, ∀ X → inductive $0 ∈ $$0 $0) () (direct 0, direct p0)
+}
 
 theorem A Natural Number Is an Element of Any Inductive Set
 premise ∈ n ℕ
 premise inductive S
-prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0
-prove ∀ X → inductive $0 ∈ n $0
-prove ∈ n S
-qed
+{
+  assert ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0 direct 69ab0035b05f277d98392c7b596d7e0dfef8953dd2f283a416a33e3c3ffcec6f () () () () ()
+  assert ∀ X → inductive $0 ∈ n $0 transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (n) (∈ $0 ℕ, ∀ X → inductive $0 ∈ $$0 $0) () (direct 0, direct p0)
+  assert ∈ n S transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (S) (inductive $0, ∈ n $0) () (direct 1, direct p1)
+}
 
 theorem A Successor of a Natural Number Is a Natural Number
 premise ∈ n ℕ
-take X {
-  assume inductive $0 {
-    prove ∈ n $0
-    prove ∧ ∈ ∅ $0 ∀ n → ∈ $0 $$0 ∈ successor $0 $$0
-    prove ∈ successor n $0
+{
+  take X {
+    assume inductive $0 {
+      assert ∈ n $0 direct ed2d7dba0ae289c7dea2faa9f19c4e1f2271e4e12bdff2029ea1587d966ac27c () (n, $0) () () (direct p0, direct 0.0a)
+      assert ∧ ∈ ∅ $0 ∀ n → ∈ $0 $$0 ∈ successor $0 $$0 direct 9fdf4a2b45725ccf4717edcf7aa0cdc5c999cd6fa1dcc06464e1e455cdbbff3c () ($0) () () (direct 0.0a)
+      assert ∈ successor n $0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (n) (∈ $$0 $0, ∈ successor $$0 $0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ ∅ $0, ∀ n → ∈ $0 $$0 ∈ successor $0 $$0) () () () direct 0.0.1 (1), direct 0.0.0)
+    }
   }
+  assert ∈ successor n ℕ direct 3094218044e941a9ae278629bb25c91256f3cf5b82853fae2c5155f82e0b64f6 () (successor n) () () (compound 0 compound 0.0a direct 0.0.2)
 }
-prove ∈ successor n ℕ
-qed

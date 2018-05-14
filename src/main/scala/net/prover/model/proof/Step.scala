@@ -9,7 +9,6 @@ sealed trait Step {
   def provenStatements: Seq[ProvenStatement]
   def referencedInferenceIds: Set[String]
   def referenceMap: ReferenceMap
-  def cached: CachedStep
   def length: Int
   def intermediateReferences: Seq[String]
   def lastReference: Option[String]
@@ -33,7 +32,6 @@ object Step {
     override def provenStatements = Seq(ProvenStatement(assertion, reference))
     override def referencedInferenceIds = inferenceApplication.referencedInferenceIds
     override def referenceMap = ReferenceMap(reference.value -> inferenceApplication.lineReferences)
-    override def cached = CachedStep.Assertion(assertion, inferenceApplication.cached, reference)
     override def length = 1
     override def intermediateReferences = Nil
     override def lastReference = Some(reference.value)
@@ -55,9 +53,15 @@ object Step {
     }
     override def isSingleAssertion = true
 
-    def elidedStatementOption = inferenceApplication.references.ofType[Reference.Elided].headOption.map(_.inferenceApplication.conclusion)
-    override def serializedLines = Seq(s"prove ${assertion.serialized}") ++
-      elidedStatementOption.map(s => s"via ${s.serialized}").toSeq.indent
+    override def serializedLines = Seq(s"assert ${assertion.serialized} ${inferenceApplication.serialized}")
+  }
+  object Assertion {
+    def parser(reference: Reference.Direct)(implicit context: ParsingContext): Parser[Assertion] = {
+      for {
+        assertion <- Statement.parser
+        inferenceApplication <- InferenceApplication.parser
+      } yield Assertion(assertion, inferenceApplication, reference)
+    }
   }
 
   case class Assumption(
@@ -70,11 +74,10 @@ object Step {
     override def provenStatements = substeps.flatMap(_.provenStatements).map { innerProvenStatement =>
       ProvenStatement(
         DefinedStatement(Seq(assumption, innerProvenStatement.statement), deductionStatement)(Nil),
-        innerProvenStatement.reference.add(reference))
+        innerProvenStatement.reference.add(reference.getChildForAssumption))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether
-    override def cached = CachedStep.Assumption(assumption, substeps.map(_.cached), reference)
     override def length = substeps.map(_.length).sum
     override def intermediateReferences = substeps.intermediateReferences
     override def lastReference = substeps.lastOption.flatMap(_.lastReference)
@@ -116,20 +119,35 @@ object Step {
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
+  object Assumption {
+    def parser(reference: Reference.Direct)(implicit context: ParsingContext): Parser[Assumption] = {
+      val deductionStatement = context.deductionStatement
+        .getOrElse(throw new Exception("Cannot prove a deduction without an appropriate statement definition"))
+      for {
+        assumption <- Statement.parser
+        substeps <- listParser(Some(reference)).inBraces
+      } yield Assumption(assumption, substeps, deductionStatement, reference)
+    }
+  }
 
   case class Naming(
       variableName: String,
-      assumptionStep: Step.Assumption,
-      assertionStep: Step.Assertion,
+      assumption: Statement,
+      substeps: Seq[Step],
+      finalInferenceApplication: InferenceApplication,
       reference: Reference.Direct)
     extends Step
   {
-    override def provenStatements = Seq(ProvenStatement(assertionStep.assertion, reference))
-    override def referencedInferenceIds = assumptionStep.referencedInferenceIds ++ assertionStep.referencedInferenceIds
-    override def referenceMap = assumptionStep.referenceMap ++ assertionStep.referenceMap
-    override def cached = CachedStep.Naming(variableName, assumptionStep.cached, assertionStep.cached, reference)
-    override def length = assumptionStep.length + 1
-    override def intermediateReferences = assumptionStep.intermediateReferences
+    private def assumptionReference = reference.getChildForAssumption
+    private def finalAssertionReference = reference.getChildForResult
+    private def finalAssertion = finalInferenceApplication.conclusion
+
+    override def provenStatements = Seq(ProvenStatement(finalAssertion, reference))
+    override def referencedInferenceIds = substeps.flatMap(_.referencedInferenceIds).toSet ++ finalInferenceApplication.referencedInferenceIds
+    override def referenceMap = substeps.map(_.referenceMap).foldTogether ++
+      ReferenceMap(finalAssertionReference.value -> finalInferenceApplication.lineReferences)
+    override def length = substeps.map(_.length).sum + 1
+    override def intermediateReferences = substeps.intermediateReferences
     override def lastReference = Some(reference.value)
     override def getLines(
       referenceMap: ReferenceMap,
@@ -139,20 +157,32 @@ object Step {
     ) = {
       val firstLine = ProofLine(
         s"Let $variableName be such that",
-        ProofLine.Expression.create(assumptionStep.assumption, referenceMap.getReferrers(assumptionStep.reference.value)),
-        Some(assertionStep.reference.value),
+        ProofLine.Expression.create(assumption, referenceMap.getReferrers(assumptionReference.value)),
+        Some(finalAssertionReference.value),
         indentLevel,
-        Some(ProofLine.InferenceLink(HtmlHelper.findInferenceToDisplay(assertionStep.inferenceApplication))))
-      val innerLines = assumptionStep.substeps.flatMapWithIndex((step, index) =>
+        Some(ProofLine.InferenceLink(HtmlHelper.findInferenceToDisplay(finalInferenceApplication))))
+      val innerLines = substeps.flatMapWithIndex((step, index) =>
         step.getLines(
           referenceMap,
           indentLevel,
-          if (index == assumptionStep.substeps.length - 1) Some(additionalReference.getOrElse(reference.value)) else None))
+          if (index == substeps.length - 1) Some(additionalReference.getOrElse(reference.value)) else None))
       firstLine +: innerLines
     }
-    override def serializedLines = Seq(s"let $variableName ${assumptionStep.assumption.serialized} {") ++
-      assumptionStep.substeps.flatMap(_.serializedLines).indent ++
+    override def serializedLines = Seq(s"let $variableName ${assumption.serialized} ${finalInferenceApplication.serialized} {") ++
+      substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
+  }
+
+  object Naming {
+    def parser(reference: Reference.Direct)(implicit context: ParsingContext): Parser[Naming] = {
+      for {
+        variableName <- Parser.singleWord
+        innerContext = context.addParameters(variableName)
+        assumption <- Statement.parser(innerContext)
+        finalInferenceApplication <- InferenceApplication.parser
+        substeps <- listParser(Some(reference))(innerContext).inBraces
+      } yield Naming(variableName, assumption, substeps, finalInferenceApplication, reference)
+    }
   }
 
   case class ScopedVariable(
@@ -175,7 +205,6 @@ object Step {
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether
-    override def cached = CachedStep.ScopedVariable(variableName, substeps.map(_.cached), reference)
     override def length = substeps.map(_.length).sum
     override def intermediateReferences = substeps.intermediateReferences
     override def lastReference = substeps.lastOption.flatMap(_.lastReference)
@@ -206,12 +235,38 @@ object Step {
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
+  object ScopedVariable {
+    def parser(reference: Reference.Direct)(implicit context: ParsingContext): Parser[ScopedVariable] = {
+      val scopingStatement = context.scopingStatement
+        .getOrElse(throw new Exception("Scoped variable step could not find scoping statement"))
+      for {
+        variableName <- Parser.singleWord
+        innerContext = context.addParameters(variableName)
+        substeps <- listParser(Some(reference))(innerContext).inBraces
+      } yield ScopedVariable(variableName, substeps, scopingStatement, reference)
+    }
+  }
 
   implicit class StepSeqOps(steps: Seq[Step]) {
     def intermediateReferences: Seq[String] = {
       steps.dropRight(1).flatMap { step =>
         step.intermediateReferences ++ step.lastReference.toSeq
       } ++ steps.lastOption.toSeq.flatMap(_.intermediateReferences)
+    }
+  }
+
+
+  def parser(reference: Reference.Direct)(implicit context: ParsingContext): Parser[Option[Step]] = {
+    Parser.selectOptionalWordParser {
+      case "assume" => Assumption.parser(reference)
+      case "let" => Naming.parser(reference)
+      case "assert" => Assertion.parser(reference)
+      case "take" => ScopedVariable.parser(reference)
+    }
+  }
+  def listParser(baseReference: Option[Reference.Direct])(implicit context: ParsingContext): Parser[Seq[Step]] = {
+    Parser.whileDefined[Step] { (_, index) =>
+      parser(Reference.nextReference(baseReference, index.toString))
     }
   }
 }

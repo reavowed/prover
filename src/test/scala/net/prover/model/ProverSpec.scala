@@ -134,6 +134,7 @@ trait ProverSpec extends Specification {
     "")
 
   implicit val defaultContext = ParsingContext(
+    inferences = Nil,
     statementDefinitions = Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
       ForAll, Exists, ExistsUnique,

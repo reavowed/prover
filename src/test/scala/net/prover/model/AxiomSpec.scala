@@ -1,22 +1,19 @@
 package net.prover.model
 
+import net.prover.model.entries.Axiom
 import net.prover.model.expressions.Statement
-import net.prover.model.entries.{Axiom, AxiomOutline}
 
 class AxiomSpec extends ProverSpec {
 
   def parseAxiom(text: String*): Axiom = {
-    val outline = AxiomOutline.parser("", "").parseAndDiscard(text.mkString("\n"))
-    outline.expand(outline.name.formatAsKey, "Test Chapter", "Test Book")
+    Axiom.parser("Test Chapter", "Test Book", identity).parseAndDiscard(text.mkString("\n"))
   }
 
   def axiom(title: String, key: String, premises: Seq[PremiseMagnet], conclusion: Statement): Axiom = {
     Axiom(
       title,
       key,
-      "test-chapter",
       "Test Chapter",
-      "test-book",
       "Test Book",
       premises,
       conclusion)

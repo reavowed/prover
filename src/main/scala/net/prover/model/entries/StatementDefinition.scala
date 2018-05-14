@@ -14,13 +14,15 @@ case class StatementDefinition(
     explicitName: Option[String],
     format: Format,
     definingStatement: Option[Statement],
-    chapterKey: String,
-    bookKey: String,
+    chapterTitle: String,
+    bookTitle: String,
     structureType: Option[StructureType])
-  extends ChapterEntry.SelfOutline
+  extends ChapterEntry
     with ExpressionDefinition
 {
   def name = explicitName.getOrElse(symbol)
+  def chapterKey = chapterTitle.formatAsKey
+  def bookKey = bookTitle.formatAsKey
 
   val defaultValue = {
     DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)
@@ -53,7 +55,7 @@ case class StatementDefinition(
       structureType.map(_.serialized).toSeq).indent
 }
 
-object StatementDefinition extends ChapterEntryParser {
+object StatementDefinition extends ChapterEntryParser.WithoutKey {
   override val name: String = "statement"
 
   sealed trait StructureType {
@@ -80,7 +82,7 @@ object StatementDefinition extends ChapterEntryParser {
     "definition",
     Statement.parser.inParens)
 
-  def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[StatementDefinition] = {
+  def parser(chapterTitle: String, bookTitle: String)(implicit context: ParsingContext): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
@@ -98,8 +100,8 @@ object StatementDefinition extends ChapterEntryParser {
         name,
         format,
         optionalDefiningStatement,
-        chapterKey,
-        bookKey,
+        chapterTitle,
+        bookTitle,
         structureType)
     }
   }

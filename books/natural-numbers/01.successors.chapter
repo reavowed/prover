@@ -7,56 +7,56 @@ term successor (n)
 
 theorem Element of Successor
 premise ∈ n successor m
-prove ∈ n ∪ m singleton m
-  via = successor m ∪ m singleton m
-prove ∨ ∈ n m ∈ n singleton m
-assume ∈ n singleton m {
-  prove = n m
+{
+  assert ∈ n ∪ m singleton m direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor m, ∪ m singleton m) (∈ n $0) () (elided direct 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (m) () () (), direct p0)
+  assert ∨ ∈ n m ∈ n singleton m direct cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (n, m, singleton m) () () (direct 0)
+  assume ∈ n singleton m {
+    assert = n m direct 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () (n, m) () () (direct 2a)
+  }
+  assert ∨ ∈ n m = n m direct fa95429f653e5cde94e123ab4a6683a012ceab4b2a8c35d1a6b43d900bae6b78 (∈ n m, ∈ n singleton m, = n m) () () () (direct 1, compound 2a direct 2.0)
 }
-prove ∨ ∈ n m = n m
-qed
 
 theorem A Set Is an Element of Its Successor
-prove ∈ n singleton n
-prove ∈ n ∪ n singleton n
-prove ∈ n successor n
-  via = successor n ∪ n singleton n
-qed
+{
+  assert ∈ n singleton n direct e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (n) () () ()
+  assert ∈ n ∪ n singleton n direct 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () (n, singleton n, n) () () (direct 0)
+  assert ∈ n successor n direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor n, ∪ n singleton n) (∈ n $0) () (elided direct 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (n) () () (), direct 1)
+}
 
 theorem An Element of a Set Is an Element of Its Successor
 premise ∈ n m
-prove ∈ n ∪ m singleton m
-prove ∈ n successor m
-  via = successor m ∪ m singleton m
-qed
+{
+  assert ∈ n ∪ m singleton m direct d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () (n, m, singleton m) () () (direct p0)
+  assert ∈ n successor m direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor m, ∪ m singleton m) (∈ n $0) () (elided direct 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (m) () () (), direct 0)
+}
 
 theorem A Set Is a Subset of Its Successor
-take x {
-  assume ∈ $0 n {
-    prove ∈ $0 successor n
+{
+  take x {
+    assume ∈ $0 n {
+      assert ∈ $0 successor n direct 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () ($0, n) () () (direct 0.0a)
+    }
   }
+  assert ⊆ n successor n direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (n, successor n) () () (compound 0 compound 0.0a direct 0.0.0)
 }
-prove ⊆ n successor n
-qed
 
 theorem Successors Are Unique
 premise = successor n successor m
-prove ∈ n successor m
-  via ∈ n successor n
-prove ∨ ∈ n m = n m
-prove ∈ m successor n
-  via ∈ m successor m
-prove ∨ ∈ m n = m n
-assume = m n {
-  prove = n m
+{
+  assert ∈ n successor m direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor n, successor m) (∈ n $0) () (direct p0, elided direct bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n) () () ())
+  assert ∨ ∈ n m = n m direct 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () (n, m) () () (direct 0)
+  assert ∈ m successor n direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor n, successor m) (∈ m $0) () (direct p0, elided direct bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (m) () () ())
+  assert ∨ ∈ m n = m n direct 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () (m, n) () () (direct 2)
+  assume = m n {
+    assert = n m direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (m, n) () () (direct 4a)
+  }
+  assert ∨ ∈ m n = n m direct fa95429f653e5cde94e123ab4a6683a012ceab4b2a8c35d1a6b43d900bae6b78 (∈ m n, = m n, = n m) () () () (direct 3, compound 4a direct 4.0)
+  assume ¬ = n m {
+    assert ∈ n m direct 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ n m, = n m) () () () (direct 1, direct 6a)
+    assert ∈ m n direct 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ m n, = n m) () () () (direct 5, direct 6a)
+    assert ∧ ∈ n m ∈ m n direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ n m, ∈ m n) () () () (direct 6.0, direct 6.1)
+    assert ¬ ∧ ∈ n m ∈ m n direct 3d8d0f70f0d112f2ba058cba8d7e7d1f2ddfee4cd21a4f1eff53781ca7f5224f () (n, m) () () ()
+    assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∧ ∈ n m ∈ m n) () () () (direct 6.2, direct 6.3)
+  }
+  assert = n m direct b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (= n m) () () () (compound 6a direct 6.4)
 }
-prove ∨ ∈ m n = n m
-assume ¬ = n m {
-  prove ∈ n m
-  prove ∈ m n
-  prove ∧ ∈ n m ∈ m n
-  prove ¬ ∧ ∈ n m ∈ m n
-  prove ⊥
-}
-prove = n m
-qed

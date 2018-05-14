@@ -6,6 +6,7 @@ statement inductive (S)
 
 theorem An Inductive Set Contains the Empty Set
 premise inductive S
-prove ∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S
-prove ∈ ∅ S
-qed
+{
+  assert ∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S direct 9fdf4a2b45725ccf4717edcf7aa0cdc5c999cd6fa1dcc06464e1e455cdbbff3c () (S) () () (direct p0)
+  assert ∈ ∅ S direct 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ ∅ S, ∀ n → ∈ $0 S ∈ successor $0 S) () () () (direct 0)
+}

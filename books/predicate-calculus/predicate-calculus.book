@@ -1,4 +1,3 @@
-Predicate Calculus
 import Propositional Calculus
 
 variables (φ ψ) (a b c F)

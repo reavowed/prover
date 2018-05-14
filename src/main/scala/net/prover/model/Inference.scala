@@ -5,6 +5,7 @@ import java.security.MessageDigest
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference._
 import net.prover.model.expressions._
+import net.prover.model.proof.Transformation
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
@@ -21,28 +22,32 @@ trait Inference {
     (premises.map(_.requiredSubstitutions) :+ conclusion.requiredSubstitutions).foldTogether
   }
 
-  def specifySubstitutions(substitutions: Substitutions): Inference.Substitutions = {
-    Inference.Substitutions(
-      requiredSubstitutions.statements.map(substitutions.statements.get),
-      requiredSubstitutions.terms.map(substitutions.terms.get),
-      requiredSubstitutions.predicates.map(substitutions.predicates.get),
-      requiredSubstitutions.functions.map(substitutions.functions.get))
-  }
-  def generalizeSubstitutions(inferenceSubstitutions: Inference.Substitutions): Option[Substitutions] = {
-    def zipAndMap[T](
-      f: Substitutions.Required => Seq[String],
-      g: Inference.Substitutions => Seq[Option[T]]
-    ): Option[Map[String, T]] = {
-      f(requiredSubstitutions).zipStrict(g(inferenceSubstitutions))
-        .map(_.collect { case (name, Some(t)) => (name, t) }.toMap)
-    }
+  def substitutionsParser(implicit parsingContext: ParsingContext): Parser[Substitutions] = {
     for {
-      statements <- zipAndMap(_.statements, _.statements)
-      terms <- zipAndMap(_.terms, _.terms)
-      predicates <- zipAndMap(_.predicates, _.predicates)
-      functions <- zipAndMap(_.functions, _.functions)
-    } yield Substitutions(statements, terms, predicates, functions)
+      statements <- Statement.parser.listInParens(Some(","))
+      terms <- Term.parser.listInParens(Some(","))
+      predicates <- Statement.parser(parsingContext.addParameterList(Nil)).listInParens(Some(","))
+      functions <- Term.parser(parsingContext.addParameterList(Nil)).listInParens(Some(","))
+    } yield {
+      Substitutions(
+        requiredSubstitutions.statements.zip(statements).toMap,
+        requiredSubstitutions.terms.zip(terms).toMap,
+        requiredSubstitutions.predicates.zip(predicates).toMap,
+        requiredSubstitutions.functions.zip(functions).toMap)
+    }
   }
+
+  def serializeSubstitutions(substitutions: Substitutions): String = {
+    Seq(
+      requiredSubstitutions.statements.map(substitutions.statements.apply),
+      requiredSubstitutions.terms.map(substitutions.terms.apply),
+      requiredSubstitutions.predicates.map(substitutions.predicates.apply),
+      requiredSubstitutions.functions.map(substitutions.functions.apply)
+    )
+      .map(x => "(" + x.map(_.serialized).mkString(", ") + ")")
+      .mkString(" ")
+  }
+
   def calculateHash(): String = {
     Inference.calculateHash(premises, conclusion)
   }
@@ -72,6 +77,7 @@ object Inference {
 
   case class Transformed(
       inner: Inference,
+      transformation: Transformation,
       premises: Seq[Premise],
       conclusion: Statement)
     extends Inference
@@ -81,6 +87,16 @@ object Inference {
     override def bookKey = inner.bookKey
     override def name = inner.name
     override def rearrangementType = inner.rearrangementType
+
+    private def isScoped(statement: Statement) = statement match {
+      case DefinedStatement(_, transformation.statementDefinition) => true
+      case _ => false
+    }
+
+    def arePremisesScoped: Seq[Boolean] = {
+      premises.map(p => isScoped(p.statement))
+    }
+    def isConclusionScoped: Boolean = isScoped(conclusion)
   }
 
   sealed trait RearrangementType {
@@ -136,5 +152,14 @@ object Inference {
     val sha = MessageDigest.getInstance("SHA-256")
     sha.update(serialized.getBytes("UTF-8"))
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))
+  }
+
+  def parser(implicit parsingContext: ParsingContext): Parser[Inference] = {
+    for {
+      inferenceId <- Parser.singleWord
+    } yield {
+      parsingContext.inferences.find(_.id == inferenceId)
+        .getOrElse(throw new Exception(s"Could not find inference with id $inferenceId"))
+    }
   }
 }

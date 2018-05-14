@@ -4,9 +4,10 @@ axiom Axiom of Power Set
 conclusion ∃ x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a
 
 theorem Power Sets Are Unique
-prove ∃ x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a
-prove ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a
-qed
+{
+  assert ∃ x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a direct ad5d7177bdc835a8084d2c813386ca2a01d8a4c734faa19bb31bc2133696258c () (a) () () ()
+  assert ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a direct 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (⊆ $0 a) () (direct 0)
+}
 
 term powerSet (a)
   name (Power Set)
@@ -15,22 +16,26 @@ term powerSet (a)
 
 theorem Subset Is in Power Set
 premise ⊆ b a
-prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a
-prove ∈ b powerSet a
-qed
+{
+  assert ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a direct 4e668b7d4f1228aec6efbd169870c864859c5b647b9e7d308a999c2bcd3f6ae3 () (a) () () ()
+  assert ∈ b powerSet a transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (b) (∈ $0 powerSet a, ⊆ $0 a) () (direct 0, direct p0)
+}
 
 theorem Element of Power Set Is Subset
 premise ∈ b powerSet a
-prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a
-prove ⊆ b a
-qed
+{
+  assert ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a direct 4e668b7d4f1228aec6efbd169870c864859c5b647b9e7d308a999c2bcd3f6ae3 () (a) () () ()
+  assert ⊆ b a transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (b) (∈ $0 powerSet a, ⊆ $0 a) () (direct 0, direct p0)
+}
 
 theorem ∅ Is in Any Power Set
-prove ⊆ ∅ a
-prove ∈ ∅ powerSet a
-qed
+{
+  assert ⊆ ∅ a direct 1bde69fc8b90a9ca85033f763d7edeaa761c9b52a26ea2e64796515496237aa9 () (a) () () ()
+  assert ∈ ∅ powerSet a direct 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (∅, a) () () (direct 0)
+}
 
 theorem Any Set Is in Its Own Power Set
-prove ⊆ a a
-prove ∈ a powerSet a
-qed
+{
+  assert ⊆ a a direct f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (a) () () ()
+  assert ∈ a powerSet a direct 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (a, a) () () (direct 0)
+}

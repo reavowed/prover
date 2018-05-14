@@ -1,6 +1,5 @@
 package net.prover.controllers
 
-import net.prover.model.Book
 import net.prover.services.BookService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}

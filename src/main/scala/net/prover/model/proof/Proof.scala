@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.DisplayContext
+import net.prover.model._
 import net.prover.model.expressions.Statement
 import org.slf4j.LoggerFactory
 
@@ -15,9 +15,12 @@ case class Proof(steps: Seq[Step]) {
   }
 
   def getLines(implicit displayContext: DisplayContext) = steps.flatMap(_.getLines(referenceMap, 0, None))
-  def serializedLines = steps.flatMap(_.serializedLines) :+ "qed"
+  def serializedLines = Seq("{") ++ steps.flatMap(_.serializedLines).indent ++ Seq("}")
 }
 
 object Proof {
   val logger = LoggerFactory.getLogger(Proof.getClass)
+  def parser(implicit parsingContext: ParsingContext): Parser[Proof] = {
+    Step.listParser(None)(parsingContext.copy(termVariableNames = parsingContext.termVariableNames + "_")).inBraces.map(Proof.apply)
+  }
 }

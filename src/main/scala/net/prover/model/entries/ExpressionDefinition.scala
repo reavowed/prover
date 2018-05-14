@@ -68,7 +68,7 @@ object ExpressionDefinition {
                 PredicateComponent(name, arguments)
             }
           } yield componentType
-      }.collectWhileDefined
+      }.whileDefined
     }
   }
 
@@ -109,7 +109,7 @@ object ExpressionDefinition {
     val boundVariablePattern = "\\$(.*)".r
     Parser.selectOptionalWord {
       case boundVariablePattern(variableName) => variableName
-    }.collectWhileDefined
+    }.whileDefined
   }
 
   def boundVariablesAndComponentTypesParser(implicit context: ParsingContext): Parser[(Seq[String], Seq[ComponentType])] = {

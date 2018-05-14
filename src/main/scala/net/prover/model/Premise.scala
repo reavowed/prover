@@ -23,8 +23,6 @@ object Premise {
       } yield Premise(statement, index)(isElidable))
     }
     def listParser(implicit context: ParsingContext): Parser[Seq[Premise]] = {
-      Parser.iterateWhileDefined((Seq.empty[Premise], 0)) { case (acc, index) =>
-        parser(index).mapMap { p => (acc :+ p, index + 1) }
-      }.map(_._1)
+      Parser.whileDefined[Premise] { (acc, index) => parser(index) }
     }
 }

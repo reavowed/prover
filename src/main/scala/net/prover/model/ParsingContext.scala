@@ -1,24 +1,34 @@
 package net.prover.model
 
-import net.prover.model.entries.{ChapterEntryOutline, StatementDefinition, TermDefinition}
+import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
+import net.prover.model.proof.Transformation
 
 import scala.util.Try
 
 case class ParsingContext(
+    inferences: Seq[Inference],
     statementDefinitions: Seq[StatementDefinition],
     termDefinitions: Seq[TermDefinition],
     statementVariableNames: Set[String],
     termVariableNames: Set[String],
     parameterLists: Seq[Seq[(String, Int)]])
 {
-  def add(chapterEntry: ChapterEntryOutline): ParsingContext = chapterEntry match {
-    case statementDefinition: StatementDefinition =>
-      copy(statementDefinitions = statementDefinitions :+ statementDefinition)
-    case termDefinition: TermDefinition =>
-      copy(termDefinitions = termDefinitions :+ termDefinition)
-    case _ =>
-      this
+  def parameterDepth = parameterLists.length
+  def deductionStatement = statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Deduction))
+  def scopingStatement = statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Scoping))
+  def transformation: Option[Transformation] = scopingStatement.flatMap(Transformation.find(_, inferences))
+
+  def add(chapterEntry: ChapterEntry): ParsingContext = {
+    val contextWithDefinitions = chapterEntry match {
+      case statementDefinition: StatementDefinition =>
+        copy(statementDefinitions = statementDefinitions :+ statementDefinition)
+      case termDefinition: TermDefinition =>
+        copy(termDefinitions = termDefinitions :+ termDefinition)
+      case _ =>
+        this
+    }
+    contextWithDefinitions.copy(inferences = inferences ++ chapterEntry.inferences)
   }
 
   def addStatementDefinition(statementDefinition: StatementDefinition): ParsingContext = {
@@ -91,6 +101,7 @@ case class ParsingContext(
 
 object ParsingContext {
   val empty = ParsingContext(
+    inferences = Nil,
     statementDefinitions = Nil,
     termDefinitions = Nil,
     statementVariableNames = Set.empty,

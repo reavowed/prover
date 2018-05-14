@@ -6,32 +6,36 @@ statement ⊆ (A B)
 theorem Definition of ⊆
 premise ⊆ A B
 premise ∈ a A
-prove ∀ x → ∈ $0 A ∈ $0 B
-prove ∈ a B
-qed
+{
+  assert ∀ x → ∈ $0 A ∈ $0 B direct f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (A, B) () () (direct p0)
+  assert ∈ a B transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (a) (∈ $0 A, ∈ $0 B) () (direct 0, direct p1)
+}
 
 theorem Subset Is Antisymmetric
 premise ⊆ A B
 premise ⊆ B A
-prove ∀ x → ∈ $0 A ∈ $0 B
-prove ∀ x → ∈ $0 B ∈ $0 A
-prove ∀ x ↔ ∈ $0 A ∈ $0 B
-prove = A B
-qed
+{
+  assert ∀ x → ∈ $0 A ∈ $0 B direct f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (A, B) () () (direct p0)
+  assert ∀ x → ∈ $0 B ∈ $0 A direct f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (B, A) () () (direct p1)
+  assert ∀ x ↔ ∈ $0 A ∈ $0 B transformed 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 rearranged (Y Y) Y () () (∈ $0 A, ∈ $0 B) () (direct 0, direct 1)
+  assert = A B direct 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (A, B) () () (direct 2)
+}
 
 theorem Subset Is Transitive
 premise ⊆ A B
 premise ⊆ B C elidable
-take x {
-  assume ∈ $0 A {
-    prove ∈ $0 B
-    prove ∈ $0 C
+{
+  take x {
+    assume ∈ $0 A {
+      assert ∈ $0 B direct ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (A, B, $0) () () (direct p0, direct 0.0a)
+      assert ∈ $0 C direct ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (B, C, $0) () () (direct p1, direct 0.0.0)
+    }
   }
+  assert ⊆ A C direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (A, C) () () (compound 0 compound 0.0a direct 0.0.1)
 }
-prove ⊆ A C
-qed
 
 theorem Any Set Is a Subset of Itself
-prove ∀ x → ∈ $0 A ∈ $0 A
-prove ⊆ A A
-qed
+{
+  assert ∀ x → ∈ $0 A ∈ $0 A transformed d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 () Y () () (∈ $0 A) () ()
+  assert ⊆ A A direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (A, A) () () (direct 0)
+}

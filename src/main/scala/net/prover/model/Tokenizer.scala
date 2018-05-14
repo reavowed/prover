@@ -17,7 +17,7 @@ trait Tokenizer {
 
   def throwParseException(message: String, cause: Option[Throwable]): Nothing = {
     throw ParseException(
-      s"Parse error in book '${currentBook.getOrElse("unknown")}'" +
+      s"Error in book '${currentBook.getOrElse("unknown")}'" +
         s" ($currentFile line $currentLine col $currentColumn): " +
         message,
       cause)

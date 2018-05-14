@@ -4,47 +4,52 @@ term 0 ()
   (= $0 ∅)
 
 theorem 0 Is a Natural Number
-prove = 0 ∅
-take X {
-  assume inductive $0 {
-    prove ∈ ∅ $0
-    prove ∈ 0 $0
+{
+  assert = 0 ∅ direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () ()
+  take X {
+    assume inductive $0 {
+      assert ∈ ∅ $0 direct 3e870e42bf1edc2865bf93e39a0af9d460cd47418ca5cdd474bf5876ef434d66 () ($0) () () (direct 1.0a)
+      assert ∈ 0 $0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∈ $$0 $0) () (direct 0, direct 1.0.0)
+    }
   }
+  assert ∈ 0 ℕ direct 3094218044e941a9ae278629bb25c91256f3cf5b82853fae2c5155f82e0b64f6 () (0) () () (compound 1 compound 1.0a direct 1.0.1)
 }
-prove ∈ 0 ℕ
-qed
 
 theorem 0 Is Not the Successor of Any Natural Number
-prove = 0 ∅
-prove ∈ n successor n
-prove ¬ = successor n ∅
-prove ¬ = successor n 0
-qed
+{
+  assert = 0 ∅ direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () ()
+  assert ∈ n successor n direct bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n) () () ()
+  assert ¬ = successor n ∅ direct 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (n, successor n) () () (direct 1)
+  assert ¬ = successor n 0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (¬ = successor n $0) () (direct 0, direct 2)
+}
 
 theorem 0 Is Not the Successor of Any Natural Number
-assume = 0 successor n {
-  prove = successor n 0
+{
+  assume = 0 successor n {
+    assert = successor n 0 direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (0, successor n) () () (direct 0a)
+  }
+  assert ¬ = successor n 0 direct 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () (n) () () ()
+  assert ¬ = 0 successor n direct 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= 0 successor n, = successor n 0) () () () (compound 0a direct 0.0, direct 1)
 }
-prove ¬ = successor n 0
-prove ¬ = 0 successor n
-qed
 
 term 1 ()
   (= $0 successor 0)
 
 theorem 1 Is a Natural Number
-prove ∈ 0 ℕ
-prove ∈ successor 0 ℕ
-prove = 1 successor 0
-prove ∈ 1 ℕ
-qed
+{
+  assert ∈ 0 ℕ direct a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () () ()
+  assert ∈ successor 0 ℕ direct 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (0) () () (direct 0)
+  assert = 1 successor 0 direct 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca () () () () ()
+  assert ∈ 1 ℕ direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (1, successor 0) (∈ $0 ℕ) () (direct 2, direct 1)
+}
 
 theorem 1 Is the Singleton of 0
-prove = 1 successor 0
-prove = successor 0 ∪ 0 singleton 0
-prove = 1 ∪ 0 singleton 0
-prove = 0 ∅
-prove = 1 ∪ ∅ singleton 0
-prove = ∪ ∅ singleton 0 singleton 0
-prove = 1 singleton 0
-qed
+{
+  assert = 1 successor 0 direct 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca () () () () ()
+  assert = successor 0 ∪ 0 singleton 0 direct 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (0) () () ()
+  assert = 1 ∪ 0 singleton 0 direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor 0, ∪ 0 singleton 0) (= 1 $0) () (direct 1, direct 0)
+  assert = 0 ∅ direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () ()
+  assert = 1 ∪ ∅ singleton 0 direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (0, ∅) (= 1 ∪ $0 singleton 0) () (direct 3, direct 2)
+  assert = ∪ ∅ singleton 0 singleton 0 direct 7b4af45d996d58a9bc0a3545d5d2d90cc5493de12289c3038266d3afae1628e4 () (singleton 0) () () ()
+  assert = 1 singleton 0 direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∪ ∅ singleton 0, singleton 0) (= 1 $0) () (direct 5, direct 4)
+}

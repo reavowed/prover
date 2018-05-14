@@ -227,22 +227,15 @@ object Parser {
     def isDefined: Parser[Boolean] = parser.map(_.isDefined)
     def isUndefined: Parser[Boolean] = parser.map(_.isEmpty)
     def whileDefined: Parser[Seq[T]] = {
-      def readNext(acc: Seq[T], tokenizer: Tokenizer): (Seq[T], Tokenizer) = {
-        parser.parse(tokenizer) match {
-          case (Some(t), nextTokenizer) =>
-            readNext(acc :+ t, nextTokenizer)
-          case (None, _) =>
-            (acc, tokenizer)
-        }
-      }
-      Parser { tokenizer =>
-        readNext(Nil, tokenizer)
-      }
+      Parser.whileDefined[T]((_, _) => parser)
     }
+  }
 
-    def collectWhileDefined: Parser[Seq[T]] = {
-      iterateWhileDefined[Seq[T]](Seq.empty) { seq =>
-        parser.mapMap(seq :+ _)
+  implicit class ParserSeqOps[T](parsers: Seq[Parser[T]]) {
+    def traverse: Parser[Seq[T]] = Parser { initialTokenizer =>
+      parsers.foldLeft((Seq.empty[T], initialTokenizer)) { case ((valuesSoFar, tokenizer), parser) =>
+        val (value, newTokenizer) = parser.parse(tokenizer)
+        (valuesSoFar :+ value, newTokenizer)
       }
     }
   }
@@ -264,21 +257,34 @@ object Parser {
     optional(name, parser.map(Some.apply), None)
   }
 
-  def iterateWhileDefined[T](
-    initial: T)(
-    parseFn: T => Parser[Option[T]]
-  ): Parser[T] = {
-    parseFn(initial)
-      .flatMapMap(iterateWhileDefined(_)(parseFn))
-      .getOrElse(initial)
+  def whileDefined[T](getParser: (Seq[T], Int) => Parser[Option[T]]): Parser[Seq[T]] = Parser { initialTokenizer =>
+    def parseRemaining(valuesSoFar: Seq[T], currentIndex: Int, currentTokenizer: Tokenizer): (Seq[T], Tokenizer) = {
+      val (newValueOption, newTokenizer) = getParser(valuesSoFar, currentIndex).parse(currentTokenizer)
+      newValueOption match {
+        case Some(newValue) =>
+          parseRemaining(valuesSoFar :+ newValue, currentIndex + 1, newTokenizer)
+        case None =>
+          (valuesSoFar, currentTokenizer)
+      }
+    }
+    parseRemaining(Nil, 0, initialTokenizer)
   }
 
-  def iterateMapFoldWhileDefined[T, R](
+  def foldWhileDefined[T, R](
     initial: R)(
-    parseFn: R => Parser[Option[(T, R)]]
+    getParser: (Seq[T], R) => Parser[Option[(T, R)]]
   ): Parser[(Seq[T], R)] = {
-    iterateWhileDefined((Seq.empty[T], initial)) { case (ts, acc) =>
-      parseFn(acc).mapMap(_.mapLeft(ts :+ _))
+    Parser { initialTokenizer =>
+      def parseRemaining(currentAccumulator: R, valuesSoFar: Seq[T], currentTokenizer: Tokenizer): ((Seq[T], R), Tokenizer) = {
+        val (newValueAndAccumulatorOption, newTokenizer) = getParser(valuesSoFar, currentAccumulator).parse(currentTokenizer)
+        newValueAndAccumulatorOption match {
+          case Some((newValue, newAccumulator)) =>
+            parseRemaining(newAccumulator, valuesSoFar :+ newValue, newTokenizer)
+          case None =>
+            ((valuesSoFar, currentAccumulator), currentTokenizer)
+        }
+      }
+      parseRemaining(initial, Nil, initialTokenizer)
     }
   }
 }

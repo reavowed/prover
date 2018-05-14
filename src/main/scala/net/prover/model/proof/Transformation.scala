@@ -4,11 +4,11 @@ import net.prover.model._
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions._
 
-case class Transformation(statementDefinition: StatementDefinition, boundVariableName: String) {
-  private def generalise(statement: Statement): Statement = {
+case class Transformation(statementDefinition: StatementDefinition, boundVariableName: String, specificationInference: Inference) {
+  def generalise(statement: Statement): Statement = {
     DefinedStatement(Seq(statement), statementDefinition)(statementDefinition.boundVariableNames)
   }
-  private def specify(statement: Statement): Statement = {
+  def specify(statement: Statement): Statement = {
     statement.specify(Seq(TermVariable("_")), 0, 0)
   }
 
@@ -23,44 +23,50 @@ case class Transformation(statementDefinition: StatementDefinition, boundVariabl
         }.toMap))
   }
 
-  def applyFully(inference: Inference): Option[(Seq[Premise], Statement, Seq[StepOutline])] = {
+  def applyFully(inference: Inference): Option[(Seq[Premise], Statement)] = {
     getSubstitutions(inference).flatMap(applyFully(inference, _))
   }
 
-  def applyFully(inference: Inference, transformationSubstitutions: Substitutions): Option[(Seq[Premise], Statement, Seq[StepOutline])] = {
+  def applyFully(inference: Inference, transformationSubstitutions: Substitutions): Option[(Seq[Premise], Statement)] = {
     for {
       conclusionStatementToProve <- inference.conclusion.applySubstitutions(transformationSubstitutions, 0, 0)
       transformedConclusion = generalise(conclusionStatementToProve)
-      (transformedPremises, premiseStatementsToProve) <- inference.premises.map { premise =>
+      transformedPremises <- inference.premises.map { premise =>
         premise.statement.applySubstitutions(transformationSubstitutions, 0, 0).map { statementToProve =>
-          premise.withStatement(generalise(statementToProve)) -> statementToProve
-        }
-      }.traverseOption.map(_.split)
-      statementsToProve = premiseStatementsToProve :+ conclusionStatementToProve
-      stepsToProve = Seq(StepOutline.ScopedVariable(boundVariableName, statementsToProve.map(s => StepOutline.Assertion(s, None, None)), None))
-    } yield (transformedPremises, transformedConclusion, stepsToProve)
-  }
-
-  def applyPartially(inference: Inference,  transformationSubstitutions: Substitutions): Option[(Seq[Seq[(Premise, Option[StepOutline])]], Statement, StepOutline)] = {
-    for {
-      transformedConclusion <- inference.conclusion.applySubstitutions(transformationSubstitutions, 0, 0).map(specify)
-      transformedPremisesAndSteps <- inference.premises.map { premise =>
-        premise.statement.applySubstitutions(transformationSubstitutions, 0, 0).map { statement =>
-          Seq(
-            premise.withStatement(generalise(statement)) -> Some(StepOutline.Assertion(specify(statement), None, None)),
-            premise.withStatement(specify(statement)) -> None)
+          premise.withStatement(generalise(statementToProve))
         }
       }.traverseOption
-    } yield (transformedPremisesAndSteps, transformedConclusion, StepOutline.Assertion(transformedConclusion, None, None))
+    } yield (transformedPremises, transformedConclusion)
+  }
+
+  def applyPartially(inference: Inference,  transformationSubstitutions: Substitutions): Option[(Seq[Seq[Premise]], Statement)] = {
+    for {
+      transformedConclusion <- inference.conclusion.applySubstitutions(transformationSubstitutions, 0, 0).map(specify)
+      transformedPremises <- inference.premises.map { premise =>
+        premise.statement.applySubstitutions(transformationSubstitutions, 0, 0).map { statement =>
+          Seq(
+            premise.withStatement(generalise(statement)),
+            premise.withStatement(specify(statement)))
+        }
+      }.traverseOption
+    } yield (transformedPremises, transformedConclusion)
   }
 }
 
 object Transformation {
-  def apply(statementDefinition: StatementDefinition): Option[Transformation] = {
+  def find(scopingStatement: StatementDefinition, inferences: Seq[Inference]): Option[Transformation] = {
     for {
-      variableName <- statementDefinition.boundVariableNames.single
-    } yield {
-      Transformation(statementDefinition, variableName)
-    }
+      boundVariableName <- scopingStatement.boundVariableNames.single
+      specificationInference <- inferences.find {
+        case Inference(
+          _,
+          Seq(Premise(DefinedStatement(Seq(PredicateApplication(name1, Seq(FunctionParameter(0, 0)))), `scopingStatement`), 0)),
+          PredicateApplication(name2, Seq(TermVariable(_)))
+        ) if name1 == name2 =>
+          true
+        case _ =>
+          false
+      }
+    } yield Transformation(scopingStatement, boundVariableName, specificationInference)
   }
 }

@@ -4,13 +4,14 @@ import net.prover.model._
 
 trait ChapterEntryParser {
   def name: String
-  def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[ChapterEntryOutline]
+  def parser(chapterTitle: String, bookTitle: String, getKey: String => String)(implicit context: ParsingContext): Parser[ChapterEntry]
+}
 
-  def parseToChapterOutline(chapterOutline: ChapterOutline, context: ParsingContext): Parser[(ChapterOutline, ParsingContext)] = {
-    for {
-      t <- parser(chapterOutline.key, chapterOutline.bookKey)(context)
-    } yield {
-      (chapterOutline.copy(entryOutlines = chapterOutline.entryOutlines :+ t), context.add(t))
+object ChapterEntryParser {
+  trait WithoutKey extends ChapterEntryParser {
+    def parser(chapterTitle: String, bookTitle: String)(implicit context: ParsingContext): Parser[ChapterEntry]
+    def parser(chapterTitle: String, bookTitle: String, getKey: String => String)(implicit context: ParsingContext): Parser[ChapterEntry] = {
+      parser(chapterTitle, bookTitle)
     }
   }
 }

@@ -6,7 +6,3 @@ trait ChapterEntry {
   def inferences: Seq[Inference] = Nil
   def serializedLines: Seq[String]
 }
-
-object ChapterEntry {
-  trait SelfOutline extends ChapterEntry with ChapterEntryOutline
-}

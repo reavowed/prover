@@ -195,6 +195,11 @@ package object model {
   }
 
   implicit class TraversableOptionOps[T, Repr](traversable: TraversableLike[Option[T], Repr]) {
+    def collectDefined[That](implicit bf: CanBuildFrom[Repr, T, That]): That = {
+      traversable.collect {
+        case Some(t) => t
+      }
+    }
     def traverseOption[That](implicit bf: CanBuildFrom[Repr, T, That]): Option[That] = {
       traversable.foldLeft(Option(bf())) { case (builderOption, valueOption) =>
         for {

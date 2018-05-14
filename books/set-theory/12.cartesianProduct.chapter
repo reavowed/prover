@@ -3,127 +3,138 @@ Introduce the Cartesian product of two sets, a×b.
 theorem Ordered Pair Is Element of Double Power Set of Union
 premise ∈ a A
 premise ∈ b B
-prove ∈ a ∪ A B
-prove ∈ b ∪ A B
-prove ∈ singleton a powerSet ∪ A B
-prove ∈ pair a b powerSet ∪ A B
-prove ∈ pair singleton a pair a b powerSet powerSet ∪ A B
-prove = orderedPair a b pair singleton a pair a b
-prove ∈ orderedPair a b powerSet powerSet ∪ A B
-qed
+{
+  assert ∈ a ∪ A B direct d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () (a, A, B) () () (direct p0)
+  assert ∈ b ∪ A B direct 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () (b, B, A) () () (direct p1)
+  assert ∈ singleton a powerSet ∪ A B direct c6c5d5f39722c96ed2ec96208cef40d1a1d3bc3a1525d4ee389d742cbb585c07 () (a, ∪ A B) () () (direct 0)
+  assert ∈ pair a b powerSet ∪ A B direct e2380d69712871e4a19d22f0a3647a2dde277f9963e9a4fd9a43ab0d9f3f639c () (a, ∪ A B, b) () () (direct 0, direct 1)
+  assert ∈ pair singleton a pair a b powerSet powerSet ∪ A B direct e2380d69712871e4a19d22f0a3647a2dde277f9963e9a4fd9a43ab0d9f3f639c () (singleton a, powerSet ∪ A B, pair a b) () () (direct 2, direct 3)
+  assert = orderedPair a b pair singleton a pair a b direct 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () () ()
+  assert ∈ orderedPair a b powerSet powerSet ∪ A B direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (orderedPair a b, pair singleton a pair a b) (∈ $0 powerSet powerSet ∪ A B) () (direct 5, direct 4)
+}
 
 term × (A B)
   name (Cartesian Product)
   (= $0 comprehension x powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0)
 
 theorem Membership Condition for Cartesian Product
-prove = × A B comprehension y powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0
-prove ∀ x ↔ ∈ $0 × A B ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0
-take x {
-  assume ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
-    let c ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
-      let d ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
-        prove ∈ orderedPair $$0 $0 powerSet powerSet ∪ A B
-        prove ∈ $$$0 powerSet powerSet ∪ A B
-      }
-    }
-  }
-  prove ↔ ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0
-}
-prove ∀ x ↔ ∈ $0 × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0
-qed
-
-theorem Element of Cartesian Product
-premise ∈ X × A B
-prove ∀ x ↔ ∈ $0 × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0
-prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0
-qed
-
-theorem Membership Condition for Cartesian Product
-take a {
-  take b {
-    assume ∈ orderedPair $$0 $0 × A B {
-      prove ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0
-      let c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 {
-        let d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 {
-          prove = $$$$0 $$0
-          prove = $$$0 $0
-          prove ∈ $$$$0 A
-          prove ∈ $$$0 B
-          prove ∧ ∈ $$$$0 A ∈ $$$0 B
+{
+  assert = × A B comprehension y powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 50da555b370e30bc4e6ece0f3afd2107b6457dc923562d5c68e24b38b11ab627 () (A, B) () () ()
+  assert ∀ x ↔ ∈ $0 × A B ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (× A B, powerSet powerSet ∪ A B) (∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () (direct 0)
+  take x {
+    assume ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
+      let c ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 powerSet powerSet ∪ A B) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () (direct 2.0a, direct 2.0.0d) {
+        let d ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 powerSet powerSet ∪ A B) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () () () direct 2.0.0a (1), direct 2.0.0.0d) {
+          assert ∈ orderedPair $$0 $0 powerSet powerSet ∪ A B direct eab7d44f0c2d9d9e8a281ad0ecf6d66a81342479f3c7eade9233924cfdf3a8b5 () ($$0, A, $0, B) () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$$0 $0) () () () direct 2.0.0a (0), simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 B, = $$$0 orderedPair $$0 $0) () () () direct 2.0.0.0a (0))
+          assert ∈ $$$0 powerSet powerSet ∪ A B direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$0, orderedPair $$0 $0) (∈ $$$$0 powerSet powerSet ∪ A B) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 B, = $$$0 orderedPair $$0 $0) () () () direct 2.0.0.0a (1), direct 2.0.0.0.0)
         }
       }
     }
-    assume ∧ ∈ $$0 A ∈ $0 B {
-      prove = orderedPair $$0 $0 orderedPair $$0 $0
-      prove ∧ ∈ $0 B = orderedPair $$0 $0 orderedPair $$0 $0
-      prove ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$0 $0
-      prove ∧ ∈ $$0 A ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$0 $0
-      prove ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0
-      prove ∀ x ↔ ∈ $0 × A B ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = $$$0 orderedPair $$0 $0
-      prove ∈ orderedPair $$0 $0 × A B
+    assert ↔ ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6301d09d66b0a087d37eb6fdfb57305fb0584d31883012474d1101001436cb7e (∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0, ∈ $0 powerSet powerSet ∪ A B) () () () (compound 2.0a direct 2.0.0)
+  }
+  assert ∀ x ↔ ∈ $0 × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $0 × A B, ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () (direct 1, compound 2 direct 2.1)
+}
+
+theorem Element of Cartesian Product
+premise ∈ X × A B
+{
+  assert ∀ x ↔ ∈ $0 × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 78664a4d74f0bfa211302b1958d00d7631c52b8411466a93b900f16b87412b96 () (A, B) () () ()
+  assert ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0 transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (X) (∈ $0 × A B, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () (direct 0, direct p0)
+}
+
+theorem Membership Condition for Cartesian Product
+{
+  take a {
+    take b {
+      assume ∈ orderedPair $$0 $0 × A B {
+        assert ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 direct 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () (orderedPair $$0 $0, A, B) () () (direct 0.0.0a)
+        let c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A ∈ $0 B) () (∧ ∈ $$$0 A ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$$0 $0) () (direct 0.0.0.0, direct 0.0.0.1d) {
+          let d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 A ∈ $$0 B) () (∧ ∈ $$$$0 B = orderedPair $$$0 $$0 orderedPair $0 $$$$0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0) () () () direct 0.0.0.1a (1), direct 0.0.0.1.0d) {
+            assert = $$$$0 $$0 direct 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () ($$$$0, $$$0, $$0, $0) () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 B, = orderedPair $$$$0 $$$0 orderedPair $$0 $0) () () () direct 0.0.0.1.0a (1))
+            assert = $$$0 $0 direct 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$$$0, $$$0, $$0, $0) () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 B, = orderedPair $$$$0 $$$0 orderedPair $$0 $0) () () () direct 0.0.0.1.0a (1))
+            assert ∈ $$$$0 A direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$0, $$0) (∈ $$$$$0 A) () (direct 0.0.0.1.0.0, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ d ∧ ∈ $0 B = orderedPair $$$$$0 $$$$0 orderedPair $$$0 $0) () () () direct 0.0.0.1a (0))
+            assert ∈ $$$0 B direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$0, $0) (∈ $$$$$0 B) () (direct 0.0.0.1.0.1, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 B, = orderedPair $$$$0 $$$0 orderedPair $$0 $0) () () () direct 0.0.0.1.0a (0))
+            assert ∧ ∈ $$$$0 A ∈ $$$0 B direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$$$0 A, ∈ $$$0 B) () () () (direct 0.0.0.1.0.2, direct 0.0.0.1.0.3)
+          }
+        }
+      }
+      assume ∧ ∈ $$0 A ∈ $0 B {
+        assert = orderedPair $$0 $0 orderedPair $$0 $0 direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (orderedPair $$0 $0) () () ()
+        assert ∧ ∈ $0 B = orderedPair $$0 $0 orderedPair $$0 $0 direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ $0 B, = orderedPair $$0 $0 orderedPair $$0 $0) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 A, ∈ $0 B) () () () direct 0.0.1a (1), direct 0.0.1.0)
+        assert ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$0 $0 direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$$0 B = orderedPair $$0 $0 orderedPair $$0 $$$0) () (direct 0.0.1.1)
+        assert ∧ ∈ $$0 A ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$0 $0 direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ $$0 A, ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$0 $0) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∈ $0 B) () () () direct 0.0.1a (0), direct 0.0.1.2)
+        assert ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$0) (∧ ∈ $$$0 A ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$$0 $0) () (direct 0.0.1.3)
+        assert ∀ x ↔ ∈ $0 × A B ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 78664a4d74f0bfa211302b1958d00d7631c52b8411466a93b900f16b87412b96 () (A, B) () () ()
+        assert ∈ orderedPair $$0 $0 × A B transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (orderedPair $$0 $0) (∈ $$$0 × A B, ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = $$$$$0 orderedPair $$0 $0) () (direct 0.0.1.5, direct 0.0.1.4)
+      }
+      assert ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ orderedPair $$0 $0 × A B, ∧ ∈ $$0 A ∈ $0 B) () () () (compound 0.0.0a direct 0.0.0.1, compound 0.0.1a direct 0.0.1.6)
     }
-    prove ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B
   }
 }
-qed
 
 theorem Ordered Pair Is Element of Cartesian Product
 premise ∈ a A
 premise ∈ b B
-prove ∀ x ∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B
-prove ∀ y ↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B
-prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
-prove ∈ orderedPair a b × A B
-qed
+{
+  assert ∀ x ∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B direct 236f521a9f01f6d3d26cc0cac93bca261543938c02c189cc3e9fe73064535b17 () (A, B) () () ()
+  assert ∀ y ↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B direct 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B) () (direct 0)
+  assert ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B direct 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B) () (direct 1)
+  assert ∈ orderedPair a b × A B direct bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (∈ orderedPair a b × A B, ∧ ∈ a A ∈ b B) () () () (direct 2, expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ a A, ∈ b B) () () () (direct p0, direct p1))
+}
 
 theorem Coordinates of Element of Cartesian Product
 premise ∈ orderedPair a b × A B
-prove ∀ x ∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B
-prove ∀ y ↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B
-prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B
-prove ∧ ∈ a A ∈ b B
-qed
+{
+  assert ∀ x ∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B direct 236f521a9f01f6d3d26cc0cac93bca261543938c02c189cc3e9fe73064535b17 () (A, B) () () ()
+  assert ∀ y ↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B direct 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B) () (direct 0)
+  assert ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B direct 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B) () (direct 1)
+  assert ∧ ∈ a A ∈ b B direct be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (∈ orderedPair a b × A B, ∧ ∈ a A ∈ b B) () () () (direct 2, direct p0)
+}
 
 theorem First Coordinate of Element of Cartesian Product
 premise ∈ orderedPair a b × A B
-prove ∧ ∈ a A ∈ b B
-prove ∈ a A
-qed
+{
+  assert ∧ ∈ a A ∈ b B direct 83a16d4b2b00799a932aebf8464d8706a690ad543d5fe89e854e50e17365080c () (a, b, A, B) () () (direct p0)
+  assert ∈ a A direct 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ a A, ∈ b B) () () () (direct 0)
+}
 
 theorem Second Coordinate of Element of Cartesian Product
 premise ∈ orderedPair a b × A B
-prove ∧ ∈ a A ∈ b B
-prove ∈ b B
-qed
+{
+  assert ∧ ∈ a A ∈ b B direct 83a16d4b2b00799a932aebf8464d8706a690ad543d5fe89e854e50e17365080c () (a, b, A, B) () () (direct p0)
+  assert ∈ b B direct 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ a A, ∈ b B) () () () (direct 0)
+}
 
 theorem Product of Subsets Is Subset of Product
 premise ⊆ A C
 premise ⊆ B D
-take x {
-  assume ∈ $0 × A B {
-    prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0
-    let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
-      let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
-        prove ∈ $$0 C
-        prove ∈ $0 D
-        prove ∈ orderedPair $$0 $0 × C D
-        prove ∈ $$$0 × C D
+{
+  take x {
+    assume ∈ $0 × A B {
+      assert ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () ($0, A, B) () () (direct 0.0a)
+      let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 × C D) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () (direct 0.0.0, direct 0.0.1d) {
+        let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 × C D) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () () () direct 0.0.1a (1), direct 0.0.1.0d) {
+          assert ∈ $$0 C direct ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (A, C, $$0) () () (direct p0, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$$0 $0) () () () direct 0.0.1a (0))
+          assert ∈ $0 D direct ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (B, D, $0) () () (direct p1, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 B, = $$$0 orderedPair $$0 $0) () () () direct 0.0.1.0a (0))
+          assert ∈ orderedPair $$0 $0 × C D direct 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () ($$0, C, $0, D) () () (direct 0.0.1.0.0, direct 0.0.1.0.1)
+          assert ∈ $$$0 × C D direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$0, orderedPair $$0 $0) (∈ $$$$0 × C D) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 B, = $$$0 orderedPair $$0 $0) () () () direct 0.0.1.0a (1), direct 0.0.1.0.2)
+        }
       }
     }
   }
+  assert ⊆ × A B × C D direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (× A B, × C D) () () (compound 0 compound 0.0a direct 0.0.1)
 }
-prove ⊆ × A B × C D
-qed
 
 theorem Product Preserves Subset
 premise ⊆ A B elidable
-prove ⊆ C C
-prove ⊆ × A C × B C
-qed
+{
+  assert ⊆ C C direct f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (C) () () ()
+  assert ⊆ × A C × B C direct 99426d3f042aceebec808cf23bbe051db5066f5e43a7ababe28303c13dd6a7bf () (A, B, C, C) () () (direct p0, direct 0)
+}
 
 theorem Product Preserves Subset
 premise ⊆ A B elidable
-prove ⊆ C C
-prove ⊆ × C A × C B
-qed
+{
+  assert ⊆ C C direct f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (C) () () ()
+  assert ⊆ × C A × C B direct 99426d3f042aceebec808cf23bbe051db5066f5e43a7ababe28303c13dd6a7bf () (C, C, A, B) () () (direct 0, direct p0)
+}

@@ -12,12 +12,15 @@ case class TermDefinition(
     format: Format,
     premises: Seq[Statement],
     definitionPredicate: Statement,
-    chapterKey: String,
-    bookKey: String)
-  extends ChapterEntry.SelfOutline
+    chapterTitle: String,
+    bookTitle: String)
+  extends ChapterEntry
     with ExpressionDefinition
 {
   def name = explicitName.getOrElse(symbol)
+  def chapterKey = chapterTitle.formatAsKey
+  def bookKey = bookTitle.formatAsKey
+
   val defaultValue = {
     DefinedTerm(componentTypes.map(_.expression), this)(boundVariableNames)
   }
@@ -44,7 +47,7 @@ case class TermDefinition(
       Seq("(" + definitionPredicate.serialized + ")")).indent
 }
 
-object TermDefinition extends ChapterEntryParser {
+object TermDefinition extends ChapterEntryParser.WithoutKey {
   override val name: String = "term"
 
   def premisesParser(implicit context: ParsingContext): Parser[Seq[Statement]] = Parser.optional(
@@ -56,7 +59,7 @@ object TermDefinition extends ChapterEntryParser {
     "name",
     Parser.allInParens)
 
-  def parser(chapterKey: String, bookKey: String)(implicit context: ParsingContext): Parser[TermDefinition] = {
+  def parser(chapterTitle: String, bookTitle: String)(implicit context: ParsingContext): Parser[TermDefinition] = {
     for {
       symbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
@@ -75,8 +78,8 @@ object TermDefinition extends ChapterEntryParser {
         format,
         premises,
         definitionPredicate,
-        chapterKey,
-        bookKey)
+        chapterTitle,
+        bookTitle)
     }
   }
 }

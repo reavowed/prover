@@ -2,63 +2,65 @@ Introduce set comprehension, {x ∈ A | φ(x)}.
 
 theorem Comprehensions Exist for Empty Sets
 premise ¬ ∃ x ∧ ∈ $0 A with ($0) φ
-prove ∀ x ¬ ∧ ∈ $0 A with ($0) φ
-prove ∀ x ↔ ∈ $0 ∅ ∧ ∈ $0 A with ($0) φ
-prove ∃ y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
-prove ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
-qed
+{
+  assert ∀ x ¬ ∧ ∈ $0 A with ($0) φ direct 9ce9302cc7e8ff857912b57f2692ecd928d2c84e880583a1086decf024c4a51f () () (∧ ∈ $0 A with ($0) φ) () (direct p0)
+  assert ∀ x ↔ ∈ $0 ∅ ∧ ∈ $0 A with ($0) φ direct e17971d0607a4fadde33eba1a8b12e10ce38134d0808f44e5e64597cf3f8597b () () (∧ ∈ $0 A with ($0) φ) () (direct 0)
+  assert ∃ y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (∅) (∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) () (direct 1)
+  assert ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ direct 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∧ ∈ $0 A with ($0) φ) () (direct 2)
+}
 
 theorem Comprehensions Exist for Non-Empty Sets Lemma
 premise ∧ ∈ a A with (a) φ
-take y {
-  assume ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a {
-    let x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a {
-      assume with ($0) φ {
-        prove = $$0 $0
-          via ↔ ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 $0
-        prove ∧ ∈ $0 A with ($0) φ
-        prove ∧ ∈ $$0 A with ($$0) φ
+{
+  take y {
+    assume ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a {
+      let x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $0 A with ($0) φ) () (∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 a) () (direct 0.0a, direct 0.0.0d) {
+        assume with ($0) φ {
+          assert = $$0 $0 direct be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 $0) () () () (elided direct 48fcd7ac4e7e37def3ef3c0106d030b65abeec6a61ed70ed45e05c732d4eb5d5 (with ($0) φ, = $$0 $0, = $$0 a) () () () (direct 0.0.0.0a), simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a) () () () direct 0.0.0a (1))
+          assert ∧ ∈ $0 A with ($0) φ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ $0 A, with ($0) φ) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a) () () () direct 0.0.0a (0), direct 0.0.0.0a)
+          assert ∧ ∈ $$0 A with ($$0) φ direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, $0) (∧ ∈ $$$0 A with ($$$0) φ) () (direct 0.0.0.0.0, direct 0.0.0.0.1)
+        }
+        assume ¬ with ($0) φ {
+          assert = $$0 a direct be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 a) () () () (elided direct 8cd89d7a4d6604f8d8d3530be80c9155084c8729b41a1bb1620e1c027b90b8ea (with ($0) φ, ¬ with ($0) φ, = $$0 $0, = $$0 a) () () () (direct 0.0.0.1a, direct 0.0.0.1a), simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a) () () () direct 0.0.0a (1))
+          assert ∧ ∈ $$0 A with ($$0) φ direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, a) (∧ ∈ $$$0 A with ($$$0) φ) () (direct 0.0.0.1.0, direct p0)
+        }
+        assert ∧ ∈ $$0 A with ($$0) φ direct 35f46479d4f3054e0f463194f8ed4dd77e7526b58f2b6157594bf81bccfcf95a (with ($0) φ, ∧ ∈ $$0 A with ($$0) φ) () () () (compound 0.0.0.0a direct 0.0.0.0.2, compound 0.0.0.1a direct 0.0.0.1.1)
       }
-      assume ¬ with ($0) φ {
-        prove = $$0 a
-          via ↔ ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 a
-        prove ∧ ∈ $$0 A with ($$0) φ
-      }
-      prove ∧ ∈ $$0 A with ($$0) φ
     }
+    assume ∧ ∈ $0 A with ($0) φ {
+      assert = $0 $0 direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () ($0) () () ()
+      assert ∧ ∈ $0 A ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ $0 A, ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, with ($0) φ) () () () direct 0.1a (0), expansion direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d rearranged (∧ with ($0) φ = $0 $0, ∧ ¬ with ($0) φ = $0 a) () () () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (with ($0) φ, = $0 $0) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, with ($0) φ) () () () direct 0.1a (1), direct 0.1.0)))
+      assert ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 a) () (direct 0.1.1)
+    }
+    assert ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a ∧ ∈ $0 A with ($0) φ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, ∧ ∈ $0 A with ($0) φ) () () () (compound 0.0a direct 0.0.0, compound 0.1a direct 0.1.2)
   }
-  assume ∧ ∈ $0 A with ($0) φ {
-    prove = $0 $0
-    prove ∧ ∈ $0 A ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a
-    prove ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a
-  }
-  prove ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a ∧ ∈ $0 A with ($0) φ
 }
-qed
 
 theorem Comprehensions Exist for Non-Empty Sets
 premise ∃ y ∧ ∈ $0 A with ($0) φ
-let a ∧ ∈ $0 A with ($0) φ {
-  take x {
-    prove ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0
-    prove → ∈ $0 A ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0
+{
+  let a ∧ ∈ $0 A with ($0) φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) () (∧ ∈ $0 A with ($0) φ) () (direct p0, direct 0d) {
+    take x {
+      assert ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0 direct 01497a2df4aaf91a9748bc5c17111c99b57fcc47c9a4cacb216acc397324cf83 (with ($0) φ) ($0, $$0) () () ()
+      assert → ∈ $0 A ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0 direct 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0, ∈ $0 A) () () () (direct 0.0.0)
+    }
+    assert ∃ Y ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$$0 direct 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () (A) (∨ ∧ with ($$0) φ = $$1 $$0 ∧ ¬ with ($$0) φ = $$1 $0) () (compound 0.0 direct 0.0.1)
+    assert ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$0 ∧ ∈ $0 A with ($0) φ direct b708f511a717e74c973f6de531b41be9dd1608d03f371544b0b3f5e5820592be () ($0, A) (with ($$0) φ) () (direct 0a)
+    assert ∃ Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ direct a6e712b38909dac88b7b619de972b17b819142bff65d3f1b507a5e6c070d9fb5 () () (∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$$0 $0 ∧ ¬ with ($0) φ = $$$0 $$0, ∧ ∈ $$0 A with ($$0) φ) () (direct 0.1, direct 0.2)
   }
-  prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$$0
-  prove ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$0 ∧ ∈ $0 A with ($0) φ
-  prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
+  assert ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ direct 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∧ ∈ $0 A with ($0) φ) () (direct 0)
 }
-prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
-qed
 
 theorem Comprehensions Exist
-assume ¬ ∃ y ∧ ∈ $0 X with ($0) φ {
-  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ
+{
+  assume ¬ ∃ y ∧ ∈ $0 X with ($0) φ {
+    assert ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ direct 34ea80ac4dc2e2e953296c2d11b812e86eef1f686590546d051f8b1e9732317a () (X) (with ($0) φ) () (direct 0a)
+  }
+  assume ∃ y ∧ ∈ $0 X with ($0) φ {
+    assert ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ direct 2f60c41955d2f9bf1309bdf7a1fc74c978342425cf7a3f23ba4e449edee631d8 () (X) (with ($0) φ) () (direct 1a)
+  }
+  assert ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ direct 35f46479d4f3054e0f463194f8ed4dd77e7526b58f2b6157594bf81bccfcf95a (∃ y ∧ ∈ $0 X with ($0) φ, ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ) () () () (compound 1a direct 1.0, compound 0a direct 0.0)
 }
-assume ∃ y ∧ ∈ $0 X with ($0) φ {
-  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ
-}
-prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ
-qed
 
 term comprehension ($x A with x φ)
   name (Comprehension)
@@ -67,53 +69,59 @@ term comprehension ($x A with x φ)
 
 theorem Membership Condition for a Comprehension
 premise = S comprehension x A with ($0) φ
-prove ∀ y ↔ ∈ $0 comprehension x A with ($0) φ ∧ ∈ $0 A with ($0) φ
-prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ
-qed
+{
+  assert ∀ y ↔ ∈ $0 comprehension x A with ($0) φ ∧ ∈ $0 A with ($0) φ direct 0111376b28debd444ee3e3e7b480f45e33692930df3feb46e5b5ef76a6b43933 () (A) (with ($0) φ) () ()
+  assert ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (S, comprehension x A with ($0) φ) (∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) () (direct p0, direct 0)
+}
 
 theorem An Element of a Comprehension Is an Element of Its Domain
 premise = S comprehension x A with ($0) φ
 premise ∈ a S
-prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ
-prove ↔ ∈ a S ∧ ∈ a A with (a) φ
-prove ∧ ∈ a A with (a) φ
-prove ∈ a A
-qed
+{
+  assert ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ direct 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (S, A) (with ($0) φ) () (direct p0)
+  assert ↔ ∈ a S ∧ ∈ a A with (a) φ direct 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ) () (direct 0)
+  assert ∧ ∈ a A with (a) φ direct be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (∈ a S, ∧ ∈ a A with (a) φ) () () () (direct 1, direct p1)
+  assert ∈ a A direct 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ a A, with (a) φ) () () () (direct 2)
+}
 
 theorem An Element of a Comprehension Satisfies Its Condition
 premise = S comprehension x A with ($0) φ
 premise ∈ a S
-prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ
-prove ↔ ∈ a S ∧ ∈ a A with (a) φ
-prove ∧ ∈ a A with (a) φ
-prove with (a) φ
-qed
+{
+  assert ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ direct 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (S, A) (with ($0) φ) () (direct p0)
+  assert ↔ ∈ a S ∧ ∈ a A with (a) φ direct 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ) () (direct 0)
+  assert ∧ ∈ a A with (a) φ direct be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (∈ a S, ∧ ∈ a A with (a) φ) () () () (direct 1, direct p1)
+  assert with (a) φ direct 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ a A, with (a) φ) () () () (direct 2)
+}
 
 theorem A Comprehension Is a Subset of Its Domain
 premise = S comprehension x A with ($0) φ
-take y {
-  assume ∈ $0 S {
-    prove ∈ $0 A
+{
+  take y {
+    assume ∈ $0 S {
+      assert ∈ $0 A direct 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () (S, A, $0) (with ($$0) φ) () (direct p0, direct 0.0a)
+    }
   }
+  assert ⊆ S A direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (S, A) () () (compound 0 compound 0.0a direct 0.0.0)
 }
-prove ⊆ S A
-qed
 
 theorem Element of a Comprehension
 premise = S comprehension x A with ($0) φ
 premise ∈ a A
 premise with (a) φ
-prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ
-prove ∈ a S
-qed
+{
+  assert ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ direct 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (S, A) (with ($0) φ) () (direct p0)
+  assert ∈ a S transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (a) (∈ $0 S, ∧ ∈ $0 A with ($0) φ) () (direct 0, expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ a A, with (a) φ) () () () (direct p1, direct p2))
+}
 
 theorem Universal Property from Comprehension
 premise = S comprehension x A with ($0) φ
 premise = S A
-take y {
-  assume ∈ $0 A {
-    prove ∈ $0 S
-    prove with ($0) φ
+{
+  take y {
+    assume ∈ $0 A {
+      assert ∈ $0 S direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (S, A) (∈ $0 $$0) () (direct p1, direct 0.0a)
+      assert with ($0) φ direct fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () (S, A, $0) (with ($$0) φ) () (direct p0, direct 0.0.0)
+    }
   }
 }
-qed
