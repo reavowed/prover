@@ -2,12 +2,13 @@
 @import net.prover.model.entries.Theorem
 @import net.prover.model.proof.ProofLine
 @import net.prover.model.DisplayContext
+@import net.prover.model.entries.ChapterEntry
 @(
   theorem: Theorem,
   chapter: Chapter,
   book: net.prover.model.Book,
-  previousOption: Option[net.prover.model.Inference.Entry],
-  nextOption: Option[net.prover.model.Inference.Entry],
+  previousOption: Option[ChapterEntry.WithKey],
+  nextOption: Option[ChapterEntry.WithKey],
   usages: Seq[(net.prover.model.Book, Chapter, Seq[Theorem])])(
   implicit displayContext: DisplayContext)
 @html.inference("Theorem", theorem, theorem.proof.referenceMap, chapter, book, previousOption, nextOption, usages) {
@@ -24,7 +25,7 @@
           </td>
           @line.inferenceLink.map { inferenceLink =>
             <td>
-              <a class="stepInferenceId" href="@{inferenceLink.key.map{case (bk, ck, k) => {s"/books/$bk/$ck/$k"}}}">
+              <a class="stepInferenceId" @inferenceLink.key.map { key => href="@key.url" }>
                 @inferenceLink.name
               </a>
             </td>

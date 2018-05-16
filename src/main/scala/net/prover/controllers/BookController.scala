@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.model.entries.{Axiom, Theorem}
+import net.prover.model.entries.{Axiom, ChapterEntry, Theorem}
 import net.prover.model.{Book, Chapter, DisplayContext, Inference}
 import net.prover.services.BookService
 import org.slf4j.LoggerFactory
@@ -28,7 +28,7 @@ class BookController @Autowired() (bookService: BookService) {
   @GetMapping(value = Array("/{bookKey}"), produces = Array("text/html;charset=UTF-8"))
   def getBook(@PathVariable("bookKey") bookKey: String) = {
     try {
-      bookService.books.find(_.key == bookKey) match {
+      bookService.books.find(_.key.value == bookKey) match {
         case Some(book) =>
           html.book(book).body
         case None =>
@@ -45,8 +45,8 @@ class BookController @Autowired() (bookService: BookService) {
   def getChapter(@PathVariable("bookKey") bookKey: String, @PathVariable("chapterKey") chapterKey: String) = {
     try {
       (for {
-        book <- bookService.books.find(_.key == bookKey)
-        chapter <- book.chapters.find(_.key == chapterKey)
+        book <- bookService.books.find(_.key.value == bookKey)
+        chapter <- book.chapters.find(_.key.value == chapterKey)
       } yield html.chapter(chapter, book).body) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {
       case NonFatal(e) =>
@@ -55,25 +55,25 @@ class BookController @Autowired() (bookService: BookService) {
     }
   }
 
-  @GetMapping(value = Array("/{bookKey}/{chapterKey}/{inferenceKey}"), produces = Array("text/html;charset=UTF-8"))
-  def getInference(
+  @GetMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}"), produces = Array("text/html;charset=UTF-8"))
+  def getEntry(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("inferenceKey") inferenceKey: String
+    @PathVariable("entryKey") entryKey: String
   ) = {
     try {
       val books = bookService.books
       (for {
-        book <- books.find(_.key == bookKey)
-        chapter <- book.chapters.find(_.key == chapterKey)
-        inferences = chapter.entries.ofType[Inference.Entry]
-        inference <- inferences.find(_.keyOption.contains(inferenceKey))
+        book <- books.find(_.key.value == bookKey)
+        chapter <- book.chapters.find(_.key.value == chapterKey)
+        entries = chapter.entries.ofType[ChapterEntry.WithKey]
+        entry <- entries.find(_.key.value == entryKey)
       } yield {
-        val index = inferences.indexOf(inference)
-        val previous = if (index > 0) Some(inferences(index - 1)) else None
-        val next = if (index < inferences.length - 1) Some(inferences(index + 1)) else None
+        val index = entries.indexOf(entry)
+        val previous = if (index > 0) Some(entries(index - 1)) else None
+        val next = if (index < entries.length - 1) Some(entries(index + 1)) else None
         implicit val displayContext = DisplayContext((book.dependencies.transitive :+ book).flatMap(_.shorthands))
-        inference match {
+        entry match {
           case axiom: Axiom =>
             html.axiom(axiom, chapter, book, previous, next, getUsages(axiom, books)).body
           case theorem: Theorem =>

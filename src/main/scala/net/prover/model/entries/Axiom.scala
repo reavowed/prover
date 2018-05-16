@@ -6,18 +6,12 @@ import net.prover.model._
 
 case class Axiom(
     name: String,
-    key: String,
-    chapterTitle: String,
-    bookTitle: String,
+    key: ChapterEntry.Key,
     premises: Seq[Premise],
     conclusion: Statement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement)
-  extends ChapterEntry
-    with Inference.Entry
+  extends Inference.Entry
 {
-  override def chapterKey = chapterTitle.formatAsKey
-  override def bookKey = bookTitle.formatAsKey
-
   override def inferences: Seq[Inference] = Seq(this)
   override def serializedLines: Seq[String] = {
     Seq(s"axiom $name") ++
@@ -37,7 +31,7 @@ object Axiom extends ChapterEntryParser {
     } yield conclusion
   }
 
-  def parser(chapterTitle: String, bookTitle: String, getKey: String => String)(implicit context: ParsingContext): Parser[Axiom] = {
+  def parser(getKey: String => ChapterEntry.Key)(implicit context: ParsingContext): Parser[Axiom] = {
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
@@ -47,8 +41,6 @@ object Axiom extends ChapterEntryParser {
       Axiom(
         name,
         getKey(name),
-        chapterTitle,
-        bookTitle,
         premises,
         conclusion,
         rearrangementType)

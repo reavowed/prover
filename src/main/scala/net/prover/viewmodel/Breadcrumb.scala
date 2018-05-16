@@ -14,14 +14,14 @@ object Breadcrumb {
   }
   case class Book(book: model.Book) extends Breadcrumb {
     val text = book.title
-    val link = "/books/" + book.key
+    val link = book.key.url
   }
   case class Chapter(chapter: model.Chapter) extends Breadcrumb {
     val text = chapter.title
-    val link = "/books/" + chapter.bookKey + "/" + chapter.key
+    val link = chapter.key.url
   }
-  case class Inference(inference: model.Inference.Entry) extends Breadcrumb {
-    val text = inference.name
-    val link = "/books/" + inference.bookKey + "/" + inference.chapterKey + "/" + inference.key
+  case class ChapterEntry(entry: model.entries.ChapterEntry.WithKey) extends Breadcrumb {
+    val text = entry.name
+    val link = entry.key.url
   }
 }

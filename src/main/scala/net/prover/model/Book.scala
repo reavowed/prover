@@ -11,11 +11,11 @@ import scala.util.{Failure, Success, Try}
 @JsonIgnoreProperties(Array("dependencies"))
 case class Book(
     title: String,
+    key: Book.Key,
     dependencies: Seq[Book],
     chapters: Seq[Chapter],
     statementVariableNames: Seq[String],
     termVariableNames: Seq[String]) {
-  val key: String = title.formatAsKey
   implicit def displayContext: DisplayContext = DisplayContext(allTransitive(_.shorthands))
 
   def inferences: Seq[Inference] = chapters.flatMap(_.inferences)
@@ -37,6 +37,10 @@ case class Book(
 object Book {
   val logger = LoggerFactory.getLogger(Book.getClass)
 
+  case class Key(value: String) {
+    def url = s"/books/$value"
+  }
+
   def parse(title: String, path: Path, previousBooks: Seq[Book], getChapterPath: (String, Int) => Path): Option[Book] = {
     Try(parser(title, previousBooks, getChapterPath).parse(Tokenizer.fromPath(path))._1) match {
       case Success(bookOutline) =>
@@ -48,6 +52,7 @@ object Book {
   }
 
   def parser(title: String, previousBooks: Seq[Book], getChapterPath: (String, Int) => Path): Parser[Book] = {
+    val key = Key(title.formatAsKey)
     for {
       imports <- importsParser
       dependencies = imports.map { importTitle =>
@@ -67,11 +72,12 @@ object Book {
         Seq.empty)
       val chapters = chapterTitles.zipWithIndex.mapFold(initialContext) { case (context, (chapterTitle, index)) =>
         val chapterPath = getChapterPath(chapterTitle, index)
-        val (chapterOutline, newContext) = Chapter.parser(chapterTitle, title)(context).parseAndDiscard(chapterPath)
+        val (chapterOutline, newContext) = Chapter.parser(chapterTitle, key)(context).parseAndDiscard(chapterPath)
         (newContext, chapterOutline)
       }._2
       Book(
         title,
+        key,
         dependencies,
         chapters,
         statementVariableNames,

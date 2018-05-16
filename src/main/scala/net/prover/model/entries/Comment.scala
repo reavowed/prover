@@ -8,5 +8,5 @@ case class Comment(text: String) extends ChapterEntry {
 
 object Comment extends ChapterEntryParser.WithoutKey {
   override val name: String = "comment"
-  def parser(chapterTitle: String, bookTitle: String)(implicit context: ParsingContext): Parser[Comment] = Parser.toEndOfLine.map(Comment.apply)
+  def parser(implicit context: ParsingContext): Parser[Comment] = Parser.toEndOfLine.map(Comment.apply)
 }

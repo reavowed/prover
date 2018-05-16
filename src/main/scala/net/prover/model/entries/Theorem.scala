@@ -9,19 +9,13 @@ import net.prover.model.proof.Proof
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement", "proofOutline"))
 case class Theorem(
     name: String,
-    key: String,
-    chapterTitle: String,
-    bookTitle: String,
+    key: ChapterEntry.Key,
     premises: Seq[Premise],
     conclusion: Statement,
     proof: Proof,
     rearrangementType: RearrangementType)
-  extends ChapterEntry
-    with Inference.Entry
+  extends Inference.Entry
 {
-  override def chapterKey = chapterTitle.formatAsKey
-  override def bookKey = bookTitle.formatAsKey
-
   def referencedInferenceIds: Set[String] = proof.referencedInferenceIds
   override def inferences: Seq[Inference] = Seq(this)
 
@@ -35,7 +29,7 @@ case class Theorem(
 
 object Theorem extends ChapterEntryParser {
   override val name: String = "theorem"
-  def parser(chapterTitle: String, bookTitle: String, getKey: String => String)(implicit context: ParsingContext): Parser[Theorem] = {
+  def parser(getKey: String => ChapterEntry.Key)(implicit context: ParsingContext): Parser[Theorem] = {
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
@@ -45,8 +39,6 @@ object Theorem extends ChapterEntryParser {
       Theorem(
         name,
         getKey(name),
-        chapterTitle,
-        bookTitle,
         premises,
         proof.conclusion,
         proof,

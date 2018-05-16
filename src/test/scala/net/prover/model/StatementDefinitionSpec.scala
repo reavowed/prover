@@ -5,7 +5,7 @@ import net.prover.model.entries.StatementDefinition
 class StatementDefinitionSpec extends ProverSpec {
   "statement definition parser" should {
     def parseStatementDefinition(text: String): StatementDefinition = {
-      StatementDefinition.parser("", "").parseAndDiscard(text)
+      StatementDefinition.parser.parseAndDiscard(text)
     }
 
     "parse definition" in {

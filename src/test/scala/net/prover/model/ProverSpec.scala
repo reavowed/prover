@@ -4,7 +4,7 @@ import java.nio.file.Paths
 
 import net.prover.model.entries.ExpressionDefinition.{ComponentType, StatementComponent, TermComponent}
 import net.prover.model.expressions._
-import net.prover.model.entries.{ExpressionDefinition, StatementDefinition, TermDefinition}
+import net.prover.model.entries._
 import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {
@@ -17,6 +17,9 @@ trait ProverSpec extends Specification {
   val b = TermVariable("b")
   val c = TermVariable("c")
   val n = TermVariable("n")
+
+  val stubBook = Book("", Book.Key(""), Nil, Nil, Nil, Nil)
+  val stubChapter = Chapter("", Chapter.Key("", stubBook.key), "", Nil)
 
   def connective(
     symbol: String,
@@ -31,8 +34,6 @@ trait ProverSpec extends Specification {
       None,
       Format.default(symbol, componentTypes.map(_.name)),
       definingStatement,
-      "",
-      "",
       None)
   }
   def predicate(
@@ -48,8 +49,6 @@ trait ProverSpec extends Specification {
       None,
       Format.default(symbol, componentTypes.map(_.name)),
       definingStatement,
-      "",
-      "",
       None)
   }
 
@@ -64,8 +63,6 @@ trait ProverSpec extends Specification {
       None,
       Format.Explicit(s"($symbol%0)%1", s"(${symbol}x)φ", requiresBrackets = false),
       definingStatement,
-      "",
-      "",
       None)
   }
 
@@ -93,9 +90,7 @@ trait ProverSpec extends Specification {
     None,
     Format.default("∅", Nil),
     Nil,
-    ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter.anonymous(0, 1)))),
-    "",
-    "")
+    ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter.anonymous(0, 1)))))
   val EmptySet = DefinedTerm(Nil, EmptySetDefinition)(Nil)
 
   val PowerSet = TermDefinition(
@@ -107,9 +102,7 @@ trait ProverSpec extends Specification {
     Nil,
     ForAll("y")(Equivalence(
       ElementOf(FunctionParameter("y", 0, 0), FunctionParameter.anonymous(0, 1)),
-      Subset(FunctionParameter("y", 0, 0), a))),
-    "",
-    "")
+      Subset(FunctionParameter("y", 0, 0), a))))
 
   val Singleton = TermDefinition(
     "singleton",
@@ -118,9 +111,7 @@ trait ProverSpec extends Specification {
     Some("Singleton"),
     Format.Explicit("{%0}", "{a}", requiresBrackets = false),
     Nil,
-    φ,
-    "",
-    "")
+    φ)
 
   val Pair = TermDefinition(
     "pair",
@@ -129,9 +120,7 @@ trait ProverSpec extends Specification {
     Some("Unordered Pair"),
     Format.Explicit("{%0, %1}", "{a, b}", requiresBrackets = false),
     Nil,
-    φ,
-    "",
-    "")
+    φ)
 
   implicit val defaultContext = ParsingContext(
     inferences = Nil,
@@ -143,9 +132,6 @@ trait ProverSpec extends Specification {
     statementVariableNames = Set(φ, ψ, χ).map(_.name),
     termVariableNames = Set(a, b, c, n).map(_.name),
     Seq.empty)
-
-  val stubBook = Book("", Nil, Nil, Nil, Nil)
-  val stubChapter = Chapter("", "", "")
 
   implicit class ParserOps[T](parser: Parser[T]) {
     def parseAndDiscard(text: String): T = {

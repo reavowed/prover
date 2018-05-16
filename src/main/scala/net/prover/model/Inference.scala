@@ -4,15 +4,14 @@ import java.security.MessageDigest
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference._
+import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions._
 import net.prover.model.proof.Transformation
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
   val id: String = calculateHash()
-  def chapterKey: String
-  def bookKey: String
-  def keyOption: Option[String]
+  def entryKeyOption: Option[ChapterEntry.Key]
   def name: String
   def premises: Seq[Premise]
   def conclusion: Statement
@@ -54,15 +53,12 @@ trait Inference {
 }
 
 object Inference {
-  trait Entry extends Inference {
-    def key: String
-    override def keyOption = Some(key)
+  trait Entry extends Inference with ChapterEntry.WithKey {
+    override def entryKeyOption = Some(key)
   }
 
   case class Definition(
       nameOfDefinition: String,
-      chapterKey: String,
-      bookKey: String,
       premiseStatements: Seq[Statement],
       conclusion: Statement)
     extends Inference
@@ -72,7 +68,7 @@ object Inference {
     }
     override def name: String = s"Definition of $nameOfDefinition"
     override def rearrangementType = RearrangementType.NotRearrangement
-    override def keyOption = None
+    override def entryKeyOption = None
   }
 
   case class Transformed(
@@ -82,9 +78,7 @@ object Inference {
       conclusion: Statement)
     extends Inference
   {
-    override def keyOption = inner.keyOption
-    override def chapterKey = inner.chapterKey
-    override def bookKey = inner.bookKey
+    override def entryKeyOption = inner.entryKeyOption
     override def name = inner.name
     override def rearrangementType = inner.rearrangementType
 

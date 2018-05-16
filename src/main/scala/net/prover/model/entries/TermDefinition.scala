@@ -11,15 +11,11 @@ case class TermDefinition(
     explicitName: Option[String],
     format: Format,
     premises: Seq[Statement],
-    definitionPredicate: Statement,
-    chapterTitle: String,
-    bookTitle: String)
+    definitionPredicate: Statement)
   extends ChapterEntry
     with ExpressionDefinition
 {
   def name = explicitName.getOrElse(symbol)
-  def chapterKey = chapterTitle.formatAsKey
-  def bookKey = bookTitle.formatAsKey
 
   val defaultValue = {
     DefinedTerm(componentTypes.map(_.expression), this)(boundVariableNames)
@@ -38,7 +34,7 @@ case class TermDefinition(
     }
   }
 
-  override def inferences: Seq[Inference] = Seq(Inference.Definition(name, chapterKey, bookKey, premises, definingStatement))
+  override def inferences: Seq[Inference] = Seq(Inference.Definition(name, premises, definingStatement))
 
   override def serializedLines: Seq[String] = Seq(s"term $symbol $serializedComponents") ++
     (explicitName.map(n => s"name ($n)").toSeq ++
@@ -59,7 +55,7 @@ object TermDefinition extends ChapterEntryParser.WithoutKey {
     "name",
     Parser.allInParens)
 
-  def parser(chapterTitle: String, bookTitle: String)(implicit context: ParsingContext): Parser[TermDefinition] = {
+  def parser(implicit context: ParsingContext): Parser[TermDefinition] = {
     for {
       symbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
@@ -77,9 +73,7 @@ object TermDefinition extends ChapterEntryParser.WithoutKey {
         name,
         format,
         premises,
-        definitionPredicate,
-        chapterTitle,
-        bookTitle)
+        definitionPredicate)
     }
   }
 }

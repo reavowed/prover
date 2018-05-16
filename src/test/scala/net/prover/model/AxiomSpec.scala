@@ -1,20 +1,20 @@
 package net.prover.model
 
-import net.prover.model.entries.Axiom
+import net.prover.model.entries.{Axiom, ChapterEntry}
 import net.prover.model.expressions.Statement
+import net.prover.model._
 
 class AxiomSpec extends ProverSpec {
+  val chapterKey = Chapter.Key("", Book.Key(""))
 
   def parseAxiom(text: String*): Axiom = {
-    Axiom.parser("Test Chapter", "Test Book", identity).parseAndDiscard(text.mkString("\n"))
+    Axiom.parser(s => ChapterEntry.Key(s.formatAsKey, chapterKey)).parseAndDiscard(text.mkString("\n"))
   }
 
   def axiom(title: String, key: String, premises: Seq[PremiseMagnet], conclusion: Statement): Axiom = {
     Axiom(
       title,
-      key,
-      "Test Chapter",
-      "Test Book",
+      ChapterEntry.Key(key, chapterKey),
       premises,
       conclusion)
   }

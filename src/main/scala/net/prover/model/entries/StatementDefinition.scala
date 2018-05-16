@@ -14,15 +14,11 @@ case class StatementDefinition(
     explicitName: Option[String],
     format: Format,
     definingStatement: Option[Statement],
-    chapterTitle: String,
-    bookTitle: String,
     structureType: Option[StructureType])
   extends ChapterEntry
     with ExpressionDefinition
 {
   def name = explicitName.getOrElse(symbol)
-  def chapterKey = chapterTitle.formatAsKey
-  def bookKey = bookTitle.formatAsKey
 
   val defaultValue = {
     DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)
@@ -43,8 +39,8 @@ case class StatementDefinition(
   override def inferences: Seq[Inference] = {
     definingStatement.toSeq.flatMap { s =>
       Seq(
-        Inference.Definition(name, chapterKey, bookKey, Seq(s), defaultValue),
-        Inference.Definition(name, chapterKey, bookKey, Seq(defaultValue), s))
+        Inference.Definition(name, Seq(s), defaultValue),
+        Inference.Definition(name, Seq(defaultValue), s))
     }
   }
 
@@ -82,7 +78,7 @@ object StatementDefinition extends ChapterEntryParser.WithoutKey {
     "definition",
     Statement.parser.inParens)
 
-  def parser(chapterTitle: String, bookTitle: String)(implicit context: ParsingContext): Parser[StatementDefinition] = {
+  def parser(implicit context: ParsingContext): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
@@ -100,8 +96,6 @@ object StatementDefinition extends ChapterEntryParser.WithoutKey {
         name,
         format,
         optionalDefiningStatement,
-        chapterTitle,
-        bookTitle,
         structureType)
     }
   }

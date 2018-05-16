@@ -1,27 +1,27 @@
-@import net.prover.model.entries.Theorem
+@import net.prover.model.entries.{ChapterEntry, Theorem}
 @import net.prover.model.proof.ReferenceMap
 @import net.prover.model.{Book, Chapter, DisplayContext, Inference}
 @import net.prover.viewmodel.Breadcrumb
 @(
   description: String,
-  inference: Inference.Entry,
+  inference: Inference with ChapterEntry.WithKey,
   referenceMap: ReferenceMap,
   chapter: Chapter,
   book: Book,
-  previousOption: Option[Inference.Entry],
-  nextOption: Option[Inference.Entry],
+  previousOption: Option[ChapterEntry.WithKey],
+  nextOption: Option[ChapterEntry.WithKey],
   usages: Seq[(Book, Chapter, Seq[Theorem])])(
   content: Html)(
   implicit displayContext: DisplayContext)
 
-@html.main(Seq(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter), Breadcrumb.Inference(inference))) {
+@html.main(Seq(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter), Breadcrumb.ChapterEntry(inference))) {
   <div class="inference">
     <div class="inferenceLinks">
       @previousOption.map { previous =>
-        <a class="inferenceLink pull-left" href="/books/@book.key/@chapter.key/@previous.key">&laquo; @previous.name</a>
+        <a class="inferenceLink pull-left" href="@previous.key.url">&laquo; @previous.name</a>
       }
       @nextOption.map { next =>
-        <a class="inferenceLink pull-right" href="/books/@book.key/@chapter.key/@next.key">@next.name &raquo;</a>
+        <a class="inferenceLink pull-right" href="@next.key.url">@next.name &raquo;</a>
       }
     </div>
 
@@ -50,7 +50,7 @@
         <p>
         @for(inference <- inferences) {
           <span class="usage">
-            <a class="usageLink" href="/books/@usageBook.key/@usageChapter.key/@inference.key">@inference.name</a>
+            <a class="usageLink" href="@inference.key.url">@inference.name</a>
           </span>
         }
         </p>

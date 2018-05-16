@@ -9,7 +9,7 @@ case class Shorthand(template: Template, format: Format.Explicit) extends Chapte
 
 object Shorthand extends ChapterEntryParser.WithoutKey {
   override def name = "shorthand"
-  override def parser(chapterTitle: String, bookTitle: String)(implicit context: ParsingContext) = {
+  override def parser(implicit context: ParsingContext) = {
     for {
       template <- Template.parser
       _ <- Parser.requiredWord("as")

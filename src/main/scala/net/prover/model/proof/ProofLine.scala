@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.entries.Shorthand
+import net.prover.model.entries.{ChapterEntry, Shorthand}
 import net.prover.model.expressions._
 
 case class ProofLine(
@@ -9,7 +9,7 @@ case class ProofLine(
   expression: ProofLine.Expression,
   reference: Option[String],
   indentLevel: Int,
-  inferenceLink: Option[ProofLine.InferenceLink])
+  inferenceLink: Option[ProofLine.EntryLink])
 
 object ProofLine {
   trait Expression {
@@ -78,10 +78,10 @@ object ProofLine {
       implicit displayContext: DisplayContext
     ): Expression = create(realExpression, Set.empty)
   }
-  case class InferenceLink(name: String, key: Option[(String, String, String)])
-  object InferenceLink {
-    def apply(inference: Inference): InferenceLink = InferenceLink(
+  case class EntryLink(name: String, key: Option[ChapterEntry.Key])
+  object EntryLink {
+    def apply(inference: Inference): EntryLink = EntryLink(
       inference.name,
-      inference.keyOption.map(key => (inference.bookKey, inference.chapterKey, key)))
+      inference.entryKeyOption)
   }
 }

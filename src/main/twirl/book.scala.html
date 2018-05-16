@@ -6,7 +6,7 @@
     <h3>@book.title</h3>
     @for(chapter <- book.chapters) {
       <div class="chapter">
-        <h4><a href="/books/@{book.key}/@{chapter.key}">@chapter.title</a></h4>
+        <h4><a href="@chapter.key.url">@chapter.title</a></h4>
         <p>@chapter.summary</p>
       </div>
     }
