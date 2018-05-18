@@ -177,6 +177,14 @@ package object model {
       }
       helper(Nil, seq, Nil)
     }
+    def interleave[S >: T](s: S): Seq[S] = {
+      seq match {
+        case head +: tail =>
+          head +: tail.flatMap(Seq(s, _))
+        case _ =>
+          seq
+      }
+    }
   }
 
   implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {

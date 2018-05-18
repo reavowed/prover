@@ -3,6 +3,7 @@ package net.prover.controllers
 import net.prover.model.entries.{Axiom, ChapterEntry, Theorem}
 import net.prover.model.{Book, Chapter, DisplayContext, Inference}
 import net.prover.services.BookService
+import net.prover.views._
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
@@ -13,11 +14,10 @@ import scala.util.control.NonFatal
 @RestController
 @RequestMapping(Array("/books"))
 class BookController @Autowired() (bookService: BookService) {
-
   @GetMapping(value = Array(""), produces = Array("text/html;charset=UTF-8"))
   def get = {
     try {
-      html.books(bookService.books).body
+      BooksView(bookService.books).toString
     } catch {
       case NonFatal(e) =>
         BookController.logger.error("Error getting books", e)
@@ -30,7 +30,7 @@ class BookController @Autowired() (bookService: BookService) {
     try {
       bookService.books.find(_.key.value == bookKey) match {
         case Some(book) =>
-          html.book(book).body
+          BookView(book).toString
         case None =>
           new ResponseEntity(HttpStatus.NOT_FOUND)
       }
@@ -47,7 +47,7 @@ class BookController @Autowired() (bookService: BookService) {
       (for {
         book <- bookService.books.find(_.key.value == bookKey)
         chapter <- book.chapters.find(_.key.value == chapterKey)
-      } yield html.chapter(chapter, book).body) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
+      } yield ChapterView(chapter, book).toString) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {
       case NonFatal(e) =>
         BookController.logger.error("Error getting books", e)
@@ -72,12 +72,11 @@ class BookController @Autowired() (bookService: BookService) {
         val index = entries.indexOf(entry)
         val previous = if (index > 0) Some(entries(index - 1)) else None
         val next = if (index < entries.length - 1) Some(entries(index + 1)) else None
-        implicit val displayContext = DisplayContext((book.dependencies.transitive :+ book).flatMap(_.shorthands))
         entry match {
           case axiom: Axiom =>
-            html.axiom(axiom, chapter, book, previous, next, getUsages(axiom, books)).body
+            AxiomView(axiom, chapter, book, previous, next, getUsages(axiom, books)).toString
           case theorem: Theorem =>
-            html.theorem(theorem, chapter, book, previous, next, getUsages(theorem, books)).body
+            TheoremView(theorem, chapter, book, previous, next, getUsages(theorem, books)).toString
         }
       }) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {

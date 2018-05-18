@@ -1,39 +1,55 @@
 package net.prover.model
 
-import java.util.regex.Matcher
+import java.util.regex.{Matcher, Pattern}
+
+import scala.collection.mutable.ListBuffer
+import scala.xml.{Elem, Node, Text}
 
 trait Format {
-  def formatString: String
+  def baseFormatString: String
   def requiresBrackets: Boolean
   def serialized: Option[String]
 
-  def formatHtml(components: Seq[String], safe: Boolean = false): String = {
-    formatInternal(HtmlHelper.format(formatString), components, safe)
-  }
   def formatText(components: Seq[String], safe: Boolean = false): String = {
-    formatInternal(formatString, components, safe)
-  }
-
-  private def formatInternal(
-    formatStringToUse: String,
-    components: Seq[String],
-    safe: Boolean = false
-  ): String = {
-    val inner = components.zipWithIndex.foldLeft(formatStringToUse) { case (textSoFar, (component, index)) =>
+    components.zipWithIndex.foldLeft(getSafeFormatString(safe)) { case (textSoFar, (component, index)) =>
       textSoFar.replaceFirst(s"%$index", Matcher.quoteReplacement(component))
     }
+  }
+  def formatHtml(components: Seq[Elem], safe: Boolean = false): Elem = {
+    HtmlHelper.formatWithReplacement(getSafeFormatString(safe), replacePlaceholders(_, components))
+  }
+
+  private def getSafeFormatString(safe: Boolean) = {
     if (safe && requiresBrackets)
-      "(" + inner + ")"
+      "(" + baseFormatString + ")"
     else
-      inner
+      baseFormatString
+  }
+
+  private def replacePlaceholders(
+    formatStringToUse: String,
+    components: Seq[Elem]
+  ): Elem = {
+    val matcher = Pattern.compile("%(\\d+)").matcher(formatStringToUse)
+    var indexOfLastMatchEnd = 0
+    val childElems = new ListBuffer[Node]
+    while (matcher.find()) {
+      val intermediateNode = new Text(formatStringToUse.substring(indexOfLastMatchEnd, matcher.start()))
+      val componentIndex = matcher.group(1).toInt
+      childElems += intermediateNode
+      childElems += components(componentIndex)
+      indexOfLastMatchEnd = matcher.end()
+    }
+    childElems += new Text(formatStringToUse.substring(indexOfLastMatchEnd))
+    <span>{childElems.toList}</span>
   }
 }
 
 object Format {
-  case class Default(formatString: String, requiresBrackets: Boolean) extends Format {
+  case class Default(baseFormatString: String, requiresBrackets: Boolean) extends Format {
     override def serialized = None
   }
-  case class Explicit(formatString: String, originalValue: String, requiresBrackets: Boolean) extends Format {
+  case class Explicit(baseFormatString: String, originalValue: String, requiresBrackets: Boolean) extends Format {
     override def serialized = Some(originalValue)
   }
 

@@ -1,4 +1,0 @@
-@import net.prover.model.proof.{ProofLine, ReferenceMap}
-@import net.prover.model.{DisplayContext, Premise}
-@(premise: Premise, referenceMap: ReferenceMap)(implicit displayContext: DisplayContext)
-<span class="premise">@html.expression(ProofLine.Expression.create(premise.statement, referenceMap.getReferrers(premise.reference.value)))</span>
