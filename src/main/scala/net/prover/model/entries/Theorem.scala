@@ -9,7 +9,7 @@ import net.prover.model.proof.Proof
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement", "proofOutline"))
 case class Theorem(
     name: String,
-    key: ChapterEntry.Key,
+    key: ChapterEntry.Key.Standalone,
     premises: Seq[Premise],
     conclusion: Statement,
     proof: Proof,
@@ -29,7 +29,7 @@ case class Theorem(
 
 object Theorem extends ChapterEntryParser {
   override val name: String = "theorem"
-  def parser(getKey: String => ChapterEntry.Key)(implicit context: ParsingContext): Parser[Theorem] = {
+  def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[Theorem] = {
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
@@ -38,7 +38,7 @@ object Theorem extends ChapterEntryParser {
     } yield {
       Theorem(
         name,
-        getKey(name),
+        (ChapterEntry.Key.Standalone.apply _).tupled(getKey(name)),
         premises,
         proof.conclusion,
         proof,

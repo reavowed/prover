@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.model.entries.{Axiom, ChapterEntry, Theorem}
+import net.prover.model.entries.{Axiom, ChapterEntry, StatementDefinition, Theorem}
 import net.prover.model.{Book, Chapter, DisplayContext, Inference}
 import net.prover.services.BookService
 import net.prover.views._
@@ -66,7 +66,7 @@ class BookController @Autowired() (bookService: BookService) {
       (for {
         book <- books.find(_.key.value == bookKey)
         chapter <- book.chapters.find(_.key.value == chapterKey)
-        entries = chapter.entries.ofType[ChapterEntry.WithKey]
+        entries = chapter.entries.ofType[ChapterEntry.Standalone]
         entry <- entries.find(_.key.value == entryKey)
       } yield {
         val index = entries.indexOf(entry)

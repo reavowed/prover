@@ -7,7 +7,7 @@ import net.prover.viewmodel.Breadcrumb
 
 object ChapterView {
   private def StatementDefinitionView(statementDefinition: StatementDefinition)(implicit displayContext: DisplayContext) = {
-    <div class="result">
+    <div id={statementDefinition.key.value} class="result">
       <h5>Statement Definition: {ExpressionView(statementDefinition.defaultValue)}</h5>
       {statementDefinition.definingStatement.toSeq.map { definingStatement =>
         <div>{ExpressionView(statementDefinition.defaultValue)} is defined by {ExpressionView(definingStatement)}. </div>
@@ -15,7 +15,7 @@ object ChapterView {
     </div>
   }
   private def TermDefinitionView(termDefinition: TermDefinition)(implicit displayContext: DisplayContext) = {
-    <div class="result">
+    <div id={termDefinition.key.value} class="result">
       <h5>Term Definition: {ExpressionView(termDefinition.defaultValue)}</h5>
       <div>
         {PremisesView(termDefinition.premises)}
@@ -27,7 +27,7 @@ object ChapterView {
     </div>
   }
   private def InferenceView(description: String, inference: Inference.Entry)(implicit displayContext: DisplayContext) = {
-    <div class="result">
+    <div id={inference.key.value} class="result">
       <h5>
         <a href={inference.key.url} class="inferenceEntryTitle">
           {description}: {inference.name}

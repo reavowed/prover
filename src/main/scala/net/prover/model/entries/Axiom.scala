@@ -6,7 +6,7 @@ import net.prover.model._
 
 case class Axiom(
     name: String,
-    key: ChapterEntry.Key,
+    key: ChapterEntry.Key.Standalone,
     premises: Seq[Premise],
     conclusion: Statement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement)
@@ -31,7 +31,7 @@ object Axiom extends ChapterEntryParser {
     } yield conclusion
   }
 
-  def parser(getKey: String => ChapterEntry.Key)(implicit context: ParsingContext): Parser[Axiom] = {
+  def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[Axiom] = {
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
@@ -40,7 +40,7 @@ object Axiom extends ChapterEntryParser {
     } yield {
       Axiom(
         name,
-        getKey(name),
+        (ChapterEntry.Key.Standalone.apply _).tupled(getKey(name)),
         premises,
         conclusion,
         rearrangementType)

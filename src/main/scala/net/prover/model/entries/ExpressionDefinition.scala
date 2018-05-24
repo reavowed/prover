@@ -4,8 +4,9 @@ import net.prover.model.{Format, Parser, ParsingContext}
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 
-trait ExpressionDefinition {
+trait ExpressionDefinition extends ChapterEntry.WithKey {
   def symbol: String
+  def key: ChapterEntry.Key.Anchor
   def boundVariableNames: Seq[String]
   def componentTypes: Seq[ComponentType]
   def format: Format

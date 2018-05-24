@@ -34,7 +34,7 @@ object Chapter {
     Theorem,
     Shorthand)
 
-  def chapterEntryParser(getKey: String => ChapterEntry.Key)(context: ParsingContext): Parser[Option[ChapterEntry]] = {
+  def chapterEntryParser(getKey: String => (String, Chapter.Key))(context: ParsingContext): Parser[Option[ChapterEntry]] = {
     Parser.singleWordIfAny.flatMapFlatMapReverse { entryType =>
       chapterEntryParsers.find(_.name == entryType).map(_.parser(getKey)(context))
     }
@@ -45,14 +45,14 @@ object Chapter {
     for {
       summary <- Parser.toEndOfLine
       entriesAndContext <- Parser.foldWhileDefined[ChapterEntry, ParsingContext](initialContext) { (entriesSoFar, currentContext) =>
-        def getNextKey(entryName: String): ChapterEntry.Key = {
+        def getNextKey(entryName: String): (String, Chapter.Key) = {
           val entryKeyValue = entriesSoFar.ofType[ChapterEntry.WithKey].count(_.name == entryName) match {
             case 0 =>
               entryName.formatAsKey
             case n =>
               (entryName + " " + (n+1)).formatAsKey
           }
-          ChapterEntry.Key(entryKeyValue, key)
+          (entryKeyValue, key)
         }
         chapterEntryParser(getNextKey)(currentContext).mapMap { entry =>
           (entry, currentContext.add(entry))

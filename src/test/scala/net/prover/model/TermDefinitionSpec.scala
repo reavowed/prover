@@ -1,15 +1,21 @@
 package net.prover.model
 
-import net.prover.model.entries.TermDefinition
+import net.prover.model.entries.{ChapterEntry, TermDefinition}
 import net.prover.model.expressions.{DefinedTerm, FunctionParameter}
 
 class TermDefinitionSpec extends ProverSpec {
+
+  private def parse(text: String): TermDefinition = {
+    TermDefinition.parser(s => (s.formatAsKey, stubChapter.key)).parseAndDiscard(text)
+  }
+
   "term definition parser" should {
     "parse a term constant" in {
-      val definition = TermDefinition.parser.parseAndDiscard("∅ () (∀ x ¬ ∈ x _)")
+      val definition = parse("∅ () (∀ x ¬ ∈ x _)")
       definition mustEqual
         TermDefinition(
           "∅",
+          ChapterEntry.Key.Anchor("∅", stubChapter.key),
           Nil,
           Nil,
           None,
@@ -21,10 +27,11 @@ class TermDefinitionSpec extends ProverSpec {
     }
 
     "parse a term with premises" in {
-      TermDefinition.parser.parseAndDiscard(
+      parse(
         "intersection (a) format (⋂a) premises (¬ = a ∅) (∀ x ↔ ∈ x _ ∀ y → ∈ y a ∈ x y)"
       ) mustEqual TermDefinition(
         "intersection",
+        ChapterEntry.Key.Anchor("intersection", stubChapter.key),
         Nil,
         Seq(a),
         None,

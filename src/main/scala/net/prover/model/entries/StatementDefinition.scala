@@ -9,14 +9,14 @@ import net.prover.model._
 @JsonIgnoreProperties(Array("symbol", "defaultVariables", "format"))
 case class StatementDefinition(
     symbol: String,
+    key: ChapterEntry.Key.Anchor,
     boundVariableNames: Seq[String],
     componentTypes: Seq[ComponentType],
     explicitName: Option[String],
     format: Format,
     definingStatement: Option[Statement],
     structureType: Option[StructureType])
-  extends ChapterEntry
-    with ExpressionDefinition
+  extends ExpressionDefinition
 {
   def name = explicitName.getOrElse(symbol)
 
@@ -39,8 +39,8 @@ case class StatementDefinition(
   override def inferences: Seq[Inference] = {
     definingStatement.toSeq.flatMap { s =>
       Seq(
-        Inference.Definition(name, Seq(s), defaultValue),
-        Inference.Definition(name, Seq(defaultValue), s))
+        Inference.Definition(name, key, Seq(s), defaultValue),
+        Inference.Definition(name, key, Seq(defaultValue), s))
     }
   }
 
@@ -51,7 +51,7 @@ case class StatementDefinition(
       structureType.map(_.serialized).toSeq).indent
 }
 
-object StatementDefinition extends ChapterEntryParser.WithoutKey {
+object StatementDefinition extends ChapterEntryParser {
   override val name: String = "statement"
 
   sealed trait StructureType {
@@ -78,7 +78,7 @@ object StatementDefinition extends ChapterEntryParser.WithoutKey {
     "definition",
     Statement.parser.inParens)
 
-  def parser(implicit context: ParsingContext): Parser[StatementDefinition] = {
+  def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[StatementDefinition] = {
     for {
       symbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
@@ -91,6 +91,7 @@ object StatementDefinition extends ChapterEntryParser.WithoutKey {
     } yield {
       StatementDefinition(
         symbol,
+        (ChapterEntry.Key.Anchor.apply _).tupled(getKey(symbol)),
         boundVariables,
         componentTypes,
         name,

@@ -82,6 +82,6 @@ object ProofLine {
   object EntryLink {
     def apply(inference: Inference): EntryLink = EntryLink(
       inference.name,
-      inference.entryKeyOption)
+      Some(inference.entryKey))
   }
 }

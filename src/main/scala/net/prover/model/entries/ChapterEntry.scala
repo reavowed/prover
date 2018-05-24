@@ -8,12 +8,26 @@ trait ChapterEntry {
 }
 
 object ChapterEntry {
-  case class Key(value: String, chapterKey: Chapter.Key) {
-    def url = s"${chapterKey.url}/$value"
+  trait Key {
+    def value: String
+    def separator: String
+    def chapterKey: Chapter.Key
+    def url: String = s"${chapterKey.url}$separator$value"
+  }
+  object Key {
+    case class Standalone(value: String, chapterKey: Chapter.Key) extends Key {
+      val separator = "/"
+    }
+    case class Anchor(value: String, chapterKey: Chapter.Key) extends Key {
+      val separator = "#"
+    }
   }
 
   trait WithKey extends ChapterEntry {
     def name: String
     def key: Key
+  }
+  trait Standalone extends WithKey {
+    def key: Key.Standalone
   }
 }
