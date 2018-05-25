@@ -1,5 +1,5 @@
 package net.prover.model
 
-import net.prover.model.entries.Shorthand
+import net.prover.model.entries.DisplayShorthand
 
-case class DisplayContext(shorthands: Seq[Shorthand])
+case class DisplayContext(displayShorthands: Seq[DisplayShorthand])

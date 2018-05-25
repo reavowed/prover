@@ -12,7 +12,7 @@ case class Chapter(
   def termDefinitions = entries.ofType[TermDefinition]
   def inferences = entries.flatMap(_.inferences)
   def theorems = entries.ofType[Theorem]
-  def shorthands = entries.ofType[Shorthand]
+  def displayShorthands = entries.ofType[DisplayShorthand]
 
   def serialized: String = {
     val entryTexts = entries.map(_.serializedLines.mkString("\n"))
@@ -32,7 +32,7 @@ object Chapter {
     TermDefinition,
     Axiom,
     Theorem,
-    Shorthand)
+    DisplayShorthand)
 
   def chapterEntryParser(getKey: String => (String, Chapter.Key))(context: ParsingContext): Parser[Option[ChapterEntry]] = {
     Parser.singleWordIfAny.flatMapFlatMapReverse { entryType =>

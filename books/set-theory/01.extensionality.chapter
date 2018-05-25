@@ -2,13 +2,13 @@ Introduce the set membership predicate ∈ and the Axiom of Extensionality, and 
 
 statement ∈ (a b)
 
-shorthand ∀ x → ∈ $0 a φ as ((∀x ∈ a)φ)
+display ∀ x → ∈ $0 a φ as ((∀x ∈ a)φ)
 
-shorthand ∃ x ∧ ∈ $0 a φ as ((∃x ∈ a)φ)
+display ∃ x ∧ ∈ $0 a φ as ((∃x ∈ a)φ)
 
-shorthand ∃! x ∧ ∈ $0 a φ as ((∃!x ∈ a)φ)
+display ∃! x ∧ ∈ $0 a φ as ((∃!x ∈ a)φ)
 
-shorthand ¬ ∈ a b as (a ∉ b in parens)
+display ¬ ∈ a b as (a ∉ b in parens)
 
 axiom Extensionality
 premise ∀ x ↔ ∈ $0 a ∈ $0 b

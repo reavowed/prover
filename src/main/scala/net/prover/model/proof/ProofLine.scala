@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.entries.{ChapterEntry, Shorthand}
+import net.prover.model.entries.{ChapterEntry, DisplayShorthand}
 import net.prover.model.expressions._
 
 case class ProofLine(
@@ -28,14 +28,14 @@ object ProofLine {
       implicit displayContext: DisplayContext
     ): Expression = {
       val topLevelReferrers = referrers.filter(_._2.isEmpty).map(_._1)
-      displayContext.shorthands.mapFind(withShorthand(source, topLevelReferrers, _))
+      displayContext.displayShorthands.mapFind(withShorthand(source, topLevelReferrers, _))
         .getOrElse(directly(source, referrers, topLevelReferrers))
     }
 
     def withShorthand(
       source: expressions.Expression,
       referrers: Set[String],
-      shorthand: Shorthand)(
+      shorthand: DisplayShorthand)(
       implicit displayContext: DisplayContext
     ): Option[Expression] = {
       for {

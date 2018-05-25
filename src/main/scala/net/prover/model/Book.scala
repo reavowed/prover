@@ -16,12 +16,12 @@ case class Book(
     chapters: Seq[Chapter],
     statementVariableNames: Seq[String],
     termVariableNames: Seq[String]) {
-  implicit def displayContext: DisplayContext = DisplayContext(allTransitive(_.shorthands))
+  implicit def displayContext: DisplayContext = DisplayContext(allTransitive(_.displayShorthands))
 
   def inferences: Seq[Inference] = chapters.flatMap(_.inferences)
   def theorems: Seq[Theorem] = chapters.flatMap(_.theorems)
   def statementDefinitions: Seq[StatementDefinition] = chapters.flatMap(_.statementDefinitions)
-  def shorthands: Seq[Shorthand] = chapters.flatMap(_.shorthands)
+  def displayShorthands: Seq[DisplayShorthand] = chapters.flatMap(_.displayShorthands)
 
   def allTransitive[T](f: Book => Seq[T]): Seq[T] = (dependencies.transitive :+ this).flatMap(f)
 
