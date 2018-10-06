@@ -13,9 +13,17 @@ class BookService {
   val bookDirectoryPath = Paths.get("books")
   val cacheDirectoryPath = Paths.get("cache")
 
-  val books = parseBooks.getOrElse(Nil)
+  private var _books = parseBooks.getOrElse(Nil)
 
-  def parseBooks: Option[Seq[Book]] = {
+  def books = _books
+
+  def updateBooks(f: Seq[Book] => Seq[Book]) = synchronized {
+    val newBooks = f(_books)
+    writeBooks(newBooks)
+    _books = newBooks
+  }
+
+  private def parseBooks: Option[Seq[Book]] = {
     val books = getBookList.mapFoldOption[Book] { case (booksSoFar, bookTitle) =>
       parseBook(bookTitle, booksSoFar)
     }
@@ -36,6 +44,22 @@ class BookService {
       .readAllLines(getBookListPath)
       .asScala
       .filter(s => !s.startsWith("#"))
+  }
+
+  private def writeBooks(books: Seq[Book]) = {
+    writeBooklist(books)
+    books.foreach(writeBook)
+  }
+
+  private def writeBooklist(books: Seq[Book]) = {
+    Files.write(getBookListPath, (books.map(_.title).mkString("\n") + "\n").getBytes("UTF-8"))
+  }
+
+  private def writeBook(book: Book) = {
+    Files.write(getBookPath(book.title), book.serialized.getBytes("UTF-8"))
+    book.chapters.foreachWithIndex((chapter, index) =>
+      Files.write(getChapterPath(book.title, chapter.title, index), chapter.serialized.getBytes("UTF-8"))
+    )
   }
 
   private def getBookListPath: Path = {

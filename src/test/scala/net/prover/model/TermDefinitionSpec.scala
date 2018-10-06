@@ -21,7 +21,8 @@ class TermDefinitionSpec extends ProverSpec {
           None,
           Format.default("∅", Nil),
           Nil,
-          ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter("_", 0, 1)))))
+          ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter("_", 0, 1)))),
+          None)
       definition.definingStatement mustEqual
         ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), DefinedTerm(Nil, definition)(Nil))))
     }
@@ -41,7 +42,8 @@ class TermDefinitionSpec extends ProverSpec {
           ElementOf(FunctionParameter("x", 0, 0), FunctionParameter.anonymous(0, 1)),
           ForAll("y")(Implication(
             ElementOf(FunctionParameter("y", 0, 0), a),
-            ElementOf(FunctionParameter("x", 0, 1), FunctionParameter("y", 0, 0)))))))
+            ElementOf(FunctionParameter("x", 0, 1), FunctionParameter("y", 0, 0)))))),
+        None)
     }
   }
 }

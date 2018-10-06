@@ -15,8 +15,9 @@ case class StatementDefinition(
     explicitName: Option[String],
     format: Format,
     definingStatement: Option[Statement],
+    shorthand: Option[String],
     structureType: Option[StructureType])
-  extends ExpressionDefinition
+  extends ExpressionDefinition with TypedExpressionDefinition[StatementDefinition]
 {
   def name = explicitName.getOrElse(symbol)
 
@@ -36,6 +37,8 @@ case class StatementDefinition(
     }
   }
 
+  override def withShorthand(newShorthand: Option[String]) = copy(shorthand = newShorthand)
+
   override def inferences: Seq[Inference] = {
     definingStatement.toSeq.flatMap { s =>
       Seq(
@@ -48,6 +51,7 @@ case class StatementDefinition(
     (explicitName.map(n => s"name ($n)").toSeq ++
       format.serialized.map(f => s"format ($f)").toSeq ++
       definingStatement.map(s => s"definition (${s.serialized})").toSeq ++
+      shorthand.map(s => s"shorthand ($s)").toSeq ++
       structureType.map(_.serialized).toSeq).indent
 }
 
@@ -87,6 +91,7 @@ object StatementDefinition extends ChapterEntryParser {
       name <- nameParser
       format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
       optionalDefiningStatement <- definingStatementParser
+      shorthand <- ExpressionDefinition.shorthandParser
       structureType <- StructureType.parser
     } yield {
       StatementDefinition(
@@ -97,6 +102,7 @@ object StatementDefinition extends ChapterEntryParser {
         name,
         format,
         optionalDefiningStatement,
+        shorthand,
         structureType)
     }
   }

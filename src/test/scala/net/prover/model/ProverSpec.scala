@@ -35,6 +35,7 @@ trait ProverSpec extends Specification {
       None,
       Format.default(symbol, componentTypes.map(_.name)),
       definingStatement,
+      None,
       None)
   }
   def predicate(
@@ -51,6 +52,7 @@ trait ProverSpec extends Specification {
       None,
       Format.default(symbol, componentTypes.map(_.name)),
       definingStatement,
+      None,
       None)
   }
 
@@ -66,6 +68,7 @@ trait ProverSpec extends Specification {
       None,
       Format.Explicit(s"($symbol%0)%1", s"(${symbol}x)φ", requiresBrackets = false),
       definingStatement,
+      None,
       None)
   }
 
@@ -94,7 +97,8 @@ trait ProverSpec extends Specification {
     None,
     Format.default("∅", Nil),
     Nil,
-    ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter.anonymous(0, 1)))))
+    ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter.anonymous(0, 1)))),
+    None)
   val EmptySet = DefinedTerm(Nil, EmptySetDefinition)(Nil)
 
   val PowerSet = TermDefinition(
@@ -107,7 +111,8 @@ trait ProverSpec extends Specification {
     Nil,
     ForAll("y")(Equivalence(
       ElementOf(FunctionParameter("y", 0, 0), FunctionParameter.anonymous(0, 1)),
-      Subset(FunctionParameter("y", 0, 0), a))))
+      Subset(FunctionParameter("y", 0, 0), a))),
+    None)
 
   val Singleton = TermDefinition(
     "singleton",
@@ -117,7 +122,8 @@ trait ProverSpec extends Specification {
     Some("Singleton"),
     Format.Explicit("{%0}", "{a}", requiresBrackets = false),
     Nil,
-    φ)
+    φ,
+    None)
 
   val Pair = TermDefinition(
     "pair",
@@ -127,7 +133,8 @@ trait ProverSpec extends Specification {
     Some("Unordered Pair"),
     Format.Explicit("{%0, %1}", "{a, b}", requiresBrackets = false),
     Nil,
-    φ)
+    φ,
+    None)
 
   implicit val defaultContext = ParsingContext(
     inferences = Nil,

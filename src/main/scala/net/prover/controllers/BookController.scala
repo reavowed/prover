@@ -1,13 +1,15 @@
 package net.prover.controllers
 
-import net.prover.model.entries.{Axiom, ChapterEntry, StatementDefinition, Theorem}
-import net.prover.model.{Book, Chapter, DisplayContext, Inference}
+import monocle.macros.GenLens
+import net.prover.model.entries._
+import net.prover.model.{Book, Chapter, Inference}
 import net.prover.services.BookService
 import net.prover.views._
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
-import org.springframework.web.bind.annotation.{GetMapping, PathVariable, RequestMapping, RestController}
+import org.springframework.web.bind.annotation._
+import net.prover.utils.Traversals
 
 import scala.util.control.NonFatal
 
@@ -84,6 +86,21 @@ class BookController @Autowired() (bookService: BookService) {
         BookController.logger.error(s"Error getting books", e)
         new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
     }
+  }
+
+  @PutMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}/shorthand"), produces = Array("text/html;charset=UTF-8"))
+  def editShorthand(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String,
+    @RequestBody newShorthand: String
+  ) = {
+    bookService.updateBooks(Traversals.filter[Book](_.key.value == bookKey)
+      .composeLens(GenLens[Book](_.chapters))
+      .composeTraversal(Traversals.filter[Chapter](_.key.value == chapterKey))
+      .composeLens(GenLens[Chapter](_.entries))
+      .composeTraversal(Traversals.filterWithType[ChapterEntry, ExpressionDefinition](_.key.value == entryKey))
+      .modify(_.withShorthand(Option(newShorthand).filter(_.nonEmpty))))
   }
 
   private def getUsages(inference: Inference, books: Seq[Book]): Seq[(Book, Chapter, Seq[Theorem])] = {

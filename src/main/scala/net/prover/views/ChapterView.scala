@@ -5,10 +5,24 @@ import net.prover.model._
 import net.prover.model.proof.ReferenceMap
 import net.prover.viewmodel.Breadcrumb
 
+import scala.xml.Unparsed
+
 object ChapterView {
+  private def DefinitionTitle(description: String, definition: ExpressionDefinition)(implicit displayContext: DisplayContext) = {
+    <div class="definitionTitle">
+      <h5>{description} Definition: {ExpressionView(definition.defaultValue)}</h5>
+      <button class="btn btn-success btn-xs editShorthand"
+              data-key={definition.key.value}
+              data-shorthand={definition.shorthand.getOrElse("")}
+              data-toggle="modal"
+              data-target="#editShorthandModal"
+      >Shorthand</button>
+    </div>
+  }
+
   private def StatementDefinitionView(statementDefinition: StatementDefinition)(implicit displayContext: DisplayContext) = {
     <div id={statementDefinition.key.value} class="result">
-      <h5>Statement Definition: {ExpressionView(statementDefinition.defaultValue)}</h5>
+      {DefinitionTitle("Statement", statementDefinition)}
       {statementDefinition.definingStatement.toSeq.map { definingStatement =>
         <div>{ExpressionView(statementDefinition.defaultValue)} is defined by {ExpressionView(definingStatement)}. </div>
       }}
@@ -16,7 +30,7 @@ object ChapterView {
   }
   private def TermDefinitionView(termDefinition: TermDefinition)(implicit displayContext: DisplayContext) = {
     <div id={termDefinition.key.value} class="result">
-      <h5>Term Definition: {ExpressionView(termDefinition.defaultValue)}</h5>
+      {DefinitionTitle("Term", termDefinition)}
       <div>
         {PremisesView(termDefinition.premises)}
         <div>
@@ -58,6 +72,31 @@ object ChapterView {
         case theorem: Theorem => InferenceView("Theorem", theorem)
         case _ => {}
       }}
+      <div class="modal" tabindex="-1" role="dialog" id="editShorthandModal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">Edit shorthand for <span id="entryDescriptionForShorthand"></span></h4>
+            </div>
+            <div class="modal-body">
+              <div id="editShorthandModalAlert" class="alert alert-danger alert-dismissible" role="alert" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span id="editShorthandModalAlertContent"></span>
+              </div>
+              <div class="form-group">
+                <label for="shorthandInput">Shorthand</label>
+                <input type="text" class="form-control" id="shorthandInput" />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="saveShorthandButton">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script src="/js/chapter.js"></script>
     </div>
   }
 }

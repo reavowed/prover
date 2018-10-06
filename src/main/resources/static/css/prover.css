@@ -37,18 +37,19 @@
     margin-bottom: 0;
 }
 
-.result h6 {
-    font-size: inherit;
-    text-decoration: underline;
-    margin-bottom: 0;
-}
-
 .result > h5:first-of-type {
     margin-top: 2px;
 }
 
 .result h5:not(:last-child) {
     margin-bottom: 3px;
+}
+
+.definitionTitle {
+    display: flex;
+}
+.definitionTitle > h5 {
+    flex: auto;
 }
 
 .inferenceEntryTitle {

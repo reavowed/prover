@@ -12,8 +12,9 @@ case class TermDefinition(
     explicitName: Option[String],
     format: Format,
     premises: Seq[Statement],
-    definitionPredicate: Statement)
-  extends ExpressionDefinition
+    definitionPredicate: Statement,
+    shorthand: Option[String])
+  extends ExpressionDefinition with TypedExpressionDefinition[TermDefinition]
 {
   def name = explicitName.getOrElse(symbol)
 
@@ -34,13 +35,16 @@ case class TermDefinition(
     }
   }
 
+  override def withShorthand(newShorthand: Option[String]) = copy(shorthand = newShorthand)
+
   override def inferences: Seq[Inference] = Seq(Inference.Definition(name, key, premises, definingStatement))
 
   override def serializedLines: Seq[String] = Seq(s"term $symbol $serializedComponents") ++
     (explicitName.map(n => s"name ($n)").toSeq ++
       format.serialized.map(f => s"format ($f)").toSeq ++
       (if (premises.nonEmpty) Seq(s"premises (${premises.map(_.serialized).mkString(", ")})") else Nil) ++
-      Seq("(" + definitionPredicate.serialized + ")")).indent
+      Seq("(" + definitionPredicate.serialized + ")") ++
+      shorthand.map(s => s"shorthand ($s)").toSeq).indent
 }
 
 object TermDefinition extends ChapterEntryParser {
@@ -65,6 +69,7 @@ object TermDefinition extends ChapterEntryParser {
       format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
       premises <- premisesParser
       definitionPredicate <- Statement.parser(context.addParameters("_")).inParens
+      shorthand <- ExpressionDefinition.shorthandParser
     } yield {
       TermDefinition(
         symbol,
@@ -74,7 +79,8 @@ object TermDefinition extends ChapterEntryParser {
         name,
         format,
         premises,
-        definitionPredicate)
+        definitionPredicate,
+        shorthand)
     }
   }
 }

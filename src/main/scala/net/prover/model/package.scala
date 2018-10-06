@@ -185,6 +185,9 @@ package object model {
           seq
       }
     }
+    def foreachWithIndex[U](f: (T, Int) => U): Unit = {
+      seq.zipWithIndex.foreach(f.tupled)
+    }
   }
 
   implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {

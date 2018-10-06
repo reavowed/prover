@@ -4,12 +4,18 @@ import net.prover.model.{Format, Parser, ParsingContext}
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 
-trait ExpressionDefinition extends ChapterEntry.WithKey {
+trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinition]
+
+trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinition] extends ChapterEntry.WithKey { self: ExpressionDefinition =>
   def symbol: String
   def key: ChapterEntry.Key.Anchor
   def boundVariableNames: Seq[String]
   def componentTypes: Seq[ComponentType]
   def format: Format
+  def shorthand: Option[String]
+  def defaultValue: Expression
+
+  def withShorthand(newShorthand: Option[String]): ExpressionDefinitionType
 
   private def updateContext(context: ParsingContext, newBoundVariableNames: Seq[String], componentType: ComponentType): ParsingContext = {
     if (boundVariableNames.isEmpty)
@@ -119,4 +125,6 @@ object ExpressionDefinition {
       componentTypes <- ComponentType.listParser(boundVariables)
     } yield (boundVariables, componentTypes)).inParens
   }
+
+  def shorthandParser = Parser.optional("shorthand", Parser.allInParens)
 }
