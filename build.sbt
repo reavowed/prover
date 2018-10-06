@@ -14,6 +14,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "bootstrap" % "3.3.7",
   "org.webjars" % "lodash" % "4.15.0",
   "commons-io" % "commons-io" % "2.5",
+  "org.scala-lang.modules" %% "scala-xml" % "1.1.0",
   "com.github.julien-truffaut" %% "monocle-core" % monocleVersion,
   "com.github.julien-truffaut" %% "monocle-macro" % monocleVersion)
 
