@@ -104,8 +104,8 @@ object Step {
       } else {
         val assumptionLine = ProofLine(
           "Assume",
-          ProofLine.Expression.create(assumption, referenceMap.getReferrers(reference.value, additionalReference)),
-          None,
+          ProofLine.Expression.create(assumption, referenceMap.getReferrers(reference.getChildForAssumption.value, additionalReference)),
+          Some(reference.getChildForAssumption.value),
           indentLevel,
           None)
         assumptionLine +: substepLines
