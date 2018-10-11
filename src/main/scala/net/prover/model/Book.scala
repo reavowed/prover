@@ -42,7 +42,7 @@ object Book {
   }
 
   def parse(title: String, path: Path, previousBooks: Seq[Book], getChapterPath: (String, Int) => Path): Option[Book] = {
-    Try(parser(title, previousBooks, getChapterPath).parse(Tokenizer.fromPath(path))._1) match {
+    Try(parser(title, previousBooks, getChapterPath).parse(Tokenizer.fromPath(path, s"book '$title'"))._1) match {
       case Success(bookOutline) =>
         Some(bookOutline)
       case Failure(e) =>
@@ -72,7 +72,8 @@ object Book {
         Seq.empty)
       val chapters = chapterTitles.zipWithIndex.mapFold(initialContext) { case (context, (chapterTitle, index)) =>
         val chapterPath = getChapterPath(chapterTitle, index)
-        val (chapterOutline, newContext) = Chapter.parser(chapterTitle, key)(context).parseAndDiscard(chapterPath)
+        val (chapterOutline, newContext) = Chapter.parser(chapterTitle, key)(context)
+          .parseAndDiscard(Tokenizer.fromPath(chapterPath, s"book '$title' chapter '$chapterTitle'"))
         (newContext, chapterOutline)
       }._2
       Book(

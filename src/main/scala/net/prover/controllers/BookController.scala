@@ -1,8 +1,12 @@
 package net.prover.controllers
 
 import monocle.macros.GenLens
+import net.prover.controllers.BookController.NewTheoremModel
+import net.prover.model.Inference.RearrangementType
 import net.prover.model.entries._
-import net.prover.model.{Book, Chapter, Inference}
+import net.prover.model.expressions.Statement
+import net.prover.model._
+import net.prover.model.proof.{Proof, Reference, Step}
 import net.prover.services.BookService
 import net.prover.views._
 import org.slf4j.LoggerFactory
@@ -57,6 +61,44 @@ class BookController @Autowired() (bookService: BookService) {
     }
   }
 
+  @PostMapping(value = Array("/{bookKey}/{chapterKey}/theorems"), produces = Array("application/json;charset=UTF-8"))
+  def createTheorem(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @RequestBody newTheoremDefininition: NewTheoremModel
+  ) = {
+    bookService.updateBooks(Traversals.filter[Book](_.key.value == bookKey)
+      .modify(book =>
+        GenLens[Book](_.chapters)
+          .composeTraversal(Traversals.filter[Chapter](_.key.value == chapterKey))
+          .modify { chapter =>
+            val chaptersSoFar = book.chapters.takeWhile(_ != chapter) :+ chapter
+            implicit val parsingContext = new ParsingContext(
+              book.dependencies.transitive.inferences ++ chaptersSoFar.flatMap(_.inferences),
+              book.dependencies.transitive.statementDefinitions ++ chaptersSoFar.flatMap(_.statementDefinitions),
+              book.dependencies.transitive.termDefinitions ++ chaptersSoFar.flatMap(_.termDefinitions),
+              book.statementVariableNames.toSet,
+              book.termVariableNames.toSet,
+              Nil)
+            def parseStatement(text: String, description: String) = {
+              Statement.parser.parseAndDiscard(Tokenizer.fromString(text, description))
+            }
+            val premises = newTheoremDefininition.premises
+              .mapWithIndex((str, index) => parseStatement(str, s"premise ${index + 1}"))
+              .mapWithIndex((statement, index) => Premise(statement, index)(false))
+            val conclusion = parseStatement(newTheoremDefininition.conclusion, "conclusion")
+            val newTheorem = Theorem(
+              newTheoremDefininition.name,
+              ChapterEntry.Key.Standalone(Chapter.getNextKey(chapter.entries, newTheoremDefininition.name), chapter.key),
+              premises,
+              conclusion,
+              Proof(Seq(Step.Target(conclusion, Reference.Direct("0")))),
+              RearrangementType.NotRearrangement)
+            chapter.addEntry(newTheorem)
+          }(book)
+      ))
+  }
+
   @GetMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}"), produces = Array("text/html;charset=UTF-8"))
   def getEntry(
     @PathVariable("bookKey") bookKey: String,
@@ -88,7 +130,7 @@ class BookController @Autowired() (bookService: BookService) {
     }
   }
 
-  @PutMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}/shorthand"), produces = Array("text/html;charset=UTF-8"))
+  @PutMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}/shorthand"), produces = Array("application/json;charset=UTF-8"))
   def editShorthand(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
@@ -115,4 +157,9 @@ class BookController @Autowired() (bookService: BookService) {
 
 object BookController {
   val logger = LoggerFactory.getLogger(BookController.getClass)
+
+  case class NewTheoremModel(
+    name: String,
+    premises: Seq[String],
+    conclusion: String)
 }

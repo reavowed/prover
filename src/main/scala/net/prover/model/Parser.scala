@@ -83,11 +83,8 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
       case NonFatal(e) => tokenizer.throwParseException(e.getMessage, Some(e))
     }
   }
-  def parseAndDiscard(text: String, path: Path): T = {
-    parse(Tokenizer.fromString(text, path))._1
-  }
-  def parseAndDiscard(path: Path): T = {
-    parse(Tokenizer.fromPath(path))._1
+  def parseAndDiscard(tokenizer: Tokenizer): T = {
+    parse(tokenizer)._1
   }
   def listOrSingle(separatorOption: Option[String]): Parser[Seq[T]] = {
     listInParens(separatorOption).tryOrElse(map(Seq(_)))
@@ -106,10 +103,6 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
 }
 
 object Parser {
-  def location: Parser[FileLocation] = Parser { tokenizer =>
-    (FileLocation(tokenizer.currentFile, tokenizer.currentLine), tokenizer)
-  }
-
   def constant[T](t: T): Parser[T] = Parser { (t, _) }
 
   def toEndOfLine: Parser[String] = Parser { tokenizer => tokenizer.readUntilEndOfLine() }

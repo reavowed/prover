@@ -3,8 +3,7 @@ package net.prover.model
 import java.nio.file.{Files, Path}
 
 trait Tokenizer {
-  def currentBook: Option[String]
-  def currentFile: String
+  def contextDescription: String
   def currentLine: Int
   def currentColumn: Int
 
@@ -17,17 +16,14 @@ trait Tokenizer {
 
   def throwParseException(message: String, cause: Option[Throwable]): Nothing = {
     throw ParseException(
-      s"Error in book '${currentBook.getOrElse("unknown")}'" +
-        s" ($currentFile line $currentLine col $currentColumn): " +
-        message,
+      s"Error in $contextDescription, line $currentLine col $currentColumn: $message",
       cause)
   }
 }
 
 case class StringTokenizer(
     text: String,
-    currentBook: Option[String],
-    currentFile: String,
+    contextDescription: String,
     currentLine: Int,
     currentColumn: Int)
   extends Tokenizer
@@ -126,8 +122,7 @@ case class CombinedTokenizer(
     otherTokenizers: Seq[StringTokenizer])
   extends Tokenizer {
 
-  def currentBook: Option[String] = currentTokenizer.currentBook
-  def currentFile: String = currentTokenizer.currentFile
+  def contextDescription: String = currentTokenizer.contextDescription
   def currentLine: Int = currentTokenizer.currentLine
   def currentColumn: Int = currentTokenizer.currentColumn
 
@@ -165,10 +160,10 @@ case class CombinedTokenizer(
 }
 
 object Tokenizer {
-  def fromString(str: String, path: Path): StringTokenizer = {
-    StringTokenizer(str, None, path.toString, 1, 1).readUntilEndOfWhitespace()
+  def fromString(str: String, context: String): StringTokenizer = {
+    StringTokenizer(str, context, 1, 1).readUntilEndOfWhitespace()
   }
-  def fromPath(path: Path): StringTokenizer = {
-    fromString(new String(Files.readAllBytes(path), "UTF-8"), path)
+  def fromPath(path: Path, context: String): StringTokenizer = {
+    fromString(new String(Files.readAllBytes(path), "UTF-8"), s"$context ($path)")
   }
 }

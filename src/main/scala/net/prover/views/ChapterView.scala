@@ -72,6 +72,11 @@ object ChapterView {
         case theorem: Theorem => InferenceView("Theorem", theorem)
         case _ => {}
       }}
+      <div class="btn-group">
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addTheoremModal">
+          Add Theorem
+        </button>
+      </div>
       <div class="modal" tabindex="-1" role="dialog" id="editShorthandModal">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -92,6 +97,34 @@ object ChapterView {
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button type="button" class="btn btn-primary" id="saveShorthandButton">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal" tabindex="-1" role="dialog" id="addTheoremModal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">Add theorem</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="theoremName">Name</label>
+                <input type="text" class="form-control" id="theoremName" />
+              </div>
+              <div class="form-group">
+                <label for="premises">Premises</label>
+                <textarea id="theoremPremises" class="form-control replaceShorthands"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="theoremConclusion">Conclusion</label>
+                <input type="text" class="form-control replaceShorthands" id="theoremConclusion" />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="addTheoremButton">Save changes</button>
             </div>
           </div>
         </div>

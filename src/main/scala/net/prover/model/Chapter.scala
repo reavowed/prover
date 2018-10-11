@@ -10,6 +10,7 @@ case class Chapter(
 {
   def statementDefinitions = entries.ofType[StatementDefinition]
   def termDefinitions = entries.ofType[TermDefinition]
+  def definitions = entries.ofType[ExpressionDefinition]
   def inferences = entries.flatMap(_.inferences)
   def theorems = entries.ofType[Theorem]
   def displayShorthands = entries.ofType[DisplayShorthand]
@@ -18,6 +19,8 @@ case class Chapter(
     val entryTexts = entries.map(_.serializedLines.mkString("\n"))
     (summary +: entryTexts).mkString("\n\n") + "\n"
   }
+
+  def addEntry(newEntry: ChapterEntry): Chapter = copy(entries = entries :+ newEntry)
 }
 
 object Chapter {
@@ -34,6 +37,15 @@ object Chapter {
     Theorem,
     DisplayShorthand)
 
+  def getNextKey(existingEntries: Seq[ChapterEntry], entryName: String) = {
+    existingEntries.ofType[ChapterEntry.WithKey].count(_.name == entryName) match {
+      case 0 =>
+        entryName.formatAsKey
+      case n =>
+        (entryName + " " + (n+1)).formatAsKey
+    }
+  }
+
   def chapterEntryParser(getKey: String => (String, Chapter.Key))(context: ParsingContext): Parser[Option[ChapterEntry]] = {
     Parser.singleWordIfAny.flatMapFlatMapReverse { entryType =>
       chapterEntryParsers.find(_.name == entryType).map(_.parser(getKey)(context))
@@ -45,16 +57,7 @@ object Chapter {
     for {
       summary <- Parser.toEndOfLine
       entriesAndContext <- Parser.foldWhileDefined[ChapterEntry, ParsingContext](initialContext) { (entriesSoFar, currentContext) =>
-        def getNextKey(entryName: String): (String, Chapter.Key) = {
-          val entryKeyValue = entriesSoFar.ofType[ChapterEntry.WithKey].count(_.name == entryName) match {
-            case 0 =>
-              entryName.formatAsKey
-            case n =>
-              (entryName + " " + (n+1)).formatAsKey
-          }
-          (entryKeyValue, key)
-        }
-        chapterEntryParser(getNextKey)(currentContext).mapMap { entry =>
+        chapterEntryParser(x => (getNextKey(entriesSoFar, x), key))(currentContext).mapMap { entry =>
           (entry, currentContext.add(entry))
         }
       }
