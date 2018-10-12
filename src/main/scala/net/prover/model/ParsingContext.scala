@@ -10,7 +10,6 @@ case class ParsingContext(
     inferences: Seq[Inference],
     statementDefinitions: Seq[StatementDefinition],
     termDefinitions: Seq[TermDefinition],
-    statementVariableNames: Set[String],
     termVariableNames: Set[String],
     parameterLists: Seq[Seq[(String, Int)]])
 {
@@ -49,7 +48,7 @@ case class ParsingContext(
 
   object RecognisedStatementVariable {
     def unapply(string: String): Option[String] = {
-      Some(string).filter(statementVariableNames.contains)
+      "([α-ω])".r.unapplySeq(string).flatMap(_.headOption)
     }
   }
   object RecognisedStatementDefinition {
@@ -60,17 +59,8 @@ case class ParsingContext(
 
   object RecognisedTermVariable {
     def unapply(string: String): Option[String] = {
-      def existsDirectly: Boolean = termVariableNames.contains(string)
-      def existsWithPrime: Boolean = termVariableNames.exists(_ + "'" == string)
-      def existsWithSubscript: Boolean = {
-        val index = string.indexOf('_')
-        (index >= 0) && termVariableNames.contains(string.substring(0, index))
-      }
-      if (existsDirectly || existsWithPrime || existsWithSubscript) {
-        Some(string)
-      } else {
-        None
-      }
+      "([a-zA-Z](?:'|_\\w+)?)".r.unapplySeq(string).flatMap(_.headOption) orElse
+        termVariableNames.find(_ == string)
     }
   }
   object RecognisedTermDefinition {
@@ -104,7 +94,6 @@ object ParsingContext {
     inferences = Nil,
     statementDefinitions = Nil,
     termDefinitions = Nil,
-    statementVariableNames = Set.empty,
     termVariableNames = Set.empty,
     parameterLists = Seq.empty)
 }

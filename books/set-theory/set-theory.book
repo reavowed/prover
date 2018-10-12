@@ -1,7 +1,5 @@
 import Predicate Calculus
 
-variables (φ) (a b c d A B C D S X)
-
 chapter Extensionality
 chapter Subsets
 chapter Empty Set

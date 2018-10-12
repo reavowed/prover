@@ -1,7 +1,5 @@
 import Propositional Calculus
 
-variables (φ ψ) (a b c F)
-
 chapter Universal Quantifier
 chapter Existential Quantifier
 chapter Equality

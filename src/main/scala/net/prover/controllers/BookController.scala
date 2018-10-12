@@ -77,7 +77,6 @@ class BookController @Autowired() (bookService: BookService) {
               book.dependencies.transitive.inferences ++ chaptersSoFar.flatMap(_.inferences),
               book.dependencies.transitive.statementDefinitions ++ chaptersSoFar.flatMap(_.statementDefinitions),
               book.dependencies.transitive.termDefinitions ++ chaptersSoFar.flatMap(_.termDefinitions),
-              book.statementVariableNames.toSet,
               book.termVariableNames.toSet,
               Nil)
             def parseStatement(text: String, description: String) = {
@@ -135,7 +134,7 @@ class BookController @Autowired() (bookService: BookService) {
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("entryKey") entryKey: String,
-    @RequestBody newShorthand: String
+    @RequestBody(required = false) newShorthand: String
   ) = {
     bookService.updateBooks(Traversals.filter[Book](_.key.value == bookKey)
       .composeLens(GenLens[Book](_.chapters))

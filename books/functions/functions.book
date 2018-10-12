@@ -1,6 +1,6 @@
 import Set Theory
 
-variables (φ) (f g h ∘ A B C D a b F S)
+term-variables (∘)
 
 chapter Definition of a Function
 chapter Basic Functions

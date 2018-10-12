@@ -18,7 +18,7 @@ trait ProverSpec extends Specification {
   val c = TermVariable("c")
   val n = TermVariable("n")
 
-  val stubBook = Book("", Book.Key(""), Nil, Nil, Nil, Nil)
+  val stubBook = Book("", Book.Key(""), Nil, Nil, Nil)
   val stubChapter = Chapter("", Chapter.Key("", stubBook.key), "", Nil)
 
   def connective(
@@ -143,8 +143,7 @@ trait ProverSpec extends Specification {
       ForAll, Exists, ExistsUnique,
       ElementOf, Equals, Subset),
     termDefinitions = Seq(EmptySetDefinition, PowerSet, Singleton, Pair),
-    statementVariableNames = Set(φ, ψ, χ).map(_.name),
-    termVariableNames = Set(a, b, c, n).map(_.name),
+    termVariableNames = Set.empty,
     Seq.empty)
 
   implicit class ParserOps[T](parser: Parser[T]) {

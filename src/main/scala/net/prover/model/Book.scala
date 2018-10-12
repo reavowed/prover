@@ -14,7 +14,6 @@ case class Book(
     key: Book.Key,
     dependencies: Seq[Book],
     chapters: Seq[Chapter],
-    statementVariableNames: Seq[String],
     termVariableNames: Seq[String]) {
   implicit def displayContext: DisplayContext = DisplayContext(allTransitive(_.displayShorthands))
 
@@ -26,10 +25,9 @@ case class Book(
   def allTransitive[T](f: Book => Seq[T]): Seq[T] = (dependencies.transitive :+ this).flatMap(f)
 
   def serialized: String = {
-    Seq(
-      dependencies.map(d => s"import ${d.title}"),
-      Seq(s"variables (${statementVariableNames.mkString(" ")}) (${termVariableNames.mkString(" ")})"),
-      chapters.map(c => s"chapter ${c.title}")
+    (Seq(dependencies.map(d => s"import ${d.title}")) ++
+      (if (termVariableNames.nonEmpty) Seq(Seq(s"term-variables (${termVariableNames.mkString(" ")})")) else Nil) ++
+      Seq(chapters.map(c => s"chapter ${c.title}"))
     ).map(_.mkString("\n")).mkString("\n\n") + "\n"
   }
 }
@@ -58,16 +56,15 @@ object Book {
       dependencies = imports.map { importTitle =>
         previousBooks.find(_.title == importTitle).getOrElse(throw new Exception(s"Could not find imported book '$importTitle'"))
       }
-      statementAndTermVariableNames <- variableDefinitionsParser
+      _ <- variableDefinitionsParser
+      termVariableNames <- termVariablesParser
       chapterTitles <- chapterTitlesParser
     } yield {
-      val (statementVariableNames, termVariableNames) = statementAndTermVariableNames
       val transitiveDependencies = dependencies.transitive
       val initialContext = ParsingContext(
         transitiveDependencies.inferences,
         transitiveDependencies.statementDefinitions,
         transitiveDependencies.termDefinitions,
-        statementVariableNames.toSet,
         termVariableNames.toSet,
         Seq.empty)
       val chapters = chapterTitles.zipWithIndex.mapFold(initialContext) { case (context, (chapterTitle, index)) =>
@@ -81,7 +78,6 @@ object Book {
         key,
         dependencies,
         chapters,
-        statementVariableNames,
         termVariableNames)
     }
   }
@@ -91,6 +87,12 @@ object Book {
       .optionalWord("import")
       .flatMapMap(_ => Parser.toEndOfLine)
       .whileDefined
+  }
+
+  def termVariablesParser: Parser[(Seq[String])] = {
+    Parser.optionalWord("term-variables")
+      .flatMapMap(_ => Parser.allInParens.map(_.splitByWhitespace()))
+      .getOrElse(Nil)
   }
 
   def variableDefinitionsParser: Parser[(Seq[String], Seq[String])] = {
