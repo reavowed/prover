@@ -1,6 +1,6 @@
 import Functions
 
-variables (φ) (n m a A S f g)
+variables (φ) (n m a A S X f g)
 
 chapter Successors
 chapter Inductive Sets

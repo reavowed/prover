@@ -1,6 +1,7 @@
 Introduce the set membership predicate ∈ and the Axiom of Extensionality, and explore their consequences for equality.
 
 statement ∈ (a b)
+  shorthand (in)
 
 display ∀ x → ∈ $0 a φ as ((∀x ∈ a)φ)
 

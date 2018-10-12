@@ -26,6 +26,7 @@ theorem There Exists a Unique Empty Set
 
 term ∅ ()
   (∀ x ¬ ∈ $0 $$0)
+  shorthand (empty)
 
 theorem The Empty Set Has No Elements
 {
