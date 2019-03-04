@@ -16,6 +16,7 @@ comment We first have to prove that equality is symmetric before we can prove th
 
 theorem Reverse Equality
 premise = a b
+conclusion = b a
 {
   assert = a a direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () () ()
   assert = b a direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= $0 a) () (direct p0, direct 0)
@@ -24,6 +25,7 @@ premise = a b
 theorem Substitution of Equals
 premise = a b elidable
 premise with (b) φ elidable
+conclusion with (a) φ
 {
   assert = b a direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () () (direct p0)
   assert with (a) φ direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (b, a) (with ($0) φ) () (direct 0, direct p1)
@@ -33,6 +35,7 @@ comment Now we can also prove that the substitution axiom works when substitutin
 
 theorem Substitution of Equals
 premise = a b elidable
+conclusion = with (a) F with (b) F
 {
   assert = with (a) F with (a) F direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (with (a) F) () () ()
   assert = with (a) F with (b) F direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= with (a) F with ($0) F) () (direct p0, direct 0)
@@ -40,6 +43,7 @@ premise = a b elidable
 
 theorem Substitution of Equals
 premise = a b elidable
+conclusion = with (b) F with (a) F
 {
   assert = b a direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () () (direct p0)
   assert = with (b) F with (a) F direct 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (b, a) () (with ($0) F) (direct 0)
@@ -48,6 +52,7 @@ premise = a b elidable
 comment Basic facts about equality.
 
 theorem Equality Is Symmetric
+conclusion ↔ = a b = b a
 {
   assume = a b {
     assert = b a direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () () (direct 0a)
@@ -61,12 +66,14 @@ theorem Equality Is Symmetric
 theorem Equality Is Transitive
 premise = a b
 premise = b c
+conclusion = a c
 {
   assert = a c direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (b, c) (= a $0) () (direct p1, direct p0)
 }
 
 theorem Equivalence of Substituted Equals
 premise = a b
+conclusion ↔ with (a) φ with (b) φ
 {
   assume with (a) φ {
     assert with (b) φ direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (with ($0) φ) () (direct p0, direct 0a)
@@ -80,6 +87,7 @@ premise = a b
 theorem Distinguishable Terms Are Not Equal
 premise with (a) φ
 premise ¬ with (b) φ
+conclusion ¬ = a b
 {
   assume = a b {
     assert with (b) φ direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (with ($0) φ) () (direct 0a, direct p0)
@@ -89,12 +97,14 @@ premise ¬ with (b) φ
 
 theorem Sets Are Equal If Always Equal to the Same Thing
 premise ∀ x ↔ = $0 a = $0 b
+conclusion = a b
 {
   assert = a a direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () () ()
   assert = a b transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (a) (= $0 a, = $0 b) () (direct p0, direct 0)
 }
 
 theorem Every Set Exists
+conclusion ∃ x = $0 a
 {
   assert = a a direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () () ()
   assert ∃ x = $0 a direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (= $0 a) () (direct 0)
@@ -102,6 +112,7 @@ theorem Every Set Exists
 
 theorem Renamed Set
 premise ∀ x → = $0 a φ
+conclusion φ
 {
   assert ∃ x = $0 a direct 8cf72cf7b527d9e599e1e396a28cdc3485d6e669a1aa4c12184758ca101eceb3 () (a) () () ()
   assert φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (φ) () (= $0 a) () (direct 0, direct p0)
@@ -110,6 +121,7 @@ premise ∀ x → = $0 a φ
 theorem Exclusive Or for Equality
 premise ∨ = a b = a c
 premise ¬ = b c
+conclusion ⊕ = a b = a c
 {
   assume ∧ = a b = a c {
     assert = b c direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= $0 c) () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= a b, = a c) () () () direct 0a (0), simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= a b, = a c) () () () direct 0a (1))

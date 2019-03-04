@@ -1,6 +1,7 @@
 Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
 
 theorem And Is Symmetric
+conclusion ↔ ∧ φ ψ ∧ ψ φ
 {
   assume ∧ φ ψ {
     assert ∧ ψ φ direct 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (φ, ψ) () () () (direct 0a)
@@ -12,6 +13,7 @@ theorem And Is Symmetric
 }
 
 theorem Or Is Symmetric
+conclusion ↔ ∨ φ ψ ∨ ψ φ
 {
   assume ∨ φ ψ {
     assert ∨ ψ φ direct 7e3651c820e1f41df1d2e5a80ff9e1c8bc55f236a482bf9ee54c7c4188e2ee93 (φ, ψ) () () () (direct 0a)
@@ -23,6 +25,7 @@ theorem Or Is Symmetric
 }
 
 theorem And Is Idempotent
+conclusion ↔ ∧ φ φ φ
 {
   assume ∧ φ φ {
     assert φ direct 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, φ) () () () (direct 0a)
@@ -34,6 +37,7 @@ theorem And Is Idempotent
 }
 
 theorem Or Is Idempotent
+conclusion ↔ ∨ φ φ φ
 {
   assume ∨ φ φ {
     assert → φ φ direct d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (φ) () () () ()

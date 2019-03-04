@@ -1,6 +1,7 @@
 Establish the existence of the unordered pair {a, b}.
 
 theorem Unordered Pair Existence Lemma
+conclusion ∀ y ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b ∨ = $0 a = $0 b
 {
   take y {
     assume ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b {
@@ -34,6 +35,7 @@ theorem Unordered Pair Existence Lemma
 }
 
 theorem Unordered Pair Existence
+conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b
 {
   take x {
     assume ∈ $0 powerSet singleton ∅ {
@@ -54,12 +56,14 @@ term pair (a b)
 
 theorem Elements of Unordered Pair
 premise ∈ c pair a b
+conclusion ∨ = c a = c b
 {
   assert ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () () ()
   assert ∨ = c a = c b transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (c) (∈ $0 pair a b, ∨ = $0 a = $0 b) () (direct 0, direct p0)
 }
 
 theorem First Element of Unordered Pair
+conclusion ∈ a pair a b
 {
   assert ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () () ()
   assert = a a direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () () ()
@@ -68,6 +72,7 @@ theorem First Element of Unordered Pair
 }
 
 theorem Second Element of Unordered Pair
+conclusion ∈ b pair a b
 {
   assert ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () () ()
   assert = b b direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (b) () () ()
@@ -76,12 +81,14 @@ theorem Second Element of Unordered Pair
 }
 
 theorem An Unordered Pair Is Not the Empty Set
+conclusion ¬ = pair a b ∅
 {
   assert ∈ a pair a b direct bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () () ()
   assert ¬ = pair a b ∅ direct 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (a, pair a b) () () (direct 0)
 }
 
 theorem Reverse Unordered Pair
+conclusion = pair a b pair b a
 {
   assert ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () () ()
   assert ∀ x ↔ ∈ $0 pair b a ∨ = $0 b = $0 a direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (b, a) () () ()
@@ -90,6 +97,7 @@ theorem Reverse Unordered Pair
 }
 
 theorem Repeated Pair Is Singleton
+conclusion = pair a a singleton a
 {
   assert ∀ x ↔ ∈ $0 pair a a ∨ = $0 a = $0 a direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, a) () () ()
   assert ∀ x ↔ ∨ = $0 a = $0 a = $0 a transformed 1a5fe4d48796996e1e2f60648d87841214623937e106ac6df3f624fb834748fc () Y () () (= $0 a) () ()
@@ -100,6 +108,7 @@ theorem Repeated Pair Is Singleton
 
 theorem Sets Are Equal If Pair Is Singleton
 premise = pair a b singleton c
+conclusion = a c
 {
   assert ∈ a pair a b direct bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () () ()
   assert ∈ a singleton c direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a b, singleton c) (∈ a $0) () (direct p0, direct 0)
@@ -108,6 +117,7 @@ premise = pair a b singleton c
 
 theorem Sets Are Equal If Pair Is Singleton
 premise = pair a b singleton c
+conclusion = b c
 {
   assert ∈ b pair a b direct c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () () ()
   assert ∈ b singleton c direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a b, singleton c) (∈ b $0) () (direct p0, direct 0)
@@ -116,6 +126,7 @@ premise = pair a b singleton c
 
 theorem Sets Are Equal If Pair Is Singleton
 premise = pair a b singleton c
+conclusion = a b
 {
   assert = a c direct 86986adff1b0347cfe6e7c5a348775548325b13c85d427e352cbea41551f0e39 () (a, b, c) () () (direct p0)
   assert = b c direct e503481086281bc97997d7b0844c1481203e538306ce9c02b5cf8d90a816fd3e () (a, b, c) () () (direct p0)
@@ -125,6 +136,7 @@ premise = pair a b singleton c
 theorem Unordered Pair Is Subset
 premise ∈ a S
 premise ∈ b S
+conclusion ⊆ pair a b S
 {
   assert ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () () ()
   take x {
@@ -145,6 +157,7 @@ premise ∈ b S
 theorem Unordered Pair Is Element of Power Set
 premise ∈ a S
 premise ∈ b S
+conclusion ∈ pair a b powerSet S
 {
   assert ⊆ pair a b S direct 4d94e628deb348f7f3974c83261d69623ae14102921c1722dc8312af89ad9063 () (a, S, b) () () (direct p0, direct p1)
   assert ∈ pair a b powerSet S direct 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (pair a b, S) () () (direct 0)

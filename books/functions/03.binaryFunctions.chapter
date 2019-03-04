@@ -7,6 +7,7 @@ term binaryApply (∘ a b)
 
 theorem Binary Function from Curried Functions
 premise ∀ a → ∈ $0 A ∃! f ∧ function $0 B C with ($0 $$0) φ
+conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0
 {
   let S = $0 comprehension s × × A B C ∃ a ∧ ∈ $0 A ∃ f ∧ function $0 B C ∧ with ($0 $$0) φ ∃ b ∧ ∈ $0 B = $$$$0 orderedPair orderedPair $$$0 $0 apply $$0 $0 direct cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0) (comprehension s × × A B C ∃ a ∧ ∈ $0 A ∃ f ∧ function $0 B C ∧ with ($0 $$0) φ ∃ b ∧ ∈ $0 B = $$$$0 orderedPair orderedPair $$$0 $0 apply $$0 $0) () () (direct 0d) {
     assert ⊆ $0 × × A B C direct 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () ($0, × × A B C) (∃ a ∧ ∈ $0 A ∃ f ∧ function $0 B C ∧ with ($0 $$0) φ ∃ b ∧ ∈ $0 B = $$$$$0 orderedPair orderedPair $$$0 $0 apply $$0 $0) () (direct 0a)

@@ -5,6 +5,7 @@ comment A set of more complicated structural facts that are surprisingly useful 
 theorem Disjoined Conjunct Equivalence
 premise φ
 premise ¬ χ
+conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ψ
 {
   assume ∧ φ ψ {
     assert ψ direct 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () () (direct 0a)
@@ -24,6 +25,7 @@ premise ¬ χ
 theorem Disjoined Conjunct Equivalence
 premise ¬ φ
 premise χ
+conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ω
 {
   assert ↔ ∨ ∧ χ ω ∧ φ ψ ω direct 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d (χ, φ, ω, ψ) () () () (direct p1, direct p0)
   assert ↔ ∨ ∧ χ ω ∧ φ ψ ∨ ∧ φ ψ ∧ χ ω direct 2eaae6272d534dc99795d91bbbacc12e5e5b58aa4db06ed18bf864f72b5c947d (∧ χ ω, ∧ φ ψ) () () () ()
@@ -32,6 +34,7 @@ premise χ
 
 theorem Disjoined Conjunct Equivalence
 premise φ
+conclusion ↔ ∨ ∧ φ ψ ∧ ¬ φ χ ψ
 {
   assert ¬ ¬ φ direct 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (φ) () () () (direct p0)
   assert ↔ ∨ ∧ φ ψ ∧ ¬ φ χ ψ direct 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d (φ, ¬ φ, ψ, χ) () () () (direct p0, direct 0)
@@ -41,6 +44,7 @@ comment Some tricks to simplify redundant statements.
 
 theorem Redundant And
 premise → φ ψ
+conclusion ↔ ∧ φ ψ φ
 {
   assume ∧ φ ψ {
     assert φ direct 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () () (direct 0a)
@@ -54,6 +58,7 @@ premise → φ ψ
 
 theorem Redundant And
 premise → φ ψ
+conclusion ↔ ∧ ψ φ φ
 {
   assert ↔ ∧ φ ψ φ direct 2ca7ed37a3468a129caccc521004ea96152f4ea4af73188ddaf790e90172876e (φ, ψ) () () () (direct p0)
   assert ↔ ∧ φ ψ ∧ ψ φ direct ceda842906abdc74679aabcef2c6848746135351212be45dd529a31e12e21892 (φ, ψ) () () () ()
@@ -62,6 +67,7 @@ premise → φ ψ
 
 theorem Redundant Or
 premise → φ ψ
+conclusion ↔ ∨ φ ψ ψ
 {
   assume ∨ φ ψ {
     assert ψ direct 2ff9c792011f656a8b9615593c8b85d39ff9d5ec55dc6db4db6934fa559f64d2 (φ, ψ) () () () (direct 0a, direct p0)
@@ -74,6 +80,7 @@ premise → φ ψ
 
 theorem Redundant Or
 premise → φ ψ
+conclusion ↔ ∨ ψ φ ψ
 {
   assume ∨ ψ φ {
     assert ψ direct 70f84c343023e057b51434d9df0e355ee665371dac38e276a18ed0103c6301b8 (ψ, φ) () () () (direct 0a, direct p0)
@@ -86,6 +93,7 @@ premise → φ ψ
 
 theorem Redundant Or
 premise ¬ φ
+conclusion ↔ ∨ φ ψ ψ
 {
   assume ∨ φ ψ {
     assert ψ direct 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (φ, ψ) () () () (direct 0a, direct p0)
@@ -98,6 +106,7 @@ premise ¬ φ
 
 theorem Redundant Or
 premise ¬ φ
+conclusion ↔ ∨ ψ φ ψ
 {
   assume ∨ ψ φ {
     assert ψ direct 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (ψ, φ) () () () (direct 0a, direct p0)
@@ -112,6 +121,7 @@ comment Adding extra conjunctions to equivalences.
 
 theorem Add Conjunction to Equivalence
 premise ↔ φ ψ
+conclusion ↔ ∧ χ φ ∧ χ ψ
 {
   assume ∧ χ φ {
     assert ψ direct be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (φ, ψ) () () () (direct p0, simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (χ, φ) () () () direct 0a (1))

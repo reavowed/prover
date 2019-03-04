@@ -1,6 +1,7 @@
 Establish the existence of the singleton set {a}.
 
 theorem There Exists a Set with an Element
+conclusion ∃ x ∃ y ∈ $0 $$0
 {
   assert ∈ ∅ powerSet ∅ direct 73e9742459642589048ead035078a534a2a395b858e45eeca2a982b48588d58d () (∅) () () ()
   assert ∃ y ∈ $0 powerSet ∅ direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (∅) (∈ $0 powerSet ∅) () (direct 0)
@@ -8,6 +9,7 @@ theorem There Exists a Set with an Element
 }
 
 theorem Singleton Existence
+conclusion ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a
 {
   assert ∃ x ∃ y ∈ $0 $$0 direct 2cccf54c4f38ed8afb8227abf888c17e48598e20266c00a7f8d4977ba6408c73 () () () () ()
   let b ∃ y ∈ $0 $$0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! z ∀ x ↔ ∈ $0 $$0 = $0 a) () (∃ y ∈ $0 $$0) () (direct 0, direct 1d) {
@@ -30,6 +32,7 @@ term singleton (a)
   (∀ x ↔ ∈ $0 $$0 = $0 a)
 
 theorem A Set Is an Element of Its Singleton
+conclusion ∈ a singleton a
 {
   assert ∀ x ↔ ∈ $0 singleton a = $0 a direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () () ()
   assert ∈ a singleton a direct b89e77bd31fd5214622c9e98732d2adc733bb4d42c134ca34a05047e7698f5a7 () (a) (∈ $0 singleton a) () (direct 0)
@@ -37,6 +40,7 @@ theorem A Set Is an Element of Its Singleton
 
 theorem Element of Singleton
 premise ∈ b singleton a
+conclusion = b a
 {
   assert ∀ x ↔ ∈ $0 singleton a = $0 a direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () () ()
   assert = b a transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (b) (∈ $0 singleton a, = $0 a) () (direct 0, direct p0)
@@ -44,6 +48,7 @@ premise ∈ b singleton a
 
 theorem Sets Are Equal If Singletons Are Equal
 premise = singleton a singleton b
+conclusion = a b
 {
   assert ∀ x ↔ ∈ $0 singleton a = $0 a direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () () ()
   assert ∀ x ↔ ∈ $0 singleton b = $0 a direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (singleton a, singleton b) (∀ x ↔ ∈ $0 $$0 = $0 a) () (direct p0, direct 0)
@@ -54,6 +59,7 @@ premise = singleton a singleton b
 
 theorem Singleton of Element Is Subset
 premise ∈ a S
+conclusion ⊆ singleton a S
 {
   assert ∀ x ↔ ∈ $0 singleton a = $0 a direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () () ()
   take x {
@@ -67,12 +73,14 @@ premise ∈ a S
 
 theorem Singleton Is in Power Set
 premise ∈ a S
+conclusion ∈ singleton a powerSet S
 {
   assert ⊆ singleton a S direct ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, S) () () (direct p0)
   assert ∈ singleton a powerSet S direct 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (singleton a, S) () () (direct 0)
 }
 
 theorem A Singleton Is Not the Empty Set
+conclusion ¬ = singleton a ∅
 {
   assert ∈ a singleton a direct e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a) () () ()
   assert ¬ = singleton a ∅ direct 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (a, singleton a) () () (direct 0)
@@ -80,6 +88,7 @@ theorem A Singleton Is Not the Empty Set
 
 theorem Subsets of a Singleton
 premise ⊆ S singleton a
+conclusion ⊕ = S singleton a = S ∅
 {
   assert ∀ x → ∈ $0 S ∈ $0 singleton a direct f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (S, singleton a) () () (direct p0)
   assert ∀ x ↔ ∈ $0 singleton a = $0 a direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () () ()
@@ -102,6 +111,7 @@ premise ⊆ S singleton a
 
 theorem Elements of Powerset of Singleton
 premise ∈ S powerSet singleton a
+conclusion ⊕ = S singleton a = S ∅
 {
   assert ⊆ S singleton a direct bb4e7eb849809346e883e29e4c961a0b1e707fabfe8da1e4537f611a4602e0f2 () (S, singleton a) () () (direct p0)
   assert ⊕ = S singleton a = S ∅ direct a68f54367f278aecd5d6ebaf8d39414c00134a884191e9c3043952317164bc27 () (S, a) () () (direct 0)

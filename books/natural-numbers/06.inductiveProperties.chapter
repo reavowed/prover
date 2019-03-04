@@ -2,6 +2,7 @@ Some basic inductive properties of ℕ.
 
 theorem A Natural Number Is Either 0 or a Successor
 premise ∈ n ℕ
+conclusion ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0
 {
   assert = 0 0 direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (0) () () ()
   assert ∨ = 0 0 ∃ m ∧ ∈ $0 ℕ = 0 successor $0 direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= 0 0, ∃ m ∧ ∈ $0 ℕ = 0 successor $0) () () () (direct 0)
@@ -19,6 +20,7 @@ premise ∈ n ℕ
 theorem Every Element of a Natural Number Is a Natural Number
 premise ∈ n ℕ
 premise ∈ m n
+conclusion ∈ m ℕ
 {
   assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
   assert ∀ x ¬ ∈ $0 0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ x ¬ ∈ $0 $$0) () (elided direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () (), direct 0)
@@ -45,6 +47,7 @@ premise ∈ m n
 
 theorem A Natural Number Is a Subset of the Natural Numbers
 premise ∈ n ℕ
+conclusion ⊆ n ℕ
 {
   take m {
     assume ∈ $0 n {
@@ -56,6 +59,7 @@ premise ∈ n ℕ
 
 theorem A Natural Number Either Is 0 or Contains 0
 premise ∈ n ℕ
+conclusion ∨ = n 0 ∈ 0 n
 {
   assert = 0 0 direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (0) () () ()
   assert ∨ = 0 0 ∈ 0 0 direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= 0 0, ∈ 0 0) () () () (direct 0)
@@ -78,6 +82,7 @@ premise ∈ n ℕ
 theorem A Natural Number Either Contains Or Is The Successor of an Element
 premise ∈ n ℕ
 premise ∈ m n
+conclusion ∨ ∈ successor m n = successor m n
 {
   assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
   assert ∀ x ¬ ∈ $0 0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ x ¬ ∈ $0 $$0) () (elided direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () (), direct 0)
@@ -114,6 +119,7 @@ premise ∈ m n
 theorem Natural Number Trichotomy
 premise ∈ n ℕ
 premise ∈ m ℕ
+conclusion ∨ ∈ n m ∨ = n m ∈ m n
 {
   assert ∨ = n 0 ∈ 0 n direct 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 () (n) () () (direct p0)
   assert ∨ ∈ n 0 ∨ = n 0 ∈ 0 n direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∨ = n 0 ∈ 0 n, ∈ n 0) () () () (direct 0)
@@ -149,6 +155,7 @@ premise ∈ m ℕ
 theorem Natural Number Transitivity
 premise ∈ n ℕ
 premise ∈ m n
+conclusion ⊆ m n
 {
   assert ∀ m ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
   assert ∀ m ¬ ∈ $0 0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ m ¬ ∈ $0 $$0) () (elided direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () (), direct 0)
@@ -178,6 +185,7 @@ theorem Natural Number Transitivity
 premise ∈ n ℕ
 premise ∈ m n
 premise ∈ a m
+conclusion ∈ a n
 {
   assert ⊆ m n direct 4407b840750f7ef787f8ff26b9b3af912fa8d7cebeb09fa54c62395236861c05 () (n, m) () () (direct p0, direct p1)
   assert ∈ a n direct ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (m, n, a) () () (direct 0, direct p2)
@@ -186,6 +194,7 @@ premise ∈ a m
 theorem A Natural Number Contains the Predecessor of an Element
 premise ∈ n ℕ
 premise ∈ successor m n
+conclusion ∈ m n
 {
   assert ∈ m successor m direct bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (m) () () ()
   assert ∈ m n direct 17d968728c1b36422e6f0db68347715fad35d870b83f1ef9de22315024673039 () (n, successor m, m) () () (direct p0, direct p1, direct 0)
@@ -194,6 +203,7 @@ premise ∈ successor m n
 theorem Natural Number Contains Element If Successor Contains Successor
 premise ∈ n ℕ
 premise ∈ successor m successor n
+conclusion ∈ m n
 {
   assert ∈ successor n ℕ direct 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () () (direct p0)
   assert ∈ m successor n direct 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () (successor n, m) () () (direct 0, direct p1)

@@ -5,6 +5,7 @@ statement ⊕ (φ ψ)
 
 theorem Reverse Exclusive Or
 premise ⊕ φ ψ
+conclusion ⊕ ψ φ
 {
   assert ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ direct 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () () (direct p0)
   assume ∧ φ ¬ ψ {
@@ -21,6 +22,7 @@ premise ⊕ φ ψ
 
 theorem Or from Exclusive Or
 premise ⊕ φ ψ
+conclusion ∨ φ ψ
 {
   assert ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ direct 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () () (direct p0)
   assume ∧ φ ¬ ψ {
@@ -34,6 +36,7 @@ premise ⊕ φ ψ
 
 theorem Negated And from Exclusive Or
 premise ⊕ φ ψ
+conclusion ¬ ∧ φ ψ
 {
   assert ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ direct 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () () (direct p0)
   assume ∧ φ ψ {
@@ -47,6 +50,7 @@ premise ⊕ φ ψ
 theorem Exclusive Or from Or and Negated And
 premise ∨ φ ψ
 premise ¬ ∧ φ ψ
+conclusion ⊕ φ ψ
 {
   assume φ {
     assert ¬ ψ direct 1af0b96e1cd8a24462ecc71676818b369217603427758b355312ec9f802ee00b (φ, ψ) () () () (direct p1, direct 0a)
@@ -66,6 +70,7 @@ premise ¬ ∧ φ ψ
 theorem Only One Part of an Exclusive Or Is True
 premise ⊕ φ ψ
 premise φ
+conclusion ¬ ψ
 {
   assert ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ direct 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () () (direct p0)
   assert ¬ ∧ ¬ φ ψ direct dcae67ef1e157f3706a751259f26f0a6ed2e6d8e907f330d10b26d2edabdca78 (φ, ψ) () () () (direct p1)
@@ -76,6 +81,7 @@ premise φ
 theorem Only One Part of an Exclusive Or Is True
 premise ⊕ φ ψ
 premise ψ
+conclusion ¬ φ
 {
   assert ⊕ ψ φ direct ab4da564f0ee2d15516623a1a43e8363a9d724e0660b87066ba8de5ddf32ac20 (φ, ψ) () () () (direct p0)
   assert ¬ φ direct e4ae6063b86741e544a9c95c2ce96510d5571fb6b97a2d084435181728226d66 (ψ, φ) () () () (direct 0, direct p1)
@@ -85,12 +91,14 @@ theorem Proof by Cases
 premise ⊕ φ ψ
 premise → φ χ
 premise → ψ χ
+conclusion χ
 {
   assert ∨ φ ψ direct 2fcf85e65b11715f1d1a789ddc4dc1e46b321f9ee5ae372ff0453e54a1f41c65 (φ, ψ) () () () (direct p0)
   assert χ direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, χ) () () () (direct 0, direct p1, direct p2)
 }
 
 theorem Exclusive Middle
+conclusion ⊕ φ ¬ φ
 {
   assume φ {
     assert ¬ ¬ φ direct 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (φ) () () () (direct 0a)

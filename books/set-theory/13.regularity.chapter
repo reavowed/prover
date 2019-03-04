@@ -5,12 +5,14 @@ conclusion ∀ x → ¬ = $0 ∅ ∃ y ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅
 
 theorem Regularity
 premise ¬ = a ∅
+conclusion ∃ x ∧ ∈ $0 a = ∩ $0 a ∅
 {
   assert ∀ y → ¬ = $0 ∅ ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅ direct 5a2bf4e5105d379d8d2886424f9e4c79009e47b8c59897ad379640ef9c3fafe2 () () () () ()
   assert ∃ x ∧ ∈ $0 a = ∩ $0 a ∅ transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (a) (¬ = $0 ∅, ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅) () (direct 0, direct p0)
 }
 
 theorem No Set Contains Itself
+conclusion ¬ ∈ a a
 {
   assert ¬ = singleton a ∅ direct 1c4e6217e33217004ef0962a46f7422720c1fd5d2c8bb711f976bf01166dc708 () (a) () () ()
   assert ∃ y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ direct 455ccb71d56e4d462fa1343c5365aa1c0e182a9a527afa75377bc4ff87da1be0 () (singleton a) () () (direct 0)
@@ -24,12 +26,14 @@ theorem No Set Contains Itself
 
 theorem No Set Contains Itself
 premise ∈ a b
+conclusion ¬ = a b
 {
   assert ¬ ∈ b b direct 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (b) () () ()
   assert ¬ = a b direct 0f121f39bcadef0371e79ff08f42eddba567b599878e5b8a1bbb15b0e8036486 () (a, b) (∈ $0 b) () (direct p0, direct 0)
 }
 
 theorem No Two Sets Contain Each Other
+conclusion ∨ ¬ ∈ b a ¬ ∈ a b
 {
   assert ¬ = pair a b ∅ direct f62b1ca093e555223e44de12325c96d4a9497e339544fc6d12d6d5afb49f13ce () (a, b) () () ()
   assert ∃ x ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ direct 455ccb71d56e4d462fa1343c5365aa1c0e182a9a527afa75377bc4ff87da1be0 () (pair a b) () () (direct 0)
@@ -50,6 +54,7 @@ theorem No Two Sets Contain Each Other
 }
 
 theorem No Two Sets Contain Each Other
+conclusion ¬ ∧ ∈ b a ∈ a b
 {
   assert ∨ ¬ ∈ b a ¬ ∈ a b direct 4cbbdc5eb910728a90ce8062525b404c9ab8f9883733c35b15aa90d25cb834e1 () (b, a) () () ()
   assert ¬ ∧ ∈ b a ∈ a b direct 3377a71ec0fe3e5503f4565893653daa725f30a43f437235891cea02ce0d6809 (∈ b a, ∈ a b) () () () (direct 0)

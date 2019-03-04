@@ -2,6 +2,7 @@ Prove the recursion theorem for recursively constructing functions on ℕ.
 
 theorem An Inductive Function Is Unique
 premise ∃ f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a
+conclusion ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a
 {
   let f' ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a) () (∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a) () (direct p0, direct 0d) {
     take f {
@@ -25,6 +26,7 @@ premise ∃ f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = 
 theorem 𝒫(ℕ × X) Contains All Functions from a Natural Number to X
 premise ∈ n ℕ
 premise function f n A
+conclusion ∈ f powerSet × ℕ A
 {
   assert ⊆ n ℕ direct c660722cbf1cd12662afceb43da350b308473e86467cf5d9f72cd22c5e8cfcf6 () (n) () () (direct p0)
   assert ⊆ f × n A direct fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, n, A) () () (direct p1)
@@ -37,6 +39,7 @@ premise ∈ n ℕ
 premise function f n A
 premise ∈ a A
 premise = g ∪ f singleton orderedPair n a
+conclusion function g successor n A
 {
   assert ¬ ∈ n n direct 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (n) () () ()
   assert function g ∪ n singleton n A direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (g, ∪ f singleton orderedPair n a) (function $0 ∪ n singleton n A) () (direct p3, elided direct ea591471c45f2e8fe8fe1673ae40671c1218cac56876cdf21a760bfacedac9da () (f, n, A, n, a) () () (direct p1, direct 0, direct p2))
@@ -47,6 +50,7 @@ theorem Recursion Theorem - Base Case
 premise function f X X
 premise ∈ g_0 X
 premise = S comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0
+conclusion ∀ x ↔ ∈ orderedPair 0 $0 union S = $0 g_0
 {
   target ∀ x ↔ ∈ orderedPair 0 $0 union S = $0 g_0
 }

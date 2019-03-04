@@ -2,6 +2,7 @@ Introduce set comprehension, {x ∈ A | φ(x)}.
 
 theorem Comprehensions Exist for Empty Sets
 premise ¬ ∃ x ∧ ∈ $0 A with ($0) φ
+conclusion ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 {
   assert ∀ x ¬ ∧ ∈ $0 A with ($0) φ direct 9ce9302cc7e8ff857912b57f2692ecd928d2c84e880583a1086decf024c4a51f () () (∧ ∈ $0 A with ($0) φ) () (direct p0)
   assert ∀ x ↔ ∈ $0 ∅ ∧ ∈ $0 A with ($0) φ direct e17971d0607a4fadde33eba1a8b12e10ce38134d0808f44e5e64597cf3f8597b () () (∧ ∈ $0 A with ($0) φ) () (direct 0)
@@ -11,6 +12,7 @@ premise ¬ ∃ x ∧ ∈ $0 A with ($0) φ
 
 theorem Comprehensions Exist for Non-Empty Sets Lemma
 premise ∧ ∈ a A with (a) φ
+conclusion ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a ∧ ∈ $0 A with ($0) φ
 {
   take y {
     assume ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a {
@@ -38,6 +40,7 @@ premise ∧ ∈ a A with (a) φ
 
 theorem Comprehensions Exist for Non-Empty Sets
 premise ∃ y ∧ ∈ $0 A with ($0) φ
+conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 {
   let a ∧ ∈ $0 A with ($0) φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) () (∧ ∈ $0 A with ($0) φ) () (direct p0, direct 0d) {
     take x {
@@ -52,6 +55,7 @@ premise ∃ y ∧ ∈ $0 A with ($0) φ
 }
 
 theorem Comprehensions Exist
+conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ
 {
   assume ¬ ∃ y ∧ ∈ $0 X with ($0) φ {
     assert ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ direct 34ea80ac4dc2e2e953296c2d11b812e86eef1f686590546d051f8b1e9732317a () (X) (with ($0) φ) () (direct 0a)
@@ -69,6 +73,7 @@ term comprehension ($x A with x φ)
 
 theorem Membership Condition for a Comprehension
 premise = S comprehension x A with ($0) φ
+conclusion ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ
 {
   assert ∀ y ↔ ∈ $0 comprehension x A with ($0) φ ∧ ∈ $0 A with ($0) φ direct 0111376b28debd444ee3e3e7b480f45e33692930df3feb46e5b5ef76a6b43933 () (A) (with ($0) φ) () ()
   assert ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (S, comprehension x A with ($0) φ) (∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) () (direct p0, direct 0)
@@ -77,6 +82,7 @@ premise = S comprehension x A with ($0) φ
 theorem An Element of a Comprehension Is an Element of Its Domain
 premise = S comprehension x A with ($0) φ
 premise ∈ a S
+conclusion ∈ a A
 {
   assert ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ direct 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (S, A) (with ($0) φ) () (direct p0)
   assert ↔ ∈ a S ∧ ∈ a A with (a) φ direct 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ) () (direct 0)
@@ -87,6 +93,7 @@ premise ∈ a S
 theorem An Element of a Comprehension Satisfies Its Condition
 premise = S comprehension x A with ($0) φ
 premise ∈ a S
+conclusion with (a) φ
 {
   assert ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ direct 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (S, A) (with ($0) φ) () (direct p0)
   assert ↔ ∈ a S ∧ ∈ a A with (a) φ direct 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ) () (direct 0)
@@ -96,6 +103,7 @@ premise ∈ a S
 
 theorem A Comprehension Is a Subset of Its Domain
 premise = S comprehension x A with ($0) φ
+conclusion ⊆ S A
 {
   take y {
     assume ∈ $0 S {
@@ -109,6 +117,7 @@ theorem Element of a Comprehension
 premise = S comprehension x A with ($0) φ
 premise ∈ a A
 premise with (a) φ
+conclusion ∈ a S
 {
   assert ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ direct 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (S, A) (with ($0) φ) () (direct p0)
   assert ∈ a S transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (a) (∈ $0 S, ∧ ∈ $0 A with ($0) φ) () (direct 0, expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ a A, with (a) φ) () () () (direct p1, direct p2))
@@ -117,6 +126,7 @@ premise with (a) φ
 theorem Universal Property from Comprehension
 premise = S comprehension x A with ($0) φ
 premise = S A
+conclusion ∀ y → ∈ $0 A with ($0) φ
 {
   take y {
     assume ∈ $0 A {

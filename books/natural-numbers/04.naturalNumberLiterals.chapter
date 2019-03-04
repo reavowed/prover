@@ -4,6 +4,7 @@ term 0 ()
   (= $0 ∅)
 
 theorem 0 Is a Natural Number
+conclusion ∈ 0 ℕ
 {
   assert = 0 ∅ direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () ()
   take X {
@@ -16,6 +17,7 @@ theorem 0 Is a Natural Number
 }
 
 theorem 0 Is Not the Successor of Any Natural Number
+conclusion ¬ = successor n 0
 {
   assert = 0 ∅ direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () ()
   assert ∈ n successor n direct bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n) () () ()
@@ -24,6 +26,7 @@ theorem 0 Is Not the Successor of Any Natural Number
 }
 
 theorem 0 Is Not the Successor of Any Natural Number
+conclusion ¬ = 0 successor n
 {
   assume = 0 successor n {
     assert = successor n 0 direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (0, successor n) () () (direct 0a)
@@ -36,6 +39,7 @@ term 1 ()
   (= $0 successor 0)
 
 theorem 1 Is a Natural Number
+conclusion ∈ 1 ℕ
 {
   assert ∈ 0 ℕ direct a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () () ()
   assert ∈ successor 0 ℕ direct 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (0) () () (direct 0)
@@ -44,6 +48,7 @@ theorem 1 Is a Natural Number
 }
 
 theorem 1 Is the Singleton of 0
+conclusion = 1 singleton 0
 {
   assert = 1 successor 0 direct 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca () () () () ()
   assert = successor 0 ∪ 0 singleton 0 direct 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (0) () () ()

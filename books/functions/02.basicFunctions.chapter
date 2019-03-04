@@ -1,6 +1,7 @@
 Define some basic functions.
 
 theorem The Empty Set Is a Function with Empty Domain
+conclusion function ∅ ∅ A
 {
   assert ⊆ ∅ × ∅ A direct 1bde69fc8b90a9ca85033f763d7edeaa761c9b52a26ea2e64796515496237aa9 () (× ∅ A) () () ()
   assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
@@ -9,6 +10,7 @@ theorem The Empty Set Is a Function with Empty Domain
 }
 
 theorem Function with a Singleton Domain
+conclusion function singleton orderedPair a b singleton a singleton b
 {
   assert ∈ a singleton a direct e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a) () () ()
   assert ∈ b singleton b direct e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (b) () () ()
@@ -38,6 +40,7 @@ theorem Combine Functions
 premise function f A B
 premise function g C D
 premise ∀ x → ∈ $0 ∩ A C = apply f $0 apply g $0
+conclusion function ∪ f g ∪ A C ∪ B D
 {
   assert ⊆ f × A B direct fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, A, B) () () (direct p0)
   assert ⊆ × A B × ∪ A C B direct 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 () (A, ∪ A C, B) () () (elided direct f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 () (A, C) () () ())
@@ -105,6 +108,7 @@ theorem Combine Disjoint Functions
 premise function f A B
 premise function g C D
 premise = ∩ A C ∅
+conclusion function ∪ f g ∪ A C ∪ B D
 {
   assert ∀ x ¬ ∈ $0 ∩ A C direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (∩ A C, ∅) (∀ x ¬ ∈ $0 $$0) () (direct p2, elided direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ())
   assert ∀ x → ∈ $0 ∩ A C = apply f $0 apply g $0 transformed bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (Y) Y () () (∈ $0 ∩ A C, = apply f $0 apply g $0) () (direct 0)
@@ -115,6 +119,7 @@ theorem Extending a Function by One Value
 premise function f A B
 premise ¬ ∈ a A
 premise ∈ b B
+conclusion function ∪ f singleton orderedPair a b ∪ A singleton a B
 {
   take x {
     assume ∈ $0 A {

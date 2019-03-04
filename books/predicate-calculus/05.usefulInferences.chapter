@@ -2,6 +2,7 @@ Some inferences that can be used to reduce boilerplate in proofs.
 
 theorem Redundant And in Existential Quantifier
 premise ∃ a with ($0) φ
+conclusion ↔ ∃ x ∧ with ($0) φ ψ ψ
 {
   assume ∃ x ∧ with ($0) φ ψ {
     let a ∧ with ($0) φ ψ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (ψ) () (∧ with ($0) φ ψ) () (direct 0a, direct 0.0d) {

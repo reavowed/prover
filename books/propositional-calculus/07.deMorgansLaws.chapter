@@ -2,6 +2,7 @@ De Morgan's Laws for conjunction and disjunction.
 
 theorem De Morgan's Law
 premise ∨ ¬ φ ¬ ψ
+conclusion ¬ ∧ φ ψ
 {
   assume ∧ φ ψ {
     assert ¬ ψ direct f457c8f729f769192bd894cd21f50779409673cebd1bcf3d99db0719bd9dc0f3 (φ, ¬ ψ) () () () (direct p0, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () () direct 0a (0))

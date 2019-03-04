@@ -22,6 +22,7 @@ case class Theorem(
   override def serializedLines = Seq(s"theorem $name") ++
     rearrangementType.serialized.toSeq ++
     premises.map(_.serialized) ++
+    Seq("conclusion " + conclusion.serialized) ++
     proof.serializedLines
 
   override def toString = name
@@ -29,18 +30,27 @@ case class Theorem(
 
 object Theorem extends ChapterEntryParser {
   override val name: String = "theorem"
+
+  private def conclusionParser(implicit context: ParsingContext): Parser[Statement] = {
+    for {
+      _ <- Parser.requiredWord("conclusion")
+      conclusion <- Statement.parser
+    } yield conclusion
+  }
+
   def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[Theorem] = {
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
       premises <- Premise.listParser
+      conclusion <- conclusionParser
       proof <- Proof.parser
     } yield {
       Theorem(
         name,
         (ChapterEntry.Key.Standalone.apply _).tupled(getKey(name)),
         premises,
-        proof.conclusion,
+        conclusion,
         proof,
         rearrangementType)
     }

@@ -6,6 +6,7 @@ statement ∃ ($x with x φ)
 
 theorem Existence
 premise with (a) φ
+conclusion ∃ x with ($0) φ
 {
   assume ∀ x ¬ with ($0) φ {
     assert ¬ with (a) φ direct 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (¬ with ($0) φ) () (direct 0a)
@@ -19,6 +20,7 @@ comment If something exists, we can name that something with an arbitrary variab
 theorem Value for Existence
 premise ∃ x with ($0) φ elidable
 premise ∀ x → with ($0) φ ψ
+conclusion ψ
 {
   assert ¬ ∀ x ¬ with ($0) φ direct 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 () () (with ($0) φ) () (direct p0)
   assume ¬ ψ {
@@ -34,6 +36,7 @@ comment Swapping an existence condition with an equivalent one.
 theorem Existence Equivalence
 premise ∃ x with ($0) φ
 premise ∀ x ↔ with ($0) φ with ($0) ψ
+conclusion ∃ x with ($0) ψ
 {
   let a with ($0) φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ x with ($0) ψ) () (with ($0) φ) () (direct p0, direct 0d) {
     assert with ($0) ψ transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () ($0) (with ($$0) φ, with ($$0) ψ) () (direct p1, direct 0a)
@@ -45,6 +48,7 @@ comment Swapping between universal and existential quantifiers.
 
 theorem Not Exists Not Is For All
 premise ¬ ∃ x ¬ with ($0) φ
+conclusion ∀ x with ($0) φ
 {
   take x {
     assume ¬ with ($0) φ {
@@ -56,6 +60,7 @@ premise ¬ ∃ x ¬ with ($0) φ
 
 theorem Not Exists Is For All Not
 premise ¬ ∃ x with ($0) φ
+conclusion ∀ x ¬ with ($0) φ
 {
   assume ¬ ∀ x ¬ with ($0) φ {
     assert ∃ x with ($0) φ direct 4e1baa7f31829a472647ff0c26af3e00308af8ed31ab25b1d5c229c0fcec6381 () () (with ($0) φ) () (direct 0a)
@@ -65,6 +70,7 @@ premise ¬ ∃ x with ($0) φ
 
 theorem For All Not Is Not Exists
 premise ∀ x ¬ with ($0) φ
+conclusion ¬ ∃ x with ($0) φ
 {
   assume ∃ x with ($0) φ {
     assert ¬ ∀ x ¬ with ($0) φ direct 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 () () (with ($0) φ) () (direct 0a)

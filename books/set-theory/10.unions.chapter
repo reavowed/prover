@@ -4,6 +4,7 @@ axiom Axiom of Union
 conclusion ∃ x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0
 
 theorem Arbitrary Unions Exist
+conclusion ∃! x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0
 {
   assert ∃ x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0 direct 7368a5aaf2ab8f127dfe8575ac80d95f32cf5e92f047b096c5dfe41f6b5dc039 () (a) () () ()
   assert ∃! x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0 direct 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∃ z ∧ ∈ $0 a ∈ $$0 $0) () (direct 0)
@@ -16,6 +17,7 @@ term union (a)
 
 theorem Element of Arbitrary Union
 premise ∈ a union A
+conclusion ∃ x ∧ ∈ a $0 ∈ $0 A
 {
   assert ∀ y ↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A direct f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (A) () () ()
   assert ∃ x ∧ ∈ a $0 ∈ $0 A transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (a) (∈ $0 union A, ∃ x ∧ ∈ $$0 $0 ∈ $0 A) () (direct 0, direct p0)
@@ -24,6 +26,7 @@ premise ∈ a union A
 theorem Element of Element Is Element of Union
 premise ∈ b a
 premise ∈ a A
+conclusion ∈ b union A
 {
   assert ∃ x ∧ ∈ b $0 ∈ $0 A direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (∧ ∈ b $0 ∈ $0 A) () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ b a, ∈ a A) () () () (direct p0, direct p1))
   assert ∀ y ↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A direct f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (A) () () ()
@@ -34,6 +37,7 @@ term ∪ (a b)
   (= $0 union pair a b)
 
 theorem Membership Condition for Binary Union
+conclusion ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
 {
   assert ∀ x ↔ ∈ $0 union pair a b ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b direct f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (pair a b) () () ()
   assert ∀ x ↔ ∈ $0 ∪ a b ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (∪ a b, union pair a b) (∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b) () (elided direct 523a320399c522cb7939b676b443444325ae6bc54389fb87a6fc4b2d72971a20 () (a, b) () () (), direct 0)
@@ -68,12 +72,14 @@ theorem Membership Condition for Binary Union
 
 theorem Element of Binary Union
 premise ∈ c ∪ a b
+conclusion ∨ ∈ c a ∈ c b
 {
   assert ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () () ()
   assert ∨ ∈ c a ∈ c b transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (c) (∈ $0 ∪ a b, ∨ ∈ $0 a ∈ $0 b) () (direct 0, direct p0)
 }
 
 theorem Binary Union Is Symmetric
+conclusion = ∪ a b ∪ b a
 {
   assert ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () () ()
   assert ∀ x ↔ ∈ $0 ∪ b a ∨ ∈ $0 b ∈ $0 a direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (b, a) () () ()
@@ -83,6 +89,7 @@ theorem Binary Union Is Symmetric
 
 theorem Element Transfers to Binary Union
 premise ∈ c a
+conclusion ∈ c ∪ a b
 {
   assert ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () () ()
   assert ∈ c ∪ a b transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (c) (∈ $0 ∪ a b, ∨ ∈ $0 a ∈ $0 b) () (direct 0, expansion direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d rearranged (∈ c a, ∈ c b) () () () (direct p0))
@@ -90,12 +97,14 @@ premise ∈ c a
 
 theorem Element Transfers to Binary Union
 premise ∈ c b
+conclusion ∈ c ∪ a b
 {
   assert ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () () ()
   assert ∈ c ∪ a b transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (c) (∈ $0 ∪ a b, ∨ ∈ $0 a ∈ $0 b) () (direct 0, expansion direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 rearranged (∈ c b, ∈ c a) () () () (direct p0))
 }
 
 theorem The Empty Set Is an Identity for Binary Union
+conclusion = ∪ ∅ a a
 {
   assert ∀ x ↔ ∈ $0 ∪ ∅ a ∨ ∈ $0 ∅ ∈ $0 a direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (∅, a) () () ()
   assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
@@ -105,6 +114,7 @@ theorem The Empty Set Is an Identity for Binary Union
 }
 
 theorem The Empty Set Is an Identity for Binary Union
+conclusion = ∪ a ∅ a
 {
   assert ∀ x ↔ ∈ $0 ∪ a ∅ ∨ ∈ $0 a ∈ $0 ∅ direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, ∅) () () ()
   assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
@@ -115,6 +125,7 @@ theorem The Empty Set Is an Identity for Binary Union
 
 theorem A Union of a Non-Empty Set Is Non-Empty
 premise ¬ = a ∅
+conclusion ¬ = ∪ a b ∅
 {
   assert ∃ x ∈ $0 a direct 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (a) () () (direct p0)
   let x ∈ $0 a direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (¬ = ∪ a b ∅) () (∈ $0 a) () (direct 0, direct 1d) {
@@ -125,6 +136,7 @@ premise ¬ = a ∅
 
 theorem A Union of a Non-Empty Set Is Non-Empty
 premise ¬ = a ∅
+conclusion ¬ = ∪ b a ∅
 {
   assert ∃ x ∈ $0 a direct 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (a) () () (direct p0)
   let x ∈ $0 a direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (¬ = ∪ b a ∅) () (∈ $0 a) () (direct 0, direct 1d) {
@@ -136,6 +148,7 @@ premise ¬ = a ∅
 theorem Set Is in One Part of a Binary Union
 premise ∈ a ∪ b c
 premise ¬ ∈ a b
+conclusion ∈ a c
 {
   assert ∨ ∈ a b ∈ a c direct cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (a, b, c) () () (direct p0)
   assert ∈ a c direct 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∈ a b, ∈ a c) () () () (direct 0, direct p1)
@@ -144,6 +157,7 @@ premise ¬ ∈ a b
 theorem Set Is in One Part of a Binary Union
 premise ∈ a ∪ b c
 premise ¬ ∈ a c
+conclusion ∈ a b
 {
   assert ∨ ∈ a b ∈ a c direct cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (a, b, c) () () (direct p0)
   assert ∈ a b direct 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ a b, ∈ a c) () () () (direct 0, direct p1)
@@ -151,6 +165,7 @@ premise ¬ ∈ a c
 
 theorem Union Membership Equivalence If Not In One Set
 premise ¬ ∈ a c
+conclusion ↔ ∈ a b ∈ a ∪ b c
 {
   assume ∈ a b {
     assert ∈ a ∪ b c direct d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () (a, b, c) () () (direct 0a)
@@ -163,6 +178,7 @@ premise ¬ ∈ a c
 
 theorem Union Membership Equivalence If Not In One Set
 premise ¬ ∈ a b
+conclusion ↔ ∈ a c ∈ a ∪ b c
 {
   assume ∈ a c {
     assert ∈ a ∪ b c direct 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () (a, c, b) () () (direct 0a)
@@ -176,6 +192,7 @@ premise ¬ ∈ a b
 theorem Union of Subsets Is a Subset
 premise ⊆ A X
 premise ⊆ B X
+conclusion ⊆ ∪ A B X
 {
   assert ∀ x → ∈ $0 A ∈ $0 X direct f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (A, X) () () (direct p0)
   assert ∀ x → ∈ $0 B ∈ $0 X direct f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (B, X) () () (direct p1)
@@ -187,6 +204,7 @@ premise ⊆ B X
 
 theorem Subset Transfers to Union
 premise ⊆ X A
+conclusion ⊆ X ∪ A B
 {
   take x {
     assume ∈ $0 X {
@@ -199,6 +217,7 @@ premise ⊆ X A
 
 theorem Subset Transfers to Union
 premise ⊆ X A
+conclusion ⊆ X ∪ B A
 {
   take x {
     assume ∈ $0 X {
@@ -210,12 +229,14 @@ premise ⊆ X A
 }
 
 theorem Set Is Subset of Its Union
+conclusion ⊆ A ∪ A B
 {
   assert ⊆ A A direct f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (A) () () ()
   assert ⊆ A ∪ A B direct 861cf8c42641b4bb0dcdb402c70b41a5b3cd5e70149c4ba8bd61b1cd1863762e () (A, A, B) () () (direct 0)
 }
 
 theorem Set Is Subset of Its Union
+conclusion ⊆ B ∪ A B
 {
   assert ⊆ B B direct f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (B) () () ()
   assert ⊆ B ∪ A B direct c44aea8393fdd86f26d82bbf976efc07e57bb21823e6336a5155590d82eb2882 () (B, B, A) () () (direct 0)
@@ -223,6 +244,7 @@ theorem Set Is Subset of Its Union
 
 theorem Redundant Union with Subset
 premise ⊆ A B
+conclusion = ∪ A B B
 {
   take x {
     assume ∈ $0 ∪ A B {
@@ -241,6 +263,7 @@ premise ⊆ A B
 
 theorem Redundant Union with Subset
 premise ⊆ A B
+conclusion = ∪ B A B
 {
   assert = ∪ A B B direct c0e819d88cc63bd8d84c19469696b7c72aca1e3384a08a41423a64297c59819c () (A, B) () () (direct p0)
   assert = ∪ B A ∪ A B direct 251a9f6358a3f62ea0c5aca19e5f6a8e906b78772c6fbf244443a5987b7b334c () (B, A) () () ()
@@ -249,6 +272,7 @@ premise ⊆ A B
 
 theorem Redundant Union with Singleton
 premise ∈ a A
+conclusion = ∪ A singleton a A
 {
   assert ⊆ singleton a A direct ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, A) () () (direct p0)
   assert = ∪ A singleton a A direct 864b4a7ad760ff86c6cf511db95004868a6d51d680ab1f91b7700b7420d13149 () (singleton a, A) () () (direct 0)
@@ -256,6 +280,7 @@ premise ∈ a A
 
 theorem Union of Subsets Is Subset
 premise ⊆ A powerSet B
+conclusion ⊆ union A B
 {
   take y {
     assume ∈ $0 union A {

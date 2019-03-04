@@ -7,6 +7,7 @@ term successor (n)
 
 theorem Element of Successor
 premise ∈ n successor m
+conclusion ∨ ∈ n m = n m
 {
   assert ∈ n ∪ m singleton m direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor m, ∪ m singleton m) (∈ n $0) () (elided direct 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (m) () () (), direct p0)
   assert ∨ ∈ n m ∈ n singleton m direct cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (n, m, singleton m) () () (direct 0)
@@ -17,6 +18,7 @@ premise ∈ n successor m
 }
 
 theorem A Set Is an Element of Its Successor
+conclusion ∈ n successor n
 {
   assert ∈ n singleton n direct e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (n) () () ()
   assert ∈ n ∪ n singleton n direct 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () (n, singleton n, n) () () (direct 0)
@@ -25,12 +27,14 @@ theorem A Set Is an Element of Its Successor
 
 theorem An Element of a Set Is an Element of Its Successor
 premise ∈ n m
+conclusion ∈ n successor m
 {
   assert ∈ n ∪ m singleton m direct d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () (n, m, singleton m) () () (direct p0)
   assert ∈ n successor m direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor m, ∪ m singleton m) (∈ n $0) () (elided direct 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (m) () () (), direct 0)
 }
 
 theorem A Set Is a Subset of Its Successor
+conclusion ⊆ n successor n
 {
   take x {
     assume ∈ $0 n {
@@ -42,6 +46,7 @@ theorem A Set Is a Subset of Its Successor
 
 theorem Successors Are Unique
 premise = successor n successor m
+conclusion = n m
 {
   assert ∈ n successor m direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor n, successor m) (∈ n $0) () (direct p0, elided direct bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n) () () ())
   assert ∨ ∈ n m = n m direct 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () (n, m) () () (direct 0)

@@ -7,6 +7,7 @@ term orderedPair (a b)
 
 theorem Elements of Ordered Pair
 premise ∈ c orderedPair a b
+conclusion ∨ = c singleton a = c pair a b
 {
   assert = orderedPair a b pair singleton a pair a b direct 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () () ()
   assert ∈ c pair singleton a pair a b direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, pair singleton a pair a b) (∈ c $0) () (direct 0, direct p0)
@@ -14,6 +15,7 @@ premise ∈ c orderedPair a b
 }
 
 theorem Singleton of First Coordinate Is Element of Ordered Pair
+conclusion ∈ singleton a orderedPair a b
 {
   assert = orderedPair a b pair singleton a pair a b direct 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () () ()
   assert ∈ singleton a pair singleton a pair a b direct bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (singleton a, pair a b) () () ()
@@ -21,6 +23,7 @@ theorem Singleton of First Coordinate Is Element of Ordered Pair
 }
 
 theorem Pair Is Element of Ordered Pair
+conclusion ∈ pair a b orderedPair a b
 {
   assert = orderedPair a b pair singleton a pair a b direct 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () () ()
   assert ∈ pair a b pair singleton a pair a b direct c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (pair a b, singleton a) () () ()
@@ -28,6 +31,7 @@ theorem Pair Is Element of Ordered Pair
 }
 
 theorem Ordered Pair with Same Coordinates Is Double Singleton
+conclusion = orderedPair a a singleton singleton a
 {
   assert = orderedPair a a pair singleton a pair a a direct 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, a) () () ()
   assert = orderedPair a a pair singleton a singleton a direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a a, singleton a) (= orderedPair a a pair singleton a $0) () (elided direct 856bed8c7f5f249bac0978dd5f7359986d8eef536dff35c07c551f8061d9cd5c () (a) () () (), direct 0)
@@ -36,6 +40,7 @@ theorem Ordered Pair with Same Coordinates Is Double Singleton
 
 theorem Ordered Pair has Same Coordinates If It Is a Double Singleton
 premise = orderedPair a b singleton singleton c
+conclusion = a b
 {
   assert ∈ pair a b orderedPair a b direct ecb0a831f5c8e2151e676d37cb898297bd72fff21fb89e3505d44fba8bda77eb () (a, b) () () ()
   assert ∈ pair a b singleton singleton c direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, singleton singleton c) (∈ pair a b $0) () (direct p0, direct 0)
@@ -45,6 +50,7 @@ premise = orderedPair a b singleton singleton c
 
 theorem First Coordinates of Equal Ordered Pairs Are Equal
 premise = orderedPair a b orderedPair c d
+conclusion = a c
 {
   assert ∈ singleton a orderedPair a b direct d92b71337c8692a5cd350a01fdfcaf921a5cf5b9bfdcb0eeb3976647b04edcb3 () (a, b) () () ()
   assert ∈ singleton a orderedPair c d direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, orderedPair c d) (∈ singleton a $0) () (direct p0, direct 0)
@@ -63,6 +69,7 @@ premise = orderedPair a b orderedPair c d
 theorem Second Coordinates of Equal Ordered Pairs Are Equal - Lemma 1
 premise = orderedPair a b orderedPair c d
 premise = b a
+conclusion = b d
 {
   assert = a c direct 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () (a, b, c, d) () () (direct p0)
   assert = orderedPair a b orderedPair a d direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, c) (= orderedPair a b orderedPair $0 d) () (direct 0, direct p0)
@@ -75,6 +82,7 @@ premise = b a
 
 theorem Second Coordinates of Equal Ordered Pairs Are Equal
 premise = orderedPair a b orderedPair c d
+conclusion = b d
 {
   assert = a c direct 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () (a, b, c, d) () () (direct p0)
   assert = orderedPair a b orderedPair a d direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, c) (= orderedPair a b orderedPair $0 d) () (direct 0, direct p0)

@@ -2,6 +2,7 @@ Arbitrary and binary intersections.
 
 theorem Intersection over a Class
 premise ∃ x with ($0) φ
+conclusion ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
 {
   let a with ($0) φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) () (with ($0) φ) () (direct p0, direct 0d) {
     take y {
@@ -20,6 +21,7 @@ premise ∃ x with ($0) φ
 
 theorem Arbitrary Intersections Are Unique
 premise ¬ = a ∅
+conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 a ∈ $$0 $0
 {
   assert ∃ x ∈ $0 a direct 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (a) () () (direct p0)
   assert ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 a ∈ $$0 $0 direct abba1013aa8f6c308803b75be9ad5743dbacab674c1314b1a8b0e4550d3e8153 () () (∈ $0 a) () (direct 0)
@@ -36,6 +38,7 @@ term ∩ (a b)
   (= $0 intersection pair a b)
 
 theorem Membership Condition for Binary Intersection
+conclusion ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b
 {
   assert ¬ = pair a b ∅ direct f62b1ca093e555223e44de12325c96d4a9497e339544fc6d12d6d5afb49f13ce () (a, b) () () ()
   assert ∀ x ↔ ∈ $0 intersection pair a b ∀ y → ∈ $0 pair a b ∈ $$0 $0 direct edd1e3274ecc3701947081b2c61edca69f7b274a4794426773b48608f01e1cb9 () (pair a b) () () (direct 0)
@@ -71,12 +74,14 @@ theorem Membership Condition for Binary Intersection
 
 theorem Element of Binary Intersection
 premise ∈ a ∩ A B
+conclusion ∧ ∈ a A ∈ a B
 {
   assert ∀ y ↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B direct 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (A, B) () () ()
   assert ∧ ∈ a A ∈ a B transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (a) (∈ $0 ∩ A B, ∧ ∈ $0 A ∈ $0 B) () (direct 0, direct p0)
 }
 
 theorem Binary Intersection Is Symmetric
+conclusion = ∩ a b ∩ b a
 {
   assert ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b direct 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (a, b) () () ()
   assert ∀ x ↔ ∈ $0 ∩ b a ∧ ∈ $0 b ∈ $0 a direct 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (b, a) () () ()
@@ -87,6 +92,7 @@ theorem Binary Intersection Is Symmetric
 theorem An Element of Two Sets Is an Element of Their Intersection
 premise ∈ a A
 premise ∈ a B
+conclusion ∈ a ∩ A B
 {
   assert ∀ x ↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B direct 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (A, B) () () ()
   assert ∈ a ∩ A B transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (a) (∈ $0 ∩ A B, ∧ ∈ $0 A ∈ $0 B) () (direct 0, expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ a A, ∈ a B) () () () (direct p0, direct p1))
@@ -95,6 +101,7 @@ premise ∈ a B
 theorem A Set Can Only Be an Element of One of a Disjoint Pair
 premise = ∩ A B ∅
 premise ∈ a A
+conclusion ¬ ∈ a B
 {
   assume ∈ a B {
     assert ∈ a ∩ A B direct f6b140168c8fe9d0c02c45f1ad9e1787200d6b3f6bc5493b60c653483319a99f () (a, A, B) () () (direct p1, direct 0a)
@@ -106,6 +113,7 @@ premise ∈ a A
 theorem A Set Can Only Be an Element of One of a Disjoint Pair
 premise = ∩ A B ∅
 premise ∈ a B
+conclusion ¬ ∈ a A
 {
   assert = ∩ A B ∩ B A direct aaeab6d7d3d52825168c301db980e40e9b4f91b1ea9d470fae589d4fdbbb6b0a () (A, B) () () ()
   assert = ∩ B A ∅ direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∩ A B, ∩ B A) (= $0 ∅) () (direct 0, direct p0)
@@ -114,6 +122,7 @@ premise ∈ a B
 
 theorem Element Transfers from Intersection
 premise ∈ a ∩ A B
+conclusion ∈ a A
 {
   assert ∧ ∈ a A ∈ a B direct c8434f4c956c72be837fe66113319fe6b79528f533893d507e97834daf174260 () (a, A, B) () () (direct p0)
   assert ∈ a A direct 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ a A, ∈ a B) () () () (direct 0)
@@ -121,6 +130,7 @@ premise ∈ a ∩ A B
 
 theorem Element Transfers from Intersection
 premise ∈ a ∩ A B
+conclusion ∈ a B
 {
   assert ∧ ∈ a A ∈ a B direct c8434f4c956c72be837fe66113319fe6b79528f533893d507e97834daf174260 () (a, A, B) () () (direct p0)
   assert ∈ a B direct 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ a A, ∈ a B) () () () (direct 0)
@@ -128,6 +138,7 @@ premise ∈ a ∩ A B
 
 theorem Disjoint Pair
 premise ∀ x → ∈ $0 A ¬ ∈ $0 B
+conclusion = ∩ A B ∅
 {
   take x {
     assume ∈ $0 ∩ A B {
@@ -143,6 +154,7 @@ premise ∀ x → ∈ $0 A ¬ ∈ $0 B
 
 theorem Disjoint Pair
 premise ∀ x → ∈ $0 A ¬ ∈ $0 B
+conclusion = ∩ B A ∅
 {
   assert = ∩ A B ∅ direct b80bb75d6dc623394f9f9d5d78b00f112d814f0a5a1aa3c718cc6420f534a673 () (A, B) () () (direct p0)
   assert = ∩ B A ∩ A B direct aaeab6d7d3d52825168c301db980e40e9b4f91b1ea9d470fae589d4fdbbb6b0a () (B, A) () () ()

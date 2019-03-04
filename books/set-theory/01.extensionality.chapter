@@ -18,6 +18,7 @@ conclusion = a b
 theorem Sets with Same Membership Condition Are Equal
 premise ∀ x ↔ ∈ $0 a with ($0) φ
 premise ∀ x ↔ ∈ $0 b with ($0) φ
+conclusion = a b
 {
   assert ∀ x ↔ ∈ $0 a ∈ $0 b transformed a7484e000ea36999f1857b841f8a03dab3aef0c8e5765ae87dbf2f433d2bbb04 (Y Y) Y () () (∈ $0 a, with ($0) φ, ∈ $0 b) () (direct p0, direct p1)
   assert = a b direct 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (a, b) () () (direct 0)
@@ -27,6 +28,7 @@ theorem Sets with Equivalent Membership Conditions Are Equal
 premise ∀ x ↔ ∈ $0 a with ($0) φ
 premise ∀ x ↔ ∈ $0 b with ($0) ψ
 premise ∀ x ↔ with ($0) φ with ($0) ψ
+conclusion = a b
 {
   assert ∀ x ↔ ∈ $0 a with ($0) ψ transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $0 a, with ($0) φ, with ($0) ψ) () (direct p0, direct p2)
   assert = a b direct f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () (a, b) (with ($0) ψ) () (direct 0, direct p1)
@@ -34,6 +36,7 @@ premise ∀ x ↔ with ($0) φ with ($0) ψ
 
 theorem A Set with a Membership Condition Is Unique
 premise ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ
+conclusion ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 {
   take z_1 {
     take z_2 {
@@ -48,6 +51,7 @@ premise ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 theorem Replace Equivalent Membership Condition
 premise ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 premise ∀ y ↔ with ($0) φ with ($0) ψ
+conclusion ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ
 {
   let a ∀ y ↔ ∈ $0 $$0 with ($0) φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ) () (∀ y ↔ ∈ $0 $$0 with ($0) φ) () (direct p0, direct 0d) {
     assert ∀ y ↔ ∈ $0 $$0 with ($0) ψ transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $$0 $0, with ($$0) φ, with ($$0) ψ) () (direct 0a, direct p1)

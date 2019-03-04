@@ -7,12 +7,14 @@ statement ∃! ($x with x φ)
 theorem Value for Unique Existence
 premise ∃! x with ($0) φ elidable
 premise ∀ x → with ($0) φ ψ
+conclusion ψ
 {
   assert ∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0 direct 3bd85ee951a3c89051f17367163d0ec7295c3fa75ac7cadf25fdb7ccd7db35dc () () (with ($0) φ) () (direct p0)
   assert ψ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (ψ) () (with ($0) φ) () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∃ x with ($0) φ, ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0) () () () direct 0 (0), direct p1)
 }
 
 theorem Every Set Is Unique
+conclusion ∃! y = $0 a
 {
   assert ∃ x = $0 a direct 8cf72cf7b527d9e599e1e396a28cdc3485d6e669a1aa4c12184758ca101eceb3 () (a) () () ()
   take x {
@@ -29,6 +31,7 @@ theorem Two Values Satisfying Unique Condition Are Equal
 premise ∃! x with ($0) φ
 premise with (a) φ
 premise with (b) φ
+conclusion = a b
 {
   assert ∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0 direct 3bd85ee951a3c89051f17367163d0ec7295c3fa75ac7cadf25fdb7ccd7db35dc () () (with ($0) φ) () (direct p0)
   assert ∀ y → ∧ with (a) φ with ($0) φ = a $0 direct 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∃ x with ($0) φ, ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0) () () () direct 0 (1))
@@ -39,6 +42,7 @@ premise with (b) φ
 theorem Uniqueness by Exhibiting Unique Value
 premise ∃ x with ($0) φ
 premise ∀ x → with ($0) φ = $0 a
+conclusion ∃! x with ($0) φ
 {
   take x {
     take y {
@@ -54,6 +58,7 @@ premise ∀ x → with ($0) φ = $0 a
 
 theorem Uniqueness by Exhibiting Unique Value
 premise ∀ x ↔ with ($0) φ = $0 a
+conclusion ∃! x with ($0) φ
 {
   assert = a a direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () () ()
   assert with (a) φ transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (a) (with ($0) φ, = $0 a) () (direct p0, direct 0)
@@ -65,6 +70,7 @@ premise ∀ x ↔ with ($0) φ = $0 a
 theorem Uniqueness by Exhibiting Unique Value
 premise ∀ x → with ($0) φ = $0 a
 premise with (a) φ
+conclusion ∃! x with ($0) φ
 {
   take x {
     assume = $0 a {
@@ -77,6 +83,7 @@ premise with (a) φ
 
 theorem Existence of Unique Value
 premise ∃! x with ($0) φ
+conclusion ∃ y ∀ x ↔ with ($0) φ = $0 $$0
 {
   let a with ($0) φ direct 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∃ y ∀ x ↔ with ($0) φ = $0 $$0) () (with ($0) φ) () (direct p0, direct 0d) {
     take x {
@@ -94,6 +101,7 @@ premise ∃! x with ($0) φ
 
 theorem Unique Value Satisifies Condition
 premise ∀ x ↔ with ($0) φ = $0 a
+conclusion with (a) φ
 {
   assert = a a direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () () ()
   assert with (a) φ transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (a) (with ($0) φ, = $0 a) () (direct p0, direct 0)
@@ -101,6 +109,7 @@ premise ∀ x ↔ with ($0) φ = $0 a
 
 theorem Uniqueness by Two Cases
 premise ⊕ φ ψ
+conclusion ∃! x ∨ ∧ φ = $0 a ∧ ψ = $0 b
 {
   assume φ {
     assert ¬ ψ direct e4ae6063b86741e544a9c95c2ce96510d5571fb6b97a2d084435181728226d66 (φ, ψ) () () () (direct p0, direct 0a)
@@ -120,6 +129,7 @@ premise ⊕ φ ψ
 }
 
 theorem Uniqueness by Two Cases
+conclusion ∃! x ∨ ∧ φ = $0 a ∧ ¬ φ = $0 b
 {
   assert ⊕ φ ¬ φ direct 84a2ec9cae05bd957bd110d11107812df38d272dbeb35f3310d763b7fb5b5824 (φ) () () () ()
   assert ∃! x ∨ ∧ φ = $0 a ∧ ¬ φ = $0 b direct 70af6c413942b8cd1f952f933aa36ee2c1c47106dbbe183957125b7845ba1f07 (φ, ¬ φ) (a, b) () () (direct 0)

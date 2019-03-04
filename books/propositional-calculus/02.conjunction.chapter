@@ -6,6 +6,7 @@ statement ∧ (φ ψ)
 theorem Extract Left Conjunct
 simplification
 premise ∧ φ ψ
+conclusion φ
 {
   assert ¬ → φ ¬ ψ direct e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (φ, ψ) () () () (direct p0)
   assume ¬ φ {
@@ -17,6 +18,7 @@ premise ∧ φ ψ
 theorem Extract Right Conjunct
 simplification
 premise ∧ φ ψ
+conclusion ψ
 {
   assert ¬ → φ ¬ ψ direct e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (φ, ψ) () () () (direct p0)
   assume ¬ ψ {
@@ -29,6 +31,7 @@ theorem Combine Conjunction
 expansion
 premise φ
 premise ψ
+conclusion ∧ φ ψ
 {
   assume → φ ¬ ψ {
     assert ¬ ψ direct fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ¬ ψ) () () () (direct 0a, direct p0)
@@ -39,6 +42,7 @@ premise ψ
 
 theorem Reverse Conjunction
 premise ∧ φ ψ
+conclusion ∧ ψ φ
 {
   assert φ direct 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () () (direct p0)
   assert ψ direct 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () () (direct p0)
@@ -46,6 +50,7 @@ premise ∧ φ ψ
 }
 
 theorem Law of Non-Contradiction
+conclusion ¬ ∧ φ ¬ φ
 {
   assume ∧ φ ¬ φ {
     assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ¬ φ) () () () direct 0a (0), simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ¬ φ) () () () direct 0a (1))
@@ -58,6 +63,7 @@ comment Some inferences for negated conjunctions.
 theorem Add Negated Conjunct
 expansion
 premise ¬ φ
+conclusion ¬ ∧ φ ψ
 {
   assume ∧ φ ψ {
     assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () () direct 0a (0), direct p0)
@@ -68,6 +74,7 @@ premise ¬ φ
 theorem Add Negated Conjunct
 expansion
 premise ¬ ψ
+conclusion ¬ ∧ φ ψ
 {
   assume ∧ φ ψ {
     assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () () direct 0a (1), direct p0)
@@ -77,6 +84,7 @@ premise ¬ ψ
 
 theorem Add Negated Conjunct
 premise φ
+conclusion ¬ ∧ ¬ φ ψ
 {
   assume ∧ ¬ φ ψ {
     assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () () (direct p0, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (¬ φ, ψ) () () () direct 0a (0))
@@ -86,6 +94,7 @@ premise φ
 
 theorem Add Negated Conjunct
 premise ψ
+conclusion ¬ ∧ φ ¬ ψ
 {
   assume ∧ φ ¬ ψ {
     assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () () (direct p0, simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ¬ ψ) () () () direct 0a (1))
@@ -96,6 +105,7 @@ premise ψ
 theorem Extract Negated Conjunct
 premise ¬ ∧ φ ψ
 premise φ
+conclusion ¬ ψ
 {
   assume ψ {
     assert ∧ φ ψ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () () (direct p1, direct 0a)
@@ -106,6 +116,7 @@ premise φ
 theorem Extract Negated Conjunct
 premise ¬ ∧ φ ψ
 premise ψ
+conclusion ¬ φ
 {
   assume φ {
     assert ∧ φ ψ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () () (direct 0a, direct p1)

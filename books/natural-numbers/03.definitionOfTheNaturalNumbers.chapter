@@ -4,6 +4,7 @@ axiom Axiom of Infinity
 conclusion ∃ X inductive $0
 
 theorem The Natural Numbers Exist
+conclusion ∃! Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0
 {
   assert ∃ X inductive $0 direct bfdf6d068ad4edf797fca0b9cf9945bf0e12f0a0abe1a2f692f69e1e5e9973e6 () () () () ()
   assert ∃ Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0 direct abba1013aa8f6c308803b75be9ad5743dbacab674c1314b1a8b0e4550d3e8153 () () (inductive $0) () (direct 0)
@@ -15,6 +16,7 @@ term ℕ ()
 
 theorem An Element of All Inductive Sets Is a Natural Number
 premise ∀ X → inductive $0 ∈ n $0
+conclusion ∈ n ℕ
 {
   assert ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0 direct 69ab0035b05f277d98392c7b596d7e0dfef8953dd2f283a416a33e3c3ffcec6f () () () () ()
   assert ∈ n ℕ transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (n) (∈ $0 ℕ, ∀ X → inductive $0 ∈ $$0 $0) () (direct 0, direct p0)
@@ -23,6 +25,7 @@ premise ∀ X → inductive $0 ∈ n $0
 theorem A Natural Number Is an Element of Any Inductive Set
 premise ∈ n ℕ
 premise inductive S
+conclusion ∈ n S
 {
   assert ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0 direct 69ab0035b05f277d98392c7b596d7e0dfef8953dd2f283a416a33e3c3ffcec6f () () () () ()
   assert ∀ X → inductive $0 ∈ n $0 transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (n) (∈ $0 ℕ, ∀ X → inductive $0 ∈ $$0 $0) () (direct 0, direct p0)
@@ -31,6 +34,7 @@ premise inductive S
 
 theorem A Successor of a Natural Number Is a Natural Number
 premise ∈ n ℕ
+conclusion ∈ successor n ℕ
 {
   take X {
     assume inductive $0 {

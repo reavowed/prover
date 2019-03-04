@@ -2,6 +2,7 @@ Proof by induction.
 
 theorem ℕ Is a Subset of Any Inductive Set
 premise inductive S
+conclusion ⊆ ℕ S
 {
   take n {
     assume ∈ $0 ℕ {
@@ -14,6 +15,7 @@ premise inductive S
 theorem An Inductive Subset of ℕ Is ℕ
 premise ⊆ S ℕ
 premise inductive S
+conclusion = S ℕ
 {
   assert ⊆ ℕ S direct 8e4ae45640ad174f7eb1eeb1b07f7485e0919bc0ce0cb72bc769ffaa087602b1 () (S) () () (direct p1)
   assert = S ℕ direct 0477ee5edbf3b855830ed7f269321584ce9ef7540ea076c0bfcc087dec2b62b6 () (S, ℕ) () () (direct p0, direct 0)
@@ -23,6 +25,7 @@ theorem Proof by Induction
 premise ⊆ S ℕ
 premise ∈ 0 S
 premise ∀ n → ∈ $0 S ∈ successor $0 S
+conclusion = S ℕ
 {
   assert = 0 ∅ direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () ()
   assert ∈ ∅ S direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (0, ∅) (∈ $0 S) () (direct 0, direct p1)
@@ -34,6 +37,7 @@ theorem Proof by Induction over Comprehension
 premise = S comprehension n ℕ with ($0) φ
 premise ∈ 0 S
 premise ∀ n → ∈ $0 S ∈ successor $0 S
+conclusion = S ℕ
 {
   assert ⊆ S ℕ direct 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () (S, ℕ) (with ($0) φ) () (direct p0)
   assert = S ℕ direct bf554a2aab3c6a5e3dbcf0924479154a006b12a51158cd9a2d469703f5aa8932 () (S) () () (direct 0, direct p1, direct p2)
@@ -42,6 +46,7 @@ premise ∀ n → ∈ $0 S ∈ successor $0 S
 theorem 0 as Element of a Comprehension over ℕ
 premise = S comprehension n ℕ with ($0) φ
 premise with (0) φ
+conclusion ∈ 0 S
 {
   assert ∈ 0 ℕ direct a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () () ()
   assert ∈ 0 S direct 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () (S, ℕ, 0) (with ($0) φ) () (direct p0, direct 0, direct p1)
@@ -51,6 +56,7 @@ theorem Successor as Element of a Comprehension over ℕ
 premise = S comprehension n ℕ with ($0) φ
 premise ∈ m S
 premise with (successor m) φ
+conclusion ∈ successor m S
 {
   assert ∈ m ℕ direct 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () (S, ℕ, m) (with ($0) φ) () (direct p0, direct p1)
   assert ∈ successor m ℕ direct 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (m) () () (direct 0)
@@ -60,6 +66,7 @@ premise with (successor m) φ
 theorem Proof by Induction on Property
 premise with (0) φ
 premise ∀ n → ∧ ∈ $0 ℕ with ($0) φ with (successor $0) φ
+conclusion ∀ n → ∈ $0 ℕ with ($0) φ
 {
   let S = $0 comprehension n ℕ with ($0) φ direct cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∀ n → ∈ $0 ℕ with ($0) φ) (comprehension n ℕ with ($0) φ) () () (direct 0d) {
     assert ∈ 0 $0 direct dcc9c4935074d5c32c3cc551415902fb84acde50cdea3784897196521172250b () ($0) (with ($$0) φ) () (direct 0a, direct p0)
@@ -80,6 +87,7 @@ theorem An Inductive Property Applies to Any Natural Number
 premise with (0) φ
 premise ∀ n → ∧ ∈ $0 ℕ with ($0) φ with (successor $0) φ
 premise ∈ n ℕ
+conclusion with (n) φ
 {
   assert ∀ n → ∈ $0 ℕ with ($0) φ direct eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (with ($0) φ) () (direct p0, direct p1)
   assert with (n) φ transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (n) (∈ $0 ℕ, with ($0) φ) () (direct 0, direct p2)
