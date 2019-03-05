@@ -8,13 +8,9 @@ case class Proof(steps: Seq[Step]) {
   def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
   def referenceMap: ReferenceMap = steps.map(_.referenceMap).foldTogether
   def length: Int = steps.map(_.length).sum
-  val conclusion: Statement = {
-    steps.flatMap(_.provenStatements).lastOption
-      .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))
-      .statement
-  }
+  val conclusion: Option[Statement] = steps.flatMap(_.provenStatements).lastOption.map(_.statement)
 
-  def getLines(implicit displayContext: DisplayContext) = steps.flatMap(_.getLines(referenceMap, 0, None))
+  def getLines(implicit displayContext: DisplayContext): Seq[ProofLine] = steps.flatMap(_.getLines(referenceMap, 0, None))
   def serializedLines = Seq("{") ++ steps.flatMap(_.serializedLines).indent ++ Seq("}")
 }
 

@@ -247,37 +247,6 @@ object Step {
     }
   }
 
-  case class Target(statement: Statement, reference: Reference.Direct) extends Step {
-    override def provenStatements = Seq(ProvenStatement(statement, reference))
-    override def referencedInferenceIds = Set.empty
-    override def referenceMap = ReferenceMap.empty
-    override def length = 1
-    override def intermediateReferences = Nil
-    override def lastReference = Some(reference.value)
-    override def getLines(
-      referenceMap: ReferenceMap,
-      indentLevel: Int,
-      additionalReference: Option[String])(
-      implicit displayContext: DisplayContext
-    ): Seq[ProofLine] = {
-      Seq(ProofLine(
-        "Target:",
-        ProofLine.Expression.create(statement, referenceMap.getReferrers(reference.value, additionalReference)),
-        Some(reference.value),
-        indentLevel,
-        None))
-    }
-    override def isSingleAssertion = false
-    def serializedLines = Seq(s"target ${statement.serialized}")
-  }
-  object Target {
-    def parser(reference: Reference.Direct)(implicit context: ParsingContext): Parser[Target] = {
-      for {
-        statement <- Statement.parser
-      } yield Target(statement, reference)
-    }
-  }
-
   implicit class StepSeqOps(steps: Seq[Step]) {
     def intermediateReferences: Seq[String] = {
       steps.dropRight(1).flatMap { step =>
@@ -286,14 +255,12 @@ object Step {
     }
   }
 
-
   def parser(reference: Reference.Direct)(implicit context: ParsingContext): Parser[Option[Step]] = {
     Parser.selectOptionalWordParser {
       case "assume" => Assumption.parser(reference)
       case "let" => Naming.parser(reference)
       case "assert" => Assertion.parser(reference)
       case "take" => ScopedVariable.parser(reference)
-      case "target" => Target.parser(reference)
     }
   }
   def listParser(baseReference: Option[Reference.Direct])(implicit context: ParsingContext): Parser[Seq[Step]] = {

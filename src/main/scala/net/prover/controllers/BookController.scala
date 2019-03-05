@@ -91,7 +91,7 @@ class BookController @Autowired() (bookService: BookService) {
               ChapterEntry.Key.Standalone(Chapter.getNextKey(chapter.entries, newTheoremDefininition.name), chapter.key),
               premises,
               conclusion,
-              Proof(Seq(Step.Target(conclusion, Reference.Direct("0")))),
+              Proof(Seq.empty),
               RearrangementType.NotRearrangement)
             chapter.addEntry(newTheorem)
           }(book)
