@@ -47,7 +47,7 @@ package object model {
       val words = splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase)
       words.headOption.getOrElse("") + words.drop(1).map(_.capitalise).mkString("")
     }
-    def formatAsKey: String = splitByWhitespace().map(_.replaceAll("[\\p{Punct}]+", "")).map(_.toLowerCase).mkString("-")
+    def formatAsKey: String = splitByWhitespace().map(_.toLowerCase).mkString("-")
   }
 
   implicit class TupleOps[S,T](tuple: (S, T)) {

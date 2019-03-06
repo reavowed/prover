@@ -59,7 +59,7 @@ $(() => {
 
   function replaceShorthandsInText(text) {
     _.each(_.keys(shorthands), valueToReplace => {
-      let regex = new RegExp('\\b' + valueToReplace + '(?=\\s$)', 'gim');
+      let regex = new RegExp('\\b' + _.escapeRegExp(valueToReplace) + '(?=\\s$)', 'gim');
       text = text.replace(regex, shorthands[valueToReplace]);
     });
     return text;
