@@ -38,24 +38,9 @@ object TheoremView {
           }}
         </table>
       </div>
+      <script src="/js/theorem.js"></script>
       <script type="text/javascript">
-        {Unparsed("""$(function() {
-          $("[data-reference]").each(function() {
-            var $this = $(this);
-            var escapedReference = _.replace($this.attr("data-reference"), /\./g, "\\.");
-            var $premises = $(".highlight-" + escapedReference);
-            var $conclusion = $this.find('.conclusion-' + escapedReference);
-            $(this)
-              .on("mouseenter", function() {
-                $premises.addClass("highlightPremise");
-                $conclusion.addClass("highlightConclusion");
-              })
-              .on("mouseleave", function() {
-                $premises.removeClass("highlightPremise");
-                $conclusion.removeClass("highlightConclusion");
-              })
-          })
-        })""")}
+        {Unparsed("""""")}
       </script>
     </div>
   }
