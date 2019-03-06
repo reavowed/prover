@@ -3,8 +3,6 @@ package net.prover.views
 import net.prover.model.{Book, Chapter, HtmlHelper}
 import net.prover.model.entries.{ChapterEntry, Theorem}
 
-import scala.xml.{Text, Unparsed}
-
 object TheoremView {
   def apply(
     theorem: Theorem,
@@ -39,9 +37,6 @@ object TheoremView {
         </table>
       </div>
       <script src="/js/theorem.js"></script>
-      <script type="text/javascript">
-        {Unparsed("""""")}
-      </script>
     </div>
   }
 }
