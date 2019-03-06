@@ -5,7 +5,6 @@ import net.prover.model._
 import net.prover.model.proof.ReferenceMap
 import net.prover.viewmodel.Breadcrumb
 
-import scala.xml.Unparsed
 
 object ChapterView {
   private def DefinitionTitle(description: String, definition: ExpressionDefinition)(implicit displayContext: DisplayContext) = {

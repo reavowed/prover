@@ -14,4 +14,31 @@ $(() => {
         $conclusion.removeClass("highlightConclusion");
       });
   });
+
+  let openPopoverHolder = null;
+
+  $(".proofLine").each(function() {
+    let $this = $(this);
+    let holder = $this.find(".popover-holder")
+    holder.popover({
+      placement: "bottom",
+      html: true,
+      trigger: "focus"
+    });
+    $this
+      .on("click", function () {
+        if (openPopoverHolder && openPopoverHolder !== holder) {
+          openPopoverHolder.popover("hide");
+        }
+        holder.popover("toggle");
+      })
+      .on("show.bs.popover", function() {
+        openPopoverHolder = holder;
+      })
+      .on("hide.bs.popover", function() {
+        if (openPopoverHolder === holder) {
+          openPopoverHolder = null;
+        }
+      });
+  });
 });

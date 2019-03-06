@@ -72,15 +72,15 @@
     clear: both;
 }
 
-.proofRows {
-    margin-top: 5px;
-}
-
 .comment + .comment {
     margin-top: 15px;
 }
 
-.proofRow td {
+.proof {
+    margin-top: 5px;
+}
+
+.proofLine {
     padding-left: 5px;
     padding-bottom: 5px;
 }
@@ -106,10 +106,6 @@ table {
 
 .stepInferenceId {
     padding-left: 25px;
-}
-
-.proofRow td:focus {
-    outline: none;
 }
 
 .highlightPremise {

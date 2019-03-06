@@ -1,9 +1,34 @@
 package net.prover.views
 
-import net.prover.model.{Book, Chapter, HtmlHelper}
+import net.prover.model.{Book, Chapter, DisplayContext, HtmlHelper}
 import net.prover.model.entries.{ChapterEntry, Theorem}
+import net.prover.model.proof.ProofLine.Justification
+import net.prover.model.proof.ReferenceMap
 
 object TheoremView {
+  private def popoverTitle(justification: Justification): String = {
+    justification.inference match {
+      case Some(inference) =>
+        <a href={inference.entryKey.url}>{justification.text}</a>.toString()
+      case None =>
+        justification.text
+    }
+  }
+  private def popoverContent(justification: Justification)(implicit displayContext: DisplayContext): String = {
+    justification.inference match {
+      case Some(inference) =>
+        <div>
+          { PremisesView(inference.premises, ReferenceMap.empty) }
+          <div>
+            { if(inference.premises.nonEmpty) "Then" }
+            {ExpressionView(inference.conclusion)}.
+          </div>
+        </div>.toString()
+      case None =>
+        ""
+    }
+  }
+
   def apply(
     theorem: Theorem,
     chapter: Chapter,
@@ -17,24 +42,19 @@ object TheoremView {
       <div class="theoremProof">
         <hr/>
         <h4>Proof</h4>
-        <table class="table-condensed proofRows">
+        <div class="proof">
           {theorem.proof.getLines.map { line =>
-            <tr class="proofRow" data-reference={line.reference.orNull}>
-              <td>
+            <div class="proofLine" data-reference={line.reference.orNull}>
+              <span class="popover-holder"
+                    title={line.justification.map(popoverTitle).orNull}
+                    data-content={line.justification.map(popoverContent).orNull}>
                 { for(_ <- 1 to line.indentLevel) yield { <span>&nbsp;&nbsp;</span> } }
                 {HtmlHelper.format(line.prefix)}
                 <span class={line.reference.map("conclusion-" + _).orNull}>{ExpressionView(line.expression)}</span>.
-              </td>
-              { line.inferenceLink.toSeq.map { inferenceLink =>
-                <td>
-                  <a class="stepInferenceId" href={inferenceLink.key.map(_.url).orNull}>
-                    {inferenceLink.name}
-                  </a>
-                </td>
-              }}
-            </tr>
+              </span>
+            </div>
           }}
-        </table>
+        </div>
       </div>
       <script src="/js/theorem.js"></script>
     </div>

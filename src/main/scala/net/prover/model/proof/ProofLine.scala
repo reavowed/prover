@@ -1,15 +1,16 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.entries.{ChapterEntry, DisplayShorthand}
+import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions._
+import net.prover.model.proof.ProofLine.Justification
 
 case class ProofLine(
   prefix: String,
   expression: ProofLine.Expression,
   reference: Option[String],
   indentLevel: Int,
-  inferenceLink: Option[ProofLine.EntryLink])
+  justification: Option[Justification])
 
 object ProofLine {
   trait Expression {
@@ -78,10 +79,11 @@ object ProofLine {
       implicit displayContext: DisplayContext
     ): Expression = create(realExpression, Set.empty)
   }
-  case class EntryLink(name: String, key: Option[ChapterEntry.Key])
-  object EntryLink {
-    def apply(inference: Inference): EntryLink = EntryLink(
-      inference.name,
-      Some(inference.entryKey))
+
+  case class Justification(text: String, inference: Option[Inference])
+  object Justification {
+    def plain(text: String) = Justification(text, None)
+    def fromInference(inference: Inference) = Justification(inference.name, Some(inference))
+    def fromInferenceApplication(inferenceApplication: InferenceApplication) = fromInference(HtmlHelper.findInferenceToDisplay(inferenceApplication))
   }
 }

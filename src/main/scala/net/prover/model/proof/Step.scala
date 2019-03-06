@@ -47,9 +47,9 @@ object Step {
         Some(reference.value),
         indentLevel,
         if (inferenceApplication.isRearrangement)
-          Some(ProofLine.EntryLink("Rearrangement", None))
+          Some(ProofLine.Justification.plain("Rearrangement"))
         else
-          Some(ProofLine.EntryLink(HtmlHelper.findInferenceToDisplay(inferenceApplication)))))
+          Some(ProofLine.Justification.fromInferenceApplication(inferenceApplication))))
     }
     override def isSingleAssertion = true
 
@@ -99,7 +99,7 @@ object Step {
               substepLine.expression.referrers),
             substepLine.reference,
             indentLevel,
-            substepLine.inferenceLink)
+            substepLine.justification)
         }
       } else {
         val assumptionLine = ProofLine(
@@ -160,7 +160,7 @@ object Step {
         ProofLine.Expression.create(assumption, referenceMap.getReferrers(assumptionReference.value)),
         Some(finalAssertionReference.value),
         indentLevel,
-        Some(ProofLine.EntryLink(HtmlHelper.findInferenceToDisplay(finalInferenceApplication))))
+        Some(ProofLine.Justification.fromInferenceApplication(finalInferenceApplication)))
       val innerLines = substeps.flatMapWithIndex((step, index) =>
         step.getLines(
           referenceMap,
