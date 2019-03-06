@@ -14,6 +14,7 @@ term powerSet (a)
   name (Power Set)
   format (𝒫a)
   (∀ x ↔ ∈ $0 $$0 ⊆ $0 a)
+  shorthand (power)
 
 theorem Subset Is in Power Set
 premise ⊆ b a

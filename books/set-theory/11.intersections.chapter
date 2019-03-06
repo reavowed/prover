@@ -36,6 +36,7 @@ term intersection (a)
 
 term ∩ (a b)
   (= $0 intersection pair a b)
+  shorthand (int)
 
 theorem Membership Condition for Binary Intersection
 conclusion ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b

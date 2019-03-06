@@ -3,6 +3,7 @@ Introduce the uniqueness quantifier, ∃!.
 statement ∃! ($x with x φ)
   format ((∃!x)φ)
   definition (∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0)
+  shorthand (ex!)
 
 theorem Value for Unique Existence
 premise ∃! x with ($0) φ elidable

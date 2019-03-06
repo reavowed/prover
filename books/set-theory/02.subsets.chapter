@@ -2,6 +2,7 @@ Introduce the subset relation, ⊆.
 
 statement ⊆ (A B)
   definition (∀ x → ∈ $0 A ∈ $0 B)
+  shorthand (sub)
 
 theorem Definition of ⊆
 premise ⊆ A B

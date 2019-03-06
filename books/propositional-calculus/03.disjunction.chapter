@@ -2,6 +2,7 @@ Introduce the "or" or "disjuction" connective, ∨.
 
 statement ∨ (φ ψ)
   definition (→ ¬ φ ψ)
+  shorthand (or)
 
 theorem Add Right Disjunct
 expansion

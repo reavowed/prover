@@ -2,6 +2,7 @@ Introduce the universal quantifier, ∀.
 
 statement ∀ ($x with x φ)
   format ((∀x)φ)
+  shorthand (fa)
   scoping
 
 axiom Specification

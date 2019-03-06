@@ -2,6 +2,7 @@ Introduce the exclusive or connective, ⊕.
 
 statement ⊕ (φ ψ)
   definition (∨ ∧ φ ¬ ψ ∧ ¬ φ ψ)
+  shorthand (xor)
 
 theorem Reverse Exclusive Or
 premise ⊕ φ ψ

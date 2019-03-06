@@ -35,6 +35,7 @@ conclusion ∈ b union A
 
 term ∪ (a b)
   (= $0 union pair a b)
+  shorthand (un)
 
 theorem Membership Condition for Binary Union
 conclusion ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b

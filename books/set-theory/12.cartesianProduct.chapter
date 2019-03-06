@@ -17,6 +17,7 @@ conclusion ∈ orderedPair a b powerSet powerSet ∪ A B
 term × (A B)
   name (Cartesian Product)
   (= $0 comprehension x powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0)
+  shorthand (prod)
 
 theorem Membership Condition for Cartesian Product
 conclusion ∀ x ↔ ∈ $0 × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0

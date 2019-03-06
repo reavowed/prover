@@ -33,9 +33,11 @@ conclusion → φ χ
 }
 
 statement ⊥ ()
+  shorthand (false)
 
 statement ¬ (φ)
   definition (→ φ ⊥)
+  shorthand (not)
 
 axiom Remove Double Negative
 premise ¬ ¬ φ

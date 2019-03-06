@@ -13,6 +13,7 @@ conclusion ∃! Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0
 
 term ℕ ()
   (∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0)
+  shorthand (nat)
 
 theorem An Element of All Inductive Sets Is a Natural Number
 premise ∀ X → inductive $0 ∈ n $0
