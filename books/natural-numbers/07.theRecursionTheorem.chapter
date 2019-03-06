@@ -46,10 +46,9 @@ conclusion function g successor n A
   assert function g successor n A direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor n, ∪ n singleton n) (function g $0 A) () (elided direct 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (n) () () (), direct 1)
 }
 
-theorem Recursion Theorem - Base Case
+theorem Recursion Theorem
 premise function f X X
 premise ∈ g_0 X
-premise = S comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0
-conclusion ∀ x ↔ ∈ orderedPair 0 $0 union S = $0 g_0
+conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
 {
 }

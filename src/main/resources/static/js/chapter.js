@@ -38,6 +38,21 @@ $(() => {
     });
   });
 
+  $("button.deleteInference").click(function() {
+    let button = $(this);
+    let key = button.attr("data-key");
+    $.ajax({
+      url: window.location.pathname + `/${key}`,
+      type: "DELETE"
+    })
+    .then(
+      () => {
+        button.parents(".result").remove();
+      },
+      response => showTemporaryTooltip(button, response.responseJSON)
+    );
+  });
+
   $("#addTheoremButton").click(function() {
     $.ajax({
       url: window.location.pathname + '/theorems',

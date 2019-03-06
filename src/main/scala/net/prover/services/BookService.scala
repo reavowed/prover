@@ -27,15 +27,15 @@ class BookService {
     result
   }
 
-  def addChapterEntry[T](bookKey: String, chapterKey: String)(f: (Book, Chapter) => (Option[ChapterEntry], T)): Option[T] = {
+  def modifyChapter[T](bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => (Option[Chapter], T)): Option[T] = {
     updateBooksWithResult[Option[T]] { books =>
       (for {
         (book, bookIndex) <- books.findWithIndex(_.key.value == bookKey)
         (chapter, chapterIndex) <- book.chapters.findWithIndex(_.key.value == chapterKey)
       } yield {
-        f(book, chapter).mapLeft {
-          case Some(newEntry) =>
-            books.updated(bookIndex, book.copy(chapters = book.chapters.updated(chapterIndex, chapter.addEntry(newEntry))))
+        f(books, book, chapter).mapLeft {
+          case Some(newChapter) =>
+            books.updated(bookIndex, book.copy(chapters = book.chapters.updated(chapterIndex, newChapter)))
           case None =>
             books
         }
@@ -43,6 +43,12 @@ class BookService {
         case Some((newBooks, result)) => (newBooks, Some(result))
         case None => (books, None)
       }
+    }
+  }
+
+  def addChapterEntry[T](bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => (Option[ChapterEntry], T)): Option[T] = {
+    modifyChapter(bookKey, chapterKey) { (books, book, chapter) =>
+      f(books, book, chapter).mapLeft(_.map(chapter.addEntry))
     }
   }
 

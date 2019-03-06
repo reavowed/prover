@@ -45,10 +45,10 @@
     margin-bottom: 3px;
 }
 
-.definitionTitle {
+.entryTitle {
     display: flex;
 }
-.definitionTitle > h5 {
+.entryTitle > h5 {
     flex: auto;
 }
 

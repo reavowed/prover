@@ -72,8 +72,7 @@ class BookController @Autowired() (bookService: BookService) {
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newTheoremDefininition: NewTheoremModel
   ) = {
-
-    bookService.addChapterEntry(bookKey, chapterKey) { (book, chapter) =>
+    bookService.addChapterEntry(bookKey, chapterKey) { (_, book, chapter) =>
       val chaptersSoFar = book.chapters.takeWhile(_ != chapter) :+ chapter
       implicit val parsingContext = new ParsingContext(
         book.dependencies.transitive.inferences ++ chaptersSoFar.flatMap(_.inferences),
@@ -135,6 +134,23 @@ class BookController @Autowired() (bookService: BookService) {
         BookController.logger.error(s"Error getting books", e)
         new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
     }
+  }
+
+  @DeleteMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}"))
+  def deleteEntry(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String
+  ) = {
+    bookService.modifyChapter(bookKey, chapterKey){ (books, _, chapter) =>
+      chapter.entries.ofType[ChapterEntry.WithKey].find(_.key.value == entryKey) match {
+      case Some(inference: Inference) if getUsages(inference, books).isEmpty =>
+        (Some(chapter.copy(entries = chapter.entries.filter(_ != inference))), new ResponseEntity(HttpStatus.OK))
+      case Some(_: Inference) => (None, new ResponseEntity[String]("Cannot delete inference with usages", HttpStatus.BAD_REQUEST))
+      case Some(_) => (None, new ResponseEntity("Deleting non-inference usages not yet supported", HttpStatus.BAD_REQUEST))
+      case None => (None, new ResponseEntity(HttpStatus.NOT_FOUND))
+      }
+    }.getOrElse(new ResponseEntity(HttpStatus.NOT_FOUND))
   }
 
   @PutMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}/shorthand"), produces = Array("application/json;charset=UTF-8"))

@@ -9,7 +9,7 @@ import scala.xml.Unparsed
 
 object ChapterView {
   private def DefinitionTitle(description: String, definition: ExpressionDefinition)(implicit displayContext: DisplayContext) = {
-    <div class="definitionTitle">
+    <div class="entryTitle">
       <h5>{description} Definition: {ExpressionView(definition.defaultValue)}</h5>
       <button class="btn btn-success btn-xs editShorthand"
               data-key={definition.key.value}
@@ -42,11 +42,16 @@ object ChapterView {
   }
   private def InferenceView(description: String, inference: Inference.Entry)(implicit displayContext: DisplayContext) = {
     <div id={inference.key.value} class="result">
-      <h5>
-        <a href={inference.key.url} class="inferenceEntryTitle">
-          {description}: {inference.name}
-        </a>
-      </h5>
+      <div class="entryTitle">
+        <h5>
+          <a href={inference.key.url} class="inferenceEntryTitle">
+            {description}: {inference.name}
+          </a>
+        </h5>
+        <button class="btn btn-danger btn-xs deleteInference"
+                data-key={inference.key.value}
+        ><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+      </div>
       <div class="resultBlock">
         { PremisesView(inference.premises, ReferenceMap.empty) }
         <div>
