@@ -24,4 +24,13 @@ class StatsController @Autowired() (bookService: BookService) {
       if theorem.proof.referenceMap.getReferrers(reference).isEmpty
     } yield (theorem.key.url, reference)
   }
+
+  @GetMapping(value = Array("unusedInferences"))
+  def getUnusedInferences = {
+    val usedInferenceIds = bookService.books.flatMap(_.theorems).flatMap(_.referencedInferenceIds).toSet
+    for {
+      inference <- bookService.books.flatMap(_.inferences)
+      if !usedInferenceIds.contains(inference.id)
+    } yield inference.entryKey.url
+  }
 }
