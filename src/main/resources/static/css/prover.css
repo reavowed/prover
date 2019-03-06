@@ -62,11 +62,13 @@
     color: inherit;
 }
 
-.inferenceLinks {
+.navigationLinks {
     margin-top: 10px;
 }
 
-.inferenceTitle {
+.navigationLinks:after {
+    content: '';
+    display: block;
     clear: both;
 }
 
@@ -91,7 +93,7 @@ table {
     font-size: inherit;
 }
 
-.stepInferenceId, .usageLink, .inferenceLink, .inferenceId {
+.stepInferenceId, .usageLink, .navigationLink, .inferenceId {
     font-family: monospace;
     color: gray;
     font-size: 0.85em;

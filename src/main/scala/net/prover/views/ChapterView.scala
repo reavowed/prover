@@ -57,9 +57,18 @@ object ChapterView {
     </div>
   }
 
-  def apply(chapter: Chapter, book: Book) = MainTemplate(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter)) {
+  def apply(
+    chapter: Chapter,
+    book: Book,
+    previousChapterOption: Option[Chapter],
+    nextChapterOption: Option[Chapter]
+   ) = MainTemplate(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter)) {
     import book.displayContext
     <div class="chapter">
+      <div class="navigationLinks">
+        { previousChapterOption.toSeq.map { previous => <a class="navigationLink pull-left" href={previous.key.url}>&laquo; {previous.title}</a> }}
+        { nextChapterOption.toSeq.map { next => <a class="navigationLink pull-right" href={next.key.url}>{next.title} &raquo;</a> }}
+      </div>
       <h3>{chapter.title}</h3>
       <p class="comment">{chapter.summary}</p>
       {chapter.entries.map {
@@ -76,6 +85,10 @@ object ChapterView {
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addTheoremModal">
           Add Theorem
         </button>
+      </div>
+      <div class="navigationLinks">
+        { previousChapterOption.toSeq.map { previous => <a class="navigationLink pull-left" href={previous.key.url}>&laquo; {previous.title}</a> }}
+        { nextChapterOption.toSeq.map { next => <a class="navigationLink pull-right" href={next.key.url}>{next.title} &raquo;</a> }}
       </div>
       <div class="modal" tabindex="-1" role="dialog" id="editShorthandModal">
         <div class="modal-dialog" role="document">

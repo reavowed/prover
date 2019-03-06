@@ -53,7 +53,12 @@ class BookController @Autowired() (bookService: BookService) {
       (for {
         book <- bookService.books.find(_.key.value == bookKey)
         chapter <- book.chapters.find(_.key.value == chapterKey)
-      } yield ChapterView(chapter, book).toString) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
+      } yield {
+        val index = book.chapters.indexOf(chapter)
+        val previous = if (index > 0) Some(book.chapters(index - 1)) else None
+        val next = if (index < book.chapters.length - 1) Some(book.chapters(index + 1)) else None
+        ChapterView(chapter, book, previous, next).toString
+      }) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {
       case NonFatal(e) =>
         BookController.logger.error("Error getting books", e)
