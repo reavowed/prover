@@ -72,35 +72,38 @@ class BookController @Autowired() (bookService: BookService) {
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newTheoremDefininition: NewTheoremModel
   ) = {
-    bookService.updateBooks(Traversals.filter[Book](_.key.value == bookKey)
-      .modify(book =>
-        GenLens[Book](_.chapters)
-          .composeTraversal(Traversals.filter[Chapter](_.key.value == chapterKey))
-          .modify { chapter =>
-            val chaptersSoFar = book.chapters.takeWhile(_ != chapter) :+ chapter
-            implicit val parsingContext = new ParsingContext(
-              book.dependencies.transitive.inferences ++ chaptersSoFar.flatMap(_.inferences),
-              book.dependencies.transitive.statementDefinitions ++ chaptersSoFar.flatMap(_.statementDefinitions),
-              book.dependencies.transitive.termDefinitions ++ chaptersSoFar.flatMap(_.termDefinitions),
-              book.termVariableNames.toSet,
-              Nil)
-            def parseStatement(text: String, description: String) = {
-              Statement.parser.parseAndDiscard(Tokenizer.fromString(text, description))
-            }
-            val premises = newTheoremDefininition.premises
-              .mapWithIndex((str, index) => parseStatement(str, s"premise ${index + 1}"))
-              .mapWithIndex((statement, index) => Premise(statement, index)(false))
-            val conclusion = parseStatement(newTheoremDefininition.conclusion, "conclusion")
-            val newTheorem = Theorem(
-              newTheoremDefininition.name,
-              ChapterEntry.Key.Standalone(Chapter.getNextKey(chapter.entries, newTheoremDefininition.name), chapter.key),
-              premises,
-              conclusion,
-              Proof(Seq.empty),
-              RearrangementType.NotRearrangement)
-            chapter.addEntry(newTheorem)
-          }(book)
-      ))
+
+    bookService.addChapterEntry(bookKey, chapterKey) { (book, chapter) =>
+      val chaptersSoFar = book.chapters.takeWhile(_ != chapter) :+ chapter
+      implicit val parsingContext = new ParsingContext(
+        book.dependencies.transitive.inferences ++ chaptersSoFar.flatMap(_.inferences),
+        book.dependencies.transitive.statementDefinitions ++ chaptersSoFar.flatMap(_.statementDefinitions),
+        book.dependencies.transitive.termDefinitions ++ chaptersSoFar.flatMap(_.termDefinitions),
+        book.termVariableNames.toSet,
+        Nil)
+      def parseStatement(text: String, description: String) = {
+        Statement.parser.parseAndDiscard(Tokenizer.fromString(text, description))
+      }
+      val premises = newTheoremDefininition.premises
+        .mapWithIndex((str, index) => parseStatement(str, s"premise ${index + 1}"))
+        .mapWithIndex((statement, index) => Premise(statement, index)(false))
+      val conclusion = parseStatement(newTheoremDefininition.conclusion, "conclusion")
+      val newTheorem = Theorem(
+        newTheoremDefininition.name,
+        ChapterEntry.Key.Standalone(Chapter.getNextKey(chapter.entries, newTheoremDefininition.name), chapter.key),
+        premises,
+        conclusion,
+        Proof(Seq.empty),
+        RearrangementType.NotRearrangement)
+
+      val existingTheoremOption = parsingContext.inferences.find(_.id == newTheorem.id)
+      existingTheoremOption match {
+        case Some(_) =>
+          (None, new ResponseEntity[String]("An inference with these premises and conclusion already exists", HttpStatus.BAD_REQUEST))
+        case None =>
+          (Some(newTheorem), new ResponseEntity(HttpStatus.OK))
+      }
+    }.getOrElse(new ResponseEntity(HttpStatus.NOT_FOUND))
   }
 
   @GetMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}"), produces = Array("text/html;charset=UTF-8"))

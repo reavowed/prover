@@ -2,6 +2,16 @@ $(() => {
   let shorthands = {};
   $.ajax({type: "GET", url: "/shorthands"}).then(data => shorthands = data);
 
+  function showTemporaryTooltip(parent, text) {
+      parent.tooltip({
+          placement: "bottom",
+          title: text,
+          trigger: "manual"
+      });
+      parent.tooltip("show");
+      setTimeout(() => parent.tooltip("hide"), 5000);
+  }
+
   $("button.editShorthand").click(function() {
     let button = $(this);
     let key = button.attr("data-key");
@@ -12,21 +22,18 @@ $(() => {
     $("#saveShorthandButton").off("click").on("click", () => {
       let newShorthand = $("#shorthandInput").val()
       $.ajax({
-          url: window.location.pathname + `/${key}/shorthand`,
-          type: "PUT",
-          data: newShorthand,
-          processData: false,
-          'contentType': 'text/plain'
+        url: window.location.pathname + `/${key}/shorthand`,
+        type: "PUT",
+        data: newShorthand,
+        processData: false,
+        'contentType': 'text/plain'
       })
       .then(
         () => {
           $('#editShorthandModal').modal('hide');
           button.attr("data-shorthand", newShorthand);
         },
-        () => {
-          $('#editShorthandModalAlertContent').text("Error updating shorthand");
-          $('#editShorthandModalAlert').show();
-        }
+        response => showTemporaryTooltip(button, response.responseJSON)
       );
     });
   });
@@ -49,11 +56,7 @@ $(() => {
         $('#theoremConclusion').val("");
         location.reload(true);
       },
-      (x) => {
-        console.log(x);
-        $('#editShorthandModalAlertContent').text("Error adding theorem");
-        $('#editShorthandModalAlert').show();
-      }
+      response => showTemporaryTooltip($("#addTheoremButton"), response.responseJSON)
     );
   });
 

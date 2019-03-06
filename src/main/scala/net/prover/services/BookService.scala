@@ -3,6 +3,7 @@ package net.prover.services
 import java.nio.file.{Files, Path, Paths}
 
 import net.prover.model._
+import net.prover.model.entries._
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -17,10 +18,32 @@ class BookService {
 
   def books = _books
 
-  def updateBooks(f: Seq[Book] => Seq[Book]) = synchronized {
-    val newBooks = f(_books)
+  def updateBooks(f: Seq[Book] => Seq[Book]) = updateBooksWithResult[Unit](books => (f(books), ()))
+
+  def updateBooksWithResult[T](f: Seq[Book] => (Seq[Book], T)): T = synchronized {
+    val (newBooks, result) = f(_books)
     writeBooks(newBooks)
     _books = newBooks
+    result
+  }
+
+  def addChapterEntry[T](bookKey: String, chapterKey: String)(f: (Book, Chapter) => (Option[ChapterEntry], T)): Option[T] = {
+    updateBooksWithResult[Option[T]] { books =>
+      (for {
+        (book, bookIndex) <- books.findWithIndex(_.key.value == bookKey)
+        (chapter, chapterIndex) <- book.chapters.findWithIndex(_.key.value == chapterKey)
+      } yield {
+        f(book, chapter).mapLeft {
+          case Some(newEntry) =>
+            books.updated(bookIndex, book.copy(chapters = book.chapters.updated(chapterIndex, chapter.addEntry(newEntry))))
+          case None =>
+            books
+        }
+      }) match {
+        case Some((newBooks, result)) => (newBooks, Some(result))
+        case None => (books, None)
+      }
+    }
   }
 
   private def parseBooks: Option[Seq[Book]] = {

@@ -136,19 +136,15 @@ package object model {
     def mapFind[S](f: T => Option[S]): Option[S] = {
       seq.iterator.map(f).find(_.isDefined).flatten
     }
-    def findIndex(obj: T): Option[Int] = {
-      val index = seq.indexOf(obj)
-      if (index == -1)
-        None
-      else
-        Some(index)
-    }
     def findIndexWhere(f: T => Boolean): Option[Int] = {
       val index = seq.indexWhere(f)
       if (index == -1)
         None
       else
         Some(index)
+    }
+    def findWithIndex(f: T => Boolean): Option[(T, Int)] = {
+      seq.zipWithIndex.find(x => f(x._1))
     }
     def foldProduct[S](f: T => Seq[S]): Seq[Seq[S]] = {
       seq.foldLeft(Seq(Seq.empty[S])) { case (acc, t) =>
