@@ -48,13 +48,11 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, Seq[Term])],
-    structuralHints: Seq[Substitutions],
     internalDepth: Int,
     externalDepth: Int
   ) = {
     getMatch(other)
-      .map(components.calculateSubstitutions(_, substitutions, applicativeHints, structuralHints, increaseDepth(internalDepth), externalDepth))
+      .map(components.calculateSubstitutions(_, substitutions, increaseDepth(internalDepth), externalDepth))
       .getOrElse(Nil)
   }
   override def applySubstitutions(
@@ -73,26 +71,6 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   ): Seq[(ExpressionType, Substitutions)] = {
     components.calculateApplicatives(baseArguments, substitutions, increaseDepth(internalDepth), previousInternalDepth, externalDepth)
       .map(_.mapLeft(update))
-  }
-
-  override def condense(
-    other: Expression,
-    thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, Seq[Term])],
-    structuralHints: Seq[Substitutions],
-    internalDepth: Int,
-    externalDepth: Int
-  ) = {
-    super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints, increaseDepth(internalDepth), externalDepth) ++
-      getMatch(other).toSeq.flatMap { otherComponents =>
-        components.zip(otherComponents)
-          .flatMapFoldProduct((thisSubstitutions, otherSubstitutions, Seq.empty[(Substitutions, Seq[Term])], Seq.empty[Substitutions]))
-          { case ((thisSubstitutionsSoFar, otherSubstitutionsSoFar, applicativeHintsSoFar, structuralHintsSoFar), (component, otherComponent)) =>
-            component.condense(otherComponent, thisSubstitutionsSoFar, otherSubstitutionsSoFar, applicativeHints, structuralHints, increaseDepth(internalDepth), externalDepth)
-              .map(t => (t._1, t._2, applicativeHintsSoFar ++ t._3, structuralHintsSoFar ++ t._4))
-          }
-      }
   }
 
   def matchesStructure(other: Expression): Boolean = {

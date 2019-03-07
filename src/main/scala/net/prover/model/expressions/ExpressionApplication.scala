@@ -43,19 +43,12 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, Seq[Term])],
-    structuralHints: Seq[Substitutions],
     internalDepth: Int,
     externalDepth: Int
   ) = {
     if (other.isRuntimeInstance[ExpressionType]) {
       for {
         (applicative, applicativeSubstitutions) <- other.calculateApplicatives(arguments, substitutions, 0, internalDepth, externalDepth)
-        if structuralHints.forall { structuralHint =>
-          substitutionsLens.get(structuralHint).get(variableName).forall { s =>
-            s.matchesStructure(applicative)
-          }
-        }
         substitutionsWithApplicative <- applicativeSubstitutions.update(
           variableName,
           applicative.asInstanceOf[ExpressionType],
@@ -81,51 +74,6 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   ): Seq[(ExpressionType, Substitutions)] = {
     arguments.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
       .map(_.mapLeft(newArguments => update(newArguments.map(_.asInstanceOf[Term]))))
-  }
-
-  override def condense(
-    other: Expression,
-    thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, Seq[Term])],
-    structuralHints: Seq[Substitutions],
-    internalDepth: Int,
-    externalDepth: Int
-  ) = {
-    val base = super.condense(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints, internalDepth, externalDepth)
-    if (base.nonEmpty)
-      base
-    else for {
-      predicate <- substitutionsLens.get(thisSubstitutions).get(variableName).toSeq
-      predicateSubstitutions <- other.calculateSubstitutions(
-        predicate.insertExternalParameters(internalDepth),
-        Substitutions.empty,
-        Nil,
-        Nil,
-        internalDepth,
-        externalDepth)
-    } yield (thisSubstitutions, otherSubstitutions, Seq((predicateSubstitutions, arguments)), Nil)
-  }
-
-  override protected def condenseReverse(
-    other: Expression,
-    thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions,
-    internalDepth: Int,
-    externalDepth: Int
-  ) = {
-    val base = super.condenseReverse(other, thisSubstitutions, otherSubstitutions, internalDepth, externalDepth)
-    if (base.nonEmpty)
-      base
-    else
-      for {
-        (applicative, newSubstitutions) <- other.calculateApplicatives(arguments, Substitutions.empty, 0, internalDepth, externalDepth)
-        updatedSubstitutions <- newSubstitutions.update(
-          variableName,
-          applicative.asInstanceOf[ExpressionType],
-          substitutionsLens,
-          1)
-      } yield (thisSubstitutions, otherSubstitutions, Nil, Seq(updatedSubstitutions))
   }
 
   def matchesStructure(other: Expression): Boolean = false // TODO: Probably these can match?

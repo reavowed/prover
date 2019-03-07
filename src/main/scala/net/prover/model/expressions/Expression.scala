@@ -47,8 +47,6 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
   def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, Seq[Term])],
-    structuralHints: Seq[Substitutions],
     internalDepth: Int,
     externalDepth: Int
   ): Seq[Substitutions]
@@ -81,56 +79,6 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     externalDepth: Int
   ): Seq[(ExpressionType, Substitutions)]
 
-  def condense(
-    other: Expression,
-    thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, Seq[Term])],
-    structuralHints: Seq[Substitutions],
-    internalDepth: Int,
-    externalDepth: Int
-  ): Seq[(Substitutions, Substitutions, Seq[(Substitutions, Seq[Term])], Seq[Substitutions])] = {
-    val forward = condenseForward(other, thisSubstitutions, otherSubstitutions, applicativeHints, structuralHints, internalDepth, externalDepth)
-    if (forward.nonEmpty)
-      forward
-    else
-      other.condenseReverse(this, otherSubstitutions, thisSubstitutions, internalDepth, externalDepth).map(t => (t._2, t._1, t._3, t._4))
-  }
-  protected def condenseForward(
-    other: Expression,
-    thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, Seq[Term])],
-    structuralHints: Seq[Substitutions],
-    internalDepth: Int,
-    externalDepth: Int
-  ): Seq[(Substitutions, Substitutions, Seq[(Substitutions, Seq[Term])], Seq[Substitutions])] = {
-    (for {
-      thisSubstituted <- applySubstitutions(thisSubstitutions, internalDepth, externalDepth).toSeq
-      updatedOtherSubstitutions <- other.calculateSubstitutions(
-        thisSubstituted,
-        otherSubstitutions,
-        applicativeHints,
-        structuralHints,
-        internalDepth,
-        externalDepth)
-    } yield (thisSubstitutions, updatedOtherSubstitutions))
-      .map(t => (t._1, t._2, Nil, Nil))
-  }
-  protected def condenseReverse(
-    other: Expression,
-    thisSubstitutions: Substitutions,
-    otherSubstitutions: Substitutions,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Seq[(Substitutions, Substitutions, Seq[(Substitutions, Seq[Term])], Seq[Substitutions])] = {
-    (for {
-      thisSubstituted <- applySubstitutions(thisSubstitutions, internalDepth, externalDepth).toSeq
-      updatedOtherSubstitutions <- other.calculateSubstitutions(thisSubstituted, otherSubstitutions, Nil, Nil, internalDepth, externalDepth)
-    } yield (thisSubstitutions, updatedOtherSubstitutions))
-      .map(t => (t._1, t._2, Nil, Nil))
-  }
-
   def matchesStructure(other: Expression): Boolean
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
     if (this == other) {
@@ -154,14 +102,12 @@ object Expression {
     def calculateSubstitutions(
       otherExpressions: Seq[Expression],
       substitutions: Substitutions,
-      applicativeHints: Seq[(Substitutions, Seq[Term])],
-      structuralHints: Seq[Substitutions],
       internalDepth: Int,
       externalDepth: Int
     ): Seq[Substitutions] = {
       expressions.zipStrict(otherExpressions).toSeq.flatten
         .foldLeft(Seq(substitutions)) { case (substitutionsSoFar, (expression, otherExpression)) =>
-          substitutionsSoFar.flatMap(expression.calculateSubstitutions(otherExpression, _, applicativeHints, structuralHints, internalDepth, externalDepth))
+          substitutionsSoFar.flatMap(expression.calculateSubstitutions(otherExpression, _, internalDepth, externalDepth))
         }
     }
     def calculateApplicatives(

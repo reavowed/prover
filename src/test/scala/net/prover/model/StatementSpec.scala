@@ -48,31 +48,4 @@ class StatementSpec extends ProverSpec {
       parseStatementList("(φ, ψ, χ)") mustEqual Seq(φ, ψ, χ)
     }
   }
-
-  "statement condensing" should {
-    "condense a statement variable with a known substitution to a matching compound statement" in {
-      val premise = φ
-      val premiseSubstitutions = Substitutions(
-        Map(φ -> Conjunction(φ, ψ)), Map.empty)
-      val conclusion = Conjunction(χ, φ)
-      val conclusionSubstitutions = Substitutions.empty
-      premise.condense(conclusion, premiseSubstitutions, conclusionSubstitutions, Nil, Nil, 0 , 0) mustEqual Seq((
-        Substitutions(statements = Map(φ -> Conjunction(φ, ψ))),
-        Substitutions(statements = Map(χ -> φ, φ -> ψ)),
-        Nil,
-        Nil))
-    }
-
-    "condense a compound statement to a statement variable with a known matching substitution" in {
-      val premise = φ
-      val premiseSubstitutions = Substitutions(Map(φ -> Conjunction(φ, ψ)), Map.empty)
-      val conclusion = Conjunction(χ, φ)
-      val conclusionSubstitutions = Substitutions.empty
-      conclusion.condense(premise, conclusionSubstitutions, premiseSubstitutions, Nil, Nil, 0, 0) mustEqual Seq((
-        Substitutions(statements = Map(χ -> φ, φ -> ψ)),
-        Substitutions(statements = Map(φ -> Conjunction(φ, ψ))),
-        Nil,
-        Nil))
-    }
-  }
 }

@@ -7,7 +7,7 @@ import org.specs2.execute.Result
 
 class SubstitutionsSpec extends ProverSpec {
   def testSubstitutions(externalDepth: Int, source: Expression, targetExpression: Expression, expectedSubstitutions: Substitutions*) = {
-    val calculatedSubstitutions = source.calculateSubstitutions(targetExpression, Substitutions.empty, Nil, Nil, 0, externalDepth)
+    val calculatedSubstitutions = source.calculateSubstitutions(targetExpression, Substitutions.empty, 0, externalDepth)
     calculatedSubstitutions.must(contain(exactly(expectedSubstitutions: _*)))
     Result.foreach(expectedSubstitutions) { expectedSubstitution =>
       val substitutedExpression = source.applySubstitutions(expectedSubstitution, 0, externalDepth)
@@ -207,19 +207,6 @@ class SubstitutionsSpec extends ProverSpec {
         ForAll("x")(ForAll("y")(Exists("z")(ElementOf(FunctionParameter("y", 0, 1), FunctionParameter("a", 0, 3))))),
         Substitutions(
           predicates = Map(φ -> Exists("y")(ElementOf(FunctionParameter.anonymous(0, 2), FunctionParameter("a", 0, 1))))))
-    }
-  }
-
-  "validating hints" should {
-    "allow applicative hints to have arguments in external bound variables" in {
-      φ.calculateSubstitutions(
-        ElementOf(FunctionParameter("x", 0, 0), a),
-        Substitutions.empty,
-        Seq(Substitutions(statements = Map(φ -> ElementOf(FunctionParameter("x", 0, 0), a))) -> Seq(a)),
-        Nil,
-        0,
-        1
-      ) mustEqual Seq(Substitutions(statements = Map(φ -> ElementOf(FunctionParameter("x", 0, 0), a))))
     }
   }
 }

@@ -47,8 +47,6 @@ case class FunctionParameter(index: Int, level: Int)(val name: Option[String]) e
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions,
-    applicativeHints: Seq[(Substitutions, Seq[Term])],
-    structuralHints: Seq[Substitutions],
     internalDepth: Int,
     externalDepth: Int
   ) = {
