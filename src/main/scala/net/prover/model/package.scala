@@ -184,6 +184,9 @@ package object model {
     def foreachWithIndex[U](f: (T, Int) => U): Unit = {
       seq.zipWithIndex.foreach(f.tupled)
     }
+    def replaceWhere(f: T => Boolean)(t: T): Seq[T] = {
+      seq.map(x => if (f(x)) t else x)
+    }
   }
 
   implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {
@@ -318,6 +321,15 @@ package object model {
           .toSeq
       else
         Nil
+    }
+  }
+
+  implicit class BooleanOps(boolean: Boolean) {
+    def ifTrue[S](s: => S): Option[S] = {
+      if (boolean) Some(s) else None
+    }
+    def ifFalse[S](s: => S): Option[S] = {
+      if (!boolean) Some(s) else None
     }
   }
 }

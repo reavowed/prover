@@ -3,6 +3,7 @@ package net.prover.model
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
 import net.prover.model.proof.Transformation
+import org.springframework.http.{HttpStatus, ResponseEntity}
 
 import scala.util.Try
 
@@ -13,10 +14,14 @@ case class ParsingContext(
     termVariableNames: Set[String],
     parameterLists: Seq[Seq[(String, Int)]])
 {
-  def parameterDepth = parameterLists.length
-  def deductionStatement = statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Deduction))
-  def scopingStatement = statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Scoping))
-  def transformation: Option[Transformation] = scopingStatement.flatMap(Transformation.find(_, inferences))
+  def parameterDepth: Int = parameterLists.length
+  def deductionStatementOption: Option[StatementDefinition] = {
+    statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Deduction))
+  }
+  def scopingStatementOption: Option[StatementDefinition] = {
+    statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Scoping))
+  }
+  def transformation: Option[Transformation] = scopingStatementOption.flatMap(Transformation.find(_, inferences))
 
   def add(chapterEntry: ChapterEntry): ParsingContext = {
     val contextWithDefinitions = chapterEntry match {
@@ -86,6 +91,32 @@ case class ParsingContext(
           None
       })
     }
+  }
+
+  def findNamingInferences(): Option[Seq[(Inference, Premise)]] = {
+    (scopingStatementOption, deductionStatementOption) match {
+      case (Some(scopingStatement), Some(deductionStatement)) =>
+        Some(inferences.mapCollect {
+          case inference @ Inference(
+            _,
+            Seq(
+              firstPremise,
+              Premise(DefinedStatement(
+                Seq(DefinedStatement(
+                  Seq(_, StatementVariable(deductionConclusionVariableName)),
+                  `deductionStatement`
+                )),
+                `scopingStatement`),
+              _)),
+            StatementVariable(conclusionVariableName)
+          ) if deductionConclusionVariableName == conclusionVariableName =>
+            Some((inference, firstPremise))
+          case _ =>
+            None
+        })
+      case _ =>
+        None
+      }
   }
 }
 

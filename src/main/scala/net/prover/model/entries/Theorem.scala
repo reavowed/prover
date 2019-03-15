@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.Proof
+import net.prover.model.proof._
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement", "proofOutline"))
 case class Theorem(
@@ -18,6 +18,17 @@ case class Theorem(
 {
   def referencedInferenceIds: Set[String] = proof.referencedInferenceIds
   override def inferences: Seq[Inference] = Seq(this)
+  def findStepWithContext(indexes: Seq[Int]): Option[(Step, StepContext)] = {
+    indexes match {
+      case Nil =>
+        None
+      case head +: tail =>
+        proof.steps.findSubstepWithContext(head, tail, StepContext(premises.map(_.provenStatement), 0))
+    }
+  }
+  def replaceStep(indexes: Seq[Int], newStep: Step): Theorem = {
+    copy(proof = Proof(proof.steps.updated(indexes.head, proof.steps(indexes.head).replaceStep(indexes.tail, newStep))))
+  }
 
   override def serializedLines = Seq(s"theorem $name") ++
     rearrangementType.serialized.toSeq ++

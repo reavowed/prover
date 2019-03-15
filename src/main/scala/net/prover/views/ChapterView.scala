@@ -102,10 +102,6 @@ object ChapterView {
               <h4 class="modal-title">Edit shorthand for <span id="entryDescriptionForShorthand"></span></h4>
             </div>
             <div class="modal-body">
-              <div id="editShorthandModalAlert" class="alert alert-danger alert-dismissible" role="alert" style="display: none;">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <span id="editShorthandModalAlertContent"></span>
-              </div>
               <div class="form-group">
                 <label for="shorthandInput">Shorthand</label>
                 <input type="text" class="form-control" id="shorthandInput" />
@@ -146,6 +142,7 @@ object ChapterView {
           </div>
         </div>
       </div>
+      <script src="/js/common.js"></script>
       <script src="/js/chapter.js"></script>
     </div>
   }

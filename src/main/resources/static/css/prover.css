@@ -123,3 +123,24 @@ table {
 .inference h3 {
     text-align: center;
 }
+
+/* TYPEAHEAD */
+
+.tt-menu {
+    width: 422px;
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+    padding: 3px 10px;
+}
+
+.tt-suggestion:hover {
+    cursor: pointer;
+    color: #fff;
+    background-color: #0097cf;
+}

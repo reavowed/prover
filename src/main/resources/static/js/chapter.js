@@ -2,21 +2,10 @@ $(() => {
   let shorthands = {};
   $.ajax({type: "GET", url: "/shorthands"}).then(data => shorthands = data);
 
-  function showTemporaryTooltip(parent, text) {
-      parent.tooltip({
-          placement: "bottom",
-          title: text,
-          trigger: "manual"
-      });
-      parent.tooltip("show");
-      setTimeout(() => parent.tooltip("hide"), 5000);
-  }
-
   $("button.editShorthand").click(function() {
     let button = $(this);
     let key = button.attr("data-key");
     let currentShorthand = button.attr("data-shorthand");
-    $('#editShorthandModalAlert').hide();
     $("#entryDescriptionForShorthand").text(key);
     $("#shorthandInput").val(currentShorthand);
     $("#saveShorthandButton").off("click").on("click", () => {

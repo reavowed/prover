@@ -15,6 +15,7 @@ object MainTemplate {
         <script src="/webjars/jquery/3.1.1/jquery.js"></script>
         <script src="/webjars/lodash/4.15.0/lodash.js"></script>
         <script src="/webjars/bootstrap/3.3.7/js/bootstrap.js"></script>
+        <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
       </head>
       <body>
         <header class="navbar navbar-static-top navbar-inverse">

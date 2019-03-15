@@ -83,6 +83,12 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
       case NonFatal(e) => tokenizer.throwParseException(e.getMessage, Some(e))
     }
   }
+  def parseFromString(str: String, description: String): T = {
+    parse(Tokenizer.fromString(str, description))._1
+  }
+  def parseFromFile(path: Path, description: String): T = {
+    parse(Tokenizer.fromPath(path, description))._1
+  }
   def parseAndDiscard(tokenizer: Tokenizer): T = {
     parse(tokenizer)._1
   }

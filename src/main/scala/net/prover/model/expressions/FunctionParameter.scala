@@ -104,6 +104,7 @@ object FunctionParameter {
   def apply(name: String, index: Int, level: Int): FunctionParameter = {
     FunctionParameter(index, level)(Some(name))
   }
+  // TODO: Move to test code
   def anonymous(index: Int, level: Int): FunctionParameter = {
     FunctionParameter(index, level)(None)
   }

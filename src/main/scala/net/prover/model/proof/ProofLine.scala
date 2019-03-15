@@ -10,7 +10,8 @@ case class ProofLine(
   expression: ProofLine.Expression,
   reference: Option[String],
   indentLevel: Int,
-  justification: Option[Justification])
+  justification: Option[Justification],
+  requiresProof: Boolean)
 
 object ProofLine {
   trait Expression {

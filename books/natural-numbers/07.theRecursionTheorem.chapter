@@ -23,6 +23,14 @@ conclusion ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 �
   }
 }
 
+theorem An Inductive Function Is Unique
+premise ∃ f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) a
+conclusion ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) a
+{
+  prove ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) a f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) a) ()
+    ?
+}
+
 theorem 𝒫(ℕ × X) Contains All Functions from a Natural Number to X
 premise ∈ n ℕ
 premise function f n A
@@ -51,4 +59,5 @@ premise function f X X
 premise ∈ g_0 X
 conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
 {
+  target ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
 }

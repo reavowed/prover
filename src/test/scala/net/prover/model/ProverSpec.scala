@@ -148,7 +148,7 @@ trait ProverSpec extends Specification {
 
   implicit class ParserOps[T](parser: Parser[T]) {
     def parseAndDiscard(text: String): T = {
-      parser.parseAndDiscard(Tokenizer.fromString(text, "test"))
+      parser.parseFromString(text, "test")
     }
   }
   implicit class StatementVariableOps(statementVariable: StatementVariable) {

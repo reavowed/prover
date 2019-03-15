@@ -3,17 +3,17 @@ package net.prover.controllers
 import monocle.macros.GenLens
 import net.prover.controllers.BookController.NewTheoremModel
 import net.prover.model.Inference.RearrangementType
+import net.prover.model._
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
-import net.prover.model._
 import net.prover.model.proof.{Proof, Reference, Step}
 import net.prover.services.BookService
+import net.prover.utils.Traversals
 import net.prover.views._
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation._
-import net.prover.utils.Traversals
 
 import scala.util.control.NonFatal
 
@@ -73,26 +73,17 @@ class BookController @Autowired() (bookService: BookService) {
     @RequestBody newTheoremDefininition: NewTheoremModel
   ) = {
     bookService.addChapterEntry(bookKey, chapterKey) { (_, book, chapter) =>
-      val chaptersSoFar = book.chapters.takeWhile(_ != chapter) :+ chapter
-      implicit val parsingContext = new ParsingContext(
-        book.dependencies.transitive.inferences ++ chaptersSoFar.flatMap(_.inferences),
-        book.dependencies.transitive.statementDefinitions ++ chaptersSoFar.flatMap(_.statementDefinitions),
-        book.dependencies.transitive.termDefinitions ++ chaptersSoFar.flatMap(_.termDefinitions),
-        book.termVariableNames.toSet,
-        Nil)
-      def parseStatement(text: String, description: String) = {
-        Statement.parser.parseAndDiscard(Tokenizer.fromString(text, description))
-      }
+      implicit val parsingContext: ParsingContext = getChapterParsingContext(book, chapter)
       val premises = newTheoremDefininition.premises
-        .mapWithIndex((str, index) => parseStatement(str, s"premise ${index + 1}"))
+        .mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}"))
         .mapWithIndex((statement, index) => Premise(statement, index)(false))
-      val conclusion = parseStatement(newTheoremDefininition.conclusion, "conclusion")
+      val conclusion = Statement.parser.parseFromString(newTheoremDefininition.conclusion, "conclusion")
       val newTheorem = Theorem(
         newTheoremDefininition.name,
         ChapterEntry.Key.Standalone(Chapter.getNextKey(chapter.entries, newTheoremDefininition.name), chapter.key),
         premises,
         conclusion,
-        Proof(Seq.empty),
+        Proof(Seq(Step.Target(conclusion, Reference.Direct("0")))),
         RearrangementType.NotRearrangement)
 
       val existingTheoremOption = parsingContext.inferences.find(_.id == newTheorem.id)
@@ -175,6 +166,16 @@ class BookController @Autowired() (bookService: BookService) {
       theorems = chapter.entries.ofType[Theorem].filter(_.proof.referencedInferenceIds.contains(inference.id))
       if theorems.nonEmpty
     } yield (book, chapter, theorems)
+  }
+
+  private def getChapterParsingContext(book: Book, chapter: Chapter): ParsingContext = {
+      val chaptersSoFar = book.chapters.takeWhile(_ != chapter) :+ chapter
+      ParsingContext(
+        book.dependencies.transitive.inferences ++ chaptersSoFar.flatMap(_.inferences),
+        book.dependencies.transitive.statementDefinitions ++ chaptersSoFar.flatMap(_.statementDefinitions),
+        book.dependencies.transitive.termDefinitions ++ chaptersSoFar.flatMap(_.termDefinitions),
+        book.termVariableNames.toSet,
+        Nil)
   }
 }
 

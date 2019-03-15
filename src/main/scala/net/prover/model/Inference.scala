@@ -50,6 +50,16 @@ trait Inference {
   def calculateHash(): String = {
     Inference.calculateHash(premises, conclusion)
   }
+
+  def substitutePremisesAndValidateConclusion(substitutions: Substitutions, expectedConclusion: Statement, externalDepth: Int): Seq[Statement] = {
+    val substitutedPremises = premises.map(p => p.statement.applySubstitutions(substitutions, 0, externalDepth)
+      .getOrElse(throw new Exception(s"Could not substitute premise ${p.statement}")))
+    val substitutedConclusion = conclusion.applySubstitutions(substitutions, 0, externalDepth)
+      .getOrElse(throw new Exception(s"Could not substitute conclusion $conclusion"))
+    (expectedConclusion == substitutedConclusion)
+          .ifFalse(throw new Exception(s"Substituted conclusion $substitutedConclusion was not expected conclusion $expectedConclusion"))
+    substitutedPremises
+  }
 }
 
 object Inference {

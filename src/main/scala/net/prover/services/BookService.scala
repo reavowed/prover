@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 import scala.collection.JavaConverters._
+import scala.reflect.ClassTag
 
 @Service
 class BookService {
@@ -49,6 +50,12 @@ class BookService {
   def addChapterEntry[T](bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => (Option[ChapterEntry], T)): Option[T] = {
     modifyChapter(bookKey, chapterKey) { (books, book, chapter) =>
       f(books, book, chapter).mapLeft(_.map(chapter.addEntry))
+    }
+  }
+
+  def modifyEntry[T <: ChapterEntry.WithKey : ClassTag](bookKey: String, chapterKey: String, entryKey: String)(f: T => T): Option[Unit] = {
+    modifyChapter(bookKey, chapterKey){ (_, _, chapter) =>
+      (Some(chapter.copy(entries = chapter.entries.map(e => e.asOptionalInstanceOf[T].filter(_.key.value == entryKey).map(f).getOrElse(e)))), ())
     }
   }
 
