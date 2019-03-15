@@ -3,7 +3,7 @@ $(() => {
     let $this = $(this);
     let escapedReference = _.replace($this.attr("data-reference"), /\./g, "\\.");
     let $premises = $(".highlight-" + escapedReference);
-    let $conclusion = $this.find('.conclusion-' + escapedReference);
+    let $conclusion = $this.find(".conclusion-" + escapedReference);
     $this
       .on("mouseenter", function () {
         $premises.addClass("highlightPremise");
@@ -54,6 +54,29 @@ $(() => {
         openPopoverHolder.popover("hide");
       }
     });
+
+  $(document).on("click", "button.addNamingStep", function() {
+    let button = $(this);
+    let reference = button.attr("data-reference");
+
+    $.ajax({
+      url: `${window.location.pathname}/${reference}/namingOptions`,
+      type: "GET"
+    }).then(
+      possibleSteps => {
+        if (possibleSteps.length) {
+          let select = $("#addNamingStepPremiseSelect");
+          _.each(possibleSteps, (step) => {
+            select.append(`<option value="${step.reference}">${step.html}</option>`)
+          });
+          $("#addNamingStepModal").modal("show");
+          if (openPopoverHolder) {
+            openPopoverHolder.popover("hide");
+          }
+        }
+      }
+    );
+  });
 
   $(document).on("click", "button.proveStatement", function() {
     let button = $(this);

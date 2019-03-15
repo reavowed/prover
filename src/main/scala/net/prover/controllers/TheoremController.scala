@@ -20,6 +20,29 @@ import scala.reflect._
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}"))
 class TheoremController @Autowired() (bookService: BookService) {
+
+  @GetMapping(value = Array("/{stepReference}/namingOptions"), produces = Array("application/json;charset=UTF-8"))
+  def getNamingOptions(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: StepReference
+  ): ResponseEntity[_] = {
+    (for {
+      (book, chapter, theorem, _, stepContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference)
+      parsingContext = getTheoremParsingContext(book, chapter, theorem)
+      namingInferences <- parsingContext.findNamingInferences().orBadRequest("Scoping or deduction statement not available")
+    } yield {
+      import book.displayContext
+      for {
+        (_, premise) <- namingInferences
+        availableStatement <- stepContext.availableStatements
+        if premise.statement.calculateSubstitutions(availableStatement.statement, Substitutions.empty, 0, stepContext.externalDepth).nonEmpty
+        summary <- ProvenStatementSummary(availableStatement)
+      } yield summary
+    }).toResponseEntity
+  }
+
   @GetMapping(value = Array("/{stepReference}/suggestions"), produces = Array("application/json;charset=UTF-8"))
   def suggestInferences(
     @PathVariable("bookKey") bookKey: String,
@@ -154,5 +177,18 @@ object TheoremController {
     ): ExpressionSummary = ExpressionSummary(
       expression.serialized,
       ExpressionView(expression).toString())
+  }
+
+  case class ProvenStatementSummary(
+    reference: String,
+    statement: ExpressionSummary)
+  object ProvenStatementSummary {
+    def apply(provenStatement: ProvenStatement)(implicit displayContext: DisplayContext): Option[ProvenStatementSummary] = {
+      provenStatement.reference.asOptionalInstanceOf[Reference.Direct].map { reference =>
+        ProvenStatementSummary(
+          reference.value,
+          ExpressionSummary(provenStatement.statement))
+      }
+    }
   }
 }
