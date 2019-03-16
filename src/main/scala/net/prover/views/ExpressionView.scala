@@ -4,6 +4,7 @@ import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions._
 import net.prover.model._
 
+import scala.util.control.NonFatal
 import scala.xml.Elem
 
 object ExpressionView {
@@ -22,10 +23,10 @@ object ExpressionView {
     implicit displayContext: DisplayContext
   ): Option[Elem] = {
     for {
-      rawComponents <- shorthand.template.matchExpression(expression)
+      rawComponents <- shorthand.template.matchExpression(expression, Nil)
       components = rawComponents.map {
-        case Left(name) => leaf(name, Set.empty)
-        case Right(e) => apply(e, Set.empty)
+        case Template.Match.BoundVariable(name) => leaf(name, Set.empty)
+        case Template.Match.Component(e, boundVariableNames) => apply(e, Set.empty)(displayContext.withBoundVariableLists(boundVariableNames))
       }
     } yield formatted(shorthand.format, components, referrers, safe)
   }
@@ -43,7 +44,10 @@ object ExpressionView {
         formatted(
           definition.format,
           boundVariableNames.map(leaf(_, Set.empty)) ++ components.mapWithIndex { (component, index) => {
-            apply(component, referrers.filter(_._2.headOption.contains(index)).map(_.mapRight(_.tail)), safe = true)
+            apply(
+              component,
+              referrers.filter(_._2.headOption.contains(index)).map(_.mapRight(_.tail)), safe = true)(
+              displayContext.withBoundVariableList(boundVariableNames))
           }},
           topLevelReferrers,
           safe)
@@ -55,7 +59,12 @@ object ExpressionView {
         topLevelReferrers,
         safe)
       case functionParameter: FunctionParameter =>
-        leaf(functionParameter.name.getOrElse(throw new Exception("Function parameter for display did not have a name")), topLevelReferrers)
+        try {
+          leaf(displayContext.boundVariableNames(functionParameter.level)(functionParameter.index), topLevelReferrers)
+        } catch {
+          case NonFatal(e) =>
+            throw e
+        }
     }
   }
 

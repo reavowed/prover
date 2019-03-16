@@ -6,30 +6,30 @@ import net.prover.model.entries.{StatementDefinition, TermDefinition}
 
 sealed trait Template {
   def names: Seq[String]
-  def matchExpression(expression: Expression): Option[Seq[Either[String, Expression]]]
+  def matchExpression(expression: Expression, boundVariableNames: Seq[Seq[String]]): Option[Seq[Template.Match]]
   def serialized: String
 }
 
 object Template {
   case class StatementVariable(name: String) extends Template {
     override def names = Seq(name)
-    override def matchExpression(expression: Expression) = expression match {
-      case statement: Statement => Some(Seq(Right(statement)))
+    override def matchExpression(expression: Expression, boundVariableNames: Seq[Seq[String]]): Option[Seq[Template.Match]] = expression match {
+      case statement: Statement => Some(Seq(Template.Match.Component(statement, boundVariableNames)))
       case _ => None
     }
     override def serialized = name
   }
   case class TermVariable(name: String) extends Template {
     override def names = Seq(name)
-    override def matchExpression(expression: Expression) = expression match {
-      case term: Term => Some(Seq(Right(term)))
+    override def matchExpression(expression: Expression, boundVariableNames: Seq[Seq[String]]) = expression match {
+      case term: Term => Some(Seq(Template.Match.Component(term, boundVariableNames)))
       case _ => None
     }
     override def serialized = name
   }
   case class FunctionParameter(parameter: expressions.FunctionParameter) extends Template {
     override def names = Nil
-    override def matchExpression(expression: Expression) = expression match {
+    override def matchExpression(expression: Expression, boundVariableNames: Seq[Seq[String]]) = expression match {
       case expressions.FunctionParameter(parameter.index, parameter.level) => Some(Nil)
       case _ => None
     }
@@ -42,12 +42,12 @@ object Template {
     extends Template
   {
     override def names = boundVariableNames ++ components.flatMap(_.names)
-    override def matchExpression(expression: Expression) = expression match {
+    override def matchExpression(expression: Expression, outerBoundVariableNames: Seq[Seq[String]]) = expression match {
       case definedStatement @ expressions.DefinedStatement(matchedComponents, `definition`) =>
         for {
           pairs <- components.zipStrict(matchedComponents)
-          submatches <- pairs.map { case (a, b) => a.matchExpression(b) }.traverseOption
-        } yield definedStatement.scopedBoundVariableNames.map(Left(_)) ++ submatches.flatten
+          submatches <- pairs.map { case (a, b) => a.matchExpression(b, outerBoundVariableNames :+ definedStatement.scopedBoundVariableNames) }.traverseOption
+        } yield definedStatement.scopedBoundVariableNames.map(Template.Match.BoundVariable) ++ submatches.flatten
       case _ =>
         None
     }
@@ -60,16 +60,22 @@ object Template {
     extends Template
   {
     override def names = boundVariableNames ++ components.flatMap(_.names)
-    override def matchExpression(expression: Expression) = expression match {
+    override def matchExpression(expression: Expression, outerBoundVariableNames: Seq[Seq[String]]) = expression match {
       case definedTerm @ expressions.DefinedTerm(matchedComponents, `definition`) =>
         for {
           pairs <- components.zipStrict(matchedComponents)
-          submatches <- pairs.map { case (a, b) => a.matchExpression(b) }.traverseOption
-        } yield definedTerm.scopedBoundVariableNames.map(Left(_)) ++ submatches.flatten
+          submatches <- pairs.map { case (a, b) => a.matchExpression(b, outerBoundVariableNames :+ definedTerm.scopedBoundVariableNames) }.traverseOption
+        } yield definedTerm.scopedBoundVariableNames.map(Template.Match.BoundVariable) ++ submatches.flatten
       case _ =>
         None
     }
     override def serialized = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
+  }
+
+  sealed trait Match
+  object Match {
+    case class BoundVariable(name: String) extends Match
+    case class Component(expression: Expression, boundVariableNames: Seq[Seq[String]]) extends Match
   }
 
   def parser(implicit context: ParsingContext): Parser[Template] = {

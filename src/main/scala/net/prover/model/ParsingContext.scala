@@ -79,14 +79,13 @@ case class ParsingContext(
     def unapply(string: String): Option[FunctionParameter] = {
       parameterLists.reverse.zipWithIndex.mapFind {
         case (parameterList, level) =>
-          parameterList.find(_._1 == string).map(_._2).map(index => FunctionParameter(index, level)(Some(string)))
+          parameterList.find(_._1 == string).map(_._2).map(index => FunctionParameter(index, level))
       } orElse (string match {
         case literalPattern(dollars, indexString) =>
           val level = dollars.length - 1
           for {
             index <- Try(indexString.toInt).toOption
-            name = parameterLists.reverse.lift(level).flatMap(_.lift(index)).map(_._1)
-          } yield FunctionParameter(index, level)(name)
+          } yield FunctionParameter(index, level)
         case _ =>
           None
       })

@@ -94,7 +94,7 @@ object ExpressionDefinition {
     override def serialized = name
   }
   case class PredicateComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-    override def expression = PredicateApplication(name, arguments.map(a => FunctionParameter(a.name, a.index, 0)))
+    override def expression = PredicateApplication(name, arguments.map(a => FunctionParameter(a.index, 0)))
     override def expressionParser(implicit context: ParsingContext) = Statement.parser
     override def templateParser(implicit context: ParsingContext) = Statement.templateParser
     override def serialized = "with " + (arguments match {
@@ -103,7 +103,7 @@ object ExpressionDefinition {
     }) + " " + name
   }
   case class FunctionComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-    override def expression = FunctionApplication(name, arguments.map(a => FunctionParameter(a.name, a.index, 0)))
+    override def expression = FunctionApplication(name, arguments.map(a => FunctionParameter(a.index, 0)))
     override def expressionParser(implicit context: ParsingContext) = Term.parser
     override def templateParser(implicit context: ParsingContext) = Term.templateParser
     override def serialized = "with " + (arguments match {

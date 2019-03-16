@@ -15,7 +15,7 @@ trait Term extends Expression with TypedExpression[Term] {
       updatedSubstitutions <- argument
         .insertExternalParameters(internalDepth)
         .calculateSubstitutions(this, substitutions, previousInternalDepth + internalDepth, externalDepth)
-    } yield FunctionParameter("_", index, externalDepth + internalDepth) -> updatedSubstitutions
+    } yield FunctionParameter(index, externalDepth + internalDepth) -> updatedSubstitutions
   }
 }
 

@@ -15,7 +15,7 @@ case class Book(
     dependencies: Seq[Book],
     chapters: Seq[Chapter],
     termVariableNames: Seq[String]) {
-  implicit def displayContext: DisplayContext = DisplayContext(allTransitive(_.displayShorthands))
+  implicit def displayContext: DisplayContext = DisplayContext(allTransitive(_.displayShorthands), Nil)
 
   def inferences: Seq[Inference] = chapters.flatMap(_.inferences)
   def theorems: Seq[Theorem] = chapters.flatMap(_.theorems)

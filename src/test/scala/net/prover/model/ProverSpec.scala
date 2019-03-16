@@ -79,15 +79,15 @@ trait ProverSpec extends Specification {
   val Equivalence = connective("↔", 2, None)
 
   val ForAll = quantifier("∀", None).copy(structureType = Some(StatementDefinition.StructureType.Scoping))
-  val Exists = quantifier("∃", Some(Negation(ForAll("x")(Negation(φ(FunctionParameter("x", 0, 0)))))))
+  val Exists = quantifier("∃", Some(Negation(ForAll("x")(Negation(φ(FunctionParameter(0, 0)))))))
   val Equals = predicate("=", 2, None)
   val ExistsUnique = quantifier("∃!", Some(Exists("y")(ForAll("x")(Equivalence(
-    φ(FunctionParameter("x", 0, 0)),
-    Equals(FunctionParameter("x", 0, 0), FunctionParameter("y", 0, 1)))))))
+    φ(FunctionParameter(0, 0)),
+    Equals(FunctionParameter(0, 0), FunctionParameter(0, 1)))))))
   val ElementOf = predicate("∈", 2, None)
   val Subset = predicate("⊆", 2, Some(ForAll("x")(Implication(
-      ElementOf(FunctionParameter("x", 0, 0), a),
-      ElementOf(FunctionParameter("x", 0, 0), b)))))
+      ElementOf(FunctionParameter(0, 0), a),
+      ElementOf(FunctionParameter(0, 0), b)))))
 
   val EmptySetDefinition = TermDefinition(
     "∅",
@@ -97,7 +97,7 @@ trait ProverSpec extends Specification {
     None,
     Format.default("∅", Nil),
     Nil,
-    ForAll("x")(Negation(ElementOf(FunctionParameter("x", 0, 0), FunctionParameter.anonymous(0, 1)))),
+    ForAll("x")(Negation(ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)))),
     None)
   val EmptySet = DefinedTerm(Nil, EmptySetDefinition)(Nil)
 
@@ -110,8 +110,8 @@ trait ProverSpec extends Specification {
     Format.Explicit("𝒫%0", "𝒫a", requiresBrackets = false),
     Nil,
     ForAll("y")(Equivalence(
-      ElementOf(FunctionParameter("y", 0, 0), FunctionParameter.anonymous(0, 1)),
-      Subset(FunctionParameter("y", 0, 0), a))),
+      ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)),
+      Subset(FunctionParameter(0, 0), a))),
     None)
 
   val Singleton = TermDefinition(

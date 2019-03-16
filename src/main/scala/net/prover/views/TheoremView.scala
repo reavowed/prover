@@ -115,6 +115,7 @@ object TheoremView {
         }
         assumptionLine +: substepLines
       case Step.Naming(variableName, assumption, substeps, _, reference) =>
+        val innerContext = displayContext.withBoundVariableList(Seq(variableName))
         val firstLine = lineView(
           s"Let $variableName be such that",
           assumption,
@@ -122,14 +123,16 @@ object TheoremView {
           reference.getChildForAssumption,
           None,
           None,
-          referenceMap)
+          referenceMap)(
+          innerContext)
         val substepLines = substeps.flatMapWithIndex { (substep, index) =>
-          stepView(substep, indentLevel, if (index == substeps.length - 1) Some(additionalReference.getOrElse(reference.value)) else None, referenceMap)
+          stepView(substep, indentLevel, if (index == substeps.length - 1) Some(additionalReference.getOrElse(reference.value)) else None, referenceMap)(innerContext)
         }
         firstLine +: substepLines
-      case Step.ScopedVariable(_, substeps, _, _) =>
+      case Step.ScopedVariable(variableName, substeps, _, _) =>
+        val innerContext = displayContext.withBoundVariableList(Seq(variableName))
         substeps.flatMapWithIndex { (substep, index) =>
-          stepView(substep, indentLevel, if (index == substeps.length - 1) additionalReference else None, referenceMap)
+          stepView(substep, indentLevel, if (index == substeps.length - 1) additionalReference else None, referenceMap)(innerContext)
         }
       case Step.Target(statement, reference) =>
         Seq(lineView(

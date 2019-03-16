@@ -27,13 +27,13 @@ class StatementSpec extends ProverSpec {
     }
 
     "parse a bound predicate application" in {
-      parseStatement("∀ y with y χ") mustEqual ForAll("y")(χ(FunctionParameter("y", 0, 0)))
+      parseStatement("∀ y with y χ") mustEqual ForAll("y")(χ(FunctionParameter(0, 0)))
     }
 
     "parse a bound defined statement" in {
       parseStatement("∀ y ↔ ∈ y a ∈ y b") mustEqual ForAll("y")(Equivalence(
-        ElementOf(FunctionParameter("y", 0, 0), a),
-        ElementOf(FunctionParameter("y", 0, 0), b)))
+        ElementOf(FunctionParameter(0, 0), a),
+        ElementOf(FunctionParameter(0, 0), b)))
     }
 
     "parse an empty list" in {

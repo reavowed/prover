@@ -19,7 +19,7 @@ case class Transformation(statementDefinition: StatementDefinition, boundVariabl
     else
       Some(Substitutions(
         statements = requiredSubstitutions.statements.map { name =>
-            name -> PredicateApplication(name, Seq(FunctionParameter(boundVariableName, 0, 0)))
+            name -> PredicateApplication(name, Seq(FunctionParameter(0, 0)))
         }.toMap))
   }
 

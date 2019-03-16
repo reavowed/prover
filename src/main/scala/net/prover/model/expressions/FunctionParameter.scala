@@ -2,10 +2,10 @@ package net.prover.model.expressions
 
 import net.prover.model.Substitutions
 
-case class FunctionParameter(index: Int, level: Int)(val name: Option[String]) extends Term {
+case class FunctionParameter(index: Int, level: Int) extends Term {
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = {
     if (level >= internalDepth) {
-      FunctionParameter(index, level + numberOfParametersToInsert)(name)
+      FunctionParameter(index, level + numberOfParametersToInsert)
     } else {
       this
     }
@@ -16,7 +16,7 @@ case class FunctionParameter(index: Int, level: Int)(val name: Option[String]) e
     else if (level < internalDepth + numberOfParametersToRemove)
       None
     else
-      Some(FunctionParameter(index, level - numberOfParametersToRemove)(name))
+      Some(FunctionParameter(index, level - numberOfParametersToRemove))
   }
 
   override def specify(
@@ -75,7 +75,7 @@ case class FunctionParameter(index: Int, level: Int)(val name: Option[String]) e
       (if (level >= internalDepth + previousInternalDepth)
         // External context
         // Shifted down to cut out the shared internal context
-        Seq(FunctionParameter(index, level - previousInternalDepth)(name) -> substitutions)
+        Seq(FunctionParameter(index, level - previousInternalDepth) -> substitutions)
       else if (level < internalDepth)
         // Internal context after the entry point to calculateApplicatives
         Seq(this -> substitutions)
@@ -95,17 +95,4 @@ case class FunctionParameter(index: Int, level: Int)(val name: Option[String]) e
   override def serialized = (0 to level).map(_ => "$").mkString("") + index
   override def serializedForHash = serialized
   override def toString = serialized
-}
-
-object FunctionParameter {
-  def apply(name: String, index: Int): FunctionParameter = {
-    apply(name, index, 0)
-  }
-  def apply(name: String, index: Int, level: Int): FunctionParameter = {
-    FunctionParameter(index, level)(Some(name))
-  }
-  // TODO: Move to test code
-  def anonymous(index: Int, level: Int): FunctionParameter = {
-    FunctionParameter(index, level)(None)
-  }
 }
