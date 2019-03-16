@@ -124,6 +124,10 @@ table {
     text-align: center;
 }
 
+.theoremProof .popover {
+    max-width: 100%;
+}
+
 /* TYPEAHEAD */
 
 .tt-menu {

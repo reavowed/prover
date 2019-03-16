@@ -233,6 +233,7 @@ object Step {
   }
   object NewAssert {
     sealed trait Premise {
+      def statement: Statement
       def serialized: String
     }
     case class FloatingPremise(statement: Statement) extends Premise {

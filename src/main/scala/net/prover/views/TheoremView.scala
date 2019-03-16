@@ -3,6 +3,7 @@ package net.prover.views
 import net.prover.model._
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.expressions.Statement
+import net.prover.model.proof.Step.NewAssert
 import net.prover.model.proof._
 
 import scala.xml.Elem
@@ -23,10 +24,11 @@ object TheoremView {
         {inference.name}
       </a>,
       <div>
-        {PremisesView(inference.premises, ReferenceMap.empty)}<div>
+        {PremisesView(inference.premises, ReferenceMap.empty)}
+        <div>
         {if (inference.premises.nonEmpty) "Then" }
         {ExpressionView(inference.conclusion)}.
-      </div>
+        </div>
       </div>)
   }
 
@@ -34,12 +36,6 @@ object TheoremView {
     Popover(
       <span>"Statement to be proved"</span>,
       <div>
-        <button type="button"
-                class="btn btn-success addNamingStep"
-                data-reference={reference.value}
-        >
-          Add Naming Step
-        </button>
         <button type="button"
                 class="btn btn-success proveStatement"
                 data-toggle="modal"
@@ -49,6 +45,26 @@ object TheoremView {
           Prove
         </button>
       </div>)
+  }
+
+  private def popoverForNewAssert(inference: Inference, premises: Seq[NewAssert.Premise])(implicit displayContext: DisplayContext): Popover = {
+    Popover(
+      <a href={inference.entryKey.url}>
+        {inference.name}
+      </a>,
+      <div>
+        <div>
+          {PremisesView(inference.premises, ReferenceMap.empty)}
+          <div>
+            {if (inference.premises.nonEmpty) "Then" }
+            {ExpressionView(inference.conclusion)}.
+          </div>
+        </div>
+        <hr />
+        <h5>Premises</h5>
+        {premises.map { p => <div>{ExpressionView(p.statement)}</div>}}
+      </div>)
+
   }
 
   private case class Popover(title: Elem, content: Elem)
@@ -98,7 +114,7 @@ object TheoremView {
           stepView(substep, indentLevel + 1, if (index == substeps.length - 1) additionalReference else None, referenceMap)
         }
         assumptionLine +: substepLines
-      case Step.Naming(variableName, assumption, substeps, finalInferenceApplication, reference) =>
+      case Step.Naming(variableName, assumption, substeps, _, reference) =>
         val firstLine = lineView(
           s"Let $variableName be such that",
           assumption,
@@ -124,14 +140,14 @@ object TheoremView {
           additionalReference,
           Some(popoverForTarget(reference)),
           referenceMap))
-      case Step.NewAssert(statement, inference, _, _, reference) =>
+      case Step.NewAssert(statement, inference, premises, _, reference) =>
         Seq(lineView(
           "Then",
           statement,
           indentLevel,
           reference,
           additionalReference,
-          Some(popoverForInference(inference)),
+          Some(popoverForNewAssert(inference, premises)),
           referenceMap))
     }
   }
