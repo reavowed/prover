@@ -30,13 +30,6 @@ sealed trait Step {
   def length: Int
   def intermediateReferences: Seq[String]
   def lastReference: Option[String]
-  def getLines(
-    referenceMap: ReferenceMap,
-    indentLevel: Int,
-    additionalReference: Option[String])(
-    implicit displayContext: DisplayContext
-  ): Seq[ProofLine]
-  def isSingleAssertion: Boolean = false
   def serializedLines: Seq[String]
 }
 
@@ -61,24 +54,6 @@ object Step {
     override def length = 1
     override def intermediateReferences = Nil
     override def lastReference = Some(reference.value)
-    override def getLines(
-      referenceMap: ReferenceMap,
-      indentLevel: Int,
-      additionalReference: Option[String])(
-      implicit displayContext: DisplayContext
-    ) = {
-      Seq(ProofLine(
-        "Then",
-        ProofLine.Expression.create(assertion, referenceMap.getReferrers(reference.value, additionalReference)),
-        Some(reference.value),
-        indentLevel,
-        if (inferenceApplication.isRearrangement)
-          Some(ProofLine.Justification.plain("Rearrangement"))
-        else
-          Some(ProofLine.Justification.fromInferenceApplication(inferenceApplication)), false))
-    }
-    override def isSingleAssertion = true
-
     override def serializedLines = Seq(s"assert ${assertion.serialized} ${inferenceApplication.serialized}")
   }
   object Assertion {
@@ -113,42 +88,6 @@ object Step {
     override def length = substeps.map(_.length).sum
     override def intermediateReferences = substeps.intermediateReferences
     override def lastReference = substeps.lastOption.flatMap(_.lastReference)
-    override def getLines(
-      referenceMap: ReferenceMap,
-      indentLevel: Int,
-      additionalReference: Option[String])(
-      implicit displayContext: DisplayContext
-    ) = {
-      val substepLines = substeps.flatMapWithIndex((step, index) =>
-        step.getLines(referenceMap, indentLevel + 1, if (index == substeps.length - 1) additionalReference else None))
-      if (isSingleAssertion) {
-        substepLines.map { substepLine =>
-          ProofLine(
-            "Then",
-            ProofLine.Expression.Nested(
-              deductionStatement.format,
-              Seq(ProofLine.Expression.create(assumption, Set.empty), substepLine.expression),
-              substepLine.expression.referrers),
-            substepLine.reference,
-            indentLevel,
-            substepLine.justification,
-            false)
-        }
-      } else {
-        val assumptionLine = ProofLine(
-          "Assume",
-          ProofLine.Expression.create(assumption, referenceMap.getReferrers(reference.getChildForAssumption.value, additionalReference)),
-          Some(reference.getChildForAssumption.value),
-          indentLevel,
-          None,
-          false)
-        assumptionLine +: substepLines
-      }
-    }
-    override def isSingleAssertion = substeps match {
-      case Seq(singleStep) if singleStep.isSingleAssertion => true
-      case _ => false
-    }
     override def serializedLines = Seq(s"assume ${assumption.serialized} {") ++
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
@@ -189,26 +128,6 @@ object Step {
     override def length = substeps.map(_.length).sum + 1
     override def intermediateReferences = substeps.intermediateReferences
     override def lastReference = Some(reference.value)
-    override def getLines(
-      referenceMap: ReferenceMap,
-      indentLevel: Int,
-      additionalReference: Option[String])(
-      implicit displayContext: DisplayContext
-    ) = {
-      val firstLine = ProofLine(
-        s"Let $variableName be such that",
-        ProofLine.Expression.create(assumption, referenceMap.getReferrers(assumptionReference.value)),
-        Some(finalAssertionReference.value),
-        indentLevel,
-        Some(ProofLine.Justification.fromInferenceApplication(finalInferenceApplication)),
-        false)
-      val innerLines = substeps.flatMapWithIndex((step, index) =>
-        step.getLines(
-          referenceMap,
-          indentLevel,
-          if (index == substeps.length - 1) Some(additionalReference.getOrElse(reference.value)) else None))
-      firstLine +: innerLines
-    }
     override def serializedLines = Seq(s"let $variableName ${assumption.serialized} ${finalInferenceApplication.serialized} {") ++
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
@@ -255,29 +174,6 @@ object Step {
     override def length = substeps.map(_.length).sum
     override def intermediateReferences = substeps.intermediateReferences
     override def lastReference = substeps.lastOption.flatMap(_.lastReference)
-    override def getLines(
-      referenceMap: ReferenceMap,
-      indentLevel: Int,
-      additionalReference: Option[String])(
-      implicit displayContext: DisplayContext
-    ) = {
-      val substepLines = substeps.flatMapWithIndex { (step, index) =>
-        step.getLines(referenceMap, indentLevel, if (index == substeps.length - 1) additionalReference else None)
-      }
-      if (isSingleAssertion)
-        substepLines.map { substepLine =>
-          substepLine.copy(expression = ProofLine.Expression.Nested(
-            scopingStatement.format,
-            Seq(ProofLine.Expression.Plain(variableName, Set.empty), substepLine.expression),
-            substepLine.expression.referrers))
-        }
-      else
-        substepLines
-    }
-    override def isSingleAssertion = substeps match {
-      case Seq(singleStep) if singleStep.isSingleAssertion => true
-      case _ => false
-    }
     override def serializedLines = Seq(s"take $variableName {") ++
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
@@ -303,21 +199,6 @@ object Step {
     override def length = 1
     override def intermediateReferences = Nil
     override def lastReference = Some(reference.value)
-    override def getLines(
-      referenceMap: ReferenceMap,
-      indentLevel: Int,
-      additionalReference: Option[String])(
-      implicit displayContext: DisplayContext
-    ): Seq[ProofLine] = {
-      Seq(ProofLine(
-        "Target:",
-        ProofLine.Expression.create(statement, referenceMap.getReferrers(reference.value, additionalReference)),
-        Some(reference.value),
-        indentLevel,
-        None,
-        true))
-    }
-    override def isSingleAssertion = false
     def serializedLines = Seq(s"target ${statement.serialized}")
   }
   object Target {
@@ -344,21 +225,6 @@ object Step {
     override def length: Int = 1
     override def intermediateReferences: Seq[String] = Nil
     override def lastReference: Option[String] = Some(reference.value)
-    override def getLines(
-      referenceMap: ReferenceMap,
-      indentLevel: Int,
-      additionalReference: Option[String])(
-      implicit displayContext: DisplayContext
-    ) = {
-      Seq(ProofLine(
-        "Then",
-        ProofLine.Expression.create(statement, referenceMap.getReferrers(reference.value, additionalReference)),
-        Some(reference.value),
-        indentLevel,
-        Some(ProofLine.Justification.fromInference(inference)), false))
-    }
-    override def isSingleAssertion = true
-
     override def serializedLines = {
       Seq(s"prove ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}") ++
         premises.map(_.serialized).indent

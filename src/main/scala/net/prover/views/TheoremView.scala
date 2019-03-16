@@ -2,32 +2,41 @@ package net.prover.views
 
 import net.prover.model._
 import net.prover.model.entries.{ChapterEntry, Theorem}
-import net.prover.model.proof.ProofLine.Justification
-import net.prover.model.proof.{ProofLine, ReferenceMap}
+import net.prover.model.expressions.Statement
+import net.prover.model.proof._
+
+import scala.xml.Elem
 
 object TheoremView {
-  private def popoverTitle(line: ProofLine): Option[String] = {
-    line.justification.map {
-      case Justification(text, Some(inference)) =>
-        <a href={inference.entryKey.url}>{text}</a>.toString()
-      case Justification(text, None) =>
-        text
-    } orElse line.requiresProof.ifTrue("Statement to be proved")
+  private def popover(inferenceApplication: InferenceApplication)(implicit displayContext: DisplayContext): Popover = {
+    if (inferenceApplication.isRearrangement) {
+      Popover(<span>Rearrangement</span>, <span/>)
+    } else {
+      val inference = HtmlHelper.findInferenceToDisplay(inferenceApplication)
+      popoverForInference(inference)
+    }
   }
-  private def popoverContent(line: ProofLine)(implicit displayContext: DisplayContext): Option[String] = {
-    line.justification.flatMap(_.inference).map { inference =>
+
+  private def popoverForInference(inference: Inference)(implicit displayContext: DisplayContext): Popover = {
+    Popover(
+      <a href={inference.entryKey.url}>
+        {inference.name}
+      </a>,
       <div>
-        { PremisesView(inference.premises, ReferenceMap.empty) }
-        <div>
-          { if(inference.premises.nonEmpty) "Then" }
-          {ExpressionView(inference.conclusion)}.
-        </div>
-      </div>.toString()
-    } orElse line.requiresProof.ifTrue {
+        {PremisesView(inference.premises, ReferenceMap.empty)}<div>
+        {if (inference.premises.nonEmpty) "Then" }
+        {ExpressionView(inference.conclusion)}.
+      </div>
+      </div>)
+  }
+
+  private def popoverForTarget(reference: Reference.Direct): Popover = {
+    Popover(
+      <span>"Statement to be proved"</span>,
       <div>
         <button type="button"
                 class="btn btn-success addNamingStep"
-                data-reference={line.reference.orNull}
+                data-reference={reference.value}
         >
           Add Naming Step
         </button>
@@ -35,11 +44,95 @@ object TheoremView {
                 class="btn btn-success proveStatement"
                 data-toggle="modal"
                 data-target="#proveStatementModal"
-                data-reference={line.reference.orNull}
+                data-reference={reference.value}
         >
           Prove
         </button>
-      </div>.toString()
+      </div>)
+  }
+
+  private case class Popover(title: Elem, content: Elem)
+
+  private def lineView(
+    prefix: String,
+    statement: Statement,
+    indentLevel: Int,
+    reference: Reference.Direct,
+    additionalReference: Option[String],
+    popover: Option[Popover],
+    referenceMap: ReferenceMap)(
+    implicit displayContext: DisplayContext
+  ): Elem = {
+    <div class="proofLine" data-reference={reference.value}>
+      <span class="popover-holder"
+            data-title={popover.map(_.title.toString()).orNull}
+            data-content={popover.map(_.content.toString()).orNull}>
+        { for(_ <- 1 to indentLevel) yield { <span>&nbsp;&nbsp;</span> } }
+        {HtmlHelper.format(prefix)}
+        <span class={"conclusion-" + reference.value}>{ExpressionView(statement, referenceMap.getReferrers(reference.value, additionalReference))}</span>.
+      </span>
+    </div>
+  }
+
+  private def stepView(step: Step, indentLevel: Int, additionalReference: Option[String], referenceMap: ReferenceMap)(implicit displayContext: DisplayContext): Seq[Elem] = {
+    step match {
+      case Step.Assertion(statement, inferenceApplication, reference) =>
+        Seq(lineView(
+          "Then",
+          statement,
+          indentLevel,
+          reference,
+          additionalReference,
+          Some(popover(inferenceApplication)),
+          referenceMap))
+      case Step.Assumption(assumption, substeps, _, reference) =>
+        val assumptionLine = lineView(
+          "Assume",
+          assumption,
+          indentLevel,
+          reference.getChildForAssumption,
+          additionalReference,
+          None,
+          referenceMap)
+        val substepLines = substeps.flatMapWithIndex { (substep, index) =>
+          stepView(substep, indentLevel + 1, if (index == substeps.length - 1) additionalReference else None, referenceMap)
+        }
+        assumptionLine +: substepLines
+      case Step.Naming(variableName, assumption, substeps, finalInferenceApplication, reference) =>
+        val firstLine = lineView(
+          s"Let $variableName be such that",
+          assumption,
+          indentLevel,
+          reference.getChildForAssumption,
+          None,
+          None,
+          referenceMap)
+        val substepLines = substeps.flatMapWithIndex { (substep, index) =>
+          stepView(substep, indentLevel, if (index == substeps.length - 1) Some(additionalReference.getOrElse(reference.value)) else None, referenceMap)
+        }
+        firstLine +: substepLines
+      case Step.ScopedVariable(_, substeps, _, _) =>
+        substeps.flatMapWithIndex { (substep, index) =>
+          stepView(substep, indentLevel, if (index == substeps.length - 1) additionalReference else None, referenceMap)
+        }
+      case Step.Target(statement, reference) =>
+        Seq(lineView(
+          "Target:",
+          statement,
+          indentLevel,
+          reference,
+          additionalReference,
+          Some(popoverForTarget(reference)),
+          referenceMap))
+      case Step.NewAssert(statement, inference, _, _, reference) =>
+        Seq(lineView(
+          "Then",
+          statement,
+          indentLevel,
+          reference,
+          additionalReference,
+          Some(popoverForInference(inference)),
+          referenceMap))
     }
   }
 
@@ -50,24 +143,15 @@ object TheoremView {
     previousOption: Option[ChapterEntry.WithKey],
     nextOption: Option[ChapterEntry.WithKey],
     usages: Seq[(Book, Chapter, Seq[Theorem])]
-  ) = InferenceView("Theorem", theorem, chapter, book, previousOption, nextOption, theorem.proof.referenceMap, usages) {
+  ): Elem = InferenceView("Theorem", theorem, chapter, book, previousOption, nextOption, theorem.proof.referenceMap, usages) {
     import book.displayContext
+    val referenceMap = theorem.proof.referenceMap
     <div>
       <div class="theoremProof">
         <hr/>
         <h4>Proof</h4>
         <div class="proof">
-          {theorem.proof.getLines.map { line =>
-            <div class="proofLine" data-reference={line.reference.orNull}>
-              <span class="popover-holder"
-                    title={popoverTitle(line).orNull}
-                    data-content={popoverContent(line).orNull}>
-                { for(_ <- 1 to line.indentLevel) yield { <span>&nbsp;&nbsp;</span> } }
-                {HtmlHelper.format(line.prefix)}
-                <span class={line.reference.map("conclusion-" + _).orNull}>{ExpressionView(line.expression)}</span>.
-              </span>
-            </div>
-          }}
+          {theorem.proof.steps.flatMap(stepView(_, 0, None, referenceMap))}
         </div>
       </div>
       <div class="modal" tabindex="-1" role="dialog" id="proveStatementModal">

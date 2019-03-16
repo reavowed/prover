@@ -13,8 +13,6 @@ case class Proof(steps: Seq[Step]) {
       .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))
       .statement
   }
-
-  def getLines(implicit displayContext: DisplayContext) = steps.flatMap(_.getLines(referenceMap, 0, None))
   def serializedLines = Seq("{") ++ steps.flatMap(_.serializedLines).indent ++ Seq("}")
 }
 

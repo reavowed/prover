@@ -2,13 +2,13 @@ package net.prover.views
 
 import net.prover.model._
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{ProofLine, ReferenceMap}
+import net.prover.model.proof.ReferenceMap
 
 import scala.xml.{Elem, Text}
 
 object PremisesView {
   private def PremiseView(statement: Statement, referrers: Set[(String, Seq[Int])] = Set.empty)(implicit displayContext: DisplayContext): Elem = {
-    <span class="premise">{ExpressionView(ProofLine.Expression.create(statement, referrers))}</span>
+    <span class="premise">{ExpressionView(statement, referrers)}</span>
   }
   private def PremiseView(premise: Premise, referenceMap: ReferenceMap)(implicit displayContext: DisplayContext): Elem = {
     PremiseView(premise.statement, referenceMap.getReferrers(premise.reference.value))
