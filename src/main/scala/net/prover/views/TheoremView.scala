@@ -33,8 +33,6 @@ object TheoremView {
         </button>
         <button type="button"
                 class="btn btn-success proveStatement"
-                data-toggle="modal"
-                data-target="#proveStatementModal"
                 data-reference={line.reference.orNull}
         >
           Prove

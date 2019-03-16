@@ -1,59 +1,100 @@
 $(() => {
-  $("[data-reference]").each(function () {
-    let $this = $(this);
-    let escapedReference = _.replace($this.attr("data-reference"), /\./g, "\\.");
+  let baseState = {
+    transitions: [
+      {
+        selector: "[data-reference]",
+        event: "mouseenter",
+        newStateConstructor: highlightLineState
+      }
+    ]
+  };
+
+  function highlightLineState(line) {
+    let escapedReference = _.replace(line.attr("data-reference"), /\./g, "\\.");
     let $premises = $(".highlight-" + escapedReference);
-    let $conclusion = $this.find('.conclusion-' + escapedReference);
-    $this
-      .on("mouseenter", function () {
+    let $conclusion = line.find('.conclusion-' + escapedReference);
+    return {
+      onEnter: () => {
         $premises.addClass("highlightPremise");
         $conclusion.addClass("highlightConclusion");
-      })
-      .on("mouseleave", function () {
+      },
+      onExit: () => {
         $premises.removeClass("highlightPremise");
         $conclusion.removeClass("highlightConclusion");
-      });
-  });
+      },
+      transitions: [
+        {
+          selector: line,
+          event: "mouseleave",
+          newState: baseState
+        },
+        {
+          selector: line,
+          event: "click",
+          newStateConstructor: popupLineState
+        }
+      ]
+    };
+  }
 
-  let openPopoverHolder = null;
+  function popupLineState(line) {
+    let holder = line.find(".popover-holder");
 
-  $(".proofLine").each(function() {
-    let $this = $(this);
-    let holder = $this.find(".popover-holder");
-    holder.popover({
-      placement: "bottom",
-      html: true,
-      trigger: "focus"
-    });
-    $this
-      .on("click", e => {
-        if ($(e.target).parents(".popover").length) {
-          return;
+    return {
+      onEnter: () => {
+        holder.popover({
+          placement: "bottom",
+          html: true,
+          trigger: "focus"
+        });
+        holder.popover("show");
+      },
+      onExit: () => {
+        holder.popover('destroy');
+      },
+      transitions: [
+        {
+          selector: document,
+          event: "click",
+          newState: baseState
+        },
+        {
+          selector: "button.proveStatement",
+          event: "click",
+          newStateConstructor: proveStatementInferenceSelect
         }
-        if (openPopoverHolder && openPopoverHolder !== holder) {
-          openPopoverHolder.popover("hide");
-        }
-        holder.popover("toggle");
-        e.stopPropagation();
-      })
-      .on("show.bs.popover", function() {
-        openPopoverHolder = holder;
-      })
-      .on("hide.bs.popover", function() {
-        if (openPopoverHolder === holder) {
-          openPopoverHolder = null;
-        }
-      });
-  });
-  $("body").on("click", e => {
-      // Don't hide the popover if we're clicking ON it
-      if ($(e.target).parents(".popover").length) {
-        return;
-      }
-      if (openPopoverHolder) {
-        openPopoverHolder.popover("hide");
-      }
-    });
+      ]
+    };
+  }
+
+  function proveStatementInferenceSelect(button) {
+      let reference = button.attr("data-reference");
+      let statementHtml = button.attr("data-statement-html");
+      $("#statementToProve").html(statementHtml);
+
+      return {
+        onEnter: () => {
+          $("#statementToProve").html(statementHtml);
+
+          let inferenceSuggestions = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace("value"),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+              url: `${window.location.pathname}/${reference}/suggestions?searchText=%QUERY`,
+              wildcard: "%QUERY"
+            }
+          });
+
+          $('#proveStatementModal').modal('show');
+        },
+        onExit: () => {
+          $('#proveStatementModal').modal('hide');
+          $("#statementToProve").html("");
+        },
+        transitions: [
+        ]
+      };
+  }
 
   $(document).on("click", "button.proveStatement", function() {
     let button = $(this);
@@ -62,14 +103,6 @@ $(() => {
 
     $("#statementToProve").html(statementHtml);
 
-    let inferenceSuggestions = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace("value"),
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      remote: {
-        url: `${window.location.pathname}/${reference}/suggestions?searchText=%QUERY`,
-        wildcard: "%QUERY"
-      }
-    });
     $("#inferenceName")
       .typeahead("destroy")
       .typeahead(null, {
@@ -104,4 +137,83 @@ $(() => {
       openPopoverHolder.popover("hide");
     }
   });
+
+  let currentState = null;
+  function enterState(newState) {
+    function getNewState(transition, element) {
+      return transition.newState || transition.newStateConstructor(element);
+    }
+
+    currentState && currentState.onExit && currentState.onExit();
+    currentState && _.each(currentState.transitions, transition => {
+      $(transition.selector).off(transition.event + ".state");
+    });
+    currentState = newState;
+    currentState.onEnter && currentState.onEnter();
+    _.each(currentState.transitions, transition => {
+      $(transition.selector).on(transition.event + ".state", function(event) {
+        event.stopPropagation();
+        enterState(getNewState(transition, $(this)));
+      });
+    });
+  }
+  enterState(baseState);
+
+
+
+  // $("[data-reference]").each(function () {
+  //   let $this = $(this);
+  //   let escapedReference = _.replace($this.attr("data-reference"), /\./g, "\\.");
+  //   let $premises = $(".highlight-" + escapedReference);
+  //   let $conclusion = $this.find('.conclusion-' + escapedReference);
+  //   $this
+  //     .on("mouseenter", function () {
+  //       $premises.addClass("highlightPremise");
+  //       $conclusion.addClass("highlightConclusion");
+  //     })
+  //     .on("mouseleave", function () {
+  //       $premises.removeClass("highlightPremise");
+  //       $conclusion.removeClass("highlightConclusion");
+  //     });
+  // });
+  //
+  // let openPopoverHolder = null;
+  //
+  // $(".proofLine").each(function() {
+  //   let $this = $(this);
+  //   let holder = $this.find(".popover-holder");
+  //   holder.popover({
+  //     placement: "bottom",
+  //     html: true,
+  //     trigger: "focus"
+  //   });
+  //   $this
+  //     .on("click", e => {
+  //       if ($(e.target).parents(".popover").length) {
+  //         return;
+  //       }
+  //       if (openPopoverHolder && openPopoverHolder !== holder) {
+  //         openPopoverHolder.popover("hide");
+  //       }
+  //       holder.popover("toggle");
+  //       e.stopPropagation();
+  //     })
+  //     .on("show.bs.popover", function() {
+  //       openPopoverHolder = holder;
+  //     })
+  //     .on("hide.bs.popover", function() {
+  //       if (openPopoverHolder === holder) {
+  //         openPopoverHolder = null;
+  //       }
+  //     });
+  // });
+  // $("body").on("click", e => {
+  //     // Don't hide the popover if we're clicking ON it
+  //     if ($(e.target).parents(".popover").length) {
+  //       return;
+  //     }
+  //     if (openPopoverHolder) {
+  //       openPopoverHolder.popover("hide");
+  //     }
+  //   });
 });
