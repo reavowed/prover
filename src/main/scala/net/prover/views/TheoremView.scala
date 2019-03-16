@@ -114,15 +114,15 @@ object TheoremView {
           stepView(substep, indentLevel + 1, if (index == substeps.length - 1) additionalReference else None, referenceMap)
         }
         assumptionLine +: substepLines
-      case Step.Naming(variableName, assumption, substeps, _, reference) =>
+      case Step.Naming(variableName, assumption, substeps, finalInferenceApplication, reference) =>
         val innerContext = displayContext.withBoundVariableList(Seq(variableName))
         val firstLine = lineView(
           s"Let $variableName be such that",
           assumption,
           indentLevel,
-          reference.getChildForAssumption,
+          reference.getChildForResult,
           None,
-          None,
+          Some(popover(finalInferenceApplication)),
           referenceMap)(
           innerContext)
         val substepLines = substeps.flatMapWithIndex { (substep, index) =>
