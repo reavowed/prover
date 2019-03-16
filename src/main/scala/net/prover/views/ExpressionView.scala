@@ -8,59 +8,64 @@ import scala.util.control.NonFatal
 import scala.xml.Elem
 
 object ExpressionView {
-  def apply(expression: Expression, referrers: Set[(String, Seq[Int])] = Set.empty, safe: Boolean = false)(implicit displayContext: DisplayContext): Elem = {
-    val topLevelReferrers = referrers.filter(_._2.isEmpty).map(_._1)
+  def apply(expression: Expression)(implicit displayContext: DisplayContext): Elem = {
+    apply(expression, internalPath = Nil, safe = false)
+  }
+
+  private def apply(expression: Expression, internalPath: Seq[Int], safe: Boolean)(implicit displayContext: DisplayContext): Elem = {
     displayContext.displayShorthands
-      .mapFind(withShorthand(expression, topLevelReferrers, _, safe))
-      .getOrElse(directly(expression, referrers, topLevelReferrers, safe))
+      .mapFind(withShorthand(expression, internalPath, _, safe))
+      .getOrElse(directly(expression, internalPath, safe))
   }
 
   private def withShorthand(
     expression: Expression,
-    referrers: Set[String],
+    internalPath: Seq[Int],
     shorthand: DisplayShorthand,
     safe: Boolean)(
     implicit displayContext: DisplayContext
   ): Option[Elem] = {
     for {
-      rawComponents <- shorthand.template.matchExpression(expression, Nil)
+      rawComponents <- shorthand.template.matchExpression(expression)
       components = rawComponents.map {
-        case Template.Match.BoundVariable(name) => leaf(name, Set.empty)
-        case Template.Match.Component(e, boundVariableNames) => apply(e, Set.empty)(displayContext.withBoundVariableLists(boundVariableNames))
+        case Template.Match.BoundVariable(name) =>
+          leaf(name)
+        case Template.Match.Component(e, boundVariableNames, componentInternalPath) =>
+          apply(e, internalPath ++ componentInternalPath, safe = false)(displayContext.withBoundVariableLists(boundVariableNames))
       }
-    } yield formatted(shorthand.format, components, referrers, safe)
+    } yield formatted(shorthand.format, components, internalPath, safe)
   }
 
   private def directly(
     expression: Expression,
-    referrers: Set[(String, Seq[Int])],
-    topLevelReferrers: Set[String],
+    internalPath: Seq[Int],
     safe: Boolean)(
     implicit displayContext: DisplayContext
   ): Elem = {
     expression match {
-      case ExpressionVariable(text) => leaf(text, topLevelReferrers)
+      case ExpressionVariable(text) => leaf(text)
       case DefinedExpression(definition, boundVariableNames, components) =>
         formatted(
           definition.format,
-          boundVariableNames.map(leaf(_, Set.empty)) ++ components.mapWithIndex { (component, index) => {
-            apply(
+          boundVariableNames.map(leaf) ++ components.mapWithIndex { (component, index) => {
+            ExpressionView(
               component,
-              referrers.filter(_._2.headOption.contains(index)).map(_.mapRight(_.tail)), safe = true)(
+              internalPath :+ index,
+              safe = true)(
               displayContext.withBoundVariableList(boundVariableNames))
           }},
-          topLevelReferrers,
+          internalPath,
           safe)
       case ExpressionApplication(text, arguments) => formatted(
         Format.Default(text + "(" + arguments.indices.map(i => s"%$i").mkString(", ") + ")", requiresBrackets = false),
         arguments.mapWithIndex((argument, index) => {
-          apply(argument, referrers.filter(_._2.headOption.contains(index)).map(_.mapRight(_.tail)), safe = true)
+          ExpressionView(argument, internalPath :+ index, safe = true)
         }),
-        topLevelReferrers,
+        internalPath,
         safe)
       case functionParameter: FunctionParameter =>
         try {
-          leaf(displayContext.boundVariableNames(functionParameter.level)(functionParameter.index), topLevelReferrers)
+          leaf(displayContext.boundVariableNames(functionParameter.level)(functionParameter.index))
         } catch {
           case NonFatal(e) =>
             throw e
@@ -68,10 +73,10 @@ object ExpressionView {
     }
   }
 
-  private def leaf(text: String, referrers: Set[String]): Elem = {
-    <span class={referrers.map("highlight-" + _).mkString(" ")}>{HtmlHelper.format(text)}</span>
+  private def leaf(text: String): Elem = {
+    <span>{HtmlHelper.format(text)}</span>
   }
-  private def formatted(format: Format, components: Seq[Elem], referrers: Set[String], safe: Boolean): Elem = {
-    <span class={referrers.map("highlight-" + _).mkString(" ")}>{format.formatHtml(components, safe)}</span>
+  private def formatted(format: Format, components: Seq[Elem], internalPath: Seq[Int], safe: Boolean): Elem = {
+    <span data-path={internalPath.mkString(".")}>{format.formatHtml(components, safe)}</span>
   }
 }

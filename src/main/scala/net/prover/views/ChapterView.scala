@@ -2,7 +2,6 @@ package net.prover.views
 
 import net.prover.model.entries._
 import net.prover.model._
-import net.prover.model.proof.ReferenceMap
 import net.prover.viewmodel.Breadcrumb
 
 
@@ -52,7 +51,7 @@ object ChapterView {
         ><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
       </div>
       <div class="resultBlock">
-        { PremisesView(inference.premises, ReferenceMap.empty) }
+        { PremisesView(inference.premises) }
         <div>
           { if(inference.premises.nonEmpty) "Then" }
           {ExpressionView(inference.conclusion)}.

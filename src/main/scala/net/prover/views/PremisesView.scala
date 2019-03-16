@@ -2,16 +2,14 @@ package net.prover.views
 
 import net.prover.model._
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.ReferenceMap
-
 import scala.xml.{Elem, Text}
 
 object PremisesView {
-  private def PremiseView(statement: Statement, referrers: Set[(String, Seq[Int])] = Set.empty)(implicit displayContext: DisplayContext): Elem = {
-    <span class="premise">{ExpressionView(statement, referrers)}</span>
+  private def PremiseView(statement: Statement)(implicit displayContext: DisplayContext): Elem = {
+    <span class="premise">{ExpressionView(statement)}</span>
   }
-  private def PremiseView(premise: Premise, referenceMap: ReferenceMap)(implicit displayContext: DisplayContext): Elem = {
-    PremiseView(premise.statement, referenceMap.getReferrers(premise.reference.value))
+  private def PremiseView(premise: Premise)(implicit displayContext: DisplayContext): Elem = {
+    PremiseView(premise.statement)
   }
   private def applyToElements(premiseElems: Seq[Elem]): Elem = {
     <div>
@@ -31,10 +29,10 @@ object PremisesView {
     </div>
   }
 
-  def apply(premises: Seq[Premise], referenceMap: ReferenceMap)(implicit displayContext: DisplayContext): Elem = {
-    applyToElements(premises.map(PremiseView(_, referenceMap)))
+  def apply(premises: Seq[Premise])(implicit displayContext: DisplayContext): Elem = {
+    applyToElements(premises.map(PremiseView))
   }
-  def apply(statements: Seq[Statement])(implicit displayContext: DisplayContext): Elem = {
+  def apply(statements: Seq[Statement])(implicit displayContext: DisplayContext, dummyImplicit: DummyImplicit): Elem = {
     applyToElements(statements.map(PremiseView(_)))
   }
 }

@@ -6,8 +6,8 @@ import net.prover.model.expressions.Statement
 sealed trait InferenceApplication {
   def inference: Inference
   def referencedInferenceIds: Set[String]
+  def referencedLines: Set[PreviousLineReference]
   def references: Seq[Reference]
-  def lineReferences: Set[(String, Seq[Int])]
   def isRearrangement: Boolean
   def conclusion: Statement
   def serialized: String
@@ -23,7 +23,7 @@ object InferenceApplication {
     extends InferenceApplication
   {
     override def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet + inference.id
-    override def lineReferences = references.flatMap(_.lineReferences).toSet
+    override def referencedLines = references.flatMap(_.lineReferences).toSet
     override def serialized = (
       Seq("direct", inference.id) ++
       (if (isRearrangement) Seq("rearranged") else Nil) ++
@@ -54,7 +54,7 @@ object InferenceApplication {
     extends InferenceApplication
   {
     override def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet + inference.transformation.specificationInference.id
-    override def lineReferences = references.flatMap(_.lineReferences).toSet
+    override def referencedLines = references.flatMap(_.lineReferences).toSet
     override def serialized = (
       Seq("transformed", inference.inner.id) ++
         (if (isRearrangement) Seq("rearranged") else Nil) ++

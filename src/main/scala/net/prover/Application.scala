@@ -18,9 +18,7 @@ class Application
 class WebMvcConfiguration extends WebMvcConfigurerAdapter {
   override def configureMessageConverters(converters: util.List[HttpMessageConverter[_]]): Unit = {
     // Configure Jackson to serialize Scala classes
-    val objectMapper = new ObjectMapper()
-    objectMapper.registerModule(DefaultScalaModule)
-    converters.add(new MappingJackson2HttpMessageConverter(objectMapper))
+    converters.add(new MappingJackson2HttpMessageConverter(JsonMapping.objectMapper))
     super.configureMessageConverters(converters)
   }
 }

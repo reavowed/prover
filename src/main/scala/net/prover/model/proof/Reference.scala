@@ -3,7 +3,7 @@ package net.prover.model.proof
 import net.prover.model._
 
 sealed trait Reference {
-  def lineReferences: Set[(String, Seq[Int])]
+  def lineReferences: Set[PreviousLineReference]
   def referencedInferenceIds: Set[String]
   def serialized: String
 }
@@ -13,13 +13,13 @@ object Reference {
     def add(other: Direct) = Compound(other, this)
   }
   sealed trait ToSingleLine extends Reference {
-    def lineReference: (String, Seq[Int])
+    def lineReference: PreviousLineReference
     override def lineReferences = Set(lineReference)
   }
 
   case class Direct(value: String) extends Compoundable with ToSingleLine {
     override def referencedInferenceIds = Set.empty
-    override def lineReference = (value, Seq.empty[Int])
+    override def lineReference = PreviousLineReference(value, Seq.empty[Int])
     override def lineReferences = Set(lineReference)
     override def serialized = s"direct $value"
     def withSuffix(suffix: String): Direct = Direct(value + suffix)
@@ -53,7 +53,7 @@ object Reference {
 
   sealed trait ApplyingInference extends Reference {
     def inferenceApplication: InferenceApplication
-    override def lineReferences = inferenceApplication.lineReferences
+    override def lineReferences = inferenceApplication.referencedLines
     override def referencedInferenceIds = inferenceApplication.referencedInferenceIds
   }
 
@@ -74,7 +74,7 @@ object Reference {
     extends ToSingleLine
   {
     override def referencedInferenceIds = inferenceReference.referencedInferenceIds
-    override def lineReference = inferenceReference.lineReference.mapRight(_ ++ simplificationPath)
+    override def lineReference = inferenceReference.lineReference.copy(internalPath = inferenceReference.lineReference.internalPath ++ simplificationPath)
     override def serialized = Seq(
       "simplification",
       inference.id,

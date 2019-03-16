@@ -26,7 +26,7 @@ sealed trait Step {
   }
   def replaceSubstep(index: Int, substepIndexes: Seq[Int], newStep: Step): Step
   def referencedInferenceIds: Set[String]
-  def referenceMap: ReferenceMap
+  def referencedLines: Set[PreviousLineReference]
   def length: Int
   def intermediateReferences: Seq[String]
   def lastReference: Option[String]
@@ -48,7 +48,7 @@ object Step {
   {
     override def provenStatements = Seq(ProvenStatement(assertion, reference))
     override def referencedInferenceIds = inferenceApplication.referencedInferenceIds
-    override def referenceMap = ReferenceMap(reference.value -> inferenceApplication.lineReferences)
+    override def referencedLines: Set[PreviousLineReference] = inferenceApplication.referencedLines
     override def findSubstepWithContext(index: Int, innerIndexes: Seq[Int], currentContext: StepContext): Option[(Step, StepContext)] = None
     override def replaceSubstep(index: Int, substepIndexes: Seq[Int], newStep: Step): Step = throw new Exception("Cannot replace substep in assertion")
     override def length = 1
@@ -84,7 +84,7 @@ object Step {
       copy(substeps = substeps.updated(index, substeps(index).replaceStep(substepIndexes, newStep)))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
-    override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether
+    override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
     override def length = substeps.map(_.length).sum
     override def intermediateReferences = substeps.intermediateReferences
     override def lastReference = substeps.lastOption.flatMap(_.lastReference)
@@ -123,8 +123,7 @@ object Step {
       copy(substeps = substeps.updated(index, substeps(index).replaceStep(substepIndexes, newStep)))
     }
     override def referencedInferenceIds = substeps.flatMap(_.referencedInferenceIds).toSet ++ finalInferenceApplication.referencedInferenceIds
-    override def referenceMap = substeps.map(_.referenceMap).foldTogether ++
-      ReferenceMap(finalAssertionReference.value -> finalInferenceApplication.lineReferences)
+    override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet ++ finalInferenceApplication.referencedLines
     override def length = substeps.map(_.length).sum + 1
     override def intermediateReferences = substeps.intermediateReferences
     override def lastReference = Some(reference.value)
@@ -170,7 +169,7 @@ object Step {
       copy(substeps = substeps.updated(index, substeps(index).replaceStep(substepIndexes, newStep)))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
-    override def referenceMap: ReferenceMap = substeps.map(_.referenceMap).foldTogether
+    override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
     override def length = substeps.map(_.length).sum
     override def intermediateReferences = substeps.intermediateReferences
     override def lastReference = substeps.lastOption.flatMap(_.lastReference)
@@ -195,7 +194,7 @@ object Step {
     override def findSubstepWithContext(index: Int, innerIndexes: Seq[Int], currentContext: StepContext): Option[(Step, StepContext)] = None
     override def replaceSubstep(index: Int, substepIndexes: Seq[Int], newStep: Step): Step = throw new Exception("Cannot replace substep in target")
     override def referencedInferenceIds = Set.empty
-    override def referenceMap = ReferenceMap.empty
+    override def referencedLines: Set[PreviousLineReference] = Set.empty
     override def length = 1
     override def intermediateReferences = Nil
     override def lastReference = Some(reference.value)
@@ -220,8 +219,8 @@ object Step {
     override def provenStatements: Seq[ProvenStatement] = Seq(ProvenStatement(statement, reference))
     override def findSubstepWithContext(index: Int, innerIndexes: Seq[Int], currentContext: StepContext): Option[(Step, StepContext)] = None
     override def replaceSubstep(index: Int, substepIndexes: Seq[Int], newStep: Step): Step = throw new Exception("Cannot replace substep in assertion")
-    override def referencedInferenceIds: Set[String] = Set(inference.id)
-    override def referenceMap: ReferenceMap = ReferenceMap(reference.value -> Set.empty[(String, Seq[Int])])
+    override def referencedInferenceIds: Set[String] = Set(inference.id) ++ premises.flatMap(_.referencedInferenceIds).toSet
+    override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def length: Int = 1
     override def intermediateReferences: Seq[String] = Nil
     override def lastReference: Option[String] = Some(reference.value)
@@ -234,10 +233,14 @@ object Step {
   object NewAssert {
     sealed trait Premise {
       def statement: Statement
+      def referencedInferenceIds: Set[String]
+      def referencedLines: Set[PreviousLineReference]
       def serialized: String
     }
     case class FloatingPremise(statement: Statement) extends Premise {
       override def serialized: String = "?"
+      override def referencedInferenceIds: Set[String] = Set.empty
+      override def referencedLines: Set[PreviousLineReference] = Set.empty
     }
 
     def premisesParser(statements: Seq[Statement]): Parser[Seq[Premise]] = {

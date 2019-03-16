@@ -1,17 +1,17 @@
 $(() => {
   $("[data-reference]").each(function () {
     let $this = $(this);
-    let escapedReference = _.replace($this.attr("data-reference"), /\./g, "\\.");
-    let $premises = $(".highlight-" + escapedReference);
-    let $conclusion = $this.find('.conclusion-' + escapedReference);
+    let premiseReferences = JSON.parse($this.attr("data-premise-references"));
+    let premiseLines = _.map(premiseReferences, reference => $(`[data-reference='${reference.lineReference}'] [data-path='${reference.internalPath.join(".")}']`));
+    let conclusionLine = $this.find('.conclusion');
     $this
       .on("mouseenter", function () {
-        $premises.addClass("highlightPremise");
-        $conclusion.addClass("highlightConclusion");
+        _.each(premiseLines, x => x.addClass("highlightPremise"));
+        conclusionLine.addClass("highlightConclusion");
       })
       .on("mouseleave", function () {
-        $premises.removeClass("highlightPremise");
-        $conclusion.removeClass("highlightConclusion");
+        _.each(premiseLines, x => x.removeClass("highlightPremise"));
+        conclusionLine.removeClass("highlightConclusion");
       });
   });
 
