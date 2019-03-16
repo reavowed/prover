@@ -79,7 +79,6 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     externalDepth: Int
   ): Seq[(ExpressionType, Substitutions)]
 
-  def matchesStructure(other: Expression): Boolean
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
     if (this == other) {
       Some(Nil)

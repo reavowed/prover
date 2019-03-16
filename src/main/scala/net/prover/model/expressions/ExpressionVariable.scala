@@ -66,8 +66,6 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     Seq((this, substitutions))
   }
 
-  def matchesStructure(other: Expression): Boolean = other.isRuntimeInstance[ExpressionType]
-
   override def toString: String = name
   override def serialized: String = name
   override def serializedForHash: String = name

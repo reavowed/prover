@@ -85,13 +85,6 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     ).distinct
   }
 
-  def matchesStructure(other: Expression): Boolean = {
-    other match {
-      case FunctionParameter(`index`, `level`) => true
-      case _ => false
-    }
-  }
-
   override def serialized = (0 to level).map(_ => "$").mkString("") + index
   override def serializedForHash = serialized
   override def toString = serialized

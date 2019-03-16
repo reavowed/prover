@@ -73,15 +73,6 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
       .map(_.mapLeft(update))
   }
 
-  def matchesStructure(other: Expression): Boolean = {
-    getMatch(other).exists { otherComponents =>
-      components.zipStrict(otherComponents).exists { componentsAndOtherComponents =>
-        componentsAndOtherComponents.forall { case (component, otherComponent) =>
-          component.matchesStructure(otherComponent)
-        }
-      }
-    }
-  }
   override def findComponentPath(other: Expression): Option[Seq[Int]] = {
     super.findComponentPath(other) orElse
       components.zipWithIndex.mapFind { case (subcomponent, index) =>

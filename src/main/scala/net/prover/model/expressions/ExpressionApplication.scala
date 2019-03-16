@@ -76,8 +76,6 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
       .map(_.mapLeft(newArguments => update(newArguments.map(_.asInstanceOf[Term]))))
   }
 
-  def matchesStructure(other: Expression): Boolean = false // TODO: Probably these can match?
-
   override def toString = s"$variableName(${arguments.map(_.toString).mkString(", ")})"
   override def safeToString = toString
   override def serialized = s"with (${arguments.map(_.serialized).mkString(" ")}) $variableName"
