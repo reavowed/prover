@@ -19,9 +19,7 @@ object TheoremView {
       <div class="theoremProof">
         <hr/>
         <h4>Proof</h4>
-        <div class="proof">
-          {theorem.proof.steps.flatMapWithIndex((s, i) => StepView(s, Seq(i)))}
-        </div>
+        {ProofView(theorem.proof)}
       </div>
       <div class="modal" tabindex="-1" role="dialog" id="proveStatementModal">
         <div class="modal-dialog" role="document">

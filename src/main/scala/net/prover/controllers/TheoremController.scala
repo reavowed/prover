@@ -9,7 +9,7 @@ import net.prover.model.expressions.{Expression, Statement}
 import net.prover.model.proof.Step.NewAssert
 import net.prover.model.proof.{ProvenStatement, Step, StepContext}
 import net.prover.services.BookService
-import net.prover.views.{ExpressionView, StepView}
+import net.prover.views.{ExpressionView, ProofView, StepView}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.convert.converter.Converter
 import org.springframework.http.ResponseEntity
@@ -120,6 +120,29 @@ class TheoremController @Autowired() (bookService: BookService) {
     }.toResponseEntity
   }
 
+  @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/target"))
+  def createTarget(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData,
+    @PathVariable("premisePath") premisePath: PathData
+  ): ResponseEntity[_] = {
+    bookService.modifyEntry[Theorem, String](bookKey, chapterKey, theoremKey) { (_, book, _, theorem) =>
+      import book.displayContext
+      for {
+        rawStep <- theorem.findStep(stepPath.indexes).orNotFound(s"Step $stepPath")
+        step <- rawStep.asOptionalInstanceOf[Step.NewAssert].orBadRequest(s"Step $stepPath is not editable")
+        premise <- step.pendingPremises.get(premisePath.indexes).orNotFound(s"Premise $premisePath")
+        newStep = Step.Target(premise.statement, step.context)
+        unadjustedNewTheorem <- theorem.insertStep(stepPath.indexes, newStep).orBadRequest(s"Failed to insert new step")
+        newTheorem <- unadjustedNewTheorem.recalculateReferences().orBadRequest(s"Something broke a reference")
+      } yield {
+        (newTheorem, ProofView(newTheorem.proof).toString())
+      }
+    }.toResponseEntity
+  }
+
   case class UpdatedStep(html: String)
   @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/rearrangement"))
   def createRearrangement(
@@ -145,7 +168,7 @@ class TheoremController @Autowired() (bookService: BookService) {
       implicit val parsingContext: ParsingContext = getTheoremParsingContext(book, chapter, theorem)
       for {
         updatedStep <- oldStep.tryUpdatePremiseAtPath(premisePath.indexes, updatePremise(_, oldStep.context)).orNotFound(s"Premise $premisePath not found").flatten
-      } yield (updatedStep, UpdatedStep(StepView(updatedStep).toString))
+      } yield (updatedStep, UpdatedStep(StepView(updatedStep, stepPath.indexes).toString))
     }.toResponseEntity
   }
 

@@ -6,24 +6,28 @@ $(() => {
   function findElementByReference(lineReference, pathReference) {
     let outerElement = $(`[data-reference='${lineReference}']`);
     outerElement = outerElement.length ? outerElement : findLastChild($(`[data-reference-for-last-child='${lineReference}']`));
+    outerElement = outerElement.find(".conclusion").length ? outerElement.find(".conclusion") : outerElement;
     return pathReference.length ? outerElement.find(`[data-path='${pathReference.join(".")}']`) : outerElement;
   }
 
-  $("[data-premise-references]").each(function () {
-    let $this = $(this);
-    let premiseReferences = JSON.parse($this.attr("data-premise-references"));
-    let premiseElements = _.map(premiseReferences, reference => findElementByReference(reference.lineReference, reference.internalPath));
-    let conclusionElement = $this.find('.conclusion');
-    $this
-      .on("mouseenter", function () {
-        _.each(premiseElements, x => x.addClass("highlightPremise"));
-        conclusionElement.addClass("highlightConclusion");
-      })
-      .on("mouseleave", function () {
-        _.each(premiseElements, x => x.removeClass("highlightPremise"));
-        conclusionElement.removeClass("highlightConclusion");
-      });
-  });
+  function bindReferences() {
+    $("[data-premise-references]").each(function () {
+      let $this = $(this);
+      let premiseReferences = JSON.parse($this.attr("data-premise-references"));
+      let premiseElements = _.map(premiseReferences, reference => findElementByReference(reference.lineReference, reference.internalPath));
+      let conclusionElement = $this.find('.conclusion');
+      $this
+        .on("mouseenter", function () {
+          _.each(premiseElements, x => x.addClass("highlightPremise"));
+          conclusionElement.addClass("highlightConclusion");
+        })
+        .on("mouseleave", function () {
+          _.each(premiseElements, x => x.removeClass("highlightPremise"));
+          conclusionElement.removeClass("highlightConclusion");
+        });
+    });
+  }
+  bindReferences();
 
   let proofLineWithOpenPopover = null;
 
@@ -101,7 +105,21 @@ $(() => {
       let premiseLine = $(rawElement);
       let path = premiseLine.attr("data-path");
 
-      premiseLine.append($("<button class='btn btn-success'>Create target</button>"));
+      let createTargetButton = $("<button class='btn btn-success'>Create target</button>");
+      createTargetButton.on("click", () => {
+        $.ajax({
+          url: `${window.location.pathname}/${lineReference}/premises/${premiseOption.path.join(".")}/target`,
+          type: 'POST',
+        }).then(
+          response => {
+            let newProof = $(response);
+            $(".proof").html(newProof.html());
+            bindReferences();
+          },
+          response => showTemporaryTooltip(createTargetButton, response.responseJSON)
+        );
+      });
+      premiseLine.append(createTargetButton);
 
       let premiseOption = _.find(premiseOptions, x => x.path.join(".") === path);
       if (premiseOption && premiseOption.expansions.length) {

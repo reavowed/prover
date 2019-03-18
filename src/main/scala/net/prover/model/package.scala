@@ -84,6 +84,14 @@ package object model {
         } yield previous :+ s
       }
     }
+    def mapFoldOption[R, S](initial: R)(f: (R, T) => Option[(R, S)]): Option[(R, Seq[S])] = {
+      seq.foldLeft(Option((initial, Seq.empty[S]))) { case (accOption, t) =>
+        for {
+          (acc, ss) <- accOption
+          (next, s) <- f(acc, t)
+        } yield (next, ss :+ s)
+      }
+    }
     def mapFoldOption[S](f: (Seq[S], T) => Option[S]): Option[Seq[S]] = {
       seq.foldLeft(Option(Seq.empty[S])) { case (accOption, t) =>
         accOption.flatMap { acc =>
@@ -204,6 +212,12 @@ package object model {
     }
     def updateAtIndex(index: Int)(f: T => T): Option[Seq[T]] = {
       seq.lift(index).map(t => seq.updated(index, f(t)))
+    }
+    def updateAtIndexIfDefined(index: Int)(f: T => Option[T]): Option[Seq[T]] = {
+      for {
+        oldValue <- seq.lift(index)
+        newValue <- f(oldValue)
+      } yield seq.updated(index, newValue)
     }
     def tryUpdateAtIndex[S](index: Int)(f: T => Try[T]): Option[Try[Seq[T]]] = {
       seq.lift(index).map(f).map(_.map(seq.updated(index, _)))

@@ -6,7 +6,7 @@ import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Proof, Reference, Step, StepContext}
+import net.prover.model.proof.{Step, StepContext}
 import net.prover.services.BookService
 import net.prover.views._
 import org.slf4j.{Logger, LoggerFactory}
@@ -83,7 +83,7 @@ class BookController @Autowired() (bookService: BookService) {
         ChapterEntry.Key.Standalone(Chapter.getNextKey(chapter.entries, newTheoremDefininition.name), chapter.key),
         premises,
         conclusion,
-        Proof(Seq(Step.Target(conclusion, StepContext(premises.map(_.provenStatement), 0)))),
+        Seq(Step.Target(conclusion, StepContext(premises.map(_.provenStatement), 0))),
         RearrangementType.NotRearrangement)
 
       val existingTheoremOption = parsingContext.inferences.find(_.id == newTheorem.id)
@@ -163,7 +163,7 @@ class BookController @Autowired() (bookService: BookService) {
     for {
       book <- books
       chapter <- book.chapters
-      theorems = chapter.entries.ofType[Theorem].filter(_.proof.referencedInferenceIds.contains(inference.id))
+      theorems = chapter.entries.ofType[Theorem].filter(_.referencedInferenceIds.contains(inference.id))
       if theorems.nonEmpty
     } yield (book, chapter, theorems)
   }

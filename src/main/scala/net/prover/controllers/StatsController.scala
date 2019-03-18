@@ -11,9 +11,9 @@ class StatsController @Autowired() (bookService: BookService) {
   @GetMapping(value = Array("longestProofs"))
   def getLongestProofs = {
     bookService.books.flatMap(_.theorems)
-      .sortBy(theorem => -1 * theorem.proof.length)
+      .sortBy(theorem => -1 * theorem.proof.map(_.length).sum)
       .take(10)
-      .map(theorem => (theorem.key.url, theorem.proof.length))
+      .map(theorem => (theorem.key.url, theorem.proof.map(_.length).sum))
   }
 
   @GetMapping(value = Array("unusedInferences"))

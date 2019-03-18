@@ -168,7 +168,7 @@ object StepView {
           "Then",
           statement,
           path.mkString("."),
-          Set.empty,
+          premises.flatMap(_.referencedLines).toSet,
           Map("data-editable" -> "true"),
           Some(popoverForNewAssert(inference, premises)),
           None))
