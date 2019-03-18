@@ -1,7 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model.expressions
-import net.prover.model.{Parser, ParsingContext}
+import net.prover.model._
 import net.prover.model.entries.{StatementDefinition, TermDefinition}
 
 sealed trait Template {
@@ -48,7 +48,7 @@ object Template {
         for {
           pairs <- components.zipStrict(matchedComponents)
           submatches <- pairs.mapWithIndex { case ((a, b), i) => a.matchExpression(b, outerBoundVariableNames :+ definedStatement.scopedBoundVariableNames, internalPath :+ i) }.traverseOption
-        } yield definedStatement.scopedBoundVariableNames.map(Template.Match.BoundVariable) ++ submatches.flatten
+        } yield definedStatement.scopedBoundVariableNames.mapWithIndex((name, index) => Template.Match.BoundVariable(name, index, internalPath)) ++ submatches.flatten
       case _ =>
         None
     }
@@ -66,7 +66,7 @@ object Template {
         for {
           pairs <- components.zipStrict(matchedComponents)
           submatches <- pairs.mapWithIndex { case ((a, b), i) => a.matchExpression(b, outerBoundVariableNames :+ definedTerm.scopedBoundVariableNames, internalPath :+ i) }.traverseOption
-        } yield definedTerm.scopedBoundVariableNames.map(Template.Match.BoundVariable) ++ submatches.flatten
+        } yield definedTerm.scopedBoundVariableNames.mapWithIndex((name, index) => Template.Match.BoundVariable(name, index, internalPath)) ++ submatches.flatten
       case _ =>
         None
     }
@@ -75,7 +75,7 @@ object Template {
 
   sealed trait Match
   object Match {
-    case class BoundVariable(name: String) extends Match
+    case class BoundVariable(name: String, index: Int, internalPath: Seq[Int]) extends Match
     case class Component(expression: Expression, boundVariableNames: Seq[Seq[String]], internalPath: Seq[Int]) extends Match
   }
 

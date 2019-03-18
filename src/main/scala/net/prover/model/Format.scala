@@ -3,7 +3,7 @@ package net.prover.model
 import java.util.regex.{Matcher, Pattern}
 
 import scala.collection.mutable.ListBuffer
-import scala.xml.{Elem, Node, Text}
+import scala.xml.{Elem, Node, NodeSeq, Text}
 
 trait Format {
   def baseFormatString: String
@@ -15,7 +15,7 @@ trait Format {
       textSoFar.replaceFirst(s"%$index", Matcher.quoteReplacement(component))
     }
   }
-  def formatHtml(components: Seq[Elem], safe: Boolean = false): Elem = {
+  def formatHtml(components: Seq[NodeSeq], safe: Boolean = false): Seq[Node] = {
     HtmlHelper.formatWithReplacement(getSafeFormatString(safe), replacePlaceholders(_, components))
   }
 
@@ -28,20 +28,20 @@ trait Format {
 
   private def replacePlaceholders(
     formatStringToUse: String,
-    components: Seq[Elem]
-  ): Elem = {
+    components: Seq[NodeSeq]
+  ): Seq[Node] = {
     val matcher = Pattern.compile("%(\\d+)").matcher(formatStringToUse)
     var indexOfLastMatchEnd = 0
-    val childElems = new ListBuffer[Node]
+    val nodes = new ListBuffer[Node]
     while (matcher.find()) {
       val intermediateNode = new Text(formatStringToUse.substring(indexOfLastMatchEnd, matcher.start()))
       val componentIndex = matcher.group(1).toInt
-      childElems += intermediateNode
-      childElems += components(componentIndex)
+      nodes += intermediateNode
+      nodes ++= components(componentIndex)
       indexOfLastMatchEnd = matcher.end()
     }
-    childElems += new Text(formatStringToUse.substring(indexOfLastMatchEnd))
-    <span>{childElems.toList}</span>
+    nodes += new Text(formatStringToUse.substring(indexOfLastMatchEnd))
+    nodes.toList
   }
 }
 

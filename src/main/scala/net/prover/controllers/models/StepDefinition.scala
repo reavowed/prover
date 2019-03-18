@@ -1,23 +1,23 @@
 package net.prover.controllers.models
 
-import net.prover.model.{Inference, Parser, ParsingContext, Substitutions}
-import ValueOrResponseEntityConverters._
+import net.prover.model._
 import net.prover.model.expressions.{Statement, Term}
+import net.prover.controllers._
 
 import scala.util.Try
 
 case class StepDefinition(inferenceId: String, substitutions: StepDefinition.Substitutions) {
-  def getInference(parsingContext: ParsingContext): ValueOrResponseEntity[Inference] = {
+  def getInference(parsingContext: ParsingContext): Try[Inference] = {
     parsingContext.inferences.find(_.id == inferenceId).orBadRequest(s"Invalid inference $inferenceId")
   }
-  def parseSubstitutions(inference: Inference)(implicit parsingContext: ParsingContext): ValueOrResponseEntity[Substitutions] = {
+  def parseSubstitutions(inference: Inference)(implicit parsingContext: ParsingContext): Try[Substitutions] = {
     def lookup[T](
       required: Seq[String],
       source: Map[String, String],
       parser: Parser[T],
       description: String
-    ): ValueOrResponseEntity[Map[String, T]] = {
-      required.mapToMapOfResponseEntities { name =>
+    ): Try[Map[String, T]] = {
+      required.mapTryToMap { name =>
         for {
           input <- source.get(name).orBadRequest(s"Missing substitution $description $name")
           value <- Try(parser.parseFromString(input, "")).toOption.orBadRequest(s"Invalid substitution $description $name '$input'")

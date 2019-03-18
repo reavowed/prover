@@ -5,14 +5,14 @@ import net.prover.model.expressions._
 import net.prover.model._
 
 import scala.util.control.NonFatal
-import scala.xml.Elem
+import scala.xml.{Elem, Node, NodeSeq}
 
 object ExpressionView {
-  def apply(expression: Expression)(implicit displayContext: DisplayContext): Elem = {
+  def apply(expression: Expression)(implicit displayContext: DisplayContext): NodeSeq = {
     apply(expression, internalPath = Nil, safe = false)
   }
 
-  private def apply(expression: Expression, internalPath: Seq[Int], safe: Boolean)(implicit displayContext: DisplayContext): Elem = {
+  private def apply(expression: Expression, internalPath: Seq[Int], safe: Boolean)(implicit displayContext: DisplayContext): NodeSeq = {
     displayContext.displayShorthands
       .mapFind(withShorthand(expression, internalPath, _, safe))
       .getOrElse(directly(expression, internalPath, safe))
@@ -28,8 +28,8 @@ object ExpressionView {
     for {
       rawComponents <- shorthand.template.matchExpression(expression)
       components = rawComponents.map {
-        case Template.Match.BoundVariable(name) =>
-          leaf(name)
+        case Template.Match.BoundVariable(name, index, variableInternalPath) =>
+          boundVariable(name, index, variableInternalPath)
         case Template.Match.Component(e, boundVariableNames, componentInternalPath) =>
           apply(e, internalPath ++ componentInternalPath, safe = false)(displayContext.withBoundVariableLists(boundVariableNames))
       }
@@ -41,13 +41,13 @@ object ExpressionView {
     internalPath: Seq[Int],
     safe: Boolean)(
     implicit displayContext: DisplayContext
-  ): Elem = {
+  ): NodeSeq = {
     expression match {
       case ExpressionVariable(text) => leaf(text)
       case DefinedExpression(definition, boundVariableNames, components) =>
         formatted(
           definition.format,
-          boundVariableNames.map(leaf) ++ components.mapWithIndex { (component, index) => {
+          boundVariableNames.mapWithIndex((name, index) => boundVariable(name, index, Nil)) ++ components.mapWithIndex { (component, index) => {
             ExpressionView(
               component,
               internalPath :+ index,
@@ -73,10 +73,13 @@ object ExpressionView {
     }
   }
 
-  private def leaf(text: String): Elem = {
-    <span>{HtmlHelper.format(text)}</span>
+  private def leaf(text: String): Seq[Node] = {
+    HtmlHelper.format(text)
   }
-  private def formatted(format: Format, components: Seq[Elem], internalPath: Seq[Int], safe: Boolean): Elem = {
+  private def boundVariable(text: String, index: Int, furtherPath: Seq[Int]): Elem = {
+    <span class="boundVariable" data-index={index.toString} data-further-path={if (furtherPath.nonEmpty) furtherPath.mkString(".") else null}>{HtmlHelper.format(text)}</span>
+  }
+  private def formatted(format: Format, components: Seq[NodeSeq], internalPath: Seq[Int], safe: Boolean): Elem = {
     <span data-path={internalPath.mkString(".")}>{format.formatHtml(components, safe)}</span>
   }
 }

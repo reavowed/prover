@@ -1,21 +1,21 @@
 package net.prover.controllers
 
-import monocle.macros.GenLens
 import net.prover.controllers.BookController.NewTheoremModel
+import net.prover.exceptions.{BadRequestException, NotFoundException}
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Proof, Reference, Step}
 import net.prover.services.BookService
-import net.prover.utils.Traversals
 import net.prover.views._
-import org.slf4j.LoggerFactory
+import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation._
 
 import scala.util.control.NonFatal
+import scala.util.{Failure, Success}
 
 @RestController
 @RequestMapping(Array("/books"))
@@ -71,7 +71,7 @@ class BookController @Autowired() (bookService: BookService) {
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newTheoremDefininition: NewTheoremModel
-  ) = {
+  ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (_, book, chapter) =>
       implicit val parsingContext: ParsingContext = getChapterParsingContext(book, chapter)
       val premises = newTheoremDefininition.premises
@@ -89,11 +89,11 @@ class BookController @Autowired() (bookService: BookService) {
       val existingTheoremOption = parsingContext.inferences.find(_.id == newTheorem.id)
       existingTheoremOption match {
         case Some(_) =>
-          (None, new ResponseEntity[String]("An inference with these premises and conclusion already exists", HttpStatus.BAD_REQUEST))
+          Failure(BadRequestException("An inference with these premises and conclusion already exists"))
         case None =>
-          (Some(newTheorem), new ResponseEntity(HttpStatus.OK))
+          Success((newTheorem, ()))
       }
-    }.getOrElse(new ResponseEntity(HttpStatus.NOT_FOUND))
+    }.toResponseEntity
   }
 
   @GetMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}"), produces = Array("text/html;charset=UTF-8"))
@@ -132,16 +132,19 @@ class BookController @Autowired() (bookService: BookService) {
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("entryKey") entryKey: String
-  ) = {
+  ): ResponseEntity[_] = {
     bookService.modifyChapter(bookKey, chapterKey){ (books, _, chapter) =>
       chapter.entries.ofType[ChapterEntry.WithKey].find(_.key.value == entryKey) match {
-      case Some(inference: Inference) if getUsages(inference, books).isEmpty =>
-        (Some(chapter.copy(entries = chapter.entries.filter(_ != inference))), new ResponseEntity(HttpStatus.OK))
-      case Some(_: Inference) => (None, new ResponseEntity[String]("Cannot delete inference with usages", HttpStatus.BAD_REQUEST))
-      case Some(_) => (None, new ResponseEntity("Deleting non-inference usages not yet supported", HttpStatus.BAD_REQUEST))
-      case None => (None, new ResponseEntity(HttpStatus.NOT_FOUND))
+        case Some(inference: Inference) if getUsages(inference, books).isEmpty =>
+          Success((chapter.copy(entries = chapter.entries.filter(_ != inference)), ()))
+        case Some(_: Inference) =>
+          Failure(BadRequestException("Cannot delete inference with usages"))
+        case Some(_) =>
+          Failure(BadRequestException("Deleting non-inference entries not yet supported"))
+        case None =>
+          Failure(NotFoundException(s"Entry $entryKey"))
       }
-    }.getOrElse(new ResponseEntity(HttpStatus.NOT_FOUND))
+    }.toResponseEntity
   }
 
   @PutMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}/shorthand"), produces = Array("application/json;charset=UTF-8"))
@@ -150,13 +153,10 @@ class BookController @Autowired() (bookService: BookService) {
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("entryKey") entryKey: String,
     @RequestBody(required = false) newShorthand: String
-  ) = {
-    bookService.updateBooks(Traversals.filter[Book](_.key.value == bookKey)
-      .composeLens(GenLens[Book](_.chapters))
-      .composeTraversal(Traversals.filter[Chapter](_.key.value == chapterKey))
-      .composeLens(GenLens[Chapter](_.entries))
-      .composeTraversal(Traversals.filterWithType[ChapterEntry, ExpressionDefinition](_.key.value == entryKey))
-      .modify(_.withShorthand(Option(newShorthand).filter(_.nonEmpty))))
+  ): ResponseEntity[_] = {
+    bookService.modifyEntry[ExpressionDefinition, Unit](bookKey, chapterKey, entryKey) { (books, book, chapter, definition) =>
+      Success((definition.withShorthand(Option(newShorthand).filter(_.nonEmpty)), ()))
+    }.toResponseEntity
   }
 
   private def getUsages(inference: Inference, books: Seq[Book]): Seq[(Book, Chapter, Seq[Theorem])] = {
@@ -180,7 +180,7 @@ class BookController @Autowired() (bookService: BookService) {
 }
 
 object BookController {
-  val logger = LoggerFactory.getLogger(BookController.getClass)
+  val logger: Logger = LoggerFactory.getLogger(BookController.getClass)
 
   case class NewTheoremModel(
     name: String,

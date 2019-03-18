@@ -18,14 +18,14 @@ $(() => {
   let openPopoverHolder = null;
 
   $(".proofLine").each(function() {
-    let $this = $(this);
-    let holder = $this.find(".popover-holder");
+    let proofLine = $(this);
+    let holder = proofLine.find(".popover-holder");
     holder.popover({
       placement: "bottom",
       html: true,
       trigger: "focus"
     });
-    $this
+    proofLine
       .on("click", e => {
         if ($(e.target).parents(".popover").length) {
           return;
@@ -33,7 +33,8 @@ $(() => {
         if (openPopoverHolder && openPopoverHolder !== holder) {
           openPopoverHolder.popover("hide");
         }
-        holder.popover("toggle");
+        holder.popover("show");
+        bindPopover(proofLine);
         e.stopPropagation();
       })
       .on("show.bs.popover", function() {
@@ -46,14 +47,44 @@ $(() => {
       });
   });
   $("body").on("click", e => {
-      // Don't hide the popover if we're clicking ON it
-      if ($(e.target).parents(".popover").length) {
+      // Don't hide the popover if we're clicking ON it or it's triggered a modal
+      if ($(e.target).parents(".popover, .modal").length) {
         return;
       }
       if (openPopoverHolder) {
         openPopoverHolder.popover("hide");
       }
     });
+
+  function bindPopover(proofLine) {
+    let lineReference = proofLine.attr("data-reference");
+    proofLine.off("click.editBoundVariable").on("click.editBoundVariable", ".editablePremise .boundVariable", function() {
+      let boundVariableElement = $(this);
+      let premiseIndex = boundVariableElement.parents(".editablePremise").attr("data-index");
+      let index = boundVariableElement.attr("data-index");
+      let parentWithPath = boundVariableElement.parents("[data-path]").eq(0);
+      let path = parentWithPath ? parentWithPath.attr("data-path") : "";
+      let currentName = boundVariableElement.text();
+      $("#boundVariableNameInput").val(currentName);
+      $("#saveBoundVariableNameButton").off("click").on("click", () => {
+        let newName =  $("#boundVariableNameInput").val();
+        $.ajax({
+          url: `${window.location.pathname}/${lineReference}/premises/${premiseIndex}/statement/${path}/boundVariables/${index}`,
+          type: 'PUT',
+          data: newName,
+          processData: false,
+          'contentType': 'text/plain'
+        }).then(
+          response => {
+            boundVariableElement.parents(".editablePremise").html(response.html);
+            $("#editBoundVariableModal").modal("hide");
+          },
+          response => showTemporaryTooltip($("#saveBoundVariableNameButton"), response.responseJSON)
+        );
+      });
+      $("#editBoundVariableModal").modal("show");
+    })
+  }
 
   $(document).on("click", "button.proveStatement", function() {
     let button = $(this);

@@ -2,60 +2,70 @@ package net.prover.services
 
 import java.nio.file.{Files, Path, Paths}
 
+import net.prover.exceptions.NotFoundException
 import net.prover.model._
 import net.prover.model.entries._
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 import scala.collection.JavaConverters._
-import scala.reflect.ClassTag
+import scala.reflect._
+import scala.util.{Failure, Success, Try}
 
 @Service
 class BookService {
-  val bookDirectoryPath = Paths.get("books")
-  val cacheDirectoryPath = Paths.get("cache")
+  private val bookDirectoryPath = Paths.get("books")
+  private val cacheDirectoryPath = Paths.get("cache")
 
   private var _books = parseBooks.getOrElse(Nil)
 
-  def books = _books
+  def books: Seq[Book] = _books
 
-  def updateBooks(f: Seq[Book] => Seq[Book]) = updateBooksWithResult[Unit](books => (f(books), ()))
-
-  def updateBooksWithResult[T](f: Seq[Book] => (Seq[Book], T)): T = synchronized {
-    val (newBooks, result) = f(_books)
-    writeBooks(newBooks)
-    _books = newBooks
-    result
+  def modifyBooks[T](f: Seq[Book] => Try[(Seq[Book], T)]): Try[T] = synchronized {
+    val newBooksAndResult = f(_books)
+    newBooksAndResult.map(_._1).foreach { newBooks =>
+      writeBooks(newBooks)
+      _books = newBooks
+    }
+    newBooksAndResult.map(_._2)
   }
 
-  def modifyChapter[T](bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => (Option[Chapter], T)): Option[T] = {
-    updateBooksWithResult[Option[T]] { books =>
-      (for {
-        (book, bookIndex) <- books.findWithIndex(_.key.value == bookKey)
-        (chapter, chapterIndex) <- book.chapters.findWithIndex(_.key.value == chapterKey)
-      } yield {
-        f(books, book, chapter).mapLeft {
-          case Some(newChapter) =>
-            books.updated(bookIndex, book.copy(chapters = book.chapters.updated(chapterIndex, newChapter)))
-          case None =>
-            books
+  def modifyBook[T](bookKey: String)(f: (Seq[Book], Book) => Try[(Book, T)]): Try[T] = {
+    modifyBooks[T] { books =>
+      books.updateSingleIfDefinedWithResult {
+        case book if book.key.value == bookKey =>
+          f(books, book)
+      }.orException(NotFoundException(s"Book $bookKey"))
+    }
+  }
+
+  def modifyChapter[T](bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => Try[(Chapter, T)]): Try[T] = {
+    modifyBook[T](bookKey) { (books, book) =>
+      book.chapters
+        .updateSingleIfDefinedWithResult {
+          case chapter if chapter.key.value == chapterKey =>
+            f(books, book, chapter)
         }
-      }) match {
-        case Some((newBooks, result)) => (newBooks, Some(result))
-        case None => (books, None)
-      }
+        .orException(NotFoundException(s"Chapter $chapterKey"))
+        .map(_.mapLeft(newChapters => book.copy(chapters = newChapters)))
     }
   }
 
-  def addChapterEntry[T](bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => (Option[ChapterEntry], T)): Option[T] = {
+  def modifyEntry[TEntry <: ChapterEntry.WithKey : ClassTag, TResult](bookKey: String, chapterKey: String, entryKey: String)(f: (Seq[Book], Book, Chapter, TEntry) => Try[(TEntry, TResult)]): Try[TResult] = {
+    modifyChapter[TResult](bookKey, chapterKey) { (books, book, chapter) =>
+      chapter.entries
+        .updateSingleIfDefinedWithResult {
+          case entry if entry.isRuntimeInstance[TEntry] && entry.asInstanceOf[TEntry].key.value == entryKey =>
+            f(books, book, chapter, entry.asInstanceOf[TEntry])
+        }
+        .orException(NotFoundException(s"${classTag[TEntry].runtimeClass.getSimpleName} $entryKey"))
+        .map(_.mapLeft(newEntries => chapter.copy(entries = newEntries)))
+    }
+  }
+
+  def addChapterEntry[T](bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => Try[(ChapterEntry, T)]): Try[T] = {
     modifyChapter(bookKey, chapterKey) { (books, book, chapter) =>
-      f(books, book, chapter).mapLeft(_.map(chapter.addEntry))
-    }
-  }
-
-  def modifyEntry[T <: ChapterEntry.WithKey : ClassTag](bookKey: String, chapterKey: String, entryKey: String)(f: T => T): Option[Unit] = {
-    modifyChapter(bookKey, chapterKey){ (_, _, chapter) =>
-      (Some(chapter.copy(entries = chapter.entries.map(e => e.asOptionalInstanceOf[T].filter(_.key.value == entryKey).map(f).getOrElse(e)))), ())
+      f(books, book, chapter).map(_.mapLeft(chapter.addEntry))
     }
   }
 

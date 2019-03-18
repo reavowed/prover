@@ -187,6 +187,27 @@ package object model {
     def replaceWhere(f: T => Boolean)(t: T): Seq[T] = {
       seq.map(x => if (f(x)) t else x)
     }
+    def updateSingleIfDefinedWithResult[S](update: PartialFunction[T, Try[(T, S)]]): Option[Try[(Seq[T], S)]] = {
+      seq.findWithIndex(update.isDefinedAt).map { case (currentValue, index) =>
+        update(currentValue).map { case (newValue, result) =>
+          (seq.updated(index, newValue), result)
+        }
+      }
+    }
+    def updateAtIndex(index: Int)(f: T => T): Option[Seq[T]] = {
+      seq.lift(index).map(t => seq.updated(index, f(t)))
+    }
+    def updateAtIndexIfDefinedWithResult[S](index: Int)(f: T => Try[(T, S)]): Option[Try[(Seq[T], S)]] = {
+      seq.lift(index).map(f).map(_.map(_.mapLeft(seq.updated(index, _))))
+    }
+    def mapTryToMap[S](f: T => Try[S]): Try[Map[T, S]] = {
+      seq.foldLeft(Try(Map.empty[T, S])) { (mapTry, key) =>
+        for {
+          map <- mapTry
+          value <- f(key)
+        } yield map + (key -> value)
+      }
+    }
   }
 
   implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {
@@ -288,6 +309,13 @@ package object model {
         case _ =>
       }
       x
+    }
+  }
+
+  implicit class OptionTryOps[T](x: Option[Try[T]]) {
+    def orException(exception: Exception): Try[T] = x match {
+      case Some(t) => t
+      case None => Failure(exception)
     }
   }
 

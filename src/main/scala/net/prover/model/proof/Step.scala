@@ -4,6 +4,8 @@ import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model._
 
+import scala.util.Try
+
 sealed trait Step {
   def reference: Reference.Direct
   def provenStatements: Seq[ProvenStatement]
@@ -236,11 +238,13 @@ object Step {
       def referencedInferenceIds: Set[String]
       def referencedLines: Set[PreviousLineReference]
       def serialized: String
+      def updateStatement(f: Statement => Try[Statement]): Try[Premise]
     }
     case class FloatingPremise(statement: Statement) extends Premise {
       override def serialized: String = "?"
       override def referencedInferenceIds: Set[String] = Set.empty
       override def referencedLines: Set[PreviousLineReference] = Set.empty
+      override def updateStatement(f: Statement => Try[Statement]): Try[FloatingPremise] = f(statement).map(FloatingPremise)
     }
 
     def premisesParser(statements: Seq[Statement]): Parser[Seq[Premise]] = {

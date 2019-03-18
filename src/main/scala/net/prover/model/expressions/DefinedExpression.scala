@@ -11,18 +11,19 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   def definition: ExpressionDefinition
 
   def getMatch(other: Expression): Option[Seq[Expression]]
-  def update(newComponents: Seq[Expression]): ExpressionType
+  def updateComponents(newComponents: Seq[Expression]): ExpressionType
+  def updateBoundVariableNames(newBoundVariableNames: Seq[String]): ExpressionType
 
   private def increaseDepth(internalDepth: Int) = if (scopedBoundVariableNames.nonEmpty) internalDepth + 1 else internalDepth
 
   override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {
-    update(components.map(_.insertExternalParameters(numberOfParametersToInsert, increaseDepth(internalDepth))))
+    updateComponents(components.map(_.insertExternalParameters(numberOfParametersToInsert, increaseDepth(internalDepth))))
   }
   override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType] = {
     components
       .map(_.removeExternalParameters(numberOfParametersToRemove, increaseDepth(internalDepth)))
       .traverseOption
-      .map(update)
+      .map(updateComponents)
   }
 
   override def specify(
@@ -30,7 +31,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     internalDepth: Int,
     externalDepth: Int
   ): ExpressionType = {
-    update(components.map(_.specify(targetArguments, increaseDepth(internalDepth), externalDepth)))
+    updateComponents(components.map(_.specify(targetArguments, increaseDepth(internalDepth), externalDepth)))
   }
   def specifyWithSubstitutions(
     targetArguments: Seq[Term],
@@ -41,7 +42,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   ) = {
     components
       .map(_.specifyWithSubstitutions(targetArguments, substitutions, increaseDepth(internalDepth), previousInternalDepth, externalDepth)).traverseOption
-      .map(update)
+      .map(updateComponents)
   }
 
   override def requiredSubstitutions = components.requiredSubstitutions
@@ -60,7 +61,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     internalDepth: Int,
     externalDepth: Int
   ): Option[ExpressionType] = {
-    components.applySubstitutions(substitutions, increaseDepth(internalDepth), externalDepth).map(update)
+    components.applySubstitutions(substitutions, increaseDepth(internalDepth), externalDepth).map(updateComponents)
   }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
@@ -70,7 +71,19 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     externalDepth: Int
   ): Seq[(ExpressionType, Substitutions)] = {
     components.calculateApplicatives(baseArguments, substitutions, increaseDepth(internalDepth), previousInternalDepth, externalDepth)
-      .map(_.mapLeft(update))
+      .map(_.mapLeft(updateComponents))
+  }
+
+  override def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = {
+    path match {
+      case Nil =>
+        if (scopedBoundVariableNames.lift(index).nonEmpty)
+          Some(updateBoundVariableNames(scopedBoundVariableNames.updated(index, newName)))
+        else
+          None
+      case head +: tail =>
+        components.lift(head).flatMap(_.renameBoundVariable(newName, index, tail)).map(e => updateComponents(components.updated(head, e)))
+    }
   }
 
   override def findComponentPath(other: Expression): Option[Seq[Int]] = {

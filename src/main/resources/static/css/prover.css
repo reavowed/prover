@@ -31,7 +31,7 @@
     border-radius: 5px;
 }
 
-.result h5 {
+h5 {
     font-weight: bold;
     margin-top: 5px;
     margin-bottom: 0;
@@ -41,7 +41,7 @@
     margin-top: 2px;
 }
 
-.result h5:not(:last-child) {
+h5:not(:last-child) {
     margin-bottom: 3px;
 }
 
@@ -147,4 +147,9 @@ table {
     cursor: pointer;
     color: #fff;
     background-color: #0097cf;
+}
+
+.editablePremise .boundVariable:hover {
+    color: red;
+    cursor: pointer;
 }

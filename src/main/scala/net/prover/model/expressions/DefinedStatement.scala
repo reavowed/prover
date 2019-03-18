@@ -8,13 +8,16 @@ case class DefinedStatement(
     val scopedBoundVariableNames: Seq[String])
  extends Statement with DefinedExpression[Statement]
 {
-  override def getMatch(other: Expression): Option[(Seq[Expression])] = other match {
+  override def getMatch(other: Expression): Option[Seq[Expression]] = other match {
     case DefinedStatement(otherComponents, `definition`) =>
       Some(otherComponents)
     case _ =>
       None
   }
-  override def update(newComponents: Seq[Expression]) = {
+  override def updateComponents(newComponents: Seq[Expression]): DefinedStatement = {
     DefinedStatement(newComponents, definition)(scopedBoundVariableNames)
+  }
+  override def updateBoundVariableNames(newBoundVariableNames: Seq[String]): DefinedStatement = {
+    DefinedStatement(components, definition)(newBoundVariableNames)
   }
 }

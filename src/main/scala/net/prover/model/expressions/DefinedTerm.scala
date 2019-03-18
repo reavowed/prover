@@ -9,14 +9,17 @@ case class DefinedTerm(
     val scopedBoundVariableNames: Seq[String])
   extends Term with DefinedExpression[Term]
 {
-  override def getMatch(other: Expression): Option[(Seq[Expression])] = other match {
+  override def getMatch(other: Expression): Option[Seq[Expression]] = other match {
     case DefinedTerm(otherComponents, `definition`) =>
       Some(otherComponents)
     case _ =>
       None
   }
-  override def update(newComponents: Seq[Expression]) = {
+  override def updateComponents(newComponents: Seq[Expression]): DefinedTerm = {
     DefinedTerm(newComponents, definition)(scopedBoundVariableNames)
+  }
+  override def updateBoundVariableNames(newBoundVariableNames: Seq[String]): DefinedTerm = {
+    DefinedTerm(components, definition)(newBoundVariableNames)
   }
 
   override def calculateApplicatives(

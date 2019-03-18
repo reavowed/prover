@@ -1,21 +1,21 @@
 package net.prover.controllers
 
 import net.prover.controllers.TheoremController._
-import net.prover.controllers.models.{StepDefinition, ValueOrResponseEntity}
+import net.prover.controllers.models.StepDefinition
+import net.prover.model._
 import net.prover.model.entries.{StatementDefinition, TermDefinition, Theorem}
 import net.prover.model.expressions.Expression
-import net.prover.model.proof.{ProvenStatement, Reference, Step, StepContext}
-import net.prover.model.{Book, Chapter, DisplayContext, Inference, ParsingContext, Substitutions}
+import net.prover.model.proof.{Step, StepContext}
 import net.prover.services.BookService
 import net.prover.views.ExpressionView
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.convert.converter.Converter
-import org.springframework.http.{HttpStatus, ResponseEntity}
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation._
-import net.prover.controllers.models.ValueOrResponseEntityConverters._
 
 import scala.reflect._
+import scala.util.Try
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}"))
@@ -25,7 +25,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepReference") stepReference: StepReference,
+    @PathVariable("stepReference") stepReference: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
     (for {
@@ -52,42 +52,73 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepReference") stepReference: StepReference,
+    @PathVariable("stepReference") stepReference: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    (for {
-      (book, chapter, theorem, oldStep, stepContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference)
-      parsingContext = getTheoremParsingContext(book, chapter, theorem)
-      inference <- definition.getInference(parsingContext)
-      substitutions <- definition.parseSubstitutions(inference)(parsingContext)
-      premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, oldStep.statement, stepContext.externalDepth)
-    } yield {
-      val newStep = Step.NewAssert(
-        oldStep.statement,
-        inference,
-        premiseStatements.map(Step.NewAssert.FloatingPremise.apply),
-        substitutions,
-        oldStep.reference)
-      bookService.modifyEntry[Theorem](bookKey, chapterKey, theoremKey)(_.replaceStep(stepReference.indexes, newStep))
-      null
-    }).toResponseEntity
+    modifyStep[Step.Target, Unit](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, oldStep, stepContext) =>
+      val parsingContext: ParsingContext = getTheoremParsingContext(book, chapter, theorem)
+      for {
+        inference <- definition.getInference(parsingContext)
+        substitutions <- definition.parseSubstitutions(inference)(parsingContext)
+        premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, oldStep.statement, stepContext.externalDepth)
+      } yield {
+        (Step.NewAssert(
+          oldStep.statement,
+          inference,
+          premiseStatements.map(Step.NewAssert.FloatingPremise.apply),
+          substitutions,
+          oldStep.reference),
+          ())
+      }
+    }.toResponseEntity
   }
 
-  private def findTheorem(bookKey: String, chapterKey: String, theoremKey: String): ValueOrResponseEntity[(Book, Chapter, Theorem)] = {
-    (for {
-      book <- bookService.books.find(_.key.value == bookKey)
-      chapter <- book.chapters.find(_.key.value == chapterKey)
-      theorem <- chapter.entries.ofType[Theorem].find(_.key.value == theoremKey)
-    } yield (book, chapter, theorem)).orNotFound
+  @PutMapping(value = Array("/{stepReference}/premises/{premiseIndex}/statement/{expressionPath}/boundVariables/{boundVariableIndex}"))
+  def editBoundVariableName(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepPath: PathData,
+    @PathVariable("premiseIndex") premiseIndex: Int,
+    @PathVariable("expressionPath") expressionPath: PathData,
+    @PathVariable("boundVariableIndex") boundVariableIndex: Int,
+    @RequestBody newBoundVariableName: String
+  ): ResponseEntity[_] = {
+    modifyStep[Step.NewAssert, ExpressionSummary](bookKey, chapterKey, theoremKey, stepPath) { (book, _, _, oldStep, _) =>
+      import book.displayContext
+      for {
+        (newPremises, newPremise) <- oldStep.premises.updateAtIndexIfDefinedWithResult(premiseIndex) { p =>
+          p.updateStatement(_.renameBoundVariable(newBoundVariableName, boundVariableIndex, expressionPath.indexes).orNotFound(s"Bound variable $boundVariableIndex at ${expressionPath.indexes.mkString(".")}")).map(x => (x, x))
+        }.orNotFound(s"Premise $premiseIndex").flatten
+      } yield (oldStep.copy(premises = newPremises), ExpressionSummary(newPremise.statement))
+    }.toResponseEntity
   }
 
-  private def findStep[T <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepReference: StepReference): ValueOrResponseEntity[(Book, Chapter, Theorem, T, StepContext)] = {
+  private def findTheorem(bookKey: String, chapterKey: String, theoremKey: String): Try[(Book, Chapter, Theorem)] = {
+    for {
+      book <- bookService.books.find(_.key.value == bookKey).orNotFound(s"Book $bookKey")
+      chapter <- book.chapters.find(_.key.value == chapterKey).orNotFound(s"Chapter $chapterKey")
+      theorem <- chapter.entries.ofType[Theorem].find(_.key.value == theoremKey).orNotFound(s"Theorem $theoremKey")
+    } yield (book, chapter, theorem)
+  }
+
+  private def findStep[T <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepReference: PathData): Try[(Book, Chapter, Theorem, T, StepContext)] = {
     for {
       (book, chapter, theorem) <- findTheorem(bookKey, chapterKey, theoremKey)
-      (rawStep, stepContext) <- theorem.findStepWithContext(stepReference.indexes).orNotFound
-      step <- rawStep.asOptionalInstanceOf[T].orResponseEntity(new ResponseEntity(s"Step was not ${classTag[T].runtimeClass.getName}", HttpStatus.BAD_REQUEST))
+      (rawStep, stepContext) <- theorem.findStepWithContext(stepReference.indexes).orNotFound(s"Step ${stepReference.indexes.mkString(".")}")
+      step <- rawStep.asOptionalInstanceOf[T].orBadRequest(s"Step was not ${classTag[T].runtimeClass.getName}")
     } yield {
       (book, chapter, theorem, step, stepContext)
+    }
+  }
+
+  private def modifyStep[TStep <: Step : ClassTag, TResult](bookKey: String, chapterKey: String, theoremKey: String, stepReference: PathData)(f: (Book, Chapter, Theorem, TStep, StepContext) => Try[(Step, TResult)]): Try[TResult] = {
+    bookService.modifyEntry[Theorem, TResult](bookKey, chapterKey, theoremKey) { (_, book, chapter, theorem) =>
+      for {
+        (rawStep, stepContext) <- theorem.findStepWithContext(stepReference.indexes).orNotFound(s"Step ${stepReference.indexes.mkString(".")}")
+        oldStep <- rawStep.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
+        (newStep, result) <- f(book, chapter, theorem, oldStep, stepContext)
+      } yield (theorem.replaceStep(stepReference.indexes, newStep), result)
     }
   }
 
@@ -102,10 +133,10 @@ class TheoremController @Autowired() (bookService: BookService) {
       Nil)
   }
 
-  case class StepReference(indexes: Seq[Int])
+  case class PathData(indexes: Seq[Int])
   @Component
-  class StepReferenceConverter extends Converter[String, StepReference] {
-    override def convert(source: String): StepReference = StepReference(source.split('.').map(_.toInt))
+  class StepReferenceConverter extends Converter[String, PathData] {
+    override def convert(source: String): PathData = PathData(source.split('.').map(_.toInt))
   }
 }
 

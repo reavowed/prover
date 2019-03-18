@@ -79,6 +79,7 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     externalDepth: Int
   ): Seq[(ExpressionType, Substitutions)]
 
+  def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = None
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
     if (this == other) {
       Some(Nil)

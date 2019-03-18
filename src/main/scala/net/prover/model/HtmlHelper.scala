@@ -6,43 +6,43 @@ import net.prover.model.proof.InferenceApplication
 import net.prover.model.proof.Reference.Elided
 
 import scala.collection.mutable.ListBuffer
-import scala.xml.{Elem, Node, NodeSeq, Text}
+import scala.xml.{Node, Text}
 
 object HtmlHelper {
-  def format(text: String): Elem = {
+  def format(text: String): Seq[Node] = {
     val matcher = Pattern.compile("(_|\\^)([^\\s)}]+)").matcher(text)
     var indexOfLastMatchEnd = 0
-    val childElems = new ListBuffer[Node]
+    val nodes = new ListBuffer[Node]
     while (matcher.find()) {
       val intermediateNode = new Text(text.substring(indexOfLastMatchEnd, matcher.start()))
       val innerText = matcher.group(2)
-      childElems += intermediateNode
-      childElems += (matcher.group(1) match {
+      nodes += intermediateNode
+      nodes += (matcher.group(1) match {
         case "_" => <sub>{innerText}</sub>
         case "^" => <sup>{innerText}</sup>
       })
       indexOfLastMatchEnd = matcher.end()
     }
-    childElems += new Text(text.substring(indexOfLastMatchEnd))
-    <span>{childElems.toList}</span>
+    nodes += new Text(text.substring(indexOfLastMatchEnd))
+    nodes.toList
   }
 
-  def formatWithReplacement(text: String, replacementFunction: String => Elem): Elem = {
+  def formatWithReplacement(text: String, replacementFunction: String => Seq[Node]): Seq[Node] = {
     val matcher = Pattern.compile("(_|\\^)([^\\s)}]+)").matcher(text)
     var indexOfLastMatchEnd = 0
-    val childElems = new ListBuffer[Node]
+    val nodes = new ListBuffer[Node]
     while (matcher.find()) {
-      val intermediateNode = replacementFunction(text.substring(indexOfLastMatchEnd, matcher.start()))
+      val intermediateNodes = replacementFunction(text.substring(indexOfLastMatchEnd, matcher.start()))
       val innerNode = replacementFunction(matcher.group(2))
-      childElems += intermediateNode
-      childElems += (matcher.group(1) match {
+      nodes ++= intermediateNodes
+      nodes += (matcher.group(1) match {
         case "_" => <sub>{innerNode}</sub>
         case "^" => <sup>{innerNode}</sup>
       })
       indexOfLastMatchEnd = matcher.end()
     }
-    childElems += replacementFunction(text.substring(indexOfLastMatchEnd))
-    <span>{childElems.toList}</span>
+    nodes ++= replacementFunction(text.substring(indexOfLastMatchEnd))
+    nodes.toList
   }
 
   def findInferenceToDisplay(inferenceApplication: InferenceApplication): Inference = {
