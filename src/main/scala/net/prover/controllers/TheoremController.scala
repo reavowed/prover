@@ -114,7 +114,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     findStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepReference).map { case (book, chapter, theorem, step) =>
       val parsingContext = getTheoremParsingContext(book, chapter, theorem)
       val expansionInferences = parsingContext.inferences.filter(_.rearrangementType == Inference.RearrangementType.Expansion)
-      step.pendingPremises.map { case (p, path) =>
+      step.pendingPremises.map { case (path, p) =>
         val matchingExpansions = expansionInferences.filter(_.conclusion.calculateSubstitutions(p.statement, Substitutions.empty, 0, step.context.externalDepth).nonEmpty)
         PremiseOption(path, matchingExpansions.map(InferenceSummary.apply))
       }
@@ -122,12 +122,12 @@ class TheoremController @Autowired() (bookService: BookService) {
   }
 
   case class UpdatedStep(html: String)
-  @PostMapping(value = Array("/{stepReference}/premises/{premisePath}/rearrangement"))
+  @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/rearrangement"))
   def createRearrangement(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepReference") stepPath: PathData,
+    @PathVariable("stepPath") stepPath: PathData,
     @PathVariable("premisePath") premisePath: PathData,
     @RequestBody inferenceId: String
   ): ResponseEntity[_] = {
@@ -145,7 +145,7 @@ class TheoremController @Autowired() (bookService: BookService) {
       import book.displayContext
       implicit val parsingContext: ParsingContext = getTheoremParsingContext(book, chapter, theorem)
       for {
-        updatedStep <- oldStep.tryUpdatePremiseAtPath(premisePath.indexes, updatePremise(_, oldStep.context)).orNotFound(s"Premise ${premisePath.indexes.mkString(".")} not found").flatten
+        updatedStep <- oldStep.tryUpdatePremiseAtPath(premisePath.indexes, updatePremise(_, oldStep.context)).orNotFound(s"Premise $premisePath not found").flatten
       } yield (updatedStep, UpdatedStep(StepView(updatedStep).toString))
     }.toResponseEntity
   }
@@ -161,7 +161,7 @@ class TheoremController @Autowired() (bookService: BookService) {
   private def findStep[T <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepReference: PathData): Try[(Book, Chapter, Theorem, T)] = {
     for {
       (book, chapter, theorem) <- findTheorem(bookKey, chapterKey, theoremKey)
-      rawStep <- theorem.findStep(stepReference.indexes).orNotFound(s"Step ${stepReference.indexes.mkString(".")}")
+      rawStep <- theorem.findStep(stepReference.indexes).orNotFound(s"Step $stepReference")
       step <- rawStep.asOptionalInstanceOf[T].orBadRequest(s"Step was not ${classTag[T].runtimeClass.getName}")
     } yield {
       (book, chapter, theorem, step)
@@ -171,7 +171,7 @@ class TheoremController @Autowired() (bookService: BookService) {
   private def modifyStep[TStep <: Step : ClassTag, TResult](bookKey: String, chapterKey: String, theoremKey: String, stepReference: PathData)(f: (Book, Chapter, Theorem, TStep) => Try[(Step, TResult)]): Try[TResult] = {
     bookService.modifyEntry[Theorem, TResult](bookKey, chapterKey, theoremKey) { (_, book, chapter, theorem) =>
       for {
-        rawStep <- theorem.findStep(stepReference.indexes).orNotFound(s"Step ${stepReference.indexes.mkString(".")}")
+        rawStep <- theorem.findStep(stepReference.indexes).orNotFound(s"Step $stepReference")
         oldStep <- rawStep.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
         (newStep, result) <- f(book, chapter, theorem, oldStep)
       } yield (theorem.replaceStep(stepReference.indexes, newStep), result)

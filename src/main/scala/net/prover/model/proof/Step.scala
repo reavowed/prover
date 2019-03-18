@@ -234,8 +234,8 @@ object Step {
       Seq(s"prove ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}") ++
         premises.flatMap(_.serializedLines).indent
     }
-    def pendingPremises: Seq[(NewAssert.Premise.Pending, Seq[Int])] = {
-      premises.flatMapWithIndex((p, i) => p.getPendingPremises(Seq(i)))
+    def pendingPremises: Map[Seq[Int], NewAssert.Premise.Pending] = {
+      premises.flatMapWithIndex((p, i) => p.getPendingPremises(Seq(i)).toSeq).toMap
     }
     def tryUpdatePremiseAtPath(path: Seq[Int], f: NewAssert.Premise => Try[NewAssert.Premise]): Option[Try[NewAssert]] = {
       path match {
@@ -252,7 +252,7 @@ object Step {
       def referencedInferenceIds: Set[String]
       def referencedLines: Set[PreviousLineReference]
       def serializedLines: Seq[String]
-      def getPendingPremises(path: Seq[Int]): Seq[(NewAssert.Premise.Pending, Seq[Int])]
+      def getPendingPremises(path: Seq[Int]): Map[Seq[Int], NewAssert.Premise.Pending]
       def updateAtPath(path: Seq[Int], f: Premise => Try[Premise]): Option[Try[Premise]]
     }
     object Premise {
@@ -270,7 +270,7 @@ object Step {
         override def serializedLines: Seq[String] = Seq(s"pending ${statement.serialized}")
         override def referencedInferenceIds: Set[String] = Set.empty
         override def referencedLines: Set[PreviousLineReference] = Set.empty
-        override def getPendingPremises(path: Seq[Int]): Seq[(NewAssert.Premise.Pending, Seq[Int])] = Seq((this, path))
+        override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], NewAssert.Premise.Pending] = Map(path -> this)
       }
       object Pending {
         def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Pending] = {
@@ -282,7 +282,7 @@ object Step {
         override def serializedLines: Seq[String] = Seq("given")
         override def referencedInferenceIds: Set[String] = Set.empty
         override def referencedLines: Set[PreviousLineReference] = Set(reference)
-        override def getPendingPremises(path: Seq[Int]): Seq[(NewAssert.Premise.Pending, Seq[Int])] = Nil
+        override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], NewAssert.Premise.Pending] = Map.empty
       }
       object Given {
         def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Given] = {
@@ -302,7 +302,7 @@ object Step {
           premises.flatMap(_.serializedLines).indent
         override def referencedInferenceIds: Set[String] = Set.empty
         override def referencedLines: Set[PreviousLineReference] = Set.empty
-        override def getPendingPremises(path: Seq[Int]): Seq[(Pending, Seq[Int])] = premises.flatMapWithIndex((p, i) => p.getPendingPremises(path :+ i))
+        override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], NewAssert.Premise.Pending] = premises.flatMapWithIndex((p, i) => p.getPendingPremises(path :+ i).toSeq).toMap
         override def updateAtPath(path: Seq[Int], f: Premise => Try[Premise]): Option[Try[Premise]] = {
           path match {
             case Nil =>

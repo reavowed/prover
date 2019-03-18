@@ -1,5 +1,8 @@
 
 function showTemporaryTooltip(parent, text) {
+  if (typeof text === "object") {
+    text = text.error + ": " + text.message;
+  }
   parent.tooltip({
     placement: "bottom",
     title: text,
