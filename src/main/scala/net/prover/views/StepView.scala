@@ -6,7 +6,7 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.{InferenceApplication, PreviousLineReference, Reference, Step}
 import net.prover.model.proof.Step.NewAssert
 
-import scala.xml.Elem
+import scala.xml._
 
 object StepView {
 
@@ -73,86 +73,89 @@ object StepView {
   private def lineView(
     prefix: String,
     statement: Statement,
-    indentLevel: Int,
     reference: Reference.Direct,
-    additionalReference: Option[String],
     premiseReferences: Set[PreviousLineReference],
-    popover: Option[Popover])(
+    additionalAttributes: Map[String, String],
+    popover: Option[Popover],
+    children: Option[Elem])(
     implicit displayContext: DisplayContext
   ): Elem = {
-    <div class="proofLine" data-reference={reference.value} data-additional-reference={additionalReference.orNull} data-premise-references={JsonMapping.toString(premiseReferences)}>
-      <span class="popover-holder"
+    val elem: Elem = <div class="proofStep">
+      <span class="proofLine"
+            data-reference={reference.value}
+            data-premise-references={JsonMapping.toString(premiseReferences)}
             data-title={popover.map(_.title.toString()).orNull}
             data-content={popover.map(_.content.toString()).orNull}>
-        { for(_ <- 1 to indentLevel) yield { <span>&nbsp;&nbsp;</span> } }
         {HtmlHelper.format(prefix)}
         <span class="conclusion">{ExpressionView(statement)}</span>.
       </span>
+      {children.orNull}
     </div>
+    // Because MetaData.append actually PREpends, and we're fussy
+    def append(head: MetaData, tail: MetaData): MetaData = head match {
+      case Null =>
+        tail
+      case attribute: Attribute =>
+        attribute.copy(append(attribute.next, tail))
+    }
+    val newAttributes = additionalAttributes.foldRight[MetaData](Null) { case ((key, value), currentAttributes) =>
+      new UnprefixedAttribute(key, Text(value), currentAttributes)
+    }
+    elem.copy(attributes = append(elem.attributes, newAttributes))
   }
 
-  def apply(step: Step, indentLevel: Int, additionalReference: Option[String])(implicit displayContext: DisplayContext): Seq[Elem] = {
+  def apply(step: Step)(implicit displayContext: DisplayContext): NodeSeq = {
     step match {
       case Step.Assertion(statement, inferenceApplication, reference) =>
-        Seq(lineView(
+        lineView(
           "Then",
           statement,
-          indentLevel,
           reference,
-          additionalReference,
           inferenceApplication.referencedLines,
-          Some(popover(inferenceApplication))))
+          Map.empty,
+          Some(popover(inferenceApplication)),
+          None)
       case Step.Assumption(assumption, substeps, _, reference) =>
-        val assumptionLine = lineView(
+        lineView(
           "Assume",
           assumption,
-          indentLevel,
           reference.getChildForAssumption,
-          additionalReference,
           Set.empty,
-          None)
-        val substepLines = substeps.flatMapWithIndex { (substep, index) =>
-          StepView(substep, indentLevel + 1, if (index == substeps.length - 1) additionalReference else None)
-        }
-        assumptionLine +: substepLines
+          Map.empty,
+          None,
+          Some(<div class="children proofIndent">{substeps.flatMap(StepView(_))}</div>))
       case Step.Naming(variableName, assumption, substeps, finalInferenceApplication, reference) =>
         val innerContext = displayContext.withBoundVariableList(Seq(variableName))
-        val firstLine = lineView(
+        lineView(
           s"Let $variableName be such that",
           assumption,
-          indentLevel,
           reference.getChildForAssumption,
-          None,
           finalInferenceApplication.referencedLines,
-          Some(popover(finalInferenceApplication)))(
+          Map("data-reference-for-last-child" -> reference.value),
+          Some(popover(finalInferenceApplication)),
+          Some(<div class="children">{substeps.flatMap(StepView(_)(innerContext))}</div>))(
           innerContext)
-        val substepLines = substeps.flatMapWithIndex { (substep, index) =>
-          StepView(substep, indentLevel, if (index == substeps.length - 1) Some(additionalReference.getOrElse(reference.value)) else None)(innerContext)
-        }
-        firstLine +: substepLines
       case Step.ScopedVariable(variableName, substeps, _, _) =>
         val innerContext = displayContext.withBoundVariableList(Seq(variableName))
-        substeps.flatMapWithIndex { (substep, index) =>
-          StepView(substep, indentLevel, if (index == substeps.length - 1) additionalReference else None)(innerContext)
-        }
+        substeps.flatMap(StepView(_)(innerContext))
       case Step.Target(statement, reference) =>
         Seq(lineView(
           "Target:",
           statement,
-          indentLevel,
           reference,
-          additionalReference,
           Set.empty,
-          Some(popoverForTarget(reference))))
+          Map.empty,
+          Some(popoverForTarget(reference)),
+          None))
       case Step.NewAssert(statement, inference, premises, _, reference) =>
         Seq(lineView(
           "Then",
           statement,
-          indentLevel,
           reference,
-          additionalReference,
           Set.empty,
-          Some(popoverForNewAssert(inference, premises))))
+          Map.empty,
+          Some(popoverForNewAssert(inference, premises)),
+          None))
     }
   }
 }

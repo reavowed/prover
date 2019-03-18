@@ -1,11 +1,18 @@
 $(() => {
+  function findLastChild(element) {
+    let lastChild = element.children(".children").children(".proofStep:last-of-type");
+    return lastChild.is("[data-reference-for-last-child]") ? findLastChild(lastChild) : lastChild;
+  }
+  function findElementByReference(lineReference, pathReference) {
+    let outerElement = $(`[data-reference='${lineReference}']`);
+    outerElement = outerElement.length ? outerElement : findLastChild($(`[data-reference-for-last-child='${lineReference}']`));
+    return pathReference.length ? outerElement.find(`[data-path='${pathReference.join(".")}']`) : outerElement;
+  }
+
   $("[data-premise-references]").each(function () {
     let $this = $(this);
     let premiseReferences = JSON.parse($this.attr("data-premise-references"));
-    let premiseElements = _.map(premiseReferences, reference => {
-      let outerElement = $(`[data-reference='${reference.lineReference}'], [data-additional-reference='${reference.lineReference}']`);
-      return reference.internalPath.length ? outerElement.find(`[data-path='${reference.internalPath.join(".")}']`) : outerElement;
-    });
+    let premiseElements = _.map(premiseReferences, reference => findElementByReference(reference.lineReference, reference.internalPath));
     let conclusionElement = $this.find('.conclusion');
     $this
       .on("mouseenter", function () {
@@ -18,12 +25,11 @@ $(() => {
       });
   });
 
-  let openPopoverHolder = null;
+  let proofLineWithOpenPopover = null;
 
   $(".proofLine").each(function() {
     let proofLine = $(this);
-    let holder = proofLine.find(".popover-holder");
-    holder.popover({
+    proofLine.popover({
       placement: "bottom",
       html: true,
       trigger: "focus"
@@ -33,19 +39,19 @@ $(() => {
         if ($(e.target).parents(".popover").length) {
           return;
         }
-        if (openPopoverHolder && openPopoverHolder !== holder) {
-          openPopoverHolder.popover("hide");
+        if (proofLineWithOpenPopover && proofLineWithOpenPopover !== proofLine) {
+          proofLineWithOpenPopover.popover("hide");
         }
-        holder.popover("show");
+        proofLine.popover("show");
         bindPopover(proofLine);
         e.stopPropagation();
       })
       .on("show.bs.popover", function() {
-        openPopoverHolder = holder;
+        proofLineWithOpenPopover = proofLine;
       })
       .on("hide.bs.popover", function() {
-        if (openPopoverHolder === holder) {
-          openPopoverHolder = null;
+        if (proofLineWithOpenPopover === proofLine) {
+          proofLineWithOpenPopover = null;
         }
       });
   });
@@ -54,8 +60,8 @@ $(() => {
       if ($(e.target).parents(".popover, .modal").length) {
         return;
       }
-      if (openPopoverHolder) {
-        openPopoverHolder.popover("hide");
+      if (proofLineWithOpenPopover) {
+        proofLineWithOpenPopover.popover("hide");
       }
     });
 
@@ -134,8 +140,8 @@ $(() => {
           });
       });
 
-    if (openPopoverHolder) {
-      openPopoverHolder.popover("hide");
+    if (proofLineWithOpenPopover) {
+      proofLineWithOpenPopover.popover("hide");
     }
   });
 });
