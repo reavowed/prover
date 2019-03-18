@@ -87,7 +87,7 @@ h5:not(:last-child) {
 }
 
 .proofIndent {
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
 table {
@@ -150,6 +150,15 @@ table {
     background-color: #0097cf;
 }
 
+.assertionPremise {
+    margin: 5px 0;
+}
+
+.assertionPremise .btn {
+    margin-left: 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
 .editablePremise .boundVariable:hover {
     color: red;
     cursor: pointer;

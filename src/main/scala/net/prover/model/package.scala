@@ -76,6 +76,14 @@ package object model {
         acc :+ f(acc, t)
       }
     }
+    def mapTry[S](f: T => Try[S]): Try[Seq[S]] = {
+      seq.foldLeft(Try(Seq.empty[S])) { (previousOption, t) =>
+        for {
+          previous <- previousOption
+          s <- f(t)
+        } yield previous :+ s
+      }
+    }
     def mapFoldOption[S](f: (Seq[S], T) => Option[S]): Option[Seq[S]] = {
       seq.foldLeft(Option(Seq.empty[S])) { case (accOption, t) =>
         accOption.flatMap { acc =>
@@ -197,7 +205,13 @@ package object model {
     def updateAtIndex(index: Int)(f: T => T): Option[Seq[T]] = {
       seq.lift(index).map(t => seq.updated(index, f(t)))
     }
-    def updateAtIndexIfDefinedWithResult[S](index: Int)(f: T => Try[(T, S)]): Option[Try[(Seq[T], S)]] = {
+    def tryUpdateAtIndex[S](index: Int)(f: T => Try[T]): Option[Try[Seq[T]]] = {
+      seq.lift(index).map(f).map(_.map(seq.updated(index, _)))
+    }
+    def tryUpdateAtIndexIfDefined[S](index: Int)(f: T => Option[Try[T]]): Option[Try[Seq[T]]] = {
+      seq.lift(index).flatMap(f).map(_.map(seq.updated(index, _)))
+    }
+    def tryUpdateAtIndexWithResult[S](index: Int)(f: T => Try[(T, S)]): Option[Try[(Seq[T], S)]] = {
       seq.lift(index).map(f).map(_.map(_.mapLeft(seq.updated(index, _))))
     }
     def mapTryToMap[S](f: T => Try[S]): Try[Map[T, S]] = {

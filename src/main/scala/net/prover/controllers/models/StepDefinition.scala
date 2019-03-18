@@ -7,9 +7,6 @@ import net.prover.controllers._
 import scala.util.Try
 
 case class StepDefinition(inferenceId: String, substitutions: StepDefinition.Substitutions) {
-  def getInference(parsingContext: ParsingContext): Try[Inference] = {
-    parsingContext.inferences.find(_.id == inferenceId).orBadRequest(s"Invalid inference $inferenceId")
-  }
   def parseSubstitutions(inference: Inference)(implicit parsingContext: ParsingContext): Try[Substitutions] = {
     def lookup[T](
       required: Seq[String],

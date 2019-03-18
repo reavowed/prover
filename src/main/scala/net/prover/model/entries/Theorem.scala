@@ -18,12 +18,12 @@ case class Theorem(
 {
   def referencedInferenceIds: Set[String] = proof.referencedInferenceIds
   override def inferences: Seq[Inference] = Seq(this)
-  def findStepWithContext(indexes: Seq[Int]): Option[(Step, StepContext)] = {
+  def findStep(indexes: Seq[Int]): Option[Step] = {
     indexes match {
       case Nil =>
         None
       case head +: tail =>
-        proof.steps.findSubstepWithContext(head, tail, StepContext(premises.map(_.provenStatement), 0))
+        proof.steps.findSubstep(head, tail)
     }
   }
   def replaceStep(indexes: Seq[Int], newStep: Step): Theorem = {
@@ -55,7 +55,7 @@ object Theorem extends ChapterEntryParser {
       rearrangementType <- RearrangementType.parser
       premises <- Premise.listParser
       conclusion <- conclusionParser
-      proof <- Proof.parser
+      proof <- Proof.parser(premises)
     } yield {
       Theorem(
         name,

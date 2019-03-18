@@ -1,6 +1,6 @@
 $(() => {
   function findLastChild(element) {
-    let lastChild = element.children(".children").children(".proofStep:last-of-type");
+    let lastChild = element.parent().children(".children").children(".proofStep:last-of-type").children(".proofLine");
     return lastChild.is("[data-reference-for-last-child]") ? findLastChild(lastChild) : lastChild;
   }
   function findElementByReference(lineReference, pathReference) {
@@ -42,8 +42,12 @@ $(() => {
         if (proofLineWithOpenPopover && proofLineWithOpenPopover !== proofLine) {
           proofLineWithOpenPopover.popover("hide");
         }
-        proofLine.popover("show");
-        bindPopover(proofLine);
+
+        if (proofLine.attr("data-editable")) {
+          getOptionsAndBindPopover(proofLine, true);
+        } else {
+          proofLine.popover("show");
+        }
         e.stopPropagation();
       })
       .on("show.bs.popover", function() {
@@ -65,11 +69,71 @@ $(() => {
       }
     });
 
-  function bindPopover(proofLine) {
+  function getOptionsAndBindPopover(proofLine, showPopover) {
     let lineReference = proofLine.attr("data-reference");
-    proofLine.off("click.editBoundVariable").on("click.editBoundVariable", ".editablePremise .boundVariable", function() {
+    return $.ajax({
+      url: `${window.location.pathname}/${lineReference}/premiseOptions`,
+      type: 'GET'
+    }).then(
+      response => {
+        if (showPopover) proofLine.popover("show");
+        bindPopover(proofLine, lineReference, response);
+      },
+      response => showTemporaryTooltip(proofLine, response.responseJSON)
+    );
+  }
+
+  function bindPopover(proofLine, lineReference, premiseOptions) {
+
+    function updateStep(htmlResponse) {
+      let newStepElement = $(htmlResponse.html);
+      let newPopoverTitle = newStepElement.children(".proofLine").attr("data-title");
+      let newPopoverContent = newStepElement.children(".proofLine").attr("data-content");
+      popoverElement.children(".popover-title").html(newPopoverTitle);
+      popoverElement.children(".popover-content").html(newPopoverContent);
+      getOptionsAndBindPopover(proofLine, false);
+
+    }
+
+    let popoverElement = proofLine.siblings(".popover");
+
+    _.each(popoverElement.find(".editablePremise"), rawElement => {
+      let premiseLine = $(rawElement);
+      let path = premiseLine.attr("data-path");
+
+      premiseLine.append($("<button class='btn btn-success'>Create target</button>"));
+
+      let premiseOption = _.find(premiseOptions, x => x.path.join(".") === path);
+      if (premiseOption && premiseOption.expansions.length) {
+        let dropdownButton = $("<button class='btn btn-success' data-toggle='dropdown'>Expansions</button>");
+        let dropDownList = $("<ul class='dropdown-menu'></ul>");
+        _.each(premiseOption.expansions, expansion => {
+          let link = $(`<a href="#">${expansion.name}</a>`);
+          dropDownList.append($("<li></li>").append(link));
+          link.on("click", (e) => {
+            e.preventDefault();
+            $.ajax({
+              url: `${window.location.pathname}/${lineReference}/premises/${premiseOption.path.join(".")}/rearrangement`,
+              type: 'POST',
+              data: expansion.id,
+              processData: false,
+              'contentType': 'text/plain'
+            }).then(
+              updateStep,
+              response => showTemporaryTooltip(dropdownButton, response.responseJSON)
+            );
+          });
+        });
+        let dropDownContainer = $("<span class='dropdown dynamicButton'></span>")
+          .append(dropdownButton)
+          .append(dropDownList);
+        premiseLine.append(dropDownContainer);
+      }
+    });
+
+    popoverElement.off("click.editBoundVariable").on("click.editBoundVariable", ".editablePremise .boundVariable", function() {
       let boundVariableElement = $(this);
-      let premiseIndex = boundVariableElement.parents(".editablePremise").attr("data-index");
+      let premisePath = boundVariableElement.parents(".editablePremise").attr("data-path");
       let index = boundVariableElement.attr("data-index");
       let parentWithPath = boundVariableElement.parents("[data-path]").eq(0);
       let path = parentWithPath ? parentWithPath.attr("data-path") : "";
@@ -78,14 +142,14 @@ $(() => {
       $("#saveBoundVariableNameButton").off("click").on("click", () => {
         let newName =  $("#boundVariableNameInput").val();
         $.ajax({
-          url: `${window.location.pathname}/${lineReference}/premises/${premiseIndex}/statement/${path}/boundVariables/${index}`,
+          url: `${window.location.pathname}/${lineReference}/premises/${premisePath}/statement/${path}/boundVariables/${index}`,
           type: 'PUT',
           data: newName,
           processData: false,
           'contentType': 'text/plain'
         }).then(
           response => {
-            boundVariableElement.parents(".editablePremise").html(response.html);
+            updateStep(response);
             $("#editBoundVariableModal").modal("hide");
           },
           response => showTemporaryTooltip($("#saveBoundVariableNameButton"), response.responseJSON)

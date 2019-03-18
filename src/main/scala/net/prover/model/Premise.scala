@@ -1,16 +1,16 @@
 package net.prover.model
 
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{ProvenStatement, Reference}
+import net.prover.model.proof.{PreviousLineReference, ProvenStatement, Reference}
 
 case class Premise(statement: Statement, index: Int)(val isElidable: Boolean) {
   def reference = Reference.Direct(s"p$index")
-  def provenStatement = ProvenStatement(statement, reference)
+  def provenStatement = ProvenStatement(statement, PreviousLineReference(reference.value, Nil))
   def requiredSubstitutions: Substitutions.Required = statement.requiredSubstitutions
   def insertExternalParameters(numberOfParametersToInsert: Int): Premise = {
     withStatement(statement.insertExternalParameters(numberOfParametersToInsert))
   }
-  def withStatement(newStatement: Statement) = copy(statement = newStatement)(isElidable)
+  def withStatement(newStatement: Statement): Premise = copy(statement = newStatement)(isElidable)
   def serialized: String = s"premise ${statement.serialized}" + (if (isElidable) " elidable" else "")
   def serializedForHash: String = s"premise ${statement.serializedForHash}"
 }
@@ -23,6 +23,6 @@ object Premise {
       } yield Premise(statement, index)(isElidable))
     }
     def listParser(implicit context: ParsingContext): Parser[Seq[Premise]] = {
-      Parser.whileDefined[Premise] { (acc, index) => parser(index) }
+      Parser.whileDefined[Premise] { (_, index) => parser(index) }
     }
 }

@@ -9,7 +9,7 @@ case class Proof(steps: Seq[Step]) {
   def referencedLines: Set[PreviousLineReference] = steps.flatMap(_.referencedLines).toSet
   def length: Int = steps.map(_.length).sum
   val conclusion: Statement = {
-    steps.flatMap(_.provenStatements).lastOption
+    steps.lastOption.flatMap(_.provenStatement)
       .getOrElse(throw new Exception("Proof must contain at least one top-level proven statement"))
       .statement
   }
@@ -18,7 +18,7 @@ case class Proof(steps: Seq[Step]) {
 
 object Proof {
   val logger = LoggerFactory.getLogger(Proof.getClass)
-  def parser(implicit parsingContext: ParsingContext): Parser[Proof] = {
-    Step.listParser(None)(parsingContext).inBraces.map(Proof.apply)
+  def parser(premises: Seq[Premise])(implicit parsingContext: ParsingContext): Parser[Proof] = {
+    Step.listParser(None)(parsingContext, StepContext(premises.map(_.provenStatement), 0)).inBraces.map(Proof.apply)
   }
 }

@@ -48,6 +48,21 @@ object StepView {
       </div>)
   }
 
+  private def AssertionPremise(premise: NewAssert.Premise, path: Seq[Int])(implicit displayContext: DisplayContext): NodeSeq = {
+    <div class="assertionPremise">
+      {premise match {
+        case NewAssert.Premise.Pending(statement) =>
+          <div class="editablePremise" data-path={path.mkString(".")}>{ExpressionView(statement)}</div>
+        case NewAssert.Premise.Given(statement, _) =>
+          <div>{ExpressionView(statement)}</div>
+        case NewAssert.Premise.Rearrangement(statement, _, premises, _) =>
+          Seq(
+            <div>{ExpressionView(statement)}</div>,
+            <div class="proofIndent">{premises.mapWithIndex((p, i) => AssertionPremise(p, path :+ i))}</div>)
+      }}
+    </div>
+  }
+
   private def popoverForNewAssert(inference: Inference, premises: Seq[NewAssert.Premise])(implicit displayContext: DisplayContext): Popover = {
     Popover(
       <a href={inference.entryKey.url}>
@@ -63,7 +78,7 @@ object StepView {
         </div>
         <hr />
         <h5>Premises</h5>
-        {premises.mapWithIndex { (p, index) => <div class="editablePremise" data-index={index.toString}>{ExpressionView(p.statement)}</div>}}
+        {premises.mapWithIndex((p, index) => AssertionPremise(p, Seq(index)))}
       </div>)
 
   }
@@ -80,7 +95,7 @@ object StepView {
     children: Option[Elem])(
     implicit displayContext: DisplayContext
   ): Elem = {
-    val elem: Elem = <div class="proofStep">
+    val lineElement =
       <span class="proofLine"
             data-reference={reference.value}
             data-premise-references={JsonMapping.toString(premiseReferences)}
@@ -89,8 +104,9 @@ object StepView {
         {HtmlHelper.format(prefix)}
         <span class="conclusion">{ExpressionView(statement)}</span>.
       </span>
-      {children.orNull}
-    </div>
+    val newAttributes = additionalAttributes.foldRight[MetaData](Null) { case ((key, value), currentAttributes) =>
+      new UnprefixedAttribute(key, Text(value), currentAttributes)
+    }
     // Because MetaData.append actually PREpends, and we're fussy
     def append(head: MetaData, tail: MetaData): MetaData = head match {
       case Null =>
@@ -98,10 +114,11 @@ object StepView {
       case attribute: Attribute =>
         attribute.copy(append(attribute.next, tail))
     }
-    val newAttributes = additionalAttributes.foldRight[MetaData](Null) { case ((key, value), currentAttributes) =>
-      new UnprefixedAttribute(key, Text(value), currentAttributes)
-    }
-    elem.copy(attributes = append(elem.attributes, newAttributes))
+
+    <div class="proofStep">
+      {lineElement.copy(attributes = append(lineElement.attributes, newAttributes))}
+      {children.orNull}
+    </div>
   }
 
   def apply(step: Step)(implicit displayContext: DisplayContext): NodeSeq = {
@@ -138,7 +155,7 @@ object StepView {
       case Step.ScopedVariable(variableName, substeps, _, _) =>
         val innerContext = displayContext.withBoundVariableList(Seq(variableName))
         substeps.flatMap(StepView(_)(innerContext))
-      case Step.Target(statement, reference) =>
+      case Step.Target(statement, reference, _) =>
         Seq(lineView(
           "Target:",
           statement,
@@ -147,13 +164,13 @@ object StepView {
           Map.empty,
           Some(popoverForTarget(reference)),
           None))
-      case Step.NewAssert(statement, inference, premises, _, reference) =>
+      case Step.NewAssert(statement, inference, premises, _, reference, _) =>
         Seq(lineView(
           "Then",
           statement,
           reference,
           Set.empty,
-          Map.empty,
+          Map("data-editable" -> "true"),
           Some(popoverForNewAssert(inference, premises)),
           None))
     }
