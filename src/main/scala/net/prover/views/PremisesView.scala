@@ -9,7 +9,7 @@ object PremisesView {
     <span class="premise">{ExpressionView(statement)}</span>
   }
   private def PremiseView(premise: Premise)(implicit displayContext: DisplayContext): Elem = {
-    PremiseView(premise.statement)
+    <span class="premise" data-reference={premise.reference.value}>{ExpressionView(premise.statement)}</span>
   }
   private def applyToElements(premiseElems: Seq[Elem]): Elem = {
     <div>

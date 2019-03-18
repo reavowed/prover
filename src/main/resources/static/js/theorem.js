@@ -1,17 +1,20 @@
 $(() => {
-  $("[data-reference]").each(function () {
+  $("[data-premise-references]").each(function () {
     let $this = $(this);
     let premiseReferences = JSON.parse($this.attr("data-premise-references"));
-    let premiseLines = _.map(premiseReferences, reference => $(`[data-reference='${reference.lineReference}'] [data-path='${reference.internalPath.join(".")}']`));
-    let conclusionLine = $this.find('.conclusion');
+    let premiseElements = _.map(premiseReferences, reference => {
+      let outerElement = $(`[data-reference='${reference.lineReference}'], [data-additional-reference='${reference.lineReference}']`);
+      return reference.internalPath.length ? outerElement.find(`[data-path='${reference.internalPath.join(".")}']`) : outerElement;
+    });
+    let conclusionElement = $this.find('.conclusion');
     $this
       .on("mouseenter", function () {
-        _.each(premiseLines, x => x.addClass("highlightPremise"));
-        conclusionLine.addClass("highlightConclusion");
+        _.each(premiseElements, x => x.addClass("highlightPremise"));
+        conclusionElement.addClass("highlightConclusion");
       })
       .on("mouseleave", function () {
-        _.each(premiseLines, x => x.removeClass("highlightPremise"));
-        conclusionLine.removeClass("highlightConclusion");
+        _.each(premiseElements, x => x.removeClass("highlightPremise"));
+        conclusionElement.removeClass("highlightConclusion");
       });
   });
 

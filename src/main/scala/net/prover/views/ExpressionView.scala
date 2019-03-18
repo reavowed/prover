@@ -80,6 +80,6 @@ object ExpressionView {
     <span class="boundVariable" data-index={index.toString} data-further-path={if (furtherPath.nonEmpty) furtherPath.mkString(".") else null}>{HtmlHelper.format(text)}</span>
   }
   private def formatted(format: Format, components: Seq[NodeSeq], internalPath: Seq[Int], safe: Boolean): Elem = {
-    <span data-path={internalPath.mkString(".")}>{format.formatHtml(components, safe)}</span>
+    <span data-path={if (internalPath.nonEmpty) internalPath.mkString(".") else null}>{format.formatHtml(components, safe)}</span>
   }
 }
