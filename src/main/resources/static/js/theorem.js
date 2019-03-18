@@ -161,7 +161,7 @@ $(() => {
 
   $(document).on("click", "button.proveStatement", function() {
     let button = $(this);
-    let reference = button.attr("data-reference");
+    let reference = button.parents("[data-reference]").eq(0).attr("data-reference");
     let statementHtml = button.attr("data-statement-html");
 
     $("#statementToProve").html(statementHtml);

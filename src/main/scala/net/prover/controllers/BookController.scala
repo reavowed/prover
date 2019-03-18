@@ -83,7 +83,7 @@ class BookController @Autowired() (bookService: BookService) {
         ChapterEntry.Key.Standalone(Chapter.getNextKey(chapter.entries, newTheoremDefininition.name), chapter.key),
         premises,
         conclusion,
-        Proof(Seq(Step.Target(conclusion, Reference.Direct("0"), StepContext(premises.map(_.provenStatement), 0)))),
+        Proof(Seq(Step.Target(conclusion, StepContext(premises.map(_.provenStatement), 0)))),
         RearrangementType.NotRearrangement)
 
       val existingTheoremOption = parsingContext.inferences.find(_.id == newTheorem.id)

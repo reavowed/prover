@@ -16,16 +16,6 @@ class StatsController @Autowired() (bookService: BookService) {
       .map(theorem => (theorem.key.url, theorem.proof.length))
   }
 
-  @GetMapping(value = Array("unusedLines"))
-  def getUnusedLines = {
-    for {
-      theorem <- bookService.books.flatMap(_.theorems)
-      referencedLines = theorem.proof.referencedLines
-      reference <- theorem.proof.steps.intermediateReferences
-      if !referencedLines.exists(_.lineReference == reference)
-    } yield (theorem.key.url, reference)
-  }
-
   @GetMapping(value = Array("unusedInferences"))
   def getUnusedInferences = {
     val usedInferenceIds = bookService.books.flatMap(_.theorems).flatMap(_.referencedInferenceIds).toSet

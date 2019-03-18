@@ -70,7 +70,6 @@ class TheoremController @Autowired() (bookService: BookService) {
           inference,
           premiseStatements.map(createPremise(_, stepContext)),
           substitutions,
-          oldStep.reference,
           oldStep.context),
           ())
       }
@@ -99,7 +98,7 @@ class TheoremController @Autowired() (bookService: BookService) {
       import book.displayContext
       for {
         updatedStep <- oldStep.tryUpdatePremiseAtPath(premisePath.indexes, updatePremise).orNotFound(s"Premise $premisePath").flatten
-      } yield (updatedStep, UpdatedStep(StepView(updatedStep).toString()))
+      } yield (updatedStep, UpdatedStep(StepView(updatedStep, stepPath.indexes).toString()))
     }.toResponseEntity
   }
 

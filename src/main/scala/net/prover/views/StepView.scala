@@ -3,7 +3,7 @@ package net.prover.views
 import net.prover.JsonMapping
 import net.prover.model.{DisplayContext, HtmlHelper, Inference}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{InferenceApplication, PreviousLineReference, Reference, Step}
+import net.prover.model.proof.{InferenceApplication, PreviousLineReference, Step}
 import net.prover.model.proof.Step.NewAssert
 
 import scala.xml._
@@ -33,7 +33,7 @@ object StepView {
       </div>)
   }
 
-  private def popoverForTarget(reference: Reference.Direct): Popover = {
+  private def popoverForTarget(): Popover = {
     Popover(
       <span>"Statement to be proved"</span>,
       <div>
@@ -41,7 +41,6 @@ object StepView {
                 class="btn btn-success proveStatement"
                 data-toggle="modal"
                 data-target="#proveStatementModal"
-                data-reference={reference.value}
         >
           Prove
         </button>
@@ -88,7 +87,7 @@ object StepView {
   private def lineView(
     prefix: String,
     statement: Statement,
-    reference: Reference.Direct,
+    reference: String,
     premiseReferences: Set[PreviousLineReference],
     additionalAttributes: Map[String, String],
     popover: Option[Popover],
@@ -97,7 +96,7 @@ object StepView {
   ): Elem = {
     val lineElement =
       <span class="proofLine"
-            data-reference={reference.value}
+            data-reference={reference}
             data-premise-references={JsonMapping.toString(premiseReferences)}
             data-title={popover.map(_.title.toString()).orNull}
             data-content={popover.map(_.content.toString()).orNull}>
@@ -121,54 +120,54 @@ object StepView {
     </div>
   }
 
-  def apply(step: Step)(implicit displayContext: DisplayContext): NodeSeq = {
+  def apply(step: Step, path: Seq[Int])(implicit displayContext: DisplayContext): NodeSeq = {
     step match {
-      case Step.Assertion(statement, inferenceApplication, reference) =>
+      case Step.Assertion(statement, inferenceApplication) =>
         lineView(
           "Then",
           statement,
-          reference,
+          path.mkString("."),
           inferenceApplication.referencedLines,
           Map.empty,
           Some(popover(inferenceApplication)),
           None)
-      case Step.Assumption(assumption, substeps, _, reference) =>
+      case Step.Assumption(assumption, substeps, _) =>
         lineView(
           "Assume",
           assumption,
-          reference.getChildForAssumption,
+          path.mkString(".") + "a",
           Set.empty,
           Map.empty,
           None,
-          Some(<div class="children proofIndent">{substeps.flatMap(StepView(_))}</div>))
-      case Step.Naming(variableName, assumption, substeps, finalInferenceApplication, reference) =>
+          Some(<div class="children proofIndent">{substeps.flatMapWithIndex((s, i) => StepView(s, path :+ i))}</div>))
+      case Step.Naming(variableName, assumption, substeps, finalInferenceApplication) =>
         val innerContext = displayContext.withBoundVariableList(Seq(variableName))
         lineView(
           s"Let $variableName be such that",
           assumption,
-          reference.getChildForAssumption,
+          path.mkString(".") + "a",
           finalInferenceApplication.referencedLines,
-          Map("data-reference-for-last-child" -> reference.value),
+          Map("data-reference-for-last-child" -> path.mkString(".")),
           Some(popover(finalInferenceApplication)),
-          Some(<div class="children">{substeps.flatMap(StepView(_)(innerContext))}</div>))(
+          Some(<div class="children">{substeps.flatMapWithIndex((s, i) => StepView(s, path :+ i)(innerContext))}</div>))(
           innerContext)
-      case Step.ScopedVariable(variableName, substeps, _, _) =>
+      case Step.ScopedVariable(variableName, substeps, _) =>
         val innerContext = displayContext.withBoundVariableList(Seq(variableName))
-        substeps.flatMap(StepView(_)(innerContext))
-      case Step.Target(statement, reference, _) =>
+        substeps.flatMapWithIndex((s, i) => StepView(s, path :+ i)(innerContext))
+      case Step.Target(statement, _) =>
         Seq(lineView(
           "Target:",
           statement,
-          reference,
+          path.mkString("."),
           Set.empty,
           Map.empty,
-          Some(popoverForTarget(reference)),
+          Some(popoverForTarget()),
           None))
-      case Step.NewAssert(statement, inference, premises, _, reference, _) =>
+      case Step.NewAssert(statement, inference, premises, _, _) =>
         Seq(lineView(
           "Then",
           statement,
-          reference,
+          path.mkString("."),
           Set.empty,
           Map("data-editable" -> "true"),
           Some(popoverForNewAssert(inference, premises)),
