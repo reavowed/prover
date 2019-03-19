@@ -117,6 +117,17 @@ table {
     color: blue;
 }
 
+.highlightIncomplete {
+    position: relative;
+}
+.highlightIncomplete::before {
+    content: "?";
+    color: red;
+    font-weight: bold;
+    position: absolute;
+    left: -10px;
+}
+
 .usage:not(:last-child)::after {
     content: '|'
 }

@@ -245,6 +245,7 @@ object Step {
           None
       }
     }
+    def isIncomplete: Boolean = premises.exists(_.isIncomplete)
   }
   object NewAssert {
     sealed trait Premise {
@@ -255,6 +256,7 @@ object Step {
       def getPendingPremises(path: Seq[Int]): Map[Seq[Int], NewAssert.Premise.Pending]
       def updateAtPath(path: Seq[Int], f: Premise => Try[Premise]): Option[Try[Premise]]
       def recalculateReferences(stepContext: StepContext): Option[Premise]
+      def isIncomplete: Boolean
     }
     object Premise {
       sealed trait Leaf extends Premise {
@@ -280,6 +282,7 @@ object Step {
               Some(this)
           }
         }
+        override def isIncomplete: Boolean = true
       }
       object Pending {
         def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Pending] = {
@@ -300,6 +303,7 @@ object Step {
               None
           }
         }
+        override def isIncomplete: Boolean = false
       }
       object Given {
         def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Given] = {
@@ -331,6 +335,7 @@ object Step {
         override def recalculateReferences(stepContext: StepContext): Option[Premise] = {
           premises.map(_.recalculateReferences(stepContext)).traverseOption.map(newPremises => copy(premises = newPremises))
         }
+        override def isIncomplete: Boolean = premises.exists(_.isIncomplete)
       }
     }
     object Rearrangement {

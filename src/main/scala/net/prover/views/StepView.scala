@@ -35,7 +35,7 @@ object StepView {
 
   private def popoverForTarget(): Popover = {
     Popover(
-      <span>"Statement to be proved"</span>,
+      <span>Target</span>,
       <div>
         <button type="button"
                 class="btn btn-success proveStatement"
@@ -90,12 +90,13 @@ object StepView {
     reference: String,
     premiseReferences: Set[PreviousLineReference],
     additionalAttributes: Map[String, String],
+    additionalClasses: Seq[String],
     popover: Option[Popover],
     children: Option[Elem])(
     implicit displayContext: DisplayContext
   ): Elem = {
     val lineElement =
-      <span class="proofLine"
+      <span class={("proofLine" +: additionalClasses).mkString(" ")}
             data-reference={reference}
             data-premise-references={JsonMapping.toString(premiseReferences)}
             data-title={popover.map(_.title.toString()).orNull}
@@ -129,6 +130,7 @@ object StepView {
           path.mkString("."),
           inferenceApplication.referencedLines,
           Map.empty,
+          Nil,
           Some(popover(inferenceApplication)),
           None)
       case Step.Assumption(assumption, substeps, _) =>
@@ -138,6 +140,7 @@ object StepView {
           path.mkString(".") + "a",
           Set.empty,
           Map.empty,
+          Nil,
           None,
           Some(<div class="children proofIndent">{substeps.flatMapWithIndex((s, i) => StepView(s, path :+ i))}</div>))
       case Step.Naming(variableName, assumption, substeps, finalInferenceApplication) =>
@@ -148,6 +151,7 @@ object StepView {
           path.mkString(".") + "a",
           finalInferenceApplication.referencedLines,
           Map("data-reference-for-last-child" -> path.mkString(".")),
+          Nil,
           Some(popover(finalInferenceApplication)),
           Some(<div class="children">{substeps.flatMapWithIndex((s, i) => StepView(s, path :+ i)(innerContext))}</div>))(
           innerContext)
@@ -156,20 +160,22 @@ object StepView {
         substeps.flatMapWithIndex((s, i) => StepView(s, path :+ i)(innerContext))
       case Step.Target(statement, _) =>
         Seq(lineView(
-          "Target:",
+          "Then",
           statement,
           path.mkString("."),
           Set.empty,
           Map.empty,
+          Seq("highlightIncomplete"),
           Some(popoverForTarget()),
           None))
-      case Step.NewAssert(statement, inference, premises, _, _) =>
+      case step @ Step.NewAssert(statement, inference, premises, _, _) =>
         Seq(lineView(
           "Then",
           statement,
           path.mkString("."),
           premises.flatMap(_.referencedLines).toSet,
           Map("data-editable" -> "true"),
+          if (step.isIncomplete) Seq("highlightIncomplete") else Nil,
           Some(popoverForNewAssert(inference, premises)),
           None))
     }
