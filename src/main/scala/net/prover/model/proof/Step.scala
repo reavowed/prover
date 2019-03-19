@@ -49,6 +49,8 @@ object Step {
       inferenceApplication: InferenceApplication)
     extends Step
   {
+    val `type` = "oldAssertion"
+    val referencedLines: Set[PreviousLineReference] = inferenceApplication.referencedLines
     override def provenStatement: Option[Statement] = Some(assertion)
     override def referencedInferenceIds = inferenceApplication.referencedInferenceIds
     override def findSubstep(index: Int, innerIndexes: Seq[Int]): Option[Step] = None
@@ -73,6 +75,7 @@ object Step {
       deductionStatement: StatementDefinition)
     extends Step
   {
+    val `type` = "assumption"
     override def provenStatement: Option[Statement] = {
       substeps.lastOption.flatMap(_.provenStatement).map(s => DefinedStatement(Seq(assumption, s), deductionStatement)(Nil))
     }

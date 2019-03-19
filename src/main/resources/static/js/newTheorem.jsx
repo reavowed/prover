@@ -29,6 +29,19 @@ function replacePlaceholders(text, components) {
     return components[index];
   });
 }
+function serialize(expression) {
+  if ("name" in expression) { // Statement or term variable
+    return expression.name;
+  } else if ("definition" in expression) { // Defined statement or term
+    return [expression.definition.symbol, ...expression.components.map(serialize)].join(" ");
+  } else if ("level" in expression) { // Function parameter
+    return "$".repeat(expression.level) + expression.index;
+  } else if ("arguments" in expression) { // Application
+    return "with " + expression.variableName + "(" + expression.arguments.map(serialize).join(", ") + ")";
+  } else {
+    return "?";
+  }
+}
 
 class Expression extends React.Component {
   static renderVariable(variable) {
@@ -87,35 +100,64 @@ const ProofLineStatement = styled(HighlightableStatement)`
 `;
 
 class Step extends React.Component {
-
   innerContent() {
-    switch (this.props.step.type) {
+    const {step, path, ...otherProps} = this.props;
+    switch (step.type) {
       case "target":
-        return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={this.props.step.statement}/>.</span>;
       case "assertion":
-        return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={this.props.step.statement}/>.</span>;
+        return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={step.statement}/>.</span>;
+      case "oldAssertion":
+        return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={step.assertion}/>.</span>;
+      case "assumption":
+        return [
+          <span key="assumption">Assume <ProofLineStatement highlighted={this.isAssumptionHighlighted()} expression={this.props.step.assumption}/>.</span>,
+          <StepChildren key="children" steps={step.substeps} path={path} {...otherProps} />
+        ]
     }
   }
 
   isHighlighted() {
     return _.some(this.props.highlightedPremises, p => p.lineReference === this.props.path.join("."))
   }
+  isAssumptionHighlighted() {
+    return _.some(this.props.highlightedPremises, p => p.lineReference === this.props.path.join(".") + "a")
+  }
 
   render() {
-    return <ProofLine onMouseEnter={() => this.props.setHighlightedPremises(this.props.step.referencedLines || [])}
+    const {step, path, ...otherProps} = this.props;
+    let innerContent = () => {
+      switch (step.type) {
+        case "target":
+        case "assertion":
+          return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={step.statement}/>.</span>;
+        case "oldAssertion":
+          return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={step.assertion}/>.</span>;
+        case "assumption":
+          return <span key="assumption">Assume <ProofLineStatement highlighted={this.isAssumptionHighlighted()} expression={step.assumption}/>.</span>;
+      }
+    };
+
+    return <div>
+      <ProofLine onMouseEnter={() => this.props.setHighlightedPremises(this.props.step.referencedLines || [])}
                       onMouseLeave={() => this.props.setHighlightedPremises([])}
-    >{this.innerContent()}</ProofLine>
+      >{innerContent()}</ProofLine>
+      {step.substeps && <StepChildren key="children" steps={step.substeps} path={path} {...otherProps} />}
+    </div>
   }
 }
 
-class Proof extends React.Component {
+class Steps extends React.Component {
   render() {
-    let {steps, ...otherProps} = this.props;
-    return steps.map((step, index) =>
-      <Step step={step} path={[index]} {...otherProps} />
-    );
+    let {steps, className, path, ...otherProps} = this.props;
+    return <div className={className}>
+      {steps.map((step, index) => <Step step={step} path={[...path, index]} {...otherProps} />)}
+    </div>;
   }
 }
+
+const StepChildren = styled(Steps)`
+  margin-left: 20px;
+`;
 
 class Premise extends React.Component {
   isHighlighted() {
@@ -182,15 +224,15 @@ class Theorem extends React.Component {
       <hr/>
 
       <h4>Proof</h4>
-      <Proof steps={proof} setHighlightedPremises={this.setHighlightedPremises} highlightedPremises={this.state.highlightedPremises} />
+      <Steps steps={proof} path={[]} setHighlightedPremises={this.setHighlightedPremises} highlightedPremises={this.state.highlightedPremises} />
 
       {usages.length > 0 &&
         <div>
           <hr />
           {usages.map(([usageBook, usageChapter, theorems]) =>
-            <div>
+            <div key={usageBook.key.value + "/" + usageChapter.key.value}>
               <div><label>{usageBook.title} - {usageChapter.title}</label></div>
-              <p>{theorems.map(theorem => <span className="usage"> <a className="usageLink" href={theorem.key.url}>{theorem.name}</a> </span>)}</p>
+              <p>{theorems.map(theorem => <span className="usage" key={theorem.key.value}> <a className="usageLink" href={theorem.key.url}>{theorem.name}</a> </span>)}</p>
             </div>
           )}
         </div>
