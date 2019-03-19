@@ -1,5 +1,6 @@
 package net.prover.model.entries
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.{Chapter, Inference}
 
 trait ChapterEntry {
@@ -12,6 +13,7 @@ object ChapterEntry {
     def value: String
     def separator: String
     def chapterKey: Chapter.Key
+    @JsonSerialize
     def url: String = s"${chapterKey.url}$separator$value"
   }
   object Key {

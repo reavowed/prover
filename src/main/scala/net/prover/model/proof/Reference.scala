@@ -23,10 +23,6 @@ object Reference {
     override def lineReferences = Set(lineReference)
     override def serialized = s"direct $value"
     def withSuffix(suffix: String): Direct = Direct(value + suffix)
-    def getChildForAssumption = withSuffix("a")
-    def getChildForDeduction = withSuffix("d")
-    def getChildForResult = withSuffix("r")
-    def getChildForSubstep(index: Int) = withSuffix(s".$index")
   }
   object Direct {
     def parser(implicit context: ParsingContext): Parser[Direct] = {

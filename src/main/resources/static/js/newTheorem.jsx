@@ -67,23 +67,20 @@ class Expression extends React.Component {
   }
 
   render() {
-    return <span className={this.props.className} dangerouslySetInnerHTML={{ __html: Expression.renderExpression(this.props.expression, [], false)}}></span>;
+    return <span className={this.props.className} dangerouslySetInnerHTML={{ __html: Expression.renderExpression(this.props.expression, [], false)}} />;
   }
 }
 
 const ProofLine = styled.div`
   display: block;
-  padding-left: 5px;
   padding-bottom: 5px;
-  
-  ${props => props.highlighted && styled.css`
-    ${ProofLineStatement} {
-      color: red;
-    }
-  `}
 `;
 
-const ProofLineStatement = styled(Expression)`
+const HighlightableStatement = styled(Expression)`
+  color: ${props => props.highlighted && "red"};
+`;
+
+const ProofLineStatement = styled(HighlightableStatement)`
   ${ProofLine}:hover & {
     color: blue;
   }
@@ -94,25 +91,64 @@ class Step extends React.Component {
   innerContent() {
     switch (this.props.step.type) {
       case "target":
-        return <span>Then <ProofLineStatement expression={this.props.step.statement}/>.</span>;
+        return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={this.props.step.statement}/>.</span>;
       case "assertion":
-        return <span>Then <ProofLineStatement expression={this.props.step.statement}/>.</span>;
+        return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={this.props.step.statement}/>.</span>;
     }
   }
 
   isHighlighted() {
-    return _.some(this.props.highlightedPremises, p => p.lineReference = this.props.path.join("."))
+    return _.some(this.props.highlightedPremises, p => p.lineReference === this.props.path.join("."))
   }
 
   render() {
-    return <ProofLine highlighted={this.isHighlighted()}
-                      onMouseEnter={() => this.props.setHighlightedPremises(this.props.step.referencedLines || [])}
+    return <ProofLine onMouseEnter={() => this.props.setHighlightedPremises(this.props.step.referencedLines || [])}
                       onMouseLeave={() => this.props.setHighlightedPremises([])}
     >{this.innerContent()}</ProofLine>
   }
 }
 
 class Proof extends React.Component {
+  render() {
+    let {steps, ...otherProps} = this.props;
+    return steps.map((step, index) =>
+      <Step step={step} path={[index]} {...otherProps} />
+    );
+  }
+}
+
+class Premise extends React.Component {
+  isHighlighted() {
+    return _.some(this.props.highlightedPremises, p => p.lineReference === ("p" + this.props.index));
+  }
+
+  render() {
+    return <HighlightableStatement highlighted={this.isHighlighted()} expression={this.props.premise.statement}/>;
+  }
+}
+
+const InferenceSummary = styled(class extends React.Component {
+  renderSinglePremise(premise) {
+    return <div>Suppose {premise}.</div>;
+  }
+  renderMultiplePremises(premises) {
+    let initialPremises = _.flatMap(premises.slice(0, -1), p => [p, <span>, </span>]).slice(0, -1);
+    let lastPremise =  premises.slice(-1)[0];
+    return <div>Suppose {initialPremises} and {lastPremise}.</div>;
+  }
+  render() {
+    let {inference} = this.props;
+    let premiseElements = inference.premises.map((p, i) => <Premise premise={p} index={i} highlightedPremises={this.props.highlightedPremises}/>);
+    let premiseElement = premiseElements.length > 0 && (premiseElements.length > 1 ? this.renderMultiplePremises(premiseElements) : this.renderSinglePremise(premiseElements[0]));
+    return <div className={this.props.className}>
+      {premiseElement}
+      <div>{premiseElements.length > 0 && "Then "}<Expression expression={inference.conclusion}/>.</div>
+    </div>
+  }
+})`margin-top: 5px;`;
+
+
+class Theorem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -125,10 +161,44 @@ class Proof extends React.Component {
   };
 
   render() {
-    return this.props.steps.map((step, index) =>
-      <Step step={step} path={[index]} setHighlightedPremises={this.setHighlightedPremises} highlightedPremises={this.state.highlightedPremises}/>
-    );
+    let {theorem, previousEntry, nextEntry, usages} = this.props;
+    let {proof} = theorem;
+    return <div className="inference">
+      <div className="navigationLinks">
+        {previousEntry && <a className="navigationLink pull-left" href={previousEntry.key.url}>&laquo; {previousEntry.name}</a>}
+        {nextEntry && <a className="navigationLink pull-right" href={nextEntry.key.url}>{nextEntry.name} &raquo;</a>}
+      </div>
+      <div className="inferenceTitle">
+        <h3>
+          Theorem: {theorem.name}
+        </h3>
+        <div className="inferenceId">
+          {theorem.id}
+        </div>
+      </div>
+
+      <InferenceSummary inference={theorem} highlightedPremises={this.state.highlightedPremises}/>
+
+      <hr/>
+
+      <h4>Proof</h4>
+      <Proof steps={proof} setHighlightedPremises={this.setHighlightedPremises} highlightedPremises={this.state.highlightedPremises} />
+
+      {usages.length > 0 &&
+        <div>
+          <hr />
+          {usages.map(([usageBook, usageChapter, theorems]) =>
+            <div>
+              <div><label>{usageBook.title} - {usageChapter.title}</label></div>
+              <p>{theorems.map(theorem => <span className="usage"> <a className="usageLink" href={theorem.key.url}>{theorem.name}</a> </span>)}</p>
+            </div>
+          )}
+        </div>
+      }
+
+    </div>
   }
+
 }
 
-ReactDOM.render(<Proof steps={proof}/>, document.getElementById("proof"));
+ReactDOM.render(<Theorem theorem={theorem} previousEntry={previousEntry} nextEntry={nextEntry} usages={usages}/>, document.getElementById("theorem"));
