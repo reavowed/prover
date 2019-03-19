@@ -127,6 +127,37 @@ class BookController @Autowired() (bookService: BookService) {
     }
   }
 
+  @GetMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}/new"), produces = Array("text/html;charset=UTF-8"))
+  def getEntryNew(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String
+  ) = {
+    try {
+      val books = bookService.books
+      (for {
+        book <- books.find(_.key.value == bookKey)
+        chapter <- book.chapters.find(_.key.value == chapterKey)
+        entries = chapter.entries.ofType[ChapterEntry.Standalone]
+        entry <- entries.find(_.key.value == entryKey)
+      } yield {
+        val index = entries.indexOf(entry)
+        val previous = if (index > 0) Some(entries(index - 1)) else None
+        val next = if (index < entries.length - 1) Some(entries(index + 1)) else None
+        entry match {
+          case axiom: Axiom =>
+            AxiomView(axiom, chapter, book, previous, next, getUsages(axiom, books)).toString
+          case theorem: Theorem =>
+            NewTheoremView(theorem, chapter, book, previous, next, getUsages(theorem, books)).toString
+        }
+      }) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
+    } catch {
+      case NonFatal(e) =>
+        BookController.logger.error(s"Error getting books", e)
+        new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+
   @DeleteMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}"))
   def deleteEntry(
     @PathVariable("bookKey") bookKey: String,

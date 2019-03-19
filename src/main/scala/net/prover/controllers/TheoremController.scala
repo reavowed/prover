@@ -104,7 +104,7 @@ class TheoremController @Autowired() (bookService: BookService) {
 
   case class PremiseOption(path: Seq[Int], expansions: Seq[InferenceSummary])
   @GetMapping(value = Array("/{stepReference}/premiseOptions"))
-  def stepOptions(
+  def premiseOptions(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,

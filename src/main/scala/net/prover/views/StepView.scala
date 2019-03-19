@@ -173,7 +173,7 @@ object StepView {
           "Then",
           statement,
           path.mkString("."),
-          premises.flatMap(_.referencedLines).toSet,
+          step.referencedLines,
           Map("data-editable" -> "true"),
           if (step.isIncomplete) Seq("highlightIncomplete") else Nil,
           Some(popoverForNewAssert(inference, premises)),

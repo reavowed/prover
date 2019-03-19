@@ -6,7 +6,7 @@ import net.prover.model.entries.StatementDefinition.StructureType
 import net.prover.model.expressions._
 import net.prover.model._
 
-@JsonIgnoreProperties(Array("symbol", "defaultVariables", "format"))
+@JsonIgnoreProperties(Array("defaultValue"))
 case class StatementDefinition(
     symbol: String,
     key: ChapterEntry.Key.Anchor,

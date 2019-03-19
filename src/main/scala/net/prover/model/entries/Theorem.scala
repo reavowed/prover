@@ -6,7 +6,7 @@ import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 
-@JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement", "proofOutline"))
+@JsonIgnoreProperties(Array("rearrangementType", "proof"))
 case class Theorem(
     name: String,
     key: ChapterEntry.Key.Standalone,

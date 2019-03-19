@@ -196,6 +196,7 @@ object Step {
   }
 
   case class Target(statement: Statement, context: StepContext) extends Step {
+    val `type` = "target"
     override def provenStatement: Option[Statement] = Some(statement)
     override def findSubstep(index: Int, innerIndexes: Seq[Int]): Option[Step] = None
     override def replaceSubstep(index: Int, substepIndexes: Seq[Int], newStep: Step): Step = throw new Exception("Cannot replace substep in target")
@@ -221,6 +222,8 @@ object Step {
       context: StepContext)
     extends Step
   {
+    val `type`: String = "assertion"
+    val referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def provenStatement: Option[Statement] = Some(statement)
     override def findSubstep(index: Int, innerIndexes: Seq[Int]): Option[Step] = None
     override def replaceSubstep(index: Int, substepIndexes: Seq[Int], newStep: Step): Step = throw new Exception("Cannot replace substep in assertion")

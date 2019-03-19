@@ -1,9 +1,11 @@
 package net.prover.model.entries
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 import net.prover.model._
 
+@JsonIgnoreProperties(Array("defaultValue", "definingStatement"))
 case class TermDefinition(
     symbol: String,
     key: ChapterEntry.Key.Anchor,
