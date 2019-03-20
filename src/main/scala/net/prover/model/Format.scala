@@ -2,9 +2,12 @@ package net.prover.model
 
 import java.util.regex.{Matcher, Pattern}
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 import scala.collection.mutable.ListBuffer
 import scala.xml.{Elem, Node, NodeSeq, Text}
 
+@JsonIgnoreProperties(value = Array("originalValue"))
 trait Format {
   def baseFormatString: String
   def requiresBrackets: Boolean

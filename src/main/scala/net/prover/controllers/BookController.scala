@@ -148,7 +148,7 @@ class BookController @Autowired() (bookService: BookService) {
           case axiom: Axiom =>
             AxiomView(axiom, chapter, book, previous, next, getUsages(axiom, books)).toString
           case theorem: Theorem =>
-            NewTheoremView(theorem, chapter, book, previous, next, getUsages(theorem, books)).toString
+            NewTheoremView(theorem, chapter, book, previous, next, getUsages(theorem, books), getChapterParsingContext(book, chapter)).toString
         }
       }) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {

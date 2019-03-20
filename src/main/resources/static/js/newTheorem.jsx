@@ -29,35 +29,20 @@ function replacePlaceholders(text, components) {
     return components[index];
   });
 }
-function serialize(expression) {
-  if ("name" in expression) { // Statement or term variable
-    return expression.name;
-  } else if ("definition" in expression) { // Defined statement or term
-    return [expression.definition.symbol, ...expression.components.map(serialize)].join(" ");
-  } else if ("level" in expression) { // Function parameter
-    return "$".repeat(expression.level) + expression.index;
-  } else if ("arguments" in expression) { // Application
-    return "with " + expression.variableName + "(" + expression.arguments.map(serialize).join(", ") + ")";
-  } else {
-    return "?";
-  }
-}
 
 class Expression extends React.Component {
-  static renderVariable(variable) {
-    return formatHtml(variable.name);
-  }
   static renderParameter(parameter, boundVariableLists) {
     return formatHtml(boundVariableLists[parameter.level][parameter.index]);
   }
   static renderDefinedExpression(expression, boundVariableLists, safe) {
-    let formatString = (safe && expression.definition.format.requiresBrackets) ?
-      "(" + expression.definition.format.baseFormatString + ")" :
-      expression.definition.format.baseFormatString;
-    let innerBoundVariableLists = expression.scopedBoundVariableNames.length ?
-      [expression.scopedBoundVariableNames].concat(boundVariableLists) :
-      boundVariableLists;
-    let components = expression.scopedBoundVariableNames.concat(expression.components.map(c => this.renderExpression(c, innerBoundVariableLists, true)));
+    let format = window.definitions[expression.definition];
+    let boundVariableNames = expression.scopedBoundVariableNames || [];
+
+    let formatString = (safe && format.requiresBrackets) ?
+      "(" + format.baseFormatString + ")" :
+      format.baseFormatString;
+    let innerBoundVariableLists = boundVariableNames.length ? [boundVariableNames].concat(boundVariableLists) : boundVariableLists;
+    let components = boundVariableNames.concat(expression.components.map(c => this.renderExpression(c, innerBoundVariableLists, true)));
     return formatHtml(formatString, s => replacePlaceholders(s, components));
   }
   static renderApplicationExpression(expression, boundVariableLists) {
@@ -66,8 +51,8 @@ class Expression extends React.Component {
     return formatHtml(formatString, s => replacePlaceholders(s, components));
   }
   static renderExpression(expression, boundVariableLists, safe) {
-    if ("name" in expression) { // Statement or term variable
-      return this.renderVariable(expression);
+    if (typeof expression === "string") { // Variable or constant
+      return formatHtml(expression);
     } else if ("definition" in expression) { // Defined statement or term
       return this.renderDefinedExpression(expression, boundVariableLists, safe);
     } else if ("level" in expression) { // Function parameter
@@ -165,7 +150,7 @@ class Premise extends React.Component {
   }
 
   render() {
-    return <HighlightableStatement highlighted={this.isHighlighted()} expression={this.props.premise.statement}/>;
+    return <HighlightableStatement highlighted={this.isHighlighted()} expression={this.props.premise}/>;
   }
 }
 
@@ -207,8 +192,8 @@ class Theorem extends React.Component {
     let {proof} = theorem;
     return <div className="inference">
       <div className="navigationLinks">
-        {previousEntry && <a className="navigationLink pull-left" href={previousEntry.key.url}>&laquo; {previousEntry.name}</a>}
-        {nextEntry && <a className="navigationLink pull-right" href={nextEntry.key.url}>{nextEntry.name} &raquo;</a>}
+        {previousEntry && <a className="navigationLink pull-left" href={previousEntry.key}>&laquo; {previousEntry.name}</a>}
+        {nextEntry && <a className="navigationLink pull-right" href={nextEntry.key}>{nextEntry.name} &raquo;</a>}
       </div>
       <div className="inferenceTitle">
         <h3>
@@ -232,7 +217,7 @@ class Theorem extends React.Component {
           {usages.map(([usageBook, usageChapter, theorems]) =>
             <div key={usageBook.key.value + "/" + usageChapter.key.value}>
               <div><label>{usageBook.title} - {usageChapter.title}</label></div>
-              <p>{theorems.map(theorem => <span className="usage" key={theorem.key.value}> <a className="usageLink" href={theorem.key.url}>{theorem.name}</a> </span>)}</p>
+              <p>{theorems.map(theorem => <span className="usage" key={theorem.key.value}> <a className="usageLink" href={theorem.key}>{theorem.name}</a> </span>)}</p>
             </div>
           )}
         </div>

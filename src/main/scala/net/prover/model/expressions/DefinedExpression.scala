@@ -1,10 +1,14 @@
 package net.prover.model.expressions
 
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition
 
 import scala.collection.immutable.Nil
 
+@JsonSerialize(using = classOf[DefinedExpressionSerializer])
 trait DefinedExpression[ExpressionType <: Expression] extends Expression with TypedExpression[ExpressionType] {
   def components: Seq[Expression]
   def scopedBoundVariableNames: Seq[String]
@@ -109,5 +113,21 @@ object DefinedExpression {
       Some((definedExpression.definition, definedExpression.scopedBoundVariableNames, definedExpression.components))
     case _ =>
       None
+  }
+}
+
+private class DefinedExpressionSerializer extends JsonSerializer[DefinedExpression[_]] {
+  override def serialize(value: DefinedExpression[_], gen: JsonGenerator, serializers: SerializerProvider): Unit = {
+    if (value.components.isEmpty) {
+      gen.writeString(value.definition.symbol)
+    } else {
+      gen.writeStartObject(value)
+      gen.writeStringField("definition", value.definition.symbol)
+      gen.writeObjectField("components", value.components)
+      if (value.scopedBoundVariableNames.nonEmpty) {
+        gen.writeObjectField("scopedBoundVariableNames", value.scopedBoundVariableNames)
+      }
+      gen.writeEndObject()
+    }
   }
 }
