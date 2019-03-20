@@ -1,7 +1,11 @@
 package net.prover.model.expressions
 
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.Substitutions
 
+@JsonSerialize(using = classOf[FunctionParameterSerializer])
 case class FunctionParameter(index: Int, level: Int) extends Term {
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = {
     if (level >= internalDepth) {
@@ -88,4 +92,13 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
   override def serialized = (0 to level).map(_ => "$").mkString("") + index
   override def serializedForHash = serialized
   override def toString = serialized
+}
+
+private class FunctionParameterSerializer extends JsonSerializer[FunctionParameter] {
+  override def serialize(value: FunctionParameter, gen: JsonGenerator, serializers: SerializerProvider) = {
+    gen.writeStartArray(2)
+    gen.writeNumber(value.level)
+    gen.writeNumber(value.index)
+    gen.writeEndArray()
+  }
 }

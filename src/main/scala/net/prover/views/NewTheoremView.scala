@@ -31,7 +31,7 @@ object NewTheoremView {
         let nextEntry = {Unparsed(JsonMapping.toString(nextOption))};
         let usages = {Unparsed(JsonMapping.toString(usages))};
         window.definitions = {Unparsed(JsonMapping.toString(
-          (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d.format).toMap
+          (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap
         ))}
       </script>
       <script src="https://unpkg.com/react@16/umd/react.development.js"></script>

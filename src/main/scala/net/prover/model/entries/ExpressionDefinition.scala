@@ -1,9 +1,13 @@
 package net.prover.model.entries
 
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.{Format, Parser, ParsingContext}
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 
+@JsonSerialize(using = classOf[ExpressionDefinitionSerializer])
 trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinition]
 
 trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinition] extends ChapterEntry.WithKey { self: ExpressionDefinition =>
@@ -127,4 +131,14 @@ object ExpressionDefinition {
   }
 
   def shorthandParser = Parser.optional("shorthand", Parser.allInParens)
+}
+
+private class ExpressionDefinitionSerializer extends JsonSerializer[ExpressionDefinition] {
+  override def serialize(value: ExpressionDefinition, gen: JsonGenerator, serializers: SerializerProvider) = {
+    gen.writeStartObject(value);
+    gen.writeObjectField("baseFormatString", value.format.baseFormatString)
+    gen.writeObjectField("requiresBrackets", value.format.requiresBrackets)
+    gen.writeObjectField("numberOfBoundVariables", value.boundVariableNames.length)
+    gen.writeEndObject()
+  }
 }

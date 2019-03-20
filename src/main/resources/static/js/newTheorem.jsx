@@ -32,32 +32,35 @@ function replacePlaceholders(text, components) {
 
 class Expression extends React.Component {
   static renderParameter(parameter, boundVariableLists) {
-    return formatHtml(boundVariableLists[parameter.level][parameter.index]);
+    let [level, index] = parameter;
+    return formatHtml(boundVariableLists[level][index]);
   }
   static renderDefinedExpression(expression, boundVariableLists, safe) {
-    let format = window.definitions[expression.definition];
-    let boundVariableNames = expression.scopedBoundVariableNames || [];
-
-    let formatString = (safe && format.requiresBrackets) ?
-      "(" + format.baseFormatString + ")" :
-      format.baseFormatString;
-    let innerBoundVariableLists = boundVariableNames.length ? [boundVariableNames].concat(boundVariableLists) : boundVariableLists;
-    let components = boundVariableNames.concat(expression.components.map(c => this.renderExpression(c, innerBoundVariableLists, true)));
-    return formatHtml(formatString, s => replacePlaceholders(s, components));
+    let [symbol, ...components] = expression;
+    let definition = window.definitions[symbol];
+    let formatString = (safe && definition.requiresBrackets) ?
+      "(" + definition.baseFormatString + ")" :
+      definition.baseFormatString;
+    let innerBoundVariableLists = definition.numberOfBoundVariables > 0 ?
+      [components.slice(0, definition.numberOfBoundVariables), ...boundVariableLists] :
+      boundVariableLists;
+    let renderedComponents = components.map(c => this.renderExpression(c, innerBoundVariableLists, true));
+    return formatHtml(formatString, s => replacePlaceholders(s, renderedComponents));
   }
   static renderApplicationExpression(expression, boundVariableLists) {
-    let formatString = expression.variableName + "(" + expression.arguments.map((_, i) => "%" + i).join(", ") + ")";
-    let components = expression.arguments.map(c => this.renderExpression(c, boundVariableLists, true));
+    var [[name, args]] = _.toPairs(expression);
+    let formatString = name + "(" + args.map((_, i) => "%" + i).join(", ") + ")";
+    let components = args.map(c => this.renderExpression(c, boundVariableLists, true));
     return formatHtml(formatString, s => replacePlaceholders(s, components));
   }
   static renderExpression(expression, boundVariableLists, safe) {
     if (typeof expression === "string") { // Variable or constant
       return formatHtml(expression);
-    } else if ("definition" in expression) { // Defined statement or term
+    } else if (_.isArray(expression) && _.isString(expression[0])) { // Defined statement or term
       return this.renderDefinedExpression(expression, boundVariableLists, safe);
-    } else if ("level" in expression) { // Function parameter
+    } else if (_.isArray(expression) && _.isNumber(expression[0])) { // Function parameter
       return this.renderParameter(expression, boundVariableLists)
-    } else if ("arguments" in expression) { // Application
+    } else if (_.isObject(expression)) { // Application
       return this.renderApplicationExpression(expression, boundVariableLists)
     } else {
       return "?";
@@ -222,10 +225,8 @@ class Theorem extends React.Component {
           )}
         </div>
       }
-
     </div>
   }
-
 }
 
 ReactDOM.render(<Theorem theorem={theorem} previousEntry={previousEntry} nextEntry={nextEntry} usages={usages}/>, document.getElementById("theorem"));

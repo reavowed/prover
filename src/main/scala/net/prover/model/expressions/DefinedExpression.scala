@@ -121,13 +121,11 @@ private class DefinedExpressionSerializer extends JsonSerializer[DefinedExpressi
     if (value.components.isEmpty) {
       gen.writeString(value.definition.symbol)
     } else {
-      gen.writeStartObject(value)
-      gen.writeStringField("definition", value.definition.symbol)
-      gen.writeObjectField("components", value.components)
-      if (value.scopedBoundVariableNames.nonEmpty) {
-        gen.writeObjectField("scopedBoundVariableNames", value.scopedBoundVariableNames)
-      }
-      gen.writeEndObject()
+      gen.writeStartArray(value.components.length + value.scopedBoundVariableNames.length + 1)
+      gen.writeString(value.definition.symbol)
+      value.scopedBoundVariableNames.foreach(gen.writeString)
+      value.components.foreach(gen.writeObject)
+      gen.writeEndArray()
     }
   }
 }

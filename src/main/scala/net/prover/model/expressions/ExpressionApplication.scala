@@ -1,10 +1,14 @@
 package net.prover.model.expressions
 
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import monocle.Lens
 import net.prover.model._
 
 import scala.reflect.ClassTag
 
+@JsonSerialize(using = classOf[ExpressionApplicationSerializer])
 abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] extends Expression with TypedExpression[ExpressionType] {
   def variableName: String
   def arguments: Seq[Term]
@@ -88,5 +92,13 @@ object ExpressionApplication {
       Some((expressionApplication.variableName, expressionApplication.arguments))
     case _ =>
       None
+  }
+}
+
+private class ExpressionApplicationSerializer extends JsonSerializer[ExpressionApplication[_]] {
+  override def serialize(value: ExpressionApplication[_], gen: JsonGenerator, serializers: SerializerProvider) = {
+    gen.writeStartObject(value)
+    gen.writeObjectField(value.variableName, value.arguments)
+    gen.writeEndObject()
   }
 }

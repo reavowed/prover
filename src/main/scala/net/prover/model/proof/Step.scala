@@ -1,5 +1,6 @@
 package net.prover.model.proof
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model._
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions.{DefinedStatement, Statement}
@@ -7,6 +8,7 @@ import net.prover.model.proof.Step.NewAssert.Premise._
 
 import scala.util.Try
 
+@JsonIgnoreProperties(Array("context", "substitutions"))
 sealed trait Step {
   def provenStatement: Option[Statement]
   def findStep(indexes: Seq[Int]): Option[Step] = {
