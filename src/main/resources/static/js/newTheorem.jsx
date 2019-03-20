@@ -23,11 +23,27 @@ function formatHtml(text, replacementFunction) {
     }
   });
 }
+
 function replacePlaceholders(text, components) {
   return formatWithReplacement(text, /%(\d+)/g, x => x,  match => {
     const index = parseInt(match[1]);
     return components[index];
   });
+}
+
+function serialize(expression) {
+  if (typeof expression === "string") { // Variable or constant
+    return expression;
+  } else if (_.isArray(expression) && _.isString(expression[0])) { // Defined statement or term
+    return _.map(expression, serialize).join(" ")
+  } else if (_.isArray(expression) && _.isNumber(expression[0])) { // Function parameter
+    return "$".repeat(expression[0]) + expression[1];
+  } else if (_.isObject(expression)) { // Application
+    let [[name, args]] = _.toPairs(expression);
+    return `with ${name} (${_.map(args, serialize)})`
+  } else {
+    return "?";
+  }
 }
 
 class Expression extends React.Component {
@@ -138,7 +154,7 @@ class Steps extends React.Component {
   render() {
     let {steps, className, path, ...otherProps} = this.props;
     return <div className={className}>
-      {steps.map((step, index) => <Step step={step} path={[...path, index]} {...otherProps} />)}
+      {steps.map((step, index) => <Step key={step.type + " " + serialize(step.statement)} step={step} path={[...path, index]} {...otherProps} />)}
     </div>;
   }
 }
