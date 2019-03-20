@@ -36,6 +36,7 @@ object NewTheoremView {
       </script>
       <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
       <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+      <script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js"></script>
       <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
       <script src="https://unpkg.com/styled-components/dist/styled-components.min.js"></script>
       <script src="/js/newTheorem.jsx" type="text/babel"></script>

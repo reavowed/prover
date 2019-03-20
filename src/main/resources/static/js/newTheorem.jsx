@@ -88,13 +88,20 @@ class Expression extends React.Component {
   }
 }
 
-const ProofLine = styled.div`
-  display: block;
+const ProofLine = styled(class extends React.Component {
+  render() {
+    return <div onMouseEnter={() => this.props.setHighlightedPremises(this.props.step.referencedLines || [])}
+                onMouseLeave={() => this.props.setHighlightedPremises([])}
+                className={this.props.className}>
+      {this.props.children}
+    </div>;
+  }
+})`
   padding-bottom: 5px;
 `;
 
 const HighlightableStatement = styled(Expression)`
-  color: ${props => props.highlighted && "red"};
+  color: ${props => _.some(props.highlightedPremises, p => p.lineReference === props.reference) && "red"};
 `;
 
 const ProofLineStatement = styled(HighlightableStatement)`
@@ -103,58 +110,50 @@ const ProofLineStatement = styled(HighlightableStatement)`
   }
 `;
 
-class Step extends React.Component {
-  innerContent() {
-    const {step, path, ...otherProps} = this.props;
-    switch (step.type) {
-      case "target":
-      case "assertion":
-        return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={step.statement}/>.</span>;
-      case "oldAssertion":
-        return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={step.assertion}/>.</span>;
-      case "assumption":
-        return [
-          <span key="assumption">Assume <ProofLineStatement highlighted={this.isAssumptionHighlighted()} expression={this.props.step.assumption}/>.</span>,
-          <StepChildren key="children" steps={step.substeps} path={path} {...otherProps} />
-        ]
-    }
-  }
-
-  isHighlighted() {
-    return _.some(this.props.highlightedPremises, p => p.lineReference === this.props.path.join("."))
-  }
-  isAssumptionHighlighted() {
-    return _.some(this.props.highlightedPremises, p => p.lineReference === this.props.path.join(".") + "a")
-  }
-
+class AssumptionStep extends React.Component {
   render() {
-    const {step, path, ...otherProps} = this.props;
-    let innerContent = () => {
-      switch (step.type) {
-        case "target":
-        case "assertion":
-          return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={step.statement}/>.</span>;
-        case "oldAssertion":
-          return <span>Then <ProofLineStatement highlighted={this.isHighlighted()} expression={step.assertion}/>.</span>;
-        case "assumption":
-          return <span key="assumption">Assume <ProofLineStatement highlighted={this.isAssumptionHighlighted()} expression={step.assumption}/>.</span>;
-      }
-    };
-
+    let {step, path, substeps, ...otherProps} = this.props;
     return <div>
-      <ProofLine onMouseEnter={() => this.props.setHighlightedPremises(this.props.step.referencedLines || [])}
-                      onMouseLeave={() => this.props.setHighlightedPremises([])}
-      >{innerContent()}</ProofLine>
-      {step.substeps && <StepChildren key="children" steps={step.substeps} path={path} {...otherProps} />}
-    </div>
+      <ProofLine step={step} {...otherProps}>
+        <span>Assume <ProofLineStatement expression={step.statement} reference={path.join(".") + "a"} {...otherProps}/>.</span>
+      </ProofLine>
+      <StepChildren steps={substeps} path={path} {...otherProps} />
+    </div>;
+  }
+}
+
+class AssertionStep extends React.Component {
+  render() {
+    let {step, path, ...otherProps} = this.props;
+    return <ProofLine step={step} {...otherProps}>
+      <span>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</span>
+    </ProofLine>;
   }
 }
 
 class Steps extends React.Component {
+  static getElementName(step) {
+    switch (step.type) {
+      case "assertion":
+      case "oldAssertion":
+      case "target":
+        return AssertionStep;
+      case "assumption":
+        return AssumptionStep;
+    }
+  }
   render() {
     let {steps, className, path, ...otherProps} = this.props;
     return <div className={className}>
-      {steps.map((step, index) => <Step key={step.type + " " + serialize(step.statement)} step={step} path={[...path, index]} {...otherProps} />)}
+      {steps.map((step, index) => {
+        let newProps = {
+          step: step,
+          path: [...path, index],
+          key: step.type + " " + serialize(step.statement),
+          ...otherProps
+        };
+        return React.createElement(Steps.getElementName(step), newProps);
+      })}
     </div>;
   }
 }
@@ -164,12 +163,8 @@ const StepChildren = styled(Steps)`
 `;
 
 class Premise extends React.Component {
-  isHighlighted() {
-    return _.some(this.props.highlightedPremises, p => p.lineReference === ("p" + this.props.index));
-  }
-
   render() {
-    return <HighlightableStatement highlighted={this.isHighlighted()} expression={this.props.premise}/>;
+    return <HighlightableStatement reference={"p" + this.props.index} highlightedPremises={this.props.highlightedPremises} expression={this.props.premise}/>;
   }
 }
 
