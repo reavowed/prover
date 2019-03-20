@@ -63,7 +63,7 @@ object Reference {
   }
 
   case class Simplification(
-      inference: Inference,
+      inference: Inference.Summary,
       substitutions: Substitutions,
       inferenceReference: Reference.ToSingleLine,
       simplificationPath: Seq[Int])

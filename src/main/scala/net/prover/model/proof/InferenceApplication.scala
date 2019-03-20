@@ -15,7 +15,7 @@ sealed trait InferenceApplication {
 
 object InferenceApplication {
   case class Direct(
-      inference: Inference,
+      inference: Inference.Summary,
       substitutions: Substitutions,
       conclusion: Statement,
       references: Seq[Reference],

@@ -219,7 +219,7 @@ object Step {
 
   case class NewAssert(
       statement: Statement,
-      inference: Inference,
+      inference: Inference.Summary,
       premises: Seq[NewAssert.Premise],
       substitutions: Substitutions,
       context: StepContext)
@@ -320,7 +320,7 @@ object Step {
 
       case class Rearrangement(
           statement: Statement,
-          inference: Inference,
+          inference: Inference.Summary,
           premises: Seq[NewAssert.Premise],
           substitutions: Substitutions)
         extends Premise

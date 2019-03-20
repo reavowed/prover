@@ -1,8 +1,15 @@
+import "@babel/polyfill";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
+import styled from 'styled-components';
+import _ from 'lodash';
+
 function formatWithReplacement(text, regex, handlePlain, handleMatch) {
-  const matches = text.matchAll(regex);
+  let match;
   let indexOfLastMatchEnd = 0;
   let html = "";
-  for (const match of matches) {
+  while (match = regex.exec(text)) {
     html += handlePlain(text.substr(indexOfLastMatchEnd, match.index - indexOfLastMatchEnd));
     html += handleMatch(match);
     indexOfLastMatchEnd = match.index + match[0].length;
@@ -237,10 +244,13 @@ class Theorem extends React.Component {
           )}
         </div>
       }
-
     </div>
   }
-
 }
 
-ReactDOM.render(<Theorem theorem={theorem} previousEntry={previousEntry} nextEntry={nextEntry} usages={usages}/>, document.getElementById("theorem"));
+window.renderTheoremClient = function(theorem, previousEntry, nextEntry, usages) {
+  ReactDOM.render(<Theorem theorem={theorem} previousEntry={previousEntry} nextEntry={nextEntry} usages={usages}/>, document.getElementById("theorem"));
+};
+window.renderTheoremServer = function(theorem, previousEntry, nextEntry, usages) {
+  return ReactDOMServer.renderToString(<Theorem theorem={JSON.parse(theorem)} previousEntry={JSON.parse(previousEntry)} nextEntry={JSON.parse(nextEntry)} usages={JSON.parse(usages)}/>);
+};

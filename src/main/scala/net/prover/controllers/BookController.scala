@@ -1,5 +1,10 @@
 package net.prover.controllers
 
+import java.io.InputStreamReader
+
+import javax.script.ScriptEngineManager
+import jdk.nashorn.api.scripting.NashornScriptEngine
+import net.prover.{JsonMapping, ServerSideRendering}
 import net.prover.controllers.BookController.NewTheoremModel
 import net.prover.exceptions.{BadRequestException, NotFoundException}
 import net.prover.model.Inference.RearrangementType
@@ -148,7 +153,8 @@ class BookController @Autowired() (bookService: BookService) {
           case axiom: Axiom =>
             AxiomView(axiom, chapter, book, previous, next, getUsages(axiom, books)).toString
           case theorem: Theorem =>
-            NewTheoremView(theorem, chapter, book, previous, next, getUsages(theorem, books)).toString
+//            val content = ServerSideRendering.render("renderTheoremServer", theorem, previous, next, getUsages(theorem, books))
+            NewTheoremView(theorem, chapter, book, previous, next, getUsages(theorem, books), "").toString
         }
       }) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {
