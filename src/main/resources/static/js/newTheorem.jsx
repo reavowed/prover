@@ -31,60 +31,9 @@ function replacePlaceholders(text, components) {
   });
 }
 
-function serialize(expression) {
-  if (typeof expression === "string") { // Variable or constant
-    return expression;
-  } else if (_.isArray(expression) && _.isString(expression[0])) { // Defined statement or term
-    return _.map(expression, serialize).join(" ")
-  } else if (_.isArray(expression) && _.isNumber(expression[0])) { // Function parameter
-    return "$".repeat(expression[0]) + expression[1];
-  } else if (_.isObject(expression)) { // Application
-    let [[name, args]] = _.toPairs(expression);
-    return `with ${name} (${_.map(args, serialize)})`
-  } else {
-    return "?";
-  }
-}
-
 class Expression extends React.Component {
-  static renderParameter(parameter, boundVariableLists) {
-    let [level, index] = parameter;
-    return formatHtml(boundVariableLists[level][index]);
-  }
-  static renderDefinedExpression(expression, boundVariableLists, safe) {
-    let [symbol, ...components] = expression;
-    let definition = window.definitions[symbol];
-    let formatString = (safe && definition.requiresBrackets) ?
-      "(" + definition.baseFormatString + ")" :
-      definition.baseFormatString;
-    let innerBoundVariableLists = definition.numberOfBoundVariables > 0 ?
-      [components.slice(0, definition.numberOfBoundVariables), ...boundVariableLists] :
-      boundVariableLists;
-    let renderedComponents = components.map(c => this.renderExpression(c, innerBoundVariableLists, true));
-    return formatHtml(formatString, s => replacePlaceholders(s, renderedComponents));
-  }
-  static renderApplicationExpression(expression, boundVariableLists) {
-    var [[name, args]] = _.toPairs(expression);
-    let formatString = name + "(" + args.map((_, i) => "%" + i).join(", ") + ")";
-    let components = args.map(c => this.renderExpression(c, boundVariableLists, true));
-    return formatHtml(formatString, s => replacePlaceholders(s, components));
-  }
-  static renderExpression(expression, boundVariableLists, safe) {
-    if (typeof expression === "string") { // Variable or constant
-      return formatHtml(expression);
-    } else if (_.isArray(expression) && _.isString(expression[0])) { // Defined statement or term
-      return this.renderDefinedExpression(expression, boundVariableLists, safe);
-    } else if (_.isArray(expression) && _.isNumber(expression[0])) { // Function parameter
-      return this.renderParameter(expression, boundVariableLists)
-    } else if (_.isObject(expression)) { // Application
-      return this.renderApplicationExpression(expression, boundVariableLists)
-    } else {
-      return "?";
-    }
-  }
-
   render() {
-    return <span className={this.props.className} dangerouslySetInnerHTML={{ __html: Expression.renderExpression(this.props.expression, [], false)}} />;
+    return <span className={this.props.className} dangerouslySetInnerHTML={{ __html: this.props.expression.toHtml([], false)}} />;
   }
 }
 
@@ -149,7 +98,7 @@ class Steps extends React.Component {
         let newProps = {
           step: step,
           path: [...path, index],
-          key: step.type + " " + serialize(step.statement),
+          key: step.type + " " + step.statement.serialize(),
           ...otherProps
         };
         return React.createElement(Steps.getElementName(step), newProps);
@@ -202,7 +151,8 @@ class Theorem extends React.Component {
   };
 
   render() {
-    let {theorem, previousEntry, nextEntry, usages} = this.props;
+    const {theorem: rawTheorem, previousEntry, nextEntry, usages} = this.props;
+    const theorem = Parser.parseTheorem(rawTheorem);
     let {proof} = theorem;
     return <div className="inference">
       <div className="navigationLinks">
@@ -237,6 +187,96 @@ class Theorem extends React.Component {
         </div>
       }
     </div>
+  }
+}
+
+class VariableOrConstant {
+  constructor(name) {
+    this.name = name;
+  }
+  serialize() {
+    return this.name;
+  }
+  toHtml() {
+    return this.name;
+  }
+}
+class DefinedExpression {
+  constructor(definition, boundVariableNames, components) {
+    this.definition = definition;
+    this.boundVariableNames = boundVariableNames;
+    this.components = components;
+  }
+  serialize() {
+    return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
+  }
+  toHtml(boundVariableLists, safe) {
+    let formatString = (safe && this.definition.requiresBrackets) ?
+      "(" + this.definition.baseFormatString + ")" :
+      this.definition.baseFormatString;
+    let innerBoundVariableLists = this.boundVariableNames.length > 0 ? [this.boundVariableNames, ...boundVariableLists] : boundVariableLists;
+    let componentsHtml = this.components.map(c => c.toHtml(innerBoundVariableLists, true));
+    return formatHtml(formatString, s => replacePlaceholders(s, [...this.boundVariableNames, ...componentsHtml]));
+  }
+}
+class FunctionParameter {
+  constructor(level, index) {
+    this.level = level;
+    this.index = index;
+  }
+  serialize() {
+    return "$".repeat(this.level) + this.index;
+  }
+  toHtml(boundVariableLists) {
+    return boundVariableLists[this.level][this.index];
+  }
+}
+class ExpressionApplication {
+  constructor(name, args) {
+    this.name = name;
+    this.args = args;
+  }
+  serialize() {
+    return `with ${this.name} (${_.map(this.args, a => a.serialize())})`
+  }
+  toHtml(boundVariableLists) {
+    const formatString = this.name + "(" + this.args.map((_, i) => "%" + i).join(", ") + ")";
+    let argsHtml = this.args.map(c => c.toHtml(boundVariableLists, true));
+    return formatHtml(formatString, s => replacePlaceholders(s, argsHtml));
+  }
+}
+
+class Parser {
+  static parseExpression(rawExpression) {
+    if (typeof rawExpression === "string") { // Variable or constant
+      return new VariableOrConstant(rawExpression);
+    } else if (_.isArray(rawExpression) && _.isString(rawExpression[0])) { // Defined statement or term
+      const [definitionSymbol, ...boundVariablesAndComponents] = rawExpression;
+      const definition = window.definitions[definitionSymbol];
+      const boundVariableNames = boundVariablesAndComponents.slice(0, definition.numberOfBoundVariables);
+      const components = boundVariablesAndComponents.slice(definition.numberOfBoundVariables);
+      return new DefinedExpression(definition, boundVariableNames, components.map(Parser.parseExpression));
+    } else if (_.isArray(rawExpression) && _.isNumber(rawExpression[0])) { // Function parameter
+      const [level, index] = rawExpression;
+      return new FunctionParameter(level, index);
+    } else if (_.isObject(rawExpression)) { // Application
+      let [[name, args]] = _.toPairs(rawExpression);
+      return new ExpressionApplication(name, args.map(Parser.parseExpression));
+    } else {
+      throw `Unrecognised expression ${JSON.stringify(rawExpression)}`
+    }
+  }
+  static parseStep(step) {
+    step.assumption = step.assumption && Parser.parseExpression(step.assumption);
+    step.statement = step.statement && Parser.parseExpression(step.statement);
+    step.substeps = step.substeps && step.substeps.map(Parser.parseStep)
+  }
+  static parseTheorem(rawTheorem) {
+    const theorem = _.cloneDeep(rawTheorem);
+    theorem.premises = theorem.premises && theorem.premises.map(Parser.parseExpression);
+    theorem.conclusion = theorem.conclusion && Parser.parseExpression(theorem.conclusion);
+    _.each(theorem.proof, Parser.parseStep);
+    return theorem;
   }
 }
 
