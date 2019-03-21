@@ -23,12 +23,12 @@ const ProofLineStatement = styled(HighlightableExpression)`
 
 class AssumptionStep extends React.Component {
   render() {
-    let {step, path, substeps, ...otherProps} = this.props;
+    let {step, path, ...otherProps} = this.props;
     return <div>
       <ProofLine step={step} {...otherProps}>
-        <span>Assume <ProofLineStatement expression={step.statement} reference={path.join(".") + "a"} {...otherProps}/>.</span>
+        <span>Assume <ProofLineStatement expression={step.assumption} reference={path.join(".") + "a"} {...otherProps}/>.</span>
       </ProofLine>
-      <StepChildren steps={substeps} path={path} {...otherProps} />
+      <StepChildren steps={step.substeps} path={path} {...otherProps} />
     </div>;
   }
 }
@@ -53,6 +53,16 @@ class Steps extends React.Component {
         return AssumptionStep;
     }
   }
+  static getKeyStatement(step) {
+    switch (step.type) {
+      case "assertion":
+      case "oldAssertion":
+      case "target":
+        return step.statement;
+      case "assumption":
+        return step.assumption;
+    }
+  }
   render() {
     let {steps, className, path, ...otherProps} = this.props;
     return <div className={className}>
@@ -60,7 +70,7 @@ class Steps extends React.Component {
         let newProps = {
           step: step,
           path: [...path, index],
-          key: step.type + " " + step.statement.serialize(),
+          key: step.type + " " + Steps.getKeyStatement(step).serialize(),
           ...otherProps
         };
         return React.createElement(Steps.getElementName(step), newProps);

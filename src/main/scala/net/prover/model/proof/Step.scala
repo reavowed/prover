@@ -8,7 +8,7 @@ import net.prover.model.proof.Step.NewAssert.Premise._
 
 import scala.util.Try
 
-@JsonIgnoreProperties(Array("context", "substitutions"))
+@JsonIgnoreProperties(Array("context", "substitutions", "deductionStatement", "scopingStatement"))
 sealed trait Step {
   def provenStatement: Option[Statement]
   def findStep(indexes: Seq[Int]): Option[Step] = {
@@ -47,20 +47,20 @@ case class StepContext(availableStatements: Seq[ProvenStatement], externalDepth:
 
 object Step {
   case class Assertion(
-      assertion: Statement,
+      statement: Statement,
       inferenceApplication: InferenceApplication)
     extends Step
   {
     val `type` = "oldAssertion"
     val referencedLines: Set[PreviousLineReference] = inferenceApplication.referencedLines
-    override def provenStatement: Option[Statement] = Some(assertion)
+    override def provenStatement: Option[Statement] = Some(statement)
     override def referencedInferenceIds = inferenceApplication.referencedInferenceIds
     override def findSubstep(index: Int, innerIndexes: Seq[Int]): Option[Step] = None
     override def replaceSubstep(index: Int, substepIndexes: Seq[Int], newStep: Step): Step = throw new Exception("Cannot replace substep in assertion")
     override def insertSubstep(index: Int, innerIndexes: Seq[Int], newStep: Step): Option[Step] = None
     override def recalculateReferences(path: Seq[Int], stepContext: StepContext): Option[Step] = Some(this)
     override def length = 1
-    override def serializedLines = Seq(s"assert ${assertion.serialized} ${inferenceApplication.serialized}")
+    override def serializedLines = Seq(s"assert ${statement.serialized} ${inferenceApplication.serialized}")
   }
   object Assertion {
     def parser(path: Seq[Int])(implicit context: ParsingContext): Parser[Assertion] = {

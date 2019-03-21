@@ -144,14 +144,14 @@ class Parser {
     }
   }
   static parseStep(step) {
-    step.assumption = step.assumption && Parser.parseExpression(step.assumption);
-    step.statement = step.statement && Parser.parseExpression(step.statement);
-    step.substeps = step.substeps && step.substeps.map(Parser.parseStep)
+    step.assumption && (step.assumption = Parser.parseExpression(step.assumption));
+    step.statement && (step.statement = Parser.parseExpression(step.statement));
+    step.substeps && _.each(step.substeps, Parser.parseStep);
   }
   static parseTheorem(rawTheorem) {
     const theorem = _.cloneDeep(rawTheorem);
-    theorem.premises = theorem.premises && theorem.premises.map(Parser.parseExpression);
-    theorem.conclusion = theorem.conclusion && Parser.parseExpression(theorem.conclusion);
+    theorem.premises && (theorem.premises = theorem.premises.map(Parser.parseExpression));
+    theorem.conclusion && (theorem.conclusion = Parser.parseExpression(theorem.conclusion));
     _.each(theorem.proof, Parser.parseStep);
     return theorem;
   }
