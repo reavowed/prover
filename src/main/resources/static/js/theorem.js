@@ -4,7 +4,7 @@ $(() => {
     return lastChild.is("[data-reference-for-last-child]") ? findLastChild(lastChild) : lastChild;
   }
   function findElementByReference(lineReference, pathReference) {
-    let outerElement = $(`[data-reference='${lineReference}']`);
+    let outerElement = $(`[data-reference='${lineReference}'], [data-premise='${lineReference}']`);
     outerElement = outerElement.length ? outerElement : findLastChild($(`[data-reference-for-last-child='${lineReference}']`));
     outerElement = outerElement.find(".conclusion").length ? outerElement.find(".conclusion") : outerElement;
     return pathReference.length ? outerElement.find(`[data-path='${pathReference.join(".")}']`) : outerElement;
@@ -36,7 +36,7 @@ $(() => {
     proofLine.popover({
       placement: "bottom",
       html: true,
-      trigger: "focus"
+      trigger: "manual"
     });
     proofLine
       .on("click", e => {
