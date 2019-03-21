@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import styled from 'styled-components';
+import _ from 'lodash';
+
 function formatWithReplacement(text, regex, handlePlain, handleMatch) {
   const matches = text.matchAll(regex);
   let indexOfLastMatchEnd = 0;
