@@ -25,8 +25,8 @@ object InferenceView {
     import book.displayContext
     <div class="inference">
       <div class="navigationLinks">
-        { previousOption.toSeq.map { previous => <a class="navigationLink pull-left" href={previous.key.url}>&laquo; {previous.name}</a> }}
-        { nextOption.toSeq.map { next => <a class="navigationLink pull-right" href={next.key.url}>{next.name} &raquo;</a> }}
+        { previousOption.toSeq.map { previous => <a class="navigationLink float-left" href={previous.key.url}>&laquo; {previous.name}</a> }}
+        { nextOption.toSeq.map { next => <a class="navigationLink float-right" href={next.key.url}>{next.name} &raquo;</a> }}
       </div>
       <div class="inferenceTitle">
         <h3>
@@ -51,7 +51,7 @@ object InferenceView {
         <div>
           <hr />
           { for((usageBook, usageChapter, theorems) <- usages) yield {
-            <div><label>{usageBook.title} - {usageChapter.title}</label></div>
+            <h6>{usageBook.title} - {usageChapter.title}</h6>
             <p>
               { theorems.map { theorem =>
                 <span class="usage">

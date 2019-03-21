@@ -100,8 +100,8 @@ export class Theorem extends React.Component {
     let {proof} = theorem;
     return <div className="inference">
       <div className="navigationLinks">
-        {previousEntry && <a className="navigationLink pull-left" href={previousEntry.key}>&laquo; {previousEntry.name}</a>}
-        {nextEntry && <a className="navigationLink pull-right" href={nextEntry.key}>{nextEntry.name} &raquo;</a>}
+        {previousEntry && <a className="navigationLink float-left" href={previousEntry.key}>&laquo; {previousEntry.name}</a>}
+        {nextEntry && <a className="navigationLink float-right" href={nextEntry.key}>{nextEntry.name} &raquo;</a>}
       </div>
       <div className="inferenceTitle">
         <h3>
@@ -124,7 +124,7 @@ export class Theorem extends React.Component {
           <hr />
           {usages.map(([usageBook, usageChapter, theorems]) =>
             <div key={usageBook.key.value + "/" + usageChapter.key.value}>
-              <div><label>{usageBook.title} - {usageChapter.title}</label></div>
+              <h6>{usageBook.title} - {usageChapter.title}</h6>
               <p>{theorems.map(theorem => <span className="usage" key={theorem.key.value}> <a className="usageLink" href={theorem.key}>{theorem.name}</a> </span>)}</p>
             </div>
           )}

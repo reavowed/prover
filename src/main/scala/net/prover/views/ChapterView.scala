@@ -9,7 +9,7 @@ object ChapterView {
   private def DefinitionTitle(description: String, definition: ExpressionDefinition)(implicit displayContext: DisplayContext) = {
     <div class="entryTitle">
       <h5>{description} Definition: {ExpressionView(definition.defaultValue)}</h5>
-      <button class="btn btn-success btn-xs editShorthand"
+      <button class="btn btn-success btn-sm editShorthand"
               data-key={definition.key.value}
               data-shorthand={definition.shorthand.getOrElse("")}
               data-toggle="modal"
@@ -46,9 +46,9 @@ object ChapterView {
             {description}: {inference.name}
           </a>
         </h5>
-        <button class="btn btn-danger btn-xs deleteInference"
+        <button class="btn btn-danger btn-sm deleteInference"
                 data-key={inference.key.value}
-        ><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        ><span class="fas fa-ban"></span></button>
       </div>
       <div class="resultBlock">
         { PremisesView(inference.premises) }
@@ -69,8 +69,8 @@ object ChapterView {
     import book.displayContext
     <div class="chapter">
       <div class="navigationLinks">
-        { previousChapterOption.toSeq.map { previous => <a class="navigationLink pull-left" href={previous.key.url}>&laquo; {previous.title}</a> }}
-        { nextChapterOption.toSeq.map { next => <a class="navigationLink pull-right" href={next.key.url}>{next.title} &raquo;</a> }}
+        { previousChapterOption.toSeq.map { previous => <a class="navigationLink float-left" href={previous.key.url}>&laquo; {previous.title}</a> }}
+        { nextChapterOption.toSeq.map { next => <a class="navigationLink float-right" href={next.key.url}>{next.title} &raquo;</a> }}
       </div>
       <h3>{chapter.title}</h3>
       <p class="comment">{chapter.summary}</p>
