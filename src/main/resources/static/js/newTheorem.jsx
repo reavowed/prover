@@ -190,6 +190,27 @@ class Theorem extends React.Component {
   }
 }
 
+function matchShorthand(template, expression, boundVariableLists) {
+  if (_.isString(template)) {
+    return expression.toHtml(boundVariableLists, false);
+  } else if (_.isArray(template) && _.isString(template[0])) {
+    if ((expression instanceof DefinedExpression) && (expression.definition.symbol === template[0])) {
+      let innerBoundVariableLists = expression.boundVariableNames.length > 0 ? [expression.boundVariableNames, ...boundVariableLists] : boundVariableLists;
+      const componentMatches = _.zipWith(
+        template.slice(1 + expression.definition.numberOfBoundVariables),
+        expression.components,
+        (t, c) => matchShorthand(t, c, innerBoundVariableLists));
+      if (_.every(componentMatches)) {
+        return [...expression.boundVariableNames, ..._.flatten(componentMatches)];
+      }
+    }
+  } else if (_.isArray(template) && _.isNumber(template[0])) {
+    if ((expression instanceof FunctionParameter) && _.isEqual(template, [expression.level, expression.index])) {
+      return [];
+    }
+  }
+}
+
 class VariableOrConstant {
   constructor(name) {
     this.name = name;
@@ -198,7 +219,7 @@ class VariableOrConstant {
     return this.name;
   }
   toHtml() {
-    return this.name;
+    return formatHtml(this.name);
   }
 }
 class DefinedExpression {
@@ -211,6 +232,16 @@ class DefinedExpression {
     return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
   }
   toHtml(boundVariableLists, safe) {
+    for (let shorthand of window.shorthands) {
+      const matches = matchShorthand(shorthand.template, this, boundVariableLists);
+      if (matches) {
+        let formatString = (safe && shorthand.requiresBrackets) ?
+          "(" + shorthand.baseFormatString + ")" :
+          shorthand.baseFormatString;
+        return formatHtml(formatString, s => replacePlaceholders(s, matches));
+      }
+    }
+
     let formatString = (safe && this.definition.requiresBrackets) ?
       "(" + this.definition.baseFormatString + ")" :
       this.definition.baseFormatString;

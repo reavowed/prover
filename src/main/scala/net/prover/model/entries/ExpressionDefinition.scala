@@ -135,7 +135,7 @@ object ExpressionDefinition {
 
 private class ExpressionDefinitionSerializer extends JsonSerializer[ExpressionDefinition] {
   override def serialize(value: ExpressionDefinition, gen: JsonGenerator, serializers: SerializerProvider) = {
-    gen.writeStartObject(value);
+    gen.writeStartObject(value)
     gen.writeObjectField("symbol", value.symbol)
     gen.writeObjectField("baseFormatString", value.format.baseFormatString)
     gen.writeObjectField("requiresBrackets", value.format.requiresBrackets)

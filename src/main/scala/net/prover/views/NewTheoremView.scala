@@ -33,6 +33,7 @@ object NewTheoremView {
         window.definitions = {Unparsed(JsonMapping.toString(
           (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap
         ))}
+        window.shorthands = {Unparsed(JsonMapping.toString(book.displayContext.displayShorthands))}
       </script>
       <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
       <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
