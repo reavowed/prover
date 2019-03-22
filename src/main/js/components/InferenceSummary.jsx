@@ -14,7 +14,7 @@ export const InferenceSummary = styled(class extends React.Component {
   }
   render() {
     let {inference, createPremiseElement} = this.props;
-    createPremiseElement = createPremiseElement || (p => <Expression expression={p} boundVariableLists={[]}/>);
+    createPremiseElement = createPremiseElement || (p => <Expression key={p.serialize()} expression={p} boundVariableLists={[]}/>);
     let premiseElements = inference.premises.map(createPremiseElement);
     let premiseElement = premiseElements.length > 0 && (premiseElements.length > 1 ? this.renderMultiplePremises(premiseElements) : this.renderSinglePremise(premiseElements[0]));
     return <div className={this.props.className}>

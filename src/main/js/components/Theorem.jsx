@@ -9,6 +9,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import path from "path";
 import {Parser} from "../Parser";
+import {FindInferenceModal} from "./Modals";
 
 const ClickableDiv = props => (
   <div {...props} />
@@ -71,54 +72,71 @@ class ScopedVariableStep extends React.Component {
 class TargetStep extends React.Component {
   constructor(props, context) {
     super(props, context);
-    this.showBoundVariableModal = this.showBoundVariableModal.bind(this);
-    this.hideBoundVariableModal = this.hideBoundVariableModal.bind(this);
-    this.updateBoundVariableName = this.updateBoundVariableName.bind(this);
-    this.introduceBoundVariable = this.introduceBoundVariable.bind(this);
     this.state = {
       showBoundVariableModal: false,
+      showFindInferenceModal: false,
       boundVariableName: props.step.statement.boundVariableNames && props.step.statement.boundVariableNames[0] || ""
     };
   }
 
-  showBoundVariableModal() {
+  showBoundVariableModal = () => {
     this.setState({showBoundVariableModal: true})
-  }
+  };
 
-  hideBoundVariableModal() {
+  hideBoundVariableModal = () => {
     this.setState({showBoundVariableModal: false})
-  }
+  };
 
-  updateBoundVariableName(event) {
+  updateBoundVariableName = (event) => {
     this.setState({boundVariableName: event.target.value})
-  }
+  };
 
-  introduceBoundVariable() {
-    this.props.fetchForTheorem(path.join(this.props.path.join("."), "introduceBoundVariable"), {
+  introduceBoundVariable = () => {
+    this.props.fetchForStep(this.props.path, "introduceBoundVariable", {
       method: "POST",
       body: this.state.boundVariableName
     }).then(response => {
       if (response.ok) {
         return response.json();
       }
-    }).then(newStep => {
-        Parser.parseStep(newStep);
-        this.props.updateStep(this.props.path, newStep);
-    });
-  }
+    }).then(this.props.updateTheorem);
+  };
+
+  showFindInferenceModal = () => {
+    this.setState({showFindInferenceModal: true})
+  };
+
+  hideFindInferenceModal = () => {
+    this.setState({showFindInferenceModal: false})
+  };
+
+  findInferences = (searchText) => {
+    return this.props.fetchForStep(this.props.path, `suggestInferences?searchText=${searchText}`)
+  };
 
   introduceDeduction = () => {
-    this.props.fetchForTheorem(path.join(this.props.path.join("."), "introduceDeduction"), {
+    this.props.fetchForStep(this.props.path, "introduceDeduction", {
       method: "POST"
     }).then(response => {
       if (response.ok) {
         return response.json();
       }
+    }).then(this.props.updateTheorem);
+  };
+
+  proveWithInference = (inferenceId, substitutions) => {
+    this.props.fetchForStep(this.props.path, {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({inferenceId, substitutions})
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      }
     }).then(newStep => {
-        Parser.parseStep(newStep);
-        this.props.updateStep(this.props.path, newStep);
+      console.log(newStep);
     });
-  }
+  };
 
   render() {
     let {step, path, ...otherProps} = this.props;
@@ -149,11 +167,13 @@ class TargetStep extends React.Component {
             <Button variant="success" size="sm" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
           {deductionStatement && step.statement.definition === deductionStatement &&
             <Button variant="success" size="sm" onClick={this.introduceDeduction}>Introduce deduction</Button>}
+          <Button variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</Button>
         </Popover>
     );
     return <>
       <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>
       {boundVariableModal}
+      {<FindInferenceModal show={this.state.showFindInferenceModal} onHide={this.hideFindInferenceModal} onSubmit={this.proveWithInference} findInferences={this.findInferences} {...otherProps} />}
     </>
   }
 }
@@ -214,7 +234,7 @@ export class Theorem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      proof: props.theorem.proof,
+      theorem: props.theorem,
       highlightedPremises: []
     }
   }
@@ -227,26 +247,23 @@ export class Theorem extends React.Component {
     return <Premise premise={premise} index={index} highlightedPremises={this.state.highlightedPremises}/>
   }
 
-  fetchForTheorem = (childPath, options) => {
-    return window.fetch(path.join(this.props.theorem.key, childPath), options);
+  fetchForStep = (stepPath, childPath, options) => {
+    if (_.isObject(childPath)) {
+      options = childPath;
+      childPath = "";
+    }
+    const combinedPath = path.join(this.state.theorem.key, stepPath.join("."), childPath) + (childPath === "" ? "/" : "");
+    return window.fetch(combinedPath, options);
   };
 
-  updateStep = (path, newStep) => {
-    const updateInner = (path, steps, newStep) => {
-      if (path.length === 1) {
-        return [...steps.slice(0, path[0]), newStep, ...steps.slice(path[0] + 1)];
-      } else {
-        const copiedStep = _.clone(steps[path[0]]);
-        copiedStep.substeps = updateInner(path.slice(1), copiedStep.substeps, newStep);
-        return [...steps.slice(0, path[0]), copiedStep, ...steps.slice(path[0] + 1)];
-      }
-    };
-    const newProof = updateInner(path, this.state.proof, newStep);
-    this.setState({proof: newProof});
+  updateTheorem = (theoremJSON) => {
+    const theorem = Parser.parseTheorem(theoremJSON);
+    this.setState({ theorem: theorem });
   };
 
   render() {
-    const {theorem, previousEntry, nextEntry, usages} = this.props;
+    const {previousEntry, nextEntry, usages} = this.props;
+    const {theorem} = this.state;
     return <div className="inference">
       <div className="navigationLinks">
         {previousEntry && <a className="navigationLink float-left" href={previousEntry.key}>&laquo; {previousEntry.name}</a>}
@@ -266,13 +283,13 @@ export class Theorem extends React.Component {
       <hr/>
 
       <h4>Proof</h4>
-      <Steps steps={this.state.proof}
+      <Steps steps={theorem.proof}
              path={[]}
              boundVariableLists={[]}
              setHighlightedPremises={this.setHighlightedPremises}
              highlightedPremises={this.state.highlightedPremises}
-             fetchForTheorem={this.fetchForTheorem}
-             updateStep={this.updateStep}/>
+             fetchForStep={this.fetchForStep}
+             updateTheorem={this.updateTheorem}/>
 
       {usages.length > 0 &&
         <div>

@@ -99,7 +99,7 @@ class FunctionParameter {
     this.index = index;
   }
   serialize() {
-    return "$".repeat(this.level) + this.index;
+    return "$".repeat(this.level + 1) + this.index;
   }
   toHtml(boundVariableLists) {
     return boundVariableLists[this.level][this.index];
@@ -158,5 +158,13 @@ export class Parser {
     theorem.conclusion && (theorem.conclusion = Parser.parseExpression(theorem.conclusion));
     _.each(theorem.proof, Parser.parseStep);
     return theorem;
+  }
+  static parseInferenceSuggestions(rawSuggestionsJson) {
+    return rawSuggestionsJson.map(suggestionJson => {
+      const suggestion = _.cloneDeep(suggestionJson);
+      Parser.parseInference(suggestion.inference);
+      suggestion.substitutions = suggestion.substitutions.map(substitution => _.mapValues(substitution, type => _.mapValues(type, e => e && Parser.parseExpression(e))));
+      return suggestion;
+    })
   }
 }

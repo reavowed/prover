@@ -96,7 +96,6 @@ $(() => {
       popoverElement.children(".popover-title").html(newPopoverTitle);
       popoverElement.children(".popover-content").html(newPopoverContent);
       getOptionsAndBindPopover(proofLine, false);
-
     }
 
     let popoverElement = proofLine.siblings(".popover");
@@ -188,7 +187,7 @@ $(() => {
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace("value"),
       queryTokenizer: Bloodhound.tokenizers.whitespace,
       remote: {
-        url: `${window.location.pathname}/${reference}/suggestions?searchText=%QUERY`,
+        url: `${window.location.pathname}/${reference}/suggestInferences?searchText=%QUERY`,
         wildcard: "%QUERY"
       }
     });
