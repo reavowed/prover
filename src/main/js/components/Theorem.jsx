@@ -43,17 +43,20 @@ const ProofLineStatement = styled(HighlightableStatement)`
 
 class DeductionStep extends React.Component {
   render() {
-    let {step, path, ...otherProps} = this.props;
+    let {step, path, additionalReferences, ...otherProps} = this.props;
+    let reference = path.join(".");
+    let referencesForLastStep = [...additionalReferences, reference];
     return <>
-      <ProofLine>Assume <HighlightableStatement statement={step.assumption} boundVariableLists={this.props.boundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.</ProofLine>
-      <StepChildren steps={step.substeps} path={path} {...otherProps} />
+      <ProofLine>Assume <HighlightableStatement statement={step.assumption} boundVariableLists={this.props.boundVariableLists} references={[...additionalReferences, reference, reference + "a"]} {...otherProps}/>.</ProofLine>
+      <StepChildren steps={step.substeps} path={path} referencesForLastStep={referencesForLastStep} {...otherProps} />
     </>;
   }
 }
 
 class AssertionStep extends React.Component {
   render() {
-    let {step, path, ...otherProps} = this.props;
+    let {step, path, additionalReferences, ...otherProps} = this.props;
+    let reference = path.join(".");
     const inference = step.inference || step.inferenceApplication.inference;
     const popover = (
       inference && <Popover title={inference.name}>
@@ -61,27 +64,31 @@ class AssertionStep extends React.Component {
       </Popover>
     );
     return <ProofLine referencedLines={step.referencedLines} popover={popover} {...otherProps}>
-      Then <ProofLineStatement statement={step.statement} boundVariableLists={this.props.boundVariableLists} reference={path.join(".")} {...otherProps}/>.
+      Then <ProofLineStatement statement={step.statement} boundVariableLists={this.props.boundVariableLists} references={[...additionalReferences, reference]} {...otherProps}/>.
     </ProofLine>;
   }
 }
 
 class ScopedVariableStep extends React.Component {
   render() {
-    let {step, path, boundVariableLists, ...otherProps} = this.props;
-    return <Steps steps={step.substeps} path={path} boundVariableLists={[[step.variableName], ...boundVariableLists]} {...otherProps} />
+    let {step, path, boundVariableLists, additionalReferences, ...otherProps} = this.props;
+    let reference = path.join(".");
+    let referencesForLastStep = [...additionalReferences, reference];
+    return <Steps steps={step.substeps} path={path} boundVariableLists={[[step.variableName], ...boundVariableLists]} referencesForLastStep={referencesForLastStep} {...otherProps} />
   }
 }
 
 class NamingStep extends React.Component {
   render() {
-    const {step, path, boundVariableLists, ...otherProps} = this.props;
+    const {step, path, boundVariableLists, additionalReferences, ...otherProps} = this.props;
+    let reference = path.join(".");
+    let referencesForLastStep = [...additionalReferences, reference];
     const innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     return <>
       <ProofLine referencedLines={step.finalInferenceApplication.referencedLines} {...otherProps}>
-        Let {formatHtml(step.variableName)} be such that <ProofLineStatement statement={step.assumption} boundVariableLists={innerBoundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.
+        Let {formatHtml(step.variableName)} be such that <ProofLineStatement statement={step.assumption} boundVariableLists={innerBoundVariableLists} references={[...additionalReferences, reference, reference + "a"]} {...otherProps}/>.
       </ProofLine>
-      <Steps steps={step.substeps} path={path} boundVariableLists={innerBoundVariableLists} {...otherProps} />
+      <Steps steps={step.substeps} path={path} boundVariableLists={innerBoundVariableLists} referencesForLastStep={referencesForLastStep} {...otherProps} />
     </>;
   }
 }
@@ -156,7 +163,8 @@ class TargetStep extends React.Component {
   };
 
   render() {
-    let {step, path, ...otherProps} = this.props;
+    let {step, path, additionalReferences, ...otherProps} = this.props;
+    let reference = path.join(".");
     let scopingStatement = _.find(window.definitions, d => d.structureType === "scoping");
     let deductionStatement = _.find(window.definitions, d => d.structureType === "deduction");
 
@@ -188,7 +196,7 @@ class TargetStep extends React.Component {
         </Popover>
     );
     return <>
-      <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement statement={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>
+      <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement statement={step.statement} references={[...additionalReferences, reference]} {...otherProps}/>.</ProofLine>
       {boundVariableModal}
       {<FindInferenceModal show={this.state.showFindInferenceModal} onHide={this.hideFindInferenceModal} onSubmit={this.proveWithInference} findInferences={this.findInferences} {...otherProps} />}
     </>
@@ -224,13 +232,15 @@ class Steps extends React.Component {
     }
   }
   render() {
-    let {steps, className, path, ...otherProps} = this.props;
+    let {steps, className, path, referencesForLastStep, ...otherProps} = this.props;
+    let lastIndex = steps.length - 1;
     return <div className={className}>
       {steps.map((step, index) => {
         let newProps = {
           step: step,
           path: [...path, index],
           key: Steps.getKey(step),
+          additionalReferences: (index === lastIndex) ? referencesForLastStep || [] : [],
           ...otherProps
         };
         return React.createElement(Steps.getElementName(step), newProps);
