@@ -121,6 +121,7 @@ object Step {
       finalInferenceApplication: InferenceApplication)
     extends Step
   {
+    val `type` = "naming"
     override def provenStatement: Option[Statement] = {
       Some(finalInferenceApplication.conclusion)
     }

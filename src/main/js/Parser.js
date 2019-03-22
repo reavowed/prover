@@ -13,7 +13,7 @@ function formatWithReplacement(text, regex, handlePlain, handleMatch) {
   return html;
 }
 
-function formatHtml(text, replacementFunction) {
+export function formatHtml(text, replacementFunction) {
   if (!replacementFunction) {
     replacementFunction = x => x;
   }

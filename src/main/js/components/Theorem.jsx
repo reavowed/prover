@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import {HighlightableExpression} from "./Expression";
+import {Expression, HighlightableExpression} from "./Expression";
 import {InferenceSummary} from "./InferenceSummary";
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
@@ -10,6 +10,7 @@ import Form from "react-bootstrap/Form";
 import path from "path";
 import {Parser} from "../Parser";
 import {FindInferenceModal} from "./Modals";
+import {formatHtml} from "../Parser";
 
 const ClickableDiv = props => (
   <div {...props} />
@@ -66,6 +67,17 @@ class ScopedVariableStep extends React.Component {
   render() {
     let {step, path, boundVariableLists, ...otherProps} = this.props;
     return <Steps steps={step.substeps} path={path} boundVariableLists={[[step.variableName], ...boundVariableLists]} {...otherProps} />
+  }
+}
+
+class NamingStep extends React.Component {
+  render() {
+    const {step, path, boundVariableLists, ...otherProps} = this.props;
+    const innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
+    return <>
+      <ProofLine step={step} {...otherProps}>Let {formatHtml(step.variableName)} be such that <ProofLineStatement expression={step.assumption} boundVariableLists={innerBoundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.</ProofLine>
+      <Steps steps={step.substeps} path={path} boundVariableLists={innerBoundVariableLists} {...otherProps} />
+    </>;
   }
 }
 
@@ -190,6 +202,8 @@ class Steps extends React.Component {
         return DeductionStep;
       case "scopedVariable":
         return ScopedVariableStep;
+      case "naming":
+        return NamingStep;
     }
   }
   static getKey(step) {
