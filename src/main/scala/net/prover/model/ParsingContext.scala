@@ -117,6 +117,17 @@ case class ParsingContext(
         None
       }
   }
+
+  def matchScopingStatement(statement: Statement): Option[(Statement, StatementDefinition)] = {
+    scopingStatementOption.flatMap { scopingStatement =>
+      statement match {
+        case DefinedStatement(Seq(substatement), `scopingStatement`) =>
+          substatement.asOptionalInstanceOf[Statement].map(_ -> scopingStatement)
+        case _ =>
+          None
+      }
+    }
+  }
 }
 
 object ParsingContext {

@@ -14,12 +14,12 @@ export const InferenceSummary = styled(class extends React.Component {
   }
   render() {
     let {inference, createPremiseElement} = this.props;
-    createPremiseElement = createPremiseElement || (p => <Expression expression={p} />);
+    createPremiseElement = createPremiseElement || (p => <Expression expression={p} boundVariableLists={[]}/>);
     let premiseElements = inference.premises.map(createPremiseElement);
     let premiseElement = premiseElements.length > 0 && (premiseElements.length > 1 ? this.renderMultiplePremises(premiseElements) : this.renderSinglePremise(premiseElements[0]));
     return <div className={this.props.className}>
       {premiseElement}
-      <div>{premiseElements.length > 0 && "Then "}<Expression expression={inference.conclusion}/>.</div>
+      <div>{premiseElements.length > 0 && "Then "}<Expression expression={inference.conclusion} boundVariableLists={[]}/>.</div>
     </div>
   }
 })`margin-top: 5px;`;

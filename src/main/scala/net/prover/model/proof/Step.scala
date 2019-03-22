@@ -1,6 +1,7 @@
 package net.prover.model.proof
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions.{DefinedStatement, Statement}
@@ -78,6 +79,7 @@ object Step {
     extends Step
   {
     val `type` = "assumption"
+    @JsonSerialize
     override def provenStatement: Option[Statement] = {
       substeps.lastOption.flatMap(_.provenStatement).map(s => DefinedStatement(Seq(assumption, s), deductionStatement)(Nil))
     }
@@ -165,6 +167,8 @@ object Step {
       scopingStatement: StatementDefinition)
     extends Step
   {
+    val `type` = "scopedVariable"
+    @JsonSerialize
     override def provenStatement: Option[Statement] = {
       substeps.lastOption.flatMap(_.provenStatement).map(s => DefinedStatement(Seq(s), scopingStatement)(Seq(variableName)))
     }

@@ -4,7 +4,7 @@ import _ from "lodash";
 
 export class Expression extends React.Component {
   render() {
-    return <span className={this.props.className} dangerouslySetInnerHTML={{ __html: this.props.expression.toHtml([], false)}} />;
+    return <span className={this.props.className} dangerouslySetInnerHTML={{ __html: this.props.expression.toHtml(this.props.boundVariableLists, false)}} />;
   }
 }
 

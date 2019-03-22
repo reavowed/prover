@@ -5,6 +5,10 @@ import {InferenceSummary} from "./InferenceSummary";
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import path from "path";
+import {Parser} from "../Parser";
 
 const ClickableDiv = props => (
   <div {...props} />
@@ -12,9 +16,9 @@ const ClickableDiv = props => (
 
 const ProofLine = styled(class extends React.Component {
   render() {
-    const lineElement= <ClickableDiv onMouseEnter={() => this.props.setHighlightedPremises(this.props.step.referencedLines || [])}
-                onMouseLeave={() => this.props.setHighlightedPremises([])}
-                className={this.props.className}>
+    const onMouseEnter = this.props.setHighlightedPremises && (() => this.props.setHighlightedPremises(this.props.step.referencedLines || []));
+    const onMouseLeave = this.props.setHighlightedPremises && (() => this.props.setHighlightedPremises([]));
+    const lineElement= <ClickableDiv onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className={this.props.className}>
       {this.props.children}
     </ClickableDiv>;
 
@@ -38,7 +42,7 @@ class AssumptionStep extends React.Component {
   render() {
     let {step, path, ...otherProps} = this.props;
     return <>
-      <ProofLine step={step} {...otherProps}>Assume <ProofLineStatement expression={step.assumption} reference={path.join(".") + "a"} {...otherProps}/>.</ProofLine>
+      <ProofLine step={step} {...otherProps}>Assume <ProofLineStatement expression={step.assumption} boundVariableLists={this.props.boundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.</ProofLine>
       <StepChildren steps={step.substeps} path={path} {...otherProps} />
     </>;
   }
@@ -47,25 +51,94 @@ class AssumptionStep extends React.Component {
 class AssertionStep extends React.Component {
   render() {
     let {step, path, ...otherProps} = this.props;
+    const inference = step.inference || step.inferenceApplication.inference;
     const popover = (
-      <Popover title={step.inference.name}>
-        <InferenceSummary inference={step.inference} />
+      inference && <Popover title={inference.name}>
+        <InferenceSummary inference={inference} />
       </Popover>
     );
-    return <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>;
+    return <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement expression={step.statement} boundVariableLists={this.props.boundVariableLists} reference={path.join(".")} {...otherProps}/>.</ProofLine>;
+  }
+}
+
+class ScopedVariableStep extends React.Component {
+  render() {
+    let {step, path, boundVariableLists, ...otherProps} = this.props;
+    return <Steps steps={step.substeps} path={path} boundVariableLists={[[step.variableName], ...boundVariableLists]} {...otherProps} />
   }
 }
 
 class TargetStep extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.showBoundVariableModal = this.showBoundVariableModal.bind(this);
+    this.hideBoundVariableModal = this.hideBoundVariableModal.bind(this);
+    this.updateBoundVariableName = this.updateBoundVariableName.bind(this);
+    this.introduceBoundVariable = this.introduceBoundVariable.bind(this);
+    this.state = {
+      showBoundVariableModal: false,
+      boundVariableName: props.step.statement.boundVariableNames && props.step.statement.boundVariableNames[0] || ""
+    };
+  }
+
+  showBoundVariableModal() {
+    this.setState({showBoundVariableModal: true})
+  }
+
+  hideBoundVariableModal() {
+    this.setState({showBoundVariableModal: false})
+  }
+
+  updateBoundVariableName(event) {
+    this.setState({boundVariableName: event.target.value})
+  }
+
+  introduceBoundVariable() {
+    this.props.fetchForTheorem(path.join(this.props.path.join("."), "introduceBoundVariable"), {
+      method: "POST",
+      body: this.state.boundVariableName
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+    }).then(newStep => {
+        Parser.parseStep(newStep);
+        this.props.updateStep(this.props.path, newStep);
+    });
+  }
+
   render() {
     let {step, path, ...otherProps} = this.props;
     let scopingStatement = _.find(window.definitions, d => d.structureType === "scoping");
-    const popover = (
-      <Popover title="Statement to prove">
-        {scopingStatement && step.statement.definition === scopingStatement && <Button variant="success" size="sm">Introduce bound variable</Button>}
-      </Popover>
+
+    const boundVariableModal = (
+        <Modal show={this.state.showBoundVariableModal} onHide={this.hideBoundVariableModal}>
+          <Modal.Header closeButton><Modal.Title>Introduce bound variable</Modal.Title></Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group>
+                <Form.Label>Bound variable name</Form.Label>
+                <Form.Control type="text" value={this.state.boundVariableName} onChange={this.updateBoundVariableName}/>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.hideBoundVariableModal}>Close</Button>
+            <Button variant="primary" onClick={this.introduceBoundVariable}>Save Changes</Button>
+          </Modal.Footer>
+        </Modal>
     );
-    return <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>
+
+    const popover = (
+        <Popover title="Statement to prove">
+          {scopingStatement && step.statement.definition === scopingStatement &&
+            <Button variant="success" size="sm" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
+        </Popover>
+    );
+    return <>
+      <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>
+      {boundVariableModal}
+    </>
   }
 }
 
@@ -79,16 +152,20 @@ class Steps extends React.Component {
         return TargetStep;
       case "assumption":
         return AssumptionStep;
+      case "scopedVariable":
+        return ScopedVariableStep;
     }
   }
-  static getKeyStatement(step) {
+  static getKey(step) {
     switch (step.type) {
       case "assertion":
       case "oldAssertion":
       case "target":
-        return step.statement;
+        return step.statement.serialize();
       case "assumption":
-        return step.assumption;
+        return "assume " + step.assumption.serialize();
+      case "scopedVariable":
+        return "take " + step.variableName;
     }
   }
   render() {
@@ -98,7 +175,7 @@ class Steps extends React.Component {
         let newProps = {
           step: step,
           path: [...path, index],
-          key: step.type + " " + Steps.getKeyStatement(step).serialize(),
+          key: Steps.getKey(step),
           ...otherProps
         };
         return React.createElement(Steps.getElementName(step), newProps);
@@ -113,7 +190,7 @@ const StepChildren = styled(Steps)`
 
 class Premise extends React.Component {
   render() {
-    return <HighlightableExpression reference={"p" + this.props.index} highlightedPremises={this.props.highlightedPremises} expression={this.props.premise}/>;
+    return <HighlightableExpression reference={"p" + this.props.index} highlightedPremises={this.props.highlightedPremises} expression={this.props.premise} boundVariableLists={[]}/>;
   }
 }
 
@@ -121,6 +198,7 @@ export class Theorem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      proof: props.theorem.proof,
       highlightedPremises: []
     }
   }
@@ -133,9 +211,26 @@ export class Theorem extends React.Component {
     return <Premise premise={premise} index={index} highlightedPremises={this.state.highlightedPremises}/>
   }
 
+  fetchForTheorem = (childPath, options) => {
+    return window.fetch(path.join(this.props.theorem.key, childPath), options);
+  };
+
+  updateStep = (path, newStep) => {
+    const updateInner = (path, steps, newStep) => {
+      if (path.length === 1) {
+        return [...steps.slice(0, path[0]), newStep, ...steps.slice(path[0] + 1)];
+      } else {
+        const copiedStep = _.clone(steps[path[0]]);
+        copiedStep.substeps = updateInner(path.slice(1), copiedStep.substeps, newStep);
+        return [...steps.slice(0, path[0]), copiedStep, ...steps.slice(path[0] + 1)];
+      }
+    };
+    const newProof = updateInner(path, this.state.proof, newStep);
+    this.setState({proof: newProof});
+  };
+
   render() {
     const {theorem, previousEntry, nextEntry, usages} = this.props;
-    let {proof} = theorem;
     return <div className="inference">
       <div className="navigationLinks">
         {previousEntry && <a className="navigationLink float-left" href={previousEntry.key}>&laquo; {previousEntry.name}</a>}
@@ -155,7 +250,13 @@ export class Theorem extends React.Component {
       <hr/>
 
       <h4>Proof</h4>
-      <Steps steps={proof} path={[]} setHighlightedPremises={this.setHighlightedPremises} highlightedPremises={this.state.highlightedPremises} />
+      <Steps steps={this.state.proof}
+             path={[]}
+             boundVariableLists={[]}
+             setHighlightedPremises={this.setHighlightedPremises}
+             highlightedPremises={this.state.highlightedPremises}
+             fetchForTheorem={this.fetchForTheorem}
+             updateStep={this.updateStep}/>
 
       {usages.length > 0 &&
         <div>

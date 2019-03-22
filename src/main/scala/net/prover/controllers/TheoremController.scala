@@ -12,7 +12,7 @@ import net.prover.services.BookService
 import net.prover.views.{ExpressionView, ProofView, StepView}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.convert.converter.Converter
-import org.springframework.http.ResponseEntity
+import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation._
 
@@ -72,6 +72,26 @@ class TheoremController @Autowired() (bookService: BookService) {
           substitutions,
           oldStep.context),
           ())
+      }
+    }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/{stepReference}/introduceBoundVariable"))
+  def introduceBoundVariable(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: PathData,
+    @RequestBody variableName: String
+  ): ResponseEntity[_] = {
+    modifyStep[Step.Target, Step](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, oldStep) =>
+      implicit val stepContext: StepContext = oldStep.context
+      implicit val parsingContext: ParsingContext = getTheoremParsingContext(book, chapter, theorem)
+      for {
+        (substatement, scopingStatement) <- parsingContext.matchScopingStatement(oldStep.statement).orBadRequest("Target statement is not a scoped statement")
+        newStep = Step.ScopedVariable(variableName, Seq(Step.Target(substatement, stepContext.increaseExternalDepth())), scopingStatement)
+      } yield {
+        (newStep, newStep)
       }
     }.toResponseEntity
   }
