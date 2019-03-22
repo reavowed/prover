@@ -2,7 +2,7 @@ import React from "react";
 import {Expression} from "./Expression";
 
 export class InferenceSummary extends React.Component {
-  renderPremises(premises, createPremiseElement) {
+  static renderPremises(premises, createPremiseElement) {
     let premiseElements = premises.map(createPremiseElement);
     let allElements = [];
     if (premiseElements.length > 0) {
@@ -26,7 +26,7 @@ export class InferenceSummary extends React.Component {
     let {inference, createPremiseElement} = this.props;
     createPremiseElement = createPremiseElement || (p => <Expression key={p.serialize()} expression={p} boundVariableLists={[]}/>);
     return <div className={this.props.className}>
-      {this.renderPremises(inference.premises, createPremiseElement)}
+      {InferenceSummary.renderPremises(inference.premises, createPremiseElement)}
       <div>{inference.premises.length > 0 && "Then "}<Expression expression={inference.conclusion} boundVariableLists={[]}/>.</div>
     </div>
   }

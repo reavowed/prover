@@ -96,9 +96,10 @@ export class Expression extends React.Component {
 
 export class HighlightableStatement extends React.Component {
   render() {
-    const {statement, reference, boundVariableLists, highlightedPremises} = this.props;
+    const {statement, reference, boundVariableLists, highlightedPremises, className} = this.props;
     const matchingPremises = _.filter(highlightedPremises, p => p.lineReference === reference);
     const pathsToHighlight = _.map(matchingPremises, p => p.internalPath);
-    return <Expression expression={statement} pathsToHighlight={pathsToHighlight} boundVariableLists={boundVariableLists} safe={false}/>
+    const expression = <Expression expression={statement} pathsToHighlight={pathsToHighlight} boundVariableLists={boundVariableLists} safe={false}/>
+    return className ? <span className={className}>{expression}</span> : expression;
   }
 }
