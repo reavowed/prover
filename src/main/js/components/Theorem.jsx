@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import {Expression, HighlightableExpression} from "./Expression";
+import {HighlightableExpression} from "./Expression";
 import {InferenceSummary} from "./InferenceSummary";
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
@@ -8,24 +8,25 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import path from "path";
-import {Parser} from "../Parser";
+import {formatHtml, Parser} from "../Parser";
 import {FindInferenceModal} from "./Modals";
-import {formatHtml} from "../Parser";
 
 const ClickableDiv = props => (
   <div {...props} />
 );
 
-const ProofLine = styled(class extends React.Component {
+const ProofLine = styled(class ProofLine extends React.Component {
   render() {
-    const onMouseEnter = this.props.setHighlightedPremises && (() => this.props.setHighlightedPremises(this.props.step.referencedLines || []));
-    const onMouseLeave = this.props.setHighlightedPremises && (() => this.props.setHighlightedPremises([]));
-    const lineElement= <ClickableDiv onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className={this.props.className}>
-      {this.props.children}
+    const {setHighlightedPremises, referencedLines, className, children, popover} = this.props;
+
+    const onMouseEnter = referencedLines && setHighlightedPremises && (() => setHighlightedPremises(referencedLines));
+    const onMouseLeave = referencedLines && setHighlightedPremises && (() => setHighlightedPremises([]));
+    const lineElement= <ClickableDiv onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className={className}>
+      {children}
     </ClickableDiv>;
 
-    if (this.props.popover) {
-      return <OverlayTrigger trigger="click" placement="bottom" overlay={this.props.popover} rootClose>{lineElement}</OverlayTrigger>;
+    if (popover) {
+      return <OverlayTrigger trigger="click" placement="bottom" overlay={popover} rootClose>{lineElement}</OverlayTrigger>;
     } else {
       return lineElement;
     }
@@ -44,7 +45,7 @@ class DeductionStep extends React.Component {
   render() {
     let {step, path, ...otherProps} = this.props;
     return <>
-      <ProofLine step={step} {...otherProps}>Assume <ProofLineStatement expression={step.assumption} boundVariableLists={this.props.boundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.</ProofLine>
+      <ProofLine>Assume <HighlightableExpression expression={step.assumption} boundVariableLists={this.props.boundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.</ProofLine>
       <StepChildren steps={step.substeps} path={path} {...otherProps} />
     </>;
   }
@@ -59,7 +60,9 @@ class AssertionStep extends React.Component {
         <InferenceSummary inference={inference} />
       </Popover>
     );
-    return <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement expression={step.statement} boundVariableLists={this.props.boundVariableLists} reference={path.join(".")} {...otherProps}/>.</ProofLine>;
+    return <ProofLine referencedLines={step.referencedLines} popover={popover} {...otherProps}>
+      Then <ProofLineStatement expression={step.statement} boundVariableLists={this.props.boundVariableLists} reference={path.join(".")} {...otherProps}/>.
+    </ProofLine>;
   }
 }
 
@@ -75,7 +78,9 @@ class NamingStep extends React.Component {
     const {step, path, boundVariableLists, ...otherProps} = this.props;
     const innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     return <>
-      <ProofLine step={step} {...otherProps}>Let {formatHtml(step.variableName)} be such that <ProofLineStatement expression={step.assumption} boundVariableLists={innerBoundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.</ProofLine>
+      <ProofLine referencedLines={step.finalInferenceApplication.referencedLines} {...otherProps}>
+        Let {formatHtml(step.variableName)} be such that <ProofLineStatement expression={step.assumption} boundVariableLists={innerBoundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.
+      </ProofLine>
       <Steps steps={step.substeps} path={path} boundVariableLists={innerBoundVariableLists} {...otherProps} />
     </>;
   }

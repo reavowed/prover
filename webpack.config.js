@@ -22,7 +22,7 @@ module.exports = {
   },
   target: 'web',
   mode: 'development',
-  devtool: 'eval-source-map',
+  devtool: 'inline-source-map',
   devServer: {
     port: 8081
   }

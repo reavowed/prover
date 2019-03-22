@@ -1,11 +1,13 @@
 package net.prover.model.proof
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
 import net.prover.model.expressions.Statement
 
 sealed trait InferenceApplication {
   def inference: Inference
   def referencedInferenceIds: Set[String]
+  @JsonSerialize
   def referencedLines: Set[PreviousLineReference]
   def references: Seq[Reference]
   def isRearrangement: Boolean
