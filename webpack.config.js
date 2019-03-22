@@ -22,5 +22,8 @@ module.exports = {
   },
   target: 'web',
   mode: 'development',
-  devtool: 'eval-source-map'
+  devtool: 'eval-source-map',
+  devServer: {
+    port: 8081
+  }
 };
