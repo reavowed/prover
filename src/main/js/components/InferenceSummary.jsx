@@ -1,9 +1,8 @@
-import styled from "styled-components";
 import React from "react";
 import _ from "lodash";
 import {Expression} from "./Expression";
 
-export const InferenceSummary = styled(class extends React.Component {
+export class InferenceSummary extends React.Component {
   renderSinglePremise(premise) {
     return <div>Suppose {premise}.</div>;
   }
@@ -22,4 +21,4 @@ export const InferenceSummary = styled(class extends React.Component {
       <div>{premiseElements.length > 0 && "Then "}<Expression expression={inference.conclusion} boundVariableLists={[]}/>.</div>
     </div>
   }
-})`margin-top: 5px;`;
+};

@@ -54,7 +54,7 @@ function matchShorthand(template, expression, boundVariableLists) {
   }
 }
 
-class VariableOrConstant {
+export class VariableOrConstant {
   constructor(name) {
     this.name = name;
   }
@@ -64,8 +64,11 @@ class VariableOrConstant {
   toHtml() {
     return formatHtml(this.name);
   }
+  textForHtml() {
+    return this.name;
+  }
 }
-class DefinedExpression {
+export class DefinedExpression {
   constructor(definition, boundVariableNames, components) {
     this.definition = definition;
     this.boundVariableNames = boundVariableNames;
@@ -92,8 +95,13 @@ class DefinedExpression {
     let componentsHtml = this.components.map(c => c.toHtml(innerBoundVariableLists, true));
     return formatHtml(formatString, s => replacePlaceholders(s, [...this.boundVariableNames, ...componentsHtml]));
   }
+  formatForHtml(safe) {
+    return (safe && this.definition.requiresBrackets) ?
+      "(" + this.definition.baseFormatString + ")" :
+      this.definition.baseFormatString;
+  }
 }
-class FunctionParameter {
+export class FunctionParameter {
   constructor(level, index) {
     this.level = level;
     this.index = index;
@@ -104,19 +112,25 @@ class FunctionParameter {
   toHtml(boundVariableLists) {
     return boundVariableLists[this.level][this.index];
   }
+  textForHtml(boundVariableLists) {
+    return boundVariableLists[this.level][this.index];
+  }
 }
-class ExpressionApplication {
-  constructor(name, args) {
+export class ExpressionApplication {
+  constructor(name, components) {
     this.name = name;
-    this.args = args;
+    this.components = components;
   }
   serialize() {
-    return `with ${this.name} (${_.map(this.args, a => a.serialize())})`
+    return `with ${this.name} (${_.map(this.components, a => a.serialize())})`
   }
   toHtml(boundVariableLists) {
-    const formatString = this.name + "(" + this.args.map((_, i) => "%" + i).join(", ") + ")";
-    let argsHtml = this.args.map(c => c.toHtml(boundVariableLists, true));
+    const formatString = this.name + "(" + this.components.map((_, i) => "%" + i).join(", ") + ")";
+    let argsHtml = this.components.map(c => c.toHtml(boundVariableLists, true));
     return formatHtml(formatString, s => replacePlaceholders(s, argsHtml));
+  }
+  formatForHtml() {
+    return this.name + "(" + this.components.map((_, i) => "%" + i).join(", ") + ")";
   }
 }
 

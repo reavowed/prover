@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import {HighlightableExpression} from "./Expression";
+import {HighlightableStatement} from "./Expression";
 import {InferenceSummary} from "./InferenceSummary";
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
@@ -35,7 +35,7 @@ const ProofLine = styled(class ProofLine extends React.Component {
   padding-bottom: 5px;
 `;
 
-const ProofLineStatement = styled(HighlightableExpression)`
+const ProofLineStatement = styled(HighlightableStatement)`
   ${ProofLine}:hover & {
     color: blue;
   }
@@ -45,7 +45,7 @@ class DeductionStep extends React.Component {
   render() {
     let {step, path, ...otherProps} = this.props;
     return <>
-      <ProofLine>Assume <HighlightableExpression expression={step.assumption} boundVariableLists={this.props.boundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.</ProofLine>
+      <ProofLine>Assume <HighlightableStatement statement={step.assumption} boundVariableLists={this.props.boundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.</ProofLine>
       <StepChildren steps={step.substeps} path={path} {...otherProps} />
     </>;
   }
@@ -61,7 +61,7 @@ class AssertionStep extends React.Component {
       </Popover>
     );
     return <ProofLine referencedLines={step.referencedLines} popover={popover} {...otherProps}>
-      Then <ProofLineStatement expression={step.statement} boundVariableLists={this.props.boundVariableLists} reference={path.join(".")} {...otherProps}/>.
+      Then <ProofLineStatement statement={step.statement} boundVariableLists={this.props.boundVariableLists} reference={path.join(".")} {...otherProps}/>.
     </ProofLine>;
   }
 }
@@ -79,7 +79,7 @@ class NamingStep extends React.Component {
     const innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     return <>
       <ProofLine referencedLines={step.finalInferenceApplication.referencedLines} {...otherProps}>
-        Let {formatHtml(step.variableName)} be such that <ProofLineStatement expression={step.assumption} boundVariableLists={innerBoundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.
+        Let {formatHtml(step.variableName)} be such that <ProofLineStatement statement={step.assumption} boundVariableLists={innerBoundVariableLists} reference={path.join(".") + "a"} {...otherProps}/>.
       </ProofLine>
       <Steps steps={step.substeps} path={path} boundVariableLists={innerBoundVariableLists} {...otherProps} />
     </>;
@@ -188,7 +188,7 @@ class TargetStep extends React.Component {
         </Popover>
     );
     return <>
-      <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>
+      <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement statement={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>
       {boundVariableModal}
       {<FindInferenceModal show={this.state.showFindInferenceModal} onHide={this.hideFindInferenceModal} onSubmit={this.proveWithInference} findInferences={this.findInferences} {...otherProps} />}
     </>
@@ -245,9 +245,25 @@ const StepChildren = styled(Steps)`
 
 class Premise extends React.Component {
   render() {
-    return <HighlightableExpression reference={"p" + this.props.index} highlightedPremises={this.props.highlightedPremises} expression={this.props.premise} boundVariableLists={[]}/>;
+    return <HighlightableStatement reference={"p" + this.props.index} highlightedPremises={this.props.highlightedPremises} statement={this.props.premise} boundVariableLists={[]}/>;
   }
 }
+
+const TheoremHeader = styled(class TheoremHeader extends React.Component {
+  render() {
+    const {theorem, className} = this.props;
+    return <div className={className}>
+      <h3>
+        Theorem: {theorem.name}
+      </h3>
+      <div className="inferenceId">
+        {theorem.id}
+      </div>
+    </div>;
+  }
+})`
+  margin-bottom: 1rem;
+`;
 
 export class Theorem extends React.Component {
   constructor(props) {
@@ -288,15 +304,8 @@ export class Theorem extends React.Component {
         {previousEntry && <a className="navigationLink float-left" href={previousEntry.key}>&laquo; {previousEntry.name}</a>}
         {nextEntry && <a className="navigationLink float-right" href={nextEntry.key}>{nextEntry.name} &raquo;</a>}
       </div>
-      <div className="inferenceTitle">
-        <h3>
-          Theorem: {theorem.name}
-        </h3>
-        <div className="inferenceId">
-          {theorem.id}
-        </div>
-      </div>
 
+      <TheoremHeader theorem={theorem} />
       <InferenceSummary createPremiseElement={this.createPremiseElement.bind(this)} inference={theorem} highlightedPremises={this.state.highlightedPremises}/>
 
       <hr/>
