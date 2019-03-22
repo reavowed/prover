@@ -128,6 +128,20 @@ case class ParsingContext(
       }
     }
   }
+
+  def matchDeductionStatement(statement: Statement): Option[(Statement, Statement, StatementDefinition)] = {
+    deductionStatementOption.flatMap { deductionStatement =>
+      statement match {
+        case DefinedStatement(Seq(antecedentExpression, consequentExpression), `deductionStatement`) =>
+          for {
+            antecedent <- antecedentExpression.asOptionalInstanceOf[Statement]
+            consequent <- consequentExpression.asOptionalInstanceOf[Statement]
+          } yield (antecedent, consequent, deductionStatement)
+        case _ =>
+          None
+      }
+    }
+  }
 }
 
 object ParsingContext {

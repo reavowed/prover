@@ -133,7 +133,7 @@ object StepView {
           Nil,
           Some(popover(inferenceApplication)),
           None)
-      case Step.Assumption(assumption, substeps, _) =>
+      case Step.Deduction(assumption, substeps, _) =>
         lineView(
           "Assume",
           assumption,

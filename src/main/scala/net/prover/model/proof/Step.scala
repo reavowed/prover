@@ -72,13 +72,13 @@ object Step {
     }
   }
 
-  case class Assumption(
+  case class Deduction(
       assumption: Statement,
       substeps: Seq[Step],
       deductionStatement: StatementDefinition)
     extends Step
   {
-    val `type` = "assumption"
+    val `type` = "deduction"
     @JsonSerialize
     override def provenStatement: Option[Statement] = {
       substeps.lastOption.flatMap(_.provenStatement).map(s => DefinedStatement(Seq(assumption, s), deductionStatement)(Nil))
@@ -103,14 +103,14 @@ object Step {
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
-  object Assumption {
-    def parser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Assumption] = {
+  object Deduction {
+    def parser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Deduction] = {
       val deductionStatement = parsingContext.deductionStatementOption
         .getOrElse(throw new Exception("Cannot prove a deduction without an appropriate statement definition"))
       for {
         assumption <- Statement.parser
         substeps <- listParser(path)(parsingContext, stepContext.addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil)))).inBraces
-      } yield Assumption(assumption, substeps, deductionStatement)
+      } yield Deduction(assumption, substeps, deductionStatement)
     }
   }
 
@@ -424,7 +424,7 @@ object Step {
 
   def parser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Option[Step]] = {
     Parser.selectOptionalWordParser {
-      case "assume" => Assumption.parser(path)
+      case "assume" => Deduction.parser(path)
       case "let" => Naming.parser(path)
       case "assert" => Assertion.parser(path)
       case "take" => ScopedVariable.parser(path)

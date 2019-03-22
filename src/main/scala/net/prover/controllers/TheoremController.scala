@@ -88,8 +88,27 @@ class TheoremController @Autowired() (bookService: BookService) {
       implicit val stepContext: StepContext = oldStep.context
       implicit val parsingContext: ParsingContext = getTheoremParsingContext(book, chapter, theorem)
       for {
-        (substatement, scopingStatement) <- parsingContext.matchScopingStatement(oldStep.statement).orBadRequest("Target statement is not a scoped statement")
-        newStep = Step.ScopedVariable(variableName, Seq(Step.Target(substatement, stepContext.increaseExternalDepth())), scopingStatement)
+        (substatement, scopingStatementDefinition) <- parsingContext.matchScopingStatement(oldStep.statement).orBadRequest("Target statement is not a scoped statement")
+        newStep = Step.ScopedVariable(variableName, Seq(Step.Target(substatement, stepContext.increaseExternalDepth())), scopingStatementDefinition)
+      } yield {
+        (newStep, newStep)
+      }
+    }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/{stepReference}/introduceDeduction"))
+  def introduceDeduction(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: PathData
+  ): ResponseEntity[_] = {
+    modifyStep[Step.Target, Step](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, oldStep) =>
+      implicit val stepContext: StepContext = oldStep.context
+      implicit val parsingContext: ParsingContext = getTheoremParsingContext(book, chapter, theorem)
+      for {
+        (antecedent, consequent, deductionStatementDefinition) <- parsingContext.matchDeductionStatement(oldStep.statement).orBadRequest("Target statement is not a deduction statement")
+        newStep = Step.Deduction(antecedent, Seq(Step.Target(consequent, stepContext.increaseExternalDepth())), deductionStatementDefinition)
       } yield {
         (newStep, newStep)
       }

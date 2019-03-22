@@ -38,7 +38,7 @@ const ProofLineStatement = styled(HighlightableExpression)`
   }
 `;
 
-class AssumptionStep extends React.Component {
+class DeductionStep extends React.Component {
   render() {
     let {step, path, ...otherProps} = this.props;
     return <>
@@ -107,9 +107,23 @@ class TargetStep extends React.Component {
     });
   }
 
+  introduceDeduction = () => {
+    this.props.fetchForTheorem(path.join(this.props.path.join("."), "introduceDeduction"), {
+      method: "POST"
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+    }).then(newStep => {
+        Parser.parseStep(newStep);
+        this.props.updateStep(this.props.path, newStep);
+    });
+  }
+
   render() {
     let {step, path, ...otherProps} = this.props;
     let scopingStatement = _.find(window.definitions, d => d.structureType === "scoping");
+    let deductionStatement = _.find(window.definitions, d => d.structureType === "deduction");
 
     const boundVariableModal = (
         <Modal show={this.state.showBoundVariableModal} onHide={this.hideBoundVariableModal}>
@@ -133,6 +147,8 @@ class TargetStep extends React.Component {
         <Popover title="Statement to prove">
           {scopingStatement && step.statement.definition === scopingStatement &&
             <Button variant="success" size="sm" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
+          {deductionStatement && step.statement.definition === deductionStatement &&
+            <Button variant="success" size="sm" onClick={this.introduceDeduction}>Introduce deduction</Button>}
         </Popover>
     );
     return <>
@@ -150,8 +166,8 @@ class Steps extends React.Component {
         return AssertionStep;
       case "target":
         return TargetStep;
-      case "assumption":
-        return AssumptionStep;
+      case "deduction":
+        return DeductionStep;
       case "scopedVariable":
         return ScopedVariableStep;
     }
@@ -162,7 +178,7 @@ class Steps extends React.Component {
       case "oldAssertion":
       case "target":
         return step.statement.serialize();
-      case "assumption":
+      case "deduction":
         return "assume " + step.assumption.serialize();
       case "scopedVariable":
         return "take " + step.variableName;
