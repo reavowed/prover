@@ -140,6 +140,7 @@ private class ExpressionDefinitionSerializer extends JsonSerializer[ExpressionDe
     gen.writeObjectField("baseFormatString", value.format.baseFormatString)
     gen.writeObjectField("requiresBrackets", value.format.requiresBrackets)
     gen.writeObjectField("numberOfBoundVariables", value.boundVariableNames.length)
+    value.asOptionalInstanceOf[StatementDefinition].flatMap(_.structureType).foreach(structureType => gen.writeObjectField("structureType", structureType.serialized))
     gen.writeEndObject()
   }
 }

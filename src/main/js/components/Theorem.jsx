@@ -2,17 +2,27 @@ import styled from "styled-components";
 import React from "react";
 import {HighlightableExpression} from "./Expression";
 import {InferenceSummary} from "./InferenceSummary";
+import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
+const ClickableDiv = props => (
+  <div {...props} />
+);
+
 const ProofLine = styled(class extends React.Component {
   render() {
-    return <div onMouseEnter={() => this.props.setHighlightedPremises(this.props.step.referencedLines || [])}
+    const lineElement= <ClickableDiv onMouseEnter={() => this.props.setHighlightedPremises(this.props.step.referencedLines || [])}
                 onMouseLeave={() => this.props.setHighlightedPremises([])}
-                onClick={this.props.onClick}
                 className={this.props.className}>
       {this.props.children}
-    </div>;
+    </ClickableDiv>;
+
+    if (this.props.popover) {
+      return <OverlayTrigger trigger="click" placement="bottom" overlay={this.props.popover} rootClose>{lineElement}</OverlayTrigger>;
+    } else {
+      return lineElement;
+    }
   }
 })`
   padding-bottom: 5px;
@@ -38,20 +48,24 @@ class AssertionStep extends React.Component {
   render() {
     let {step, path, ...otherProps} = this.props;
     const popover = (
-      <Popover id="popover-basic" title={step.inference.name}>
+      <Popover title={step.inference.name}>
         <InferenceSummary inference={step.inference} />
       </Popover>
     );
-    return <OverlayTrigger trigger="click" placement="bottom" overlay={popover} rootClose>
-      <ProofLine step={step} {...otherProps}>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>
-    </OverlayTrigger>;
+    return <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>;
   }
 }
 
 class TargetStep extends React.Component {
   render() {
     let {step, path, ...otherProps} = this.props;
-    return <ProofLine step={step} {...otherProps}>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>
+    let scopingStatement = _.find(window.definitions, d => d.structureType === "scoping");
+    const popover = (
+      <Popover title="Statement to prove">
+        {scopingStatement && step.statement.definition === scopingStatement && <Button variant="success" size="sm">Introduce bound variable</Button>}
+      </Popover>
+    );
+    return <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>
   }
 }
 
