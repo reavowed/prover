@@ -3,6 +3,7 @@ package net.prover.model
 import java.security.MessageDigest
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.Inference._
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions._
@@ -12,8 +13,11 @@ import net.prover.model.proof.Transformation
 trait Inference {
   val id: String = calculateHash()
   def entryKey: ChapterEntry.Key
+  @JsonSerialize
   def name: String
+  @JsonSerialize
   def premises: Seq[Premise]
+  @JsonSerialize
   def conclusion: Statement
   def rearrangementType: RearrangementType
 

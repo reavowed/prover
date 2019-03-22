@@ -76,7 +76,7 @@ object StepView {
           </div>
         </div>
         <hr />
-        <h5>Premises</h5>
+        <strong>Premises</strong>
         {premises.mapWithIndex((p, index) => AssertionPremise(p, Seq(index)))}
       </div>)
 

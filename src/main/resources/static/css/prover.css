@@ -187,3 +187,6 @@ table {
     color: red;
     cursor: pointer;
 }
+.popover {
+    max-width: 100%;
+}

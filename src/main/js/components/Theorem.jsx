@@ -2,11 +2,14 @@ import styled from "styled-components";
 import React from "react";
 import {HighlightableExpression} from "./Expression";
 import {InferenceSummary} from "./InferenceSummary";
+import Popover from "react-bootstrap/Popover";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 const ProofLine = styled(class extends React.Component {
   render() {
     return <div onMouseEnter={() => this.props.setHighlightedPremises(this.props.step.referencedLines || [])}
                 onMouseLeave={() => this.props.setHighlightedPremises([])}
+                onClick={this.props.onClick}
                 className={this.props.className}>
       {this.props.children}
     </div>;
@@ -24,21 +27,31 @@ const ProofLineStatement = styled(HighlightableExpression)`
 class AssumptionStep extends React.Component {
   render() {
     let {step, path, ...otherProps} = this.props;
-    return <div>
-      <ProofLine step={step} {...otherProps}>
-        <span>Assume <ProofLineStatement expression={step.assumption} reference={path.join(".") + "a"} {...otherProps}/>.</span>
-      </ProofLine>
+    return <>
+      <ProofLine step={step} {...otherProps}>Assume <ProofLineStatement expression={step.assumption} reference={path.join(".") + "a"} {...otherProps}/>.</ProofLine>
       <StepChildren steps={step.substeps} path={path} {...otherProps} />
-    </div>;
+    </>;
   }
 }
 
 class AssertionStep extends React.Component {
   render() {
     let {step, path, ...otherProps} = this.props;
-    return <ProofLine step={step} {...otherProps}>
-      <span>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</span>
-    </ProofLine>;
+    const popover = (
+      <Popover id="popover-basic" title={step.inference.name}>
+        <InferenceSummary inference={step.inference} />
+      </Popover>
+    );
+    return <OverlayTrigger trigger="click" placement="bottom" overlay={popover} rootClose>
+      <ProofLine step={step} {...otherProps}>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>
+    </OverlayTrigger>;
+  }
+}
+
+class TargetStep extends React.Component {
+  render() {
+    let {step, path, ...otherProps} = this.props;
+    return <ProofLine step={step} {...otherProps}>Then <ProofLineStatement expression={step.statement} reference={path.join(".")} {...otherProps}/>.</ProofLine>
   }
 }
 
@@ -47,8 +60,9 @@ class Steps extends React.Component {
     switch (step.type) {
       case "assertion":
       case "oldAssertion":
-      case "target":
         return AssertionStep;
+      case "target":
+        return TargetStep;
       case "assumption":
         return AssumptionStep;
     }

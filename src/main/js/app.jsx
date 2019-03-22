@@ -143,9 +143,14 @@ class Parser {
       throw `Unrecognised expression ${JSON.stringify(rawExpression)}`
     }
   }
+  static parseInference(inference) {
+    inference.premises = inference.premises.map(Parser.parseExpression);
+    inference.conclusion = Parser.parseExpression(inference.conclusion);
+  }
   static parseStep(step) {
     step.assumption && (step.assumption = Parser.parseExpression(step.assumption));
     step.statement && (step.statement = Parser.parseExpression(step.statement));
+    step.inference && Parser.parseInference(step.inference);
     step.substeps && _.each(step.substeps, Parser.parseStep);
   }
   static parseTheorem(rawTheorem) {
