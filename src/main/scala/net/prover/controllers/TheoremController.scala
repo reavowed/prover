@@ -117,14 +117,16 @@ class TheoremController @Autowired() (bookService: BookService) {
     }.toResponseEntity
   }
 
-  @PutMapping(value = Array("/{stepReference}/premises/{premisePath}/statement/{expressionPath}/boundVariables/{boundVariableIndex}"))
+  @PutMapping(value = Array(
+    "/{stepReference}/premises/{premisePath}/statement/{expressionPath}/boundVariables/{boundVariableIndex}",
+    "/{stepReference}/premises/{premisePath}/statement/boundVariables/{boundVariableIndex}"))
   def editBoundVariableName(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("stepReference") stepPath: PathData,
     @PathVariable("premisePath") premisePath: PathData,
-    @PathVariable("expressionPath") expressionPath: PathData,
+    @PathVariable(value = "expressionPath", required = false) expressionPath: PathData,
     @PathVariable("boundVariableIndex") boundVariableIndex: Int,
     @RequestBody newBoundVariableName: String
   ): ResponseEntity[_] = {
@@ -132,7 +134,11 @@ class TheoremController @Autowired() (bookService: BookService) {
     def updatePremise(oldPremise: Premise): Try[Premise] = {
       for {
         oldPendingPremise <- oldPremise.asOptionalInstanceOf[Premise.Pending].orBadRequest(s"Premise $premisePath is not pending")
-        newStatement <- oldPendingPremise.statement.renameBoundVariable(newBoundVariableName, boundVariableIndex, expressionPath.indexes).orNotFound(s"Bound variable $boundVariableIndex at $expressionPath")
+        newStatement <- oldPendingPremise.statement.renameBoundVariable(
+          newBoundVariableName,
+          boundVariableIndex,
+          Option(expressionPath).map(_.indexes).getOrElse(Nil)
+        ).orNotFound(s"Bound variable $boundVariableIndex at $expressionPath")
       } yield oldPendingPremise.copy(statement = newStatement)
     }
     modifyStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (_, _, _, oldStep) =>

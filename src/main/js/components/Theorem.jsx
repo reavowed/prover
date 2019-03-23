@@ -406,10 +406,14 @@ export class Theorem extends React.Component {
   };
 
   updateTheorem = (response) => {
-    return response.json().then(theoremJSON => {
-      const theorem = Parser.parseTheorem(theoremJSON);
-      this.setState({theorem: theorem});
-    });
+    if (response.ok) {
+      return response.json().then(theoremJSON => {
+        const theorem = Parser.parseTheorem(theoremJSON);
+        this.setState({theorem: theorem});
+      });
+    } else {
+      throw response.statusText;
+    }
   };
 
   render() {
