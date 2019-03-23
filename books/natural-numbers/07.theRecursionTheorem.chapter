@@ -41,7 +41,9 @@ conclusion ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 �
                 given
         take n {
           assume ∧ ∈ $0 ℕ = apply $$$0 $0 apply $$0 $0 {
-            target = apply $$$0 successor $0 apply $$0 successor $0
+            prove = apply $$$0 successor $0 apply $$0 successor $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$0 successor $0, with (apply $$$0 $0) a) (= apply $$$0 successor $0 $$$$0) ()
+              pending = apply $$0 successor $0 with (apply $$$0 $0) a
+              pending = apply $$$0 successor $0 with (apply $$$0 $0) a
           }
         }
         prove ∀ n → ∈ $0 ℕ = apply $$$0 $0 apply $$0 $0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (= apply $$0 $$$0 apply $0 $$$0) ()

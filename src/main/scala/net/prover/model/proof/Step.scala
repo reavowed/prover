@@ -43,7 +43,7 @@ case class StepContext(availableStatements: Seq[ProvenStatement], boundVariableL
   def addStatements(statements: Seq[ProvenStatement]) = copy(availableStatements = availableStatements ++ statements)
   def addBoundVariable(name: String) = copy(
     availableStatements = availableStatements.map(_.insertExternalParameters(1)),
-    boundVariableLists = Seq(name) +: boundVariableLists)
+    boundVariableLists = boundVariableLists :+ Seq(name))
   def findProvenStatement(statement: Statement): Option[ProvenStatement] = {
     availableStatements.find(_.statement == statement)
   }
