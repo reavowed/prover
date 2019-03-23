@@ -226,7 +226,7 @@ object Step {
 
   case class NewAssert(
       statement: Statement,
-      inference: Inference,
+      inference: Inference.Summary,
       premises: Seq[NewAssert.Premise],
       substitutions: Substitutions,
       context: StepContext)
@@ -321,7 +321,7 @@ object Step {
 
       case class Rearrangement(
           statement: Statement,
-          inference: Inference,
+          inference: Inference.Summary,
           premises: Seq[NewAssert.Premise],
           substitutions: Substitutions)
         extends Premise
@@ -361,7 +361,7 @@ object Step {
         }
       }
 
-      case class Simplification(statement: Statement, premise: Premise.SingleLinePremise, inference: Inference, substitutions: Substitutions, path: Seq[Int]) extends SingleLinePremise {
+      case class Simplification(statement: Statement, premise: Premise.SingleLinePremise, inference: Inference.Summary, substitutions: Substitutions, path: Seq[Int]) extends SingleLinePremise {
         override def referencedLine: PreviousLineReference = premise.referencedLine.addPath(path)
         override def referencedInferenceIds: Set[String] = premise.referencedInferenceIds + inference.id
         override def serializedLines: Seq[String] = Seq(s"simplified ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}") ++ premise.serializedLines.indent

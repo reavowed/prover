@@ -247,8 +247,8 @@ class TheoremController @Autowired() (bookService: BookService) {
       Nil)
   }
 
-  private def findInference(inferenceId: String)(implicit parsingContext: ParsingContext): Try[Inference] = {
-    parsingContext.inferences.find(_.id == inferenceId).orBadRequest(s"Invalid inference $inferenceId")
+  private def findInference(inferenceId: String)(implicit parsingContext: ParsingContext): Try[Inference.Summary] = {
+    parsingContext.inferences.find(_.id == inferenceId).map(_.summary).orBadRequest(s"Invalid inference $inferenceId")
   }
 
   private def createPremise(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): NewAssert.Premise = {

@@ -157,9 +157,7 @@ class TargetStep extends React.Component {
       if (response.ok) {
         return response.json();
       }
-    }).then(newStep => {
-      console.log(newStep);
-    });
+    }).then(this.props.updateTheorem);
   };
 
   render() {

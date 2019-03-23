@@ -21,6 +21,8 @@ trait Inference {
   def conclusion: Statement
   def rearrangementType: RearrangementType
 
+  def summary: Summary = Summary(this)
+
   def requiredSubstitutions: Substitutions.Required = {
     (premises.map(_.requiredSubstitutions) :+ conclusion.requiredSubstitutions).foldTogether
   }
@@ -70,6 +72,13 @@ object Inference {
   trait Entry extends Inference with ChapterEntry.Standalone {
     override def entryKey = key
   }
+  case class Summary(entryKey: ChapterEntry.Key, name: String, premises: Seq[Premise], conclusion: Statement, rearrangementType: RearrangementType) extends Inference
+  object Summary {
+    def apply(inference: Inference): Summary = {
+      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.entryKey, inference.name, inference.premises, inference.conclusion, inference.rearrangementType))
+    }
+  }
+
   case class Definition(
       nameOfDefinition: String,
       entryKey: ChapterEntry.Key,
@@ -85,7 +94,7 @@ object Inference {
   }
 
   case class Transformed(
-      inner: Inference,
+      inner: Inference.Summary,
       transformation: Transformation,
       premises: Seq[Premise],
       conclusion: Statement)
@@ -161,12 +170,13 @@ object Inference {
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))
   }
 
-  def parser(implicit parsingContext: ParsingContext): Parser[Inference] = {
+  def parser(implicit parsingContext: ParsingContext): Parser[Inference.Summary] = {
     for {
       inferenceId <- Parser.singleWord
     } yield {
       parsingContext.inferences.find(_.id == inferenceId)
         .getOrElse(throw new Exception(s"Could not find inference with id $inferenceId"))
+        .summary
     }
   }
 }

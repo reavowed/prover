@@ -14,7 +14,7 @@ object ProofHelper {
       simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
       path <- inferencePremise.statement.findComponentPath(simplificationInference.conclusion)
     } yield {
-      NewAssert.Premise.Simplification(simplifiedTarget, premise, simplificationInference, substitutions, path)
+      NewAssert.Premise.Simplification(simplifiedTarget, premise, simplificationInference.summary, substitutions, path)
     }
   }
   private def getSingleSimplifications(premise: SingleLinePremise, simplificationInferences: Seq[Inference], stepContext: StepContext): Seq[SingleLinePremise] = {
