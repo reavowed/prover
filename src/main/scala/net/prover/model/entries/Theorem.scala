@@ -38,7 +38,7 @@ case class Theorem(
     }
   }
   def recalculateReferences(parsingContext: ParsingContext): Option[Theorem] = {
-    val stepContext = StepContext(premises.map(_.provenStatement), 0)
+    val stepContext = StepContext(premises.map(_.provenStatement), Nil)
     proof.recalculateReferences(Nil, stepContext, parsingContext).map(newProof => copy(proof = newProof))
   }
 
@@ -63,7 +63,7 @@ object Theorem extends ChapterEntryParser {
     } yield conclusion
   }
   def proofParser(premises: Seq[Premise])(implicit parsingContext: ParsingContext): Parser[Seq[Step]] = {
-    Step.listParser(Nil)(parsingContext, StepContext(premises.map(_.provenStatement), 0)).inBraces
+    Step.listParser(Nil)(parsingContext, StepContext(premises.map(_.provenStatement), Nil)).inBraces
   }
 
   def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[Theorem] = {

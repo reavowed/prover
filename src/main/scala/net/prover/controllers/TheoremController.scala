@@ -33,7 +33,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     (for {
       (book, chapter, theorem, step) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference)
     } yield {
-      implicit val parsingContext: ParsingContext = getTheoremParsingContext(book, chapter, theorem)
+      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, step)
       parsingContext.inferences
         .filter(_.name.toLowerCase.contains(searchText.toLowerCase))
         .mapCollect { inference =>
@@ -56,20 +56,20 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("stepReference") stepReference: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, oldStep) =>
-      implicit val stepContext: StepContext = oldStep.context
-      implicit val parsingContext: ParsingContext = getTheoremParsingContext(book, chapter, theorem)
+    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, step) =>
+      implicit val stepContext: StepContext = step.context
+      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, step)
       for {
         inference <- findInference(definition.inferenceId)
         substitutions <- definition.parseSubstitutions(inference)
-        premiseStatements <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, oldStep.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
+        premiseStatements <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, step.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
       } yield {
         Step.NewAssert(
-          oldStep.statement,
+          step.statement,
           inference,
           premiseStatements.map(createPremise(_, stepContext, parsingContext)),
           substitutions,
-          oldStep.context)
+          step.context)
       }
     }.toResponseEntity
   }
@@ -82,15 +82,15 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("stepReference") stepReference: PathData,
     @RequestBody variableName: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, oldStep) =>
-      implicit val stepContext: StepContext = oldStep.context
-      implicit val parsingContext: ParsingContext = getTheoremParsingContext(book, chapter, theorem)
+    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, step) =>
+      implicit val stepContext: StepContext = step.context
+      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, step)
       for {
-        (substatement, scopingStatementDefinition) <- parsingContext.matchScopingStatement(oldStep.statement).orBadRequest("Target statement is not a scoped statement")
+        (substatement, scopingStatementDefinition) <- parsingContext.matchScopingStatement(step.statement).orBadRequest("Target statement is not a scoped statement")
       } yield {
         Step.ScopedVariable(
           variableName,
-          Seq(Step.Target(substatement, stepContext.increaseExternalDepth())),
+          Seq(Step.Target(substatement, stepContext.addBoundVariable(variableName))),
           scopingStatementDefinition)
       }
     }.toResponseEntity
@@ -103,15 +103,15 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("stepReference") stepReference: PathData
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, oldStep) =>
-      implicit val stepContext: StepContext = oldStep.context
-      implicit val parsingContext: ParsingContext = getTheoremParsingContext(book, chapter, theorem)
+    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, step) =>
+      implicit val stepContext: StepContext = step.context
+      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, step)
       for {
-        (antecedent, consequent, deductionStatementDefinition) <- parsingContext.matchDeductionStatement(oldStep.statement).orBadRequest("Target statement is not a deduction statement")
+        (antecedent, consequent, deductionStatementDefinition) <- parsingContext.matchDeductionStatement(step.statement).orBadRequest("Target statement is not a deduction statement")
       } yield {
         Step.Deduction(
           antecedent,
-          Seq(Step.Target(consequent, stepContext.increaseExternalDepth())),
+          Seq(Step.Target(consequent, stepContext)),
           deductionStatementDefinition)
       }
     }.toResponseEntity
@@ -155,7 +155,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("stepReference") stepReference: PathData
   ): ResponseEntity[_] = {
     findStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepReference).map { case (book, chapter, theorem, step) =>
-      val parsingContext = getTheoremParsingContext(book, chapter, theorem)
+      val parsingContext = getStepParsingContext(book, chapter, theorem, step)
       val expansionInferences = parsingContext.inferences.filter(_.rearrangementType == Inference.RearrangementType.Expansion)
       step.pendingPremises.map { case (path, p) =>
         val matchingExpansions = expansionInferences.filter(_.conclusion.calculateSubstitutions(p.statement, Substitutions.empty, 0, step.context.externalDepth).nonEmpty)
@@ -173,14 +173,13 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("premisePath") premisePath: PathData
   ): ResponseEntity[_] = {
     bookService.modifyEntry[Theorem, Theorem](bookKey, chapterKey, theoremKey) { (_, book, chapter, theorem) =>
-      val parsingContext = getTheoremParsingContext(book, chapter, theorem)
       for {
         rawStep <- theorem.findStep(stepPath.indexes).orNotFound(s"Step $stepPath")
         step <- rawStep.asOptionalInstanceOf[Step.NewAssert].orBadRequest(s"Step $stepPath is not editable")
         premise <- step.pendingPremises.get(premisePath.indexes).orNotFound(s"Premise $premisePath")
         newStep = Step.Target(premise.statement, step.context)
         unadjustedNewTheorem <- theorem.insertStep(stepPath.indexes, newStep).orBadRequest(s"Failed to insert new step")
-        newTheorem <- unadjustedNewTheorem.recalculateReferences(parsingContext).orBadRequest(s"Something broke a reference")
+        newTheorem <- unadjustedNewTheorem.recalculateReferences(getTheoremParsingContext(book, chapter, theorem)).orBadRequest(s"Something broke a reference")
       } yield {
         (newTheorem, newTheorem)
       }
@@ -207,7 +206,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     }
 
     modifyStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (book, chapter, theorem, oldStep) =>
-      implicit val parsingContext: ParsingContext = getTheoremParsingContext(book, chapter, theorem)
+      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, oldStep)
       oldStep.tryUpdatePremiseAtPath(premisePath.indexes, updatePremise(_, oldStep.context)).orNotFound(s"Premise $premisePath not found").flatten
     }.toResponseEntity
   }
@@ -250,6 +249,18 @@ class TheoremController @Autowired() (bookService: BookService) {
       book.dependencies.transitive.termDefinitions ++ previousChapters.flatMap(_.termDefinitions) ++ previousEntries.ofType[TermDefinition],
       book.termVariableNames.toSet,
       Nil)
+  }
+
+  private def getStepParsingContext(book: Book, chapter: Chapter, theorem: Theorem, step: Step.Target): ParsingContext = {
+    getStepParsingContext(book, chapter, theorem, step.context)
+  }
+
+  private def getStepParsingContext(book: Book, chapter: Chapter, theorem: Theorem, step: Step.NewAssert): ParsingContext = {
+    getStepParsingContext(book, chapter, theorem, step.context)
+  }
+
+  private def getStepParsingContext(book: Book, chapter: Chapter, theorem: Theorem, stepContext: StepContext): ParsingContext = {
+    getTheoremParsingContext(book, chapter, theorem).copy(parameterLists = stepContext.boundVariableLists.map(_.zipWithIndex))
   }
 
   private def findInference(inferenceId: String)(implicit parsingContext: ParsingContext): Try[Inference.Summary] = {

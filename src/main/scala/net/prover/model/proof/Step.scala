@@ -37,10 +37,13 @@ sealed trait Step {
   def serializedLines: Seq[String]
 }
 
-case class StepContext(availableStatements: Seq[ProvenStatement], externalDepth: Int) {
+case class StepContext(availableStatements: Seq[ProvenStatement], boundVariableLists: Seq[Seq[String]]) {
+  def externalDepth: Int = boundVariableLists.length
   def addStatement(statement: ProvenStatement) = copy(availableStatements = availableStatements :+ statement)
   def addStatements(statements: Seq[ProvenStatement]) = copy(availableStatements = availableStatements ++ statements)
-  def increaseExternalDepth() = copy(externalDepth = externalDepth + 1)
+  def addBoundVariable(name: String) = copy(
+    availableStatements = availableStatements.map(_.insertExternalParameters(1)),
+    boundVariableLists = Seq(name) +: boundVariableLists)
   def findProvenStatement(statement: Statement): Option[ProvenStatement] = {
     availableStatements.find(_.statement == statement)
   }
@@ -137,7 +140,7 @@ object Step {
     // TODO: apply to inference application
     override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Option[Step] = {
       substeps
-        .recalculateReferences(path, stepContext.addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil))).increaseExternalDepth(), parsingContext)
+        .recalculateReferences(path, stepContext.addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil))).addBoundVariable(variableName), parsingContext)
         .map(newSubsteps => copy(substeps = newSubsteps))
     }
     override def referencedInferenceIds = substeps.flatMap(_.referencedInferenceIds).toSet ++ finalInferenceApplication.referencedInferenceIds
@@ -155,7 +158,7 @@ object Step {
         assumption <- Statement.parser(innerParsingContext)
         innerStepContext = stepContext
           .addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil)))
-          .increaseExternalDepth()
+          .addBoundVariable(variableName)
         finalInferenceApplication <- InferenceApplication.parser
         substeps <- listParser(path)(innerParsingContext, innerStepContext).inBraces
       } yield Naming(variableName, assumption, substeps, finalInferenceApplication)
@@ -184,7 +187,7 @@ object Step {
     }
     override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Option[Step] = {
       substeps
-        .recalculateReferences(path, stepContext.increaseExternalDepth(), parsingContext)
+        .recalculateReferences(path, stepContext.addBoundVariable(variableName), parsingContext)
         .map(newSubsteps => copy(substeps = newSubsteps))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
@@ -200,7 +203,7 @@ object Step {
       for {
         variableName <- Parser.singleWord
         innerContext = context.addParameters(variableName)
-        substeps <- listParser(path)(innerContext, stepContext.increaseExternalDepth()).inBraces
+        substeps <- listParser(path)(innerContext, stepContext.addBoundVariable(variableName)).inBraces
       } yield ScopedVariable(variableName, substeps, scopingStatement)
     }
   }
