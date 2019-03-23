@@ -75,6 +75,10 @@ export class Parser {
     inference.premises = inference.premises.map(Parser.parseExpression);
     inference.conclusion = Parser.parseExpression(inference.conclusion);
   }
+  static parsePremise(premise) {
+    premise.statement && (premise.statement = Parser.parseExpression(premise.statement));
+    premise.premises && _.each(premise.premises, Parser.parsePremise);
+  }
   static parseStep(step) {
     step.assumption && (step.assumption = Parser.parseExpression(step.assumption));
     step.statement && (step.statement = Parser.parseExpression(step.statement));
@@ -82,6 +86,7 @@ export class Parser {
     step.inference && Parser.parseInference(step.inference);
     step.inferenceApplication && Parser.parseInference(step.inferenceApplication.inference);
     step.substeps && _.each(step.substeps, Parser.parseStep);
+    step.premises && _.each(step.premises, Parser.parsePremise);
   }
   static parseTheorem(rawTheorem) {
     const theorem = _.cloneDeep(rawTheorem);

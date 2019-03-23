@@ -1,32 +1,48 @@
 import styled from "styled-components";
 import React from "react";
-import {formatHtml, HighlightableStatement} from "./Expression";
+import {Expression, formatHtml, HighlightableStatement} from "./Expression";
 import {InferenceSummary} from "./InferenceSummary";
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Overlay from "react-bootstrap/Overlay";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import path from "path";
 import {Parser} from "../Parser";
 import {FindInferenceModal} from "./Modals";
-
-const ClickableDiv = props => (
-  <div {...props} />
-);
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const ProofLine = styled(class ProofLine extends React.Component {
+  constructor(...args) {
+    super(...args);
+    this.attachRef = target => this.setState({ target });
+    this.state = {
+      showPopover: false,
+    };
+  }
+  showPopover = () => {
+    this.setState({showPopover: true})
+  };
+  hidePopover = () => {
+    this.setState({showPopover: false})
+  };
   render() {
-    const {setHighlightedPremises, referencedLines, className, children, popover} = this.props;
+    const {setHighlightedPremises, referencedLines, className, children, popover, onShowPopover} = this.props;
 
     const onMouseEnter = referencedLines && setHighlightedPremises && (() => setHighlightedPremises(referencedLines));
     const onMouseLeave = referencedLines && setHighlightedPremises && (() => setHighlightedPremises([]));
-    const lineElement= <ClickableDiv onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className={className}>
+    const lineElement= <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onClick={this.showPopover} className={className} ref={this.attachRef}>
       {children}
-    </ClickableDiv>;
+    </div>;
 
     if (popover) {
-      return <OverlayTrigger trigger="click" placement="bottom" overlay={popover} rootClose>{lineElement}</OverlayTrigger>;
+      return <>
+        {lineElement}
+        <Overlay target={this.state.target} show={this.state.showPopover} onEnter={onShowPopover} onHide={this.hidePopover} rootClose placement="bottom-start">
+          {popover}
+        </Overlay>
+      </>
     } else {
       return lineElement;
     }
@@ -53,7 +69,60 @@ class DeductionStep extends React.Component {
   }
 }
 
+const PremiseChildren = styled.div`
+  margin-left: 20px;
+`;
+
 class AssertionStep extends React.Component {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      premiseOptions: {}
+    };
+  }
+
+  applyExpansion = (premisePath, expansionId) => {
+    this.props.fetchForStep(this.props.path, `premises/${premisePath.join(".")}/rearrangement`, {
+      method: "POST",
+      body: expansionId
+    }).then(this.props.updateTheorem);
+  };
+
+  renderPremise(premise, path, boundVariableLists) {
+    switch (premise.type) {
+      case "pending":
+        const options = _.find(this.state.premiseOptions, option => _.isEqual(option.path, path)) || {};
+        return <div>
+          <Expression expression={premise.statement} boundVariableLists={boundVariableLists}/>
+          {options.expansions && <DropdownButton title="Expansions" size="sm">
+            {options.expansions.map(e => <Dropdown.Item key={e.id} onClick={() => this.applyExpansion(path, e.id)}>{e.name}</Dropdown.Item>)}
+          </DropdownButton>}
+        </div>;
+      case "expansion":
+        return <div>
+          <Expression expression={premise.statement} boundVariableLists={boundVariableLists}/>
+          <PremiseChildren>
+            {premise.premises.map((p, i) => this.renderPremise(p, [...path, i], boundVariableLists))}
+          </PremiseChildren>
+        </div>;
+      case "given":
+      case "simplification":
+        return <div>
+          <Expression expression={premise.statement} boundVariableLists={boundVariableLists}/>
+        </div>;
+    }
+  }
+
+  fetchOptions = () => {
+    this.props.fetchForStep(this.props.path, "premiseOptions")
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then(options => this.setState({premiseOptions: options}));
+  };
+
   render() {
     let {step, path, additionalReferences, ...otherProps} = this.props;
     let reference = path.join(".");
@@ -61,9 +130,14 @@ class AssertionStep extends React.Component {
     const popover = (
       inference && <Popover title={inference.name}>
         <InferenceSummary inference={inference} />
+        {step.premises && <>
+          <hr/>
+          <div><strong>Premises</strong></div>
+          {step.premises.map((p, i) => this.renderPremise(p, [i], otherProps.boundVariableLists))}
+        </>}
       </Popover>
     );
-    return <ProofLine referencedLines={step.referencedLines} popover={popover} {...otherProps}>
+    return <ProofLine referencedLines={step.referencedLines} popover={popover} onShowPopover={this.fetchOptions} {...otherProps}>
       Then <ProofLineStatement statement={step.statement} boundVariableLists={this.props.boundVariableLists} references={[...additionalReferences, reference]} {...otherProps}/>.
     </ProofLine>;
   }
@@ -119,10 +193,6 @@ class TargetStep extends React.Component {
     this.props.fetchForStep(this.props.path, "introduceBoundVariable", {
       method: "POST",
       body: this.state.boundVariableName
-    }).then(response => {
-      if (response.ok) {
-        return response.json();
-      }
     }).then(this.props.updateTheorem);
   };
 
@@ -141,10 +211,6 @@ class TargetStep extends React.Component {
   introduceDeduction = () => {
     this.props.fetchForStep(this.props.path, "introduceDeduction", {
       method: "POST"
-    }).then(response => {
-      if (response.ok) {
-        return response.json();
-      }
     }).then(this.props.updateTheorem);
   };
 
@@ -153,10 +219,6 @@ class TargetStep extends React.Component {
       method: "PUT",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, substitutions})
-    }).then(response => {
-      if (response.ok) {
-        return response.json();
-      }
     }).then(this.props.updateTheorem);
   };
 
@@ -299,9 +361,11 @@ export class Theorem extends React.Component {
     return window.fetch(combinedPath, options);
   };
 
-  updateTheorem = (theoremJSON) => {
-    const theorem = Parser.parseTheorem(theoremJSON);
-    this.setState({ theorem: theorem });
+  updateTheorem = (response) => {
+    response.json().then(theoremJSON => {
+      const theorem = Parser.parseTheorem(theoremJSON);
+      this.setState({theorem: theorem});
+    });
   };
 
   render() {

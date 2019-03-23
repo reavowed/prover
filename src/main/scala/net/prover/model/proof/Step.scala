@@ -288,6 +288,7 @@ object Step {
         }
       }
       case class Pending(statement: Statement) extends Leaf {
+        val `type` = "pending"
         override def serializedLines: Seq[String] = Seq(s"pending ${statement.serialized}")
         override def referencedInferenceIds: Set[String] = Set.empty
         override def referencedLines: Set[PreviousLineReference] = Set.empty
@@ -304,6 +305,7 @@ object Step {
       }
 
       case class Given(statement: Statement, referencedLine: PreviousLineReference) extends Leaf with SingleLinePremise {
+        val `type` = "given"
         override def serializedLines: Seq[String] = Seq("given")
         override def referencedInferenceIds: Set[String] = Set.empty
         override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], NewAssert.Premise.Pending] = Map.empty
@@ -319,14 +321,15 @@ object Step {
         }
       }
 
-      case class Rearrangement(
+      case class Expansion(
           statement: Statement,
           inference: Inference.Summary,
           premises: Seq[NewAssert.Premise],
           substitutions: Substitutions)
         extends Premise
       {
-        override def serializedLines: Seq[String] = Seq(s"rearranged ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}") ++
+        val `type` = "expansion"
+        override def serializedLines: Seq[String] = Seq(s"expanded ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}") ++
           premises.flatMap(_.serializedLines).indent
         override def referencedInferenceIds: Set[String] = premises.flatMap(_.referencedInferenceIds).toSet + inference.id
         override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
@@ -344,8 +347,8 @@ object Step {
         }
         override def isIncomplete: Boolean = premises.exists(_.isIncomplete)
       }
-      object Rearrangement {
-        def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Rearrangement] = {
+      object Expansion {
+        def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Expansion] = {
           for {
             statement <- Statement.parser
             inference <- Inference.parser
@@ -356,12 +359,13 @@ object Step {
             if (statement != targetStatement) {
               throw new Exception(s"Statement $statement did not match target $targetStatement")
             }
-            Premise.Rearrangement(statement, inference, premises, substitutions)
+            Premise.Expansion(statement, inference, premises, substitutions)
           }
         }
       }
 
       case class Simplification(statement: Statement, premise: Premise.SingleLinePremise, inference: Inference.Summary, substitutions: Substitutions, path: Seq[Int]) extends SingleLinePremise {
+        val `type` = "simplification"
         override def referencedLine: PreviousLineReference = premise.referencedLine.addPath(path)
         override def referencedInferenceIds: Set[String] = premise.referencedInferenceIds + inference.id
         override def serializedLines: Seq[String] = Seq(s"simplified ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}") ++ premise.serializedLines.indent
@@ -407,8 +411,8 @@ object Step {
           Pending.parser(statement)
         case "given" =>
           Given.parser(statement)
-        case "rearranged" =>
-          Rearrangement.parser(statement)
+        case "expanded" =>
+          Expansion.parser(statement)
         case "simplified" =>
           Simplification.parser(statement)
       }

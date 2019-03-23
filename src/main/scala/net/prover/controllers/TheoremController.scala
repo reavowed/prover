@@ -198,7 +198,7 @@ class TheoremController @Autowired() (bookService: BookService) {
         substitutions <- inference.conclusion.calculateSubstitutions(oldPremise.statement, Substitutions.empty, 0, stepContext.externalDepth).headOption.orException(BadRequestException("Could not calculate substitutions"))
         substitutedInferencePremises <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, oldPremise.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
         newPremises = substitutedInferencePremises.map(createPremise(_, stepContext, parsingContext))
-      } yield Step.NewAssert.Premise.Rearrangement(oldPremise.statement, inference, newPremises, substitutions)
+      } yield Step.NewAssert.Premise.Expansion(oldPremise.statement, inference, newPremises, substitutions)
     }
 
     modifyStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (book, chapter, theorem, oldStep) =>

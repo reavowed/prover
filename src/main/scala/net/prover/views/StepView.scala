@@ -54,7 +54,7 @@ object StepView {
           <div class="editablePremise" data-path={path.mkString(".")}>{ExpressionView(statement)}</div>
         case NewAssert.Premise.Given(statement, _) =>
           <div>{ExpressionView(statement)}</div>
-        case NewAssert.Premise.Rearrangement(statement, _, premises, _) =>
+        case NewAssert.Premise.Expansion(statement, _, premises, _) =>
           Seq(
             <div>{ExpressionView(statement)}</div>,
             <div class="proofIndent">{premises.mapWithIndex((p, i) => AssertionPremise(p, path :+ i))}</div>)
