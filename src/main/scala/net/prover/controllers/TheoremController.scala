@@ -166,9 +166,8 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData,
     @PathVariable("premisePath") premisePath: PathData
   ): ResponseEntity[_] = {
-    bookService.modifyEntry[Theorem, String](bookKey, chapterKey, theoremKey) { (_, book, chapter, theorem) =>
+    bookService.modifyEntry[Theorem, Theorem](bookKey, chapterKey, theoremKey) { (_, book, chapter, theorem) =>
       val parsingContext = getTheoremParsingContext(book, chapter, theorem)
-      import book.displayContext
       for {
         rawStep <- theorem.findStep(stepPath.indexes).orNotFound(s"Step $stepPath")
         step <- rawStep.asOptionalInstanceOf[Step.NewAssert].orBadRequest(s"Step $stepPath is not editable")
@@ -177,7 +176,7 @@ class TheoremController @Autowired() (bookService: BookService) {
         unadjustedNewTheorem <- theorem.insertStep(stepPath.indexes, newStep).orBadRequest(s"Failed to insert new step")
         newTheorem <- unadjustedNewTheorem.recalculateReferences(parsingContext).orBadRequest(s"Something broke a reference")
       } yield {
-        (newTheorem, ProofView(newTheorem.proof).toString())
+        (newTheorem, newTheorem)
       }
     }.toResponseEntity
   }

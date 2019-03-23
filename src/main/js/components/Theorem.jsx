@@ -81,6 +81,12 @@ class AssertionStep extends React.Component {
     };
   }
 
+  addTarget = (premisePath) => {
+    this.props.fetchForStep(this.props.path, `premises/${premisePath.join(".")}/target`, {
+      method: "POST"
+    }).then(this.props.updateTheorem);
+  };
+
   applyExpansion = (premisePath, expansionId) => {
     this.props.fetchForStep(this.props.path, `premises/${premisePath.join(".")}/rearrangement`, {
       method: "POST",
@@ -94,7 +100,8 @@ class AssertionStep extends React.Component {
         const options = _.find(this.state.premiseOptions, option => _.isEqual(option.path, path)) || {};
         return <div>
           <Expression expression={premise.statement} boundVariableLists={boundVariableLists}/>
-          {options.expansions && <DropdownButton title="Expansions" size="sm">
+          <Button size="sm" onClick={() => this.addTarget(path)}>Target</Button>
+          {options.expansions && options.expansions.length > 0 && <DropdownButton title="Expansions" size="sm">
             {options.expansions.map(e => <Dropdown.Item key={e.id} onClick={() => this.applyExpansion(path, e.id)}>{e.name}</Dropdown.Item>)}
           </DropdownButton>}
         </div>;
