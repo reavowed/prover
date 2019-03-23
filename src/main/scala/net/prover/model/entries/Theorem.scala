@@ -37,9 +37,9 @@ case class Theorem(
         proof.insertSubstep(head, tail, newStep).map(newProof => copy(proof = newProof))
     }
   }
-  def recalculateReferences(): Option[Theorem] = {
+  def recalculateReferences(parsingContext: ParsingContext): Option[Theorem] = {
     val stepContext = StepContext(premises.map(_.provenStatement), 0)
-    proof.recalculateReferences(Nil, stepContext).map(newProof => copy(proof = newProof))
+    proof.recalculateReferences(Nil, stepContext, parsingContext).map(newProof => copy(proof = newProof))
   }
 
   override def serializedLines = Seq(s"theorem $name") ++

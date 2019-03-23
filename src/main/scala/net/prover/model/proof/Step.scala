@@ -31,7 +31,7 @@ sealed trait Step {
   }
   def replaceSubstep(index: Int, substepIndexes: Seq[Int], newStep: Step): Step
   def insertSubstep(index: Int, innerIndexes: Seq[Int], newStep: Step): Option[Step]
-  def recalculateReferences(path: Seq[Int], stepContext: StepContext): Option[Step]
+  def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Option[Step]
   def referencedInferenceIds: Set[String]
   def length: Int
   def serializedLines: Seq[String]
@@ -59,7 +59,7 @@ object Step {
     override def findSubstep(index: Int, innerIndexes: Seq[Int]): Option[Step] = None
     override def replaceSubstep(index: Int, substepIndexes: Seq[Int], newStep: Step): Step = throw new Exception("Cannot replace substep in assertion")
     override def insertSubstep(index: Int, innerIndexes: Seq[Int], newStep: Step): Option[Step] = None
-    override def recalculateReferences(path: Seq[Int], stepContext: StepContext): Option[Step] = Some(this)
+    override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Option[Step] = Some(this)
     override def length = 1
     override def serializedLines = Seq(s"assert ${statement.serialized} ${inferenceApplication.serialized}")
   }
@@ -92,9 +92,9 @@ object Step {
     override def insertSubstep(index: Int, innerIndexes: Seq[Int], newStep: Step): Option[Step] = {
       substeps.insertSubstep(index, innerIndexes, newStep).map(newSubsteps => copy(substeps = newSubsteps))
     }
-    override def recalculateReferences(path: Seq[Int], stepContext: StepContext): Option[Step] = {
+    override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Option[Step] = {
       substeps
-        .recalculateReferences(path, stepContext.addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil))))
+        .recalculateReferences(path, stepContext.addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil))), parsingContext)
         .map(newSubsteps => copy(substeps = newSubsteps))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
@@ -135,9 +135,9 @@ object Step {
       substeps.insertSubstep(index, innerIndexes, newStep).map(newSubsteps => copy(substeps = newSubsteps))
     }
     // TODO: apply to inference application
-    override def recalculateReferences(path: Seq[Int], stepContext: StepContext): Option[Step] = {
+    override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Option[Step] = {
       substeps
-        .recalculateReferences(path, stepContext.addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil))).increaseExternalDepth())
+        .recalculateReferences(path, stepContext.addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil))).increaseExternalDepth(), parsingContext)
         .map(newSubsteps => copy(substeps = newSubsteps))
     }
     override def referencedInferenceIds = substeps.flatMap(_.referencedInferenceIds).toSet ++ finalInferenceApplication.referencedInferenceIds
@@ -182,9 +182,9 @@ object Step {
     override def insertSubstep(index: Int, innerIndexes: Seq[Int], newStep: Step): Option[Step] = {
       substeps.insertSubstep(index, innerIndexes, newStep).map(newSubsteps => copy(substeps = newSubsteps))
     }
-    override def recalculateReferences(path: Seq[Int], stepContext: StepContext): Option[Step] = {
+    override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Option[Step] = {
       substeps
-        .recalculateReferences(path, stepContext.increaseExternalDepth())
+        .recalculateReferences(path, stepContext.increaseExternalDepth(), parsingContext)
         .map(newSubsteps => copy(substeps = newSubsteps))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
@@ -211,7 +211,7 @@ object Step {
     override def findSubstep(index: Int, innerIndexes: Seq[Int]): Option[Step] = None
     override def replaceSubstep(index: Int, substepIndexes: Seq[Int], newStep: Step): Step = throw new Exception("Cannot replace substep in target")
     override def insertSubstep(index: Int, innerIndexes: Seq[Int], newStep: Step): Option[Step] = None
-    override def recalculateReferences(path: Seq[Int], stepContext: StepContext): Option[Step] = Some(this)
+    override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Option[Step] = Some(this)
     override def referencedInferenceIds = Set.empty
     override def length = 1
     def serializedLines = Seq(s"target ${statement.serialized}")
@@ -238,8 +238,8 @@ object Step {
     override def findSubstep(index: Int, innerIndexes: Seq[Int]): Option[Step] = None
     override def replaceSubstep(index: Int, substepIndexes: Seq[Int], newStep: Step): Step = throw new Exception("Cannot replace substep in assertion")
     override def insertSubstep(index: Int, innerIndexes: Seq[Int], newStep: Step): Option[Step] = None
-    override def recalculateReferences(path: Seq[Int], stepContext: StepContext): Option[Step] = {
-      premises.map(_.recalculateReferences(stepContext)).traverseOption.map(newPremises => copy(premises = newPremises))
+    override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Option[Step] = {
+      premises.map(_.recalculateReferences(stepContext, parsingContext)).traverseOption.map(newPremises => copy(premises = newPremises))
     }
     override def referencedInferenceIds: Set[String] = Set(inference.id) ++ premises.flatMap(_.referencedInferenceIds).toSet
     override def length: Int = 1
@@ -268,10 +268,15 @@ object Step {
       def serializedLines: Seq[String]
       def getPendingPremises(path: Seq[Int]): Map[Seq[Int], NewAssert.Premise.Pending]
       def updateAtPath(path: Seq[Int], f: Premise => Try[Premise]): Option[Try[Premise]]
-      def recalculateReferences(stepContext: StepContext): Option[Premise]
+      def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Option[Premise]
       def isIncomplete: Boolean
     }
     object Premise {
+      sealed trait SingleLinePremise extends Premise {
+        def referencedLine: PreviousLineReference
+        override def referencedLines: Set[PreviousLineReference] = Set(referencedLine)
+        override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Option[SingleLinePremise]
+      }
       sealed trait Leaf extends Premise {
         override def updateAtPath(path: Seq[Int], f: Premise => Try[Premise]): Option[Try[Premise]] = {
           path match {
@@ -287,13 +292,8 @@ object Step {
         override def referencedInferenceIds: Set[String] = Set.empty
         override def referencedLines: Set[PreviousLineReference] = Set.empty
         override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], NewAssert.Premise.Pending] = Map(path -> this)
-        override def recalculateReferences(stepContext: StepContext): Option[Premise] = {
-          stepContext.findProvenStatement(statement) match {
-            case Some(ProvenStatement(provenStatement, reference)) =>
-              Some(Given(provenStatement, reference))
-            case None =>
-              Some(this)
-          }
+        override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Option[Premise] = {
+          ProofHelper.findPremise(statement, stepContext, parsingContext).orElse(Some(this))
         }
         override def isIncomplete: Boolean = true
       }
@@ -303,18 +303,12 @@ object Step {
         }
       }
 
-      case class Given(statement: Statement, reference: PreviousLineReference) extends Leaf {
+      case class Given(statement: Statement, referencedLine: PreviousLineReference) extends Leaf with SingleLinePremise {
         override def serializedLines: Seq[String] = Seq("given")
         override def referencedInferenceIds: Set[String] = Set.empty
-        override def referencedLines: Set[PreviousLineReference] = Set(reference)
         override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], NewAssert.Premise.Pending] = Map.empty
-        override def recalculateReferences(stepContext: StepContext): Option[Premise] = {
-          stepContext.findProvenStatement(statement) match {
-            case Some(ProvenStatement(provenStatement, newReference)) =>
-              Some(Given(provenStatement, newReference))
-            case None =>
-              None
-          }
+        override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Option[SingleLinePremise] = {
+          ProofHelper.findPremise(statement, stepContext, parsingContext)
         }
         override def isIncomplete: Boolean = false
       }
@@ -345,26 +339,78 @@ object Step {
               premises.tryUpdateAtIndexIfDefined(path.head)(p => p.updateAtPath(path.tail, f)).map(_.map(newPremises => copy(premises = newPremises)))
           }
         }
-        override def recalculateReferences(stepContext: StepContext): Option[Premise] = {
-          premises.map(_.recalculateReferences(stepContext)).traverseOption.map(newPremises => copy(premises = newPremises))
+        override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Option[Premise] = {
+          premises.map(_.recalculateReferences(stepContext, parsingContext)).traverseOption.map(newPremises => copy(premises = newPremises))
         }
         override def isIncomplete: Boolean = premises.exists(_.isIncomplete)
       }
-    }
-    object Rearrangement {
-      def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Rearrangement] = {
-        for {
-          statement <- Statement.parser
-          inference <- Inference.parser
-          substitutions <- inference.substitutionsParser
-          premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, statement, parsingContext.parameterDepth)
-          premises <- premisesParser(premiseStatements)
-        } yield {
-          if (statement != targetStatement) {
-            throw new Exception(s"Statement $statement did not match target $targetStatement")
+      object Rearrangement {
+        def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Rearrangement] = {
+          for {
+            statement <- Statement.parser
+            inference <- Inference.parser
+            substitutions <- inference.substitutionsParser
+            premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, statement, parsingContext.parameterDepth)
+            premises <- premisesParser(premiseStatements)
+          } yield {
+            if (statement != targetStatement) {
+              throw new Exception(s"Statement $statement did not match target $targetStatement")
+            }
+            Premise.Rearrangement(statement, inference, premises, substitutions)
           }
-          Premise.Rearrangement(statement, inference, premises, substitutions)
         }
+      }
+
+      case class Simplification(statement: Statement, premise: Premise.SingleLinePremise, inference: Inference, substitutions: Substitutions, path: Seq[Int]) extends SingleLinePremise {
+        override def referencedLine: PreviousLineReference = premise.referencedLine.addPath(path)
+        override def referencedInferenceIds: Set[String] = premise.referencedInferenceIds + inference.id
+        override def serializedLines: Seq[String] = Seq(s"simplified ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}") ++ premise.serializedLines.indent
+        override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Pending] = premise.getPendingPremises(path :+ 0)
+        override def updateAtPath(path: Seq[Int], f: Premise => Try[Premise]): Option[Try[Premise]] = path match {
+          case Nil =>
+            Some(f(this))
+          case 0 +: tail =>
+            premise.updateAtPath(tail, f)
+          case _ =>
+            None
+        }
+        override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Option[SingleLinePremise] = {
+          premise.recalculateReferences(stepContext, parsingContext).map(newPremise => copy(premise = newPremise))
+            .orElse(ProofHelper.findPremise(statement, stepContext, parsingContext))
+        }
+        override def isIncomplete: Boolean = premise.isIncomplete
+      }
+      object Simplification {
+        def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Simplification] = {
+          for {
+            statement <- Statement.parser
+            inference <- Inference.parser
+            substitutions <- inference.substitutionsParser
+            premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, statement, parsingContext.parameterDepth)
+            premiseStatement = premiseStatements.single.getOrElse(throw new Exception("Simplification inference must have a single premise"))
+            premise <- premiseParser(premiseStatement)
+          } yield {
+            if (statement != targetStatement) {
+              throw new Exception(s"Statement $statement did not match target $targetStatement")
+            }
+            val path = premiseStatement.findComponentPath(statement).getOrElse(throw new Exception(s"Could not find $statement in $premiseStatement"))
+            val singleLinePremise = premise.asOptionalInstanceOf[SingleLinePremise].getOrElse(throw new Exception("Simplification premise must be single line"))
+            Premise.Simplification(statement, singleLinePremise, inference, substitutions, path)
+          }
+        }
+      }
+    }
+
+    def premiseParser(statement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Premise] = {
+      Parser.selectWordParser("premise") {
+        case "pending" =>
+          Pending.parser(statement)
+        case "given" =>
+          Given.parser(statement)
+        case "rearranged" =>
+          Rearrangement.parser(statement)
+        case "simplified" =>
+          Simplification.parser(statement)
       }
     }
 
@@ -372,14 +418,7 @@ object Step {
       statements.foldLeft(Parser.constant(Seq.empty[Premise])) { (parserSoFar, statement) =>
         for {
           premisesSoFar <- parserSoFar
-          newPremise <- Parser.selectWordParser("premise") {
-            case "pending" =>
-              Pending.parser(statement)
-            case "given" =>
-              Given.parser(statement)
-            case "rearranged" =>
-              Rearrangement.parser(statement)
-          }
+          newPremise <- premiseParser(statement)
         } yield premisesSoFar :+ newPremise
       }
     }
@@ -411,10 +450,10 @@ object Step {
           steps.updateAtIndexIfDefined(index)(_.insertSubstep(head, tail, newStep))
       }
     }
-    def recalculateReferences(path: Seq[Int], stepContext: StepContext): Option[Seq[Step]] = {
+    def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Option[Seq[Step]] = {
       steps.zipWithIndex.mapFoldOption(stepContext) { case (currentContext, (oldStep, i)) =>
         for {
-          newStep <- oldStep.recalculateReferences(path :+ i, currentContext)
+          newStep <- oldStep.recalculateReferences(path :+ i, currentContext, parsingContext)
         } yield {
           val newProvenStatements = newStep.provenStatement.toSeq.map(s => ProvenStatement(s, PreviousLineReference((path :+ i).mkString("."), Nil)))
           (currentContext.addStatements(newProvenStatements), newStep)

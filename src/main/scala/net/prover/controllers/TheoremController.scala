@@ -7,7 +7,7 @@ import net.prover.model._
 import net.prover.model.entries.{StatementDefinition, TermDefinition, Theorem}
 import net.prover.model.expressions.{Expression, Statement}
 import net.prover.model.proof.Step.NewAssert
-import net.prover.model.proof.{ProvenStatement, Step, StepContext}
+import net.prover.model.proof._
 import net.prover.services.BookService
 import net.prover.views.{ExpressionView, ProofView}
 import org.springframework.beans.factory.annotation.Autowired
@@ -67,7 +67,7 @@ class TheoremController @Autowired() (bookService: BookService) {
         Step.NewAssert(
           oldStep.statement,
           inference,
-          premiseStatements.map(createPremise(_, stepContext)),
+          premiseStatements.map(createPremise(_, stepContext, parsingContext)),
           substitutions,
           oldStep.context)
       }
@@ -166,7 +166,8 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData,
     @PathVariable("premisePath") premisePath: PathData
   ): ResponseEntity[_] = {
-    bookService.modifyEntry[Theorem, String](bookKey, chapterKey, theoremKey) { (_, book, _, theorem) =>
+    bookService.modifyEntry[Theorem, String](bookKey, chapterKey, theoremKey) { (_, book, chapter, theorem) =>
+      val parsingContext = getTheoremParsingContext(book, chapter, theorem)
       import book.displayContext
       for {
         rawStep <- theorem.findStep(stepPath.indexes).orNotFound(s"Step $stepPath")
@@ -174,14 +175,13 @@ class TheoremController @Autowired() (bookService: BookService) {
         premise <- step.pendingPremises.get(premisePath.indexes).orNotFound(s"Premise $premisePath")
         newStep = Step.Target(premise.statement, step.context)
         unadjustedNewTheorem <- theorem.insertStep(stepPath.indexes, newStep).orBadRequest(s"Failed to insert new step")
-        newTheorem <- unadjustedNewTheorem.recalculateReferences().orBadRequest(s"Something broke a reference")
+        newTheorem <- unadjustedNewTheorem.recalculateReferences(parsingContext).orBadRequest(s"Something broke a reference")
       } yield {
         (newTheorem, ProofView(newTheorem.proof).toString())
       }
     }.toResponseEntity
   }
 
-  case class UpdatedStep(html: String)
   @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/rearrangement"))
   def createRearrangement(
     @PathVariable("bookKey") bookKey: String,
@@ -197,7 +197,7 @@ class TheoremController @Autowired() (bookService: BookService) {
         inference <- findInference(inferenceId)
         substitutions <- inference.conclusion.calculateSubstitutions(oldPremise.statement, Substitutions.empty, 0, stepContext.externalDepth).headOption.orException(BadRequestException("Could not calculate substitutions"))
         substitutedInferencePremises <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, oldPremise.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
-        newPremises = substitutedInferencePremises.map(createPremise(_, stepContext))
+        newPremises = substitutedInferencePremises.map(createPremise(_, stepContext, parsingContext))
       } yield Step.NewAssert.Premise.Rearrangement(oldPremise.statement, inference, newPremises, substitutions)
     }
 
@@ -251,13 +251,8 @@ class TheoremController @Autowired() (bookService: BookService) {
     parsingContext.inferences.find(_.id == inferenceId).orBadRequest(s"Invalid inference $inferenceId")
   }
 
-  private def createPremise(target: Statement, stepContext: StepContext): NewAssert.Premise.Leaf = {
-    stepContext.findProvenStatement(target) match {
-      case Some(ProvenStatement(statement, reference)) =>
-        NewAssert.Premise.Given(statement, reference)
-      case None =>
-        NewAssert.Premise.Pending(target)
-    }
+  private def createPremise(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): NewAssert.Premise = {
+    ProofHelper.findPremise(target, stepContext, parsingContext).getOrElse(NewAssert.Premise.Pending(target))
   }
 
   case class PathData(indexes: Seq[Int]) {
