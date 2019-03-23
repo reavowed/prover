@@ -31,6 +31,11 @@ class BookController @Autowired() (bookService: BookService) {
     }
   }
 
+  @GetMapping(value = Array("reloadFromDisk"))
+  def reloadFromDisk(): Unit = {
+    bookService.reload().toResponseEntity
+  }
+
   @GetMapping(value = Array("/{bookKey}"), produces = Array("text/html;charset=UTF-8"))
   def getBook(@PathVariable("bookKey") bookKey: String) = {
     try {

@@ -9,7 +9,7 @@ import net.prover.model.expressions.{Expression, Statement}
 import net.prover.model.proof.Step.NewAssert
 import net.prover.model.proof._
 import net.prover.services.BookService
-import net.prover.views.{ExpressionView, ProofView}
+import net.prover.views.ExpressionView
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.convert.converter.Converter
 import org.springframework.http.ResponseEntity

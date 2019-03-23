@@ -5,19 +5,18 @@ import java.nio.file.{Files, Path, Paths}
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
 import net.prover.model.entries._
-import org.slf4j.LoggerFactory
+import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.stereotype.Service
 
 import scala.collection.JavaConverters._
 import scala.reflect._
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
 @Service
 class BookService {
   private val bookDirectoryPath = Paths.get("books")
-  private val cacheDirectoryPath = Paths.get("cache")
 
-  private var _books = parseBooks.getOrElse(Nil)
+  private var _books = parseBooks
 
   def books: Seq[Book] = _books
 
@@ -69,20 +68,21 @@ class BookService {
     }
   }
 
-  private def parseBooks: Option[Seq[Book]] = {
-    val books = getBookList.mapFoldOption[Book] { case (booksSoFar, bookTitle) =>
+  def reload(): Try[Unit] = {
+    modifyBooks[Unit](_ => Try((parseBooks, ())))
+  }
+
+  private def parseBooks: Seq[Book] = {
+    val books = getBookList.mapFold[Book] { case (booksSoFar, bookTitle) =>
       parseBook(bookTitle, booksSoFar)
     }
-    books.foreach { books =>
-      BookService.logger.info(s"Parsed ${books.length} books")
-    }
+    BookService.logger.info(s"Parsed ${books.length} books")
     books
   }
 
-  private def parseBook(title: String, previousBooks: Seq[Book]): Option[Book] = {
+  private def parseBook(title: String, previousBooks: Seq[Book]): Book = {
     BookService.logger.info(s"Parsing book $title")
     Book.parse(title, getBookPath(title), previousBooks, getChapterPath(title, _, _))
-      .ifEmpty { BookService.logger.info(s"Failed to parse book $title") }
   }
 
   private def getBookList: Seq[String] = {
@@ -92,16 +92,16 @@ class BookService {
       .filter(s => !s.startsWith("#"))
   }
 
-  private def writeBooks(books: Seq[Book]) = {
+  private def writeBooks(books: Seq[Book]): Unit = {
     writeBooklist(books)
     books.foreach(writeBook)
   }
 
-  private def writeBooklist(books: Seq[Book]) = {
+  private def writeBooklist(books: Seq[Book]): Unit = {
     Files.write(getBookListPath, (books.map(_.title).mkString("\n") + "\n").getBytes("UTF-8"))
   }
 
-  private def writeBook(book: Book) = {
+  private def writeBook(book: Book): Unit = {
     Files.write(getBookPath(book.title), book.serialized.getBytes("UTF-8"))
     book.chapters.foreachWithIndex((chapter, index) =>
       Files.write(getChapterPath(book.title, chapter.title, index), chapter.serialized.getBytes("UTF-8"))
@@ -123,5 +123,5 @@ class BookService {
 }
 
 object BookService {
-  val logger = LoggerFactory.getLogger(BookService.getClass)
+  val logger: Logger = LoggerFactory.getLogger(BookService.getClass)
 }

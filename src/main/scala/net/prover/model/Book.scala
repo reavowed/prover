@@ -39,14 +39,8 @@ object Book {
     def url = s"/books/$value"
   }
 
-  def parse(title: String, path: Path, previousBooks: Seq[Book], getChapterPath: (String, Int) => Path): Option[Book] = {
-    Try(parser(title, previousBooks, getChapterPath).parseFromFile(path, s"book '$title'")) match {
-      case Success(bookOutline) =>
-        Some(bookOutline)
-      case Failure(e) =>
-        logger.error(s"Error parsing book '$title'\n${e.getMessage}")
-        None
-    }
+  def parse(title: String, path: Path, previousBooks: Seq[Book], getChapterPath: (String, Int) => Path): Book = {
+    parser(title, previousBooks, getChapterPath).parseFromFile(path, s"book '$title'")
   }
 
   def parser(title: String, previousBooks: Seq[Book], getChapterPath: (String, Int) => Path): Parser[Book] = {
