@@ -43,7 +43,7 @@ const HighlightedSpan = styled.span`
 export class Expression extends React.Component {
   matchShorthand(template, expression, boundVariableLists) {
     if (_.isString(template)) {
-      return <Expression expression={expression} boundVariableLists={boundVariableLists}/>;
+      return <Expression expression={expression} boundVariableLists={boundVariableLists} safe={true}/>;
     } else if (_.isArray(template) && _.isString(template[0])) {
       if ((expression instanceof DefinedExpression) && (expression.definition.symbol === template[0])) {
         let innerBoundVariableLists = expression.boundVariableNames.length > 0 ? [expression.boundVariableNames, ...boundVariableLists] : boundVariableLists;
