@@ -204,7 +204,7 @@ class AssertionStep extends React.Component {
                  popover={popover}
                  onShowPopover={this.fetchOptions}
                  blockHide={this.showBoundVariableModal()}
-                 incomplete={_.some(step.premises, "isIncomplete")}
+                 incomplete={_.some(step.premises, "incomplete")}
                  {...otherProps}
       >
         Then <ProofLineStatement statement={step.statement}
