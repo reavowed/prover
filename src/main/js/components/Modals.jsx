@@ -8,7 +8,7 @@ import {InferenceSummary} from "./InferenceSummary";
 import {Parser} from "../Parser";
 import Col from "react-bootstrap/Col";
 import {Expression} from "./Expression";
-import path from 'path';
+import {renderToString} from "react-dom/server";
 
 const DropdownContainer = styled.div`
   .react-autosuggest__suggestions-container--open & {
@@ -26,6 +26,8 @@ const DropdownContainer = styled.div`
     }
   }
 `;
+
+const AllSubstitutionTypes = ["statements", "terms", "predicates", "functions"];
 
 export class FindInferenceModal extends React.Component {
   constructor(props, context) {
@@ -51,31 +53,58 @@ export class FindInferenceModal extends React.Component {
     });
   };
   onSuggestionSelected = (event, {suggestion}) => {
-    const substitutions = _.fromPairs(["statements", "terms", "predicates", "functions"].map(key => {
-      const required = suggestion.requiredSubstitutions[key];
-      const values = _.fromPairs(_.map(required, name => {
-        const given = suggestion.substitutions[0][key][name];
-        return [name, given ? given.serialize() : ""];
+    const selectedSubstitutions = _.fromPairs(AllSubstitutionTypes.map(type => {
+      const requiredNames = suggestion.requiredSubstitutions[type];
+      const namesToSelectedValues = _.fromPairs(_.map(requiredNames, name => {
+        const possibleValues = suggestion.substitutions.map(s => s[type][name]);
+        return [name, possibleValues.length === 1 ? possibleValues[0].serialize() : ""];
       }));
-      return [key, values];
+      return [type, namesToSelectedValues];
     }));
     this.setState({
       selectedInferenceSuggestion: suggestion,
-      substitutions: substitutions
+      selectedSubstitutions
     });
   };
-  setSubstitution = (key, name, value) => {
-    const substitutions = this.state.substitutions;
-    substitutions[key][name] = value;
-    this.setState({
-      substitutions: substitutions
-    });
+  setSubstitutionValue = (key, name, value) => {
+    const {selectedSubstitutions} = this.state;
+    selectedSubstitutions[key][name] = value;
+    this.updateForcedSubstitutionValues(selectedSubstitutions);
+    this.setState({selectedSubstitutions});
   };
   readyToSubmit() {
-    return this.state.selectedInferenceSuggestion && _.chain(this.state.substitutions).values().flatMap(_.values).every().value();
+    return this.state.selectedInferenceSuggestion && _.chain(this.state.selectedSubstitutions).values().flatMap(_.values).every().value();
   };
   submit = () => {
-    this.props.onSubmit(this.state.selectedInferenceSuggestion.inference.id, this.state.substitutions);
+    this.props.onSubmit(this.state.selectedInferenceSuggestion.inference.id, this.state.selectedSubstitutions);
+  };
+  getCompatibleSubstitutions = (selectedSubstitutions, ignoringType, ignoringName) => {
+    return _.filter(this.state.selectedInferenceSuggestion.substitutions, s =>
+      _.every(AllSubstitutionTypes, type =>
+        _.every(this.state.selectedInferenceSuggestion.requiredSubstitutions[type], name =>
+          (ignoringType === type && ignoringName === name) ||
+            selectedSubstitutions[type][name] === '' ||
+            !s[type][name] ||
+            selectedSubstitutions[type][name] === s[type][name].serialize()
+        )
+      )
+    );
+  };
+  updateForcedSubstitutionValues = (selectedSubstitutions) => {
+    const compatibleSubstitutions = this.getCompatibleSubstitutions(selectedSubstitutions);
+    _.each(AllSubstitutionTypes, type => {
+      _.each(this.state.selectedInferenceSuggestion.requiredSubstitutions[type], name => {
+        if (selectedSubstitutions[type][name] === '') {
+          const compatibleValues = _.uniq(_.map(compatibleSubstitutions, s => s[type][name]));
+          if (compatibleValues.length === 1 && compatibleValues[0]) {
+            selectedSubstitutions[type][name] = compatibleValues[0].serialize();
+          }
+        }
+      });
+    });
+  };
+  getValidSubstitutionValues = (type, name) => {
+    return this.getCompatibleSubstitutions(this.state.selectedSubstitutions, type, name).map(s => s[type][name]);
   };
 
   render() {
@@ -84,13 +113,26 @@ export class FindInferenceModal extends React.Component {
     }
     let showSubstitutions = (key, boundVariableLists, addParameter) => {
       const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
-      const givenSubstitutions = this.state.selectedInferenceSuggestion.substitutions[0][key];
       if (addParameter) {
         boundVariableLists = [...boundVariableLists, ["_"]];
       }
 
-      return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name =>
-        <Form.Group key={`${key} ${name}`}>
+      return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name => {
+        const validValues = this.getValidSubstitutionValues(key, name);
+        const selectionElement = _.some(validValues, _.isUndefined) ?
+          <Form.Control type="text" value={this.state.selectedSubstitutions[key][name]} onChange={e => this.setSubstitutionValue(key, name, e.target.value)}/> :
+          validValues.length === 1 ?
+          <Form.Label column><Expression expression={validValues[0]} boundVariableLists={boundVariableLists} /></Form.Label> :
+          <Form.Control as="select" value={this.state.selectedSubstitutions[key][name]} onChange={e => this.setSubstitutionValue(key, name, e.target.value)}>
+            <option value="" />
+            {validValues.map(v =>
+              <option value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
+                <Expression expression={v} boundVariableLists={boundVariableLists} />
+              )}}/>
+            )}
+          </Form.Control>
+
+        return <Form.Group key={`${key} ${name}`}>
           <Form.Row >
             <Col xs={1}>
               <Form.Label column>{name}{addParameter && "(_)"}</Form.Label>
@@ -99,12 +141,11 @@ export class FindInferenceModal extends React.Component {
               <Form.Label column>&rarr;</Form.Label>
             </Col>
             <Col>
-              {givenSubstitutions[name] ?
-                <Form.Label column><Expression expression={givenSubstitutions[name]} boundVariableLists={boundVariableLists} /></Form.Label> :
-                <Form.Control type="text" value={this.state.substitutions[key][name]} onChange={e => this.setSubstitution(key, name, e.target.value)}/>}
+              {selectionElement}
             </Col>
           </Form.Row>
-        </Form.Group>);
+        </Form.Group>
+      });
     };
     const {show, onHide, boundVariableLists} = this.props;
 
