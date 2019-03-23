@@ -82,15 +82,18 @@ export class FindInferenceModal extends React.Component {
     function renderSuggestionsContainer ({containerProps, children}) {
       return <div {...containerProps}><DropdownContainer>{children}</DropdownContainer></div>
     }
-    let showSubstitutions = (key, boundVariableLists) => {
+    let showSubstitutions = (key, boundVariableLists, addParameter) => {
       const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
       const givenSubstitutions = this.state.selectedInferenceSuggestion.substitutions[0][key];
+      if (addParameter) {
+        boundVariableLists = [...boundVariableLists, ["_"]];
+      }
 
       return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name =>
         <Form.Group key={`${key} ${name}`}>
           <Form.Row >
             <Col xs={1}>
-              <Form.Label column>{name}</Form.Label>
+              <Form.Label column>{name}{addParameter && "(_)"}</Form.Label>
             </Col>
             <Col xs={1}>
               <Form.Label column>&rarr;</Form.Label>
@@ -130,8 +133,8 @@ export class FindInferenceModal extends React.Component {
               {_.flatten([
                 showSubstitutions("statements", boundVariableLists),
                 showSubstitutions("terms", boundVariableLists),
-                showSubstitutions("predicates", [["_"], ...boundVariableLists]),
-                showSubstitutions("functions", [["_"], ...boundVariableLists]),
+                showSubstitutions("predicates", boundVariableLists, true),
+                showSubstitutions("functions", boundVariableLists, true),
               ])}
             </>}
         </Form>
