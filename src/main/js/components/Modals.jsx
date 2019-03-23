@@ -143,3 +143,24 @@ export class FindInferenceModal extends React.Component {
     </Modal>
   }
 }
+
+export class BoundVariableModal extends React.Component {
+  render() {
+    const {show, onHide, title, value, onChange, onSave} = this.props;
+    return <Modal show={show} onHide={onHide}>
+      <Modal.Header closeButton><Modal.Title>{title}</Modal.Title></Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Form.Group>
+            <Form.Label>Bound variable name</Form.Label>
+            <Form.Control type="text" value={value} onChange={onChange}/>
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onHide}>Close</Button>
+        <Button variant="primary" onClick={onSave}>Save Changes</Button>
+      </Modal.Footer>
+    </Modal>
+  }
+}

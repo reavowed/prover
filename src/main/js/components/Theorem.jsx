@@ -5,11 +5,9 @@ import {InferenceSummary} from "./InferenceSummary";
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
 import Overlay from "react-bootstrap/Overlay";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
 import path from "path";
 import {Parser} from "../Parser";
-import {FindInferenceModal} from "./Modals";
+import {BoundVariableModal, FindInferenceModal} from "./Modals";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 
@@ -25,7 +23,9 @@ const ProofLine = styled(class ProofLine extends React.Component {
     this.setState({showPopover: true})
   };
   hidePopover = () => {
-    this.setState({showPopover: false})
+    if (!this.props.blockHide) {
+      this.setState({showPopover: false})
+    }
   };
   render() {
     const {setHighlightedPremises, referencedLines, className, children, popover, onShowPopover} = this.props;
@@ -72,12 +72,20 @@ class DeductionStep extends React.Component {
 const PremiseChildren = styled.div`
   margin-left: 20px;
 `;
+const EditableBoundVariable = styled.span`
+  &:hover {
+    color: red;
+    cursor: pointer;
+  }
+`;
 
 class AssertionStep extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
-      premiseOptions: {}
+      premiseOptions: {},
+      boundVariableLocation: null,
+      boundVariableName: ''
     };
   }
 
@@ -98,8 +106,18 @@ class AssertionStep extends React.Component {
     switch (premise.type) {
       case "pending":
         const options = _.find(this.state.premiseOptions, option => _.isEqual(option.path, path)) || {};
+        const wrapEditableBoundVariable = (boundVariableContent, boundVariableName, boundVariableIndex, boundVariablePath) => {
+          const startEditingBoundVariable = () => {
+            this.setState({
+              boundVariableLocation: {boundVariableIndex, boundVariablePath, premisePath: path},
+              boundVariableName: boundVariableName
+            });
+          };
+          return <EditableBoundVariable onClick={startEditingBoundVariable}>{boundVariableContent}</EditableBoundVariable>;
+        };
+
         return <div>
-          <Expression expression={premise.statement} boundVariableLists={boundVariableLists}/>
+          <Expression expression={premise.statement} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapEditableBoundVariable}/>
           <Button size="sm" onClick={() => this.addTarget(path)}>Target</Button>
           {options.expansions && options.expansions.length > 0 && <DropdownButton title="Expansions" size="sm">
             {options.expansions.map(e => <Dropdown.Item key={e.id} onClick={() => this.applyExpansion(path, e.id)}>{e.name}</Dropdown.Item>)}
@@ -130,6 +148,25 @@ class AssertionStep extends React.Component {
       .then(options => this.setState({premiseOptions: options}));
   };
 
+  showBoundVariableModal = () => {
+    return this.state.boundVariableLocation != null;
+  };
+  hideBoundVariableModal = () => {
+    setTimeout(() => this.setState({boundVariableLocation: null}), 0);
+  };
+  updateBoundVariableName = (event) => {
+    this.setState({boundVariableName: event.target.value});
+  };
+  saveBoundVariable = () => {
+    const {boundVariableIndex, boundVariablePath, premisePath} = this.state.boundVariableLocation;
+    this.props.fetchForStep(this.props.path, `premises/${premisePath.join(".")}/statement/${boundVariablePath.join(".")}/boundVariables/${boundVariableIndex}/`, {
+      method: "PUT",
+      body: this.state.boundVariableName
+    })
+      .then(this.props.updateTheorem)
+      .then(this.hideBoundVariableModal);
+  };
+
   render() {
     let {step, path, additionalReferences, ...otherProps} = this.props;
     let reference = path.join(".");
@@ -144,9 +181,20 @@ class AssertionStep extends React.Component {
         </>}
       </Popover>
     );
-    return <ProofLine referencedLines={step.referencedLines} popover={popover} onShowPopover={this.fetchOptions} {...otherProps}>
-      Then <ProofLineStatement statement={step.statement} boundVariableLists={this.props.boundVariableLists} references={[...additionalReferences, reference]} {...otherProps}/>.
-    </ProofLine>;
+
+    const boundVariableModal = <BoundVariableModal show={this.showBoundVariableModal()}
+                                                   onHide={this.hideBoundVariableModal}
+                                                   title="Edit bound variable"
+                                                   value={this.state.boundVariableName}
+                                                   onChange={this.updateBoundVariableName}
+                                                   onSave={this.saveBoundVariable}/>;
+
+    return <>
+      <ProofLine referencedLines={step.referencedLines} popover={popover} onShowPopover={this.fetchOptions} blockHide={this.showBoundVariableModal()} {...otherProps}>
+        Then <ProofLineStatement statement={step.statement} boundVariableLists={this.props.boundVariableLists} references={[...additionalReferences, reference]} {...otherProps}/>.
+      </ProofLine>
+      {boundVariableModal}
+    </>;
   }
 }
 
@@ -235,23 +283,12 @@ class TargetStep extends React.Component {
     let scopingStatement = _.find(window.definitions, d => d.structureType === "scoping");
     let deductionStatement = _.find(window.definitions, d => d.structureType === "deduction");
 
-    const boundVariableModal = (
-        <Modal show={this.state.showBoundVariableModal} onHide={this.hideBoundVariableModal}>
-          <Modal.Header closeButton><Modal.Title>Introduce bound variable</Modal.Title></Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group>
-                <Form.Label>Bound variable name</Form.Label>
-                <Form.Control type="text" value={this.state.boundVariableName} onChange={this.updateBoundVariableName}/>
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.hideBoundVariableModal}>Close</Button>
-            <Button variant="primary" onClick={this.introduceBoundVariable}>Save Changes</Button>
-          </Modal.Footer>
-        </Modal>
-    );
+    const boundVariableModal = <BoundVariableModal show={this.state.showBoundVariableModal}
+                                                   onHide={this.hideBoundVariableModal}
+                                                   title="Introduce bound variable"
+                                                   value={this.state.boundVariableName}
+                                                   onChange={this.updateBoundVariableName}
+                                                   onSave={this.introduceBoundVariable}/>;
 
     const popover = (
         <Popover title="Statement to prove">
@@ -355,9 +392,9 @@ export class Theorem extends React.Component {
     this.setState({highlightedPremises: premises});
   };
 
-  createPremiseElement(premise, index) {
+  createPremiseElement = (premise, index) => {
     return <Premise premise={premise} index={index} highlightedPremises={this.state.highlightedPremises}/>
-  }
+  };
 
   fetchForStep = (stepPath, childPath, options) => {
     if (_.isObject(childPath)) {
@@ -369,7 +406,7 @@ export class Theorem extends React.Component {
   };
 
   updateTheorem = (response) => {
-    response.json().then(theoremJSON => {
+    return response.json().then(theoremJSON => {
       const theorem = Parser.parseTheorem(theoremJSON);
       this.setState({theorem: theorem});
     });
@@ -385,7 +422,7 @@ export class Theorem extends React.Component {
       </div>
 
       <TheoremHeader theorem={theorem} />
-      <InferenceSummary createPremiseElement={this.createPremiseElement.bind(this)} inference={theorem} highlightedPremises={this.state.highlightedPremises}/>
+      <InferenceSummary createPremiseElement={this.createPremiseElement} inference={theorem} highlightedPremises={this.state.highlightedPremises}/>
 
       <hr/>
 

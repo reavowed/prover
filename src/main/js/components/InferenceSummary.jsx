@@ -20,7 +20,7 @@ export class InferenceSummary extends React.Component {
       allElements.push(premiseElements.shift());
       allElements.push(<React.Fragment>.</React.Fragment>)
     }
-    return allElements.map((e, i) => <React.Fragment key={i}>{e}</React.Fragment>)
+    return <div>{allElements.map((e, i) => <React.Fragment key={i}>{e}</React.Fragment>)}</div>
   }
   render() {
     let {inference, createPremiseElement} = this.props;

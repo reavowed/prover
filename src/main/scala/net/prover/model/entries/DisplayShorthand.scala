@@ -32,13 +32,11 @@ private class DisplayShorthandSerializer extends JsonSerializer[DisplayShorthand
       case Template.DefinedStatement(definition, boundVariableNames, components) =>
         gen.writeStartArray(boundVariableNames.length + components.length + 1)
         gen.writeString(definition.symbol)
-        boundVariableNames.foreach(gen.writeString)
         components.foreach(serialize(_, gen))
         gen.writeEndArray()
       case Template.DefinedTerm(definition, boundVariableNames, components) =>
         gen.writeStartArray(boundVariableNames.length + components.length + 1)
         gen.writeString(definition.symbol)
-        boundVariableNames.foreach(gen.writeString)
         components.foreach(serialize(_, gen))
         gen.writeEndArray()
       case Template.FunctionParameter(parameter) =>

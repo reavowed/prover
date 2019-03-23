@@ -41,18 +41,18 @@ const HighlightedSpan = styled.span`
 `;
 
 export class Expression extends React.Component {
-  matchShorthand(template, expression, boundVariableLists) {
+  matchShorthand(template, expression, pathWithinMatch, boundVariablesWithinMatch) {
     if (_.isString(template)) {
-      return <Expression expression={expression} boundVariableLists={boundVariableLists} safe={true}/>;
+      return {type: "expression", expression, pathWithinMatch, boundVariablesWithinMatch};
     } else if (_.isArray(template) && _.isString(template[0])) {
       if ((expression instanceof DefinedExpression) && (expression.definition.symbol === template[0])) {
-        let innerBoundVariableLists = expression.boundVariableNames.length > 0 ? [expression.boundVariableNames, ...boundVariableLists] : boundVariableLists;
-        const componentMatches = _.zipWith(
-          template.slice(1 + expression.definition.numberOfBoundVariables),
-          expression.components,
-          (t, c) => this.matchShorthand(t, c, innerBoundVariableLists));
+        const innerBoundVariables = expression.definition.numberOfBoundVariables ? [expression.boundVariableNames, ...boundVariablesWithinMatch] : boundVariablesWithinMatch;
+        const componentMatches = _.chain(template.slice(1))
+          .zip(expression.components)
+          .map(([t, c], i) => this.matchShorthand(t, c, [...pathWithinMatch, i], innerBoundVariables))
+          .value();
         if (_.every(componentMatches)) {
-          return [...expression.boundVariableNames.map(n => formatHtml(n)), ..._.flatten(componentMatches)];
+          return [...expression.boundVariableNames.map((name, index) => ({type: "boundVariable", name, index, pathWithinMatch})), ..._.flatten(componentMatches)];
         }
       }
     } else if (_.isArray(template) && _.isNumber(template[0])) {
@@ -62,24 +62,48 @@ export class Expression extends React.Component {
     }
   }
 
-  renderInner(expression, pathsToHighlight, boundVariableLists, safe) {
+  renderMatch(match, path, pathsToHighlight, boundVariableLists, wrapBoundVariable) {
+    if (match.type === "boundVariable") {
+      return wrapBoundVariable(formatHtml(match.name), match.name, match.index, path.concat(match.pathWithinMatch));
+    } else {
+      const lengthOfPath = match.pathWithinMatch.length;
+      const innerPathsToHighlight = _.chain(pathsToHighlight)
+        .filter(p => _.isEqual(p.slice(0, lengthOfPath), match.pathWithinMatch))
+        .map(p => p.slice(lengthOfPath))
+        .value();
+      return <Expression expression={match.expression}
+                         path={path.concat(match.pathWithinMatch)}
+                         pathsToHighlight={innerPathsToHighlight}
+                         boundVariableLists={[...match.boundVariablesWithinMatch, ...boundVariableLists]}
+                         wrapBoundVariable={wrapBoundVariable}
+                         safe={true}/>
+    }
+  }
+
+  renderInner(expression, path, pathsToHighlight, boundVariableLists, wrapBoundVariable, safe) {
     for (const shorthand of window.shorthands) {
-      const matches = this.matchShorthand(shorthand.template, expression, boundVariableLists);
+      const matches = this.matchShorthand(shorthand.template, expression, [], []);
       if (matches) {
+        let renderedMatches = matches.map(m => this.renderMatch(m, path, pathsToHighlight, boundVariableLists, wrapBoundVariable));
         let formatString = (safe && shorthand.requiresBrackets) ?
           "(" + shorthand.baseFormatString + ")" :
           shorthand.baseFormatString;
-        return formatHtml(formatString, s => replacePlaceholders(s, matches));
+        return formatHtml(formatString, s => replacePlaceholders(s, renderedMatches));
       }
     }
     if (expression.formatForHtml) {
       const format = expression.formatForHtml(safe);
       const boundVariables = expression.boundVariableNames || [];
       const innerBoundVariables = boundVariables.length ? [boundVariables, ...boundVariableLists] : boundVariableLists;
-      const renderedBoundVariables = boundVariables.map(v => formatHtml(v));
+      const renderedBoundVariables = boundVariables.map((name, index) => wrapBoundVariable(formatHtml(name), name, index, path));
       const renderedComponents = expression.components.map((c, i) => {
         const innerPaths = _.chain(pathsToHighlight).filter(p => p.length > 0 && p[0] === i).map(p => p.slice(1)).value();
-        return <Expression expression={c} pathsToHighlight={innerPaths} boundVariableLists={innerBoundVariables} safe={true}/>
+        return <Expression expression={c}
+                           path={[...path, i]}
+                           pathsToHighlight={innerPaths}
+                           boundVariableLists={innerBoundVariables}
+                           wrapBoundVariable={wrapBoundVariable}
+                           safe={true}/>
       });
       return formatHtml(format, s => replacePlaceholders(s, [...renderedBoundVariables, ...renderedComponents]));
     } else if (expression.textForHtml) {
@@ -88,20 +112,23 @@ export class Expression extends React.Component {
   }
   render() {
     const {expression, pathsToHighlight, boundVariableLists, safe} = this.props;
+    let {wrapBoundVariable, path} = this.props;
+    wrapBoundVariable = wrapBoundVariable || _.identity;
+    path = path || [];
     const shouldHighlightThis = _.some(pathsToHighlight, p => p.length === 0);
     const tag = shouldHighlightThis ? HighlightedSpan : React.Fragment;
-    return React.createElement(tag, {}, this.renderInner(expression, pathsToHighlight, boundVariableLists, safe).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>));
+    return React.createElement(tag, {}, this.renderInner(expression, path, pathsToHighlight, boundVariableLists, wrapBoundVariable, safe).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>));
   }
 }
 
 export class HighlightableStatement extends React.Component {
   render() {
-    const {statement, reference, boundVariableLists, highlightedPremises, className} = this.props;
+    const {statement, reference, boundVariableLists, wrapBoundVariable, highlightedPremises, className} = this.props;
     let {references} = this.props;
     references = references || [reference];
     const matchingPremises = _.filter(highlightedPremises, p => references.includes(p.lineReference));
     const pathsToHighlight = _.map(matchingPremises, p => p.internalPath);
-    const expression = <Expression expression={statement} pathsToHighlight={pathsToHighlight} boundVariableLists={boundVariableLists} safe={false}/>
+    const expression = <Expression expression={statement} pathsToHighlight={pathsToHighlight} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} safe={false}/>
     return className ? <span className={className}>{expression}</span> : expression;
   }
 }
