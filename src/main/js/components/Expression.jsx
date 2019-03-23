@@ -16,7 +16,7 @@ function formatWithReplacement(text, regex, handlePlain, handleMatch) {
   return _.flatten(elements);
 }
 
-function formatHtml(text, replacementFunction) {
+export function formatHtml(text, replacementFunction) {
   if (!replacementFunction) {
     replacementFunction = x => <React.Fragment>{x}</React.Fragment>;
   }

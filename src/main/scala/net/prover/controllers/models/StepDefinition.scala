@@ -12,7 +12,8 @@ case class StepDefinition(inferenceId: String, substitutions: StepDefinition.Sub
       required: Seq[String],
       source: Map[String, String],
       parser: Parser[T],
-      description: String
+      description: String)(
+      implicit parsingContext: ParsingContext
     ): Try[Map[String, T]] = {
       required.mapTryToMap { name =>
         for {
@@ -24,8 +25,8 @@ case class StepDefinition(inferenceId: String, substitutions: StepDefinition.Sub
     for {
       statements <- lookup(inference.requiredSubstitutions.statements, substitutions.statements, Statement.parser, "statement")
       terms <- lookup(inference.requiredSubstitutions.terms, substitutions.terms, Term.parser, "term")
-      predicates <- lookup(inference.requiredSubstitutions.predicates, substitutions.predicates, Statement.parser, "predicate")
-      functions <- lookup(inference.requiredSubstitutions.functions, substitutions.functions, Term.parser, "function")
+      predicates <- lookup(inference.requiredSubstitutions.predicates, substitutions.predicates, Statement.parser, "predicate")(parsingContext.addParameters("_"))
+      functions <- lookup(inference.requiredSubstitutions.functions, substitutions.functions, Term.parser, "function")(parsingContext.addParameters("_"))
     } yield Substitutions(statements, terms, predicates, functions)
   }
 }

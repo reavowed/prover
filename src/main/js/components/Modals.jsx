@@ -82,6 +82,27 @@ export class FindInferenceModal extends React.Component {
     function renderSuggestionsContainer ({containerProps, children}) {
       return <div {...containerProps}><DropdownContainer>{children}</DropdownContainer></div>
     }
+    let showSubstitutions = (key, boundVariableLists) => {
+      const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
+      const givenSubstitutions = this.state.selectedInferenceSuggestion.substitutions[0][key];
+
+      return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name =>
+        <Form.Group key={`${key} ${name}`}>
+          <Form.Row >
+            <Col xs={1}>
+              <Form.Label column>{name}</Form.Label>
+            </Col>
+            <Col xs={1}>
+              <Form.Label column>&rarr;</Form.Label>
+            </Col>
+            <Col>
+              {givenSubstitutions[name] ?
+                <Form.Label column><Expression expression={givenSubstitutions[name]} boundVariableLists={boundVariableLists} /></Form.Label> :
+                <Form.Control type="text" value={this.state.substitutions[key][name]} onChange={e => this.setSubstitution(key, name, e.target.value)}/>}
+            </Col>
+          </Form.Row>
+        </Form.Group>);
+    };
     const {show, onHide, boundVariableLists} = this.props;
 
     return <Modal show={show} onHide={onHide}>
@@ -106,26 +127,12 @@ export class FindInferenceModal extends React.Component {
                 <InferenceSummary inference={this.state.selectedInferenceSuggestion.inference}/>
               </Form.Group>
               <Form.Label><strong>Substitutions</strong></Form.Label>
-                {["statements", "terms", "predicates", "functions"].map(key => {
-                  const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
-                  const givenSubstitutions = this.state.selectedInferenceSuggestion.substitutions[0][key];
-                  return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name =>
-                    <Form.Group key={`${key} ${name}`}>
-                      <Form.Row >
-                        <Col xs={1}>
-                          <Form.Label column>{name}</Form.Label>
-                        </Col>
-                        <Col xs={1}>
-                          <Form.Label column>&rarr;</Form.Label>
-                        </Col>
-                        <Col>
-                          {givenSubstitutions[name] ?
-                            <Form.Label column><Expression expression={givenSubstitutions[name]} boundVariableLists={boundVariableLists} /></Form.Label> :
-                            <Form.Control type="text" value={this.state.substitutions[key][name]} onChange={e => this.setSubstitution(key, name, e.target.value)}/>}
-                        </Col>
-                      </Form.Row>
-                    </Form.Group>);
-                })}
+              {_.flatten([
+                showSubstitutions("statements", boundVariableLists),
+                showSubstitutions("terms", boundVariableLists),
+                showSubstitutions("predicates", [["_"], ...boundVariableLists]),
+                showSubstitutions("functions", [["_"], ...boundVariableLists]),
+              ])}
             </>}
         </Form>
       </Modal.Body>

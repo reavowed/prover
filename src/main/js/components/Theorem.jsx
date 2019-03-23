@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import {HighlightableStatement} from "./Expression";
+import {formatHtml, HighlightableStatement} from "./Expression";
 import {InferenceSummary} from "./InferenceSummary";
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
@@ -8,7 +8,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import path from "path";
-import {formatHtml, Parser} from "../Parser";
+import {Parser} from "../Parser";
 import {FindInferenceModal} from "./Modals";
 
 const ClickableDiv = props => (
