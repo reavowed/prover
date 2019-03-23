@@ -50,6 +50,8 @@ object StepView {
   private def AssertionPremise(premise: NewAssert.Premise, path: Seq[Int])(implicit displayContext: DisplayContext): NodeSeq = {
     <div class="assertionPremise">
       {premise match {
+        case NewAssert.Premise.Simplification(statement, _, _, _, _) =>
+          <div>{ExpressionView(statement)}</div>
         case NewAssert.Premise.Pending(statement) =>
           <div class="editablePremise" data-path={path.mkString(".")}>{ExpressionView(statement)}</div>
         case NewAssert.Premise.Given(statement, _) =>

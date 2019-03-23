@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import React from "react";
 import {Expression, formatHtml, HighlightableStatement} from "./Expression";
 import {InferenceSummary} from "./InferenceSummary";
@@ -48,7 +48,17 @@ const ProofLine = styled(class ProofLine extends React.Component {
     }
   }
 })`
+  position: relative;
   padding-bottom: 5px;
+  ${props => props.incomplete && css`
+    &::before {
+      content: "?";
+      color: red;
+      font-weight: bold;
+      position: absolute;
+      left: -10px;
+    }
+  `}
 `;
 
 const ProofLineStatement = styled(HighlightableStatement)`
@@ -190,8 +200,18 @@ class AssertionStep extends React.Component {
                                                    onSave={this.saveBoundVariable}/>;
 
     return <>
-      <ProofLine referencedLines={step.referencedLines} popover={popover} onShowPopover={this.fetchOptions} blockHide={this.showBoundVariableModal()} {...otherProps}>
-        Then <ProofLineStatement statement={step.statement} boundVariableLists={this.props.boundVariableLists} references={[...additionalReferences, reference]} {...otherProps}/>.
+      <ProofLine referencedLines={step.referencedLines}
+                 popover={popover}
+                 onShowPopover={this.fetchOptions}
+                 blockHide={this.showBoundVariableModal()}
+                 incomplete={_.some(step.premises, "isIncomplete")}
+                 {...otherProps}
+      >
+        Then <ProofLineStatement statement={step.statement}
+                                 boundVariableLists={this.props.boundVariableLists}
+                                 references={[...additionalReferences, reference]}
+                                 {...otherProps}
+        />.
       </ProofLine>
       {boundVariableModal}
     </>;
@@ -300,7 +320,7 @@ class TargetStep extends React.Component {
         </Popover>
     );
     return <>
-      <ProofLine step={step} popover={popover} {...otherProps}>Then <ProofLineStatement statement={step.statement} references={[...additionalReferences, reference]} {...otherProps}/>.</ProofLine>
+      <ProofLine incomplete step={step} popover={popover} {...otherProps}>Then <ProofLineStatement statement={step.statement} references={[...additionalReferences, reference]} {...otherProps}/>.</ProofLine>
       {boundVariableModal}
       {<FindInferenceModal show={this.state.showFindInferenceModal} onHide={this.hideFindInferenceModal} onSubmit={this.proveWithInference} findInferences={this.findInferences} {...otherProps} />}
     </>
