@@ -6,6 +6,8 @@ import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 
+import scala.util.{Success, Try}
+
 @JsonIgnoreProperties(Array("rearrangementType"))
 case class Theorem(
     name: String,
@@ -18,28 +20,61 @@ case class Theorem(
 {
   def referencedInferenceIds: Set[String] = proof.flatMap(_.referencedInferenceIds).toSet
   override def inferences: Seq[Inference] = Seq(this)
+
+  private def replaceProof(newProof: Seq[Step]): Theorem = copy(proof = newProof)
   def findStep(indexes: Seq[Int]): Option[Step] = {
     indexes match {
       case Nil =>
         None
       case head +: tail =>
-        proof.findSubstep(head, tail)
+        tail.foldLeft(proof.lift(head)) { (currentStepOption, index) => currentStepOption.flatMap(_.getSubstep(index)) }
     }
   }
-  def replaceStep(indexes: Seq[Int], newStep: Step): Theorem = {
-    copy(proof = proof.updated(indexes.head, proof(indexes.head).replaceStep(indexes.tail, newStep)))
+  def modifySteps(indexes: Seq[Int], f: Seq[Step] => Option[Seq[Step]]): Option[Theorem] = {
+    def helper(indexes: Seq[Int], steps: Seq[Step]): Option[Seq[Step]] = {
+      indexes match {
+        case Nil =>
+          f(steps)
+        case head +: tail =>
+          steps.updateAtIndexIfDefined(head, _.modifySubsteps(substeps => helper(tail, substeps)))
+      }
+    }
+    helper(indexes, proof).map(replaceProof)
+  }
+  def tryModifySteps(indexes: Seq[Int], f: Seq[Step] => Option[Try[Seq[Step]]]): Option[Try[Theorem]] = {
+    def helper(indexes: Seq[Int], steps: Seq[Step]): Option[Try[Seq[Step]]] = {
+      indexes match {
+        case Nil =>
+          f(steps)
+        case head +: tail =>
+          steps.tryUpdateAtIndexIfDefined(head, _.tryModifySubsteps(substeps => helper(tail, substeps)))
+      }
+    }
+    helper(indexes, proof).mapMap(replaceProof)
+  }
+  def tryModifyStep(indexes: Seq[Int], f: Step => Try[Step]): Option[Try[Theorem]] = {
+    indexes match {
+      case Nil =>
+        None
+      case init :+ last =>
+        tryModifySteps(init, _.tryUpdateAtIndex(last, f))
+    }
   }
   def insertStep(indexes: Seq[Int], newStep: Step): Option[Theorem] = {
     indexes match {
       case Nil =>
         None
-      case head +: tail =>
-        proof.insertSubstep(head, tail, newStep).map(newProof => copy(proof = newProof))
+      case init :+ last =>
+        modifySteps(init, steps => {
+          val (before, after) = steps.splitAt(last)
+          Some((before :+ newStep) ++ after)
+        })
     }
   }
-  def recalculateReferences(parsingContext: ParsingContext): Option[Theorem] = {
+  def recalculateReferences(parsingContext: ParsingContext): Theorem = {
     val stepContext = StepContext(premises.map(_.provenStatement), Nil)
-    proof.recalculateReferences(Nil, stepContext, parsingContext).map(newProof => copy(proof = newProof))
+    val newProof = proof.recalculateReferences(Nil, stepContext, parsingContext)
+    copy(proof = newProof)
   }
 
   override def serializedLines = Seq(s"theorem $name") ++

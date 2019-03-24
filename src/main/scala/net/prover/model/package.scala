@@ -210,23 +210,17 @@ package object model {
         }
       }
     }
-    def updateAtIndex(index: Int)(f: T => T): Option[Seq[T]] = {
-      seq.lift(index).map(t => seq.updated(index, f(t)))
-    }
-    def updateAtIndexIfDefined(index: Int)(f: T => Option[T]): Option[Seq[T]] = {
+    def updateAtIndexIfDefined(index: Int, f: T => Option[T]): Option[Seq[T]] = {
       for {
         oldValue <- seq.lift(index)
         newValue <- f(oldValue)
       } yield seq.updated(index, newValue)
     }
-    def tryUpdateAtIndex[S](index: Int)(f: T => Try[T]): Option[Try[Seq[T]]] = {
+    def tryUpdateAtIndex[S](index: Int, f: T => Try[T]): Option[Try[Seq[T]]] = {
       seq.lift(index).map(f).map(_.map(seq.updated(index, _)))
     }
-    def tryUpdateAtIndexIfDefined[S](index: Int)(f: T => Option[Try[T]]): Option[Try[Seq[T]]] = {
-      seq.lift(index).flatMap(f).map(_.map(seq.updated(index, _)))
-    }
-    def tryUpdateAtIndexWithResult[S](index: Int)(f: T => Try[(T, S)]): Option[Try[(Seq[T], S)]] = {
-      seq.lift(index).map(f).map(_.map(_.mapLeft(seq.updated(index, _))))
+    def tryUpdateAtIndexIfDefined[S](index: Int, f: T => Option[Try[T]]): Option[Try[Seq[T]]] = {
+      seq.lift(index).flatMap(f).mapMap(seq.updated(index, _))
     }
     def mapTryToMap[S](f: T => Try[S]): Try[Map[T, S]] = {
       seq.foldLeft(Try(Map.empty[T, S])) { (mapTry, key) =>
@@ -345,6 +339,7 @@ package object model {
       case Some(t) => t
       case None => Failure(exception)
     }
+    def mapMap[S](f: T => S): Option[Try[S]] = x.map(_.map(f))
   }
 
   implicit class SeqStringOps(seq: Seq[String]) {

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation._
 
 import scala.reflect._
-import scala.util.{Failure, Try}
+import scala.util.{Failure, Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}"))
@@ -74,6 +74,45 @@ class TheoremController @Autowired() (bookService: BookService) {
     }.toResponseEntity
   }
 
+  @DeleteMapping(value = Array("/{stepReference}"))
+  def deleteStep(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: PathData
+  ): ResponseEntity[_] = {
+    def getReplacementStep(step: Step): Try[Option[Step]] = {
+      step match {
+        case _: Step.Target =>
+          Success(None)
+        case _ =>
+          Success(step.provenStatement.map(s => Step.Target(s, step.context)))
+      }
+    }
+    def deleteFromTheorem(theorem: Theorem, parsingContext: ParsingContext): Option[Try[Theorem]] = {
+      stepReference.indexes match {
+        case Nil =>
+          None
+        case init :+ last =>
+          theorem.tryModifySteps(init, steps => {
+            steps.lift(last).map { step =>
+              getReplacementStep(step).map {
+                case Some(replacementStep) =>
+                  steps.updated(last, replacementStep)
+                case None =>
+                  steps.take(last) ++ steps.drop(last + 1)
+              }
+            }
+          })
+          .mapMap(_.recalculateReferences(parsingContext))
+      }
+    }
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (book, chapter, theorem) =>
+      val parsingContext = getTheoremParsingContext(book, chapter, theorem)
+      deleteFromTheorem(theorem, parsingContext).orNotFound(s"Step $stepReference").flatten
+    }.toResponseEntity
+  }
+
   @PostMapping(value = Array("/{stepReference}/introduceBoundVariable"))
   def introduceBoundVariable(
     @PathVariable("bookKey") bookKey: String,
@@ -91,7 +130,8 @@ class TheoremController @Autowired() (bookService: BookService) {
         Step.ScopedVariable(
           variableName,
           Seq(Step.Target(substatement, stepContext.addBoundVariable(variableName))),
-          scopingStatementDefinition)
+          scopingStatementDefinition,
+          stepContext)
       }
     }.toResponseEntity
   }
@@ -112,7 +152,8 @@ class TheoremController @Autowired() (bookService: BookService) {
         Step.Deduction(
           antecedent,
           Seq(Step.Target(consequent, stepContext)),
-          deductionStatementDefinition)
+          deductionStatementDefinition,
+          stepContext)
       }
     }.toResponseEntity
   }
@@ -172,16 +213,16 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData,
     @PathVariable("premisePath") premisePath: PathData
   ): ResponseEntity[_] = {
-    bookService.modifyEntry[Theorem, Theorem](bookKey, chapterKey, theoremKey) { (_, book, chapter, theorem) =>
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (book, chapter, theorem) =>
       for {
         rawStep <- theorem.findStep(stepPath.indexes).orNotFound(s"Step $stepPath")
         step <- rawStep.asOptionalInstanceOf[Step.NewAssert].orBadRequest(s"Step $stepPath is not editable")
         premise <- step.pendingPremises.get(premisePath.indexes).orNotFound(s"Premise $premisePath")
         newStep = Step.Target(premise.statement, step.context)
-        unadjustedNewTheorem <- theorem.insertStep(stepPath.indexes, newStep).orBadRequest(s"Failed to insert new step")
-        newTheorem <- unadjustedNewTheorem.recalculateReferences(getTheoremParsingContext(book, chapter, theorem)).orBadRequest(s"Something broke a reference")
+        newTheorem <- theorem.insertStep(stepPath.indexes, newStep).orBadRequest(s"Failed to insert new step")
+          .map(_.recalculateReferences(getTheoremParsingContext(book, chapter, theorem)))
       } yield {
-        (newTheorem, newTheorem)
+        newTheorem
       }
     }.toResponseEntity
   }
@@ -229,14 +270,20 @@ class TheoremController @Autowired() (bookService: BookService) {
     }
   }
 
-  private def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepReference: PathData)(f: (Book, Chapter, Theorem, TStep) => Try[Step]): Try[Theorem] = {
+  private def modifyTheorem(bookKey: String, chapterKey: String, theoremKey: String)(f: (Book, Chapter, Theorem) => Try[Theorem]): Try[Theorem] = {
     bookService.modifyEntry[Theorem, Theorem](bookKey, chapterKey, theoremKey) { (_, book, chapter, theorem) =>
-      for {
-        rawStep <- theorem.findStep(stepReference.indexes).orNotFound(s"Step $stepReference")
-        oldStep <- rawStep.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
-        newStep <- f(book, chapter, theorem, oldStep)
-        updatedTheorem = theorem.replaceStep(stepReference.indexes, newStep)
-      } yield (updatedTheorem, updatedTheorem)
+      f(book, chapter, theorem).map(t => (t, t))
+    }
+  }
+
+  private def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepReference: PathData)(f: (Book, Chapter, Theorem, TStep) => Try[Step]): Try[Theorem] = {
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (book, chapter, theorem) =>
+      theorem.tryModifyStep(stepReference.indexes, oldStep => {
+        for {
+          oldTStep <- oldStep.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
+          newStep <- f(book, chapter, theorem, oldTStep)
+        } yield newStep
+      }).orNotFound(s"Step $stepReference").flatten
     }
   }
 

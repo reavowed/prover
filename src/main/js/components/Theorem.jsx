@@ -89,6 +89,18 @@ const EditableBoundVariable = styled.span`
   }
 `;
 
+class DeleteStepButton extends React.Component {
+  deleteStep = () => {
+    this.props.fetchForStep(this.props.path, {
+      method: "DELETE"
+    }).then(this.props.updateTheorem);
+  };
+
+  render() {
+    return <Button variant="danger" size="sm"><span className="fas fa-ban" onClick={this.deleteStep}/></Button>
+  }
+}
+
 class AssertionStep extends React.Component {
   constructor(...args) {
     super(...args);
@@ -182,7 +194,7 @@ class AssertionStep extends React.Component {
     let reference = path.join(".");
     const inference = step.inference || step.inferenceApplication.inference;
     const popover = (
-      inference && <Popover title={inference.name}>
+      inference && <Popover title={<>{inference.name} <DeleteStepButton path={path} {...otherProps}/></>}>
         <InferenceSummary inference={inference} />
         {step.premises && <>
           <hr/>
@@ -311,13 +323,13 @@ class TargetStep extends React.Component {
                                                    onSave={this.introduceBoundVariable}/>;
 
     const popover = (
-        <Popover title="Statement to prove">
-          {scopingStatement && step.statement.definition === scopingStatement &&
-            <Button variant="success" size="sm" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
-          {deductionStatement && step.statement.definition === deductionStatement &&
-            <Button variant="success" size="sm" onClick={this.introduceDeduction}>Introduce deduction</Button>}
-          <Button variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</Button>
-        </Popover>
+      <Popover title={<>Statement to prove <DeleteStepButton path={path} {...otherProps}/></>}>
+        {scopingStatement && step.statement.definition === scopingStatement &&
+          <Button variant="success" size="sm" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
+        {deductionStatement && step.statement.definition === deductionStatement &&
+          <Button variant="success" size="sm" onClick={this.introduceDeduction}>Introduce deduction</Button>}
+        <Button variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</Button>
+      </Popover>
     );
     return <>
       <ProofLine incomplete step={step} popover={popover} {...otherProps}>Then <ProofLineStatement statement={step.statement} references={[...additionalReferences, reference]} {...otherProps}/>.</ProofLine>
