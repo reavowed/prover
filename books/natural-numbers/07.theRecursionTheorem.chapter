@@ -1,29 +1,6 @@
 Prove the recursion theorem for recursively constructing functions on ℕ.
 
 theorem An Inductive Function Is Unique
-premise ∃ f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a
-conclusion ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a
-{
-  let f' ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a) () (∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a) () (direct p0, direct 0d) {
-    take f {
-      assume ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a {
-        assert = apply $0 0 apply $$0 0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$0 0, a_0) (= apply $0 0 $$$0) () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply $$0 0 a_0, ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with ($0) a) () () () simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 ℕ A, ∧ = apply $$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with ($0) a) () () () direct 0a (1) (0), simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply $0 0 a_0, ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a) () () () simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $0 ℕ A, ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a) () () () direct 0.0.0a (1) (0))
-        take n {
-          assume ∧ ∈ $0 ℕ = apply $$0 $0 apply $$$0 $0 {
-            assert = apply $$0 successor $0 with ($0) a transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($0) (∈ $$$$0 ℕ, = apply $$0 successor $$$$0 with ($$$$0) a) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply $$0 0 a_0, ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with ($0) a) () () () simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 ℕ A, ∧ = apply $$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with ($0) a) () () () direct 0.0.0a (1) (1), simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℕ, = apply $$0 $0 apply $$$0 $0) () () () direct 0.0.0.1.0a (0))
-            assert = apply $$$0 successor $0 with ($0) a transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($0) (∈ $$$$0 ℕ, = apply $$$0 successor $$$$0 with ($$$$0) a) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply $$$0 0 a_0, ∀ n → ∈ $0 ℕ = apply $$$$0 successor $0 with ($0) a) () () () simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$$0 ℕ A, ∧ = apply $$$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$$0 successor $0 with ($0) a) () () () direct 0a (1) (1), simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℕ, = apply $$0 $0 apply $$$0 $0) () () () direct 0.0.0.1.0a (0))
-            assert = apply $$0 successor $0 apply $$$0 successor $0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$$0 successor $0, with ($0) a) (= apply $$0 successor $0 $$$$0) () (direct 0.0.0.1.0.1, direct 0.0.0.1.0.0)
-          }
-        }
-        assert ∀ n → ∈ $0 ℕ = apply $$0 $0 apply $$$0 $0 direct eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (= apply $0 $$$0 apply $$0 $$$0) () (direct 0.0.0.0, compound 0.0.0.1 compound 0.0.0.1.0a direct 0.0.0.1.0.2)
-        assert = $0 $$0 direct 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () ($0, ℕ, A, $$0) () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $0 ℕ A, ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a) () () () direct 0.0.0a (0), simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 ℕ A, ∧ = apply $$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with ($0) a) () () () direct 0a (0), direct 0.0.0.2)
-      }
-    }
-    assert ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with ($0) a direct 1b7ae071289c44e21caaffbed806e6ad13a048b0090ef87bb05277c9bd0a537c () ($0) (∧ function $$0 ℕ A ∧ = apply $$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with ($0) a) () (direct p0, compound 0.0 compound 0.0.0a direct 0.0.0.3)
-  }
-}
-
-theorem An Inductive Function Is Unique
 premise ∃ f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) a
 conclusion ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) a
 {
@@ -41,8 +18,24 @@ conclusion ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 �
                 given
         take n {
           assume ∧ ∈ $0 ℕ = apply $$$0 $0 apply $$0 $0 {
-            target = apply $$$0 successor $0 with (apply $$$0 $0) a
-            target = apply $$0 successor $0 with (apply $$$0 $0) a
+            prove = apply $$$0 successor $0 with (apply $$$0 $0) a 834f07d1403653413dc67c3681452bb5fb2799dda2ce6a53925c00f1758b2124 () ($0) (∈ $$$$0 ℕ, = apply $$$0 successor $$$$0 with (apply $$$0 $$$$0) a) ()
+              simplified ∀ n → ∈ $0 ℕ = apply $$$$0 successor $0 with (apply $$$$0 $0) a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply $$$0 0 a_0, ∀ n → ∈ $0 ℕ = apply $$$$0 successor $0 with (apply $$$$0 $0) a) () () ()
+                simplified ∧ = apply $$$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$$0 successor $0 with (apply $$$$0 $0) a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$$0 ℕ A, ∧ = apply $$$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$$0 successor $0 with (apply $$$$0 $0) a) () () ()
+                  simplified ∧ function $$$0 ℕ A ∧ = apply $$$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$$0 successor $0 with (apply $$$$0 $0) a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function $$$0 ℕ A ∧ = apply $$$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$$0 successor $0 with (apply $$$$0 $0) a, ∧ function $$0 ℕ A ∧ = apply $$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) a) () () ()
+                    given
+              simplified ∈ $0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℕ, = apply $$$0 $0 apply $$0 $0) () () ()
+                given
+            prove = apply $$0 successor $0 with (apply $$0 $0) a 834f07d1403653413dc67c3681452bb5fb2799dda2ce6a53925c00f1758b2124 () ($0) (∈ $$$$0 ℕ, = apply $$0 successor $$$$0 with (apply $$0 $$$$0) a) ()
+              simplified ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply $$0 0 a_0, ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) a) () () ()
+                simplified ∧ = apply $$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 ℕ A, ∧ = apply $$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) a) () () ()
+                  simplified ∧ function $$0 ℕ A ∧ = apply $$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∧ function $$$0 ℕ A ∧ = apply $$$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$$0 successor $0 with (apply $$$$0 $0) a, ∧ function $$0 ℕ A ∧ = apply $$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) a) () () ()
+                    given
+              simplified ∈ $0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℕ, = apply $$$0 $0 apply $$0 $0) () () ()
+                given
+            prove = apply $$0 successor $0 with (apply $$$0 $0) a 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$$0 $0, apply $$0 $0) (= apply $$0 successor $0 with ($$$$0) a) ()
+              simplified = apply $$$0 $0 apply $$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, = apply $$$0 $0 apply $$0 $0) () () ()
+                given
+              given
             prove = apply $$$0 successor $0 apply $$0 successor $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$0 successor $0, with (apply $$$0 $0) a) (= apply $$$0 successor $0 $$$$0) ()
               given
               given
@@ -94,7 +87,9 @@ conclusion function g successor n A
 theorem Recursion Theorem
 premise function f X X
 premise ∈ g_0 X
-conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
+conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
 {
-  target ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
+  target ∃ g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
+  prove ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0 7e9f82102c20c58a4b06619743d8bf8792dfae2f90022462ae50947e30071a71 () (X, g_0) () (apply f $0)
+    given
 }

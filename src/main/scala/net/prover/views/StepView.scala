@@ -125,7 +125,7 @@ object StepView {
 
   def apply(step: Step, path: Seq[Int])(implicit displayContext: DisplayContext): NodeSeq = {
     step match {
-      case Step.Assertion(statement, inferenceApplication) =>
+      case Step.Assertion(statement, inferenceApplication, _) =>
         lineView(
           "Then",
           statement,
@@ -135,7 +135,7 @@ object StepView {
           Nil,
           Some(popover(inferenceApplication)),
           None)
-      case Step.Deduction(assumption, substeps, _) =>
+      case Step.Deduction(assumption, substeps, _, _) =>
         lineView(
           "Assume",
           assumption,
@@ -145,7 +145,7 @@ object StepView {
           Nil,
           None,
           Some(<div class="children proofIndent">{substeps.flatMapWithIndex((s, i) => StepView(s, path :+ i))}</div>))
-      case Step.Naming(variableName, assumption, substeps, finalInferenceApplication) =>
+      case Step.Naming(variableName, assumption, substeps, finalInferenceApplication, _) =>
         val innerContext = displayContext.withBoundVariableList(Seq(variableName))
         lineView(
           s"Let $variableName be such that",
@@ -157,7 +157,7 @@ object StepView {
           Some(popover(finalInferenceApplication)),
           Some(<div class="children">{substeps.flatMapWithIndex((s, i) => StepView(s, path :+ i)(innerContext))}</div>))(
           innerContext)
-      case Step.ScopedVariable(variableName, substeps, _) =>
+      case Step.ScopedVariable(variableName, substeps, _, _) =>
         val innerContext = displayContext.withBoundVariableList(Seq(variableName))
         substeps.flatMapWithIndex((s, i) => StepView(s, path :+ i)(innerContext))
       case Step.Target(statement, _) =>

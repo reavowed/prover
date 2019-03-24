@@ -51,6 +51,10 @@ case class ParsingContext(
     copy(parameterLists = parameterLists :+ parameters)
   }
 
+  def withPlaceholderParameter(): ParsingContext = {
+    copy(parameterLists = Seq("_").zipWithIndex +: parameterLists)
+  }
+
   object RecognisedStatementVariable {
     def unapply(string: String): Option[String] = {
       "([α-ω])".r.unapplySeq(string).flatMap(_.headOption)

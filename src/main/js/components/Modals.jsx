@@ -57,7 +57,7 @@ export class FindInferenceModal extends React.Component {
       const requiredNames = suggestion.requiredSubstitutions[type];
       const namesToSelectedValues = _.fromPairs(_.map(requiredNames, name => {
         const possibleValues = suggestion.substitutions.map(s => s[type][name]);
-        return [name, possibleValues.length === 1 ? possibleValues[0].serialize() : ""];
+        return [name, (possibleValues.length === 1 && possibleValues[0]) ? possibleValues[0].serialize() : ""];
       }));
       return [type, namesToSelectedValues];
     }));

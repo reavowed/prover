@@ -17,3 +17,15 @@ conclusion ↔ ∃ x ∧ with ($0) φ ψ ψ
   }
   assert ↔ ∃ x ∧ with ($0) φ ψ ψ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ x ∧ with ($0) φ ψ, ψ) () () () (compound 0a direct 0.0, compound 1a direct 1.0)
 }
+
+theorem Modus Ponens with Generalized Implication
+premise ∀ x → with ($0) φ with ($0) ψ
+premise with (a) φ
+conclusion with (a) ψ
+{
+  prove → with (a) φ with (a) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (→ with ($0) φ with ($0) ψ) ()
+    given
+  prove with (a) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with (a) φ, with (a) ψ) () () ()
+    given
+    given
+}
