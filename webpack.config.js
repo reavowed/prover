@@ -5,7 +5,9 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'target', 'scala-2.12', 'classes', 'static', 'js'),
     publicPath: '/js/',
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    libraryTarget: 'var',
+    library: 'App'
   },
   resolve: {
     extensions: ['.js', '.jsx'],

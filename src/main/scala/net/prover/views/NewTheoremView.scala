@@ -24,18 +24,22 @@ object NewTheoremView {
   {
     <div>
       <div id="theorem"></div>
-      <script type="text/javascript">
-        let theorem = {Unparsed(JsonMapping.toString(theorem))};
-        theorem.proof = {Unparsed(JsonMapping.toString(theorem.proof))};
-        let previousEntry = {Unparsed(JsonMapping.toString(previousOption))};
-        let nextEntry = {Unparsed(JsonMapping.toString(nextOption))};
-        let usages = {Unparsed(JsonMapping.toString(usages))};
-        window.definitions = {Unparsed(JsonMapping.toString(
-          (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap
-        ))}
-        window.shorthands = {Unparsed(JsonMapping.toString(book.displayContext.displayShorthands))}
-      </script>
       <script src="http://localhost:8081/js/bundle.js"></script>
+      <script type="text/javascript">{Unparsed(s"""
+            |window.definitions = ${JsonMapping.toString((parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap)};
+            |window.shorthands = ${JsonMapping.toString(book.displayContext.displayShorthands)};
+            |App.renderTheorem(
+            |  {
+            |    theorem: App.Parser.parseTheorem(${JsonMapping.toString(theorem)}),
+            |    previousEntry: ${JsonMapping.toString(previousOption)},
+            |    nextEntry: ${JsonMapping.toString(nextOption)},
+            |    usages: ${JsonMapping.toString(usages)}
+            |  },
+            |  document.getElementById("theorem")
+            |);
+          """.stripMargin
+        )}
+      </script>
     </div>
   }
 }

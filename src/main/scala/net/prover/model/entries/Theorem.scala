@@ -6,7 +6,7 @@ import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 
-import scala.util.{Success, Try}
+import scala.util.Try
 
 @JsonIgnoreProperties(Array("rearrangementType"))
 case class Theorem(
