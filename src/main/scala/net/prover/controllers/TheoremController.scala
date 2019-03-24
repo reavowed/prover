@@ -344,7 +344,7 @@ object TheoremController {
       InferenceSummary(
         inference.name,
         inference.id,
-        inference.entryKey.url)
+        inference.key.url)
     }
   }
 

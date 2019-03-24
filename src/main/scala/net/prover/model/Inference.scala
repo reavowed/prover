@@ -12,7 +12,7 @@ import net.prover.model.proof.Transformation
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
   val id: String = calculateHash()
-  def entryKey: ChapterEntry.Key
+  def key: ChapterEntry.Key
   @JsonSerialize
   def name: String
   @JsonSerialize
@@ -69,19 +69,17 @@ trait Inference {
 }
 
 object Inference {
-  trait Entry extends Inference with ChapterEntry.Standalone {
-    override def entryKey = key
-  }
-  case class Summary(entryKey: ChapterEntry.Key, name: String, premises: Seq[Premise], conclusion: Statement, rearrangementType: RearrangementType) extends Inference
+  trait Entry extends Inference with ChapterEntry.Standalone
+  case class Summary(key: ChapterEntry.Key, name: String, premises: Seq[Premise], conclusion: Statement, rearrangementType: RearrangementType) extends Inference
   object Summary {
     def apply(inference: Inference): Summary = {
-      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.entryKey, inference.name, inference.premises, inference.conclusion, inference.rearrangementType))
+      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.key, inference.name, inference.premises, inference.conclusion, inference.rearrangementType))
     }
   }
 
   case class Definition(
       nameOfDefinition: String,
-      entryKey: ChapterEntry.Key,
+      key: ChapterEntry.Key,
       premiseStatements: Seq[Statement],
       conclusion: Statement)
     extends Inference
@@ -100,7 +98,7 @@ object Inference {
       conclusion: Statement)
     extends Inference
   {
-    override def entryKey = inner.entryKey
+    override def key = inner.key
     override def name = inner.name
     override def rearrangementType = inner.rearrangementType
 

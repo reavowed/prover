@@ -6,7 +6,7 @@ import net.prover.model._
 
 case class Axiom(
     name: String,
-    key: ChapterEntry.Key.Standalone,
+    override val key: ChapterEntry.Key.Standalone,
     premises: Seq[Premise],
     conclusion: Statement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement)

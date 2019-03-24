@@ -21,7 +21,7 @@ object StepView {
 
   private def popoverForInference(inference: Inference)(implicit displayContext: DisplayContext): Popover = {
     Popover(
-      <a href={inference.entryKey.url}>
+      <a href={inference.key.url}>
         {inference.name}
       </a>,
       <div>
@@ -66,7 +66,7 @@ object StepView {
 
   private def popoverForNewAssert(inference: Inference, premises: Seq[NewAssert.Premise])(implicit displayContext: DisplayContext): Popover = {
     Popover(
-      <a href={inference.entryKey.url}>
+      <a href={inference.key.url}>
         {inference.name}
       </a>,
       <div>

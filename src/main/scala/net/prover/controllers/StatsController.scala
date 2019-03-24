@@ -22,6 +22,6 @@ class StatsController @Autowired() (bookService: BookService) {
     for {
       inference <- bookService.books.flatMap(_.inferences)
       if !usedInferenceIds.contains(inference.id)
-    } yield inference.entryKey.url
+    } yield inference.key.url
   }
 }

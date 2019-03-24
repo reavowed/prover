@@ -11,7 +11,7 @@ import scala.util.Try
 @JsonIgnoreProperties(Array("rearrangementType"))
 case class Theorem(
     name: String,
-    key: ChapterEntry.Key.Standalone,
+    override val key: ChapterEntry.Key.Standalone,
     premises: Seq[Premise],
     conclusion: Statement,
     proof: Seq[Step],
