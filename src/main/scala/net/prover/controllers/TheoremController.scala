@@ -5,11 +5,10 @@ import net.prover.controllers.models.StepDefinition
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.entries.{StatementDefinition, TermDefinition, Theorem}
-import net.prover.model.expressions.{Expression, Statement}
+import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step.NewAssert
 import net.prover.model.proof._
 import net.prover.services.BookService
-import net.prover.views.ExpressionView
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.convert.converter.Converter
 import org.springframework.http.ResponseEntity
@@ -187,7 +186,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     }.toResponseEntity
   }
 
-  case class PremiseOption(path: Seq[Int], expansions: Seq[InferenceSummary])
+  case class PremiseOption(path: Seq[Int], expansions: Seq[Inference.Summary])
   @GetMapping(value = Array("/{stepReference}/premiseOptions"))
   def premiseOptions(
     @PathVariable("bookKey") bookKey: String,
@@ -200,7 +199,7 @@ class TheoremController @Autowired() (bookService: BookService) {
       val expansionInferences = parsingContext.inferences.filter(_.rearrangementType == Inference.RearrangementType.Expansion)
       step.pendingPremises.map { case (path, p) =>
         val matchingExpansions = expansionInferences.filter(_.conclusion.calculateSubstitutions(p.statement, Substitutions.empty, 0, step.context.externalDepth).nonEmpty)
-        PremiseOption(path, matchingExpansions.map(InferenceSummary.apply))
+        PremiseOption(path, matchingExpansions.map(_.summary))
       }
     }.toResponseEntity
   }
@@ -334,46 +333,4 @@ object TheoremController {
     inference: Inference,
     requiredSubstitutions: Substitutions.Required,
     substitutions: Seq[Substitutions])
-
-  case class InferenceSummary(
-    name: String,
-    id: String,
-    url: String)
-  object InferenceSummary {
-    def apply(inference: Inference): InferenceSummary = {
-      InferenceSummary(
-        inference.name,
-        inference.id,
-        inference.key.url)
-    }
-  }
-
-  case class SubstitutionsSummary(
-    statements: Map[String, Option[ExpressionSummary]],
-    terms: Map[String, Option[ExpressionSummary]],
-    predicates: Map[String, Option[ExpressionSummary]],
-    functions: Map[String, Option[ExpressionSummary]])
-  object SubstitutionsSummary {
-    def apply(
-      substitutions: Substitutions,
-      requiredSubstitutions: Substitutions.Required)(
-      implicit displayContext: DisplayContext
-    ): SubstitutionsSummary = SubstitutionsSummary(
-      requiredSubstitutions.statements.map(s => s -> substitutions.statements.get(s).map(ExpressionSummary.apply)).toMap,
-      requiredSubstitutions.terms.map(s => s -> substitutions.terms.get(s).map(ExpressionSummary.apply)).toMap,
-      requiredSubstitutions.predicates.map(s => s -> substitutions.predicates.get(s).map(ExpressionSummary.apply)).toMap,
-      requiredSubstitutions.functions.map(s => s -> substitutions.functions.get(s).map(ExpressionSummary.apply)).toMap)
-  }
-
-  case class ExpressionSummary(
-    serialized: String,
-    html: String)
-  object ExpressionSummary {
-    def apply(
-      expression: Expression)(
-      implicit displayContext: DisplayContext
-    ): ExpressionSummary = ExpressionSummary(
-      expression.serialized,
-      ExpressionView(expression).toString())
-  }
 }
