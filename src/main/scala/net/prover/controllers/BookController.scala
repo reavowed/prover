@@ -122,7 +122,7 @@ class BookController @Autowired() (bookService: BookService) {
           case axiom: Axiom =>
             AxiomView(axiom, chapter, book, previous, next, getUsages(axiom, books)).toString
           case theorem: Theorem =>
-            TheoremView(theorem, chapter, book, previous, next, getUsages(theorem, books)).toString
+            TheoremView(theorem, chapter, book, previous, next, getUsages(theorem, books), getChapterParsingContext(book, chapter)).toString
         }
       }) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {
@@ -132,8 +132,8 @@ class BookController @Autowired() (bookService: BookService) {
     }
   }
 
-  @GetMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}/new"), produces = Array("text/html;charset=UTF-8"))
-  def getEntryNew(
+  @GetMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}/old"), produces = Array("text/html;charset=UTF-8"))
+  def getEntryOld(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("entryKey") entryKey: String
@@ -153,7 +153,7 @@ class BookController @Autowired() (bookService: BookService) {
           case axiom: Axiom =>
             AxiomView(axiom, chapter, book, previous, next, getUsages(axiom, books)).toString
           case theorem: Theorem =>
-            NewTheoremView(theorem, chapter, book, previous, next, getUsages(theorem, books), getChapterParsingContext(book, chapter)).toString
+            OldTheoremView(theorem, chapter, book, previous, next, getUsages(theorem, books)).toString
         }
       }) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {
