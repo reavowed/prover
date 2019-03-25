@@ -71,7 +71,7 @@ export class Parser {
       throw `Unrecognised expression ${JSON.stringify(rawExpression)}`
     }
   }
-  static parseInference(inference) {
+  static parseStepInference(inference) {
     inference.premises = inference.premises.map(Parser.parseExpression);
     inference.conclusion = Parser.parseExpression(inference.conclusion);
   }
@@ -83,8 +83,8 @@ export class Parser {
     step.assumption && (step.assumption = Parser.parseExpression(step.assumption));
     step.statement && (step.statement = Parser.parseExpression(step.statement));
     step.provenStatement && (step.provenStatement = Parser.parseExpression(step.provenStatement));
-    step.inference && Parser.parseInference(step.inference);
-    step.inferenceApplication && Parser.parseInference(step.inferenceApplication.inference);
+    step.inference && Parser.parseStepInference(step.inference);
+    step.inferenceApplication && Parser.parseStepInference(step.inferenceApplication.inference);
     step.substeps && _.each(step.substeps, Parser.parseStep);
     step.premises && _.each(step.premises, Parser.parsePremise);
   }
