@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/main/js/app.jsx',
+  entry: './src/main/js/App.jsx',
   output: {
     path: path.join(__dirname, 'target', 'scala-2.12', 'classes', 'static', 'js'),
     publicPath: '/js/',
