@@ -2,13 +2,13 @@ package net.prover.controllers
 
 import net.prover.JsonMapping
 import net.prover.controllers.BookController.NewTheoremModel
-import net.prover.exceptions.{BadRequestException, NotFoundException}
+import net.prover.controllers.models.ChapterProps
+import net.prover.exceptions.BadRequestException
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepContext}
-import net.prover.services.BookService
 import net.prover.views._
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,33 +34,34 @@ class BookController @Autowired() (bookService: BookService) {
   }
 
   case class ChapterSummary(title: String, chapterKey: Chapter.Key, summary: String)
-  case class BookProps(title: String, bookKey: Book.Key, chapters: Seq[ChapterSummary])
+  case class BookProps(title: String, bookKey: Book.Key, chapters: Seq[ChapterSummary], previous: Option[Book.Key], next: Option[Book.Key])
   @GetMapping(value = Array("/{bookKey}"), produces = Array("text/html;charset=UTF-8"))
   def getBook(@PathVariable("bookKey") bookKey: String): ResponseEntity[_] = {
+    val books = bookService.books
     (for {
-      book <- bookService.books.find(_.key.value == bookKey).orNotFound(s"Book $bookKey")
+      book <- books.find(_.key.value == bookKey).orNotFound(s"Book $bookKey")
     } yield {
-      createReactView("Book", BookProps(book.title, book.key, book.chapters.map(c => ChapterSummary(c.title, c.key, c.summary))))
+      val index = books.indexOf(book)
+      val previous = if (index > 0) Some(books(index - 1).key) else None
+      val next = if (index < books.length - 1) Some(books(index + 1).key) else None
+      createReactView("Book", BookProps(book.title, book.key, book.chapters.map(c => ChapterSummary(c.title, c.key, c.summary)), previous, next))
     }).toResponseEntity
   }
 
   @GetMapping(value = Array("/{bookKey}/{chapterKey}"), produces = Array("text/html;charset=UTF-8"))
-  def getChapter(@PathVariable("bookKey") bookKey: String, @PathVariable("chapterKey") chapterKey: String) = {
-    try {
-      (for {
-        book <- bookService.books.find(_.key.value == bookKey)
-        chapter <- book.chapters.find(_.key.value == chapterKey)
-      } yield {
-        val index = book.chapters.indexOf(chapter)
-        val previous = if (index > 0) Some(book.chapters(index - 1)) else None
-        val next = if (index < book.chapters.length - 1) Some(book.chapters(index + 1)) else None
-        ChapterView(chapter, book, previous, next).toString
-      }) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
-    } catch {
-      case NonFatal(e) =>
-        BookController.logger.error("Error getting books", e)
-        new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+  def getChapter(@PathVariable("bookKey") bookKey: String, @PathVariable("chapterKey") chapterKey: String): ResponseEntity[_] = {
+    (for {
+      book <- bookService.books.find(_.key.value == bookKey).orNotFound(s"Book $bookKey")
+      chapter <- book.chapters.find(_.key.value == chapterKey).orNotFound(s"Chapter $chapterKey")
+    } yield {
+      val parsingContext = getChapterParsingContext(book, chapter)
+      createReactView(
+        "Chapter",
+        ChapterProps(chapter, book),
+        Map(
+          "definitions" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap,
+          "shorthands" -> book.displayContext.displayShorthands))
+    }).toResponseEntity
   }
 
   @PostMapping(value = Array("/{bookKey}/{chapterKey}/theorems"), produces = Array("application/json;charset=UTF-8"))
@@ -88,9 +89,9 @@ class BookController @Autowired() (bookService: BookService) {
         case Some(_) =>
           Failure(BadRequestException("An inference with these premises and conclusion already exists"))
         case None =>
-          Success((newTheorem, ()))
+          Success(newTheorem)
       }
-    }.toResponseEntity
+    }.map{ case (_, book, chapter) => ChapterProps(chapter, book) }.toResponseEntity
   }
 
   case class TheoremProps(theorem: Theorem, previousEntry: Option[ChapterEntry.Key], nextEntry: Option[ChapterEntry.Key], usages: Seq[(Book, Chapter, Seq[Theorem])])
@@ -137,18 +138,23 @@ class BookController @Autowired() (bookService: BookService) {
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("entryKey") entryKey: String
   ): ResponseEntity[_] = {
-    bookService.modifyChapter(bookKey, chapterKey){ (books, _, chapter) =>
-      chapter.entries.ofType[ChapterEntry.WithKey].find(_.key.value == entryKey) match {
-        case Some(inference: Inference) if getUsages(inference, books).isEmpty =>
-          Success((chapter.copy(entries = chapter.entries.filter(_ != inference)), ()))
-        case Some(_: Inference) =>
+    def deleteEntry(chapterEntry: ChapterEntry, chapter: Chapter, books: Seq[Book]): Try[Chapter] = {
+      chapterEntry match {
+        case inference: Inference if getUsages(inference, books).isEmpty =>
+          Success(chapter.copy(entries = chapter.entries.filter(_ != inference)))
+        case _: Inference =>
           Failure(BadRequestException("Cannot delete inference with usages"))
-        case Some(_) =>
+        case _ =>
           Failure(BadRequestException("Deleting non-inference entries not yet supported"))
-        case None =>
-          Failure(NotFoundException(s"Entry $entryKey"))
       }
-    }.toResponseEntity
+    }
+
+    bookService.modifyChapter(bookKey, chapterKey){ (books, _, chapter) =>
+      for {
+        entry <- chapter.entries.find(_.key.value == entryKey).orNotFound(s"Entry $entryKey")
+        updatedChapter <- deleteEntry(entry, chapter, books)
+      } yield (updatedChapter, ())
+    }.map{ case (_, book, chapter, _) => ChapterProps(chapter, book) }.toResponseEntity
   }
 
   @PutMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}/shorthand"), produces = Array("application/json;charset=UTF-8"))
@@ -158,9 +164,9 @@ class BookController @Autowired() (bookService: BookService) {
     @PathVariable("entryKey") entryKey: String,
     @RequestBody(required = false) newShorthand: String
   ): ResponseEntity[_] = {
-    bookService.modifyEntry[ExpressionDefinition, Unit](bookKey, chapterKey, entryKey) { (books, book, chapter, definition) =>
-      Success((definition.withShorthand(Option(newShorthand).filter(_.nonEmpty)), ()))
-    }.toResponseEntity
+    bookService.modifyEntry[ExpressionDefinition, ChapterProps](bookKey, chapterKey, entryKey, (_, _, _, definition) =>
+      Success(definition.withShorthand(Option(newShorthand).filter(_.nonEmpty)))
+    ).map{ case (_, book, chapter, _) => ChapterProps(chapter, book) }.toResponseEntity
   }
 
   private def getUsages(inference: Inference, books: Seq[Book]): Seq[(Book, Chapter, Seq[Theorem])] = {

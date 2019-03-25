@@ -12,8 +12,8 @@ object InferenceView {
     inference: Inference.Entry,
     chapter: Chapter,
     book: Book,
-    previousOption: Option[ChapterEntry.WithKey],
-    nextOption: Option[ChapterEntry.WithKey],
+    previousOption: Option[ChapterEntry],
+    nextOption: Option[ChapterEntry],
     usages: Seq[(Book, Chapter, Seq[Theorem])])(
     content: Elem)(
   ) = OldMainTemplate(

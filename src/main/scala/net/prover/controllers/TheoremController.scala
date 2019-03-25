@@ -7,7 +7,6 @@ import net.prover.model.entries.{StatementDefinition, TermDefinition, Theorem}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step.NewAssert
 import net.prover.model.proof._
-import net.prover.services.BookService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.convert.converter.Converter
 import org.springframework.http.ResponseEntity
@@ -335,9 +334,9 @@ class TheoremController @Autowired() (bookService: BookService) {
   }
 
   private def modifyTheorem(bookKey: String, chapterKey: String, theoremKey: String)(f: (Book, Chapter, Theorem) => Try[Theorem]): Try[Theorem] = {
-    bookService.modifyEntry[Theorem, Theorem](bookKey, chapterKey, theoremKey) { (_, book, chapter, theorem) =>
-      f(book, chapter, theorem).map(t => (t, t))
-    }
+    bookService.modifyEntry[Theorem, Theorem](bookKey, chapterKey, theoremKey, (_, book, chapter, theorem) =>
+      f(book, chapter, theorem)
+    ).map(_._4)
   }
 
   private def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepReference: PathData)(f: (Book, Chapter, Theorem, TStep) => Try[Step]): Try[Theorem] = {

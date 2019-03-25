@@ -39,8 +39,8 @@ object Chapter {
     Theorem,
     DisplayShorthand)
 
-  def getNextKey(existingEntries: Seq[ChapterEntry], entryName: String) = {
-    existingEntries.ofType[ChapterEntry.WithKey].count(_.name == entryName) match {
+  def getNextKey(existingEntries: Seq[ChapterEntry], entryName: String): String = {
+    existingEntries.count(_.name == entryName) match {
       case 0 =>
         entryName.formatAsKey
       case n =>

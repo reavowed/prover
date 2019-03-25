@@ -10,7 +10,7 @@ import net.prover.model.expressions._
 @JsonSerialize(using = classOf[ExpressionDefinitionSerializer])
 trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinition]
 
-trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinition] extends ChapterEntry.WithKey { self: ExpressionDefinition =>
+trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinition] extends ChapterEntry { self: ExpressionDefinition =>
   def symbol: String
   def key: ChapterEntry.Key.Anchor
   def boundVariableNames: Seq[String]

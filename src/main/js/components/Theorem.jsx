@@ -1,6 +1,5 @@
 import path from "path";
 import React from "react";
-import styled from "styled-components";
 import {Parser} from "../Parser";
 import {Breadcrumbs} from "./Breadcrumbs"
 import {HighlightableStatement} from "./Expression";
@@ -16,24 +15,15 @@ class Premise extends React.Component {
   }
 }
 
-const Title = styled.h3`
-  text-align: center;
-`;
-const Id = styled(Monospace)`
-  text-align: center;
-`;
-
-const TheoremHeader = styled(class extends React.Component {
+class TheoremHeader extends React.Component {
   render() {
     const {theorem, className} = this.props;
     return <div className={className}>
-      <Title>Theorem: {theorem.name}</Title>
-      <Id>{theorem.id}</Id>
+      <h3 className="text-center mb-0">Theorem: {theorem.name}</h3>
+      <Monospace className="text-center">{theorem.id}</Monospace>
     </div>;
   }
-})`
-  margin-bottom: 1rem;
-`;
+}
 
 export class Theorem extends React.Component {
   constructor(props) {

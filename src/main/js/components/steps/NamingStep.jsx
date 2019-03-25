@@ -1,6 +1,7 @@
 import React from "react";
 import {formatHtml} from "../Expression";
 import {ProofLine} from "./ProofLine";
+import {Steps} from "./Steps";
 
 export class NamingStep extends React.Component {
   render() {

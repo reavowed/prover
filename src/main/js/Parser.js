@@ -116,4 +116,14 @@ export class Parser {
       })
     );
   }
+  static parseEntries(entriesJson) {
+    return entriesJson.map(entryJson => {
+      const entry = _.cloneDeep(entryJson);
+      entry.premises && (entry.premises = entry.premises.map(Parser.parseExpression));
+      entry.conclusion && (entry.conclusion = Parser.parseExpression(entry.conclusion));
+      entry.defaultValue && (entry.defaultValue = Parser.parseExpression(entry.defaultValue));
+      entry.definingStatement && (entry.definingStatement = Parser.parseExpression(entry.definingStatement));
+      return entry;
+    });
+  }
 }

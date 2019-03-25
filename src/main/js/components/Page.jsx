@@ -9,7 +9,7 @@ export class Page extends React.Component {
       <Header>
         {breadcrumbs}
       </Header>
-      <Container>
+      <Container className="mb-3">
         {children}
       </Container>
     </>

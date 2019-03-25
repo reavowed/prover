@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.model.entries.ChapterEntry.Key
 import net.prover.model.{Chapter, Inference}
 
 trait ChapterEntry {
+  def name: String
+  def key: Key
   def inferences: Seq[Inference] = Nil
   def serializedLines: Seq[String]
 }
@@ -14,7 +17,6 @@ trait ChapterEntry {
 object ChapterEntry {
   sealed trait Key {
     def name: String
-    @JsonIgnore
     def value: String
     @JsonIgnore
     def separator: String
@@ -49,11 +51,7 @@ object ChapterEntry {
     }
   }
 
-  trait WithKey extends ChapterEntry {
-    def name: String
-    def key: Key
-  }
-  trait Standalone extends WithKey {
+  trait Standalone extends ChapterEntry {
     def key: Key.Standalone
   }
 }

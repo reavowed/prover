@@ -5,6 +5,10 @@ import styled from "styled-components";
 
 const NavbarWrapper = styled.div`
   background-color: #343a40;
+  & .navbar {
+    padding-left: 0;
+    padding-right: 0;
+  }
 `;
 
 export class Header extends React.Component {

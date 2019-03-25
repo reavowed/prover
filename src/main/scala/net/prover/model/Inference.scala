@@ -12,6 +12,7 @@ import net.prover.model.proof.Transformation
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
   val id: String = calculateHash()
+  @JsonSerialize
   def key: ChapterEntry.Key
   @JsonSerialize
   def name: String

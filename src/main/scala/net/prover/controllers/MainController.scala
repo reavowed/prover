@@ -1,7 +1,6 @@
 package net.prover.controllers
 
 import javax.servlet.http.HttpServletResponse
-import net.prover.services.BookService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 import net.prover.model._

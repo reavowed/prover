@@ -20,7 +20,7 @@ object Breadcrumb {
     val text = chapter.title
     val link = chapter.key.url
   }
-  case class ChapterEntry(entry: model.entries.ChapterEntry.WithKey) extends Breadcrumb {
+  case class ChapterEntry(entry: model.entries.ChapterEntry) extends Breadcrumb {
     val text = entry.name
     val link = entry.key.url
   }

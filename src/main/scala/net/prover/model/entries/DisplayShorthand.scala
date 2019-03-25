@@ -4,21 +4,22 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.expressions.Template
-import net.prover.model.{Format, Parser, ParsingContext}
+import net.prover.model.{Chapter, Format, Parser, ParsingContext}
 
 @JsonSerialize(using = classOf[DisplayShorthandSerializer])
-case class DisplayShorthand(template: Template, format: Format.Explicit) extends ChapterEntry {
+case class DisplayShorthand(template: Template, format: Format.Explicit, key: ChapterEntry.Key.Anchor) extends ChapterEntry {
+  override def name: String = DisplayShorthand.name
   override def serializedLines: Seq[String] = Seq(s"display ${template.serialized} as (${format.originalValue})")
 }
 
-object DisplayShorthand extends ChapterEntryParser.WithoutKey {
+object DisplayShorthand extends ChapterEntryParser {
   override def name = "display"
-  override def parser(implicit context: ParsingContext) = {
+  override def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[DisplayShorthand] = {
     for {
       template <- Template.parser
       _ <- Parser.requiredWord("as")
       format <- Format.parser(template.names)
-    } yield DisplayShorthand(template, format)
+    } yield DisplayShorthand(template, format, ChapterEntry.Key.Anchor(name, getKey))
   }
 }
 

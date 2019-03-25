@@ -8,8 +8,8 @@ object AxiomView {
     axiom: Axiom,
     chapter: Chapter,
     book: Book,
-    previousOption: Option[ChapterEntry.WithKey],
-    nextOption: Option[ChapterEntry.WithKey],
+    previousOption: Option[ChapterEntry],
+    nextOption: Option[ChapterEntry],
     usages: Seq[(Book, Chapter, Seq[Theorem])]
   ) = InferenceView("Axiom", axiom, chapter, book, previousOption, nextOption, usages) { <div></div> }
 }
