@@ -78,9 +78,11 @@ class DefinitionResult extends React.Component {
 
     return <>
       <Result title={<>{title}: <Expression expression={entry.defaultValue} boundVariableLists={[]}/></>}
-              buttons={<Button size="sm" variant="primary" className="ml-1 mb-n1" onClick={this.startEditingShorthand}>Shorthand</Button>}
+              buttons={<Button size="sm" variant="primary" className="ml-1" onClick={this.startEditingShorthand}>Shorthand</Button>}
       >
-        {children}
+        {children && <div className="mt-n2">
+          {children}
+        </div>}
       </Result>
       <Modal show={this.state.editingShorthand} onHide={this.stopEditingShorthand}>
         <Modal.Header closeButton><Modal.Title>Edit shorthand</Modal.Title></Modal.Header>
