@@ -3,6 +3,7 @@ package net.prover.model
 import java.nio.file.Path
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.entries._
 import org.slf4j.LoggerFactory
 
@@ -35,7 +36,8 @@ case class Book(
 object Book {
   val logger = LoggerFactory.getLogger(Book.getClass)
 
-  case class Key(value: String) {
+  case class Key(name: String, value: String) {
+    @JsonSerialize
     def url = s"/books/$value"
   }
 
@@ -44,7 +46,7 @@ object Book {
   }
 
   def parser(title: String, previousBooks: Seq[Book], getChapterPath: (String, Int) => Path): Parser[Book] = {
-    val key = Key(title.formatAsKey)
+    val key = Key(title, title.formatAsKey)
     for {
       imports <- importsParser
       dependencies = imports.map { importTitle =>

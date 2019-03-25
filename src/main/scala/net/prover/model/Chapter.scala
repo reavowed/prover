@@ -1,5 +1,6 @@
 package net.prover.model
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.entries._
 
 case class Chapter(
@@ -25,7 +26,8 @@ case class Chapter(
 
 object Chapter {
 
-  case class Key(value: String, bookKey: Book.Key) {
+  case class Key(name: String, value: String, bookKey: Book.Key) {
+    @JsonSerialize
     def url = s"${bookKey.url}/$value"
   }
 
@@ -53,7 +55,7 @@ object Chapter {
   }
 
   def parser(title: String, bookKey: Book.Key)(initialContext: ParsingContext): Parser[(Chapter, ParsingContext)] = {
-    val key = Key(title.formatAsKey, bookKey)
+    val key = Key(title, title.formatAsKey, bookKey)
     for {
       summary <- Parser.toEndOfLine
       entriesAndContext <- Parser.foldWhileDefined[ChapterEntry, ParsingContext](initialContext) { (entriesSoFar, currentContext) =>

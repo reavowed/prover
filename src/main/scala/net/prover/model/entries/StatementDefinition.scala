@@ -96,7 +96,7 @@ object StatementDefinition extends ChapterEntryParser {
     } yield {
       StatementDefinition(
         symbol,
-        (ChapterEntry.Key.Anchor.apply _).tupled(getKey(symbol)),
+        ChapterEntry.Key.Anchor.apply(symbol, getKey),
         boundVariables,
         componentTypes,
         name,

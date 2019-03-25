@@ -12,19 +12,13 @@ object TheoremView {
     theorem: Theorem,
     chapter: Chapter,
     book: Book,
-    previousOption: Option[ChapterEntry.WithKey],
-    nextOption: Option[ChapterEntry.WithKey],
+    previousOption: Option[ChapterEntry.Key],
+    nextOption: Option[ChapterEntry.Key],
     usages: Seq[(Book, Chapter, Seq[Theorem])],
     parsingContext: ParsingContext
-  ): Elem = MainTemplate(
-    Breadcrumb.Root,
-    Breadcrumb.Book(book),
-    Breadcrumb.Chapter(chapter),
-    Breadcrumb.ChapterEntry(theorem))
-  {
+  ): Elem = MainTemplate {
     <div>
       <div id="theorem"></div>
-      <script src="http://localhost:8081/js/bundle.js"></script>
       <script type="text/javascript">{Unparsed(s"""
             |window.definitions = ${JsonMapping.toString((parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap)};
             |window.shorthands = ${JsonMapping.toString(book.displayContext.displayShorthands)};

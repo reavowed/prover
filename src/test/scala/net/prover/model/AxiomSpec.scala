@@ -13,7 +13,7 @@ class AxiomSpec extends ProverSpec {
   def axiom(title: String, key: String, premises: Seq[PremiseMagnet], conclusion: Statement): Axiom = {
     Axiom(
       title,
-      ChapterEntry.Key.Standalone(key, stubChapter.key),
+      ChapterEntry.Key.Standalone(title, key, stubChapter.key),
       premises,
       conclusion)
   }

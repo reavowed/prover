@@ -15,7 +15,7 @@ class TermDefinitionSpec extends ProverSpec {
       definition mustEqual
         TermDefinition(
           "∅",
-          ChapterEntry.Key.Anchor("∅", stubChapter.key),
+          ChapterEntry.Key.Anchor("∅", "∅", stubChapter.key),
           Nil,
           Nil,
           None,
@@ -32,7 +32,7 @@ class TermDefinitionSpec extends ProverSpec {
         "intersection (a) format (⋂a) premises (¬ = a ∅) (∀ x ↔ ∈ x _ ∀ y → ∈ y a ∈ x y)"
       ) mustEqual TermDefinition(
         "intersection",
-        ChapterEntry.Key.Anchor("intersection", stubChapter.key),
+        ChapterEntry.Key.Anchor("intersection", "intersection", stubChapter.key),
         Nil,
         Seq(a),
         None,

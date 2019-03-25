@@ -111,7 +111,7 @@ object Theorem extends ChapterEntryParser {
     } yield {
       Theorem(
         name,
-        (ChapterEntry.Key.Standalone.apply _).tupled(getKey(name)),
+        ChapterEntry.Key.Standalone(name, getKey),
         premises,
         conclusion,
         proof,

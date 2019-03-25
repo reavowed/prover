@@ -85,7 +85,7 @@ class BookController @Autowired() (bookService: BookService) {
       val conclusion = Statement.parser.parseFromString(newTheoremDefininition.conclusion, "conclusion")
       val newTheorem = Theorem(
         newTheoremDefininition.name,
-        ChapterEntry.Key.Standalone(Chapter.getNextKey(chapter.entries, newTheoremDefininition.name), chapter.key),
+        ChapterEntry.Key.Standalone(newTheoremDefininition.name, Chapter.getNextKey(chapter.entries, newTheoremDefininition.name), chapter.key),
         premises,
         conclusion,
         Seq(Step.Target(conclusion, StepContext(premises.map(_.provenStatement), Nil))),
@@ -122,7 +122,7 @@ class BookController @Autowired() (bookService: BookService) {
           case axiom: Axiom =>
             AxiomView(axiom, chapter, book, previous, next, getUsages(axiom, books)).toString
           case theorem: Theorem =>
-            TheoremView(theorem, chapter, book, previous, next, getUsages(theorem, books), getChapterParsingContext(book, chapter)).toString
+            TheoremView(theorem, chapter, book, previous.map(_.key), next.map(_.key), getUsages(theorem, books), getChapterParsingContext(book, chapter)).toString
         }
       }) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {

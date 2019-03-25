@@ -40,7 +40,7 @@ object Axiom extends ChapterEntryParser {
     } yield {
       Axiom(
         name,
-        (ChapterEntry.Key.Standalone.apply _).tupled(getKey(name)),
+        ChapterEntry.Key.Standalone(name, getKey),
         premises,
         conclusion,
         rearrangementType)

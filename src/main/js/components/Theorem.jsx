@@ -1,10 +1,15 @@
 import path from "path";
 import React from "react";
+import Container from "react-bootstrap/Container";
 import styled from "styled-components";
 import {Parser} from "../Parser";
+import {Breadcrumbs} from "./Breadcrumbs"
 import {HighlightableStatement} from "./Expression";
+import {Header} from "./Header";
 import {InferenceSummary} from "./InferenceSummary";
+import {Monospace} from "./Monospace";
 import {Steps} from "./steps/Steps";
+import {NavLinks} from "./NavLinks";
 
 class Premise extends React.Component {
   render() {
@@ -12,16 +17,19 @@ class Premise extends React.Component {
   }
 }
 
+const Title = styled.h3`
+  text-align: center;
+`;
+const Id = styled(Monospace)`
+  text-align: center;
+`;
+
 const TheoremHeader = styled(class extends React.Component {
   render() {
     const {theorem, className} = this.props;
     return <div className={className}>
-      <h3>
-        Theorem: {theorem.name}
-      </h3>
-      <div className="inferenceId">
-        {theorem.id}
-      </div>
+      <Title>Theorem: {theorem.name}</Title>
+      <Id>{theorem.id}</Id>
     </div>;
   }
 })`
@@ -50,7 +58,7 @@ export class Theorem extends React.Component {
       options = childPath;
       childPath = "";
     }
-    const combinedPath = path.join(this.state.theorem.key, stepPath.join("."), childPath) + (childPath === "" ? "/" : "");
+    const combinedPath = path.join(this.state.theorem.key.url, stepPath.join("."), childPath) + (childPath === "" ? "/" : "");
     return window.fetch(combinedPath, options);
   };
 
@@ -68,37 +76,39 @@ export class Theorem extends React.Component {
   render() {
     const {previousEntry, nextEntry, usages} = this.props;
     const {theorem} = this.state;
-    return <div className="inference">
-      <div className="navigationLinks">
-        {previousEntry && <a className="navigationLink float-left" href={previousEntry.key}>&laquo; {previousEntry.name}</a>}
-        {nextEntry && <a className="navigationLink float-right" href={nextEntry.key}>{nextEntry.name} &raquo;</a>}
-      </div>
+    return <>
+      <Header>
+        <Breadcrumbs.Entry entryKey={theorem.key}/>
+      </Header>
+      <Container>
+        <NavLinks previous={previousEntry} next={nextEntry}/>
 
-      <TheoremHeader theorem={theorem} />
-      <InferenceSummary createPremiseElement={this.createPremiseElement} inference={theorem} highlightedPremises={this.state.highlightedPremises}/>
+        <TheoremHeader theorem={theorem} />
+        <InferenceSummary createPremiseElement={this.createPremiseElement} inference={theorem} highlightedPremises={this.state.highlightedPremises}/>
 
-      <hr/>
+        <hr/>
 
-      <h4>Proof</h4>
-      <Steps steps={theorem.proof}
-             path={[]}
-             boundVariableLists={[]}
-             setHighlightedPremises={this.setHighlightedPremises}
-             highlightedPremises={this.state.highlightedPremises}
-             fetchForStep={this.fetchForStep}
-             updateTheorem={this.updateTheorem}/>
+        <h4>Proof</h4>
+        <Steps steps={theorem.proof}
+               path={[]}
+               boundVariableLists={[]}
+               setHighlightedPremises={this.setHighlightedPremises}
+               highlightedPremises={this.state.highlightedPremises}
+               fetchForStep={this.fetchForStep}
+               updateTheorem={this.updateTheorem}/>
 
-      {usages.length > 0 &&
-        <div>
-          <hr />
-          {usages.map(([usageBook, usageChapter, theorems]) =>
-            <div key={usageBook.key.value + "/" + usageChapter.key.value}>
-              <h6>{usageBook.title} - {usageChapter.title}</h6>
-              <p>{theorems.map(theorem => <span className="usage" key={theorem.key.value}> <a className="usageLink" href={theorem.key}>{theorem.name}</a> </span>)}</p>
-            </div>
-          )}
-        </div>
-      }
-    </div>
+        {usages.length > 0 &&
+          <div>
+            <hr />
+            {usages.map(([usageBook, usageChapter, theorems]) =>
+              <div key={usageChapter.key.url}>
+                <h6>{usageBook.title} - {usageChapter.title}</h6>
+                <p>{theorems.map(theorem => <span className="usage" key={theorem.key.url}> <a className="usageLink" href={theorem.key.url}>{theorem.name}</a> </span>)}</p>
+              </div>
+            )}
+          </div>
+        }
+      </Container>
+    </>
   }
 }

@@ -4,7 +4,7 @@ import net.prover.model.Book
 import net.prover.viewmodel.Breadcrumb
 
 object BookView {
-  def apply(book: Book) = MainTemplate(Breadcrumb.Root, Breadcrumb.Book(book)) {
+  def apply(book: Book) = OldMainTemplate(Breadcrumb.Root, Breadcrumb.Book(book)) {
     <div class="book">
       <h3>{book.title}</h3>
       { book.chapters.map { chapter =>

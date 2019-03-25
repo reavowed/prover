@@ -16,7 +16,7 @@ object InferenceView {
     nextOption: Option[ChapterEntry.WithKey],
     usages: Seq[(Book, Chapter, Seq[Theorem])])(
     content: Elem)(
-  ) = MainTemplate(
+  ) = OldMainTemplate(
     Breadcrumb.Root,
     Breadcrumb.Book(book),
     Breadcrumb.Chapter(chapter),

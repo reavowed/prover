@@ -65,7 +65,7 @@ object ChapterView {
     book: Book,
     previousChapterOption: Option[Chapter],
     nextChapterOption: Option[Chapter]
-   ) = MainTemplate(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter)) {
+   ) = OldMainTemplate(Breadcrumb.Root, Breadcrumb.Book(book), Breadcrumb.Chapter(chapter)) {
     import book.displayContext
     <div class="chapter">
       <div class="navigationLinks">
