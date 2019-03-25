@@ -30,9 +30,15 @@ class TransitiveSteps extends React.Component {
     const {firstStep, firstIndex, transitivityStepsAndIndexes, ...otherProps} = this.props;
     const symbol = firstStep.statement.definition.symbol;
     return <div>
-      <div className="mb-1"><span ref={this.setGuidingSpacer}>Then <Expression expression={firstStep.statement.components[0]} boundVariableLists={otherProps.boundVariableLists}/> </span>{symbol} <Expression expression={firstStep.statement.components[1]} boundVariableLists={otherProps.boundVariableLists}/></div>
+      <div className="mb-1">
+        <span ref={this.setGuidingSpacer}>Then <Expression expression={firstStep.statement.components[0]} boundVariableLists={otherProps.boundVariableLists}/> </span>
+        {symbol} <Expression expression={firstStep.statement.components[1]} boundVariableLists={otherProps.boundVariableLists}/>.
+      </div>
       {transitivityStepsAndIndexes.map(({subsequentStep, subsequentIndex, transitiveIndex}) =>
-        <div className="mb-1"><span ref={this.setChildSpacer}/>{symbol} <Expression expression={subsequentStep.statement.components[1]} boundVariableLists={otherProps.boundVariableLists}/></div>
+        <div className="mb-1">
+          <span ref={this.setChildSpacer}/>
+          {symbol} <Expression expression={subsequentStep.statement.components[1]} boundVariableLists={otherProps.boundVariableLists}/>.
+        </div>
       )}
     </div>
   }
