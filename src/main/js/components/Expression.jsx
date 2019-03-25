@@ -41,7 +41,7 @@ const HighlightedSpan = styled.span`
 `;
 
 export class Expression extends React.Component {
-  matchShorthand(template, expression, pathWithinMatch, boundVariablesWithinMatch) {
+  matchDisplayShorthand(template, expression, pathWithinMatch, boundVariablesWithinMatch) {
     if (_.isString(template)) {
       return {type: "expression", expression, pathWithinMatch, boundVariablesWithinMatch};
     } else if (_.isArray(template) && _.isString(template[0])) {
@@ -49,7 +49,7 @@ export class Expression extends React.Component {
         const innerBoundVariables = expression.definition.numberOfBoundVariables ? [expression.boundVariableNames, ...boundVariablesWithinMatch] : boundVariablesWithinMatch;
         const componentMatches = _.chain(template.slice(1))
           .zip(expression.components)
-          .map(([t, c], i) => this.matchShorthand(t, c, [...pathWithinMatch, i], innerBoundVariables))
+          .map(([t, c], i) => this.matchDisplayShorthand(t, c, [...pathWithinMatch, i], innerBoundVariables))
           .value();
         if (_.every(componentMatches)) {
           return [...expression.boundVariableNames.map((name, index) => ({type: "boundVariable", name, index, pathWithinMatch})), ..._.flatten(componentMatches)];
@@ -81,13 +81,13 @@ export class Expression extends React.Component {
   }
 
   renderInner(expression, path, pathsToHighlight, boundVariableLists, wrapBoundVariable, safe) {
-    for (const shorthand of window.shorthands) {
-      const matches = this.matchShorthand(shorthand.template, expression, [], []);
+    for (const displayShorthand of window.displayShorthands) {
+      const matches = this.matchDisplayShorthand(displayShorthand.template, expression, [], []);
       if (matches) {
         let renderedMatches = matches.map(m => this.renderMatch(m, path, pathsToHighlight, boundVariableLists, wrapBoundVariable));
-        let formatString = (safe && shorthand.requiresBrackets) ?
-          "(" + shorthand.baseFormatString + ")" :
-          shorthand.baseFormatString;
+        let formatString = (safe && displayShorthand.requiresBrackets) ?
+          "(" + displayShorthand.baseFormatString + ")" :
+          displayShorthand.baseFormatString;
         return formatHtml(formatString, s => replacePlaceholders(s, renderedMatches));
       }
     }

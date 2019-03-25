@@ -58,7 +58,7 @@ class BookController @Autowired() (bookService: BookService) {
         ChapterProps(chapter, book),
         Map(
           "definitions" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap,
-          "shorthands" -> book.displayContext.displayShorthands))
+          "displayShorthands" -> book.displayContext.displayShorthands))
     }).toResponseEntity
   }
 
@@ -123,7 +123,7 @@ class BookController @Autowired() (bookService: BookService) {
         inferenceBaseProps ++ Map("previous" -> previous, "next" -> next, "usages" -> getUsages(inference, books)),
         Map(
           "definitions" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap,
-          "shorthands" -> book.displayContext.displayShorthands))
+          "displayShorthands" -> book.displayContext.displayShorthands))
     }).toResponseEntity
   }
 
