@@ -11,12 +11,20 @@ import {BoundVariableModal, FindInferenceModal} from "./Modals";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 
+const SpacedButton = styled(Button)`
+  margin-left: 5px;
+`;
+const SpacedDropdown = styled(Dropdown)`
+  margin-left: 5px;
+`;
+
 const ProofLine = styled(class ProofLine extends React.Component {
   constructor(...args) {
     super(...args);
     this.attachRef = target => this.setState({ target });
     this.state = {
       showPopover: false,
+      isHovered: false
     };
   }
   showPopover = () => {
@@ -27,13 +35,38 @@ const ProofLine = styled(class ProofLine extends React.Component {
       this.setState({showPopover: false})
     }
   };
+  onMouseEnter = () => {
+    const {setHighlightedPremises, referencedLines} = this.props;
+    if (referencedLines && setHighlightedPremises) {
+      setHighlightedPremises(referencedLines);
+    }
+    this.setState({isHovered: true});
+  };
+  onMouseLeave = () => {
+    const {setHighlightedPremises} = this.props;
+    if (setHighlightedPremises) {
+      setHighlightedPremises([]);
+    }
+    this.setState({isHovered: false});
+  };
+  moveUp = () => {
+    this.props.fetchForStep(this.props.path, "move?direction=up", {
+      method: "POST"
+    }).then(this.props.updateTheorem);
+  };
+  moveDown = () => {
+    this.props.fetchForStep(this.props.path, "move?direction=down", {
+      method: "POST"
+    }).then(this.props.updateTheorem);
+  };
   render() {
-    const {setHighlightedPremises, referencedLines, className, children, popover, onShowPopover} = this.props;
-
-    const onMouseEnter = referencedLines && setHighlightedPremises && (() => setHighlightedPremises(referencedLines));
-    const onMouseLeave = referencedLines && setHighlightedPremises && (() => setHighlightedPremises([]));
-    const lineElement= <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onClick={this.showPopover} className={className} ref={this.attachRef}>
+    const {className, children, popover, onShowPopover, path} = this.props;
+    const lineElement= <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.showPopover} className={className} ref={this.attachRef}>
       {children}
+      {path && this.state.isHovered && <span className="float-right">
+        <SpacedButton onClick={this.moveUp} size="sm"><span className="fas fa-arrow-up"/></SpacedButton>
+        <SpacedButton onClick={this.moveDown} size="sm"><span className="fas fa-arrow-down"/></SpacedButton>
+      </span>}
     </div>;
 
     if (popover) {
@@ -97,7 +130,7 @@ class DeleteStepButton extends React.Component {
   };
 
   render() {
-    return <Button variant="danger" size="sm"><span className="fas fa-ban" onClick={this.deleteStep}/></Button>
+    return <SpacedButton variant="danger" size="sm"><span className="fas fa-ban" onClick={this.deleteStep}/></SpacedButton>
   }
 }
 
@@ -213,6 +246,7 @@ class AssertionStep extends React.Component {
 
     return <>
       <ProofLine referencedLines={step.referencedLines}
+                 path={path}
                  popover={popover}
                  onShowPopover={this.fetchOptions}
                  blockHide={this.showBoundVariableModal()}
@@ -328,14 +362,14 @@ class TargetStep extends React.Component {
     const popover = (
       <Popover title={<>Statement to prove <DeleteStepButton path={path} {...otherProps}/></>}>
         {scopingStatement && step.statement.definition === scopingStatement &&
-          <Button variant="success" size="sm" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
+          <SpacedButton variant="success" size="sm" onClick={this.showBoundVariableModal}>Introduce bound variable</SpacedButton>}
         {deductionStatement && step.statement.definition === deductionStatement &&
-          <Button variant="success" size="sm" onClick={this.introduceDeduction}>Introduce deduction</Button>}
-        <Button variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</Button>
+          <SpacedButton variant="success" size="sm" onClick={this.introduceDeduction}>Introduce deduction</SpacedButton>}
+        <SpacedButton variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</SpacedButton>
       </Popover>
     );
     return <>
-      <ProofLine incomplete step={step} popover={popover} {...otherProps}>Then <ProofLineStatement statement={step.statement} references={[...additionalReferences, reference]} {...otherProps}/>.</ProofLine>
+      <ProofLine incomplete step={step} popover={popover} path={path} {...otherProps}>Then <ProofLineStatement statement={step.statement} references={[...additionalReferences, reference]} {...otherProps}/>.</ProofLine>
       {boundVariableModal}
       {<FindInferenceModal show={this.state.showFindInferenceModal} onHide={this.hideFindInferenceModal} onSubmit={this.proveWithInference} getInferenceSuggestions={this.getInferenceSuggestions} getPremiseSuggestions={this.getPremiseSuggestions} {...otherProps} />}
     </>

@@ -66,9 +66,9 @@ premise ∈ n ℕ
 premise function f n A
 conclusion ∈ f powerSet × ℕ A
 {
-  prove ⊆ f × n A fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, n, A) () ()
-    given
   prove ⊆ n ℕ c660722cbf1cd12662afceb43da350b308473e86467cf5d9f72cd22c5e8cfcf6 () (n) () ()
+    given
+  prove ⊆ f × n A fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, n, A) () ()
     given
   prove ⊆ × n A × ℕ A 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 () (n, ℕ, A) () ()
     given

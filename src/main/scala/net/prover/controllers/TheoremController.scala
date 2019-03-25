@@ -144,6 +144,39 @@ class TheoremController @Autowired() (bookService: BookService) {
     }.toResponseEntity
   }
 
+  @PostMapping(value = Array("/{stepReference}/move"))
+  def moveStep(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: PathData,
+    @RequestParam("direction") direction: String
+  ): ResponseEntity[_] = {
+    def moveInTheorem(theorem: Theorem, parsingContext: ParsingContext): Option[Try[Theorem]] = {
+      stepReference.indexes match {
+        case Nil =>
+          None
+        case init :+ last =>
+          theorem.tryModifySteps(init, steps => {
+            steps.lift(last).map { step =>
+              direction match {
+                case "up" =>
+                  Success((steps.take(last - 1) :+ step :+ steps(last - 1)) ++ steps.drop(last + 1))
+                case "down" =>
+                  Success((steps.take(last) ++ steps.lift(last + 1).toSeq :+ step) ++ steps.drop(last + 1))
+                case _ =>
+                  Failure(BadRequestException(s"Unrecognised direction $direction"))
+              }
+            }
+          }).mapMap(_.recalculateReferences(parsingContext))
+      }
+    }
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (book, chapter, theorem) =>
+      val parsingContext = getTheoremParsingContext(book, chapter, theorem)
+      moveInTheorem(theorem, parsingContext).orNotFound(s"Step $stepReference").flatten
+    }.toResponseEntity
+  }
+
   @PostMapping(value = Array("/{stepReference}/introduceBoundVariable"))
   def introduceBoundVariable(
     @PathVariable("bookKey") bookKey: String,
