@@ -1,14 +1,14 @@
 import React from "react";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import Autosuggest from "react-autosuggest";
-import styled from "styled-components";
-import {InferenceSummary} from "./InferenceSummary";
-import {Parser} from "../Parser";
+import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
-import {Expression} from "./Expression";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
 import {renderToString} from "react-dom/server";
+import styled from "styled-components";
+import {Parser} from "../Parser";
+import {Expression} from "./Expression";
+import {InferenceSummary} from "./InferenceSummary";
 
 const DropdownContainer = styled.div`
   .react-autosuggest__suggestions-container--open & {

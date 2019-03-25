@@ -1,6 +1,6 @@
+import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
-import _ from "lodash";
 import {DefinedExpression, FunctionParameter} from "../Parser";
 
 function formatWithReplacement(text, regex, handlePlain, handleMatch) {
