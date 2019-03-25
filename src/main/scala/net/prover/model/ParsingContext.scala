@@ -1,9 +1,8 @@
 package net.prover.model
 
-import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
+import net.prover.model.entries.{ChapterEntry, ExpressionDefinition, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
 import net.prover.model.proof.Transformation
-import org.springframework.http.{HttpStatus, ResponseEntity}
 
 import scala.util.Try
 
@@ -22,6 +21,21 @@ case class ParsingContext(
     statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Scoping))
   }
   def transformation: Option[Transformation] = scopingStatementOption.flatMap(Transformation.find(_, inferences))
+
+  def transitivityInferences: Map[ExpressionDefinition, Inference] = {
+    inferences.mapCollect {
+      case inference @ Inference(
+        _,
+        Seq(
+          Premise(DefinedExpression(d1, Nil, Seq(ExpressionVariable(a1), ExpressionVariable(b1))), _),
+          Premise(DefinedExpression(d2, Nil, Seq(ExpressionVariable(b2), ExpressionVariable(c1))), _)),
+        DefinedExpression(d3, Nil, Seq(ExpressionVariable(a2), ExpressionVariable(c2)))
+      ) if d1 == d2 && d2 == d3 && a1 == a2 && b1 == b2 && c1 == c2 =>
+        Some((d1, inference))
+      case _ =>
+        None
+    }.toMap
+  }
 
   def add(chapterEntry: ChapterEntry): ParsingContext = {
     val contextWithDefinitions = chapterEntry match {

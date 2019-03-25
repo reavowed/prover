@@ -123,7 +123,8 @@ class BookController @Autowired() (bookService: BookService) {
         inferenceBaseProps ++ Map("previous" -> previous, "next" -> next, "usages" -> getUsages(inference, books)),
         Map(
           "definitions" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap,
-          "displayShorthands" -> book.displayContext.displayShorthands))
+          "displayShorthands" -> book.displayContext.displayShorthands,
+          "transitivityInferences" -> parsingContext.transitivityInferences.map { case (d, i) => d.symbol -> i.id }))
     }).toResponseEntity
   }
 

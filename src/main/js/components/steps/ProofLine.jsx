@@ -47,7 +47,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
   };
   render() {
     const {className, children, popover, onShowPopover, path} = this.props;
-    const lineElement= <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.showPopover} className={className} ref={this.attachRef}>
+    const lineElement= <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.showPopover} className={"mb-1 " + className} ref={this.attachRef}>
       {children}
       {path && this.state.isHovered && <span className="float-right">
         <Button onClick={this.moveUp} size="sm" className="ml-1"><span className="fas fa-arrow-up"/></Button>
@@ -68,7 +68,6 @@ export const ProofLine = styled(class ProofLine extends React.Component {
   }
 })`
   position: relative;
-  padding-bottom: 5px;
   ${props => props.incomplete && css`
     &::before {
       content: "?";
