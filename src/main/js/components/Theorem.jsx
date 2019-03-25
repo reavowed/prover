@@ -194,7 +194,7 @@ class AssertionStep extends React.Component {
     let reference = path.join(".");
     const inference = step.inference || step.inferenceApplication.inference;
     const popover = (
-      inference && <Popover title={<>{inference.name} <DeleteStepButton path={path} {...otherProps}/></>}>
+      inference && <Popover title={<><a href={inference.key}>{inference.name}</a> <DeleteStepButton path={path} {...otherProps}/></>}>
         <InferenceSummary inference={inference} />
         {step.premises && <>
           <hr/>
