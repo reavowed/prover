@@ -363,7 +363,7 @@ class Steps extends React.Component {
       case "assertion":
       case "oldAssertion":
       case "target":
-        return step.statement.serialize();
+        return step.type + " " + step.statement.serialize();
       case "deduction":
         return "assume " + step.assumption.serialize();
       case "scopedVariable":

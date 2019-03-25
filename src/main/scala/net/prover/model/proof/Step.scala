@@ -59,7 +59,7 @@ object Step {
     val referencedLines: Set[PreviousLineReference] = inferenceApplication.referencedLines
     override def provenStatement: Option[Statement] = Some(statement)
     override def referencedInferenceIds: Set[String] = inferenceApplication.referencedInferenceIds
-    override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Step = this
+    override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Step = copy(context = stepContext)
     override def length = 1
     override def serializedLines: Seq[String] = Seq(s"assert ${statement.serialized} ${inferenceApplication.serialized}")
   }
@@ -87,7 +87,7 @@ object Step {
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Step = {
       val newSubsteps = substeps.recalculateReferences(path, stepContext.addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil))), parsingContext)
-      copy(substeps = newSubsteps)
+      copy(substeps = newSubsteps, context = stepContext)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def length: Int = substeps.map(_.length).sum
@@ -122,7 +122,7 @@ object Step {
     // TODO: apply to inference application
     override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Step = {
       val newSubsteps = substeps.recalculateReferences(path, stepContext.addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil))).addBoundVariable(variableName), parsingContext)
-      copy(substeps = newSubsteps)
+      copy(substeps = newSubsteps, context = stepContext)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet ++ finalInferenceApplication.referencedInferenceIds
     override def length: Int = substeps.map(_.length).sum + 1
@@ -160,7 +160,7 @@ object Step {
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Step = {
       val newSubsteps = substeps.recalculateReferences(path, stepContext.addBoundVariable(variableName), parsingContext)
-      copy(substeps = newSubsteps)
+      copy(substeps = newSubsteps, context = stepContext)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def length: Int = substeps.map(_.length).sum
@@ -183,7 +183,7 @@ object Step {
   case class Target(statement: Statement, context: StepContext) extends Step.WithoutSubsteps {
     val `type` = "target"
     override def provenStatement: Option[Statement] = Some(statement)
-    override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Step = this
+    override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Step = copy(context = stepContext)
     override def referencedInferenceIds: Set[String] = Set.empty
     override def length = 1
     def serializedLines: Seq[String] = Seq(s"target ${statement.serialized}")
@@ -209,7 +209,7 @@ object Step {
     override def provenStatement: Option[Statement] = Some(statement)
     override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Step = {
       val newPremises = premises.map(_.recalculateReferences(stepContext, parsingContext))
-      copy(premises = newPremises)
+      copy(premises = newPremises, context = stepContext)
     }
     override def referencedInferenceIds: Set[String] = Set(inference.id) ++ premises.flatMap(_.referencedInferenceIds).toSet
     override def length: Int = 1

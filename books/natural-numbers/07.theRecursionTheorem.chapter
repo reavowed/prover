@@ -66,10 +66,17 @@ premise ∈ n ℕ
 premise function f n A
 conclusion ∈ f powerSet × ℕ A
 {
-  assert ⊆ n ℕ direct c660722cbf1cd12662afceb43da350b308473e86467cf5d9f72cd22c5e8cfcf6 () (n) () () (direct p0)
-  assert ⊆ f × n A direct fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, n, A) () () (direct p1)
-  assert ⊆ f × ℕ A direct 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, × n A, × ℕ A) () () (direct 1, elided direct 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 () (n, ℕ, A) () () (direct 0))
-  assert ∈ f powerSet × ℕ A direct 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (f, × ℕ A) () () (direct 2)
+  prove ⊆ f × n A fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, n, A) () ()
+    given
+  prove ⊆ n ℕ c660722cbf1cd12662afceb43da350b308473e86467cf5d9f72cd22c5e8cfcf6 () (n) () ()
+    given
+  prove ⊆ × n A × ℕ A 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 () (n, ℕ, A) () ()
+    given
+  prove ⊆ f × ℕ A 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, × n A, × ℕ A) () ()
+    given
+    given
+  prove ∈ f powerSet × ℕ A 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (f, × ℕ A) () ()
+    given
 }
 
 theorem Extend Function from a Natural Number to Its Successor
