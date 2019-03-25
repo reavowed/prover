@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import net.prover.JsonMapping
 import net.prover.controllers.BookController.NewTheoremModel
 import net.prover.exceptions.{BadRequestException, NotFoundException}
 import net.prover.model.Inference.RearrangementType
@@ -16,14 +17,16 @@ import org.springframework.web.bind.annotation._
 
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
+import scala.xml.Unparsed
 
 @RestController
 @RequestMapping(Array("/books"))
 class BookController @Autowired() (bookService: BookService) {
+  case class BookProps(bookKeys: Seq[Book.Key])
   @GetMapping(value = Array(""), produces = Array("text/html;charset=UTF-8"))
   def get = {
     try {
-      BooksView(bookService.books).toString
+      createReactView("Books", BookProps(bookService.books.map(_.key)))
     } catch {
       case NonFatal(e) =>
         BookController.logger.error("Error getting books", e)
@@ -101,6 +104,7 @@ class BookController @Autowired() (bookService: BookService) {
     }.toResponseEntity
   }
 
+  case class TheoremProps(theorem: Theorem, previousEntry: Option[ChapterEntry.Key], nextEntry: Option[ChapterEntry.Key], usages: Seq[(Book, Chapter, Seq[Theorem])])
   @GetMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}"), produces = Array("text/html;charset=UTF-8"))
   def getEntry(
     @PathVariable("bookKey") bookKey: String,
@@ -122,7 +126,13 @@ class BookController @Autowired() (bookService: BookService) {
           case axiom: Axiom =>
             AxiomView(axiom, chapter, book, previous, next, getUsages(axiom, books)).toString
           case theorem: Theorem =>
-            TheoremView(theorem, chapter, book, previous.map(_.key), next.map(_.key), getUsages(theorem, books), getChapterParsingContext(book, chapter)).toString
+            val parsingContext = getChapterParsingContext(book, chapter)
+            createReactView(
+              "Theorem",
+              TheoremProps(theorem, previous.map(_.key), next.map(_.key), getUsages(theorem, books)),
+              Map(
+                "definitions" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap,
+                "shorthands" -> book.displayContext.displayShorthands))
         }
       }) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
     } catch {
@@ -181,6 +191,24 @@ class BookController @Autowired() (bookService: BookService) {
         book.dependencies.transitive.termDefinitions ++ chaptersSoFar.flatMap(_.termDefinitions),
         book.termVariableNames.toSet,
         Nil)
+  }
+
+  private def createReactView(viewName: String, props: AnyRef, globals: Map[String, AnyRef] = Map.empty): String = {
+    val initScript = (globals.map { case (name, value) => s"window.$name = ${JsonMapping.toString(value)};" }.toSeq
+      :+ s"App.render(App.$viewName, ${JsonMapping.toString(props)});"
+    ).mkString("\n")
+    <html>
+      <head>
+        <title>Prover</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous" />
+      </head>
+      <body>
+        <script src="http://localhost:8081/js/bundle.js"></script>
+        <script type="text/javascript">{Unparsed(initScript)}</script>
+      </body>
+    </html>.toString()
   }
 }
 

@@ -8,7 +8,7 @@ export class NavLinks extends React.Component {
     return <FlexRow>
       {previous && <Monospace.Link href={previous.url}>&laquo; {previous.name}</Monospace.Link>}
       <FlexRow.Grow/>
-      {next && <Monospace.Link href={previous.url}>{next.name} &raquo;</Monospace.Link>}
+      {next && <Monospace.Link href={next.url}>{next.name} &raquo;</Monospace.Link>}
     </FlexRow>
   }
 }

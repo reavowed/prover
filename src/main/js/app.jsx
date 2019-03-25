@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Books} from "./components/Books";
 import {Theorem} from "./components/Theorem";
-import {Parser} from "./Parser"
 
-export { Parser };
-export function renderTheorem(props, element) {
-  ReactDOM.render(<Theorem {...props}/>, element);
+export { Theorem, Books };
+export function render(component, props) {
+  const element = document.createElement("div");
+  document.body.append(element);
+  ReactDOM.render(React.createElement(component, props), element);
 }
