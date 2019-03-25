@@ -119,7 +119,7 @@ export class AssertionStep extends React.Component {
         {step.premises && <>
           <hr/>
           <div><strong>Premises</strong></div>
-          {step.premises.map((p, i) => this.renderPremise(p, [i], otherProps.boundVariableLists))}
+          {step.premises.map((p, i) => <React.Fragment key={p.statement.serialize()}>{this.renderPremise(p, [i], otherProps.boundVariableLists)}</React.Fragment>)}
         </>}
       </Popover>
     );
