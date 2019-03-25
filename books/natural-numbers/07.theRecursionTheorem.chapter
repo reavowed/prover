@@ -79,9 +79,18 @@ premise ∈ a A
 premise = g ∪ f singleton orderedPair n a
 conclusion function g successor n A
 {
-  assert ¬ ∈ n n direct 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (n) () () ()
-  assert function g ∪ n singleton n A direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (g, ∪ f singleton orderedPair n a) (function $0 ∪ n singleton n A) () (direct p3, elided direct ea591471c45f2e8fe8fe1673ae40671c1218cac56876cdf21a760bfacedac9da () (f, n, A, n, a) () () (direct p1, direct 0, direct p2))
-  assert function g successor n A direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor n, ∪ n singleton n) (function g $0 A) () (elided direct 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (n) () () (), direct 1)
+  prove = successor n ∪ n singleton n 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (n) () ()
+  prove ¬ ∈ n n 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (n) () ()
+  prove function ∪ f singleton orderedPair n a ∪ n singleton n A ea591471c45f2e8fe8fe1673ae40671c1218cac56876cdf21a760bfacedac9da () (f, n, A, n, a) () ()
+    given
+    given
+    given
+  prove function ∪ f singleton orderedPair n a successor n A 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor n, ∪ n singleton n) (function ∪ f singleton orderedPair n a $0 A) ()
+    given
+    given
+  prove function g successor n A 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (g, ∪ f singleton orderedPair n a) (function $0 successor n A) ()
+    given
+    given
 }
 
 theorem Recursion Theorem

@@ -1,6 +1,5 @@
 package net.prover.controllers
 
-import net.prover.controllers.TheoremController._
 import net.prover.controllers.models.StepDefinition
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
@@ -21,6 +20,11 @@ import scala.util.{Failure, Success, Try}
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}"))
 class TheoremController @Autowired() (bookService: BookService) {
+
+  case class InferenceSuggestion(
+    inference: Inference,
+    requiredSubstitutions: Substitutions.Required,
+    substitutions: Seq[Substitutions])
   @GetMapping(value = Array("/{stepReference}/suggestInferences"), produces = Array("application/json;charset=UTF-8"))
   def suggestInferences(
     @PathVariable("bookKey") bookKey: String,
@@ -44,6 +48,34 @@ class TheoremController @Autowired() (bookService: BookService) {
         }
         .reverse
         .take(10)
+    }).toResponseEntity
+  }
+
+  case class PossiblePremiseMatch(statement: Statement, substitutions: Seq[Substitutions])
+  @GetMapping(value = Array("/{stepReference}/suggestPremises"), produces = Array("application/json;charset=UTF-8"))
+  def suggestPremisesForSubstitutions(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: PathData,
+    @RequestParam("inferenceId") inferenceId: String
+  ): ResponseEntity[_] = {
+    (for {
+      (book, chapter, theorem, step) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference)
+      parsingContext = getStepParsingContext(book, chapter, theorem, step)
+      inference <- findInference(inferenceId)(parsingContext)
+    } yield {
+      val availablePremises = ProofHelper.getAvailablePremises(step.context, parsingContext)
+      inference.premises.map { premise =>
+        availablePremises.mapCollect { availablePremise =>
+          val substitutions = premise.statement.calculateSubstitutions(availablePremise.statement, Substitutions.empty, 0, step.context.externalDepth)
+          if (substitutions.nonEmpty) {
+            Some(PossiblePremiseMatch(availablePremise.statement, substitutions))
+          } else {
+            None
+          }
+        }
+      }
     }).toResponseEntity
   }
 
@@ -326,11 +358,4 @@ class TheoremController @Autowired() (bookService: BookService) {
       PathData(source.split('.').map(_.toInt))
     }
   }
-}
-
-object TheoremController {
-  case class InferenceSuggestion(
-    inference: Inference,
-    requiredSubstitutions: Substitutions.Required,
-    substitutions: Seq[Substitutions])
 }

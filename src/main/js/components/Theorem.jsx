@@ -291,9 +291,12 @@ class TargetStep extends React.Component {
     this.setState({showFindInferenceModal: false})
   };
 
-  findInferences = (searchText) => {
+  getInferenceSuggestions = (searchText) => {
     return this.props.fetchForStep(this.props.path, `suggestInferences?searchText=${searchText}`)
   };
+  getPremiseSuggestions = (inferenceId) => {
+    return this.props.fetchForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}`)
+  }
 
   introduceDeduction = () => {
     this.props.fetchForStep(this.props.path, "introduceDeduction", {
@@ -334,7 +337,7 @@ class TargetStep extends React.Component {
     return <>
       <ProofLine incomplete step={step} popover={popover} {...otherProps}>Then <ProofLineStatement statement={step.statement} references={[...additionalReferences, reference]} {...otherProps}/>.</ProofLine>
       {boundVariableModal}
-      {<FindInferenceModal show={this.state.showFindInferenceModal} onHide={this.hideFindInferenceModal} onSubmit={this.proveWithInference} findInferences={this.findInferences} {...otherProps} />}
+      {<FindInferenceModal show={this.state.showFindInferenceModal} onHide={this.hideFindInferenceModal} onSubmit={this.proveWithInference} getInferenceSuggestions={this.getInferenceSuggestions} getPremiseSuggestions={this.getPremiseSuggestions} {...otherProps} />}
     </>
   }
 }

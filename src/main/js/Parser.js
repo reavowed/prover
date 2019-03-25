@@ -95,12 +95,25 @@ export class Parser {
     _.each(theorem.proof, Parser.parseStep);
     return theorem;
   }
-  static parseInferenceSuggestions(rawSuggestionsJson) {
-    return rawSuggestionsJson.map(suggestionJson => {
+  static parseSubstitutions(substitutions) {
+    return substitutions.map(substitution => _.mapValues(substitution, type => _.mapValues(type, e => e && Parser.parseExpression(e))))
+  }
+  static parseInferenceSuggestions(suggestions) {
+    return suggestions.map(suggestionJson => {
       const suggestion = _.cloneDeep(suggestionJson);
       Parser.parseInference(suggestion.inference);
-      suggestion.substitutions = suggestion.substitutions.map(substitution => _.mapValues(substitution, type => _.mapValues(type, e => e && Parser.parseExpression(e))));
+      suggestion.substitutions = Parser.parseSubstitutions(suggestion.substitutions);
       return suggestion;
     })
+  }
+  static parsePremiseSuggestions(suggestionsForPremises) {
+    return suggestionsForPremises.map(suggestionsForPremise =>
+      suggestionsForPremise.map(suggestionJson => {
+        const suggestion = _.cloneDeep(suggestionJson);
+        suggestion.statement && (suggestion.statement = Parser.parseExpression(suggestion.statement));
+        suggestion.substitutions = Parser.parseSubstitutions(suggestion.substitutions);
+        return suggestion;
+      })
+    );
   }
 }
