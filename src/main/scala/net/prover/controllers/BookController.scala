@@ -9,13 +9,11 @@ import net.prover.model._
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepContext}
-import net.prover.views._
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.{HttpStatus, ResponseEntity}
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 import scala.xml.Unparsed
 
@@ -74,7 +72,7 @@ class BookController @Autowired() (bookService: BookService) {
       implicit val parsingContext: ParsingContext = getChapterParsingContext(book, chapter)
       val premises = newTheoremDefininition.premises
         .mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}"))
-        .mapWithIndex((statement, index) => Premise(statement, index)(false))
+        .mapWithIndex((statement, index) => Premise(statement, index)(isElidable = false))
       val conclusion = Statement.parser.parseFromString(newTheoremDefininition.conclusion, "conclusion")
       val newTheorem = Theorem(
         newTheoremDefininition.name,
@@ -94,42 +92,39 @@ class BookController @Autowired() (bookService: BookService) {
     }.map{ case (_, book, chapter) => ChapterProps(chapter, book) }.toResponseEntity
   }
 
-  case class TheoremProps(theorem: Theorem, previousEntry: Option[ChapterEntry.Key], nextEntry: Option[ChapterEntry.Key], usages: Seq[(Book, Chapter, Seq[Theorem])])
+  case class InferenceProps(inference: Inference.Entry, previousEntry: Option[ChapterEntry.Key], nextEntry: Option[ChapterEntry.Key], usages: Seq[(Book, Chapter, Seq[Theorem])])
   @GetMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}"), produces = Array("text/html;charset=UTF-8"))
   def getEntry(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("entryKey") entryKey: String
-  ) = {
-    try {
-      val books = bookService.books
-      (for {
-        book <- books.find(_.key.value == bookKey)
-        chapter <- book.chapters.find(_.key.value == chapterKey)
-        entries = chapter.entries.ofType[ChapterEntry.Standalone]
-        entry <- entries.find(_.key.value == entryKey)
-      } yield {
-        val index = entries.indexOf(entry)
-        val previous = if (index > 0) Some(entries(index - 1)) else None
-        val next = if (index < entries.length - 1) Some(entries(index + 1)) else None
-        entry match {
-          case axiom: Axiom =>
-            AxiomView(axiom, chapter, book, previous, next, getUsages(axiom, books)).toString
-          case theorem: Theorem =>
-            val parsingContext = getChapterParsingContext(book, chapter)
-            createReactView(
-              "Theorem",
-              TheoremProps(theorem, previous.map(_.key), next.map(_.key), getUsages(theorem, books)),
-              Map(
-                "definitions" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap,
-                "shorthands" -> book.displayContext.displayShorthands))
-        }
-      }) getOrElse new ResponseEntity(HttpStatus.NOT_FOUND)
-    } catch {
-      case NonFatal(e) =>
-        BookController.logger.error(s"Error getting books", e)
-        new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+  ): ResponseEntity[_] = {
+    val books = bookService.books
+    (for {
+      book <- books.find(_.key.value == bookKey).orNotFound(s"Book $bookKey")
+      chapter <- book.chapters.find(_.key.value == chapterKey).orNotFound(s"Chapter $chapterKey")
+      entries = chapter.entries.ofType[ChapterEntry.Standalone]
+      entry <- entries.find(_.key.value == entryKey).orNotFound(s"Entry $entryKey")
+      (viewName, inference, inferenceBaseProps: Map[String, AnyRef]) <- entry match {
+        case axiom: Axiom =>
+          Success(("Axiom", axiom, Map("axiom" -> axiom)))
+        case theorem: Theorem =>
+          Success(("Theorem", theorem, Map("theorem" -> theorem)))
+        case _ =>
+          Failure(BadRequestException(s"Cannot view ${entry.getClass.getSimpleName}"))
+      }
+    } yield {
+      val index = entries.indexOf(entry)
+      val previous = if (index > 0) Some(entries(index - 1).key) else None
+      val next = if (index < entries.length - 1) Some(entries(index + 1).key) else None
+      val parsingContext = getChapterParsingContext(book, chapter)
+      createReactView(
+        viewName,
+        inferenceBaseProps ++ Map("previous" -> previous, "next" -> next, "usages" -> getUsages(inference, books)),
+        Map(
+          "definitions" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap,
+          "shorthands" -> book.displayContext.displayShorthands))
+    }).toResponseEntity
   }
 
   @DeleteMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}"))

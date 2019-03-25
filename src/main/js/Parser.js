@@ -89,11 +89,15 @@ export class Parser {
     step.premises && _.each(step.premises, Parser.parsePremise);
   }
   static parseTheorem(rawTheorem) {
-    const theorem = _.cloneDeep(rawTheorem);
-    theorem.premises && (theorem.premises = theorem.premises.map(Parser.parseExpression));
-    theorem.conclusion && (theorem.conclusion = Parser.parseExpression(theorem.conclusion));
+    const theorem = Parser.parseInference(rawTheorem);
     _.each(theorem.proof, Parser.parseStep);
     return theorem;
+  }
+  static parseInference(rawInference) {
+    const inference = _.cloneDeep(rawInference);
+    inference.premises && (inference.premises = inference.premises.map(Parser.parseExpression));
+    inference.conclusion && (inference.conclusion = Parser.parseExpression(inference.conclusion));
+    return inference;
   }
   static parseSubstitutions(substitutions) {
     return substitutions.map(substitution => _.mapValues(substitution, type => _.mapValues(type, e => e && Parser.parseExpression(e))))
