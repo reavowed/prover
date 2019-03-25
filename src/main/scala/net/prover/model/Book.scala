@@ -7,8 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.entries._
 import org.slf4j.LoggerFactory
 
-import scala.util.{Failure, Success, Try}
-
 @JsonIgnoreProperties(Array("dependencies"))
 case class Book(
     title: String,

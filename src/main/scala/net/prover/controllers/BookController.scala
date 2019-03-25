@@ -16,22 +16,16 @@ import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation._
 
 import scala.util.control.NonFatal
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Success, Try}
 import scala.xml.Unparsed
 
 @RestController
 @RequestMapping(Array("/books"))
 class BookController @Autowired() (bookService: BookService) {
-  case class BookProps(bookKeys: Seq[Book.Key])
+  case class BooksProps(bookKeys: Seq[Book.Key])
   @GetMapping(value = Array(""), produces = Array("text/html;charset=UTF-8"))
-  def get = {
-    try {
-      createReactView("Books", BookProps(bookService.books.map(_.key)))
-    } catch {
-      case NonFatal(e) =>
-        BookController.logger.error("Error getting books", e)
-        new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+  def get: ResponseEntity[_] = {
+    Try(createReactView("Books", BooksProps(bookService.books.map(_.key)))).toResponseEntity
   }
 
   @GetMapping(value = Array("reloadFromDisk"))
@@ -39,20 +33,15 @@ class BookController @Autowired() (bookService: BookService) {
     bookService.reload().toResponseEntity
   }
 
+  case class ChapterSummary(title: String, chapterKey: Chapter.Key, summary: String)
+  case class BookProps(title: String, bookKey: Book.Key, chapters: Seq[ChapterSummary])
   @GetMapping(value = Array("/{bookKey}"), produces = Array("text/html;charset=UTF-8"))
-  def getBook(@PathVariable("bookKey") bookKey: String) = {
-    try {
-      bookService.books.find(_.key.value == bookKey) match {
-        case Some(book) =>
-          BookView(book).toString
-        case None =>
-          new ResponseEntity(HttpStatus.NOT_FOUND)
-      }
-    } catch {
-      case NonFatal(e) =>
-        BookController.logger.error("Error getting books", e)
-        new ResponseEntity[Throwable](e, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+  def getBook(@PathVariable("bookKey") bookKey: String): ResponseEntity[_] = {
+    (for {
+      book <- bookService.books.find(_.key.value == bookKey).orNotFound(s"Book $bookKey")
+    } yield {
+      createReactView("Book", BookProps(book.title, book.key, book.chapters.map(c => ChapterSummary(c.title, c.key, c.summary))))
+    }).toResponseEntity
   }
 
   @GetMapping(value = Array("/{bookKey}/{chapterKey}"), produces = Array("text/html;charset=UTF-8"))

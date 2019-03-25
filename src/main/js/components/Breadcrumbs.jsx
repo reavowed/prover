@@ -7,19 +7,18 @@ const BreadcrumbWrapper = styled.div`
   background-color: #e9ecef;
 `;
 
-class Entry extends React.Component {
-  render() {
-    const {entryKey} = this.props;
-    return <BreadcrumbWrapper>
-      <Container>
-        <Breadcrumb>
-          <Breadcrumb.Item href={entryKey.chapterKey.bookKey.url}>{entryKey.chapterKey.bookKey.name}</Breadcrumb.Item>
-          <Breadcrumb.Item href={entryKey.chapterKey.url}>{entryKey.chapterKey.name}</Breadcrumb.Item>
-          <Breadcrumb.Item active>{entryKey.name}</Breadcrumb.Item>
-        </Breadcrumb>
-      </Container>
-    </BreadcrumbWrapper>
-  }
+function createBreadcrumbs(...keys) {
+  return <BreadcrumbWrapper>
+    <Container>
+      <Breadcrumb>
+        {keys.slice(0, keys.length - 1).map(key => <Breadcrumb.Item key={key.url} href={key.url}>{key.name}</Breadcrumb.Item>)}
+        <Breadcrumb.Item active>{keys[keys.length-1].name}</Breadcrumb.Item>
+      </Breadcrumb>
+    </Container>
+  </BreadcrumbWrapper>
 }
 
-export const Breadcrumbs = {Entry};
+const Book = ({bookKey}) => createBreadcrumbs(bookKey);
+const Entry = ({entryKey}) => createBreadcrumbs(entryKey.chapterKey.bookKey, entryKey.chapterKey, entryKey);
+
+export const Breadcrumbs = {Book, Entry};

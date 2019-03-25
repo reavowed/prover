@@ -17,8 +17,8 @@ export class Header extends React.Component {
             <Navbar.Brand href="/books">Prover</Navbar.Brand>
           </Navbar>
         </Container>
-        {children}
       </NavbarWrapper>
+      {children}
     </>
   }
 }
