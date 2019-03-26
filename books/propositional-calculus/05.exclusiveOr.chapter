@@ -8,44 +8,70 @@ theorem Reverse Exclusive Or
 premise ⊕ φ ψ
 conclusion ⊕ ψ φ
 {
-  assert ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ direct 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () () (direct p0)
+  prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () ()
+    given
   assume ∧ φ ¬ ψ {
-    assert ∧ ¬ ψ φ direct 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (φ, ¬ ψ) () () () (direct 1a)
-    assert ∨ ∧ ψ ¬ φ ∧ ¬ ψ φ direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∧ ¬ ψ φ, ∧ ψ ¬ φ) () () () (direct 1.0)
+    prove ∧ ¬ ψ φ 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (φ, ¬ ψ) () () ()
+      given
+    prove ∨ ∧ ψ ¬ φ ∧ ¬ ψ φ 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∧ ¬ ψ φ, ∧ ψ ¬ φ) () () ()
+      given
   }
   assume ∧ ¬ φ ψ {
-    assert ∧ ψ ¬ φ direct 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (¬ φ, ψ) () () () (direct 2a)
-    assert ∨ ∧ ψ ¬ φ ∧ ¬ ψ φ direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∧ ψ ¬ φ, ∧ ¬ ψ φ) () () () (direct 2.0)
+    prove ∧ ψ ¬ φ 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (¬ φ, ψ) () () ()
+      given
+    prove ∨ ∧ ψ ¬ φ ∧ ¬ ψ φ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∧ ψ ¬ φ, ∧ ¬ ψ φ) () () ()
+      given
   }
-  assert ∨ ∧ ψ ¬ φ ∧ ¬ ψ φ direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∧ φ ¬ ψ, ∧ ¬ φ ψ, ∨ ∧ ψ ¬ φ ∧ ¬ ψ φ) () () () (direct 0, compound 1a direct 1.1, compound 2a direct 2.1)
-  assert ⊕ ψ φ direct 307330d037a6c2c828ed7c99ba6dfe131fee5a0fd9103fdb38fbdb265fb0ef35 (ψ, φ) () () () (direct 3)
+  prove ∨ ∧ ψ ¬ φ ∧ ¬ ψ φ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∧ φ ¬ ψ, ∧ ¬ φ ψ, ∨ ∧ ψ ¬ φ ∧ ¬ ψ φ) () () ()
+    given
+    given
+    given
+  prove ⊕ ψ φ 307330d037a6c2c828ed7c99ba6dfe131fee5a0fd9103fdb38fbdb265fb0ef35 (ψ, φ) () () ()
+    given
 }
 
 theorem Or from Exclusive Or
 premise ⊕ φ ψ
 conclusion ∨ φ ψ
 {
-  assert ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ direct 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () () (direct p0)
+  prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () ()
+    given
   assume ∧ φ ¬ ψ {
-    assert ∨ φ ψ direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d rearranged (φ, ψ) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ¬ ψ) () () () direct 1a (0))
+    prove ∨ φ ψ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (φ, ψ) () () ()
+      simplified φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ¬ ψ) () () ()
+        given
   }
   assume ∧ ¬ φ ψ {
-    assert ∨ φ ψ direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 rearranged (ψ, φ) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (¬ φ, ψ) () () () direct 2a (1))
+    prove ∨ φ ψ 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (ψ, φ) () () ()
+      simplified ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (¬ φ, ψ) () () ()
+        given
   }
-  assert ∨ φ ψ direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∧ φ ¬ ψ, ∧ ¬ φ ψ, ∨ φ ψ) () () () (direct 0, compound 1a direct 1.0, compound 2a direct 2.0)
+  prove ∨ φ ψ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∧ φ ¬ ψ, ∧ ¬ φ ψ, ∨ φ ψ) () () ()
+    given
+    given
+    given
 }
 
 theorem Negated And from Exclusive Or
 premise ⊕ φ ψ
 conclusion ¬ ∧ φ ψ
 {
-  assert ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ direct 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () () (direct p0)
+  prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () ()
+    given
   assume ∧ φ ψ {
-    assert ¬ ∧ φ ¬ ψ direct 09419cc3720d5175d59a0e55392ea1e4d1aaad48581c92621070194b0cfcd08f (ψ, φ) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () () direct 1a (1))
-    assert ¬ ∧ ¬ φ ψ direct dcae67ef1e157f3706a751259f26f0a6ed2e6d8e907f330d10b26d2edabdca78 (φ, ψ) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () () direct 1a (0))
-    assert ¬ ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ direct 7de09e8a989572b5b5bd3e83a8f59edc959d20e00cfb9290ee3a1926363ceb10 (∧ φ ¬ ψ, ∧ ¬ φ ψ) () () () (direct 1.0, direct 1.1)
+    prove ¬ ∧ φ ¬ ψ 09419cc3720d5175d59a0e55392ea1e4d1aaad48581c92621070194b0cfcd08f (ψ, φ) () () ()
+      simplified ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () ()
+        given
+    prove ¬ ∧ ¬ φ ψ dcae67ef1e157f3706a751259f26f0a6ed2e6d8e907f330d10b26d2edabdca78 (φ, ψ) () () ()
+      simplified φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () ()
+        given
+    prove ¬ ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ 7de09e8a989572b5b5bd3e83a8f59edc959d20e00cfb9290ee3a1926363ceb10 (∧ φ ¬ ψ, ∧ ¬ φ ψ) () () ()
+      given
+      given
   }
-  assert ¬ ∧ φ ψ direct fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (∧ φ ψ, ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ) () () () (compound 1a direct 1.2, direct 0)
+  prove ¬ ∧ φ ψ fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (∧ φ ψ, ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ) () () ()
+    given
+    given
 }
 
 theorem Exclusive Or from Or and Negated And
@@ -54,18 +80,33 @@ premise ¬ ∧ φ ψ
 conclusion ⊕ φ ψ
 {
   assume φ {
-    assert ¬ ψ direct 1af0b96e1cd8a24462ecc71676818b369217603427758b355312ec9f802ee00b (φ, ψ) () () () (direct p1, direct 0a)
-    assert ∧ φ ¬ ψ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ¬ ψ) () () () (direct 0a, direct 0.0)
-    assert ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∧ φ ¬ ψ, ∧ ¬ φ ψ) () () () (direct 0.1)
-    assert ⊕ φ ψ direct 307330d037a6c2c828ed7c99ba6dfe131fee5a0fd9103fdb38fbdb265fb0ef35 (φ, ψ) () () () (direct 0.2)
+    prove ¬ ψ 1af0b96e1cd8a24462ecc71676818b369217603427758b355312ec9f802ee00b (φ, ψ) () () ()
+      given
+      given
+    prove ∧ φ ¬ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ¬ ψ) () () ()
+      given
+      given
+    prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∧ φ ¬ ψ, ∧ ¬ φ ψ) () () ()
+      given
+    prove ⊕ φ ψ 307330d037a6c2c828ed7c99ba6dfe131fee5a0fd9103fdb38fbdb265fb0ef35 (φ, ψ) () () ()
+      given
   }
   assume ψ {
-    assert ¬ φ direct fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (φ, ψ) () () () (compound 0a direct 0.0, direct 1a)
-    assert ∧ ¬ φ ψ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (¬ φ, ψ) () () () (direct 1.0, direct 1a)
-    assert ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∧ ¬ φ ψ, ∧ φ ¬ ψ) () () () (direct 1.1)
-    assert ⊕ φ ψ direct 307330d037a6c2c828ed7c99ba6dfe131fee5a0fd9103fdb38fbdb265fb0ef35 (φ, ψ) () () () (direct 1.2)
+    prove ¬ φ 074a3a0d1bd79e37e874c33e1e377edb1f155c7f663bdd6164043235490185b7 (φ, ψ) () () ()
+      given
+      given
+    prove ∧ ¬ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (¬ φ, ψ) () () ()
+      given
+      given
+    prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∧ ¬ φ ψ, ∧ φ ¬ ψ) () () ()
+      given
+    prove ⊕ φ ψ 307330d037a6c2c828ed7c99ba6dfe131fee5a0fd9103fdb38fbdb265fb0ef35 (φ, ψ) () () ()
+      given
   }
-  assert ⊕ φ ψ direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, ⊕ φ ψ) () () () (direct p0, compound 0a direct 0.3, compound 1a direct 1.3)
+  prove ⊕ φ ψ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, ⊕ φ ψ) () () ()
+    given
+    given
+    given
 }
 
 theorem Only One Part of an Exclusive Or Is True
@@ -73,10 +114,15 @@ premise ⊕ φ ψ
 premise φ
 conclusion ¬ ψ
 {
-  assert ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ direct 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () () (direct p0)
-  assert ¬ ∧ ¬ φ ψ direct dcae67ef1e157f3706a751259f26f0a6ed2e6d8e907f330d10b26d2edabdca78 (φ, ψ) () () () (direct p1)
-  assert ∧ φ ¬ ψ direct 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∧ φ ¬ ψ, ∧ ¬ φ ψ) () () () (direct 0, direct 1)
-  assert ¬ ψ direct 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ¬ ψ) () () () (direct 2)
+  prove ∨ ∧ φ ¬ ψ ∧ ¬ φ ψ 7fbde11284d54b63668cb6a99536e6be65e451ac864e740680657f85351b6416 (φ, ψ) () () ()
+    given
+  prove ¬ ∧ ¬ φ ψ dcae67ef1e157f3706a751259f26f0a6ed2e6d8e907f330d10b26d2edabdca78 (φ, ψ) () () ()
+    given
+  prove ∧ φ ¬ ψ 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∧ φ ¬ ψ, ∧ ¬ φ ψ) () () ()
+    given
+    given
+  prove ¬ ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ¬ ψ) () () ()
+    given
 }
 
 theorem Only One Part of an Exclusive Or Is True
@@ -84,8 +130,11 @@ premise ⊕ φ ψ
 premise ψ
 conclusion ¬ φ
 {
-  assert ⊕ ψ φ direct ab4da564f0ee2d15516623a1a43e8363a9d724e0660b87066ba8de5ddf32ac20 (φ, ψ) () () () (direct p0)
-  assert ¬ φ direct e4ae6063b86741e544a9c95c2ce96510d5571fb6b97a2d084435181728226d66 (ψ, φ) () () () (direct 0, direct p1)
+  prove ⊕ ψ φ ab4da564f0ee2d15516623a1a43e8363a9d724e0660b87066ba8de5ddf32ac20 (φ, ψ) () () ()
+    given
+  prove ¬ φ e4ae6063b86741e544a9c95c2ce96510d5571fb6b97a2d084435181728226d66 (ψ, φ) () () ()
+    given
+    given
 }
 
 theorem Proof by Cases
@@ -94,20 +143,32 @@ premise → φ χ
 premise → ψ χ
 conclusion χ
 {
-  assert ∨ φ ψ direct 2fcf85e65b11715f1d1a789ddc4dc1e46b321f9ee5ae372ff0453e54a1f41c65 (φ, ψ) () () () (direct p0)
-  assert χ direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, χ) () () () (direct 0, direct p1, direct p2)
+  prove ∨ φ ψ 2fcf85e65b11715f1d1a789ddc4dc1e46b321f9ee5ae372ff0453e54a1f41c65 (φ, ψ) () () ()
+    given
+  prove χ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, χ) () () ()
+    given
+    given
+    given
 }
 
 theorem Exclusive Middle
 conclusion ⊕ φ ¬ φ
 {
   assume φ {
-    assert ¬ ¬ φ direct 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (φ) () () () (direct 0a)
-    assert ∧ φ ¬ ¬ φ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ¬ ¬ φ) () () () (direct 0a, direct 0.0)
+    prove ¬ ¬ φ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (φ) () () ()
+      given
+    prove ∧ φ ¬ ¬ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ¬ ¬ φ) () () ()
+      given
+      given
   }
   assume ¬ φ {
-    assert ∧ ¬ φ ¬ φ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (¬ φ, ¬ φ) () () () (direct 1a, direct 1a)
+    prove ∧ ¬ φ ¬ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (¬ φ, ¬ φ) () () ()
+      given
+      given
   }
-  assert ∨ ∧ φ ¬ ¬ φ ∧ ¬ φ ¬ φ direct 8f4dce2a580ead51e91bb5caa5ae4b8474eb94defe5e756747db4d413819415c (φ, ∧ φ ¬ ¬ φ, ∧ ¬ φ ¬ φ) () () () (compound 0a direct 0.1, compound 1a direct 1.0)
-  assert ⊕ φ ¬ φ direct 307330d037a6c2c828ed7c99ba6dfe131fee5a0fd9103fdb38fbdb265fb0ef35 (φ, ¬ φ) () () () (direct 2)
+  prove ∨ ∧ φ ¬ ¬ φ ∧ ¬ φ ¬ φ 8f4dce2a580ead51e91bb5caa5ae4b8474eb94defe5e756747db4d413819415c (φ, ∧ φ ¬ ¬ φ, ∧ ¬ φ ¬ φ) () () ()
+    given
+    given
+  prove ⊕ φ ¬ φ 307330d037a6c2c828ed7c99ba6dfe131fee5a0fd9103fdb38fbdb265fb0ef35 (φ, ¬ φ) () () ()
+    given
 }

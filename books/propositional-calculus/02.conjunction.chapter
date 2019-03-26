@@ -9,11 +9,15 @@ simplification
 premise ∧ φ ψ
 conclusion φ
 {
-  assert ¬ → φ ¬ ψ direct e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (φ, ψ) () () () (direct p0)
+  prove ¬ → φ ¬ ψ e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (φ, ψ) () () ()
+    given
   assume ¬ φ {
-    assert → φ ¬ ψ direct bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (φ, ¬ ψ) () () () (direct 1a)
+    prove → φ ¬ ψ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (φ, ¬ ψ) () () ()
+      given
   }
-  assert φ direct 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (φ, → φ ¬ ψ) () () () (compound 1a direct 1.0, direct 0)
+  prove φ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (φ, → φ ¬ ψ) () () ()
+    given
+    given
 }
 
 theorem Extract Right Conjunct
@@ -21,11 +25,15 @@ simplification
 premise ∧ φ ψ
 conclusion ψ
 {
-  assert ¬ → φ ¬ ψ direct e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (φ, ψ) () () () (direct p0)
+  prove ¬ → φ ¬ ψ e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (φ, ψ) () () ()
+    given
   assume ¬ ψ {
-    assert → φ ¬ ψ direct 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (¬ ψ, φ) () () () (direct 1a)
+    prove → φ ¬ ψ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (¬ ψ, φ) () () ()
+      given
   }
-  assert ψ direct 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (ψ, → φ ¬ ψ) () () () (compound 1a direct 1.0, direct 0)
+  prove ψ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (ψ, → φ ¬ ψ) () () ()
+    given
+    given
 }
 
 theorem Combine Conjunction
@@ -35,28 +43,42 @@ premise ψ
 conclusion ∧ φ ψ
 {
   assume → φ ¬ ψ {
-    assert ¬ ψ direct fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ¬ ψ) () () () (direct 0a, direct p0)
+    prove ¬ ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ¬ ψ) () () ()
+      given
+      given
   }
-  assert ¬ → φ ¬ ψ direct fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (→ φ ¬ ψ, ψ) () () () (compound 0a direct 0.0, direct p1)
-  assert ∧ φ ψ direct 1fb57cbd284d5244531819f8c2dfd32be60e7a13a7c04d539048d8535037c02a (φ, ψ) () () () (direct 1)
+  prove ¬ → φ ¬ ψ fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (→ φ ¬ ψ, ψ) () () ()
+    given
+    given
+  prove ∧ φ ψ 1fb57cbd284d5244531819f8c2dfd32be60e7a13a7c04d539048d8535037c02a (φ, ψ) () () ()
+    given
 }
 
 theorem Reverse Conjunction
 premise ∧ φ ψ
 conclusion ∧ ψ φ
 {
-  assert φ direct 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () () (direct p0)
-  assert ψ direct 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () () (direct p0)
-  assert ∧ ψ φ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (ψ, φ) () () () (direct 1, direct 0)
+  prove φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () ()
+    given
+  prove ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () ()
+    given
+  prove ∧ ψ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (ψ, φ) () () ()
+    given
+    given
 }
 
 theorem Law of Non-Contradiction
 conclusion ¬ ∧ φ ¬ φ
 {
   assume ∧ φ ¬ φ {
-    assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ¬ φ) () () () direct 0a (0), simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ¬ φ) () () () direct 0a (1))
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () ()
+      simplified φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ¬ φ) () () ()
+        given
+      simplified ¬ φ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ¬ φ) () () ()
+        given
   }
-  assert ¬ ∧ φ ¬ φ direct adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ¬ φ) () () () (compound 0a direct 0.0)
+  prove ¬ ∧ φ ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ¬ φ) () () ()
+    given
 }
 
 comment Some inferences for negated conjunctions.
@@ -67,9 +89,13 @@ premise ¬ φ
 conclusion ¬ ∧ φ ψ
 {
   assume ∧ φ ψ {
-    assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () () direct 0a (0), direct p0)
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () ()
+      simplified φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () ()
+        given
+      given
   }
-  assert ¬ ∧ φ ψ direct adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ψ) () () () (compound 0a direct 0.0)
+  prove ¬ ∧ φ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ψ) () () ()
+    given
 }
 
 theorem Add Negated Conjunct
@@ -78,9 +104,13 @@ premise ¬ ψ
 conclusion ¬ ∧ φ ψ
 {
   assume ∧ φ ψ {
-    assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () () direct 0a (1), direct p0)
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () ()
+      simplified ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () ()
+        given
+      given
   }
-  assert ¬ ∧ φ ψ direct adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ψ) () () () (compound 0a direct 0.0)
+  prove ¬ ∧ φ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ψ) () () ()
+    given
 }
 
 theorem Add Negated Conjunct
@@ -88,9 +118,13 @@ premise φ
 conclusion ¬ ∧ ¬ φ ψ
 {
   assume ∧ ¬ φ ψ {
-    assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () () (direct p0, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (¬ φ, ψ) () () () direct 0a (0))
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () ()
+      given
+      simplified ¬ φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (¬ φ, ψ) () () ()
+        given
   }
-  assert ¬ ∧ ¬ φ ψ direct adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ ¬ φ ψ) () () () (compound 0a direct 0.0)
+  prove ¬ ∧ ¬ φ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ ¬ φ ψ) () () ()
+    given
 }
 
 theorem Add Negated Conjunct
@@ -98,9 +132,13 @@ premise ψ
 conclusion ¬ ∧ φ ¬ ψ
 {
   assume ∧ φ ¬ ψ {
-    assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () () (direct p0, simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ¬ ψ) () () () direct 0a (1))
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () ()
+      given
+      simplified ¬ ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ¬ ψ) () () ()
+        given
   }
-  assert ¬ ∧ φ ¬ ψ direct adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ¬ ψ) () () () (compound 0a direct 0.0)
+  prove ¬ ∧ φ ¬ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ¬ ψ) () () ()
+    given
 }
 
 theorem Extract Negated Conjunct
@@ -109,9 +147,13 @@ premise φ
 conclusion ¬ ψ
 {
   assume ψ {
-    assert ∧ φ ψ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () () (direct p1, direct 0a)
+    prove ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () ()
+      given
+      given
   }
-  assert ¬ ψ direct 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (ψ, ∧ φ ψ) () () () (compound 0a direct 0.0, direct p0)
+  prove ¬ ψ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (ψ, ∧ φ ψ) () () ()
+    given
+    given
 }
 
 theorem Extract Negated Conjunct
@@ -120,7 +162,11 @@ premise ψ
 conclusion ¬ φ
 {
   assume φ {
-    assert ∧ φ ψ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () () (direct 0a, direct p1)
+    prove ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () ()
+      given
+      given
   }
-  assert ¬ φ direct 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (φ, ∧ φ ψ) () () () (compound 0a direct 0.0, direct p0)
+  prove ¬ φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (φ, ∧ φ ψ) () () ()
+    given
+    given
 }

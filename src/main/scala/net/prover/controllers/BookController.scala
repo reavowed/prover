@@ -8,7 +8,8 @@ import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Step, StepContext}
+import net.prover.model.proof.Step.NewAssert
+import net.prover.model.proof._
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -60,6 +61,47 @@ class BookController @Autowired() (bookService: BookService) {
           "definitions" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap,
           "displayShorthands" -> book.displayContext.displayShorthands))
     }).toResponseEntity
+  }
+
+  @GetMapping(value = Array("/{bookKey}/{chapterKey}/replaceOldAssertions"))
+  def replaceOldAssertions(@PathVariable("bookKey") bookKey: String, @PathVariable("chapterKey") chapterKey: String): ResponseEntity[_] = {
+    def replaceReference(reference: Reference, premiseStatement: Statement, externalDepth: Int): Option[NewAssert.Premise] = reference match {
+      case Reference.Direct(value) =>
+        Some(NewAssert.Premise.Given(premiseStatement, PreviousLineReference(value, Nil)))
+      case Reference.Compound(Reference.Direct(first), Reference.Direct(_)) if first.endsWith("a") =>
+        Some(NewAssert.Premise.Given(premiseStatement, PreviousLineReference(first.init, Nil)))
+      case Reference.Simplification(inference, substitutions, innerReference, path) =>
+        for {
+          innerPremiseStatement <- inference.substitutePremisesAndValidateConclusion(substitutions, premiseStatement, externalDepth).single
+          updatedInnerReference <- replaceReference(innerReference, innerPremiseStatement, externalDepth).flatMap(_.asOptionalInstanceOf[NewAssert.Premise.SingleLinePremise])
+        } yield NewAssert.Premise.Simplification(premiseStatement, updatedInnerReference, inference.summary, substitutions, path)
+      case _ =>
+        None
+    }
+    def replaceSteps(steps: Seq[Step]): Seq[Step] = {
+      steps.map {
+        case step @ Step.Assertion(statement, InferenceApplication.Direct(inference, substitutions, conclusion, references, _), context) =>
+          val premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, conclusion, context.externalDepth)
+          val newPremisesOption = references.zip(premiseStatements).map { case (r, s) => replaceReference(r, s, context.externalDepth) }.traverseOption
+          newPremisesOption.map(premises => Step.NewAssert(statement, inference, premises, substitutions, context)).getOrElse(step)
+        case step: Step.WithSubsteps =>
+          step.replaceSubsteps(replaceSteps(step.substeps))
+        case step =>
+          step
+      }
+    }
+    def replaceTheorem(theorem: Theorem): Theorem = {
+      theorem.copy(proof = replaceSteps(theorem.proof))
+    }
+    bookService.modifyChapter(bookKey, chapterKey, (_, _, chapter) => {
+      val updatedEntries = chapter.entries.map {
+        case theorem: Theorem =>
+          replaceTheorem(theorem)
+        case other =>
+          other
+      }
+      Success((chapter.copy(entries = updatedEntries), ()))
+    }).map(_ => ()).toResponseEntity
   }
 
   @PostMapping(value = Array("/{bookKey}/{chapterKey}/theorems"), produces = Array("application/json;charset=UTF-8"))
@@ -145,12 +187,12 @@ class BookController @Autowired() (bookService: BookService) {
       }
     }
 
-    bookService.modifyChapter(bookKey, chapterKey){ (books, _, chapter) =>
+    bookService.modifyChapter(bookKey, chapterKey, (books, _, chapter) =>
       for {
         entry <- chapter.entries.find(_.key.value == entryKey).orNotFound(s"Entry $entryKey")
         updatedChapter <- deleteEntry(entry, chapter, books)
       } yield (updatedChapter, ())
-    }.map{ case (_, book, chapter, _) => ChapterProps(chapter, book) }.toResponseEntity
+    ).map{ case (_, book, chapter, _) => ChapterProps(chapter, book) }.toResponseEntity
   }
 
   @PutMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}/shorthand"), produces = Array("application/json;charset=UTF-8"))

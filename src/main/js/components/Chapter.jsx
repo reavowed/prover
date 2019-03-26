@@ -209,7 +209,7 @@ export class Chapter extends React.Component {
             </Form.Group>
             <Form.Group>
               <Form.Label>Premises</Form.Label>
-              <Form.Control type="textarea" value={this.state.theoremBeingAdded.premises} onChange={e => this.updateTheoremPremises(e.target.value)}/>
+              <Form.Control as="textarea" value={this.state.theoremBeingAdded.premises} onChange={e => this.updateTheoremPremises(e.target.value)}/>
             </Form.Group>
             <Form.Group>
               <Form.Label>Conclusion</Form.Label>

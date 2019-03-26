@@ -5,8 +5,15 @@ premise ∨ ¬ φ ¬ ψ
 conclusion ¬ ∧ φ ψ
 {
   assume ∧ φ ψ {
-    assert ¬ ψ direct f457c8f729f769192bd894cd21f50779409673cebd1bcf3d99db0719bd9dc0f3 (φ, ¬ ψ) () () () (direct p0, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () () direct 0a (0))
-    assert ⊥ direct bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∧ φ ψ) () () () (direct 0a, expansion direct fda7c4618e5ff1aae7e4feee10e9f74edc94da1ee6578cc508c2b4e56973058d rearranged (ψ, φ) () () () (direct 0.0))
+    prove ¬ ψ f457c8f729f769192bd894cd21f50779409673cebd1bcf3d99db0719bd9dc0f3 (φ, ¬ ψ) () () ()
+      given
+      simplified φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () ()
+        given
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () ()
+      simplified ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () ()
+        given
+      given
   }
-  assert ¬ ∧ φ ψ direct adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ψ) () () () (compound 0a direct 0.1)
+  prove ¬ ∧ φ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ψ) () () ()
+    given
 }

@@ -10,33 +10,43 @@ premise → φ ψ
 premise → ψ φ
 conclusion ↔ φ ψ
 {
-  assert ∧ → φ ψ → ψ φ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (→ φ ψ, → ψ φ) () () () (direct p0, direct p1)
-  assert ↔ φ ψ direct a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 (φ, ψ) () () () (direct 0)
+  prove ∧ → φ ψ → ψ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (→ φ ψ, → ψ φ) () () ()
+    given
+    given
+  prove ↔ φ ψ a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 (φ, ψ) () () ()
+    given
 }
 
 theorem Reverse Equivalence
 premise ↔ φ ψ
 conclusion ↔ ψ φ
 {
-  assert ∧ → φ ψ → ψ φ direct 7f19797c54a26dad1234eb2dc1c99bde245b863055592b0eb89ac0d093318f99 (φ, ψ) () () () (direct p0)
-  assert ∧ → ψ φ → φ ψ direct 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (→ φ ψ, → ψ φ) () () () (direct 0)
-  assert ↔ ψ φ direct a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 (ψ, φ) () () () (direct 1)
+  prove ∧ → φ ψ → ψ φ 7f19797c54a26dad1234eb2dc1c99bde245b863055592b0eb89ac0d093318f99 (φ, ψ) () () ()
+    given
+  prove ∧ → ψ φ → φ ψ 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (→ φ ψ, → ψ φ) () () ()
+    given
+  prove ↔ ψ φ a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 (ψ, φ) () () ()
+    given
 }
 
 theorem Forward Implication from Equivalence
 premise ↔ φ ψ
 conclusion → φ ψ
 {
-  assert ∧ → φ ψ → ψ φ direct 7f19797c54a26dad1234eb2dc1c99bde245b863055592b0eb89ac0d093318f99 (φ, ψ) () () () (direct p0)
-  assert → φ ψ direct 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (→ φ ψ, → ψ φ) () () () (direct 0)
+  prove ∧ → φ ψ → ψ φ 7f19797c54a26dad1234eb2dc1c99bde245b863055592b0eb89ac0d093318f99 (φ, ψ) () () ()
+    given
+  prove → φ ψ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (→ φ ψ, → ψ φ) () () ()
+    given
 }
 
 theorem Reverse Implication from Equivalence
 premise ↔ φ ψ
 conclusion → ψ φ
 {
-  assert ∧ → φ ψ → ψ φ direct 7f19797c54a26dad1234eb2dc1c99bde245b863055592b0eb89ac0d093318f99 (φ, ψ) () () () (direct p0)
-  assert → ψ φ direct 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (→ φ ψ, → ψ φ) () () () (direct 0)
+  prove ∧ → φ ψ → ψ φ 7f19797c54a26dad1234eb2dc1c99bde245b863055592b0eb89ac0d093318f99 (φ, ψ) () () ()
+    given
+  prove → ψ φ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (→ φ ψ, → ψ φ) () () ()
+    given
 }
 
 theorem Modus Ponens (Equivalence)
@@ -44,8 +54,11 @@ premise ↔ φ ψ elidable
 premise φ
 conclusion ψ
 {
-  assert → φ ψ direct f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () () () (direct p0)
-  assert ψ direct fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () () () (direct 0, direct p1)
+  prove → φ ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () () ()
+    given
+  prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () () ()
+    given
+    given
 }
 
 theorem Modus Ponens (Equivalence)
@@ -53,8 +66,11 @@ premise ↔ φ ψ elidable
 premise ψ
 conclusion φ
 {
-  assert → ψ φ direct 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (φ, ψ) () () () (direct p0)
-  assert φ direct fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, φ) () () () (direct 0, direct p1)
+  prove → ψ φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (φ, ψ) () () ()
+    given
+  prove φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, φ) () () ()
+    given
+    given
 }
 
 theorem Equivalence Is Transitive
@@ -63,14 +79,24 @@ premise ↔ ψ χ
 conclusion ↔ φ χ
 {
   assume φ {
-    assert ψ direct be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (φ, ψ) () () () (direct p0, direct 0a)
-    assert χ direct be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (ψ, χ) () () () (direct p1, direct 0.0)
+    prove ψ be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (φ, ψ) () () ()
+      given
+      given
+    prove χ be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (ψ, χ) () () ()
+      given
+      given
   }
   assume χ {
-    assert ψ direct bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (ψ, χ) () () () (direct p1, direct 1a)
-    assert φ direct bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (φ, ψ) () () () (direct p0, direct 1.0)
+    prove ψ bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (ψ, χ) () () ()
+      given
+      given
+    prove φ bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (φ, ψ) () () ()
+      given
+      given
   }
-  assert ↔ φ χ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, χ) () () () (compound 0a direct 0.1, compound 1a direct 1.1)
+  prove ↔ φ χ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, χ) () () ()
+    given
+    given
 }
 
 theorem Equivalence Is Transitive
@@ -78,8 +104,11 @@ premise ↔ φ ψ
 premise ↔ χ ψ
 conclusion ↔ φ χ
 {
-  assert ↔ ψ χ direct 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (χ, ψ) () () () (direct p1)
-  assert ↔ φ χ direct e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (φ, ψ, χ) () () () (direct p0, direct 0)
+  prove ↔ ψ χ 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (χ, ψ) () () ()
+    given
+  prove ↔ φ χ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (φ, ψ, χ) () () ()
+    given
+    given
 }
 
 theorem Equivalence Is Transitive
@@ -87,8 +116,11 @@ premise ↔ φ ψ
 premise ↔ φ χ
 conclusion ↔ ψ χ
 {
-  assert ↔ ψ φ direct 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (φ, ψ) () () () (direct p0)
-  assert ↔ ψ χ direct e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (ψ, φ, χ) () () () (direct 0, direct p1)
+  prove ↔ ψ φ 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (φ, ψ) () () ()
+    given
+  prove ↔ ψ χ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (ψ, φ, χ) () () ()
+    given
+    given
 }
 
 theorem True Statements Are Equivalent
@@ -96,9 +128,13 @@ premise φ
 premise ψ
 conclusion ↔ φ ψ
 {
-  assert → φ ψ direct 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (ψ, φ) () () () (direct p1)
-  assert → ψ φ direct 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (φ, ψ) () () () (direct p0)
-  assert ↔ φ ψ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, ψ) () () () (direct 0, direct 1)
+  prove → φ ψ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (ψ, φ) () () ()
+    given
+  prove → ψ φ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (φ, ψ) () () ()
+    given
+  prove ↔ φ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, ψ) () () ()
+    given
+    given
 }
 
 theorem False Statements Are Equivalent
@@ -106,9 +142,13 @@ premise ¬ φ
 premise ¬ ψ
 conclusion ↔ φ ψ
 {
-  assert → φ ψ direct bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (φ, ψ) () () () (direct p0)
-  assert → ψ φ direct bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (ψ, φ) () () () (direct p1)
-  assert ↔ φ ψ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, ψ) () () () (direct 0, direct 1)
+  prove → φ ψ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (φ, ψ) () () ()
+    given
+  prove → ψ φ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (ψ, φ) () () ()
+    given
+  prove ↔ φ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, ψ) () () ()
+    given
+    given
 }
 
 theorem Implication then Equivalence
@@ -116,8 +156,11 @@ premise → φ ψ
 premise ↔ ψ χ
 conclusion → φ χ
 {
-  assert → ψ χ direct f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (ψ, χ) () () () (direct p1)
-  assert → φ χ direct 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (φ, ψ, χ) () () () (direct p0, direct 0)
+  prove → ψ χ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (ψ, χ) () () ()
+    given
+  prove → φ χ 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (φ, ψ, χ) () () ()
+    given
+    given
 }
 
 theorem Equivalence then Implication
@@ -125,6 +168,9 @@ premise ↔ φ ψ
 premise → ψ χ
 conclusion → φ χ
 {
-  assert → φ ψ direct f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () () () (direct p0)
-  assert → φ χ direct 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (φ, ψ, χ) () () () (direct 0, direct p1)
+  prove → φ ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () () ()
+    given
+  prove → φ χ 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (φ, ψ, χ) () () ()
+    given
+    given
 }

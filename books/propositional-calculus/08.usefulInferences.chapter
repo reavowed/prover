@@ -8,18 +8,30 @@ premise ¬ χ
 conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ψ
 {
   assume ∧ φ ψ {
-    assert ψ direct 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () () (direct 0a)
+    prove ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () ()
+      given
   }
   assume ∧ χ ω {
-    assert ψ direct 11d0fff7a64bf999eb92163828dd9f9c59f567d1ed1e532cd51a8c5d0bbb731c (∧ χ ω, ψ) () () () (direct 1a, expansion direct 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 rearranged (χ, ω) () () () (direct p1))
+    prove ψ 11d0fff7a64bf999eb92163828dd9f9c59f567d1ed1e532cd51a8c5d0bbb731c (χ, ψ) () () ()
+      simplified χ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (χ, ω) () () ()
+        given
+      given
   }
   assume ∨ ∧ φ ψ ∧ χ ω {
-    assert ψ direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∧ φ ψ, ∧ χ ω, ψ) () () () (direct 2a, compound 0a direct 0.0, compound 1a direct 1.0)
+    prove ψ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∧ φ ψ, ∧ χ ω, ψ) () () ()
+      given
+      given
+      given
   }
   assume ψ {
-    assert ∨ ∧ φ ψ ∧ χ ω direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d rearranged (∧ φ ψ, ∧ χ ω) () () () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (φ, ψ) () () () (direct p0, direct 3a))
+    prove ∨ ∧ φ ψ ∧ χ ω 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∧ φ ψ, ∧ χ ω) () () ()
+      expanded ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () ()
+        given
+        given
   }
-  assert ↔ ∨ ∧ φ ψ ∧ χ ω ψ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ ∧ φ ψ ∧ χ ω, ψ) () () () (compound 2a direct 2.0, compound 3a direct 3.0)
+  prove ↔ ∨ ∧ φ ψ ∧ χ ω ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ ∧ φ ψ ∧ χ ω, ψ) () () ()
+    given
+    given
 }
 
 theorem Disjoined Conjunct Equivalence
@@ -27,17 +39,24 @@ premise ¬ φ
 premise χ
 conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ω
 {
-  assert ↔ ∨ ∧ χ ω ∧ φ ψ ω direct 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d (χ, φ, ω, ψ) () () () (direct p1, direct p0)
-  assert ↔ ∨ ∧ χ ω ∧ φ ψ ∨ ∧ φ ψ ∧ χ ω direct 2eaae6272d534dc99795d91bbbacc12e5e5b58aa4db06ed18bf864f72b5c947d (∧ χ ω, ∧ φ ψ) () () () ()
-  assert ↔ ∨ ∧ φ ψ ∧ χ ω ω direct 7afee04d4ca5d2e44058e18cab3e54c1a0fd1517b1138340d50e180fb50ad7ef (∨ ∧ χ ω ∧ φ ψ, ∨ ∧ φ ψ ∧ χ ω, ω) () () () (direct 1, direct 0)
+  prove ↔ ∨ ∧ χ ω ∧ φ ψ ω 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d (χ, φ, ω, ψ) () () ()
+    given
+    given
+  prove ↔ ∨ ∧ χ ω ∧ φ ψ ∨ ∧ φ ψ ∧ χ ω 2eaae6272d534dc99795d91bbbacc12e5e5b58aa4db06ed18bf864f72b5c947d (∧ χ ω, ∧ φ ψ) () () ()
+  prove ↔ ∨ ∧ φ ψ ∧ χ ω ω 7afee04d4ca5d2e44058e18cab3e54c1a0fd1517b1138340d50e180fb50ad7ef (∨ ∧ χ ω ∧ φ ψ, ∨ ∧ φ ψ ∧ χ ω, ω) () () ()
+    given
+    given
 }
 
 theorem Disjoined Conjunct Equivalence
 premise φ
 conclusion ↔ ∨ ∧ φ ψ ∧ ¬ φ χ ψ
 {
-  assert ¬ ¬ φ direct 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (φ) () () () (direct p0)
-  assert ↔ ∨ ∧ φ ψ ∧ ¬ φ χ ψ direct 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d (φ, ¬ φ, ψ, χ) () () () (direct p0, direct 0)
+  prove ¬ ¬ φ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (φ) () () ()
+    given
+  prove ↔ ∨ ∧ φ ψ ∧ ¬ φ χ ψ 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d (φ, ¬ φ, ψ, χ) () () ()
+    given
+    given
 }
 
 comment Some tricks to simplify redundant statements.
@@ -47,22 +66,32 @@ premise → φ ψ
 conclusion ↔ ∧ φ ψ φ
 {
   assume ∧ φ ψ {
-    assert φ direct 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () () (direct 0a)
+    prove φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () ()
+      given
   }
   assume φ {
-    assert ψ direct fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () () () (direct p0, direct 1a)
-    assert ∧ φ ψ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () () (direct 1a, direct 1.0)
+    prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () () ()
+      given
+      given
+    prove ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () ()
+      given
+      given
   }
-  assert ↔ ∧ φ ψ φ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ φ ψ, φ) () () () (compound 0a direct 0.0, compound 1a direct 1.1)
+  prove ↔ ∧ φ ψ φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ φ ψ, φ) () () ()
+    given
+    given
 }
 
 theorem Redundant And
 premise → φ ψ
 conclusion ↔ ∧ ψ φ φ
 {
-  assert ↔ ∧ φ ψ φ direct 2ca7ed37a3468a129caccc521004ea96152f4ea4af73188ddaf790e90172876e (φ, ψ) () () () (direct p0)
-  assert ↔ ∧ φ ψ ∧ ψ φ direct ceda842906abdc74679aabcef2c6848746135351212be45dd529a31e12e21892 (φ, ψ) () () () ()
-  assert ↔ ∧ ψ φ φ direct 7afee04d4ca5d2e44058e18cab3e54c1a0fd1517b1138340d50e180fb50ad7ef (∧ φ ψ, ∧ ψ φ, φ) () () () (direct 1, direct 0)
+  prove ↔ ∧ φ ψ φ 2ca7ed37a3468a129caccc521004ea96152f4ea4af73188ddaf790e90172876e (φ, ψ) () () ()
+    given
+  prove ↔ ∧ φ ψ ∧ ψ φ ceda842906abdc74679aabcef2c6848746135351212be45dd529a31e12e21892 (φ, ψ) () () ()
+  prove ↔ ∧ ψ φ φ 7afee04d4ca5d2e44058e18cab3e54c1a0fd1517b1138340d50e180fb50ad7ef (∧ φ ψ, ∧ ψ φ, φ) () () ()
+    given
+    given
 }
 
 theorem Redundant Or
@@ -70,12 +99,17 @@ premise → φ ψ
 conclusion ↔ ∨ φ ψ ψ
 {
   assume ∨ φ ψ {
-    assert ψ direct 2ff9c792011f656a8b9615593c8b85d39ff9d5ec55dc6db4db6934fa559f64d2 (φ, ψ) () () () (direct 0a, direct p0)
+    prove ψ 2ff9c792011f656a8b9615593c8b85d39ff9d5ec55dc6db4db6934fa559f64d2 (φ, ψ) () () ()
+      given
+      given
   }
   assume ψ {
-    assert ∨ φ ψ direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (ψ, φ) () () () (direct 1a)
+    prove ∨ φ ψ 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (ψ, φ) () () ()
+      given
   }
-  assert ↔ ∨ φ ψ ψ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ φ ψ, ψ) () () () (compound 0a direct 0.0, compound 1a direct 1.0)
+  prove ↔ ∨ φ ψ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ φ ψ, ψ) () () ()
+    given
+    given
 }
 
 theorem Redundant Or
@@ -83,12 +117,17 @@ premise → φ ψ
 conclusion ↔ ∨ ψ φ ψ
 {
   assume ∨ ψ φ {
-    assert ψ direct 70f84c343023e057b51434d9df0e355ee665371dac38e276a18ed0103c6301b8 (ψ, φ) () () () (direct 0a, direct p0)
+    prove ψ 70f84c343023e057b51434d9df0e355ee665371dac38e276a18ed0103c6301b8 (ψ, φ) () () ()
+      given
+      given
   }
   assume ψ {
-    assert ∨ ψ φ direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (ψ, φ) () () () (direct 1a)
+    prove ∨ ψ φ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (ψ, φ) () () ()
+      given
   }
-  assert ↔ ∨ ψ φ ψ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ ψ φ, ψ) () () () (compound 0a direct 0.0, compound 1a direct 1.0)
+  prove ↔ ∨ ψ φ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ ψ φ, ψ) () () ()
+    given
+    given
 }
 
 theorem Redundant Or
@@ -96,12 +135,17 @@ premise ¬ φ
 conclusion ↔ ∨ φ ψ ψ
 {
   assume ∨ φ ψ {
-    assert ψ direct 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (φ, ψ) () () () (direct 0a, direct p0)
+    prove ψ 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (φ, ψ) () () ()
+      given
+      given
   }
   assume ψ {
-    assert ∨ φ ψ direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (ψ, φ) () () () (direct 1a)
+    prove ∨ φ ψ 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (ψ, φ) () () ()
+      given
   }
-  assert ↔ ∨ φ ψ ψ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ φ ψ, ψ) () () () (compound 0a direct 0.0, compound 1a direct 1.0)
+  prove ↔ ∨ φ ψ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ φ ψ, ψ) () () ()
+    given
+    given
 }
 
 theorem Redundant Or
@@ -109,12 +153,17 @@ premise ¬ φ
 conclusion ↔ ∨ ψ φ ψ
 {
   assume ∨ ψ φ {
-    assert ψ direct 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (ψ, φ) () () () (direct 0a, direct p0)
+    prove ψ 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (ψ, φ) () () ()
+      given
+      given
   }
   assume ψ {
-    assert ∨ ψ φ direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (ψ, φ) () () () (direct 1a)
+    prove ∨ ψ φ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (ψ, φ) () () ()
+      given
   }
-  assert ↔ ∨ ψ φ ψ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ ψ φ, ψ) () () () (compound 0a direct 0.0, compound 1a direct 1.0)
+  prove ↔ ∨ ψ φ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ ψ φ, ψ) () () ()
+    given
+    given
 }
 
 comment Adding extra conjunctions to equivalences.
@@ -124,12 +173,26 @@ premise ↔ φ ψ
 conclusion ↔ ∧ χ φ ∧ χ ψ
 {
   assume ∧ χ φ {
-    assert ψ direct be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (φ, ψ) () () () (direct p0, simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (χ, φ) () () () direct 0a (1))
-    assert ∧ χ ψ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (χ, ψ) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (χ, φ) () () () direct 0a (0), direct 0.0)
+    prove ψ be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (φ, ψ) () () ()
+      given
+      simplified φ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (χ, φ) () () ()
+        given
+    prove ∧ χ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (χ, ψ) () () ()
+      simplified χ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (χ, φ) () () ()
+        given
+      given
   }
   assume ∧ χ ψ {
-    assert φ direct bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (φ, ψ) () () () (direct p0, simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (χ, ψ) () () () direct 1a (1))
-    assert ∧ χ φ direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (χ, φ) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (χ, ψ) () () () direct 1a (0), direct 1.0)
+    prove φ bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (φ, ψ) () () ()
+      given
+      simplified ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (χ, ψ) () () ()
+        given
+    prove ∧ χ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (χ, φ) () () ()
+      simplified χ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (χ, ψ) () () ()
+        given
+      given
   }
-  assert ↔ ∧ χ φ ∧ χ ψ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ χ φ, ∧ χ ψ) () () () (compound 0a direct 0.1, compound 1a direct 1.1)
+  prove ↔ ∧ χ φ ∧ χ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ χ φ, ∧ χ ψ) () () ()
+    given
+    given
 }

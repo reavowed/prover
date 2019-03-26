@@ -40,7 +40,7 @@ class BookService {
     }.map { case (books, (book, result)) => (books, book, result) }
   }
 
-  def modifyChapter[T](bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => Try[(Chapter, T)]): Try[(Seq[Book], Book, Chapter, T)] = {
+  def modifyChapter[T](bookKey: String, chapterKey: String, f: (Seq[Book], Book, Chapter) => Try[(Chapter, T)]): Try[(Seq[Book], Book, Chapter, T)] = {
     modifyBook(bookKey, (books, book) =>
       book.chapters.updateSingleIfDefinedWithResult {
         case chapter if chapter.key.value == chapterKey =>
@@ -52,20 +52,19 @@ class BookService {
   }
 
   def modifyEntry[TEntry <: ChapterEntry : ClassTag, TResult](bookKey: String, chapterKey: String, entryKey: String, f: (Seq[Book], Book, Chapter, TEntry) => Try[TEntry]): Try[(Seq[Book], Book, Chapter, TEntry)] = {
-    modifyChapter(bookKey, chapterKey) { (books, book, chapter) =>
+    modifyChapter(bookKey, chapterKey, (books, book, chapter) =>
       chapter.entries.updateSingleIfDefinedWithResult {
         case entry if entry.isRuntimeInstance[TEntry] && entry.asInstanceOf[TEntry].key.value == entryKey =>
           for {
             newEntry <- f(books, book, chapter, entry.asInstanceOf[TEntry])
           } yield (newEntry, newEntry)
-      }.orNotFound(s"${classTag[TEntry].runtimeClass.getSimpleName} $entryKey").flatten.map(_.mapLeft(newEntries => chapter.copy(entries = newEntries)))
-    }
+      }.orNotFound(s"${classTag[TEntry].runtimeClass.getSimpleName} $entryKey").flatten.map(_.mapLeft(newEntries => chapter.copy(entries = newEntries))))
   }
 
   def addChapterEntry(bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => Try[ChapterEntry]): Try[(Seq[Book], Book, Chapter)] = {
-    modifyChapter(bookKey, chapterKey) { (books, book, chapter) =>
+    modifyChapter(bookKey, chapterKey, (books, book, chapter) =>
       f(books, book, chapter).map(chapter.addEntry).map(_ -> ())
-    }.map { case (books, book, chapter, _) => (books, book, chapter) }
+    ).map { case (books, book, chapter, _) => (books, book, chapter) }
   }
 
   def reload(): Try[Any] = {

@@ -263,6 +263,18 @@ package object model {
     }.map(_.result())
   }
 
+  implicit class TraversableTryOps[T, Repr](traversable: TraversableLike[Try[T], Repr]) {
+    def traverseTry[That](implicit bf: CanBuildFrom[Repr, T, That]): Try[That] = {
+      traversable.foldLeft(Try(bf())) { case (builderTry, valueTry) =>
+        for {
+          builder <- builderTry
+          value <- valueTry
+        } yield builder += value
+      }
+    }.map(_.result())
+  }
+
+
   implicit class SeqSetOps[T](seq: Seq[Set[T]]) {
     def knownCommonValues: Set[T] = {
       seq match {
