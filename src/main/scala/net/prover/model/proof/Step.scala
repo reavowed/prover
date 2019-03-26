@@ -121,7 +121,7 @@ object Step {
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     // TODO: apply to inference application
     override def recalculateReferences(path: Seq[Int], stepContext: StepContext, parsingContext: ParsingContext): Step = {
-      val newSubsteps = substeps.recalculateReferences(path, stepContext.addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil))).addBoundVariable(variableName), parsingContext)
+      val newSubsteps = substeps.recalculateReferences(path, stepContext.addBoundVariable(variableName).addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil))), parsingContext)
       copy(substeps = newSubsteps, context = stepContext)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet ++ finalInferenceApplication.referencedInferenceIds
@@ -138,8 +138,8 @@ object Step {
         innerParsingContext = parsingContext.addParameters(variableName)
         assumption <- Statement.parser(innerParsingContext)
         innerStepContext = stepContext
-          .addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil)))
           .addBoundVariable(variableName)
+          .addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil)))
         finalInferenceApplication <- InferenceApplication.parser
         substeps <- listParser(path)(innerParsingContext, innerStepContext).inBraces
       } yield Naming(variableName, assumption, substeps, finalInferenceApplication, stepContext)
