@@ -1,13 +1,13 @@
 import path from "path";
 import React from "react";
 import {Parser} from "../Parser";
-import {HighlightableStatement} from "./Expression";
+import {HighlightableExpression} from "./Expression";
 import {Inference} from "./Inference";
 import {Steps} from "./steps/Steps";
 
 class Premise extends React.Component {
   render() {
-    return <HighlightableStatement reference={"p" + this.props.index} highlightedPremises={this.props.highlightedPremises} statement={this.props.premise} boundVariableLists={[]}/>;
+    return <HighlightableExpression reference={"p" + this.props.index} highlighting={this.props.highlighting} expression={this.props.premise} boundVariableLists={[]}/>;
   }
 }
 
@@ -16,7 +16,8 @@ export class Theorem extends React.Component {
     super(props);
     this.state = {
       theorem: Parser.parseTheorem(props.theorem),
-      highlightedPremises: []
+      highlightedPremises: [],
+      highlightedConclusion: null
     }
   }
 
@@ -24,9 +25,10 @@ export class Theorem extends React.Component {
     this.setState({highlightedPremises: premises});
   };
 
-  createPremiseElement = (premise, index) => {
-    return <Premise premise={premise} index={index} highlightedPremises={this.state.highlightedPremises}/>
+  setHighlightedConclusion = (conclusion) => {
+    this.setState({highlightedConclusion: conclusion});
   };
+
 
   fetchForStep = (stepPath, childPath, options) => {
     if (_.isObject(childPath)) {
@@ -50,14 +52,23 @@ export class Theorem extends React.Component {
 
   render() {
     const {theorem} = this.state;
-    return <Inference inference={theorem} createPremiseElement={this.createPremiseElement} title="Theorem" {...this.props}>
+    const highlighting = {
+      highlightedPremises: this.state.highlightedPremises,
+      highlightedConclusion: this.state.highlightedConclusion,
+      setHighlightedPremises: this.setHighlightedPremises,
+      setHighlightedConclusion: this.setHighlightedConclusion
+    };
+    const createPremiseElement = (premise, index) => {
+      return <Premise premise={premise} index={index} highlighting={highlighting}/>
+    };
+
+    return <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" {...this.props}>
       <hr/>
       <h4>Proof</h4>
       <Steps steps={theorem.proof}
              path={[]}
              boundVariableLists={[]}
-             setHighlightedPremises={this.setHighlightedPremises}
-             highlightedPremises={this.state.highlightedPremises}
+             highlighting={highlighting}
              fetchForStep={this.fetchForStep}
              updateTheorem={this.updateTheorem}/>
     </Inference>;

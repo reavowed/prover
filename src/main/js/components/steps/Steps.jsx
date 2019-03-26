@@ -1,46 +1,78 @@
 import React from "react";
 import styled from "styled-components";
-import {Expression} from "../Expression";
+import {HighlightableExpression} from "../Expression";
 import {AssertionStep} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
 import {NamingStep} from "./NamingStep";
 import {ScopedVariableStep} from "./ScopedVariableStep";
 import {TargetStep} from "./TargetStep";
+import {ProofLine} from "./ProofLine";
 
 class TransitiveSteps extends React.Component {
   constructor(props) {
     super(props);
-    this.childSpacers = [];
+    this.spacerRefs = [];
   }
-  setGuidingSpacer = (ref) => {
-    this.guidingSpacer = ref;
+  setLeftHandSideRef = (ref) => {
+    this.leftHandSideRef = ref;
   };
-  setChildSpacer = (ref) => {
-    this.childSpacers.push(ref);
+  setSpacerRef = (ref) => {
+    this.spacerRefs.push(ref);
   };
   componentDidMount() {
-    const spacingWidth = this.guidingSpacer.getBoundingClientRect().width;
-    for (const childSpacer of this.childSpacers) {
-      childSpacer.style.display = "inline-block";
-      childSpacer.style.width = spacingWidth + "px";
+    const spacingWidth = this.leftHandSideRef.getBoundingClientRect().width;
+    for (const spacerRef of this.spacerRefs) {
+      spacerRef.style.display = "inline-block";
+      spacerRef.style.width = spacingWidth + "px";
     }
   }
 
   render() {
-    const {firstStep, firstIndex, transitivityStepsAndIndexes, ...otherProps} = this.props;
-    const symbol = firstStep.statement.definition.symbol;
-    return <div>
-      <div className="mb-1">
-        <span ref={this.setGuidingSpacer}>Then <Expression expression={firstStep.statement.components[0]} boundVariableLists={otherProps.boundVariableLists}/> </span>
-        {symbol} <Expression expression={firstStep.statement.components[1]} boundVariableLists={otherProps.boundVariableLists}/>.
-      </div>
-      {transitivityStepsAndIndexes.map(({subsequentStep, subsequentIndex, transitiveIndex}) =>
-        <div className="mb-1">
-          <span ref={this.setChildSpacer}/>
-          {symbol} <Expression expression={subsequentStep.statement.components[1]} boundVariableLists={otherProps.boundVariableLists}/>.
+    const {leftHandSide, symbol, rightHandSides, ...otherProps} = this.props;
+    const {highlighting} = this.props;
+
+    const renderRightHandSide = (rightHandSide, index) => {
+      const nextRightHandSide = rightHandSides[index + 1];
+      return <>
+        <HighlightableExpression expression={{textForHtml: () => symbol}}
+                                 boundVariableLists={[]}
+                                 references={[rightHandSide.lineReference]}
+                                 {...otherProps}/>
+        {' '}
+        <HighlightableExpression expression={rightHandSide.expression}
+                                 boundVariableLists={otherProps.boundVariableLists}
+                                 referencesAsConclusion={nextRightHandSide ? [nextRightHandSide.lineReference, rightHandSide.lineReference] : [rightHandSide.lineReference]}
+                                 references={[rightHandSide.lineReference]}
+                                 {...otherProps}/>.
+      </>
+    };
+
+    return <>
+      <ProofLine highlighting={highlighting}
+                 premiseReferences={leftHandSide.step.referencedLines}
+                 path={leftHandSide.path}
+                 popover={<AssertionStep.Popover step={leftHandSide.step} path={leftHandSide.path} {...otherProps}/>}
+                 {...otherProps}>
+        <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
+                                                                          boundVariableLists={otherProps.boundVariableLists}
+                                                                          referencesAsPremise={[leftHandSide.lineReference, ..._.map(rightHandSides, ({lineReference}) => lineReference)]}
+                                                                          referencesAsConclusion={[leftHandSide.lineReference]}
+                                                                          {...otherProps}/> </span>
+        {renderRightHandSide(rightHandSides[0], 0)}
+      </ProofLine>
+      {rightHandSides.slice(1).map((rightHandSide, index) => {
+        return <div className="mb-1">
+          <ProofLine highlighting={highlighting}
+                     premiseReferences={rightHandSide.step.referencedLines}
+                     path={rightHandSide.path}
+                     popover={<AssertionStep.Popover step={rightHandSide.step} path={rightHandSide.path} {...otherProps}/>}
+                     {...otherProps}>
+            <span ref={this.setSpacerRef}/>
+            {renderRightHandSide(rightHandSide, index + 1)}
+          </ProofLine>
         </div>
-      )}
-    </div>
+      })}
+    </>
   }
 }
 
@@ -72,8 +104,17 @@ export class Steps extends React.Component {
         return "take " + step.variableName;
     }
   }
-  static readTransitivityStep(stepsWithIndexes, startComponent, currentComponent, definitionSymbol, transitivityInferenceId) {
-    if (stepsWithIndexes.length > 2 &&
+  static getTransitivityDetails(stepsWithIndexes, firstStep, transitivityInferenceId, basePath, firstIndex) {
+    const definitionSymbol = firstStep.statement.definition.symbol;
+    const firstLinePath = [...basePath, firstIndex];
+    const firstLineReference = firstLinePath.join(".");
+    const leftHandSideExpression = firstStep.statement.components[0];
+    const rightHandSides = [{
+      expression: firstStep.statement.components[1],
+      lineReference: firstLineReference,
+      step: firstStep
+    }];
+    while (stepsWithIndexes.length > 2 &&
       stepsWithIndexes[0].step.type === "assertion" &&
       stepsWithIndexes[1].step.type === "assertion" &&
       stepsWithIndexes[0].step.statement.definition &&
@@ -81,51 +122,32 @@ export class Steps extends React.Component {
       stepsWithIndexes[0].step.statement.definition.symbol === definitionSymbol &&
       stepsWithIndexes[1].step.statement.definition.symbol === definitionSymbol &&
       stepsWithIndexes[1].step.inference.id === transitivityInferenceId &&
-      stepsWithIndexes[0].step.statement.components[0].serialize() === currentComponent.serialize() &&
-      stepsWithIndexes[1].step.statement.components[0].serialize() === startComponent.serialize() &&
+      stepsWithIndexes[0].step.statement.components[0].serialize() === rightHandSides[rightHandSides.length-1].expression.serialize() &&
+      stepsWithIndexes[1].step.statement.components[0].serialize() === leftHandSideExpression.serialize() &&
       stepsWithIndexes[0].step.statement.components[1].serialize() === stepsWithIndexes[1].step.statement.components[1].serialize()
     ) {
-      const {step: subsequentStep, index: subsequentIndex} = stepsWithIndexes.shift();
-      const {index: transitiveIndex} = stepsWithIndexes.shift();
+      const {step} = stepsWithIndexes.shift();
+      const {index} = stepsWithIndexes.shift();
+      rightHandSides.push({
+        expression: step.statement.components[1],
+        step,
+        path: [...basePath, index],
+        lineReference: [...basePath, index].join(".")
+      });
+    }
+    if (rightHandSides.length > 1) {
       return {
-        subsequentStep,
-        subsequentIndex,
-        transitiveIndex
+        leftHandSide: {
+          expression: leftHandSideExpression,
+          step: firstStep,
+          path: firstLinePath,
+          lineReference: firstLineReference
+        },
+        symbol: definitionSymbol,
+        rightHandSides: rightHandSides
       }
     }
-  }
-  static getNextStepsWithTransitivity(stepsWithIndexes, firstStep, transitivityInferenceId, basePath) {
-    const definitionSymbol = firstStep.statement.definition.symbol;
-    const startComponent = firstStep.statement.components[0];
-    var currentComponent = firstStep.statement.components[1];
-    var nextComponentAndStep;
-    const subsequentComponentsAndSteps = [];
-    while (nextComponentAndStep = this.readTransitivityStep(stepsWithIndexes, startComponent, currentComponent, definitionSymbol, transitivityInferenceId)) {
-      subsequentComponentsAndSteps.push(nextComponentAndStep);
-      currentComponent = nextComponentAndStep.subsequentStep.statement.components[1];
-    }
-    return subsequentComponentsAndSteps;
-  }
-  static renderTransitivity(firstStep, firstIndex, transitivityStepsAndIndexes) {
-    const definitionSymbol = firstStep.statement.definition.symbol;
-    return <TableWrapper>
-      <TableWithMargin>
-        <tr class="mb-1">
-          <BlankCell>Then&nbsp;</BlankCell>
-          <BlankCell><Expression expression={firstStep.statement.components[0]} boundVariableLists={[]}/></BlankCell>
-          <BlankCell>&nbsp;{definitionSymbol}&nbsp;</BlankCell>
-          <BlankCell><Expression expression={firstStep.statement.components[1]} boundVariableLists={[]}/>.</BlankCell>
-        </tr>
-        {transitivityStepsAndIndexes.map(({subsequentStep, subsequentIndex, transitiveIndex}) =>
-          <tr className="mb-1">
-            <BlankCell/>
-            <BlankCell/>
-            <BlankCell>&nbsp;{definitionSymbol}&nbsp;</BlankCell>
-            <BlankCell><Expression expression={subsequentStep.statement.components[1]} boundVariableLists={[]}/>.</BlankCell>
-          </tr>
-        )}
-      </TableWithMargin>
-    </TableWrapper>
+    return null;
   }
 
   static renderNextStep(stepsWithIndexes, path, referencesForLastStep, otherProps, lastIndex) {
@@ -134,10 +156,9 @@ export class Steps extends React.Component {
       const definitionSymbol = step.statement.definition.symbol;
       const potentialTransitivityInference = window.transitivityInferences[definitionSymbol];
       if (potentialTransitivityInference) {
-        const transitivityStepsAndIndexes = this.getNextStepsWithTransitivity(stepsWithIndexes, step, potentialTransitivityInference, path);
-        if (transitivityStepsAndIndexes.length) {
-          const props = {firstStep: step, firstIndex: index, transitivityStepsAndIndexes, ...otherProps};
-          return <TransitiveSteps {...props}/>;
+        const transitivityDetails = this.getTransitivityDetails(stepsWithIndexes, step, potentialTransitivityInference, path, index);
+        if (transitivityDetails) {
+          return <TransitiveSteps {...transitivityDetails} {...otherProps}/>;
         }
       }
     }

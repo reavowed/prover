@@ -119,7 +119,6 @@ export class FindInferenceModal extends React.Component {
     );
   };
 
-
   getValidSubstitutionValues = (type, name) => {
     const selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
     selectedSubstitutionValues[type][name] = "";

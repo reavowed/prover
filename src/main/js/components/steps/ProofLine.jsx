@@ -2,7 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Overlay from "react-bootstrap/Overlay";
 import styled, {css} from "styled-components";
-import {HighlightableStatement} from "../Expression";
+import {HighlightableExpression} from "../Expression";
 
 export const ProofLine = styled(class ProofLine extends React.Component {
   constructor(...args) {
@@ -22,16 +22,20 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     }
   };
   onMouseEnter = () => {
-    const {setHighlightedPremises, referencedLines} = this.props;
-    if (referencedLines && setHighlightedPremises) {
-      setHighlightedPremises(referencedLines);
+    let {highlighting, premiseReferences, path} = this.props;
+    if (premiseReferences && highlighting) {
+      highlighting.setHighlightedPremises(premiseReferences);
+    }
+    if (path && highlighting) {
+      highlighting.setHighlightedConclusion(path.join("."));
     }
     this.setState({isHovered: true});
   };
   onMouseLeave = () => {
-    const {setHighlightedPremises} = this.props;
-    if (setHighlightedPremises) {
-      setHighlightedPremises([]);
+    const {highlighting} = this.props;
+    if (highlighting) {
+      highlighting.setHighlightedPremises([]);
+      highlighting.setHighlightedConclusion(null);
     }
     this.setState({isHovered: false});
   };
@@ -79,7 +83,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
   `}
 `;
 
-ProofLine.Statement = styled(HighlightableStatement)`
+ProofLine.Statement = styled(HighlightableExpression)`
   ${ProofLine}:hover & {
     color: blue;
   }

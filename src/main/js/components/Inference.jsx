@@ -6,17 +6,6 @@ import {Monospace} from "./Monospace";
 import {NavLinks} from "./NavLinks";
 import {Page} from "./Page";
 
-
-class InferenceHeader extends React.Component {
-  render() {
-    const {inference, title, className} = this.props;
-    return <div className={className}>
-      <h3 className="text-center mb-0">{title}: {inference.name}</h3>
-      <Monospace className="text-center">{inference.id}</Monospace>
-    </div>;
-  }
-}
-
 const UsageList = styled.p`
   span:not(:last-child)::after {
       content: ' | ';
@@ -24,23 +13,13 @@ const UsageList = styled.p`
 `;
 
 export class Inference extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      highlightedPremises: []
-    }
-  }
-
-  setHighlightedPremises = (premises) => {
-    this.setState({highlightedPremises: premises});
-  };
-
   render() {
     const {inference, title, previous, next, usages, children, createPremiseElement} = this.props;
     return <Page breadcrumbs={<Breadcrumbs.Entry entryKey={inference.key}/>}>
       <NavLinks previous={previous} next={next}/>
-      <InferenceHeader inference={inference} title={title} />
-      <InferenceSummary createPremiseElement={createPremiseElement} inference={inference} highlightedPremises={this.state.highlightedPremises}/>
+      <h3 className="text-center mb-0">{title}: {inference.name}</h3>
+      <Monospace className="text-center">{inference.id}</Monospace>
+      <InferenceSummary createPremiseElement={createPremiseElement} inference={inference}/>
       {children}
       {usages.length > 0 &&
       <div>
