@@ -35,7 +35,12 @@ export class FunctionParameter {
     return "$".repeat(this.level + 1) + this.index;
   }
   textForHtml(boundVariableLists) {
-    return boundVariableLists[this.level][this.index];
+    const name = boundVariableLists[this.level][this.index];
+    if (_.countBy(_.flattenDeep(boundVariableLists))[name] > 1) { // Disambiguate variables that appear multiple times in scope
+      return this.serialize()
+    } else {
+      return name;
+    }
   }
 }
 export class ExpressionApplication {

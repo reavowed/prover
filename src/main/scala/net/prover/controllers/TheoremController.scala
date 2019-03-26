@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.StepDefinition
+import net.prover.controllers.models.{QuickDefinition, StepDefinition}
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.entries.{StatementDefinition, TermDefinition, Theorem}
@@ -21,7 +21,7 @@ import scala.util.{Failure, Success, Try}
 class TheoremController @Autowired() (bookService: BookService) {
 
   case class InferenceSuggestion(
-    inference: Inference,
+    inference: Inference.Summary,
     requiredSubstitutions: Substitutions.Required,
     substitutions: Seq[Substitutions])
   @GetMapping(value = Array("/{stepReference}/suggestInferences"), produces = Array("application/json;charset=UTF-8"))
@@ -41,7 +41,7 @@ class TheoremController @Autowired() (bookService: BookService) {
         .mapCollect { inference =>
           val substitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, step.context.externalDepth)
           if (substitutions.nonEmpty)
-            Some(InferenceSuggestion(inference, inference.requiredSubstitutions, substitutions))
+            Some(InferenceSuggestion(inference.summary, inference.requiredSubstitutions, substitutions))
           else
             None
         }
@@ -250,24 +250,6 @@ class TheoremController @Autowired() (bookService: BookService) {
     }.toResponseEntity
   }
 
-  case class PremiseOption(path: Seq[Int], expansions: Seq[Inference.Summary])
-  @GetMapping(value = Array("/{stepReference}/premiseOptions"))
-  def premiseOptions(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepReference") stepReference: PathData
-  ): ResponseEntity[_] = {
-    findStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepReference).map { case (book, chapter, theorem, step) =>
-      val parsingContext = getStepParsingContext(book, chapter, theorem, step)
-      val expansionInferences = parsingContext.inferences.filter(_.rearrangementType == Inference.RearrangementType.Expansion)
-      step.pendingPremises.map { case (path, p) =>
-        val matchingExpansions = expansionInferences.filter(_.conclusion.calculateSubstitutions(p.statement, Substitutions.empty, 0, step.context.externalDepth).nonEmpty)
-        PremiseOption(path, matchingExpansions.map(_.summary))
-      }
-    }.toResponseEntity
-  }
-
   @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/target"))
   def createTarget(
     @PathVariable("bookKey") bookKey: String,
@@ -290,6 +272,33 @@ class TheoremController @Autowired() (bookService: BookService) {
     }.toResponseEntity
   }
 
+  case class QuickSuggestion(inference: Inference.Summary, target: Statement)
+  case class PremiseOption(path: Seq[Int], expansions: Seq[Inference.Summary], quick: Seq[QuickSuggestion])
+  @GetMapping(value = Array("/{stepReference}/premiseOptions"))
+  def premiseOptions(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: PathData
+  ): ResponseEntity[_] = {
+    findStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepReference).map { case (book, chapter, theorem, step) =>
+      val parsingContext = getStepParsingContext(book, chapter, theorem, step)
+      val expansionInferences = parsingContext.inferences.filter(_.rearrangementType == Inference.RearrangementType.Expansion)
+      val quickInferences = parsingContext.inferences.filter(i => i.requiredSubstitutions == i.conclusion.requiredSubstitutions).mapCollect(i => i.premises.single.map(i -> _.statement)).reverse
+      step.pendingPremises.map { case (path, p) =>
+        val quickSuggestions = quickInferences
+          .flatMap { case (inference, premiseStatement) =>
+            val possibleTargets = inference.conclusion
+              .calculateSubstitutions(p.statement, Substitutions.empty, 0, step.context.externalDepth)
+              .mapCollect(s => premiseStatement.applySubstitutions(s, 0, step.context.externalDepth))
+            possibleTargets.map { target => QuickSuggestion(inference.summary, target) }
+          }
+        val matchingExpansions = expansionInferences.filter(_.conclusion.calculateSubstitutions(p.statement, Substitutions.empty, 0, step.context.externalDepth).nonEmpty)
+        PremiseOption(path, matchingExpansions.map(_.summary), quickSuggestions)
+      }
+    }.toResponseEntity
+  }
+
   @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/rearrangement"))
   def createRearrangement(
     @PathVariable("bookKey") bookKey: String,
@@ -304,6 +313,35 @@ class TheoremController @Autowired() (bookService: BookService) {
       for {
         inference <- findInference(inferenceId)
         substitutions <- inference.conclusion.calculateSubstitutions(oldPremise.statement, Substitutions.empty, 0, stepContext.externalDepth).headOption.orException(BadRequestException("Could not calculate substitutions"))
+        substitutedInferencePremises <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, oldPremise.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
+        newPremises = substitutedInferencePremises.map(createPremise(_, stepContext, parsingContext))
+      } yield Step.NewAssert.Premise.Expansion(oldPremise.statement, inference, newPremises, substitutions)
+    }
+
+    modifyStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (book, chapter, theorem, oldStep) =>
+      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, oldStep)
+      oldStep.tryUpdatePremiseAtPath(premisePath.indexes, updatePremise(_, oldStep.context)).orNotFound(s"Premise $premisePath not found").flatten
+    }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/quick"), consumes = Array("application/json;charset=UTF-8"))
+  def createQuickPremise(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData,
+    @PathVariable("premisePath") premisePath: PathData,
+    @RequestBody quickDefinition: QuickDefinition
+  ): ResponseEntity[_] = {
+    import Step.NewAssert._
+    def updatePremise(oldPremise: Premise, stepContext: StepContext)(implicit parsingContext: ParsingContext): Try[Premise] = {
+      for {
+        inference <- findInference(quickDefinition.inferenceId)
+        target <- Try(Statement.parser.parseFromString(quickDefinition.target, "")).toOption.orBadRequest("Invalid target statement")
+        singlePremise <- inference.premises.single.orBadRequest("Invalid inference for quick premise")
+        substitutions <- inference.conclusion.calculateSubstitutions(oldPremise.statement, Substitutions.empty, 0, stepContext.externalDepth)
+          .flatMap(s => singlePremise.statement.calculateSubstitutions(target, s, 0, stepContext.externalDepth))
+          .headOption.orBadRequest("Could not calculate substitutions")
         substitutedInferencePremises <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, oldPremise.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
         newPremises = substitutedInferencePremises.map(createPremise(_, stepContext, parsingContext))
       } yield Step.NewAssert.Premise.Expansion(oldPremise.statement, inference, newPremises, substitutions)

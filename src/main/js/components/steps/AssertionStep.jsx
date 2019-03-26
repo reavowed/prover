@@ -4,6 +4,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Popover from "react-bootstrap/Popover";
 import styled from "styled-components";
+import {Parser} from "../../Parser";
 import {Expression, HighlightableExpression} from "../Expression";
 import {FlexRow} from "../FlexRow";
 import {InferenceSummary} from "../InferenceSummary";
@@ -38,7 +39,10 @@ export class AssertionStep extends React.Component {
           return response.json();
         }
       })
-      .then(options => this.setState({premiseOptions: options}));
+      .then(options => {
+        _.each(options, option => _.each(option.quick, t => t.target = Parser.parseExpression(t.target)));
+        this.setState({premiseOptions: options})
+      });
   };
 
   showBoundVariableModal = () => {
@@ -97,6 +101,13 @@ AssertionStep.Popover = class extends React.Component {
       body: expansionId
     }).then(this.props.updateTheorem);
   };
+  applyQuick = (premisePath, inferenceId, target) => {
+    this.props.fetchForStep(this.props.path, `premises/${premisePath.join(".")}/quick`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({inferenceId, target: target.serialize()})
+    }).then(this.props.updateTheorem);
+  };
 
   addTarget = (premisePath) => {
     this.props.fetchForStep(this.props.path, `premises/${premisePath.join(".")}/target`, {
@@ -123,6 +134,14 @@ AssertionStep.Popover = class extends React.Component {
           <Button size="sm" className="ml-1" onClick={() => this.addTarget(path)}>Target</Button>
           {options.expansions && options.expansions.length > 0 && <DropdownButton title="Expansions" size="sm" className="ml-1">
             {options.expansions.map(e => <Dropdown.Item key={e.id} onClick={() => this.applyExpansion(path, e.id)}>{e.name}</Dropdown.Item>)}
+          </DropdownButton>}
+          {options.quick && options.quick.length > 0 && <DropdownButton title="Quick" size="sm" className="ml-1">
+            {options.quick.map(e => {
+              const content = _.countBy(options.quick, "inference.id")[e.inference.id] > 1 ?
+                <>{e.inference.name} - <Expression expression={e.target} boundVariableLists={boundVariableLists}/></> :
+                e.inference.name;
+              return <Dropdown.Item key={e.id + " " + e.target.serialize()} onClick={() => this.applyQuick(path, e.inference.id, e.target)}>{content}</Dropdown.Item>
+            })}
           </DropdownButton>}
         </FlexRow>;
       case "expansion":
