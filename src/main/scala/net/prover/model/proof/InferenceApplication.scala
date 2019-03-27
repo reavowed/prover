@@ -55,7 +55,7 @@ object InferenceApplication {
       isRearrangement: Boolean)
     extends InferenceApplication
   {
-    override def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet + inference.transformation.specificationInference.id
+    override def referencedInferenceIds = references.flatMap(_.referencedInferenceIds).toSet + inference.inner.id + inference.transformation.specificationInference.id
     override def referencedLines = references.flatMap(_.lineReferences).toSet
     override def serialized = (
       Seq("transformed", inference.inner.id) ++
