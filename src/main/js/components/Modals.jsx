@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import {renderToString} from "react-dom/server";
 import styled from "styled-components";
 import {Parser} from "../Parser";
-import {Expression} from "./Expression";
+import {ExpressionComponent} from "./ExpressionComponent";
 import {InferenceSummary} from "./InferenceSummary";
 
 const DropdownContainer = styled.div`
@@ -182,12 +182,12 @@ export class FindInferenceModal extends React.Component {
         const selectionElement = !validValues ?
           <Form.Control type="text" value={this.state.selectedSubstitutionValues[key][name]} onChange={e => this.setSelectedSubstitutionValue(key, name, e.target.value)}/> :
           validValues.length === 1 ?
-          <Form.Label column><Expression expression={validValues[0]} boundVariableLists={boundVariableLists} /></Form.Label> :
+          <Form.Label column><ExpressionComponent expression={validValues[0]} boundVariableLists={boundVariableLists} /></Form.Label> :
           <Form.Control as="select" value={this.state.selectedSubstitutionValues[key][name]} onChange={e => this.setSelectedSubstitutionValue(key, name, e.target.value)}>
             <option value="" />
             {validValues.map(v =>
               <option value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                <Expression expression={v} boundVariableLists={boundVariableLists} />
+                <ExpressionComponent expression={v} boundVariableLists={boundVariableLists} />
               )}}/>
             )}
           </Form.Control>;
@@ -228,14 +228,14 @@ export class FindInferenceModal extends React.Component {
                     {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
                       <Form.Group as={Form.Row}>
                         <Col xs={2}>
-                          <Expression expression={premise} boundVariableLists={[]} />
+                          <ExpressionComponent expression={premise} boundVariableLists={[]} />
                         </Col>
                         <Col>
                           <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)}>
                             <option value="" />
                             {suggestions.map((s, i) =>
                               <option value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                                  <Expression expression={s.statement} boundVariableLists={boundVariableLists} />
+                                  <ExpressionComponent expression={s.statement} boundVariableLists={boundVariableLists} />
                                 )}}/>
                             )}
                           </Form.Control>

@@ -1,30 +1,35 @@
-const path = require('path');
-
 module.exports = {
   entry: './src/main/js/App.jsx',
   output: {
-    path: path.join(__dirname, 'target', 'scala-2.12', 'classes', 'static', 'js'),
-    publicPath: '/js/',
     filename: 'bundle.js',
     libraryTarget: 'var',
     library: 'App'
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   module: {
     rules: [
       {
+        test: /\.tsx?/,
+        exclude: /node_modules/,
+        use: ['babel-loader', 'awesome-typescript-loader']
+      },
+      {
         test: /\.jsx?/,
-        use: {
-          loader: 'babel-loader'
-        }
+        exclude: /node_modules/,
+        loader: 'babel-loader'
+      },
+      {
+        enforce: "pre",
+        test: /\.js$/,
+        loader: "source-map-loader"
       }
     ]
   },
   target: 'web',
   mode: 'development',
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   devServer: {
     port: 8081
   },

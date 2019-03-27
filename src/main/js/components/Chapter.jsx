@@ -6,7 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import styled from "styled-components";
 import {Parser} from "../Parser";
 import {Breadcrumbs} from "./Breadcrumbs";
-import {Expression} from "./Expression";
+import {ExpressionComponent} from "./ExpressionComponent";
 import {FlexRow} from "./FlexRow";
 import {InferenceSummary} from "./InferenceSummary";
 import {NavLinks} from "./NavLinks";
@@ -77,7 +77,7 @@ class DefinitionResult extends React.Component {
     const {title, entry, children} = this.props;
 
     return <>
-      <Result title={<>{title}: <Expression expression={entry.defaultValue} boundVariableLists={[]}/></>}
+      <Result title={<>{title}: <ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/></>}
               buttons={<Button size="sm" variant="primary" className="ml-1" onClick={this.startEditingShorthand}>Shorthand</Button>}
       >
         {children && <div className="mt-n2">
@@ -138,12 +138,12 @@ export class Chapter extends React.Component {
         return <InferenceResult key={entry.key.value} title="Theorem" entry={entry} updateChapter={this.updateChapter}/>;
       case "statementDefinition":
         return <DefinitionResult key={entry.key.value} title="Statement Definition" entry={entry} updateChapter={this.updateChapter}>
-          {entry.definingStatement && <><Expression expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <Expression expression={entry.definingStatement} boundVariableLists={[]}/>.</>}
+          {entry.definingStatement && <><ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.</>}
         </DefinitionResult>;
       case "termDefinition":
         return <DefinitionResult key={entry.key.value} title="Term Definition" entry={entry} updateChapter={this.updateChapter}>
           <ResultWithPremises premises={entry.premises}
-                              result={<><Expression expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <Expression expression={entry.definingStatement} boundVariableLists={[]}/></>}/>
+                              result={<><ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/></>}/>
         </DefinitionResult>;
       case "comment":
         return <p key={entry.key.value}>{entry.text}</p>

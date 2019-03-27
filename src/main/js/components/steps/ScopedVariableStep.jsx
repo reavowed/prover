@@ -1,6 +1,6 @@
 import React from "react";
 import Popover from "react-bootstrap/Popover";
-import {Expression} from "../Expression";
+import {ExpressionComponent} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import {DeleteStepButton} from "./DeleteStepButton";
 import {ProofLine} from "./ProofLine";
@@ -19,7 +19,7 @@ export class ScopedVariableStep extends React.Component {
         <Popover title={<FlexRow><FlexRow.Grow>Scoped variable</FlexRow.Grow><DeleteStepButton path={path} {...otherProps}/></FlexRow>}/>
       );
       return <ProofLine popover={popover}>
-        Take any <Expression expression={{textForHtml: () => step.variableName}}/>.
+        Take any <ExpressionComponent expression={{textForHtml: () => step.variableName}}/>.
       </ProofLine>
     }
   }

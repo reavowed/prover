@@ -1,7 +1,7 @@
 import path from "path";
 import React from "react";
 import {Parser} from "../Parser";
-import {HighlightableExpression} from "./Expression";
+import {HighlightableExpression} from "./ExpressionComponent";
 import {Inference} from "./Inference";
 import {Steps} from "./steps/Steps";
 

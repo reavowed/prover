@@ -1,5 +1,5 @@
 import React from "react";
-import {Expression} from "./Expression";
+import {ExpressionComponent} from "./ExpressionComponent";
 
 export class ResultWithPremises extends React.Component {
   static renderPremises(premises, createPremiseElement) {
@@ -24,7 +24,7 @@ export class ResultWithPremises extends React.Component {
   }
   render() {
     let {premises, result, createPremiseElement} = this.props;
-    createPremiseElement = createPremiseElement || (p => <Expression key={p.serialize()} expression={p} boundVariableLists={[]}/>);
+    createPremiseElement = createPremiseElement || (p => <ExpressionComponent key={p.serialize()} expression={p} boundVariableLists={[]}/>);
     return <div className={this.props.className}>
       {ResultWithPremises.renderPremises(premises, createPremiseElement)}
       <div>{premises.length > 0 && "Then "}{result}.</div>

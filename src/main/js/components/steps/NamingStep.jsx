@@ -1,5 +1,5 @@
 import React from "react";
-import {formatHtml} from "../Expression";
+import {formatHtml} from "../ExpressionComponent";
 import {ProofLine} from "./ProofLine";
 import {Steps} from "./Steps";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {HighlightableExpression} from "../Expression";
+import {HighlightableExpression} from "../ExpressionComponent";
 import {AssertionStep} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
 import {NamingStep} from "./NamingStep";

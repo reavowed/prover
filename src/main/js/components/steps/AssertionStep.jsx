@@ -4,8 +4,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Popover from "react-bootstrap/Popover";
 import styled from "styled-components";
-import {Parser} from "../../Parser";
-import {Expression, HighlightableExpression} from "../Expression";
+import {ExpressionComponent, HighlightableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import {InferenceSummary} from "../InferenceSummary";
 import {BoundVariableModal} from "../Modals";
@@ -73,7 +72,7 @@ AssertionStep.Popover = class extends React.Component {
         }
       })
       .then(options => {
-        _.each(options, option => _.each(option.quick, t => t.target = Parser.parseExpression(t.target)));
+        _.each(options, option => _.each(option.quick, t => t.target = ExpressionComponent.parseFromJson(t.target)));
         this.setState({premiseOptions: options})
       });
   };
@@ -147,7 +146,7 @@ AssertionStep.Popover = class extends React.Component {
         };
 
         return <FlexRow>
-          <FlexRow.Grow><Expression expression={premise.statement} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapEditableBoundVariable}/></FlexRow.Grow>
+          <FlexRow.Grow><ExpressionComponent expression={premise.statement} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapEditableBoundVariable}/></FlexRow.Grow>
           <Button size="sm" className="ml-1" onClick={() => this.addTarget(premisePath)}>Target</Button>
           {options.expansions && options.expansions.length > 0 && <DropdownButton title="Expansions" size="sm" className="ml-1">
             {options.expansions.map(e => <Dropdown.Item key={e.id} onClick={() => this.applyExpansion(premisePath, e.id)}>{e.name}</Dropdown.Item>)}
@@ -155,7 +154,7 @@ AssertionStep.Popover = class extends React.Component {
           {options.quick && options.quick.length > 0 && <DropdownButton title="Quick" size="sm" className="ml-1">
             {options.quick.map(e => {
               const content = _.countBy(options.quick, "inference.id")[e.inference.id] > 1 ?
-                <>{e.inference.name} - <Expression expression={e.target} boundVariableLists={boundVariableLists}/></> :
+                <>{e.inference.name} - <ExpressionComponent expression={e.target} boundVariableLists={boundVariableLists}/></> :
                 e.inference.name;
               return <Dropdown.Item key={e.id + " " + e.target.serialize()} onClick={() => this.applyQuick(premisePath, e.inference.id, e.target)}>{content}</Dropdown.Item>
             })}
@@ -164,7 +163,7 @@ AssertionStep.Popover = class extends React.Component {
       case "expansion":
         return <>
           <FlexRow>
-            <FlexRow.Grow><Expression expression={premise.statement} boundVariableLists={boundVariableLists}/></FlexRow.Grow>
+            <FlexRow.Grow><ExpressionComponent expression={premise.statement} boundVariableLists={boundVariableLists}/></FlexRow.Grow>
             <Button size="sm" className="ml-1" onClick={() => this.deletePremise(premisePath)}><span className="fas fa-ban"/></Button>
           </FlexRow>
           <PremiseChildren>
@@ -174,7 +173,7 @@ AssertionStep.Popover = class extends React.Component {
       case "given":
       case "simplification":
         return <div>
-          <Expression expression={premise.statement} boundVariableLists={boundVariableLists}/>
+          <ExpressionComponent expression={premise.statement} boundVariableLists={boundVariableLists}/>
         </div>;
     }
   }

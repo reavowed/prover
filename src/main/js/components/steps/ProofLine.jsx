@@ -2,7 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Overlay from "react-bootstrap/Overlay";
 import styled, {css} from "styled-components";
-import {HighlightableExpression} from "../Expression";
+import {HighlightableExpression} from "../ExpressionComponent";
 
 export const ProofLine = styled(class ProofLine extends React.Component {
   constructor(...args) {

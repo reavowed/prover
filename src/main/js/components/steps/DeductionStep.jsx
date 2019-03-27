@@ -1,6 +1,6 @@
 import React from "react";
 import Popover from "react-bootstrap/Popover";
-import {Expression, HighlightableExpression} from "../Expression";
+import {ExpressionComponent, HighlightableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import {DeleteStepButton} from "./DeleteStepButton";
 import {ProofLine} from "./ProofLine";
@@ -13,7 +13,7 @@ export class DeductionStep extends React.Component {
     let referencesForLastStep = [...additionalReferences, reference];
     const popover = (
       <Popover title={<FlexRow><FlexRow.Grow>Assumption</FlexRow.Grow><DeleteStepButton path={path} {...otherProps}/></FlexRow>}>
-        <Expression expression={step.assumption} boundVariableLists={this.props.boundVariableLists}/>
+        <ExpressionComponent expression={step.assumption} boundVariableLists={this.props.boundVariableLists}/>
       </Popover>
     );
     return <>

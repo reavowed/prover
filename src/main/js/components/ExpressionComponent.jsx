@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
-import {DefinedExpression, FunctionParameter} from "../Parser";
+import {DefinedExpression, FunctionParameter} from "../models/Expression";
 
 function formatWithReplacement(text, regex, handlePlain, handleMatch) {
   const matches = text.matchAll(regex);
@@ -45,7 +45,7 @@ const HighlightedConclusion = styled.span`
   color: blue;
 `;
 
-export class Expression extends React.Component {
+export class ExpressionComponent extends React.Component {
   matchDisplayShorthand(template, expression, pathWithinMatch, boundVariablesWithinMatch) {
     if (_.isString(template)) {
       return {type: "expression", expression, pathWithinMatch, boundVariablesWithinMatch};
@@ -76,12 +76,12 @@ export class Expression extends React.Component {
         .filter(p => _.isEqual(p.slice(0, lengthOfPath), match.pathWithinMatch))
         .map(p => p.slice(lengthOfPath))
         .value();
-      return <Expression expression={match.expression}
-                         path={path.concat(match.pathWithinMatch)}
-                         pathsToHighlightAsPremise={innerPathsToHighlightAsPremise}
-                         boundVariableLists={[...match.boundVariablesWithinMatch, ...boundVariableLists]}
-                         wrapBoundVariable={wrapBoundVariable}
-                         safe={true}/>
+      return <ExpressionComponent expression={match.expression}
+                                  path={path.concat(match.pathWithinMatch)}
+                                  pathsToHighlightAsPremise={innerPathsToHighlightAsPremise}
+                                  boundVariableLists={[...match.boundVariablesWithinMatch, ...boundVariableLists]}
+                                  wrapBoundVariable={wrapBoundVariable}
+                                  safe={true}/>
     }
   }
 
@@ -103,12 +103,12 @@ export class Expression extends React.Component {
       const renderedBoundVariables = boundVariables.map((name, index) => wrapBoundVariable(formatHtml(name), name, index, path));
       const renderedComponents = expression.components.map((c, i) => {
         const innerPaths = _.chain(pathsToHighlightAsPremise).filter(p => p.length > 0 && p[0] === i).map(p => p.slice(1)).value();
-        return <Expression expression={c}
-                           path={[...path, i]}
-                           pathsToHighlightAsPremise={innerPaths}
-                           boundVariableLists={innerBoundVariables}
-                           wrapBoundVariable={wrapBoundVariable}
-                           safe={true}/>
+        return <ExpressionComponent expression={c}
+                                    path={[...path, i]}
+                                    pathsToHighlightAsPremise={innerPaths}
+                                    boundVariableLists={innerBoundVariables}
+                                    wrapBoundVariable={wrapBoundVariable}
+                                    safe={true}/>
       });
       return formatHtml(format, s => replacePlaceholders(s, [...renderedBoundVariables, ...renderedComponents]));
     } else if (expression.textForHtml) {
@@ -137,7 +137,7 @@ export class HighlightableExpression extends React.Component {
     const matchingPremises = highlighting ? _.filter(highlighting.highlightedPremises, p => referencesAsPremise.includes(p.lineReference)) : [];
     const pathsToHighlightAsPremise = _.map(matchingPremises, p => p.internalPath);
     const shouldHighlightAsConclusion = highlighting && _.some(referencesAsConclusion, r => r === highlighting.highlightedConclusion);
-    const expressionElement = <Expression expression={statement || expression} pathsToHighlightAsPremise={pathsToHighlightAsPremise} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} safe={false}/>;
+    const expressionElement = <ExpressionComponent expression={statement || expression} pathsToHighlightAsPremise={pathsToHighlightAsPremise} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} safe={false}/>;
     return shouldHighlightAsConclusion ? <HighlightedConclusion className={className}>{expressionElement}</HighlightedConclusion> :
       className ? <span className={className}>{expressionElement}</span> : expressionElement;
   }
