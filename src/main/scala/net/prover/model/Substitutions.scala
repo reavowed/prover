@@ -32,6 +32,12 @@ object Substitutions {
         (predicates ++ other.predicates).distinct,
         (functions ++ other.functions).distinct)
     }
+    def isEquivalentTo(other: Required): Boolean = {
+      statements.toSet == other.statements.toSet &&
+        terms.toSet == other.terms.toSet &&
+        predicates.toSet == other.predicates.toSet &&
+        functions.toSet == other.functions.toSet
+    }
   }
 
   object Required {

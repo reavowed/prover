@@ -284,7 +284,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     findStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepReference).map { case (book, chapter, theorem, step) =>
       val parsingContext = getStepParsingContext(book, chapter, theorem, step)
       val expansionInferences = parsingContext.inferences.filter(_.rearrangementType == Inference.RearrangementType.Expansion)
-      val quickInferences = parsingContext.inferences.filter(i => i.requiredSubstitutions == i.conclusion.requiredSubstitutions).mapCollect(i => i.premises.single.map(i -> _.statement)).reverse
+      val quickInferences = parsingContext.inferences.filter(i => i.requiredSubstitutions isEquivalentTo i.conclusion.requiredSubstitutions).mapCollect(i => i.premises.single.map(i -> _.statement)).reverse
       step.pendingPremises.map { case (path, p) =>
         val quickSuggestions = quickInferences
           .flatMap { case (inference, premiseStatement) =>
