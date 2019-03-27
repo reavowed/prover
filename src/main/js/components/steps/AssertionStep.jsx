@@ -40,7 +40,7 @@ export class AssertionStep extends React.Component {
 
     return <ProofLine premiseReferences={step.referencedLines}
                  path={path}
-                 popover={<AssertionStep.Popover step={step} path={path} premiseOptions={this.state.premiseOptions} onTransition={this.onModalTransition} {...otherProps}/>}
+                 popover={<AssertionStep.Popover step={step} path={path} boundVariableLists={this.props.boundVariableLists} onTransition={this.onModalTransition}/>}
                  blockHide={this.state.showingModal}
                  incomplete={_.some(step.premises, "incomplete")}
                  {...otherProps}
@@ -136,7 +136,7 @@ AssertionStep.Popover = class extends React.Component {
       .then(this.hideBoundVariableModal);
   };
 
-  renderPremise(premise, premisePath, boundVariableLists) {
+  renderPremiseInner(premise, premisePath, boundVariableLists) {
     switch (premise.type) {
       case "pending":
         const options = !this.state.hideOptions && _.find(this.state.premiseOptions, option => _.isEqual(option.path, premisePath)) || {};
@@ -179,7 +179,15 @@ AssertionStep.Popover = class extends React.Component {
     }
   }
 
+  renderPremise(premise, premisePath, boundVariableLists) {
+    return <React.Fragment key={premisePath.join(".") + " " + premise.statement.serialize()}>
+      {this.renderPremiseInner(premise, premisePath, boundVariableLists)}
+    </React.Fragment>
+  }
+
   render() {
+    const popoverProps = _.pick(this.props, ["arrowProps", "className", "outOfBoundaries", "placement", "scheduleUpdate", "style"]);
+    const {} = this.props
     const {step, path, boundVariableLists, innerRef} = this.props;
     const inference = step.inference || step.inferenceApplication.inference;;
     const boundVariableModal = <BoundVariableModal show={this.isShowingBoundVariableModal()}
@@ -190,15 +198,15 @@ AssertionStep.Popover = class extends React.Component {
                                                    onSave={this.saveBoundVariable}/>;
 
     return <>
-      <Popover ref={innerRef} title={<FlexRow><FlexRow.Grow><a href={inference.key.url}>{inference.name}</a></FlexRow.Grow>{path && <DeleteStepButton path={path} {...this.props}/>}</FlexRow>}  {...this.props}>
+      <Popover ref={innerRef} title={<FlexRow><FlexRow.Grow><a href={inference.key.url}>{inference.name}</a></FlexRow.Grow>{path && <DeleteStepButton path={path} {...this.props}/>}</FlexRow>}  {...popoverProps}>
         <InferenceSummary inference={inference} />
         {step.premises && <>
           <hr/>
           <div><strong>Premises</strong></div>
-          {step.premises.map((p, i) => <React.Fragment key={p.statement.serialize()}>{this.renderPremise(p, [i], boundVariableLists)}</React.Fragment>)}
+          {step.premises.map((p, i) => this.renderPremise(p, [i], boundVariableLists))}
         </>}
       </Popover>
       {boundVariableModal}
     </>;
   }
-}
+};

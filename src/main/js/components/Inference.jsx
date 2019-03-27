@@ -27,7 +27,7 @@ export class Inference extends React.Component {
         {usages.map(([usageBook, usageChapter, theorems]) =>
           <div key={usageChapter.key.url}>
             <h6>{usageBook.title} - {usageChapter.title}</h6>
-            <UsageList>{theorems.map(theorem => <Monospace.Text><Monospace.Link className="usageLink" href={theorem.key.url}>{theorem.name}</Monospace.Link></Monospace.Text>)}</UsageList>
+            <UsageList>{theorems.map(theorem => <Monospace.Text key={theorem.key.url}><Monospace.Link className="usageLink" href={theorem.key.url}>{theorem.name}</Monospace.Link></Monospace.Text>)}</UsageList>
           </div>
         )}
       </div>
