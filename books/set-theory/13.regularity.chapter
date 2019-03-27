@@ -7,55 +7,82 @@ theorem Regularity
 premise ¬ = a ∅
 conclusion ∃ x ∧ ∈ $0 a = ∩ $0 a ∅
 {
-  assert ∀ y → ¬ = $0 ∅ ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅ direct 5a2bf4e5105d379d8d2886424f9e4c79009e47b8c59897ad379640ef9c3fafe2 () () () () ()
+  prove ∀ y → ¬ = $0 ∅ ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅ 5a2bf4e5105d379d8d2886424f9e4c79009e47b8c59897ad379640ef9c3fafe2 () () () ()
   assert ∃ x ∧ ∈ $0 a = ∩ $0 a ∅ transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (a) (¬ = $0 ∅, ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅) () (direct 0, direct p0)
 }
 
 theorem No Set Contains Itself
 conclusion ¬ ∈ a a
 {
-  assert ¬ = singleton a ∅ direct 1c4e6217e33217004ef0962a46f7422720c1fd5d2c8bb711f976bf01166dc708 () (a) () () ()
-  assert ∃ y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ direct 455ccb71d56e4d462fa1343c5365aa1c0e182a9a527afa75377bc4ff87da1be0 () (singleton a) () () (direct 0)
+  prove ¬ = singleton a ∅ 1c4e6217e33217004ef0962a46f7422720c1fd5d2c8bb711f976bf01166dc708 () (a) () ()
+  prove ∃ y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ 455ccb71d56e4d462fa1343c5365aa1c0e182a9a527afa75377bc4ff87da1be0 () (singleton a) () ()
+    given
   let y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= ∩ a singleton a ∅) () (∧ ∈ $0 singleton a = ∩ $0 singleton a ∅) () (direct 1, direct 2d) {
-    assert = $0 a direct 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 singleton a, = ∩ $0 singleton a ∅) () () () direct 2a (0))
-    assert = ∩ a singleton a ∅ direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (= ∩ $$0 singleton a ∅) () (direct 2.0, simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 singleton a, = ∩ $0 singleton a ∅) () () () direct 2a (1))
+    prove = $0 a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) () ()
+      simplified ∈ $0 singleton a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 singleton a, = ∩ $0 singleton a ∅) () () ()
+        given
+    prove = ∩ a singleton a ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (= ∩ $$0 singleton a ∅) ()
+      given
+      simplified = ∩ $0 singleton a ∅ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 singleton a, = ∩ $0 singleton a ∅) () () ()
+        given
   }
-  assert ∈ a singleton a direct e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a) () () ()
-  assert ¬ ∈ a a direct 27177c191d8f27ae5397cd3f90eed9841516040c0a0ed25957ef03f175584fb8 () (a, singleton a, a) () () (direct 2, direct 3)
+  prove ∈ a singleton a e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a) () ()
+  prove ¬ ∈ a a 27177c191d8f27ae5397cd3f90eed9841516040c0a0ed25957ef03f175584fb8 () (a, singleton a, a) () ()
+    given
+    given
 }
 
 theorem No Set Contains Itself
 premise ∈ a b
 conclusion ¬ = a b
 {
-  assert ¬ ∈ b b direct 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (b) () () ()
-  assert ¬ = a b direct 0f121f39bcadef0371e79ff08f42eddba567b599878e5b8a1bbb15b0e8036486 () (a, b) (∈ $0 b) () (direct p0, direct 0)
+  prove ¬ ∈ b b 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (b) () ()
+  prove ¬ = a b 0f121f39bcadef0371e79ff08f42eddba567b599878e5b8a1bbb15b0e8036486 () (a, b) (∈ $0 b) ()
+    given
+    given
 }
 
 theorem No Two Sets Contain Each Other
 conclusion ∨ ¬ ∈ b a ¬ ∈ a b
 {
-  assert ¬ = pair a b ∅ direct f62b1ca093e555223e44de12325c96d4a9497e339544fc6d12d6d5afb49f13ce () (a, b) () () ()
-  assert ∃ x ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ direct 455ccb71d56e4d462fa1343c5365aa1c0e182a9a527afa75377bc4ff87da1be0 () (pair a b) () () (direct 0)
+  prove ¬ = pair a b ∅ f62b1ca093e555223e44de12325c96d4a9497e339544fc6d12d6d5afb49f13ce () (a, b) () ()
+  prove ∃ x ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ 455ccb71d56e4d462fa1343c5365aa1c0e182a9a527afa75377bc4ff87da1be0 () (pair a b) () ()
+    given
   let c ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∨ ¬ ∈ b a ¬ ∈ a b) () (∧ ∈ $0 pair a b = ∩ $0 pair a b ∅) () (direct 1, direct 2d) {
-    assert ∨ = $0 a = $0 b direct b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () ($0, a, b) () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 pair a b, = ∩ $0 pair a b ∅) () () () direct 2a (0))
+    prove ∨ = $0 a = $0 b b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () ($0, a, b) () ()
+      simplified ∈ $0 pair a b 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 pair a b, = ∩ $0 pair a b ∅) () () ()
+        given
     assume = $0 a {
-      assert = ∩ a pair a b ∅ direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (= ∩ $$0 pair a b ∅) () (direct 2.1a, simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 pair a b, = ∩ $0 pair a b ∅) () () () direct 2a (1))
-      assert ∈ b pair a b direct c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () () ()
-      assert ¬ ∈ b a direct 27177c191d8f27ae5397cd3f90eed9841516040c0a0ed25957ef03f175584fb8 () (a, pair a b, b) () () (direct 2.1.0, direct 2.1.1)
+      prove = ∩ a pair a b ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (= ∩ $$0 pair a b ∅) ()
+        given
+        simplified = ∩ $0 pair a b ∅ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 pair a b, = ∩ $0 pair a b ∅) () () ()
+          given
+      prove ∈ b pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () ()
+      prove ¬ ∈ b a 27177c191d8f27ae5397cd3f90eed9841516040c0a0ed25957ef03f175584fb8 () (a, pair a b, b) () ()
+        given
+        given
     }
     assume = $0 b {
-      assert = ∩ b pair a b ∅ direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, b) (= ∩ $$0 pair a b ∅) () (direct 2.2a, simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 pair a b, = ∩ $0 pair a b ∅) () () () direct 2a (1))
-      assert ∈ a pair a b direct bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () () ()
-      assert ¬ ∈ a b direct 27177c191d8f27ae5397cd3f90eed9841516040c0a0ed25957ef03f175584fb8 () (b, pair a b, a) () () (direct 2.2.0, direct 2.2.1)
+      prove = ∩ b pair a b ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, b) (= ∩ $$0 pair a b ∅) ()
+        given
+        simplified = ∩ $0 pair a b ∅ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 pair a b, = ∩ $0 pair a b ∅) () () ()
+          given
+      prove ∈ a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () ()
+      prove ¬ ∈ a b 27177c191d8f27ae5397cd3f90eed9841516040c0a0ed25957ef03f175584fb8 () (b, pair a b, a) () ()
+        given
+        given
     }
-    assert ∨ ¬ ∈ b a ¬ ∈ a b direct 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (= $0 a, = $0 b, ¬ ∈ b a, ¬ ∈ a b) () () () (direct 2.0, compound 2.1a direct 2.1.2, compound 2.2a direct 2.2.2)
+    prove ∨ ¬ ∈ b a ¬ ∈ a b 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (= $0 a, = $0 b, ¬ ∈ b a, ¬ ∈ a b) () () ()
+      given
+      given
+      given
   }
 }
 
 theorem No Two Sets Contain Each Other
 conclusion ¬ ∧ ∈ b a ∈ a b
 {
-  assert ∨ ¬ ∈ b a ¬ ∈ a b direct 4cbbdc5eb910728a90ce8062525b404c9ab8f9883733c35b15aa90d25cb834e1 () (b, a) () () ()
-  assert ¬ ∧ ∈ b a ∈ a b direct 3377a71ec0fe3e5503f4565893653daa725f30a43f437235891cea02ce0d6809 (∈ b a, ∈ a b) () () () (direct 0)
+  prove ∨ ¬ ∈ b a ¬ ∈ a b 4cbbdc5eb910728a90ce8062525b404c9ab8f9883733c35b15aa90d25cb834e1 () (b, a) () ()
+  prove ¬ ∧ ∈ b a ∈ a b 3377a71ec0fe3e5503f4565893653daa725f30a43f437235891cea02ce0d6809 (∈ b a, ∈ a b) () () ()
+    given
 }

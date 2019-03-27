@@ -79,34 +79,26 @@ premise ↔ ψ χ
 conclusion ↔ φ χ
 {
   assume φ {
-    prove ψ be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (φ, ψ) () () ()
+    prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () () ()
+      expanded → φ ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () () ()
+        given
       given
-      given
-    prove χ be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (ψ, χ) () () ()
-      given
+    prove χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, χ) () () ()
+      expanded → ψ χ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (ψ, χ) () () ()
+        given
       given
   }
   assume χ {
-    prove ψ bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (ψ, χ) () () ()
+    prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (χ, ψ) () () ()
+      expanded → χ ψ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (ψ, χ) () () ()
+        given
       given
-      given
-    prove φ bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (φ, ψ) () () ()
-      given
+    prove φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, φ) () () ()
+      expanded → ψ φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (φ, ψ) () () ()
+        given
       given
   }
   prove ↔ φ χ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, χ) () () ()
-    given
-    given
-}
-
-theorem Equivalence Is Transitive
-premise ↔ φ ψ
-premise ↔ χ ψ
-conclusion ↔ φ χ
-{
-  prove ↔ ψ χ 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (χ, ψ) () () ()
-    given
-  prove ↔ φ χ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (φ, ψ, χ) () () ()
     given
     given
 }

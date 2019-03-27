@@ -9,31 +9,38 @@ theorem Elements of Ordered Pair
 premise ∈ c orderedPair a b
 conclusion ∨ = c singleton a = c pair a b
 {
-  assert = orderedPair a b pair singleton a pair a b direct 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () () ()
-  assert ∈ c pair singleton a pair a b direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, pair singleton a pair a b) (∈ c $0) () (direct 0, direct p0)
-  assert ∨ = c singleton a = c pair a b direct b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () (c, singleton a, pair a b) () () (direct 1)
+  prove = orderedPair a b pair singleton a pair a b 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () ()
+  prove ∈ c pair singleton a pair a b 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, pair singleton a pair a b) (∈ c $0) ()
+    given
+    given
+  prove ∨ = c singleton a = c pair a b b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () (c, singleton a, pair a b) () ()
+    given
 }
 
 theorem Singleton of First Coordinate Is Element of Ordered Pair
 conclusion ∈ singleton a orderedPair a b
 {
-  assert = orderedPair a b pair singleton a pair a b direct 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () () ()
-  assert ∈ singleton a pair singleton a pair a b direct bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (singleton a, pair a b) () () ()
-  assert ∈ singleton a orderedPair a b direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (orderedPair a b, pair singleton a pair a b) (∈ singleton a $0) () (direct 0, direct 1)
+  prove = orderedPair a b pair singleton a pair a b 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () ()
+  prove ∈ singleton a pair singleton a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (singleton a, pair a b) () ()
+  prove ∈ singleton a orderedPair a b 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (orderedPair a b, pair singleton a pair a b) (∈ singleton a $0) ()
+    given
+    given
 }
 
 theorem Pair Is Element of Ordered Pair
 conclusion ∈ pair a b orderedPair a b
 {
-  assert = orderedPair a b pair singleton a pair a b direct 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () () ()
-  assert ∈ pair a b pair singleton a pair a b direct c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (pair a b, singleton a) () () ()
-  assert ∈ pair a b orderedPair a b direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (orderedPair a b, pair singleton a pair a b) (∈ pair a b $0) () (direct 0, direct 1)
+  prove = orderedPair a b pair singleton a pair a b 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () ()
+  prove ∈ pair a b pair singleton a pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (pair a b, singleton a) () ()
+  prove ∈ pair a b orderedPair a b 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (orderedPair a b, pair singleton a pair a b) (∈ pair a b $0) ()
+    given
+    given
 }
 
 theorem Ordered Pair with Same Coordinates Is Double Singleton
 conclusion = orderedPair a a singleton singleton a
 {
-  assert = orderedPair a a pair singleton a pair a a direct 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, a) () () ()
+  prove = orderedPair a a pair singleton a pair a a 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, a) () ()
   assert = orderedPair a a pair singleton a singleton a direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a a, singleton a) (= orderedPair a a pair singleton a $0) () (elided direct 856bed8c7f5f249bac0978dd5f7359986d8eef536dff35c07c551f8061d9cd5c () (a) () () (), direct 0)
   assert = orderedPair a a singleton singleton a direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair singleton a singleton a, singleton singleton a) (= orderedPair a a $0) () (elided direct 856bed8c7f5f249bac0978dd5f7359986d8eef536dff35c07c551f8061d9cd5c () (singleton a) () () (), direct 1)
 }
@@ -42,28 +49,42 @@ theorem Ordered Pair has Same Coordinates If It Is a Double Singleton
 premise = orderedPair a b singleton singleton c
 conclusion = a b
 {
-  assert ∈ pair a b orderedPair a b direct ecb0a831f5c8e2151e676d37cb898297bd72fff21fb89e3505d44fba8bda77eb () (a, b) () () ()
-  assert ∈ pair a b singleton singleton c direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, singleton singleton c) (∈ pair a b $0) () (direct p0, direct 0)
-  assert = pair a b singleton c direct 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () (pair a b, singleton c) () () (direct 1)
-  assert = a b direct 93ce3bbad6edc8c32e60305820feb6561d45d6e612b3c3797dd420084232119a () (a, b, c) () () (direct 2)
+  prove ∈ pair a b orderedPair a b ecb0a831f5c8e2151e676d37cb898297bd72fff21fb89e3505d44fba8bda77eb () (a, b) () ()
+  prove ∈ pair a b singleton singleton c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, singleton singleton c) (∈ pair a b $0) ()
+    given
+    given
+  prove = pair a b singleton c 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () (pair a b, singleton c) () ()
+    given
+  prove = a b 93ce3bbad6edc8c32e60305820feb6561d45d6e612b3c3797dd420084232119a () (a, b, c) () ()
+    given
 }
 
 theorem First Coordinates of Equal Ordered Pairs Are Equal
 premise = orderedPair a b orderedPair c d
 conclusion = a c
 {
-  assert ∈ singleton a orderedPair a b direct d92b71337c8692a5cd350a01fdfcaf921a5cf5b9bfdcb0eeb3976647b04edcb3 () (a, b) () () ()
-  assert ∈ singleton a orderedPair c d direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, orderedPair c d) (∈ singleton a $0) () (direct p0, direct 0)
-  assert ∨ = singleton a singleton c = singleton a pair c d direct 2c8000ec49645b22f521a8ae79e6c32c70ac1ee8482445c1f24e5f9438d2435f () (singleton a, c, d) () () (direct 1)
+  prove ∈ singleton a orderedPair a b d92b71337c8692a5cd350a01fdfcaf921a5cf5b9bfdcb0eeb3976647b04edcb3 () (a, b) () ()
+  prove ∈ singleton a orderedPair c d 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, orderedPair c d) (∈ singleton a $0) ()
+    given
+    given
+  prove ∨ = singleton a singleton c = singleton a pair c d 2c8000ec49645b22f521a8ae79e6c32c70ac1ee8482445c1f24e5f9438d2435f () (singleton a, c, d) () ()
+    given
   assume = singleton a singleton c {
-    assert = a c direct 5a215068757c67bce26be0c2f4c354760c1a149522ad46458e05781e4c45cad6 () (a, c) () () (direct 3a)
+    prove = a c 5a215068757c67bce26be0c2f4c354760c1a149522ad46458e05781e4c45cad6 () (a, c) () ()
+      given
   }
   assume = singleton a pair c d {
-    assert = pair c d singleton a direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (singleton a, pair c d) () () (direct 4a)
-    assert = c a direct 86986adff1b0347cfe6e7c5a348775548325b13c85d427e352cbea41551f0e39 () (c, d, a) () () (direct 4.0)
-    assert = a c direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (c, a) () () (direct 4.1)
+    prove = pair c d singleton a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (singleton a, pair c d) () ()
+      given
+    prove = c a 86986adff1b0347cfe6e7c5a348775548325b13c85d427e352cbea41551f0e39 () (c, d, a) () ()
+      given
+    prove = a c 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (c, a) () ()
+      given
   }
-  assert = a c direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= singleton a singleton c, = singleton a pair c d, = a c) () () () (direct 2, compound 3a direct 3.0, compound 4a direct 4.2)
+  prove = a c 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= singleton a singleton c, = singleton a pair c d, = a c) () () ()
+    given
+    given
+    given
 }
 
 theorem Second Coordinates of Equal Ordered Pairs Are Equal - Lemma 1
@@ -71,36 +92,65 @@ premise = orderedPair a b orderedPair c d
 premise = b a
 conclusion = b d
 {
-  assert = a c direct 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () (a, b, c, d) () () (direct p0)
-  assert = orderedPair a b orderedPair a d direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, c) (= orderedPair a b orderedPair $0 d) () (direct 0, direct p0)
-  assert = orderedPair a a singleton singleton a direct 486dbcd9819d647e874f4e85d6466b65986782b9653cefbc33fa9c2f444b8e9f () (a) () () ()
-  assert = orderedPair a b singleton singleton a direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (b, a) (= orderedPair a $0 singleton singleton a) () (direct p1, direct 2)
-  assert = orderedPair a d singleton singleton a direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, orderedPair a d) (= $0 singleton singleton a) () (direct 1, direct 3)
-  assert = a d direct 1efef162b72af80fed24b414af675b41e123bc2c29d25ea39d9c65e7215a74cc () (a, d, a) () () (direct 4)
-  assert = b d direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, d) (= b $0) () (direct 5, direct p1)
+  prove = a c 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () (a, b, c, d) () ()
+    given
+  prove = orderedPair a b orderedPair a d 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, c) (= orderedPair a b orderedPair $0 d) ()
+    given
+    given
+  prove = orderedPair a a singleton singleton a 486dbcd9819d647e874f4e85d6466b65986782b9653cefbc33fa9c2f444b8e9f () (a) () ()
+  prove = orderedPair a b singleton singleton a 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (b, a) (= orderedPair a $0 singleton singleton a) ()
+    given
+    given
+  prove = orderedPair a d singleton singleton a 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, orderedPair a d) (= $0 singleton singleton a) ()
+    given
+    given
+  prove = a d 1efef162b72af80fed24b414af675b41e123bc2c29d25ea39d9c65e7215a74cc () (a, d, a) () ()
+    given
+  prove = b d 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, d) (= b $0) ()
+    given
+    given
 }
 
 theorem Second Coordinates of Equal Ordered Pairs Are Equal
 premise = orderedPair a b orderedPair c d
 conclusion = b d
 {
-  assert = a c direct 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () (a, b, c, d) () () (direct p0)
-  assert = orderedPair a b orderedPair a d direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, c) (= orderedPair a b orderedPair $0 d) () (direct 0, direct p0)
-  assert ∈ pair a b orderedPair a b direct ecb0a831f5c8e2151e676d37cb898297bd72fff21fb89e3505d44fba8bda77eb () (a, b) () () ()
-  assert ∈ pair a b orderedPair a d direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, orderedPair a d) (∈ pair a b $0) () (direct 1, direct 2)
-  assert ∨ = pair a b singleton a = pair a b pair a d direct 2c8000ec49645b22f521a8ae79e6c32c70ac1ee8482445c1f24e5f9438d2435f () (pair a b, a, d) () () (direct 3)
+  prove = a c 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () (a, b, c, d) () ()
+    given
+  prove = orderedPair a b orderedPair a d 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, c) (= orderedPair a b orderedPair $0 d) ()
+    given
+    given
+  prove ∈ pair a b orderedPair a b ecb0a831f5c8e2151e676d37cb898297bd72fff21fb89e3505d44fba8bda77eb () (a, b) () ()
+  prove ∈ pair a b orderedPair a d 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, orderedPair a d) (∈ pair a b $0) ()
+    given
+    given
+  prove ∨ = pair a b singleton a = pair a b pair a d 2c8000ec49645b22f521a8ae79e6c32c70ac1ee8482445c1f24e5f9438d2435f () (pair a b, a, d) () ()
+    given
   assume = pair a b singleton a {
-    assert = b a direct e503481086281bc97997d7b0844c1481203e538306ce9c02b5cf8d90a816fd3e () (a, b, a) () () (direct 5a)
-    assert = b d direct 80c6b64c9a56adf4d1f0f96bd147ef34edfe647eb9497d29595ceda8a53bf842 () (a, b, c, d) () () (direct p0, direct 5.0)
+    prove = b a e503481086281bc97997d7b0844c1481203e538306ce9c02b5cf8d90a816fd3e () (a, b, a) () ()
+      given
+    prove = b d 80c6b64c9a56adf4d1f0f96bd147ef34edfe647eb9497d29595ceda8a53bf842 () (a, b, c, d) () ()
+      given
+      given
   }
   assume = pair a b pair a d {
-    assert ∈ b pair a b direct c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () () ()
-    assert ∈ b pair a d direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a b, pair a d) (∈ b $0) () (direct 6a, direct 6.0)
-    assert ∨ = b a = b d direct b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () (b, a, d) () () (direct 6.1)
+    prove ∈ b pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () ()
+    prove ∈ b pair a d 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a b, pair a d) (∈ b $0) ()
+      given
+      given
+    prove ∨ = b a = b d b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () (b, a, d) () ()
+      given
     assume = b a {
-      assert = b d direct 80c6b64c9a56adf4d1f0f96bd147ef34edfe647eb9497d29595ceda8a53bf842 () (a, b, c, d) () () (direct p0, direct 6.3a)
+      prove = b d 80c6b64c9a56adf4d1f0f96bd147ef34edfe647eb9497d29595ceda8a53bf842 () (a, b, c, d) () ()
+        given
+        given
     }
-    assert = b d direct 2ff9c792011f656a8b9615593c8b85d39ff9d5ec55dc6db4db6934fa559f64d2 (= b a, = b d) () () () (direct 6.2, compound 6.3a direct 6.3.0)
+    prove = b d 2ff9c792011f656a8b9615593c8b85d39ff9d5ec55dc6db4db6934fa559f64d2 (= b a, = b d) () () ()
+      given
+      given
   }
-  assert = b d direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= pair a b singleton a, = pair a b pair a d, = b d) () () () (direct 4, compound 5a direct 5.1, compound 6a direct 6.4)
+  prove = b d 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= pair a b singleton a, = pair a b pair a d, = b d) () () ()
+    given
+    given
+    given
 }

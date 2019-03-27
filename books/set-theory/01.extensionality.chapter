@@ -20,8 +20,16 @@ premise ∀ x ↔ ∈ $0 a with ($0) φ
 premise ∀ x ↔ ∈ $0 b with ($0) φ
 conclusion = a b
 {
-  assert ∀ x ↔ ∈ $0 a ∈ $0 b transformed a7484e000ea36999f1857b841f8a03dab3aef0c8e5765ae87dbf2f433d2bbb04 (Y Y) Y () () (∈ $0 a, with ($0) φ, ∈ $0 b) () (direct p0, direct p1)
-  assert = a b direct 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (a, b) () () (direct 0)
+  take x {
+    prove ↔ ∈ $0 a ∈ $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 a, with ($0) φ, ∈ $0 b) () () ()
+      expanded ↔ ∈ $0 a with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 a with ($$0) φ) ()
+        given
+      expanded ↔ with ($0) φ ∈ $0 b 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (∈ $0 b, with ($0) φ) () () ()
+        expanded ↔ ∈ $0 b with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 b with ($$0) φ) ()
+          given
+  }
+  prove = a b 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (a, b) () ()
+    given
 }
 
 theorem Sets with Equivalent Membership Conditions Are Equal
@@ -30,8 +38,16 @@ premise ∀ x ↔ ∈ $0 b with ($0) ψ
 premise ∀ x ↔ with ($0) φ with ($0) ψ
 conclusion = a b
 {
-  assert ∀ x ↔ ∈ $0 a with ($0) ψ transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $0 a, with ($0) φ, with ($0) ψ) () (direct p0, direct p2)
-  assert = a b direct f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () (a, b) (with ($0) ψ) () (direct 0, direct p1)
+  take x {
+    prove ↔ ∈ $0 a with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 a, with ($0) φ, with ($0) ψ) () () ()
+      expanded ↔ ∈ $0 a with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 a with ($$0) φ) ()
+        given
+      expanded ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$0) φ with ($$0) ψ) ()
+        given
+  }
+  prove = a b f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () (a, b) (with ($0) ψ) ()
+    given
+    given
 }
 
 theorem A Set with a Membership Condition Is Unique
@@ -41,11 +57,18 @@ conclusion ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ
   take z_1 {
     take z_2 {
       assume ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ {
-        assert = $$0 $0 direct f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () ($$0, $0) (with ($$$0) φ) () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∀ y ↔ ∈ $0 $$$0 with ($0) φ, ∀ y ↔ ∈ $0 $$0 with ($0) φ) () () () direct 0.0.0a (0), simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∀ y ↔ ∈ $0 $$$0 with ($0) φ, ∀ y ↔ ∈ $0 $$0 with ($0) φ) () () () direct 0.0.0a (1))
+        prove = $$0 $0 f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () ($$0, $0) (with ($$$0) φ) ()
+          simplified ∀ y ↔ ∈ $0 $$$0 with ($0) φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∀ y ↔ ∈ $0 $$$0 with ($0) φ, ∀ y ↔ ∈ $0 $$0 with ($0) φ) () () ()
+            given
+          simplified ∀ y ↔ ∈ $0 $$0 with ($0) φ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∀ y ↔ ∈ $0 $$$0 with ($0) φ, ∀ y ↔ ∈ $0 $$0 with ($0) φ) () () ()
+            given
       }
     }
   }
-  assert ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ direct f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∀ y ↔ ∈ $0 $$0 with ($0) φ) () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ x ∀ y → ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ = $$0 $0) () () () (direct p0, compound 0 compound 0.0 compound 0.0.0a direct 0.0.0.0))
+  prove ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∀ y ↔ ∈ $0 $$0 with ($0) φ) ()
+    expanded ∧ ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ ∀ x ∀ y → ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ x ∀ y → ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ = $$0 $0) () () ()
+      given
+      given
 }
 
 theorem Replace Equivalent Membership Condition
@@ -54,7 +77,14 @@ premise ∀ y ↔ with ($0) φ with ($0) ψ
 conclusion ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ
 {
   let a ∀ y ↔ ∈ $0 $$0 with ($0) φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ) () (∀ y ↔ ∈ $0 $$0 with ($0) φ) () (direct p0, direct 0d) {
-    assert ∀ y ↔ ∈ $0 $$0 with ($0) ψ transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $$0 $0, with ($$0) φ, with ($$0) ψ) () (direct 0a, direct p1)
-    assert ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∀ y ↔ ∈ $0 $$$0 with ($0) ψ) () (direct 0.0)
+    take y {
+      prove ↔ ∈ $0 $$0 with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, with ($0) φ, with ($0) ψ) () () ()
+        expanded ↔ ∈ $0 $$0 with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 with ($$$0) φ) ()
+          given
+        expanded ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ with ($$$0) ψ) ()
+          given
+    }
+    prove ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∀ y ↔ ∈ $0 $$$0 with ($0) ψ) ()
+      given
   }
 }

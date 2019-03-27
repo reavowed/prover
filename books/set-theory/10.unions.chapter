@@ -6,8 +6,9 @@ conclusion ∃ x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0
 theorem Arbitrary Unions Exist
 conclusion ∃! x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0
 {
-  assert ∃ x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0 direct 7368a5aaf2ab8f127dfe8575ac80d95f32cf5e92f047b096c5dfe41f6b5dc039 () (a) () () ()
-  assert ∃! x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0 direct 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∃ z ∧ ∈ $0 a ∈ $$0 $0) () (direct 0)
+  prove ∃ x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0 7368a5aaf2ab8f127dfe8575ac80d95f32cf5e92f047b096c5dfe41f6b5dc039 () (a) () ()
+  prove ∃! x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∃ z ∧ ∈ $0 a ∈ $$0 $0) ()
+    given
 }
 
 term union (a)
@@ -19,7 +20,7 @@ theorem Element of Arbitrary Union
 premise ∈ a union A
 conclusion ∃ x ∧ ∈ a $0 ∈ $0 A
 {
-  assert ∀ y ↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A direct f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (A) () () ()
+  prove ∀ y ↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (A) () ()
   assert ∃ x ∧ ∈ a $0 ∈ $0 A transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (a) (∈ $0 union A, ∃ x ∧ ∈ $$0 $0 ∈ $0 A) () (direct 0, direct p0)
 }
 
@@ -29,7 +30,7 @@ premise ∈ a A
 conclusion ∈ b union A
 {
   assert ∃ x ∧ ∈ b $0 ∈ $0 A direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (∧ ∈ b $0 ∈ $0 A) () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ b a, ∈ a A) () () () (direct p0, direct p1))
-  assert ∀ y ↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A direct f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (A) () () ()
+  prove ∀ y ↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (A) () ()
   assert ∈ b union A transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (b) (∈ $0 union A, ∃ x ∧ ∈ $$0 $0 ∈ $0 A) () (direct 1, direct 0)
 }
 
@@ -40,33 +41,49 @@ term ∪ (a b)
 theorem Membership Condition for Binary Union
 conclusion ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
 {
-  assert ∀ x ↔ ∈ $0 union pair a b ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b direct f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (pair a b) () () ()
+  prove ∀ x ↔ ∈ $0 union pair a b ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (pair a b) () ()
   assert ∀ x ↔ ∈ $0 ∪ a b ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (∪ a b, union pair a b) (∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b) () (elided direct 523a320399c522cb7939b676b443444325ae6bc54389fb87a6fc4b2d72971a20 () (a, b) () () (), direct 0)
   take x {
     assume ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b {
       let y ∧ ∈ $$0 $0 ∈ $0 pair a b direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∨ ∈ $0 a ∈ $0 b) () (∧ ∈ $0 $$0 ∈ $$0 pair a b) () (direct 2.0a, direct 2.0.0d) {
-        assert ∨ = $0 a = $0 b direct b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () ($0, a, b) () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 $0, ∈ $0 pair a b) () () () direct 2.0.0a (1))
+        prove ∨ = $0 a = $0 b b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () ($0, a, b) () ()
+          simplified ∈ $0 pair a b 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 $0, ∈ $0 pair a b) () () ()
+            given
         assume = $0 a {
-          assert ∈ $$0 a direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (∈ $$0 $$$0) () (direct 2.0.0.1a, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 $0, ∈ $0 pair a b) () () () direct 2.0.0a (0))
+          prove ∈ $$0 a 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (∈ $$0 $$$0) ()
+            given
+            simplified ∈ $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 $0, ∈ $0 pair a b) () () ()
+              given
         }
         assume = $0 b {
-          assert ∈ $$0 b direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, b) (∈ $$0 $$$0) () (direct 2.0.0.2a, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 $0, ∈ $0 pair a b) () () () direct 2.0.0a (0))
+          prove ∈ $$0 b 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, b) (∈ $$0 $$$0) ()
+            given
+            simplified ∈ $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 $0, ∈ $0 pair a b) () () ()
+              given
         }
-        assert ∨ ∈ $$0 a ∈ $$0 b direct 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (= $0 a, = $0 b, ∈ $$0 a, ∈ $$0 b) () () () (direct 2.0.0.0, compound 2.0.0.1a direct 2.0.0.1.0, compound 2.0.0.2a direct 2.0.0.2.0)
+        prove ∨ ∈ $$0 a ∈ $$0 b 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (= $0 a, = $0 b, ∈ $$0 a, ∈ $$0 b) () () ()
+          given
+          given
+          given
       }
     }
     assume ∈ $0 a {
-      assert ∈ a pair a b direct bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () () ()
+      prove ∈ a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () ()
       assert ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (∧ ∈ $0 $$0 ∈ $$0 pair a b) () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ $0 a, ∈ a pair a b) () () () (direct 2.1a, direct 2.1.0))
     }
     assume ∈ $0 b {
-      assert ∈ b pair a b direct c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () () ()
+      prove ∈ b pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () ()
       assert ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (b) (∧ ∈ $0 $$0 ∈ $$0 pair a b) () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ $0 b, ∈ b pair a b) () () () (direct 2.2a, direct 2.2.0))
     }
     assume ∨ ∈ $0 a ∈ $0 b {
-      assert ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 a, ∈ $0 b, ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b) () () () (direct 2.3a, compound 2.1a direct 2.1.1, compound 2.2a direct 2.2.1)
+      prove ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 a, ∈ $0 b, ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b) () () ()
+        given
+        given
+        given
     }
-    assert ↔ ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b ∨ ∈ $0 a ∈ $0 b direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b, ∨ ∈ $0 a ∈ $0 b) () () () (compound 2.0a direct 2.0.0, compound 2.3a direct 2.3.0)
+    prove ↔ ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b ∨ ∈ $0 a ∈ $0 b 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b, ∨ ∈ $0 a ∈ $0 b) () () ()
+      given
+      given
   }
   assert ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $0 ∪ a b, ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b, ∨ ∈ $0 a ∈ $0 b) () (direct 1, compound 2 direct 2.4)
 }
@@ -75,24 +92,27 @@ theorem Element of Binary Union
 premise ∈ c ∪ a b
 conclusion ∨ ∈ c a ∈ c b
 {
-  assert ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () () ()
+  prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () ()
   assert ∨ ∈ c a ∈ c b transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (c) (∈ $0 ∪ a b, ∨ ∈ $0 a ∈ $0 b) () (direct 0, direct p0)
 }
 
 theorem Binary Union Is Symmetric
 conclusion = ∪ a b ∪ b a
 {
-  assert ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () () ()
-  assert ∀ x ↔ ∈ $0 ∪ b a ∨ ∈ $0 b ∈ $0 a direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (b, a) () () ()
+  prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () ()
+  prove ∀ x ↔ ∈ $0 ∪ b a ∨ ∈ $0 b ∈ $0 a 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (b, a) () ()
   assert ∀ x ↔ ∨ ∈ $0 a ∈ $0 b ∨ ∈ $0 b ∈ $0 a transformed 2eaae6272d534dc99795d91bbbacc12e5e5b58aa4db06ed18bf864f72b5c947d () Y () () (∈ $0 a, ∈ $0 b) () ()
-  assert = ∪ a b ∪ b a direct 4b83926de252406c08777885e14c3c906028ee3c7fb53340249ba1eb1ada4d4d () (∪ a b, ∪ b a) (∨ ∈ $0 a ∈ $0 b, ∨ ∈ $0 b ∈ $0 a) () (direct 0, direct 1, direct 2)
+  prove = ∪ a b ∪ b a 4b83926de252406c08777885e14c3c906028ee3c7fb53340249ba1eb1ada4d4d () (∪ a b, ∪ b a) (∨ ∈ $0 a ∈ $0 b, ∨ ∈ $0 b ∈ $0 a) ()
+    given
+    given
+    given
 }
 
 theorem Element Transfers to Binary Union
 premise ∈ c a
 conclusion ∈ c ∪ a b
 {
-  assert ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () () ()
+  prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () ()
   assert ∈ c ∪ a b transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (c) (∈ $0 ∪ a b, ∨ ∈ $0 a ∈ $0 b) () (direct 0, expansion direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d rearranged (∈ c a, ∈ c b) () () () (direct p0))
 }
 
@@ -100,38 +120,43 @@ theorem Element Transfers to Binary Union
 premise ∈ c b
 conclusion ∈ c ∪ a b
 {
-  assert ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () () ()
+  prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () ()
   assert ∈ c ∪ a b transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (c) (∈ $0 ∪ a b, ∨ ∈ $0 a ∈ $0 b) () (direct 0, expansion direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 rearranged (∈ c b, ∈ c a) () () () (direct p0))
 }
 
 theorem The Empty Set Is an Identity for Binary Union
 conclusion = ∪ ∅ a a
 {
-  assert ∀ x ↔ ∈ $0 ∪ ∅ a ∨ ∈ $0 ∅ ∈ $0 a direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (∅, a) () () ()
-  assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
+  prove ∀ x ↔ ∈ $0 ∪ ∅ a ∨ ∈ $0 ∅ ∈ $0 a 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (∅, a) () ()
+  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
   assert ∀ x ↔ ∨ ∈ $0 ∅ ∈ $0 a ∈ $0 a transformed 8695bf79aeed4be31872e7b45776b2d7a75b0ddb572f1628b69e69babe85a6b2 (Y) Y () () (∈ $0 ∅, ∈ $0 a) () (direct 1)
   assert ∀ x ↔ ∈ $0 ∪ ∅ a ∈ $0 a transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $0 ∪ ∅ a, ∨ ∈ $0 ∅ ∈ $0 a, ∈ $0 a) () (direct 0, direct 2)
-  assert = ∪ ∅ a a direct 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (∪ ∅ a, a) () () (direct 3)
+  prove = ∪ ∅ a a 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (∪ ∅ a, a) () ()
+    given
 }
 
 theorem The Empty Set Is an Identity for Binary Union
 conclusion = ∪ a ∅ a
 {
-  assert ∀ x ↔ ∈ $0 ∪ a ∅ ∨ ∈ $0 a ∈ $0 ∅ direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, ∅) () () ()
-  assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
+  prove ∀ x ↔ ∈ $0 ∪ a ∅ ∨ ∈ $0 a ∈ $0 ∅ 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, ∅) () ()
+  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
   assert ∀ x ↔ ∨ ∈ $0 a ∈ $0 ∅ ∈ $0 a transformed 6b9fa7f736511ac3f68acac926cb0a2ff949395a1971c09e23463785f17de95b (Y) Y () () (∈ $0 ∅, ∈ $0 a) () (direct 1)
   assert ∀ x ↔ ∈ $0 ∪ a ∅ ∈ $0 a transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $0 ∪ a ∅, ∨ ∈ $0 a ∈ $0 ∅, ∈ $0 a) () (direct 0, direct 2)
-  assert = ∪ a ∅ a direct 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (∪ a ∅, a) () () (direct 3)
+  prove = ∪ a ∅ a 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (∪ a ∅, a) () ()
+    given
 }
 
 theorem A Union of a Non-Empty Set Is Non-Empty
 premise ¬ = a ∅
 conclusion ¬ = ∪ a b ∅
 {
-  assert ∃ x ∈ $0 a direct 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (a) () () (direct p0)
+  prove ∃ x ∈ $0 a 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (a) () ()
+    given
   let x ∈ $0 a direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (¬ = ∪ a b ∅) () (∈ $0 a) () (direct 0, direct 1d) {
-    assert ∈ $0 ∪ a b direct d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () ($0, a, b) () () (direct 1a)
-    assert ¬ = ∪ a b ∅ direct 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () ($0, ∪ a b) () () (direct 1.0)
+    prove ∈ $0 ∪ a b d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () ($0, a, b) () ()
+      given
+    prove ¬ = ∪ a b ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () ($0, ∪ a b) () ()
+      given
   }
 }
 
@@ -139,10 +164,13 @@ theorem A Union of a Non-Empty Set Is Non-Empty
 premise ¬ = a ∅
 conclusion ¬ = ∪ b a ∅
 {
-  assert ∃ x ∈ $0 a direct 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (a) () () (direct p0)
+  prove ∃ x ∈ $0 a 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (a) () ()
+    given
   let x ∈ $0 a direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (¬ = ∪ b a ∅) () (∈ $0 a) () (direct 0, direct 1d) {
-    assert ∈ $0 ∪ b a direct 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () ($0, a, b) () () (direct 1a)
-    assert ¬ = ∪ b a ∅ direct 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () ($0, ∪ b a) () () (direct 1.0)
+    prove ∈ $0 ∪ b a 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () ($0, a, b) () ()
+      given
+    prove ¬ = ∪ b a ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () ($0, ∪ b a) () ()
+      given
   }
 }
 
@@ -151,8 +179,11 @@ premise ∈ a ∪ b c
 premise ¬ ∈ a b
 conclusion ∈ a c
 {
-  assert ∨ ∈ a b ∈ a c direct cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (a, b, c) () () (direct p0)
-  assert ∈ a c direct 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∈ a b, ∈ a c) () () () (direct 0, direct p1)
+  prove ∨ ∈ a b ∈ a c cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (a, b, c) () ()
+    given
+  prove ∈ a c 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∈ a b, ∈ a c) () () ()
+    given
+    given
 }
 
 theorem Set Is in One Part of a Binary Union
@@ -160,8 +191,11 @@ premise ∈ a ∪ b c
 premise ¬ ∈ a c
 conclusion ∈ a b
 {
-  assert ∨ ∈ a b ∈ a c direct cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (a, b, c) () () (direct p0)
-  assert ∈ a b direct 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ a b, ∈ a c) () () () (direct 0, direct p1)
+  prove ∨ ∈ a b ∈ a c cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (a, b, c) () ()
+    given
+  prove ∈ a b 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ a b, ∈ a c) () () ()
+    given
+    given
 }
 
 theorem Union Membership Equivalence If Not In One Set
@@ -169,12 +203,17 @@ premise ¬ ∈ a c
 conclusion ↔ ∈ a b ∈ a ∪ b c
 {
   assume ∈ a b {
-    assert ∈ a ∪ b c direct d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () (a, b, c) () () (direct 0a)
+    prove ∈ a ∪ b c d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () (a, b, c) () ()
+      given
   }
   assume ∈ a ∪ b c {
-    assert ∈ a b direct e5c82469ce89d1c5970a355b84917e0bbb62793b4b1b5c668ebf595a499da2a3 () (a, b, c) () () (direct 1a, direct p0)
+    prove ∈ a b e5c82469ce89d1c5970a355b84917e0bbb62793b4b1b5c668ebf595a499da2a3 () (a, b, c) () ()
+      given
+      given
   }
-  assert ↔ ∈ a b ∈ a ∪ b c direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ a b, ∈ a ∪ b c) () () () (compound 0a direct 0.0, compound 1a direct 1.0)
+  prove ↔ ∈ a b ∈ a ∪ b c 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ a b, ∈ a ∪ b c) () () ()
+    given
+    given
 }
 
 theorem Union Membership Equivalence If Not In One Set
@@ -182,12 +221,17 @@ premise ¬ ∈ a b
 conclusion ↔ ∈ a c ∈ a ∪ b c
 {
   assume ∈ a c {
-    assert ∈ a ∪ b c direct 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () (a, c, b) () () (direct 0a)
+    prove ∈ a ∪ b c 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () (a, c, b) () ()
+      given
   }
   assume ∈ a ∪ b c {
-    assert ∈ a c direct f2a97c58a3627f2863e342d60426ac766e10389dc2c0ce7901af06b00281e473 () (a, b, c) () () (direct 1a, direct p0)
+    prove ∈ a c f2a97c58a3627f2863e342d60426ac766e10389dc2c0ce7901af06b00281e473 () (a, b, c) () ()
+      given
+      given
   }
-  assert ↔ ∈ a c ∈ a ∪ b c direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ a c, ∈ a ∪ b c) () () () (compound 0a direct 0.0, compound 1a direct 1.0)
+  prove ↔ ∈ a c ∈ a ∪ b c 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ a c, ∈ a ∪ b c) () () ()
+    given
+    given
 }
 
 theorem Union of Subsets Is a Subset
@@ -195,12 +239,15 @@ premise ⊆ A X
 premise ⊆ B X
 conclusion ⊆ ∪ A B X
 {
-  assert ∀ x → ∈ $0 A ∈ $0 X direct f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (A, X) () () (direct p0)
-  assert ∀ x → ∈ $0 B ∈ $0 X direct f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (B, X) () () (direct p1)
+  prove ∀ x → ∈ $0 A ∈ $0 X f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (A, X) () ()
+    given
+  prove ∀ x → ∈ $0 B ∈ $0 X f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (B, X) () ()
+    given
   assert ∀ x → ∨ ∈ $0 A ∈ $0 B ∈ $0 X transformed 601e278a38579fd247c444cdbd61fe6d5f48c99f2b5725ef973cc3cb781a8eef (Y Y) Y () () (∈ $0 A, ∈ $0 X, ∈ $0 B) () (direct 0, direct 1)
-  assert ∀ x ↔ ∈ $0 ∪ A B ∨ ∈ $0 A ∈ $0 B direct 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (A, B) () () ()
+  prove ∀ x ↔ ∈ $0 ∪ A B ∨ ∈ $0 A ∈ $0 B 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (A, B) () ()
   assert ∀ x → ∈ $0 ∪ A B ∈ $0 X transformed 05be0af438db5ac136aa592c728307d7245a00ec32e576d2b1fe8e3c3bd6e0e9 (Y Y) Y () () (∈ $0 ∪ A B, ∨ ∈ $0 A ∈ $0 B, ∈ $0 X) () (direct 3, direct 2)
-  assert ⊆ ∪ A B X direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (∪ A B, X) () () (direct 4)
+  prove ⊆ ∪ A B X 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (∪ A B, X) () ()
+    given
 }
 
 theorem Subset Transfers to Union
@@ -209,8 +256,11 @@ conclusion ⊆ X ∪ A B
 {
   take x {
     assume ∈ $0 X {
-      assert ∈ $0 A direct ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (X, A, $0) () () (direct p0, direct 0.0a)
-      assert ∈ $0 ∪ A B direct d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () ($0, A, B) () () (direct 0.0.0)
+      prove ∈ $0 A ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (X, A, $0) () ()
+        given
+        given
+      prove ∈ $0 ∪ A B d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () ($0, A, B) () ()
+        given
     }
   }
   assert ⊆ X ∪ A B direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (X, ∪ A B) () () (compound 0 compound 0.0a direct 0.0.1)
@@ -222,8 +272,11 @@ conclusion ⊆ X ∪ B A
 {
   take x {
     assume ∈ $0 X {
-      assert ∈ $0 A direct ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (X, A, $0) () () (direct p0, direct 0.0a)
-      assert ∈ $0 ∪ B A direct 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () ($0, A, B) () () (direct 0.0.0)
+      prove ∈ $0 A ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (X, A, $0) () ()
+        given
+        given
+      prove ∈ $0 ∪ B A 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () ($0, A, B) () ()
+        given
     }
   }
   assert ⊆ X ∪ B A direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (X, ∪ B A) () () (compound 0 compound 0.0a direct 0.0.1)
@@ -232,15 +285,17 @@ conclusion ⊆ X ∪ B A
 theorem Set Is Subset of Its Union
 conclusion ⊆ A ∪ A B
 {
-  assert ⊆ A A direct f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (A) () () ()
-  assert ⊆ A ∪ A B direct 861cf8c42641b4bb0dcdb402c70b41a5b3cd5e70149c4ba8bd61b1cd1863762e () (A, A, B) () () (direct 0)
+  prove ⊆ A A f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (A) () ()
+  prove ⊆ A ∪ A B 861cf8c42641b4bb0dcdb402c70b41a5b3cd5e70149c4ba8bd61b1cd1863762e () (A, A, B) () ()
+    given
 }
 
 theorem Set Is Subset of Its Union
 conclusion ⊆ B ∪ A B
 {
-  assert ⊆ B B direct f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (B) () () ()
-  assert ⊆ B ∪ A B direct c44aea8393fdd86f26d82bbf976efc07e57bb21823e6336a5155590d82eb2882 () (B, B, A) () () (direct 0)
+  prove ⊆ B B f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (B) () ()
+  prove ⊆ B ∪ A B c44aea8393fdd86f26d82bbf976efc07e57bb21823e6336a5155590d82eb2882 () (B, B, A) () ()
+    given
 }
 
 theorem Redundant Union with Subset
@@ -249,14 +304,20 @@ conclusion = ∪ A B B
 {
   take x {
     assume ∈ $0 ∪ A B {
-      assert ∨ ∈ $0 A ∈ $0 B direct cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () ($0, A, B) () () (direct 0.0a)
+      prove ∨ ∈ $0 A ∈ $0 B cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () ($0, A, B) () ()
+        given
       assume ∈ $0 A {
-        assert ∈ $0 B direct ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (A, B, $0) () () (direct p0, direct 0.0.1a)
+        prove ∈ $0 B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (A, B, $0) () ()
+          given
+          given
       }
-      assert ∈ $0 B direct 2ff9c792011f656a8b9615593c8b85d39ff9d5ec55dc6db4db6934fa559f64d2 (∈ $0 A, ∈ $0 B) () () () (direct 0.0.0, compound 0.0.1a direct 0.0.1.0)
+      prove ∈ $0 B 2ff9c792011f656a8b9615593c8b85d39ff9d5ec55dc6db4db6934fa559f64d2 (∈ $0 A, ∈ $0 B) () () ()
+        given
+        given
     }
     assume ∈ $0 B {
-      assert ∈ $0 ∪ A B direct 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () ($0, B, A) () () (direct 0.1a)
+      prove ∈ $0 ∪ A B 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () ($0, B, A) () ()
+        given
     }
   }
   assert = ∪ A B B direct 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (∪ A B, B) () () (expansion transformed 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 rearranged (Y Y) Y () () (∈ $0 ∪ A B, ∈ $0 B) () (compound 0 compound 0.0a direct 0.0.2, compound 0 compound 0.1a direct 0.1.0))
@@ -266,17 +327,22 @@ theorem Redundant Union with Subset
 premise ⊆ A B
 conclusion = ∪ B A B
 {
-  assert = ∪ A B B direct c0e819d88cc63bd8d84c19469696b7c72aca1e3384a08a41423a64297c59819c () (A, B) () () (direct p0)
-  assert = ∪ B A ∪ A B direct 251a9f6358a3f62ea0c5aca19e5f6a8e906b78772c6fbf244443a5987b7b334c () (B, A) () () ()
-  assert = ∪ B A B direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∪ A B, B) (= ∪ B A $0) () (direct 0, direct 1)
+  prove = ∪ A B B c0e819d88cc63bd8d84c19469696b7c72aca1e3384a08a41423a64297c59819c () (A, B) () ()
+    given
+  prove = ∪ B A ∪ A B 251a9f6358a3f62ea0c5aca19e5f6a8e906b78772c6fbf244443a5987b7b334c () (B, A) () ()
+  prove = ∪ B A B 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∪ A B, B) (= ∪ B A $0) ()
+    given
+    given
 }
 
 theorem Redundant Union with Singleton
 premise ∈ a A
 conclusion = ∪ A singleton a A
 {
-  assert ⊆ singleton a A direct ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, A) () () (direct p0)
-  assert = ∪ A singleton a A direct 864b4a7ad760ff86c6cf511db95004868a6d51d680ab1f91b7700b7420d13149 () (singleton a, A) () () (direct 0)
+  prove ⊆ singleton a A ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, A) () ()
+    given
+  prove = ∪ A singleton a A 864b4a7ad760ff86c6cf511db95004868a6d51d680ab1f91b7700b7420d13149 () (singleton a, A) () ()
+    given
 }
 
 theorem Union of Subsets Is Subset
@@ -285,11 +351,19 @@ conclusion ⊆ union A B
 {
   take y {
     assume ∈ $0 union A {
-      assert ∃ a ∧ ∈ $$0 $0 ∈ $0 A direct 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () ($0, A) () () (direct 0.0a)
+      prove ∃ a ∧ ∈ $$0 $0 ∈ $0 A 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () ($0, A) () ()
+        given
       let a ∧ ∈ $$0 $0 ∈ $0 A direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 B) () (∧ ∈ $0 $$0 ∈ $$0 A) () (direct 0.0.0, direct 0.0.1d) {
-        assert ∈ $0 powerSet B direct ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (A, powerSet B, $0) () () (direct p0, simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 $0, ∈ $0 A) () () () direct 0.0.1a (1))
-        assert ⊆ $0 B direct bb4e7eb849809346e883e29e4c961a0b1e707fabfe8da1e4537f611a4602e0f2 () ($0, B) () () (direct 0.0.1.0)
-        assert ∈ $$0 B direct ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($0, B, $$0) () () (direct 0.0.1.1, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 $0, ∈ $0 A) () () () direct 0.0.1a (0))
+        prove ∈ $0 powerSet B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (A, powerSet B, $0) () ()
+          given
+          simplified ∈ $0 A 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 $0, ∈ $0 A) () () ()
+            given
+        prove ⊆ $0 B bb4e7eb849809346e883e29e4c961a0b1e707fabfe8da1e4537f611a4602e0f2 () ($0, B) () ()
+          given
+        prove ∈ $$0 B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($0, B, $$0) () ()
+          given
+          simplified ∈ $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 $0, ∈ $0 A) () () ()
+            given
       }
     }
   }

@@ -9,17 +9,22 @@ premise ∀ x ¬ ∈ $0 b
 conclusion = a b
 {
   assert ∀ x ↔ ∈ $0 a ∈ $0 b transformed 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 (Y Y) Y () () (∈ $0 a, ∈ $0 b) () (direct p0, direct p1)
-  assert = a b direct 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (a, b) () () (direct 0)
+  prove = a b 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (a, b) () ()
+    given
 }
 
 theorem There Exists a Unique Empty Set
 conclusion ∃! X ∀ x ¬ ∈ $0 $$0
 {
-  assert ∃ X ∀ x ¬ ∈ $0 $$0 direct 8cb461b548b624327fb06349cc783dcfe8c32d8a0e06ed3cec2f7283c17ad309 () () () () ()
+  prove ∃ X ∀ x ¬ ∈ $0 $$0 8cb461b548b624327fb06349cc783dcfe8c32d8a0e06ed3cec2f7283c17ad309 () () () ()
   take X {
     take Y {
       assume ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 {
-        assert = $$0 $0 direct 9364073b214fb72ba44752492c8581a0077da27b1f568678e34c11dee0726104 () ($$0, $0) () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∀ x ¬ ∈ $0 $$$0, ∀ x ¬ ∈ $0 $$0) () () () direct 1.0.0a (0), simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∀ x ¬ ∈ $0 $$$0, ∀ x ¬ ∈ $0 $$0) () () () direct 1.0.0a (1))
+        prove = $$0 $0 9364073b214fb72ba44752492c8581a0077da27b1f568678e34c11dee0726104 () ($$0, $0) () ()
+          simplified ∀ x ¬ ∈ $0 $$$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∀ x ¬ ∈ $0 $$$0, ∀ x ¬ ∈ $0 $$0) () () ()
+            given
+          simplified ∀ x ¬ ∈ $0 $$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∀ x ¬ ∈ $0 $$$0, ∀ x ¬ ∈ $0 $$0) () () ()
+            given
       }
     }
   }
@@ -33,40 +38,49 @@ term ∅ ()
 theorem The Empty Set Has No Elements
 conclusion ¬ ∃ x ∈ $0 ∅
 {
-  assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
-  assert ¬ ∃ x ∈ $0 ∅ direct 872156a627b48127aaf94f85dae6db43b564ad471e9f83890f421a2127ae266d () () (∈ $0 ∅) () (direct 0)
+  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
+  prove ¬ ∃ x ∈ $0 ∅ 872156a627b48127aaf94f85dae6db43b564ad471e9f83890f421a2127ae266d () () (∈ $0 ∅) ()
+    given
 }
 
 theorem A Set with No Elements Is the Empty Set
 premise ∀ x ¬ ∈ $0 a
 conclusion = a ∅
 {
-  assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
-  assert = a ∅ direct 9364073b214fb72ba44752492c8581a0077da27b1f568678e34c11dee0726104 () (a, ∅) () () (direct p0, direct 0)
+  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
+  prove = a ∅ 9364073b214fb72ba44752492c8581a0077da27b1f568678e34c11dee0726104 () (a, ∅) () ()
+    given
+    given
 }
 
 theorem A Set with No Elements Is the Empty Set
 premise ¬ ∃ x ∈ $0 a
 conclusion = a ∅
 {
-  assert ∀ x ¬ ∈ $0 a direct 9ce9302cc7e8ff857912b57f2692ecd928d2c84e880583a1086decf024c4a51f () () (∈ $0 a) () (direct p0)
-  assert = a ∅ direct 5a0c9d59fc32105d62c25b9e1215721f2748a1705d2e6fc33b3faed70a0fd20c () (a) () () (direct 0)
+  prove ∀ x ¬ ∈ $0 a 9ce9302cc7e8ff857912b57f2692ecd928d2c84e880583a1086decf024c4a51f () () (∈ $0 a) ()
+    given
+  prove = a ∅ 5a0c9d59fc32105d62c25b9e1215721f2748a1705d2e6fc33b3faed70a0fd20c () (a) () ()
+    given
 }
 
 theorem A Set with an Element Is Not the Empty Set
 premise ∃ x ∈ $0 a
 conclusion ¬ = a ∅
 {
-  assert ¬ ∃ x ∈ $0 ∅ direct 827d8083281e459a00a0171702fcaad0a436e7c4f5fd723a073232540de78434 () () () () ()
-  assert ¬ = a ∅ direct 0f121f39bcadef0371e79ff08f42eddba567b599878e5b8a1bbb15b0e8036486 () (a, ∅) (∃ x ∈ $0 $$0) () (direct p0, direct 0)
+  prove ¬ ∃ x ∈ $0 ∅ 827d8083281e459a00a0171702fcaad0a436e7c4f5fd723a073232540de78434 () () () ()
+  prove ¬ = a ∅ 0f121f39bcadef0371e79ff08f42eddba567b599878e5b8a1bbb15b0e8036486 () (a, ∅) (∃ x ∈ $0 $$0) ()
+    given
+    given
 }
 
 theorem A Set with an Element Is Not the Empty Set
 premise ∈ b a
 conclusion ¬ = a ∅
 {
-  assert ∃ x ∈ $0 a direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (b) (∈ $0 a) () (direct p0)
-  assert ¬ = a ∅ direct 0354a8cc6a68f985d261b4d1d684630756f623f41ae54a05d2c51c34524e46ac () (a) () () (direct 0)
+  prove ∃ x ∈ $0 a c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (b) (∈ $0 a) ()
+    given
+  prove ¬ = a ∅ 0354a8cc6a68f985d261b4d1d684630756f623f41ae54a05d2c51c34524e46ac () (a) () ()
+    given
 }
 
 theorem A Set That Is Not the Empty Set Has an Element
@@ -74,23 +88,27 @@ premise ¬ = a ∅
 conclusion ∃ x ∈ $0 a
 {
   assume ¬ ∃ x ∈ $0 a {
-    assert = a ∅ direct 390a59191aac7aa37bb4b44fdcb7c73e8cfcc43ddbf73aedc606428f3be459ad () (a) () () (direct 0a)
+    prove = a ∅ 390a59191aac7aa37bb4b44fdcb7c73e8cfcc43ddbf73aedc606428f3be459ad () (a) () ()
+      given
   }
-  assert ∃ x ∈ $0 a direct 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (∃ x ∈ $0 a, = a ∅) () () () (compound 0a direct 0.0, direct p0)
+  prove ∃ x ∈ $0 a 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (∃ x ∈ $0 a, = a ∅) () () ()
+    given
+    given
 }
 
 theorem The Empty Set Is a Subset of Any Set
 conclusion ⊆ ∅ a
 {
-  assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
+  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
   assert ∀ x → ∈ $0 ∅ ∈ $0 a transformed bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (Y) Y () () (∈ $0 ∅, ∈ $0 a) () (direct 0)
-  assert ⊆ ∅ a direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (∅, a) () () (direct 1)
+  prove ⊆ ∅ a 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (∅, a) () ()
+    given
 }
 
 theorem A False Statement Is a Membership Condition for the Empty Set
 premise ∀ x ¬ with ($0) φ
 conclusion ∀ x ↔ ∈ $0 ∅ with ($0) φ
 {
-  assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
+  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
   assert ∀ x ↔ ∈ $0 ∅ with ($0) φ transformed 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 (Y Y) Y () () (∈ $0 ∅, with ($0) φ) () (direct 0, direct p0)
 }

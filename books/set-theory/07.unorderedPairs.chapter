@@ -7,30 +7,45 @@ conclusion ∀ y ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 single
     assume ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b {
       let x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∨ = $0 a = $0 b) () (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 a ∧ = $$0 ∅ = $0 b) () (direct 0.0a, direct 0.0.0d) {
         assume ∧ = $0 singleton ∅ = $$0 a {
-          assert ∨ = $$0 a = $$0 b direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d rearranged (= $$0 a, = $$0 b) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= $0 singleton ∅, = $$0 a) () () () direct 0.0.0.0a (1))
+          prove ∨ = $$0 a = $$0 b 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= $$0 a, = $$0 b) () () ()
+            simplified = $$0 a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= $0 singleton ∅, = $$0 a) () () ()
+              given
         }
         assume ∧ = $0 ∅ = $$0 b {
-          assert ∨ = $$0 a = $$0 b direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 rearranged (= $$0 b, = $$0 a) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= $0 ∅, = $$0 b) () () () direct 0.0.0.1a (1))
+          prove ∨ = $$0 a = $$0 b 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (= $$0 b, = $$0 a) () () ()
+            simplified = $$0 b 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= $0 ∅, = $$0 b) () () ()
+              given
         }
-        assert ∨ = $$0 a = $$0 b direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∧ = $0 singleton ∅ = $$0 a, ∧ = $0 ∅ = $$0 b, ∨ = $$0 a = $$0 b) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 powerSet singleton ∅, ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b) () () () direct 0.0.0a (1), compound 0.0.0.0a direct 0.0.0.0.0, compound 0.0.0.1a direct 0.0.0.1.0)
+        prove ∨ = $$0 a = $$0 b 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∧ = $0 singleton ∅ = $$0 a, ∧ = $0 ∅ = $$0 b, ∨ = $$0 a = $$0 b) () () ()
+          simplified ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 powerSet singleton ∅, ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b) () () ()
+            given
+          given
+          given
       }
     }
     assume ∨ = $0 a = $0 b {
       assume = $0 a {
-        assert ∈ singleton ∅ powerSet singleton ∅ direct 8c3a27c8fb2b27234e4d6ea0d03abd4dca0bfe98c5575012f9352c5bf80e9e24 () (singleton ∅) () () ()
-        assert = singleton ∅ singleton ∅ direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (singleton ∅) () () ()
+        prove ∈ singleton ∅ powerSet singleton ∅ 8c3a27c8fb2b27234e4d6ea0d03abd4dca0bfe98c5575012f9352c5bf80e9e24 () (singleton ∅) () ()
+        prove = singleton ∅ singleton ∅ 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (singleton ∅) () ()
         assert ∧ ∈ singleton ∅ powerSet singleton ∅ ∨ ∧ = singleton ∅ singleton ∅ = $0 a ∧ = singleton ∅ ∅ = $0 b direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ singleton ∅ powerSet singleton ∅, ∨ ∧ = singleton ∅ singleton ∅ = $0 a ∧ = singleton ∅ ∅ = $0 b) () () () (direct 0.1.0.0, expansion direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d rearranged (∧ = singleton ∅ singleton ∅ = $0 a, ∧ = singleton ∅ ∅ = $0 b) () () () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (= singleton ∅ singleton ∅, = $0 a) () () () (direct 0.1.0.1, direct 0.1.0a)))
-        assert ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (singleton ∅) (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 a ∧ = $$0 ∅ = $0 b) () (direct 0.1.0.2)
+        prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (singleton ∅) (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 a ∧ = $$0 ∅ = $0 b) ()
+          given
       }
       assume = $0 b {
-        assert ∈ ∅ powerSet singleton ∅ direct 73e9742459642589048ead035078a534a2a395b858e45eeca2a982b48588d58d () (singleton ∅) () () ()
-        assert = ∅ ∅ direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (∅) () () ()
+        prove ∈ ∅ powerSet singleton ∅ 73e9742459642589048ead035078a534a2a395b858e45eeca2a982b48588d58d () (singleton ∅) () ()
+        prove = ∅ ∅ 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (∅) () ()
         assert ∧ ∈ ∅ powerSet singleton ∅ ∨ ∧ = ∅ singleton ∅ = $0 a ∧ = ∅ ∅ = $0 b direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ ∅ powerSet singleton ∅, ∨ ∧ = ∅ singleton ∅ = $0 a ∧ = ∅ ∅ = $0 b) () () () (direct 0.1.1.0, expansion direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 rearranged (∧ = ∅ ∅ = $0 b, ∧ = ∅ singleton ∅ = $0 a) () () () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (= ∅ ∅, = $0 b) () () () (direct 0.1.1.1, direct 0.1.1a)))
-        assert ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (∅) (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 a ∧ = $$0 ∅ = $0 b) () (direct 0.1.1.2)
+        prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (∅) (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 a ∧ = $$0 ∅ = $0 b) ()
+          given
       }
-      assert ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= $0 a, = $0 b, ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b) () () () (direct 0.1a, compound 0.1.0a direct 0.1.0.3, compound 0.1.1a direct 0.1.1.3)
+      prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= $0 a, = $0 b, ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b) () () ()
+        given
+        given
+        given
     }
-    assert ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b ∨ = $0 a = $0 b direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b, ∨ = $0 a = $0 b) () () () (compound 0.0a direct 0.0.0, compound 0.1a direct 0.1.2)
+    prove ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b ∨ = $0 a = $0 b 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b, ∨ = $0 a = $0 b) () () ()
+      given
+      given
   }
 }
 
@@ -39,14 +54,19 @@ conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b
 {
   take x {
     assume ∈ $0 powerSet singleton ∅ {
-      assert ⊕ = $0 singleton ∅ = $0 ∅ direct c4645200566ec29f19136c3687c113432300261bd51857fbf3f39cef71660e2a () ($0, ∅) () () (direct 0.0a)
-      assert ∃! y ∨ ∧ = $$0 singleton ∅ = $0 a ∧ = $$0 ∅ = $0 b direct 70af6c413942b8cd1f952f933aa36ee2c1c47106dbbe183957125b7845ba1f07 (= $0 singleton ∅, = $0 ∅) (a, b) () () (direct 0.0.0)
+      prove ⊕ = $0 singleton ∅ = $0 ∅ c4645200566ec29f19136c3687c113432300261bd51857fbf3f39cef71660e2a () ($0, ∅) () ()
+        given
+      prove ∃! y ∨ ∧ = $$0 singleton ∅ = $0 a ∧ = $$0 ∅ = $0 b 70af6c413942b8cd1f952f933aa36ee2c1c47106dbbe183957125b7845ba1f07 (= $0 singleton ∅, = $0 ∅) (a, b) () ()
+        given
     }
   }
   assert ∃ z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b direct 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () (powerSet singleton ∅) (∨ ∧ = $0 singleton ∅ = $1 a ∧ = $0 ∅ = $1 b) () (compound 0 compound 0.0a direct 0.0.1)
-  assert ∀ y ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b ∨ = $0 a = $0 b direct 26f94e3143a37effc32a24db06763cf885cc828e4823aa187ee043c61a0a15eb () (a, b) () () ()
-  assert ∃ z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b direct a6e712b38909dac88b7b619de972b17b819142bff65d3f1b507a5e6c070d9fb5 () () (∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b, ∨ = $0 a = $0 b) () (direct 1, direct 2)
-  assert ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b direct 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∨ = $0 a = $0 b) () (direct 3)
+  prove ∀ y ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b ∨ = $0 a = $0 b 26f94e3143a37effc32a24db06763cf885cc828e4823aa187ee043c61a0a15eb () (a, b) () ()
+  prove ∃ z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b a6e712b38909dac88b7b619de972b17b819142bff65d3f1b507a5e6c070d9fb5 () () (∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b, ∨ = $0 a = $0 b) ()
+    given
+    given
+  prove ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∨ = $0 a = $0 b) ()
+    given
 }
 
 term pair (a b)
@@ -58,79 +78,97 @@ theorem Elements of Unordered Pair
 premise ∈ c pair a b
 conclusion ∨ = c a = c b
 {
-  assert ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () () ()
+  prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () ()
   assert ∨ = c a = c b transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (c) (∈ $0 pair a b, ∨ = $0 a = $0 b) () (direct 0, direct p0)
 }
 
 theorem First Element of Unordered Pair
 conclusion ∈ a pair a b
 {
-  assert ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () () ()
-  assert = a a direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () () ()
-  assert ∨ = a a = a b direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= a a, = a b) () () () (direct 1)
+  prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () ()
+  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
+  prove ∨ = a a = a b 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= a a, = a b) () () ()
+    given
   assert ∈ a pair a b transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (a) (∈ $0 pair a b, ∨ = $0 a = $0 b) () (direct 0, direct 2)
 }
 
 theorem Second Element of Unordered Pair
 conclusion ∈ b pair a b
 {
-  assert ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () () ()
-  assert = b b direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (b) () () ()
-  assert ∨ = b a = b b direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (= b b, = b a) () () () (direct 1)
+  prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () ()
+  prove = b b 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (b) () ()
+  prove ∨ = b a = b b 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (= b b, = b a) () () ()
+    given
   assert ∈ b pair a b transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (b) (∈ $0 pair a b, ∨ = $0 a = $0 b) () (direct 0, direct 2)
 }
 
 theorem An Unordered Pair Is Not the Empty Set
 conclusion ¬ = pair a b ∅
 {
-  assert ∈ a pair a b direct bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () () ()
-  assert ¬ = pair a b ∅ direct 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (a, pair a b) () () (direct 0)
+  prove ∈ a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () ()
+  prove ¬ = pair a b ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (a, pair a b) () ()
+    given
 }
 
 theorem Reverse Unordered Pair
 conclusion = pair a b pair b a
 {
-  assert ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () () ()
-  assert ∀ x ↔ ∈ $0 pair b a ∨ = $0 b = $0 a direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (b, a) () () ()
+  prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () ()
+  prove ∀ x ↔ ∈ $0 pair b a ∨ = $0 b = $0 a 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (b, a) () ()
   assert ∀ x ↔ ∨ = $0 a = $0 b ∨ = $0 b = $0 a transformed 2eaae6272d534dc99795d91bbbacc12e5e5b58aa4db06ed18bf864f72b5c947d () Y () () (= $0 a, = $0 b) () ()
-  assert = pair a b pair b a direct 4b83926de252406c08777885e14c3c906028ee3c7fb53340249ba1eb1ada4d4d () (pair a b, pair b a) (∨ = $0 a = $0 b, ∨ = $0 b = $0 a) () (direct 0, direct 1, direct 2)
+  prove = pair a b pair b a 4b83926de252406c08777885e14c3c906028ee3c7fb53340249ba1eb1ada4d4d () (pair a b, pair b a) (∨ = $0 a = $0 b, ∨ = $0 b = $0 a) ()
+    given
+    given
+    given
 }
 
 theorem Repeated Pair Is Singleton
 conclusion = pair a a singleton a
 {
-  assert ∀ x ↔ ∈ $0 pair a a ∨ = $0 a = $0 a direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, a) () () ()
+  prove ∀ x ↔ ∈ $0 pair a a ∨ = $0 a = $0 a 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, a) () ()
   assert ∀ x ↔ ∨ = $0 a = $0 a = $0 a transformed 1a5fe4d48796996e1e2f60648d87841214623937e106ac6df3f624fb834748fc () Y () () (= $0 a) () ()
   assert ∀ x ↔ ∈ $0 pair a a = $0 a transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $0 pair a a, ∨ = $0 a = $0 a, = $0 a) () (direct 0, direct 1)
-  assert ∀ x ↔ ∈ $0 singleton a = $0 a direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () () ()
-  assert = pair a a singleton a direct f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () (pair a a, singleton a) (= $0 a) () (direct 2, direct 3)
+  prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () ()
+  prove = pair a a singleton a f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () (pair a a, singleton a) (= $0 a) ()
+    given
+    given
 }
 
 theorem Sets Are Equal If Pair Is Singleton
 premise = pair a b singleton c
 conclusion = a c
 {
-  assert ∈ a pair a b direct bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () () ()
-  assert ∈ a singleton c direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a b, singleton c) (∈ a $0) () (direct p0, direct 0)
-  assert = a c direct 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () (a, c) () () (direct 1)
+  prove ∈ a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () ()
+  prove ∈ a singleton c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a b, singleton c) (∈ a $0) ()
+    given
+    given
+  prove = a c 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () (a, c) () ()
+    given
 }
 
 theorem Sets Are Equal If Pair Is Singleton
 premise = pair a b singleton c
 conclusion = b c
 {
-  assert ∈ b pair a b direct c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () () ()
-  assert ∈ b singleton c direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a b, singleton c) (∈ b $0) () (direct p0, direct 0)
-  assert = b c direct 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () (b, c) () () (direct 1)
+  prove ∈ b pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () ()
+  prove ∈ b singleton c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a b, singleton c) (∈ b $0) ()
+    given
+    given
+  prove = b c 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () (b, c) () ()
+    given
 }
 
 theorem Sets Are Equal If Pair Is Singleton
 premise = pair a b singleton c
 conclusion = a b
 {
-  assert = a c direct 86986adff1b0347cfe6e7c5a348775548325b13c85d427e352cbea41551f0e39 () (a, b, c) () () (direct p0)
-  assert = b c direct e503481086281bc97997d7b0844c1481203e538306ce9c02b5cf8d90a816fd3e () (a, b, c) () () (direct p0)
-  assert = a b direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (b, c) (= a $0) () (direct 1, direct 0)
+  prove = a c 86986adff1b0347cfe6e7c5a348775548325b13c85d427e352cbea41551f0e39 () (a, b, c) () ()
+    given
+  prove = b c e503481086281bc97997d7b0844c1481203e538306ce9c02b5cf8d90a816fd3e () (a, b, c) () ()
+    given
+  prove = a b 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (b, c) (= a $0) ()
+    given
+    given
 }
 
 theorem Unordered Pair Is Subset
@@ -138,20 +176,28 @@ premise ∈ a S
 premise ∈ b S
 conclusion ⊆ pair a b S
 {
-  assert ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b direct 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () () ()
+  prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () ()
   take x {
     assume = $0 a {
-      assert ∈ $0 S direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, a) (∈ $$0 S) () (direct 1.0a, direct p0)
+      prove ∈ $0 S 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, a) (∈ $$0 S) ()
+        given
+        given
     }
     assume = $0 b {
-      assert ∈ $0 S direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, b) (∈ $$0 S) () (direct 1.1a, direct p1)
+      prove ∈ $0 S 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, b) (∈ $$0 S) ()
+        given
+        given
     }
     assume ∨ = $0 a = $0 b {
-      assert ∈ $0 S direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= $0 a, = $0 b, ∈ $0 S) () () () (direct 1.2a, compound 1.0a direct 1.0.0, compound 1.1a direct 1.1.0)
+      prove ∈ $0 S 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= $0 a, = $0 b, ∈ $0 S) () () ()
+        given
+        given
+        given
     }
   }
   assert ∀ x → ∈ $0 pair a b ∈ $0 S transformed 05be0af438db5ac136aa592c728307d7245a00ec32e576d2b1fe8e3c3bd6e0e9 (Y Y) Y () () (∈ $0 pair a b, ∨ = $0 a = $0 b, ∈ $0 S) () (direct 0, compound 1 compound 1.2a direct 1.2.0)
-  assert ⊆ pair a b S direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (pair a b, S) () () (direct 2)
+  prove ⊆ pair a b S 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (pair a b, S) () ()
+    given
 }
 
 theorem Unordered Pair Is Element of Power Set
@@ -159,6 +205,9 @@ premise ∈ a S
 premise ∈ b S
 conclusion ∈ pair a b powerSet S
 {
-  assert ⊆ pair a b S direct 4d94e628deb348f7f3974c83261d69623ae14102921c1722dc8312af89ad9063 () (a, S, b) () () (direct p0, direct p1)
-  assert ∈ pair a b powerSet S direct 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (pair a b, S) () () (direct 0)
+  prove ⊆ pair a b S 4d94e628deb348f7f3974c83261d69623ae14102921c1722dc8312af89ad9063 () (a, S, b) () ()
+    given
+    given
+  prove ∈ pair a b powerSet S 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (pair a b, S) () ()
+    given
 }

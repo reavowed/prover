@@ -3,26 +3,31 @@ Establish the existence of the singleton set {a}.
 theorem There Exists a Set with an Element
 conclusion ∃ x ∃ y ∈ $0 $$0
 {
-  assert ∈ ∅ powerSet ∅ direct 73e9742459642589048ead035078a534a2a395b858e45eeca2a982b48588d58d () (∅) () () ()
-  assert ∃ y ∈ $0 powerSet ∅ direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (∅) (∈ $0 powerSet ∅) () (direct 0)
-  assert ∃ x ∃ y ∈ $0 $$0 direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (powerSet ∅) (∃ y ∈ $0 $$0) () (direct 1)
+  prove ∈ ∅ powerSet ∅ 73e9742459642589048ead035078a534a2a395b858e45eeca2a982b48588d58d () (∅) () ()
+  prove ∃ y ∈ $0 powerSet ∅ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (∅) (∈ $0 powerSet ∅) ()
+    given
+  prove ∃ x ∃ y ∈ $0 $$0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (powerSet ∅) (∃ y ∈ $0 $$0) ()
+    given
 }
 
 theorem Singleton Existence
 conclusion ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a
 {
-  assert ∃ x ∃ y ∈ $0 $$0 direct 2cccf54c4f38ed8afb8227abf888c17e48598e20266c00a7f8d4977ba6408c73 () () () () ()
+  prove ∃ x ∃ y ∈ $0 $$0 2cccf54c4f38ed8afb8227abf888c17e48598e20266c00a7f8d4977ba6408c73 () () () ()
   let b ∃ y ∈ $0 $$0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! z ∀ x ↔ ∈ $0 $$0 = $0 a) () (∃ y ∈ $0 $$0) () (direct 0, direct 1d) {
-    assert ∃! x = $0 a direct c95bd5a48f1e634431831232959dc7b7ef2ed222c694cac5df9ed7f08eee333a () (a) () () ()
+    prove ∃! x = $0 a c95bd5a48f1e634431831232959dc7b7ef2ed222c694cac5df9ed7f08eee333a () (a) () ()
     take y {
-      assert → ∈ $0 $$0 ∃! x = $0 a direct 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∃! x = $0 a, ∈ $0 $$0) () () () (direct 1.0)
+      prove → ∈ $0 $$0 ∃! x = $0 a 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∃! x = $0 a, ∈ $0 $$0) () () ()
+        given
     }
     assert ∃ z ∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $0 $$$$0 = $$0 a direct 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () ($0) (= $$1 a) () (compound 1.1 direct 1.1.0)
     take x {
-      assert ↔ ∃ y ∧ ∈ $0 $$$0 = $$0 a = $0 a direct f3b93ffee9d1e4d18f4185d1961d7b248a588d2c491f7a35890fdbb6a207eff3 (= $0 a) () (∈ $$$0 $$0) () (direct 1a)
+      prove ↔ ∃ y ∧ ∈ $0 $$$0 = $$0 a = $0 a f3b93ffee9d1e4d18f4185d1961d7b248a588d2c491f7a35890fdbb6a207eff3 (= $0 a) () (∈ $$$0 $$0) ()
+        given
     }
     assert ∃ z ∀ x ↔ ∈ $0 $$0 = $0 a direct a6e712b38909dac88b7b619de972b17b819142bff65d3f1b507a5e6c070d9fb5 () () (∃ y ∧ ∈ $0 $$0 = $$$0 a, = $$0 a) () (direct 1.2, compound 1.3 direct 1.3.0)
-    assert ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a direct 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (= $$0 a) () (direct 1.4)
+    prove ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (= $$0 a) ()
+      given
   }
 }
 
@@ -34,15 +39,16 @@ term singleton (a)
 theorem A Set Is an Element of Its Singleton
 conclusion ∈ a singleton a
 {
-  assert ∀ x ↔ ∈ $0 singleton a = $0 a direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () () ()
-  assert ∈ a singleton a direct b89e77bd31fd5214622c9e98732d2adc733bb4d42c134ca34a05047e7698f5a7 () (a) (∈ $0 singleton a) () (direct 0)
+  prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () ()
+  prove ∈ a singleton a b89e77bd31fd5214622c9e98732d2adc733bb4d42c134ca34a05047e7698f5a7 () (a) (∈ $0 singleton a) ()
+    given
 }
 
 theorem Element of Singleton
 premise ∈ b singleton a
 conclusion = b a
 {
-  assert ∀ x ↔ ∈ $0 singleton a = $0 a direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () () ()
+  prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () ()
   assert = b a transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (b) (∈ $0 singleton a, = $0 a) () (direct 0, direct p0)
 }
 
@@ -50,69 +56,91 @@ theorem Sets Are Equal If Singletons Are Equal
 premise = singleton a singleton b
 conclusion = a b
 {
-  assert ∀ x ↔ ∈ $0 singleton a = $0 a direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () () ()
-  assert ∀ x ↔ ∈ $0 singleton b = $0 a direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (singleton a, singleton b) (∀ x ↔ ∈ $0 $$0 = $0 a) () (direct p0, direct 0)
-  assert ∀ x ↔ ∈ $0 singleton b = $0 b direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (b) () () ()
+  prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () ()
+  prove ∀ x ↔ ∈ $0 singleton b = $0 a 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (singleton a, singleton b) (∀ x ↔ ∈ $0 $$0 = $0 a) ()
+    given
+    given
+  prove ∀ x ↔ ∈ $0 singleton b = $0 b 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (b) () ()
   assert ∀ x ↔ = $0 a = $0 b transformed 7afee04d4ca5d2e44058e18cab3e54c1a0fd1517b1138340d50e180fb50ad7ef (Y Y) Y () () (∈ $0 singleton b, = $0 a, = $0 b) () (direct 1, direct 2)
-  assert = a b direct d19d34e8a567ece130472195f806460ffa757ea570113c9779131cbf05b33ef7 () (a, b) () () (direct 3)
+  prove = a b d19d34e8a567ece130472195f806460ffa757ea570113c9779131cbf05b33ef7 () (a, b) () ()
+    given
 }
 
 theorem Singleton of Element Is Subset
 premise ∈ a S
 conclusion ⊆ singleton a S
 {
-  assert ∀ x ↔ ∈ $0 singleton a = $0 a direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () () ()
+  prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () ()
   take x {
     assume = $0 a {
-      assert ∈ $0 S direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, a) (∈ $$0 S) () (direct 1.0a, direct p0)
+      prove ∈ $0 S 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, a) (∈ $$0 S) ()
+        given
+        given
     }
   }
   assert ∀ x → ∈ $0 singleton a ∈ $0 S transformed 05be0af438db5ac136aa592c728307d7245a00ec32e576d2b1fe8e3c3bd6e0e9 (Y Y) Y () () (∈ $0 singleton a, = $0 a, ∈ $0 S) () (direct 0, compound 1 compound 1.0a direct 1.0.0)
-  assert ⊆ singleton a S direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (singleton a, S) () () (direct 2)
+  prove ⊆ singleton a S 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (singleton a, S) () ()
+    given
 }
 
 theorem Singleton Is in Power Set
 premise ∈ a S
 conclusion ∈ singleton a powerSet S
 {
-  assert ⊆ singleton a S direct ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, S) () () (direct p0)
-  assert ∈ singleton a powerSet S direct 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (singleton a, S) () () (direct 0)
+  prove ⊆ singleton a S ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, S) () ()
+    given
+  prove ∈ singleton a powerSet S 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (singleton a, S) () ()
+    given
 }
 
 theorem A Singleton Is Not the Empty Set
 conclusion ¬ = singleton a ∅
 {
-  assert ∈ a singleton a direct e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a) () () ()
-  assert ¬ = singleton a ∅ direct 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (a, singleton a) () () (direct 0)
+  prove ∈ a singleton a e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a) () ()
+  prove ¬ = singleton a ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (a, singleton a) () ()
+    given
 }
 
 theorem Subsets of a Singleton
 premise ⊆ S singleton a
 conclusion ⊕ = S singleton a = S ∅
 {
-  assert ∀ x → ∈ $0 S ∈ $0 singleton a direct f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (S, singleton a) () () (direct p0)
-  assert ∀ x ↔ ∈ $0 singleton a = $0 a direct 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () () ()
+  prove ∀ x → ∈ $0 S ∈ $0 singleton a f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (S, singleton a) () ()
+    given
+  prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () ()
   assert ∀ x → ∈ $0 S = $0 a transformed 04bbf502aadffe1b0b9e64dc91a73292912cb7fc87cac0dcf53aa75f7f0dbe46 (Y Y) Y () () (∈ $0 S, ∈ $0 singleton a, = $0 a) () (direct 0, direct 1)
   assume ∃ y ∈ $0 S {
     let b ∈ $0 S direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ a S) () (∈ $0 S) () (direct 3a, direct 3.0d) {
       assert = $0 a transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($0) (∈ $$0 S, = $$0 a) () (direct 2, direct 3.0a)
-      assert ∈ a S direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (∈ $$0 S) () (direct 3.0.0, direct 3.0a)
+      prove ∈ a S 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (∈ $$0 S) ()
+        given
+        given
     }
-    assert ⊆ singleton a S direct ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, S) () () (direct 3.0)
-    assert = S singleton a direct 0477ee5edbf3b855830ed7f269321584ce9ef7540ea076c0bfcc087dec2b62b6 () (S, singleton a) () () (direct p0, direct 3.1)
+    prove ⊆ singleton a S ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, S) () ()
+      given
+    prove = S singleton a 0477ee5edbf3b855830ed7f269321584ce9ef7540ea076c0bfcc087dec2b62b6 () (S, singleton a) () ()
+      given
+      given
   }
   assume ¬ ∃ y ∈ $0 S {
-    assert = S ∅ direct 390a59191aac7aa37bb4b44fdcb7c73e8cfcc43ddbf73aedc606428f3be459ad () (S) () () (direct 4a)
+    prove = S ∅ 390a59191aac7aa37bb4b44fdcb7c73e8cfcc43ddbf73aedc606428f3be459ad () (S) () ()
+      given
   }
-  assert ∨ = S singleton a = S ∅ direct 8f4dce2a580ead51e91bb5caa5ae4b8474eb94defe5e756747db4d413819415c (∃ y ∈ $0 S, = S singleton a, = S ∅) () () () (compound 3a direct 3.2, compound 4a direct 4.0)
-  assert ¬ = singleton a ∅ direct 1c4e6217e33217004ef0962a46f7422720c1fd5d2c8bb711f976bf01166dc708 () (a) () () ()
-  assert ⊕ = S singleton a = S ∅ direct cc33f6b28f64a37e2f3542e4cf12cd895be950c17403f5fff89e02ecec3dfcfe () (S, singleton a, ∅) () () (direct 5, direct 6)
+  prove ∨ = S singleton a = S ∅ 8f4dce2a580ead51e91bb5caa5ae4b8474eb94defe5e756747db4d413819415c (∃ y ∈ $0 S, = S singleton a, = S ∅) () () ()
+    given
+    given
+  prove ¬ = singleton a ∅ 1c4e6217e33217004ef0962a46f7422720c1fd5d2c8bb711f976bf01166dc708 () (a) () ()
+  prove ⊕ = S singleton a = S ∅ cc33f6b28f64a37e2f3542e4cf12cd895be950c17403f5fff89e02ecec3dfcfe () (S, singleton a, ∅) () ()
+    given
+    given
 }
 
 theorem Elements of Powerset of Singleton
 premise ∈ S powerSet singleton a
 conclusion ⊕ = S singleton a = S ∅
 {
-  assert ⊆ S singleton a direct bb4e7eb849809346e883e29e4c961a0b1e707fabfe8da1e4537f611a4602e0f2 () (S, singleton a) () () (direct p0)
-  assert ⊕ = S singleton a = S ∅ direct a68f54367f278aecd5d6ebaf8d39414c00134a884191e9c3043952317164bc27 () (S, a) () () (direct 0)
+  prove ⊆ S singleton a bb4e7eb849809346e883e29e4c961a0b1e707fabfe8da1e4537f611a4602e0f2 () (S, singleton a) () ()
+    given
+  prove ⊕ = S singleton a = S ∅ a68f54367f278aecd5d6ebaf8d39414c00134a884191e9c3043952317164bc27 () (S, a) () ()
+    given
 }
