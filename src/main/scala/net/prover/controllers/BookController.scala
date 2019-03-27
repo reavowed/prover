@@ -242,7 +242,9 @@ class BookController @Autowired() (bookService: BookService) {
         <style>{".popover { max-width: 100%; }"}</style>
       </head>
       <body>
-        <script src="http://localhost:8081/js/bundle.js"></script>
+        <script src="http://localhost:8081/node_modules/react/umd/react.development.js"></script>
+        <script src="http://localhost:8081/node_modules/react-dom/umd/react-dom.development.js"></script>
+        <script src="http://localhost:8081/bundle.js"></script>
         <script type="text/javascript">{Unparsed(initScript)}</script>
       </body>
     </html>.toString()

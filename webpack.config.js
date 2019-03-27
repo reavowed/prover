@@ -27,5 +27,9 @@ module.exports = {
   devtool: 'inline-source-map',
   devServer: {
     port: 8081
+  },
+  externals: {
+    "react": "React",
+    "react-dom": "ReactDOM"
   }
 };
