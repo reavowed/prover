@@ -20,12 +20,15 @@ conclusion ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a
       prove → ∈ $0 $$0 ∃! x = $0 a 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∃! x = $0 a, ∈ $0 $$0) () () ()
         given
     }
-    assert ∃ z ∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $0 $$$$0 = $$0 a direct 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () ($0) (= $$1 a) () (compound 1.1 direct 1.1.0)
+    prove ∃ z ∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $0 $$$$0 = $$0 a 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () ($0) (= $$1 a) ()
+      given
     take x {
       prove ↔ ∃ y ∧ ∈ $0 $$$0 = $$0 a = $0 a f3b93ffee9d1e4d18f4185d1961d7b248a588d2c491f7a35890fdbb6a207eff3 (= $0 a) () (∈ $$$0 $$0) ()
         given
     }
-    assert ∃ z ∀ x ↔ ∈ $0 $$0 = $0 a direct a6e712b38909dac88b7b619de972b17b819142bff65d3f1b507a5e6c070d9fb5 () () (∃ y ∧ ∈ $0 $$0 = $$$0 a, = $$0 a) () (direct 1.2, compound 1.3 direct 1.3.0)
+    prove ∃ z ∀ x ↔ ∈ $0 $$0 = $0 a a6e712b38909dac88b7b619de972b17b819142bff65d3f1b507a5e6c070d9fb5 () () (∃ y ∧ ∈ $0 $$0 = $$$0 a, = $$0 a) ()
+      given
+      given
     prove ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (= $$0 a) ()
       given
   }
@@ -49,7 +52,11 @@ premise ∈ b singleton a
 conclusion = b a
 {
   prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () ()
-  assert = b a transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (b) (∈ $0 singleton a, = $0 a) () (direct 0, direct p0)
+  prove = b a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b singleton a, = b a) () () ()
+    expanded → ∈ b singleton a = b a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b singleton a, = b a) () () ()
+      expanded ↔ ∈ b singleton a = b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 singleton a = $0 a) ()
+        given
+    given
 }
 
 theorem Sets Are Equal If Singletons Are Equal
@@ -61,7 +68,14 @@ conclusion = a b
     given
     given
   prove ∀ x ↔ ∈ $0 singleton b = $0 b 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (b) () ()
-  assert ∀ x ↔ = $0 a = $0 b transformed 7afee04d4ca5d2e44058e18cab3e54c1a0fd1517b1138340d50e180fb50ad7ef (Y Y) Y () () (∈ $0 singleton b, = $0 a, = $0 b) () (direct 1, direct 2)
+  take x {
+    prove ↔ = $0 a = $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (= $0 a, ∈ $0 singleton b, = $0 b) () () ()
+      expanded ↔ = $0 a ∈ $0 singleton b 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (∈ $0 singleton b, = $0 a) () () ()
+        expanded ↔ ∈ $0 singleton b = $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 singleton b = $$0 a) ()
+          given
+      expanded ↔ ∈ $0 singleton b = $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 singleton b = $$0 b) ()
+        given
+  }
   prove = a b d19d34e8a567ece130472195f806460ffa757ea570113c9779131cbf05b33ef7 () (a, b) () ()
     given
 }
