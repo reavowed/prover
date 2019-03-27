@@ -38,6 +38,7 @@ class TheoremController @Autowired() (bookService: BookService) {
       implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, step)
       parsingContext.inferences
         .filter(_.name.toLowerCase.contains(searchText.toLowerCase))
+        .reverse
         .mapCollect { inference =>
           val substitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, step.context.externalDepth)
           if (substitutions.nonEmpty)
@@ -45,7 +46,6 @@ class TheoremController @Autowired() (bookService: BookService) {
           else
             None
         }
-        .reverse
         .take(10)
     }).toResponseEntity
   }

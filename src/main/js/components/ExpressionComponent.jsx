@@ -20,7 +20,7 @@ export function formatHtml(text, replacementFunction) {
   if (!replacementFunction) {
     replacementFunction = x => <React.Fragment>{x}</React.Fragment>;
   }
-  return formatWithReplacement(text, /([_^])([^\s)}]+)/g, replacementFunction, match => {
+  return formatWithReplacement(text, /(?<!\s)([_^])([^\s)}]+)/g, replacementFunction, match => {
     if (match[1] === "_") {
       return <sub>{match[2]}</sub>
     } else if (match[1] === "^") {

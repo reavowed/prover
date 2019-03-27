@@ -65,8 +65,9 @@ case class ParsingContext(
     copy(parameterLists = parameterLists :+ parameters)
   }
 
-  def withPlaceholderParameter(): ParsingContext = {
-    copy(parameterLists = Seq("_").zipWithIndex +: parameterLists)
+  def withPlaceholderParameters(numberOfParameters: Int): ParsingContext = {
+    val parameters = if(numberOfParameters == 1) Seq("$") else (1 to numberOfParameters).map(i => s"$$_$i")
+    copy(parameterLists = parameters.zipWithIndex +: parameterLists)
   }
 
   object RecognisedStatementVariable {

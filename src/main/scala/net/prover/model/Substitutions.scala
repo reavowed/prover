@@ -6,13 +6,13 @@ import net.prover.model.expressions._
 case class Substitutions(
     statements: Map[String, Statement] = Map.empty,
     terms: Map[String, Term] = Map.empty,
-    predicates: Map[String, Statement] = Map.empty,
-    functions: Map[String, Term] = Map.empty)
+    predicates: Map[(String, Int), Statement] = Map.empty,
+    functions: Map[(String, Int), Term] = Map.empty)
 {
-  def update[T <: Expression](
-    name: String,
+  def update[S, T <: Expression](
+    name: S,
     expression: T,
-    lens: Lens[Substitutions, Map[String, T]],
+    lens: Lens[Substitutions, Map[S, T]],
     additionalDepth: Int
   ): Option[Substitutions] = {
     lens.get(this)
@@ -24,7 +24,7 @@ case class Substitutions(
 object Substitutions {
   val empty = Substitutions(Map.empty, Map.empty, Map.empty, Map.empty)
 
-  case class Required(statements: Seq[String], terms: Seq[String], predicates: Seq[String], functions: Seq[String]) {
+  case class Required(statements: Seq[String], terms: Seq[String], predicates: Seq[(String, Int)], functions: Seq[(String, Int)]) {
     def ++(other: Required): Required = {
       Required(
         (statements ++ other.statements).distinct,

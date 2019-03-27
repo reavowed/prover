@@ -156,7 +156,8 @@ trait ProverSpec extends Specification {
   }
   implicit def statementVariableToComponentType(statementVariable: StatementVariable): StatementComponent = StatementComponent(statementVariable.name)
   implicit def termVariableToComponentType(termVariable: TermVariable): TermComponent = TermComponent(termVariable.name)
-  implicit def variableTupleToString[T](tuple: (ExpressionVariable[_], T)): (String, T) = (tuple._1.name, tuple._2)
+  implicit def variableTupleToString[T](tuple: (ExpressionVariable[_], T)): (String, T) = tuple.mapLeft(_.name)
+  implicit def variableTupleTupleToString[T](tuple: ((ExpressionVariable[_], Int), T)): ((String, Int), T) = tuple.mapLeft(_.mapLeft(_.name))
   implicit class StatementDefinitionOps(statementDefinition: StatementDefinition) {
     def apply(components: Expression*): DefinedStatement = {
       DefinedStatement(components, statementDefinition)(statementDefinition.boundVariableNames)

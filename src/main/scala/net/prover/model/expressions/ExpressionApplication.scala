@@ -12,8 +12,8 @@ import scala.reflect.ClassTag
 abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] extends Expression with TypedExpression[ExpressionType] {
   def variableName: String
   def arguments: Seq[Term]
-  def substitutionsLens: Lens[Substitutions, Map[String, ExpressionType]]
-  def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[String]]
+  def substitutionsLens: Lens[Substitutions, Map[(String, Int), ExpressionType]]
+  def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[(String, Int)]]
 
   def update(newArguments: Seq[Term]): ExpressionType
 
@@ -42,7 +42,7 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   }
 
   override def requiredSubstitutions = {
-    arguments.requiredSubstitutions ++ requiredSubstitutionsLens.set(Seq(variableName))(Substitutions.Required.empty)
+    arguments.requiredSubstitutions ++ requiredSubstitutionsLens.set(Seq((variableName, arguments.length)))(Substitutions.Required.empty)
   }
   override def calculateSubstitutions(
     other: Expression,
@@ -54,7 +54,7 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
       for {
         (applicative, applicativeSubstitutions) <- other.calculateApplicatives(arguments, substitutions, 0, internalDepth, externalDepth)
         substitutionsWithApplicative <- applicativeSubstitutions.update(
-          variableName,
+          (variableName, arguments.length),
           applicative.asInstanceOf[ExpressionType],
           substitutionsLens,
           1)
@@ -64,7 +64,7 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
 
   override def applySubstitutions(substitutions: Substitutions, internalDepth: Int, externalDepth: Int): Option[ExpressionType] = {
     for {
-      predicate <- substitutionsLens.get(substitutions).get(variableName)
+      predicate <- substitutionsLens.get(substitutions).get((variableName, arguments.length))
       result <- predicate.specifyWithSubstitutions(arguments, substitutions, 0, internalDepth, externalDepth)
     } yield result.asInstanceOf[ExpressionType]
   }

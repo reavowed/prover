@@ -31,14 +31,30 @@ export class Parser {
     inference.conclusion && (inference.conclusion = Expression.parseFromJson(inference.conclusion));
     return inference;
   }
+  static doubleMapFromTriples(triples) {
+    const namesToPairLists = _.mapValues(_.groupBy(triples, 0), x => x.map(y => y.slice(1)));
+    return _.mapValues(namesToPairLists, _.fromPairs);
+  }
   static parseSubstitutions(substitutions) {
-    return substitutions.map(substitution => _.mapValues(substitution, type => _.mapValues(type, e => e && Expression.parseFromJson(e))))
+    const parseApplications = (applications) => {
+      const triples = _.map(_.toPairs(applications), ([nameAndCount, e]) => {
+        const [_, name, count] = nameAndCount.match(/\((.*),(\d+)\)/);
+        return [name, parseInt(count), Expression.parseFromJson(e)];
+      });
+      return Parser.doubleMapFromTriples(triples);
+    };
+
+    const statements = _.mapValues(substitutions.statements, s => s && Expression.parseFromJson(s));
+    const terms = _.mapValues(substitutions.terms, t => t && Expression.parseFromJson(t));
+    const predicates = parseApplications(substitutions.predicates);
+    const functions = parseApplications(substitutions.functions);
+    return {statements, terms, predicates, functions};
   }
   static parseInferenceSuggestions(suggestions) {
     return suggestions.map(suggestionJson => {
       const suggestion = _.cloneDeep(suggestionJson);
       Parser.parseInferenceSummary(suggestion.inference);
-      suggestion.substitutions = Parser.parseSubstitutions(suggestion.substitutions);
+      suggestion.substitutions = _.map(suggestion.substitutions, Parser.parseSubstitutions);
       return suggestion;
     })
   }
@@ -47,7 +63,7 @@ export class Parser {
       suggestionsForPremise.map(suggestionJson => {
         const suggestion = _.cloneDeep(suggestionJson);
         suggestion.statement && (suggestion.statement = Expression.parseFromJson(suggestion.statement));
-        suggestion.substitutions = Parser.parseSubstitutions(suggestion.substitutions);
+        suggestion.substitutions = _.map(suggestion.substitutions, Parser.parseSubstitutions);
         return suggestion;
       })
     );
