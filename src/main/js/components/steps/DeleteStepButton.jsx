@@ -3,9 +3,9 @@ import Button from "react-bootstrap/Button";
 
 export class DeleteStepButton extends React.Component {
   deleteStep = () => {
-    this.props.fetchForStep(this.props.path, {
+    this.props.apiService.fetchJsonForStep(this.props.path, "", {
       method: "DELETE"
-    }).then(this.props.updateTheorem);
+    }).then(this.props.apiService.updateTheorem);
   };
 
   render() {

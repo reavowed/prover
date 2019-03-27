@@ -29,25 +29,21 @@ export class Theorem extends React.Component {
     this.setState({highlightedConclusion: conclusion});
   };
 
-
-  fetchForStep = (stepPath, childPath, options) => {
-    if (_.isObject(childPath)) {
-      options = childPath;
-      childPath = "";
-    }
+  fetchJsonForStep = (stepPath, childPath, options) => {
     const combinedPath = path.join(this.state.theorem.key.url, stepPath.join("."), childPath) + (childPath === "" ? "/" : "");
-    return window.fetch(combinedPath, options);
+    return window.fetch(combinedPath, options)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw response.statusText;
+        }
+      });
   };
 
-  updateTheorem = (response) => {
-    if (response.ok) {
-      return response.json().then(theoremJSON => {
-        const theorem = Parser.parseTheorem(theoremJSON);
-        this.setState({theorem: theorem});
-      });
-    } else {
-      throw response.statusText;
-    }
+  updateTheorem = (theoremJSON) => {
+    const theorem = Parser.parseTheorem(theoremJSON);
+    this.setState({theorem: theorem});
   };
 
   render() {
@@ -57,6 +53,10 @@ export class Theorem extends React.Component {
       highlightedConclusion: this.state.highlightedConclusion,
       setHighlightedPremises: this.setHighlightedPremises,
       setHighlightedConclusion: this.setHighlightedConclusion
+    };
+    const apiService = {
+      fetchJsonForStep: this.fetchJsonForStep,
+      updateTheorem: this.updateTheorem
     };
     const createPremiseElement = (premise, index) => {
       return <Premise premise={premise} index={index} highlighting={highlighting}/>
@@ -69,8 +69,7 @@ export class Theorem extends React.Component {
              path={[]}
              boundVariableLists={[]}
              highlighting={highlighting}
-             fetchForStep={this.fetchForStep}
-             updateTheorem={this.updateTheorem}/>
+             apiService={apiService}/>
     </Inference>;
   }
 }

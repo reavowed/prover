@@ -40,14 +40,12 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.setState({isHovered: false});
   };
   moveUp = () => {
-    this.props.fetchForStep(this.props.path, "move?direction=up", {
-      method: "POST"
-    }).then(this.props.updateTheorem);
+    this.props.apiService.fetchJsonForStep(this.props.path, "move?direction=up", {method: "POST"})
+      .then(this.props.apiService.updateTheorem);
   };
   moveDown = () => {
-    this.props.fetchForStep(this.props.path, "move?direction=down", {
-      method: "POST"
-    }).then(this.props.updateTheorem);
+    this.props.apiService.fetchJsonForStep(this.props.path, "move?direction=down", {method: "POST"})
+      .then(this.props.apiService.updateTheorem);
   };
   render() {
     const {className, children, popover, onShowPopover, path} = this.props;

@@ -10,6 +10,7 @@ import {InferenceSummary} from "../InferenceSummary";
 import {BoundVariableModal} from "../Modals";
 import {DeleteStepButton} from "./DeleteStepButton";
 import {ProofLine} from "./ProofLine";
+import {Expression} from "../../models/Expression";
 
 const PremiseChildren = styled.div`
   margin-left: 20px;
@@ -34,20 +35,25 @@ export class AssertionStep extends React.Component {
 
 
   render() {
-    let {step, path, additionalReferences, ...otherProps} = this.props;
+    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists} = this.props;
     let reference = path.join(".");
 
     return <ProofLine premiseReferences={step.referencedLines}
-                 path={path}
-                 popover={<AssertionStep.Popover step={step} path={path} boundVariableLists={this.props.boundVariableLists} onTransition={this.onModalTransition}/>}
-                 blockHide={this.state.showingModal}
-                 incomplete={_.some(step.premises, "incomplete")}
-                 {...otherProps}
+                      path={path}
+                      popover={<AssertionStep.Popover step={step}
+                                                      path={path}
+                                                      apiService={apiService}
+                                                      boundVariableLists={boundVariableLists}
+                                                      onTransition={this.onModalTransition}/>}
+                      apiService={apiService}
+                      highlighting={highlighting}
+                      blockHide={this.state.showingModal}
+                      incomplete={_.some(step.premises, "incomplete")}
       >
         Then <HighlightableExpression statement={step.statement}
                                       boundVariableLists={this.props.boundVariableLists}
                                       references={[...additionalReferences, reference]}
-                                      {...otherProps}
+                                      highlighting={highlighting}
       />.
     </ProofLine>;
   }
@@ -57,7 +63,7 @@ AssertionStep.Popover = class extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
-      premiseOptions: {}
+      premiseOptions: []
     };
     if (_.some(this.props.step.premises, "incomplete")) {
       this.fetchOptions();
@@ -65,24 +71,17 @@ AssertionStep.Popover = class extends React.Component {
   }
 
   fetchOptions = () => {
-    return this.props.fetchForStep(this.props.path, "premiseOptions")
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
+    return this.props.apiService.fetchJsonForStep(this.props.path, "premiseOptions")
       .then(options => {
-        _.each(options, option => _.each(option.quick, t => t.target = ExpressionComponent.parseFromJson(t.target)));
+        _.each(options, option => _.each(option.quick, t => t.target = Expression.parseFromJson(t.target)));
         this.setState({premiseOptions: options})
       });
   };
 
   fetchAndUpdateOptions = (fetchPath, fetchOptions) => {
-    this.props.fetchForStep(this.props.path, fetchPath, fetchOptions)
-      .then(response => {
-        this.setState({premiseOptions: {}});
-        this.props.updateTheorem(response);
-      })
+    this.props.apiService.fetchJsonForStep(this.props.path, fetchPath, fetchOptions)
+      .then(this.props.apiService.updateTheorem)
+      .then(() => this.setState({premiseOptions: []}))
       .then(this.fetchOptions)
   };
 
@@ -127,7 +126,7 @@ AssertionStep.Popover = class extends React.Component {
   };
   saveBoundVariable = () => {
     const {boundVariableIndex, boundVariablePath, premisePath} = this.state.boundVariableLocation;
-    this.props.fetchForStep(this.props.path, `premises/${premisePath.join(".")}/statement/${boundVariablePath.join(".")}/boundVariables/${boundVariableIndex}/`, {
+    this.props.apiService.fetchJsonForStep(this.props.path, `premises/${premisePath.join(".")}/statement/${boundVariablePath.join(".")}/boundVariables/${boundVariableIndex}/`, {
       method: "PUT",
       body: this.state.boundVariableName
     })
@@ -187,7 +186,7 @@ AssertionStep.Popover = class extends React.Component {
   render() {
     const popoverProps = _.pick(this.props, ["arrowProps", "className", "outOfBoundaries", "placement", "scheduleUpdate", "style"]);
     const {} = this.props
-    const {step, path, boundVariableLists, innerRef} = this.props;
+    const {step, path, boundVariableLists, innerRef, apiService} = this.props;
     const inference = step.inference || step.inferenceApplication.inference;;
     const boundVariableModal = <BoundVariableModal show={this.isShowingBoundVariableModal()}
                                                    onHide={this.hideBoundVariableModal}
@@ -197,7 +196,12 @@ AssertionStep.Popover = class extends React.Component {
                                                    onSave={this.saveBoundVariable}/>;
 
     return <>
-      <Popover ref={innerRef} title={<FlexRow><FlexRow.Grow><a href={inference.key.url}>{inference.name}</a></FlexRow.Grow>{path && <DeleteStepButton path={path} {...this.props}/>}</FlexRow>}  {...popoverProps}>
+      <Popover ref={innerRef}
+               title={<FlexRow>
+                 <FlexRow.Grow><a href={inference.key.url}>{inference.name}</a></FlexRow.Grow>
+                 {path && <DeleteStepButton path={path} apiService={apiService}/>}
+               </FlexRow>}
+               {...popoverProps}>
         <InferenceSummary inference={inference} />
         {step.premises && <>
           <hr/>

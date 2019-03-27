@@ -29,10 +29,10 @@ export class TargetStep extends React.Component {
   };
 
   introduceBoundVariable = () => {
-    this.props.fetchForStep(this.props.path, "introduceBoundVariable", {
+    this.props.apiService.fetchJsonForStep(this.props.path, "introduceBoundVariable", {
       method: "POST",
       body: this.state.boundVariableName
-    }).then(this.props.updateTheorem);
+    }).then(this.props.apiService.updateTheorem);
   };
 
   showFindInferenceModal = () => {
@@ -44,24 +44,24 @@ export class TargetStep extends React.Component {
   };
 
   getInferenceSuggestions = (searchText) => {
-    return this.props.fetchForStep(this.props.path, `suggestInferences?searchText=${searchText}`)
+    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}`)
   };
   getPremiseSuggestions = (inferenceId) => {
-    return this.props.fetchForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}`)
+    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}`)
   };
 
   introduceDeduction = () => {
-    this.props.fetchForStep(this.props.path, "introduceDeduction", {
+    this.props.apiService.fetchJsonForStep(this.props.path, "introduceDeduction", {
       method: "POST"
-    }).then(this.props.updateTheorem);
+    }).then(this.props.apiService.updateTheorem);
   };
 
   proveWithInference = (inferenceId, substitutions) => {
-    this.props.fetchForStep(this.props.path, {
+    this.props.apiService.fetchJsonForStep(this.props.path, "", {
       method: "PUT",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, substitutions})
-    }).then(this.props.updateTheorem);
+    }).then(this.props.apiService.updateTheorem);
   };
 
   render() {

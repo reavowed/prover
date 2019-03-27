@@ -54,7 +54,6 @@ export class FindInferenceModal extends React.Component {
   };
   onSuggestionsFetchRequested = ({ value }) => {
     this.props.getInferenceSuggestions(value)
-      .then(response => response.json())
       .then(suggestionsJson => this.setState({inferenceSuggestions: Parser.parseInferenceSuggestions(suggestionsJson)}))
   };
   onSuggestionsClearRequested = () => {
@@ -71,7 +70,6 @@ export class FindInferenceModal extends React.Component {
       selectedSubstitutionValues
     });
     this.props.getPremiseSuggestions(suggestion.inference.id)
-      .then(response => response.json())
       .then(suggestionsJson => this.setState({
         premiseSuggestions: Parser.parsePremiseSuggestions(suggestionsJson),
         selectedPremiseSuggestions: suggestion.inference.premises.map(() => ["", null])

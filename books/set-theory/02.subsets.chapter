@@ -11,7 +11,10 @@ conclusion ∈ a B
 {
   prove ∀ x → ∈ $0 A ∈ $0 B f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (A, B) () ()
     given
-  assert ∈ a B transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (a) (∈ $0 A, ∈ $0 B) () (direct 0, direct p1)
+  prove ∈ a B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∈ a B) () () ()
+    expanded → ∈ a A ∈ a B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (→ ∈ $0 A ∈ $0 B) ()
+      given
+    given
 }
 
 theorem Subset Is Antisymmetric
@@ -23,7 +26,14 @@ conclusion = A B
     given
   prove ∀ x → ∈ $0 B ∈ $0 A f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (B, A) () ()
     given
-  assert ∀ x ↔ ∈ $0 A ∈ $0 B transformed 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 rearranged (Y Y) Y () () (∈ $0 A, ∈ $0 B) () (direct 0, direct 1)
+  take x {
+    prove ↔ ∈ $0 A ∈ $0 B a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 (∈ $0 A, ∈ $0 B) () () ()
+      expanded ∧ → ∈ $0 A ∈ $0 B → ∈ $0 B ∈ $0 A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (→ ∈ $0 A ∈ $0 B, → ∈ $0 B ∈ $0 A) () () ()
+        expanded → ∈ $0 A ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 A ∈ $$0 B) ()
+          given
+        expanded → ∈ $0 B ∈ $0 A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 B ∈ $$0 A) ()
+          given
+  }
   prove = A B 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (A, B) () ()
     given
 }
@@ -43,13 +53,16 @@ conclusion ⊆ A C
         given
     }
   }
-  assert ⊆ A C direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (A, C) () () (compound 0 compound 0.0a direct 0.0.1)
+  prove ⊆ A C 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (A, C) () ()
+    given
 }
 
 theorem Any Set Is a Subset of Itself
 conclusion ⊆ A A
 {
-  assert ∀ x → ∈ $0 A ∈ $0 A transformed d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 () Y () () (∈ $0 A) () ()
+  take x {
+    prove → ∈ $0 A ∈ $0 A d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (∈ $0 A) () () ()
+  }
   prove ⊆ A A 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (A, A) () ()
     given
 }
