@@ -169,7 +169,8 @@ class BookController @Autowired() (bookService: BookService) {
         Map(
           "definitions" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap,
           "displayShorthands" -> book.displayContext.displayShorthands,
-          "transitivityInferences" -> parsingContext.transitivityInferences.map { case (d, i) => d.symbol -> i.id }))
+          "transitivityInferences" -> parsingContext.transitivityInferences.map { case (d, i) => d.symbol -> i.id },
+          "definitionShorthands" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).mapCollect(d => d.shorthand.map(_ -> d.symbol)).toMap))
     }).toResponseEntity
   }
 

@@ -158,6 +158,15 @@ export class FindInferenceModal extends React.Component {
     });
   };
 
+  replaceShorthands = (event) => {
+    var text = event.target.value;
+    _.each(_.toPairs(window.definitionShorthands), ([valueToReplace, symbol]) => {
+      let regex = new RegExp('\\b' + _.escapeRegExp(valueToReplace) + '(?=\\s$)', 'gim');
+      text = text.replace(regex, symbol);
+    });
+    return text;
+  };
+
   readyToSubmit() {
     return this.state.selectedInferenceSuggestion && _.chain(this.state.selectedSubstitutionValues).values().flatMap(_.values).every().value();
   };
@@ -178,7 +187,7 @@ export class FindInferenceModal extends React.Component {
       return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name => {
         const validValues = this.getValidSubstitutionValues(key, name);
         const selectionElement = !validValues ?
-          <Form.Control type="text" value={this.state.selectedSubstitutionValues[key][name]} onChange={e => this.setSelectedSubstitutionValue(key, name, e.target.value)}/> :
+          <Form.Control type="text" value={this.state.selectedSubstitutionValues[key][name]} onChange={e => this.setSelectedSubstitutionValue(key, name, this.replaceShorthands(e))}/> :
           validValues.length === 1 ?
           <Form.Label column><ExpressionComponent expression={validValues[0]} boundVariableLists={boundVariableLists} /></Form.Label> :
           <Form.Control as="select" value={this.state.selectedSubstitutionValues[key][name]} onChange={e => this.setSelectedSubstitutionValue(key, name, e.target.value)}>
