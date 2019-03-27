@@ -324,7 +324,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     }.toResponseEntity
   }
 
-  @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/quick"), consumes = Array("application/json;charset=UTF-8"))
+  @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/quick"))
   def createQuickPremise(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
@@ -350,6 +350,20 @@ class TheoremController @Autowired() (bookService: BookService) {
     modifyStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (book, chapter, theorem, oldStep) =>
       implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, oldStep)
       oldStep.tryUpdatePremiseAtPath(premisePath.indexes, updatePremise(_, oldStep.context)).orNotFound(s"Premise $premisePath not found").flatten
+    }.toResponseEntity
+  }
+
+  @DeleteMapping(value = Array("/{stepPath}/premises/{premisePath}"))
+  def deletePremise(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData,
+    @PathVariable("premisePath") premisePath: PathData
+  ): ResponseEntity[_] = {
+    modifyStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (book, chapter, theorem, oldStep) =>
+      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, oldStep)
+      oldStep.tryUpdatePremiseAtPath(premisePath.indexes, p => Success(NewAssert.Premise.Pending(p.statement))).orNotFound(s"Premise $premisePath not found").flatten
     }.toResponseEntity
   }
 

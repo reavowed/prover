@@ -33,7 +33,7 @@ export class AssertionStep extends React.Component {
   }
 
   fetchOptions = () => {
-    this.props.fetchForStep(this.props.path, "premiseOptions")
+    return this.props.fetchForStep(this.props.path, "premiseOptions")
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -77,7 +77,7 @@ export class AssertionStep extends React.Component {
     return <>
       <ProofLine premiseReferences={step.referencedLines}
                  path={path}
-                 popover={<AssertionStep.Popover step={step} path={path} premiseOptions={this.state.premiseOptions} {...otherProps}/>}
+                 popover={<AssertionStep.Popover step={step} path={path} premiseOptions={this.state.premiseOptions} fetchOptions={this.fetchOptions} {...otherProps}/>}
                  onShowPopover={this.fetchOptions}
                  blockHide={this.showBoundVariableModal()}
                  incomplete={_.some(step.premises, "incomplete")}
@@ -95,30 +95,50 @@ export class AssertionStep extends React.Component {
 }
 
 AssertionStep.Popover = class extends React.Component {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      hideOptions: false
+    };
+  }
+
+  fetchAndUpdateOptions = (fetchPath, fetchOptions) => {
+    this.props.fetchForStep(this.props.path, fetchPath, fetchOptions)
+      .then(response => {
+        this.setState({hideOptions: true});
+        this.props.updateTheorem(response);
+      })
+      .then(this.props.fetchOptions)
+      .then(() => this.setState({hideOptions: false}));
+  };
+
   applyExpansion = (premisePath, expansionId) => {
-    this.props.fetchForStep(this.props.path, `premises/${premisePath.join(".")}/rearrangement`, {
+    this.fetchAndUpdateOptions(`premises/${premisePath.join(".")}/rearrangement`, {
       method: "POST",
       body: expansionId
-    }).then(this.props.updateTheorem);
+    });
   };
   applyQuick = (premisePath, inferenceId, target) => {
-    this.props.fetchForStep(this.props.path, `premises/${premisePath.join(".")}/quick`, {
+    this.fetchAndUpdateOptions(`premises/${premisePath.join(".")}/quick`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, target: target.serialize()})
-    }).then(this.props.updateTheorem);
+    });
   };
-
+  deletePremise = (premisePath) => {
+    this.fetchAndUpdateOptions(`premises/${premisePath.join(".")}/`, {method: "DELETE"});
+  };
   addTarget = (premisePath) => {
-    this.props.fetchForStep(this.props.path, `premises/${premisePath.join(".")}/target`, {
+    this.props.fetchAndUpdateOptions(`premises/${premisePath.join(".")}/target`, {
       method: "POST"
-    }).then(this.props.updateTheorem);
+    });
   };
 
   renderPremise(premise, path, boundVariableLists) {
+
     switch (premise.type) {
       case "pending":
-        const options = _.find(this.props.premiseOptions, option => _.isEqual(option.path, path)) || {};
+        const options = !this.state.hideOptions && _.find(this.props.premiseOptions, option => _.isEqual(option.path, path)) || {};
         const wrapEditableBoundVariable = (boundVariableContent, boundVariableName, boundVariableIndex, boundVariablePath) => {
           const startEditingBoundVariable = () => {
             this.setState({
@@ -145,12 +165,15 @@ AssertionStep.Popover = class extends React.Component {
           </DropdownButton>}
         </FlexRow>;
       case "expansion":
-        return <div>
-          <Expression expression={premise.statement} boundVariableLists={boundVariableLists}/>
+        return <>
+          <FlexRow>
+            <FlexRow.Grow><Expression expression={premise.statement} boundVariableLists={boundVariableLists}/></FlexRow.Grow>
+            <Button size="sm" className="ml-1" onClick={() => this.deletePremise(path)}><span className="fas fa-ban"/></Button>
+          </FlexRow>
           <PremiseChildren>
             {premise.premises.map((p, i) => this.renderPremise(p, [...path, i], boundVariableLists))}
           </PremiseChildren>
-        </div>;
+        </>;
       case "given":
       case "simplification":
         return <div>
