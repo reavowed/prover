@@ -63,8 +63,8 @@ class BookController @Autowired() (bookService: BookService) {
     }).toResponseEntity
   }
 
-  @GetMapping(value = Array("/{bookKey}/{chapterKey}/replaceOldAssertions"))
-  def replaceOldAssertions(@PathVariable("bookKey") bookKey: String, @PathVariable("chapterKey") chapterKey: String): ResponseEntity[_] = {
+  @GetMapping(value = Array("/{bookKey}/replaceOldAssertions"))
+  def replaceOldAssertions(@PathVariable("bookKey") bookKey: String): ResponseEntity[_] = {
     def replaceReference(reference: Reference, premiseStatement: Statement, externalDepth: Int): Option[NewAssert.Premise] = reference match {
       case Reference.Direct(value) =>
         Some(NewAssert.Premise.Given(premiseStatement, PreviousLineReference(value, Nil)))
@@ -93,14 +93,17 @@ class BookController @Autowired() (bookService: BookService) {
     def replaceTheorem(theorem: Theorem): Theorem = {
       theorem.copy(proof = replaceSteps(theorem.proof))
     }
-    bookService.modifyChapter(bookKey, chapterKey, (_, _, chapter) => {
+    def replaceChapter(chapter: Chapter): Chapter = {
       val updatedEntries = chapter.entries.map {
         case theorem: Theorem =>
           replaceTheorem(theorem)
         case other =>
           other
       }
-      Success((chapter.copy(entries = updatedEntries), ()))
+      chapter.copy(entries = updatedEntries)
+    }
+    bookService.modifyBook(bookKey, (_, book) => {
+      Success((book.copy(chapters = book.chapters.map(replaceChapter)), ()))
     }).map(_ => ()).toResponseEntity
   }
 

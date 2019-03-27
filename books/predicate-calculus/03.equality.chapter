@@ -18,8 +18,10 @@ theorem Reverse Equality
 premise = a b
 conclusion = b a
 {
-  assert = a a direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () () ()
-  assert = b a direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= $0 a) () (direct p0, direct 0)
+  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
+  prove = b a 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= $0 a) ()
+    given
+    given
 }
 
 theorem Substitution of Equals
@@ -27,8 +29,11 @@ premise = a b elidable
 premise with (b) φ elidable
 conclusion with (a) φ
 {
-  assert = b a direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () () (direct p0)
-  assert with (a) φ direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (b, a) (with ($0) φ) () (direct 0, direct p1)
+  prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () ()
+    given
+  prove with (a) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (b, a) (with ($0) φ) ()
+    given
+    given
 }
 
 comment Now we can also prove that the substitution axiom works when substituting into equal terms.
@@ -37,16 +42,20 @@ theorem Substitution of Equals
 premise = a b elidable
 conclusion = with (a) F with (b) F
 {
-  assert = with (a) F with (a) F direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (with (a) F) () () ()
-  assert = with (a) F with (b) F direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= with (a) F with ($0) F) () (direct p0, direct 0)
+  prove = with (a) F with (a) F 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (with (a) F) () ()
+  prove = with (a) F with (b) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= with (a) F with ($0) F) ()
+    given
+    given
 }
 
 theorem Substitution of Equals
 premise = a b elidable
 conclusion = with (b) F with (a) F
 {
-  assert = b a direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () () (direct p0)
-  assert = with (b) F with (a) F direct 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (b, a) () (with ($0) F) (direct 0)
+  prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () ()
+    given
+  prove = with (b) F with (a) F 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (b, a) () (with ($0) F)
+    given
 }
 
 comment Basic facts about equality.
@@ -55,12 +64,16 @@ theorem Equality Is Symmetric
 conclusion ↔ = a b = b a
 {
   assume = a b {
-    assert = b a direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () () (direct 0a)
+    prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () ()
+      given
   }
   assume = b a {
-    assert = a b direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (b, a) () () (direct 1a)
+    prove = a b 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (b, a) () ()
+      given
   }
-  assert ↔ = a b = b a direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= a b, = b a) () () () (compound 0a direct 0.0, compound 1a direct 1.0)
+  prove ↔ = a b = b a 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= a b, = b a) () () ()
+    given
+    given
 }
 
 theorem Equality Is Transitive
@@ -68,7 +81,9 @@ premise = a b
 premise = b c
 conclusion = a c
 {
-  assert = a c direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (b, c) (= a $0) () (direct p1, direct p0)
+  prove = a c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (b, c) (= a $0) ()
+    given
+    given
 }
 
 theorem Equivalence of Substituted Equals
@@ -76,12 +91,18 @@ premise = a b
 conclusion ↔ with (a) φ with (b) φ
 {
   assume with (a) φ {
-    assert with (b) φ direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (with ($0) φ) () (direct p0, direct 0a)
+    prove with (b) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (with ($0) φ) ()
+      given
+      given
   }
   assume with (b) φ {
-    assert with (a) φ direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, b) (with ($0) φ) () (direct p0, direct 1a)
+    prove with (a) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, b) (with ($0) φ) ()
+      given
+      given
   }
-  assert ↔ with (a) φ with (b) φ direct 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (with (a) φ, with (b) φ) () () () (compound 0a direct 0.0, compound 1a direct 1.0)
+  prove ↔ with (a) φ with (b) φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (with (a) φ, with (b) φ) () () ()
+    given
+    given
 }
 
 theorem Distinguishable Terms Are Not Equal
@@ -90,32 +111,43 @@ premise ¬ with (b) φ
 conclusion ¬ = a b
 {
   assume = a b {
-    assert with (b) φ direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (with ($0) φ) () (direct 0a, direct p0)
+    prove with (b) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (with ($0) φ) ()
+      given
+      given
   }
-  assert ¬ = a b direct 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= a b, with (b) φ) () () () (compound 0a direct 0.0, direct p1)
+  prove ¬ = a b 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= a b, with (b) φ) () () ()
+    given
+    given
 }
 
 theorem Sets Are Equal If Always Equal to the Same Thing
 premise ∀ x ↔ = $0 a = $0 b
 conclusion = a b
 {
-  assert = a a direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () () ()
-  assert = a b transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (a) (= $0 a, = $0 b) () (direct p0, direct 0)
+  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
+  prove = a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= a a, = a b) () () ()
+    expanded → = a a = a b f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= a a, = a b) () () ()
+      expanded ↔ = a a = a b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ = $0 a = $0 b) ()
+        given
+    given
 }
 
 theorem Every Set Exists
 conclusion ∃ x = $0 a
 {
-  assert = a a direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () () ()
-  assert ∃ x = $0 a direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (= $0 a) () (direct 0)
+  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
+  prove ∃ x = $0 a c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (= $0 a) ()
+    given
 }
 
 theorem Renamed Set
 premise ∀ x → = $0 a φ
 conclusion φ
 {
-  assert ∃ x = $0 a direct 8cf72cf7b527d9e599e1e396a28cdc3485d6e669a1aa4c12184758ca101eceb3 () (a) () () ()
-  assert φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (φ) () (= $0 a) () (direct 0, direct p0)
+  prove ∃ x = $0 a 8cf72cf7b527d9e599e1e396a28cdc3485d6e669a1aa4c12184758ca101eceb3 () (a) () ()
+  prove φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (φ) () (= $0 a) ()
+    given
+    given
 }
 
 theorem Exclusive Or for Equality
@@ -124,8 +156,16 @@ premise ¬ = b c
 conclusion ⊕ = a b = a c
 {
   assume ∧ = a b = a c {
-    assert = b c direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= $0 c) () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= a b, = a c) () () () direct 0a (0), simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= a b, = a c) () () () direct 0a (1))
+    prove = b c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= $0 c) ()
+      simplified = a b 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= a b, = a c) () () ()
+        given
+      simplified = a c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= a b, = a c) () () ()
+        given
   }
-  assert ¬ ∧ = a b = a c direct 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ = a b = a c, = b c) () () () (compound 0a direct 0.0, direct p1)
-  assert ⊕ = a b = a c direct 85d9228e116d39e101fccf8102b9ae979459e94efa97bd1f050fb7327031497b (= a b, = a c) () () () (direct p0, direct 1)
+  prove ¬ ∧ = a b = a c 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ = a b = a c, = b c) () () ()
+    given
+    given
+  prove ⊕ = a b = a c 85d9228e116d39e101fccf8102b9ae979459e94efa97bd1f050fb7327031497b (= a b, = a c) () () ()
+    given
+    given
 }
