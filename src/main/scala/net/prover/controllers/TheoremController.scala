@@ -91,7 +91,7 @@ class TheoremController @Autowired() (bookService: BookService) {
       implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, step)
       for {
         inference <- findInference(definition.inferenceId)
-        substitutions <- definition.parseSubstitutions(inference, parsingContext)
+        substitutions <- definition.parseSubstitutions(inference)
         premiseStatements <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, step.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
       } yield {
         Step.NewAssert(
