@@ -14,6 +14,16 @@ export class ScopedVariableStep extends React.Component {
     let referencesForLastStep = [...additionalReferences, reference];
     let innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     let singleAssertion = step.getSingleAssertion();
+    let conclusionLine = step.provenStatement && <ProofLine highlighting={highlighting}
+                                                            apiService={apiService}
+                                                            premiseReferences={[{lineReference: [...path, step.substeps.length - 1].join("."), internalPath: []}]}
+                                                            path={path}>
+      So <HighlightableExpression expression={step.provenStatement}
+                                  boundVariableLists={boundVariableLists}
+                                  references={referencesForLastStep}
+                                  apiService={apiService}
+                                  highlighting={highlighting}/>.
+    </ProofLine>;
     if (step.shouldDisplayInFull()) {
       const popover = (
         <Popover title={<FlexRow>
@@ -28,17 +38,7 @@ export class ScopedVariableStep extends React.Component {
                         boundVariableLists={innerBoundVariableLists}
                         apiService={apiService}
                         highlighting={highlighting}/>
-        {step.provenStatement &&
-          <ProofLine highlighting={highlighting}
-                     apiService={apiService}
-                     premiseReferences={[{lineReference: [...path, step.substeps.length - 1].join("."), internalPath: []}]}
-                     path={path}>
-            So <HighlightableExpression expression={step.provenStatement}
-                                        boundVariableLists={boundVariableLists}
-                                        references={referencesForLastStep}
-                                        apiService={apiService}
-                                        highlighting={highlighting}/>.
-          </ProofLine>}
+        {conclusionLine}
       </>
     } else if (singleAssertion) {
       return <ProofLine highlighting={highlighting}
@@ -57,12 +57,12 @@ export class ScopedVariableStep extends React.Component {
     } else {
       return <>
         <Steps steps={step.substeps}
-                    path={path}
-                    boundVariableLists={innerBoundVariableLists}
-                    referencesForLastStep={referencesForLastStep}
-                    apiService={apiService}
-                    highlighting={highlighting}/>
-        {step.provenStatement && <ProofLine>So <ExpressionComponent expression={step.provenStatement} boundVariableLists={boundVariableLists}/>.</ProofLine>}
+               path={path}
+               boundVariableLists={innerBoundVariableLists}
+               referencesForLastStep={referencesForLastStep}
+               apiService={apiService}
+               highlighting={highlighting}/>
+        {conclusionLine}
       </>
     }
   }
