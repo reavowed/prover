@@ -5,6 +5,7 @@ import {FlexRow} from "../FlexRow";
 import {BoundVariableModal, FindInferenceModal} from "../Modals";
 import {DeleteStepButton} from "./DeleteStepButton";
 import {ProofLine} from "./ProofLine";
+import {HighlightableExpression} from "../ExpressionComponent";
 
 export class TargetStep extends React.Component {
   constructor(props, context) {
@@ -87,7 +88,7 @@ export class TargetStep extends React.Component {
       </Popover>
     );
     return <>
-      <ProofLine incomplete step={step} popover={popover} path={path} {...otherProps}>Then <ProofLine.Statement statement={step.statement} references={[...additionalReferences, reference]} {...otherProps}/>.</ProofLine>
+      <ProofLine incomplete step={step} popover={popover} path={path} {...otherProps}>Then <HighlightableExpression statement={step.statement} references={[...additionalReferences, reference]} {...otherProps}/>.</ProofLine>
       {boundVariableModal}
       {<FindInferenceModal show={this.state.showFindInferenceModal} onHide={this.hideFindInferenceModal} onSubmit={this.proveWithInference} getInferenceSuggestions={this.getInferenceSuggestions} getPremiseSuggestions={this.getPremiseSuggestions} {...otherProps} />}
     </>
