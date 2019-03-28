@@ -17,7 +17,14 @@ export class DeductionStep extends React.Component {
       </Popover>
     );
     return <>
-      <ProofLine popover={popover}>Assume <HighlightableExpression expression={step.assumption} boundVariableLists={this.props.boundVariableLists} references={[...additionalReferences, reference, reference + "a"]} {...otherProps}/>.</ProofLine>
+      <ProofLine popover={popover}>
+        Assume
+        {' '}
+        <HighlightableExpression expression={step.assumption}
+                                 boundVariableLists={this.props.boundVariableLists}
+                                 references={[...additionalReferences, reference, reference + "a"]}
+                                 {...otherProps}/>.
+      </ProofLine>
       <Steps.Children steps={step.substeps} path={path} referencesForLastStep={referencesForLastStep} {...otherProps} />
     </>;
   }

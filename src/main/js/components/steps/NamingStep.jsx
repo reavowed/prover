@@ -16,7 +16,7 @@ export class NamingStep extends React.Component {
         {' '}
         <HighlightableExpression statement={step.assumption}
                                  boundVariableLists={innerBoundVariableLists}
-                                 references={[...additionalReferences, assumptionReference]}
+                                 reference={assumptionReference}
                                  {...otherProps}/>.
       </ProofLine>
       <Steps steps={step.substeps} path={path} boundVariableLists={innerBoundVariableLists} referencesForLastStep={referencesForLastStep} {...otherProps} />
