@@ -15,6 +15,7 @@ function createBreadcrumbs(...keys) {
   return <BreadcrumbWrapper>
     <Container>
       <Breadcrumb>
+        <Breadcrumb.Item href="/books">Books</Breadcrumb.Item>
         {keys.slice(0, keys.length - 1).map(key => <Breadcrumb.Item key={key.url}
                                                                     href={key.url}>{key.name}</Breadcrumb.Item>)}
         <Breadcrumb.Item active>{keys[keys.length - 1].name}</Breadcrumb.Item>
