@@ -1,5 +1,8 @@
 import path from "path";
 import React from "react";
+import {Expression} from "../models/Expression";
+import {Step} from "../models/Step";
+import _ from "../Parser";
 import {Parser} from "../Parser";
 import {HighlightableExpression} from "./ExpressionComponent";
 import {Inference} from "./Inference";
@@ -15,7 +18,7 @@ export class Theorem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      theorem: Parser.parseTheorem(props.theorem),
+      theorem: this.parseTheorem(props.theorem),
       highlightedPremises: [],
       highlightedConclusion: null
     }
@@ -41,8 +44,19 @@ export class Theorem extends React.Component {
       });
   };
 
+  parseTheorem = (theoremJson) => {
+    return {
+      name: theoremJson.name,
+      id: theoremJson.id,
+      key: theoremJson.key,
+      premises: theoremJson.premises.map(Expression.parseFromJson),
+      conclusion: Expression.parseFromJson(theoremJson.conclusion),
+      proof: Step.parseFromJson(theoremJson.proof)
+    };
+  };
+
   updateTheorem = (theoremJSON) => {
-    const theorem = Parser.parseTheorem(theoremJSON);
+    const theorem = this.parseTheorem(theoremJSON);
     this.setState({theorem: theorem});
   };
 

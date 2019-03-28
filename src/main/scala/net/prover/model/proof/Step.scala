@@ -11,6 +11,7 @@ import scala.util.Try
 
 @JsonIgnoreProperties(Array("context", "substitutions", "deductionStatement", "scopingStatement"))
 sealed trait Step {
+  @JsonSerialize
   def provenStatement: Option[Statement]
   def context: StepContext
   def getSubstep(index: Int): Option[Step]

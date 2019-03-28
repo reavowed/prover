@@ -7,23 +7,11 @@ export class Parser {
     inference.premises = inference.premises.map(Expression.parseFromJson);
     inference.conclusion = Expression.parseFromJson(inference.conclusion);
   }
-  static parsePremise(premise) {
-    premise.statement && (premise.statement = Expression.parseFromJson(premise.statement));
-    premise.premises && _.each(premise.premises, Parser.parsePremise);
-  }
-  static parseStep(step) {
-    step.assumption && (step.assumption = Expression.parseFromJson(step.assumption));
-    step.statement && (step.statement = Expression.parseFromJson(step.statement));
-    step.provenStatement && (step.provenStatement = Expression.parseFromJson(step.provenStatement));
-    step.inference && Parser.parseInferenceSummary(step.inference);
-    step.inferenceApplication && Parser.parseInferenceSummary(step.inferenceApplication.inference);
-    step.substeps && _.each(step.substeps, Parser.parseStep);
-    step.premises && _.each(step.premises, Parser.parsePremise);
-  }
-  static parseTheorem(rawTheorem) {
-    const theorem = Parser.parseInference(rawTheorem);
-    _.each(theorem.proof, Parser.parseStep);
-    return theorem;
+  static parsePremise(premiseJson) {
+    const premise = _.cloneDeep(premiseJson);
+    premiseJson.statement && (premise.statement = Expression.parseFromJson(premiseJson.statement));
+    premiseJson.premises && (premise.premises =  premise.premises.map(Parser.parsePremise));
+    return premise;
   }
   static parseInference(rawInference) {
     const inference = _.cloneDeep(rawInference);

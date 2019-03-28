@@ -102,6 +102,8 @@ export class Steps extends React.Component {
         return "assume " + step.assumption.serialize();
       case "scopedVariable":
         return "take " + step.variableName;
+      case "naming":
+        return "name " + step.variableName + " as " + step.assumption.serialize();
     }
   }
   static getTransitivityDetails(stepsWithIndexes, firstStep, transitivityInferenceId, basePath, firstIndex) {
