@@ -203,7 +203,7 @@ AssertionStep.Popover = class extends React.Component {
                </FlexRow>}
                {...popoverProps}>
         <InferenceSummary inference={inference} />
-        {step.premises && <>
+        {step.premises && step.premises.length > 0 && <>
           <hr/>
           <div><strong>Premises</strong></div>
           {step.premises.map((p, i) => this.renderPremise(p, [i], boundVariableLists))}
