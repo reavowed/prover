@@ -151,11 +151,29 @@ AssertionStep.Popover = class extends React.Component {
             {options.expansions.map(e => <Dropdown.Item key={e.id} onClick={() => this.applyExpansion(premisePath, e.id)}>{e.name}</Dropdown.Item>)}
           </DropdownButton>}
           {options.quick && options.quick.length > 0 && <DropdownButton title="Quick" size="sm" className="ml-1">
-            {options.quick.map(e => {
-              const content = _.countBy(options.quick, "inference.id")[e.inference.id] > 1 ?
-                <>{e.inference.name} - <ExpressionComponent expression={e.target} boundVariableLists={boundVariableLists}/></> :
-                e.inference.name;
-              return <Dropdown.Item key={e.id + " " + e.target.serialize()} onClick={() => this.applyQuick(premisePath, e.inference.id, e.target)}>{content}</Dropdown.Item>
+            {_.toPairs(_.groupBy(options.quick, "inference.id")).map(([id, options]) => {
+              const inference = options[0].inference;
+              if (options.length === 1) {
+                const option = options[0];
+                return <Dropdown.Item key={inference.id}
+                                      onClick={() => this.applyQuick(premisePath, option.inference.id, option.target)}>
+                  {inference.name}
+                </Dropdown.Item>
+              } else {
+                return <Dropdown.Item key={inference.id} >
+                  <Dropdown onClick={e => e.stopPropagation()} className="dropright">
+                    <Dropdown.Toggle as="div">{inference.name}</Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        {options.map(option =>
+                          <Dropdown.Item key={option.target.serialize()}
+                                         onClick={() => this.applyQuick(premisePath, option.inference.id, option.target)}>
+                            <ExpressionComponent expression={option.target} boundVariableLists={boundVariableLists}/>
+                          </Dropdown.Item>
+                        )}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Dropdown.Item>
+              }
             })}
           </DropdownButton>}
         </FlexRow>;
