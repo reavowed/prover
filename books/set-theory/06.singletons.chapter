@@ -121,13 +121,13 @@ theorem Subsets of a Singleton
 premise ⊆ S singleton a
 conclusion ⊕ = S singleton a = S ∅
 {
-  prove ∀ x → ∈ $0 S ∈ $0 singleton a f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (S, singleton a) () ()
-    given
-  prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () ()
-  assert ∀ x → ∈ $0 S = $0 a transformed 04bbf502aadffe1b0b9e64dc91a73292912cb7fc87cac0dcf53aa75f7f0dbe46 (Y Y) Y () () (∈ $0 S, ∈ $0 singleton a, = $0 a) () (direct 0, direct 1)
   assume ∃ y ∈ $0 S {
     let b ∈ $0 S direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ a S) () (∈ $0 S) () (direct 3a, direct 3.0d) {
-      assert = $0 a transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($0) (∈ $$0 S, = $$0 a) () (direct 2, direct 3.0a)
+      prove ∈ $0 singleton a ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (S, singleton a, $0) () ()
+        given
+        given
+      prove = $0 a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) () ()
+        given
       prove ∈ a S 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (∈ $$0 S) ()
         given
         given
@@ -148,15 +148,5 @@ conclusion ⊕ = S singleton a = S ∅
   prove ¬ = singleton a ∅ 1c4e6217e33217004ef0962a46f7422720c1fd5d2c8bb711f976bf01166dc708 () (a) () ()
   prove ⊕ = S singleton a = S ∅ cc33f6b28f64a37e2f3542e4cf12cd895be950c17403f5fff89e02ecec3dfcfe () (S, singleton a, ∅) () ()
     given
-    given
-}
-
-theorem Elements of Powerset of Singleton
-premise ∈ S powerSet singleton a
-conclusion ⊕ = S singleton a = S ∅
-{
-  prove ⊆ S singleton a bb4e7eb849809346e883e29e4c961a0b1e707fabfe8da1e4537f611a4602e0f2 () (S, singleton a) () ()
-    given
-  prove ⊕ = S singleton a = S ∅ a68f54367f278aecd5d6ebaf8d39414c00134a884191e9c3043952317164bc27 () (S, a) () ()
     given
 }

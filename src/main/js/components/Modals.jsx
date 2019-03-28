@@ -46,8 +46,9 @@ function buildSubstitutionMap(requiredSubstitutions, f) {
 }
 
 export class FindInferenceModal extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(...args) {
+    super(...args);
+    this.autoSuggestRef = React.createRef();
     this.state = {
       isLoading: false,
       autosuggestValue: "",
@@ -217,60 +218,59 @@ export class FindInferenceModal extends React.Component {
     };
     const {show, onHide, boundVariableLists} = this.props;
 
-    return <Modal show={show} onHide={onHide}>
+    return <Modal show={show} onHide={onHide} onEntered={() => this.autoSuggestRef.current.input.focus()}>
       <Modal.Header closeButton><Modal.Title>Find inference</Modal.Title></Modal.Header>
       <Modal.Body>
-        <Form>
-          <Form.Group>
-            <Form.Label><strong>Select inference</strong></Form.Label>
-            <Autosuggest
-              suggestions={this.state.inferenceSuggestions}
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-              getSuggestionValue={s => s.inference.name}
-              renderSuggestionsContainer={renderSuggestionsContainer}
-              onSuggestionSelected={this.onSuggestionSelected}
-              renderSuggestion={s => <span className="dropdown-item">{s.inference.name}</span>}
-              inputProps={{value: this.state.autosuggestValue, onChange: this.onAutosuggestChange, className:"form-control"}} />
-          </Form.Group>
-          {this.state.selectedInferenceSuggestion &&
-            <>
-              <Form.Group>
-                <InferenceSummary inference={this.state.selectedInferenceSuggestion.inference}/>
-              </Form.Group>
-              { this.state.premiseSuggestions &&
-                  <Form.Group>
-                    <Form.Label><strong>Premises</strong></Form.Label>
-                    {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
-                      <Form.Group as={Form.Row}>
-                        <Col xs={4}>
-                          <ExpressionComponent expression={premise} boundVariableLists={[]} />
-                        </Col>
-                        <Col>
-                          <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)}>
-                            <option value="" />
-                            {suggestions.map((s, i) =>
-                              <option value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                                  <ExpressionComponent expression={s.statement} boundVariableLists={boundVariableLists} />
-                                )}}/>
-                            )}
-                          </Form.Control>
-                        </Col>
-                      </Form.Group>
-                    )}
-                  </Form.Group>
-              }
-              <Form.Group>
-                <Form.Label><strong>Substitutions</strong></Form.Label>
-                {_.flatten([
-                  showSimpleSubstitutions("statements", boundVariableLists),
-                  showSimpleSubstitutions("terms", boundVariableLists),
-                  showParameteredSubstitutions("predicates", boundVariableLists),
-                  showParameteredSubstitutions("functions", boundVariableLists),
-                ])}
-              </Form.Group>
-            </>}
-        </Form>
+        <Form.Group>
+          <Form.Label><strong>Select inference</strong></Form.Label>
+          <Autosuggest
+            ref={this.autoSuggestRef}
+            suggestions={this.state.inferenceSuggestions}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            getSuggestionValue={s => s.inference.name}
+            renderSuggestionsContainer={renderSuggestionsContainer}
+            onSuggestionSelected={this.onSuggestionSelected}
+            renderSuggestion={s => <span className="dropdown-item">{s.inference.name}</span>}
+            inputProps={{value: this.state.autosuggestValue, onChange: this.onAutosuggestChange, className:"form-control"}} />
+        </Form.Group>
+        {this.state.selectedInferenceSuggestion &&
+          <>
+            <Form.Group>
+              <InferenceSummary inference={this.state.selectedInferenceSuggestion.inference}/>
+            </Form.Group>
+            { this.state.premiseSuggestions &&
+                <Form.Group>
+                  <Form.Label><strong>Premises</strong></Form.Label>
+                  {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
+                    <Form.Group as={Form.Row}>
+                      <Col xs={4}>
+                        <ExpressionComponent expression={premise} boundVariableLists={[]} />
+                      </Col>
+                      <Col>
+                        <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)}>
+                          <option value="" />
+                          {suggestions.map((s, i) =>
+                            <option value={i} dangerouslySetInnerHTML={{__html: renderToString(
+                                <ExpressionComponent expression={s.statement} boundVariableLists={boundVariableLists} />
+                              )}}/>
+                          )}
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>
+                  )}
+                </Form.Group>
+            }
+            <Form.Group>
+              <Form.Label><strong>Substitutions</strong></Form.Label>
+              {_.flatten([
+                showSimpleSubstitutions("statements", boundVariableLists),
+                showSimpleSubstitutions("terms", boundVariableLists),
+                showParameteredSubstitutions("predicates", boundVariableLists),
+                showParameteredSubstitutions("functions", boundVariableLists),
+              ])}
+            </Form.Group>
+          </>}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={this.props.onHide}>Close</Button>
@@ -281,17 +281,33 @@ export class FindInferenceModal extends React.Component {
 }
 
 export class BoundVariableModal extends React.Component {
+  constructor(...args) {
+    super(...args);
+    this.inputRef = React.createRef();
+  }
   render() {
     const {show, onHide, title, value, onChange, onSave} = this.props;
-    return <Modal show={show} onHide={onHide}>
+    const onInputKeyUp = (event) => {
+      if (event.keyCode === 13) {
+        onSave();
+      }
+      event.preventDefault();
+      event.stopPropagation();
+    };
+    return <Modal show={show} onHide={onHide} onEntered={() => {
+      this.inputRef.current.focus();
+      this.inputRef.current.select();
+    }}>
       <Modal.Header closeButton><Modal.Title>{title}</Modal.Title></Modal.Header>
       <Modal.Body>
-        <Form>
-          <Form.Group>
-            <Form.Label>Bound variable name</Form.Label>
-            <Form.Control type="text" value={value} onChange={onChange}/>
-          </Form.Group>
-        </Form>
+        <Form.Group>
+          <Form.Label>Bound variable name</Form.Label>
+          <Form.Control type="text"
+                        value={value}
+                        onChange={onChange}
+                        onKeyUp={onInputKeyUp}
+                        ref={this.inputRef}/>
+        </Form.Group>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>Close</Button>
