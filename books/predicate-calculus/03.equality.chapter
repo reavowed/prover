@@ -24,7 +24,7 @@ conclusion = b a
     given
 }
 
-theorem Substitution of Equals
+theorem Substitution of Equals (Reversed)
 premise = a b elidable
 premise with (b) φ elidable
 conclusion with (a) φ
@@ -38,7 +38,7 @@ conclusion with (a) φ
 
 comment Now we can also prove that the substitution axiom works when substituting into equal terms.
 
-theorem Substitution of Equals
+theorem Substitution of Equals into Function
 premise = a b elidable
 conclusion = with (a) F with (b) F
 {
@@ -48,7 +48,7 @@ conclusion = with (a) F with (b) F
     given
 }
 
-theorem Substitution of Equals
+theorem Substitution of Equals into Function (Reversed)
 premise = a b elidable
 conclusion = with (b) F with (a) F
 {
