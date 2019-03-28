@@ -5,6 +5,9 @@ import * as _ from "lodash";
 export class AssertionStep {
     type = "assertion";
     constructor(public statement: Expression, public premises: any, public inference: any, public referencedLines: any, public isIncomplete: boolean) {}
+    getSingleAssertion(): AssertionStep | null {
+        return this.isIncomplete ? null : this;
+    }
 }
 
 export class DeductionStep {
@@ -16,19 +19,17 @@ export class DeductionStep {
 export class ScopedVariableStep {
     type = "scopedVariable";
     constructor(public variableName: String, public substeps: Step[], public provenStatement: Expression | void) {}
-    isIncomplete: boolean = _.some(this.substeps, "isIncomplete");
+    isIncomplete: boolean = _.some(this.substeps, s => s.isIncomplete);
     shouldDisplayInFull(): boolean {
         return this.isIncomplete || this.substeps.length == 0;
     }
-    shouldDisplayAsSingleLine(): boolean {
-        if (this.isIncomplete || this.substeps.length != 1)
-            return false;
-        const substep = this.substeps[0];
-        if (substep instanceof AssertionStep)
-            return true;
-        if (substep instanceof ScopedVariableStep)
-            return substep.shouldDisplayAsSingleLine();
-        return false;
+    getSingleAssertion(): AssertionStep | null {
+        if (this.substeps.length == 1) {
+            const substep = this.substeps[0];
+            if (substep instanceof AssertionStep || substep instanceof ScopedVariableStep)
+                return substep.getSingleAssertion();
+        }
+        return null;
     }
 }
 
