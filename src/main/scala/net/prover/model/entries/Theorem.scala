@@ -43,7 +43,7 @@ case class Theorem(
           f(steps, outerContext)
         case head +: tail =>
           steps.splitAtIndexIfValid(head).flatMap { case (before, step, after) =>
-              step.modifySubsteps(outerContext.addSteps(before), (substeps, innerContext) => helper(tail, substeps, innerContext))
+              step.modifySubsteps(outerContext.addSteps(before).atIndex(head), (substeps, innerContext) => helper(tail, substeps, innerContext))
                 .map { updatedStep =>
                   (before :+ updatedStep) ++ after
                 }
@@ -59,7 +59,7 @@ case class Theorem(
           f(steps, outerContext)
         case head +: tail =>
           steps.splitAtIndexIfValid(head).flatMap { case (before, step, after) =>
-              step.tryModifySubsteps(outerContext.addSteps(before), (substeps, innerContext) => helper(tail, substeps, innerContext))
+              step.tryModifySubsteps(outerContext.addSteps(before).atIndex(head), (substeps, innerContext) => helper(tail, substeps, innerContext))
                 .mapMap { updatedStep =>
                   (before :+ updatedStep) ++ after
                 }

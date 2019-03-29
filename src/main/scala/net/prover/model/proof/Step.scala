@@ -64,7 +64,7 @@ object Step {
     def modifyStepForExtraction(step: Step): Option[Step]
     override def getSubstep(index: Int, outerContext: StepContext): Option[(Step, StepContext)] = {
       substeps.lift(index).map { step =>
-        step -> specifyContext(outerContext).addSteps(substeps.take(index))
+        step -> specifyContext(outerContext.atIndex(index)).addSteps(substeps.take(index))
       }
     }
     override def extractSubstep(index: Int): Option[Option[(Step, Step)]] = {
@@ -492,11 +492,10 @@ object Step {
   }
 
   implicit class StepSeqOps(steps: Seq[Step]) {
-    def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Seq[Step] = {
-      steps.zipWithIndex.mapFold(stepContext) { case (outerContext, (oldStep, i)) =>
-        val newStep = oldStep.recalculateReferences(outerContext.atIndex(i), parsingContext)
-        (outerContext.addStep(newStep), newStep)
-      }._2
+    def recalculateReferences(outerContext: StepContext, parsingContext: ParsingContext): Seq[Step] = {
+      steps.zipWithIndex.mapReduceWithPrevious[Step] { case (previousSteps, (oldStep, i)) =>
+        oldStep.recalculateReferences(outerContext.addSteps(previousSteps).atIndex(i), parsingContext)
+      }
     }
   }
 

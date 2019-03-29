@@ -72,7 +72,7 @@ class BookService {
   }
 
   private def parseBooks: Seq[Book] = {
-    val books = getBookList.mapFold[Book] { case (booksSoFar, bookTitle) =>
+    val books = getBookList.mapReduceWithPrevious[Book] { case (booksSoFar, bookTitle) =>
       parseBook(bookTitle, booksSoFar)
     }
     BookService.logger.info(s"Parsed ${books.length} books")

@@ -71,7 +71,7 @@ package object model {
           f(acc, t).mapRight(ss :+ _)
       }
     }
-    def mapFold[S](f: (Seq[S], T) => S): Seq[S] = {
+    def mapReduceWithPrevious[S](f: (Seq[S], T) => S): Seq[S] = {
       seq.foldLeft(Seq.empty[S]) { case (acc, t) =>
         acc :+ f(acc, t)
       }
