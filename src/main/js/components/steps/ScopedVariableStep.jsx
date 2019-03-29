@@ -59,7 +59,6 @@ export class ScopedVariableStep extends React.Component {
         <Steps steps={step.substeps}
                path={path}
                boundVariableLists={innerBoundVariableLists}
-               referencesForLastStep={referencesForLastStep}
                apiService={apiService}
                highlighting={highlighting}/>
         {conclusionLine}
