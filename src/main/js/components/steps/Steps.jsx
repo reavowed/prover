@@ -116,9 +116,11 @@ export class Steps extends React.Component {
       lineReference: firstLineReference,
       step: firstStep
     }];
-    while (stepsWithIndexes.length > 2 &&
+    while (stepsWithIndexes.length >= 2 &&
       stepsWithIndexes[0].step.type === "assertion" &&
       stepsWithIndexes[1].step.type === "assertion" &&
+      !stepsWithIndexes[0].step.isIncomplete &&
+      !stepsWithIndexes[1].step.isIncomplete &&
       stepsWithIndexes[0].step.statement.definition &&
       stepsWithIndexes[1].step.statement.definition &&
       stepsWithIndexes[0].step.statement.definition.symbol === definitionSymbol &&

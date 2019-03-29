@@ -40,9 +40,17 @@ conclusion ∈ pair a b orderedPair a b
 theorem Ordered Pair with Same Coordinates Is Double Singleton
 conclusion = orderedPair a a singleton singleton a
 {
+  prove = pair a a singleton a 856bed8c7f5f249bac0978dd5f7359986d8eef536dff35c07c551f8061d9cd5c () (a) () ()
   prove = orderedPair a a pair singleton a pair a a 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, a) () ()
-  assert = orderedPair a a pair singleton a singleton a direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a a, singleton a) (= orderedPair a a pair singleton a $0) () (elided direct 856bed8c7f5f249bac0978dd5f7359986d8eef536dff35c07c551f8061d9cd5c () (a) () () (), direct 0)
-  assert = orderedPair a a singleton singleton a direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair singleton a singleton a, singleton singleton a) (= orderedPair a a $0) () (elided direct 856bed8c7f5f249bac0978dd5f7359986d8eef536dff35c07c551f8061d9cd5c () (singleton a) () () (), direct 1)
+  prove = pair singleton a pair a a pair singleton a singleton a 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (pair a a, singleton a) () (pair singleton a $0)
+    given
+  prove = orderedPair a a pair singleton a singleton a 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (orderedPair a a, pair singleton a pair a a, pair singleton a singleton a) () ()
+    given
+    given
+  prove = pair singleton a singleton a singleton singleton a 856bed8c7f5f249bac0978dd5f7359986d8eef536dff35c07c551f8061d9cd5c () (singleton a) () ()
+  prove = orderedPair a a singleton singleton a 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (orderedPair a a, pair singleton a singleton a, singleton singleton a) () ()
+    given
+    given
 }
 
 theorem Ordered Pair has Same Coordinates If It Is a Double Singleton
