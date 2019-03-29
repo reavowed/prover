@@ -78,20 +78,20 @@ class BookController @Autowired() (bookService: BookService) {
       case _ =>
         None
     }
-    def replaceSteps(steps: Seq[Step]): Seq[Step] = {
-      steps.map {
-        case step @ Step.Assertion(statement, InferenceApplication.Direct(inference, substitutions, conclusion, references, _), context) =>
-          val premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, conclusion, context.externalDepth)
-          val newPremisesOption = references.zip(premiseStatements).map { case (r, s) => replaceReference(r, s, context.externalDepth) }.traverseOption
-          newPremisesOption.map(premises => Step.NewAssert(statement, inference, premises, substitutions, context)).getOrElse(step)
-        case step: Step.WithSubsteps =>
-          step.replaceSubsteps(replaceSteps(step.substeps))
-        case step =>
+    def replaceSteps(steps: Seq[Step], outerContext: StepContext): Seq[Step] = {
+      steps.mapWithIndex {
+        case (step @ Step.Assertion(statement, InferenceApplication.Direct(inference, substitutions, conclusion, references, _)), _) =>
+          val premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, conclusion, outerContext.externalDepth)
+          val newPremisesOption = references.zip(premiseStatements).map { case (r, s) => replaceReference(r, s, outerContext.externalDepth) }.traverseOption
+          newPremisesOption.map(premises => Step.NewAssert(statement, inference, premises, substitutions)).getOrElse(step)
+        case (step: Step.WithSubsteps, index) =>
+          step.replaceSubsteps(replaceSteps(step.substeps, step.specifyContext(outerContext.atIndex(index))))
+        case (step, _) =>
           step
       }
     }
     def replaceTheorem(theorem: Theorem): Theorem = {
-      theorem.copy(proof = replaceSteps(theorem.proof))
+      theorem.copy(proof = replaceSteps(theorem.proof, StepContext.justWithPremises(theorem.premises)))
     }
     def replaceChapter(chapter: Chapter): Chapter = {
       val updatedEntries = chapter.entries.map {
@@ -124,7 +124,7 @@ class BookController @Autowired() (bookService: BookService) {
         ChapterEntry.Key.Standalone(newTheoremDefininition.name, Chapter.getNextKey(chapter.entries, newTheoremDefininition.name), chapter.key),
         premises,
         conclusion,
-        Seq(Step.Target(conclusion, StepContext(premises.map(_.provenStatement), Nil))),
+        Seq(Step.Target(conclusion)),
         RearrangementType.NotRearrangement)
 
       val existingTheoremOption = parsingContext.inferences.find(_.id == newTheorem.id)

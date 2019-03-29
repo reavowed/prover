@@ -11,9 +11,6 @@ case class Premise(statement: Statement, index: Int)(val isElidable: Boolean) {
   def reference = Reference.Direct(s"p$index")
   def provenStatement = ProvenStatement(statement, PreviousLineReference(reference.value, Nil))
   def requiredSubstitutions: Substitutions.Required = statement.requiredSubstitutions
-  def insertExternalParameters(numberOfParametersToInsert: Int): Premise = {
-    withStatement(statement.insertExternalParameters(numberOfParametersToInsert))
-  }
   def withStatement(newStatement: Statement): Premise = copy(statement = newStatement)(isElidable)
   def serialized: String = s"premise ${statement.serialized}" + (if (isElidable) " elidable" else "")
   def serializedForHash: String = s"premise ${statement.serializedForHash}"

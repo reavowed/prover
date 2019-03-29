@@ -40,11 +40,13 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     }
     this.setState({isHovered: false});
   };
-  moveUp = () => {
+  moveUp = (e) => {
+    e.stopPropagation();
     this.props.apiService.fetchJsonForStep(this.props.path, "move?direction=up", {method: "POST"})
       .then(this.props.apiService.updateTheorem);
   };
-  moveDown = () => {
+  moveDown = (e) => {
+    e.stopPropagation();
     this.props.apiService.fetchJsonForStep(this.props.path, "move?direction=down", {method: "POST"})
       .then(this.props.apiService.updateTheorem);
   };

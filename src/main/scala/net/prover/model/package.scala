@@ -9,7 +9,7 @@ import scala.collection.JavaConverters._
 import scala.collection.generic.CanBuildFrom
 import scala.collection.{TraversableLike, mutable}
 import scala.reflect.ClassTag
-import scala.util.{Failure, Try}
+import scala.util.{Failure, Success, Try}
 
 package object model {
   implicit class AnyOps[T](t: T) {
@@ -210,14 +210,12 @@ package object model {
         }
       }
     }
-    def updateAtIndexIfDefined(index: Int, f: T => Option[T]): Option[Seq[T]] = {
-      for {
-        oldValue <- seq.lift(index)
-        newValue <- f(oldValue)
-      } yield seq.updated(index, newValue)
-    }
-    def tryUpdateAtIndex[S](index: Int, f: T => Try[T]): Option[Try[Seq[T]]] = {
-      seq.lift(index).map(f).map(_.map(seq.updated(index, _)))
+    def splitAtIndexIfValid(index: Int): Option[(Seq[T], T, Seq[T])] = {
+      if (0 <= index && index < seq.length) {
+        Some((seq.take(index), seq(index), seq.drop(index + 1)))
+      } else {
+        None
+      }
     }
     def tryUpdateAtIndexIfDefined[S](index: Int, f: T => Option[Try[T]]): Option[Try[Seq[T]]] = {
       seq.lift(index).flatMap(f).mapMap(seq.updated(index, _))
@@ -230,6 +228,7 @@ package object model {
         } yield map + (key -> value)
       }
     }
+    def removeAtIndex(index: Int): Seq[T] = seq.take(index) ++ seq.drop(index + 1)
   }
 
   implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {
@@ -273,7 +272,6 @@ package object model {
       }
     }.map(_.result())
   }
-
 
   implicit class SeqSetOps[T](seq: Seq[Set[T]]) {
     def knownCommonValues: Set[T] = {
@@ -373,6 +371,14 @@ package object model {
       other.foldLeft(Option(map)) { case (mapOptionSoFar, (key, value)) =>
         mapOptionSoFar.flatMap(_.tryAdd(key, value))
       }
+    }
+  }
+
+  implicit class MapOptionOps[S, T](map: Map[S, Option[T]]) {
+    def traverseOption: Option[Map[S, T]] = {
+      map.map { case (s, tOption) => tOption.map(s -> _) }
+        .traverseOption
+        .map(_.toMap)
     }
   }
 

@@ -6,8 +6,14 @@ conclusion ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 {
   prove ∀ x ¬ ∧ ∈ $0 A with ($0) φ 9ce9302cc7e8ff857912b57f2692ecd928d2c84e880583a1086decf024c4a51f () () (∧ ∈ $0 A with ($0) φ) ()
     given
-  prove ∀ x ↔ ∈ $0 ∅ ∧ ∈ $0 A with ($0) φ e17971d0607a4fadde33eba1a8b12e10ce38134d0808f44e5e64597cf3f8597b () () (∧ ∈ $0 A with ($0) φ) ()
-    given
+  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
+  take x {
+    prove ↔ ∈ $0 ∅ ∧ ∈ $0 A with ($0) φ 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 (∈ $0 ∅, ∧ ∈ $0 A with ($0) φ) () () ()
+      expanded ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 ∅) ()
+        given
+      expanded ¬ ∧ ∈ $0 A with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∧ ∈ $$0 A with ($$0) φ) ()
+        given
+  }
   prove ∃ y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (∅) (∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) ()
     given
   prove ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∧ ∈ $0 A with ($0) φ) ()
@@ -22,7 +28,15 @@ conclusion ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ wit
     assume ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a {
       let x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $0 A with ($0) φ) () (∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 a) () (direct 0.0a, direct 0.0.0d) {
         assume with ($0) φ {
-          assert = $$0 $0 direct be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 $0) () () () (elided direct 48fcd7ac4e7e37def3ef3c0106d030b65abeec6a61ed70ed45e05c732d4eb5d5 (with ($0) φ, = $$0 $0, = $$0 a) () () () (direct 0.0.0.0a), simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a) () () () direct 0.0.0a (1))
+          prove ↔ ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 $0 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d (with ($0) φ, ¬ with ($0) φ, = $$0 $0, = $$0 a) () () ()
+            given
+            expanded ¬ ¬ with ($0) φ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (with ($0) φ) () () ()
+              given
+          prove = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 $0) () () ()
+            expanded → ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 $0) () () ()
+              given
+            simplified ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a) () () ()
+              given
           prove ∧ ∈ $0 A with ($0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 A, with ($0) φ) () () ()
             simplified ∈ $0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a) () () ()
               given
@@ -32,7 +46,14 @@ conclusion ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ wit
             given
         }
         assume ¬ with ($0) φ {
-          assert = $$0 a direct be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 a) () () () (elided direct 8cd89d7a4d6604f8d8d3530be80c9155084c8729b41a1bb1620e1c027b90b8ea (with ($0) φ, ¬ with ($0) φ, = $$0 $0, = $$0 a) () () () (direct 0.0.0.1a, direct 0.0.0.1a), simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a) () () () direct 0.0.0a (1))
+          prove ↔ ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 a 8cd89d7a4d6604f8d8d3530be80c9155084c8729b41a1bb1620e1c027b90b8ea (with ($0) φ, ¬ with ($0) φ, = $$0 $0, = $$0 a) () () ()
+            given
+            given
+          prove = $$0 a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 a) () () ()
+            expanded → ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 a) () () ()
+              given
+            simplified ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a) () () ()
+              given
           prove ∧ ∈ $$0 A with ($$0) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, a) (∧ ∈ $$$0 A with ($$$0) φ) ()
             given
             given
@@ -44,7 +65,14 @@ conclusion ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ wit
     }
     assume ∧ ∈ $0 A with ($0) φ {
       prove = $0 $0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () ($0) () ()
-      assert ∧ ∈ $0 A ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ $0 A, ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, with ($0) φ) () () () direct 0.1a (0), expansion direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d rearranged (∧ with ($0) φ = $0 $0, ∧ ¬ with ($0) φ = $0 a) () () () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (with ($0) φ, = $0 $0) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, with ($0) φ) () () () direct 0.1a (1), direct 0.1.0)))
+      prove ∧ ∈ $0 A ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 A, ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a) () () ()
+        simplified ∈ $0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, with ($0) φ) () () ()
+          given
+        expanded ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∧ with ($0) φ = $0 $0, ∧ ¬ with ($0) φ = $0 a) () () ()
+          expanded ∧ with ($0) φ = $0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (with ($0) φ, = $0 $0) () () ()
+            simplified with ($0) φ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, with ($0) φ) () () ()
+              given
+            given
       prove ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 a) ()
         given
     }
@@ -64,7 +92,8 @@ conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
       prove → ∈ $0 A ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0, ∈ $0 A) () () ()
         given
     }
-    assert ∃ Y ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$$0 direct 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () (A) (∨ ∧ with ($$0) φ = $$1 $$0 ∧ ¬ with ($$0) φ = $$1 $0) () (compound 0.0 direct 0.0.1)
+    prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$$0 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () (A) (∨ ∧ with ($$0) φ = $$1 $$0 ∧ ¬ with ($$0) φ = $$1 $0) ()
+      given
     prove ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$0 ∧ ∈ $0 A with ($0) φ b708f511a717e74c973f6de531b41be9dd1608d03f371544b0b3f5e5820592be () ($0, A) (with ($$0) φ) ()
       given
     prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ a6e712b38909dac88b7b619de972b17b819142bff65d3f1b507a5e6c070d9fb5 () () (∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$$0 $0 ∧ ¬ with ($0) φ = $$$0 $$0, ∧ ∈ $$0 A with ($$0) φ) ()
@@ -149,7 +178,8 @@ conclusion ⊆ S A
         given
     }
   }
-  assert ⊆ S A direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (S, A) () () (compound 0 compound 0.0a direct 0.0.0)
+  prove ⊆ S A 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (S, A) () ()
+    given
 }
 
 theorem Element of a Comprehension
@@ -160,7 +190,13 @@ conclusion ∈ a S
 {
   prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (S, A) (with ($0) φ) ()
     given
-  assert ∈ a S transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (a) (∈ $0 S, ∧ ∈ $0 A with ($0) φ) () (direct 0, expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ a A, with (a) φ) () () () (direct p1, direct p2))
+  prove ∈ a S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ a A with (a) φ, ∈ a S) () () ()
+    expanded → ∧ ∈ a A with (a) φ ∈ a S 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ a S, ∧ ∈ a A with (a) φ) () () ()
+      expanded ↔ ∈ a S ∧ ∈ a A with (a) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ) ()
+        given
+    expanded ∧ ∈ a A with (a) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a A, with (a) φ) () () ()
+      given
+      given
 }
 
 theorem Universal Property from Comprehension

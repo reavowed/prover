@@ -2,7 +2,7 @@ Some inferences that can be used to reduce boilerplate in proofs.
 
 comment A set of more complicated structural facts that are surprisingly useful later on.
 
-theorem Disjoined Conjunct Equivalence
+theorem First Part of Disjoined Conjunct Equivalence
 premise φ
 premise ¬ χ
 conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ψ
@@ -34,7 +34,7 @@ conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ψ
     given
 }
 
-theorem Disjoined Conjunct Equivalence
+theorem Second Part of Disjoined Conjunct Equivalence
 premise ¬ φ
 premise χ
 conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ω
@@ -46,17 +46,6 @@ conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ω
   prove ↔ ∨ ∧ φ ψ ∧ χ ω ω e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∨ ∧ φ ψ ∧ χ ω, ∨ ∧ χ ω ∧ φ ψ, ω) () () ()
     expanded ↔ ∨ ∧ φ ψ ∧ χ ω ∨ ∧ χ ω ∧ φ ψ 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (∨ ∧ χ ω ∧ φ ψ, ∨ ∧ φ ψ ∧ χ ω) () () ()
       given
-    given
-}
-
-theorem Disjoined Conjunct Equivalence
-premise φ
-conclusion ↔ ∨ ∧ φ ψ ∧ ¬ φ χ ψ
-{
-  prove ¬ ¬ φ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (φ) () () ()
-    given
-  prove ↔ ∨ ∧ φ ψ ∧ ¬ φ χ ψ 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d (φ, ¬ φ, ψ, χ) () () ()
-    given
     given
 }
 
