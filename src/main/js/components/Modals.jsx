@@ -28,8 +28,6 @@ const DropdownContainer = styled.div`
   }
 `;
 
-const AllSubstitutionTypes = ["statements", "terms", "predicates", "functions"];
-
 function buildSubstitutionMap(requiredSubstitutions, f) {
   const map = {};
   function getSimple(type) {
@@ -43,6 +41,26 @@ function buildSubstitutionMap(requiredSubstitutions, f) {
   getParametered("predicates");
   getParametered("functions");
   return map;
+}
+
+function getAllRequiredPaths(requiredSubstitutions) {
+  function getSimple(type) {
+    return _.map(requiredSubstitutions[type], name => [type, name]);
+  }
+  function getParametered(type) {
+    return _.map(requiredSubstitutions[type], ([name, length]) => [type, name, length]);
+  }
+  return [
+    ...getSimple("statements"),
+    ...getSimple("terms"),
+    ...getParametered("predicates"),
+    ...getParametered("functions")
+  ];
+}
+
+function getAtPath(substitutions, [type, name, length]) {
+  const base = substitutions[type][name];
+  return (base && length) ? base[length] : base;
 }
 
 export class FindInferenceModal extends React.Component {
@@ -108,13 +126,11 @@ export class FindInferenceModal extends React.Component {
   filterBySelectedSubstitutionValues = (substitutionsLists, requiredSubstitutions, selectedSubstitutionValues) => {
     return _.map(substitutionsLists, substitutionsList =>
       _.filter(substitutionsList, s =>
-        _.every(AllSubstitutionTypes, type =>
-          _.every(requiredSubstitutions[type], name => {
-            return selectedSubstitutionValues[type][name] === '' ||
-              !s[type][name] ||
-              selectedSubstitutionValues[type][name] === s[type][name].serialize();
-          })
-        )
+        _.every(getAllRequiredPaths(requiredSubstitutions), path => {
+          const selectedValue = getAtPath(selectedSubstitutionValues, path);
+          const value = getAtPath(s, path);
+          return selectedValue === '' || !value || selectedValue === value.serialize();
+        })
       )
     );
   };
@@ -144,10 +160,11 @@ export class FindInferenceModal extends React.Component {
     this.setState({selectedSubstitutionValues});
   };
   setSelectedPremiseSuggestion = (premiseIndex, suggestionIndex) => {
+    const selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
     const selectedPremiseSuggestions = _.cloneDeep(this.state.selectedPremiseSuggestions);
     selectedPremiseSuggestions[premiseIndex] = [suggestionIndex, suggestionIndex !== "" ? this.state.premiseSuggestions[premiseIndex][parseInt(suggestionIndex)].substitutions : null];
-    this.updateForcedSubstitutionValues(this.state.selectedSubstitutionValues, selectedPremiseSuggestions);
-    this.setState({selectedPremiseSuggestions})
+    this.updateForcedSubstitutionValues(selectedSubstitutionValues, selectedPremiseSuggestions);
+    this.setState({selectedSubstitutionValues, selectedPremiseSuggestions})
   };
   updateForcedSubstitutionValues = (selectedSubstitutionValues, selectedPremiseSuggestions) => {
     const compatibleSubstitutions = this.filterBySelectedSubstitutionValues(
