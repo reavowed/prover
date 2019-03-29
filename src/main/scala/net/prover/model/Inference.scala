@@ -70,7 +70,9 @@ trait Inference {
 }
 
 object Inference {
-  trait Entry extends Inference with ChapterEntry.Standalone
+  trait Entry extends Inference with ChapterEntry.Standalone {
+    override def title: String = name
+  }
   case class Summary(key: ChapterEntry.Key, name: String, premises: Seq[Premise], conclusion: Statement, rearrangementType: RearrangementType) extends Inference
   object Summary {
     def apply(inference: Inference): Summary = {

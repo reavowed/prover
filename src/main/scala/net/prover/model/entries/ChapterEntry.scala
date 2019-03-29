@@ -53,5 +53,6 @@ object ChapterEntry {
 
   trait Standalone extends ChapterEntry {
     def key: Key.Standalone
+    def title: String
   }
 }

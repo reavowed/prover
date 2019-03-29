@@ -58,7 +58,7 @@ class BookController @Autowired() (bookService: BookService) {
         "Chapter",
         ChapterProps(chapter, book),
         Map(
-          "definitions" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap,
+          "definitions" -> getDefinitionSummaries(parsingContext),
           "displayShorthands" -> book.displayContext.displayShorthands))
     }).toResponseEntity
   }
@@ -137,7 +137,11 @@ class BookController @Autowired() (bookService: BookService) {
     }.map{ case (_, book, chapter) => ChapterProps(chapter, book) }.toResponseEntity
   }
 
-  case class InferenceProps(inference: Inference.Entry, previousEntry: Option[ChapterEntry.Key], nextEntry: Option[ChapterEntry.Key], usages: Seq[(Book, Chapter, Seq[Theorem])])
+  case class NavLink(url: String, title: String)
+  object NavLink {
+    def apply(entry: ChapterEntry.Standalone): NavLink = NavLink(entry.key.url, entry.title)
+  }
+  case class InferenceProps(inference: Inference.Entry, previousEntry: Option[NavLink], nextEntry: Option[NavLink], usages: Seq[(Book, Chapter, Seq[Theorem])])
   @GetMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}"), produces = Array("text/html;charset=UTF-8"))
   def getEntry(
     @PathVariable("bookKey") bookKey: String,
@@ -150,24 +154,28 @@ class BookController @Autowired() (bookService: BookService) {
       chapter <- book.chapters.find(_.key.value == chapterKey).orNotFound(s"Chapter $chapterKey")
       entries = chapter.entries.ofType[ChapterEntry.Standalone]
       entry <- entries.find(_.key.value == entryKey).orNotFound(s"Entry $entryKey")
-      (viewName, inference, inferenceBaseProps: Map[String, AnyRef]) <- entry match {
+      (viewName, baseProps: Map[String, AnyRef]) <- entry match {
         case axiom: Axiom =>
-          Success(("Axiom", axiom, Map("axiom" -> axiom)))
+          Success(("Axiom", Map("axiom" -> axiom)))
         case theorem: Theorem =>
-          Success(("Theorem", theorem, Map("theorem" -> theorem)))
+          Success(("Theorem", Map("theorem" -> theorem)))
+        case statementDefinition: StatementDefinition =>
+          Success(("StatementDefinition", Map("definition" -> statementDefinition)))
+        case termDefinition: TermDefinition =>
+          Success(("TermDefinition", Map("definition" -> termDefinition)))
         case _ =>
           Failure(BadRequestException(s"Cannot view ${entry.getClass.getSimpleName}"))
       }
     } yield {
       val index = entries.indexOf(entry)
-      val previous = if (index > 0) Some(entries(index - 1).key) else None
-      val next = if (index < entries.length - 1) Some(entries(index + 1).key) else None
+      val previous = if (index > 0) Some(NavLink(entries(index - 1))) else None
+      val next = if (index < entries.length - 1) Some(NavLink(entries(index + 1))) else None
       val parsingContext = getChapterParsingContext(book, chapter)
       createReactView(
         viewName,
-        inferenceBaseProps ++ Map("previous" -> previous, "next" -> next, "usages" -> getUsages(inference, books)),
+        baseProps ++ Map("previous" -> previous, "next" -> next, "usages" -> getUsages(entry, books)),
         Map(
-          "definitions" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).filter(_.componentTypes.nonEmpty).map(d => d.symbol -> d).toMap,
+          "definitions" -> getDefinitionSummaries(parsingContext),
           "displayShorthands" -> book.displayContext.displayShorthands,
           "transitivityInferences" -> parsingContext.transitivityInferences.map { case (d, i) => d.symbol -> i.id },
           "definitionShorthands" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).mapCollect(d => d.shorthand.map(_ -> d.symbol)).toMap))
@@ -211,11 +219,19 @@ class BookController @Autowired() (bookService: BookService) {
     ).map{ case (_, book, chapter, _) => ChapterProps(chapter, book) }.toResponseEntity
   }
 
-  private def getUsages(inference: Inference, books: Seq[Book]): Seq[(Book, Chapter, Seq[Theorem])] = {
+  case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, numberOfBoundVariables: Int)
+  private def getDefinitionSummaries(parsingContext: ParsingContext) = {
+    (parsingContext.statementDefinitions ++ parsingContext.termDefinitions)
+      .filter(_.componentTypes.nonEmpty)
+      .map(d => d.symbol -> DefinitionSummary(d.symbol, d.format.baseFormatString, d.format.requiresBrackets, d.boundVariableNames.length)).toMap
+  }
+
+  private def getUsages(entry: ChapterEntry, books: Seq[Book]) = {
+    val inferenceIds = entry.inferences.map(_.id).toSet
     for {
       book <- books
       chapter <- book.chapters
-      theorems = chapter.entries.ofType[Theorem].filter(_.referencedInferenceIds.contains(inference.id))
+      theorems = chapter.entries.ofType[Theorem].filter(_.referencedInferenceIds.intersect(inferenceIds).nonEmpty)
       if theorems.nonEmpty
     } yield (book, chapter, theorems)
   }

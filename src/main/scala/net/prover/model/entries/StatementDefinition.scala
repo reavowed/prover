@@ -1,15 +1,13 @@
 package net.prover.model.entries
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.entries.StatementDefinition.StructureType
 import net.prover.model.expressions._
-import net.prover.model._
 
-@JsonIgnoreProperties(Array("defaultValue"))
 case class StatementDefinition(
     symbol: String,
-    key: ChapterEntry.Key.Anchor,
+    key: ChapterEntry.Key.Standalone,
     boundVariableNames: Seq[String],
     componentTypes: Seq[ComponentType],
     explicitName: Option[String],
@@ -19,9 +17,10 @@ case class StatementDefinition(
     structureType: Option[StructureType])
   extends ExpressionDefinition with TypedExpressionDefinition[StatementDefinition]
 {
-  def name = explicitName.getOrElse(symbol)
+  override def name: String = explicitName.getOrElse(symbol)
+  override def typeName: String = "Statement"
 
-  val defaultValue = {
+  val defaultValue: DefinedStatement = {
     DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)
   }
 
@@ -37,7 +36,7 @@ case class StatementDefinition(
     }
   }
 
-  override def withShorthand(newShorthand: Option[String]) = copy(shorthand = newShorthand)
+  override def withShorthand(newShorthand: Option[String]): StatementDefinition = copy(shorthand = newShorthand)
 
   override def inferences: Seq[Inference] = {
     definingStatement.toSeq.flatMap { s =>
@@ -96,7 +95,7 @@ object StatementDefinition extends ChapterEntryParser {
     } yield {
       StatementDefinition(
         symbol,
-        ChapterEntry.Key.Anchor.apply(symbol, getKey),
+        ChapterEntry.Key.Standalone.apply(symbol, getKey),
         boundVariables,
         componentTypes,
         name,

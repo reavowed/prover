@@ -78,6 +78,7 @@ class DefinitionResult extends React.Component {
 
     return <>
       <Result title={<>{title}: <ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/></>}
+              href={entry.key.url}
               buttons={<Button size="sm" variant="primary" className="ml-1" onClick={this.startEditingShorthand}>Shorthand</Button>}
       >
         {children && <div className="mt-n2">

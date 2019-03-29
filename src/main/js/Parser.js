@@ -19,6 +19,19 @@ export class Parser {
     inference.conclusion && (inference.conclusion = Expression.parseFromJson(inference.conclusion));
     return inference;
   }
+  static parseStatementDefinition(definitionJson) {
+    const definition = _.cloneDeep(definitionJson);
+    definition.definingStatement && (definition.definingStatement = Expression.parseFromJson(definition.definingStatement));
+    definition.defaultValue = Expression.parseFromJson(definition.defaultValue);
+    return definition;
+  }
+  static parseTermDefinition(definitionJson) {
+    const definition = _.cloneDeep(definitionJson);
+    definition.definingStatement && (definition.definingStatement = Expression.parseFromJson(definition.definingStatement));
+    definition.defaultValue = Expression.parseFromJson(definition.defaultValue);
+    definition.premises && (definition.premises = definition.premises.map(Expression.parseFromJson));
+    return definition;
+  }
   static doubleMapFromTriples(triples) {
     const namesToPairLists = _.mapValues(_.groupBy(triples, 0), x => x.map(y => y.slice(1)));
     return _.mapValues(namesToPairLists, _.fromPairs);

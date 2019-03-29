@@ -29,7 +29,7 @@ trait ProverSpec extends Specification {
     val componentTypes = Seq[ComponentType](φ, ψ, χ).take(size)
     StatementDefinition(
       symbol,
-      ChapterEntry.Key.Anchor(symbol, symbol, stubChapter.key),
+      ChapterEntry.Key.Standalone(symbol, symbol, stubChapter.key),
       Nil,
       componentTypes,
       None,
@@ -46,7 +46,7 @@ trait ProverSpec extends Specification {
     val componentTypes = Seq[ComponentType](a, b, c).take(size)
     StatementDefinition(
       symbol,
-      ChapterEntry.Key.Anchor(symbol, symbol, stubChapter.key),
+      ChapterEntry.Key.Standalone(symbol, symbol, stubChapter.key),
       Nil,
       componentTypes,
       None,
@@ -62,7 +62,7 @@ trait ProverSpec extends Specification {
   ): StatementDefinition = {
     StatementDefinition(
       symbol,
-      ChapterEntry.Key.Anchor(symbol, symbol, stubChapter.key),
+      ChapterEntry.Key.Standalone(symbol, symbol, stubChapter.key),
       Seq("x"),
       Seq(ExpressionDefinition.PredicateComponent("φ", Seq(ExpressionDefinition.ComponentArgument("x", 0)))),
       None,
@@ -91,7 +91,7 @@ trait ProverSpec extends Specification {
 
   val EmptySetDefinition = TermDefinition(
     "∅",
-    ChapterEntry.Key.Anchor("∅", "∅", stubChapter.key),
+    ChapterEntry.Key.Standalone("∅", "∅", stubChapter.key),
     Nil,
     Nil,
     None,
@@ -103,7 +103,7 @@ trait ProverSpec extends Specification {
 
   val PowerSet = TermDefinition(
     "powerSet",
-    ChapterEntry.Key.Anchor("powerSet", "powerSet", stubChapter.key),
+    ChapterEntry.Key.Standalone("powerSet", "powerSet", stubChapter.key),
     Nil,
     Seq(a),
     Some("Power Set"),
@@ -116,7 +116,7 @@ trait ProverSpec extends Specification {
 
   val Singleton = TermDefinition(
     "singleton",
-    ChapterEntry.Key.Anchor("singleton", "singleton", stubChapter.key),
+    ChapterEntry.Key.Standalone("singleton", "singleton", stubChapter.key),
     Nil,
     Seq(a),
     Some("Singleton"),
@@ -127,7 +127,7 @@ trait ProverSpec extends Specification {
 
   val Pair = TermDefinition(
     "pair",
-    ChapterEntry.Key.Anchor("pair", "pair", stubChapter.key),
+    ChapterEntry.Key.Standalone("pair", "pair", stubChapter.key),
     Nil,
     Seq(a, b),
     Some("Unordered Pair"),

@@ -1,14 +1,12 @@
 package net.prover.model.entries
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 import net.prover.model._
 
-@JsonIgnoreProperties(Array("defaultValue", "definingStatement"))
 case class TermDefinition(
     symbol: String,
-    key: ChapterEntry.Key.Anchor,
+    key: ChapterEntry.Key.Standalone,
     boundVariableNames: Seq[String],
     componentTypes: Seq[ComponentType],
     explicitName: Option[String],
@@ -18,12 +16,13 @@ case class TermDefinition(
     shorthand: Option[String])
   extends ExpressionDefinition with TypedExpressionDefinition[TermDefinition]
 {
-  def name = explicitName.getOrElse(symbol)
+  override def name: String = explicitName.getOrElse(symbol)
+  override def typeName: String = "Term"
 
-  val defaultValue = {
+  override val defaultValue: DefinedTerm = {
     DefinedTerm(componentTypes.map(_.expression), this)(boundVariableNames)
   }
-  val definingStatement = definitionPredicate.specify(Seq(defaultValue), 0, 0)
+  val definingStatement: Statement = definitionPredicate.specify(Seq(defaultValue), 0, 0)
 
   def termParser(implicit context: ParsingContext): Parser[Term] = {
     componentExpressionParser.map { case (newBoundVariableNames, components) =>
@@ -37,7 +36,7 @@ case class TermDefinition(
     }
   }
 
-  override def withShorthand(newShorthand: Option[String]) = copy(shorthand = newShorthand)
+  override def withShorthand(newShorthand: Option[String]): TermDefinition = copy(shorthand = newShorthand)
 
   override def inferences: Seq[Inference] = Seq(Inference.Definition(name, key, premises, definingStatement))
 
@@ -75,7 +74,7 @@ object TermDefinition extends ChapterEntryParser {
     } yield {
       TermDefinition(
         symbol,
-        ChapterEntry.Key.Anchor.apply(symbol, getKey),
+        ChapterEntry.Key.Standalone.apply(symbol, getKey),
         boundVariables,
         componentTypes,
         name,

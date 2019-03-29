@@ -1,25 +1,23 @@
 package net.prover.model.entries
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
-import net.prover.model.{Format, Parser, ParsingContext}
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
+import net.prover.model.{Format, Parser, ParsingContext}
 
-@JsonSerialize(using = classOf[ExpressionDefinitionSerializer])
 trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinition]
 
-trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinition] extends ChapterEntry { self: ExpressionDefinition =>
+trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinition] extends ChapterEntry.Standalone { self: ExpressionDefinition =>
   def symbol: String
-  def key: ChapterEntry.Key.Anchor
   def boundVariableNames: Seq[String]
   def componentTypes: Seq[ComponentType]
   def format: Format
   def shorthand: Option[String]
   def defaultValue: Expression
+  def typeName: String
 
   def withShorthand(newShorthand: Option[String]): ExpressionDefinitionType
+
+  override def title: String = s"$typeName Definition: $name"
 
   private def updateContext(context: ParsingContext, newBoundVariableNames: Seq[String], componentType: ComponentType): ParsingContext = {
     if (boundVariableNames.isEmpty)
@@ -131,16 +129,4 @@ object ExpressionDefinition {
   }
 
   def shorthandParser = Parser.optional("shorthand", Parser.allInParens)
-}
-
-private class ExpressionDefinitionSerializer extends JsonSerializer[ExpressionDefinition] {
-  override def serialize(value: ExpressionDefinition, gen: JsonGenerator, serializers: SerializerProvider) = {
-    gen.writeStartObject(value)
-    gen.writeObjectField("symbol", value.symbol)
-    gen.writeObjectField("baseFormatString", value.format.baseFormatString)
-    gen.writeObjectField("requiresBrackets", value.format.requiresBrackets)
-    gen.writeObjectField("numberOfBoundVariables", value.boundVariableNames.length)
-    value.asOptionalInstanceOf[StatementDefinition].flatMap(_.structureType).foreach(structureType => gen.writeObjectField("structureType", structureType.serialized))
-    gen.writeEndObject()
-  }
 }
