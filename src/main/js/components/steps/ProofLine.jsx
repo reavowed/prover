@@ -16,9 +16,13 @@ export const ProofLine = styled(class ProofLine extends React.Component {
   showPopover = () => {
     this.setState({showPopover: true})
   };
-  hidePopover = () => {
+  onShowPopover = () => {
+    this.props.onPopover && this.props.onPopover(true);
+  };
+  hidePopover = (e) => {
     if (!this.props.blockHide) {
       this.setState({showPopover: false})
+      this.props.onPopover && this.props.onPopover(false);
     }
   };
   onMouseEnter = () => {
@@ -51,7 +55,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
       .then(this.props.apiService.updateTheorem);
   };
   render() {
-    const {className, children, popover, onShowPopover, path} = this.props;
+    const {className, children, popover, path} = this.props;
     const lineElement= <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.showPopover} className={"mb-1 " + className} ref={this.attachRef}>
       {children}
       {path && this.state.isHovered && <span className="float-right">
@@ -63,7 +67,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     if (popover) {
       return <>
         {lineElement}
-        <Overlay target={this.state.target} show={this.state.showPopover} onEnter={onShowPopover} onHide={this.hidePopover} rootClose placement="bottom-start">
+        <Overlay target={this.state.target} show={this.state.showPopover} onEnter={this.onShowPopover} onHide={this.hidePopover} rootClose placement="bottom-start">
           {popover}
         </Overlay>
       </>

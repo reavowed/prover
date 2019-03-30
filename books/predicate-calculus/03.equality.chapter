@@ -125,11 +125,15 @@ premise ∀ x ↔ = $0 a = $0 b
 conclusion = a b
 {
   prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
-  prove = a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= a a, = a b) () () ()
-    expanded → = a a = a b f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= a a, = a b) () () ()
-      expanded ↔ = a a = a b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ = $0 a = $0 b) ()
-        given
-    given
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ = a a = a b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ = $0 a = $0 b) ()
+      given
+    prove → = a a = a b f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= a a, = a b) () () ()
+      given
+    prove = a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= a a, = a b) () () ()
+      given
+      given
+  }
 }
 
 theorem Every Set Exists

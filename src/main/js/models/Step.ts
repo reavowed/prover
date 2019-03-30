@@ -5,14 +5,11 @@ import * as _ from "lodash";
 export class AssertionStep {
     type = "assertion";
     constructor(public statement: Expression, public premises: any, public inference: any, public referencedLines: any, public isIncomplete: boolean) {}
-    getSingleAssertion(): AssertionStep | null {
-        return this.isIncomplete ? null : this;
-    }
 }
 
 export class DeductionStep {
     type = "deduction";
-    constructor(public assumption: Expression, public substeps: Step[]) {}
+    constructor(public assumption: Expression, public substeps: Step[], public provenStatement: Expression | void) {}
     isIncomplete: boolean = _.some(this.substeps, "isIncomplete");
 }
 
@@ -20,22 +17,17 @@ export class ScopedVariableStep {
     type = "scopedVariable";
     constructor(public variableName: String, public substeps: Step[], public provenStatement: Expression | void) {}
     isIncomplete: boolean = _.some(this.substeps, s => s.isIncomplete);
-    shouldDisplayInFull(): boolean {
-        return this.isIncomplete || this.substeps.length == 0;
-    }
-    getSingleAssertion(): AssertionStep | null {
-        if (this.substeps.length == 1) {
-            const substep = this.substeps[0];
-            if (substep instanceof AssertionStep || substep instanceof ScopedVariableStep)
-                return substep.getSingleAssertion();
-        }
-        return null;
-    }
 }
 
 export class NamingStep {
     type = "naming";
     constructor(public variableName: String, public assumption: Expression, public substeps: Step[], public inference: any) {}
+    isIncomplete: boolean = _.some(this.substeps, "isIncomplete");
+}
+
+export class ElidedStep {
+    type = "elided";
+    constructor(public substeps: Step[], public highlightedInference: any, public provenStatement: Expression, public referencedLines: any) {}
     isIncomplete: boolean = _.some(this.substeps, "isIncomplete");
 }
 
@@ -45,7 +37,7 @@ export class TargetStep {
     isIncomplete: boolean = true;
 }
 
-export type Step = AssertionStep | DeductionStep | ScopedVariableStep | NamingStep | TargetStep;
+export type Step = AssertionStep | DeductionStep | ScopedVariableStep | NamingStep | TargetStep | ElidedStep;
 export const Step = {
     parseFromJson(json: any): Step[] {
         return json.map((stepJson: any) => {
@@ -67,7 +59,8 @@ export const Step = {
                case "deduction":
                    return new DeductionStep(
                        Expression.parseFromJson(stepJson.assumption),
-                       Step.parseFromJson(stepJson.substeps));
+                       Step.parseFromJson(stepJson.substeps),
+                       stepJson.provenStatement && Expression.parseFromJson(stepJson.provenStatement));
                case "scopedVariable":
                    return new ScopedVariableStep(
                        stepJson.variableName,
@@ -81,6 +74,12 @@ export const Step = {
                        stepJson.finalInferenceApplication);
                case "target":
                    return new TargetStep(Expression.parseFromJson(stepJson.statement));
+               case "elided":
+                   return new ElidedStep(
+                       Step.parseFromJson(stepJson.substeps),
+                       stepJson.highlightedInference && Parser.parseInference(stepJson.highlightedInference),
+                       Expression.parseFromJson(stepJson.provenStatement),
+                       stepJson.referencedLines);
                default:
                    throw "Unrecognised step " + JSON.stringify(stepJson);
            }

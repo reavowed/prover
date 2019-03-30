@@ -8,12 +8,16 @@ premise ∀ x ¬ ∈ $0 a
 premise ∀ x ¬ ∈ $0 b
 conclusion = a b
 {
-  take x {
-    prove ↔ ∈ $0 a ∈ $0 b 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 (∈ $0 a, ∈ $0 b) () () ()
-      expanded ¬ ∈ $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 a) ()
+  elided 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 {
+    take x {
+      prove ¬ ∈ $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 a) ()
         given
-      expanded ¬ ∈ $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 b) ()
+      prove ¬ ∈ $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 b) ()
         given
+      prove ↔ ∈ $0 a ∈ $0 b 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 (∈ $0 a, ∈ $0 b) () () ()
+        given
+        given
+    }
   }
   prove = a b 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (a, b) () ()
     given
@@ -34,10 +38,13 @@ conclusion ∃! X ∀ x ¬ ∈ $0 $$0
       }
     }
   }
-  prove ∃! X ∀ x ¬ ∈ $0 $$0 f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∀ x ¬ ∈ $0 $$0) ()
-    expanded ∧ ∃ x ∀ x ¬ ∈ $0 $$0 ∀ x ∀ y → ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∀ x ¬ ∈ $0 $$0, ∀ x ∀ y → ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 = $$0 $0) () () ()
+  elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
+    prove ∧ ∃ x ∀ x ¬ ∈ $0 $$0 ∀ x ∀ y → ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∀ x ¬ ∈ $0 $$0, ∀ x ∀ y → ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 = $$0 $0) () () ()
       given
       given
+    prove ∃! X ∀ x ¬ ∈ $0 $$0 f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∀ x ¬ ∈ $0 $$0) ()
+      given
+  }
 }
 
 term ∅ ()
@@ -104,10 +111,13 @@ theorem The Empty Set Is a Subset of Any Set
 conclusion ⊆ ∅ a
 {
   prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
-  take x {
-    prove → ∈ $0 ∅ ∈ $0 a bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 ∅, ∈ $0 a) () () ()
-      expanded ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 ∅) ()
+  elided bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 {
+    take x {
+      prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 ∅) ()
         given
+      prove → ∈ $0 ∅ ∈ $0 a bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 ∅, ∈ $0 a) () () ()
+        given
+    }
   }
   prove ⊆ ∅ a 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (∅, a) () ()
     given

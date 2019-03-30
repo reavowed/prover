@@ -22,11 +22,15 @@ premise ⊆ b a
 conclusion ∈ b powerSet a
 {
   prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a 4e668b7d4f1228aec6efbd169870c864859c5b647b9e7d308a999c2bcd3f6ae3 () (a) () ()
-  prove ∈ b powerSet a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (⊆ b a, ∈ b powerSet a) () () ()
-    expanded → ⊆ b a ∈ b powerSet a 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b powerSet a, ⊆ b a) () () ()
-      expanded ↔ ∈ b powerSet a ⊆ b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 powerSet a ⊆ $0 a) ()
-        given
-    given
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ b powerSet a ⊆ b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 powerSet a ⊆ $0 a) ()
+      given
+    prove → ⊆ b a ∈ b powerSet a 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b powerSet a, ⊆ b a) () () ()
+      given
+    prove ∈ b powerSet a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (⊆ b a, ∈ b powerSet a) () () ()
+      given
+      given
+  }
 }
 
 theorem Element of Power Set Is Subset
@@ -34,11 +38,15 @@ premise ∈ b powerSet a
 conclusion ⊆ b a
 {
   prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a 4e668b7d4f1228aec6efbd169870c864859c5b647b9e7d308a999c2bcd3f6ae3 () (a) () ()
-  prove ⊆ b a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b powerSet a, ⊆ b a) () () ()
-    expanded → ∈ b powerSet a ⊆ b a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b powerSet a, ⊆ b a) () () ()
-      expanded ↔ ∈ b powerSet a ⊆ b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 powerSet a ⊆ $0 a) ()
-        given
-    given
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ b powerSet a ⊆ b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 powerSet a ⊆ $0 a) ()
+      given
+    prove → ∈ b powerSet a ⊆ b a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b powerSet a, ⊆ b a) () () ()
+      given
+    prove ⊆ b a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b powerSet a, ⊆ b a) () () ()
+      given
+      given
+  }
 }
 
 theorem ∅ Is in Any Power Set

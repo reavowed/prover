@@ -66,7 +66,7 @@ export class TargetStep extends React.Component {
   };
 
   render() {
-    let {step, path, additionalReferences, ...otherProps} = this.props;
+    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists, onPopover} = this.props;
     let reference = path.join(".");
     let scopingStatement = _.find(window.definitions, d => d.structureType === "scoping");
     let deductionStatement = _.find(window.definitions, d => d.structureType === "deduction");
@@ -79,7 +79,7 @@ export class TargetStep extends React.Component {
                                                    onSave={this.introduceBoundVariable}/>;
 
     const popover = (
-      <Popover title={<FlexRow><FlexRow.Grow>Statement to prove</FlexRow.Grow><DeleteStepButton path={path} {...otherProps}/></FlexRow>}>
+      <Popover title={<FlexRow><FlexRow.Grow>Statement to prove</FlexRow.Grow><DeleteStepButton path={path} apiService={apiService}/></FlexRow>}>
         <Button variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</Button>
         {scopingStatement && step.statement.definition === scopingStatement &&
         <Button variant="success" size="sm" className="ml-1" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
@@ -88,9 +88,26 @@ export class TargetStep extends React.Component {
       </Popover>
     );
     return <>
-      <ProofLine incomplete step={step} popover={popover} path={path} {...otherProps}>Then <HighlightableExpression statement={step.statement} references={[...additionalReferences, reference]} {...otherProps}/>.</ProofLine>
+      <ProofLine incomplete
+                 path={path}
+                 onPopover={onPopover}
+                 popover={popover}
+                 blockHide={this.state.showFindInferenceModal}
+                 apiService={apiService}
+                 highlighting={highlighting}>
+        Then <HighlightableExpression statement={step.statement}
+                                      boundVariableLists={boundVariableLists}
+                                      references={[...additionalReferences, reference]}
+                                      highlighting={highlighting}
+        />.
+      </ProofLine>
       {boundVariableModal}
-      {<FindInferenceModal show={this.state.showFindInferenceModal} onHide={this.hideFindInferenceModal} onSubmit={this.proveWithInference} getInferenceSuggestions={this.getInferenceSuggestions} getPremiseSuggestions={this.getPremiseSuggestions} {...otherProps} />}
+      {<FindInferenceModal show={this.state.showFindInferenceModal}
+                           onHide={this.hideFindInferenceModal}
+                           onSubmit={this.proveWithInference}
+                           getInferenceSuggestions={this.getInferenceSuggestions}
+                           getPremiseSuggestions={this.getPremiseSuggestions}
+                           boundVariableLists={boundVariableLists} />}
     </>
   }
 }

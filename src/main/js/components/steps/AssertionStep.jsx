@@ -33,25 +33,25 @@ export class AssertionStep extends React.Component {
     this.setState({showingModal});
   };
 
-
   render() {
-    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists} = this.props;
+    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists, onPopover} = this.props;
     let reference = path.join(".");
 
     return <ProofLine premiseReferences={step.referencedLines}
                       path={path}
+                      onPopover={onPopover}
                       popover={<AssertionStep.Popover step={step}
                                                       path={path}
                                                       apiService={apiService}
                                                       boundVariableLists={boundVariableLists}
-                                                      onTransition={this.onModalTransition}/>}
-                      apiService={apiService}
+                                                      onModalTransition={this.onModalTransition}/>}
                       highlighting={highlighting}
+                      apiService={apiService}
                       blockHide={this.state.showingModal}
                       incomplete={_.some(step.premises, "incomplete")}
       >
         Then <HighlightableExpression statement={step.statement}
-                                      boundVariableLists={this.props.boundVariableLists}
+                                      boundVariableLists={boundVariableLists}
                                       references={[...additionalReferences, reference]}
                                       highlighting={highlighting}
       />.
@@ -115,11 +115,11 @@ AssertionStep.Popover = class extends React.Component {
       boundVariableLocation: {boundVariableIndex, boundVariablePath, premisePath},
       boundVariableName: boundVariableName
     });
-    this.props.onTransition(true);
+    this.props.onModalTransition(true);
   };
   hideBoundVariableModal = () => {
     setTimeout(() => this.setState({boundVariableLocation: null}), 0);
-    this.props.onTransition(false);
+    this.props.onModalTransition(false);
   };
   updateBoundVariableName = (event) => {
     this.setState({boundVariableName: event.target.value});
@@ -203,7 +203,6 @@ AssertionStep.Popover = class extends React.Component {
 
   render() {
     const popoverProps = _.pick(this.props, ["arrowProps", "className", "outOfBoundaries", "placement", "scheduleUpdate", "style"]);
-    const {} = this.props
     const {step, path, boundVariableLists, innerRef, apiService} = this.props;
     const inference = step.inference || step.inferenceApplication.inference;;
     const boundVariableModal = <BoundVariableModal show={this.isShowingBoundVariableModal()}

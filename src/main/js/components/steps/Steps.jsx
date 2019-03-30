@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {AssertionStep} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
+import {ElidedStep} from "./ElidedStep";
 import {NamingStep} from "./NamingStep";
 import {ScopedVariableStep} from "./ScopedVariableStep";
 import {TargetStep} from "./TargetStep";
@@ -28,8 +29,7 @@ class TransitiveSteps extends React.Component {
   }
 
   render() {
-    const {leftHandSide, symbol, rightHandSides, ...otherProps} = this.props;
-    const {highlighting} = this.props;
+    const {leftHandSide, symbol, rightHandSides, highlighting, onPopover, apiService, boundVariableLists} = this.props;
 
     const renderRightHandSide = (rightHandSide, index) => {
       const nextRightHandSide = rightHandSides[index + 1];
@@ -37,36 +37,44 @@ class TransitiveSteps extends React.Component {
         <HighlightableExpression expression={{textForHtml: () => symbol}}
                                  boundVariableLists={[]}
                                  references={[rightHandSide.lineReference]}
-                                 {...otherProps}/>
+                                 highlighting={highlighting}/>
         {' '}
         <HighlightableExpression expression={rightHandSide.expression}
-                                 boundVariableLists={otherProps.boundVariableLists}
+                                 boundVariableLists={boundVariableLists}
                                  referencesAsConclusion={nextRightHandSide ? [nextRightHandSide.lineReference, rightHandSide.lineReference] : [rightHandSide.lineReference]}
                                  references={[rightHandSide.lineReference]}
-                                 {...otherProps}/>.
+                                 highlighting={highlighting}/>.
       </>
     };
 
     return <>
-      <ProofLine highlighting={highlighting}
-                 premiseReferences={leftHandSide.step.referencedLines}
+      <ProofLine premiseReferences={leftHandSide.step.referencedLines}
                  path={leftHandSide.path}
-                 popover={<AssertionStep.Popover step={leftHandSide.step} path={leftHandSide.path} {...otherProps}/>}
-                 {...otherProps}>
+                 onPopover={onPopover}
+                 popover={<AssertionStep.Popover step={leftHandSide.step}
+                                                 path={leftHandSide.path}
+                                                 apiService={apiService}
+                                                 boundVariableLists={boundVariableLists}/>}
+                 highlighting={highlighting}
+                 apiService={apiService}>
         <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
-                                                                          boundVariableLists={otherProps.boundVariableLists}
+                                                                          boundVariableLists={boundVariableLists}
                                                                           referencesAsPremise={[leftHandSide.lineReference, ..._.map(rightHandSides, ({lineReference}) => lineReference)]}
                                                                           referencesAsConclusion={[leftHandSide.lineReference]}
-                                                                          {...otherProps}/> </span>
+                                                                          highlighting={highlighting}/> </span>
         {renderRightHandSide(rightHandSides[0], 0)}
       </ProofLine>
       {rightHandSides.slice(1).map((rightHandSide, index) => {
         return <div className="mb-1">
-          <ProofLine highlighting={highlighting}
-                     premiseReferences={rightHandSide.step.referencedLines}
+          <ProofLine premiseReferences={rightHandSide.step.referencedLines}
                      path={rightHandSide.path}
-                     popover={<AssertionStep.Popover step={rightHandSide.step} path={rightHandSide.path} {...otherProps}/>}
-                     {...otherProps}>
+                     onPopover={onPopover}
+                     popover={<AssertionStep.Popover step={rightHandSide.step}
+                                                     path={rightHandSide.path}
+                                                     apiService={apiService}
+                                                     boundVariableLists={boundVariableLists}/>}
+                     highlighting={highlighting}
+                     apiService={apiService}>
             <span ref={this.setSpacerRef}/>
             {renderRightHandSide(rightHandSide, index + 1)}
           </ProofLine>
@@ -90,6 +98,8 @@ export class Steps extends React.Component {
         return ScopedVariableStep;
       case "naming":
         return NamingStep;
+      case "elided":
+        return ElidedStep;
     }
   }
   static getKey(step) {
@@ -97,13 +107,15 @@ export class Steps extends React.Component {
       case "assertion":
       case "oldAssertion":
       case "target":
-        return step.type + " " + step.statement.serialize();
+        return step.statement.serialize();
       case "deduction":
-        return "assume " + step.assumption.serialize();
+        return step.provenStatement ? step.provenStatement.serialize() : "assume " + step.assumption.serialize();
       case "scopedVariable":
-        return "take " + step.variableName;
+        return step.provenStatement ? step.provenStatement.serialize() : "take " + step.variableName;
       case "naming":
         return "name " + step.variableName + " as " + step.assumption.serialize();
+      case "elided":
+        return step.provenStatement.serialize()
     }
   }
   static getTransitivityDetails(stepsWithIndexes, firstStep, transitivityInferenceId, basePath, firstIndex) {

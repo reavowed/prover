@@ -20,13 +20,18 @@ premise ∀ x ↔ ∈ $0 a with ($0) φ
 premise ∀ x ↔ ∈ $0 b with ($0) φ
 conclusion = a b
 {
-  take x {
-    prove ↔ ∈ $0 a ∈ $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 a, with ($0) φ, ∈ $0 b) () () ()
-      expanded ↔ ∈ $0 a with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 a with ($$0) φ) ()
+  elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+    take x {
+      prove ↔ ∈ $0 b with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 b with ($$0) φ) ()
         given
-      expanded ↔ with ($0) φ ∈ $0 b 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (∈ $0 b, with ($0) φ) () () ()
-        expanded ↔ ∈ $0 b with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 b with ($$0) φ) ()
-          given
+      prove ↔ ∈ $0 a with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 a with ($$0) φ) ()
+        given
+      prove ↔ with ($0) φ ∈ $0 b 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (∈ $0 b, with ($0) φ) () () ()
+        given
+      prove ↔ ∈ $0 a ∈ $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 a, with ($0) φ, ∈ $0 b) () () ()
+        given
+        given
+    }
   }
   prove = a b 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (a, b) () ()
     given
@@ -38,12 +43,16 @@ premise ∀ x ↔ ∈ $0 b with ($0) ψ
 premise ∀ x ↔ with ($0) φ with ($0) ψ
 conclusion = a b
 {
-  take x {
-    prove ↔ ∈ $0 a with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 a, with ($0) φ, with ($0) ψ) () () ()
-      expanded ↔ ∈ $0 a with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 a with ($$0) φ) ()
+  elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+    take x {
+      prove ↔ ∈ $0 a with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 a with ($$0) φ) ()
         given
-      expanded ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$0) φ with ($$0) ψ) ()
+      prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$0) φ with ($$0) ψ) ()
         given
+      prove ↔ ∈ $0 a with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 a, with ($0) φ, with ($0) ψ) () () ()
+        given
+        given
+    }
   }
   prove = a b f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () (a, b) (with ($0) ψ) ()
     given
@@ -65,10 +74,13 @@ conclusion ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ
       }
     }
   }
-  prove ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∀ y ↔ ∈ $0 $$0 with ($0) φ) ()
-    expanded ∧ ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ ∀ x ∀ y → ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ x ∀ y → ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ = $$0 $0) () () ()
+  elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
+    prove ∧ ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ ∀ x ∀ y → ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ x ∀ y → ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ = $$0 $0) () () ()
       given
       given
+    prove ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∀ y ↔ ∈ $0 $$0 with ($0) φ) ()
+      given
+  }
 }
 
 theorem Replace Equivalent Membership Condition
@@ -77,12 +89,16 @@ premise ∀ y ↔ with ($0) φ with ($0) ψ
 conclusion ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ
 {
   let a ∀ y ↔ ∈ $0 $$0 with ($0) φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ) () (∀ y ↔ ∈ $0 $$0 with ($0) φ) () (direct p0, direct 0d) {
-    take y {
-      prove ↔ ∈ $0 $$0 with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, with ($0) φ, with ($0) ψ) () () ()
-        expanded ↔ ∈ $0 $$0 with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 with ($$$0) φ) ()
+    elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+      take y {
+        prove ↔ ∈ $0 $$0 with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 with ($$$0) φ) ()
           given
-        expanded ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ with ($$$0) ψ) ()
+        prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ with ($$$0) ψ) ()
           given
+        prove ↔ ∈ $0 $$0 with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, with ($0) φ, with ($0) ψ) () () ()
+          given
+          given
+      }
     }
     prove ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∀ y ↔ ∈ $0 $$$0 with ($0) ψ) ()
       given

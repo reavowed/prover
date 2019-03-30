@@ -124,14 +124,20 @@ premise ∈ b B
 conclusion ∈ orderedPair a b × A B
 {
   prove ∀ x ∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B 236f521a9f01f6d3d26cc0cac93bca261543938c02c189cc3e9fe73064535b17 () (A, B) () ()
-  prove ∈ orderedPair a b × A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ a A ∈ b B, ∈ orderedPair a b × A B) () () ()
-    expanded → ∧ ∈ a A ∈ b B ∈ orderedPair a b × A B 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair a b × A B, ∧ ∈ a A ∈ b B) () () ()
-      expanded ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B) ()
-        expanded ∀ y ↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B) ()
-          given
-    expanded ∧ ∈ a A ∈ b B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a A, ∈ b B) () () ()
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ∀ y ↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B) ()
+      given
+    prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B) ()
+      given
+    prove → ∧ ∈ a A ∈ b B ∈ orderedPair a b × A B 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair a b × A B, ∧ ∈ a A ∈ b B) () () ()
+      given
+    prove ∧ ∈ a A ∈ b B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a A, ∈ b B) () () ()
       given
       given
+    prove ∈ orderedPair a b × A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ a A ∈ b B, ∈ orderedPair a b × A B) () () ()
+      given
+      given
+  }
 }
 
 theorem Coordinates of Element of Cartesian Product

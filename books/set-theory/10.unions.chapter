@@ -21,11 +21,15 @@ premise ∈ a union A
 conclusion ∃ x ∧ ∈ a $0 ∈ $0 A
 {
   prove ∀ y ↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (A) () ()
-  prove ∃ x ∧ ∈ a $0 ∈ $0 A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a union A, ∃ x ∧ ∈ a $0 ∈ $0 A) () () ()
-    expanded → ∈ a union A ∃ x ∧ ∈ a $0 ∈ $0 A f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ a union A, ∃ x ∧ ∈ a $0 ∈ $0 A) () () ()
-      expanded ↔ ∈ a union A ∃ x ∧ ∈ a $0 ∈ $0 A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A) ()
-        given
-    given
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ a union A ∃ x ∧ ∈ a $0 ∈ $0 A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A) ()
+      given
+    prove → ∈ a union A ∃ x ∧ ∈ a $0 ∈ $0 A f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ a union A, ∃ x ∧ ∈ a $0 ∈ $0 A) () () ()
+      given
+    prove ∃ x ∧ ∈ a $0 ∈ $0 A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a union A, ∃ x ∧ ∈ a $0 ∈ $0 A) () () ()
+      given
+      given
+  }
 }
 
 theorem Element of Element Is Element of Union
@@ -33,16 +37,23 @@ premise ∈ b a
 premise ∈ a A
 conclusion ∈ b union A
 {
-  prove ∃ x ∧ ∈ b $0 ∈ $0 A c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (∧ ∈ b $0 ∈ $0 A) ()
-    expanded ∧ ∈ b a ∈ a A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ b a, ∈ a A) () () ()
-      given
-      given
   prove ∀ y ↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (A) () ()
-  prove ∈ b union A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ x ∧ ∈ b $0 ∈ $0 A, ∈ b union A) () () ()
-    expanded → ∃ x ∧ ∈ b $0 ∈ $0 A ∈ b union A 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b union A, ∃ x ∧ ∈ b $0 ∈ $0 A) () () ()
-      expanded ↔ ∈ b union A ∃ x ∧ ∈ b $0 ∈ $0 A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A) ()
-        given
-    given
+  elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+    prove ∧ ∈ b a ∈ a A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ b a, ∈ a A) () () ()
+      given
+      given
+    prove ∃ x ∧ ∈ b $0 ∈ $0 A c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (∧ ∈ b $0 ∈ $0 A) ()
+      given
+  }
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ b union A ∃ x ∧ ∈ b $0 ∈ $0 A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 union A ∃ x ∧ ∈ $$0 $0 ∈ $0 A) ()
+      given
+    prove → ∃ x ∧ ∈ b $0 ∈ $0 A ∈ b union A 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b union A, ∃ x ∧ ∈ b $0 ∈ $0 A) () () ()
+      given
+    prove ∈ b union A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ x ∧ ∈ b $0 ∈ $0 A, ∈ b union A) () () ()
+      given
+      given
+  }
 }
 
 term ∪ (a b)
@@ -83,17 +94,23 @@ conclusion ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
     }
     assume ∈ $0 a {
       prove ∈ a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () ()
-      prove ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (∧ ∈ $0 $$0 ∈ $$0 pair a b) ()
-        expanded ∧ ∈ $0 a ∈ a pair a b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 a, ∈ a pair a b) () () ()
+      elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+        prove ∧ ∈ $0 a ∈ a pair a b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 a, ∈ a pair a b) () () ()
           given
           given
+        prove ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (∧ ∈ $0 $$0 ∈ $$0 pair a b) ()
+          given
+      }
     }
     assume ∈ $0 b {
       prove ∈ b pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () ()
-      prove ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (b) (∧ ∈ $0 $$0 ∈ $$0 pair a b) ()
-        expanded ∧ ∈ $0 b ∈ b pair a b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 b, ∈ b pair a b) () () ()
+      elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+        prove ∧ ∈ $0 b ∈ b pair a b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 b, ∈ b pair a b) () () ()
           given
           given
+        prove ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (b) (∧ ∈ $0 $$0 ∈ $$0 pair a b) ()
+          given
+      }
     }
     assume ∨ ∈ $0 a ∈ $0 b {
       prove ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 a, ∈ $0 b, ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b) () () ()
@@ -105,12 +122,16 @@ conclusion ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
       given
       given
   }
-  take x {
-    prove ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 ∪ a b, ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b, ∨ ∈ $0 a ∈ $0 b) () () ()
-      expanded ↔ ∈ $0 ∪ a b ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 ∪ a b ∃ y ∧ ∈ $$$0 $0 ∈ $0 pair a b) ()
+  elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+    take x {
+      prove ↔ ∈ $0 ∪ a b ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 ∪ a b ∃ y ∧ ∈ $$$0 $0 ∈ $0 pair a b) ()
         given
-      expanded ↔ ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b ∨ ∈ $0 a ∈ $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∃ y ∧ ∈ $$$0 $0 ∈ $0 pair a b ∨ ∈ $$0 a ∈ $$0 b) ()
+      prove ↔ ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b ∨ ∈ $0 a ∈ $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∃ y ∧ ∈ $$$0 $0 ∈ $0 pair a b ∨ ∈ $$0 a ∈ $$0 b) ()
         given
+      prove ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 ∪ a b, ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b, ∨ ∈ $0 a ∈ $0 b) () () ()
+        given
+        given
+    }
   }
 }
 
@@ -119,11 +140,15 @@ premise ∈ c ∪ a b
 conclusion ∨ ∈ c a ∈ c b
 {
   prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () ()
-  prove ∨ ∈ c a ∈ c b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ c ∪ a b, ∨ ∈ c a ∈ c b) () () ()
-    expanded → ∈ c ∪ a b ∨ ∈ c a ∈ c b f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ c ∪ a b, ∨ ∈ c a ∈ c b) () () ()
-      expanded ↔ ∈ c ∪ a b ∨ ∈ c a ∈ c b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (c) (↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b) ()
-        given
-    given
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ c ∪ a b ∨ ∈ c a ∈ c b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (c) (↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b) ()
+      given
+    prove → ∈ c ∪ a b ∨ ∈ c a ∈ c b f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ c ∪ a b, ∨ ∈ c a ∈ c b) () () ()
+      given
+    prove ∨ ∈ c a ∈ c b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ c ∪ a b, ∨ ∈ c a ∈ c b) () () ()
+      given
+      given
+  }
 }
 
 theorem Binary Union Is Symmetric
@@ -131,8 +156,10 @@ conclusion = ∪ a b ∪ b a
 {
   prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () ()
   prove ∀ x ↔ ∈ $0 ∪ b a ∨ ∈ $0 b ∈ $0 a 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (b, a) () ()
-  take x {
-    prove ↔ ∨ ∈ $0 a ∈ $0 b ∨ ∈ $0 b ∈ $0 a 2eaae6272d534dc99795d91bbbacc12e5e5b58aa4db06ed18bf864f72b5c947d (∈ $0 a, ∈ $0 b) () () ()
+  elided 2eaae6272d534dc99795d91bbbacc12e5e5b58aa4db06ed18bf864f72b5c947d {
+    take x {
+      prove ↔ ∨ ∈ $0 a ∈ $0 b ∨ ∈ $0 b ∈ $0 a 2eaae6272d534dc99795d91bbbacc12e5e5b58aa4db06ed18bf864f72b5c947d (∈ $0 a, ∈ $0 b) () () ()
+    }
   }
   prove = ∪ a b ∪ b a 4b83926de252406c08777885e14c3c906028ee3c7fb53340249ba1eb1ada4d4d () (∪ a b, ∪ b a) (∨ ∈ $0 a ∈ $0 b, ∨ ∈ $0 b ∈ $0 a) ()
     given
@@ -147,11 +174,15 @@ conclusion ∈ c ∪ a b
   prove ∨ ∈ c a ∈ c b 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ c a, ∈ c b) () () ()
     given
   prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () ()
-  prove ∈ c ∪ a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ c a ∈ c b, ∈ c ∪ a b) () () ()
-    expanded → ∨ ∈ c a ∈ c b ∈ c ∪ a b 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ c ∪ a b, ∨ ∈ c a ∈ c b) () () ()
-      expanded ↔ ∈ c ∪ a b ∨ ∈ c a ∈ c b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (c) (↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b) ()
-        given
-    given
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ c ∪ a b ∨ ∈ c a ∈ c b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (c) (↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b) ()
+      given
+    prove → ∨ ∈ c a ∈ c b ∈ c ∪ a b 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ c ∪ a b, ∨ ∈ c a ∈ c b) () () ()
+      given
+    prove ∈ c ∪ a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ c a ∈ c b, ∈ c ∪ a b) () () ()
+      given
+      given
+  }
 }
 
 theorem Element Transfers to Binary Union
@@ -161,11 +192,15 @@ conclusion ∈ c ∪ a b
   prove ∨ ∈ c a ∈ c b 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∈ c b, ∈ c a) () () ()
     given
   prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () ()
-  prove ∈ c ∪ a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ c a ∈ c b, ∈ c ∪ a b) () () ()
-    expanded → ∨ ∈ c a ∈ c b ∈ c ∪ a b 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ c ∪ a b, ∨ ∈ c a ∈ c b) () () ()
-      expanded ↔ ∈ c ∪ a b ∨ ∈ c a ∈ c b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (c) (↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b) ()
-        given
-    given
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ c ∪ a b ∨ ∈ c a ∈ c b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (c) (↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b) ()
+      given
+    prove → ∨ ∈ c a ∈ c b ∈ c ∪ a b 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ c ∪ a b, ∨ ∈ c a ∈ c b) () () ()
+      given
+    prove ∈ c ∪ a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ c a ∈ c b, ∈ c ∪ a b) () () ()
+      given
+      given
+  }
 }
 
 theorem The Empty Set Is an Identity for Binary Union
@@ -179,12 +214,16 @@ conclusion = ∪ ∅ a a
     prove ↔ ∨ ∈ $0 ∅ ∈ $0 a ∈ $0 a fea847b6ac71dacbccf8815bf45a965c0039d8080b07292713e6b9c3f94899e8 (∈ $0 ∅, ∈ $0 a) () () ()
       given
   }
-  take x {
-    prove ↔ ∈ $0 ∪ ∅ a ∈ $0 a e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 ∪ ∅ a, ∨ ∈ $0 ∅ ∈ $0 a, ∈ $0 a) () () ()
-      expanded ↔ ∈ $0 ∪ ∅ a ∨ ∈ $0 ∅ ∈ $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 ∪ ∅ a ∨ ∈ $$0 ∅ ∈ $$0 a) ()
+  elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+    take x {
+      prove ↔ ∈ $0 ∪ ∅ a ∨ ∈ $0 ∅ ∈ $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 ∪ ∅ a ∨ ∈ $$0 ∅ ∈ $$0 a) ()
         given
-      expanded ↔ ∨ ∈ $0 ∅ ∈ $0 a ∈ $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∨ ∈ $$0 ∅ ∈ $$0 a ∈ $$0 a) ()
+      prove ↔ ∨ ∈ $0 ∅ ∈ $0 a ∈ $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∨ ∈ $$0 ∅ ∈ $$0 a ∈ $$0 a) ()
         given
+      prove ↔ ∈ $0 ∪ ∅ a ∈ $0 a e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 ∪ ∅ a, ∨ ∈ $0 ∅ ∈ $0 a, ∈ $0 a) () () ()
+        given
+        given
+    }
   }
   prove = ∪ ∅ a a 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (∪ ∅ a, a) () ()
     given
@@ -288,20 +327,29 @@ conclusion ⊆ ∪ A B X
     given
   prove ∀ x → ∈ $0 B ∈ $0 X f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (B, X) () ()
     given
-  take x {
-    prove → ∨ ∈ $0 A ∈ $0 B ∈ $0 X 601e278a38579fd247c444cdbd61fe6d5f48c99f2b5725ef973cc3cb781a8eef (∈ $0 A, ∈ $0 X, ∈ $0 B) () () ()
-      expanded → ∈ $0 A ∈ $0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 A ∈ $$0 X) ()
+  elided 601e278a38579fd247c444cdbd61fe6d5f48c99f2b5725ef973cc3cb781a8eef {
+    take x {
+      prove → ∈ $0 A ∈ $0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 A ∈ $$0 X) ()
         given
-      expanded → ∈ $0 B ∈ $0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 B ∈ $$0 X) ()
+      prove → ∈ $0 B ∈ $0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 B ∈ $$0 X) ()
         given
+      prove → ∨ ∈ $0 A ∈ $0 B ∈ $0 X 601e278a38579fd247c444cdbd61fe6d5f48c99f2b5725ef973cc3cb781a8eef (∈ $0 A, ∈ $0 X, ∈ $0 B) () () ()
+        given
+        given
+    }
   }
-  take x {
-    prove → ∈ $0 ∪ A B ∈ $0 X 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (∈ $0 ∪ A B, ∨ ∈ $0 A ∈ $0 B, ∈ $0 X) () () ()
-      expanded → ∈ $0 ∪ A B ∨ ∈ $0 A ∈ $0 B f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 ∪ A B, ∨ ∈ $0 A ∈ $0 B) () () ()
-        expanded ↔ ∈ $0 ∪ A B ∨ ∈ $0 A ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 ∪ A B ∨ ∈ $$0 A ∈ $$0 B) ()
-          given
-      expanded → ∨ ∈ $0 A ∈ $0 B ∈ $0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∨ ∈ $$0 A ∈ $$0 B ∈ $$0 X) ()
+  elided 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 {
+    take x {
+      prove ↔ ∈ $0 ∪ A B ∨ ∈ $0 A ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 ∪ A B ∨ ∈ $$0 A ∈ $$0 B) ()
         given
+      prove → ∈ $0 ∪ A B ∨ ∈ $0 A ∈ $0 B f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 ∪ A B, ∨ ∈ $0 A ∈ $0 B) () () ()
+        given
+      prove → ∨ ∈ $0 A ∈ $0 B ∈ $0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∨ ∈ $$0 A ∈ $$0 B ∈ $$0 X) ()
+        given
+      prove → ∈ $0 ∪ A B ∈ $0 X 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (∈ $0 ∪ A B, ∨ ∈ $0 A ∈ $0 B, ∈ $0 X) () () ()
+        given
+        given
+    }
   }
   prove ⊆ ∪ A B X 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (∪ A B, X) () ()
     given
@@ -376,13 +424,18 @@ conclusion = ∪ A B B
         given
     }
   }
-  take x {
-    prove ↔ ∈ $0 ∪ A B ∈ $0 B a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 (∈ $0 ∪ A B, ∈ $0 B) () () ()
-      expanded ∧ → ∈ $0 ∪ A B ∈ $0 B → ∈ $0 B ∈ $0 ∪ A B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (→ ∈ $0 ∪ A B ∈ $0 B, → ∈ $0 B ∈ $0 ∪ A B) () () ()
-        expanded → ∈ $0 ∪ A B ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 ∪ A B ∈ $$0 B) ()
-          given
-        expanded → ∈ $0 B ∈ $0 ∪ A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 B ∈ $$0 ∪ A B) ()
-          given
+  elided a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 {
+    take x {
+      prove → ∈ $0 ∪ A B ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 ∪ A B ∈ $$0 B) ()
+        given
+      prove → ∈ $0 B ∈ $0 ∪ A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 B ∈ $$0 ∪ A B) ()
+        given
+      prove ∧ → ∈ $0 ∪ A B ∈ $0 B → ∈ $0 B ∈ $0 ∪ A B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (→ ∈ $0 ∪ A B ∈ $0 B, → ∈ $0 B ∈ $0 ∪ A B) () () ()
+        given
+        given
+      prove ↔ ∈ $0 ∪ A B ∈ $0 B a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 (∈ $0 ∪ A B, ∈ $0 B) () () ()
+        given
+    }
   }
   prove = ∪ A B B 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (∪ A B, B) () ()
     given
@@ -432,5 +485,6 @@ conclusion ⊆ union A B
       }
     }
   }
-  assert ⊆ union A B direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (union A, B) () () (compound 0 compound 0.0a direct 0.0.1)
+  prove ⊆ union A B 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (union A, B) () ()
+    given
 }

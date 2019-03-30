@@ -78,6 +78,16 @@ class BookController @Autowired() (bookService: BookService) {
       case _ =>
         None
     }
+    def extractStepsFromPremise(premise: Step.NewAssert.Premise.Expansion): Seq[Step] = {
+      extractStepsFromPremises(premise.premises) :+ Step.NewAssert(
+        premise.statement,
+        premise.inference,
+        premise.premises.map(p => Step.NewAssert.Premise.Pending(p.statement)),
+        premise.substitutions)
+    }
+    def extractStepsFromPremises(premises: Seq[Step.NewAssert.Premise]): Seq[Step] = {
+      premises.ofType[Step.NewAssert.Premise.Expansion].flatMap(extractStepsFromPremise)
+    }
     def replaceSteps(steps: Seq[Step], outerContext: StepContext): Seq[Step] = {
       steps.mapWithIndex {
         case (step @ Step.Assertion(statement, InferenceApplication.Direct(inference, substitutions, conclusion, references, _)), _) =>
@@ -90,20 +100,21 @@ class BookController @Autowired() (bookService: BookService) {
           step
       }
     }
-    def replaceTheorem(theorem: Theorem): Theorem = {
-      theorem.copy(proof = replaceSteps(theorem.proof, StepContext.justWithPremises(theorem.premises)))
+    def replaceTheorem(book: Book, chapter: Chapter, theorem: Theorem): Theorem = {
+      val parsingContext = getTheoremParsingContext(book, chapter, theorem)
+      theorem.copy(proof = replaceSteps(theorem.proof, StepContext.justWithPremises(theorem.premises))).recalculateReferences(parsingContext)
     }
-    def replaceChapter(chapter: Chapter): Chapter = {
+    def replaceChapter(book: Book, chapter: Chapter): Chapter = {
       val updatedEntries = chapter.entries.map {
         case theorem: Theorem =>
-          replaceTheorem(theorem)
+          replaceTheorem(book, chapter, theorem)
         case other =>
           other
       }
       chapter.copy(entries = updatedEntries)
     }
     bookService.modifyBook(bookKey, (_, book) => {
-      Success((book.copy(chapters = book.chapters.map(replaceChapter)), ()))
+      Success((book.copy(chapters = book.chapters.map(replaceChapter(book, _))), ()))
     }).map(_ => ()).toResponseEntity
   }
 
