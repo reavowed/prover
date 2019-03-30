@@ -193,7 +193,8 @@ conclusion = ∩ A B ∅
     prove ¬ ∈ $0 ∩ A B adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∈ $0 ∩ A B) () () ()
       given
   }
-  assert = ∩ A B ∅ direct 5a0c9d59fc32105d62c25b9e1215721f2748a1705d2e6fc33b3faed70a0fd20c () (∩ A B) () () (compound 0 direct 0.1)
+  prove = ∩ A B ∅ 5a0c9d59fc32105d62c25b9e1215721f2748a1705d2e6fc33b3faed70a0fd20c () (∩ A B) () ()
+    given
 }
 
 theorem Disjoint Pair
