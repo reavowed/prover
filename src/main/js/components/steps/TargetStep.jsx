@@ -80,11 +80,11 @@ export class TargetStep extends React.Component {
 
     const popover = (
       <Popover title={<FlexRow><FlexRow.Grow>Statement to prove</FlexRow.Grow><DeleteStepButton path={path} {...otherProps}/></FlexRow>}>
-        {scopingStatement && step.statement.definition === scopingStatement &&
-        <Button variant="success" size="sm" className="mr-1" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
-        {deductionStatement && step.statement.definition === deductionStatement &&
-        <Button variant="success" size="sm" className="mr-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
         <Button variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</Button>
+        {scopingStatement && step.statement.definition === scopingStatement &&
+        <Button variant="success" size="sm" className="ml-1" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
+        {deductionStatement && step.statement.definition === deductionStatement &&
+        <Button variant="success" size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
       </Popover>
     );
     return <>
