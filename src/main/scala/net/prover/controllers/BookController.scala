@@ -219,11 +219,11 @@ class BookController @Autowired() (bookService: BookService) {
     ).map{ case (_, book, chapter, _) => ChapterProps(chapter, book) }.toResponseEntity
   }
 
-  case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, numberOfBoundVariables: Int)
+  case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, numberOfBoundVariables: Int, structureType: Option[String])
   private def getDefinitionSummaries(parsingContext: ParsingContext) = {
     (parsingContext.statementDefinitions ++ parsingContext.termDefinitions)
       .filter(_.componentTypes.nonEmpty)
-      .map(d => d.symbol -> DefinitionSummary(d.symbol, d.format.baseFormatString, d.format.requiresBrackets, d.boundVariableNames.length)).toMap
+      .map(d => d.symbol -> DefinitionSummary(d.symbol, d.format.baseFormatString, d.format.requiresBrackets, d.boundVariableNames.length, d.asOptionalInstanceOf[StatementDefinition].flatMap(_.structureType).map(_.serialized))).toMap
   }
 
   private def getUsages(entry: ChapterEntry, books: Seq[Book]) = {
