@@ -7,7 +7,13 @@ conclusion ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
   let a with ($0) φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) () (with ($0) φ) () (direct p0, direct 0d) {
     take y {
       assume ∀ x → with ($0) φ ∈ $$0 $0 {
-        assert ∈ $0 $$0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($$0) (with ($$$0) φ, ∈ $0 $$$0) () (direct 0.0.0a, direct 0a)
+        elided {
+          prove → with ($$0) φ ∈ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ with ($$$0) φ ∈ $0 $$$0) ()
+            given
+          prove ∈ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($$0) φ, ∈ $0 $$0) () () ()
+            given
+            given
+        }
       }
       prove ↔ ∧ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 ∀ x → with ($0) φ ∈ $$0 $0 6301d09d66b0a087d37eb6fdfb57305fb0584d31883012474d1101001436cb7e (∀ x → with ($0) φ ∈ $$0 $0, ∈ $0 $$0) () () ()
         given
@@ -15,7 +21,17 @@ conclusion ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
     let S = $0 comprehension z $$$0 ∀ x → with ($0) φ ∈ $$0 $0 direct cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) (comprehension z $$0 ∀ x → with ($0) φ ∈ $$0 $0) () () (direct 0.1d) {
       prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () ($0, $$0) (∀ x → with ($0) φ ∈ $$$$0 $0) ()
         given
-      assert ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $$$0 $0, ∧ ∈ $$$0 $$0 ∀ x → with ($0) φ ∈ $$$$0 $0, ∀ x → with ($0) φ ∈ $$$$0 $0) () (direct 0.1.0, compound 0.0 direct 0.0.1)
+      elided {
+        take y {
+          prove ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$$0 $$0 ∧ ∈ $$$$0 $$$0 ∀ x → with ($0) φ ∈ $$$$$0 $0) ()
+            given
+          prove ↔ ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 ∀ x → with ($0) φ ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∧ ∈ $$$$0 $$$0 ∀ x → with ($0) φ ∈ $$$$$0 $0 ∀ x → with ($0) φ ∈ $$$$$0 $0) ()
+            given
+          prove ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0, ∀ x → with ($0) φ ∈ $$0 $0) () () ()
+            given
+            given
+        }
+      }
       prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∀ y ↔ ∈ $0 $$$$0 ∀ x → with ($0) φ ∈ $$0 $0) ()
         given
     }

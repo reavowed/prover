@@ -57,6 +57,12 @@ export class TargetStep extends React.Component {
     }).then(this.props.apiService.updateTheorem);
   };
 
+  elide = () => {
+    this.props.apiService.fetchJsonForStep(this.props.path, "elide", {
+      method: "POST"
+    }).then(this.props.apiService.updateTheorem);
+  };
+
   proveWithInference = (inferenceId, substitutions) => {
     this.props.apiService.fetchJsonForStep(this.props.path, "", {
       method: "PUT",
@@ -81,6 +87,7 @@ export class TargetStep extends React.Component {
     const popover = (
       <Popover title={<FlexRow><FlexRow.Grow>Statement to prove</FlexRow.Grow><DeleteStepButton path={path} apiService={apiService}/></FlexRow>}>
         <Button variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</Button>
+        <Button variant="success" size="sm" className="ml-1" onClick={this.elide}>Elide</Button>
         {scopingStatement && step.statement.definition === scopingStatement &&
         <Button variant="success" size="sm" className="ml-1" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
         {deductionStatement && step.statement.definition === deductionStatement &&

@@ -224,6 +224,18 @@ class TheoremController @Autowired() (bookService: BookService) {
     }.toResponseEntity
   }
 
+  @PostMapping(value = Array("/{stepReference}/elide"))
+  def elide(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: PathData
+  ): ResponseEntity[_] = {
+    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, step, stepContext) =>
+      Success(Step.Elided(Seq(step), None))
+    }.toResponseEntity
+  }
+
   @PutMapping(value = Array(
     "/{stepReference}/premises/{premisePath}/statement/{expressionPath}/boundVariables/{boundVariableIndex}",
     "/{stepReference}/premises/{premisePath}/statement/boundVariables/{boundVariableIndex}"))
