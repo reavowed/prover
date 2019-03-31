@@ -234,8 +234,20 @@ premise function g C D
 premise = ∩ A C ∅
 conclusion function ∪ f g ∪ A C ∪ B D
 {
-  assert ∀ x ¬ ∈ $0 ∩ A C direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (∩ A C, ∅) (∀ x ¬ ∈ $0 $$0) () (direct p2, elided direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ())
-  assert ∀ x → ∈ $0 ∩ A C = apply f $0 apply g $0 transformed bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (Y) Y () () (∈ $0 ∩ A C, = apply f $0 apply g $0) () (direct 0)
+  elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+    prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
+    prove ∀ x ¬ ∈ $0 ∩ A C 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (∩ A C, ∅) (∀ x ¬ ∈ $0 $$0) ()
+      given
+      given
+  }
+  elided bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 {
+    take x {
+      prove ¬ ∈ $0 ∩ A C 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 ∩ A C) ()
+        given
+      prove → ∈ $0 ∩ A C = apply f $0 apply g $0 bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 ∩ A C, = apply f $0 apply g $0) () () ()
+        given
+    }
+  }
   prove function ∪ f g ∪ A C ∪ B D 84d60be1086176b05a501f7c25c4700c759d3c47900300f6d0da4d1cd3f749b9 () (f, A, B, g, C, D) () ()
     given
     given
@@ -262,11 +274,18 @@ conclusion function ∪ f singleton orderedPair a b ∪ A singleton a B
         given
     }
   }
-  assert = ∩ A singleton a ∅ direct b80bb75d6dc623394f9f9d5d78b00f112d814f0a5a1aa3c718cc6420f534a673 () (A, singleton a) () () (compound 0 compound 0.0a direct 0.0.1)
+  prove = ∩ A singleton a ∅ b80bb75d6dc623394f9f9d5d78b00f112d814f0a5a1aa3c718cc6420f534a673 () (A, singleton a) () ()
+    given
   prove function singleton orderedPair a b singleton a singleton b f0d91f99346599d36374a0a7767b7eefdc44886e1fb4a5734feac36206c18b19 () (a, b) () ()
-  prove function ∪ f singleton orderedPair a b ∪ A singleton a ∪ B singleton b e2f633104c964ecbacd79bcc49c6e70fdf95ecd644e15d06dca95ceea43313a1 () (f, A, B, singleton orderedPair a b, singleton a, singleton b) () ()
-    given
-    given
-    given
-  assert function ∪ f singleton orderedPair a b ∪ A singleton a B direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∪ B singleton b, B) (function ∪ f singleton orderedPair a b ∪ A singleton a $0) () (elided direct bf90281de90230ec1d059bbd0e55d08bda536855c195bcd6d6a18931f54f9007 () (b, B) () () (direct p2), direct 3)
+  elided e2f633104c964ecbacd79bcc49c6e70fdf95ecd644e15d06dca95ceea43313a1 {
+    prove = ∪ B singleton b B bf90281de90230ec1d059bbd0e55d08bda536855c195bcd6d6a18931f54f9007 () (b, B) () ()
+      given
+    prove function ∪ f singleton orderedPair a b ∪ A singleton a ∪ B singleton b e2f633104c964ecbacd79bcc49c6e70fdf95ecd644e15d06dca95ceea43313a1 () (f, A, B, singleton orderedPair a b, singleton a, singleton b) () ()
+      given
+      given
+      given
+    prove function ∪ f singleton orderedPair a b ∪ A singleton a B 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∪ B singleton b, B) (function ∪ f singleton orderedPair a b ∪ A singleton a $0) ()
+      given
+      given
+  }
 }

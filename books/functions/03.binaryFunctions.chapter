@@ -18,7 +18,14 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ func
           given
         let a_1 ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! x ∈ orderedPair $$0 $0 $$$0) () (∧ ∈ $$$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$$0 $0) () (direct 0.1.0.0, direct 0.1.0.1d) {
           let b_1 ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! x ∈ orderedPair $$$0 $0 $$$$0) () (∧ ∈ $$$$0 B = $$0 orderedPair $0 $$$$0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () () () direct 0.1.0.1a (1), direct 0.1.0.1.0d) {
-            assert ∃! f ∧ function $0 B C with ($0 $$$0) φ transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($$0) (∈ $$$$$0 A, ∃! f ∧ function $0 B C with ($0 $$$$$$0) φ) () (direct p0, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$$0 $0) () () () direct 0.1.0.1a (0))
+            elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+              prove → ∈ $$0 A ∃! f ∧ function $0 B C with ($0 $$$0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$0 A ∃! f ∧ function $0 B C with ($0 $$$$$$0) φ) ()
+                given
+              prove ∃! f ∧ function $0 B C with ($0 $$$0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∃! f ∧ function $0 B C with ($0 $$$0) φ) () () ()
+                given
+                simplified ∈ $$0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$$0 $0) () () ()
+                  given
+            }
             let f_1 ∧ function $0 B C with ($0 $$$0) φ direct 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∃! x ∈ orderedPair $$$$0 $0 $$$$$0) () (∧ function $$$$$0 B C with ($$$$$0 $$0) φ) () (direct 0.1.0.1.0.0, direct 0.1.0.1.0.1d) {
               prove ∈ apply $0 $$0 C 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () ($0, B, C, $$0) () ()
                 simplified function $0 B C 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $0 B C, with ($0 $$$0) φ) () () ()
@@ -31,9 +38,30 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ func
               prove = orderedPair $$$$0 apply $0 $$0 orderedPair orderedPair $$$0 $$0 apply $0 $$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () ($$$$0, orderedPair $$$0 $$0) () (orderedPair $$$$$$0 apply $0 $$0)
                 simplified = $$$$0 orderedPair $$$0 $$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 B, = $$$$0 orderedPair $$$0 $$0) () () ()
                   given
-              assert ∃ b ∧ ∈ $0 B = orderedPair $$$$$0 apply $$0 $$$0 orderedPair orderedPair $$$$0 $0 apply $$0 $0 direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$0) (∧ ∈ $$$$$$0 B = orderedPair $$$$0 apply $0 $$0 orderedPair orderedPair $$$0 $$$$$$0 apply $0 $$$$$$0) () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ $$0 B, = orderedPair $$$$0 apply $0 $$0 orderedPair orderedPair $$$0 $$0 apply $0 $$0) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 B, = $$$$0 orderedPair $$$0 $$0) () () () direct 0.1.0.1.0a (0), direct 0.1.0.1.0.1.2))
-              assert ∃ f ∧ function $0 B C ∧ with ($0 $$$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$0 apply $$$0 $$$$0 orderedPair orderedPair $$$$$0 $0 apply $$0 $0 direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ function $$$$$$0 B C ∧ with ($$$$$$0 $$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$0 apply $$0 $$$0 orderedPair orderedPair $$$$0 $0 apply $$$$$$$0 $0) () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (function $0 B C, ∧ with ($0 $$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$0 apply $$0 $$$0 orderedPair orderedPair $$$$0 $0 apply $$0 $0) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $0 B C, with ($0 $$$0) φ) () () () direct 0.1.0.1.0.1a (0), expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (with ($0 $$$0) φ, ∃ b ∧ ∈ $0 B = orderedPair $$$$$0 apply $$0 $$$0 orderedPair orderedPair $$$$0 $0 apply $$0 $0) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $0 B C, with ($0 $$$0) φ) () () () direct 0.1.0.1.0.1a (1), direct 0.1.0.1.0.1.3)))
-              assert ∃ a ∧ ∈ $0 A ∃ f ∧ function $0 B C ∧ with ($0 $$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$$0 apply $$$$0 $$$$$0 orderedPair orderedPair $$$0 $0 apply $$0 $0 direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$$0) (∧ ∈ $$$$$$0 A ∃ f ∧ function $0 B C ∧ with ($0 $$$$$$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$0 apply $$$0 $$$$0 orderedPair orderedPair $$$$$$$$0 $0 apply $$0 $0) () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ $$$0 A, ∃ f ∧ function $0 B C ∧ with ($0 $$$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$0 apply $$$0 $$$$0 orderedPair orderedPair $$$$$0 $0 apply $$0 $0) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$0 A, ∃ b ∧ ∈ $0 B = $$$$$0 orderedPair $$$$0 $0) () () () direct 0.1.0.1a (0), direct 0.1.0.1.0.1.4))
+              elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+                prove ∧ ∈ $$0 B = orderedPair $$$$0 apply $0 $$0 orderedPair orderedPair $$$0 $$0 apply $0 $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$0 B, = orderedPair $$$$0 apply $0 $$0 orderedPair orderedPair $$$0 $$0 apply $0 $$0) () () ()
+                  simplified ∈ $$0 B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 B, = $$$$0 orderedPair $$$0 $$0) () () ()
+                    given
+                  given
+                prove ∃ b ∧ ∈ $0 B = orderedPair $$$$$0 apply $$0 $$$0 orderedPair orderedPair $$$$0 $0 apply $$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$0) (∧ ∈ $$$$$$0 B = orderedPair $$$$0 apply $0 $$0 orderedPair orderedPair $$$0 $$$$$$0 apply $0 $$$$$$0) ()
+                  given
+                prove ∧ with ($0 $$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$0 apply $$0 $$$0 orderedPair orderedPair $$$$0 $0 apply $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (with ($0 $$$0) φ, ∃ b ∧ ∈ $0 B = orderedPair $$$$$0 apply $$0 $$$0 orderedPair orderedPair $$$$0 $0 apply $$0 $0) () () ()
+                  simplified with ($0 $$$0) φ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $0 B C, with ($0 $$$0) φ) () () ()
+                    given
+                  given
+                prove ∧ function $0 B C ∧ with ($0 $$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$0 apply $$0 $$$0 orderedPair orderedPair $$$$0 $0 apply $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 B C, ∧ with ($0 $$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$0 apply $$0 $$$0 orderedPair orderedPair $$$$0 $0 apply $$0 $0) () () ()
+                  simplified function $0 B C 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $0 B C, with ($0 $$$0) φ) () () ()
+                    given
+                  given
+                prove ∃ f ∧ function $0 B C ∧ with ($0 $$$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$0 apply $$$0 $$$$0 orderedPair orderedPair $$$$$0 $0 apply $$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ function $$$$$$0 B C ∧ with ($$$$$$0 $$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$0 apply $$0 $$$0 orderedPair orderedPair $$$$0 $0 apply $$$$$$$0 $0) ()
+                  given
+                prove ∧ ∈ $$$0 A ∃ f ∧ function $0 B C ∧ with ($0 $$$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$0 apply $$$0 $$$$0 orderedPair orderedPair $$$$$0 $0 apply $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$$0 A, ∃ f ∧ function $0 B C ∧ with ($0 $$$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$0 apply $$$0 $$$$0 orderedPair orderedPair $$$$$0 $0 apply $$0 $0) () () ()
+                  simplified ∈ $$$0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$0 A, ∃ b ∧ ∈ $0 B = $$$$$0 orderedPair $$$$0 $0) () () ()
+                    given
+                  given
+                prove ∃ a ∧ ∈ $0 A ∃ f ∧ function $0 B C ∧ with ($0 $$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$$0 apply $$$$0 $$$$$0 orderedPair orderedPair $$$0 $0 apply $$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$$0) (∧ ∈ $$$$$$0 A ∃ f ∧ function $0 B C ∧ with ($0 $$$$$$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$0 apply $$$0 $$$$0 orderedPair orderedPair $$$$$$$$0 $0 apply $$0 $0) ()
+                  given
+              }
               prove ∈ orderedPair $$$$0 apply $0 $$0 $$$$$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$$$$0, × × A B C, orderedPair $$$$0 apply $0 $$0) (∃ a ∧ ∈ $0 A ∃ f ∧ function $0 B C ∧ with ($0 $$0) φ ∃ b ∧ ∈ $0 B = $$$$$$$$$0 orderedPair orderedPair $$$0 $0 apply $$0 $0) ()
                 given
                 given
@@ -62,7 +90,16 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ func
                           simplified with ($$0 $$$0) φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (with ($$0 $$$0) φ, ∃ b ∧ ∈ $0 B = orderedPair $$$$$$$$$0 $$$$$0 orderedPair orderedPair $$$$0 $0 apply $$$0 $0) () () ()
                             simplified ∧ with ($$0 $$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$$$$0 $$$$$0 orderedPair orderedPair $$$$0 $0 apply $$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 B C, ∧ with ($$0 $$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$$$$0 $$$$$0 orderedPair orderedPair $$$$0 $0 apply $$$0 $0) () () ()
                               given
-                        assert = $$$$$0 $$0 direct 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () ($$$$$0, $$0) (∧ function $$$$$$$$$$0 B C with ($$$$$$$$$$0 $$$$$$$0) φ) () (direct 0.1.0.1.0.0, direct 0.1.0.1.0.1a, expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (function $$0 B C, with ($$0 $$$$$$$0) φ) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 B C, ∧ with ($$0 $$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$$$$0 $$$$$0 orderedPair orderedPair $$$$0 $0 apply $$$0 $0) () () () direct 0.1.0.1.0.1.7.0.1.0a (0), direct 0.1.0.1.0.1.7.0.1.0.0.4))
+                        elided 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 {
+                          prove ∧ function $$0 B C with ($$0 $$$$$$$0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $$0 B C, with ($$0 $$$$$$$0) φ) () () ()
+                            simplified function $$0 B C 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 B C, ∧ with ($$0 $$$0) φ ∃ b ∧ ∈ $0 B = orderedPair $$$$$$$$$0 $$$$$0 orderedPair orderedPair $$$$0 $0 apply $$$0 $0) () () ()
+                              given
+                            given
+                          prove = $$$$$0 $$0 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () ($$$$$0, $$0) (∧ function $$$$$$$$$$0 B C with ($$$$$$$$$$0 $$$$$$$0) φ) ()
+                            given
+                            given
+                            given
+                        }
                         prove = $$$$0 apply $$0 $0 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$$$$$$$0, $$$$0, orderedPair $$$0 $0, apply $$0 $0) () ()
                           simplified = orderedPair $$$$$$$$0 $$$$0 orderedPair orderedPair $$$0 $0 apply $$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 B, = orderedPair $$$$$$$$0 $$$$0 orderedPair orderedPair $$$0 $0 apply $$0 $0) () () ()
                             given
@@ -77,16 +114,30 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ func
                   }
                 }
               }
-              assert ∃! x ∈ orderedPair $$$$$0 $0 $$$$$$0 direct 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply $0 $$0) (∈ orderedPair $$$$0 $$$$$$0 $$$$$0) () (compound 0.1.0.1.0.1.7 compound 0.1.0.1.0.1.7.0a direct 0.1.0.1.0.1.7.0.1, direct 0.1.0.1.0.1.6)
+              prove ∃! x ∈ orderedPair $$$$$0 $0 $$$$$$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply $0 $$0) (∈ orderedPair $$$$0 $$$$$$0 $$$$$0) ()
+                given
+                given
             }
           }
         }
       }
     }
-    assert function $0 × A B C direct be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () ($0, × A B, C) () () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (⊆ $0 × × A B C, ∀ x → ∈ $0 × A B ∃! y ∈ orderedPair $$0 $0 $$$0) () () () (direct 0.0, compound 0.1 compound 0.1.0a direct 0.1.0.1))
+    elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
+      prove ∧ ⊆ $0 × × A B C ∀ x → ∈ $0 × A B ∃! y ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 × × A B C, ∀ x → ∈ $0 × A B ∃! y ∈ orderedPair $$0 $0 $$$0) () () ()
+        given
+        given
+      prove function $0 × A B C be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () ($0, × A B, C) () ()
+        given
+    }
     take a_1 {
       assume ∈ $0 A {
-        assert ∃! f ∧ function $0 B C with ($0 $$0) φ transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($0) (∈ $$$0 A, ∃! f ∧ function $0 B C with ($0 $$$$0) φ) () (direct p0, direct 0.3.0a)
+        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+          prove → ∈ $0 A ∃! f ∧ function $0 B C with ($0 $$0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 A ∃! f ∧ function $0 B C with ($0 $$$$0) φ) ()
+            given
+          prove ∃! f ∧ function $0 B C with ($0 $$0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∃! f ∧ function $0 B C with ($0 $$0) φ) () () ()
+            given
+            given
+        }
         take f_1 {
           assume ∧ function $0 B C with ($0 $$0) φ {
             take b_1 {
@@ -141,7 +192,9 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ func
         }
       }
     }
-    assert ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0 direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 × A B C, ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0) () () () (direct 0.2, compound 0.3 compound 0.3.0a compound 0.3.0.1 compound 0.3.0.1.0a compound 0.3.0.1.0.0 compound 0.3.0.1.0.0.0a direct 0.3.0.1.0.0.0.3)
+    prove ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 × A B C, ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0) () () ()
+      given
+      given
     take g {
       assume ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0 {
         take y {
@@ -150,14 +203,54 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ func
               given
             let a' ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply $$0 $0 apply $$$0 $0) () (∧ ∈ $$$$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$$$0 $0) () (direct 0.5.0.0.0.0, direct 0.5.0.0.0.1d) {
               let b' ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply $$$0 $$0 apply $$$$0 $$0) () (∧ ∈ $$$$$0 B = $$0 orderedPair $0 $$$$$0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () () () direct 0.5.0.0.0.1a (1), direct 0.5.0.0.0.1.0d) {
-                assert ∀ f → ∧ function $0 B C with ($0 $$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$0 $0 apply $$0 $0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($$0) (∈ $$$$$$0 A, ∀ f → ∧ function $0 B C with ($0 $$$$$$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$$$$$0 $0 apply $$0 $0) () (compound 0.3 compound 0.3.0a compound 0.3.0.1 compound 0.3.0.1.0a compound 0.3.0.1.0.0 compound 0.3.0.1.0.0.0a direct 0.3.0.1.0.0.0.3, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$$0 $0) () () () direct 0.5.0.0.0.1a (0))
-                assert ∀ f → ∧ function $0 B C with ($0 $$$0) φ ∀ b → ∈ $0 B = apply $$$$$$0 orderedPair $$$$0 $0 apply $$0 $0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($$0) (∈ $$$$$$0 A, ∀ f → ∧ function $0 B C with ($0 $$$$$$$0) φ ∀ b → ∈ $0 B = apply $$$$$$0 orderedPair $$$$$$$$0 $0 apply $$0 $0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$$$0 × A B C, ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$0 $0 apply $$0 $0) () () () direct 0.5.0a (1), simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$$0 $0) () () () direct 0.5.0.0.0.1a (0))
-                assert ∃! f ∧ function $0 B C with ($0 $$$0) φ transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($$0) (∈ $$$$$$0 A, ∃! f ∧ function $0 B C with ($0 $$$$$$$0) φ) () (direct p0, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$$0 $0) () () () direct 0.5.0.0.0.1a (0))
+                elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                  prove → ∈ $$0 A ∃! f ∧ function $0 B C with ($0 $$$0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$$0 A ∃! f ∧ function $0 B C with ($0 $$$$$$$0) φ) ()
+                    given
+                  prove ∃! f ∧ function $0 B C with ($0 $$$0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∃! f ∧ function $0 B C with ($0 $$$0) φ) () () ()
+                    given
+                    simplified ∈ $$0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$$0 $0) () () ()
+                      given
+                }
                 let f' ∧ function $0 B C with ($0 $$$0) φ direct 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (= apply $$$$0 $$$0 apply $$$$$0 $$$0) () (∧ function $$$$$$0 B C with ($$$$$$0 $$0) φ) () (direct 0.5.0.0.0.1.0.2, direct 0.5.0.0.0.1.0.3d) {
-                  assert ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$0 $0 apply $$0 $0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($0) (∧ function $$$$$$$0 B C with ($$$$$$$0 $$$0) φ, ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$0 $0 apply $$$$$$$$0 $0) () (direct 0.5.0.0.0.1.0.0, direct 0.5.0.0.0.1.0.3a)
-                  assert ∀ b → ∈ $0 B = apply $$$$$$0 orderedPair $$$$0 $0 apply $$0 $0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($0) (∧ function $$$$$$$0 B C with ($$$$$$$0 $$$0) φ, ∀ b → ∈ $0 B = apply $$$$$$0 orderedPair $$$$0 $0 apply $$$$$$$$0 $0) () (direct 0.5.0.0.0.1.0.1, direct 0.5.0.0.0.1.0.3a)
-                  assert = apply $$$$$$0 orderedPair $$$0 $$0 apply $0 $$0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($$0) (∈ $$$$$$$0 B, = apply $$$$$$0 orderedPair $$$0 $$$$$$$0 apply $0 $$$$$$$0) () (direct 0.5.0.0.0.1.0.3.0, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 B, = $$$$0 orderedPair $$$0 $$0) () () () direct 0.5.0.0.0.1.0a (0))
-                  assert = apply $$$$$0 orderedPair $$$0 $$0 apply $0 $$0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($$0) (∈ $$$$$$$0 B, = apply $$$$$0 orderedPair $$$0 $$$$$$$0 apply $0 $$$$$$$0) () (direct 0.5.0.0.0.1.0.3.1, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 B, = $$$$0 orderedPair $$$0 $$0) () () () direct 0.5.0.0.0.1.0a (0))
+                  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                    prove → ∈ $$$0 A ∀ f → ∧ function $0 B C with ($0 $$$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$$0 orderedPair $$$$$0 $0 apply $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$$0) (→ ∈ $$$$$$$0 A ∀ f → ∧ function $0 B C with ($0 $$$$$$$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$$0 orderedPair $$$$$$$$$0 $0 apply $$0 $0) ()
+                      given
+                    prove ∀ f → ∧ function $0 B C with ($0 $$$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$$0 orderedPair $$$$$0 $0 apply $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, ∀ f → ∧ function $0 B C with ($0 $$$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$$0 orderedPair $$$$$0 $0 apply $$0 $0) () () ()
+                      given
+                      simplified ∈ $$$0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$0 A, ∃ b ∧ ∈ $0 B = $$$$$0 orderedPair $$$$0 $0) () () ()
+                        given
+                    prove → ∧ function $0 B C with ($0 $$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$0 $0 apply $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∧ function $$$$$$$0 B C with ($$$$$$$0 $$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$0 $0 apply $$$$$$$$0 $0) ()
+                      given
+                    prove ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$0 $0 apply $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ function $0 B C with ($0 $$$0) φ, ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$0 $0 apply $$0 $0) () () ()
+                      given
+                      given
+                    prove → ∈ $$0 B = apply $$$$$$0 orderedPair $$$0 $$0 apply $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$$$0 B = apply $$$$$$0 orderedPair $$$0 $$$$$$$0 apply $0 $$$$$$$0) ()
+                      given
+                    prove = apply $$$$$$0 orderedPair $$$0 $$0 apply $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 B, = apply $$$$$$0 orderedPair $$$0 $$0 apply $0 $$0) () () ()
+                      given
+                      simplified ∈ $$0 B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 B, = $$$$0 orderedPair $$$0 $$0) () () ()
+                        given
+                  }
+                  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                    prove → ∈ $$$0 A ∀ f → ∧ function $0 B C with ($0 $$$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$$0 $0 apply $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$$0) (→ ∈ $$$$$$$0 A ∀ f → ∧ function $0 B C with ($0 $$$$$$$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$$$$$$0 $0 apply $$0 $0) ()
+                      simplified ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$$$$$0 orderedPair $$$0 $0 apply $$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$$$$0 × A B C, ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$$$$$0 orderedPair $$$0 $0 apply $$0 $0) () () ()
+                        given
+                    prove ∀ f → ∧ function $0 B C with ($0 $$$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$$0 $0 apply $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, ∀ f → ∧ function $0 B C with ($0 $$$$0) φ ∀ b → ∈ $0 B = apply $$$$$$$0 orderedPair $$$$$0 $0 apply $$0 $0) () () ()
+                      given
+                      simplified ∈ $$$0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$0 A, ∃ b ∧ ∈ $0 B = $$$$$0 orderedPair $$$$0 $0) () () ()
+                        given
+                    prove → ∧ function $0 B C with ($0 $$$0) φ ∀ b → ∈ $0 B = apply $$$$$$0 orderedPair $$$$0 $0 apply $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∧ function $$$$$$$0 B C with ($$$$$$$0 $$$0) φ ∀ b → ∈ $0 B = apply $$$$$$0 orderedPair $$$$0 $0 apply $$$$$$$$0 $0) ()
+                      given
+                    prove ∀ b → ∈ $0 B = apply $$$$$$0 orderedPair $$$$0 $0 apply $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ function $0 B C with ($0 $$$0) φ, ∀ b → ∈ $0 B = apply $$$$$$0 orderedPair $$$$0 $0 apply $$0 $0) () () ()
+                      given
+                      given
+                    prove → ∈ $$0 B = apply $$$$$0 orderedPair $$$0 $$0 apply $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$$$0 B = apply $$$$$0 orderedPair $$$0 $$$$$$$0 apply $0 $$$$$$$0) ()
+                      given
+                    prove = apply $$$$$0 orderedPair $$$0 $$0 apply $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 B, = apply $$$$$0 orderedPair $$$0 $$0 apply $0 $$0) () () ()
+                      given
+                      simplified ∈ $$0 B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 B, = $$$$0 orderedPair $$$0 $$0) () () ()
+                        given
+                  }
                   prove = apply $$$$$0 orderedPair $$$0 $$0 apply $$$$$$0 orderedPair $$$0 $$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$$$$$0 orderedPair $$$0 $$0, apply $0 $$0) (= apply $$$$$0 orderedPair $$$0 $$0 $$$$$$$0) ()
                     given
                     given
@@ -170,9 +263,15 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ func
             }
           }
         }
-        assert = $0 $$0 direct 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () ($0, × A B, C, $$0) () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $0 × A B C, ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0) () () () direct 0.5.0a (0), direct 0.2, compound 0.5.0.0 compound 0.5.0.0.0a direct 0.5.0.0.0.1)
+        prove = $0 $$0 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () ($0, × A B, C, $$0) () ()
+          simplified function $0 × A B C 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $0 × A B C, ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0) () () ()
+            given
+          given
+          given
       }
     }
-    assert ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0 direct 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ function $$0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$$0 orderedPair $$$0 $0 apply $$0 $0) () (compound 0.5 compound 0.5.0a direct 0.5.0.1, direct 0.4)
+    prove ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ function $$0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$$0 orderedPair $$$0 $0 apply $$0 $0) ()
+      given
+      given
   }
 }
