@@ -1,16 +1,10 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
-import styled from "styled-components";
+import _ from "lodash";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {BoundVariableModal, FindInferenceModal} from "../Modals";
+import {ClickableText} from "./ClickableText";
 import {ProofLine} from "./ProofLine";
-
-const EditableBoundVariable = styled.span`
-  &:hover {
-    color: red;
-    cursor: pointer;
-  }
-`;
 
 export class TargetStep extends React.Component {
   constructor(props, context) {
@@ -33,7 +27,7 @@ export class TargetStep extends React.Component {
   startIntroducingBoundVariable= () => {
     this.setState({
       boundVariableModalCallback: this.introduceBoundVariable,
-      boundVariableName: props.step.statement.boundVariableNames && props.step.statement.boundVariableNames[0] || ""
+      boundVariableName: this.props.step.statement.boundVariableNames && this.props.step.statement.boundVariableNames[0] || ""
     });
   };
   introduceBoundVariable = () => {
@@ -106,10 +100,10 @@ export class TargetStep extends React.Component {
                                                    onChange={this.updateBoundVariableName}
                                                    onSave={this.state.boundVariableModalCallback}/>;
     const wrapEditableBoundVariable = (boundVariableContent, boundVariableName, boundVariableIndex, boundVariablePath) =>
-      <EditableBoundVariable
+      <ClickableText
         onClick={() => this.startUpdatingBoundVariable(boundVariableName, boundVariableIndex, boundVariablePath)}>
         {boundVariableContent}
-      </EditableBoundVariable>;
+      </ClickableText>;
 
     const buttons = (
       <>

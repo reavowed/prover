@@ -220,7 +220,7 @@ class TheoremController @Autowired() (bookService: BookService) {
   }
 
   @PostMapping(value = Array("/{stepReference}/highlightedInference"))
-  def elide(
+  def setHighlightedInference(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
@@ -244,6 +244,19 @@ class TheoremController @Autowired() (bookService: BookService) {
     replaceStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
       val targetStatements = step.pendingPremises.values.map(_.statement).toSeq
       Success(targetStatements.map(Step.Target(_)) :+ step)
+    }.toResponseEntity
+  }
+
+  @PutMapping(value = Array("/{stepPath}/boundVariable"))
+  def renameBoundVariableForStep(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData,
+    @RequestBody boundVariableName: String
+  ): ResponseEntity[_] = {
+    modifyStep[Step.ScopedVariable](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
+      Success(step.copy(variableName = boundVariableName))
     }.toResponseEntity
   }
 

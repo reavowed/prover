@@ -2,8 +2,6 @@ import path from "path";
 import React from "react";
 import {Expression} from "../models/Expression";
 import {Step} from "../models/Step";
-import _ from "../Parser";
-import {Parser} from "../Parser";
 import {HighlightableExpression} from "./ExpressionComponent";
 import {Inference} from "./Inference";
 import {Steps} from "./steps/Steps";
