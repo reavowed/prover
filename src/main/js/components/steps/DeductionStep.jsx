@@ -9,7 +9,7 @@ export class DeductionStep extends React.Component {
     let reference = path.join(".");
     let referencesForLastStep = [...additionalReferences, reference];
     return <>
-      <ProofLine>
+      <ProofLine path={path} apiService={apiService}>
         Assume
         {' '}
         <HighlightableExpression expression={step.assumption}
