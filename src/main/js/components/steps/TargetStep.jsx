@@ -94,7 +94,7 @@ export class TargetStep extends React.Component {
   };
 
   render() {
-    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists, elided} = this.props;
+    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists} = this.props;
     let reference = path.join(".");
     let scopingStatement = _.find(window.definitions, d => d.structureType === "scoping");
     let deductionStatement = _.find(window.definitions, d => d.structureType === "deduction");
@@ -114,7 +114,7 @@ export class TargetStep extends React.Component {
     const buttons = (
       <>
         <Button variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</Button>
-        {!elided && <Button variant="success" size="sm" className="ml-1" onClick={this.elide}>Elide</Button>}
+        <Button variant="success" size="sm" className="ml-1" onClick={this.elide}>Elide</Button>
         {scopingStatement && step.statement.definition === scopingStatement &&
         <Button variant="success" size="sm" className="ml-1" onClick={this.startIntroducingBoundVariable}>Introduce bound variable</Button>}
         {deductionStatement && step.statement.definition === deductionStatement &&

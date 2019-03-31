@@ -53,7 +53,6 @@ export class ElidedStepProofLine extends React.Component {
       </ProofLine>
       {this.state.showProofCard && <div className="card" style={{margin: ".5rem 2rem", padding: ".5rem .75rem", display: "inline-block"}}>
         <Steps steps={step.substeps}
-               elided
                path={path}
                boundVariableLists={boundVariableLists}
                referencesForLastStep={[]}
