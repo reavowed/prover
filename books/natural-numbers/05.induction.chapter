@@ -68,7 +68,7 @@ premise with (0) φ
 premise ∀ n → ∧ ∈ $0 ℕ with ($0) φ with (successor $0) φ
 conclusion ∀ n → ∈ $0 ℕ with ($0) φ
 {
-  let S = $0 comprehension n ℕ with ($0) φ direct cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∀ n → ∈ $0 ℕ with ($0) φ) (comprehension n ℕ with ($0) φ) () () (direct 0d) {
+  let S = $0 comprehension n ℕ with ($0) φ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∀ n → ∈ $0 ℕ with ($0) φ) (comprehension n ℕ with ($0) φ) () () {
     assert ∈ 0 $0 direct dcc9c4935074d5c32c3cc551415902fb84acde50cdea3784897196521172250b () ($0) (with ($$0) φ) () (direct 0a, direct p0)
     take n {
       assume ∈ $0 $$0 {

@@ -164,7 +164,7 @@ theorem Existence of Unique Value
 premise ∃! x with ($0) φ
 conclusion ∃ y ∀ x ↔ with ($0) φ = $0 $$0
 {
-  let a with ($0) φ direct 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∃ y ∀ x ↔ with ($0) φ = $0 $$0) () (with ($0) φ) () (direct p0, direct 0d) {
+  let a with ($0) φ 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∃ y ∀ x ↔ with ($0) φ = $0 $$0) () (with ($0) φ) () {
     take x {
       assume with ($0) φ {
         prove = $0 $$0 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () ($0, $$0) (with ($$$0) φ) ()

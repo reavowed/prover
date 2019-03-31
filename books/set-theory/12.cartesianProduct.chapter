@@ -36,8 +36,8 @@ conclusion ∀ x ↔ ∈ $0 × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 
     given
   take x {
     assume ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
-      let c ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 powerSet powerSet ∪ A B) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () (direct 2.0a, direct 2.0.0d) {
-        let d ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 powerSet powerSet ∪ A B) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () () () direct 2.0.0a (1), direct 2.0.0.0d) {
+      let c ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 powerSet powerSet ∪ A B) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () {
+        let d ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 powerSet powerSet ∪ A B) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () {
           prove ∈ orderedPair $$0 $0 powerSet powerSet ∪ A B eab7d44f0c2d9d9e8a281ad0ecf6d66a81342479f3c7eade9233924cfdf3a8b5 () ($$0, A, $0, B) () ()
             simplified ∈ $$0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$$0 $0) () () ()
               given
@@ -90,8 +90,8 @@ conclusion ∀ a ∀ b ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B
       assume ∈ orderedPair $$0 $0 × A B {
         prove ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () (orderedPair $$0 $0, A, B) () ()
           given
-        let c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A ∈ $0 B) () (∧ ∈ $$$0 A ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$$0 $0) () (direct 0.0.0.0, direct 0.0.0.1d) {
-          let d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 A ∈ $$0 B) () (∧ ∈ $$$$0 B = orderedPair $$$0 $$0 orderedPair $0 $$$$0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0) () () () direct 0.0.0.1a (1), direct 0.0.0.1.0d) {
+        let c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A ∈ $0 B) () (∧ ∈ $$$0 A ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$$0 $0) () {
+          let d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 A ∈ $$0 B) () (∧ ∈ $$$$0 B = orderedPair $$$0 $$0 orderedPair $0 $$$$0) () {
             prove = $$$$0 $$0 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () ($$$$0, $$$0, $$0, $0) () ()
               simplified = orderedPair $$$$0 $$$0 orderedPair $$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 B, = orderedPair $$$$0 $$$0 orderedPair $$0 $0) () () ()
                 given
@@ -209,8 +209,8 @@ conclusion ⊆ × A B × C D
     assume ∈ $0 × A B {
       prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () ($0, A, B) () ()
         given
-      let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 × C D) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () (direct 0.0.0, direct 0.0.1d) {
-        let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 × C D) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () () () direct 0.0.1a (1), direct 0.0.1.0d) {
+      let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 × C D) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () {
+        let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 × C D) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () {
           prove ∈ $$0 C ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (A, C, $$0) () ()
             given
             simplified ∈ $$0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$$0 $0) () () ()

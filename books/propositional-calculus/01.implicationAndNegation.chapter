@@ -302,3 +302,10 @@ conclusion → ¬ φ ψ
       given
   }
 }
+
+theorem 
+premise φ
+conclusion → φ φ
+{
+  target → φ φ
+}

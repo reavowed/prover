@@ -23,7 +23,7 @@ conclusion ¬ ∈ a a
   prove ¬ = singleton a ∅ 1c4e6217e33217004ef0962a46f7422720c1fd5d2c8bb711f976bf01166dc708 () (a) () ()
   prove ∃ y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ 455ccb71d56e4d462fa1343c5365aa1c0e182a9a527afa75377bc4ff87da1be0 () (singleton a) () ()
     given
-  let y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= ∩ a singleton a ∅) () (∧ ∈ $0 singleton a = ∩ $0 singleton a ∅) () (direct 1, direct 2d) {
+  let y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= ∩ a singleton a ∅) () (∧ ∈ $0 singleton a = ∩ $0 singleton a ∅) () {
     prove = $0 a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) () ()
       simplified ∈ $0 singleton a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 singleton a, = ∩ $0 singleton a ∅) () () ()
         given
@@ -54,7 +54,7 @@ conclusion ∨ ¬ ∈ b a ¬ ∈ a b
   prove ¬ = pair a b ∅ f62b1ca093e555223e44de12325c96d4a9497e339544fc6d12d6d5afb49f13ce () (a, b) () ()
   prove ∃ x ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ 455ccb71d56e4d462fa1343c5365aa1c0e182a9a527afa75377bc4ff87da1be0 () (pair a b) () ()
     given
-  let c ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∨ ¬ ∈ b a ¬ ∈ a b) () (∧ ∈ $0 pair a b = ∩ $0 pair a b ∅) () (direct 1, direct 2d) {
+  let c ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∨ ¬ ∈ b a ¬ ∈ a b) () (∧ ∈ $0 pair a b = ∩ $0 pair a b ∅) () {
     prove ∨ = $0 a = $0 b b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () ($0, a, b) () ()
       simplified ∈ $0 pair a b 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 pair a b, = ∩ $0 pair a b ∅) () () ()
         given

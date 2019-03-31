@@ -158,33 +158,37 @@ object Step {
   case class Naming(
       variableName: String,
       assumption: Statement,
+      statement: Statement,
       substeps: Seq[Step],
-      finalInferenceApplication: InferenceApplication)
+      inference: Inference.Summary,
+      premises: Seq[NewAssert.Premise],
+      substitutions: Substitutions)
     extends Step.WithSubsteps
   {
     val `type` = "naming"
-    override def provenStatement: Option[Statement] = {
-      Some(finalInferenceApplication.conclusion)
-    }
+    override def provenStatement: Option[Statement] = Some(statement)
     override def specifyContext(outerContext: StepContext): StepContext = {
       outerContext.addBoundVariable(variableName).addStatement(ProvenStatement(assumption, PreviousLineReference(outerContext.path.mkString(".") + "a", Nil)))
     }
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     override def modifyStepForExtraction(step: Step): Option[Step] = step.removeExternalParameters(1)
-    // TODO: apply to inference application
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
       for {
         newAssumption <- assumption.removeExternalParameters(numberOfParametersToRemove)
+        newStatement <- statement.removeExternalParameters(numberOfParametersToRemove)
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
-      } yield Naming(variableName, newAssumption, newSubsteps, finalInferenceApplication)
+      } yield Naming(variableName, newAssumption, newStatement, newSubsteps, inference, premises, substitutions)
     }
-    // TODO: apply to inference application
-    override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Step = super.recalculateReferences(stepContext, parsingContext)
-    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet ++ finalInferenceApplication.referencedInferenceIds
+    override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Step = {
+      val newSubsteps = substeps.recalculateReferences(specifyContext(stepContext), parsingContext)
+      val newPremises = premises.map(p => ProofHelper.findPremise(p.statement, stepContext, parsingContext))
+      copy(substeps = newSubsteps, premises = newPremises)
+    }
+    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet + inference.id
     override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet
-    override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet ++ finalInferenceApplication.referencedLines
+    override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def length: Int = substeps.map(_.length).sum + 1
-    override def serializedLines: Seq[String] = Seq(s"let $variableName ${assumption.serialized} ${finalInferenceApplication.serialized} {") ++
+    override def serializedLines: Seq[String] = Seq(s"let $variableName ${assumption.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)} {") ++
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
@@ -198,9 +202,27 @@ object Step {
         innerStepContext = stepContext
           .addBoundVariable(variableName)
           .addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil)))
-        finalInferenceApplication <- InferenceApplication.parser
+        inference <- Inference.parser
+        substitutions <- inference.substitutionsParser
         substeps <- listParser(path)(innerParsingContext, innerStepContext).inBraces
-      } yield Naming(variableName, assumption, substeps, finalInferenceApplication)
+      } yield {
+        val internalConclusion = substeps.flatMap(_.provenStatement).lastOption.getOrElse(throw new Exception("No conclusion for naming step"))
+        val extractedConclusion = internalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
+        val scopingStatement = parsingContext.scopingStatementOption.getOrElse(throw new Exception("Naming step requires a scoping statement"))
+        val deductionStatement = parsingContext.deductionStatementOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
+        val internalPremise = DefinedStatement(Seq(DefinedStatement(Seq(assumption, internalConclusion), deductionStatement)(Nil)), scopingStatement)(Seq(variableName))
+        val substitutedPremises = inference.substitutePremisesAndValidateConclusion(substitutions, extractedConclusion, stepContext.externalDepth)
+        val availablePremises = ProofHelper.getAvailablePremises(stepContext, parsingContext)
+        val premises = substitutedPremises match {
+          case init :+ last =>
+            if (last != internalPremise)
+              throw new Exception(s"Inference premise $last did not match $internalPremise")
+            init.map(s => availablePremises.find(_.statement == s).getOrElse(throw new Exception(s"Could not find premise $s")))
+          case Nil =>
+            throw new Exception("Naming step inference had no premises")
+        }
+        Naming(variableName, assumption, extractedConclusion, substeps, inference, premises, substitutions)
+      }
     }
   }
 
@@ -312,7 +334,7 @@ object Step {
       } yield NewAssert(newStatement, inference, newPremises, newSubstitutions)
     }
     override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Step = {
-      val newPremises = premises.map(_.recalculateReferences(stepContext, parsingContext))
+      val newPremises = premises.map(p => ProofHelper.findPremise(p.statement, stepContext, parsingContext))
       copy(premises = newPremises)
     }
     override def referencedInferenceIds: Set[String] = Set(inference.id) ++ premises.flatMap(_.referencedInferenceIds).toSet
@@ -345,7 +367,6 @@ object Step {
       def getPendingPremises(path: Seq[Int]): Map[Seq[Int], NewAssert.Premise.Pending]
       def updateAtPath(path: Seq[Int], f: Premise => Try[Premise]): Option[Try[Premise]]
       def removeExternalParameters(numberOfParametersToRemove: Int): Option[Premise]
-      def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Premise
       def isIncomplete: Boolean
     }
     object Premise {
@@ -372,9 +393,6 @@ object Step {
         override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Premise] = {
           statement.removeExternalParameters(numberOfParametersToRemove).map(Pending(_))
         }
-        override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Premise = {
-          ProofHelper.findPremise(statement, stepContext, parsingContext).getOrElse(this)
-        }
         override def isIncomplete: Boolean = true
       }
       object Pending {
@@ -391,66 +409,12 @@ object Step {
         override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Premise] = {
           statement.removeExternalParameters(numberOfParametersToRemove).map(Pending(_))
         }
-        override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Premise = {
-          ProofHelper.findPremise(statement, stepContext, parsingContext).getOrElse(Pending(statement))
-        }
         override def isIncomplete: Boolean = false
       }
       object Given {
         def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Given] = {
           val provenStatement = stepContext.findProvenStatement(targetStatement).getOrElse(throw new Exception(s"Statement $targetStatement was not given"))
           Parser.constant(Given(provenStatement.statement, provenStatement.reference))
-        }
-      }
-
-      case class Expansion(
-          statement: Statement,
-          inference: Inference.Summary,
-          premises: Seq[NewAssert.Premise],
-          substitutions: Substitutions)
-        extends Premise
-      {
-        val `type` = "expansion"
-        override def serializedLines: Seq[String] = Seq(s"expanded ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}") ++
-          premises.flatMap(_.serializedLines).indent
-        override def referencedInferenceIds: Set[String] = premises.flatMap(_.referencedInferenceIds).toSet + inference.id
-        override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
-        override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], NewAssert.Premise.Pending] = premises.flatMapWithIndex((p, i) => p.getPendingPremises(path :+ i).toSeq).toMap
-        override def updateAtPath(path: Seq[Int], f: Premise => Try[Premise]): Option[Try[Premise]] = {
-          path match {
-            case Nil =>
-              Some(f(this))
-            case _ =>
-              premises.tryUpdateAtIndexIfDefined(path.head, _.updateAtPath(path.tail, f)).mapMap(newPremises => copy(premises = newPremises))
-          }
-        }
-        override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Premise] = {
-          for {
-            newStatement <- statement.removeExternalParameters(numberOfParametersToRemove)
-            newPremises <- premises.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
-            newSubstitutions <- substitutions.removeExternalParameters(numberOfParametersToRemove)
-          } yield Expansion(newStatement, inference, newPremises, newSubstitutions)
-        }
-        override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Premise = {
-          val newPremises = premises.map(_.recalculateReferences(stepContext, parsingContext))
-          copy(premises = newPremises)
-        }
-        override def isIncomplete: Boolean = premises.exists(_.isIncomplete)
-      }
-      object Expansion {
-        def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Expansion] = {
-          for {
-            statement <- Statement.parser
-            inference <- Inference.parser
-            substitutions <- inference.substitutionsParser
-            premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, statement, parsingContext.parameterDepth)
-            premises <- premisesParser(premiseStatements)
-          } yield {
-            if (statement != targetStatement) {
-              throw new Exception(s"Statement $statement did not match target $targetStatement")
-            }
-            Premise.Expansion(statement, inference, premises, substitutions)
-          }
         }
       }
 
@@ -470,11 +434,6 @@ object Step {
         }
         override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Premise] = {
           statement.removeExternalParameters(numberOfParametersToRemove).map(Pending(_))
-        }
-        override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Premise = {
-          ProofHelper.findPremise(statement, stepContext, parsingContext)
-            .orElse(premise.recalculateReferences(stepContext, parsingContext).asOptionalInstanceOf[SingleLinePremise].map(newPremise => copy(premise = newPremise)))
-            .getOrElse(Pending(statement))
         }
         override def isIncomplete: Boolean = premise.isIncomplete
       }
@@ -505,8 +464,6 @@ object Step {
           Pending.parser(statement)
         case "given" =>
           Given.parser(statement)
-        case "expanded" =>
-          Expansion.parser(statement)
         case "simplified" =>
           Simplification.parser(statement)
       }

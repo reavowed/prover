@@ -24,9 +24,9 @@ export class ScopedVariableStep {
 
 export class NamingStep {
     type = "naming";
-    constructor(public variableName: String, public assumption: Expression, public substeps: Step[], public inferenceApplication: any) {}
+    constructor(public variableName: String, public assumption: Expression, public statement: Expression, public substeps: Step[], public inference: any, public referencedLines: any) {}
     isIncomplete: boolean = _.some(this.substeps, "isIncomplete");
-    inferencesUsed: any[] = [..._.flatMap(this.substeps, s => s.inferencesUsed), this.inferenceApplication.inference];
+    inferencesUsed: any[] = [..._.flatMap(this.substeps, s => s.inferencesUsed), this.inference];
 }
 
 export class ElidedStep {
@@ -76,8 +76,10 @@ export const Step = {
                    return new NamingStep(
                        stepJson.variableName,
                        Expression.parseFromJson(stepJson.assumption),
+                       Expression.parseFromJson(stepJson.provenStatement),
                        Step.parseFromJson(stepJson.substeps),
-                       Parser.parseInferenceApplication(stepJson.finalInferenceApplication));
+                       Parser.parseInference(stepJson.inference),
+                       stepJson.referencedLines);
                case "target":
                    return new TargetStep(Expression.parseFromJson(stepJson.statement));
                case "elided":

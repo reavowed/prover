@@ -79,16 +79,6 @@ class BookController @Autowired() (bookService: BookService) {
       case _ =>
         None
     }
-    def extractStepsFromPremise(premise: Step.NewAssert.Premise.Expansion): Seq[Step] = {
-      extractStepsFromPremises(premise.premises) :+ Step.NewAssert(
-        premise.statement,
-        premise.inference,
-        premise.premises.map(p => Step.NewAssert.Premise.Pending(p.statement)),
-        premise.substitutions)
-    }
-    def extractStepsFromPremises(premises: Seq[Step.NewAssert.Premise]): Seq[Step] = {
-      premises.ofType[Step.NewAssert.Premise.Expansion].flatMap(extractStepsFromPremise)
-    }
     def replaceSteps(steps: Seq[Step], outerContext: StepContext): Seq[Step] = {
       steps.mapWithIndex {
         case (step @ Step.Assertion(statement, InferenceApplication.Direct(inference, substitutions, conclusion, references, _)), _) =>

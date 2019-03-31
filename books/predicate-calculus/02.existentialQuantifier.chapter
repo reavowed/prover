@@ -52,7 +52,7 @@ premise ∃ x with ($0) φ
 premise ∀ x ↔ with ($0) φ with ($0) ψ
 conclusion ∃ x with ($0) ψ
 {
-  let a with ($0) φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ x with ($0) ψ) () (with ($0) φ) () (direct p0, direct 0d) {
+  let a with ($0) φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ x with ($0) ψ) () (with ($0) φ) () {
     elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
       prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$0) φ with ($$0) ψ) ()
         given

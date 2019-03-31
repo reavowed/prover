@@ -14,7 +14,7 @@ theorem Singleton Existence
 conclusion ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a
 {
   prove ∃ x ∃ y ∈ $0 $$0 2cccf54c4f38ed8afb8227abf888c17e48598e20266c00a7f8d4977ba6408c73 () () () ()
-  let b ∃ y ∈ $0 $$0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! z ∀ x ↔ ∈ $0 $$0 = $0 a) () (∃ y ∈ $0 $$0) () (direct 0, direct 1d) {
+  let b ∃ y ∈ $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! z ∀ x ↔ ∈ $0 $$0 = $0 a) () (∃ y ∈ $0 $$0) () {
     prove ∃! x = $0 a c95bd5a48f1e634431831232959dc7b7ef2ed222c694cac5df9ed7f08eee333a () (a) () ()
     elided 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f {
       take y {
@@ -135,7 +135,7 @@ premise ⊆ S singleton a
 conclusion ⊕ = S singleton a = S ∅
 {
   assume ∃ y ∈ $0 S {
-    let b ∈ $0 S direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ a S) () (∈ $0 S) () (direct 3a, direct 3.0d) {
+    let b ∈ $0 S 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ a S) () (∈ $0 S) () {
       prove ∈ $0 singleton a ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (S, singleton a, $0) () ()
         given
         given

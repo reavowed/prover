@@ -143,8 +143,8 @@ conclusion ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
         given
       prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () ($0, A, B) () ()
         given
-      let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () (direct 1.0.1, direct 1.0.2d) {
-        let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () () () direct 1.0.2a (1), direct 1.0.2.0d) {
+      let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () {
+        let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () {
           prove ∈ orderedPair $$0 $0 f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$$0, orderedPair $$0 $0) (∈ $$$$0 f) ()
             simplified = $$$0 orderedPair $$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 B, = $$$0 orderedPair $$0 $0) () () ()
               given
@@ -168,7 +168,7 @@ conclusion ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
   }
   take x {
     assume ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 {
-      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 f) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0) () (direct 1.1a, direct 1.1.0d) {
+      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 f) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0) () {
         prove ∈ orderedPair $0 apply f $0 f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, $0) () ()
           given
           simplified ∈ $0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, = $$0 orderedPair $0 apply f $0) () () ()
@@ -205,7 +205,7 @@ conclusion = f g
     given
   take x {
     assume ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 {
-      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0) () (direct 2.0a, direct 2.0.0d) {
+      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0) () {
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
           prove → ∈ $0 A = apply f $0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 A = apply f $$$0 apply g $$$0) ()
             given
@@ -224,7 +224,7 @@ conclusion = f g
   }
   take x {
     assume ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 {
-      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply g $$0) () (direct 2.1a, direct 2.1.0d) {
+      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply g $$0) () {
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
           prove → ∈ $0 A = apply f $0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 A = apply f $$$0 apply g $$$0) ()
             given
@@ -313,7 +313,7 @@ conclusion ∃! f ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0
 theorem Function Space Is Unique
 conclusion ∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B
 {
-  let S = $0 comprehension f powerSet × A B function $0 A B direct cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B) (comprehension f powerSet × A B function $0 A B) () () (direct 0d) {
+  let S = $0 comprehension f powerSet × A B function $0 A B cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B) (comprehension f powerSet × A B function $0 A B) () () {
     take f {
       assume function $0 A B {
         prove ⊆ $0 × A B fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () ($0, A, B) () ()

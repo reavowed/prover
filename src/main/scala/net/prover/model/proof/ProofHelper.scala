@@ -39,7 +39,7 @@ object ProofHelper {
     getSimplifications(basePremises, simplificationInferences, stepContext)
   }
 
-  def findPremise(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): Option[NewAssert.Premise.SingleLinePremise] = {
-    getAvailablePremises(stepContext, parsingContext).find(_.statement == target)
+  def findPremise(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): NewAssert.Premise = {
+    getAvailablePremises(stepContext, parsingContext).find(_.statement == target).getOrElse(NewAssert.Premise.Pending(target))
   }
 }

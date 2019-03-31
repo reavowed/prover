@@ -4,7 +4,7 @@ theorem Intersection over a Class
 premise ∃ x with ($0) φ
 conclusion ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
 {
-  let a with ($0) φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) () (with ($0) φ) () (direct p0, direct 0d) {
+  let a with ($0) φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) () (with ($0) φ) () {
     take y {
       assume ∀ x → with ($0) φ ∈ $$0 $0 {
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
@@ -18,7 +18,7 @@ conclusion ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
       prove ↔ ∧ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 ∀ x → with ($0) φ ∈ $$0 $0 6301d09d66b0a087d37eb6fdfb57305fb0584d31883012474d1101001436cb7e (∀ x → with ($0) φ ∈ $$0 $0, ∈ $0 $$0) () () ()
         given
     }
-    let S = $0 comprehension z $$$0 ∀ x → with ($0) φ ∈ $$0 $0 direct cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) (comprehension z $$0 ∀ x → with ($0) φ ∈ $$0 $0) () () (direct 0.1d) {
+    let S = $0 comprehension z $$$0 ∀ x → with ($0) φ ∈ $$0 $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) (comprehension z $$0 ∀ x → with ($0) φ ∈ $$0 $0) () () {
       prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () ($0, $$0) (∀ x → with ($0) φ ∈ $$$$0 $0) ()
         given
       elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {

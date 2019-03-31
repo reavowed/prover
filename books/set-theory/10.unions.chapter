@@ -70,7 +70,7 @@ conclusion ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
     given
   take x {
     assume ∃ y ∧ ∈ $$0 $0 ∈ $0 pair a b {
-      let y ∧ ∈ $$0 $0 ∈ $0 pair a b direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∨ ∈ $0 a ∈ $0 b) () (∧ ∈ $0 $$0 ∈ $$0 pair a b) () (direct 2.0a, direct 2.0.0d) {
+      let y ∧ ∈ $$0 $0 ∈ $0 pair a b 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∨ ∈ $0 a ∈ $0 b) () (∧ ∈ $0 $$0 ∈ $$0 pair a b) () {
         prove ∨ = $0 a = $0 b b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () ($0, a, b) () ()
           simplified ∈ $0 pair a b 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 $0, ∈ $0 pair a b) () () ()
             given
@@ -235,7 +235,7 @@ conclusion ¬ = ∪ a b ∅
 {
   prove ∃ x ∈ $0 a 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (a) () ()
     given
-  let x ∈ $0 a direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (¬ = ∪ a b ∅) () (∈ $0 a) () (direct 0, direct 1d) {
+  let x ∈ $0 a 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (¬ = ∪ a b ∅) () (∈ $0 a) () {
     prove ∈ $0 ∪ a b d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () ($0, a, b) () ()
       given
     prove ¬ = ∪ a b ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () ($0, ∪ a b) () ()
@@ -249,7 +249,7 @@ conclusion ¬ = ∪ b a ∅
 {
   prove ∃ x ∈ $0 a 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (a) () ()
     given
-  let x ∈ $0 a direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (¬ = ∪ b a ∅) () (∈ $0 a) () (direct 0, direct 1d) {
+  let x ∈ $0 a 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (¬ = ∪ b a ∅) () (∈ $0 a) () {
     prove ∈ $0 ∪ b a 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () ($0, a, b) () ()
       given
     prove ¬ = ∪ b a ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () ($0, ∪ b a) () ()
@@ -471,7 +471,7 @@ conclusion ⊆ union A B
     assume ∈ $0 union A {
       prove ∃ a ∧ ∈ $$0 $0 ∈ $0 A 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () ($0, A) () ()
         given
-      let a ∧ ∈ $$0 $0 ∈ $0 A direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 B) () (∧ ∈ $0 $$0 ∈ $$0 A) () (direct 0.0.0, direct 0.0.1d) {
+      let a ∧ ∈ $$0 $0 ∈ $0 A 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 B) () (∧ ∈ $0 $$0 ∈ $$0 A) () {
         prove ∈ $0 powerSet B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (A, powerSet B, $0) () ()
           given
           simplified ∈ $0 A 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 $0, ∈ $0 A) () () ()

@@ -5,7 +5,7 @@ conclusion ∀ y ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 single
 {
   take y {
     assume ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b {
-      let x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∨ = $0 a = $0 b) () (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 a ∧ = $$0 ∅ = $0 b) () (direct 0.0a, direct 0.0.0d) {
+      let x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∨ = $0 a = $0 b) () (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 a ∧ = $$0 ∅ = $0 b) () {
         assume ∧ = $0 singleton ∅ = $$0 a {
           prove ∨ = $$0 a = $$0 b 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= $$0 a, = $$0 b) () () ()
             simplified = $$0 a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= $0 singleton ∅, = $$0 a) () () ()

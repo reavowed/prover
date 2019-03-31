@@ -160,7 +160,7 @@ class TheoremController @Autowired() (bookService: BookService) {
                   Failure(BadRequestException(s"Unrecognised direction $direction"))
               }
             }
-          }).mapMap(_.recalculateReferences(parsingContext))
+          })
       }
     }
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, parsingContext) =>
@@ -328,7 +328,7 @@ class TheoremController @Autowired() (bookService: BookService) {
   }
 
   private def createPremise(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): NewAssert.Premise = {
-    ProofHelper.findPremise(target, stepContext, parsingContext).getOrElse(NewAssert.Premise.Pending(target))
+    ProofHelper.findPremise(target, stepContext, parsingContext)
   }
 
   case class PathData(indexes: Seq[Int]) {
