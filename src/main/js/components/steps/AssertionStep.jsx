@@ -23,7 +23,7 @@ export class AssertionStep extends React.Component {
                       </>}
                       highlighting={highlighting}
                       apiService={apiService}
-                      incomplete={_.some(step.premises, "incomplete")}
+                      incomplete={step.isIncomplete}
       >
         Then
         {' '}

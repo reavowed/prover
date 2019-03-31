@@ -61,7 +61,7 @@ export const Step = {
                        [],
                        Parser.parseInference(stepJson.inferenceApplication.inference),
                        stepJson.referencedLines,
-                       false);
+                       true);
                case "deduction":
                    return new DeductionStep(
                        Expression.parseFromJson(stepJson.assumption),
