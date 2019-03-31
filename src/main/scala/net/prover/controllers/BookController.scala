@@ -59,7 +59,8 @@ class BookController @Autowired() (bookService: BookService) {
         ChapterProps(chapter, book),
         Map(
           "definitions" -> getDefinitionSummaries(parsingContext),
-          "displayShorthands" -> book.displayContext.displayShorthands))
+          "displayShorthands" -> book.displayContext.displayShorthands,
+          "definitionShorthands" -> getDefinitionShorthands(parsingContext)))
     }).toResponseEntity
   }
 
@@ -189,7 +190,7 @@ class BookController @Autowired() (bookService: BookService) {
           "definitions" -> getDefinitionSummaries(parsingContext),
           "displayShorthands" -> book.displayContext.displayShorthands,
           "transitivityInferences" -> parsingContext.transitivityInferences.map { case (d, i) => d.symbol -> i.id },
-          "definitionShorthands" -> (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).mapCollect(d => d.shorthand.map(_ -> d.symbol)).toMap))
+          "definitionShorthands" -> getDefinitionShorthands(parsingContext)))
     }).toResponseEntity
   }
 
@@ -235,6 +236,10 @@ class BookController @Autowired() (bookService: BookService) {
     (parsingContext.statementDefinitions ++ parsingContext.termDefinitions)
       .filter(_.componentTypes.nonEmpty)
       .map(d => d.symbol -> DefinitionSummary(d.symbol, d.format.baseFormatString, d.format.requiresBrackets, d.boundVariableNames.length, d.asOptionalInstanceOf[StatementDefinition].flatMap(_.structureType).map(_.serialized))).toMap
+  }
+
+  private def getDefinitionShorthands(parsingContext: ParsingContext): Map[String, String] = {
+    (parsingContext.statementDefinitions ++ parsingContext.termDefinitions).mapCollect(d => d.shorthand.map(_ -> d.symbol)).toMap
   }
 
   private def getUsages(entry: ChapterEntry, books: Seq[Book]) = {

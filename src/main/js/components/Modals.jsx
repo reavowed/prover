@@ -175,15 +175,6 @@ export class FindInferenceModal extends React.Component {
       this.updateForcedSubstitutionValues(selectedSubstitutionValues, selectedPremiseSuggestions);
     }
   };
-
-  replaceShorthands = (event) => {
-    var text = event.target.value;
-    _.each(_.toPairs(window.definitionShorthands), ([valueToReplace, symbol]) => {
-      let regex = new RegExp('\\b' + _.escapeRegExp(valueToReplace) + '(?=\\s$)', 'gim');
-      text = text.replace(regex, symbol);
-    });
-    return text;
-  };
   onInputKeyUp = (event) => {
     if (event.keyCode === 13 && this.readyToSubmit()) {
       this.submit();
@@ -207,7 +198,7 @@ export class FindInferenceModal extends React.Component {
       const selectionElement = !validValues ?
         <Form.Control type="text"
                       value={getter(this.state.selectedSubstitutionValues)}
-                      onChange={e => this.setSelectedSubstitutionValue(setter, this.replaceShorthands(e))}
+                      onChange={e => this.setSelectedSubstitutionValue(setter, Parser.replaceShorthands(e.target.value))}
                       onKeyUp={this.onInputKeyUp}
         /> :
         validValues.length === 1 ?

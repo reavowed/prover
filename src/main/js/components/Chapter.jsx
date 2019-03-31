@@ -172,12 +172,12 @@ export class Chapter extends React.Component {
   };
   updateTheoremPremises = (newPremises) => {
     const {theoremBeingAdded} = this.state;
-    theoremBeingAdded.premises = newPremises;
+    theoremBeingAdded.premises = Parser.replaceShorthands(newPremises);
     this.setState({theoremBeingAdded});
   };
   updateTheoremConclusion = (newConclusion) => {
     const {theoremBeingAdded} = this.state;
-    theoremBeingAdded.conclusion = newConclusion;
+    theoremBeingAdded.conclusion = Parser.replaceShorthands(newConclusion);
     this.setState({theoremBeingAdded});
   };
   saveTheorem = () => {
