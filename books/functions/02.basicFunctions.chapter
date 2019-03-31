@@ -3,37 +3,65 @@ Define some basic functions.
 theorem The Empty Set Is a Function with Empty Domain
 conclusion function ∅ ∅ A
 {
-  assert ⊆ ∅ × ∅ A direct 1bde69fc8b90a9ca85033f763d7edeaa761c9b52a26ea2e64796515496237aa9 () (× ∅ A) () () ()
-  assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
-  assert ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅ transformed bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (Y) Y () () (∈ $0 ∅, ∃! y ∈ orderedPair $$0 $0 ∅) () (direct 1)
-  assert function ∅ ∅ A direct be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (∅, ∅, A) () () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (⊆ ∅ × ∅ A, ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅) () () () (direct 0, direct 2))
+  prove ⊆ ∅ × ∅ A 1bde69fc8b90a9ca85033f763d7edeaa761c9b52a26ea2e64796515496237aa9 () (× ∅ A) () ()
+  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
+  elided bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 {
+    take x {
+      prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 ∅) ()
+        given
+      prove → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 ∅, ∃! y ∈ orderedPair $$0 $0 ∅) () () ()
+        given
+    }
+  }
+  elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
+    prove ∧ ⊆ ∅ × ∅ A ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ ∅ × ∅ A, ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅) () () ()
+      given
+      given
+    prove function ∅ ∅ A be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (∅, ∅, A) () ()
+      given
+  }
 }
 
 theorem Function with a Singleton Domain
 conclusion function singleton orderedPair a b singleton a singleton b
 {
-  assert ∈ a singleton a direct e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a) () () ()
-  assert ∈ b singleton b direct e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (b) () () ()
-  assert ∈ orderedPair a b × singleton a singleton b direct 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () (a, singleton a, b, singleton b) () () (direct 0, direct 1)
-  assert ⊆ singleton orderedPair a b × singleton a singleton b direct ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (orderedPair a b, × singleton a singleton b) () () (direct 2)
+  prove ∈ a singleton a e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a) () ()
+  prove ∈ b singleton b e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (b) () ()
+  prove ∈ orderedPair a b × singleton a singleton b 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () (a, singleton a, b, singleton b) () ()
+    given
+    given
+  prove ⊆ singleton orderedPair a b × singleton a singleton b ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (orderedPair a b, × singleton a singleton b) () ()
+    given
   take x {
     assume ∈ $0 singleton a {
-      assert = $0 a direct 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) () () (direct 4.0a)
+      prove = $0 a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) () ()
+        given
+      elided e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 {
+        prove ∈ orderedPair a b singleton orderedPair a b e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (orderedPair a b) () ()
+        prove ∈ orderedPair $0 b singleton orderedPair a b 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, a) (∈ orderedPair $$0 b singleton orderedPair a b) ()
+          given
+          given
+      }
       take y {
         assume ∈ orderedPair $$0 $0 singleton orderedPair a b {
-          assert = orderedPair $$0 $0 orderedPair a b direct 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () (orderedPair $$0 $0, orderedPair a b) () () (direct 4.0.1.0a)
-          assert = $0 b direct 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$0, $0, a, b) () () (direct 4.0.1.0.0)
-        }
-        assume = $0 b {
-          assert ∈ orderedPair a b singleton orderedPair a b direct e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (orderedPair a b) () () ()
-          assert ∈ orderedPair $$0 b singleton orderedPair a b direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, a) (∈ orderedPair $$$0 b singleton orderedPair a b) () (direct 4.0.0, direct 4.0.1.1.0)
-          assert ∈ orderedPair $$0 $0 singleton orderedPair a b direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, b) (∈ orderedPair $$0 $$$0 singleton orderedPair a b) () (direct 4.0.1.1a, direct 4.0.1.1.1)
+          prove = orderedPair $$0 $0 orderedPair a b 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () (orderedPair $$0 $0, orderedPair a b) () ()
+            given
+          prove = $0 b 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$0, $0, a, b) () ()
+            given
         }
       }
-      assert ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b direct 4bdd4c4c05b03bbab5920d1e6f4973a7784402c71237251140cc5eced776cf6f () (b) (∈ orderedPair $0 $$0 singleton orderedPair a b) () (expansion transformed 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 rearranged (Y Y) Y () () (∈ orderedPair $0 $$0 singleton orderedPair a b, = $$0 b) () (compound 4.0.1 compound 4.0.1.0a direct 4.0.1.0.1, compound 4.0.1 compound 4.0.1.1a direct 4.0.1.1.2))
+      prove ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (b) (∈ orderedPair $0 $$0 singleton orderedPair a b) ()
+        given
+        given
     }
   }
-  assert function singleton orderedPair a b singleton a singleton b direct be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (singleton orderedPair a b, singleton a, singleton b) () () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (⊆ singleton orderedPair a b × singleton a singleton b, ∀ x → ∈ $0 singleton a ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b) () () () (direct 3, compound 4 compound 4.0a direct 4.0.2))
+  elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
+    prove ∧ ⊆ singleton orderedPair a b × singleton a singleton b ∀ x → ∈ $0 singleton a ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ singleton orderedPair a b × singleton a singleton b, ∀ x → ∈ $0 singleton a ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b) () () ()
+      given
+      given
+    prove function singleton orderedPair a b singleton a singleton b be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (singleton orderedPair a b, singleton a, singleton b) () ()
+      given
+  }
 }
 
 theorem Combine Functions
@@ -42,66 +70,162 @@ premise function g C D
 premise ∀ x → ∈ $0 ∩ A C = apply f $0 apply g $0
 conclusion function ∪ f g ∪ A C ∪ B D
 {
-  assert ⊆ f × A B direct fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, A, B) () () (direct p0)
-  assert ⊆ × A B × ∪ A C B direct 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 () (A, ∪ A C, B) () () (elided direct f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 () (A, C) () () ())
-  assert ⊆ f × ∪ A C B direct 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, × A B, × ∪ A C B) () () (direct 0, direct 1)
-  assert ⊆ × ∪ A C B × ∪ A C ∪ B D direct f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d () (B, ∪ B D, ∪ A C) () () (elided direct f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 () (B, D) () () ())
-  assert ⊆ f × ∪ A C ∪ B D direct 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, × ∪ A C B, × ∪ A C ∪ B D) () () (direct 2, direct 3)
-  assert ⊆ g × C D direct fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (g, C, D) () () (direct p1)
-  assert ⊆ × C D × ∪ A C D direct 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 () (C, ∪ A C, D) () () (elided direct fabd15b89589c3bb4285a85675ac82a6d858eefc540651426a23b14961dc1da8 () (C, A) () () ())
-  assert ⊆ g × ∪ A C D direct 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (g, × C D, × ∪ A C D) () () (direct 5, direct 6)
-  assert ⊆ × ∪ A C D × ∪ A C ∪ B D direct f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d () (D, ∪ B D, ∪ A C) () () (elided direct fabd15b89589c3bb4285a85675ac82a6d858eefc540651426a23b14961dc1da8 () (D, B) () () ())
-  assert ⊆ g × ∪ A C ∪ B D direct 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (g, × ∪ A C D, × ∪ A C ∪ B D) () () (direct 7, direct 8)
-  assert ⊆ ∪ f g × ∪ A C ∪ B D direct 1e0fb866e80651443576b9a8daf2045425916c8ca2a52d3e9d66aed0c4927c2e () (f, × ∪ A C ∪ B D, g) () () (direct 4, direct 9)
+  prove ⊆ f × A B fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, A, B) () ()
+    given
+  elided 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 {
+    prove ⊆ A ∪ A C f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 () (A, C) () ()
+    prove ⊆ × A B × ∪ A C B 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 () (A, ∪ A C, B) () ()
+      given
+  }
+  prove ⊆ f × ∪ A C B 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, × A B, × ∪ A C B) () ()
+    given
+    given
+  elided f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d {
+    prove ⊆ B ∪ B D f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 () (B, D) () ()
+    prove ⊆ × ∪ A C B × ∪ A C ∪ B D f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d () (B, ∪ B D, ∪ A C) () ()
+      given
+  }
+  prove ⊆ f × ∪ A C ∪ B D 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, × ∪ A C B, × ∪ A C ∪ B D) () ()
+    given
+    given
+  prove ⊆ g × C D fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (g, C, D) () ()
+    given
+  elided 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 {
+    prove ⊆ C ∪ A C fabd15b89589c3bb4285a85675ac82a6d858eefc540651426a23b14961dc1da8 () (C, A) () ()
+    prove ⊆ × C D × ∪ A C D 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 () (C, ∪ A C, D) () ()
+      given
+  }
+  prove ⊆ g × ∪ A C D 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (g, × C D, × ∪ A C D) () ()
+    given
+    given
+  elided f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d {
+    prove ⊆ D ∪ B D fabd15b89589c3bb4285a85675ac82a6d858eefc540651426a23b14961dc1da8 () (D, B) () ()
+    prove ⊆ × ∪ A C D × ∪ A C ∪ B D f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d () (D, ∪ B D, ∪ A C) () ()
+      given
+  }
+  prove ⊆ g × ∪ A C ∪ B D 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (g, × ∪ A C D, × ∪ A C ∪ B D) () ()
+    given
+    given
+  prove ⊆ ∪ f g × ∪ A C ∪ B D 1e0fb866e80651443576b9a8daf2045425916c8ca2a52d3e9d66aed0c4927c2e () (f, × ∪ A C ∪ B D, g) () ()
+    given
+    given
   take x {
-    assume ∈ $0 ∪ A C {
-      assert ∨ ∈ $0 A ∈ $0 C direct cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () ($0, A, C) () () (direct 11.0a)
-      assume ∈ $0 A {
-        take y {
-          assume ∈ orderedPair $$0 $0 ∪ f g {
-            assert ∨ ∈ orderedPair $$0 $0 f ∈ orderedPair $$0 $0 g direct cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (orderedPair $$0 $0, f, g) () () (direct 11.0.1.0.0a)
-            assume ∈ orderedPair $$0 $0 f {
-              assert = $0 apply f $$0 direct bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, B, $$0, $0) () () (direct p0, direct 11.0.1.0.0.1a)
+    assume ∈ $0 A {
+      take y {
+        assume ∈ orderedPair $$0 $0 ∪ f g {
+          assume ∈ orderedPair $$0 $0 f {
+            prove = $0 apply f $$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, B, $$0, $0) () ()
+              given
+              given
+          }
+          assume ∈ orderedPair $$0 $0 g {
+            prove ∈ $$0 C 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () (g, C, D, $$0, $0) () ()
+              given
+              given
+            prove = $0 apply g $$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (g, C, D, $$0, $0) () ()
+              given
+              given
+            elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+              prove → ∈ $$0 ∩ A C = apply f $$0 apply g $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ∩ A C = apply f $$$0 apply g $$$0) ()
+                given
+              prove ∈ $$0 ∩ A C f6b140168c8fe9d0c02c45f1ad9e1787200d6b3f6bc5493b60c653483319a99f () ($$0, A, C) () ()
+                given
+                given
+              prove = apply f $$0 apply g $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ∩ A C, = apply f $$0 apply g $$0) () () ()
+                given
+                given
+              prove = apply g $$0 apply f $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f $$0, apply g $$0) () ()
+                given
             }
-            assume ∈ orderedPair $$0 $0 g {
-              assert ∈ $$0 C direct 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () (g, C, D, $$0, $0) () () (direct p1, direct 11.0.1.0.0.2a)
-              assert ∈ $$0 ∩ A C direct f6b140168c8fe9d0c02c45f1ad9e1787200d6b3f6bc5493b60c653483319a99f () ($$0, A, C) () () (direct 11.0.1a, direct 11.0.1.0.0.2.0)
-              assert = apply f $$0 apply g $$0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($$0) (∈ $$$0 ∩ A C, = apply f $$$0 apply g $$$0) () (direct p2, direct 11.0.1.0.0.2.1)
-              assert = $0 apply g $$0 direct bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (g, C, D, $$0, $0) () () (direct p1, direct 11.0.1.0.0.2a)
-              assert = $0 apply f $$0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply f $$0, apply g $$0) (= $0 $$$0) () (direct 11.0.1.0.0.2.2, direct 11.0.1.0.0.2.3)
-            }
-            assert = $0 apply f $$0 direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ orderedPair $$0 $0 f, ∈ orderedPair $$0 $0 g, = $0 apply f $$0) () () () (direct 11.0.1.0.0.0, compound 11.0.1.0.0.1a direct 11.0.1.0.0.1.0, compound 11.0.1.0.0.2a direct 11.0.1.0.0.2.4)
+            prove = $0 apply f $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($0, apply g $$0, apply f $$0) () ()
+              given
+              given
+          }
+          elided 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 {
+            prove ∨ ∈ orderedPair $$0 $0 f ∈ orderedPair $$0 $0 g cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (orderedPair $$0 $0, f, g) () ()
+              given
+            prove = $0 apply f $$0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ orderedPair $$0 $0 f, ∈ orderedPair $$0 $0 g, = $0 apply f $$0) () () ()
+              given
+              given
+              given
           }
         }
-        assert ∈ orderedPair $0 apply f $0 f direct 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, $0) () () (direct p0, direct 11.0.1a)
-        assert ∈ orderedPair $0 apply f $0 ∪ f g direct d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () (orderedPair $0 apply f $0, f, g) () () (direct 11.0.1.1)
-        assert ∃! y ∈ orderedPair $$0 $0 ∪ f g direct 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply f $0) (∈ orderedPair $0 $$0 ∪ f g) () (compound 11.0.1.0 compound 11.0.1.0.0a direct 11.0.1.0.0.3, direct 11.0.1.2)
       }
-      assume ∈ $0 C {
-        take y {
-          assume ∈ orderedPair $$0 $0 ∪ f g {
-            assert ∨ ∈ orderedPair $$0 $0 f ∈ orderedPair $$0 $0 g direct cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (orderedPair $$0 $0, f, g) () () (direct 11.0.2.0.0a)
-            assume ∈ orderedPair $$0 $0 f {
-              assert ∈ $$0 A direct 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () (f, A, B, $$0, $0) () () (direct p0, direct 11.0.2.0.0.1a)
-              assert ∈ $$0 ∩ A C direct f6b140168c8fe9d0c02c45f1ad9e1787200d6b3f6bc5493b60c653483319a99f () ($$0, A, C) () () (direct 11.0.2.0.0.1.0, direct 11.0.2a)
-              assert = apply f $$0 apply g $$0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($$0) (∈ $$$0 ∩ A C, = apply f $$$0 apply g $$$0) () (direct p2, direct 11.0.2.0.0.1.1)
-              assert = $0 apply f $$0 direct bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, B, $$0, $0) () () (direct p0, direct 11.0.2.0.0.1a)
-              assert = $0 apply g $$0 direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (apply f $$0, apply g $$0) (= $0 $$$0) () (direct 11.0.2.0.0.1.2, direct 11.0.2.0.0.1.3)
+      prove ∈ orderedPair $0 apply f $0 f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, $0) () ()
+        given
+        given
+      prove ∈ orderedPair $0 apply f $0 ∪ f g d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () (orderedPair $0 apply f $0, f, g) () ()
+        given
+      prove ∃! y ∈ orderedPair $$0 $0 ∪ f g 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply f $0) (∈ orderedPair $0 $$0 ∪ f g) ()
+        given
+        given
+    }
+    assume ∈ $0 C {
+      take y {
+        assume ∈ orderedPair $$0 $0 ∪ f g {
+          assume ∈ orderedPair $$0 $0 f {
+            prove ∈ $$0 A 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () (f, A, B, $$0, $0) () ()
+              given
+              given
+            prove = $0 apply f $$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, B, $$0, $0) () ()
+              given
+              given
+            elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+              prove → ∈ $$0 ∩ A C = apply f $$0 apply g $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ∩ A C = apply f $$$0 apply g $$$0) ()
+                given
+              prove ∈ $$0 ∩ A C f6b140168c8fe9d0c02c45f1ad9e1787200d6b3f6bc5493b60c653483319a99f () ($$0, A, C) () ()
+                given
+                given
+              prove = apply f $$0 apply g $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ∩ A C, = apply f $$0 apply g $$0) () () ()
+                given
+                given
             }
-            assume ∈ orderedPair $$0 $0 g {
-              assert = $0 apply g $$0 direct bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (g, C, D, $$0, $0) () () (direct p1, direct 11.0.2.0.0.2a)
-            }
-            assert = $0 apply g $$0 direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ orderedPair $$0 $0 f, ∈ orderedPair $$0 $0 g, = $0 apply g $$0) () () () (direct 11.0.2.0.0.0, compound 11.0.2.0.0.1a direct 11.0.2.0.0.1.4, compound 11.0.2.0.0.2a direct 11.0.2.0.0.2.0)
+            prove = $0 apply g $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($0, apply f $$0, apply g $$0) () ()
+              given
+              given
+          }
+          assume ∈ orderedPair $$0 $0 g {
+            prove = $0 apply g $$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (g, C, D, $$0, $0) () ()
+              given
+              given
+          }
+          elided 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 {
+            prove ∨ ∈ orderedPair $$0 $0 f ∈ orderedPair $$0 $0 g cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () (orderedPair $$0 $0, f, g) () ()
+              given
+            prove = $0 apply g $$0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ orderedPair $$0 $0 f, ∈ orderedPair $$0 $0 g, = $0 apply g $$0) () () ()
+              given
+              given
+              given
           }
         }
-        assert ∈ orderedPair $0 apply g $0 g direct 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (g, C, D, $0) () () (direct p1, direct 11.0.2a)
-        assert ∈ orderedPair $0 apply g $0 ∪ f g direct 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () (orderedPair $0 apply g $0, g, f) () () (direct 11.0.2.1)
-        assert ∃! y ∈ orderedPair $$0 $0 ∪ f g direct 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply g $0) (∈ orderedPair $0 $$0 ∪ f g) () (compound 11.0.2.0 compound 11.0.2.0.0a direct 11.0.2.0.0.3, direct 11.0.2.2)
       }
-      assert ∃! y ∈ orderedPair $$0 $0 ∪ f g direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 A, ∈ $0 C, ∃! y ∈ orderedPair $$0 $0 ∪ f g) () () () (direct 11.0.0, compound 11.0.1a direct 11.0.1.3, compound 11.0.2a direct 11.0.2.3)
+      prove ∈ orderedPair $0 apply g $0 g 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (g, C, D, $0) () ()
+        given
+        given
+      prove ∈ orderedPair $0 apply g $0 ∪ f g 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () (orderedPair $0 apply g $0, g, f) () ()
+        given
+      prove ∃! y ∈ orderedPair $$0 $0 ∪ f g 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply g $0) (∈ orderedPair $0 $$0 ∪ f g) ()
+        given
+        given
+    }
+    elided 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 {
+      assume ∈ $0 ∪ A C {
+        prove ∨ ∈ $0 A ∈ $0 C cde8542240bb9e5a86aa278567e73df0f38700b884300f7dfa76f865a8ffb7f0 () ($0, A, C) () ()
+          given
+        prove ∃! y ∈ orderedPair $$0 $0 ∪ f g 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 A, ∈ $0 C, ∃! y ∈ orderedPair $$0 $0 ∪ f g) () () ()
+          given
+          given
+          given
+      }
     }
   }
-  assert function ∪ f g ∪ A C ∪ B D direct be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (∪ f g, ∪ A C, ∪ B D) () () (expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (⊆ ∪ f g × ∪ A C ∪ B D, ∀ x → ∈ $0 ∪ A C ∃! y ∈ orderedPair $$0 $0 ∪ f g) () () () (direct 10, compound 11 compound 11.0a direct 11.0.3))
+  elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
+    prove ∧ ⊆ ∪ f g × ∪ A C ∪ B D ∀ x → ∈ $0 ∪ A C ∃! y ∈ orderedPair $$0 $0 ∪ f g bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ ∪ f g × ∪ A C ∪ B D, ∀ x → ∈ $0 ∪ A C ∃! y ∈ orderedPair $$0 $0 ∪ f g) () () ()
+      given
+      given
+    prove function ∪ f g ∪ A C ∪ B D be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (∪ f g, ∪ A C, ∪ B D) () ()
+      given
+  }
 }
 
 theorem Combine Disjoint Functions
@@ -112,7 +236,10 @@ conclusion function ∪ f g ∪ A C ∪ B D
 {
   assert ∀ x ¬ ∈ $0 ∩ A C direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (∩ A C, ∅) (∀ x ¬ ∈ $0 $$0) () (direct p2, elided direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ())
   assert ∀ x → ∈ $0 ∩ A C = apply f $0 apply g $0 transformed bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (Y) Y () () (∈ $0 ∩ A C, = apply f $0 apply g $0) () (direct 0)
-  assert function ∪ f g ∪ A C ∪ B D direct 84d60be1086176b05a501f7c25c4700c759d3c47900300f6d0da4d1cd3f749b9 () (f, A, B, g, C, D) () () (direct p0, direct p1, direct 1)
+  prove function ∪ f g ∪ A C ∪ B D 84d60be1086176b05a501f7c25c4700c759d3c47900300f6d0da4d1cd3f749b9 () (f, A, B, g, C, D) () ()
+    given
+    given
+    given
 }
 
 theorem Extending a Function by One Value
@@ -124,14 +251,22 @@ conclusion function ∪ f singleton orderedPair a b ∪ A singleton a B
   take x {
     assume ∈ $0 A {
       assume ∈ $0 singleton a {
-        assert = $0 a direct 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) () () (direct 0.0.0a)
-        assert ∈ a A direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (∈ $$0 A) () (direct 0.0.0.0, direct 0.0a)
+        prove = $0 a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) () ()
+          given
+        prove ∈ a A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (∈ $$0 A) ()
+          given
+          given
       }
-      assert ¬ ∈ $0 singleton a direct 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ $0 singleton a, ∈ a A) () () () (compound 0.0.0a direct 0.0.0.1, direct p1)
+      prove ¬ ∈ $0 singleton a 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ $0 singleton a, ∈ a A) () () ()
+        given
+        given
     }
   }
   assert = ∩ A singleton a ∅ direct b80bb75d6dc623394f9f9d5d78b00f112d814f0a5a1aa3c718cc6420f534a673 () (A, singleton a) () () (compound 0 compound 0.0a direct 0.0.1)
-  assert function singleton orderedPair a b singleton a singleton b direct f0d91f99346599d36374a0a7767b7eefdc44886e1fb4a5734feac36206c18b19 () (a, b) () () ()
-  assert function ∪ f singleton orderedPair a b ∪ A singleton a ∪ B singleton b direct e2f633104c964ecbacd79bcc49c6e70fdf95ecd644e15d06dca95ceea43313a1 () (f, A, B, singleton orderedPair a b, singleton a, singleton b) () () (direct p0, direct 2, direct 1)
+  prove function singleton orderedPair a b singleton a singleton b f0d91f99346599d36374a0a7767b7eefdc44886e1fb4a5734feac36206c18b19 () (a, b) () ()
+  prove function ∪ f singleton orderedPair a b ∪ A singleton a ∪ B singleton b e2f633104c964ecbacd79bcc49c6e70fdf95ecd644e15d06dca95ceea43313a1 () (f, A, B, singleton orderedPair a b, singleton a, singleton b) () ()
+    given
+    given
+    given
   assert function ∪ f singleton orderedPair a b ∪ A singleton a B direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∪ B singleton b, B) (function ∪ f singleton orderedPair a b ∪ A singleton a $0) () (elided direct bf90281de90230ec1d059bbd0e55d08bda536855c195bcd6d6a18931f54f9007 () (b, B) () () (direct p2), direct 3)
 }
