@@ -63,10 +63,14 @@ class TheoremController @Autowired() (bookService: BookService) {
       parsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
       inference <- findInference(inferenceId)(parsingContext)
     } yield {
+      val possibleConclusionSubstitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
       val availablePremises = ProofHelper.getAvailablePremises(stepContext, parsingContext)
       inference.premises.map { premise =>
         availablePremises.mapCollect { availablePremise =>
-          val substitutions = premise.statement.calculateSubstitutions(availablePremise.statement, Substitutions.empty, 0, stepContext.externalDepth)
+          val substitutions = for {
+            conclusionSubstitutions <- possibleConclusionSubstitutions
+            premiseSubstitutions <- premise.statement.calculateSubstitutions(availablePremise.statement, conclusionSubstitutions, 0, stepContext.externalDepth)
+          } yield premiseSubstitutions
           if (substitutions.nonEmpty) {
             Some(PossiblePremiseMatch(availablePremise.statement, substitutions))
           } else {
