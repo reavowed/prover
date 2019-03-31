@@ -10,7 +10,13 @@ export class ElidedStep extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
-      showProofCard: false
+      showProofCard: this.props.step.isIncomplete
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!this.props.step.isIncomplete && prevProps.step.isIncomplete) {
+      this.setState({showProofCard: false});
     }
   }
 
