@@ -92,7 +92,7 @@ export class FunctionParameter {
 export class ExpressionApplication {
   constructor(public name: string, public components: Expression[]) {}
   serialize() {
-    return `with (${_.map(this.components, a => a.serialize())}) ${this.name}`
+    return `with (${this.components.map(a => a.serialize()).join(" ")}) ${this.name}`
   }
   formatForHtml() {
     return this.name + "(" + this.components.map((_, i) => "%" + i).join(", ") + ")";
