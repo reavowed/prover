@@ -1,36 +1,61 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
+import styled from "styled-components";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {BoundVariableModal, FindInferenceModal} from "../Modals";
 import {ProofLine} from "./ProofLine";
+
+const EditableBoundVariable = styled.span`
+  &:hover {
+    color: red;
+    cursor: pointer;
+  }
+`;
 
 export class TargetStep extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      showBoundVariableModal: false,
+      boundVariableModalCallback: null,
       showFindInferenceModal: false,
-      boundVariableName: props.step.statement.boundVariableNames && props.step.statement.boundVariableNames[0] || ""
+      boundVariableName: ""
     };
   }
 
-  showBoundVariableModal = () => {
-    this.setState({showBoundVariableModal: true})
-  };
-
+  isShowingBoundVariableModal = () => this.state.boundVariableModalCallback != null;
   hideBoundVariableModal = () => {
-    this.setState({showBoundVariableModal: false})
+    this.setState({boundVariableModalCallback: null})
   };
-
   updateBoundVariableName = (event) => {
     this.setState({boundVariableName: event.target.value})
   };
 
+  startIntroducingBoundVariable= () => {
+    this.setState({
+      boundVariableModalCallback: this.introduceBoundVariable,
+      boundVariableName: props.step.statement.boundVariableNames && props.step.statement.boundVariableNames[0] || ""
+    });
+  };
   introduceBoundVariable = () => {
     this.props.apiService.fetchJsonForStep(this.props.path, "introduceBoundVariable", {
       method: "POST",
       body: this.state.boundVariableName
     }).then(this.props.apiService.updateTheorem);
+  };
+
+  startUpdatingBoundVariable = (boundVariableName, boundVariableIndex, boundVariablePath) => {
+    this.setState({
+      boundVariableModalCallback: () => this.updateBoundVariable(boundVariableIndex, boundVariablePath),
+      boundVariableName
+    });
+  };
+  updateBoundVariable = (boundVariableIndex, boundVariablePath) => {
+    this.props.apiService.fetchJsonForStep(this.props.path, `boundVariables/${boundVariablePath.join(".")}/${boundVariableIndex}/`, {
+      method: "PUT",
+      body: this.state.boundVariableName
+    })
+      .then(this.props.apiService.updateTheorem)
+      .then(this.hideBoundVariableModal);
   };
 
   showFindInferenceModal = () => {
@@ -74,19 +99,24 @@ export class TargetStep extends React.Component {
     let scopingStatement = _.find(window.definitions, d => d.structureType === "scoping");
     let deductionStatement = _.find(window.definitions, d => d.structureType === "deduction");
 
-    const boundVariableModal = <BoundVariableModal show={this.state.showBoundVariableModal}
+    const boundVariableModal = <BoundVariableModal show={this.isShowingBoundVariableModal()}
                                                    onHide={this.hideBoundVariableModal}
                                                    title="Introduce bound variable"
                                                    value={this.state.boundVariableName}
                                                    onChange={this.updateBoundVariableName}
-                                                   onSave={this.introduceBoundVariable}/>;
+                                                   onSave={this.state.boundVariableModalCallback}/>;
+    const wrapEditableBoundVariable = (boundVariableContent, boundVariableName, boundVariableIndex, boundVariablePath) =>
+      <EditableBoundVariable
+        onClick={() => this.startUpdatingBoundVariable(boundVariableName, boundVariableIndex, boundVariablePath)}>
+        {boundVariableContent}
+      </EditableBoundVariable>;
 
     const buttons = (
       <>
         <Button variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</Button>
         {!elided && <Button variant="success" size="sm" className="ml-1" onClick={this.elide}>Elide</Button>}
         {scopingStatement && step.statement.definition === scopingStatement &&
-        <Button variant="success" size="sm" className="ml-1" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
+        <Button variant="success" size="sm" className="ml-1" onClick={this.startIntroducingBoundVariable}>Introduce bound variable</Button>}
         {deductionStatement && step.statement.definition === deductionStatement &&
         <Button variant="success" size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
       </>
@@ -101,6 +131,7 @@ export class TargetStep extends React.Component {
         Then <HighlightableExpression statement={step.statement}
                                       boundVariableLists={boundVariableLists}
                                       references={[...additionalReferences, reference]}
+                                      wrapBoundVariable={wrapEditableBoundVariable}
                                       highlighting={highlighting}
         />.
       </ProofLine>

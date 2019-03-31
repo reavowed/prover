@@ -64,15 +64,15 @@ class TheoremController @Autowired() (bookService: BookService) {
       inference <- findInference(inferenceId)(parsingContext)
     } yield {
       val possibleConclusionSubstitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
-      val availablePremises = ProofHelper.getAvailablePremises(stepContext, parsingContext)
+      val availablePremises = ProofHelper.getAvailablePremises(stepContext, parsingContext).map(_.statement).distinct
       inference.premises.map { premise =>
         availablePremises.mapCollect { availablePremise =>
           val substitutions = for {
             conclusionSubstitutions <- possibleConclusionSubstitutions
-            premiseSubstitutions <- premise.calculateSubstitutions(availablePremise.statement, conclusionSubstitutions, 0, stepContext.externalDepth)
+            premiseSubstitutions <- premise.calculateSubstitutions(availablePremise, conclusionSubstitutions, 0, stepContext.externalDepth)
           } yield premiseSubstitutions
           if (substitutions.nonEmpty) {
-            Some(PossiblePremiseMatch(availablePremise.statement, substitutions))
+            Some(PossiblePremiseMatch(availablePremise, substitutions))
           } else {
             None
           }
@@ -244,6 +244,24 @@ class TheoremController @Autowired() (bookService: BookService) {
     replaceStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
       val targetStatements = step.pendingPremises.values.map(_.statement).toSeq
       Success(targetStatements.map(Step.Target(_)) :+ step)
+    }.toResponseEntity
+  }
+
+  @PutMapping(value = Array(
+    "/{stepPath}/boundVariables/{boundVariableIndex}",
+    "/{stepPath}/boundVariables/{statementPath}/{boundVariableIndex}"))
+  def renameBoundVariableInStep(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData,
+    @PathVariable(value = "statementPath", required = false) statementPath: PathData,
+    @PathVariable("boundVariableIndex") boundVariableIndex: Int,
+    @RequestBody boundVariableName: String
+  ): ResponseEntity[_] = {
+    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
+      step.statement.renameBoundVariable(boundVariableName, boundVariableIndex, Option(statementPath).map(_.indexes).getOrElse(Nil)).orNotFound(s"Bound variable $boundVariableIndex at $statementPath")
+        .map(newStatement => step.copy(statement = newStatement))
     }.toResponseEntity
   }
 
