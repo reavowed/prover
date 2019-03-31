@@ -7,7 +7,7 @@ conclusion ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
   let a with ($0) φ direct 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) () (with ($0) φ) () (direct p0, direct 0d) {
     take y {
       assume ∀ x → with ($0) φ ∈ $$0 $0 {
-        elided {
+        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
           prove → with ($$0) φ ∈ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ with ($$$0) φ ∈ $0 $$$0) ()
             given
           prove ∈ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($$0) φ, ∈ $0 $$0) () () ()
@@ -21,7 +21,7 @@ conclusion ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
     let S = $0 comprehension z $$$0 ∀ x → with ($0) φ ∈ $$0 $0 direct cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) (comprehension z $$0 ∀ x → with ($0) φ ∈ $$0 $0) () () (direct 0.1d) {
       prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () ($0, $$0) (∀ x → with ($0) φ ∈ $$$$0 $0) ()
         given
-      elided {
+      elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
         take y {
           prove ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$$0 $$0 ∧ ∈ $$$$0 $$$0 ∀ x → with ($0) φ ∈ $$$$$0 $0) ()
             given
@@ -69,9 +69,21 @@ conclusion ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b
   take x {
     assume ∀ y → ∈ $0 pair a b ∈ $$0 $0 {
       prove ∈ a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b) () ()
-      assert ∈ $0 a transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (a) (∈ $$0 pair a b, ∈ $0 $$0) () (direct 2.0a, direct 2.0.0)
+      elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+        prove → ∈ a pair a b ∈ $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (→ ∈ $$0 pair a b ∈ $0 $$0) ()
+          given
+        prove ∈ $0 a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a pair a b, ∈ $0 a) () () ()
+          given
+          given
+      }
       prove ∈ b pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () ()
-      assert ∈ $0 b transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (b) (∈ $$0 pair a b, ∈ $0 $$0) () (direct 2.0a, direct 2.0.2)
+      elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+        prove → ∈ b pair a b ∈ $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (→ ∈ $$0 pair a b ∈ $0 $$0) ()
+          given
+        prove ∈ $0 b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b pair a b, ∈ $0 b) () () ()
+          given
+          given
+      }
       prove ∧ ∈ $0 a ∈ $0 b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 a, ∈ $0 b) () () ()
         given
         given
@@ -98,13 +110,35 @@ conclusion ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b
         }
       }
       prove ∀ y ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b) () ()
-      assert ∀ y → ∈ $0 pair a b ∈ $$0 $0 transformed 05be0af438db5ac136aa592c728307d7245a00ec32e576d2b1fe8e3c3bd6e0e9 (Y Y) Y () () (∈ $$0 pair a b, ∨ = $$0 a = $$0 b, ∈ $0 $$0) () (direct 2.1.1, compound 2.1.0 compound 2.1.0.2a direct 2.1.0.2.0)
+      elided 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 {
+        take y {
+          prove ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 pair a b ∨ = $$$0 a = $$$0 b) ()
+            given
+          prove → ∈ $0 pair a b ∨ = $0 a = $0 b f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 pair a b, ∨ = $0 a = $0 b) () () ()
+            given
+          prove → ∨ = $0 a = $0 b ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∨ = $$$0 a = $$$0 b ∈ $$0 $$$0) ()
+            given
+          prove → ∈ $0 pair a b ∈ $$0 $0 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (∈ $0 pair a b, ∨ = $0 a = $0 b, ∈ $$0 $0) () () ()
+            given
+            given
+        }
+      }
     }
     prove ↔ ∀ y → ∈ $0 pair a b ∈ $$0 $0 ∧ ∈ $0 a ∈ $0 b 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ y → ∈ $0 pair a b ∈ $$0 $0, ∧ ∈ $0 a ∈ $0 b) () () ()
       given
       given
   }
-  assert ∀ x ↔ ∈ $0 intersection pair a b ∧ ∈ $0 a ∈ $0 b transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $0 intersection pair a b, ∀ y → ∈ $0 pair a b ∈ $$0 $0, ∧ ∈ $0 a ∈ $0 b) () (direct 1, compound 2 direct 2.2)
+  elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+    take x {
+      prove ↔ ∈ $0 intersection pair a b ∀ y → ∈ $0 pair a b ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 intersection pair a b ∀ y → ∈ $0 pair a b ∈ $$$0 $0) ()
+        given
+      prove ↔ ∀ y → ∈ $0 pair a b ∈ $$0 $0 ∧ ∈ $0 a ∈ $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∀ y → ∈ $0 pair a b ∈ $$$0 $0 ∧ ∈ $$0 a ∈ $$0 b) ()
+        given
+      prove ↔ ∈ $0 intersection pair a b ∧ ∈ $0 a ∈ $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 intersection pair a b, ∀ y → ∈ $0 pair a b ∈ $$0 $0, ∧ ∈ $0 a ∈ $0 b) () () ()
+        given
+        given
+    }
+  }
   prove = ∩ a b intersection pair a b 526cf0b0946fc0f192ef24c8fe6bdaac82003702c32545dd39660e026823bb29 () (a, b) () ()
   prove ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (∩ a b, intersection pair a b) (∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 a ∈ $0 b) ()
     given
@@ -116,7 +150,15 @@ premise ∈ a ∩ A B
 conclusion ∧ ∈ a A ∈ a B
 {
   prove ∀ y ↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (A, B) () ()
-  assert ∧ ∈ a A ∈ a B transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (a) (∈ $0 ∩ A B, ∧ ∈ $0 A ∈ $0 B) () (direct 0, direct p0)
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ a ∩ A B ∧ ∈ a A ∈ a B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B) ()
+      given
+    prove → ∈ a ∩ A B ∧ ∈ a A ∈ a B f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ a ∩ A B, ∧ ∈ a A ∈ a B) () () ()
+      given
+    prove ∧ ∈ a A ∈ a B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a ∩ A B, ∧ ∈ a A ∈ a B) () () ()
+      given
+      given
+  }
 }
 
 theorem Binary Intersection Is Symmetric
@@ -124,7 +166,11 @@ conclusion = ∩ a b ∩ b a
 {
   prove ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (a, b) () ()
   prove ∀ x ↔ ∈ $0 ∩ b a ∧ ∈ $0 b ∈ $0 a 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (b, a) () ()
-  assert ∀ x ↔ ∧ ∈ $0 a ∈ $0 b ∧ ∈ $0 b ∈ $0 a transformed ceda842906abdc74679aabcef2c6848746135351212be45dd529a31e12e21892 () Y () () (∈ $0 a, ∈ $0 b) () ()
+  elided ceda842906abdc74679aabcef2c6848746135351212be45dd529a31e12e21892 {
+    take x {
+      prove ↔ ∧ ∈ $0 a ∈ $0 b ∧ ∈ $0 b ∈ $0 a ceda842906abdc74679aabcef2c6848746135351212be45dd529a31e12e21892 (∈ $0 a, ∈ $0 b) () () ()
+    }
+  }
   prove = ∩ a b ∩ b a 4b83926de252406c08777885e14c3c906028ee3c7fb53340249ba1eb1ada4d4d () (∩ a b, ∩ b a) (∧ ∈ $0 a ∈ $0 b, ∧ ∈ $0 b ∈ $0 a) ()
     given
     given
@@ -137,7 +183,18 @@ premise ∈ a B
 conclusion ∈ a ∩ A B
 {
   prove ∀ x ↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (A, B) () ()
-  assert ∈ a ∩ A B transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (a) (∈ $0 ∩ A B, ∧ ∈ $0 A ∈ $0 B) () (direct 0, expansion direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ a A, ∈ a B) () () () (direct p0, direct p1))
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ a ∩ A B ∧ ∈ a A ∈ a B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B) ()
+      given
+    prove → ∧ ∈ a A ∈ a B ∈ a ∩ A B 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ a ∩ A B, ∧ ∈ a A ∈ a B) () () ()
+      given
+    prove ∧ ∈ a A ∈ a B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a A, ∈ a B) () () ()
+      given
+      given
+    prove ∈ a ∩ A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ a A ∈ a B, ∈ a ∩ A B) () () ()
+      given
+      given
+  }
 }
 
 theorem A Set Can Only Be an Element of One of a Disjoint Pair
@@ -201,7 +258,13 @@ conclusion = ∩ A B ∅
         given
       prove ∈ $0 B 5fecea1e57a95e4064274ac5dede19744c44a8f63e36ce07662cbaa577e956db () ($0, A, B) () ()
         given
-      assert ¬ ∈ $0 B transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($0) (∈ $$0 A, ¬ ∈ $$0 B) () (direct p0, direct 0.0.0)
+      elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+        prove → ∈ $0 A ¬ ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 A ¬ ∈ $$0 B) ()
+          given
+        prove ¬ ∈ $0 B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ¬ ∈ $0 B) () () ()
+          given
+          given
+      }
       prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∈ $0 B) () () ()
         given
         given

@@ -1,11 +1,8 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
-import Popover from "react-bootstrap/Popover";
-import {FlexRow} from "../FlexRow";
-import {BoundVariableModal, FindInferenceModal} from "../Modals";
-import {DeleteStepButton} from "./DeleteStepButton";
-import {ProofLine} from "./ProofLine";
 import {HighlightableExpression} from "../ExpressionComponent";
+import {BoundVariableModal, FindInferenceModal} from "../Modals";
+import {ProofLine} from "./ProofLine";
 
 export class TargetStep extends React.Component {
   constructor(props, context) {
@@ -72,7 +69,7 @@ export class TargetStep extends React.Component {
   };
 
   render() {
-    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists, onPopover} = this.props;
+    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists, elided} = this.props;
     let reference = path.join(".");
     let scopingStatement = _.find(window.definitions, d => d.structureType === "scoping");
     let deductionStatement = _.find(window.definitions, d => d.structureType === "deduction");
@@ -84,21 +81,20 @@ export class TargetStep extends React.Component {
                                                    onChange={this.updateBoundVariableName}
                                                    onSave={this.introduceBoundVariable}/>;
 
-    const popover = (
-      <Popover title={<FlexRow><FlexRow.Grow>Statement to prove</FlexRow.Grow><DeleteStepButton path={path} apiService={apiService}/></FlexRow>}>
+    const buttons = (
+      <>
         <Button variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</Button>
-        <Button variant="success" size="sm" className="ml-1" onClick={this.elide}>Elide</Button>
+        {!elided && <Button variant="success" size="sm" className="ml-1" onClick={this.elide}>Elide</Button>}
         {scopingStatement && step.statement.definition === scopingStatement &&
         <Button variant="success" size="sm" className="ml-1" onClick={this.showBoundVariableModal}>Introduce bound variable</Button>}
         {deductionStatement && step.statement.definition === deductionStatement &&
         <Button variant="success" size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
-      </Popover>
+      </>
     );
     return <>
       <ProofLine incomplete
                  path={path}
-                 onPopover={onPopover}
-                 popover={popover}
+                 buttons={buttons}
                  blockHide={this.state.showFindInferenceModal}
                  apiService={apiService}
                  highlighting={highlighting}>

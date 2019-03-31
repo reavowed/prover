@@ -4,6 +4,7 @@ import {HighlightableExpression} from "../ExpressionComponent";
 import {AssertionStep} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
 import {ElidedStep} from "./ElidedStep";
+import {InferenceLink} from "./InferenceLink";
 import {NamingStep} from "./NamingStep";
 import {ScopedVariableStep} from "./ScopedVariableStep";
 import {TargetStep} from "./TargetStep";
@@ -29,7 +30,7 @@ class TransitiveSteps extends React.Component {
   }
 
   render() {
-    const {leftHandSide, symbol, rightHandSides, highlighting, onPopover, apiService, boundVariableLists} = this.props;
+    const {leftHandSide, symbol, rightHandSides, highlighting, apiService, boundVariableLists} = this.props;
 
     const renderRightHandSide = (rightHandSide, index) => {
       const nextRightHandSide = rightHandSides[index + 1];
@@ -50,11 +51,7 @@ class TransitiveSteps extends React.Component {
     return <>
       <ProofLine premiseReferences={leftHandSide.step.referencedLines}
                  path={leftHandSide.path}
-                 onPopover={onPopover}
-                 popover={<AssertionStep.Popover step={leftHandSide.step}
-                                                 path={leftHandSide.path}
-                                                 apiService={apiService}
-                                                 boundVariableLists={boundVariableLists}/>}
+                 buttons={<InferenceLink inference={rightHandSides[0].step.inference}/>}
                  highlighting={highlighting}
                  apiService={apiService}>
         <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
@@ -68,11 +65,7 @@ class TransitiveSteps extends React.Component {
         return <div className="mb-1">
           <ProofLine premiseReferences={rightHandSide.step.referencedLines}
                      path={rightHandSide.path}
-                     onPopover={onPopover}
-                     popover={<AssertionStep.Popover step={rightHandSide.step}
-                                                     path={rightHandSide.path}
-                                                     apiService={apiService}
-                                                     boundVariableLists={boundVariableLists}/>}
+                     buttons={<InferenceLink inference={rightHandSide.step.inference}/>}
                      highlighting={highlighting}
                      apiService={apiService}>
             <span ref={this.setSpacerRef}/>

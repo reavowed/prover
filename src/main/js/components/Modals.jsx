@@ -134,21 +134,18 @@ export class FindInferenceModal extends React.Component {
       )
     );
   };
-  getPossibleSubstitutionsLists = (selectedPremiseSuggestions) => {
+  getPossibleSubstitutionsLists = (selectedPremiseSuggestions, selectedSubstitutionValues) => {
     return this.filterBySelectedSubstitutionValues(
       [this.state.selectedInferenceSuggestion.substitutions, ..._.filter(_.map(selectedPremiseSuggestions, s => s[1]))],
       this.state.selectedInferenceSuggestion.requiredSubstitutions,
-      this.state.selectedSubstitutionValues
+      selectedSubstitutionValues
     );
   };
 
   getValidSubstitutionValues = (type, name, numberOfParameters) => {
     const selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
     numberOfParameters ? selectedSubstitutionValues[type][name][numberOfParameters] = "" : selectedSubstitutionValues[type][name] = "";
-    const compatibleSubstitutions = this.filterBySelectedSubstitutionValues(
-      this.getPossibleSubstitutionsLists(this.state.selectedPremiseSuggestions),
-      this.state.selectedInferenceSuggestion.requiredSubstitutions,
-      selectedSubstitutionValues);
+    const compatibleSubstitutions = this.getPossibleSubstitutionsLists(this.state.selectedPremiseSuggestions, selectedSubstitutionValues);
     const allSelectableValues = this.getAllSelectableSubstitutionValues(compatibleSubstitutions, this.state.selectedInferenceSuggestion.requiredSubstitutions)
     return numberOfParameters ? allSelectableValues[type][name][numberOfParameters] : allSelectableValues[type][name];
   };
@@ -167,15 +164,16 @@ export class FindInferenceModal extends React.Component {
     this.setState({selectedSubstitutionValues, selectedPremiseSuggestions})
   };
   updateForcedSubstitutionValues = (selectedSubstitutionValues, selectedPremiseSuggestions) => {
-    const compatibleSubstitutions = this.filterBySelectedSubstitutionValues(
-      this.getPossibleSubstitutionsLists(selectedPremiseSuggestions),
-      this.state.selectedInferenceSuggestion.requiredSubstitutions,
-      selectedSubstitutionValues);
-    const forcedSubstitutionValues = this.getAllForcedSubstitutionValues(
-      compatibleSubstitutions,
-      this.state.selectedInferenceSuggestion.requiredSubstitutions,
-      selectedPremiseSuggestions);
-    _.merge(selectedSubstitutionValues, forcedSubstitutionValues);
+    const compatibleSubstitutions = this.getPossibleSubstitutionsLists(selectedPremiseSuggestions, selectedSubstitutionValues);
+    const forcedSubstitutionValues = this.getAllForcedSubstitutionValues(compatibleSubstitutions, this.state.selectedInferenceSuggestion.requiredSubstitutions);
+    const areAnyNewValuesForced = _.some(getAllRequiredPaths( this.state.selectedInferenceSuggestion.requiredSubstitutions), path => {
+      const forcedValue = getAtPath(forcedSubstitutionValues, path);
+      return forcedValue && forcedValue !== getAtPath(selectedSubstitutionValues, path)
+    });
+    if (areAnyNewValuesForced) {
+      _.merge(selectedSubstitutionValues, forcedSubstitutionValues);
+      this.updateForcedSubstitutionValues(selectedSubstitutionValues, selectedPremiseSuggestions);
+    }
   };
 
   replaceShorthands = (event) => {
@@ -185,6 +183,13 @@ export class FindInferenceModal extends React.Component {
       text = text.replace(regex, symbol);
     });
     return text;
+  };
+  onInputKeyUp = (event) => {
+    if (event.keyCode === 13 && this.readyToSubmit()) {
+      this.submit();
+    }
+    event.preventDefault();
+    event.stopPropagation();
   };
 
   readyToSubmit() {
@@ -200,7 +205,11 @@ export class FindInferenceModal extends React.Component {
     }
     let showSubstitutionOptions = (name, key, validValues, boundVariableLists, getter, setter) => {
       const selectionElement = !validValues ?
-        <Form.Control type="text" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, this.replaceShorthands(e))}/> :
+        <Form.Control type="text"
+                      value={getter(this.state.selectedSubstitutionValues)}
+                      onChange={e => this.setSelectedSubstitutionValue(setter, this.replaceShorthands(e))}
+                      onKeyUp={this.onInputKeyUp}
+        /> :
         validValues.length === 1 ?
           <Form.Label column><ExpressionComponent expression={validValues[0]} boundVariableLists={boundVariableLists} /></Form.Label> :
           <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)}>

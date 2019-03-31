@@ -53,7 +53,17 @@ conclusion ∀ x ↔ ∈ $0 × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 
     prove ↔ ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6301d09d66b0a087d37eb6fdfb57305fb0584d31883012474d1101001436cb7e (∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0, ∈ $0 powerSet powerSet ∪ A B) () () ()
       given
   }
-  assert ∀ x ↔ ∈ $0 × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 transformed e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (Y Y) Y () () (∈ $0 × A B, ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () (direct 1, compound 2 direct 2.1)
+  elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+    take x {
+      prove ↔ ∈ $0 × A B ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 × A B ∧ ∈ $$0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$0 $0) ()
+        given
+      prove ↔ ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∧ ∈ $$0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$0 $0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$0 $0) ()
+        given
+      prove ↔ ∈ $0 × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 × A B, ∧ ∈ $0 powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () () ()
+        given
+        given
+    }
+  }
 }
 
 theorem Element of Cartesian Product
@@ -61,7 +71,15 @@ premise ∈ X × A B
 conclusion ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0
 {
   prove ∀ x ↔ ∈ $0 × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 78664a4d74f0bfa211302b1958d00d7631c52b8411466a93b900f16b87412b96 () (A, B) () ()
-  assert ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0 transformed be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (Y N) N () (X) (∈ $0 × A B, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () (direct 0, direct p0)
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ X × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (X) (↔ ∈ $0 × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) ()
+      given
+    prove → ∈ X × A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ X × A B, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0) () () ()
+      given
+    prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ X × A B, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0) () () ()
+      given
+      given
+  }
 }
 
 theorem Membership Condition for Cartesian Product
@@ -109,7 +127,15 @@ conclusion ∀ a ∀ b ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B
         prove ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$0) (∧ ∈ $$$0 A ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$$0 $0) ()
           given
         prove ∀ x ↔ ∈ $0 × A B ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 78664a4d74f0bfa211302b1958d00d7631c52b8411466a93b900f16b87412b96 () (A, B) () ()
-        assert ∈ orderedPair $$0 $0 × A B transformed bc63e6bb6c01863a6ac4d307023e340344146f589205caa08ccf425cfe294e79 (Y N) N () (orderedPair $$0 $0) (∈ $$$0 × A B, ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = $$$$$0 orderedPair $$0 $0) () (direct 0.0.1.5, direct 0.0.1.4)
+        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+          prove ↔ ∈ orderedPair $$0 $0 × A B ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (orderedPair $$0 $0) (↔ ∈ $$$0 × A B ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = $$$$$0 orderedPair $$0 $0) ()
+            given
+          prove → ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 ∈ orderedPair $$0 $0 × A B 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $$0 $0 × A B, ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0) () () ()
+            given
+          prove ∈ orderedPair $$0 $0 × A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0, ∈ orderedPair $$0 $0 × A B) () () ()
+            given
+            given
+        }
       }
       prove ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ orderedPair $$0 $0 × A B, ∧ ∈ $$0 A ∈ $0 B) () () ()
         given
@@ -204,7 +230,8 @@ conclusion ⊆ × A B × C D
       }
     }
   }
-  assert ⊆ × A B × C D direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (× A B, × C D) () () (compound 0 compound 0.0a direct 0.0.1)
+  prove ⊆ × A B × C D 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (× A B, × C D) () ()
+    given
 }
 
 theorem Product Preserves Subset

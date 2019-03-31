@@ -1,30 +1,21 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Overlay from "react-bootstrap/Overlay";
+import Tooltip from "react-bootstrap/Tooltip";
 import styled, {css} from "styled-components";
 import {HighlightableExpression} from "../ExpressionComponent";
+import {FlexRow} from "../FlexRow";
+import {DeleteStepButton} from "./DeleteStepButton";
 
 export const ProofLine = styled(class ProofLine extends React.Component {
   constructor(...args) {
     super(...args);
-    this.attachRef = target => this.setState({ target });
+    this.attachDivRef = divRef => this.setState({ divRef });
+    this.attachSpanRef = spanRef => this.setState({ spanRef });
     this.state = {
-      showPopover: false,
       isHovered: false
     };
   }
-  showPopover = () => {
-    this.setState({showPopover: true})
-  };
-  onShowPopover = () => {
-    this.props.onPopover && this.props.onPopover(true);
-  };
-  hidePopover = (e) => {
-    if (!this.props.blockHide) {
-      this.setState({showPopover: false})
-      this.props.onPopover && this.props.onPopover(false);
-    }
-  };
   onMouseEnter = () => {
     let {highlighting, premiseReferences, path, reference} = this.props;
     reference = reference || (path && path.join("."));
@@ -44,6 +35,11 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     }
     this.setState({isHovered: false});
   };
+  onClick = (e) => {
+    if (this.props.onClick) {
+      this.props.onClick(e);
+    }
+  };
   moveUp = (e) => {
     e.stopPropagation();
     this.props.apiService.fetchJsonForStep(this.props.path, "move?direction=up", {method: "POST"})
@@ -55,20 +51,34 @@ export const ProofLine = styled(class ProofLine extends React.Component {
       .then(this.props.apiService.updateTheorem);
   };
   render() {
-    const {className, children, popover, path} = this.props;
-    const lineElement= <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.showPopover} className={"mb-1 " + className} ref={this.attachRef}>
-      {children}
-      {path && this.state.isHovered && <span className="float-right">
-        <Button onClick={this.moveUp} size="sm" className="ml-1"><span className="fas fa-arrow-up"/></Button>
-        <Button onClick={this.moveDown} size="sm" className="ml-1"><span className="fas fa-arrow-down"/></Button>
-      </span>}
+    const {className, children, tooltip, path, apiService, buttons} = this.props;
+    const lineElement= <div onMouseEnter={this.onMouseEnter}
+                            onMouseLeave={this.onMouseLeave}
+                            className={"mb-1 " + className}
+                            ref={this.attachDivRef}>
+      <FlexRow>
+        <span ref={this.attachSpanRef}
+              onClick={this.onClick}
+              style={this.props.onClick && {cursor: "pointer"}}>
+          {children}
+        </span>
+        <span className="ml-3">
+          {buttons}
+        </span>
+        <FlexRow.Grow/>
+        {path && this.state.isHovered && <>
+          <DeleteStepButton path={path} apiService={apiService}/>
+          <Button onClick={this.moveUp} size="sm" className="ml-1"><span className="fas fa-arrow-up"/></Button>
+          <Button onClick={this.moveDown} size="sm" className="ml-1"><span className="fas fa-arrow-down"/></Button>
+        </>}
+      </FlexRow>
     </div>;
 
-    if (popover) {
+    if (tooltip) {
       return <>
         {lineElement}
-        <Overlay target={this.state.target} show={this.state.showPopover} onEnter={this.onShowPopover} onHide={this.hidePopover} rootClose placement="bottom-start">
-          {popover}
+        <Overlay target={this.state.spanRef} show={this.state.isHovered} placement="right">
+          {({show, ...props}) => <Tooltip {...props}>{tooltip}</Tooltip>}
         </Overlay>
       </>
     } else {

@@ -8,7 +8,13 @@ premise ¬ = a ∅
 conclusion ∃ x ∧ ∈ $0 a = ∩ $0 a ∅
 {
   prove ∀ y → ¬ = $0 ∅ ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅ 5a2bf4e5105d379d8d2886424f9e4c79009e47b8c59897ad379640ef9c3fafe2 () () () ()
-  assert ∃ x ∧ ∈ $0 a = ∩ $0 a ∅ transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (a) (¬ = $0 ∅, ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅) () (direct 0, direct p0)
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove → ¬ = a ∅ ∃ x ∧ ∈ $0 a = ∩ $0 a ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (→ ¬ = $0 ∅ ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅) ()
+      given
+    prove ∃ x ∧ ∈ $0 a = ∩ $0 a ∅ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ = a ∅, ∃ x ∧ ∈ $0 a = ∩ $0 a ∅) () () ()
+      given
+      given
+  }
 }
 
 theorem No Set Contains Itself

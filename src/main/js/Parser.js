@@ -19,6 +19,11 @@ export class Parser {
     inference.conclusion && (inference.conclusion = Expression.parseFromJson(inference.conclusion));
     return inference;
   }
+  static parseInferenceApplication(inferenceApplicationJson) {
+    const inferenceApplication = _.cloneDeep(inferenceApplicationJson);
+    inferenceApplication.inference = Parser.parseInference(inferenceApplication.inference);
+    return inferenceApplication;
+  }
   static parseStatementDefinition(definitionJson) {
     const definition = _.cloneDeep(definitionJson);
     definition.definingStatement && (definition.definingStatement = Expression.parseFromJson(definition.definingStatement));

@@ -37,11 +37,9 @@ function replacePlaceholders(text, components) {
 }
 
 const HighlightedPremise = styled.span`
-  font-weight: bold;
   color: red;
 `;
 const HighlightedConclusion = styled.span`
-  font-weight: bold;
   color: blue;
 `;
 

@@ -1,54 +1,62 @@
 import React from "react";
-import Popover from "react-bootstrap/Popover";
-import {ExpressionComponent, HighlightableExpression} from "../ExpressionComponent";
-import {FlexRow} from "../FlexRow";
-import {DeleteStepButton} from "./DeleteStepButton";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import {HighlightableExpression} from "../ExpressionComponent";
+import {InferenceLink} from "./InferenceLink";
 import {ProofLine} from "./ProofLine";
 import {Steps} from "./Steps";
-import {AssertionStep} from "./AssertionStep";
 
 export class ElidedStep extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
-      showingChildPopover: false
+      showProofCard: false
     }
   }
 
-  onChildPopover = (showingChildPopover) => {
-    this.setState({showingChildPopover});
+  toggleProofCard = () => {
+    this.setState({showProofCard: !this.state.showProofCard})
+  };
+
+  highlightInference = (inferenceId) => {
+    this.props.apiService.fetchJsonForStep(this.props.path, "highlightedInference", {
+      method: "POST",
+      body: inferenceId
+    }).then(this.props.apiService.updateTheorem);
   };
 
   render() {
     let {step, path, boundVariableLists, additionalReferences, apiService, highlighting} = this.props;
     let reference = path.join(".");
-    const popover = (
-      <Popover title={<FlexRow>
-                        <FlexRow.Grow>Elided proof of <ExpressionComponent expression={step.provenStatement} boundVariableLists={boundVariableLists}/> </FlexRow.Grow>
-                        <DeleteStepButton path={path} apiService={apiService}/>
-                      </FlexRow>}>
+    let buttons = <>
+      {step.highlightedInference && <InferenceLink inference={step.highlightedInference} suffix="[elided]"/>}
+      {!step.highlightedInference && <DropdownButton title="Highlighted Inference" size="sm" className="ml-1">
+        {step.inferencesUsed.map(i => <Dropdown.Item key={i.id} onClick={() => this.highlightInference(i.id)}>{i.name}</Dropdown.Item>)}
+      </DropdownButton>}
+    </>;
+    return <>
+      <ProofLine premiseReferences={_.filter(step.referencedLines, r => !r.lineReference.startsWith(reference))}
+                 path={path}
+                 buttons={buttons}
+                 onClick={this.toggleProofCard}
+                 apiService={apiService}
+                 highlighting={highlighting}
+                 incomplete={step.isIncomplete}
+      >
+        Then <HighlightableExpression statement={step.provenStatement}
+                                      boundVariableLists={boundVariableLists}
+                                      references={[...additionalReferences, reference]}
+                                      highlighting={highlighting}/>.
+      </ProofLine>
+      {this.state.showProofCard && <div className="card" style={{margin: ".5rem 2rem", padding: ".5rem .75rem", display: "inline-block"}}>
         <Steps steps={step.substeps}
+               elided
                path={path}
-               onPopover={this.onChildPopover}
                boundVariableLists={boundVariableLists}
                referencesForLastStep={[]}
                apiService={apiService}
                highlighting={highlighting}/>
-      </Popover>
-    );
-    return <ProofLine premiseReferences={_.filter(step.referencedLines, r => !r.lineReference.startsWith(reference))}
-                      path={path}
-                      popover={popover}
-                      blockHide={this.state.showingChildPopover}
-                      apiService={apiService}
-                      highlighting={highlighting}
-                      incomplete={_.some(step.substeps, "incomplete")}
-    >
-      Then <HighlightableExpression statement={step.provenStatement}
-                                    boundVariableLists={boundVariableLists}
-                                    references={[...additionalReferences, reference]}
-                                    highlighting={highlighting}
-    />.
-    </ProofLine>;
+      </div>}
+    </>;
   }
 }

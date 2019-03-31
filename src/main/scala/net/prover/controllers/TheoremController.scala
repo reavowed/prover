@@ -1,9 +1,9 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{QuickDefinition, StepDefinition}
+import net.prover.controllers.models.StepDefinition
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
-import net.prover.model.entries.{StatementDefinition, TermDefinition, Theorem}
+import net.prover.model.entries.Theorem
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step.NewAssert
 import net.prover.model.proof._
@@ -85,14 +85,15 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("stepReference") stepReference: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, step, stepContext) =>
-      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (step, stepContext, parsingContext) =>
       for {
-        inference <- findInference(definition.inferenceId)
-        substitutions <- definition.parseSubstitutions(inference)
+        inference <- findInference(definition.inferenceId)(parsingContext)
+        substitutions <- definition.parseSubstitutions(inference)(parsingContext)
         premiseStatements <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, step.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
       } yield {
-        Step.NewAssert(
+        val premises = premiseStatements.map(createPremise(_, stepContext, parsingContext))
+        val targetSteps = premises.ofType[Step.NewAssert.Premise.Pending].map(p => Step.Target(p.statement))
+        targetSteps :+ Step.NewAssert(
           step.statement,
           inference,
           premiseStatements.map(createPremise(_, stepContext, parsingContext)),
@@ -116,28 +117,9 @@ class TheoremController @Autowired() (bookService: BookService) {
           Success(step.provenStatement.map(s => Step.Target(s)))
       }
     }
-    def deleteFromTheorem(theorem: Theorem, parsingContext: ParsingContext): Option[Try[Theorem]] = {
-      stepReference.indexes match {
-        case Nil =>
-          None
-        case init :+ last =>
-          theorem.tryModifySteps(init, (steps, _) => {
-            steps.lift(last).map { step =>
-              getReplacementStep(step).map {
-                case Some(replacementStep) =>
-                  steps.updated(last, replacementStep)
-                case None =>
-                  steps.take(last) ++ steps.drop(last + 1)
-              }
-            }
-          })
-          .mapMap(_.recalculateReferences(parsingContext))
-      }
-    }
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (book, chapter, theorem) =>
-      val parsingContext = getTheoremParsingContext(book, chapter, theorem)
-      deleteFromTheorem(theorem, parsingContext).orNotFound(s"Step $stepReference").flatten
-    }.toResponseEntity
+    replaceStep[Step](bookKey, chapterKey, theoremKey, stepReference)((step, _, _) =>
+      getReplacementStep(step).map(_.toSeq)
+    ).toResponseEntity
   }
 
   @PostMapping(value = Array("/{stepReference}/move"))
@@ -177,8 +159,7 @@ class TheoremController @Autowired() (bookService: BookService) {
           }).mapMap(_.recalculateReferences(parsingContext))
       }
     }
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (book, chapter, theorem) =>
-      val parsingContext = getTheoremParsingContext(book, chapter, theorem)
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, parsingContext) =>
       moveInTheorem(theorem, parsingContext).orNotFound(s"Step $stepReference").flatten
     }.toResponseEntity
   }
@@ -191,8 +172,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("stepReference") stepReference: PathData,
     @RequestBody variableName: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, step, stepContext) =>
-      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
+    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (step, _, parsingContext) =>
       for {
         (substatement, scopingStatementDefinition) <- parsingContext.matchScopingStatement(step.statement).orBadRequest("Target statement is not a scoped statement")
       } yield {
@@ -211,8 +191,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("stepReference") stepReference: PathData
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, step, stepContext) =>
-      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
+    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (step, _, parsingContext) =>
       for {
         (antecedent, consequent, deductionStatementDefinition) <- parsingContext.matchDeductionStatement(step.statement).orBadRequest("Target statement is not a deduction statement")
       } yield {
@@ -231,154 +210,36 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("stepReference") stepReference: PathData
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (book, chapter, theorem, step, stepContext) =>
+    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (step, _, _) =>
       Success(Step.Elided(Seq(step), None))
     }.toResponseEntity
   }
 
-  @PutMapping(value = Array(
-    "/{stepReference}/premises/{premisePath}/statement/{expressionPath}/boundVariables/{boundVariableIndex}",
-    "/{stepReference}/premises/{premisePath}/statement/boundVariables/{boundVariableIndex}"))
-  def editBoundVariableName(
+  @PostMapping(value = Array("/{stepReference}/highlightedInference"))
+  def elide(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepReference") stepPath: PathData,
-    @PathVariable("premisePath") premisePath: PathData,
-    @PathVariable(value = "expressionPath", required = false) expressionPath: PathData,
-    @PathVariable("boundVariableIndex") boundVariableIndex: Int,
-    @RequestBody newBoundVariableName: String
-  ): ResponseEntity[_] = {
-    import Step.NewAssert._
-    def updatePremise(oldPremise: Premise): Try[Premise] = {
-      for {
-        oldPendingPremise <- oldPremise.asOptionalInstanceOf[Premise.Pending].orBadRequest(s"Premise $premisePath is not pending")
-        newStatement <- oldPendingPremise.statement.renameBoundVariable(
-          newBoundVariableName,
-          boundVariableIndex,
-          Option(expressionPath).map(_.indexes).getOrElse(Nil)
-        ).orNotFound(s"Bound variable $boundVariableIndex at $expressionPath")
-      } yield oldPendingPremise.copy(statement = newStatement)
-    }
-    modifyStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (_, _, _, oldStep, _) =>
-      oldStep.tryUpdatePremiseAtPath(premisePath.indexes, updatePremise).orNotFound(s"Premise $premisePath").flatten
-    }.toResponseEntity
-  }
-
-  @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/target"))
-  def createTarget(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepPath") stepPath: PathData,
-    @PathVariable("premisePath") premisePath: PathData
-  ): ResponseEntity[_] = {
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (book, chapter, theorem) =>
-      for {
-        (rawStep, _) <- theorem.findStep(stepPath.indexes).orNotFound(s"Step $stepPath")
-        step <- rawStep.asOptionalInstanceOf[Step.NewAssert].orBadRequest(s"Step $stepPath is not editable")
-        premise <- step.pendingPremises.get(premisePath.indexes).orNotFound(s"Premise $premisePath")
-        newStep = Step.Target(premise.statement)
-        newTheorem <- theorem.insertStep(stepPath.indexes, newStep).orBadRequest(s"Failed to insert new step")
-          .map(_.recalculateReferences(getTheoremParsingContext(book, chapter, theorem)))
-      } yield {
-        newTheorem
-      }
-    }.toResponseEntity
-  }
-
-  case class QuickSuggestion(inference: Inference.Summary, target: Statement)
-  case class PremiseOption(path: Seq[Int], expansions: Seq[Inference.Summary], quick: Seq[QuickSuggestion])
-  @GetMapping(value = Array("/{stepReference}/premiseOptions"))
-  def premiseOptions(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepReference") stepReference: PathData
-  ): ResponseEntity[_] = {
-    findStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepReference).map { case (book, chapter, theorem, step, stepContext) =>
-      val parsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
-      val expansionInferences = parsingContext.inferences.filter(_.rearrangementType == Inference.RearrangementType.Expansion)
-      val quickInferences = parsingContext.inferences.filter(i => i.requiredSubstitutions isEquivalentTo i.conclusion.requiredSubstitutions).mapCollect(i => i.premises.single.map(i -> _.statement)).reverse
-      step.pendingPremises.map { case (path, p) =>
-        val quickSuggestions = quickInferences
-          .flatMap { case (inference, premiseStatement) =>
-            val possibleTargets = inference.conclusion
-              .calculateSubstitutions(p.statement, Substitutions.empty, 0, stepContext.externalDepth)
-              .mapCollect(s => premiseStatement.applySubstitutions(s, 0, stepContext.externalDepth))
-            possibleTargets.map { target => QuickSuggestion(inference.summary, target) }
-          }
-        val matchingExpansions = expansionInferences.filter(_.conclusion.calculateSubstitutions(p.statement, Substitutions.empty, 0, stepContext.externalDepth).nonEmpty)
-        PremiseOption(path, matchingExpansions.map(_.summary), quickSuggestions)
-      }
-    }.toResponseEntity
-  }
-
-  @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/rearrangement"))
-  def createRearrangement(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepPath") stepPath: PathData,
-    @PathVariable("premisePath") premisePath: PathData,
+    @PathVariable("stepReference") stepReference: PathData,
     @RequestBody inferenceId: String
   ): ResponseEntity[_] = {
-    import Step.NewAssert._
-    def updatePremise(oldPremise: Premise, stepContext: StepContext)(implicit parsingContext: ParsingContext): Try[Premise] = {
+    modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, stepReference) { (step, _, parsingContext) =>
       for {
-        inference <- findInference(inferenceId)
-        substitutions <- inference.conclusion.calculateSubstitutions(oldPremise.statement, Substitutions.empty, 0, stepContext.externalDepth).headOption.orException(BadRequestException("Could not calculate substitutions"))
-        substitutedInferencePremises <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, oldPremise.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
-        newPremises = substitutedInferencePremises.map(createPremise(_, stepContext, parsingContext))
-      } yield Step.NewAssert.Premise.Expansion(oldPremise.statement, inference, newPremises, substitutions)
-    }
-
-    modifyStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (book, chapter, theorem, oldStep, stepContext) =>
-      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
-      oldStep.tryUpdatePremiseAtPath(premisePath.indexes, updatePremise(_, stepContext)).orNotFound(s"Premise $premisePath not found").flatten
+        inference <- findInference(inferenceId)(parsingContext)
+      } yield step.copy(highlightedInference = Some(inference))
     }.toResponseEntity
   }
 
-  @PostMapping(value = Array("/{stepPath}/premises/{premisePath}/quick"))
-  def createQuickPremise(
+  @PostMapping(value = Array("/{stepPath}/createTargets"))
+  def createTargets(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepPath") stepPath: PathData,
-    @PathVariable("premisePath") premisePath: PathData,
-    @RequestBody quickDefinition: QuickDefinition
+    @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    import Step.NewAssert._
-    def updatePremise(oldPremise: Premise, stepContext: StepContext)(implicit parsingContext: ParsingContext): Try[Premise] = {
-      for {
-        inference <- findInference(quickDefinition.inferenceId)
-        target <- Try(Statement.parser.parseFromString(quickDefinition.target, "")).toOption.orBadRequest("Invalid target statement")
-        singlePremise <- inference.premises.single.orBadRequest("Invalid inference for quick premise")
-        substitutions <- inference.conclusion.calculateSubstitutions(oldPremise.statement, Substitutions.empty, 0, stepContext.externalDepth)
-          .flatMap(s => singlePremise.statement.calculateSubstitutions(target, s, 0, stepContext.externalDepth))
-          .headOption.orBadRequest("Could not calculate substitutions")
-        substitutedInferencePremises <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, oldPremise.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
-        newPremises = substitutedInferencePremises.map(createPremise(_, stepContext, parsingContext))
-      } yield Step.NewAssert.Premise.Expansion(oldPremise.statement, inference, newPremises, substitutions)
-    }
-
-    modifyStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (book, chapter, theorem, oldStep, stepContext) =>
-      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
-      oldStep.tryUpdatePremiseAtPath(premisePath.indexes, updatePremise(_, stepContext)).orNotFound(s"Premise $premisePath not found").flatten
-    }.toResponseEntity
-  }
-
-  @DeleteMapping(value = Array("/{stepPath}/premises/{premisePath}"))
-  def deletePremise(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepPath") stepPath: PathData,
-    @PathVariable("premisePath") premisePath: PathData
-  ): ResponseEntity[_] = {
-    modifyStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (book, chapter, theorem, oldStep, stepContext) =>
-      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
-      oldStep.tryUpdatePremiseAtPath(premisePath.indexes, p => Success(NewAssert.Premise.Pending(p.statement))).orNotFound(s"Premise $premisePath not found").flatten
+    replaceStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
+      val targetStatements = step.pendingPremises.values.map(_.statement).toSeq
+      Success(targetStatements.map(Step.Target(_)) :+ step)
     }.toResponseEntity
   }
 
@@ -400,20 +261,39 @@ class TheoremController @Autowired() (bookService: BookService) {
     }
   }
 
-  private def modifyTheorem(bookKey: String, chapterKey: String, theoremKey: String)(f: (Book, Chapter, Theorem) => Try[Theorem]): Try[Theorem] = {
-    bookService.modifyEntry[Theorem, Theorem](bookKey, chapterKey, theoremKey, (_, book, chapter, theorem) =>
-      f(book, chapter, theorem)
-    ).map(_._4)
+  private def modifyTheorem(bookKey: String, chapterKey: String, theoremKey: String)(f: (Theorem, ParsingContext) => Try[Theorem]): Try[Theorem] = {
+    bookService.modifyEntry[Theorem, Theorem](bookKey, chapterKey, theoremKey, (_, book, chapter, theorem) => {
+      val parsingContext = getTheoremParsingContext(book, chapter, theorem)
+      f(theorem, parsingContext).map(_.recalculateReferences(parsingContext))
+    }).map(_._4)
   }
 
-  private def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepReference: PathData)(f: (Book, Chapter, Theorem, TStep, StepContext) => Try[Step]): Try[Theorem] = {
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (book, chapter, theorem) =>
-      theorem.tryModifyStep(stepReference.indexes, (oldStep, stepContext) => {
+  private def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepReference: PathData)(f: (TStep, StepContext, ParsingContext) => Try[Step]): Try[Theorem] = {
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, parsingContext) =>
+      theorem.tryModifyStep(stepReference.indexes, (step, stepContext) => {
         for {
-          oldTStep <- oldStep.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
-          newStep <- f(book, chapter, theorem, oldTStep, stepContext)
+          typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
+          newStep <- f(typedStep, stepContext, parsingContext.copy(parameterLists = stepContext.boundVariableLists.map(_.zipWithIndex)))
         } yield newStep
       }).orNotFound(s"Step $stepReference").flatten
+    }
+  }
+
+  private def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepReference: PathData)(f: (TStep, StepContext, ParsingContext) => Try[Seq[Step]]): Try[Theorem] = {
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, parsingContext) =>
+        (stepReference.indexes match {
+          case init :+ last =>
+            theorem.tryModifySteps(init, (steps, outerContext) => {
+              steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+                for {
+                  typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
+                  replacementSteps <- f(typedStep, outerContext.addSteps(before), parsingContext.copy(parameterLists = outerContext.boundVariableLists.map(_.zipWithIndex)))
+                } yield before ++ replacementSteps ++ after
+              }
+            })
+          case _ =>
+            None
+        }).orNotFound(s"Step $stepReference").flatten
     }
   }
 
