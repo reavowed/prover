@@ -12,13 +12,14 @@ import scala.util.Try
 case class Theorem(
     name: String,
     override val key: ChapterEntry.Key.Standalone,
-    premises: Seq[Premise],
+    premises: Seq[Statement],
     conclusion: Statement,
     proof: Seq[Step],
     rearrangementType: RearrangementType)
   extends Inference.Entry
 {
-  def referencedInferenceIds: Set[String] = proof.flatMap(_.referencedInferenceIds).toSet
+  override def referencedInferenceIds: Set[String] = proof.flatMap(_.referencedInferenceIds).toSet
+  override def referencedDefinitions: Set[ExpressionDefinition] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions ++ proof.flatMap(_.referencedDefinitions).toSet
   override def inferences: Seq[Inference] = Seq(this)
   private def initialContext: StepContext = StepContext.justWithPremises(premises)
 
@@ -98,7 +99,7 @@ case class Theorem(
 
   override def serializedLines: Seq[String] = Seq(s"theorem $name") ++
     rearrangementType.serialized.toSeq ++
-    premises.map(_.serialized) ++
+    premises.map("premise " + _.serialized) ++
     Seq("conclusion " + conclusion.serialized) ++
     Seq("{") ++
     proof.flatMap(_.serializedLines).indent ++
@@ -107,16 +108,10 @@ case class Theorem(
   override def toString: String = name
 }
 
-object Theorem extends ChapterEntryParser {
+object Theorem extends Inference.EntryParser {
   override val name: String = "theorem"
 
-  private def conclusionParser(implicit context: ParsingContext): Parser[Statement] = {
-    for {
-      _ <- Parser.requiredWord("conclusion")
-      conclusion <- Statement.parser
-    } yield conclusion
-  }
-  def proofParser(premises: Seq[Premise])(implicit parsingContext: ParsingContext): Parser[Seq[Step]] = {
+  def proofParser(premises: Seq[Statement])(implicit parsingContext: ParsingContext): Parser[Seq[Step]] = {
     Step.listParser(Nil)(parsingContext, StepContext.justWithPremises(premises)).inBraces
   }
 
@@ -124,7 +119,7 @@ object Theorem extends ChapterEntryParser {
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
-      premises <- Premise.listParser
+      premises <- premisesParser
       conclusion <- conclusionParser
       proof <- proofParser(premises)
     } yield {

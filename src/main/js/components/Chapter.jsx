@@ -29,21 +29,30 @@ const ResultTitle = styled.a`
   }
 `;
 
-const Result = ({title, href, buttons, children}) => <ResultWrapper>
-  <FlexRow>
-    <FlexRow.Grow><ResultTitle href={href}>{title}</ResultTitle></FlexRow.Grow>
-    {buttons}
-  </FlexRow>
-  {children}
-</ResultWrapper>;
+const Result = ({title, entryKey, buttons, deleteButton, children, updateChapter}) => {
+  const deleteEntry = () => {
+    updateChapter(entryKey.value, {method: "DELETE"})
+  };
+  const moveEntry = (direction) => {
+    updateChapter(entryKey.value + "/move?direction=" + direction, {method: "POST"})
+  };
+  return <ResultWrapper>
+    <FlexRow>
+      <FlexRow.Grow><ResultTitle href={entryKey.url}>{title}</ResultTitle></FlexRow.Grow>
+      {buttons}
+      {deleteButton && <Button size="sm" variant="danger" className="ml-1" onClick={deleteEntry}><span className="fas fa-ban"/></Button>}
+      <Button size="sm" className="ml-1" onClick={() => moveEntry("up")}><span className="fas fa-arrow-up"/></Button>
+      <Button size="sm" className="ml-1" onClick={() => moveEntry("down")}><span className="fas fa-arrow-down"/></Button>
+    </FlexRow>
+    {children}
+  </ResultWrapper>
+};
 
 const InferenceResult = ({title, entry, updateChapter}) => {
-  const deleteInference = () => {
-    updateChapter(entry.key.value, {method: "DELETE"})
-  };
   return <Result title={<>{title}: {entry.name}</>}
-                 href={entry.key.url}
-                 buttons={<Button size="sm" variant="danger" className="ml-1" onClick={deleteInference}><span className="fas fa-ban"/></Button>}>
+                 entryKey={entry.key}
+                 updateChapter={updateChapter}
+                 deleteButton>
     <InferenceSummary inference={entry}/>
   </Result>;
 };
@@ -74,11 +83,12 @@ class DefinitionResult extends React.Component {
       .then(() => this.stopEditingShorthand());
   };
   render() {
-    const {title, entry, children} = this.props;
+    const {title, entry, children, updateChapter} = this.props;
 
     return <>
       <Result title={<>{title}: <ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/></>}
-              href={entry.key.url}
+              entryKey={entry.key}
+              updateChapter={updateChapter}
               buttons={<Button size="sm" variant="primary" className="ml-1" onClick={this.startEditingShorthand}>Shorthand</Button>}
       >
         {children && <div className="mt-n2">

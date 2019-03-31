@@ -10,6 +10,9 @@ import net.prover.model.{Chapter, Format, Parser, ParsingContext}
 case class DisplayShorthand(template: Template, format: Format.Explicit, key: ChapterEntry.Key.Anchor) extends ChapterEntry {
   override def name: String = DisplayShorthand.name
   override def serializedLines: Seq[String] = Seq(s"display ${template.serialized} as (${format.originalValue})")
+
+  override def referencedInferenceIds: Set[String] = Set.empty
+  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
 }
 
 object DisplayShorthand extends ChapterEntryParser {

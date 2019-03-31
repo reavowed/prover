@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import monocle.Lens
 import net.prover.model._
+import net.prover.model.entries.ExpressionDefinition
 
 import scala.reflect.ClassTag
 
@@ -17,6 +18,7 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
 
   def update(newArguments: Seq[Term]): ExpressionType
 
+  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {
     update(arguments.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)))
   }

@@ -5,7 +5,7 @@ import java.security.MessageDigest
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.Inference._
-import net.prover.model.entries.ChapterEntry
+import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
 import net.prover.model.expressions._
 import net.prover.model.proof.Transformation
 
@@ -17,7 +17,7 @@ trait Inference {
   @JsonSerialize
   def name: String
   @JsonSerialize
-  def premises: Seq[Premise]
+  def premises: Seq[Statement]
   @JsonSerialize
   def conclusion: Statement
   def rearrangementType: RearrangementType
@@ -59,8 +59,8 @@ trait Inference {
   }
 
   def substitutePremisesAndValidateConclusion(substitutions: Substitutions, expectedConclusion: Statement, externalDepth: Int): Seq[Statement] = {
-    val substitutedPremises = premises.map(p => p.statement.applySubstitutions(substitutions, 0, externalDepth)
-      .getOrElse(throw new Exception(s"Could not substitute premise ${p.statement}")))
+    val substitutedPremises = premises.map(p => p.applySubstitutions(substitutions, 0, externalDepth)
+      .getOrElse(throw new Exception(s"Could not substitute premise $p")))
     val substitutedConclusion = conclusion.applySubstitutions(substitutions, 0, externalDepth)
       .getOrElse(throw new Exception(s"Could not substitute conclusion $conclusion"))
     (expectedConclusion == substitutedConclusion)
@@ -73,7 +73,19 @@ object Inference {
   trait Entry extends Inference with ChapterEntry.Standalone {
     override def title: String = name
   }
-  case class Summary(key: ChapterEntry.Key, name: String, premises: Seq[Premise], conclusion: Statement, rearrangementType: RearrangementType) extends Inference
+  trait EntryParser extends ChapterEntryParser {
+    def premisesParser(implicit context: ParsingContext): Parser[Seq[Statement]] = {
+      Parser.optional("premise", Statement.parser).whileDefined
+    }
+    def conclusionParser(implicit context: ParsingContext): Parser[Statement] = {
+      for {
+        _ <- Parser.requiredWord("conclusion")
+        conclusion <- Statement.parser
+      } yield conclusion
+    }
+  }
+
+  case class Summary(key: ChapterEntry.Key, name: String, premises: Seq[Statement], conclusion: Statement, rearrangementType: RearrangementType) extends Inference
   object Summary {
     def apply(inference: Inference): Summary = {
       inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.key, inference.name, inference.premises, inference.conclusion, inference.rearrangementType))
@@ -83,13 +95,10 @@ object Inference {
   case class Definition(
       nameOfDefinition: String,
       key: ChapterEntry.Key,
-      premiseStatements: Seq[Statement],
+      premises: Seq[Statement],
       conclusion: Statement)
     extends Inference
   {
-    override def premises = premiseStatements.zipWithIndex.map { case (premiseStatement, index) =>
-      Premise(premiseStatement, index)(isElidable = false)
-    }
     override def name: String = s"Definition of $nameOfDefinition"
     override def rearrangementType = RearrangementType.NotRearrangement
   }
@@ -97,7 +106,7 @@ object Inference {
   case class Transformed(
       inner: Inference.Summary,
       transformation: Transformation,
-      premises: Seq[Premise],
+      premises: Seq[Statement],
       conclusion: Statement)
     extends Inference
   {
@@ -111,7 +120,7 @@ object Inference {
     }
 
     def arePremisesScoped: Seq[Boolean] = {
-      premises.map(p => isScoped(p.statement))
+      premises.map(isScoped)
     }
     def isConclusionScoped: Boolean = isScoped(conclusion)
   }
@@ -160,12 +169,12 @@ object Inference {
     }
   }
 
-  def unapply(inference: Inference): Option[(String, Seq[Premise], Statement)] = {
+  def unapply(inference: Inference): Option[(String, Seq[Statement], Statement)] = {
     Some(inference.name, inference.premises, inference.conclusion)
   }
 
-  def calculateHash(premises: Seq[Premise], conclusion: Statement): String = {
-    val serialized = (premises.map(_.serializedForHash) :+ conclusion.serializedForHash).mkString("\n")
+  def calculateHash(premises: Seq[Statement], conclusion: Statement): String = {
+    val serialized = (premises.map("premise " + _.serializedForHash) :+ conclusion.serializedForHash).mkString("\n")
     val sha = MessageDigest.getInstance("SHA-256")
     sha.update(serialized.getBytes("UTF-8"))
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))

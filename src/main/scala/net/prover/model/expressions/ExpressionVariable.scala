@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import monocle.Lens
 import net.prover.model._
+import net.prover.model.entries.ExpressionDefinition
 
 import scala.collection.immutable.Nil
 import scala.reflect.ClassTag
@@ -15,6 +16,7 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   def substitutionsLens: Lens[Substitutions, Map[String, ExpressionType]]
   def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[String]]
 
+  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
   override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = this
   override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0) = Some(this)
 

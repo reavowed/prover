@@ -10,9 +10,9 @@ object ProofHelper {
   private def getSimplification(premise: SingleLinePremise, simplificationInference: Inference, stepContext: StepContext): Option[SingleLinePremise] = {
     for {
       inferencePremise <- simplificationInference.premises.single
-      substitutions <- inferencePremise.statement.calculateSubstitutions(premise.statement, Substitutions.empty, 0, stepContext.externalDepth).headOption
+      substitutions <- inferencePremise.calculateSubstitutions(premise.statement, Substitutions.empty, 0, stepContext.externalDepth).headOption
       simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
-      path <- inferencePremise.statement.findComponentPath(simplificationInference.conclusion)
+      path <- inferencePremise.findComponentPath(simplificationInference.conclusion)
     } yield {
       NewAssert.Premise.Simplification(simplifiedTarget, premise, simplificationInference.summary, substitutions, path)
     }

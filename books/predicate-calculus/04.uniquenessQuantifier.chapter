@@ -6,7 +6,7 @@ statement ∃! ($x with x φ)
   shorthand (ex!)
 
 theorem Value for Unique Existence
-premise ∃! x with ($0) φ elidable
+premise ∃! x with ($0) φ
 premise ∀ x → with ($0) φ ψ
 conclusion ψ
 {

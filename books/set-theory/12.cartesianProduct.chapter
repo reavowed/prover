@@ -235,7 +235,7 @@ conclusion ⊆ × A B × C D
 }
 
 theorem Product Preserves Subset
-premise ⊆ A B elidable
+premise ⊆ A B
 conclusion ⊆ × A C × B C
 {
   prove ⊆ C C f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (C) () ()
@@ -245,7 +245,7 @@ conclusion ⊆ × A C × B C
 }
 
 theorem Product Preserves Subset
-premise ⊆ A B elidable
+premise ⊆ A B
 conclusion ⊆ × C A × C B
 {
   prove ⊆ C C f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (C) () ()

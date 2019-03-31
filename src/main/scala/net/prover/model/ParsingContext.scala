@@ -27,8 +27,8 @@ case class ParsingContext(
       case inference @ Inference(
         _,
         Seq(
-          Premise(DefinedExpression(d1, Nil, Seq(ExpressionVariable(a1), ExpressionVariable(b1))), _),
-          Premise(DefinedExpression(d2, Nil, Seq(ExpressionVariable(b2), ExpressionVariable(c1))), _)),
+          DefinedExpression(d1, Nil, Seq(ExpressionVariable(a1), ExpressionVariable(b1))),
+          DefinedExpression(d2, Nil, Seq(ExpressionVariable(b2), ExpressionVariable(c1)))),
         DefinedExpression(d3, Nil, Seq(ExpressionVariable(a2), ExpressionVariable(c2)))
       ) if d1 == d2 && d2 == d3 && a1 == a2 && b1 == b2 && c1 == c2 =>
         Some((d1, inference))
@@ -111,7 +111,7 @@ case class ParsingContext(
     }
   }
 
-  def findNamingInferences(): Option[Seq[(Inference, Premise)]] = {
+  def findNamingInferences(): Option[Seq[(Inference, Statement)]] = {
     (scopingStatementOption, deductionStatementOption) match {
       case (Some(scopingStatement), Some(deductionStatement)) =>
         Some(inferences.mapCollect {
@@ -119,13 +119,13 @@ case class ParsingContext(
             _,
             Seq(
               firstPremise,
-              Premise(DefinedStatement(
+              DefinedStatement(
                 Seq(DefinedStatement(
                   Seq(_, StatementVariable(deductionConclusionVariableName)),
                   `deductionStatement`
                 )),
                 `scopingStatement`),
-              _)),
+              _),
             StatementVariable(conclusionVariableName)
           ) if deductionConclusionVariableName == conclusionVariableName =>
             Some((inference, firstPremise))

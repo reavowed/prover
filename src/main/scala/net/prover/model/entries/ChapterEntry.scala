@@ -12,6 +12,8 @@ trait ChapterEntry {
   def key: Key
   def inferences: Seq[Inference] = Nil
   def serializedLines: Seq[String]
+  def referencedInferenceIds: Set[String]
+  def referencedDefinitions: Set[ExpressionDefinition]
 }
 
 object ChapterEntry {

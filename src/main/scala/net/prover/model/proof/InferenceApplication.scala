@@ -87,11 +87,10 @@ object InferenceApplication {
         arePremisesScoped <- booleanParser.listInParens(None)
         isConclusionScoped <- booleanParser
         transformedPremises = inference.premises.zip(arePremisesScoped).map { case (premise, isScoped) =>
-            premise.withStatement(
-              premise.statement
-                .applySubstitutions(transformationSubstitutions, 0, 0)
-                .map(if (isScoped) transformation.generalise else transformation.specify)
-                .getOrElse(throw new Exception(s"Could not apply transformation to premise ${premise.toString}")))
+            premise
+              .applySubstitutions(transformationSubstitutions, 0, 0)
+              .map(if (isScoped) transformation.generalise else transformation.specify)
+              .getOrElse(throw new Exception(s"Could not apply transformation to premise ${premise.toString}"))
         }
         transformedConclusion = inference.conclusion
           .applySubstitutions(transformationSubstitutions, 0, 0)

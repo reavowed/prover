@@ -10,7 +10,7 @@ class AxiomSpec extends ProverSpec {
     Axiom.parser(s => (s.formatAsKey, stubChapter.key)).parseAndDiscard(text.mkString("\n"))
   }
 
-  def axiom(title: String, key: String, premises: Seq[PremiseMagnet], conclusion: Statement): Axiom = {
+  def axiom(title: String, key: String, premises: Seq[Statement], conclusion: Statement): Axiom = {
     Axiom(
       title,
       ChapterEntry.Key.Standalone(title, key, stubChapter.key),

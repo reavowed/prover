@@ -1,7 +1,7 @@
 package net.prover.controllers.models
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import net.prover.model.{Book, Chapter, Premise, entries}
+import net.prover.model.{Book, Chapter, entries}
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Statement, Term}
 
@@ -44,10 +44,10 @@ object ChapterProps {
     @JsonSerialize
     val `type`: String
   }
-  case class Axiom(name: String, key: ChapterEntry.Key, premises: Seq[Premise], conclusion: Statement) extends Entry {
+  case class Axiom(name: String, key: ChapterEntry.Key, premises: Seq[Statement], conclusion: Statement) extends Entry {
     override val `type`: String = "axiom"
   }
-  case class Theorem(name: String, key: ChapterEntry.Key, premises: Seq[Premise], conclusion: Statement) extends Entry {
+  case class Theorem(name: String, key: ChapterEntry.Key, premises: Seq[Statement], conclusion: Statement) extends Entry {
     override val `type`: String = "theorem"
   }
   case class StatementDefinition(defaultValue: Statement, key: ChapterEntry.Key, shorthand: Option[String], definingStatement: Option[Statement]) extends Entry {

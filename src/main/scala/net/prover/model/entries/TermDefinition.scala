@@ -18,6 +18,7 @@ case class TermDefinition(
 {
   override def name: String = explicitName.getOrElse(symbol)
   override def typeName: String = "Term"
+  override def referencedDefinitions: Set[ExpressionDefinition] = definingStatement.referencedDefinitions ++ premises.flatMap(_.referencedDefinitions).toSet
 
   override val defaultValue: DefinedTerm = {
     DefinedTerm(componentTypes.map(_.expression), this)(boundVariableNames)

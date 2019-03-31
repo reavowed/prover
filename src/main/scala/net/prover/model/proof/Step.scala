@@ -3,7 +3,7 @@ package net.prover.model.proof
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
-import net.prover.model.entries.StatementDefinition
+import net.prover.model.entries.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof.Step.NewAssert.Premise._
 
@@ -21,6 +21,7 @@ sealed trait Step {
   def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step]
   def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Step
   def referencedInferenceIds: Set[String]
+  def referencedDefinitions: Set[ExpressionDefinition]
   @JsonSerialize
   def referencedLines: Set[PreviousLineReference]
   def length: Int
@@ -48,7 +49,7 @@ case class StepContext(path: Seq[Int], availableStatements: Seq[ProvenStatement]
   }
 }
 object StepContext {
-  def justWithPremises(premises: Seq[Premise]): StepContext = StepContext(Nil, premises.map(_.provenStatement), Nil)
+  def justWithPremises(premises: Seq[Statement]): StepContext = StepContext(Nil, premises.mapWithIndex((p, i) => ProvenStatement(p, PreviousLineReference(s"p$i", Nil))), Nil)
 }
 
 object Step {
@@ -95,6 +96,7 @@ object Step {
     val `type` = "oldAssertion"
     override def provenStatement: Option[Statement] = Some(statement)
     override def referencedInferenceIds: Set[String] = inferenceApplication.referencedInferenceIds
+    override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
     override def referencedLines: Set[PreviousLineReference] = inferenceApplication.referencedLines
     // TODO: Apply to inference application
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
@@ -136,6 +138,7 @@ object Step {
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
+    override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet + deductionStatement
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"assume ${assumption.serialized} {") ++
       substeps.flatMap(_.serializedLines).indent ++
@@ -178,6 +181,7 @@ object Step {
     // TODO: apply to inference application
     override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Step = super.recalculateReferences(stepContext, parsingContext)
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet ++ finalInferenceApplication.referencedInferenceIds
+    override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet
     override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet ++ finalInferenceApplication.referencedLines
     override def length: Int = substeps.map(_.length).sum + 1
     override def serializedLines: Seq[String] = Seq(s"let $variableName ${assumption.serialized} ${finalInferenceApplication.serialized} {") ++
@@ -221,6 +225,7 @@ object Step {
       } yield ScopedVariable(variableName, newSubsteps, scopingStatement)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
+    override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet + scopingStatement
     override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"take $variableName {") ++
@@ -249,6 +254,7 @@ object Step {
     }
     override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Step = this
     override def referencedInferenceIds: Set[String] = Set.empty
+    override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
     override def referencedLines: Set[PreviousLineReference] = Set.empty
     override def length = 1
     def serializedLines: Seq[String] = Seq(s"target ${statement.serialized}")
@@ -273,6 +279,7 @@ object Step {
       } yield Elided(newSubsteps, highlightedInference)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
+    override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
     override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(("elided" +: highlightedInference.map(_.id).toSeq :+ "{").mkString(" ")) ++
@@ -309,6 +316,7 @@ object Step {
       copy(premises = newPremises)
     }
     override def referencedInferenceIds: Set[String] = Set(inference.id) ++ premises.flatMap(_.referencedInferenceIds).toSet
+    override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
     override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def length: Int = 1
     override def serializedLines: Seq[String] = {

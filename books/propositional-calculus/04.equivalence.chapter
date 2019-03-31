@@ -50,7 +50,7 @@ conclusion → ψ φ
 }
 
 theorem Modus Ponens (Equivalence)
-premise ↔ φ ψ elidable
+premise ↔ φ ψ
 premise φ
 conclusion ψ
 {
@@ -62,7 +62,7 @@ conclusion ψ
 }
 
 theorem Modus Ponens (Equivalence)
-premise ↔ φ ψ elidable
+premise ↔ φ ψ
 premise ψ
 conclusion φ
 {

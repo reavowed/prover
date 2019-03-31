@@ -4,9 +4,12 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.Substitutions
+import net.prover.model.entries.ExpressionDefinition
 
 @JsonSerialize(using = classOf[FunctionParameterSerializer])
 case class FunctionParameter(index: Int, level: Int) extends Term {
+  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
+
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = {
     if (level >= internalDepth) {
       FunctionParameter(index, level + numberOfParametersToInsert)

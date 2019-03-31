@@ -18,6 +18,7 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
   def withShorthand(newShorthand: Option[String]): ExpressionDefinitionType
 
   override def title: String = s"$typeName Definition: $name"
+  override def referencedInferenceIds: Set[String] = Set.empty
 
   private def updateContext(context: ParsingContext, newBoundVariableNames: Seq[String], componentType: ComponentType): ParsingContext = {
     if (boundVariableNames.isEmpty)

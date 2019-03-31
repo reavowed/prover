@@ -1,10 +1,13 @@
 package net.prover.model.expressions
 
+import net.prover.model.entries.ExpressionDefinition
 import net.prover.model.{Parser, ParsingContext, Substitutions}
 
 trait Expression extends TypedExpression[Expression]
 
 trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
+  def referencedDefinitions: Set[ExpressionDefinition]
+
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType]
 
@@ -38,8 +41,6 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     *
     * @param other The target expression to match
     * @param substitutions A set of existing substitutions to preserve
-    * @param applicativeHints A sequence of requirements non predicate application variables
-    * @param structuralHints A sequence of requirements on non-predicate variables
     * @param internalDepth The current scope depth inside the expression since we starting calculating substitutions
     * @param externalDepth The depth of external scoped variables that might be referred to by the other statement
     * @return A sequence of valid substitutions

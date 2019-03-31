@@ -5,6 +5,9 @@ import net.prover.model.{Chapter, Parser, ParsingContext}
 case class Comment(text: String, key: ChapterEntry.Key.Anchor) extends ChapterEntry {
   override def name: String = Comment.name
   override def serializedLines: Seq[String] = Seq(s"comment $text")
+
+  override def referencedInferenceIds: Set[String] = Set.empty
+  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
 }
 
 object Comment extends ChapterEntryParser {

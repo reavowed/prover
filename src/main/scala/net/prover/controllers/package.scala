@@ -33,6 +33,13 @@ package object controllers {
     }
     def orNotFound(objectDescription: String): Try[T] = orException(NotFoundException(objectDescription))
     def orBadRequest(message: String): Try[T] = orException(BadRequestException(message))
+
+    def badRequestIfDefined(message: String): Try[Unit] = {
+      option match {
+        case Some(_) => Failure(BadRequestException(message))
+        case None => Success(())
+      }
+    }
   }
   def getTheoremParsingContext(book: Book, chapter: Chapter, theorem: Theorem): ParsingContext = {
     val previousChapters = book.chapters.takeWhile(_ != chapter)

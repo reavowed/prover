@@ -9,7 +9,7 @@ statement → (φ ψ)
   deduction
 
 axiom Modus Ponens
-premise → φ ψ elidable
+premise → φ ψ
 premise φ
 conclusion ψ
 

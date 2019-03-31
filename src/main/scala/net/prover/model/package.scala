@@ -217,6 +217,12 @@ package object model {
         None
       }
     }
+    def splitWhere(f: T => Boolean): Option[(Seq[T], T, Seq[T])] = {
+      findIndexWhere(f).map { index =>
+        (seq.take(index), seq(index), seq.drop(index + 1))
+      }
+    }
+
     def tryUpdateAtIndexIfDefined[S](index: Int, f: T => Option[Try[T]]): Option[Try[Seq[T]]] = {
       seq.lift(index).flatMap(f).mapMap(seq.updated(index, _))
     }

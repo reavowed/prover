@@ -127,9 +127,7 @@ class BookController @Autowired() (bookService: BookService) {
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (_, book, chapter) =>
       implicit val parsingContext: ParsingContext = getChapterParsingContext(book, chapter)
-      val premises = newTheoremDefininition.premises
-        .mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}"))
-        .mapWithIndex((statement, index) => Premise(statement, index)(isElidable = false))
+      val premises = newTheoremDefininition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}"))
       val conclusion = Statement.parser.parseFromString(newTheoremDefininition.conclusion, "conclusion")
       val newTheorem = Theorem(
         newTheoremDefininition.name,
@@ -147,6 +145,37 @@ class BookController @Autowired() (bookService: BookService) {
           Success(newTheorem)
       }
     }.map{ case (_, book, chapter) => ChapterProps(chapter, book) }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/{bookKey}/{chapterKey}/{entryKey}/move"), produces = Array("application/json;charset=UTF-8"))
+  def moveEntry(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") theoremKey: String,
+    @RequestParam("direction") direction: String
+  ): ResponseEntity[_] = {
+    def tryMove(entry: ChapterEntry, previousEntries: Seq[ChapterEntry], nextEntries: Seq[ChapterEntry]): Try[Seq[ChapterEntry]] = {
+      direction match {
+        case "up" =>
+          for {
+            (earlierEntries, precedingEntry) <- :+.unapply(previousEntries).orBadRequest("Entry was first in chapter")
+            _ <- precedingEntry.asOptionalInstanceOf[Inference].filter(i => entry.referencedInferenceIds.contains(i.id)).badRequestIfDefined("Entry depends on previous one")
+            _ <- precedingEntry.asOptionalInstanceOf[ExpressionDefinition].filter(entry.referencedDefinitions.contains).badRequestIfDefined("Entry depends on previous one")
+          } yield earlierEntries ++ Seq(entry, precedingEntry) ++ nextEntries
+        case "down" =>
+          for {
+            (nextEntry, lastEntries) <- +:.unapply(nextEntries).orBadRequest("Entry was last in chapter")
+            _ <- entry.asOptionalInstanceOf[Inference].filter(i => nextEntry.referencedInferenceIds.contains(i.id)).badRequestIfDefined("Next entry depends on this one")
+            _ <- entry.asOptionalInstanceOf[ExpressionDefinition].filter(nextEntry.referencedDefinitions.contains).badRequestIfDefined("Next entry depends on this one")
+          } yield previousEntries ++ Seq(nextEntry, entry) ++ lastEntries
+      }
+    }
+    bookService.modifyChapter(bookKey, chapterKey, (_, _, chapter) => {
+      for {
+        (previousEntries, entry, nextEntries) <- chapter.entries.splitWhere(_.key.value == theoremKey).orNotFound(s"Theorem $theoremKey")
+        updatedEntries <- tryMove(entry, previousEntries, nextEntries)
+      } yield (chapter.copy(entries = updatedEntries), ())
+    }).map{ case (_, book, chapter, _) => ChapterProps(chapter, book) }.toResponseEntity
   }
 
   case class NavLink(url: String, title: String)

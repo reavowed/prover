@@ -23,7 +23,7 @@ conclusion ∃ x with ($0) φ
 comment If something exists, we can name that something with an arbitrary variable for free.
 
 theorem Value for Existence
-premise ∃ x with ($0) φ elidable
+premise ∃ x with ($0) φ
 premise ∀ x → with ($0) φ ψ
 conclusion ψ
 {

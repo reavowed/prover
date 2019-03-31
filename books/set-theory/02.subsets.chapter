@@ -46,7 +46,7 @@ conclusion = A B
 
 theorem Subset Is Transitive
 premise ⊆ A B
-premise ⊆ B C elidable
+premise ⊆ B C
 conclusion ⊆ A C
 {
   take x {

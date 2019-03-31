@@ -87,7 +87,7 @@ conclusion ∈ apply f a B
 
 theorem Extend Function Range to Superset
 premise function f A B
-premise ⊆ B C elidable
+premise ⊆ B C
 conclusion function f A C
 {
   prove ∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f adf16ed83c8011626387bff9855a2c3794562437dac17b7f7d6c2e4663f5467a () (f, A, B) () ()

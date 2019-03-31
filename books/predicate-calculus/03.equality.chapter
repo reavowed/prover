@@ -8,8 +8,8 @@ axiom Equality Is Reflexive
 conclusion = a a
 
 axiom Substitution of Equals
-premise = a b elidable
-premise with (a) φ elidable
+premise = a b
+premise with (a) φ
 conclusion with (b) φ
 
 comment We first have to prove that equality is symmetric before we can prove the reversed version of the second axiom.
@@ -25,8 +25,8 @@ conclusion = b a
 }
 
 theorem Substitution of Equals (Reversed)
-premise = a b elidable
-premise with (b) φ elidable
+premise = a b
+premise with (b) φ
 conclusion with (a) φ
 {
   prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () ()
@@ -39,7 +39,7 @@ conclusion with (a) φ
 comment Now we can also prove that the substitution axiom works when substituting into equal terms.
 
 theorem Substitution of Equals into Function
-premise = a b elidable
+premise = a b
 conclusion = with (a) F with (b) F
 {
   prove = with (a) F with (a) F 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (with (a) F) () ()
@@ -49,7 +49,7 @@ conclusion = with (a) F with (b) F
 }
 
 theorem Substitution of Equals into Function (Reversed)
-premise = a b elidable
+premise = a b
 conclusion = with (b) F with (a) F
 {
   prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () ()

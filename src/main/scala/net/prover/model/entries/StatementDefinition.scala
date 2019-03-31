@@ -19,6 +19,7 @@ case class StatementDefinition(
 {
   override def name: String = explicitName.getOrElse(symbol)
   override def typeName: String = "Statement"
+  override def referencedDefinitions: Set[ExpressionDefinition] = definingStatement.map(_.referencedDefinitions).getOrElse(Set.empty)
 
   val defaultValue: DefinedStatement = {
     DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)

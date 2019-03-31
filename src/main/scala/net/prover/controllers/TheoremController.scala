@@ -69,7 +69,7 @@ class TheoremController @Autowired() (bookService: BookService) {
         availablePremises.mapCollect { availablePremise =>
           val substitutions = for {
             conclusionSubstitutions <- possibleConclusionSubstitutions
-            premiseSubstitutions <- premise.statement.calculateSubstitutions(availablePremise.statement, conclusionSubstitutions, 0, stepContext.externalDepth)
+            premiseSubstitutions <- premise.calculateSubstitutions(availablePremise.statement, conclusionSubstitutions, 0, stepContext.externalDepth)
           } yield premiseSubstitutions
           if (substitutions.nonEmpty) {
             Some(PossiblePremiseMatch(availablePremise.statement, substitutions))

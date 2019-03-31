@@ -174,16 +174,4 @@ trait ProverSpec extends Specification {
       DefinedTerm(components, termDefinition)(boundVariableNames)
     }
   }
-
-  trait PremiseMagnet {
-    def elidable: PremiseMagnet
-    def toPremise(index: Int): Premise
-  }
-  implicit class FromStatement(statement: Statement)(implicit isElidable: Boolean = false) extends PremiseMagnet {
-    def elidable: PremiseMagnet = FromStatement(statement)(isElidable = true)
-    def toPremise(index: Int) = Premise(statement, index)(isElidable)
-  }
-  implicit def allToPremise(magnets: Seq[PremiseMagnet]): Seq[Premise] = {
-    magnets.mapWithIndex(_.toPremise(_))
-  }
 }
