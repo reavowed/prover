@@ -1,8 +1,8 @@
 package net.prover.model.proof
 
 import net.prover.model.Inference.RearrangementType
-import net.prover.model.expressions.Statement
 import net.prover.model._
+import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step.NewAssert
 import net.prover.model.proof.Step.NewAssert.Premise.SingleLinePremise
 
@@ -41,5 +41,16 @@ object ProofHelper {
 
   def findPremise(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): NewAssert.Premise = {
     getAvailablePremises(stepContext, parsingContext).find(_.statement == target).getOrElse(NewAssert.Premise.Pending(target))
+  }
+
+  def findFact(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): Option[NewAssert] = {
+    parsingContext.inferences
+      .filter(_.premises.isEmpty)
+      .mapFind { inference =>
+        inference.conclusion.calculateSubstitutions(target, Substitutions.empty, 0, stepContext.externalDepth).headOption
+          .map { substitutions =>
+            NewAssert(target, inference.summary, Nil, substitutions)
+          }
+      }
   }
 }

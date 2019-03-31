@@ -96,7 +96,7 @@ class TheoremController @Autowired() (bookService: BookService) {
         premiseStatements <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, step.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
       } yield {
         val premises = premiseStatements.map(createPremise(_, stepContext, parsingContext))
-        val targetSteps = premises.ofType[Step.NewAssert.Premise.Pending].map(p => Step.Target(p.statement))
+        val targetSteps = premises.ofType[Step.NewAssert.Premise.Pending].map(p => ProofHelper.findFact(p.statement, stepContext, parsingContext).getOrElse(Step.Target(p.statement)))
         targetSteps :+ Step.NewAssert(
           step.statement,
           inference,
