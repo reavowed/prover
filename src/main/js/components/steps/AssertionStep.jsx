@@ -4,7 +4,7 @@ import {HighlightableExpression} from "../ExpressionComponent";
 import {InferenceLink} from "./InferenceLink";
 import {ProofLine} from "./ProofLine";
 
-export class AssertionStep extends React.Component {
+export class AssertionStepProofLine extends React.Component {
   createTargets = () => {
     this.props.apiService.fetchJsonForStep(this.props.path, "createTargets", {
       method: "POST"
@@ -12,9 +12,7 @@ export class AssertionStep extends React.Component {
   };
 
   render() {
-    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists} = this.props;
-    let reference = path.join(".");
-
+    let {step, path, apiService, highlighting, children} = this.props;
     return <ProofLine premiseReferences={step.referencedLines}
                       path={path}
                       buttons={<>
@@ -23,14 +21,20 @@ export class AssertionStep extends React.Component {
                       </>}
                       highlighting={highlighting}
                       apiService={apiService}
-                      incomplete={step.isIncomplete}
-      >
-        Then
-        {' '}
-        <HighlightableExpression statement={step.statement}
-                                 boundVariableLists={boundVariableLists}
-                                 references={[...additionalReferences, reference]}
-                                 highlighting={highlighting}/>.
+                      incomplete={step.isIncomplete}>
+      {children}
     </ProofLine>;
   }
 }
+
+export const AssertionStep = (props) => {
+  const {step, boundVariableLists, additionalReferences, highlighting, path} = props;
+  let reference = path.join(".");
+  return <AssertionStepProofLine {...props}>
+    Then
+    {' '}
+    <HighlightableExpression statement={step.statement}
+                             boundVariableLists={boundVariableLists}
+                             references={[...additionalReferences, reference]}
+                             highlighting={highlighting}/>.</AssertionStepProofLine>
+};

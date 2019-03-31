@@ -6,7 +6,7 @@ import {InferenceLink} from "./InferenceLink";
 import {ProofLine} from "./ProofLine";
 import {Steps} from "./Steps";
 
-export class ElidedStep extends React.Component {
+export class ElidedStepProofLine extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
@@ -32,7 +32,7 @@ export class ElidedStep extends React.Component {
   };
 
   render() {
-    let {step, path, boundVariableLists, additionalReferences, apiService, highlighting} = this.props;
+    let {step, path, boundVariableLists, apiService, highlighting, children} = this.props;
     let reference = path.join(".");
     let buttons = <>
       {step.highlightedInference && <InferenceLink inference={step.highlightedInference} suffix="[elided]"/>}
@@ -49,10 +49,7 @@ export class ElidedStep extends React.Component {
                  highlighting={highlighting}
                  incomplete={step.isIncomplete}
       >
-        Then <HighlightableExpression statement={step.provenStatement}
-                                      boundVariableLists={boundVariableLists}
-                                      references={[...additionalReferences, reference]}
-                                      highlighting={highlighting}/>.
+        {children}
       </ProofLine>
       {this.state.showProofCard && <div className="card" style={{margin: ".5rem 2rem", padding: ".5rem .75rem", display: "inline-block"}}>
         <Steps steps={step.substeps}
@@ -66,3 +63,13 @@ export class ElidedStep extends React.Component {
     </>;
   }
 }
+
+export const ElidedStep = (props) => {
+  let {step, boundVariableLists, additionalReferences, highlighting, path} = props;
+  return <ElidedStepProofLine {...props}>
+    Then <HighlightableExpression statement={step.statement}
+                                  boundVariableLists={boundVariableLists}
+                                  references={[...additionalReferences, path.join(".")]}
+                                  highlighting={highlighting}/>.
+  </ElidedStepProofLine>
+};

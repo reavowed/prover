@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import {HighlightableExpression} from "../ExpressionComponent";
-import {AssertionStep} from "./AssertionStep";
+import {AssertionStep, AssertionStepProofLine} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
-import {ElidedStep} from "./ElidedStep";
+import {ElidedStep, ElidedStepProofLine} from "./ElidedStep";
 import {InferenceLink} from "./InferenceLink";
 import {NamingStep} from "./NamingStep";
 import {ScopedVariableStep} from "./ScopedVariableStep";
@@ -37,42 +37,46 @@ class TransitiveSteps extends React.Component {
       return <>
         <HighlightableExpression expression={{textForHtml: () => symbol}}
                                  boundVariableLists={[]}
-                                 references={[rightHandSide.lineReference]}
+                                 references={rightHandSide.references}
                                  highlighting={highlighting}/>
         {' '}
         <HighlightableExpression expression={rightHandSide.expression}
                                  boundVariableLists={boundVariableLists}
-                                 referencesAsConclusion={nextRightHandSide ? [nextRightHandSide.lineReference, rightHandSide.lineReference] : [rightHandSide.lineReference]}
-                                 references={[rightHandSide.lineReference]}
+                                 referencesAsPremise={rightHandSide.references}
+                                 referencesAsConclusion={nextRightHandSide ? [...nextRightHandSide.references, ...rightHandSide.references] : rightHandSide.references}
                                  highlighting={highlighting}/>.
       </>
     };
+    const renderProofLine = (props, children) => {
+      switch (props.step.type) {
+        case "assertion":
+          return <AssertionStepProofLine {...props}>{children}</AssertionStepProofLine>
+        case "elided":
+          return <ElidedStepProofLine {...props}>{children}</ElidedStepProofLine>
+      }
+    };
 
     return <>
-      <ProofLine premiseReferences={leftHandSide.step.referencedLines}
-                 path={leftHandSide.path}
-                 buttons={<InferenceLink inference={rightHandSides[0].step.inference}/>}
-                 highlighting={highlighting}
-                 apiService={apiService}>
-        <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
-                                                                          boundVariableLists={boundVariableLists}
-                                                                          referencesAsPremise={[leftHandSide.lineReference, ..._.map(rightHandSides, ({lineReference}) => lineReference)]}
-                                                                          referencesAsConclusion={[leftHandSide.lineReference]}
-                                                                          highlighting={highlighting}/> </span>
-        {renderRightHandSide(rightHandSides[0], 0)}
-      </ProofLine>
-      {rightHandSides.slice(1).map((rightHandSide, index) => {
-        return <div className="mb-1">
-          <ProofLine premiseReferences={rightHandSide.step.referencedLines}
-                     path={rightHandSide.path}
-                     buttons={<InferenceLink inference={rightHandSide.step.inference}/>}
-                     highlighting={highlighting}
-                     apiService={apiService}>
+      {renderProofLine(
+        {step: leftHandSide.step, path: leftHandSide.path, highlighting, apiService, boundVariableLists},
+        <>
+          <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
+                                                                            boundVariableLists={boundVariableLists}
+                                                                            referencesAsPremise={[leftHandSide.lineReference, ..._.map(rightHandSides, ({lineReference}) => lineReference)]}
+                                                                            referencesAsConclusion={[leftHandSide.lineReference]}
+                                                                            highlighting={highlighting}/> </span>
+          {renderRightHandSide(rightHandSides[0], 0)}
+        </>
+      )}
+      {rightHandSides.slice(1).map((rightHandSide, index) =>
+        renderProofLine(
+          {step: rightHandSide.step, path: rightHandSide.path, highlighting, apiService, boundVariableLists},
+          <>
             <span ref={this.setSpacerRef}/>
             {renderRightHandSide(rightHandSide, index + 1)}
-          </ProofLine>
-        </div>
-      })}
+          </>
+        )
+      )}
     </>
   }
 }
@@ -108,7 +112,7 @@ export class Steps extends React.Component {
       case "naming":
         return "name " + step.variableName + " as " + step.assumption.serialize();
       case "elided":
-        return step.provenStatement.serialize()
+        return step.statement.serialize()
     }
   }
   static getTransitivityDetails(stepsWithIndexes, firstStep, transitivityInferenceId, basePath, firstIndex) {
@@ -118,30 +122,30 @@ export class Steps extends React.Component {
     const leftHandSideExpression = firstStep.statement.components[0];
     const rightHandSides = [{
       expression: firstStep.statement.components[1],
-      lineReference: firstLineReference,
+      references: [firstLineReference],
       step: firstStep
     }];
     while (stepsWithIndexes.length >= 2 &&
-      stepsWithIndexes[0].step.type === "assertion" &&
-      stepsWithIndexes[1].step.type === "assertion" &&
+      (stepsWithIndexes[0].step.type === "assertion" || stepsWithIndexes[0].step.type === "elided") &&
+      (stepsWithIndexes[1].step.type === "assertion" || stepsWithIndexes[1].step.type === "elided") &&
       !stepsWithIndexes[0].step.isIncomplete &&
       !stepsWithIndexes[1].step.isIncomplete &&
       stepsWithIndexes[0].step.statement.definition &&
       stepsWithIndexes[1].step.statement.definition &&
       stepsWithIndexes[0].step.statement.definition.symbol === definitionSymbol &&
       stepsWithIndexes[1].step.statement.definition.symbol === definitionSymbol &&
-      stepsWithIndexes[1].step.inference.id === transitivityInferenceId &&
+      stepsWithIndexes[1].step.inference && stepsWithIndexes[1].step.inference.id === transitivityInferenceId &&
       stepsWithIndexes[0].step.statement.components[0].serialize() === rightHandSides[rightHandSides.length-1].expression.serialize() &&
       stepsWithIndexes[1].step.statement.components[0].serialize() === leftHandSideExpression.serialize() &&
       stepsWithIndexes[0].step.statement.components[1].serialize() === stepsWithIndexes[1].step.statement.components[1].serialize()
     ) {
-      const {step} = stepsWithIndexes.shift();
-      const {index} = stepsWithIndexes.shift();
+      const {step, index} = stepsWithIndexes.shift();
+      const {index: transitiveIndex} = stepsWithIndexes.shift();
       rightHandSides.push({
         expression: step.statement.components[1],
         step,
         path: [...basePath, index],
-        lineReference: [...basePath, index].join(".")
+        references: [[...basePath, index].join("."), [...basePath, transitiveIndex].join(".")]
       });
     }
     if (rightHandSides.length > 1) {
