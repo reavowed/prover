@@ -3,26 +3,24 @@ package net.prover.model.proof
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement, StatementVariable}
-import net.prover.model.proof.Step.NewAssert
-import net.prover.model.proof.Step.NewAssert.Premise.SingleLinePremise
 
 object ProofHelper {
-  private def getSimplification(premise: SingleLinePremise, simplificationInference: Inference, stepContext: StepContext): Option[SingleLinePremise] = {
+  private def getSimplification(premise: Premise.SingleLinePremise, simplificationInference: Inference, stepContext: StepContext): Option[Premise.SingleLinePremise] = {
     for {
       inferencePremise <- simplificationInference.premises.single
       substitutions <- inferencePremise.calculateSubstitutions(premise.statement, Substitutions.empty, 0, stepContext.externalDepth).headOption
       simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
       path <- inferencePremise.findComponentPath(simplificationInference.conclusion)
     } yield {
-      NewAssert.Premise.Simplification(simplifiedTarget, premise, simplificationInference.summary, substitutions, path)
+      Premise.Simplification(simplifiedTarget, premise, simplificationInference.summary, substitutions, path)
     }
   }
-  private def getSingleSimplifications(premise: SingleLinePremise, simplificationInferences: Seq[Inference], stepContext: StepContext): Seq[SingleLinePremise] = {
+  private def getSingleSimplifications(premise: Premise.SingleLinePremise, simplificationInferences: Seq[Inference], stepContext: StepContext): Seq[Premise.SingleLinePremise] = {
     simplificationInferences.mapCollect(i => getSimplification(premise, i, stepContext))
   }
 
-  private def getSimplifications(premises: Seq[SingleLinePremise], simplificationInferences: Seq[Inference], stepContext: StepContext): Seq[SingleLinePremise] = {
-    def helper(previous: Seq[SingleLinePremise], next: Seq[SingleLinePremise]): Seq[SingleLinePremise] = {
+  private def getSimplifications(premises: Seq[Premise.SingleLinePremise], simplificationInferences: Seq[Inference], stepContext: StepContext): Seq[Premise.SingleLinePremise] = {
+    def helper(previous: Seq[Premise.SingleLinePremise], next: Seq[Premise.SingleLinePremise]): Seq[Premise.SingleLinePremise] = {
       if (next.isEmpty)
         previous
       else
@@ -31,25 +29,25 @@ object ProofHelper {
     helper(Nil, premises)
   }
 
-  def getAvailablePremises(stepContext: StepContext, parsingContext: ParsingContext): Seq[NewAssert.Premise.SingleLinePremise] = {
+  def getAvailablePremises(stepContext: StepContext, parsingContext: ParsingContext): Seq[Premise.SingleLinePremise] = {
     val basePremises = stepContext.availableStatements.map { s=>
-      NewAssert.Premise.Given(s.statement, s.reference)
+      Premise.Given(s.statement, s.reference)
     }
     val simplificationInferences = parsingContext.inferences.filter(_.rearrangementType == RearrangementType.Simplification)
     getSimplifications(basePremises, simplificationInferences, stepContext)
   }
 
-  def findPremise(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): NewAssert.Premise = {
-    getAvailablePremises(stepContext, parsingContext).find(_.statement == target).getOrElse(NewAssert.Premise.Pending(target))
+  def findPremise(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): Premise = {
+    getAvailablePremises(stepContext, parsingContext).find(_.statement == target).getOrElse(Premise.Pending(target))
   }
 
-  def findFact(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): Option[NewAssert] = {
+  def findFact(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): Option[Step.Assertion] = {
     parsingContext.inferences
       .filter(_.premises.isEmpty)
       .mapFind { inference =>
         inference.conclusion.calculateSubstitutions(target, Substitutions.empty, 0, stepContext.externalDepth).headOption
           .map { substitutions =>
-            NewAssert(target, inference.summary, Nil, substitutions)
+            Step.Assertion(target, inference.summary, Nil, substitutions)
           }
       }
   }

@@ -5,7 +5,6 @@ import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.Step.NewAssert
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.convert.converter.Converter
@@ -144,8 +143,8 @@ class TheoremController @Autowired() (bookService: BookService) {
         premiseStatements <- inference.substitutePremisesAndValidateConclusion(step.statement, substitutions, stepContext.externalDepth).recoverWithBadRequest
       } yield {
         val premises = premiseStatements.map(createPremise(_, stepContext, parsingContext))
-        val targetSteps = premises.ofType[Step.NewAssert.Premise.Pending].map(p => ProofHelper.findFact(p.statement, stepContext, parsingContext).getOrElse(Step.Target(p.statement)))
-        targetSteps :+ Step.NewAssert(
+        val targetSteps = premises.ofType[Premise.Pending].map(p => ProofHelper.findFact(p.statement, stepContext, parsingContext).getOrElse(Step.Target(p.statement)))
+        targetSteps :+ Step.Assertion(
           step.statement,
           inference,
           premises,
@@ -234,7 +233,7 @@ class TheoremController @Autowired() (bookService: BookService) {
         substitutedAssumption <- inference.substituteStatement(assumption, substitutions, stepContext.externalDepth).recoverWithBadRequest
       } yield {
         val premises = premiseStatements.map(createPremise(_, stepContext, parsingContext))
-        val targetSteps = premises.ofType[Step.NewAssert.Premise.Pending].map(p => ProofHelper.findFact(p.statement, stepContext, parsingContext).getOrElse(Step.Target(p.statement)))
+        val targetSteps = premises.ofType[Premise.Pending].map(p => ProofHelper.findFact(p.statement, stepContext, parsingContext).getOrElse(Step.Target(p.statement)))
         targetSteps :+ Step.Naming(
           definition.variableName,
           substitutedAssumption,
@@ -320,7 +319,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step.NewAssert](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
+    replaceStep[Step.Assertion](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
       val targetStatements = step.pendingPremises.values.map(_.statement).toSeq
       Success(targetStatements.map(Step.Target(_)) :+ step)
     }.toResponseEntity
@@ -419,7 +418,7 @@ class TheoremController @Autowired() (bookService: BookService) {
     parsingContext.inferences.find(_.id == inferenceId).map(_.summary).orBadRequest(s"Invalid inference $inferenceId")
   }
 
-  private def createPremise(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): NewAssert.Premise = {
+  private def createPremise(target: Statement, stepContext: StepContext, parsingContext: ParsingContext): Premise = {
     ProofHelper.findPremise(target, stepContext, parsingContext)
   }
 
