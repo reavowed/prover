@@ -67,7 +67,7 @@ export class ExpressionComponent extends React.Component {
 
   renderMatch(match, path, pathsToHighlightAsPremise, boundVariableLists, wrapBoundVariable) {
     if (match.type === "boundVariable") {
-      return wrapBoundVariable(formatHtml(match.name), match.name, match.index, path.concat(match.pathWithinMatch));
+      return wrapBoundVariable(formatHtml(match.name).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>), match.name, match.index, path.concat(match.pathWithinMatch));
     } else {
       const lengthOfPath = match.pathWithinMatch.length;
       const innerPathsToHighlightAsPremise = _.chain(pathsToHighlightAsPremise)
@@ -98,7 +98,7 @@ export class ExpressionComponent extends React.Component {
       const format = expression.formatForHtml(safe);
       const boundVariables = expression.boundVariableNames || [];
       const innerBoundVariables = boundVariables.length ? [boundVariables, ...boundVariableLists] : boundVariableLists;
-      const renderedBoundVariables = boundVariables.map((name, index) => wrapBoundVariable(formatHtml(name), name, index, path));
+      const renderedBoundVariables = boundVariables.map((name, index) => wrapBoundVariable(formatHtml(name).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>), name, index, path));
       const renderedComponents = expression.components.map((c, i) => {
         const innerPaths = _.chain(pathsToHighlightAsPremise).filter(p => p.length > 0 && p[0] === i).map(p => p.slice(1)).value();
         return <ExpressionComponent expression={c}

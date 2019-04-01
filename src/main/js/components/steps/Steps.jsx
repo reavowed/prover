@@ -103,17 +103,19 @@ export class Steps extends React.Component {
   static getKey(step) {
     switch (step.type) {
       case "assertion":
-      case "oldAssertion":
+        return "prove " + step.statement.serialize();
       case "target":
-        return step.statement.serialize();
+        return "target " + step.statement.serialize();
       case "deduction":
-        return step.provenStatement ? step.provenStatement.serialize() : "assume " + step.assumption.serialize();
+        return "assume " + step.assumption.serialize() + (step.provenStatement ? " for " + step.provenStatement.serialize() : "");
       case "scopedVariable":
-        return step.provenStatement ? step.provenStatement.serialize() : "take " + step.variableName;
+        return "take " + step.variableName + (step.provenStatement ? " for " + step.provenStatement.serialize() : "");
       case "naming":
-        return "name " + step.variableName + " as " + step.assumption.serialize();
+        return "name " + step.variableName + " as " + step.assumption.serialize() + (step.provenStatement ? " for " + step.provenStatement.serialize() : "");
       case "elided":
-        return step.statement.serialize()
+        return "elide " + step.statement.serialize();
+      case "subproof":
+        return "subproof " + step.statement.serialize();
     }
   }
   static getTransitivityDetails(stepsWithIndexes, firstStep, transitivityInferenceId, basePath, firstIndex) {

@@ -20,7 +20,7 @@ export class SubproofStep extends React.Component {
     let reference ={stepPath: path};
     let referencesForLastStep = [...additionalReferences, reference];
     return <>
-      <h6 onClick={this.toggleSubproof} className={!showingSubproof && "mb-0"} style={{cursor: "pointer"}}>{step.name}</h6>
+      <h6 onClick={this.toggleSubproof} className="mb-0" style={{cursor: "pointer"}}>{step.name}</h6>
       {!showingSubproof &&
         <ProofLine path={path}
                    premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}

@@ -1,5 +1,6 @@
 import React from "react";
-import {formatHtml, HighlightableExpression} from "../ExpressionComponent";
+import {VariableOrConstant} from "../../models/Expression";
+import {ExpressionComponent, formatHtml, HighlightableExpression} from "../ExpressionComponent";
 import {InferenceLink} from "./InferenceLink";
 import {ProofLine} from "./ProofLine";
 import {Steps} from "./Steps";
@@ -18,7 +19,7 @@ export class NamingStep extends React.Component {
                  path={path}
                  apiService={apiService}
                  highlighting={highlighting}>
-        Let {formatHtml(step.variableName)} be such that
+        Let <ExpressionComponent expression={new VariableOrConstant(step.variableName)} /> be such that
         {' '}
         <HighlightableExpression statement={step.assumption}
                                  boundVariableLists={innerBoundVariableLists}

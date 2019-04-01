@@ -206,7 +206,7 @@ export class FindInferenceModal extends React.Component {
           <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)}>
             <option value="" />
             {validValues.map(v =>
-              <option value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
+              <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
                   <ExpressionComponent expression={v} boundVariableLists={boundVariableLists} />
                 )}}/>
             )}
@@ -260,7 +260,7 @@ export class FindInferenceModal extends React.Component {
                 <Form.Group>
                   <Form.Label><strong>Premises</strong></Form.Label>
                   {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
-                    <Form.Group as={Form.Row}>
+                    <Form.Group as={Form.Row} key={i}>
                       <Col xs={4}>
                         <ExpressionComponent expression={premise} boundVariableLists={[]} />
                       </Col>
@@ -268,7 +268,7 @@ export class FindInferenceModal extends React.Component {
                         <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)}>
                           <option value="" />
                           {suggestions.map((s, i) =>
-                            <option value={i} dangerouslySetInnerHTML={{__html: renderToString(
+                            <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
                                 <ExpressionComponent expression={s.statement} boundVariableLists={boundVariableLists} />
                               )}}/>
                           )}
