@@ -202,7 +202,7 @@ class TheoremController @Autowired() (bookService: BookService) {
                 case "up" =>
                   Success((steps.take(last - 1) :+ step :+ steps(last - 1)) ++ steps.drop(last + 1))
                 case "down" =>
-                  Success((steps.take(last) ++ steps.lift(last + 1).toSeq :+ step) ++ steps.drop(last + 1))
+                  Success((steps.take(last) ++ steps.lift(last + 1).toSeq :+ step) ++ steps.drop(last + 2))
                 case _ =>
                   Failure(BadRequestException(s"Unrecognised direction $direction"))
               }
