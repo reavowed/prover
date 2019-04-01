@@ -6,8 +6,9 @@ import {Steps} from "./Steps";
 export class SubproofStep extends React.Component {
   constructor(...args) {
     super(...args);
+    const {step} = this.props;
     this.state = {
-      showingSubproof: false
+      showingSubproof: step.isIncomplete && (step.substeps.length > 1 || step.substeps[0].type !== "target")
     };
   }
   toggleSubproof = () => {
