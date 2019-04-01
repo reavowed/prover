@@ -346,8 +346,8 @@ class TheoremController @Autowired() (bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody boundVariableName: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.ScopedVariable](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
-      Success(step.copy(variableName = boundVariableName))
+    modifyStep[Step.WithVariable](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
+      Success(step.replaceVariableName(boundVariableName))
     }.toResponseEntity
   }
 

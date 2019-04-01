@@ -85,6 +85,10 @@ object Step {
     }
     override def tryModifySubstepsWithResult[T](f: Seq[Step] => Option[Try[(Seq[Step], T)]]): Option[Try[(Step, T)]] = f(substeps).map(_.map(_.mapLeft(replaceSubsteps)))
   }
+  sealed trait WithVariable extends Step {
+    def variableName: String
+    def replaceVariableName(newVariableName: String): Step
+  }
 
   case class Deduction(
       assumption: Statement,
@@ -134,13 +138,14 @@ object Step {
       inference: Inference.Summary,
       premises: Seq[Premise],
       substitutions: Substitutions)
-    extends Step.WithSubsteps
+    extends Step.WithSubsteps with WithVariable
   {
     val `type` = "naming"
     override def provenStatement: Option[Statement] = Some(statement)
     override def specifyContext(outerContext: StepContext): StepContext = {
       outerContext.addBoundVariable(variableName).addStatement(ProvenStatement(assumption, outerContext.stepReference.withSuffix("a")))
     }
+    override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     override def modifyStepForExtraction(step: Step): Option[Step] = step.removeExternalParameters(1)
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
@@ -201,7 +206,7 @@ object Step {
       variableName: String,
       substeps: Seq[Step],
       scopingStatement: StatementDefinition)
-    extends Step.WithSubsteps
+    extends Step.WithSubsteps with WithVariable
   {
     val `type` = "scopedVariable"
     override def provenStatement: Option[Statement] = {
@@ -211,6 +216,7 @@ object Step {
       outerContext.addBoundVariable(variableName)
     }
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
+    override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
     override def modifyStepForExtraction(step: Step): Option[Step] = step.removeExternalParameters(1)
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
       for {
