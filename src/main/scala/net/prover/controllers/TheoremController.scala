@@ -243,7 +243,7 @@ class TheoremController @Autowired() (bookService: BookService) {
         substitutions <- definition.substitutions.parse(inference)(parsingContext)
         _ <- inference.validateConclusion(step.statement, substitutions, stepContext.externalDepth).recoverWithBadRequest
         premiseStatements <- namingPremises.map(inference.substituteStatement(_, substitutions, stepContext.externalDepth)).recoverWithBadRequest
-        substitutedAssumption <- inference.substituteStatement(assumption, substitutions, stepContext.externalDepth).recoverWithBadRequest
+        substitutedAssumption <- assumption.applySubstitutions(substitutions, 1, stepContext.externalDepth).orBadRequest("Could not substitute assumption")
       } yield {
         val premises = premiseStatements.map(createPremise(_, stepContext, parsingContext))
         val targetSteps = premises.ofType[Premise.Pending].map(p => ProofHelper.findFact(p.statement, stepContext, parsingContext).getOrElse(Step.Target(p.statement)))
@@ -251,7 +251,7 @@ class TheoremController @Autowired() (bookService: BookService) {
           definition.variableName,
           substitutedAssumption,
           step.statement,
-          Seq(Step.Target(step.statement)),
+          Seq(Step.Target(step.statement.insertExternalParameters(1))),
           inference,
           premises,
           substitutions)
