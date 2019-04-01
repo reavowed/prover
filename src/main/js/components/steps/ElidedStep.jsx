@@ -34,7 +34,6 @@ export class ElidedStepProofLine extends React.Component {
 
   render() {
     let {step, path, boundVariableLists, apiService, highlighting, children} = this.props;
-    let reference = path.join(".");
     let buttons = <>
       {step.highlightedInference && <InferenceLink inference={step.highlightedInference} suffix="[elided]"/>}
       {!step.highlightedInference && <DropdownButton title="Highlighted Inference" size="sm" className="ml-1">
@@ -42,7 +41,7 @@ export class ElidedStepProofLine extends React.Component {
       </DropdownButton>}
     </>;
     return <>
-      <ProofLine premiseReferences={_.filter(step.referencedLines, r => !r.lineReference.startsWith(reference))}
+      <ProofLine premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
                  path={path}
                  buttons={buttons}
                  onClick={this.toggleProofCard}
@@ -69,7 +68,7 @@ export const ElidedStep = (props) => {
   return <ElidedStepProofLine {...props}>
     Then <HighlightableExpression statement={step.statement}
                                   boundVariableLists={boundVariableLists}
-                                  references={[...additionalReferences, path.join(".")]}
+                                  references={[...additionalReferences, {stepPath: path}]}
                                   highlighting={highlighting}/>.
   </ElidedStepProofLine>
 };

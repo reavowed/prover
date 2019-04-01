@@ -21,7 +21,7 @@ export class ScopedVariableStep extends React.Component {
   };
   render() {
     let {step, path, boundVariableLists, additionalReferences, apiService, highlighting} = this.props;
-    let reference = path.join(".");
+    let reference = {stepPath: path};
     let referencesForLastStep = [...additionalReferences, reference];
     let innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     return <>
@@ -41,7 +41,7 @@ export class ScopedVariableStep extends React.Component {
       {step.provenStatement &&
         <ProofLine highlighting={highlighting}
                    apiService={apiService}
-                   premiseReferences={[{lineReference: [...path, step.substeps.length - 1].join("."), internalPath: []}]}
+                   premiseReferences={[{stepPath: [...path, step.substeps.length - 1]}]}
                    path={path}>
           So <HighlightableExpression expression={step.provenStatement}
                                       boundVariableLists={boundVariableLists}

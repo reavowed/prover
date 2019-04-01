@@ -8,7 +8,7 @@ import {Steps} from "./steps/Steps";
 
 class Premise extends React.Component {
   render() {
-    return <HighlightableExpression reference={"p" + this.props.index} highlighting={this.props.highlighting} expression={this.props.premise} boundVariableLists={[]}/>;
+    return <HighlightableExpression reference={{premiseIndex: this.props.index}} highlighting={this.props.highlighting} expression={this.props.premise} boundVariableLists={[]}/>;
   }
 }
 

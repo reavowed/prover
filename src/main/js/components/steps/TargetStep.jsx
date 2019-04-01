@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import _ from "lodash";
-import Form from "react-bootstrap/Form";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {BoundVariableModal, FindInferenceModal} from "../Modals";
 import {ClickableText} from "./ClickableText";
@@ -44,7 +43,7 @@ export class TargetStep extends React.Component {
   startUpdatingBoundVariable = (boundVariableName, boundVariableIndex, boundVariablePath) => {
     this.setState({
       boundVariableModalTitle: "Rename bound variable",
-      boundVariableModaLabel: "Bound variable name",
+      boundVariableModalLabel: "Bound variable name",
       boundVariableModalCallback: () => this.updateBoundVariable(boundVariableIndex, boundVariablePath),
       boundVariableName
     });
@@ -71,7 +70,7 @@ export class TargetStep extends React.Component {
   chooseBoundVariableForNaming = () => {
     this.setState({
       boundVariableModalTitle: "Choose variable name",
-      boundVariableModaLabel: "Variable name",
+      boundVariableModalLabel: "Variable name",
       boundVariableModalCallback: () => this.findInferenceForNaming(),
       boundVariableName: ''
     });
@@ -90,7 +89,7 @@ export class TargetStep extends React.Component {
   chooseNameForSubproof = () => {
     this.setState({
       boundVariableModalTitle: "Choose sub-proof name",
-      boundVariableModaLabel: "Name",
+      boundVariableModalLabel: "Name",
       boundVariableModalCallback: () => this.createSubproof(),
       boundVariableName: ''
     });
@@ -150,7 +149,7 @@ export class TargetStep extends React.Component {
 
   render() {
     let {step, path, additionalReferences, apiService, highlighting, boundVariableLists} = this.props;
-    let reference = path.join(".");
+    let reference = {stepPath: path};
     let scopingStatement = _.find(window.definitions, d => d.structureType === "scoping");
     let deductionStatement = _.find(window.definitions, d => d.structureType === "deduction");
 

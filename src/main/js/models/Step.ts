@@ -45,7 +45,7 @@ export class TargetStep {
 
 export class SubproofStep {
     type = "subproof";
-    constructor(public name: String, public statement: Expression, public substeps: Step[]) {}
+    constructor(public name: String, public statement: Expression, public substeps: Step[], public referencedLines: any) {}
     isIncomplete: boolean = _.some(this.substeps, s => s.isIncomplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
 }
@@ -99,7 +99,8 @@ export const Step = {
                    return new SubproofStep(
                        stepJson.name,
                        Expression.parseFromJson(stepJson.statement),
-                       Step.parseFromJson(stepJson.substeps));
+                       Step.parseFromJson(stepJson.substeps),
+                       stepJson.referencedLines,);
                default:
                    throw "Unrecognised step " + JSON.stringify(stepJson);
            }

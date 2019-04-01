@@ -23,19 +23,19 @@ object ChapterProps {
   private def toSummary(entry: ChapterEntry): Option[Entry] = entry match {
     case axiom: entries.Axiom =>
       import axiom._
-      Some(Axiom(name, key, premises, conclusion))
+      Some(AxiomPropsForChapter(name, key, premises, conclusion))
     case theorem: entries.Theorem =>
       import theorem._
-      Some(Theorem(name, key, premises, conclusion))
+      Some(TheoremPropsForChapter(name, key, premises, conclusion))
     case statementDefinition: entries.StatementDefinition =>
       import statementDefinition._
-      Some(StatementDefinition(defaultValue, key, shorthand, definingStatement))
+      Some(StatementDefinitionPropsForChapter(defaultValue, key, shorthand, definingStatement))
     case termDefinition: entries.TermDefinition =>
       import termDefinition._
-      Some(TermDefinition(defaultValue, key, shorthand, definingStatement, premises))
+      Some(TermDefinitionPropsForChapter(defaultValue, key, shorthand, definingStatement, premises))
     case comment: entries.Comment =>
       import comment._
-      Some(Comment(text, key))
+      Some(CommentPropsForChapter(text, key))
     case _ =>
       None
   }
@@ -44,19 +44,19 @@ object ChapterProps {
     @JsonSerialize
     val `type`: String
   }
-  case class Axiom(name: String, key: ChapterEntry.Key, premises: Seq[Statement], conclusion: Statement) extends Entry {
+  case class AxiomPropsForChapter(name: String, key: ChapterEntry.Key, premises: Seq[Statement], conclusion: Statement) extends Entry {
     override val `type`: String = "axiom"
   }
-  case class Theorem(name: String, key: ChapterEntry.Key, premises: Seq[Statement], conclusion: Statement) extends Entry {
+  case class TheoremPropsForChapter(name: String, key: ChapterEntry.Key, premises: Seq[Statement], conclusion: Statement) extends Entry {
     override val `type`: String = "theorem"
   }
-  case class StatementDefinition(defaultValue: Statement, key: ChapterEntry.Key, shorthand: Option[String], definingStatement: Option[Statement]) extends Entry {
+  case class StatementDefinitionPropsForChapter(defaultValue: Statement, key: ChapterEntry.Key, shorthand: Option[String], definingStatement: Option[Statement]) extends Entry {
     override val `type`: String = "statementDefinition"
   }
-  case class TermDefinition(defaultValue: Term, key: ChapterEntry.Key, shorthand: Option[String], definingStatement: Statement, premises: Seq[Statement]) extends Entry {
+  case class TermDefinitionPropsForChapter(defaultValue: Term, key: ChapterEntry.Key, shorthand: Option[String], definingStatement: Statement, premises: Seq[Statement]) extends Entry {
     override val `type`: String = "termDefinition"
   }
-  case class Comment(text: String, key: ChapterEntry.Key) extends Entry {
+  case class CommentPropsForChapter(text: String, key: ChapterEntry.Key) extends Entry {
     override val `type`: String = "comment"
   }
 }

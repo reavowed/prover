@@ -29,7 +29,7 @@ case class Theorem(
       case Nil =>
         None
       case head +: tail =>
-        val initialStepContextAndPathOption = proof.lift(head).map(step => (step, initialContext.addSteps(proof.take(head)), Seq(head)))
+        val initialStepContextAndPathOption = proof.lift(head).map(step => (step, initialContext.addSteps(proof.take(head)).atIndex(head), Seq(head)))
         tail.foldLeft(initialStepContextAndPathOption) { case (currentStepContextAndPathOption, index) =>
           currentStepContextAndPathOption.flatMap { case (step, context, path) =>
             step.getSubstep(index, context).map { case (newStep, newContext) => (newStep, newContext, path :+ index) }
@@ -112,7 +112,7 @@ object Theorem extends Inference.EntryParser {
   override val name: String = "theorem"
 
   def proofParser(premises: Seq[Statement])(implicit parsingContext: ParsingContext): Parser[Seq[Step]] = {
-    Step.listParser(Nil)(parsingContext, StepContext.justWithPremises(premises)).inBraces
+    Step.listParser(parsingContext, StepContext.justWithPremises(premises)).inBraces
   }
 
   def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[Theorem] = {

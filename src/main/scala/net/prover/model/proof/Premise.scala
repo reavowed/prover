@@ -55,7 +55,7 @@ object Premise {
 
   case class Simplification(statement: Statement, premise: Premise.SingleLinePremise, inference: Inference.Summary, substitutions: Substitutions, path: Seq[Int]) extends SingleLinePremise {
     val `type` = "simplification"
-    override def referencedLine: PreviousLineReference = premise.referencedLine.addPath(path)
+    override def referencedLine: PreviousLineReference = premise.referencedLine.addInternalPath(path)
     override def referencedInferenceIds: Set[String] = premise.referencedInferenceIds + inference.id
     override def serializedLines: Seq[String] = Seq(s"simplified ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}") ++ premise.serializedLines.indent
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Pending] = premise.getPendingPremises(path :+ 0)

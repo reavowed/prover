@@ -7,13 +7,13 @@ import {Steps} from "./Steps";
 export class NamingStep extends React.Component {
   render() {
     let {step, path, additionalReferences, apiService, highlighting, boundVariableLists,} = this.props;
-    let reference = path.join(".");
-    let assumptionReference = reference + "a";
+    let reference = {stepPath: path};
+    let referenceForAssumption = {stepPath: path, suffix: "a"};
     let referencesForLastStep = [...additionalReferences, reference];
     const innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     return <>
       <ProofLine premiseReferences={step.referencedLines}
-                 reference={assumptionReference}
+                 reference={referenceForAssumption}
                  buttons={<InferenceLink inference={step.inference}/>}
                  path={path}
                  apiService={apiService}
@@ -22,7 +22,7 @@ export class NamingStep extends React.Component {
         {' '}
         <HighlightableExpression statement={step.assumption}
                                  boundVariableLists={innerBoundVariableLists}
-                                 reference={assumptionReference}
+                                 reference={referenceForAssumption}
                                  highlighting={highlighting}/>.
       </ProofLine>
       <Steps steps={step.substeps}

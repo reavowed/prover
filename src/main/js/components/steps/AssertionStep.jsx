@@ -29,12 +29,11 @@ export class AssertionStepProofLine extends React.Component {
 
 export const AssertionStep = (props) => {
   const {step, boundVariableLists, additionalReferences, highlighting, path} = props;
-  let reference = path.join(".");
   return <AssertionStepProofLine {...props}>
     Then
     {' '}
     <HighlightableExpression statement={step.statement}
                              boundVariableLists={boundVariableLists}
-                             references={[...additionalReferences, reference]}
+                             references={[...additionalReferences, {stepPath: path}]}
                              highlighting={highlighting}/>.</AssertionStepProofLine>
 };

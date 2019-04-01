@@ -84,7 +84,6 @@ export class Steps extends React.Component {
   static getElementName(step) {
     switch (step.type) {
       case "assertion":
-      case "oldAssertion":
         return AssertionStep;
       case "target":
         return TargetStep;

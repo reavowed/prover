@@ -27,16 +27,15 @@ sealed trait Step {
   def serializedLines: Seq[String]
 }
 
-case class StepContext(path: Seq[Int], availableStatements: Seq[ProvenStatement], boundVariableLists: Seq[Seq[String]]) {
+case class StepContext(stepReference: StepReference, availableStatements: Seq[ProvenStatement], boundVariableLists: Seq[Seq[String]]) {
   def externalDepth: Int = boundVariableLists.length
-  def atIndex(index: Int): StepContext = copy(path = path :+ index)
+  def atIndex(index: Int): StepContext = copy(stepReference = stepReference.forChild(index))
   def addStatement(statement: ProvenStatement): StepContext = copy(availableStatements = availableStatements :+ statement)
   def addStatements(statements: Seq[ProvenStatement]): StepContext = copy(availableStatements = availableStatements ++ statements)
   def addStep(step: Step): StepContext = addSteps(Seq(step))
   def addSteps(steps: Seq[Step]): StepContext = {
-    val provenStatements = steps
-      .mapWithIndex((step, index) =>
-        step.provenStatement.map(ProvenStatement(_, PreviousLineReference((path :+ index).mkString("."), Nil)))
+    val provenStatements = steps.mapWithIndex((step, index) =>
+      step.provenStatement.map(ProvenStatement(_, stepReference.forChild(index)))
     ).collectDefined
     addStatements(provenStatements)
   }
@@ -48,7 +47,7 @@ case class StepContext(path: Seq[Int], availableStatements: Seq[ProvenStatement]
   }
 }
 object StepContext {
-  def justWithPremises(premises: Seq[Statement]): StepContext = StepContext(Nil, premises.mapWithIndex((p, i) => ProvenStatement(p, PreviousLineReference(s"p$i", Nil))), Nil)
+  def justWithPremises(premises: Seq[Statement]): StepContext = StepContext(StepReference(Nil), premises.mapWithIndex((p, i) => ProvenStatement(p, PremiseReference(i))), Nil)
 }
 
 object Step {
@@ -98,7 +97,7 @@ object Step {
       substeps.lastOption.flatMap(_.provenStatement).map(s => DefinedStatement(Seq(assumption, s), deductionStatement)(Nil))
     }
     override def specifyContext(outerContext: StepContext): StepContext = {
-      outerContext.addStatement(ProvenStatement(assumption, PreviousLineReference(outerContext.path.mkString(".") + "a", Nil)))
+      outerContext.addStatement(ProvenStatement(assumption, outerContext.stepReference.withSuffix("a")))
     }
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     override def modifyStepForExtraction(step: Step): Option[Step] = Some(step)
@@ -117,12 +116,12 @@ object Step {
       Seq("}")
   }
   object Deduction {
-    def parser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Deduction] = {
+    def parser(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Deduction] = {
       val deductionStatement = parsingContext.deductionStatementOption
         .getOrElse(throw new Exception("Cannot prove a deduction without an appropriate statement definition"))
       for {
         assumption <- Statement.parser
-        substeps <- listParser(path)(parsingContext, stepContext.addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil)))).inBraces
+        substeps <- listParser(parsingContext, stepContext.addStatement(ProvenStatement(assumption, stepContext.stepReference.withSuffix("a")))).inBraces
       } yield Deduction(assumption, substeps, deductionStatement)
     }
   }
@@ -140,7 +139,7 @@ object Step {
     val `type` = "naming"
     override def provenStatement: Option[Statement] = Some(statement)
     override def specifyContext(outerContext: StepContext): StepContext = {
-      outerContext.addBoundVariable(variableName).addStatement(ProvenStatement(assumption, PreviousLineReference(outerContext.path.mkString(".") + "a", Nil)))
+      outerContext.addBoundVariable(variableName).addStatement(ProvenStatement(assumption, outerContext.stepReference.withSuffix("a")))
     }
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     override def modifyStepForExtraction(step: Step): Option[Step] = step.removeExternalParameters(1)
@@ -158,7 +157,7 @@ object Step {
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet + inference.id
     override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet
-    override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
+    override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet ++ substeps.flatMap(_.referencedLines).toSet
     override def length: Int = substeps.map(_.length).sum + 1
     override def serializedLines: Seq[String] = Seq(s"let $variableName ${assumption.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)} {") ++
       substeps.flatMap(_.serializedLines).indent ++
@@ -166,17 +165,17 @@ object Step {
   }
 
   object Naming {
-    def parser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Naming] = {
+    def parser(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Naming] = {
       for {
         variableName <- Parser.singleWord
         innerParsingContext = parsingContext.addParameters(variableName)
         assumption <- Statement.parser(innerParsingContext)
         innerStepContext = stepContext
           .addBoundVariable(variableName)
-          .addStatement(ProvenStatement(assumption, PreviousLineReference(path.mkString(".") + "a", Nil)))
+          .addStatement(ProvenStatement(assumption, stepContext.stepReference.withSuffix("a")))
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
-        substeps <- listParser(path)(innerParsingContext, innerStepContext).inBraces
+        substeps <- listParser(innerParsingContext, innerStepContext).inBraces
       } yield {
         val internalConclusion = substeps.flatMap(_.provenStatement).lastOption.getOrElse(throw new Exception("No conclusion for naming step"))
         val extractedConclusion = internalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
@@ -227,13 +226,13 @@ object Step {
       Seq("}")
   }
   object ScopedVariable {
-    def parser(path: Seq[Int])(implicit context: ParsingContext, stepContext: StepContext): Parser[ScopedVariable] = {
+    def parser(implicit context: ParsingContext, stepContext: StepContext): Parser[ScopedVariable] = {
       val scopingStatement = context.scopingStatementOption
         .getOrElse(throw new Exception("Scoped variable step could not find scoping statement"))
       for {
         variableName <- Parser.singleWord
         innerContext = context.addParameters(variableName)
-        substeps <- listParser(path)(innerContext, stepContext.addBoundVariable(variableName)).inBraces
+        substeps <- listParser(innerContext, stepContext.addBoundVariable(variableName)).inBraces
       } yield ScopedVariable(variableName, substeps, scopingStatement)
     }
   }
@@ -254,7 +253,7 @@ object Step {
     def serializedLines: Seq[String] = Seq(s"target ${statement.serialized}")
   }
   object Target {
-    def parser(path: Seq[Int])(implicit context: ParsingContext, stepContext: StepContext): Parser[Target] = {
+    def parser(implicit context: ParsingContext, stepContext: StepContext): Parser[Target] = {
       for {
         statement <- Statement.parser
       } yield Target(statement)
@@ -281,10 +280,10 @@ object Step {
       Seq("}")
   }
   object Elided {
-    def parser(path: Seq[Int])(implicit context: ParsingContext, stepContext: StepContext): Parser[Elided] = {
+    def parser(implicit context: ParsingContext, stepContext: StepContext): Parser[Elided] = {
       for {
         highlightedInference <- Inference.parser.tryOrNone
-        substeps <- listParser(path).inBraces
+        substeps <- listParser.inBraces
       } yield Elided(substeps, highlightedInference)
     }
   }
@@ -331,7 +330,7 @@ object Step {
         } yield premisesSoFar :+ newPremise
       }
     }
-    def parser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Assertion] = {
+    def parser(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Assertion] = {
       for {
         statement <- Statement.parser
         inference <- Inference.parser
@@ -363,11 +362,11 @@ object Step {
       Seq("}")
   }
   object SubProof {
-    def parser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[SubProof] = {
+    def parser(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[SubProof] = {
       for {
         statement <- Statement.parser
         name <- Parser.allInParens
-        substeps <- listParser(path).inBraces
+        substeps <- listParser.inBraces
       } yield SubProof(name, statement, substeps)
     }
   }
@@ -380,21 +379,21 @@ object Step {
     }
   }
 
-  def parser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Option[Step]] = {
+  def parser(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Option[Step]] = {
     Parser.selectOptionalWordParser {
-      case "assume" => Deduction.parser(path)
-      case "let" => Naming.parser(path)
-      case "take" => ScopedVariable.parser(path)
-      case "target" => Target.parser(path)
-      case "prove" => Assertion.parser(path)
-      case "elided" => Elided.parser(path)
-      case "subproof" => SubProof.parser(path)
+      case "assume" => Deduction.parser
+      case "let" => Naming.parser
+      case "take" => ScopedVariable.parser
+      case "target" => Target.parser
+      case "prove" => Assertion.parser
+      case "elided" => Elided.parser
+      case "subproof" => SubProof.parser
     }
   }
-  def listParser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Seq[Step]] = {
+  def listParser(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Seq[Step]] = {
     Parser.whileDefined[Step] { (previousSteps, index) =>
-      val previousProvenStatements = previousSteps.mapWithIndex((s, i) => s.provenStatement.map(s => ProvenStatement(s, PreviousLineReference((path :+ i).mkString("."), Nil)))).collectDefined
-      parser(path :+ index)(parsingContext, stepContext.addStatements(previousProvenStatements))
+      val innerContext = stepContext.addSteps(previousSteps).atIndex(index)
+      parser(parsingContext, innerContext)
     }
   }
 }

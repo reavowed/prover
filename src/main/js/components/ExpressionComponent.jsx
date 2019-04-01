@@ -125,6 +125,16 @@ export class ExpressionComponent extends React.Component {
   }
 }
 
+function referencesMatch(r1, r2) {
+  if (_.isNumber(r1.premiseIndex)) {
+    return r1.premiseIndex === r2.premiseIndex;
+  } else {
+    return r2.stepPath &&
+      r1.stepPath.join(".") === r2.stepPath.join(".") &&
+      r1.suffix === r2.suffix;
+  }
+}
+
 export class HighlightableExpression extends React.Component {
   render() {
     const {statement, expression, references, reference, boundVariableLists, wrapBoundVariable, highlighting, className} = this.props;
@@ -132,9 +142,17 @@ export class HighlightableExpression extends React.Component {
     let defaultReferences = references || [reference];
     referencesAsPremise = referencesAsPremise || defaultReferences;
     referencesAsConclusion = referencesAsConclusion || defaultReferences;
-    const matchingPremises = highlighting ? _.filter(highlighting.highlightedPremises, p => referencesAsPremise.includes(p.lineReference)) : [];
-    const pathsToHighlightAsPremise = _.map(matchingPremises, p => p.internalPath);
-    const shouldHighlightAsConclusion = highlighting && _.some(referencesAsConclusion, r => r === highlighting.highlightedConclusion);
+
+    const matchingPremises = highlighting ? _.filter(highlighting.highlightedPremises, highlightedPremise =>
+      _.some(referencesAsPremise, reference =>
+        referencesMatch(reference, highlightedPremise)
+      )
+    ) : [];
+    const pathsToHighlightAsPremise = _.map(matchingPremises, p => p.internalPath || []);
+
+    const shouldHighlightAsConclusion = highlighting && highlighting.highlightedConclusion &&
+      _.some(referencesAsConclusion, r => referencesMatch(r, highlighting.highlightedConclusion));
+
     const expressionElement = <ExpressionComponent expression={statement || expression} pathsToHighlightAsPremise={pathsToHighlightAsPremise} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} safe={false}/>;
     return shouldHighlightAsConclusion ? <HighlightedConclusion className={className}>{expressionElement}</HighlightedConclusion> :
       className ? <span className={className}>{expressionElement}</span> : expressionElement;

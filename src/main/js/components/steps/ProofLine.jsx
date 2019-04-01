@@ -18,12 +18,12 @@ export const ProofLine = styled(class ProofLine extends React.Component {
   }
   onMouseEnter = () => {
     let {highlighting, premiseReferences, path, reference} = this.props;
-    reference = reference || (path && path.join("."));
     if (premiseReferences && highlighting) {
       highlighting.setHighlightedPremises(premiseReferences);
     }
-    if (reference && highlighting) {
-      highlighting.setHighlightedConclusion(reference);
+    let conclusionReference = reference || (path && {stepPath: path});
+    if (conclusionReference && highlighting) {
+      highlighting.setHighlightedConclusion(conclusionReference);
     }
     this.setState({isHovered: true});
   };
