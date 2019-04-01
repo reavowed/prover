@@ -43,7 +43,14 @@ export class TargetStep {
     inferencesUsed: any[] = [];
 }
 
-export type Step = AssertionStep | DeductionStep | ScopedVariableStep | NamingStep | TargetStep | ElidedStep;
+export class SubproofStep {
+    type = "subproof";
+    constructor(public name: String, public statement: Expression, public substeps: Step[]) {}
+    isIncomplete: boolean = _.some(this.substeps, s => s.isIncomplete);
+    inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
+}
+
+export type Step = AssertionStep | DeductionStep | ScopedVariableStep | NamingStep | TargetStep | ElidedStep | SubproofStep;
 export const Step = {
     parseFromJson(json: any): Step[] {
         return json.map((stepJson: any) => {
@@ -88,6 +95,11 @@ export const Step = {
                        Step.parseFromJson(stepJson.substeps),
                        stepJson.highlightedInference && Parser.parseInference(stepJson.highlightedInference),
                        stepJson.referencedLines);
+               case "subproof":
+                   return new SubproofStep(
+                       stepJson.name,
+                       Expression.parseFromJson(stepJson.statement),
+                       Step.parseFromJson(stepJson.substeps));
                default:
                    throw "Unrecognised step " + JSON.stringify(stepJson);
            }

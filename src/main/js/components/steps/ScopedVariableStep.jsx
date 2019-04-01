@@ -52,6 +52,7 @@ export class ScopedVariableStep extends React.Component {
       <BoundVariableModal show={this.state.showBoundVariableModal}
                           onHide={() => this.setState({showBoundVariableModal: false})}
                           title="Introduce bound variable"
+                          label="Bound variable name"
                           value={this.state.boundVariableName}
                           onChange={e => this.setState({boundVariableName: e.target.value})}
                           onSave={this.updateBoundVariable}/>

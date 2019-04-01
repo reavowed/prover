@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import _ from "lodash";
+import Form from "react-bootstrap/Form";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {BoundVariableModal, FindInferenceModal} from "../Modals";
 import {ClickableText} from "./ClickableText";
@@ -28,6 +29,7 @@ export class TargetStep extends React.Component {
   startIntroducingBoundVariable= () => {
     this.setState({
       boundVariableModalTitle: "Introduce bound variable",
+      boundVariableModaLabel: "Bound variable name",
       boundVariableModalCallback: this.introduceBoundVariable,
       boundVariableName: this.props.step.statement.boundVariableNames && this.props.step.statement.boundVariableNames[0] || ""
     });
@@ -42,6 +44,7 @@ export class TargetStep extends React.Component {
   startUpdatingBoundVariable = (boundVariableName, boundVariableIndex, boundVariablePath) => {
     this.setState({
       boundVariableModalTitle: "Rename bound variable",
+      boundVariableModaLabel: "Bound variable name",
       boundVariableModalCallback: () => this.updateBoundVariable(boundVariableIndex, boundVariablePath),
       boundVariableName
     });
@@ -68,6 +71,7 @@ export class TargetStep extends React.Component {
   chooseBoundVariableForNaming = () => {
     this.setState({
       boundVariableModalTitle: "Choose variable name",
+      boundVariableModaLabel: "Variable name",
       boundVariableModalCallback: () => this.findInferenceForNaming(),
       boundVariableName: ''
     });
@@ -81,6 +85,21 @@ export class TargetStep extends React.Component {
         getPremiseSuggestions: this.getNamingPremiseSuggestions,
         submit: this.createNamingStep
       }})
+  };
+
+  chooseNameForSubproof = () => {
+    this.setState({
+      boundVariableModalTitle: "Choose sub-proof name",
+      boundVariableModaLabel: "Name",
+      boundVariableModalCallback: () => this.createSubproof(),
+      boundVariableName: ''
+    });
+  };
+  createSubproof = () => {
+    this.props.apiService.fetchJsonForStep(this.props.path, "introduceSubproof", {
+      method: "POST",
+      body: this.state.boundVariableName
+    }).then(this.props.apiService.updateTheorem);
   };
 
   hideFindInferenceModal = () => {
@@ -99,7 +118,6 @@ export class TargetStep extends React.Component {
   getNamingPremiseSuggestions = (inferenceId) => {
     return this.props.apiService.fetchJsonForStep(this.props.path, `suggestNamingPremises?inferenceId=${inferenceId}`)
   };
-
 
   proveWithInference = (inferenceId, substitutions) => {
     this.props.apiService.fetchJsonForStep(this.props.path, "", {
@@ -139,6 +157,7 @@ export class TargetStep extends React.Component {
     const boundVariableModal = <BoundVariableModal show={this.isShowingBoundVariableModal()}
                                                    onHide={this.hideBoundVariableModal}
                                                    title={this.state.boundVariableModalTitle}
+                                                   label={this.state.boundVariableModalLabel}
                                                    value={this.state.boundVariableName}
                                                    onChange={this.updateBoundVariableName}
                                                    onSave={this.state.boundVariableModalCallback}/>;
@@ -153,6 +172,7 @@ export class TargetStep extends React.Component {
         <Button variant="success" size="sm" onClick={this.findInferenceForAssertion}>Find inference</Button>
         <Button variant="success" size="sm" className="ml-1" onClick={this.elide}>Elide</Button>
         <Button variant="success" size="sm" className="ml-1" onClick={this.chooseBoundVariableForNaming}>Name</Button>
+        <Button variant="success" size="sm" className="ml-1" onClick={this.chooseNameForSubproof}>Subproof</Button>
         {scopingStatement && step.statement.definition === scopingStatement &&
         <Button variant="success" size="sm" className="ml-1" onClick={this.startIntroducingBoundVariable}>Introduce bound variable</Button>}
         {deductionStatement && step.statement.definition === deductionStatement &&

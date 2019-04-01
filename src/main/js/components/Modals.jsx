@@ -303,7 +303,7 @@ export class BoundVariableModal extends React.Component {
     this.inputRef = React.createRef();
   }
   render() {
-    const {show, onHide, title, value, onChange, onSave} = this.props;
+    const {show, onHide, title, label, value, onChange, onSave} = this.props;
     const onInputKeyUp = (event) => {
       if (event.keyCode === 13) {
         onSave();
@@ -318,7 +318,7 @@ export class BoundVariableModal extends React.Component {
       <Modal.Header closeButton><Modal.Title>{title}</Modal.Title></Modal.Header>
       <Modal.Body>
         <Form.Group>
-          <Form.Label>Bound variable name</Form.Label>
+          <Form.Label>{label}</Form.Label>
           <Form.Control type="text"
                         value={value}
                         onChange={onChange}

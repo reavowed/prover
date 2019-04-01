@@ -4,11 +4,10 @@ import {HighlightableExpression} from "../ExpressionComponent";
 import {AssertionStep, AssertionStepProofLine} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
 import {ElidedStep, ElidedStepProofLine} from "./ElidedStep";
-import {InferenceLink} from "./InferenceLink";
 import {NamingStep} from "./NamingStep";
 import {ScopedVariableStep} from "./ScopedVariableStep";
+import {SubproofStep} from "./SubproofStep";
 import {TargetStep} from "./TargetStep";
-import {ProofLine} from "./ProofLine";
 
 class TransitiveSteps extends React.Component {
   constructor(props) {
@@ -97,6 +96,8 @@ export class Steps extends React.Component {
         return NamingStep;
       case "elided":
         return ElidedStep;
+      case "subproof":
+        return SubproofStep;
     }
   }
   static getKey(step) {

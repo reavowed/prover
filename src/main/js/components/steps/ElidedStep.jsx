@@ -5,6 +5,7 @@ import {HighlightableExpression} from "../ExpressionComponent";
 import {InferenceLink} from "./InferenceLink";
 import {ProofLine} from "./ProofLine";
 import {Steps} from "./Steps";
+import {Subproof} from "./Subproof";
 
 export class ElidedStepProofLine extends React.Component {
   constructor(...args) {

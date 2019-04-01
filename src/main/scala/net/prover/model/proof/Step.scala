@@ -342,6 +342,36 @@ object Step {
     }
   }
 
+  case class SubProof(name: String, statement: Statement, substeps: Seq[Step]) extends Step.WithSubsteps {
+    val `type`: String = "subproof"
+    override def specifyContext(outerContext: StepContext): StepContext = outerContext
+    override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
+    override def modifyStepForExtraction(step: Step): Option[Step] = Some(step)
+    override def provenStatement: Option[Statement] = Some(statement)
+    override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
+      for {
+        newStatement <- statement.removeExternalParameters(numberOfParametersToRemove)
+        newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
+      } yield SubProof(name, newStatement, newSubsteps)
+    }
+    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
+    override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
+    override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
+    override def length: Int = substeps.map(_.length).sum
+    override def serializedLines: Seq[String] = Seq(s"subproof ${statement.serialized} ($name) {") ++
+      substeps.flatMap(_.serializedLines).indent ++
+      Seq("}")
+  }
+  object SubProof {
+    def parser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[SubProof] = {
+      for {
+        statement <- Statement.parser
+        name <- Parser.allInParens
+        substeps <- listParser(path).inBraces
+      } yield SubProof(name, statement, substeps)
+    }
+  }
+
   implicit class StepSeqOps(steps: Seq[Step]) {
     def recalculateReferences(outerContext: StepContext, parsingContext: ParsingContext): Seq[Step] = {
       steps.zipWithIndex.mapReduceWithPrevious[Step] { case (previousSteps, (oldStep, i)) =>
@@ -358,6 +388,7 @@ object Step {
       case "target" => Target.parser(path)
       case "prove" => Assertion.parser(path)
       case "elided" => Elided.parser(path)
+      case "subproof" => SubProof.parser(path)
     }
   }
   def listParser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Seq[Step]] = {

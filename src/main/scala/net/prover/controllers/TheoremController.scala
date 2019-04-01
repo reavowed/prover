@@ -215,6 +215,19 @@ class TheoremController @Autowired() (bookService: BookService) {
     }.toResponseEntity
   }
 
+  @PostMapping(value = Array("/{stepReference}/introduceSubproof"))
+  def introduceSubproof(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: PathData,
+    @RequestBody name: String
+  ): ResponseEntity[_] = {
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (step, stepContext, parsingContext) =>
+      Success(Seq(Step.SubProof(name, step.statement, Seq(step))))
+    }.toResponseEntity
+  }
+
   @PostMapping(value = Array("/{stepReference}/introduceNaming"))
   def introduceNaming(
     @PathVariable("bookKey") bookKey: String,
