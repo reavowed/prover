@@ -2,7 +2,6 @@ package net.prover.model
 
 import net.prover.model.entries.{ChapterEntry, ExpressionDefinition, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
-import net.prover.model.proof.Transformation
 
 import scala.util.Try
 
@@ -20,7 +19,6 @@ case class ParsingContext(
   def scopingStatementOption: Option[StatementDefinition] = {
     statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Scoping))
   }
-  def transformation: Option[Transformation] = scopingStatementOption.flatMap(Transformation.find(_, inferences))
 
   def transitivityInferences: Map[ExpressionDefinition, Inference] = {
     inferences.mapCollect {
@@ -109,32 +107,6 @@ case class ParsingContext(
           None
       })
     }
-  }
-
-  def findNamingInferences(): Option[Seq[(Inference, Statement)]] = {
-    (scopingStatementOption, deductionStatementOption) match {
-      case (Some(scopingStatement), Some(deductionStatement)) =>
-        Some(inferences.mapCollect {
-          case inference @ Inference(
-            _,
-            Seq(
-              firstPremise,
-              DefinedStatement(
-                Seq(DefinedStatement(
-                  Seq(_, StatementVariable(deductionConclusionVariableName)),
-                  `deductionStatement`
-                )),
-                `scopingStatement`),
-              _),
-            StatementVariable(conclusionVariableName)
-          ) if deductionConclusionVariableName == conclusionVariableName =>
-            Some((inference, firstPremise))
-          case _ =>
-            None
-        })
-      case _ =>
-        None
-      }
   }
 
   def matchScopingStatement(statement: Statement): Option[(Statement, StatementDefinition)] = {

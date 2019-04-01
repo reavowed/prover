@@ -7,11 +7,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.Inference._
 import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
 import net.prover.model.expressions._
-import net.prover.model.proof.Transformation
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
-  val id: String = calculateHash()
+  @JsonSerialize
+  def id: String
   @JsonSerialize
   def key: ChapterEntry.Key
   @JsonSerialize
@@ -58,19 +58,28 @@ trait Inference {
     Inference.calculateHash(premises, conclusion)
   }
 
-  def substitutePremisesAndValidateConclusion(substitutions: Substitutions, expectedConclusion: Statement, externalDepth: Int): Seq[Statement] = {
-    val substitutedPremises = premises.map(p => p.applySubstitutions(substitutions, 0, externalDepth)
-      .getOrElse(throw new Exception(s"Could not substitute premise $p")))
+  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions, externalDepth: Int): Seq[Statement] = {
+    validateConclusion(expectedConclusion, substitutions, externalDepth)
+    premises.map(substituteStatement(_, substitutions, externalDepth))
+  }
+
+  def substituteStatement(statement: Statement, substitutions: Substitutions, externalDepth: Int): Statement = {
+    statement.applySubstitutions(substitutions, 0, externalDepth).getOrElse(throw new Exception(s"Could not substitute $statement"))
+  }
+
+  def validateConclusion(expectedConclusion: Statement, substitutions: Substitutions, externalDepth: Int): Unit = {
     val substitutedConclusion = conclusion.applySubstitutions(substitutions, 0, externalDepth)
       .getOrElse(throw new Exception(s"Could not substitute conclusion $conclusion"))
     (expectedConclusion == substitutedConclusion)
-          .ifFalse(throw new Exception(s"Substituted conclusion $substitutedConclusion was not expected conclusion $expectedConclusion"))
-    substitutedPremises
+      .ifFalse(throw new Exception(s"Substituted conclusion $substitutedConclusion was not expected conclusion $expectedConclusion"))
   }
 }
 
 object Inference {
-  trait Entry extends Inference with ChapterEntry.Standalone {
+  trait WithCalculatedId extends Inference {
+    def id: String = calculateHash()
+  }
+  trait Entry extends Inference.WithCalculatedId with ChapterEntry.Standalone {
     override def title: String = name
   }
   trait EntryParser extends ChapterEntryParser {
@@ -85,10 +94,10 @@ object Inference {
     }
   }
 
-  case class Summary(key: ChapterEntry.Key, name: String, premises: Seq[Statement], conclusion: Statement, rearrangementType: RearrangementType) extends Inference
+  case class Summary(key: ChapterEntry.Key, name: String, id: String, premises: Seq[Statement], conclusion: Statement, rearrangementType: RearrangementType) extends Inference
   object Summary {
     def apply(inference: Inference): Summary = {
-      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.key, inference.name, inference.premises, inference.conclusion, inference.rearrangementType))
+      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.key, inference.name, inference.id, inference.premises, inference.conclusion, inference.rearrangementType))
     }
   }
 
@@ -97,32 +106,10 @@ object Inference {
       key: ChapterEntry.Key,
       premises: Seq[Statement],
       conclusion: Statement)
-    extends Inference
+    extends Inference.WithCalculatedId
   {
     override def name: String = s"Definition of $nameOfDefinition"
     override def rearrangementType = RearrangementType.NotRearrangement
-  }
-
-  case class Transformed(
-      inner: Inference.Summary,
-      transformation: Transformation,
-      premises: Seq[Statement],
-      conclusion: Statement)
-    extends Inference
-  {
-    override def key = inner.key
-    override def name = inner.name
-    override def rearrangementType = inner.rearrangementType
-
-    private def isScoped(statement: Statement) = statement match {
-      case DefinedStatement(_, transformation.statementDefinition) => true
-      case _ => false
-    }
-
-    def arePremisesScoped: Seq[Boolean] = {
-      premises.map(isScoped)
-    }
-    def isConclusionScoped: Boolean = isScoped(conclusion)
   }
 
   sealed trait RearrangementType {

@@ -41,6 +41,11 @@ package object controllers {
       }
     }
   }
+  implicit class AnyWithResponseExceptionOps[T](t: => T) {
+    def recoverWithBadRequest: Try[T] = {
+      Try(t).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
+    }
+  }
   def getTheoremParsingContext(book: Book, chapter: Chapter, theorem: Theorem): ParsingContext = {
     val previousChapters = book.chapters.takeWhile(_ != chapter)
     val previousEntries = chapter.entries.takeWhile(_ != theorem)

@@ -116,7 +116,21 @@ premise function f X X
 premise ∈ g_0 X
 conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
 {
-  target ∃ g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
+  let S = $0 comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 x ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0) (comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 x ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () {
+    target function union $0 ℕ X
+    target = apply union $0 0 g_0
+    target ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply f apply union $$0 $0
+    elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+      prove ∧ = apply union $0 0 g_0 ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply f apply union $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= apply union $0 0 g_0, ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply f apply union $$0 $0) () () ()
+        given
+        given
+      prove ∧ function union $0 ℕ X ∧ = apply union $0 0 g_0 ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply f apply union $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function union $0 ℕ X, ∧ = apply union $0 0 g_0 ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply f apply union $$0 $0) () () ()
+        given
+        given
+      prove ∃ g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (union $0) (∧ function $$0 ℕ X ∧ = apply $$0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 apply f apply $$$0 $0) ()
+        given
+    }
+  }
   prove ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0 7e9f82102c20c58a4b06619743d8bf8792dfae2f90022462ae50947e30071a71 () (X, g_0) () (apply f $0)
     given
 }

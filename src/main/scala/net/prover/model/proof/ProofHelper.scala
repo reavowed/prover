@@ -2,7 +2,7 @@ package net.prover.model.proof
 
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
-import net.prover.model.expressions.Statement
+import net.prover.model.expressions.{DefinedStatement, Statement, StatementVariable}
 import net.prover.model.proof.Step.NewAssert
 import net.prover.model.proof.Step.NewAssert.Premise.SingleLinePremise
 
@@ -52,5 +52,36 @@ object ProofHelper {
             NewAssert(target, inference.summary, Nil, substitutions)
           }
       }
+  }
+
+  def findNamingInferences(parsingContext: ParsingContext): Seq[(Inference, Seq[Statement], Statement)] = {
+    parsingContext.inferences.mapCollect(i =>
+      getNamingPremisesAndAssumption(i, parsingContext).map {
+        case (premises, assumption) => (i, premises, assumption)
+      })
+  }
+
+  def getNamingPremisesAndAssumption(inference: Inference, parsingContext: ParsingContext): Option[(Seq[Statement], Statement)] = {
+    (parsingContext.scopingStatementOption, parsingContext.deductionStatementOption) match {
+      case (Some(scopingStatement), Some(deductionStatement)) =>
+        inference match {
+          case Inference(
+            _,
+            initialPremises :+
+              DefinedStatement(
+              Seq(DefinedStatement(
+              Seq(assumption: Statement, StatementVariable(deductionConclusionVariableName)),
+              `deductionStatement`
+              )),
+              `scopingStatement`),
+            StatementVariable(conclusionVariableName)
+          ) if deductionConclusionVariableName == conclusionVariableName =>
+            Some((initialPremises, assumption))
+          case _ =>
+            None
+        }
+      case _ =>
+        None
+    }
   }
 }

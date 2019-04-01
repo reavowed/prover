@@ -80,7 +80,7 @@ export class FindInferenceModal extends React.Component {
     this.setState({autosuggestValue: newValue});
   };
   onSuggestionsFetchRequested = ({ value }) => {
-    this.props.getInferenceSuggestions(value)
+    this.props.callbacks.getInferenceSuggestions(value)
       .then(suggestionsJson => this.setState({inferenceSuggestions: Parser.parseInferenceSuggestions(suggestionsJson)}))
   };
   onSuggestionsClearRequested = () => {
@@ -96,7 +96,7 @@ export class FindInferenceModal extends React.Component {
       premiseSuggestions: null,
       selectedSubstitutionValues
     });
-    this.props.getPremiseSuggestions(suggestion.inference.id)
+    this.props.callbacks.getPremiseSuggestions && this.props.callbacks.getPremiseSuggestions(suggestion.inference.id)
       .then(suggestionsJson => this.setState({
         premiseSuggestions: Parser.parsePremiseSuggestions(suggestionsJson),
         selectedPremiseSuggestions: suggestion.inference.premises.map(() => ["", null])
@@ -187,7 +187,7 @@ export class FindInferenceModal extends React.Component {
     return this.state.selectedInferenceSuggestion && _.chain(this.state.selectedSubstitutionValues).values().flatMap(_.values).every().value();
   };
   submit = () => {
-    this.props.onSubmit(this.state.selectedInferenceSuggestion.inference.id, this.state.selectedSubstitutionValues);
+    this.props.callbacks.submit(this.state.selectedInferenceSuggestion.inference.id, this.state.selectedSubstitutionValues);
   };
 
   render() {

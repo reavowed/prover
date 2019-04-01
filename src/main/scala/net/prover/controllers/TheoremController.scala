@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.StepDefinition
+import net.prover.controllers.models.{NamingDefinition, StepDefinition}
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.entries.Theorem
@@ -48,10 +48,8 @@ class TheoremController @Autowired() (bookService: BookService) {
         .take(10)
     }).toResponseEntity
   }
-
-  case class PossiblePremiseMatch(statement: Statement, substitutions: Seq[Substitutions])
   @GetMapping(value = Array("/{stepReference}/suggestPremises"), produces = Array("application/json;charset=UTF-8"))
-  def suggestPremisesForSubstitutions(
+  def suggestPremisesForInference(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
@@ -63,22 +61,72 @@ class TheoremController @Autowired() (bookService: BookService) {
       parsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
       inference <- findInference(inferenceId)(parsingContext)
     } yield {
-      val possibleConclusionSubstitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
-      val availablePremises = ProofHelper.getAvailablePremises(stepContext, parsingContext).map(_.statement).distinct
-      inference.premises.map { premise =>
-        availablePremises.mapCollect { availablePremise =>
-          val substitutions = for {
-            conclusionSubstitutions <- possibleConclusionSubstitutions
-            premiseSubstitutions <- premise.calculateSubstitutions(availablePremise, conclusionSubstitutions, 0, stepContext.externalDepth)
-          } yield premiseSubstitutions
-          if (substitutions.nonEmpty) {
-            Some(PossiblePremiseMatch(availablePremise, substitutions))
-          } else {
+      getPremiseMatches(inference.premises, inference.conclusion, step, stepContext, parsingContext)
+    }).toResponseEntity
+  }
+
+  @GetMapping(value = Array("/{stepReference}/suggestNamingInferences"), produces = Array("application/json;charset=UTF-8"))
+  def suggestNamingInferences(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: PathData,
+    @RequestParam("searchText") searchText: String
+  ): ResponseEntity[_] = {
+    (for {
+      (book, chapter, theorem, step, stepContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference)
+    } yield {
+      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
+      ProofHelper.findNamingInferences(parsingContext)
+        .filter(_._1.name.toLowerCase.contains(searchText.toLowerCase))
+        .reverse
+        .mapCollect { case (inference, namingPremises, _) =>
+          val substitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
+          if (substitutions.nonEmpty)
+            Some(InferenceSuggestion(inference.summary.copy(premises = namingPremises), inference.requiredSubstitutions, substitutions))
+          else
             None
-          }
+        }
+        .take(10)
+    }).toResponseEntity
+  }
+
+  @GetMapping(value = Array("/{stepReference}/suggestNamingPremises"), produces = Array("application/json;charset=UTF-8"))
+  def suggestPremisesForNaming(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: PathData,
+    @RequestParam("inferenceId") inferenceId: String
+  ): ResponseEntity[_] = {
+    (for {
+      (book, chapter, theorem, step, stepContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference)
+      parsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
+      inference <- findInference(inferenceId)(parsingContext)
+      (namingPremises, _) <- ProofHelper.getNamingPremisesAndAssumption(inference, parsingContext).orBadRequest(s"Inference $inferenceId was not naming inference")
+    } yield {
+      getPremiseMatches(namingPremises, inference.conclusion, step, stepContext, parsingContext)
+    }).toResponseEntity
+  }
+
+
+  case class PossiblePremiseMatch(statement: Statement, substitutions: Seq[Substitutions])
+  private def getPremiseMatches(premises: Seq[Statement], conclusion: Statement, step: Step.Target, stepContext: StepContext, parsingContext: ParsingContext): Seq[Seq[PossiblePremiseMatch]] = {
+    val possibleConclusionSubstitutions = conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
+    val availablePremises = ProofHelper.getAvailablePremises(stepContext, parsingContext).map(_.statement).distinct
+    premises.map { premise =>
+      availablePremises.mapCollect { availablePremise =>
+        val substitutions = for {
+          conclusionSubstitutions <- possibleConclusionSubstitutions
+          premiseSubstitutions <- premise.calculateSubstitutions(availablePremise, conclusionSubstitutions, 0, stepContext.externalDepth)
+        } yield premiseSubstitutions
+        if (substitutions.nonEmpty) {
+          Some(PossiblePremiseMatch(availablePremise, substitutions))
+        } else {
+          None
         }
       }
-    }).toResponseEntity
+    }
   }
 
   @PutMapping(value = Array("/{stepReference}"))
@@ -92,15 +140,15 @@ class TheoremController @Autowired() (bookService: BookService) {
     replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (step, stepContext, parsingContext) =>
       for {
         inference <- findInference(definition.inferenceId)(parsingContext)
-        substitutions <- definition.parseSubstitutions(inference)(parsingContext)
-        premiseStatements <- Try(inference.substitutePremisesAndValidateConclusion(substitutions, step.statement, stepContext.externalDepth)).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
+        substitutions <- definition.substitutions.parse(inference)(parsingContext)
+        premiseStatements <- inference.substitutePremisesAndValidateConclusion(step.statement, substitutions, stepContext.externalDepth).recoverWithBadRequest
       } yield {
         val premises = premiseStatements.map(createPremise(_, stepContext, parsingContext))
         val targetSteps = premises.ofType[Step.NewAssert.Premise.Pending].map(p => ProofHelper.findFact(p.statement, stepContext, parsingContext).getOrElse(Step.Target(p.statement)))
         targetSteps :+ Step.NewAssert(
           step.statement,
           inference,
-          premiseStatements.map(createPremise(_, stepContext, parsingContext)),
+          premises,
           substitutions)
       }
     }.toResponseEntity
@@ -165,6 +213,37 @@ class TheoremController @Autowired() (bookService: BookService) {
     }
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, parsingContext) =>
       moveInTheorem(theorem, parsingContext).orNotFound(s"Step $stepReference").flatten
+    }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/{stepReference}/introduceNaming"))
+  def introduceNaming(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepReference") stepReference: PathData,
+    @RequestBody definition: NamingDefinition
+  ): ResponseEntity[_] = {
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (step, stepContext, parsingContext) =>
+      for {
+        inference <- findInference(definition.inferenceId)(parsingContext)
+        (namingPremises, assumption) <- ProofHelper.getNamingPremisesAndAssumption(inference, parsingContext).orBadRequest(s"Inference ${definition.inferenceId} is not a naming inference")
+        substitutions <- definition.substitutions.parse(inference)(parsingContext)
+        _ <- inference.validateConclusion(step.statement, substitutions, stepContext.externalDepth).recoverWithBadRequest
+        premiseStatements <- namingPremises.map(inference.substituteStatement(_, substitutions, stepContext.externalDepth)).recoverWithBadRequest
+        substitutedAssumption <- inference.substituteStatement(assumption, substitutions, stepContext.externalDepth).recoverWithBadRequest
+      } yield {
+        val premises = premiseStatements.map(createPremise(_, stepContext, parsingContext))
+        val targetSteps = premises.ofType[Step.NewAssert.Premise.Pending].map(p => ProofHelper.findFact(p.statement, stepContext, parsingContext).getOrElse(Step.Target(p.statement)))
+        targetSteps :+ Step.Naming(
+          definition.variableName,
+          substitutedAssumption,
+          step.statement,
+          Seq(Step.Target(step.statement)),
+          inference,
+          premises,
+          substitutions)
+      }
     }.toResponseEntity
   }
 

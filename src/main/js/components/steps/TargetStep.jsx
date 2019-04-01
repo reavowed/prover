@@ -11,6 +11,7 @@ export class TargetStep extends React.Component {
     super(props, context);
     this.state = {
       boundVariableModalCallback: null,
+      findInferenceModalCallbacks: null,
       showFindInferenceModal: false,
       boundVariableName: ""
     };
@@ -26,6 +27,7 @@ export class TargetStep extends React.Component {
 
   startIntroducingBoundVariable= () => {
     this.setState({
+      boundVariableModalTitle: "Introduce bound variable",
       boundVariableModalCallback: this.introduceBoundVariable,
       boundVariableName: this.props.step.statement.boundVariableNames && this.props.step.statement.boundVariableNames[0] || ""
     });
@@ -39,6 +41,7 @@ export class TargetStep extends React.Component {
 
   startUpdatingBoundVariable = (boundVariableName, boundVariableIndex, boundVariablePath) => {
     this.setState({
+      boundVariableModalTitle: "Rename bound variable",
       boundVariableModalCallback: () => this.updateBoundVariable(boundVariableIndex, boundVariablePath),
       boundVariableName
     });
@@ -52,19 +55,67 @@ export class TargetStep extends React.Component {
       .then(this.hideBoundVariableModal);
   };
 
-  showFindInferenceModal = () => {
-    this.setState({showFindInferenceModal: true})
+  shouldShowFindInferenceModal = () => this.state.findInferenceModalCallbacks != null;
+
+  findInferenceForAssertion = () => {
+    this.setState({findInferenceModalCallbacks: {
+        getInferenceSuggestions: this.getStepInferenceSuggestions,
+        getPremiseSuggestions: this.getPremiseSuggestions,
+        submit: this.proveWithInference
+      }})
+  };
+
+  chooseBoundVariableForNaming = () => {
+    this.setState({
+      boundVariableModalTitle: "Choose variable name",
+      boundVariableModalCallback: () => this.findInferenceForNaming(),
+      boundVariableName: ''
+    });
+  };
+  findInferenceForNaming = () => {
+    this.setState({
+      boundVariableModalCallback: null
+    });
+    this.setState({findInferenceModalCallbacks: {
+        getInferenceSuggestions: this.getNamingInferenceSuggestions,
+        getPremiseSuggestions: this.getNamingPremiseSuggestions,
+        submit: this.createNamingStep
+      }})
   };
 
   hideFindInferenceModal = () => {
-    this.setState({showFindInferenceModal: false})
+    this.setState({findInferenceModalCallbacks: null})
   };
 
-  getInferenceSuggestions = (searchText) => {
+  getStepInferenceSuggestions = (searchText) => {
     return this.props.apiService.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}`)
+  };
+  getNamingInferenceSuggestions = (searchText) => {
+    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestNamingInferences?searchText=${searchText}`)
   };
   getPremiseSuggestions = (inferenceId) => {
     return this.props.apiService.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}`)
+  };
+  getNamingPremiseSuggestions = (inferenceId) => {
+    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestNamingPremises?inferenceId=${inferenceId}`)
+  };
+
+
+  proveWithInference = (inferenceId, substitutions) => {
+    this.props.apiService.fetchJsonForStep(this.props.path, "", {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({inferenceId, substitutions})
+    }).then(this.props.apiService.updateTheorem);
+  };
+
+  createNamingStep = (inferenceId, substitutions) => {
+    const {boundVariableName: variableName} = this.state;
+    this.props.apiService.fetchJsonForStep(this.props.path, "introduceNaming", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({inferenceId, substitutions, variableName})
+    }).then(this.props.apiService.updateTheorem);
   };
 
   introduceDeduction = () => {
@@ -79,14 +130,6 @@ export class TargetStep extends React.Component {
     }).then(this.props.apiService.updateTheorem);
   };
 
-  proveWithInference = (inferenceId, substitutions) => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "", {
-      method: "PUT",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({inferenceId, substitutions})
-    }).then(this.props.apiService.updateTheorem);
-  };
-
   render() {
     let {step, path, additionalReferences, apiService, highlighting, boundVariableLists} = this.props;
     let reference = path.join(".");
@@ -95,7 +138,7 @@ export class TargetStep extends React.Component {
 
     const boundVariableModal = <BoundVariableModal show={this.isShowingBoundVariableModal()}
                                                    onHide={this.hideBoundVariableModal}
-                                                   title="Introduce bound variable"
+                                                   title={this.state.boundVariableModalTitle}
                                                    value={this.state.boundVariableName}
                                                    onChange={this.updateBoundVariableName}
                                                    onSave={this.state.boundVariableModalCallback}/>;
@@ -107,8 +150,9 @@ export class TargetStep extends React.Component {
 
     const buttons = (
       <>
-        <Button variant="success" size="sm" onClick={this.showFindInferenceModal}>Find inference</Button>
+        <Button variant="success" size="sm" onClick={this.findInferenceForAssertion}>Find inference</Button>
         <Button variant="success" size="sm" className="ml-1" onClick={this.elide}>Elide</Button>
+        <Button variant="success" size="sm" className="ml-1" onClick={this.chooseBoundVariableForNaming}>Name</Button>
         {scopingStatement && step.statement.definition === scopingStatement &&
         <Button variant="success" size="sm" className="ml-1" onClick={this.startIntroducingBoundVariable}>Introduce bound variable</Button>}
         {deductionStatement && step.statement.definition === deductionStatement &&
@@ -119,7 +163,6 @@ export class TargetStep extends React.Component {
       <ProofLine incomplete
                  path={path}
                  buttons={buttons}
-                 blockHide={this.state.showFindInferenceModal}
                  apiService={apiService}
                  highlighting={highlighting}>
         Then <HighlightableExpression statement={step.statement}
@@ -130,11 +173,9 @@ export class TargetStep extends React.Component {
         />.
       </ProofLine>
       {boundVariableModal}
-      {<FindInferenceModal show={this.state.showFindInferenceModal}
+      {<FindInferenceModal show={this.shouldShowFindInferenceModal()}
                            onHide={this.hideFindInferenceModal}
-                           onSubmit={this.proveWithInference}
-                           getInferenceSuggestions={this.getInferenceSuggestions}
-                           getPremiseSuggestions={this.getPremiseSuggestions}
+                           callbacks={this.state.findInferenceModalCallbacks}
                            boundVariableLists={boundVariableLists} />}
     </>
   }

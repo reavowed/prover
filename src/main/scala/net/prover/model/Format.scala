@@ -18,33 +18,12 @@ trait Format {
       textSoFar.replaceFirst(s"%$index", Matcher.quoteReplacement(component))
     }
   }
-  def formatHtml(components: Seq[NodeSeq], safe: Boolean = false): Seq[Node] = {
-    HtmlHelper.formatWithReplacement(getSafeFormatString(safe), replacePlaceholders(_, components))
-  }
 
   private def getSafeFormatString(safe: Boolean) = {
     if (safe && requiresBrackets)
       "(" + baseFormatString + ")"
     else
       baseFormatString
-  }
-
-  private def replacePlaceholders(
-    formatStringToUse: String,
-    components: Seq[NodeSeq]
-  ): Seq[Node] = {
-    val matcher = Pattern.compile("%(\\d+)").matcher(formatStringToUse)
-    var indexOfLastMatchEnd = 0
-    val nodes = new ListBuffer[Node]
-    while (matcher.find()) {
-      val intermediateNode = new Text(formatStringToUse.substring(indexOfLastMatchEnd, matcher.start()))
-      val componentIndex = matcher.group(1).toInt
-      nodes += intermediateNode
-      nodes ++= components(componentIndex)
-      indexOfLastMatchEnd = matcher.end()
-    }
-    nodes += new Text(formatStringToUse.substring(indexOfLastMatchEnd))
-    nodes.toList
   }
 }
 

@@ -88,33 +88,6 @@ object Step {
     override def tryModifySubstepsWithResult[T](f: Seq[Step] => Option[Try[(Seq[Step], T)]]): Option[Try[(Step, T)]] = f(substeps).map(_.map(_.mapLeft(replaceSubsteps)))
   }
 
-  case class Assertion(
-      statement: Statement,
-      inferenceApplication: InferenceApplication)
-    extends Step.WithoutSubsteps
-  {
-    val `type` = "oldAssertion"
-    override def provenStatement: Option[Statement] = Some(statement)
-    override def referencedInferenceIds: Set[String] = inferenceApplication.referencedInferenceIds
-    override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
-    override def referencedLines: Set[PreviousLineReference] = inferenceApplication.referencedLines
-    // TODO: Apply to inference application
-    override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
-      statement.removeExternalParameters(numberOfParametersToRemove).map(s => copy(statement = s))
-    }
-    override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Step = this
-    override def length = 1
-    override def serializedLines: Seq[String] = Seq(s"assert ${statement.serialized} ${inferenceApplication.serialized}")
-  }
-  object Assertion {
-    def parser(path: Seq[Int])(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Assertion] = {
-      for {
-        assertion <- Statement.parser
-        inferenceApplication <- InferenceApplication.parser
-      } yield Assertion(assertion, inferenceApplication)
-    }
-  }
-
   case class Deduction(
       assumption: Statement,
       substeps: Seq[Step],
@@ -211,7 +184,7 @@ object Step {
         val scopingStatement = parsingContext.scopingStatementOption.getOrElse(throw new Exception("Naming step requires a scoping statement"))
         val deductionStatement = parsingContext.deductionStatementOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
         val internalPremise = DefinedStatement(Seq(DefinedStatement(Seq(assumption, internalConclusion), deductionStatement)(Nil)), scopingStatement)(Seq(variableName))
-        val substitutedPremises = inference.substitutePremisesAndValidateConclusion(substitutions, extractedConclusion, stepContext.externalDepth)
+        val substitutedPremises = inference.substitutePremisesAndValidateConclusion(extractedConclusion, substitutions, stepContext.externalDepth)
         val availablePremises = ProofHelper.getAvailablePremises(stepContext, parsingContext)
         val premises = substitutedPremises match {
           case init :+ last =>
@@ -443,7 +416,7 @@ object Step {
             statement <- Statement.parser
             inference <- Inference.parser
             substitutions <- inference.substitutionsParser
-            premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, statement, parsingContext.parameterDepth)
+            premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions, parsingContext.parameterDepth)
             premiseStatement = premiseStatements.single.getOrElse(throw new Exception("Simplification inference must have a single premise"))
             premise <- premiseParser(premiseStatement)
           } yield {
@@ -482,7 +455,7 @@ object Step {
         statement <- Statement.parser
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
-        premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, statement, parsingContext.parameterDepth)
+        premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions, parsingContext.parameterDepth)
         premises <- premisesParser(premiseStatements)
       } yield NewAssert(statement, inference, premises, substitutions)
     }
@@ -500,7 +473,6 @@ object Step {
     Parser.selectOptionalWordParser {
       case "assume" => Deduction.parser(path)
       case "let" => Naming.parser(path)
-      case "assert" => Assertion.parser(path)
       case "take" => ScopedVariable.parser(path)
       case "target" => Target.parser(path)
       case "prove" => NewAssert.parser(path)

@@ -8,7 +8,6 @@ import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.Step.NewAssert
 import net.prover.model.proof._
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
@@ -62,51 +61,6 @@ class BookController @Autowired() (bookService: BookService) {
           "displayShorthands" -> book.displayContext.displayShorthands,
           "definitionShorthands" -> getDefinitionShorthands(parsingContext)))
     }).toResponseEntity
-  }
-
-  @GetMapping(value = Array("/{bookKey}/replaceOldAssertions"))
-  def replaceOldAssertions(@PathVariable("bookKey") bookKey: String): ResponseEntity[_] = {
-    def replaceReference(reference: Reference, premiseStatement: Statement, externalDepth: Int): Option[NewAssert.Premise] = reference match {
-      case Reference.Direct(value) =>
-        Some(NewAssert.Premise.Given(premiseStatement, PreviousLineReference(value, Nil)))
-      case Reference.Compound(Reference.Direct(first), Reference.Direct(_)) if first.endsWith("a") =>
-        Some(NewAssert.Premise.Given(premiseStatement, PreviousLineReference(first.init, Nil)))
-      case Reference.Simplification(inference, substitutions, innerReference, path) =>
-        for {
-          innerPremiseStatement <- inference.substitutePremisesAndValidateConclusion(substitutions, premiseStatement, externalDepth).single
-          updatedInnerReference <- replaceReference(innerReference, innerPremiseStatement, externalDepth).flatMap(_.asOptionalInstanceOf[NewAssert.Premise.SingleLinePremise])
-        } yield NewAssert.Premise.Simplification(premiseStatement, updatedInnerReference, inference.summary, substitutions, path)
-      case _ =>
-        None
-    }
-    def replaceSteps(steps: Seq[Step], outerContext: StepContext): Seq[Step] = {
-      steps.mapWithIndex {
-        case (step @ Step.Assertion(statement, InferenceApplication.Direct(inference, substitutions, conclusion, references, _)), _) =>
-          val premiseStatements = inference.substitutePremisesAndValidateConclusion(substitutions, conclusion, outerContext.externalDepth)
-          val newPremisesOption = references.zip(premiseStatements).map { case (r, s) => replaceReference(r, s, outerContext.externalDepth) }.traverseOption
-          newPremisesOption.map(premises => Step.NewAssert(statement, inference, premises, substitutions)).getOrElse(step)
-        case (step: Step.WithSubsteps, index) =>
-          step.replaceSubsteps(replaceSteps(step.substeps, step.specifyContext(outerContext.atIndex(index))))
-        case (step, _) =>
-          step
-      }
-    }
-    def replaceTheorem(book: Book, chapter: Chapter, theorem: Theorem): Theorem = {
-      val parsingContext = getTheoremParsingContext(book, chapter, theorem)
-      theorem.copy(proof = replaceSteps(theorem.proof, StepContext.justWithPremises(theorem.premises))).recalculateReferences(parsingContext)
-    }
-    def replaceChapter(book: Book, chapter: Chapter): Chapter = {
-      val updatedEntries = chapter.entries.map {
-        case theorem: Theorem =>
-          replaceTheorem(book, chapter, theorem)
-        case other =>
-          other
-      }
-      chapter.copy(entries = updatedEntries)
-    }
-    bookService.modifyBook(bookKey, (_, book) => {
-      Success((book.copy(chapters = book.chapters.map(replaceChapter(book, _))), ()))
-    }).map(_ => ()).toResponseEntity
   }
 
   @PostMapping(value = Array("/{bookKey}/{chapterKey}/theorems"), produces = Array("application/json;charset=UTF-8"))
