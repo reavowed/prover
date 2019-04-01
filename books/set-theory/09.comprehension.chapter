@@ -220,20 +220,3 @@ conclusion ∈ a S
       given
   }
 }
-
-theorem Universal Property from Comprehension
-premise = S comprehension x A with ($0) φ
-premise = S A
-conclusion ∀ y → ∈ $0 A with ($0) φ
-{
-  take y {
-    assume ∈ $0 A {
-      prove ∈ $0 S 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (S, A) (∈ $0 $$0) ()
-        given
-        given
-      prove with ($0) φ fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () (S, A, $0) (with ($$0) φ) ()
-        given
-        given
-    }
-  }
-}

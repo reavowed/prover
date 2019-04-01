@@ -251,7 +251,7 @@ conclusion → ψ φ
   }
 }
 
-theorem Proof by Cases
+theorem Proof by Exclusive Cases
 premise → φ ψ
 premise → ¬ φ ψ
 conclusion ψ
@@ -301,11 +301,4 @@ conclusion → ¬ φ ψ
       given
       given
   }
-}
-
-theorem 
-premise φ
-conclusion → φ φ
-{
-  target → φ φ
 }

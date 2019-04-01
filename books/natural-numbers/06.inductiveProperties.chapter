@@ -4,17 +4,34 @@ theorem A Natural Number Is Either 0 or a Successor
 premise ∈ n ℕ
 conclusion ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0
 {
-  assert = 0 0 direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (0) () () ()
-  assert ∨ = 0 0 ∃ m ∧ ∈ $0 ℕ = 0 successor $0 direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= 0 0, ∃ m ∧ ∈ $0 ℕ = 0 successor $0) () () () (direct 0)
-  take a {
+  prove = 0 0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (0) () ()
+  prove ∨ = 0 0 ∃ m ∧ ∈ $0 ℕ = 0 successor $0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= 0 0, ∃ m ∧ ∈ $0 ℕ = 0 successor $0) () () ()
+    given
+  take n {
     assume ∧ ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0 {
-      assert = successor $0 successor $0 direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (successor $0) () () ()
-      assert ∧ ∈ $0 ℕ = successor $0 successor $0 direct bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d rearranged (∈ $0 ℕ, = successor $0 successor $0) () () () (simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℕ, ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) () () () direct 2.0a (0), direct 2.0.0)
-      assert ∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0 direct c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$0 ℕ = successor $0 successor $$0) () (direct 2.0.1)
-      assert ∨ = successor $0 0 ∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0 direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0, = successor $0 0) () () () (direct 2.0.2)
+      prove = successor $0 successor $0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (successor $0) () ()
+      elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+        prove ∧ ∈ $0 ℕ = successor $0 successor $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 ℕ, = successor $0 successor $0) () () ()
+          simplified ∈ $0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℕ, ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) () () ()
+            given
+          given
+        prove ∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$0 ℕ = successor $0 successor $$0) ()
+          given
+      }
+      prove ∨ = successor $0 0 ∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0, = successor $0 0) () () ()
+        given
     }
   }
-  assert ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0 direct bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) () (direct 1, compound 2 compound 2.0a direct 2.0.3, direct p0)
+  prove ∀ n → ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) ()
+    given
+    given
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove → ∈ n ℕ ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) ()
+      given
+    prove ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0) () () ()
+      given
+      given
+  }
 }
 
 theorem Every Element of a Natural Number Is a Natural Number
@@ -22,27 +39,62 @@ premise ∈ n ℕ
 premise ∈ m n
 conclusion ∈ m ℕ
 {
-  assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
-  assert ∀ x ¬ ∈ $0 0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ x ¬ ∈ $0 $$0) () (elided direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () (), direct 0)
-  assert ∀ x → ∈ $0 0 ∈ $0 ℕ transformed bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (Y) Y () () (∈ $0 0, ∈ $0 ℕ) () (direct 1)
+  elided 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf {
+    prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
+    prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
+    prove ∀ x ¬ ∈ $0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ x ¬ ∈ $0 $$0) ()
+      given
+      given
+  }
+  elided bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 {
+    take x {
+      prove ¬ ∈ $0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 0) ()
+        given
+      prove → ∈ $0 0 ∈ $0 ℕ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 0, ∈ $0 ℕ) () () ()
+        given
+    }
+  }
   take a {
     assume ∧ ∈ $0 ℕ ∀ x → ∈ $0 $$0 ∈ $0 ℕ {
       take x {
         assume ∈ $0 $$0 {
-          assert ∈ $0 ℕ transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($0) (∈ $$$0 $$0, ∈ $$$0 ℕ) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∀ x → ∈ $0 $$$0 ∈ $0 ℕ) () () () direct 3.0a (1), direct 3.0.0.0a)
+          elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+            prove → ∈ $0 $$0 ∈ $0 ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 $$0 ∈ $$$0 ℕ) ()
+              simplified ∀ x → ∈ $0 $$$0 ∈ $0 ℕ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∀ x → ∈ $0 $$$0 ∈ $0 ℕ) () () ()
+                given
+            prove ∈ $0 ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ∈ $0 ℕ) () () ()
+              given
+              given
+          }
         }
         assume = $0 $$0 {
-          assert ∈ $0 ℕ direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, $$0) (∈ $$$0 ℕ) () (direct 3.0.0.1a, simplification 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 ℕ, ∀ x → ∈ $0 $$$0 ∈ $0 ℕ) () () () direct 3.0a (0))
+          prove ∈ $0 ℕ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, $$0) (∈ $$$0 ℕ) ()
+            given
+            simplified ∈ $$0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 ℕ, ∀ x → ∈ $0 $$$0 ∈ $0 ℕ) () () ()
+              given
         }
         assume ∈ $0 successor $$0 {
-          assert ∨ ∈ $0 $$0 = $0 $$0 direct 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () () (direct 3.0.0.2a)
-          assert ∈ $0 ℕ direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 $$0, = $0 $$0, ∈ $0 ℕ) () () () (direct 3.0.0.2.0, compound 3.0.0.0a direct 3.0.0.0.0, compound 3.0.0.1a direct 3.0.0.1.0)
+          prove ∨ ∈ $0 $$0 = $0 $$0 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () ()
+            given
+          prove ∈ $0 ℕ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 $$0, = $0 $$0, ∈ $0 ℕ) () () ()
+            given
+            given
+            given
         }
       }
     }
   }
-  assert ∀ x → ∈ $0 n ∈ $0 ℕ direct bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ x → ∈ $0 $$0 ∈ $0 ℕ) () (direct 2, compound 3 compound 3.0a compound 3.0.0 compound 3.0.0.2a direct 3.0.0.2.1, direct p0)
-  assert ∈ m ℕ transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (m) (∈ $0 n, ∈ $0 ℕ) () (direct 4, direct p1)
+  prove ∀ x → ∈ $0 n ∈ $0 ℕ bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ x → ∈ $0 $$0 ∈ $0 ℕ) ()
+    given
+    given
+    given
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove → ∈ m n ∈ m ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 n ∈ $0 ℕ) ()
+      given
+    prove ∈ m ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m n, ∈ m ℕ) () () ()
+      given
+      given
+  }
 }
 
 theorem A Natural Number Is a Subset of the Natural Numbers
@@ -51,32 +103,49 @@ conclusion ⊆ n ℕ
 {
   take m {
     assume ∈ $0 n {
-      assert ∈ $0 ℕ direct 855ceeaea4de8732d2bfd8b04ef8837eb6f5b74bf21dfbcac079d12d5f2390b2 () (n, $0) () () (direct p0, direct 0.0a)
+      prove ∈ $0 ℕ 855ceeaea4de8732d2bfd8b04ef8837eb6f5b74bf21dfbcac079d12d5f2390b2 () (n, $0) () ()
+        given
+        given
     }
   }
-  assert ⊆ n ℕ direct 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (n, ℕ) () () (compound 0 compound 0.0a direct 0.0.0)
+  prove ⊆ n ℕ 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (n, ℕ) () ()
+    given
 }
 
 theorem A Natural Number Either Is 0 or Contains 0
 premise ∈ n ℕ
 conclusion ∨ = n 0 ∈ 0 n
 {
-  assert = 0 0 direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (0) () () ()
-  assert ∨ = 0 0 ∈ 0 0 direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= 0 0, ∈ 0 0) () () () (direct 0)
+  prove = 0 0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (0) () ()
+  prove ∨ = 0 0 ∈ 0 0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= 0 0, ∈ 0 0) () () ()
+    given
   take m {
     assume ∧ ∈ $0 ℕ ∨ = $0 0 ∈ 0 $0 {
       assume = $0 0 {
-        assert ∈ $0 successor $0 direct bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () ($0) () () ()
-        assert ∈ 0 successor $0 direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, 0) (∈ $$0 successor $0) () (direct 2.0.0a, direct 2.0.0.0)
+        elided bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 {
+          prove ∈ $0 successor $0 bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () ($0) () ()
+          prove ∈ 0 successor $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, 0) (∈ $$0 successor $0) ()
+            given
+            given
+        }
       }
       assume ∈ 0 $0 {
-        assert ∈ 0 successor $0 direct 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (0, $0) () () (direct 2.0.1a)
+        prove ∈ 0 successor $0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (0, $0) () ()
+          given
       }
-      assert ∈ 0 successor $0 direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= $0 0, ∈ 0 $0, ∈ 0 successor $0) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∨ = $0 0 ∈ 0 $0) () () () direct 2.0a (1), compound 2.0.0a direct 2.0.0.1, compound 2.0.1a direct 2.0.1.0)
-      assert ∨ = successor $0 0 ∈ 0 successor $0 direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∈ 0 successor $0, = successor $0 0) () () () (direct 2.0.2)
+      prove ∈ 0 successor $0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= $0 0, ∈ 0 $0, ∈ 0 successor $0) () () ()
+        simplified ∨ = $0 0 ∈ 0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∨ = $0 0 ∈ 0 $0) () () ()
+          given
+        given
+        given
+      prove ∨ = successor $0 0 ∈ 0 successor $0 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∈ 0 successor $0, = successor $0 0) () () ()
+        given
     }
   }
-  assert ∨ = n 0 ∈ 0 n direct bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∨ = $0 0 ∈ 0 $0) () (direct 1, compound 2 compound 2.0a direct 2.0.3, direct p0)
+  prove ∨ = n 0 ∈ 0 n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∨ = $0 0 ∈ 0 $0) ()
+    given
+    given
+    given
 }
 
 theorem A Natural Number Either Contains Or Is The Successor of an Element
@@ -84,36 +153,78 @@ premise ∈ n ℕ
 premise ∈ m n
 conclusion ∨ ∈ successor m n = successor m n
 {
-  assert ∀ x ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
-  assert ∀ x ¬ ∈ $0 0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ x ¬ ∈ $0 $$0) () (elided direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () (), direct 0)
-  assert ∀ x → ∈ $0 0 ∨ ∈ successor $0 0 = successor $0 0 transformed bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (Y) Y () () (∈ $0 0, ∨ ∈ successor $0 0 = successor $0 0) () (direct 1)
+  elided 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf {
+    prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
+    prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
+    prove ∀ x ¬ ∈ $0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ x ¬ ∈ $0 $$0) ()
+      given
+      given
+  }
+  elided bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 {
+    take x {
+      prove ¬ ∈ $0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 0) ()
+        given
+      prove → ∈ $0 0 ∨ ∈ successor $0 0 = successor $0 0 bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 0, ∨ ∈ successor $0 0 = successor $0 0) () () ()
+        given
+    }
+  }
   take a {
     assume ∧ ∈ $0 ℕ ∀ x → ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 {
       take x {
         assume ∈ $0 successor $$0 {
-          assert ∨ ∈ $0 $$0 = $0 $$0 direct 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () () (direct 3.0.0.0a)
           assume ∈ $0 $$0 {
-            assert ∨ ∈ successor $0 $$0 = successor $0 $$0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($0) (∈ $$$0 $$0, ∨ ∈ successor $$$0 $$0 = successor $$$0 $$0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∀ x → ∈ $0 $$$0 ∨ ∈ successor $0 $$$0 = successor $0 $$$0) () () () direct 3.0a (1), direct 3.0.0.0.1a)
             assume ∈ successor $0 $$0 {
-              assert ∈ successor $0 successor $$0 direct 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (successor $0, $$0) () () (direct 3.0.0.0.1.1a)
+              prove ∈ successor $0 successor $$0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (successor $0, $$0) () ()
+                given
             }
             assume = successor $0 $$0 {
-              assert ∈ $$0 successor $$0 direct bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () ($$0) () () ()
-              assert ∈ successor $0 successor $$0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor $0, $$0) (∈ $$$0 successor $$0) () (direct 3.0.0.0.1.2a, direct 3.0.0.0.1.2.0)
+              elided bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 {
+                prove ∈ $$0 successor $$0 bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () ($$0) () ()
+                prove ∈ successor $0 successor $$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor $0, $$0) (∈ $$$0 successor $$0) ()
+                  given
+                  given
+              }
             }
-            assert ∈ successor $0 successor $$0 direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ successor $0 $$0, = successor $0 $$0, ∈ successor $0 successor $$0) () () () (direct 3.0.0.0.1.0, compound 3.0.0.0.1.1a direct 3.0.0.0.1.1.0, compound 3.0.0.0.1.2a direct 3.0.0.0.1.2.1)
+            elided 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 {
+              prove → ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 $$0 ∨ ∈ successor $$$0 $$0 = successor $$$0 $$0) ()
+                simplified ∀ x → ∈ $0 $$$0 ∨ ∈ successor $0 $$$0 = successor $0 $$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∀ x → ∈ $0 $$$0 ∨ ∈ successor $0 $$$0 = successor $0 $$$0) () () ()
+                  given
+              prove ∨ ∈ successor $0 $$0 = successor $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ∨ ∈ successor $0 $$0 = successor $0 $$0) () () ()
+                given
+                given
+              prove ∈ successor $0 successor $$0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ successor $0 $$0, = successor $0 $$0, ∈ successor $0 successor $$0) () () ()
+                given
+                given
+                given
+            }
           }
           assume = $0 $$0 {
-            assert = successor $0 successor $0 direct 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (successor $0) () () ()
-            assert = successor $0 successor $$0 direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, $$0) (= successor $0 successor $$$0) () (direct 3.0.0.0.2a, direct 3.0.0.0.2.0)
+            prove = successor $0 successor $$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () ($0, $$0) () (successor $$$0)
+              given
           }
-          assert ∨ ∈ successor $0 successor $$0 = successor $0 successor $$0 direct 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (∈ $0 $$0, = $0 $$0, ∈ successor $0 successor $$0, = successor $0 successor $$0) () () () (direct 3.0.0.0.0, compound 3.0.0.0.1a direct 3.0.0.0.1.3, compound 3.0.0.0.2a direct 3.0.0.0.2.1)
+          elided 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea {
+            prove ∨ ∈ $0 $$0 = $0 $$0 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () ()
+              given
+            prove ∨ ∈ successor $0 successor $$0 = successor $0 successor $$0 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (∈ $0 $$0, = $0 $$0, ∈ successor $0 successor $$0, = successor $0 successor $$0) () () ()
+              given
+              given
+              given
+          }
         }
       }
     }
   }
-  assert ∀ x → ∈ $0 n ∨ ∈ successor $0 n = successor $0 n direct bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ x → ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0) () (direct 2, compound 3 compound 3.0a compound 3.0.0 compound 3.0.0.0a direct 3.0.0.0.3, direct p0)
-  assert ∨ ∈ successor m n = successor m n transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (m) (∈ $0 n, ∨ ∈ successor $0 n = successor $0 n) () (direct 4, direct p1)
+  prove ∀ x → ∈ $0 n ∨ ∈ successor $0 n = successor $0 n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ x → ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0) ()
+    given
+    given
+    given
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove → ∈ m n ∨ ∈ successor m n = successor m n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 n ∨ ∈ successor $0 n = successor $0 n) ()
+      given
+    prove ∨ ∈ successor m n = successor m n fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m n, ∨ ∈ successor m n = successor m n) () () ()
+      given
+      given
+  }
 }
 
 theorem Natural Number Trichotomy
@@ -121,35 +232,59 @@ premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ∨ ∈ n m ∨ = n m ∈ m n
 {
-  assert ∨ = n 0 ∈ 0 n direct 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 () (n) () () (direct p0)
-  assert ∨ ∈ n 0 ∨ = n 0 ∈ 0 n direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∨ = n 0 ∈ 0 n, ∈ n 0) () () () (direct 0)
+  prove ∨ = n 0 ∈ 0 n 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 () (n) () ()
+    given
+  prove ∨ ∈ n 0 ∨ = n 0 ∈ 0 n 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∨ = n 0 ∈ 0 n, ∈ n 0) () () ()
+    given
   take a {
     assume ∧ ∈ $0 ℕ ∨ ∈ n $0 ∨ = n $0 ∈ $0 n {
       assume ∈ n $0 {
-        assert ∈ n successor $0 direct 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (n, $0) () () (direct 2.0.0a)
-        assert ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ n successor $0, ∨ = n successor $0 ∈ successor $0 n) () () () (direct 2.0.0.0)
+        prove ∈ n successor $0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (n, $0) () ()
+          given
+        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ n successor $0, ∨ = n successor $0 ∈ successor $0 n) () () ()
+          given
       }
       assume = n $0 {
-        assert ∈ n successor n direct bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n) () () ()
-        assert ∈ n successor $0 direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (n, $0) (∈ n successor $$0) () (direct 2.0.1a, direct 2.0.1.0)
-        assert ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n direct 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ n successor $0, ∨ = n successor $0 ∈ successor $0 n) () () () (direct 2.0.1.1)
+        prove ∈ n successor n bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n) () ()
+        prove ∈ n successor $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (n, $0) (∈ n successor $$0) ()
+          given
+          given
+        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ n successor $0, ∨ = n successor $0 ∈ successor $0 n) () () ()
+          given
       }
       assume ∈ $0 n {
-        assert ∨ ∈ successor $0 n = successor $0 n direct 220bd30d1396001c231c4257d9a9f1d98ebf4bd91132cbb730afda2d43cb7b1c () (n, $0) () () (direct p0, direct 2.0.2a)
-        assert ∨ = successor $0 n ∈ successor $0 n direct 7e3651c820e1f41df1d2e5a80ff9e1c8bc55f236a482bf9ee54c7c4188e2ee93 (∈ successor $0 n, = successor $0 n) () () () (direct 2.0.2.0)
+        prove ∨ ∈ successor $0 n = successor $0 n 220bd30d1396001c231c4257d9a9f1d98ebf4bd91132cbb730afda2d43cb7b1c () (n, $0) () ()
+          given
+          given
+        prove ∨ = successor $0 n ∈ successor $0 n 7e3651c820e1f41df1d2e5a80ff9e1c8bc55f236a482bf9ee54c7c4188e2ee93 (∈ successor $0 n, = successor $0 n) () () ()
+          given
         assume = successor $0 n {
-          assert = n successor $0 direct 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (successor $0, n) () () (direct 2.0.2.2a)
+          prove = n successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (successor $0, n) () ()
+            given
         }
-        assert ∨ = n successor $0 ∈ successor $0 n direct 2fef1e6f547d23b9aa52e58e574fab87dbf5de6cf4c4dc35820bbae4723c7c09 (= successor $0 n, ∈ successor $0 n, = n successor $0) () () () (direct 2.0.2.1, compound 2.0.2.2a direct 2.0.2.2.0)
-        assert ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n direct 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∨ = n successor $0 ∈ successor $0 n, ∈ n successor $0) () () () (direct 2.0.2.3)
+        prove ∨ = n successor $0 ∈ successor $0 n 2fef1e6f547d23b9aa52e58e574fab87dbf5de6cf4c4dc35820bbae4723c7c09 (= successor $0 n, ∈ successor $0 n, = n successor $0) () () ()
+          given
+          given
+        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∨ = n successor $0 ∈ successor $0 n, ∈ n successor $0) () () ()
+          given
       }
       assume ∨ = n $0 ∈ $0 n {
-        assert ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= n $0, ∈ $0 n, ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n) () () () (direct 2.0.3a, compound 2.0.1a direct 2.0.1.2, compound 2.0.2a direct 2.0.2.4)
+        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= n $0, ∈ $0 n, ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n) () () ()
+          given
+          given
+          given
       }
-      assert ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ n $0, ∨ = n $0 ∈ $0 n, ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n) () () () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∨ ∈ n $0 ∨ = n $0 ∈ $0 n) () () () direct 2.0a (1), compound 2.0.0a direct 2.0.0.1, compound 2.0.3a direct 2.0.3.0)
+      prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ n $0, ∨ = n $0 ∈ $0 n, ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n) () () ()
+        simplified ∨ ∈ n $0 ∨ = n $0 ∈ $0 n 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∨ ∈ n $0 ∨ = n $0 ∈ $0 n) () () ()
+          given
+        given
+        given
     }
   }
-  assert ∨ ∈ n m ∨ = n m ∈ m n direct bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (m) (∨ ∈ n $0 ∨ = n $0 ∈ $0 n) () (direct 1, compound 2 compound 2.0a direct 2.0.4, direct p1)
+  prove ∨ ∈ n m ∨ = n m ∈ m n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (m) (∨ ∈ n $0 ∨ = n $0 ∈ $0 n) ()
+    given
+    given
+    given
 }
 
 theorem Natural Number Transitivity
@@ -157,28 +292,68 @@ premise ∈ n ℕ
 premise ∈ m n
 conclusion ⊆ m n
 {
-  assert ∀ m ¬ ∈ $0 ∅ direct d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () () ()
-  assert ∀ m ¬ ∈ $0 0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ m ¬ ∈ $0 $$0) () (elided direct 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () () (), direct 0)
-  assert ∀ m → ∈ $0 0 ⊆ $0 0 transformed bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (Y) Y () () (∈ $0 0, ⊆ $0 0) () (direct 1)
+  elided 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf {
+    prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
+    prove ∀ m ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
+    prove ∀ m ¬ ∈ $0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ m ¬ ∈ $0 $$0) ()
+      given
+      given
+  }
+  elided bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 {
+    take m {
+      prove ¬ ∈ $0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 0) ()
+        given
+      prove → ∈ $0 0 ⊆ $0 0 bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 0, ⊆ $0 0) () () ()
+        given
+    }
+  }
   take n {
     assume ∧ ∈ $0 ℕ ∀ m → ∈ $0 $$0 ⊆ $0 $$0 {
       take m {
         assume ∈ $0 successor $$0 {
-          assert ∨ ∈ $0 $$0 = $0 $$0 direct 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () () (direct 3.0.0.0a)
+          prove ∨ ∈ $0 $$0 = $0 $$0 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () ()
+            given
           assume ∈ $0 $$0 {
-            assert ⊆ $0 $$0 transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () ($0) (∈ $$$0 $$0, ⊆ $$$0 $$0) () (simplification 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∀ m → ∈ $0 $$$0 ⊆ $0 $$$0) () () () direct 3.0a (1), direct 3.0.0.0.1a)
-            assert ⊆ $0 successor $$0 direct 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () ($0, $$0, successor $$0) () () (direct 3.0.0.0.1.0, elided direct bc482b426c19736933e5c43690f5993eca5312d020f2fca05241efb641d48b15 () ($$0) () () ())
+            elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+              prove → ∈ $0 $$0 ⊆ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 $$0 ⊆ $$$0 $$0) ()
+                simplified ∀ m → ∈ $0 $$$0 ⊆ $0 $$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∀ m → ∈ $0 $$$0 ⊆ $0 $$$0) () () ()
+                  given
+              prove ⊆ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ⊆ $0 $$0) () () ()
+                given
+                given
+            }
+            prove ⊆ $$0 successor $$0 bc482b426c19736933e5c43690f5993eca5312d020f2fca05241efb641d48b15 () ($$0) () ()
+            prove ⊆ $0 successor $$0 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () ($0, $$0, successor $$0) () ()
+              given
+              given
           }
           assume = $0 $$0 {
-            assert ⊆ $0 successor $$0 direct 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, $$0) (⊆ $$$0 successor $$0) () (direct 3.0.0.0.2a, elided direct bc482b426c19736933e5c43690f5993eca5312d020f2fca05241efb641d48b15 () ($$0) () () ())
+            elided bc482b426c19736933e5c43690f5993eca5312d020f2fca05241efb641d48b15 {
+              prove ⊆ $$0 successor $$0 bc482b426c19736933e5c43690f5993eca5312d020f2fca05241efb641d48b15 () ($$0) () ()
+              prove ⊆ $0 successor $$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, $$0) (⊆ $$$0 successor $$0) ()
+                given
+                given
+            }
           }
-          assert ⊆ $0 successor $$0 direct 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 $$0, = $0 $$0, ⊆ $0 successor $$0) () () () (direct 3.0.0.0.0, compound 3.0.0.0.1a direct 3.0.0.0.1.1, compound 3.0.0.0.2a direct 3.0.0.0.2.0)
+          prove ⊆ $0 successor $$0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 $$0, = $0 $$0, ⊆ $0 successor $$0) () () ()
+            given
+            given
+            given
         }
       }
     }
   }
-  assert ∀ m → ∈ $0 n ⊆ $0 n direct bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ m → ∈ $0 $$0 ⊆ $0 $$0) () (direct 2, compound 3 compound 3.0a compound 3.0.0 compound 3.0.0.0a direct 3.0.0.0.3, direct p0)
-  assert ⊆ m n transformed fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (Y N) N () (m) (∈ $0 n, ⊆ $0 n) () (direct 4, direct p1)
+  prove ∀ m → ∈ $0 n ⊆ $0 n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ m → ∈ $0 $$0 ⊆ $0 $$0) ()
+    given
+    given
+    given
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove → ∈ m n ⊆ m n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 n ⊆ $0 n) ()
+      given
+    prove ⊆ m n fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m n, ⊆ m n) () () ()
+      given
+      given
+  }
 }
 
 theorem Natural Number Transitivity
@@ -187,8 +362,12 @@ premise ∈ m n
 premise ∈ a m
 conclusion ∈ a n
 {
-  assert ⊆ m n direct 4407b840750f7ef787f8ff26b9b3af912fa8d7cebeb09fa54c62395236861c05 () (n, m) () () (direct p0, direct p1)
-  assert ∈ a n direct ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (m, n, a) () () (direct 0, direct p2)
+  prove ⊆ m n 4407b840750f7ef787f8ff26b9b3af912fa8d7cebeb09fa54c62395236861c05 () (n, m) () ()
+    given
+    given
+  prove ∈ a n ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (m, n, a) () ()
+    given
+    given
 }
 
 theorem A Natural Number Contains the Predecessor of an Element
@@ -196,8 +375,11 @@ premise ∈ n ℕ
 premise ∈ successor m n
 conclusion ∈ m n
 {
-  assert ∈ m successor m direct bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (m) () () ()
-  assert ∈ m n direct 17d968728c1b36422e6f0db68347715fad35d870b83f1ef9de22315024673039 () (n, successor m, m) () () (direct p0, direct p1, direct 0)
+  prove ∈ m successor m bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (m) () ()
+  prove ∈ m n 17d968728c1b36422e6f0db68347715fad35d870b83f1ef9de22315024673039 () (n, successor m, m) () ()
+    given
+    given
+    given
 }
 
 theorem Natural Number Contains Element If Successor Contains Successor
@@ -205,13 +387,23 @@ premise ∈ n ℕ
 premise ∈ successor m successor n
 conclusion ∈ m n
 {
-  assert ∈ successor n ℕ direct 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () () (direct p0)
-  assert ∈ m successor n direct 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () (successor n, m) () () (direct 0, direct p1)
-  assert ∨ ∈ m n = m n direct 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () (m, n) () () (direct 1)
+  prove ∈ successor n ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () ()
+    given
+  prove ∈ m successor n 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () (successor n, m) () ()
+    given
+    given
+  prove ∨ ∈ m n = m n 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () (m, n) () ()
+    given
   assume = m n {
-    assert ¬ ∈ successor m successor m direct 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (successor m) () () ()
-    assert ¬ ∈ successor m successor n direct 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (m, n) (¬ ∈ successor m successor $0) () (direct 3a, direct 3.0)
+    prove ¬ ∈ successor m successor m 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (successor m) () ()
+    prove ¬ ∈ successor m successor n 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (m, n) (¬ ∈ successor m successor $0) ()
+      given
+      given
   }
-  assert ¬ = m n direct fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (= m n, ∈ successor m successor n) () () () (compound 3a direct 3.1, direct p1)
-  assert ∈ m n direct 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ m n, = m n) () () () (direct 2, direct 4)
+  prove ¬ = m n fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (= m n, ∈ successor m successor n) () () ()
+    given
+    given
+  prove ∈ m n 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ m n, = m n) () () ()
+    given
+    given
 }

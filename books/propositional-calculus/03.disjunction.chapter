@@ -76,7 +76,7 @@ conclusion ∨ χ ω
     given
 }
 
-theorem Proof by Separate Cases
+theorem Proof by Exclusive Separate Cases
 premise → φ ψ
 premise → ¬ φ χ
 conclusion ∨ ψ χ

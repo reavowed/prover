@@ -165,7 +165,7 @@ export class Steps extends React.Component {
 
   static renderNextStep(stepsWithIndexes, path, referencesForLastStep, otherProps, lastIndex) {
     const {step, index} = stepsWithIndexes.shift();
-    if (step.type === "assertion" && step.statement.definition) {
+    if ((step.type === "assertion" || step.type === "elided") && step.statement.definition) {
       const definitionSymbol = step.statement.definition.symbol;
       const potentialTransitivityInference = window.transitivityInferences[definitionSymbol];
       if (potentialTransitivityInference) {
