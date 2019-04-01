@@ -29,19 +29,20 @@ class TransitiveSteps extends React.Component {
   }
 
   render() {
-    const {leftHandSide, symbol, rightHandSides, highlighting, apiService, boundVariableLists} = this.props;
+    const {leftHandSide, symbol, rightHandSides, highlighting, apiService, boundVariableLists, referencesForLastStep} = this.props;
 
     const renderRightHandSide = (rightHandSide, index) => {
       const nextRightHandSide = rightHandSides[index + 1];
+      const additionalReferences = index === rightHandSides.length - 1 ? referencesForLastStep : [];
       return <>
         <HighlightableExpression expression={{textForHtml: () => symbol}}
                                  boundVariableLists={[]}
-                                 references={rightHandSide.references}
+                                 references={[...rightHandSide.references, ...additionalReferences]}
                                  highlighting={highlighting}/>
         {' '}
         <HighlightableExpression expression={rightHandSide.expression}
                                  boundVariableLists={boundVariableLists}
-                                 referencesAsPremise={rightHandSide.references}
+                                 referencesAsPremise={[...rightHandSide.references, ...additionalReferences]}
                                  referencesAsConclusion={nextRightHandSide ? [...nextRightHandSide.references, ...rightHandSide.references] : rightHandSide.references}
                                  highlighting={highlighting}/>.
       </>
@@ -49,9 +50,9 @@ class TransitiveSteps extends React.Component {
     const renderProofLine = (props, children) => {
       switch (props.step.type) {
         case "assertion":
-          return <AssertionStepProofLine {...props}>{children}</AssertionStepProofLine>
+          return <AssertionStepProofLine {...props}>{children}</AssertionStepProofLine>;
         case "elided":
-          return <ElidedStepProofLine {...props}>{children}</ElidedStepProofLine>
+          return <ElidedStepProofLine {...props}>{children}</ElidedStepProofLine>;
       }
     };
 
@@ -61,7 +62,7 @@ class TransitiveSteps extends React.Component {
         <>
           <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
                                                                             boundVariableLists={boundVariableLists}
-                                                                            referencesAsPremise={[leftHandSide.lineReference, ..._.map(rightHandSides, ({lineReference}) => lineReference)]}
+                                                                            referencesAsPremise={[leftHandSide.lineReference, ..._.flatMap(rightHandSides, rhs => rhs.references), ...referencesForLastStep]}
                                                                             referencesAsConclusion={[leftHandSide.lineReference]}
                                                                             highlighting={highlighting}/> </span>
           {renderRightHandSide(rightHandSides[0], 0)}
@@ -118,7 +119,7 @@ export class Steps extends React.Component {
   static getTransitivityDetails(stepsWithIndexes, firstStep, transitivityInferenceId, basePath, firstIndex) {
     const definitionSymbol = firstStep.statement.definition.symbol;
     const firstLinePath = [...basePath, firstIndex];
-    const firstLineReference = firstLinePath.join(".");
+    const firstLineReference = {stepPath: firstLinePath};
     const leftHandSideExpression = firstStep.statement.components[0];
     const rightHandSides = [{
       expression: firstStep.statement.components[1],
@@ -145,7 +146,7 @@ export class Steps extends React.Component {
         expression: step.statement.components[1],
         step,
         path: [...basePath, index],
-        references: [[...basePath, index].join("."), [...basePath, transitiveIndex].join(".")]
+        references: [{stepPath: [...basePath, index]}, {stepPath: [...basePath, transitiveIndex]}]
       });
     }
     if (rightHandSides.length > 1) {
@@ -171,7 +172,7 @@ export class Steps extends React.Component {
       if (potentialTransitivityInference) {
         const transitivityDetails = this.getTransitivityDetails(stepsWithIndexes, step, potentialTransitivityInference, path, index);
         if (transitivityDetails) {
-          return <TransitiveSteps {...transitivityDetails} {...otherProps}/>;
+          return <TransitiveSteps referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []} {...transitivityDetails} {...otherProps}/>;
         }
       }
     }
