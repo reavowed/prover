@@ -488,3 +488,18 @@ conclusion ⊆ union A B
   prove ⊆ union A B 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (union A, B) () ()
     given
 }
+
+theorem Element is Subset of Union
+premise ∈ a A
+conclusion ⊆ a union A
+{
+  take x {
+    assume ∈ $0 a {
+      prove ∈ $0 union A c6380fe68a1b2148337c46533f74f3cc3c2dc26eb007c8a18b6d674dfa7b158c () ($0, a, A) () ()
+        given
+        given
+    }
+  }
+  prove ⊆ a union A 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (a, union A) () ()
+    given
+}

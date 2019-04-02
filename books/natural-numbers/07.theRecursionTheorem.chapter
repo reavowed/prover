@@ -117,644 +117,743 @@ premise ∈ g_0 X
 conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
 {
   let S = $0 comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0) (comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () {
-    subproof (⋃S is a function) {
-      subproof (Function definition - subset) {
-        take x {
-          assume ∈ $0 union $$0 {
-            prove ∃ g ∧ ∈ $$0 $0 ∈ $0 $$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () ($0, $$0) () ()
+    subproof (Function definition - subset) {
+      take x {
+        assume ∈ $0 union $$0 {
+          prove ∃ g ∧ ∈ $$0 $0 ∈ $0 $$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () ($0, $$0) () ()
+            given
+          let g ∧ ∈ $$0 $0 ∈ $0 $$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 × ℕ X) () (∧ ∈ $0 $$$0 ∈ $$$0 $$0) () {
+            prove ∈ $0 powerSet × ℕ X 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () ($$$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$0 $$0 apply f apply $$$$$$$0 $0) ()
               given
-            let g ∧ ∈ $$0 $0 ∈ $0 $$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 × ℕ X) () (∧ ∈ $0 $$$0 ∈ $$$0 $$0) () {
-              prove ∈ $0 powerSet × ℕ X 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () ($$$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$0 $$0 apply f apply $$$$$$$0 $0) ()
+              simplified ∈ $0 $$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 $0, ∈ $0 $$$0) () () ()
                 given
-                simplified ∈ $0 $$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 $0, ∈ $0 $$$0) () () ()
-                  given
-              prove ⊆ $0 × ℕ X bb4e7eb849809346e883e29e4c961a0b1e707fabfe8da1e4537f611a4602e0f2 () ($0, × ℕ X) () ()
+            prove ⊆ $0 × ℕ X bb4e7eb849809346e883e29e4c961a0b1e707fabfe8da1e4537f611a4602e0f2 () ($0, × ℕ X) () ()
+              given
+            prove ∈ $$0 × ℕ X ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($0, × ℕ X, $$0) () ()
+              given
+              simplified ∈ $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 $0, ∈ $0 $$$0) () () ()
                 given
-              prove ∈ $$0 × ℕ X ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($0, × ℕ X, $$0) () ()
+          }
+        }
+      }
+      prove ⊆ union $0 × ℕ X 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (union $0, × ℕ X) () ()
+        given
+    }
+    subproof (Base case - existence) {
+      let g = $0 singleton orderedPair 0 g_0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∈ orderedPair 0 g_0 union $0) (singleton orderedPair 0 g_0) () () {
+        elided f0d91f99346599d36374a0a7767b7eefdc44886e1fb4a5734feac36206c18b19 {
+          prove function singleton orderedPair 0 g_0 singleton 0 singleton g_0 f0d91f99346599d36374a0a7767b7eefdc44886e1fb4a5734feac36206c18b19 () (0, g_0) () ()
+          prove function $0 singleton 0 singleton g_0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, singleton orderedPair 0 g_0) (function $$$0 singleton 0 singleton g_0) ()
+            given
+            given
+          elided 14eac1038136097fce25ab96c6366d51e7ae6c43531d44456ffa0ccba226a8c9 {
+            prove = 1 singleton 0 14eac1038136097fce25ab96c6366d51e7ae6c43531d44456ffa0ccba226a8c9 () () () ()
+            prove function $0 1 singleton g_0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (1, singleton 0) (function $0 $$$0 singleton g_0) ()
+              given
+              given
+          }
+          prove ⊆ singleton g_0 X ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (g_0, X) () ()
+            given
+          prove function $0 1 X a24b6cc2064ec06bf3e7a3aaf24ad7a87910420b78f0f3c47ba32473212ab24e () ($0, 1, singleton g_0, X) () ()
+            given
+            given
+        }
+        elided 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 {
+          prove ∈ 1 ℕ 0ea2cae46b5b1dec42fef1b2b68f5d829b809f821651b8628f2f94b1abd87ac5 () () () ()
+          prove ∈ $0 powerSet × ℕ X 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 () (1, $0, X) () ()
+            given
+            given
+        }
+        elided e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 {
+          prove ∈ orderedPair 0 g_0 singleton orderedPair 0 g_0 e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (orderedPair 0 g_0) () ()
+          prove ∈ orderedPair 0 g_0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, singleton orderedPair 0 g_0) (∈ orderedPair 0 g_0 $$$0) ()
+            given
+            given
+        }
+        elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
+          prove = g_0 apply $0 0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($0, 1, X, 0, g_0) () ()
+            given
+            given
+          prove = apply $0 0 g_0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (g_0, apply $0 0) () ()
+            given
+        }
+        take n {
+          assume ∈ $0 1 {
+            elided 14eac1038136097fce25ab96c6366d51e7ae6c43531d44456ffa0ccba226a8c9 {
+              prove = 1 singleton 0 14eac1038136097fce25ab96c6366d51e7ae6c43531d44456ffa0ccba226a8c9 () () () ()
+              prove ∈ $0 singleton 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (1, singleton 0) (∈ $0 $$$$0) ()
                 given
-                simplified ∈ $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 $0, ∈ $0 $$$0) () () ()
-                  given
+                given
+              prove = $0 0 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, 0) () ()
+                given
+            }
+            elided 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d {
+              prove = apply $$0 $0 g_0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, 0) (= apply $$0 $$$$0 g_0) ()
+                given
+                given
+              prove ∧ = $0 0 = apply $$0 $0 g_0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= $0 0, = apply $$0 $0 g_0) () () ()
+                given
+                given
+              prove ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∧ = $0 0 = apply $$0 $0 g_0, ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
+                given
             }
           }
         }
-        prove ⊆ union $0 × ℕ X 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (union $0, × ℕ X) () ()
+        elided 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d {
+          prove ∈ 1 ℕ 0ea2cae46b5b1dec42fef1b2b68f5d829b809f821651b8628f2f94b1abd87ac5 () () () ()
+          prove ∧ function $0 1 X ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 1 X, ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
+            given
+            given
+          prove ∧ ∈ 1 ℕ ∧ function $0 1 X ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ 1 ℕ, ∧ function $0 1 X ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
+            given
+            given
+          prove ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (1) (∧ ∈ $$$0 ℕ ∧ function $0 $$$0 X ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) ()
+            given
+          prove ∈ $0 $$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) ()
+            given
+            given
+            given
+        }
+        prove ∈ orderedPair 0 g_0 union $$0 c6380fe68a1b2148337c46533f74f3cc3c2dc26eb007c8a18b6d674dfa7b158c () (orderedPair 0 g_0, $0, $$0) () ()
+          given
           given
       }
-      subproof (Function definition - unique value) {
-        subproof (Base case) {
-          subproof (Existence) {
-            let g = $0 singleton orderedPair 0 g_0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∈ orderedPair 0 g_0 union $0) (singleton orderedPair 0 g_0) () () {
-              elided f0d91f99346599d36374a0a7767b7eefdc44886e1fb4a5734feac36206c18b19 {
-                prove function singleton orderedPair 0 g_0 singleton 0 singleton g_0 f0d91f99346599d36374a0a7767b7eefdc44886e1fb4a5734feac36206c18b19 () (0, g_0) () ()
-                prove function $0 singleton 0 singleton g_0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, singleton orderedPair 0 g_0) (function $$$0 singleton 0 singleton g_0) ()
-                  given
-                  given
-                elided 14eac1038136097fce25ab96c6366d51e7ae6c43531d44456ffa0ccba226a8c9 {
-                  prove = 1 singleton 0 14eac1038136097fce25ab96c6366d51e7ae6c43531d44456ffa0ccba226a8c9 () () () ()
-                  prove function $0 1 singleton g_0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (1, singleton 0) (function $0 $$$0 singleton g_0) ()
+    }
+    subproof (Base case - uniqueness) {
+      take x_0 {
+        assume ∈ orderedPair 0 $0 union $$0 {
+          prove ∃ g ∧ ∈ orderedPair 0 $$0 $0 ∈ $0 $$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair 0 $0, $$0) () ()
+            given
+          let g ∧ ∈ orderedPair 0 $$0 $0 ∈ $0 $$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $0 g_0) () (∧ ∈ orderedPair 0 $0 $$$0 ∈ $$$0 $$0) () {
+            prove ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$0 $$0 apply f apply $$$$$$$0 $0) ()
+              given
+              simplified ∈ $0 $$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair 0 $$0 $0, ∈ $0 $$$0) () () ()
+                given
+            let n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$0 g_0) () (∧ ∈ $$$$0 ℕ ∧ function $0 $$$$0 X ∀ a → ∈ $0 $$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
+              prove ∈ 0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, 0, $$$0) () ()
+                simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                  simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
                     given
+                simplified ∈ orderedPair 0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair 0 $$$0 $$0, ∈ $$0 $$$$0) () () ()
+                  given
+              elided c5a163f6a3b0ffc769773f489bc775c0300f132d88a72941a3e129b91b202abe {
+                take b {
+                  prove ¬ = 0 successor $0 c5a163f6a3b0ffc769773f489bc775c0300f132d88a72941a3e129b91b202abe () ($0) () ()
+                  prove ¬ ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 (= 0 successor $0, = apply $$$0 0 apply f apply $$$0 $0) () () ()
                     given
                 }
-                prove ⊆ singleton g_0 X ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (g_0, X) () ()
-                  given
-                prove function $0 1 X a24b6cc2064ec06bf3e7a3aaf24ad7a87910420b78f0f3c47ba32473212ab24e () ($0, 1, singleton g_0, X) () ()
-                  given
+                prove ¬ ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0 872156a627b48127aaf94f85dae6db43b564ad471e9f83890f421a2127ae266d () () (∧ = 0 successor $$$$$0 = apply $$0 0 apply f apply $$0 $$$$$0) ()
                   given
               }
-              elided 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 {
-                prove ∈ 1 ℕ 0ea2cae46b5b1dec42fef1b2b68f5d829b809f821651b8628f2f94b1abd87ac5 () () () ()
-                prove ∈ $0 powerSet × ℕ X 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 () (1, $0, X) () ()
+              prove = $$$0 apply $$0 0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, $0, X, 0, $$$0) () ()
+                simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                  simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                    given
+                simplified ∈ orderedPair 0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair 0 $$$0 $$0, ∈ $$0 $$$$0) () () ()
                   given
+              elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                prove → ∈ 0 $0 ∨ ∧ = 0 0 = apply $$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (0) (→ ∈ $$$$$0 $0 ∨ ∧ = $$$$$0 0 = apply $$0 $$$$$0 g_0 ∃ b ∧ = $$$$$$0 successor $0 = apply $$$0 $$$$$$0 apply f apply $$$0 $0) ()
+                  simplified ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                    simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                      given
+                prove ∨ ∧ = 0 0 = apply $$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0 $0, ∨ ∧ = 0 0 = apply $$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0) () () ()
+                  given
+                  given
+                prove ∧ = 0 0 = apply $$0 0 g_0 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∧ = 0 0 = apply $$0 0 g_0, ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0) () () ()
+                  given
+                  given
+                prove = apply $$0 0 g_0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= 0 0, = apply $$0 0 g_0) () () ()
                   given
               }
-              elided e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 {
-                prove ∈ orderedPair 0 g_0 singleton orderedPair 0 g_0 e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (orderedPair 0 g_0) () ()
-                prove ∈ orderedPair 0 g_0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, singleton orderedPair 0 g_0) (∈ orderedPair 0 g_0 $$$0) ()
-                  given
-                  given
-              }
-              elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
-                prove = g_0 apply $0 0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($0, 1, X, 0, g_0) () ()
-                  given
-                  given
-                prove = apply $0 0 g_0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (g_0, apply $0 0) () ()
-                  given
-              }
-              take n {
-                assume ∈ $0 1 {
-                  elided 14eac1038136097fce25ab96c6366d51e7ae6c43531d44456ffa0ccba226a8c9 {
-                    prove = 1 singleton 0 14eac1038136097fce25ab96c6366d51e7ae6c43531d44456ffa0ccba226a8c9 () () () ()
-                    prove ∈ $0 singleton 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (1, singleton 0) (∈ $0 $$$$0) ()
-                      given
-                      given
-                    prove = $0 0 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, 0) () ()
-                      given
-                  }
-                  elided 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d {
-                    prove = apply $$0 $0 g_0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, 0) (= apply $$0 $$$$0 g_0) ()
-                      given
-                      given
-                    prove ∧ = $0 0 = apply $$0 $0 g_0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= $0 0, = apply $$0 $0 g_0) () () ()
-                      given
-                      given
-                    prove ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∧ = $0 0 = apply $$0 $0 g_0, ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
-                      given
-                  }
-                }
-              }
-              elided 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d {
-                prove ∈ 1 ℕ 0ea2cae46b5b1dec42fef1b2b68f5d829b809f821651b8628f2f94b1abd87ac5 () () () ()
-                prove ∧ function $0 1 X ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 1 X, ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
-                  given
-                  given
-                prove ∧ ∈ 1 ℕ ∧ function $0 1 X ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ 1 ℕ, ∧ function $0 1 X ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
-                  given
-                  given
-                prove ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (1) (∧ ∈ $$$0 ℕ ∧ function $0 $$$0 X ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) ()
-                  given
-                prove ∈ $0 $$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) ()
-                  given
-                  given
-                  given
-              }
-              prove ∈ orderedPair 0 g_0 union $$0 c6380fe68a1b2148337c46533f74f3cc3c2dc26eb007c8a18b6d674dfa7b158c () (orderedPair 0 g_0, $0, $$0) () ()
+              prove = $$$0 g_0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$0, apply $$0 0, g_0) () ()
                 given
                 given
             }
           }
-          subproof (Uniqueness) {
-            take x_0 {
-              assume ∈ orderedPair 0 $0 union $$0 {
-                prove ∃ g ∧ ∈ orderedPair 0 $$0 $0 ∈ $0 $$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair 0 $0, $$0) () ()
-                  given
-                let g ∧ ∈ orderedPair 0 $$0 $0 ∈ $0 $$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $0 g_0) () (∧ ∈ orderedPair 0 $0 $$$0 ∈ $$$0 $$0) () {
-                  prove ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$0 $$0 apply f apply $$$$$$$0 $0) ()
-                    given
-                    simplified ∈ $0 $$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair 0 $$0 $0, ∈ $0 $$$0) () () ()
-                      given
-                  let n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$0 g_0) () (∧ ∈ $$$$0 ℕ ∧ function $0 $$$$0 X ∀ a → ∈ $0 $$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
-                    prove ∈ 0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, 0, $$$0) () ()
-                      simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                        simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                          given
-                      simplified ∈ orderedPair 0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair 0 $$$0 $$0, ∈ $$0 $$$$0) () () ()
-                        given
-                    elided c5a163f6a3b0ffc769773f489bc775c0300f132d88a72941a3e129b91b202abe {
-                      take b {
-                        prove ¬ = 0 successor $0 c5a163f6a3b0ffc769773f489bc775c0300f132d88a72941a3e129b91b202abe () ($0) () ()
-                        prove ¬ ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 (= 0 successor $0, = apply $$$0 0 apply f apply $$$0 $0) () () ()
-                          given
-                      }
-                      prove ¬ ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0 872156a627b48127aaf94f85dae6db43b564ad471e9f83890f421a2127ae266d () () (∧ = 0 successor $$$$$0 = apply $$0 0 apply f apply $$0 $$$$$0) ()
-                        given
-                    }
-                    prove = $$$0 apply $$0 0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, $0, X, 0, $$$0) () ()
-                      simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                        simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                          given
-                      simplified ∈ orderedPair 0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair 0 $$$0 $$0, ∈ $$0 $$$$0) () () ()
-                        given
-                    elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-                      prove → ∈ 0 $0 ∨ ∧ = 0 0 = apply $$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (0) (→ ∈ $$$$$0 $0 ∨ ∧ = $$$$$0 0 = apply $$0 $$$$$0 g_0 ∃ b ∧ = $$$$$$0 successor $0 = apply $$$0 $$$$$$0 apply f apply $$$0 $0) ()
-                        simplified ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                          simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                            given
-                      prove ∨ ∧ = 0 0 = apply $$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0 $0, ∨ ∧ = 0 0 = apply $$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0) () () ()
-                        given
-                        given
-                      prove ∧ = 0 0 = apply $$0 0 g_0 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∧ = 0 0 = apply $$0 0 g_0, ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0) () () ()
-                        given
-                        given
-                      prove = apply $$0 0 g_0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= 0 0, = apply $$0 0 g_0) () () ()
-                        given
-                    }
-                    prove = $$$0 g_0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$0, apply $$0 0, g_0) () ()
-                      given
-                      given
-                  }
-                }
-              }
-            }
-          }
-          prove ∃! x_0 ∈ orderedPair 0 $0 union $$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (g_0) (∈ orderedPair 0 $$0 union $0) ()
-            given
-            given
         }
-        subproof (Inductive case) {
-          take n {
-            assume ∧ ∈ $0 ℕ ∃! x_n ∈ orderedPair $$0 $0 union $$$0 {
-              let x_n ∈ orderedPair $$0 $0 union $$$0 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∃! x ∈ orderedPair successor $$0 $0 union $$$0) () (∈ orderedPair $0 $$$0 union $$0) () {
-                prove ∃ g ∧ ∈ orderedPair $$$0 $$0 $0 ∈ $0 $$$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair $$0 $0, $$$0) () ()
+      }
+    }
+    prove ∃! x_0 ∈ orderedPair 0 $0 union $$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (g_0) (∈ orderedPair 0 $$0 union $0) ()
+      given
+      given
+    subproof (Inductive case) {
+      take n {
+        assume ∧ ∈ $0 ℕ ∃! x_n ∈ orderedPair $$0 $0 union $$$0 {
+          let x_n ∈ orderedPair $$0 $0 union $$$0 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∃! x ∈ orderedPair successor $$0 $0 union $$$0) () (∈ orderedPair $0 $$$0 union $$0) () {
+            prove ∃ g ∧ ∈ orderedPair $$$0 $$0 $0 ∈ $0 $$$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair $$0 $0, $$$0) () ()
+              given
+            let g_n ∧ ∈ orderedPair $$$0 $$0 $0 ∈ $0 $$$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair successor $$$0 $0 union $$$$0) () (∧ ∈ orderedPair $$0 $0 $$$$0 ∈ $$$$0 $$$0) () {
+              prove ∃ m_n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$$0, powerSet × ℕ X, $0) (∃ m ∧ ∈ $0 ℕ ∧ function $$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$0 $$0 apply f apply $$$$$$$$0 $0) ()
+                given
+                simplified ∈ $0 $$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair $$$0 $$0 $0, ∈ $0 $$$$0) () () ()
                   given
-                let g_n ∧ ∈ orderedPair $$$0 $$0 $0 ∈ $0 $$$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair successor $$$0 $0 union $$$$0) () (∧ ∈ orderedPair $$0 $0 $$$$0 ∈ $$$$0 $$$0) () {
-                  prove ∃ m_n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$$0, powerSet × ℕ X, $0) (∃ m ∧ ∈ $0 ℕ ∧ function $$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$0 $$0 apply f apply $$$$$$$$0 $0) ()
-                    given
-                    simplified ∈ $0 $$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair $$$0 $$0 $0, ∈ $0 $$$$0) () () ()
+              let m_n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair successor $$$$0 $0 union $$$$$0) () (∧ ∈ $$$$$0 ℕ ∧ function $0 $$$$$0 X ∀ a → ∈ $0 $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
+                subproof (Existence) {
+                  prove ∈ $$$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, $$$$0, $$$0) () ()
+                    simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                      simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                        given
+                    simplified ∈ orderedPair $$$$0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair $$$$0 $$$0 $$0, ∈ $$0 $$$$$0) () () ()
                       given
-                  let m_n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair successor $$$$0 $0 union $$$$$0) () (∧ ∈ $$$$$0 ℕ ∧ function $0 $$$$$0 X ∀ a → ∈ $0 $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
-                    subproof (Existence) {
-                      prove ∈ $$$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, $$$$0, $$$0) () ()
-                        simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                          simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                            given
-                        simplified ∈ orderedPair $$$$0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair $$$$0 $$$0 $$0, ∈ $$0 $$$$$0) () () ()
+                  prove = $$$0 apply $$0 $$$$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, $0, X, $$$$0, $$$0) () ()
+                    simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                      simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                        given
+                    simplified ∈ orderedPair $$$$0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair $$$$0 $$$0 $$0, ∈ $$0 $$$$$0) () () ()
+                      given
+                  subproof (Successor is in domain) {
+                    assume ∈ successor $$$$0 $0 {
+                      elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                        prove → ∈ successor $$$$0 $0 ∨ ∧ = successor $$$$0 0 = apply $$0 successor $$$$0 g_0 ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $$$$0) (→ ∈ $$$$$$0 $0 ∨ ∧ = $$$$$$0 0 = apply $$0 $$$$$$0 g_0 ∃ b ∧ = $$$$$$$0 successor $0 = apply $$$0 $$$$$$$0 apply f apply $$$0 $0) ()
+                          simplified ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                            simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                              given
+                        prove ∨ ∧ = successor $$$$0 0 = apply $$0 successor $$$$0 g_0 ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $$$$0 $0, ∨ ∧ = successor $$$$0 0 = apply $$0 successor $$$$0 g_0 ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0) () () ()
                           given
-                      prove = $$$0 apply $$0 $$$$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, $0, X, $$$$0, $$$0) () ()
-                        simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                          simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                            given
-                        simplified ∈ orderedPair $$$$0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair $$$$0 $$$0 $$0, ∈ $$0 $$$$$0) () () ()
                           given
-                      subproof (Successor is in domain) {
-                        assume ∈ successor $$$$0 $0 {
-                          elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-                            prove → ∈ successor $$$$0 $0 ∨ ∧ = successor $$$$0 0 = apply $$0 successor $$$$0 g_0 ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $$$$0) (→ ∈ $$$$$$0 $0 ∨ ∧ = $$$$$$0 0 = apply $$0 $$$$$$0 g_0 ∃ b ∧ = $$$$$$$0 successor $0 = apply $$$0 $$$$$$$0 apply f apply $$$0 $0) ()
-                              simplified ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                  given
-                            prove ∨ ∧ = successor $$$$0 0 = apply $$0 successor $$$$0 g_0 ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $$$$0 $0, ∨ ∧ = successor $$$$0 0 = apply $$0 successor $$$$0 g_0 ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0) () () ()
-                              given
-                              given
-                            prove ¬ = successor $$$$0 0 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () ($$$$0) () ()
-                            prove ¬ ∧ = successor $$$$0 0 = apply $$0 successor $$$$0 g_0 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 (= successor $$$$0 0, = apply $$0 successor $$$$0 g_0) () () ()
-                              given
-                            prove ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∧ = successor $$$$0 0 = apply $$0 successor $$$$0 g_0, ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0) () () ()
-                              given
-                              given
-                          }
-                          let b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply $$0 successor $$$$0 apply f $$$0) () (∧ = successor $$$$0 successor $$$$$$0 = apply $$0 successor $$$$0 apply f apply $$0 $$$$$$0) () {
-                            prove = $$$$$0 $0 5778861e17c0abb75b73129b83d1c1f7cf2f553201969f92436d386720fa0a99 () ($$$$$0, $0) () ()
-                              simplified = successor $$$$$0 successor $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= successor $$$$$0 successor $0, = apply $$$0 successor $$$$$0 apply f apply $$$0 $0) () () ()
-                                given
-                            prove = apply $$$0 successor $$$$$0 apply f apply $$$0 $$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$$0, $0) (= apply $$$0 successor $$$$$0 apply f apply $$$0 $$$$$$$0) ()
-                              given
-                              simplified = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= successor $$$$$0 successor $0, = apply $$$0 successor $$$$$0 apply f apply $$$0 $0) () () ()
-                                given
-                            prove = apply $$$0 successor $$$$$0 apply f $$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$0, apply $$$0 $$$$$0) (= apply $$$0 successor $$$$$0 apply f $$$$$$$0) ()
-                              given
-                              given
-                          }
-                          elided 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 {
-                            prove ∈ orderedPair successor $$$$0 apply $$0 successor $$$$0 $$0 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () ($$0, $0, X, successor $$$$0) () ()
-                              simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                  given
-                              given
-                            prove ∈ orderedPair successor $$$$0 apply f $$$0 $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (apply $$0 successor $$$$0, apply f $$$0) (∈ orderedPair successor $$$$0 $$$$$$0 $$0) ()
-                              given
-                              given
-                          }
-                          prove ∈ orderedPair successor $$$$0 apply f $$$0 union $$$$$0 c6380fe68a1b2148337c46533f74f3cc3c2dc26eb007c8a18b6d674dfa7b158c () (orderedPair successor $$$$0 apply f $$$0, $$0, $$$$$0) () ()
-                            given
-                            simplified ∈ $$0 $$$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair $$$$0 $$$0 $$0, ∈ $$0 $$$$$0) () () ()
-                              given
-                        }
+                        prove ¬ = successor $$$$0 0 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () ($$$$0) () ()
+                        prove ¬ ∧ = successor $$$$0 0 = apply $$0 successor $$$$0 g_0 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 (= successor $$$$0 0, = apply $$0 successor $$$$0 g_0) () () ()
+                          given
+                        prove ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∧ = successor $$$$0 0 = apply $$0 successor $$$$0 g_0, ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0) () () ()
+                          given
+                          given
                       }
-                      subproof (Successor is domain) {
-                        assume = successor $$$$0 $0 {
-                          let g^+ = $0 ∪ $$$0 singleton orderedPair successor $$$$$0 apply f $$$$0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∈ orderedPair successor $$$$0 apply f $$$0 union $$$$$0) (∪ $$0 singleton orderedPair successor $$$$0 apply f $$$0) () () {
-                            elided e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 {
-                              prove ∈ orderedPair successor $$$$$0 apply f $$$$0 singleton orderedPair successor $$$$$0 apply f $$$$0 e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (orderedPair successor $$$$$0 apply f $$$$0) () ()
-                              prove ∈ orderedPair successor $$$$$0 apply f $$$$0 ∪ $$$0 singleton orderedPair successor $$$$$0 apply f $$$$0 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () (orderedPair successor $$$$$0 apply f $$$$0, singleton orderedPair successor $$$$$0 apply f $$$$0, $$$0) () ()
+                      let b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply $$0 successor $$$$0 apply f $$$0) () (∧ = successor $$$$0 successor $$$$$$0 = apply $$0 successor $$$$0 apply f apply $$0 $$$$$$0) () {
+                        prove = $$$$$0 $0 5778861e17c0abb75b73129b83d1c1f7cf2f553201969f92436d386720fa0a99 () ($$$$$0, $0) () ()
+                          simplified = successor $$$$$0 successor $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= successor $$$$$0 successor $0, = apply $$$0 successor $$$$$0 apply f apply $$$0 $0) () () ()
+                            given
+                        prove = apply $$$0 successor $$$$$0 apply f apply $$$0 $$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$$0, $0) (= apply $$$0 successor $$$$$0 apply f apply $$$0 $$$$$$$0) ()
+                          given
+                          simplified = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= successor $$$$$0 successor $0, = apply $$$0 successor $$$$$0 apply f apply $$$0 $0) () () ()
+                            given
+                        prove = apply $$$0 successor $$$$$0 apply f $$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$0, apply $$$0 $$$$$0) (= apply $$$0 successor $$$$$0 apply f $$$$$$$0) ()
+                          given
+                          given
+                      }
+                      elided 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 {
+                        prove ∈ orderedPair successor $$$$0 apply $$0 successor $$$$0 $$0 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () ($$0, $0, X, successor $$$$0) () ()
+                          simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                            simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                              given
+                          given
+                        prove ∈ orderedPair successor $$$$0 apply f $$$0 $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (apply $$0 successor $$$$0, apply f $$$0) (∈ orderedPair successor $$$$0 $$$$$$0 $$0) ()
+                          given
+                          given
+                      }
+                      prove ∈ orderedPair successor $$$$0 apply f $$$0 union $$$$$0 c6380fe68a1b2148337c46533f74f3cc3c2dc26eb007c8a18b6d674dfa7b158c () (orderedPair successor $$$$0 apply f $$$0, $$0, $$$$$0) () ()
+                        given
+                        simplified ∈ $$0 $$$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair $$$$0 $$$0 $$0, ∈ $$0 $$$$$0) () () ()
+                          given
+                    }
+                  }
+                  subproof (Successor is domain) {
+                    assume = successor $$$$0 $0 {
+                      let g^+ = $0 ∪ $$$0 singleton orderedPair successor $$$$$0 apply f $$$$0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∈ orderedPair successor $$$$0 apply f $$$0 union $$$$$0) (∪ $$0 singleton orderedPair successor $$$$0 apply f $$$0) () () {
+                        elided e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 {
+                          prove ∈ orderedPair successor $$$$$0 apply f $$$$0 singleton orderedPair successor $$$$$0 apply f $$$$0 e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (orderedPair successor $$$$$0 apply f $$$$0) () ()
+                          prove ∈ orderedPair successor $$$$$0 apply f $$$$0 ∪ $$$0 singleton orderedPair successor $$$$$0 apply f $$$$0 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () (orderedPair successor $$$$$0 apply f $$$$0, singleton orderedPair successor $$$$$0 apply f $$$$0, $$$0) () ()
+                            given
+                          prove ∈ orderedPair successor $$$$$0 apply f $$$$0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, ∪ $$$0 singleton orderedPair successor $$$$$0 apply f $$$$0) (∈ orderedPair successor $$$$$0 apply f $$$$0 $$$$$$$0) ()
+                            given
+                            given
+                        }
+                        elided 2cb925c2504836b10cd5ec4fbdaa31c47b0aead131405dd66756b2fc5a5220f2 {
+                          prove ∈ $$$$0 X dcc696c503db6554d43904698b71d4b1bca3b5927c301caf40f2036a60d3bd46 () ($$$0, $$0, X, $$$$$0, $$$$0) () ()
+                            simplified function $$$0 $$0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$$0 $$0 X, ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
+                              simplified ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
                                 given
-                              prove ∈ orderedPair successor $$$$$0 apply f $$$$0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, ∪ $$$0 singleton orderedPair successor $$$$$0 apply f $$$$0) (∈ orderedPair successor $$$$$0 apply f $$$$0 $$$$$$$0) ()
+                            simplified ∈ orderedPair $$$$$0 $$$$0 $$$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair $$$$$0 $$$$0 $$$0, ∈ $$$0 $$$$$$0) () () ()
+                              given
+                          prove ∈ apply f $$$$0 X 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (f, X, X, $$$$0) () ()
+                            given
+                            given
+                          prove ∈ successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$$$$0) () ()
+                            simplified ∈ $$$$$0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$$$0 ℕ, ∃! x_n ∈ orderedPair $$$$$$0 $0 union $$$$$$$0) () () ()
+                              given
+                          prove function $$$0 successor $$$$$0 X 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor $$$$$0, $$0) (function $$$0 $$$$$$$0 X) ()
+                            given
+                            simplified function $$$0 $$0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$$0 $$0 X, ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
+                              simplified ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
                                 given
+                          prove function $0 successor successor $$$$$0 X 2cb925c2504836b10cd5ec4fbdaa31c47b0aead131405dd66756b2fc5a5220f2 () (successor $$$$$0, $$$0, X, apply f $$$$0, $0) () ()
+                            given
+                            given
+                            given
+                            given
+                        }
+                        elided 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 {
+                          prove ∈ successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$$$$0) () ()
+                            simplified ∈ $$$$$0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$$$0 ℕ, ∃! x_n ∈ orderedPair $$$$$$0 $0 union $$$$$$$0) () () ()
+                              given
+                          prove ∈ successor successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (successor $$$$$0) () ()
+                            given
+                          prove ∈ $0 powerSet × ℕ X 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 () (successor successor $$$$$0, $0, X) () ()
+                            given
+                            given
+                        }
+                        elided e0ad13e7b958f91d4dc2eb7dabb5251c5e193be6759baa3c47807eba2d04c2c3 {
+                          elided f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 {
+                            prove ⊆ $$$0 ∪ $$$0 singleton orderedPair successor $$$$$0 apply f $$$$0 f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 () ($$$0, singleton orderedPair successor $$$$$0 apply f $$$$0) () ()
+                            prove ⊆ $$$0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, ∪ $$$0 singleton orderedPair successor $$$$$0 apply f $$$$0) (⊆ $$$0 $$$$$$$0) ()
+                              given
+                              given
+                          }
+                          prove ∀ y → ∈ $0 $$$0 = apply $$$$0 $0 apply $$0 $0 e0ad13e7b958f91d4dc2eb7dabb5251c5e193be6759baa3c47807eba2d04c2c3 () ($$$0, $$0, X, $0, successor successor $$$$$0, X) () ()
+                            simplified function $$$0 $$0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$$0 $$0 X, ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
+                              simplified ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
                                 given
-                            }
-                            elided 2cb925c2504836b10cd5ec4fbdaa31c47b0aead131405dd66756b2fc5a5220f2 {
-                              prove ∈ $$$$0 X dcc696c503db6554d43904698b71d4b1bca3b5927c301caf40f2036a60d3bd46 () ($$$0, $$0, X, $$$$$0, $$$$0) () ()
-                                simplified function $$$0 $$0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$$0 $$0 X, ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
-                                  simplified ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
+                            given
+                            given
+                        }
+                        take a {
+                          assume ∈ $0 successor successor $$$$$$0 {
+                            subproof (a is zero) {
+                              assume = $0 0 {
+                                elided 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 {
+                                  prove ∨ = $$$0 0 ∈ 0 $$$0 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 () ($$$0) () ()
+                                    simplified ∈ $$$0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$0 ℕ, ∧ function $$$$0 $$$0 X ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) () () ()
+                                      given
+                                  elided 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 {
+                                    prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
+                                    prove ¬ = $$$0 ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () ($$$$$$0, $$$0) () ()
+                                      given
+                                    prove ¬ = $$$0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (¬ = $$$0 $$$$$$$$0) ()
+                                      given
+                                      given
+                                  }
+                                  prove ∈ 0 $$$0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (= $$$0 0, ∈ 0 $$$0) () () ()
                                     given
-                                simplified ∈ orderedPair $$$$$0 $$$$0 $$$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair $$$$$0 $$$$0 $$$0, ∈ $$$0 $$$$$$0) () () ()
-                                  given
-                              prove ∈ apply f $$$$0 X 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (f, X, X, $$$$0) () ()
-                                given
-                                given
-                              prove ∈ successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$$$$0) () ()
-                                simplified ∈ $$$$$0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$$$0 ℕ, ∃! x_n ∈ orderedPair $$$$$$0 $0 union $$$$$$$0) () () ()
-                                  given
-                              prove function $$$0 successor $$$$$0 X 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor $$$$$0, $$0) (function $$$0 $$$$$$$0 X) ()
-                                given
-                                simplified function $$$0 $$0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$$0 $$0 X, ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
-                                  simplified ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
                                     given
-                              prove function $0 successor successor $$$$$0 X 2cb925c2504836b10cd5ec4fbdaa31c47b0aead131405dd66756b2fc5a5220f2 () (successor $$$$$0, $$$0, X, apply f $$$$0, $0) () ()
-                                given
-                                given
-                                given
-                                given
-                            }
-                            elided 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 {
-                              prove ∈ successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$$$$0) () ()
-                                simplified ∈ $$$$$0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$$$0 ℕ, ∃! x_n ∈ orderedPair $$$$$$0 $0 union $$$$$$$0) () () ()
+                                }
+                                elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                                  prove → ∈ 0 $$$0 = apply $$$$0 0 apply $$0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (0) (→ ∈ $$$$$$$$0 $$$0 = apply $$$$0 $$$$$$$$0 apply $$0 $$$$$$$$0) ()
+                                    given
+                                  prove = apply $$$$0 0 apply $$0 0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0 $$$0, = apply $$$$0 0 apply $$0 0) () () ()
+                                    given
+                                    given
+                                  prove = apply $$0 0 apply $$$$0 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply $$$$0 0, apply $$0 0) () ()
+                                    given
+                                }
+                                elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                                  prove → ∈ 0 $$$0 ∨ ∧ = 0 0 = apply $$$$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (0) (→ ∈ $$$$$$$$0 $$$0 ∨ ∧ = $$$$$$$$0 0 = apply $$$$0 $$$$$$$$0 g_0 ∃ b ∧ = $$$$$$$$$0 successor $0 = apply $$$$$0 $$$$$$$$$0 apply f apply $$$$$0 $0) ()
+                                    simplified ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$$$0 $$$0 X, ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) () () ()
+                                      simplified ∧ function $$$$0 $$$0 X ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$$0 ℕ, ∧ function $$$$0 $$$0 X ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) () () ()
+                                        given
+                                  prove ∨ ∧ = 0 0 = apply $$$$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0 $$$0, ∨ ∧ = 0 0 = apply $$$$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0) () () ()
+                                    given
+                                    given
+                                  elided c5a163f6a3b0ffc769773f489bc775c0300f132d88a72941a3e129b91b202abe {
+                                    take x {
+                                      prove ¬ = 0 successor $0 c5a163f6a3b0ffc769773f489bc775c0300f132d88a72941a3e129b91b202abe () ($0) () ()
+                                      prove ¬ ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 (= 0 successor $0, = apply $$$$$0 0 apply f apply $$$$$0 $0) () () ()
+                                        given
+                                    }
+                                    prove ¬ ∃ b ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0 872156a627b48127aaf94f85dae6db43b564ad471e9f83890f421a2127ae266d () () (∧ = 0 successor $$$$$$$$0 = apply $$$$0 0 apply f apply $$$$0 $$$$$$$$0) ()
+                                      given
+                                  }
+                                  prove ∧ = 0 0 = apply $$$$0 0 g_0 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∧ = 0 0 = apply $$$$0 0 g_0, ∃ b ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0) () () ()
+                                    given
+                                    given
+                                  prove = apply $$$$0 0 g_0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= 0 0, = apply $$$$0 0 g_0) () () ()
+                                    given
+                                }
+                                prove = apply $$0 0 g_0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$0 0, apply $$$$0 0, g_0) () ()
                                   given
-                              prove ∈ successor successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (successor $$$$$0) () ()
-                                given
-                              prove ∈ $0 powerSet × ℕ X 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 () (successor successor $$$$$0, $0, X) () ()
-                                given
-                                given
-                            }
-                            elided e0ad13e7b958f91d4dc2eb7dabb5251c5e193be6759baa3c47807eba2d04c2c3 {
-                              elided f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 {
-                                prove ⊆ $$$0 ∪ $$$0 singleton orderedPair successor $$$$$0 apply f $$$$0 f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 () ($$$0, singleton orderedPair successor $$$$$0 apply f $$$$0) () ()
-                                prove ⊆ $$$0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, ∪ $$$0 singleton orderedPair successor $$$$$0 apply f $$$$0) (⊆ $$$0 $$$$$$$0) ()
                                   given
-                                  given
+                                elided bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d {
+                                  prove = apply $$0 $0 g_0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, 0) (= apply $$0 $$$$$$$$0 g_0) ()
+                                    given
+                                    given
+                                  prove ∧ = $0 0 = apply $$0 $0 g_0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= $0 0, = apply $$0 $0 g_0) () () ()
+                                    given
+                                    given
+                                }
                               }
-                              prove ∀ y → ∈ $0 $$$0 = apply $$$$0 $0 apply $$0 $0 e0ad13e7b958f91d4dc2eb7dabb5251c5e193be6759baa3c47807eba2d04c2c3 () ($$$0, $$0, X, $0, successor successor $$$$$0, X) () ()
-                                simplified function $$$0 $$0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$$0 $$0 X, ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
-                                  simplified ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 ℕ, ∧ function $$$0 $$0 X ∀ a → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
-                                    given
-                                given
-                                given
                             }
-                            take a {
-                              assume ∈ $0 successor successor $$$$$$0 {
-                                subproof (a is zero) {
-                                  assume = $0 0 {
-                                    elided 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 {
-                                      prove ∨ = $$$0 0 ∈ 0 $$$0 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 () ($$$0) () ()
-                                        simplified ∈ $$$0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$0 ℕ, ∧ function $$$$0 $$$0 X ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) () () ()
-                                          given
-                                      elided 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 {
-                                        prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
-                                        prove ¬ = $$$0 ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () ($$$$$$0, $$$0) () ()
-                                          given
-                                        prove ¬ = $$$0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (¬ = $$$0 $$$$$$$$0) ()
-                                          given
-                                          given
-                                      }
-                                      prove ∈ 0 $$$0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (= $$$0 0, ∈ 0 $$$0) () () ()
-                                        given
-                                        given
-                                    }
+                            subproof (a is nonzero) {
+                              assume ¬ = $0 0 {
+                                subproof (a is in g) {
+                                  assume ∈ $0 successor $$$$$$0 {
                                     elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-                                      prove → ∈ 0 $$$0 = apply $$$$0 0 apply $$0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (0) (→ ∈ $$$$$$$$0 $$$0 = apply $$$$0 $$$$$$$$0 apply $$0 $$$$$$$$0) ()
-                                        given
-                                      prove = apply $$$$0 0 apply $$0 0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0 $$$0, = apply $$$$0 0 apply $$0 0) () () ()
-                                        given
-                                        given
-                                      prove = apply $$0 0 apply $$$$0 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply $$$$0 0, apply $$0 0) () ()
-                                        given
-                                    }
-                                    elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-                                      prove → ∈ 0 $$$0 ∨ ∧ = 0 0 = apply $$$$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (0) (→ ∈ $$$$$$$$0 $$$0 ∨ ∧ = $$$$$$$$0 0 = apply $$$$0 $$$$$$$$0 g_0 ∃ b ∧ = $$$$$$$$$0 successor $0 = apply $$$$$0 $$$$$$$$$0 apply f apply $$$$$0 $0) ()
+                                      prove → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$$$$0 $$$0 ∨ ∧ = $$$$$$$$0 0 = apply $$$$0 $$$$$$$$0 g_0 ∃ b ∧ = $$$$$$$$$0 successor $0 = apply $$$$$0 $$$$$$$$$0 apply f apply $$$$$0 $0) ()
                                         simplified ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$$$0 $$$0 X, ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) () () ()
                                           simplified ∧ function $$$$0 $$$0 X ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$$0 ℕ, ∧ function $$$$0 $$$0 X ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) () () ()
                                             given
-                                      prove ∨ ∧ = 0 0 = apply $$$$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0 $$$0, ∨ ∧ = 0 0 = apply $$$$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0) () () ()
+                                      prove ∈ $0 $$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor $$$$$$0, $$$0) (∈ $0 $$$$$$$$0) ()
                                         given
                                         given
-                                      elided c5a163f6a3b0ffc769773f489bc775c0300f132d88a72941a3e129b91b202abe {
-                                        take x {
-                                          prove ¬ = 0 successor $0 c5a163f6a3b0ffc769773f489bc775c0300f132d88a72941a3e129b91b202abe () ($0) () ()
-                                          prove ¬ ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 (= 0 successor $0, = apply $$$$$0 0 apply f apply $$$$$0 $0) () () ()
-                                            given
-                                        }
-                                        prove ¬ ∃ b ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0 872156a627b48127aaf94f85dae6db43b564ad471e9f83890f421a2127ae266d () () (∧ = 0 successor $$$$$$$$0 = apply $$$$0 0 apply f apply $$$$0 $$$$$$$$0) ()
+                                      prove ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$$0, ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
+                                        given
+                                        given
+                                      elided 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 {
+                                        prove ¬ ∧ = $0 0 = apply $$$$0 $0 g_0 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 (= $0 0, = apply $$$$0 $0 g_0) () () ()
+                                          given
+                                        prove ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∧ = $0 0 = apply $$$$0 $0 g_0, ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
+                                          given
                                           given
                                       }
-                                      prove ∧ = 0 0 = apply $$$$0 0 g_0 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∧ = 0 0 = apply $$$$0 0 g_0, ∃ b ∧ = 0 successor $0 = apply $$$$$0 0 apply f apply $$$$$0 $0) () () ()
+                                    }
+                                    let b' ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () (∧ = $0 successor $$$$$$$$0 = apply $$$$0 $0 apply f apply $$$$0 $$$$$$$$0) () {
+                                      elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                                        prove → ∈ $0 $$$$0 = apply $$$$$0 $0 apply $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$$$$$0 $$$$0 = apply $$$$$0 $$$$$$$$$0 apply $$$0 $$$$$$$$$0) ()
+                                          given
+                                        elided 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c {
+                                          prove ∈ successor $0 successor $$$$$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$0, successor $0) (∈ $$$$$$$$$0 successor $$$$$$$0) ()
+                                            simplified = $$0 successor $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= $$0 successor $0, = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
+                                              given
+                                            given
+                                          elided 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c {
+                                            prove ∈ successor $$$$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$$$$$$0) () ()
+                                              simplified ∈ $$$$$$$0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$$$$$0 ℕ, ∃! x_n ∈ orderedPair $$$$$$$$0 $0 union $$$$$$$$$0) () () ()
+                                                given
+                                            prove ∈ $0 successor $$$$$$$0 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () (successor $$$$$$$0, $0) () ()
+                                              given
+                                              given
+                                          }
+                                          prove ∈ $0 $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor $$$$$$$0, $$$$0) (∈ $0 $$$$$$$$$0) ()
+                                            given
+                                            given
+                                        }
+                                        prove = apply $$$$$0 $0 apply $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$$$0, = apply $$$$$0 $0 apply $$$0 $0) () () ()
+                                          given
+                                          given
+                                      }
+                                      elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                                        prove → ∈ $$0 $$$$0 = apply $$$$$0 $$0 apply $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$$$$$0 $$$$0 = apply $$$$$0 $$$$$$$$$0 apply $$$0 $$$$$$$$$0) ()
+                                          given
+                                        prove ∈ $$0 $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor $$$$$$$0, $$$$0) (∈ $$0 $$$$$$$$$0) ()
+                                          given
+                                          given
+                                        prove = apply $$$$$0 $$0 apply $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 $$$$0, = apply $$$$$0 $$0 apply $$$0 $$0) () () ()
+                                          given
+                                          given
+                                        prove = apply $$$0 $$0 apply $$$$$0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply $$$$$0 $$0, apply $$$0 $$0) () ()
+                                          given
+                                      }
+                                      prove = apply $$$0 $$0 apply f apply $$$$$0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 $$0, apply $$$$$0 $$0, apply f apply $$$$$0 $0) () ()
+                                        given
+                                        simplified = apply $$$$$0 $$0 apply f apply $$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= $$0 successor $0, = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
+                                          given
+                                      prove = apply f apply $$$$$0 $0 apply f apply $$$0 $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply $$$$$0 $0, apply $$$0 $0) () (apply f $$$$$$$$$0)
+                                        given
+                                      prove = apply $$$0 $$0 apply f apply $$$0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 $$0, apply f apply $$$$$0 $0, apply f apply $$$0 $0) () ()
                                         given
                                         given
-                                      prove = apply $$$$0 0 g_0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= 0 0, = apply $$$$0 0 g_0) () () ()
+                                      elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+                                        prove ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= $$0 successor $0, = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
+                                          simplified = $$0 successor $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= $$0 successor $0, = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
+                                            given
+                                          given
+                                        prove ∃ b ∧ = $$$0 successor $0 = apply $$$$0 $$$0 apply f apply $$$$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ = $$0 successor $$$$$$$$$0 = apply $$$0 $$0 apply f apply $$$0 $$$$$$$$$0) ()
+                                          given
+                                      }
+                                    }
+                                  }
+                                }
+                                subproof (a was added to g) {
+                                  assume = $0 successor $$$$$$0 {
+                                    elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                                      prove → ∈ $$$$$$0 $$$0 = apply $$$$0 $$$$$$0 apply $$0 $$$$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$$$$$0) (→ ∈ $$$$$$$$0 $$$0 = apply $$$$0 $$$$$$$$0 apply $$0 $$$$$$$$0) ()
+                                        given
+                                      prove = apply $$$$0 $$$$$$0 apply $$0 $$$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$$$0 $$$0, = apply $$$$0 $$$$$$0 apply $$0 $$$$$$0) () () ()
+                                        given
+                                        given
+                                      prove = apply $$0 $$$$$$0 apply $$$$0 $$$$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply $$$$0 $$$$$$0, apply $$0 $$$$$$0) () ()
                                         given
                                     }
-                                    prove = apply $$0 0 g_0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$0 0, apply $$$$0 0, g_0) () ()
+                                    prove = apply $$0 $$$$$$0 $$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$$0, apply $$$$0 $$$$$$0) (= apply $$0 $$$$$$0 $$$$$$$$0) ()
                                       given
                                       given
-                                    elided bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d {
-                                      prove = apply $$0 $0 g_0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, 0) (= apply $$0 $$$$$$$$0 g_0) ()
+                                    elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
+                                      prove = apply f $$$$$0 apply $$0 successor $$$$$$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, successor successor $$$$$$0, X, successor $$$$$$0, apply f $$$$$0) () ()
                                         given
                                         given
-                                      prove ∧ = $0 0 = apply $$0 $0 g_0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= $0 0, = apply $$0 $0 g_0) () () ()
+                                      prove = apply $$0 successor $$$$$$0 apply f $$$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f $$$$$0, apply $$0 successor $$$$$$0) () ()
                                         given
+                                    }
+                                    prove = apply $$0 successor $$$$$$0 apply f apply $$0 $$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$0 $$$$$$0, $$$$$0) (= apply $$0 successor $$$$$$0 apply f $$$$$$$$0) ()
+                                      given
+                                      given
+                                    prove = apply $$0 $0 apply f apply $$0 $$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, successor $$$$$$0) (= apply $$0 $$$$$$$$0 apply f apply $$0 $$$$$$0) ()
+                                      given
+                                      given
+                                    elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+                                      prove ∧ = $0 successor $$$$$$0 = apply $$0 $0 apply f apply $$0 $$$$$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= $0 successor $$$$$$0, = apply $$0 $0 apply f apply $$0 $$$$$$0) () () ()
+                                        given
+                                        given
+                                      prove ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$$$$$0) (∧ = $0 successor $$$$$$$$0 = apply $$0 $0 apply f apply $$0 $$$$$$$$0) ()
                                         given
                                     }
                                   }
                                 }
-                                subproof (a is nonzero) {
-                                  assume ¬ = $0 0 {
-                                    subproof (a is in g) {
-                                      assume ∈ $0 successor $$$$$$0 {
-                                        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-                                          prove → ∈ $0 $$$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$$$$0 $$$0 ∨ ∧ = $$$$$$$$0 0 = apply $$$$0 $$$$$$$$0 g_0 ∃ b ∧ = $$$$$$$$$0 successor $0 = apply $$$$$0 $$$$$$$$$0 apply f apply $$$$$0 $0) ()
-                                            simplified ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$$$0 $$$0 X, ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) () () ()
-                                              simplified ∧ function $$$$0 $$$0 X ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$$0 ℕ, ∧ function $$$$0 $$$0 X ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) () () ()
-                                                given
-                                          prove ∈ $0 $$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor $$$$$$0, $$$0) (∈ $0 $$$$$$$$0) ()
-                                            given
-                                            given
-                                          prove ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$$0, ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
-                                            given
-                                            given
-                                          elided 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 {
-                                            prove ¬ ∧ = $0 0 = apply $$$$0 $0 g_0 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 (= $0 0, = apply $$$$0 $0 g_0) () () ()
-                                              given
-                                            prove ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∧ = $0 0 = apply $$$$0 $0 g_0, ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
-                                              given
-                                              given
-                                          }
-                                        }
-                                        let b' ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () (∧ = $0 successor $$$$$$$$0 = apply $$$$0 $0 apply f apply $$$$0 $$$$$$$$0) () {
-                                          elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-                                            prove → ∈ $0 $$$$0 = apply $$$$$0 $0 apply $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$$$$$0 $$$$0 = apply $$$$$0 $$$$$$$$$0 apply $$$0 $$$$$$$$$0) ()
-                                              given
-                                            elided 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c {
-                                              prove ∈ successor $0 successor $$$$$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$0, successor $0) (∈ $$$$$$$$$0 successor $$$$$$$0) ()
-                                                simplified = $$0 successor $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= $$0 successor $0, = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
-                                                  given
-                                                given
-                                              elided 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c {
-                                                prove ∈ successor $$$$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$$$$$$0) () ()
-                                                  simplified ∈ $$$$$$$0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$$$$$0 ℕ, ∃! x_n ∈ orderedPair $$$$$$$$0 $0 union $$$$$$$$$0) () () ()
-                                                    given
-                                                prove ∈ $0 successor $$$$$$$0 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () (successor $$$$$$$0, $0) () ()
-                                                  given
-                                                  given
-                                              }
-                                              prove ∈ $0 $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor $$$$$$$0, $$$$0) (∈ $0 $$$$$$$$$0) ()
-                                                given
-                                                given
-                                            }
-                                            prove = apply $$$$$0 $0 apply $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$$$0, = apply $$$$$0 $0 apply $$$0 $0) () () ()
-                                              given
-                                              given
-                                          }
-                                          elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-                                            prove → ∈ $$0 $$$$0 = apply $$$$$0 $$0 apply $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$$$$$0 $$$$0 = apply $$$$$0 $$$$$$$$$0 apply $$$0 $$$$$$$$$0) ()
-                                              given
-                                            prove ∈ $$0 $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor $$$$$$$0, $$$$0) (∈ $$0 $$$$$$$$$0) ()
-                                              given
-                                              given
-                                            prove = apply $$$$$0 $$0 apply $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 $$$$0, = apply $$$$$0 $$0 apply $$$0 $$0) () () ()
-                                              given
-                                              given
-                                            prove = apply $$$0 $$0 apply $$$$$0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply $$$$$0 $$0, apply $$$0 $$0) () ()
-                                              given
-                                          }
-                                          prove = apply $$$0 $$0 apply f apply $$$$$0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 $$0, apply $$$$$0 $$0, apply f apply $$$$$0 $0) () ()
-                                            given
-                                            simplified = apply $$$$$0 $$0 apply f apply $$$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= $$0 successor $0, = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
-                                              given
-                                          prove = apply f apply $$$$$0 $0 apply f apply $$$0 $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply $$$$$0 $0, apply $$$0 $0) () (apply f $$$$$$$$$0)
-                                            given
-                                          prove = apply $$$0 $$0 apply f apply $$$0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 $$0, apply f apply $$$$$0 $0, apply f apply $$$0 $0) () ()
-                                            given
-                                            given
-                                          elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-                                            prove ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= $$0 successor $0, = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
-                                              simplified = $$0 successor $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= $$0 successor $0, = apply $$$$$0 $$0 apply f apply $$$$$0 $0) () () ()
-                                                given
-                                              given
-                                            prove ∃ b ∧ = $$$0 successor $0 = apply $$$$0 $$$0 apply f apply $$$$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ = $$0 successor $$$$$$$$$0 = apply $$$0 $$0 apply f apply $$$0 $$$$$$$$$0) ()
-                                              given
-                                          }
-                                        }
-                                      }
-                                    }
-                                    subproof (a was added to g) {
-                                      assume = $0 successor $$$$$$0 {
-                                        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-                                          prove → ∈ $$$$$$0 $$$0 = apply $$$$0 $$$$$$0 apply $$0 $$$$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$$$$$0) (→ ∈ $$$$$$$$0 $$$0 = apply $$$$0 $$$$$$$$0 apply $$0 $$$$$$$$0) ()
-                                            given
-                                          prove = apply $$$$0 $$$$$$0 apply $$0 $$$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$$$0 $$$0, = apply $$$$0 $$$$$$0 apply $$0 $$$$$$0) () () ()
-                                            given
-                                            given
-                                          prove = apply $$0 $$$$$$0 apply $$$$0 $$$$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply $$$$0 $$$$$$0, apply $$0 $$$$$$0) () ()
-                                            given
-                                        }
-                                        prove = apply $$0 $$$$$$0 $$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$$0, apply $$$$0 $$$$$$0) (= apply $$0 $$$$$$0 $$$$$$$$0) ()
-                                          given
-                                          given
-                                        elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
-                                          prove = apply f $$$$$0 apply $$0 successor $$$$$$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, successor successor $$$$$$0, X, successor $$$$$$0, apply f $$$$$0) () ()
-                                            given
-                                            given
-                                          prove = apply $$0 successor $$$$$$0 apply f $$$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f $$$$$0, apply $$0 successor $$$$$$0) () ()
-                                            given
-                                        }
-                                        prove = apply $$0 successor $$$$$$0 apply f apply $$0 $$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$0 $$$$$$0, $$$$$0) (= apply $$0 successor $$$$$$0 apply f $$$$$$$$0) ()
-                                          given
-                                          given
-                                        prove = apply $$0 $0 apply f apply $$0 $$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, successor $$$$$$0) (= apply $$0 $$$$$$$$0 apply f apply $$0 $$$$$$0) ()
-                                          given
-                                          given
-                                        elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-                                          prove ∧ = $0 successor $$$$$$0 = apply $$0 $0 apply f apply $$0 $$$$$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= $0 successor $$$$$$0, = apply $$0 $0 apply f apply $$0 $$$$$$0) () () ()
-                                            given
-                                            given
-                                          prove ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$$$$$0) (∧ = $0 successor $$$$$$$$0 = apply $$0 $0 apply f apply $$0 $$$$$$$$0) ()
-                                            given
-                                        }
-                                      }
-                                    }
-                                    elided 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 {
-                                      prove ∨ ∈ $0 successor $$$$$$0 = $0 successor $$$$$$0 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, successor $$$$$$0) () ()
-                                        given
-                                      prove ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 successor $$$$$$0, = $0 successor $$$$$$0, ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
-                                        given
-                                        given
-                                        given
-                                    }
-                                  }
+                                elided 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 {
+                                  prove ∨ ∈ $0 successor $$$$$$0 = $0 successor $$$$$$0 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, successor $$$$$$0) () ()
+                                    given
+                                  prove ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 successor $$$$$$0, = $0 successor $$$$$$0, ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
+                                    given
+                                    given
+                                    given
                                 }
-                                prove ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 8f4dce2a580ead51e91bb5caa5ae4b8474eb94defe5e756747db4d413819415c (= $0 0, ∧ = $0 0 = apply $$0 $0 g_0, ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
-                                  given
-                                  given
                               }
                             }
-                            elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-                              prove ∈ successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$$$$0) () ()
-                                simplified ∈ $$$$$0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$$$0 ℕ, ∃! x_n ∈ orderedPair $$$$$$0 $0 union $$$$$$$0) () () ()
-                                  given
-                              prove ∈ successor successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (successor $$$$$0) () ()
-                                given
-                              prove ∧ function $0 successor successor $$$$$0 X ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 successor successor $$$$$0 X, ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
-                                given
-                                given
-                              prove ∧ ∈ successor successor $$$$$0 ℕ ∧ function $0 successor successor $$$$$0 X ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ successor successor $$$$$0 ℕ, ∧ function $0 successor successor $$$$$0 X ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
-                                given
-                                given
-                              prove ∃ n'' ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (successor successor $$$$$0) (∧ ∈ $$$$$$$0 ℕ ∧ function $0 $$$$$$$0 X ∀ a → ∈ $0 $$$$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) ()
-                                given
-                            }
-                            prove ∈ $0 $$$$$$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$$$$$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$$$0 $$0 apply f apply $$$$$$$$$$0 $0) ()
-                              given
-                              given
-                              given
-                            prove ∈ orderedPair successor $$$$$0 apply f $$$$0 union $$$$$$0 c6380fe68a1b2148337c46533f74f3cc3c2dc26eb007c8a18b6d674dfa7b158c () (orderedPair successor $$$$$0 apply f $$$$0, $0, $$$$$$0) () ()
+                            prove ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 8f4dce2a580ead51e91bb5caa5ae4b8474eb94defe5e756747db4d413819415c (= $0 0, ∧ = $0 0 = apply $$0 $0 g_0, ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
                               given
                               given
                           }
                         }
-                      }
-                      elided 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 {
-                        prove ∨ ∈ successor $$$$0 $0 = successor $$$$0 $0 220bd30d1396001c231c4257d9a9f1d98ebf4bd91132cbb730afda2d43cb7b1c () ($0, $$$$0) () ()
-                          simplified ∈ $0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                        elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+                          prove ∈ successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$$$$0) () ()
+                            simplified ∈ $$$$$0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$$$0 ℕ, ∃! x_n ∈ orderedPair $$$$$$0 $0 union $$$$$$$0) () () ()
+                              given
+                          prove ∈ successor successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (successor $$$$$0) () ()
                             given
+                          prove ∧ function $0 successor successor $$$$$0 X ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 successor successor $$$$$0 X, ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
+                            given
+                            given
+                          prove ∧ ∈ successor successor $$$$$0 ℕ ∧ function $0 successor successor $$$$$0 X ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ successor successor $$$$$0 ℕ, ∧ function $0 successor successor $$$$$0 X ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
+                            given
+                            given
+                          prove ∃ n'' ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (successor successor $$$$$0) (∧ ∈ $$$$$$$0 ℕ ∧ function $0 $$$$$$$0 X ∀ a → ∈ $0 $$$$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) ()
+                            given
+                        }
+                        prove ∈ $0 $$$$$$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$$$$$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$$$0 $$0 apply f apply $$$$$$$$$$0 $0) ()
                           given
-                        prove ∈ orderedPair successor $$$$0 apply f $$$0 union $$$$$0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ successor $$$$0 $0, = successor $$$$0 $0, ∈ orderedPair successor $$$$0 apply f $$$0 union $$$$$0) () () ()
                           given
+                          given
+                        prove ∈ orderedPair successor $$$$$0 apply f $$$$0 union $$$$$$0 c6380fe68a1b2148337c46533f74f3cc3c2dc26eb007c8a18b6d674dfa7b158c () (orderedPair successor $$$$$0 apply f $$$$0, $0, $$$$$$0) () ()
                           given
                           given
                       }
                     }
-                    subproof (Uniqueness) {
-                      take x_n^+ {
-                        assume ∈ orderedPair successor $$$$$0 $0 union $$$$$$0 {
-                          prove ∃ g ∧ ∈ orderedPair successor $$$$$$0 $$0 $0 ∈ $0 $$$$$$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair successor $$$$$0 $0, $$$$$$0) () ()
+                  }
+                  elided 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 {
+                    prove ∨ ∈ successor $$$$0 $0 = successor $$$$0 $0 220bd30d1396001c231c4257d9a9f1d98ebf4bd91132cbb730afda2d43cb7b1c () ($0, $$$$0) () ()
+                      simplified ∈ $0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                        given
+                      given
+                    prove ∈ orderedPair successor $$$$0 apply f $$$0 union $$$$$0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ successor $$$$0 $0, = successor $$$$0 $0, ∈ orderedPair successor $$$$0 apply f $$$0 union $$$$$0) () () ()
+                      given
+                      given
+                      given
+                  }
+                }
+                subproof (Uniqueness) {
+                  take x_n^+ {
+                    assume ∈ orderedPair successor $$$$$0 $0 union $$$$$$0 {
+                      prove ∃ g ∧ ∈ orderedPair successor $$$$$$0 $$0 $0 ∈ $0 $$$$$$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair successor $$$$$0 $0, $$$$$$0) () ()
+                        given
+                      let g_n^+ ∧ ∈ orderedPair successor $$$$$$0 $$0 $0 ∈ $0 $$$$$$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $0 apply f $$$$0) () (∧ ∈ orderedPair successor $$$$$0 $0 $$$$$$$0 ∈ $$$$$$$0 $$$$$$0) () {
+                        prove ∃ m ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$$$$$0, powerSet × ℕ X, $0) (∃ m ∧ ∈ $0 ℕ ∧ function $$$$$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$$$$0 $$0 apply f apply $$$$$$$$$$$0 $0) ()
+                          given
+                          simplified ∈ $0 $$$$$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair successor $$$$$$0 $$0 $0, ∈ $0 $$$$$$$0) () () ()
                             given
-                          let g_n^+ ∧ ∈ orderedPair successor $$$$$$0 $$0 $0 ∈ $0 $$$$$$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $0 apply f $$$$0) () (∧ ∈ orderedPair successor $$$$$0 $0 $$$$$$$0 ∈ $$$$$$$0 $$$$$$0) () {
-                            prove ∃ m ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$$$$$0, powerSet × ℕ X, $0) (∃ m ∧ ∈ $0 ℕ ∧ function $$$$$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$$$$0 $$0 apply f apply $$$$$$$$$$$0 $0) ()
-                              given
-                              simplified ∈ $0 $$$$$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair successor $$$$$$0 $$0 $0, ∈ $0 $$$$$$$0) () () ()
-                                given
-                            let m_n^+ ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$0 apply f $$$$$0) () (∧ ∈ $$$$$$$$0 ℕ ∧ function $0 $$$$$$$$0 X ∀ a → ∈ $0 $$$$$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
-                              elided 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 {
-                                elided 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 {
-                                  prove ∈ successor $$$$$$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, successor $$$$$$$0, $$$0) () ()
-                                    simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                      simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                        given
-                                    simplified ∈ orderedPair successor $$$$$$$0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair successor $$$$$$$0 $$$0 $$0, ∈ $$0 $$$$$$$$0) () () ()
-                                      given
-                                  prove ∈ $$$$$$$0 $0 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () ($0, $$$$$$$0) () ()
-                                    simplified ∈ $0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                      given
-                                    given
-                                  prove ∈ orderedPair $$$$$$$0 apply $$0 $$$$$$$0 $$0 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () ($$0, $0, X, $$$$$$$0) () ()
-                                    simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                      simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                        given
-                                    given
-                                }
-                                prove ∈ orderedPair $$$$$$$0 apply $$0 $$$$$$$0 union $$$$$$$$0 c6380fe68a1b2148337c46533f74f3cc3c2dc26eb007c8a18b6d674dfa7b158c () (orderedPair $$$$$$$0 apply $$0 $$$$$$$0, $$0, $$$$$$$$0) () ()
-                                  given
-                                  simplified ∈ $$0 $$$$$$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair successor $$$$$$$0 $$$0 $$0, ∈ $$0 $$$$$$$$0) () () ()
-                                    given
-                                prove = $$$$$$0 apply $$0 $$$$$$$0 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () ($$$$$$0, apply $$0 $$$$$$$0) (∈ orderedPair $$$$$$$0 $$$$$$$$$0 union $$$$$$$$0) ()
-                                  simplified ∃! x_n ∈ orderedPair $$$$$$$$0 $0 union $$$$$$$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$$$$$$0 ℕ, ∃! x_n ∈ orderedPair $$$$$$$$0 $0 union $$$$$$$$$0) () () ()
-                                    given
-                                  given
-                                  given
-                              }
-                              elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-                                prove → ∈ successor $$$$$$$0 $0 ∨ ∧ = successor $$$$$$$0 0 = apply $$0 successor $$$$$$$0 g_0 ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $$$$$$$0) (→ ∈ $$$$$$$$$0 $0 ∨ ∧ = $$$$$$$$$0 0 = apply $$0 $$$$$$$$$0 g_0 ∃ x ∧ = $$$$$$$$$$0 successor $0 = apply $$$0 $$$$$$$$$$0 apply f apply $$$0 $0) ()
-                                  simplified ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                    simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                      given
-                                prove ∈ successor $$$$$$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, successor $$$$$$$0, $$$0) () ()
-                                  simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                    simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
-                                      given
-                                  simplified ∈ orderedPair successor $$$$$$$0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair successor $$$$$$$0 $$$0 $$0, ∈ $$0 $$$$$$$$0) () () ()
-                                    given
-                                prove ∨ ∧ = successor $$$$$$$0 0 = apply $$0 successor $$$$$$$0 g_0 ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $$$$$$$0 $0, ∨ ∧ = successor $$$$$$$0 0 = apply $$0 successor $$$$$$$0 g_0 ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0) () () ()
-                                  given
-                                  given
-                                elided 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 {
-                                  prove ¬ = successor $$$$$$$0 0 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () ($$$$$$$0) () ()
-                                  prove ¬ ∧ = successor $$$$$$$0 0 = apply $$0 successor $$$$$$$0 g_0 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 (= successor $$$$$$$0 0, = apply $$0 successor $$$$$$$0 g_0) () () ()
-                                    given
-                                }
-                                prove ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∧ = successor $$$$$$$0 0 = apply $$0 successor $$$$$$$0 g_0, ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0) () () ()
-                                  given
-                                  given
-                                let b ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply $$0 successor $$$$$$$0 apply f apply $$0 $$$$$$$0) () (∧ = successor $$$$$$$0 successor $$$$$$$$$0 = apply $$0 successor $$$$$$$0 apply f apply $$0 $$$$$$$$$0) () {
-                                  prove = $$$$$$$$0 $0 5778861e17c0abb75b73129b83d1c1f7cf2f553201969f92436d386720fa0a99 () ($$$$$$$$0, $0) () ()
-                                    simplified = successor $$$$$$$$0 successor $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= successor $$$$$$$$0 successor $0, = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0) () () ()
-                                      given
-                                  prove = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $$$$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$$$$$0, $0) (= apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $$$$$$$$$$0) ()
-                                    given
-                                    simplified = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= successor $$$$$$$$0 successor $0, = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0) () () ()
-                                      given
-                                }
-                              }
-                              prove = $$$0 apply $$0 successor $$$$$$$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, $0, X, successor $$$$$$$0, $$$0) () ()
+                        let m_n^+ ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$0 apply f $$$$$0) () (∧ ∈ $$$$$$$$0 ℕ ∧ function $0 $$$$$$$$0 X ∀ a → ∈ $0 $$$$$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
+                          elided 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 {
+                            elided 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 {
+                              prove ∈ successor $$$$$$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, successor $$$$$$$0, $$$0) () ()
                                 simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
                                   simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
                                     given
                                 simplified ∈ orderedPair successor $$$$$$$0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair successor $$$$$$$0 $$$0 $$0, ∈ $$0 $$$$$$$$0) () () ()
                                   given
-                              prove = apply $$0 successor $$$$$$$0 apply f $$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$$$0, apply $$0 $$$$$$$0) (= apply $$0 successor $$$$$$$0 apply f $$$$$$$$$0) ()
+                              prove ∈ $$$$$$$0 $0 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () ($0, $$$$$$$0) () ()
+                                simplified ∈ $0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                                  given
                                 given
-                                given
-                              prove = $$$0 apply f $$$$$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$0, apply $$0 successor $$$$$$$0, apply f $$$$$$0) () ()
-                                given
+                              prove ∈ orderedPair $$$$$$$0 apply $$0 $$$$$$$0 $$0 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () ($$0, $0, X, $$$$$$$0) () ()
+                                simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                                  simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                                    given
                                 given
                             }
+                            prove ∈ orderedPair $$$$$$$0 apply $$0 $$$$$$$0 union $$$$$$$$0 c6380fe68a1b2148337c46533f74f3cc3c2dc26eb007c8a18b6d674dfa7b158c () (orderedPair $$$$$$$0 apply $$0 $$$$$$$0, $$0, $$$$$$$$0) () ()
+                              given
+                              simplified ∈ $$0 $$$$$$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair successor $$$$$$$0 $$$0 $$0, ∈ $$0 $$$$$$$$0) () () ()
+                                given
+                            prove = $$$$$$0 apply $$0 $$$$$$$0 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () ($$$$$$0, apply $$0 $$$$$$$0) (∈ orderedPair $$$$$$$0 $$$$$$$$$0 union $$$$$$$$0) ()
+                              simplified ∃! x_n ∈ orderedPair $$$$$$$$0 $0 union $$$$$$$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$$$$$$0 ℕ, ∃! x_n ∈ orderedPair $$$$$$$$0 $0 union $$$$$$$$$0) () () ()
+                                given
+                              given
+                              given
                           }
+                          elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                            prove → ∈ successor $$$$$$$0 $0 ∨ ∧ = successor $$$$$$$0 0 = apply $$0 successor $$$$$$$0 g_0 ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $$$$$$$0) (→ ∈ $$$$$$$$$0 $0 ∨ ∧ = $$$$$$$$$0 0 = apply $$0 $$$$$$$$$0 g_0 ∃ x ∧ = $$$$$$$$$$0 successor $0 = apply $$$0 $$$$$$$$$$0 apply f apply $$$0 $0) ()
+                              simplified ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                                simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                                  given
+                            prove ∈ successor $$$$$$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, successor $$$$$$$0, $$$0) () ()
+                              simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                                simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                                  given
+                              simplified ∈ orderedPair successor $$$$$$$0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair successor $$$$$$$0 $$$0 $$0, ∈ $$0 $$$$$$$$0) () () ()
+                                given
+                            prove ∨ ∧ = successor $$$$$$$0 0 = apply $$0 successor $$$$$$$0 g_0 ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $$$$$$$0 $0, ∨ ∧ = successor $$$$$$$0 0 = apply $$0 successor $$$$$$$0 g_0 ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0) () () ()
+                              given
+                              given
+                            elided 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 {
+                              prove ¬ = successor $$$$$$$0 0 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () ($$$$$$$0) () ()
+                              prove ¬ ∧ = successor $$$$$$$0 0 = apply $$0 successor $$$$$$$0 g_0 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 (= successor $$$$$$$0 0, = apply $$0 successor $$$$$$$0 g_0) () () ()
+                                given
+                            }
+                            prove ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∧ = successor $$$$$$$0 0 = apply $$0 successor $$$$$$$0 g_0, ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0) () () ()
+                              given
+                              given
+                            let b ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply $$0 successor $$$$$$$0 apply f apply $$0 $$$$$$$0) () (∧ = successor $$$$$$$0 successor $$$$$$$$$0 = apply $$0 successor $$$$$$$0 apply f apply $$0 $$$$$$$$$0) () {
+                              prove = $$$$$$$$0 $0 5778861e17c0abb75b73129b83d1c1f7cf2f553201969f92436d386720fa0a99 () ($$$$$$$$0, $0) () ()
+                                simplified = successor $$$$$$$$0 successor $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= successor $$$$$$$$0 successor $0, = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0) () () ()
+                                  given
+                              prove = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $$$$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$$$$$0, $0) (= apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $$$$$$$$$$0) ()
+                                given
+                                simplified = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= successor $$$$$$$$0 successor $0, = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0) () () ()
+                                  given
+                            }
+                          }
+                          prove = $$$0 apply $$0 successor $$$$$$$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, $0, X, successor $$$$$$$0, $$$0) () ()
+                            simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                              simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                                given
+                            simplified ∈ orderedPair successor $$$$$$$0 $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair successor $$$$$$$0 $$$0 $$0, ∈ $$0 $$$$$$$$0) () () ()
+                              given
+                          prove = apply $$0 successor $$$$$$$0 apply f $$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$$$0, apply $$0 $$$$$$$0) (= apply $$0 successor $$$$$$$0 apply f $$$$$$$$$0) ()
+                            given
+                            given
+                          prove = $$$0 apply f $$$$$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$0, apply $$0 successor $$$$$$$0, apply f $$$$$$0) () ()
+                            given
+                            given
                         }
                       }
                     }
-                    prove ∃! y ∈ orderedPair successor $$$$$0 $0 union $$$$$$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply f $$$0) (∈ orderedPair successor $$$$0 $$$$$$0 union $$$$$0) ()
-                      given
-                      given
                   }
                 }
+                prove ∃! y ∈ orderedPair successor $$$$$0 $0 union $$$$$$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply f $$$0) (∈ orderedPair successor $$$$0 $$$$$$0 union $$$$$0) ()
+                  given
+                  given
               }
             }
           }
         }
-        prove ∀ n → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (∃! y ∈ orderedPair $$$0 $0 union $$0) ()
-          given
-          given
       }
-      elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
-        prove ∧ ⊆ union $0 × ℕ X ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ union $0 × ℕ X, ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0) () () ()
-          given
-          given
-        prove function union $0 ℕ X be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (union $0, ℕ, X) () ()
-          given
-      }
+    }
+    prove ∀ n → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (∃! y ∈ orderedPair $$$0 $0 union $$0) ()
+      given
+      given
+    elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
+      prove ∧ ⊆ union $0 × ℕ X ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ union $0 × ℕ X, ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0) () () ()
+        given
+        given
+      prove function union $0 ℕ X be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (union $0, ℕ, X) () ()
+        given
     }
     subproof (Function value - base case) {
-      target = apply union $0 0 g_0
+      elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
+        prove = g_0 apply union $0 0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (union $0, ℕ, X, 0, g_0) () ()
+          given
+          given
+        prove = apply union $0 0 g_0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (g_0, apply union $0 0) () ()
+          given
+      }
     }
     subproof (Function value - inductive case) {
-      target ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply f apply union $$0 $0
+      take n {
+        assume ∈ $0 ℕ {
+          elided 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 {
+            prove ∈ successor $0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($0) () ()
+              given
+            prove ∈ orderedPair successor $0 apply union $$0 successor $0 union $$0 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (union $$0, ℕ, X, successor $0) () ()
+              given
+              given
+          }
+          prove ∃ g ∧ ∈ orderedPair successor $$0 apply union $$$0 successor $$0 $0 ∈ $0 $$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair successor $0 apply union $$0 successor $0, $$0) () ()
+            given
+          let g_n ∧ ∈ orderedPair successor $$0 apply union $$$0 successor $$0 $0 ∈ $0 $$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply union $$0 successor $0 apply f apply union $$0 $0) () (∧ ∈ orderedPair successor $0 apply union $$0 successor $0 $$$0 ∈ $$$0 $$0) () {
+            prove ∃ m ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, powerSet × ℕ X, $0) (∃ m ∧ ∈ $0 ℕ ∧ function $$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$0 $$0 apply f apply $$$$$$$0 $0) ()
+              given
+              simplified ∈ $0 $$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair successor $$0 apply union $$$0 successor $$0 $0, ∈ $0 $$$0) () () ()
+                given
+            let m_n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply union $$$0 successor $$0 apply f apply union $$$0 $$0) () (∧ ∈ $$$$0 ℕ ∧ function $0 $$$$0 X ∀ a → ∈ $0 $$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
+              elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                prove → ∈ successor $$$0 $0 ∨ ∧ = successor $$$0 0 = apply $$0 successor $$$0 g_0 ∃ b ∧ = successor $$$$0 successor $0 = apply $$$0 successor $$$$0 apply f apply $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $$$0) (→ ∈ $$$$$0 $0 ∨ ∧ = $$$$$0 0 = apply $$0 $$$$$0 g_0 ∃ b ∧ = $$$$$$0 successor $0 = apply $$$0 $$$$$$0 apply f apply $$$0 $0) ()
+                  simplified ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                    simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                      given
+                prove ∈ successor $$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, successor $$$0, apply union $$$$0 successor $$$0) () ()
+                  simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                    simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                      given
+                  simplified ∈ orderedPair successor $$$0 apply union $$$$0 successor $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair successor $$$0 apply union $$$$0 successor $$$0 $$0, ∈ $$0 $$$$0) () () ()
+                    given
+                prove ∨ ∧ = successor $$$0 0 = apply $$0 successor $$$0 g_0 ∃ b ∧ = successor $$$$0 successor $0 = apply $$$0 successor $$$$0 apply f apply $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $$$0 $0, ∨ ∧ = successor $$$0 0 = apply $$0 successor $$$0 g_0 ∃ b ∧ = successor $$$$0 successor $0 = apply $$$0 successor $$$$0 apply f apply $$$0 $0) () () ()
+                  given
+                  given
+                elided 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 {
+                  prove ¬ = successor $$$0 0 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () ($$$0) () ()
+                  prove ¬ ∧ = successor $$$0 0 = apply $$0 successor $$$0 g_0 7e89cd08bcb0d0ec5bf7d622aa44de299c253190147e4fcd6372c157190c7cd7 (= successor $$$0 0, = apply $$0 successor $$$0 g_0) () () ()
+                    given
+                }
+                prove ∃ b ∧ = successor $$$$0 successor $0 = apply $$$0 successor $$$$0 apply f apply $$$0 $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∧ = successor $$$0 0 = apply $$0 successor $$$0 g_0, ∃ b ∧ = successor $$$$0 successor $0 = apply $$$0 successor $$$$0 apply f apply $$$0 $0) () () ()
+                  given
+                  given
+              }
+              let b_n ∧ = successor $$$$0 successor $0 = apply $$$0 successor $$$$0 apply f apply $$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply $$0 successor $$$0 apply f apply $$0 $$$0) () (∧ = successor $$$0 successor $$$$$0 = apply $$0 successor $$$0 apply f apply $$0 $$$$$0) () {
+                prove = $$$$0 $0 5778861e17c0abb75b73129b83d1c1f7cf2f553201969f92436d386720fa0a99 () ($$$$0, $0) () ()
+                  simplified = successor $$$$0 successor $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= successor $$$$0 successor $0, = apply $$$0 successor $$$$0 apply f apply $$$0 $0) () () ()
+                    given
+                prove = apply $$$0 successor $$$$0 apply f apply $$$0 $$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$0, $0) (= apply $$$0 successor $$$$0 apply f apply $$$0 $$$$$$0) ()
+                  given
+                  simplified = apply $$$0 successor $$$$0 apply f apply $$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= successor $$$$0 successor $0, = apply $$$0 successor $$$$0 apply f apply $$$0 $0) () () ()
+                    given
+              }
+              prove ⊆ $$0 union $$$$0 95c32c2c8cc0e00a8696a1caecffdb78140c40d6904ea90ced8f6d059852cb3a () ($$0, $$$$0) () ()
+                simplified ∈ $$0 $$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair successor $$$0 apply union $$$$0 successor $$$0 $$0, ∈ $$0 $$$$0) () () ()
+                  given
+              prove ∀ m → ∈ $0 $$0 = apply $$$0 $0 apply union $$$$$0 $0 e0ad13e7b958f91d4dc2eb7dabb5251c5e193be6759baa3c47807eba2d04c2c3 () ($$0, $0, X, union $$$$0, ℕ, X) () ()
+                simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                  simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                    given
+                given
+                given
+              elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                prove → ∈ $$$0 $0 = apply $$0 $$$0 apply union $$$$0 $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$$0) (→ ∈ $$$$$0 $0 = apply $$0 $$$$$0 apply union $$$$0 $$$$$0) ()
+                  given
+                elided 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b {
+                  prove ∈ successor $$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, successor $$$0, apply union $$$$0 successor $$$0) () ()
+                    simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                      simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                        given
+                    simplified ∈ orderedPair successor $$$0 apply union $$$$0 successor $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair successor $$$0 apply union $$$$0 successor $$$0 $$0, ∈ $$0 $$$$0) () () ()
+                      given
+                  prove ∈ $$$0 $0 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () ($0, $$$0) () ()
+                    simplified ∈ $0 ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                      given
+                    given
+                }
+                prove = apply $$0 $$$0 apply union $$$$0 $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 $0, = apply $$0 $$$0 apply union $$$$0 $$$0) () () ()
+                  given
+                  given
+              }
+              elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                prove → ∈ successor $$$0 $0 = apply $$0 successor $$$0 apply union $$$$0 successor $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $$$0) (→ ∈ $$$$$0 $0 = apply $$0 $$$$$0 apply union $$$$0 $$$$$0) ()
+                  given
+                prove ∈ successor $$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, successor $$$0, apply union $$$$0 successor $$$0) () ()
+                  simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                    simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
+                      given
+                  simplified ∈ orderedPair successor $$$0 apply union $$$$0 successor $$$0 $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ orderedPair successor $$$0 apply union $$$$0 successor $$$0 $$0, ∈ $$0 $$$$0) () () ()
+                    given
+                prove = apply $$0 successor $$$0 apply union $$$$0 successor $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $$$0 $0, = apply $$0 successor $$$0 apply union $$$$0 successor $$$0) () () ()
+                  given
+                  given
+              }
+              prove = apply $$0 successor $$$0 apply f apply union $$$$0 $$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (apply $$0 $$$0, apply union $$$$0 $$$0) (= apply $$0 successor $$$0 apply f $$$$$0) ()
+                given
+                given
+              prove = apply union $$$$0 successor $$$0 apply f apply union $$$$0 $$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (apply $$0 successor $$$0, apply union $$$$0 successor $$$0) (= $$$$$0 apply f apply union $$$$0 $$$0) ()
+                given
+                given
+            }
+          }
+        }
+      }
     }
     elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
       prove ∧ = apply union $0 0 g_0 ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply f apply union $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= apply union $0 0 g_0, ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply f apply union $$0 $0) () () ()
