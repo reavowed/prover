@@ -289,3 +289,24 @@ conclusion function ∪ f singleton orderedPair a b ∪ A singleton a B
       given
   }
 }
+
+theorem Extended Function is Equal to Original on its Domain
+premise function f A B
+premise function g C D
+premise ⊆ f g
+conclusion ∀ a → ∈ $0 A = apply f $0 apply g $0
+{
+  take a {
+    assume ∈ $0 A {
+      prove ∈ orderedPair $0 apply f $0 f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, $0) () ()
+        given
+        given
+      prove ∈ orderedPair $0 apply f $0 g ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, g, orderedPair $0 apply f $0) () ()
+        given
+        given
+      prove = apply f $0 apply g $0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (g, C, D, $0, apply f $0) () ()
+        given
+        given
+    }
+  }
+}

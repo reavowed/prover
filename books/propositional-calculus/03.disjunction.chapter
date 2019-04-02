@@ -119,7 +119,7 @@ conclusion ∨ ψ φ
     given
 }
 
-theorem One Disjunct Must Be True
+theorem Right Disjunct Must Be True
 premise ∨ φ ψ
 premise ¬ φ
 conclusion ψ
@@ -131,7 +131,7 @@ conclusion ψ
     given
 }
 
-theorem One Disjunct Must Be True
+theorem Left Disjunct Must Be True
 premise ∨ φ ψ
 premise ¬ ψ
 conclusion φ
@@ -139,30 +139,6 @@ conclusion φ
   prove → ¬ φ ψ 862ea012be93c379c01aff64885a7a24dd0ea42d5825b13b8ae15ee5eb65620d (φ, ψ) () () ()
     given
   prove φ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (φ, ψ) () () ()
-    given
-    given
-}
-
-theorem One Disjunct Must Be True
-premise ∨ ¬ φ ψ
-premise φ
-conclusion ψ
-{
-  prove ¬ ¬ φ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (φ) () () ()
-    given
-  prove ψ 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (¬ φ, ψ) () () ()
-    given
-    given
-}
-
-theorem One Disjunct Must Be True
-premise ∨ φ ¬ ψ
-premise ψ
-conclusion φ
-{
-  prove ¬ ¬ ψ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (ψ) () () ()
-    given
-  prove φ 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (φ, ¬ ψ) () () ()
     given
     given
 }

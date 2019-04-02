@@ -167,7 +167,7 @@ conclusion = ∪ a b ∪ b a
     given
 }
 
-theorem Element Transfers to Binary Union
+theorem Element Transfers from Left of Union
 premise ∈ c a
 conclusion ∈ c ∪ a b
 {
@@ -185,7 +185,7 @@ conclusion ∈ c ∪ a b
   }
 }
 
-theorem Element Transfers to Binary Union
+theorem Element Transfers from Right of Union
 premise ∈ c b
 conclusion ∈ c ∪ a b
 {

@@ -65,16 +65,29 @@ conclusion = a b
   }
 }
 
-theorem Uniqueness by Exhibiting Unique Value
-premise ∃ x with ($0) φ
-premise ∀ x → with ($0) φ = $0 a
+theorem Uniqueness by Equivalence with Single Value
+premise ∀ x ↔ with ($0) φ = $0 a
 conclusion ∃! x with ($0) φ
 {
+  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ with (a) φ = a a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ with ($0) φ = $0 a) ()
+      given
+    prove → = a a with (a) φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (with (a) φ, = a a) () () ()
+      given
+    prove with (a) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= a a, with (a) φ) () () ()
+      given
+      given
+  }
+  prove ∃ x with ($0) φ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (with ($0) φ) ()
+    given
   take x {
     take y {
       assume ∧ with ($$0) φ with ($0) φ {
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove → with ($$0) φ = $$0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ with ($$$0) φ = $$$0 a) ()
+          prove ↔ with ($$0) φ = $$0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (↔ with ($$$0) φ = $$$0 a) ()
+            given
+          prove → with ($$0) φ = $$0 a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (with ($$0) φ, = $$0 a) () () ()
             given
           prove = $$0 a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($$0) φ, = $$0 a) () () ()
             given
@@ -82,7 +95,9 @@ conclusion ∃! x with ($0) φ
               given
         }
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove → with ($0) φ = $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ with ($$$0) φ = $$$0 a) ()
+          prove ↔ with ($0) φ = $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ = $$$0 a) ()
+            given
+          prove → with ($0) φ = $0 a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (with ($0) φ, = $0 a) () () ()
             given
           prove = $0 a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, = $0 a) () () ()
             given
@@ -104,36 +119,7 @@ conclusion ∃! x with ($0) φ
   }
 }
 
-theorem Uniqueness by Exhibiting Unique Value
-premise ∀ x ↔ with ($0) φ = $0 a
-conclusion ∃! x with ($0) φ
-{
-  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
-  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ with (a) φ = a a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ with ($0) φ = $0 a) ()
-      given
-    prove → = a a with (a) φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (with (a) φ, = a a) () () ()
-      given
-    prove with (a) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= a a, with (a) φ) () () ()
-      given
-      given
-  }
-  prove ∃ x with ($0) φ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (with ($0) φ) ()
-    given
-  elided f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 {
-    take x {
-      prove ↔ with ($0) φ = $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$0) φ = $$0 a) ()
-        given
-      prove → with ($0) φ = $0 a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (with ($0) φ, = $0 a) () () ()
-        given
-    }
-  }
-  prove ∃! x with ($0) φ 1b7ae071289c44e21caaffbed806e6ad13a048b0090ef87bb05277c9bd0a537c () (a) (with ($0) φ) ()
-    given
-    given
-}
-
-theorem Uniqueness by Exhibiting Unique Value
+theorem Uniqueness by Exhibiting Single Value
 premise ∀ x → with ($0) φ = $0 a
 premise with (a) φ
 conclusion ∃! x with ($0) φ

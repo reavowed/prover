@@ -110,7 +110,7 @@ conclusion function f A C
   }
 }
 
-theorem Uniqueness of Function Application
+theorem Element of Function
 premise function f A B
 premise ∈ orderedPair a b f
 conclusion = b apply f a
@@ -130,7 +130,7 @@ conclusion = b apply f a
     given
 }
 
-theorem Element of Function
+theorem Membership Condition for Function
 premise function f A B
 conclusion ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
 {

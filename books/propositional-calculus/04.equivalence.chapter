@@ -61,18 +61,6 @@ conclusion ψ
     given
 }
 
-theorem Modus Ponens (Equivalence)
-premise ↔ φ ψ
-premise ψ
-conclusion φ
-{
-  prove → ψ φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (φ, ψ) () () ()
-    given
-  prove φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, φ) () () ()
-    given
-    given
-}
-
 theorem Equivalence Is Transitive
 premise ↔ φ ψ
 premise ↔ ψ χ

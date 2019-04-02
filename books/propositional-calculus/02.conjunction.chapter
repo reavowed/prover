@@ -83,7 +83,7 @@ conclusion ¬ ∧ φ ¬ φ
 
 comment Some inferences for negated conjunctions.
 
-theorem Add Negated Conjunct
+theorem Add Right Negated Conjunct
 expansion
 premise ¬ φ
 conclusion ¬ ∧ φ ψ
@@ -98,7 +98,7 @@ conclusion ¬ ∧ φ ψ
     given
 }
 
-theorem Add Negated Conjunct
+theorem Add Left Negated Conjunct
 expansion
 premise ¬ ψ
 conclusion ¬ ∧ φ ψ
