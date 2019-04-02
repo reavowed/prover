@@ -5,7 +5,7 @@ import {Expression} from "./models/Expression";
 export class Parser {
   static replaceShorthands = (text) => {
     _.each(_.toPairs(window.definitionShorthands), ([valueToReplace, symbol]) => {
-      let regex = new RegExp('\\b' + _.escapeRegExp(valueToReplace) + '(?=\\s$)', 'gim');
+      let regex = new RegExp('\\b' + _.escapeRegExp(valueToReplace) + '(?=\\s)', 'gim');
       text = text.replace(regex, symbol);
     });
     return text;
