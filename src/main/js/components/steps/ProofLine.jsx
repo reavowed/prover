@@ -6,6 +6,7 @@ import styled, {css} from "styled-components";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import Popover from "react-bootstrap/Popover";
+import {BoundVariableModal} from "../Modals";
 
 export const ProofLine = styled(class ProofLine extends React.Component {
   constructor(...args) {
@@ -15,7 +16,9 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.attachButtonRef = buttonRef => this.setState({ buttonRef });
     this.state = {
       isHovered: false,
-      shouldShowButtonPopover: false
+      shouldShowButtonPopover: false,
+      shouldShowSubproofNameModal: false,
+      subproofName: ''
     };
   }
   toggleButtonPopover = () => {
@@ -68,8 +71,30 @@ export const ProofLine = styled(class ProofLine extends React.Component {
       method: "DELETE"
     }).then(this.props.apiService.updateTheorem);
   };
+
+  showSubproofNameModal = () => {
+    this.setState({shouldShowSubproofNameModal: true})
+  };
+  hideSubproofNameModal = () => {
+    this.setState({shouldShowSubproofNameModal: false})
+  };
+  createSubproof = () => {
+    this.props.apiService.fetchJsonForStep(this.props.path, "introduceSubproof", {
+      method: "POST",
+      body: this.state.subproofName
+    }).then(this.props.apiService.updateTheorem);
+  };
+
   render() {
     const {className, children, tooltip, path, buttons} = this.props;
+
+    const subProofNamingModal = <BoundVariableModal show={this.state.shouldShowSubproofNameModal}
+                                                    onHide={() => this.hideSubproofNameModal}
+                                                    title="Choose sub-proof name"
+                                                    value={this.state.subproofName}
+                                                    onChange={e => this.setState({subproofName: e.target.value})}
+                                                    onSave={this.createSubproof}/>;
+
     const lineElement= <div onMouseEnter={this.onMouseEnter}
                             onMouseLeave={this.onMouseLeave}
                             className={"mb-1 " + className}
@@ -84,16 +109,18 @@ export const ProofLine = styled(class ProofLine extends React.Component {
           {buttons}
         </span>
         <FlexRow.Grow/>
-        {path && this.state.isHovered && <>
+        {path && (this.state.isHovered || this.state.shouldShowButtonPopover) && <>
           <Button ref={this.attachButtonRef} onClick={this.toggleButtonPopover} size="sm" className="ml-1"><span className="fas fa-ellipsis-v"/></Button>
           <Overlay target={this.state.buttonRef} show={this.state.shouldShowButtonPopover} onHide={this.hideButtonPopover} rootClose placement="bottom">
             {({show, ...props}) => <Popover {...props}>
+              <Button onClick={this.showSubproofNameModal} variant="success" size="sm" className="ml-1">To subproof</Button>
               <Button onClick={this.clearStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-redo"/></Button>
               <Button onClick={this.deleteStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-trash"/></Button>
               <Button onClick={this.moveUp} size="sm" className="ml-1"><span className="fas fa-arrow-up"/></Button>
               <Button onClick={this.moveDown} size="sm" className="ml-1"><span className="fas fa-arrow-down"/></Button>
             </Popover>}
           </Overlay>
+          {subProofNamingModal}
         </>}
       </FlexRow>
     </div>;

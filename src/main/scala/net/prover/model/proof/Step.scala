@@ -347,33 +347,31 @@ object Step {
     }
   }
 
-  case class SubProof(name: String, statement: Statement, substeps: Seq[Step]) extends Step.WithSubsteps {
+  case class SubProof(name: String, substeps: Seq[Step]) extends Step.WithSubsteps {
     val `type`: String = "subproof"
     override def specifyContext(outerContext: StepContext): StepContext = outerContext
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     override def modifyStepForExtraction(step: Step): Option[Step] = Some(step)
-    override def provenStatement: Option[Statement] = Some(statement)
+    override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
       for {
-        newStatement <- statement.removeExternalParameters(numberOfParametersToRemove)
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
-      } yield SubProof(name, newStatement, newSubsteps)
+      } yield SubProof(name, newSubsteps)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
     override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
     override def length: Int = substeps.map(_.length).sum
-    override def serializedLines: Seq[String] = Seq(s"subproof ${statement.serialized} ($name) {") ++
+    override def serializedLines: Seq[String] = Seq(s"subproof ($name) {") ++
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
   object SubProof {
     def parser(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[SubProof] = {
       for {
-        statement <- Statement.parser
         name <- Parser.allInParens
         substeps <- listParser.inBraces
-      } yield SubProof(name, statement, substeps)
+      } yield SubProof(name, substeps)
     }
   }
 

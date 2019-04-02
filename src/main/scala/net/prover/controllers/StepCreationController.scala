@@ -37,19 +37,6 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     }.toResponseEntity
   }
 
-  @PostMapping(value = Array("/introduceSubproof"))
-  def introduceSubproof(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepPath") stepPath: PathData,
-    @RequestBody name: String
-  ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext, parsingContext) =>
-      Success(Seq(Step.SubProof(name, step.statement, Seq(step))))
-    }.toResponseEntity
-  }
-
   @PostMapping(value = Array("/introduceNaming"))
   def introduceNaming(
     @PathVariable("bookKey") bookKey: String,

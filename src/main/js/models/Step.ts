@@ -98,9 +98,9 @@ export const Step = {
                case "subproof":
                    return new SubproofStep(
                        stepJson.name,
-                       Expression.parseFromJson(stepJson.statement),
+                       stepJson.provenStatement && Expression.parseFromJson(stepJson.provenStatement),
                        Step.parseFromJson(stepJson.substeps),
-                       stepJson.referencedLines,);
+                       stepJson.referencedLines);
                default:
                    throw "Unrecognised step " + JSON.stringify(stepJson);
            }

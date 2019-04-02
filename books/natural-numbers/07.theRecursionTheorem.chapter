@@ -117,8 +117,8 @@ premise ∈ g_0 X
 conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
 {
   let S = $0 comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0) (comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () {
-    subproof function union $0 ℕ X (⋃S is a function) {
-      subproof ⊆ union $0 × ℕ X (Function definition - subset) {
+    subproof (⋃S is a function) {
+      subproof (Function definition - subset) {
         take x {
           assume ∈ $0 union $$0 {
             prove ∃ g ∧ ∈ $$0 $0 ∈ $0 $$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () ($0, $$0) () ()
@@ -140,19 +140,21 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
         prove ⊆ union $0 × ℕ X 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (union $0, × ℕ X) () ()
           given
       }
-      subproof ∀ n → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0 (Function definition - unique value) {
-        subproof ∃! x ∈ orderedPair 0 $0 union $$0 (Base case) {
-          subproof ∈ orderedPair 0 g_0 union $0 (Existence) {
+      subproof (Function definition - unique value) {
+        subproof (Base case) {
+          subproof (Existence) {
             let g = $0 singleton orderedPair 0 g_0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∈ orderedPair 0 g_0 union $0) (singleton orderedPair 0 g_0) () () {
               elided f0d91f99346599d36374a0a7767b7eefdc44886e1fb4a5734feac36206c18b19 {
                 prove function singleton orderedPair 0 g_0 singleton 0 singleton g_0 f0d91f99346599d36374a0a7767b7eefdc44886e1fb4a5734feac36206c18b19 () (0, g_0) () ()
                 prove function $0 singleton 0 singleton g_0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, singleton orderedPair 0 g_0) (function $$$0 singleton 0 singleton g_0) ()
                   given
                   given
-                prove = 1 singleton 0 14eac1038136097fce25ab96c6366d51e7ae6c43531d44456ffa0ccba226a8c9 () () () ()
-                prove function $0 1 singleton g_0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (1, singleton 0) (function $0 $$$0 singleton g_0) ()
-                  given
-                  given
+                elided 14eac1038136097fce25ab96c6366d51e7ae6c43531d44456ffa0ccba226a8c9 {
+                  prove = 1 singleton 0 14eac1038136097fce25ab96c6366d51e7ae6c43531d44456ffa0ccba226a8c9 () () () ()
+                  prove function $0 1 singleton g_0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (1, singleton 0) (function $0 $$$0 singleton g_0) ()
+                    given
+                    given
+                }
                 prove ⊆ singleton g_0 X ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (g_0, X) () ()
                   given
                 prove function $0 1 X a24b6cc2064ec06bf3e7a3aaf24ad7a87910420b78f0f3c47ba32473212ab24e () ($0, 1, singleton g_0, X) () ()
@@ -220,7 +222,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                 given
             }
           }
-          subproof ∀ x → ∈ orderedPair 0 $0 union $$0 = $0 g_0 (Uniqueness) {
+          subproof (Uniqueness) {
             take x {
               assume ∈ orderedPair 0 $0 union $$0 {
                 prove ∃ g ∧ ∈ orderedPair 0 $$0 $0 ∈ $0 $$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair 0 $0, $$0) () ()
@@ -278,7 +280,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
             given
             given
         }
-        subproof ∀ n → ∧ ∈ $0 ℕ ∃! x ∈ orderedPair $$0 $0 union $$$0 ∃! x ∈ orderedPair successor $$0 $0 union $$$0 (Inductive case) {
+        subproof (Inductive case) {
           take n {
             assume ∧ ∈ $0 ℕ ∃! x ∈ orderedPair $$0 $0 union $$$0 {
               let x ∈ orderedPair $$0 $0 union $$$0 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∃! x ∈ orderedPair successor $$0 $0 union $$$0) () (∈ orderedPair $0 $$$0 union $$0) () {
@@ -290,7 +292,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                     simplified ∈ $0 $$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ orderedPair $$$0 $$0 $0, ∈ $0 $$$$0) () () ()
                       given
                   let m ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair successor $$$$0 $0 union $$$$$0) () (∧ ∈ $$$$$0 ℕ ∧ function $0 $$$$$0 X ∀ a → ∈ $0 $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
-                    subproof ∈ orderedPair successor $$$$0 apply f $$$0 union $$$$$0 (Existence) {
+                    subproof (Existence) {
                       prove ∈ $$$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, $$$$0, $$$0) () ()
                         simplified function $$0 $0 X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 $0 X, ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
                           simplified ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℕ, ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () ()
@@ -563,7 +565,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                           given
                       }
                     }
-                    subproof ∀ x → ∈ orderedPair successor $$$$$0 $0 union $$$$$$0 = $0 apply f $$$$0 (Uniqueness) {
+                    subproof (Uniqueness) {
                       target ∀ x → ∈ orderedPair successor $$$$$0 $0 union $$$$$$0 = $0 apply f $$$$0
                     }
                     prove ∃! y ∈ orderedPair successor $$$$$0 $0 union $$$$$$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply f $$$0) (∈ orderedPair successor $$$$0 $$$$$$0 union $$$$$0) ()
@@ -587,10 +589,10 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
           given
       }
     }
-    subproof = apply union $0 0 g_0 (Function value - base case) {
+    subproof (Function value - base case) {
       target = apply union $0 0 g_0
     }
-    subproof ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply f apply union $$0 $0 (Function value - inductive case) {
+    subproof (Function value - inductive case) {
       target ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply f apply union $$0 $0
     }
     elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {

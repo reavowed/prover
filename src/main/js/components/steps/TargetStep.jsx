@@ -86,21 +86,6 @@ export class TargetStep extends React.Component {
       }})
   };
 
-  chooseNameForSubproof = () => {
-    this.setState({
-      boundVariableModalTitle: "Choose sub-proof name",
-      boundVariableModalLabel: "Name",
-      boundVariableModalCallback: () => this.createSubproof(),
-      boundVariableName: ''
-    });
-  };
-  createSubproof = () => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "introduceSubproof", {
-      method: "POST",
-      body: this.state.boundVariableName
-    }).then(this.props.apiService.updateTheorem);
-  };
-
   hideFindInferenceModal = () => {
     this.setState({findInferenceModalCallbacks: null})
   };
@@ -171,7 +156,6 @@ export class TargetStep extends React.Component {
         <Button variant="success" size="sm" onClick={this.findInferenceForAssertion}>Find inference</Button>
         <Button variant="success" size="sm" className="ml-1" onClick={this.elide}>Elide</Button>
         <Button variant="success" size="sm" className="ml-1" onClick={this.chooseBoundVariableForNaming}>Name</Button>
-        <Button variant="success" size="sm" className="ml-1" onClick={this.chooseNameForSubproof}>Subproof</Button>
         {scopingStatement && step.statement.definition === scopingStatement &&
         <Button variant="success" size="sm" className="ml-1" onClick={this.startIntroducingBoundVariable}>Introduce bound variable</Button>}
         {deductionStatement && step.statement.definition === deductionStatement &&
