@@ -70,7 +70,7 @@ class TransitiveSteps extends React.Component {
       )}
       {rightHandSides.slice(1).map((rightHandSide, index) =>
         renderProofLine(
-          {step: rightHandSide.step, path: rightHandSide.path, highlighting, apiService, boundVariableLists},
+          {step: rightHandSide.step, path: rightHandSide.path, highlighting, apiService, boundVariableLists, key: "transitive " + rightHandSide.expression.serialize()},
           <>
             <span ref={this.setSpacerRef}/>
             {renderRightHandSide(rightHandSide, index + 1)}
@@ -160,7 +160,8 @@ export class Steps extends React.Component {
           lineReference: firstLineReference
         },
         symbol: definitionSymbol,
-        rightHandSides: rightHandSides
+        rightHandSides: rightHandSides,
+        finalStatement: rightHandSides[rightHandSides.length - 1].step.statement
       }
     }
     return null;
@@ -174,7 +175,10 @@ export class Steps extends React.Component {
       if (potentialTransitivityInference) {
         const transitivityDetails = this.getTransitivityDetails(stepsWithIndexes, step, potentialTransitivityInference, path, index);
         if (transitivityDetails) {
-          return <TransitiveSteps referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []} {...transitivityDetails} {...otherProps}/>;
+          return <TransitiveSteps key={"transitivity for " + transitivityDetails.finalStatement.serialize()}
+                                  referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []}
+                                  {...transitivityDetails}
+                                  {...otherProps}/>;
         }
       }
     }
