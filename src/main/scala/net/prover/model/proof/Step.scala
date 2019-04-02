@@ -97,12 +97,15 @@ object Step {
     override def modifyStepForInsertion(step: Step): Step = step
     override def modifyStepForExtraction(step: Step): Option[Step] = Some(step)
   }
+  sealed trait WithTopLevelStatement extends Step {
+    def updateStatement(f: Statement => Try[Statement]): Try[Step]
+  }
 
   case class Deduction(
       assumption: Statement,
       substeps: Seq[Step],
       deductionStatement: StatementDefinition)
-    extends Step.WithSubsteps with WithoutVariable
+    extends Step.WithSubsteps with WithoutVariable with WithTopLevelStatement
   {
     val `type` = "deduction"
     override def provenStatement: Option[Statement] = {
@@ -112,6 +115,7 @@ object Step {
       outerContext.addStatement(ProvenStatement(assumption, outerContext.stepReference.withSuffix("a")))
     }
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
+    override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
     override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
       Deduction(
         assumption.insertExternalParameters(numberOfParametersToInsert),
@@ -151,7 +155,7 @@ object Step {
       inference: Inference.Summary,
       premises: Seq[Premise],
       substitutions: Substitutions)
-    extends Step.WithSubsteps with WithVariable
+    extends Step.WithSubsteps with WithVariable with WithTopLevelStatement
   {
     val `type` = "naming"
     override def provenStatement: Option[Statement] = Some(statement)
@@ -160,6 +164,7 @@ object Step {
     }
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
+    override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
     override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
       Naming(
         variableName,
@@ -273,7 +278,7 @@ object Step {
     }
   }
 
-  case class Target(statement: Statement) extends Step.WithoutSubsteps {
+  case class Target(statement: Statement) extends Step.WithoutSubsteps with Step.WithTopLevelStatement {
     val `type` = "target"
     override def provenStatement: Option[Statement] = Some(statement)
     override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
@@ -284,6 +289,7 @@ object Step {
         s <- statement.removeExternalParameters(numberOfParametersToRemove)
       } yield copy(statement = s)
     }
+    override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Step = this
     override def referencedInferenceIds: Set[String] = Set.empty
     override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
@@ -336,7 +342,7 @@ object Step {
       inference: Inference.Summary,
       premises: Seq[Premise],
       substitutions: Substitutions)
-    extends Step.WithoutSubsteps
+    extends Step.WithoutSubsteps with Step.WithTopLevelStatement
   {
     val `type`: String = "assertion"
     override def provenStatement: Option[Statement] = Some(statement)
@@ -358,6 +364,7 @@ object Step {
       val newPremises = premises.map(p => ProofHelper.findPremise(p.statement, stepContext, parsingContext))
       copy(premises = newPremises)
     }
+    override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def referencedInferenceIds: Set[String] = Set(inference.id) ++ premises.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
     override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet

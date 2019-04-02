@@ -65,9 +65,8 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("boundVariableIndex") boundVariableIndex: Int,
     @RequestBody boundVariableName: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
-      step.statement.renameBoundVariable(boundVariableName, boundVariableIndex, Option(statementPath).map(_.indexes).getOrElse(Nil)).orNotFound(s"Bound variable $boundVariableIndex at $statementPath")
-        .map(newStatement => step.copy(statement = newStatement))
+    modifyStep[Step.WithTopLevelStatement](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
+      step.updateStatement(s => s.renameBoundVariable(boundVariableName, boundVariableIndex, Option(statementPath).map(_.indexes).getOrElse(Nil)).orNotFound(s"Bound variable $boundVariableIndex at $statementPath"))
     }.toResponseEntity
   }
 }

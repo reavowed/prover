@@ -5,6 +5,9 @@ import {HighlightableExpression} from "../ExpressionComponent";
 import {InferenceLink} from "./InferenceLink";
 import {ProofLine} from "./ProofLine";
 import {Steps} from "./Steps";
+import {ClickableText} from "./ClickableText";
+import {BoundVariableModal} from "../Modals";
+import {AssertionStepProofLine} from "./AssertionStep";
 
 export class ElidedStepProofLine extends React.Component {
   constructor(...args) {
@@ -62,12 +65,52 @@ export class ElidedStepProofLine extends React.Component {
   }
 }
 
-export const ElidedStep = (props) => {
-  let {step, boundVariableLists, additionalReferences, highlighting, path} = props;
-  return <ElidedStepProofLine {...props}>
-    Then <HighlightableExpression statement={step.statement}
-                                  boundVariableLists={boundVariableLists}
-                                  references={[...additionalReferences, {stepPath: path}]}
-                                  highlighting={highlighting}/>.
-  </ElidedStepProofLine>
+export class ElidedStep extends React.Component {
+  constructor(...args) {
+    super(...args)
+    this.state = {
+      boundVariableModalCallback: null,
+      boundVariableName: ""
+    }
+  }
+  showBoundVariableModal = (boundVariableName, boundVariableIndex, boundVariablePath) => {
+    this.setState({
+      boundVariableName,
+      boundVariableModalCallback: () => this.updateBoundVariable(boundVariableIndex, boundVariablePath)
+    })
+  };
+  hideBoundVariableModal = () => {
+    this.setState({
+      boundVariableModalCallback: null
+    })
+  };
+  updateBoundVariable = (boundVariableIndex, boundVariablePath) => {
+    this.props.apiService.fetchJsonForStep(this.props.path, `boundVariables/${boundVariablePath.join(".")}/${boundVariableIndex}/`, {
+      method: "PUT",
+      body: this.state.boundVariableName
+    })
+      .then(this.props.apiService.updateTheorem)
+      .then(this.hideBoundVariableModal);
+  };
+  render() {
+    let {step, boundVariableLists, additionalReferences, highlighting, path} = this.props;
+    const wrapEditableBoundVariable = (boundVariableContent, boundVariableName, boundVariableIndex, boundVariablePath) =>
+      <ClickableText
+        onClick={() => this.showBoundVariableModal(boundVariableName, boundVariableIndex, boundVariablePath)}>
+        {boundVariableContent}
+      </ClickableText>;
+    return <ElidedStepProofLine {...this.props}>
+      Then <HighlightableExpression statement={step.statement}
+                                    boundVariableLists={boundVariableLists}
+                                    wrapBoundVariable={wrapEditableBoundVariable}
+                                    references={[...additionalReferences, {stepPath: path}]}
+                                    highlighting={highlighting}/>.
+      <BoundVariableModal show={this.state.boundVariableModalCallback != null}
+                          onHide={this.hideBoundVariableModal}
+                          title="Rename bound variable"
+                          value={this.state.boundVariableName}
+                          onChange={e => this.setState({boundVariableName: e.target.value})}
+                          onSave={this.state.boundVariableModalCallback}/>
+    </ElidedStepProofLine>
+  }
 };

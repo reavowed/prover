@@ -1,6 +1,6 @@
 import React from "react";
 import {VariableOrConstant} from "../../models/Expression";
-import {ExpressionComponent, formatHtml, HighlightableExpression} from "../ExpressionComponent";
+import {ExpressionComponent, HighlightableExpression} from "../ExpressionComponent";
 import {BoundVariableModal} from "../Modals";
 import {ClickableText} from "./ClickableText";
 import {InferenceLink} from "./InferenceLink";
@@ -9,7 +9,7 @@ import {Steps} from "./Steps";
 
 export class NamingStep extends React.Component {
   constructor(...args) {
-    super(...args)
+    super(...args);
     this.state = {
       showBoundVariableModal: false,
       boundVariableName: ""
