@@ -113,7 +113,7 @@ export class Steps extends React.Component {
       case "naming":
         return "name " + step.variableName + " as " + step.assumption.serialize() + (step.provenStatement ? " for " + step.provenStatement.serialize() : "");
       case "elided":
-        return "elide " + step.statement.serialize();
+        return "elide " + (step.statement ? step.statement.serialize() : "???");
       case "subproof":
         return "subproof " + step.statement.serialize();
     }
@@ -133,6 +133,8 @@ export class Steps extends React.Component {
       (stepsWithIndexes[1].step.type === "assertion" || stepsWithIndexes[1].step.type === "elided") &&
       !stepsWithIndexes[0].step.isIncomplete &&
       !stepsWithIndexes[1].step.isIncomplete &&
+      stepsWithIndexes[0].step.statement &&
+      stepsWithIndexes[1].step.statement &&
       stepsWithIndexes[0].step.statement.definition &&
       stepsWithIndexes[1].step.statement.definition &&
       stepsWithIndexes[0].step.statement.definition.symbol === definitionSymbol &&
@@ -169,7 +171,7 @@ export class Steps extends React.Component {
 
   static renderNextStep(stepsWithIndexes, path, referencesForLastStep, otherProps, lastIndex) {
     const {step, index} = stepsWithIndexes.shift();
-    if ((step.type === "assertion" || step.type === "elided") && step.statement.definition) {
+    if ((step.type === "assertion" || step.type === "elided") && step.statement && step.statement.definition) {
       const definitionSymbol = step.statement.definition.symbol;
       const potentialTransitivityInference = window.transitivityInferences[definitionSymbol];
       if (potentialTransitivityInference) {

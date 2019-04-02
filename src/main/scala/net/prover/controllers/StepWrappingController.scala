@@ -23,4 +23,16 @@ class StepWrappingController @Autowired() (val bookService: BookService) extends
       Success(Seq(Step.SubProof(name, Seq(step))))
     }.toResponseEntity
   }
+
+  @PostMapping(value = Array("/elide"))
+  def elide(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData
+  ): ResponseEntity[_] = {
+    modifyStep[Step](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
+      Success(Step.Elided(Seq(step), None))
+    }.toResponseEntity
+  }
 }

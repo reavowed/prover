@@ -106,16 +106,4 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
       }
     }.toResponseEntity
   }
-
-  @PostMapping(value = Array("/elide"))
-  def elide(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepPath") stepPath: PathData
-  ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
-      Success(Step.Elided(Seq(step), None))
-    }.toResponseEntity
-  }
 }

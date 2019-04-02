@@ -126,12 +126,6 @@ export class TargetStep extends React.Component {
     }).then(this.props.apiService.updateTheorem);
   };
 
-  elide = () => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "elide", {
-      method: "POST"
-    }).then(this.props.apiService.updateTheorem);
-  };
-
   render() {
     let {step, path, additionalReferences, apiService, highlighting, boundVariableLists} = this.props;
     let reference = {stepPath: path};
@@ -154,7 +148,6 @@ export class TargetStep extends React.Component {
     const buttons = (
       <>
         <Button variant="success" size="sm" onClick={this.findInferenceForAssertion}>Find inference</Button>
-        <Button variant="success" size="sm" className="ml-1" onClick={this.elide}>Elide</Button>
         <Button variant="success" size="sm" className="ml-1" onClick={this.chooseBoundVariableForNaming}>Name</Button>
         {scopingStatement && step.statement.definition === scopingStatement &&
         <Button variant="success" size="sm" className="ml-1" onClick={this.startIntroducingBoundVariable}>Introduce bound variable</Button>}

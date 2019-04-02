@@ -7,7 +7,6 @@ import {ProofLine} from "./ProofLine";
 import {Steps} from "./Steps";
 import {ClickableText} from "./ClickableText";
 import {BoundVariableModal} from "../Modals";
-import {AssertionStepProofLine} from "./AssertionStep";
 
 export class ElidedStepProofLine extends React.Component {
   constructor(...args) {
@@ -100,11 +99,12 @@ export class ElidedStep extends React.Component {
         {boundVariableContent}
       </ClickableText>;
     return <ElidedStepProofLine {...this.props}>
-      Then <HighlightableExpression statement={step.statement}
-                                    boundVariableLists={boundVariableLists}
-                                    wrapBoundVariable={wrapEditableBoundVariable}
-                                    references={[...additionalReferences, {stepPath: path}]}
-                                    highlighting={highlighting}/>.
+      Then { step.statement ?
+        <HighlightableExpression statement={step.statement}
+                                 boundVariableLists={boundVariableLists}
+                                 wrapBoundVariable={wrapEditableBoundVariable}
+                                 references={[...additionalReferences, {stepPath: path}]}
+                                 highlighting={highlighting}/> : "???"}.
       <BoundVariableModal show={this.state.boundVariableModalCallback != null}
                           onHide={this.hideBoundVariableModal}
                           title="Rename bound variable"

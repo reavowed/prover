@@ -31,7 +31,7 @@ export class NamingStep {
 
 export class ElidedStep {
     type = "elided";
-    constructor(public statement: Expression, public substeps: Step[], public highlightedInference: any, public referencedLines: any) {}
+    constructor(public statement: Expression | void, public substeps: Step[], public highlightedInference: any, public referencedLines: any) {}
     isIncomplete: boolean = !this.highlightedInference || _.some(this.substeps, "isIncomplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
 }
@@ -92,7 +92,7 @@ export const Step = {
                    return new TargetStep(Expression.parseFromJson(stepJson.statement));
                case "elided":
                    return new ElidedStep(
-                       Expression.parseFromJson(stepJson.provenStatement),
+                       stepJson.provenStatement && Expression.parseFromJson(stepJson.provenStatement),
                        Step.parseFromJson(stepJson.substeps),
                        stepJson.highlightedInference && Parser.parseInference(stepJson.highlightedInference),
                        stepJson.referencedLines);

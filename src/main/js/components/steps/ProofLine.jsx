@@ -90,6 +90,12 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     }).then(this.props.apiService.updateTheorem);
   };
 
+  elide = () => {
+    this.props.apiService.fetchJsonForStep(this.props.path, "elide", {
+      method: "POST"
+    }).then(this.props.apiService.updateTheorem);
+  };
+
   render() {
     const {className, children, tooltip, path, buttons} = this.props;
 
@@ -119,6 +125,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
           <Overlay target={this.state.buttonRef} show={this.state.shouldShowButtonPopover} onHide={this.hideButtonPopover} rootClose placement="bottom">
             {({show, ...props}) => <Popover {...props}>
               <Button onClick={this.showSubproofNameModal} variant="success" size="sm" className="ml-1">To subproof</Button>
+              <Button onClick={this.elide}variant="success" size="sm" className="ml-1">Elide</Button>
               <Button onClick={this.clearStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-redo"/></Button>
               <Button onClick={this.deleteStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-trash"/></Button>
               <Button onClick={this.moveUp} size="sm" className="ml-1"><span className="fas fa-arrow-up"/></Button>
