@@ -35,7 +35,11 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     replaceStep[Step](bookKey, chapterKey, theoremKey, stepPath)((step, _, _) =>
-      Success(Nil)
+      // Deleting naming steps is confusing, just clear them
+      Success(step.asOptionalInstanceOf[Step.Naming]
+        .flatMap(namingStep => namingStep.provenStatement)
+        .map(s => Step.Target(s))
+        .toSeq)
     ).toResponseEntity
   }
 
