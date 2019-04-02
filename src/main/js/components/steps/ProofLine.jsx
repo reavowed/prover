@@ -5,17 +5,25 @@ import Tooltip from "react-bootstrap/Tooltip";
 import styled, {css} from "styled-components";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
-import {DeleteStepButton} from "./DeleteStepButton";
+import Popover from "react-bootstrap/Popover";
 
 export const ProofLine = styled(class ProofLine extends React.Component {
   constructor(...args) {
     super(...args);
     this.attachDivRef = divRef => this.setState({ divRef });
     this.attachSpanRef = spanRef => this.setState({ spanRef });
+    this.attachButtonRef = buttonRef => this.setState({ buttonRef });
     this.state = {
-      isHovered: false
+      isHovered: false,
+      shouldShowButtonPopover: false
     };
   }
+  toggleButtonPopover = () => {
+    this.setState({shouldShowButtonPopover: !this.state.shouldShowButtonPopover});
+  };
+  hideButtonPopover = () => {
+    this.setState({shouldShowButtonPopover: false});
+  };
   onMouseEnter = () => {
     let {highlighting, premiseReferences, path, reference} = this.props;
     if (premiseReferences && highlighting) {
@@ -50,8 +58,18 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.props.apiService.fetchJsonForStep(this.props.path, "move?direction=down", {method: "POST"})
       .then(this.props.apiService.updateTheorem);
   };
+  clearStep = () => {
+    this.props.apiService.fetchJsonForStep(this.props.path, "clear", {
+      method: "POST"
+    }).then(this.props.apiService.updateTheorem);
+  };
+  deleteStep = () => {
+    this.props.apiService.fetchJsonForStep(this.props.path, "", {
+      method: "DELETE"
+    }).then(this.props.apiService.updateTheorem);
+  };
   render() {
-    const {className, children, tooltip, path, apiService, buttons} = this.props;
+    const {className, children, tooltip, path, buttons} = this.props;
     const lineElement= <div onMouseEnter={this.onMouseEnter}
                             onMouseLeave={this.onMouseLeave}
                             className={"mb-1 " + className}
@@ -67,9 +85,15 @@ export const ProofLine = styled(class ProofLine extends React.Component {
         </span>
         <FlexRow.Grow/>
         {path && this.state.isHovered && <>
-          <DeleteStepButton path={path} apiService={apiService}/>
-          <Button onClick={this.moveUp} size="sm" className="ml-1"><span className="fas fa-arrow-up"/></Button>
-          <Button onClick={this.moveDown} size="sm" className="ml-1"><span className="fas fa-arrow-down"/></Button>
+          <Button ref={this.attachButtonRef} onClick={this.toggleButtonPopover} size="sm" className="ml-1"><span className="fas fa-ellipsis-v"/></Button>
+          <Overlay target={this.state.buttonRef} show={this.state.shouldShowButtonPopover} onHide={this.hideButtonPopover} rootClose placement="bottom">
+            {({show, ...props}) => <Popover {...props}>
+              <Button onClick={this.clearStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-redo"/></Button>
+              <Button onClick={this.deleteStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-trash"/></Button>
+              <Button onClick={this.moveUp} size="sm" className="ml-1"><span className="fas fa-arrow-up"/></Button>
+              <Button onClick={this.moveDown} size="sm" className="ml-1"><span className="fas fa-arrow-down"/></Button>
+            </Popover>}
+          </Overlay>
         </>}
       </FlexRow>
     </div>;

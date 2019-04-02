@@ -50,7 +50,7 @@ export class ElidedStepProofLine extends React.Component {
       >
         {children}
       </ProofLine>
-      {this.state.showProofCard && <div className="card" style={{margin: ".5rem 2rem", padding: ".5rem .75rem", display: "inline-block"}}>
+      {this.state.showProofCard && <div className="card" style={{margin: ".5rem -0.75rem .5rem 2rem", padding: ".5rem .75rem"}}>
         <Steps steps={step.substeps}
                path={path}
                boundVariableLists={boundVariableLists}
