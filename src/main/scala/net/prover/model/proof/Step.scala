@@ -17,6 +17,7 @@ sealed trait Step {
   def modifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Seq[Step]]): Option[Step]
   def tryModifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Try[Seq[Step]]]): Option[Try[Step]]
   def tryModifySubstepsWithResult[T](f: Seq[Step] => Option[Try[(Seq[Step], T)]]): Option[Try[(Step, T)]]
+  def insertExternalParameters(numberOfParametersToRemove: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step]
   def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Step
   def referencedInferenceIds: Set[String]
@@ -62,6 +63,7 @@ object Step {
     def substeps: Seq[Step]
     def specifyContext(outerContext: StepContext): StepContext
     def replaceSubsteps(newSubsteps: Seq[Step]): Step
+    def modifyStepForInsertion(step: Step): Step
     def modifyStepForExtraction(step: Step): Option[Step]
     override def getSubstep(index: Int, outerContext: StepContext): Option[(Step, StepContext)] = {
       substeps.lift(index).map { step =>
@@ -85,16 +87,22 @@ object Step {
     }
     override def tryModifySubstepsWithResult[T](f: Seq[Step] => Option[Try[(Seq[Step], T)]]): Option[Try[(Step, T)]] = f(substeps).map(_.map(_.mapLeft(replaceSubsteps)))
   }
-  sealed trait WithVariable extends Step {
+  sealed trait WithVariable extends Step.WithSubsteps {
     def variableName: String
     def replaceVariableName(newVariableName: String): Step
+    override def modifyStepForInsertion(step: Step): Step = step.insertExternalParameters(1)
+    override def modifyStepForExtraction(step: Step): Option[Step] = step.removeExternalParameters(1)
+  }
+  sealed trait WithoutVariable extends Step.WithSubsteps {
+    override def modifyStepForInsertion(step: Step): Step = step
+    override def modifyStepForExtraction(step: Step): Option[Step] = Some(step)
   }
 
   case class Deduction(
       assumption: Statement,
       substeps: Seq[Step],
       deductionStatement: StatementDefinition)
-    extends Step.WithSubsteps
+    extends Step.WithSubsteps with WithoutVariable
   {
     val `type` = "deduction"
     override def provenStatement: Option[Statement] = {
@@ -104,7 +112,12 @@ object Step {
       outerContext.addStatement(ProvenStatement(assumption, outerContext.stepReference.withSuffix("a")))
     }
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
-    override def modifyStepForExtraction(step: Step): Option[Step] = Some(step)
+    override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
+      Deduction(
+        assumption.insertExternalParameters(numberOfParametersToInsert),
+        substeps.map(_.insertExternalParameters(numberOfParametersToInsert)),
+        deductionStatement)
+    }
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
       for {
         newAssumption <- assumption.removeExternalParameters(numberOfParametersToRemove)
@@ -147,13 +160,23 @@ object Step {
     }
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
-    override def modifyStepForExtraction(step: Step): Option[Step] = step.removeExternalParameters(1)
+    override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
+      Naming(
+        variableName,
+        assumption.insertExternalParameters(numberOfParametersToInsert),
+        statement.insertExternalParameters(numberOfParametersToInsert),
+        substeps.map(_.insertExternalParameters(numberOfParametersToInsert)),
+        inference,
+        premises,
+        substitutions.insertExternalParameters(numberOfParametersToInsert))
+    }
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
       for {
         newAssumption <- assumption.removeExternalParameters(numberOfParametersToRemove)
         newStatement <- statement.removeExternalParameters(numberOfParametersToRemove)
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
-      } yield Naming(variableName, newAssumption, newStatement, newSubsteps, inference, premises, substitutions)
+        newSubstitutions <- substitutions.removeExternalParameters(numberOfParametersToRemove)
+      } yield Naming(variableName, newAssumption, newStatement, newSubsteps, inference, premises, newSubstitutions)
     }
     override def recalculateReferences(stepContext: StepContext, parsingContext: ParsingContext): Step = {
       val newSubsteps = substeps.recalculateReferences(specifyContext(stepContext), parsingContext)
@@ -217,7 +240,12 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
-    override def modifyStepForExtraction(step: Step): Option[Step] = step.removeExternalParameters(1)
+    override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
+      ScopedVariable(
+        variableName,
+        substeps.map(_.insertExternalParameters(numberOfParametersToInsert)),
+        scopingStatement)
+    }
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
       for {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
@@ -246,6 +274,9 @@ object Step {
   case class Target(statement: Statement) extends Step.WithoutSubsteps {
     val `type` = "target"
     override def provenStatement: Option[Statement] = Some(statement)
+    override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
+      Target(statement.insertExternalParameters(numberOfParametersToInsert))
+    }
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
       for {
         s <- statement.removeExternalParameters(numberOfParametersToRemove)
@@ -266,12 +297,16 @@ object Step {
     }
   }
 
-  case class Elided(substeps: Seq[Step], highlightedInference: Option[Inference.Summary]) extends Step.WithSubsteps {
+  case class Elided(substeps: Seq[Step], highlightedInference: Option[Inference.Summary]) extends Step.WithSubsteps with WithoutVariable {
     val `type` = "elided"
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
     override def specifyContext(outerContext: StepContext): StepContext = outerContext
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
-    override def modifyStepForExtraction(step: Step): Option[Step] = Some(step)
+    override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
+      Elided(
+        substeps.map(_.insertExternalParameters(numberOfParametersToInsert)),
+        highlightedInference)
+    }
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
       for {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
@@ -303,6 +338,13 @@ object Step {
   {
     val `type`: String = "assertion"
     override def provenStatement: Option[Statement] = Some(statement)
+    override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
+      Assertion(
+        statement.insertExternalParameters(numberOfParametersToInsert),
+        inference,
+        premises,
+        substitutions.insertExternalParameters(numberOfParametersToInsert))
+    }
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
       for {
         newStatement <- statement.removeExternalParameters(numberOfParametersToRemove)
@@ -347,12 +389,16 @@ object Step {
     }
   }
 
-  case class SubProof(name: String, substeps: Seq[Step]) extends Step.WithSubsteps {
+  case class SubProof(name: String, substeps: Seq[Step]) extends Step.WithSubsteps with WithoutVariable {
     val `type`: String = "subproof"
     override def specifyContext(outerContext: StepContext): StepContext = outerContext
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
-    override def modifyStepForExtraction(step: Step): Option[Step] = Some(step)
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
+    override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
+      SubProof(
+        name,
+        substeps.map(_.insertExternalParameters(numberOfParametersToInsert)))
+    }
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
       for {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption

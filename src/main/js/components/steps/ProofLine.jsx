@@ -61,6 +61,11 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.props.apiService.fetchJsonForStep(this.props.path, "move?direction=down", {method: "POST"})
       .then(this.props.apiService.updateTheorem);
   };
+  moveIntoNext = (e) => {
+    e.stopPropagation();
+    this.props.apiService.fetchJsonForStep(this.props.path, "moveIntoNext", {method: "POST"})
+      .then(this.props.apiService.updateTheorem);
+  };
   clearStep = () => {
     this.props.apiService.fetchJsonForStep(this.props.path, "clear", {
       method: "POST"
@@ -118,6 +123,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
               <Button onClick={this.deleteStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-trash"/></Button>
               <Button onClick={this.moveUp} size="sm" className="ml-1"><span className="fas fa-arrow-up"/></Button>
               <Button onClick={this.moveDown} size="sm" className="ml-1"><span className="fas fa-arrow-down"/></Button>
+              <Button onClick={this.moveIntoNext} size="sm" className="ml-1"><span className="fas fa-level-down-alt"/></Button>
             </Popover>}
           </Overlay>
           {subProofNamingModal}

@@ -19,6 +19,13 @@ case class Substitutions(
       .tryAdd(name, expression)
       .map(lens.set(_)(this))
   }
+  def insertExternalParameters(numberOfParametersToInsert: Int): Substitutions = {
+    Substitutions(
+      statements.mapValues(_.insertExternalParameters(numberOfParametersToInsert)),
+      terms.mapValues(_.insertExternalParameters(numberOfParametersToInsert)),
+      predicates.mapValues(_.insertExternalParameters(numberOfParametersToInsert)),
+      functions.mapValues(_.insertExternalParameters(numberOfParametersToInsert)))
+  }
   def removeExternalParameters(numberOfParametersToRemove: Int): Option[Substitutions] = {
     for {
       newStatements <- statements.mapValues(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption

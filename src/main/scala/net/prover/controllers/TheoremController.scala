@@ -4,7 +4,6 @@ import net.prover.controllers.models.PathData
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.entries.Theorem
-import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -83,4 +82,34 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
   }
 
 
+  @PostMapping(value = Array("/{stepPath}/moveIntoNext"))
+  def moveStepIntoNext(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData
+  ): ResponseEntity[_] = {
+    def moveInTheorem(theorem: Theorem, parsingContext: ParsingContext): Option[Try[Theorem]] = {
+      stepPath.indexes match {
+        case Nil =>
+          None
+        case init :+ last =>
+          theorem.tryModifySteps(init, (steps, _) => {
+            steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+                after match {
+                  case (following: Step.WithSubsteps) +: remaining =>
+                    val updatedStep = following.modifyStepForInsertion(step)
+                    Success(before ++ Seq(following.replaceSubsteps(updatedStep +: following.substeps)) ++ remaining)
+                  case _ =>
+                    Failure(BadRequestException("No valid following step to insert into"))
+                }
+
+            }
+          })
+      }
+    }
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, parsingContext) =>
+      moveInTheorem(theorem, parsingContext).orNotFound(s"Step $stepPath").flatten
+    }.toResponseEntity
+  }
 }
