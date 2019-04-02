@@ -30,11 +30,12 @@ export class SubproofStep extends React.Component {
                    onClick={this.toggleSubproof}>
           Then
           {' '}
-          <HighlightableExpression expression={step.statement}
-                                   boundVariableLists={boundVariableLists}
-                                   reference={reference}
-                                   apiService={apiService}
-                                   highlighting={highlighting}/>.
+          {step.statement ?
+            <HighlightableExpression expression={step.statement}
+                                    boundVariableLists={boundVariableLists}
+                                    reference={reference}
+                                    apiService={apiService}
+                                    highlighting={highlighting}/> : "???"}.
         </ProofLine>}
       {showingSubproof && <Steps.Children steps={step.substeps}
                                           path={path}

@@ -115,7 +115,7 @@ export class Steps extends React.Component {
       case "elided":
         return "elide " + (step.statement ? step.statement.serialize() : "???");
       case "subproof":
-        return "subproof " + step.statement.serialize();
+        return "subproof " + (step.statement ? step.statement.serialize() : "???");
     }
   }
   static getTransitivityDetails(stepsWithIndexes, firstStep, transitivityInferenceId, basePath, firstIndex) {
