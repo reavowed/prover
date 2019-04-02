@@ -27,7 +27,7 @@ export class NamingStep extends React.Component {
     let referencesForLastStep = [...additionalReferences, reference];
     const innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     return <>
-      <ProofLine premiseReferences={step.referencedLines}
+      <ProofLine premiseReferences={step.referencedLinesForExtraction}
                  reference={referenceForAssumption}
                  buttons={<InferenceLink inference={step.inference}/>}
                  path={path}

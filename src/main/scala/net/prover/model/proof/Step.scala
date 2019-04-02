@@ -186,6 +186,8 @@ object Step {
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet + inference.id
     override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet
     override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet ++ substeps.flatMap(_.referencedLines).toSet
+    @JsonSerialize
+    def referencedLinesForExtraction: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def length: Int = substeps.map(_.length).sum + 1
     override def serializedLines: Seq[String] = Seq(s"let $variableName ${assumption.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)} {") ++
       substeps.flatMap(_.serializedLines).indent ++
