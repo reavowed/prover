@@ -22,9 +22,9 @@ export function formatHtml(text, replacementFunction) {
   }
   return formatWithReplacement(text, /(?<!\s)([_^])([^\s)}]+)/g, replacementFunction, match => {
     if (match[1] === "_") {
-      return <sub>{replacementFunction(match[2])}</sub>
+      return <sub>{formatHtml(match[2], replacementFunction)}</sub>
     } else if (match[1] === "^") {
-      return <sup>{replacementFunction(match[2])}</sup>
+      return <sup>{formatHtml(match[2], replacementFunction)}</sup>
     }
   });
 }

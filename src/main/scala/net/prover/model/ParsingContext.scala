@@ -81,7 +81,7 @@ case class ParsingContext(
 
   object RecognisedTermVariable {
     def unapply(string: String): Option[String] = {
-      "([a-zA-Z](?:'|_\\w+)?)".r.unapplySeq(string).flatMap(_.headOption) orElse
+      "([a-zA-Z](?:'|[_\\^].*)?)".r.unapplySeq(string).flatMap(_.headOption) orElse
         termVariableNames.find(_ == string)
     }
   }
