@@ -31,7 +31,7 @@ object Book {
       .flatMap { importedBook =>
         getDependencies(importedBook.imports, availableBooks) :+ importedBook
       }
-      .distinct
+      .distinctBy(_.title)
   }
 
   def parse(title: String, path: Path, previousBooks: Seq[Book], getChapterPath: (String, Int) => Path): Book = {

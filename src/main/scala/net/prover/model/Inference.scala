@@ -53,10 +53,6 @@ trait Inference {
       .mkString(" ")
   }
 
-  def calculateHash(): String = {
-    Inference.calculateHash(premises, conclusion)
-  }
-
   def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions, stepContext: StepContext): Seq[Statement] = {
     validateConclusion(expectedConclusion, substitutions, stepContext)
     premises.map(substituteStatement(_, substitutions, stepContext))
@@ -76,7 +72,7 @@ trait Inference {
 
 object Inference {
   trait WithCalculatedId extends Inference {
-    def id: String = calculateHash()
+    val id: String = Inference.calculateHash(premises, conclusion)
   }
   trait Entry extends Inference.WithCalculatedId with ChapterEntry.Standalone {
     override def title: String = name
