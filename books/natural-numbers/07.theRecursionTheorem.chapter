@@ -117,28 +117,10 @@ premise ∈ g_0 X
 conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
 {
   let S = $0 comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0) (comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () {
-    subproof (Function definition - subset) {
-      take x {
-        assume ∈ $0 union $$0 {
-          prove ∃ g ∧ ∈ $$0 $0 ∈ $0 $$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () ($0, $$0) () ()
-            given
-          let g ∧ ∈ $$0 $0 ∈ $0 $$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 × ℕ X) () (∧ ∈ $0 $$$0 ∈ $$$0 $$0) () {
-            prove ∈ $0 powerSet × ℕ X 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () ($$$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$0 $$0 apply f apply $$$$$$$0 $0) ()
-              given
-              simplified ∈ $0 $$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 $0, ∈ $0 $$$0) () () ()
-                given
-            prove ⊆ $0 × ℕ X bb4e7eb849809346e883e29e4c961a0b1e707fabfe8da1e4537f611a4602e0f2 () ($0, × ℕ X) () ()
-              given
-            prove ∈ $$0 × ℕ X ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($0, × ℕ X, $$0) () ()
-              given
-              simplified ∈ $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 $0, ∈ $0 $$$0) () () ()
-                given
-          }
-        }
-      }
-      prove ⊆ union $0 × ℕ X 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (union $0, × ℕ X) () ()
-        given
-    }
+    prove ⊆ $0 powerSet × ℕ X 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () ($0, powerSet × ℕ X) (∃ n ∧ ∈ $0 ℕ ∧ function $$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) ()
+      given
+    prove ⊆ union $0 × ℕ X aa0993b0a958f1b761e3dd5f31bc5045e41da27f517428ced08dce38691d6a0e () ($0, × ℕ X) () ()
+      given
     subproof (Base case - existence) {
       let g = $0 singleton orderedPair 0 g_0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∈ orderedPair 0 g_0 union $0) (singleton orderedPair 0 g_0) () () {
         elided f0d91f99346599d36374a0a7767b7eefdc44886e1fb4a5734feac36206c18b19 {
@@ -152,11 +134,13 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
               given
               given
           }
-          prove ⊆ singleton g_0 X ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (g_0, X) () ()
-            given
-          prove function $0 1 X a24b6cc2064ec06bf3e7a3aaf24ad7a87910420b78f0f3c47ba32473212ab24e () ($0, 1, singleton g_0, X) () ()
-            given
-            given
+          elided ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 {
+            prove ⊆ singleton g_0 X ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (g_0, X) () ()
+              given
+            prove function $0 1 X a24b6cc2064ec06bf3e7a3aaf24ad7a87910420b78f0f3c47ba32473212ab24e () ($0, 1, singleton g_0, X) () ()
+              given
+              given
+          }
         }
         elided 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 {
           prove ∈ 1 ℕ 0ea2cae46b5b1dec42fef1b2b68f5d829b809f821651b8628f2f94b1abd87ac5 () () () ()
