@@ -3,8 +3,7 @@ package net.prover.controllers
 import net.prover.controllers.models.PathData
 import net.prover.model._
 import net.prover.model.entries.{ChapterEntry, Theorem}
-import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, ProofHelper, Step, StepContext}
+import net.prover.model.proof.{PremiseContext, Step, StepContext}
 
 import scala.reflect.{ClassTag, classTag}
 import scala.util.Try
@@ -65,24 +64,12 @@ trait BookModification {
       .flatMap(_.asOptionalInstanceOf[T].orBadRequest(s"Entry is not a ${classTag[T].runtimeClass.getSimpleName}"))
   }
 
-  protected def findStep[T <: Step : ClassTag](theorem: Theorem, stepPath: PathData): Try[(T, StepContext)] = {
+  protected def findStep[T <: Step : ClassTag](theorem: Theorem, stepPath: PathData, entryContext: EntryContext): Try[(T, StepContext, PremiseContext)] = {
     for {
-      (rawStep, stepContext) <- theorem.findStep(stepPath.indexes).orNotFound(s"Step $stepPath")
+      (rawStep, stepContext, premiseContext) <- theorem.findStep(stepPath.indexes, entryContext).orNotFound(s"Step $stepPath")
       step <- rawStep.asOptionalInstanceOf[T].orBadRequest(s"Step is not ${classTag[T].runtimeClass.getName}")
     } yield {
-      (step, stepContext)
-    }
-  }
-
-  protected def findStep[T <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepPath: PathData): Try[(Book, Chapter, Theorem, T, StepContext)] = {
-    for {
-      book <- findBook(bookKey)
-      chapter <- findChapter(book, chapterKey)
-      theorem <- findEntry[Theorem](chapter, theoremKey)
-      (rawStep, stepContext) <- theorem.findStep(stepPath.indexes).orNotFound(s"Step $stepPath")
-      step <- rawStep.asOptionalInstanceOf[T].orBadRequest(s"Step is not ${classTag[T].runtimeClass.getName}")
-    } yield {
-      (book, chapter, theorem, step, stepContext)
+      (step, stepContext, premiseContext)
     }
   }
 
@@ -127,7 +114,7 @@ trait BookModification {
 
   protected def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepPath: PathData)(f: (TStep, StepContext, EntryContext) => Try[Step]): Try[Theorem] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
-      theorem.tryModifyStep(stepPath.indexes, (step, stepContext) => {
+      theorem.tryModifyStep(stepPath.indexes, entryContext, (step, stepContext) => {
         for {
           typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
           newStep <- f(typedStep, stepContext, entryContext)
@@ -136,29 +123,25 @@ trait BookModification {
     }
   }
 
-  protected def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepPath: PathData)(f: (TStep, StepContext, EntryContext) => Try[Seq[Step]]): Try[Theorem] = {
+  protected def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepPath: PathData)(f: (TStep, StepContext, PremiseContext, EntryContext) => Try[Seq[Step]]): Try[Theorem] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
-        (stepPath.indexes match {
-          case init :+ last =>
-            theorem.tryModifySteps(init, (steps, outerContext) => {
-              steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
-                for {
-                  typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
-                  replacementSteps <- f(typedStep, outerContext.addSteps(before), entryContext)
-                } yield before ++ replacementSteps ++ after
-              }
-            })
-          case _ =>
-            None
-        }).orNotFound(s"Step $stepPath").flatten
+      (stepPath.indexes match {
+        case init :+ last =>
+          theorem.tryModifySteps(init, entryContext, (steps, stepContext, premiseContext) => {
+            steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+              for {
+                typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
+                replacementSteps <- f(typedStep, stepContext.atIndex(last), premiseContext.addSteps(before, stepContext), entryContext)
+              } yield before ++ replacementSteps ++ after
+            }
+          })
+        case _ =>
+          None
+      }).orNotFound(s"Step $stepPath").flatten
     }
   }
 
   protected def findInference(inferenceId: String)(implicit entryContext: EntryContext): Try[Inference.Summary] = {
     entryContext.inferences.find(_.id == inferenceId).map(_.summary).orBadRequest(s"Invalid inference $inferenceId")
-  }
-
-  protected def createPremise(target: Statement, stepContext: StepContext, entryContext: EntryContext): Premise = {
-    ProofHelper.findPremise(target, stepContext, entryContext)
   }
 }

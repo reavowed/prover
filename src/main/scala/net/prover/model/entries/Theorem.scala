@@ -20,20 +20,23 @@ case class Theorem(
   override def referencedInferenceIds: Set[String] = proof.flatMap(_.referencedInferenceIds).toSet
   override def referencedDefinitions: Set[ExpressionDefinition] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions ++ proof.flatMap(_.referencedDefinitions).toSet
   override def inferences: Seq[Inference] = Seq(this)
-  private def initialContext: StepContext = StepContext.justWithPremises(premises)
+  private def initialStepContext: StepContext = StepContext.empty
+  private def initialPremiseContext(entryContext: EntryContext): PremiseContext = PremiseContext.justWithPremises(premises, entryContext)
 
   private def replaceProof(newProof: Seq[Step]): Theorem = copy(proof = newProof)
-  def findStep(indexes: Seq[Int]): Option[(Step, StepContext)] = {
+  def findStep(indexes: Seq[Int], entryContext: EntryContext): Option[(Step, StepContext, PremiseContext)] = {
     indexes match {
       case Nil =>
         None
       case head +: tail =>
-        val initialStepContextAndPathOption = proof.lift(head).map(step => (step, initialContext.addSteps(proof.take(head)).atIndex(head), Seq(head)))
+        val initialStepContextAndPathOption = proof.splitAtIndexIfValid(head).map { case (before, step, _) =>
+          (step, initialStepContext.atIndex(head), initialPremiseContext(entryContext), Seq(head))
+        }
         tail.foldLeft(initialStepContextAndPathOption) { case (currentStepContextAndPathOption, index) =>
-          currentStepContextAndPathOption.flatMap { case (step, context, path) =>
-            step.getSubstep(index, context).map { case (newStep, newContext) => (newStep, newContext, path :+ index) }
+          currentStepContextAndPathOption.flatMap { case (step, stepContext, premiseContext, path) =>
+            step.getSubstep(index, stepContext, premiseContext).map { case (newStep, newStepContext, newPremiseContext) => (newStep, newStepContext, newPremiseContext, path :+ index) }
           }
-        }.map { case (step, context, path) => (step, context) }
+        }.map { case (step, stepContext, premiseContext, path) => (step, stepContext, premiseContext) }
     }
   }
   def modifySteps(indexes: Seq[Int], f: (Seq[Step], StepContext) => Option[Seq[Step]]): Option[Theorem] = {
@@ -43,38 +46,41 @@ case class Theorem(
           f(steps, outerContext)
         case head +: tail =>
           steps.splitAtIndexIfValid(head).flatMap { case (before, step, after) =>
-              step.modifySubsteps(outerContext.addSteps(before).atIndex(head), (substeps, innerContext) => helper(tail, substeps, innerContext))
+              step.modifySubsteps(outerContext.atIndex(head), (substeps, innerContext) => helper(tail, substeps, innerContext))
                 .map { updatedStep =>
                   (before :+ updatedStep) ++ after
                 }
           }
       }
     }
-    helper(indexes, proof, initialContext).map(replaceProof)
+    helper(indexes, proof, initialStepContext).map(replaceProof)
   }
-  def tryModifySteps(indexes: Seq[Int], f: (Seq[Step], StepContext) => Option[Try[Seq[Step]]]): Option[Try[Theorem]] = {
-    def helper(indexes: Seq[Int], steps: Seq[Step], outerContext: StepContext): Option[Try[Seq[Step]]] = {
+  def tryModifySteps(indexes: Seq[Int], entryContext: EntryContext, f: (Seq[Step], StepContext, PremiseContext) => Option[Try[Seq[Step]]]): Option[Try[Theorem]] = {
+    def helper(indexes: Seq[Int], steps: Seq[Step], stepContext: StepContext, premiseContext: PremiseContext): Option[Try[Seq[Step]]] = {
       indexes match {
         case Nil =>
-          f(steps, outerContext)
+          f(steps, stepContext, premiseContext)
         case head +: tail =>
           steps.splitAtIndexIfValid(head).flatMap { case (before, step, after) =>
-              step.tryModifySubsteps(outerContext.addSteps(before).atIndex(head), (substeps, innerContext) => helper(tail, substeps, innerContext))
-                .mapMap { updatedStep =>
-                  (before :+ updatedStep) ++ after
-                }
+            step.tryModifySubsteps(
+              stepContext.atIndex(head),
+              premiseContext.addSteps(before, stepContext),
+              (substeps, innerStepContext, innerPremiseContext) => helper(tail, substeps, innerStepContext, innerPremiseContext)
+            ).mapMap { updatedStep =>
+              (before :+ updatedStep) ++ after
+            }
           }
       }
     }
-    helper(indexes, proof, initialContext).mapMap(replaceProof)
+    helper(indexes, proof, initialStepContext, initialPremiseContext(entryContext)).mapMap(replaceProof)
   }
-  def tryModifyStep(indexes: Seq[Int], f: (Step, StepContext) => Try[Step]): Option[Try[Theorem]] = {
+  def tryModifyStep(indexes: Seq[Int], entryContext: EntryContext, f: (Step, StepContext) => Try[Step]): Option[Try[Theorem]] = {
     indexes match {
       case Nil =>
         None
       case init :+ last =>
-        tryModifySteps(init, (steps, context) => steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
-          f(step, context.addSteps(before)).map { updatedStep =>
+        tryModifySteps(init, entryContext, (steps, context, _) => steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+          f(step, context.atIndex(last)).map { updatedStep =>
             (before :+ updatedStep) ++ after
           }
         })
@@ -92,7 +98,7 @@ case class Theorem(
     }
   }
   def recalculateReferences(entryContext: EntryContext): Theorem = {
-    val newProof = proof.recalculateReferences(initialContext, entryContext)
+    val newProof = proof.recalculateReferences(initialStepContext, initialPremiseContext(entryContext))
     copy(proof = newProof)
   }
 
@@ -111,7 +117,7 @@ object Theorem extends Inference.EntryParser {
   override val name: String = "theorem"
 
   def proofParser(premises: Seq[Statement])(implicit entryContext: EntryContext): Parser[Seq[Step]] = {
-    Step.listParser(entryContext, StepContext.justWithPremises(premises)).inBraces
+    Step.listParser(entryContext, StepContext.empty, PremiseContext.justWithPremises(premises, entryContext)).inBraces
   }
 
   override def parser(implicit entryContext: EntryContext): Parser[Theorem] = {

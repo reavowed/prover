@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.model.Inference.RearrangementType
 import net.prover.model.entries.{ChapterEntry, ExpressionDefinition, StatementDefinition, TermDefinition}
 import net.prover.model.expressions.{DefinedExpression, DefinedStatement, ExpressionVariable, Statement}
 
@@ -7,6 +8,8 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
   val inferences: Seq[Inference] = availableEntries.flatMap(_.inferences)
   val statementDefinitions: Seq[StatementDefinition] = availableEntries.ofType[StatementDefinition]
   val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
+
+  lazy val simplificationInferences: Seq[Inference] = inferences.filter(_.rearrangementType == RearrangementType.Simplification)
 
   def addEntry(entry: ChapterEntry): EntryContext = copy(availableEntries = availableEntries :+ entry)
   def addEntries(entries: Seq[ChapterEntry]): EntryContext = copy(availableEntries = availableEntries ++ entries)

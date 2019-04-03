@@ -274,19 +274,19 @@ object Parser {
 
   def foldWhileDefined[T, R](
     initial: R)(
-    getParser: (Seq[T], R) => Parser[Option[(T, R)]]
+    getParser: (Seq[T], Int, R) => Parser[Option[(T, R)]]
   ): Parser[(Seq[T], R)] = {
     Parser { initialTokenizer =>
-      def parseRemaining(currentAccumulator: R, valuesSoFar: Seq[T], currentTokenizer: Tokenizer): ((Seq[T], R), Tokenizer) = {
-        val (newValueAndAccumulatorOption, newTokenizer) = getParser(valuesSoFar, currentAccumulator).parse(currentTokenizer)
+      def parseRemaining(currentAccumulator: R, valuesSoFar: Seq[T], currentIndex: Int, currentTokenizer: Tokenizer): ((Seq[T], R), Tokenizer) = {
+        val (newValueAndAccumulatorOption, newTokenizer) = getParser(valuesSoFar, currentIndex, currentAccumulator).parse(currentTokenizer)
         newValueAndAccumulatorOption match {
           case Some((newValue, newAccumulator)) =>
-            parseRemaining(newAccumulator, valuesSoFar :+ newValue, newTokenizer)
+            parseRemaining(newAccumulator, valuesSoFar :+ newValue, currentIndex + 1, newTokenizer)
           case None =>
             ((valuesSoFar, currentAccumulator), currentTokenizer)
         }
       }
-      parseRemaining(initial, Nil, initialTokenizer)
+      parseRemaining(initial, Nil, 0, initialTokenizer)
     }
   }
 }
