@@ -9,7 +9,6 @@ val monocleVersion = "1.4.0"
 libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.3.2",
   "org.springframework.boot" % "spring-boot-starter-web" % "1.4.2.RELEASE",
-  "org.springframework.boot" % "spring-boot-devtools" % "1.4.2.RELEASE",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.8.4",
   "commons-io" % "commons-io" % "2.5",
   "org.scala-lang.modules" %% "scala-xml" % "1.1.0",
