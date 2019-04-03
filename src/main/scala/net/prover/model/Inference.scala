@@ -7,13 +7,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.Inference._
 import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
 import net.prover.model.expressions._
+import net.prover.model.proof.StepContext
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
   @JsonSerialize
   def id: String
-  @JsonSerialize
-  def key: ChapterEntry.Key
   @JsonSerialize
   def name: String
   @JsonSerialize
@@ -28,7 +27,7 @@ trait Inference {
     (premises.map(_.requiredSubstitutions) :+ conclusion.requiredSubstitutions).foldTogether
   }
 
-  def substitutionsParser(implicit parsingContext: ParsingContext): Parser[Substitutions] = {
+  def substitutionsParser(implicit parsingContext: ExpressionParsingContext): Parser[Substitutions] = {
     for {
       statements <- Statement.parser.listInParens(Some(","))
       terms <- Term.parser.listInParens(Some(","))
@@ -58,17 +57,17 @@ trait Inference {
     Inference.calculateHash(premises, conclusion)
   }
 
-  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions, externalDepth: Int): Seq[Statement] = {
-    validateConclusion(expectedConclusion, substitutions, externalDepth)
-    premises.map(substituteStatement(_, substitutions, externalDepth))
+  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions, stepContext: StepContext): Seq[Statement] = {
+    validateConclusion(expectedConclusion, substitutions, stepContext)
+    premises.map(substituteStatement(_, substitutions, stepContext))
   }
 
-  def substituteStatement(statement: Statement, substitutions: Substitutions, externalDepth: Int): Statement = {
-    statement.applySubstitutions(substitutions, 0, externalDepth).getOrElse(throw new Exception(s"Could not substitute $statement"))
+  def substituteStatement(statement: Statement, substitutions: Substitutions, stepContext: StepContext): Statement = {
+    statement.applySubstitutions(substitutions, 0, stepContext.externalDepth).getOrElse(throw new Exception(s"Could not substitute $statement"))
   }
 
-  def validateConclusion(expectedConclusion: Statement, substitutions: Substitutions, externalDepth: Int): Unit = {
-    val substitutedConclusion = conclusion.applySubstitutions(substitutions, 0, externalDepth)
+  def validateConclusion(expectedConclusion: Statement, substitutions: Substitutions, stepContext: StepContext): Unit = {
+    val substitutedConclusion = conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
       .getOrElse(throw new Exception(s"Could not substitute conclusion $conclusion"))
     (expectedConclusion == substitutedConclusion)
       .ifFalse(throw new Exception(s"Substituted conclusion $substitutedConclusion was not expected conclusion $expectedConclusion"))
@@ -83,10 +82,10 @@ object Inference {
     override def title: String = name
   }
   trait EntryParser extends ChapterEntryParser {
-    def premisesParser(implicit context: ParsingContext): Parser[Seq[Statement]] = {
+    def premisesParser(implicit context: ExpressionParsingContext): Parser[Seq[Statement]] = {
       Parser.optional("premise", Statement.parser).whileDefined
     }
-    def conclusionParser(implicit context: ParsingContext): Parser[Statement] = {
+    def conclusionParser(implicit context: ExpressionParsingContext): Parser[Statement] = {
       for {
         _ <- Parser.requiredWord("conclusion")
         conclusion <- Statement.parser
@@ -94,16 +93,15 @@ object Inference {
     }
   }
 
-  case class Summary(key: ChapterEntry.Key, name: String, id: String, premises: Seq[Statement], conclusion: Statement, rearrangementType: RearrangementType) extends Inference
+  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement, rearrangementType: RearrangementType) extends Inference
   object Summary {
     def apply(inference: Inference): Summary = {
-      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.key, inference.name, inference.id, inference.premises, inference.conclusion, inference.rearrangementType))
+      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.name, inference.id, inference.premises, inference.conclusion, inference.rearrangementType))
     }
   }
 
   case class Definition(
       nameOfDefinition: String,
-      key: ChapterEntry.Key,
       premises: Seq[Statement],
       conclusion: Statement)
     extends Inference.WithCalculatedId
@@ -146,7 +144,7 @@ object Inference {
       .mkString(" ")
   }
   object Substitutions {
-    def parser(implicit parsingContext: ParsingContext): Parser[Substitutions] = {
+    def parser(implicit parsingContext: ExpressionParsingContext): Parser[Substitutions] = {
       for {
         statements <- Statement.parser.withNone("%").listInParens(Some(","))
         terms <- Term.parser.withNone("%").listInParens(Some(","))
@@ -167,11 +165,11 @@ object Inference {
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))
   }
 
-  def parser(implicit parsingContext: ParsingContext): Parser[Inference.Summary] = {
+  def parser(implicit entryContext: EntryContext): Parser[Inference.Summary] = {
     for {
       inferenceId <- Parser.singleWord
     } yield {
-      parsingContext.inferences.find(_.id == inferenceId)
+      entryContext.inferences.find(_.id == inferenceId)
         .getOrElse(throw new Exception(s"Could not find inference with id $inferenceId"))
         .summary
     }

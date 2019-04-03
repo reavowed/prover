@@ -3,11 +3,11 @@ import {Page} from "./Page";
 
 export class Books extends React.Component {
   render() {
-    const {bookKeys} = this.props;
+    const {books} = this.props;
     return <Page>
-      {bookKeys.map(bookKey =>
+      {books.map(book =>
         <h3 className="mt-3">
-          <a href={bookKey.url}>{bookKey.name}</a>
+          <a href={book.url} key={book.url}>{book.title}</a>
         </h3>
       )}
     </Page>

@@ -149,9 +149,6 @@ package object model {
       else
        Some(b.result())
     }
-    def mapFind[S](f: T => Option[S]): Option[S] = {
-      seq.iterator.map(f).find(_.isDefined).flatten
-    }
     def findIndexWhere(f: T => Boolean): Option[Int] = {
       val index = seq.indexWhere(f)
       if (index == -1)
@@ -200,8 +197,14 @@ package object model {
     def foreachWithIndex[U](f: (T, Int) => U): Unit = {
       seq.zipWithIndex.foreach(f.tupled)
     }
+    def replaceValue(oldValue: T, newValue: T): Seq[T] = {
+      seq.updated(seq.indexOf(oldValue), newValue)
+    }
     def replaceWhere(f: T => Boolean)(t: T): Seq[T] = {
       seq.map(x => if (f(x)) t else x)
+    }
+    def until(value: T): Seq[T] = {
+      seq.takeWhile(_ != value)
     }
     def updateSingleIfDefinedWithResult[S](update: PartialFunction[T, Try[(T, S)]]): Option[Try[(Seq[T], S)]] = {
       seq.findWithIndex(update.isDefinedAt).map { case (currentValue, index) =>
@@ -235,6 +238,15 @@ package object model {
       }
     }
     def removeAtIndex(index: Int): Seq[T] = seq.take(index) ++ seq.drop(index + 1)
+  }
+
+  implicit class IterableOps[T](iterable: Iterable[T]) {
+    def mapFind[S](f: T => Option[S]): Option[S] = {
+      iterable.iterator.map(f).find(_.isDefined).flatten
+    }
+    def mapToMap[S](f: T => S): Map[T, S] = {
+      iterable.map(t => t -> f(t)).toMap
+    }
   }
 
   implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {

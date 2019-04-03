@@ -11,7 +11,6 @@ import scala.util.Try
 @JsonIgnoreProperties(Array("rearrangementType"))
 case class Theorem(
     name: String,
-    override val key: ChapterEntry.Key.Standalone,
     premises: Seq[Statement],
     conclusion: Statement,
     proof: Seq[Step],
@@ -92,8 +91,8 @@ case class Theorem(
         })
     }
   }
-  def recalculateReferences(parsingContext: ParsingContext): Theorem = {
-    val newProof = proof.recalculateReferences(initialContext, parsingContext)
+  def recalculateReferences(entryContext: EntryContext): Theorem = {
+    val newProof = proof.recalculateReferences(initialContext, entryContext)
     copy(proof = newProof)
   }
 
@@ -111,11 +110,12 @@ case class Theorem(
 object Theorem extends Inference.EntryParser {
   override val name: String = "theorem"
 
-  def proofParser(premises: Seq[Statement])(implicit parsingContext: ParsingContext): Parser[Seq[Step]] = {
-    Step.listParser(parsingContext, StepContext.justWithPremises(premises)).inBraces
+  def proofParser(premises: Seq[Statement])(implicit entryContext: EntryContext): Parser[Seq[Step]] = {
+    Step.listParser(entryContext, StepContext.justWithPremises(premises)).inBraces
   }
 
-  def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[Theorem] = {
+  override def parser(implicit entryContext: EntryContext): Parser[Theorem] = {
+    implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
@@ -125,7 +125,6 @@ object Theorem extends Inference.EntryParser {
     } yield {
       Theorem(
         name,
-        ChapterEntry.Key.Standalone(name, getKey),
         premises,
         conclusion,
         proof,

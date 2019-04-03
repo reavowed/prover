@@ -6,7 +6,6 @@ import net.prover.model._
 
 case class Axiom(
     name: String,
-    override val key: ChapterEntry.Key.Standalone,
     premises: Seq[Statement],
     conclusion: Statement,
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement)
@@ -26,7 +25,8 @@ case class Axiom(
 object Axiom extends Inference.EntryParser {
   override val name: String = "axiom"
 
-  def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[Axiom] = {
+  def parser(implicit entryContext: EntryContext): Parser[Axiom] = {
+    implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
     for {
       name <- Parser.toEndOfLine
       rearrangementType <- RearrangementType.parser
@@ -35,7 +35,6 @@ object Axiom extends Inference.EntryParser {
     } yield {
       Axiom(
         name,
-        ChapterEntry.Key.Standalone(name, getKey),
         premises,
         conclusion,
         rearrangementType)

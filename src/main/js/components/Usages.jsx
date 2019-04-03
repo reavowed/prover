@@ -11,10 +11,10 @@ const UsageList = styled.p`
 export class Usages extends React.Component {
   render() {
     const {usages} = this.props;
-    return usages.map(([usageBook, usageChapter, theorems]) =>
-      <div key={usageChapter.key.url}>
-        <h6>{usageBook.title} - {usageChapter.title}</h6>
-        <UsageList>{theorems.map(theorem => <Monospace.Text key={theorem.key.url}><Monospace.Link className="usageLink" href={theorem.key.url}>{theorem.name}</Monospace.Link></Monospace.Text>)}</UsageList>
+    return usages.map(([bookTitle, chapterTitle, theoremLinks]) =>
+      <div key={bookTitle + "-" + chapterTitle}>
+        <h6>{bookTitle} - {chapterTitle}</h6>
+        <UsageList>{theoremLinks.map(link => <Monospace.Text key={link.url}><Monospace.Link className="usageLink" href={link.url}>{link.title}</Monospace.Link></Monospace.Text>)}</UsageList>
       </div>
     );
 }

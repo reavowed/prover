@@ -1,21 +1,12 @@
 package net.prover.model
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.entries._
 
 case class Chapter(
     title: String,
-    key: Chapter.Key,
     summary: String,
     entries: Seq[ChapterEntry])
 {
-  def statementDefinitions = entries.ofType[StatementDefinition]
-  def termDefinitions = entries.ofType[TermDefinition]
-  def definitions = entries.ofType[ExpressionDefinition]
-  def inferences = entries.flatMap(_.inferences)
-  def theorems = entries.ofType[Theorem]
-  def displayShorthands = entries.ofType[DisplayShorthand]
-
   def serialized: String = {
     val entryTexts = entries.map(_.serializedLines.mkString("\n"))
     (summary +: entryTexts).mkString("\n\n") + "\n"
@@ -25,12 +16,6 @@ case class Chapter(
 }
 
 object Chapter {
-
-  case class Key(name: String, value: String, bookKey: Book.Key) {
-    @JsonSerialize
-    def url = s"${bookKey.url}/$value"
-  }
-
   val chapterEntryParsers: Seq[ChapterEntryParser] = Seq(
     Comment,
     StatementDefinition,
@@ -39,30 +24,20 @@ object Chapter {
     Theorem,
     DisplayShorthand)
 
-  def getNextKey(existingEntries: Seq[ChapterEntry], entryName: String): String = {
-    existingEntries.count(_.name == entryName) match {
-      case 0 =>
-        entryName.formatAsKey
-      case n =>
-        (entryName + " " + (n+1)).formatAsKey
-    }
-  }
-
-  def chapterEntryParser(getKey: String => (String, Chapter.Key))(context: ParsingContext): Parser[Option[ChapterEntry]] = {
+  def chapterEntryParser(context: EntryContext): Parser[Option[ChapterEntry]] = {
     Parser.singleWordIfAny.flatMapFlatMapReverse { entryType =>
-      chapterEntryParsers.find(_.name == entryType).map(_.parser(getKey)(context))
+      chapterEntryParsers.find(_.name == entryType).map(_.parser(context))
     }
   }
 
-  def parser(title: String, bookKey: Book.Key)(initialContext: ParsingContext): Parser[(Chapter, ParsingContext)] = {
-    val key = Key(title, title.formatAsKey, bookKey)
+  def parser(title: String)(initialContext: EntryContext): Parser[(Chapter, EntryContext)] = {
     for {
       summary <- Parser.toEndOfLine
-      entriesAndContext <- Parser.foldWhileDefined[ChapterEntry, ParsingContext](initialContext) { (entriesSoFar, currentContext) =>
-        chapterEntryParser(x => (getNextKey(entriesSoFar, x), key))(currentContext).mapMap { entry =>
-          (entry, currentContext.add(entry))
+      entriesAndContext <- Parser.foldWhileDefined[ChapterEntry, EntryContext](initialContext) { (_, currentContext) =>
+        chapterEntryParser(currentContext).mapMap { entry =>
+          (entry, currentContext.addEntry(entry))
         }
       }
-    } yield Chapter(title, key, summary, entriesAndContext._1) -> entriesAndContext._2
+    } yield Chapter(title, summary, entriesAndContext._1) -> entriesAndContext._2
   }
 }

@@ -9,9 +9,9 @@ import {Usages} from "./Usages";
 
 export class TermDefinition extends React.Component {
   render() {
-    const {definition: definitionJson, previous, next, usages} = this.props;
+    const {definition: definitionJson, url, bookLink, chapterLink, previous, next, usages} = this.props;
     const definition = Parser.parseTermDefinition(definitionJson);
-    return <Page breadcrumbs={<Breadcrumbs.Entry entryKey={definition.key}/>}>
+    return <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <h3>Term Definition:  <ExpressionComponent expression={definition.defaultValue} boundVariableLists={[]}/></h3>
       <ResultWithPremises premises={definition.premises}

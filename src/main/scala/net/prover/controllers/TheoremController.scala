@@ -51,7 +51,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("direction") direction: String
   ): ResponseEntity[_] = {
-    def moveInTheorem(theorem: Theorem, parsingContext: ParsingContext): Option[Try[Theorem]] = {
+    def moveInTheorem(theorem: Theorem): Option[Try[Theorem]] = {
       stepPath.indexes match {
         case Nil =>
           None
@@ -80,8 +80,8 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
           })
       }
     }
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, parsingContext) =>
-      moveInTheorem(theorem, parsingContext).orNotFound(s"Step $stepPath").flatten
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
+      moveInTheorem(theorem).orNotFound(s"Step $stepPath").flatten
     }.toResponseEntity
   }
 
@@ -93,7 +93,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    def moveInTheorem(theorem: Theorem, parsingContext: ParsingContext): Option[Try[Theorem]] = {
+    def moveInTheorem(theorem: Theorem): Option[Try[Theorem]] = {
       stepPath.indexes match {
         case Nil =>
           None
@@ -112,8 +112,8 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
           })
       }
     }
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, parsingContext) =>
-      moveInTheorem(theorem, parsingContext).orNotFound(s"Step $stepPath").flatten
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
+      moveInTheorem(theorem).orNotFound(s"Step $stepPath").flatten
     }.toResponseEntity
   }
 }

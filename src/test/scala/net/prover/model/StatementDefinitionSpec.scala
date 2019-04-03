@@ -1,11 +1,11 @@
 package net.prover.model
 
-import net.prover.model.entries.{ChapterEntry, StatementDefinition}
+import net.prover.model.entries.StatementDefinition
 
 class StatementDefinitionSpec extends ProverSpec {
   "statement definition parser" should {
     def parseStatementDefinition(text: String): StatementDefinition = {
-      StatementDefinition.parser(s => (s.formatAsKey, stubChapter.key)).parseAndDiscard(text)
+      StatementDefinition.parser.parseAndDiscard(text)
     }
 
     "parse definition" in {

@@ -7,15 +7,7 @@ import net.prover.model._
 class AxiomSpec extends ProverSpec {
 
   def parseAxiom(text: String*): Axiom = {
-    Axiom.parser(s => (s.formatAsKey, stubChapter.key)).parseAndDiscard(text.mkString("\n"))
-  }
-
-  def axiom(title: String, key: String, premises: Seq[Statement], conclusion: Statement): Axiom = {
-    Axiom(
-      title,
-      ChapterEntry.Key.Standalone(title, key, stubChapter.key),
-      premises,
-      conclusion)
+    Axiom.parser.parseAndDiscard(text.mkString("\n"))
   }
 
   "axiom parser" should {
@@ -23,9 +15,8 @@ class AxiomSpec extends ProverSpec {
       parseAxiom(
         "Equality Is Reflexive",
         "conclusion = a a"
-      ) mustEqual axiom(
+      ) mustEqual Axiom(
         "Equality Is Reflexive",
-        "equality-is-reflexive",
         Nil,
         Equals(a, a))
     }
@@ -35,9 +26,8 @@ class AxiomSpec extends ProverSpec {
         "Restate",
         "premise φ",
         "conclusion φ"
-      ) mustEqual axiom(
+      ) mustEqual Axiom(
         "Restate",
-        "restate",
         Seq(φ),
         φ)
     }
@@ -48,9 +38,8 @@ class AxiomSpec extends ProverSpec {
         "premise → φ ψ",
         "premise φ",
         "conclusion ψ"
-      ) mustEqual axiom(
+      ) mustEqual Axiom(
         "Eliminate Implication",
-        "eliminate-implication",
         Seq(Implication(φ, ψ), φ),
         ψ)
     }

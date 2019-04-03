@@ -8,9 +8,9 @@ import {Usages} from "./Usages";
 
 export class StatementDefinition extends React.Component {
   render() {
-    const {definition: definitionJson, previous, next, usages} = this.props;
+    const {definition: definitionJson, url, bookLink, chapterLink, previous, next, usages} = this.props;
     const definition = Parser.parseStatementDefinition(definitionJson);
-    return <Page breadcrumbs={<Breadcrumbs.Entry entryKey={definition.key}/>}>
+    return <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <h3>Statement Definition:  <ExpressionComponent expression={definition.defaultValue} boundVariableLists={[]}/></h3>
       {definition.definingStatement && <><ExpressionComponent expression={definition.defaultValue} boundVariableLists={[]}/> is defined by <ExpressionComponent expression={definition.definingStatement} boundVariableLists={[]}/>.</>}

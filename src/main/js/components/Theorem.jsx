@@ -31,7 +31,7 @@ export class Theorem extends React.Component {
   };
 
   fetchJsonForStep = (stepPath, childPath, options) => {
-    const combinedPath = path.join(this.state.theorem.key.url, stepPath.join("."), childPath) + (childPath === "" ? "/" : "");
+    const combinedPath = path.join(this.props.url, stepPath.join("."), childPath) + (childPath === "" ? "/" : "");
     return window.fetch(combinedPath, options)
       .then(response => {
         if (response.ok) {

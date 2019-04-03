@@ -30,7 +30,7 @@ object Premise {
     override def isIncomplete: Boolean = true
   }
   object Pending {
-    def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Pending] = {
+    def parser(targetStatement: Statement)(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Pending] = {
       Statement.parser.map(Pending(_))
     }
   }
@@ -47,7 +47,7 @@ object Premise {
   }
 
   object Given {
-    def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Given] = {
+    def parser(targetStatement: Statement)(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Given] = {
       val provenStatement = stepContext.findProvenStatement(targetStatement).getOrElse(throw new Exception(s"Statement $targetStatement was not given"))
       Parser.constant(Given(provenStatement.statement, provenStatement.reference))
     }
@@ -65,12 +65,12 @@ object Premise {
     override def isIncomplete: Boolean = premise.isIncomplete
   }
   object Simplification {
-    def parser(targetStatement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Simplification] = {
+    def parser(targetStatement: Statement)(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Simplification] = {
       for {
         statement <- Statement.parser
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
-        premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions, parsingContext.parameterDepth)
+        premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions, stepContext)
         premiseStatement = premiseStatements.single.getOrElse(throw new Exception("Simplification inference must have a single premise"))
         premise <- Premise.parser(premiseStatement)
       } yield {
@@ -84,7 +84,7 @@ object Premise {
     }
   }
 
-  def parser(statement: Statement)(implicit parsingContext: ParsingContext, stepContext: StepContext): Parser[Premise] = {
+  def parser(statement: Statement)(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Premise] = {
     Parser.selectWordParser("premise") {
       case "pending" =>
         Pending.parser(statement)

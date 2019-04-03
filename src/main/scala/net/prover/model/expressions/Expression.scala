@@ -1,7 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model.entries.ExpressionDefinition
-import net.prover.model.{Parser, ParsingContext, Substitutions}
+import net.prover.model.{Parser, ExpressionParsingContext, Substitutions}
 
 trait Expression extends TypedExpression[Expression]
 
@@ -94,7 +94,7 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
 }
 
 object Expression {
-  def parser(implicit parsingContext: ParsingContext): Parser[Expression] = {
+  def parser(implicit parsingContext: ExpressionParsingContext): Parser[Expression] = {
     Statement.parser.tryOrElse(Term.parser)
   }
 

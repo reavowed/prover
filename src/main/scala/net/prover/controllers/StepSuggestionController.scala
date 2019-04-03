@@ -1,8 +1,9 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.PathData
+import net.prover.model.entries.Theorem
 import net.prover.model.expressions.Statement
-import net.prover.model.{Inference, ParsingContext, Substitutions}
+import net.prover.model.{EntryContext, Inference, Substitutions}
 import net.prover.model.proof.{ProofHelper, Step, StepContext}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -24,11 +25,15 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
+    val books = bookService.books
     (for {
-      (book, chapter, theorem, step, stepContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath)
+      book <- findBook(books, bookKey)
+      chapter <- findChapter(book, chapterKey)
+      theorem <- findEntry[Theorem](chapter, theoremKey)
+      entryContext = EntryContext.forEntry(books, book, chapter, theorem)
+      (step, stepContext) <- findStep[Step.Target](theorem, stepPath)
     } yield {
-      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
-      parsingContext.inferences
+      entryContext.inferences
         .filter(_.name.toLowerCase.contains(searchText.toLowerCase))
         .reverse
         .mapCollect { inference =>
@@ -50,12 +55,16 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("inferenceId") inferenceId: String
   ): ResponseEntity[_] = {
+    val books = bookService.books
     (for {
-      (book, chapter, theorem, step, stepContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath)
-      parsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
-      inference <- findInference(inferenceId)(parsingContext)
+      book <- findBook(books, bookKey)
+      chapter <- findChapter(book, chapterKey)
+      theorem <- findEntry[Theorem](chapter, theoremKey)
+      entryContext = EntryContext.forEntry(books, book, chapter, theorem)
+      (step, stepContext) <- findStep[Step.Target](theorem, stepPath)
+      inference <- findInference(inferenceId)(entryContext)
     } yield {
-      getPremiseMatches(inference.premises, inference.conclusion, step, stepContext, parsingContext)
+      getPremiseMatches(inference.premises, inference.conclusion, step, stepContext, entryContext)
     }).toResponseEntity
   }
 
@@ -67,11 +76,15 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
+    val books = bookService.books
     (for {
-      (book, chapter, theorem, step, stepContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath)
+      book <- findBook(books, bookKey)
+      chapter <- findChapter(book, chapterKey)
+      theorem <- findEntry[Theorem](chapter, theoremKey)
+      entryContext = EntryContext.forEntry(books, book, chapter, theorem)
+      (step, stepContext) <- findStep[Step.Target](theorem, stepPath)
     } yield {
-      implicit val parsingContext: ParsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
-      ProofHelper.findNamingInferences(parsingContext)
+      ProofHelper.findNamingInferences(entryContext)
         .filter(_._1.name.toLowerCase.contains(searchText.toLowerCase))
         .reverse
         .mapCollect { case (inference, namingPremises, _) =>
@@ -93,20 +106,24 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("inferenceId") inferenceId: String
   ): ResponseEntity[_] = {
+    val books = bookService.books
     (for {
-      (book, chapter, theorem, step, stepContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath)
-      parsingContext = getStepParsingContext(book, chapter, theorem, stepContext)
-      inference <- findInference(inferenceId)(parsingContext)
-      (namingPremises, _) <- ProofHelper.getNamingPremisesAndAssumption(inference, parsingContext).orBadRequest(s"Inference $inferenceId was not naming inference")
+      book <- findBook(books, bookKey)
+      chapter <- findChapter(book, chapterKey)
+      theorem <- findEntry[Theorem](chapter, theoremKey)
+      entryContext = EntryContext.forEntry(books, book, chapter, theorem)
+      (step, stepContext) <- findStep[Step.Target](theorem, stepPath)
+      inference <- findInference(inferenceId)(entryContext)
+      (namingPremises, _) <- ProofHelper.getNamingPremisesAndAssumption(inference, entryContext).orBadRequest(s"Inference $inferenceId was not naming inference")
     } yield {
-      getPremiseMatches(namingPremises, inference.conclusion, step, stepContext, parsingContext)
+      getPremiseMatches(namingPremises, inference.conclusion, step, stepContext, entryContext)
     }).toResponseEntity
   }
 
   case class PossiblePremiseMatch(statement: Statement, substitutions: Seq[Substitutions])
-  private def getPremiseMatches(premises: Seq[Statement], conclusion: Statement, step: Step.Target, stepContext: StepContext, parsingContext: ParsingContext): Seq[Seq[PossiblePremiseMatch]] = {
+  private def getPremiseMatches(premises: Seq[Statement], conclusion: Statement, step: Step.Target, stepContext: StepContext, entryContext: EntryContext): Seq[Seq[PossiblePremiseMatch]] = {
     val possibleConclusionSubstitutions = conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
-    val availablePremises = ProofHelper.getAvailablePremises(stepContext, parsingContext).map(_.statement).distinct
+    val availablePremises = ProofHelper.getAvailablePremises(stepContext, entryContext).map(_.statement).distinct
     premises.map { premise =>
       availablePremises.mapCollect { availablePremise =>
         val substitutions = for {

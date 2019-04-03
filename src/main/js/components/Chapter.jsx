@@ -29,16 +29,16 @@ const ResultTitle = styled.a`
   }
 `;
 
-const Result = ({title, entryKey, buttons, deleteButton, children, updateChapter}) => {
+const Result = ({title, url, buttons, deleteButton, children, updateChapter}) => {
   const deleteEntry = () => {
-    updateChapter(entryKey.value, {method: "DELETE"})
+    updateChapter(url, {method: "DELETE"})
   };
   const moveEntry = (direction) => {
-    updateChapter(entryKey.value + "/move?direction=" + direction, {method: "POST"})
+    updateChapter(url + "/move?direction=" + direction, {method: "POST"})
   };
   return <ResultWrapper>
     <FlexRow>
-      <FlexRow.Grow><ResultTitle href={entryKey.url}>{title}</ResultTitle></FlexRow.Grow>
+      <FlexRow.Grow><ResultTitle href={url}>{title}</ResultTitle></FlexRow.Grow>
       {buttons}
       {deleteButton && <Button size="sm" variant="danger" className="ml-1" onClick={deleteEntry}><span className="fas fa-ban"/></Button>}
       <Button size="sm" className="ml-1" onClick={() => moveEntry("up")}><span className="fas fa-arrow-up"/></Button>
@@ -50,7 +50,7 @@ const Result = ({title, entryKey, buttons, deleteButton, children, updateChapter
 
 const InferenceResult = ({title, entry, updateChapter}) => {
   return <Result title={<>{title}: {entry.name}</>}
-                 entryKey={entry.key}
+                 url={entry.url}
                  updateChapter={updateChapter}
                  deleteButton>
     <InferenceSummary inference={entry}/>
@@ -76,7 +76,7 @@ class DefinitionResult extends React.Component {
   };
   saveShorthand = () => {
     this.props
-      .updateChapter(this.props.entry.key.value + "/shorthand", {
+      .updateChapter(this.props.entry.url + "/shorthand", {
         method: "PUT",
         body: this.state.shorthand
       })
@@ -87,7 +87,7 @@ class DefinitionResult extends React.Component {
 
     return <>
       <Result title={<>{title}: <ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/></>}
-              entryKey={entry.key}
+              url={entry.url}
               updateChapter={updateChapter}
               buttons={<Button size="sm" variant="primary" className="ml-1" onClick={this.startEditingShorthand}>Shorthand</Button>}
       >
@@ -129,7 +129,7 @@ export class Chapter extends React.Component {
   }
 
   updateChapter = (fetchUrl, fetchData) => {
-    return window.fetch(path.join(this.props.chapterKey.url, fetchUrl), fetchData)
+    return window.fetch(fetchUrl, fetchData)
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -144,22 +144,22 @@ export class Chapter extends React.Component {
   renderEntry = (entry) => {
     switch (entry.type) {
       case "axiom":
-        return <InferenceResult key={entry.key.value} title="Axiom" entry={entry} updateChapter={this.updateChapter}/>;
+        return <InferenceResult key={entry.url} title="Axiom" entry={entry} updateChapter={this.updateChapter}/>;
       case "theorem":
-        return <InferenceResult key={entry.key.value} title="Theorem" entry={entry} updateChapter={this.updateChapter}/>;
+        return <InferenceResult key={entry.url} title="Theorem" entry={entry} updateChapter={this.updateChapter}/>;
       case "statementDefinition":
-        return <DefinitionResult key={entry.key.value} title="Statement Definition" entry={entry} updateChapter={this.updateChapter}>
+        return <DefinitionResult key={entry.url} title="Statement Definition" entry={entry} updateChapter={this.updateChapter}>
           {entry.definingStatement && <><ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.</>}
         </DefinitionResult>;
       case "termDefinition":
-        return <DefinitionResult key={entry.key.value} title="Term Definition" entry={entry} updateChapter={this.updateChapter}>
+        return <DefinitionResult key={entry.url} title="Term Definition" entry={entry} updateChapter={this.updateChapter}>
           <ResultWithPremises premises={entry.premises}
                               result={<><ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/></>}/>
         </DefinitionResult>;
       case "comment":
-        return <p key={entry.key.value}>{entry.text}</p>
+        return <p key={entry.key}>{entry.text}</p>
       default:
-        return <React.Fragment key={entry.key.value}/>
+        return <React.Fragment key={entry.key}/>
     }
   };
   startAddingTheorem = () => {
@@ -202,9 +202,9 @@ export class Chapter extends React.Component {
   };
 
   render() {
-    const {title, chapterKey, summary, previous, next} = this.props;
+    const {title, url, bookLink, summary, previous, next} = this.props;
     const {entries} = this.state;
-    return <Page breadcrumbs={<Breadcrumbs.Chapter chapterKey={chapterKey}/>}>
+    return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <h3>{title}</h3>
       <p>{summary}</p>

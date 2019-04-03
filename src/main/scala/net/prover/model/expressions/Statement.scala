@@ -1,11 +1,11 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Parser, ParsingContext}
+import net.prover.model.{Parser, ExpressionParsingContext}
 
 trait Statement extends Expression with TypedExpression[Statement]
 
 object Statement {
-  def parser(implicit context: ParsingContext): Parser[Statement] = {
+  def parser(implicit context: ExpressionParsingContext): Parser[Statement] = {
     Parser.selectWordParser("statement") {
       case "with" =>
         for {
@@ -19,16 +19,16 @@ object Statement {
     }
   }
 
-  def listParser(implicit context: ParsingContext): Parser[Seq[Statement]] = parser.listInParens(Some(","))
+  def listParser(implicit context: ExpressionParsingContext): Parser[Seq[Statement]] = parser.listInParens(Some(","))
 
-  def variableParser(implicit context: ParsingContext): Parser[StatementVariable] = parser.map {
+  def variableParser(implicit context: ExpressionParsingContext): Parser[StatementVariable] = parser.map {
     case variable: StatementVariable =>
       variable
     case nonVariable =>
       throw new Exception(s"Expected statement variable, got $nonVariable")
   }
 
-  def templateParser(implicit context: ParsingContext): Parser[Template] = {
+  def templateParser(implicit context: ExpressionParsingContext): Parser[Template] = {
     Parser.selectWordParser("statement template") {
       case context.RecognisedStatementVariable(name) =>
         Parser.constant(Template.StatementVariable(name))

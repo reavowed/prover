@@ -7,7 +7,6 @@ import net.prover.model.expressions._
 
 case class StatementDefinition(
     symbol: String,
-    key: ChapterEntry.Key.Standalone,
     boundVariableNames: Seq[String],
     componentTypes: Seq[ComponentType],
     explicitName: Option[String],
@@ -25,13 +24,13 @@ case class StatementDefinition(
     DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)
   }
 
-  def statementParser(implicit context: ParsingContext): Parser[Statement] = {
+  def statementParser(implicit context: ExpressionParsingContext): Parser[Statement] = {
     componentExpressionParser.map { case (newBoundVariableNames, components) =>
       DefinedStatement(components, this)(newBoundVariableNames)
     }
   }
 
-  def templateParser(implicit context: ParsingContext): Parser[Template] = {
+  def templateParser(implicit context: ExpressionParsingContext): Parser[Template] = {
     componentTemplateParser.map { case (newBoundVariableNames, components) =>
       Template.DefinedStatement(this, newBoundVariableNames, components)
     }
@@ -42,8 +41,8 @@ case class StatementDefinition(
   override def inferences: Seq[Inference] = {
     definingStatement.toSeq.flatMap { s =>
       Seq(
-        Inference.Definition(name, key, Seq(s), defaultValue),
-        Inference.Definition(name, key, Seq(defaultValue), s))
+        Inference.Definition(name, Seq(s), defaultValue),
+        Inference.Definition(name, Seq(defaultValue), s))
     }
   }
 
@@ -74,15 +73,16 @@ object StatementDefinition extends ChapterEntryParser {
     }
   }
 
-  def nameParser(implicit context: ParsingContext): Parser[Option[String]] = Parser.optional(
+  def nameParser: Parser[Option[String]] = Parser.optional(
     "name",
     Parser.allInParens)
 
-  private def definingStatementParser(implicit context: ParsingContext): Parser[Option[Statement]] = Parser.optional(
+  private def definingStatementParser(implicit context: ExpressionParsingContext): Parser[Option[Statement]] = Parser.optional(
     "definition",
     Statement.parser.inParens)
 
-  def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[StatementDefinition] = {
+  def parser(implicit entryContext: EntryContext): Parser[StatementDefinition] = {
+    implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
     for {
       symbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
@@ -96,7 +96,6 @@ object StatementDefinition extends ChapterEntryParser {
     } yield {
       StatementDefinition(
         symbol,
-        ChapterEntry.Key.Standalone.apply(symbol, getKey),
         boundVariables,
         componentTypes,
         name,

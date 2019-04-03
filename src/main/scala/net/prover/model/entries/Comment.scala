@@ -1,8 +1,8 @@
 package net.prover.model.entries
 
-import net.prover.model.{Chapter, Parser, ParsingContext}
+import net.prover.model.{EntryContext, Parser}
 
-case class Comment(text: String, key: ChapterEntry.Key.Anchor) extends ChapterEntry {
+case class Comment(text: String) extends ChapterEntry {
   override def name: String = Comment.name
   override def serializedLines: Seq[String] = Seq(s"comment $text")
 
@@ -12,9 +12,9 @@ case class Comment(text: String, key: ChapterEntry.Key.Anchor) extends ChapterEn
 
 object Comment extends ChapterEntryParser {
   override val name: String = "comment"
-  override def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[Comment] = {
+  override def parser(implicit context: EntryContext): Parser[Comment] = {
     for {
       text <- Parser.toEndOfLine
-    } yield Comment(text, ChapterEntry.Key.Anchor(name, getKey))
+    } yield Comment(text)
   }
 }

@@ -20,9 +20,9 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody inferenceId: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, stepPath) { (step, _, parsingContext) =>
+    modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, stepPath) { (step, _, entryContext) =>
       for {
-        inference <- findInference(inferenceId)(parsingContext)
+        inference <- findInference(inferenceId)(entryContext)
       } yield step.copy(highlightedInference = Some(inference))
     }.toResponseEntity
   }

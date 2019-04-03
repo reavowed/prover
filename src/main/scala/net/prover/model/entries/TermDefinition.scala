@@ -6,7 +6,6 @@ import net.prover.model._
 
 case class TermDefinition(
     symbol: String,
-    key: ChapterEntry.Key.Standalone,
     boundVariableNames: Seq[String],
     componentTypes: Seq[ComponentType],
     explicitName: Option[String],
@@ -25,13 +24,13 @@ case class TermDefinition(
   }
   val definingStatement: Statement = definitionPredicate.specify(Seq(defaultValue), 0, 0)
 
-  def termParser(implicit context: ParsingContext): Parser[Term] = {
+  def termParser(implicit context: ExpressionParsingContext): Parser[Term] = {
     componentExpressionParser.map { case (newBoundVariableNames, components) =>
       DefinedTerm(components, this)(newBoundVariableNames)
     }
   }
 
-  def templateParser(implicit context: ParsingContext): Parser[Template] = {
+  def templateParser(implicit context: ExpressionParsingContext): Parser[Template] = {
     componentTemplateParser.map { case (newBoundVariableNames, components) =>
       Template.DefinedTerm(this, newBoundVariableNames, components)
     }
@@ -39,7 +38,7 @@ case class TermDefinition(
 
   override def withShorthand(newShorthand: Option[String]): TermDefinition = copy(shorthand = newShorthand)
 
-  override def inferences: Seq[Inference] = Seq(Inference.Definition(name, key, premises, definingStatement))
+  override def inferences: Seq[Inference] = Seq(Inference.Definition(name, premises, definingStatement))
 
   override def serializedLines: Seq[String] = Seq(s"term $symbol $serializedComponents") ++
     (explicitName.map(n => s"name ($n)").toSeq ++
@@ -52,16 +51,17 @@ case class TermDefinition(
 object TermDefinition extends ChapterEntryParser {
   override val name: String = "term"
 
-  def premisesParser(implicit context: ParsingContext): Parser[Seq[Statement]] = Parser.optional(
+  def premisesParser(implicit context: ExpressionParsingContext): Parser[Seq[Statement]] = Parser.optional(
     "premises",
     Statement.listParser,
     Nil)
 
-  def nameParser(implicit context: ParsingContext): Parser[Option[String]] = Parser.optional(
+  def nameParser: Parser[Option[String]] = Parser.optional(
     "name",
     Parser.allInParens)
 
-  def parser(getKey: String => (String, Chapter.Key))(implicit context: ParsingContext): Parser[TermDefinition] = {
+  def parser(implicit entryContext: EntryContext): Parser[TermDefinition] = {
+    implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
     for {
       symbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
@@ -70,12 +70,11 @@ object TermDefinition extends ChapterEntryParser {
       name <- nameParser
       format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
       premises <- premisesParser
-      definitionPredicate <- Statement.parser(context.addParameters("_")).inParens
+      definitionPredicate <- Statement.parser(expressionParsingContext.addParameters("_")).inParens
       shorthand <- ExpressionDefinition.shorthandParser
     } yield {
       TermDefinition(
         symbol,
-        ChapterEntry.Key.Standalone.apply(symbol, getKey),
         boundVariables,
         componentTypes,
         name,

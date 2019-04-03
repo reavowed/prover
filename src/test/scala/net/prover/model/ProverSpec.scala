@@ -18,8 +18,8 @@ trait ProverSpec extends Specification {
   val c = TermVariable("c")
   val n = TermVariable("n")
 
-  val stubBook = Book("", Book.Key("", ""), Nil, Nil, Nil)
-  val stubChapter = Chapter("", Chapter.Key("", "", stubBook.key), "", Nil)
+  val stubBook = Book("", Nil, Nil, Nil)
+  val stubChapter = Chapter("", "", Nil)
 
   def connective(
     symbol: String,
@@ -29,7 +29,6 @@ trait ProverSpec extends Specification {
     val componentTypes = Seq[ComponentType](φ, ψ, χ).take(size)
     StatementDefinition(
       symbol,
-      ChapterEntry.Key.Standalone(symbol, symbol, stubChapter.key),
       Nil,
       componentTypes,
       None,
@@ -46,7 +45,6 @@ trait ProverSpec extends Specification {
     val componentTypes = Seq[ComponentType](a, b, c).take(size)
     StatementDefinition(
       symbol,
-      ChapterEntry.Key.Standalone(symbol, symbol, stubChapter.key),
       Nil,
       componentTypes,
       None,
@@ -62,7 +60,6 @@ trait ProverSpec extends Specification {
   ): StatementDefinition = {
     StatementDefinition(
       symbol,
-      ChapterEntry.Key.Standalone(symbol, symbol, stubChapter.key),
       Seq("x"),
       Seq(ExpressionDefinition.PredicateComponent("φ", Seq(ExpressionDefinition.ComponentArgument("x", 0)))),
       None,
@@ -91,7 +88,6 @@ trait ProverSpec extends Specification {
 
   val EmptySetDefinition = TermDefinition(
     "∅",
-    ChapterEntry.Key.Standalone("∅", "∅", stubChapter.key),
     Nil,
     Nil,
     None,
@@ -103,7 +99,6 @@ trait ProverSpec extends Specification {
 
   val PowerSet = TermDefinition(
     "powerSet",
-    ChapterEntry.Key.Standalone("powerSet", "powerSet", stubChapter.key),
     Nil,
     Seq(a),
     Some("Power Set"),
@@ -116,7 +111,6 @@ trait ProverSpec extends Specification {
 
   val Singleton = TermDefinition(
     "singleton",
-    ChapterEntry.Key.Standalone("singleton", "singleton", stubChapter.key),
     Nil,
     Seq(a),
     Some("Singleton"),
@@ -127,7 +121,6 @@ trait ProverSpec extends Specification {
 
   val Pair = TermDefinition(
     "pair",
-    ChapterEntry.Key.Standalone("pair", "pair", stubChapter.key),
     Nil,
     Seq(a, b),
     Some("Unordered Pair"),
@@ -136,15 +129,14 @@ trait ProverSpec extends Specification {
     φ,
     None)
 
-  implicit val defaultContext = ParsingContext(
-    inferences = Nil,
-    statementDefinitions = Seq(
+  implicit val entryContext: EntryContext = EntryContext(
+    Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
       ForAll, Exists, ExistsUnique,
-      ElementOf, Equals, Subset),
-    termDefinitions = Seq(EmptySetDefinition, PowerSet, Singleton, Pair),
-    termVariableNames = Set.empty,
-    Seq.empty)
+      ElementOf, Equals, Subset) ++
+      Seq(EmptySetDefinition, PowerSet, Singleton, Pair),
+    Nil)
+  implicit val parsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
 
   implicit class ParserOps[T](parser: Parser[T]) {
     def parseAndDiscard(text: String): T = {

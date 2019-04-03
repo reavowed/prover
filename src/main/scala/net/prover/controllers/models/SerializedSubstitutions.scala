@@ -12,13 +12,13 @@ case class SerializedSubstitutions(
   predicates: Map[String, Map[String, String]],
   functions: Map[String, Map[String, String]]
 ) {
-  def parse(inference: Inference)(implicit parsingContext: ParsingContext): Try[Substitutions] = {
+  def parse(inference: Inference)(implicit parsingContext: ExpressionParsingContext): Try[Substitutions] = {
     def lookup[T](
       required: Seq[String],
       source: Map[String, String],
-      parser: ParsingContext => Parser[T],
+      parser: ExpressionParsingContext => Parser[T],
       description: String)(
-      implicit parsingContext: ParsingContext
+      implicit parsingContext: ExpressionParsingContext
     ): Try[Map[String, T]] = {
       required.mapTryToMap { name =>
         for {
@@ -30,9 +30,9 @@ case class SerializedSubstitutions(
     def lookupWithPlaceholders[T](
       required: Seq[(String, Int)],
       source: Map[String, Map[String, String]],
-      parser: ParsingContext => Parser[T],
+      parser: ExpressionParsingContext => Parser[T],
       description: String)(
-      implicit parsingContext: ParsingContext
+      implicit parsingContext: ExpressionParsingContext
     ): Try[Map[(String, Int), T]] = {
       required.mapTryToMap { case (name, numberOfParameters) =>
         for {

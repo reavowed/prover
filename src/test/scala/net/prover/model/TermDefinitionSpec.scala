@@ -6,7 +6,7 @@ import net.prover.model.expressions.{DefinedTerm, FunctionParameter}
 class TermDefinitionSpec extends ProverSpec {
 
   private def parse(text: String): TermDefinition = {
-    TermDefinition.parser(s => (s.formatAsKey, stubChapter.key)).parseAndDiscard(text)
+    TermDefinition.parser.parseAndDiscard(text)
   }
 
   "term definition parser" should {
@@ -15,7 +15,6 @@ class TermDefinitionSpec extends ProverSpec {
       definition mustEqual
         TermDefinition(
           "∅",
-          ChapterEntry.Key.Standalone("∅", "∅", stubChapter.key),
           Nil,
           Nil,
           None,
@@ -32,7 +31,6 @@ class TermDefinitionSpec extends ProverSpec {
         "intersection (a) format (⋂a) premises (¬ = a ∅) (∀ x ↔ ∈ x _ ∀ y → ∈ y a ∈ x y)"
       ) mustEqual TermDefinition(
         "intersection",
-        ChapterEntry.Key.Standalone("intersection", "intersection", stubChapter.key),
         Nil,
         Seq(a),
         None,

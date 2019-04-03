@@ -79,7 +79,7 @@ object Template {
     case class Component(expression: Expression, boundVariableNames: Seq[Seq[String]], internalPath: Seq[Int]) extends Match
   }
 
-  def parser(implicit context: ParsingContext): Parser[Template] = {
+  def parser(implicit context: ExpressionParsingContext): Parser[Template] = {
     Statement.templateParser.tryOrElse(Term.templateParser)
   }
 }

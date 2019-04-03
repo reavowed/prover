@@ -1,6 +1,6 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Parser, ParsingContext, Substitutions}
+import net.prover.model.{ExpressionParsingContext, Parser, Substitutions}
 
 trait Term extends Expression with TypedExpression[Term] {
   def calculateApplicatives(
@@ -33,7 +33,7 @@ object Term {
     }
   }
 
-  def parser(implicit context: ParsingContext): Parser[Term] = {
+  def parser(implicit context: ExpressionParsingContext): Parser[Term] = {
     Parser.selectWordParser("term") {
       case "with" =>
         for {
@@ -49,17 +49,17 @@ object Term {
     }
   }
 
-  def listParser(implicit context: ParsingContext): Parser[Seq[Term]] = {
+  def listParser(implicit context: ExpressionParsingContext): Parser[Seq[Term]] = {
     parser.listInParens(Some(","))
   }
 
-  def variableParser(implicit context: ParsingContext): Parser[TermVariable] = parser.map(asVariable)
+  def variableParser(implicit context: ExpressionParsingContext): Parser[TermVariable] = parser.map(asVariable)
 
-  def variableListParser(implicit context: ParsingContext): Parser[Seq[TermVariable]] = {
+  def variableListParser(implicit context: ExpressionParsingContext): Parser[Seq[TermVariable]] = {
     variableParser.listInParens(None)
   }
 
-  def templateParser(implicit context: ParsingContext): Parser[Template] = {
+  def templateParser(implicit context: ExpressionParsingContext): Parser[Template] = {
     Parser.selectWordParser("term template") {
       case context.RecognisedTermVariable(name) =>
         Parser.constant(Template.TermVariable(name))

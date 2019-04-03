@@ -5,11 +5,11 @@ import net.prover.model.expressions._
 class StatementSpec extends ProverSpec {
 
   def parseStatement(line: String): Statement = {
-    Statement.parser(defaultContext).parseAndDiscard(line)
+    Statement.parser.parseAndDiscard(line)
   }
 
   def parseStatementList(line: String): Seq[Statement] = {
-    Statement.listParser(defaultContext).parseAndDiscard(line)
+    Statement.listParser.parseAndDiscard(line)
   }
 
   "statement parser" should {

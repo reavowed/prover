@@ -4,7 +4,7 @@ import net.prover.model.expressions._
 
 class TermSpec extends ProverSpec {
 
-  def parseTerm(line: String)(implicit parsingContext: ParsingContext): Term = {
+  def parseTerm(line: String)(implicit parsingContext: ExpressionParsingContext): Term = {
     Term.parser(parsingContext).parseAndDiscard(line)
   }
 
@@ -25,7 +25,7 @@ class TermSpec extends ProverSpec {
       parseTerm("∘") must throwAn[Exception]
     }
     "parse a named term variable" in {
-      parseTerm("∘")(defaultContext.copy(termVariableNames = Set("∘"))) mustEqual TermVariable("∘")
+      parseTerm("∘")(ExpressionParsingContext.outsideProof(entryContext.copy(termVariableNames = Seq("∘")))) mustEqual TermVariable("∘")
     }
   }
 }

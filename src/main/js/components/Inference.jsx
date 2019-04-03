@@ -8,8 +8,8 @@ import {Usages} from "./Usages";
 
 export class Inference extends React.Component {
   render() {
-    const {inference, title, previous, next, usages, children, createPremiseElement} = this.props;
-    return <Page breadcrumbs={<Breadcrumbs.Entry entryKey={inference.key}/>}>
+    const {inference, title, url, bookLink, chapterLink, previous, next, usages, children, createPremiseElement} = this.props;
+    return <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next}/>
       <h3 className="text-center mb-0">{title}: {inference.name}</h3>
       <Monospace className="text-center">{inference.id}</Monospace>

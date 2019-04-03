@@ -11,21 +11,13 @@ const BreadcrumbWrapper = styled.div`
   }
 `;
 
-function createBreadcrumbs(...keys) {
-  return <BreadcrumbWrapper>
+export const Breadcrumbs = ({links}) =>
+  <BreadcrumbWrapper>
     <Container>
       <Breadcrumb>
         <Breadcrumb.Item href="/books">Books</Breadcrumb.Item>
-        {keys.slice(0, keys.length - 1).map(key => <Breadcrumb.Item key={key.url}
-                                                                    href={key.url}>{key.name}</Breadcrumb.Item>)}
-        <Breadcrumb.Item active>{keys[keys.length - 1].name}</Breadcrumb.Item>
+        {links.slice(0, links.length - 1).map(({title, url}) => <Breadcrumb.Item key={url} href={url}>{title}</Breadcrumb.Item>)}
+        <Breadcrumb.Item active>{links[links.length - 1].title}</Breadcrumb.Item>
       </Breadcrumb>
     </Container>
-  </BreadcrumbWrapper>
-}
-
-const Book = ({bookKey}) => createBreadcrumbs(bookKey);
-const Chapter = ({chapterKey}) => createBreadcrumbs(chapterKey.bookKey, chapterKey);
-const Entry = ({entryKey}) => createBreadcrumbs(entryKey.chapterKey.bookKey, entryKey.chapterKey, entryKey);
-
-export const Breadcrumbs = {Book, Chapter, Entry};
+  </BreadcrumbWrapper>;
