@@ -194,7 +194,7 @@ export class Chapter extends React.Component {
     const {theoremBeingAdded} = this.state;
     const theoremToAdd = _.cloneDeep(theoremBeingAdded);
     theoremToAdd.premises = _.filter(theoremToAdd.premises.split(/\r?\n/), s => s.length);
-    this.updateChapter("theorems", {
+    this.updateChapter(path.join(this.props.url, "theorems"), {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(theoremToAdd)
