@@ -10,13 +10,9 @@ premise ∈ a A
 conclusion ∈ a B
 {
   prove ∀ x → ∈ $0 A ∈ $0 B f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (A, B) () ()
-    given
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
     prove → ∈ a A ∈ a B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (→ ∈ $0 A ∈ $0 B) ()
-      given
     prove ∈ a B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∈ a B) () () ()
-      given
-      given
   }
 }
 
@@ -26,22 +22,15 @@ premise ⊆ B A
 conclusion = A B
 {
   prove ∀ x → ∈ $0 A ∈ $0 B f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (A, B) () ()
-    given
   prove ∀ x → ∈ $0 B ∈ $0 A f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (B, A) () ()
-    given
   elided 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 {
     take x {
       prove → ∈ $0 A ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 A ∈ $$0 B) ()
-        given
       prove → ∈ $0 B ∈ $0 A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 B ∈ $$0 A) ()
-        given
       prove ↔ ∈ $0 A ∈ $0 B 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 A, ∈ $0 B) () () ()
-        given
-        given
     }
   }
   prove = A B 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (A, B) () ()
-    given
 }
 
 theorem Subset Is Transitive
@@ -52,15 +41,10 @@ conclusion ⊆ A C
   take x {
     assume ∈ $0 A {
       prove ∈ $0 B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (A, B, $0) () ()
-        given
-        given
       prove ∈ $0 C ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (B, C, $0) () ()
-        given
-        given
     }
   }
   prove ⊆ A C 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (A, C) () ()
-    given
 }
 
 theorem Any Set Is a Subset of Itself
@@ -72,5 +56,4 @@ conclusion ⊆ A A
     }
   }
   prove ⊆ A A 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (A, A) () ()
-    given
 }

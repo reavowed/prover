@@ -5,9 +5,7 @@ conclusion ∃ x ∃ y ∈ $0 $$0
 {
   prove ∈ ∅ powerSet ∅ 73e9742459642589048ead035078a534a2a395b858e45eeca2a982b48588d58d () (∅) () ()
   prove ∃ y ∈ $0 powerSet ∅ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (∅) (∈ $0 powerSet ∅) ()
-    given
   prove ∃ x ∃ y ∈ $0 $$0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (powerSet ∅) (∃ y ∈ $0 $$0) ()
-    given
 }
 
 theorem Singleton Existence
@@ -19,22 +17,16 @@ conclusion ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a
     elided 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f {
       take y {
         prove → ∈ $0 $$0 ∃! x = $0 a 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∃! x = $0 a, ∈ $0 $$0) () () ()
-          given
       }
     }
     prove ∃ z ∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $0 $$$$0 = $$0 a 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () ($0) (= $$1 a) ()
-      given
     elided f3b93ffee9d1e4d18f4185d1961d7b248a588d2c491f7a35890fdbb6a207eff3 {
       take x {
         prove ↔ ∃ y ∧ ∈ $0 $$$0 = $$0 a = $0 a f3b93ffee9d1e4d18f4185d1961d7b248a588d2c491f7a35890fdbb6a207eff3 (= $0 a) () (∈ $$$0 $$0) ()
-          given
       }
     }
     prove ∃ z ∀ x ↔ ∈ $0 $$0 = $0 a a6e712b38909dac88b7b619de972b17b819142bff65d3f1b507a5e6c070d9fb5 () () (∃ y ∧ ∈ $0 $$0 = $$$0 a, = $$0 a) ()
-      given
-      given
     prove ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (= $$0 a) ()
-      given
   }
 }
 
@@ -48,7 +40,6 @@ conclusion ∈ a singleton a
 {
   prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () ()
   prove ∈ a singleton a b89e77bd31fd5214622c9e98732d2adc733bb4d42c134ca34a05047e7698f5a7 () (a) (∈ $0 singleton a) ()
-    given
 }
 
 theorem Element of Singleton
@@ -58,12 +49,8 @@ conclusion = b a
   prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () ()
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
     prove ↔ ∈ b singleton a = b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 singleton a = $0 a) ()
-      given
     prove → ∈ b singleton a = b a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b singleton a, = b a) () () ()
-      given
     prove = b a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b singleton a, = b a) () () ()
-      given
-      given
   }
 }
 
@@ -73,24 +60,16 @@ conclusion = a b
 {
   prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a) () ()
   prove ∀ x ↔ ∈ $0 singleton b = $0 a 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (singleton a, singleton b) (∀ x ↔ ∈ $0 $$0 = $0 a) ()
-    given
-    given
   prove ∀ x ↔ ∈ $0 singleton b = $0 b 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (b) () ()
   elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
     take x {
       prove ↔ ∈ $0 singleton b = $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 singleton b = $$0 a) ()
-        given
       prove ↔ = $0 a ∈ $0 singleton b 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (∈ $0 singleton b, = $0 a) () () ()
-        given
       prove ↔ ∈ $0 singleton b = $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 singleton b = $$0 b) ()
-        given
       prove ↔ = $0 a = $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (= $0 a, ∈ $0 singleton b, = $0 b) () () ()
-        given
-        given
     }
   }
   prove = a b d19d34e8a567ece130472195f806460ffa757ea570113c9779131cbf05b33ef7 () (a, b) () ()
-    given
 }
 
 theorem Singleton of Element Is Subset
@@ -101,15 +80,12 @@ conclusion ⊆ singleton a S
   take x {
     assume = $0 a {
       prove ∈ $0 S 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, a) (∈ $$0 S) ()
-        given
-        given
     }
   }
   take x {
     target → ∈ $0 singleton a ∈ $0 S
   }
   prove ⊆ singleton a S 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (singleton a, S) () ()
-    given
 }
 
 theorem Singleton Is in Power Set
@@ -117,9 +93,7 @@ premise ∈ a S
 conclusion ∈ singleton a powerSet S
 {
   prove ⊆ singleton a S ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, S) () ()
-    given
   prove ∈ singleton a powerSet S 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (singleton a, S) () ()
-    given
 }
 
 theorem A Singleton Is Not the Empty Set
@@ -127,7 +101,6 @@ conclusion ¬ = singleton a ∅
 {
   prove ∈ a singleton a e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a) () ()
   prove ¬ = singleton a ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (a, singleton a) () ()
-    given
 }
 
 theorem Subsets of a Singleton
@@ -137,29 +110,16 @@ conclusion ⊕ = S singleton a = S ∅
   assume ∃ y ∈ $0 S {
     let b ∈ $0 S 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ a S) () (∈ $0 S) () {
       prove ∈ $0 singleton a ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (S, singleton a, $0) () ()
-        given
-        given
       prove = $0 a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) () ()
-        given
       prove ∈ a S 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, a) (∈ $$0 S) ()
-        given
-        given
     }
     prove ⊆ singleton a S ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, S) () ()
-      given
     prove = S singleton a 0477ee5edbf3b855830ed7f269321584ce9ef7540ea076c0bfcc087dec2b62b6 () (S, singleton a) () ()
-      given
-      given
   }
   assume ¬ ∃ y ∈ $0 S {
     prove = S ∅ 390a59191aac7aa37bb4b44fdcb7c73e8cfcc43ddbf73aedc606428f3be459ad () (S) () ()
-      given
   }
   prove ∨ = S singleton a = S ∅ 8f4dce2a580ead51e91bb5caa5ae4b8474eb94defe5e756747db4d413819415c (∃ y ∈ $0 S, = S singleton a, = S ∅) () () ()
-    given
-    given
   prove ¬ = singleton a ∅ 1c4e6217e33217004ef0962a46f7422720c1fd5d2c8bb711f976bf01166dc708 () (a) () ()
   prove ⊕ = S singleton a = S ∅ cc33f6b28f64a37e2f3542e4cf12cd895be950c17403f5fff89e02ecec3dfcfe () (S, singleton a, ∅) () ()
-    given
-    given
 }

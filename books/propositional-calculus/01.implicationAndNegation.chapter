@@ -18,7 +18,6 @@ conclusion → φ φ
 {
   assume φ {
     prove φ bef95b18b97a05ca4c8a14f15ac5e41f30b9f6ee30472fcd4734069751460227 (φ) () () ()
-      given
   }
 }
 
@@ -29,11 +28,7 @@ conclusion → φ χ
 {
   assume φ {
     prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () () ()
-      given
-      given
     prove χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, χ) () () ()
-      given
-      given
   }
 }
 
@@ -53,9 +48,7 @@ premise → ¬ φ ⊥
 conclusion φ
 {
   prove ¬ ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (¬ φ) () () ()
-    given
   prove φ 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 (φ) () () ()
-    given
 }
 
 theorem Contradiction
@@ -64,10 +57,7 @@ premise ¬ φ
 conclusion ⊥
 {
   prove → φ ⊥ e90047dcd0d8d94cb5bba934eb926519880bb863d497d3805aaf2fb67564014c (φ) () () ()
-    given
   prove ⊥ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ⊥) () () ()
-    given
-    given
 }
 
 theorem Principle of Explosion
@@ -76,10 +66,8 @@ conclusion φ
 {
   assume ¬ φ {
     prove ⊥ bef95b18b97a05ca4c8a14f15ac5e41f30b9f6ee30472fcd4734069751460227 (⊥) () () ()
-      given
   }
   prove φ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (φ) () () ()
-    given
 }
 
 theorem Principle of Explosion
@@ -88,10 +76,7 @@ premise ¬ φ
 conclusion ψ
 {
   prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () ()
-    given
-    given
   prove ψ b98d6d09d2418d878f39abf12fe811fcb151d44278257378df82b75217c58a99 (ψ) () () ()
-    given
 }
 
 theorem Add Double Negative
@@ -100,11 +85,8 @@ conclusion ¬ ¬ φ
 {
   assume ¬ φ {
     prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () ()
-      given
-      given
   }
   prove ¬ ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (¬ φ) () () ()
-    given
 }
 
 theorem Proof by Self-Contradiction
@@ -113,14 +95,9 @@ conclusion ¬ φ
 {
   assume φ {
     prove ¬ φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ¬ φ) () () ()
-      given
-      given
     prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () ()
-      given
-      given
   }
   prove ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (φ) () () ()
-    given
 }
 
 theorem Proof by Self-Contradiction
@@ -129,14 +106,9 @@ conclusion φ
 {
   assume ¬ φ {
     prove φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ φ, φ) () () ()
-      given
-      given
     prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () ()
-      given
-      given
   }
   prove φ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (φ) () () ()
-    given
 }
 
 theorem Modus Tollens
@@ -146,14 +118,9 @@ conclusion ¬ φ
 {
   assume φ {
     prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () () ()
-      given
-      given
     prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () ()
-      given
-      given
   }
   prove ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (φ) () () ()
-    given
 }
 
 theorem Modus Tollens
@@ -163,14 +130,9 @@ conclusion ¬ φ
 {
   assume φ {
     prove ¬ ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ¬ ψ) () () ()
-      given
-      given
     prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () ()
-      given
-      given
   }
   prove ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (φ) () () ()
-    given
 }
 
 theorem Modus Tollens
@@ -180,14 +142,9 @@ conclusion φ
 {
   assume ¬ φ {
     prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ φ, ψ) () () ()
-      given
-      given
     prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () ()
-      given
-      given
   }
   prove φ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (φ) () () ()
-    given
 }
 
 theorem Modus Tollens
@@ -197,14 +154,9 @@ conclusion φ
 {
   assume ¬ φ {
     prove ¬ ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ φ, ¬ ψ) () () ()
-      given
-      given
     prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () ()
-      given
-      given
   }
   prove φ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (φ) () () ()
-    given
 }
 
 theorem Contraposition
@@ -213,8 +165,6 @@ conclusion → ¬ ψ ¬ φ
 {
   assume ¬ ψ {
     prove ¬ φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (φ, ψ) () () ()
-      given
-      given
   }
 }
 
@@ -224,8 +174,6 @@ conclusion → ψ ¬ φ
 {
   assume ψ {
     prove ¬ φ fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (φ, ψ) () () ()
-      given
-      given
   }
 }
 
@@ -235,8 +183,6 @@ conclusion → ¬ ψ φ
 {
   assume ¬ ψ {
     prove φ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (φ, ψ) () () ()
-      given
-      given
   }
 }
 
@@ -246,8 +192,6 @@ conclusion → ψ φ
 {
   assume ψ {
     prove φ 8a46e8deb24c46121dc84d3ce4fc6c40f1729e85c96c2c275a415e0980dd1e40 (φ, ψ) () () ()
-      given
-      given
   }
 }
 
@@ -258,17 +202,10 @@ conclusion ψ
 {
   assume ¬ ψ {
     prove ¬ φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (φ, ψ) () () ()
-      given
-      given
     prove ¬ ¬ φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (¬ φ, ψ) () () ()
-      given
-      given
     prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (¬ φ) () () ()
-      given
-      given
   }
   prove ψ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (ψ) () () ()
-    given
 }
 
 theorem Anything Implies A True Statement
@@ -277,7 +214,6 @@ conclusion → ψ φ
 {
   assume ψ {
     prove φ bef95b18b97a05ca4c8a14f15ac5e41f30b9f6ee30472fcd4734069751460227 (φ) () () ()
-      given
   }
 }
 
@@ -287,8 +223,6 @@ conclusion → φ ψ
 {
   assume φ {
     prove ψ 11d0fff7a64bf999eb92163828dd9f9c59f567d1ed1e532cd51a8c5d0bbb731c (φ, ψ) () () ()
-      given
-      given
   }
 }
 
@@ -298,7 +232,5 @@ conclusion → ¬ φ ψ
 {
   assume ¬ φ {
     prove ψ 11d0fff7a64bf999eb92163828dd9f9c59f567d1ed1e532cd51a8c5d0bbb731c (φ, ψ) () () ()
-      given
-      given
   }
 }

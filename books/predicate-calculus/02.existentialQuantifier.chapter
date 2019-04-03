@@ -11,13 +11,9 @@ conclusion ∃ x with ($0) φ
 {
   assume ∀ x ¬ with ($0) φ {
     prove ¬ with (a) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (¬ with ($0) φ) ()
-      given
   }
   prove ¬ ∀ x ¬ with ($0) φ fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (∀ x ¬ with ($0) φ, with (a) φ) () () ()
-    given
-    given
   prove ∃ x with ($0) φ 4e1baa7f31829a472647ff0c26af3e00308af8ed31ab25b1d5c229c0fcec6381 () () (with ($0) φ) ()
-    given
 }
 
 comment If something exists, we can name that something with an arbitrary variable for free.
@@ -28,21 +24,15 @@ premise ∀ x → with ($0) φ ψ
 conclusion ψ
 {
   prove ¬ ∀ x ¬ with ($0) φ 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 () () (with ($0) φ) ()
-    given
   assume ¬ ψ {
     elided 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 {
       take x {
         prove → with ($0) φ ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ with ($$0) φ ψ) ()
-          given
         prove ¬ with ($0) φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (with ($0) φ, ψ) () () ()
-          given
-          given
       }
     }
   }
   prove ψ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (ψ, ∀ x ¬ with ($0) φ) () () ()
-    given
-    given
 }
 
 comment Swapping an existence condition with an equivalent one.
@@ -55,15 +45,10 @@ conclusion ∃ x with ($0) ψ
   let a with ($0) φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ x with ($0) ψ) () (with ($0) φ) () {
     elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
       prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$0) φ with ($$0) ψ) ()
-        given
       prove → with ($0) φ with ($0) ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (with ($0) φ, with ($0) ψ) () () ()
-        given
       prove with ($0) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, with ($0) ψ) () () ()
-        given
-        given
     }
     prove ∃ x with ($0) ψ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (with ($$0) ψ) ()
-      given
   }
 }
 
@@ -76,11 +61,8 @@ conclusion ∀ x with ($0) φ
   take x {
     assume ¬ with ($0) φ {
       prove ∃ y ¬ with ($0) φ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (¬ with ($$0) φ) ()
-        given
     }
     prove with ($0) φ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (with ($0) φ, ∃ y ¬ with ($0) φ) () () ()
-      given
-      given
   }
 }
 
@@ -90,11 +72,8 @@ conclusion ∀ x ¬ with ($0) φ
 {
   assume ¬ ∀ x ¬ with ($0) φ {
     prove ∃ x with ($0) φ 4e1baa7f31829a472647ff0c26af3e00308af8ed31ab25b1d5c229c0fcec6381 () () (with ($0) φ) ()
-      given
   }
   prove ∀ x ¬ with ($0) φ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (∀ x ¬ with ($0) φ, ∃ x with ($0) φ) () () ()
-    given
-    given
 }
 
 theorem For All Not Is Not Exists
@@ -103,9 +82,6 @@ conclusion ¬ ∃ x with ($0) φ
 {
   assume ∃ x with ($0) φ {
     prove ¬ ∀ x ¬ with ($0) φ 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 () () (with ($0) φ) ()
-      given
   }
   prove ¬ ∃ x with ($0) φ fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (∃ x with ($0) φ, ∀ x ¬ with ($0) φ) () () ()
-    given
-    given
 }

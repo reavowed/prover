@@ -15,7 +15,11 @@ import scala.util.Try
 class BookService {
   private val bookDirectoryPath = Paths.get("books")
 
-  private var _books = parseBooks
+  private var _books = {
+    val books = parseBooks
+    writeBooks(books)
+    books
+  }
 
   def books: Seq[Book] = _books
 

@@ -20,8 +20,6 @@ conclusion = b a
 {
   prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
   prove = b a 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= $0 a) ()
-    given
-    given
 }
 
 theorem Substitution of Equals (Reversed)
@@ -30,10 +28,7 @@ premise with (b) φ
 conclusion with (a) φ
 {
   prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () ()
-    given
   prove with (a) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (b, a) (with ($0) φ) ()
-    given
-    given
 }
 
 comment Now we can also prove that the substitution axiom works when substituting into equal terms.
@@ -44,8 +39,6 @@ conclusion = with (a) F with (b) F
 {
   prove = with (a) F with (a) F 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (with (a) F) () ()
   prove = with (a) F with (b) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= with (a) F with ($0) F) ()
-    given
-    given
 }
 
 theorem Substitution of Equals into Function (Reversed)
@@ -53,9 +46,7 @@ premise = a b
 conclusion = with (b) F with (a) F
 {
   prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () ()
-    given
   prove = with (b) F with (a) F 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (b, a) () (with ($0) F)
-    given
 }
 
 comment Basic facts about equality.
@@ -65,15 +56,11 @@ conclusion ↔ = a b = b a
 {
   assume = a b {
     prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () ()
-      given
   }
   assume = b a {
     prove = a b 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (b, a) () ()
-      given
   }
   prove ↔ = a b = b a 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= a b, = b a) () () ()
-    given
-    given
 }
 
 theorem Equality Is Transitive
@@ -82,8 +69,6 @@ premise = b c
 conclusion = a c
 {
   prove = a c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (b, c) (= a $0) ()
-    given
-    given
 }
 
 theorem Equivalence of Substituted Equals
@@ -92,17 +77,11 @@ conclusion ↔ with (a) φ with (b) φ
 {
   assume with (a) φ {
     prove with (b) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (with ($0) φ) ()
-      given
-      given
   }
   assume with (b) φ {
     prove with (a) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, b) (with ($0) φ) ()
-      given
-      given
   }
   prove ↔ with (a) φ with (b) φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (with (a) φ, with (b) φ) () () ()
-    given
-    given
 }
 
 theorem Distinguishable Terms Are Not Equal
@@ -112,12 +91,8 @@ conclusion ¬ = a b
 {
   assume = a b {
     prove with (b) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (with ($0) φ) ()
-      given
-      given
   }
   prove ¬ = a b 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= a b, with (b) φ) () () ()
-    given
-    given
 }
 
 theorem Sets Are Equal If Always Equal to the Same Thing
@@ -127,12 +102,8 @@ conclusion = a b
   prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
     prove ↔ = a a = a b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ = $0 a = $0 b) ()
-      given
     prove → = a a = a b f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= a a, = a b) () () ()
-      given
     prove = a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= a a, = a b) () () ()
-      given
-      given
   }
 }
 
@@ -141,7 +112,6 @@ conclusion ∃ x = $0 a
 {
   prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
   prove ∃ x = $0 a c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (= $0 a) ()
-    given
 }
 
 theorem Renamed Set
@@ -150,8 +120,6 @@ conclusion φ
 {
   prove ∃ x = $0 a 8cf72cf7b527d9e599e1e396a28cdc3485d6e669a1aa4c12184758ca101eceb3 () (a) () ()
   prove φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (φ) () (= $0 a) ()
-    given
-    given
 }
 
 theorem Exclusive Or for Equality
@@ -161,15 +129,7 @@ conclusion ⊕ = a b = a c
 {
   assume ∧ = a b = a c {
     prove = b c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= $0 c) ()
-      simplified = a b 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= a b, = a c) () () ()
-        given
-      simplified = a c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= a b, = a c) () () ()
-        given
   }
   prove ¬ ∧ = a b = a c 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ = a b = a c, = b c) () () ()
-    given
-    given
   prove ⊕ = a b = a c 85d9228e116d39e101fccf8102b9ae979459e94efa97bd1f050fb7327031497b (= a b, = a c) () () ()
-    given
-    given
 }

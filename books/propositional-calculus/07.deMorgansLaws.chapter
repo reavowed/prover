@@ -7,17 +7,9 @@ conclusion ¬ ∧ φ ψ
   assume ∧ φ ψ {
     elided 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 {
       prove ¬ ¬ φ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (φ) () () ()
-        simplified φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () ()
-          given
       prove ¬ ψ 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (¬ φ, ¬ ψ) () () ()
-        given
-        given
     }
     prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () ()
-      simplified ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () ()
-        given
-      given
   }
   prove ¬ ∧ φ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ψ) () () ()
-    given
 }

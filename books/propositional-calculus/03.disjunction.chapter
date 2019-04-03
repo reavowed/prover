@@ -10,9 +10,7 @@ premise φ
 conclusion ∨ φ ψ
 {
   prove → ¬ φ ψ 9b46701d1aa951dfb1ded533db23d843a270602c4f72661631fb683f9bbbb633 (φ, ψ) () () ()
-    given
   prove ∨ φ ψ 94eabd8c44d2886bcf8b632647ae5882b8e713fa3c14c8b25800ea563dfc1919 (φ, ψ) () () ()
-    given
 }
 
 theorem Add Left Disjunct
@@ -21,9 +19,7 @@ premise ψ
 conclusion ∨ φ ψ
 {
   prove → ¬ φ ψ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (ψ, ¬ φ) () () ()
-    given
   prove ∨ φ ψ 94eabd8c44d2886bcf8b632647ae5882b8e713fa3c14c8b25800ea563dfc1919 (φ, ψ) () () ()
-    given
 }
 
 theorem Law of the Excluded Middle
@@ -31,7 +27,6 @@ conclusion ∨ φ ¬ φ
 {
   prove → ¬ φ ¬ φ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (¬ φ) () () ()
   prove ∨ φ ¬ φ 94eabd8c44d2886bcf8b632647ae5882b8e713fa3c14c8b25800ea563dfc1919 (φ, ¬ φ) () () ()
-    given
 }
 
 theorem Proof by Cases
@@ -41,13 +36,8 @@ premise → ψ χ
 conclusion χ
 {
   prove → ¬ φ ψ 862ea012be93c379c01aff64885a7a24dd0ea42d5825b13b8ae15ee5eb65620d (φ, ψ) () () ()
-    given
   prove → ¬ φ χ 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (¬ φ, ψ, χ) () () ()
-    given
-    given
   prove χ 35f46479d4f3054e0f463194f8ed4dd77e7526b58f2b6157594bf81bccfcf95a (φ, χ) () () ()
-    given
-    given
 }
 
 theorem Proof by Separate Cases
@@ -58,22 +48,13 @@ conclusion ∨ χ ω
 {
   assume φ {
     prove χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, χ) () () ()
-      given
-      given
     prove ∨ χ ω 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (χ, ω) () () ()
-      given
   }
   assume ψ {
     prove ω fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, ω) () () ()
-      given
-      given
     prove ∨ χ ω 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (ω, χ) () () ()
-      given
   }
   prove ∨ χ ω 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, ∨ χ ω) () () ()
-    given
-    given
-    given
 }
 
 theorem Proof by Exclusive Separate Cases
@@ -83,9 +64,6 @@ conclusion ∨ ψ χ
 {
   prove ∨ φ ¬ φ 55cacad7c48d56585c5db61f43accacd896d4b7d2209fc897d3c9a12ca23be2d (φ) () () ()
   prove ∨ ψ χ 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (φ, ¬ φ, ψ, χ) () () ()
-    given
-    given
-    given
 }
 
 theorem Combine Cases
@@ -95,9 +73,6 @@ conclusion → ∨ φ ψ χ
 {
   assume ∨ φ ψ {
     prove χ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, χ) () () ()
-      given
-      given
-      given
   }
 }
 
@@ -107,16 +82,11 @@ conclusion ∨ ψ φ
 {
   assume φ {
     prove ∨ ψ φ 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (φ, ψ) () () ()
-      given
   }
   assume ψ {
     prove ∨ ψ φ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (ψ, φ) () () ()
-      given
   }
   prove ∨ ψ φ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, ∨ ψ φ) () () ()
-    given
-    given
-    given
 }
 
 theorem Right Disjunct Must Be True
@@ -125,10 +95,7 @@ premise ¬ φ
 conclusion ψ
 {
   prove → ¬ φ ψ 862ea012be93c379c01aff64885a7a24dd0ea42d5825b13b8ae15ee5eb65620d (φ, ψ) () () ()
-    given
   prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ φ, ψ) () () ()
-    given
-    given
 }
 
 theorem Left Disjunct Must Be True
@@ -137,10 +104,7 @@ premise ¬ ψ
 conclusion φ
 {
   prove → ¬ φ ψ 862ea012be93c379c01aff64885a7a24dd0ea42d5825b13b8ae15ee5eb65620d (φ, ψ) () () ()
-    given
   prove φ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (φ, ψ) () () ()
-    given
-    given
 }
 
 theorem Disjunction of Two Falsehoods Is False
@@ -150,12 +114,8 @@ conclusion ¬ ∨ φ ψ
 {
   assume ∨ φ ψ {
     prove ψ 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (φ, ψ) () () ()
-      given
-      given
   }
   prove ¬ ∨ φ ψ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∨ φ ψ, ψ) () () ()
-    given
-    given
 }
 
 theorem Deduction in Left Disjunct
@@ -165,9 +125,6 @@ conclusion ∨ χ ψ
 {
   prove → ψ ψ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (ψ) () () ()
   prove ∨ χ ψ 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (φ, ψ, χ, ψ) () () ()
-    given
-    given
-    given
 }
 
 theorem Deduction in Right Disjunct
@@ -177,9 +134,6 @@ conclusion ∨ φ χ
 {
   prove → φ φ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (φ) () () ()
   prove ∨ φ χ 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (φ, ψ, φ, χ) () () ()
-    given
-    given
-    given
 }
 
 theorem Eliminate Redundant Or
@@ -189,9 +143,6 @@ conclusion ψ
 {
   prove → ψ ψ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (ψ) () () ()
   prove ψ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, ψ) () () ()
-    given
-    given
-    given
 }
 
 theorem Eliminate Redundant Or
@@ -201,7 +152,4 @@ conclusion φ
 {
   prove → φ φ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (φ) () () ()
   prove φ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, φ) () () ()
-    given
-    given
-    given
 }

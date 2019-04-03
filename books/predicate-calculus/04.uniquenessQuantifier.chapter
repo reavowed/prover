@@ -11,11 +11,7 @@ premise ∀ x → with ($0) φ ψ
 conclusion ψ
 {
   prove ∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0 3bd85ee951a3c89051f17367163d0ec7295c3fa75ac7cadf25fdb7ccd7db35dc () () (with ($0) φ) ()
-    given
   prove ψ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (ψ) () (with ($0) φ) ()
-    simplified ∃ x with ($0) φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∃ x with ($0) φ, ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0) () () ()
-      given
-    given
 }
 
 theorem Every Set Is Unique
@@ -26,19 +22,12 @@ conclusion ∃! y = $0 a
     take y {
       assume ∧ = $$0 a = $0 a {
         prove = $$0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, a) (= $$0 $$$0) ()
-          simplified = $0 a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= $$0 a, = $0 a) () () ()
-            given
-          simplified = $$0 a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= $$0 a, = $0 a) () () ()
-            given
       }
     }
   }
   elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
     prove ∧ ∃ x = $0 a ∀ x ∀ y → ∧ = $$0 a = $0 a = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x = $0 a, ∀ x ∀ y → ∧ = $$0 a = $0 a = $$0 $0) () () ()
-      given
-      given
     prove ∃! y = $0 a f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (= $0 a) ()
-      given
   }
 }
 
@@ -49,19 +38,11 @@ premise with (b) φ
 conclusion = a b
 {
   prove ∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0 3bd85ee951a3c89051f17367163d0ec7295c3fa75ac7cadf25fdb7ccd7db35dc () () (with ($0) φ) ()
-    given
   prove ∀ y → ∧ with (a) φ with ($0) φ = a $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0) ()
-    simplified ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∃ x with ($0) φ, ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0) () () ()
-      given
   prove → ∧ with (a) φ with (b) φ = a b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (→ ∧ with (a) φ with ($0) φ = a $0) ()
-    given
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
     prove ∧ with (a) φ with (b) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (with (a) φ, with (b) φ) () () ()
-      given
-      given
     prove = a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ with (a) φ with (b) φ, = a b) () () ()
-      given
-      given
   }
 }
 
@@ -72,50 +53,30 @@ conclusion ∃! x with ($0) φ
   prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
     prove ↔ with (a) φ = a a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ with ($0) φ = $0 a) ()
-      given
     prove → = a a with (a) φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (with (a) φ, = a a) () () ()
-      given
     prove with (a) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= a a, with (a) φ) () () ()
-      given
-      given
   }
   prove ∃ x with ($0) φ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (with ($0) φ) ()
-    given
   take x {
     take y {
       assume ∧ with ($$0) φ with ($0) φ {
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
           prove ↔ with ($$0) φ = $$0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (↔ with ($$$0) φ = $$$0 a) ()
-            given
           prove → with ($$0) φ = $$0 a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (with ($$0) φ, = $$0 a) () () ()
-            given
           prove = $$0 a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($$0) φ, = $$0 a) () () ()
-            given
-            simplified with ($$0) φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (with ($$0) φ, with ($0) φ) () () ()
-              given
         }
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
           prove ↔ with ($0) φ = $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ = $$$0 a) ()
-            given
           prove → with ($0) φ = $0 a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (with ($0) φ, = $0 a) () () ()
-            given
           prove = $0 a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, = $0 a) () () ()
-            given
-            simplified with ($0) φ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (with ($$0) φ, with ($0) φ) () () ()
-              given
         }
         prove = $$0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, a) (= $$0 $$$0) ()
-          given
-          given
       }
     }
   }
   elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
     prove ∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x with ($0) φ, ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0) () () ()
-      given
-      given
     prove ∃! x with ($0) φ f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (with ($0) φ) ()
-      given
   }
 }
 
@@ -127,23 +88,16 @@ conclusion ∃! x with ($0) φ
   take x {
     assume = $0 a {
       prove with ($0) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, a) (with ($$0) φ) ()
-        given
-        given
     }
   }
   elided 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 {
     take x {
       prove → with ($0) φ = $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ with ($$0) φ = $$0 a) ()
-        given
       prove → = $0 a with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ = $$0 a with ($$0) φ) ()
-        given
       prove ↔ with ($0) φ = $0 a 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (with ($0) φ, = $0 a) () () ()
-        given
-        given
     }
   }
   prove ∃! x with ($0) φ 4bdd4c4c05b03bbab5920d1e6f4973a7784402c71237251140cc5eced776cf6f () (a) (with ($0) φ) ()
-    given
 }
 
 theorem Existence of Unique Value
@@ -154,21 +108,13 @@ conclusion ∃ y ∀ x ↔ with ($0) φ = $0 $$0
     take x {
       assume with ($0) φ {
         prove = $0 $$0 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () ($0, $$0) (with ($$$0) φ) ()
-          given
-          given
-          given
       }
       assume = $0 $$0 {
         prove with ($0) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, $$0) (with ($$$0) φ) ()
-          given
-          given
       }
       prove ↔ with ($0) φ = $0 $$0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (with ($0) φ, = $0 $$0) () () ()
-        given
-        given
     }
     prove ∃ y ∀ x ↔ with ($0) φ = $0 $$0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∀ x ↔ with ($0) φ = $0 $$$0) ()
-      given
   }
 }
 
@@ -179,12 +125,8 @@ conclusion with (a) φ
   prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
     prove ↔ with (a) φ = a a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ with ($0) φ = $0 a) ()
-      given
     prove → = a a with (a) φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (with (a) φ, = a a) () () ()
-      given
     prove with (a) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= a a, with (a) φ) () () ()
-      given
-      given
   }
 }
 
@@ -194,36 +136,23 @@ conclusion ∃! x ∨ ∧ φ = $0 a ∧ ψ = $0 b
 {
   assume φ {
     prove ¬ ψ e4ae6063b86741e544a9c95c2ce96510d5571fb6b97a2d084435181728226d66 (φ, ψ) () () ()
-      given
-      given
     elided 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d {
       take x {
         prove ↔ ∨ ∧ φ = $0 a ∧ ψ = $0 b = $0 a 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d (φ, ψ, = $0 a, = $0 b) () () ()
-          given
-          given
       }
     }
     prove ∃! x ∨ ∧ φ = $0 a ∧ ψ = $0 b 4bdd4c4c05b03bbab5920d1e6f4973a7784402c71237251140cc5eced776cf6f () (a) (∨ ∧ φ = $0 a ∧ ψ = $0 b) ()
-      given
   }
   assume ψ {
     prove ¬ φ c2835d53d6a25647e4e13a5e6b6827e44467e791f5b85c1f7b1dce41d7c10fcc (φ, ψ) () () ()
-      given
-      given
     elided 8cd89d7a4d6604f8d8d3530be80c9155084c8729b41a1bb1620e1c027b90b8ea {
       take x {
         prove ↔ ∨ ∧ φ = $0 a ∧ ψ = $0 b = $0 b 8cd89d7a4d6604f8d8d3530be80c9155084c8729b41a1bb1620e1c027b90b8ea (φ, ψ, = $0 a, = $0 b) () () ()
-          given
-          given
       }
     }
     prove ∃! x ∨ ∧ φ = $0 a ∧ ψ = $0 b 4bdd4c4c05b03bbab5920d1e6f4973a7784402c71237251140cc5eced776cf6f () (b) (∨ ∧ φ = $0 a ∧ ψ = $0 b) ()
-      given
   }
   prove ∃! x ∨ ∧ φ = $0 a ∧ ψ = $0 b 6aeeb93c3d3130142b21336bc97e5f0f803dce7736409435c8131b0a52f348c3 (φ, ψ, ∃! x ∨ ∧ φ = $0 a ∧ ψ = $0 b) () () ()
-    given
-    given
-    given
 }
 
 theorem Uniqueness by Two Cases
@@ -231,5 +160,4 @@ conclusion ∃! x ∨ ∧ φ = $0 a ∧ ¬ φ = $0 b
 {
   prove ⊕ φ ¬ φ 84a2ec9cae05bd957bd110d11107812df38d272dbeb35f3310d763b7fb5b5824 (φ) () () ()
   prove ∃! x ∨ ∧ φ = $0 a ∧ ¬ φ = $0 b 70af6c413942b8cd1f952f933aa36ee2c1c47106dbbe183957125b7845ba1f07 (φ, ¬ φ) (a, b) () ()
-    given
 }

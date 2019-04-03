@@ -17,14 +17,9 @@ premise ∈ a A
 conclusion ∃! y ∈ orderedPair a $0 f
 {
   prove ∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f adf16ed83c8011626387bff9855a2c3794562437dac17b7f7d6c2e4663f5467a () (f, A, B) () ()
-    given
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
     prove → ∈ a A ∃! y ∈ orderedPair a $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (→ ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) ()
-      simplified ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (⊆ f × A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () () ()
-        given
     prove ∃! y ∈ orderedPair a $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∃! y ∈ orderedPair a $0 f) () () ()
-      given
-      given
   }
 }
 
@@ -39,9 +34,7 @@ premise function f A B
 conclusion ⊆ f × A B
 {
   prove ∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f adf16ed83c8011626387bff9855a2c3794562437dac17b7f7d6c2e4663f5467a () (f, A, B) () ()
-    given
   prove ⊆ f × A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ f × A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () () ()
-    given
 }
 
 theorem First Coordinate of Element of Function Is Element of Domain
@@ -50,12 +43,8 @@ premise ∈ orderedPair a b f
 conclusion ∈ a A
 {
   prove ⊆ f × A B fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, A, B) () ()
-    given
   prove ∈ orderedPair a b × A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, × A B, orderedPair a b) () ()
-    given
-    given
   prove ∈ a A 8579751e8d3533a51149e0ce589062e2091474ddd0f02b6fb64202912f19d22e () (a, b, A, B) () ()
-    given
 }
 
 theorem Second Coordinate of Element of Function Is Element of Range
@@ -64,12 +53,8 @@ premise ∈ orderedPair a b f
 conclusion ∈ b B
 {
   prove ⊆ f × A B fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, A, B) () ()
-    given
   prove ∈ orderedPair a b × A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, × A B, orderedPair a b) () ()
-    given
-    given
   prove ∈ b B e2238c29ee1255d4b9d3b1d86cf9ac1e893f8f63c8b75f7677403f1dfa4fd2c9 () (a, b, A, B) () ()
-    given
 }
 
 theorem Function Application Is Element of Range
@@ -78,11 +63,7 @@ premise ∈ a A
 conclusion ∈ apply f a B
 {
   prove ∈ orderedPair a apply f a f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, a) () ()
-    given
-    given
   prove ∈ apply f a B dcc696c503db6554d43904698b71d4b1bca3b5927c301caf40f2036a60d3bd46 () (f, A, B, a, apply f a) () ()
-    given
-    given
 }
 
 theorem Extend Function Range to Superset
@@ -91,22 +72,13 @@ premise ⊆ B C
 conclusion function f A C
 {
   prove ∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f adf16ed83c8011626387bff9855a2c3794562437dac17b7f7d6c2e4663f5467a () (f, A, B) () ()
-    given
   elided f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d {
     prove ⊆ × A B × A C f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d () (B, C, A) () ()
-      given
     prove ⊆ f × A C 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, × A B, × A C) () ()
-      simplified ⊆ f × A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ f × A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () () ()
-        given
-      given
   }
   elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
     prove ∧ ⊆ f × A C ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ f × A C, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () () ()
-      given
-      simplified ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (⊆ f × A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () () ()
-        given
     prove function f A C be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (f, A, C) () ()
-      given
   }
 }
 
@@ -116,18 +88,9 @@ premise ∈ orderedPair a b f
 conclusion = b apply f a
 {
   prove ∈ a A 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () (f, A, B, a, b) () ()
-    given
-    given
   prove ∃! x ∈ orderedPair a $0 f 49026c2de95e5ee17fef618394741a9f6cf98795fa1f38675a2bb7f5d30aeaec () (f, A, B, a) () ()
-    given
-    given
   prove ∈ orderedPair a apply f a f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, a) () ()
-    given
-    given
   prove = b apply f a 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () (b, apply f a) (∈ orderedPair a $0 f) ()
-    given
-    given
-    given
 }
 
 theorem Membership Condition for Function
@@ -135,33 +98,17 @@ premise function f A B
 conclusion ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
 {
   prove ⊆ f × A B fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, A, B) () ()
-    given
   take x {
     assume ∈ $0 f {
       prove ∈ $0 × A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, × A B, $0) () ()
-        given
-        given
       prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () ($0, A, B) () ()
-        given
       let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () {
         let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () {
           prove ∈ orderedPair $$0 $0 f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$$0, orderedPair $$0 $0) (∈ $$$$0 f) ()
-            simplified = $$$0 orderedPair $$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 B, = $$$0 orderedPair $$0 $0) () () ()
-              given
-            given
           prove = $0 apply f $$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, B, $$0, $0) () ()
-            given
-            given
           prove = $$$0 orderedPair $$0 apply f $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, apply f $$0) (= $$$0 orderedPair $$0 $$$$0) ()
-            given
-            simplified = $$$0 orderedPair $$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 B, = $$$0 orderedPair $$0 $0) () () ()
-              given
           prove ∧ ∈ $$0 A = $$$0 orderedPair $$0 apply f $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$0 A, = $$$0 orderedPair $$0 apply f $$0) () () ()
-            simplified ∈ $$0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 A, ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$$0 $0) () () ()
-              given
-            given
           prove ∃ a ∧ ∈ $0 A = $$$$0 orderedPair $0 apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$0) (∧ ∈ $$$$0 A = $$$0 orderedPair $$$$0 apply f $$$$0) ()
-            given
         }
       }
     }
@@ -170,25 +117,15 @@ conclusion ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
     assume ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 {
       let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 f) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0) () {
         prove ∈ orderedPair $0 apply f $0 f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, $0) () ()
-          given
-          simplified ∈ $0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, = $$0 orderedPair $0 apply f $0) () () ()
-            given
         prove ∈ $$0 f 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, orderedPair $0 apply f $0) (∈ $$$0 f) ()
-          simplified = $$0 orderedPair $0 apply f $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, = $$0 orderedPair $0 apply f $0) () () ()
-            given
-          given
       }
     }
   }
   elided 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 {
     take x {
       prove → ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 f ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0) ()
-        given
       prove → ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 ∈ $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0 ∈ $$0 f) ()
-        given
       prove ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 f, ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () () ()
-        given
-        given
     }
   }
 }
@@ -200,25 +137,16 @@ premise ∀ x → ∈ $0 A = apply f $0 apply g $0
 conclusion = f g
 {
   prove ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 3ce328146ec577046de9c2d35107e33ccea59175c6a8ad4b5792c1d8384913df () (f, A, B) () ()
-    given
   prove ∀ x ↔ ∈ $0 g ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 3ce328146ec577046de9c2d35107e33ccea59175c6a8ad4b5792c1d8384913df () (g, A, B) () ()
-    given
   take x {
     assume ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 {
       let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0) () {
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
           prove → ∈ $0 A = apply f $0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 A = apply f $$$0 apply g $$$0) ()
-            given
           prove = apply f $0 apply g $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply f $0 apply g $0) () () ()
-            given
-            simplified ∈ $0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, = $$0 orderedPair $0 apply f $0) () () ()
-              given
         }
         prove ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (apply f $0, apply g $0) (∧ ∈ $0 A = $$0 orderedPair $0 $$$0) ()
-          given
-          given
         prove ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply g $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$$0 A = $$0 orderedPair $$$0 apply g $$$0) ()
-          given
       }
     }
   }
@@ -227,35 +155,21 @@ conclusion = f g
       let a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply g $$0) () {
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
           prove → ∈ $0 A = apply f $0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 A = apply f $$$0 apply g $$$0) ()
-            given
           prove = apply f $0 apply g $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply f $0 apply g $0) () () ()
-            given
-            simplified ∈ $0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, = $$0 orderedPair $0 apply g $0) () () ()
-              given
         }
         prove ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply f $0, apply g $0) (∧ ∈ $0 A = $$0 orderedPair $0 $$$0) ()
-          given
-          given
         prove ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$$0 A = $$0 orderedPair $$$0 apply f $$$0) ()
-          given
       }
     }
   }
   elided 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 {
     take x {
       prove → ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0 ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply g $0) ()
-        given
       prove → ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply g $0 ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0) ()
-        given
       prove ↔ ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0, ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0) () () ()
-        given
-        given
     }
   }
   prove = f g 4b83926de252406c08777885e14c3c906028ee3c7fb53340249ba1eb1ada4d4d () (f, g) (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0, ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0) ()
-    given
-    given
-    given
 }
 
 theorem Function With Specified Values Is Unique
@@ -269,44 +183,22 @@ conclusion ∃! f ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0
           assume ∈ $0 A {
             elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
               prove → ∈ $0 A = apply $$$0 $0 with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 A = apply $$$0 $$$$0 with ($$$$0) F) ()
-                simplified ∀ x → ∈ $0 A = apply $$$$0 $0 with ($0) F 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$$0 A B, ∀ x → ∈ $0 A = apply $$$$0 $0 with ($0) F) () () ()
-                  simplified ∧ function $$$0 A B ∀ x → ∈ $0 A = apply $$$$0 $0 with ($0) F 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function $$$0 A B ∀ x → ∈ $0 A = apply $$$$0 $0 with ($0) F, ∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F) () () ()
-                    given
               prove = apply $$$0 $0 with ($0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply $$$0 $0 with ($0) F) () () ()
-                given
-                given
             }
             elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
               prove → ∈ $0 A = apply $$0 $0 with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 A = apply $$0 $$$$0 with ($$$$0) F) ()
-                simplified ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0 A B, ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F) () () ()
-                  simplified ∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∧ function $$$0 A B ∀ x → ∈ $0 A = apply $$$$0 $0 with ($0) F, ∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F) () () ()
-                    given
               prove = apply $$0 $0 with ($0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply $$0 $0 with ($0) F) () () ()
-                given
-                given
             }
             prove = apply $$$0 $0 apply $$0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$0 $0, with ($0) F) (= apply $$$0 $0 $$$$0) ()
-              given
-              given
           }
         }
         prove = $$0 $0 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () ($$0, A, B, $0) () ()
-          simplified function $$0 A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $$0 A B, ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F) () () ()
-            simplified ∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F, ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F) () () ()
-              given
-          simplified function $0 A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function $0 A B, ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F) () () ()
-            simplified ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F, ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F) () () ()
-              given
-          given
       }
     }
   }
   elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
     prove ∧ ∃ x ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F ∀ x ∀ y → ∧ ∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F, ∀ x ∀ y → ∧ ∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F = $$0 $0) () () ()
-      given
-      given
     prove ∃! f ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F) ()
-      given
   }
 }
 
@@ -317,37 +209,24 @@ conclusion ∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B
     take f {
       assume function $0 A B {
         prove ⊆ $0 × A B fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () ($0, A, B) () ()
-          given
         prove ∈ $0 powerSet × A B 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () ($0, × A B) () ()
-          given
         prove ∈ $0 $$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$0, powerSet × A B, $0) (function $$$0 A B) ()
-          given
-          given
-          given
       }
     }
     take f {
       assume ∈ $0 $$0 {
         prove function $0 A B fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$0, powerSet × A B, $0) (function $$$0 A B) ()
-          given
-          given
       }
     }
     elided 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 {
       take f {
         prove → ∈ $0 $$0 function $0 A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 $$0 function $$$0 A B) ()
-          given
         prove → function $0 A B ∈ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ function $$$0 A B ∈ $$$0 $$0) ()
-          given
         prove ↔ ∈ $0 $$0 function $0 A B 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 $$0, function $0 A B) () () ()
-          given
-          given
       }
     }
     prove ∃ S ∀ f ↔ ∈ $0 $$0 function $0 A B c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∀ f ↔ ∈ $0 $$$0 function $0 A B) ()
-      given
     prove ∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (function $$0 A B) ()
-      given
   }
 }
 
@@ -363,11 +242,7 @@ conclusion function f A B
   prove ∀ f ↔ ∈ $0 functionSpace A B function $0 A B 7c7caa8d3ebd277e15f06400bc3c8d650d303c6a21d56e5873fd06fe7aaeef4c () (A, B) () ()
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
     prove ↔ ∈ f functionSpace A B function f A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (f) (↔ ∈ $0 functionSpace A B function $0 A B) ()
-      given
     prove → ∈ f functionSpace A B function f A B f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ f functionSpace A B, function f A B) () () ()
-      given
     prove function f A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ f functionSpace A B, function f A B) () () ()
-      given
-      given
   }
 }

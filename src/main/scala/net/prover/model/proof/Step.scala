@@ -368,8 +368,7 @@ object Step {
     override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def length: Int = 1
     override def serializedLines: Seq[String] = {
-      Seq(s"prove ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}") ++
-        premises.flatMap(_.serializedLines).indent
+      Seq(s"prove ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}")
     }
     def pendingPremises: Map[Seq[Int], Premise.Pending] = {
       premises.flatMapWithIndex((p, i) => p.getPendingPremises(Seq(i)).toSeq).toMap
@@ -377,22 +376,17 @@ object Step {
     def isIncomplete: Boolean = premises.exists(_.isIncomplete)
   }
   object Assertion {
-    def premisesParser(statements: Seq[Statement])(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Seq[Premise]] = {
-      statements.foldLeft(Parser.constant(Seq.empty[Premise])) { (parserSoFar, statement) =>
-        for {
-          premisesSoFar <- parserSoFar
-          newPremise <- Premise.parser(statement)
-        } yield premisesSoFar :+ newPremise
-      }
-    }
     def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Assertion] = {
       for {
         statement <- Statement.parser
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
         premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions, stepContext)
-        premises <- premisesParser(premiseStatements)
-      } yield Assertion(statement, inference, premises, substitutions)
+      } yield {
+        val availablePremises = ProofHelper.getAvailablePremises(stepContext, entryContext)
+        val premises = premiseStatements.map(s => availablePremises.find(_.statement == s).getOrElse(throw new Exception(s"Could not find premise $s")))
+        Assertion(statement, inference, premises, substitutions)
+      }
     }
   }
 
