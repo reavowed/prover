@@ -39,7 +39,7 @@ object Step {
   sealed trait WithSubsteps extends Step {
     def substeps: Seq[Step]
     def specifyStepContext(outerContext: StepContext): StepContext
-    def addPremises(premiseContext: PremiseContext, stepContext: StepContext): PremiseContext
+    def addPremises(premiseContext: PremiseContext, stepContext: StepContext): PremiseContext = premiseContext
     def replaceSubsteps(newSubsteps: Seq[Step]): Step
     def modifyStepForInsertion(step: Step): Step
     def modifyStepForExtraction(step: Step): Option[Step]
@@ -73,6 +73,9 @@ object Step {
     override def specifyStepContext(outerContext: StepContext): StepContext = outerContext.addBoundVariable(variableName)
     override def modifyStepForInsertion(step: Step): Step = step.insertExternalParameters(1)
     override def modifyStepForExtraction(step: Step): Option[Step] = step.removeExternalParameters(1)
+    override def addPremises(premiseContext: PremiseContext, stepContext: StepContext): PremiseContext = {
+      super.addPremises(premiseContext, stepContext).addBoundVariable()
+    }
   }
   sealed trait WithoutVariable extends Step.WithSubsteps {
     override def specifyStepContext(outerContext: StepContext): StepContext = outerContext
@@ -81,12 +84,9 @@ object Step {
   }
   sealed trait WithAssumption extends Step.WithSubsteps {
     def assumption: Statement
-    def addPremises(premiseContext: PremiseContext, stepContext: StepContext): PremiseContext = {
-      premiseContext.addStatement(assumption, "a", stepContext)
+    override def addPremises(premiseContext: PremiseContext, stepContext: StepContext): PremiseContext = {
+      super.addPremises(premiseContext, stepContext).addStatement(assumption, "a", stepContext)
     }
-  }
-  sealed trait WithoutAssumption extends Step.WithSubsteps {
-    def addPremises(premiseContext: PremiseContext, stepContext: StepContext): PremiseContext = premiseContext
   }
 
   sealed trait WithTopLevelStatement extends Step {
@@ -144,7 +144,7 @@ object Step {
       inference: Inference.Summary,
       premises: Seq[Premise],
       substitutions: Substitutions)
-    extends Step.WithSubsteps with WithVariable with WithTopLevelStatement with WithAssumption
+    extends Step.WithSubsteps with WithTopLevelStatement with WithVariable with WithAssumption // WithVariable has to be to the right of WithAssumption for addPremises to work correctly!
   {
     val `type` = "naming"
     override def provenStatement: Option[Statement] = Some(statement)
@@ -220,7 +220,7 @@ object Step {
       variableName: String,
       substeps: Seq[Step],
       scopingStatement: StatementDefinition)
-    extends Step.WithSubsteps with WithVariable with WithoutAssumption
+    extends Step.WithSubsteps with WithVariable
   {
     val `type` = "scopedVariable"
     override def provenStatement: Option[Statement] = {
@@ -285,7 +285,7 @@ object Step {
     }
   }
 
-  case class Elided(substeps: Seq[Step], highlightedInference: Option[Inference.Summary]) extends Step.WithSubsteps with WithoutVariable with WithoutAssumption {
+  case class Elided(substeps: Seq[Step], highlightedInference: Option[Inference.Summary]) extends Step.WithSubsteps with WithoutVariable {
     val `type` = "elided"
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
@@ -370,7 +370,7 @@ object Step {
     }
   }
 
-  case class SubProof(name: String, substeps: Seq[Step]) extends Step.WithSubsteps with WithoutVariable with WithoutAssumption {
+  case class SubProof(name: String, substeps: Seq[Step]) extends Step.WithSubsteps with WithoutVariable {
     val `type`: String = "subproof"
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
