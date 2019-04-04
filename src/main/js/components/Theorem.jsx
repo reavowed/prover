@@ -1,5 +1,6 @@
 import path from "path";
 import React from "react";
+import _ from "lodash";
 import {Expression} from "../models/Expression";
 import {Step} from "../models/Step";
 import {HighlightableExpression} from "./ExpressionComponent";
@@ -53,8 +54,9 @@ export class Theorem extends React.Component {
     };
   };
 
-  updateTheorem = (theoremJSON) => {
-    const theorem = this.parseTheorem(theoremJSON);
+  updateTheorem = (result) => {
+    _.merge(window.inferences, result.newInferences);
+    const theorem = this.parseTheorem(result.theorem);
     this.setState({theorem: theorem});
   };
 

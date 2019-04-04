@@ -121,7 +121,7 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
         case axiom: Axiom =>
           Success(("Axiom", Map("axiom" -> axiom), Map.empty))
         case theorem: Theorem =>
-          Success(("Theorem", Map("theorem" -> theorem), Map("inferences" -> getReferencedInferences(theorem))))
+          Success(("Theorem", Map("theorem" -> theorem), Map("inferences" -> getInferenceLinks(theorem.referencedInferenceIds))))
         case statementDefinition: StatementDefinition =>
           Success(("StatementDefinition", Map("definition" -> statementDefinition), Map.empty))
         case termDefinition: TermDefinition =>
@@ -241,9 +241,9 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
     @PathVariable("entryKey") entryKey: String,
     @RequestBody(required = false) newShorthand: String
   ): ResponseEntity[_] = {
-    modifyEntry[ExpressionDefinition, ChapterProps](bookKey, chapterKey, entryKey, (_, _, _, definition) =>
-      Success(definition.withShorthand(Option(newShorthand).filter(_.nonEmpty)))
-    ).map{ case (books, book, chapter, _) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    modifyEntry[ExpressionDefinition, Unit](bookKey, chapterKey, entryKey, (_, _, _, definition) =>
+      Success(definition.withShorthand(Option(newShorthand).filter(_.nonEmpty)) -> ())
+    ).map{ case (books, book, chapter, _, _) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
   case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, numberOfBoundVariables: Int, structureType: Option[String])
@@ -267,17 +267,6 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
         .filter(_._1.referencedInferenceIds.intersect(inferenceIds).nonEmpty)
       if theoremsWithKeys.nonEmpty
     } yield (book.title, chapter.title, theoremsWithKeys.map { case (theorem, key) => LinkSummary(theorem.name, getEntryUrl(bookKey, chapterKey, key))})
-  }
-
-  private def getReferencedInferences(theorem: Theorem): Map[String, LinkSummary] = {
-    val inferenceIds = theorem.referencedInferenceIds
-    (for {
-      (book, bookKey) <- getBooksWithKeys(bookService.books)
-      (chapter, chapterKey) <- getChaptersWithKeys(book)
-      (inference, key) <- getEntriesWithKeys(chapter)
-        .flatMap { case (entry, key) => entry.inferences.map(_ -> key) }
-        .filter{ case (inference, key) => inferenceIds.contains(inference.id) }
-    } yield inference.id -> LinkSummary(inference.name, getEntryUrl(bookKey, chapterKey, key))).toMap
   }
 
   private def createReactView(viewName: String, props: AnyRef, globals: Map[String, AnyRef] = Map.empty): String = {
