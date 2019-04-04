@@ -171,7 +171,7 @@ object Step {
       } yield Naming(variableName, newAssumption, newStatement, newSubsteps, inference, newPremises, newSubstitutions)
     }
     override def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step = {
-      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext), premiseContext)
+      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext), addPremises(premiseContext, stepContext))
       val newPremises = premises.map(p => premiseContext.createPremise(p.statement))
       copy(substeps = newSubsteps, premises = newPremises)
     }
