@@ -4,6 +4,7 @@ import net.prover.controllers.models.PathData
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.entries.Theorem
+import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -14,6 +15,23 @@ import scala.util.{Failure, Success, Try}
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}"))
 class TheoremController @Autowired() (val bookService: BookService) extends BookModification {
+
+  @PostMapping(value = Array("/target"))
+  def createTopLevelTarget(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @RequestBody serializedStatement: String
+  ): ResponseEntity[_] = {
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
+      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
+      for {
+        targetStatement <- Statement.parser.parseFromString(serializedStatement, "target statement").recoverWithBadRequest
+        step = Step.Target(targetStatement)
+        newProof = step +: theorem.proof
+      } yield theorem.copy(proof = newProof)
+    }.toResponseEntity
+  }
 
   @PostMapping(value = Array("/{stepPath}/clear"))
   def clearStep(

@@ -43,10 +43,11 @@ object Step {
     def replaceSubsteps(newSubsteps: Seq[Step]): Step
     def modifyStepForInsertion(step: Step): Step
     def modifyStepForExtraction(step: Step): Option[Step]
-    override def getSubstep(index: Int, outerContext: StepContext, premiseContext: PremiseContext): Option[(Step, StepContext, PremiseContext)] = {
-      substeps.splitAtIndexIfValid(index).map { case (_, step, _) =>
-        val innerStepContext = specifyStepContext(outerContext)
-        (step, innerStepContext, addPremises(premiseContext, innerStepContext))
+    override def getSubstep(index: Int, outerStepContext: StepContext, outerPremiseContext: PremiseContext): Option[(Step, StepContext, PremiseContext)] = {
+      substeps.splitAtIndexIfValid(index).map { case (before, step, _) =>
+        val innerStepContext = specifyStepContext(outerStepContext)
+        val innerPremiseContext = addPremises(outerPremiseContext, outerStepContext).addSteps(before, innerStepContext)
+        (step, innerStepContext, innerPremiseContext)
       }
     }
     override def extractSubstep(index: Int): Option[Option[(Step, Step)]] = {
