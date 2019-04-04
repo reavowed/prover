@@ -145,3 +145,28 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ func
     prove ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$$0 $0 apply $$0 $0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ function $$0 × A B C ∀ a → ∈ $0 A ∀ f → ∧ function $0 B C with ($0 $$0) φ ∀ b → ∈ $0 B = apply $$$$$0 orderedPair $$$0 $0 apply $$0 $0) ()
   }
 }
+
+theorem Binary Functions with Same Values are Equal
+premise function f × A B C
+premise function g × A B C
+premise ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply f orderedPair $$0 $0 apply g orderedPair $$0 $0
+conclusion = f g
+{
+  take x {
+    assume ∈ $0 × A B {
+      prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () ($0, A, B) () ()
+      let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply f $0 apply g $0) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () {
+        let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply f $$0 apply g $$0) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () {
+          elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+            prove → ∈ $$0 A ∀ b' → ∈ $0 B = apply f orderedPair $$$0 $0 apply g orderedPair $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$0 A ∀ b' → ∈ $0 B = apply f orderedPair $$$$$0 $0 apply g orderedPair $$$$$0 $0) ()
+            prove ∀ b' → ∈ $0 B = apply f orderedPair $$$0 $0 apply g orderedPair $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ b' → ∈ $0 B = apply f orderedPair $$$0 $0 apply g orderedPair $$$0 $0) () () ()
+            prove → ∈ $0 B = apply f orderedPair $$0 $0 apply g orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 B = apply f orderedPair $$0 $$$$0 apply g orderedPair $$0 $$$$0) ()
+            prove = apply f orderedPair $$0 $0 apply g orderedPair $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 B, = apply f orderedPair $$0 $0 apply g orderedPair $$0 $0) () () ()
+          }
+          prove = apply f $$$0 apply g $$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$0, orderedPair $$0 $0) (= apply f $$$$0 apply g $$$$0) ()
+        }
+      }
+    }
+  }
+  prove = f g 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () (f, × A B, C, g) () ()
+}
