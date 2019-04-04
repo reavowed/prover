@@ -160,21 +160,23 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
     addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
-      val premises = newTheoremDefininition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}"))
-      val conclusion = Statement.parser.parseFromString(newTheoremDefininition.conclusion, "conclusion")
-      val newTheorem = Theorem(
-        newTheoremDefininition.name,
-        premises,
-        conclusion,
-        Seq(Step.Target(conclusion)),
-        RearrangementType.NotRearrangement)
-      val existingTheoremOption = entryContext.inferences.find(_.id == newTheorem.id)
-      existingTheoremOption match {
-        case Some(_) =>
-          Failure(BadRequestException("An inference with these premises and conclusion already exists"))
-        case None =>
-          Success(newTheorem)
-      }
+      for {
+        premises <- newTheoremDefininition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}").recoverWithBadRequest).traverseTry
+        conclusion <- Statement.parser.parseFromString(newTheoremDefininition.conclusion, "conclusion").recoverWithBadRequest
+        newTheorem = Theorem(
+          newTheoremDefininition.name,
+          premises,
+          conclusion,
+          Seq(Step.Target(conclusion)),
+          RearrangementType.NotRearrangement)
+        existingTheoremOption = entryContext.inferences.find(_.id == newTheorem.id)
+        _ <- existingTheoremOption match {
+          case Some(_) =>
+            Failure(BadRequestException("An inference with these premises and conclusion already exists"))
+          case None =>
+            Success(newTheorem)
+        }
+      } yield newTheorem
     }.map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
