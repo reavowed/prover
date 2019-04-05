@@ -80,10 +80,10 @@ conclusion ∃! x with ($0) φ
   }
 }
 
-theorem Uniqueness by Exhibiting Single Value
+theorem Uniqueness Equivalence from Single Value
 premise ∀ x → with ($0) φ = $0 a
 premise with (a) φ
-conclusion ∃! x with ($0) φ
+conclusion ∀ x ↔ with ($0) φ = $0 a
 {
   take x {
     assume = $0 a {
@@ -97,6 +97,14 @@ conclusion ∃! x with ($0) φ
       prove ↔ with ($0) φ = $0 a 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (with ($0) φ, = $0 a) () () ()
     }
   }
+}
+
+theorem Uniqueness by Exhibiting Single Value
+premise ∀ x → with ($0) φ = $0 a
+premise with (a) φ
+conclusion ∃! x with ($0) φ
+{
+  prove ∀ x ↔ with ($0) φ = $0 a db1d25f081fa3100b2862c013829cc4069d1bf5d6b35088c299c8774de94294b () (a) (with ($0) φ) ()
   prove ∃! x with ($0) φ 4bdd4c4c05b03bbab5920d1e6f4973a7784402c71237251140cc5eced776cf6f () (a) (with ($0) φ) ()
 }
 

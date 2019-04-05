@@ -246,3 +246,74 @@ conclusion function f A B
     prove function f A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ f functionSpace A B, function f A B) () () ()
   }
 }
+
+theorem Function from Formula
+premise ∀ a → ∈ $0 A ∈ with ($0) F B
+conclusion ∃! f ∧ function $0 A B ∀ a → ∈ $0 A = apply $$0 $0 with ($0) F
+{
+  let f_F = $0 comprehension x × A B ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 with ($0) F cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ f ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F) (comprehension x × A B ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 with ($0) F) () () {
+    prove ⊆ $0 × A B 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () ($0, × A B) (∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 with ($0) F) ()
+    subproof (Function value is unique) {
+      take a {
+        assume ∈ $0 A {
+          elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+            prove → ∈ $0 A ∈ with ($0) F B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 A ∈ with ($$$0) F B) ()
+            prove ∈ with ($0) F B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∈ with ($0) F B) () () ()
+          }
+          elided 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d {
+            prove ∈ orderedPair $0 with ($0) F × A B 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () ($0, A, with ($0) F, B) () ()
+            elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+              prove = orderedPair $0 with ($0) F orderedPair $0 with ($0) F 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (orderedPair $0 with ($0) F) () ()
+              prove ∧ ∈ $0 A = orderedPair $0 with ($0) F orderedPair $0 with ($0) F bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 A, = orderedPair $0 with ($0) F orderedPair $0 with ($0) F) () () ()
+              prove ∃ a ∧ ∈ $0 A = orderedPair $$0 with ($$0) F orderedPair $0 with ($0) F c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$$0 A = orderedPair $0 with ($0) F orderedPair $$$0 with ($$$0) F) ()
+            }
+            prove ∈ orderedPair $0 with ($0) F $$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$0, × A B, orderedPair $0 with ($0) F) (∃ a ∧ ∈ $0 A = $$$$0 orderedPair $0 with ($0) F) ()
+          }
+          take x {
+            assume ∈ orderedPair $$0 $0 $$$0 {
+              prove ∃ a' ∧ ∈ $0 A = orderedPair $$$0 $$0 orderedPair $0 with ($0) F fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, × A B, orderedPair $$0 $0) (∃ a ∧ ∈ $0 A = $$$$$0 orderedPair $0 with ($0) F) ()
+              let a' ∧ ∈ $0 A = orderedPair $$$0 $$0 orderedPair $0 with ($0) F 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $0 with ($$0) F) () (∧ ∈ $$$$0 A = orderedPair $$0 $0 orderedPair $$$$0 with ($$$$0) F) () {
+                prove = $$$0 $0 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () ($$$0, $$0, $0, with ($0) F) () ()
+                prove = $$0 with ($0) F 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$$0, $$0, $0, with ($0) F) () ()
+                prove = $$0 with ($$$0) F 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$0, $0) (= $$0 with ($$$$$0) F) ()
+              }
+            }
+          }
+          prove ∀ x ↔ ∈ orderedPair $$0 $0 $$$0 = $0 with ($$0) F db1d25f081fa3100b2862c013829cc4069d1bf5d6b35088c299c8774de94294b () (with ($0) F) (∈ orderedPair $0 $$$0 $$0) ()
+        }
+      }
+    }
+    elided 4bdd4c4c05b03bbab5920d1e6f4973a7784402c71237251140cc5eced776cf6f {
+      take a {
+        assume ∈ $0 A {
+          prove → ∈ $0 A ∀ x ↔ ∈ orderedPair $$0 $0 $$$0 = $0 with ($$0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 A ∀ x ↔ ∈ orderedPair $$$$0 $0 $$$0 = $0 with ($$$$0) F) ()
+          prove ∀ x ↔ ∈ orderedPair $$0 $0 $$$0 = $0 with ($$0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ x ↔ ∈ orderedPair $$0 $0 $$$0 = $0 with ($$0) F) () () ()
+          prove ∃! y ∈ orderedPair $$0 $0 $$$0 4bdd4c4c05b03bbab5920d1e6f4973a7784402c71237251140cc5eced776cf6f () (with ($0) F) (∈ orderedPair $0 $$$0 $$0) ()
+        }
+      }
+    }
+    elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
+      prove ∧ ⊆ $0 × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 × A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 $$$0) () () ()
+      prove function $0 A B be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () ($0, A, B) () ()
+    }
+    subproof (Function is equivalent to formula) {
+      take a {
+        assume ∈ $0 A {
+          prove ∈ orderedPair $0 apply $$0 $0 $$0 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () ($$0, A, B, $0) () ()
+          elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+            prove → ∈ $0 A ∀ x ↔ ∈ orderedPair $$0 $0 $$$0 = $0 with ($$0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 A ∀ x ↔ ∈ orderedPair $$$$0 $0 $$$0 = $0 with ($$$$0) F) ()
+            prove ∀ x ↔ ∈ orderedPair $$0 $0 $$$0 = $0 with ($$0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ x ↔ ∈ orderedPair $$0 $0 $$$0 = $0 with ($$0) F) () () ()
+            prove ↔ ∈ orderedPair $0 apply $$0 $0 $$0 = apply $$0 $0 with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (apply $$0 $0) (↔ ∈ orderedPair $0 $$$0 $$0 = $$$0 with ($0) F) ()
+            prove → ∈ orderedPair $0 apply $$0 $0 $$0 = apply $$0 $0 with ($0) F f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $0 apply $$0 $0 $$0, = apply $$0 $0 with ($0) F) () () ()
+            prove = apply $$0 $0 with ($0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $0 apply $$0 $0 $$0, = apply $$0 $0 with ($0) F) () () ()
+          }
+        }
+      }
+    }
+    elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+      prove ∧ function $0 A B ∀ a → ∈ $0 A = apply $$0 $0 with ($0) F bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 A B, ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F) () () ()
+      prove ∃ f ∧ function $0 A B ∀ a → ∈ $0 A = apply $$0 $0 with ($0) F c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F) ()
+    }
+  }
+  prove ∃! f ∧ function $0 A B ∀ a → ∈ $0 A = apply $$0 $0 with ($0) F 3a9caa6515b27b35622b39eaa4eb51c264daf52104e0afe26902be29146899da () (A, B) () (with ($0) F)
+}
