@@ -256,7 +256,11 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
   }
 
   private def getDefinitionShorthands(entryContext: EntryContext): Map[String, String] = {
-    entryContext.availableEntries.ofType[ExpressionDefinition].mapCollect(d => d.shorthand.map(_ -> d.symbol)).toMap
+    val shorthandsFromDefinitions = entryContext.availableEntries.ofType[ExpressionDefinition].mapCollect(d => d.shorthand.map(_ -> d.symbol)).toMap
+    val greekLetterShorthands = 'α'.to('ω')
+      .map(c => Character.getName(c).splitByWhitespace().last.toLowerCase -> c.toString)
+      .toMap
+    shorthandsFromDefinitions ++ greekLetterShorthands
   }
 
   private def getUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[LinkSummary])] = {
