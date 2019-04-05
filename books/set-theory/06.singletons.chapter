@@ -69,7 +69,12 @@ conclusion = a b
       prove ↔ = $0 a = $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (= $0 a, ∈ $0 singleton b, = $0 b) () () ()
     }
   }
-  prove = a b d19d34e8a567ece130472195f806460ffa757ea570113c9779131cbf05b33ef7 () (a, b) () ()
+  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ = a a = a b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ = $0 a = $0 b) ()
+    prove → = a a = a b f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= a a, = a b) () () ()
+    prove = a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= a a, = a b) () () ()
+  }
 }
 
 theorem Singleton of Element Is Subset

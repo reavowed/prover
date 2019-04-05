@@ -95,18 +95,6 @@ conclusion ¬ = a b
   prove ¬ = a b 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= a b, with (b) φ) () () ()
 }
 
-theorem Sets Are Equal If Always Equal to the Same Thing
-premise ∀ x ↔ = $0 a = $0 b
-conclusion = a b
-{
-  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
-  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ = a a = a b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ = $0 a = $0 b) ()
-    prove → = a a = a b f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= a a, = a b) () () ()
-    prove = a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= a a, = a b) () () ()
-  }
-}
-
 theorem Every Set Exists
 conclusion ∃ x = $0 a
 {
@@ -132,4 +120,13 @@ conclusion ⊕ = a b = a c
   }
   prove ¬ ∧ = a b = a c 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ = a b = a c, = b c) () () ()
   prove ⊕ = a b = a c 85d9228e116d39e101fccf8102b9ae979459e94efa97bd1f050fb7327031497b (= a b, = a c) () () ()
+}
+
+theorem Sets Are Equal If Equal to the Same Thing
+premise = x a
+premise = x b
+conclusion = a b
+{
+  prove = a x 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (x, a) () ()
+  prove = a b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (a, x, b) () ()
 }
