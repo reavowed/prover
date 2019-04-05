@@ -85,3 +85,21 @@ conclusion ¬ ∃ x with ($0) φ
   }
   prove ¬ ∃ x with ($0) φ fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (∃ x with ($0) φ, ∀ x ¬ with ($0) φ) () () ()
 }
+
+theorem Swap Restricted Existential Quantifiers
+premise ∃ a ∧ with ($0) φ ∃ b ∧ with ($0) ψ with ($$0 $0) χ
+conclusion ∃ b ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ
+{
+  let a' ∧ with ($0) φ ∃ b ∧ with ($0) ψ with ($$0 $0) χ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ b ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ) () (∧ with ($0) φ ∃ b ∧ with ($0) ψ with ($$0 $0) χ) () {
+    let b' ∧ with ($0) ψ with ($$0 $0) χ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ b ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ) () (∧ with ($$0) ψ with ($0 $$0) χ) () {
+      elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+        prove ∧ with ($$0) φ with ($$0 $0) χ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (with ($$0) φ, with ($$0 $0) χ) () () ()
+        prove ∃ a ∧ with ($0) φ with ($0 $$0) χ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$0) (∧ with ($$$0) φ with ($$$0 $0) χ) ()
+      }
+      elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+        prove ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (with ($0) ψ, ∃ a ∧ with ($0) φ with ($0 $$0) χ) () () ()
+        prove ∃ b ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ with ($$$0) ψ ∃ a ∧ with ($0) φ with ($0 $$$$0) χ) ()
+      }
+    }
+  }
+}
