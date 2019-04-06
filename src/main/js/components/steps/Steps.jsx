@@ -207,7 +207,7 @@ export class Steps extends React.Component {
   render() {
     let {steps, className, path, referencesForLastStep, ...otherProps} = this.props;
     return <div className={className}>
-      {Steps.renderSteps(steps, path, referencesForLastStep, otherProps)}
+      {Steps.renderSteps(steps, path, referencesForLastStep || [], otherProps)}
     </div>;
   }
 }
