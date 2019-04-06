@@ -30,7 +30,7 @@ case class Theorem(
         None
       case head +: tail =>
         val initialStepContextAndPathOption = proof.splitAtIndexIfValid(head).map { case (before, step, _) =>
-          (step, initialStepContext.atIndex(head), initialPremiseContext(entryContext), Seq(head))
+          (step, initialStepContext.atIndex(head), initialPremiseContext(entryContext).addSteps(before, initialStepContext), Seq(head))
         }
         tail.foldLeft(initialStepContextAndPathOption) { case (currentStepContextAndPathOption, index) =>
           currentStepContextAndPathOption.flatMap { case (step, stepContext, premiseContext, path) =>

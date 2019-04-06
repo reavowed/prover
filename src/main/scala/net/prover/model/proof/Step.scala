@@ -16,7 +16,11 @@ sealed trait Step {
   def extractSubstep(index: Int): Option[Option[(Step, Step)]]
   def modifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Seq[Step]]): Option[Step]
   def tryModifySubsteps(outerContext: StepContext, premiseContext: PremiseContext, f: (Seq[Step], StepContext, PremiseContext) => Option[Try[Seq[Step]]]): Option[Try[Step]]
-  def tryModifySubstepsWithResult[T](f: Seq[Step] => Option[Try[(Seq[Step], T)]]): Option[Try[(Step, T)]]
+  def tryModifySubstepsWithResult[T](
+    stepContext: StepContext,
+    premiseContext: PremiseContext,
+    f: (Seq[Step], StepContext, PremiseContext) => Option[Try[(Seq[Step], T)]]
+  ): Option[Try[(Step, T)]]
   def insertExternalParameters(numberOfParametersToRemove: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step]
   def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step
@@ -34,7 +38,11 @@ object Step {
     override def extractSubstep(index: Int): Option[Option[(Step, Step)]] = None
     override def modifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Seq[Step]]): Option[Step] = None
     override def tryModifySubsteps(outerContext: StepContext, premiseContext: PremiseContext, f: (Seq[Step], StepContext, PremiseContext) => Option[Try[Seq[Step]]]): Option[Try[Step]] = None
-    override def tryModifySubstepsWithResult[T](f: Seq[Step] => Option[Try[(Seq[Step], T)]]): Option[Try[(Step, T)]] = None
+    override def tryModifySubstepsWithResult[T](
+    stepContext: StepContext,
+    premiseContext: PremiseContext,
+    f: (Seq[Step], StepContext, PremiseContext) => Option[Try[(Seq[Step], T)]]
+  ): Option[Try[(Step, T)]] = None
   }
   sealed trait WithSubsteps extends Step {
     def substeps: Seq[Step]
@@ -66,7 +74,14 @@ object Step {
       val innerStepContext = specifyStepContext(stepContext)
       f(substeps, innerStepContext, addPremises(premiseContext, innerStepContext)).map(_.map(replaceSubsteps))
     }
-    override def tryModifySubstepsWithResult[T](f: Seq[Step] => Option[Try[(Seq[Step], T)]]): Option[Try[(Step, T)]] = f(substeps).map(_.map(_.mapLeft(replaceSubsteps)))
+    override def tryModifySubstepsWithResult[T](
+    stepContext: StepContext,
+    premiseContext: PremiseContext,
+    f: (Seq[Step], StepContext, PremiseContext) => Option[Try[(Seq[Step], T)]]
+  ): Option[Try[(Step, T)]] = {
+      val innerStepContext = specifyStepContext(stepContext)
+      f(substeps, innerStepContext, addPremises(premiseContext, innerStepContext)).map(_.map(_.mapLeft(replaceSubsteps)))
+    }
   }
   sealed trait WithVariable extends Step.WithSubsteps {
     def variableName: String

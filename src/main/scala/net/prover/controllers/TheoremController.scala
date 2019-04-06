@@ -103,6 +103,37 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     }.toResponseEntity
   }
 
+  @PostMapping(value = Array("/{stepPath}/moveOutOfContainer"))
+  def moveStepOutOfContainer(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData
+  ): ResponseEntity[_] = {
+    def moveInTheorem(theorem: Theorem, entryContext: EntryContext): Option[Try[Theorem]] = {
+      stepPath.indexes match {
+        case Nil =>
+          None
+        case Seq(_) =>
+          Some(Failure(BadRequestException("No containing step to move out of")))
+        case init :+ containerIndex :+ last =>
+          theorem.tryModifySteps(init, entryContext, (steps, outerStepContext, outerPremiseContext) => {
+            steps.splitAtIndexIfValid(containerIndex).flatMap { case (beforeContainer, container, afterContainer) =>
+              container.tryModifySubstepsWithResult[Step](outerStepContext, outerPremiseContext, (substeps, innerStepContext, innerPremiseContext) => {
+                substeps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+                  Success((before ++ after, step))
+                }
+              }).mapMap { case (updatedContainer, step) =>
+                (beforeContainer :+ step :+ updatedContainer) ++ afterContainer
+              }
+            }
+          })
+      }
+    }
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
+      moveInTheorem(theorem, entryContext).orNotFound(s"Step $stepPath").flatten
+    }.toResponseEntity
+  }
 
   @PostMapping(value = Array("/{stepPath}/moveIntoNext"))
   def moveStepIntoNext(

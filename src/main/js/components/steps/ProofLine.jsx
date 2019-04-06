@@ -66,6 +66,11 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.props.apiService.fetchJsonForStep(this.props.path, "moveIntoNext", {method: "POST"})
       .then(this.props.apiService.updateTheorem);
   };
+  moveOutOfContainer = (e) => {
+    e.stopPropagation();
+    this.props.apiService.fetchJsonForStep(this.props.path, "moveOutOfContainer", {method: "POST"})
+      .then(this.props.apiService.updateTheorem);
+  };
   clearStep = () => {
     this.props.apiService.fetchJsonForStep(this.props.path, "clear", {
       method: "POST"
@@ -128,6 +133,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
               <Button onClick={this.elide}variant="success" size="sm" className="ml-1">Elide</Button>
               <Button onClick={this.clearStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-redo"/></Button>
               <Button onClick={this.deleteStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-trash"/></Button>
+              <Button onClick={this.moveOutOfContainer} size="sm" className="ml-1"><span className="fas fa-level-up-alt"/></Button>
               <Button onClick={this.moveUp} size="sm" className="ml-1"><span className="fas fa-arrow-up"/></Button>
               <Button onClick={this.moveDown} size="sm" className="ml-1"><span className="fas fa-arrow-down"/></Button>
               <Button onClick={this.moveIntoNext} size="sm" className="ml-1"><span className="fas fa-level-down-alt"/></Button>
