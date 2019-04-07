@@ -41,14 +41,6 @@ conclusion = with (a) F with (b) F
   prove = with (a) F with (b) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= with (a) F with ($0) F) ()
 }
 
-theorem Substitution of Equals into Function (Reversed)
-premise = a b
-conclusion = with (b) F with (a) F
-{
-  prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () ()
-  prove = with (b) F with (a) F 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (b, a) () (with ($0) F)
-}
-
 comment Basic facts about equality.
 
 theorem Equality Is Symmetric
@@ -69,6 +61,24 @@ premise = b c
 conclusion = a c
 {
   prove = a c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (b, c) (= a $0) ()
+}
+
+theorem Equality by Equaling the Same Thing (Left)
+premise = a x
+premise = b x
+conclusion = a b
+{
+  prove = x b 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (b, x) () ()
+  prove = a b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (a, x, b) () ()
+}
+
+theorem Equality by Equaling the Same Thing (Right)
+premise = x a
+premise = x b
+conclusion = a b
+{
+  prove = a x 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (x, a) () ()
+  prove = a b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (a, x, b) () ()
 }
 
 theorem Equivalence of Substituted Equals
@@ -116,17 +126,8 @@ premise ¬ = b c
 conclusion ⊕ = a b = a c
 {
   assume ∧ = a b = a c {
-    prove = b c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= $0 c) ()
+    prove = b c 44fd8329fe93cb8213e4e6996b2de73b2e0aaeeb19ebaebc0ed7a29ddf1f619b () (a, b, c) () ()
   }
   prove ¬ ∧ = a b = a c 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ = a b = a c, = b c) () () ()
   prove ⊕ = a b = a c 85d9228e116d39e101fccf8102b9ae979459e94efa97bd1f050fb7327031497b (= a b, = a c) () () ()
-}
-
-theorem Sets Are Equal If Equal to the Same Thing
-premise = x a
-premise = x b
-conclusion = a b
-{
-  prove = a x 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (x, a) () ()
-  prove = a b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (a, x, b) () ()
 }

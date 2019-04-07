@@ -7,7 +7,7 @@ conclusion ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 �
   take f {
     take g {
       assume ∧ ∧ function $$0 ℕ A ∧ = apply $$0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) a ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) a {
-        prove = apply $$0 0 apply $0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $0 0, a_0) (= apply $$0 0 $$$0) ()
+        prove = apply $$0 0 apply $0 0 c23a01cc15e828d72e0e45b93e062cd3e609d01d59029b2516edf5993bfc6565 () (apply $$0 0, a_0, apply $0 0) () ()
         take n {
           assume ∧ ∈ $0 ℕ = apply $$$0 $0 apply $$0 $0 {
             elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
@@ -19,7 +19,7 @@ conclusion ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 �
               prove = apply $$0 successor $0 with (apply $$0 $0) a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, = apply $$0 successor $0 with (apply $$0 $0) a) () () ()
             }
             prove = apply $$0 successor $0 with (apply $$$0 $0) a 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$$0 $0, apply $$0 $0) (= apply $$0 successor $0 with ($$$$0) a) ()
-            prove = apply $$$0 successor $0 apply $$0 successor $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$0 successor $0, with (apply $$$0 $0) a) (= apply $$$0 successor $0 $$$$0) ()
+            prove = apply $$$0 successor $0 apply $$0 successor $0 c23a01cc15e828d72e0e45b93e062cd3e609d01d59029b2516edf5993bfc6565 () (apply $$$0 successor $0, with (apply $$$0 $0) a, apply $$0 successor $0) () ()
           }
         }
         prove ∀ n → ∈ $0 ℕ = apply $$$0 $0 apply $$0 $0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (= apply $$0 $$$0 apply $0 $$$0) ()
@@ -292,7 +292,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                                       prove = apply $$$$0 $$$$$$0 apply $$0 $$$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$$$0 $$$0, = apply $$$$0 $$$$$$0 apply $$0 $$$$$$0) () () ()
                                       prove = apply $$0 $$$$$$0 apply $$$$0 $$$$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply $$$$0 $$$$$$0, apply $$0 $$$$$$0) () ()
                                     }
-                                    prove = apply $$0 $$$$$$0 $$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$$0, apply $$$$0 $$$$$$0) (= apply $$0 $$$$$$0 $$$$$$$$0) ()
+                                    prove = apply $$0 $$$$$$0 $$$$$0 c23a01cc15e828d72e0e45b93e062cd3e609d01d59029b2516edf5993bfc6565 () (apply $$0 $$$$$$0, apply $$$$0 $$$$$$0, $$$$$0) () ()
                                     elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
                                       prove = apply f $$$$$0 apply $$0 successor $$$$$$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, successor successor $$$$$$0, X, successor $$$$$$0, apply f $$$$$0) () ()
                                       prove = apply $$0 successor $$$$$$0 apply f $$$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f $$$$$0, apply $$0 successor $$$$$$0) () ()
@@ -428,7 +428,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                 prove = apply $$0 successor $$$0 apply union $$$$0 successor $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $$$0 $0, = apply $$0 successor $$$0 apply union $$$$0 successor $$$0) () () ()
               }
               prove = apply $$0 successor $$$0 apply f apply union $$$$0 $$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (apply $$0 $$$0, apply union $$$$0 $$$0) (= apply $$0 successor $$$0 apply f $$$$$0) ()
-              prove = apply union $$$$0 successor $$$0 apply f apply union $$$$0 $$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (apply $$0 successor $$$0, apply union $$$$0 successor $$$0) (= $$$$$0 apply f apply union $$$$0 $$$0) ()
+              prove = apply union $$$$0 successor $$$0 apply f apply union $$$$0 $$$0 44fd8329fe93cb8213e4e6996b2de73b2e0aaeeb19ebaebc0ed7a29ddf1f619b () (apply $$0 successor $$$0, apply union $$$$0 successor $$$0, apply f apply union $$$$0 $$$0) () ()
             }
           }
         }

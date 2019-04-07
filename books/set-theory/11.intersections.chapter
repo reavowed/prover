@@ -157,8 +157,8 @@ premise = ∩ A B ∅
 premise ∈ a B
 conclusion ¬ ∈ a A
 {
-  prove = ∩ A B ∩ B A aaeab6d7d3d52825168c301db980e40e9b4f91b1ea9d470fae589d4fdbbb6b0a () (A, B) () ()
-  prove = ∩ B A ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∩ A B, ∩ B A) (= $0 ∅) ()
+  prove = ∩ B A ∩ A B aaeab6d7d3d52825168c301db980e40e9b4f91b1ea9d470fae589d4fdbbb6b0a () (B, A) () ()
+  prove = ∩ B A ∅ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (∩ B A, ∩ A B, ∅) () ()
   prove ¬ ∈ a A d67ac36a53ad0c96b62926315f6b8e27b9496d02c67bae65854aaf941f66dc8a () (B, A, a) () ()
 }
 
@@ -201,7 +201,7 @@ theorem Disjoint Pair
 premise ∀ x → ∈ $0 A ¬ ∈ $0 B
 conclusion = ∩ B A ∅
 {
-  prove = ∩ A B ∅ b80bb75d6dc623394f9f9d5d78b00f112d814f0a5a1aa3c718cc6420f534a673 () (A, B) () ()
   prove = ∩ B A ∩ A B aaeab6d7d3d52825168c301db980e40e9b4f91b1ea9d470fae589d4fdbbb6b0a () (B, A) () ()
-  prove = ∩ B A ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∩ A B, ∅) (= ∩ B A $0) ()
+  prove = ∩ A B ∅ b80bb75d6dc623394f9f9d5d78b00f112d814f0a5a1aa3c718cc6420f534a673 () (A, B) () ()
+  prove = ∩ B A ∅ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (∩ B A, ∩ A B, ∅) () ()
 }

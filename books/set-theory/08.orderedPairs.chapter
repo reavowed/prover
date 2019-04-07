@@ -17,17 +17,21 @@ conclusion ∨ = c singleton a = c pair a b
 theorem Singleton of First Coordinate Is Element of Ordered Pair
 conclusion ∈ singleton a orderedPair a b
 {
-  prove = orderedPair a b pair singleton a pair a b 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () ()
   prove ∈ singleton a pair singleton a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (singleton a, pair a b) () ()
-  prove ∈ singleton a orderedPair a b 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (orderedPair a b, pair singleton a pair a b) (∈ singleton a $0) ()
+  elided 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 {
+    prove = orderedPair a b pair singleton a pair a b 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () ()
+    prove ∈ singleton a orderedPair a b 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (orderedPair a b, pair singleton a pair a b) (∈ singleton a $0) ()
+  }
 }
 
 theorem Pair Is Element of Ordered Pair
 conclusion ∈ pair a b orderedPair a b
 {
-  prove = orderedPair a b pair singleton a pair a b 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () ()
   prove ∈ pair a b pair singleton a pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (pair a b, singleton a) () ()
-  prove ∈ pair a b orderedPair a b 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (orderedPair a b, pair singleton a pair a b) (∈ pair a b $0) ()
+  elided 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 {
+    prove = orderedPair a b pair singleton a pair a b 20416614abb9fbe0f01a094dbc9b86ed7246f84025771d98135acae7e0dbc523 () (a, b) () ()
+    prove ∈ pair a b orderedPair a b 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (orderedPair a b, pair singleton a pair a b) (∈ pair a b $0) ()
+  }
 }
 
 theorem Ordered Pair with Same Coordinates Is Double Singleton
@@ -78,9 +82,9 @@ conclusion = b d
   prove = orderedPair a b orderedPair a d 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, c) (= orderedPair a b orderedPair $0 d) ()
   prove = orderedPair a a singleton singleton a 486dbcd9819d647e874f4e85d6466b65986782b9653cefbc33fa9c2f444b8e9f () (a) () ()
   prove = orderedPair a b singleton singleton a 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (b, a) (= orderedPair a $0 singleton singleton a) ()
-  prove = orderedPair a d singleton singleton a 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, orderedPair a d) (= $0 singleton singleton a) ()
+  prove = orderedPair a d singleton singleton a 44fd8329fe93cb8213e4e6996b2de73b2e0aaeeb19ebaebc0ed7a29ddf1f619b () (orderedPair a b, orderedPair a d, singleton singleton a) () ()
   prove = a d 1efef162b72af80fed24b414af675b41e123bc2c29d25ea39d9c65e7215a74cc () (a, d, a) () ()
-  prove = b d 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, d) (= b $0) ()
+  prove = b d 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (b, a, d) () ()
 }
 
 theorem Second Coordinates of Equal Ordered Pairs Are Equal

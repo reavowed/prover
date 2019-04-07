@@ -54,9 +54,11 @@ conclusion = 1 singleton 0
 {
   prove = 1 successor 0 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca () () () ()
   prove = successor 0 ∪ 0 singleton 0 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (0) () ()
-  prove = 1 ∪ 0 singleton 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (successor 0, ∪ 0 singleton 0) (= 1 $0) ()
-  prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
-  prove = 1 ∪ ∅ singleton 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (0, ∅) (= 1 ∪ $0 singleton 0) ()
+  prove = 1 ∪ 0 singleton 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (1, successor 0, ∪ 0 singleton 0) () ()
+  elided 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf {
+    prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
+    prove = 1 ∪ ∅ singleton 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (0, ∅) (= 1 ∪ $0 singleton 0) ()
+  }
   prove = ∪ ∅ singleton 0 singleton 0 7b4af45d996d58a9bc0a3545d5d2d90cc5493de12289c3038266d3afae1628e4 () (singleton 0) () ()
-  prove = 1 singleton 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∪ ∅ singleton 0, singleton 0) (= 1 $0) ()
+  prove = 1 singleton 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (1, ∪ ∅ singleton 0, singleton 0) () ()
 }

@@ -88,7 +88,13 @@ conclusion ⊆ singleton a S
     }
   }
   take x {
-    target → ∈ $0 singleton a ∈ $0 S
+    assume ∈ $0 singleton a {
+      prove = $0 a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) () ()
+      elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+        prove → = $0 a ∈ $0 S 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ = $$0 a ∈ $$0 S) ()
+        prove ∈ $0 S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= $0 a, ∈ $0 S) () () ()
+      }
+    }
   }
   prove ⊆ singleton a S 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (singleton a, S) () ()
 }

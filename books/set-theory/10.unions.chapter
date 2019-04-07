@@ -326,9 +326,9 @@ theorem Redundant Union with Subset
 premise ⊆ A B
 conclusion = ∪ B A B
 {
-  prove = ∪ A B B c0e819d88cc63bd8d84c19469696b7c72aca1e3384a08a41423a64297c59819c () (A, B) () ()
   prove = ∪ B A ∪ A B 251a9f6358a3f62ea0c5aca19e5f6a8e906b78772c6fbf244443a5987b7b334c () (B, A) () ()
-  prove = ∪ B A B 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∪ A B, B) (= ∪ B A $0) ()
+  prove = ∪ A B B c0e819d88cc63bd8d84c19469696b7c72aca1e3384a08a41423a64297c59819c () (A, B) () ()
+  prove = ∪ B A B 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (∪ B A, ∪ A B, B) () ()
 }
 
 theorem Redundant Union with Singleton

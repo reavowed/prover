@@ -189,7 +189,7 @@ conclusion ∃! f ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0
               prove → ∈ $0 A = apply $$0 $0 with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 A = apply $$0 $$$$0 with ($$$$0) F) ()
               prove = apply $$0 $0 with ($0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply $$0 $0 with ($0) F) () () ()
             }
-            prove = apply $$$0 $0 apply $$0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$0 $0, with ($0) F) (= apply $$$0 $0 $$$$0) ()
+            prove = apply $$$0 $0 apply $$0 $0 c23a01cc15e828d72e0e45b93e062cd3e609d01d59029b2516edf5993bfc6565 () (apply $$$0 $0, with ($0) F, apply $$0 $0) () ()
           }
         }
         prove = $$0 $0 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () ($$0, A, B, $0) () ()

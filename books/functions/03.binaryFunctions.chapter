@@ -68,7 +68,7 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B
                   let a_c ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = orderedPair $$$$$$0 $$$0 orderedPair orderedPair $$0 $0 apply apply f $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $0 apply apply f $$$0 $$0) () (∧ ∈ $$$$$$0 A ∃ b ∧ ∈ $0 B = orderedPair $$$$$0 $$0 orderedPair orderedPair $$$$$$$0 $0 apply apply f $$$$$$$0 $0) () {
                     let b_c ∧ ∈ $0 B = orderedPair $$$$$$0 $$$0 orderedPair orderedPair $$0 $0 apply apply f $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$0 apply apply f $$$$0 $$$0) () (∧ ∈ $$$$$$$0 B = orderedPair $$$$$0 $$0 orderedPair orderedPair $0 $$$$$$$0 apply apply f $0 $$$$$$$0) () {
                       prove = $$$$$$0 orderedPair $$0 $0 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () ($$$$$$0, $$$0, orderedPair $$0 $0, apply apply f $$0 $0) () ()
-                      prove = orderedPair $$0 $0 orderedPair $$$$$0 $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$$$$$0, orderedPair $$0 $0) (= $$$$$$$$0 orderedPair $$$$$0 $$$$0) ()
+                      prove = orderedPair $$0 $0 orderedPair $$$$$0 $$$$0 44fd8329fe93cb8213e4e6996b2de73b2e0aaeeb19ebaebc0ed7a29ddf1f619b () ($$$$$$0, orderedPair $$0 $0, orderedPair $$$$$0 $$$$0) () ()
                       prove = $$0 $$$$$0 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () ($$0, $0, $$$$$0, $$$$0) () ()
                       prove = $0 $$$$0 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$0, $0, $$$$$0, $$$$0) () ()
                       prove = $$$0 apply apply f $$0 $0 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$$$$$0, $$$0, orderedPair $$0 $0, apply apply f $$0 $0) () ()
@@ -141,7 +141,7 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B
                     prove → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 B = apply $$$0 orderedPair $$0 $$$$$0 apply apply f $$0 $$$$$0) ()
                     prove = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 B, = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0) () () ()
                   }
-                  prove = apply $$$0 orderedPair $$0 $0 apply $$$$0 orderedPair $$0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply $$$$0 orderedPair $$0 $0, apply apply f $$0 $0) (= apply $$$0 orderedPair $$0 $0 $$$$$0) ()
+                  prove = apply $$$0 orderedPair $$0 $0 apply $$$$0 orderedPair $$0 $0 c23a01cc15e828d72e0e45b93e062cd3e609d01d59029b2516edf5993bfc6565 () (apply $$$0 orderedPair $$0 $0, apply apply f $$0 $0, apply $$$$0 orderedPair $$0 $0) () ()
                 }
               }
             }

@@ -165,7 +165,7 @@ conclusion = a b
 {
   prove = a c 86986adff1b0347cfe6e7c5a348775548325b13c85d427e352cbea41551f0e39 () (a, b, c) () ()
   prove = b c e503481086281bc97997d7b0844c1481203e538306ce9c02b5cf8d90a816fd3e () (a, b, c) () ()
-  prove = a b 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (b, c) (= a $0) ()
+  prove = a b c23a01cc15e828d72e0e45b93e062cd3e609d01d59029b2516edf5993bfc6565 () (a, c, b) () ()
 }
 
 theorem Unordered Pair Is Subset
