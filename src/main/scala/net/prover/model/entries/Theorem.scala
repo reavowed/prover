@@ -102,6 +102,23 @@ case class Theorem(
     copy(proof = newProof)
   }
 
+  def findAssertions: Seq[(Step.Assertion, StepContext)] = {
+    def forStep(step: Step, context: StepContext): Seq[(Step.Assertion, StepContext)] = {
+      step match {
+        case assertion: Step.Assertion =>
+          Seq((assertion, context))
+        case stepWithSubsteps: Step.WithSubsteps =>
+          forSteps(stepWithSubsteps.substeps, stepWithSubsteps.specifyStepContext(context))
+        case _ =>
+          Nil
+      }
+    }
+    def forSteps(steps: Seq[Step], context: StepContext): Seq[(Step.Assertion, StepContext)] = {
+      steps.zipWithIndex.flatMap { case (step, index) => forStep(step, context.atIndex(index))}
+    }
+    forSteps(proof, initialStepContext)
+  }
+
   override def serializedLines: Seq[String] = Seq(s"theorem $name") ++
     rearrangementType.serialized.toSeq ++
     premises.map("premise " + _.serialized) ++
