@@ -18,7 +18,6 @@ case class DisplayShorthand(template: Template, format: Format.Explicit) extends
 object DisplayShorthand extends ChapterEntryParser {
   override def name = "display"
   override def parser(implicit entryContext: EntryContext): Parser[DisplayShorthand] = {
-    implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
     for {
       template <- Template.parser
       _ <- Parser.requiredWord("as")

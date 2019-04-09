@@ -1,6 +1,6 @@
 package net.prover.model.expressions
 
-import net.prover.model.{ExpressionParsingContext, Parser, Substitutions}
+import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, TemplateParsingContext}
 
 trait Term extends Expression with TypedExpression[Term] {
   def calculateApplicatives(
@@ -40,12 +40,10 @@ object Term {
           arguments <- Term.parser.listOrSingle(None)
           name <- Parser.singleWord
         } yield FunctionApplication(name, arguments)
-      case context.RecognisedParameter(parameter) =>
-        Parser.constant(parameter)
-      case context.RecognisedTermDefinition(termDefinition) =>
+      case context.entryContext.RecognisedTermDefinition(termDefinition) =>
         termDefinition.termParser
-      case context.RecognisedTermVariable(name) =>
-        Parser.constant(TermVariable(name))
+      case context.RecognisedTermVariableOrParameter(variableOrParameter) =>
+        Parser.constant(variableOrParameter)
     }
   }
 
@@ -59,14 +57,16 @@ object Term {
     variableParser.listInParens(None)
   }
 
-  def templateParser(implicit context: ExpressionParsingContext): Parser[Template] = {
-    Parser.selectWordParser("term template") {
-      case context.RecognisedTermVariable(name) =>
-        Parser.constant(Template.TermVariable(name))
-      case context.RecognisedTermDefinition(definition) =>
-        definition.templateParser
-      case context.RecognisedParameter(parameter) =>
-        Parser.constant(Template.FunctionParameter(parameter))
-    }
+  def templateParser(implicit context: TemplateParsingContext): Parser[Template] = {
+    Parser.selectWordParser("term template")(templateParserFunction)
+  }
+
+  def templateParserFunction(implicit context: TemplateParsingContext): PartialFunction[String, Parser[Template]] = {
+    case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
+      Parser.constant(Template.TermVariable(name))
+    case context.entryContext.RecognisedTermDefinition(definition) =>
+      definition.templateParser
+    case context.RecognisedParameter(parameter) =>
+      Parser.constant(Template.FunctionParameter(parameter))
   }
 }

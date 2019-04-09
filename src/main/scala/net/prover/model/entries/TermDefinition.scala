@@ -30,7 +30,7 @@ case class TermDefinition(
     }
   }
 
-  def templateParser(implicit context: ExpressionParsingContext): Parser[Template] = {
+  def templateParser(implicit context: TemplateParsingContext): Parser[Template] = {
     componentTemplateParser.map { case (newBoundVariableNames, components) =>
       Template.DefinedTerm(this, newBoundVariableNames, components)
     }

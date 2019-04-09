@@ -210,14 +210,6 @@ object Parser {
       case None =>
         Parser.constant(None)
     }
-    def orElse[S >: T](otherParser: => Parser[S]): Parser[S] = Parser { tokenizer =>
-      parser.parse(tokenizer) match {
-        case (Some(t), nextTokenizer) =>
-          (t, nextTokenizer)
-        case (None, _) =>
-          otherParser.parse(tokenizer)
-      }
-    }
     def getOrElse[S >: T](other: => S): Parser[S] = Parser { tokenizer =>
       parser.parse(tokenizer) match {
         case (Some(t), nextTokenizer) =>

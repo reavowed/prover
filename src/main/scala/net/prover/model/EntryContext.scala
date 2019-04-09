@@ -59,6 +59,17 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
         None
     }.toMap
   }
+
+  object RecognisedStatementDefinition {
+    def unapply(string: String): Option[StatementDefinition] = {
+      statementDefinitions.find(_.symbol == string)
+    }
+  }
+  object RecognisedTermDefinition {
+    def unapply(s: String): Option[TermDefinition] = {
+      termDefinitions.find(_.symbol == s)
+    }
+  }
 }
 
 object EntryContext {

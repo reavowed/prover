@@ -1,6 +1,6 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Parser, ExpressionParsingContext}
+import net.prover.model.{ExpressionParsingContext, Parser, TemplateParsingContext}
 
 trait Statement extends Expression with TypedExpression[Statement]
 
@@ -12,9 +12,9 @@ object Statement {
           arguments <- Term.parser.listOrSingle(None)
           name <- Parser.singleWord
         } yield PredicateApplication(name, arguments)
-      case context.RecognisedStatementDefinition(statementDefinition) =>
+      case context.entryContext.RecognisedStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
-      case context.RecognisedStatementVariable(name) =>
+      case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
         Parser.constant(StatementVariable(name))
     }
   }
@@ -28,12 +28,14 @@ object Statement {
       throw new Exception(s"Expected statement variable, got $nonVariable")
   }
 
-  def templateParser(implicit context: ExpressionParsingContext): Parser[Template] = {
-    Parser.selectWordParser("statement template") {
-      case context.RecognisedStatementVariable(name) =>
+  def templateParser(implicit templateParsingContext: TemplateParsingContext): Parser[Template] = {
+    Parser.selectWordParser("statement template")(templateParserFunction)
+  }
+
+  def templateParserFunction(implicit templateParsingContext: TemplateParsingContext): PartialFunction[String, Parser[Template]] = {
+      case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
         Parser.constant(Template.StatementVariable(name))
-      case context.RecognisedStatementDefinition(definition) =>
+      case templateParsingContext.entryContext.RecognisedStatementDefinition(definition) =>
         definition.templateParser
-    }
   }
 }

@@ -20,8 +20,8 @@ case class Theorem(
   override def referencedInferenceIds: Set[String] = proof.flatMap(_.referencedInferenceIds).toSet
   override def referencedDefinitions: Set[ExpressionDefinition] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions ++ proof.flatMap(_.referencedDefinitions).toSet
   override def inferences: Seq[Inference] = Seq(this)
-  private def initialStepContext: StepContext = StepContext.empty
-  private def initialPremiseContext(entryContext: EntryContext): PremiseContext = PremiseContext.justWithPremises(premises, entryContext)
+  def initialStepContext: StepContext = StepContext.empty(requiredSubstitutions.terms)
+  def initialPremiseContext(entryContext: EntryContext): PremiseContext = PremiseContext.justWithPremises(premises, entryContext)
 
   private def replaceProof(newProof: Seq[Step]): Theorem = copy(proof = newProof)
   def findStep(indexes: Seq[Int], entryContext: EntryContext): Option[(Step, StepContext, PremiseContext)] = {
@@ -133,8 +133,12 @@ case class Theorem(
 object Theorem extends Inference.EntryParser {
   override val name: String = "theorem"
 
-  def proofParser(premises: Seq[Statement])(implicit entryContext: EntryContext): Parser[Seq[Step]] = {
-    Step.listParser(entryContext, StepContext.empty, PremiseContext.justWithPremises(premises, entryContext)).inBraces
+  def proofParser(premises: Seq[Statement], conclusion: Statement)(implicit entryContext: EntryContext): Parser[Seq[Step]] = {
+    Step.listParser(
+      entryContext,
+      StepContext.empty((premises :+ conclusion).map(_.requiredSubstitutions).foldTogether.terms),
+      PremiseContext.justWithPremises(premises, entryContext)
+    ).inBraces
   }
 
   override def parser(implicit entryContext: EntryContext): Parser[Theorem] = {
@@ -144,7 +148,7 @@ object Theorem extends Inference.EntryParser {
       rearrangementType <- RearrangementType.parser
       premises <- premisesParser
       conclusion <- conclusionParser
-      proof <- proofParser(premises)
+      proof <- proofParser(premises, conclusion)
     } yield {
       Theorem(
         name,

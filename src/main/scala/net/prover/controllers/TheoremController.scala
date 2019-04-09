@@ -24,7 +24,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     @RequestBody serializedStatement: String
   ): ResponseEntity[_] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
-      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
+      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.atStep(entryContext, theorem.initialStepContext)
       for {
         targetStatement <- Statement.parser.parseFromString(serializedStatement, "target statement").recoverWithBadRequest
         step = Step.Target(targetStatement)
