@@ -2,11 +2,14 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Overlay from "react-bootstrap/Overlay";
 import Tooltip from "react-bootstrap/Tooltip";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
 import styled, {css} from "styled-components";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import Popover from "react-bootstrap/Popover";
 import {BoundVariableModal} from "../Modals";
+import {Parser} from "../../Parser";
 
 export const ProofLine = styled(class ProofLine extends React.Component {
   constructor(...args) {
@@ -14,11 +17,14 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.attachDivRef = divRef => this.setState({ divRef });
     this.attachSpanRef = spanRef => this.setState({ spanRef });
     this.attachButtonRef = buttonRef => this.setState({ buttonRef });
+    this.targetInputRef = React.createRef();
     this.state = {
       isHovered: false,
       shouldShowButtonPopover: false,
       shouldShowSubproofNameModal: false,
-      subproofName: ''
+      subproofName: '',
+      addingTarget: false,
+      targetToAdd: ''
     };
   }
   toggleButtonPopover = () => {
@@ -92,7 +98,24 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.props.apiService.fetchJsonForStep(this.props.path, "introduceSubproof", {
       method: "POST",
       body: this.state.subproofName
-    }).then(this.props.apiService.updateTheorem);
+    })
+      .then(this.props.apiService.updateTheorem)
+      .then(this.hideSubproofNameModal);
+  };
+
+  showTargetModal = () => {
+    this.setState({addingTarget: true})
+  };
+  hideTargetModal = () => {
+    this.setState({addingTarget: false});
+  };
+  addTarget = () => {
+    this.props.apiService.fetchJsonForStep(this.props.path, "target", {
+      method: "POST",
+      body: this.state.targetToAdd
+    })
+      .then(this.props.apiService.updateTheorem)
+      .then(this.hideTargetModal);
   };
 
   elide = () => {
@@ -110,6 +133,33 @@ export const ProofLine = styled(class ProofLine extends React.Component {
                                                     value={this.state.subproofName}
                                                     onChange={e => this.setState({subproofName: e.target.value})}
                                                     onSave={this.createSubproof}/>;
+
+
+    const targetModal = <Modal show={this.state.addingTarget} onHide={this.hideTargetModal} onEntered={() => {
+      this.targetInputRef.current.focus();
+      this.targetInputRef.current.select();
+    }}>
+      <Modal.Header closeButton><Modal.Title>Add target statement</Modal.Title></Modal.Header>
+      <Modal.Body>
+        <Form.Group>
+          <Form.Control type="text"
+                        value={this.state.targetToAdd}
+                        onChange={e => this.setState({targetToAdd: Parser.replaceShorthands(e.target.value)})}
+                        onKeyUp={(event) => {
+                          if (event.keyCode === 13) {
+                            this.addTarget();
+                          }
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }}
+                        ref={this.targetInputRef}/>
+        </Form.Group>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={this.hideTargetModal}>Close</Button>
+        <Button variant="primary" onClick={this.addTarget}>Save Changes</Button>
+      </Modal.Footer>
+    </Modal>;
 
     const lineElement= <div onMouseEnter={this.onMouseEnter}
                             onMouseLeave={this.onMouseLeave}
@@ -129,8 +179,9 @@ export const ProofLine = styled(class ProofLine extends React.Component {
           <Button ref={this.attachButtonRef} onClick={this.toggleButtonPopover} size="sm" className="ml-1"><span className="fas fa-ellipsis-v"/></Button>
           <Overlay target={this.state.buttonRef} show={this.state.shouldShowButtonPopover} onHide={this.hideButtonPopover} rootClose placement="bottom">
             {({show, ...props}) => <Popover {...props}>
+              <Button onClick={this.showTargetModal} variant="success" size="sm" className="ml-1">Add target</Button>
               <Button onClick={this.showSubproofNameModal} variant="success" size="sm" className="ml-1">To subproof</Button>
-              <Button onClick={this.elide}variant="success" size="sm" className="ml-1">Elide</Button>
+              <Button onClick={this.elide} variant="success" size="sm" className="ml-1">Elide</Button>
               <Button onClick={this.clearStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-redo"/></Button>
               <Button onClick={this.deleteStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-trash"/></Button>
               <Button onClick={this.moveOutOfContainer} size="sm" className="ml-1"><span className="fas fa-level-up-alt"/></Button>
@@ -140,6 +191,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
             </Popover>}
           </Overlay>
           {subProofNamingModal}
+          {targetModal}
         </>}
       </FlexRow>
     </div>;

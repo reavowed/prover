@@ -51,6 +51,6 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
       if Option(statementSymbol).forall(symbol =>
         assertion.statement.asOptionalInstanceOf[DefinedStatement]
           .exists(_.definition.symbol == symbol))
-    } yield (getEntryUrl(bookKey, chapterKey, inferenceKey), context.stepReference.stepPath.mkString("."))
+    } yield ("http://localhost:8080" + getEntryUrl(bookKey, chapterKey, inferenceKey), context.stepReference.stepPath.mkString("."))
   }
 }

@@ -16,23 +16,6 @@ import scala.util.{Failure, Success, Try}
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}"))
 class TheoremController @Autowired() (val bookService: BookService) extends BookModification {
 
-  @PostMapping(value = Array("/target"))
-  def createTopLevelTarget(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @RequestBody serializedStatement: String
-  ): ResponseEntity[_] = {
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
-      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.atStep(entryContext, theorem.initialStepContext)
-      for {
-        targetStatement <- Statement.parser.parseFromString(serializedStatement, "target statement").recoverWithBadRequest
-        step = Step.Target(targetStatement)
-        newProof = step +: theorem.proof
-      } yield theorem.copy(proof = newProof)
-    }.toResponseEntity
-  }
-
   @PostMapping(value = Array("/{stepPath}/clear"))
   def clearStep(
     @PathVariable("bookKey") bookKey: String,

@@ -9,7 +9,6 @@ import {Step} from "../models/Step";
 import {HighlightableExpression} from "./ExpressionComponent";
 import {Inference} from "./Inference";
 import {Steps} from "./steps/Steps";
-import {Parser} from "../Parser";
 
 class Premise extends React.Component {
   render() {
@@ -20,11 +19,8 @@ class Premise extends React.Component {
 export class Theorem extends React.Component {
   constructor(props) {
     super(props);
-    this.targetInputRef = React.createRef();
     this.state = {
       theorem: this.parseTheorem(props.theorem),
-      addingTarget: false,
-      targetToAdd: '',
       highlightedPremises: [],
       highlightedConclusion: null
     }
@@ -67,23 +63,6 @@ export class Theorem extends React.Component {
     this.setState({theorem: theorem});
   };
 
-  hideTargetModal = () => this.setState({addingTarget: false});
-
-  addTarget = () => {
-    window.fetch(this.props.url + "/target", {method: "POST", body: this.state.targetToAdd})
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw response.statusText;
-        }
-      })
-      .then(result => {
-        this.hideTargetModal();
-        this.updateTheorem(result)
-      });
-  };
-
   render() {
     const {theorem} = this.state;
     const highlighting = {
@@ -100,44 +79,14 @@ export class Theorem extends React.Component {
       return <Premise premise={premise} index={index} highlighting={highlighting}/>
     };
 
-    const targetModal = <Modal show={this.state.addingTarget} onHide={this.hideTargetModal} onEntered={() => {
-      this.targetInputRef.current.focus();
-      this.targetInputRef.current.select();
-    }}>
-      <Modal.Header closeButton><Modal.Title>Add target statement</Modal.Title></Modal.Header>
-      <Modal.Body>
-        <Form.Group>
-          <Form.Control type="text"
-                        value={this.state.targetToAdd}
-                        onChange={e => this.setState({targetToAdd: Parser.replaceShorthands(e.target.value)})}
-                        onKeyUp={(event) => {
-                          if (event.keyCode === 13) {
-                            this.addTarget();
-                          }
-                          event.preventDefault();
-                          event.stopPropagation();
-                        }}
-                        ref={this.targetInputRef}/>
-        </Form.Group>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={this.hideTargetModal}>Close</Button>
-        <Button variant="primary" onClick={this.addTarget}>Save Changes</Button>
-      </Modal.Footer>
-    </Modal>;
-
     return <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" {...this.props}>
       <hr/>
-      <h4>
-        Proof
-        <Button onClick={() => this.setState({addingTarget: true})} variant="success" size="sm" className="ml-2">Add target</Button>
-      </h4>
+      <h4>Proof</h4>
       <Steps steps={theorem.proof}
              path={[]}
              boundVariableLists={[]}
              highlighting={highlighting}
              apiService={apiService}/>
-      {targetModal}
     </Inference>;
   }
 }

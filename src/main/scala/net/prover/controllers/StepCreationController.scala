@@ -2,6 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.models.{NamingDefinition, PathData, StepDefinition}
 import net.prover.model.ExpressionParsingContext
+import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, ProofHelper, Step}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -104,6 +105,23 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
           Seq(Step.Target(consequent)),
           deductionStatementDefinition)
       }
+    }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/target"))
+  def addTarget(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData,
+    @RequestBody serializedStatement: String
+  ): ResponseEntity[_] = {
+    replaceStep[Step](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext, _, entryContext) =>
+      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.atStep(entryContext, stepContext)
+      for {
+        targetStatement <- Statement.parser.parseFromString(serializedStatement, "target statement").recoverWithBadRequest
+        targetStep = Step.Target(targetStatement)
+      } yield Seq(targetStep, step)
     }.toResponseEntity
   }
 }
