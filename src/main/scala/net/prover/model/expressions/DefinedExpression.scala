@@ -18,6 +18,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   def updateComponents(newComponents: Seq[Expression]): ExpressionType
   def updateBoundVariableNames(newBoundVariableNames: Seq[String]): ExpressionType
 
+  override def complexity: Int = components.map(_.complexity).sum + 1
   override def referencedDefinitions: Set[ExpressionDefinition] = components.flatMap(_.referencedDefinitions).toSet + definition
 
   private def increaseDepth(internalDepth: Int) = if (scopedBoundVariableNames.nonEmpty) internalDepth + 1 else internalDepth

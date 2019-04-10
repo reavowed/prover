@@ -35,7 +35,6 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     } yield {
       entryContext.inferences
         .filter(_.name.toLowerCase.contains(searchText.toLowerCase))
-        .reverse
         .mapCollect { inference =>
           val substitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
           if (substitutions.nonEmpty)
@@ -43,6 +42,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
           else
             None
         }
+        .sortBy(_.inference.conclusion.complexity)(implicitly[Ordering[Int]].reverse)
         .take(10)
     }).toResponseEntity
   }

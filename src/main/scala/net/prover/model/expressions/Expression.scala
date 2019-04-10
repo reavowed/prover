@@ -6,6 +6,7 @@ import net.prover.model.{Parser, ExpressionParsingContext, Substitutions}
 trait Expression extends TypedExpression[Expression]
 
 trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
+  def complexity: Int
   def referencedDefinitions: Set[ExpressionDefinition]
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType
