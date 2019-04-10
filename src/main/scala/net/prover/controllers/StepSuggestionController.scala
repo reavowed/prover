@@ -3,11 +3,13 @@ package net.prover.controllers
 import net.prover.controllers.models.PathData
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.Statement
-import net.prover.model.{EntryContext, Inference, Substitutions}
+import net.prover.model._
 import net.prover.model.proof.{PremiseContext, ProofHelper, Step, StepContext}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
+
+import scala.util.Try
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/{stepPath}"))
@@ -64,7 +66,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       (step, stepContext, premiseContext) <- findStep[Step.Target](theorem, stepPath, entryContext)
       inference <- findInference(inferenceId)(entryContext)
     } yield {
-      getPremiseMatches(inference.premises, inference.conclusion, step, stepContext, premiseContext)
+      getPremiseSuggestions(inference.premises, inference, step, stepContext, premiseContext)
     }).toResponseEntity
   }
 
@@ -116,15 +118,22 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       inference <- findInference(inferenceId)(entryContext)
       (namingPremises, _) <- ProofHelper.getNamingPremisesAndAssumption(inference, entryContext).orBadRequest(s"Inference $inferenceId was not naming inference")
     } yield {
-      getPremiseMatches(namingPremises, inference.conclusion, step, stepContext, premiseContext)
+      getPremiseSuggestions(namingPremises, inference, step, stepContext, premiseContext)
     }).toResponseEntity
   }
 
+  case class PremiseSuggestions(immediateSubstitutions: Option[Substitutions], premiseMatches: Seq[Seq[PossiblePremiseMatch]])
   case class PossiblePremiseMatch(statement: Statement, substitutions: Seq[Substitutions])
-  private def getPremiseMatches(premises: Seq[Statement], conclusion: Statement, step: Step.Target, stepContext: StepContext, premiseContext: PremiseContext): Seq[Seq[PossiblePremiseMatch]] = {
-    val possibleConclusionSubstitutions = conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
+  private def getPremiseSuggestions(
+    premises: Seq[Statement],
+    inference: Inference,
+    step: Step.Target,
+    stepContext: StepContext,
+    premiseContext: PremiseContext
+  ): PremiseSuggestions = {
+    val possibleConclusionSubstitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
     val availablePremises = (premiseContext.givenPremises ++ premiseContext.simplifiedPremises).map(_.statement).distinct
-    premises.map { premise =>
+    val premiseMatches = premises.map { premise =>
       availablePremises.mapCollect { availablePremise =>
         val substitutions = for {
           conclusionSubstitutions <- possibleConclusionSubstitutions
@@ -137,6 +146,10 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
         }
       }
     }
+    val immediateSubstitutions = premiseMatches.mapFind(_.mapFind(_.substitutions.find { substitutions =>
+      Try(inference.substitutePremisesAndValidateConclusion(step.statement, substitutions, stepContext)).toOption.exists(_.forall(availablePremises.contains))
+    }))
+    PremiseSuggestions(immediateSubstitutions, premiseMatches)
   }
 
 }

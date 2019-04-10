@@ -96,11 +96,22 @@ export class FindInferenceModal extends React.Component {
       premiseSuggestions: null,
       selectedSubstitutionValues
     });
-    this.props.callbacks.getPremiseSuggestions && this.props.callbacks.getPremiseSuggestions(suggestion.inference.id)
-      .then(suggestionsJson => this.setState({
-        premiseSuggestions: Parser.parsePremiseSuggestions(suggestionsJson),
-        selectedPremiseSuggestions: suggestion.inference.premises.map(() => ["", null])
-      }))
+    this.props.callbacks.getPremiseSuggestions &&
+      this.props.callbacks.getPremiseSuggestions(suggestion.inference.id)
+        .then(this.handlePremiseSuggestions)
+  };
+  handlePremiseSuggestions = (suggestionsJson) => {
+    if (suggestionsJson.immediateSubstitutions) {
+      const substitutions = Parser.parseSubstitutions(suggestionsJson.immediateSubstitutions);
+      const selectedSubstitutionValues = this.getAllForcedSubstitutionValues([[substitutions]], this.state.selectedInferenceSuggestion.requiredSubstitutions);
+      this.setState({selectedSubstitutionValues});
+      this.submitWithSelectedValues(selectedSubstitutionValues);
+    } else {
+      this.setState({
+        premiseSuggestions: Parser.parsePremiseSuggestions(suggestionsJson.premiseMatches),
+        selectedPremiseSuggestions: this.state.selectedInferenceSuggestion.inference.premises.map(() => ["", null])
+      })
+    }
   };
 
   getAllForcedSubstitutionValues = (possibleSubstitutionsLists, requiredSubstitutions) => {
@@ -187,7 +198,10 @@ export class FindInferenceModal extends React.Component {
     return this.state.selectedInferenceSuggestion && _.chain(this.state.selectedSubstitutionValues).values().flatMap(_.values).every().value();
   };
   submit = () => {
-    this.props.callbacks.submit(this.state.selectedInferenceSuggestion.inference.id, this.state.selectedSubstitutionValues);
+    this.submitWithSelectedValues(this.state.selectedSubstitutionValues);
+  };
+  submitWithSelectedValues = (selectedSubstitutionValues) => {
+    this.props.callbacks.submit(this.state.selectedInferenceSuggestion.inference.id, selectedSubstitutionValues || this.state.selectedSubstitutionValues);
   };
 
   render() {
