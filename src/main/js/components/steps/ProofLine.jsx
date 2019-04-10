@@ -190,10 +190,10 @@ export const ProofLine = styled(class ProofLine extends React.Component {
               <Button onClick={this.moveIntoNext} size="sm" className="ml-1"><span className="fas fa-level-down-alt"/></Button>
             </Popover>}
           </Overlay>
-          {subProofNamingModal}
-          {targetModal}
         </>}
       </FlexRow>
+      {subProofNamingModal}
+      {targetModal}
     </div>;
 
     if (tooltip) {
