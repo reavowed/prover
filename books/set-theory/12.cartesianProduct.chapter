@@ -56,39 +56,44 @@ conclusion ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0
   }
 }
 
-theorem Membership Condition for Cartesian Product
-conclusion ∀ a ∀ b ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B
+theorem First Coordinate of Element of Cartesian Product
+premise ∈ x × A B
+conclusion ∈ first x A
 {
-  take a {
-    take b {
-      assume ∈ orderedPair $$0 $0 × A B {
-        prove ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () (orderedPair $$0 $0, A, B) () ()
-        let c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A ∈ $0 B) () (∧ ∈ $$$0 A ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$$0 $0) () {
-          let d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 A ∈ $$0 B) () (∧ ∈ $$$$0 B = orderedPair $$$0 $$0 orderedPair $0 $$$$0) () {
-            prove = $$$$0 $$0 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () ($$$$0, $$$0, $$0, $0) () ()
-            prove = $$$0 $0 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$$$0, $$$0, $$0, $0) () ()
-            prove ∈ $$$$0 A 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$0, $$0) (∈ $$$$$0 A) ()
-            prove ∈ $$$0 B 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$0, $0) (∈ $$$$$0 B) ()
-            prove ∧ ∈ $$$$0 A ∈ $$$0 B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$$$0 A, ∈ $$$0 B) () () ()
-          }
-        }
-      }
-      assume ∧ ∈ $$0 A ∈ $0 B {
-        prove = orderedPair $$0 $0 orderedPair $$0 $0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (orderedPair $$0 $0) () ()
-        prove ∧ ∈ $0 B = orderedPair $$0 $0 orderedPair $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 B, = orderedPair $$0 $0 orderedPair $$0 $0) () () ()
-        prove ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$$0 B = orderedPair $$0 $0 orderedPair $$0 $$$0) ()
-        prove ∧ ∈ $$0 A ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$0 A, ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$0 $0) () () ()
-        prove ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$0) (∧ ∈ $$$0 A ∃ d ∧ ∈ $0 B = orderedPair $$$0 $$0 orderedPair $$$$0 $0) ()
-        prove ∀ x ↔ ∈ $0 × A B ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 78664a4d74f0bfa211302b1958d00d7631c52b8411466a93b900f16b87412b96 () (A, B) () ()
-        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove ↔ ∈ orderedPair $$0 $0 × A B ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (orderedPair $$0 $0) (↔ ∈ $$$0 × A B ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = $$$$$0 orderedPair $$0 $0) ()
-          prove → ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0 ∈ orderedPair $$0 $0 × A B 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $$0 $0 × A B, ∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0) () () ()
-          prove ∈ orderedPair $$0 $0 × A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ c ∧ ∈ $0 A ∃ d ∧ ∈ $0 B = orderedPair $$$$0 $$$0 orderedPair $$0 $0, ∈ orderedPair $$0 $0 × A B) () () ()
-        }
-      }
-      prove ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ orderedPair $$0 $0 × A B, ∧ ∈ $$0 A ∈ $0 B) () () ()
-    }
+  prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = x orderedPair $$0 $0 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () (x, A, B) () ()
+  prove ∃ a ∃ b = x orderedPair $$0 $0 5e69e56604bf32ad206851cf5900da0450ffb3ab6632698486f03fb4281f29e2 () () (∈ $0 A, ∈ $0 B, = x orderedPair $0 $1) ()
+  let a_x ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = x orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ first x A) () (∧ ∈ $0 A ∃ b ∧ ∈ $0 B = x orderedPair $$0 $0) () {
+    prove ∃! a ∃ b = x orderedPair $$0 $0 136100f31adf5e972a94c89b409f0ee62d929bb044ad898baf522b07bb64c0a7 () (x) () ()
+    prove ∃ b = x orderedPair first x $0 627c9ee25bcca8ee601a41541fce48306f1e7a731864726c87a241235b71423f () (x) () ()
+    prove ∃ b = x orderedPair $$0 $0 82bc5a035b55ef94c2408b53dd2c57fd0e98c636406d98bc4e4e7d28868a4f77 () () (∈ $$0 B, = x orderedPair $0 $$0) ()
+    prove = first x $0 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () (first x, $0) (∃ b = x orderedPair $$$0 $0) ()
+    prove ∈ first x A 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (first x, $0) (∈ $$0 A) ()
   }
+}
+
+theorem Second Coordinate of Element of Cartesian Product
+premise ∈ x × A B
+conclusion ∈ second x B
+{
+  prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = x orderedPair $$0 $0 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () (x, A, B) () ()
+  prove ∃ a ∃ b = x orderedPair $$0 $0 5e69e56604bf32ad206851cf5900da0450ffb3ab6632698486f03fb4281f29e2 () () (∈ $0 A, ∈ $0 B, = x orderedPair $0 $1) ()
+  prove ∃ b ∧ ∈ $0 B ∃ a ∧ ∈ $0 A = x orderedPair $0 $$0 02f6a793a5e0ec2904eb7e3a2a4cc7ad743e0c1ddf557084efa52942910f91f5 () () (∈ $0 A, ∈ $0 B, = x orderedPair $0 $1) ()
+  let b_x ∧ ∈ $0 B ∃ a ∧ ∈ $0 A = x orderedPair $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ second x B) () (∧ ∈ $0 B ∃ a ∧ ∈ $0 A = x orderedPair $0 $$0) () {
+    prove ∃! b ∃ a = x orderedPair $0 $$0 a03a52595f30aa9f017d4c100fbd868c8b7419433bcc0d815351d04ee5982300 () (x) () ()
+    prove ∃ a = x orderedPair $0 second x 4373ef9021e142193e755f11b93fde380a93be178d6596c9e9c462dacd2bdaae () (x) () ()
+    prove ∃ a = x orderedPair $0 $$0 82bc5a035b55ef94c2408b53dd2c57fd0e98c636406d98bc4e4e7d28868a4f77 () () (∈ $$0 A, = x orderedPair $$0 $0) ()
+    prove = second x $0 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () (second x, $0) (∃ a = x orderedPair $0 $$$0) ()
+    prove ∈ second x B 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (second x, $0) (∈ $$0 B) ()
+  }
+}
+
+theorem Element of Cartesian Product from Coordinates
+premise ∈ x × A B
+conclusion = x orderedPair first x second x
+{
+  prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = x orderedPair $$0 $0 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () (x, A, B) () ()
+  prove ∃ a ∃ b = x orderedPair $$0 $0 5e69e56604bf32ad206851cf5900da0450ffb3ab6632698486f03fb4281f29e2 () () (∈ $0 A, ∈ $0 B, = x orderedPair $0 $1) ()
+  prove = x orderedPair first x second x 79e207fc9c24524ef98db5b100b9b26d00522e3895a1993ad7f63bf59a147c36 () (x) () ()
 }
 
 theorem Ordered Pair Is Element of Cartesian Product
@@ -96,40 +101,39 @@ premise ∈ a A
 premise ∈ b B
 conclusion ∈ orderedPair a b × A B
 {
-  prove ∀ x ∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B 236f521a9f01f6d3d26cc0cac93bca261543938c02c189cc3e9fe73064535b17 () (A, B) () ()
+  prove ∀ x ↔ ∈ $0 × A B ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 78664a4d74f0bfa211302b1958d00d7631c52b8411466a93b900f16b87412b96 () (A, B) () ()
+  prove = orderedPair a b orderedPair a b 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (orderedPair a b) () ()
+  elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+    prove ∧ ∈ b B = orderedPair a b orderedPair a b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ b B, = orderedPair a b orderedPair a b) () () ()
+    prove ∃ b' ∧ ∈ $0 B = orderedPair a b orderedPair a $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (b) (∧ ∈ $0 B = orderedPair a b orderedPair a $0) ()
+  }
+  elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+    prove ∧ ∈ a A ∃ b' ∧ ∈ $0 B = orderedPair a b orderedPair a $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a A, ∃ b' ∧ ∈ $0 B = orderedPair a b orderedPair a $0) () () ()
+    prove ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B = orderedPair a b orderedPair $$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (∧ ∈ $0 A ∃ b' ∧ ∈ $0 B = orderedPair a b orderedPair $$0 $0) ()
+  }
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ∀ y ↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B) ()
-    prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B) ()
-    prove → ∧ ∈ a A ∈ b B ∈ orderedPair a b × A B 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair a b × A B, ∧ ∈ a A ∈ b B) () () ()
-    prove ∧ ∈ a A ∈ b B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a A, ∈ b B) () () ()
-    prove ∈ orderedPair a b × A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ a A ∈ b B, ∈ orderedPair a b × A B) () () ()
+    prove ↔ ∈ orderedPair a b × A B ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B = orderedPair a b orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (orderedPair a b) (↔ ∈ $0 × A B ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) ()
+    prove → ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B = orderedPair a b orderedPair $$0 $0 ∈ orderedPair a b × A B 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair a b × A B, ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B = orderedPair a b orderedPair $$0 $0) () () ()
+    prove ∈ orderedPair a b × A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B = orderedPair a b orderedPair $$0 $0, ∈ orderedPair a b × A B) () () ()
   }
 }
 
-theorem Coordinates of Element of Cartesian Product
-premise ∈ orderedPair a b × A B
-conclusion ∧ ∈ a A ∈ b B
-{
-  prove ∀ x ∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B 236f521a9f01f6d3d26cc0cac93bca261543938c02c189cc3e9fe73064535b17 () (A, B) () ()
-  prove ∀ y ↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (∀ y ↔ ∈ orderedPair $$0 $0 × A B ∧ ∈ $$0 A ∈ $0 B) ()
-  prove ↔ ∈ orderedPair a b × A B ∧ ∈ a A ∈ b B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ orderedPair a $0 × A B ∧ ∈ a A ∈ $0 B) ()
-  prove ∧ ∈ a A ∈ b B be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (∈ orderedPair a b × A B, ∧ ∈ a A ∈ b B) () () ()
-}
-
-theorem First Coordinate of Element of Cartesian Product
+theorem First Coordinate of Ordered Pair in Cartesian Product
 premise ∈ orderedPair a b × A B
 conclusion ∈ a A
 {
-  prove ∧ ∈ a A ∈ b B 83a16d4b2b00799a932aebf8464d8706a690ad543d5fe89e854e50e17365080c () (a, b, A, B) () ()
-  prove ∈ a A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ a A, ∈ b B) () () ()
+  prove ∈ first orderedPair a b A 212eb18271d78fa0dde5cc68499b2b6ecc0595c50b41a0aed26ee845bde8ad33 () (orderedPair a b, A, B) () ()
+  prove = first orderedPair a b a 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () (a, b) () ()
+  prove ∈ a A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (first orderedPair a b, a) (∈ $0 A) ()
 }
 
-theorem Second Coordinate of Element of Cartesian Product
+theorem Second Coordinate of Ordered Pair in Cartesian Product
 premise ∈ orderedPair a b × A B
 conclusion ∈ b B
 {
-  prove ∧ ∈ a A ∈ b B 83a16d4b2b00799a932aebf8464d8706a690ad543d5fe89e854e50e17365080c () (a, b, A, B) () ()
-  prove ∈ b B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ a A, ∈ b B) () () ()
+  prove = second orderedPair a b b 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () (a, b) () ()
+  prove ∈ second orderedPair a b B 6265805f78e67268a7358de9065e468d8c4e495889ebb74b520416cdc6d73461 () (orderedPair a b, A, B) () ()
+  prove ∈ b B 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (second orderedPair a b, b) (∈ $0 B) ()
 }
 
 theorem Product of Subsets Is Subset of Product
@@ -139,15 +143,13 @@ conclusion ⊆ × A B × C D
 {
   take x {
     assume ∈ $0 × A B {
-      prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () ($0, A, B) () ()
-      let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 × C D) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () {
-        let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 × C D) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () {
-          prove ∈ $$0 C ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (A, C, $$0) () ()
-          prove ∈ $0 D ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (B, D, $0) () ()
-          prove ∈ orderedPair $$0 $0 × C D 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () ($$0, C, $0, D) () ()
-          prove ∈ $$$0 × C D 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$0, orderedPair $$0 $0) (∈ $$$$0 × C D) ()
-        }
-      }
+      prove = $0 orderedPair first $0 second $0 67869817b48cb1ff2116a58e12959fc3392a8b1da88998b959c87c4daff11a57 () ($0, A, B) () ()
+      prove ∈ first $0 A 212eb18271d78fa0dde5cc68499b2b6ecc0595c50b41a0aed26ee845bde8ad33 () ($0, A, B) () ()
+      prove ∈ second $0 B 6265805f78e67268a7358de9065e468d8c4e495889ebb74b520416cdc6d73461 () ($0, A, B) () ()
+      prove ∈ first $0 C ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (A, C, first $0) () ()
+      prove ∈ second $0 D ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (B, D, second $0) () ()
+      prove ∈ orderedPair first $0 second $0 × C D 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () (first $0, C, second $0, D) () ()
+      prove ∈ $0 × C D 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, orderedPair first $0 second $0) (∈ $$0 × C D) ()
     }
   }
   prove ⊆ × A B × C D 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (× A B, × C D) () ()

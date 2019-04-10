@@ -78,18 +78,17 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     previousInternalDepth: Int,
     externalDepth: Int
   ): Seq[(Term, Substitutions)] = {
-    (super.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth) ++
-      (if (level >= internalDepth + previousInternalDepth)
-        // External context
-        // Shifted down to cut out the shared internal context
-        Seq(FunctionParameter(index, level - previousInternalDepth) -> substitutions)
-      else if (level < internalDepth)
-        // Internal context after the entry point to calculateApplicatives
-        Seq(this -> substitutions)
-      else
-        // Shared internal context - must be passed in via the arguments
-        Nil)
-    ).distinct
+  super.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth) ++
+    (if (level >= internalDepth + previousInternalDepth)
+      // External context
+      // Shifted down to cut out the shared internal context
+      Seq(FunctionParameter(index, level - previousInternalDepth) -> substitutions)
+    else if (level < internalDepth)
+      // Internal context after the entry point to calculateApplicatives
+      Seq(this -> substitutions)
+    else
+      // Shared internal context - must be passed in via the arguments
+      Nil)
   }
 
   override def serialized = (0 to level).map(_ => "$").mkString("") + index

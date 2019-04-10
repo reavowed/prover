@@ -41,6 +41,14 @@ conclusion = with (a) F with (b) F
   prove = with (a) F with (b) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= with (a) F with ($0) F) ()
 }
 
+theorem Substitution of Equals into Function (Reversed)
+premise = a b
+conclusion = with (b) F with (a) F
+{
+  prove = with (a) F with (b) F 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (a, b) () (with ($0) F)
+  prove = with (b) F with (a) F 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (with (a) F, with (b) F) () ()
+}
+
 comment Basic facts about equality.
 
 theorem Equality Is Symmetric

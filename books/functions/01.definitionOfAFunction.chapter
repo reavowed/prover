@@ -101,15 +101,14 @@ conclusion ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
   take x {
     assume ∈ $0 f {
       prove ∈ $0 × A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, × A B, $0) () ()
-      prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0f6b6cffd590766363e3072c94d10faa9d70685bb73c3c9e3907fb1ac591ed6a () ($0, A, B) () ()
-      let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () {
-        let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0) () (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () {
-          prove ∈ orderedPair $$0 $0 f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$$0, orderedPair $$0 $0) (∈ $$$$0 f) ()
-          prove = $0 apply f $$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, B, $$0, $0) () ()
-          prove = $$$0 orderedPair $$0 apply f $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, apply f $$0) (= $$$0 orderedPair $$0 $$$$0) ()
-          prove ∧ ∈ $$0 A = $$$0 orderedPair $$0 apply f $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$0 A, = $$$0 orderedPair $$0 apply f $$0) () () ()
-          prove ∃ a ∧ ∈ $0 A = $$$$0 orderedPair $0 apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$0) (∧ ∈ $$$$0 A = $$$0 orderedPair $$$$0 apply f $$$$0) ()
-        }
+      prove ∈ first $0 A 212eb18271d78fa0dde5cc68499b2b6ecc0595c50b41a0aed26ee845bde8ad33 () ($0, A, B) () ()
+      prove = $0 orderedPair first $0 second $0 67869817b48cb1ff2116a58e12959fc3392a8b1da88998b959c87c4daff11a57 () ($0, A, B) () ()
+      prove ∈ orderedPair first $0 second $0 f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, orderedPair first $0 second $0) (∈ $$0 f) ()
+      prove = second $0 apply f first $0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, B, first $0, second $0) () ()
+      prove = $0 orderedPair first $0 apply f first $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (second $0, apply f first $0) (= $0 orderedPair first $0 $$0) ()
+      elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+        prove ∧ ∈ first $0 A = $0 orderedPair first $0 apply f first $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ first $0 A, = $0 orderedPair first $0 apply f first $0) () () ()
+        prove ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (first $0) (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0) ()
       }
     }
   }

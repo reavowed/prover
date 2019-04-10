@@ -45,16 +45,6 @@ conclusion = orderedPair a a singleton singleton a
   prove = orderedPair a a singleton singleton a 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (orderedPair a a, pair singleton a singleton a, singleton singleton a) () ()
 }
 
-theorem Ordered Pair has Same Coordinates If It Is a Double Singleton
-premise = orderedPair a b singleton singleton c
-conclusion = a b
-{
-  prove ∈ pair a b orderedPair a b ecb0a831f5c8e2151e676d37cb898297bd72fff21fb89e3505d44fba8bda77eb () (a, b) () ()
-  prove ∈ pair a b singleton singleton c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, singleton singleton c) (∈ pair a b $0) ()
-  prove = pair a b singleton c 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () (pair a b, singleton c) () ()
-  prove = a b 93ce3bbad6edc8c32e60305820feb6561d45d6e612b3c3797dd420084232119a () (a, b, c) () ()
-}
-
 theorem First Coordinates of Equal Ordered Pairs Are Equal
 premise = orderedPair a b orderedPair c d
 conclusion = a c
@@ -66,25 +56,13 @@ conclusion = a c
     prove = a c 5a215068757c67bce26be0c2f4c354760c1a149522ad46458e05781e4c45cad6 () (a, c) () ()
   }
   assume = singleton a pair c d {
-    prove = pair c d singleton a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (singleton a, pair c d) () ()
-    prove = c a 86986adff1b0347cfe6e7c5a348775548325b13c85d427e352cbea41551f0e39 () (c, d, a) () ()
-    prove = a c 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (c, a) () ()
+    elided 86986adff1b0347cfe6e7c5a348775548325b13c85d427e352cbea41551f0e39 {
+      prove = pair c d singleton a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (singleton a, pair c d) () ()
+      prove = c a 86986adff1b0347cfe6e7c5a348775548325b13c85d427e352cbea41551f0e39 () (c, d, a) () ()
+      prove = a c 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (c, a) () ()
+    }
   }
   prove = a c 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= singleton a singleton c, = singleton a pair c d, = a c) () () ()
-}
-
-theorem Second Coordinates of Equal Ordered Pairs Are Equal - Lemma 1
-premise = orderedPair a b orderedPair c d
-premise = b a
-conclusion = b d
-{
-  prove = a c 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () (a, b, c, d) () ()
-  prove = orderedPair a b orderedPair a d 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, c) (= orderedPair a b orderedPair $0 d) ()
-  prove = orderedPair a a singleton singleton a 486dbcd9819d647e874f4e85d6466b65986782b9653cefbc33fa9c2f444b8e9f () (a) () ()
-  prove = orderedPair a b singleton singleton a 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (b, a) (= orderedPair a $0 singleton singleton a) ()
-  prove = orderedPair a d singleton singleton a 44fd8329fe93cb8213e4e6996b2de73b2e0aaeeb19ebaebc0ed7a29ddf1f619b () (orderedPair a b, orderedPair a d, singleton singleton a) () ()
-  prove = a d 1efef162b72af80fed24b414af675b41e123bc2c29d25ea39d9c65e7215a74cc () (a, d, a) () ()
-  prove = b d 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (b, a, d) () ()
 }
 
 theorem Second Coordinates of Equal Ordered Pairs Are Equal
@@ -92,22 +70,146 @@ premise = orderedPair a b orderedPair c d
 conclusion = b d
 {
   prove = a c 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () (a, b, c, d) () ()
+  assume = b a {
+    prove = orderedPair a b orderedPair a d 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, c) (= orderedPair a b orderedPair $0 d) ()
+    prove = orderedPair a a singleton singleton a 486dbcd9819d647e874f4e85d6466b65986782b9653cefbc33fa9c2f444b8e9f () (a) () ()
+    prove = orderedPair a b singleton singleton a 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (b, a) (= orderedPair a $0 singleton singleton a) ()
+    prove = orderedPair a d singleton singleton a 44fd8329fe93cb8213e4e6996b2de73b2e0aaeeb19ebaebc0ed7a29ddf1f619b () (orderedPair a b, orderedPair a d, singleton singleton a) () ()
+    prove ∈ pair a d orderedPair a d ecb0a831f5c8e2151e676d37cb898297bd72fff21fb89e3505d44fba8bda77eb () (a, d) () ()
+    prove ∈ pair a d singleton singleton a 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a d, singleton singleton a) (∈ pair a d $0) ()
+    prove = pair a d singleton a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () (pair a d, singleton a) () ()
+    prove = a d 93ce3bbad6edc8c32e60305820feb6561d45d6e612b3c3797dd420084232119a () (a, d, a) () ()
+    prove = b d 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (b, a, d) () ()
+  }
   prove = orderedPair a b orderedPair a d 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, c) (= orderedPair a b orderedPair $0 d) ()
   prove ∈ pair a b orderedPair a b ecb0a831f5c8e2151e676d37cb898297bd72fff21fb89e3505d44fba8bda77eb () (a, b) () ()
   prove ∈ pair a b orderedPair a d 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair a b, orderedPair a d) (∈ pair a b $0) ()
   prove ∨ = pair a b singleton a = pair a b pair a d 2c8000ec49645b22f521a8ae79e6c32c70ac1ee8482445c1f24e5f9438d2435f () (pair a b, a, d) () ()
   assume = pair a b singleton a {
     prove = b a e503481086281bc97997d7b0844c1481203e538306ce9c02b5cf8d90a816fd3e () (a, b, a) () ()
-    prove = b d 80c6b64c9a56adf4d1f0f96bd147ef34edfe647eb9497d29595ceda8a53bf842 () (a, b, c, d) () ()
+    prove = b d fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= b a, = b d) () () ()
   }
   assume = pair a b pair a d {
     prove ∈ b pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a) () ()
     prove ∈ b pair a d 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (pair a b, pair a d) (∈ b $0) ()
     prove ∨ = b a = b d b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () (b, a, d) () ()
-    assume = b a {
-      prove = b d 80c6b64c9a56adf4d1f0f96bd147ef34edfe647eb9497d29595ceda8a53bf842 () (a, b, c, d) () ()
-    }
     prove = b d 2ff9c792011f656a8b9615593c8b85d39ff9d5ec55dc6db4db6934fa559f64d2 (= b a, = b d) () () ()
   }
   prove = b d 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= pair a b singleton a, = pair a b pair a d, = b d) () () ()
+}
+
+theorem Uniqueness of First Coordinate of Ordered Pair
+premise ∃ a ∃ b = x orderedPair $$0 $0
+conclusion ∃! a ∃ b = x orderedPair $$0 $0
+{
+  take a_1 {
+    take a_2 {
+      assume ∧ ∃ b = x orderedPair $$$0 $0 ∃ b = x orderedPair $$0 $0 {
+        let b_1 = x orderedPair $$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$0 $0) () (= x orderedPair $$0 $$$0) () {
+          let b_2 = x orderedPair $$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$$0 $$0) () (= x orderedPair $$0 $$$$0) () {
+            prove = orderedPair $$$$0 $$0 orderedPair $$$0 $0 44fd8329fe93cb8213e4e6996b2de73b2e0aaeeb19ebaebc0ed7a29ddf1f619b () (x, orderedPair $$$$0 $$0, orderedPair $$$0 $0) () ()
+            prove = $$$$0 $$$0 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () ($$$$0, $$0, $$$0, $0) () ()
+          }
+        }
+      }
+    }
+  }
+  elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
+    prove ∧ ∃ a ∃ b = x orderedPair $$0 $0 ∀ a_1 ∀ a_2 → ∧ ∃ b = x orderedPair $$$0 $0 ∃ b = x orderedPair $$0 $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ a ∃ b = x orderedPair $$0 $0, ∀ a_1 ∀ a_2 → ∧ ∃ b = x orderedPair $$$0 $0 ∃ b = x orderedPair $$0 $0 = $$0 $0) () () ()
+    prove ∃! a ∃ b = x orderedPair $$0 $0 f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∃ b = x orderedPair $$0 $0) ()
+  }
+}
+
+theorem Uniqueness of Second Coordinate of Ordered Pair
+premise ∃ a ∃ b = x orderedPair $$0 $0
+conclusion ∃! b ∃ a = x orderedPair $0 $$0
+{
+  prove ∃ b ∃ a = x orderedPair $0 $$0 21ad7359021d4e8cc2a6871978ce17bb671b076beec63fd513a8089b15d1c77b () () (= x orderedPair $0 $1) ()
+  take b_1 {
+    take b_2 {
+      assume ∧ ∃ a = x orderedPair $0 $$$0 ∃ a = x orderedPair $0 $$0 {
+        let a_1 = x orderedPair $0 $$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$0 $0) () (= x orderedPair $$$0 $$0) () {
+          let a_2 = x orderedPair $0 $$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$$0 $$0) () (= x orderedPair $$$$0 $$0) () {
+            prove = orderedPair $$0 $$$$0 orderedPair $0 $$$0 44fd8329fe93cb8213e4e6996b2de73b2e0aaeeb19ebaebc0ed7a29ddf1f619b () (x, orderedPair $$0 $$$$0, orderedPair $0 $$$0) () ()
+            prove = $$$$0 $$$0 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$0, $$$$0, $0, $$$0) () ()
+          }
+        }
+      }
+    }
+  }
+  elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
+    prove ∧ ∃ b ∃ a = x orderedPair $0 $$0 ∀ x ∀ y → ∧ ∃ a = x orderedPair $0 $$$0 ∃ a = x orderedPair $0 $$0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∃ a = x orderedPair $0 $$0, ∀ x ∀ y → ∧ ∃ a = x orderedPair $0 $$$0 ∃ a = x orderedPair $0 $$0 = $$0 $0) () () ()
+    prove ∃! b ∃ a = x orderedPair $0 $$0 f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∃ a = x orderedPair $0 $$0) ()
+  }
+}
+
+term first (x)
+  name (First Element of Ordered Pair)
+  format (x_0)
+  premises (∃ a ∃ b = x orderedPair $$0 $0)
+  (∃ b = x orderedPair $$0 $0)
+
+term second (x)
+  name (Second Element of Ordered Pair)
+  format (x_1)
+  premises (∃ a ∃ b = x orderedPair $$0 $0)
+  (∃ a = x orderedPair $0 $$0)
+
+theorem Ordered Pair from Coordinates
+premise ∃ a ∃ b = x orderedPair $$0 $0
+conclusion = x orderedPair first x second x
+{
+  let a' ∃ b = x orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= x orderedPair first x second x) () (∃ b = x orderedPair $$0 $0) () {
+    let b' = x orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= x orderedPair first x second x) () (= x orderedPair $0 $$0) () {
+      prove ∃ a = x orderedPair $0 $$0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$0) (= x orderedPair $$$0 $0) ()
+      elided 136100f31adf5e972a94c89b409f0ee62d929bb044ad898baf522b07bb64c0a7 {
+        prove ∃! a ∃ b = x orderedPair $$0 $0 136100f31adf5e972a94c89b409f0ee62d929bb044ad898baf522b07bb64c0a7 () (x) () ()
+        prove ∃ b = x orderedPair first x $0 627c9ee25bcca8ee601a41541fce48306f1e7a731864726c87a241235b71423f () (x) () ()
+        prove = $$0 first x 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () ($$0, first x) (∃ b = x orderedPair $$$$0 $0) ()
+      }
+      elided a03a52595f30aa9f017d4c100fbd868c8b7419433bcc0d815351d04ee5982300 {
+        prove ∃! b ∃ a = x orderedPair $0 $$0 a03a52595f30aa9f017d4c100fbd868c8b7419433bcc0d815351d04ee5982300 () (x) () ()
+        prove ∃ a = x orderedPair $0 second x 4373ef9021e142193e755f11b93fde380a93be178d6596c9e9c462dacd2bdaae () (x) () ()
+        prove = $0 second x 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () ($0, second x) (∃ a = x orderedPair $0 $$$$0) ()
+      }
+      elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+        prove = x orderedPair $$0 second x 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, second x) (= x orderedPair $$0 $$$0) ()
+        prove = x orderedPair first x second x 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$0, first x) (= x orderedPair $$$0 second x) ()
+      }
+    }
+  }
+}
+
+theorem First Coordinate of Ordered Pair
+conclusion = first orderedPair a b a
+{
+  elided 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc {
+    prove = orderedPair a b orderedPair a b 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (orderedPair a b) () ()
+    prove ∃ b' = orderedPair a b orderedPair a $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (b) (= orderedPair a b orderedPair a $0) ()
+    prove ∃ a' ∃ b' = orderedPair a b orderedPair $$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (∃ b' = orderedPair a b orderedPair $$0 $0) ()
+  }
+  prove ∃! a' ∃ b' = orderedPair a b orderedPair $$0 $0 136100f31adf5e972a94c89b409f0ee62d929bb044ad898baf522b07bb64c0a7 () (orderedPair a b) () ()
+  prove ∃ b' = orderedPair a b orderedPair first orderedPair a b $0 627c9ee25bcca8ee601a41541fce48306f1e7a731864726c87a241235b71423f () (orderedPair a b) () ()
+  elided 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc {
+    prove = orderedPair a b orderedPair a b 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (orderedPair a b) () ()
+    prove ∃ b' = orderedPair a b orderedPair a $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (b) (= orderedPair a b orderedPair a $0) ()
+  }
+  prove = first orderedPair a b a 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () (first orderedPair a b, a) (∃ b' = orderedPair a b orderedPair $$0 $0) ()
+}
+
+theorem Second Coordinate of Ordered Pair
+conclusion = second orderedPair a b b
+{
+  elided 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc {
+    prove = orderedPair a b orderedPair a b 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (orderedPair a b) () ()
+    prove ∃ b' = orderedPair a b orderedPair a $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (b) (= orderedPair a b orderedPair a $0) ()
+    prove ∃ a' ∃ b' = orderedPair a b orderedPair $$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (∃ b = orderedPair a b orderedPair $$0 $0) ()
+  }
+  prove ∃! b' ∃ a' = orderedPair a b orderedPair $0 $$0 a03a52595f30aa9f017d4c100fbd868c8b7419433bcc0d815351d04ee5982300 () (orderedPair a b) () ()
+  prove ∃ a' = orderedPair a b orderedPair $0 second orderedPair a b 4373ef9021e142193e755f11b93fde380a93be178d6596c9e9c462dacd2bdaae () (orderedPair a b) () ()
+  elided 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc {
+    prove = orderedPair a b orderedPair a b 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (orderedPair a b) () ()
+    prove ∃ a' = orderedPair a b orderedPair $0 b c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (= orderedPair a b orderedPair $0 b) ()
+  }
+  prove = second orderedPair a b b 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () (second orderedPair a b, b) (∃ a' = orderedPair a b orderedPair $0 $$0) ()
 }
