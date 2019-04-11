@@ -23,6 +23,7 @@ export class SubproofStep extends React.Component {
       <h6 onClick={this.toggleSubproof} className="mb-0" style={{cursor: "pointer"}}>{step.name}</h6>
       {!showingSubproof &&
         <ProofLine path={path}
+                   statement={step.statement}
                    premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
                    apiService={apiService}
                    highlighting={highlighting}

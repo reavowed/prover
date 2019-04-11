@@ -157,6 +157,7 @@ export class TargetStep extends React.Component {
     );
     return <>
       <ProofLine incomplete
+                 statement={step.statement}
                  path={path}
                  buttons={buttons}
                  apiService={apiService}

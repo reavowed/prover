@@ -104,7 +104,10 @@ export const ProofLine = styled(class ProofLine extends React.Component {
   };
 
   showTargetModal = () => {
-    this.setState({addingTarget: true})
+    this.setState({
+      addingTarget: true,
+      targetToAdd: this.props.statement ? this.props.statement.serialize() : ''
+    })
   };
   hideTargetModal = () => {
     this.setState({addingTarget: false});

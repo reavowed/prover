@@ -18,6 +18,7 @@ export class AssertionStepProofLine extends React.Component {
     let {step, path, apiService, highlighting, children} = this.props;
     return <ProofLine premiseReferences={step.referencedLines}
                       path={path}
+                      statement={step.statement}
                       buttons={<>
                         <InferenceLink inference={step.inference}/>
                         {step.isIncomplete && <Button variant="success" size="sm" onClick={this.createTargets}>Create targets</Button>}
