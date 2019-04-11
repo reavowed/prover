@@ -120,7 +120,7 @@ conclusion ↔ ∨ ψ φ ψ
 
 comment Adding extra conjunctions to equivalences.
 
-theorem Add Conjunction to Equivalence
+theorem Add Left Conjunction to Equivalence
 premise ↔ φ ψ
 conclusion ↔ ∧ χ φ ∧ χ ψ
 {
@@ -139,4 +139,48 @@ conclusion ↔ ∧ χ φ ∧ χ ψ
     prove ∧ χ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (χ, φ) () () ()
   }
   prove ↔ ∧ χ φ ∧ χ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ χ φ, ∧ χ ψ) () () ()
+}
+
+theorem Add Right Conjunction to Equivalence
+premise ↔ φ ψ
+conclusion ↔ ∧ φ χ ∧ ψ χ
+{
+  assume ∧ φ χ {
+    elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+      prove → φ ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () () ()
+      prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () () ()
+    }
+    prove ∧ ψ χ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (ψ, χ) () () ()
+  }
+  assume ∧ ψ χ {
+    elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+      prove → ψ φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (φ, ψ) () () ()
+      prove φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, φ) () () ()
+    }
+    prove ∧ φ χ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, χ) () () ()
+  }
+  prove ↔ ∧ φ χ ∧ ψ χ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ φ χ, ∧ ψ χ) () () ()
+}
+
+theorem Distribute Implication over Equivalence
+premise → φ ↔ ψ χ
+conclusion ↔ ∧ φ ψ ∧ φ χ
+{
+  assume ∧ φ ψ {
+    elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+      prove ↔ ψ χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ↔ ψ χ) () () ()
+      prove → ψ χ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (ψ, χ) () () ()
+      prove χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, χ) () () ()
+    }
+    prove ∧ φ χ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, χ) () () ()
+  }
+  assume ∧ φ χ {
+    elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+      prove ↔ ψ χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ↔ ψ χ) () () ()
+      prove → χ ψ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (ψ, χ) () () ()
+      prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (χ, ψ) () () ()
+    }
+    prove ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () ()
+  }
+  prove ↔ ∧ φ ψ ∧ φ χ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ φ ψ, ∧ φ χ) () () ()
 }

@@ -316,3 +316,106 @@ conclusion ∃! f ∧ function $0 A B ∀ a → ∈ $0 A = apply $$0 $0 with ($0
   }
   prove ∃! f ∧ function $0 A B ∀ a → ∈ $0 A = apply $$0 $0 with ($0) F 3a9caa6515b27b35622b39eaa4eb51c264daf52104e0afe26902be29146899da () (A, B) () (with ($0) F)
 }
+
+theorem Function from Unique Pairing
+premise ∀ a → ∈ $0 A ∃! b ∧ ∈ $0 B with ($$0 $0) φ
+conclusion ∃! f ∧ function $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ
+{
+  let f_φ = $0 comprehension x × A B with (first $0 second $0) φ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! f ∧ function $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ) (comprehension x × A B with (first $0 second $0) φ) () () {
+    subproof (f_φ is a function) {
+      prove ⊆ $0 × A B 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () ($0, × A B) (with (first $$0 second $$0) φ) ()
+      take a {
+        assume ∈ $0 A {
+          elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+            prove → ∈ $0 A ∃! b ∧ ∈ $0 B with ($$0 $0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 A ∃! b ∧ ∈ $0 B with ($$$$0 $0) φ) ()
+            prove ∃! b ∧ ∈ $0 B with ($$0 $0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∃! b ∧ ∈ $0 B with ($$0 $0) φ) () () ()
+          }
+          take b {
+            assume ∧ ∈ $0 B with ($$0 $0) φ {
+              prove ∈ orderedPair $$0 $0 × A B 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () ($$0, A, $0, B) () ()
+              elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
+                prove = first orderedPair $$0 $0 $$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () ($$0, $0) () ()
+                prove with (first orderedPair $$0 $0 $0) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (first orderedPair $$0 $0, $$0) (with ($$$$0 $0) φ) ()
+              }
+              elided 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 {
+                prove = second orderedPair $$0 $0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($$0, $0) () ()
+                prove with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (second orderedPair $$0 $0, $0) (with (first orderedPair $$0 $0 $$$$0) φ) ()
+              }
+              prove ∈ orderedPair $$0 $0 $$$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$$0, × A B, orderedPair $$0 $0) (with (first $$$$0 second $$$$0) φ) ()
+            }
+            assume ∈ orderedPair $$0 $0 $$$0 {
+              prove ∈ orderedPair $$0 $0 × A B 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () ($$$0, × A B, orderedPair $$0 $0) (with (first $$$$0 second $$$$0) φ) ()
+              prove ∈ $0 B e2238c29ee1255d4b9d3b1d86cf9ac1e893f8f63c8b75f7677403f1dfa4fd2c9 () ($$0, $0, A, B) () ()
+              prove with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, × A B, orderedPair $$0 $0) (with (first $$$$0 second $$$$0) φ) ()
+              elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
+                prove = first orderedPair $$0 $0 $$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () ($$0, $0) () ()
+                prove with ($$0 second orderedPair $$0 $0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (first orderedPair $$0 $0, $$0) (with ($$$$0 second orderedPair $$0 $0) φ) ()
+              }
+              elided 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 {
+                prove = second orderedPair $$0 $0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($$0, $0) () ()
+                prove with ($$0 $0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (second orderedPair $$0 $0, $0) (with ($$0 $$$$0) φ) ()
+              }
+              prove ∧ ∈ $0 B with ($$0 $0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 B, with ($$0 $0) φ) () () ()
+            }
+            prove ↔ ∧ ∈ $0 B with ($$0 $0) φ ∈ orderedPair $$0 $0 $$$0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ ∈ $0 B with ($$0 $0) φ, ∈ orderedPair $$0 $0 $$$0) () () ()
+          }
+          prove ∃! b ∈ orderedPair $$0 $0 $$$0 2990d85d4ee52472194a7ae53589f3f257b4493424bdd996a411322c70e5e4c6 () () (∧ ∈ $$$0 B with ($0 $$$0) φ, ∈ orderedPair $0 $$$0 $$0) ()
+        }
+      }
+      elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
+        prove ∧ ⊆ $0 × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 × A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 $$$0) () () ()
+        prove function $0 A B be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () ($0, A, B) () ()
+      }
+    }
+    subproof (f_φ satisfies φ) {
+      take a {
+        assume ∈ $0 A {
+          prove ∈ orderedPair $0 apply $$0 $0 $$0 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () ($$0, A, B, $0) () ()
+          prove with (first orderedPair $0 apply $$0 $0 second orderedPair $0 apply $$0 $0) φ fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$0, × A B, orderedPair $0 apply $$0 $0) (with (first $$$0 second $$$0) φ) ()
+          elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
+            prove = first orderedPair $0 apply $$0 $0 $0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () ($0, apply $$0 $0) () ()
+            prove with ($0 second orderedPair $0 apply $$0 $0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (first orderedPair $0 apply $$0 $0, $0) (with ($$$0 second orderedPair $0 apply $$0 $0) φ) ()
+          }
+          elided 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 {
+            prove = second orderedPair $0 apply $$0 $0 apply $$0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($0, apply $$0 $0) () ()
+            prove with ($0 apply $$0 $0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (second orderedPair $0 apply $$0 $0, apply $$0 $0) (with ($0 $$$0) φ) ()
+          }
+        }
+      }
+    }
+    subproof (f_φ is unique) {
+      take f {
+        assume ∧ function $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ {
+          take a {
+            assume ∈ $0 A {
+              elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                prove → ∈ $0 A ∃! b ∧ ∈ $0 B with ($$0 $0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 A ∃! x ∧ ∈ $0 B with ($$$$$0 $0) φ) ()
+                prove ∃! b ∧ ∈ $0 B with ($$0 $0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∃! x ∧ ∈ $0 B with ($$0 $0) φ) () () ()
+              }
+              prove ∈ apply $$0 $0 B 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () ($$0, A, B, $0) () ()
+              elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                prove → ∈ $0 A with ($0 apply $$0 $0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 A with ($$$$0 apply $$0 $$$$0) φ) ()
+                prove with ($0 apply $$0 $0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, with ($0 apply $$0 $0) φ) () () ()
+              }
+              prove ∈ apply $$$0 $0 B 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () ($$$0, A, B, $0) () ()
+              elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                prove → ∈ $0 A with ($0 apply $$$0 $0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 A with ($$$$0 apply $$$0 $$$$0) φ) ()
+                prove with ($0 apply $$$0 $0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, with ($0 apply $$$0 $0) φ) () () ()
+              }
+              elided 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 {
+                prove ∧ ∈ apply $$0 $0 B with ($0 apply $$0 $0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ apply $$0 $0 B, with ($0 apply $$0 $0) φ) () () ()
+                prove ∧ ∈ apply $$$0 $0 B with ($0 apply $$$0 $0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ apply $$$0 $0 B, with ($0 apply $$$0 $0) φ) () () ()
+                prove = apply $$0 $0 apply $$$0 $0 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () (apply $$0 $0, apply $$$0 $0) (∧ ∈ $$$$0 B with ($0 $$$$0) φ) ()
+              }
+            }
+          }
+          prove = $0 $$0 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () ($0, A, B, $$0) () ()
+        }
+      }
+    }
+    elided 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 {
+      prove ∧ function $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 A B, ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ) () () ()
+      prove ∃! f ∧ function $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ function $$0 A B ∀ a → ∈ $0 A with ($0 apply $$$0 $0) φ) ()
+    }
+  }
+}

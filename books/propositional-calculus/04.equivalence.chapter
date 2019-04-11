@@ -104,21 +104,3 @@ conclusion ↔ φ ψ
   prove → ψ φ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (ψ, φ) () () ()
   prove ↔ φ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, ψ) () () ()
 }
-
-theorem Implication then Equivalence
-premise → φ ψ
-premise ↔ ψ χ
-conclusion → φ χ
-{
-  prove → ψ χ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (ψ, χ) () () ()
-  prove → φ χ 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (φ, ψ, χ) () () ()
-}
-
-theorem Equivalence then Implication
-premise ↔ φ ψ
-premise → ψ χ
-conclusion → φ χ
-{
-  prove → φ ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () () ()
-  prove → φ χ 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (φ, ψ, χ) () () ()
-}

@@ -139,3 +139,40 @@ conclusion ⊕ = a b = a c
   prove ¬ ∧ = a b = a c 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ = a b = a c, = b c) () () ()
   prove ⊕ = a b = a c 85d9228e116d39e101fccf8102b9ae979459e94efa97bd1f050fb7327031497b (= a b, = a c) () () ()
 }
+
+theorem Equivalence of Generalised Equals
+premise ∀ x → with ($0) F = with ($0) G with ($0) H
+conclusion ↔ ∀ x → with ($0) F with ($0 with ($0) G) φ ∀ x → with ($0) F with ($0 with ($0) H) φ
+{
+  assume ∀ x → with ($0) F with ($0 with ($0) G) φ {
+    take x {
+      assume with ($0) F {
+        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+          prove → with ($0) F = with ($0) G with ($0) H 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ with ($$0) F = with ($$0) G with ($$0) H) ()
+          prove = with ($0) G with ($0) H fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) F, = with ($0) G with ($0) H) () () ()
+        }
+        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+          prove → with ($0) F with ($0 with ($0) G) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ with ($$0) F with ($$0 with ($$0) G) φ) ()
+          prove with ($0 with ($0) G) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) F, with ($0 with ($0) G) φ) () () ()
+        }
+        prove with ($0 with ($0) H) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (with ($0) G, with ($0) H) (with ($0 $$0) φ) ()
+      }
+    }
+  }
+  assume ∀ x → with ($0) F with ($0 with ($0) H) φ {
+    take x {
+      assume with ($0) F {
+        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+          prove → with ($0) F = with ($0) G with ($0) H 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ with ($$0) F = with ($$0) G with ($$0) H) ()
+          prove = with ($0) G with ($0) H fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) F, = with ($0) G with ($0) H) () () ()
+        }
+        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+          prove → with ($0) F with ($0 with ($0) H) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ with ($$0) F with ($$0 with ($$0) H) φ) ()
+          prove with ($0 with ($0) H) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) F, with ($0 with ($0) H) φ) () () ()
+        }
+        prove with ($0 with ($0) G) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (with ($0) G, with ($0) H) (with ($0 $$0) φ) ()
+      }
+    }
+  }
+  prove ↔ ∀ x → with ($0) F with ($0 with ($0) G) φ ∀ x → with ($0) F with ($0 with ($0) H) φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ x → with ($0) F with ($0 with ($0) G) φ, ∀ x → with ($0) F with ($0 with ($0) H) φ) () () ()
+}
