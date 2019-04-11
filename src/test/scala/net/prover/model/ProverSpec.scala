@@ -17,6 +17,7 @@ trait ProverSpec extends Specification {
   val b = TermVariable("b")
   val c = TermVariable("c")
   val n = TermVariable("n")
+  val F = TermVariable("F")
 
   val stubBook = Book("", Nil, Nil, Nil)
   val stubChapter = Chapter("", "", Nil)
@@ -145,6 +146,9 @@ trait ProverSpec extends Specification {
   }
   implicit class StatementVariableOps(statementVariable: StatementVariable) {
     def apply(terms: Term*) = PredicateApplication(statementVariable.name, terms)
+  }
+  implicit class TermVariableOps(termVariable: TermVariable) {
+    def apply(terms: Term*) = FunctionApplication(termVariable.name, terms)
   }
   implicit def statementVariableToComponentType(statementVariable: StatementVariable): StatementComponent = StatementComponent(statementVariable.name)
   implicit def termVariableToComponentType(termVariable: TermVariable): TermComponent = TermComponent(termVariable.name)

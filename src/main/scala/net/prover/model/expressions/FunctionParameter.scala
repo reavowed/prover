@@ -46,7 +46,7 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     externalDepth: Int
   ) = {
     if (level == internalDepth + externalDepth)
-      targetArguments(index).applySubstitutions(substitutions, 0, externalDepth).map(_.insertExternalParameters(internalDepth))
+      targetArguments(index).applySubstitutions(substitutions, previousInternalDepth, externalDepth).map(_.insertExternalParameters(internalDepth))
     else
       Some(this.insertExternalParameters(previousInternalDepth, internalDepth))
   }

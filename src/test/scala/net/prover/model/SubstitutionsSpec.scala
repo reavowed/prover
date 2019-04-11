@@ -1,7 +1,5 @@
 package net.prover.model
 
-import net.prover.model.entries.ExpressionDefinition.{ComponentArgument, PredicateComponent}
-import net.prover.model.entries.TermDefinition
 import net.prover.model.expressions.{Expression, FunctionParameter}
 import org.specs2.execute.Result
 
@@ -161,7 +159,7 @@ class SubstitutionsSpec extends ProverSpec {
       testSubstitutions(
         1,
         ForAll("x")(φ(FunctionParameter(0, 0))),
-        ForAll("X")(ForAll("x")(Negation(ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 2))))),
+        ForAll("y")(ForAll("x")(Negation(ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 2))))),
         Substitutions(
           predicates = Map((φ, 1) -> ForAll("x")(Negation(ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)))))))
     }
@@ -207,6 +205,77 @@ class SubstitutionsSpec extends ProverSpec {
         ForAll("x")(ForAll("y")(Exists("z")(ElementOf(FunctionParameter(0, 1), FunctionParameter(0, 3))))),
         Substitutions(
           predicates = Map((φ, 1) -> Exists("y")(ElementOf(FunctionParameter(0, 2), FunctionParameter(0, 1))))))
+    }
+
+    "match nested applications" in {
+      testSubstitutions(
+        1,
+        φ(F(a)),
+        Equals(b, FunctionParameter(0, 0)),
+        Substitutions(predicates = Map((φ, 1) -> Equals(b, FunctionParameter(0, 0)))),
+        Substitutions(
+          predicates = Map((φ, 1) -> Equals(FunctionParameter(0, 1), FunctionParameter(0, 0))),
+          functions = Map((F, 1) -> b)),
+        Substitutions(
+          terms = Map(a -> b),
+          predicates = Map((φ, 1) -> Equals(FunctionParameter(0, 1), FunctionParameter(0, 0))),
+          functions = Map((F, 1) -> FunctionParameter(0, 1))),
+        Substitutions(
+          predicates = Map((φ, 1) -> Equals(b, FunctionParameter(0, 1))),
+          functions = Map((F, 1) -> FunctionParameter(0, 0))),
+        Substitutions(
+          terms = Map(a -> FunctionParameter(0, 0)),
+          predicates = Map((φ, 1) -> Equals(b, FunctionParameter(0, 1))),
+          functions = Map((F, 1) -> FunctionParameter(0, 1)))
+      )
+    }
+
+    "match bound nested applications" in {
+      testSubstitutions(
+        1,
+        ForAll("x")(φ(F(a))),
+        ForAll("x")(Equals(b, FunctionParameter(0, 1))),
+        Substitutions(predicates = Map((φ, 1) -> Equals(b, FunctionParameter(0, 0)))),
+        Substitutions(
+          predicates = Map((φ, 1) -> Equals(FunctionParameter(0, 1), FunctionParameter(0, 0))),
+          functions = Map((F, 1) -> b)),
+        Substitutions(
+          terms = Map(a -> b),
+          predicates = Map((φ, 1) -> Equals(FunctionParameter(0, 1), FunctionParameter(0, 0))),
+          functions = Map((F, 1) -> FunctionParameter(0, 1))),
+        Substitutions(
+          predicates = Map((φ, 1) -> Equals(b, FunctionParameter(0, 1))),
+          functions = Map((F, 1) -> FunctionParameter(0, 0))),
+        Substitutions(
+          terms = Map(a -> FunctionParameter(0, 0)),
+          predicates = Map((φ, 1) -> Equals(b, FunctionParameter(0, 1))),
+          functions = Map((F, 1) -> FunctionParameter(0, 1)))
+      )
+    }
+
+    "match bound nested applications" in {
+      testSubstitutions(
+        1,
+        ForAll("x")(φ(F(FunctionParameter(0, 0)))),
+        ForAll("x")(ElementOf(Singleton(FunctionParameter(0, 0)), FunctionParameter(0, 1))),
+        Substitutions(
+          predicates = Map((φ, 1) -> ElementOf(Singleton(FunctionParameter(0, 1)), FunctionParameter(0, 0))),
+          functions = Map((F, 1) -> FunctionParameter(0, 1))),
+        Substitutions(
+          predicates = Map((φ, 1) -> ElementOf(FunctionParameter(0, 1), FunctionParameter(0, 0))),
+          functions = Map((F, 1) -> Singleton(FunctionParameter(0, 1))))
+      )
+    }
+
+    "something something" in {
+      ForAll("x")(φ(F(a)))
+        .applySubstitutions(
+          Substitutions(
+            predicates = Map((φ, 1) -> Equals(b, FunctionParameter(0, 1))),
+            functions = Map((F, 1) -> FunctionParameter(0, 0))),
+          0,
+          1)
+        .mustEqual(Some(ForAll("x")(Equals(b, FunctionParameter(0, 1)))))
     }
   }
 }

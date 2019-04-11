@@ -20,10 +20,13 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
 
   /**
     * Specify, lazily substituting any argument used.
-    * @param targetArguments the arguments to specify with
-    * @param substitutions the substitutions to use
-    * @param internalDepth The current scope depth inside the expression since we starting applying substitutions
-    * @param externalDepth The depth of external scoped variables that might be referred to by this statement or substitutions
+    *
+    * @param targetArguments       the arguments to specify with
+    * @param substitutions         the substitutions to use
+    * @param internalDepth         The current scope depth inside the expression since we starting specifying.
+    * @param previousInternalDepth The scope depth inside the expression before we started specifying.  Specified predicates
+    *                              may not refer to parameters in this range - they must be passed in through the arguments.
+    * @param externalDepth         The depth of external scoped variables that might be referred to by this statement or substitutions
     * @return
     */
   def specifyWithSubstitutions(
