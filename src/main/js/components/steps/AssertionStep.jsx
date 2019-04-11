@@ -15,10 +15,11 @@ export class AssertionStepProofLine extends React.Component {
   };
 
   render() {
-    let {step, path, apiService, highlighting, children} = this.props;
+    let {step, path, apiService, highlighting, children, boundVariableLists} = this.props;
     return <ProofLine premiseReferences={step.referencedLines}
                       path={path}
                       statement={step.statement}
+                      boundVariableLists={boundVariableLists}
                       buttons={<>
                         <InferenceLink inference={step.inference}/>
                         {step.isIncomplete && <Button variant="success" size="sm" onClick={this.createTargets}>Create targets</Button>}

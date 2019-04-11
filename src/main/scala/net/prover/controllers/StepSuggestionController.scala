@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/{stepPath}"))
@@ -18,14 +18,15 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
   case class InferenceSuggestion(
     inference: Inference.Summary,
     requiredSubstitutions: Substitutions.Required,
-    substitutions: Seq[Substitutions])
+    substitutions: Option[Seq[Substitutions]])
   @GetMapping(value = Array("/suggestInferences"), produces = Array("application/json;charset=UTF-8"))
   def suggestInferences(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("stepPath") stepPath: PathData,
-    @RequestParam("searchText") searchText: String
+    @RequestParam("searchText") searchText: String,
+    @RequestParam("withConclusion") withConclusion: Boolean
   ): ResponseEntity[_] = {
     val books = bookService.books
     (for {
@@ -33,16 +34,20 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       chapter <- findChapter(book, chapterKey)
       theorem <- findEntry[Theorem](chapter, theoremKey)
       entryContext = EntryContext.forEntry(books, book, chapter, theorem)
-      (step, stepContext, _) <- findStep[Step.Target](theorem, stepPath, entryContext)
+      (step, stepContext, _) <- findStep[Step](theorem, stepPath, entryContext)
+      getSubstitutions <- if (withConclusion)
+        step.asOptionalInstanceOf[Step.Target].orBadRequest("Step is not target").map { targetStep =>
+          (inference: Inference) =>
+            val substitutions = inference.conclusion.calculateSubstitutions(targetStep.statement, Substitutions.empty, 0, stepContext.externalDepth)
+            if (substitutions.nonEmpty) Some(Some(substitutions)) else None
+        }
+        else
+         Success((_: Inference) => Some(None))
     } yield {
       entryContext.inferences
         .filter(_.name.toLowerCase.contains(searchText.toLowerCase))
         .mapCollect { inference =>
-          val substitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
-          if (substitutions.nonEmpty)
-            Some(InferenceSuggestion(inference.summary, inference.requiredSubstitutions, substitutions))
-          else
-            None
+          getSubstitutions(inference).map(InferenceSuggestion(inference.summary, inference.requiredSubstitutions, _))
         }
         .sortBy(_.inference.conclusion.complexity)(implicitly[Ordering[Int]].reverse)
         .take(10)
@@ -55,7 +60,8 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("stepPath") stepPath: PathData,
-    @RequestParam("inferenceId") inferenceId: String
+    @RequestParam("inferenceId") inferenceId: String,
+    @RequestParam("withConclusion") withConclusion: Boolean
   ): ResponseEntity[_] = {
     val books = bookService.books
     (for {
@@ -63,10 +69,14 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       chapter <- findChapter(book, chapterKey)
       theorem <- findEntry[Theorem](chapter, theoremKey)
       entryContext = EntryContext.forEntry(books, book, chapter, theorem)
-      (step, stepContext, premiseContext) <- findStep[Step.Target](theorem, stepPath, entryContext)
+      (step, stepContext, premiseContext) <- findStep[Step](theorem, stepPath, entryContext)
       inference <- findInference(inferenceId)(entryContext)
+      targetOption <- if (withConclusion)
+        step.asOptionalInstanceOf[Step.Target].orBadRequest("Step is not target").map(_.statement).map(Some(_))
+      else
+        Success(None)
     } yield {
-      getPremiseSuggestions(inference.premises, inference, step, stepContext, premiseContext)
+      getPremiseSuggestions(inference.premises, targetOption, inference, stepContext, premiseContext)
     }).toResponseEntity
   }
 
@@ -92,7 +102,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
         .mapCollect { case (inference, namingPremises, _) =>
           val substitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
           if (substitutions.nonEmpty)
-            Some(InferenceSuggestion(inference.summary.copy(premises = namingPremises), inference.requiredSubstitutions, substitutions))
+            Some(InferenceSuggestion(inference.summary.copy(premises = namingPremises), inference.requiredSubstitutions, Some(substitutions)))
           else
             None
         }
@@ -118,7 +128,12 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       inference <- findInference(inferenceId)(entryContext)
       (namingPremises, _) <- ProofHelper.getNamingPremisesAndAssumption(inference, entryContext).orBadRequest(s"Inference $inferenceId was not naming inference")
     } yield {
-      getPremiseSuggestions(namingPremises, inference, step, stepContext, premiseContext)
+      getPremiseSuggestions(
+        namingPremises,
+        Some(step.statement),
+        inference,
+        stepContext,
+        premiseContext)
     }).toResponseEntity
   }
 
@@ -126,12 +141,14 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
   case class PossiblePremiseMatch(statement: Statement, substitutions: Seq[Substitutions])
   private def getPremiseSuggestions(
     premises: Seq[Statement],
+    targetOption: Option[Statement],
     inference: Inference,
-    step: Step.Target,
     stepContext: StepContext,
     premiseContext: PremiseContext
   ): PremiseSuggestions = {
-    val possibleConclusionSubstitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
+    val possibleConclusionSubstitutions = targetOption
+      .map(inference.conclusion.calculateSubstitutions(_, Substitutions.empty, 0, stepContext.externalDepth))
+      .getOrElse(Seq(Substitutions.empty))
     val availablePremises = (premiseContext.givenPremises ++ premiseContext.simplifiedPremises).map(_.statement).distinct
     val premiseMatches = premises.map { premise =>
       availablePremises.mapCollect { availablePremise =>
@@ -146,9 +163,10 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
         }
       }
     }
-    val immediateSubstitutions = premiseMatches.mapFind(_.mapFind(_.substitutions.find { substitutions =>
-      Try(inference.substitutePremisesAndValidateConclusion(step.statement, substitutions, stepContext)).toOption.exists(_.forall(availablePremises.contains))
-    }))
+    val immediateSubstitutions = targetOption.flatMap(target =>
+      premiseMatches.mapFind(_.mapFind(_.substitutions.find { substitutions =>
+        Try(inference.substitutePremisesAndValidateConclusion(target, substitutions, stepContext)).toOption.exists(_.forall(availablePremises.contains))
+      })))
     PremiseSuggestions(immediateSubstitutions, premiseMatches)
   }
 

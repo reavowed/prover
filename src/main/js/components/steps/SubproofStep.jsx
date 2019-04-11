@@ -25,6 +25,7 @@ export class SubproofStep extends React.Component {
         <ProofLine path={path}
                    statement={step.statement}
                    premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
+                   boundVariableLists={boundVariableLists}
                    apiService={apiService}
                    highlighting={highlighting}
                    incomplete={step.isIncomplete}

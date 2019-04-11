@@ -43,6 +43,7 @@ export class ElidedStepProofLine extends React.Component {
     </>;
     return <>
       <ProofLine premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
+                 boundVariableLists={boundVariableLists}
                  path={path}
                  statement={step.statement}
                  buttons={buttons}

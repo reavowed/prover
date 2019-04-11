@@ -25,7 +25,7 @@ export class ScopedVariableStep extends React.Component {
     let referencesForLastStep = [...additionalReferences, reference];
     let innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     return <>
-      <ProofLine path={path} apiService={apiService}>
+      <ProofLine path={path} apiService={apiService} boundVariableLists={boundVariableLists}>
         Take any
         {' '}
         <ClickableText onClick={() => this.setState({showBoundVariableModal: true, boundVariableName: step.variableName})}>

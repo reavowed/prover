@@ -8,7 +8,7 @@ import styled, {css} from "styled-components";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import Popover from "react-bootstrap/Popover";
-import {BoundVariableModal} from "../Modals";
+import {BoundVariableModal, FindInferenceModal} from "../Modals";
 import {Parser} from "../../Parser";
 
 export const ProofLine = styled(class ProofLine extends React.Component {
@@ -24,7 +24,8 @@ export const ProofLine = styled(class ProofLine extends React.Component {
       shouldShowSubproofNameModal: false,
       subproofName: '',
       addingTarget: false,
-      targetToAdd: ''
+      targetToAdd: '',
+      findInferenceModalCallbacks: null
     };
   }
   toggleButtonPopover = () => {
@@ -127,8 +128,34 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     }).then(this.props.apiService.updateTheorem);
   };
 
+  shouldShowFindInferenceModal = () => this.state.findInferenceModalCallbacks != null;
+  hideFindInferenceModal = () => {
+    this.setState({findInferenceModalCallbacks: null})
+  };
+  findInferenceForAssertion = () => {
+    this.setState({findInferenceModalCallbacks: {
+        getInferenceSuggestions: this.getStepInferenceSuggestions,
+        getPremiseSuggestions: this.getPremiseSuggestions,
+        submit: this.addAssertion
+      }})
+  };
+  getStepInferenceSuggestions = (searchText) => {
+    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}&withConclusion=false`)
+  };
+  getPremiseSuggestions = (inferenceId) => {
+    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=false`)
+  };
+  addAssertion = (inferenceId, substitutions) => {
+    this.props.apiService.fetchJsonForStep(this.props.path, "assertion", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({inferenceId, substitutions})
+    }).then(this.props.apiService.updateTheorem)
+      .then(this.hideFindInferenceModal);
+  };
+
   render() {
-    const {className, children, tooltip, path, buttons} = this.props;
+    const {className, children, tooltip, path, buttons, boundVariableLists} = this.props;
 
     const subProofNamingModal = <BoundVariableModal show={this.state.shouldShowSubproofNameModal}
                                                     onHide={() => this.hideSubproofNameModal}
@@ -183,6 +210,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
           <Overlay target={this.state.buttonRef} show={this.state.shouldShowButtonPopover} onHide={this.hideButtonPopover} rootClose placement="bottom">
             {({show, ...props}) => <Popover {...props}>
               <Button onClick={this.showTargetModal} variant="success" size="sm" className="ml-1">Add target</Button>
+              <Button onClick={this.findInferenceForAssertion} variant="success" size="sm" className="ml-1">Find inference</Button>
               <Button onClick={this.showSubproofNameModal} variant="success" size="sm" className="ml-1">To subproof</Button>
               <Button onClick={this.elide} variant="success" size="sm" className="ml-1">Elide</Button>
               <Button onClick={this.clearStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-redo"/></Button>
@@ -197,6 +225,10 @@ export const ProofLine = styled(class ProofLine extends React.Component {
       </FlexRow>
       {subProofNamingModal}
       {targetModal}
+      {<FindInferenceModal show={this.shouldShowFindInferenceModal()}
+                           onHide={this.hideFindInferenceModal}
+                           callbacks={this.state.findInferenceModalCallbacks}
+                           boundVariableLists={boundVariableLists} />}
     </div>;
 
     if (tooltip) {

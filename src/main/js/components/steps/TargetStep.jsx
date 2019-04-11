@@ -91,13 +91,13 @@ export class TargetStep extends React.Component {
   };
 
   getStepInferenceSuggestions = (searchText) => {
-    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}`)
+    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}&withConclusion=true`)
   };
   getNamingInferenceSuggestions = (searchText) => {
     return this.props.apiService.fetchJsonForStep(this.props.path, `suggestNamingInferences?searchText=${searchText}`)
   };
   getPremiseSuggestions = (inferenceId) => {
-    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}`)
+    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=true`)
   };
   getNamingPremiseSuggestions = (inferenceId) => {
     return this.props.apiService.fetchJsonForStep(this.props.path, `suggestNamingPremises?inferenceId=${inferenceId}`)
@@ -158,6 +158,7 @@ export class TargetStep extends React.Component {
     return <>
       <ProofLine incomplete
                  statement={step.statement}
+                 boundVariableLists={boundVariableLists}
                  path={path}
                  buttons={buttons}
                  apiService={apiService}

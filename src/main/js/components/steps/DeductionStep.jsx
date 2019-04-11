@@ -43,7 +43,7 @@ export class DeductionStep extends React.Component {
         {boundVariableContent}
       </ClickableText>;
     return <>
-      <ProofLine path={path} apiService={apiService}>
+      <ProofLine path={path} apiService={apiService} boundVariableLists={boundVariableLists}>
         Assume
         {' '}
         <HighlightableExpression expression={step.assumption}

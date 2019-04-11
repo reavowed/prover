@@ -38,6 +38,32 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     }.toResponseEntity
   }
 
+  @PostMapping(value = Array("/assertion"))
+  def addAssertion(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepReference: PathData,
+    @RequestBody definition: StepDefinition
+  ): ResponseEntity[_] = {
+    replaceStep[Step](bookKey, chapterKey, theoremKey, stepReference) { (step, stepContext, premiseContext, entryContext) =>
+      for {
+        inference <- findInference(definition.inferenceId)(entryContext)
+        substitutions <- definition.substitutions.parse(inference)(ExpressionParsingContext.atStep(entryContext, stepContext))
+        premiseStatements <- inference.substitutePremises(substitutions, stepContext).recoverWithBadRequest
+        conclusion <- inference.substituteConclusion(substitutions, stepContext).recoverWithBadRequest
+      } yield {
+        val premises = premiseStatements.map(premiseContext.createPremise)
+        val targetSteps = premises.ofType[Premise.Pending].map(p => ProofHelper.findFact(p.statement, stepContext, entryContext).getOrElse(Step.Target(p.statement)))
+        targetSteps :+ Step.Assertion(
+          conclusion,
+          inference,
+          premises,
+          substitutions) :+ step
+      }
+    }.toResponseEntity
+  }
+
   @PostMapping(value = Array("/introduceNaming"))
   def introduceNaming(
     @PathVariable("bookKey") bookKey: String,

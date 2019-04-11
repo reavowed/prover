@@ -55,18 +55,26 @@ trait Inference {
 
   def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions, stepContext: StepContext): Seq[Statement] = {
     validateConclusion(expectedConclusion, substitutions, stepContext)
+    substitutePremises(substitutions, stepContext)
+  }
+
+  def substitutePremises(substitutions: Substitutions, stepContext: StepContext): Seq[Statement] = {
     premises.map(substituteStatement(_, substitutions, stepContext))
+  }
+
+  def substituteConclusion(substitutions: Substitutions, stepContext: StepContext): Statement = {
+    conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
+      .getOrElse(throw new Exception(s"Could not substitute conclusion $conclusion"))
+  }
+
+  def validateConclusion(expectedConclusion: Statement, substitutions: Substitutions, stepContext: StepContext): Unit = {
+    val substitutedConclusion = substituteConclusion(substitutions, stepContext)
+    (expectedConclusion == substitutedConclusion)
+      .ifFalse(throw new Exception(s"Substituted conclusion $substitutedConclusion was not expected conclusion $expectedConclusion"))
   }
 
   def substituteStatement(statement: Statement, substitutions: Substitutions, stepContext: StepContext): Statement = {
     statement.applySubstitutions(substitutions, 0, stepContext.externalDepth).getOrElse(throw new Exception(s"Could not substitute $statement"))
-  }
-
-  def validateConclusion(expectedConclusion: Statement, substitutions: Substitutions, stepContext: StepContext): Unit = {
-    val substitutedConclusion = conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
-      .getOrElse(throw new Exception(s"Could not substitute conclusion $conclusion"))
-    (expectedConclusion == substitutedConclusion)
-      .ifFalse(throw new Exception(s"Substituted conclusion $substitutedConclusion was not expected conclusion $expectedConclusion"))
   }
 }
 

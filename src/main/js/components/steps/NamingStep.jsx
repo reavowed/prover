@@ -29,8 +29,10 @@ export class NamingStep extends React.Component {
     return <>
       <ProofLine premiseReferences={step.referencedLinesForExtraction}
                  reference={referenceForAssumption}
+                 boundVariableLists={boundVariableLists}
                  buttons={<InferenceLink inference={step.inference}/>}
                  path={path}
+                 statement={step.assumption}
                  apiService={apiService}
                  highlighting={highlighting}>
         Let

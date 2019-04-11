@@ -89,7 +89,7 @@ export class FindInferenceModal extends React.Component {
     });
   };
   onSuggestionSelected = (event, {suggestion}) => {
-    const forcedSubstitutionValues = this.getAllForcedSubstitutionValues([suggestion.substitutions], suggestion.requiredSubstitutions);
+    const forcedSubstitutionValues = this.getAllForcedSubstitutionValues(_.filter([suggestion.substitutions]), suggestion.requiredSubstitutions);
     const selectedSubstitutionValues = buildSubstitutionMap(suggestion.requiredSubstitutions, getter => getter(forcedSubstitutionValues) ? getter(forcedSubstitutionValues) : "");
     this.setState({
       selectedInferenceSuggestion: suggestion,
@@ -147,7 +147,7 @@ export class FindInferenceModal extends React.Component {
   };
   getPossibleSubstitutionsLists = (selectedPremiseSuggestions, selectedSubstitutionValues) => {
     return this.filterBySelectedSubstitutionValues(
-      [this.state.selectedInferenceSuggestion.substitutions, ..._.filter(_.map(selectedPremiseSuggestions, s => s[1]))],
+      _.filter([this.state.selectedInferenceSuggestion.substitutions, ..._.map(selectedPremiseSuggestions, s => s[1])]),
       this.state.selectedInferenceSuggestion.requiredSubstitutions,
       selectedSubstitutionValues
     );
