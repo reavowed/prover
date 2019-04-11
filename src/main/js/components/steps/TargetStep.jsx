@@ -104,7 +104,7 @@ export class TargetStep extends React.Component {
   };
 
   proveWithInference = (inferenceId, substitutions) => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "", {
+    return this.props.apiService.fetchJsonForStep(this.props.path, "", {
       method: "PUT",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, substitutions})
@@ -113,7 +113,7 @@ export class TargetStep extends React.Component {
 
   createNamingStep = (inferenceId, substitutions) => {
     const {boundVariableName: variableName} = this.state;
-    this.props.apiService.fetchJsonForStep(this.props.path, "introduceNaming", {
+    return this.props.apiService.fetchJsonForStep(this.props.path, "introduceNaming", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, substitutions, variableName})

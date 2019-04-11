@@ -146,7 +146,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     return this.props.apiService.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=false`)
   };
   addAssertion = (inferenceId, substitutions) => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "assertion", {
+    return this.props.apiService.fetchJsonForStep(this.props.path, "assertion", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, substitutions})
