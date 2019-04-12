@@ -165,7 +165,7 @@ term + ()
   (∧ function $0 × ℕ ℕ ℕ ∀ n → ∈ $0 ℕ ∧ = apply $$0 orderedPair $0 0 $0 ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0)
   attributes (infix)
 
-theorem Identity for Addition (Left)
+theorem Identity for Addition (Right)
 premise ∈ n ℕ
 conclusion = apply + orderedPair n 0 n
 {
@@ -173,4 +173,156 @@ conclusion = apply + orderedPair n 0 n
   prove → ∈ n ℕ ∧ = apply + orderedPair n 0 n ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∧ = apply + orderedPair $0 0 $0 ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0) ()
   prove ∧ = apply + orderedPair n 0 n ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∧ = apply + orderedPair n 0 n ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0) () () ()
   prove = apply + orderedPair n 0 n 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply + orderedPair n 0 n, ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0) () () ()
+}
+
+theorem Successor of Addition (Right)
+premise ∈ n ℕ
+premise ∈ m ℕ
+conclusion = apply + orderedPair n successor m successor apply + orderedPair n m
+{
+  prove ∧ function + × ℕ ℕ ℕ ∀ n → ∈ $0 ℕ ∧ = apply + orderedPair $0 0 $0 ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0 254c0233664d014e09db5980662db76d9aa31958026571dc155bece8faf088c6 () () () ()
+  prove → ∈ n ℕ ∧ = apply + orderedPair n 0 n ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∧ = apply + orderedPair $0 0 $0 ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0) ()
+  prove ∧ = apply + orderedPair n 0 n ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∧ = apply + orderedPair n 0 n ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0) () () ()
+  prove → ∈ m ℕ = apply + orderedPair n successor m successor apply + orderedPair n m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0) ()
+  prove = apply + orderedPair n successor m successor apply + orderedPair n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m ℕ, = apply + orderedPair n successor m successor apply + orderedPair n m) () () ()
+}
+
+theorem Identity for Addition (Left)
+premise ∈ n ℕ
+conclusion = apply + orderedPair 0 n n
+{
+  elided a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 {
+    prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
+    prove = apply + orderedPair 0 0 0 a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (0) () ()
+  }
+  take m {
+    assume ∧ ∈ $0 ℕ = apply + orderedPair 0 $0 $0 {
+      elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
+        prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
+        prove = apply + orderedPair 0 successor $0 successor apply + orderedPair 0 $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (0, $0) () ()
+      }
+      prove = successor apply + orderedPair 0 $0 successor $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair 0 $0, $0) () (successor $$0)
+      prove = apply + orderedPair 0 successor $0 successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair 0 successor $0, successor apply + orderedPair 0 $0, successor $0) () ()
+    }
+  }
+  prove = apply + orderedPair 0 n n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (= apply + orderedPair 0 $0 $0) ()
+}
+
+theorem Successor of Addition (Left)
+premise ∈ n ℕ
+premise ∈ m ℕ
+conclusion = apply + orderedPair successor n m successor apply + orderedPair n m
+{
+  elided a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 {
+    prove ∈ successor n ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () ()
+    prove = apply + orderedPair successor n 0 successor n a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (successor n) () ()
+  }
+  elided a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 {
+    prove = apply + orderedPair n 0 n a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (n) () ()
+    prove = n apply + orderedPair n 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair n 0, n) () ()
+    prove = successor n successor apply + orderedPair n 0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (n, apply + orderedPair n 0) () (successor $0)
+  }
+  prove = apply + orderedPair successor n 0 successor apply + orderedPair n 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair successor n 0, successor n, successor apply + orderedPair n 0) () ()
+  take x {
+    assume ∧ ∈ $0 ℕ = apply + orderedPair successor n $0 successor apply + orderedPair n $0 {
+      elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
+        prove ∈ successor n ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () ()
+        prove = apply + orderedPair successor n successor $0 successor apply + orderedPair successor n $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (successor n, $0) () ()
+      }
+      prove = successor apply + orderedPair successor n $0 successor successor apply + orderedPair n $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair successor n $0, successor apply + orderedPair n $0) () (successor $$0)
+      prove = apply + orderedPair successor n successor $0 successor successor apply + orderedPair n $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair successor n successor $0, successor apply + orderedPair successor n $0, successor successor apply + orderedPair n $0) () ()
+      elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
+        prove = apply + orderedPair n successor $0 successor apply + orderedPair n $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (n, $0) () ()
+        prove = successor apply + orderedPair n $0 apply + orderedPair n successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair n successor $0, successor apply + orderedPair n $0) () ()
+        prove = successor successor apply + orderedPair n $0 successor apply + orderedPair n successor $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (successor apply + orderedPair n $0, apply + orderedPair n successor $0) () (successor $$0)
+      }
+      prove = apply + orderedPair successor n successor $0 successor apply + orderedPair n successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair successor n successor $0, successor successor apply + orderedPair n $0, successor apply + orderedPair n successor $0) () ()
+    }
+  }
+  prove = apply + orderedPair successor n m successor apply + orderedPair n m bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (m) (= apply + orderedPair successor n $0 successor apply + orderedPair n $0) ()
+}
+
+theorem Addition is a Function
+conclusion function + × ℕ ℕ ℕ
+{
+  prove ∧ function + × ℕ ℕ ℕ ∀ n → ∈ $0 ℕ ∧ = apply + orderedPair $0 0 $0 ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0 254c0233664d014e09db5980662db76d9aa31958026571dc155bece8faf088c6 () () () ()
+  prove function + × ℕ ℕ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function + × ℕ ℕ ℕ, ∀ n → ∈ $0 ℕ ∧ = apply + orderedPair $0 0 $0 ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0) () () ()
+}
+
+theorem Addition is Closed on the Natural Numbers
+premise ∈ n ℕ
+premise ∈ m ℕ
+conclusion ∈ apply + orderedPair n m ℕ
+{
+  prove function + × ℕ ℕ ℕ de3142c8a5e374ab978a063bd7ca838356e0e183f0f5685e796ed0b17b6bd74d () () () ()
+  prove ∈ orderedPair n m × ℕ ℕ 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () (n, ℕ, m, ℕ) () ()
+  prove ∈ apply + orderedPair n m ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (+, × ℕ ℕ, ℕ, orderedPair n m) () ()
+}
+
+theorem Addition is Commutative
+premise ∈ n ℕ
+premise ∈ m ℕ
+conclusion = apply + orderedPair n m apply + orderedPair m n
+{
+  prove = apply + orderedPair n 0 n a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (n) () ()
+  elided e160748d6da6b39f1c3838d1176bd4edc7d0b683d6180f08dfd556eaf700d8c9 {
+    prove = apply + orderedPair 0 n n e160748d6da6b39f1c3838d1176bd4edc7d0b683d6180f08dfd556eaf700d8c9 () (n) () ()
+    prove = n apply + orderedPair 0 n 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair 0 n, n) () ()
+  }
+  prove = apply + orderedPair n 0 apply + orderedPair 0 n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair n 0, n, apply + orderedPair 0 n) () ()
+  take x {
+    assume ∧ ∈ $0 ℕ = apply + orderedPair n $0 apply + orderedPair $0 n {
+      prove = apply + orderedPair n successor $0 successor apply + orderedPair n $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (n, $0) () ()
+      prove = successor apply + orderedPair n $0 successor apply + orderedPair $0 n 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair n $0, apply + orderedPair $0 n) () (successor $$0)
+      prove = apply + orderedPair n successor $0 successor apply + orderedPair $0 n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair n successor $0, successor apply + orderedPair n $0, successor apply + orderedPair $0 n) () ()
+      elided 2d4570ac9330c3bf6ccb7237a8087fd509ab4576382b8c7d0a28e419a249ffbd {
+        prove = apply + orderedPair successor $0 n successor apply + orderedPair $0 n 2d4570ac9330c3bf6ccb7237a8087fd509ab4576382b8c7d0a28e419a249ffbd () ($0, n) () ()
+        prove = successor apply + orderedPair $0 n apply + orderedPair successor $0 n 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair successor $0 n, successor apply + orderedPair $0 n) () ()
+      }
+      prove = apply + orderedPair n successor $0 apply + orderedPair successor $0 n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair n successor $0, successor apply + orderedPair $0 n, apply + orderedPair successor $0 n) () ()
+    }
+  }
+  prove = apply + orderedPair n m apply + orderedPair m n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (m) (= apply + orderedPair n $0 apply + orderedPair $0 n) ()
+}
+
+theorem Addition is Associative
+premise ∈ n ℕ
+premise ∈ m ℕ
+premise ∈ r ℕ
+conclusion = apply + orderedPair n apply + orderedPair m r apply + orderedPair apply + orderedPair n m r
+{
+  elided a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 {
+    prove = apply + orderedPair m 0 m a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (m) () ()
+    prove = apply + orderedPair n apply + orderedPair m 0 apply + orderedPair n m 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair m 0, m) () (apply + orderedPair n $0)
+  }
+  elided a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 {
+    prove ∈ apply + orderedPair n m ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (n, m) () ()
+    prove = apply + orderedPair apply + orderedPair n m 0 apply + orderedPair n m a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (apply + orderedPair n m) () ()
+    prove = apply + orderedPair n m apply + orderedPair apply + orderedPair n m 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair apply + orderedPair n m 0, apply + orderedPair n m) () ()
+  }
+  prove = apply + orderedPair n apply + orderedPair m 0 apply + orderedPair apply + orderedPair n m 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair n apply + orderedPair m 0, apply + orderedPair n m, apply + orderedPair apply + orderedPair n m 0) () ()
+  take x {
+    assume ∧ ∈ $0 ℕ = apply + orderedPair n apply + orderedPair m $0 apply + orderedPair apply + orderedPair n m $0 {
+      elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
+        prove = apply + orderedPair m successor $0 successor apply + orderedPair m $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (m, $0) () ()
+        prove = apply + orderedPair n apply + orderedPair m successor $0 apply + orderedPair n successor apply + orderedPair m $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair m successor $0, successor apply + orderedPair m $0) () (apply + orderedPair n $$0)
+      }
+      elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
+        prove ∈ apply + orderedPair m $0 ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (m, $0) () ()
+        prove = apply + orderedPair n successor apply + orderedPair m $0 successor apply + orderedPair n apply + orderedPair m $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (n, apply + orderedPair m $0) () ()
+      }
+      prove = apply + orderedPair n apply + orderedPair m successor $0 successor apply + orderedPair n apply + orderedPair m $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair n apply + orderedPair m successor $0, apply + orderedPair n successor apply + orderedPair m $0, successor apply + orderedPair n apply + orderedPair m $0) () ()
+      prove = successor apply + orderedPair n apply + orderedPair m $0 successor apply + orderedPair apply + orderedPair n m $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair n apply + orderedPair m $0, apply + orderedPair apply + orderedPair n m $0) () (successor $$0)
+      prove = apply + orderedPair n apply + orderedPair m successor $0 successor apply + orderedPair apply + orderedPair n m $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair n apply + orderedPair m successor $0, successor apply + orderedPair n apply + orderedPair m $0, successor apply + orderedPair apply + orderedPair n m $0) () ()
+      elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
+        elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
+          prove ∈ apply + orderedPair n m ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (n, m) () ()
+          prove = apply + orderedPair apply + orderedPair n m successor $0 successor apply + orderedPair apply + orderedPair n m $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (apply + orderedPair n m, $0) () ()
+        }
+        prove = successor apply + orderedPair apply + orderedPair n m $0 apply + orderedPair apply + orderedPair n m successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair apply + orderedPair n m successor $0, successor apply + orderedPair apply + orderedPair n m $0) () ()
+      }
+      prove = apply + orderedPair n apply + orderedPair m successor $0 apply + orderedPair apply + orderedPair n m successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair n apply + orderedPair m successor $0, successor apply + orderedPair apply + orderedPair n m $0, apply + orderedPair apply + orderedPair n m successor $0) () ()
+    }
+  }
+  prove = apply + orderedPair n apply + orderedPair m r apply + orderedPair apply + orderedPair n m r bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (r) (= apply + orderedPair n apply + orderedPair m $0 apply + orderedPair apply + orderedPair n m $0) ()
 }
