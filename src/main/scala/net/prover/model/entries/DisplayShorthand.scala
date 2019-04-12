@@ -7,9 +7,12 @@ import net.prover.model.expressions.Template
 import net.prover.model.{EntryContext, ExpressionParsingContext, Format, Parser}
 
 @JsonSerialize(using = classOf[DisplayShorthandSerializer])
-case class DisplayShorthand(template: Template, format: Format.Explicit) extends ChapterEntry {
+case class DisplayShorthand(template: Template, format: Format.Explicit, conditions: Seq[(String, String)]) extends ChapterEntry {
   override def name: String = DisplayShorthand.name
-  override def serializedLines: Seq[String] = Seq(s"display ${template.serialized} as (${format.originalValue})")
+  override def serializedLines: Seq[String] = Seq((
+    Seq("display", template.serialized, "as", s"(${format.originalValue})") ++
+      conditions.flatMap { case (variableName, requiredAttribute) => Seq("if", variableName, requiredAttribute) }
+    ).mkString(" "))
 
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
@@ -17,12 +20,23 @@ case class DisplayShorthand(template: Template, format: Format.Explicit) extends
 
 object DisplayShorthand extends ChapterEntryParser {
   override def name = "display"
+
+  def conditionsParser: Parser[Seq[(String, String)]] = {
+    Parser.optionalWord("if").flatMapMap { _ =>
+      for {
+        variableName <- Parser.singleWord
+        requiredAttribute <- Parser.singleWord
+      } yield (variableName, requiredAttribute)
+    }.whileDefined
+  }
+
   override def parser(implicit entryContext: EntryContext): Parser[DisplayShorthand] = {
     for {
       template <- Template.parser
       _ <- Parser.requiredWord("as")
       format <- Format.parser(template.names)
-    } yield DisplayShorthand(template, format)
+      conditions <- conditionsParser
+    } yield DisplayShorthand(template, format, conditions)
   }
 }
 
@@ -55,6 +69,7 @@ private class DisplayShorthandSerializer extends JsonSerializer[DisplayShorthand
     gen.writeStartObject(value)
     gen.writeObjectField("baseFormatString", value.format.baseFormatString)
     gen.writeObjectField("requiresBrackets", value.format.requiresBrackets)
+    gen.writeObjectField("conditions", value.conditions)
     gen.writeFieldName("template")
     serialize(value.template, gen)
     gen.writeEndObject()

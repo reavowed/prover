@@ -2,7 +2,6 @@ package net.prover.model.entries
 
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition.ComponentType
-import net.prover.model.entries.StatementDefinition.StructureType
 import net.prover.model.expressions._
 
 case class StatementDefinition(
@@ -13,7 +12,7 @@ case class StatementDefinition(
     format: Format,
     definingStatement: Option[Statement],
     shorthand: Option[String],
-    structureType: Option[StructureType])
+    attributes: Seq[String])
   extends ExpressionDefinition with TypedExpressionDefinition[StatementDefinition]
 {
   override def name: String = explicitName.getOrElse(symbol)
@@ -51,27 +50,12 @@ case class StatementDefinition(
       format.serialized.map(f => s"format ($f)").toSeq ++
       definingStatement.map(s => s"definition (${s.serialized})").toSeq ++
       shorthand.map(s => s"shorthand ($s)").toSeq ++
-      structureType.map(_.serialized).toSeq).indent
+      Some(attributes).filter(_.nonEmpty).map(attributes => s"attributes (${attributes.mkString(" ")})").toSeq
+    ).indent
 }
 
 object StatementDefinition extends ChapterEntryParser {
   override val name: String = "statement"
-
-  sealed trait StructureType {
-    def serialized: String
-  }
-  object StructureType {
-    case object Deduction extends StructureType {
-      def serialized = "deduction"
-    }
-    case object Scoping extends StructureType {
-      def serialized = "scoping"
-    }
-    def parser: Parser[Option[StructureType]] = Parser.selectOptionalWord {
-      case "deduction" => Deduction
-      case "scoping" => Scoping
-    }
-  }
 
   def nameParser: Parser[Option[String]] = Parser.optional(
     "name",
@@ -92,7 +76,7 @@ object StatementDefinition extends ChapterEntryParser {
       format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
       optionalDefiningStatement <- definingStatementParser
       shorthand <- ExpressionDefinition.shorthandParser
-      structureType <- StructureType.parser
+      attributes <- ExpressionDefinition.attributesParser
     } yield {
       StatementDefinition(
         symbol,
@@ -102,7 +86,7 @@ object StatementDefinition extends ChapterEntryParser {
         format,
         optionalDefiningStatement,
         shorthand,
-        structureType)
+        attributes)
     }
   }
 }

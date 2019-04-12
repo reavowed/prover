@@ -15,10 +15,10 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
   def addEntries(entries: Seq[ChapterEntry]): EntryContext = copy(availableEntries = availableEntries ++ entries)
 
   def deductionStatementOption: Option[StatementDefinition] = {
-    statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Deduction))
+    statementDefinitions.find(_.attributes.contains("deduction"))
   }
   def scopingStatementOption: Option[StatementDefinition] = {
-    statementDefinitions.find(_.structureType.contains(StatementDefinition.StructureType.Scoping))
+    statementDefinitions.find(_.attributes.contains("scoping"))
   }
 
   def matchScopingStatement(statement: Statement): Option[(Statement, StatementDefinition)] = {

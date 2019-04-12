@@ -129,8 +129,8 @@ export class TargetStep extends React.Component {
   render() {
     let {step, path, additionalReferences, apiService, highlighting, boundVariableLists} = this.props;
     let reference = {stepPath: path};
-    let scopingStatement = _.find(window.definitions, d => d.structureType === "scoping");
-    let deductionStatement = _.find(window.definitions, d => d.structureType === "deduction");
+    let scopingStatement = _.find(window.definitions, d => _.includes(d.attributes, "scoping"));
+    let deductionStatement = _.find(window.definitions, d => _.includes(d.attributes, "deduction"));
 
     const boundVariableModal = <BoundVariableModal show={this.isShowingBoundVariableModal()}
                                                    onHide={this.hideBoundVariableModal}

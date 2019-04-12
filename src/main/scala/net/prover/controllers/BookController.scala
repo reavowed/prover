@@ -248,11 +248,10 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
     ).map{ case (books, book, chapter, _, _) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
-  case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, numberOfBoundVariables: Int, structureType: Option[String])
+  case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, numberOfBoundVariables: Int, attributes: Seq[String])
   private def getDefinitionSummaries(entryContext: EntryContext) = {
     entryContext.availableEntries.ofType[ExpressionDefinition]
-      .filter(_.componentTypes.nonEmpty)
-      .map(d => d.symbol -> DefinitionSummary(d.symbol, d.format.baseFormatString, d.format.requiresBrackets, d.boundVariableNames.length, d.asOptionalInstanceOf[StatementDefinition].flatMap(_.structureType).map(_.serialized))).toMap
+      .map(d => d.symbol -> DefinitionSummary(d.symbol, d.format.baseFormatString, d.format.requiresBrackets, d.boundVariableNames.length, d.attributes)).toMap
   }
 
   private def getDefinitionShorthands(entryContext: EntryContext): Map[String, String] = {
@@ -288,9 +287,9 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
         <style>{".popover { max-width: 100%; }"}</style>
       </head>
       <body>
-        <script src="http://localhost:8081/node_modules/react/umd/react.development.js"></script>
-        <script src="http://localhost:8081/node_modules/react-dom/umd/react-dom.development.js"></script>
-        <script src="http://localhost:8081/bundle.js"></script>
+        <script src="http://localhost:8079/node_modules/react/umd/react.development.js"></script>
+        <script src="http://localhost:8079/node_modules/react-dom/umd/react-dom.development.js"></script>
+        <script src="http://localhost:8079/bundle.js"></script>
         <script type="text/javascript">{Unparsed(initScript)}</script>
       </body>
     </html>.toString()

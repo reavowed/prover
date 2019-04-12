@@ -3,7 +3,7 @@ package net.prover.model.entries
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
-import net.prover.model.{ExpressionParsingContext, Format, Parser, TemplateParsingContext}
+import net.prover.model._
 
 trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinition]
 
@@ -15,6 +15,7 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
   def shorthand: Option[String]
   def defaultValue: Expression
   def typeName: String
+  def attributes: Seq[String]
 
   def withShorthand(newShorthand: Option[String]): ExpressionDefinitionType
 
@@ -138,4 +139,10 @@ object ExpressionDefinition {
   }
 
   def shorthandParser = Parser.optional("shorthand", Parser.allInParens)
+
+  def attributesParser: Parser[Seq[String]] = {
+    Parser.optionalWord("attributes")
+      .flatMapMap(_ => Parser.allInParens.map(_.splitByWhitespace()))
+      .getOrElse(Nil)
+  }
 }

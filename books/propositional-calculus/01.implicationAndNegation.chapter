@@ -6,7 +6,7 @@ conclusion φ
 
 statement → (φ ψ)
   shorthand (imp)
-  deduction
+  attributes (deduction)
 
 axiom Modus Ponens
 premise → φ ψ

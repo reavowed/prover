@@ -12,7 +12,8 @@ case class TermDefinition(
     format: Format,
     premises: Seq[Statement],
     definitionPredicate: Statement,
-    shorthand: Option[String])
+    shorthand: Option[String],
+    attributes: Seq[String])
   extends ExpressionDefinition with TypedExpressionDefinition[TermDefinition]
 {
   override def name: String = explicitName.getOrElse(symbol)
@@ -45,7 +46,9 @@ case class TermDefinition(
       format.serialized.map(f => s"format ($f)").toSeq ++
       (if (premises.nonEmpty) Seq(s"premises (${premises.map(_.serialized).mkString(", ")})") else Nil) ++
       Seq("(" + definitionPredicate.serialized + ")") ++
-      shorthand.map(s => s"shorthand ($s)").toSeq).indent
+      shorthand.map(s => s"shorthand ($s)").toSeq ++
+      Some(attributes).filter(_.nonEmpty).map(attributes => s"attributes (${attributes.mkString(" ")})").toSeq
+    ).indent
 }
 
 object TermDefinition extends ChapterEntryParser {
@@ -72,6 +75,7 @@ object TermDefinition extends ChapterEntryParser {
       premises <- premisesParser
       definitionPredicate <- Statement.parser(expressionParsingContext.addParameters("_")).inParens
       shorthand <- ExpressionDefinition.shorthandParser
+      attributes <- ExpressionDefinition.attributesParser
     } yield {
       TermDefinition(
         symbol,
@@ -81,7 +85,8 @@ object TermDefinition extends ChapterEntryParser {
         format,
         premises,
         definitionPredicate,
-        shorthand)
+        shorthand,
+        attributes)
     }
   }
 }

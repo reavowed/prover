@@ -44,15 +44,15 @@ const HighlightedConclusion = styled.span`
 `;
 
 export class ExpressionComponent extends React.Component {
-  matchDisplayShorthand(template, expression, pathWithinMatch, boundVariablesWithinMatch) {
+  matchTemplate(template, expression, pathWithinMatch, boundVariablesWithinMatch) {
     if (_.isString(template)) {
-      return {type: "expression", expression, pathWithinMatch, boundVariablesWithinMatch};
+      return {type: "expression", matchedVariable: template, expression, pathWithinMatch, boundVariablesWithinMatch};
     } else if (_.isArray(template) && _.isString(template[0])) {
       if ((expression instanceof DefinedExpression) && (expression.definition.symbol === template[0])) {
         const innerBoundVariables = expression.definition.numberOfBoundVariables ? [expression.boundVariableNames, ...boundVariablesWithinMatch] : boundVariablesWithinMatch;
         const componentMatches = _.chain(template.slice(1))
           .zip(expression.components)
-          .map(([t, c], i) => this.matchDisplayShorthand(t, c, [...pathWithinMatch, i], innerBoundVariables))
+          .map(([t, c], i) => this.matchTemplate(t, c, [...pathWithinMatch, i], innerBoundVariables))
           .value();
         if (_.every(componentMatches)) {
           return [...expression.boundVariableNames.map((name, index) => ({type: "boundVariable", name, index, pathWithinMatch})), ..._.flatten(componentMatches)];
@@ -62,6 +62,16 @@ export class ExpressionComponent extends React.Component {
       if ((expression instanceof FunctionParameter) && _.isEqual(template, [expression.level, expression.index])) {
         return [];
       }
+    }
+  }
+  matchDisplayShorthand(displayShorthand, expression, pathWithinMatch, boundVariablesWithinMatch) {
+    const matches = this.matchTemplate(displayShorthand.template, expression, pathWithinMatch, boundVariablesWithinMatch);
+    if (matches) {
+      const matchesConditions = _.every(displayShorthand.conditions, condition => {
+        const match = _.find(matches, match => match.matchedVariable === condition[0]);
+        return match && match.expression.definition && _.includes(match.expression.definition.attributes, condition[1]);
+      });
+      if (matchesConditions) return matches;
     }
   }
 
@@ -85,7 +95,7 @@ export class ExpressionComponent extends React.Component {
 
   renderInner(expression, path, pathsToHighlightAsPremise, boundVariableLists, wrapBoundVariable, safe) {
     for (const displayShorthand of window.displayShorthands) {
-      const matches = this.matchDisplayShorthand(displayShorthand.template, expression, [], []);
+      const matches = this.matchDisplayShorthand(displayShorthand, expression, [], []);
       if (matches) {
         let renderedMatches = matches.map(m => this.renderMatch(m, path, pathsToHighlightAsPremise, boundVariableLists, wrapBoundVariable));
         let formatString = (safe && displayShorthand.requiresBrackets) ?

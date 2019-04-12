@@ -36,7 +36,7 @@ trait ProverSpec extends Specification {
       Format.default(symbol, componentTypes.map(_.name)),
       definingStatement,
       None,
-      None)
+      Nil)
   }
   def predicate(
     symbol: String,
@@ -52,7 +52,7 @@ trait ProverSpec extends Specification {
       Format.default(symbol, componentTypes.map(_.name)),
       definingStatement,
       None,
-      None)
+      Nil)
   }
 
   def quantifier(
@@ -67,16 +67,16 @@ trait ProverSpec extends Specification {
       Format.Explicit(s"($symbol%0)%1", s"(${symbol}x)φ", requiresBrackets = false),
       definingStatement,
       None,
-      None)
+      Nil)
   }
 
-  val Implication = connective("→", 2, None).copy(structureType = Some(StatementDefinition.StructureType.Deduction))
+  val Implication = connective("→", 2, None).copy(attributes = Seq("deduction"))
   val Negation = connective("¬", 1, None)
   val Conjunction = connective("∧", 2, Some(Negation(Implication(φ, Negation(ψ)))))
   val Disjunction = connective("∨", 2, Some(Implication(Negation(φ), ψ)))
   val Equivalence = connective("↔", 2, None)
 
-  val ForAll = quantifier("∀", None).copy(structureType = Some(StatementDefinition.StructureType.Scoping))
+  val ForAll = quantifier("∀", None).copy(attributes = Seq("scoping"))
   val Exists = quantifier("∃", Some(Negation(ForAll("x")(Negation(φ(FunctionParameter(0, 0)))))))
   val Equals = predicate("=", 2, None)
   val ExistsUnique = quantifier("∃!", Some(Exists("y")(ForAll("x")(Equivalence(
@@ -95,7 +95,8 @@ trait ProverSpec extends Specification {
     Format.default("∅", Nil),
     Nil,
     ForAll("x")(Negation(ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)))),
-    None)
+    None,
+    Nil)
   val EmptySet = DefinedTerm(Nil, EmptySetDefinition)(Nil)
 
   val PowerSet = TermDefinition(
@@ -108,7 +109,8 @@ trait ProverSpec extends Specification {
     ForAll("y")(Equivalence(
       ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)),
       Subset(FunctionParameter(0, 0), a))),
-    None)
+    None,
+    Nil)
 
   val Singleton = TermDefinition(
     "singleton",
@@ -118,7 +120,8 @@ trait ProverSpec extends Specification {
     Format.Explicit("{%0}", "{a}", requiresBrackets = false),
     Nil,
     φ,
-    None)
+    None,
+    Nil)
 
   val Pair = TermDefinition(
     "pair",
@@ -128,7 +131,8 @@ trait ProverSpec extends Specification {
     Format.Explicit("{%0, %1}", "{a, b}", requiresBrackets = false),
     Nil,
     φ,
-    None)
+    None,
+    Nil)
 
   implicit val entryContext: EntryContext = EntryContext(
     Seq(

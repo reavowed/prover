@@ -9,14 +9,19 @@ export interface ExpressionDefinition {
   baseFormatString: string;
   requiresBrackets: boolean;
   numberOfBoundVariables: number;
-  structureType: string | null;
+  attributes: string[];
 }
 
 export type Expression = TextBasedExpression | FormatBasedExpression
 export const Expression = {
   parseFromJson(json: any): Expression {
     if (typeof json === "string") {
+      const definition = window.definitions[json];
+      if (definition) {
+        return new DefinedExpression(definition, [], [])
+      } else {
       return new VariableOrConstant(json);
+      }
     } else if (_.isArray(json) && _.isString(json[0])) {
       const [definitionSymbol, ...boundVariablesAndComponents] = json;
       const definition = window.definitions[definitionSymbol];
