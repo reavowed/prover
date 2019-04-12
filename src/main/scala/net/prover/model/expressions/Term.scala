@@ -44,6 +44,8 @@ object Term {
         termDefinition.termParser
       case context.RecognisedTermVariableOrParameter(variableOrParameter) =>
         Parser.constant(variableOrParameter)
+      case context.entryContext.RecognisedTermShorthand(template) =>
+        template.expressionParser
     }
   }
 

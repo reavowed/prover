@@ -164,3 +164,13 @@ term + ()
   name (Addition)
   (∧ function $0 × ℕ ℕ ℕ ∀ n → ∈ $0 ℕ ∧ = apply $$0 orderedPair $0 0 $0 ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0)
   attributes (infix)
+
+theorem Identity for Addition (Left)
+premise ∈ n ℕ
+conclusion = apply + orderedPair n 0 n
+{
+  prove ∧ function + × ℕ ℕ ℕ ∀ n → ∈ $0 ℕ ∧ = apply + orderedPair $0 0 $0 ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0 254c0233664d014e09db5980662db76d9aa31958026571dc155bece8faf088c6 () () () ()
+  prove → ∈ n ℕ ∧ = apply + orderedPair n 0 n ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∧ = apply + orderedPair $0 0 $0 ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0) ()
+  prove ∧ = apply + orderedPair n 0 n ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∧ = apply + orderedPair n 0 n ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0) () () ()
+  prove = apply + orderedPair n 0 n 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply + orderedPair n 0 n, ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0) () () ()
+}

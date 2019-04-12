@@ -1,13 +1,14 @@
 package net.prover.model
 
 import net.prover.model.Inference.RearrangementType
-import net.prover.model.entries.{ChapterEntry, ExpressionDefinition, StatementDefinition, TermDefinition}
-import net.prover.model.expressions.{DefinedExpression, DefinedStatement, ExpressionVariable, Statement}
+import net.prover.model.entries._
+import net.prover.model.expressions._
 
 case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: Seq[String]) {
   val inferences: Seq[Inference] = availableEntries.flatMap(_.inferences)
   val statementDefinitions: Seq[StatementDefinition] = availableEntries.ofType[StatementDefinition]
   val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
+  val writingShorthands: Seq[WritingShorthand] = availableEntries.ofType[WritingShorthand]
 
   lazy val simplificationInferences: Seq[Inference] = inferences.filter(_.rearrangementType == RearrangementType.Simplification)
 
@@ -68,6 +69,17 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
   object RecognisedTermDefinition {
     def unapply(s: String): Option[TermDefinition] = {
       termDefinitions.find(_.symbol == s)
+    }
+  }
+
+  object RecognisedStatementShorthand {
+    def unapply(string: String): Option[Template.DefinedStatement] = {
+      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[Template.DefinedStatement])
+    }
+  }
+  object RecognisedTermShorthand {
+    def unapply(string: String): Option[Template.DefinedTerm] = {
+      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[Template.DefinedTerm])
     }
   }
 }

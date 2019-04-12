@@ -4,10 +4,7 @@ display apply x orderedPair a b as (a x b in parens) if x infix
 
 display apply f orderedPair a b as (f(a, b))
 
-term binaryApply (∘ a b)
-  name (Binary Function Application)
-  format (a ∘ b in parens)
-  (= $0 apply ∘ orderedPair a b)
+write apply f orderedPair a b as apply2
 
 theorem Binary Functions with Same Values are Equal
 premise function f × A B C

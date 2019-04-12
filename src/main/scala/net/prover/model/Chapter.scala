@@ -22,7 +22,8 @@ object Chapter {
     TermDefinition,
     Axiom,
     Theorem,
-    DisplayShorthand)
+    DisplayShorthand,
+    WritingShorthand)
 
   def chapterEntryParser(context: EntryContext): Parser[Option[ChapterEntry]] = {
     Parser.singleWordIfAny.flatMapFlatMapReverse { entryType =>
