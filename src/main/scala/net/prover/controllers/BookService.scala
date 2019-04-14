@@ -3,12 +3,12 @@ package net.prover.controllers
 import java.nio.file.{Files, Path, Paths}
 
 import net.prover.model._
-import net.prover.model.entries._
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.stereotype.Service
+import scalaz.Functor
+import scalaz.syntax.functor._
 
 import scala.collection.JavaConverters._
-import scala.reflect._
 import scala.util.Try
 
 @Service
@@ -23,18 +23,18 @@ class BookService {
 
   def books: Seq[Book] = _books
 
-  def modifyBooks[T](f: Seq[Book] => Try[(Seq[Book], T)]): Try[(Seq[Book], T)] = synchronized {
+  def modifyBooks[F[_] : Functor](f: Seq[Book] => F[Seq[Book]]): F[Seq[Book]] = synchronized {
     for {
-      (newBooks, result) <- f(_books)
+      newBooks <- f(_books)
     } yield {
       writeBooks(newBooks)
       _books = newBooks
-      (newBooks, result)
+      newBooks
     }
   }
 
   def reload(): Try[Any] = {
-    modifyBooks[Unit](_ => Try(parseBooks).map(_ -> ()))
+    modifyBooks(_ => Try(parseBooks))
   }
 
   private def parseBooks: Seq[Book] = {
@@ -67,7 +67,9 @@ class BookService {
   }
 
   private def writeBook(book: Book): Unit = {
-    Files.write(getBookPath(book.title), book.serialized.getBytes("UTF-8"))
+    val bookPath = getBookPath(book.title)
+    Files.createDirectories(bookPath.getParent)
+    Files.write(bookPath, book.serialized.getBytes("UTF-8"))
     book.chapters.foreachWithIndex((chapter, index) =>
       Files.write(getChapterPath(book.title, chapter.title, index), chapter.serialized.getBytes("UTF-8"))
     )
