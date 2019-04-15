@@ -52,10 +52,9 @@ conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b
       prove ∃! y ∨ ∧ = $$0 singleton ∅ = $0 a ∧ = $$0 ∅ = $0 b 70af6c413942b8cd1f952f933aa36ee2c1c47106dbbe183957125b7845ba1f07 (= $0 singleton ∅, = $0 ∅) (a, b) () ()
     }
   }
-  prove ∃ z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () (powerSet singleton ∅) (∨ ∧ = $0 singleton ∅ = $1 a ∧ = $0 ∅ = $1 b) ()
+  prove ∃! x ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b a23a254299d258a1307d257384c823b073a0c85f62f1606a89715f5d133ca2c7 () (powerSet singleton ∅) (∨ ∧ = $0 singleton ∅ = $1 a ∧ = $0 ∅ = $1 b) ()
   prove ∀ y ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b ∨ = $0 a = $0 b 26f94e3143a37effc32a24db06763cf885cc828e4823aa187ee043c61a0a15eb () (a, b) () ()
-  prove ∃ z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b a6e712b38909dac88b7b619de972b17b819142bff65d3f1b507a5e6c070d9fb5 () () (∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b, ∨ = $0 a = $0 b) ()
-  prove ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∨ = $0 a = $0 b) ()
+  prove ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b d2e7024f4fa96bd78696602328e3ef0d125281eafe2790c6fc17fcd49b3cc2f1 () () (∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b, ∨ = $0 a = $0 b) ()
 }
 
 term pair (a b)

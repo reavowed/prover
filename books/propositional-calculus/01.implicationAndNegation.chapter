@@ -147,54 +147,6 @@ conclusion φ
   prove φ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (φ) () () ()
 }
 
-theorem Modus Tollens
-premise → ¬ φ ¬ ψ
-premise ψ
-conclusion φ
-{
-  assume ¬ φ {
-    prove ¬ ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ φ, ¬ ψ) () () ()
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () ()
-  }
-  prove φ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (φ) () () ()
-}
-
-theorem Contraposition
-premise → φ ψ
-conclusion → ¬ ψ ¬ φ
-{
-  assume ¬ ψ {
-    prove ¬ φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (φ, ψ) () () ()
-  }
-}
-
-theorem Contraposition
-premise → φ ¬ ψ
-conclusion → ψ ¬ φ
-{
-  assume ψ {
-    prove ¬ φ fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (φ, ψ) () () ()
-  }
-}
-
-theorem Contraposition
-premise → ¬ φ ψ
-conclusion → ¬ ψ φ
-{
-  assume ¬ ψ {
-    prove φ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (φ, ψ) () () ()
-  }
-}
-
-theorem Contraposition
-premise → ¬ φ ¬ ψ
-conclusion → ψ φ
-{
-  assume ψ {
-    prove φ 8a46e8deb24c46121dc84d3ce4fc6c40f1729e85c96c2c275a415e0980dd1e40 (φ, ψ) () () ()
-  }
-}
-
 theorem Proof by Exclusive Cases
 premise → φ ψ
 premise → ¬ φ ψ

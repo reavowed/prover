@@ -3,3 +3,11 @@ Introduce the Axiom of Replacement.
 axiom Axiom of Replacement
 premise ∀ x → ∈ $0 a ∃! y with ($$0 $0) φ
 conclusion ∃ z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ
+
+theorem Unique Replacement
+premise ∀ x → ∈ $0 a ∃! y with ($$0 $0) φ
+conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ
+{
+  prove ∃ z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () (a) (with ($0 $1) φ) ()
+  prove ∃! z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∃ x ∧ ∈ $0 a with ($0 $$0) φ) ()
+}

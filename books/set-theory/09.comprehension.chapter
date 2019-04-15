@@ -64,16 +64,15 @@ theorem Comprehensions Exist for Non-Empty Sets
 premise ∃ y ∧ ∈ $0 A with ($0) φ
 conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 {
-  let a ∧ ∈ $0 A with ($0) φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) () (∧ ∈ $0 A with ($0) φ) () {
+  let a ∧ ∈ $0 A with ($0) φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) () (∧ ∈ $0 A with ($0) φ) () {
     take x {
       prove ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0 01497a2df4aaf91a9748bc5c17111c99b57fcc47c9a4cacb216acc397324cf83 (with ($0) φ) ($0, $$0) () ()
       prove → ∈ $0 A ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0, ∈ $0 A) () () ()
     }
-    prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$$0 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () (A) (∨ ∧ with ($$0) φ = $$1 $$0 ∧ ¬ with ($$0) φ = $$1 $0) ()
+    prove ∃! x ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$$0 a23a254299d258a1307d257384c823b073a0c85f62f1606a89715f5d133ca2c7 () (A) (∨ ∧ with ($$0) φ = $$1 $$0 ∧ ¬ with ($$0) φ = $$1 $0) ()
     prove ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$0 ∧ ∈ $0 A with ($0) φ b708f511a717e74c973f6de531b41be9dd1608d03f371544b0b3f5e5820592be () ($0, A) (with ($$0) φ) ()
-    prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ a6e712b38909dac88b7b619de972b17b819142bff65d3f1b507a5e6c070d9fb5 () () (∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$$0 $0 ∧ ¬ with ($0) φ = $$$0 $$0, ∧ ∈ $$0 A with ($$0) φ) ()
+    prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ d2e7024f4fa96bd78696602328e3ef0d125281eafe2790c6fc17fcd49b3cc2f1 () () (∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$$0 $0 ∧ ¬ with ($0) φ = $$$0 $$0, ∧ ∈ $$0 A with ($$0) φ) ()
   }
-  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∧ ∈ $0 A with ($0) φ) ()
 }
 
 theorem Comprehensions Exist
@@ -107,9 +106,12 @@ premise ∈ a S
 conclusion ∈ a A
 {
   prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (S, A) (with ($0) φ) ()
-  prove ↔ ∈ a S ∧ ∈ a A with (a) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ) ()
-  prove ∧ ∈ a A with (a) φ be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (∈ a S, ∧ ∈ a A with (a) φ) () () ()
-  prove ∈ a A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ a A, with (a) φ) () () ()
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ a S ∧ ∈ a A with (a) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ) ()
+    prove → ∈ a S ∧ ∈ a A with (a) φ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ a S, ∧ ∈ a A with (a) φ) () () ()
+    prove ∧ ∈ a A with (a) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a S, ∧ ∈ a A with (a) φ) () () ()
+    prove ∈ a A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ a A, with (a) φ) () () ()
+  }
 }
 
 theorem An Element of a Comprehension Satisfies Its Condition
@@ -118,9 +120,12 @@ premise ∈ a S
 conclusion with (a) φ
 {
   prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (S, A) (with ($0) φ) ()
-  prove ↔ ∈ a S ∧ ∈ a A with (a) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ) ()
-  prove ∧ ∈ a A with (a) φ be987a63ca0b4a37f0203f8c23b85c3fec9e519614e8dbffff6e66ed94e8910d (∈ a S, ∧ ∈ a A with (a) φ) () () ()
-  prove with (a) φ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ a A, with (a) φ) () () ()
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove ↔ ∈ a S ∧ ∈ a A with (a) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ) ()
+    prove → ∈ a S ∧ ∈ a A with (a) φ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ a S, ∧ ∈ a A with (a) φ) () () ()
+    prove ∧ ∈ a A with (a) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a S, ∧ ∈ a A with (a) φ) () () ()
+    prove with (a) φ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ a A, with (a) φ) () () ()
+  }
 }
 
 theorem A Comprehension Is a Subset of Its Domain

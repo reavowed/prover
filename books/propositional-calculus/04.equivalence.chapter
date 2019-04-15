@@ -39,15 +39,6 @@ conclusion → ψ φ
   prove → ψ φ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (→ φ ψ, → ψ φ) () () ()
 }
 
-theorem Modus Ponens (Equivalence)
-premise ↔ φ ψ
-premise φ
-conclusion ψ
-{
-  prove → φ ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () () ()
-  prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () () ()
-}
-
 theorem Equivalence Is Transitive
 premise ↔ φ ψ
 premise ↔ ψ χ
@@ -74,25 +65,6 @@ conclusion ↔ φ χ
     }
   }
   prove ↔ φ χ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, χ) () () ()
-}
-
-theorem Equivalence Is Transitive
-premise ↔ φ ψ
-premise ↔ φ χ
-conclusion ↔ ψ χ
-{
-  prove ↔ ψ φ 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (φ, ψ) () () ()
-  prove ↔ ψ χ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (ψ, φ, χ) () () ()
-}
-
-theorem True Statements Are Equivalent
-premise φ
-premise ψ
-conclusion ↔ φ ψ
-{
-  prove → φ ψ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (ψ, φ) () () ()
-  prove → ψ φ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (φ, ψ) () () ()
-  prove ↔ φ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, ψ) () () ()
 }
 
 theorem False Statements Are Equivalent

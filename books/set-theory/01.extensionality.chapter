@@ -65,18 +65,33 @@ conclusion ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 }
 
 theorem Replace Equivalent Membership Condition
-premise ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ
+premise ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 premise ∀ y ↔ with ($0) φ with ($0) ψ
-conclusion ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ
+conclusion ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) ψ
 {
-  let a ∀ y ↔ ∈ $0 $$0 with ($0) φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ) () (∀ y ↔ ∈ $0 $$0 with ($0) φ) () {
-    elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
-      take y {
-        prove ↔ ∈ $0 $$0 with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 with ($$$0) φ) ()
-        prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ with ($$$0) ψ) ()
-        prove ↔ ∈ $0 $$0 with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, with ($0) φ, with ($0) ψ) () () ()
+  take x {
+    assume ∀ y ↔ ∈ $0 $$0 with ($0) φ {
+      elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+        take y {
+          prove ↔ ∈ $0 $$0 with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 with ($$$0) φ) ()
+          prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ with ($$$0) ψ) ()
+          prove ↔ ∈ $0 $$0 with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, with ($0) φ, with ($0) ψ) () () ()
+        }
       }
     }
-    prove ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) ψ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∀ y ↔ ∈ $0 $$$0 with ($0) ψ) ()
+    assume ∀ y ↔ ∈ $0 $$0 with ($0) ψ {
+      elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+        take y {
+          prove ↔ ∈ $0 $$0 with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 with ($$$0) ψ) ()
+          elided 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 {
+            prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ with ($$$0) ψ) ()
+            prove ↔ with ($0) ψ with ($0) φ 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (with ($0) φ, with ($0) ψ) () () ()
+          }
+          prove ↔ ∈ $0 $$0 with ($0) φ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, with ($0) ψ, with ($0) φ) () () ()
+        }
+      }
+    }
+    prove ↔ ∀ y ↔ ∈ $0 $$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ y ↔ ∈ $0 $$0 with ($0) ψ) () () ()
   }
+  prove ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) ψ 2990d85d4ee52472194a7ae53589f3f257b4493424bdd996a411322c70e5e4c6 () () (∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ y ↔ ∈ $0 $$0 with ($0) ψ) ()
 }

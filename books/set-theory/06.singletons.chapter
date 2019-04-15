@@ -19,14 +19,13 @@ conclusion ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a
         prove → ∈ $0 $$0 ∃! x = $0 a 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∃! x = $0 a, ∈ $0 $$0) () () ()
       }
     }
-    prove ∃ z ∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $0 $$$$0 = $$0 a 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () ($0) (= $$1 a) ()
+    prove ∃! z ∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $0 $$$$0 = $$0 a a23a254299d258a1307d257384c823b073a0c85f62f1606a89715f5d133ca2c7 () ($0) (= $$1 a) ()
     elided f3b93ffee9d1e4d18f4185d1961d7b248a588d2c491f7a35890fdbb6a207eff3 {
       take x {
         prove ↔ ∃ y ∧ ∈ $0 $$$0 = $$0 a = $0 a f3b93ffee9d1e4d18f4185d1961d7b248a588d2c491f7a35890fdbb6a207eff3 (= $0 a) () (∈ $$$0 $$0) ()
       }
     }
-    prove ∃ z ∀ x ↔ ∈ $0 $$0 = $0 a a6e712b38909dac88b7b619de972b17b819142bff65d3f1b507a5e6c070d9fb5 () () (∃ y ∧ ∈ $0 $$0 = $$$0 a, = $$0 a) ()
-    prove ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (= $$0 a) ()
+    prove ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a d2e7024f4fa96bd78696602328e3ef0d125281eafe2790c6fc17fcd49b3cc2f1 () () (∃ y ∧ ∈ $0 $$0 = $$$0 a, = $$0 a) ()
   }
 }
 
