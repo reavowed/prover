@@ -12,3 +12,8 @@ property symmetric on relation ~ A
 
 property transitive on relation ~ A
   definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ~ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $$$0 $0 ~)
+
+type equivalenceRelation ≈ (A)
+  format (on A)
+  name (equivalence relation)
+  definition (relation ≈ A)

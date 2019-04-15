@@ -15,7 +15,6 @@ object WritingShorthand extends ChapterEntryParser {
   override def parser(implicit context: EntryContext): Parser[ChapterEntry] =
     for {
       template <- Template.parser
-      _ <- Parser.requiredWord("as")
-      symbol <- Parser.singleWord
+      symbol <- Parser.required("as", Parser.singleWord)
     } yield WritingShorthand(template, symbol)
 }

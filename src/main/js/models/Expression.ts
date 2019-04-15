@@ -1,7 +1,11 @@
 import * as _ from "lodash";
+import {replacePlaceholders} from "../components/ExpressionComponent";
 
 declare global {
-    interface Window { definitions: { [key: string]: ExpressionDefinition } }
+    interface Window {
+      definitions: { [key: string]: ExpressionDefinition }
+      typeDefinitions: { [key: string]: TypeDefinition }
+    }
 }
 
 export interface ExpressionDefinition {
@@ -10,6 +14,12 @@ export interface ExpressionDefinition {
   requiresBrackets: boolean;
   numberOfBoundVariables: number;
   attributes: string[];
+}
+
+export interface TypeDefinition {
+  symbol: string;
+  name: string;
+  componentFormatString: string;
 }
 
 export type Expression = TextBasedExpression | FormatBasedExpression
@@ -24,10 +34,17 @@ export const Expression = {
       }
     } else if (_.isArray(json) && _.isString(json[0])) {
       const [definitionSymbol, ...boundVariablesAndComponents] = json;
-      const definition = window.definitions[definitionSymbol];
-      const boundVariableNames = boundVariablesAndComponents.slice(0, definition.numberOfBoundVariables);
-      const components = boundVariablesAndComponents.slice(definition.numberOfBoundVariables);
-      return new DefinedExpression(definition, boundVariableNames, components.map(Expression.parseFromJson));
+      const expressionDefinition = window.definitions[definitionSymbol];
+      const typeDefinition = window.typeDefinitions[definitionSymbol];
+      if (expressionDefinition) {
+        const boundVariableNames = boundVariablesAndComponents.slice(0, expressionDefinition.numberOfBoundVariables);
+        const components = boundVariablesAndComponents.slice(expressionDefinition.numberOfBoundVariables);
+        return new DefinedExpression(expressionDefinition, boundVariableNames, components.map(Expression.parseFromJson));
+      } else if (typeDefinition) {
+        return new TypeExpression(typeDefinition, Expression.parseFromJson(boundVariablesAndComponents[0]), boundVariablesAndComponents.slice(1).map(Expression.parseFromJson))
+      } else {
+        throw `Unrecognised definition ${definitionSymbol}`
+      }
     } else if (_.isArray(json) && _.isNumber(json[0])) {
       const [level, index] = json;
       return new FunctionParameter(level, index);
@@ -76,6 +93,23 @@ export class DefinedExpression extends FormatBasedExpression {
   }
 }
 
+export class TypeExpression extends FormatBasedExpression {
+  constructor(public definition: TypeDefinition, public term: Expression, public otherComponents: Expression[]) {
+    super()
+  }
+  components: Expression[] = [this.term, ...this.otherComponents]
+  serialize() {
+    return [this.definition.symbol, ...this.components.map(c => c.serialize())].join(" ")
+  }
+  formatForHtml(safe: boolean) {
+    const extendedFormatString = `%0 is a ${this.definition.name} ` + replacePlaceholders(this.definition.componentFormatString, this.otherComponents.map((_, i) => "%" + (i+1))).join("");
+    return safe ?
+        "(" + extendedFormatString + ")" :
+        extendedFormatString;
+  }
+
+}
+
 export class FunctionParameter {
   constructor(public level: number, public index: number) {
     this.level = level;
@@ -94,8 +128,10 @@ export class FunctionParameter {
   }
 }
 
-export class ExpressionApplication {
-  constructor(public name: string, public components: Expression[]) {}
+export class ExpressionApplication extends FormatBasedExpression {
+  constructor(public name: string, public components: Expression[]) {
+    super()
+  }
   serialize() {
     return `with (${this.components.map(a => a.serialize()).join(" ")}) ${this.name}`
   }

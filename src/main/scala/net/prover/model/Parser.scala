@@ -251,6 +251,14 @@ object Parser {
     optional(name, parser.map(Some.apply), None)
   }
 
+  def required[T](
+    name: String,
+    parser: Parser[T]
+  ): Parser[T] = {
+    Parser.requiredWord(name)
+      .flatMap(_ => parser)
+  }
+
   def whileDefined[T](getParser: (Seq[T], Int) => Parser[Option[T]]): Parser[Seq[T]] = Parser { initialTokenizer =>
     def parseRemaining(valuesSoFar: Seq[T], currentIndex: Int, currentTokenizer: Tokenizer): (Seq[T], Tokenizer) = {
       val (newValueOption, newTokenizer) = getParser(valuesSoFar, currentIndex).parse(currentTokenizer)

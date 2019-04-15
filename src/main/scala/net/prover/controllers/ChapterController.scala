@@ -40,10 +40,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         Some(TermDefinitionPropsForChapter(defaultValue, getEntryUrl(bookKey, chapterKey, key), shorthand, definingStatement, premises))
       case (typeDefinition: entries.TypeDefinition, key) =>
         import typeDefinition._
-        Some(TypeDefinitionPropsForChapter(name, getEntryUrl(bookKey, chapterKey, key), defaultSymbol, otherComponentTypes.map(_.name), componentFormat.baseFormatString, definingStatement))
+        Some(TypeDefinitionPropsForChapter(symbol, getEntryUrl(bookKey, chapterKey, key), defaultTermName, otherComponentTypes.map(_.name), definingStatement))
       case (propertyDefinition: entries.PropertyDefinition, key) =>
         import propertyDefinition._
-        Some(PropertyDefinitionPropsForChapter(name, getEntryUrl(bookKey, chapterKey, key), defaultSymbol, parentType.name, parentComponentTypes.map(_.name), parentType.componentFormat.baseFormatString, definingStatement))
+        Some(PropertyDefinitionPropsForChapter(name, getEntryUrl(bookKey, chapterKey, key), defaultTermName, parentType.symbol, parentComponentTypes.map(_.name), definingStatement))
       case (comment: entries.Comment, key) =>
         import comment._
         Some(CommentPropsForChapter(text, key))
@@ -74,6 +74,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         getChapterProps(books, book, bookKey, chapter, chapterKey),
         Map(
           "definitions" -> getDefinitionSummaries(entryContext),
+          "typeDefinitions" -> getTypeDefinitions(entryContext),
           "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
           "definitionShorthands" -> getDefinitionShorthands(entryContext)))
     }).toResponseEntity
@@ -226,7 +227,15 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, numberOfBoundVariables: Int, attributes: Seq[String])
   private def getDefinitionSummaries(entryContext: EntryContext) = {
     entryContext.availableEntries.ofType[ExpressionDefinition]
-      .map(d => d.symbol -> DefinitionSummary(d.symbol, d.format.baseFormatString, d.format.requiresBrackets, d.boundVariableNames.length, d.attributes)).toMap
+      .map(d => d.symbol -> DefinitionSummary(d.symbol, d.format.baseFormatString, d.format.requiresBrackets, d.boundVariableNames.length, d.attributes))
+      .toMap
+  }
+
+  case class TypeDefinitionSummary(symbol: String, name: String, componentFormatString: String, article: String)
+  private def getTypeDefinitions(entryContext: EntryContext) = {
+    entryContext.typeDefinitions
+      .map(d => d.symbol -> TypeDefinitionSummary(d.symbol, d.name, d.componentFormat.baseFormatString, if (d.name.headOption.exists("aeiou".contains(_))) "an" else "a"))
+      .toMap
   }
 
   private def getDefinitionShorthands(entryContext: EntryContext): Map[String, String] = {

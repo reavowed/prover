@@ -90,10 +90,7 @@ object Inference {
       Parser.optional("premise", Statement.parser).whileDefined
     }
     def conclusionParser(implicit context: ExpressionParsingContext): Parser[Statement] = {
-      for {
-        _ <- Parser.requiredWord("conclusion")
-        conclusion <- Statement.parser
-      } yield conclusion
+      Parser.required("conclusion", Statement.parser)
     }
   }
 

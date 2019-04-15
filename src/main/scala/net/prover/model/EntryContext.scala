@@ -6,7 +6,10 @@ import net.prover.model.expressions._
 
 case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: Seq[String]) {
   val inferences: Seq[Inference] = availableEntries.flatMap(_.inferences)
-  val statementDefinitions: Seq[StatementDefinition] = availableEntries.ofType[StatementDefinition]
+  val statementDefinitions: Seq[StatementDefinition] = availableEntries.collect {
+    case statementDefinition: StatementDefinition => statementDefinition
+    case typeDefinition: TypeDefinition => typeDefinition.statementDefinition
+  }
   val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
   val typeDefinitions: Seq[TypeDefinition] = availableEntries.ofType[TypeDefinition]
   val writingShorthands: Seq[WritingShorthand] = availableEntries.ofType[WritingShorthand]

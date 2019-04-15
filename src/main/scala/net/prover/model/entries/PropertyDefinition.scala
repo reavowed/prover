@@ -7,7 +7,7 @@ import net.prover.model._
 case class PropertyDefinition(
     name: String,
     parentType: TypeDefinition,
-    defaultSymbol: String,
+    defaultTermName: String,
     parentComponentTypes: Seq[ComponentType],
     definingStatement: Statement)
   extends ChapterEntry.Standalone
@@ -17,7 +17,7 @@ case class PropertyDefinition(
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry] + parentType
 
-  override def serializedLines: Seq[String] = (Seq("property", name, "on", parentType.name, defaultSymbol) ++ parentComponentTypes.map(_.serialized)).mkString(" ") +:
+  override def serializedLines: Seq[String] = (Seq("property", name, "on", parentType.name, defaultTermName) ++ parentComponentTypes.map(_.serialized)).mkString(" ") +:
     Seq(
       Seq("definition", definingStatement.serialized.inParens).mkString(" ")
     ).indent
@@ -28,13 +28,11 @@ object PropertyDefinition extends ChapterEntryParser {
   override def parser(implicit context: EntryContext): Parser[ChapterEntry] = {
     for {
       name <- Parser.singleWord
-      _ <- Parser.requiredWord("on")
-      parentTypeName <- Parser.singleWord
+      parentTypeName <- Parser.required("on", Parser.singleWord)
       parentType = context.typeDefinitions.find(_.name == parentTypeName).getOrElse(throw new Exception(s"Unrecognised type '$parentTypeName'"))
       defaultSymbol <- Parser.singleWord
       parentComponentTypes <- parentType.otherComponentTypes.map(t => Parser.singleWord.map(t.withName)).traverseParser
-      _ <- Parser.requiredWord("definition")
-      definingStatement <- Statement.parser(ExpressionParsingContext.outsideProof(context, defaultSymbol +: parentComponentTypes.ofType[TermComponent].map(_.name))).inParens
+      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultSymbol +: parentComponentTypes.ofType[TermComponent].map(_.name))).inParens)
     } yield PropertyDefinition(name, parentType, defaultSymbol, parentComponentTypes, definingStatement)
   }
 

@@ -58,30 +58,26 @@ object Book {
   }
 
   private def importsParser: Parser[Seq[String]] = {
-    Parser
-      .optionalWord("import")
-      .flatMapMap(_ => Parser.toEndOfLine)
-      .whileDefined
+    Parser.optional("import", Parser.toEndOfLine).whileDefined
   }
 
   def termVariableNamesParser: Parser[Seq[String]] = {
-    Parser.optionalWord("term-variables")
-      .flatMapMap(_ => Parser.allInParens.map(_.splitByWhitespace()))
-      .getOrElse(Nil)
+    Parser.optional("term-variables", Parser.allInParens.map(_.splitByWhitespace()), Nil)
   }
 
   def variableDefinitionsParser: Parser[(Seq[String], Seq[String])] = {
-    Parser.optionalWord("variables").flatMapMap { _ =>
+    Parser.optional(
+      "variables",
       for {
         statementVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
         termVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
       } yield {
         (statementVariableNames, termVariableNames)
-      }
-    }.getOrElse((Nil, Nil))
+      },
+      (Nil, Nil))
   }
 
   def chapterTitlesParser: Parser[Seq[String]] = {
-    Parser.optionalWord("chapter").flatMapMap(_ => Parser.toEndOfLine).whileDefined
+    Parser.optional("chapter", Parser.toEndOfLine).whileDefined
   }
 }

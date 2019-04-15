@@ -31,10 +31,10 @@ object ChapterProps {
   case class TermDefinitionPropsForChapter(defaultValue: Term, url: String, shorthand: Option[String], definingStatement: Statement, premises: Seq[Statement]) extends EntryProps {
     override val `type`: String = "termDefinition"
   }
-  case class TypeDefinitionPropsForChapter(name: String, url: String, symbol: String, components: Seq[String], format: String, definingStatement: Statement) extends EntryProps {
+  case class TypeDefinitionPropsForChapter(symbol: String, url: String, defaultTermName: String, components: Seq[String], definingStatement: Statement) extends EntryProps {
     override val `type`: String = "typeDefinition"
   }
-  case class PropertyDefinitionPropsForChapter(name: String, url: String, symbol: String, parentTypeName: String, parentTypeComponents: Seq[String], parentTypeFormat: String, definingStatement: Statement) extends EntryProps {
+  case class PropertyDefinitionPropsForChapter(name: String, url: String, defaultTermName: String, parentTypeSymbol: String, parentTypeComponents: Seq[String], definingStatement: Statement) extends EntryProps {
     override val `type`: String = "propertyDefinition"
   }
   case class CommentPropsForChapter(text: String, key: String) extends EntryProps {

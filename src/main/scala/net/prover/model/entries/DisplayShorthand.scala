@@ -22,19 +22,19 @@ object DisplayShorthand extends ChapterEntryParser {
   override def name = "display"
 
   def conditionsParser: Parser[Seq[(String, String)]] = {
-    Parser.optionalWord("if").flatMapMap { _ =>
+    Parser.optional(
+      "if",
       for {
         variableName <- Parser.singleWord
         requiredAttribute <- Parser.singleWord
       } yield (variableName, requiredAttribute)
-    }.whileDefined
+    ).whileDefined
   }
 
   override def parser(implicit entryContext: EntryContext): Parser[DisplayShorthand] = {
     for {
       template <- Template.parser
-      _ <- Parser.requiredWord("as")
-      format <- Format.parser(template.names)
+      format <- Parser.required("as", Format.parser(template.names))
       conditions <- conditionsParser
     } yield DisplayShorthand(template, format, conditions)
   }

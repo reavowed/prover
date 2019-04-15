@@ -29,6 +29,10 @@ const ResultTitle = styled.a`
   }
 `;
 
+const Capitalized = styled.span`
+  text-transform: capitalize;
+`;
+
 const Result = ({title, url, buttons, deleteButton, children, updateChapter}) => {
   const deleteEntry = () => {
     updateChapter(url, {method: "DELETE"})
@@ -157,16 +161,18 @@ export class Chapter extends React.Component {
                               result={<><ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/></>}/>
         </DefinitionResult>;
       case "typeDefinition":
-        return <Result title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name}</span></>}
+        const definition = window.typeDefinitions[entry.symbol];
+        return <Result title={<>Definition: <Capitalized>{definition.name}</Capitalized></>}
                        url={entry.url}
                        key={entry.url}>
-          {entry.symbol} is a {entry.name} {formatHtml(entry.format, s => replacePlaceholders(s, entry.components))} if <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.
+          {entry.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormatString, s => replacePlaceholders(s, entry.components))} if <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.
         </Result>;
       case "propertyDefinition":
+        const typeDefinition = window.typeDefinitions[entry.parentTypeSymbol];
         return <Result title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name} {entry.parentTypeName}</span></>}
                        url={entry.url}
                        key={entry.url}>
-          A {entry.parentTypeName} {entry.symbol} {formatHtml(entry.parentTypeFormat, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name}  if <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.
+          <Capitalized>{typeDefinition.article}</Capitalized> {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.
         </Result>;
       case "comment":
         return <p key={entry.key}>{entry.text}</p>;

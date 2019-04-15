@@ -12,6 +12,13 @@ object Statement {
           arguments <- Term.parser.listOrSingle(None)
           name <- Parser.singleWord
         } yield PredicateApplication(name, arguments)
+      case "is" =>
+        for {
+          term <- Term.parser
+          typeDefinitionSymbol <- Parser.singleWord
+          typeDefinition = context.entryContext.typeDefinitions.find(_.symbol == typeDefinitionSymbol).getOrElse(throw new Exception(s"Unrecognised type definition '$typeDefinitionSymbol'"))
+          otherComponents <- typeDefinition.otherComponentTypes.map(_.expressionParser).traverseParser
+        } yield DefinedStatement(term +: otherComponents, typeDefinition.statementDefinition)(Nil)
       case context.entryContext.RecognisedStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
       case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
