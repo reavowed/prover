@@ -7,7 +7,7 @@ trait ChapterEntry {
   def inferences: Seq[Inference] = Nil
   def serializedLines: Seq[String]
   def referencedInferenceIds: Set[String]
-  def referencedDefinitions: Set[ExpressionDefinition]
+  def referencedEntries: Set[ChapterEntry]
 }
 
 object ChapterEntry {

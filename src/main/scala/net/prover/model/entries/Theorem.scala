@@ -18,7 +18,7 @@ case class Theorem(
   extends Inference.Entry
 {
   override def referencedInferenceIds: Set[String] = proof.flatMap(_.referencedInferenceIds).toSet
-  override def referencedDefinitions: Set[ExpressionDefinition] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions ++ proof.flatMap(_.referencedDefinitions).toSet
+  override def referencedEntries: Set[ChapterEntry] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions ++ proof.flatMap(_.referencedDefinitions).toSet
   override def inferences: Seq[Inference] = Seq(this)
   def initialStepContext: StepContext = StepContext.empty(requiredSubstitutions.terms)
   def initialPremiseContext(entryContext: EntryContext): PremiseContext = PremiseContext.justWithPremises(premises, entryContext)

@@ -38,6 +38,12 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       case (termDefinition: entries.TermDefinition, key) =>
         import termDefinition._
         Some(TermDefinitionPropsForChapter(defaultValue, getEntryUrl(bookKey, chapterKey, key), shorthand, definingStatement, premises))
+      case (typeDefinition: entries.TypeDefinition, key) =>
+        import typeDefinition._
+        Some(TypeDefinitionPropsForChapter(name, getEntryUrl(bookKey, chapterKey, key), defaultSymbol, otherComponentTypes.map(_.name), componentFormat.baseFormatString, definingStatement))
+      case (propertyDefinition: entries.PropertyDefinition, key) =>
+        import propertyDefinition._
+        Some(PropertyDefinitionPropsForChapter(name, getEntryUrl(bookKey, chapterKey, key), defaultSymbol, parentType.name, parentComponentTypes.map(_.name), parentType.componentFormat.baseFormatString, definingStatement))
       case (comment: entries.Comment, key) =>
         import comment._
         Some(CommentPropsForChapter(text, key))
@@ -162,13 +168,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           for {
             (earlierEntries, precedingEntry) <- :+.unapply(previousEntries).orBadRequest("Entry was first in chapter")
             _ <- precedingEntry.asOptionalInstanceOf[Inference].filter(i => entry.referencedInferenceIds.contains(i.id)).badRequestIfDefined("Entry depends on previous one")
-            _ <- precedingEntry.asOptionalInstanceOf[ExpressionDefinition].filter(entry.referencedDefinitions.contains).badRequestIfDefined("Entry depends on previous one")
+            _ <- Some(precedingEntry).filter(entry.referencedEntries.contains).badRequestIfDefined("Entry depends on previous one")
           } yield earlierEntries ++ Seq(entry, precedingEntry) ++ nextEntries
         case "down" =>
           for {
             (nextEntry, lastEntries) <- +:.unapply(nextEntries).orBadRequest("Entry was last in chapter")
             _ <- entry.asOptionalInstanceOf[Inference].filter(i => nextEntry.referencedInferenceIds.contains(i.id)).badRequestIfDefined("Next entry depends on this one")
-            _ <- entry.asOptionalInstanceOf[ExpressionDefinition].filter(nextEntry.referencedDefinitions.contains).badRequestIfDefined("Next entry depends on this one")
+            _ <- Some(entry).filter(nextEntry.referencedEntries.contains).badRequestIfDefined("Next entry depends on this one")
           } yield previousEntries ++ Seq(nextEntry, entry) ++ lastEntries
       }
     }

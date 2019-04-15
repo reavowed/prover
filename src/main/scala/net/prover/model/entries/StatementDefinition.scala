@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.model._
-import net.prover.model.entries.ExpressionDefinition.{ComponentType, TermComponent}
+import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 
 case class StatementDefinition(
@@ -17,7 +17,7 @@ case class StatementDefinition(
 {
   override def name: String = explicitName.getOrElse(symbol)
   override def typeName: String = "Statement"
-  override def referencedDefinitions: Set[ExpressionDefinition] = definingStatement.map(_.referencedDefinitions).getOrElse(Set.empty)
+  override def referencedEntries: Set[ChapterEntry] = definingStatement.map(_.referencedDefinitions).getOrElse(Set.empty).toType[ChapterEntry]
 
   val defaultValue: DefinedStatement = {
     DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)

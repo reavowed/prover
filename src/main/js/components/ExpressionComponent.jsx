@@ -29,7 +29,7 @@ export function formatHtml(text, replacementFunction) {
   });
 }
 
-function replacePlaceholders(text, components) {
+export function replacePlaceholders(text, components) {
   return formatWithReplacement(text, /%(\d+)/g, x => x,  match => {
     const index = parseInt(match[1]);
     return components[index];

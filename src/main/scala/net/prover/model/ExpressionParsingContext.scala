@@ -75,6 +75,11 @@ object ExpressionParsingContext {
       entryContext,
       TermVariableValidator.AnyTermVariable,
       Nil)
+  def outsideProof(entryContext: EntryContext, termVariableNames: Seq[String]): ExpressionParsingContext =
+    ExpressionParsingContext(
+      entryContext,
+      TermVariableValidator.LimitedList(termVariableNames),
+      Nil)
   implicit def atStep(implicit entryContext: EntryContext, stepContext: StepContext): ExpressionParsingContext =
     ExpressionParsingContext(
       entryContext,

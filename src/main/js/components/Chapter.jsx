@@ -6,7 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import styled from "styled-components";
 import {Parser} from "../Parser";
 import {Breadcrumbs} from "./Breadcrumbs";
-import {ExpressionComponent} from "./ExpressionComponent";
+import {ExpressionComponent, formatHtml, replacePlaceholders} from "./ExpressionComponent";
 import {FlexRow} from "./FlexRow";
 import {InferenceSummary} from "./InferenceSummary";
 import {NavLinks} from "./NavLinks";
@@ -112,7 +112,7 @@ class DefinitionResult extends React.Component {
       </Modal>
     </>;
   }
-};
+}
 
 export class Chapter extends React.Component {
   constructor(props) {
@@ -156,10 +156,22 @@ export class Chapter extends React.Component {
           <ResultWithPremises premises={entry.premises}
                               result={<><ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/></>}/>
         </DefinitionResult>;
+      case "typeDefinition":
+        return <Result title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name}</span></>}
+                       url={entry.url}
+                       key={entry.url}>
+          {entry.symbol} is a {entry.name} {formatHtml(entry.format, s => replacePlaceholders(s, entry.components))} if <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.
+        </Result>;
+      case "propertyDefinition":
+        return <Result title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name} {entry.parentTypeName}</span></>}
+                       url={entry.url}
+                       key={entry.url}>
+          A {entry.parentTypeName} {entry.symbol} {formatHtml(entry.parentTypeFormat, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name}  if <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.
+        </Result>;
       case "comment":
-        return <p key={entry.key}>{entry.text}</p>
+        return <p key={entry.key}>{entry.text}</p>;
       default:
-        return <React.Fragment key={entry.key}/>
+        return <React.Fragment key={entry.key}/>;
     }
   };
   startAddingTheorem = () => {

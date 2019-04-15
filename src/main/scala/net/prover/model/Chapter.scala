@@ -20,6 +20,8 @@ object Chapter {
     Comment,
     StatementDefinition,
     TermDefinition,
+    TypeDefinition,
+    PropertyDefinition,
     Axiom,
     Theorem,
     DisplayShorthand,

@@ -5,7 +5,7 @@ import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 import net.prover.model._
 
-trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinition]
+trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinition] with ChapterEntry
 
 trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinition] extends ChapterEntry.Standalone { self: ExpressionDefinition =>
   def symbol: String
@@ -61,6 +61,7 @@ object ExpressionDefinition {
 
   sealed trait ComponentType {
     def name: String
+    def withName(newName: String): ComponentType
     def expression: Expression
     def arguments: Seq[ComponentArgument]
     def expressionParser(implicit context: ExpressionParsingContext): Parser[Expression]
@@ -68,6 +69,15 @@ object ExpressionDefinition {
     def serialized: String
   }
   object ComponentType {
+    def listWithoutBoundVariablesParser: Parser[Seq[ComponentType]] = {
+      Parser.selectOptionalWordParser {
+        case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
+          Parser.constant(StatementComponent(name))
+        case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
+          Parser.constant(TermComponent(name))
+      }.whileDefined
+    }
+
     def listParser(boundVariableNames: Seq[String]): Parser[Seq[ComponentType]] = {
       Parser.selectOptionalWordParser {
         case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
@@ -92,6 +102,7 @@ object ExpressionDefinition {
   }
 
   case class StatementComponent(name: String) extends ComponentType {
+    override def withName(newName: String): StatementComponent = copy(name = newName)
     override def arguments = Nil
     override def expression = StatementVariable(name)
     override def expressionParser(implicit context: ExpressionParsingContext) = Statement.parser
@@ -99,6 +110,7 @@ object ExpressionDefinition {
     override def serialized = name
   }
   case class TermComponent(name: String) extends ComponentType {
+    override def withName(newName: String): TermComponent = copy(name = newName)
     override def arguments = Nil
     override def expression = TermVariable(name)
     override def expressionParser(implicit context: ExpressionParsingContext) = Term.parser
@@ -106,6 +118,7 @@ object ExpressionDefinition {
     override def serialized = name
   }
   case class PredicateComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
+    override def withName(newName: String): PredicateComponent = copy(name = newName)
     override def expression = PredicateApplication(name, arguments.map(a => FunctionParameter(a.index, 0)))
     override def expressionParser(implicit context: ExpressionParsingContext) = Statement.parser
     override def templateParser(implicit context: TemplateParsingContext) = Statement.templateParser
@@ -115,6 +128,7 @@ object ExpressionDefinition {
     }) + " " + name
   }
   case class FunctionComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
+    override def withName(newName: String): FunctionComponent = copy(name = newName)
     override def expression = FunctionApplication(name, arguments.map(a => FunctionParameter(a.index, 0)))
     override def expressionParser(implicit context: ExpressionParsingContext) = Term.parser
     override def templateParser(implicit context: TemplateParsingContext) = Term.templateParser

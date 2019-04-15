@@ -8,6 +8,7 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
   val inferences: Seq[Inference] = availableEntries.flatMap(_.inferences)
   val statementDefinitions: Seq[StatementDefinition] = availableEntries.ofType[StatementDefinition]
   val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
+  val typeDefinitions: Seq[TypeDefinition] = availableEntries.ofType[TypeDefinition]
   val writingShorthands: Seq[WritingShorthand] = availableEntries.ofType[WritingShorthand]
 
   lazy val simplificationInferences: Seq[Inference] = inferences.filter(_.rearrangementType == RearrangementType.Simplification)

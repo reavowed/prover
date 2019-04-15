@@ -31,6 +31,12 @@ object ChapterProps {
   case class TermDefinitionPropsForChapter(defaultValue: Term, url: String, shorthand: Option[String], definingStatement: Statement, premises: Seq[Statement]) extends EntryProps {
     override val `type`: String = "termDefinition"
   }
+  case class TypeDefinitionPropsForChapter(name: String, url: String, symbol: String, components: Seq[String], format: String, definingStatement: Statement) extends EntryProps {
+    override val `type`: String = "typeDefinition"
+  }
+  case class PropertyDefinitionPropsForChapter(name: String, url: String, symbol: String, parentTypeName: String, parentTypeComponents: Seq[String], parentTypeFormat: String, definingStatement: Statement) extends EntryProps {
+    override val `type`: String = "propertyDefinition"
+  }
   case class CommentPropsForChapter(text: String, key: String) extends EntryProps {
     override val `type`: String = "comment"
   }

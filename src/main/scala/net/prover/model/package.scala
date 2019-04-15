@@ -40,14 +40,12 @@ package object model {
     def splitByWhitespace(max: Int = 0): Seq[String] = {
       s.trim.split("\\s+", max).toSeq.filter(_.nonEmpty)
     }
-    def capitalise: String = {
-      s.headOption.map(_.toUpper).getOrElse("") + s.drop(1)
-    }
     def camelCase: String = {
       val words = splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase)
-      words.headOption.getOrElse("") + words.drop(1).map(_.capitalise).mkString("")
+      words.headOption.getOrElse("") + words.drop(1).map(_.capitalize).mkString("")
     }
     def formatAsKey: String = splitByWhitespace().map(_.toLowerCase).mkString("-")
+    def inParens: String = "(" + s + ")"
   }
 
   implicit class TupleOps[S,T](tuple: (S, T)) {
@@ -262,6 +260,7 @@ package object model {
           case s if implicitly[ClassTag[S]].runtimeClass.isInstance(s) => s.asInstanceOf[S]
         }
     }
+    def toType[S >: T]: Set[S] = set.map(_.asInstanceOf[S])
   }
 
   implicit class TraversableOptionOps[T, Repr](traversable: TraversableLike[Option[T], Repr]) {

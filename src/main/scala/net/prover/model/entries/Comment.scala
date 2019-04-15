@@ -7,7 +7,7 @@ case class Comment(text: String) extends ChapterEntry {
   override def serializedLines: Seq[String] = Seq(s"comment $text")
 
   override def referencedInferenceIds: Set[String] = Set.empty
-  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
+  override def referencedEntries: Set[ChapterEntry] = Set.empty
 }
 
 object Comment extends ChapterEntryParser {
