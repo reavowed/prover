@@ -1,7 +1,5 @@
 package net.prover.model
 
-import java.util.regex.Pattern
-
 import net.prover.model.ExpressionParsingContext.{TermVariableValidator}
 import net.prover.model.expressions._
 import net.prover.model.proof.StepContext
@@ -39,7 +37,7 @@ case class ExpressionParsingContext(
 
 object ExpressionParsingContext {
   private val StatementVariablePattern: String = "[α-ω]"
-  private val TermVariableNamePattern: String = "[a-zA-Z]"
+  private val TermVariableNamePattern: String = "[^α-ω(){}\\[\\]]"
 
   object RecognisedStatementVariableName {
     def unapply(text: String): Option[String] = s"($StatementVariablePattern)".r.unapplySeq(text).flatMap(_.headOption)
@@ -54,11 +52,10 @@ object ExpressionParsingContext {
     def getVariableOrParameter(text: String, parameter: Option[FunctionParameter]): Option[Term]
   }
   object TermVariableValidator{
-    case class AnyTermVariable(recognisedNonLatinCharacters: Seq[String]) extends TermVariableValidator {
-      private val allowedVariableMatches = ("[a-zA-Z]" +: recognisedNonLatinCharacters.map(Pattern.quote)).mkString("|")
+    case object AnyTermVariable extends TermVariableValidator {
       // Matches an optional prime or sub/superscripts
       private val allowedSuffixMatch = "(?:'|[_\\^].*)?"
-      private val pattern = s"($allowedVariableMatches$allowedSuffixMatch)".r
+      private val pattern = s"($TermVariableNamePattern$allowedSuffixMatch)".r
       override protected def isValidTermVariable(text: String): Boolean = pattern.pattern.matcher(text).matches()
 
       override def getVariableOrParameter(text: String, parameter: Option[FunctionParameter]): Option[Term] = {
@@ -76,7 +73,7 @@ object ExpressionParsingContext {
   def outsideProof(entryContext: EntryContext): ExpressionParsingContext =
     ExpressionParsingContext(
       entryContext,
-      TermVariableValidator.AnyTermVariable(entryContext.termVariableNames),
+      TermVariableValidator.AnyTermVariable,
       Nil)
   implicit def atStep(implicit entryContext: EntryContext, stepContext: StepContext): ExpressionParsingContext =
     ExpressionParsingContext(

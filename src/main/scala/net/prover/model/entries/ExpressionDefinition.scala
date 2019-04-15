@@ -68,11 +68,11 @@ object ExpressionDefinition {
     def serialized: String
   }
   object ComponentType {
-    def listParser(boundVariableNames: Seq[String])(implicit context: ExpressionParsingContext): Parser[Seq[ComponentType]] = {
+    def listParser(boundVariableNames: Seq[String]): Parser[Seq[ComponentType]] = {
       Parser.selectOptionalWordParser {
         case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
           Parser.constant(StatementComponent(name))
-        case context.RecognisedTermVariableName(name) =>
+        case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
           Parser.constant(TermComponent(name))
         case "with" =>
           for {
@@ -131,7 +131,7 @@ object ExpressionDefinition {
     }.whileDefined
   }
 
-  def boundVariablesAndComponentTypesParser(implicit context: ExpressionParsingContext): Parser[(Seq[String], Seq[ComponentType])] = {
+  def boundVariablesAndComponentTypesParser: Parser[(Seq[String], Seq[ComponentType])] = {
     (for {
       boundVariables <- boundVariablesParser
       componentTypes <- ComponentType.listParser(boundVariables)

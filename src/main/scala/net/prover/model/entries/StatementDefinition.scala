@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.model._
-import net.prover.model.entries.ExpressionDefinition.ComponentType
+import net.prover.model.entries.ExpressionDefinition.{ComponentType, TermComponent}
 import net.prover.model.expressions._
 
 case class StatementDefinition(
@@ -66,7 +66,6 @@ object StatementDefinition extends ChapterEntryParser {
     Statement.parser.inParens)
 
   def parser(implicit entryContext: EntryContext): Parser[StatementDefinition] = {
-    implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
     for {
       symbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
@@ -74,7 +73,7 @@ object StatementDefinition extends ChapterEntryParser {
       componentTypes = boundVariablesAndComponentTypes._2
       name <- nameParser
       format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
-      optionalDefiningStatement <- definingStatementParser
+      optionalDefiningStatement <- definingStatementParser(ExpressionParsingContext.outsideProof(entryContext))
       shorthand <- ExpressionDefinition.shorthandParser
       attributes <- ExpressionDefinition.attributesParser
     } yield {
