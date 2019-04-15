@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
-import {DefinedExpression, FunctionParameter} from "../models/Expression";
+import {DefinedExpression, FunctionParameter, TypeExpression} from "../models/Expression";
 
 function formatWithReplacement(text, regex, handlePlain, handleMatch) {
   const matches = text.matchAll(regex);
@@ -104,7 +104,13 @@ export class ExpressionComponent extends React.Component {
         return formatHtml(formatString, s => replacePlaceholders(s, renderedMatches));
       }
     }
-    if (expression.formatForHtml) {
+    if (expression instanceof TypeExpression) {
+      const formattedTerm = <ExpressionComponent expression={expression.term} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} safe={false}/>;
+      const renderedOtherComponents = expression.otherComponents.map(c => <ExpressionComponent expression={c} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} safe={false}/>);
+      const formattedComponents = formatHtml(expression.definition.componentFormatString, s => replacePlaceholders(s, renderedOtherComponents));
+      const formattedProperties = expression.properties.join(", ");
+      return [formattedTerm, <> is a {formattedProperties} {expression.definition.name} </>, ...formattedComponents];
+    } else if (expression.formatForHtml) {
       const format = expression.formatForHtml(safe);
       const boundVariables = expression.boundVariableNames || [];
       const innerBoundVariables = boundVariables.length ? [boundVariables, ...boundVariableLists] : boundVariableLists;

@@ -9,9 +9,11 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
   val statementDefinitions: Seq[StatementDefinition] = availableEntries.collect {
     case statementDefinition: StatementDefinition => statementDefinition
     case typeDefinition: TypeDefinition => typeDefinition.statementDefinition
+    case propertyDefinition: PropertyDefinition => propertyDefinition.statementDefinition
   }
   val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
   val typeDefinitions: Seq[TypeDefinition] = availableEntries.ofType[TypeDefinition]
+  val propertyDefinitionsByType: Map[String, Seq[PropertyDefinition]] = availableEntries.ofType[PropertyDefinition].groupBy(_.parentType.symbol)
   val writingShorthands: Seq[WritingShorthand] = availableEntries.ofType[WritingShorthand]
 
   lazy val simplificationInferences: Seq[Inference] = inferences.filter(_.rearrangementType == RearrangementType.Simplification)
@@ -19,31 +21,34 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
   def addEntry(entry: ChapterEntry): EntryContext = copy(availableEntries = availableEntries :+ entry)
   def addEntries(entries: Seq[ChapterEntry]): EntryContext = copy(availableEntries = availableEntries ++ entries)
 
-  def deductionStatementOption: Option[StatementDefinition] = {
+  def deductionDefinitionOption: Option[StatementDefinition] = {
     statementDefinitions.find(_.attributes.contains("deduction"))
   }
-  def scopingStatementOption: Option[StatementDefinition] = {
+  def scopingDefinitionOption: Option[StatementDefinition] = {
     statementDefinitions.find(_.attributes.contains("scoping"))
+  }
+  def conjunctionDefinitionOption: Option[StatementDefinition] = {
+    statementDefinitions.find(_.attributes.contains("conjunction"))
   }
 
   def matchScopingStatement(statement: Statement): Option[(Statement, StatementDefinition)] = {
-    scopingStatementOption.flatMap { scopingStatement =>
+    scopingDefinitionOption.flatMap { scopingDefinition =>
       statement match {
-        case DefinedStatement(Seq(substatement), `scopingStatement`) =>
-          substatement.asOptionalInstanceOf[Statement].map(_ -> scopingStatement)
+        case DefinedStatement(Seq(substatement), `scopingDefinition`) =>
+          substatement.asOptionalInstanceOf[Statement].map(_ -> scopingDefinition)
         case _ =>
           None
       }
     }
   }
   def matchDeductionStatement(statement: Statement): Option[(Statement, Statement, StatementDefinition)] = {
-    deductionStatementOption.flatMap { deductionStatement =>
+    deductionDefinitionOption.flatMap { deductionDefinition =>
       statement match {
-        case DefinedStatement(Seq(antecedentExpression, consequentExpression), `deductionStatement`) =>
+        case DefinedStatement(Seq(antecedentExpression, consequentExpression), `deductionDefinition`) =>
           for {
             antecedent <- antecedentExpression.asOptionalInstanceOf[Statement]
             consequent <- consequentExpression.asOptionalInstanceOf[Statement]
-          } yield (antecedent, consequent, deductionStatement)
+          } yield (antecedent, consequent, deductionDefinition)
         case _ =>
           None
       }

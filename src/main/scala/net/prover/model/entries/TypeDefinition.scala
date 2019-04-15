@@ -19,13 +19,13 @@ case class TypeDefinition(
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry]
 
+  def statementDefinition = StatementDefinition(symbol, Nil, TermComponent(defaultTermName) +: otherComponentTypes, explicitName, componentFormat, Some(definingStatement), None, Nil)
+
   override def serializedLines: Seq[String] = Seq("type", symbol, defaultTermName, otherComponentTypes.map(_.serialized).mkString(" ").inParens).mkString(" ") +:
     (Seq(Seq("format", componentFormat.serialized.value.inParens).mkString(" ")) ++
       explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++
       Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
     ).indent
-
-  def statementDefinition = StatementDefinition(symbol, Nil, TermComponent(defaultTermName) +: otherComponentTypes, explicitName, componentFormat, Some(definingStatement), None, Nil)
 }
 
 object TypeDefinition extends ChapterEntryParser {

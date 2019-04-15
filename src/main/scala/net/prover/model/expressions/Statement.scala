@@ -1,6 +1,6 @@
 package net.prover.model.expressions
 
-import net.prover.model.{ExpressionParsingContext, Parser, TemplateParsingContext}
+import net.prover.model._
 
 trait Statement extends Expression with TypedExpression[Statement]
 
@@ -13,16 +13,29 @@ object Statement {
           name <- Parser.singleWord
         } yield PredicateApplication(name, arguments)
       case "is" =>
-        for {
-          term <- Term.parser
-          typeDefinitionSymbol <- Parser.singleWord
-          typeDefinition = context.entryContext.typeDefinitions.find(_.symbol == typeDefinitionSymbol).getOrElse(throw new Exception(s"Unrecognised type definition '$typeDefinitionSymbol'"))
-          otherComponents <- typeDefinition.otherComponentTypes.map(_.expressionParser).traverseParser
-        } yield DefinedStatement(term +: otherComponents, typeDefinition.statementDefinition)(Nil)
+        typeStatementParser
       case context.entryContext.RecognisedStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
       case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
         Parser.constant(StatementVariable(name))
+    }
+  }
+
+  def typeStatementParser(implicit context: ExpressionParsingContext): Parser[Statement] = {
+    for {
+      term <- Term.parser
+      typeDefinitionSymbol <- Parser.singleWord
+      typeDefinition = context.entryContext.typeDefinitions.find(_.symbol == typeDefinitionSymbol).getOrElse(throw new Exception(s"Unrecognised type '$typeDefinitionSymbol'"))
+      otherComponents <- typeDefinition.otherComponentTypes.map(_.expressionParser).traverseParser
+      availableProperties = context.entryContext.propertyDefinitionsByType.get(typeDefinitionSymbol).toSeq.flatten
+      properties <- Parser.optional("with", Parser.allInParens.map(_.splitByWhitespace().map(s => availableProperties.find(_.symbol == s).getOrElse(throw new Exception(s"Unrecognised property '$s' for '$typeDefinitionSymbol'")))), Nil)
+    } yield {
+      val baseStatement = DefinedStatement(term +: otherComponents, typeDefinition.statementDefinition)(Nil)
+      properties.foldLeft(baseStatement) { (statement, property) =>
+        val conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add properties to a type without a conjunction definition"))
+        val propertyStatement = DefinedStatement(term +: otherComponents, property.statementDefinition)(Nil)
+        DefinedStatement(Seq(statement, propertyStatement), conjunctionDefinition)(Nil)
+      }
     }
   }
 

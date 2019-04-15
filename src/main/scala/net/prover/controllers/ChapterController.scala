@@ -121,6 +121,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           "usages" -> getUsages(entry, books)),
         baseGlobals ++ Map(
           "definitions" -> getDefinitionSummaries(entryContext),
+          "typeDefinitions" -> getTypeDefinitions(entryContext),
           "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
           "transitivityInferences" -> entryContext.transitivityInferences.map { case (d, i) => d.symbol -> i.id },
           "definitionShorthands" -> getDefinitionShorthands(entryContext)))
@@ -231,10 +232,15 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       .toMap
   }
 
-  case class TypeDefinitionSummary(symbol: String, name: String, componentFormatString: String, article: String)
+  case class TypeDefinitionSummary(symbol: String, name: String, componentFormatString: String, article: String, properties: Map[String, String])
   private def getTypeDefinitions(entryContext: EntryContext) = {
     entryContext.typeDefinitions
-      .map(d => d.symbol -> TypeDefinitionSummary(d.symbol, d.name, d.componentFormat.baseFormatString, if (d.name.headOption.exists("aeiou".contains(_))) "an" else "a"))
+      .map(d => d.symbol -> TypeDefinitionSummary(
+        d.symbol,
+        d.name,
+        d.componentFormat.baseFormatString,
+        if (d.name.headOption.exists("aeiou".contains(_))) "an" else "a",
+        entryContext.propertyDefinitionsByType.getOrElse(d.symbol, Nil).map(pd => pd.qualifiedSymbol -> pd.name).toMap))
       .toMap
   }
 

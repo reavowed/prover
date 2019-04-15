@@ -3,6 +3,7 @@ Introduce the "and" or "conjuction" connective, ∧.
 statement ∧ (φ ψ)
   definition (¬ → φ ¬ ψ)
   shorthand (and)
+  attributes (conjunction)
 
 theorem Extract Left Conjunct
 simplification

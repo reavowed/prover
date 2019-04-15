@@ -16,4 +16,4 @@ property transitive on relation ~ A
 type equivalenceRelation ≈ (A)
   format (on A)
   name (equivalence relation)
-  definition (relation ≈ A)
+  definition (∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A)

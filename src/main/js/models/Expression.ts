@@ -1,5 +1,4 @@
 import * as _ from "lodash";
-import {replacePlaceholders} from "../components/ExpressionComponent";
 
 declare global {
     interface Window {
@@ -20,9 +19,10 @@ export interface TypeDefinition {
   symbol: string;
   name: string;
   componentFormatString: string;
+  properties: { [key: string]: string }
 }
 
-export type Expression = TextBasedExpression | FormatBasedExpression
+export type Expression = TextBasedExpression | FormatBasedExpression | TypeExpression
 export const Expression = {
   parseFromJson(json: any): Expression {
     if (typeof json === "string") {
@@ -38,10 +38,24 @@ export const Expression = {
       const typeDefinition = window.typeDefinitions[definitionSymbol];
       if (expressionDefinition) {
         const boundVariableNames = boundVariablesAndComponents.slice(0, expressionDefinition.numberOfBoundVariables);
-        const components = boundVariablesAndComponents.slice(expressionDefinition.numberOfBoundVariables);
-        return new DefinedExpression(expressionDefinition, boundVariableNames, components.map(Expression.parseFromJson));
+        const componentsJson = boundVariablesAndComponents.slice(expressionDefinition.numberOfBoundVariables);
+        if (_.includes(expressionDefinition.attributes, "conjunction")) {
+          const [firstComponentJson, secondComponentJson] = componentsJson;
+          const firstComponent = Expression.parseFromJson(firstComponentJson);
+          if (firstComponent instanceof TypeExpression && _.isArray(secondComponentJson) && _.isString(secondComponentJson[0])) {
+            const [propertyName, termJson, ...otherComponentsJson] = secondComponentJson;
+            const property = firstComponent.definition.properties[propertyName];
+            const term = Expression.parseFromJson(termJson);
+            const otherComponents = otherComponentsJson.map(Expression.parseFromJson);
+            if (property && term.serialize() === firstComponent.term.serialize() && otherComponents.map(c => c.serialize()).join(" ") === firstComponent.otherComponents.map(c => c.serialize()).join(" ")) {
+              firstComponent.addProperty(property);
+              return firstComponent;
+            }
+          }
+        }
+        return new DefinedExpression(expressionDefinition, boundVariableNames, componentsJson.map(Expression.parseFromJson));
       } else if (typeDefinition) {
-        return new TypeExpression(typeDefinition, Expression.parseFromJson(boundVariablesAndComponents[0]), boundVariablesAndComponents.slice(1).map(Expression.parseFromJson))
+        return new TypeExpression(typeDefinition, Expression.parseFromJson(boundVariablesAndComponents[0]), boundVariablesAndComponents.slice(1).map(Expression.parseFromJson), [])
       } else {
         throw `Unrecognised definition ${definitionSymbol}`
       }
@@ -57,20 +71,18 @@ export const Expression = {
   }
 };
 
-abstract class TextBasedExpression {
-  abstract serialize(): string
-  abstract textForHtml(boundVariableLists: string[][]): string
+interface TextBasedExpression {
+  serialize(): string
+  textForHtml(boundVariableLists: string[][]): string
 }
-abstract class FormatBasedExpression {
-  abstract components: Expression[];
-  abstract serialize(): string
-  abstract formatForHtml(safe: boolean): string
+interface FormatBasedExpression {
+  components: Expression[]
+  serialize(): string
+  formatForHtml(safe: boolean): string
 }
 
-export class VariableOrConstant extends TextBasedExpression {
-  constructor(public name: string) {
-    super()
-  }
+export class VariableOrConstant {
+  constructor(public name: string) {}
   serialize(): string {
     return this.name;
   }
@@ -79,10 +91,8 @@ export class VariableOrConstant extends TextBasedExpression {
   }
 }
 
-export class DefinedExpression extends FormatBasedExpression {
-  constructor(public definition: ExpressionDefinition, public boundVariableNames: string[], public components: Expression[]) {
-    super()
-  }
+export class DefinedExpression {
+  constructor(public definition: ExpressionDefinition, public boundVariableNames: string[], public components: Expression[]) {}
   serialize() {
     return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
   }
@@ -93,21 +103,14 @@ export class DefinedExpression extends FormatBasedExpression {
   }
 }
 
-export class TypeExpression extends FormatBasedExpression {
-  constructor(public definition: TypeDefinition, public term: Expression, public otherComponents: Expression[]) {
-    super()
+export class TypeExpression {
+  constructor(public definition: TypeDefinition, public term: Expression, public otherComponents: Expression[], public properties: string[]) {}
+  serialize(): string {
+    return [this.definition.symbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
   }
-  components: Expression[] = [this.term, ...this.otherComponents]
-  serialize() {
-    return [this.definition.symbol, ...this.components.map(c => c.serialize())].join(" ")
+  addProperty(newProperty: string) {
+    this.properties = [...this.properties, newProperty];
   }
-  formatForHtml(safe: boolean) {
-    const extendedFormatString = `%0 is a ${this.definition.name} ` + replacePlaceholders(this.definition.componentFormatString, this.otherComponents.map((_, i) => "%" + (i+1))).join("");
-    return safe ?
-        "(" + extendedFormatString + ")" :
-        extendedFormatString;
-  }
-
 }
 
 export class FunctionParameter {
@@ -128,10 +131,8 @@ export class FunctionParameter {
   }
 }
 
-export class ExpressionApplication extends FormatBasedExpression {
-  constructor(public name: string, public components: Expression[]) {
-    super()
-  }
+export class ExpressionApplication {
+  constructor(public name: string, public components: Expression[]) {}
   serialize() {
     return `with (${this.components.map(a => a.serialize()).join(" ")}) ${this.name}`
   }

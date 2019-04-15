@@ -143,12 +143,12 @@ object Step {
   }
   object Deduction {
     def parser(implicit entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Parser[Deduction] = {
-      val deductionStatement = entryContext.deductionStatementOption
+      val deductionDefinition = entryContext.deductionDefinitionOption
         .getOrElse(throw new Exception("Cannot prove a deduction without an appropriate statement definition"))
       for {
         assumption <- Statement.parser
         substeps <- listParser(entryContext, stepContext, premiseContext.addStatement(assumption, "a", stepContext)).inBraces
-      } yield Deduction(assumption, substeps, deductionStatement)
+      } yield Deduction(assumption, substeps, deductionDefinition)
     }
   }
 
@@ -215,9 +215,9 @@ object Step {
       } yield {
         val internalConclusion = substeps.flatMap(_.provenStatement).lastOption.getOrElse(throw new Exception("No conclusion for naming step"))
         val extractedConclusion = internalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
-        val scopingStatement = entryContext.scopingStatementOption.getOrElse(throw new Exception("Naming step requires a scoping statement"))
-        val deductionStatement = entryContext.deductionStatementOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
-        val internalPremise = DefinedStatement(Seq(DefinedStatement(Seq(assumption, internalConclusion), deductionStatement)(Nil)), scopingStatement)(Seq(variableName))
+        val scopingDefinition = entryContext.scopingDefinitionOption.getOrElse(throw new Exception("Naming step requires a scoping statement"))
+        val deductionDefinition = entryContext.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
+        val internalPremise = DefinedStatement(Seq(DefinedStatement(Seq(assumption, internalConclusion), deductionDefinition)(Nil)), scopingDefinition)(Seq(variableName))
         val substitutedPremises = inference.substitutePremisesAndValidateConclusion(extractedConclusion, substitutions, stepContext)
         val premises = substitutedPremises match {
           case init :+ last =>
@@ -265,12 +265,12 @@ object Step {
   }
   object ScopedVariable {
     def parser(implicit entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Parser[ScopedVariable] = {
-      val scopingStatement = entryContext.scopingStatementOption
+      val scopingDefinition = entryContext.scopingDefinitionOption
         .getOrElse(throw new Exception("Scoped variable step could not find scoping statement"))
       for {
         variableName <- Parser.singleWord
         substeps <- listParser(entryContext, stepContext.addBoundVariable(variableName), premiseContext.addBoundVariable()).inBraces
-      } yield ScopedVariable(variableName, substeps, scopingStatement)
+      } yield ScopedVariable(variableName, substeps, scopingDefinition)
     }
   }
 
