@@ -80,6 +80,17 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }).toResponseEntity
   }
 
+  @PutMapping(value = Array("/title"), produces = Array("application/json;charset=UTF-8"))
+  def updateTitle(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @RequestBody newTitle: String
+  ): ResponseEntity[_] = {
+    modifyChapter[Identity](bookKey, chapterKey, (_, _, chapter) => {
+      Success(chapter.copy(title = newTitle))
+    }).map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, getChaptersWithKeys(book).find(_._1.title == newTitle).get._2) }.toResponseEntity
+  }
+
   case class InferenceProps(inference: Inference.Entry, previousEntry: Option[LinkSummary], nextEntry: Option[LinkSummary], usages: Seq[(Book, Chapter, Seq[Theorem])])
   @GetMapping(value = Array("/{entryKey}"), produces = Array("text/html;charset=UTF-8"))
   def getEntry(

@@ -119,10 +119,43 @@ class DefinitionResult extends React.Component {
   }
 }
 
+class ChapterTitle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hovered: false,
+      editing: false
+    }
+  }
+
+  saveTitle = () => {
+    return this.props.updateChapter(this.props.url + "/title", {method: "PUT", body: this.state.newTitle})
+      .then(() => this.setState({editing: false}));
+  };
+
+  render() {
+    const {title} = this.props;
+    const {editing, hovered, newTitle} = this.state;
+    return editing ?
+      <FlexRow className="mb-2">
+        <FlexRow.Grow><Form.Control type="text" value={newTitle} onChange={e => this.setState({newTitle: e.target.value})} /></FlexRow.Grow>
+        <Button className="ml-1" variant="success" onClick={this.saveTitle}><i className="fas fa-check"/></Button>
+        <Button className="ml-1" variant="danger" onClick={() => this.setState({editing: false})}><i className="fas fa-times"/></Button>
+      </FlexRow> :
+      <h3 onMouseEnter={() => this.setState({hovered: true})} onMouseLeave={() => this.setState({hovered: false})}>
+        {title}
+        {hovered && <Button className="ml-3" size="sm" onClick={() => this.setState({editing: true, hovered: false, newTitle: title})}><i className="fas fa-edit"/></Button>}
+      </h3>;
+  }
+
+}
+
 export class Chapter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: props.title,
+      url: props.url,
       entries: Parser.parseEntries(props.entries),
       addingTheorem: false,
       theoremBeingAdded: {
@@ -143,7 +176,14 @@ export class Chapter extends React.Component {
         }
       })
       .then(newProps => {
-        this.setState({entries: Parser.parseEntries(newProps.entries)});
+        this.setState({
+          title: newProps.title,
+          url: newProps.url,
+          entries: Parser.parseEntries(newProps.entries)
+        });
+        if (window.location.pathname !== newProps.url) {
+          history.replaceState({}, "", newProps.url);
+        }
       });
   };
   renderEntry = (entry) => {
@@ -213,7 +253,7 @@ export class Chapter extends React.Component {
     const {theoremBeingAdded} = this.state;
     const theoremToAdd = _.cloneDeep(theoremBeingAdded);
     theoremToAdd.premises = _.filter(theoremToAdd.premises.split(/\r?\n/), s => s.length);
-    this.updateChapter(path.join(this.props.url, "theorems"), {
+    this.updateChapter(path.join(this.state.url, "theorems"), {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(theoremToAdd)
@@ -221,11 +261,11 @@ export class Chapter extends React.Component {
   };
 
   render() {
-    const {title, url, bookLink, summary, previous, next} = this.props;
-    const {entries} = this.state;
+    const {bookLink, summary, previous, next} = this.props;
+    const {title, url, entries} = this.state;
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
-      <h3>{title}</h3>
+      <ChapterTitle title={title} url={url} updateChapter={this.updateChapter} />
       <p>{summary}</p>
       {entries.map(this.renderEntry)}
       <Button onClick={this.startAddingTheorem}>Add theorem</Button>

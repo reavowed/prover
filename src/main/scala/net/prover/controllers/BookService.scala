@@ -3,6 +3,7 @@ package net.prover.controllers
 import java.nio.file.{Files, Path, Paths}
 
 import net.prover.model._
+import org.apache.commons.io.FileUtils
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.stereotype.Service
 import scalaz.Functor
@@ -58,6 +59,7 @@ class BookService {
   }
 
   private def writeBooks(books: Seq[Book]): Unit = {
+    FileUtils.cleanDirectory(bookDirectoryPath.toFile)
     writeBooklist(books)
     books.foreach(writeBook)
   }

@@ -1,0 +1,135 @@
+Define an relation between two sets.
+
+type relation R (A)
+  format (on A)
+  definition (⊆ R × A A)
+
+property reflexive on relation ~ A
+  definition (∀ a → ∈ $0 A ∈ orderedPair $0 $0 ~)
+
+property symmetric on relation ~ A
+  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~)
+
+property transitive on relation ~ A
+  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ~ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $$$0 $0 ~)
+
+type equivalenceRelation ≈ (A)
+  format (on A)
+  name (equivalence relation)
+  definition (∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A)
+
+term equivalenceClass (a ≈)
+  name (Equivalence Class)
+  format ([a])
+  premises (equivalenceRelation ≈ A, ∈ a A)
+  (= $0 comprehension x A ∈ orderedPair a $0 ≈)
+
+term equivalenceQuotient (A ≈)
+  name (Quotient)
+  format (A/≈) requires-brackets
+  premises (equivalenceRelation ≈ A)
+  (= $0 replacementSet a A equivalenceClass $0 ≈)
+
+theorem Equivalence Class Is Element of Quotient
+premise equivalenceRelation ≈ A
+premise ∈ a A
+conclusion ∈ equivalenceClass a ≈ equivalenceQuotient A ≈
+{
+  prove = equivalenceQuotient A ≈ replacementSet a A equivalenceClass $0 ≈ ee847b980cb0ac32359a914ee29e89ca3b82e119bbfa35371f913a1aa2c74040 () (≈, A) () ()
+  prove ∈ equivalenceClass a ≈ replacementSet a A equivalenceClass $0 ≈ a589a065eaf6fd14df96011853687723f8771b35d92a81e50c5885a3e0f64b49 () (a, A) () (equivalenceClass $0 ≈)
+  prove ∈ equivalenceClass a ≈ equivalenceQuotient A ≈ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (equivalenceQuotient A ≈, replacementSet a A equivalenceClass $0 ≈) (∈ equivalenceClass a ≈ $0) ()
+}
+
+theorem Element of Quotient Is Equivalence Class
+premise equivalenceRelation ≈ A
+premise ∈ x equivalenceQuotient A ≈
+conclusion ∃ a ∧ ∈ $0 A = x equivalenceClass $0 ≈
+{
+  prove = equivalenceQuotient A ≈ replacementSet a A equivalenceClass $0 ≈ ee847b980cb0ac32359a914ee29e89ca3b82e119bbfa35371f913a1aa2c74040 () (≈, A) () ()
+  prove ∃ a ∧ ∈ $0 A = x equivalenceClass $0 ≈ 59f16feab39e419a00c1a5ff891838a6995d40cf560efb4a00d0b51a9a16ff2a () (equivalenceQuotient A ≈, A, x) () (equivalenceClass $0 ≈)
+}
+
+theorem Set Is Element of Equivalence Class
+premise equivalenceRelation ≈ A
+premise ∈ a A
+conclusion ∈ a equivalenceClass a ≈
+{
+  prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) () ()
+  prove ∀ x → ∈ $0 A ∈ orderedPair $0 $0 ≈ 6908755e7b9f9be1cc79793d486d2f8322b14b89d88bd2a34e407b675465508e () (≈, A) () ()
+  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+    prove → ∈ a A ∈ orderedPair a a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (→ ∈ $0 A ∈ orderedPair $0 $0 ≈) ()
+    prove ∈ orderedPair a a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∈ orderedPair a a ≈) () () ()
+  }
+  prove = equivalenceClass a ≈ comprehension x A ∈ orderedPair a $0 ≈ f2e5322bcbc2762c77a7c0c134101ca46410896012aa8739a73a188c900d9b2c () (≈, A, a) () ()
+  prove ∈ a equivalenceClass a ≈ 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () (equivalenceClass a ≈, A, a) (∈ orderedPair a $0 ≈) ()
+}
+
+theorem Element of Equivalence Class Is Equivalent
+premise equivalenceRelation ≈ A
+premise ∈ b equivalenceClass a ≈
+conclusion ∈ orderedPair a b ≈
+{
+  target ∈ orderedPair a b ≈
+}
+
+theorem Elements Are Equivalent If Equivalence Classes Are Equal
+premise equivalenceRelation ≈ A
+premise = equivalenceClass x ≈ equivalenceClass y ≈
+conclusion ∈ orderedPair x y ≈
+{
+  target ∈ orderedPair x y ≈
+}
+
+theorem Lift Function to Quotient
+premise equivalenceRelation ≈ A
+premise function f A B
+premise ∀ x → ∈ $0 A ∀ y → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ = apply f $$0 apply f $0
+conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0
+{
+  let f_≈ = $0 replacementSet a A orderedPair equivalenceClass $0 ≈ apply f $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0) (replacementSet a A orderedPair equivalenceClass $0 ≈ apply f $0) () () {
+    subproof (f_≈ is a function) {
+      take a {
+        assume ∈ $0 A {
+          prove ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 () (≈, A, $0) () ()
+          prove ∈ apply f $0 B 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (f, A, B, $0) () ()
+          prove ∈ orderedPair equivalenceClass $0 ≈ apply f $0 × equivalenceQuotient A ≈ B 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () (equivalenceClass $0 ≈, equivalenceQuotient A ≈, apply f $0, B) () ()
+        }
+      }
+      prove ⊆ $0 × equivalenceQuotient A ≈ B 5abd6f2a4ef8be849b93a8771cd8616427a895522af6d3fc6eb62dace50aaa5a () (A, × equivalenceQuotient A ≈ B, $0) () (orderedPair equivalenceClass $$0 ≈ apply f $$0)
+      take x {
+        assume ∈ $0 equivalenceQuotient A ≈ {
+          prove ∃ a ∧ ∈ $0 A = $$0 equivalenceClass $0 ≈ c653a37ffa1d81361e01187938eb89b605b5c113f11179c00e19ede4f26a7090 () (≈, A, $0) () ()
+          let a_x ∧ ∈ $0 A = $$0 equivalenceClass $0 ≈ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair $$0 $0 $$$0) () (∧ ∈ $$$0 A = $0 equivalenceClass $$$0 ≈) () {
+            elided a589a065eaf6fd14df96011853687723f8771b35d92a81e50c5885a3e0f64b49 {
+              prove ∈ orderedPair equivalenceClass $0 ≈ apply f $0 replacementSet a A orderedPair equivalenceClass $0 ≈ apply f $0 a589a065eaf6fd14df96011853687723f8771b35d92a81e50c5885a3e0f64b49 () ($0, A) () (orderedPair equivalenceClass $$$$0 ≈ apply f $$$$0)
+              prove ∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$0, replacementSet a A orderedPair equivalenceClass $0 ≈ apply f $0) (∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$$$0) ()
+              prove ∈ orderedPair $$0 apply f $0 $$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, equivalenceClass $0 ≈) (∈ orderedPair $$$$0 apply f $0 $$$0) ()
+            }
+            take y {
+              assume ∈ orderedPair $$$0 $0 $$$$0 {
+                prove ∃ a ∧ ∈ $0 A = orderedPair $$$$0 $$0 orderedPair equivalenceClass $0 ≈ apply f $0 59f16feab39e419a00c1a5ff891838a6995d40cf560efb4a00d0b51a9a16ff2a () ($$$$0, A, orderedPair $$$0 $0) () (orderedPair equivalenceClass $$$$$0 ≈ apply f $$$$$0)
+                let a_y ∧ ∈ $0 A = orderedPair $$$$0 $$0 orderedPair equivalenceClass $0 ≈ apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $0 apply f $$0) () (∧ ∈ $$$$$0 A = orderedPair $$$0 $0 orderedPair equivalenceClass $$$$$0 ≈ apply f $$$$$0) () {
+                  prove = equivalenceClass $$$0 ≈ $$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$$$0, equivalenceClass $$$0 ≈) () ()
+                  prove = $$$$0 equivalenceClass $0 ≈ 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () ($$$$0, $$0, equivalenceClass $0 ≈, apply f $0) () ()
+                  prove = equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (equivalenceClass $$$0 ≈, $$$$0, equivalenceClass $0 ≈) () ()
+                  target = $$0 apply f $$$0
+                }
+              }
+            }
+            prove ∃! y ∈ orderedPair $$$0 $0 $$$$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply f $0) (∈ orderedPair $$0 $$$$0 $$$0) ()
+          }
+        }
+      }
+      elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
+        prove ∧ ⊆ $0 × equivalenceQuotient A ≈ B ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! y ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 × equivalenceQuotient A ≈ B, ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! y ∈ orderedPair $$0 $0 $$$0) () () ()
+        prove function $0 equivalenceQuotient A ≈ B be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () ($0, equivalenceQuotient A ≈, B) () ()
+      }
+    }
+    target ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0
+    target ∀ g → ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 = $0 $$0
+    elided 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 {
+      prove ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 equivalenceQuotient A ≈ B, ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0) () () ()
+      prove ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ function $$0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$$0 equivalenceClass $0 ≈ apply f $0) ()
+    }
+  }
+}
