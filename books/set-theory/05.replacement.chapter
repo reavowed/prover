@@ -43,8 +43,8 @@ conclusion ∃ a ∧ ∈ $0 A = b with ($0) F
 }
 
 theorem Replacement Set Is Subset
-premise ∀ a → ∈ $0 A ∈ with ($0) F B
 premise = S replacementSet a A with ($0) F
+premise ∀ a → ∈ $0 A ∈ with ($0) F B
 conclusion ⊆ S B
 {
   take b {
@@ -62,17 +62,19 @@ conclusion ⊆ S B
   prove ⊆ S B 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (S, B) () ()
 }
 
-theorem Function of Element Is Element of Replacement Set
+theorem Function of Element is Element of Replacement Set
+premise = S replacementSet a A with ($0) F
 premise ∈ a A
-conclusion ∈ with (a) F replacementSet x A with ($0) F
+conclusion ∈ with (a) F S
 {
-  prove ∀ b ↔ ∈ $0 replacementSet x A with ($0) F ∃ a ∧ ∈ $0 A = $$0 with ($0) F 8e6c4400b6cc995bb10f0746ea4444e9801d61d3b9ab5424ae31fc4a2628fff5 () (A) () (with ($0) F)
-  prove ↔ ∈ with (a) F replacementSet x A with ($0) F ∃ x ∧ ∈ $0 A = with (a) F with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (with (a) F) (↔ ∈ $0 replacementSet x A with ($0) F ∃ a ∧ ∈ $0 A = $$0 with ($0) F) ()
-  prove → ∃ x ∧ ∈ $0 A = with (a) F with ($0) F ∈ with (a) F replacementSet x A with ($0) F 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ with (a) F replacementSet x A with ($0) F, ∃ a ∧ ∈ $0 A = with (a) F with ($0) F) () () ()
+  prove ∀ y ↔ ∈ $0 replacementSet x A with ($0) F ∃ x ∧ ∈ $0 A = $$0 with ($0) F 8e6c4400b6cc995bb10f0746ea4444e9801d61d3b9ab5424ae31fc4a2628fff5 () (A) () (with ($0) F)
+  prove ∀ y ↔ ∈ $0 S ∃ x ∧ ∈ $0 A = $$0 with ($0) F 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (S, replacementSet a A with ($0) F) (∀ y ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 A = $$0 with ($0) F) ()
+  prove ↔ ∈ with (a) F S ∃ x ∧ ∈ $0 A = with (a) F with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (with (a) F) (↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F) ()
+  prove → ∃ x ∧ ∈ $0 A = with (a) F with ($0) F ∈ with (a) F S 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ with (a) F S, ∃ a ∧ ∈ $0 A = with (a) F with ($0) F) () () ()
   elided 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc {
     prove = with (a) F with (a) F 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (with (a) F) () ()
     prove ∧ ∈ a A = with (a) F with (a) F bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a A, = with (a) F with (a) F) () () ()
     prove ∃ x ∧ ∈ $0 A = with (a) F with ($0) F c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (∧ ∈ $0 A = with (a) F with ($0) F) ()
   }
-  prove ∈ with (a) F replacementSet x A with ($0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ a ∧ ∈ $0 A = with (a) F with ($0) F, ∈ with (a) F replacementSet a A with ($0) F) () () ()
+  prove ∈ with (a) F S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ a ∧ ∈ $0 A = with (a) F with ($0) F, ∈ with (a) F S) () () ()
 }
