@@ -22,7 +22,7 @@ export function formatHtmlWithoutWrapping(text: String, replacementFunction?: ((
   if (!replacementFunction) {
     replacementFunction = (x: String) => <React.Fragment>{x}</React.Fragment>;
   }
-  return formatWithReplacement(text, /(?<!\s)([_^])([^\s)}]+)/g, replacementFunction, match => {
+  return formatWithReplacement(text, /(?<!\s)([_^])([^\s(){}]+)/g, replacementFunction, match => {
     if (match[1] === "_") {
       return <sub>{formatHtml(match[2], replacementFunction)}</sub>
     } else if (match[1] === "^") {
