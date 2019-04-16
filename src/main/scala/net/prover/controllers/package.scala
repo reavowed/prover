@@ -24,6 +24,11 @@ package object controllers {
           throw e
       }
     }
+    def orBadRequest(message: String): Try[T] = {
+      t.recoverWith {
+        case e => Failure(BadRequestException(s"$message: ${e.getMessage}"))
+      }
+    }
   }
   implicit class OptionWithResponseExceptionOps[T](option: Option[T]) {
     def orException(e: Exception): Try[T] = {

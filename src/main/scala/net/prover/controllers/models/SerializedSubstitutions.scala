@@ -23,7 +23,7 @@ case class SerializedSubstitutions(
       required.mapTryToMap { name =>
         for {
           input <- source.get(name).orBadRequest(s"Missing substitution $description $name")
-          value <- Try(parser(parsingContext).parseFromString(input, "")).toOption.orBadRequest(s"Invalid substitution $description $name '$input'")
+          value <- Try(parser(parsingContext).parseFromString(input, "")).orBadRequest(s"Invalid substitution $description $name '$input'")
         } yield value
       }
     }
@@ -37,7 +37,7 @@ case class SerializedSubstitutions(
       required.mapTryToMap { case (name, numberOfParameters) =>
         for {
           input <- source.get(name).flatMap(_.get(numberOfParameters.toString)).orBadRequest(s"Missing substitution $description $name")
-          value <- Try(parser(parsingContext.withPlaceholderParameters(numberOfParameters)).parseFromString(input, "")).toOption.orBadRequest(s"Invalid substitution $description $name '$input'")
+          value <- Try(parser(parsingContext.withPlaceholderParameters(numberOfParameters)).parseFromString(input, "")).orBadRequest(s"Invalid substitution $description $name '$input'")
         } yield value
       }
     }

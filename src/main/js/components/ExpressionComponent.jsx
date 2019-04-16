@@ -2,39 +2,7 @@ import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
 import {DefinedExpression, FunctionParameter, TypeExpression} from "../models/Expression";
-
-function formatWithReplacement(text, regex, handlePlain, handleMatch) {
-  const matches = text.matchAll(regex);
-  let indexOfLastMatchEnd = 0;
-  let elements = [];
-  for (const match of matches) {
-    elements.push(handlePlain(text.substr(indexOfLastMatchEnd, match.index - indexOfLastMatchEnd)));
-    elements.push(handleMatch(match));
-    indexOfLastMatchEnd = match.index + match[0].length;
-  }
-  elements.push(handlePlain(text.substr(indexOfLastMatchEnd)));
-  return _.flatten(elements);
-}
-
-export function formatHtml(text, replacementFunction) {
-  if (!replacementFunction) {
-    replacementFunction = x => <React.Fragment>{x}</React.Fragment>;
-  }
-  return formatWithReplacement(text, /(?<!\s)([_^])([^\s)}]+)/g, replacementFunction, match => {
-    if (match[1] === "_") {
-      return <sub>{formatHtml(match[2], replacementFunction)}</sub>
-    } else if (match[1] === "^") {
-      return <sup>{formatHtml(match[2], replacementFunction)}</sup>
-    }
-  });
-}
-
-export function replacePlaceholders(text, components) {
-  return formatWithReplacement(text, /%(\d+)/g, x => x,  match => {
-    const index = parseInt(match[1]);
-    return components[index];
-  });
-}
+import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "./helpers/Formatter";
 
 const HighlightedPremise = styled.span`
   color: red;
@@ -77,7 +45,7 @@ export class ExpressionComponent extends React.Component {
 
   renderMatch(match, path, pathsToHighlightAsPremise, boundVariableLists, wrapBoundVariable) {
     if (match.type === "boundVariable") {
-      return wrapBoundVariable(formatHtml(match.name).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>), match.name, match.index, path.concat(match.pathWithinMatch));
+      return wrapBoundVariable(formatHtml(match.name), match.name, match.index, path.concat(match.pathWithinMatch));
     } else {
       const lengthOfPath = match.pathWithinMatch.length;
       const innerPathsToHighlightAsPremise = _.chain(pathsToHighlightAsPremise)
@@ -101,20 +69,20 @@ export class ExpressionComponent extends React.Component {
         let formatString = (parentRequiresBrackets && displayShorthand.requiresBrackets) ?
           "(" + displayShorthand.baseFormatString + ")" :
           displayShorthand.baseFormatString;
-        return formatHtml(formatString, s => replacePlaceholders(s, renderedMatches));
+        return formatHtmlWithoutWrapping(formatString, s => replacePlaceholders(s, renderedMatches));
       }
     }
     if (expression instanceof TypeExpression) {
       const formattedTerm = <ExpressionComponent expression={expression.term} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
       const renderedOtherComponents = expression.otherComponents.map(c => <ExpressionComponent expression={c} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>);
-      const formattedComponents = formatHtml(expression.definition.componentFormatString, s => replacePlaceholders(s, renderedOtherComponents));
+      const formattedComponents = formatHtmlWithoutWrapping(expression.definition.componentFormatString, s => replacePlaceholders(s, renderedOtherComponents));
       const formattedProperties = expression.properties.join(", ");
       return [formattedTerm, <> is a {formattedProperties} {expression.definition.name} </>, ...formattedComponents];
     } else if (expression.formatForHtml) {
       const format = expression.formatForHtml(parentRequiresBrackets);
       const boundVariables = expression.boundVariableNames || [];
       const innerBoundVariables = boundVariables.length ? [boundVariables, ...boundVariableLists] : boundVariableLists;
-      const renderedBoundVariables = boundVariables.map((name, index) => wrapBoundVariable(formatHtml(name).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>), name, index, path));
+      const renderedBoundVariables = boundVariables.map((name, index) => wrapBoundVariable(formatHtml(name), name, index, path));
       const renderedComponents = expression.components.map((c, i) => {
         const innerPaths = _.chain(pathsToHighlightAsPremise).filter(p => p.length > 0 && p[0] === i).map(p => p.slice(1)).value();
         return <ExpressionComponent expression={c}
@@ -124,9 +92,9 @@ export class ExpressionComponent extends React.Component {
                                     wrapBoundVariable={wrapBoundVariable}
                                     parentRequiresBrackets={expression.definition ? expression.definition.requiresComponentBrackets : true}/>
       });
-      return formatHtml(format, s => replacePlaceholders(s, [...renderedBoundVariables, ...renderedComponents]));
+      return formatHtmlWithoutWrapping(format, s => replacePlaceholders(s, [...renderedBoundVariables, ...renderedComponents]));
     } else if (expression.textForHtml) {
-      return formatHtml(expression.textForHtml(boundVariableLists));
+      return formatHtmlWithoutWrapping(expression.textForHtml(boundVariableLists));
     }
   }
 
