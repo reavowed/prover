@@ -11,3 +11,19 @@ conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ
   prove ∃ z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 () (a) (with ($0 $1) φ) ()
   prove ∃! z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∃ x ∧ ∈ $0 a with ($0 $$0) φ) ()
 }
+
+theorem Existence of Replacement Set
+conclusion ∃! B ∀ b ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 A = $$0 with ($0) F
+{
+  take a {
+    assume ∈ $0 A {
+      prove ∃! b = $0 with ($$0) F c95bd5a48f1e634431831232959dc7b7ef2ed222c694cac5df9ed7f08eee333a () (with ($0) F) () ()
+    }
+  }
+  prove ∃! B ∀ b ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 A = $$0 with ($0) F a23a254299d258a1307d257384c823b073a0c85f62f1606a89715f5d133ca2c7 () (A) (= $1 with ($0) F) ()
+}
+
+term replacementSet ($x A with x F)
+  name (Replacement Set)
+  format ({ F | x ∈ A }) no-component-brackets
+  (∀ y ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 A = $$0 with ($0) F)

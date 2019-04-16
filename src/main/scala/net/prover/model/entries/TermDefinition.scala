@@ -43,7 +43,7 @@ case class TermDefinition(
 
   override def serializedLines: Seq[String] = Seq(s"term $symbol $serializedComponents") ++
     (explicitName.map(n => s"name ($n)").toSeq ++
-      format.serialized.map(f => s"format ($f)").toSeq ++
+      format.serialized.toSeq ++
       (if (premises.nonEmpty) Seq(s"premises (${premises.map(_.serialized).mkString(", ")})") else Nil) ++
       Seq("(" + definitionPredicate.serialized + ")") ++
       shorthand.map(s => s"shorthand ($s)").toSeq ++

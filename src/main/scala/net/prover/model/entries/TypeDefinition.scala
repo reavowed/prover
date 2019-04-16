@@ -22,7 +22,7 @@ case class TypeDefinition(
   def statementDefinition = StatementDefinition(symbol, Nil, TermComponent(defaultTermName) +: otherComponentTypes, explicitName, componentFormat, Some(definingStatement), None, Nil)
 
   override def serializedLines: Seq[String] = Seq("type", symbol, defaultTermName, otherComponentTypes.map(_.serialized).mkString(" ").inParens).mkString(" ") +:
-    (Seq(Seq("format", componentFormat.serialized.value.inParens).mkString(" ")) ++
+    (Seq(componentFormat.serialized.value) ++
       explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++
       Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
     ).indent

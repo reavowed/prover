@@ -2,7 +2,7 @@ Definition of a function.
 
 statement function (f A B)
   name (a Function)
-  format (f: A → B in parens)
+  format (f: A → B) requires-brackets
   definition (∧ ⊆ f × A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f)
 
 display ∀ f → function f A B φ as ((∀f: A → B)φ)

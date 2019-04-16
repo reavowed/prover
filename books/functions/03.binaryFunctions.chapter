@@ -1,6 +1,6 @@
 Introduce the concept of a binary function - a function whose domain is the product of two other sets.
 
-display apply x orderedPair a b as (a x b in parens) if x infix
+display apply x orderedPair a b as (a x b) requires-brackets if x infix
 
 display apply f orderedPair a b as (f(a, b))
 

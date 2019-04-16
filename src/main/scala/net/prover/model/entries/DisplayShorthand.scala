@@ -10,7 +10,7 @@ import net.prover.model.{EntryContext, ExpressionParsingContext, Format, Parser}
 case class DisplayShorthand(template: Template, format: Format.Explicit, conditions: Seq[(String, String)]) extends ChapterEntry {
   override def name: String = DisplayShorthand.name
   override def serializedLines: Seq[String] = Seq((
-    Seq("display", template.serialized, "as", s"(${format.originalValue})") ++
+    Seq("display", template.serialized, "as", format.serializedWithoutPrefix) ++
       conditions.flatMap { case (variableName, requiredAttribute) => Seq("if", variableName, requiredAttribute) }
     ).mkString(" "))
 

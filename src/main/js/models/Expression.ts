@@ -11,6 +11,7 @@ export interface ExpressionDefinition {
   symbol: string;
   baseFormatString: string;
   requiresBrackets: boolean;
+  requiresComponentBrackets: boolean;
   numberOfBoundVariables: number;
   attributes: string[];
 }
@@ -78,7 +79,7 @@ interface TextBasedExpression {
 interface FormatBasedExpression {
   components: Expression[]
   serialize(): string
-  formatForHtml(safe: boolean): string
+  formatForHtml(parentRequiresBrackets: boolean): string
 }
 
 export class VariableOrConstant {
@@ -96,8 +97,8 @@ export class DefinedExpression {
   serialize() {
     return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
   }
-  formatForHtml(safe: boolean) {
-    return (safe && this.definition.requiresBrackets) ?
+  formatForHtml(parentRequiresBrackets: boolean) {
+    return (parentRequiresBrackets && this.definition.requiresBrackets) ?
       "(" + this.definition.baseFormatString + ")" :
       this.definition.baseFormatString;
   }

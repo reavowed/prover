@@ -11,16 +11,17 @@ import scala.xml.{Elem, Node, NodeSeq, Text}
 trait Format {
   def baseFormatString: String
   def requiresBrackets: Boolean
+  def requiresComponentBrackets: Boolean
   def serialized: Option[String]
 
-  def formatText(components: Seq[String], safe: Boolean = false): String = {
-    components.zipWithIndex.foldLeft(getSafeFormatString(safe)) { case (textSoFar, (component, index)) =>
+  def formatText(components: Seq[String], parentRequiresBrackets: Boolean = false): String = {
+    components.zipWithIndex.foldLeft(getSafeFormatString(parentRequiresBrackets)) { case (textSoFar, (component, index)) =>
       textSoFar.replaceFirst(s"%$index", Matcher.quoteReplacement(component))
     }
   }
 
-  private def getSafeFormatString(safe: Boolean) = {
-    if (safe && requiresBrackets)
+  private def getSafeFormatString(parentRequiresBrackets: Boolean) = {
+    if (parentRequiresBrackets && requiresBrackets)
       "(" + baseFormatString + ")"
     else
       baseFormatString
@@ -29,10 +30,15 @@ trait Format {
 
 object Format {
   case class Default(baseFormatString: String, requiresBrackets: Boolean) extends Format {
+    override def requiresComponentBrackets = true
     override def serialized = None
   }
-  case class Explicit(baseFormatString: String, originalValue: String, requiresBrackets: Boolean) extends Format {
-    override def serialized = Some(originalValue)
+  case class Explicit(baseFormatString: String, originalValue: String, requiresBrackets: Boolean, requiresComponentBrackets: Boolean) extends Format {
+    override def serialized = Some(s"format $serializedWithoutPrefix")
+    def serializedWithoutPrefix = (originalValue.inParens +: (
+        Some("requires-brackets").filter(_ => requiresBrackets).toSeq ++
+        Some("no-component-brackets").filter(_ => !requiresComponentBrackets).toSeq)
+    ).mkString(" ")
   }
 
   def default(
@@ -52,18 +58,24 @@ object Format {
     Format.Default(formatString, requiresBrackets)
   }
 
+  private def testAndRemoveSuffix(str: String, suffix: String): (String, Boolean) = {
+    if (str.endsWith(suffix)) {
+      (str.stripSuffix(suffix), true)
+    } else {
+      (str, false)
+    }
+  }
+
   def parser(replacementNames: Seq[String]): Parser[Format.Explicit] = {
     for {
       originalString <- Parser.allInParens
+      requiresBrackets <- Parser.optionalWord("requires-brackets").isDefined
+      noComponentBrackets <- Parser.optionalWord("no-component-brackets").isDefined
     } yield {
-      val (rawString, requiresBrackets) = if (originalString.endsWith("in parens"))
-        (originalString.stripSuffix("in parens").trim, true)
-      else
-        (originalString, false)
-      val replacedFormat = replacementNames.zipWithIndex.foldLeft(rawString) { case (str, (name, index)) =>
+      val replacedFormat = replacementNames.zipWithIndex.foldLeft(originalString) { case (str, (name, index)) =>
         str.replaceAll(name, s"%$index")
       }
-      Format.Explicit(replacedFormat, originalString, requiresBrackets)
+      Format.Explicit(replacedFormat, originalString, requiresBrackets, !noComponentBrackets)
     }
   }
 

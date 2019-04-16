@@ -89,7 +89,7 @@ conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ
 
 term comprehension ($x A with x φ)
   name (Comprehension)
-  format ({x ∈ A | φ})
+  format ({ x ∈ A | φ }) no-component-brackets
   (∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ)
 
 theorem Membership Condition for a Comprehension

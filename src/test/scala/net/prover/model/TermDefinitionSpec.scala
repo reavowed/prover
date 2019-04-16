@@ -35,7 +35,7 @@ class TermDefinitionSpec extends ProverSpec {
         Nil,
         Seq(a),
         None,
-        Format.Explicit("⋂%0", "⋂a", requiresBrackets = false),
+        Format.Explicit("⋂%0", "⋂a", requiresBrackets = false, requiresComponentBrackets = true),
         Seq(Negation(Equals(a, EmptySet))),
         ForAll("x")(Equivalence(
           ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)),

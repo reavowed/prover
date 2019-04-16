@@ -225,10 +225,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     ).map{ case (books, book, chapter, _) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
-  case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, numberOfBoundVariables: Int, attributes: Seq[String])
+  case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, requiresComponentBrackets: Boolean, numberOfBoundVariables: Int, attributes: Seq[String])
   private def getDefinitionSummaries(entryContext: EntryContext) = {
     entryContext.availableEntries.ofType[ExpressionDefinition]
-      .map(d => d.symbol -> DefinitionSummary(d.symbol, d.format.baseFormatString, d.format.requiresBrackets, d.boundVariableNames.length, d.attributes))
+      .map(d => d.symbol -> DefinitionSummary(d.symbol, d.format.baseFormatString, d.format.requiresBrackets, d.format.requiresComponentBrackets, d.boundVariableNames.length, d.attributes))
       .toMap
   }
 

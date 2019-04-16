@@ -47,7 +47,7 @@ case class StatementDefinition(
 
   override def serializedLines: Seq[String] = Seq(s"statement $symbol $serializedComponents") ++
     (explicitName.map(n => s"name ($n)").toSeq ++
-      format.serialized.map(f => s"format ($f)").toSeq ++
+      format.serialized.toSeq ++
       definingStatement.map(s => s"definition (${s.serialized})").toSeq ++
       shorthand.map(s => s"shorthand ($s)").toSeq ++
       Some(attributes).filter(_.nonEmpty).map(attributes => s"attributes (${attributes.mkString(" ")})").toSeq

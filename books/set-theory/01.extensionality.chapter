@@ -9,7 +9,7 @@ display ∃ x ∧ ∈ $0 a φ as ((∃x ∈ a)φ)
 
 display ∃! x ∧ ∈ $0 a φ as ((∃!x ∈ a)φ)
 
-display ¬ ∈ a b as (a ∉ b in parens)
+display ¬ ∈ a b as (a ∉ b) requires-brackets
 
 axiom Extensionality
 premise ∀ x ↔ ∈ $0 a ∈ $0 b

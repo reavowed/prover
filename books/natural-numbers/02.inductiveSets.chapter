@@ -1,7 +1,7 @@
 Define the concept of an inductive set - effectively, a set that contains every natural number.
 
 statement inductive (S)
-  format (S is inductive in parens)
+  format (S is inductive) requires-brackets
   definition (∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S)
 
 theorem An Inductive Set Contains the Empty Set

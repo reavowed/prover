@@ -17,3 +17,15 @@ type equivalenceRelation ≈ (A)
   format (on A)
   name (equivalence relation)
   definition (∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A)
+
+term equivalenceClass (a ≈)
+  name (Equivalence Class)
+  format ([a])
+  premises (equivalenceRelation ≈ A, ∈ a A)
+  (= $0 comprehension x A ∈ orderedPair a $0 ≈)
+
+term equivalenceQuotient (A ≈)
+  name (Quotient)
+  format (A/≈) requires-brackets
+  premises (equivalenceRelation ≈ A)
+  (= $0 replacementSet a A equivalenceClass $0 ≈)

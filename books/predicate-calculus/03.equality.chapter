@@ -2,7 +2,7 @@ Introduce equality and its associated rules of inference.
 
 statement = (a b)
 
-display ¬ = a b as (a ≠ b in parens)
+display ¬ = a b as (a ≠ b) requires-brackets
 
 axiom Equality Is Reflexive
 conclusion = a a

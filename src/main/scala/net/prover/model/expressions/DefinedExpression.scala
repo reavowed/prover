@@ -101,10 +101,10 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
 
   override def toString: String = {
-    definition.format.formatText(scopedBoundVariableNames ++ components.map(_.safeToString), safe = false)
+    definition.format.formatText(scopedBoundVariableNames ++ components.map(_.safeToString), parentRequiresBrackets = false)
   }
   override def safeToString: String = {
-    definition.format.formatText(scopedBoundVariableNames ++ components.map(_.safeToString), safe = true)
+    definition.format.formatText(scopedBoundVariableNames ++ components.map(_.safeToString), parentRequiresBrackets = true)
   }
   override def serialized: String = (Seq(definition.symbol) ++ scopedBoundVariableNames ++ components.map(_.serialized)).mkString(" ")
   override def serializedForHash: String = (Seq(definition.symbol) ++ components.map(_.serializedForHash)).mkString(" ")
