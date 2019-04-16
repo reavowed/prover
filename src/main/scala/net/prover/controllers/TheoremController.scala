@@ -100,15 +100,12 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
         case Seq(_) =>
           Some(Failure(BadRequestException("No containing step to move out of")))
         case init :+ containerIndex :+ last =>
-          theorem.tryModifySteps(init, entryContext, (steps, outerStepContext, outerPremiseContext) => {
+          theorem.tryModifySteps(init, entryContext, (steps, _, _) => {
             steps.splitAtIndexIfValid(containerIndex).flatMap { case (beforeContainer, container, afterContainer) =>
-              container.tryModifySubstepsWithResult[Step](outerStepContext, outerPremiseContext, (substeps, innerStepContext, innerPremiseContext) => {
-                substeps.splitAtIndexIfValid(last).map { case (before, step, after) =>
-                  Success((before ++ after, step))
+              container.extractSubstep(last).map(_.orBadRequest(s"Could not extract step $stepPath from outer step"))
+                .mapMap { case (updatedContainer, step) =>
+                  (beforeContainer :+ step :+ updatedContainer) ++ afterContainer
                 }
-              }).mapMap { case (updatedContainer, step) =>
-                (beforeContainer :+ step :+ updatedContainer) ++ afterContainer
-              }
             }
           })
       }
