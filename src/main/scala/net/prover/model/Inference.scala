@@ -76,6 +76,8 @@ trait Inference {
   def substituteStatement(statement: Statement, substitutions: Substitutions, stepContext: StepContext): Statement = {
     statement.applySubstitutions(substitutions, 0, stepContext.externalDepth).getOrElse(throw new Exception(s"Could not substitute $statement"))
   }
+
+  override def toString: String = name
 }
 
 object Inference {
@@ -107,7 +109,7 @@ object Inference {
       conclusion: Statement)
     extends Inference.WithCalculatedId
   {
-    override def name: String = s"Definition of $nameOfDefinition"
+    override def name: String = s"Definition of ${nameOfDefinition.capitalizeWords}"
     override def rearrangementType = RearrangementType.NotRearrangement
   }
 

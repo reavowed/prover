@@ -239,7 +239,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         d.symbol,
         d.name,
         d.componentFormat.baseFormatString,
-        if (d.name.headOption.exists("aeiou".contains(_))) "an" else "a",
+        d.article,
         entryContext.propertyDefinitionsByType.getOrElse(d.symbol, Nil).map(pd => pd.qualifiedSymbol -> pd.name).toMap))
       .toMap
   }

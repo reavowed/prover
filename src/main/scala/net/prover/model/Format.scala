@@ -40,6 +40,14 @@ object Format {
         Some("no-component-brackets").filter(_ => !requiresComponentBrackets).toSeq)
     ).mkString(" ")
   }
+  object Explicit {
+    def apply(originalValue: String, replacementNames: Seq[String], requiresBrackets: Boolean, requiresComponentBrackets: Boolean): Explicit = {
+      val baseFormatString = replacementNames.zipWithIndex.foldLeft(originalValue) { case (str, (name, index)) =>
+        str.replaceAll(name, s"%$index")
+      }
+      Format.Explicit(baseFormatString, originalValue, requiresBrackets, requiresComponentBrackets)
+    }
+  }
 
   def default(
     symbol: String,
@@ -72,10 +80,7 @@ object Format {
       requiresBrackets <- Parser.optionalWord("requires-brackets").isDefined
       noComponentBrackets <- Parser.optionalWord("no-component-brackets").isDefined
     } yield {
-      val replacedFormat = replacementNames.zipWithIndex.foldLeft(originalString) { case (str, (name, index)) =>
-        str.replaceAll(name, s"%$index")
-      }
-      Format.Explicit(replacedFormat, originalString, requiresBrackets, !noComponentBrackets)
+      Format.Explicit(originalString, replacementNames, requiresBrackets, !noComponentBrackets)
     }
   }
 

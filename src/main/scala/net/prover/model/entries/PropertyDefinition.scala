@@ -20,7 +20,17 @@ case class PropertyDefinition(
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry] + parentType
 
-  def statementDefinition = StatementDefinition(qualifiedSymbol, Nil, TermComponent(defaultTermName) +: parentComponentTypes, explicitName, parentType.componentFormat, Some(definingStatement), None, Nil)
+  def fullFormat: Format = Format.Explicit(s"$defaultTermName is $name", Seq(defaultTermName), requiresBrackets = false, requiresComponentBrackets = true)
+  def statementDefinition = StatementDefinition(
+    qualifiedSymbol,
+    Nil,
+    TermComponent(defaultTermName) +: parentComponentTypes,
+    explicitName.orElse(Some(symbol)),
+    fullFormat,
+    Some(definingStatement),
+    None,
+    Nil)
+  override def inferences: Seq[Inference] = statementDefinition.inferences
 
   override def serializedLines: Seq[String] = (Seq("property", name, "on", parentType.name, defaultTermName) ++ parentComponentTypes.map(_.serialized)).mkString(" ") +:
     (Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" ")) ++

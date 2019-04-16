@@ -14,12 +14,28 @@ case class TypeDefinition(
   extends ChapterEntry.Standalone
 {
   override def name: String = explicitName.getOrElse(symbol)
-  override def title: String = s"Definition: ${name.capitalize}"
+  override def title: String = s"Definition: ${name.capitalizeWords}"
 
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry]
 
-  def statementDefinition = StatementDefinition(symbol, Nil, TermComponent(defaultTermName) +: otherComponentTypes, explicitName, componentFormat, Some(definingStatement), None, Nil)
+  def article: String = if (name.headOption.exists("aeiou".contains(_))) "an" else "a"
+  def fullFormat: Format.Explicit = Format.Explicit(
+    s"$defaultTermName is $article $name ${componentFormat.originalValue}",
+    defaultTermName +: otherComponentTypes.map(_.name),
+    componentFormat.requiresBrackets,
+    componentFormat.requiresComponentBrackets)
+
+  def statementDefinition = StatementDefinition(
+    symbol,
+    Nil,
+    TermComponent(defaultTermName) +: otherComponentTypes,
+    explicitName,
+    fullFormat,
+    Some(definingStatement),
+    None,
+    Nil)
+  override def inferences: Seq[Inference] = statementDefinition.inferences
 
   override def serializedLines: Seq[String] = Seq("type", symbol, defaultTermName, otherComponentTypes.map(_.serialized).mkString(" ").inParens).mkString(" ") +:
     (Seq(componentFormat.serialized.value) ++

@@ -126,8 +126,6 @@ case class Theorem(
     Seq("{") ++
     proof.flatMap(_.serializedLines).indent ++
     Seq("}")
-
-  override def toString: String = name
 }
 
 object Theorem extends Inference.EntryParser {

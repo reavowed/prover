@@ -202,7 +202,7 @@ export class FindInferenceModal extends React.Component {
   };
   submitWithSelectedValues = (selectedSubstitutionValues) => {
     this.props.callbacks.submit(this.state.selectedInferenceSuggestion.inference.id, selectedSubstitutionValues || this.state.selectedSubstitutionValues)
-      .then(this.setState({
+      .then(() => this.setState({
         isLoading: false,
         autosuggestValue: "",
         inferenceSuggestions: [],

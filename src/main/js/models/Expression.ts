@@ -23,7 +23,7 @@ export interface TypeDefinition {
   properties: { [key: string]: string }
 }
 
-export type Expression = TextBasedExpression | FormatBasedExpression | TypeExpression
+export type Expression = TextBasedExpression | FormatBasedExpression | TypeExpression | PropertyExpression
 export const Expression = {
   parseFromJson(json: any): Expression {
     if (typeof json === "string") {
@@ -37,6 +37,7 @@ export const Expression = {
       const [definitionSymbol, ...boundVariablesAndComponents] = json;
       const expressionDefinition = window.definitions[definitionSymbol];
       const typeDefinition = window.typeDefinitions[definitionSymbol];
+      const parentTypeDefinition = _.find(window.typeDefinitions, d => _.has(d.properties, definitionSymbol));
       if (expressionDefinition) {
         const boundVariableNames = boundVariablesAndComponents.slice(0, expressionDefinition.numberOfBoundVariables);
         const componentsJson = boundVariablesAndComponents.slice(expressionDefinition.numberOfBoundVariables);
@@ -57,6 +58,8 @@ export const Expression = {
         return new DefinedExpression(expressionDefinition, boundVariableNames, componentsJson.map(Expression.parseFromJson));
       } else if (typeDefinition) {
         return new TypeExpression(typeDefinition, Expression.parseFromJson(boundVariablesAndComponents[0]), boundVariablesAndComponents.slice(1).map(Expression.parseFromJson), [])
+      } else if (parentTypeDefinition) {
+        return new PropertyExpression(parentTypeDefinition, definitionSymbol, parentTypeDefinition.properties[definitionSymbol], Expression.parseFromJson(boundVariablesAndComponents[0]), boundVariablesAndComponents.slice(1).map(Expression.parseFromJson))
       } else {
         throw `Unrecognised definition ${definitionSymbol}`
       }
@@ -111,6 +114,13 @@ export class TypeExpression {
   }
   addProperty(newProperty: string) {
     this.properties = [...this.properties, newProperty];
+  }
+}
+
+export class PropertyExpression {
+  constructor(public typeDefinition: TypeDefinition, public symbol: string, public name: string, public term: Expression, public otherComponents: Expression[]) {}
+  serialize(): string {
+    return [this.symbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
   }
 }
 

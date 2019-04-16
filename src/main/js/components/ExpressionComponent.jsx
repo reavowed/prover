@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
-import {DefinedExpression, FunctionParameter, TypeExpression} from "../models/Expression";
+import {DefinedExpression, FunctionParameter, PropertyExpression, TypeExpression} from "../models/Expression";
 import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "./helpers/Formatter";
 
 const HighlightedPremise = styled.span`
@@ -78,6 +78,9 @@ export class ExpressionComponent extends React.Component {
       const formattedComponents = formatHtmlWithoutWrapping(expression.definition.componentFormatString, s => replacePlaceholders(s, renderedOtherComponents));
       const formattedProperties = expression.properties.join(", ");
       return [formattedTerm, <> is a {formattedProperties} {expression.definition.name} </>, ...formattedComponents];
+    } else if (expression instanceof PropertyExpression) {
+      const formattedTerm = <ExpressionComponent expression={expression.term} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
+      return [formattedTerm, <> is </>, expression.name];
     } else if (expression.formatForHtml) {
       const format = expression.formatForHtml(parentRequiresBrackets);
       const boundVariables = expression.boundVariableNames || [];

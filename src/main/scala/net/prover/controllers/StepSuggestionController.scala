@@ -28,6 +28,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @RequestParam("searchText") searchText: String,
     @RequestParam("withConclusion") withConclusion: Boolean
   ): ResponseEntity[_] = {
+    val searchWords = searchText.toLowerCase().splitByWhitespace()
     val books = bookService.books
     (for {
       book <- findBook(books, bookKey)
@@ -44,13 +45,16 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
         else
          Success((_: Inference) => Some(None))
     } yield {
-      entryContext.inferences
-        .filter(_.name.toLowerCase.contains(searchText.toLowerCase))
+      val matchingInferences = entryContext.inferences
+        .filter(i => searchWords.forall(i.name.toLowerCase.contains))
         .mapCollect { inference =>
           getSubstitutions(inference).map(InferenceSuggestion(inference.summary, inference.requiredSubstitutions, _))
         }
-        .sortBy(_.inference.conclusion.complexity)(implicitly[Ordering[Int]].reverse)
-        .take(10)
+      val sortedInferences = if (withConclusion)
+        matchingInferences.sortBy(_.inference.conclusion.complexity)(implicitly[Ordering[Int]].reverse)
+      else
+        matchingInferences.reverse
+      sortedInferences.take(10)
     }).toResponseEntity
   }
 
