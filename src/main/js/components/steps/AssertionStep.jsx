@@ -4,7 +4,6 @@ import {HighlightableExpression} from "../ExpressionComponent";
 import {InferenceLink} from "./InferenceLink";
 import {ProofLine} from "./ProofLine";
 import {ClickableText} from "./ClickableText";
-import {Steps} from "./Steps";
 import {BoundVariableModal} from "../Modals";
 
 export class AssertionStepProofLine extends React.Component {

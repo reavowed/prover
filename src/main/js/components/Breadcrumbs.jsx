@@ -8,6 +8,7 @@ const BreadcrumbWrapper = styled.div`
   & .breadcrumb {
     padding-left: 0;
     padding-right: 0;
+    margin-bottom: 0;
   }
 `;
 

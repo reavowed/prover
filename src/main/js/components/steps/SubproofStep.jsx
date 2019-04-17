@@ -21,7 +21,7 @@ export class SubproofStep extends React.Component {
     let reference ={stepPath: path};
     let referencesForLastStep = [...additionalReferences, reference];
     return <>
-      <h6 onClick={this.toggleSubproof} className="mb-0" style={{cursor: "pointer"}}>{formatHtml(step.name)}</h6>
+      <h6 onClick={this.toggleSubproof} className={"mt-1 mb-1"} style={{cursor: "pointer"}}>{formatHtml(step.name)}</h6>
       {!showingSubproof &&
         <ProofLine path={path}
                    statement={step.statement}
