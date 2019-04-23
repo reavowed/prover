@@ -45,7 +45,7 @@ export class ExpressionComponent extends React.Component {
 
   renderMatch(match, path, pathsToHighlightAsPremise, boundVariableLists, wrapBoundVariable) {
     if (match.type === "boundVariable") {
-      return wrapBoundVariable(formatHtml(match.name), match.name, match.index, path.concat(match.pathWithinMatch));
+      return wrapBoundVariable(match.name, match.index, path.concat(match.pathWithinMatch));
     } else {
       const lengthOfPath = match.pathWithinMatch.length;
       const innerPathsToHighlightAsPremise = _.chain(pathsToHighlightAsPremise)
@@ -85,7 +85,7 @@ export class ExpressionComponent extends React.Component {
       const format = expression.formatForHtml(parentRequiresBrackets);
       const boundVariables = expression.boundVariableNames || [];
       const innerBoundVariables = boundVariables.length ? [boundVariables, ...boundVariableLists] : boundVariableLists;
-      const renderedBoundVariables = boundVariables.map((name, index) => wrapBoundVariable(formatHtml(name), name, index, path));
+      const renderedBoundVariables = boundVariables.map((name, index) => wrapBoundVariable(name, index, path));
       const renderedComponents = expression.components.map((c, i) => {
         const innerPaths = _.chain(pathsToHighlightAsPremise).filter(p => p.length > 0 && p[0] === i).map(p => p.slice(1)).value();
         return <ExpressionComponent expression={c}
@@ -104,7 +104,7 @@ export class ExpressionComponent extends React.Component {
   render() {
     const {expression, pathsToHighlightAsPremise, boundVariableLists, parentRequiresBrackets} = this.props;
     let {wrapBoundVariable, path} = this.props;
-    wrapBoundVariable = wrapBoundVariable || _.identity;
+    wrapBoundVariable = wrapBoundVariable || formatHtml;
     path = path || [];
     const shouldHighlightThis = _.some(pathsToHighlightAsPremise, p => p.length === 0);
     const tag = shouldHighlightThis ? HighlightedPremise : React.Fragment;

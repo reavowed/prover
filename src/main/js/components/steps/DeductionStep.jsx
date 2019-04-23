@@ -43,16 +43,14 @@ export class DeductionStep extends React.Component {
         {boundVariableContent}
       </ClickableText>;
     return <>
-      <ProofLine path={path} apiService={apiService} boundVariableLists={boundVariableLists}>
-        Assume
-        {' '}
-        <HighlightableExpression expression={step.assumption}
-                                 boundVariableLists={boundVariableLists}
-                                 wrapBoundVariable={wrapEditableBoundVariable}
-                                 references={[...additionalReferences, reference, referenceForAssumption]}
-                                 apiService={apiService}
-                                 highlighting={highlighting}/>.
-      </ProofLine>
+      <ProofLine.SingleStatementWithPrefix editableBoundVariable
+                                           prefix="Assume"
+                                           statement={step.assumption}
+                                           path={path}
+                                           boundVariableLists={boundVariableLists}
+                                           additionalReferences={[...additionalReferences, referenceForAssumption]}
+                                           apiService={apiService}
+                                           highlighting={highlighting}/>
       <Steps.Children steps={step.substeps}
                       path={path}
                       boundVariableLists={boundVariableLists}

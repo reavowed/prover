@@ -32,53 +32,16 @@ export class AssertionStepProofLine extends React.Component {
 }
 
 export class AssertionStep extends React.Component {
-  constructor(...args) {
-    super(...args)
-    this.state = {
-      boundVariableModalCallback: null,
-      boundVariableName: ""
-    }
-  }
-  showBoundVariableModal = (boundVariableName, boundVariableIndex, boundVariablePath) => {
-    this.setState({
-      boundVariableName,
-      boundVariableModalCallback: () => this.updateBoundVariable(boundVariableIndex, boundVariablePath)
-    })
-  };
-  hideBoundVariableModal = () => {
-    this.setState({
-      boundVariableModalCallback: null
-    })
-  };
-  updateBoundVariable = (boundVariableIndex, boundVariablePath) => {
-    this.props.apiService.fetchJsonForStep(this.props.path, `boundVariables/${boundVariablePath.join(".")}/${boundVariableIndex}/`, {
-      method: "PUT",
-      body: this.state.boundVariableName
-    })
-      .then(this.props.apiService.updateTheorem)
-      .then(this.hideBoundVariableModal);
-  };
   render() {
-    const {step, boundVariableLists, additionalReferences, highlighting, path} = this.props;
-    const wrapEditableBoundVariable = (boundVariableContent, boundVariableName, boundVariableIndex, boundVariablePath) =>
-      <ClickableText
-        onClick={() => this.showBoundVariableModal(boundVariableName, boundVariableIndex, boundVariablePath)}>
-        {boundVariableContent}
-      </ClickableText>;
+    const {step, path, boundVariableLists, highlighting, apiService} = this.props;
     return <AssertionStepProofLine {...this.props}>
-      Then
-      {' '}
-      <HighlightableExpression statement={step.statement}
-                               boundVariableLists={boundVariableLists}
-                               wrapBoundVariable={wrapEditableBoundVariable}
-                               references={[...additionalReferences, {stepPath: path}]}
-                               highlighting={highlighting}/>.
-      <BoundVariableModal show={this.state.boundVariableModalCallback != null}
-                          onHide={this.hideBoundVariableModal}
-                          title="Rename bound variable"
-                          value={this.state.boundVariableName}
-                          onChange={e => this.setState({boundVariableName: e.target.value})}
-                          onSave={this.state.boundVariableModalCallback}/>
+      <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
+                                                  prefix="Then"
+                                                  statement={step.statement}
+                                                  path={path}
+                                                  boundVariableLists={boundVariableLists}
+                                                  highlighting={highlighting}
+                                                  apiService={apiService} />
     </AssertionStepProofLine>
   }
-};
+}

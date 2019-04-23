@@ -1,0 +1,7 @@
+Multiplication on Natural Numbers
+
+theorem Existence of Multiplication
+conclusion ∃! f ∧ function $0 × ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 apply + orderedPair apply $$$0 orderedPair $$0 $0 $$0
+{
+  target ∃! f ∧ function $0 × ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 apply + orderedPair apply $$$0 orderedPair $$0 $0 $$0
+}

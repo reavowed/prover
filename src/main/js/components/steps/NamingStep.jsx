@@ -1,23 +1,13 @@
 import React from "react";
-import {VariableOrConstant} from "../../models/Expression";
-import {ExpressionComponent, HighlightableExpression} from "../ExpressionComponent";
-import {BoundVariableModal} from "../Modals";
-import {ClickableText} from "./ClickableText";
 import {InferenceLink} from "./InferenceLink";
 import {ProofLine} from "./ProofLine";
 import {Steps} from "./Steps";
+import {BoundVariableEditor} from "./BoundVariableEditor";
 
 export class NamingStep extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.state = {
-      showBoundVariableModal: false,
-      boundVariableName: ""
-    }
-  }
-  updateBoundVariable = () => {
+  updateBoundVariable = (newName) => {
     this.props.apiService
-      .fetchJsonForStep(this.props.path, "boundVariable", {method: "PUT", body: this.state.boundVariableName})
+      .fetchJsonForStep(this.props.path, "boundVariable", {method: "PUT", body: newName})
       .then(this.props.apiService.updateTheorem);
   };
   render() {
@@ -26,41 +16,31 @@ export class NamingStep extends React.Component {
     let referenceForAssumption = {stepPath: path, suffix: "a"};
     let referencesForLastStep = [...additionalReferences, reference];
     const innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
-    return <>
-      <ProofLine premiseReferences={step.referencedLinesForExtraction}
-                 reference={referenceForAssumption}
-                 boundVariableLists={boundVariableLists}
-                 buttons={<InferenceLink inference={step.inference}/>}
-                 path={path}
-                 statement={step.assumption}
-                 apiService={apiService}
-                 highlighting={highlighting}>
+    const prefix = <>
         Let
         {' '}
-        <ClickableText onClick={() => this.setState({showBoundVariableModal: true, boundVariableName: step.variableName})}>
-          <ExpressionComponent expression={new VariableOrConstant(step.variableName)}/>
-        </ClickableText>
+        <BoundVariableEditor name={step.variableName} callback={this.updateBoundVariable}/>
         {' '}
         be such that
-        {' '}
-        <HighlightableExpression statement={step.assumption}
-                                 boundVariableLists={innerBoundVariableLists}
-                                 reference={referenceForAssumption}
-                                 highlighting={highlighting}/>.
-      </ProofLine>
+    </>;
+    return <>
+      <ProofLine.SingleStatementWithPrefix editableBoundVariable
+                                           prefix={prefix}
+                                           statement={step.assumption}
+                                           path={path}
+                                           boundVariableLists={innerBoundVariableLists}
+                                           additionalReferences={additionalReferences}
+                                           premiseReferences={step.referencedLinesForExtraction}
+                                           reference={referenceForAssumption}
+                                           buttons={<InferenceLink inference={step.inference}/>}
+                                           apiService={apiService}
+                                           highlighting={highlighting}/>
       <Steps steps={step.substeps}
              path={path}
              boundVariableLists={innerBoundVariableLists}
              referencesForLastStep={referencesForLastStep}
              apiService={apiService}
              highlighting={highlighting} />
-      <BoundVariableModal show={this.state.showBoundVariableModal}
-                          onHide={() => this.setState({showBoundVariableModal: false})}
-                          title="Introduce bound variable"
-                          label="Bound variable name"
-                          value={this.state.boundVariableName}
-                          onChange={e => this.setState({boundVariableName: e.target.value})}
-                          onSave={this.updateBoundVariable}/>
     </>;
   }
 }

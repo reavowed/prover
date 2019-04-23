@@ -10,6 +10,7 @@ import {FlexRow} from "../FlexRow";
 import Popover from "react-bootstrap/Popover";
 import {BoundVariableModal, FindInferenceModal} from "../Modals";
 import {Parser} from "../../Parser";
+import {BoundVariableEditor} from "./BoundVariableEditor";
 
 export const ProofLine = styled(class ProofLine extends React.Component {
   constructor(...args) {
@@ -255,8 +256,40 @@ export const ProofLine = styled(class ProofLine extends React.Component {
   `}
 `;
 
-ProofLine.Statement = styled(HighlightableExpression)`
-  ${ProofLine}:hover & {
-    color: blue;
+ProofLine.SingleStatementWithPrefixContent  = class extends React.Component {
+  render() {
+    const {editableBoundVariable, prefix, statement, path, boundVariableLists, highlighting, apiService} = this.props;
+    let {additionalReferences} = this.props;
+    additionalReferences = additionalReferences || [];
+    const wrapEditableBoundVariable = (name, index, boundVariablePath) => {
+      const callback = (newName) => {
+        return apiService.fetchJsonForStep(path, `boundVariables/${boundVariablePath.join(".")}/${index}/`, {
+          method: "PUT",
+          body: newName
+        })
+        .then(apiService.updateTheorem)
+      };
+      return <BoundVariableEditor name={name} callback={callback} />;
+    };
+    return <>
+      {prefix}
+      {statement && <>
+        {' '}
+        <HighlightableExpression statement={statement}
+                                 boundVariableLists={boundVariableLists}
+                                 references={[...additionalReferences, {stepPath: path}]}
+                                 wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}
+                                 highlighting={highlighting}/>
+       </>}
+      {'.'}
+    </>
   }
-`;
+};
+
+ProofLine.SingleStatementWithPrefix = class extends React.Component {
+  render() {
+    return <ProofLine {...this.props}>
+      <ProofLine.SingleStatementWithPrefixContent {...this.props}/>
+    </ProofLine>
+  }
+};

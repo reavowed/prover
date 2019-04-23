@@ -7,8 +7,8 @@ import {ClickableText} from "./ClickableText";
 import {ProofLine} from "./ProofLine";
 
 export class TargetStep extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       boundVariableModalCallback: null,
       findInferenceModalCallbacks: null,
@@ -38,23 +38,6 @@ export class TargetStep extends React.Component {
       method: "POST",
       body: this.state.boundVariableName
     }).then(this.props.apiService.updateTheorem);
-  };
-
-  startUpdatingBoundVariable = (boundVariableName, boundVariableIndex, boundVariablePath) => {
-    this.setState({
-      boundVariableModalTitle: "Rename bound variable",
-      boundVariableModalLabel: "Bound variable name",
-      boundVariableModalCallback: () => this.updateBoundVariable(boundVariableIndex, boundVariablePath),
-      boundVariableName
-    });
-  };
-  updateBoundVariable = (boundVariableIndex, boundVariablePath) => {
-    this.props.apiService.fetchJsonForStep(this.props.path, `boundVariables/${boundVariablePath.join(".")}/${boundVariableIndex}/`, {
-      method: "PUT",
-      body: this.state.boundVariableName
-    })
-      .then(this.props.apiService.updateTheorem)
-      .then(this.hideBoundVariableModal);
   };
 
   shouldShowFindInferenceModal = () => this.state.findInferenceModalCallbacks != null;
@@ -139,12 +122,6 @@ export class TargetStep extends React.Component {
                                                    value={this.state.boundVariableName}
                                                    onChange={this.updateBoundVariableName}
                                                    onSave={this.state.boundVariableModalCallback}/>;
-    const wrapEditableBoundVariable = (boundVariableContent, boundVariableName, boundVariableIndex, boundVariablePath) =>
-      <ClickableText
-        onClick={() => this.startUpdatingBoundVariable(boundVariableName, boundVariableIndex, boundVariablePath)}>
-        {boundVariableContent}
-      </ClickableText>;
-
     const buttons = (
       <>
         <Button variant="success" size="sm" onClick={this.findInferenceForAssertion}>Find inference</Button>
@@ -156,21 +133,17 @@ export class TargetStep extends React.Component {
       </>
     );
     return <>
-      <ProofLine incomplete
-                 statement={step.statement}
-                 boundVariableLists={boundVariableLists}
-                 path={path}
-                 buttons={buttons}
-                 apiService={apiService}
-                 highlighting={highlighting}>
-        Then <HighlightableExpression statement={step.statement}
-                                      boundVariableLists={boundVariableLists}
-                                      references={[...additionalReferences, reference]}
-                                      wrapBoundVariable={wrapEditableBoundVariable}
-                                      highlighting={highlighting}
-        />.
-      </ProofLine>
       {boundVariableModal}
+      <ProofLine.SingleStatementWithPrefix incomplete
+                                           editableBoundVariable
+                                           prefix="Then"
+                                           statement={step.statement}
+                                           path={path}
+                                           boundVariableLists={boundVariableLists}
+                                           additionalReferences={additionalReferences}
+                                           buttons={buttons}
+                                           apiService={apiService}
+                                           highlighting={highlighting}/>
       {<FindInferenceModal show={this.shouldShowFindInferenceModal()}
                            onHide={this.hideFindInferenceModal}
                            callbacks={this.state.findInferenceModalCallbacks}
