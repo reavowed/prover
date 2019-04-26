@@ -38,7 +38,8 @@ export class ElidedStepProofLine extends React.Component {
     let {step, path, boundVariableLists, apiService, highlighting, children} = this.props;
     let buttons = <>
       {step.highlightedInference && <InferenceLink inference={step.highlightedInference} suffix="[elided]"/>}
-      {!step.highlightedInference && <DropdownButton title="Highlighted Inference" size="sm" className="ml-1">
+      {step.description && <span className="text-muted text-uppercase ml-1" style={{"fontFamily": "monospace"}}>{step.description}</span>}
+      {!step.highlightedInference && !step.description && <DropdownButton title="Highlighted Inference" size="sm" className="ml-1">
         {step.inferencesUsed.map(i => <Dropdown.Item key={i.id} onClick={() => this.highlightInference(i.id)}>{i.name}</Dropdown.Item>)}
       </DropdownButton>}
     </>;

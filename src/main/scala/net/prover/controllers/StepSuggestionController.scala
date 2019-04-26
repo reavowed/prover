@@ -153,7 +153,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     val possibleConclusionSubstitutions = targetOption
       .map(inference.conclusion.calculateSubstitutions(_, Substitutions.empty, 0, stepContext.externalDepth))
       .getOrElse(Seq(Substitutions.empty))
-    val availablePremises = (premiseContext.givenPremises ++ premiseContext.simplifiedPremises).map(_.statement).distinct
+    val availablePremises = premiseContext.allPremises.map(_.statement)
     val premiseMatches = premises.map { premise =>
       availablePremises.mapCollect { availablePremise =>
         val substitutions = for {

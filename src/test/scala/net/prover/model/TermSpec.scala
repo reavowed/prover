@@ -21,11 +21,14 @@ class TermSpec extends ProverSpec {
     "parse a term variable with a subscript" in {
       parseTerm("g_0") mustEqual TermVariable("g_0")
     }
-    "not parse a random character as a term variable" in {
-      parseTerm("∘") must throwAn[Exception]
+    "parse a single non-ASCII character as a term variable" in {
+      parseTerm("∘") mustEqual TermVariable("∘")
     }
-    "parse a named term variable" in {
-      parseTerm("∘")(ExpressionParsingContext.outsideProof(entryContext.copy(termVariableNames = Seq("∘")))) mustEqual TermVariable("∘")
+    "not parse a statement variable character as a term variable" in {
+      parseTerm("φ") must throwAn[Exception]
+    }
+    "not parse multiple characters as a term variable" in {
+      parseTerm("fg") must throwAn[Exception]
     }
   }
 }

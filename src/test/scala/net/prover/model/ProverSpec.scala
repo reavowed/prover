@@ -16,6 +16,8 @@ trait ProverSpec extends Specification {
   val a = TermVariable("a")
   val b = TermVariable("b")
   val c = TermVariable("c")
+  val A = TermVariable("A")
+  val B = TermVariable("B")
   val n = TermVariable("n")
   val F = TermVariable("F")
 
@@ -87,6 +89,8 @@ trait ProverSpec extends Specification {
       ElementOf(FunctionParameter(0, 0), a),
       ElementOf(FunctionParameter(0, 0), b)))))
 
+  val BlankDefinition = DefinedStatement(Nil, connective("false", 0, None))(Nil)
+
   val EmptySetDefinition = TermDefinition(
     "∅",
     Nil,
@@ -119,7 +123,7 @@ trait ProverSpec extends Specification {
     Some("Singleton"),
     Format.Explicit("{%0}", "{a}", requiresBrackets = false, requiresComponentBrackets = false),
     Nil,
-    φ,
+    BlankDefinition,
     None,
     Nil)
 
@@ -130,7 +134,40 @@ trait ProverSpec extends Specification {
     Some("Unordered Pair"),
     Format.Explicit("{%0, %1}", "{a, b}", requiresBrackets = false, requiresComponentBrackets = false),
     Nil,
-    φ,
+    BlankDefinition,
+    None,
+    Nil)
+
+  val ZeroDefinition = TermDefinition(
+    "0",
+    Nil,
+    Nil,
+    None,
+    Format.default("0", Nil),
+    Nil,
+    BlankDefinition,
+    None,
+    Nil)
+  val Zero = DefinedTerm(Nil, ZeroDefinition)(Nil)
+  val NaturalsDefinition = TermDefinition(
+    "ℕ",
+    Nil,
+    Nil,
+    None,
+    Format.default("ℕ", Nil),
+    Nil,
+    BlankDefinition,
+    None,
+    Nil)
+  val Naturals = DefinedTerm(Nil, NaturalsDefinition)(Nil)
+  val Successor = TermDefinition(
+    "successor",
+    Nil,
+    Seq(a),
+    None,
+    Format.Explicit("a^+", Seq("a"), requiresBrackets = false, requiresComponentBrackets = true),
+    Nil,
+    BlankDefinition,
     None,
     Nil)
 

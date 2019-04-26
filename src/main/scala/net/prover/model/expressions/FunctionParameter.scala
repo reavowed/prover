@@ -59,7 +59,7 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     externalDepth: Int
   ) = {
     other match {
-      case FunctionParameter(`index`, `level`) if level < internalDepth =>
+      case FunctionParameter(`index`, `level`) =>
         Seq(substitutions)
       case _ =>
         Nil

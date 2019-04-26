@@ -7,12 +7,14 @@ export class TargetStep extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      boundVariableModalCallback: null,
-      findInferenceModalCallbacks: null,
-      showFindInferenceModal: false,
-      boundVariableName: ""
+      proving: false
     };
   }
+
+  extract = () => {
+    return this.props.apiService.fetchJsonForStep(this.props.path, "extract", { method: "POST" })
+      .then(this.props.apiService.updateTheorem);
+  };
 
   render() {
     let {step, path, additionalReferences, apiService, highlighting, boundVariableLists} = this.props;
@@ -30,6 +32,7 @@ export class TargetStep extends React.Component {
                                            highlighting={highlighting}/>
       {proving && <div className="card" style={{margin: ".5rem", padding: ".5rem .75rem"}}>
         <h5 className="text-center"><ExpressionComponent expression={step.statement} boundVariableLists={boundVariableLists}/></h5>
+        <div className="text-center"><Button size="sm" onClick={this.extract}>Extract</Button></div>
       </div>}
     </>
   }

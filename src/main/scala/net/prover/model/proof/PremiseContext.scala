@@ -1,17 +1,14 @@
 package net.prover.model.proof
 
-import net.prover.model.EntryContext
+import net.prover.model._
 import net.prover.model.expressions.Statement
 
 case class PremiseContext(
-  givenPremises: Seq[Premise.Given],
-  simplifiedPremises: Seq[Premise.Simplification],
+  premisesAndSimplifications: Seq[(Premise.Given, Seq[Premise.Simplification])],
   entryContext: EntryContext)
 {
   private def addPremise(givenPremise: Premise.Given, externalDepth: Int): PremiseContext = {
-    copy(
-      givenPremises = givenPremises :+ givenPremise,
-      simplifiedPremises = simplifiedPremises ++ ProofHelper.getSimplifications(givenPremise, entryContext, externalDepth))
+    copy(premisesAndSimplifications = premisesAndSimplifications :+ (givenPremise, ProofHelper.getSimplifications(givenPremise, entryContext, externalDepth)))
   }
   private def addStatement(statement: Statement, reference: PreviousLineReference, externalDepth: Int): PremiseContext = {
     addPremise(Premise.Given(statement, reference), externalDepth)
@@ -31,8 +28,10 @@ case class PremiseContext(
     }
   }
 
+  def allPremises: Seq[Premise.SingleLinePremise] = premisesAndSimplifications.map(_._1) ++ premisesAndSimplifications.flatMap(_._2)
+
   def findPremise(statement: Statement): Option[Premise.SingleLinePremise] = {
-    givenPremises.find(_.statement == statement) orElse simplifiedPremises.find(_.statement == statement)
+    allPremises.find(_.statement == statement)
   }
   def createPremise(statement: Statement): Premise = {
     findPremise(statement) getOrElse Premise.Pending(statement)
@@ -40,15 +39,14 @@ case class PremiseContext(
 
   def addBoundVariable(): PremiseContext = {
     PremiseContext(
-      givenPremises = givenPremises.map(_.insertExternalParameters(1)),
-      simplifiedPremises = simplifiedPremises.map(_.insertExternalParameters(1)),
+      premisesAndSimplifications = premisesAndSimplifications.map(_.mapLeft(_.insertExternalParameters(1)).mapRight(_.map(_.insertExternalParameters(1)))),
       entryContext)
   }
 }
 
 object PremiseContext {
   def justWithPremises(premises: Seq[Statement], entryContext: EntryContext): PremiseContext = {
-    val emptyContext = PremiseContext(Nil, Nil, entryContext)
+    val emptyContext = PremiseContext(Nil, entryContext)
     premises.zipWithIndex.foldLeft(emptyContext) { case (context, (premise, index)) =>
       context.addStatement(premise, PremiseReference(index), 0)
     }

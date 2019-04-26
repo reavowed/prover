@@ -31,8 +31,8 @@ export class NamingStep {
 
 export class ElidedStep {
     type = "elided";
-    constructor(public statement: Expression | void, public substeps: Step[], public highlightedInference: any, public referencedLines: any) {}
-    isIncomplete: boolean = !this.highlightedInference || _.some(this.substeps, "isIncomplete");
+    constructor(public statement: Expression | void, public substeps: Step[], public highlightedInference: any, public description: string | null, public referencedLines: any) {}
+    isIncomplete: boolean = (!this.highlightedInference && !this.description) || _.some(this.substeps, "isIncomplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
 }
 
@@ -95,6 +95,7 @@ export const Step = {
                        stepJson.provenStatement && Expression.parseFromJson(stepJson.provenStatement),
                        Step.parseFromJson(stepJson.substeps),
                        stepJson.highlightedInference && Parser.parseInference(stepJson.highlightedInference),
+                       stepJson.description,
                        stepJson.referencedLines);
                case "subproof":
                    return new SubproofStep(

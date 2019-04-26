@@ -32,7 +32,7 @@ class StepWrappingController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     modifyStep[Step](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
-      Success(Step.Elided(Seq(step), None))
+      Success(Step.Elided(Seq(step), None, None))
     }.toResponseEntity
   }
 }

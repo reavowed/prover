@@ -301,25 +301,26 @@ object Step {
     }
   }
 
-  case class Elided(substeps: Seq[Step], highlightedInference: Option[Inference.Summary]) extends Step.WithSubsteps with WithoutVariable {
+  case class Elided(substeps: Seq[Step], highlightedInference: Option[Inference.Summary], description: Option[String]) extends Step.WithSubsteps with WithoutVariable {
     val `type` = "elided"
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
       Elided(
         substeps.map(_.insertExternalParameters(numberOfParametersToInsert)),
-        highlightedInference)
+        highlightedInference,
+        description)
     }
     override def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step] = {
       for {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
-      } yield Elided(newSubsteps, highlightedInference)
+      } yield Elided(newSubsteps, highlightedInference, description)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
     override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
     override def length: Int = substeps.map(_.length).sum
-    override def serializedLines: Seq[String] = Seq(("elided" +: highlightedInference.map(_.id).toSeq :+ "{").mkString(" ")) ++
+    override def serializedLines: Seq[String] = Seq(("elided" +: (highlightedInference.map(_.id).toSeq ++ description.map(_.inParens).toSeq) :+ "{").mkString(" ")) ++
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
@@ -327,8 +328,9 @@ object Step {
     def parser(implicit entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Parser[Elided] = {
       for {
         highlightedInference <- Inference.parser.tryOrNone
+        description <- Parser.allInParens.tryOrNone
         substeps <- listParser.inBraces
-      } yield Elided(substeps, highlightedInference)
+      } yield Elided(substeps, highlightedInference, description)
     }
   }
 

@@ -53,6 +53,15 @@ object Substitutions {
         predicates.toSet == other.predicates.toSet &&
         functions.toSet == other.functions.toSet
     }
+    def contains(other: Required): Boolean = {
+      other.statements.toSet.subsetOf(statements.toSet) &&
+        other.terms.toSet.subsetOf(terms.toSet) &&
+        other.predicates.toSet.subsetOf(predicates.toSet) &&
+        other.functions.toSet.subsetOf(functions.toSet)
+    }
+    def isSingleStatementVariable: Boolean = {
+      statements.length == 1 && terms.isEmpty && predicates.isEmpty && functions.isEmpty
+    }
   }
 
   object Required {
