@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
 import {HighlightableExpression} from "../ExpressionComponent";
@@ -12,17 +13,27 @@ import {TargetStep} from "./TargetStep";
 class TransitiveSteps extends React.Component {
   constructor(props) {
     super(props);
-    this.spacerRefs = [];
+    this.spacerRefs = {};
   }
   setLeftHandSideRef = (ref) => {
     this.leftHandSideRef = ref;
   };
-  setSpacerRef = (ref) => {
-    this.spacerRefs.push(ref);
+  setSpacerRef = (ref, path) => {
+    if (ref) {
+      this.spacerRefs[path.join(".")] = ref;
+    } else {
+      delete this.spacerRefs[path.join(".")];
+    }
   };
   componentDidMount() {
+    this.updateSpacing()
+  }
+  componentDidUpdate() {
+    this.updateSpacing()
+  }
+  updateSpacing() {
     const spacingWidth = this.leftHandSideRef.getBoundingClientRect().width;
-    for (const spacerRef of this.spacerRefs) {
+    for (const spacerRef of _.values(this.spacerRefs)) {
       spacerRef.style.display = "inline-block";
       spacerRef.style.width = spacingWidth + "px";
     }
@@ -72,7 +83,7 @@ class TransitiveSteps extends React.Component {
         renderProofLine(
           {step: rightHandSide.step, path: rightHandSide.path, highlighting, apiService, boundVariableLists, key: "transitive " + rightHandSide.expression.serialize()},
           <>
-            <span ref={this.setSpacerRef}/>
+            <span ref={r => this.setSpacerRef(r, rightHandSide.path)}/>
             {renderRightHandSide(rightHandSide, index + 1)}
           </>
         )
