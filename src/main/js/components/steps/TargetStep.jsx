@@ -10,20 +10,33 @@ export class TargetStep extends React.Component {
     this.state = {
       proving: false
     };
+    this.props.theoremContext.registerStep(this, this.props.path);
   }
+  componentWillUnmount() {
+    this.props.theoremContext.unregisterStep(this.props.path);
+  }
+
   introduceBoundVariable = () => {
     this.props.theoremContext.fetchJsonForStep(this.props.path, "introduceBoundVariable", {
       method: "POST"
-    }).then(this.props.theoremContext.updateTheorem);
+    })
+      .then(this.props.theoremContext.updateTheorem)
+      .then(() => this.props.theoremContext.callOnStep([...this.props.path, 0], "startProving"));
   };
   introduceDeduction = () => {
     this.props.theoremContext.fetchJsonForStep(this.props.path, "introduceDeduction", {
       method: "POST"
-    }).then(this.props.theoremContext.updateTheorem);
+    })
+      .then(this.props.theoremContext.updateTheorem)
+      .then(() => this.props.theoremContext.callOnStep([...this.props.path, 0], "startProving"));
   };
   extract = () => {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, "extract", { method: "POST" })
       .then(this.props.theoremContext.updateTheorem);
+  };
+
+  startProving = () => {
+    this.setState({proving: true});
   };
 
   render() {

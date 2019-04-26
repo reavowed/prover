@@ -16,12 +16,23 @@ class Premise extends React.Component {
 export class Theorem extends React.Component {
   constructor(props) {
     super(props);
+    this.steps = {};
     this.state = {
       theorem: this.parseTheorem(props.theorem),
       highlightedPremises: [],
       highlightedConclusion: null
     }
   }
+
+  registerStep = (step, path) => {
+    this.steps[path.join(".")] = step;
+  };
+  unregisterStep = (path) => {
+    delete this.steps[path.join(".")];
+  };
+  callOnStep = (path, action) => {
+    this.steps[path.join(".")][action]();
+  };
 
   setHighlightedPremises = (premises) => {
     this.setState({highlightedPremises: premises});
@@ -68,7 +79,10 @@ export class Theorem extends React.Component {
       setHighlightedPremises: this.setHighlightedPremises,
       setHighlightedConclusion: this.setHighlightedConclusion,
       fetchJsonForStep: this.fetchJsonForStep,
-      updateTheorem: this.updateTheorem
+      updateTheorem: this.updateTheorem,
+      registerStep: this.registerStep,
+      unregisterStep: this.unregisterStep,
+      callOnStep: this.callOnStep
     };
     const createPremiseElement = (premise, index) => {
       return <Premise premise={premise} index={index} theoremContext={theoremContext}/>
