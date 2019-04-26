@@ -8,13 +8,13 @@ import {BoundVariableModal} from "../Modals";
 
 export class AssertionStepProofLine extends React.Component {
   createTargets = () => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "createTargets", {
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "createTargets", {
       method: "POST"
-    }).then(this.props.apiService.updateTheorem);
+    }).then(this.props.theoremContext.updateTheorem);
   };
 
   render() {
-    let {step, path, apiService, highlighting, children, boundVariableLists} = this.props;
+    let {step, path, theoremContext, children, boundVariableLists} = this.props;
     return <ProofLine premiseReferences={step.referencedLines}
                       path={path}
                       statement={step.statement}
@@ -23,8 +23,7 @@ export class AssertionStepProofLine extends React.Component {
                         <InferenceLink inference={step.inference}/>
                         {step.isIncomplete && <Button variant="success" size="sm" onClick={this.createTargets}>Create targets</Button>}
                       </>}
-                      highlighting={highlighting}
-                      apiService={apiService}
+                      theoremContext={theoremContext}
                       incomplete={step.isIncomplete}>
       {children}
     </ProofLine>;
@@ -33,15 +32,14 @@ export class AssertionStepProofLine extends React.Component {
 
 export class AssertionStep extends React.Component {
   render() {
-    const {step, path, boundVariableLists, highlighting, apiService} = this.props;
+    const {step, path, boundVariableLists, theoremContext} = this.props;
     return <AssertionStepProofLine {...this.props}>
       <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
                                                   prefix="Then"
                                                   statement={step.statement}
                                                   path={path}
                                                   boundVariableLists={boundVariableLists}
-                                                  highlighting={highlighting}
-                                                  apiService={apiService} />
+                                                  theoremContext={theoremContext} />
     </AssertionStepProofLine>
   }
 }

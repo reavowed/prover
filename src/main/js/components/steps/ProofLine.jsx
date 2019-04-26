@@ -36,21 +36,21 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.setState({shouldShowButtonPopover: false});
   };
   onMouseEnter = () => {
-    let {highlighting, premiseReferences, path, reference} = this.props;
-    if (premiseReferences && highlighting) {
-      highlighting.setHighlightedPremises(premiseReferences);
+    let {theoremContext, premiseReferences, path, reference} = this.props;
+    if (premiseReferences && theoremContext) {
+      theoremContext.setHighlightedPremises(premiseReferences);
     }
     let conclusionReference = reference || (path && {stepPath: path});
-    if (conclusionReference && highlighting) {
-      highlighting.setHighlightedConclusion(conclusionReference);
+    if (conclusionReference && theoremContext) {
+      theoremContext.setHighlightedConclusion(conclusionReference);
     }
     this.setState({isHovered: true});
   };
   onMouseLeave = () => {
-    const {highlighting} = this.props;
-    if (highlighting) {
-      highlighting.setHighlightedPremises([]);
-      highlighting.setHighlightedConclusion(null);
+    const {theoremContext} = this.props;
+    if (theoremContext) {
+      theoremContext.setHighlightedPremises([]);
+      theoremContext.setHighlightedConclusion(null);
     }
     this.setState({isHovered: false});
   };
@@ -61,33 +61,33 @@ export const ProofLine = styled(class ProofLine extends React.Component {
   };
   moveUp = (e) => {
     e.stopPropagation();
-    this.props.apiService.fetchJsonForStep(this.props.path, "move?direction=up", {method: "POST"})
-      .then(this.props.apiService.updateTheorem);
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "move?direction=up", {method: "POST"})
+      .then(this.props.theoremContext.updateTheorem);
   };
   moveDown = (e) => {
     e.stopPropagation();
-    this.props.apiService.fetchJsonForStep(this.props.path, "move?direction=down", {method: "POST"})
-      .then(this.props.apiService.updateTheorem);
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "move?direction=down", {method: "POST"})
+      .then(this.props.theoremContext.updateTheorem);
   };
   moveIntoNext = (e) => {
     e.stopPropagation();
-    this.props.apiService.fetchJsonForStep(this.props.path, "moveIntoNext", {method: "POST"})
-      .then(this.props.apiService.updateTheorem);
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "moveIntoNext", {method: "POST"})
+      .then(this.props.theoremContext.updateTheorem);
   };
   moveOutOfContainer = (e) => {
     e.stopPropagation();
-    this.props.apiService.fetchJsonForStep(this.props.path, "moveOutOfContainer", {method: "POST"})
-      .then(this.props.apiService.updateTheorem);
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "moveOutOfContainer", {method: "POST"})
+      .then(this.props.theoremContext.updateTheorem);
   };
   clearStep = () => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "clear", {
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "clear", {
       method: "POST"
-    }).then(this.props.apiService.updateTheorem);
+    }).then(this.props.theoremContext.updateTheorem);
   };
   deleteStep = () => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "", {
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "", {
       method: "DELETE"
-    }).then(this.props.apiService.updateTheorem);
+    }).then(this.props.theoremContext.updateTheorem);
   };
 
   showSubproofNameModal = () => {
@@ -97,11 +97,11 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.setState({shouldShowSubproofNameModal: false})
   };
   createSubproof = () => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "introduceSubproof", {
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "introduceSubproof", {
       method: "POST",
       body: this.state.subproofName
     })
-      .then(this.props.apiService.updateTheorem)
+      .then(this.props.theoremContext.updateTheorem)
       .then(this.hideSubproofNameModal);
   };
 
@@ -115,18 +115,18 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.setState({addingTarget: false});
   };
   addTarget = () => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "target", {
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "target", {
       method: "POST",
       body: this.state.targetToAdd
     })
-      .then(this.props.apiService.updateTheorem)
+      .then(this.props.theoremContext.updateTheorem)
       .then(this.hideTargetModal);
   };
 
   elide = () => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "elide", {
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "elide", {
       method: "POST"
-    }).then(this.props.apiService.updateTheorem);
+    }).then(this.props.theoremContext.updateTheorem);
   };
 
   shouldShowFindInferenceModal = () => this.state.findInferenceModalCallbacks != null;
@@ -141,17 +141,17 @@ export const ProofLine = styled(class ProofLine extends React.Component {
       }})
   };
   getStepInferenceSuggestions = (searchText) => {
-    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}&withConclusion=false`)
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}&withConclusion=false`)
   };
   getPremiseSuggestions = (inferenceId) => {
-    return this.props.apiService.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=false`)
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=false`)
   };
   addAssertion = (inferenceId, substitutions) => {
-    return this.props.apiService.fetchJsonForStep(this.props.path, "assertion", {
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, "assertion", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, substitutions})
-    }).then(this.props.apiService.updateTheorem)
+    }).then(this.props.theoremContext.updateTheorem)
       .then(this.hideFindInferenceModal);
   };
 
@@ -258,16 +258,16 @@ export const ProofLine = styled(class ProofLine extends React.Component {
 
 ProofLine.SingleStatementWithPrefixContent  = class extends React.Component {
   render() {
-    const {editableBoundVariable, prefix, statement, path, boundVariableLists, highlighting, apiService} = this.props;
+    const {editableBoundVariable, prefix, statement, path, boundVariableLists, theoremContext} = this.props;
     let {additionalReferences} = this.props;
     additionalReferences = additionalReferences || [];
     const wrapEditableBoundVariable = (name, index, boundVariablePath) => {
       const callback = (newName) => {
-        return apiService.fetchJsonForStep(path, `boundVariables/${boundVariablePath.join(".")}/${index}/`, {
+        return theoremContext.fetchJsonForStep(path, `boundVariables/${boundVariablePath.join(".")}/${index}/`, {
           method: "PUT",
           body: newName
         })
-        .then(apiService.updateTheorem)
+        .then(theoremContext.updateTheorem)
       };
       return <BoundVariableEditor name={name} callback={callback} />;
     };
@@ -279,7 +279,7 @@ ProofLine.SingleStatementWithPrefixContent  = class extends React.Component {
                                  boundVariableLists={boundVariableLists}
                                  references={[...additionalReferences, {stepPath: path}]}
                                  wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}
-                                 highlighting={highlighting}/>
+                                 theoremContext={theoremContext}/>
        </>}
       {'.'}
     </>

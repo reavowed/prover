@@ -28,14 +28,14 @@ export class ElidedStepProofLine extends React.Component {
   };
 
   highlightInference = (inferenceId) => {
-    this.props.apiService.fetchJsonForStep(this.props.path, "highlightedInference", {
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "highlightedInference", {
       method: "POST",
       body: inferenceId
-    }).then(this.props.apiService.updateTheorem);
+    }).then(this.props.theoremContext.updateTheorem);
   };
 
   render() {
-    let {step, path, boundVariableLists, apiService, highlighting, children} = this.props;
+    let {step, path, boundVariableLists, theoremContext, children} = this.props;
     let buttons = <>
       {step.highlightedInference && <InferenceLink inference={step.highlightedInference} suffix="[elided]"/>}
       {step.description && <span className="text-muted text-uppercase ml-1" style={{"fontFamily": "monospace"}}>{step.description}</span>}
@@ -50,8 +50,7 @@ export class ElidedStepProofLine extends React.Component {
                  statement={step.statement}
                  buttons={buttons}
                  onClick={this.toggleProofCard}
-                 apiService={apiService}
-                 highlighting={highlighting}
+                 theoremContext={theoremContext}
                  incomplete={step.isIncomplete}
       >
         {children}
@@ -61,8 +60,7 @@ export class ElidedStepProofLine extends React.Component {
                path={path}
                boundVariableLists={boundVariableLists}
                referencesForLastStep={[]}
-               apiService={apiService}
-               highlighting={highlighting}/>
+               theoremContext={theoremContext}/>
       </div>}
     </>;
   }
@@ -70,14 +68,13 @@ export class ElidedStepProofLine extends React.Component {
 
 export class ElidedStep extends React.Component {
   render() {
-    const {step, path, boundVariableLists, highlighting, apiService} = this.props;
+    const {step, path, boundVariableLists, theoremContext} = this.props;
     return <ElidedStepProofLine {...this.props} prefix="Then">
       <ProofLine.SingleStatementWithPrefixContent prefix="Then"
                                                   statement={step.statement}
                                                   path={path}
                                                   boundVariableLists={boundVariableLists}
-                                                  highlighting={highlighting}
-                                                  apiService={apiService} />
+                                                  theoremContext={theoremContext} />
     </ElidedStepProofLine>;
   }
 }

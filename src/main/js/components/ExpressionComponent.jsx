@@ -124,21 +124,21 @@ function referencesMatch(r1, r2) {
 
 export class HighlightableExpression extends React.Component {
   render() {
-    const {statement, expression, references, reference, boundVariableLists, wrapBoundVariable, highlighting, className} = this.props;
+    const {statement, expression, references, reference, boundVariableLists, wrapBoundVariable, theoremContext, className} = this.props;
     let {referencesAsPremise, referencesAsConclusion} = this.props;
     let defaultReferences = references || [reference];
     referencesAsPremise = referencesAsPremise || defaultReferences;
     referencesAsConclusion = referencesAsConclusion || defaultReferences;
 
-    const matchingPremises = highlighting ? _.filter(highlighting.highlightedPremises, highlightedPremise =>
+    const matchingPremises = theoremContext ? _.filter(theoremContext.highlightedPremises, highlightedPremise =>
       _.some(referencesAsPremise, reference =>
         referencesMatch(reference, highlightedPremise)
       )
     ) : [];
     const pathsToHighlightAsPremise = _.map(matchingPremises, p => p.internalPath || []);
 
-    const shouldHighlightAsConclusion = highlighting && highlighting.highlightedConclusion &&
-      _.some(referencesAsConclusion, r => referencesMatch(r, highlighting.highlightedConclusion));
+    const shouldHighlightAsConclusion = theoremContext && theoremContext.highlightedConclusion &&
+      _.some(referencesAsConclusion, r => referencesMatch(r, theoremContext.highlightedConclusion));
 
     const expressionElement = <ExpressionComponent expression={statement || expression} pathsToHighlightAsPremise={pathsToHighlightAsPremise} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
     return shouldHighlightAsConclusion ? <HighlightedConclusion className={className}>{expressionElement}</HighlightedConclusion> :

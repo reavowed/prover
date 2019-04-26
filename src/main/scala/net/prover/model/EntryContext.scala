@@ -31,11 +31,11 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
     statementDefinitions.find(_.attributes.contains("conjunction"))
   }
 
-  def matchScopingStatement(statement: Statement): Option[(Statement, StatementDefinition)] = {
+  def matchScopingStatement(statement: Statement): Option[(Statement, String, StatementDefinition)] = {
     scopingDefinitionOption.flatMap { scopingDefinition =>
       statement match {
-        case DefinedStatement(Seq(substatement), `scopingDefinition`) =>
-          substatement.asOptionalInstanceOf[Statement].map(_ -> scopingDefinition)
+        case definedStatement @ DefinedStatement(Seq(substatement), `scopingDefinition`) =>
+          substatement.asOptionalInstanceOf[Statement].map((_, definedStatement.scopedBoundVariableNames.head, scopingDefinition))
         case _ =>
           None
       }

@@ -16,7 +16,7 @@ export class SubproofStep extends React.Component {
     this.setState({showingSubproof: !this.state.showingSubproof})
   };
   render() {
-    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists} = this.props;
+    let {step, path, additionalReferences, theoremContext, boundVariableLists} = this.props;
     let {showingSubproof} = this.state;
     let reference ={stepPath: path};
     let referencesForLastStep = [...additionalReferences, reference];
@@ -27,8 +27,7 @@ export class SubproofStep extends React.Component {
                    statement={step.statement}
                    premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
                    boundVariableLists={boundVariableLists}
-                   apiService={apiService}
-                   highlighting={highlighting}
+                   theoremContext={theoremContext}
                    incomplete={step.isIncomplete}
                    onClick={this.toggleSubproof}>
           Then
@@ -37,15 +36,13 @@ export class SubproofStep extends React.Component {
             <HighlightableExpression expression={step.statement}
                                     boundVariableLists={boundVariableLists}
                                     reference={reference}
-                                    apiService={apiService}
-                                    highlighting={highlighting}/> : "???"}.
+                                     theoremContext={theoremContext} /> : "???"}.
         </ProofLine>}
       {showingSubproof && <Steps.Children steps={step.substeps}
                                           path={path}
                                           boundVariableLists={boundVariableLists}
                                           referencesForLastStep={referencesForLastStep}
-                                          apiService={apiService}
-                                          highlighting={highlighting} />}
+                                          theoremContext={theoremContext} />}
     </>;
   }
 }

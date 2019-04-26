@@ -102,12 +102,11 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("stepPath") stepPath: PathData,
-    @RequestBody variableName: String
+    @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, _, entryContext) =>
       for {
-        (substatement, scopingStatementDefinition) <- entryContext.matchScopingStatement(step.statement).orBadRequest("Target statement is not a scoped statement")
+        (substatement, variableName, scopingStatementDefinition) <- entryContext.matchScopingStatement(step.statement).orBadRequest("Target statement is not a scoped statement")
       } yield {
         Step.ScopedVariable(
           variableName,

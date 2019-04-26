@@ -6,12 +6,12 @@ import {BoundVariableEditor} from "./BoundVariableEditor";
 
 export class NamingStep extends React.Component {
   updateBoundVariable = (newName) => {
-    this.props.apiService
+    this.props.theoremContext
       .fetchJsonForStep(this.props.path, "boundVariable", {method: "PUT", body: newName})
-      .then(this.props.apiService.updateTheorem);
+      .then(this.props.theoremContext.updateTheorem);
   };
   render() {
-    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists,} = this.props;
+    let {step, path, additionalReferences, theoremContext, boundVariableLists,} = this.props;
     let reference = {stepPath: path};
     let referenceForAssumption = {stepPath: path, suffix: "a"};
     let referencesForLastStep = [...additionalReferences, reference];
@@ -33,14 +33,12 @@ export class NamingStep extends React.Component {
                                            premiseReferences={step.referencedLinesForExtraction}
                                            reference={referenceForAssumption}
                                            buttons={<InferenceLink inference={step.inference}/>}
-                                           apiService={apiService}
-                                           highlighting={highlighting}/>
+                                           theoremContext={theoremContext} />
       <Steps steps={step.substeps}
              path={path}
              boundVariableLists={innerBoundVariableLists}
              referencesForLastStep={referencesForLastStep}
-             apiService={apiService}
-             highlighting={highlighting} />
+             theoremContext={theoremContext} />
     </>;
   }
 }

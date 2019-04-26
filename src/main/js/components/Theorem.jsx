@@ -9,7 +9,7 @@ import {Steps} from "./steps/Steps";
 
 class Premise extends React.Component {
   render() {
-    return <HighlightableExpression reference={{premiseIndex: this.props.index}} highlighting={this.props.highlighting} expression={this.props.premise} boundVariableLists={[]}/>;
+    return <HighlightableExpression reference={{premiseIndex: this.props.index}} theoremContext={this.props.theoremContext} expression={this.props.premise} boundVariableLists={[]}/>;
   }
 }
 
@@ -62,18 +62,16 @@ export class Theorem extends React.Component {
 
   render() {
     const {theorem} = this.state;
-    const highlighting = {
+    const theoremContext = {
       highlightedPremises: this.state.highlightedPremises,
       highlightedConclusion: this.state.highlightedConclusion,
       setHighlightedPremises: this.setHighlightedPremises,
-      setHighlightedConclusion: this.setHighlightedConclusion
-    };
-    const apiService = {
+      setHighlightedConclusion: this.setHighlightedConclusion,
       fetchJsonForStep: this.fetchJsonForStep,
       updateTheorem: this.updateTheorem
     };
     const createPremiseElement = (premise, index) => {
-      return <Premise premise={premise} index={index} highlighting={highlighting}/>
+      return <Premise premise={premise} index={index} theoremContext={theoremContext}/>
     };
 
     return <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" {...this.props}>
@@ -82,8 +80,7 @@ export class Theorem extends React.Component {
       <Steps steps={theorem.proof}
              path={[]}
              boundVariableLists={[]}
-             highlighting={highlighting}
-             apiService={apiService}/>
+             theoremContext={theoremContext}/>
     </Inference>;
   }
 }

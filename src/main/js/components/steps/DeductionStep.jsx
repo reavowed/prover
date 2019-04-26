@@ -25,15 +25,15 @@ export class DeductionStep extends React.Component {
     })
   };
   updateBoundVariable = (boundVariableIndex, boundVariablePath) => {
-    this.props.apiService.fetchJsonForStep(this.props.path, `boundVariables/${boundVariablePath.join(".")}/${boundVariableIndex}/`, {
+    this.props.theoremContext.fetchJsonForStep(this.props.path, `boundVariables/${boundVariablePath.join(".")}/${boundVariableIndex}/`, {
       method: "PUT",
       body: this.state.boundVariableName
     })
-      .then(this.props.apiService.updateTheorem)
+      .then(this.props.theoremContext.updateTheorem)
       .then(this.hideBoundVariableModal);
   };
   render() {
-    let {step, path, additionalReferences, apiService, highlighting, boundVariableLists} = this.props;
+    let {step, path, additionalReferences, theoremContext, boundVariableLists} = this.props;
     let reference = {stepPath: path};
     let referenceForAssumption = {stepPath: path, suffix: "a"};
     let referencesForLastStep = [...additionalReferences, reference];
@@ -49,14 +49,12 @@ export class DeductionStep extends React.Component {
                                            path={path}
                                            boundVariableLists={boundVariableLists}
                                            additionalReferences={[...additionalReferences, referenceForAssumption]}
-                                           apiService={apiService}
-                                           highlighting={highlighting}/>
+                                           theoremContext={theoremContext}/>
       <Steps.Children steps={step.substeps}
                       path={path}
                       boundVariableLists={boundVariableLists}
                       referencesForLastStep={referencesForLastStep}
-                      apiService={apiService}
-                      highlighting={highlighting} />
+                      theoremContext={theoremContext} />
       <BoundVariableModal show={this.state.boundVariableModalCallback != null}
                           onHide={this.hideBoundVariableModal}
                           title="Rename bound variable"
