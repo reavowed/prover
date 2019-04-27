@@ -2,23 +2,18 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Overlay from "react-bootstrap/Overlay";
 import Tooltip from "react-bootstrap/Tooltip";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
 import styled, {css} from "styled-components";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import Popover from "react-bootstrap/Popover";
-import {BoundVariableModal, FindInferenceModal} from "../Modals";
-import {Parser} from "../../Parser";
+import {BoundVariableModal} from "../Modals";
 import {BoundVariableEditor} from "./BoundVariableEditor";
 
 export const ProofLine = styled(class ProofLine extends React.Component {
   constructor(...args) {
     super(...args);
-    this.attachDivRef = divRef => this.setState({ divRef });
     this.attachSpanRef = spanRef => this.setState({ spanRef });
     this.attachButtonRef = buttonRef => this.setState({ buttonRef });
-    this.targetInputRef = React.createRef();
     this.state = {
       isHovered: false,
       shouldShowButtonPopover: false,
@@ -124,8 +119,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
 
     const lineElement= <div onMouseEnter={this.onMouseEnter}
                             onMouseLeave={this.onMouseLeave}
-                            className={"mb-1 " + className}
-                            ref={this.attachDivRef}>
+                            className={"mb-1 " + className}>
       <FlexRow>
         <span ref={this.attachSpanRef}
               onClick={this.onClick}

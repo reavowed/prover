@@ -22,7 +22,7 @@ object ChapterProps {
   case class AxiomPropsForChapter(name: String, url: String, premises: Seq[Statement], conclusion: Statement) extends EntryProps {
     override val `type`: String = "axiom"
   }
-  case class TheoremPropsForChapter(name: String, url: String, premises: Seq[Statement], conclusion: Statement) extends EntryProps {
+  case class TheoremPropsForChapter(name: String, url: String, premises: Seq[Statement], conclusion: Statement, isComplete: Boolean) extends EntryProps {
     override val `type`: String = "theorem"
   }
   case class StatementDefinitionPropsForChapter(defaultValue: Statement, url: String, shorthand: Option[String], definingStatement: Option[Statement]) extends EntryProps {

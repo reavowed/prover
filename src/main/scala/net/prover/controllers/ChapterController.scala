@@ -31,7 +31,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         Some(AxiomPropsForChapter(name, getEntryUrl(bookKey, chapterKey, key), premises, conclusion))
       case (theorem: entries.Theorem, key) =>
         import theorem._
-        Some(TheoremPropsForChapter(name, getEntryUrl(bookKey, chapterKey, key), premises, conclusion))
+        Some(TheoremPropsForChapter(name, getEntryUrl(bookKey, chapterKey, key), premises, conclusion, isComplete))
       case (statementDefinition: entries.StatementDefinition, key) =>
         import statementDefinition._
         Some(StatementDefinitionPropsForChapter(defaultValue, getEntryUrl(bookKey, chapterKey, key), shorthand, definingStatement))

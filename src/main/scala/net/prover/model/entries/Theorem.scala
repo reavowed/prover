@@ -20,8 +20,11 @@ case class Theorem(
   override def referencedInferenceIds: Set[String] = proof.flatMap(_.referencedInferenceIds).toSet
   override def referencedEntries: Set[ChapterEntry] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions ++ proof.flatMap(_.referencedDefinitions).toSet
   override def inferences: Seq[Inference] = Seq(this)
+
   def initialStepContext: StepContext = StepContext.empty(requiredSubstitutions.terms)
   def initialPremiseContext(entryContext: EntryContext): PremiseContext = PremiseContext.justWithPremises(premises, entryContext)
+
+  def isComplete: Boolean = proof.forall(_.isComplete)
 
   private def replaceProof(newProof: Seq[Step]): Theorem = copy(proof = newProof)
   def findStep(indexes: Seq[Int], entryContext: EntryContext): Option[(Step, StepContext, PremiseContext)] = {
@@ -148,6 +151,7 @@ object Theorem extends Inference.EntryParser {
       conclusion <- conclusionParser
       proof <- proofParser(premises, conclusion)
     } yield {
+      if (!proof.mapCollect(_.provenStatement).lastOption.contains(conclusion)) throw new Exception(s"Proof of theorem '$name' did not prove $conclusion")
       Theorem(
         name,
         premises,

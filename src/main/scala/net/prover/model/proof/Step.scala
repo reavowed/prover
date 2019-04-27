@@ -8,7 +8,7 @@ import net.prover.model.expressions.{DefinedStatement, Statement}
 
 import scala.util.Try
 
-@JsonIgnoreProperties(Array("context", "substitutions", "deductionStatement", "scopingStatement"))
+@JsonIgnoreProperties(Array("substitutions", "deductionStatement", "scopingStatement", "isComplete"))
 sealed trait Step {
   @JsonSerialize
   def provenStatement: Option[Statement]
@@ -24,6 +24,7 @@ sealed trait Step {
   def insertExternalParameters(numberOfParametersToRemove: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step]
   def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step
+  def isComplete: Boolean
   def referencedInferenceIds: Set[String]
   def referencedDefinitions: Set[ExpressionDefinition]
   @JsonSerialize
@@ -51,6 +52,7 @@ object Step {
     def replaceSubsteps(newSubsteps: Seq[Step]): Step
     def modifyStepForInsertion(step: Step): Step
     def modifyStepForExtraction(step: Step): Option[Step]
+    override def isComplete: Boolean = substeps.forall(_.isComplete)
     override def getSubstep(index: Int, outerStepContext: StepContext, outerPremiseContext: PremiseContext): Option[(Step, StepContext, PremiseContext)] = {
       substeps.splitAtIndexIfValid(index).map { case (before, step, _) =>
         val innerStepContext = specifyStepContext(outerStepContext)
@@ -276,6 +278,7 @@ object Step {
 
   case class Target(statement: Statement) extends Step.WithoutSubsteps with Step.WithTopLevelStatement {
     val `type` = "target"
+    override def isComplete: Boolean = false
     override def provenStatement: Option[Statement] = Some(statement)
     override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
       Target(statement.insertExternalParameters(numberOfParametersToInsert))
@@ -342,6 +345,7 @@ object Step {
     extends Step.WithoutSubsteps with Step.WithTopLevelStatement
   {
     val `type`: String = "assertion"
+    override def isComplete: Boolean = true
     override def provenStatement: Option[Statement] = Some(statement)
     override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
       Assertion(

@@ -3,7 +3,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import styled from "styled-components";
+import styled, {css}  from "styled-components";
 import {Parser} from "../Parser";
 import {Breadcrumbs} from "./Breadcrumbs";
 import {ExpressionComponent} from "./ExpressionComponent";
@@ -28,13 +28,22 @@ const ResultTitle = styled.a`
   &:hover {
     color: black;
   }
+  
+  ${props => props.incomplete && css`
+    &::before {
+      content: "?";
+      color: red;
+      font-weight: bold;
+      margin-right: 0.25em;
+    }
+  `}
 `;
 
 const Capitalized = styled.span`
   text-transform: capitalize;
 `;
 
-const Result = ({title, url, buttons, deleteButton, children, updateChapter}) => {
+const Result = ({title, url, buttons, deleteButton, children, updateChapter, incomplete}) => {
   const deleteEntry = () => {
     updateChapter(url, {method: "DELETE"})
   };
@@ -43,7 +52,7 @@ const Result = ({title, url, buttons, deleteButton, children, updateChapter}) =>
   };
   return <ResultWrapper>
     <FlexRow>
-      <FlexRow.Grow><ResultTitle href={url}>{title}</ResultTitle></FlexRow.Grow>
+      <FlexRow.Grow><ResultTitle href={url} incomplete={incomplete}>{title}</ResultTitle></FlexRow.Grow>
       {buttons}
       {deleteButton && <Button size="sm" variant="danger" className="ml-1" onClick={deleteEntry}><span className="fas fa-ban"/></Button>}
       <Button size="sm" className="ml-1" onClick={() => moveEntry("up")}><span className="fas fa-arrow-up"/></Button>
@@ -53,11 +62,12 @@ const Result = ({title, url, buttons, deleteButton, children, updateChapter}) =>
   </ResultWrapper>
 };
 
-const InferenceResult = ({title, entry, updateChapter}) => {
+const InferenceResult = ({title, entry, updateChapter, incomplete}) => {
   return <Result title={<>{title}: {entry.name}</>}
                  url={entry.url}
                  updateChapter={updateChapter}
-                 deleteButton>
+                 deleteButton
+                 incomplete={incomplete}>
     <InferenceSummary inference={entry}/>
   </Result>;
 };
@@ -191,7 +201,7 @@ export class Chapter extends React.Component {
       case "axiom":
         return <InferenceResult key={entry.url} title="Axiom" entry={entry} updateChapter={this.updateChapter}/>;
       case "theorem":
-        return <InferenceResult key={entry.url} title="Theorem" entry={entry} updateChapter={this.updateChapter}/>;
+        return <InferenceResult key={entry.url} title="Theorem" entry={entry} updateChapter={this.updateChapter} incomplete={!entry.isComplete}/>;
       case "statementDefinition":
         return <DefinitionResult key={entry.url} title="Statement Definition" entry={entry} updateChapter={this.updateChapter}>
           {entry.definingStatement && <><ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.</>}
