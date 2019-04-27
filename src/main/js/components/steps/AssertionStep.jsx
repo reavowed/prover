@@ -1,10 +1,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
-import {HighlightableExpression} from "../ExpressionComponent";
 import {InferenceLink} from "./InferenceLink";
 import {ProofLine} from "./ProofLine";
-import {ClickableText} from "./ClickableText";
-import {BoundVariableModal} from "../Modals";
 
 export class AssertionStepProofLine extends React.Component {
   createTargets = () => {

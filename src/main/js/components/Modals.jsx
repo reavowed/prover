@@ -63,7 +63,7 @@ function getAtPath(substitutions, [type, name, length]) {
   return (base && length) ? base[length] : base;
 }
 
-export class FindInferenceModal extends React.Component {
+export class InferenceFinder extends React.Component {
   constructor(...args) {
     super(...args);
     this.autoSuggestRef = React.createRef();
@@ -80,7 +80,7 @@ export class FindInferenceModal extends React.Component {
     this.setState({autosuggestValue: newValue});
   };
   onSuggestionsFetchRequested = ({ value }) => {
-    this.props.callbacks.getInferenceSuggestions(value)
+    this.props.getInferenceSuggestions(value)
       .then(suggestionsJson => this.setState({inferenceSuggestions: Parser.parseInferenceSuggestions(suggestionsJson)}))
   };
   onSuggestionsClearRequested = () => {
@@ -96,8 +96,8 @@ export class FindInferenceModal extends React.Component {
       premiseSuggestions: null,
       selectedSubstitutionValues
     });
-    this.props.callbacks.getPremiseSuggestions &&
-      this.props.callbacks.getPremiseSuggestions(suggestion.inference.id)
+    this.props.getPremiseSuggestions &&
+      this.props.getPremiseSuggestions(suggestion.inference.id)
         .then(this.handlePremiseSuggestions)
   };
   handlePremiseSuggestions = (suggestionsJson) => {
@@ -201,7 +201,7 @@ export class FindInferenceModal extends React.Component {
     this.submitWithSelectedValues(this.state.selectedSubstitutionValues);
   };
   submitWithSelectedValues = (selectedSubstitutionValues) => {
-    this.props.callbacks.submit(this.state.selectedInferenceSuggestion.inference.id, selectedSubstitutionValues || this.state.selectedSubstitutionValues)
+    this.props.submit(this.state.selectedInferenceSuggestion.inference.id, selectedSubstitutionValues || this.state.selectedSubstitutionValues)
       .then(() => this.setState({
         isLoading: false,
         autosuggestValue: "",
@@ -255,67 +255,62 @@ export class FindInferenceModal extends React.Component {
         return showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, `${key} ${name} ${numberOfParameters}`, validValues, [...boundVariableLists, newVariableList], x => x[key][name][numberOfParameters], (x, y) => x[key][name][numberOfParameters] = y);
       });
     };
-    const {show, onHide, boundVariableLists} = this.props;
+    const {boundVariableLists} = this.props;
 
-    return <Modal show={show} onHide={onHide} onEntered={() => this.autoSuggestRef.current.input.focus()}>
-      <Modal.Header closeButton><Modal.Title>Find inference</Modal.Title></Modal.Header>
-      <Modal.Body>
+    return <>
+      <Form.Group>
+        <Form.Label><strong>Select inference</strong></Form.Label>
+        <Autosuggest
+          ref={this.autoSuggestRef}
+          suggestions={this.state.inferenceSuggestions}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          getSuggestionValue={s => s.inference.name}
+          renderSuggestionsContainer={renderSuggestionsContainer}
+          onSuggestionSelected={this.onSuggestionSelected}
+          renderSuggestion={s => <span className="dropdown-item">{s.inference.name}</span>}
+          inputProps={{value: this.state.autosuggestValue, onChange: this.onAutosuggestChange, className:"form-control"}} />
+      </Form.Group>
+      {this.state.selectedInferenceSuggestion && <>
         <Form.Group>
-          <Form.Label><strong>Select inference</strong></Form.Label>
-          <Autosuggest
-            ref={this.autoSuggestRef}
-            suggestions={this.state.inferenceSuggestions}
-            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-            getSuggestionValue={s => s.inference.name}
-            renderSuggestionsContainer={renderSuggestionsContainer}
-            onSuggestionSelected={this.onSuggestionSelected}
-            renderSuggestion={s => <span className="dropdown-item">{s.inference.name}</span>}
-            inputProps={{value: this.state.autosuggestValue, onChange: this.onAutosuggestChange, className:"form-control"}} />
+          <InferenceSummary inference={this.state.selectedInferenceSuggestion.inference}/>
         </Form.Group>
-        {this.state.selectedInferenceSuggestion &&
-          <>
+        { this.state.premiseSuggestions &&
             <Form.Group>
-              <InferenceSummary inference={this.state.selectedInferenceSuggestion.inference}/>
-            </Form.Group>
-            { this.state.premiseSuggestions &&
-                <Form.Group>
-                  <Form.Label><strong>Premises</strong></Form.Label>
-                  {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
-                    <Form.Group as={Form.Row} key={i}>
-                      <Col xs={4}>
-                        <ExpressionComponent expression={premise} boundVariableLists={[]} />
-                      </Col>
-                      <Col>
-                        <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)}>
-                          <option value="" />
-                          {suggestions.map((s, i) =>
-                            <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                                <ExpressionComponent expression={s.statement} boundVariableLists={boundVariableLists} />
-                              )}}/>
-                          )}
-                        </Form.Control>
-                      </Col>
-                    </Form.Group>
-                  )}
+              <Form.Label><strong>Premises</strong></Form.Label>
+              {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
+                <Form.Group as={Form.Row} key={i}>
+                  <Col xs={4}>
+                    <ExpressionComponent expression={premise} boundVariableLists={[]} />
+                  </Col>
+                  <Col>
+                    <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)}>
+                      <option value="" />
+                      {suggestions.map((s, i) =>
+                        <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
+                            <ExpressionComponent expression={s.statement} boundVariableLists={boundVariableLists} />
+                          )}}/>
+                      )}
+                    </Form.Control>
+                  </Col>
                 </Form.Group>
-            }
-            <Form.Group>
-              <Form.Label><strong>Substitutions</strong></Form.Label>
-              {_.flatten([
-                showSimpleSubstitutions("statements", boundVariableLists),
-                showSimpleSubstitutions("terms", boundVariableLists),
-                showParameteredSubstitutions("predicates", boundVariableLists),
-                showParameteredSubstitutions("functions", boundVariableLists),
-              ])}
+              )}
             </Form.Group>
-          </>}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={this.props.onHide}>Close</Button>
-        <Button variant="primary" onClick={this.submit} disabled={!this.readyToSubmit()}>Save Changes</Button>
-      </Modal.Footer>
-    </Modal>
+        }
+        <Form.Group>
+          <Form.Label><strong>Substitutions</strong></Form.Label>
+          {_.flatten([
+            showSimpleSubstitutions("statements", boundVariableLists),
+            showSimpleSubstitutions("terms", boundVariableLists),
+            showParameteredSubstitutions("predicates", boundVariableLists),
+            showParameteredSubstitutions("functions", boundVariableLists),
+          ])}
+        </Form.Group>
+        <div className="text-center">
+          <Button variant="primary" onClick={this.submit} disabled={!this.readyToSubmit()}>Save Changes</Button>
+        </div>
+      </>}
+    </>
   }
 }
 

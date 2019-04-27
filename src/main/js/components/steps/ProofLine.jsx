@@ -105,55 +105,12 @@ export const ProofLine = styled(class ProofLine extends React.Component {
       .then(this.hideSubproofNameModal);
   };
 
-  showTargetModal = () => {
-    this.setState({
-      addingTarget: true,
-      targetToAdd: this.props.statement ? this.props.statement.serialize() : ''
-    })
-  };
-  hideTargetModal = () => {
-    this.setState({addingTarget: false});
-  };
-  addTarget = () => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "target", {
-      method: "POST",
-      body: this.state.targetToAdd
-    })
-      .then(this.props.theoremContext.updateTheorem)
-      .then(this.hideTargetModal);
-  };
-
   elide = () => {
     this.props.theoremContext.fetchJsonForStep(this.props.path, "elide", {
       method: "POST"
     }).then(this.props.theoremContext.updateTheorem);
   };
 
-  shouldShowFindInferenceModal = () => this.state.findInferenceModalCallbacks != null;
-  hideFindInferenceModal = () => {
-    this.setState({findInferenceModalCallbacks: null})
-  };
-  findInferenceForAssertion = () => {
-    this.setState({findInferenceModalCallbacks: {
-        getInferenceSuggestions: this.getStepInferenceSuggestions,
-        getPremiseSuggestions: this.getPremiseSuggestions,
-        submit: this.addAssertion
-      }})
-  };
-  getStepInferenceSuggestions = (searchText) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}&withConclusion=false`)
-  };
-  getPremiseSuggestions = (inferenceId) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=false`)
-  };
-  addAssertion = (inferenceId, substitutions) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, "assertion", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({inferenceId, substitutions})
-    }).then(this.props.theoremContext.updateTheorem)
-      .then(this.hideFindInferenceModal);
-  };
 
   render() {
     const {className, children, tooltip, path, buttons, boundVariableLists} = this.props;
@@ -210,8 +167,6 @@ export const ProofLine = styled(class ProofLine extends React.Component {
           <Button ref={this.attachButtonRef} onClick={this.toggleButtonPopover} size="sm" className="ml-1"><span className="fas fa-ellipsis-v"/></Button>
           <Overlay target={this.state.buttonRef} show={this.state.shouldShowButtonPopover} onHide={this.hideButtonPopover} rootClose placement="bottom">
             {({show, ...props}) => <Popover {...props}>
-              <Button onClick={this.showTargetModal} variant="success" size="sm" className="ml-1">Add target</Button>
-              <Button onClick={this.findInferenceForAssertion} variant="success" size="sm" className="ml-1">Find inference</Button>
               <Button onClick={this.showSubproofNameModal} variant="success" size="sm" className="ml-1">To subproof</Button>
               <Button onClick={this.elide} variant="success" size="sm" className="ml-1">Elide</Button>
               <Button onClick={this.clearStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-redo"/></Button>
@@ -225,11 +180,6 @@ export const ProofLine = styled(class ProofLine extends React.Component {
         </>}
       </FlexRow>
       {subProofNamingModal}
-      {targetModal}
-      {<FindInferenceModal show={this.shouldShowFindInferenceModal()}
-                           onHide={this.hideFindInferenceModal}
-                           callbacks={this.state.findInferenceModalCallbacks}
-                           boundVariableLists={boundVariableLists} />}
     </div>;
 
     if (tooltip) {
