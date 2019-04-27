@@ -10,7 +10,8 @@ export class TargetStepProofLine extends React.Component {
     super(props);
     this.state = {
       proving: false,
-      provingWithInference: false
+      provingWithInference: false,
+      addingPremise: false
     };
     this.props.theoremContext.registerStep(this, this.props.path);
   }
@@ -38,14 +39,24 @@ export class TargetStepProofLine extends React.Component {
   };
 
   startProving = () => {
-    this.setState({proving: true});
+    this.setState({
+      proving: true,
+      provingWithInference: false,
+      addingPremise: false
+    });
   };
 
-  getStepInferenceSuggestions = (searchText) => {
+  getInferenceSuggestionsForStep = (searchText) => {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}&withConclusion=true`)
   };
-  getPremiseSuggestions = (inferenceId) => {
+  getInferenceSuggestionsForPremise = (searchText) => {
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}&withConclusion=false`)
+  };
+  getPremiseSuggestionsForStep = (inferenceId) => {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=true`)
+  };
+  getPremiseSuggestionsForPremise = (inferenceId) => {
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=false`)
   };
   proveWithInference = (inferenceId, substitutions) => {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, "", {
@@ -54,38 +65,58 @@ export class TargetStepProofLine extends React.Component {
       body: JSON.stringify({inferenceId, substitutions})
     }).then(this.props.theoremContext.updateTheorem);
   };
+  addPremise = (inferenceId, substitutions) => {
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, "assertion", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({inferenceId, substitutions})
+    }).then(this.props.theoremContext.updateTheorem)
+      .then(() => this.setState({addingPremise: false}));
+  };
 
   render() {
     let {step, path, additionalReferences, theoremContext, boundVariableLists, children} = this.props;
-    let {proving, provingWithInference} = this.state;
+    let {proving, provingWithInference, addingPremise} = this.state;
     let scopingStatement = _.find(window.definitions, d => _.includes(d.attributes, "scoping"));
     let deductionStatement = _.find(window.definitions, d => _.includes(d.attributes, "deduction"));
     return <>
-      <ProofLine incomplete
+      {proving ?
+        <div className="card" style={{margin: ".5rem", padding: ".5rem .75rem"}}>
+          <Button size="sm" variant="danger" className="float-left" onClick={() => this.setState({proving: false})} style={{position: "absolute"}}><i className="fas fa-times"/></Button>
+
+          <div className="text-center">
+            <Button size="sm" className="ml-1" onClick={() => this.setState({addingPremise: !addingPremise})}>Add premise</Button>
+          </div>
+          {addingPremise && <InferenceFinder getInferenceSuggestions={this.getInferenceSuggestionsForPremise}
+                                             getPremiseSuggestions={this.getPremiseSuggestionsForPremise}
+                                             boundVariableLists={boundVariableLists}
+                                             submit={this.addPremise}/>}
+          <h5 className="text-center">
+            <ExpressionComponent expression={step.statement} boundVariableLists={boundVariableLists}/>
+          </h5>
+          <div className="text-center">
+            <Button size="sm" className="ml-1" onClick={this.extract}>Extract</Button>
+            <Button size="sm" className="ml-1" onClick={() => this.setState({provingWithInference: !provingWithInference})}>Prove with inference</Button>
+          </div>
+          <div className="text-center">
+            {scopingStatement && step.statement.definition === scopingStatement &&
+            <Button size="sm" className="ml-1" onClick={this.introduceBoundVariable}>Introduce bound variable</Button>}
+            {deductionStatement && step.statement.definition === deductionStatement &&
+            <Button size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
+          </div>
+          {provingWithInference && <InferenceFinder getInferenceSuggestions={this.getInferenceSuggestionsForStep}
+                                                    getPremiseSuggestions={this.getPremiseSuggestionsForStep}
+                                                    boundVariableLists={boundVariableLists}
+                                                    submit={this.proveWithInference}/>}
+        </div> :
+        <ProofLine incomplete
                  editableBoundVariable
                  path={path}
                  additionalReferences={additionalReferences}
-                 buttons={<Button variant="danger" size="sm" className="pt-0 pb-0" onClick={() => this.setState({proving: !proving})}>{proving ? "Cancel" : "Prove"}</Button>}
+                 buttons={<Button variant="danger" size="sm" className="pt-0 pb-0" onClick={this.startProving}>Prove</Button>}
                  theoremContext={theoremContext}>
-        {children}
-      </ProofLine>
-      {proving && <div className="card" style={{margin: ".5rem", padding: ".5rem .75rem"}}>
-        <h5 className="text-center"><ExpressionComponent expression={step.statement} boundVariableLists={boundVariableLists}/></h5>
-        <div className="text-center">
-          <Button size="sm" className="ml-1" onClick={this.extract}>Extract</Button>
-          <Button size="sm" className="ml-1" onClick={() => this.setState({provingWithInference: !provingWithInference})}>Prove with inference</Button>
-        </div>
-        <div className="text-center">
-          {scopingStatement && step.statement.definition === scopingStatement &&
-          <Button size="sm" className="ml-1" onClick={this.introduceBoundVariable}>Introduce bound variable</Button>}
-          {deductionStatement && step.statement.definition === deductionStatement &&
-          <Button size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
-        </div>
-        {provingWithInference && <InferenceFinder getInferenceSuggestions={this.getStepInferenceSuggestions}
-                                                  getPremiseSuggestions={this.getPremiseSuggestions}
-                                                  boundVariableLists={boundVariableLists}
-                                                  submit={this.proveWithInference}/>}
-      </div>}
+          {children}
+        </ProofLine>}
     </>
   }
 }
