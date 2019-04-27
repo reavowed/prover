@@ -76,6 +76,9 @@ export class InferenceFinder extends React.Component {
       selectedPremiseSuggestions: []
     };
   }
+  componentDidMount() {
+    this.autoSuggestRef.current.input.focus();
+  }
   onAutosuggestChange = (event, { newValue }) => {
     this.setState({autosuggestValue: newValue});
   };
