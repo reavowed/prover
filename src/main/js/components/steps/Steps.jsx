@@ -8,7 +8,7 @@ import {ElidedStep, ElidedStepProofLine} from "./ElidedStep";
 import {NamingStep} from "./NamingStep";
 import {ScopedVariableStep} from "./ScopedVariableStep";
 import {SubproofStep} from "./SubproofStep";
-import {TargetStep} from "./TargetStep";
+import {TargetStep, TargetStepProofLine} from "./TargetStep";
 
 class TransitiveSteps extends React.Component {
   constructor(props) {
@@ -64,6 +64,8 @@ class TransitiveSteps extends React.Component {
           return <AssertionStepProofLine {...props}>{children}</AssertionStepProofLine>;
         case "elided":
           return <ElidedStepProofLine {...props}>{children}</ElidedStepProofLine>;
+        case "target":
+          return <TargetStepProofLine {...props}>{children}</TargetStepProofLine>;
       }
     };
 
@@ -91,6 +93,8 @@ class TransitiveSteps extends React.Component {
     </>
   }
 }
+
+const allowableTransitivityStepTypes = ["assertion", "elided", "target"];
 
 export class Steps extends React.Component {
   static getElementName(step) {
@@ -140,9 +144,8 @@ export class Steps extends React.Component {
       step: firstStep
     }];
     while (stepsWithIndexes.length >= 2 &&
-      (stepsWithIndexes[0].step.type === "assertion" || stepsWithIndexes[0].step.type === "elided") &&
-      (stepsWithIndexes[1].step.type === "assertion" || stepsWithIndexes[1].step.type === "elided") &&
-      !stepsWithIndexes[0].step.isIncomplete &&
+      _.includes(allowableTransitivityStepTypes, stepsWithIndexes[0].step.type) &&
+      stepsWithIndexes[1].step.type === "assertion" &&
       !stepsWithIndexes[1].step.isIncomplete &&
       stepsWithIndexes[0].step.statement &&
       stepsWithIndexes[1].step.statement &&
@@ -182,7 +185,7 @@ export class Steps extends React.Component {
 
   static renderNextStep(stepsWithIndexes, path, referencesForLastStep, otherProps, lastIndex) {
     const {step, index} = stepsWithIndexes.shift();
-    if ((step.type === "assertion" || step.type === "elided") && step.statement && step.statement.definition) {
+    if (_.includes(allowableTransitivityStepTypes, step.type) && step.statement && step.statement.definition) {
       const definitionSymbol = step.statement.definition.symbol;
       const potentialTransitivityInference = window.transitivityInferences[definitionSymbol];
       if (potentialTransitivityInference) {

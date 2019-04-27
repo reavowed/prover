@@ -113,7 +113,7 @@ export const ProofLine = styled(class ProofLine extends React.Component {
 
 
   render() {
-    const {className, children, tooltip, path, buttons, boundVariableLists} = this.props;
+    const {className, children, tooltip, path, buttons} = this.props;
 
     const subProofNamingModal = <BoundVariableModal show={this.state.shouldShowSubproofNameModal}
                                                     onHide={() => this.hideSubproofNameModal}
@@ -121,33 +121,6 @@ export const ProofLine = styled(class ProofLine extends React.Component {
                                                     value={this.state.subproofName}
                                                     onChange={e => this.setState({subproofName: e.target.value})}
                                                     onSave={this.createSubproof}/>;
-
-
-    const targetModal = <Modal show={this.state.addingTarget} onHide={this.hideTargetModal} onEntered={() => {
-      this.targetInputRef.current.focus();
-      this.targetInputRef.current.select();
-    }}>
-      <Modal.Header closeButton><Modal.Title>Add target statement</Modal.Title></Modal.Header>
-      <Modal.Body>
-        <Form.Group>
-          <Form.Control type="text"
-                        value={this.state.targetToAdd}
-                        onChange={e => this.setState({targetToAdd: Parser.replaceShorthands(e.target.value)})}
-                        onKeyUp={(event) => {
-                          if (event.keyCode === 13) {
-                            this.addTarget();
-                          }
-                          event.preventDefault();
-                          event.stopPropagation();
-                        }}
-                        ref={this.targetInputRef}/>
-        </Form.Group>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={this.hideTargetModal}>Close</Button>
-        <Button variant="primary" onClick={this.addTarget}>Save Changes</Button>
-      </Modal.Footer>
-    </Modal>;
 
     const lineElement= <div onMouseEnter={this.onMouseEnter}
                             onMouseLeave={this.onMouseLeave}

@@ -5,7 +5,7 @@ import {ExpressionComponent} from "../ExpressionComponent";
 import {InferenceFinder} from "../Modals";
 import {ProofLine} from "./ProofLine";
 
-export class TargetStep extends React.Component {
+export class TargetStepProofLine extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,20 +56,19 @@ export class TargetStep extends React.Component {
   };
 
   render() {
-    let {step, path, additionalReferences, theoremContext, boundVariableLists} = this.props;
+    let {step, path, additionalReferences, theoremContext, boundVariableLists, children} = this.props;
     let {proving, provingWithInference} = this.state;
     let scopingStatement = _.find(window.definitions, d => _.includes(d.attributes, "scoping"));
     let deductionStatement = _.find(window.definitions, d => _.includes(d.attributes, "deduction"));
     return <>
-      <ProofLine.SingleStatementWithPrefix incomplete
-                                           editableBoundVariable
-                                           prefix="Then"
-                                           statement={step.statement}
-                                           path={path}
-                                           boundVariableLists={boundVariableLists}
-                                           additionalReferences={additionalReferences}
-                                           buttons={<Button variant="danger" size="sm" className="pt-0 pb-0" onClick={() => this.setState({proving: !proving})}>{proving ? "Cancel" : "Prove"}</Button>}
-                                           theoremContext={theoremContext} />
+      <ProofLine incomplete
+                 editableBoundVariable
+                 path={path}
+                 additionalReferences={additionalReferences}
+                 buttons={<Button variant="danger" size="sm" className="pt-0 pb-0" onClick={() => this.setState({proving: !proving})}>{proving ? "Cancel" : "Prove"}</Button>}
+                 theoremContext={theoremContext}>
+        {children}
+      </ProofLine>
       {proving && <div className="card" style={{margin: ".5rem", padding: ".5rem .75rem"}}>
         <h5 className="text-center"><ExpressionComponent expression={step.statement} boundVariableLists={boundVariableLists}/></h5>
         <div className="text-center">
@@ -88,5 +87,19 @@ export class TargetStep extends React.Component {
                                                   submit={this.proveWithInference}/>}
       </div>}
     </>
+  }
+}
+
+export class TargetStep extends React.Component {
+  render() {
+    const {step, path, boundVariableLists, theoremContext} = this.props;
+    return <TargetStepProofLine {...this.props}>
+      <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
+                                                  prefix="Then"
+                                                  statement={step.statement}
+                                                  path={path}
+                                                  boundVariableLists={boundVariableLists}
+                                                  theoremContext={theoremContext} />
+    </TargetStepProofLine>
   }
 }
