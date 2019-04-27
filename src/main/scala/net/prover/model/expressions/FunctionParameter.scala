@@ -9,7 +9,7 @@ import net.prover.model.entries.ExpressionDefinition
 @JsonSerialize(using = classOf[FunctionParameterSerializer])
 case class FunctionParameter(index: Int, level: Int) extends Term {
   override def complexity: Int = 0
-  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
+  override def definitionUsages: DefinitionUsages = DefinitionUsages.empty
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = {
     if (level >= internalDepth) {

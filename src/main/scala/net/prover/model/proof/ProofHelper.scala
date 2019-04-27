@@ -76,7 +76,9 @@ object ProofHelper {
       case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
         if conclusion.singleStatementVariable.isDefined &&
           firstPremise.requiredSubstitutions.contains(inference.requiredSubstitutions) &&
-          conclusion.complexity < firstPremise.complexity
+          conclusion.complexity < firstPremise.complexity &&
+          firstPremise.definitionUsages.contains(conclusion.definitionUsages)
+
       =>
         (inference, firstPremise, otherPremises)
     }
@@ -92,11 +94,15 @@ object ProofHelper {
           }
           .map { case (predicateName, argumentNames) => (inference, singlePremise, predicateName, argumentNames)}
     }.collectDefined
-    val simplificationInferences = entryContext.availableEntries.ofType[Inference].collect {
+    val simplificationInferences = entryContext.availableEntries.ofType[Inference].collectOption {
       case inference @ Inference(_, Seq(singlePremise), conclusion)
         if conclusion.complexity > singlePremise.complexity &&
-          conclusion.requiredSubstitutions.isEquivalentTo(singlePremise.requiredSubstitutions)
-      => (inference, singlePremise)
+          conclusion.requiredSubstitutions.isEquivalentTo(singlePremise.requiredSubstitutions) &&
+          singlePremise.referencedDefinitions.subsetOf(conclusion.referencedDefinitions)
+      =>
+        ( conclusion.definitionUsages - singlePremise.definitionUsages).map { addedDefinitions =>
+          (inference, singlePremise, addedDefinitions)
+        }
     }
     val rewriteInferences = entryContext.availableEntries.ofType[Inference].collect {
       case inference @ Inference(_, Seq(singlePremise), conclusion)
@@ -109,14 +115,17 @@ object ProofHelper {
     def findSubsidiaryPremiseFromGivenPremise(subsidiaryPremise: Statement, givenPremise: Statement): Option[Seq[Step]] = {
       if (subsidiaryPremise == givenPremise)
         Some(Nil)
-      else if (subsidiaryPremise.complexity > givenPremise.complexity)
-        simplificationInferences.iterator.findFirst { case (inference, singlePremise) =>
-          (for {
-            substitutions <- singlePremise.calculateSubstitutions(givenPremise, Substitutions.empty, 0, stepContext.externalDepth)
-            simplifiedPremise <- inference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
-            innerSteps <- findSubsidiaryPremiseFromGivenPremise(subsidiaryPremise, simplifiedPremise)
-            newStep = Step.Assertion(simplifiedPremise, inference.summary, Seq(Premise.Pending(givenPremise)), substitutions)
-          } yield newStep +: innerSteps).headOption
+      else if (subsidiaryPremise.complexity > givenPremise.complexity && subsidiaryPremise.definitionUsages.contains(givenPremise.definitionUsages))
+        simplificationInferences.iterator.findFirst { case (inference, singlePremise, addedDefinitions) =>
+          if ((subsidiaryPremise.definitionUsages ++ addedDefinitions).contains(givenPremise.definitionUsages))
+            (for {
+              substitutions <- singlePremise.calculateSubstitutions(givenPremise, Substitutions.empty, 0, stepContext.externalDepth)
+              simplifiedPremise <- inference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
+              innerSteps <- findSubsidiaryPremiseFromGivenPremise(subsidiaryPremise, simplifiedPremise)
+              newStep = Step.Assertion(simplifiedPremise, inference.summary, Seq(Premise.Pending(givenPremise)), substitutions)
+            } yield newStep +: innerSteps).headOption
+          else
+            None
         }
       else None
     }
@@ -244,12 +253,15 @@ object ProofHelper {
         extractWithRewrite(extractionCandidate, termsSoFar)
     }
 
-    premiseContext.premisesAndSimplifications
-      .flatMap(x => x._2.reverse :+ x._1)
-      .map(_.statement)
-      .mapFind(extract(_, 0)).map { case (_, steps) =>
+    def extractPremise(premise: Premise.SingleLinePremise): Option[Step.Elided] = {
+      extract(premise.statement, 0).map { case (_, steps) =>
         Step.Elided(steps, None, Some("Simplified"))
       }
+    }
+
+    premiseContext.premisesAndSimplifications
+      .flatMap(x => x._2.reverse :+ x._1)
+      .mapFind(extractPremise)
   }
 
   implicit class ExpressionOps(expression: Expression) {

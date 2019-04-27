@@ -132,6 +132,9 @@ package object model {
       case _ =>
         false
     }
+    def collectOption[S](f: PartialFunction[T, Option[S]]): Seq[S] = {
+      seq.collect(f).collectDefined
+    }
     def mapCollect[S](f: T => Option[S]): Seq[S] = {
       seq.map(f).collect {
         case Some(t) => t

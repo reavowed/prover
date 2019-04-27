@@ -19,7 +19,7 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   def update(newArguments: Seq[Term]): ExpressionType
 
   override def complexity: Int = arguments.map(_.complexity).sum + 1
-  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
+  override def definitionUsages: DefinitionUsages = DefinitionUsages.empty
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {
     update(arguments.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)))
   }

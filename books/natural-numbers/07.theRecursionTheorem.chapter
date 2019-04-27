@@ -470,92 +470,101 @@ conclusion ∃! g ∧ function $0 × ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply 
   prove ∃! f ∧ function $0 ℕ functionSpace ℕ A ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+ 777979cf73d2d0bf6c4057a5958662ad04ea6cfd5cc34a242121423362f17f89 () (ℕ, functionSpace ℕ A) (∧ = apply $1 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply $$1 successor $0 with ($$0 apply $$1 $0) F_+) ()
   let f ∧ function $0 ℕ functionSpace ℕ A ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+ 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∃! g ∧ function $0 × ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () (∧ function $0 ℕ functionSpace ℕ A ∀ a → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+) () {
     prove ∃! g ∧ function $0 × ℕ ℕ A ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 d87e68e239e88ef17bf606c9fb9cc5d7e5b18a0224175945e7dcd06713e05af6 () ($0, ℕ, ℕ, A) () ()
-    take g {
-      assume function $0 × ℕ ℕ A {
-        assume ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 {
-          take n {
-            assume ∈ $0 ℕ {
-              elided (Simplified) {
-                prove → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$$$$0 $0 apply apply $$$$0 $$$$$0 $0) ()
-                prove ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0) () () ()
-                prove → ∈ 0 ℕ = apply $$0 orderedPair $0 0 apply apply $$$0 $0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (0) (→ ∈ $$$$0 ℕ = apply $$0 orderedPair $0 $$$$0 apply apply $$$0 $0 $$$$0) ()
-                prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
-                prove = apply $$0 orderedPair $0 0 apply apply $$$0 $0 0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0 ℕ, = apply $$0 orderedPair $0 0 apply apply $$$0 $0 0) () () ()
+    subproof (Equivalence of definitions) {
+      take g {
+        assume function $0 × ℕ ℕ A {
+          assume ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 {
+            take n {
+              assume ∈ $0 ℕ {
+                elided (Simplified) {
+                  prove → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$$$$0 $0 apply apply $$$$0 $$$$$0 $0) ()
+                  prove ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0) () () ()
+                  prove → ∈ 0 ℕ = apply $$0 orderedPair $0 0 apply apply $$$0 $0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (0) (→ ∈ $$$$0 ℕ = apply $$0 orderedPair $0 $$$$0 apply apply $$$0 $0 $$$$0) ()
+                  prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
+                  prove = apply $$0 orderedPair $0 0 apply apply $$$0 $0 0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0 ℕ, = apply $$0 orderedPair $0 0 apply apply $$$0 $0 0) () () ()
+                }
+                elided (Simplified) {
+                  prove → ∈ $0 ℕ ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ ∧ = apply apply $$$0 $$$$0 0 with ($$$$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$$$$0 successor $0 with ($$$$$0 apply apply $$$$0 $$$$$0 $0) F_+) ()
+                  prove ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
+                  prove = apply apply $$$0 $0 0 with ($0) F_0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply apply $$$0 $0 0 with ($0) F_0, ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
+                }
+                prove = apply $$0 orderedPair $0 0 with ($0) F_0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$0 orderedPair $0 0, apply apply $$$0 $0 0, with ($0) F_0) () ()
               }
-              elided (Simplified) {
-                prove → ∈ $0 ℕ ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ ∧ = apply apply $$$0 $$$$0 0 with ($$$$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$$$$0 successor $0 with ($$$$$0 apply apply $$$$0 $$$$$0 $0) F_+) ()
-                prove ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
-                prove = apply apply $$$0 $0 0 with ($0) F_0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply apply $$$0 $0 0 with ($0) F_0, ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
-              }
-              prove = apply $$0 orderedPair $0 0 with ($0) F_0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$0 orderedPair $0 0, apply apply $$$0 $0 0, with ($0) F_0) () ()
             }
-          }
-          take n {
-            assume ∈ $0 ℕ {
-              take m {
-                assume ∈ $0 ℕ {
-                  elided (Simplified) {
-                    prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$$$$0 $0 apply apply $$$$$0 $$$$$$0 $0) ()
-                    prove ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0) () () ()
-                    prove → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 ℕ = apply $$$0 orderedPair $$0 $$$$$0 apply apply $$$$0 $$0 $$$$$0) ()
-                    prove = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0) () () ()
+            take n {
+              assume ∈ $0 ℕ {
+                take m {
+                  assume ∈ $0 ℕ {
+                    elided (Simplified) {
+                      prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$$$$0 $0 apply apply $$$$$0 $$$$$$0 $0) ()
+                      prove ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0) () () ()
+                      prove → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 ℕ = apply $$$0 orderedPair $$0 $$$$$0 apply apply $$$$0 $$0 $$$$$0) ()
+                      prove = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0) () () ()
+                    }
+                    elided (Simplified) {
+                      prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$$$$0 $0 apply apply $$$$$0 $$$$$$0 $0) ()
+                      prove ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0) () () ()
+                      prove → ∈ successor $0 ℕ = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $0) (→ ∈ $$$$$0 ℕ = apply $$$0 orderedPair $$0 $$$$$0 apply apply $$$$0 $$0 $$$$$0) ()
+                      prove ∈ successor $0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($0) () ()
+                      prove = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $0 ℕ, = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0) () () ()
+                    }
+                    elided (Simplified) {
+                      prove → ∈ $$0 ℕ ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$0 ℕ ∧ = apply apply $$$$0 $$$$$0 0 with ($$$$$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$$$$0 successor $0 with ($$$$$$0 apply apply $$$$$0 $$$$$$0 $0) F_+) ()
+                      prove ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+) () () ()
+                      prove ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply apply $$$$0 $$0 0 with ($$0) F_0, ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+) () () ()
+                      prove → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 ℕ = apply apply $$$$0 $$0 successor $$$$$0 with ($$0 apply apply $$$$0 $$0 $$$$$0) F_+) ()
+                      prove = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
+                    }
+                    prove = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 orderedPair $$0 successor $0, apply apply $$$$0 $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) F_+) () ()
+                    prove = with ($$0 apply apply $$$$0 $$0 $0) F_+ with ($$0 apply $$$0 orderedPair $$0 $0) F_+ 7c443e2cf474b9526f100bc88fa4dea410b006c21c5a0a187c8e6e34b2c5eedf () (apply $$$0 orderedPair $$0 $0, apply apply $$$$0 $$0 $0) () (with ($$0 $$$$$0) F_+)
+                    prove = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 orderedPair $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) F_+, with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () ()
                   }
-                  elided (Simplified) {
-                    prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$$$$0 $0 apply apply $$$$$0 $$$$$$0 $0) ()
-                    prove ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0) () () ()
-                    prove → ∈ successor $0 ℕ = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $0) (→ ∈ $$$$$0 ℕ = apply $$$0 orderedPair $$0 $$$$$0 apply apply $$$$0 $$0 $$$$$0) ()
-                    prove ∈ successor $0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($0) () ()
-                    prove = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $0 ℕ, = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0) () () ()
-                  }
-                  elided (Simplified) {
-                    prove → ∈ $$0 ℕ ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$0 ℕ ∧ = apply apply $$$$0 $$$$$0 0 with ($$$$$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$$$$0 successor $0 with ($$$$$$0 apply apply $$$$$0 $$$$$$0 $0) F_+) ()
-                    prove ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+) () () ()
-                    prove ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply apply $$$$0 $$0 0 with ($$0) F_0, ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+) () () ()
-                    prove → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 ℕ = apply apply $$$$0 $$0 successor $$$$$0 with ($$0 apply apply $$$$0 $$0 $$$$$0) F_+) ()
-                    prove = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
-                  }
-                  prove = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 orderedPair $$0 successor $0, apply apply $$$$0 $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) F_+) () ()
-                  prove = with ($$0 apply apply $$$$0 $$0 $0) F_+ with ($$0 apply $$$0 orderedPair $$0 $0) F_+ 7c443e2cf474b9526f100bc88fa4dea410b006c21c5a0a187c8e6e34b2c5eedf () (apply $$$0 orderedPair $$0 $0, apply apply $$$$0 $$0 $0) () (with ($$0 $$$$$0) F_+)
-                  prove = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 orderedPair $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) F_+, with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () ()
                 }
               }
             }
+            prove ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0, ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () () ()
           }
-          prove ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0, ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () () ()
-        }
-        assume ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ {
-          take n {
-            assume ∈ $0 ℕ {
-              elided (Simplified) {
-                prove → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ = apply $$0 orderedPair $$$$0 0 with ($$$$0) F_0) ()
-                prove = apply $$0 orderedPair $0 0 with ($0) F_0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, = apply $$0 orderedPair $0 0 with ($0) F_0) () () ()
-              }
-              elided (Simplified) {
-                prove → ∈ $0 ℕ ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ ∧ = apply apply $$$0 $$$$0 0 with ($$$$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$$$$0 successor $0 with ($$$$$0 apply apply $$$$0 $$$$$0 $0) F_+) ()
-                prove ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
-                prove = apply apply $$$0 $0 0 with ($0) F_0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply apply $$$0 $0 0 with ($0) F_0, ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
-                prove = with ($0) F_0 apply apply $$$0 $0 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply apply $$$0 $0 0, with ($0) F_0) () ()
-              }
-              prove = apply $$0 orderedPair $0 0 apply apply $$$0 $0 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$0 orderedPair $0 0, with ($0) F_0, apply apply $$$0 $0 0) () ()
-              take m {
-                assume ∧ ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 {
-                  target = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+
-                  elided (Simplified) {
-                    prove → ∈ $$0 ℕ ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$0 ℕ ∧ = apply apply $$$$0 $$$$$0 0 with ($$$$$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$$$$0 successor $0 with ($$$$$$0 apply apply $$$$$0 $$$$$$0 $0) F_+) ()
-                    prove ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+) () () ()
-                    prove ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply apply $$$$0 $$0 0 with ($$0) F_0, ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+) () () ()
-                    prove → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 ℕ = apply apply $$$$0 $$0 successor $$$$$0 with ($$0 apply apply $$$$0 $$0 $$$$$0) F_+) ()
-                    prove = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
-                    prove = with ($$0 apply apply $$$$0 $$0 $0) F_+ apply apply $$$$0 $$0 successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply apply $$$$0 $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) F_+) () ()
-                  }
-                  prove = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 orderedPair $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) F_+, apply apply $$$$0 $$0 successor $0) () ()
+          assume ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ {
+            take n {
+              assume ∈ $0 ℕ {
+                elided (Simplified) {
+                  prove → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ = apply $$0 orderedPair $$$$0 0 with ($$$$0) F_0) ()
+                  prove = apply $$0 orderedPair $0 0 with ($0) F_0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, = apply $$0 orderedPair $0 0 with ($0) F_0) () () ()
                 }
+                elided (Simplified) {
+                  prove → ∈ $0 ℕ ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ ∧ = apply apply $$$0 $$$$0 0 with ($$$$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$$$$0 successor $0 with ($$$$$0 apply apply $$$$0 $$$$$0 $0) F_+) ()
+                  prove ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∧ = apply apply $$$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
+                  prove = apply apply $$$0 $0 0 with ($0) F_0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply apply $$$0 $0 0 with ($0) F_0, ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
+                  prove = with ($0) F_0 apply apply $$$0 $0 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply apply $$$0 $0 0, with ($0) F_0) () ()
+                }
+                prove = apply $$0 orderedPair $0 0 apply apply $$$0 $0 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$0 orderedPair $0 0, with ($0) F_0, apply apply $$$0 $0 0) () ()
+                take m {
+                  assume ∧ ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 {
+                    elided (Simplified) {
+                      prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 successor $0 with ($$$0 apply $$$$0 orderedPair $$$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$$$$0 successor $0 with ($$$$$$0 apply $$$$0 orderedPair $$$$$$0 $0) F_+) ()
+                      prove ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 successor $0 with ($$$0 apply $$$$0 orderedPair $$$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 successor $0 with ($$$0 apply $$$$0 orderedPair $$$0 $0) F_+) () () ()
+                      prove → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 ℕ = apply $$$0 orderedPair $$0 successor $$$$$0 with ($$0 apply $$$0 orderedPair $$0 $$$$$0) F_+) ()
+                      prove = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () () ()
+                    }
+                    prove = with ($$0 apply $$$0 orderedPair $$0 $0) F_+ with ($$0 apply apply $$$$0 $$0 $0) F_+ 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply $$$0 orderedPair $$0 $0, apply apply $$$$0 $$0 $0) () (with ($$0 $$$$$0) F_+)
+                    prove = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 orderedPair $$0 successor $0, with ($$0 apply $$$0 orderedPair $$0 $0) F_+, with ($$0 apply apply $$$$0 $$0 $0) F_+) () ()
+                    elided (Simplified) {
+                      prove → ∈ $$0 ℕ ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$0 ℕ ∧ = apply apply $$$$0 $$$$$0 0 with ($$$$$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$$$$0 successor $0 with ($$$$$$0 apply apply $$$$$0 $$$$$$0 $0) F_+) ()
+                      prove ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∧ = apply apply $$$$0 $$0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+) () () ()
+                      prove ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply apply $$$$0 $$0 0 with ($$0) F_0, ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) F_+) () () ()
+                      prove → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 ℕ = apply apply $$$$0 $$0 successor $$$$$0 with ($$0 apply apply $$$$0 $$0 $$$$$0) F_+) ()
+                      prove = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) F_+) () () ()
+                      prove = with ($$0 apply apply $$$$0 $$0 $0) F_+ apply apply $$$$0 $$0 successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply apply $$$$0 $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) F_+) () ()
+                    }
+                    prove = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 orderedPair $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) F_+, apply apply $$$$0 $$0 successor $0) () ()
+                  }
+                }
+                prove ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (= apply $$0 orderedPair $0 $$$$0 apply apply $$$0 $0 $$$$0) ()
               }
-              prove ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (= apply $$0 orderedPair $0 $$$$0 apply apply $$$0 $0 $$$$0) ()
             }
           }
+          prove ↔ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0, ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () () ()
         }
-        prove ↔ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0, ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () () ()
       }
     }
     prove ∃! g ∧ function $0 × ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ 1342b4d3fde965a10ba79e07101310821d244b988e55d3ac51ea637e0b7eefa6 () () (function $$0 × ℕ ℕ A, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 $0 apply apply $$$0 $$0 $0, ∧ ∀ n → ∈ $0 ℕ = apply $$$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 successor $0 with ($$0 apply $$$$0 orderedPair $$0 $0) F_+) ()

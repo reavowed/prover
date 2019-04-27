@@ -21,7 +21,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   override def complexity: Int = {
     if (components.isEmpty) 0 else components.map(_.complexity).sum + 1
   }
-  override def referencedDefinitions: Set[ExpressionDefinition] = components.flatMap(_.referencedDefinitions).toSet + definition
+  override def definitionUsages: DefinitionUsages = components.map(_.definitionUsages).foldTogether.addUsage(definition)
 
   private def increaseDepth(internalDepth: Int) = if (scopedBoundVariableNames.nonEmpty) internalDepth + 1 else internalDepth
 

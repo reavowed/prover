@@ -7,7 +7,8 @@ trait Expression extends TypedExpression[Expression]
 
 trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
   def complexity: Int
-  def referencedDefinitions: Set[ExpressionDefinition]
+  def definitionUsages: DefinitionUsages
+  def referencedDefinitions: Set[ExpressionDefinition] = definitionUsages.map.keySet
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType]

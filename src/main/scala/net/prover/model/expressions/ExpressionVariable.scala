@@ -17,7 +17,7 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[String]]
 
   override def complexity: Int = 0
-  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
+  override def definitionUsages: DefinitionUsages = DefinitionUsages.empty
   override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = this
   override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0) = Some(this)
 
