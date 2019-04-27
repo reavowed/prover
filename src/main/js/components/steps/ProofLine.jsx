@@ -182,7 +182,8 @@ export const ProofLine = styled(class ProofLine extends React.Component {
 ProofLine.SingleStatementWithPrefixContent  = class extends React.Component {
   render() {
     const {editableBoundVariable, prefix, statement, path, boundVariableLists, theoremContext} = this.props;
-    let {additionalReferences} = this.props;
+    let {reference, additionalReferences} = this.props;
+    reference = reference || {stepPath: path};
     additionalReferences = additionalReferences || [];
     const wrapEditableBoundVariable = (name, index, boundVariablePath) => {
       const callback = (newName) => {
@@ -200,7 +201,7 @@ ProofLine.SingleStatementWithPrefixContent  = class extends React.Component {
         {' '}
         <HighlightableExpression statement={statement}
                                  boundVariableLists={boundVariableLists}
-                                 references={[...additionalReferences, {stepPath: path}]}
+                                 references={[...additionalReferences, reference]}
                                  wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}
                                  theoremContext={theoremContext}/>
        </>}
