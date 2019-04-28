@@ -71,7 +71,7 @@ object ProofHelper {
     }
   }
 
-  def extract(targetStatement: Statement, entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Option[Step.Elided] = {
+  def extract(targetStatement: Statement, entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Option[Step] = {
     val statementExtractionInferences = entryContext.availableEntries.ofType[Inference].collect {
       case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
         if conclusion.singleStatementVariable.isDefined &&
@@ -253,9 +253,14 @@ object ProofHelper {
         extractWithRewrite(extractionCandidate, termsSoFar)
     }
 
-    def extractPremise(premise: Premise.SingleLinePremise): Option[Step.Elided] = {
-      extract(premise.statement, 0).map { case (_, steps) =>
-        Step.Elided(steps, None, Some("Simplified"))
+    def extractPremise(premise: Premise.SingleLinePremise): Option[Step] = {
+      extract(premise.statement, 0).flatMap {
+        case (_, Nil) =>
+          None
+        case (_, Seq(singleStep)) =>
+          Some(singleStep)
+        case (_, steps) =>
+          Some(Step.Elided(steps, None, Some("Simplified")))
       }
     }
 
