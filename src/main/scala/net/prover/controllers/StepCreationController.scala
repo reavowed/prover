@@ -1,9 +1,9 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.{NamingDefinition, PathData, StepDefinition}
-import net.prover.model.{ExpressionParsingContext, Inference}
+import net.prover.model.{EntryContext, ExpressionParsingContext, Inference, Substitutions}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, ProofHelper, Step}
+import net.prover.model.proof.{Premise, PremiseContext, ProofHelper, Step, StepContext}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -29,13 +29,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         substitutions <- definition.substitutions.parse(inference)(ExpressionParsingContext.atStep(entryContext, stepContext))
         premiseStatements <- inference.substitutePremisesAndValidateConclusion(step.statement, substitutions, stepContext).recoverWithBadRequest
       } yield {
-        val premises = premiseStatements.map(premiseContext.createPremise)
-        val targetSteps = premises.ofType[Premise.Pending].map(p => ProofHelper.findFact(p.statement, stepContext, entryContext).getOrElse(Step.Target(p.statement)))
-        targetSteps :+ Step.Assertion(
-          step.statement,
-          inference,
-          premises,
-          substitutions)
+        getAssertionWithPremises(premiseStatements, step.statement, inference, substitutions, stepContext, premiseContext, entryContext)
       }
     }.toResponseEntity
   }
@@ -55,15 +49,40 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         premiseStatements <- inference.substitutePremises(substitutions, stepContext).recoverWithBadRequest
         conclusion <- inference.substituteConclusion(substitutions, stepContext).recoverWithBadRequest
       } yield {
-        val premises = premiseStatements.map(premiseContext.createPremise)
-        val targetSteps = premises.ofType[Premise.Pending].map(p => ProofHelper.findFact(p.statement, stepContext, entryContext).getOrElse(Step.Target(p.statement)))
-        targetSteps :+ Step.Assertion(
-          conclusion,
-          inference,
-          premises,
-          substitutions) :+ step
+        getAssertionWithPremises(premiseStatements, conclusion, inference, substitutions, stepContext, premiseContext, entryContext) :+ step
       }
     }.toResponseEntity
+  }
+
+  private def getAssertionWithPremises(
+    premiseStatements: Seq[Statement],
+    conclusion: Statement,
+    inference: Inference.Summary,
+    substitutions: Substitutions,
+    stepContext: StepContext,
+    premiseContext: PremiseContext,
+    entryContext: EntryContext
+  ): Seq[Step] = {
+    val premises = premiseStatements.map(premiseContext.createPremise)
+    val (targetSteps, premiseSteps) = premises.ofType[Premise.Pending].foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premise) =>
+      ProofHelper.findBySimplifying(premise.statement, entryContext, premiseContext, stepContext) match {
+        case Some(newPremiseSteps) =>
+          (targetStepsSoFar, premiseStepsSoFar ++ newPremiseSteps)
+        case None =>
+          (targetStepsSoFar :+ Step.Target(premise.statement), premiseStepsSoFar)
+      }
+    }
+    val assertionStep = Step.Assertion(
+      conclusion,
+      inference,
+      premises,
+      substitutions)
+    val baseStep = if (premiseSteps.nonEmpty) {
+      Step.Elided(premiseSteps :+ assertionStep, Some(inference.summary), None)
+    } else {
+      assertionStep
+    }
+    targetSteps :+ baseStep
   }
 
   @PostMapping(value = Array("/introduceNaming"))

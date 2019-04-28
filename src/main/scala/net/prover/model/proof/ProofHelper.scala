@@ -40,6 +40,43 @@ object ProofHelper {
       }
   }
 
+  def findBySimplifying(premise: Statement, entryContext: EntryContext, premiseContext: PremiseContext, stepContext: StepContext): Option[Seq[Step]] = {
+    val simplificationInferences = entryContext.availableEntries.ofType[Inference].collectOption {
+      case inference @ Inference(_, Seq(singlePremise), conclusion)
+        if conclusion.complexity > singlePremise.complexity &&
+          conclusion.requiredSubstitutions.isEquivalentTo(singlePremise.requiredSubstitutions) &&
+          singlePremise.referencedDefinitions.subsetOf(conclusion.referencedDefinitions)
+      =>
+        ( conclusion.definitionUsages - singlePremise.definitionUsages).map { addedDefinitions =>
+          (inference, singlePremise, addedDefinitions)
+        }
+    }
+
+    def findSubsidiaryPremiseFromGivenPremise(subsidiaryPremise: Statement, givenPremise: Statement): Option[Seq[Step]] = {
+      if (subsidiaryPremise == givenPremise)
+        Some(Nil)
+      else if (subsidiaryPremise.complexity > givenPremise.complexity && subsidiaryPremise.definitionUsages.contains(givenPremise.definitionUsages))
+        simplificationInferences.iterator.findFirst { case (inference, singlePremise, addedDefinitions) =>
+          if ((subsidiaryPremise.definitionUsages ++ addedDefinitions).contains(givenPremise.definitionUsages))
+            (for {
+              substitutions <- singlePremise.calculateSubstitutions(givenPremise, Substitutions.empty, 0, stepContext.externalDepth)
+              simplifiedPremise <- inference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
+              innerSteps <- findSubsidiaryPremiseFromGivenPremise(subsidiaryPremise, simplifiedPremise)
+              newStep = Step.Assertion(simplifiedPremise, inference.summary, Seq(Premise.Pending(givenPremise)), substitutions)
+            } yield newStep +: innerSteps).headOption
+          else
+            None
+        }
+      else None
+    }
+    def fromGivenPremises = premiseContext.premisesAndSimplifications
+      .flatMap(x => x._2.reverse :+ x._1)
+      .map(_.statement)
+      .mapFind(findSubsidiaryPremiseFromGivenPremise(premise, _))
+    def fromFact = findFact(premise, stepContext, entryContext).map(Seq(_))
+    fromGivenPremises orElse fromFact
+  }
+
   def findNamingInferences(entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement)] = {
     entryContext.inferences.mapCollect(i =>
       getNamingPremisesAndAssumption(i, entryContext).map {
@@ -94,48 +131,12 @@ object ProofHelper {
           }
           .map { case (predicateName, argumentNames) => (inference, singlePremise, predicateName, argumentNames)}
     }.collectDefined
-    val simplificationInferences = entryContext.availableEntries.ofType[Inference].collectOption {
-      case inference @ Inference(_, Seq(singlePremise), conclusion)
-        if conclusion.complexity > singlePremise.complexity &&
-          conclusion.requiredSubstitutions.isEquivalentTo(singlePremise.requiredSubstitutions) &&
-          singlePremise.referencedDefinitions.subsetOf(conclusion.referencedDefinitions)
-      =>
-        ( conclusion.definitionUsages - singlePremise.definitionUsages).map { addedDefinitions =>
-          (inference, singlePremise, addedDefinitions)
-        }
-    }
     val rewriteInferences = entryContext.availableEntries.ofType[Inference].collect {
       case inference @ Inference(_, Seq(singlePremise), conclusion)
         if conclusion.complexity == singlePremise.complexity &&
           conclusion.requiredSubstitutions.isEquivalentTo(singlePremise.requiredSubstitutions) &&
           conclusion != singlePremise
       => (inference, singlePremise)
-    }
-
-    def findSubsidiaryPremiseFromGivenPremise(subsidiaryPremise: Statement, givenPremise: Statement): Option[Seq[Step]] = {
-      if (subsidiaryPremise == givenPremise)
-        Some(Nil)
-      else if (subsidiaryPremise.complexity > givenPremise.complexity && subsidiaryPremise.definitionUsages.contains(givenPremise.definitionUsages))
-        simplificationInferences.iterator.findFirst { case (inference, singlePremise, addedDefinitions) =>
-          if ((subsidiaryPremise.definitionUsages ++ addedDefinitions).contains(givenPremise.definitionUsages))
-            (for {
-              substitutions <- singlePremise.calculateSubstitutions(givenPremise, Substitutions.empty, 0, stepContext.externalDepth)
-              simplifiedPremise <- inference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
-              innerSteps <- findSubsidiaryPremiseFromGivenPremise(subsidiaryPremise, simplifiedPremise)
-              newStep = Step.Assertion(simplifiedPremise, inference.summary, Seq(Premise.Pending(givenPremise)), substitutions)
-            } yield newStep +: innerSteps).headOption
-          else
-            None
-        }
-      else None
-    }
-    def findSubsidiaryPremise(premise: Statement): Option[Seq[Step]] = {
-      def fromGivenPremises = premiseContext.premisesAndSimplifications
-        .flatMap(x => x._2.reverse :+ x._1)
-        .map(_.statement)
-        .mapFind(findSubsidiaryPremiseFromGivenPremise(premise, _))
-      def fromFact = findFact(premise, stepContext, entryContext).map(Seq(_))
-      fromGivenPremises orElse fromFact
     }
 
     def matchDirectly(extractionCandidate: Statement, termsSoFar: Int): Option[(Seq[Term], Seq[Step])] = {
@@ -198,7 +199,7 @@ object ProofHelper {
             actualSubstitutions <- firstPremise.calculateSubstitutions(actualFirstPremise, Substitutions.empty, 0, stepContext.externalDepth)
             actualOtherPremises <- otherPremises.map(_.applySubstitutions(actualSubstitutions, 0, stepContext.externalDepth)).traverseOption
             actualConclusion <- inference.conclusion.applySubstitutions(actualSubstitutions, 0, stepContext.externalDepth)
-            premiseSteps <- actualOtherPremises.map(findSubsidiaryPremise).traverseOption.map(_.flatten)
+            premiseSteps <- actualOtherPremises.map(findBySimplifying(_, entryContext, premiseContext, stepContext)).traverseOption.map(_.flatten)
             newStep = Step.Assertion(
               actualConclusion,
               inference.summary,
