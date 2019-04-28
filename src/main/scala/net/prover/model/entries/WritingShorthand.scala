@@ -8,6 +8,11 @@ case class WritingShorthand(template: Template, symbol: String) extends ChapterE
   override def serializedLines: Seq[String] = Seq(Seq("write", template.serialized, "as", symbol).mkString(" "))
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = template.referencedDefinitions.toType[ChapterEntry]
+  override def replaceDefinition(
+    oldDefinition: ExpressionDefinition,
+    newDefinition: ExpressionDefinition,
+    entryContext: EntryContext
+  ): WritingShorthand = this
 }
 
 object WritingShorthand extends ChapterEntryParser {

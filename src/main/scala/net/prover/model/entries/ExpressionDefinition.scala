@@ -17,6 +17,7 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
   def typeName: String
   def attributes: Seq[String]
 
+  def withSymbol(newSymbol: String): ExpressionDefinitionType
   def withShorthand(newShorthand: Option[String]): ExpressionDefinitionType
 
   @JsonSerialize

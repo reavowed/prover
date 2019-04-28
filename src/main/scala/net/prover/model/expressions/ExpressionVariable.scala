@@ -20,6 +20,7 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   override def definitionUsages: DefinitionUsages = DefinitionUsages.empty
   override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = this
   override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0) = Some(this)
+  override def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): ExpressionType = this
 
   override def specify(
     targetArguments: Seq[Term],

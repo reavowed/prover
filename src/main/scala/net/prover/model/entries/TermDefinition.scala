@@ -37,6 +37,7 @@ case class TermDefinition(
     }
   }
 
+  override def withSymbol(newSymbol: String): TermDefinition = copy(symbol = newSymbol)
   override def withShorthand(newShorthand: Option[String]): TermDefinition = copy(shorthand = newShorthand)
 
   override def inferences: Seq[Inference] = Seq(Inference.Definition(name, premises, definingStatement))
@@ -49,6 +50,23 @@ case class TermDefinition(
       shorthand.map(s => s"shorthand ($s)").toSeq ++
       Some(attributes).filter(_.nonEmpty).map(attributes => s"attributes (${attributes.mkString(" ")})").toSeq
     ).indent
+
+  override def replaceDefinition(
+    oldDefinition: ExpressionDefinition,
+    newDefinition: ExpressionDefinition,
+    entryContext: EntryContext
+  ): TermDefinition = {
+    TermDefinition(
+      symbol,
+      boundVariableNames,
+      componentTypes,
+      explicitName,
+      format,
+      premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
+      definitionPredicate.replaceDefinition(oldDefinition, newDefinition),
+      shorthand,
+      attributes)
+  }
 }
 
 object TermDefinition extends ChapterEntryParser {

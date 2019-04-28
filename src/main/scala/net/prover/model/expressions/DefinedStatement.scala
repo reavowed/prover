@@ -1,6 +1,6 @@
 package net.prover.model.expressions
 
-import net.prover.model.entries.StatementDefinition
+import net.prover.model.entries.{ExpressionDefinition, StatementDefinition}
 
 case class DefinedStatement(
     components: Seq[Expression],
@@ -19,5 +19,11 @@ case class DefinedStatement(
   }
   override def updateBoundVariableNames(newBoundVariableNames: Seq[String]): DefinedStatement = {
     DefinedStatement(components, definition)(newBoundVariableNames)
+  }
+  override def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): DefinedStatement = {
+    DefinedStatement(
+      components.map(_.replaceDefinition(oldDefinition, newDefinition)),
+      if (definition == oldDefinition) newDefinition.asInstanceOf[StatementDefinition] else definition
+    )(scopedBoundVariableNames)
   }
 }

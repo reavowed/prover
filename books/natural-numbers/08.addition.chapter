@@ -1,7 +1,7 @@
 Addition on natural numbers.
 
 theorem Existence of Addition
-conclusion ∃! f ∧ function $0 × ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0
+conclusion ∃! f ∧ function $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0
 {
   elided ac7b2dcbb3db44e507debe87d8065f967f2eb33d604f65072090ed2712a391c7 {
     elided 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 {
@@ -38,19 +38,19 @@ conclusion ∃! f ∧ function $0 × ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = appl
       }
     }
   }
-  prove ∃! f ∧ function $0 × ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0 4ae595434513e9882876d5c28fd3fd89584c1a66adae062ed3c4fcc0c5a21ec7 () (ℕ) () ($0, successor $1)
+  prove ∃! f ∧ function $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0 41a52e9387cb0301dcaca83e9781aeaf8efc3e39cc5c3621fcb76a28f1bc12b1 () (ℕ) () ($0, successor $1)
 }
 
 term + ()
   name (Addition)
-  (∧ function $0 × ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0)
+  (∧ function $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0)
   attributes (infix)
 
 theorem Identity for Addition (Right)
 premise ∈ n ℕ
 conclusion = apply + orderedPair n 0 n
 {
-  prove ∧ function + × ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply + orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0 1a3ecd1d37baa577c6a302c9f2912f7c58f98d7abc7ab79440e2098cc68a8fef () () () ()
+  prove ∧ function + product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply + orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0 4dd7cca468df4ddb9a7287abb11baffdfb74c3dd7db3d6f31b94b6f4d5398974 () () () ()
   elided (Simplified) {
     prove → ∈ n ℕ = apply + orderedPair n 0 n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ = apply + orderedPair $0 0 $0) ()
     prove = apply + orderedPair n 0 n fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, = apply + orderedPair n 0 n) () () ()
@@ -62,7 +62,7 @@ premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion = apply + orderedPair n successor m successor apply + orderedPair n m
 {
-  prove ∧ function + × ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply + orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0 1a3ecd1d37baa577c6a302c9f2912f7c58f98d7abc7ab79440e2098cc68a8fef () () () ()
+  prove ∧ function + product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply + orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0 4dd7cca468df4ddb9a7287abb11baffdfb74c3dd7db3d6f31b94b6f4d5398974 () () () ()
   elided (Simplified) {
     prove → ∈ n ℕ ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0) ()
     prove ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ m → ∈ $0 ℕ = apply + orderedPair n successor $0 successor apply + orderedPair n $0) () () ()
@@ -127,10 +127,10 @@ conclusion = apply + orderedPair successor n m successor apply + orderedPair n m
 }
 
 theorem Addition is a Function
-conclusion function + × ℕ ℕ ℕ
+conclusion function + product ℕ ℕ ℕ
 {
-  prove ∧ function + × ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply + orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0 1a3ecd1d37baa577c6a302c9f2912f7c58f98d7abc7ab79440e2098cc68a8fef () () () ()
-  prove function + × ℕ ℕ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function + × ℕ ℕ ℕ, ∧ ∀ n → ∈ $0 ℕ = apply + orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0) () () ()
+  prove ∧ function + product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply + orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0 4dd7cca468df4ddb9a7287abb11baffdfb74c3dd7db3d6f31b94b6f4d5398974 () () () ()
+  prove function + product ℕ ℕ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function + product ℕ ℕ ℕ, ∧ ∀ n → ∈ $0 ℕ = apply + orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply + orderedPair $$0 successor $0 successor apply + orderedPair $$0 $0) () () ()
 }
 
 theorem Addition is Closed on the Natural Numbers
@@ -138,9 +138,9 @@ premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ∈ apply + orderedPair n m ℕ
 {
-  prove function + × ℕ ℕ ℕ de3142c8a5e374ab978a063bd7ca838356e0e183f0f5685e796ed0b17b6bd74d () () () ()
-  prove ∈ orderedPair n m × ℕ ℕ 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () (n, ℕ, m, ℕ) () ()
-  prove ∈ apply + orderedPair n m ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (+, × ℕ ℕ, ℕ, orderedPair n m) () ()
+  prove function + product ℕ ℕ ℕ 116262124479ac876dbca1c725bf76d80aceacf10cc8f0d2de9abe175df459c4 () () () ()
+  prove ∈ orderedPair n m product ℕ ℕ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (n, ℕ, m, ℕ) () ()
+  prove ∈ apply + orderedPair n m ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (+, product ℕ ℕ, ℕ, orderedPair n m) () ()
 }
 
 theorem Addition is Commutative

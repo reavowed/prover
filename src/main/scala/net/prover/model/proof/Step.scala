@@ -23,6 +23,11 @@ sealed trait Step {
   ): Option[Try[(Step, T)]]
   def insertExternalParameters(numberOfParametersToRemove: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step]
+  def replaceDefinition(
+    oldDefinition: ExpressionDefinition,
+    newDefinition: ExpressionDefinition,
+    entryContext: EntryContext
+  ): Step
   def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step
   def isComplete: Boolean
   def referencedInferenceIds: Set[String]
@@ -31,6 +36,7 @@ sealed trait Step {
   def referencedLines: Set[PreviousLineReference]
   def length: Int
   def serializedLines: Seq[String]
+
 }
 
 object Step {
@@ -135,6 +141,16 @@ object Step {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
       } yield Deduction(newAssumption, newSubsteps, deductionStatement)
     }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition,
+      entryContext: EntryContext
+    ): Deduction = {
+      Deduction(
+        assumption.replaceDefinition(oldDefinition, newDefinition),
+        substeps.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)),
+        entryContext.deductionDefinitionOption.get)
+    }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet + deductionStatement
@@ -187,6 +203,20 @@ object Step {
         newPremises <- premises.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
         newSubstitutions <- substitutions.removeExternalParameters(numberOfParametersToRemove)
       } yield Naming(variableName, newAssumption, newStatement, newSubsteps, inference, newPremises, newSubstitutions)
+    }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition,
+      entryContext: EntryContext
+    ): Naming = {
+      Naming(
+        variableName,
+        assumption.replaceDefinition(oldDefinition, newDefinition),
+        statement.replaceDefinition(oldDefinition, newDefinition),
+        substeps.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)),
+        inference.replaceDefinition(oldDefinition, newDefinition),
+        premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
+        substitutions.replaceDefinition(oldDefinition, newDefinition))
     }
     override def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step = {
       val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext), addPremises(premiseContext, stepContext))
@@ -257,6 +287,16 @@ object Step {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
       } yield ScopedVariable(variableName, newSubsteps, scopingStatement)
     }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition,
+      entryContext: EntryContext
+    ): ScopedVariable = {
+      ScopedVariable(
+        variableName,
+        substeps.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)),
+        entryContext.scopingDefinitionOption.get)
+    }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet + scopingStatement
     override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
@@ -288,6 +328,11 @@ object Step {
         s <- statement.removeExternalParameters(numberOfParametersToRemove)
       } yield copy(statement = s)
     }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition,
+      entryContext: EntryContext
+    ): Target = Target(statement.replaceDefinition(oldDefinition, newDefinition))
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step = this
     override def referencedInferenceIds: Set[String] = Set.empty
@@ -318,6 +363,16 @@ object Step {
       for {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
       } yield Elided(newSubsteps, highlightedInference, description)
+    }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition,
+      entryContext: EntryContext
+    ): Elided = {
+      Elided(
+        substeps.map(_.replaceDefinition(oldDefinition, newDefinition,entryContext)),
+        highlightedInference.map(_.replaceDefinition(oldDefinition, newDefinition)),
+        description)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
@@ -360,6 +415,17 @@ object Step {
         newPremises <- premises.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
         newSubstitutions <- substitutions.removeExternalParameters(numberOfParametersToRemove)
       } yield Assertion(newStatement, inference, newPremises, newSubstitutions)
+    }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition,
+      entryContext: EntryContext
+    ): Assertion = {
+      Assertion(
+        statement.replaceDefinition(oldDefinition, newDefinition),
+        inference.replaceDefinition(oldDefinition, newDefinition),
+        premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
+        substitutions.replaceDefinition(oldDefinition, newDefinition))
     }
     override def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step = {
       val newPremises = premises.map(p => premiseContext.createPremise(p.statement))
@@ -405,6 +471,15 @@ object Step {
       for {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
       } yield SubProof(name, newSubsteps)
+    }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition,
+      entryContext: EntryContext
+    ): SubProof = {
+      SubProof(
+        name,
+        substeps.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet

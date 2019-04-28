@@ -36,6 +36,20 @@ case class PropertyDefinition(
     (Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" ")) ++
       explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq
     ).indent
+
+  override def replaceDefinition(
+    oldDefinition: ExpressionDefinition,
+    newDefinition: ExpressionDefinition,
+    entryContext: EntryContext
+  ): PropertyDefinition = {
+    PropertyDefinition(
+      symbol,
+      entryContext.typeDefinitions.find(_.symbol == parentType.symbol).get,
+      defaultTermName,
+      parentComponentTypes,
+      explicitName,
+      definingStatement.replaceDefinition(oldDefinition, newDefinition))
+  }
 }
 
 object PropertyDefinition extends ChapterEntryParser {

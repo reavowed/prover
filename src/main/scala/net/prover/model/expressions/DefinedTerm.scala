@@ -1,7 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model.Substitutions
-import net.prover.model.entries.TermDefinition
+import net.prover.model.entries.{ExpressionDefinition, TermDefinition}
 
 case class DefinedTerm(
     components: Seq[Expression],
@@ -20,6 +20,12 @@ case class DefinedTerm(
   }
   override def updateBoundVariableNames(newBoundVariableNames: Seq[String]): DefinedTerm = {
     DefinedTerm(components, definition)(newBoundVariableNames)
+  }
+  override def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): DefinedTerm = {
+    DefinedTerm(
+      components.map(_.replaceDefinition(oldDefinition, newDefinition)),
+      if (definition == oldDefinition) newDefinition.asInstanceOf[TermDefinition] else definition
+    )(scopedBoundVariableNames)
   }
 
   override def calculateApplicatives(

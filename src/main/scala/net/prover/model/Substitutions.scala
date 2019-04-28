@@ -1,6 +1,7 @@
 package net.prover.model
 
 import monocle.Lens
+import net.prover.model.entries.ExpressionDefinition
 import net.prover.model.expressions._
 
 case class Substitutions(
@@ -33,6 +34,13 @@ case class Substitutions(
       newPredicates <- predicates.mapValues(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
       newFunctions <- functions.mapValues(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
     } yield Substitutions(newStatements, newTerms, newPredicates, newFunctions)
+  }
+  def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Substitutions = {
+    Substitutions(
+      statements.mapValues(_.replaceDefinition(oldDefinition, newDefinition)),
+      terms.mapValues(_.replaceDefinition(oldDefinition, newDefinition)),
+      predicates.mapValues(_.replaceDefinition(oldDefinition, newDefinition)),
+      functions.mapValues(_.replaceDefinition(oldDefinition, newDefinition)))
   }
 }
 

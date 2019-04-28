@@ -7,59 +7,59 @@ display apply f orderedPair a b as (f(a, b))
 write apply f orderedPair a b as apply2
 
 theorem Binary Functions with Same Values are Equal
-premise function f × A B C
-premise function g × A B C
+premise function f product A B C
+premise function g product A B C
 premise ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply f orderedPair $$0 $0 apply g orderedPair $$0 $0
 conclusion = f g
 {
   take x {
-    assume ∈ $0 × A B {
-      prove ∈ first $0 A 212eb18271d78fa0dde5cc68499b2b6ecc0595c50b41a0aed26ee845bde8ad33 () ($0, A, B) () ()
-      prove ∈ second $0 B 6265805f78e67268a7358de9065e468d8c4e495889ebb74b520416cdc6d73461 () ($0, A, B) () ()
+    assume ∈ $0 product A B {
+      prove ∈ first $0 A 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($0, A, B) () ()
+      prove ∈ second $0 B 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($0, A, B) () ()
       elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
         prove → ∈ first $0 A ∀ b → ∈ $0 B = apply f orderedPair first $$0 $0 apply g orderedPair first $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (first $0) (→ ∈ $$0 A ∀ b → ∈ $0 B = apply f orderedPair $$$0 $0 apply g orderedPair $$$0 $0) ()
         prove ∀ b → ∈ $0 B = apply f orderedPair first $$0 $0 apply g orderedPair first $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ first $0 A, ∀ b → ∈ $0 B = apply f orderedPair first $$0 $0 apply g orderedPair first $$0 $0) () () ()
         prove → ∈ second $0 B = apply f orderedPair first $0 second $0 apply g orderedPair first $0 second $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (second $0) (→ ∈ $$0 B = apply f orderedPair first $0 $$0 apply g orderedPair first $0 $$0) ()
         prove = apply f orderedPair first $0 second $0 apply g orderedPair first $0 second $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ second $0 B, = apply f orderedPair first $0 second $0 apply g orderedPair first $0 second $0) () () ()
       }
-      elided 67869817b48cb1ff2116a58e12959fc3392a8b1da88998b959c87c4daff11a57 {
-        prove = $0 orderedPair first $0 second $0 67869817b48cb1ff2116a58e12959fc3392a8b1da88998b959c87c4daff11a57 () ($0, A, B) () ()
+      elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+        prove = $0 orderedPair first $0 second $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($0, A, B) () ()
         prove = apply f $0 apply g $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, orderedPair first $0 second $0) (= apply f $$0 apply g $$0) ()
       }
     }
   }
-  prove = f g 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () (f, × A B, C, g) () ()
+  prove = f g 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () (f, product A B, C, g) () ()
 }
 
 theorem Uncurry Function
 premise function f A functionSpace B C
-conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0
+conclusion ∃! g ∧ function $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0
 {
-  let g_f = $0 comprehension x × × A B C = second $0 apply apply f first first $0 second first $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0) (comprehension x × × A B C = second $0 apply apply f first first $0 second first $0) () () {
+  let g_f = $0 comprehension x product product A B C = second $0 apply apply f first first $0 second first $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! g ∧ function $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0) (comprehension x product product A B C = second $0 apply apply f first first $0 second first $0) () () {
     subproof (Function) {
-      prove ⊆ $0 × × A B C 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () ($0, × × A B C) (= second $$0 apply apply f first first $$0 second first $$0) ()
+      prove ⊆ $0 product product A B C 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () ($0, product product A B C) (= second $$0 apply apply f first first $$0 second first $$0) ()
       take x {
-        assume ∈ $0 × A B {
+        assume ∈ $0 product A B {
           elided 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 {
-            prove ∈ first $0 A 212eb18271d78fa0dde5cc68499b2b6ecc0595c50b41a0aed26ee845bde8ad33 () ($0, A, B) () ()
+            prove ∈ first $0 A 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($0, A, B) () ()
             prove ∈ apply f first $0 functionSpace B C 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (f, A, functionSpace B C, first $0) () ()
           }
           prove function apply f first $0 B C 4d70c4c4f9984bdaa76ed2bf85648419f8aa9287d0985d64b9533285f6042535 () (apply f first $0, B, C) () ()
           elided 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 {
-            prove ∈ second $0 B 6265805f78e67268a7358de9065e468d8c4e495889ebb74b520416cdc6d73461 () ($0, A, B) () ()
+            prove ∈ second $0 B 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($0, A, B) () ()
             prove ∈ apply apply f first $0 second $0 C 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (apply f first $0, B, C, second $0) () ()
           }
-          prove ∈ orderedPair $0 apply apply f first $0 second $0 × × A B C 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () ($0, × A B, apply apply f first $0 second $0, C) () ()
+          prove ∈ orderedPair $0 apply apply f first $0 second $0 product product A B C 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($0, product A B, apply apply f first $0 second $0, C) () ()
           prove = second orderedPair $0 apply apply f first $0 second $0 apply apply f first $0 second $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($0, apply apply f first $0 second $0) () ()
           elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
             prove = first orderedPair $0 apply apply f first $0 second $0 $0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () ($0, apply apply f first $0 second $0) () ()
             prove = apply apply f first $0 second $0 apply apply f first first orderedPair $0 apply apply f first $0 second $0 second first orderedPair $0 apply apply f first $0 second $0 7c443e2cf474b9526f100bc88fa4dea410b006c21c5a0a187c8e6e34b2c5eedf () (first orderedPair $0 apply apply f first $0 second $0, $0) () (apply apply f first $$$0 second $$$0)
           }
           prove = second orderedPair $0 apply apply f first $0 second $0 apply apply f first first orderedPair $0 apply apply f first $0 second $0 second first orderedPair $0 apply apply f first $0 second $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (second orderedPair $0 apply apply f first $0 second $0, apply apply f first $0 second $0, apply apply f first first orderedPair $0 apply apply f first $0 second $0 second first orderedPair $0 apply apply f first $0 second $0) () ()
-          prove ∈ orderedPair $0 apply apply f first $0 second $0 $$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$0, × × A B C, orderedPair $0 apply apply f first $0 second $0) (= second $$$0 apply apply f first first $$$0 second first $$$0) ()
+          prove ∈ orderedPair $0 apply apply f first $0 second $0 $$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$0, product product A B C, orderedPair $0 apply apply f first $0 second $0) (= second $$$0 apply apply f first first $$$0 second first $$$0) ()
           take c {
             assume ∈ orderedPair $$0 $0 $$$0 {
-              prove = second orderedPair $$0 $0 apply apply f first first orderedPair $$0 $0 second first orderedPair $$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, × × A B C, orderedPair $$0 $0) (= second $$$$0 apply apply f first first $$$$0 second first $$$$0) ()
+              prove = second orderedPair $$0 $0 apply apply f first first orderedPair $$0 $0 second first orderedPair $$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, product product A B C, orderedPair $$0 $0) (= second $$$$0 apply apply f first first $$$$0 second first $$$$0) ()
               elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
                 prove = first orderedPair $$0 $0 $$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () ($$0, $0) () ()
                 prove = second orderedPair $$0 $0 apply apply f first $$0 second $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (first orderedPair $$0 $0, $$0) (= second orderedPair $$0 $0 apply apply f first $$$$0 second $$$$0) ()
@@ -73,9 +73,9 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B
           prove ∃! y ∈ orderedPair $$0 $0 $$$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply apply f first $0 second $0) (∈ orderedPair $0 $$$0 $$0) ()
         }
       }
-      elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
-        prove ∧ ⊆ $0 × × A B C ∀ x → ∈ $0 × A B ∃! y ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 × × A B C, ∀ x → ∈ $0 × A B ∃! y ∈ orderedPair $$0 $0 $$$0) () () ()
-        prove function $0 × A B C be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () ($0, × A B, C) () ()
+      elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
+        prove ∧ ⊆ $0 product product A B C ∀ x → ∈ $0 product A B ∃! y ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 product product A B C, ∀ x → ∈ $0 product A B ∃! y ∈ orderedPair $$0 $0 $$$0) () () ()
+        prove function $0 product A B C 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () ($0, product A B, C) () ()
       }
     }
     subproof (Function has same values) {
@@ -84,14 +84,14 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B
           take b {
             assume ∈ $0 B {
               elided 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 {
-                prove ∈ orderedPair $$0 $0 × A B 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () ($$0, A, $0, B) () ()
-                prove ∈ orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 $$$0 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () ($$$0, × A B, C, orderedPair $$0 $0) () ()
+                prove ∈ orderedPair $$0 $0 product A B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, A, $0, B) () ()
+                prove ∈ orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 $$$0 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () ($$$0, product A B, C, orderedPair $$0 $0) () ()
               }
               elided 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 {
                 prove = second orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () (orderedPair $$0 $0, apply $$$0 orderedPair $$0 $0) () ()
                 prove = apply $$$0 orderedPair $$0 $0 second orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (second orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0, apply $$$0 orderedPair $$0 $0) () ()
               }
-              prove = second orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 apply apply f first first orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 second first orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, × × A B C, orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0) (= second $$$$0 apply apply f first first $$$$0 second first $$$$0) ()
+              prove = second orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 apply apply f first first orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 second first orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, product product A B C, orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0) (= second $$$$0 apply apply f first first $$$$0 second first $$$$0) ()
               prove = apply $$$0 orderedPair $$0 $0 apply apply f first first orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 second first orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$0 orderedPair $$0 $0, second orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0, apply apply f first first orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 second first orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0) () ()
               elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
                 prove = first orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 orderedPair $$0 $0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () (orderedPair $$0 $0, apply $$$0 orderedPair $$0 $0) () ()
@@ -115,7 +115,7 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B
     }
     subproof (Uniqueness) {
       take g {
-        assume ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 {
+        assume ∧ function $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 {
           take a {
             assume ∈ $0 A {
               take b {
@@ -138,13 +138,13 @@ conclusion ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B
               }
             }
           }
-          prove = $0 $$0 f2d9103d8a6b104b65a02f4ed4c3594bd75a28f182ac32ba00997ddb65825de1 () ($0, A, B, C, $$0) () ()
+          prove = $0 $$0 d8eafc3758bf7d18e72b1cad81a767b0f5c67d864b365c27c8955770c95e3ff6 () ($0, A, B, C, $$0) () ()
         }
       }
     }
     elided 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 {
-      prove ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 × A B C, ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0) () () ()
-      prove ∃! g ∧ function $0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ function $$0 × A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$0 $0 apply apply f $$0 $0) ()
+      prove ∧ function $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 product A B C, ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0) () () ()
+      prove ∃! g ∧ function $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ function $$0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$0 $0 apply apply f $$0 $0) ()
     }
   }
 }

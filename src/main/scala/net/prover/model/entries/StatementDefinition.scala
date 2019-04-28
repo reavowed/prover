@@ -35,6 +35,7 @@ case class StatementDefinition(
     }
   }
 
+  override def withSymbol(newSymbol: String): StatementDefinition = copy(symbol = newSymbol)
   override def withShorthand(newShorthand: Option[String]): StatementDefinition = copy(shorthand = newShorthand)
 
   override def inferences: Seq[Inference] = {
@@ -52,6 +53,22 @@ case class StatementDefinition(
       shorthand.map(s => s"shorthand ($s)").toSeq ++
       Some(attributes).filter(_.nonEmpty).map(attributes => s"attributes (${attributes.mkString(" ")})").toSeq
     ).indent
+
+  override def replaceDefinition(
+    oldDefinition: ExpressionDefinition,
+    newDefinition: ExpressionDefinition,
+    entryContext: EntryContext
+  ): StatementDefinition = {
+    StatementDefinition(
+      symbol,
+      boundVariableNames,
+      componentTypes,
+      explicitName,
+      format,
+      definingStatement.map(_.replaceDefinition(oldDefinition, newDefinition)),
+      shorthand,
+      attributes)
+  }
 }
 
 object StatementDefinition extends ChapterEntryParser {

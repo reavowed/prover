@@ -26,6 +26,8 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     else
       Some(FunctionParameter(index, level - numberOfParametersToRemove))
   }
+  override def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): FunctionParameter = this
+
 
   override def specify(
     targetArguments: Seq[Term],

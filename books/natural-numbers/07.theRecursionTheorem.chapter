@@ -36,13 +36,13 @@ conclusion ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 a_0 ∀ n → ∈ $0 �
 theorem 𝒫(ℕ × X) Contains All Functions from a Natural Number to X
 premise ∈ n ℕ
 premise function f n A
-conclusion ∈ f powerSet × ℕ A
+conclusion ∈ f powerSet product ℕ A
 {
   prove ⊆ n ℕ c660722cbf1cd12662afceb43da350b308473e86467cf5d9f72cd22c5e8cfcf6 () (n) () ()
-  prove ⊆ f × n A fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, n, A) () ()
-  prove ⊆ × n A × ℕ A 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 () (n, ℕ, A) () ()
-  prove ⊆ f × ℕ A 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, × n A, × ℕ A) () ()
-  prove ∈ f powerSet × ℕ A 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (f, × ℕ A) () ()
+  prove ⊆ f product n A 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () (f, n, A) () ()
+  prove ⊆ product n A product ℕ A 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 () (n, ℕ, A) () ()
+  prove ⊆ f product ℕ A 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, product n A, product ℕ A) () ()
+  prove ∈ f powerSet product ℕ A 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (f, product ℕ A) () ()
 }
 
 theorem Extend Function from a Natural Number to Its Successor
@@ -64,9 +64,9 @@ premise function f X X
 premise ∈ g_0 X
 conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
 {
-  let S = $0 comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0) (comprehension g powerSet × ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () {
-    prove ⊆ $0 powerSet × ℕ X 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () ($0, powerSet × ℕ X) (∃ n ∧ ∈ $0 ℕ ∧ function $$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) ()
-    prove ⊆ union $0 × ℕ X aa0993b0a958f1b761e3dd5f31bc5045e41da27f517428ced08dce38691d6a0e () ($0, × ℕ X) () ()
+  let S = $0 comprehension g powerSet product ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0) (comprehension g powerSet product ℕ X ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () () {
+    prove ⊆ $0 powerSet product ℕ X 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () ($0, powerSet product ℕ X) (∃ n ∧ ∈ $0 ℕ ∧ function $$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply f apply $$$$$0 $0) ()
+    prove ⊆ union $0 product ℕ X aa0993b0a958f1b761e3dd5f31bc5045e41da27f517428ced08dce38691d6a0e () ($0, product ℕ X) () ()
     subproof (Base case - existence) {
       let g = $0 singleton orderedPair 0 g_0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∈ orderedPair 0 g_0 union $0) (singleton orderedPair 0 g_0) () () {
         elided f0d91f99346599d36374a0a7767b7eefdc44886e1fb4a5734feac36206c18b19 {
@@ -81,9 +81,9 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
             prove function $0 1 X a24b6cc2064ec06bf3e7a3aaf24ad7a87910420b78f0f3c47ba32473212ab24e () ($0, 1, singleton g_0, X) () ()
           }
         }
-        elided 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 {
+        elided a4ff4cc83c2d650304ee70052f6ff9e1a95e5c726ee75122bba9bd928eb15696 {
           prove ∈ 1 ℕ 0ea2cae46b5b1dec42fef1b2b68f5d829b809f821651b8628f2f94b1abd87ac5 () () () ()
-          prove ∈ $0 powerSet × ℕ X 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 () (1, $0, X) () ()
+          prove ∈ $0 powerSet product ℕ X a4ff4cc83c2d650304ee70052f6ff9e1a95e5c726ee75122bba9bd928eb15696 () (1, $0, X) () ()
         }
         elided e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 {
           prove ∈ orderedPair 0 g_0 singleton orderedPair 0 g_0 e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (orderedPair 0 g_0) () ()
@@ -112,7 +112,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
           prove ∧ function $0 1 X ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 1 X, ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
           prove ∧ ∈ 1 ℕ ∧ function $0 1 X ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ 1 ℕ, ∧ function $0 1 X ∀ a → ∈ $0 1 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
           prove ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (1) (∧ ∈ $$$0 ℕ ∧ function $0 $$$0 X ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) ()
-          prove ∈ $0 $$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) ()
+          prove ∈ $0 $$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$0, powerSet product ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$0 $$0 apply f apply $$$$$$0 $0) ()
         }
         prove ∈ orderedPair 0 g_0 union $$0 c6380fe68a1b2148337c46533f74f3cc3c2dc26eb007c8a18b6d674dfa7b158c () (orderedPair 0 g_0, $0, $$0) () ()
       }
@@ -122,7 +122,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
         assume ∈ orderedPair 0 $0 union $$0 {
           prove ∃ g ∧ ∈ orderedPair 0 $$0 $0 ∈ $0 $$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair 0 $0, $$0) () ()
           let g ∧ ∈ orderedPair 0 $$0 $0 ∈ $0 $$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $0 g_0) () (∧ ∈ orderedPair 0 $0 $$$0 ∈ $$$0 $$0) () {
-            prove ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$0 $$0 apply f apply $$$$$$$0 $0) ()
+            prove ∃ n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, powerSet product ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$0 $$0 apply f apply $$$$$$$0 $0) ()
             let n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$0 g_0) () (∧ ∈ $$$$0 ℕ ∧ function $0 $$$$0 X ∀ a → ∈ $0 $$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
               prove ∈ 0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, 0, $$$0) () ()
               elided c5a163f6a3b0ffc769773f489bc775c0300f132d88a72941a3e129b91b202abe {
@@ -152,7 +152,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
           let x_n ∈ orderedPair $$0 $0 union $$$0 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∃! x ∈ orderedPair successor $$0 $0 union $$$0) () (∈ orderedPair $0 $$$0 union $$0) () {
             prove ∃ g ∧ ∈ orderedPair $$$0 $$0 $0 ∈ $0 $$$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair $$0 $0, $$$0) () ()
             let g_n ∧ ∈ orderedPair $$$0 $$0 $0 ∈ $0 $$$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair successor $$$0 $0 union $$$$0) () (∧ ∈ orderedPair $$0 $0 $$$$0 ∈ $$$$0 $$$0) () {
-              prove ∃ m_n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$$0, powerSet × ℕ X, $0) (∃ m ∧ ∈ $0 ℕ ∧ function $$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$0 $$0 apply f apply $$$$$$$$0 $0) ()
+              prove ∃ m_n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$$0, powerSet product ℕ X, $0) (∃ m ∧ ∈ $0 ℕ ∧ function $$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$0 $$0 apply f apply $$$$$$$$0 $0) ()
               let m_n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair successor $$$$0 $0 union $$$$$0) () (∧ ∈ $$$$$0 ℕ ∧ function $0 $$$$$0 X ∀ a → ∈ $0 $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
                 subproof (Existence) {
                   prove ∈ $$$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, $$$$0, $$$0) () ()
@@ -193,10 +193,10 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                           prove function $$$0 successor $$$$$0 X 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor $$$$$0, $$0) (function $$$0 $$$$$$$0 X) ()
                           prove function $0 successor successor $$$$$0 X 2cb925c2504836b10cd5ec4fbdaa31c47b0aead131405dd66756b2fc5a5220f2 () (successor $$$$$0, $$$0, X, apply f $$$$0, $0) () ()
                         }
-                        elided 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 {
+                        elided a4ff4cc83c2d650304ee70052f6ff9e1a95e5c726ee75122bba9bd928eb15696 {
                           prove ∈ successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$$$$0) () ()
                           prove ∈ successor successor $$$$$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (successor $$$$$0) () ()
-                          prove ∈ $0 powerSet × ℕ X 9ac34f7909ce83165820beb46144e895b75b104a7d9fdcdea18bbdd6eedd8122 () (successor successor $$$$$0, $0, X) () ()
+                          prove ∈ $0 powerSet product ℕ X a4ff4cc83c2d650304ee70052f6ff9e1a95e5c726ee75122bba9bd928eb15696 () (successor successor $$$$$0, $0, X) () ()
                         }
                         elided e0ad13e7b958f91d4dc2eb7dabb5251c5e193be6759baa3c47807eba2d04c2c3 {
                           elided f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 {
@@ -321,7 +321,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                           prove ∧ ∈ successor successor $$$$$0 ℕ ∧ function $0 successor successor $$$$$0 X ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ successor successor $$$$$0 ℕ, ∧ function $0 successor successor $$$$$0 X ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () () ()
                           prove ∃ n'' ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (successor successor $$$$$0) (∧ ∈ $$$$$$$0 ℕ ∧ function $0 $$$$$$$0 X ∀ a → ∈ $0 $$$$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) ()
                         }
-                        prove ∈ $0 $$$$$$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$$$$$0, powerSet × ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$$$0 $$0 apply f apply $$$$$$$$$$0 $0) ()
+                        prove ∈ $0 $$$$$$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$$$$$0, powerSet product ℕ X, $0) (∃ n ∧ ∈ $0 ℕ ∧ function $$$$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$$$0 $$0 apply f apply $$$$$$$$$$0 $0) ()
                         prove ∈ orderedPair successor $$$$$0 apply f $$$$0 union $$$$$$0 c6380fe68a1b2148337c46533f74f3cc3c2dc26eb007c8a18b6d674dfa7b158c () (orderedPair successor $$$$$0 apply f $$$$0, $0, $$$$$$0) () ()
                       }
                     }
@@ -336,7 +336,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                     assume ∈ orderedPair successor $$$$$0 $0 union $$$$$$0 {
                       prove ∃ g ∧ ∈ orderedPair successor $$$$$$0 $$0 $0 ∈ $0 $$$$$$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair successor $$$$$0 $0, $$$$$$0) () ()
                       let g_n^+ ∧ ∈ orderedPair successor $$$$$$0 $$0 $0 ∈ $0 $$$$$$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $0 apply f $$$$0) () (∧ ∈ orderedPair successor $$$$$0 $0 $$$$$$$0 ∈ $$$$$$$0 $$$$$$0) () {
-                        prove ∃ m ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$$$$$0, powerSet × ℕ X, $0) (∃ m ∧ ∈ $0 ℕ ∧ function $$$$$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$$$$0 $$0 apply f apply $$$$$$$$$$$0 $0) ()
+                        prove ∃ m ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$$$$$0, powerSet product ℕ X, $0) (∃ m ∧ ∈ $0 ℕ ∧ function $$$$$$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$$$$$0 $$0 apply f apply $$$$$$$$$$$0 $0) ()
                         let m_n^+ ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$0 apply f $$$$$0) () (∧ ∈ $$$$$$$$0 ℕ ∧ function $0 $$$$$$$$0 X ∀ a → ∈ $0 $$$$$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
                           elided 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 {
                             elided 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 {
@@ -377,9 +377,9 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
       }
     }
     prove ∀ n → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (∃! y ∈ orderedPair $$$0 $0 union $$0) ()
-    elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
-      prove ∧ ⊆ union $0 × ℕ X ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ union $0 × ℕ X, ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0) () () ()
-      prove function union $0 ℕ X be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (union $0, ℕ, X) () ()
+    elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
+      prove ∧ ⊆ union $0 product ℕ X ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ union $0 product ℕ X, ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0) () () ()
+      prove function union $0 ℕ X 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (union $0, ℕ, X) () ()
     }
     subproof (Function value - base case) {
       elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
@@ -396,7 +396,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
           }
           prove ∃ g ∧ ∈ orderedPair successor $$0 apply union $$$0 successor $$0 $0 ∈ $0 $$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair successor $0 apply union $$0 successor $0, $$0) () ()
           let g_n ∧ ∈ orderedPair successor $$0 apply union $$$0 successor $$0 $0 ∈ $0 $$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply union $$0 successor $0 apply f apply union $$0 $0) () (∧ ∈ orderedPair successor $0 apply union $$0 successor $0 $$$0 ∈ $$$0 $$0) () {
-            prove ∃ m ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, powerSet × ℕ X, $0) (∃ m ∧ ∈ $0 ℕ ∧ function $$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$0 $$0 apply f apply $$$$$$$0 $0) ()
+            prove ∃ m ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$0, powerSet product ℕ X, $0) (∃ m ∧ ∈ $0 ℕ ∧ function $$$$$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$$$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$$$$0 $$0 apply f apply $$$$$$$0 $0) ()
             let m_n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= apply union $$$0 successor $$0 apply f apply union $$$0 $$0) () (∧ ∈ $$$$0 ℕ ∧ function $0 $$$$0 X ∀ a → ∈ $0 $$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0) () {
               elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
                 prove → ∈ successor $$$0 $0 ∨ ∧ = successor $$$0 0 = apply $$0 successor $$$0 g_0 ∃ b ∧ = successor $$$$0 successor $0 = apply $$$0 successor $$$$0 apply f apply $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $$$0) (→ ∈ $$$$$0 $0 ∨ ∧ = $$$$$0 0 = apply $$0 $$$$$0 g_0 ∃ b ∧ = $$$$$$0 successor $0 = apply $$$0 $$$$$$0 apply f apply $$$0 $0) ()
@@ -445,7 +445,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
 
 theorem Uncurry Recursive Function
 premise ∀ n → ∈ $0 ℕ ∃! f ∧ function $0 ℕ A ∧ = apply $0 0 with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) F_+
-conclusion ∃! g ∧ function $0 × ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+
+conclusion ∃! g ∧ function $0 product ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+
 {
   elided 7c7caa8d3ebd277e15f06400bc3c8d650d303c6a21d56e5873fd06fe7aaeef4c {
     prove ∀ f ↔ ∈ $0 functionSpace ℕ A function $0 ℕ A 7c7caa8d3ebd277e15f06400bc3c8d650d303c6a21d56e5873fd06fe7aaeef4c () (ℕ, A) () ()
@@ -468,11 +468,11 @@ conclusion ∃! g ∧ function $0 × ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply 
     }
   }
   prove ∃! f ∧ function $0 ℕ functionSpace ℕ A ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+ 777979cf73d2d0bf6c4057a5958662ad04ea6cfd5cc34a242121423362f17f89 () (ℕ, functionSpace ℕ A) (∧ = apply $1 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply $$1 successor $0 with ($$0 apply $$1 $0) F_+) ()
-  let f ∧ function $0 ℕ functionSpace ℕ A ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+ 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∃! g ∧ function $0 × ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () (∧ function $0 ℕ functionSpace ℕ A ∀ a → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+) () {
-    prove ∃! g ∧ function $0 × ℕ ℕ A ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 d87e68e239e88ef17bf606c9fb9cc5d7e5b18a0224175945e7dcd06713e05af6 () ($0, ℕ, ℕ, A) () ()
+  let f ∧ function $0 ℕ functionSpace ℕ A ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+ 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∃! g ∧ function $0 product ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () (∧ function $0 ℕ functionSpace ℕ A ∀ a → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+) () {
+    prove ∃! g ∧ function $0 product ℕ ℕ A ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 f7957dc8414647c15438d241018c8ac8185e6d16353e9f60dca7570f7affb754 () ($0, ℕ, ℕ, A) () ()
     subproof (Equivalence of definitions) {
       take g {
-        assume function $0 × ℕ ℕ A {
+        assume function $0 product ℕ ℕ A {
           assume ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 {
             take n {
               assume ∈ $0 ℕ {
@@ -567,6 +567,6 @@ conclusion ∃! g ∧ function $0 × ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply 
         }
       }
     }
-    prove ∃! g ∧ function $0 × ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ 1342b4d3fde965a10ba79e07101310821d244b988e55d3ac51ea637e0b7eefa6 () () (function $$0 × ℕ ℕ A, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 $0 apply apply $$$0 $$0 $0, ∧ ∀ n → ∈ $0 ℕ = apply $$$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 successor $0 with ($$0 apply $$$$0 orderedPair $$0 $0) F_+) ()
+    prove ∃! g ∧ function $0 product ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+ 1342b4d3fde965a10ba79e07101310821d244b988e55d3ac51ea637e0b7eefa6 () () (function $$0 product ℕ ℕ A, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 $0 apply apply $$$0 $$0 $0, ∧ ∀ n → ∈ $0 ℕ = apply $$$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 successor $0 with ($$0 apply $$$$0 orderedPair $$0 $0) F_+) ()
   }
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.expressions.Template
-import net.prover.model.{EntryContext, ExpressionParsingContext, Format, Parser}
+import net.prover.model.{EntryContext, Format, Parser}
 
 @JsonSerialize(using = classOf[DisplayShorthandSerializer])
 case class DisplayShorthand(template: Template, format: Format.Explicit, conditions: Seq[(String, String)]) extends ChapterEntry {
@@ -16,6 +16,17 @@ case class DisplayShorthand(template: Template, format: Format.Explicit, conditi
 
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = template.referencedDefinitions.toType[ChapterEntry]
+
+  override def replaceDefinition(
+    oldDefinition: ExpressionDefinition,
+    newDefinition: ExpressionDefinition,
+    entryContext: EntryContext
+  ): DisplayShorthand = {
+    DisplayShorthand(
+      template.replaceDefinition(oldDefinition, newDefinition),
+      format,
+      conditions)
+  }
 }
 
 object DisplayShorthand extends ChapterEntryParser {

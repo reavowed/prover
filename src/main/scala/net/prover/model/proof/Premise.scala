@@ -1,6 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model._
+import net.prover.model.entries.ExpressionDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Premise.Pending
 
@@ -13,6 +14,7 @@ sealed trait Premise {
   def removeExternalParameters(numberOfParametersToRemove: Int): Option[Premise] = {
     statement.removeExternalParameters(numberOfParametersToRemove).map(Pending)
   }
+  def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Premise
   def toPending: Pending = Pending(statement)
   def isIncomplete: Boolean
 }
@@ -30,6 +32,9 @@ object Premise {
     override def insertExternalParameters(numberOfParametersToInsert: Int): Premise.Pending = {
       copy(statement = statement.insertExternalParameters(numberOfParametersToInsert))
     }
+    def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Pending = {
+      Pending(statement.replaceDefinition(oldDefinition, newDefinition))
+    }
     override def isIncomplete: Boolean = true
   }
 
@@ -39,6 +44,11 @@ object Premise {
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending] = Map.empty
     override def insertExternalParameters(numberOfParametersToInsert: Int): Premise.Given = {
       copy(statement = statement.insertExternalParameters(numberOfParametersToInsert))
+    }
+    def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Given = {
+      Given(
+        statement.replaceDefinition(oldDefinition, newDefinition),
+        referencedLine)
     }
     override def isIncomplete: Boolean = false
   }
@@ -52,6 +62,14 @@ object Premise {
       copy(
         statement = statement.insertExternalParameters(numberOfParametersToInsert),
         substitutions = substitutions.insertExternalParameters(numberOfParametersToInsert))
+    }
+    def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Simplification = {
+      Simplification(
+        statement.replaceDefinition(oldDefinition, newDefinition),
+        premise.replaceDefinition(oldDefinition, newDefinition).asInstanceOf[Premise.SingleLinePremise],
+        inference.replaceDefinition(oldDefinition, newDefinition),
+        substitutions.replaceDefinition(oldDefinition, newDefinition),
+        path)
     }
     override def isIncomplete: Boolean = premise.isIncomplete
   }

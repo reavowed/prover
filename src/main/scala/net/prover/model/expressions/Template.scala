@@ -8,6 +8,10 @@ sealed trait Template {
   def names: Seq[String]
   def matchExpression(expression: Expression): Option[Seq[Template.Match]] = matchExpression(expression, Nil, Nil)
   protected def matchExpression(expression: Expression, boundVariableNames: Seq[Seq[String]], internalPath: Seq[Int]): Option[Seq[Template.Match]]
+  def replaceDefinition(
+    oldDefinition: ExpressionDefinition,
+    newDefinition: ExpressionDefinition
+  ): Template
   def referencedDefinitions: Set[ExpressionDefinition]
   def expressionParser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Expression]
   def serialized: String
@@ -20,6 +24,10 @@ object Template {
       case statement: Statement => Some(Seq(Template.Match.Component(statement, boundVariableNames, internalPath)))
       case _ => None
     }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition
+    ): Template = this
     override def expressionParser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Statement] = Statement.parser
     override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
     override def serialized: String = name
@@ -34,6 +42,10 @@ object Template {
       case term: Term => Some(Seq(Template.Match.Component(term, boundVariableNames, internalPath)))
       case _ => None
     }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition
+    ): Template = this
     override def expressionParser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Term] = Term.parser
     override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
     override def serialized: String = name
@@ -48,6 +60,10 @@ object Template {
       case expressions.FunctionParameter(parameter.index, parameter.level) => Some(Nil)
       case _ => None
     }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition
+    ): Template = this
     override def expressionParser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Expression] = {
       throw new Exception("Parsing templated parameters not currently supported")
     }
@@ -73,6 +89,15 @@ object Template {
         } yield definedStatement.scopedBoundVariableNames.mapWithIndex((name, index) => Template.Match.BoundVariable(name, index, internalPath)) ++ submatches.flatten
       case _ =>
         None
+    }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition
+    ): Template = {
+      if (oldDefinition == definition)
+        copy(definition = newDefinition.asInstanceOf[StatementDefinition])
+      else
+        this
     }
     override def expressionParser(implicit expressionParsingContext: ExpressionParsingContext): Parser[expressions.DefinedStatement] = {
       if (boundVariableNames.nonEmpty) throw new Exception("Parsing templated statements with bound variables not currently supported")
@@ -104,6 +129,15 @@ object Template {
         } yield definedTerm.scopedBoundVariableNames.mapWithIndex((name, index) => Template.Match.BoundVariable(name, index, internalPath)) ++ submatches.flatten
       case _ =>
         None
+    }
+    override def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition
+    ): Template = {
+      if (oldDefinition == definition)
+        copy(definition = newDefinition.asInstanceOf[TermDefinition])
+      else
+        this
     }
     override def referencedDefinitions: Set[ExpressionDefinition] = components.flatMap(_.referencedDefinitions).toSet + definition
     override def serialized: String = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")

@@ -129,6 +129,19 @@ case class Theorem(
     Seq("{") ++
     proof.flatMap(_.serializedLines).indent ++
     Seq("}")
+
+  override def replaceDefinition(
+    oldDefinition: ExpressionDefinition,
+    newDefinition: ExpressionDefinition,
+    entryContext: EntryContext
+  ): Theorem = {
+    Theorem(
+      name,
+      premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
+      conclusion.replaceDefinition(oldDefinition, newDefinition),
+      proof.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)),
+      rearrangementType)
+  }
 }
 
 object Theorem extends Inference.EntryParser {

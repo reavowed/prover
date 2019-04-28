@@ -236,6 +236,35 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     ).map{ case (books, book, chapter, _) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
+  @PutMapping(value = Array("/{entryKey}/symbol"), produces = Array("application/json;charset=UTF-8"))
+  def editSymbol(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String,
+    @RequestBody(required = false) newSymbol: String
+  ): ResponseEntity[_] = {
+    (for {
+      book <- findBook(bookKey)
+      chapter <- findChapter(book, chapterKey)
+      entry <- findEntry[ExpressionDefinition](chapter, entryKey)
+      newEntry = entry.withSymbol(newSymbol)
+      newBooks = bookService.modifyBooks[Identity](books => {
+        books.mapReduceWithPrevious[Book] { (previousBooks, bookToModify) =>
+          bookToModify.chapters.mapFold(EntryContext.forBookExclusive(previousBooks, bookToModify)) { (entryContextForChapter, chapterToModify) =>
+            chapterToModify.entries.mapFold(entryContextForChapter) { (entryContext, entryToModify) =>
+              val modifiedEntry = if (entryToModify == entry) {
+                newEntry
+              } else {
+                entryToModify.replaceDefinition(entry, newEntry, entryContext)
+              }
+              (entryContext.addEntry(modifiedEntry), modifiedEntry)
+            }.mapRight(newEntries => chapterToModify.copy(entries = newEntries))
+          }.mapRight(newChapters => bookToModify.copy(chapters = newChapters))._2
+        }
+      })
+    } yield ()).toResponseEntity
+  }
+
   case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, requiresComponentBrackets: Boolean, numberOfBoundVariables: Int, attributes: Seq[String])
   private def getDefinitionSummaries(entryContext: EntryContext) = {
     entryContext.availableEntries.ofType[ExpressionDefinition]

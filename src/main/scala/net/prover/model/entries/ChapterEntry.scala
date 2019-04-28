@@ -1,6 +1,6 @@
 package net.prover.model.entries
 
-import net.prover.model.Inference
+import net.prover.model.{EntryContext, Inference}
 
 trait ChapterEntry {
   def name: String
@@ -8,6 +8,12 @@ trait ChapterEntry {
   def serializedLines: Seq[String]
   def referencedInferenceIds: Set[String]
   def referencedEntries: Set[ChapterEntry]
+
+  def replaceDefinition(
+    oldDefinition: ExpressionDefinition,
+    newDefinition: ExpressionDefinition,
+    entryContext: EntryContext
+  ): ChapterEntry
 }
 
 object ChapterEntry {

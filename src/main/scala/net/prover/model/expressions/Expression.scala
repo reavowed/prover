@@ -12,6 +12,7 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType]
+  def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): ExpressionType
 
   def specify(
     targetArguments: Seq[Term],

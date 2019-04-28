@@ -26,6 +26,9 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType] = {
     arguments.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption.map(update)
   }
+  override def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): ExpressionType = {
+    update(arguments.map(_.replaceDefinition(oldDefinition, newDefinition)))
+  }
 
   def specify(
     targetArguments: Seq[Term],

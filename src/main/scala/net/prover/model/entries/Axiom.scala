@@ -20,6 +20,18 @@ case class Axiom(
       premises.map("premise " + _.serialized) ++
       Seq(s"conclusion ${conclusion.serialized}")
   }
+
+  override def replaceDefinition(
+    oldDefinition: ExpressionDefinition,
+    newDefinition: ExpressionDefinition,
+    entryContext: EntryContext
+  ): Axiom = {
+    Axiom(
+      name,
+      premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
+      conclusion.replaceDefinition(oldDefinition, newDefinition),
+      rearrangementType)
+  }
 }
 
 object Axiom extends Inference.EntryParser {

@@ -3,7 +3,7 @@ Define some basic functions.
 theorem The Empty Set Is a Function with Empty Domain
 conclusion function ∅ ∅ A
 {
-  prove ⊆ ∅ × ∅ A 1bde69fc8b90a9ca85033f763d7edeaa761c9b52a26ea2e64796515496237aa9 () (× ∅ A) () ()
+  prove ⊆ ∅ product ∅ A 1bde69fc8b90a9ca85033f763d7edeaa761c9b52a26ea2e64796515496237aa9 () (product ∅ A) () ()
   prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
   elided bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 {
     take x {
@@ -11,9 +11,9 @@ conclusion function ∅ ∅ A
       prove → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 ∅, ∃! y ∈ orderedPair $$0 $0 ∅) () () ()
     }
   }
-  elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
-    prove ∧ ⊆ ∅ × ∅ A ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ ∅ × ∅ A, ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅) () () ()
-    prove function ∅ ∅ A be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (∅, ∅, A) () ()
+  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
+    prove ∧ ⊆ ∅ product ∅ A ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ ∅ product ∅ A, ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅) () () ()
+    prove function ∅ ∅ A 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (∅, ∅, A) () ()
   }
 }
 
@@ -22,8 +22,8 @@ conclusion function singleton orderedPair a b singleton a singleton b
 {
   prove ∈ a singleton a e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a) () ()
   prove ∈ b singleton b e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (b) () ()
-  prove ∈ orderedPair a b × singleton a singleton b 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () (a, singleton a, b, singleton b) () ()
-  prove ⊆ singleton orderedPair a b × singleton a singleton b ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (orderedPair a b, × singleton a singleton b) () ()
+  prove ∈ orderedPair a b product singleton a singleton b 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (a, singleton a, b, singleton b) () ()
+  prove ⊆ singleton orderedPair a b product singleton a singleton b ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (orderedPair a b, product singleton a singleton b) () ()
   take x {
     assume ∈ $0 singleton a {
       prove = $0 a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) () ()
@@ -40,9 +40,9 @@ conclusion function singleton orderedPair a b singleton a singleton b
       prove ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (b) (∈ orderedPair $0 $$0 singleton orderedPair a b) ()
     }
   }
-  elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
-    prove ∧ ⊆ singleton orderedPair a b × singleton a singleton b ∀ x → ∈ $0 singleton a ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ singleton orderedPair a b × singleton a singleton b, ∀ x → ∈ $0 singleton a ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b) () () ()
-    prove function singleton orderedPair a b singleton a singleton b be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (singleton orderedPair a b, singleton a, singleton b) () ()
+  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
+    prove ∧ ⊆ singleton orderedPair a b product singleton a singleton b ∀ x → ∈ $0 singleton a ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ singleton orderedPair a b product singleton a singleton b, ∀ x → ∈ $0 singleton a ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b) () () ()
+    prove function singleton orderedPair a b singleton a singleton b 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (singleton orderedPair a b, singleton a, singleton b) () ()
   }
 }
 
@@ -52,29 +52,29 @@ premise function g C D
 premise ∀ x → ∈ $0 ∩ A C = apply f $0 apply g $0
 conclusion function ∪ f g ∪ A C ∪ B D
 {
-  prove ⊆ f × A B fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (f, A, B) () ()
-  elided 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 {
+  prove ⊆ f product A B 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () (f, A, B) () ()
+  elided 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 {
     prove ⊆ A ∪ A C f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 () (A, C) () ()
-    prove ⊆ × A B × ∪ A C B 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 () (A, ∪ A C, B) () ()
+    prove ⊆ product A B product ∪ A C B 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 () (A, ∪ A C, B) () ()
   }
-  prove ⊆ f × ∪ A C B 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, × A B, × ∪ A C B) () ()
-  elided f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d {
+  prove ⊆ f product ∪ A C B 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, product A B, product ∪ A C B) () ()
+  elided a56ef8aba50fbf515e3ca63d354f5ae8b08157b98df96492ee0a4ab9bcb7390b {
     prove ⊆ B ∪ B D f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 () (B, D) () ()
-    prove ⊆ × ∪ A C B × ∪ A C ∪ B D f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d () (B, ∪ B D, ∪ A C) () ()
+    prove ⊆ product ∪ A C B product ∪ A C ∪ B D a56ef8aba50fbf515e3ca63d354f5ae8b08157b98df96492ee0a4ab9bcb7390b () (B, ∪ B D, ∪ A C) () ()
   }
-  prove ⊆ f × ∪ A C ∪ B D 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, × ∪ A C B, × ∪ A C ∪ B D) () ()
-  prove ⊆ g × C D fdab4bf820056b0faca98fcb5a1d27cc21eba924b6d87882d61720efbdffc58b () (g, C, D) () ()
-  elided 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 {
+  prove ⊆ f product ∪ A C ∪ B D 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, product ∪ A C B, product ∪ A C ∪ B D) () ()
+  prove ⊆ g product C D 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () (g, C, D) () ()
+  elided 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 {
     prove ⊆ C ∪ A C fabd15b89589c3bb4285a85675ac82a6d858eefc540651426a23b14961dc1da8 () (C, A) () ()
-    prove ⊆ × C D × ∪ A C D 3ef48727b9a5da1cc027d8b28af0df69a8c38e91a697700b7ed3eb4842d54308 () (C, ∪ A C, D) () ()
+    prove ⊆ product C D product ∪ A C D 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 () (C, ∪ A C, D) () ()
   }
-  prove ⊆ g × ∪ A C D 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (g, × C D, × ∪ A C D) () ()
-  elided f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d {
+  prove ⊆ g product ∪ A C D 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (g, product C D, product ∪ A C D) () ()
+  elided a56ef8aba50fbf515e3ca63d354f5ae8b08157b98df96492ee0a4ab9bcb7390b {
     prove ⊆ D ∪ B D fabd15b89589c3bb4285a85675ac82a6d858eefc540651426a23b14961dc1da8 () (D, B) () ()
-    prove ⊆ × ∪ A C D × ∪ A C ∪ B D f3063a456d1ae10b40b8b4264a76ffd685d1768d788b0f1d6fe626d7d93e767d () (D, ∪ B D, ∪ A C) () ()
+    prove ⊆ product ∪ A C D product ∪ A C ∪ B D a56ef8aba50fbf515e3ca63d354f5ae8b08157b98df96492ee0a4ab9bcb7390b () (D, ∪ B D, ∪ A C) () ()
   }
-  prove ⊆ g × ∪ A C ∪ B D 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (g, × ∪ A C D, × ∪ A C ∪ B D) () ()
-  prove ⊆ ∪ f g × ∪ A C ∪ B D 1e0fb866e80651443576b9a8daf2045425916c8ca2a52d3e9d66aed0c4927c2e () (f, × ∪ A C ∪ B D, g) () ()
+  prove ⊆ g product ∪ A C ∪ B D 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (g, product ∪ A C D, product ∪ A C ∪ B D) () ()
+  prove ⊆ ∪ f g product ∪ A C ∪ B D 1e0fb866e80651443576b9a8daf2045425916c8ca2a52d3e9d66aed0c4927c2e () (f, product ∪ A C ∪ B D, g) () ()
   take x {
     assume ∈ $0 A {
       take y {
@@ -136,9 +136,9 @@ conclusion function ∪ f g ∪ A C ∪ B D
       }
     }
   }
-  elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
-    prove ∧ ⊆ ∪ f g × ∪ A C ∪ B D ∀ x → ∈ $0 ∪ A C ∃! y ∈ orderedPair $$0 $0 ∪ f g bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ ∪ f g × ∪ A C ∪ B D, ∀ x → ∈ $0 ∪ A C ∃! y ∈ orderedPair $$0 $0 ∪ f g) () () ()
-    prove function ∪ f g ∪ A C ∪ B D be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () (∪ f g, ∪ A C, ∪ B D) () ()
+  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
+    prove ∧ ⊆ ∪ f g product ∪ A C ∪ B D ∀ x → ∈ $0 ∪ A C ∃! y ∈ orderedPair $$0 $0 ∪ f g bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ ∪ f g product ∪ A C ∪ B D, ∀ x → ∈ $0 ∪ A C ∃! y ∈ orderedPair $$0 $0 ∪ f g) () () ()
+    prove function ∪ f g ∪ A C ∪ B D 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (∪ f g, ∪ A C, ∪ B D) () ()
   }
 }
 

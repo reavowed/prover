@@ -5,7 +5,7 @@ import java.security.MessageDigest
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.Inference._
-import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
+import net.prover.model.entries.{ChapterEntry, ChapterEntryParser, ExpressionDefinition}
 import net.prover.model.expressions._
 import net.prover.model.proof.StepContext
 
@@ -96,7 +96,21 @@ object Inference {
     }
   }
 
-  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement, rearrangementType: RearrangementType) extends Inference
+  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement, rearrangementType: RearrangementType) extends Inference {
+    def replaceDefinition(
+      oldDefinition: ExpressionDefinition,
+      newDefinition: ExpressionDefinition
+    ): Summary = {
+      val newPremises = premises.map(_.replaceDefinition(oldDefinition, newDefinition))
+      val newConclusion = conclusion.replaceDefinition(oldDefinition, newDefinition)
+      Summary(
+        name,
+        Inference.calculateHash(newPremises, newConclusion),
+        newPremises,
+        newConclusion,
+        rearrangementType)
+    }
+  }
   object Summary {
     def apply(inference: Inference): Summary = {
       inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.name, inference.id, inference.premises, inference.conclusion, inference.rearrangementType))

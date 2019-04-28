@@ -2,7 +2,7 @@ Define an relation between two sets.
 
 type relation R (A)
   format (on A)
-  definition (⊆ R × A A)
+  definition (⊆ R product A A)
 
 property reflexive on relation ~ A
   definition (∀ a → ∈ $0 A ∈ orderedPair $0 $0 ~)
@@ -97,10 +97,10 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
         assume ∈ $0 A {
           prove ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 () (≈, A, $0) () ()
           prove ∈ apply f $0 B 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (f, A, B, $0) () ()
-          prove ∈ orderedPair equivalenceClass $0 ≈ apply f $0 × equivalenceQuotient A ≈ B 28a5e65c344995496d3a5b4d0d8a8735bf34a7b99adc50f2ce74470afcbc5259 () (equivalenceClass $0 ≈, equivalenceQuotient A ≈, apply f $0, B) () ()
+          prove ∈ orderedPair equivalenceClass $0 ≈ apply f $0 product equivalenceQuotient A ≈ B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (equivalenceClass $0 ≈, equivalenceQuotient A ≈, apply f $0, B) () ()
         }
       }
-      prove ⊆ $0 × equivalenceQuotient A ≈ B bf9b885955fdfb3b60f1098ed34059890f5c82b494ecbda0f2cb089db00a78db () ($0, A, × equivalenceQuotient A ≈ B) () (orderedPair equivalenceClass $$0 ≈ apply f $$0)
+      prove ⊆ $0 product equivalenceQuotient A ≈ B bf9b885955fdfb3b60f1098ed34059890f5c82b494ecbda0f2cb089db00a78db () ($0, A, product equivalenceQuotient A ≈ B) () (orderedPair equivalenceClass $$0 ≈ apply f $$0)
       take x {
         assume ∈ $0 equivalenceQuotient A ≈ {
           prove ∃ a ∧ ∈ $0 A = $$0 equivalenceClass $0 ≈ c653a37ffa1d81361e01187938eb89b605b5c113f11179c00e19ede4f26a7090 () (≈, A, $0) () ()
@@ -135,9 +135,9 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
           }
         }
       }
-      elided be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab {
-        prove ∧ ⊆ $0 × equivalenceQuotient A ≈ B ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! y ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 × equivalenceQuotient A ≈ B, ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! y ∈ orderedPair $$0 $0 $$$0) () () ()
-        prove function $0 equivalenceQuotient A ≈ B be00d1ed1d190e95b6e4866495e948e11729e81644f77bb4bc5c2a0c4f2555ab () ($0, equivalenceQuotient A ≈, B) () ()
+      elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
+        prove ∧ ⊆ $0 product equivalenceQuotient A ≈ B ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! y ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 product equivalenceQuotient A ≈ B, ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! y ∈ orderedPair $$0 $0 $$$0) () () ()
+        prove function $0 equivalenceQuotient A ≈ B 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () ($0, equivalenceQuotient A ≈, B) () ()
       }
     }
     subproof (f_≈ satisfies condition) {

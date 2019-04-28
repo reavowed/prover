@@ -42,6 +42,20 @@ case class TypeDefinition(
       explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++
       Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
     ).indent
+
+  override def replaceDefinition(
+    oldDefinition: ExpressionDefinition,
+    newDefinition: ExpressionDefinition,
+    entryContext: EntryContext
+  ): TypeDefinition = {
+    TypeDefinition(
+      symbol,
+      defaultTermName,
+      otherComponentTypes,
+      componentFormat,
+      explicitName,
+      definingStatement.replaceDefinition(oldDefinition, newDefinition))
+  }
 }
 
 object TypeDefinition extends ChapterEntryParser {
