@@ -104,7 +104,7 @@ export class ExpressionComponent extends React.Component {
   render() {
     const {expression, pathsToHighlightAsPremise, boundVariableLists, parentRequiresBrackets} = this.props;
     let {wrapBoundVariable, path} = this.props;
-    wrapBoundVariable = wrapBoundVariable || formatHtml;
+    wrapBoundVariable = wrapBoundVariable || ((name) => formatHtml(name));
     path = path || [];
     const shouldHighlightThis = _.some(pathsToHighlightAsPremise, p => p.length === 0);
     const tag = shouldHighlightThis ? HighlightedPremise : React.Fragment;
