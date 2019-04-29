@@ -11,6 +11,10 @@ case class FunctionApplication(
   override def substitutionsLens = GenLens[Substitutions](_.functions)
   override def requiredSubstitutionsLens = GenLens[Substitutions.Required](_.functions)
 
+  def getMatch(other: Expression): Option[Seq[Expression]] = other match {
+    case FunctionApplication(`variableName`, otherArguments) => Some(otherArguments)
+    case _ => None
+  }
   def update(newArguments: Seq[Term]) = FunctionApplication(variableName, newArguments)
 
   override def calculateApplicatives(

@@ -1,6 +1,7 @@
 Introduce equality and its associated rules of inference.
 
 statement = (a b)
+  attributes (equality)
 
 display ¬ = a b as (a ≠ b) requires-brackets
 

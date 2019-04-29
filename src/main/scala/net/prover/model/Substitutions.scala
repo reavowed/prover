@@ -10,6 +10,8 @@ case class Substitutions(
     predicates: Map[(String, Int), Statement] = Map.empty,
     functions: Map[(String, Int), Term] = Map.empty)
 {
+  def isEmpty: Boolean = statements.isEmpty && terms.isEmpty && functions.isEmpty && predicates.isEmpty
+
   def update[S, T <: Expression](
     name: S,
     expression: T,
@@ -48,6 +50,8 @@ object Substitutions {
   val empty = Substitutions(Map.empty, Map.empty, Map.empty, Map.empty)
 
   case class Required(statements: Seq[String], terms: Seq[String], predicates: Seq[(String, Int)], functions: Seq[(String, Int)]) {
+    def isEmpty: Boolean = statements.isEmpty && terms.isEmpty && functions.isEmpty && predicates.isEmpty
+
     def ++(other: Required): Required = {
       Required(
         (statements ++ other.statements).distinct,

@@ -85,6 +85,12 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     previousInternalDepth: Int,
     externalDepth: Int
   ): Seq[(ExpressionType, Substitutions)]
+  def calculateArguments(
+    target: Expression,
+    argumentsSoFar: Map[Int, Term],
+    internalDepth: Int,
+    externalDepth: Int
+  ): Option[Map[Int, Term]]
 
   def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = None
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
@@ -135,6 +141,19 @@ object Expression {
             externalDepth)
         } yield (predicatesSoFar :+ predicate, newSubstitutions)
       }
+    }
+    def calculateArguments(
+      targets: Seq[Expression],
+      argumentsSoFar: Map[Int, Term],
+      internalDepth: Int,
+      externalDepth: Int
+    ): Option[Map[Int, Term]] = {
+      expressions.zipStrict(targets).flatMap(_.foldLeft(Option(argumentsSoFar)) { case (argumentsOption, (expression, target)) =>
+        for {
+          arguments <- argumentsOption
+          result <- expression.calculateArguments(target, arguments, internalDepth, externalDepth)
+        } yield result
+      })
     }
     def applySubstitutions(
       substitutions: Substitutions,

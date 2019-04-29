@@ -3,6 +3,7 @@ package net.prover.model
 import net.prover.model.Inference.RearrangementType
 import net.prover.model.entries._
 import net.prover.model.expressions._
+import net.prover.model.proof.StepContext
 
 case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: Seq[String]) {
   val inferences: Seq[Inference] = availableEntries.flatMap(_.inferences)
@@ -30,6 +31,9 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
   def conjunctionDefinitionOption: Option[StatementDefinition] = {
     statementDefinitions.find(_.attributes.contains("conjunction"))
   }
+  def equalityDefinitionOption: Option[StatementDefinition] = {
+    statementDefinitions.find(_.attributes.contains("equality"))
+  }
 
   def matchScopingStatement(statement: Statement): Option[(Statement, String, StatementDefinition)] = {
     scopingDefinitionOption.flatMap { scopingDefinition =>
@@ -54,6 +58,20 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
       }
     }
   }
+  def matchEqualityStatement(statement: Statement): Option[(Term, Term, StatementDefinition)] = {
+    equalityDefinitionOption.flatMap { equalityDefinition =>
+      statement match {
+        case DefinedStatement(Seq(lhsExpression, rhsExpression), `equalityDefinition`) =>
+          for {
+            lhs <- lhsExpression.asOptionalInstanceOf[Term]
+            rhs <- rhsExpression.asOptionalInstanceOf[Term]
+          } yield (lhs, rhs, equalityDefinition)
+        case _ =>
+          None
+      }
+
+    }
+  }
 
   def transitivityInferences: Map[ExpressionDefinition, Inference] = {
     inferences.mapCollect {
@@ -68,6 +86,129 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
       case _ =>
         None
     }.toMap
+  }
+
+  def findRearrangableFunctions(equalityDefinition: StatementDefinition): Seq[(Term, Inference, Inference)] = {
+    inferences
+      .mapCollect { inference =>
+        val substitutions = inference.requiredSubstitutions
+        if (substitutions.statements.isEmpty && substitutions.predicates.isEmpty && substitutions.functions.isEmpty) {
+          substitutions.terms match {
+            case Seq(a, b) =>
+              Some((inference, TermVariable(a), TermVariable(b)))
+            case _ =>
+              None
+          }
+        } else {
+          None
+        }
+      }
+      .mapCollect { case (inference, firstTerm, secondTerm) =>
+        for {
+          Seq(l, r) <- equalityDefinition.unapplySeq(inference.conclusion)
+          (function, _) <- l.calculateApplicatives(Seq(firstTerm, secondTerm), Substitutions.empty, 0, 0, 0)
+            .find { case (function, substitutions) => function.requiredSubstitutions.isEmpty && substitutions == Substitutions(terms = Seq(firstTerm, secondTerm).map(v => v.name -> v).toMap) }
+          if r == function.specify(Seq(secondTerm, firstTerm), 0, 0)
+        } yield (inference, function.asInstanceOf[Term])
+      }
+      .mapCollect { case (commutativityInference, function) =>
+        inferences
+          .mapCollect { inference =>
+            val substitutions = inference.requiredSubstitutions
+            if (substitutions.statements.isEmpty && substitutions.predicates.isEmpty && substitutions.functions.isEmpty) {
+              substitutions.terms match {
+                case Seq(a, b, c) =>
+                  Some((inference, TermVariable(a), TermVariable(b), TermVariable(c)))
+                case _ =>
+                  None
+              }
+            } else {
+              None
+            }
+          }
+          .mapFind { case (inference, a, b, c) =>
+            def specify(l: Term, r: Term): Term = function.specify(Seq(l, r), 0, 0)
+            if (inference.conclusion == equalityDefinition(specify(a, specify(b, c)), specify(specify(a, b), c)))
+              Some((function, commutativityInference, inference))
+            else
+              None
+          }
+      }
+  }
+
+  def findAssociativityInference(operatorDefinition: TermDefinition): Option[Inference] = {
+    for {
+      equalityDefinition <- equalityDefinitionOption
+      inference <- inferences.find {
+        case Inference(
+          _,
+          Nil,
+          DefinedStatement(
+            Seq(
+              DefinedTerm(Seq(ExpressionVariable(a), DefinedTerm(Seq(ExpressionVariable(b), ExpressionVariable(c)), `operatorDefinition`)), `operatorDefinition`),
+              DefinedTerm(Seq(DefinedTerm(Seq(ExpressionVariable(d), ExpressionVariable(e)), `operatorDefinition`), ExpressionVariable(f)), `operatorDefinition`)),
+            `equalityDefinition`)
+        ) if a == d && b == e && c == f =>
+          true
+        case _ =>
+          false
+      }
+    } yield inference
+  }
+  def findCommutativityInference(operatorDefinition: TermDefinition): Option[Inference] = {
+    for {
+      equalityDefinition <- equalityDefinitionOption
+      inference <- inferences.find {
+        case Inference(
+          _,
+          Nil,
+          DefinedStatement(
+            Seq(
+              DefinedTerm(Seq(ExpressionVariable(a), ExpressionVariable(b)), `operatorDefinition`),
+              DefinedTerm(Seq(ExpressionVariable(c), ExpressionVariable(d)), `operatorDefinition`)),
+            `equalityDefinition`)
+        ) if a == d && b == c =>
+          true
+        case _ =>
+          false
+      }
+    } yield inference
+  }
+  def findReversalInference(statementDefinition: StatementDefinition): Option[Inference] = {
+    inferences.find {
+      case Inference(
+        _,
+        Seq(statementDefinition(ExpressionVariable(a), ExpressionVariable(b))),
+        statementDefinition(ExpressionVariable(c), ExpressionVariable(d))
+      ) if a == d && b == c =>
+        true
+      case _ =>
+        false
+    }
+  }
+  def findTransitivityInference(statementDefinition: StatementDefinition): Option[Inference] = {
+    inferences.find {
+      case Inference(
+        _,
+        Seq(statementDefinition(ExpressionVariable(a), ExpressionVariable(b)), statementDefinition(ExpressionVariable(c), ExpressionVariable(d))),
+        statementDefinition(ExpressionVariable(e), ExpressionVariable(f))
+      ) if a == e && b == c && d == f =>
+        true
+      case _ =>
+        false
+    }
+  }
+  def findExpansionInference(statementDefinition: StatementDefinition): Option[Inference] = {
+    inferences.find {
+      case Inference(
+      _,
+      Seq(statementDefinition(ExpressionVariable(a), ExpressionVariable(b))),
+      statementDefinition(FunctionApplication(f, Seq(ExpressionVariable(c))), FunctionApplication(g, Seq(ExpressionVariable(d))))
+      ) if a == c && b == d && f == g =>
+        true
+      case _ =>
+        false
+    }
   }
 
   object RecognisedStatementDefinition {

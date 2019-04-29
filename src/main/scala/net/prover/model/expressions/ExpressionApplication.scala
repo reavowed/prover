@@ -16,6 +16,7 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   def substitutionsLens: Lens[Substitutions, Map[(String, Int), ExpressionType]]
   def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[(String, Int)]]
 
+  def getMatch(other: Expression): Option[Seq[Expression]]
   def update(newArguments: Seq[Term]): ExpressionType
 
   override def complexity: Int = arguments.map(_.complexity).sum + 1
@@ -84,6 +85,14 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   ): Seq[(ExpressionType, Substitutions)] = {
     arguments.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
       .map(_.mapLeft(newArguments => update(newArguments.map(_.asInstanceOf[Term]))))
+  }
+  override def calculateArguments(
+    target: Expression,
+    argumentsSoFar: Map[Int, Term],
+    internalDepth: Int,
+    externalDepth: Int
+  ): Option[Map[Int, Term]] = {
+    getMatch(target).flatMap(targetComponents => arguments.calculateArguments(targetComponents, argumentsSoFar, internalDepth, externalDepth))
   }
 
   override def toString = s"$variableName(${arguments.map(_.toString).mkString(", ")})"

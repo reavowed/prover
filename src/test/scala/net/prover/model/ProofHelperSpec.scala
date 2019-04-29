@@ -1,43 +1,41 @@
 package net.prover.model
 
-import net.prover.model.entries.Axiom
-import net.prover.model.expressions.{FunctionParameter, Statement}
+import net.prover.model.Inference.RearrangementType
+import net.prover.model.entries.{Axiom, Theorem}
+import net.prover.model.expressions.{FunctionParameter, Statement, Term}
 import net.prover.model.proof._
 
 class ProofHelperSpec extends ProverSpec {
 
-  val specification = Axiom("Specification", Seq(ForAll("x")(φ(FunctionParameter(0, 0)))), φ(a))
-  val modusPonens = Axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
-  val zeroIsANaturalNumber = Axiom("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
-  val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
-  val axioms = Seq(specification, modusPonens, zeroIsANaturalNumber, successorOfNaturalIsNatural)
-  def extract(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
-    val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
-    val stepContext = StepContext.empty(Nil)
-    val premiseContext = PremiseContext.justWithPremises(premises, entryContextWithAxioms)
-    ProofHelper.extract(
-      targetStatement,
-      entryContextWithAxioms,
-      stepContext,
-      premiseContext
-    ).map(_.recalculateReferences(stepContext, premiseContext))
-  }
 
 
   "extracting a statement" should {
+    val specification = Axiom("Specification", Seq(ForAll("x")(φ(FunctionParameter(0, 0)))), φ(a))
+    val modusPonens = Axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
+    val zeroIsANaturalNumber = Axiom("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
+    val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
+    val axioms = Seq(specification, modusPonens, zeroIsANaturalNumber, successorOfNaturalIsNatural)
+    def extract(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
+      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+      val stepContext = StepContext.empty(Nil)
+      val premiseContext = PremiseContext.justWithPremises(premises, entryContextWithAxioms)
+      ProofHelper.extract(
+        targetStatement,
+        entryContextWithAxioms,
+        stepContext,
+        premiseContext
+      ).map(_.recalculateReferences(stepContext, premiseContext))
+    }
+
     "find a statement via specification" in {
       extract(
         Equals(a, b),
         Seq(ForAll("x")(Equals(FunctionParameter(0, 0), b)))
-      ) must beSome(Step.Elided(
-        Seq(
-          Step.Assertion(
+      ) must beSome(Step.Assertion(
             Equals(a, b),
             specification.summary,
             Seq(Premise.Given(ForAll("x")(Equals(FunctionParameter(0, 0), b)), PremiseReference(0))),
-            Substitutions(terms = Map(a -> a), predicates = Map((φ, 1) -> Equals(FunctionParameter(0, 0), b))))),
-        None,
-        Some("Simplified")))
+            Substitutions(terms = Map(a -> a), predicates = Map((φ, 1) -> Equals(FunctionParameter(0, 0), b)))))
     }
     "find a statement via specification and modus ponens" in {
       extract(
@@ -183,6 +181,40 @@ class ProofHelperSpec extends ProverSpec {
         φ,
         Seq(ElementOf(a, b))
       ) must beNone
+    }
+  }
+
+  "rearranging a statement" should {
+    "rearrange with associativity and commutativity" in {
+      def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
+      val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
+      val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
+      val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b)), Equals(F(a), F(b)))
+      val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
+      val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
+      val axioms = Seq(reverseEquality, equalityIsTransitive, substitutionOfEquals, additionIsAssociative, additionIsCommutative)
+      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+      val stepContext = StepContext.empty(Nil)
+      val conclusion = Equals(
+        add(add(a, b), add(c, d)),
+        add(add(a, c), add(b, d)))
+      val step = ProofHelper.rearrange(
+        conclusion,
+        entryContextWithAxioms,
+        PremiseContext.justWithPremises(Nil, entryContextWithAxioms),
+        stepContext)
+      step must beSome
+      val theorem = Theorem(
+        "Rearrangement",
+        Nil,
+        conclusion,
+        step.toSeq,
+        RearrangementType.NotRearrangement
+      ).recalculateReferences(entryContextWithAxioms)
+      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
+      println(serializedTheorem)
+      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
+      parsedTheorem mustEqual theorem
     }
   }
 }

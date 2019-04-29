@@ -69,6 +69,19 @@ case class StatementDefinition(
       shorthand,
       attributes)
   }
+
+  def apply(components: Expression*): DefinedStatement = {
+    DefinedStatement(components, this)(boundVariableNames)
+  }
+  def apply(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
+    DefinedStatement(components, this)(boundVariableNames)
+  }
+  def unapplySeq(expression: Expression): Option[Seq[Expression]] = expression match {
+    case DefinedStatement(components, definition) if definition == this =>
+      Some(components)
+    case _ =>
+      None
+  }
 }
 
 object StatementDefinition extends ChapterEntryParser {

@@ -93,6 +93,27 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
       // Shared internal context - must be passed in via the arguments
       Nil)
   }
+  override def calculateArguments(
+    target: Expression,
+    argumentsSoFar: Map[Int, Term],
+    internalDepth: Int,
+    externalDepth: Int
+  ): Option[Map[Int, Term]] = {
+    if (level == internalDepth + externalDepth) {
+      argumentsSoFar.get(index) match {
+        case Some(`target`) =>
+          Some(argumentsSoFar)
+        case Some(_) =>
+          None
+        case None =>
+          target.asOptionalInstanceOf[Term].map(t => argumentsSoFar.updated(index, t))
+      }
+    } else if (target == this) {
+      Some(argumentsSoFar)
+    } else {
+      None
+    }
+  }
 
   override def serialized = (0 to level).map(_ => "$").mkString("") + index
   override def serializedForHash = serialized

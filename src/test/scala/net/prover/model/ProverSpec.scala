@@ -16,6 +16,7 @@ trait ProverSpec extends Specification {
   val a = TermVariable("a")
   val b = TermVariable("b")
   val c = TermVariable("c")
+  val d = TermVariable("d")
   val A = TermVariable("A")
   val B = TermVariable("B")
   val n = TermVariable("n")
@@ -80,7 +81,7 @@ trait ProverSpec extends Specification {
 
   val ForAll = quantifier("∀", None).copy(attributes = Seq("scoping"))
   val Exists = quantifier("∃", Some(Negation(ForAll("x")(Negation(φ(FunctionParameter(0, 0)))))))
-  val Equals = predicate("=", 2, None)
+  val Equals = predicate("=", 2, None).copy(attributes = Seq("equality"))
   val ExistsUnique = quantifier("∃!", Some(Exists("y")(ForAll("x")(Equivalence(
     φ(FunctionParameter(0, 0)),
     Equals(FunctionParameter(0, 0), FunctionParameter(0, 1)))))))
@@ -170,13 +171,36 @@ trait ProverSpec extends Specification {
     BlankDefinition,
     None,
     Nil)
+  val AdditionDefinition = TermDefinition(
+    "+",
+    Nil,
+    Nil,
+    None,
+    Format.default("+", Nil),
+    Nil,
+    BlankDefinition,
+    None,
+    Nil)
+  val Addition = DefinedTerm(Nil, AdditionDefinition)(Nil)
+  val Apply = TermDefinition(
+    "apply",
+    Nil,
+    Seq(a, b),
+    None,
+    Format.Explicit("%0(%1)", "a(b)", requiresBrackets = false, requiresComponentBrackets = true),
+    Nil,
+    BlankDefinition,
+    None,
+    Nil)
 
   implicit val entryContext: EntryContext = EntryContext(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
       ForAll, Exists, ExistsUnique,
       ElementOf, Equals, Subset) ++
-      Seq(EmptySetDefinition, PowerSet, Singleton, Pair),
+      Seq(
+        EmptySetDefinition, PowerSet, Singleton, Pair,
+        ZeroDefinition, NaturalsDefinition, Successor, AdditionDefinition, Apply),
     Nil)
   implicit val parsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
 
@@ -195,20 +219,4 @@ trait ProverSpec extends Specification {
   implicit def termVariableToComponentType(termVariable: TermVariable): TermComponent = TermComponent(termVariable.name)
   implicit def variableTupleToString[T](tuple: (ExpressionVariable[_], T)): (String, T) = tuple.mapLeft(_.name)
   implicit def variableTupleTupleToString[T](tuple: ((ExpressionVariable[_], Int), T)): ((String, Int), T) = tuple.mapLeft(_.mapLeft(_.name))
-  implicit class StatementDefinitionOps(statementDefinition: StatementDefinition) {
-    def apply(components: Expression*): DefinedStatement = {
-      DefinedStatement(components, statementDefinition)(statementDefinition.boundVariableNames)
-    }
-    def apply(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
-      DefinedStatement(components, statementDefinition)(boundVariableNames)
-    }
-  }
-  implicit class TermDefinitionOps(termDefinition: TermDefinition) {
-    def apply(components: Expression*): DefinedTerm = {
-      DefinedTerm(components, termDefinition)(termDefinition.boundVariableNames)
-    }
-    def apply(boundVariableNames: String*)(components: Expression*): DefinedTerm = {
-      DefinedTerm(components, termDefinition)(boundVariableNames)
-    }
-  }
 }

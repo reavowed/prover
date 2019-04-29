@@ -67,6 +67,13 @@ case class TermDefinition(
       shorthand,
       attributes)
   }
+
+  def apply(components: Expression*): DefinedTerm = {
+    DefinedTerm(components, this)(boundVariableNames)
+  }
+  def apply(boundVariableNames: String*)(components: Expression*): DefinedTerm = {
+    DefinedTerm(components, this)(boundVariableNames)
+  }
 }
 
 object TermDefinition extends ChapterEntryParser {

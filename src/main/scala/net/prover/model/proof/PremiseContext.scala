@@ -28,7 +28,9 @@ case class PremiseContext(
     }
   }
 
-  def allPremises: Seq[Premise.SingleLinePremise] = premisesAndSimplifications.map(_._1) ++ premisesAndSimplifications.flatMap(_._2)
+  def allPremises: Seq[Premise.SingleLinePremise] = {
+    premisesAndSimplifications.flatMap { case (premise, simplifications) => premise +: simplifications }
+  }
 
   def findPremise(statement: Statement): Option[Premise.SingleLinePremise] = {
     allPremises.find(_.statement == statement)

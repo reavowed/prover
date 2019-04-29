@@ -73,6 +73,17 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   ): Seq[(ExpressionType, Substitutions)] = {
     Seq((this, substitutions))
   }
+  override def calculateArguments(
+    target: Expression,
+    argumentsSoFar: Map[Int, Term],
+    internalDepth: Int,
+    externalDepth: Int
+  ): Option[Map[Int, Term]] = {
+    if (target == this)
+      Some(argumentsSoFar)
+    else
+      None
+  }
 
   override def toString: String = name
   override def serialized: String = name

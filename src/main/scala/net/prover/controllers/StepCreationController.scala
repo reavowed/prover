@@ -1,15 +1,12 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.{NamingDefinition, PathData, StepDefinition}
-import net.prover.model.{EntryContext, ExpressionParsingContext, Inference, Substitutions}
+import net.prover.model.ExpressionParsingContext
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, PremiseContext, ProofHelper, Step, StepContext}
+import net.prover.model.proof.{Premise, ProofHelper, Step}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
-
-import scala.util.Success
-
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/{stepPath}"))
@@ -27,9 +24,9 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
       for {
         inference <- findInference(definition.inferenceId)(entryContext)
         substitutions <- definition.substitutions.parse(inference)(ExpressionParsingContext.atStep(entryContext, stepContext))
-        premiseStatements <- inference.substitutePremisesAndValidateConclusion(step.statement, substitutions, stepContext).recoverWithBadRequest
+        _ = inference.validateConclusion(step.statement, substitutions, stepContext)
       } yield {
-        getAssertionWithPremises(premiseStatements, step.statement, inference, substitutions, stepContext, premiseContext, entryContext)
+        ProofHelper.getAssertionWithPremises(inference, substitutions, stepContext, premiseContext, entryContext)
       }
     }.toResponseEntity
   }
@@ -46,43 +43,10 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
       for {
         inference <- findInference(definition.inferenceId)(entryContext)
         substitutions <- definition.substitutions.parse(inference)(ExpressionParsingContext.atStep(entryContext, stepContext))
-        premiseStatements <- inference.substitutePremises(substitutions, stepContext).recoverWithBadRequest
-        conclusion <- inference.substituteConclusion(substitutions, stepContext).recoverWithBadRequest
       } yield {
-        getAssertionWithPremises(premiseStatements, conclusion, inference, substitutions, stepContext, premiseContext, entryContext) :+ step
+        ProofHelper.getAssertionWithPremises(inference, substitutions, stepContext, premiseContext, entryContext) :+ step
       }
     }.toResponseEntity
-  }
-
-  private def getAssertionWithPremises(
-    premiseStatements: Seq[Statement],
-    conclusion: Statement,
-    inference: Inference.Summary,
-    substitutions: Substitutions,
-    stepContext: StepContext,
-    premiseContext: PremiseContext,
-    entryContext: EntryContext
-  ): Seq[Step] = {
-    val premises = premiseStatements.map(premiseContext.createPremise)
-    val (targetSteps, premiseSteps) = premises.ofType[Premise.Pending].foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premise) =>
-      ProofHelper.findBySimplifying(premise.statement, entryContext, premiseContext, stepContext) match {
-        case Some(newPremiseSteps) =>
-          (targetStepsSoFar, premiseStepsSoFar ++ newPremiseSteps)
-        case None =>
-          (targetStepsSoFar :+ Step.Target(premise.statement), premiseStepsSoFar)
-      }
-    }
-    val assertionStep = Step.Assertion(
-      conclusion,
-      inference,
-      premises,
-      substitutions)
-    val baseStep = if (premiseSteps.nonEmpty) {
-      Step.Elided(premiseSteps :+ assertionStep, Some(inference.summary), None)
-    } else {
-      assertionStep
-    }
-    targetSteps :+ baseStep
   }
 
   @PostMapping(value = Array("/introduceNaming"))
@@ -154,7 +118,6 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     }.toResponseEntity
   }
 
-
   @PostMapping(value = Array("/extract"), produces = Array("application/json;charset=UTF-8"))
   def extract(
     @PathVariable("bookKey") bookKey: String,
@@ -165,6 +128,20 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext, premiseContext, entryContext) =>
       for {
         newStep <- ProofHelper.extract(step.statement, entryContext, stepContext, premiseContext).orBadRequest(s"Could not extract statement ${step.statement}")
+      } yield Seq(newStep)
+    }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/rearrange"), produces = Array("application/json;charset=UTF-8"))
+  def rearrange(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData
+  ): ResponseEntity[_] = {
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext, premiseContext, entryContext) =>
+      for {
+        newStep <- ProofHelper.rearrange(step.statement, entryContext, premiseContext, stepContext).orBadRequest(s"Could not rearrange statement ${step.statement}")
       } yield Seq(newStep)
     }.toResponseEntity
   }

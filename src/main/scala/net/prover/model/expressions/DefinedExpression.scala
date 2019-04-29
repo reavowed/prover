@@ -82,6 +82,14 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     components.calculateApplicatives(baseArguments, substitutions, increaseDepth(internalDepth), previousInternalDepth, externalDepth)
       .map(_.mapLeft(updateComponents))
   }
+  override def calculateArguments(
+    target: Expression,
+    argumentsSoFar: Map[Int, Term],
+    internalDepth: Int,
+    externalDepth: Int
+  ): Option[Map[Int, Term]] = {
+    getMatch(target).flatMap(targetComponents => components.calculateArguments(targetComponents, argumentsSoFar, increaseDepth(internalDepth), externalDepth))
+  }
 
   override def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = {
     path match {
