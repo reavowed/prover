@@ -6,6 +6,7 @@ export class AssertionStep {
     type = "assertion";
     constructor(public statement: Expression, public premises: any, public inference: any, public referencedLines: any, public isIncomplete: boolean) {}
     inferencesUsed: any[] = [this.inference];
+    allSubsteps: Step[] = [];
 }
 
 export class DeductionStep {
@@ -13,6 +14,7 @@ export class DeductionStep {
     constructor(public assumption: Expression, public substeps: Step[], public provenStatement: Expression | void) {}
     isIncomplete: boolean = _.some(this.substeps, "isIncomplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
+    allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
 }
 
 export class ScopedVariableStep {
@@ -20,6 +22,7 @@ export class ScopedVariableStep {
     constructor(public variableName: String, public substeps: Step[], public provenStatement: Expression | void) {}
     isIncomplete: boolean = _.some(this.substeps, s => s.isIncomplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
+    allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
 }
 
 export class NamingStep {
@@ -27,6 +30,7 @@ export class NamingStep {
     constructor(public variableName: String, public assumption: Expression, public statement: Expression, public substeps: Step[], public inference: any, public referencedLines: any, public referencedLinesForExtraction: any) {}
     isIncomplete: boolean = _.some(this.substeps, "isIncomplete");
     inferencesUsed: any[] = [..._.flatMap(this.substeps, s => s.inferencesUsed), this.inference];
+    allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
 }
 
 export class ElidedStep {
@@ -34,6 +38,7 @@ export class ElidedStep {
     constructor(public statement: Expression | void, public substeps: Step[], public highlightedInference: any, public description: string | null, public referencedLines: any) {}
     isIncomplete: boolean = (!this.highlightedInference && !this.description) || _.some(this.substeps, "isIncomplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
+    allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
 }
 
 export class TargetStep {
@@ -41,6 +46,7 @@ export class TargetStep {
     constructor(public statement: Expression) {}
     isIncomplete: boolean = true;
     inferencesUsed: any[] = [];
+    allSubsteps: Step[] = [];
 }
 
 export class SubproofStep {
@@ -48,6 +54,7 @@ export class SubproofStep {
     constructor(public name: String, public statement: Expression, public substeps: Step[], public referencedLines: any) {}
     isIncomplete: boolean = _.some(this.substeps, s => s.isIncomplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
+    allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
 }
 
 export type Step = AssertionStep | DeductionStep | ScopedVariableStep | NamingStep | TargetStep | ElidedStep | SubproofStep;

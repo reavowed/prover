@@ -26,6 +26,18 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
       } yield step.copy(highlightedInference = Some(inference))
     }.toResponseEntity
   }
+  @PostMapping(value = Array("/description"))
+  def setDescription(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData,
+    @RequestBody description: String
+  ): ResponseEntity[_] = {
+    modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
+      Success(step.copy(description = Some(description)))
+    }.toResponseEntity
+  }
 
   @PostMapping(value = Array("/createTargets"))
   def createTargets(
