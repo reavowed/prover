@@ -155,6 +155,8 @@ term second (x)
   premises (∃ a ∃ b = x orderedPair $$0 $0)
   (∃ a = x orderedPair $0 $$0)
 
+write orderedPair first a second a as expandPair
+
 theorem Ordered Pair from Coordinates
 premise ∃ a ∃ b = x orderedPair $$0 $0
 conclusion = x orderedPair first x second x
