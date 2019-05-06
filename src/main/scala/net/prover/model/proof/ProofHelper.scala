@@ -43,37 +43,6 @@ object ProofHelper {
       }
   }
 
-  def findBySimplifying(target: Statement, entryContext: EntryContext, premiseContext: PremiseContext, stepContext: StepContext): Option[Seq[Step]] = {
-    val simplificationInferences = entryContext.availableEntries.ofType[Inference].filter {
-      case inference @ Inference(_, premises, conclusion)
-        if premises.nonEmpty &&
-          premises.forall(_.complexity < conclusion.complexity ) &&
-          conclusion.requiredSubstitutions.isEquivalentTo(inference.requiredSubstitutions) &&
-          conclusion.requiredSubstitutions.predicates.isEmpty && conclusion.requiredSubstitutions.functions.isEmpty &&
-          premises.forall(_.referencedDefinitions.subsetOf(conclusion.referencedDefinitions))
-      =>
-        true
-      case _ =>
-        false
-    }
-
-    def fromGivenPremises = premiseContext.premisesAndSimplifications
-      .flatMap(x => x._2.reverse :+ x._1)
-      .map(_.statement)
-      .find(_ == target)
-      .map(_ => Nil)
-    def fromFact = findFact(target, stepContext, entryContext).map(Seq(_))
-    def bySimplifying = simplificationInferences.iterator.findFirst { inference =>
-      (for {
-        substitutions <- inference.conclusion.calculateSubstitutions(target, Substitutions.empty, 0, stepContext.externalDepth)
-        premiseStatements <- Try(inference.substitutePremises(substitutions, stepContext)).toOption
-        premiseSteps <- premiseStatements.map(findBySimplifying(_, entryContext, premiseContext, stepContext)).traverseOption.map(_.reduce(_ ++ _))
-        assertionStep = Step.Assertion(target, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
-      } yield premiseSteps :+ assertionStep).headOption
-    }
-    fromGivenPremises orElse fromFact orElse bySimplifying
-  }
-
   def findNamingInferences(entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement)] = {
     entryContext.inferences.mapCollect(i =>
       getNamingPremisesAndAssumption(i, entryContext).map {
@@ -190,7 +159,7 @@ object ProofHelper {
             actualSubstitutions <- firstPremise.calculateSubstitutions(actualFirstPremise, Substitutions.empty, 0, stepContext.externalDepth)
             actualOtherPremises <- otherPremises.map(_.applySubstitutions(actualSubstitutions, 0, stepContext.externalDepth)).traverseOption
             actualConclusion <- inference.conclusion.applySubstitutions(actualSubstitutions, 0, stepContext.externalDepth)
-            premiseSteps <- actualOtherPremises.map(findBySimplifying(_, entryContext, premiseContext, stepContext)).traverseOption.map(_.flatten)
+            premiseSteps <- PremiseFinder.findPremiseSteps(actualOtherPremises, entryContext, premiseContext, stepContext)
             newStep = Step.Assertion(
               actualConclusion,
               inference.summary,
@@ -263,7 +232,7 @@ object ProofHelper {
     val conclusion = inference.substituteConclusion(substitutions, stepContext)
     val premises = premiseStatements.map(premiseContext.createPremise)
     val (targetSteps, premiseSteps) = premises.ofType[Premise.Pending].foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premise) =>
-      ProofHelper.findBySimplifying(premise.statement, entryContext, premiseContext, stepContext) match {
+      PremiseFinder.findPremiseSteps(premise.statement, entryContext, premiseContext, stepContext) match {
         case Some(newPremiseSteps) =>
           (targetStepsSoFar, premiseStepsSoFar ++ newPremiseSteps)
         case None =>
@@ -550,17 +519,6 @@ object ProofHelper {
     } yield result
   }
 
-  private def findWithSingleRewrite(targetStatement: Statement, entryContext: EntryContext, premiseContext: PremiseContext, stepContext: StepContext): Option[Seq[Step]] = {
-    findBySimplifying(targetStatement, entryContext, premiseContext, stepContext) orElse entryContext.rewriteInferences.iterator.findFirst { case (inference, singlePremise) =>
-      (for {
-        rewriteSubstitutions <- inference.conclusion.calculateSubstitutions(targetStatement, Substitutions.empty, 0, stepContext.externalDepth)
-        rewrittenTarget <- singlePremise.applySubstitutions(rewriteSubstitutions, 0, stepContext.externalDepth).toSeq
-        steps <- findBySimplifying(rewrittenTarget, entryContext, premiseContext, stepContext)
-        assertionStep = Step.Assertion(targetStatement, inference.summary, Seq(Premise.Pending(rewrittenTarget)), rewriteSubstitutions)
-      } yield steps :+ assertionStep).headOption
-    }
-  }
-
   private def rewrite(
     targetStatement: Statement,
     entryContext: EntryContext,
@@ -760,20 +718,16 @@ object ProofHelper {
       }
     }
 
-    def rewriteTermByComponents(premiseTerm: Term, targetTerm: Term, wrappingPredicate: Statement): Option[Seq[Step]] = {
-      (premiseTerm, targetTerm) match {
-        case (DefinedTerm(premiseComponents, premiseDefinition), DefinedTerm(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
-          rewriteComponents(premiseComponents, targetComponents, components => wrappingPredicate.specify(Seq(premiseDefinition(components:_*)), 0, stepContext.externalDepth))
-        case _ =>
-          None
-      }
-    }
     def rewriteTerm(premiseTerm: Term, targetTerm: Term, wrappingPredicate: Statement): Option[Seq[Step]] = {
       if (premiseTerm == targetTerm)
         Some(Nil)
       else
-        findBySimplifying(premiseTerm, targetTerm, wrappingPredicate).map(Seq(_)) orElse
-          rewriteTermByComponents(premiseTerm, targetTerm, wrappingPredicate)
+        (premiseTerm, targetTerm) match {
+          case (DefinedTerm(premiseComponents, premiseDefinition), DefinedTerm(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
+            rewriteComponents(premiseComponents, targetComponents, components => wrappingPredicate.specify(Seq(premiseDefinition(components:_*)), 0, stepContext.externalDepth))
+          case _ =>
+            findBySimplifying(premiseTerm, targetTerm, wrappingPredicate).map(Seq(_))
+        }
     }
 
     def rewritePremise(premise: Premise): Option[Seq[Step]] = {
