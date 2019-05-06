@@ -216,6 +216,68 @@ class ProofHelperSpec extends ProverSpec {
       val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
       parsedTheorem mustEqual theorem
     }
+
+    "rearrange using a premise in same order" in {
+      def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
+      val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
+      val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
+      val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b)), Equals(F(a), F(b)))
+      val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
+      val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
+      val axioms = Seq(reverseEquality, equalityIsTransitive, substitutionOfEquals, additionIsAssociative, additionIsCommutative)
+      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+      val stepContext = StepContext.empty(Nil)
+      val premise = Equals(add(a, b), add(c, d))
+      val conclusion = Equals(add(d, c), add(b, a))
+      val step = ProofHelper.rearrange(
+        conclusion,
+        entryContextWithAxioms,
+        PremiseContext.justWithPremises(Seq(premise), entryContextWithAxioms),
+        stepContext)
+      step must beSome
+      val theorem = Theorem(
+        "Rearrangement",
+        Seq(premise),
+        conclusion,
+        step.toSeq,
+        RearrangementType.NotRearrangement
+      ).recalculateReferences(entryContextWithAxioms)
+      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
+      println(serializedTheorem)
+      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
+      parsedTheorem mustEqual theorem
+    }
+
+    "rearrange using a premise in reversed order" in {
+      def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
+      val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
+      val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
+      val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b)), Equals(F(a), F(b)))
+      val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
+      val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
+      val axioms = Seq(reverseEquality, equalityIsTransitive, substitutionOfEquals, additionIsAssociative, additionIsCommutative)
+      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+      val stepContext = StepContext.empty(Nil)
+      val premise = Equals(add(a, b), add(c, d))
+      val conclusion = Equals(add(b, a), add(d, c))
+      val step = ProofHelper.rearrange(
+        conclusion,
+        entryContextWithAxioms,
+        PremiseContext.justWithPremises(Seq(premise), entryContextWithAxioms),
+        stepContext)
+      step must beSome
+      val theorem = Theorem(
+        "Rearrangement",
+        Seq(premise),
+        conclusion,
+        step.toSeq,
+        RearrangementType.NotRearrangement
+      ).recalculateReferences(entryContextWithAxioms)
+      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
+      println(serializedTheorem)
+      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
+      parsedTheorem mustEqual theorem
+    }
   }
 
   "rewriting a statement" should {

@@ -318,6 +318,13 @@ object ProofHelper {
     def operator(a: Term, b: Term): Term = {
       operatorDefinition.specify(Seq(a, b), 0, stepContext.externalDepth)
     }
+    def reversalStep(a: Term, b: Term): Step = {
+      Step.Assertion(
+        equalityDefinition(b, a),
+        equalityReversalInference.summary,
+        Seq(Premise.Pending(equalityDefinition(a, b))),
+        Substitutions(terms = equalityReversalInference.requiredSubstitutions.terms.zip(Seq(a, b)).toMap))
+    }
     def transitivityStep(a: Term, b: Term, c: Term): Step = {
       Step.Assertion(
         equalityDefinition(a, c),
@@ -376,11 +383,7 @@ object ProofHelper {
           stepContext,
           premiseContext,
           entryContext) :+
-        Step.Assertion(
-          equalityDefinition(reversed, normalised),
-          equalityReversalInference.summary,
-          Seq(Premise.Pending(equalityDefinition(normalised, reversed))),
-          Substitutions(terms = equalityReversalInference.requiredSubstitutions.terms.zip(Seq(normalised, reversed)).toMap))
+        reversalStep(normalised, reversed)
       val stepsToElide = if (wrappingFunction.isInstanceOf[FunctionParameter]) {
         associativityAndReversalSteps
       } else {
@@ -429,7 +432,7 @@ object ProofHelper {
           Some((Nil, r))
         case Operator(l, r, _) if l.isRearranged(targetLeft) =>
           for {
-            leftSteps <- matchTrees(l, targetLeft, addRight(wrappingFunction, r))
+            leftSteps <- matchTreesRaw(l, targetLeft, addRight(wrappingFunction, r))
           } yield (leftSteps, r)
         case Operator(l, r, _) if l.contains(targetLeft) =>
           for {
@@ -463,12 +466,12 @@ object ProofHelper {
           }
       }
     }
-    def matchTrees(lhs: OperatorTree, rhs: OperatorTree, wrappingFunction: Term): Option[Seq[Step]] = {
+    def matchTreesRaw(lhs: OperatorTree, rhs: OperatorTree, wrappingFunction: Term): Option[Seq[Step]] = {
       rhs match {
         case Operator(rhsLeft, rhsRight, _) =>
           for {
             (stepsToPullLeft, lhsRight) <- pullLeft(lhs, rhsLeft, wrappingFunction)
-            stepsToMatchRight <- matchTrees(
+            stepsToMatchRight <- matchTreesRaw(
               lhsRight,
               rhsRight,
               wrappingFunction.specify(
@@ -482,20 +485,51 @@ object ProofHelper {
           None
       }
     }
-    matchTrees(baseLhs, baseRhs, FunctionParameter(0, stepContext.externalDepth))
-      .map(steps => steps.take(1) ++ steps.drop(2))
-      .flatMap(wrapAsElidedIfNecessary(_, "Rearranged"))
+    def matchTrees(lhs: OperatorTree, rhs: OperatorTree): Option[Seq[Step]] = {
+      matchTreesRaw(lhs, rhs,  FunctionParameter(0, stepContext.externalDepth)).map(steps => steps.take(1) ++ steps.drop(2))
+    }
+    def rearrangeDirectly = matchTrees(baseLhs, baseRhs)
+
+
+    def rearrangeUsingPremise(premiseLhs: OperatorTree, premiseRhs: OperatorTree): Option[Seq[Step]] = {
+      (for {
+        lhsMatch <- matchTrees(baseLhs, premiseLhs)
+        firstJoiner = if (lhsMatch.nonEmpty) Seq(transitivityStep(baseLhs.baseTerm, premiseLhs.baseTerm, premiseRhs.baseTerm)) else Nil
+        rhsMatch <- matchTrees(premiseRhs, baseRhs)
+        secondJoiner = Seq(transitivityStep(baseLhs.baseTerm, premiseRhs.baseTerm, baseRhs.baseTerm))
+      } yield lhsMatch ++ firstJoiner ++ rhsMatch ++ secondJoiner) orElse
+        (for {
+          firstMatch <- matchTrees(baseLhs, premiseRhs)
+          firstJoiner = Seq(reversalStep(premiseLhs.baseTerm, premiseRhs.baseTerm), transitivityStep(baseLhs.baseTerm, premiseRhs.baseTerm, premiseLhs.baseTerm))
+          secondMatch <- matchTrees(premiseLhs, baseRhs)
+          secondJoiner = Seq(transitivityStep(baseLhs.baseTerm, premiseLhs.baseTerm, baseRhs.baseTerm))
+        } yield firstMatch ++ firstJoiner ++ secondMatch ++ secondJoiner)
+    }
+
+    def rearrangeUsingPremises: Option[Seq[Step]] = (for {
+      premise <- premiseContext.allPremisesSimplestFirst
+      (premiseLhsTerm, premiseRhsTerm) <- (premise.statement match {
+        case equalityDefinition(l: Term, r: Term) => Some((l, r))
+        case _ => None
+      }).toSeq
+      premiseLhs = disassemble(premiseLhsTerm, operatorDefinition, stepContext)
+      premiseRhs = disassemble(premiseRhsTerm, operatorDefinition, stepContext)
+      result <- rearrangeUsingPremise(premiseLhs, premiseRhs)
+    } yield result).headOption
+
+    (rearrangeDirectly orElse rearrangeUsingPremises).flatMap(wrapAsElidedIfNecessary(_, "Rearranged"))
+  }
+
+  private def disassemble(term: Term, operator: Term, stepContext: StepContext): OperatorTree = {
+    operator.calculateArguments(term, Map.empty, 0, stepContext.externalDepth).flatMap { map =>
+      for {
+        a <- map.get(0)
+        b <- map.get(1)
+      } yield Operator(disassemble(a, operator, stepContext), disassemble(b, operator, stepContext), term)
+    }.getOrElse(Leaf(term))
   }
 
   def rearrange(targetStatement: Statement, entryContext: EntryContext, premiseContext: PremiseContext, stepContext: StepContext): Option[Step] = {
-    def disassemble(term: Term, operator: Term): OperatorTree = {
-      operator.calculateArguments(term, Map.empty, 0, stepContext.externalDepth).flatMap { map =>
-        for {
-          a <- map.get(0)
-          b <- map.get(1)
-        } yield Operator(disassemble(a, operator), disassemble(b, operator), term)
-      }.getOrElse(Leaf(term))
-    }
 
     for {
       (lhs, rhs, equalityDefinition) <- entryContext.matchEqualityStatement(targetStatement)
@@ -507,8 +541,8 @@ object ProofHelper {
       equalityReversalInference <- entryContext.findReversalInference(equalityDefinition)
       equalityTransitivityInference <- entryContext.findTransitivityInference(equalityDefinition)
       equalityExpansionInference <- entryContext.findExpansionInference(equalityDefinition)
-      lhsTree = disassemble(lhs, operator)
-      rhsTree = disassemble(rhs, operator)
+      lhsTree = disassemble(lhs, operator, stepContext)
+      rhsTree = disassemble(rhs, operator, stepContext)
       result <- rearrange(
         lhsTree,
         rhsTree,
