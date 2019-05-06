@@ -217,4 +217,37 @@ class ProofHelperSpec extends ProverSpec {
       parsedTheorem mustEqual theorem
     }
   }
+
+  "rewriting a statement" should {
+    "rewrite with simplification and expansion" in {
+      val firstElement = Axiom("First Element", Nil, Equals(First(Pair(a, b)), a))
+      val reverseEquality = Axiom("Reverse equality", Seq(Equals(a, b)), Equals(b, a))
+      val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
+      val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
+      val substitutionOfEqualsIntoFunction = Axiom("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
+      val axioms = Seq(firstElement, reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction)
+      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+
+      val premise = Equals(Pair(First(First(Pair(Pair(a, b), c))), b), Pair(c, d))
+      val target = Equals(Pair(a, b), Pair(First(Pair(c, d)), d))
+      val steps = ProofHelper.rewrite(
+        target,
+        entryContextWithAxioms,
+        PremiseContext.justWithPremises(Seq(premise), entryContextWithAxioms),
+        StepContext.empty(Nil))
+      steps must beSome
+
+      val theorem = Theorem(
+        "Rewrite",
+        Seq(premise),
+        target,
+        steps.get,
+        RearrangementType.NotRearrangement
+      ).recalculateReferences(entryContextWithAxioms)
+      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
+      println(theorem.serializedLines.mapWithIndex((s, i) => s"${"%02d".format(i + 1)} $s").mkString("\n"))
+      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
+      parsedTheorem mustEqual theorem
+    }
+  }
 }

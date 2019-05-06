@@ -87,6 +87,15 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
         None
     }.toMap
   }
+  def rewriteInferences: Seq[(Inference, Statement)] = {
+    availableEntries.ofType[Inference].collect {
+      case inference @ Inference(_, Seq(singlePremise), conclusion)
+        if conclusion.complexity == singlePremise.complexity &&
+          conclusion.requiredSubstitutions.isEquivalentTo(singlePremise.requiredSubstitutions) &&
+          conclusion != singlePremise
+      => (inference, singlePremise)
+    }
+  }
 
   def findRearrangableFunctions(equalityDefinition: StatementDefinition): Seq[(Term, Inference, Inference)] = {
     inferences
@@ -202,13 +211,28 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
     inferences.find {
       case Inference(
       _,
-      Seq(statementDefinition(ExpressionVariable(a), ExpressionVariable(b))),
-      statementDefinition(FunctionApplication(f, Seq(ExpressionVariable(c))), FunctionApplication(g, Seq(ExpressionVariable(d))))
+      Seq(statementDefinition(TermVariable(a), TermVariable(b))),
+      statementDefinition(FunctionApplication(f, Seq(TermVariable(c))), FunctionApplication(g, Seq(TermVariable(d))))
       ) if a == c && b == d && f == g =>
         true
       case _ =>
         false
     }
+  }
+  def findSubstitutionInference(statementDefinition: StatementDefinition): Option[Inference] = {
+    inferences.find {
+      case Inference(
+        _,
+        Seq(
+          statementDefinition(TermVariable(a), TermVariable(b)),
+          PredicateApplication(phi, Seq(TermVariable(c)))),
+        PredicateApplication(psi, Seq(TermVariable(d))))
+      if a == c && b == d && phi == psi =>
+        true
+      case _ =>
+        false
+    }
+
   }
 
   object RecognisedStatementDefinition {

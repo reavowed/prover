@@ -28,12 +28,15 @@ case class PremiseContext(
     }
   }
 
-  def allPremises: Seq[Premise.SingleLinePremise] = {
+  def allPremisesSimplestFirst: Seq[Premise.SingleLinePremise] = {
+    premisesAndSimplifications.flatMap { case (premise, simplifications) => simplifications.reverse :+ premise }
+  }
+  def allPremisesSimplestLast: Seq[Premise.SingleLinePremise] = {
     premisesAndSimplifications.flatMap { case (premise, simplifications) => premise +: simplifications }
   }
 
   def findPremise(statement: Statement): Option[Premise.SingleLinePremise] = {
-    allPremises.find(_.statement == statement)
+    allPremisesSimplestLast.find(_.statement == statement)
   }
   def createPremise(statement: Statement): Premise = {
     findPremise(statement) getOrElse Premise.Pending(statement)

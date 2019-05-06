@@ -146,6 +146,19 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     }.toResponseEntity
   }
 
+  @PostMapping(value = Array("/rewrite"), produces = Array("application/json;charset=UTF-8"))
+  def rewrite(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("stepPath") stepPath: PathData
+  ): ResponseEntity[_] = {
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext, premiseContext, entryContext) =>
+      ProofHelper.rewrite(step.statement, entryContext, premiseContext, stepContext)
+        .orBadRequest(s"Could not simplify statement ${step.statement}")
+    }.toResponseEntity
+  }
+
   @PostMapping(value = Array("/target"))
   def addTarget(
     @PathVariable("bookKey") bookKey: String,

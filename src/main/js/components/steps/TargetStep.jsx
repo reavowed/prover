@@ -46,6 +46,10 @@ export class TargetStepProofLine extends React.Component {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, "rearrange", { method: "POST" })
       .then(this.props.theoremContext.updateTheorem);
   };
+  rewrite = () => {
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, "rewrite", { method: "POST" })
+      .then(this.props.theoremContext.updateTheorem);
+  };
 
   startProving = () => {
     this.setState({
@@ -127,6 +131,7 @@ export class TargetStepProofLine extends React.Component {
             <Button size="sm" className="ml-1" onClick={() => this.setState({addingTarget: !addingTarget, targetStatement: ''})}>Add target</Button>
             <Button size="sm" className="ml-1" onClick={this.extract}>Extract</Button>
             <Button size="sm" className="ml-1" onClick={this.rearrange}>Rearrange</Button>
+            <Button size="sm" className="ml-1" onClick={this.rewrite}>Rewrite</Button>
             {scopingStatement && step.statement.definition === scopingStatement &&
             <Button size="sm" className="ml-1" onClick={this.introduceBoundVariable}>Introduce bound variable</Button>}
             {deductionStatement && step.statement.definition === deductionStatement &&

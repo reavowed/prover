@@ -128,13 +128,7 @@ object ProofHelper {
           }
           .map { case (predicateName, argumentNames) => (inference, singlePremise, predicateName, argumentNames)}
     }.collectDefined
-    val rewriteInferences = entryContext.availableEntries.ofType[Inference].collect {
-      case inference @ Inference(_, Seq(singlePremise), conclusion)
-        if conclusion.complexity == singlePremise.complexity &&
-          conclusion.requiredSubstitutions.isEquivalentTo(singlePremise.requiredSubstitutions) &&
-          conclusion != singlePremise
-      => (inference, singlePremise)
-    }
+    val rewriteInferences = entryContext.rewriteInferences
 
     def matchDirectly(extractionCandidate: Statement, termsSoFar: Int): Option[(Seq[Term], Seq[Step])] = {
       (for {
@@ -255,9 +249,7 @@ object ProofHelper {
       extract(premise.statement, 0).map(_._2).flatMap(wrapAsElidedIfNecessary(_, "Simplified"))
     }
 
-    premiseContext.premisesAndSimplifications
-      .flatMap(x => x._2.reverse :+ x._1)
-      .mapFind(extractPremise)
+    premiseContext.allPremisesSimplestFirst.mapFind(extractPremise)
   }
 
   def getAssertionWithPremises(
@@ -291,7 +283,7 @@ object ProofHelper {
     targetSteps :+ baseStep
   }
 
-  private def wrapAsElidedIfNecessary(steps: Seq[Step], description: String): Option[Step] = {
+  def wrapAsElidedIfNecessary(steps: Seq[Step], description: String): Option[Step] = {
     steps match {
       case Nil =>
         None
@@ -555,6 +547,262 @@ object ProofHelper {
         entryContext,
         premiseContext,
         stepContext)
+    } yield result
+  }
+
+  private def findWithSingleRewrite(targetStatement: Statement, entryContext: EntryContext, premiseContext: PremiseContext, stepContext: StepContext): Option[Seq[Step]] = {
+    findBySimplifying(targetStatement, entryContext, premiseContext, stepContext) orElse entryContext.rewriteInferences.iterator.findFirst { case (inference, singlePremise) =>
+      (for {
+        rewriteSubstitutions <- inference.conclusion.calculateSubstitutions(targetStatement, Substitutions.empty, 0, stepContext.externalDepth)
+        rewrittenTarget <- singlePremise.applySubstitutions(rewriteSubstitutions, 0, stepContext.externalDepth).toSeq
+        steps <- findBySimplifying(rewrittenTarget, entryContext, premiseContext, stepContext)
+        assertionStep = Step.Assertion(targetStatement, inference.summary, Seq(Premise.Pending(rewrittenTarget)), rewriteSubstitutions)
+      } yield steps :+ assertionStep).headOption
+    }
+  }
+
+  private def rewrite(
+    targetStatement: Statement,
+    entryContext: EntryContext,
+    premiseContext: PremiseContext,
+    stepContext: StepContext,
+    equalityDefinition: StatementDefinition,
+    equalitySubstitutionInference: Inference,
+    equalityExpansionInference: Inference,
+    equalityTransitivityInference: Inference,
+    equalityReversalInference: Inference
+  ): Option[Seq[Step]] = {
+    val termSimplificationInferences = entryContext.availableEntries.ofType[Inference]
+      .collect {
+        case inference @ Inference(
+          _,
+          _,
+          equalityDefinition(left: Term, right: Term))
+        if left.complexity > right.complexity && left.requiredSubstitutions.contains(inference.requiredSubstitutions) =>
+          (inference, left, right)
+      }
+    val termDesimplificationInferences = entryContext.availableEntries.ofType[Inference]
+      .collect {
+        case inference @ Inference(
+        _,
+        _,
+        equalityDefinition(left: Term, right: Term))
+          if left.complexity < right.complexity && right.requiredSubstitutions.contains(inference.requiredSubstitutions) =>
+          (inference, left, right)
+      }
+
+    def findSimplificationsDirectly(premiseTerm: Term, reverse: Boolean): Seq[(Term, Step, Inference)] = {
+      def reverseStep(step: Step, inference: Inference, left: Term, right: Term): Step = {
+        Step.Assertion(
+          equalityDefinition(left, right),
+          equalityReversalInference.summary,
+          Seq(Premise.Pending(equalityDefinition(right, left))),
+          Substitutions(terms = equalityReversalInference.requiredSubstitutions.terms.zip(Seq(right, left)).toMap))
+      }
+
+      (for {
+        (inference, left, right) <- termSimplificationInferences
+        substitutions <- left.calculateSubstitutions(premiseTerm, Substitutions.empty, 0, stepContext.externalDepth)
+        simplifiedTerm <- right.applySubstitutions(substitutions, 0, stepContext.externalDepth).flatMap(_.asOptionalInstanceOf[Term])
+        assertionStep <- getAssertionWithPremises(inference.summary, substitutions, stepContext, premiseContext, entryContext).single
+        step =
+          if (reverse)
+            Step.Elided(
+              Seq(assertionStep, reverseStep(assertionStep, inference, simplifiedTerm, premiseTerm) ),
+              Some(inference.summary),
+              None)
+          else
+            assertionStep
+      } yield (simplifiedTerm, step, inference)) ++
+        (for {
+        (inference, left, right) <- termDesimplificationInferences
+        substitutions <- right.calculateSubstitutions(premiseTerm, Substitutions.empty, 0, stepContext.externalDepth)
+        simplifiedTerm <- left.applySubstitutions(substitutions, 0, stepContext.externalDepth).flatMap(_.asOptionalInstanceOf[Term])
+        assertionStep <- getAssertionWithPremises(inference.summary, substitutions, stepContext, premiseContext, entryContext).single
+        step =
+          if (!reverse)
+            Step.Elided(
+              Seq(assertionStep, reverseStep(assertionStep, inference, premiseTerm, simplifiedTerm) ),
+              Some(inference.summary),
+              None)
+          else
+            assertionStep
+      } yield (simplifiedTerm, step, inference))
+    }
+
+    def findSimplificationsWithinExpansion(premiseTerm: Term, wrappingFunction: Term, reverse: Boolean): Seq[(Term, Step, Inference)] = {
+      premiseTerm match {
+        case DefinedTerm(components, termDefinition) =>
+          def helper(previousComponents: Seq[Expression], nextComponents: Seq[Expression], resultsSoFar: Seq[(Term, Step, Inference)]): Seq[(Term, Step, Inference)]  = {
+            nextComponents match {
+              case (innerTerm: Term) +: moar =>
+                val newWrapper = wrappingFunction.specify(
+                  Seq(termDefinition((previousComponents :+ FunctionParameter(0, stepContext.externalDepth)) ++ moar: _*)),
+                  0,
+                  stepContext.externalDepth)
+                val newResults = findSimplifications(innerTerm, reverse) map { case (simplifiedInnerTerm, simplificationStep, simplificationInference) =>
+                  val simplifiedTerm = newWrapper.specify(Seq(simplifiedInnerTerm), 0, stepContext.externalDepth)
+                  def reverseIfAppropriate[T](seq: T*): Seq[T] = if (reverse) seq.reverse else seq
+                  val expansionStep = Step.Assertion(
+                    equalityDefinition(reverseIfAppropriate(premiseTerm, simplifiedTerm):_*),
+                    equalityExpansionInference.summary,
+                    Seq(Premise.Pending(equalityDefinition(reverseIfAppropriate(innerTerm, simplifiedInnerTerm):_*))),
+                    Substitutions(
+                      terms = equalityExpansionInference.requiredSubstitutions.terms.zip(reverseIfAppropriate(innerTerm, simplifiedInnerTerm)).toMap,
+                      functions = equalityExpansionInference.requiredSubstitutions.functions.zip(Seq(newWrapper)).toMap))
+                  val elidedStep = Step.Elided(Seq(simplificationStep, expansionStep), Some(simplificationInference.summary), None)
+                  (simplifiedTerm, elidedStep, simplificationInference)
+                }
+                helper(previousComponents :+ innerTerm, moar, resultsSoFar ++ newResults)
+              case nonTerm +: moar =>
+                helper(previousComponents :+ nonTerm, moar, resultsSoFar)
+              case Nil =>
+                resultsSoFar
+            }
+          }
+          helper(Nil, components, Nil)
+        case _ =>
+          Nil
+      }
+    }
+
+    def findSimplifications(premiseTerm: Term, reverse: Boolean): Seq[(Term, Step, Inference)] = {
+      findSimplificationsDirectly(premiseTerm, reverse) ++
+        findSimplificationsWithinExpansion(premiseTerm, FunctionParameter(0, stepContext.externalDepth), reverse)
+    }
+
+    def findSimplificationPath(premiseTerm: Term, targetTerm: Term, reverse: Boolean): Option[Seq[(Term, Step)]] = {
+      if (premiseTerm == targetTerm)
+        Some(Nil)
+      else if (!reverse && premiseTerm.complexity > targetTerm.complexity)
+        (for {
+          (simplifiedPremise, simplificationStep, _) <- findSimplifications(premiseTerm, reverse = false)
+          remainingSteps <- findSimplificationPath(simplifiedPremise, targetTerm, reverse = false)
+        } yield (simplifiedPremise, simplificationStep) +: remainingSteps).headOption
+      else if (reverse && premiseTerm.complexity < targetTerm.complexity)
+        (for {
+          (simplifiedTarget, simplificationStep, _) <- findSimplifications(targetTerm, reverse = true)
+          remainingSteps <- findSimplificationPath(premiseTerm, simplifiedTarget, reverse = true)
+        } yield remainingSteps :+ (targetTerm, simplificationStep)).headOption
+      else
+        None
+    }
+
+    def buildTransitivity(left: Term, path: Seq[(Term, Step)]): Option[Seq[Step]] = {
+      for {
+        (firstRight, firstStep) <- path.headOption
+        remainingPath = path.tail
+      } yield remainingPath.foldLeft((firstRight, Seq(firstStep))) { case ((previousRight, stepsSoFar), (currentRight, currentStep)) =>
+        (currentRight, stepsSoFar :+ currentStep :+ Step.Assertion(
+          equalityDefinition(left, currentRight),
+          equalityTransitivityInference.summary,
+          Seq(Premise.Pending(equalityDefinition(left, previousRight)), Premise.Pending(equalityDefinition(previousRight, currentRight))),
+          Substitutions(terms = equalityTransitivityInference.requiredSubstitutions.terms.zip(Seq(left, previousRight, currentRight)).toMap)))
+      }._2
+    }
+
+    def findSimplificationSteps(
+      premiseTerm: Term,
+      targetTerm: Term
+    ): Option[Seq[Step]] = {
+      for {
+        simplificationPath <- findSimplificationPath(premiseTerm, targetTerm, premiseTerm.complexity < targetTerm.complexity)
+        transitivitySteps <- buildTransitivity(premiseTerm, simplificationPath)
+      } yield transitivitySteps
+    }
+
+    def wrap(steps: Seq[Step], premiseTerm: Term, targetTerm: Term, wrappingPredicate: Statement): Option[Step] = {
+      val wrappingStep = Step.Assertion(
+        wrappingPredicate.specify(Seq(targetTerm), 0, stepContext.externalDepth),
+        equalitySubstitutionInference.summary,
+        Seq(
+          Premise.Pending(equalityDefinition(premiseTerm, targetTerm)),
+          Premise.Pending(wrappingPredicate.specify(Seq(premiseTerm), 0, stepContext.externalDepth))),
+        Substitutions(
+          terms = equalitySubstitutionInference.requiredSubstitutions.terms.zip(Seq(premiseTerm, targetTerm)).toMap,
+          predicates = equalitySubstitutionInference.requiredSubstitutions.predicates.zip(Seq(wrappingPredicate)).toMap))
+      wrapAsElidedIfNecessary(steps :+ wrappingStep, if (premiseTerm.complexity > targetTerm.complexity) "Simplified" else "Expanded")
+    }
+
+    def findBySimplifying(premiseTerm: Term, targetTerm: Term, wrappingPredicate: Statement): Option[Step] = {
+      for {
+        simplificationSteps <- findSimplificationSteps(premiseTerm, targetTerm)
+        result <- wrap(simplificationSteps, premiseTerm, targetTerm, wrappingPredicate)
+      } yield result
+    }
+
+    def rewriteComponents(premiseComponents: Seq[Expression], targetComponents: Seq[Expression], wrappingFunction: Seq[Expression] => Statement): Option[Seq[Step]] = {
+      def helper(previousComponents: Seq[(Expression, Expression)], nextComponents: Seq[(Expression, Expression)], currentSteps: Seq[Step]): Option[Seq[Step]] = {
+        nextComponents match {
+          case Nil =>
+            Some(currentSteps)
+          case (premise: Statement, target: Statement) +: moar =>
+            rewriteStatement(premise, target, s => wrappingFunction((previousComponents.map(_._2) :+ s) ++ moar.map(_._1)))
+              .flatMap(newSteps => helper(previousComponents :+ (premise, target), moar, currentSteps ++ newSteps))
+          case (premise: Term, target: Term) +: moar =>
+            rewriteTerm(premise, target, wrappingFunction((previousComponents.map(_._2) :+ FunctionParameter(0, stepContext.externalDepth)) ++ moar.map(_._1)))
+              .flatMap(newSteps => helper(previousComponents :+ (premise, target), moar, currentSteps ++ newSteps))
+          case _ =>
+            None
+        }
+      }
+      premiseComponents.zipStrict(targetComponents).flatMap(helper(Nil, _, Nil))
+    }
+
+    def rewriteStatement(premiseStatement: Statement, currentTarget: Statement, wrappingFunction: Statement => Statement): Option[Seq[Step]] = {
+      if (premiseStatement == currentTarget)
+        Some(Nil)
+      else (premiseStatement, currentTarget) match {
+        case (DefinedStatement(premiseComponents, premiseDefinition), DefinedStatement(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
+          rewriteComponents(premiseComponents, targetComponents, components => premiseDefinition(components:_*))
+        case _ =>
+          None
+      }
+    }
+
+    def rewriteTermByComponents(premiseTerm: Term, targetTerm: Term, wrappingPredicate: Statement): Option[Seq[Step]] = {
+      (premiseTerm, targetTerm) match {
+        case (DefinedTerm(premiseComponents, premiseDefinition), DefinedTerm(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
+          rewriteComponents(premiseComponents, targetComponents, components => wrappingPredicate.specify(Seq(premiseDefinition(components:_*)), 0, stepContext.externalDepth))
+        case _ =>
+          None
+      }
+    }
+    def rewriteTerm(premiseTerm: Term, targetTerm: Term, wrappingPredicate: Statement): Option[Seq[Step]] = {
+      if (premiseTerm == targetTerm)
+        Some(Nil)
+      else
+        findBySimplifying(premiseTerm, targetTerm, wrappingPredicate).map(Seq(_)) orElse
+          rewriteTermByComponents(premiseTerm, targetTerm, wrappingPredicate)
+    }
+
+    def rewritePremise(premise: Premise): Option[Seq[Step]] = {
+      rewriteStatement(premise.statement, targetStatement, identity)
+        .flatMap(wrapAsElidedIfNecessary(_, "Rewritten"))
+        .map(Seq(_))
+    }
+
+    (targetStatement match {
+      case equalityDefinition(premiseTerm: Term, targetTerm: Term) =>
+        findSimplificationSteps(premiseTerm, targetTerm)
+      case _ =>
+        None
+    }) orElse premiseContext.allPremisesSimplestFirst.mapFind(rewritePremise)
+  }
+
+  def rewrite(
+    targetStatement: Statement,
+    entryContext: EntryContext,
+    premiseContext: PremiseContext,
+    stepContext: StepContext
+  ): Option[Seq[Step]] = {
+    for {
+      equalityDefinition <- entryContext.equalityDefinitionOption
+      equalitySubstitutionInference <- entryContext.findSubstitutionInference(equalityDefinition)
+      equalityExpansionInference <- entryContext.findExpansionInference(equalityDefinition)
+      equalityTransitivityInference <- entryContext.findTransitivityInference(equalityDefinition)
+      equalityReversalInference <- entryContext.findReversalInference(equalityDefinition)
+      result <- rewrite(targetStatement, entryContext, premiseContext, stepContext, equalityDefinition, equalitySubstitutionInference, equalityExpansionInference, equalityTransitivityInference, equalityReversalInference)
     } yield result
   }
 }

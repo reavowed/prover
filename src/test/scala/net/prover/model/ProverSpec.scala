@@ -138,6 +138,16 @@ trait ProverSpec extends Specification {
     BlankDefinition,
     None,
     Nil)
+  val First = TermDefinition(
+    "first",
+    Nil,
+    Seq(a),
+    None,
+    Format.Explicit("%0_0", "a_0", requiresBrackets = false, requiresComponentBrackets = true),
+    Nil,
+    BlankDefinition,
+    None,
+    Nil)
 
   val ZeroDefinition = TermDefinition(
     "0",
@@ -199,7 +209,7 @@ trait ProverSpec extends Specification {
       ForAll, Exists, ExistsUnique,
       ElementOf, Equals, Subset) ++
       Seq(
-        EmptySetDefinition, PowerSet, Singleton, Pair,
+        EmptySetDefinition, PowerSet, Singleton, Pair, First,
         ZeroDefinition, NaturalsDefinition, Successor, AdditionDefinition, Apply),
     Nil)
   implicit val parsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)

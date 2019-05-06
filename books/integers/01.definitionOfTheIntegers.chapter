@@ -1,0 +1,137 @@
+Define the set of integers, ℤ.
+
+theorem Existence of ~_ℤ
+conclusion ∃! ~ ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0
+{
+  let ~_ℤ = $0 comprehension x product product ℕ ℕ product ℕ ℕ = apply + orderedPair first first $0 second second $0 apply + orderedPair second first $0 first second $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! ~ ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0) (comprehension x product product ℕ ℕ product ℕ ℕ = apply + orderedPair first first $0 second second $0 apply + orderedPair second first $0 first second $0) () () {
+    prove ⊆ $0 product product ℕ ℕ product ℕ ℕ 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () ($0, product product ℕ ℕ product ℕ ℕ) (= apply + orderedPair first first $$0 second second $$0 apply + orderedPair second first $$0 first second $$0) ()
+    prove relation $0 product ℕ ℕ 64dac6bb3fd9231be3d7210a6751c712a4af4bcd31ef18b3fbcfd19610b1b57b () ($0, product ℕ ℕ) () ()
+    take a {
+      assume ∈ $0 ℕ {
+        take b {
+          assume ∈ $0 ℕ {
+            take c {
+              assume ∈ $0 ℕ {
+                take d {
+                  assume ∈ $0 ℕ {
+                    assume ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 {
+                      prove = apply + orderedPair first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 apply + orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$$$$0, product product ℕ ℕ product ℕ ℕ, orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) (= apply + orderedPair first first $$$$$$0 second second $$$$$$0 apply + orderedPair second first $$$$$$0 first second $$$$$$0) ()
+                      elided (Rewritten) {
+                        elided (Simplified) {
+                          elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
+                            prove = first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$$$0 $$$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () (orderedPair $$$$0 $$$0, orderedPair $$0 $0) () ()
+                            prove = first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first orderedPair $$$$0 $$$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$$$0 $$$0) () (first $$$$$$0)
+                          }
+                          prove = first orderedPair $$$$0 $$$0 $$$$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () ($$$$0, $$$0) () ()
+                          prove = first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, first orderedPair $$$$0 $$$0, $$$$0) () ()
+                          prove = apply + orderedPair $$$$0 second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 apply + orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, $$$$0) (= apply + orderedPair $$$$$$0 second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 apply + orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) ()
+                        }
+                        elided (Simplified) {
+                          elided 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 {
+                            prove = second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () (orderedPair $$$$0 $$$0, orderedPair $$0 $0) () ()
+                            prove = second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second orderedPair $$0 $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$0 $0) () (second $$$$$$0)
+                          }
+                          prove = second orderedPair $$0 $0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($$0, $0) () ()
+                          prove = second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, second orderedPair $$0 $0, $0) () ()
+                          prove = apply + orderedPair $$$$0 $0 apply + orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, $0) (= apply + orderedPair $$$$0 $$$$$$0 apply + orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) ()
+                        }
+                        elided (Simplified) {
+                          elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
+                            prove = first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$$$0 $$$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () (orderedPair $$$$0 $$$0, orderedPair $$0 $0) () ()
+                            prove = second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second orderedPair $$$$0 $$$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$$$0 $$$0) () (second $$$$$$0)
+                          }
+                          prove = second orderedPair $$$$0 $$$0 $$$0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($$$$0, $$$0) () ()
+                          prove = second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, second orderedPair $$$$0 $$$0, $$$0) () ()
+                          prove = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, $$$0) (= apply + orderedPair $$$$0 $0 apply + orderedPair $$$$$$0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) ()
+                        }
+                        elided (Simplified) {
+                          elided 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 {
+                            prove = second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () (orderedPair $$$$0 $$$0, orderedPair $$0 $0) () ()
+                            prove = first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first orderedPair $$0 $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$0 $0) () (first $$$$$$0)
+                          }
+                          prove = first orderedPair $$0 $0 $$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () ($$0, $0) () ()
+                          prove = first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, first orderedPair $$0 $0, $$0) () ()
+                          prove = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, $$0) (= apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$$$$$0) ()
+                        }
+                      }
+                    }
+                    assume = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 {
+                      elided (Rewritten) {
+                        elided (Simplified) {
+                          elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
+                            prove = first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$$$0 $$$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () (orderedPair $$$$0 $$$0, orderedPair $$0 $0) () ()
+                            prove = first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first orderedPair $$$$0 $$$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$$$0 $$$0) () (first $$$$$$0)
+                          }
+                          prove = first orderedPair $$$$0 $$$0 $$$$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () ($$$$0, $$$0) () ()
+                          prove = first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, first orderedPair $$$$0 $$$0, $$$$0) () ()
+                          prove = $$$$0 first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, $$$$0) () ()
+                          prove = apply + orderedPair first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $0 apply + orderedPair $$$0 $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$$$0, first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) (= apply + orderedPair $$$$$$0 $0 apply + orderedPair $$$0 $$0) ()
+                        }
+                        elided (Simplified) {
+                          elided 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 {
+                            prove = second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () (orderedPair $$$$0 $$$0, orderedPair $$0 $0) () ()
+                            prove = second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second orderedPair $$0 $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$0 $0) () (second $$$$$$0)
+                          }
+                          prove = second orderedPair $$0 $0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($$0, $0) () ()
+                          prove = second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, second orderedPair $$0 $0, $0) () ()
+                          prove = $0 second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, $0) () ()
+                          prove = apply + orderedPair first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 apply + orderedPair $$$0 $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) (= apply + orderedPair first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$$0 apply + orderedPair $$$0 $$0) ()
+                        }
+                        elided (Simplified) {
+                          elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
+                            prove = first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$$$0 $$$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () (orderedPair $$$$0 $$$0, orderedPair $$0 $0) () ()
+                            prove = second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second orderedPair $$$$0 $$$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$$$0 $$$0) () (second $$$$$$0)
+                          }
+                          prove = second orderedPair $$$$0 $$$0 $$$0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($$$$0, $$$0) () ()
+                          prove = second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, second orderedPair $$$$0 $$$0, $$$0) () ()
+                          prove = $$$0 second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, $$$0) () ()
+                          prove = apply + orderedPair first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 apply + orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$$0, second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) (= apply + orderedPair first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 apply + orderedPair $$$$$$0 $$0) ()
+                        }
+                        elided (Simplified) {
+                          elided 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 {
+                            prove = second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () (orderedPair $$$$0 $$$0, orderedPair $$0 $0) () ()
+                            prove = first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first orderedPair $$0 $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$0 $0) () (first $$$$$$0)
+                          }
+                          prove = first orderedPair $$0 $0 $$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () ($$0, $0) () ()
+                          prove = first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, first orderedPair $$0 $0, $$0) () ()
+                          prove = $$0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, $$0) () ()
+                          prove = apply + orderedPair first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 apply + orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$0, first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) (= apply + orderedPair first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 apply + orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$$0) ()
+                        }
+                      }
+                      elided 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d {
+                        prove ∈ orderedPair $$$$0 $$$0 product ℕ ℕ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$$$0, ℕ, $$$0, ℕ) () ()
+                        prove ∈ orderedPair $$0 $0 product ℕ ℕ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, ℕ, $0, ℕ) () ()
+                        prove ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 product product ℕ ℕ product ℕ ℕ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (orderedPair $$$$0 $$$0, product ℕ ℕ, orderedPair $$0 $0, product ℕ ℕ) () ()
+                        prove ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$$$$0, product product ℕ ℕ product ℕ ℕ, orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) (= apply + orderedPair first first $$$$$$0 second second $$$$$$0 apply + orderedPair second first $$$$$$0 first second $$$$$$0) ()
+                      }
+                    }
+                    prove ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0, = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0) () () ()
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    take x {
+      assume ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 {
+        take y {
+          assume ∈ $0 $$0 {
+            prove ⊆ $$0 product product ℕ ℕ product ℕ ℕ bdc3e1f2449e2fbd0a83076d34a8055e2d09d67c1806a4bc59547d29cfa15bd1 () ($$0, product ℕ ℕ) () ()
+            prove ∈ $0 product product ℕ ℕ product ℕ ℕ ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($$0, product product ℕ ℕ product ℕ ℕ, $0) () ()
+            target = $0 orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0
+            target ∈ $0 $$$0
+          }
+          target → ∈ $0 $$$0 ∈ $0 $$0
+          prove ↔ ∈ $0 $$0 ∈ $0 $$$0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 $$0, ∈ $0 $$$0) () () ()
+        }
+        prove = $0 $$0 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () ($0, $$0) () ()
+      }
+    }
+    elided 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 {
+      prove ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation $0 product ℕ ℕ, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0) () () ()
+      prove ∃! x ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ relation $$0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0) ()
+    }
+  }
+}
