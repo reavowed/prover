@@ -19,6 +19,8 @@ trait ProverSpec extends Specification {
   val d = TermVariable("d")
   val A = TermVariable("A")
   val B = TermVariable("B")
+  val C = TermVariable("C")
+  val D = TermVariable("D")
   val n = TermVariable("n")
   val F = TermVariable("F")
 
@@ -138,12 +140,32 @@ trait ProverSpec extends Specification {
     BlankDefinition,
     None,
     Nil)
+  val Product = TermDefinition(
+    "product",
+    Nil,
+    Seq(a, b),
+    Some("Cartesian Product"),
+    Format.Explicit("%0 × %1", "a × b", requiresBrackets = true, requiresComponentBrackets = true),
+    Nil,
+    BlankDefinition,
+    None,
+    Nil)
   val First = TermDefinition(
     "first",
     Nil,
     Seq(a),
     None,
     Format.Explicit("%0_0", "a_0", requiresBrackets = false, requiresComponentBrackets = true),
+    Nil,
+    BlankDefinition,
+    None,
+    Nil)
+  val Second = TermDefinition(
+    "second",
+    Nil,
+    Seq(a),
+    None,
+    Format.Explicit("%0_1", "a_1", requiresBrackets = false, requiresComponentBrackets = true),
     Nil,
     BlankDefinition,
     None,
@@ -209,7 +231,7 @@ trait ProverSpec extends Specification {
       ForAll, Exists, ExistsUnique,
       ElementOf, Equals, Subset) ++
       Seq(
-        EmptySetDefinition, PowerSet, Singleton, Pair, First,
+        EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second,
         ZeroDefinition, NaturalsDefinition, Successor, AdditionDefinition, Apply),
     Nil)
   implicit val parsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)

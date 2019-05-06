@@ -249,5 +249,38 @@ class ProofHelperSpec extends ProverSpec {
       val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
       parsedTheorem mustEqual theorem
     }
+
+    "rewrite with a premise requiring complicated simplification" in {
+      val elementOfCartesianProductFromCoordinates = Axiom("Element of Cartesian Product from Coordinates", Seq(ElementOf(a, Product(A, B))), Equals(a, Pair(First(a), Second(a))))
+      val firstCoordinateOfElementOfCartesianProduct = Axiom("First Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(First(a), A))
+      val secondCoordinateOfElementOfCartesianProduct = Axiom("Second Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(Second(a), B))
+      val reverseEquality = Axiom("Reverse equality", Seq(Equals(a, b)), Equals(b, a))
+      val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
+      val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
+      val substitutionOfEqualsIntoFunction = Axiom("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
+      val axioms = Seq(elementOfCartesianProductFromCoordinates, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction)
+      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+
+      val premise = ElementOf(a, Product(Product(A, B), Product(C, D)))
+      val target = Equals(a, Pair(Pair(First(First(a)), Second(First(a))), Pair(First(Second(a)), Second(Second(a)))))
+      val steps = ProofHelper.rewrite(
+        target,
+        entryContextWithAxioms,
+        PremiseContext.justWithPremises(Seq(premise), entryContextWithAxioms),
+        StepContext.empty(Nil))
+      steps must beSome
+
+      val theorem = Theorem(
+        "Rewrite",
+        Seq(premise),
+        target,
+        steps.get,
+        RearrangementType.NotRearrangement
+      ).recalculateReferences(entryContextWithAxioms)
+      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
+      println(theorem.serializedLines.mapWithIndex((s, i) => s"${"%02d".format(i + 1)} $s").mkString("\n"))
+      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
+      parsedTheorem mustEqual theorem
+    }
   }
 }

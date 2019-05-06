@@ -140,7 +140,23 @@ conclusion ∃! ~ ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b →
           assume ∈ $0 $$0 {
             prove ⊆ $$0 product product ℕ ℕ product ℕ ℕ bdc3e1f2449e2fbd0a83076d34a8055e2d09d67c1806a4bc59547d29cfa15bd1 () ($$0, product ℕ ℕ) () ()
             prove ∈ $0 product product ℕ ℕ product ℕ ℕ ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($$0, product product ℕ ℕ product ℕ ℕ, $0) () ()
-            target = $0 orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0
+            prove = $0 orderedPair first $0 second $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($0, product ℕ ℕ, product ℕ ℕ) () ()
+            elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+              elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+                prove ∈ second $0 product ℕ ℕ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($0, product ℕ ℕ, product ℕ ℕ) () ()
+                prove = second $0 orderedPair first second $0 second second $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () (second $0, ℕ, ℕ) () ()
+              }
+              prove = orderedPair first $0 second $0 orderedPair first $0 orderedPair first second $0 second second $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (second $0, orderedPair first second $0 second second $0) () (orderedPair first $0 $$$$0)
+            }
+            prove = $0 orderedPair first $0 orderedPair first second $0 second second $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($0, orderedPair first $0 second $0, orderedPair first $0 orderedPair first second $0 second second $0) () ()
+            elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+              elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+                prove ∈ first $0 product ℕ ℕ 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($0, product ℕ ℕ, product ℕ ℕ) () ()
+                prove = first $0 orderedPair first first $0 second first $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () (first $0, ℕ, ℕ) () ()
+              }
+              prove = orderedPair first $0 orderedPair first second $0 second second $0 orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (first $0, orderedPair first first $0 second first $0) () (orderedPair $$$$0 orderedPair first second $0 second second $0)
+            }
+            prove = $0 orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($0, orderedPair first $0 orderedPair first second $0 second second $0, orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0) () ()
             target ∈ $0 $$$0
           }
           target → ∈ $0 $$$0 ∈ $0 $$0

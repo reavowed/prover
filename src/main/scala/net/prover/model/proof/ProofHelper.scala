@@ -4,8 +4,6 @@ import net.prover.model._
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions._
 
-import scala.util.Try
-
 object ProofHelper {
   private def getSimplification(premise: Premise.SingleLinePremise, simplificationInference: Inference, externalDepth: Int): Option[Premise.Simplification] = {
     for {
@@ -253,13 +251,21 @@ object ProofHelper {
   }
 
   def wrapAsElidedIfNecessary(steps: Seq[Step], description: String): Option[Step] = {
+    wrapAsElidedIfNecessary(steps, Step.Elided(_, None, Some(description)))
+  }
+
+  def wrapAsElidedIfNecessary(steps: Seq[Step], inference: Inference): Option[Step] = {
+    wrapAsElidedIfNecessary(steps, Step.Elided(_, Some(inference.summary), None))
+  }
+
+  private def wrapAsElidedIfNecessary(steps: Seq[Step], f: Seq[Step] => Step.Elided): Option[Step] = {
     steps match {
       case Nil =>
         None
       case Seq(singleStep) =>
         Some(singleStep)
       case _ =>
-        Some(Step.Elided(steps, None, Some(description)))
+        Some(f(steps))
     }
   }
 
@@ -536,7 +542,7 @@ object ProofHelper {
           _,
           _,
           equalityDefinition(left: Term, right: Term))
-        if left.complexity > right.complexity && left.requiredSubstitutions.contains(inference.requiredSubstitutions) =>
+        if left.complexity > right.complexity && left.requiredSubstitutions.contains(inference.conclusion.requiredSubstitutions) =>
           (inference, left, right)
       }
     val termDesimplificationInferences = entryContext.availableEntries.ofType[Inference]
@@ -545,7 +551,7 @@ object ProofHelper {
         _,
         _,
         equalityDefinition(left: Term, right: Term))
-          if left.complexity < right.complexity && right.requiredSubstitutions.contains(inference.requiredSubstitutions) =>
+          if left.complexity < right.complexity && right.requiredSubstitutions.contains(inference.conclusion.requiredSubstitutions) =>
           (inference, left, right)
       }
 
@@ -560,31 +566,37 @@ object ProofHelper {
 
       (for {
         (inference, left, right) <- termSimplificationInferences
-        substitutions <- left.calculateSubstitutions(premiseTerm, Substitutions.empty, 0, stepContext.externalDepth)
-        simplifiedTerm <- right.applySubstitutions(substitutions, 0, stepContext.externalDepth).flatMap(_.asOptionalInstanceOf[Term])
-        assertionStep <- getAssertionWithPremises(inference.summary, substitutions, stepContext, premiseContext, entryContext).single
-        step =
+        conclusionSubstitutions <- left.calculateSubstitutions(premiseTerm, Substitutions.empty, 0, stepContext.externalDepth)
+        simplifiedTerm <- right.applySubstitutions(conclusionSubstitutions, 0, stepContext.externalDepth).flatMap(_.asOptionalInstanceOf[Term])
+        (premiseSteps, substitutedPremises, finalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, entryContext, premiseContext, stepContext)
+        assertionStep = Step.Assertion(
+          equalityDefinition(premiseTerm, simplifiedTerm),
+          inference.summary,
+          substitutedPremises.map(Premise.Pending),
+          finalSubstitutions)
+        steps =
           if (reverse)
-            Step.Elided(
-              Seq(assertionStep, reverseStep(assertionStep, inference, simplifiedTerm, premiseTerm) ),
-              Some(inference.summary),
-              None)
+            premiseSteps ++ Seq(assertionStep, reverseStep(assertionStep, inference, simplifiedTerm, premiseTerm))
           else
-            assertionStep
+            premiseSteps :+ assertionStep
+        step <- wrapAsElidedIfNecessary(steps, inference)
       } yield (simplifiedTerm, step, inference)) ++
         (for {
         (inference, left, right) <- termDesimplificationInferences
-        substitutions <- right.calculateSubstitutions(premiseTerm, Substitutions.empty, 0, stepContext.externalDepth)
-        simplifiedTerm <- left.applySubstitutions(substitutions, 0, stepContext.externalDepth).flatMap(_.asOptionalInstanceOf[Term])
-        assertionStep <- getAssertionWithPremises(inference.summary, substitutions, stepContext, premiseContext, entryContext).single
-        step =
+        conclusionSubstitutions <- right.calculateSubstitutions(premiseTerm, Substitutions.empty, 0, stepContext.externalDepth)
+        simplifiedTerm <- left.applySubstitutions(conclusionSubstitutions, 0, stepContext.externalDepth).flatMap(_.asOptionalInstanceOf[Term])
+        (premiseSteps, substitutedPremises, finalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, entryContext, premiseContext, stepContext)
+        assertionStep = Step.Assertion(
+          equalityDefinition(simplifiedTerm, premiseTerm),
+          inference.summary,
+          substitutedPremises.map(Premise.Pending),
+          finalSubstitutions)
+        steps =
           if (!reverse)
-            Step.Elided(
-              Seq(assertionStep, reverseStep(assertionStep, inference, premiseTerm, simplifiedTerm) ),
-              Some(inference.summary),
-              None)
+            premiseSteps ++ Seq(assertionStep, reverseStep(assertionStep, inference, premiseTerm, simplifiedTerm))
           else
-            assertionStep
+            premiseSteps :+ assertionStep
+        step <- wrapAsElidedIfNecessary(steps, inference)
       } yield (simplifiedTerm, step, inference))
     }
 
