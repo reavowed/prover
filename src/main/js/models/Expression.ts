@@ -110,7 +110,9 @@ export class DefinedExpression {
 export class TypeExpression {
   constructor(public definition: TypeDefinition, public term: Expression, public otherComponents: Expression[], public properties: string[]) {}
   serialize(): string {
-    return [this.definition.symbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
+    const baseWords = ["is", this.term.serialize(), this.definition.symbol, ...this.otherComponents.map(c => c.serialize())];
+    const allWords = this.properties.length ? [...baseWords, "with", "(" + this.properties.join(" ") + ")"] : baseWords;
+    return allWords.join(" ")
   }
   addProperty(newProperty: string) {
     this.properties = [...this.properties, newProperty];
