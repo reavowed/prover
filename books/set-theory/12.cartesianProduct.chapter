@@ -16,7 +16,7 @@ conclusion ∈ orderedPair a b powerSet powerSet ∪ A B
 
 term product (A B)
   name (Cartesian Product)
-  format (A × B)
+  format (A × B) requires-brackets
   (= $0 comprehension x powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0)
   shorthand (prod)
 
