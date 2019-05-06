@@ -40,7 +40,23 @@ object PremiseFinder {
         assertionStep = Step.Assertion(premiseStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
       } yield premiseSteps :+ assertionStep).headOption
     }
-    fromGivenPremises orElse fromFact orElse bySimplifying
+    def bySimplifyingComponent = premiseStatement match {
+      case DefinedStatement(firstComponent +: _, statementDefinition) =>
+        (for {
+          (simplificationInference, simplificationPremise, firstSimplificationConclusionComponent) <- getStatementDefinitionSimplifications(statementDefinition, entryContext)
+          initialSimplificationSubstitutions <- firstSimplificationConclusionComponent.calculateSubstitutions(firstComponent, Substitutions.empty, 0, stepContext.externalDepth)
+          (simplificationPremiseSteps, substitutedSimplificationPremise, simplificationSubstitutions) <- findPremiseSteps(simplificationPremise, initialSimplificationSubstitutions, entryContext, premiseContext, stepContext)
+          assertionStep = Step.Assertion(
+            premiseStatement,
+            simplificationInference.summary,
+            Seq(Premise.Pending(substitutedSimplificationPremise)),
+            simplificationSubstitutions)
+        } yield simplificationPremiseSteps :+ assertionStep).headOption
+      case _ =>
+        None
+    }
+
+    fromGivenPremises orElse fromFact orElse bySimplifying orElse bySimplifyingComponent
   }
 
   def findPremiseSteps(
