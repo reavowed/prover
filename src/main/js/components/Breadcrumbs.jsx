@@ -2,6 +2,7 @@ import React from "react";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Container from "react-bootstrap/Container";
 import styled from "styled-components";
+import {formatHtml} from "./helpers/Formatter";
 
 const BreadcrumbWrapper = styled.div`
   background-color: #e9ecef;
@@ -17,8 +18,8 @@ export const Breadcrumbs = ({links}) =>
     <Container>
       <Breadcrumb>
         <Breadcrumb.Item href="/books">Books</Breadcrumb.Item>
-        {links.slice(0, links.length - 1).map(({title, url}) => <Breadcrumb.Item key={url} href={url}>{title}</Breadcrumb.Item>)}
-        <Breadcrumb.Item active>{links[links.length - 1].title}</Breadcrumb.Item>
+        {links.slice(0, links.length - 1).map(({title, url}) => <Breadcrumb.Item key={url} href={url}>{formatHtml(title)}</Breadcrumb.Item>)}
+        <Breadcrumb.Item active>{formatHtml(links[links.length - 1].title)}</Breadcrumb.Item>
       </Breadcrumb>
     </Container>
   </BreadcrumbWrapper>;

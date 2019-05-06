@@ -1,7 +1,6 @@
 import _ from "lodash";
 import {Expression} from "./models/Expression";
 
-
 export class Parser {
   static replaceShorthands = (text) => {
     _.each(_.toPairs(window.definitionShorthands), ([valueToReplace, symbol]) => {

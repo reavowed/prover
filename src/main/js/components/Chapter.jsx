@@ -63,7 +63,7 @@ const Result = ({title, url, buttons, deleteButton, children, updateChapter, inc
 };
 
 const InferenceResult = ({title, entry, updateChapter, incomplete}) => {
-  return <Result title={<>{title}: {entry.name}</>}
+  return <Result title={<>{title}: {formatHtml(entry.name)}</>}
                  url={entry.url}
                  updateChapter={updateChapter}
                  deleteButton
