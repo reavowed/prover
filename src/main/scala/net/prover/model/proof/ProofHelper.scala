@@ -486,7 +486,7 @@ object ProofHelper {
       }
     }
     def matchTrees(lhs: OperatorTree, rhs: OperatorTree): Option[Seq[Step]] = {
-      matchTreesRaw(lhs, rhs,  FunctionParameter(0, stepContext.externalDepth)).map(steps => steps.take(1) ++ steps.drop(2))
+      matchTreesRaw(lhs, rhs, FunctionParameter(0, stepContext.externalDepth)).map(steps => steps.take(1) ++ steps.drop(2))
     }
     def rearrangeDirectly = matchTrees(baseLhs, baseRhs)
 
@@ -494,16 +494,14 @@ object ProofHelper {
     def rearrangeUsingPremise(premiseLhs: OperatorTree, premiseRhs: OperatorTree): Option[Seq[Step]] = {
       (for {
         lhsMatch <- matchTrees(baseLhs, premiseLhs)
-        firstJoiner = if (lhsMatch.nonEmpty) Seq(transitivityStep(baseLhs.baseTerm, premiseLhs.baseTerm, premiseRhs.baseTerm)) else Nil
-        rhsMatch <- matchTrees(premiseRhs, baseRhs)
-        secondJoiner = Seq(transitivityStep(baseLhs.baseTerm, premiseRhs.baseTerm, baseRhs.baseTerm))
-      } yield lhsMatch ++ firstJoiner ++ rhsMatch ++ secondJoiner) orElse
+        joiner = if (lhsMatch.nonEmpty) Seq(transitivityStep(baseLhs.baseTerm, premiseLhs.baseTerm, premiseRhs.baseTerm)) else Nil
+        rhsMatch <- if (lhsMatch.nonEmpty) matchTreesRaw(premiseRhs, baseRhs, FunctionParameter(0, stepContext.externalDepth)) else matchTrees(premiseRhs, baseRhs)
+      } yield lhsMatch ++ joiner ++ rhsMatch) orElse
         (for {
           firstMatch <- matchTrees(baseLhs, premiseRhs)
-          firstJoiner = Seq(reversalStep(premiseLhs.baseTerm, premiseRhs.baseTerm), transitivityStep(baseLhs.baseTerm, premiseRhs.baseTerm, premiseLhs.baseTerm))
-          secondMatch <- matchTrees(premiseLhs, baseRhs)
-          secondJoiner = Seq(transitivityStep(baseLhs.baseTerm, premiseLhs.baseTerm, baseRhs.baseTerm))
-        } yield firstMatch ++ firstJoiner ++ secondMatch ++ secondJoiner)
+          joiner = Seq(reversalStep(premiseLhs.baseTerm, premiseRhs.baseTerm), transitivityStep(baseLhs.baseTerm, premiseRhs.baseTerm, premiseLhs.baseTerm))
+          secondMatch <- matchTreesRaw(premiseLhs, baseRhs, FunctionParameter(0, stepContext.externalDepth))
+        } yield firstMatch ++ joiner ++ secondMatch)
     }
 
     def rearrangeUsingPremises: Option[Seq[Step]] = (for {
