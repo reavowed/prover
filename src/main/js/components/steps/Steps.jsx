@@ -32,10 +32,12 @@ class TransitiveSteps extends React.Component {
     this.updateSpacing()
   }
   updateSpacing() {
-    const spacingWidth = this.leftHandSideRef.getBoundingClientRect().width;
-    for (const spacerRef of _.values(this.spacerRefs)) {
-      spacerRef.style.display = "inline-block";
-      spacerRef.style.width = spacingWidth + "px";
+    if (this.leftHandSideRef) {
+      const spacingWidth = this.leftHandSideRef.getBoundingClientRect().width;
+      for (const spacerRef of _.values(this.spacerRefs)) {
+        spacerRef.style.display = "inline-block";
+        spacerRef.style.width = spacingWidth + "px";
+      }
     }
   }
 
