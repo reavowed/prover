@@ -211,13 +211,44 @@ conclusion = apply + orderedPair n apply + orderedPair m r apply + orderedPair a
   prove = apply + orderedPair n apply + orderedPair m r apply + orderedPair apply + orderedPair n m r bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (r) (= apply + orderedPair n apply + orderedPair m $0 apply + orderedPair apply + orderedPair n m $0) ()
 }
 
-theorem Addition is Left-Cancellative
+theorem Addition is Right-Cancellative
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
 premise = apply + orderedPair n r apply + orderedPair m r
 conclusion = n m
 {
-  target ∀ x → ∈ $0 ℕ → = apply + orderedPair n $0 apply + orderedPair m $0 = n m
-  target = n m
+  assume = apply + orderedPair n 0 apply + orderedPair m 0 {
+    elided (Rewritten) {
+      elided (Simplified) {
+        prove = apply + orderedPair n 0 n a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (n) () ()
+        prove = n apply + orderedPair m 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (apply + orderedPair n 0, n) (= $0 apply + orderedPair m 0) ()
+      }
+      elided (Simplified) {
+        prove = apply + orderedPair m 0 m a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (m) () ()
+        prove = n m 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (apply + orderedPair m 0, m) (= n $0) ()
+      }
+    }
+  }
+  take x {
+    assume ∧ ∈ $0 ℕ → = apply + orderedPair n $0 apply + orderedPair m $0 = n m {
+      assume = apply + orderedPair n successor $0 apply + orderedPair m successor $0 {
+        elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
+          prove = apply + orderedPair n successor $0 successor apply + orderedPair n $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (n, $0) () ()
+          prove = successor apply + orderedPair n $0 apply + orderedPair n successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair n successor $0, successor apply + orderedPair n $0) () ()
+        }
+        prove = successor apply + orderedPair n $0 apply + orderedPair m successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (successor apply + orderedPair n $0, apply + orderedPair n successor $0, apply + orderedPair m successor $0) () ()
+        prove = apply + orderedPair m successor $0 successor apply + orderedPair m $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (m, $0) () ()
+        prove = successor apply + orderedPair n $0 successor apply + orderedPair m $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (successor apply + orderedPair n $0, apply + orderedPair m successor $0, successor apply + orderedPair m $0) () ()
+        prove = apply + orderedPair n $0 apply + orderedPair m $0 5778861e17c0abb75b73129b83d1c1f7cf2f553201969f92436d386720fa0a99 () (apply + orderedPair n $0, apply + orderedPair m $0) () ()
+        prove = n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply + orderedPair n $0 apply + orderedPair m $0, = n m) () () ()
+      }
+    }
+  }
+  prove ∀ x → ∈ $0 ℕ → = apply + orderedPair n $0 apply + orderedPair m $0 = n m eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (→ = apply + orderedPair n $0 apply + orderedPair m $0 = n m) ()
+  elided (Simplified) {
+    prove → ∈ r ℕ → = apply + orderedPair n r apply + orderedPair m r = n m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (r) (→ ∈ $0 ℕ → = apply + orderedPair n $0 apply + orderedPair m $0 = n m) ()
+    prove → = apply + orderedPair n r apply + orderedPair m r = n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ r ℕ, → = apply + orderedPair n r apply + orderedPair m r = n m) () () ()
+    prove = n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply + orderedPair n r apply + orderedPair m r, = n m) () () ()
+  }
 }

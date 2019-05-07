@@ -18,13 +18,13 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     targetArguments: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
-  ): ExpressionType
+  ): Option[ExpressionType]
   def specify(
     targetArguments: Seq[Term],
     internalDepth: Int,
     externalDepth: Int
-  ): ExpressionType = {
-    specify(targetArguments.indices.zip(targetArguments).toMap, internalDepth, externalDepth).asInstanceOf[ExpressionType]
+  ): Option[ExpressionType] = {
+    specify(targetArguments.indices.zip(targetArguments).toMap, internalDepth, externalDepth).asInstanceOf[Option[ExpressionType]]
   }
 
   /**

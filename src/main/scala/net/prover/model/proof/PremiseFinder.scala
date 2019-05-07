@@ -2,11 +2,48 @@ package net.prover.model.proof
 
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.{EntryContext, Inference, Substitutions}
-import net.prover.model.expressions.{DefinedStatement, Expression, Statement}
+import net.prover.model.expressions.{DefinedStatement, Expression, Statement, Term}
 
 import scala.util.Try
 
 object PremiseFinder {
+
+  def findParameterisedPremiseSteps(
+    targetStatement: Statement,
+    terms: Map[Int, Term],
+    entryContext: EntryContext,
+    premiseContext: PremiseContext,
+    stepContext: StepContext
+  ): Seq[(Seq[Step], Map[Int, Term])] = {
+    def fromGivenPremises = premiseContext.allPremisesSimplestFirst
+      .map(_.statement)
+      .mapCollect { premiseStatement =>
+        for {
+          terms <- targetStatement.calculateArguments(premiseStatement, terms, 0, stepContext.externalDepth)
+        } yield (Nil, terms)
+      }
+
+    def asAlreadyKnown = for {
+      knownTarget <- targetStatement.specify(terms, 0, stepContext.externalDepth)
+      steps <- findPremiseSteps(knownTarget, entryContext, premiseContext, stepContext)
+    } yield (steps, terms)
+
+    asAlreadyKnown.map(Seq(_)) getOrElse fromGivenPremises
+  }
+  def findParameterisedPremiseSteps(
+    targetStatements: Seq[Statement],
+    initialTerms: Map[Int, Term],
+    entryContext: EntryContext,
+    premiseContext: PremiseContext,
+    stepContext: StepContext
+  ): Seq[(Seq[Step], Map[Int, Term])] = {
+    targetStatements.foldLeft(Seq((Seq.empty[Step], initialTerms))) { case (stepsAndTermsSoFar, targetStatement) =>
+      for {
+        (currentSteps, currentTerms) <- stepsAndTermsSoFar
+        (newSteps, newTerms) <- findParameterisedPremiseSteps(targetStatement, currentTerms, entryContext, premiseContext, stepContext)
+      } yield (currentSteps ++ newSteps, newTerms)
+    }
+  }
 
   def findPremiseSteps(
     premiseStatement: Statement,

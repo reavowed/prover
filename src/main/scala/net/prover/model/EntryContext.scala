@@ -117,7 +117,7 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
           Seq(l, r) <- equalityDefinition.unapplySeq(inference.conclusion)
           (function, _) <- l.calculateApplicatives(Seq(firstTerm, secondTerm), Substitutions.empty, 0, 0, 0)
             .find { case (function, substitutions) => function.requiredSubstitutions.isEmpty && substitutions == Substitutions(terms = Seq(firstTerm, secondTerm).map(v => v.name -> v).toMap) }
-          if r == function.specify(Seq(secondTerm, firstTerm), 0, 0)
+          if function.specify(Seq(secondTerm, firstTerm), 0, 0).contains(r)
         } yield (inference, function.asInstanceOf[Term])
       }
       .mapCollect { case (commutativityInference, function) =>
@@ -136,7 +136,7 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
             }
           }
           .mapFind { case (inference, a, b, c) =>
-            def specify(l: Term, r: Term): Term = function.specify(Seq(l, r), 0, 0)
+            def specify(l: Term, r: Term): Term = function.specify(Seq(l, r), 0, 0).get
             if (inference.conclusion == equalityDefinition(specify(a, specify(b, c)), specify(specify(a, b), c)))
               Some((function, commutativityInference, inference))
             else

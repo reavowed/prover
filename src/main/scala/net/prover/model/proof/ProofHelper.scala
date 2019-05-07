@@ -109,12 +109,13 @@ object ProofHelper {
           (for {
             extractionSubstitutions <- firstPremise.calculateSubstitutions(extractionCandidate, Substitutions.empty, 0, stepContext.externalDepth)
             extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions, 0, stepContext.externalDepth).toSeq
-            (terms, innerSteps) <- extract(extractedConclusion, termsSoFar).toSeq
-            substitutedFirstPremise = extractionCandidate.specify(terms, 0, stepContext.externalDepth)
+            (conclusionTerms, innerSteps) <- extract(extractedConclusion, termsSoFar).toSeq
+            extractedOtherPremises <- otherPremises.map(_.applySubstitutions(extractionSubstitutions, 0, stepContext.externalDepth)).traverseOption.toSeq
+            (premiseSteps, terms) <- PremiseFinder.findParameterisedPremiseSteps(extractedOtherPremises, conclusionTerms, entryContext, premiseContext, stepContext)
+            substitutedFirstPremise <- extractionCandidate.specify(terms, 0, stepContext.externalDepth).toSeq
             substitutions <- firstPremise.calculateSubstitutions(substitutedFirstPremise, Substitutions.empty, 0, stepContext.externalDepth)
             substitutedOtherPremises <- otherPremises.map(_.applySubstitutions(substitutions, 0, stepContext.externalDepth)).traverseOption.toSeq
             substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
-            premiseSteps <- PremiseFinder.findPremiseSteps(substitutedOtherPremises, entryContext, premiseContext, stepContext)
             newStep = Step.Assertion(
               substitutedConclusion,
               inference.summary,
@@ -126,13 +127,13 @@ object ProofHelper {
           (for {
             extractionSubstitutions <- singlePremise.calculateSubstitutions(extractionCandidate, Substitutions.empty, 0, stepContext.externalDepth + 1)
             extractionPredicate <- extractionSubstitutions.predicates.get((predicateName, argumentNames.length)).toSeq
-            nextPremise = extractionPredicate.specify(argumentNames.mapWithIndex((_, index) => FunctionParameter(termsSoFar + index, stepContext.externalDepth)), 0, stepContext.externalDepth + 1)
+            nextPremise <- extractionPredicate.specify(argumentNames.mapWithIndex((_, index) => FunctionParameter(termsSoFar + index, stepContext.externalDepth)), 0, stepContext.externalDepth + 1).toSeq
             (terms, laterSteps) <- extract(nextPremise, termsSoFar + argumentNames.length).toSeq
-            specifiedPremise = extractionCandidate.specify(terms, 0, stepContext.externalDepth)
+            specifiedPremise <- extractionCandidate.specify(terms, 0, stepContext.externalDepth).toSeq
             substitutionsWithTerms <- singlePremise.calculateSubstitutions(specifiedPremise, Substitutions.empty, 0, stepContext.externalDepth)
               .map(_.copy(terms = argumentNames.mapWithIndex((n, i) => n -> terms(termsSoFar + i)).toMap))
-            substitutedConclusion <- inference.conclusion.applySubstitutions(substitutionsWithTerms, 0, stepContext.externalDepth)
-            specifiedConclusion = substitutedConclusion.specify(terms, 0, stepContext.externalDepth)
+            substitutedConclusion <- inference.conclusion.applySubstitutions(substitutionsWithTerms, 0, stepContext.externalDepth).toSeq
+            specifiedConclusion <- substitutedConclusion.specify(terms, 0, stepContext.externalDepth).toSeq
             newStep = Step.Assertion(
               specifiedConclusion,
               inference.summary,
@@ -153,9 +154,9 @@ object ProofHelper {
           substitutions <- singlePremise.calculateSubstitutions(extractionCandidate, Substitutions.empty, 0, stepContext.externalDepth)
           inferenceConclusion <- inference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth).toSeq
           (terms, innerSteps) <- extractWithoutRewrite(inferenceConclusion, termsSoFar).toSeq
-          specifiedPremise = extractionCandidate.specify(terms, 0, stepContext.externalDepth)
-          substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
-          specifiedConclusion = substitutedConclusion.specify(terms, 0, stepContext.externalDepth)
+          specifiedPremise <- extractionCandidate.specify(terms, 0, stepContext.externalDepth).toSeq
+          substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth).toSeq
+          specifiedConclusion <- substitutedConclusion.specify(terms, 0, stepContext.externalDepth).toSeq
           newStep = Step.Assertion(
             specifiedConclusion,
             inference.summary,
@@ -274,7 +275,7 @@ object ProofHelper {
     stepContext: StepContext
   ): Option[Step] = {
     def operator(a: Term, b: Term): Term = {
-      operatorDefinition.specify(Seq(a, b), 0, stepContext.externalDepth)
+      operatorDefinition.specify(Seq(a, b), 0, stepContext.externalDepth).get
     }
     def reversalStep(a: Term, b: Term): Step = {
       Step.Assertion(
@@ -297,7 +298,7 @@ object ProofHelper {
       operator(operator(a, b), c)
     }
     def wrap(wrappingFunction: Term, t: Term): Term = {
-      wrappingFunction.specify(Seq(t), 0, stepContext.externalDepth)
+      wrappingFunction.specify(Seq(t), 0, stepContext.externalDepth).get
     }
     def wrappingStep(wrappingFunction: Term, a: Term, b: Term): Step = {
       Step.Assertion(
@@ -400,7 +401,8 @@ object ProofHelper {
               wrappingFunction.specify(
                 Seq(operator(FunctionParameter(0, stepContext.externalDepth), r.baseTerm)),
                 0,
-                stepContext.externalDepth))
+                stepContext.externalDepth
+              ).get)
             associativitySteps = reverseAssociativity(targetLeft.baseTerm, remainingRight.baseTerm, r.baseTerm, wrappingFunction)
           } yield (steps ++ associativitySteps, Operator(remainingRight, r, operator(remainingRight.baseTerm, r.baseTerm)))
         case Operator(l, r, _) if r.contains(targetLeft) =>
@@ -435,7 +437,8 @@ object ProofHelper {
               wrappingFunction.specify(
                 Seq(operator(rhsLeft.baseTerm, FunctionParameter(0, stepContext.externalDepth))),
                 0,
-                stepContext.externalDepth))
+                stepContext.externalDepth
+              ).get)
           } yield stepsToPullLeft ++ stepsToMatchRight
         case Leaf(t) if lhs.baseTerm == t =>
           Some(Nil)
@@ -599,9 +602,10 @@ object ProofHelper {
                 val newWrapper = wrappingFunction.specify(
                   Seq(termDefinition((previousComponents :+ FunctionParameter(0, stepContext.externalDepth)) ++ moar: _*)),
                   0,
-                  stepContext.externalDepth)
+                  stepContext.externalDepth
+                ).get
                 val newResults = findSimplifications(innerTerm, reverse) map { case (simplifiedInnerTerm, simplificationStep, simplificationInference) =>
-                  val simplifiedTerm = newWrapper.specify(Seq(simplifiedInnerTerm), 0, stepContext.externalDepth)
+                  val simplifiedTerm = newWrapper.specify(Seq(simplifiedInnerTerm), 0, stepContext.externalDepth).get
                   def reverseIfAppropriate[T](seq: T*): Seq[T] = if (reverse) seq.reverse else seq
                   val expansionStep = Step.Assertion(
                     equalityDefinition(reverseIfAppropriate(premiseTerm, simplifiedTerm):_*),
@@ -673,11 +677,11 @@ object ProofHelper {
 
     def wrap(steps: Seq[Step], premiseTerm: Term, targetTerm: Term, wrappingPredicate: Statement): Option[Step] = {
       val wrappingStep = Step.Assertion(
-        wrappingPredicate.specify(Seq(targetTerm), 0, stepContext.externalDepth),
+        wrappingPredicate.specify(Seq(targetTerm), 0, stepContext.externalDepth).get,
         equalitySubstitutionInference.summary,
         Seq(
           Premise.Pending(equalityDefinition(premiseTerm, targetTerm)),
-          Premise.Pending(wrappingPredicate.specify(Seq(premiseTerm), 0, stepContext.externalDepth))),
+          Premise.Pending(wrappingPredicate.specify(Seq(premiseTerm), 0, stepContext.externalDepth).get)),
         Substitutions(
           terms = equalitySubstitutionInference.requiredSubstitutions.terms.zip(Seq(premiseTerm, targetTerm)).toMap,
           predicates = equalitySubstitutionInference.requiredSubstitutions.predicates.zip(Seq(wrappingPredicate)).toMap))
@@ -726,7 +730,7 @@ object ProofHelper {
       else
         (premiseTerm, targetTerm) match {
           case (DefinedTerm(premiseComponents, premiseDefinition), DefinedTerm(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
-            rewriteComponents(premiseComponents, targetComponents, components => wrappingPredicate.specify(Seq(premiseDefinition(components:_*)), 0, stepContext.externalDepth))
+            rewriteComponents(premiseComponents, targetComponents, components => wrappingPredicate.specify(Seq(premiseDefinition(components:_*)), 0, stepContext.externalDepth).get)
           case _ =>
             findBySimplifying(premiseTerm, targetTerm, wrappingPredicate).map(Seq(_))
         }

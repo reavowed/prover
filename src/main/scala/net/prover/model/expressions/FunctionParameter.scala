@@ -32,11 +32,11 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     targetArguments: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
-  ): Term = {
+  ): Option[Term] = {
     if (level == internalDepth + externalDepth)
-      targetArguments(index).insertExternalParameters(internalDepth)
+      targetArguments.get(index).map(_.insertExternalParameters(internalDepth))
     else
-      this
+      Some(this)
   }
 
   def specifyWithSubstitutions(

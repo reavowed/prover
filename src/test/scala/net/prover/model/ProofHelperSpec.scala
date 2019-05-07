@@ -6,9 +6,6 @@ import net.prover.model.expressions.{FunctionParameter, Statement, Term}
 import net.prover.model.proof._
 
 class ProofHelperSpec extends ProverSpec {
-
-
-
   "extracting a statement" should {
     val specification = Axiom("Specification", Seq(ForAll("x")(φ(FunctionParameter(0, 0)))), φ(a))
     val modusPonens = Axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
@@ -167,6 +164,30 @@ class ProofHelperSpec extends ProverSpec {
               Premise.Given(Implication(ElementOf(Successor(a), Naturals), φ(Successor(a))), StepReference(Seq(0))),
               Premise.Given(ElementOf(Successor(a), Naturals), StepReference(Seq(1)))),
             Substitutions(statements = Map(φ -> ElementOf(Successor(a), Naturals), ψ -> φ(Successor(a)))))),
+        None,
+        Some("Simplified")))
+    }
+
+    "find a statement with a bound variable appearing only in a subsidiary premise" in {
+      extract(
+        φ(b),
+        Seq(
+          ForAll("x")(Implication(φ(FunctionParameter(0, 0)), φ(b))),
+          φ(a))
+      ) must beSome(Step.Elided(
+        Seq(
+          Step.Assertion(
+            Implication(φ(a), φ(b)),
+            specification.summary,
+            Seq(Premise.Given(ForAll("x")(Implication(φ(FunctionParameter(0, 0)), φ(b))), PremiseReference(0))),
+            Substitutions(terms = Map(a -> a), predicates = Map((φ, 1) -> Implication(φ(FunctionParameter(0, 0)), φ(b))))),
+          Step.Assertion(
+            φ(b),
+            modusPonens.summary,
+            Seq(
+              Premise.Given(Implication(φ(a), φ(b)), StepReference(Seq(0))),
+              Premise.Given(φ(a), PremiseReference(1))),
+            Substitutions(statements = Map(φ -> φ(a), ψ -> φ(b))))),
         None,
         Some("Simplified")))
     }

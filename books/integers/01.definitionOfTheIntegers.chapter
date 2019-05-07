@@ -573,7 +573,50 @@ conclusion equivalenceRelation ~_ℤ product ℕ ℕ
                     }
                     prove = apply + orderedPair apply + orderedPair first $$$0 second $0 apply + orderedPair first $$0 second $$0 apply + orderedPair apply + orderedPair second $$$0 first $0 apply + orderedPair first $$0 second $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair first $$$0 second $0 apply + orderedPair first $$0 second $$0, apply + orderedPair apply + orderedPair second $$$0 first $0 apply + orderedPair second $$0 first $$0, apply + orderedPair apply + orderedPair second $$$0 first $0 apply + orderedPair first $$0 second $$0) () ()
                   }
-                  target ∈ orderedPair $$$0 $0 ~_ℤ
+                  elided 56fdd0faafd2e2db6a7dedeb528dcb8d9c17411a56ffc8144eb51935cb8a5b0f {
+                    prove ∈ first $$$0 ℕ 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($$$0, ℕ, ℕ) () ()
+                    prove ∈ second $0 ℕ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($0, ℕ, ℕ) () ()
+                    prove ∈ apply + orderedPair first $$$0 second $0 ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (first $$$0, second $0) () ()
+                    prove ∈ second $$$0 ℕ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($$$0, ℕ, ℕ) () ()
+                    prove ∈ first $0 ℕ 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($0, ℕ, ℕ) () ()
+                    prove ∈ apply + orderedPair second $$$0 first $0 ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (second $$$0, first $0) () ()
+                    prove ∈ first $$0 ℕ 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($$0, ℕ, ℕ) () ()
+                    prove ∈ second $$0 ℕ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($$0, ℕ, ℕ) () ()
+                    prove ∈ apply + orderedPair first $$0 second $$0 ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (first $$0, second $$0) () ()
+                    prove = apply + orderedPair first $$$0 second $0 apply + orderedPair second $$$0 first $0 56fdd0faafd2e2db6a7dedeb528dcb8d9c17411a56ffc8144eb51935cb8a5b0f () (apply + orderedPair first $$$0 second $0, apply + orderedPair second $$$0 first $0, apply + orderedPair first $$0 second $$0) () ()
+                  }
+                  elided (Simplified) {
+                    prove → ∈ first $$$0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair first $$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply + orderedPair first $$$$$$0 $0 apply + orderedPair $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (first $$$0) (→ ∈ $$$$0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply + orderedPair $$$$$$$0 $0 apply + orderedPair $$$0 $$0) ()
+                    prove ∈ first $$$0 ℕ 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($$$0, ℕ, ℕ) () ()
+                    prove ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair first $$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply + orderedPair first $$$$$$0 $0 apply + orderedPair $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ first $$$0 ℕ, ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair first $$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply + orderedPair first $$$$$$0 $0 apply + orderedPair $$$0 $$0) () () ()
+                    prove → ∈ second $$$0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair first $$$$$0 second $$$$$0 orderedPair $$0 $0 ~_ℤ = apply + orderedPair first $$$$$0 $0 apply + orderedPair second $$$$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (second $$$0) (→ ∈ $$$$0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair first $$$$$0 $$$$$$0 orderedPair $$0 $0 ~_ℤ = apply + orderedPair first $$$$$0 $0 apply + orderedPair $$$$$$0 $$0) ()
+                    prove ∈ second $$$0 ℕ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($$$0, ℕ, ℕ) () ()
+                    prove ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair first $$$$$0 second $$$$$0 orderedPair $$0 $0 ~_ℤ = apply + orderedPair first $$$$$0 $0 apply + orderedPair second $$$$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ second $$$0 ℕ, ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair first $$$$$0 second $$$$$0 orderedPair $$0 $0 ~_ℤ = apply + orderedPair first $$$$$0 $0 apply + orderedPair second $$$$$0 $$0) () () ()
+                    prove → ∈ first $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair first $$$$0 second $$$$0 orderedPair first $$0 $0 ~_ℤ = apply + orderedPair first $$$$0 $0 apply + orderedPair second $$$$0 first $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (first $0) (→ ∈ $$$$0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair first $$$$0 second $$$$0 orderedPair $$$$$0 $0 ~_ℤ = apply + orderedPair first $$$$0 $0 apply + orderedPair second $$$$0 $$$$$0) ()
+                    prove ∈ first $0 ℕ 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($0, ℕ, ℕ) () ()
+                    prove ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair first $$$$0 second $$$$0 orderedPair first $$0 $0 ~_ℤ = apply + orderedPair first $$$$0 $0 apply + orderedPair second $$$$0 first $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ first $0 ℕ, ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair first $$$$0 second $$$$0 orderedPair first $$0 $0 ~_ℤ = apply + orderedPair first $$$$0 $0 apply + orderedPair second $$$$0 first $$0) () () ()
+                    prove → ∈ second $0 ℕ ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair first $0 second $0 ~_ℤ = apply + orderedPair first $$$0 second $0 apply + orderedPair second $$$0 first $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (second $0) (→ ∈ $$$$0 ℕ ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair first $0 $$$$0 ~_ℤ = apply + orderedPair first $$$0 $$$$0 apply + orderedPair second $$$0 first $0) ()
+                    prove ∈ second $0 ℕ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($0, ℕ, ℕ) () ()
+                    prove ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair first $0 second $0 ~_ℤ = apply + orderedPair first $$$0 second $0 apply + orderedPair second $$$0 first $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ second $0 ℕ, ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair first $0 second $0 ~_ℤ = apply + orderedPair first $$$0 second $0 apply + orderedPair second $$$0 first $0) () () ()
+                    prove → = apply + orderedPair first $$$0 second $0 apply + orderedPair second $$$0 first $0 ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair first $0 second $0 ~_ℤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair orderedPair $$$$0 $$$$1 orderedPair $$$$2 $$$$3 ~_ℤ, = apply + orderedPair $$$$0 $$$$3 apply + orderedPair $$$$1 $$$$2) () () ()
+                    prove ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair first $0 second $0 ~_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply + orderedPair first $$$0 second $0 apply + orderedPair second $$$0 first $0, ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair first $0 second $0 ~_ℤ) () () ()
+                  }
+                  elided (Rewritten) {
+                    elided (Simplified) {
+                      elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+                        prove = $$$0 orderedPair first $$$0 second $$$0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($$$0, ℕ, ℕ) () ()
+                        prove = orderedPair first $$$0 second $$$0 $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$$0, orderedPair first $$$0 second $$$0) () ()
+                      }
+                      prove ∈ orderedPair $$$0 orderedPair first $0 second $0 ~_ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair first $$$0 second $$$0, $$$0) (∈ orderedPair $$$$0 orderedPair first $0 second $0 ~_ℤ) ()
+                    }
+                    elided (Simplified) {
+                      elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+                        prove = $0 orderedPair first $0 second $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($0, ℕ, ℕ) () ()
+                        prove = orderedPair first $0 second $0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($0, orderedPair first $0 second $0) () ()
+                      }
+                      prove ∈ orderedPair $$$0 $0 ~_ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (orderedPair first $0 second $0, $0) (∈ orderedPair $$$0 $$$$0 ~_ℤ) ()
+                    }
+                  }
                 }
               }
             }
