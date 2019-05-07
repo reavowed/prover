@@ -156,6 +156,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext, premiseContext, entryContext) =>
       ProofHelper.rewrite(step.statement, entryContext, premiseContext, stepContext)
         .orBadRequest(s"Could not simplify statement ${step.statement}")
+        .map(Seq(_))
     }.toResponseEntity
   }
 

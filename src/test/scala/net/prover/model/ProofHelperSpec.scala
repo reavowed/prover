@@ -9,12 +9,14 @@ class ProofHelperSpec extends ProverSpec {
   "extracting a statement" should {
     val specification = Axiom("Specification", Seq(ForAll("x")(φ(FunctionParameter(0, 0)))), φ(a))
     val modusPonens = Axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
+    val reverseImplicationFromEquivalence = Axiom("Reverse Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(ψ, φ))
     val zeroIsANaturalNumber = Axiom("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
     val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
-    val axioms = Seq(specification, modusPonens, zeroIsANaturalNumber, successorOfNaturalIsNatural)
+    val axioms = Seq(specification, modusPonens, reverseImplicationFromEquivalence, zeroIsANaturalNumber, successorOfNaturalIsNatural)
+    val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+    val stepContext = StepContext.empty(Nil)
+
     def extract(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
-      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
-      val stepContext = StepContext.empty(Nil)
       val premiseContext = PremiseContext.justWithPremises(premises, entryContextWithAxioms)
       ProofHelper.extract(
         targetStatement,
@@ -24,172 +26,73 @@ class ProofHelperSpec extends ProverSpec {
       ).map(_.recalculateReferences(stepContext, premiseContext))
     }
 
+    def testExtraction(targetStatement: Statement, premises: Seq[Statement]) = {
+      val step = extract(targetStatement, premises)
+      step must beSome
+      val theorem = Theorem(
+        "Rearrangement",
+        premises,
+        targetStatement,
+        step.toSeq,
+        RearrangementType.NotRearrangement
+      ).recalculateReferences(entryContextWithAxioms)
+      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
+      println(serializedTheorem)
+      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
+      parsedTheorem mustEqual theorem
+    }
+
     "find a statement via specification" in {
-      val x = extract(
+      testExtraction(
         Equals(a, b),
-        Seq(ForAll("x")(Equals(FunctionParameter(0, 0), b)))
-      )
-      x must beSome(Step.Assertion(
-            Equals(a, b),
-            specification.summary,
-            Seq(Premise.Given(ForAll("x")(Equals(FunctionParameter(0, 0), b)), PremiseReference(0))),
-            Substitutions(terms = Map(a -> a), predicates = Map((φ, 1) -> Equals(FunctionParameter(0, 0), b)))))
+        Seq(ForAll("x")(Equals(FunctionParameter(0, 0), b))))
     }
     "find a statement via specification and modus ponens" in {
-      extract(
+      testExtraction(
         Equals(c, b),
         Seq(
           ForAll("x")(Implication(ElementOf(FunctionParameter(0, 0), a), Equals(FunctionParameter(0, 0), b))),
-          ElementOf(c, a))
-      ) must beSome(Step.Elided(
-        Seq(
-          Step.Assertion(
-            Implication(ElementOf(c, a), Equals(c, b)),
-            specification.summary,
-            Seq(Premise.Given(ForAll("x")(Implication(ElementOf(FunctionParameter(0, 0), a), Equals(FunctionParameter(0, 0), b))), PremiseReference(0))),
-            Substitutions(terms = Map(a -> c), predicates = Map((φ, 1) -> Implication(ElementOf(FunctionParameter(0, 0), a), Equals(FunctionParameter(0, 0), b))))),
-          Step.Assertion(
-            Equals(c, b),
-            modusPonens.summary,
-            Seq(
-              Premise.Given(Implication(ElementOf(c, a), Equals(c, b)), StepReference(Seq(0))),
-              Premise.Given(ElementOf(c, a), PremiseReference(1))),
-            Substitutions(statements = Map(φ -> ElementOf(c, a), ψ -> Equals(c, b))))),
-        None,
-        Some("Simplified")))
+          ElementOf(c, a)))
     }
     "find a statement via double nested specification and modus ponens" in {
-      extract(
+      testExtraction(
         Equals(a, b),
         Seq(
           ForAll("x")(Implication(ElementOf(FunctionParameter(0, 0), A),
             ForAll("y")(Implication(ElementOf(FunctionParameter(0, 0), B),
               Equals(FunctionParameter(0, 1), FunctionParameter(0, 0)))))),
           ElementOf(a, A),
-          ElementOf(b, B))
-      ) must beSome(Step.Elided(
-        Seq(
-          Step.Assertion(
-            Implication(ElementOf(a, A), ForAll("y")(Implication(ElementOf(FunctionParameter(0, 0), B), Equals(a, FunctionParameter(0, 0))))),
-            specification.summary,
-            Seq(Premise.Given(
-              ForAll("x")(Implication(ElementOf(FunctionParameter(0, 0), A),
-                ForAll("y")(Implication(ElementOf(FunctionParameter(0, 0), B),
-                  Equals(FunctionParameter(0, 1), FunctionParameter(0, 0)))))),
-              PremiseReference(0))),
-            Substitutions(
-              terms = Map(a -> a),
-              predicates = Map((φ, 1) ->
-                Implication(ElementOf(FunctionParameter(0, 0), A),
-                  ForAll("y")(Implication(ElementOf(FunctionParameter(0, 0), B),
-                    Equals(FunctionParameter(0, 1), FunctionParameter(0, 0)))))))),
-          Step.Assertion(
-            ForAll("y")(Implication(ElementOf(FunctionParameter(0, 0), B), Equals(a, FunctionParameter(0, 0)))),
-            modusPonens.summary,
-            Seq(
-              Premise.Given(Implication(ElementOf(a, A), ForAll("y")(Implication(ElementOf(FunctionParameter(0, 0), B), Equals(a, FunctionParameter(0, 0))))), StepReference(Seq(0))),
-              Premise.Given(ElementOf(a, A), PremiseReference(1))),
-            Substitutions(statements = Map(φ -> ElementOf(a, A), ψ -> ForAll("y")(Implication(ElementOf(FunctionParameter(0, 0), B), Equals(a, FunctionParameter(0, 0))))))),
-          Step.Assertion(
-            Implication(ElementOf(b, B), Equals(a, b)),
-            specification.summary,
-            Seq(Premise.Given(
-              ForAll("y")(Implication(ElementOf(FunctionParameter(0, 0), B), Equals(a, FunctionParameter(0, 0)))),
-              StepReference(Seq(1)))),
-            Substitutions(
-              terms = Map(a -> b),
-              predicates = Map((φ, 1) -> Implication(ElementOf(FunctionParameter(0, 0), B), Equals(a, FunctionParameter(0, 0)))))),
-          Step.Assertion(
-            Equals(a, b),
-            modusPonens.summary,
-            Seq(
-              Premise.Given(Implication(ElementOf(b, B), Equals(a, b)), StepReference(Seq(2))),
-              Premise.Given(ElementOf(b, B), PremiseReference(2))),
-            Substitutions(statements = Map(φ -> ElementOf(b, B), ψ -> Equals(a, b))))),
-        None,
-        Some("Simplified")))
+          ElementOf(b, B)))
     }
 
     "find a statement via modus ponens using a known fact" in {
-      extract(
+      testExtraction(
         φ(Zero),
-        Seq(ForAll("n")(Implication(ElementOf(FunctionParameter(0, 0), Naturals), φ(FunctionParameter(0, 0)))))
-      ) must beSome(Step.Elided(
-        Seq(
-          Step.Assertion(
-            Implication(ElementOf(Zero, Naturals), φ(Zero)),
-            specification.summary,
-            Seq(Premise.Given(ForAll("n")(Implication(ElementOf(FunctionParameter(0, 0), Naturals), φ(FunctionParameter(0, 0)))), PremiseReference(0))),
-            Substitutions(
-              terms = Map(a -> Zero),
-              predicates = Map((φ, 1) -> Implication(ElementOf(FunctionParameter(0, 0), Naturals), φ(FunctionParameter(0, 0)))))),
-          Step.Assertion(
-            ElementOf(Zero, Naturals),
-            zeroIsANaturalNumber.summary,
-            Nil,
-            Substitutions.empty),
-          Step.Assertion(
-            φ(Zero),
-            modusPonens.summary,
-            Seq(
-              Premise.Given(Implication(ElementOf(Zero, Naturals), φ(Zero)), StepReference(Seq(0))),
-              Premise.Given(ElementOf(Zero, Naturals), StepReference(Seq(1)))),
-            Substitutions(statements = Map(φ -> ElementOf(Zero, Naturals), ψ -> φ(Zero))))),
-        None,
-        Some("Simplified")))
+        Seq(ForAll("n")(Implication(ElementOf(FunctionParameter(0, 0), Naturals), φ(FunctionParameter(0, 0))))))
     }
 
     "find a statement via modus ponens using a premise simplification" in {
-      extract(
+      testExtraction(
         φ(Successor(a)),
         Seq(
           ForAll("n")(Implication(ElementOf(FunctionParameter(0, 0), Naturals), φ(FunctionParameter(0, 0)))),
-          ElementOf(a, Naturals))
-      ) must beSome(Step.Elided(
+          ElementOf(a, Naturals)))
+    }
+
+    "find a statement via modus ponens using a rewrite" in {
+      testExtraction(
+        ψ(a),
         Seq(
-          Step.Assertion(
-            Implication(ElementOf(Successor(a), Naturals), φ(Successor(a))),
-            specification.summary,
-            Seq(Premise.Given(ForAll("n")(Implication(ElementOf(FunctionParameter(0, 0), Naturals), φ(FunctionParameter(0, 0)))), PremiseReference(0))),
-            Substitutions(terms = Map(a -> Successor(a)), predicates = Map((φ, 1) -> Implication(ElementOf(FunctionParameter(0, 0), Naturals), φ(FunctionParameter(0, 0)))))),
-          Step.Assertion(
-            ElementOf(Successor(a), Naturals),
-            successorOfNaturalIsNatural.summary,
-            Seq(Premise.Given(ElementOf(a, Naturals), PremiseReference(1))),
-            Substitutions(terms = Map(a -> a))),
-          Step.Assertion(
-            φ(Successor(a)),
-            modusPonens.summary,
-            Seq(
-              Premise.Given(Implication(ElementOf(Successor(a), Naturals), φ(Successor(a))), StepReference(Seq(0))),
-              Premise.Given(ElementOf(Successor(a), Naturals), StepReference(Seq(1)))),
-            Substitutions(statements = Map(φ -> ElementOf(Successor(a), Naturals), ψ -> φ(Successor(a)))))),
-        None,
-        Some("Simplified")))
+          ForAll("n")(Equivalence(ψ(FunctionParameter(0, 0)), φ(FunctionParameter(0, 0)))),
+          φ(a)))
     }
 
     "find a statement with a bound variable appearing only in a subsidiary premise" in {
-      extract(
+      testExtraction(
         φ(b),
         Seq(
           ForAll("x")(Implication(φ(FunctionParameter(0, 0)), φ(b))),
-          φ(a))
-      ) must beSome(Step.Elided(
-        Seq(
-          Step.Assertion(
-            Implication(φ(a), φ(b)),
-            specification.summary,
-            Seq(Premise.Given(ForAll("x")(Implication(φ(FunctionParameter(0, 0)), φ(b))), PremiseReference(0))),
-            Substitutions(terms = Map(a -> a), predicates = Map((φ, 1) -> Implication(φ(FunctionParameter(0, 0)), φ(b))))),
-          Step.Assertion(
-            φ(b),
-            modusPonens.summary,
-            Seq(
-              Premise.Given(Implication(φ(a), φ(b)), StepReference(Seq(0))),
-              Premise.Given(φ(a), PremiseReference(1))),
-            Substitutions(statements = Map(φ -> φ(a), ψ -> φ(b))))),
-        None,
-        Some("Simplified")))
+          φ(a)))
     }
 
     "not extract statements that are substitution matches but not exact matches" in {
@@ -303,29 +206,39 @@ class ProofHelperSpec extends ProverSpec {
   }
 
   "rewriting a statement" should {
-    "rewrite with simplification and expansion" in {
+
+    def testRewrite(premises: Seq[Statement], target: Statement) = {
+      val elementOfCartesianProductFromCoordinates = Axiom("Element of Cartesian Product from Coordinates", Seq(ElementOf(a, Product(A, B))), Equals(a, Pair(First(a), Second(a))))
+      val firstCoordinateOfElementOfCartesianProduct = Axiom("First Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(First(a), A))
+      val secondCoordinateOfElementOfCartesianProduct = Axiom("Second Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(Second(a), B))
       val firstElement = Axiom("First Element", Nil, Equals(First(Pair(a, b)), a))
       val reverseEquality = Axiom("Reverse equality", Seq(Equals(a, b)), Equals(b, a))
       val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
       val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
       val substitutionOfEqualsIntoFunction = Axiom("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
-      val axioms = Seq(firstElement, reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction)
+      val axioms = Seq(
+        elementOfCartesianProductFromCoordinates,
+        firstCoordinateOfElementOfCartesianProduct,
+        secondCoordinateOfElementOfCartesianProduct,
+        firstElement,
+        reverseEquality,
+        equalityIsTransitive,
+        substitutionOfEquals,
+        substitutionOfEqualsIntoFunction)
       val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
 
-      val premise = Equals(Pair(First(First(Pair(Pair(a, b), c))), b), Pair(c, d))
-      val target = Equals(Pair(a, b), Pair(First(Pair(c, d)), d))
-      val steps = ProofHelper.rewrite(
+      val stepOption = ProofHelper.rewrite(
         target,
         entryContextWithAxioms,
-        PremiseContext.justWithPremises(Seq(premise), entryContextWithAxioms),
+        PremiseContext.justWithPremises(premises, entryContextWithAxioms),
         StepContext.empty(Nil))
-      steps must beSome
+      stepOption must beSome
 
       val theorem = Theorem(
         "Rewrite",
-        Seq(premise),
+        premises,
         target,
-        steps.get,
+        stepOption.toSeq,
         RearrangementType.NotRearrangement
       ).recalculateReferences(entryContextWithAxioms)
       val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
@@ -334,37 +247,24 @@ class ProofHelperSpec extends ProverSpec {
       parsedTheorem mustEqual theorem
     }
 
-    "rewrite with a premise requiring complicated simplification" in {
-      val elementOfCartesianProductFromCoordinates = Axiom("Element of Cartesian Product from Coordinates", Seq(ElementOf(a, Product(A, B))), Equals(a, Pair(First(a), Second(a))))
-      val firstCoordinateOfElementOfCartesianProduct = Axiom("First Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(First(a), A))
-      val secondCoordinateOfElementOfCartesianProduct = Axiom("Second Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(Second(a), B))
-      val reverseEquality = Axiom("Reverse equality", Seq(Equals(a, b)), Equals(b, a))
-      val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
-      val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
-      val substitutionOfEqualsIntoFunction = Axiom("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
-      val axioms = Seq(elementOfCartesianProductFromCoordinates, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction)
-      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+    "rewrite with simplification and expansion" in {
+      val premise = Equals(Pair(First(First(Pair(Pair(a, b), c))), b), Pair(c, d))
+      val target = Equals(Pair(a, b), Pair(First(Pair(c, d)), d))
+      testRewrite(Seq(premise), target)
+    }
 
+    "rewrite with a premise requiring complicated simplification" in {
       val premise = ElementOf(a, Product(Product(A, B), Product(C, D)))
       val target = Equals(a, Pair(Pair(First(First(a)), Second(First(a))), Pair(First(Second(a)), Second(Second(a)))))
-      val steps = ProofHelper.rewrite(
-        target,
-        entryContextWithAxioms,
-        PremiseContext.justWithPremises(Seq(premise), entryContextWithAxioms),
-        StepContext.empty(Nil))
-      steps must beSome
+      testRewrite(Seq(premise), target)
+    }
 
-      val theorem = Theorem(
-        "Rewrite",
-        Seq(premise),
-        target,
-        steps.get,
-        RearrangementType.NotRearrangement
-      ).recalculateReferences(entryContextWithAxioms)
-      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
-      println(theorem.serializedLines.mapWithIndex((s, i) => s"${"%02d".format(i + 1)} $s").mkString("\n"))
-      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
-      parsedTheorem mustEqual theorem
+    "rewrite inline" in {
+      def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
+
+      val premises = Seq(Equals(a, b), Equals(c, d))
+      val target = Equals(add(a, c), add(b, d))
+      testRewrite(premises, target)
     }
   }
 }
