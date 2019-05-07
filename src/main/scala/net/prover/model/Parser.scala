@@ -5,33 +5,33 @@ import java.nio.file.Path
 import scala.util.Try
 import scala.util.control.NonFatal
 
-case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
-  def map[S](f: T => S): Parser[S] = Parser(tokenizer => attemptParse(tokenizer).mapLeft(f))
-  def flatMap[S](f: T => Parser[S]): Parser[S] = Parser { tokenizer =>
-    val (t, nextTokenizer) = attemptParse(tokenizer)
-    f(t).parse(nextTokenizer)
+case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
+  def map[S](f: T => S): Parser[S] = Parser(tokenStream => attemptParse(tokenStream).mapLeft(f))
+  def flatMap[S](f: T => Parser[S]): Parser[S] = Parser { tokenStream =>
+    val (t, nextTokenStream) = attemptParse(tokenStream)
+    f(t).parse(nextTokenStream)
   }
-  def flatMapOption[S](f: T => Option[Parser[S]]): Parser[Option[S]] = Parser { tokenizer =>
-    val (t, nextTokenizer) = attemptParse(tokenizer)
+  def flatMapOption[S](f: T => Option[Parser[S]]): Parser[Option[S]] = Parser { tokenStream =>
+    val (t, nextTokenStream) = attemptParse(tokenStream)
     f(t) match {
       case Some(otherParser) =>
-        otherParser.parse(nextTokenizer).mapLeft(Some.apply)
+        otherParser.parse(nextTokenStream).mapLeft(Some.apply)
       case None =>
-        (None, tokenizer)
+        (None, tokenStream)
     }
   }
-  def onlyIf(f: T => Boolean): Parser[Option[T]] = Parser { tokenizer =>
-    val (t, nextTokenizer) = attemptParse(tokenizer)
+  def onlyIf(f: T => Boolean): Parser[Option[T]] = Parser { tokenStream =>
+    val (t, nextTokenStream) = attemptParse(tokenStream)
     if (f(t))
-      (Some(t), nextTokenizer)
+      (Some(t), nextTokenStream)
     else
-      (None, tokenizer)
+      (None, tokenStream)
   }
-  def tryOrElse[S >: T](otherParser: => Parser[S]): Parser[S] = Parser { tokenizer =>
-    Try(attemptParse(tokenizer)).toOption.getOrElse(otherParser.attemptParse(tokenizer))
+  def tryOrElse[S >: T](otherParser: => Parser[S]): Parser[S] = Parser { tokenStream =>
+    Try(attemptParse(tokenStream)).toOption.getOrElse(otherParser.attemptParse(tokenStream))
   }
-  def tryOrNone: Parser[Option[T]] = Parser { tokenizer =>
-    Try(attemptParse(tokenizer).mapLeft(Some(_))).toOption.getOrElse((None, tokenizer))
+  def tryOrNone: Parser[Option[T]] = Parser { tokenStream =>
+    Try(attemptParse(tokenStream).mapLeft(Some(_))).toOption.getOrElse((None, tokenStream))
   }
   def withNone(noneWord: String): Parser[Option[T]] = map(Some.apply).tryOrElse(Parser.requiredWord(noneWord).map(_ => None))
 
@@ -43,20 +43,21 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
     } yield t
   }
   private def listInBrackets(openBracket: String, closeBracket: String, separatorOption: Option[String]) = {
-    def parseNext(tokenizer: Tokenizer, acc: Seq[T] = Nil): (Seq[T], Tokenizer) = {
-      val (nextToken, nextTokenizer) = tokenizer.readNext()
-      if (nextToken == closeBracket) {
-        (acc, nextTokenizer)
+    def parseNext(tokenStream: TokenStream, acc: Seq[T] = Nil): (Seq[T], TokenStream) = {
+      if (tokenStream.currentToken.text == closeBracket) {
+        (acc, tokenStream.advance())
       } else {
-        val tokenizerToUse = separatorOption match {
+        val tokenStreamToUse = separatorOption match {
           case Some(separator) if acc.nonEmpty =>
-            if (nextToken == separator) nextTokenizer
-            else throw new Exception("Expected separator or close bracket after list item")
+            if (tokenStream.currentToken.text == separator)
+              tokenStream.advance()
+            else
+              throw new Exception("Expected separator or close bracket after list item")
           case _ =>
-            tokenizer
+            tokenStream
         }
-        val (next, remainingTokenizer) = parse(tokenizerToUse)
-        parseNext(remainingTokenizer, acc :+ next)
+        val (next, remainingTokenStream) = parse(tokenStreamToUse)
+        parseNext(remainingTokenStream, acc :+ next)
       }
     }
     for {
@@ -66,24 +67,17 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
   }
 
   def inParens: Parser[T] = inBrackets("(", ")")
-  def optionalInParens: Parser[Option[T]] = Parser[Option[T]] { tokenizer =>
-    val (nextToken, _) = tokenizer.readNext()
-    if (nextToken != ")")
-      attemptParse(tokenizer).mapLeft(Some.apply)
-    else
-      (None, tokenizer)
-  }.inParens
   def listInParens(separatorOption: Option[String]) = listInBrackets("(", ")", separatorOption)
 
   def inBraces: Parser[T] = inBrackets("{", "}")
   def listInBraces(separatorOption: Option[String]) = listInBrackets("{", "}", separatorOption)
 
-  def parse(tokenizer: Tokenizer): (T, Tokenizer) = {
+  def parse(tokenStream: TokenStream): (T, TokenStream) = {
     try {
-      attemptParse(tokenizer)
+      attemptParse(tokenStream)
     } catch {
       case e @ (_:ParseException | _:ParseException.NoWrap) => throw e
-      case NonFatal(e) => tokenizer.throwParseException(e.getMessage, Some(e))
+      case NonFatal(e) => tokenStream.throwParseException(e.getMessage, Some(e))
     }
   }
   def parseFromString(str: String, description: String): T = {
@@ -92,31 +86,31 @@ case class Parser[+T](attemptParse: Tokenizer => (T, Tokenizer)) {
   def parseFromFile(path: Path, description: String): T = {
     parse(Tokenizer.fromPath(path, description))._1
   }
-  def parseAndDiscard(tokenizer: Tokenizer): T = {
-    parse(tokenizer)._1
+  def parseAndDiscard(tokenStream: TokenStream): T = {
+    parse(tokenStream)._1
   }
   def listOrSingle(separatorOption: Option[String]): Parser[Seq[T]] = {
     listInParens(separatorOption).tryOrElse(map(Seq(_)))
   }
-  def toEndOfFile: Parser[Seq[T]] = Parser { tokenizer =>
-    def helper(parsed: Seq[T], currentTokenizer: Tokenizer): (Seq[T], Tokenizer) = {
-      if (currentTokenizer.isEmpty) {
-        (parsed, currentTokenizer)
+  def toEndOfFile: Parser[Seq[T]] = Parser { tokenStream =>
+    def helper(parsed: Seq[T], currentTokenStream: TokenStream): (Seq[T], TokenStream) = {
+      if (currentTokenStream.isEmpty) {
+        (parsed, currentTokenStream)
       } else {
-        val (next, nextTokenizer) = parse(currentTokenizer)
-        helper(parsed :+ next, nextTokenizer)
+        val (next, nextTokenStream) = parse(currentTokenStream)
+        helper(parsed :+ next, nextTokenStream)
       }
     }
-    helper(Nil, tokenizer)
+    helper(Nil, tokenStream)
   }
 }
 
 object Parser {
   def constant[T](t: T): Parser[T] = Parser { (t, _) }
 
-  def toEndOfLine: Parser[String] = Parser { tokenizer => tokenizer.readUntilEndOfLine() }
+  def toEndOfLine: Parser[String] = Parser { tokenStream => tokenStream.restOfLine() }
 
-  def singleWord: Parser[String] = Parser { tokenizer => tokenizer.readNext() }
+  def singleWord: Parser[String] = Parser { tokenStream => (tokenStream.currentToken.text, tokenStream.advance()) }
 
   def nWords(n: Int): Parser[Seq[String]] = (1 to n).foldLeft(Parser.constant(Seq.empty[String])) { case (parserSoFar, _) =>
     for {
@@ -145,49 +139,46 @@ object Parser {
     }
   }
 
-  def selectOptionalWord[T](f: PartialFunction[String, T]): Parser[Option[T]] = Parser { tokenizer =>
-    if (tokenizer.isEmpty) {
-      (None, tokenizer)
+  def selectOptionalWord[T](f: PartialFunction[String, T]): Parser[Option[T]] = Parser { tokenStream =>
+    if (tokenStream.isEmpty) {
+      (None, tokenStream)
     } else {
-      val (word, nextTokenizer) = tokenizer.readNext()
-      if (f.isDefinedAt(word))
-        (Some(f(word)), nextTokenizer)
+      if (f.isDefinedAt(tokenStream.currentToken.text))
+        (Some(f(tokenStream.currentToken.text)), tokenStream.advance())
       else
-        (None, tokenizer)
+        (None, tokenStream)
     }
   }
 
-  def selectOptionalWordParser[T](f: PartialFunction[String, Parser[T]]): Parser[Option[T]] = Parser { tokenizer =>
-    if (tokenizer.isEmpty) {
-      (None, tokenizer)
+  def selectOptionalWordParser[T](f: PartialFunction[String, Parser[T]]): Parser[Option[T]] = Parser { tokenStream =>
+    if (tokenStream.isEmpty) {
+      (None, tokenStream)
     } else {
-      val (word, nextTokenizer) = tokenizer.readNext()
-      if (f.isDefinedAt(word))
-        f(word).parse(nextTokenizer).mapLeft(Some(_))
+      if (f.isDefinedAt(tokenStream.currentToken.text))
+        f(tokenStream.currentToken.text).parse(tokenStream.advance()).mapLeft(Some(_))
       else
-        (None, tokenizer)
+        (None, tokenStream)
     }
   }
 
-  def requiredWord(expectedWord: String): Parser[Unit] = Parser { tokenizer =>
-    val (word, nextTokenizer) = tokenizer.readNext()
-    if (word == expectedWord)
-      ((), nextTokenizer)
+  def requiredWord(expectedWord: String): Parser[Unit] = Parser { tokenStream =>
+    if (tokenStream.currentToken.text == expectedWord)
+      ((), tokenStream.advance())
     else
-      throw new Exception(s"Expected '$expectedWord' but found '$word'")
+      throw new Exception(s"Expected '$expectedWord' but found '${tokenStream.currentToken.text}'")
   }
 
-  def singleWordIfAny: Parser[Option[String]] = Parser { t =>
-    if (t.isEmpty) {
-      (None, t)
+  def singleWordIfAny: Parser[Option[String]] = Parser { tokenStream =>
+    if (tokenStream.isEmpty) {
+      (None, tokenStream)
     } else {
-      t.readNext().mapLeft(Some.apply)
+      (Some(tokenStream.currentToken.text), tokenStream.advance())
     }
   }
 
   def int: Parser[Int] = Parser.singleWord.map(_.toInt)
 
-  def allInParens: Parser[String] = Parser(_.readUntilCloseParen()).inParens
+  def allInParens: Parser[String] = Parser(_.untilCloseParen()).inParens
 
   implicit class OptionParserOps[T](parser: Parser[Option[T]]) {
     def mapMap[S](f: T => S): Parser[Option[S]] = parser.map(_.map(f))
@@ -210,12 +201,12 @@ object Parser {
       case None =>
         Parser.constant(None)
     }
-    def getOrElse[S >: T](other: => S): Parser[S] = Parser { tokenizer =>
-      parser.parse(tokenizer) match {
-        case (Some(t), nextTokenizer) =>
-          (t, nextTokenizer)
+    def getOrElse[S >: T](other: => S): Parser[S] = Parser { tokenStream =>
+      parser.parse(tokenStream) match {
+        case (Some(t), nextTokenStream) =>
+          (t, nextTokenStream)
         case (None, _) =>
-          (other, tokenizer)
+          (other, tokenStream)
       }
     }
     def isDefined: Parser[Boolean] = parser.map(_.isDefined)
@@ -226,10 +217,10 @@ object Parser {
   }
 
   implicit class ParserSeqOps[T](parsers: Seq[Parser[T]]) {
-    def traverse: Parser[Seq[T]] = Parser { initialTokenizer =>
-      parsers.foldLeft((Seq.empty[T], initialTokenizer)) { case ((valuesSoFar, tokenizer), parser) =>
-        val (value, newTokenizer) = parser.parse(tokenizer)
-        (valuesSoFar :+ value, newTokenizer)
+    def traverse: Parser[Seq[T]] = Parser { initialTokenStream =>
+      parsers.foldLeft((Seq.empty[T], initialTokenStream)) { case ((valuesSoFar, tokenStream), parser) =>
+        val (value, newTokenStream) = parser.parse(tokenStream)
+        (valuesSoFar :+ value, newTokenStream)
       }
     }
   }
@@ -259,34 +250,34 @@ object Parser {
       .flatMap(_ => parser)
   }
 
-  def whileDefined[T](getParser: (Seq[T], Int) => Parser[Option[T]]): Parser[Seq[T]] = Parser { initialTokenizer =>
-    def parseRemaining(valuesSoFar: Seq[T], currentIndex: Int, currentTokenizer: Tokenizer): (Seq[T], Tokenizer) = {
-      val (newValueOption, newTokenizer) = getParser(valuesSoFar, currentIndex).parse(currentTokenizer)
+  def whileDefined[T](getParser: (Seq[T], Int) => Parser[Option[T]]): Parser[Seq[T]] = Parser { initialTokenStream =>
+    def parseRemaining(valuesSoFar: Seq[T], currentIndex: Int, currentTokenStream: TokenStream): (Seq[T], TokenStream) = {
+      val (newValueOption, newTokenStream) = getParser(valuesSoFar, currentIndex).parse(currentTokenStream)
       newValueOption match {
         case Some(newValue) =>
-          parseRemaining(valuesSoFar :+ newValue, currentIndex + 1, newTokenizer)
+          parseRemaining(valuesSoFar :+ newValue, currentIndex + 1, newTokenStream)
         case None =>
-          (valuesSoFar, currentTokenizer)
+          (valuesSoFar, currentTokenStream)
       }
     }
-    parseRemaining(Nil, 0, initialTokenizer)
+    parseRemaining(Nil, 0, initialTokenStream)
   }
 
   def foldWhileDefined[T, R](
     initial: R)(
     getParser: (Seq[T], Int, R) => Parser[Option[(T, R)]]
   ): Parser[(Seq[T], R)] = {
-    Parser { initialTokenizer =>
-      def parseRemaining(currentAccumulator: R, valuesSoFar: Seq[T], currentIndex: Int, currentTokenizer: Tokenizer): ((Seq[T], R), Tokenizer) = {
-        val (newValueAndAccumulatorOption, newTokenizer) = getParser(valuesSoFar, currentIndex, currentAccumulator).parse(currentTokenizer)
+    Parser { initialTokenStream =>
+      def parseRemaining(currentAccumulator: R, valuesSoFar: Seq[T], currentIndex: Int, currentTokenStream: TokenStream): ((Seq[T], R), TokenStream) = {
+        val (newValueAndAccumulatorOption, newTokenStream) = getParser(valuesSoFar, currentIndex, currentAccumulator).parse(currentTokenStream)
         newValueAndAccumulatorOption match {
           case Some((newValue, newAccumulator)) =>
-            parseRemaining(newAccumulator, valuesSoFar :+ newValue, currentIndex + 1, newTokenizer)
+            parseRemaining(newAccumulator, valuesSoFar :+ newValue, currentIndex + 1, newTokenStream)
           case None =>
-            ((valuesSoFar, currentAccumulator), currentTokenizer)
+            ((valuesSoFar, currentAccumulator), currentTokenStream)
         }
       }
-      parseRemaining(initial, Nil, 0, initialTokenizer)
+      parseRemaining(initial, Nil, 0, initialTokenStream)
     }
   }
 }

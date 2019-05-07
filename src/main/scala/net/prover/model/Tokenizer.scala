@@ -2,6 +2,64 @@ package net.prover.model
 
 import java.nio.file.{Files, Path}
 
+import scala.collection.mutable
+
+case class Token(text: String, contextDescription: String, lineNumber: Int, columnNumber: Int)
+
+case class TokenStream(tokens: Vector[Token], endToken: Token, lines: Vector[Vector[Char]], index: Int) {
+  def isEmpty: Boolean = index == tokens.length
+  def currentToken: Token = {
+    if (isEmpty) throw new ParseException("No tokens remaining")
+    tokens(index)
+  }
+  def advance(): TokenStream = copy(index = index + 1)
+  def restOfLine(): (String, TokenStream) = {
+    def findNextLine(lineNumber: Int, currentIndex: Int): Int = {
+      if (currentIndex == tokens.length || tokens(currentIndex).lineNumber != lineNumber)
+        currentIndex
+      else
+        findNextLine(lineNumber, currentIndex + 1)
+    }
+    val token = currentToken
+    val text = lineSubstring(token.lineNumber - 1, token.columnNumber - 1)
+    val nextIndex = findNextLine(currentToken.lineNumber, index)
+    (text, copy(index = nextIndex))
+  }
+  def untilCloseParen(): (String, TokenStream) = {
+    val initialLineNumber = currentToken.lineNumber
+    def findCloseParen(currentIndex: Int, parenDepth: Int): Option[Int] = {
+      if (parenDepth == 0)
+        Some(currentIndex - 1)
+      else if (currentIndex == tokens.length)
+        None
+      else if (tokens(currentIndex).lineNumber != initialLineNumber)
+        None
+      else if (tokens(currentIndex).text == "(")
+        findCloseParen(currentIndex + 1, parenDepth + 1)
+      else if (tokens(currentIndex).text == ")")
+        findCloseParen(currentIndex + 1, parenDepth - 1)
+      else
+        findCloseParen(currentIndex + 1, parenDepth)
+    }
+    val closeParenIndex = findCloseParen(index, 1).getOrElse(throwParseException("No matching close-paren", None))
+    (lineSubstring(initialLineNumber - 1, currentToken.columnNumber - 1, tokens(closeParenIndex).columnNumber - 1), copy(index = closeParenIndex))
+  }
+
+  private def lineSubstring(lineIndex: Int, start: Int): String = {
+    lineSubstring(lineIndex, start, lines(lineIndex).length)
+  }
+  private def lineSubstring(lineIndex: Int, start: Int, end: Int): String = {
+    lines(lineIndex).subSequence(start, end).toString
+  }
+
+  def throwParseException(message: String, cause: Option[Throwable]): Nothing = {
+    val token = if (isEmpty) endToken else tokens(index)
+    throw ParseException(
+      s"Error in ${token.contextDescription}, line ${token.lineNumber} col ${token.columnNumber}: $message",
+      cause)
+  }
+}
+
 trait Tokenizer {
   def contextDescription: String
   def currentLine: Int
@@ -12,8 +70,6 @@ trait Tokenizer {
   def readUntilEndOfLine(): (String, Tokenizer)
   def readUntilCloseParen(): (String, Tokenizer)
 
-  def addTokenizer(tokenizer: StringTokenizer): Tokenizer
-
   def throwParseException(message: String, cause: Option[Throwable]): Nothing = {
     throw ParseException(
       s"Error in $contextDescription, line $currentLine col $currentColumn: $message",
@@ -21,149 +77,56 @@ trait Tokenizer {
   }
 }
 
-case class StringTokenizer(
-    text: String,
-    contextDescription: String,
-    currentLine: Int,
-    currentColumn: Int)
-  extends Tokenizer
-{
-  val singleCharacterTokens = "(){},"
-
-  def isEmpty: Boolean = text.isEmpty
-
-  def readNext(): (String, StringTokenizer) = {
-    if (text.isEmpty) throw new Exception("No tokens remaining")
-    val (nextChar, nextTokenizer) = readChar()
-    if (singleCharacterTokens.contains(nextChar)) {
-      (nextChar.toString, nextTokenizer.readUntilEndOfWhitespace())
-    } else {
-      nextTokenizer.readUntilEndOfToken(nextChar.toString)
-    }
-  }
-
-  def readUntilEndOfLine(): (String, StringTokenizer) = {
-    readUntilEndOfLine("")
-  }
-
-  private def readUntilEndOfLine(textSoFar: String): (String, StringTokenizer) = {
-    if (isEmpty)
-      (textSoFar, this)
-    else {
-      val (nextChar, nextTokenizer) = readChar()
-      if ("\r\n".contains(nextChar)) {
-        (textSoFar.trim, nextTokenizer.readUntilEndOfWhitespace())
-      } else {
-        nextTokenizer.readUntilEndOfLine(textSoFar + nextChar)
-      }
-    }
-  }
-
-  private def readChar(): (Char, StringTokenizer) = {
-    val c = text.head
-    val (newLine, newColumn) = if (c == '\n') (currentLine + 1, 1) else (currentLine, currentColumn + 1)
-    (c, copy(text = text.tail, currentLine = newLine, currentColumn = newColumn))
-  }
-
-  private def readUntilEndOfToken(tokenSoFar: String): (String, StringTokenizer) = {
-    if (isEmpty)
-      (tokenSoFar, this)
-    else {
-      val (nextChar, nextTokenizer) = readChar()
-      if (singleCharacterTokens.contains(nextChar)) {
-        (tokenSoFar, this)
-      } else if (nextChar.isWhitespace) {
-        (tokenSoFar, nextTokenizer.readUntilEndOfWhitespace())
-      } else {
-        nextTokenizer.readUntilEndOfToken(tokenSoFar + nextChar)
-      }
-    }
-  }
-
-  def readUntilEndOfWhitespace(): StringTokenizer = {
-    if (isEmpty)
-      this
-    else {
-      val (nextChar, nextTokenizer) = readChar()
-      if (nextChar.isWhitespace) {
-        nextTokenizer.readUntilEndOfWhitespace()
-      } else if (nextChar == '#') {
-        nextTokenizer.readUntilEndOfLine()._2.readUntilEndOfWhitespace()
-      } else {
-        this
-      }
-    }
-  }
-
-  def readUntilCloseParen(): (String, StringTokenizer) = {
-    readUntilCloseParen("", 1)
-  }
-
-  def readUntilCloseParen(textSoFar: String, parenCount: Int): (String, StringTokenizer) = {
-    if (isEmpty) throw new Exception("File ended without close-paren")
-    val (nextChar, nextTokenizer) = readChar()
-    if (parenCount == 1 && nextChar == ')')
-      (textSoFar, this)
-    else {
-      val newParenCount = if (nextChar == ')') parenCount - 1 else if (nextChar == '(') parenCount + 1 else parenCount
-      nextTokenizer.readUntilCloseParen(textSoFar + nextChar, newParenCount)
-    }
-  }
-
-  def addTokenizer(tokenizer: StringTokenizer): Tokenizer = {
-    if (isEmpty) tokenizer
-    else CombinedTokenizer(tokenizer, this, Nil)
-  }
-}
-
-case class CombinedTokenizer(
-    currentTokenizer: StringTokenizer,
-    nextTokenizer: StringTokenizer,
-    otherTokenizers: Seq[StringTokenizer])
-  extends Tokenizer {
-
-  def contextDescription: String = currentTokenizer.contextDescription
-  def currentLine: Int = currentTokenizer.currentLine
-  def currentColumn: Int = currentTokenizer.currentColumn
-
-  def isEmpty: Boolean = false
-  def readNext(): (String, Tokenizer) = {
-    val (token, updatedTokenizer) = currentTokenizer.readNext()
-    (token, removeWhitespace(updatedTokenizer))
-  }
-  def readUntilEndOfLine(): (String, Tokenizer) = {
-    currentTokenizer.readUntilEndOfLine().mapRight(removeWhitespace)
-  }
-  def readUntilCloseParen(): (String, Tokenizer) = {
-    currentTokenizer.readUntilCloseParen().mapRight(removeWhitespace)
-  }
-
-  private def removeWhitespace(updatedTokenizer: StringTokenizer): Tokenizer = {
-    if (updatedTokenizer.isEmpty)
-      getNextTokenizer
-    else
-      copy(currentTokenizer = updatedTokenizer)
-  }
-
-  def getNextTokenizer: Tokenizer = {
-    otherTokenizers match {
-      case Nil =>
-        nextTokenizer
-      case firstOtherTokenizer +: otherOtherTokenizers =>
-        CombinedTokenizer(nextTokenizer, firstOtherTokenizer, otherOtherTokenizers)
-    }
-  }
-
-  def addTokenizer(tokenizer: StringTokenizer): Tokenizer = {
-    CombinedTokenizer(tokenizer, currentTokenizer, nextTokenizer +: otherTokenizers)
-  }
-}
-
 object Tokenizer {
-  def fromString(str: String, context: String): StringTokenizer = {
-    StringTokenizer(str, context, 1, 1).readUntilEndOfWhitespace()
+  private val singleCharacterTokens = "(){},"
+  def fromString(str: String, context: String): TokenStream = {
+    val lines = str.lines.toVector.map(_.toVector)
+    def findEndOfWhitespace(currentLine: Int, currentColumn: Int): Option[(Int, Int)] = {
+      if (currentLine == lines.length)
+        None
+      else if (currentColumn == lines(currentLine).length)
+        findEndOfWhitespace(currentLine + 1, 0)
+      else if (lines(currentLine)(currentColumn).isWhitespace)
+        findEndOfWhitespace(currentLine, currentColumn + 1)
+      else
+        Some((currentLine, currentColumn))
+    }
+    def findEndOfToken(currentLine: Int, currentColumn: Int): Int = {
+      if (currentColumn == lines(currentLine).length || lines(currentLine)(currentColumn).isWhitespace || singleCharacterTokens.contains(lines(currentLine)(currentColumn)))
+        currentColumn
+      else
+        findEndOfToken(currentLine, currentColumn + 1)
+    }
+    def getTokens(builder: mutable.Builder[Token, Vector[Token]], currentLine: Int, currentColumn: Int): Vector[Token] = {
+      findEndOfWhitespace(currentLine, currentColumn) match {
+        case Some((endOfWhitespaceLine, endOfWhitespaceColumn)) =>
+          if (singleCharacterTokens.contains(lines(endOfWhitespaceLine)(endOfWhitespaceColumn)))
+            getTokens(
+              builder += Token(
+                lines(endOfWhitespaceLine)(endOfWhitespaceColumn).toString,
+                context,
+                endOfWhitespaceLine + 1,
+                endOfWhitespaceColumn + 1),
+              endOfWhitespaceLine,
+              endOfWhitespaceColumn + 1)
+          else {
+            val endOfTokenColumn = findEndOfToken(endOfWhitespaceLine, endOfWhitespaceColumn + 1)
+            getTokens(
+              builder += Token(
+                lines(endOfWhitespaceLine).subSequence(endOfWhitespaceColumn, endOfTokenColumn).toString,
+                context,
+                endOfWhitespaceLine + 1,
+                endOfWhitespaceColumn + 1),
+              endOfWhitespaceLine,
+              endOfTokenColumn)
+          }
+        case None =>
+          builder.result()
+      }
+    }
+    TokenStream(getTokens(Vector.newBuilder, 0, 0), Token("", context, lines.length, lines.last.length), lines, 0)
   }
-  def fromPath(path: Path, context: String): StringTokenizer = {
+  def fromPath(path: Path, context: String): TokenStream = {
     fromString(new String(Files.readAllBytes(path), "UTF-8"), s"$context ($path)")
   }
 }
