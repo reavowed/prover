@@ -637,3 +637,55 @@ conclusion equivalenceRelation ~_ℤ product ℕ ℕ
     prove equivalenceRelation ~_ℤ product ℕ ℕ 1e51ab5b58ae08ce5d2499d681d198d5c03e9f381f3241c2c9f8e9147a1e791c () (~_ℤ, product ℕ ℕ) () ()
   }
 }
+
+term ℤ ()
+  (= $0 equivalenceQuotient product ℕ ℕ ~_ℤ)
+  shorthand (int)
+
+term ⍳_ℤ ()
+  (= $0 replacementSet n ℕ orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ)
+  shorthand (inZ)
+
+theorem ⍳_ℤ is a function
+conclusion function ⍳_ℤ ℕ ℤ
+{
+  prove = ⍳_ℤ replacementSet n ℕ orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ 153f6f3cad26398e0d747a28c300d0f7db0ced933c617fc616291eaad0b2b139 () () () ()
+  prove = ℤ equivalenceQuotient product ℕ ℕ ~_ℤ 990bffb51c839c8157c4cb5f80607cb7cd0b0c6c8450ab39b5659dc0279ef4b8 () () () ()
+  take n {
+    assume ∈ $0 ℕ {
+      elided 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 {
+        prove equivalenceRelation ~_ℤ product ℕ ℕ 459d141ac7e7021353f809dbe31e38d1a6638a074975a411a362a7e5f9d91017 () () () ()
+        prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
+        prove ∈ orderedPair $0 0 product ℕ ℕ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($0, ℕ, 0, ℕ) () ()
+        prove ∈ equivalenceClass orderedPair $0 0 ~_ℤ equivalenceQuotient product ℕ ℕ ~_ℤ 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 () (~_ℤ, product ℕ ℕ, orderedPair $0 0) () ()
+      }
+      prove ∈ equivalenceClass orderedPair $0 0 ~_ℤ ℤ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (ℤ, equivalenceQuotient product ℕ ℕ ~_ℤ) (∈ equivalenceClass orderedPair $0 0 ~_ℤ $$0) ()
+      prove ∈ orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ product ℕ ℤ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($0, ℕ, equivalenceClass orderedPair $0 0 ~_ℤ, ℤ) () ()
+    }
+  }
+  prove ⊆ ⍳_ℤ product ℕ ℤ bf9b885955fdfb3b60f1098ed34059890f5c82b494ecbda0f2cb089db00a78db () (⍳_ℤ, ℕ, product ℕ ℤ) () (orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ)
+  take n {
+    assume ∈ $0 ℕ {
+      prove ∈ orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ ⍳_ℤ d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () (⍳_ℤ, ℕ, $0) () (orderedPair $$0 equivalenceClass orderedPair $$0 0 ~_ℤ)
+      take x {
+        assume ∈ orderedPair $$0 $0 ⍳_ℤ {
+          prove ∃ m ∧ ∈ $0 ℕ = orderedPair $$$0 $$0 orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ 59f16feab39e419a00c1a5ff891838a6995d40cf560efb4a00d0b51a9a16ff2a () (⍳_ℤ, ℕ, orderedPair $$0 $0) () (orderedPair $$$0 equivalenceClass orderedPair $$$0 0 ~_ℤ)
+          let m_n ∧ ∈ $0 ℕ = orderedPair $$$0 $$0 orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $0 equivalenceClass orderedPair $$0 0 ~_ℤ) () (∧ ∈ $$$0 ℕ = orderedPair $$0 $0 orderedPair $$$0 equivalenceClass orderedPair $$$0 0 ~_ℤ) () {
+            prove = $$0 equivalenceClass orderedPair $0 0 ~_ℤ 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$$0, $$0, $0, equivalenceClass orderedPair $0 0 ~_ℤ) () ()
+            elided (Rewritten) {
+              prove = $$$0 $0 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () ($$$0, $$0, $0, equivalenceClass orderedPair $0 0 ~_ℤ) () ()
+              prove = $0 $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$$0, $0) () ()
+              prove = equivalenceClass orderedPair $0 0 ~_ℤ equivalenceClass orderedPair $$$0 0 ~_ℤ 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () ($0, $$$0) () (equivalenceClass orderedPair $$$$0 0 ~_ℤ)
+            }
+            prove = $$0 equivalenceClass orderedPair $$$0 0 ~_ℤ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$0, equivalenceClass orderedPair $0 0 ~_ℤ, equivalenceClass orderedPair $$$0 0 ~_ℤ) () ()
+          }
+        }
+      }
+      prove ∃! x ∈ orderedPair $$0 $0 ⍳_ℤ 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (equivalenceClass orderedPair $0 0 ~_ℤ) (∈ orderedPair $0 $$0 ⍳_ℤ) ()
+    }
+  }
+  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
+    prove ∧ ⊆ ⍳_ℤ product ℕ ℤ ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 ⍳_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ ⍳_ℤ product ℕ ℤ, ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 ⍳_ℤ) () () ()
+    prove function ⍳_ℤ ℕ ℤ 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (⍳_ℤ, ℕ, ℤ) () ()
+  }
+}
