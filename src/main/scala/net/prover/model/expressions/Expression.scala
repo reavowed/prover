@@ -15,10 +15,17 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
   def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): ExpressionType
 
   def specify(
-    targetArguments: Seq[Term],
+    targetArguments: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
   ): ExpressionType
+  def specify(
+    targetArguments: Seq[Term],
+    internalDepth: Int,
+    externalDepth: Int
+  ): ExpressionType = {
+    specify(targetArguments.indices.zip(targetArguments).toMap, internalDepth, externalDepth).asInstanceOf[ExpressionType]
+  }
 
   /**
     * Specify, lazily substituting any argument used.

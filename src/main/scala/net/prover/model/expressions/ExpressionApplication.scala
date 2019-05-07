@@ -32,7 +32,7 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   }
 
   def specify(
-    targetArguments: Seq[Term],
+    targetArguments: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
   ) = {

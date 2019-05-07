@@ -36,7 +36,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
 
   override def specify(
-    targetArguments: Seq[Term],
+    targetArguments: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
   ): ExpressionType = {

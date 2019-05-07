@@ -36,8 +36,6 @@ sealed trait Step {
   def referencedLines: Set[PreviousLineReference]
   def length: Int
   def serializedLines: Seq[String]
-
-  override def toString: String = provenStatement.map(_.toString).getOrElse("<no statement>")
 }
 
 object Step {

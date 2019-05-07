@@ -28,10 +28,11 @@ class ProofHelperSpec extends ProverSpec {
     }
 
     "find a statement via specification" in {
-      extract(
+      val x = extract(
         Equals(a, b),
         Seq(ForAll("x")(Equals(FunctionParameter(0, 0), b)))
-      ) must beSome(Step.Assertion(
+      )
+      x must beSome(Step.Assertion(
             Equals(a, b),
             specification.summary,
             Seq(Premise.Given(ForAll("x")(Equals(FunctionParameter(0, 0), b)), PremiseReference(0))),

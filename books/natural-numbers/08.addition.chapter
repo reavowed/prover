@@ -210,3 +210,14 @@ conclusion = apply + orderedPair n apply + orderedPair m r apply + orderedPair a
   }
   prove = apply + orderedPair n apply + orderedPair m r apply + orderedPair apply + orderedPair n m r bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (r) (= apply + orderedPair n apply + orderedPair m $0 apply + orderedPair apply + orderedPair n m $0) ()
 }
+
+theorem Addition is Left-Cancellative
+premise ∈ n ℕ
+premise ∈ m ℕ
+premise ∈ r ℕ
+premise = apply + orderedPair n r apply + orderedPair m r
+conclusion = n m
+{
+  target ∀ x → ∈ $0 ℕ → = apply + orderedPair n $0 apply + orderedPair m $0 = n m
+  target = n m
+}

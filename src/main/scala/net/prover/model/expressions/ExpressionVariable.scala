@@ -23,7 +23,7 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   override def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): ExpressionType = this
 
   override def specify(
-    targetArguments: Seq[Term],
+    targetArguments: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
   ) = {
