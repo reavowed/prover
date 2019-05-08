@@ -276,6 +276,7 @@ conclusion ∃! ~ ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b →
 
 term ~_ℤ ()
   (∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0)
+  shorthand (~Z)
 
 theorem ~_ℤ is an equivalence relation
 conclusion equivalenceRelation ~_ℤ product ℕ ℕ
