@@ -2,7 +2,7 @@ package net.prover.model.proof
 
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.{EntryContext, Inference, Substitutions}
-import net.prover.model.expressions.{DefinedStatement, Expression, Statement, Term}
+import net.prover.model.expressions._
 
 import scala.util.Try
 
@@ -201,5 +201,27 @@ object PremiseFinder {
       }
     }
     helper(unsubstitutedPremiseStatements, substitutions, Nil, Nil)
+  }
+
+  def deconstructStatement(statement: Statement, entryContext: EntryContext, stepContext: StepContext): (Seq[Statement], Seq[Step]) = {
+    def byDeconstructing = for {
+      statementDefinition <- statement.asOptionalInstanceOf[DefinedStatement].map(_.definition)
+      deconstructionInference <- entryContext.inferences.find {
+        case Inference(_, premises, DefinedStatement(components, `statementDefinition`))
+          if components.map(_.asOptionalInstanceOf[StatementVariable]).traverseOption.contains(premises)
+        =>
+          true
+        case _ =>
+          false
+      }
+      substitutions <- deconstructionInference.conclusion.calculateSubstitutions(statement, Substitutions.empty, 0, stepContext.externalDepth).headOption
+      premises <- deconstructionInference.premises.map(_.applySubstitutions(substitutions, 0, stepContext.externalDepth)).traverseOption
+      premiseStatementsAndSteps = premises.map(deconstructStatement(_, entryContext, stepContext))
+      premiseDeconstructedStatements = premiseStatementsAndSteps.flatMap(_._1)
+      premiseDeconstructionSteps = premiseStatementsAndSteps.flatMap(_._2)
+      step = Step.Assertion(statement, deconstructionInference.summary, premises.map(Premise.Pending), substitutions)
+    } yield (premiseDeconstructedStatements, premiseDeconstructionSteps :+ step)
+
+    byDeconstructing.getOrElse((Seq(statement), Nil))
   }
 }

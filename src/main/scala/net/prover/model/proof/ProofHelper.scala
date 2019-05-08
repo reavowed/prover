@@ -187,19 +187,19 @@ object ProofHelper {
   ): Seq[Step] = {
     val premiseStatements = inference.substitutePremises(substitutions, stepContext)
     val conclusion = inference.substituteConclusion(substitutions, stepContext)
-    val premises = premiseStatements.map(premiseContext.createPremise)
-    val (targetSteps, premiseSteps) = premises.ofType[Premise.Pending].foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premise) =>
-      PremiseFinder.findPremiseSteps(premise.statement, entryContext, premiseContext, stepContext) match {
+    val (targetSteps, premiseSteps) = premiseStatements.foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premiseStatement) =>
+      PremiseFinder.findPremiseSteps(premiseStatement, entryContext, premiseContext, stepContext) match {
         case Some(newPremiseSteps) =>
           (targetStepsSoFar, premiseStepsSoFar ++ newPremiseSteps)
         case None =>
-          (targetStepsSoFar :+ Step.Target(premise.statement), premiseStepsSoFar)
+          val (deconstructedStatements, deconstructionSteps) = PremiseFinder.deconstructStatement(premiseStatement, entryContext, stepContext)
+          (targetStepsSoFar ++ deconstructedStatements.map(Step.Target(_)), premiseStepsSoFar ++ deconstructionSteps)
       }
     }
     val assertionStep = Step.Assertion(
       conclusion,
       inference,
-      premises,
+      premiseStatements.map(Premise.Pending),
       substitutions)
     val baseStep = if (premiseSteps.nonEmpty) {
       Step.Elided(premiseSteps :+ assertionStep, Some(inference.summary), None)
