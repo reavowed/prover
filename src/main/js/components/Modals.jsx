@@ -101,7 +101,7 @@ export class InferenceFinder extends React.Component {
       premiseSuggestions: null,
       selectedSubstitutionValues
     });
-    if (this.areSubstitutionValuesSufficient(selectedSubstitutionValues)) {
+    if (this.areSubstitutionValuesSufficient(suggestion, selectedSubstitutionValues)) {
       this.submitWithSelectedValues(suggestion, selectedSubstitutionValues);
     } else {
       this.props.getPremiseSuggestions &&
@@ -203,11 +203,13 @@ export class InferenceFinder extends React.Component {
     event.stopPropagation();
   };
 
-  areSubstitutionValuesSufficient(selectedSubstitutionValues) {
-    return _.chain(selectedSubstitutionValues).values().flatMap(_.values).every().value();
+  areSubstitutionValuesSufficient(selectedInferenceSuggestion, selectedSubstitutionValues) {
+    return selectedInferenceSuggestion && _.every(
+      getAllRequiredPaths(selectedInferenceSuggestion.requiredSubstitutions),
+      path => getAtPath(selectedSubstitutionValues, path));
   }
   readyToSubmit() {
-    return this.state.selectedInferenceSuggestion && this.areSubstitutionValuesSufficient(this.state.selectedSubstitutionValues);
+    return this.areSubstitutionValuesSufficient(this.state.selectedInferenceSuggestion, this.state.selectedSubstitutionValues);
   };
   submit = () => {
     this.submitWithSelectedValues(this.state.selectedInferenceSuggestion, this.state.selectedSubstitutionValues);
