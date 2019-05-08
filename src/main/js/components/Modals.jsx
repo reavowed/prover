@@ -101,16 +101,20 @@ export class InferenceFinder extends React.Component {
       premiseSuggestions: null,
       selectedSubstitutionValues
     });
-    this.props.getPremiseSuggestions &&
-      this.props.getPremiseSuggestions(suggestion.inference.id)
-        .then(this.handlePremiseSuggestions)
+    if (this.areSubstitutionValuesSufficient(selectedSubstitutionValues)) {
+      this.submitWithSelectedValues(suggestion, selectedSubstitutionValues);
+    } else {
+      this.props.getPremiseSuggestions &&
+        this.props.getPremiseSuggestions(suggestion.inference.id)
+          .then(this.handlePremiseSuggestions)
+    }
   };
   handlePremiseSuggestions = (suggestionsJson) => {
     if (suggestionsJson.immediateSubstitutions) {
       const substitutions = Parser.parseSubstitutions(suggestionsJson.immediateSubstitutions);
       const selectedSubstitutionValues = this.getAllForcedSubstitutionValues([[substitutions]], this.state.selectedInferenceSuggestion.requiredSubstitutions);
       this.setState({selectedSubstitutionValues});
-      this.submitWithSelectedValues(selectedSubstitutionValues);
+      this.submitWithSelectedValues(this.state.selectedInferenceSuggestion, selectedSubstitutionValues);
     } else {
       this.setState({
         premiseSuggestions: Parser.parsePremiseSuggestions(suggestionsJson.premiseMatches),
@@ -199,14 +203,17 @@ export class InferenceFinder extends React.Component {
     event.stopPropagation();
   };
 
+  areSubstitutionValuesSufficient(selectedSubstitutionValues) {
+    return _.chain(selectedSubstitutionValues).values().flatMap(_.values).every().value();
+  }
   readyToSubmit() {
-    return this.state.selectedInferenceSuggestion && _.chain(this.state.selectedSubstitutionValues).values().flatMap(_.values).every().value();
+    return this.state.selectedInferenceSuggestion && this.areSubstitutionValuesSufficient(this.state.selectedSubstitutionValues);
   };
   submit = () => {
-    this.submitWithSelectedValues(this.state.selectedSubstitutionValues);
+    this.submitWithSelectedValues(this.state.selectedInferenceSuggestion, this.state.selectedSubstitutionValues);
   };
-  submitWithSelectedValues = (selectedSubstitutionValues) => {
-    this.props.submit(this.state.selectedInferenceSuggestion.inference.id, selectedSubstitutionValues || this.state.selectedSubstitutionValues)
+  submitWithSelectedValues = (selectedInferenceSuggestion, selectedSubstitutionValues) => {
+    this.props.submit(selectedInferenceSuggestion.inference.id, selectedSubstitutionValues || this.state.selectedSubstitutionValues)
       .then(() => this.setState({
         isLoading: false,
         autosuggestValue: "",
