@@ -274,5 +274,11 @@ class ProofHelperSpec extends ProverSpec {
       val target = Equals(add(a, First(Pair(c, d))), add(b, c))
       testRewrite(premises, target)
     }
+
+    "rewrite a function application inline" in {
+      val premises = Seq(Equals(a, b))
+      val target = Equals(F(a), F(b))
+      testRewrite(premises, target)
+    }
   }
 }

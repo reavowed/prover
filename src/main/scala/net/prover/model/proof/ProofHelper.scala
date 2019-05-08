@@ -661,29 +661,36 @@ object ProofHelper {
       ).map(steps => Seq((
         wrappingFunction.specify(Seq(targetTerm), 0, stepContext.externalDepth).get,
         wrapAsElidedIfNecessary((steps :+ reverseStep(premiseTerm, targetTerm)) ++ getWrappingStep(premiseTerm, targetTerm), "Rewritten"))))
+
+      def findByComponentsHelper(
+        previousComponents: Seq[(Term, Term)],
+        nextComponents: Seq[(Term, Term)],
+        stepsSoFar: Seq[(Term, Option[Step])],
+        getWrapperForComponents: Seq[Term] => Term
+      ): Option[Seq[(Term, Option[Step])]]  = {
+        nextComponents match {
+          case (premiseComponent, targetComponent) +: moreComponents =>
+            def newWrapper = getWrapperForComponents((previousComponents.map(_._2) :+ FunctionParameter(0, stepContext.externalDepth)) ++ moreComponents.map(_._1))
+            for {
+              theseSteps <- findKnownEqualityPath(premiseComponent, targetComponent, newWrapper)
+              result <- findByComponentsHelper(previousComponents :+ (premiseComponent, targetComponent), moreComponents, stepsSoFar ++ theseSteps, getWrapperForComponents)
+            } yield result
+          case Nil =>
+            Some(stepsSoFar)
+        }
+      }
       def findByComponents = (premiseTerm, targetTerm) match {
         case (DefinedTerm(premiseComponents, premiseDefinition), DefinedTerm(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition =>
-          def helper(previousComponents: Seq[(Term, Term)], nextComponents: Seq[(Term, Term)], stepsSoFar: Seq[(Term, Option[Step])]): Option[Seq[(Term, Option[Step])]]  = {
-            nextComponents match {
-              case (premiseComponent, targetComponent) +: moreComponents =>
-                def newWrapper = wrappingFunction.specify(
-                  Seq(premiseDefinition((previousComponents.map(_._2) :+ FunctionParameter(0, stepContext.externalDepth)) ++ moreComponents.map(_._1):_*)),
-                  0,
-                  stepContext.externalDepth
-                ).get
-                for {
-                  theseSteps <- findKnownEqualityPath(premiseComponent, targetComponent, newWrapper)
-                  result <- helper(previousComponents :+ (premiseComponent, targetComponent), moreComponents, stepsSoFar ++ theseSteps)
-                } yield result
-              case Nil =>
-                Some(stepsSoFar)
-            }
-          }
           for {
             premiseTerms <- premiseComponents.map(_.asOptionalInstanceOf[Term]).traverseOption
             targetTerms <- targetComponents.map(_.asOptionalInstanceOf[Term]).traverseOption
             componentTerms <- premiseTerms.zipStrict(targetTerms)
-            result <- helper(Nil, componentTerms, Nil)
+            result <- findByComponentsHelper(Nil, componentTerms, Nil, components => wrappingFunction.specify(Seq(premiseDefinition(components:_*)), 0, stepContext.externalDepth).get)
+          } yield result
+        case (FunctionApplication(f, premiseComponents), FunctionApplication(g, targetComponents)) if f == g =>
+          for {
+            componentTerms <- premiseComponents.zipStrict(targetComponents)
+            result <- findByComponentsHelper(Nil, componentTerms, Nil, arguments => wrappingFunction.specify(Seq(FunctionApplication(f, arguments)), 0, stepContext.externalDepth).get)
           } yield result
         case _ =>
           None
