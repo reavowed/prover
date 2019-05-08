@@ -6,6 +6,7 @@ import net.prover.controllers.models.{ChapterProps, LinkSummary}
 import net.prover.exceptions.BadRequestException
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
+import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step
@@ -177,18 +178,18 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
+      val symbol = newTermDefininition.symbol
+      val name = Option(newTermDefininition.name).filter(_.nonEmpty)
+      val shorthand = Option(newTermDefininition.shorthand).filter(_.nonEmpty)
+      val attributes = Option(newTermDefininition.attributes).toSeq.flatMap(_.splitByWhitespace()).filter(_.nonEmpty)
       for {
         boundVariablesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newTermDefininition.components, "components").recoverWithBadRequest
         boundVariables = boundVariablesAndComponentTypes._1
         componentTypes = boundVariablesAndComponentTypes._2
         componentNames = boundVariables ++ componentTypes.map(_.name)
-        symbol = newTermDefininition.symbol
         definition <- Statement.parser.parseFromString(newTermDefininition.definition, "definition").recoverWithBadRequest
-        name = Option(newTermDefininition.name).filter(_.nonEmpty)
         format <- Option(newTermDefininition.format).filter(_.nonEmpty).map(f => Format.parser(componentNames).parseFromString(f, "format")).getOrElse(Format.default(symbol, componentNames)).recoverWithBadRequest
         premises <- newTermDefininition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}")).recoverWithBadRequest
-        shorthand = Option(newTermDefininition.shorthand).filter(_.nonEmpty)
-        attributes = Option(newTermDefininition.attributes).toSeq.flatMap(_.splitByWhitespace()).filter(_.nonEmpty)
         newTerm = TermDefinition(
           symbol,
           boundVariables,
@@ -203,6 +204,33 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }.map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
+  @PostMapping(value = Array("/typeDefinitions"), produces = Array("application/json;charset=UTF-8"))
+  def createTypeDefinition(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @RequestBody newTypeDefininition: NewTypeDefinitionModel
+  ): ResponseEntity[_] = {
+    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
+      val symbol = newTypeDefininition.symbol
+      val defaultTermName = newTypeDefininition.defaultTermName
+      val name = Option(newTypeDefininition.name).filter(_.nonEmpty)
+      for {
+        otherComponentTypes <- ComponentType.listWithoutBoundVariablesParser.parseFromString(newTypeDefininition.otherComponents, "component types").recoverWithBadRequest
+        format <- Format.parser(otherComponentTypes.map(_.name)).parseFromString(newTypeDefininition.format, "format").recoverWithBadRequest
+        definition <- Statement.parser.parseFromString(newTypeDefininition.definition, "definition").recoverWithBadRequest
+        newTypeDefinition = TypeDefinition(
+          symbol,
+          defaultTermName,
+          otherComponentTypes,
+          format,
+          name,
+          definition)
+      } yield newTypeDefinition
+    }.map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
+  }
+
   @PostMapping(value = Array("/propertyDefinitions"), produces = Array("application/json;charset=UTF-8"))
   def createPropertyDefinition(
     @PathVariable("bookKey") bookKey: String,
@@ -212,12 +240,12 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
+      val symbol = newPropertyDefininition.symbol
+      val defaultTermName = newPropertyDefininition.defaultTermName
+      val name = Option(newPropertyDefininition.name).filter(_.nonEmpty)
       for {
         parentType <- entryContext.typeDefinitions.find(_.symbol == newPropertyDefininition.parentType).orBadRequest(s"Unknown type '${newPropertyDefininition.parentType}'")
-        symbol = newPropertyDefininition.symbol
-        defaultTermName = newPropertyDefininition.defaultTermName
-        parentComponentTypes <- parentType.childComponentTypesParser.parseFromString(newPropertyDefininition.parentComponentTypes, "parent component types").recoverWithBadRequest
-        name = Option(newPropertyDefininition.name).filter(_.nonEmpty)
+        parentComponentTypes <- parentType.childComponentTypesParser.parseFromString(newPropertyDefininition.parentComponents, "parent component types").recoverWithBadRequest
         definition <- Statement.parser.parseFromString(newPropertyDefininition.definition, "definition").recoverWithBadRequest
         newPropertyDefinition = PropertyDefinition(
           symbol,
@@ -382,11 +410,18 @@ object ChapterController {
     definition: String,
     shorthand: String,
     attributes: String)
+  case class NewTypeDefinitionModel(
+    symbol: String,
+    defaultTermName: String,
+    otherComponents: String,
+    format: String,
+    name: String,
+    definition: String)
   case class NewPropertyDefinitionModel(
     symbol: String,
     parentType: String,
     defaultTermName: String,
-    parentComponentTypes: String,
+    parentComponents: String,
     name: String,
     definition: String)
 }

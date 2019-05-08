@@ -340,13 +340,14 @@ export class Chapter extends React.Component {
     currentStateValue[innerPropertyName] = transformer ? transformer(newPropertyValue) : newPropertyValue;
     this.setState({statePropertyName: currentStateValue});
   };
+
   startAddingProperty = () => {
     this.setState({
       propertyBeingAdded: {
         symbol: "",
         parentType: "",
         defaultTermName: "",
-        parentComponentTypes: "",
+        parentComponents: "",
         name: "",
         definition: ""
       }
@@ -364,9 +365,33 @@ export class Chapter extends React.Component {
     }).then(this.stopAddingProperty);
   };
 
+  startAddingType = () => {
+    this.setState({
+      typeBeingAdded: {
+        symbol: "",
+        defaultTermName: "",
+        otherComponents: "",
+        format: "",
+        name: "",
+        definition: ""
+      }
+    })
+  };
+  stopAddingType = () => {
+    this.setState({typeBeingAdded: null})
+  };
+  saveType = () => {
+    const {typeBeingAdded} = this.state;
+    this.updateChapter(path.join(this.state.url, "typeDefinitions"), {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(typeBeingAdded)
+    }).then(this.stopAddingProperty);
+  };
+
   render() {
     const {bookLink, summary, previous, next} = this.props;
-    const {title, url, entries, theoremBeingAdded, termBeingAdded, propertyBeingAdded} = this.state;
+    const {title, url, entries, theoremBeingAdded, termBeingAdded, typeBeingAdded, propertyBeingAdded} = this.state;
 
     const updateControl = (caption, statePropertyName, innerPropertyName, transformer) => {
       return <Form.Group>
@@ -381,9 +406,10 @@ export class Chapter extends React.Component {
       <p>{summary}</p>
       {entries.map(this.renderEntry)}
       <hr/>
-      {!theoremBeingAdded && !termBeingAdded && !propertyBeingAdded && <>
+      {!theoremBeingAdded && !termBeingAdded && !typeBeingAdded && !propertyBeingAdded && <>
         <Button onClick={this.startAddingTheorem}>Add theorem</Button>
         <Button className="ml-2" onClick={this.startAddingTerm}>Add term</Button>
+        <Button className="ml-2" onClick={this.startAddingType}>Add type</Button>
         <Button className="ml-2" onClick={this.startAddingProperty}>Add property</Button>
       </>}
       {theoremBeingAdded && <>
@@ -455,15 +481,26 @@ export class Chapter extends React.Component {
         <Button size="sm" onClick={this.saveTerm}>Save term</Button>
         <Button size="sm" className="ml-2" variant="danger" onClick={this.stopAddingTerm}>Cancel</Button>
       </>}
+      {typeBeingAdded && <>
+        <h4>Add type</h4>
+        {updateControl("Symbol", "typeBeingAdded", "symbol")}
+        {updateControl("Default term name", "typeBeingAdded", "defaultTermName")}
+        {updateControl("Other components", "typeBeingAdded", "otherComponents")}
+        {updateControl("Format", "typeBeingAdded", "format")}
+        {updateControl("Explicit name (if different from symbol)", "typeBeingAdded", "name")}
+        {updateControl("Definition", "typeBeingAdded", "definition", Parser.replaceShorthands)}
+        <Button size="sm" onClick={this.saveType}>Save type</Button>
+        <Button size="sm" className="ml-2" variant="danger" onClick={this.stopAddingType}>Cancel</Button>
+      </>}
       {propertyBeingAdded && <>
         <h4>Add property</h4>
         {updateControl("Symbol", "propertyBeingAdded", "symbol")}
         {updateControl("Parent type", "propertyBeingAdded", "parentType")}
         {updateControl("Default term name", "propertyBeingAdded", "defaultTermName")}
-        {updateControl("Parent component names", "propertyBeingAdded", "parentComponentTypes")}
+        {updateControl("Parent components", "propertyBeingAdded", "parentComponents")}
         {updateControl("Explicit name (if different from symbol)", "propertyBeingAdded", "name")}
         {updateControl("Definition", "propertyBeingAdded", "definition", Parser.replaceShorthands)}
-        <Button size="sm" onClick={this.saveProperty}>Save term</Button>
+        <Button size="sm" onClick={this.saveProperty}>Save property</Button>
         <Button size="sm" className="ml-2" variant="danger" onClick={this.stopAddingProperty}>Cancel</Button>
       </>}
     </Page>
