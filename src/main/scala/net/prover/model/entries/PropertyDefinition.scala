@@ -13,7 +13,7 @@ case class PropertyDefinition(
     definingStatement: Statement)
   extends ChapterEntry.Standalone
 {
-  override def name: String = symbol
+  override def name: String = explicitName.getOrElse(symbol)
   override def title: String = s"Definition: ${name.capitalize} ${parentType.name.capitalize}"
   def qualifiedSymbol: String = symbol + parentType.symbol.capitalize
 
@@ -32,9 +32,9 @@ case class PropertyDefinition(
     Nil)
   override def inferences: Seq[Inference] = statementDefinition.inferences
 
-  override def serializedLines: Seq[String] = (Seq("property", name, "on", parentType.name, defaultTermName) ++ parentComponentTypes.map(_.serialized)).mkString(" ") +:
-    (Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" ")) ++
-      explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq
+  override def serializedLines: Seq[String] = (Seq("property", symbol, "on", parentType.name, defaultTermName) ++ parentComponentTypes.map(_.serialized)).mkString(" ") +:
+    (explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++
+      Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
     ).indent
 
   override def replaceDefinition(

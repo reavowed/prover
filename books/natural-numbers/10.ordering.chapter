@@ -4,3 +4,9 @@ term < ()
   name (Standard order on ℕ)
   (= $0 comprehension x product ℕ ℕ ∈ first $0 second $0)
   attributes (infix)
+
+theorem < Is a Strict Total Order on ℕ
+conclusion strictTotalOrder < ℕ
+{
+  target strictTotalOrder < ℕ
+}

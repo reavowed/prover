@@ -9,11 +9,24 @@ display ∈ orderedPair a b x as (a x b) requires-brackets if x infix
 property reflexive on relation ~ A
   definition (∀ a → ∈ $0 A ∈ orderedPair $0 $0 ~)
 
+property irreflexive on relation ~ A
+  definition (∀ a → ∈ $0 A ¬ ∈ orderedPair $0 $0 ~)
+
 property symmetric on relation ~ A
   definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~)
 
 property asymmetric on relation ~ A
   definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ¬ ∈ orderedPair $0 $$0 ~)
 
+property antisymmetric on relation ~ A
+  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∧ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~ = $$0 $0)
+
 property transitive on relation ~ A
   definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ~ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $$$0 $0 ~)
+
+property complete on relation ~ A
+  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~)
+
+property semicomplete on relation ~ A
+  name (semi-complete)
+  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ = $$0 $0 ∨ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~)

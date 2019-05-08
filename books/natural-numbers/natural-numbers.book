@@ -1,4 +1,5 @@
 import Functions
+import Relations
 
 chapter Successors
 chapter Inductive Sets

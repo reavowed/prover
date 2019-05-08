@@ -216,7 +216,7 @@ export class Chapter extends React.Component {
         </Result>;
       case "propertyDefinition":
         const typeDefinition = window.typeDefinitions[entry.parentTypeSymbol];
-        return <Result title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name} {entry.parentTypeName}</span></>}
+        return <Result title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name} {typeDefinition.name}</span></>}
                        url={entry.url}
                        key={entry.url}
                        updateChapter={this.updateChapter}>

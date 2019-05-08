@@ -1,6 +1,6 @@
 Define partial and total orders on a set
 
-type totalOrder < (A)
+type strictTotalOrder < (A)
   format (on A)
-  name (total order)
-  definition (∧ ∧ relation < A asymmetricRelation < A transitiveRelation < A)
+  name (strict total order)
+  definition (∧ ∧ ∧ relation < A asymmetricRelation < A transitiveRelation < A semicompleteRelation < A)
