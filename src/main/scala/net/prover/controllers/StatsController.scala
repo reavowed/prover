@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Requ
 class StatsController @Autowired() (val bookService: BookService) extends BookModification  {
 
   @GetMapping(value = Array("longestProofs"))
-  def getLongestProofs = {
+  def getLongestProofs: Seq[(String, Int)] = {
     val urlsWithLengths = for {
       (book, bookKey) <- getBooksWithKeys(bookService.books)
       (chapter, chapterKey) <- getChaptersWithKeys(book)
@@ -24,7 +24,7 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
   }
 
   @GetMapping(value = Array("unusedInferences"))
-  def getUnusedInferences = {
+  def getUnusedInferences: Seq[String] = {
     val entryContext = EntryContext.forBooks(bookService.books, Nil)
     val usedInferenceIds = entryContext.inferences.ofType[Theorem].flatMap(_.referencedInferenceIds)
     for {
@@ -40,13 +40,14 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
   def findAssertions(
     @RequestParam inferenceId: String,
     @RequestParam(required = false) statementSymbol: String
-  ) = {
+  ): Seq[(String, String)] = {
+    val books = bookService.books
     for {
-      (book, bookKey) <- getBooksWithKeys(bookService.books)
+      (book, bookKey) <- getBooksWithKeys(books)
       (chapter, chapterKey) <- getChaptersWithKeys(book)
       (theorem, inferenceKey) <- getEntriesWithKeys(chapter)
         .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-      (assertion, context) <- theorem.findAssertions
+      (assertion, context) <- theorem.findAssertions(EntryContext.forEntry(books, book, chapter, theorem))
       if assertion.inference.id == inferenceId
       if Option(statementSymbol).forall(symbol =>
         assertion.statement.asOptionalInstanceOf[DefinedStatement]

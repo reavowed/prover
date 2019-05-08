@@ -14,16 +14,11 @@ class ProofHelperSpec extends ProverSpec {
     val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
     val axioms = Seq(specification, modusPonens, reverseImplicationFromEquivalence, zeroIsANaturalNumber, successorOfNaturalIsNatural)
     val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
-    val stepContext = StepContext.empty(Nil)
 
     def extract(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
-      val premiseContext = PremiseContext.justWithPremises(premises, entryContextWithAxioms)
-      ProofHelper.extract(
-        targetStatement,
-        entryContextWithAxioms,
-        stepContext,
-        premiseContext
-      ).map(_.recalculateReferences(stepContext, premiseContext))
+      val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms)
+      ProofHelper.extract(targetStatement, stepContext)
+        .map(_.recalculateReferences(stepContext))
     }
 
     def testExtraction(targetStatement: Statement, premises: Seq[Statement]) = {
@@ -110,98 +105,54 @@ class ProofHelperSpec extends ProverSpec {
   }
 
   "rearranging a statement" should {
+    def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
+    val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
+    val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
+    val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b)), Equals(F(a), F(b)))
+    val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
+    val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
+    val axioms = Seq(reverseEquality, equalityIsTransitive, substitutionOfEquals, additionIsAssociative, additionIsCommutative)
+    val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+
+    def rearrange(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
+      val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms)
+      ProofHelper.rearrange(targetStatement, stepContext)
+        .map(_.recalculateReferences(stepContext))
+    }
+
+    def testRearranging(targetStatement: Statement, premises: Seq[Statement]) = {
+      val step = rearrange(targetStatement, premises)
+      step must beSome
+      val theorem = Theorem(
+        "Rearrangement",
+        premises,
+        targetStatement,
+        step.toSeq,
+        RearrangementType.NotRearrangement
+      ).recalculateReferences(entryContextWithAxioms)
+      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
+      println(serializedTheorem)
+      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
+      parsedTheorem mustEqual theorem
+    }
+
     "rearrange with associativity and commutativity" in {
-      def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
-      val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
-      val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
-      val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b)), Equals(F(a), F(b)))
-      val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
-      val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
-      val axioms = Seq(reverseEquality, equalityIsTransitive, substitutionOfEquals, additionIsAssociative, additionIsCommutative)
-      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
-      val stepContext = StepContext.empty(Nil)
       val conclusion = Equals(
         add(add(a, b), add(c, d)),
         add(add(a, c), add(b, d)))
-      val step = ProofHelper.rearrange(
-        conclusion,
-        entryContextWithAxioms,
-        PremiseContext.justWithPremises(Nil, entryContextWithAxioms),
-        stepContext)
-      step must beSome
-      val theorem = Theorem(
-        "Rearrangement",
-        Nil,
-        conclusion,
-        step.toSeq,
-        RearrangementType.NotRearrangement
-      ).recalculateReferences(entryContextWithAxioms)
-      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
-      println(serializedTheorem)
-      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
-      parsedTheorem mustEqual theorem
+      testRearranging(conclusion, Nil)
     }
 
     "rearrange using a premise in same order" in {
-      def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
-      val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
-      val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
-      val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b)), Equals(F(a), F(b)))
-      val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
-      val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
-      val axioms = Seq(reverseEquality, equalityIsTransitive, substitutionOfEquals, additionIsAssociative, additionIsCommutative)
-      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
-      val stepContext = StepContext.empty(Nil)
       val premise = Equals(add(a, b), add(c, d))
       val conclusion = Equals(add(d, c), add(b, a))
-      val step = ProofHelper.rearrange(
-        conclusion,
-        entryContextWithAxioms,
-        PremiseContext.justWithPremises(Seq(premise), entryContextWithAxioms),
-        stepContext)
-      step must beSome
-      val theorem = Theorem(
-        "Rearrangement",
-        Seq(premise),
-        conclusion,
-        step.toSeq,
-        RearrangementType.NotRearrangement
-      ).recalculateReferences(entryContextWithAxioms)
-      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
-      println(serializedTheorem)
-      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
-      parsedTheorem mustEqual theorem
+      testRearranging(conclusion, Seq(premise))
     }
 
     "rearrange using a premise in reversed order" in {
-      def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
-      val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
-      val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
-      val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b)), Equals(F(a), F(b)))
-      val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
-      val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
-      val axioms = Seq(reverseEquality, equalityIsTransitive, substitutionOfEquals, additionIsAssociative, additionIsCommutative)
-      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
-      val stepContext = StepContext.empty(Nil)
       val premise = Equals(add(a, b), add(c, d))
       val conclusion = Equals(add(b, a), add(d, c))
-      val step = ProofHelper.rearrange(
-        conclusion,
-        entryContextWithAxioms,
-        PremiseContext.justWithPremises(Seq(premise), entryContextWithAxioms),
-        stepContext)
-      step must beSome
-      val theorem = Theorem(
-        "Rearrangement",
-        Seq(premise),
-        conclusion,
-        step.toSeq,
-        RearrangementType.NotRearrangement
-      ).recalculateReferences(entryContextWithAxioms)
-      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
-      println(serializedTheorem)
-      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
-      parsedTheorem mustEqual theorem
+      testRearranging(conclusion, Seq(premise))
     }
   }
 
@@ -229,9 +180,7 @@ class ProofHelperSpec extends ProverSpec {
 
       val stepOption = ProofHelper.rewrite(
         target,
-        entryContextWithAxioms,
-        PremiseContext.justWithPremises(premises, entryContextWithAxioms),
-        StepContext.empty(Nil))
+        StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms))
       stepOption must beSome
 
       val theorem = Theorem(

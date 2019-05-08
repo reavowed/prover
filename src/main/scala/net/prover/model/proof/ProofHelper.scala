@@ -30,8 +30,8 @@ object ProofHelper {
     helper(Nil, Seq(premise))
   }
 
-  def findFact(target: Statement, stepContext: StepContext, entryContext: EntryContext): Option[Step.Assertion] = {
-    entryContext.inferences
+  def findFact(target: Statement, stepContext: StepContext): Option[Step.Assertion] = {
+    stepContext.entryContext.inferences
       .filter(_.premises.isEmpty)
       .mapFind { inference =>
         inference.conclusion.calculateSubstitutions(target, Substitutions.empty, 0, stepContext.externalDepth).headOption
@@ -72,8 +72,8 @@ object ProofHelper {
     }
   }
 
-  def extract(targetStatement: Statement, entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Option[Step] = {
-    val statementExtractionInferences = entryContext.availableEntries.ofType[Inference].collect {
+  def extract(targetStatement: Statement, stepContext: StepContext): Option[Step] = {
+    val statementExtractionInferences = stepContext.entryContext.availableEntries.ofType[Inference].collect {
       case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
         if conclusion.singleStatementVariable.isDefined &&
           firstPremise.requiredSubstitutions.contains(inference.requiredSubstitutions) &&
@@ -83,7 +83,7 @@ object ProofHelper {
       =>
         (inference, firstPremise, otherPremises)
     }
-    val predicateSpecificationInferences = entryContext.availableEntries.ofType[Inference].collect {
+    val predicateSpecificationInferences = stepContext.entryContext.availableEntries.ofType[Inference].collect {
       case inference @ Inference(_, Seq(singlePremise), conclusion)
         if conclusion.complexity < singlePremise.complexity
       =>
@@ -95,7 +95,7 @@ object ProofHelper {
           }
           .map { case (predicateName, argumentNames) => (inference, singlePremise, predicateName, argumentNames)}
     }.collectDefined
-    val rewriteInferences = entryContext.rewriteInferences
+    val rewriteInferences = stepContext.entryContext.rewriteInferences
 
     def matchDirectly(extractionCandidate: Statement, termsSoFar: Int): Option[(Map[Int, Term], Seq[Step])] = {
       for {
@@ -111,7 +111,7 @@ object ProofHelper {
             extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions, 0, stepContext.externalDepth).toSeq
             (conclusionTerms, innerSteps) <- extract(extractedConclusion, termsSoFar).toSeq
             extractedOtherPremises <- otherPremises.map(_.applySubstitutions(extractionSubstitutions, 0, stepContext.externalDepth)).traverseOption.toSeq
-            (premiseSteps, terms) <- PremiseFinder.findParameterisedPremiseSteps(extractedOtherPremises, conclusionTerms, entryContext, premiseContext, stepContext)
+            (premiseSteps, terms) <- PremiseFinder.findParameterisedPremiseSteps(extractedOtherPremises, conclusionTerms, stepContext)
             substitutedFirstPremise <- extractionCandidate.specify(terms, 0, stepContext.externalDepth).toSeq
             substitutions <- firstPremise.calculateSubstitutions(substitutedFirstPremise, Substitutions.empty, 0, stepContext.externalDepth)
             substitutedOtherPremises <- otherPremises.map(_.applySubstitutions(substitutions, 0, stepContext.externalDepth)).traverseOption.toSeq
@@ -175,24 +175,22 @@ object ProofHelper {
       extract(premise.statement, 0).map(_._2).flatMap(wrapAsElidedIfNecessary(_, "Simplified"))
     }
 
-    premiseContext.allPremisesSimplestFirst.mapFind(extractPremise)
+    stepContext.allPremisesSimplestFirst.mapFind(extractPremise)
   }
 
   def getAssertionWithPremises(
     inference: Inference.Summary,
     substitutions: Substitutions,
-    stepContext: StepContext,
-    premiseContext: PremiseContext,
-    entryContext: EntryContext
+    stepContext: StepContext
   ): Seq[Step] = {
     val premiseStatements = inference.substitutePremises(substitutions, stepContext)
     val conclusion = inference.substituteConclusion(substitutions, stepContext)
     val (targetSteps, premiseSteps) = premiseStatements.foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premiseStatement) =>
-      PremiseFinder.findPremiseSteps(premiseStatement, entryContext, premiseContext, stepContext) match {
+      PremiseFinder.findPremiseSteps(premiseStatement, stepContext) match {
         case Some(newPremiseSteps) =>
           (targetStepsSoFar, premiseStepsSoFar ++ newPremiseSteps)
         case None =>
-          val (deconstructedStatements, deconstructionSteps) = PremiseFinder.deconstructStatement(premiseStatement, entryContext, stepContext)
+          val (deconstructedStatements, deconstructionSteps) = PremiseFinder.deconstructStatement(premiseStatement, stepContext)
           (targetStepsSoFar ++ deconstructedStatements.map(Step.Target(_)), premiseStepsSoFar ++ deconstructionSteps)
       }
     }
@@ -270,8 +268,6 @@ object ProofHelper {
     equalityReversalInference: Inference,
     equalityTransitivityInference: Inference,
     equalityExpansionInference: Inference,
-    entryContext: EntryContext,
-    premiseContext: PremiseContext,
     stepContext: StepContext
   ): Option[Step] = {
     def operator(a: Term, b: Term): Term = {
@@ -315,9 +311,7 @@ object ProofHelper {
       val assertionSteps = getAssertionWithPremises(
         associativityInference.summary,
         Substitutions(terms = associativityInference.requiredSubstitutions.terms.zip(Seq(a, b, c)).toMap),
-        stepContext,
-        premiseContext,
-        entryContext)
+        stepContext)
       val steps = if (wrappingFunction.isInstanceOf[FunctionParameter]) {
         assertionSteps
       } else {
@@ -339,9 +333,7 @@ object ProofHelper {
         getAssertionWithPremises(
           associativityInference.summary,
           Substitutions(terms = associativityInference.requiredSubstitutions.terms.zip(Seq(a, b, c)).toMap),
-          stepContext,
-          premiseContext,
-          entryContext) :+
+          stepContext) :+
         reversalStep(normalised, reversed)
       val stepsToElide = if (wrappingFunction.isInstanceOf[FunctionParameter]) {
         associativityAndReversalSteps
@@ -364,9 +356,7 @@ object ProofHelper {
       val assertionSteps = getAssertionWithPremises(
         commutativityInference.summary,
         Substitutions(terms = commutativityInference.requiredSubstitutions.terms.zip(Seq(a, b)).toMap),
-        stepContext,
-        premiseContext,
-        entryContext)
+        stepContext)
       val steps = if (wrappingFunction.isInstanceOf[FunctionParameter]) {
         assertionSteps
       } else {
@@ -466,7 +456,7 @@ object ProofHelper {
     }
 
     def rearrangeUsingPremises: Option[Seq[Step]] = (for {
-      premise <- premiseContext.allPremisesSimplestFirst
+      premise <- stepContext.allPremisesSimplestFirst
       (premiseLhsTerm, premiseRhsTerm) <- (premise.statement match {
         case equalityDefinition(l: Term, r: Term) => Some((l, r))
         case _ => None
@@ -488,8 +478,8 @@ object ProofHelper {
     }.getOrElse(Leaf(term))
   }
 
-  def rearrange(targetStatement: Statement, entryContext: EntryContext, premiseContext: PremiseContext, stepContext: StepContext): Option[Step] = {
-
+  def rearrange(targetStatement: Statement, stepContext: StepContext): Option[Step] = {
+    val entryContext = stepContext.entryContext
     for {
       (lhs, rhs, equalityDefinition) <- entryContext.matchEqualityStatement(targetStatement)
       (operator, commutativityInference, associativityInference) <- entryContext.findRearrangableFunctions(equalityDefinition)
@@ -512,16 +502,12 @@ object ProofHelper {
         equalityReversalInference,
         equalityTransitivityInference,
         equalityExpansionInference,
-        entryContext,
-        premiseContext,
         stepContext)
     } yield result
   }
 
   private def rewrite(
     targetStatement: Statement,
-    entryContext: EntryContext,
-    premiseContext: PremiseContext,
     stepContext: StepContext,
     equalityDefinition: StatementDefinition,
     equalitySubstitutionInference: Inference,
@@ -529,6 +515,7 @@ object ProofHelper {
     equalityTransitivityInference: Inference,
     equalityReversalInference: Inference
   ): Option[Step] = {
+    val entryContext = stepContext.entryContext
     val termSimplificationInferences = entryContext.availableEntries.ofType[Inference]
       .collect {
         case inference @ Inference(
@@ -570,7 +557,7 @@ object ProofHelper {
         (inference, left, right) <- termSimplificationInferences
         conclusionSubstitutions <- left.calculateSubstitutions(premiseTerm, Substitutions.empty, 0, stepContext.externalDepth)
         simplifiedTerm <- right.applySubstitutions(conclusionSubstitutions, 0, stepContext.externalDepth).flatMap(_.asOptionalInstanceOf[Term])
-        (premiseSteps, substitutedPremises, finalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, entryContext, premiseContext, stepContext)
+        (premiseSteps, substitutedPremises, finalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, stepContext)
         assertionStep = Step.Assertion(
           equalityDefinition(premiseTerm, simplifiedTerm),
           inference.summary,
@@ -587,7 +574,7 @@ object ProofHelper {
         (inference, left, right) <- termDesimplificationInferences
         conclusionSubstitutions <- right.calculateSubstitutions(premiseTerm, Substitutions.empty, 0, stepContext.externalDepth)
         simplifiedTerm <- left.applySubstitutions(conclusionSubstitutions, 0, stepContext.externalDepth).flatMap(_.asOptionalInstanceOf[Term])
-        (premiseSteps, substitutedPremises, finalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, entryContext, premiseContext, stepContext)
+        (premiseSteps, substitutedPremises, finalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, stepContext)
         assertionStep = Step.Assertion(
           equalityDefinition(simplifiedTerm, premiseTerm),
           inference.summary,
@@ -647,16 +634,12 @@ object ProofHelper {
       def findExactly = if (premiseTerm == targetTerm) Some(Nil) else None
       def findDirectly = PremiseFinder.findPremiseSteps(
         equalityDefinition(premiseTerm, targetTerm),
-        entryContext,
-        premiseContext,
         stepContext
       ).map(steps => Seq((
         wrappingFunction.specify(Seq(targetTerm), 0, stepContext.externalDepth).get,
         wrapAsElidedIfNecessary(steps ++ getWrappingStep(premiseTerm, targetTerm), "Rewritten"))))
       def findReverse = PremiseFinder.findPremiseSteps(
         equalityDefinition(targetTerm, premiseTerm),
-        entryContext,
-        premiseContext,
         stepContext
       ).map(steps => Seq((
         wrappingFunction.specify(Seq(targetTerm), 0, stepContext.externalDepth).get,
@@ -824,24 +807,23 @@ object ProofHelper {
         findSimplificationSteps(premiseTerm, targetTerm) orElse findKnownEqualitySteps(premiseTerm, targetTerm, FunctionParameter(0, stepContext.externalDepth))
       case _ =>
         None
-    }) orElse premiseContext.allPremisesSimplestFirst.mapFind(rewritePremise)
+    }) orElse stepContext.allPremisesSimplestFirst.mapFind(rewritePremise)
 
     resultStepsOption.flatMap(wrapAsElidedIfNecessary(_, "Rewritten"))
   }
 
   def rewrite(
     targetStatement: Statement,
-    entryContext: EntryContext,
-    premiseContext: PremiseContext,
     stepContext: StepContext
   ): Option[Step] = {
+    val entryContext = stepContext.entryContext
     for {
       equalityDefinition <- entryContext.equalityDefinitionOption
       equalitySubstitutionInference <- entryContext.findSubstitutionInference(equalityDefinition)
       equalityExpansionInference <- entryContext.findExpansionInference(equalityDefinition)
       equalityTransitivityInference <- entryContext.findTransitivityInference(equalityDefinition)
       equalityReversalInference <- entryContext.findReversalInference(equalityDefinition)
-      result <- rewrite(targetStatement, entryContext, premiseContext, stepContext, equalityDefinition, equalitySubstitutionInference, equalityExpansionInference, equalityTransitivityInference, equalityReversalInference)
+      result <- rewrite(targetStatement, stepContext, equalityDefinition, equalitySubstitutionInference, equalityExpansionInference, equalityTransitivityInference, equalityReversalInference)
     } yield result
   }
 }

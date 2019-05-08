@@ -4,7 +4,6 @@ import net.prover.controllers.models.PathData
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.entries.Theorem
-import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -23,7 +22,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step](bookKey, chapterKey, theoremKey, stepPath)((step, _, _, _) =>
+    replaceStep[Step](bookKey, chapterKey, theoremKey, stepPath)((step, _) =>
       Success(step.provenStatement.map(s => Step.Target(s)).toSeq)
     ).toResponseEntity
   }
@@ -35,7 +34,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step](bookKey, chapterKey, theoremKey, stepPath)((step, _, _, _) =>
+    replaceStep[Step](bookKey, chapterKey, theoremKey, stepPath)((step, _) =>
       // Deleting naming steps is confusing, just clear them
       Success(step.asOptionalInstanceOf[Step.Naming]
         .flatMap(namingStep => namingStep.provenStatement)
@@ -59,7 +58,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
         case Seq(0) if direction == "up" =>
           Some(Failure(BadRequestException("Cannot move step upwards if it's the first step")))
         case init :+ containerIndex :+ 0 if direction == "up" =>
-          theorem.tryModifySteps(init, entryContext, (steps, _, _) => {
+          theorem.tryModifySteps(init, entryContext, (steps, _) => {
             steps.lift(containerIndex).flatMap { outerStep =>
               outerStep.extractSubstep(0).map(_.orBadRequest(s"Could not extract step $stepPath from outer step"))
             }.mapMap { case (outerStep, innerStep) =>
@@ -67,7 +66,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
             }
           })
         case init :+ last =>
-          theorem.tryModifySteps(init, entryContext, (steps, _, _) => {
+          theorem.tryModifySteps(init, entryContext, (steps, _) => {
             steps.lift(last).map { step =>
               direction match {
                 case "up" =>
@@ -100,7 +99,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
         case Seq(_) =>
           Some(Failure(BadRequestException("No containing step to move out of")))
         case init :+ containerIndex :+ last =>
-          theorem.tryModifySteps(init, entryContext, (steps, _, _) => {
+          theorem.tryModifySteps(init, entryContext, (steps, _) => {
             steps.splitAtIndexIfValid(containerIndex).flatMap { case (beforeContainer, container, afterContainer) =>
               container.extractSubstep(last).map(_.orBadRequest(s"Could not extract step $stepPath from outer step"))
                 .mapMap { case (updatedContainer, step) =>
@@ -127,7 +126,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
         case Nil =>
           None
         case init :+ last =>
-          theorem.tryModifySteps(init, entryContext, (steps, _, _) => {
+          theorem.tryModifySteps(init, entryContext, (steps, _) => {
             steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
                 after match {
                   case (following: Step.WithSubsteps) +: remaining =>

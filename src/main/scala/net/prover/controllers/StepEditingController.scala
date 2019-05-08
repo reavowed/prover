@@ -20,9 +20,9 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody inferenceId: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, stepPath) { (step, _, entryContext) =>
+    modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext) =>
       for {
-        inference <- findInference(inferenceId)(entryContext)
+        inference <- findInference(inferenceId)(stepContext.entryContext)
       } yield step.copy(highlightedInference = Some(inference))
     }.toResponseEntity
   }
@@ -34,7 +34,7 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody description: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
+    modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, stepPath) { (step, _) =>
       Success(step.copy(description = Some(description)))
     }.toResponseEntity
   }
@@ -46,7 +46,7 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step.Assertion](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _, _) =>
+    replaceStep[Step.Assertion](bookKey, chapterKey, theoremKey, stepPath) { (step, _) =>
       val targetStatements = step.pendingPremises.values.map(_.statement).toSeq
       Success(targetStatements.map(Step.Target(_)) :+ step)
     }.toResponseEntity
@@ -60,7 +60,7 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody boundVariableName: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.WithVariable](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
+    modifyStep[Step.WithVariable](bookKey, chapterKey, theoremKey, stepPath) { (step, _) =>
       Success(step.replaceVariableName(boundVariableName))
     }.toResponseEntity
   }
@@ -77,7 +77,7 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("boundVariableIndex") boundVariableIndex: Int,
     @RequestBody boundVariableName: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.WithTopLevelStatement](bookKey, chapterKey, theoremKey, stepPath) { (step, _, _) =>
+    modifyStep[Step.WithTopLevelStatement](bookKey, chapterKey, theoremKey, stepPath) { (step, _) =>
       step.updateStatement(s => s.renameBoundVariable(boundVariableName, boundVariableIndex, Option(statementPath).map(_.indexes).getOrElse(Nil)).orNotFound(s"Bound variable $boundVariableIndex at $statementPath"))
     }.toResponseEntity
   }

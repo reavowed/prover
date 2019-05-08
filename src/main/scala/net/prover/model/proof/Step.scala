@@ -12,14 +12,13 @@ import scala.util.Try
 sealed trait Step {
   @JsonSerialize
   def provenStatement: Option[Statement]
-  def getSubstep(index: Int, stepContext: StepContext, premiseContext: PremiseContext): Option[(Step, StepContext, PremiseContext)]
+  def getSubstep(index: Int, stepContext: StepContext): Option[(Step, StepContext)]
   def extractSubstep(index: Int): Option[Option[(Step, Step)]]
   def modifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Seq[Step]]): Option[Step]
-  def tryModifySubsteps(outerContext: StepContext, premiseContext: PremiseContext, f: (Seq[Step], StepContext, PremiseContext) => Option[Try[Seq[Step]]]): Option[Try[Step]]
+  def tryModifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Try[Seq[Step]]]): Option[Try[Step]]
   def tryModifySubstepsWithResult[T](
     stepContext: StepContext,
-    premiseContext: PremiseContext,
-    f: (Seq[Step], StepContext, PremiseContext) => Option[Try[(Seq[Step], T)]]
+    f: (Seq[Step], StepContext) => Option[Try[(Seq[Step], T)]]
   ): Option[Try[(Step, T)]]
   def insertExternalParameters(numberOfParametersToRemove: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step]
@@ -28,7 +27,7 @@ sealed trait Step {
     newDefinition: ExpressionDefinition,
     entryContext: EntryContext
   ): Step
-  def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step
+  def recalculateReferences(stepContext: StepContext): Step
   def isComplete: Boolean
   def referencedInferenceIds: Set[String]
   def referencedDefinitions: Set[ExpressionDefinition]
@@ -40,29 +39,26 @@ sealed trait Step {
 
 object Step {
   sealed trait WithoutSubsteps extends Step {
-    override def getSubstep(index: Int, outerContext: StepContext, premiseContext: PremiseContext): Option[(Step, StepContext, PremiseContext)] = None
+    override def getSubstep(index: Int, outerContext: StepContext): Option[(Step, StepContext)] = None
     override def extractSubstep(index: Int): Option[Option[(Step, Step)]] = None
     override def modifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Seq[Step]]): Option[Step] = None
-    override def tryModifySubsteps(outerContext: StepContext, premiseContext: PremiseContext, f: (Seq[Step], StepContext, PremiseContext) => Option[Try[Seq[Step]]]): Option[Try[Step]] = None
+    override def tryModifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Try[Seq[Step]]]): Option[Try[Step]] = None
     override def tryModifySubstepsWithResult[T](
-    stepContext: StepContext,
-    premiseContext: PremiseContext,
-    f: (Seq[Step], StepContext, PremiseContext) => Option[Try[(Seq[Step], T)]]
-  ): Option[Try[(Step, T)]] = None
+      stepContext: StepContext,
+      f: (Seq[Step], StepContext) => Option[Try[(Seq[Step], T)]]
+    ): Option[Try[(Step, T)]] = None
   }
   sealed trait WithSubsteps extends Step {
     def substeps: Seq[Step]
-    def specifyStepContext(outerContext: StepContext): StepContext
-    def addPremises(premiseContext: PremiseContext, stepContext: StepContext): PremiseContext = premiseContext
+    def specifyStepContext(outerContext: StepContext): StepContext = outerContext
     def replaceSubsteps(newSubsteps: Seq[Step]): Step
     def modifyStepForInsertion(step: Step): Step
     def modifyStepForExtraction(step: Step): Option[Step]
     override def isComplete: Boolean = substeps.forall(_.isComplete)
-    override def getSubstep(index: Int, outerStepContext: StepContext, outerPremiseContext: PremiseContext): Option[(Step, StepContext, PremiseContext)] = {
+    override def getSubstep(index: Int, outerStepContext: StepContext): Option[(Step, StepContext)] = {
       substeps.splitAtIndexIfValid(index).map { case (before, step, _) =>
-        val innerStepContext = specifyStepContext(outerStepContext)
-        val innerPremiseContext = addPremises(outerPremiseContext, outerStepContext).addSteps(before, innerStepContext)
-        (step, innerStepContext, innerPremiseContext)
+        val innerStepContext = specifyStepContext(outerStepContext).addSteps(before)
+        (step, innerStepContext)
       }
     }
     override def extractSubstep(index: Int): Option[Option[(Step, Step)]] = {
@@ -70,35 +66,33 @@ object Step {
         .map(modifyStepForExtraction)
         .map(_.map(replaceSubsteps(substeps.removeAtIndex(index)) -> _))
     }
-    override def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step = {
-      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext), addPremises(premiseContext, stepContext))
+    override def recalculateReferences(stepContext: StepContext): Step = {
+      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext))
       replaceSubsteps(newSubsteps)
     }
     override def modifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Seq[Step]]): Option[Step] = {
       f(substeps, specifyStepContext(outerContext)).map(replaceSubsteps)
     }
-    override def tryModifySubsteps(stepContext: StepContext, premiseContext: PremiseContext, f: (Seq[Step], StepContext, PremiseContext) => Option[Try[Seq[Step]]]): Option[Try[Step]] = {
+    override def tryModifySubsteps(stepContext: StepContext, f: (Seq[Step], StepContext) => Option[Try[Seq[Step]]]): Option[Try[Step]] = {
       val innerStepContext = specifyStepContext(stepContext)
-      f(substeps, innerStepContext, addPremises(premiseContext, innerStepContext)).map(_.map(replaceSubsteps))
+      f(substeps, innerStepContext).map(_.map(replaceSubsteps))
     }
     override def tryModifySubstepsWithResult[T](
-    stepContext: StepContext,
-    premiseContext: PremiseContext,
-    f: (Seq[Step], StepContext, PremiseContext) => Option[Try[(Seq[Step], T)]]
-  ): Option[Try[(Step, T)]] = {
+      stepContext: StepContext,
+      f: (Seq[Step], StepContext) => Option[Try[(Seq[Step], T)]]
+    ): Option[Try[(Step, T)]] = {
       val innerStepContext = specifyStepContext(stepContext)
-      f(substeps, innerStepContext, addPremises(premiseContext, innerStepContext)).map(_.map(_.mapLeft(replaceSubsteps)))
+      f(substeps, innerStepContext).map(_.map(_.mapLeft(replaceSubsteps)))
     }
   }
   sealed trait WithVariable extends Step.WithSubsteps {
     def variableName: String
     def replaceVariableName(newVariableName: String): Step
-    override def specifyStepContext(outerContext: StepContext): StepContext = outerContext.addBoundVariable(variableName)
+    override def specifyStepContext(outerContext: StepContext): StepContext = {
+      super.specifyStepContext(outerContext).addBoundVariable(variableName)
+    }
     override def modifyStepForInsertion(step: Step): Step = step.insertExternalParameters(1)
     override def modifyStepForExtraction(step: Step): Option[Step] = step.removeExternalParameters(1)
-    override def addPremises(premiseContext: PremiseContext, stepContext: StepContext): PremiseContext = {
-      super.addPremises(premiseContext, stepContext).addBoundVariable()
-    }
   }
   sealed trait WithoutVariable extends Step.WithSubsteps {
     override def specifyStepContext(outerContext: StepContext): StepContext = outerContext
@@ -107,8 +101,8 @@ object Step {
   }
   sealed trait WithAssumption extends Step.WithSubsteps {
     def assumption: Statement
-    override def addPremises(premiseContext: PremiseContext, stepContext: StepContext): PremiseContext = {
-      super.addPremises(premiseContext, stepContext).addStatement(assumption, "a", stepContext)
+    override def specifyStepContext(outerContext: StepContext): StepContext = {
+      super.specifyStepContext(outerContext).addStatement(assumption, "a")
     }
   }
 
@@ -159,12 +153,12 @@ object Step {
       Seq("}")
   }
   object Deduction {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Parser[Deduction] = {
+    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Deduction] = {
       val deductionDefinition = entryContext.deductionDefinitionOption
         .getOrElse(throw new Exception("Cannot prove a deduction without an appropriate statement definition"))
       for {
         assumption <- Statement.parser
-        substeps <- listParser(entryContext, stepContext, premiseContext.addStatement(assumption, "a", stepContext)).inBraces
+        substeps <- listParser(entryContext, stepContext.addStatement(assumption, "a")).inBraces
       } yield Deduction(assumption, substeps, deductionDefinition)
     }
   }
@@ -217,9 +211,9 @@ object Step {
         premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
         substitutions.replaceDefinition(oldDefinition, newDefinition))
     }
-    override def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step = {
-      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext), addPremises(premiseContext, stepContext))
-      val newPremises = premises.map(p => premiseContext.createPremise(p.statement))
+    override def recalculateReferences(stepContext: StepContext): Step = {
+      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext))
+      val newPremises = premises.map(p => stepContext.createPremise(p.statement))
       copy(substeps = newSubsteps, premises = newPremises)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet + inference.id
@@ -234,15 +228,14 @@ object Step {
   }
 
   object Naming {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Parser[Naming] = {
+    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Naming] = {
       for {
         variableName <- Parser.singleWord
         assumption <- Statement.parser
-        innerStepContext = stepContext.addBoundVariable(variableName)
-        innerPremiseContext = premiseContext.addBoundVariable().addStatement(assumption, "a", innerStepContext)
+        innerStepContext = stepContext.addBoundVariable(variableName).addStatement(assumption, "a")
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
-        substeps <- listParser(entryContext, innerStepContext, innerPremiseContext).inBraces
+        substeps <- listParser(entryContext, innerStepContext).inBraces
       } yield {
         val internalConclusion = substeps.flatMap(_.provenStatement).lastOption.getOrElse(throw new Exception("No conclusion for naming step"))
         val extractedConclusion = internalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
@@ -254,7 +247,7 @@ object Step {
           case init :+ last =>
             if (last != internalPremise)
               throw new Exception(s"Inference premise $last did not match $internalPremise")
-            init.map(s => premiseContext.findPremise(s).getOrElse(throw new Exception(s"Could not find premise $s")))
+            init.map(s => stepContext.findPremise(s).getOrElse(throw new Exception(s"Could not find premise $s")))
           case Nil =>
             throw new Exception("Naming step inference had no premises")
         }
@@ -305,12 +298,12 @@ object Step {
       Seq("}")
   }
   object ScopedVariable {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Parser[ScopedVariable] = {
+    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[ScopedVariable] = {
       val scopingDefinition = entryContext.scopingDefinitionOption
         .getOrElse(throw new Exception("Scoped variable step could not find scoping statement"))
       for {
         variableName <- Parser.singleWord
-        substeps <- listParser(entryContext, stepContext.addBoundVariable(variableName), premiseContext.addBoundVariable()).inBraces
+        substeps <- listParser(entryContext, stepContext.addBoundVariable(variableName)).inBraces
       } yield ScopedVariable(variableName, substeps, scopingDefinition)
     }
   }
@@ -333,7 +326,7 @@ object Step {
       entryContext: EntryContext
     ): Target = Target(statement.replaceDefinition(oldDefinition, newDefinition))
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
-    override def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step = this
+    override def recalculateReferences(stepContext: StepContext): Step = this
     override def referencedInferenceIds: Set[String] = Set.empty
     override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
     override def referencedLines: Set[PreviousLineReference] = Set.empty
@@ -382,7 +375,7 @@ object Step {
       Seq("}")
   }
   object Elided {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Parser[Elided] = {
+    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Elided] = {
       for {
         highlightedInference <- Inference.parser.tryOrNone
         description <- Parser.allInParens.tryOrNone
@@ -426,8 +419,8 @@ object Step {
         premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
         substitutions.replaceDefinition(oldDefinition, newDefinition))
     }
-    override def recalculateReferences(stepContext: StepContext, premiseContext: PremiseContext): Step = {
-      val newPremises = premises.map(p => premiseContext.createPremise(p.statement))
+    override def recalculateReferences(stepContext: StepContext): Step = {
+      val newPremises = premises.map(p => stepContext.createPremise(p.statement))
       copy(premises = newPremises)
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
@@ -444,14 +437,14 @@ object Step {
     def isIncomplete: Boolean = premises.exists(_.isIncomplete)
   }
   object Assertion {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Parser[Assertion] = {
+    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Assertion] = {
       for {
         statement <- Statement.parser
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
         premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions, stepContext)
       } yield {
-        val premises = premiseStatements.map(s => premiseContext.findPremise(s).getOrElse(throw new Exception(s"Could not find premise $s")))
+        val premises = premiseStatements.map(s => stepContext.findPremise(s).getOrElse(throw new Exception(s"Could not find premise $s")))
         Assertion(statement, inference, premises, substitutions)
       }
     }
@@ -489,7 +482,7 @@ object Step {
       Seq("}")
   }
   object SubProof {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Parser[SubProof] = {
+    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[SubProof] = {
       for {
         name <- Parser.allInParens
         substeps <- listParser.inBraces
@@ -498,16 +491,16 @@ object Step {
   }
 
   implicit class StepSeqOps(steps: Seq[Step]) {
-    def recalculateReferences(outerStepContext: StepContext, premiseContext: PremiseContext): Seq[Step] = {
-      steps.zipWithIndex.mapFold(premiseContext) { case (currentPremiseContext, (step, index)) =>
-        val innerStepContext = outerStepContext.atIndex(index)
-        val newStep = step.recalculateReferences(innerStepContext, currentPremiseContext)
-        currentPremiseContext.addStep(newStep, innerStepContext) -> newStep
+    def recalculateReferences(outerStepContext: StepContext): Seq[Step] = {
+      steps.zipWithIndex.mapFold(outerStepContext) { case (currentStepContext, (step, index)) =>
+        val innerStepContext = currentStepContext.atIndex(index)
+        val newStep = step.recalculateReferences(innerStepContext)
+        currentStepContext.addStep(newStep, innerStepContext.stepReference) -> newStep
       }._2
     }
   }
 
-  def parser(implicit entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Parser[Option[Step]] = {
+  def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Option[Step]] = {
     Parser.selectOptionalWordParser {
       case "assume" => Deduction.parser
       case "let" => Naming.parser
@@ -518,11 +511,11 @@ object Step {
       case "subproof" => SubProof.parser
     }
   }
-  def listParser(implicit entryContext: EntryContext, stepContext: StepContext, premiseContext: PremiseContext): Parser[Seq[Step]] = {
-    Parser.foldWhileDefined[Step, PremiseContext](premiseContext) { (_, index, currentPremiseContext) =>
-      val innerStepContext = stepContext.atIndex(index)
-      parser(entryContext, innerStepContext, currentPremiseContext)
-        .mapMap(step => step -> currentPremiseContext.addStep(step, innerStepContext))
+  def listParser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Seq[Step]] = {
+    Parser.foldWhileDefined[Step, StepContext](stepContext) { (_, index, currentStepContext) =>
+      val innerStepContext = currentStepContext.atIndex(index)
+      parser(entryContext, innerStepContext)
+        .mapMap(step => step -> currentStepContext.addStep(step, innerStepContext.stepReference))
     }.map(_._1)
   }
 }

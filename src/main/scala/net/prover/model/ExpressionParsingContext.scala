@@ -80,9 +80,9 @@ object ExpressionParsingContext {
       entryContext,
       TermVariableValidator.LimitedList(termVariableNames),
       Nil)
-  implicit def atStep(implicit entryContext: EntryContext, stepContext: StepContext): ExpressionParsingContext =
+  implicit def atStep(implicit stepContext: StepContext): ExpressionParsingContext =
     ExpressionParsingContext(
-      entryContext,
+      stepContext.entryContext,
       TermVariableValidator.LimitedList(stepContext.termVariableNames),
       stepContext.boundVariableLists.map(_.zipWithIndex))
 }
