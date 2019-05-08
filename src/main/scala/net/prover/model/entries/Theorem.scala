@@ -1,12 +1,13 @@
 package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.prover.controllers.Identity
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
-
-import scala.util.Try
+import scalaz.Functor
+import scalaz.syntax.functor._
 
 @JsonIgnoreProperties(Array("rearrangementType"))
 case class Theorem(
@@ -41,46 +42,26 @@ case class Theorem(
         }.map { case (step, stepContext, _) => (step, stepContext) }
     }
   }
-  def modifySteps(indexes: Seq[Int], entryContext: EntryContext, f: (Seq[Step], StepContext) => Option[Seq[Step]]): Option[Theorem] = {
-    def helper(indexes: Seq[Int], steps: Seq[Step], outerContext: StepContext): Option[Seq[Step]] = {
+  def modifySteps[F[_] : Functor](indexes: Seq[Int], entryContext: EntryContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Theorem]] = {
+    def helper(indexes: Seq[Int], steps: Seq[Step], outerContext: StepContext): Option[F[Seq[Step]]] = {
       indexes match {
         case Nil =>
           f(steps, outerContext)
         case head +: tail =>
           steps.splitAtIndexIfValid(head).flatMap { case (before, step, after) =>
               step.modifySubsteps(outerContext.addSteps(before).atIndex(head), (substeps, innerContext) => helper(tail, substeps, innerContext))
-                .map { updatedStep =>
-                  (before :+ updatedStep) ++ after
-                }
+                .map(_.map(updatedStep => (before :+ updatedStep) ++ after))
           }
       }
     }
-    helper(indexes, proof, initialStepContext(entryContext)).map(replaceProof)
+    helper(indexes, proof, initialStepContext(entryContext)).map(_.map(replaceProof))
   }
-  def tryModifySteps(indexes: Seq[Int], entryContext: EntryContext, f: (Seq[Step], StepContext) => Option[Try[Seq[Step]]]): Option[Try[Theorem]] = {
-    def helper(indexes: Seq[Int], steps: Seq[Step], stepContext: StepContext): Option[Try[Seq[Step]]] = {
-      indexes match {
-        case Nil =>
-          f(steps, stepContext)
-        case head +: tail =>
-          steps.splitAtIndexIfValid(head).flatMap { case (before, step, after) =>
-            step.tryModifySubsteps(
-              stepContext.addSteps(before).atIndex(head),
-              (substeps, innerStepContext) => helper(tail, substeps, innerStepContext)
-            ).mapMap { updatedStep =>
-              (before :+ updatedStep) ++ after
-            }
-          }
-      }
-    }
-    helper(indexes, proof, initialStepContext(entryContext)).mapMap(replaceProof)
-  }
-  def tryModifyStep(indexes: Seq[Int], entryContext: EntryContext, f: (Step, StepContext) => Try[Step]): Option[Try[Theorem]] = {
+  def modifyStep[F[_] : Functor](indexes: Seq[Int], entryContext: EntryContext, f: (Step, StepContext) => F[Step]): Option[F[Theorem]] = {
     indexes match {
       case Nil =>
         None
       case init :+ last =>
-        tryModifySteps(init, entryContext, (steps, context) => steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+        modifySteps(init, entryContext, (steps, context) => steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
           f(step, context.atIndex(last)).map { updatedStep =>
             (before :+ updatedStep) ++ after
           }
@@ -92,7 +73,7 @@ case class Theorem(
       case Nil =>
         None
       case init :+ last =>
-        modifySteps(init, entryContext, (steps, _) => {
+        modifySteps[Identity](init, entryContext, (steps, _) => {
           val (before, after) = steps.splitAt(last)
           Some((before :+ newStep) ++ after)
         })

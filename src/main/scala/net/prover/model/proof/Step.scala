@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
 import net.prover.model.entries.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.{DefinedStatement, Statement}
+import scalaz.Functor
+import scalaz.syntax.functor._
 
 import scala.util.Try
 
@@ -14,12 +16,7 @@ sealed trait Step {
   def provenStatement: Option[Statement]
   def getSubstep(index: Int, stepContext: StepContext): Option[(Step, StepContext)]
   def extractSubstep(index: Int): Option[Option[(Step, Step)]]
-  def modifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Seq[Step]]): Option[Step]
-  def tryModifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Try[Seq[Step]]]): Option[Try[Step]]
-  def tryModifySubstepsWithResult[T](
-    stepContext: StepContext,
-    f: (Seq[Step], StepContext) => Option[Try[(Seq[Step], T)]]
-  ): Option[Try[(Step, T)]]
+  def modifySubsteps[F[_] : Functor](outerContext: StepContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]]
   def insertExternalParameters(numberOfParametersToRemove: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step]
   def replaceDefinition(
@@ -41,12 +38,7 @@ object Step {
   sealed trait WithoutSubsteps extends Step {
     override def getSubstep(index: Int, outerContext: StepContext): Option[(Step, StepContext)] = None
     override def extractSubstep(index: Int): Option[Option[(Step, Step)]] = None
-    override def modifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Seq[Step]]): Option[Step] = None
-    override def tryModifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Try[Seq[Step]]]): Option[Try[Step]] = None
-    override def tryModifySubstepsWithResult[T](
-      stepContext: StepContext,
-      f: (Seq[Step], StepContext) => Option[Try[(Seq[Step], T)]]
-    ): Option[Try[(Step, T)]] = None
+    override def modifySubsteps[F[_] : Functor](outerContext: StepContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]] = None
   }
   sealed trait WithSubsteps extends Step {
     def substeps: Seq[Step]
@@ -70,19 +62,8 @@ object Step {
       val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext))
       replaceSubsteps(newSubsteps)
     }
-    override def modifySubsteps(outerContext: StepContext, f: (Seq[Step], StepContext) => Option[Seq[Step]]): Option[Step] = {
-      f(substeps, specifyStepContext(outerContext)).map(replaceSubsteps)
-    }
-    override def tryModifySubsteps(stepContext: StepContext, f: (Seq[Step], StepContext) => Option[Try[Seq[Step]]]): Option[Try[Step]] = {
-      val innerStepContext = specifyStepContext(stepContext)
-      f(substeps, innerStepContext).map(_.map(replaceSubsteps))
-    }
-    override def tryModifySubstepsWithResult[T](
-      stepContext: StepContext,
-      f: (Seq[Step], StepContext) => Option[Try[(Seq[Step], T)]]
-    ): Option[Try[(Step, T)]] = {
-      val innerStepContext = specifyStepContext(stepContext)
-      f(substeps, innerStepContext).map(_.map(_.mapLeft(replaceSubsteps)))
+    override def modifySubsteps[F[_] : Functor](outerContext: StepContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]] = {
+      f(substeps, specifyStepContext(outerContext)).map(_.map(replaceSubsteps))
     }
   }
   sealed trait WithVariable extends Step.WithSubsteps {

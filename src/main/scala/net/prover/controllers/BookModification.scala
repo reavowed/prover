@@ -122,7 +122,7 @@ trait BookModification {
 
   protected def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepPath: PathData)(f: (TStep, StepContext) => Try[Step]): Try[TheoremProps] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
-      theorem.tryModifyStep(stepPath.indexes, entryContext, (step, stepContext) => {
+      theorem.modifyStep[Try](stepPath.indexes, entryContext, (step, stepContext) => {
         for {
           typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
           newStep <- f(typedStep, stepContext)
@@ -135,7 +135,7 @@ trait BookModification {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
       (stepPath.indexes match {
         case init :+ last =>
-          theorem.tryModifySteps(init, entryContext, (steps, stepContext) => {
+          theorem.modifySteps[Try](init, entryContext, (steps, stepContext) => {
             steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
               for {
                 typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
