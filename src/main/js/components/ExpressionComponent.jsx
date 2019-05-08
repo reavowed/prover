@@ -77,7 +77,10 @@ export class ExpressionComponent extends React.Component {
       const renderedOtherComponents = expression.otherComponents.map(c => <ExpressionComponent expression={c} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>);
       const formattedComponents = formatHtmlWithoutWrapping(expression.definition.componentFormatString, s => replacePlaceholders(s, renderedOtherComponents));
       const formattedProperties = expression.properties.join(", ");
-      return [formattedTerm, <> is a {formattedProperties} {expression.definition.name} </>, ...formattedComponents];
+      const articleWord = expression.properties.length ? expression.properties[0] : expression.definition.name;
+      const article = _.includes("aeiou", articleWord[0]) ? "an" : "a";
+
+      return [formattedTerm, <> is {article} {formattedProperties} {expression.definition.name} </>, ...formattedComponents];
     } else if (expression instanceof PropertyExpression) {
       const formattedTerm = <ExpressionComponent expression={expression.term} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
       return [formattedTerm, <> is </>, expression.name];
