@@ -637,7 +637,7 @@ object ProofHelper {
         findSimplificationsWithinExpansion(premiseTerm, FunctionParameter(0, stepContext.externalDepth), reverse)
     }
 
-    def findKnownEquality(premiseTerm: Term, targetTerm: Term, wrappingFunction: Term): Option[Seq[(Term, Option[Step])]] = {
+    def findKnownEqualityPath(premiseTerm: Term, targetTerm: Term, wrappingFunction: Term): Option[Seq[(Term, Option[Step])]] = {
       def getWrappingStep(l: Term, r: Term): Seq[Step] = {
         if (wrappingFunction.isInstanceOf[FunctionParameter])
           Nil
@@ -672,7 +672,7 @@ object ProofHelper {
                   stepContext.externalDepth
                 ).get
                 for {
-                  theseSteps <- findKnownEquality(premiseComponent, targetComponent, newWrapper)
+                  theseSteps <- findKnownEqualityPath(premiseComponent, targetComponent, newWrapper)
                   result <- helper(previousComponents :+ (premiseComponent, targetComponent), moreComponents, stepsSoFar ++ theseSteps)
                 } yield result
               case Nil =>
@@ -691,22 +691,36 @@ object ProofHelper {
 
       findExactly orElse findDirectly orElse findReverse orElse findByComponents
     }
+    def findKnownEqualitySteps(premiseTerm: Term, targetTerm: Term, wrappingFunction: Term): Option[Seq[Step]] = {
+      for {
+        simplificationPath <- findKnownEqualityPath(premiseTerm, targetTerm, wrappingFunction)
+        transitivitySteps <- buildTransitivity(premiseTerm, simplificationPath)
+      } yield transitivitySteps
+    }
+    def findByKnownEquality(premiseTerm: Term, targetTerm: Term, wrappingPredicate: Statement): Option[Step] = {
+      for {
+        simplificationSteps <- findKnownEqualitySteps(premiseTerm, targetTerm, FunctionParameter(0, stepContext.externalDepth))
+        result <- wrap(simplificationSteps, premiseTerm, targetTerm, wrappingPredicate, "Rewritten")
+      } yield result
+    }
 
     def findSimplificationPath(premiseTerm: Term, targetTerm: Term, reverse: Boolean): Option[Seq[(Term, Option[Step])]] = {
-      if (premiseTerm == targetTerm)
-        Some(Nil)
-      else if (!reverse && premiseTerm.complexity > targetTerm.complexity)
-        (for {
-          (simplifiedPremise, simplificationStep, _) <- findSimplifications(premiseTerm, reverse = false)
-          remainingSteps <- findSimplificationPath(simplifiedPremise, targetTerm, reverse = false)
-        } yield (simplifiedPremise, Some(simplificationStep)) +: remainingSteps).headOption
-      else if (reverse && premiseTerm.complexity < targetTerm.complexity)
-        (for {
-          (simplifiedTarget, simplificationStep, _) <- findSimplifications(targetTerm, reverse = true)
-          remainingSteps <- findSimplificationPath(premiseTerm, simplifiedTarget, reverse = true)
-        } yield remainingSteps :+ (targetTerm, Some(simplificationStep))).headOption
-      else
-        findKnownEquality(premiseTerm, targetTerm, FunctionParameter(0, stepContext.externalDepth))
+      def findDirectly = if (premiseTerm == targetTerm) Some(Nil) else None
+      def findBySimplifying = {
+        if (!reverse && premiseTerm.complexity > targetTerm.complexity)
+          (for {
+            (simplifiedPremise, simplificationStep, _) <- findSimplifications(premiseTerm, reverse = false)
+            remainingSteps <- findSimplificationPath(simplifiedPremise, targetTerm, reverse = false)
+          } yield (simplifiedPremise, Some(simplificationStep)) +: remainingSteps).headOption
+        else if (reverse && premiseTerm.complexity < targetTerm.complexity)
+          (for {
+            (simplifiedTarget, simplificationStep, _) <- findSimplifications(targetTerm, reverse = true)
+            remainingSteps <- findSimplificationPath(premiseTerm, simplifiedTarget, reverse = true)
+          } yield remainingSteps :+ (targetTerm, Some(simplificationStep))).headOption
+        else
+          None
+      }
+      findDirectly orElse findBySimplifying
     }
 
     def buildTransitivity(left: Term, path: Seq[(Term, Option[Step])]): Option[Seq[Step]] = {
@@ -732,7 +746,7 @@ object ProofHelper {
       } yield transitivitySteps
     }
 
-    def wrap(steps: Seq[Step], premiseTerm: Term, targetTerm: Term, wrappingPredicate: Statement): Option[Step] = {
+    def wrap(steps: Seq[Step], premiseTerm: Term, targetTerm: Term, wrappingPredicate: Statement, description: String): Option[Step] = {
       val wrappingStep = Step.Assertion(
         wrappingPredicate.specify(Seq(targetTerm), 0, stepContext.externalDepth).get,
         equalitySubstitutionInference.summary,
@@ -742,13 +756,13 @@ object ProofHelper {
         Substitutions(
           terms = equalitySubstitutionInference.requiredSubstitutions.terms.zip(Seq(premiseTerm, targetTerm)).toMap,
           predicates = equalitySubstitutionInference.requiredSubstitutions.predicates.zip(Seq(wrappingPredicate)).toMap))
-      wrapAsElidedIfNecessary(steps :+ wrappingStep, if (premiseTerm.complexity > targetTerm.complexity) "Simplified" else "Expanded")
+      wrapAsElidedIfNecessary(steps :+ wrappingStep, description)
     }
 
     def findBySimplifying(premiseTerm: Term, targetTerm: Term, wrappingPredicate: Statement): Option[Step] = {
       for {
         simplificationSteps <- findSimplificationSteps(premiseTerm, targetTerm)
-        result <- wrap(simplificationSteps, premiseTerm, targetTerm, wrappingPredicate)
+        result <- wrap(simplificationSteps, premiseTerm, targetTerm, wrappingPredicate, if (premiseTerm.complexity > targetTerm.complexity) "Simplified" else "Expanded")
       } yield result
     }
 
@@ -775,7 +789,7 @@ object ProofHelper {
         Some(Nil)
       else (premiseStatement, currentTarget) match {
         case (DefinedStatement(premiseComponents, premiseDefinition), DefinedStatement(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
-          rewriteComponents(premiseComponents, targetComponents, components => premiseDefinition(components:_*))
+          rewriteComponents(premiseComponents, targetComponents, components => wrappingFunction(premiseDefinition(components:_*)))
         case _ =>
           None
       }
@@ -789,7 +803,8 @@ object ProofHelper {
           case (DefinedTerm(premiseComponents, premiseDefinition), DefinedTerm(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
             rewriteComponents(premiseComponents, targetComponents, components => wrappingPredicate.specify(Seq(premiseDefinition(components:_*)), 0, stepContext.externalDepth).get)
           case _ =>
-            findBySimplifying(premiseTerm, targetTerm, wrappingPredicate).map(Seq(_))
+            (findBySimplifying(premiseTerm, targetTerm, wrappingPredicate) orElse findByKnownEquality(premiseTerm, targetTerm, wrappingPredicate))
+              .map(Seq(_))
         }
     }
 
@@ -799,7 +814,7 @@ object ProofHelper {
 
     val resultStepsOption = (targetStatement match {
       case equalityDefinition(premiseTerm: Term, targetTerm: Term) =>
-        findSimplificationSteps(premiseTerm, targetTerm)
+        findSimplificationSteps(premiseTerm, targetTerm) orElse findKnownEqualitySteps(premiseTerm, targetTerm, FunctionParameter(0, stepContext.externalDepth))
       case _ =>
         None
     }) orElse premiseContext.allPremisesSimplestFirst.mapFind(rewritePremise)

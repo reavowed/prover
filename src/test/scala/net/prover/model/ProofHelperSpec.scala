@@ -266,5 +266,13 @@ class ProofHelperSpec extends ProverSpec {
       val target = Equals(add(a, c), add(b, d))
       testRewrite(premises, target)
     }
+
+    "rewrite inline with simplification and known equality" in {
+      def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
+
+      val premises = Seq(Equals(a, b))
+      val target = Equals(add(a, First(Pair(c, d))), add(b, c))
+      testRewrite(premises, target)
+    }
   }
 }
