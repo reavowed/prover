@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
 @RestController
-@RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/{stepPath}"))
+@RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
 class StepCreationController @Autowired() (val bookService: BookService) extends BookModification {
 
   @PutMapping
@@ -17,10 +17,11 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepReference: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepReference) { (step, stepContext) =>
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (step, stepContext) =>
       for {
         inference <- findInference(definition.inferenceId)(stepContext.entryContext)
         substitutions <- definition.substitutions.parse(inference)(ExpressionParsingContext.atStep(stepContext))
@@ -36,10 +37,11 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepReference: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    replaceStep[Step](bookKey, chapterKey, theoremKey, stepReference) { (step, stepContext) =>
+    replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (step, stepContext) =>
       for {
         inference <- findInference(definition.inferenceId)(stepContext.entryContext)
         substitutions <- definition.substitutions.parse(inference)(ExpressionParsingContext.atStep(stepContext))
@@ -54,10 +56,11 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: NamingDefinition
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext) =>
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepContext) =>
       val entryContext = stepContext.entryContext
       for {
         inference <- findInference(definition.inferenceId)(entryContext)
@@ -86,9 +89,10 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext) =>
+    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepContext) =>
       for {
         (substatement, variableName, scopingStatementDefinition) <- stepContext.entryContext.matchScopingStatement(step.statement).orBadRequest("Target statement is not a scoped statement")
       } yield {
@@ -105,9 +109,10 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext) =>
+    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepContext) =>
       for {
         (antecedent, consequent, deductionStatementDefinition) <- stepContext.entryContext.matchDeductionStatement(step.statement).orBadRequest("Target statement is not a deduction statement")
       } yield {
@@ -124,9 +129,10 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext) =>
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepContext) =>
       for {
         newStep <- ProofHelper.extract(step.statement, stepContext).orBadRequest(s"Could not extract statement ${step.statement}")
       } yield Seq(newStep)
@@ -138,9 +144,10 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext) =>
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepContext) =>
       for {
         newStep <- ProofHelper.rearrange(step.statement, stepContext).orBadRequest(s"Could not rearrange statement ${step.statement}")
       } yield Seq(newStep)
@@ -152,9 +159,10 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext) =>
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepContext) =>
       ProofHelper.rewrite(step.statement, stepContext)
         .orBadRequest(s"Could not simplify statement ${step.statement}")
         .map(Seq(_))
@@ -166,10 +174,11 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedStatement: String
   ): ResponseEntity[_] = {
-    replaceStep[Step](bookKey, chapterKey, theoremKey, stepPath) { (step, stepContext) =>
+    replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepContext) =>
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.atStep(stepContext)
       for {
         targetStatement <- Statement.parser.parseFromString(serializedStatement, "target statement").recoverWithBadRequest

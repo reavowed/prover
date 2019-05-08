@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation._
 import scala.util.{Success, Try}
 
 @RestController
-@RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/{stepPath}"))
+@RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
 class StepSuggestionController @Autowired() (val bookService: BookService) extends BookModification {
 
   case class InferenceSuggestion(
@@ -24,6 +24,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String,
     @RequestParam("withConclusion") withConclusion: Boolean
@@ -35,7 +36,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       chapter <- findChapter(book, chapterKey)
       theorem <- findEntry[Theorem](chapter, theoremKey)
       entryContext = EntryContext.forEntry(books, book, chapter, theorem)
-      (step, stepContext) <- findStep[Step](theorem, stepPath, entryContext)
+      (step, stepContext) <- findStep[Step](theorem, proofIndex, stepPath, entryContext)
       getSubstitutions <- if (withConclusion)
         step.asOptionalInstanceOf[Step.Target].orBadRequest("Step is not target").map { targetStep =>
           (inference: Inference) =>
@@ -63,6 +64,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("inferenceId") inferenceId: String,
     @RequestParam("withConclusion") withConclusion: Boolean
@@ -73,7 +75,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       chapter <- findChapter(book, chapterKey)
       theorem <- findEntry[Theorem](chapter, theoremKey)
       entryContext = EntryContext.forEntry(books, book, chapter, theorem)
-      (step, stepContext) <- findStep[Step](theorem, stepPath, entryContext)
+      (step, stepContext) <- findStep[Step](theorem, proofIndex, stepPath, entryContext)
       inference <- findInference(inferenceId)(entryContext)
       targetOption <- if (withConclusion)
         step.asOptionalInstanceOf[Step.Target].orBadRequest("Step is not target").map(_.statement).map(Some(_))
@@ -89,6 +91,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
@@ -98,7 +101,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       chapter <- findChapter(book, chapterKey)
       theorem <- findEntry[Theorem](chapter, theoremKey)
       entryContext = EntryContext.forEntry(books, book, chapter, theorem)
-      (step, stepContext) <- findStep[Step.Target](theorem, stepPath, entryContext)
+      (step, stepContext) <- findStep[Step.Target](theorem, proofIndex, stepPath, entryContext)
     } yield {
       ProofHelper.findNamingInferences(entryContext)
         .filter(_._1.name.toLowerCase.contains(searchText.toLowerCase))
@@ -119,6 +122,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("inferenceId") inferenceId: String
   ): ResponseEntity[_] = {
@@ -128,7 +132,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       chapter <- findChapter(book, chapterKey)
       theorem <- findEntry[Theorem](chapter, theoremKey)
       entryContext = EntryContext.forEntry(books, book, chapter, theorem)
-      (step, stepContext) <- findStep[Step.Target](theorem, stepPath, entryContext)
+      (step, stepContext) <- findStep[Step.Target](theorem, proofIndex, stepPath, entryContext)
       inference <- findInference(inferenceId)(entryContext)
       (namingPremises, _) <- ProofHelper.getNamingPremisesAndAssumption(inference, entryContext).orBadRequest(s"Inference $inferenceId was not naming inference")
     } yield {

@@ -155,7 +155,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           newTheoremDefininition.name,
           premises,
           conclusion,
-          Seq(Step.Target(conclusion)),
+          Seq(Theorem.Proof(Seq(Step.Target(conclusion)))),
           RearrangementType.NotRearrangement)
         existingTheoremOption = entryContext.inferences.find(_.id == newTheorem.id)
         _ <- existingTheoremOption match {

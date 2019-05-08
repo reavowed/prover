@@ -4,8 +4,24 @@ import net.prover.model.Inference.RearrangementType
 import net.prover.model.entries.{Axiom, Theorem}
 import net.prover.model.expressions.{FunctionParameter, Statement, Term}
 import net.prover.model.proof._
+import org.specs2.matcher.MatchResult
 
 class ProofHelperSpec extends ProverSpec {
+
+  def validateStep(step: Option[Step], targetStatement: Statement, premises: Seq[Statement], entryContext: EntryContext): MatchResult[Any] = {
+    step must beSome
+    val theorem = Theorem(
+      "Test Theorem",
+      premises,
+      targetStatement,
+      Seq(Theorem.Proof(step.toSeq)),
+      RearrangementType.NotRearrangement
+    ).recalculateReferences(entryContext)
+    val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
+    val parsedTheorem = Theorem.parser(entryContext).parseFromString(serializedTheorem, "Theorem")
+    parsedTheorem mustEqual theorem
+  }
+
   "extracting a statement" should {
     val specification = Axiom("Specification", Seq(ForAll("x")(φ(FunctionParameter(0, 0)))), φ(a))
     val modusPonens = Axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
@@ -23,18 +39,7 @@ class ProofHelperSpec extends ProverSpec {
 
     def testExtraction(targetStatement: Statement, premises: Seq[Statement]) = {
       val step = extract(targetStatement, premises)
-      step must beSome
-      val theorem = Theorem(
-        "Rearrangement",
-        premises,
-        targetStatement,
-        step.toSeq,
-        RearrangementType.NotRearrangement
-      ).recalculateReferences(entryContextWithAxioms)
-      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
-      println(serializedTheorem)
-      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
-      parsedTheorem mustEqual theorem
+      validateStep(step, targetStatement, premises, entryContextWithAxioms)
     }
 
     "find a statement via specification" in {
@@ -122,18 +127,7 @@ class ProofHelperSpec extends ProverSpec {
 
     def testRearranging(targetStatement: Statement, premises: Seq[Statement]) = {
       val step = rearrange(targetStatement, premises)
-      step must beSome
-      val theorem = Theorem(
-        "Rearrangement",
-        premises,
-        targetStatement,
-        step.toSeq,
-        RearrangementType.NotRearrangement
-      ).recalculateReferences(entryContextWithAxioms)
-      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
-      println(serializedTheorem)
-      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
-      parsedTheorem mustEqual theorem
+      validateStep(step, targetStatement, premises, entryContextWithAxioms)
     }
 
     "rearrange with associativity and commutativity" in {
@@ -181,19 +175,7 @@ class ProofHelperSpec extends ProverSpec {
       val stepOption = ProofHelper.rewrite(
         target,
         StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms))
-      stepOption must beSome
-
-      val theorem = Theorem(
-        "Rewrite",
-        premises,
-        target,
-        stepOption.toSeq,
-        RearrangementType.NotRearrangement
-      ).recalculateReferences(entryContextWithAxioms)
-      val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
-      println(theorem.serializedLines.mapWithIndex((s, i) => s"${"%02d".format(i + 1)} $s").mkString("\n"))
-      val parsedTheorem = Theorem.parser(entryContextWithAxioms).parseFromString(serializedTheorem, "Theorem")
-      parsedTheorem mustEqual theorem
+      validateStep(stepOption, target, premises, entryContextWithAxioms)
     }
 
     "rewrite with simplification and expansion" in {

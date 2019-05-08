@@ -17,7 +17,7 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
       (chapter, chapterKey) <- getChaptersWithKeys(book)
       (theorem, theoremKey) <- getEntriesWithKeys(chapter)
         .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-    } yield (getEntryUrl(bookKey, chapterKey, theoremKey), theorem.proof.map(_.length).sum)
+    } yield (getEntryUrl(bookKey, chapterKey, theoremKey), theorem.proofs.map(_.steps.map(_.length).sum).min)
     urlsWithLengths
         .sortBy { case (_, length) => -1 * length }
         .take(10)

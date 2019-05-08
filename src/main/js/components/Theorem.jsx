@@ -6,6 +6,7 @@ import {Step} from "../models/Step";
 import {HighlightableExpression} from "./ExpressionComponent";
 import {Inference} from "./Inference";
 import {Steps} from "./steps/Steps";
+import Button from "react-bootstrap/Button";
 
 class Premise extends React.Component {
   render() {
@@ -13,13 +14,11 @@ class Premise extends React.Component {
   }
 }
 
-export class Theorem extends React.Component {
+class Proof extends React.Component {
   constructor(props) {
     super(props);
     this.steps = {};
     this.state = {
-      theorem: this.parseTheorem(props.theorem),
-      highlightedPremises: [],
       highlightedConclusion: null
     }
   }
@@ -34,24 +33,57 @@ export class Theorem extends React.Component {
     this.steps[path.join(".")][action]();
   };
 
-  setHighlightedPremises = (premises) => {
-    this.setState({highlightedPremises: premises});
-  };
-
   setHighlightedConclusion = (conclusion) => {
     this.setState({highlightedConclusion: conclusion});
   };
 
   fetchJsonForStep = (stepPath, childPath, options) => {
-    const combinedPath = path.join(this.props.url, stepPath.join("."), childPath) + (childPath === "" ? "/" : "");
-    return window.fetch(combinedPath, options)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw response.statusText;
-        }
-      });
+    const combinedPath = path.join("proofs", this.props.index.toString(), stepPath.join("."), childPath) + (childPath === "" ? "/" : "");
+    return this.props.fetchJson(combinedPath, options);
+  };
+
+  delete = () => {
+    this.props.fetchJson(path.join("proofs", this.props.index.toString()), {method: "DELETE"})
+      .then(this.props.updateTheorem);
+  };
+
+  render() {
+    const {title, steps, highlightedPremises, setHighlightedPremises, updateTheorem, deleteable} = this.props;
+    const theoremContext = {
+      highlightedPremises: highlightedPremises,
+      highlightedConclusion: this.state.highlightedConclusion,
+      setHighlightedPremises: setHighlightedPremises,
+      setHighlightedConclusion: this.setHighlightedConclusion,
+      fetchJsonForStep: this.fetchJsonForStep,
+      updateTheorem: updateTheorem,
+      registerStep: this.registerStep,
+      unregisterStep: this.unregisterStep,
+      callOnStep: this.callOnStep
+    };
+    return <>
+      <hr/>
+      {deleteable && <Button onClick={this.delete} variant="danger" size="sm" className="float-right"><i className="fas fa-times"/></Button>}
+      <h4>{title}</h4>
+      <Steps steps={steps}
+             path={[]}
+             boundVariableLists={[]}
+             theoremContext={theoremContext}/>
+    </>;
+  }
+}
+
+export class Theorem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.steps = {};
+    this.state = {
+      theorem: this.parseTheorem(props.theorem),
+      highlightedPremises: []
+    }
+  }
+
+  setHighlightedPremises = (premises) => {
+    this.setState({highlightedPremises: premises});
   };
 
   parseTheorem = (theoremJson) => {
@@ -61,7 +93,7 @@ export class Theorem extends React.Component {
       key: theoremJson.key,
       premises: theoremJson.premises.map(Expression.parseFromJson),
       conclusion: Expression.parseFromJson(theoremJson.conclusion),
-      proof: Step.parseFromJson(theoremJson.proof)
+      proofs: theoremJson.proofs.map(proof => Step.parseFromJson(proof.steps))
     };
   };
 
@@ -71,30 +103,47 @@ export class Theorem extends React.Component {
     this.setState({theorem: theorem});
   };
 
+  fetchJson = (subpath, options) => {
+    return window.fetch(path.join(this.props.url, subpath), options)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw response.statusText;
+        }
+      });
+  };
+
+  addProof = () => {
+    this.fetchJson("proofs", {method: "POST"}).then(this.updateTheorem);
+  };
+
   render() {
-    const {theorem} = this.state;
-    const theoremContext = {
-      highlightedPremises: this.state.highlightedPremises,
-      highlightedConclusion: this.state.highlightedConclusion,
-      setHighlightedPremises: this.setHighlightedPremises,
-      setHighlightedConclusion: this.setHighlightedConclusion,
-      fetchJsonForStep: this.fetchJsonForStep,
-      updateTheorem: this.updateTheorem,
-      registerStep: this.registerStep,
-      unregisterStep: this.unregisterStep,
-      callOnStep: this.callOnStep
-    };
+    const {url} = this.props;
+    const {theorem, highlightedPremises} = this.state;
+
     const createPremiseElement = (premise, index) => {
-      return <Premise premise={premise} index={index} theoremContext={theoremContext}/>
+      return <Premise premise={premise} index={index} theoremContext={{highlightedPremises: highlightedPremises}}/>
     };
 
+    function getProofTitle(index) {
+      return theorem.proofs.length > 1 ? `Proof ${index + 1}` : "Proof";
+    }
+
     return <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" {...this.props}>
-      <hr/>
-      <h4>Proof</h4>
-      <Steps steps={theorem.proof}
-             path={[]}
-             boundVariableLists={[]}
-             theoremContext={theoremContext}/>
+      {theorem.proofs.map((proof, index) =>
+          <Proof key={index}
+                 title={getProofTitle(index)}
+                 steps={proof}
+                 index={index}
+                 theoremUrl={url}
+                 highlightedPremises={highlightedPremises}
+                 setHighlightedPremises={this.setHighlightedPremises}
+                 fetchJson={this.fetchJson}
+                 updateTheorem={this.updateTheorem}
+                 deleteable={theorem.proofs.length > 1}/>)
+      }
+      <Button size="sm" className="mt-3" onClick={this.addProof}>Add proof</Button>
     </Inference>;
   }
 }

@@ -66,9 +66,9 @@ trait BookModification {
       .flatMap(_.asOptionalInstanceOf[T].orBadRequest(s"Entry is not a ${classTag[T].runtimeClass.getSimpleName}"))
   }
 
-  protected def findStep[T <: Step : ClassTag](theorem: Theorem, stepPath: PathData, entryContext: EntryContext): Try[(T, StepContext)] = {
+  protected def findStep[T <: Step : ClassTag](theorem: Theorem, proofIndex: Int, stepPath: PathData, entryContext: EntryContext): Try[(T, StepContext)] = {
     for {
-      (rawStep, stepContext) <- theorem.findStep(stepPath.indexes, entryContext).orNotFound(s"Step $stepPath")
+      (rawStep, stepContext) <- theorem.findStep(proofIndex, stepPath.indexes, entryContext).orNotFound(s"Step $stepPath")
       step <- rawStep.asOptionalInstanceOf[T].orBadRequest(s"Step is not ${classTag[T].runtimeClass.getName}")
     } yield {
       (step, stepContext)
@@ -120,9 +120,9 @@ trait BookModification {
     }).map(_._2)
   }
 
-  protected def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepPath: PathData)(f: (TStep, StepContext) => Try[Step]): Try[TheoremProps] = {
+  protected def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepContext) => Try[Step]): Try[TheoremProps] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
-      theorem.modifyStep[Try](stepPath.indexes, entryContext, (step, stepContext) => {
+      theorem.modifyStep[Try](proofIndex, stepPath.indexes, entryContext, (step, stepContext) => {
         for {
           typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
           newStep <- f(typedStep, stepContext)
@@ -131,11 +131,11 @@ trait BookModification {
     }
   }
 
-  protected def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, stepPath: PathData)(f: (TStep, StepContext) => Try[Seq[Step]]): Try[TheoremProps] = {
+  protected def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepContext) => Try[Seq[Step]]): Try[TheoremProps] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
       (stepPath.indexes match {
         case init :+ last =>
-          theorem.modifySteps[Try](init, entryContext, (steps, stepContext) => {
+          theorem.modifySteps[Try](proofIndex, init, entryContext, (steps, stepContext) => {
             steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
               for {
                 typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
