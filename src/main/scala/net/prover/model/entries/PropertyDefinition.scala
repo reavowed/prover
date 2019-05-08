@@ -60,7 +60,7 @@ object PropertyDefinition extends ChapterEntryParser {
       parentTypeName <- Parser.required("on", Parser.singleWord)
       parentType = context.typeDefinitions.find(_.name == parentTypeName).getOrElse(throw new Exception(s"Unrecognised type '$parentTypeName'"))
       defaultSymbol <- Parser.singleWord
-      parentComponentTypes <- parentType.otherComponentTypes.map(t => Parser.singleWord.map(t.withName)).traverseParser
+      parentComponentTypes <- parentType.childComponentTypesParser
       explicitName <- Parser.optional("name", Parser.allInParens)
       definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultSymbol +: parentComponentTypes.ofType[TermComponent].map(_.name))).inParens)
     } yield PropertyDefinition(symbol, parentType, defaultSymbol, parentComponentTypes, explicitName, definingStatement)

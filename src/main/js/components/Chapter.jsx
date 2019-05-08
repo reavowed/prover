@@ -333,18 +333,56 @@ export class Chapter extends React.Component {
     }).then(this.stopAddingTerm);
   };
 
+  createUpdater = (statePropertyName, innerPropertyName, transformer) => (newPropertyValue) => {
+    const currentStateValue = this.state[statePropertyName];
+    currentStateValue[innerPropertyName] = transformer ? transformer(newPropertyValue) : newPropertyValue;
+    this.setState({statePropertyName: currentStateValue});
+  };
+  startAddingProperty = () => {
+    this.setState({
+      propertyBeingAdded: {
+        symbol: "",
+        parentType: "",
+        defaultTermName: "",
+        parentComponentTypes: "",
+        name: "",
+        definition: ""
+      }
+    })
+  };
+  stopAddingProperty = () => {
+    this.setState({propertyBeingAdded: null})
+  };
+  saveProperty = () => {
+    const {propertyBeingAdded} = this.state;
+    this.updateChapter(path.join(this.state.url, "propertyDefinitions"), {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(propertyBeingAdded)
+    }).then(this.stopAddingProperty);
+  };
+
   render() {
     const {bookLink, summary, previous, next} = this.props;
-    const {title, url, entries, theoremBeingAdded, termBeingAdded} = this.state;
+    const {title, url, entries, theoremBeingAdded, termBeingAdded, propertyBeingAdded} = this.state;
+
+    const updateControl = (caption, statePropertyName, innerPropertyName, transformer) => {
+      return <Form.Group>
+        <Form.Label><strong>{caption}</strong></Form.Label>
+        <Form.Control type="text" value={this.state[statePropertyName][innerPropertyName]} onChange={e => this.createUpdater(statePropertyName, innerPropertyName, transformer)(e.target.value)}/>
+      </Form.Group>
+    };
+
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <ChapterTitle title={title} url={url} updateChapter={this.updateChapter} />
       <p>{summary}</p>
       {entries.map(this.renderEntry)}
       <hr/>
-      {!theoremBeingAdded && !termBeingAdded && <>
+      {!theoremBeingAdded && !termBeingAdded && !propertyBeingAdded && <>
         <Button onClick={this.startAddingTheorem}>Add theorem</Button>
         <Button className="ml-2" onClick={this.startAddingTerm}>Add term</Button>
+        <Button className="ml-2" onClick={this.startAddingProperty}>Add property</Button>
       </>}
       {theoremBeingAdded && <>
         <h4>Add theorem</h4>
@@ -414,6 +452,17 @@ export class Chapter extends React.Component {
         </Form.Group>
         <Button size="sm" onClick={this.saveTerm}>Save term</Button>
         <Button size="sm" className="ml-2" variant="danger" onClick={this.stopAddingTerm}>Cancel</Button>
+      </>}
+      {propertyBeingAdded && <>
+        <h4>Add property</h4>
+        {updateControl("Symbol", "propertyBeingAdded", "symbol")}
+        {updateControl("Parent type", "propertyBeingAdded", "parentType")}
+        {updateControl("Default term name", "propertyBeingAdded", "defaultTermName")}
+        {updateControl("Parent component names", "propertyBeingAdded", "parentComponentTypes")}
+        {updateControl("Explicit name (if different from symbol)", "propertyBeingAdded", "name")}
+        {updateControl("Definition", "propertyBeingAdded", "definition", Parser.replaceShorthands)}
+        <Button size="sm" onClick={this.saveProperty}>Save term</Button>
+        <Button size="sm" className="ml-2" variant="danger" onClick={this.stopAddingProperty}>Cancel</Button>
       </>}
     </Page>
   }

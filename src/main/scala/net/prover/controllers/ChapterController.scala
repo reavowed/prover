@@ -190,7 +190,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         shorthand = Option(newTermDefininition.shorthand).filter(_.nonEmpty)
         attributes = Option(newTermDefininition.attributes).toSeq.flatMap(_.splitByWhitespace()).filter(_.nonEmpty)
         newTerm = TermDefinition(
-          newTermDefininition.symbol,
+          symbol,
           boundVariables,
           componentTypes,
           name,
@@ -200,6 +200,33 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           shorthand,
           attributes)
       } yield newTerm
+    }.map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/propertyDefinitions"), produces = Array("application/json;charset=UTF-8"))
+  def createPropertyDefinition(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @RequestBody newPropertyDefininition: NewPropertyDefinitionModel
+  ): ResponseEntity[_] = {
+    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
+      for {
+        parentType <- entryContext.typeDefinitions.find(_.symbol == newPropertyDefininition.parentType).orBadRequest(s"Unknown type '${newPropertyDefininition.parentType}'")
+        symbol = newPropertyDefininition.symbol
+        defaultTermName = newPropertyDefininition.defaultTermName
+        parentComponentTypes <- parentType.childComponentTypesParser.parseFromString(newPropertyDefininition.parentComponentTypes, "parent component types").recoverWithBadRequest
+        name = Option(newPropertyDefininition.name).filter(_.nonEmpty)
+        definition <- Statement.parser.parseFromString(newPropertyDefininition.definition, "definition").recoverWithBadRequest
+        newPropertyDefinition = PropertyDefinition(
+          symbol,
+          parentType,
+          defaultTermName,
+          parentComponentTypes,
+          name,
+          definition)
+      } yield newPropertyDefinition
     }.map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
@@ -355,4 +382,11 @@ object ChapterController {
     definition: String,
     shorthand: String,
     attributes: String)
+  case class NewPropertyDefinitionModel(
+    symbol: String,
+    parentType: String,
+    defaultTermName: String,
+    parentComponentTypes: String,
+    name: String,
+    definition: String)
 }

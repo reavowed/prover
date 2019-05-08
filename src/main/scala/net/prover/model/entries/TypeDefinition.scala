@@ -56,6 +56,10 @@ case class TypeDefinition(
       explicitName,
       definingStatement.replaceDefinition(oldDefinition, newDefinition))
   }
+
+  def childComponentTypesParser: Parser[Seq[ComponentType]] = {
+    otherComponentTypes.map(t => Parser.singleWord.map(t.withName)).traverseParser
+  }
 }
 
 object TypeDefinition extends ChapterEntryParser {
