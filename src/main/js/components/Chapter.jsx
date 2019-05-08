@@ -210,14 +210,16 @@ export class Chapter extends React.Component {
         const definition = window.typeDefinitions[entry.symbol];
         return <Result title={<>Definition: <Capitalized>{definition.name}</Capitalized></>}
                        url={entry.url}
-                       key={entry.url}>
+                       key={entry.url}
+                       updateChapter={this.updateChapter}>
           {entry.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormatString, s => replacePlaceholders(s, entry.components))} if <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.
         </Result>;
       case "propertyDefinition":
         const typeDefinition = window.typeDefinitions[entry.parentTypeSymbol];
         return <Result title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name} {entry.parentTypeName}</span></>}
                        url={entry.url}
-                       key={entry.url}>
+                       key={entry.url}
+                       updateChapter={this.updateChapter}>
           <Capitalized>{typeDefinition.article}</Capitalized> {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.
         </Result>;
       case "comment":

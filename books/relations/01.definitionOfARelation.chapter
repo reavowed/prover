@@ -12,8 +12,8 @@ property reflexive on relation ~ A
 property symmetric on relation ~ A
   definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~)
 
-property transitive on relation ~ A
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ~ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $$$0 $0 ~)
-
 property asymmetric on relation ~ A
   definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ¬ ∈ orderedPair $0 $$0 ~)
+
+property transitive on relation ~ A
+  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ~ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $$$0 $0 ~)
