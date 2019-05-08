@@ -146,11 +146,15 @@ object ExpressionDefinition {
     }.whileDefined
   }
 
-  def boundVariablesAndComponentTypesParser: Parser[(Seq[String], Seq[ComponentType])] = {
-    (for {
+  def rawBoundVariablesAndComponentTypesParser: Parser[(Seq[String], Seq[ComponentType])] = {
+    for {
       boundVariables <- boundVariablesParser
       componentTypes <- ComponentType.listParser(boundVariables)
-    } yield (boundVariables, componentTypes)).inParens
+    } yield (boundVariables, componentTypes)
+  }
+
+  def boundVariablesAndComponentTypesParser: Parser[(Seq[String], Seq[ComponentType])] = {
+    rawBoundVariablesAndComponentTypesParser.inParens
   }
 
   def shorthandParser: Parser[Option[String]] = Parser.optional("shorthand", Parser.allInParens)

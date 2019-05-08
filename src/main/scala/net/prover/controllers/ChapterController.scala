@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.ChapterController.NewTheoremModel
+import net.prover.controllers.ChapterController._
 import net.prover.controllers.models.ChapterProps._
 import net.prover.controllers.models.{ChapterProps, LinkSummary}
 import net.prover.exceptions.BadRequestException
@@ -168,6 +168,42 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }.map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
+  @PostMapping(value = Array("/termDefinitions"), produces = Array("application/json;charset=UTF-8"))
+  def createTermDefinition(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @RequestBody newTermDefininition: NewTermDefinitionModel
+  ): ResponseEntity[_] = {
+    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
+      for {
+        boundVariablesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newTermDefininition.components, "components").recoverWithBadRequest
+        boundVariables = boundVariablesAndComponentTypes._1
+        componentTypes = boundVariablesAndComponentTypes._2
+        componentNames = boundVariables ++ componentTypes.map(_.name)
+        symbol = newTermDefininition.symbol
+        definition <- Statement.parser.parseFromString(newTermDefininition.definition, "definition").recoverWithBadRequest
+        name = Option(newTermDefininition.name).filter(_.nonEmpty)
+        format <- Option(newTermDefininition.format).filter(_.nonEmpty).map(f => Format.parser(componentNames).parseFromString(f, "format")).getOrElse(Format.default(symbol, componentNames)).recoverWithBadRequest
+        premises <- newTermDefininition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}")).recoverWithBadRequest
+        shorthand = Option(newTermDefininition.shorthand).filter(_.nonEmpty)
+        attributes = Option(newTermDefininition.attributes).toSeq.flatMap(_.splitByWhitespace()).filter(_.nonEmpty)
+        newTerm = TermDefinition(
+          newTermDefininition.symbol,
+          boundVariables,
+          componentTypes,
+          name,
+          format,
+          premises,
+          definition,
+          shorthand,
+          attributes)
+      } yield newTerm
+    }.map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
+  }
+
+
   @PostMapping(value = Array("/{entryKey}/move"), produces = Array("application/json;charset=UTF-8"))
   def moveEntry(
     @PathVariable("bookKey") bookKey: String,
@@ -310,4 +346,13 @@ object ChapterController {
     name: String,
     premises: Seq[String],
     conclusion: String)
+  case class NewTermDefinitionModel(
+    symbol: String,
+    components: String,
+    name: String,
+    format: String,
+    premises: Seq[String],
+    definition: String,
+    shorthand: String,
+    attributes: String)
 }

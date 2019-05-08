@@ -171,7 +171,6 @@ export class TargetStepProofLine extends React.Component {
                 <Button size="sm" className="ml-1" onClick={this.addTarget}>Add</Button>
               </FlexRow>
             </Form.Group>
-
           </>}
         </div> :
         <ProofLine incomplete

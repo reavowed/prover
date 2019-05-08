@@ -1,0 +1,6 @@
+The standard ordering on natural numbers.
+
+term < ()
+  name (Standard order on ℕ)
+  (= $0 comprehension x product ℕ ℕ ∈ first $0 second $0)
+  attributes (infix)

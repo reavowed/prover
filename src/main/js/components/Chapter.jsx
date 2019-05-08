@@ -167,12 +167,7 @@ export class Chapter extends React.Component {
       title: props.title,
       url: props.url,
       entries: Parser.parseEntries(props.entries),
-      addingTheorem: false,
-      theoremBeingAdded: {
-        name: "",
-        premises: "",
-        conclusion: ""
-      }
+      theoremBeingAdded: null
     }
   }
 
@@ -231,9 +226,9 @@ export class Chapter extends React.Component {
         return <React.Fragment key={entry.key}/>;
     }
   };
+
   startAddingTheorem = () => {
     this.setState({
-      addingTheorem: true,
       theoremBeingAdded: {
         name: "",
         premises: "",
@@ -242,7 +237,7 @@ export class Chapter extends React.Component {
     })
   };
   stopAddingTheorem = () => {
-    this.setState({addingTheorem: false})
+    this.setState({theoremBeingAdded: null})
   };
   updateTheoremName = (newName) => {
     const {theoremBeingAdded} = this.state;
@@ -270,38 +265,156 @@ export class Chapter extends React.Component {
     }).then(this.stopAddingTheorem);
   };
 
+  startAddingTerm = () => {
+    this.setState({
+      termBeingAdded: {
+        symbol: "",
+        components: "",
+        name: "",
+        format: "",
+        premises: "",
+        definition: "",
+        shorthand: "",
+        attributes: ""
+      }
+    })
+  };
+  stopAddingTerm = () => {
+    this.setState({termBeingAdded: null})
+  };
+  updateTermSymbol = (newSymbol) => {
+    const {termBeingAdded} = this.state;
+    termBeingAdded.symbol = newSymbol;
+    this.setState({termBeingAdded});
+  };
+  updateTermComponents = (newComponents) => {
+    const {termBeingAdded} = this.state;
+    termBeingAdded.components = newComponents;
+    this.setState({termBeingAdded});
+  };
+  updateTermName = (newName) => {
+    const {termBeingAdded} = this.state;
+    termBeingAdded.name = newName;
+    this.setState({termBeingAdded});
+  };
+  updateTermFormat = (newFormat) => {
+    const {termBeingAdded} = this.state;
+    termBeingAdded.format = newFormat;
+    this.setState({termBeingAdded});
+  };
+  updateTermPremises = (newPremises) => {
+    const {termBeingAdded} = this.state;
+    termBeingAdded.premises = Parser.replaceShorthands(newPremises);
+    this.setState({termBeingAdded});
+  };
+  updateTermDefinition = (newDefinition) => {
+    const {termBeingAdded} = this.state;
+    termBeingAdded.definition = Parser.replaceShorthands(newDefinition);
+    this.setState({termBeingAdded});
+  };
+  updateTermShorthand = (newShorthand) => {
+    const {termBeingAdded} = this.state;
+    termBeingAdded.shorthand = Parser.replaceShorthands(newShorthand);
+    this.setState({termBeingAdded});
+  };
+  updateTermAttributes = (newAttributes) => {
+    const {termBeingAdded} = this.state;
+    termBeingAdded.attributes = Parser.replaceShorthands(newAttributes);
+    this.setState({termBeingAdded});
+  };
+  saveTerm = () => {
+    const {termBeingAdded} = this.state;
+    const termToAdd = _.cloneDeep(termBeingAdded);
+    termToAdd.premises = _.filter(termToAdd.premises.split(/\r?\n/), s => s.length);
+    this.updateChapter(path.join(this.state.url, "termDefinitions"), {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(termToAdd)
+    }).then(this.stopAddingTerm);
+  };
+
   render() {
     const {bookLink, summary, previous, next} = this.props;
-    const {title, url, entries} = this.state;
+    const {title, url, entries, theoremBeingAdded, termBeingAdded} = this.state;
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <ChapterTitle title={title} url={url} updateChapter={this.updateChapter} />
       <p>{summary}</p>
       {entries.map(this.renderEntry)}
-      <Button onClick={this.startAddingTheorem}>Add theorem</Button>
-      <Modal show={this.state.addingTheorem} onHide={this.stopAddingTheorem}>
-        <Modal.Header closeButton><Modal.Title>Add theorem</Modal.Title></Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group>
-              <Form.Label>Name</Form.Label>
-              <Form.Control type="text" value={this.state.theoremBeingAdded.name} onChange={e => this.updateTheoremName(e.target.value)}/>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Premises</Form.Label>
-              <Form.Control as="textarea" value={this.state.theoremBeingAdded.premises} onChange={e => this.updateTheoremPremises(e.target.value)}/>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Conclusion</Form.Label>
-              <Form.Control type="text" value={this.state.theoremBeingAdded.conclusion} onChange={e => this.updateTheoremConclusion(e.target.value)}/>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={this.stopAddingTheorem}>Close</Button>
-          <Button variant="primary" onClick={this.saveTheorem}>Save Changes</Button>
-        </Modal.Footer>
-      </Modal>
+      <hr/>
+      {!theoremBeingAdded && !termBeingAdded && <>
+        <Button onClick={this.startAddingTheorem}>Add theorem</Button>
+        <Button className="ml-2" onClick={this.startAddingTerm}>Add term</Button>
+      </>}
+      {theoremBeingAdded && <>
+        <h4>Add theorem</h4>
+        <Form.Group>
+          <Form.Label>Name</Form.Label>
+          <Form.Control type="text" value={this.state.theoremBeingAdded.name} onChange={e => this.updateTheoremName(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Premises</Form.Label>
+          <Form.Control as="textarea" value={this.state.theoremBeingAdded.premises} onChange={e => this.updateTheoremPremises(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Conclusion</Form.Label>
+          <Form.Control type="text" value={this.state.theoremBeingAdded.conclusion} onChange={e => this.updateTheoremConclusion(e.target.value)}/>
+        </Form.Group>
+        <Button variant="primary" onClick={this.saveTheorem}>Save theorem</Button>
+      </>}
+      {termBeingAdded && <>
+        <h4>Add term</h4>
+        <Form.Group>
+          <Form.Label><strong>Symbol</strong></Form.Label>
+          <Form.Control type="text"
+                        value={this.state.termBeingAdded.symbol}
+                        onChange={(e) => this.updateTermSymbol(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label><strong>Components</strong></Form.Label>
+          <Form.Control type="text"
+                        value={this.state.termBeingAdded.components}
+                        onChange={(e) => this.updateTermComponents(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label><strong>Name</strong></Form.Label>
+          <Form.Control type="text"
+                        value={this.state.termBeingAdded.name}
+                        onChange={(e) => this.updateTermName(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label><strong>Format</strong></Form.Label>
+          <Form.Control type="text"
+                        value={this.state.termBeingAdded.format}
+                        onChange={(e) => this.updateTermFormat(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label><strong>Premises</strong></Form.Label>
+          <Form.Control as="textarea"
+                        value={this.state.termBeingAdded.premises}
+                        onChange={(e) => this.updateTermPremises(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label><strong>Definition</strong></Form.Label>
+          <Form.Control type="text"
+                        value={this.state.termBeingAdded.definition}
+                        onChange={(e) => this.updateTermDefinition(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label><strong>Shorthand</strong></Form.Label>
+          <Form.Control type="text"
+                        value={this.state.termBeingAdded.shorthand}
+                        onChange={(e) => this.updateTermShorthand(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label><strong>Attributes</strong></Form.Label>
+          <Form.Control type="text"
+                        value={this.state.termBeingAdded.attributes}
+                        onChange={(e) => this.updateTermAttributes(e.target.value)}/>
+        </Form.Group>
+        <Button size="sm" onClick={this.saveTerm}>Save term</Button>
+        <Button size="sm" className="ml-2" variant="danger" onClick={this.stopAddingTerm}>Cancel</Button>
+      </>}
     </Page>
   }
 }

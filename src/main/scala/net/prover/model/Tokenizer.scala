@@ -80,7 +80,7 @@ trait Tokenizer {
 object Tokenizer {
   private val singleCharacterTokens = "(){},"
   def fromString(str: String, context: String): TokenStream = {
-    val lines = str.lines.toVector.map(_.toVector)
+    val lines = str.split("\\r?\\n").toVector.map(_.toVector)
     def findEndOfWhitespace(currentLine: Int, currentColumn: Int): Option[(Int, Int)] = {
       if (currentLine == lines.length)
         None
