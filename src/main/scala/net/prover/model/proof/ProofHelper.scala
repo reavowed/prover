@@ -76,9 +76,9 @@ object ProofHelper {
     val statementExtractionInferences = stepContext.entryContext.availableEntries.ofType[Inference].collect {
       case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
         if conclusion.singleStatementVariable.isDefined &&
+          inference.requiredSubstitutions.copy(statements = Nil).isEmpty &&
           firstPremise.requiredSubstitutions.contains(inference.requiredSubstitutions) &&
-          conclusion.complexity < firstPremise.complexity &&
-          firstPremise.definitionUsages.contains(conclusion.definitionUsages)
+          (conclusion.complexity < firstPremise.complexity || firstPremise.requiredSubstitutions.statements.length > 1)
 
       =>
         (inference, firstPremise, otherPremises)
@@ -172,7 +172,7 @@ object ProofHelper {
     }
 
     def extractPremise(premise: Premise.SingleLinePremise): Option[Step] = {
-      extract(premise.statement, 0).map(_._2).flatMap(wrapAsElidedIfNecessary(_, "Simplified"))
+      extract(premise.statement, 0).map(_._2).flatMap(wrapAsElidedIfNecessary(_, "Extracted"))
     }
 
     stepContext.allPremisesSimplestFirst.mapFind(extractPremise)
