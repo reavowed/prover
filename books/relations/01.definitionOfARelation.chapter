@@ -6,6 +6,8 @@ type relation R (A)
 
 display ∈ orderedPair a b x as (a x b) requires-brackets if x infix
 
+write ∈ orderedPair a b ~ as in2
+
 property reflexive on relation ~ A
   definition (∀ a → ∈ $0 A ∈ orderedPair $0 $0 ~)
 
@@ -29,4 +31,4 @@ property complete on relation ~ A
 
 property semicomplete on relation ~ A
   name (semi-complete)
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ = $$0 $0 ∨ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~)
+  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 ~ ∨ = $$0 $0 ∈ orderedPair $0 $$0 ~)

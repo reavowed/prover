@@ -78,11 +78,8 @@ conclusion = n m
   assume ¬ = n m {
     prove ∈ n m 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ n m, = n m) () () ()
     prove ∈ m n 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ m n, = n m) () () ()
-    prove ¬ ∧ ∈ n m ∈ m n 3d8d0f70f0d112f2ba058cba8d7e7d1f2ddfee4cd21a4f1eff53781ca7f5224f () (n, m) () ()
-    elided bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a {
-      prove ∧ ∈ n m ∈ m n bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ n m, ∈ m n) () () ()
-      prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∧ ∈ n m ∈ m n) () () ()
-    }
+    prove ¬ ∈ m n 2b3ba86408996dce3f0dec95e3371dd6fb0104d817d1744142840cb50591910b () (n, m) () ()
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∈ m n) () () ()
   }
   prove = n m b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (= n m) () () ()
 }

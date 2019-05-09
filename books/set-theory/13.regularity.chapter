@@ -56,9 +56,13 @@ conclusion ∨ ¬ ∈ b a ¬ ∈ a b
   }
 }
 
-theorem No Two Sets Contain Each Other
-conclusion ¬ ∧ ∈ b a ∈ a b
+theorem Element of a Set Cannot Contain It
+premise ∈ a b
+conclusion ¬ ∈ b a
 {
-  prove ∨ ¬ ∈ b a ¬ ∈ a b 4cbbdc5eb910728a90ce8062525b404c9ab8f9883733c35b15aa90d25cb834e1 () (b, a) () ()
-  prove ¬ ∧ ∈ b a ∈ a b 3377a71ec0fe3e5503f4565893653daa725f30a43f437235891cea02ce0d6809 (∈ b a, ∈ a b) () () ()
+  prove ∨ ¬ ∈ a b ¬ ∈ b a 4cbbdc5eb910728a90ce8062525b404c9ab8f9883733c35b15aa90d25cb834e1 () (a, b) () ()
+  elided (Extracted) {
+    prove ¬ ¬ ∈ a b 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (∈ a b) () () ()
+    prove ¬ ∈ b a 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (¬ ∈ a b, ¬ ∈ b a) () () ()
+  }
 }

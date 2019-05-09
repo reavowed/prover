@@ -18,6 +18,8 @@ object Statement {
         statementDefinition.statementParser
       case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
         Parser.constant(StatementVariable(name))
+      case context.entryContext.RecognisedStatementShorthand(template) =>
+        template.expressionParser.map(_.asInstanceOf[Statement])
     }
   }
 
