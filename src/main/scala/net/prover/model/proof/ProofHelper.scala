@@ -191,7 +191,15 @@ object ProofHelper {
           (targetStepsSoFar, premiseStepsSoFar ++ newPremiseSteps)
         case None =>
           val (deconstructedStatements, deconstructionSteps) = PremiseFinder.deconstructStatement(premiseStatement, stepContext)
-          (targetStepsSoFar ++ deconstructedStatements.map(Step.Target(_)), premiseStepsSoFar ++ deconstructionSteps)
+          val (deconstructionTargetSteps, deconstructionPremiseSteps) = deconstructedStatements.foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((otherTargetStepsSoFar, otherPremiseStepsSoFar), deconstructedStatement) =>
+            PremiseFinder.findPremiseSteps(deconstructedStatement, stepContext) match {
+              case Some(newPremiseSteps) =>
+                (otherTargetStepsSoFar, otherPremiseStepsSoFar ++ newPremiseSteps)
+              case None =>
+                (otherTargetStepsSoFar :+ Step.Target(deconstructedStatement), otherPremiseStepsSoFar)
+            }
+          }
+          (targetStepsSoFar ++ deconstructionTargetSteps, premiseStepsSoFar ++ deconstructionPremiseSteps ++ deconstructionSteps)
       }
     }
     val assertionStep = Step.Assertion(
