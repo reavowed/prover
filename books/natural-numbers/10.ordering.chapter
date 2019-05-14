@@ -175,3 +175,46 @@ conclusion strictTotalOrder < ℕ
     prove strictTotalOrder < ℕ b3266dc481e1b3e83b5124f058e80789a3e7c1c96f5a0bc57a04e927e9456cd6 () (<, ℕ) () ()
   }
 }
+
+theorem Natural Number Is Smaller than Successor
+premise ∈ n ℕ
+conclusion ∈ orderedPair n successor n <
+{
+  prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+  prove ∈ n successor n bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n) () ()
+  elided (Extracted) {
+    prove → ∈ n ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) ()
+    prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) () () ()
+    prove → ∈ successor n ℕ ↔ ∈ orderedPair n successor n < ∈ n successor n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor n) (→ ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) ()
+    prove ∈ successor n ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () ()
+    prove ↔ ∈ orderedPair n successor n < ∈ n successor n fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor n ℕ, ↔ ∈ orderedPair n successor n < ∈ n successor n) () () ()
+    prove → ∈ n successor n ∈ orderedPair n successor n < 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair n successor n <, ∈ n successor n) () () ()
+    prove ∈ orderedPair n successor n < fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n successor n, ∈ orderedPair n successor n <) () () ()
+  }
+}
+
+theorem < Is Transitive
+premise ∈ orderedPair n m <
+premise ∈ orderedPair m r <
+conclusion ∈ orderedPair n r <
+{
+  prove strictTotalOrder < ℕ 81dedf73d69b50c05235585a865ec89191df7af8ed00dd4751e918a19efa59c5 () () () ()
+  prove ∧ ∧ ∧ relation < ℕ asymmetricRelation < ℕ transitiveRelation < ℕ semicompleteRelation < ℕ 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 () (<, ℕ) () ()
+  prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ → ∧ ∈ orderedPair $$$0 $$0 < ∈ orderedPair $$0 $0 < ∈ orderedPair $$$0 $0 < 9d11e0ac2e6cb1f549e37d9ba51c30b772c483a2d99a2e76853176f4fa486ac3 () (<, ℕ) () ()
+  prove ⊆ < product ℕ ℕ bdc3e1f2449e2fbd0a83076d34a8055e2d09d67c1806a4bc59547d29cfa15bd1 () (<, ℕ) () ()
+  prove ∈ orderedPair n m product ℕ ℕ ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (<, product ℕ ℕ, orderedPair n m) () ()
+  prove ∈ orderedPair m r product ℕ ℕ ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (<, product ℕ ℕ, orderedPair m r) () ()
+  elided (Extracted) {
+    prove → ∈ n ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ → ∧ ∈ orderedPair n $$0 < ∈ orderedPair $$0 $0 < ∈ orderedPair n $0 < 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ → ∧ ∈ orderedPair $$$0 $$0 < ∈ orderedPair $$0 $0 < ∈ orderedPair $$$0 $0 <) ()
+    prove ∈ n ℕ 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () (n, m, ℕ, ℕ) () ()
+    prove ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ → ∧ ∈ orderedPair n $$0 < ∈ orderedPair $$0 $0 < ∈ orderedPair n $0 < fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ → ∧ ∈ orderedPair n $$0 < ∈ orderedPair $$0 $0 < ∈ orderedPair n $0 <) () () ()
+    prove → ∈ m ℕ ∀ c → ∈ $0 ℕ → ∧ ∈ orderedPair n m < ∈ orderedPair m $0 < ∈ orderedPair n $0 < 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 ℕ ∀ c → ∈ $0 ℕ → ∧ ∈ orderedPair n $$0 < ∈ orderedPair $$0 $0 < ∈ orderedPair n $0 <) ()
+    prove ∈ m ℕ fd9eacaeda58b006596b2a50422b6bc2841496d77f4db1e4196a7e9759de2d78 () (n, m, ℕ, ℕ) () ()
+    prove ∀ c → ∈ $0 ℕ → ∧ ∈ orderedPair n m < ∈ orderedPair m $0 < ∈ orderedPair n $0 < fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m ℕ, ∀ c → ∈ $0 ℕ → ∧ ∈ orderedPair n m < ∈ orderedPair m $0 < ∈ orderedPair n $0 <) () () ()
+    prove → ∈ r ℕ → ∧ ∈ orderedPair n m < ∈ orderedPair m r < ∈ orderedPair n r < 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (r) (→ ∈ $0 ℕ → ∧ ∈ orderedPair n m < ∈ orderedPair m $0 < ∈ orderedPair n $0 <) ()
+    prove ∈ r ℕ fd9eacaeda58b006596b2a50422b6bc2841496d77f4db1e4196a7e9759de2d78 () (m, r, ℕ, ℕ) () ()
+    prove → ∧ ∈ orderedPair n m < ∈ orderedPair m r < ∈ orderedPair n r < fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ r ℕ, → ∧ ∈ orderedPair n m < ∈ orderedPair m r < ∈ orderedPair n r <) () () ()
+    prove ∧ ∈ orderedPair n m < ∈ orderedPair m r < bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair n m <, ∈ orderedPair m r <) () () ()
+    prove ∈ orderedPair n r < fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair n m < ∈ orderedPair m r <, ∈ orderedPair n r <) () () ()
+  }
+}

@@ -13,6 +13,19 @@ object PremiseFinder {
     terms: Map[Int, Term],
     stepContext: StepContext
   ): Seq[(Seq[Step], Map[Int, Term])] = {
+    val targetSimplificationInferences = stepContext.entryContext.availableEntries.ofType[Inference].filter {
+      case inference @ Inference(_, premises, conclusion)
+        if premises.nonEmpty &&
+          premises.forall(_.complexity < conclusion.complexity) &&
+          conclusion.requiredSubstitutions.isEquivalentTo(inference.requiredSubstitutions) &&
+          conclusion.requiredSubstitutions.predicates.isEmpty && conclusion.requiredSubstitutions.functions.isEmpty &&
+          premises.forall(_.referencedDefinitions.subsetOf(conclusion.referencedDefinitions))
+      =>
+        true
+      case _ =>
+        false
+    }
+
     def fromGivenPremises = stepContext.allPremisesSimplestFirst
       .map(_.statement)
       .mapCollect { premiseStatement =>
@@ -20,13 +33,23 @@ object PremiseFinder {
           terms <- targetStatement.calculateArguments(premiseStatement, terms, 0, stepContext.externalDepth)
         } yield (Nil, terms)
       }
+    def bySimplifyingTarget = for {
+        inference <- targetSimplificationInferences
+        substitutionsWithPlaceholders <- inference.conclusion.calculateSubstitutions(targetStatement, Substitutions.empty, 0, stepContext.externalDepth)
+        premiseStatementsWithPlaceholders <- Try(inference.substitutePremises(substitutionsWithPlaceholders, stepContext)).toOption.toSeq
+        (premiseSteps, newTerms) <- findParameterisedPremiseSteps(premiseStatementsWithPlaceholders, terms, stepContext)
+        conclusion <- targetStatement.specify(newTerms, 0, stepContext.externalDepth).toSeq
+        substitutions <- inference.conclusion.calculateSubstitutions(conclusion, Substitutions.empty, 0, stepContext.externalDepth)
+        premiseStatements <- premiseStatementsWithPlaceholders.map(_.specify(newTerms, 0, stepContext.externalDepth)).traverseOption.toSeq
+        assertionStep = Step.Assertion(conclusion, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
+      } yield (premiseSteps :+ assertionStep, newTerms)
 
     def asAlreadyKnown = for {
       knownTarget <- targetStatement.specify(terms, 0, stepContext.externalDepth)
       steps <- findPremiseSteps(knownTarget, stepContext)
     } yield (steps, terms)
 
-    asAlreadyKnown.map(Seq(_)) getOrElse fromGivenPremises
+    asAlreadyKnown.map(Seq(_)) getOrElse (fromGivenPremises ++ bySimplifyingTarget)
   }
   def findParameterisedPremiseSteps(
     targetStatements: Seq[Statement],

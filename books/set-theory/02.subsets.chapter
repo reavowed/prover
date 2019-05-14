@@ -4,7 +4,7 @@ statement ⊆ (A B)
   definition (∀ x → ∈ $0 A ∈ $0 B)
   shorthand (sub)
 
-theorem Definition of ⊆
+theorem Element of Subset Is Element of Set
 premise ⊆ A B
 premise ∈ a A
 conclusion ∈ a B

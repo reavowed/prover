@@ -26,9 +26,10 @@ class ProofHelperSpec extends ProverSpec {
     val specification = Axiom("Specification", Seq(ForAll("x")(φ(FunctionParameter(0, 0)))), φ(a))
     val modusPonens = Axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
     val reverseImplicationFromEquivalence = Axiom("Reverse Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(ψ, φ))
+    val combineConjunction = Axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
     val zeroIsANaturalNumber = Axiom("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
     val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
-    val axioms = Seq(specification, modusPonens, reverseImplicationFromEquivalence, zeroIsANaturalNumber, successorOfNaturalIsNatural)
+    val axioms = Seq(specification, modusPonens, reverseImplicationFromEquivalence, combineConjunction, zeroIsANaturalNumber, successorOfNaturalIsNatural)
     val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
 
     def extract(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
@@ -93,6 +94,19 @@ class ProofHelperSpec extends ProverSpec {
         Seq(
           ForAll("x")(Implication(φ(FunctionParameter(0, 0)), φ(b))),
           φ(a)))
+    }
+
+    "find a statement with a bound variable appearing only in a subsidiary premise that requires simplification" in {
+      testExtraction(
+        φ(a, c),
+        Seq(
+          ForAll("a")(ForAll("b")(ForAll("c")(Implication(
+            Conjunction(
+              φ(FunctionParameter(0, 2), FunctionParameter(0, 1)),
+              φ(FunctionParameter(0, 1), FunctionParameter(0, 0))),
+            φ(FunctionParameter(0, 2), FunctionParameter(0, 0)))))),
+          φ(a, b),
+          φ(b, c)))
     }
 
     "not extract statements that are substitution matches but not exact matches" in {
