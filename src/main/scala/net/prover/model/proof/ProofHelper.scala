@@ -116,12 +116,13 @@ object ProofHelper {
             substitutions <- firstPremise.calculateSubstitutions(substitutedFirstPremise, Substitutions.empty, 0, stepContext.externalDepth)
             substitutedOtherPremises <- otherPremises.map(_.applySubstitutions(substitutions, 0, stepContext.externalDepth)).traverseOption.toSeq
             substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
-            newStep = Step.Assertion(
+            assertionStep = Step.Assertion(
               substitutedConclusion,
               inference.summary,
               (substitutedFirstPremise +: substitutedOtherPremises).map(Premise.Pending),
               substitutions)
-          } yield (terms, (premiseSteps :+ newStep) ++ innerSteps)).headOption
+            newStep <- wrapAsElidedIfNecessary(premiseSteps :+ assertionStep, inference)
+          } yield (terms, newStep +: innerSteps)).headOption
       } orElse predicateSpecificationInferences.iterator.findFirst {
         case (inference, singlePremise, predicateName, argumentNames) =>
           (for {
