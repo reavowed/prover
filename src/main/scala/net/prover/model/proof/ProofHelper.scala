@@ -208,12 +208,16 @@ object ProofHelper {
       inference,
       premiseStatements.map(Premise.Pending),
       substitutions)
-    val baseStep = if (premiseSteps.nonEmpty) {
-      Step.Elided(premiseSteps :+ assertionStep, Some(inference.summary), None)
+    if (InferenceTypes.isTransitivity(inference)) {
+      (targetSteps ++ premiseSteps) :+ assertionStep
     } else {
-      assertionStep
+      val baseStep = if (premiseSteps.nonEmpty) {
+        Step.Elided(premiseSteps :+ assertionStep, Some(inference.summary), None)
+      } else {
+        assertionStep
+      }
+      targetSteps :+ baseStep
     }
-    targetSteps :+ baseStep
   }
 
   def wrapAsElidedIfNecessary(steps: Seq[Step], description: String): Option[Step] = {

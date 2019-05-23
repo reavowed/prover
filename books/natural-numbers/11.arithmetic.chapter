@@ -1,0 +1,33 @@
+Some basic facts about natural number arithmetic.
+
+theorem Difference Between Two Naturals Is a Natural Number
+conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ → ∈ orderedPair $$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$0 $0 $$0
+{
+  take m {
+    assume ∈ $0 ℕ {
+      assume ∈ orderedPair 0 $0 < {
+        prove = apply + orderedPair 0 $0 $0 e160748d6da6b39f1c3838d1176bd4edc7d0b683d6180f08dfd556eaf700d8c9 () ($0) () ()
+        elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+          prove ∧ ∈ $0 ℕ = apply + orderedPair 0 $0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 ℕ, = apply + orderedPair 0 $0 $0) () () ()
+          prove ∃ x ∧ ∈ $0 ℕ = apply + orderedPair 0 $0 $$0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$0 ℕ = apply + orderedPair 0 $$0 $0) ()
+        }
+      }
+    }
+  }
+  take n {
+    assume ∧ ∈ $0 ℕ ∀ m → ∈ $0 ℕ → ∈ orderedPair $$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$0 $0 $$0 {
+      take m {
+        assume ∈ $0 ℕ {
+          assume ∈ orderedPair successor $$0 $0 < {
+            prove ∈ orderedPair $$0 successor $$0 < 03ca329a7f30e183c6921ba709d61c5535da2fb28b0a1f8bc1cdfedcf59b8b1c () ($$0) () ()
+            prove ∈ orderedPair $$0 $0 < ab870655614f85af15c3382e6269a0f6dab4558694e4c471733749b8e1c520c6 () ($$0, successor $$0, $0) () ()
+            prove ∈ orderedPair $0 successor $0 < 03ca329a7f30e183c6921ba709d61c5535da2fb28b0a1f8bc1cdfedcf59b8b1c () ($0) () ()
+            prove ∈ orderedPair $$0 successor $0 < ab870655614f85af15c3382e6269a0f6dab4558694e4c471733749b8e1c520c6 () ($$0, $0, successor $0) () ()
+            target ∃ x ∧ ∈ $0 ℕ = apply + orderedPair successor $$$0 $0 $$0
+          }
+        }
+      }
+    }
+  }
+  prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ → ∈ orderedPair $$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$0 $0 $$0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (∀ m → ∈ $0 ℕ → ∈ orderedPair $$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$0 $0 $$0) ()
+}
