@@ -109,7 +109,7 @@ object ProofHelper {
           (for {
             extractionSubstitutions <- firstPremise.calculateSubstitutions(extractionCandidate, Substitutions.empty, 0, stepContext.externalDepth)
             extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions, 0, stepContext.externalDepth).toSeq
-            (conclusionTerms, innerSteps) <- extract(extractedConclusion, termsSoFar).toSeq
+            (conclusionTerms, innerSteps) <- extractFromStatement(extractedConclusion, termsSoFar).toSeq
             extractedOtherPremises <- otherPremises.map(_.applySubstitutions(extractionSubstitutions, 0, stepContext.externalDepth)).traverseOption.toSeq
             (premiseSteps, terms) <- PremiseFinder.findParameterisedPremiseSteps(extractedOtherPremises, conclusionTerms, stepContext)
             substitutedFirstPremise <- extractionCandidate.specify(terms, 0, stepContext.externalDepth).toSeq
@@ -129,7 +129,7 @@ object ProofHelper {
             extractionSubstitutions <- singlePremise.calculateSubstitutions(extractionCandidate, Substitutions.empty, 0, stepContext.externalDepth + 1)
             extractionPredicate <- extractionSubstitutions.predicates.get((predicateName, argumentNames.length)).toSeq
             nextPremise <- extractionPredicate.specify(argumentNames.mapWithIndex((_, index) => FunctionParameter(termsSoFar + index, stepContext.externalDepth)), 0, stepContext.externalDepth + 1).toSeq
-            (terms, laterSteps) <- extract(nextPremise, termsSoFar + argumentNames.length).toSeq
+            (terms, laterSteps) <- extractFromStatement(nextPremise, termsSoFar + argumentNames.length).toSeq
             specifiedPremise <- extractionCandidate.specify(terms, 0, stepContext.externalDepth).toSeq
             substitutionsWithTerms <- singlePremise.calculateSubstitutions(specifiedPremise, Substitutions.empty, 0, stepContext.externalDepth)
               .map(_.copy(terms = argumentNames.mapWithIndex((n, i) => n -> terms(termsSoFar + i)).toMap))
@@ -167,13 +167,13 @@ object ProofHelper {
       }
     }
 
-    def extract(extractionCandidate: Statement, termsSoFar: Int): Option[(Map[Int, Term], Seq[Step])] = {
+    def extractFromStatement(extractionCandidate: Statement, termsSoFar: Int): Option[(Map[Int, Term], Seq[Step])] = {
       extractWithoutRewrite(extractionCandidate, termsSoFar) orElse
         extractWithRewrite(extractionCandidate, termsSoFar)
     }
 
     def extractPremise(premise: Premise.SingleLinePremise): Option[Step] = {
-      extract(premise.statement, 0).map(_._2).flatMap(wrapAsElidedIfNecessary(_, "Extracted"))
+      extractFromStatement(premise.statement, 0).map(_._2).flatMap(wrapAsElidedIfNecessary(_, "Extracted"))
     }
 
     stepContext.allPremisesSimplestFirst.mapFind(extractPremise)

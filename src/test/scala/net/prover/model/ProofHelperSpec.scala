@@ -32,8 +32,8 @@ class ProofHelperSpec extends ProverSpec {
     val axioms = Seq(specification, modusPonens, reverseImplicationFromEquivalence, combineConjunction, zeroIsANaturalNumber, successorOfNaturalIsNatural)
     val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
 
-    def extract(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
-      val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms)
+    def extract(targetStatement: Statement, premises: Seq[Statement], depth: Int = 0): Option[Step] = {
+      val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms).copy(boundVariableLists = (1 to depth).map(i => Seq(i.toString)))
       ProofHelper.extract(targetStatement, stepContext)
         .map(_.recalculateReferences(stepContext))
     }
@@ -120,6 +120,30 @@ class ProofHelperSpec extends ProverSpec {
         φ,
         Seq(ElementOf(a, b))
       ) must beNone
+    }
+
+    "not find spurious results with external bound variables" in {
+      extract(
+        Exists("x")(ψ(FunctionParameter(0, 0) /*x*/, FunctionParameter(0, 2) /*n*/, Successor(FunctionParameter(0, 1))  /*m+*/)),
+        Seq(
+          ForAll("y")(Implication(
+            φ(FunctionParameter(0, 2) /*n*/, FunctionParameter(0, 0) /*y*/),
+            Exists("x")(ψ(FunctionParameter(0, 0) /*x*/, FunctionParameter(0, 3) /*n*/, FunctionParameter(0, 1) /*y*/)))),
+          φ(FunctionParameter(0, 1) /*n*/, Successor(FunctionParameter(0, 1)) /*n+*/)),
+        2
+      ) must beNone
+    }
+
+    "find non-spurious result with external bound variables" in {
+      extract(
+        Exists("x")(ψ(FunctionParameter(0, 0), FunctionParameter(0, 2), Successor(FunctionParameter(0, 1)))),
+        Seq(
+          ForAll("y")(Implication(
+            φ(FunctionParameter(0, 2), FunctionParameter(0, 0)),
+            Exists("x")(ψ(FunctionParameter(0, 0), FunctionParameter(0, 3), FunctionParameter(0, 1))))),
+          φ(FunctionParameter(0, 1), Successor(FunctionParameter(0, 0)))),
+        2
+      ) must beSome
     }
   }
 

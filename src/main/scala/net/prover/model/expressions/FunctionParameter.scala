@@ -105,7 +105,9 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
         case Some(_) =>
           None
         case None =>
-          target.asOptionalInstanceOf[Term].map(t => argumentsSoFar.updated(index, t))
+          target.asOptionalInstanceOf[Term]
+            .flatMap(_.removeExternalParameters(internalDepth))
+            .map(t => argumentsSoFar.updated(index, t))
       }
     } else if (target == this) {
       Some(argumentsSoFar)
