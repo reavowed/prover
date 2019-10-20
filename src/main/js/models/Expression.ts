@@ -23,6 +23,47 @@ export interface TypeDefinition {
   properties: { [key: string]: string }
 }
 
+export interface ExpressionMatchResult {
+  type: "expression";
+  matchedVariable: string;
+  expression: Expression;
+  pathWithinMatch: number[];
+  boundVariablesWithinMatch: string[][];
+}
+
+export interface BoundVariableMatchResult {
+  type: "boundVariable";
+  name: string;
+  index: number;
+  pathWithinMatch: number[];
+}
+
+type MatchResult = ExpressionMatchResult | BoundVariableMatchResult;
+
+export function matchTemplate(template: any, expression: Expression, pathWithinMatch: number[], boundVariablesWithinMatch: string[][]): MatchResult[] | undefined {
+  if (_.isString(template)) {
+    return [{type: "expression", matchedVariable: template, expression, pathWithinMatch, boundVariablesWithinMatch}];
+  } else if (_.isArray(template) && _.isString(template[0])) {
+    if ((expression instanceof DefinedExpression) && (expression.definition.symbol === template[0])) {
+      const innerBoundVariables = expression.definition.numberOfBoundVariables ? [expression.boundVariableNames, ...boundVariablesWithinMatch] : boundVariablesWithinMatch;
+      const componentMatches = _.chain(template.slice(1))
+          .zip(expression.components)
+          .map(([t, c], i) => matchTemplate(t, c!, [...pathWithinMatch, i], innerBoundVariables))
+          .value();
+      if (_.every(componentMatches)) {
+        const boundVariableMatches = expression.boundVariableNames.map((name, index) => ({type: "boundVariable", name, index, pathWithinMatch} as BoundVariableMatchResult));
+        const flattenedComponentMatches: MatchResult[] = _.flatten(componentMatches as MatchResult[][]);
+        return [...boundVariableMatches, ...flattenedComponentMatches];
+      }
+    }
+  } else if (_.isArray(template) && _.isNumber(template[0])) {
+    if ((expression instanceof FunctionParameter) && _.isEqual(template, [expression.level, expression.index])) {
+      return [];
+    }
+  }
+  return undefined;
+}
+
 export type Expression = TextBasedExpression | FormatBasedExpression | TypeExpression | PropertyExpression
 export const Expression = {
   parseFromJson(json: any): Expression {

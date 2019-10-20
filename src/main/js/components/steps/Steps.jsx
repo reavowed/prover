@@ -1,6 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
+import {matchTemplate} from "../../models/Expression";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {AssertionStep, AssertionStepProofLine} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
@@ -135,35 +136,34 @@ export class Steps extends React.Component {
         return "subproof " + (step.statement ? step.statement.serialize() : "???");
     }
   }
-  static getTransitivityDetails(stepsWithIndexes, firstStep, transitivityInferenceId, basePath, firstIndex) {
-    const definitionSymbol = firstStep.statement.definition.symbol;
+  static getTransitivityDetails(stepsWithIndexes, firstStep, transitiveStatement, basePath, firstIndex) {
+    const firstStepMatch = matchTemplate(transitiveStatement.template, firstStep.statement, [], []);
     const firstLinePath = [...basePath, firstIndex];
     const firstLineReference = {stepPath: firstLinePath};
-    const leftHandSideExpression = firstStep.statement.components[0];
+    const leftHandSideExpression = firstStepMatch[0].expression;
     const rightHandSides = [{
-      expression: firstStep.statement.components[1],
+      expression: firstStepMatch[1].expression,
       references: [firstLineReference],
       step: firstStep
     }];
+    let continuingStepMatch, transitiveStepMatch;
     while (stepsWithIndexes.length >= 2 &&
       _.includes(allowableTransitivityStepTypes, stepsWithIndexes[0].step.type) &&
       stepsWithIndexes[1].step.type === "assertion" &&
+      stepsWithIndexes[1].step.inference && stepsWithIndexes[1].step.inference.id === transitiveStatement.inferenceId &&
       !stepsWithIndexes[1].step.isIncomplete &&
       stepsWithIndexes[0].step.statement &&
       stepsWithIndexes[1].step.statement &&
-      stepsWithIndexes[0].step.statement.definition &&
-      stepsWithIndexes[1].step.statement.definition &&
-      stepsWithIndexes[0].step.statement.definition.symbol === definitionSymbol &&
-      stepsWithIndexes[1].step.statement.definition.symbol === definitionSymbol &&
-      stepsWithIndexes[1].step.inference && stepsWithIndexes[1].step.inference.id === transitivityInferenceId &&
-      stepsWithIndexes[0].step.statement.components[0].serialize() === rightHandSides[rightHandSides.length-1].expression.serialize() &&
-      stepsWithIndexes[1].step.statement.components[0].serialize() === leftHandSideExpression.serialize() &&
-      stepsWithIndexes[0].step.statement.components[1].serialize() === stepsWithIndexes[1].step.statement.components[1].serialize()
+      (continuingStepMatch = matchTemplate(transitiveStatement.template, stepsWithIndexes[0].step.statement, [], [])) &&
+      (transitiveStepMatch = matchTemplate(transitiveStatement.template, stepsWithIndexes[1].step.statement, [], [])) &&
+      continuingStepMatch[0].expression.serialize() === rightHandSides[rightHandSides.length-1].expression.serialize() &&
+      transitiveStepMatch[0].expression.serialize() === leftHandSideExpression.serialize() &&
+      continuingStepMatch[1].expression.serialize() === transitiveStepMatch[1].expression.serialize()
     ) {
       const {step, index} = stepsWithIndexes.shift();
       const {index: transitiveIndex} = stepsWithIndexes.shift();
       rightHandSides.push({
-        expression: step.statement.components[1],
+        expression: continuingStepMatch[1].expression,
         step,
         path: [...basePath, index],
         references: [{stepPath: [...basePath, index]}, {stepPath: [...basePath, transitiveIndex]}]
@@ -177,7 +177,7 @@ export class Steps extends React.Component {
           path: firstLinePath,
           lineReference: firstLineReference
         },
-        symbol: definitionSymbol,
+        symbol: transitiveStatement.symbol,
         rightHandSides: rightHandSides,
         finalStatement: rightHandSides[rightHandSides.length - 1].step.statement
       }
@@ -188,10 +188,9 @@ export class Steps extends React.Component {
   static renderNextStep(stepsWithIndexes, path, referencesForLastStep, otherProps, lastIndex) {
     const {step, index} = stepsWithIndexes.shift();
     if (_.includes(allowableTransitivityStepTypes, step.type) && step.statement && step.statement.definition) {
-      const definitionSymbol = step.statement.definition.symbol;
-      const potentialTransitivityInference = window.transitivityInferences[definitionSymbol];
-      if (potentialTransitivityInference) {
-        const transitivityDetails = this.getTransitivityDetails(stepsWithIndexes, step, potentialTransitivityInference, path, index);
+      const transitiveStatement = _.find(window.transitiveStatements, x => matchTemplate(x.template, step.statement, [], []));
+      if (transitiveStatement) {
+        const transitivityDetails = this.getTransitivityDetails(stepsWithIndexes, step, transitiveStatement, path, index);
         if (transitivityDetails) {
           return <TransitiveSteps key={"transitivity for " + transitivityDetails.finalStatement.serialize()}
                                   referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []}

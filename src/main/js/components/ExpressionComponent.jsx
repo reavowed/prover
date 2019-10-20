@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
-import {DefinedExpression, FunctionParameter, PropertyExpression, TypeExpression} from "../models/Expression";
+import {matchTemplate, PropertyExpression, TypeExpression} from "../models/Expression";
 import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "./helpers/Formatter";
 
 const HighlightedPremise = styled.span`
@@ -12,28 +12,8 @@ const HighlightedConclusion = styled.span`
 `;
 
 export class ExpressionComponent extends React.Component {
-  matchTemplate(template, expression, pathWithinMatch, boundVariablesWithinMatch) {
-    if (_.isString(template)) {
-      return {type: "expression", matchedVariable: template, expression, pathWithinMatch, boundVariablesWithinMatch};
-    } else if (_.isArray(template) && _.isString(template[0])) {
-      if ((expression instanceof DefinedExpression) && (expression.definition.symbol === template[0])) {
-        const innerBoundVariables = expression.definition.numberOfBoundVariables ? [expression.boundVariableNames, ...boundVariablesWithinMatch] : boundVariablesWithinMatch;
-        const componentMatches = _.chain(template.slice(1))
-          .zip(expression.components)
-          .map(([t, c], i) => this.matchTemplate(t, c, [...pathWithinMatch, i], innerBoundVariables))
-          .value();
-        if (_.every(componentMatches)) {
-          return [...expression.boundVariableNames.map((name, index) => ({type: "boundVariable", name, index, pathWithinMatch})), ..._.flatten(componentMatches)];
-        }
-      }
-    } else if (_.isArray(template) && _.isNumber(template[0])) {
-      if ((expression instanceof FunctionParameter) && _.isEqual(template, [expression.level, expression.index])) {
-        return [];
-      }
-    }
-  }
   matchDisplayShorthand(displayShorthand, expression, pathWithinMatch, boundVariablesWithinMatch) {
-    const matches = this.matchTemplate(displayShorthand.template, expression, pathWithinMatch, boundVariablesWithinMatch);
+    const matches = matchTemplate(displayShorthand.template, expression, pathWithinMatch, boundVariablesWithinMatch);
     if (matches) {
       const matchesConditions = _.every(displayShorthand.conditions, condition => {
         const match = _.find(matches, match => match.matchedVariable === condition[0]);

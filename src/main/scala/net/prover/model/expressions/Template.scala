@@ -37,7 +37,9 @@ sealed trait Template {
 }
 
 object Template {
-  sealed trait Variable extends Template
+  sealed trait Variable extends Template {
+    def name: String
+  }
   case class StatementVariable(name: String) extends Template.Variable {
     override def names: Seq[String] = Seq(name)
     override def matchExpression(expression: Expression, boundVariableNames: Seq[Seq[String]], internalPath: Seq[Int]): Option[Seq[Template.Match]] = expression match {
