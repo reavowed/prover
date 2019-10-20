@@ -125,7 +125,7 @@ object PremiseFinder {
       case DefinedStatement(firstComponent +: _, statementDefinition) =>
         (for {
           (simplificationInference, simplificationPremise, firstSimplificationConclusionComponent) <- getStatementDefinitionSimplifications(statementDefinition, stepContext.entryContext)
-          initialSimplificationSubstitutions <- firstSimplificationConclusionComponent.calculateSubstitutions(firstComponent, Substitutions.empty, 0, stepContext.externalDepth)
+          initialSimplificationSubstitutions <- simplificationInference.conclusion.calculateSubstitutions(targetStatement, Substitutions.empty, 0, stepContext.externalDepth)
           (simplificationPremiseSteps, substitutedSimplificationPremise, simplificationSubstitutions) <- findPremiseSteps(simplificationPremise, initialSimplificationSubstitutions, stepContext)
           assertionStep = Step.Assertion(
             targetStatement,
