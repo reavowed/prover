@@ -793,6 +793,8 @@ object ProofHelper {
       else (premiseStatement, currentTarget) match {
         case (DefinedStatement(premiseComponents, premiseDefinition), DefinedStatement(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
           rewriteComponents(premiseComponents, targetComponents, components => wrappingFunction(premiseDefinition(components:_*)))
+        case (PredicateApplication(premiseName, premiseArguments), PredicateApplication(targetName, targetArguments)) if premiseName == targetName =>
+          rewriteComponents(premiseArguments, targetArguments, arguments => wrappingFunction(PredicateApplication(premiseName, arguments.toType[Term].get)))
         case _ =>
           None
       }
@@ -805,6 +807,8 @@ object ProofHelper {
         (premiseTerm, targetTerm) match {
           case (DefinedTerm(premiseComponents, premiseDefinition), DefinedTerm(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
             rewriteComponents(premiseComponents, targetComponents, components => wrappingPredicate.specify(Seq(premiseDefinition(components:_*)), 0, stepContext.externalDepth).get)
+          case (FunctionApplication(premiseName, premiseArguments), FunctionApplication(targetName, targetArguments)) if premiseName == targetName =>
+            rewriteComponents(premiseArguments, targetArguments, arguments => wrappingPredicate.specify(Seq(FunctionApplication(premiseName, arguments.toType[Term].get)), 0, stepContext.externalDepth).get)
           case _ =>
             (findBySimplifying(premiseTerm, targetTerm, wrappingPredicate) orElse findByKnownEquality(premiseTerm, targetTerm, wrappingPredicate))
               .map(Seq(_))
