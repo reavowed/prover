@@ -5,6 +5,26 @@ type equivalenceRelation ≈ (A)
   name (equivalence relation)
   definition (∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A)
 
+theorem Reverse Equivalence
+premise equivalenceRelation ≈ A
+premise ∈ orderedPair a b ≈
+conclusion ∈ orderedPair b a ≈
+{
+  prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) () ()
+  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $0 $$0 ≈ ce450319bb89876bf8589de995443ba3047eae658cd4dece800308b76eb4d3d3 () (≈, A) () ()
+  prove ⊆ ≈ product A A bdc3e1f2449e2fbd0a83076d34a8055e2d09d67c1806a4bc59547d29cfa15bd1 () (≈, A) () ()
+  prove ∈ orderedPair a b product A A ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (≈, product A A, orderedPair a b) () ()
+  prove ∈ a A 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () (a, b, A, A) () ()
+  prove ∈ b A fd9eacaeda58b006596b2a50422b6bc2841496d77f4db1e4196a7e9759de2d78 () (a, b, A, A) () ()
+  elided (Extracted) {
+    prove → ∈ a A ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (→ ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $0 $$0 ≈) ()
+    prove ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈) () () ()
+    prove → ∈ b A → ∈ orderedPair a b ≈ ∈ orderedPair b a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (→ ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈) ()
+    prove → ∈ orderedPair a b ≈ ∈ orderedPair b a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, → ∈ orderedPair a b ≈ ∈ orderedPair b a ≈) () () ()
+    prove ∈ orderedPair b a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair a b ≈, ∈ orderedPair b a ≈) () () ()
+  }
+}
+
 term equivalenceClass (a ≈)
   name (Equivalence Class)
   format ([a])
@@ -60,16 +80,79 @@ conclusion ∈ orderedPair a b ≈
   prove ∈ orderedPair a b ≈ fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () (equivalenceClass a ≈, A, b) (∈ orderedPair a $0 ≈) ()
 }
 
+theorem Equivalent Set Is Element of Equivalence Class
+premise equivalenceRelation ≈ A
+premise ∈ a A
+premise ∈ b A
+premise ∈ orderedPair a b ≈
+conclusion ∈ b equivalenceClass a ≈
+{
+  prove = equivalenceClass a ≈ comprehension x A ∈ orderedPair a $0 ≈ f2e5322bcbc2762c77a7c0c134101ca46410896012aa8739a73a188c900d9b2c () (≈, A, a) () ()
+  prove ∈ b equivalenceClass a ≈ 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () (equivalenceClass a ≈, A, b) (∈ orderedPair a $0 ≈) ()
+}
+
 theorem Elements Are Equivalent If Equivalence Classes Are Equal
 premise equivalenceRelation ≈ A
-premise ∈ x A
-premise ∈ y A
-premise = equivalenceClass x ≈ equivalenceClass y ≈
-conclusion ∈ orderedPair x y ≈
+premise ∈ a A
+premise ∈ b A
+premise = equivalenceClass a ≈ equivalenceClass b ≈
+conclusion ∈ orderedPair a b ≈
 {
-  prove ∈ y equivalenceClass y ≈ a2c3ae5d05953aca74d207208b7ac3cebbe21923fb3013e35e6db79e251224e7 () (≈, A, y) () ()
-  prove ∈ y equivalenceClass x ≈ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (equivalenceClass x ≈, equivalenceClass y ≈) (∈ y $0) ()
-  prove ∈ orderedPair x y ≈ 79356f61dd25fd47ebc97730d0b07dcb92caeecfafbccaa22a90a76090558516 () (≈, A, x, y) () ()
+  prove ∈ b equivalenceClass b ≈ a2c3ae5d05953aca74d207208b7ac3cebbe21923fb3013e35e6db79e251224e7 () (≈, A, b) () ()
+  prove ∈ b equivalenceClass a ≈ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (equivalenceClass a ≈, equivalenceClass b ≈) (∈ b $0) ()
+  prove ∈ orderedPair a b ≈ 79356f61dd25fd47ebc97730d0b07dcb92caeecfafbccaa22a90a76090558516 () (≈, A, a, b) () ()
+}
+
+theorem Equivalence Classses Are Equal If Elements Are Equivalent
+premise equivalenceRelation ≈ A
+premise ∈ a A
+premise ∈ b A
+premise ∈ orderedPair a b ≈
+conclusion = equivalenceClass a ≈ equivalenceClass b ≈
+{
+  prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) () ()
+  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$0 $0 ≈ 9d11e0ac2e6cb1f549e37d9ba51c30b772c483a2d99a2e76853176f4fa486ac3 () (≈, A) () ()
+  take x {
+    assume ∈ $0 equivalenceClass a ≈ {
+      prove = equivalenceClass a ≈ comprehension x A ∈ orderedPair a $0 ≈ f2e5322bcbc2762c77a7c0c134101ca46410896012aa8739a73a188c900d9b2c () (≈, A, a) () ()
+      prove ∈ $0 A 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () (equivalenceClass a ≈, A, $0) (∈ orderedPair a $$0 ≈) ()
+      prove ∈ orderedPair a $0 ≈ 79356f61dd25fd47ebc97730d0b07dcb92caeecfafbccaa22a90a76090558516 () (≈, A, a, $0) () ()
+      prove ∈ orderedPair b a ≈ 166b1259329c7ad9d68144df129a3b2fd662bc382fd678f3ed31a0155fff1a33 () (≈, A, a, b) () ()
+      elided (Extracted) {
+        prove → ∈ b A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (→ ∈ $$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$$0 $0 ≈) ()
+        prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈) () () ()
+        prove → ∈ a A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (→ ∈ $$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$$0 ≈ ∈ orderedPair $$$0 $0 ≈ ∈ orderedPair b $0 ≈) ()
+        prove ∀ c → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ c → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈) () () ()
+        prove → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $$0 ≈ ∈ orderedPair b $$0 ≈) ()
+        prove → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈) () () ()
+        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+          prove ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair b a ≈, ∈ orderedPair a $0 ≈) () () ()
+          prove ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈, ∈ orderedPair b $0 ≈) () () ()
+        }
+      }
+      prove ∈ $0 equivalenceClass b ≈ aa1947cba79c33d6722464064a2395bae2a8c50954a989af8e10438f424a1370 () (≈, A, b, $0) () ()
+    }
+    assume ∈ $0 equivalenceClass b ≈ {
+      prove = equivalenceClass b ≈ comprehension x A ∈ orderedPair b $0 ≈ f2e5322bcbc2762c77a7c0c134101ca46410896012aa8739a73a188c900d9b2c () (≈, A, b) () ()
+      prove ∈ $0 A 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () (equivalenceClass b ≈, A, $0) (∈ orderedPair b $$0 ≈) ()
+      prove ∈ orderedPair b $0 ≈ 79356f61dd25fd47ebc97730d0b07dcb92caeecfafbccaa22a90a76090558516 () (≈, A, b, $0) () ()
+      elided (Extracted) {
+        prove → ∈ a A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (→ ∈ $$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$$0 $0 ≈) ()
+        prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈) () () ()
+        prove → ∈ b A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (→ ∈ $$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$$0 ≈ ∈ orderedPair $$$0 $0 ≈ ∈ orderedPair a $0 ≈) ()
+        prove ∀ c → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, ∀ c → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈) () () ()
+        prove → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $$0 ≈ ∈ orderedPair a $$0 ≈) ()
+        prove → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈) () () ()
+        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+          prove ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair a b ≈, ∈ orderedPair b $0 ≈) () () ()
+          prove ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈, ∈ orderedPair a $0 ≈) () () ()
+        }
+      }
+      prove ∈ $0 equivalenceClass a ≈ aa1947cba79c33d6722464064a2395bae2a8c50954a989af8e10438f424a1370 () (≈, A, a, $0) () ()
+    }
+    prove ↔ ∈ $0 equivalenceClass a ≈ ∈ $0 equivalenceClass b ≈ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 equivalenceClass a ≈, ∈ $0 equivalenceClass b ≈) () () ()
+  }
+  prove = equivalenceClass a ≈ equivalenceClass b ≈ 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (equivalenceClass a ≈, equivalenceClass b ≈) () ()
 }
 
 theorem Lift Function to Quotient
@@ -101,7 +184,7 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
                     prove = equivalenceClass $0 ≈ $$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$$$0, equivalenceClass $0 ≈) () ()
                   }
                   prove = equivalenceClass $0 ≈ equivalenceClass $$$0 ≈ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (equivalenceClass $0 ≈, $$$$0, equivalenceClass $$$0 ≈) () ()
-                  prove ∈ orderedPair $0 $$$0 ≈ 12f015cda29c60387842b23f3367d61c306d55a754d63f8e3a8461a46d42eb1e () (≈, A, $0, $$$0) () ()
+                  prove ∈ orderedPair $0 $$$0 ≈ 0abafdc17aeda225325cbf7504636e4df9f206dfe22ed7542f501c7eb8ab6a5b () (≈, A, $0, $$$0) () ()
                   prove = $$0 apply f $0 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$$$0, $$0, equivalenceClass $0 ≈, apply f $0) () ()
                   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
                     prove → ∈ $0 A ∀ y → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ = apply f $$0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$$0 A ∀ y → ∈ $0 A → ∈ orderedPair $$$$$$$0 $0 ≈ = apply f $$$$$$$0 apply f $0) ()

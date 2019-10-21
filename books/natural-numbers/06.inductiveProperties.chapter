@@ -23,6 +23,15 @@ conclusion ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0
   }
 }
 
+theorem A Non-Zero Number Is a Successor
+premise ∈ n ℕ
+premise ¬ = n 0
+conclusion ∃ m ∧ ∈ $0 ℕ = n successor $0
+{
+  prove ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0 9cb04c0b7ebcd3d2f79c4d9aeb6298e9ee0f6edb9acdb639d551ea7d04dbe418 () (n) () ()
+  prove ∃ m ∧ ∈ $0 ℕ = n successor $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (= n 0, ∃ m ∧ ∈ $0 ℕ = n successor $0) () () ()
+}
+
 theorem Every Element of a Natural Number Is a Natural Number
 premise ∈ n ℕ
 premise ∈ m n
@@ -271,4 +280,17 @@ conclusion ∈ m n
   }
   prove ¬ = m n fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (= m n, ∈ successor m successor n) () () ()
   prove ∈ m n 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ m n, = m n) () () ()
+}
+
+theorem Zero Is an Element of a Successor
+premise ∈ n ℕ
+conclusion ∈ 0 successor n
+{
+  prove ∈ 0 successor 0 bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (0) () ()
+  take n {
+    assume ∧ ∈ $0 ℕ ∈ 0 successor $0 {
+      prove ∈ 0 successor successor $0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (0, successor $0) () ()
+    }
+  }
+  prove ∈ 0 successor n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∈ 0 successor $0) ()
 }

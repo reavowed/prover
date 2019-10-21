@@ -19,15 +19,50 @@ conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ → ∈ orderedPair $$0 $0 
       take m {
         assume ∈ $0 ℕ {
           assume ∈ orderedPair successor $$0 $0 < {
-            prove ∈ orderedPair $$0 successor $$0 < 03ca329a7f30e183c6921ba709d61c5535da2fb28b0a1f8bc1cdfedcf59b8b1c () ($$0) () ()
-            prove ∈ orderedPair $$0 $0 < ab870655614f85af15c3382e6269a0f6dab4558694e4c471733749b8e1c520c6 () ($$0, successor $$0, $0) () ()
-            prove ∈ orderedPair $0 successor $0 < 03ca329a7f30e183c6921ba709d61c5535da2fb28b0a1f8bc1cdfedcf59b8b1c () ($0) () ()
-            prove ∈ orderedPair $$0 successor $0 < ab870655614f85af15c3382e6269a0f6dab4558694e4c471733749b8e1c520c6 () ($$0, $0, successor $0) () ()
-            target ∃ x ∧ ∈ $0 ℕ = apply + orderedPair successor $$$0 $0 $$0
+            elided b9de0e3d7311287e1479c4dbf3e9caa20fb858f495620f18fd9735cc47d56954 {
+              prove ∈ successor $$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$0) () ()
+              prove ¬ = $0 0 b9de0e3d7311287e1479c4dbf3e9caa20fb858f495620f18fd9735cc47d56954 () (successor $$0, $0) () ()
+            }
+            prove ∃ r ∧ ∈ $0 ℕ = $$0 successor $0 c6173f36ad92ced253d9de5e0ba375fc2f5c6a12e1d70a1c942f87c6c9ff4d3f () ($0) () ()
+            let r ∧ ∈ $0 ℕ = $$0 successor $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ x ∧ ∈ $0 ℕ = apply + orderedPair successor $$$0 $0 $$0) () (∧ ∈ $$$0 ℕ = $0 successor $$$0) () {
+              prove ∈ orderedPair successor $$$0 successor $0 < 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$0, successor $0) (∈ orderedPair successor $$$0 $$$$0 <) ()
+              prove ∈ orderedPair $$$0 $0 < 1c98407e3f7a02ea810643f5489eb0cd5eefdb38578936e034e28b3a0ccec925 () ($$$0, $0) () ()
+              elided (Extracted) {
+                prove → ∈ $0 ℕ → ∈ orderedPair $$$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$$0 $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ → ∈ orderedPair $$$0 $$$$0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$$0 $0 $$$$$0) ()
+                prove → ∈ orderedPair $$$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$$0 $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, → ∈ orderedPair $$$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$$0 $0 $$0) () () ()
+                prove ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$$0 $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$$0 $0 <, ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$$0 $0 $$0) () () ()
+              }
+              let y ∧ ∈ $0 ℕ = apply + orderedPair $$$$0 $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ x ∧ ∈ $0 ℕ = apply + orderedPair successor $$$$0 $0 $$$0) () (∧ ∈ $$$$0 ℕ = apply + orderedPair $$$0 $$$$0 $0) () {
+                prove = apply + orderedPair successor $$$$0 $0 successor apply + orderedPair $$$$0 $0 2d4570ac9330c3bf6ccb7237a8087fd509ab4576382b8c7d0a28e419a249ffbd () ($$$$0, $0) () ()
+                prove = successor apply + orderedPair $$$$0 $0 successor $$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair $$$$0 $0, $$0) () (successor $$$$$0)
+                prove = apply + orderedPair successor $$$$0 $0 successor $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair successor $$$$0 $0, successor apply + orderedPair $$$$0 $0, successor $$0) () ()
+                prove = apply + orderedPair successor $$$$0 $0 $$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$0, successor $$0) (= apply + orderedPair successor $$$$0 $0 $$$$$0) ()
+                elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+                  prove ∧ ∈ $0 ℕ = apply + orderedPair successor $$$$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 ℕ, = apply + orderedPair successor $$$$0 $0 $$$0) () () ()
+                  prove ∃ x ∧ ∈ $0 ℕ = apply + orderedPair successor $$$$$0 $0 $$$$0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$$$$0 ℕ = apply + orderedPair successor $$$$0 $$$$$0 $$$0) ()
+                }
+              }
+            }
           }
         }
       }
     }
   }
   prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ → ∈ orderedPair $$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$0 $0 $$0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (∀ m → ∈ $0 ℕ → ∈ orderedPair $$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$0 $0 $$0) ()
+}
+
+theorem Difference Between Two Naturals Is a Natural Number
+premise ∈ n ℕ
+premise ∈ m ℕ
+premise ∈ orderedPair n m <
+conclusion ∃ x ∧ ∈ $0 ℕ = apply + orderedPair n $0 m
+{
+  prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ → ∈ orderedPair $$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$0 $0 $$0 724eb13d486204b68479ea4cd26460237e975ed9bf38424d4022c88f333046c2 () () () ()
+  elided (Extracted) {
+    prove → ∈ n ℕ ∀ m → ∈ $0 ℕ → ∈ orderedPair n $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair n $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∀ m → ∈ $0 ℕ → ∈ orderedPair $$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$0 $0 $$0) ()
+    prove ∀ m → ∈ $0 ℕ → ∈ orderedPair n $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair n $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ m → ∈ $0 ℕ → ∈ orderedPair n $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair n $0 $$0) () () ()
+    prove → ∈ m ℕ → ∈ orderedPair n m < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair n $0 m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 ℕ → ∈ orderedPair n $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair n $0 $$0) ()
+    prove → ∈ orderedPair n m < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair n $0 m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m ℕ, → ∈ orderedPair n m < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair n $0 m) () () ()
+    prove ∃ x ∧ ∈ $0 ℕ = apply + orderedPair n $0 m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair n m <, ∃ x ∧ ∈ $0 ℕ = apply + orderedPair n $0 m) () () ()
+  }
 }
