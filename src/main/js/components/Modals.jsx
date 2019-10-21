@@ -269,11 +269,11 @@ export class InferenceFinder extends React.Component {
         return showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, `${key} ${name} ${numberOfParameters}`, validValues, [...boundVariableLists, newVariableList], x => x[key][name][numberOfParameters], (x, y) => x[key][name][numberOfParameters] = y);
       });
     };
-    const {boundVariableLists} = this.props;
+    const {title, boundVariableLists} = this.props;
 
     return <>
       <Form.Group>
-        <Form.Label><strong>Select inference</strong></Form.Label>
+        <Form.Label><strong>{title}</strong></Form.Label>
         <Autosuggest
           ref={this.autoSuggestRef}
           suggestions={this.state.inferenceSuggestions}

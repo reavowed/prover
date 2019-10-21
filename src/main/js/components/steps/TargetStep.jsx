@@ -13,10 +13,7 @@ export class TargetStepProofLine extends React.Component {
     super(props);
     this.state = {
       proving: false,
-      provingWithInference: false,
-      addingPremise: false,
-      naming: false,
-      addingTarget: false
+      activeProvingType: null
     };
     this.props.theoremContext.registerStep(this, this.props.path);
   }
@@ -54,10 +51,14 @@ export class TargetStepProofLine extends React.Component {
   startProving = () => {
     this.setState({
       proving: true,
-      provingWithInference: false,
-      addingPremise: false,
-      naming: false,
-      addingTarget: false
+      activeProvingType: null
+    });
+  };
+
+  stopProving = () => {
+    this.setState({
+      proving: false,
+      activeProvingType: null
     });
   };
 
@@ -84,7 +85,9 @@ export class TargetStepProofLine extends React.Component {
       method: "PUT",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, substitutions})
-    }).then(this.props.theoremContext.updateTheorem);
+    })
+      .then(this.props.theoremContext.updateTheorem)
+      .then(this.stopProving);
   };
   addPremise = (inferenceId, substitutions) => {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, "assertion", {
@@ -92,7 +95,7 @@ export class TargetStepProofLine extends React.Component {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, substitutions})
     }).then(this.props.theoremContext.updateTheorem)
-      .then(() => this.setState({addingPremise: false}));
+      .then(this.stopProving);
   };
   createNamingStep = (inferenceId, substitutions) => {
     const {namingVariableName: variableName} = this.state;
@@ -101,7 +104,7 @@ export class TargetStepProofLine extends React.Component {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, substitutions, variableName})
     }).then(this.props.theoremContext.updateTheorem)
-      .then(() => this.setState({naming: false}));
+      .then(this.stopProving);
   };
   addTarget = () => {
     this.props.theoremContext.fetchJsonForStep(this.props.path, "target", {
@@ -109,12 +112,12 @@ export class TargetStepProofLine extends React.Component {
       body: this.state.targetStatement
     })
       .then(this.props.theoremContext.updateTheorem)
-      .then(() => this.setState({addingTarget: false}));
-  }
+      .then(this.stopProving);
+  };
 
   render() {
     let {step, path, additionalReferences, theoremContext, boundVariableLists, children} = this.props;
-    let {proving, provingWithInference, addingPremise, naming, addingTarget} = this.state;
+    let {proving, activeProvingType} = this.state;
     let scopingStatement = _.find(window.definitions, d => _.includes(d.attributes, "scoping"));
     let deductionStatement = _.find(window.definitions, d => _.includes(d.attributes, "deduction"));
     return <>
@@ -125,10 +128,10 @@ export class TargetStepProofLine extends React.Component {
             <ExpressionComponent expression={step.statement} boundVariableLists={boundVariableLists}/>
           </h5>
           <div className="text-center">
-            <Button size="sm" className="ml-1" onClick={() => this.setState({provingWithInference: !provingWithInference})}>Prove with inference</Button>
-            <Button size="sm" className="ml-1" onClick={() => this.setState({addingPremise: !addingPremise})}>Add premise</Button>
-            <Button size="sm" className="ml-1" onClick={() => this.setState({naming: !naming, namingVariableName: ''})}>Name</Button>
-            <Button size="sm" className="ml-1" onClick={() => this.setState({addingTarget: !addingTarget, targetStatement: ''})}>Add target</Button>
+            <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'inference'})}>Prove with inference</Button>
+            <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'premise'})}>Add premise</Button>
+            <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'naming', namingVariableName: ''})}>Name</Button>
+            <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'target', targetStatement: ''})}>Add target</Button>
             <Button size="sm" className="ml-1" onClick={this.extract}>Extract</Button>
             <Button size="sm" className="ml-1" onClick={this.rearrange}>Rearrange</Button>
             <Button size="sm" className="ml-1" onClick={this.rewrite}>Rewrite</Button>
@@ -137,29 +140,32 @@ export class TargetStepProofLine extends React.Component {
             {deductionStatement && step.statement.definition === deductionStatement &&
             <Button size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
           </div>
-          {addingPremise && <InferenceFinder getInferenceSuggestions={this.getInferenceSuggestionsForPremise}
-                                             getPremiseSuggestions={this.getPremiseSuggestionsForPremise}
-                                             boundVariableLists={boundVariableLists}
-                                             submit={this.addPremise}
-                                             focusOnMount/>}
-          {provingWithInference && <InferenceFinder getInferenceSuggestions={this.getInferenceSuggestionsForStep}
-                                                    getPremiseSuggestions={this.getPremiseSuggestionsForStep}
-                                                    boundVariableLists={boundVariableLists}
-                                                    submit={this.proveWithInference}
-                                                    focusOnMount/>}
-          {naming && <>
+          {activeProvingType === 'premise' && <InferenceFinder title='Select Inference for Premise'
+                                                               getInferenceSuggestions={this.getInferenceSuggestionsForPremise}
+                                                               getPremiseSuggestions={this.getPremiseSuggestionsForPremise}
+                                                               boundVariableLists={boundVariableLists}
+                                                               submit={this.addPremise}
+                                                               focusOnMount/>}
+          {activeProvingType === 'inference' && <InferenceFinder title='Select Inference'
+                                                                 getInferenceSuggestions={this.getInferenceSuggestionsForStep}
+                                                                 getPremiseSuggestions={this.getPremiseSuggestionsForStep}
+                                                                 boundVariableLists={boundVariableLists}
+                                                                 submit={this.proveWithInference}
+                                                                 focusOnMount/>}
+          {activeProvingType === 'naming' && <>
             <Form.Group>
               <Form.Label><strong>Variable name</strong></Form.Label>
               <Form.Control type="text"
                             value={this.state.namingVariableName}
                             onChange={(e) => this.setState({namingVariableName: e.target.value})}/>
             </Form.Group>
-            <InferenceFinder getInferenceSuggestions={this.getInferenceSuggestionsForNaming}
+            <InferenceFinder title='Select Inference for Naming'
+                             getInferenceSuggestions={this.getInferenceSuggestionsForNaming}
                              getPremiseSuggestions={this.getPremiseSuggestionsForNaming}
                              boundVariableLists={boundVariableLists}
                              submit={this.createNamingStep}/>
           </>}
-          {addingTarget && <>
+          {activeProvingType === 'target' && <>
             <Form.Group>
               <Form.Label><strong>Target</strong></Form.Label>
               <FlexRow>
