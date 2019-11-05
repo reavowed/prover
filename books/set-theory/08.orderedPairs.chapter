@@ -4,6 +4,7 @@ term orderedPair (a b)
   name (Ordered Pair)
   format ((a, b))
   (= $0 pair singleton a pair a b)
+  shorthand (op)
 
 theorem Elements of Ordered Pair
 premise ∈ c orderedPair a b

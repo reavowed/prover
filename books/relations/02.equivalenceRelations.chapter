@@ -30,6 +30,7 @@ term equivalenceClass (a ≈)
   format ([a])
   premises (equivalenceRelation ≈ A, ∈ a A)
   (= $0 comprehension x A ∈ orderedPair a $0 ≈)
+  shorthand (ec)
 
 term equivalenceQuotient (A ≈)
   name (Quotient)
