@@ -12,7 +12,8 @@ case class TermVariable(name: String) extends ExpressionVariable[Term] with Term
     substitutions: Substitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
-    externalDepth: Int) = {
+    externalDepth: Int
+  ): Iterator[(Term, Substitutions)] = {
     super[Term].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth) ++
       super[ExpressionVariable].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
   }

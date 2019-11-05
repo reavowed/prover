@@ -62,10 +62,10 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     substitutions: Substitutions,
     internalDepth: Int,
     externalDepth: Int
-  ) = {
+  ): Iterator[Substitutions] = {
     getMatch(other)
       .map(components.calculateSubstitutions(_, substitutions, increaseDepth(internalDepth), externalDepth))
-      .getOrElse(Nil)
+      .getOrElse(Iterator.empty)
   }
   override def applySubstitutions(
     substitutions: Substitutions,
@@ -80,7 +80,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Seq[(ExpressionType, Substitutions)] = {
+  ): Iterator[(ExpressionType, Substitutions)] = {
     components.calculateApplicatives(baseArguments, substitutions, increaseDepth(internalDepth), previousInternalDepth, externalDepth)
       .map(_.mapLeft(updateComponents))
   }

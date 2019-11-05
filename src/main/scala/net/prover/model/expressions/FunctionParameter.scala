@@ -58,12 +58,12 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     substitutions: Substitutions,
     internalDepth: Int,
     externalDepth: Int
-  ) = {
+  ): Iterator[Substitutions] = {
     other match {
       case FunctionParameter(`index`, `level`) =>
-        Seq(substitutions)
+        Iterator(substitutions)
       case _ =>
-        Nil
+        Iterator.empty
     }
   }
   override def applySubstitutions(
@@ -79,7 +79,7 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Seq[(Term, Substitutions)] = {
+  ): Iterator[(Term, Substitutions)] = {
   super.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth) ++
     (if (level >= internalDepth + previousInternalDepth)
       // External context

@@ -45,15 +45,15 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     substitutions: Substitutions,
     internalDepth: Int,
     externalDepth: Int
-  ): Seq[Substitutions] = {
+  ): Iterator[Substitutions] = {
     other match {
       case _  if other.isRuntimeInstance[ExpressionType] =>
         (for {
           reducedOther <- other.removeExternalParameters(internalDepth)
           result <- substitutions.update(name, reducedOther.asInstanceOf[ExpressionType], substitutionsLens, 0)
-        } yield result).toSeq
+        } yield result).iterator
       case _ =>
-        Nil
+        Iterator.empty
     }
   }
   def applySubstitutions(
@@ -70,8 +70,8 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Seq[(ExpressionType, Substitutions)] = {
-    Seq((this, substitutions))
+  ): Iterator[(ExpressionType, Substitutions)] = {
+    Iterator((this, substitutions))
   }
   override def calculateArguments(
     target: Expression,

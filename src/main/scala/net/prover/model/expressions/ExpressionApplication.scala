@@ -68,7 +68,7 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
           substitutionsLens,
           1)
       } yield substitutionsWithApplicative
-    } else Nil
+    } else Iterator.empty
   }
 
   override def applySubstitutions(substitutions: Substitutions, internalDepth: Int, externalDepth: Int): Option[ExpressionType] = {
@@ -84,7 +84,7 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Seq[(ExpressionType, Substitutions)] = {
+  ): Iterator[(ExpressionType, Substitutions)] = {
     arguments.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
       .map(_.mapLeft(newArguments => update(newArguments.map(_.asInstanceOf[Term]))))
   }

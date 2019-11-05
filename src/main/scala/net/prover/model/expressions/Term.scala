@@ -9,9 +9,9 @@ trait Term extends Expression with TypedExpression[Term] {
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Seq[(Term, Substitutions)] = {
+  ): Iterator[(Term, Substitutions)] = {
     for {
-      (argument, index) <- baseArguments.zipWithIndex
+      (argument, index) <- baseArguments.zipWithIndex.iterator
       updatedSubstitutions <- argument
         .insertExternalParameters(internalDepth)
         .calculateSubstitutions(this, substitutions, previousInternalDepth + internalDepth, externalDepth)

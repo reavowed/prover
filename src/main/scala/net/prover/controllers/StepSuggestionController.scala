@@ -18,6 +18,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
   case class InferenceSuggestion(
     inference: Inference.Summary,
     requiredSubstitutions: Substitutions.Required,
+    haveSubstitutionsOverflowed: Option[Boolean],
     substitutions: Option[Seq[Substitutions]])
   @GetMapping(value = Array("/suggestInferences"), produces = Array("application/json;charset=UTF-8"))
   def suggestInferences(
@@ -40,8 +41,14 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       getSubstitutions <- if (withConclusion)
         step.asOptionalInstanceOf[Step.Target].orBadRequest("Step is not target").map { targetStep =>
           (inference: Inference) =>
-            val substitutions = inference.conclusion.calculateSubstitutions(targetStep.statement, Substitutions.empty, 0, stepContext.externalDepth)
-            if (substitutions.nonEmpty) Some(Some(substitutions)) else None
+            val substitutions = inference.conclusion.calculateSubstitutions(targetStep.statement, Substitutions.empty, 0, stepContext.externalDepth).take(11).toSeq
+            if (substitutions.nonEmpty)
+              if (substitutions.length > 10)
+                Some(Some((true, Nil)))
+              else
+                Some(Some((false, substitutions)))
+            else
+              None
         }
         else
          Success((_: Inference) => Some(None))
@@ -49,7 +56,9 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       val matchingInferences = entryContext.inferences
         .filter(i => searchWords.forall(i.name.toLowerCase.contains))
         .mapCollect { inference =>
-          getSubstitutions(inference).map(InferenceSuggestion(inference.summary, inference.requiredSubstitutions, _))
+          getSubstitutions(inference).map { x =>
+            InferenceSuggestion(inference.summary, inference.requiredSubstitutions, x.map(_._1), x.filter(!_._1).map(_._2))
+          }
         }
       val sortedInferences = if (withConclusion)
         matchingInferences.sortBy(_.inference.conclusion.complexity)(implicitly[Ordering[Int]].reverse)
@@ -107,9 +116,13 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
         .filter(_._1.name.toLowerCase.contains(searchText.toLowerCase))
         .reverse
         .mapCollect { case (inference, namingPremises, _) =>
-          val substitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth)
+          val substitutions = inference.conclusion.calculateSubstitutions(step.statement, Substitutions.empty, 0, stepContext.externalDepth).take(11).toSeq
           if (substitutions.nonEmpty)
-            Some(InferenceSuggestion(inference.summary.copy(premises = namingPremises), inference.requiredSubstitutions, Some(substitutions)))
+            Some(InferenceSuggestion(
+              inference.summary.copy(premises = namingPremises),
+              inference.requiredSubstitutions,
+              Some(substitutions.length > 10),
+              Some(substitutions).filter(_.length < 11)))
           else
             None
         }
@@ -145,32 +158,32 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
   }
 
   case class PremiseSuggestions(immediateSubstitutions: Option[Substitutions], premiseMatches: Seq[Seq[PossiblePremiseMatch]])
-  case class PossiblePremiseMatch(statement: Statement, substitutions: Seq[Substitutions])
+  case class PossiblePremiseMatch(statement: Statement, haveSubstitutionsOverflowed: Boolean, substitutions: Option[Seq[Substitutions]])
   private def getPremiseSuggestions(
     premises: Seq[Statement],
     targetOption: Option[Statement],
     inference: Inference,
     stepContext: StepContext
   ): PremiseSuggestions = {
-    val possibleConclusionSubstitutions = targetOption
+    def possibleConclusionSubstitutions = targetOption
       .map(inference.conclusion.calculateSubstitutions(_, Substitutions.empty, 0, stepContext.externalDepth))
-      .getOrElse(Seq(Substitutions.empty))
+      .getOrElse(Iterator(Substitutions.empty))
     val availablePremises = stepContext.allPremisesSimplestLast.map(_.statement)
     val premiseMatches = premises.map { premise =>
       availablePremises.mapCollect { availablePremise =>
-        val substitutions = for {
+        val substitutions = (for {
           conclusionSubstitutions <- possibleConclusionSubstitutions
           premiseSubstitutions <- premise.calculateSubstitutions(availablePremise, conclusionSubstitutions, 0, stepContext.externalDepth)
-        } yield premiseSubstitutions
+        } yield premiseSubstitutions).take(11).toSeq
         if (substitutions.nonEmpty) {
-          Some(PossiblePremiseMatch(availablePremise, substitutions))
+          Some(PossiblePremiseMatch(availablePremise, substitutions.length > 10, if (substitutions.length < 11) Some(substitutions) else None))
         } else {
           None
         }
       }
     }
     val immediateSubstitutions = targetOption.flatMap(target =>
-      premiseMatches.mapFind(_.mapFind(_.substitutions.find { substitutions =>
+      premiseMatches.mapFind(_.mapFind(_.substitutions.toSeq.flatten.find { substitutions =>
         Try(inference.substitutePremisesAndValidateConclusion(target, substitutions, stepContext)).toOption.exists(_.forall(availablePremises.contains))
       })))
     PremiseSuggestions(immediateSubstitutions, premiseMatches)

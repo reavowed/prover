@@ -63,7 +63,7 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     substitutions: Substitutions,
     internalDepth: Int,
     externalDepth: Int
-  ): Seq[Substitutions]
+  ): Iterator[Substitutions]
 
   /**
     * Apply the given substitutions to this statement.
@@ -81,6 +81,9 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     * Calculate an applicative and a set of substitutions, such that when the applicative is applied to the given
     * arguments after substitution, this expression results.
     *
+    * Used in calculating substitutions for a function or predicate application - calling e.g.
+    * `F(a).calculateSubstitutions(other)` will result in a call to `other.calculateApplicatives(Seq(a))`.
+    *
     * @param internalDepth The current scope depth inside the expression since we starting calculating applicatives
     * @param previousInternalDepth The scope depth inside the expression at the point we started calculating applicatives
     * @param externalDepth The depth of external scoped variables that might be referred to by this statement
@@ -91,7 +94,7 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Seq[(ExpressionType, Substitutions)]
+  ): Iterator[(ExpressionType, Substitutions)]
   def calculateArguments(
     target: Expression,
     argumentsSoFar: Map[Int, Term],
@@ -124,9 +127,9 @@ object Expression {
       substitutions: Substitutions,
       internalDepth: Int,
       externalDepth: Int
-    ): Seq[Substitutions] = {
+    ): Iterator[Substitutions] = {
       expressions.zipStrict(otherExpressions).toSeq.flatten
-        .foldLeft(Seq(substitutions)) { case (substitutionsSoFar, (expression, otherExpression)) =>
+        .foldLeft(Iterator(substitutions)) { case (substitutionsSoFar, (expression, otherExpression)) =>
           substitutionsSoFar.flatMap(expression.calculateSubstitutions(otherExpression, _, internalDepth, externalDepth))
         }
     }
@@ -136,8 +139,8 @@ object Expression {
       internalDepth: Int,
       previousInternalDepth: Int,
       externalDepth: Int
-    ): Seq[(Seq[Expression], Substitutions)] = {
-      expressions.foldLeft(Seq((Seq.empty[Expression], substitutions))) { case (predicatesAndSubstitutionsSoFar, expression) =>
+    ): Iterator[(Seq[Expression], Substitutions)] = {
+      expressions.iterator.foldLeft(Iterator((Seq.empty[Expression], substitutions))) { case (predicatesAndSubstitutionsSoFar, expression) =>
         for {
           (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar
           (predicate, newSubstitutions) <- expression.calculateApplicatives(
