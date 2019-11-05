@@ -118,11 +118,13 @@ export const Expression = {
 
 interface TextBasedExpression {
   serialize(): string
+  serializeNicely(boundVariableLists: string[][]): string
   textForHtml(boundVariableLists: string[][]): string
 }
 interface FormatBasedExpression {
   components: Expression[]
   serialize(): string
+  serializeNicely(boundVariableLists: string[][]): string
   formatForHtml(parentRequiresBrackets: boolean): string
 }
 
@@ -130,6 +132,9 @@ export class VariableOrConstant {
   constructor(public name: string) {}
   serialize(): string {
     return this.name;
+  }
+  serializeNicely(_: string[][]): string {
+    return this.serialize();
   }
   textForHtml(): string {
     return this.name;
@@ -140,6 +145,9 @@ export class DefinedExpression {
   constructor(public definition: ExpressionDefinition, public boundVariableNames: string[], public components: Expression[]) {}
   serialize() {
     return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
+  }
+  serializeNicely(boundVariableLists: string[][]): string {
+    return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serializeNicely(boundVariableLists))].join(" ");
   }
   formatForHtml(parentRequiresBrackets: boolean) {
     return (parentRequiresBrackets && this.definition.requiresBrackets) ?
@@ -155,6 +163,11 @@ export class TypeExpression {
     const allWords = this.properties.length ? [...baseWords, "with", "(" + this.properties.join(" ") + ")"] : baseWords;
     return allWords.join(" ")
   }
+  serializeNicely(boundVariableLists: string[][]): string {
+    const baseWords = ["is", this.term.serializeNicely(boundVariableLists), this.definition.symbol, ...this.otherComponents.map(c => c.serializeNicely(boundVariableLists))];
+    const allWords = this.properties.length ? [...baseWords, "with", "(" + this.properties.join(" ") + ")"] : baseWords;
+    return allWords.join(" ")
+  }
   addProperty(newProperty: string) {
     this.properties = [...this.properties, newProperty];
   }
@@ -165,6 +178,9 @@ export class PropertyExpression {
   serialize(): string {
     return [this.symbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
   }
+  serializeNicely(boundVariableLists: string[][]): string {
+    return [this.symbol, this.term.serialize(), ...this.otherComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+  }
 }
 
 export class FunctionParameter {
@@ -174,6 +190,9 @@ export class FunctionParameter {
   }
   serialize() {
     return "$".repeat(this.level + 1) + this.index;
+  }
+  serializeNicely(boundVariableLists: string[][]): string {
+    return this.textForHtml(boundVariableLists);
   }
   textForHtml(boundVariableLists: string[][]) {
     const name = boundVariableLists[this.level][this.index];
@@ -189,6 +208,9 @@ export class ExpressionApplication {
   constructor(public name: string, public components: Expression[]) {}
   serialize() {
     return `with (${this.components.map(a => a.serialize()).join(" ")}) ${this.name}`
+  }
+  serializeNicely(boundVariableLists: string[][]): string {
+    return `with (${this.components.map(a => a.serializeNicely(boundVariableLists)).join(" ")}) ${this.name}`;
   }
   formatForHtml() {
     return this.name + "(" + this.components.map((_, i) => "%" + i).join(", ") + ")";

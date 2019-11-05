@@ -189,7 +189,7 @@ ProofLine.SingleStatementWithPrefixContent  = class extends React.Component {
       };
       return <BoundVariableEditor name={name} callback={callback} />;
     };
-    return <>
+    return <span onContextMenu={() => navigator.clipboard.writeText(statement.serializeNicely(boundVariableLists))}>
       {prefix}
       {statement && <>
         {' '}
@@ -200,7 +200,7 @@ ProofLine.SingleStatementWithPrefixContent  = class extends React.Component {
                                  theoremContext={theoremContext}/>
        </>}
       {'.'}
-    </>
+    </span>
   }
 };
 
