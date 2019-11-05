@@ -95,7 +95,7 @@ export class TargetStepProofLine extends React.Component {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, substitutions})
     }).then(this.props.theoremContext.updateTheorem)
-      .then(this.stopProving);
+      .then(this.startProving);
   };
   createNamingStep = (inferenceId, substitutions) => {
     const {namingVariableName: variableName} = this.state;
@@ -104,7 +104,7 @@ export class TargetStepProofLine extends React.Component {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId, substitutions, variableName})
     }).then(this.props.theoremContext.updateTheorem)
-      .then(this.stopProving);
+      .then(this.startProving);
   };
   addTarget = () => {
     this.props.theoremContext.fetchJsonForStep(this.props.path, "target", {
@@ -112,7 +112,7 @@ export class TargetStepProofLine extends React.Component {
       body: this.state.targetStatement
     })
       .then(this.props.theoremContext.updateTheorem)
-      .then(this.stopProving);
+      .then(this.startProving);
   };
 
   render() {
