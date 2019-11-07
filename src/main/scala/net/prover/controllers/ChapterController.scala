@@ -339,7 +339,36 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       chapter <- findChapter(book, chapterKey)
       entry <- findEntry[ExpressionDefinition](chapter, entryKey)
       newEntry = entry.withSymbol(newSymbol)
-      newBooks = bookService.modifyBooks[Identity](books => {
+      _ = bookService.modifyBooks[Identity](books => {
+        books.mapReduceWithPrevious[Book] { (previousBooks, bookToModify) =>
+          bookToModify.chapters.mapFold(EntryContext.forBookExclusive(previousBooks, bookToModify)) { (entryContextForChapter, chapterToModify) =>
+            chapterToModify.entries.mapFold(entryContextForChapter) { (entryContext, entryToModify) =>
+              val modifiedEntry = if (entryToModify == entry) {
+                newEntry
+              } else {
+                entryToModify.replaceDefinition(entry, newEntry, entryContext)
+              }
+              (entryContext.addEntry(modifiedEntry), modifiedEntry)
+            }.mapRight(newEntries => chapterToModify.copy(entries = newEntries))
+          }.mapRight(newChapters => bookToModify.copy(chapters = newChapters))._2
+        }
+      })
+    } yield ()).toResponseEntity
+  }
+
+  @PutMapping(value = Array("/{entryKey}/attributes"), produces = Array("application/json;charset=UTF-8"))
+  def editAttributes(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String,
+    @RequestBody(required = false) newAttributes: Seq[String]
+  ): ResponseEntity[_] = {
+    (for {
+      book <- findBook(bookKey)
+      chapter <- findChapter(book, chapterKey)
+      entry <- findEntry[TermDefinition](chapter, entryKey)
+      newEntry = entry.copy(attributes = newAttributes)
+      _ = bookService.modifyBooks[Identity](books => {
         books.mapReduceWithPrevious[Book] { (previousBooks, bookToModify) =>
           bookToModify.chapters.mapFold(EntryContext.forBookExclusive(previousBooks, bookToModify)) { (entryContextForChapter, chapterToModify) =>
             chapterToModify.entries.mapFold(entryContextForChapter) { (entryContext, entryToModify) =>
