@@ -37,7 +37,7 @@ conclusion ∃! f ∧ function $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ =
 term + ()
   name (Addition)
   (∧ function $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0)
-  attributes (infix)
+  attributes (infix-function)
 
 theorem Identity for Addition (Right)
 premise ∈ n ℕ

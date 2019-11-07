@@ -3,7 +3,7 @@ The standard ordering on natural numbers.
 term < ()
   name (Standard order on ℕ)
   (= $0 comprehension x product ℕ ℕ ∈ first $0 second $0)
-  attributes (infix)
+  attributes (infix-relation)
 
 theorem Ordering on ℕ Is Element Relation
 conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0

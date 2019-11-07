@@ -4,7 +4,7 @@ type relation R (A)
   format (on A)
   definition (⊆ R product A A)
 
-display ∈ orderedPair a b x as (a x b) requires-brackets if x infix
+display ∈ orderedPair a b x as (a x b) requires-brackets if x infix-relation
 
 write ∈ orderedPair a b ~ as in2
 

@@ -2,6 +2,8 @@ Addition on the integers.
 
 term +_ℤ ()
   (= $0 replacementSet4 a b c d ℕ ℕ ℕ ℕ orderedPair orderedPair equivalenceClass orderedPair $0 $1 ~_ℤ equivalenceClass orderedPair $2 $3 ~_ℤ equivalenceClass orderedPair apply + orderedPair $0 $2 apply + orderedPair $1 $3 ~_ℤ)
+  shorthand (+_Z)
+  attributes (infix-function)
 
 theorem +_ℤ is a function
 conclusion function +_ℤ product ℤ ℤ ℤ
