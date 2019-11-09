@@ -35,10 +35,8 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
     targetArguments: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
-  ): Option[ExpressionType] = {
-    arguments.map(_.specify(targetArguments, internalDepth, externalDepth))
-        .traverseOption
-        .map(update)
+  ): ExpressionType = {
+    update(arguments.map(_.specify(targetArguments, internalDepth, externalDepth)))
   }
   def specifyWithSubstitutions(
     targetArguments: Seq[Term],

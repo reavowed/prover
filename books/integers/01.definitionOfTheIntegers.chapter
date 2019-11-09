@@ -677,12 +677,12 @@ conclusion ∃ n ∧ ∈ $0 ℕ ∃ m ∧ ∈ $0 ℕ = x equivalenceClass ordere
     elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
       prove ∈ second $0 ℕ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($0, ℕ, ℕ) () ()
       prove ∧ ∈ second $0 ℕ = x equivalenceClass orderedPair first $0 second $0 ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ second $0 ℕ, = x equivalenceClass orderedPair first $0 second $0 ~_ℤ) () () ()
-      prove ∃ x ∧ ∈ $0 ℕ = x equivalenceClass orderedPair first $$0 $0 ~_ℤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (second $0) (∧ ∈ $$0 ℕ = x equivalenceClass orderedPair first $0 $$0 ~_ℤ) ()
+      prove ∃ m ∧ ∈ $0 ℕ = x equivalenceClass orderedPair first $$0 $0 ~_ℤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (second $0) (∧ ∈ $$0 ℕ = x equivalenceClass orderedPair first $0 $$0 ~_ℤ) ()
     }
     elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
       prove ∈ first $0 ℕ 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($0, ℕ, ℕ) () ()
       prove ∧ ∈ first $0 ℕ ∃ m ∧ ∈ $0 ℕ = x equivalenceClass orderedPair first $$0 $0 ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ first $0 ℕ, ∃ m ∧ ∈ $0 ℕ = x equivalenceClass orderedPair first $$0 $0 ~_ℤ) () () ()
-      prove ∃ x ∧ ∈ $0 ℕ ∃ m ∧ ∈ $0 ℕ = x equivalenceClass orderedPair $$0 $0 ~_ℤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (first $0) (∧ ∈ $$0 ℕ ∃ m ∧ ∈ $0 ℕ = x equivalenceClass orderedPair $$$0 $0 ~_ℤ) ()
+      prove ∃ n ∧ ∈ $0 ℕ ∃ m ∧ ∈ $0 ℕ = x equivalenceClass orderedPair $$0 $0 ~_ℤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (first $0) (∧ ∈ $$0 ℕ ∃ m ∧ ∈ $0 ℕ = x equivalenceClass orderedPair $$$0 $0 ~_ℤ) ()
     }
   }
 }

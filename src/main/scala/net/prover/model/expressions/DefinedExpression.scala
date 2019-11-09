@@ -39,10 +39,8 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     targetArguments: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
-  ): Option[ExpressionType] = {
-    components.map(_.specify(targetArguments, increaseDepth(internalDepth), externalDepth))
-        .traverseOption
-        .map(updateComponents)
+  ): ExpressionType = {
+    updateComponents(components.map(_.specify(targetArguments, increaseDepth(internalDepth), externalDepth)))
   }
   def specifyWithSubstitutions(
     targetArguments: Seq[Term],

@@ -136,7 +136,7 @@ conclusion ∈ apply + orderedPair n m ℕ
   prove ∈ apply + orderedPair n m ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (+, product ℕ ℕ, ℕ, orderedPair n m) () ()
 }
 
-theorem Addition is Commutative
+theorem Natural Addition is Commutative
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion = apply + orderedPair n m apply + orderedPair m n
@@ -162,7 +162,7 @@ conclusion = apply + orderedPair n m apply + orderedPair m n
   prove = apply + orderedPair n m apply + orderedPair m n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (m) (= apply + orderedPair n $0 apply + orderedPair $0 n) ()
 }
 
-theorem Addition is Associative
+theorem Natural Addition is Associative
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ

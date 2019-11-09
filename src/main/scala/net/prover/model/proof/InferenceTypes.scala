@@ -14,11 +14,7 @@ object InferenceTypes {
         inference.conclusion.calculateApplicatives(Seq(TermVariable(a), TermVariable(c)), Substitutions.empty, 0, 0, 0).find { case (predicate, substitutions) =>
           predicate.requiredSubstitutions.isEmpty &&
             substitutions == Substitutions(terms = Map(a -> TermVariable(a), c -> TermVariable(c))) &&
-            predicate.specify(Seq(TermVariable(a), TermVariable(b)), 0, 0).exists { first =>
-              predicate.specify(Seq(TermVariable(b), TermVariable(c)), 0, 0).exists { second =>
-                inference.premises == Seq(first, second)
-              }
-            }
+            inference.premises == Seq(predicate.specify(Seq(TermVariable(a), TermVariable(b)), 0, 0), predicate.specify(Seq(TermVariable(b), TermVariable(c)), 0, 0))
         }.map(_._1)
       case _ =>
         None

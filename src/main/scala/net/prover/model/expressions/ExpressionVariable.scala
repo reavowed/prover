@@ -22,12 +22,12 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0) = Some(this)
   override def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): ExpressionType = this
 
-  override def specify(
+  def specify(
     targetArguments: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
-  ): Option[ExpressionType] = {
-    Some(this)
+  ): ExpressionType = {
+    this
   }
   override def specifyWithSubstitutions(
     targetArguments: Seq[Term],

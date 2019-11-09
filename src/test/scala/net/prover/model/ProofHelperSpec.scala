@@ -34,7 +34,7 @@ class ProofHelperSpec extends ProverSpec {
 
     def extract(targetStatement: Statement, premises: Seq[Statement], depth: Int = 0): Option[Step] = {
       val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms).copy(boundVariableLists = (1 to depth).map(i => Seq(i.toString)))
-      ProofHelper.extract(targetStatement, stepContext)
+      SubstatementExtractor.extract(targetStatement, stepContext)
         .map(_.recalculateReferences(stepContext))
     }
 
@@ -159,7 +159,7 @@ class ProofHelperSpec extends ProverSpec {
 
     def rearrange(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
       val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms)
-      ProofHelper.rearrange(targetStatement, stepContext)
+      TermRearranger.rearrange(targetStatement, stepContext)
         .map(_.recalculateReferences(stepContext))
     }
 
@@ -186,6 +186,11 @@ class ProofHelperSpec extends ProverSpec {
       val conclusion = Equals(add(b, a), add(d, c))
       testRearranging(conclusion, Seq(premise))
     }
+
+    "rearrange inside a function" in {
+      val conclusion = Equals(F(add(add(a, b), add(c, d)), add(c, d)), F(add(add(a, c), add(b, d)), add(d, c)))
+      testRearranging(conclusion, Nil)
+    }
   }
 
   "rewriting a statement" should {
@@ -210,7 +215,7 @@ class ProofHelperSpec extends ProverSpec {
         substitutionOfEqualsIntoFunction)
       val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
 
-      val stepOption = ProofHelper.rewrite(
+      val stepOption = EqualityRewriter.rewrite(
         target,
         StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms))
       validateStep(stepOption, target, premises, entryContextWithAxioms)

@@ -38,14 +38,14 @@ object PremiseFinder {
         substitutionsWithPlaceholders <- inference.conclusion.calculateSubstitutions(targetStatement, stepContext)
         premiseStatementsWithPlaceholders <- Try(inference.substitutePremises(substitutionsWithPlaceholders, stepContext)).toOption.toSeq
         (premiseSteps, newTerms) <- findParameterisedPremiseSteps(premiseStatementsWithPlaceholders, terms, stepContext)
-        conclusion <- targetStatement.specify(newTerms, 0, stepContext.externalDepth).toSeq
+        conclusion = targetStatement.specify(newTerms, 0, stepContext.externalDepth)
         substitutions <- inference.conclusion.calculateSubstitutions(conclusion, stepContext)
-        premiseStatements <- premiseStatementsWithPlaceholders.map(_.specify(newTerms, 0, stepContext.externalDepth)).traverseOption.toSeq
+        premiseStatements = premiseStatementsWithPlaceholders.map(_.specify(newTerms, 0, stepContext.externalDepth))
         assertionStep = Step.Assertion(conclusion, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
       } yield (premiseSteps :+ assertionStep, newTerms)
 
     def asAlreadyKnown = for {
-      knownTarget <- targetStatement.specify(terms, 0, stepContext.externalDepth)
+      knownTarget <- Try(targetStatement.specify(terms, 0, stepContext.externalDepth)).toOption
       steps <- findPremiseSteps(knownTarget, stepContext)
     } yield (steps, terms)
 

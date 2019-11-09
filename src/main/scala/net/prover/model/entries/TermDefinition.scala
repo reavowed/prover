@@ -23,7 +23,7 @@ case class TermDefinition(
   override val defaultValue: DefinedTerm = {
     DefinedTerm(componentTypes.map(_.expression), this)(boundVariableNames)
   }
-  val definingStatement: Statement = definitionPredicate.specify(Seq(defaultValue), 0, 0).get
+  val definingStatement: Statement = definitionPredicate.specify(Seq(defaultValue), 0, 0)
 
   def termParser(implicit context: ExpressionParsingContext): Parser[Term] = {
     componentExpressionParser.map { case (newBoundVariableNames, components) =>

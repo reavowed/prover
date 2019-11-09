@@ -3,7 +3,7 @@ package net.prover.controllers
 import net.prover.controllers.models.{NamingDefinition, PathData, StepDefinition}
 import net.prover.model.{ExpressionParsingContext, Substitutions}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, ProofHelper, Step}
+import net.prover.model.proof.{EqualityRewriter, Premise, ProofHelper, Step, SubstatementExtractor, TermRearranger}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -143,7 +143,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
   ): ResponseEntity[_] = {
     replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepContext) =>
       for {
-        newStep <- ProofHelper.extract(step.statement, stepContext).orBadRequest(s"Could not extract statement ${step.statement}")
+        newStep <- SubstatementExtractor.extract(step.statement, stepContext).orBadRequest(s"Could not extract statement ${step.statement}")
       } yield Seq(newStep)
     }.toResponseEntity
   }
@@ -158,7 +158,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
   ): ResponseEntity[_] = {
     replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepContext) =>
       for {
-        newStep <- ProofHelper.rearrange(step.statement, stepContext).orBadRequest(s"Could not rearrange statement ${step.statement}")
+        newStep <- TermRearranger.rearrange(step.statement, stepContext).orBadRequest(s"Could not rearrange statement ${step.statement}")
       } yield Seq(newStep)
     }.toResponseEntity
   }
@@ -172,7 +172,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepContext) =>
-      ProofHelper.rewrite(step.statement, stepContext)
+      EqualityRewriter.rewrite(step.statement, stepContext)
         .orBadRequest(s"Could not simplify statement ${step.statement}")
         .map(Seq(_))
     }.toResponseEntity
