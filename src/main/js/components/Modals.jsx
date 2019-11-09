@@ -215,7 +215,7 @@ export class InferenceFinder extends React.Component {
     this.submitWithSelectedValues(this.state.selectedInferenceSuggestion, this.state.selectedSubstitutionValues);
   };
   submitWithSelectedValues = (selectedInferenceSuggestion, selectedSubstitutionValues) => {
-    this.props.submit(selectedInferenceSuggestion.inference.id, selectedSubstitutionValues || this.state.selectedSubstitutionValues)
+    this.props.submit(selectedInferenceSuggestion.inference.id, selectedSubstitutionValues || this.state.selectedSubstitutionValues, selectedInferenceSuggestion.rewriteInference && selectedInferenceSuggestion.rewriteInference.id)
       .then(() => this.setState({
         isLoading: false,
         autosuggestValue: "",
@@ -271,6 +271,8 @@ export class InferenceFinder extends React.Component {
     };
     const {title, boundVariableLists} = this.props;
 
+    let getSuggestionText = s => s.rewriteInference ? s.inference.name + " [" + s.rewriteInference.name + "]" : s.inference.name;
+    
     return <>
       <Form.Group>
         <Form.Label><strong>{title}</strong></Form.Label>
@@ -279,10 +281,10 @@ export class InferenceFinder extends React.Component {
           suggestions={this.state.inferenceSuggestions}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={s => s.inference.name}
+          getSuggestionValue={getSuggestionText}
           renderSuggestionsContainer={renderSuggestionsContainer}
           onSuggestionSelected={this.onSuggestionSelected}
-          renderSuggestion={s => <span className="dropdown-item">{s.inference.name}</span>}
+          renderSuggestion={s => <span className="dropdown-item">{getSuggestionText(s)}</span>}
           inputProps={{value: this.state.autosuggestValue, onChange: this.onAutosuggestChange, className:"form-control"}} />
       </Form.Group>
       {this.state.selectedInferenceSuggestion && <>

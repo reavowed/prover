@@ -63,10 +63,10 @@ export class TargetStepProofLine extends React.Component {
   };
 
   getInferenceSuggestionsForStep = (searchText) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}&withConclusion=true`)
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}`)
   };
   getInferenceSuggestionsForPremise = (searchText) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}&withConclusion=false`)
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferencesForPremise?searchText=${searchText}`)
   };
   getInferenceSuggestionsForNaming = (searchText) => {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestNamingInferences?searchText=${searchText}`)
@@ -80,20 +80,20 @@ export class TargetStepProofLine extends React.Component {
   getPremiseSuggestionsForNaming = (inferenceId) => {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestNamingPremises?inferenceId=${inferenceId}`)
   };
-  proveWithInference = (inferenceId, substitutions) => {
+  proveWithInference = (inferenceId, substitutions, rewriteInferenceId) => {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, "", {
       method: "PUT",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({inferenceId, substitutions})
+      body: JSON.stringify({inferenceId, substitutions, rewriteInferenceId})
     })
       .then(this.props.theoremContext.updateTheorem)
       .then(this.stopProving);
   };
-  addPremise = (inferenceId, substitutions) => {
+  addPremise = (inferenceId, substitutions, rewriteInferenceId) => {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, "assertion", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({inferenceId, substitutions})
+      body: JSON.stringify({inferenceId, substitutions, rewriteInferenceId})
     }).then(this.props.theoremContext.updateTheorem)
       .then(this.startProving);
   };

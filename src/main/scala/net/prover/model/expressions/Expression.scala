@@ -1,7 +1,8 @@
 package net.prover.model.expressions
 
 import net.prover.model.entries.ExpressionDefinition
-import net.prover.model.{Parser, ExpressionParsingContext, Substitutions}
+import net.prover.model.proof.StepContext
+import net.prover.model.{ExpressionParsingContext, Parser, Substitutions}
 
 trait Expression extends TypedExpression[Expression]
 
@@ -64,6 +65,12 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     internalDepth: Int,
     externalDepth: Int
   ): Iterator[Substitutions]
+  def calculateSubstitutions(other: Expression, stepContext: StepContext): Iterator[Substitutions] = {
+    calculateSubstitutions(other, Substitutions.empty, 0, stepContext.externalDepth)
+  }
+  def calculateSubstitutions(other: Expression, substitutions: Substitutions, stepContext: StepContext): Iterator[Substitutions] = {
+    calculateSubstitutions(other, substitutions, 0, stepContext.externalDepth)
+  }
 
   /**
     * Apply the given substitutions to this statement.
@@ -76,6 +83,12 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     internalDepth: Int,
     externalDepth: Int
   ): Option[ExpressionType]
+  def applySubstitutions(
+    substitutions: Substitutions,
+    stepContext: StepContext
+  ): Option[ExpressionType] = {
+    applySubstitutions(substitutions, 0, stepContext.externalDepth).asInstanceOf[Option[ExpressionType]]
+  }
 
   /**
     * Calculate an applicative and a set of substitutions, such that when the applicative is applied to the given

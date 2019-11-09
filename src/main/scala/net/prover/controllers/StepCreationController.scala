@@ -1,12 +1,14 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.{NamingDefinition, PathData, StepDefinition}
-import net.prover.model.ExpressionParsingContext
+import net.prover.model.{ExpressionParsingContext, Substitutions}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, ProofHelper, Step}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
+
+import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
@@ -25,9 +27,16 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
       for {
         inference <- findInference(definition.inferenceId)(stepContext.entryContext)
         substitutions <- definition.substitutions.parse(inference)(ExpressionParsingContext.atStep(stepContext))
-        _ = inference.validateConclusion(step.statement, substitutions, stepContext)
+        (rewriteStep, target) <- definition.rewriteInferenceId.map { rewriteInferenceid =>
+          for {
+            (rewriteInference, rewriteInferencePremise) <- stepContext.entryContext.rewriteInferences.find(_._1.id == rewriteInferenceid).orBadRequest(s"Could not find rewrite inference $rewriteInferenceid")
+            rewriteSubstitutions <- rewriteInference.conclusion.calculateSubstitutions(step.statement, stepContext).headOption.orBadRequest("Could not calculate substitutions for rewrite inference")
+            newTarget <- rewriteInferencePremise.applySubstitutions(rewriteSubstitutions, stepContext).orBadRequest("Could not apply substitutions from rewrite inference")
+          } yield (Some(Step.Assertion(step.statement, rewriteInference.summary, Seq(Premise.Pending(newTarget)), rewriteSubstitutions)), newTarget)
+        }.getOrElse(Success((None, step.statement)))
+        _ <- Try(inference.validateConclusion(target, substitutions, stepContext))
       } yield {
-        ProofHelper.getAssertionWithPremises(inference, substitutions, stepContext)
+        ProofHelper.getAssertionWithPremises(inference, substitutions, stepContext, rewriteStep)
       }
     }.toResponseEntity
   }

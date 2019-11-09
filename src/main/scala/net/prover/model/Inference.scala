@@ -63,7 +63,7 @@ trait Inference {
   }
 
   def substituteConclusion(substitutions: Substitutions, stepContext: StepContext): Statement = {
-    conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
+    conclusion.applySubstitutions(substitutions, stepContext)
       .getOrElse(throw new Exception(s"Could not substitute conclusion $conclusion"))
   }
 
@@ -74,7 +74,7 @@ trait Inference {
   }
 
   def substituteStatement(statement: Statement, substitutions: Substitutions, stepContext: StepContext): Statement = {
-    statement.applySubstitutions(substitutions, 0, stepContext.externalDepth).getOrElse(throw new Exception(s"Could not substitute $statement"))
+    statement.applySubstitutions(substitutions, stepContext).getOrElse(throw new Exception(s"Could not substitute $statement"))
   }
 
   override def toString: String = name

@@ -5,25 +5,25 @@ import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions._
 
 object ProofHelper {
-  private def getSimplification(premise: Premise.SingleLinePremise, simplificationInference: Inference, externalDepth: Int): Option[Premise.Simplification] = {
+  private def getSimplification(premise: Premise.SingleLinePremise, simplificationInference: Inference, stepContext: StepContext): Option[Premise.Simplification] = {
     for {
       inferencePremise <- simplificationInference.premises.single
-      substitutions <- inferencePremise.calculateSubstitutions(premise.statement, Substitutions.empty, 0, externalDepth).headOption
-      simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions, 0, externalDepth)
+      substitutions <- inferencePremise.calculateSubstitutions(premise.statement, stepContext).headOption
+      simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions, stepContext)
       path <- inferencePremise.findComponentPath(simplificationInference.conclusion)
     } yield {
       Premise.Simplification(simplifiedTarget, premise, simplificationInference.summary, substitutions, path)
     }
   }
-  private def getSingleSimplifications(premise: Premise.SingleLinePremise, simplificationInferences: Seq[Inference], externalDepth: Int): Seq[Premise.Simplification] = {
-    simplificationInferences.mapCollect(i => getSimplification(premise, i, externalDepth))
+  private def getSingleSimplifications(premise: Premise.SingleLinePremise, simplificationInferences: Seq[Inference], stepContext: StepContext): Seq[Premise.Simplification] = {
+    simplificationInferences.mapCollect(i => getSimplification(premise, i, stepContext))
   }
-  def getSimplifications(premise: Premise.Given, entryContext: EntryContext, externalDepth: Int): Seq[Premise.Simplification] = {
+  def getSimplifications(premise: Premise.Given, entryContext: EntryContext, stepContext: StepContext): Seq[Premise.Simplification] = {
     def helper(acc: Seq[Premise.Simplification], toCalculate: Seq[Premise.SingleLinePremise]): Seq[Premise.Simplification] = {
       if (toCalculate.isEmpty)
         acc
       else {
-        val next = toCalculate.flatMap(getSingleSimplifications(_, entryContext.simplificationInferences, externalDepth))
+        val next = toCalculate.flatMap(getSingleSimplifications(_, entryContext.simplificationInferences, stepContext))
         helper(acc ++ next, next)
       }
     }
@@ -34,7 +34,7 @@ object ProofHelper {
     stepContext.entryContext.inferences
       .filter(_.premises.isEmpty)
       .mapFind { inference =>
-        inference.conclusion.calculateSubstitutions(target, Substitutions.empty, 0, stepContext.externalDepth).headOption
+        inference.conclusion.calculateSubstitutions(target, stepContext).headOption
           .map { substitutions =>
             Step.Assertion(target, inference.summary, Nil, substitutions)
           }
@@ -107,15 +107,15 @@ object ProofHelper {
       statementExtractionInferences.iterator.findFirst {
         case (inference, firstPremise, otherPremises) =>
           (for {
-            extractionSubstitutions <- firstPremise.calculateSubstitutions(extractionCandidate, Substitutions.empty, 0, stepContext.externalDepth)
-            extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions, 0, stepContext.externalDepth).toSeq
+            extractionSubstitutions <- firstPremise.calculateSubstitutions(extractionCandidate, stepContext)
+            extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions, stepContext).toSeq
             (conclusionTerms, innerSteps) <- extractFromStatement(extractedConclusion, termsSoFar).toSeq
-            extractedOtherPremises <- otherPremises.map(_.applySubstitutions(extractionSubstitutions, 0, stepContext.externalDepth)).traverseOption.toSeq
+            extractedOtherPremises <- otherPremises.map(_.applySubstitutions(extractionSubstitutions, stepContext)).traverseOption.toSeq
             (premiseSteps, terms) <- PremiseFinder.findParameterisedPremiseSteps(extractedOtherPremises, conclusionTerms, stepContext)
             substitutedFirstPremise <- extractionCandidate.specify(terms, 0, stepContext.externalDepth).toSeq
-            substitutions <- firstPremise.calculateSubstitutions(substitutedFirstPremise, Substitutions.empty, 0, stepContext.externalDepth)
-            substitutedOtherPremises <- otherPremises.map(_.applySubstitutions(substitutions, 0, stepContext.externalDepth)).traverseOption.toSeq
-            substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth)
+            substitutions <- firstPremise.calculateSubstitutions(substitutedFirstPremise, stepContext)
+            substitutedOtherPremises <- otherPremises.map(_.applySubstitutions(substitutions, stepContext)).traverseOption.toSeq
+            substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions, stepContext)
             assertionStep = Step.Assertion(
               substitutedConclusion,
               inference.summary,
@@ -131,9 +131,9 @@ object ProofHelper {
             nextPremise <- extractionPredicate.specify(argumentNames.mapWithIndex((_, index) => FunctionParameter(termsSoFar + index, stepContext.externalDepth)), 0, stepContext.externalDepth + 1).toSeq
             (terms, laterSteps) <- extractFromStatement(nextPremise, termsSoFar + argumentNames.length).toSeq
             specifiedPremise <- extractionCandidate.specify(terms, 0, stepContext.externalDepth).toSeq
-            substitutionsWithTerms <- singlePremise.calculateSubstitutions(specifiedPremise, Substitutions.empty, 0, stepContext.externalDepth)
+            substitutionsWithTerms <- singlePremise.calculateSubstitutions(specifiedPremise, stepContext)
               .map(_.copy(terms = argumentNames.mapWithIndex((n, i) => n -> terms(termsSoFar + i)).toMap))
-            substitutedConclusion <- inference.conclusion.applySubstitutions(substitutionsWithTerms, 0, stepContext.externalDepth).toSeq
+            substitutedConclusion <- inference.conclusion.applySubstitutions(substitutionsWithTerms, stepContext).toSeq
             specifiedConclusion <- substitutedConclusion.specify(terms, 0, stepContext.externalDepth).toSeq
             newStep = Step.Assertion(
               specifiedConclusion,
@@ -152,12 +152,12 @@ object ProofHelper {
     def extractWithRewrite(extractionCandidate: Statement, termsSoFar: Int): Option[(Map[Int, Term], Seq[Step])] = {
       rewriteInferences.iterator.findFirst { case (inference, singlePremise) =>
         (for {
-          extractionSubstitutions <- singlePremise.calculateSubstitutions(extractionCandidate, Substitutions.empty, 0, stepContext.externalDepth)
-          rewrittenStatement <- inference.conclusion.applySubstitutions(extractionSubstitutions, 0, stepContext.externalDepth).toSeq
+          extractionSubstitutions <- singlePremise.calculateSubstitutions(extractionCandidate, stepContext)
+          rewrittenStatement <- inference.conclusion.applySubstitutions(extractionSubstitutions, stepContext).toSeq
           (terms, innerSteps) <- extractWithoutRewrite(rewrittenStatement, termsSoFar).toSeq
           substitutedPremise <- extractionCandidate.specify(terms, 0, stepContext.externalDepth).toSeq
-          substitutions <- singlePremise.calculateSubstitutions(substitutedPremise, Substitutions.empty, 0, stepContext.externalDepth)
-          substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions, 0, stepContext.externalDepth).toSeq
+          substitutions <- singlePremise.calculateSubstitutions(substitutedPremise, stepContext)
+          substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions, stepContext).toSeq
           newStep = Step.Assertion(
             substitutedConclusion,
             inference.summary,
@@ -182,7 +182,8 @@ object ProofHelper {
   def getAssertionWithPremises(
     inference: Inference.Summary,
     substitutions: Substitutions,
-    stepContext: StepContext
+    stepContext: StepContext,
+    followUpStep: Option[Step] = None
   ): Seq[Step] = {
     val premiseStatements = inference.substitutePremises(substitutions, stepContext)
     val conclusion = inference.substituteConclusion(substitutions, stepContext)
@@ -203,16 +204,18 @@ object ProofHelper {
           (targetStepsSoFar ++ deconstructionTargetSteps, premiseStepsSoFar ++ deconstructionPremiseSteps ++ deconstructionSteps)
       }
     }
+    def elide(steps: Seq[Step]): Step.Elided = Step.Elided(steps, Some(inference.summary), None)
+
     val assertionStep = Step.Assertion(
       conclusion,
       inference,
       premiseStatements.map(Premise.Pending),
       substitutions)
     if (InferenceTypes.isTransitivity(inference)) {
-      (targetSteps ++ premiseSteps) :+ assertionStep
+      (targetSteps ++ premiseSteps) :+ followUpStep.map(s => elide(Seq(assertionStep, s))).getOrElse(assertionStep)
     } else {
-      val baseStep = if (premiseSteps.nonEmpty) {
-        Step.Elided(premiseSteps :+ assertionStep, Some(inference.summary), None)
+      val baseStep = if (premiseSteps.nonEmpty || followUpStep.nonEmpty) {
+        elide((premiseSteps :+ assertionStep) ++ followUpStep)
       } else {
         assertionStep
       }
@@ -568,8 +571,8 @@ object ProofHelper {
     def findSimplificationsDirectly(premiseTerm: Term, reverse: Boolean): Seq[(Term, Step, Inference)] = {
       (for {
         (inference, left, right) <- termSimplificationInferences
-        conclusionSubstitutions <- left.calculateSubstitutions(premiseTerm, Substitutions.empty, 0, stepContext.externalDepth)
-        simplifiedTerm <- right.applySubstitutions(conclusionSubstitutions, 0, stepContext.externalDepth).flatMap(_.asOptionalInstanceOf[Term])
+        conclusionSubstitutions <- left.calculateSubstitutions(premiseTerm, stepContext)
+        simplifiedTerm <- right.applySubstitutions(conclusionSubstitutions, stepContext).flatMap(_.asOptionalInstanceOf[Term])
         (premiseSteps, substitutedPremises, finalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, stepContext)
         assertionStep = Step.Assertion(
           equalityDefinition(premiseTerm, simplifiedTerm),
@@ -585,8 +588,8 @@ object ProofHelper {
       } yield (simplifiedTerm, step, inference)) ++
         (for {
         (inference, left, right) <- termDesimplificationInferences
-        conclusionSubstitutions <- right.calculateSubstitutions(premiseTerm, Substitutions.empty, 0, stepContext.externalDepth)
-        simplifiedTerm <- left.applySubstitutions(conclusionSubstitutions, 0, stepContext.externalDepth).flatMap(_.asOptionalInstanceOf[Term])
+        conclusionSubstitutions <- right.calculateSubstitutions(premiseTerm, stepContext)
+        simplifiedTerm <- left.applySubstitutions(conclusionSubstitutions, stepContext).flatMap(_.asOptionalInstanceOf[Term])
         (premiseSteps, substitutedPremises, finalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, stepContext)
         assertionStep = Step.Assertion(
           equalityDefinition(simplifiedTerm, premiseTerm),
