@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import {ExpressionComponent} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
-import {InferenceFinder} from "../Modals";
+import {InferenceFinder} from "../InferenceFinder";
 import {ProofLine} from "./ProofLine";
 import {Parser} from "../../Parser";
 
@@ -156,6 +156,7 @@ export class TargetStepProofLine extends React.Component {
             <Form.Group>
               <Form.Label><strong>Variable name</strong></Form.Label>
               <Form.Control type="text"
+                            autoFocus
                             value={this.state.namingVariableName}
                             onChange={(e) => this.setState({namingVariableName: e.target.value})}/>
             </Form.Group>

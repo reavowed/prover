@@ -63,9 +63,11 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
         direct.map(Seq(_)).getOrElse(rewritten)
       }
       filterInferences(entryContext.inferences, searchText)
+        .sortBy(_.conclusion.complexity)(implicitly[Ordering[Int]].reverse)
+        .iterator
         .flatMap(getSuggestions)
-        .sortBy(_.inference.conclusion.complexity)(implicitly[Ordering[Int]].reverse)
         .take(10)
+        .toSeq
     }).toResponseEntity
   }
 
@@ -86,9 +88,9 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       entryContext = EntryContext.forEntry(books, book, chapter, theorem)
     } yield {
       filterInferences(entryContext.inferences, searchText)
-        .map { inference => InferenceSuggestion(inference.summary, inference.requiredSubstitutions, None, None, None) }
         .reverse
         .take(10)
+        .map { inference => InferenceSuggestion(inference.summary, inference.requiredSubstitutions, None, None, None) }
     }).toResponseEntity
   }
 
