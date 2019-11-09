@@ -7,7 +7,7 @@ import {HighlightableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import Popover from "react-bootstrap/Popover";
 import {BoundVariableModal} from "../Modals";
-import {BoundVariableEditor} from "./BoundVariableEditor";
+import {InlineTextEditor} from "../helpers/InlineTextEditor";
 
 export const ProofLine = styled(class ProofLine extends React.Component {
   constructor(...args) {
@@ -187,7 +187,7 @@ ProofLine.SingleStatementWithPrefixContent  = class extends React.Component {
         })
         .then(theoremContext.updateTheorem)
       };
-      return <BoundVariableEditor name={name} callback={callback} />;
+      return <InlineTextEditor text={name} callback={callback} />;
     };
     return <span onContextMenu={() => navigator.clipboard.writeText(statement.serializeNicely(boundVariableLists))}>
       {prefix}

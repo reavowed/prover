@@ -643,7 +643,7 @@ term ℤ ()
   (= $0 equivalenceQuotient product ℕ ℕ ~_ℤ)
   shorthand (int)
 
-theorem Equivalence Class Is Element of ℤ
+theorem Equivalence Class Is Integer
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ∈ equivalenceClass orderedPair n m ~_ℤ ℤ
@@ -659,7 +659,7 @@ conclusion ∈ equivalenceClass orderedPair n m ~_ℤ ℤ
   }
 }
 
-theorem Element of ℤ Is Equivalence Class
+theorem Integer Is Equivalence Class
 premise ∈ x ℤ
 conclusion ∃ n ∧ ∈ $0 ℕ ∃ m ∧ ∈ $0 ℕ = x equivalenceClass orderedPair $$0 $0 ~_ℤ
 {

@@ -92,7 +92,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }).map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, getChaptersWithKeys(book).find(_._1.title == newTitle).get._2) }.toResponseEntity
   }
 
-  case class InferenceProps(inference: Inference.Entry, previousEntry: Option[LinkSummary], nextEntry: Option[LinkSummary], usages: Seq[(Book, Chapter, Seq[Theorem])])
   @GetMapping(value = Array("/{entryKey}"), produces = Array("text/html;charset=UTF-8"))
   def getEntry(
     @PathVariable("bookKey") bookKey: String,
@@ -258,7 +257,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }.map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
-
   @PostMapping(value = Array("/{entryKey}/move"), produces = Array("application/json;charset=UTF-8"))
   def moveEntry(
     @PathVariable("bookKey") bookKey: String,
@@ -325,64 +323,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     modifyEntry[ExpressionDefinition, Identity](bookKey, chapterKey, entryKey, (_, _, _, definition) =>
       Success(definition.withShorthand(Option(newShorthand).filter(_.nonEmpty)))
     ).map{ case (books, book, chapter, _) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
-  }
-
-  @PutMapping(value = Array("/{entryKey}/symbol"), produces = Array("application/json;charset=UTF-8"))
-  def editSymbol(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("entryKey") entryKey: String,
-    @RequestBody(required = false) newSymbol: String
-  ): ResponseEntity[_] = {
-    (for {
-      book <- findBook(bookKey)
-      chapter <- findChapter(book, chapterKey)
-      entry <- findEntry[ExpressionDefinition](chapter, entryKey)
-      newEntry = entry.withSymbol(newSymbol)
-      _ = bookService.modifyBooks[Identity](books => {
-        books.mapReduceWithPrevious[Book] { (previousBooks, bookToModify) =>
-          bookToModify.chapters.mapFold(EntryContext.forBookExclusive(previousBooks, bookToModify)) { (entryContextForChapter, chapterToModify) =>
-            chapterToModify.entries.mapFold(entryContextForChapter) { (entryContext, entryToModify) =>
-              val modifiedEntry = if (entryToModify == entry) {
-                newEntry
-              } else {
-                entryToModify.replaceDefinition(entry, newEntry, entryContext)
-              }
-              (entryContext.addEntry(modifiedEntry), modifiedEntry)
-            }.mapRight(newEntries => chapterToModify.copy(entries = newEntries))
-          }.mapRight(newChapters => bookToModify.copy(chapters = newChapters))._2
-        }
-      })
-    } yield ()).toResponseEntity
-  }
-
-  @PutMapping(value = Array("/{entryKey}/attributes"), produces = Array("application/json;charset=UTF-8"))
-  def editAttributes(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("entryKey") entryKey: String,
-    @RequestBody(required = false) newAttributes: Seq[String]
-  ): ResponseEntity[_] = {
-    (for {
-      book <- findBook(bookKey)
-      chapter <- findChapter(book, chapterKey)
-      entry <- findEntry[TermDefinition](chapter, entryKey)
-      newEntry = entry.copy(attributes = newAttributes)
-      _ = bookService.modifyBooks[Identity](books => {
-        books.mapReduceWithPrevious[Book] { (previousBooks, bookToModify) =>
-          bookToModify.chapters.mapFold(EntryContext.forBookExclusive(previousBooks, bookToModify)) { (entryContextForChapter, chapterToModify) =>
-            chapterToModify.entries.mapFold(entryContextForChapter) { (entryContext, entryToModify) =>
-              val modifiedEntry = if (entryToModify == entry) {
-                newEntry
-              } else {
-                entryToModify.replaceDefinition(entry, newEntry, entryContext)
-              }
-              (entryContext.addEntry(modifiedEntry), modifiedEntry)
-            }.mapRight(newEntries => chapterToModify.copy(entries = newEntries))
-          }.mapRight(newChapters => bookToModify.copy(chapters = newChapters))._2
-        }
-      })
-    } yield ()).toResponseEntity
   }
 
   case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, requiresComponentBrackets: Boolean, numberOfBoundVariables: Int, attributes: Seq[String])

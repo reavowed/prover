@@ -19,6 +19,7 @@ case class Theorem(
     rearrangementType: RearrangementType)
   extends Inference.Entry
 {
+  override def withName(newName: String): Theorem = copy(name = newName)
   override def referencedInferenceIds: Set[String] = proofs.flatMap(_.referencedInferenceIds).toSet
   override def referencedEntries: Set[ChapterEntry] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions ++ proofs.flatMap(_.referencedDefinitions).toSet
   override def inferences: Seq[Inference] = Seq(this)

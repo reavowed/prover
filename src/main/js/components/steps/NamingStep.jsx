@@ -2,7 +2,7 @@ import React from "react";
 import {InferenceLink} from "./InferenceLink";
 import {ProofLine} from "./ProofLine";
 import {Steps} from "./Steps";
-import {BoundVariableEditor} from "./BoundVariableEditor";
+import {InlineTextEditor} from "../helpers/InlineTextEditor";
 
 export class NamingStep extends React.Component {
   updateBoundVariable = (newName) => {
@@ -19,7 +19,7 @@ export class NamingStep extends React.Component {
     const prefix = <>
         Let
         {' '}
-        <BoundVariableEditor name={step.variableName} callback={this.updateBoundVariable}/>
+        <InlineTextEditor text={step.variableName} callback={this.updateBoundVariable}/>
         {' '}
         be such that
     </>;

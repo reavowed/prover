@@ -1,7 +1,7 @@
 import React from "react";
 import {ProofLine} from "./ProofLine";
 import {Steps} from "./Steps";
-import {BoundVariableEditor} from "./BoundVariableEditor";
+import {InlineTextEditor} from "../helpers/InlineTextEditor";
 
 export class ScopedVariableStep extends React.Component {
   updateBoundVariable = (newName) => {
@@ -16,7 +16,7 @@ export class ScopedVariableStep extends React.Component {
       <ProofLine path={path} theoremContext={theoremContext} boundVariableLists={boundVariableLists}>
         Take any
         {' '}
-        <BoundVariableEditor name={step.variableName} callback={this.updateBoundVariable}/>
+        <InlineTextEditor text={step.variableName} callback={this.updateBoundVariable}/>
         .
       </ProofLine>
       <Steps.Children steps={step.substeps}

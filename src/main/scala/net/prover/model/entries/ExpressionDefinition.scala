@@ -5,7 +5,7 @@ import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 import net.prover.model._
 
-trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinition] with ChapterEntry
+trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinition] with ChapterEntry.Standalone
 
 trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinition] extends ChapterEntry.Standalone { self: ExpressionDefinition =>
   def symbol: String

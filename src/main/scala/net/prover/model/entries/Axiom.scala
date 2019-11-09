@@ -11,6 +11,7 @@ case class Axiom(
     rearrangementType: RearrangementType = RearrangementType.NotRearrangement)
   extends Inference.Entry
 {
+  override def withName(newName: String): Axiom = copy(name = newName)
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions
   override def inferences: Seq[Inference] = Seq(this)

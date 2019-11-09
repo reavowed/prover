@@ -86,6 +86,7 @@ object Inference {
   }
   trait Entry extends Inference.WithCalculatedId with ChapterEntry.Standalone {
     override def title: String = name
+    def withName(newName: String): Entry
   }
   trait EntryParser extends ChapterEntryParser {
     def premisesParser(implicit context: ExpressionParsingContext): Parser[Seq[Statement]] = {
