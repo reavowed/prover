@@ -14,12 +14,28 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   def variableName: String
   def arguments: Seq[Term]
   def substitutionsLens: Lens[Substitutions, Map[(String, Int), ExpressionType]]
+  def possibleSubstitutionsLens: Lens[Substitutions.Possible, Map[(String, Int), ExpressionType]]
+  def possibleSubstitutionsApplicationsLens: Lens[Substitutions.Possible, Map[(String, Int), Seq[(Seq[Term], ExpressionType, Int, Int)]]]
   def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[(String, Int)]]
 
   def getMatch(other: Expression): Option[Seq[Expression]]
   def update(newArguments: Seq[Term]): ExpressionType
 
   override def complexity: Int = arguments.map(_.complexity).sum + 1
+  override def getTerms(depth: Int): Seq[(Term, ExpressionType)] = {
+    def helper(previous: Seq[Term], next: Seq[Term], acc: Seq[(Term, ExpressionType)]): Seq[(Term, ExpressionType)] = {
+      next match {
+        case current +: more =>
+          helper(
+            previous :+ current,
+            more,
+            acc ++ current.getTerms(depth).map(_.mapRight(e => update((previous :+ e) ++ more))))
+        case _ =>
+          acc
+      }
+    }
+    helper(Nil, arguments, Nil)
+  }
   override def definitionUsages: DefinitionUsages = DefinitionUsages.empty
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {
     update(arguments.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)))
@@ -53,20 +69,18 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   }
   override def calculateSubstitutions(
     other: Expression,
-    substitutions: Substitutions,
+    substitutions: Substitutions.Possible,
     internalDepth: Int,
     externalDepth: Int
   ) = {
     if (other.isRuntimeInstance[ExpressionType]) {
-      for {
-        (applicative, applicativeSubstitutions) <- other.calculateApplicatives(arguments, substitutions, 0, internalDepth, externalDepth)
-        substitutionsWithApplicative <- applicativeSubstitutions.update(
+      substitutions
+        .updateAdd(
           (variableName, arguments.length),
-          applicative.asInstanceOf[ExpressionType],
-          substitutionsLens,
-          1)
-      } yield substitutionsWithApplicative
-    } else Iterator.empty
+          (arguments, other.asInstanceOf[ExpressionType], internalDepth, externalDepth),
+          possibleSubstitutionsApplicationsLens)
+        .clearApplicationsWherePossible()
+    } else None
   }
 
   override def applySubstitutions(substitutions: Substitutions, internalDepth: Int, externalDepth: Int): Option[ExpressionType] = {
@@ -78,11 +92,11 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
 
   override def calculateApplicatives(
     baseArguments: Seq[Term],
-    substitutions: Substitutions,
+    substitutions: Substitutions.Possible,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(ExpressionType, Substitutions)] = {
+  ): Iterator[(ExpressionType, Substitutions.Possible)] = {
     arguments.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
       .map(_.mapLeft(newArguments => update(newArguments.map(_.asInstanceOf[Term]))))
   }

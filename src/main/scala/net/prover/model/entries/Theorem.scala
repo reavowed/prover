@@ -39,7 +39,7 @@ case class Theorem(
   def findStep(proofIndex: Int, stepIndexes: Seq[Int], entryContext: EntryContext): Option[(Step, StepContext)] = {
     proofs.lift(proofIndex).flatMap(_.findStep(stepIndexes, initialStepContext(entryContext)))
   }
-  def modifySteps[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int], entryContext: EntryContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Theorem]] = {
+  def modifySteps[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int], entryContext: EntryContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Theorem]] = {
     modifyProof(proofIndex, _.modifySteps(stepIndexes, initialStepContext(entryContext), f))
   }
   def modifyStep[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int], entryContext: EntryContext, f: (Step, StepContext) => F[Step]): Option[F[Theorem]] = {
@@ -50,10 +50,10 @@ case class Theorem(
       case Nil =>
         None
       case init :+ last =>
-        modifySteps[Identity](proofIndex, init, entryContext, (steps, _) => {
+        modifySteps[Identity](proofIndex, init, entryContext) { (steps, _) =>
           val (before, after) = steps.splitAt(last)
           Some((before :+ newStep) ++ after)
-        })
+        }
     }
   }
   def recalculateReferences(entryContext: EntryContext): Theorem = {

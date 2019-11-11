@@ -218,7 +218,7 @@ export class InferenceFinder extends React.Component {
     this.submitWithSelectedValues(this.state.selectedInferenceSuggestion, this.state.selectedSubstitutionValues);
   };
   submitWithSelectedValues = (selectedInferenceSuggestion, selectedSubstitutionValues) => {
-    this.props.submit(selectedInferenceSuggestion.inference.id, selectedSubstitutionValues || this.state.selectedSubstitutionValues, selectedInferenceSuggestion.rewriteInference && selectedInferenceSuggestion.rewriteInference.id)
+    this.props.submit(selectedInferenceSuggestion, selectedSubstitutionValues || this.state.selectedSubstitutionValues)
       .then(() => this.setState({
         isLoading: false,
         autosuggestValue: "",

@@ -135,14 +135,14 @@ trait BookModification {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
       (stepPath.indexes match {
         case init :+ last =>
-          theorem.modifySteps[Try](proofIndex, init, entryContext, (steps, stepContext) => {
+          theorem.modifySteps[Try](proofIndex, init, entryContext) { (steps, stepContext) =>
             steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
               for {
                 typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
                 replacementSteps <- f(typedStep, stepContext.addSteps(before).atIndex(last))
               } yield before ++ replacementSteps ++ after
             }
-          })
+          }
         case _ =>
           None
       }).orNotFound(s"Step $stepPath").flatten

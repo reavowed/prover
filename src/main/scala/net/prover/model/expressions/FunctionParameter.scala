@@ -55,15 +55,15 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
   override def requiredSubstitutions = Substitutions.Required.empty
   override def calculateSubstitutions(
     other: Expression,
-    substitutions: Substitutions,
+    substitutions: Substitutions.Possible,
     internalDepth: Int,
     externalDepth: Int
-  ): Iterator[Substitutions] = {
+  ): Option[Substitutions.Possible] = {
     other match {
       case FunctionParameter(`index`, `level`) =>
-        Iterator(substitutions)
+        Some(substitutions)
       case _ =>
-        Iterator.empty
+        None
     }
   }
   override def applySubstitutions(
@@ -75,22 +75,23 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
   }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
-    substitutions: Substitutions,
+    substitutions: Substitutions.Possible,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(Term, Substitutions)] = {
-  super.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth) ++
-    (if (level >= internalDepth + previousInternalDepth)
-      // External context
-      // Shifted down to cut out the shared internal context
-      Seq(FunctionParameter(index, level - previousInternalDepth) -> substitutions)
-    else if (level < internalDepth)
-      // Internal context after the entry point to calculateApplicatives
-      Seq(this -> substitutions)
-    else
-      // Shared internal context - must be passed in via the arguments
-      Nil)
+  ): Iterator[(Term, Substitutions.Possible)] = {
+    (super.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth).toSet ++
+      (if (level >= internalDepth + previousInternalDepth)
+        // External context
+        // Shifted down to cut out the shared internal context
+        Seq(FunctionParameter(index, level - previousInternalDepth) -> substitutions)
+      else if (level < internalDepth)
+        // Internal context after the entry point to calculateApplicatives
+        Seq(this -> substitutions)
+      else
+        // Shared internal context - must be passed in via the arguments
+        Nil)
+    ).iterator
   }
   override def calculateArguments(
     target: Expression,

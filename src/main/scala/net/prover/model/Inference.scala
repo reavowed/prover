@@ -53,28 +53,23 @@ trait Inference {
       .mkString(" ")
   }
 
-  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions, stepContext: StepContext): Seq[Statement] = {
-    validateConclusion(expectedConclusion, substitutions, stepContext)
-    substitutePremises(substitutions, stepContext)
+  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions, stepContext: StepContext): Option[Seq[Statement]] = {
+    for {
+      _ <- substituteConclusion(substitutions, stepContext)
+      premises <- substitutePremises(substitutions, stepContext)
+    } yield premises
   }
 
-  def substitutePremises(substitutions: Substitutions, stepContext: StepContext): Seq[Statement] = {
-    premises.map(substituteStatement(_, substitutions, stepContext))
+  def substitutePremises(substitutions: Substitutions, stepContext: StepContext): Option[Seq[Statement]] = {
+    premises.map(substituteStatement(_, substitutions, stepContext)).traverseOption
   }
 
-  def substituteConclusion(substitutions: Substitutions, stepContext: StepContext): Statement = {
+  def substituteConclusion(substitutions: Substitutions, stepContext: StepContext): Option[Statement] = {
     conclusion.applySubstitutions(substitutions, stepContext)
-      .getOrElse(throw new Exception(s"Could not substitute conclusion $conclusion"))
   }
 
-  def validateConclusion(expectedConclusion: Statement, substitutions: Substitutions, stepContext: StepContext): Unit = {
-    val substitutedConclusion = substituteConclusion(substitutions, stepContext)
-    (expectedConclusion == substitutedConclusion)
-      .ifFalse(throw new Exception(s"Substituted conclusion $substitutedConclusion was not expected conclusion $expectedConclusion"))
-  }
-
-  def substituteStatement(statement: Statement, substitutions: Substitutions, stepContext: StepContext): Statement = {
-    statement.applySubstitutions(substitutions, stepContext).getOrElse(throw new Exception(s"Could not substitute $statement"))
+  def substituteStatement(statement: Statement, substitutions: Substitutions, stepContext: StepContext): Option[Statement] = {
+    statement.applySubstitutions(substitutions, stepContext)
   }
 
   override def toString: String = name

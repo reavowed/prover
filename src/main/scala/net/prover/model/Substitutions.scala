@@ -1,6 +1,7 @@
 package net.prover.model
 
 import monocle.Lens
+import monocle.macros.GenLens
 import net.prover.model.entries.ExpressionDefinition
 import net.prover.model.expressions._
 
@@ -12,16 +13,6 @@ case class Substitutions(
 {
   def isEmpty: Boolean = statements.isEmpty && terms.isEmpty && functions.isEmpty && predicates.isEmpty
 
-  def update[S, T <: Expression](
-    name: S,
-    expression: T,
-    lens: Lens[Substitutions, Map[S, T]],
-    additionalDepth: Int
-  ): Option[Substitutions] = {
-    lens.get(this)
-      .tryAdd(name, expression)
-      .map(lens.set(_)(this))
-  }
   def insertExternalParameters(numberOfParametersToInsert: Int): Substitutions = {
     Substitutions(
       statements.mapValues(_.insertExternalParameters(numberOfParametersToInsert)),
@@ -82,6 +73,86 @@ object Substitutions {
       def foldTogether: Required = {
         seq.fold(empty)(_ ++ _)
       }
+    }
+  }
+
+
+  case class Possible(
+    statements: Map[String, Statement] = Map.empty,
+    terms: Map[String, Term] = Map.empty,
+    predicates: Map[(String, Int), Statement] = Map.empty,
+    functions: Map[(String, Int), Term] = Map.empty,
+    predicateApplications: Map[(String, Int), Seq[(Seq[Term], Statement, Int, Int)]] = Map.empty,
+    functionApplications: Map[(String, Int), Seq[(Seq[Term], Term, Int, Int)]] = Map.empty)
+  {
+    def update[TKey, TExpression](
+      key: TKey,
+      expression: TExpression,
+      lens: Lens[Substitutions.Possible, Map[TKey, TExpression]]
+    ): Option[Substitutions.Possible] = {
+      lens.get(this)
+        .tryAdd(key, expression)
+        .map(lens.set(_)(this))
+    }
+    def updateAdd[TKey, TExpression](
+      key: TKey,
+      expression: (Seq[Term], TExpression, Int, Int),
+      lens: Lens[Substitutions.Possible, Map[TKey, Seq[(Seq[Term], TExpression, Int, Int)]]]
+    ): Substitutions.Possible = {
+      val map = lens.get(this)
+      val newValue = map.getOrElse(key, Nil) :+ expression
+      val newMap = map.updated(key, newValue)
+      lens.set(newMap)(this)
+    }
+
+    def clearApplicationsWherePossible(): Option[Substitutions.Possible] = {
+      def clear[T <: Expression](
+        substitutions: Substitutions.Possible,
+        lens: Lens[Substitutions.Possible, Map[(String, Int), T]],
+        applicationLens: Lens[Substitutions.Possible, Map[(String, Int), Seq[(Seq[Term], T, Int, Int)]]]
+      ): Option[Substitutions.Possible] = {
+        applicationLens.get(substitutions).toSeq.foldLeft(Option(applicationLens.set(Map.empty)(substitutions))) { case (possibleSubstitutionsSoFarOption, ((name, arity), applications)) =>
+          possibleSubstitutionsSoFarOption.flatMap { possibleSubstitutionsSoFar =>
+            val results = applications
+              .foldLeft(Iterator(possibleSubstitutionsSoFar)) { case (iterator, (arguments, target, internalDepth, externalDepth)) =>
+                for {
+                  possibleSubstitutionsForThisPredicate <- iterator
+                  (applicative, applicativeSubstitutions) <- target.calculateApplicatives(arguments, possibleSubstitutionsForThisPredicate, 0, internalDepth, externalDepth)
+                  substitutionsWithApplicative <- applicativeSubstitutions.update((name, arity), applicative.asInstanceOf[T], lens)
+                } yield substitutionsWithApplicative
+              }.toList
+            results match {
+              case Nil =>
+                None
+              case Seq(single) =>
+                Some(single)
+              case more =>
+                Some(applicationLens.set(applicationLens.get(possibleSubstitutionsSoFar) + ((name, arity) -> applications))(possibleSubstitutionsSoFar))
+            }
+          }
+        }
+      }
+
+      for {
+        afterPredicates <- clear(this, GenLens[Substitutions.Possible](_.predicates), GenLens[Substitutions.Possible](_.predicateApplications))
+        afterFunctions <- clear(afterPredicates, GenLens[Substitutions.Possible](_.functions), GenLens[Substitutions.Possible](_.functionApplications))
+      } yield afterFunctions
+    }
+
+    def stripApplications(): Substitutions = Substitutions(statements, terms, predicates, functions)
+
+    def confirmTotality: Option[Substitutions] = {
+      if (predicateApplications.isEmpty && functionApplications.isEmpty)
+        Some(stripApplications())
+      else
+        None
+    }
+  }
+  object Possible {
+    val empty = Possible(Map.empty, Map.empty, Map.empty, Map.empty, Map.empty, Map.empty)
+
+    implicit def substitutionsToPossibleSubstitutions(substitutions: Substitutions): Substitutions.Possible = {
+      Substitutions.Possible(substitutions.statements, substitutions.terms, substitutions.predicates, substitutions.functions, Map.empty, Map.empty)
     }
   }
 }

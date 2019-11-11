@@ -6,10 +6,13 @@ import net.prover.model.{ExpressionParsingContext, Parser, Substitutions}
 
 trait Expression extends TypedExpression[Expression]
 
-trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
+trait TypedExpression[+ExpressionType <: Expression] {
   def complexity: Int
   def definitionUsages: DefinitionUsages
   def referencedDefinitions: Set[ExpressionDefinition] = definitionUsages.map.keySet
+
+  def getTerms(depth: Int): Seq[(Term, ExpressionType)]
+  def getTerms(stepContext: StepContext): Seq[(Term, ExpressionType)] = getTerms(stepContext.externalDepth)
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType]
@@ -25,7 +28,7 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     internalDepth: Int,
     externalDepth: Int
   ): ExpressionType = {
-    specify(targetArguments.indices.zip(targetArguments).toMap, internalDepth, externalDepth).asInstanceOf[ExpressionType]
+    specify(targetArguments.indices.zip(targetArguments).toMap, internalDepth, externalDepth)
   }
 
   /**
@@ -61,14 +64,14 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     */
   def calculateSubstitutions(
     other: Expression,
-    substitutions: Substitutions,
+    substitutions: Substitutions.Possible,
     internalDepth: Int,
     externalDepth: Int
-  ): Iterator[Substitutions]
-  def calculateSubstitutions(other: Expression, stepContext: StepContext): Iterator[Substitutions] = {
-    calculateSubstitutions(other, Substitutions.empty, 0, stepContext.externalDepth)
+  ): Option[Substitutions.Possible]
+  def calculateSubstitutions(other: Expression, stepContext: StepContext): Option[Substitutions.Possible] = {
+    calculateSubstitutions(other, Substitutions.Possible.empty, 0, stepContext.externalDepth)
   }
-  def calculateSubstitutions(other: Expression, substitutions: Substitutions, stepContext: StepContext): Iterator[Substitutions] = {
+  def calculateSubstitutions(other: Expression, substitutions: Substitutions.Possible, stepContext: StepContext): Option[Substitutions.Possible] = {
     calculateSubstitutions(other, substitutions, 0, stepContext.externalDepth)
   }
 
@@ -87,7 +90,7 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     substitutions: Substitutions,
     stepContext: StepContext
   ): Option[ExpressionType] = {
-    applySubstitutions(substitutions, 0, stepContext.externalDepth).asInstanceOf[Option[ExpressionType]]
+    applySubstitutions(substitutions, 0, stepContext.externalDepth)
   }
 
   /**
@@ -103,11 +106,11 @@ trait TypedExpression[+ExpressionType <: Expression] { self: Expression =>
     */
   def calculateApplicatives(
     targetArguments: Seq[Term],
-    substitutions: Substitutions,
+    substitutions: Substitutions.Possible,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(ExpressionType, Substitutions)]
+  ): Iterator[(ExpressionType, Substitutions.Possible)]
   def calculateArguments(
     target: Expression,
     argumentsSoFar: Map[Int, Term],
@@ -137,22 +140,22 @@ object Expression {
     def requiredSubstitutions: Substitutions.Required = expressions.map(_.requiredSubstitutions).foldTogether
     def calculateSubstitutions(
       otherExpressions: Seq[Expression],
-      substitutions: Substitutions,
+      substitutions: Substitutions.Possible,
       internalDepth: Int,
       externalDepth: Int
-    ): Iterator[Substitutions] = {
-      expressions.zipStrict(otherExpressions).toSeq.flatten
-        .foldLeft(Iterator(substitutions)) { case (substitutionsSoFar, (expression, otherExpression)) =>
-          substitutionsSoFar.flatMap(expression.calculateSubstitutions(otherExpression, _, internalDepth, externalDepth))
-        }
+    ): Option[Substitutions.Possible] = {
+      expressions.zipStrict(otherExpressions)
+        .flatMap(_.foldLeft(Option(substitutions))  { case (substitutionsSoFar, (expression, otherExpression)) =>
+          substitutionsSoFar.flatMap(s => expression.calculateSubstitutions(otherExpression, s, internalDepth, externalDepth))
+        })
     }
     def calculateApplicatives(
       arguments: Seq[Term],
-      substitutions: Substitutions,
+      substitutions: Substitutions.Possible,
       internalDepth: Int,
       previousInternalDepth: Int,
       externalDepth: Int
-    ): Iterator[(Seq[Expression], Substitutions)] = {
+    ): Iterator[(Seq[Expression], Substitutions.Possible)] = {
       expressions.iterator.foldLeft(Iterator((Seq.empty[Expression], substitutions))) { case (predicatesAndSubstitutionsSoFar, expression) =>
         for {
           (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar

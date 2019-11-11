@@ -59,6 +59,7 @@ package object model {
   }
 
   implicit class SeqOps[T](seq: Seq[T]) {
+    def headAndTailOption: Option[(T, Seq[T])] = +:.unapply(seq)
     def single: Option[T]= {
       seq match {
         case Seq(singleElement) => Some(singleElement)
@@ -314,6 +315,11 @@ package object model {
     }
     def findFirst[S](f: T => Option[S]): Option[S] = {
       iterator.map(f).collect { case Some(t) => t }.headOption
+    }
+    def mapCollect[S](f: T => Option[S]): Iterator[S] = {
+      iterator.map(f).collect {
+        case Some(t) => t
+      }
     }
   }
 

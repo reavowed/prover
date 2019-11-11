@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition
+import net.prover.model.proof.StepContext
 
 import scala.collection.immutable.Nil
 
@@ -20,6 +21,21 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
 
   override def complexity: Int = {
     if (components.isEmpty) 0 else components.map(_.complexity).sum + 1
+  }
+  override def getTerms(depth: Int): Seq[(Term, ExpressionType)] = {
+    @scala.annotation.tailrec
+    def helper(previous: Seq[Expression], next: Seq[Expression], acc: Seq[(Term, ExpressionType)]): Seq[(Term, ExpressionType)] = {
+      next match {
+        case current +: more =>
+          helper(
+            previous :+ current,
+            more,
+            acc ++ current.getTerms(increaseDepth(depth)).map(_.mapRight(e => updateComponents((previous :+ e) ++ more))))
+        case _ =>
+          acc
+      }
+    }
+    helper(Nil, components, Nil)
   }
   override def definitionUsages: DefinitionUsages = components.map(_.definitionUsages).foldTogether.addUsage(definition)
 
@@ -57,13 +73,12 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   override def requiredSubstitutions = components.requiredSubstitutions
   override def calculateSubstitutions(
     other: Expression,
-    substitutions: Substitutions,
+    substitutions: Substitutions.Possible,
     internalDepth: Int,
     externalDepth: Int
-  ): Iterator[Substitutions] = {
+  ): Option[Substitutions.Possible] = {
     getMatch(other)
-      .map(components.calculateSubstitutions(_, substitutions, increaseDepth(internalDepth), externalDepth))
-      .getOrElse(Iterator.empty)
+      .flatMap(components.calculateSubstitutions(_, substitutions, increaseDepth(internalDepth), externalDepth))
   }
   override def applySubstitutions(
     substitutions: Substitutions,
@@ -74,11 +89,11 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
-    substitutions: Substitutions,
+    substitutions: Substitutions.Possible,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(ExpressionType, Substitutions)] = {
+  ): Iterator[(ExpressionType, Substitutions.Possible)] = {
     components.calculateApplicatives(baseArguments, substitutions, increaseDepth(internalDepth), previousInternalDepth, externalDepth)
       .map(_.mapLeft(updateComponents))
   }

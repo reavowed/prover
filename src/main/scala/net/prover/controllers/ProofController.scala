@@ -61,15 +61,15 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
         case Seq(0) if direction == "up" =>
           Some(Failure(BadRequestException("Cannot move step upwards if it's the first step")))
         case init :+ containerIndex :+ 0 if direction == "up" =>
-          theorem.modifySteps[Try](proofIndex, init, entryContext, (steps, _) => {
+          theorem.modifySteps[Try](proofIndex, init, entryContext) { (steps, _) =>
             steps.lift(containerIndex).flatMap { outerStep =>
               outerStep.extractSubstep(0).map(_.orBadRequest(s"Could not extract step $stepPath from outer step"))
             }.mapMap { case (outerStep, innerStep) =>
               steps.take(containerIndex) ++ Seq(innerStep, outerStep) ++ steps.drop(containerIndex + 1)
             }
-          })
+          }
         case init :+ last =>
-          theorem.modifySteps[Try](proofIndex, init, entryContext, (steps, _) => {
+          theorem.modifySteps[Try](proofIndex, init, entryContext) { (steps, _) =>
             steps.lift(last).map { step =>
               direction match {
                 case "up" =>
@@ -80,7 +80,7 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
                   Failure(BadRequestException(s"Unrecognised direction $direction"))
               }
             }
-          })
+          }
       }
     }
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
@@ -103,14 +103,14 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
         case Seq(_) =>
           Some(Failure(BadRequestException("No containing step to move out of")))
         case init :+ containerIndex :+ last =>
-          theorem.modifySteps[Try](proofIndex, init, entryContext, (steps, _) => {
+          theorem.modifySteps[Try](proofIndex, init, entryContext) { (steps, _) =>
             steps.splitAtIndexIfValid(containerIndex).flatMap { case (beforeContainer, container, afterContainer) =>
               container.extractSubstep(last).map(_.orBadRequest(s"Could not extract step $stepPath from outer step"))
                 .mapMap { case (updatedContainer, step) =>
                   (beforeContainer :+ step :+ updatedContainer) ++ afterContainer
                 }
             }
-          })
+          }
       }
     }
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
@@ -131,7 +131,7 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
         case Nil =>
           None
         case init :+ last =>
-          theorem.modifySteps[Try](proofIndex, init, entryContext, (steps, _) => {
+          theorem.modifySteps[Try](proofIndex, init, entryContext) { (steps, _) =>
             steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
                 after match {
                   case (following: Step.WithSubsteps) +: remaining =>
@@ -142,7 +142,7 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
                 }
 
             }
-          })
+          }
       }
     }
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>

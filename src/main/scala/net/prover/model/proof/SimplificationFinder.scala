@@ -6,7 +6,7 @@ object SimplificationFinder {
   private def getSimplification(premise: Premise.SingleLinePremise, simplificationInference: Inference, stepContext: StepContext): Option[Premise.Simplification] = {
     for {
       inferencePremise <- simplificationInference.premises.single
-      substitutions <- inferencePremise.calculateSubstitutions(premise.statement, stepContext).headOption
+      substitutions <- inferencePremise.calculateSubstitutions(premise.statement, stepContext).flatMap(_.confirmTotality)
       simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions, stepContext)
       path <- inferencePremise.findComponentPath(simplificationInference.conclusion)
     } yield {

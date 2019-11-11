@@ -10,6 +10,8 @@ case class PredicateApplication(
     with Statement
 {
   override def substitutionsLens = GenLens[Substitutions](_.predicates)
+  override def possibleSubstitutionsLens = GenLens[Substitutions.Possible](_.predicates)
+  override def possibleSubstitutionsApplicationsLens = GenLens[Substitutions.Possible](_.predicateApplications)
   override def requiredSubstitutionsLens = GenLens[Substitutions.Required](_.predicates)
 
   def getMatch(other: Expression): Option[Seq[Expression]] = other match {

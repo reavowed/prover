@@ -69,7 +69,7 @@ class TransitiveSteps extends React.Component {
         case "elided":
           return <ElidedStepProofLine {...props}>{children}</ElidedStepProofLine>;
         case "target":
-          return <TargetStepProofLine {...props}>{children}</TargetStepProofLine>;
+          return <TargetStepProofLine {...props} transitive>{children}</TargetStepProofLine>;
       }
     };
 

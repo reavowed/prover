@@ -3,7 +3,7 @@ package net.prover.model
 import net.prover.model.Inference.RearrangementType
 import net.prover.model.entries._
 import net.prover.model.expressions._
-import net.prover.model.proof.StepContext
+import net.prover.model.proof.{InferenceTypes, StepContext}
 
 case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: Seq[String]) {
   val inferences: Seq[Inference] = availableEntries.flatMap(_.inferences)
@@ -73,20 +73,40 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
     }
   }
 
-  def transitivityInferences: Map[ExpressionDefinition, Inference] = {
-    inferences.mapCollect {
-      case inference @ Inference(
-        _,
-        Seq(
-          DefinedExpression(d1, Nil, Seq(ExpressionVariable(a1), ExpressionVariable(b1))),
-          DefinedExpression(d2, Nil, Seq(ExpressionVariable(b2), ExpressionVariable(c1)))),
-        DefinedExpression(d3, Nil, Seq(ExpressionVariable(a2), ExpressionVariable(c2)))
-      ) if d1 == d2 && d2 == d3 && a1 == a2 && b1 == b2 && c1 == c2 =>
-        Some((d1, inference))
-      case _ =>
-        None
-    }.toMap
+  def getTransitivityDefinitions: Seq[(String, Statement, Inference)] = {
+    // Find all statement definitions that have default infix formats and a proven transitivity
+    def fromDefinitions = for {
+      definition <- statementDefinitions
+      if definition.componentTypes.length == 2 && definition.format.baseFormatString == s"%0 ${definition.symbol} %1"
+      predicate = DefinedStatement(Seq(FunctionParameter(0, 0), FunctionParameter(1, 0)), definition)(Nil)
+      inference <- inferences.find { i => InferenceTypes.getTransitivityPredicate(i).contains(predicate) }.toSeq
+    } yield (definition.symbol, definition.defaultValue, inference)
+
+    // Find all term definitions that can be built into an infix statement via a shorthand and have a proven transitivity
+    def fromShorthands = for {
+      shorthand <- availableEntries.ofType[DisplayShorthand]
+      if shorthand.template.isInstanceOf[Template.DefinedStatement]
+      if shorthand.template.variables.length == 3
+      Seq(lhsIndex, symbolIndex, rhsIndex) <- "%(\\d) %(\\d) %(\\d)".r.unapplySeq(shorthand.format.baseFormatString).map(_.map(_.toInt)).toSeq
+      if lhsIndex != symbolIndex && lhsIndex != rhsIndex && symbolIndex != rhsIndex
+      lhsVariable = shorthand.template.variables(lhsIndex)
+      symbolVariable = shorthand.template.variables(symbolIndex)
+      rhsVariable = shorthand.template.variables(rhsIndex)
+      if lhsVariable.isInstanceOf[Template.TermVariable] && symbolVariable.isInstanceOf[Template.TermVariable] && rhsVariable.isInstanceOf[Template.TermVariable]
+      if shorthand.conditions.forall(_._1 == symbolVariable.name)
+      definition <- termDefinitions
+      if definition.componentTypes.isEmpty
+      if shorthand.conditions.map(_._2).forall(definition.attributes.contains)
+      predicate = shorthand.template.expand(Map.empty, Map(lhsVariable.name -> FunctionParameter(0, 0), rhsVariable.name -> FunctionParameter(1, 0), symbolVariable.name -> definition.defaultValue))
+      inference <- inferences.find { i => InferenceTypes.getTransitivityPredicate(i).contains(predicate) }.toSeq
+    } yield (
+      definition.symbol,
+      shorthand.template.expand(Map.empty, Map(lhsVariable.name -> TermVariable(lhsVariable.name), rhsVariable.name -> TermVariable(rhsVariable.name), symbolVariable.name -> definition.defaultValue)).asInstanceOf[Statement],
+      inference)
+
+    fromDefinitions ++ fromShorthands
   }
+
   def rewriteInferences: Seq[(Inference, Statement)] = {
     availableEntries.ofType[Inference].collect {
       case inference @ Inference(_, Seq(singlePremise), conclusion)
@@ -115,8 +135,8 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
       .mapCollect { case (inference, firstTerm, secondTerm) =>
         for {
           Seq(l, r) <- equalityDefinition.unapplySeq(inference.conclusion)
-          (function, _) <- l.calculateApplicatives(Seq(firstTerm, secondTerm), Substitutions.empty, 0, 0, 0)
-            .find { case (function, substitutions) => function.requiredSubstitutions.isEmpty && substitutions == Substitutions(terms = Seq(firstTerm, secondTerm).map(v => v.name -> v).toMap) }
+          (function, _) <- l.calculateApplicatives(Seq(firstTerm, secondTerm), Substitutions.Possible.empty, 0, 0, 0)
+            .find { case (function, substitutions) => function.requiredSubstitutions.isEmpty && substitutions == Substitutions.Possible(terms = Seq(firstTerm, secondTerm).map(v => v.name -> v).toMap) }
           if function.specify(Seq(secondTerm, firstTerm), 0, 0) == r
         } yield (inference, function.asInstanceOf[Term])
       }
@@ -218,6 +238,28 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
       case _ =>
         false
     }
+  }
+  def findExpansionInference(template: Statement): Option[Inference] = {
+    for {
+      (a, b) <- template.requiredSubstitutions.terms match {
+        case Seq(a, b) => Some((a, b))
+        case _ => None
+      }
+      result <- inferences.find { i =>
+        i.premises.single.exists { premise =>
+          template.calculateSubstitutions(premise, Substitutions.empty, 0, 0).exists { premiseSubstitutions =>
+            template.calculateSubstitutions(i.conclusion, Substitutions.empty, 0, 0).exists { conclusionSubstitutions =>
+              (premiseSubstitutions.terms.get(a), premiseSubstitutions.terms.get(b), conclusionSubstitutions.terms.get(a), conclusionSubstitutions.terms.get(b)) match {
+                case (Some(TermVariable(a)), Some(TermVariable(b)), Some(FunctionApplication(f, Seq(TermVariable(c)))), Some(FunctionApplication(g, Seq(TermVariable(d))))) if a == c && b == d && f == g =>
+                  true
+                case _ =>
+                  false
+              }
+            }
+          }
+        }
+      }
+    } yield result
   }
   def findSubstitutionInference(statementDefinition: StatementDefinition): Option[Inference] = {
     inferences.find {

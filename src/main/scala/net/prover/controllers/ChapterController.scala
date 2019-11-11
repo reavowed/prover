@@ -8,8 +8,8 @@ import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.entries._
-import net.prover.model.expressions.{DefinedStatement, FunctionParameter, Statement, Template, TermVariable}
-import net.prover.model.proof.{InferenceTypes, Step}
+import net.prover.model.expressions.Statement
+import net.prover.model.proof.Step
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -134,7 +134,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           "definitions" -> getDefinitionSummaries(entryContext),
           "typeDefinitions" -> getTypeDefinitions(entryContext),
           "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
-          "transitiveStatements" -> getTransitiveStatements(entryContext),
+          "transitiveStatements" -> getTransitivityDefinitions(entryContext),
           "definitionShorthands" -> getDefinitionShorthands(entryContext)))
     }).toResponseEntity
   }
@@ -364,45 +364,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     } yield (book.title, chapter.title, theoremsWithKeys.map { case (theorem, key) => LinkSummary(theorem.name, getEntryUrl(bookKey, chapterKey, key))})
   }
 
-  case class TransitivityStatement(symbol: String, template: Statement, inferenceId: String)
-  private def getTransitiveStatements(entryContext: EntryContext) = {
-    getTransitiveStatementsFromDefinitions(entryContext) ++ getTransitiveStatementsFromShorthands(entryContext)
+  case class TransitivityDefinition(symbol: String, template: Statement, inferenceId: String)
+  private def getTransitivityDefinitions(entryContext: EntryContext) = {
+    for {
+      (symbol, template, inference) <- entryContext.getTransitivityDefinitions
+    } yield TransitivityDefinition(symbol, template, inference.id)
   }
 
-  // Find all statement definitions that have default infix formats and a proven transitivity
-  private def getTransitiveStatementsFromDefinitions(entryContext: EntryContext): Seq[TransitivityStatement] = {
-    for {
-      definition <- entryContext.statementDefinitions
-      if definition.componentTypes.length == 2 && definition.format.baseFormatString == s"%0 ${definition.symbol} %1"
-      predicate = DefinedStatement(Seq(FunctionParameter(0, 0), FunctionParameter(1, 0)), definition)(Nil)
-      inference <- entryContext.inferences.find { i => InferenceTypes.getTransitivityPredicate(i).contains(predicate) }.toSeq
-    } yield TransitivityStatement(definition.symbol, definition.defaultValue, inference.id)
-  }
-
-  // Find all term definitions that can be built into an infix statement via a shorthand and have a proven transitivity
-  private def getTransitiveStatementsFromShorthands(entryContext: EntryContext): Seq[TransitivityStatement] = {
-    val shorthands = entryContext.availableEntries.ofType[DisplayShorthand]
-    for {
-      shorthand <- entryContext.availableEntries.ofType[DisplayShorthand]
-      if shorthand.template.isInstanceOf[Template.DefinedStatement]
-      if shorthand.template.variables.length == 3
-      Seq(lhsIndex, symbolIndex, rhsIndex) <- "%(\\d) %(\\d) %(\\d)".r.unapplySeq(shorthand.format.baseFormatString).map(_.map(_.toInt)).toSeq
-      if lhsIndex != symbolIndex && lhsIndex != rhsIndex && symbolIndex != rhsIndex
-      lhsVariable = shorthand.template.variables(lhsIndex)
-      symbolVariable = shorthand.template.variables(symbolIndex)
-      rhsVariable = shorthand.template.variables(rhsIndex)
-      if lhsVariable.isInstanceOf[Template.TermVariable] && symbolVariable.isInstanceOf[Template.TermVariable] && rhsVariable.isInstanceOf[Template.TermVariable]
-      if shorthand.conditions.forall(_._1 == symbolVariable.name)
-      definition <- entryContext.termDefinitions
-      if definition.componentTypes.isEmpty
-      if shorthand.conditions.map(_._2).forall(definition.attributes.contains)
-      predicate = shorthand.template.expand(Map.empty, Map(lhsVariable.name -> FunctionParameter(0, 0), rhsVariable.name -> FunctionParameter(1, 0), symbolVariable.name -> definition.defaultValue))
-      inference <- entryContext.inferences.find { i => InferenceTypes.getTransitivityPredicate(i).contains(predicate) }.toSeq
-    } yield TransitivityStatement(
-      definition.symbol,
-      shorthand.template.expand(Map.empty, Map(lhsVariable.name -> TermVariable(lhsVariable.name), rhsVariable.name -> TermVariable(rhsVariable.name), symbolVariable.name -> definition.defaultValue)).asInstanceOf[Statement],
-      inference.id)
-  }
 }
 
 object ChapterController {

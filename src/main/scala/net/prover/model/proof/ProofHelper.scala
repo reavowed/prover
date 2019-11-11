@@ -9,7 +9,7 @@ object ProofHelper {
     stepContext.entryContext.inferences
       .filter(_.premises.isEmpty)
       .mapFind { inference =>
-        inference.conclusion.calculateSubstitutions(target, stepContext).headOption
+        inference.conclusion.calculateSubstitutions(target, stepContext).flatMap(_.confirmTotality)
           .map { substitutions =>
             Step.Assertion(target, inference.summary, Nil, substitutions)
           }
@@ -52,42 +52,44 @@ object ProofHelper {
     substitutions: Substitutions,
     stepContext: StepContext,
     followUpStep: Option[Step] = None
-  ): Seq[Step] = {
-    val premiseStatements = inference.substitutePremises(substitutions, stepContext)
-    val conclusion = inference.substituteConclusion(substitutions, stepContext)
-    val (targetSteps, premiseSteps) = premiseStatements.foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premiseStatement) =>
-      PremiseFinder.findPremiseSteps(premiseStatement, stepContext) match {
-        case Some(newPremiseSteps) =>
-          (targetStepsSoFar, premiseStepsSoFar ++ newPremiseSteps)
-        case None =>
-          val (deconstructedStatements, deconstructionSteps) = PremiseFinder.deconstructStatement(premiseStatement, stepContext)
-          val (deconstructionTargetSteps, deconstructionPremiseSteps) = deconstructedStatements.foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((otherTargetStepsSoFar, otherPremiseStepsSoFar), deconstructedStatement) =>
-            PremiseFinder.findPremiseSteps(deconstructedStatement, stepContext) match {
-              case Some(newPremiseSteps) =>
-                (otherTargetStepsSoFar, otherPremiseStepsSoFar ++ newPremiseSteps)
-              case None =>
-                (otherTargetStepsSoFar :+ Step.Target(deconstructedStatement), otherPremiseStepsSoFar)
-            }
-          }
-          (targetStepsSoFar ++ deconstructionTargetSteps, premiseStepsSoFar ++ deconstructionPremiseSteps ++ deconstructionSteps)
-      }
-    }
+  ): Option[Seq[Step]] = {
     def elide(steps: Seq[Step]): Step.Elided = Step.Elided(steps, Some(inference.summary), None)
-
-    val assertionStep = Step.Assertion(
-      conclusion,
-      inference,
-      premiseStatements.map(Premise.Pending),
-      substitutions)
-    if (InferenceTypes.isTransitivity(inference)) {
-      (targetSteps ++ premiseSteps) :+ followUpStep.map(s => elide(Seq(assertionStep, s))).getOrElse(assertionStep)
-    } else {
-      val baseStep = if (premiseSteps.nonEmpty || followUpStep.nonEmpty) {
-        elide((premiseSteps :+ assertionStep) ++ followUpStep)
-      } else {
-        assertionStep
+    for {
+      premiseStatements <- inference.substitutePremises(substitutions, stepContext)
+      conclusion <- inference.substituteConclusion(substitutions, stepContext)
+    } yield {
+      val (targetSteps, premiseSteps) = premiseStatements.foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premiseStatement) =>
+        PremiseFinder.findPremiseSteps(premiseStatement, stepContext) match {
+          case Some(newPremiseSteps) =>
+            (targetStepsSoFar, premiseStepsSoFar ++ newPremiseSteps)
+          case None =>
+            val (deconstructedStatements, deconstructionSteps) = PremiseFinder.deconstructStatement(premiseStatement, stepContext)
+            val (deconstructionTargetSteps, deconstructionPremiseSteps) = deconstructedStatements.foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((otherTargetStepsSoFar, otherPremiseStepsSoFar), deconstructedStatement) =>
+              PremiseFinder.findPremiseSteps(deconstructedStatement, stepContext) match {
+                case Some(newPremiseSteps) =>
+                  (otherTargetStepsSoFar, otherPremiseStepsSoFar ++ newPremiseSteps)
+                case None =>
+                  (otherTargetStepsSoFar :+ Step.Target(deconstructedStatement), otherPremiseStepsSoFar)
+              }
+            }
+            (targetStepsSoFar ++ deconstructionTargetSteps, premiseStepsSoFar ++ deconstructionPremiseSteps ++ deconstructionSteps)
+        }
       }
-      targetSteps :+ baseStep
+      val assertionStep = Step.Assertion(
+        conclusion,
+        inference,
+        premiseStatements.map(Premise.Pending),
+        substitutions)
+      if (InferenceTypes.isTransitivity(inference)) {
+        (targetSteps ++ premiseSteps) :+ followUpStep.map(s => elide(Seq(assertionStep, s))).getOrElse(assertionStep)
+      } else {
+        val baseStep = if (premiseSteps.nonEmpty || followUpStep.nonEmpty) {
+          elide((premiseSteps :+ assertionStep) ++ followUpStep)
+        } else {
+          assertionStep
+        }
+        targetSteps :+ baseStep
+      }
     }
   }
 
@@ -119,8 +121,7 @@ object ProofHelper {
         equalityDefinition(a, c),
         equalityTransitivityInference.summary,
         Seq(Premise.Pending(equalityDefinition(a, b)), Premise.Pending(equalityDefinition(b, c))),
-        Substitutions(terms = equalityTransitivityInference.requiredSubstitutions.terms.zip(Seq(a, b, c)).toMap)
-      )
+        Substitutions(terms = equalityTransitivityInference.requiredSubstitutions.terms.zip(Seq(a, b, c)).toMap))
     }
   }
   object TransitiveEquality {

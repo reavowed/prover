@@ -223,7 +223,7 @@ object Step {
         val scopingDefinition = entryContext.scopingDefinitionOption.getOrElse(throw new Exception("Naming step requires a scoping statement"))
         val deductionDefinition = entryContext.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
         val internalPremise = DefinedStatement(Seq(DefinedStatement(Seq(assumption, internalConclusion), deductionDefinition)(Nil)), scopingDefinition)(Seq(variableName))
-        val substitutedPremises = inference.substitutePremisesAndValidateConclusion(extractedConclusion, substitutions, stepContext)
+        val substitutedPremises = inference.substitutePremisesAndValidateConclusion(extractedConclusion, substitutions, stepContext).getOrElse(throw new Exception("Could not apply substitutions"))
         val premises = substitutedPremises match {
           case init :+ last =>
             if (last != internalPremise)
@@ -423,7 +423,7 @@ object Step {
         statement <- Statement.parser
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
-        premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions, stepContext)
+        premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions, stepContext).getOrElse(throw new Exception("Could not apply substitutions"))
       } yield {
         val premises = premiseStatements.map(s => stepContext.findPremise(s).getOrElse(throw new Exception(s"Could not find premise $s")))
         Assertion(statement, inference, premises, substitutions)

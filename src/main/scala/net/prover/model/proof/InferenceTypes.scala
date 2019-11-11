@@ -11,9 +11,9 @@ object InferenceTypes {
   def getTransitivityPredicate(inference: Inference): Option[Statement] = {
     inference.requiredSubstitutions match {
       case Substitutions.Required(Nil, Seq(a, b, c), Nil, Nil) =>
-        inference.conclusion.calculateApplicatives(Seq(TermVariable(a), TermVariable(c)), Substitutions.empty, 0, 0, 0).find { case (predicate, substitutions) =>
+        inference.conclusion.calculateApplicatives(Seq(TermVariable(a), TermVariable(c)), Substitutions.Possible.empty, 0, 0, 0).find { case (predicate, substitutions) =>
           predicate.requiredSubstitutions.isEmpty &&
-            substitutions == Substitutions(terms = Map(a -> TermVariable(a), c -> TermVariable(c))) &&
+            substitutions == Substitutions.Possible(terms = Map(a -> TermVariable(a), c -> TermVariable(c))) &&
             inference.premises == Seq(predicate.specify(Seq(TermVariable(a), TermVariable(b)), 0, 0), predicate.specify(Seq(TermVariable(b), TermVariable(c)), 0, 0))
         }.map(_._1)
       case _ =>

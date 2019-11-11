@@ -7,13 +7,13 @@ import monocle.Lens
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition
 
-import scala.collection.immutable.Nil
 import scala.reflect.ClassTag
 
 @JsonSerialize(using = classOf[ExpressionVariableSerializer])
 abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] extends Expression with TypedExpression[ExpressionType] { this: ExpressionType =>
   def name: String
   def substitutionsLens: Lens[Substitutions, Map[String, ExpressionType]]
+  def possibleSubstitutionsLens: Lens[Substitutions.Possible, Map[String, ExpressionType]]
   def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[String]]
 
   override def complexity: Int = 0
@@ -42,18 +42,18 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   override def requiredSubstitutions = requiredSubstitutionsLens.set(Seq(name))(Substitutions.Required.empty)
   override def calculateSubstitutions(
     other: Expression,
-    substitutions: Substitutions,
+    substitutions: Substitutions.Possible,
     internalDepth: Int,
     externalDepth: Int
-  ): Iterator[Substitutions] = {
+  ): Option[Substitutions.Possible] = {
     other match {
       case _  if other.isRuntimeInstance[ExpressionType] =>
-        (for {
+        for {
           reducedOther <- other.removeExternalParameters(internalDepth)
-          result <- substitutions.update(name, reducedOther.asInstanceOf[ExpressionType], substitutionsLens, 0)
-        } yield result).iterator
+          result <- substitutions.update(name, reducedOther.asInstanceOf[ExpressionType], possibleSubstitutionsLens)
+        } yield result
       case _ =>
-        Iterator.empty
+        None
     }
   }
   def applySubstitutions(
@@ -66,11 +66,11 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
 
   def calculateApplicatives(
     baseArguments: Seq[Term],
-    substitutions: Substitutions,
+    substitutions: Substitutions.Possible,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(ExpressionType, Substitutions)] = {
+  ): Iterator[(ExpressionType, Substitutions.Possible)] = {
     Iterator((this, substitutions))
   }
   override def calculateArguments(

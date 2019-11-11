@@ -38,9 +38,10 @@ case class EqualityRewriter(
     def findSimplificationsDirectly(premiseTerm: Term, reverse: Boolean): Seq[(Term, Step, Inference)] = {
       (for {
         (inference, left, right) <- termSimplificationInferences
-        conclusionSubstitutions <- left.calculateSubstitutions(premiseTerm, stepContext)
+        conclusionSubstitutions <- left.calculateSubstitutions(premiseTerm, stepContext).flatMap(_.confirmTotality)
         simplifiedTerm <- right.applySubstitutions(conclusionSubstitutions, stepContext).flatMap(_.asOptionalInstanceOf[Term])
-        (premiseSteps, substitutedPremises, finalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, stepContext)
+        (premiseSteps, substitutedPremises, possibleFinalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, stepContext)
+        finalSubstitutions <- possibleFinalSubstitutions.confirmTotality
         assertionStep = Step.Assertion(
           equalityDefinition(premiseTerm, simplifiedTerm),
           inference.summary,
@@ -55,9 +56,10 @@ case class EqualityRewriter(
       } yield (simplifiedTerm, step, inference)) ++
         (for {
           (inference, left, right) <- termDesimplificationInferences
-          conclusionSubstitutions <- right.calculateSubstitutions(premiseTerm, stepContext)
+          conclusionSubstitutions <- right.calculateSubstitutions(premiseTerm, stepContext).flatMap(_.confirmTotality)
           simplifiedTerm <- left.applySubstitutions(conclusionSubstitutions, stepContext).flatMap(_.asOptionalInstanceOf[Term])
-          (premiseSteps, substitutedPremises, finalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, stepContext)
+          (premiseSteps, substitutedPremises, possibleFinalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions, stepContext)
+          finalSubstitutions <- possibleFinalSubstitutions.confirmTotality
           assertionStep = Step.Assertion(
             equalityDefinition(simplifiedTerm, premiseTerm),
             inference.summary,

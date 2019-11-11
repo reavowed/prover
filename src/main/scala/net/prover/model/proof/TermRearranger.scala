@@ -52,7 +52,7 @@ case class TermRearranger(
       val assertionSteps = ProofHelper.getAssertionWithPremises(
         associativityInference.summary,
         Substitutions(terms = associativityInference.requiredSubstitutions.terms.zip(Seq(a, b, c)).toMap),
-        stepContext)
+        stepContext).get
       val steps = if (wrappingFunction.isInstanceOf[FunctionParameter]) {
         assertionSteps
       } else {
@@ -74,7 +74,7 @@ case class TermRearranger(
         ProofHelper.getAssertionWithPremises(
           associativityInference.summary,
           Substitutions(terms = associativityInference.requiredSubstitutions.terms.zip(Seq(a, b, c)).toMap),
-          stepContext) :+
+          stepContext).get :+
           equalityReversalStep(reversed, normalised)
       val stepsToElide = if (wrappingFunction.isInstanceOf[FunctionParameter]) {
         associativityAndReversalSteps
@@ -97,7 +97,7 @@ case class TermRearranger(
       val assertionSteps = ProofHelper.getAssertionWithPremises(
         commutativityInference.summary,
         Substitutions(terms = commutativityInference.requiredSubstitutions.terms.zip(Seq(a, b)).toMap),
-        stepContext)
+        stepContext).get
       val steps = if (wrappingFunction.isInstanceOf[FunctionParameter]) {
         assertionSteps
       } else {
