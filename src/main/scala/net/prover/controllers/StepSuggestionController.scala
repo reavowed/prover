@@ -105,17 +105,15 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       entryContext = EntryContext.forEntry(books, book, chapter, theorem)
       (step, stepContext) <- findStep[Step](theorem, proofIndex, stepPath, entryContext)
       targetStep <- step.asOptionalInstanceOf[Step.Target].orBadRequest("Step is not target")
-      (targetLhs, transitivityTemplate) <- entryContext.getTransitivityDefinitions.mapFind { case (_, template, _) =>
-          for {
-            substitutions <- template.calculateSubstitutions(targetStep.statement, stepContext)
-            Seq(lhs, _) <- template.requiredSubstitutions.terms.map(substitutions.terms.get).traverseOption
-          } yield (lhs, template)
+      (targetLhs, transitivityDefinition) <- entryContext.getTransitivityDefinitions.mapFind { definition =>
+        for {
+          (lhs, _) <- definition.splitStatement(targetStep.statement)(stepContext)
+        } yield (lhs, definition)
       }.orBadRequest("Target step is not a transitive statement")
     } yield {
       def getSuggestions(inference: Inference): Option[InferenceSuggestion] = {
         for {
-          transitivitySubstitutions <- transitivityTemplate.calculateSubstitutions(inference.conclusion, stepContext)
-          Seq(conclusionLhs, _) <- transitivityTemplate.requiredSubstitutions.terms.map(transitivitySubstitutions.terms.get).traverseOption
+          (conclusionLhs, _) <- transitivityDefinition.splitStatement(inference.conclusion)(stepContext)
           substitutions <- calculateSubstitutionsForTermOrSubTerm(targetLhs, conclusionLhs, stepContext)
         } yield InferenceSuggestion(
           inference.summary,
@@ -183,17 +181,13 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       entryContext = EntryContext.forEntry(books, book, chapter, theorem)
       (step, stepContext) <- findStep[Step](theorem, proofIndex, stepPath, entryContext)
       targetStep <- step.asOptionalInstanceOf[Step.Target].orBadRequest("Step is not target")
-      (targetLhs, transitivityTemplate) <- entryContext.getTransitivityDefinitions.mapFind { case (_, template, _) =>
+      (targetLhs, transitivityDefinition) <- entryContext.getTransitivityDefinitions.mapFind { definition =>
         for {
-          substitutions <- template.calculateSubstitutions(targetStep.statement, stepContext)
-          Seq(lhs, _) <- template.requiredSubstitutions.terms.map(substitutions.terms.get).traverseOption
-        } yield (lhs, template)
+          (lhs, _) <- definition.splitStatement(targetStep.statement)(stepContext)
+        } yield (lhs, definition)
       }.orBadRequest("Target step is not a transitive statement")
       inference <- findInference(inferenceId)(entryContext)
-      conclusionLhs <- (for {
-        transitivitySubstitutions <- transitivityTemplate.calculateSubstitutions(inference.conclusion, stepContext)
-        Seq(conclusionLhs, _) <- transitivityTemplate.requiredSubstitutions.terms.map(transitivitySubstitutions.terms.get).traverseOption
-      } yield conclusionLhs).orBadRequest("Inference conclusion is not transitive statement")
+      (conclusionLhs, _) <- transitivityDefinition.splitStatement(inference.conclusion)(stepContext).orBadRequest("Inference conclusion is not transitive statement")
       possibleSubstitutions <- calculateSubstitutionsForTermOrSubTerm(targetLhs, conclusionLhs, stepContext)
         .orBadRequest("Could not calculate any substitutions for this inference")
     } yield {

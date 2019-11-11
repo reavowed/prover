@@ -3,7 +3,7 @@ package net.prover.model
 import net.prover.model.Inference.RearrangementType
 import net.prover.model.entries._
 import net.prover.model.expressions._
-import net.prover.model.proof.{InferenceTypes, StepContext}
+import net.prover.model.proof.InferenceTypes
 
 case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: Seq[String]) {
   val inferences: Seq[Inference] = availableEntries.flatMap(_.inferences)
@@ -73,14 +73,14 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
     }
   }
 
-  def getTransitivityDefinitions: Seq[(String, Statement, Inference)] = {
+  def getTransitivityDefinitions: Seq[TransitivityDefinition] = {
     // Find all statement definitions that have default infix formats and a proven transitivity
     def fromDefinitions = for {
       definition <- statementDefinitions
       if definition.componentTypes.length == 2 && definition.format.baseFormatString == s"%0 ${definition.symbol} %1"
       predicate = DefinedStatement(Seq(FunctionParameter(0, 0), FunctionParameter(1, 0)), definition)(Nil)
       inference <- inferences.find { i => InferenceTypes.getTransitivityPredicate(i).contains(predicate) }.toSeq
-    } yield (definition.symbol, definition.defaultValue, inference)
+    } yield TransitivityDefinition(definition.symbol, definition.defaultValue, inference.summary)
 
     // Find all term definitions that can be built into an infix statement via a shorthand and have a proven transitivity
     def fromShorthands = for {
@@ -99,10 +99,10 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
       if shorthand.conditions.map(_._2).forall(definition.attributes.contains)
       predicate = shorthand.template.expand(Map.empty, Map(lhsVariable.name -> FunctionParameter(0, 0), rhsVariable.name -> FunctionParameter(1, 0), symbolVariable.name -> definition.defaultValue))
       inference <- inferences.find { i => InferenceTypes.getTransitivityPredicate(i).contains(predicate) }.toSeq
-    } yield (
+    } yield TransitivityDefinition(
       definition.symbol,
       shorthand.template.expand(Map.empty, Map(lhsVariable.name -> TermVariable(lhsVariable.name), rhsVariable.name -> TermVariable(rhsVariable.name), symbolVariable.name -> definition.defaultValue)).asInstanceOf[Statement],
-      inference)
+      inference.summary)
 
     fromDefinitions ++ fromShorthands
   }
@@ -239,13 +239,13 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
         false
     }
   }
-  def findExpansionInference(template: Statement): Option[Inference] = {
+  def findExpansion(template: Statement): Option[ExpansionDefinition] = {
     for {
       (a, b) <- template.requiredSubstitutions.terms match {
         case Seq(a, b) => Some((a, b))
         case _ => None
       }
-      result <- inferences.find { i =>
+      inference <- inferences.find { i =>
         i.premises.single.exists { premise =>
           template.calculateSubstitutions(premise, Substitutions.empty, 0, 0).exists { premiseSubstitutions =>
             template.calculateSubstitutions(i.conclusion, Substitutions.empty, 0, 0).exists { conclusionSubstitutions =>
@@ -259,7 +259,7 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
           }
         }
       }
-    } yield result
+    } yield ExpansionDefinition(template, inference.summary)
   }
   def findSubstitutionInference(statementDefinition: StatementDefinition): Option[Inference] = {
     inferences.find {

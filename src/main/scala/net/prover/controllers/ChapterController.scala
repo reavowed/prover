@@ -134,7 +134,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           "definitions" -> getDefinitionSummaries(entryContext),
           "typeDefinitions" -> getTypeDefinitions(entryContext),
           "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
-          "transitiveStatements" -> getTransitivityDefinitions(entryContext),
+          "transitiveStatements" -> entryContext.getTransitivityDefinitions,
           "definitionShorthands" -> getDefinitionShorthands(entryContext)))
     }).toResponseEntity
   }
@@ -363,14 +363,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       if theoremsWithKeys.nonEmpty
     } yield (book.title, chapter.title, theoremsWithKeys.map { case (theorem, key) => LinkSummary(theorem.name, getEntryUrl(bookKey, chapterKey, key))})
   }
-
-  case class TransitivityDefinition(symbol: String, template: Statement, inferenceId: String)
-  private def getTransitivityDefinitions(entryContext: EntryContext) = {
-    for {
-      (symbol, template, inference) <- entryContext.getTransitivityDefinitions
-    } yield TransitivityDefinition(symbol, template, inference.id)
-  }
-
 }
 
 object ChapterController {

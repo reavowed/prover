@@ -139,6 +139,15 @@ export class TargetStepProofLine extends React.Component {
       .then(this.stopProving);
   };
 
+  addTransitiveTarget = () => {
+    this.props.theoremContext.fetchJsonForStep(this.props.path, "transitiveTarget", {
+      method: "POST",
+      body: this.state.targetStatement
+    })
+      .then(this.props.theoremContext.updateTheorem)
+      .then(this.startProving);
+  };
+
   render() {
     let {step, path, additionalReferences, theoremContext, boundVariableLists, children, transitive} = this.props;
     let {proving, activeProvingType} = this.state;
@@ -163,6 +172,7 @@ export class TargetStepProofLine extends React.Component {
             {transitive &&
             <>
               <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'addFromLeft'})}>Add expression from left</Button>
+              <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'transitiveTarget', targetStatement: ''})}>Add target</Button>
             </>
             }
             <Button size="sm" className="ml-1" onClick={this.extract}>Extract</Button>
@@ -205,6 +215,7 @@ export class TargetStepProofLine extends React.Component {
               <FlexRow>
                 <FlexRow.Grow>
                   <Form.Control type="text"
+                                autoFocus
                                 value={this.state.targetStatement}
                                 onChange={(e) => this.setState({targetStatement: Parser.replaceShorthands(e.target.value)})}/>
                 </FlexRow.Grow>
@@ -218,6 +229,20 @@ export class TargetStepProofLine extends React.Component {
                                                                    boundVariableLists={boundVariableLists}
                                                                    submit={this.addFromLeft}
                                                                    focusOnMount/>}
+          {activeProvingType === 'transitiveTarget' && <>
+            <Form.Group>
+              <Form.Label><strong>Transitive Target</strong></Form.Label>
+              <FlexRow>
+                <FlexRow.Grow>
+                  <Form.Control type="text"
+                                autoFocus
+                                value={this.state.targetStatement}
+                                onChange={(e) => this.setState({targetStatement: Parser.replaceShorthands(e.target.value)})}/>
+                </FlexRow.Grow>
+                <Button size="sm" className="ml-1" onClick={this.addTransitiveTarget}>Add</Button>
+              </FlexRow>
+            </Form.Group>
+          </>}
         </div> :
         <ProofLine incomplete
                    editableBoundVariable
