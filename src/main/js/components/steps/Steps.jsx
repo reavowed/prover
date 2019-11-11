@@ -19,12 +19,13 @@ class TransitiveSteps extends React.Component {
   setLeftHandSideRef = (ref) => {
     this.leftHandSideRef = ref;
   };
-  setSpacerRef = (ref, path) => {
+  setSpacerRef = (ref, id) => {
     if (ref) {
-      this.spacerRefs[path.join(".")] = ref;
+      this.spacerRefs[id] = ref;
     } else {
-      delete this.spacerRefs[path.join(".")];
+      delete this.spacerRefs[id];
     }
+    this.updateSpacing()
   };
   componentDidMount() {
     this.updateSpacing()
@@ -88,7 +89,7 @@ class TransitiveSteps extends React.Component {
         renderProofLine(
           {step: rightHandSide.step, path: rightHandSide.path, theoremContext, boundVariableLists, key: "transitive " + rightHandSide.expression.serialize()},
           <>
-            <span ref={r => this.setSpacerRef(r, rightHandSide.path)}/>
+            <span ref={r => this.setSpacerRef(r, rightHandSide.path.join("."))}/>
             {renderRightHandSide(rightHandSide, index + 1)}
           </>
         )
