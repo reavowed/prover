@@ -123,10 +123,30 @@ export class TargetStepProofLine extends React.Component {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferencesForTransitivityFromLeft?searchText=${searchText}`)
   };
   getPremiseSuggestionsForLeft = (inferenceId) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestPremisesForTransitivityFromLeft?inferenceId=${inferenceId}&withConclusion=true`)
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestPremisesForTransitivityFromLeft?inferenceId=${inferenceId}`)
   };
   addFromLeft = (suggestion, substitutions) => {
     return this.props.theoremContext.fetchJsonForStep(this.props.path, "transitivityFromLeft", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        inferenceId: suggestion.inference.id,
+        substitutions,
+        rewriteInferenceId: suggestion.rewriteInference && suggestion.rewriteInference.id
+      })
+    })
+      .then(this.props.theoremContext.updateTheorem)
+      .then(this.stopProving);
+  };
+
+  getInferenceSuggestionsForRight = (searchText) => {
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferencesForTransitivityFromRight?searchText=${searchText}`)
+  };
+  getPremiseSuggestionsForRight = (inferenceId) => {
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestPremisesForTransitivityFromRight?inferenceId=${inferenceId}`)
+  };
+  addFromRight = (suggestion, substitutions) => {
+    return this.props.theoremContext.fetchJsonForStep(this.props.path, "transitivityFromRight", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -172,6 +192,7 @@ export class TargetStepProofLine extends React.Component {
             {transitive &&
             <>
               <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'addFromLeft'})}>Add expression from left</Button>
+              <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'addFromRight'})}>Add expression from right</Button>
               <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'transitiveTarget', targetStatement: ''})}>Add target</Button>
             </>
             }
@@ -228,6 +249,12 @@ export class TargetStepProofLine extends React.Component {
                                                                    getPremiseSuggestions={this.getPremiseSuggestionsForLeft}
                                                                    boundVariableLists={boundVariableLists}
                                                                    submit={this.addFromLeft}
+                                                                   focusOnMount/>}
+          {activeProvingType === 'addFromRight' && <InferenceFinder title='Select Inference to Add from Right'
+                                                                   getInferenceSuggestions={this.getInferenceSuggestionsForRight}
+                                                                   getPremiseSuggestions={this.getPremiseSuggestionsForRight}
+                                                                   boundVariableLists={boundVariableLists}
+                                                                   submit={this.addFromRight}
                                                                    focusOnMount/>}
           {activeProvingType === 'transitiveTarget' && <>
             <Form.Group>

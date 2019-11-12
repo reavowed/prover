@@ -51,14 +51,13 @@ object ProofHelper {
     inference: Inference.Summary,
     substitutions: Substitutions,
     stepContext: StepContext,
-    followUpStep: Option[Step] = None
+    followUpSteps: Seq[Step] = Nil
   ): Option[Seq[Step]] = {
-    def elide(steps: Seq[Step]): Step.Elided = Step.Elided(steps, Some(inference.summary), None)
+    def elide(steps: Seq[Step]): Option[Step] = WrapElided.wrapAsElidedIfNecessary(steps, inference)
     for {
       premiseStatements <- inference.substitutePremises(substitutions, stepContext)
       conclusion <- inference.substituteConclusion(substitutions, stepContext)
-    } yield {
-      val (targetSteps, premiseSteps) = premiseStatements.foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premiseStatement) =>
+      (targetSteps, premiseSteps) = premiseStatements.foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premiseStatement) =>
         PremiseFinder.findPremiseSteps(premiseStatement, stepContext) match {
           case Some(newPremiseSteps) =>
             (targetStepsSoFar, premiseStepsSoFar ++ newPremiseSteps)
@@ -75,30 +74,28 @@ object ProofHelper {
             (targetStepsSoFar ++ deconstructionTargetSteps, premiseStepsSoFar ++ deconstructionPremiseSteps ++ deconstructionSteps)
         }
       }
-      val assertionStep = Step.Assertion(
+      assertionStep = Step.Assertion(
         conclusion,
         inference,
         premiseStatements.map(Premise.Pending),
         substitutions)
-      if (InferenceTypes.isTransitivity(inference)) {
-        (targetSteps ++ premiseSteps) :+ followUpStep.map(s => elide(Seq(assertionStep, s))).getOrElse(assertionStep)
+      result <- if (InferenceTypes.isTransitivity(inference)) {
+        elide(assertionStep +: followUpSteps).map((targetSteps ++ premiseSteps) :+ _)
       } else {
-        val baseStep = if (premiseSteps.nonEmpty || followUpStep.nonEmpty) {
-          elide((premiseSteps :+ assertionStep) ++ followUpStep)
-        } else {
-          assertionStep
-        }
-        targetSteps :+ baseStep
+        elide((premiseSteps :+ assertionStep) ++ followUpSteps).map(targetSteps :+ _)
       }
-    }
+    } yield result
   }
 
   object WrapElided {
     def wrapAsElidedIfNecessary(steps: Seq[Step], description: String): Option[Step] = {
       wrapAsElidedIfNecessary(steps, Step.Elided(_, None, Some(description)))
     }
+    def wrapAsElidedIfNecessary(steps: Seq[Step], inference: Inference.Summary): Option[Step] = {
+      wrapAsElidedIfNecessary(steps, Step.Elided(_, Some(inference), None))
+    }
     def wrapAsElidedIfNecessary(steps: Seq[Step], inference: Inference): Option[Step] = {
-      wrapAsElidedIfNecessary(steps, Step.Elided(_, Some(inference.summary), None))
+      wrapAsElidedIfNecessary(steps, inference.summary)
     }
     private def wrapAsElidedIfNecessary(steps: Seq[Step], f: Seq[Step] => Step.Elided): Option[Step] = {
       steps match {

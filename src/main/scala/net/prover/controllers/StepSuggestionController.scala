@@ -88,14 +88,14 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       Some((targetTerm.getTerms(stepContext).map(_._1).toSet - targetTerm).toSeq.mapCollect(conclusionTerm.calculateSubstitutions(_, stepContext))).filter(_.nonEmpty)
   }
 
-  @GetMapping(value = Array("/suggestInferencesForTransitivityFromLeft"), produces = Array("application/json;charset=UTF-8"))
-  def suggestInferencesForTransitivityFromLeft(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("proofIndex") proofIndex: Int,
-    @PathVariable("stepPath") stepPath: PathData,
-    @RequestParam("searchText") searchText: String
+  private def suggestInferencesForTransitivity(
+    bookKey: String,
+    chapterKey: String,
+    theoremKey: String,
+    proofIndex: Int,
+    stepPath: PathData,
+    searchText: String)(
+    f: (TransitivityDefinition, Statement, StepContext) => Option[Term]
   ): ResponseEntity[_] = {
     val books = bookService.books
     (for {
@@ -105,30 +105,63 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       entryContext = EntryContext.forEntry(books, book, chapter, theorem)
       (step, stepContext) <- findStep[Step](theorem, proofIndex, stepPath, entryContext)
       targetStep <- step.asOptionalInstanceOf[Step.Target].orBadRequest("Step is not target")
-      (targetLhs, transitivityDefinition) <- entryContext.getTransitivityDefinitions.mapFind { definition =>
+      (targetPart, transitivityDefinition) <- entryContext.getTransitivityDefinitions.mapFind { definition =>
         for {
-          (lhs, _) <- definition.splitStatement(targetStep.statement)(stepContext)
+          lhs <- f(definition, targetStep.statement, stepContext)
         } yield (lhs, definition)
       }.orBadRequest("Target step is not a transitive statement")
     } yield {
-      def getSuggestions(inference: Inference): Option[InferenceSuggestion] = {
-        for {
-          (conclusionLhs, _) <- transitivityDefinition.splitStatement(inference.conclusion)(stepContext)
-          substitutions <- calculateSubstitutionsForTermOrSubTerm(targetLhs, conclusionLhs, stepContext)
+      def getSuggestions(inference: Inference): Seq[InferenceSuggestion] = {
+        val direct = for {
+          conclusionPart <- f(transitivityDefinition, inference.conclusion, stepContext)
+          substitutions <- calculateSubstitutionsForTermOrSubTerm(targetPart, conclusionPart, stepContext)
         } yield InferenceSuggestion(
           inference.summary,
           inference.requiredSubstitutions,
           substitutions,
           None)
+        def rewritten = for {
+          (rewriteInference, rewritePremise) <- entryContext.rewriteInferences
+          rewriteSubstitutions <- rewriteInference.conclusion.calculateSubstitutions(inference.conclusion, stepContext).flatMap(_.confirmTotality).toSeq
+          rewrittenConclusion <- rewritePremise.applySubstitutions(rewriteSubstitutions, stepContext).toSeq
+          conclusionPart <- f(transitivityDefinition, rewrittenConclusion, stepContext).toSeq
+          substitutions <- calculateSubstitutionsForTermOrSubTerm(targetPart, conclusionPart, stepContext).toSeq
+        } yield InferenceSuggestion(inference.summary, inference.requiredSubstitutions, substitutions, Some(rewriteInference.summary))
+        direct.toSeq ++ rewritten
       }
 
       filterInferences(entryContext.inferences, searchText)
         .sortBy(_.conclusion.complexity)(implicitly[Ordering[Int]].reverse)
         .iterator
-        .mapCollect(getSuggestions)
+        .flatMap(getSuggestions)
         .take(10)
         .toSeq
     }).toResponseEntity
+
+  }
+
+  @GetMapping(value = Array("/suggestInferencesForTransitivityFromLeft"), produces = Array("application/json;charset=UTF-8"))
+  def suggestInferencesForTransitivityFromLeft(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData,
+    @RequestParam("searchText") searchText: String
+  ): ResponseEntity[_] = {
+    suggestInferencesForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText)(_.splitStatement(_)(_).map(_._1))
+  }
+
+  @GetMapping(value = Array("/suggestInferencesForTransitivityFromRight"), produces = Array("application/json;charset=UTF-8"))
+  def suggestInferencesForTransitivityFromRight(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData,
+    @RequestParam("searchText") searchText: String
+  ): ResponseEntity[_] = {
+    suggestInferencesForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText)(_.splitStatement(_)(_).map(_._2))
   }
 
   private def filterInferences(inferences: Seq[Inference], searchText: String): Seq[Inference] = {
@@ -163,15 +196,14 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     }).toResponseEntity
   }
 
-  @GetMapping(value = Array("/suggestPremisesForTransitivityFromLeft"), produces = Array("application/json;charset=UTF-8"))
-  def suggestPremisesForTransitivityFromLeft(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("proofIndex") proofIndex: Int,
-    @PathVariable("stepPath") stepPath: PathData,
-    @RequestParam("inferenceId") inferenceId: String,
-    @RequestParam("withConclusion") withConclusion: Boolean
+  private def suggestPremisesForTransitivity(
+    bookKey: String,
+    chapterKey: String,
+    theoremKey: String,
+    proofIndex: Int,
+    stepPath: PathData,
+    inferenceId: String)(
+    f: (TransitivityDefinition, Statement, StepContext) => Option[Term]
   ): ResponseEntity[_] = {
     val books = bookService.books
     (for {
@@ -181,19 +213,44 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       entryContext = EntryContext.forEntry(books, book, chapter, theorem)
       (step, stepContext) <- findStep[Step](theorem, proofIndex, stepPath, entryContext)
       targetStep <- step.asOptionalInstanceOf[Step.Target].orBadRequest("Step is not target")
-      (targetLhs, transitivityDefinition) <- entryContext.getTransitivityDefinitions.mapFind { definition =>
+      (targetPart, transitivityDefinition) <- entryContext.getTransitivityDefinitions.mapFind { definition =>
         for {
-          (lhs, _) <- definition.splitStatement(targetStep.statement)(stepContext)
+          lhs <- f(definition, targetStep.statement, stepContext)
         } yield (lhs, definition)
       }.orBadRequest("Target step is not a transitive statement")
       inference <- findInference(inferenceId)(entryContext)
-      (conclusionLhs, _) <- transitivityDefinition.splitStatement(inference.conclusion)(stepContext).orBadRequest("Inference conclusion is not transitive statement")
-      possibleSubstitutions <- calculateSubstitutionsForTermOrSubTerm(targetLhs, conclusionLhs, stepContext)
+      conclusionPart <- f(transitivityDefinition, inference.conclusion, stepContext)
+        .orBadRequest("Inference conclusion is not transitive statement")
+      possibleSubstitutions <- calculateSubstitutionsForTermOrSubTerm(targetPart, conclusionPart, stepContext)
         .orBadRequest("Could not calculate any substitutions for this inference")
     } yield {
       val premiseMatches = getPremiseMatches(inference.premises, possibleSubstitutions, stepContext)
       PremiseSuggestions(None, premiseMatches)
     }).toResponseEntity
+  }
+
+  @GetMapping(value = Array("/suggestPremisesForTransitivityFromLeft"), produces = Array("application/json;charset=UTF-8"))
+  def suggestPremisesForTransitivityFromLeft(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData,
+    @RequestParam("inferenceId") inferenceId: String
+  ): ResponseEntity[_] = {
+    suggestPremisesForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, inferenceId)(_.splitStatement(_)(_).map(_._1))
+  }
+
+  @GetMapping(value = Array("/suggestPremisesForTransitivityFromRight"), produces = Array("application/json;charset=UTF-8"))
+  def suggestPremisesForTransitivityFromRight(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData,
+    @RequestParam("inferenceId") inferenceId: String
+  ): ResponseEntity[_] = {
+    suggestPremisesForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, inferenceId)(_.splitStatement(_)(_).map(_._2))
   }
 
   @GetMapping(value = Array("/suggestNamingInferences"), produces = Array("application/json;charset=UTF-8"))
