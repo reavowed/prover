@@ -3,6 +3,7 @@ package net.prover.controllers
 import net.prover.model.EntryContext
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.DefinedStatement
+import net.prover.model.proof.Step
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 
@@ -47,7 +48,7 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
       (chapter, chapterKey) <- getChaptersWithKeys(book)
       (theorem, inferenceKey) <- getEntriesWithKeys(chapter)
         .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-      (assertion, context) <- theorem.findAssertions(EntryContext.forEntry(books, book, chapter, theorem))
+      (assertion, context) <- theorem.findSteps[Step.Assertion](EntryContext.forEntry(books, book, chapter, theorem))
       if assertion.inference.id == inferenceId
       if Option(statementSymbol).forall(symbol =>
         assertion.statement.asOptionalInstanceOf[DefinedStatement]

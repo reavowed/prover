@@ -223,7 +223,7 @@ object Step {
         val scopingDefinition = entryContext.scopingDefinitionOption.getOrElse(throw new Exception("Naming step requires a scoping statement"))
         val deductionDefinition = entryContext.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
         val internalPremise = DefinedStatement(Seq(DefinedStatement(Seq(assumption, internalConclusion), deductionDefinition)(Nil)), scopingDefinition)(Seq(variableName))
-        val substitutedPremises = inference.substitutePremisesAndValidateConclusion(extractedConclusion, substitutions, stepContext).getOrElse(throw new Exception("Could not apply substitutions"))
+        val substitutedPremises = inference.substitutePremisesAndValidateConclusion(extractedConclusion, substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
         val premises = substitutedPremises match {
           case init :+ last =>
             if (last != internalPremise)
@@ -363,6 +363,26 @@ object Step {
         substeps <- listParser.inBraces
       } yield Elided(substeps, highlightedInference, description)
     }
+    private def ifNecessary(substeps: Seq[Step], elider: Seq[Step] => Step): Option[Step] = {
+      substeps match {
+        case Nil => None
+        case Seq(single) => Some(single)
+        case _ => Some(elider(substeps))
+      }
+    }
+    def ifNecessary(substeps: Seq[Step], inference: Inference): Option[Step] = {
+      ifNecessary(substeps, forInference(inference))
+    }
+    def ifNecessary(substeps: Seq[Step], description: String): Option[Step] = {
+      ifNecessary(substeps, Step.Elided(_, None, Some(description)))
+    }
+
+    def forInference(inference: Inference): Seq[Step] => Step.Elided = {
+      Step.Elided(_, Some(inference.summary), None)
+    }
+    def forDescription(description: String): Seq[Step] => Step.Elided = {
+      Step.Elided(_, None, Some(description))
+    }
   }
 
   case class Assertion(
@@ -423,7 +443,7 @@ object Step {
         statement <- Statement.parser
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
-        premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions, stepContext).getOrElse(throw new Exception("Could not apply substitutions"))
+        premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
       } yield {
         val premises = premiseStatements.map(s => stepContext.findPremise(s).getOrElse(throw new Exception(s"Could not find premise $s")))
         Assertion(statement, inference, premises, substitutions)

@@ -1,7 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model.entries.ExpressionDefinition
-import net.prover.model.proof.StepContext
+import net.prover.model.proof.{StepContext, SubstitutionContext}
 import net.prover.model.{ExpressionParsingContext, Parser, Substitutions}
 
 trait Expression extends TypedExpression[Expression]
@@ -12,7 +12,7 @@ trait TypedExpression[+ExpressionType <: Expression] {
   def referencedDefinitions: Set[ExpressionDefinition] = definitionUsages.map.keySet
 
   def getTerms(depth: Int): Seq[(Term, ExpressionType)]
-  def getTerms(stepContext: StepContext): Seq[(Term, ExpressionType)] = getTerms(stepContext.externalDepth)
+  def getTerms(implicit stepContext: StepContext): Seq[(Term, ExpressionType)] = getTerms(stepContext.externalDepth)
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType]
@@ -29,6 +29,12 @@ trait TypedExpression[+ExpressionType <: Expression] {
     externalDepth: Int
   ): ExpressionType = {
     specify(targetArguments.indices.zip(targetArguments).toMap, internalDepth, externalDepth)
+  }
+  def specify(targetArguments: Map[Int, Term])(implicit substitutionContext: SubstitutionContext): ExpressionType = {
+    specify(targetArguments, 0, substitutionContext.externalDepth)
+  }
+  def specify(targetArguments: Seq[Term])(implicit substitutionContext: SubstitutionContext): ExpressionType = {
+    specify(targetArguments.indices.zip(targetArguments).toMap)
   }
 
   /**
@@ -68,11 +74,11 @@ trait TypedExpression[+ExpressionType <: Expression] {
     internalDepth: Int,
     externalDepth: Int
   ): Option[Substitutions.Possible]
-  def calculateSubstitutions(other: Expression, stepContext: StepContext): Option[Substitutions.Possible] = {
-    calculateSubstitutions(other, Substitutions.Possible.empty, 0, stepContext.externalDepth)
+  def calculateSubstitutions(other: Expression)(implicit substitutionContext: SubstitutionContext): Option[Substitutions.Possible] = {
+    calculateSubstitutions(other, Substitutions.Possible.empty)
   }
-  def calculateSubstitutions(other: Expression, substitutions: Substitutions.Possible, stepContext: StepContext): Option[Substitutions.Possible] = {
-    calculateSubstitutions(other, substitutions, 0, stepContext.externalDepth)
+  def calculateSubstitutions(other: Expression, substitutions: Substitutions.Possible)(implicit substitutionContext: SubstitutionContext): Option[Substitutions.Possible] = {
+    calculateSubstitutions(other, substitutions, 0, substitutionContext.externalDepth)
   }
 
   /**
@@ -87,10 +93,10 @@ trait TypedExpression[+ExpressionType <: Expression] {
     externalDepth: Int
   ): Option[ExpressionType]
   def applySubstitutions(
-    substitutions: Substitutions,
-    stepContext: StepContext
+    substitutions: Substitutions)(
+    implicit substitutionContext: SubstitutionContext
   ): Option[ExpressionType] = {
-    applySubstitutions(substitutions, 0, stepContext.externalDepth)
+    applySubstitutions(substitutions, 0, substitutionContext.externalDepth)
   }
 
   /**
@@ -111,12 +117,26 @@ trait TypedExpression[+ExpressionType <: Expression] {
     previousInternalDepth: Int,
     externalDepth: Int
   ): Iterator[(ExpressionType, Substitutions.Possible)]
+  def calculateApplicatives(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions.Possible)(
+    implicit substitutionContext: SubstitutionContext
+  ): Iterator[(ExpressionType, Substitutions.Possible)] = {
+    calculateApplicatives(targetArguments, substitutions, 0, 0, substitutionContext.externalDepth)
+  }
+
   def calculateArguments(
     target: Expression,
     argumentsSoFar: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
   ): Option[Map[Int, Term]]
+  def calculateArguments(
+    target: Expression,
+    argumentsSoFar: Map[Int, Term])(
+    implicit substitutionContext: SubstitutionContext
+  ): Option[Map[Int, Term]] = calculateArguments(target, argumentsSoFar, 0, substitutionContext.externalDepth)
+
 
   def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = None
   def findComponentPath(other: Expression): Option[Seq[Int]] = {

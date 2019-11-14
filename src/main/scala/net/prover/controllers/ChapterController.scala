@@ -134,7 +134,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           "definitions" -> getDefinitionSummaries(entryContext),
           "typeDefinitions" -> getTypeDefinitions(entryContext),
           "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
-          "transitiveStatements" -> entryContext.getTransitivityDefinitions,
+          "transitiveStatements" -> getTransitivitySummaries(entryContext),
           "definitionShorthands" -> getDefinitionShorthands(entryContext)))
     }).toResponseEntity
   }
@@ -350,6 +350,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       .map(c => Character.getName(c).splitByWhitespace().last.toLowerCase -> c.toString)
       .toMap
     shorthandsFromDefinitions ++ greekLetterShorthands
+  }
+
+  case class TransitivitySummary(symbol: String, template: Statement, inferenceId: String)
+  private def getTransitivitySummaries(entryContext: EntryContext): Seq[TransitivitySummary] = {
+    entryContext.getTransitivityDefinitions.map { case (symbol, transitivity) =>
+      TransitivitySummary(symbol, transitivity.relation.template, transitivity.inference.id)
+    }
   }
 
   private def getUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[LinkSummary])] = {

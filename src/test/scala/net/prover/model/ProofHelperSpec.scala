@@ -4,6 +4,7 @@ import net.prover.model.Inference.RearrangementType
 import net.prover.model.entries.{Axiom, Theorem}
 import net.prover.model.expressions.{FunctionParameter, Statement, Term}
 import net.prover.model.proof._
+import org.specs2.execute.Result
 import org.specs2.matcher.MatchResult
 
 class ProofHelperSpec extends ProverSpec {
@@ -33,8 +34,8 @@ class ProofHelperSpec extends ProverSpec {
     val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
 
     def extract(targetStatement: Statement, premises: Seq[Statement], depth: Int = 0): Option[Step] = {
-      val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms).copy(boundVariableLists = (1 to depth).map(i => Seq(i.toString)))
-      SubstatementExtractor.extract(targetStatement, stepContext)
+      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms).copy(boundVariableLists = (1 to depth).map(i => Seq(i.toString)))
+      SubstatementExtractor.extract(targetStatement)
         .map(_.recalculateReferences(stepContext))
     }
 
@@ -151,15 +152,16 @@ class ProofHelperSpec extends ProverSpec {
     def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
     val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
     val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
-    val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b)), Equals(F(a), F(b)))
+    val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
+    val substitutionOfEqualsIntoFunction = Axiom("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
     val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
     val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
-    val axioms = Seq(reverseEquality, equalityIsTransitive, substitutionOfEquals, additionIsAssociative, additionIsCommutative)
+    val axioms = Seq(reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, additionIsAssociative, additionIsCommutative)
     val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
 
     def rearrange(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
-      val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms)
-      TermRearranger.rearrange(targetStatement, stepContext)
+      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms)
+      TermRearranger.rearrange(targetStatement)
         .map(_.recalculateReferences(stepContext))
     }
 
@@ -219,6 +221,14 @@ class ProofHelperSpec extends ProverSpec {
         target,
         StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms))
       validateStep(stepOption, target, premises, entryContextWithAxioms)
+
+      def checkSteps(steps: Seq[Step]): Result = {
+        Result.foreach(steps) { step =>
+          step.provenStatement must beSome(beNone ^^ ((s: Statement) => Equals(a, a).calculateSubstitutions(s)(SubstitutionContext.outsideProof)))
+          checkSteps(step.asOptionalInstanceOf[Step.WithSubsteps].toSeq.flatMap(_.substeps))
+        }
+      }
+      checkSteps(stepOption.toSeq)
     }
 
     "rewrite with simplification and expansion" in {

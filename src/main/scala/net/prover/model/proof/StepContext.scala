@@ -9,6 +9,7 @@ case class StepContext private(
     boundVariableLists: Seq[Seq[String]],
     premisesAndSimplifications: Seq[(Premise.Given, Seq[Premise.Simplification])],
     entryContext: EntryContext)
+  extends SubstitutionContext
 {
   def externalDepth: Int = boundVariableLists.length
   def atIndex(index: Int): StepContext = copy(stepReference = stepReference.forChild(index))
@@ -17,7 +18,7 @@ case class StepContext private(
     premisesAndSimplifications = premisesAndSimplifications.map(_.mapLeft(_.insertExternalParameters(1)).mapRight(_.map(_.insertExternalParameters(1)))))
 
   private def addPremise(givenPremise: Premise.Given): StepContext = {
-    copy(premisesAndSimplifications = premisesAndSimplifications :+ (givenPremise, SimplificationFinder.getSimplifications(givenPremise, entryContext, this)))
+    copy(premisesAndSimplifications = premisesAndSimplifications :+ (givenPremise, SimplificationFinder.getSimplifications(givenPremise, entryContext)(this)))
   }
   private def addStatement(statement: Statement, reference: PreviousLineReference): StepContext = {
     addPremise(Premise.Given(statement, reference))

@@ -10,6 +10,8 @@ import net.prover.model.proof._
 import scalaz.Functor
 import scalaz.syntax.functor._
 
+import scala.reflect.ClassTag
+
 @JsonIgnoreProperties(Array("rearrangementType"))
 case class Theorem(
     name: String,
@@ -60,10 +62,10 @@ case class Theorem(
     copy(proofs = proofs.map(_.recalculateReferences(initialStepContext(entryContext))))
   }
 
-  def findAssertions(entryContext: EntryContext): Seq[(Step.Assertion, StepContext)] = {
-    def forStep(step: Step, context: StepContext): Seq[(Step.Assertion, StepContext)] = {
+  def findSteps[T <: Step : ClassTag](entryContext: EntryContext): Seq[(T, StepContext)] = {
+    def forStep(step: Step, context: StepContext): Seq[(T, StepContext)] = {
       step match {
-        case assertion: Step.Assertion =>
+        case assertion: T =>
           Seq((assertion, context))
         case stepWithSubsteps: Step.WithSubsteps =>
           forSteps(stepWithSubsteps.substeps, stepWithSubsteps.specifyStepContext(context))
@@ -71,7 +73,7 @@ case class Theorem(
           Nil
       }
     }
-    def forSteps(steps: Seq[Step], context: StepContext): Seq[(Step.Assertion, StepContext)] = {
+    def forSteps(steps: Seq[Step], context: StepContext): Seq[(T, StepContext)] = {
       steps.zipWithIndex.flatMap { case (step, index) => forStep(step, context.atIndex(index))}
     }
     proofs.flatMap(proof => forSteps(proof.steps, initialStepContext(entryContext)))

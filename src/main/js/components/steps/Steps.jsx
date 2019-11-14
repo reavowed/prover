@@ -151,7 +151,7 @@ export class Steps extends React.Component {
     while (stepsWithIndexes.length >= 2 &&
       _.includes(allowableTransitivityStepTypes, stepsWithIndexes[0].step.type) &&
       stepsWithIndexes[1].step.type === "assertion" &&
-      stepsWithIndexes[1].step.inference && stepsWithIndexes[1].step.inference.id === transitiveStatement.inference.id &&
+      stepsWithIndexes[1].step.inference && stepsWithIndexes[1].step.inference.id === transitiveStatement.inferenceId &&
       !stepsWithIndexes[1].step.isIncomplete &&
       stepsWithIndexes[0].step.statement &&
       stepsWithIndexes[1].step.statement &&

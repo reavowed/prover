@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.Inference._
 import net.prover.model.entries.{ChapterEntry, ChapterEntryParser, ExpressionDefinition}
 import net.prover.model.expressions._
-import net.prover.model.proof.StepContext
+import net.prover.model.proof.{StepContext, SubstitutionContext}
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
@@ -53,23 +53,23 @@ trait Inference {
       .mkString(" ")
   }
 
-  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions, stepContext: StepContext): Option[Seq[Statement]] = {
+  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions)(implicit stepContext: StepContext): Option[Seq[Statement]] = {
     for {
-      _ <- substituteConclusion(substitutions, stepContext)
-      premises <- substitutePremises(substitutions, stepContext)
+      _ <- substituteConclusion(substitutions)
+      premises <- substitutePremises(substitutions)
     } yield premises
   }
 
-  def substitutePremises(substitutions: Substitutions, stepContext: StepContext): Option[Seq[Statement]] = {
-    premises.map(substituteStatement(_, substitutions, stepContext)).traverseOption
+  def substitutePremises(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Seq[Statement]] = {
+    premises.map(substituteStatement(_, substitutions)).traverseOption
   }
 
-  def substituteConclusion(substitutions: Substitutions, stepContext: StepContext): Option[Statement] = {
-    conclusion.applySubstitutions(substitutions, stepContext)
+  def substituteConclusion(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {
+    conclusion.applySubstitutions(substitutions)
   }
 
-  def substituteStatement(statement: Statement, substitutions: Substitutions, stepContext: StepContext): Option[Statement] = {
-    statement.applySubstitutions(substitutions, stepContext)
+  def substituteStatement(statement: Statement, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {
+    statement.applySubstitutions(substitutions)
   }
 
   override def toString: String = name

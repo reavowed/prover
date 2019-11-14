@@ -4,10 +4,7 @@ import net.prover.model._
 import net.prover.model.expressions._
 
 object SubstatementExtractor {
-
-  import ProofHelper.WrapElided._
-
-  def extract(targetStatement: Statement, stepContext: StepContext): Option[Step] = {
+  def extract(targetStatement: Statement)(implicit stepContext: StepContext): Option[Step] = {
     val statementExtractionInferences = stepContext.entryContext.availableEntries.ofType[Inference].collect {
       case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
         if conclusion.singleStatementVariable.isDefined &&
@@ -34,7 +31,7 @@ object SubstatementExtractor {
 
     def matchDirectly(extractionCandidate: Statement, termsSoFar: Int): Option[(Map[Int, Term], Seq[Step])] = {
       for {
-        terms <- extractionCandidate.calculateArguments(targetStatement, Map.empty, 0, stepContext.externalDepth)
+        terms <- extractionCandidate.calculateArguments(targetStatement, Map.empty)
       } yield (terms, Nil)
     }
 
@@ -42,21 +39,21 @@ object SubstatementExtractor {
       statementExtractionInferences.iterator.findFirst {
         case (inference, firstPremise, otherPremises) =>
           (for {
-            extractionSubstitutions <- firstPremise.calculateSubstitutions(extractionCandidate, stepContext).flatMap(_.confirmTotality).toSeq
-            extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions, stepContext).toSeq
+            extractionSubstitutions <- firstPremise.calculateSubstitutions(extractionCandidate).flatMap(_.confirmTotality).toSeq
+            extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions).toSeq
             (conclusionTerms, innerSteps) <- extractFromStatement(extractedConclusion, termsSoFar).toSeq
-            extractedOtherPremises <- otherPremises.map(_.applySubstitutions(extractionSubstitutions, stepContext)).traverseOption.toSeq
-            (premiseSteps, terms) <- PremiseFinder.findParameterisedPremiseSteps(extractedOtherPremises, conclusionTerms, stepContext)
-            substitutedFirstPremise = extractionCandidate.specify(terms, 0, stepContext.externalDepth)
-            substitutions <- firstPremise.calculateSubstitutions(substitutedFirstPremise, stepContext).flatMap(_.confirmTotality).toSeq
-            substitutedOtherPremises <- otherPremises.map(_.applySubstitutions(substitutions, stepContext)).traverseOption.toSeq
-            substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions, stepContext)
+            extractedOtherPremises <- otherPremises.map(_.applySubstitutions(extractionSubstitutions)).traverseOption.toSeq
+            (premiseSteps, terms) <- PremiseFinder.findParameterisedPremiseSteps(extractedOtherPremises, conclusionTerms)
+            substitutedFirstPremise = extractionCandidate.specify(terms)
+            substitutions <- firstPremise.calculateSubstitutions(substitutedFirstPremise).flatMap(_.confirmTotality).toSeq
+            substitutedOtherPremises <- otherPremises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
+            substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions)
             assertionStep = Step.Assertion(
               substitutedConclusion,
               inference.summary,
               (substitutedFirstPremise +: substitutedOtherPremises).map(Premise.Pending),
               substitutions)
-            newStep <- wrapAsElidedIfNecessary(premiseSteps :+ assertionStep, inference)
+            newStep <- Step.Elided.ifNecessary(premiseSteps :+ assertionStep, inference.summary)
           } yield (terms, newStep +: innerSteps)).headOption
       } orElse predicateSpecificationInferences.iterator.findFirst {
         case (inference, singlePremise, predicateName, argumentNames) =>
@@ -66,9 +63,9 @@ object SubstatementExtractor {
             nextPremise = extractionPredicate.specify(argumentNames.mapWithIndex((_, index) => FunctionParameter(termsSoFar + index, stepContext.externalDepth)), 0, stepContext.externalDepth + 1)
             (terms, laterSteps) <- extractFromStatement(nextPremise, termsSoFar + argumentNames.length).toSeq
             specifiedPremise = extractionCandidate.specify(terms, 0, stepContext.externalDepth)
-            substitutionsWithTerms <- singlePremise.calculateSubstitutions(specifiedPremise, stepContext).flatMap(_.confirmTotality).toSeq
+            substitutionsWithTerms <- singlePremise.calculateSubstitutions(specifiedPremise).flatMap(_.confirmTotality).toSeq
               .map(_.copy(terms = argumentNames.mapWithIndex((n, i) => n -> terms(termsSoFar + i)).toMap))
-            substitutedConclusion <- inference.conclusion.applySubstitutions(substitutionsWithTerms, stepContext).toSeq
+            substitutedConclusion <- inference.conclusion.applySubstitutions(substitutionsWithTerms).toSeq
             specifiedConclusion = substitutedConclusion.specify(terms, 0, stepContext.externalDepth)
             newStep = Step.Assertion(
               specifiedConclusion,
@@ -86,19 +83,19 @@ object SubstatementExtractor {
 
     def extractWithRewrite(extractionCandidate: Statement, termsSoFar: Int): Option[(Map[Int, Term], Seq[Step])] = {
       rewriteInferences.iterator.findFirst { case (inference, singlePremise) =>
-        (for {
-          extractionSubstitutions <- singlePremise.calculateSubstitutions(extractionCandidate, stepContext).flatMap(_.confirmTotality)
-          rewrittenStatement <- inference.conclusion.applySubstitutions(extractionSubstitutions, stepContext)
+        for {
+          extractionSubstitutions <- singlePremise.calculateSubstitutions(extractionCandidate).flatMap(_.confirmTotality)
+          rewrittenStatement <- inference.conclusion.applySubstitutions(extractionSubstitutions)
           (terms, innerSteps) <- extractWithoutRewrite(rewrittenStatement, termsSoFar)
           substitutedPremise = extractionCandidate.specify(terms, 0, stepContext.externalDepth)
-          substitutions <- singlePremise.calculateSubstitutions(substitutedPremise, stepContext).flatMap(_.confirmTotality)
-          substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions, stepContext)
+          substitutions <- singlePremise.calculateSubstitutions(substitutedPremise).flatMap(_.confirmTotality)
+          substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions)
           newStep = Step.Assertion(
             substitutedConclusion,
             inference.summary,
             Seq(Premise.Pending(substitutedPremise)),
             substitutions)
-        } yield (terms, newStep +: innerSteps))
+        } yield (terms, newStep +: innerSteps)
       }
     }
 
@@ -108,7 +105,7 @@ object SubstatementExtractor {
     }
 
     def extractPremise(premise: Premise.SingleLinePremise): Option[Step] = {
-      extractFromStatement(premise.statement, 0).map(_._2).flatMap(wrapAsElidedIfNecessary(_, "Extracted"))
+      extractFromStatement(premise.statement, 0).map(_._2).flatMap(Step.Elided.ifNecessary(_, "Extracted"))
     }
 
     stepContext.allPremisesSimplestFirst.mapFind(extractPremise)
