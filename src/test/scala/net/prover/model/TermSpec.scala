@@ -3,6 +3,7 @@ package net.prover.model
 import net.prover.model.expressions._
 
 class TermSpec extends ProverSpec {
+  implicit val ec = entryContext
 
   def parseTerm(line: String)(implicit parsingContext: ExpressionParsingContext): Term = {
     Term.parser(parsingContext).parseAndDiscard(line)

@@ -39,7 +39,7 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
     @PathVariable("bookKey") bookKey: String,
     @RequestBody chapterDefinition: ChapterDefinition
   ): ResponseEntity[_] = {
-    modifyBook[Identity](bookKey, (_, book) => {
+    modifyBook[Identity](bookKey, (_, _, book) => {
       val chapter = new Chapter(chapterDefinition.title, chapterDefinition.summary, Nil)
       val newBook = book.copy(chapters = book.chapters :+ chapter)
       Success(newBook)

@@ -3,6 +3,7 @@ package net.prover.controllers
 import java.nio.file.{Files, Path, Paths}
 
 import net.prover.model._
+import net.prover.model.definitions.Definitions
 import org.apache.commons.io.FileUtils
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.stereotype.Service
@@ -16,26 +17,31 @@ import scala.util.Try
 class BookService {
   private val bookDirectoryPath = Paths.get("books")
 
-  private var _books = {
+  private var _booksAndDefinitions: (Seq[Book], Definitions) = this.synchronized {
     val books = parseBooks
+    val definitions = getDefinitions(books)
     writeBooks(books)
-    books
+    (books, definitions)
   }
+  def booksAndDefinitions: (Seq[Book], Definitions) = this.synchronized {
+    _booksAndDefinitions
+  }
+  def books: Seq[Book] = booksAndDefinitions._1
 
-  def books: Seq[Book] = _books
-
-  def modifyBooks[F[_] : Functor](f: Seq[Book] => F[Seq[Book]]): F[Seq[Book]] = synchronized {
+  def modifyBooks[F[_] : Functor](f: (Seq[Book], Definitions) => F[Seq[Book]]): F[Seq[Book]] = this.synchronized {
+    val (books, definitions) = booksAndDefinitions
     for {
-      newBooks <- f(_books)
+      newBooks <- f(books, definitions)
     } yield {
+      val newDefinitions = getDefinitions(books)
       writeBooks(newBooks)
-      _books = newBooks
+      _booksAndDefinitions = (newBooks, newDefinitions)
       newBooks
     }
   }
 
   def reload(): Try[Any] = {
-    modifyBooks(_ => Try(parseBooks))
+    modifyBooks((_, _) => Try(parseBooks))
   }
 
   private def parseBooks: Seq[Book] = {
@@ -88,6 +94,10 @@ class BookService {
 
   private def getChapterPath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
     bookDirectoryPath.resolve(bookTitle.formatAsKey).resolve("%02d".format(chapterIndex + 1) + "." + chapterTitle.camelCase + ".chapter")
+  }
+
+  private def getDefinitions(books: Seq[Book]): Definitions = {
+    Definitions(books.flatMap(_.chapters).flatMap(_.entries))
   }
 }
 

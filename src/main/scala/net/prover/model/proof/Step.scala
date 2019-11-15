@@ -24,7 +24,7 @@ sealed trait Step {
     newDefinition: ExpressionDefinition,
     entryContext: EntryContext
   ): Step
-  def recalculateReferences(stepContext: StepContext): Step
+  def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step
   def isComplete: Boolean
   def referencedInferenceIds: Set[String]
   def referencedDefinitions: Set[ExpressionDefinition]
@@ -58,8 +58,8 @@ object Step {
         .map(modifyStepForExtraction)
         .map(_.map(replaceSubsteps(substeps.removeAtIndex(index)) -> _))
     }
-    override def recalculateReferences(stepContext: StepContext): Step = {
-      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext))
+    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step = {
+      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
       replaceSubsteps(newSubsteps)
     }
     override def modifySubsteps[F[_] : Functor](outerContext: StepContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]] = {
@@ -192,9 +192,9 @@ object Step {
         premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
         substitutions.replaceDefinition(oldDefinition, newDefinition))
     }
-    override def recalculateReferences(stepContext: StepContext): Step = {
-      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext))
-      val newPremises = premises.map(p => stepContext.createPremise(p.statement))
+    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step = {
+      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
+      val newPremises = premises.map(p => StepProvingContext(stepContext, provingContext).createPremise(p.statement))
       copy(substeps = newSubsteps, premises = newPremises)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet + inference.id
@@ -301,7 +301,7 @@ object Step {
       entryContext: EntryContext
     ): Target = Target(statement.replaceDefinition(oldDefinition, newDefinition))
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
-    override def recalculateReferences(stepContext: StepContext): Step = this
+    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step = this
     override def referencedInferenceIds: Set[String] = Set.empty
     override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
     override def referencedLines: Set[PreviousLineReference] = Set.empty
@@ -414,8 +414,8 @@ object Step {
         premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
         substitutions.replaceDefinition(oldDefinition, newDefinition))
     }
-    override def recalculateReferences(stepContext: StepContext): Step = {
-      val newPremises = premises.map(p => stepContext.createPremise(p.statement))
+    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step = {
+      val newPremises = premises.map(p => StepProvingContext(stepContext, provingContext).createPremise(p.statement))
       copy(premises = newPremises)
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
@@ -487,10 +487,10 @@ object Step {
   }
 
   implicit class StepSeqOps(steps: Seq[Step]) {
-    def recalculateReferences(outerStepContext: StepContext): Seq[Step] = {
+    def recalculateReferences(outerStepContext: StepContext, provingContext: ProvingContext): Seq[Step] = {
       steps.zipWithIndex.mapFold(outerStepContext) { case (currentStepContext, (step, index)) =>
         val innerStepContext = currentStepContext.atIndex(index)
-        val newStep = step.recalculateReferences(innerStepContext)
+        val newStep = step.recalculateReferences(innerStepContext, provingContext)
         currentStepContext.addStep(newStep, innerStepContext.stepReference) -> newStep
       }._2
     }

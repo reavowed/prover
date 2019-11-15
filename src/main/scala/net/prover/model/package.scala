@@ -404,6 +404,9 @@ package object model {
         mapOptionSoFar.flatMap(_.tryAdd(key, value))
       }
     }
+    def replace(key: S, f: T => T): Map[S, T] = {
+      map.get(key).map(t => map.updated(key, f(t))) getOrElse map
+    }
   }
 
   implicit class MapOptionOps[S, T](map: Map[S, Option[T]]) {

@@ -1,8 +1,8 @@
 package net.prover.model
 
-import net.prover.model.ExpressionParsingContext.{TermVariableValidator}
+import net.prover.model.ExpressionParsingContext.TermVariableValidator
 import net.prover.model.expressions._
-import net.prover.model.proof.StepContext
+import net.prover.model.proof.{StepContext, StepProvingContext}
 
 case class ExpressionParsingContext(
     entryContext: EntryContext,
@@ -80,9 +80,10 @@ object ExpressionParsingContext {
       entryContext,
       TermVariableValidator.LimitedList(termVariableNames),
       Nil)
-  implicit def atStep(implicit stepContext: StepContext): ExpressionParsingContext =
+  implicit def atStep(implicit entryContext: EntryContext, stepContext: StepContext): ExpressionParsingContext = {
     ExpressionParsingContext(
-      stepContext.entryContext,
+      entryContext,
       TermVariableValidator.LimitedList(stepContext.termVariableNames),
       stepContext.boundVariableLists.map(_.zipWithIndex))
+  }
 }

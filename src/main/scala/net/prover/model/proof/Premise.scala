@@ -46,7 +46,7 @@ object Premise {
     for {
       ref <- PreviousLineReference.parser
       baseRef = ref.withoutInternalPath
-      givenPremise = stepContext.premisesAndSimplifications.map(_._1).find(_.referencedLine == baseRef).getOrElse(throw new Exception(s"Could not find reference ${baseRef.serialize}"))
+      givenPremise = stepContext.premises.find(_.referencedLine == baseRef).getOrElse(throw new Exception(s"Could not find reference ${baseRef.serialize}"))
       inferences <- Inference.parser.tryOrNone.whileDefined
       result = helper(inferences, givenPremise)
       _ = if (result.statement != statement) throw new Exception(s"Given premise ${result.statement} did not match expected premise $statement")

@@ -4,8 +4,8 @@ import net.prover.model._
 import net.prover.model.expressions._
 
 object ProofHelper {
-  def findFact(target: Statement)(implicit stepContext: StepContext): Option[Step.Assertion] = {
-    stepContext.entryContext.inferences
+  def findFact(target: Statement)(implicit provingContext: ProvingContext, stepContext: StepContext): Option[Step.Assertion] = {
+    provingContext.entryContext.inferences
       .filter(_.premises.isEmpty)
       .mapFind { inference =>
         inference.conclusion.calculateSubstitutions(target).flatMap(_.confirmTotality)
@@ -15,14 +15,14 @@ object ProofHelper {
       }
   }
 
-  def findNamingInferences(entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement)] = {
+  def findNamingInferences(implicit entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement)] = {
     entryContext.inferences.mapCollect(i =>
-      getNamingPremisesAndAssumption(i, entryContext).map {
+      getNamingPremisesAndAssumption(i).map {
         case (premises, assumption) => (i, premises, assumption)
       })
   }
 
-  def getNamingPremisesAndAssumption(inference: Inference, entryContext: EntryContext): Option[(Seq[Statement], Statement)] = {
+  def getNamingPremisesAndAssumption(inference: Inference)(implicit entryContext: EntryContext): Option[(Seq[Statement], Statement)] = {
     (entryContext.scopingDefinitionOption, entryContext.deductionDefinitionOption) match {
       case (Some(scopingDefinition), Some(deductionDefinition)) =>
         inference match {
@@ -50,7 +50,7 @@ object ProofHelper {
     inference: Inference,
     substitutions: Substitutions,
     followUpSteps: Seq[Step] = Nil)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Seq[Step]] = {
     for {
       premiseStatements <- inference.substitutePremises(substitutions)

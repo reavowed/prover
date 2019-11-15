@@ -8,8 +8,10 @@ case class TermRearranger(
     commutativity: Commutativity,
     associativity: Associativity,
     equality: Equality)(
-    implicit stepContext: StepContext)
+    implicit stepProvingContext: StepProvingContext)
 {
+  import stepProvingContext._
+
   private sealed trait OperatorTree {
     def baseTerm: Term
     def allLeaves: Seq[Term]
@@ -109,7 +111,7 @@ case class TermRearranger(
     }
 
     def rearrangeUsingPremises: Option[Seq[RearrangementStep]] = (for {
-      premise <- stepContext.allPremisesSimplestFirst
+      premise <- allPremisesSimplestFirst
       (premiseLhsTerm, premiseRhsTerm) <- equality.unapply(premise.statement).toSeq
       premiseLhs = disassemble(premiseLhsTerm)
       premiseRhs = disassemble(premiseRhsTerm)
@@ -126,11 +128,10 @@ object TermRearranger {
     rhs: Term,
     equality: Equality,
     wrapper: Wrapper[Term, Term])(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Seq[RearrangementStep]] = {
-    import stepContext.entryContext
     for {
-      (operator, commutativity, associativity) <- entryContext.findRearrangableFunctions(equality)
+      (operator, commutativity, associativity) <- stepProvingContext.provingContext.rearrangeableFunctions
         .find { case (operator, _, _) => operator.unapply(lhs).nonEmpty}
       rearranger = TermRearranger(operator, commutativity, associativity, equality)
       result <- rearranger.rearrange(lhs, rhs, wrapper)
@@ -140,7 +141,7 @@ object TermRearranger {
     baseLhs: Term,
     baseRhs: Term,
     equality: Equality)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Step] = {
     def rearrangeTerm(lhs: Term, rhs: Term, wrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStep]] = {
       if (lhs == rhs)
@@ -193,10 +194,9 @@ object TermRearranger {
     } yield result
   }
 
-  def rearrange(targetStatement: Statement)(implicit stepContext: StepContext): Option[Step] = {
-    import stepContext.entryContext
+  def rearrange(targetStatement: Statement)(implicit stepProvingContext: StepProvingContext): Option[Step] = {
     for {
-      equality <- entryContext.equalityOption
+      equality <- stepProvingContext.provingContext.equalityOption
       (lhs, rhs) <- equality.unapply(targetStatement)
       result <- rearrange(lhs, rhs, equality)
     } yield result

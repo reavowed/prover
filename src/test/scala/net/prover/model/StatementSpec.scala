@@ -3,6 +3,7 @@ package net.prover.model
 import net.prover.model.expressions._
 
 class StatementSpec extends ProverSpec {
+  implicit val ec = entryContext
 
   def parseStatement(line: String): Statement = {
     Statement.parser.parseAndDiscard(line)

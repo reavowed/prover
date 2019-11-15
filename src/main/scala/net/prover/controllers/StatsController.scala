@@ -42,13 +42,13 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
     @RequestParam inferenceId: String,
     @RequestParam(required = false) statementSymbol: String
   ): Seq[(String, String)] = {
-    val books = bookService.books
+    val (books, definitions) = bookService.booksAndDefinitions
     for {
       (book, bookKey) <- getBooksWithKeys(books)
       (chapter, chapterKey) <- getChaptersWithKeys(book)
       (theorem, inferenceKey) <- getEntriesWithKeys(chapter)
         .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-      (assertion, context) <- theorem.findSteps[Step.Assertion](EntryContext.forEntry(books, book, chapter, theorem))
+      (assertion, context) <- theorem.findSteps[Step.Assertion]
       if assertion.inference.id == inferenceId
       if Option(statementSymbol).forall(symbol =>
         assertion.statement.asOptionalInstanceOf[DefinedStatement]

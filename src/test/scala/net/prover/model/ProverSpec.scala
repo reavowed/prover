@@ -2,9 +2,11 @@ package net.prover.model
 
 import java.nio.file.Paths
 
+import net.prover.model.definitions.Definitions
 import net.prover.model.entries.ExpressionDefinition.{ComponentType, StatementComponent, TermComponent}
 import net.prover.model.expressions._
 import net.prover.model.entries._
+import net.prover.model.proof.{StepContext, StepProvingContext}
 import org.specs2.mutable.Specification
 
 trait ProverSpec extends Specification {
@@ -225,7 +227,7 @@ trait ProverSpec extends Specification {
     None,
     Nil)
 
-  implicit val entryContext: EntryContext = EntryContext(
+  val entryContext: EntryContext = EntryContext(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
       ForAll, Exists, ExistsUnique,
@@ -234,7 +236,6 @@ trait ProverSpec extends Specification {
         EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second,
         ZeroDefinition, NaturalsDefinition, Successor, AdditionDefinition, Apply),
     Nil)
-  implicit val parsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
 
   implicit class ParserOps[T](parser: Parser[T]) {
     def parseAndDiscard(text: String): T = {
@@ -251,4 +252,9 @@ trait ProverSpec extends Specification {
   implicit def termVariableToComponentType(termVariable: TermVariable): TermComponent = TermComponent(termVariable.name)
   implicit def variableTupleToString[T](tuple: (ExpressionVariable[_], T)): (String, T) = tuple.mapLeft(_.name)
   implicit def variableTupleTupleToString[T](tuple: ((ExpressionVariable[_], Int), T)): ((String, Int), T) = tuple.mapLeft(_.mapLeft(_.name))
+  implicit def entryContextToParsingContext(implicit entryContext: EntryContext): ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
+  implicit def entryContextToProvingContext(implicit entryContext: EntryContext): ProvingContext = ProvingContext(entryContext, new Definitions(entryContext.availableEntries))
+  implicit def entryContextAndStepContextToStepProvingContext(implicit entryContext: EntryContext, stepContext: StepContext): StepProvingContext = {
+    StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
+  }
 }

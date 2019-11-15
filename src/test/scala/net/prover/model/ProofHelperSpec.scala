@@ -17,7 +17,7 @@ class ProofHelperSpec extends ProverSpec {
       targetStatement,
       Seq(Theorem.Proof(step.toSeq)),
       RearrangementType.NotRearrangement
-    ).recalculateReferences(entryContext)
+    ).recalculateReferences(entryContextToProvingContext(entryContext))
     val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
     val parsedTheorem = Theorem.parser(entryContext).parseFromString(serializedTheorem, "Theorem")
     parsedTheorem mustEqual theorem
@@ -31,12 +31,12 @@ class ProofHelperSpec extends ProverSpec {
     val zeroIsANaturalNumber = Axiom("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
     val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
     val axioms = Seq(specification, modusPonens, reverseImplicationFromEquivalence, combineConjunction, zeroIsANaturalNumber, successorOfNaturalIsNatural)
-    val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+    implicit val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
 
     def extract(targetStatement: Statement, premises: Seq[Statement], depth: Int = 0): Option[Step] = {
-      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms).copy(boundVariableLists = (1 to depth).map(i => Seq(i.toString)))
-      SubstatementExtractor.extract(targetStatement)
-        .map(_.recalculateReferences(stepContext))
+      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil).copy(boundVariableLists = (1 to depth).map(i => Seq(i.toString)))
+      SubstatementExtractor.extract(targetStatement)(entryContextAndStepContextToStepProvingContext)
+        .map(_.recalculateReferences(stepContext, implicitly[ProvingContext]))
     }
 
     def testExtraction(targetStatement: Statement, premises: Seq[Statement]) = {
@@ -157,12 +157,12 @@ class ProofHelperSpec extends ProverSpec {
     val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
     val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
     val axioms = Seq(reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, additionIsAssociative, additionIsCommutative)
-    val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+    implicit val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
 
     def rearrange(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
-      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms)
+      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
       TermRearranger.rearrange(targetStatement)
-        .map(_.recalculateReferences(stepContext))
+        .map(_.recalculateReferences(stepContext, implicitly[ProvingContext]))
     }
 
     def testRearranging(targetStatement: Statement, premises: Seq[Statement]) = {
@@ -215,11 +215,10 @@ class ProofHelperSpec extends ProverSpec {
         equalityIsTransitive,
         substitutionOfEquals,
         substitutionOfEqualsIntoFunction)
-      val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+      implicit val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
+      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
 
-      val stepOption = EqualityRewriter.rewrite(
-        target,
-        StepContext.withPremisesAndTerms(premises, Nil, entryContextWithAxioms))
+      val stepOption = EqualityRewriter.rewrite(target)
       validateStep(stepOption, target, premises, entryContextWithAxioms)
 
       def checkSteps(steps: Seq[Step]): Result = {

@@ -4,29 +4,10 @@ import net.prover.model._
 import net.prover.model.definitions.{Equality, RearrangementStep, Wrapper}
 import net.prover.model.expressions._
 
-case class EqualityRewriter(equality: Equality)
+case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: StepProvingContext)
 {
-  def rewrite(targetStatement: Statement)(implicit stepContext: StepContext): Option[Step] = {
-    val entryContext = stepContext.entryContext
-    val termSimplificationInferences = entryContext.availableEntries.ofType[Inference]
-      .collect {
-        case inference @ Inference(
-        _,
-        _,
-        equality(left: Term, right: Term))
-          if left.complexity > right.complexity && left.requiredSubstitutions.contains(inference.conclusion.requiredSubstitutions) =>
-          (inference, left, right)
-      }
-    val termDesimplificationInferences = entryContext.availableEntries.ofType[Inference]
-      .collect {
-        case inference @ Inference(
-        _,
-        _,
-        equality(left: Term, right: Term))
-          if left.complexity < right.complexity && right.requiredSubstitutions.contains(inference.conclusion.requiredSubstitutions) =>
-          (inference, left, right)
-      }
-
+  import stepProvingContext.provingContext._
+  def rewrite(targetStatement: Statement): Option[Step] = {
     sealed trait InferenceForElision {
       def combine(other: InferenceForElision): InferenceForElision
       def elider(fallbackDescription: String): Seq[Step] => Option[Step]
@@ -307,20 +288,19 @@ case class EqualityRewriter(equality: Equality)
         findRearrangement(premiseTerm, targetTerm, None).map(_._1)
       case _ =>
         None
-    }) orElse stepContext.allPremisesSimplestFirst.mapFind(rewritePremise)
+    }) orElse stepProvingContext.allPremisesSimplestFirst.mapFind(rewritePremise)
   }
 }
 
 object EqualityRewriter {
   def rewrite(
-    targetStatement: Statement,
-    stepContext: StepContext
+    targetStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
   ): Option[Step] = {
-    val entryContext = stepContext.entryContext
     for {
-      equality <- entryContext.equalityOption
+      equality <- stepProvingContext.provingContext.equalityOption
       rewriter = EqualityRewriter(equality)
-      result <- rewriter.rewrite(targetStatement)(stepContext)
+      result <- rewriter.rewrite(targetStatement)
     } yield result
   }
 }

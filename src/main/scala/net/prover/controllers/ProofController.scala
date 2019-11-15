@@ -54,14 +54,14 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("direction") direction: String
   ): ResponseEntity[_] = {
-    def moveInTheorem(theorem: Theorem, entryContext: EntryContext): Option[Try[Theorem]] = {
+    def moveInTheorem(theorem: Theorem): Option[Try[Theorem]] = {
       stepPath.indexes match {
         case Nil =>
           None
         case Seq(0) if direction == "up" =>
           Some(Failure(BadRequestException("Cannot move step upwards if it's the first step")))
         case init :+ containerIndex :+ 0 if direction == "up" =>
-          theorem.modifySteps[Try](proofIndex, init, entryContext) { (steps, _) =>
+          theorem.modifySteps[Try](proofIndex, init) { (steps, _) =>
             steps.lift(containerIndex).flatMap { outerStep =>
               outerStep.extractSubstep(0).map(_.orBadRequest(s"Could not extract step $stepPath from outer step"))
             }.mapMap { case (outerStep, innerStep) =>
@@ -69,7 +69,7 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
             }
           }
         case init :+ last =>
-          theorem.modifySteps[Try](proofIndex, init, entryContext) { (steps, _) =>
+          theorem.modifySteps[Try](proofIndex, init) { (steps, _) =>
             steps.lift(last).map { step =>
               direction match {
                 case "up" =>
@@ -83,8 +83,8 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
           }
       }
     }
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
-      moveInTheorem(theorem, entryContext).orNotFound(s"Step $stepPath").flatten
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
+      moveInTheorem(theorem).orNotFound(s"Step $stepPath").flatten
     }.toResponseEntity
   }
 
@@ -96,14 +96,14 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    def moveInTheorem(theorem: Theorem, entryContext: EntryContext): Option[Try[Theorem]] = {
+    def moveInTheorem(theorem: Theorem): Option[Try[Theorem]] = {
       stepPath.indexes match {
         case Nil =>
           None
         case Seq(_) =>
           Some(Failure(BadRequestException("No containing step to move out of")))
         case init :+ containerIndex :+ last =>
-          theorem.modifySteps[Try](proofIndex, init, entryContext) { (steps, _) =>
+          theorem.modifySteps[Try](proofIndex, init) { (steps, _) =>
             steps.splitAtIndexIfValid(containerIndex).flatMap { case (beforeContainer, container, afterContainer) =>
               container.extractSubstep(last).map(_.orBadRequest(s"Could not extract step $stepPath from outer step"))
                 .mapMap { case (updatedContainer, step) =>
@@ -113,8 +113,8 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
           }
       }
     }
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
-      moveInTheorem(theorem, entryContext).orNotFound(s"Step $stepPath").flatten
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
+      moveInTheorem(theorem).orNotFound(s"Step $stepPath").flatten
     }.toResponseEntity
   }
 
@@ -126,12 +126,12 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    def moveInTheorem(theorem: Theorem, entryContext: EntryContext): Option[Try[Theorem]] = {
+    def moveInTheorem(theorem: Theorem): Option[Try[Theorem]] = {
       stepPath.indexes match {
         case Nil =>
           None
         case init :+ last =>
-          theorem.modifySteps[Try](proofIndex, init, entryContext) { (steps, _) =>
+          theorem.modifySteps[Try](proofIndex, init) { (steps, _) =>
             steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
                 after match {
                   case (following: Step.WithSubsteps) +: remaining =>
@@ -145,8 +145,8 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
           }
       }
     }
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, entryContext) =>
-      moveInTheorem(theorem, entryContext).orNotFound(s"Step $stepPath").flatten
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
+      moveInTheorem(theorem).orNotFound(s"Step $stepPath").flatten
     }.toResponseEntity
   }
 }

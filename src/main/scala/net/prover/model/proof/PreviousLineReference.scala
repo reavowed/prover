@@ -48,19 +48,16 @@ object PreviousLineReference {
     protected def withInternalPath(newInternalPath: Seq[Int]): PreviousLineReference
     override def addInternalPath(additionalInternalPath: Seq[Int]): PreviousLineReference = withInternalPath(internalPath ++ additionalInternalPath)
   }
-  private val premiseRegex = "p(\\d+)(?:-(\\d+(?:\\.\\d+)*))?".r
-  private val stepRegex = "(\\d+(?:\\.\\d+)*)(\\w)?(?:-(\\d+(?:\\.\\d+)*))?".r
+  private val premiseRegex = "p(\\d+)".r
+  private val stepRegex = "(\\d+(?:\\.\\d+)*)(\\w)?".r
   def parser: Parser[PreviousLineReference] = Parser.singleWord.map {
-    case premiseRegex(indexText, internalPathText) =>
+    case premiseRegex(indexText) =>
       val index = indexText.toInt
-      val internalPath = Option(internalPathText).map(_.split("\\.").map(_.toInt))
-      internalPath.foldLeft[PreviousLineReference](PremiseReference(index)) { case (ref, path) => ref.addInternalPath(path) }
-    case stepRegex(pathText, suffix, internalPathText) =>
+      PremiseReference(index)
+    case stepRegex(pathText, suffix) =>
       val path = pathText.split("\\.").map(_.toInt)
-      val internalPath = Option(internalPathText).map(_.split("\\.").map(_.toInt).toSeq)
       val base = StepReference(path)
-      val withSuffix = Option(suffix).map(base.withSuffix).getOrElse(base)
-      internalPath.map(withSuffix.addInternalPath).getOrElse(withSuffix)
+      Option(suffix).map(base.withSuffix).getOrElse(base)
     case s =>
       throw new Exception(s"Unrecognised reference $s")
   }

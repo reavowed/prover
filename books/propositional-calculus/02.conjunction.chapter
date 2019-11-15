@@ -48,7 +48,7 @@ conclusion ∧ ψ φ
 {
   prove φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () () p0
   prove ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () () p0
-  prove ∧ ψ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (ψ, φ) () () () p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+  prove ∧ ψ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (ψ, φ) () () () 1 0
 }
 
 theorem Law of Non-Contradiction

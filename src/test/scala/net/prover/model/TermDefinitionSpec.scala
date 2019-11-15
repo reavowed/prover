@@ -6,6 +6,7 @@ import net.prover.model.expressions.{DefinedTerm, FunctionParameter}
 class TermDefinitionSpec extends ProverSpec {
 
   private def parse(text: String): TermDefinition = {
+    implicit val ec = entryContext
     TermDefinition.parser.parseAndDiscard(text)
   }
 

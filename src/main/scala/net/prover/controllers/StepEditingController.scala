@@ -21,9 +21,9 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody inferenceId: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepContext) =>
+    modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
-        inference <- findInference(inferenceId)(stepContext.entryContext)
+        inference <- findInference(inferenceId)(stepProvingContext)
       } yield step.copy(highlightedInference = Some(inference))
     }.toResponseEntity
   }
@@ -82,7 +82,7 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("boundVariableIndex") boundVariableIndex: Int,
     @RequestBody boundVariableName: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.WithTopLevelStatement](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, _) =>
+    modifyStep[Step.WithTopLevelStatement](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step,_ ) =>
       step.updateStatement(s => s.renameBoundVariable(boundVariableName, boundVariableIndex, Option(statementPath).map(_.indexes).getOrElse(Nil)).orNotFound(s"Bound variable $boundVariableIndex at $statementPath"))
     }.toResponseEntity
   }

@@ -4,30 +4,9 @@ import net.prover.model._
 import net.prover.model.expressions._
 
 object SubstatementExtractor {
-  def extract(targetStatement: Statement)(implicit stepContext: StepContext): Option[Step] = {
-    val statementExtractionInferences = stepContext.entryContext.availableEntries.ofType[Inference].collect {
-      case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
-        if conclusion.singleStatementVariable.isDefined &&
-          inference.requiredSubstitutions.copy(statements = Nil).isEmpty &&
-          firstPremise.requiredSubstitutions.contains(inference.requiredSubstitutions) &&
-          (conclusion.complexity < firstPremise.complexity || firstPremise.requiredSubstitutions.statements.length > 1)
-
-      =>
-        (inference, firstPremise, otherPremises)
-    }
-    val predicateSpecificationInferences = stepContext.entryContext.availableEntries.ofType[Inference].collect {
-      case inference @ Inference(_, Seq(singlePremise), conclusion)
-        if conclusion.complexity < singlePremise.complexity
-      =>
-        conclusion.singlePredicateApplication
-          .flatMap(pa => pa.arguments.map(_.asOptionalInstanceOf[TermVariable].map(_.name)).traverseOption.map(pa.variableName -> _))
-          .filter { case (predicateName, argumentNames) =>
-            singlePremise.requiredSubstitutions.isEquivalentTo(Substitutions.Required(Nil, Nil, Seq((predicateName, argumentNames.length)), Nil)) &&
-              inference.requiredSubstitutions.isEquivalentTo(Substitutions.Required(Nil, argumentNames, Seq((predicateName, argumentNames.length)), Nil))
-          }
-          .map { case (predicateName, argumentNames) => (inference, singlePremise, predicateName, argumentNames)}
-    }.collectDefined
-    val rewriteInferences = stepContext.entryContext.rewriteInferences
+  def extract(targetStatement: Statement)(implicit stepProvingContext: StepProvingContext): Option[Step] = {
+    import stepProvingContext._
+    import provingContext._
 
     def matchDirectly(extractionCandidate: Statement, termsSoFar: Int): Option[(Map[Int, Term], Seq[Step])] = {
       for {
@@ -108,25 +87,6 @@ object SubstatementExtractor {
       extractFromStatement(premise.statement, 0).map(_._2).flatMap(Step.Elided.ifNecessary(_, "Extracted"))
     }
 
-    stepContext.allPremisesSimplestFirst.mapFind(extractPremise)
-  }
-
-  implicit class ExpressionOps(expression: Expression) {
-    def singleStatementVariable: Option[StatementVariable] = expression match {
-      case sv: StatementVariable =>
-        Some(sv)
-      case DefinedStatement(Seq(singleStatement: Statement), _) =>
-        singleStatement.singleStatementVariable
-      case _ =>
-        None
-    }
-    def singlePredicateApplication: Option[PredicateApplication] = expression match {
-      case pa: PredicateApplication =>
-        Some(pa)
-      case DefinedStatement(Seq(singleStatement: Statement), _) =>
-        singleStatement.singlePredicateApplication
-      case _ =>
-        None
-    }
+    allPremisesSimplestFirst.mapFind(extractPremise)
   }
 }

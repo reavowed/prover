@@ -1,12 +1,11 @@
 package net.prover.model
 
-import net.prover.model.entries.{Axiom, ChapterEntry}
-import net.prover.model.expressions.Statement
-import net.prover.model._
+import net.prover.model.entries.Axiom
 
 class AxiomSpec extends ProverSpec {
 
   def parseAxiom(text: String*): Axiom = {
+    implicit val ec = entryContext
     Axiom.parser.parseAndDiscard(text.mkString("\n"))
   }
 

@@ -27,9 +27,7 @@ case class Theorem(
   override def inferences: Seq[Inference] = Seq(this)
 
   def isComplete: Boolean = proofs.exists(_.isComplete)
-  def initialStepContext(entryContext: EntryContext): StepContext = StepContext.withPremisesAndTerms(premises, requiredSubstitutions.terms, entryContext)
-
-  private def replaceProof(index: Int, newProof: Proof): Theorem = copy(proofs = proofs.updated(index, newProof))
+  def initialStepContext: StepContext = StepContext.withPremisesAndTerms(premises, requiredSubstitutions.terms)
 
   private def modifyProof[F[_] : Functor](proofIndex: Int, f: Proof => Option[F[Proof]]): Option[F[Theorem]] = {
     proofs.splitAtIndexIfValid(proofIndex).flatMap { case (before, proof, after) =>
@@ -38,31 +36,20 @@ case class Theorem(
   }
 
 
-  def findStep(proofIndex: Int, stepIndexes: Seq[Int], entryContext: EntryContext): Option[(Step, StepContext)] = {
-    proofs.lift(proofIndex).flatMap(_.findStep(stepIndexes, initialStepContext(entryContext)))
+  def findStep(proofIndex: Int, stepIndexes: Seq[Int]): Option[(Step, StepContext)] = {
+    proofs.lift(proofIndex).flatMap(_.findStep(stepIndexes, initialStepContext))
   }
-  def modifySteps[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int], entryContext: EntryContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Theorem]] = {
-    modifyProof(proofIndex, _.modifySteps(stepIndexes, initialStepContext(entryContext), f))
+  def modifySteps[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int])(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Theorem]] = {
+    modifyProof(proofIndex, _.modifySteps(stepIndexes, initialStepContext, f))
   }
-  def modifyStep[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int], entryContext: EntryContext, f: (Step, StepContext) => F[Step]): Option[F[Theorem]] = {
-    modifyProof(proofIndex, _.modifyStep(stepIndexes, initialStepContext(entryContext), f))
+  def modifyStep[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int], f: (Step, StepContext) => F[Step]): Option[F[Theorem]] = {
+    modifyProof(proofIndex, _.modifyStep(stepIndexes, initialStepContext, f))
   }
-  def insertStep(proofIndex: Int, indexes: Seq[Int], newStep: Step, entryContext: EntryContext): Option[Theorem] = {
-    indexes match {
-      case Nil =>
-        None
-      case init :+ last =>
-        modifySteps[Identity](proofIndex, init, entryContext) { (steps, _) =>
-          val (before, after) = steps.splitAt(last)
-          Some((before :+ newStep) ++ after)
-        }
-    }
-  }
-  def recalculateReferences(entryContext: EntryContext): Theorem = {
-    copy(proofs = proofs.map(_.recalculateReferences(initialStepContext(entryContext))))
+  def recalculateReferences(provingContext: ProvingContext): Theorem = {
+    copy(proofs = proofs.map(_.recalculateReferences(initialStepContext, provingContext)))
   }
 
-  def findSteps[T <: Step : ClassTag](entryContext: EntryContext): Seq[(T, StepContext)] = {
+  def findSteps[T <: Step : ClassTag]: Seq[(T, StepContext)] = {
     def forStep(step: Step, context: StepContext): Seq[(T, StepContext)] = {
       step match {
         case assertion: T =>
@@ -76,7 +63,7 @@ case class Theorem(
     def forSteps(steps: Seq[Step], context: StepContext): Seq[(T, StepContext)] = {
       steps.zipWithIndex.flatMap { case (step, index) => forStep(step, context.atIndex(index))}
     }
-    proofs.flatMap(proof => forSteps(proof.steps, initialStepContext(entryContext)))
+    proofs.flatMap(proof => forSteps(proof.steps, initialStepContext))
   }
 
   override def serializedLines: Seq[String] = Seq(s"theorem $name") ++
@@ -159,8 +146,8 @@ object Theorem extends Inference.EntryParser {
           })
       }
     }
-    def recalculateReferences(initialStepContext: StepContext): Proof = {
-      Proof(steps.recalculateReferences(initialStepContext))
+    def recalculateReferences(initialStepContext: StepContext, provingContext: ProvingContext): Proof = {
+      Proof(steps.recalculateReferences(initialStepContext, provingContext))
     }
 
     def findAssertions(initialStepContext: StepContext): Seq[(Step.Assertion, StepContext)] = {
@@ -195,7 +182,7 @@ object Theorem extends Inference.EntryParser {
     val proofParser = for {
       steps <- Step.listParser(
         entryContext,
-        StepContext.withPremisesAndTerms(premises, (premises :+ conclusion).map(_.requiredSubstitutions).foldTogether.terms, entryContext)).inBraces
+        StepContext.withPremisesAndTerms(premises, (premises :+ conclusion).map(_.requiredSubstitutions).foldTogether.terms)).inBraces
       _ = if (!steps.mapCollect(_.provenStatement).lastOption.contains(conclusion)) throw new Exception(s"Proof of theorem '$name' did not prove $conclusion")
     } yield Proof(steps)
 

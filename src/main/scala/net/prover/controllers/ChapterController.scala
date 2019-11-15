@@ -87,7 +87,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newTitle: String
   ): ResponseEntity[_] = {
-    modifyChapter[Identity](bookKey, chapterKey, (_, _, chapter) => {
+    modifyChapter[Identity](bookKey, chapterKey, (_, _, _, chapter) => {
       Success(chapter.copy(title = newTitle))
     }).map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, getChaptersWithKeys(book).find(_._1.title == newTitle).get._2) }.toResponseEntity
   }
@@ -98,7 +98,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("entryKey") entryKey: String
   ): ResponseEntity[_] = {
-    val books = bookService.books
+    val (books, definitions) = bookService.booksAndDefinitions
     (for {
       book <- findBook(books, bookKey)
       chapter <- findChapter(book, chapterKey)
@@ -118,6 +118,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       }
     } yield {
       val entryContext = EntryContext.forEntry(books, book, chapter, entry).addEntry(entry)
+      val provingContext = ProvingContext(entryContext, definitions)
       val index = entriesWithKeys.findIndexWhere(_._1 == entry).getOrElse(throw new Exception("Book somehow didn't exist"))
       val previous = entriesWithKeys.lift(index - 1).map { case (c, key) => LinkSummary(c.title, key) }
       val next = entriesWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, key) }
@@ -134,7 +135,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           "definitions" -> getDefinitionSummaries(entryContext),
           "typeDefinitions" -> getTypeDefinitions(entryContext),
           "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
-          "transitiveStatements" -> getTransitivitySummaries(entryContext),
+          "transitiveStatements" -> getTransitivitySummaries(provingContext),
           "definitionShorthands" -> getDefinitionShorthands(entryContext)))
     }).toResponseEntity
   }
@@ -280,7 +281,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           } yield previousEntries ++ Seq(nextEntry, entry) ++ lastEntries
       }
     }
-    modifyChapter[Identity](bookKey, chapterKey, (_, _, chapter) => {
+    modifyChapter[Identity](bookKey, chapterKey, (_, _, _, chapter) => {
       for {
         (previousEntries, entry, nextEntries) <- getEntriesWithKeys(chapter).splitWhere(_._2 == entryKey).orNotFound(s"Entry $entryKey")
         updatedEntries <- tryMove(entry._1, previousEntries.map(_._1), nextEntries.map(_._1))
@@ -305,7 +306,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       }
     }
 
-    modifyChapter[Identity](bookKey, chapterKey, (books, _, chapter) =>
+    modifyChapter[Identity](bookKey, chapterKey, (books, _, _, chapter) =>
       for {
         entry <- findEntry[ChapterEntry](chapter, entryKey)
         updatedChapter <- deleteEntry(entry, chapter, books)
@@ -320,7 +321,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("entryKey") entryKey: String,
     @RequestBody(required = false) newShorthand: String
   ): ResponseEntity[_] = {
-    modifyEntry[ExpressionDefinition, Identity](bookKey, chapterKey, entryKey, (_, _, _, definition) =>
+    modifyEntry[ExpressionDefinition, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, definition) =>
       Success(definition.withShorthand(Option(newShorthand).filter(_.nonEmpty)))
     ).map{ case (books, book, chapter, _) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
@@ -353,8 +354,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   }
 
   case class TransitivitySummary(symbol: String, template: Statement, inferenceId: String)
-  private def getTransitivitySummaries(entryContext: EntryContext): Seq[TransitivitySummary] = {
-    entryContext.getTransitivityDefinitions.map { case (symbol, transitivity) =>
+  private def getTransitivitySummaries(provingContext: ProvingContext): Seq[TransitivitySummary] = {
+    provingContext.transitivityDefinitions.map { case (symbol, transitivity) =>
       TransitivitySummary(symbol, transitivity.relation.template, transitivity.inference.id)
     }
   }
