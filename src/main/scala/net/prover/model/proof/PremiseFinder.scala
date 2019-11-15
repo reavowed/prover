@@ -67,7 +67,7 @@ object PremiseFinder {
   def findPremiseSteps(
     targetStatement: Statement)(
     implicit stepContext: StepContext
-  ): Option[Seq[Step]] = {
+  ): Option[Seq[Step.Assertion]] = {
     val premiseSimplificationInferences = stepContext.entryContext.availableEntries.ofType[Inference].collect {
       case inference @ Inference(_, Seq(singlePremise), conclusion)
         if singlePremise.complexity > conclusion.complexity &&
@@ -96,7 +96,7 @@ object PremiseFinder {
       .map(_ => Nil)
     def fromFact = ProofHelper.findFact(targetStatement).map(Seq(_))
 
-    def bySimplifyingPremise(givenPremise: Statement): Option[Seq[Step]] = {
+    def bySimplifyingPremise(givenPremise: Statement): Option[Seq[Step.Assertion]] = {
       if (givenPremise == targetStatement)
         Some(Nil)
       else if (givenPremise.complexity > targetStatement.complexity && givenPremise.definitionUsages.contains(targetStatement.definitionUsages))
@@ -144,7 +144,7 @@ object PremiseFinder {
   def findPremiseSteps(
     premiseStatements: Seq[Statement])(
     implicit stepContext: StepContext
-  ): Option[Seq[Step]] = {
+  ): Option[Seq[Step.Assertion]] = {
     premiseStatements.map(findPremiseSteps).traverseOption.map(_.flatten)
   }
 
@@ -166,7 +166,7 @@ object PremiseFinder {
     unsubstitutedPremiseStatement: Statement,
     initialSubstitutions: Substitutions.Possible)(
     implicit stepContext: StepContext
-  ): Seq[(Seq[Step], Statement, Substitutions.Possible)] = {
+  ): Seq[(Seq[Step.Assertion], Statement, Substitutions.Possible)] = {
 
     def directly = for {
       premise <- stepContext.allPremisesSimplestFirst
