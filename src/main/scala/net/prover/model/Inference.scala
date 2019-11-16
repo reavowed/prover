@@ -53,11 +53,21 @@ trait Inference {
       .mkString(" ")
   }
 
+  def validatePremisesAndConclusion(expectedPremises: Seq[Statement], expectedConclusion: Statement, substitutions: Substitutions)(implicit stepContext: StepContext): Option[Unit] = {
+    for {
+      substitutedConclusion <- substituteConclusion(substitutions)
+      if substitutedConclusion == expectedConclusion
+      substitutedPremises <- substitutePremises(substitutions)
+      if substitutedPremises == expectedPremises
+    } yield ()
+  }
+
   def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions)(implicit stepContext: StepContext): Option[Seq[Statement]] = {
     for {
-      _ <- substituteConclusion(substitutions)
-      premises <- substitutePremises(substitutions)
-    } yield premises
+      substitutedConclusion <- substituteConclusion(substitutions)
+      if substitutedConclusion == expectedConclusion
+      substitutedPremises <- substitutePremises(substitutions)
+    } yield substitutedPremises
   }
 
   def substitutePremises(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Seq[Statement]] = {

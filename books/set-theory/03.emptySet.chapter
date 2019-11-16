@@ -10,12 +10,12 @@ conclusion = a b
 {
   elided 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 {
     take x {
-      prove ¬ ∈ $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 a) ()
-      prove ¬ ∈ $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 b) ()
-      prove ↔ ∈ $0 a ∈ $0 b 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 (∈ $0 a, ∈ $0 b) () () ()
+      prove ¬ ∈ $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 a) () p0
+      prove ¬ ∈ $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 b) () p1
+      prove ↔ ∈ $0 a ∈ $0 b 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 (∈ $0 a, ∈ $0 b) () () () 0.0.0 0.0.1
     }
   }
-  prove = a b 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (a, b) () ()
+  prove = a b 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (a, b) () () 0
 }
 
 theorem There Exists a Unique Empty Set
@@ -25,13 +25,13 @@ conclusion ∃! X ∀ x ¬ ∈ $0 $$0
   take X {
     take Y {
       assume ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 {
-        prove = $$0 $0 9364073b214fb72ba44752492c8581a0077da27b1f568678e34c11dee0726104 () ($$0, $0) () ()
+        prove = $$0 $0 9364073b214fb72ba44752492c8581a0077da27b1f568678e34c11dee0726104 () ($$0, $0) () () 1.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
       }
     }
   }
   elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
-    prove ∧ ∃ x ∀ x ¬ ∈ $0 $$0 ∀ x ∀ y → ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∀ x ¬ ∈ $0 $$0, ∀ x ∀ y → ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 = $$0 $0) () () ()
-    prove ∃! X ∀ x ¬ ∈ $0 $$0 f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∀ x ¬ ∈ $0 $$0) ()
+    prove ∧ ∃ x ∀ x ¬ ∈ $0 $$0 ∀ x ∀ y → ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∀ x ¬ ∈ $0 $$0, ∀ x ∀ y → ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 = $$0 $0) () () () 0 1
+    prove ∃! X ∀ x ¬ ∈ $0 $$0 f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∀ x ¬ ∈ $0 $$0) () 2.0
   }
 }
 
@@ -43,7 +43,7 @@ theorem No Set Is an Element of the Empty Set
 conclusion ¬ ∈ a ∅
 {
   prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
-  prove ¬ ∈ a ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (¬ ∈ $0 ∅) ()
+  prove ¬ ∈ a ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (¬ ∈ $0 ∅) () 0
 }
 
 theorem A Set with No Elements Is the Empty Set
@@ -51,15 +51,15 @@ premise ∀ x ¬ ∈ $0 a
 conclusion = a ∅
 {
   prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
-  prove = a ∅ 9364073b214fb72ba44752492c8581a0077da27b1f568678e34c11dee0726104 () (a, ∅) () ()
+  prove = a ∅ 9364073b214fb72ba44752492c8581a0077da27b1f568678e34c11dee0726104 () (a, ∅) () () p0 0
 }
 
 theorem A Set with No Elements Is the Empty Set
 premise ¬ ∃ x ∈ $0 a
 conclusion = a ∅
 {
-  prove ∀ x ¬ ∈ $0 a 9ce9302cc7e8ff857912b57f2692ecd928d2c84e880583a1086decf024c4a51f () () (∈ $0 a) ()
-  prove = a ∅ 5a0c9d59fc32105d62c25b9e1215721f2748a1705d2e6fc33b3faed70a0fd20c () (a) () ()
+  prove ∀ x ¬ ∈ $0 a 9ce9302cc7e8ff857912b57f2692ecd928d2c84e880583a1086decf024c4a51f () () (∈ $0 a) () p0
+  prove = a ∅ 5a0c9d59fc32105d62c25b9e1215721f2748a1705d2e6fc33b3faed70a0fd20c () (a) () () 0
 }
 
 theorem A Set with an Element Is Not the Empty Set
@@ -68,9 +68,9 @@ conclusion ¬ = a ∅
 {
   prove ¬ ∈ b ∅ 2a07c3469d7b9f30a2e73a8615d711278aff1a423ddcf01c763a30443d9de3aa () (b) () ()
   assume = a ∅ {
-    prove ∈ b ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, ∅) (∈ b $0) ()
+    prove ∈ b ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, ∅) (∈ b $0) () 1a p0
   }
-  prove ¬ = a ∅ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= a ∅, ∈ b ∅) () () ()
+  prove ¬ = a ∅ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= a ∅, ∈ b ∅) () () () 1 0
 }
 
 theorem A Set That Is Not the Empty Set Has an Element
@@ -78,9 +78,9 @@ premise ¬ = a ∅
 conclusion ∃ x ∈ $0 a
 {
   assume ¬ ∃ x ∈ $0 a {
-    prove = a ∅ 390a59191aac7aa37bb4b44fdcb7c73e8cfcc43ddbf73aedc606428f3be459ad () (a) () ()
+    prove = a ∅ 390a59191aac7aa37bb4b44fdcb7c73e8cfcc43ddbf73aedc606428f3be459ad () (a) () () 0a
   }
-  prove ∃ x ∈ $0 a 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (∃ x ∈ $0 a, = a ∅) () () ()
+  prove ∃ x ∈ $0 a 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (∃ x ∈ $0 a, = a ∅) () () () 0 p0
 }
 
 theorem The Empty Set Is a Subset of Any Set
@@ -89,9 +89,9 @@ conclusion ⊆ ∅ a
   prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
   elided bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 {
     take x {
-      prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 ∅) ()
-      prove → ∈ $0 ∅ ∈ $0 a bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 ∅, ∈ $0 a) () () ()
+      prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 ∅) () 0
+      prove → ∈ $0 ∅ ∈ $0 a bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 ∅, ∈ $0 a) () () () 1.0.0
     }
   }
-  prove ⊆ ∅ a 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (∅, a) () ()
+  prove ⊆ ∅ a 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (∅, a) () () 1
 }

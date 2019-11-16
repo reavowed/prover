@@ -7,7 +7,7 @@ theorem Power Sets Are Unique
 conclusion ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a
 {
   prove ∃ x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a ad5d7177bdc835a8084d2c813386ca2a01d8a4c734faa19bb31bc2133696258c () (a) () ()
-  prove ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (⊆ $0 a) ()
+  prove ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (⊆ $0 a) () 0
 }
 
 term powerSet (a)
@@ -22,9 +22,9 @@ conclusion ∈ b powerSet a
 {
   prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a 4e668b7d4f1228aec6efbd169870c864859c5b647b9e7d308a999c2bcd3f6ae3 () (a) () ()
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ ∈ b powerSet a ⊆ b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 powerSet a ⊆ $0 a) ()
-    prove → ⊆ b a ∈ b powerSet a 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b powerSet a, ⊆ b a) () () ()
-    prove ∈ b powerSet a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (⊆ b a, ∈ b powerSet a) () () ()
+    prove ↔ ∈ b powerSet a ⊆ b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 powerSet a ⊆ $0 a) () 0
+    prove → ⊆ b a ∈ b powerSet a 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b powerSet a, ⊆ b a) () () () 1.0
+    prove ∈ b powerSet a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (⊆ b a, ∈ b powerSet a) () () () 1.1 p0
   }
 }
 
@@ -34,9 +34,9 @@ conclusion ⊆ b a
 {
   prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a 4e668b7d4f1228aec6efbd169870c864859c5b647b9e7d308a999c2bcd3f6ae3 () (a) () ()
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ ∈ b powerSet a ⊆ b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 powerSet a ⊆ $0 a) ()
-    prove → ∈ b powerSet a ⊆ b a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b powerSet a, ⊆ b a) () () ()
-    prove ⊆ b a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b powerSet a, ⊆ b a) () () ()
+    prove ↔ ∈ b powerSet a ⊆ b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (b) (↔ ∈ $0 powerSet a ⊆ $0 a) () 0
+    prove → ∈ b powerSet a ⊆ b a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b powerSet a, ⊆ b a) () () () 1.0
+    prove ⊆ b a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b powerSet a, ⊆ b a) () () () 1.1 p0
   }
 }
 
@@ -44,12 +44,12 @@ theorem ∅ Is in Any Power Set
 conclusion ∈ ∅ powerSet a
 {
   prove ⊆ ∅ a 1bde69fc8b90a9ca85033f763d7edeaa761c9b52a26ea2e64796515496237aa9 () (a) () ()
-  prove ∈ ∅ powerSet a 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (∅, a) () ()
+  prove ∈ ∅ powerSet a 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (∅, a) () () 0
 }
 
 theorem Any Set Is in Its Own Power Set
 conclusion ∈ a powerSet a
 {
   prove ⊆ a a f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (a) () ()
-  prove ∈ a powerSet a 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (a, a) () ()
+  prove ∈ a powerSet a 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (a, a) () () 0
 }

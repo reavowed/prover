@@ -6,10 +6,10 @@ conclusion ⊆ ℕ S
 {
   take n {
     assume ∈ $0 ℕ {
-      prove ∈ $0 S ed2d7dba0ae289c7dea2faa9f19c4e1f2271e4e12bdff2029ea1587d966ac27c () ($0, S) () ()
+      prove ∈ $0 S ed2d7dba0ae289c7dea2faa9f19c4e1f2271e4e12bdff2029ea1587d966ac27c () ($0, S) () () 0.0a p0
     }
   }
-  prove ⊆ ℕ S 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (ℕ, S) () ()
+  prove ⊆ ℕ S 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (ℕ, S) () () 0
 }
 
 theorem An Inductive Subset of ℕ Is ℕ
@@ -17,8 +17,8 @@ premise ⊆ S ℕ
 premise inductive S
 conclusion = S ℕ
 {
-  prove ⊆ ℕ S 8e4ae45640ad174f7eb1eeb1b07f7485e0919bc0ce0cb72bc769ffaa087602b1 () (S) () ()
-  prove = S ℕ 0477ee5edbf3b855830ed7f269321584ce9ef7540ea076c0bfcc087dec2b62b6 () (S, ℕ) () ()
+  prove ⊆ ℕ S 8e4ae45640ad174f7eb1eeb1b07f7485e0919bc0ce0cb72bc769ffaa087602b1 () (S) () () p1
+  prove = S ℕ 0477ee5edbf3b855830ed7f269321584ce9ef7540ea076c0bfcc087dec2b62b6 () (S, ℕ) () () p0 0
 }
 
 theorem Proof by Induction
@@ -28,12 +28,12 @@ premise ∀ n → ∈ $0 S ∈ successor $0 S
 conclusion = S ℕ
 {
   prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
-  prove ∈ ∅ S 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (0, ∅) (∈ $0 S) ()
+  prove ∈ ∅ S 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (0, ∅) (∈ $0 S) () 0 p1
   elided 8b7a38f87c467c6ea53b15a76b9448412eddc7a5b75741f936ea8764e5f087bf {
-    prove ∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ ∅ S, ∀ n → ∈ $0 S ∈ successor $0 S) () () ()
-    prove inductive S 8b7a38f87c467c6ea53b15a76b9448412eddc7a5b75741f936ea8764e5f087bf () (S) () ()
+    prove ∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ ∅ S, ∀ n → ∈ $0 S ∈ successor $0 S) () () () 1 p2
+    prove inductive S 8b7a38f87c467c6ea53b15a76b9448412eddc7a5b75741f936ea8764e5f087bf () (S) () () 2.0
   }
-  prove = S ℕ 323abac858d29c3fdfff980d135ac4f5676512b12a42e8d2737ea6bdb3feb22e () (S) () ()
+  prove = S ℕ 323abac858d29c3fdfff980d135ac4f5676512b12a42e8d2737ea6bdb3feb22e () (S) () () p0 2
 }
 
 theorem Proof by Induction over Comprehension
@@ -42,8 +42,8 @@ premise ∈ 0 S
 premise ∀ n → ∈ $0 S ∈ successor $0 S
 conclusion = S ℕ
 {
-  prove ⊆ S ℕ 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () (S, ℕ) (with ($0) φ) ()
-  prove = S ℕ bf554a2aab3c6a5e3dbcf0924479154a006b12a51158cd9a2d469703f5aa8932 () (S) () ()
+  prove ⊆ S ℕ 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () (S, ℕ) (with ($0) φ) () p0
+  prove = S ℕ bf554a2aab3c6a5e3dbcf0924479154a006b12a51158cd9a2d469703f5aa8932 () (S) () () 0 p1 p2
 }
 
 theorem Proof by Induction on Property
@@ -54,29 +54,29 @@ conclusion ∀ n → ∈ $0 ℕ with ($0) φ
   let S = $0 comprehension n ℕ with ($0) φ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∀ n → ∈ $0 ℕ with ($0) φ) (comprehension n ℕ with ($0) φ) () () {
     elided 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d {
       prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
-      prove ∈ 0 $0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($0, ℕ, 0) (with ($$0) φ) ()
+      prove ∈ 0 $0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($0, ℕ, 0) (with ($$0) φ) () 0a 0.0.0 p0
     }
     take n {
       assume ∈ $0 $$0 {
-        prove ∈ $0 ℕ 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () ($$0, ℕ, $0) (with ($$$0) φ) ()
-        prove with ($0) φ fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$0, ℕ, $0) (with ($$$0) φ) ()
+        prove ∈ $0 ℕ 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () ($$0, ℕ, $0) (with ($$$0) φ) () 0a 0.1.0a
+        prove with ($0) φ fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$0, ℕ, $0) (with ($$$0) φ) () 0a 0.1.0a
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove → ∧ ∈ $0 ℕ with ($0) φ with (successor $0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∧ ∈ $$$0 ℕ with ($$$0) φ with (successor $$$0) φ) ()
-          prove ∧ ∈ $0 ℕ with ($0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 ℕ, with ($0) φ) () () ()
-          prove with (successor $0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $0 ℕ with ($0) φ, with (successor $0) φ) () () ()
+          prove → ∧ ∈ $0 ℕ with ($0) φ with (successor $0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∧ ∈ $$$0 ℕ with ($$$0) φ with (successor $$$0) φ) () p1
+          prove ∧ ∈ $0 ℕ with ($0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 ℕ, with ($0) φ) () () () 0.1.0.0 0.1.0.1
+          prove with (successor $0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $0 ℕ with ($0) φ, with (successor $0) φ) () () () 0.1.0.2.0 0.1.0.2.1
         }
         elided 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d {
-          prove ∈ successor $0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($0) () ()
-          prove ∈ successor $0 $$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$0, ℕ, successor $0) (with ($$$0) φ) ()
+          prove ∈ successor $0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($0) () () 0.1.0.0
+          prove ∈ successor $0 $$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$0, ℕ, successor $0) (with ($$$0) φ) () 0a 0.1.0.3.0 0.1.0.2
         }
       }
     }
-    prove = $0 ℕ e1c493cee3409a3120f519c8d1b2d6a29f43e4720b6efea996441698780d3b60 () ($0) (with ($$0) φ) ()
+    prove = $0 ℕ e1c493cee3409a3120f519c8d1b2d6a29f43e4720b6efea996441698780d3b60 () ($0) (with ($$0) φ) () 0a 0.0 0.1
     take n {
       assume ∈ $0 ℕ {
         elided fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c {
-          prove ∈ $0 $$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, ℕ) (∈ $0 $$$0) ()
-          prove with ($0) φ fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$0, ℕ, $0) (with ($$$0) φ) ()
+          prove ∈ $0 $$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, ℕ) (∈ $0 $$$0) () 0.2 0.3.0a
+          prove with ($0) φ fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$0, ℕ, $0) (with ($$$0) φ) () 0a 0.3.0.0.0
         }
       }
     }
@@ -89,9 +89,9 @@ premise ∀ n → ∧ ∈ $0 ℕ with ($0) φ with (successor $0) φ
 premise ∈ n ℕ
 conclusion with (n) φ
 {
-  prove ∀ n → ∈ $0 ℕ with ($0) φ eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (with ($0) φ) ()
+  prove ∀ n → ∈ $0 ℕ with ($0) φ eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (with ($0) φ) () p0 p1
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove → ∈ n ℕ with (n) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ with ($0) φ) ()
-    prove with (n) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, with (n) φ) () () ()
+    prove → ∈ n ℕ with (n) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ with ($0) φ) () 0
+    prove with (n) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, with (n) φ) () () () 1.0 p2
   }
 }

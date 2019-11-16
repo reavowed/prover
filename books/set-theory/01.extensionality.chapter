@@ -22,13 +22,13 @@ conclusion = a b
 {
   elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
     take x {
-      prove ↔ ∈ $0 b with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 b with ($$0) φ) ()
-      prove ↔ ∈ $0 a with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 a with ($$0) φ) ()
-      prove ↔ with ($0) φ ∈ $0 b 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (∈ $0 b, with ($0) φ) () () ()
-      prove ↔ ∈ $0 a ∈ $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 a, with ($0) φ, ∈ $0 b) () () ()
+      prove ↔ ∈ $0 b with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 b with ($$0) φ) () p1
+      prove ↔ ∈ $0 a with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 a with ($$0) φ) () p0
+      prove ↔ with ($0) φ ∈ $0 b 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (∈ $0 b, with ($0) φ) () () () 0.0.0
+      prove ↔ ∈ $0 a ∈ $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 a, with ($0) φ, ∈ $0 b) () () () 0.0.1 0.0.2
     }
   }
-  prove = a b 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (a, b) () ()
+  prove = a b 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (a, b) () () 0
 }
 
 theorem Sets with Equivalent Membership Conditions Are Equal
@@ -39,12 +39,12 @@ conclusion = a b
 {
   elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
     take x {
-      prove ↔ ∈ $0 a with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 a with ($$0) φ) ()
-      prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$0) φ with ($$0) ψ) ()
-      prove ↔ ∈ $0 a with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 a, with ($0) φ, with ($0) ψ) () () ()
+      prove ↔ ∈ $0 a with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 a with ($$0) φ) () p0
+      prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$0) φ with ($$0) ψ) () p2
+      prove ↔ ∈ $0 a with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 a, with ($0) φ, with ($0) ψ) () () () 0.0.0 0.0.1
     }
   }
-  prove = a b f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () (a, b) (with ($0) ψ) ()
+  prove = a b f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () (a, b) (with ($0) ψ) () 0 p1
 }
 
 theorem A Set with a Membership Condition Is Unique
@@ -54,13 +54,13 @@ conclusion ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ
   take z_1 {
     take z_2 {
       assume ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ {
-        prove = $$0 $0 f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () ($$0, $0) (with ($$$0) φ) ()
+        prove = $$0 $0 f05e0b00d20fda3988c4c9650bbbdb1bf502e6acd106b6c203561005310a3932 () ($$0, $0) (with ($$$0) φ) () 0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
       }
     }
   }
   elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
-    prove ∧ ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ ∀ x ∀ y → ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ x ∀ y → ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ = $$0 $0) () () ()
-    prove ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∀ y ↔ ∈ $0 $$0 with ($0) φ) ()
+    prove ∧ ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ ∀ x ∀ y → ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ x ∀ y → ∧ ∀ y ↔ ∈ $0 $$$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) φ = $$0 $0) () () () p0 0
+    prove ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∀ y ↔ ∈ $0 $$0 with ($0) φ) () 1.0
   }
 }
 
@@ -73,25 +73,25 @@ conclusion ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) ψ
     assume ∀ y ↔ ∈ $0 $$0 with ($0) φ {
       elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
         take y {
-          prove ↔ ∈ $0 $$0 with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 with ($$$0) φ) ()
-          prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ with ($$$0) ψ) ()
-          prove ↔ ∈ $0 $$0 with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, with ($0) φ, with ($0) ψ) () () ()
+          prove ↔ ∈ $0 $$0 with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 with ($$$0) φ) () 0.0a
+          prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ with ($$$0) ψ) () p1
+          prove ↔ ∈ $0 $$0 with ($0) ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, with ($0) φ, with ($0) ψ) () () () 0.0.0.0.0 0.0.0.0.1
         }
       }
     }
     assume ∀ y ↔ ∈ $0 $$0 with ($0) ψ {
       elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
         take y {
-          prove ↔ ∈ $0 $$0 with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 with ($$$0) ψ) ()
+          prove ↔ ∈ $0 $$0 with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 with ($$$0) ψ) () 0.1a
           elided 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 {
-            prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ with ($$$0) ψ) ()
-            prove ↔ with ($0) ψ with ($0) φ 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (with ($0) φ, with ($0) ψ) () () ()
+            prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ with ($$$0) φ with ($$$0) ψ) () p1
+            prove ↔ with ($0) ψ with ($0) φ 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (with ($0) φ, with ($0) ψ) () () () 0.1.0.0.1.0
           }
-          prove ↔ ∈ $0 $$0 with ($0) φ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, with ($0) ψ, with ($0) φ) () () ()
+          prove ↔ ∈ $0 $$0 with ($0) φ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, with ($0) ψ, with ($0) φ) () () () 0.1.0.0.0 0.1.0.0.1
         }
       }
     }
-    prove ↔ ∀ y ↔ ∈ $0 $$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ y ↔ ∈ $0 $$0 with ($0) ψ) () () ()
+    prove ↔ ∀ y ↔ ∈ $0 $$0 with ($0) φ ∀ y ↔ ∈ $0 $$0 with ($0) ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ y ↔ ∈ $0 $$0 with ($0) ψ) () () () 0.0 0.1
   }
-  prove ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) ψ 2990d85d4ee52472194a7ae53589f3f257b4493424bdd996a411322c70e5e4c6 () () (∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ y ↔ ∈ $0 $$0 with ($0) ψ) ()
+  prove ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) ψ 2990d85d4ee52472194a7ae53589f3f257b4493424bdd996a411322c70e5e4c6 () () (∀ y ↔ ∈ $0 $$0 with ($0) φ, ∀ y ↔ ∈ $0 $$0 with ($0) ψ) () p0 0
 }

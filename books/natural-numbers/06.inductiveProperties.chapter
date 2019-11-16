@@ -5,21 +5,21 @@ premise ∈ n ℕ
 conclusion ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0
 {
   prove = 0 0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (0) () ()
-  prove ∨ = 0 0 ∃ m ∧ ∈ $0 ℕ = 0 successor $0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= 0 0, ∃ m ∧ ∈ $0 ℕ = 0 successor $0) () () ()
+  prove ∨ = 0 0 ∃ m ∧ ∈ $0 ℕ = 0 successor $0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= 0 0, ∃ m ∧ ∈ $0 ℕ = 0 successor $0) () () () 0
   take n {
     assume ∧ ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0 {
       prove = successor $0 successor $0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (successor $0) () ()
       elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-        prove ∧ ∈ $0 ℕ = successor $0 successor $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 ℕ, = successor $0 successor $0) () () ()
-        prove ∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$0 ℕ = successor $0 successor $$0) ()
+        prove ∧ ∈ $0 ℕ = successor $0 successor $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 ℕ, = successor $0 successor $0) () () () 2.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 2.0.0
+        prove ∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$0 ℕ = successor $0 successor $$0) () 2.0.1.0
       }
-      prove ∨ = successor $0 0 ∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0, = successor $0 0) () () ()
+      prove ∨ = successor $0 0 ∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∃ m ∧ ∈ $0 ℕ = successor $$0 successor $0, = successor $0 0) () () () 2.0.1
     }
   }
-  prove ∀ n → ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) ()
+  prove ∀ n → ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0 eb72b1b97e252e7241762dcc8390a1816da9bde20f8c353a0b097c65d0977fc7 () () (∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) () 1 2
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove → ∈ n ℕ ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) ()
-    prove ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0) () () ()
+    prove → ∈ n ℕ ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) () 3
+    prove ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0) () () () 4.0 p0
   }
 }
 
@@ -28,8 +28,8 @@ premise ∈ n ℕ
 premise ¬ = n 0
 conclusion ∃ m ∧ ∈ $0 ℕ = n successor $0
 {
-  prove ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0 9cb04c0b7ebcd3d2f79c4d9aeb6298e9ee0f6edb9acdb639d551ea7d04dbe418 () (n) () ()
-  prove ∃ m ∧ ∈ $0 ℕ = n successor $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (= n 0, ∃ m ∧ ∈ $0 ℕ = n successor $0) () () ()
+  prove ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0 9cb04c0b7ebcd3d2f79c4d9aeb6298e9ee0f6edb9acdb639d551ea7d04dbe418 () (n) () () p0
+  prove ∃ m ∧ ∈ $0 ℕ = n successor $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (= n 0, ∃ m ∧ ∈ $0 ℕ = n successor $0) () () () 0 p1
 }
 
 theorem Every Element of a Natural Number Is a Natural Number
@@ -40,12 +40,12 @@ conclusion ∈ m ℕ
   elided 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf {
     prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
     prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
-    prove ∀ x ¬ ∈ $0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ x ¬ ∈ $0 $$0) ()
+    prove ∀ x ¬ ∈ $0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ x ¬ ∈ $0 $$0) () 0.0 0.1
   }
   elided bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 {
     take x {
-      prove ¬ ∈ $0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 0) ()
-      prove → ∈ $0 0 ∈ $0 ℕ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 0, ∈ $0 ℕ) () () ()
+      prove ¬ ∈ $0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 0) () 0
+      prove → ∈ $0 0 ∈ $0 ℕ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 0, ∈ $0 ℕ) () () () 1.0.0
     }
   }
   take a {
@@ -53,24 +53,24 @@ conclusion ∈ m ℕ
       take x {
         assume ∈ $0 $$0 {
           elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-            prove → ∈ $0 $$0 ∈ $0 ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 $$0 ∈ $$$0 ℕ) ()
-            prove ∈ $0 ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ∈ $0 ℕ) () () ()
+            prove → ∈ $0 $$0 ∈ $0 ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 $$0 ∈ $$$0 ℕ) () 2.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∈ $0 ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ∈ $0 ℕ) () () () 2.0.0.0.0.0 2.0.0.0a
           }
         }
         assume = $0 $$0 {
-          prove ∈ $0 ℕ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, $$0) (∈ $$$0 ℕ) ()
+          prove ∈ $0 ℕ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, $$0) (∈ $$$0 ℕ) () 2.0.0.1a 2.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
         }
         assume ∈ $0 successor $$0 {
-          prove ∨ ∈ $0 $$0 = $0 $$0 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () ()
-          prove ∈ $0 ℕ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 $$0, = $0 $$0, ∈ $0 ℕ) () () ()
+          prove ∨ ∈ $0 $$0 = $0 $$0 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () () 2.0.0.2a
+          prove ∈ $0 ℕ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 $$0, = $0 $$0, ∈ $0 ℕ) () () () 2.0.0.2.0 2.0.0.0 2.0.0.1
         }
       }
     }
   }
-  prove ∀ x → ∈ $0 n ∈ $0 ℕ bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ x → ∈ $0 $$0 ∈ $0 ℕ) ()
+  prove ∀ x → ∈ $0 n ∈ $0 ℕ bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ x → ∈ $0 $$0 ∈ $0 ℕ) () 1 2 p0
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove → ∈ m n ∈ m ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 n ∈ $0 ℕ) ()
-    prove ∈ m ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m n, ∈ m ℕ) () () ()
+    prove → ∈ m n ∈ m ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 n ∈ $0 ℕ) () 3
+    prove ∈ m ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m n, ∈ m ℕ) () () () 4.0 p1
   }
 }
 
@@ -80,10 +80,10 @@ conclusion ⊆ n ℕ
 {
   take m {
     assume ∈ $0 n {
-      prove ∈ $0 ℕ 855ceeaea4de8732d2bfd8b04ef8837eb6f5b74bf21dfbcac079d12d5f2390b2 () (n, $0) () ()
+      prove ∈ $0 ℕ 855ceeaea4de8732d2bfd8b04ef8837eb6f5b74bf21dfbcac079d12d5f2390b2 () (n, $0) () () p0 0.0a
     }
   }
-  prove ⊆ n ℕ 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (n, ℕ) () ()
+  prove ⊆ n ℕ 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (n, ℕ) () () 0
 }
 
 theorem A Natural Number Either Is 0 or Contains 0
@@ -91,23 +91,23 @@ premise ∈ n ℕ
 conclusion ∨ = n 0 ∈ 0 n
 {
   prove = 0 0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (0) () ()
-  prove ∨ = 0 0 ∈ 0 0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= 0 0, ∈ 0 0) () () ()
+  prove ∨ = 0 0 ∈ 0 0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= 0 0, ∈ 0 0) () () () 0
   take m {
     assume ∧ ∈ $0 ℕ ∨ = $0 0 ∈ 0 $0 {
       assume = $0 0 {
         elided bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 {
           prove ∈ $0 successor $0 bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () ($0) () ()
-          prove ∈ 0 successor $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, 0) (∈ $$0 successor $0) ()
+          prove ∈ 0 successor $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, 0) (∈ $$0 successor $0) () 2.0.0a 2.0.0.0.0
         }
       }
       assume ∈ 0 $0 {
-        prove ∈ 0 successor $0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (0, $0) () ()
+        prove ∈ 0 successor $0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (0, $0) () () 2.0.1a
       }
-      prove ∈ 0 successor $0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= $0 0, ∈ 0 $0, ∈ 0 successor $0) () () ()
-      prove ∨ = successor $0 0 ∈ 0 successor $0 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∈ 0 successor $0, = successor $0 0) () () ()
+      prove ∈ 0 successor $0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= $0 0, ∈ 0 $0, ∈ 0 successor $0) () () () 2.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 2.0.0 2.0.1
+      prove ∨ = successor $0 0 ∈ 0 successor $0 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∈ 0 successor $0, = successor $0 0) () () () 2.0.2
     }
   }
-  prove ∨ = n 0 ∈ 0 n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∨ = $0 0 ∈ 0 $0) ()
+  prove ∨ = n 0 ∈ 0 n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∨ = $0 0 ∈ 0 $0) () 1 2 p0
 }
 
 theorem A Natural Number Either Contains Or Is The Successor of an Element
@@ -118,12 +118,12 @@ conclusion ∨ ∈ successor m n = successor m n
   elided 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf {
     prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
     prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
-    prove ∀ x ¬ ∈ $0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ x ¬ ∈ $0 $$0) ()
+    prove ∀ x ¬ ∈ $0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ x ¬ ∈ $0 $$0) () 0.0 0.1
   }
   elided bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 {
     take x {
-      prove ¬ ∈ $0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 0) ()
-      prove → ∈ $0 0 ∨ ∈ successor $0 0 = successor $0 0 bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 0, ∨ ∈ successor $0 0 = successor $0 0) () () ()
+      prove ¬ ∈ $0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 0) () 0
+      prove → ∈ $0 0 ∨ ∈ successor $0 0 = successor $0 0 bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 0, ∨ ∈ successor $0 0 = successor $0 0) () () () 1.0.0
     }
   }
   take a {
@@ -132,35 +132,35 @@ conclusion ∨ ∈ successor m n = successor m n
         assume ∈ $0 successor $$0 {
           assume ∈ $0 $$0 {
             assume ∈ successor $0 $$0 {
-              prove ∈ successor $0 successor $$0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (successor $0, $$0) () ()
+              prove ∈ successor $0 successor $$0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (successor $0, $$0) () () 2.0.0.0.0.0a
             }
             assume = successor $0 $$0 {
               elided bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 {
                 prove ∈ $$0 successor $$0 bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () ($$0) () ()
-                prove ∈ successor $0 successor $$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor $0, $$0) (∈ $$$0 successor $$0) ()
+                prove ∈ successor $0 successor $$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (successor $0, $$0) (∈ $$$0 successor $$0) () 2.0.0.0.0.1a 2.0.0.0.0.1.0.0
               }
             }
             elided 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 {
-              prove → ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 $$0 ∨ ∈ successor $$$0 $$0 = successor $$$0 $$0) ()
-              prove ∨ ∈ successor $0 $$0 = successor $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ∨ ∈ successor $0 $$0 = successor $0 $$0) () () ()
-              prove ∈ successor $0 successor $$0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ successor $0 $$0, = successor $0 $$0, ∈ successor $0 successor $$0) () () ()
+              prove → ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 $$0 ∨ ∈ successor $$$0 $$0 = successor $$$0 $$0) () 2.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              prove ∨ ∈ successor $0 $$0 = successor $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ∨ ∈ successor $0 $$0 = successor $0 $$0) () () () 2.0.0.0.0.2.0 2.0.0.0.0a
+              prove ∈ successor $0 successor $$0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ successor $0 $$0, = successor $0 $$0, ∈ successor $0 successor $$0) () () () 2.0.0.0.0.2.1 2.0.0.0.0.0 2.0.0.0.0.1
             }
           }
           assume = $0 $$0 {
-            prove = successor $0 successor $$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () ($0, $$0) () (successor $$$0)
+            prove = successor $0 successor $$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () ($0, $$0) () (successor $$$0) 2.0.0.0.1a
           }
           elided 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea {
-            prove ∨ ∈ $0 $$0 = $0 $$0 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () ()
-            prove ∨ ∈ successor $0 successor $$0 = successor $0 successor $$0 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (∈ $0 $$0, = $0 $$0, ∈ successor $0 successor $$0, = successor $0 successor $$0) () () ()
+            prove ∨ ∈ $0 $$0 = $0 $$0 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () () 2.0.0.0a
+            prove ∨ ∈ successor $0 successor $$0 = successor $0 successor $$0 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (∈ $0 $$0, = $0 $$0, ∈ successor $0 successor $$0, = successor $0 successor $$0) () () () 2.0.0.0.2.0 2.0.0.0.0 2.0.0.0.1
           }
         }
       }
     }
   }
-  prove ∀ x → ∈ $0 n ∨ ∈ successor $0 n = successor $0 n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ x → ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0) ()
+  prove ∀ x → ∈ $0 n ∨ ∈ successor $0 n = successor $0 n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ x → ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0) () 1 2 p0
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove → ∈ m n ∨ ∈ successor m n = successor m n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 n ∨ ∈ successor $0 n = successor $0 n) ()
-    prove ∨ ∈ successor m n = successor m n fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m n, ∨ ∈ successor m n = successor m n) () () ()
+    prove → ∈ m n ∨ ∈ successor m n = successor m n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 n ∨ ∈ successor $0 n = successor $0 n) () 3
+    prove ∨ ∈ successor m n = successor m n fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m n, ∨ ∈ successor m n = successor m n) () () () 4.0 p1
   }
 }
 
@@ -169,35 +169,35 @@ premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ∨ ∈ n m ∨ = n m ∈ m n
 {
-  prove ∨ = n 0 ∈ 0 n 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 () (n) () ()
-  prove ∨ ∈ n 0 ∨ = n 0 ∈ 0 n 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∨ = n 0 ∈ 0 n, ∈ n 0) () () ()
+  prove ∨ = n 0 ∈ 0 n 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 () (n) () () p0
+  prove ∨ ∈ n 0 ∨ = n 0 ∈ 0 n 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∨ = n 0 ∈ 0 n, ∈ n 0) () () () 0
   take a {
     assume ∧ ∈ $0 ℕ ∨ ∈ n $0 ∨ = n $0 ∈ $0 n {
       assume ∈ n $0 {
-        prove ∈ n successor $0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (n, $0) () ()
-        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ n successor $0, ∨ = n successor $0 ∈ successor $0 n) () () ()
+        prove ∈ n successor $0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (n, $0) () () 2.0.0a
+        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ n successor $0, ∨ = n successor $0 ∈ successor $0 n) () () () 2.0.0.0
       }
       assume = n $0 {
         prove ∈ n successor n bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n) () ()
-        prove ∈ n successor $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (n, $0) (∈ n successor $$0) ()
-        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ n successor $0, ∨ = n successor $0 ∈ successor $0 n) () () ()
+        prove ∈ n successor $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (n, $0) (∈ n successor $$0) () 2.0.1a 2.0.1.0
+        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ n successor $0, ∨ = n successor $0 ∈ successor $0 n) () () () 2.0.1.1
       }
       assume ∈ $0 n {
-        prove ∨ ∈ successor $0 n = successor $0 n 220bd30d1396001c231c4257d9a9f1d98ebf4bd91132cbb730afda2d43cb7b1c () (n, $0) () ()
-        prove ∨ = successor $0 n ∈ successor $0 n 7e3651c820e1f41df1d2e5a80ff9e1c8bc55f236a482bf9ee54c7c4188e2ee93 (∈ successor $0 n, = successor $0 n) () () ()
+        prove ∨ ∈ successor $0 n = successor $0 n 220bd30d1396001c231c4257d9a9f1d98ebf4bd91132cbb730afda2d43cb7b1c () (n, $0) () () p0 2.0.2a
+        prove ∨ = successor $0 n ∈ successor $0 n 7e3651c820e1f41df1d2e5a80ff9e1c8bc55f236a482bf9ee54c7c4188e2ee93 (∈ successor $0 n, = successor $0 n) () () () 2.0.2.0
         assume = successor $0 n {
-          prove = n successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (successor $0, n) () ()
+          prove = n successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (successor $0, n) () () 2.0.2.2a
         }
-        prove ∨ = n successor $0 ∈ successor $0 n 2fef1e6f547d23b9aa52e58e574fab87dbf5de6cf4c4dc35820bbae4723c7c09 (= successor $0 n, ∈ successor $0 n, = n successor $0) () () ()
-        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∨ = n successor $0 ∈ successor $0 n, ∈ n successor $0) () () ()
+        prove ∨ = n successor $0 ∈ successor $0 n 2fef1e6f547d23b9aa52e58e574fab87dbf5de6cf4c4dc35820bbae4723c7c09 (= successor $0 n, ∈ successor $0 n, = n successor $0) () () () 2.0.2.1 2.0.2.2
+        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∨ = n successor $0 ∈ successor $0 n, ∈ n successor $0) () () () 2.0.2.3
       }
       assume ∨ = n $0 ∈ $0 n {
-        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= n $0, ∈ $0 n, ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n) () () ()
+        prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= n $0, ∈ $0 n, ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n) () () () 2.0.3a 2.0.1 2.0.2
       }
-      prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ n $0, ∨ = n $0 ∈ $0 n, ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n) () () ()
+      prove ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ n $0, ∨ = n $0 ∈ $0 n, ∨ ∈ n successor $0 ∨ = n successor $0 ∈ successor $0 n) () () () 2.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 2.0.0 2.0.3
     }
   }
-  prove ∨ ∈ n m ∨ = n m ∈ m n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (m) (∨ ∈ n $0 ∨ = n $0 ∈ $0 n) ()
+  prove ∨ ∈ n m ∨ = n m ∈ m n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (m) (∨ ∈ n $0 ∨ = n $0 ∈ $0 n) () 1 2 p1
 }
 
 theorem Natural Number Transitivity
@@ -208,42 +208,42 @@ conclusion ⊆ m n
   elided 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf {
     prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
     prove ∀ m ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
-    prove ∀ m ¬ ∈ $0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ m ¬ ∈ $0 $$0) ()
+    prove ∀ m ¬ ∈ $0 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (0, ∅) (∀ m ¬ ∈ $0 $$0) () 0.0 0.1
   }
   elided bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 {
     take m {
-      prove ¬ ∈ $0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 0) ()
-      prove → ∈ $0 0 ⊆ $0 0 bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 0, ⊆ $0 0) () () ()
+      prove ¬ ∈ $0 0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 0) () 0
+      prove → ∈ $0 0 ⊆ $0 0 bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 0, ⊆ $0 0) () () () 1.0.0
     }
   }
   take n {
     assume ∧ ∈ $0 ℕ ∀ m → ∈ $0 $$0 ⊆ $0 $$0 {
       take m {
         assume ∈ $0 successor $$0 {
-          prove ∨ ∈ $0 $$0 = $0 $$0 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () ()
+          prove ∨ ∈ $0 $$0 = $0 $$0 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () ($0, $$0) () () 2.0.0.0a
           assume ∈ $0 $$0 {
             elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-              prove → ∈ $0 $$0 ⊆ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 $$0 ⊆ $$$0 $$0) ()
-              prove ⊆ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ⊆ $0 $$0) () () ()
+              prove → ∈ $0 $$0 ⊆ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 $$0 ⊆ $$$0 $$0) () 2.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              prove ⊆ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ⊆ $0 $$0) () () () 2.0.0.0.1.0.0 2.0.0.0.1a
             }
             prove ⊆ $$0 successor $$0 bc482b426c19736933e5c43690f5993eca5312d020f2fca05241efb641d48b15 () ($$0) () ()
-            prove ⊆ $0 successor $$0 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () ($0, $$0, successor $$0) () ()
+            prove ⊆ $0 successor $$0 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () ($0, $$0, successor $$0) () () 2.0.0.0.1.0 2.0.0.0.1.1
           }
           assume = $0 $$0 {
             elided bc482b426c19736933e5c43690f5993eca5312d020f2fca05241efb641d48b15 {
               prove ⊆ $$0 successor $$0 bc482b426c19736933e5c43690f5993eca5312d020f2fca05241efb641d48b15 () ($$0) () ()
-              prove ⊆ $0 successor $$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, $$0) (⊆ $$$0 successor $$0) ()
+              prove ⊆ $0 successor $$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($0, $$0) (⊆ $$$0 successor $$0) () 2.0.0.0.2a 2.0.0.0.2.0.0
             }
           }
-          prove ⊆ $0 successor $$0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 $$0, = $0 $$0, ⊆ $0 successor $$0) () () ()
+          prove ⊆ $0 successor $$0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ $0 $$0, = $0 $$0, ⊆ $0 successor $$0) () () () 2.0.0.0.0 2.0.0.0.1 2.0.0.0.2
         }
       }
     }
   }
-  prove ∀ m → ∈ $0 n ⊆ $0 n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ m → ∈ $0 $$0 ⊆ $0 $$0) ()
+  prove ∀ m → ∈ $0 n ⊆ $0 n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∀ m → ∈ $0 $$0 ⊆ $0 $$0) () 1 2 p0
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove → ∈ m n ⊆ m n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 n ⊆ $0 n) ()
-    prove ⊆ m n fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m n, ⊆ m n) () () ()
+    prove → ∈ m n ⊆ m n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 n ⊆ $0 n) () 3
+    prove ⊆ m n fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m n, ⊆ m n) () () () 4.0 p1
   }
 }
 
@@ -253,8 +253,8 @@ premise ∈ m n
 premise ∈ a m
 conclusion ∈ a n
 {
-  prove ⊆ m n 4407b840750f7ef787f8ff26b9b3af912fa8d7cebeb09fa54c62395236861c05 () (n, m) () ()
-  prove ∈ a n ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (m, n, a) () ()
+  prove ⊆ m n 4407b840750f7ef787f8ff26b9b3af912fa8d7cebeb09fa54c62395236861c05 () (n, m) () () p0 p1
+  prove ∈ a n ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (m, n, a) () () 0 p2
 }
 
 theorem A Natural Number Contains the Predecessor of an Element
@@ -263,7 +263,7 @@ premise ∈ successor m n
 conclusion ∈ m n
 {
   prove ∈ m successor m bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (m) () ()
-  prove ∈ m n 17d968728c1b36422e6f0db68347715fad35d870b83f1ef9de22315024673039 () (n, successor m, m) () ()
+  prove ∈ m n 17d968728c1b36422e6f0db68347715fad35d870b83f1ef9de22315024673039 () (n, successor m, m) () () p0 p1 0
 }
 
 theorem Natural Number Contains Element If Successor Contains Successor
@@ -271,15 +271,15 @@ premise ∈ n ℕ
 premise ∈ successor m successor n
 conclusion ∈ m n
 {
-  prove ∈ successor n ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () ()
-  prove ∈ m successor n 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () (successor n, m) () ()
-  prove ∨ ∈ m n = m n 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () (m, n) () ()
+  prove ∈ successor n ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () () p0
+  prove ∈ m successor n 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () (successor n, m) () () 0 p1
+  prove ∨ ∈ m n = m n 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () (m, n) () () 1
   assume = m n {
     prove ¬ ∈ successor m successor m 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (successor m) () ()
-    prove ¬ ∈ successor m successor n 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (m, n) (¬ ∈ successor m successor $0) ()
+    prove ¬ ∈ successor m successor n 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (m, n) (¬ ∈ successor m successor $0) () 3a 3.0
   }
-  prove ¬ = m n fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (= m n, ∈ successor m successor n) () () ()
-  prove ∈ m n 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ m n, = m n) () () ()
+  prove ¬ = m n fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (= m n, ∈ successor m successor n) () () () 3 p1
+  prove ∈ m n 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ m n, = m n) () () () 2 4
 }
 
 theorem Zero Is an Element of a Successor
@@ -289,8 +289,8 @@ conclusion ∈ 0 successor n
   prove ∈ 0 successor 0 bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (0) () ()
   take n {
     assume ∧ ∈ $0 ℕ ∈ 0 successor $0 {
-      prove ∈ 0 successor successor $0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (0, successor $0) () ()
+      prove ∈ 0 successor successor $0 07f260f1fbb25ce3136bc23f5178db2c3a62843caef6b0e836b1b963db0a5adc () (0, successor $0) () () 1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
     }
   }
-  prove ∈ 0 successor n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∈ 0 successor $0) ()
+  prove ∈ 0 successor n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (∈ 0 successor $0) () 0 1 p0
 }

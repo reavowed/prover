@@ -152,7 +152,7 @@ object Step {
       inference: Inference.Summary,
       premises: Seq[Premise],
       substitutions: Substitutions)
-    extends Step.WithSubsteps with WithTopLevelStatement with WithVariable with WithAssumption // WithVariable has to be to the right of WithAssumption for addPremises to work correctly!
+    extends Step.WithSubsteps with WithTopLevelStatement with WithVariable with WithAssumption
   {
     val `type` = "naming"
     override def provenStatement: Option[Statement] = Some(statement)
@@ -205,7 +205,7 @@ object Step {
     override def length: Int = substeps.map(_.length).sum + 1
     override def serializedLines: Seq[String] = Seq(s"let $variableName ${assumption.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)} {") ++
       substeps.flatMap(_.serializedLines).indent ++
-      Seq("}")
+      Seq(Seq("}", Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
   }
 
   object Naming {
@@ -217,21 +217,15 @@ object Step {
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
         substeps <- listParser(entryContext, innerStepContext).inBraces
+        internalConclusion = substeps.flatMap(_.provenStatement).lastOption.getOrElse(throw new Exception("No conclusion for naming step"))
+        extractedConclusion = internalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
+        premiseStatements = inference.substitutePremisesAndValidateConclusion(extractedConclusion, substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
+        premises <- premiseStatements.init.map(Premise.parser).traverse
+        scopingDefinition = entryContext.scopingDefinitionOption.getOrElse(throw new Exception("Naming step requires a scoping statement"))
+        deductionDefinition = entryContext.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
+        internalPremise = DefinedStatement(Seq(DefinedStatement(Seq(assumption, internalConclusion), deductionDefinition)(Nil)), scopingDefinition)(Seq(variableName))
+        _ = if (internalPremise != premiseStatements.last) throw new Exception("Invalid naming premise")
       } yield {
-        val internalConclusion = substeps.flatMap(_.provenStatement).lastOption.getOrElse(throw new Exception("No conclusion for naming step"))
-        val extractedConclusion = internalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
-        val scopingDefinition = entryContext.scopingDefinitionOption.getOrElse(throw new Exception("Naming step requires a scoping statement"))
-        val deductionDefinition = entryContext.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
-        val internalPremise = DefinedStatement(Seq(DefinedStatement(Seq(assumption, internalConclusion), deductionDefinition)(Nil)), scopingDefinition)(Seq(variableName))
-        val substitutedPremises = inference.substitutePremisesAndValidateConclusion(extractedConclusion, substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
-        val premises = substitutedPremises match {
-          case init :+ last =>
-            if (last != internalPremise)
-              throw new Exception(s"Inference premise $last did not match $internalPremise")
-            init.map(s => stepContext.findPremise(s).getOrElse(throw new Exception(s"Could not find premise $s")))
-          case Nil =>
-            throw new Exception("Naming step inference had no premises")
-        }
         Naming(variableName, assumption, extractedConclusion, substeps, inference, premises, substitutions)
       }
     }
@@ -430,7 +424,7 @@ object Step {
     override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def length: Int = 1
     override def serializedLines: Seq[String] = {
-      Seq(s"prove ${statement.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)}")
+      Seq(Seq("prove", statement.serialized, inference.id, inference.serializeSubstitutions(substitutions), Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
     }
     def pendingPremises: Map[Seq[Int], Premise.Pending] = {
       premises.flatMapWithIndex((p, i) => p.getPendingPremises(Seq(i)).toSeq).toMap
@@ -444,8 +438,9 @@ object Step {
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
         premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
+        premises <- premiseStatements.map(Premise.parser).traverse
+        _ = inference.validatePremisesAndConclusion(premises.map(_.statement), statement, substitutions)
       } yield {
-        val premises = premiseStatements.map(s => stepContext.findPremise(s).getOrElse(throw new Exception(s"Could not find premise $s")))
         Assertion(statement, inference, premises, substitutions)
       }
     }
