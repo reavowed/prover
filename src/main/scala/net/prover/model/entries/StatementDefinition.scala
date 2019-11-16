@@ -82,6 +82,17 @@ case class StatementDefinition(
     case _ =>
       None
   }
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[StatementDefinition]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: StatementDefinition =>
+      (that canEqual this) &&
+        symbol == that.symbol
+    case _ => false
+  }
+
+  override val hashCode: Int = symbol.hashCode
 }
 
 object StatementDefinition extends ChapterEntryParser {

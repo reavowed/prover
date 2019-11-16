@@ -74,6 +74,17 @@ case class TermDefinition(
   def apply(boundVariableNames: String*)(components: Expression*): DefinedTerm = {
     DefinedTerm(components, this)(boundVariableNames)
   }
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[TermDefinition]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: TermDefinition =>
+      (that canEqual this) &&
+        symbol == that.symbol
+    case _ => false
+  }
+
+  override val hashCode: Int = symbol.hashCode
 }
 
 object TermDefinition extends ChapterEntryParser {
