@@ -25,11 +25,6 @@ export class Parser {
     inference.conclusion && (inference.conclusion = Expression.parseFromJson(inference.conclusion));
     return inference;
   }
-  static parseInferenceApplication(inferenceApplicationJson) {
-    const inferenceApplication = _.cloneDeep(inferenceApplicationJson);
-    inferenceApplication.inference = Parser.parseInference(inferenceApplication.inference);
-    return inferenceApplication;
-  }
   static parseStatementDefinition(definitionJson) {
     const definition = _.cloneDeep(definitionJson);
     definition.definingStatement && (definition.definingStatement = Expression.parseFromJson(definition.definingStatement));
@@ -48,19 +43,22 @@ export class Parser {
     return _.mapValues(namesToPairLists, _.fromPairs);
   }
   static parseSubstitutions(substitutions) {
-    const parseApplications = (applications) => {
+
+    const parseApplications = (applications, parser) => {
       const triples = _.map(_.toPairs(applications), ([nameAndCount, e]) => {
         const [_, name, count] = nameAndCount.match(/\((.*),(\d+)\)/);
-        return [name, parseInt(count), Expression.parseFromJson(e)];
+        return [name, parseInt(count), parser(e)];
       });
       return Parser.doubleMapFromTriples(triples);
     };
 
     const statements = _.mapValues(substitutions.statements, s => s && Expression.parseFromJson(s));
     const terms = _.mapValues(substitutions.terms, t => t && Expression.parseFromJson(t));
-    const predicates = parseApplications(substitutions.predicates);
-    const functions = parseApplications(substitutions.functions);
-    return {statements, terms, predicates, functions};
+    const predicates = parseApplications(substitutions.predicates, Expression.parseFromJson);
+    const functions = parseApplications(substitutions.functions, Expression.parseFromJson);
+    const predicateApplications = parseApplications(substitutions.predicateApplications, s => s.map(Expression.parseFromJson));
+    const functionApplications = parseApplications(substitutions.functionApplications, s => s.map(Expression.parseFromJson));
+    return {statements, terms, predicates, functions, predicateApplications, functionApplications};
   }
   static parseInferenceSuggestions(suggestions) {
     return suggestions.map(suggestionJson => {

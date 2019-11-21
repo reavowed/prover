@@ -639,6 +639,8 @@ conclusion equivalenceRelation ~_ℤ product ℕ ℕ
   }
 }
 
+write equivalenceClass orderedPair a b ~_ℤ as int2
+
 term ℤ ()
   (= $0 equivalenceQuotient product ℕ ℕ ~_ℤ)
   shorthand (int)

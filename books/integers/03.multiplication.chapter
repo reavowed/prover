@@ -1,0 +1,54 @@
+Multiplication on the integers.
+
+term ×_ℤ ()
+  (= $0 replacementSet4 a b c d ℕ ℕ ℕ ℕ orderedPair orderedPair equivalenceClass orderedPair $0 $1 ~_ℤ equivalenceClass orderedPair $2 $3 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $0 $2 apply × orderedPair $1 $3 apply + orderedPair apply × orderedPair $0 $3 apply × orderedPair $1 $2 ~_ℤ)
+  shorthand (xZ)
+  attributes (infix-function)
+
+theorem ×_ℤ is a Function
+conclusion function ×_ℤ product ℤ ℤ ℤ
+{
+  prove = ×_ℤ replacementSet4 a b c d ℕ ℕ ℕ ℕ orderedPair orderedPair equivalenceClass orderedPair $0 $1 ~_ℤ equivalenceClass orderedPair $2 $3 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $0 $2 apply × orderedPair $1 $3 apply + orderedPair apply × orderedPair $0 $3 apply × orderedPair $1 $2 ~_ℤ 8e3a3f7623065eb1d5045c026d2a4718790706c67827b4d7d5f4547098ba9ad3 () () () ()
+  subproof (Subset) {
+    take x {
+      assume ∈ $0 ×_ℤ {
+        prove ∃ a ∧ ∈ $0 ℕ ∃ b ∧ ∈ $0 ℕ ∃ c ∧ ∈ $0 ℕ ∃ d ∧ ∈ $0 ℕ = $$$$$0 orderedPair orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ 8c65193404dcc57c43b1ec19a0b2e113b567c498d2b7188cc219866a8775c6a0 () (×_ℤ, ℕ, ℕ, ℕ, ℕ, $0) () (orderedPair orderedPair equivalenceClass orderedPair $$0 $$1 ~_ℤ equivalenceClass orderedPair $$2 $$3 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$0 $$2 apply × orderedPair $$1 $$3 apply + orderedPair apply × orderedPair $$0 $$3 apply × orderedPair $$1 $$2 ~_ℤ) 0 1.0.0a
+        let a ∧ ∈ $0 ℕ ∃ b ∧ ∈ $0 ℕ ∃ c ∧ ∈ $0 ℕ ∃ d ∧ ∈ $0 ℕ = $$$$$0 orderedPair orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 product product ℤ ℤ ℤ) () (∧ ∈ $$0 ℕ ∃ b ∧ ∈ $0 ℕ ∃ c ∧ ∈ $0 ℕ ∃ d ∧ ∈ $0 ℕ = $$$$0 orderedPair orderedPair equivalenceClass orderedPair $$$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ) () {
+          let b ∧ ∈ $0 ℕ ∃ c ∧ ∈ $0 ℕ ∃ d ∧ ∈ $0 ℕ = $$$$$0 orderedPair orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 product product ℤ ℤ ℤ) () (∧ ∈ $$$0 ℕ ∃ c ∧ ∈ $0 ℕ ∃ d ∧ ∈ $0 ℕ = $$$$0 orderedPair orderedPair equivalenceClass orderedPair $$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$0 $$0 apply × orderedPair $$$$$0 $0 apply + orderedPair apply × orderedPair $$$0 $0 apply × orderedPair $$$$$0 $$0 ~_ℤ) () {
+            let c ∧ ∈ $0 ℕ ∃ d ∧ ∈ $0 ℕ = $$$$$0 orderedPair orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$$0 product product ℤ ℤ ℤ) () (∧ ∈ $$$$0 ℕ ∃ d ∧ ∈ $0 ℕ = $$$$0 orderedPair orderedPair equivalenceClass orderedPair $$$0 $$0 ~_ℤ equivalenceClass orderedPair $$$$$0 $0 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$0 $$$$$0 apply × orderedPair $$0 $0 apply + orderedPair apply × orderedPair $$$0 $0 apply × orderedPair $$0 $$$$$0 ~_ℤ) () {
+              let d ∧ ∈ $0 ℕ = $$$$$0 orderedPair orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$$$0 product product ℤ ℤ ℤ) () (∧ ∈ $$$$$0 ℕ = $$$$0 orderedPair orderedPair equivalenceClass orderedPair $$$0 $$0 ~_ℤ equivalenceClass orderedPair $0 $$$$$0 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$0 $0 apply × orderedPair $$0 $$$$$0 apply + orderedPair apply × orderedPair $$$0 $$$$$0 apply × orderedPair $$0 $0 ~_ℤ) () {
+                prove ∈ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ ℤ e11b973099825be06ace54a206bbbbac7b605be328e595b1dbcc64e8ce99eb82 () ($$$$0, $$$0) () () 1.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0.0.1.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                prove ∈ equivalenceClass orderedPair $$0 $0 ~_ℤ ℤ e11b973099825be06ace54a206bbbbac7b605be328e595b1dbcc64e8ce99eb82 () ($$0, $0) () () 1.0.0.1.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0.0.1.0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                prove ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ product ℤ ℤ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, ℤ, equivalenceClass orderedPair $$0 $0 ~_ℤ, ℤ) () () 1.0.0.1.0.0.0.0 1.0.0.1.0.0.0.1
+                elided e11b973099825be06ace54a206bbbbac7b605be328e595b1dbcc64e8ce99eb82 {
+                  prove ∈ apply × orderedPair $$$$0 $$0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($$$$0, $$0) () () 1.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0.0.1.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  prove ∈ apply × orderedPair $$$0 $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($$$0, $0) () () 1.0.0.1.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0.0.1.0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  prove ∈ apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (apply × orderedPair $$$$0 $$0, apply × orderedPair $$$0 $0) () () 1.0.0.1.0.0.0.3.0 1.0.0.1.0.0.0.3.1
+                  prove ∈ apply × orderedPair $$$$0 $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($$$$0, $0) () () 1.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0.0.1.0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  prove ∈ apply × orderedPair $$$0 $$0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($$$0, $$0) () () 1.0.0.1.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0.0.1.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  prove ∈ apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (apply × orderedPair $$$$0 $0, apply × orderedPair $$$0 $$0) () () 1.0.0.1.0.0.0.3.3 1.0.0.1.0.0.0.3.4
+                  prove ∈ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ ℤ e11b973099825be06ace54a206bbbbac7b605be328e595b1dbcc64e8ce99eb82 () (apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0, apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0) () () 1.0.0.1.0.0.0.3.2 1.0.0.1.0.0.0.3.5
+                }
+                prove ∈ orderedPair orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ product product ℤ ℤ ℤ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ, product ℤ ℤ, equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ, ℤ) () () 1.0.0.1.0.0.0.2 1.0.0.1.0.0.0.3
+                prove ∈ $$$$$0 product product ℤ ℤ ℤ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$$$$0, orderedPair orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ) (∈ $$$$$$0 product product ℤ ℤ ℤ) () 1.0.0.1.0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 1.0.0.1.0.0.0.4
+              } 1.0.0.1.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            } 1.0.0.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          } 1.0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        } 1.0.0.0
+      }
+    }
+    prove ⊆ ×_ℤ product product ℤ ℤ ℤ 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (×_ℤ, product product ℤ ℤ ℤ) () () 1.0
+  }
+  subproof (Uniqueness) {
+    take x {
+      assume ∈ $0 product ℤ ℤ {
+        prove ∃ a ∧ ∈ $0 ℤ ∃ b ∧ ∈ $0 ℤ = $$$0 orderedPair $$0 $0 2c5898a93d503f67864a5f7946c9db3d7c9c578a1ccb09f54d947eb150789919 () ($0, ℤ, ℤ) () () 2.0.0a
+        target ∃! y ∈ orderedPair $$0 $0 ×_ℤ
+      }
+    }
+  }
+  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
+    prove ∧ ⊆ ×_ℤ product product ℤ ℤ ℤ ∀ x → ∈ $0 product ℤ ℤ ∃! y ∈ orderedPair $$0 $0 ×_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ ×_ℤ product product ℤ ℤ ℤ, ∀ x → ∈ $0 product ℤ ℤ ∃! y ∈ orderedPair $$0 $0 ×_ℤ) () () () 1 2
+    prove function ×_ℤ product ℤ ℤ ℤ 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (×_ℤ, product ℤ ℤ, ℤ) () () 3.0
+  }
+}

@@ -105,6 +105,23 @@ object Substitutions {
       lens.set(newMap)(this)
     }
 
+    def calculateApplicatives[T <: Expression](
+      name: String,
+      arity: Int,
+      applications: Seq[(Seq[Term], T, Int, Int)],
+      lens: Lens[Substitutions.Possible, Map[(String, Int), T]],
+      applicationLens: Lens[Substitutions.Possible, Map[(String, Int), Seq[(Seq[Term], T, Int, Int)]]]
+    ): Iterator[Possible] = {
+      applications
+        .foldLeft(Iterator(this)) { case (iterator, (arguments, target, internalDepth, externalDepth)) =>
+          for {
+            possibleSubstitutionsForThisPredicate <- iterator
+            (applicative, applicativeSubstitutions) <- target.calculateApplicatives(arguments, possibleSubstitutionsForThisPredicate, 0, internalDepth, externalDepth)
+            substitutionsWithApplicative <- applicativeSubstitutions.update((name, arity), applicative.asInstanceOf[T], lens)
+          } yield substitutionsWithApplicative
+        }
+    }
+
     def clearApplicationsWherePossible(): Option[Substitutions.Possible] = {
       def clear[T <: Expression](
         substitutions: Substitutions.Possible,
@@ -113,15 +130,8 @@ object Substitutions {
       ): Option[Substitutions.Possible] = {
         applicationLens.get(substitutions).toSeq.foldLeft(Option(applicationLens.set(Map.empty)(substitutions))) { case (possibleSubstitutionsSoFarOption, ((name, arity), applications)) =>
           possibleSubstitutionsSoFarOption.flatMap { possibleSubstitutionsSoFar =>
-            val results = applications
-              .foldLeft(Iterator(possibleSubstitutionsSoFar)) { case (iterator, (arguments, target, internalDepth, externalDepth)) =>
-                for {
-                  possibleSubstitutionsForThisPredicate <- iterator
-                  (applicative, applicativeSubstitutions) <- target.calculateApplicatives(arguments, possibleSubstitutionsForThisPredicate, 0, internalDepth, externalDepth)
-                  substitutionsWithApplicative <- applicativeSubstitutions.update((name, arity), applicative.asInstanceOf[T], lens)
-                } yield substitutionsWithApplicative
-              }.toList
-            results match {
+            val results = possibleSubstitutionsSoFar.calculateApplicatives(name, arity, applications, lens, applicationLens)
+            results.take(2).toList match {
               case Nil =>
                 None
               case Seq(single) =>
@@ -134,8 +144,8 @@ object Substitutions {
       }
 
       for {
-        afterPredicates <- clear(this, GenLens[Substitutions.Possible](_.predicates), GenLens[Substitutions.Possible](_.predicateApplications))
-        afterFunctions <- clear(afterPredicates, GenLens[Substitutions.Possible](_.functions), GenLens[Substitutions.Possible](_.functionApplications))
+        afterPredicates <- clear(this, Possible.predicatesLens, Possible.predicateApplicationsLens)
+        afterFunctions <- clear(afterPredicates, Possible.functionsLens, Possible.functionApplicationsLens)
       } yield afterFunctions
     }
 
@@ -150,6 +160,10 @@ object Substitutions {
   }
   object Possible {
     val empty = Possible(Map.empty, Map.empty, Map.empty, Map.empty, Map.empty, Map.empty)
+    val predicatesLens = GenLens[Substitutions.Possible](_.predicates)
+    val functionsLens = GenLens[Substitutions.Possible](_.functions)
+    val predicateApplicationsLens = GenLens[Substitutions.Possible](_.predicateApplications)
+    val functionApplicationsLens = GenLens[Substitutions.Possible](_.functionApplications)
 
     implicit def substitutionsToPossibleSubstitutions(substitutions: Substitutions): Substitutions.Possible = {
       Substitutions.Possible(substitutions.statements, substitutions.terms, substitutions.predicates, substitutions.functions, Map.empty, Map.empty)

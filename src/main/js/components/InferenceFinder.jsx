@@ -27,39 +27,52 @@ const DropdownContainer = styled.div`
   }
 `;
 
+function simpleGetter(type, name) {
+  return substitutions => substitutions[type][name];
+}
+function applicationGetter(type, applicationType, name, length) {
+  return substitutions => {
+    const baseValue = substitutions[type][name] && substitutions[type][name][length];
+    if (!_.isUndefined(baseValue)) {
+      return baseValue;
+    } else {
+      return substitutions[applicationType] && substitutions[applicationType][name] && substitutions[applicationType][name][length];
+    }
+  };
+}
+
 function buildSubstitutionMap(requiredSubstitutions, f) {
   const map = {};
   function getSimple(type) {
-    map[type] = _.fromPairs(requiredSubstitutions[type].map(x => [x, f(y => y[type][x])]));
+    map[type] = _.fromPairs(requiredSubstitutions[type].map(name => [name, f(simpleGetter(type, name))]));
   }
-  function getParametered(type) {
-    map[type] = Parser.doubleMapFromTriples(requiredSubstitutions[type].map(([x, i]) => [x, i, f(y => y[type][x] && y[type][x][i])]));
+  function getParametered(type, applicationType) {
+    map[type] = Parser.doubleMapFromTriples(requiredSubstitutions[type].map(([name, length]) => [name, length, f(applicationGetter(type, applicationType, name, length))]));
   }
   getSimple("statements");
   getSimple("terms");
-  getParametered("predicates");
-  getParametered("functions");
+  getParametered("predicates", "predicateApplications");
+  getParametered("functions", "functionApplications");
   return map;
 }
 
 function getAllRequiredPaths(requiredSubstitutions) {
   function getSimple(type) {
-    return _.map(requiredSubstitutions[type], name => [type, name]);
+    return _.map(requiredSubstitutions[type], name => simpleGetter(type, name));
   }
-  function getParametered(type) {
-    return _.map(requiredSubstitutions[type], ([name, length]) => [type, name, length]);
+  function getParametered(type, applicationType) {
+    return _.map(requiredSubstitutions[type], ([name, length]) => applicationGetter(type, applicationType, name, length));
   }
   return [
     ...getSimple("statements"),
     ...getSimple("terms"),
-    ...getParametered("predicates"),
-    ...getParametered("functions")
+    ...getParametered("predicates", "predicateApplications"),
+    ...getParametered("functions", "functionApplications")
   ];
 }
 
-function getAtPath(substitutions, [type, name, length]) {
-  const base = substitutions[type][name];
-  return (base && length) ? base[length] : base;
+function getAtPath(substitutions, path) {
+  return path(substitutions);
 }
 
 export class InferenceFinder extends React.Component {
@@ -125,7 +138,26 @@ export class InferenceFinder extends React.Component {
       })
     }
   };
+  setSelectedPremiseSuggestion = (premiseIndex, suggestionIndex) => {
+    const selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
+    const selectedPremiseSuggestions = _.cloneDeep(this.state.selectedPremiseSuggestions);
+    selectedPremiseSuggestions[premiseIndex] = [suggestionIndex, suggestionIndex !== "" ? this.state.premiseSuggestions[premiseIndex][parseInt(suggestionIndex)].substitutions : null];
+    this.updateForcedSubstitutionValues(selectedSubstitutionValues, selectedPremiseSuggestions);
+    this.setState({selectedSubstitutionValues, selectedPremiseSuggestions})
+  };
 
+  updateForcedSubstitutionValues = (selectedSubstitutionValues, selectedPremiseSuggestions) => {
+    const compatibleSubstitutions = this.getPossibleSubstitutionsLists(selectedPremiseSuggestions, selectedSubstitutionValues);
+    const forcedSubstitutionValues = this.getAllForcedSubstitutionValues(compatibleSubstitutions, this.state.selectedInferenceSuggestion.requiredSubstitutions);
+    const areAnyNewValuesForced = _.some(getAllRequiredPaths( this.state.selectedInferenceSuggestion.requiredSubstitutions), path => {
+      const forcedValue = getAtPath(forcedSubstitutionValues, path);
+      return forcedValue && forcedValue !== getAtPath(selectedSubstitutionValues, path)
+    });
+    if (areAnyNewValuesForced) {
+      _.merge(selectedSubstitutionValues, forcedSubstitutionValues);
+      this.updateForcedSubstitutionValues(selectedSubstitutionValues, selectedPremiseSuggestions);
+    }
+  };
   getAllForcedSubstitutionValues = (possibleSubstitutionsLists, requiredSubstitutions) => {
     const selectableSubstitutionValues = this.getAllSelectableSubstitutionValues(possibleSubstitutionsLists, requiredSubstitutions);
     return buildSubstitutionMap(requiredSubstitutions, getter =>
@@ -135,7 +167,7 @@ export class InferenceFinder extends React.Component {
   getAllSelectableSubstitutionValues = (possibleSubstitutionsLists, requiredSubstitutions) => {
     return buildSubstitutionMap(requiredSubstitutions, getter => {
       const allowedValuesLists = _.map(possibleSubstitutionsLists, substitutionsList =>
-        _.uniqBy(substitutionsList.map(getter), x => !x || x.serialize())
+        _.uniqBy(_.flatten(substitutionsList.map(getter)), x => !x || x.serialize())
       );
       const allowAnything = _.every(allowedValuesLists, allowedValues => _.some(allowedValues, _.isUndefined));
       if (allowAnything) {
@@ -146,22 +178,16 @@ export class InferenceFinder extends React.Component {
     });
   };
 
-  filterBySelectedSubstitutionValues = (substitutionsLists, requiredSubstitutions, selectedSubstitutionValues) => {
-    return _.map(substitutionsLists, substitutionsList =>
-      _.filter(substitutionsList, s =>
-        _.every(getAllRequiredPaths(requiredSubstitutions), path => {
+  getPossibleSubstitutionsLists = (selectedPremiseSuggestions, selectedSubstitutionValues) => {
+    const possibleSubstitutionsFromInferenceAndPremises = _.filter([this.state.selectedInferenceSuggestion.substitutions, ..._.map(selectedPremiseSuggestions, s => s[1])]);
+    return _.map(possibleSubstitutionsFromInferenceAndPremises, possibleSubstitutions =>
+      _.filter(possibleSubstitutions, s =>
+        _.every(getAllRequiredPaths(this.state.selectedInferenceSuggestion.requiredSubstitutions), path => {
           const selectedValue = getAtPath(selectedSubstitutionValues, path);
           const value = getAtPath(s, path);
-          return selectedValue === '' || !value || selectedValue === value.serialize();
+          return selectedValue === '' || !value || (_.isArray(value) ? _.some(value, v => selectedValue === v.serialize()) : selectedValue === value.serialize());
         })
       )
-    );
-  };
-  getPossibleSubstitutionsLists = (selectedPremiseSuggestions, selectedSubstitutionValues) => {
-    return this.filterBySelectedSubstitutionValues(
-      _.filter([this.state.selectedInferenceSuggestion.substitutions, ..._.map(selectedPremiseSuggestions, s => s[1])]),
-      this.state.selectedInferenceSuggestion.requiredSubstitutions,
-      selectedSubstitutionValues
     );
   };
 
@@ -178,25 +204,6 @@ export class InferenceFinder extends React.Component {
     setter(selectedSubstitutionValues, value);
     this.updateForcedSubstitutionValues(selectedSubstitutionValues, this.state.selectedPremiseSuggestions);
     this.setState({selectedSubstitutionValues});
-  };
-  setSelectedPremiseSuggestion = (premiseIndex, suggestionIndex) => {
-    const selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
-    const selectedPremiseSuggestions = _.cloneDeep(this.state.selectedPremiseSuggestions);
-    selectedPremiseSuggestions[premiseIndex] = [suggestionIndex, suggestionIndex !== "" ? this.state.premiseSuggestions[premiseIndex][parseInt(suggestionIndex)].substitutions : null];
-    this.updateForcedSubstitutionValues(selectedSubstitutionValues, selectedPremiseSuggestions);
-    this.setState({selectedSubstitutionValues, selectedPremiseSuggestions})
-  };
-  updateForcedSubstitutionValues = (selectedSubstitutionValues, selectedPremiseSuggestions) => {
-    const compatibleSubstitutions = this.getPossibleSubstitutionsLists(selectedPremiseSuggestions, selectedSubstitutionValues);
-    const forcedSubstitutionValues = this.getAllForcedSubstitutionValues(compatibleSubstitutions, this.state.selectedInferenceSuggestion.requiredSubstitutions);
-    const areAnyNewValuesForced = _.some(getAllRequiredPaths( this.state.selectedInferenceSuggestion.requiredSubstitutions), path => {
-      const forcedValue = getAtPath(forcedSubstitutionValues, path);
-      return forcedValue && forcedValue !== getAtPath(selectedSubstitutionValues, path)
-    });
-    if (areAnyNewValuesForced) {
-      _.merge(selectedSubstitutionValues, forcedSubstitutionValues);
-      this.updateForcedSubstitutionValues(selectedSubstitutionValues, selectedPremiseSuggestions);
-    }
   };
   onInputKeyUp = (event) => {
     if (event.keyCode === 13 && this.readyToSubmit()) {
