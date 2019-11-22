@@ -1,19 +1,21 @@
 import React from "react";
-import {ProofLine} from "./ProofLine";
+import {connect} from "react-redux";
+import ProofContext from "../theorem/ProofContext";
+import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
+import ProofLine from "./ProofLine";
 import {Steps} from "./Steps";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
 
-export class ScopedVariableStep extends React.Component {
+export const ScopedVariableStep = connect()(class extends React.Component {
+  static contextType = ProofContext;
   updateBoundVariable = (newName) => {
-    return this.props.theoremContext
-      .fetchJsonForStep(this.props.path, "boundVariable", {method: "PUT", body: newName})
-      .then(this.props.theoremContext.updateTheorem);
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "boundVariable", {method: "PUT", body: newName}));
   };
   render() {
-    let {step, path, boundVariableLists, additionalReferences, theoremContext} = this.props;
+    let {step, path, boundVariableLists, additionalReferences} = this.props;
     let innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     return <>
-      <ProofLine path={path} theoremContext={theoremContext} boundVariableLists={boundVariableLists}>
+      <ProofLine path={path} boundVariableLists={boundVariableLists}>
         Take any
         {' '}
         <InlineTextEditor text={step.variableName} callback={this.updateBoundVariable}/>
@@ -21,16 +23,14 @@ export class ScopedVariableStep extends React.Component {
       </ProofLine>
       <Steps.Children steps={step.substeps}
                       path={path}
-                      boundVariableLists={innerBoundVariableLists}
-                      theoremContext={theoremContext} />
+                      boundVariableLists={innerBoundVariableLists} />
       {step.provenStatement &&
         <ProofLine.SingleStatementWithPrefix prefix="So"
                                              statement={step.provenStatement}
                                              path={path}
                                              boundVariableLists={boundVariableLists}
                                              additionalReferences={additionalReferences}
-                                             premiseReferences={[{stepPath: [...path, step.substeps.length - 1]}]}
-                                             theoremContext={theoremContext} />}
+                                             premiseReferences={[{stepPath: [...path, step.substeps.length - 1]}]} />}
     </>
   }
-}
+});

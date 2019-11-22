@@ -39,6 +39,7 @@ export class InlineTextEditor extends React.Component<InlineTextEditorProps, Inl
       input.style.width = contentWidth + "px";
       if (input !== document.activeElement) {
         input.focus();
+        input.select();
       }
     }
   }

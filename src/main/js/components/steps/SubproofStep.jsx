@@ -1,6 +1,6 @@
 import React from "react";
 import {HighlightableExpression} from "../ExpressionComponent";
-import {ProofLine} from "./ProofLine";
+import ProofLine from "./ProofLine";
 import {Steps} from "./Steps";
 import {formatHtml} from "../helpers/Formatter";
 
@@ -16,7 +16,7 @@ export class SubproofStep extends React.Component {
     this.setState({showingSubproof: !this.state.showingSubproof})
   };
   render() {
-    let {step, path, additionalReferences, theoremContext, boundVariableLists} = this.props;
+    let {step, path, additionalReferences, boundVariableLists} = this.props;
     let {showingSubproof} = this.state;
     let reference ={stepPath: path};
     let referencesForLastStep = [...additionalReferences, reference];
@@ -27,7 +27,6 @@ export class SubproofStep extends React.Component {
                    statement={step.statement}
                    premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
                    boundVariableLists={boundVariableLists}
-                   theoremContext={theoremContext}
                    incomplete={step.isIncomplete}
                    onClick={this.toggleSubproof}>
           Then
@@ -35,14 +34,12 @@ export class SubproofStep extends React.Component {
           {step.statement ?
             <HighlightableExpression expression={step.statement}
                                     boundVariableLists={boundVariableLists}
-                                    reference={reference}
-                                     theoremContext={theoremContext} /> : "???"}.
+                                    reference={reference} /> : "???"}.
         </ProofLine>}
       {showingSubproof && <Steps.Children steps={step.substeps}
                                           path={path}
                                           boundVariableLists={boundVariableLists}
-                                          referencesForLastStep={referencesForLastStep}
-                                          theoremContext={theoremContext} />}
+                                          referencesForLastStep={referencesForLastStep} />}
     </>;
   }
 }

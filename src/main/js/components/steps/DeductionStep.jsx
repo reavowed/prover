@@ -1,11 +1,14 @@
 import React from "react";
-import {HighlightableExpression} from "../ExpressionComponent";
-import {ProofLine} from "./ProofLine";
+import {connect} from "react-redux";
+import ProofContext from "../theorem/ProofContext";
+import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
+import ProofLine from "./ProofLine";
 import {Steps} from "./Steps";
 import {BoundVariableModal} from "../Modals";
 import {ClickableText} from "./ClickableText";
 
-export class DeductionStep extends React.Component {
+export const DeductionStep = connect()(class extends React.Component {
+  static contextType = ProofContext;
   constructor(...args) {
     super(...args)
     this.state = {
@@ -25,15 +28,13 @@ export class DeductionStep extends React.Component {
     })
   };
   updateBoundVariable = (boundVariableIndex, boundVariablePath) => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, `boundVariables/${boundVariablePath.join(".")}/${boundVariableIndex}/`, {
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, `boundVariables/${boundVariablePath.join(".")}/${boundVariableIndex}/`, {
       method: "PUT",
       body: this.state.boundVariableName
-    })
-      .then(this.props.theoremContext.updateTheorem)
-      .then(this.hideBoundVariableModal);
+    })).then(this.hideBoundVariableModal);
   };
   render() {
-    let {step, path, additionalReferences, theoremContext, boundVariableLists} = this.props;
+    let {step, path, additionalReferences, boundVariableLists} = this.props;
     let reference = {stepPath: path};
     let referenceForAssumption = {stepPath: path, suffix: "a"};
     let referencesForLastStep = [...additionalReferences, reference];
@@ -48,13 +49,11 @@ export class DeductionStep extends React.Component {
                                            statement={step.assumption}
                                            path={path}
                                            boundVariableLists={boundVariableLists}
-                                           additionalReferences={[...additionalReferences, referenceForAssumption]}
-                                           theoremContext={theoremContext}/>
+                                           additionalReferences={[...additionalReferences, referenceForAssumption]}/>
       <Steps.Children steps={step.substeps}
                       path={path}
                       boundVariableLists={boundVariableLists}
-                      referencesForLastStep={referencesForLastStep}
-                      theoremContext={theoremContext} />
+                      referencesForLastStep={referencesForLastStep} />
       <BoundVariableModal show={this.state.boundVariableModalCallback != null}
                           onHide={this.hideBoundVariableModal}
                           title="Rename bound variable"
@@ -63,4 +62,4 @@ export class DeductionStep extends React.Component {
                           onSave={this.state.boundVariableModalCallback}/>
     </>;
   }
-}
+});

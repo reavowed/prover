@@ -1,12 +1,16 @@
 import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import {connect} from "react-redux";
+import ProofContext from "../theorem/ProofContext";
+import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import {InferenceLink} from "./InferenceLink";
-import {ProofLine} from "./ProofLine";
+import ProofLine from "./ProofLine";
 import {Steps} from "./Steps";
 import {ElidedStep as ElidedStepModel} from "../../models/Step";
 
-export class ElidedStepProofLine extends React.Component {
+export const ElidedStepProofLine = connect()(class extends React.Component {
+  static contextType = ProofContext;
   constructor(...args) {
     super(...args);
     this.state = {
@@ -25,21 +29,21 @@ export class ElidedStepProofLine extends React.Component {
   };
 
   setDescription = (description) => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "description", {
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "description", {
       method: "POST",
       body: description
-    }).then(this.props.theoremContext.updateTheorem);
+    }));
   };
 
   highlightInference = (inferenceId) => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "highlightedInference", {
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "highlightedInference", {
       method: "POST",
       body: inferenceId
-    }).then(this.props.theoremContext.updateTheorem);
+    }));
   };
 
   render() {
-    let {step, path, boundVariableLists, theoremContext, children} = this.props;
+    let {step, path, boundVariableLists, children} = this.props;
     let buttons = <>
       {step.highlightedInference && <InferenceLink inference={step.highlightedInference} suffix={<span className="fas fa-ellipsis-v"/>}/>}
       {step.description && <span className="text-muted text-uppercase ml-1" style={{"fontFamily": "monospace"}}>{step.description} <span className="fas fa-ellipsis-v"/></span>}
@@ -55,7 +59,6 @@ export class ElidedStepProofLine extends React.Component {
                  statement={step.statement}
                  buttons={buttons}
                  onClick={this.toggleProofCard}
-                 theoremContext={theoremContext}
                  incomplete={step.isIncomplete}
       >
         {children}
@@ -64,22 +67,20 @@ export class ElidedStepProofLine extends React.Component {
         <Steps steps={step.substeps}
                path={path}
                boundVariableLists={boundVariableLists}
-               referencesForLastStep={[]}
-               theoremContext={theoremContext}/>
+               referencesForLastStep={[]}/>
       </div>}
     </>;
   }
-}
+});
 
 export class ElidedStep extends React.Component {
   render() {
-    const {step, path, boundVariableLists, theoremContext} = this.props;
+    const {step, path, boundVariableLists} = this.props;
     return <ElidedStepProofLine {...this.props} prefix="Then">
       <ProofLine.SingleStatementWithPrefixContent prefix="Then"
                                                   statement={step.statement}
                                                   path={path}
-                                                  boundVariableLists={boundVariableLists}
-                                                  theoremContext={theoremContext} />
+                                                  boundVariableLists={boundVariableLists} />
     </ElidedStepProofLine>;
   }
 }

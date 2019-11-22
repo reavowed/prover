@@ -44,7 +44,7 @@ class TransitiveSteps extends React.Component {
   }
 
   render() {
-    const {leftHandSide, symbol, rightHandSides, theoremContext, boundVariableLists, referencesForLastStep} = this.props;
+    const {leftHandSide, symbol, rightHandSides, boundVariableLists, referencesForLastStep} = this.props;
 
     const renderRightHandSide = (rightHandSide, index) => {
       const nextRightHandSide = rightHandSides[index + 1];
@@ -52,14 +52,12 @@ class TransitiveSteps extends React.Component {
       return <>
         <HighlightableExpression expression={{textForHtml: () => symbol}}
                                  boundVariableLists={[]}
-                                 references={[...rightHandSide.references, ...additionalReferences]}
-                                 theoremContext={theoremContext}/>
+                                 references={[...rightHandSide.references, ...additionalReferences]} />
         {' '}
         <HighlightableExpression expression={rightHandSide.expression}
                                  boundVariableLists={boundVariableLists}
                                  referencesAsPremise={[...rightHandSide.references, ...additionalReferences]}
-                                 referencesAsConclusion={nextRightHandSide ? [...nextRightHandSide.references, ...rightHandSide.references] : rightHandSide.references}
-                                 theoremContext={theoremContext}/>.
+                                 referencesAsConclusion={nextRightHandSide ? [...nextRightHandSide.references, ...rightHandSide.references] : rightHandSide.references} />.
       </>
     };
     const renderProofLine = (props, children) => {
@@ -75,19 +73,18 @@ class TransitiveSteps extends React.Component {
 
     return <>
       {renderProofLine(
-        {step: leftHandSide.step, path: leftHandSide.path, theoremContext, boundVariableLists},
+        {step: leftHandSide.step, path: leftHandSide.path, boundVariableLists},
         <>
           <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
                                                                             boundVariableLists={boundVariableLists}
                                                                             referencesAsPremise={[leftHandSide.lineReference, ..._.flatMap(rightHandSides, rhs => rhs.references), ...referencesForLastStep]}
-                                                                            referencesAsConclusion={[leftHandSide.lineReference]}
-                                                                            theoremContext={theoremContext}/> </span>
+                                                                            referencesAsConclusion={[leftHandSide.lineReference]}/> </span>
           {renderRightHandSide(rightHandSides[0], 0)}
         </>
       )}
       {rightHandSides.slice(1).map((rightHandSide, index) =>
         renderProofLine(
-          {step: rightHandSide.step, path: rightHandSide.path, theoremContext, boundVariableLists, key: "transitive " + rightHandSide.expression.serialize()},
+          {step: rightHandSide.step, path: rightHandSide.path, boundVariableLists, key: "transitive " + rightHandSide.expression.serialize()},
           <>
             <span ref={r => this.setSpacerRef(r, rightHandSide.path.join("."))}/>
             {renderRightHandSide(rightHandSide, index + 1)}

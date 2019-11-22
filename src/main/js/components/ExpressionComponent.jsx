@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React from "react";
+import {connect} from "react-redux";
 import styled from "styled-components";
 import {matchTemplate, PropertyExpression, TypeExpression} from "../models/Expression";
 import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "./helpers/Formatter";
@@ -105,26 +106,29 @@ function referencesMatch(r1, r2) {
   }
 }
 
-export class HighlightableExpression extends React.Component {
-  render() {
-    const {statement, expression, references, reference, boundVariableLists, wrapBoundVariable, theoremContext, className} = this.props;
-    let {referencesAsPremise, referencesAsConclusion} = this.props;
+export const HighlightableExpression = connect(
+  (state, {expression, reference, references, referencesAsPremise, referencesAsConclusion, boundVariableLists, wrapBoundVariable, className}) => {
     let defaultReferences = references || [reference];
     referencesAsPremise = referencesAsPremise || defaultReferences;
     referencesAsConclusion = referencesAsConclusion || defaultReferences;
 
-    const matchingPremises = theoremContext ? _.filter(theoremContext.highlightedPremises, highlightedPremise =>
-      _.some(referencesAsPremise, reference =>
-        referencesMatch(reference, highlightedPremise)
-      )
-    ) : [];
+    const matchingPremises = _.filter(state.highlightedPremises, highlightedPremise =>
+      _.some(referencesAsPremise, reference => referencesMatch(reference, highlightedPremise))
+    );
     const pathsToHighlightAsPremise = _.map(matchingPremises, p => p.internalPath || []);
+    const shouldHighlightAsConclusion = state.highlightedConclusion && _.some(referencesAsConclusion, r => referencesMatch(r, state.highlightedConclusion));
 
-    const shouldHighlightAsConclusion = theoremContext && theoremContext.highlightedConclusion &&
-      _.some(referencesAsConclusion, r => referencesMatch(r, theoremContext.highlightedConclusion));
-
-    const expressionElement = <ExpressionComponent expression={statement || expression} pathsToHighlightAsPremise={pathsToHighlightAsPremise} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
-    return shouldHighlightAsConclusion ? <HighlightedConclusion className={className}>{expressionElement}</HighlightedConclusion> :
-      className ? <span className={className}>{expressionElement}</span> : expressionElement;
+    return {
+      expression,
+      pathsToHighlightAsPremise,
+      shouldHighlightAsConclusion,
+      boundVariableLists,
+      wrapBoundVariable,
+      className
+    }
   }
-}
+)(({expression, pathsToHighlightAsPremise, shouldHighlightAsConclusion, boundVariableLists, wrapBoundVariable, className}) => {
+  const expressionElement = <ExpressionComponent expression={expression} pathsToHighlightAsPremise={pathsToHighlightAsPremise} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
+  return shouldHighlightAsConclusion ? <HighlightedConclusion className={className}>{expressionElement}</HighlightedConclusion> :
+    className ? <span className={className}>{expressionElement}</span> : expressionElement;
+});

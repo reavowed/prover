@@ -1,17 +1,19 @@
 import React from "react";
+import {connect} from "react-redux";
+import ProofContext from "../theorem/ProofContext";
+import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import {InferenceLink} from "./InferenceLink";
-import {ProofLine} from "./ProofLine";
+import ProofLine from "./ProofLine";
 import {Steps} from "./Steps";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
 
-export class NamingStep extends React.Component {
+export const NamingStep = connect()(class extends React.Component {
+  static contextType = ProofContext;
   updateBoundVariable = (newName) => {
-    this.props.theoremContext
-      .fetchJsonForStep(this.props.path, "boundVariable", {method: "PUT", body: newName})
-      .then(this.props.theoremContext.updateTheorem);
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "boundVariable", {method: "PUT", body: newName}));
   };
   render() {
-    let {step, path, additionalReferences, theoremContext, boundVariableLists,} = this.props;
+    let {step, path, additionalReferences, boundVariableLists,} = this.props;
     let reference = {stepPath: path};
     let referenceForAssumption = {stepPath: path, suffix: "a"};
     let referencesForLastStep = [...additionalReferences, reference];
@@ -32,13 +34,11 @@ export class NamingStep extends React.Component {
                                            additionalReferences={additionalReferences}
                                            premiseReferences={step.referencedLinesForExtraction}
                                            reference={referenceForAssumption}
-                                           buttons={<InferenceLink inference={step.inference}/>}
-                                           theoremContext={theoremContext} />
+                                           buttons={<InferenceLink inference={step.inference}/>} />
       <Steps steps={step.substeps}
              path={path}
              boundVariableLists={innerBoundVariableLists}
-             referencesForLastStep={referencesForLastStep}
-             theoremContext={theoremContext} />
+             referencesForLastStep={referencesForLastStep} />
     </>;
   }
-}
+});

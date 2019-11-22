@@ -2,50 +2,51 @@ import _ from "lodash";
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import {connect} from "react-redux";
 import {ExpressionComponent} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import {InferenceFinder} from "../InferenceFinder";
-import {ProofLine} from "./ProofLine";
+import {FetchJsonForStep, FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
+import ProofLine from "./ProofLine";
 import {Parser} from "../../Parser";
+import ProofContext from "../theorem/ProofContext";
 
-export class TargetStepProofLine extends React.Component {
+export const TargetStepProofLine = connect()(class extends React.Component {
+  static contextType = ProofContext;
   constructor(props) {
     super(props);
     this.state = {
       proving: false,
       activeProvingType: null
     };
-    this.props.theoremContext.registerStep(this, this.props.path);
+  }
+  componentDidMount() {
+    this.context.registerStep(this, this.props.path);
   }
   componentWillUnmount() {
-    this.props.theoremContext.unregisterStep(this.props.path);
+    this.context.unregisterStep(this.props.path);
   }
 
   introduceBoundVariable = () => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "introduceBoundVariable", {
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "introduceBoundVariable", {
       method: "POST"
-    })
-      .then(this.props.theoremContext.updateTheorem)
-      .then(() => this.props.theoremContext.callOnStep([...this.props.path, 0], "startProving"));
+    }))
+      .then(() => this.context.callOnStep([...this.props.path, 0], "startProving"));
   };
   introduceDeduction = () => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "introduceDeduction", {
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "introduceDeduction", {
       method: "POST"
-    })
-      .then(this.props.theoremContext.updateTheorem)
-      .then(() => this.props.theoremContext.callOnStep([...this.props.path, 0], "startProving"));
+    }))
+      .then(() => this.context.callOnStep([...this.props.path, 0], "startProving"));
   };
   extract = () => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, "extract", { method: "POST" })
-      .then(this.props.theoremContext.updateTheorem);
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "extract", { method: "POST" }));
   };
   rearrange = () => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, "rearrange", { method: "POST" })
-      .then(this.props.theoremContext.updateTheorem);
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rearrange", { method: "POST" }));
   };
   rewrite = () => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, "rewrite", { method: "POST" })
-      .then(this.props.theoremContext.updateTheorem);
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewrite", { method: "POST" }));
   };
 
   startProving = () => {
@@ -63,25 +64,25 @@ export class TargetStepProofLine extends React.Component {
   };
 
   getInferenceSuggestionsForStep = (searchText) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferences?searchText=${searchText}`)
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `suggestInferences?searchText=${searchText}`));
   };
   getInferenceSuggestionsForPremise = (searchText) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferencesForPremise?searchText=${searchText}`)
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `suggestInferencesForPremise?searchText=${searchText}`));
   };
   getInferenceSuggestionsForNaming = (searchText) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestNamingInferences?searchText=${searchText}`)
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `suggestNamingInferences?searchText=${searchText}`));
   };
   getPremiseSuggestionsForStep = (inferenceId) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=true`)
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=true`));
   };
   getPremiseSuggestionsForPremise = (inferenceId) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=false`)
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=false`));
   };
   getPremiseSuggestionsForNaming = (inferenceId) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestNamingPremises?inferenceId=${inferenceId}`)
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `suggestNamingPremises?inferenceId=${inferenceId}`));
   };
   proveWithInference = (suggestion, substitutions) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, "", {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "", {
       method: "PUT",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -89,44 +90,39 @@ export class TargetStepProofLine extends React.Component {
         substitutions,
         rewriteInferenceId: suggestion.rewriteInference && suggestion.rewriteInference.id
       })
-    })
-      .then(this.props.theoremContext.updateTheorem)
-      .then(this.stopProving);
+    }));
   };
   addPremise = (suggestion, substitutions) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, "assertion", {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "assertion", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId: suggestion.inference.id, substitutions})
-    }).then(this.props.theoremContext.updateTheorem)
-      .then(this.startProving);
+    }));
   };
   createNamingStep = (suggestion, substitutions) => {
     const {namingVariableName: variableName} = this.state;
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, "introduceNaming", {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "introduceNaming", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId: suggestion.inference.id, substitutions, variableName})
-    }).then(this.props.theoremContext.updateTheorem)
-      .then(this.startProving);
+    }))
+      .then(() => this.context.callOnStep([...this.props.path, 0], "startProving"));
   };
   addTarget = () => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "target", {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "target", {
       method: "POST",
       body: this.state.targetStatement
-    })
-      .then(this.props.theoremContext.updateTheorem)
-      .then(this.startProving);
+    }));
   };
 
   getInferenceSuggestionsForLeft = (searchText) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferencesForTransitivityFromLeft?searchText=${searchText}`)
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `suggestInferencesForTransitivityFromLeft?searchText=${searchText}`));
   };
   getPremiseSuggestionsForLeft = (inferenceId) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestPremisesForTransitivityFromLeft?inferenceId=${inferenceId}`)
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `suggestPremisesForTransitivityFromLeft?inferenceId=${inferenceId}`));
   };
   addFromLeft = (suggestion, substitutions) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, "transitivityFromLeft", {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "transitivityFromLeft", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -134,19 +130,17 @@ export class TargetStepProofLine extends React.Component {
         substitutions,
         rewriteInferenceId: suggestion.rewriteInference && suggestion.rewriteInference.id
       })
-    })
-      .then(this.props.theoremContext.updateTheorem)
-      .then(this.stopProving);
+    }));
   };
 
   getInferenceSuggestionsForRight = (searchText) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestInferencesForTransitivityFromRight?searchText=${searchText}`)
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `suggestInferencesForTransitivityFromRight?searchText=${searchText}`));
   };
   getPremiseSuggestionsForRight = (inferenceId) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, `suggestPremisesForTransitivityFromRight?inferenceId=${inferenceId}`)
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `suggestPremisesForTransitivityFromRight?inferenceId=${inferenceId}`));
   };
   addFromRight = (suggestion, substitutions) => {
-    return this.props.theoremContext.fetchJsonForStep(this.props.path, "transitivityFromRight", {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "transitivityFromRight", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -154,22 +148,18 @@ export class TargetStepProofLine extends React.Component {
         substitutions,
         rewriteInferenceId: suggestion.rewriteInference && suggestion.rewriteInference.id
       })
-    })
-      .then(this.props.theoremContext.updateTheorem)
-      .then(this.stopProving);
+    }));
   };
 
   addTransitiveTarget = () => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "transitiveTarget", {
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, "transitiveTarget", {
       method: "POST",
       body: this.state.targetStatement
-    })
-      .then(this.props.theoremContext.updateTheorem)
-      .then(this.startProving);
+    }));
   };
 
   render() {
-    let {step, path, additionalReferences, theoremContext, boundVariableLists, children, transitive} = this.props;
+    let {step, path, additionalReferences, boundVariableLists, children, transitive} = this.props;
     let {proving, activeProvingType} = this.state;
     let scopingStatement = _.find(window.definitions, d => _.includes(d.attributes, "scoping"));
     let deductionStatement = _.find(window.definitions, d => _.includes(d.attributes, "deduction"));
@@ -275,24 +265,22 @@ export class TargetStepProofLine extends React.Component {
                    editableBoundVariable
                    path={path}
                    additionalReferences={additionalReferences}
-                   buttons={<Button variant="danger" size="sm" className="pt-0 pb-0" onClick={this.startProving}>Prove</Button>}
-                   theoremContext={theoremContext}>
+                   buttons={<Button variant="danger" size="sm" className="pt-0 pb-0" onClick={this.startProving}>Prove</Button>}>
           {children}
         </ProofLine>}
     </>
   }
-}
+});
 
 export class TargetStep extends React.Component {
   render() {
-    const {step, path, boundVariableLists, theoremContext} = this.props;
+    const {step, path, boundVariableLists} = this.props;
     return <TargetStepProofLine {...this.props}>
       <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
                                                   prefix="Then"
                                                   statement={step.statement}
                                                   path={path}
-                                                  boundVariableLists={boundVariableLists}
-                                                  theoremContext={theoremContext} />
+                                                  boundVariableLists={boundVariableLists} />
     </TargetStepProofLine>
   }
 }

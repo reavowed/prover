@@ -1,15 +1,19 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Overlay from "react-bootstrap/Overlay";
+import Popover from "react-bootstrap/Popover";
 import Tooltip from "react-bootstrap/Tooltip";
+import {connect} from "react-redux";
 import styled, {css} from "styled-components";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
-import Popover from "react-bootstrap/Popover";
-import {BoundVariableModal} from "../Modals";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
+import {BoundVariableModal} from "../Modals";
+import ProofContext from "../theorem/ProofContext";
+import {FetchJsonForStepAndUpdate, SetHighlightedConclusion, SetHighlightedPremises} from "../theorem/TheoremStore";
 
-export const ProofLine = styled(class ProofLine extends React.Component {
+const ProofLine = connect()(styled(class ProofLine extends React.Component {
+  static contextType = ProofContext;
   constructor(...args) {
     super(...args);
     this.attachSpanRef = spanRef => this.setState({ spanRef });
@@ -31,22 +35,19 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.setState({shouldShowButtonPopover: false});
   };
   onMouseEnter = () => {
-    let {theoremContext, premiseReferences, path, reference} = this.props;
-    if (premiseReferences && theoremContext) {
-      theoremContext.setHighlightedPremises(premiseReferences);
+    let {premiseReferences, path, reference} = this.props;
+    if (premiseReferences) {
+      this.props.dispatch(SetHighlightedPremises(premiseReferences));
     }
     let conclusionReference = reference || (path && {stepPath: path});
-    if (conclusionReference && theoremContext) {
-      theoremContext.setHighlightedConclusion(conclusionReference);
+    if (conclusionReference) {
+      this.props.dispatch(SetHighlightedConclusion(conclusionReference));
     }
     this.setState({isHovered: true});
   };
   onMouseLeave = () => {
-    const {theoremContext} = this.props;
-    if (theoremContext) {
-      theoremContext.setHighlightedPremises([]);
-      theoremContext.setHighlightedConclusion(null);
-    }
+    this.props.dispatch(SetHighlightedPremises([]));
+    this.props.dispatch(SetHighlightedConclusion(null));
     this.setState({isHovered: false});
   };
   onClick = (e) => {
@@ -56,33 +57,25 @@ export const ProofLine = styled(class ProofLine extends React.Component {
   };
   moveUp = (e) => {
     e.stopPropagation();
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "move?direction=up", {method: "POST"})
-      .then(this.props.theoremContext.updateTheorem);
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "move?direction=up", {method: "POST"}));
   };
   moveDown = (e) => {
     e.stopPropagation();
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "move?direction=down", {method: "POST"})
-      .then(this.props.theoremContext.updateTheorem);
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "move?direction=down", {method: "POST"}));
   };
   moveIntoNext = (e) => {
     e.stopPropagation();
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "moveIntoNext", {method: "POST"})
-      .then(this.props.theoremContext.updateTheorem);
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "moveIntoNext", {method: "POST"}));
   };
   moveOutOfContainer = (e) => {
     e.stopPropagation();
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "moveOutOfContainer", {method: "POST"})
-      .then(this.props.theoremContext.updateTheorem);
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "moveOutOfContainer", {method: "POST"}));
   };
   clearStep = () => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "clear", {
-      method: "POST"
-    }).then(this.props.theoremContext.updateTheorem);
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "clear", {method: "POST"}));
   };
   deleteStep = () => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "", {
-      method: "DELETE"
-    }).then(this.props.theoremContext.updateTheorem);
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "", {method: "DELETE"}));
   };
 
   showSubproofNameModal = () => {
@@ -92,18 +85,15 @@ export const ProofLine = styled(class ProofLine extends React.Component {
     this.setState({shouldShowSubproofNameModal: false})
   };
   createSubproof = () => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "introduceSubproof", {
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "introduceSubproof", {
       method: "POST",
       body: this.state.subproofName
-    })
-      .then(this.props.theoremContext.updateTheorem)
+    }))
       .then(this.hideSubproofNameModal);
   };
 
   elide = () => {
-    this.props.theoremContext.fetchJsonForStep(this.props.path, "elide", {
-      method: "POST"
-    }).then(this.props.theoremContext.updateTheorem);
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "elide", {method: "POST"}));
   };
 
 
@@ -171,21 +161,23 @@ export const ProofLine = styled(class ProofLine extends React.Component {
       left: -10px;
     }
   `}
-`;
+`);
 
-ProofLine.SingleStatementWithPrefixContent  = class extends React.Component {
+ProofLine.SingleStatementWithPrefixContent = connect()(class extends React.Component {
+  static contextType = ProofContext;
+
   render() {
-    const {editableBoundVariable, prefix, statement, path, boundVariableLists, theoremContext} = this.props;
+    const {editableBoundVariable, prefix, statement, path, boundVariableLists, dispatch} = this.props;
+    const context = this.context;
     let {reference, additionalReferences} = this.props;
     reference = reference || {stepPath: path};
     additionalReferences = additionalReferences || [];
     const wrapEditableBoundVariable = (name, index, boundVariablePath) => {
       const callback = (newName) => {
-        return theoremContext.fetchJsonForStep(path, `boundVariables/${boundVariablePath.join(".")}/${index}/`, {
+        return dispatch(FetchJsonForStepAndUpdate(context.proofIndex, path, `boundVariables/${boundVariablePath.join(".")}/${index}/`, {
           method: "PUT",
           body: newName
-        })
-        .then(theoremContext.updateTheorem)
+        }))
       };
       return <InlineTextEditor text={name} callback={callback} />;
     };
@@ -193,16 +185,15 @@ ProofLine.SingleStatementWithPrefixContent  = class extends React.Component {
       {prefix}
       {statement && <>
         {' '}
-        <HighlightableExpression statement={statement}
+        <HighlightableExpression expression={statement}
                                  boundVariableLists={boundVariableLists}
                                  references={[...additionalReferences, reference]}
-                                 wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}
-                                 theoremContext={theoremContext}/>
+                                 wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}/>
        </>}
       {'.'}
     </span>
   }
-};
+});
 
 ProofLine.SingleStatementWithPrefix = class extends React.Component {
   render() {
@@ -211,3 +202,5 @@ ProofLine.SingleStatementWithPrefix = class extends React.Component {
     </ProofLine>
   }
 };
+
+export default ProofLine;
