@@ -43,7 +43,21 @@ conclusion function ×_ℤ product ℤ ℤ ℤ
     take x {
       assume ∈ $0 product ℤ ℤ {
         prove ∃ a ∧ ∈ $0 ℤ ∃ b ∧ ∈ $0 ℤ = $$$0 orderedPair $$0 $0 2c5898a93d503f67864a5f7946c9db3d7c9c578a1ccb09f54d947eb150789919 () ($0, ℤ, ℤ) () () 2.0.0a
-        target ∃! y ∈ orderedPair $$0 $0 ×_ℤ
+        let a ∧ ∈ $0 ℤ ∃ b ∧ ∈ $0 ℤ = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair $$0 $0 ×_ℤ) () (∧ ∈ $$0 ℤ ∃ b ∧ ∈ $0 ℤ = $$0 orderedPair $$$0 $0) () {
+          let b ∧ ∈ $0 ℤ = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair $$$0 $0 ×_ℤ) () (∧ ∈ $$$0 ℤ = $$0 orderedPair $0 $$$0) () {
+            prove ∃ a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ c6fcab51674da7fb8782ea49ba5ffd64422e9c0678281be9e1d8499fe02d34b5 () ($$0) () () 2.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair $$$$0 $0 ×_ℤ) () (∧ ∈ $$$$0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$0 equivalenceClass orderedPair $$$$$0 $0 ~_ℤ) () {
+              let a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair $$$$$0 $0 ×_ℤ) () (∧ ∈ $$$$$0 ℕ = $$$0 equivalenceClass orderedPair $0 $$$$$0 ~_ℤ) () {
+                prove ∃ b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ c6fcab51674da7fb8782ea49ba5ffd64422e9c0678281be9e1d8499fe02d34b5 () ($$$0) () () 2.0.0.1.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                let b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair $$$$$$0 $0 ×_ℤ) () (∧ ∈ $$$$$$0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$$$$$$0 $0 ~_ℤ) () {
+                  let b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! y ∈ orderedPair $$$$$$$0 $0 ×_ℤ) () (∧ ∈ $$$$$$$0 ℕ = $$$$0 equivalenceClass orderedPair $0 $$$$$$$0 ~_ℤ) () {
+                    target ∃! y ∈ orderedPair $$$$$$$$0 $0 ×_ℤ
+                  } 2.0.0.1.0.1.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                } 2.0.0.1.0.1.0.0
+              } 2.0.0.1.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            } 2.0.0.1.0.0
+          } 2.0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        } 2.0.0.0
       }
     }
   }

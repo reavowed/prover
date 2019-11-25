@@ -5,7 +5,7 @@ import net.prover.controllers.models.PathData
 import net.prover.model._
 import net.prover.model.definitions.Transitivity
 import net.prover.model.entries.Theorem
-import net.prover.model.expressions.{Expression, Statement, Term}
+import net.prover.model.expressions.{DefinedStatement, Expression, Statement, Term}
 import net.prover.model.proof.{ProofHelper, Step, StepContext, StepProvingContext}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -311,6 +311,32 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @RequestParam("inferenceId") inferenceId: String
   ): ResponseEntity[_] = {
     suggestPremisesForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, inferenceId)(_.relation.unapply(_)(_).map(_._2))
+  }
+
+  @GetMapping(value = Array("/suggestImmediateNamingPremises"), produces = Array("application/json;charset=UTF-8"))
+  def suggestNamingPremises(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData
+  ): ResponseEntity[_] = {
+    val (books, definitions) = bookService.booksAndDefinitions
+    (for {
+      book <- findBook(books, bookKey)
+      chapter <- findChapter(book, chapterKey)
+      theorem <- findEntry[Theorem](chapter, theoremKey)
+      provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
+      (_, stepContext) <- findStep[Step](theorem, proofIndex, stepPath)
+    } yield {
+      implicit val stepProvingContext = StepProvingContext(stepContext, provingContext)
+      for {
+        (_, Seq(singleNamingPremise: DefinedStatement), _) <- ProofHelper.findNamingInferences(provingContext.entryContext)
+        if singleNamingPremise.scopedBoundVariableNames.single.nonEmpty
+        premise <- stepProvingContext.allPremisesSimplestFirst
+        if singleNamingPremise.calculateSubstitutions(premise.statement).nonEmpty
+      } yield premise.referencedLine
+    }).toResponseEntity
   }
 
   @GetMapping(value = Array("/suggestNamingInferences"), produces = Array("application/json;charset=UTF-8"))

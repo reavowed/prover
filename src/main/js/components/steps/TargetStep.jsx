@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import {ExpressionComponent} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import {InferenceFinder} from "../InferenceFinder";
-import {FetchJsonForStep, FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
+import {FetchJsonForStep, FetchJsonForStepAndUpdate, SetHighlightingAction} from "../theorem/TheoremStore";
 import ProofLine from "./ProofLine";
 import {Parser} from "../../Parser";
 import ProofContext from "../theorem/ProofContext";
@@ -61,6 +61,7 @@ export const TargetStepProofLine = connect()(class extends React.Component {
       proving: false,
       activeProvingType: null
     });
+    this.cancelImmediateNamingPremises();
   };
 
   getInferenceSuggestionsForStep = (searchText) => {
@@ -97,7 +98,8 @@ export const TargetStepProofLine = connect()(class extends React.Component {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId: suggestion.inference.id, substitutions})
-    }));
+    }))
+      .then(this.setProvingType(null));
   };
   createNamingStep = (suggestion, substitutions) => {
     const {namingVariableName: variableName} = this.state;
@@ -112,7 +114,8 @@ export const TargetStepProofLine = connect()(class extends React.Component {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "target", {
       method: "POST",
       body: this.state.targetStatement
-    }));
+    }))
+      .then(this.setProvingType(null));
   };
 
   getInferenceSuggestionsForLeft = (searchText) => {
@@ -158,6 +161,38 @@ export const TargetStepProofLine = connect()(class extends React.Component {
     }));
   };
 
+  setProvingType = (provingType) => {
+    this.setState({
+      activeProvingType: provingType,
+      targetStatement: '',
+      namingVariableName: ''
+    });
+    if (provingType === 'naming') {
+      this.setState({immediateNamingActive: true});
+      this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, "suggestImmediateNamingPremises"))
+        .then(this.handleImmediateNamingPremises);
+    } else {
+      this.cancelImmediateNamingPremises();
+    }
+  };
+
+  handleImmediateNamingPremises = (paths) => {
+    if (this.state.immediateNamingActive) {
+      this.props.dispatch(SetHighlightingAction(paths, this.handleImmediateNamingPremiseSelected));
+    }
+  };
+  handleImmediateNamingPremiseSelected = (premise) => {
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "introduceNamingFromPremise", { method: "POST", body: premise }))
+      .then(() => {
+        this.props.dispatch(SetHighlightingAction([], null));
+        this.context.callOnStep([...this.props.path, 0], "startProving")
+      });
+  };
+  cancelImmediateNamingPremises = () => {
+    this.setState({immediateNamingActive: false});
+    this.props.dispatch(SetHighlightingAction([], null));
+  };
+
   render() {
     let {step, path, additionalReferences, boundVariableLists, children, transitive} = this.props;
     let {proving, activeProvingType} = this.state;
@@ -173,17 +208,17 @@ export const TargetStepProofLine = connect()(class extends React.Component {
           <div className="text-center">
             {!transitive &&
               <>
-                <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'inference'})}>Prove with inference</Button>
-                <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'premise'})}>Add premise</Button>
-                <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'naming', namingVariableName: ''})}>Name</Button>
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('inference')}>Prove with inference</Button>
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('premise')}>Add premise</Button>
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('naming')}>Name</Button>
                 <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'target', targetStatement: ''})}>Add target</Button>
               </>
             }
             {transitive &&
             <>
-              <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'addFromLeft'})}>Add expression from left</Button>
-              <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'addFromRight'})}>Add expression from right</Button>
-              <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'transitiveTarget', targetStatement: ''})}>Add target</Button>
+              <Button size="sm" className="ml-1" onClick={() => this.setProvingType('addFromLeft')}>Add expression from left</Button>
+              <Button size="sm" className="ml-1" onClick={() => this.setProvingType('addFromRight')}>Add expression from right</Button>
+              <Button size="sm" className="ml-1" onClick={() => this.setProvingType('transitiveTarget')}>Add target</Button>
             </>
             }
             <Button size="sm" className="ml-1" onClick={this.extract}>Extract</Button>

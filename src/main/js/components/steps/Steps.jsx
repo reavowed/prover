@@ -52,12 +52,14 @@ class TransitiveSteps extends React.Component {
       return <>
         <HighlightableExpression expression={{textForHtml: () => symbol}}
                                  boundVariableLists={[]}
-                                 references={[...rightHandSide.references, ...additionalReferences]} />
+                                 references={rightHandSide.references}
+                                 additionalReferences={additionalReferences}/>
         {' '}
         <HighlightableExpression expression={rightHandSide.expression}
                                  boundVariableLists={boundVariableLists}
-                                 referencesAsPremise={[...rightHandSide.references, ...additionalReferences]}
-                                 referencesAsConclusion={nextRightHandSide ? [...nextRightHandSide.references, ...rightHandSide.references] : rightHandSide.references} />.
+                                 references={rightHandSide.references}
+                                 additionalPremiseReferences={additionalReferences}
+                                 additionalConclusionReferences={nextRightHandSide ? nextRightHandSide.references : []} />.
       </>
     };
     const renderProofLine = (props, children) => {
@@ -77,8 +79,9 @@ class TransitiveSteps extends React.Component {
         <>
           <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
                                                                             boundVariableLists={boundVariableLists}
-                                                                            referencesAsPremise={[leftHandSide.lineReference, ..._.flatMap(rightHandSides, rhs => rhs.references), ...referencesForLastStep]}
-                                                                            referencesAsConclusion={[leftHandSide.lineReference]}/> </span>
+                                                                            references={[leftHandSide.lineReference]}
+                                                                            additionalReferences={referencesForLastStep}
+                                                                            additionalPremiseReferences={_.flatMap(rightHandSides, rhs => rhs.references)}/> </span>
           {renderRightHandSide(rightHandSides[0], 0)}
         </>
       )}

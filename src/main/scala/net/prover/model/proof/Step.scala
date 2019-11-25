@@ -49,7 +49,7 @@ object Step {
     override def isComplete: Boolean = substeps.forall(_.isComplete)
     override def getSubstep(index: Int, outerStepContext: StepContext): Option[(Step, StepContext)] = {
       substeps.splitAtIndexIfValid(index).map { case (before, step, _) =>
-        val innerStepContext = specifyStepContext(outerStepContext).addSteps(before)
+        val innerStepContext = specifyStepContext(outerStepContext).addSteps(before).atIndex(index)
         (step, innerStepContext)
       }
     }

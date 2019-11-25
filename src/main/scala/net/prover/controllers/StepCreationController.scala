@@ -2,9 +2,9 @@ package net.prover.controllers
 
 import net.prover.controllers.models.{NamingDefinition, PathData, StepDefinition}
 import net.prover.exceptions.NotFoundException
-import net.prover.model.expressions.{Statement, Term}
+import net.prover.model.expressions.{DefinedStatement, Statement, Term}
 import net.prover.model.proof._
-import net.prover.model.{ExpressionParsingContext, ProvingContext}
+import net.prover.model._
 import net.prover.model.definitions.{Transitivity, Wrapper}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -242,6 +242,44 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
           inference,
           premises,
           substitutions)
+      }
+    }.toResponseEntity
+  }
+
+
+  @PostMapping(value = Array("/introduceNamingFromPremise"))
+  def introduceNamingFromPremise(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData,
+    @RequestBody serializedPremise: String
+  ): ResponseEntity[_] = {
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (targetStep, stepProvingContext) =>
+      implicit val spc = stepProvingContext
+      for {
+        premiseStatement <- Statement.parser.parseFromString(serializedPremise, "premise").recoverWithBadRequest
+        premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
+        variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.scopedBoundVariableNames.single).orBadRequest("Premise did not have single bound variable")
+        (namingInference, namingInferenceAssumption, substitutionsAfterPremise) <- ProofHelper.findNamingInferences(stepProvingContext.provingContext.entryContext).mapFind {
+          case (i, Seq(singlePremise), a) =>
+            singlePremise.calculateSubstitutions(premiseStatement).map { s => (i, a, s) }
+          case _ =>
+            None
+        }.orBadRequest("Could not find naming inference matching premise")
+        substitutionsAfterConclusion <- namingInference.conclusion.calculateSubstitutions(targetStep.statement, substitutionsAfterPremise).orBadRequest("Could not calculate substitutions for conclusion")
+        substitutions <- substitutionsAfterConclusion.confirmTotality.orBadRequest("Substitutions for naming inference were not total")
+        substitutedAssumption <- namingInferenceAssumption.applySubstitutions(substitutions, 1, stepProvingContext.stepContext.externalDepth).orBadRequest("Could not substitute assumption")
+      } yield {
+        Seq(Step.Naming(
+          variableName,
+          substitutedAssumption,
+          targetStep.statement,
+          Seq(Step.Target(targetStep.statement.insertExternalParameters(1))),
+          namingInference.summary,
+          Seq(premise),
+          substitutions))
       }
     }.toResponseEntity
   }

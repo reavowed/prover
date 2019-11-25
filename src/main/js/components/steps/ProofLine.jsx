@@ -167,11 +167,8 @@ ProofLine.SingleStatementWithPrefixContent = connect()(class extends React.Compo
   static contextType = ProofContext;
 
   render() {
-    const {editableBoundVariable, prefix, statement, path, boundVariableLists, dispatch} = this.props;
+    const {editableBoundVariable, prefix, statement, path, reference, additionalReferences, boundVariableLists, dispatch} = this.props;
     const context = this.context;
-    let {reference, additionalReferences} = this.props;
-    reference = reference || {stepPath: path};
-    additionalReferences = additionalReferences || [];
     const wrapEditableBoundVariable = (name, index, boundVariablePath) => {
       const callback = (newName) => {
         return dispatch(FetchJsonForStepAndUpdate(context.proofIndex, path, `boundVariables/${boundVariablePath.join(".")}/${index}/`, {
@@ -187,7 +184,8 @@ ProofLine.SingleStatementWithPrefixContent = connect()(class extends React.Compo
         {' '}
         <HighlightableExpression expression={statement}
                                  boundVariableLists={boundVariableLists}
-                                 references={[...additionalReferences, reference]}
+                                 references={[reference || {stepPath: path}]}
+                                 additionalReferences={additionalReferences || []}
                                  wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}/>
        </>}
       {'.'}

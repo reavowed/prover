@@ -36,6 +36,14 @@ export const SetHighlightedConclusion = function(newHighlightedConclusion) {
   }
 };
 
+export const SetHighlightingAction = function(highlightablePremises, action) {
+  return {
+    type: "SetHighlightingAction",
+    highlightablePremises,
+    action
+  };
+};
+
 export const FetchJson = function(subpath, options) {
   return (dispatch, getState) => {
     return window.fetch(path.join(getState().url, subpath), options)
@@ -64,19 +72,18 @@ export const FetchJsonForStepAndUpdate = (proofIndex, stepPath, childPath, optio
   }
 };
 
-const highlightedPremisesReducer = function(state = [], action) {
+const highlightingReducer = function(state = {}, action) {
   switch (action.type) {
     case "SetHighlightedPremises":
-      return action.newHighlightedPremises;
-    default:
-      return state;
-  }
-};
-
-const highlightedConclusionReducer = function(state = [], action) {
-  switch (action.type) {
+      return !state.action ? Object.assign({}, state, {premises: action.newHighlightedPremises}) : state;
     case "SetHighlightedConclusion":
-      return action.newHighlightedConclusion;
+      return !state.action ? Object.assign({}, state, {conclusion: action.newHighlightedConclusion}) : state;
+    case "SetHighlightingAction":
+      return {
+        premises: action.highlightablePremises,
+        conclusion: null,
+        action: action.action
+      };
     default:
       return state;
   }
@@ -98,7 +105,6 @@ const urlReducer = function(state = "", action) {
 
 export default combineReducers({
   theorem: theoremReducer,
-  highlightedPremises: highlightedPremisesReducer,
-  highlightedConclusion: highlightedConclusionReducer,
+  highlighting: highlightingReducer,
   url: urlReducer
 });

@@ -33,8 +33,8 @@ export class SubproofStep extends React.Component {
           {' '}
           {step.statement ?
             <HighlightableExpression expression={step.statement}
-                                    boundVariableLists={boundVariableLists}
-                                    reference={reference} /> : "???"}.
+                                     boundVariableLists={boundVariableLists}
+                                     references={[reference]} /> : "???"}.
         </ProofLine>}
       {showingSubproof && <Steps.Children steps={step.substeps}
                                           path={path}
