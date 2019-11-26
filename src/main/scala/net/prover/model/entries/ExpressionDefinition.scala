@@ -53,6 +53,8 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
     } yield (newBoundVariableNames, components)
   }
 
+  def increaseDepth(internalDepth: Int) = if (boundVariableNames.nonEmpty) internalDepth + 1 else internalDepth
+
   protected def serializedComponents = "(" + (boundVariableNames.map("$" + _) ++ componentTypes.map(_.serialized)).mkString(" ") + ")"
 }
 

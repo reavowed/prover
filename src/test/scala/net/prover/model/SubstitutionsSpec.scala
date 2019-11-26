@@ -282,7 +282,7 @@ class SubstitutionsSpec extends ProverSpec {
         ForAll("x")(φ(b)) -> ForAll("x")(Equals(b, c)))
     }
 
-    "match bound nested applications" in {
+    "match more bound nested applications" in {
       testSuccessfulMatch(
         1,
         Substitutions(

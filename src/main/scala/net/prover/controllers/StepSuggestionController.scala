@@ -39,17 +39,19 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     def apply(possibleSubstitutions: Substitutions.Possible)(implicit stepContext: StepContext): SuggestedSubstitutions = {
       val plainSubstitutions = possibleSubstitutions.stripApplications()
       def filterApplications[T <: Expression](
-        applicationsMap: Map[(String, Int), Seq[(Seq[Term], T, Int, Int)]],
+        applicationsMap: Map[(String, Int), Seq[(Seq[Term], T, Int)]],
         lens: Lens[Substitutions.Possible, Map[(String, Int), T]],
-        applicationLens: Lens[Substitutions.Possible, Map[(String, Int), Seq[(Seq[Term], T, Int, Int)]]]
+        applicationLens: Lens[Substitutions.Possible, Map[(String, Int), Seq[(Seq[Term], T, Int)]]]
       ): Map[(String, Int), Seq[T]] = {
         applicationsMap
           .map { case ((name, arity), applications) =>
-            val results = if (applications.exists { case (arguments, _, _, _) => (0 until arity).forall(i => arguments(i).applySubstitutions(plainSubstitutions).nonEmpty) }) {
-              possibleSubstitutions.calculateApplicatives(name, arity, applications, lens, applicationLens).map(lens.get).map(_((name, arity))).toSeq
-            } else {
-              Nil
-            }
+            val results = applications
+              .find { case (arguments, _, _) => (0 until arity).forall(i => arguments(i).applySubstitutions(plainSubstitutions).nonEmpty) }
+              .map { case (arguments, value, depth) =>
+                value.calculateApplicatives(arguments, plainSubstitutions, 0, depth, stepContext.externalDepth).map(_._1.asInstanceOf[T]).toSeq
+              }
+              .getOrElse(Nil)
+
             ((name, arity), results)
           }
           .filter { case (_, applications) => applications.nonEmpty }

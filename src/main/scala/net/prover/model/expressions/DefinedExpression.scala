@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition
-import net.prover.model.proof.StepContext
 
 import scala.collection.immutable.Nil
 
@@ -30,7 +29,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
           helper(
             previous :+ current,
             more,
-            acc ++ current.getTerms(increaseDepth(depth)).map(_.mapRight(e => updateComponents((previous :+ e) ++ more))))
+            acc ++ current.getTerms(definition.increaseDepth(depth)).map(_.mapRight(e => updateComponents((previous :+ e) ++ more))))
         case _ =>
           acc
       }
@@ -39,14 +38,12 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
   override def definitionUsages: DefinitionUsages = components.map(_.definitionUsages).foldTogether.addUsage(definition)
 
-  private def increaseDepth(internalDepth: Int) = if (scopedBoundVariableNames.nonEmpty) internalDepth + 1 else internalDepth
-
   override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {
-    updateComponents(components.map(_.insertExternalParameters(numberOfParametersToInsert, increaseDepth(internalDepth))))
+    updateComponents(components.map(_.insertExternalParameters(numberOfParametersToInsert, definition.increaseDepth(internalDepth))))
   }
   override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType] = {
     components
-      .map(_.removeExternalParameters(numberOfParametersToRemove, increaseDepth(internalDepth)))
+      .map(_.removeExternalParameters(numberOfParametersToRemove, definition.increaseDepth(internalDepth)))
       .traverseOption
       .map(updateComponents)
   }
@@ -56,7 +53,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     internalDepth: Int,
     externalDepth: Int
   ): ExpressionType = {
-    updateComponents(components.map(_.specify(targetArguments, increaseDepth(internalDepth), externalDepth)))
+    updateComponents(components.map(_.specify(targetArguments, definition.increaseDepth(internalDepth), externalDepth)))
   }
   def specifyWithSubstitutions(
     targetArguments: Seq[Term],
@@ -66,7 +63,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     externalDepth: Int
   ): Option[ExpressionType] = {
     components
-      .map(_.specifyWithSubstitutions(targetArguments, substitutions, increaseDepth(internalDepth), previousInternalDepth, externalDepth)).traverseOption
+      .map(_.specifyWithSubstitutions(targetArguments, substitutions, definition.increaseDepth(internalDepth), previousInternalDepth, externalDepth)).traverseOption
       .map(updateComponents)
   }
 
@@ -78,14 +75,14 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     externalDepth: Int
   ): Option[Substitutions.Possible] = {
     getMatch(other)
-      .flatMap(components.calculateSubstitutions(_, substitutions, increaseDepth(internalDepth), externalDepth))
+      .flatMap(components.calculateSubstitutions(_, substitutions, definition.increaseDepth(internalDepth), externalDepth))
   }
   override def applySubstitutions(
     substitutions: Substitutions,
     internalDepth: Int,
     externalDepth: Int
   ): Option[ExpressionType] = {
-    components.applySubstitutions(substitutions, increaseDepth(internalDepth), externalDepth).map(updateComponents)
+    components.applySubstitutions(substitutions, definition.increaseDepth(internalDepth), externalDepth).map(updateComponents)
   }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
@@ -94,7 +91,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     previousInternalDepth: Int,
     externalDepth: Int
   ): Iterator[(ExpressionType, Substitutions.Possible)] = {
-    components.calculateApplicatives(baseArguments, substitutions, increaseDepth(internalDepth), previousInternalDepth, externalDepth)
+    components.calculateApplicatives(baseArguments, substitutions, definition.increaseDepth(internalDepth), previousInternalDepth, externalDepth)
       .map(_.mapLeft(updateComponents))
   }
   override def calculateArguments(
@@ -103,7 +100,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     internalDepth: Int,
     externalDepth: Int
   ): Option[Map[Int, Term]] = {
-    getMatch(target).flatMap(targetComponents => components.calculateArguments(targetComponents, argumentsSoFar, increaseDepth(internalDepth), externalDepth))
+    getMatch(target).flatMap(targetComponents => components.calculateArguments(targetComponents, argumentsSoFar, definition.increaseDepth(internalDepth), externalDepth))
   }
 
   override def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = {

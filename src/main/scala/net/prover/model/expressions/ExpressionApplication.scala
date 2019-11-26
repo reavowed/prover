@@ -11,11 +11,12 @@ import scala.reflect.ClassTag
 
 @JsonSerialize(using = classOf[ExpressionApplicationSerializer])
 abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] extends Expression with TypedExpression[ExpressionType] {
+  val arity: Int = arguments.length
   def variableName: String
   def arguments: Seq[Term]
   def substitutionsLens: Lens[Substitutions, Map[(String, Int), ExpressionType]]
   def possibleSubstitutionsLens: Lens[Substitutions.Possible, Map[(String, Int), ExpressionType]]
-  def possibleSubstitutionsApplicationsLens: Lens[Substitutions.Possible, Map[(String, Int), Seq[(Seq[Term], ExpressionType, Int, Int)]]]
+  def possibleSubstitutionsApplicationsLens: Lens[Substitutions.Possible, Map[(String, Int), Seq[(Seq[Term], ExpressionType, Int)]]]
   def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[(String, Int)]]
 
   def getMatch(other: Expression): Option[Seq[Expression]]
@@ -65,7 +66,7 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   }
 
   override def requiredSubstitutions = {
-    arguments.requiredSubstitutions ++ requiredSubstitutionsLens.set(Seq((variableName, arguments.length)))(Substitutions.Required.empty)
+    arguments.requiredSubstitutions ++ requiredSubstitutionsLens.set(Seq((variableName, arity)))(Substitutions.Required.empty)
   }
   override def calculateSubstitutions(
     other: Expression,
@@ -74,18 +75,31 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
     externalDepth: Int
   ) = {
     if (other.isRuntimeInstance[ExpressionType]) {
-      substitutions
-        .updateAdd(
-          (variableName, arguments.length),
-          (arguments, other.asInstanceOf[ExpressionType], internalDepth, externalDepth),
-          possibleSubstitutionsApplicationsLens)
-        .clearApplicationsWherePossible()
+      substitutionsLens.get(substitutions.stripApplications()).get((variableName, arity)) match {
+        case Some(applicative) =>
+          applicative.calculateArguments(other, Map.empty, 0, externalDepth).flatMap { otherArguments =>
+            (0 until arity).foldLeft(Option(substitutions)) { case (substitutionOptions, index) =>
+              substitutionOptions.flatMap { substitutionsSoFar =>
+                otherArguments.get(index).map { otherArgument =>
+                  arguments(index).calculateSubstitutions(otherArgument, substitutionsSoFar, internalDepth, externalDepth)
+                }.getOrElse(Some(substitutionsSoFar))
+              }
+            }
+          }
+        case None =>
+          substitutions
+            .updateAdd(
+              (variableName, arity),
+              (arguments, other.asInstanceOf[ExpressionType], internalDepth),
+              possibleSubstitutionsApplicationsLens)
+            .clearApplicationsWherePossible(externalDepth)
+      }
     } else None
   }
 
   override def applySubstitutions(substitutions: Substitutions, internalDepth: Int, externalDepth: Int): Option[ExpressionType] = {
     for {
-      predicate <- substitutionsLens.get(substitutions).get((variableName, arguments.length))
+      predicate <- substitutionsLens.get(substitutions).get((variableName, arity))
       result <- predicate.specifyWithSubstitutions(arguments, substitutions, 0, internalDepth, externalDepth)
     } yield result.asInstanceOf[ExpressionType]
   }

@@ -2,6 +2,8 @@ package net.prover
 
 import java.nio.file.Path
 
+import net.prover.util.PossibleSingleMatch
+import net.prover.util.PossibleSingleMatch.{MultipleMatches, NoMatches, SingleMatch}
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 
@@ -9,7 +11,7 @@ import scala.collection.JavaConverters._
 import scala.collection.generic.CanBuildFrom
 import scala.collection.{TraversableLike, mutable}
 import scala.reflect.ClassTag
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Try}
 
 package object model {
   implicit class AnyOps[T](t: T) {
@@ -49,7 +51,7 @@ package object model {
     def inParens: String = "(" + s + ")"
   }
 
-  implicit class TupleOps[S,T](tuple: (S, T)) {
+  implicit class Tuple2Ops[S,T](tuple: (S, T)) {
     def mapLeft[R](f: S => R): (R, T) = (f(tuple._1), tuple._2)
     def mapRight[R](f: T => R): (S, R) = (tuple._1, f(tuple._2))
     def mapBoth[U, R](f: S => U, g: T => R): (U, R) = (f(tuple._1), g(tuple._2))
@@ -58,12 +60,24 @@ package object model {
     def reverse: (T, S) = (tuple._2, tuple._1)
   }
 
+  implicit class Tuple3Ops[S,T,U](tuple: (S, T, U)) {
+    def map2[R](f: T => R): (S, R, U) = (tuple._1, f(tuple._2), tuple._3)
+    def optionMap2[R](f: T => Option[R]): Option[(S, R, U)] = f(tuple._2).map((tuple._1, _, tuple._3))
+  }
+
   implicit class SeqOps[T](seq: Seq[T]) {
     def headAndTailOption: Option[(T, Seq[T])] = +:.unapply(seq)
     def single: Option[T]= {
       seq match {
         case Seq(singleElement) => Some(singleElement)
         case _ => None
+      }
+    }
+    def singleMatch: PossibleSingleMatch[T]= {
+      seq match {
+        case Nil => NoMatches
+        case Seq(singleElement) => SingleMatch(singleElement)
+        case _ => MultipleMatches
       }
     }
     def mapFold[R, S](initial: R)(f: (R, T) => (R, S)): (R, Seq[S]) = {
@@ -326,6 +340,26 @@ package object model {
         case Some(t) => t
       }
     }
+    def singleDistinctMatch: PossibleSingleMatch[T] = {
+      def hasDifferentMatch(i: Iterator[T], t: T): Boolean = {
+        if (!i.hasNext)
+          false
+        else if (i.next() != t)
+          true
+        else
+          hasDifferentMatch(i, t)
+      }
+      if (!iterator.hasNext) {
+        NoMatches
+      } else {
+        val firstMatch = iterator.next()
+        if (!hasDifferentMatch(iterator, firstMatch)) {
+          SingleMatch(firstMatch)
+        } else {
+          MultipleMatches
+        }
+      }
+    }
   }
 
   implicit class SeqParserOps[T](x: Seq[Parser[T]]) {
@@ -355,6 +389,7 @@ package object model {
   }
 
   implicit class OptionOps[T](x: Option[T]) {
+    def toMatch: PossibleSingleMatch[T] = x.map(PossibleSingleMatch.SingleMatch(_)).getOrElse(PossibleSingleMatch.NoMatches)
     def ifDefined(action: => Unit): Option[T] = {
       if (x.nonEmpty) action
       x
