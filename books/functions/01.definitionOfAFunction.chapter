@@ -5,11 +5,11 @@ statement function (f A B)
   format (f: A → B) requires-brackets
   definition (∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f)
 
-display ∀ f → function f A B φ as ((∀f: A → B)φ)
+display ∀ f → function $0 A B φ as ((∀f: A → B)φ)
 
-display ∃ f ∧ function f A B φ as ((∃f: A → B)φ)
+display ∃ f ∧ function $0 A B φ as ((∃f: A → B)φ)
 
-display ∃! f ∧ function f A B φ as ((∃!f: A → B)φ)
+display ∃! f ∧ function $0 A B φ as ((∃!f: A → B)φ)
 
 theorem Function Application Is Unique
 premise function f A B

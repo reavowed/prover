@@ -143,14 +143,10 @@ object DefinedExpression {
 
 private class DefinedExpressionSerializer extends JsonSerializer[DefinedExpression[_]] {
   override def serialize(value: DefinedExpression[_], gen: JsonGenerator, serializers: SerializerProvider): Unit = {
-    if (value.components.isEmpty) {
-      gen.writeString(value.definition.symbol)
-    } else {
-      gen.writeStartArray(value.components.length + value.scopedBoundVariableNames.length + 1)
-      gen.writeString(value.definition.symbol)
-      value.scopedBoundVariableNames.foreach(gen.writeString)
-      value.components.foreach(gen.writeObject)
-      gen.writeEndArray()
-    }
+    gen.writeStartArray(value.components.length + value.scopedBoundVariableNames.length + 1)
+    gen.writeString(value.definition.symbol)
+    value.scopedBoundVariableNames.foreach(gen.writeString)
+    value.components.foreach(gen.writeObject)
+    gen.writeEndArray()
   }
 }

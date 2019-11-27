@@ -43,6 +43,8 @@ term × ()
   shorthand (mul)
   attributes (infix-function)
 
+display apply × orderedPair a b as (ab)
+
 theorem Multiplication Is a Function
 conclusion function × product ℕ ℕ ℕ
 {

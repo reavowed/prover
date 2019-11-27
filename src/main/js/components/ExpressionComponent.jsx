@@ -50,7 +50,7 @@ export class ExpressionComponent extends React.Component {
   }
 
   renderInner(expression, path, pathsToHighlightAsPremise, highlightingAction, boundVariableLists, wrapBoundVariable, parentRequiresBrackets) {
-    for (const displayShorthand of window.displayShorthands) {
+    for (const displayShorthand of _.reverse(window.displayShorthands.slice())) {
       const matches = this.matchDisplayShorthand(displayShorthand, expression, [], []);
       if (matches) {
         let renderedMatches = matches.map(m => this.renderMatch(m, path, pathsToHighlightAsPremise, highlightingAction, boundVariableLists, wrapBoundVariable));

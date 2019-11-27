@@ -65,11 +65,11 @@ object Term {
   }
 
   def templateParserFunction(implicit context: TemplateParsingContext): PartialFunction[String, Parser[Template]] = {
-    case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
-      Parser.constant(Template.TermVariable(name))
     case context.entryContext.RecognisedTermDefinition(definition) =>
       definition.templateParser
     case context.RecognisedParameter(parameter) =>
       Parser.constant(Template.FunctionParameter(parameter))
+    case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
+      Parser.constant(Template.TermVariable(name))
   }
 }
