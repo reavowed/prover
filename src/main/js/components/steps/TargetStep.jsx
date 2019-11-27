@@ -82,6 +82,30 @@ export const TargetStepProofLine = connect()(class extends React.Component {
   getPremiseSuggestionsForNaming = (inferenceId) => {
     return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `suggestNamingPremises?inferenceId=${inferenceId}`));
   };
+  getSubstitutionSuggestionsForStep = (inferenceId, selectedPremises) => {
+    return this.getSubstitutionSuggestions(inferenceId, selectedPremises, true);
+  };
+  getSubstitutionSuggestionsForPremise = (inferenceId, selectedPremises) => {
+    return this.getSubstitutionSuggestions(inferenceId, selectedPremises, false);
+  };
+
+  getSubstitutionSuggestions = (inferenceId, selectedPremises, withConclusion) => {
+    return this.props.dispatch(FetchJsonForStep(
+      this.context.proofIndex,
+      this.props.path,
+      `suggestSubstitutions`,
+      {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          inferenceId,
+          serializedPremises: _.mapValues(selectedPremises, p => p.serialize()),
+          withConclusion
+        })
+      }
+    ));
+  }
+
   proveWithInference = (suggestion, substitutions) => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "", {
       method: "PUT",
@@ -232,12 +256,14 @@ export const TargetStepProofLine = connect()(class extends React.Component {
           {activeProvingType === 'premise' && <InferenceFinder title='Select Inference for Premise'
                                                                getInferenceSuggestions={this.getInferenceSuggestionsForPremise}
                                                                getPremiseSuggestions={this.getPremiseSuggestionsForPremise}
+                                                               getSubstitutionSuggestions={this.getSubstitutionSuggestionsForPremise}
                                                                boundVariableLists={boundVariableLists}
                                                                submit={this.addPremise}
                                                                focusOnMount/>}
           {activeProvingType === 'inference' && <InferenceFinder title='Select Inference'
                                                                  getInferenceSuggestions={this.getInferenceSuggestionsForStep}
                                                                  getPremiseSuggestions={this.getPremiseSuggestionsForStep}
+                                                                 getSubstitutionSuggestions={this.getSubstitutionSuggestionsForStep}
                                                                  boundVariableLists={boundVariableLists}
                                                                  submit={this.proveWithInference}
                                                                  focusOnMount/>}

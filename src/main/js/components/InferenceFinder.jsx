@@ -139,23 +139,44 @@ export class InferenceFinder extends React.Component {
     }
   };
   setSelectedPremiseSuggestion = (premiseIndex, suggestionIndex) => {
-    const selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
-    const selectedPremiseSuggestions = _.cloneDeep(this.state.selectedPremiseSuggestions);
-    selectedPremiseSuggestions[premiseIndex] = [suggestionIndex, suggestionIndex !== "" ? this.state.premiseSuggestions[premiseIndex][parseInt(suggestionIndex)].substitutions : null];
-    this.updateForcedSubstitutionValues(selectedSubstitutionValues, selectedPremiseSuggestions);
+    const selectedSuggestion = [suggestionIndex, suggestionIndex !== "" ? this.state.premiseSuggestions[premiseIndex][parseInt(suggestionIndex)].substitutions : null];
+    const selectedPremiseSuggestions = Object.assign({}, this.state.selectedPremiseSuggestions, {[premiseIndex]: selectedSuggestion});
+    const selectedSubstitutionValues = this.updateForcedSubstitutionValues(this.state.selectedSubstitutionValues, selectedPremiseSuggestions);
     this.setState({selectedSubstitutionValues, selectedPremiseSuggestions})
+    this.getSubstitutionSuggestions(selectedPremiseSuggestions);
   };
 
-  updateForcedSubstitutionValues = (selectedSubstitutionValues, selectedPremiseSuggestions) => {
-    const compatibleSubstitutions = this.getPossibleSubstitutionsLists(selectedPremiseSuggestions, selectedSubstitutionValues);
+  getSubstitutionSuggestions = (selectedPremiseSuggestions) => {
+    if (this.props.getSubstitutionSuggestions && _.keys(_.pickBy(selectedPremiseSuggestions, x => x[1])).length > 1) {
+      this.props.getSubstitutionSuggestions(
+        this.state.selectedInferenceSuggestion.inference.id,
+        _.chain(selectedPremiseSuggestions)
+          .pickBy(x => x[1])
+          .map((value, key) => [key, this.state.premiseSuggestions[key][parseInt(value[0])].statement])
+          .fromPairs()
+          .value())
+      .then(Parser.parseSubstitutions)
+      .then(additionalSubstitutionSuggestions => {
+        if (_.isEqual(this.state.selectedPremiseSuggestions, selectedPremiseSuggestions)) {
+          const selectedSubstitutionValues = this.updateForcedSubstitutionValues(this.state.selectedSubstitutionValues, selectedPremiseSuggestions, additionalSubstitutionSuggestions);
+          this.setState({additionalSubstitutionSuggestions, selectedSubstitutionValues});
+        }
+      })
+    }
+  };
+
+  updateForcedSubstitutionValues = (selectedSubstitutionValues, selectedPremiseSuggestions, additionalSubstitutionSuggestions) => {
+    const compatibleSubstitutions = this.getPossibleSubstitutionsLists(selectedPremiseSuggestions, selectedSubstitutionValues, additionalSubstitutionSuggestions);
     const forcedSubstitutionValues = this.getAllForcedSubstitutionValues(compatibleSubstitutions, this.state.selectedInferenceSuggestion.requiredSubstitutions);
     const areAnyNewValuesForced = _.some(getAllRequiredPaths( this.state.selectedInferenceSuggestion.requiredSubstitutions), path => {
       const forcedValue = getAtPath(forcedSubstitutionValues, path);
       return forcedValue && forcedValue !== getAtPath(selectedSubstitutionValues, path)
     });
     if (areAnyNewValuesForced) {
-      _.merge(selectedSubstitutionValues, forcedSubstitutionValues);
-      this.updateForcedSubstitutionValues(selectedSubstitutionValues, selectedPremiseSuggestions);
+      const newSelectedSubstitutionValues = _.merge({}, selectedSubstitutionValues, forcedSubstitutionValues);
+      return this.updateForcedSubstitutionValues(newSelectedSubstitutionValues, selectedPremiseSuggestions, additionalSubstitutionSuggestions);
+    } else {
+      return selectedSubstitutionValues;
     }
   };
   getAllForcedSubstitutionValues = (possibleSubstitutionsLists, requiredSubstitutions) => {
@@ -178,8 +199,8 @@ export class InferenceFinder extends React.Component {
     });
   };
 
-  getPossibleSubstitutionsLists = (selectedPremiseSuggestions, selectedSubstitutionValues) => {
-    const possibleSubstitutionsFromInferenceAndPremises = _.filter([this.state.selectedInferenceSuggestion.substitutions, ..._.map(selectedPremiseSuggestions, s => s[1])]);
+  getPossibleSubstitutionsLists = (selectedPremiseSuggestions, selectedSubstitutionValues, additionalSubstitutionSuggestions) => {
+    const possibleSubstitutionsFromInferenceAndPremises = _.filter([(additionalSubstitutionSuggestions ? [additionalSubstitutionSuggestions] : this.state.selectedInferenceSuggestion.substitutions), ..._.map(selectedPremiseSuggestions, s => s[1])]);
     return _.map(possibleSubstitutionsFromInferenceAndPremises, possibleSubstitutions =>
       _.filter(possibleSubstitutions, s =>
         _.every(getAllRequiredPaths(this.state.selectedInferenceSuggestion.requiredSubstitutions), path => {
@@ -194,15 +215,15 @@ export class InferenceFinder extends React.Component {
   getValidSubstitutionValues = (type, name, numberOfParameters) => {
     const selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
     numberOfParameters ? selectedSubstitutionValues[type][name][numberOfParameters] = "" : selectedSubstitutionValues[type][name] = "";
-    const compatibleSubstitutions = this.getPossibleSubstitutionsLists(this.state.selectedPremiseSuggestions, selectedSubstitutionValues);
+    const compatibleSubstitutions = this.getPossibleSubstitutionsLists(this.state.selectedPremiseSuggestions, selectedSubstitutionValues, this.state.additionalSubstitutionSuggestions);
     const allSelectableValues = this.getAllSelectableSubstitutionValues(compatibleSubstitutions, this.state.selectedInferenceSuggestion.requiredSubstitutions)
     return numberOfParameters ? allSelectableValues[type][name][numberOfParameters] : allSelectableValues[type][name];
   };
 
   setSelectedSubstitutionValue = (setter, value) => {
-    const selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
+    let selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
     setter(selectedSubstitutionValues, value);
-    this.updateForcedSubstitutionValues(selectedSubstitutionValues, this.state.selectedPremiseSuggestions);
+    selectedSubstitutionValues = this.updateForcedSubstitutionValues(selectedSubstitutionValues, this.state.selectedPremiseSuggestions, this.state.additionalSubstitutionSuggestions);
     this.setState({selectedSubstitutionValues});
   };
   onInputKeyUp = (event) => {
