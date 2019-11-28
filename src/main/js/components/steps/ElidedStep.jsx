@@ -14,12 +14,12 @@ export const ElidedStepProofLine = connect()(class extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
-      showProofCard: this.props.step.isIncomplete
+      showProofCard: !this.props.step.isComplete
     }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (!this.props.step.isIncomplete && prevProps.step.isIncomplete) {
+    if (this.props.step.isComplete && !prevProps.step.isComplete) {
       this.setState({showProofCard: false});
     }
   }
@@ -59,7 +59,7 @@ export const ElidedStepProofLine = connect()(class extends React.Component {
                  statement={step.statement}
                  buttons={buttons}
                  onClick={this.toggleProofCard}
-                 incomplete={step.isIncomplete}
+                 incomplete={!step.isComplete}
       >
         {children}
       </ProofLine>

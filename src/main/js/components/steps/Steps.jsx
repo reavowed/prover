@@ -152,7 +152,7 @@ export class Steps extends React.Component {
       _.includes(allowableTransitivityStepTypes, stepsWithIndexes[0].step.type) &&
       stepsWithIndexes[1].step.type === "assertion" &&
       stepsWithIndexes[1].step.inference && stepsWithIndexes[1].step.inference.id === transitiveStatement.inferenceId &&
-      !stepsWithIndexes[1].step.isIncomplete &&
+      stepsWithIndexes[1].step.isComplete &&
       stepsWithIndexes[0].step.statement &&
       stepsWithIndexes[1].step.statement &&
       (continuingStepMatch = matchTemplate(transitiveStatement.template, stepsWithIndexes[0].step.statement, [], [])) &&

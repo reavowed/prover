@@ -155,6 +155,8 @@ object Step {
     extends Step.WithSubsteps with WithTopLevelStatement with WithVariable with WithAssumption
   {
     val `type` = "naming"
+
+    override def isComplete: Boolean = super.isComplete && premises.forall(_.isComplete)
     override def provenStatement: Option[Statement] = Some(statement)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
@@ -387,7 +389,7 @@ object Step {
     extends Step.WithoutSubsteps with Step.WithTopLevelStatement
   {
     val `type`: String = "assertion"
-    override def isComplete: Boolean = true
+    override def isComplete: Boolean = premises.forall(_.isComplete)
     override def provenStatement: Option[Statement] = Some(statement)
     override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
       Assertion(
@@ -429,7 +431,6 @@ object Step {
     def pendingPremises: Map[Seq[Int], Premise.Pending] = {
       premises.flatMapWithIndex((p, i) => p.getPendingPremises(Seq(i)).toSeq).toMap
     }
-    def isIncomplete: Boolean = premises.exists(_.isIncomplete)
   }
   object Assertion {
     def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Assertion] = {

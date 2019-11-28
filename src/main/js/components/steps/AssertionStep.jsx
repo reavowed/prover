@@ -20,9 +20,9 @@ export const AssertionStepProofLine = connect()(class extends React.Component {
                       boundVariableLists={boundVariableLists}
                       buttons={<>
                         <InferenceLink inference={step.inference}/>
-                        {step.isIncomplete && <Button variant="success" size="sm" onClick={this.createTargets}>Create targets</Button>}
+                        {!step.isComplete && <Button variant="success" size="sm" onClick={this.createTargets}>Create targets</Button>}
                       </>}
-                      incomplete={step.isIncomplete}>
+                      incomplete={!step.isComplete}>
       {children}
     </ProofLine>;
   }

@@ -16,20 +16,20 @@ sealed trait Premise {
   }
   def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Premise
   def toPending: Pending = Pending(statement)
-  def isIncomplete: Boolean
+  def isComplete: Boolean
 }
 object Premise {
   def serialize(premises: Seq[Premise]): String = premises.map(serialize).mkString(" ")
   def serialize(premise: Premise): String = {
     def helper(p: Premise, suffix: String): String = p match {
-      case Pending(_) => throw new Exception("Cannot serialize pending premise")
+      case Pending(_) => "???"
       case Given(_, ref) => ref.serialize + suffix
       case Simplification(_, inner, inference, _, _) => helper(inner, " " + inference.id + suffix)
     }
     helper(premise, "")
   }
 
-  def parser(statement: Statement)(implicit stepContext: StepContext, entryContext: EntryContext): Parser[SingleLinePremise] = {
+  def parser(statement: Statement)(implicit stepContext: StepContext, entryContext: EntryContext): Parser[Premise] = {
     @scala.annotation.tailrec
     def helper(inferences: Seq[Inference], premise: SingleLinePremise): SingleLinePremise = {
       inferences match {
@@ -43,7 +43,8 @@ object Premise {
           helper(tailInferences, Simplification(result, premise, inference.summary, substitutions, path))
       }
     }
-    for {
+    val pendingParser = Parser.optionalWord("???").mapMap(_ => Premise.Pending(statement))
+    val singleLinePremiseParser = for {
       ref <- PreviousLineReference.parser
       baseRef = ref.withoutInternalPath
       givenPremise = stepContext.premises.find(_.referencedLine == baseRef).getOrElse(throw new Exception(s"Could not find reference ${baseRef.serialize}"))
@@ -51,6 +52,7 @@ object Premise {
       result = helper(inferences, givenPremise)
       _ = if (result.statement != statement) throw new Exception(s"Given premise ${result.statement} did not match expected premise $statement")
     } yield helper(inferences, givenPremise)
+    pendingParser orElse singleLinePremiseParser
   }
 
   sealed trait SingleLinePremise extends Premise {
@@ -69,7 +71,7 @@ object Premise {
     def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Pending = {
       Pending(statement.replaceDefinition(oldDefinition, newDefinition))
     }
-    override def isIncomplete: Boolean = true
+    override def isComplete: Boolean = false
   }
 
   case class Given(statement: Statement, referencedLine: PreviousLineReference) extends SingleLinePremise {
@@ -84,7 +86,7 @@ object Premise {
         statement.replaceDefinition(oldDefinition, newDefinition),
         referencedLine)
     }
-    override def isIncomplete: Boolean = false
+    override def isComplete: Boolean = true
   }
 
   case class Simplification(statement: Statement, premise: Premise.SingleLinePremise, inference: Inference.Summary, substitutions: Substitutions, path: Seq[Int]) extends SingleLinePremise {
@@ -105,6 +107,6 @@ object Premise {
         substitutions.replaceDefinition(oldDefinition, newDefinition),
         path)
     }
-    override def isIncomplete: Boolean = premise.isIncomplete
+    override def isComplete: Boolean = premise.isComplete
   }
 }

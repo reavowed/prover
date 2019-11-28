@@ -9,7 +9,7 @@ export class SubproofStep extends React.Component {
     super(...args);
     const {step} = this.props;
     this.state = {
-      showingSubproof: step.isIncomplete && (step.substeps.length > 1 || step.substeps[0].type !== "target")
+      showingSubproof: !step.isComplete && (step.substeps.length > 1 || step.substeps[0].type !== "target")
     };
   }
   toggleSubproof = () => {
@@ -27,7 +27,7 @@ export class SubproofStep extends React.Component {
                    statement={step.statement}
                    premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
                    boundVariableLists={boundVariableLists}
-                   incomplete={step.isIncomplete}
+                   incomplete={!step.isComplete}
                    onClick={this.toggleSubproof}>
           Then
           {' '}

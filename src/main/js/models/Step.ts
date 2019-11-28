@@ -4,7 +4,7 @@ import * as _ from "lodash";
 
 export class AssertionStep {
     type = "assertion";
-    constructor(public statement: Expression, public premises: any, public inference: any, public referencedLines: any, public isIncomplete: boolean) {}
+    constructor(public statement: Expression, public premises: any, public inference: any, public referencedLines: any, public isComplete: boolean) {}
     inferencesUsed: any[] = [this.inference];
     allSubsteps: Step[] = [];
 }
@@ -12,7 +12,7 @@ export class AssertionStep {
 export class DeductionStep {
     type = "deduction";
     constructor(public assumption: Expression, public substeps: Step[], public provenStatement: Expression | void) {}
-    isIncomplete: boolean = _.some(this.substeps, "isIncomplete");
+    isComplete: boolean = _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
 }
@@ -20,7 +20,7 @@ export class DeductionStep {
 export class ScopedVariableStep {
     type = "scopedVariable";
     constructor(public variableName: String, public substeps: Step[], public provenStatement: Expression | void) {}
-    isIncomplete: boolean = _.some(this.substeps, s => s.isIncomplete);
+    isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
 }
@@ -28,7 +28,7 @@ export class ScopedVariableStep {
 export class NamingStep {
     type = "naming";
     constructor(public variableName: String, public assumption: Expression, public statement: Expression, public substeps: Step[], public inference: any, public referencedLines: any, public referencedLinesForExtraction: any) {}
-    isIncomplete: boolean = _.some(this.substeps, "isIncomplete");
+    isComplete: boolean = _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = [..._.flatMap(this.substeps, s => s.inferencesUsed), this.inference];
     allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
 }
@@ -36,7 +36,7 @@ export class NamingStep {
 export class ElidedStep {
     type = "elided";
     constructor(public statement: Expression | void, public substeps: Step[], public highlightedInference: any, public description: string | null, public referencedLines: any) {}
-    isIncomplete: boolean = (!this.highlightedInference && !this.description) || _.some(this.substeps, "isIncomplete");
+    isComplete: boolean = (this.highlightedInference || this.description) && _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
 }
@@ -44,7 +44,7 @@ export class ElidedStep {
 export class TargetStep {
     type = "target";
     constructor(public statement: Expression) {}
-    isIncomplete: boolean = true;
+    isComplete: boolean = false;
     inferencesUsed: any[] = [];
     allSubsteps: Step[] = [];
 }
@@ -52,7 +52,7 @@ export class TargetStep {
 export class SubproofStep {
     type = "subproof";
     constructor(public name: String, public statement: Expression, public substeps: Step[], public referencedLines: any) {}
-    isIncomplete: boolean = _.some(this.substeps, s => s.isIncomplete);
+    isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
 }
@@ -68,7 +68,7 @@ export const Step = {
                        stepJson.premises.map(Parser.parsePremise),
                        Parser.parseInference(stepJson.inference),
                        stepJson.referencedLines,
-                       stepJson.incomplete);
+                       stepJson.complete);
                case "oldAssertion":
                    return new AssertionStep(
                        Expression.parseFromJson(stepJson.statement),
