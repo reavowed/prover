@@ -3,7 +3,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import {connect} from "react-redux";
-import {ExpressionComponent} from "../ExpressionComponent";
+import {CopiableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import {InferenceFinder} from "../InferenceFinder";
 import {FetchJsonForStep, FetchJsonForStepAndUpdate, SetHighlightingAction} from "../theorem/TheoremStore";
@@ -227,7 +227,7 @@ export const TargetStepProofLine = connect()(class extends React.Component {
         <div className="card" style={{margin: ".5rem", padding: ".5rem .75rem"}}>
           <Button size="sm" variant="danger" className="float-left" onClick={this.stopProving} style={{position: "absolute"}}><i className="fas fa-times"/></Button>
           <h5 className="text-center">
-            <ExpressionComponent expression={step.statement} boundVariableLists={boundVariableLists}/>
+            <CopiableExpression expression={step.statement} boundVariableLists={boundVariableLists}/>
           </h5>
           <div className="text-center">
             {!transitive &&

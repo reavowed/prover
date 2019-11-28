@@ -51,11 +51,13 @@ class TransitiveSteps extends React.Component {
       const additionalReferences = index === rightHandSides.length - 1 ? referencesForLastStep : [];
       return <>
         <HighlightableExpression expression={{textForHtml: () => symbol}}
+                                 expressionToCopy={rightHandSide.step.statement}
                                  boundVariableLists={[]}
                                  references={rightHandSide.references}
                                  additionalReferences={additionalReferences}/>
         {' '}
         <HighlightableExpression expression={rightHandSide.expression}
+                                 expressionToCopy={rightHandSide.step.statement}
                                  boundVariableLists={boundVariableLists}
                                  references={rightHandSide.references}
                                  additionalPremiseReferences={additionalReferences}
@@ -78,6 +80,7 @@ class TransitiveSteps extends React.Component {
         {step: leftHandSide.step, path: leftHandSide.path, boundVariableLists},
         <>
           <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
+                                                                            expressionToCopy={rightHandSides[0].step.statement}
                                                                             boundVariableLists={boundVariableLists}
                                                                             references={[leftHandSide.lineReference]}
                                                                             additionalReferences={referencesForLastStep}

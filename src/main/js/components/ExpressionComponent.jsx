@@ -118,6 +118,13 @@ function referencesMatch(r1, r2) {
   }
 }
 
+export const CopiableExpression = (props) => {
+  const expressionToCopy = props.expressionToCopy || props.expression;
+  return <span onContextMenu={() => navigator.clipboard.writeText(expressionToCopy.serializeNicely(props.boundVariableLists))}>
+      <ExpressionComponent {...props}/>
+    </span>
+};
+
 export const HighlightableExpression = connect(
   (state, {expression, references, additionalReferences, additionalPremiseReferences, additionalConclusionReferences, boundVariableLists, wrapBoundVariable, className}) => {
 
@@ -144,7 +151,7 @@ export const HighlightableExpression = connect(
     }
   }
 )(({expression, pathsToHighlightAsPremise, highlightingAction, shouldHighlightAsConclusion, boundVariableLists, wrapBoundVariable, className}) => {
-  const expressionElement = <ExpressionComponent expression={expression} pathsToHighlightAsPremise={pathsToHighlightAsPremise} highlightingAction={highlightingAction} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
+  const expressionElement = <CopiableExpression expression={expression} pathsToHighlightAsPremise={pathsToHighlightAsPremise} highlightingAction={highlightingAction} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
   return shouldHighlightAsConclusion ? <HighlightedConclusion className={className}>{expressionElement}</HighlightedConclusion> :
     className ? <span className={className}>{expressionElement}</span> : expressionElement;
 });

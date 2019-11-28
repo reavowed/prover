@@ -6,7 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import styled, {css}  from "styled-components";
 import {Parser} from "../Parser";
 import {Breadcrumbs} from "./Breadcrumbs";
-import {ExpressionComponent} from "./ExpressionComponent";
+import {CopiableExpression} from "./ExpressionComponent";
 import {formatHtml, replacePlaceholders} from "./helpers/Formatter";
 import {FlexRow} from "./FlexRow";
 import {InferenceSummary} from "./InferenceSummary";
@@ -101,7 +101,7 @@ class DefinitionResult extends React.Component {
     const {title, entry, children, updateChapter} = this.props;
 
     return <>
-      <Result title={<>{title}: <ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/></>}
+      <Result title={<>{title}: <CopiableExpression expression={entry.defaultValue} boundVariableLists={[]}/></>}
               url={entry.url}
               updateChapter={updateChapter}
               buttons={<Button size="sm" variant="primary" className="ml-1" onClick={this.startEditingShorthand}>Shorthand</Button>}
@@ -199,12 +199,12 @@ export class Chapter extends React.Component {
         return <InferenceResult key={entry.url} title="Theorem" entry={entry} updateChapter={this.updateChapter} incomplete={!entry.isComplete}/>;
       case "statementDefinition":
         return <DefinitionResult key={entry.url} title="Statement Definition" entry={entry} updateChapter={this.updateChapter}>
-          {entry.definingStatement && <><ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.</>}
+          {entry.definingStatement && <><CopiableExpression expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <CopiableExpression expression={entry.definingStatement} boundVariableLists={[]}/>.</>}
         </DefinitionResult>;
       case "termDefinition":
         return <DefinitionResult key={entry.url} title="Term Definition" entry={entry} updateChapter={this.updateChapter}>
           <ResultWithPremises premises={entry.premises}
-                              result={<><ExpressionComponent expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/></>}/>
+                              result={<><CopiableExpression expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <CopiableExpression expression={entry.definingStatement} boundVariableLists={[]}/></>}/>
         </DefinitionResult>;
       case "typeDefinition":
         const definition = window.typeDefinitions[entry.symbol];
@@ -212,7 +212,7 @@ export class Chapter extends React.Component {
                        url={entry.url}
                        key={entry.url}
                        updateChapter={this.updateChapter}>
-          {entry.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormatString, s => replacePlaceholders(s, entry.components))} if <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.
+          {entry.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormatString, s => replacePlaceholders(s, entry.components))} if <CopiableExpression expression={entry.definingStatement} boundVariableLists={[]}/>.
         </Result>;
       case "propertyDefinition":
         const typeDefinition = window.typeDefinitions[entry.parentTypeSymbol];
@@ -220,7 +220,7 @@ export class Chapter extends React.Component {
                        url={entry.url}
                        key={entry.url}
                        updateChapter={this.updateChapter}>
-          <Capitalized>{typeDefinition.article}</Capitalized> {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <ExpressionComponent expression={entry.definingStatement} boundVariableLists={[]}/>.
+          <Capitalized>{typeDefinition.article}</Capitalized> {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <CopiableExpression expression={entry.definingStatement} boundVariableLists={[]}/>.
         </Result>;
       case "comment":
         return <p key={entry.key}>{entry.text}</p>;

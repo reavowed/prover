@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import {Parser} from "../Parser";
 import {Breadcrumbs} from "./Breadcrumbs";
-import {ExpressionComponent} from "./ExpressionComponent";
+import {CopiableExpression} from "./ExpressionComponent";
 import {NavLinks} from "./NavLinks";
 import {Page} from "./Page";
 import {ResultWithPremises} from "./ResultWithPremises";
@@ -49,9 +49,9 @@ export class TermDefinition extends React.Component {
     const {definition, newSymbol, newAttributes} = this.state;
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
-      <h3>Term Definition:  <ExpressionComponent expression={definition.defaultValue} boundVariableLists={[]}/></h3>
+      <h3>Term Definition:  <CopiableExpression expression={definition.defaultValue} boundVariableLists={[]}/></h3>
       <ResultWithPremises premises={definition.premises}
-                          result={<><ExpressionComponent expression={definition.defaultValue} boundVariableLists={[]}/> is defined by <ExpressionComponent expression={definition.definingStatement} boundVariableLists={[]}/></>}/>
+                          result={<><CopiableExpression expression={definition.defaultValue} boundVariableLists={[]}/> is defined by <CopiableExpression expression={definition.definingStatement} boundVariableLists={[]}/></>}/>
       <hr/>
       <Row>
         <Col xs={1}><strong>Symbol</strong></Col>

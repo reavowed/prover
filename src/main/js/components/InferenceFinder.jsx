@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {Parser} from "../Parser";
-import {ExpressionComponent} from "./ExpressionComponent";
+import {CopiableExpression} from "./ExpressionComponent";
 import {InferenceSummary} from "./InferenceSummary";
 import styled from "styled-components";
 
@@ -261,18 +261,18 @@ export class InferenceFinder extends React.Component {
                       onKeyUp={this.onInputKeyUp}
         /> :
         validValues.length === 1 ?
-          <Form.Label column><ExpressionComponent expression={validValues[0]} boundVariableLists={boundVariableLists} /></Form.Label> :
+          <Form.Label column><CopiableExpression expression={validValues[0]} boundVariableLists={boundVariableLists} /></Form.Label> :
           <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)}>
             <option value="" />
             {validValues.map(v =>
               <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                  <ExpressionComponent expression={v} boundVariableLists={boundVariableLists} />
+                  <CopiableExpression expression={v} boundVariableLists={boundVariableLists} />
                 )}}/>
             )}
           </Form.Control>;
 
       return <Form.Group key={key} as={Form.Row}>
-        <Form.Label column xs={2}><ExpressionComponent expression={{textForHtml: () => name}} boundVariableLists={[]}/></Form.Label>
+        <Form.Label column xs={2}><CopiableExpression expression={{textForHtml: () => name}} boundVariableLists={[]}/></Form.Label>
         <Form.Label column xs={1}>&rarr;</Form.Label>
         <Col>{selectionElement}</Col>
       </Form.Group>
@@ -321,14 +321,14 @@ export class InferenceFinder extends React.Component {
           {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
             <Form.Group as={Form.Row} key={i}>
               <Col xs={4}>
-                <ExpressionComponent expression={premise} boundVariableLists={[]} />
+                <CopiableExpression expression={premise} boundVariableLists={[]} />
               </Col>
               <Col>
                 <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)}>
                   <option value="" />
                   {suggestions.map((s, i) =>
                     <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                        <ExpressionComponent expression={s.statement} boundVariableLists={boundVariableLists} />
+                        <CopiableExpression expression={s.statement} boundVariableLists={boundVariableLists} />
                       )}}/>
                   )}
                 </Form.Control>
