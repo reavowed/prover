@@ -230,9 +230,9 @@ export const TargetStepProofLine = connect()(class extends React.Component {
             <CopiableExpression expression={step.statement} boundVariableLists={boundVariableLists}/>
           </h5>
           <div className="text-center">
+            <Button size="sm" className="ml-1" onClick={() => this.setProvingType('inference')}>Prove with inference</Button>
             {!transitive &&
               <>
-                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('inference')}>Prove with inference</Button>
                 <Button size="sm" className="ml-1" onClick={() => this.setProvingType('premise')}>Add premise</Button>
                 <Button size="sm" className="ml-1" onClick={() => this.setProvingType('naming')}>Name</Button>
                 <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'target', targetStatement: ''})}>Add target</Button>
