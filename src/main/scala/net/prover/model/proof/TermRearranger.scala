@@ -91,21 +91,47 @@ case class TermRearranger(
     }
   }
 
+  private def rearrangeLeaves(baseTree: OperatorTree, availableLeaves: Seq[Term], wrapper: Wrapper[Term, Term]): Option[(Seq[RearrangementStep], OperatorTree, Seq[Term])] = {
+    baseTree match {
+      case Leaf(t) =>
+        if (availableLeaves.contains(t)) {
+          Some((Nil, Leaf(t), availableLeaves.removeSingleValue(t)))
+        } else {
+          availableLeaves.mapFind { t2 =>
+            TermRearranger.rearrangeTerm(t, t2, wrapper, equality).map((_, Leaf(t2), availableLeaves.removeSingleValue(t2)))
+          }
+        }
+      case Operator(l, r, _) =>
+        for {
+          (leftSteps, leftTree, leavesAfterLeft) <- rearrangeLeaves(l, availableLeaves, wrapper.insert(t => operator(t, r.baseTerm)))
+          (rightSteps, rightTree, leavesAfterRight) <- rearrangeLeaves(r, leavesAfterLeft, wrapper.insert(t => operator(leftTree.baseTerm, t)))
+        } yield (leftSteps ++ rightSteps, Operator(leftTree, rightTree, operator(leftTree.baseTerm, rightTree.baseTerm)), leavesAfterRight)
+    }
+  }
+
+  private def rearrangeTrees(baseLhs: OperatorTree, baseRhs: OperatorTree, wrapper: Wrapper[Term, Term]) = {
+    for {
+      (innerRearrangementSteps, rearrangedLeft, remainingTerms) <- rearrangeLeaves(baseLhs, baseRhs.allLeaves, wrapper)
+      if remainingTerms.isEmpty
+      mainRearrangementSteps <- matchTrees(rearrangedLeft, baseRhs, wrapper)
+    } yield innerRearrangementSteps ++ mainRearrangementSteps
+  }
+
   def rearrange(lhsTerm: Term, rhsTerm: Term, wrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStep]] = {
     val baseLhs = disassemble(lhsTerm)
     val baseRhs = disassemble(rhsTerm)
 
-    def rearrangeDirectly: Option[Seq[RearrangementStep]] = matchTrees(baseLhs, baseRhs, wrapper)
+    def rearrangeDirectly: Option[Seq[RearrangementStep]] = rearrangeTrees(baseLhs, baseRhs, wrapper)
 
     def rearrangeUsingPremise(premiseLhs: OperatorTree, premiseRhs: OperatorTree): Option[Seq[RearrangementStep]] = {
       (for {
-        lhsMatch <- matchTrees(baseLhs, premiseLhs, wrapper)
-        rhsMatch <- matchTrees(premiseRhs, baseRhs, wrapper)
+        lhsMatch <- rearrangeTrees(baseLhs, premiseLhs, wrapper)
+        rhsMatch <- rearrangeTrees(premiseRhs, baseRhs, wrapper)
         joiner = RearrangementStep(premiseRhs.baseTerm, Nil, _ => None)
       } yield (lhsMatch :+ joiner) ++ rhsMatch) orElse
         (for {
-          firstMatch <- matchTrees(baseLhs, premiseRhs, wrapper)
-          secondMatch <- matchTrees(premiseLhs, baseRhs, wrapper)
+          firstMatch <- rearrangeTrees(baseLhs, premiseRhs, wrapper)
+          secondMatch <- rearrangeTrees(premiseLhs, baseRhs, wrapper)
           joiner = equality.reversalRearrangementStep(premiseRhs.baseTerm, premiseLhs.baseTerm, wrapper)
         } yield (firstMatch :+ joiner) ++ secondMatch)
     }
@@ -137,68 +163,75 @@ object TermRearranger {
       result <- rearranger.rearrange(lhs, rhs, wrapper)
     } yield result
   }
-  private def rearrange(
-    baseLhs: Term,
-    baseRhs: Term,
+  def rearrangeTerm(
+    lhs: Term,
+    rhs: Term,
+    wrapper: Wrapper[Term, Term],
     equality: Equality)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Step] = {
-    def rearrangeTerm(lhs: Term, rhs: Term, wrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStep]] = {
-      if (lhs == rhs)
-        Some(Nil)
-      else
-        rearrangeDirectly(lhs, rhs, equality, wrapper) orElse
-          ((lhs, rhs) match {
-            case (DefinedTerm(premiseComponents, premiseDefinition), DefinedTerm(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
-              rearrangeComponents(premiseComponents, targetComponents, wrapper.insert(components => premiseDefinition(components:_*)))
-            case (FunctionApplication(premiseName, premiseArguments), FunctionApplication(targetName, targetArguments)) if premiseName == targetName =>
-              rearrangeComponents(premiseArguments, targetArguments, wrapper.insert(arguments => FunctionApplication(premiseName, arguments.toType[Term].get)))
-            case _ =>
-              None
-          })
+  ): Option[Seq[RearrangementStep]] = {
+    if (lhs == rhs)
+      Some(Nil)
+    else
+      rearrangeDirectly(lhs, rhs, equality, wrapper) orElse
+        ((lhs, rhs) match {
+          case (DefinedTerm(premiseComponents, premiseDefinition), DefinedTerm(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
+            rearrangeComponents(premiseComponents, targetComponents, wrapper.insert(components => premiseDefinition(components:_*)), equality)
+          case (FunctionApplication(premiseName, premiseArguments), FunctionApplication(targetName, targetArguments)) if premiseName == targetName =>
+            rearrangeComponents(premiseArguments, targetArguments, wrapper.insert(arguments => FunctionApplication(premiseName, arguments.toType[Term].get)), equality)
+          case _ =>
+            None
+        })
+  }
+  def rearrangeStatement(
+    lhsStatement: Statement,
+    rhsStatement: Statement,
+    wrapper: Wrapper[Statement, Term],
+    equality: Equality)(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[Seq[RearrangementStep]] = {
+    if (lhsStatement == rhsStatement)
+      Some(Nil)
+    else (lhsStatement, rhsStatement) match {
+      case (DefinedStatement(premiseComponents, premiseDefinition), DefinedStatement(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
+        rearrangeComponents(premiseComponents, targetComponents, wrapper.insert(components => premiseDefinition(components:_*)), equality)
+      case (PredicateApplication(premiseName, premiseArguments), PredicateApplication(targetName, targetArguments)) if premiseName == targetName =>
+        rearrangeComponents(premiseArguments, targetArguments, wrapper.insert(arguments => PredicateApplication(premiseName, arguments.toType[Term].get)), equality)
+      case _ =>
+        None
     }
-    def rearrangeStatement(lhsStatement: Statement, rhsStatement: Statement, wrapper: Wrapper[Statement, Term]): Option[Seq[RearrangementStep]] = {
-      if (lhsStatement == rhsStatement)
-        Some(Nil)
-      else (lhsStatement, rhsStatement) match {
-        case (DefinedStatement(premiseComponents, premiseDefinition), DefinedStatement(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
-          rearrangeComponents(premiseComponents, targetComponents, wrapper.insert(components => premiseDefinition(components:_*)))
-        case (PredicateApplication(premiseName, premiseArguments), PredicateApplication(targetName, targetArguments)) if premiseName == targetName =>
-          rearrangeComponents(premiseArguments, targetArguments, wrapper.insert(arguments => PredicateApplication(premiseName, arguments.toType[Term].get)))
+  }
+  def rearrangeComponents(
+    lhsComponents: Seq[Expression],
+    rhsComponents: Seq[Expression],
+    wrapper: Wrapper[Seq[Expression], Term],
+    equality: Equality)(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[Seq[RearrangementStep]] = {
+    def helper(previousComponents: Seq[(Expression, Expression)], nextComponents: Seq[(Expression, Expression)], currentSteps: Seq[RearrangementStep]): Option[Seq[RearrangementStep]] = {
+      nextComponents match {
+        case Nil =>
+          Some(currentSteps)
+        case (premise: Statement, target: Statement) +: moar =>
+          rearrangeStatement(premise, target, wrapper.insert(s => (previousComponents.map(_._2) :+ s) ++ moar.map(_._1)), equality)
+            .flatMap(newSteps => helper(previousComponents :+ (premise, target), moar, currentSteps ++ newSteps))
+        case (premise: Term, target: Term) +: moar =>
+          rearrangeTerm(premise, target, wrapper.insert(t => (previousComponents.map(_._2) :+ t) ++ moar.map(_._1)), equality)
+            .flatMap(newSteps => helper(previousComponents :+ (premise, target), moar, currentSteps ++ newSteps))
         case _ =>
           None
       }
     }
-    def rearrangeComponents(lhsComponents: Seq[Expression], rhsComponents: Seq[Expression], wrapper: Wrapper[Seq[Expression], Term]): Option[Seq[RearrangementStep]] = {
-      def helper(previousComponents: Seq[(Expression, Expression)], nextComponents: Seq[(Expression, Expression)], currentSteps: Seq[RearrangementStep]): Option[Seq[RearrangementStep]] = {
-        nextComponents match {
-          case Nil =>
-            Some(currentSteps)
-          case (premise: Statement, target: Statement) +: moar =>
-            rearrangeStatement(premise, target, wrapper.insert(s => (previousComponents.map(_._2) :+ s) ++ moar.map(_._1)))
-              .flatMap(newSteps => helper(previousComponents :+ (premise, target), moar, currentSteps ++ newSteps))
-          case (premise: Term, target: Term) +: moar =>
-            rearrangeTerm(premise, target, wrapper.insert(t => (previousComponents.map(_._2) :+ t) ++ moar.map(_._1)))
-              .flatMap(newSteps => helper(previousComponents :+ (premise, target), moar, currentSteps ++ newSteps))
-          case _ =>
-            None
-        }
-      }
-      lhsComponents.zipStrict(rhsComponents).flatMap(helper(Nil, _, Nil))
-    }
-
-    for {
-      rearrangementSteps <- rearrangeTerm(baseLhs, baseRhs, Wrapper.identity)
-      steps = equality.addTransitivityToRearrangement(baseLhs, rearrangementSteps)
-      result <- Step.Elided.ifNecessary(steps, "Rearranged")
-    } yield result
+    lhsComponents.zipStrict(rhsComponents).flatMap(helper(Nil, _, Nil))
   }
 
   def rearrange(targetStatement: Statement)(implicit stepProvingContext: StepProvingContext): Option[Step] = {
     for {
       equality <- stepProvingContext.provingContext.equalityOption
       (lhs, rhs) <- equality.unapply(targetStatement)
-      result <- rearrange(lhs, rhs, equality)
+      rearrangementSteps <- rearrangeTerm(lhs, rhs, Wrapper.identity, equality)
+      steps = equality.addTransitivityToRearrangement(lhs, rearrangementSteps)
+      result <- Step.Elided.ifNecessary(steps, "Rearranged")
     } yield result
   }
 }

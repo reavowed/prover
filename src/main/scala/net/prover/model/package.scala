@@ -260,6 +260,14 @@ package object model {
       }
     }
     def removeAtIndex(index: Int): Seq[T] = seq.take(index) ++ seq.drop(index + 1)
+    def removeSingleValue(t: T): Seq[T] = {
+      val index = seq.indexOf(t)
+      if (index >= 0) {
+        removeAtIndex(index)
+      } else {
+        seq
+      }
+    }
   }
 
   implicit class IterableOps[T](iterable: Iterable[T]) {
