@@ -220,11 +220,11 @@ export class InferenceFinder extends React.Component {
     return numberOfParameters ? allSelectableValues[type][name][numberOfParameters] : allSelectableValues[type][name];
   };
 
-  setSelectedSubstitutionValue = (setter, value) => {
+  setSelectedSubstitutionValue = (setter, value, callback) => {
     let selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
     setter(selectedSubstitutionValues, value);
     selectedSubstitutionValues = this.updateForcedSubstitutionValues(selectedSubstitutionValues, this.state.selectedPremiseSuggestions, this.state.additionalSubstitutionSuggestions);
-    this.setState({selectedSubstitutionValues});
+    this.setState({selectedSubstitutionValues}, callback);
   };
   onInputKeyUp = (event) => {
     if (event.keyCode === 13 && this.readyToSubmit()) {
@@ -257,7 +257,7 @@ export class InferenceFinder extends React.Component {
       const selectionElement = !validValues ?
         <Form.Control type="text"
                       value={getter(this.state.selectedSubstitutionValues)}
-                      onChange={e => this.setSelectedSubstitutionValue(setter, Parser.replaceShorthands(e.target.value))}
+                      onChange={e => this.setSelectedSubstitutionValue(setter, ...Parser.replaceShorthands(e))}
                       onKeyUp={this.onInputKeyUp}
         /> :
         validValues.length === 1 ?

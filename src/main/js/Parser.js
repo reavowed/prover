@@ -2,12 +2,17 @@ import _ from "lodash";
 import {Expression} from "./models/Expression";
 
 export class Parser {
-  static replaceShorthands = (text) => {
-    _.each(_.toPairs(window.definitionShorthands), ([valueToReplace, symbol]) => {
-      let regex = new RegExp('(?<=^|\\s)' + _.escapeRegExp(valueToReplace) + '(?=\\s)', 'gim');
-      text = text.replace(regex, symbol);
-    });
-    return text;
+  static replaceShorthands = (event) => {
+    const input = event.target;
+    const initialText = input.value.substring(0, input.selectionStart);
+    const finalText = input.value.substring(input.selectionStart);
+    const replacedInitialText =_.reduce(_.toPairs(window.definitionShorthands), (text, [valueToReplace, symbol]) => {
+      const regex = new RegExp('(?<=^|\\s)' + _.escapeRegExp(valueToReplace) + '(?=\\s$)', 'gim');
+      return text.replace(regex, symbol);
+    }, initialText);
+    const replacedText = replacedInitialText + finalText;
+    const callback = () => input.setSelectionRange(replacedInitialText.length, replacedInitialText.length);
+    return [replacedText, callback];
   };
   static parseInferenceSummary(inference) {
     inference.premises = inference.premises.map(Expression.parseFromJson);

@@ -246,15 +246,15 @@ export class Chapter extends React.Component {
     theoremBeingAdded.name = newName;
     this.setState({theoremBeingAdded});
   };
-  updateTheoremPremises = (newPremises) => {
-    const {theoremBeingAdded} = this.state;
-    theoremBeingAdded.premises = Parser.replaceShorthands(newPremises);
-    this.setState({theoremBeingAdded});
+  updateTheoremPremises = (event) => {
+    const [premises, callback] = Parser.replaceShorthands(event);
+    const theoremBeingAdded = _.assign({}, this.state.theoremBeingAdded, {premises});
+    this.setState({theoremBeingAdded}, callback)
   };
-  updateTheoremConclusion = (newConclusion) => {
-    const {theoremBeingAdded} = this.state;
-    theoremBeingAdded.conclusion = Parser.replaceShorthands(newConclusion);
-    this.setState({theoremBeingAdded});
+  updateTheoremConclusion = (event) => {
+    const [conclusion, callback] = Parser.replaceShorthands(event);
+    const theoremBeingAdded = _.assign({}, this.state.theoremBeingAdded, {conclusion});
+    this.setState({theoremBeingAdded}, callback);
   };
   saveTheorem = () => {
     const {theoremBeingAdded} = this.state;
@@ -304,25 +304,25 @@ export class Chapter extends React.Component {
     termBeingAdded.format = newFormat;
     this.setState({termBeingAdded});
   };
-  updateTermPremises = (newPremises) => {
-    const {termBeingAdded} = this.state;
-    termBeingAdded.premises = Parser.replaceShorthands(newPremises);
-    this.setState({termBeingAdded});
+  updateTermPremises = (event) => {
+    const [premises, callback] = Parser.replaceShorthands(event);
+    const termBeingAdded = _.assign({}, this.state.termBeingAdded, {premises});
+    this.setState({termBeingAdded}, callback);
   };
-  updateTermDefinition = (newDefinition) => {
-    const {termBeingAdded} = this.state;
-    termBeingAdded.definition = Parser.replaceShorthands(newDefinition);
-    this.setState({termBeingAdded});
+  updateTermDefinition = (event) => {
+    const [definition, callback] = Parser.replaceShorthands(event);
+    const termBeingAdded = _.assign({}, this.state.termBeingAdded, {definition});
+    this.setState({termBeingAdded}, callback);
   };
-  updateTermShorthand = (newShorthand) => {
-    const {termBeingAdded} = this.state;
-    termBeingAdded.shorthand = Parser.replaceShorthands(newShorthand);
-    this.setState({termBeingAdded});
+  updateTermShorthand = (event) => {
+    const [shorthand, callback] = Parser.replaceShorthands(event);
+    const termBeingAdded = _.assign({}, this.state.termBeingAdded, {shorthand});
+    this.setState({termBeingAdded}, callback);
   };
-  updateTermAttributes = (newAttributes) => {
-    const {termBeingAdded} = this.state;
-    termBeingAdded.attributes = Parser.replaceShorthands(newAttributes);
-    this.setState({termBeingAdded});
+  updateTermAttributes = (event) => {
+    const [attributes, callback] = Parser.replaceShorthands(event);
+    const termBeingAdded = _.assign({}, this.state.termBeingAdded, {attributes});
+    this.setState({termBeingAdded}, callback);
   };
   saveTerm = () => {
     const {termBeingAdded} = this.state;
@@ -335,10 +335,10 @@ export class Chapter extends React.Component {
     }).then(this.stopAddingTerm);
   };
 
-  createUpdater = (statePropertyName, innerPropertyName, transformer) => (newPropertyValue) => {
-    const currentStateValue = this.state[statePropertyName];
-    currentStateValue[innerPropertyName] = transformer ? transformer(newPropertyValue) : newPropertyValue;
-    this.setState({statePropertyName: currentStateValue});
+  createUpdater = (statePropertyName, innerPropertyName, transformer) => (event) => {
+    const [newValue, callback] = transformer ? transformer(event) : [event.target.value, null];
+    const newStateValue = _.assign({}, this.state.statePropertyName, {innerPropertyName: newValue});
+    this.setState({statePropertyName: newStateValue}, callback);
   };
 
   startAddingProperty = () => {
@@ -396,7 +396,7 @@ export class Chapter extends React.Component {
     const updateControl = (caption, statePropertyName, innerPropertyName, transformer) => {
       return <Form.Group>
         <Form.Label><strong>{caption}</strong></Form.Label>
-        <Form.Control type="text" value={this.state[statePropertyName][innerPropertyName]} onChange={e => this.createUpdater(statePropertyName, innerPropertyName, transformer)(e.target.value)}/>
+        <Form.Control type="text" value={this.state[statePropertyName][innerPropertyName]} onChange={e => this.createUpdater(statePropertyName, innerPropertyName, transformer)(e)}/>
       </Form.Group>
     };
 
@@ -420,11 +420,11 @@ export class Chapter extends React.Component {
         </Form.Group>
         <Form.Group>
           <Form.Label>Premises</Form.Label>
-          <Form.Control as="textarea" value={this.state.theoremBeingAdded.premises} onChange={e => this.updateTheoremPremises(e.target.value)}/>
+          <Form.Control as="textarea" value={this.state.theoremBeingAdded.premises} onChange={e => this.updateTheoremPremises(e)}/>
         </Form.Group>
         <Form.Group>
           <Form.Label>Conclusion</Form.Label>
-          <Form.Control type="text" value={this.state.theoremBeingAdded.conclusion} onChange={e => this.updateTheoremConclusion(e.target.value)}/>
+          <Form.Control type="text" value={this.state.theoremBeingAdded.conclusion} onChange={e => this.updateTheoremConclusion(e)}/>
         </Form.Group>
         <Button variant="primary" onClick={this.saveTheorem}>Save theorem</Button>
       </>}
@@ -458,25 +458,25 @@ export class Chapter extends React.Component {
           <Form.Label><strong>Premises</strong></Form.Label>
           <Form.Control as="textarea"
                         value={this.state.termBeingAdded.premises}
-                        onChange={(e) => this.updateTermPremises(e.target.value)}/>
+                        onChange={(e) => this.updateTermPremises(e)}/>
         </Form.Group>
         <Form.Group>
           <Form.Label><strong>Definition</strong></Form.Label>
           <Form.Control type="text"
                         value={this.state.termBeingAdded.definition}
-                        onChange={(e) => this.updateTermDefinition(e.target.value)}/>
+                        onChange={(e) => this.updateTermDefinition(e)}/>
         </Form.Group>
         <Form.Group>
           <Form.Label><strong>Shorthand</strong></Form.Label>
           <Form.Control type="text"
                         value={this.state.termBeingAdded.shorthand}
-                        onChange={(e) => this.updateTermShorthand(e.target.value)}/>
+                        onChange={(e) => this.updateTermShorthand(e)}/>
         </Form.Group>
         <Form.Group>
           <Form.Label><strong>Attributes</strong></Form.Label>
           <Form.Control type="text"
                         value={this.state.termBeingAdded.attributes}
-                        onChange={(e) => this.updateTermAttributes(e.target.value)}/>
+                        onChange={(e) => this.updateTermAttributes(e)}/>
         </Form.Group>
         <Button size="sm" onClick={this.saveTerm}>Save term</Button>
         <Button size="sm" className="ml-2" variant="danger" onClick={this.stopAddingTerm}>Cancel</Button>

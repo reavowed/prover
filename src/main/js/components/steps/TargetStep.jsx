@@ -289,7 +289,10 @@ export const TargetStepProofLine = connect()(class extends React.Component {
                   <Form.Control type="text"
                                 autoFocus
                                 value={this.state.targetStatement}
-                                onChange={(e) => this.setState({targetStatement: Parser.replaceShorthands(e.target.value)})}/>
+                                onChange={(e) => {
+                                  const [targetStatement, callback] = Parser.replaceShorthands(e);
+                                  this.setState({targetStatement}, callback);
+                                }}/>
                 </FlexRow.Grow>
                 <Button size="sm" className="ml-1" onClick={this.addTarget}>Add</Button>
               </FlexRow>
@@ -315,7 +318,10 @@ export const TargetStepProofLine = connect()(class extends React.Component {
                   <Form.Control type="text"
                                 autoFocus
                                 value={this.state.targetStatement}
-                                onChange={(e) => this.setState({targetStatement: Parser.replaceShorthands(e.target.value)})}/>
+                                onChange={(e) => {
+                                  const [targetStatement, callback] = Parser.replaceShorthands(e);
+                                  this.setState({targetStatement}, callback);
+                                }}/>
                 </FlexRow.Grow>
                 <Button size="sm" className="ml-1" onClick={this.addTransitiveTarget}>Add</Button>
               </FlexRow>
