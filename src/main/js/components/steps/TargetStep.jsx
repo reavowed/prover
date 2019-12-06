@@ -179,7 +179,7 @@ export const TargetStepProofLine = connect()(class extends React.Component {
   };
 
   addTransitiveTarget = () => {
-    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, "transitiveTarget", {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "transitiveTarget", {
       method: "POST",
       body: this.state.targetStatement
     }));
