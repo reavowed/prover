@@ -145,7 +145,12 @@ object PremiseFinder {
         Nil
     }
 
-    directly ++ bySimplifying
+    unsubstitutedPremiseStatement.applySubstitutions(initialSubstitutions.stripApplications()) match {
+      case Some(substitutedPremiseStatement) =>
+        findPremiseSteps(substitutedPremiseStatement).map((_, substitutedPremiseStatement, initialSubstitutions)).toSeq
+      case None =>
+        directly ++ bySimplifying
+    }
   }
 
   def findPremiseSteps(

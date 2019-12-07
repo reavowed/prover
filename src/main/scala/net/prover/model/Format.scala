@@ -66,14 +66,6 @@ object Format {
     Format.Default(formatString, requiresBrackets)
   }
 
-  private def testAndRemoveSuffix(str: String, suffix: String): (String, Boolean) = {
-    if (str.endsWith(suffix)) {
-      (str.stripSuffix(suffix), true)
-    } else {
-      (str, false)
-    }
-  }
-
   def parser(replacementNames: Seq[String]): Parser[Format.Explicit] = {
     for {
       originalString <- Parser.allInParens
