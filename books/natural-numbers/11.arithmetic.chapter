@@ -1,6 +1,6 @@
 Some basic facts about natural number arithmetic.
 
-display apply × orderedPair a b as (ab)
+display apply × orderedPair a b as (ab) requires-brackets
 
 theorem Difference Between Two Naturals Is a Natural Number
 conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ → ∈ orderedPair $$0 $0 < ∃ x ∧ ∈ $0 ℕ = apply + orderedPair $$$0 $0 $$0

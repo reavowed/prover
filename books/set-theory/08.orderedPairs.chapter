@@ -2,7 +2,7 @@ Establish the existence of the ordered pair (a, b).
 
 term orderedPair (a b)
   name (Ordered Pair)
-  format ((a, b))
+  format ((a, b)) no-component-brackets
   (= $0 pair singleton a pair a b)
   shorthand (op)
 
