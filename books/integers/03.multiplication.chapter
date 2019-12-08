@@ -742,7 +742,7 @@ conclusion function ×_ℤ product ℤ ℤ ℤ
                         }
                       }
                     }
-                    prove ∃! x ∈ orderedPair $$$$$$$$0 $0 ×_ℤ 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ) (∈ orderedPair $$$$$$$0 $$$$$$$$0 ×_ℤ) () 2.0.0.1.0.1.0.1.0.2 2.0.0.1.0.1.0.1.0.1
+                    prove ∃! y ∈ orderedPair $$$$$$$$0 $0 ×_ℤ ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () (equivalenceClass orderedPair apply + orderedPair apply × orderedPair $$$$0 $$0 apply × orderedPair $$$0 $0 apply + orderedPair apply × orderedPair $$$$0 $0 apply × orderedPair $$$0 $$0 ~_ℤ) (∈ orderedPair $$$$$$$0 $$$$$$$$0 ×_ℤ) () 2.0.0.1.0.1.0.1.0.1 2.0.0.1.0.1.0.1.0.2
                   } 2.0.0.1.0.1.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                 } 2.0.0.1.0.1.0.0
               } 2.0.0.1.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c

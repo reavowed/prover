@@ -202,7 +202,7 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
               prove ∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$$0 d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () ($$$0, A, $0) () (orderedPair equivalenceClass $$$$0 ≈ apply f $$$$0) 0a 0.0.2.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
               prove ∈ orderedPair $$0 apply f $0 $$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, equivalenceClass $0 ≈) (∈ orderedPair $$$$0 apply f $0 $$$0) () 0.0.2.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.0.2.0.1.1.0
             }
-            prove ∃! y ∈ orderedPair $$$0 $0 $$$$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply f $0) (∈ orderedPair $$0 $$$$0 $$$0) () 0.0.2.0.1.0 0.0.2.0.1.1
+            prove ∃! y ∈ orderedPair $$$0 $0 $$$$0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () (apply f $0) (∈ orderedPair $$0 $$$$0 $$$0) () 0.0.2.0.1.1 0.0.2.0.1.0
           } 0.0.2.0.0
         }
       }
@@ -250,9 +250,9 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
         }
       }
     }
-    elided 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 {
+    elided ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d {
       prove ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 equivalenceQuotient A ≈ B, ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0) () () () 0.0 0.1
-      prove ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ function $$0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$$0 equivalenceClass $0 ≈ apply f $0) () 0.2 0.3.0
+      prove ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () ($0) (∧ function $$0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$$0 equivalenceClass $0 ≈ apply f $0) () 0.3.0 0.2
     }
   }
 }

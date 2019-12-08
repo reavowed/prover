@@ -145,7 +145,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
         }
       }
     }
-    prove ∃! x_0 ∈ orderedPair 0 $0 union $$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (g_0) (∈ orderedPair 0 $$0 union $0) () 0.3 0.2
+    prove ∃! x_0 ∈ orderedPair 0 $0 union $$0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () (g_0) (∈ orderedPair 0 $$0 union $0) () 0.2 0.3
     subproof (Inductive case) {
       take n {
         assume ∧ ∈ $0 ℕ ∃! x_n ∈ orderedPair $$0 $0 union $$$0 {
@@ -369,7 +369,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                     }
                   }
                 }
-                prove ∃! y ∈ orderedPair successor $$$$$0 $0 union $$$$$$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply f $$$0) (∈ orderedPair successor $$$$0 $$$$$$0 union $$$$$0) () 0.5.0.0.0.1.1.1 0.5.0.0.0.1.1.0
+                prove ∃! y ∈ orderedPair successor $$$$$0 $0 union $$$$$$0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () (apply f $$$0) (∈ orderedPair successor $$$$0 $$$$$$0 union $$$$$0) () 0.5.0.0.0.1.1.0 0.5.0.0.0.1.1.1
               } 0.5.0.0.0.1.0
             } 0.5.0.0.0.0
           } 0.5.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c

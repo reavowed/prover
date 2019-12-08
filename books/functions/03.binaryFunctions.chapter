@@ -70,7 +70,7 @@ conclusion ∃! g ∧ function $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈
               }
             }
           }
-          prove ∃! y ∈ orderedPair $$0 $0 $$$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply apply f first $0 second $0) (∈ orderedPair $0 $$$0 $$0) () 0.0.1.0.8 0.0.1.0.7
+          prove ∃! y ∈ orderedPair $$0 $0 $$$0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () (apply apply f first $0 second $0) (∈ orderedPair $0 $$$0 $$0) () 0.0.1.0.7 0.0.1.0.8
         }
       }
       elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
@@ -142,9 +142,9 @@ conclusion ∃! g ∧ function $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈
         }
       }
     }
-    elided 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 {
+    elided ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d {
       prove ∧ function $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 product A B C, ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0) () () () 0.0 0.1
-      prove ∃! g ∧ function $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ function $$0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$0 $0 apply apply f $$0 $0) () 0.2 0.3.0
+      prove ∃! g ∧ function $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () ($0) (∧ function $$0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$0 $0 apply apply f $$0 $0) () 0.3.0 0.2
     }
   }
 }

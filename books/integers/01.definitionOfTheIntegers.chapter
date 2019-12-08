@@ -134,7 +134,7 @@ conclusion ∃! ~ ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b →
         }
       }
     }
-    take x {
+    take ~ {
       assume ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 {
         take y {
           assume ∈ $0 $$0 {
@@ -267,9 +267,9 @@ conclusion ∃! ~ ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b →
         prove = $0 $$0 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () ($0, $$0) () () 0.3.0.0
       }
     }
-    elided 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 {
+    elided ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d {
       prove ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation $0 product ℕ ℕ, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0) () () () 0.1 0.2
-      prove ∃! x ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ relation $$0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0) () 0.3 0.4.0
+      prove ∃! ~ ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () ($0) (∧ relation $$0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$$0 = apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0) () 0.4.0 0.3
     }
   }
 }
@@ -731,7 +731,7 @@ conclusion function ⍳_ℤ ℕ ℤ
             } 2.0.0.1.0.0
           }
         }
-        prove ∃! x ∈ orderedPair $$0 $0 ⍳_ℤ 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (equivalenceClass orderedPair $0 0 ~_ℤ) (∈ orderedPair $0 $$0 ⍳_ℤ) () 2.0.0.1 2.0.0.0
+        prove ∃! x ∈ orderedPair $$0 $0 ⍳_ℤ ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () (equivalenceClass orderedPair $0 0 ~_ℤ) (∈ orderedPair $0 $$0 ⍳_ℤ) () 2.0.0.0 2.0.0.1
       }
     }
   }

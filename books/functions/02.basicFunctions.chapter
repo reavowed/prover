@@ -37,7 +37,7 @@ conclusion function singleton orderedPair a b singleton a singleton b
           prove = $0 b 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$0, $0, a, b) () () 4.0.2.0.0
         }
       }
-      prove ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (b) (∈ orderedPair $0 $$0 singleton orderedPair a b) () 4.0.2 4.0.1
+      prove ∃! x ∈ orderedPair $$0 $0 singleton orderedPair a b ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () (b) (∈ orderedPair $0 $$0 singleton orderedPair a b) () 4.0.1 4.0.2
     }
   }
   elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
@@ -101,7 +101,7 @@ conclusion function ∪ f g ∪ A C ∪ B D
       }
       prove ∈ orderedPair $0 apply f $0 f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, $0) () () p0 11.0a
       prove ∈ orderedPair $0 apply f $0 ∪ f g d5036b7bd1f8054f54a2ccbe06169976406b3c34f776c4970f70cce1213a84c8 () (orderedPair $0 apply f $0, f, g) () () 11.0.1
-      prove ∃! y ∈ orderedPair $$0 $0 ∪ f g 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply f $0) (∈ orderedPair $0 $$0 ∪ f g) () 11.0.0 11.0.2
+      prove ∃! x ∈ orderedPair $$0 $0 ∪ f g ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () (apply f $0) (∈ orderedPair $0 $$0 ∪ f g) () 11.0.2 11.0.0
     }
     assume ∈ $0 C {
       take y {
@@ -127,7 +127,7 @@ conclusion function ∪ f g ∪ A C ∪ B D
       }
       prove ∈ orderedPair $0 apply g $0 g 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (g, C, D, $0) () () p1 11.1a
       prove ∈ orderedPair $0 apply g $0 ∪ f g 3934182eb9a158255503c3f89add40bbec2df3dd151306da9ffbe1ba6f0ccf6a () (orderedPair $0 apply g $0, g, f) () () 11.1.1
-      prove ∃! y ∈ orderedPair $$0 $0 ∪ f g 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (apply g $0) (∈ orderedPair $0 $$0 ∪ f g) () 11.1.0 11.1.2
+      prove ∃! x ∈ orderedPair $$0 $0 ∪ f g ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () (apply g $0) (∈ orderedPair $0 $$0 ∪ f g) () 11.1.2 11.1.0
     }
     elided 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 {
       assume ∈ $0 ∪ A C {
@@ -247,7 +247,7 @@ conclusion function f A B
             } 2.0.0.1.0.0
           }
         }
-        prove ∃! x ∈ orderedPair $$0 $0 f 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () (with ($0) F) (∈ orderedPair $0 $$0 f) () 2.0.0.1 2.0.0.0
+        prove ∃! x ∈ orderedPair $$0 $0 f ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () (with ($0) F) (∈ orderedPair $0 $$0 f) () 2.0.0.0 2.0.0.1
       }
     }
   }
@@ -377,9 +377,9 @@ conclusion ∃! f ∧ function $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) 
         }
       }
     }
-    elided 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 {
+    elided ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d {
       prove ∧ function $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 A B, ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ) () () () 0.0 0.1
-      prove ∃! f ∧ function $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ 779308aeb7a19deef16c098ec4314c5126eb674d0a2a641e1f6e5aa2c67b3a97 () ($0) (∧ function $$0 A B ∀ a → ∈ $0 A with ($0 apply $$$0 $0) φ) () 0.2 0.3.0
+      prove ∃! f ∧ function $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d () ($0) (∧ function $$0 A B ∀ a → ∈ $0 A with ($0 apply $$$0 $0) φ) () 0.3.0 0.2
     }
   }
 }
