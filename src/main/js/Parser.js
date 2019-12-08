@@ -70,6 +70,7 @@ export class Parser {
       const suggestion = _.cloneDeep(suggestionJson);
       Parser.parseInferenceSummary(suggestion.inference);
       suggestion.substitutions && (suggestion.substitutions = _.map(suggestion.substitutions, Parser.parseSubstitutions));
+      suggestion.conclusion = Expression.parseFromJson(suggestion.conclusion);
       return suggestion;
     })
   }

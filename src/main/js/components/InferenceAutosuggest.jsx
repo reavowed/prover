@@ -31,7 +31,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const {getSuggestionValue, suggestions, onSuggestionsFetchRequested, onSuggestionsClearRequested, onSuggestionSelected, value, onValueChange} = this.props;
+    const {getSuggestionValue, renderSuggestion, suggestions, onSuggestionsFetchRequested, onSuggestionsClearRequested, onSuggestionSelected, value, onValueChange} = this.props;
 
     function renderSuggestionsContainer ({containerProps, children}) {
       return <div {...containerProps}><DropdownContainer>{children}</DropdownContainer></div>
@@ -46,7 +46,7 @@ export default class extends React.Component {
       getSuggestionValue={getSuggestionValue}
       renderSuggestionsContainer={renderSuggestionsContainer}
       onSuggestionSelected={onSuggestionSelected}
-      renderSuggestion={s => <span className="dropdown-item">{getSuggestionValue(s)}</span>}
+      renderSuggestion={s => <span className="dropdown-item">{(renderSuggestion || getSuggestionValue)(s)}</span>}
       inputProps={{value: value, onChange: onValueChange, className:"form-control"}} />
   }
 }

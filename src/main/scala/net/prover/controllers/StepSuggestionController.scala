@@ -71,7 +71,8 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     inference: Inference.Summary,
     requiredSubstitutions: Substitutions.Required,
     substitutions: Seq[SuggestedSubstitutions],
-    rewriteInference: Option[Inference.Summary])
+    rewriteInference: Option[Inference.Summary],
+    conclusion: Statement)
 
   case class PremiseSuggestions(immediateSubstitutions: Option[Substitutions], premiseMatches: Seq[Seq[PossiblePremiseMatch]])
   case class PossiblePremiseMatch(statement: Statement, substitutions: Seq[SuggestedSubstitutions])
@@ -97,15 +98,17 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       implicit val implicitStepContext: StepContext = stepContext
       def getSuggestions(inference: Inference): Seq[InferenceSuggestion] = {
         val direct = inference.conclusion.calculateSubstitutions(targetStep.statement).map(SuggestedSubstitutions.apply).map { substitutions =>
-          InferenceSuggestion(inference.summary, inference.requiredSubstitutions, Seq(substitutions), None)
+          InferenceSuggestion(inference.summary, inference.requiredSubstitutions, Seq(substitutions), None, inference.conclusion)
         }
         def rewritten = for {
           (rewriteInference, rewritePremise) <- provingContext.rewriteInferences
           rewriteSubstitutions <- rewriteInference.conclusion.calculateSubstitutions(targetStep.statement).flatMap(_.confirmTotality).toSeq
           rewrittenTarget <- rewritePremise.applySubstitutions(rewriteSubstitutions).toSeq
+          inferenceRewriteSubstitutions <- rewritePremise.calculateSubstitutions(inference.conclusion).flatMap(_.confirmTotality).toSeq
+          rewrittenConclusion <- rewriteInference.conclusion.applySubstitutions(inferenceRewriteSubstitutions).toSeq
           possibleSubstitutions <- inference.conclusion.calculateSubstitutions(rewrittenTarget).toSeq
-          suggestedSubstituions = SuggestedSubstitutions(possibleSubstitutions)
-        } yield InferenceSuggestion(inference.summary, inference.requiredSubstitutions, Seq(suggestedSubstituions), Some(rewriteInference.summary))
+          suggestedSubstitutions = SuggestedSubstitutions(possibleSubstitutions)
+        } yield InferenceSuggestion(inference.summary, inference.requiredSubstitutions, Seq(suggestedSubstitutions), Some(rewriteInference.summary), rewrittenConclusion)
         direct.map(Seq(_)).getOrElse(rewritten)
       }
       filterInferences(provingContext.entryContext.inferences, searchText)
@@ -136,7 +139,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       filterInferences(entryContext.inferences, searchText)
         .reverse
         .take(10)
-        .map { inference => InferenceSuggestion(inference.summary, inference.requiredSubstitutions, Seq(SuggestedSubstitutions.empty), None) }
+        .map { inference => InferenceSuggestion(inference.summary, inference.requiredSubstitutions, Seq(SuggestedSubstitutions.empty), None, inference.conclusion) }
     }).toResponseEntity
   }
 
@@ -178,7 +181,8 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
           inference.summary,
           inference.requiredSubstitutions,
           suggestedSubstitutions,
-          None)
+          None,
+          inference.conclusion)
         def rewritten = for {
           (rewriteInference, rewritePremise) <- provingContext.rewriteInferences
           rewriteSubstitutions <- rewriteInference.conclusion.calculateSubstitutions(inference.conclusion).flatMap(_.confirmTotality).toSeq
@@ -186,7 +190,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
           conclusionPart <- f(transitivityDefinition, rewrittenConclusion, stepContext).toSeq
           possibleSubstitutions <- calculateSubstitutionsForTermOrSubTerm(targetPart, conclusionPart).toSeq
           suggestedSubstitutions = possibleSubstitutions.map(SuggestedSubstitutions.apply)
-        } yield InferenceSuggestion(inference.summary, inference.requiredSubstitutions, suggestedSubstitutions, Some(rewriteInference.summary))
+        } yield InferenceSuggestion(inference.summary, inference.requiredSubstitutions, suggestedSubstitutions, Some(rewriteInference.summary), rewrittenConclusion)
         direct.toSeq ++ rewritten
       }
 
@@ -364,7 +368,8 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
               inference.summary.copy(premises = namingPremises),
               inference.requiredSubstitutions,
               Seq(s),
-              None))
+              None,
+              inference.conclusion))
         }
         .take(10)
     }).toResponseEntity

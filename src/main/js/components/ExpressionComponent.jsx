@@ -89,6 +89,8 @@ export class ExpressionComponent extends React.Component {
       return formatHtmlWithoutWrapping(format, s => replacePlaceholders(s, [...renderedBoundVariables, ...renderedComponents]));
     } else if (expression.textForHtml) {
       return formatHtmlWithoutWrapping(expression.textForHtml(boundVariableLists));
+    } else {
+      throw "Could not render expression " + expression;
     }
   }
 

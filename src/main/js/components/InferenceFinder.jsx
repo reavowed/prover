@@ -273,6 +273,20 @@ export class InferenceFinder extends React.Component {
     };
     const {title, boundVariableLists, autofocus} = this.props;
 
+    class SuggestionDropdownElement extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {showConclusion: false};
+      }
+      render() {
+        const {suggestion} = this.props;
+        return <div onMouseEnter={() => this.setState({showConclusion: true})} onMouseLeave={() => this.setState({showConclusion: false})}>
+          {getSuggestionValue(suggestion)} {this.state.showConclusion && <>- <CopiableExpression expression={suggestion.conclusion} boundVariableLists={[]} /></>}
+        </div>
+      }
+    }
+
+    let renderSuggestion = s => <SuggestionDropdownElement suggestion={s}/>;
     let getSuggestionValue = s => s.rewriteInference ? s.inference.name + " [" + s.rewriteInference.name + "]" : s.inference.name;
 
     return <>
@@ -284,6 +298,7 @@ export class InferenceFinder extends React.Component {
           onValueChange={this.onAutosuggestChange}
           suggestions={this.state.inferenceSuggestions}
           getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           onSuggestionSelected={this.onSuggestionSelected} />
