@@ -51,17 +51,17 @@ object ProofHelper {
     substitutions: Substitutions,
     followUpSteps: Seq[Step] = Nil)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[Step]] = {
+  ): Option[(Step, Seq[Step.Target])] = {
     for {
       premiseStatements <- inference.substitutePremises(substitutions)
       conclusion <- inference.substituteConclusion(substitutions)
-      (targetSteps, premiseSteps) = premiseStatements.foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premiseStatement) =>
+      (targetSteps, premiseSteps) = premiseStatements.foldLeft((Seq.empty[Step.Target], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premiseStatement) =>
         PremiseFinder.findPremiseSteps(premiseStatement) match {
           case Some(newPremiseSteps) =>
             (targetStepsSoFar, premiseStepsSoFar ++ newPremiseSteps)
           case None =>
             val (deconstructedStatements, deconstructionSteps) = PremiseFinder.deconstructStatement(premiseStatement)
-            val (deconstructionTargetSteps, deconstructionPremiseSteps) = deconstructedStatements.foldLeft((Seq.empty[Step], Seq.empty[Step])) { case ((otherTargetStepsSoFar, otherPremiseStepsSoFar), deconstructedStatement) =>
+            val (deconstructionTargetSteps, deconstructionPremiseSteps) = deconstructedStatements.foldLeft((Seq.empty[Step.Target], Seq.empty[Step])) { case ((otherTargetStepsSoFar, otherPremiseStepsSoFar), deconstructedStatement) =>
               PremiseFinder.findPremiseSteps(deconstructedStatement) match {
                 case Some(newPremiseSteps) =>
                   (otherTargetStepsSoFar, otherPremiseStepsSoFar ++ newPremiseSteps)
@@ -77,11 +77,7 @@ object ProofHelper {
         inference.summary,
         premiseStatements.map(Premise.Pending),
         substitutions)
-      (initialSteps, stepsToElide) = if (InferenceTypes.isTransitivity(inference)) {
-        (targetSteps ++ premiseSteps, assertionStep +: followUpSteps)
-      } else {
-        (targetSteps, (premiseSteps :+ assertionStep) ++ followUpSteps)
-      }
-    } yield initialSteps ++ Step.Elided.ifNecessary(stepsToElide, inference).toSeq
+      elidedStep <- Step.Elided.ifNecessary((premiseSteps :+ assertionStep) ++ followUpSteps, inference)
+    } yield (elidedStep, targetSteps)
   }
 }

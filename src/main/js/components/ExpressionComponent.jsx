@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React from "react";
+import {act} from "react-dom/test-utils";
 import {connect} from "react-redux";
 import styled from "styled-components";
 import {matchTemplate, PropertyExpression, TypeExpression} from "../models/Expression";
@@ -17,8 +18,8 @@ const ClickablePremise = styled(HighlightedPremise)`
 
 function filterPaths(paths, initialPath) {
   return _.chain(paths)
-    .filter(p => _.isEqual(p.slice(0, initialPath.length), initialPath))
-    .map(p => p.slice(initialPath.length))
+    .filter(p => _.isEqual(p.path.slice(0, initialPath.length), initialPath))
+    .map(p => Object.assign({}, p, {path: p.path.slice(initialPath.length)}))
     .value();
 }
 
@@ -34,26 +35,25 @@ export class ExpressionComponent extends React.Component {
     }
   }
 
-  renderMatch(match, path, pathsToHighlightAsPremise, highlightingAction, boundVariableLists, wrapBoundVariable) {
+  renderMatch(match, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable) {
     if (match.type === "boundVariable") {
       return wrapBoundVariable(match.name, match.index, path.concat(match.pathWithinMatch));
     } else {
-      const innerPaths = filterPaths(pathsToHighlightAsPremise, match.pathWithinMatch);
       return <ExpressionComponent expression={match.expression}
                                   path={path.concat(match.pathWithinMatch)}
-                                  pathsToHighlightAsPremise={innerPaths}
-                                  highlightingAction={highlightingAction}
+                                  actionHighlights={filterPaths(actionHighlights, match.pathWithinMatch)}
+                                  staticHighlights={filterPaths(staticHighlights, match.pathWithinMatch)}
                                   boundVariableLists={[...match.boundVariablesWithinMatch, ...boundVariableLists]}
                                   wrapBoundVariable={wrapBoundVariable}
                                   parentRequiresBrackets={true}/> // Display shorthands currently default to requiring brackets
     }
   }
 
-  renderInner(expression, path, pathsToHighlightAsPremise, highlightingAction, boundVariableLists, wrapBoundVariable, parentRequiresBrackets) {
+  renderInner(expression, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, parentRequiresBrackets) {
     for (const displayShorthand of _.reverse(window.displayShorthands.slice())) {
       const matches = this.matchDisplayShorthand(displayShorthand, expression, [], []);
       if (matches) {
-        let renderedMatches = matches.map(m => this.renderMatch(m, path, pathsToHighlightAsPremise, highlightingAction, boundVariableLists, wrapBoundVariable));
+        let renderedMatches = matches.map(m => this.renderMatch(m, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable));
         let formatString = (parentRequiresBrackets && displayShorthand.requiresBrackets) ?
           "(" + displayShorthand.baseFormatString + ")" :
           displayShorthand.baseFormatString;
@@ -78,11 +78,10 @@ export class ExpressionComponent extends React.Component {
       const innerBoundVariables = boundVariables.length ? [boundVariables, ...boundVariableLists] : boundVariableLists;
       const renderedBoundVariables = boundVariables.map((name, index) => wrapBoundVariable(name, index, path));
       const renderedComponents = expression.components.map((c, i) => {
-        const innerPaths = filterPaths(pathsToHighlightAsPremise, [i]);
         return <ExpressionComponent expression={c}
                                     path={[...path, i]}
-                                    pathsToHighlightAsPremise={innerPaths}
-                                    highlightingAction={highlightingAction}
+                                    actionHighlights={filterPaths(actionHighlights, [i])}
+                                    staticHighlights={filterPaths(staticHighlights, [i])}
                                     boundVariableLists={innerBoundVariables}
                                     wrapBoundVariable={wrapBoundVariable}
                                     parentRequiresBrackets={expression.definition ? expression.definition.requiresComponentBrackets : true}/>
@@ -94,17 +93,20 @@ export class ExpressionComponent extends React.Component {
   }
 
   render() {
-    const {expression, pathsToHighlightAsPremise, highlightingAction, boundVariableLists, parentRequiresBrackets} = this.props;
+    const {expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets} = this.props;
     let {wrapBoundVariable, path} = this.props;
     wrapBoundVariable = wrapBoundVariable || ((name) => formatHtml(name));
     path = path || [];
-    const shouldHighlightThis = _.some(pathsToHighlightAsPremise, p => p.length === 0);
-    const tag = shouldHighlightThis ? highlightingAction ? ClickablePremise : HighlightedPremise : React.Fragment;
+
+    const matchingActionHighlight = _.find(actionHighlights, p => p.path.length === 0);
+    const shouldStaticHighlight = _.some(staticHighlights, p => p.path.length === 0);
+
+    const tag = matchingActionHighlight ? (matchingActionHighlight.action ? ClickablePremise : HighlightedPremise) : (shouldStaticHighlight ? HighlightedConclusion : React.Fragment);
     const props = {};
-    if (shouldHighlightThis && highlightingAction) {
-      props.onClick = () => highlightingAction(expression.serialize())
+    if (matchingActionHighlight && matchingActionHighlight.action) {
+      props.onClick = () => matchingActionHighlight.action(expression.serialize())
     }
-    return React.createElement(tag, props, this.renderInner(expression, path, pathsToHighlightAsPremise, highlightingAction, boundVariableLists, wrapBoundVariable, parentRequiresBrackets).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>));
+    return React.createElement(tag, props, this.renderInner(expression, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, parentRequiresBrackets).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>));
   }
 }
 
@@ -137,21 +139,20 @@ export const HighlightableExpression = connect(
     const matchingPremises = _.filter(state.highlighting.premises, highlightedPremise =>
       _.some(referencesAsPremise, reference => referencesMatch(reference, highlightedPremise))
     );
-    const pathsToHighlightAsPremise = _.map(matchingPremises, p => p.internalPath || []);
+    const actionHighlights = _.map(matchingPremises, p => { return { path: p.internalPath || [], action: state.highlighting.action }});
     const shouldHighlightAsConclusion = !state.highlighting.action && state.highlighting.conclusion && _.some(referencesAsConclusion, r => referencesMatch(r, state.highlighting.conclusion));
 
     return {
       expression,
-      pathsToHighlightAsPremise,
+      actionHighlights: actionHighlights,
+      staticHighlights: shouldHighlightAsConclusion ? [{path: []}] : [],
       highlightingAction: state.highlighting.action,
-      shouldHighlightAsConclusion,
       boundVariableLists,
       wrapBoundVariable,
       className
     }
   }
-)(({expression, pathsToHighlightAsPremise, highlightingAction, shouldHighlightAsConclusion, boundVariableLists, wrapBoundVariable, className}) => {
-  const expressionElement = <CopiableExpression expression={expression} pathsToHighlightAsPremise={pathsToHighlightAsPremise} highlightingAction={highlightingAction} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
-  return shouldHighlightAsConclusion ? <HighlightedConclusion className={className}>{expressionElement}</HighlightedConclusion> :
-    className ? <span className={className}>{expressionElement}</span> : expressionElement;
+)(({expression, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, className}) => {
+  const expressionElement = <CopiableExpression expression={expression} actionHighlights={actionHighlights} staticHighlights={staticHighlights} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
+  return className ? <span className={className}>{expressionElement}</span> : expressionElement;
 });

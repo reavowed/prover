@@ -1,7 +1,7 @@
 package net.prover.model.definitions
 
 import net.prover.model.expressions.{Statement, Term}
-import net.prover.model.proof.{ProofHelper, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof.{ProofHelper, Step, StepProvingContext, SubstitutionContext}
 import net.prover.model.{Inference, Substitutions}
 
 case class Associativity(operator: BinaryOperator, inference: Inference.Summary, equality: Equality) {
@@ -22,11 +22,12 @@ case class Associativity(operator: BinaryOperator, inference: Inference.Summary,
 
   def forwardRearrangementStep(a: Term, b: Term, c: Term, wrapper: Wrapper[Term, Term])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep] = {
     for {
-      associativitySteps <- ProofHelper.getAssertionWithPremises(
+      (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremises(
         inference,
         Substitutions(terms = inference.requiredSubstitutions.terms.zip(Seq(a, b, c)).toMap))
+      if targetSteps.isEmpty
       expansionSteps = equality.expansion.assertionStepIfNecessary(normalisedTerm(a, b, c), reversedTerm(a, b, c), wrapper).toSeq
-    } yield RearrangementStep(wrapper(reversedTerm(a, b, c)), associativitySteps ++ expansionSteps, inference)
+    } yield RearrangementStep(wrapper(reversedTerm(a, b, c)), assertionStep +: expansionSteps, inference)
   }
 
   def reverseRearrangementStep(a: Term, b: Term, c: Term, wrapper: Wrapper[Term, Term])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep] = {

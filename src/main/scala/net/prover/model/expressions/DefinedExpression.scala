@@ -21,15 +21,15 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   override def complexity: Int = {
     if (components.isEmpty) 0 else components.map(_.complexity).sum + 1
   }
-  override def getTerms(depth: Int): Seq[(Term, ExpressionType)] = {
+  override def getTerms(depth: Int): Seq[(Term, ExpressionType, Seq[Int])] = {
     @scala.annotation.tailrec
-    def helper(previous: Seq[Expression], next: Seq[Expression], acc: Seq[(Term, ExpressionType)]): Seq[(Term, ExpressionType)] = {
+    def helper(previous: Seq[Expression], next: Seq[Expression], acc: Seq[(Term, ExpressionType, Seq[Int])]): Seq[(Term, ExpressionType, Seq[Int])] = {
       next match {
         case current +: more =>
           helper(
             previous :+ current,
             more,
-            acc ++ current.getTerms(definition.increaseDepth(depth)).map(_.mapRight(e => updateComponents((previous :+ e) ++ more))))
+            acc ++ current.getTerms(definition.increaseDepth(depth)).map { case (term, function, path) => (term, updateComponents((previous :+ function) ++ more), previous.length +: path)})
         case _ =>
           acc
       }

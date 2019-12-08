@@ -3,7 +3,7 @@ package net.prover.model.expressions
 import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, TemplateParsingContext}
 
 trait Term extends Expression with TypedExpression[Term] {
-  override def getTerms(depth: Int): Seq[(Term, Term)] = Seq((this, FunctionParameter(0, depth)))
+  override def getTerms(depth: Int): Seq[(Term, Term, Seq[Int])] = Seq((this, FunctionParameter(0, depth), Nil))
   def calculateApplicatives(
     baseArguments: Seq[Term],
     substitutions: Substitutions.Possible,

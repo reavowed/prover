@@ -28,7 +28,7 @@ case class DefinedTerm(
     )(scopedBoundVariableNames)
   }
 
-  override def getTerms(depth: Int): Seq[(Term, Term)] = super[Term].getTerms(depth) ++ super[DefinedExpression].getTerms(depth)
+  override def getTerms(depth: Int): Seq[(Term, Term, Seq[Int])] = super[Term].getTerms(depth) ++ super[DefinedExpression].getTerms(depth)
   override def calculateApplicatives(
     baseArguments: Seq[Term],
     substitutions: Substitutions.Possible,

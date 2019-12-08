@@ -23,14 +23,14 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   def update(newArguments: Seq[Term]): ExpressionType
 
   override def complexity: Int = arguments.map(_.complexity).sum + 1
-  override def getTerms(depth: Int): Seq[(Term, ExpressionType)] = {
-    def helper(previous: Seq[Term], next: Seq[Term], acc: Seq[(Term, ExpressionType)]): Seq[(Term, ExpressionType)] = {
+  override def getTerms(depth: Int): Seq[(Term, ExpressionType, Seq[Int])] = {
+    def helper(previous: Seq[Term], next: Seq[Term], acc: Seq[(Term, ExpressionType, Seq[Int])]): Seq[(Term, ExpressionType, Seq[Int])] = {
       next match {
         case current +: more =>
           helper(
             previous :+ current,
             more,
-            acc ++ current.getTerms(depth).map(_.mapRight(e => update((previous :+ e) ++ more))))
+            acc ++ current.getTerms(depth).map { case (term, function, path) => (term, update((previous :+ function) ++ more), previous.length +: path)})
         case _ =>
           acc
       }

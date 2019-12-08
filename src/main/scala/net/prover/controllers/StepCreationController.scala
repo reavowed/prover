@@ -1,20 +1,19 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.{NamingDefinition, PathData, StepDefinition}
-import net.prover.exceptions.NotFoundException
+import net.prover.model._
+import net.prover.model.definitions.Wrapper
 import net.prover.model.expressions.{DefinedStatement, Statement, Term}
 import net.prover.model.proof._
-import net.prover.model._
-import net.prover.model.definitions.{Transitivity, Wrapper}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepCreationController @Autowired() (val bookService: BookService) extends BookModification {
+class StepCreationController @Autowired() (val bookService: BookService) extends BookModification with TransitivityEditing {
 
   def rewriteFromConclusion(conclusion: Statement, rewriteInferenceId: Option[String])(implicit stepProvingContext: StepProvingContext): Try[(Option[Step.Assertion], Statement)] = {
     rewriteInferenceId.map { rewriteInferenceid =>
@@ -44,14 +43,14 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepReference: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (step, stepProvingContext) =>
+    replaceStepAndAddBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (step, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
         inference <- findInference(definition.inferenceId)
         substitutions <- definition.substitutions.parse(inference)
         (rewriteStep, target) <- rewriteFromConclusion(step.statement, definition.rewriteInferenceId)
-        result <- ProofHelper.getAssertionWithPremises(inference, substitutions, rewriteStep.toSeq).orBadRequest("Could not apply substitutions to inference")
         _ <- inference.substituteConclusion(substitutions).filter(_ == target).orBadRequest("Conclusion was incorrect")
+        result <- ProofHelper.getAssertionWithPremises(inference, substitutions, rewriteStep.toSeq).orBadRequest("Could not apply substitutions to inference")
       } yield result
     }.toResponseEntity
   }
@@ -65,55 +64,16 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepReference: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (step, stepProvingContext) =>
+    replaceStepAndAddBeforeTransitivity[Step](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (step, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
         inference <- findInference(definition.inferenceId)
         substitutions <- definition.substitutions.parse(inference)
-        stepsForAssertion <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
+        (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
       } yield {
-        stepsForAssertion :+ step
+        (step, targetSteps :+ assertionStep)
       }
     }.toResponseEntity
-  }
-
-  private def insertTransitivity(
-    bookKey: String,
-    chapterKey: String,
-    theoremKey: String,
-    proofIndex: Int,
-    stepPath: PathData)(
-    f: (StepProvingContext, Transitivity, Term, Term) => Try[(Seq[Step], Seq[Step], Term)]
-  ): ResponseEntity[_] = {
-    (stepPath.indexes match {
-      case Nil =>
-        Failure(NotFoundException(s"Step $stepPath"))
-      case init :+ last =>
-        modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-          theorem.modifySteps(proofIndex, init) { (steps, outerStepContext) =>
-            steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
-              implicit val stepContext = outerStepContext.addSteps(before).atIndex(last)
-              implicit val stepProvingContext = StepProvingContext(stepContext, provingContext)
-              for {
-                targetStep <- step.asOptionalInstanceOf[Step.Target].orBadRequest(s"Step was not target")
-                (targetLhs, targetRhs, transitivityDefinition) <- provingContext.transitivityDefinitions.map(_._2).mapFind { transitivityDefinition =>
-                  for {
-                    (lhs, rhs) <- transitivityDefinition.relation.unapply(targetStep.statement)
-                  } yield (lhs, rhs, transitivityDefinition)
-                }.orBadRequest("Target step is not a transitive statement")
-                (followingStep, restOfSteps) <- after.headAndTailOption.orBadRequest("No following step")
-                (mainLhs, _) <- followingStep.asOptionalInstanceOf[Step.Assertion]
-                  .filter(_.inference.id == transitivityDefinition.inference.id)
-                  .flatMap(s => transitivityDefinition.relation.unapply(s.statement))
-                  .orBadRequest("Following step not transitivity")
-                (firstSteps, secondSteps, intermediateTerm) <- f(stepProvingContext, transitivityDefinition, targetLhs, targetRhs)
-                firstTransitivityStep = transitivityDefinition.assertionStep(mainLhs, targetLhs, intermediateTerm)
-                secondTransitivityStep = transitivityDefinition.assertionStep(mainLhs, intermediateTerm, targetRhs)
-              } yield before ++ (firstSteps :+ firstTransitivityStep) ++ (secondSteps :+ secondTransitivityStep) ++ restOfSteps
-            }
-          }.orNotFound(s"Step $stepPath").flatten
-        }
-    }).toResponseEntity
   }
 
   trait MaybeSwap {
@@ -163,10 +123,10 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
             step.statement)
         (rewriteStep, rewrittenConclusion) <- rewriteFromPremise(expandedConclusion, definition.rewriteInferenceId)
         (_, intermediateTerm) <- transitivity.relation.unapply(rewrittenConclusion).map(swapper.f).orBadRequest("Rewritten expanded conclusion is not a transitive statement")
-        assertionSteps <- ProofHelper.getAssertionWithPremises(inference, substitutions, expansionStep.toSeq ++ rewriteStep.toSeq).orBadRequest("Could not apply substitutions to inference")
+        (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremises(inference, substitutions, expansionStep.toSeq ++ rewriteStep.toSeq).orBadRequest("Could not apply substitutions to inference")
         newTarget = Step.Target((transitivity.relation.apply _).tupled.apply(swapper.f((intermediateTerm, targetRhs))))
-        (firstSteps, secondSteps) = swapper.f((assertionSteps, Seq(newTarget)))
-      } yield (firstSteps, secondSteps, intermediateTerm)
+        (firstStep, secondStep) = swapper.f((assertionStep, newTarget))
+      } yield (firstStep, secondStep, intermediateTerm, targetSteps)
     }
   }
 
@@ -209,7 +169,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         intermediateTerm <- Term.parser.parseFromString(serializedTerm, "target term").recoverWithBadRequest
         firstStep = Step.Target(transitivity.relation(targetLhs, intermediateTerm))
         secondStep = Step.Target(transitivity.relation(intermediateTerm, targetRhs))
-      } yield (Seq(firstStep), Seq(secondStep), intermediateTerm)
+      } yield (firstStep, secondStep, intermediateTerm, Nil)
     }
   }
 

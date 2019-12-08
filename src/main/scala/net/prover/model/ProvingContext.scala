@@ -159,6 +159,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     replace(definitions.predicateSpecificationInferences)
   }
 
+  lazy val termRewriteInferences: Seq[(Inference, Term, Term)] = {
+    replace(definitions.termRewriteInferences)
+  }
   lazy val termSimplificationInferences: Seq[(Inference, Term, Term)] = {
     replace(definitions.termSimplificationInferences)
   }

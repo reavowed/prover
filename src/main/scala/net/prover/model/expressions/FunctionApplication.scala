@@ -20,7 +20,7 @@ case class FunctionApplication(
   }
   def update(newArguments: Seq[Term]) = FunctionApplication(variableName, newArguments)
 
-  override def getTerms(depth: Int): Seq[(Term, Term)] = super[Term].getTerms(depth) ++ super[ExpressionApplication].getTerms(depth)
+  override def getTerms(depth: Int): Seq[(Term, Term, Seq[Int])] = super[Term].getTerms(depth) ++ super[ExpressionApplication].getTerms(depth)
   override def calculateApplicatives(
     baseArguments: Seq[Term],
     substitutions: Substitutions.Possible,

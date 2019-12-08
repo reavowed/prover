@@ -1,11 +1,13 @@
 import _ from "lodash";
 import React from "react";
+import {Col, Row} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import {connect} from "react-redux";
 import {CopiableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import {InferenceFinder} from "../InferenceFinder";
+import Rewriter from "../Rewriter";
 import {FetchJsonForStep, FetchJsonForStepAndUpdate, SetHighlightingAction} from "../theorem/TheoremStore";
 import ProofLine from "./ProofLine";
 import {Parser} from "../../Parser";
@@ -217,6 +219,25 @@ export const TargetStepProofLine = connect()(class extends React.Component {
     this.props.dispatch(SetHighlightingAction([], null));
   };
 
+  getRewriteSuggestions = (searchText, expression, pathsAlreadyRewritten) => {
+    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `rewriteSuggestions?searchText=${searchText}&expression=${encodeURIComponent(expression.serialize())}&pathsAlreadyRewritten=${_.map(pathsAlreadyRewritten, p => p.join(".")).join(",")}`));
+  };
+  rewriteLeft = (rewrites) => {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewriteLeft", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(rewrites)
+    }));
+  };
+  rewriteRight = (rewrites) => {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewriteRight", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(rewrites)
+    }));
+  };
+
+
   render() {
     let {step, path, additionalReferences, boundVariableLists, children, transitive} = this.props;
     let {proving, activeProvingType} = this.state;
@@ -229,29 +250,48 @@ export const TargetStepProofLine = connect()(class extends React.Component {
           <h5 className="text-center">
             <CopiableExpression expression={step.statement} boundVariableLists={boundVariableLists}/>
           </h5>
-          <div className="text-center">
-            <Button size="sm" className="ml-1" onClick={() => this.setProvingType('inference')}>Prove with inference</Button>
+          <div>
             {!transitive &&
-              <>
-                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('premise')}>Add premise</Button>
-                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('naming')}>Name</Button>
-                <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'target', targetStatement: ''})}>Add target</Button>
-              </>
+              <Row className="mb-1">
+                <Col xs={2} className="text-right">
+                  Insert before
+                </Col>
+                <Col xs={10}>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('premise')}>Add premise</Button>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('naming')}>Name</Button>
+                  <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'target', targetStatement: ''})}>Add target</Button>
+                </Col>
+              </Row>
             }
+            <Row className="mb-1">
+              <Col xs={2} className="text-right">
+                Prove directly
+              </Col>
+              <Col xs={10}>
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('inference')}>Prove with inference</Button>
+                <Button size="sm" className="ml-1" onClick={this.extract}>Extract</Button>
+                <Button size="sm" className="ml-1" onClick={this.rearrange}>Rearrange</Button>
+                <Button size="sm" className="ml-1" onClick={this.rewrite}>Rewrite</Button>
+                {!transitive && scopingStatement && step.statement.definition === scopingStatement &&
+                <Button size="sm" className="ml-1" onClick={this.introduceBoundVariable}>Introduce bound variable</Button>}
+                {!transitive && deductionStatement && step.statement.definition === deductionStatement &&
+                <Button size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
+              </Col>
+            </Row>
             {transitive &&
-            <>
-              <Button size="sm" className="ml-1" onClick={() => this.setProvingType('addFromLeft')}>Add expression from left</Button>
-              <Button size="sm" className="ml-1" onClick={() => this.setProvingType('addFromRight')}>Add expression from right</Button>
-              <Button size="sm" className="ml-1" onClick={() => this.setProvingType('transitiveTarget')}>Add target</Button>
-            </>
+              <Row className="mb-1">
+                <Col xs={2} className="text-right">
+                  Add transitive
+                </Col>
+                <Col xs={10}>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('addFromLeft')}>Add expression from left</Button>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('addFromRight')}>Add expression from right</Button>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('rewriteLeft')}>Rewrite left</Button>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('rewriteRight')}>Rewrite right</Button>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('transitiveTarget')}>Add target</Button>
+                </Col>
+              </Row>
             }
-            <Button size="sm" className="ml-1" onClick={this.extract}>Extract</Button>
-            <Button size="sm" className="ml-1" onClick={this.rearrange}>Rearrange</Button>
-            <Button size="sm" className="ml-1" onClick={this.rewrite}>Rewrite</Button>
-            {!transitive && scopingStatement && step.statement.definition === scopingStatement &&
-            <Button size="sm" className="ml-1" onClick={this.introduceBoundVariable}>Introduce bound variable</Button>}
-            {!transitive && deductionStatement && step.statement.definition === deductionStatement &&
-            <Button size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
           </div>
           {activeProvingType === 'premise' && <InferenceFinder title='Select Inference for Premise'
                                                                getInferenceSuggestions={this.getInferenceSuggestionsForPremise}
@@ -259,14 +299,14 @@ export const TargetStepProofLine = connect()(class extends React.Component {
                                                                getSubstitutionSuggestions={this.getSubstitutionSuggestionsForPremise}
                                                                boundVariableLists={boundVariableLists}
                                                                submit={this.addPremise}
-                                                               focusOnMount/>}
+                                                               autofocus/>}
           {activeProvingType === 'inference' && <InferenceFinder title='Select Inference'
                                                                  getInferenceSuggestions={this.getInferenceSuggestionsForStep}
                                                                  getPremiseSuggestions={this.getPremiseSuggestionsForStep}
                                                                  getSubstitutionSuggestions={this.getSubstitutionSuggestionsForStep}
                                                                  boundVariableLists={boundVariableLists}
                                                                  submit={this.proveWithInference}
-                                                                 focusOnMount/>}
+                                                                 autofocus/>}
           {activeProvingType === 'naming' && <>
             <Form.Group>
               <Form.Label><strong>Variable name</strong></Form.Label>
@@ -303,13 +343,27 @@ export const TargetStepProofLine = connect()(class extends React.Component {
                                                                    getPremiseSuggestions={this.getPremiseSuggestionsForLeft}
                                                                    boundVariableLists={boundVariableLists}
                                                                    submit={this.addFromLeft}
-                                                                   focusOnMount/>}
+                                                                   autofocus/>}
           {activeProvingType === 'addFromRight' && <InferenceFinder title='Select Inference to Add from Right'
-                                                                   getInferenceSuggestions={this.getInferenceSuggestionsForRight}
-                                                                   getPremiseSuggestions={this.getPremiseSuggestionsForRight}
-                                                                   boundVariableLists={boundVariableLists}
-                                                                   submit={this.addFromRight}
-                                                                   focusOnMount/>}
+                                                                    getInferenceSuggestions={this.getInferenceSuggestionsForRight}
+                                                                    getPremiseSuggestions={this.getPremiseSuggestionsForRight}
+                                                                    boundVariableLists={boundVariableLists}
+                                                                    submit={this.addFromRight}
+                                                                    autofocus/>}
+          {activeProvingType === 'rewriteLeft' && <Rewriter
+            title="Rewriting Left"
+            expression={step.statement.components[0]}
+            boundVariableLists={boundVariableLists}
+            getSuggestions={this.getRewriteSuggestions}
+            onSave={this.rewriteLeft}
+          />}
+          {activeProvingType === 'rewriteRight' && <Rewriter
+            title="Rewriting Right"
+            expression={step.statement.components[1]}
+            boundVariableLists={boundVariableLists}
+            getSuggestions={this.getRewriteSuggestions}
+            onSave={this.rewriteRight}
+          />}
           {activeProvingType === 'transitiveTarget' && <>
             <Form.Group>
               <Form.Label><strong>Transitive Target</strong></Form.Label>

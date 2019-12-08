@@ -15,7 +15,7 @@ import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepSuggestionController @Autowired() (val bookService: BookService) extends BookModification {
+class StepSuggestionController @Autowired() (val bookService: BookService) extends BookModification with InferenceSearch {
 
   case class SuggestedSubstitutions(
     statements: Map[String, Statement],
@@ -224,10 +224,6 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     suggestInferencesForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText)(_.relation.unapply(_)(_).map(_._2))
   }
 
-  private def filterInferences(inferences: Seq[Inference], searchText: String): Seq[Inference] = {
-    val searchWords = searchText.toLowerCase().splitByWhitespace()
-    inferences.filter(i => searchWords.forall(i.name.toLowerCase.contains))
-  }
 
   @GetMapping(value = Array("/suggestPremises"), produces = Array("application/json;charset=UTF-8"))
   def suggestPremisesForInference(

@@ -219,7 +219,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       => (inference, singlePremise)
     }
   }
-  lazy val termSimplificationInferences: Seq[(Inference, Term, Term)] = {
+  lazy val termRewriteInferences: Seq[(Inference, Term, Term)] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
       equality <- equalityOption.toSeq
@@ -228,27 +228,20 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
           case inference @ Inference(
           _,
           _,
-          equality(left: Term, right: Term))
-            if left.complexity > right.complexity && left.requiredSubstitutions.contains(inference.conclusion.requiredSubstitutions) =>
+          equality(left: Term, right: Term)) =>
             (inference, left, right)
         }
     } yield result
   }
+  lazy val termSimplificationInferences: Seq[(Inference, Term, Term)] = {
+    termRewriteInferences.filter { case (inference, left, right) =>
+      left.complexity > right.complexity && left.requiredSubstitutions.contains(inference.conclusion.requiredSubstitutions)
+    }
+  }
   lazy val termDesimplificationInferences: Seq[(Inference, Term, Term)] = {
-    implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
-    for {
-      equality <- equalityOption.toSeq
-      result <-
-        inferenceEntries
-          .collect {
-            case inference @ Inference(
-            _,
-            _,
-            equality(left: Term, right: Term))
-              if left.complexity < right.complexity && right.requiredSubstitutions.contains(inference.conclusion.requiredSubstitutions) =>
-              (inference, left, right)
-          }
-    } yield result
+    termRewriteInferences.filter { case (inference, left, right) =>
+      left.complexity < right.complexity && right.requiredSubstitutions.contains(inference.conclusion.requiredSubstitutions)
+    }
   }
   lazy val statementDefinitionSimplifications: Map[StatementDefinition, Seq[(Inference, Statement, Expression)]] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof

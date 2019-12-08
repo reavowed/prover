@@ -1,31 +1,13 @@
 import _ from "lodash";
 import React from "react";
-import Autosuggest from "react-autosuggest";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {Parser} from "../Parser";
 import {CopiableExpression} from "./ExpressionComponent";
+import InferenceAutosuggest from "./InferenceAutosuggest";
 import {InferenceSummary} from "./InferenceSummary";
-import styled from "styled-components";
-
-const DropdownContainer = styled.div`
-  .react-autosuggest__suggestions-container--open & {
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
-    border-radius: .25rem;
-    ul {
-      margin: 0;
-      padding: 0;
-    }
-    li {
-      list-style-type: none;
-      overflow: hidden;
-    }
-  }
-`;
 
 function simpleGetter(type, name) {
   return substitutions => substitutions[type][name];
@@ -250,9 +232,6 @@ export class InferenceFinder extends React.Component {
   };
 
   render() {
-    function renderSuggestionsContainer ({containerProps, children}) {
-      return <div {...containerProps}><DropdownContainer>{children}</DropdownContainer></div>
-    }
     let showSubstitutionOptions = (name, key, validValues, boundVariableLists, getter, setter) => {
       const selectionElement = !validValues ?
         <Form.Control type="text"
@@ -292,24 +271,22 @@ export class InferenceFinder extends React.Component {
         return showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, `${key} ${name} ${numberOfParameters}`, validValues, [...boundVariableLists, newVariableList], x => x[key][name][numberOfParameters], (x, y) => x[key][name][numberOfParameters] = y);
       });
     };
-    const {title, boundVariableLists} = this.props;
+    const {title, boundVariableLists, autofocus} = this.props;
 
-    let getSuggestionText = s => s.rewriteInference ? s.inference.name + " [" + s.rewriteInference.name + "]" : s.inference.name;
+    let getSuggestionValue = s => s.rewriteInference ? s.inference.name + " [" + s.rewriteInference.name + "]" : s.inference.name;
 
     return <>
       <Form.Group>
         <Form.Label><strong>{title}</strong></Form.Label>
-        <Autosuggest
-          ref={this.autoSuggestRef}
+        <InferenceAutosuggest
+          autofocus={autofocus}
+          value={this.state.autosuggestValue}
+          onValueChange={this.onAutosuggestChange}
           suggestions={this.state.inferenceSuggestions}
+          getSuggestionValue={getSuggestionValue}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          shouldRenderSuggestions={() => true}
-          getSuggestionValue={getSuggestionText}
-          renderSuggestionsContainer={renderSuggestionsContainer}
-          onSuggestionSelected={this.onSuggestionSelected}
-          renderSuggestion={s => <span className="dropdown-item">{getSuggestionText(s)}</span>}
-          inputProps={{value: this.state.autosuggestValue, onChange: this.onAutosuggestChange, className:"form-control"}} />
+          onSuggestionSelected={this.onSuggestionSelected} />
       </Form.Group>
       {this.state.selectedInferenceSuggestion && <>
         <Form.Group>

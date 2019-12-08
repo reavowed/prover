@@ -83,6 +83,14 @@ export class Parser {
       })
     );
   }
+  static parseRewriteSuggestions(suggestions) {
+    return suggestions.map(suggestionJson => {
+      const suggestion = _.cloneDeep(suggestionJson);
+      Parser.parseInferenceSummary(suggestion.inference);
+      suggestion.rewriteSuggestions = _.map(suggestion.rewriteSuggestions, s => { return { path: s.path, result: Expression.parseFromJson(s.result), direction: s.direction } });
+      return suggestion;
+    })
+  }
   static parseEntries(entriesJson) {
     return entriesJson.map(entryJson => {
       const entry = _.cloneDeep(entryJson);

@@ -120,12 +120,14 @@ interface TextBasedExpression {
   serialize(): string
   serializeNicely(boundVariableLists: string[][]): string
   textForHtml(boundVariableLists: string[][]): string
+  replaceAtPath(path: number[], expression: Expression): Expression
 }
 interface FormatBasedExpression {
   components: Expression[]
   serialize(): string
   serializeNicely(boundVariableLists: string[][]): string
   formatForHtml(parentRequiresBrackets: boolean): string
+  replaceAtPath(path: number[], expression: Expression): Expression
 }
 
 export class VariableOrConstant {
@@ -138,6 +140,13 @@ export class VariableOrConstant {
   }
   textForHtml(): string {
     return this.name;
+  }
+  replaceAtPath(path: number[], expression: Expression): Expression {
+    if (!path.length) {
+      return expression
+    } else {
+      throw "Cannot replace subexpression of variable or constant"
+    }
   }
 }
 
@@ -153,6 +162,15 @@ export class DefinedExpression {
     return (parentRequiresBrackets && this.definition.requiresBrackets) ?
       "(" + this.definition.baseFormatString + ")" :
       this.definition.baseFormatString;
+  }
+  replaceAtPath(path: number[], expression: Expression): Expression {
+    if (!path.length) {
+      return expression
+    } else {
+      const [first, ...remaining] = path;
+      const newComponents = [...this.components.slice(0, first), this.components[first].replaceAtPath(remaining, expression), ... this.components.slice(first + 1)];
+      return new DefinedExpression(this.definition, this.boundVariableNames, newComponents);
+    }
   }
 }
 
@@ -171,6 +189,9 @@ export class TypeExpression {
   addProperty(newProperty: string) {
     this.properties = [...this.properties, newProperty];
   }
+  replaceAtPath(_path: number[], _expression: Expression): Expression {
+    throw "Cannot replace in type expression"
+  }
 }
 
 export class PropertyExpression {
@@ -180,6 +201,9 @@ export class PropertyExpression {
   }
   serializeNicely(boundVariableLists: string[][]): string {
     return [this.symbol, this.term.serialize(), ...this.otherComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+  }
+  replaceAtPath(_path: number[], _expression: Expression): Expression {
+    throw "Cannot replace in property expression"
   }
 }
 
@@ -202,6 +226,13 @@ export class FunctionParameter {
       return name;
     }
   }
+  replaceAtPath(path: number[], expression: Expression): Expression {
+    if (!path.length) {
+      return expression
+    } else {
+      throw "Cannot replace subexpression of function parameter"
+    }
+  }
 }
 
 export class ExpressionApplication {
@@ -214,5 +245,14 @@ export class ExpressionApplication {
   }
   formatForHtml() {
     return this.name + "(" + this.components.map((_, i) => "%" + i).join(", ") + ")";
+  }
+  replaceAtPath(path: number[], expression: Expression): Expression {
+    if (!path.length) {
+      return expression
+    } else {
+      const [first, ...remaining] = path;
+      const newComponents = [...this.components.slice(0, first), this.components[first].replaceAtPath(remaining, expression), ... this.components.slice(first + 1)];
+      return new ExpressionApplication(this.name, newComponents);
+    }
   }
 }
