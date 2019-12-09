@@ -47,8 +47,8 @@ export const TargetStepProofLine = connect()(class extends React.Component {
   rearrange = () => {
     this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rearrange", { method: "POST" }));
   };
-  rewrite = () => {
-    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewrite", { method: "POST" }));
+  rewriteAutomatically = () => {
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewriteAutomatically", { method: "POST" }));
   };
 
   startProving = () => {
@@ -222,6 +222,13 @@ export const TargetStepProofLine = connect()(class extends React.Component {
   getRewriteSuggestions = (searchText, expression, pathsAlreadyRewritten) => {
     return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `rewriteSuggestions?searchText=${searchText}&expression=${encodeURIComponent(expression.serialize())}&pathsAlreadyRewritten=${_.map(pathsAlreadyRewritten, p => p.join(".")).join(",")}`));
   };
+  rewrite = (rewrites) => {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewrite", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(rewrites)
+    }));
+  };
   rewriteLeft = (rewrites) => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewriteLeft", {
       method: "POST",
@@ -269,13 +276,21 @@ export const TargetStepProofLine = connect()(class extends React.Component {
               </Col>
               <Col xs={10}>
                 <Button size="sm" className="ml-1" onClick={() => this.setProvingType('inference')}>Prove with inference</Button>
-                <Button size="sm" className="ml-1" onClick={this.extract}>Extract</Button>
-                <Button size="sm" className="ml-1" onClick={this.rearrange}>Rearrange</Button>
-                <Button size="sm" className="ml-1" onClick={this.rewrite}>Rewrite</Button>
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('rewrite')}>Rewrite</Button>
                 {!transitive && scopingStatement && step.statement.definition === scopingStatement &&
                 <Button size="sm" className="ml-1" onClick={this.introduceBoundVariable}>Introduce bound variable</Button>}
                 {!transitive && deductionStatement && step.statement.definition === deductionStatement &&
                 <Button size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
+              </Col>
+            </Row>
+            <Row className="mb-1">
+              <Col xs={2} className="text-right">
+                Automatic
+              </Col>
+              <Col xs={10}>
+                <Button size="sm" className="ml-1" onClick={this.extract}>Extract</Button>
+                <Button size="sm" className="ml-1" onClick={this.rearrange}>Rearrange</Button>
+                <Button size="sm" className="ml-1" onClick={this.rewriteAutomatically}>Rewrite</Button>
               </Col>
             </Row>
             {transitive &&
@@ -307,6 +322,13 @@ export const TargetStepProofLine = connect()(class extends React.Component {
                                                                  boundVariableLists={boundVariableLists}
                                                                  submit={this.proveWithInference}
                                                                  autofocus/>}
+          {activeProvingType === 'rewrite' && <Rewriter
+            title="Rewriting"
+            expression={step.statement}
+            boundVariableLists={boundVariableLists}
+            getSuggestions={this.getRewriteSuggestions}
+            onSave={this.rewrite}
+          />}
           {activeProvingType === 'naming' && <>
             <Form.Group>
               <Form.Label><strong>Variable name</strong></Form.Label>

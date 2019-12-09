@@ -9,8 +9,8 @@ class Wrapper[TInput, TOutput](f: TInput => TOutput) {
 }
 object Wrapper {
   def identity[T]: Wrapper[T, T] = new Wrapper(scala.Predef.identity)
-  def fromFunction(function: Term)(implicit substitutionContext: SubstitutionContext): Wrapper[Term, Term] = {
-    new Wrapper(t => function.specify(Seq(t)))
+  def fromExpression[T <: Expression with TypedExpression[T]](expression: T)(implicit substitutionContext: SubstitutionContext): Wrapper[Term, T] = {
+    new Wrapper(t => expression.specify(Seq(t)))
   }
 
   implicit class TermWrapper[TOutput](wrapper: Wrapper[Term, TOutput]) {

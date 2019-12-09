@@ -5,6 +5,7 @@ import net.prover.model._
 import net.prover.model.definitions.Wrapper
 import net.prover.model.expressions.{DefinedStatement, Statement, Term}
 import net.prover.model.proof._
+import net.prover.util.Swapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -76,19 +77,6 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     }.toResponseEntity
   }
 
-  trait MaybeSwap {
-    def f[T](tuple: (T, T)): (T, T)
-    def g[T](l: T, r: T): (T, T) = f((l, r))
-  }
-  object MaybeSwap {
-    val swap: MaybeSwap = new MaybeSwap {
-      override def f[T](tuple: (T, T)): (T, T) = tuple.swap
-    }
-    val dontSwap: MaybeSwap = new MaybeSwap {
-      override def f[T](tuple: (T, T)): (T, T) = tuple
-    }
-  }
-
   private def insertTransitivityAssertion(
     bookKey: String,
     chapterKey: String,
@@ -96,10 +84,10 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     proofIndex: Int,
     stepPath: PathData,
     @RequestBody definition: StepDefinition,
-    swapper: MaybeSwap
+    swapper: Swapper
   ): ResponseEntity[_] = {
     insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (stepProvingContext, transitivity, targetLhsUnswapped, targetRhsUnswapped) =>
-      val (targetLhs, targetRhs) = swapper.f(targetLhsUnswapped, targetRhsUnswapped)
+      val (targetLhs, targetRhs) = swapper.swap(targetLhsUnswapped, targetRhsUnswapped)
       implicit val spc = stepProvingContext
       for {
         inference <- findInference(definition.inferenceId)
@@ -108,8 +96,8 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         conclusion <- inference.substituteConclusion(substitutions).orBadRequest("Could not apply substitutions to inference")
         wrapper <- for {
           (_, rewrittenConclusion) <- rewriteFromConclusion(conclusion, definition.rewriteInferenceId)
-          (rewrittenConclusionLhs, _) <- transitivity.relation.unapply(rewrittenConclusion).map(swapper.f).orBadRequest("Inference conclusion is not a transitive statement")
-          function <- targetLhs.getTerms(stepProvingContext.stepContext).filter(_._1 == rewrittenConclusionLhs).map(_._2).map(Wrapper.fromFunction).single.orBadRequest("Could not find conclusion LHS uniquely in target LHS")
+          (rewrittenConclusionLhs, _) <- transitivity.relation.unapply(rewrittenConclusion).map(swapper.swapTuple).orBadRequest("Inference conclusion is not a transitive statement")
+          function <- targetLhs.getTerms(stepProvingContext.stepContext).filter(_._1 == rewrittenConclusionLhs).map(_._2).map(Wrapper.fromExpression).single.orBadRequest("Could not find conclusion LHS uniquely in target LHS")
         } yield function
         (expansionStep, expandedConclusion) <- if (wrapper.isIdentity)
           Success((None, conclusion))
@@ -122,10 +110,10 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
             Some(step),
             step.statement)
         (rewriteStep, rewrittenConclusion) <- rewriteFromPremise(expandedConclusion, definition.rewriteInferenceId)
-        (_, intermediateTerm) <- transitivity.relation.unapply(rewrittenConclusion).map(swapper.f).orBadRequest("Rewritten expanded conclusion is not a transitive statement")
+        (_, intermediateTerm) <- transitivity.relation.unapply(rewrittenConclusion).map(swapper.swapTuple).orBadRequest("Rewritten expanded conclusion is not a transitive statement")
         (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremises(inference, substitutions, expansionStep.toSeq ++ rewriteStep.toSeq).orBadRequest("Could not apply substitutions to inference")
-        newTarget = Step.Target((transitivity.relation.apply _).tupled.apply(swapper.f((intermediateTerm, targetRhs))))
-        (firstStep, secondStep) = swapper.f((assertionStep, newTarget))
+        newTarget = Step.Target((transitivity.relation.apply _).tupled.apply(swapper.swap(intermediateTerm, targetRhs)))
+        (firstStep, secondStep) = swapper.swap(assertionStep, newTarget)
       } yield (firstStep, secondStep, intermediateTerm, targetSteps)
     }
   }
@@ -139,7 +127,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    insertTransitivityAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, MaybeSwap.dontSwap)
+    insertTransitivityAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, Swapper.dontSwap)
   }
 
   @PostMapping(value = Array("/transitivityFromRight"))
@@ -151,7 +139,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    insertTransitivityAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, MaybeSwap.swap)
+    insertTransitivityAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, Swapper.swap)
   }
 
   @PostMapping(value = Array("/transitiveTarget"))
@@ -311,21 +299,6 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
       for {
         newStep <- TermRearranger.rearrange(step.statement)(stepProvingContext).orBadRequest(s"Could not rearrange statement ${step.statement}")
       } yield Seq(newStep)
-    }.toResponseEntity
-  }
-
-  @PostMapping(value = Array("/rewrite"), produces = Array("application/json;charset=UTF-8"))
-  def rewrite(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("proofIndex") proofIndex: Int,
-    @PathVariable("stepPath") stepPath: PathData
-  ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
-      EqualityRewriter.rewrite(step.statement)(stepProvingContext)
-        .orBadRequest(s"Could not simplify statement ${step.statement}")
-        .map(Seq(_))
     }.toResponseEntity
   }
 

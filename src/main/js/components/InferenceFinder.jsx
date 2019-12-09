@@ -281,7 +281,7 @@ export class InferenceFinder extends React.Component {
       render() {
         const {suggestion} = this.props;
         return <div onMouseEnter={() => this.setState({showConclusion: true})} onMouseLeave={() => this.setState({showConclusion: false})}>
-          {getSuggestionValue(suggestion)} {this.state.showConclusion && <>- <CopiableExpression expression={suggestion.conclusion} boundVariableLists={[]} /></>}
+          {getSuggestionValue(suggestion)} {this.state.showConclusion && <> (<CopiableExpression expression={suggestion.conclusion} boundVariableLists={[]} />)</>}
         </div>
       }
     }

@@ -88,7 +88,9 @@ export class Parser {
     return suggestions.map(suggestionJson => {
       const suggestion = _.cloneDeep(suggestionJson);
       Parser.parseInferenceSummary(suggestion.inference);
-      suggestion.rewriteSuggestions = _.map(suggestion.rewriteSuggestions, s => { return { path: s.path, result: Expression.parseFromJson(s.result), direction: s.direction } });
+      suggestion.source = Expression.parseFromJson(suggestion.source);
+      suggestion.result = Expression.parseFromJson(suggestion.result);
+      suggestion.rewriteSuggestions = _.map(suggestion.rewriteSuggestions, s => { return { path: s.path, result: Expression.parseFromJson(s.result) } });
       return suggestion;
     })
   }

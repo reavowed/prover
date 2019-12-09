@@ -14,14 +14,14 @@ export default class extends React.Component {
       currentExpression: this.props.expression,
       inferenceSuggestions: [],
       selectedSuggestion: null,
-      chosenRewrites: []
+      chosenRewrites: [[]]
     };
   }
   onAutosuggestChange = (event, { newValue }) => {
     this.setState({autosuggestValue: newValue});
   };
   onSuggestionsFetchRequested = ({ value }) => {
-    this.props.getSuggestions(value, this.props.expression, _.map(this.state.chosenRewrites, r => r.path))
+    this.props.getSuggestions(value, this.state.currentExpression, _.map(this.state.chosenRewrites[this.state.chosenRewrites.length - 1], r => r.path))
       .then(suggestionsJson => {
         if (this.state.autosuggestValue === value) {
           this.setState({inferenceSuggestions: Parser.parseRewriteSuggestions(suggestionsJson)})
@@ -34,26 +34,50 @@ export default class extends React.Component {
   onSuggestionSelected = (event, {suggestion}) => {
     this.setState({selectedSuggestion: suggestion});
   };
-  onExpressionClicked = (path, replacementExpression, inferenceId, direction) => {
+  onExpressionClicked = (path, replacementExpression, inferenceId, reverse) => {
+    let {chosenRewrites} = this.state;
+    chosenRewrites = [...chosenRewrites.slice(0, chosenRewrites.length - 1), [...chosenRewrites[chosenRewrites.length - 1], {path, inferenceId, reverse}]];
     this.setState({
       currentExpression: this.state.currentExpression.replaceAtPath(path, replacementExpression),
-      chosenRewrites: [...this.state.chosenRewrites, {path, inferenceId, direction}]
+      chosenRewrites
     });
+  };
+  again = () => {
+    this.setState({
+      chosenRewrites: [...this.state.chosenRewrites, []],
+      inferenceSuggestions: [],
+      selectedSuggestion: null
+    })
   };
 
   render() {
     const {title, boundVariableLists, onSave} = this.props;
     const {currentExpression, selectedSuggestion, chosenRewrites} = this.state;
+    const currentPaths =  _.map(chosenRewrites[chosenRewrites.length - 1], r => r.path);
 
     const actionHighlights = selectedSuggestion ?
       _.chain(selectedSuggestion.rewriteSuggestions)
-        .filter(s => !_.some(chosenRewrites, r => _.startsWith(s.path, r.path)))
-        .map(s => { return {path: s.path, action: () => this.onExpressionClicked(s.path, s.result, selectedSuggestion.inference.id, s.direction) }})
+        .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
+        .map(s => { return {path: s.path, action: () => this.onExpressionClicked(s.path, s.result, selectedSuggestion.inference.id, selectedSuggestion.reverse) }})
         .value() :
       [];
-    const staticHighlights = _.map(chosenRewrites, r => { return {path: r.path}});
+    const staticHighlights = _.map(currentPaths, path => { return {path}});
+
+    class SuggestionDropdownElement extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {showConclusion: false};
+      }
+      render() {
+        const {suggestion} = this.props;
+        return <div onMouseEnter={() => this.setState({showConclusion: true})} onMouseLeave={() => this.setState({showConclusion: false})}>
+          {getSuggestionValue(suggestion)} {this.state.showConclusion && <> (<CopiableExpression expression={suggestion.source} boundVariableLists={[]} /> -> <CopiableExpression expression={suggestion.result} boundVariableLists={[]} />)</>}
+        </div>
+      }
+    }
 
     let getSuggestionValue = s => s.inference.name;
+    let renderSuggestion = s => <SuggestionDropdownElement suggestion={s}/>;
 
     return <>
       <Form.Group>
@@ -65,17 +89,20 @@ export default class extends React.Component {
       <Form.Group>
         <Form.Label><strong>Inference</strong></Form.Label>
         <InferenceAutosuggest
+          key={chosenRewrites.length} // Force reset when Again button is clicked
           autofocus
           value={this.state.autosuggestValue}
           onValueChange={this.onAutosuggestChange}
           suggestions={this.state.inferenceSuggestions}
           getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           onSuggestionSelected={this.onSuggestionSelected} />
       </Form.Group>
       <Form.Group>
-        <Button variant="success" onClick={() => onSave(chosenRewrites)} disabled={chosenRewrites.length === 0}>Save</Button>
+        <Button variant="success" onClick={() => onSave(chosenRewrites)} disabled={chosenRewrites.length === 0 || chosenRewrites[chosenRewrites.length - 1].length === 0}>Save</Button>
+        <Button variant="primary" onClick={this.again} disabled={chosenRewrites.length === 0 || chosenRewrites[chosenRewrites.length - 1].length === 0}>Again</Button>
       </Form.Group>
     </>
   }

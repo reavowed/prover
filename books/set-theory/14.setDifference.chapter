@@ -1,0 +1,5 @@
+The difference of two sets.
+
+term diff (A B)
+  format (A/B) requires-brackets
+  (= $0 comprehension x A ¬ ∈ $0 B)
