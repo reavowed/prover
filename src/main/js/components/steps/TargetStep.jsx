@@ -306,12 +306,12 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
                 Prove directly
               </Col>
               <Col xs={10}>
-                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('inference')}>Prove with inference</Button>
-                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('rewrite')}>Rewrite</Button>
                 {!transitive && scopingStatement && step.statement.definition === scopingStatement &&
                 <Button size="sm" className="ml-1" onClick={this.introduceBoundVariable}>Introduce bound variable</Button>}
                 {!transitive && deductionStatement && step.statement.definition === deductionStatement &&
                 <Button size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('inference')}>Prove with inference</Button>
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('rewrite')}>Rewrite</Button>
               </Col>
             </Row>
             {!transitive &&
