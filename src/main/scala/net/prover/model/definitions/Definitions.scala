@@ -223,7 +223,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
       equality <- equalityOption.toSeq
-      result <- inferenceEntries
+      result <- inferences
         .collect {
           case inference @ Inference(
           _,
