@@ -8,6 +8,7 @@ import {Parser} from "../Parser";
 import {CopiableExpression} from "./ExpressionComponent";
 import InferenceAutosuggest from "./InferenceAutosuggest";
 import {InferenceSummary} from "./InferenceSummary";
+import SuggestionDropdownElement from "./SuggestionDropdownElement";
 
 function simpleGetter(type, name) {
   return substitutions => substitutions[type][name];
@@ -273,21 +274,10 @@ export class InferenceFinder extends React.Component {
     };
     const {title, boundVariableLists, autofocus} = this.props;
 
-    class SuggestionDropdownElement extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {showConclusion: false};
-      }
-      render() {
-        const {suggestion} = this.props;
-        return <div onMouseEnter={() => this.setState({showConclusion: true})} onMouseLeave={() => this.setState({showConclusion: false})}>
-          {getSuggestionValue(suggestion)} {this.state.showConclusion && <> (<CopiableExpression expression={suggestion.conclusion} boundVariableLists={[]} />)</>}
-        </div>
-      }
-    }
-
-    let renderSuggestion = s => <SuggestionDropdownElement suggestion={s}/>;
     let getSuggestionValue = s => s.rewriteInference ? s.inference.name + " [" + s.rewriteInference.name + "]" : s.inference.name;
+    let renderSuggestion = s => <SuggestionDropdownElement
+      mainElement={getSuggestionValue(s)}
+      hoverElement={<CopiableExpression expression={s.conclusion} boundVariableLists={[]} />} />;
 
     return <>
       <Form.Group>

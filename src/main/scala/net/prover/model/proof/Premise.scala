@@ -1,5 +1,6 @@
 package net.prover.model.proof
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition
 import net.prover.model.expressions.Statement
@@ -56,6 +57,7 @@ object Premise {
   }
 
   sealed trait SingleLinePremise extends Premise {
+    @JsonSerialize
     def referencedLine: PreviousLineReference
     override def referencedLines: Set[PreviousLineReference] = Set(referencedLine)
   }

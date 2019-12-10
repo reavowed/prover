@@ -6,7 +6,7 @@ import ProofLine from "./ProofLine";
 import {Steps} from "./Steps";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
 
-export const ScopedVariableStep = connect()(class extends React.Component {
+export const ScopedVariableStep = connect()(class ScopedVariableStep extends React.Component {
   static contextType = ProofContext;
   updateBoundVariable = (newName) => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "boundVariable", {method: "PUT", body: newName}));

@@ -7,7 +7,7 @@ import {Steps} from "./Steps";
 import {BoundVariableModal} from "../Modals";
 import {ClickableText} from "./ClickableText";
 
-export const DeductionStep = connect()(class extends React.Component {
+export const DeductionStep = connect()(class DeductionStep extends React.Component {
   static contextType = ProofContext;
   constructor(...args) {
     super(...args)

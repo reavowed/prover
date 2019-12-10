@@ -7,6 +7,7 @@ import {renderToString} from "react-dom/server";
 import {connect} from "react-redux";
 import {Expression} from "../../models/Expression";
 import {CopiableExpression} from "../ExpressionComponent";
+import Extractor from "../Extractor";
 import {FlexRow} from "../FlexRow";
 import {InferenceFinder} from "../InferenceFinder";
 import Rewriter from "../Rewriter";
@@ -14,14 +15,13 @@ import {
   ClearHighlightingAction,
   FetchJsonForStep,
   FetchJsonForStepAndUpdate,
-  SetHighlightedConclusion,
   SetHighlightingAction
 } from "../theorem/TheoremStore";
 import ProofLine from "./ProofLine";
 import {Parser} from "../../Parser";
 import ProofContext from "../theorem/ProofContext";
 
-export const TargetStepProofLine = connect()(class extends React.Component {
+export const TargetStepProofLine = connect()(class TargetStepProofLine extends React.Component {
   static contextType = ProofContext;
   constructor(props) {
     super(props);
@@ -34,7 +34,7 @@ export const TargetStepProofLine = connect()(class extends React.Component {
   componentDidMount() {
     this.context.registerStep(this, this.props.path);
     this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, "premises"))
-      .then(premiseJson => this.setState({availablePremises: _.map(premiseJson, Expression.parseFromJson)}));
+      .then(premiseJson => this.setState({availablePremises: _.map(premiseJson, Parser.parsePremise)}));
   }
   componentWillUnmount() {
     this.context.unregisterStep(this.props.path);
@@ -226,7 +226,7 @@ export const TargetStepProofLine = connect()(class extends React.Component {
     }
   };
   handleImmediateNamingPremiseSelected = (premise) => {
-    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "introduceNamingFromPremise", { method: "POST", body: premise }))
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "introduceNamingFromPremise", { method: "POST", body: premise.serialize() }))
       .then(() => {
         this.props.dispatch(ClearHighlightingAction());
         this.context.callOnStep([...this.props.path, 0], "startProving")
@@ -323,6 +323,7 @@ export const TargetStepProofLine = connect()(class extends React.Component {
                 <Button size="sm" className="ml-1" onClick={() => this.setProvingType('premise')}>Add premise</Button>
                 <Button size="sm" className="ml-1" onClick={() => this.setProvingType('naming')}>Name</Button>
                 <Button size="sm" className="ml-1" onClick={() => this.setProvingType('rewritePremise')}>Rewrite premise</Button>
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('extractPremise')}>Extract with premise</Button>
                 <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'target', targetStatement: ''})}>Add target</Button>
               </Col>
             </Row>
@@ -442,11 +443,11 @@ export const TargetStepProofLine = connect()(class extends React.Component {
           {activeProvingType === 'rewritePremise' && <>
           <Form.Group>
             <Form.Label><strong>Choose premise</strong></Form.Label>
-            <Form.Control as="select" autoFocus value={this.state.premiseToRewrite && this.state.premiseToRewrite.serialize()} onChange={e => this.setState({premiseToRewrite: _.find(this.state.availablePremises, p => p.serialize() === e.target.value)})}>
+            <Form.Control as="select" autoFocus value={this.state.premiseToRewrite && this.state.premiseToRewrite.serialize()} onChange={e => this.setState({premiseToRewrite: _.find(this.state.availablePremises, p => p.serializedReference === e.target.value).statement})}>
               <option value="" />
               {this.state.availablePremises.map(p =>
-                <option key={p.serialize()} value={p.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                    <CopiableExpression expression={p} boundVariableLists={boundVariableLists} />
+                <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
+                    <CopiableExpression expression={p.statement} boundVariableLists={boundVariableLists} />
                   )}}/>
               )}
             </Form.Control>
@@ -462,6 +463,12 @@ export const TargetStepProofLine = connect()(class extends React.Component {
               onSave={rewrites => this.rewritePremise({serializedPremise: this.state.premiseToRewrite.serialize(), rewrites})}
             />}
           </>}
+          {activeProvingType === 'extractPremise' && <Extractor
+            title="Extract premise"
+            availablePremises={this.state.availablePremises}
+            boundVariableLists={boundVariableLists}
+            path={path}
+          />}
           {activeProvingType === 'transitiveTarget' && <>
             <Form.Group>
               <Form.Label><strong>Transitive Target</strong></Form.Label>

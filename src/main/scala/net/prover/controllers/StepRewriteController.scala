@@ -128,7 +128,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       theorem <- findEntry[Theorem](chapter, theoremKey)
       provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
       (_, stepContext) <- findStep[Step](theorem, proofIndex, stepPath)
-    } yield StepProvingContext(stepContext, provingContext).allPremisesSimplestFirst.map(_.statement)).toResponseEntity
+    } yield StepProvingContext(stepContext, provingContext).allPremisesSimplestFirst).toResponseEntity
   }
 
   def rewrite[TExpression <: Expression with TypedExpression[TExpression], TStep](

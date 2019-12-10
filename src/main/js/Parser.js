@@ -1,6 +1,14 @@
 import _ from "lodash";
 import {Expression} from "./models/Expression";
 
+function serializeReference(reference) {
+  if (!reference) return "???";
+  const main = _.isNumber(reference.premiseIndex) ? "p" + reference.premiseIndex : reference.stepPath.join(".");
+  const internalPath = reference.internalPath ? "-" + reference.internalPath.join(".") : "";
+  const suffix = reference.suffix || "";
+  return main + internalPath + suffix;
+}
+
 export class Parser {
   static replaceShorthands = (event) => {
     const input = event.target;
@@ -18,10 +26,12 @@ export class Parser {
     inference.premises = inference.premises.map(Expression.parseFromJson);
     inference.conclusion = Expression.parseFromJson(inference.conclusion);
   }
+
   static parsePremise(premiseJson) {
     const premise = _.cloneDeep(premiseJson);
     premiseJson.statement && (premise.statement = Expression.parseFromJson(premiseJson.statement));
     premiseJson.premises && (premise.premises =  premise.premises.map(Parser.parsePremise));
+    premise.serializedReference = serializeReference(premiseJson.referencedLine);
     return premise;
   }
   static parseInference(rawInference) {

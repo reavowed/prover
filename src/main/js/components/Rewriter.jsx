@@ -1,12 +1,12 @@
 import React from "react";
 import {Button} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import {Expression} from "../models/Expression";
 import {Parser} from "../Parser";
 import {CopiableExpression} from "./ExpressionComponent";
 import InferenceAutosuggest from "./InferenceAutosuggest";
+import SuggestionDropdownElement from "./SuggestionDropdownElement";
 
-export default class extends React.Component {
+export default class Rewriter extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
@@ -94,21 +94,10 @@ export default class extends React.Component {
       [];
     const staticHighlights = _.map(currentPaths, path => { return {path}});
 
-    class SuggestionDropdownElement extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {showConclusion: false};
-      }
-      render() {
-        const {suggestion} = this.props;
-        return <div onMouseEnter={() => this.setState({showConclusion: true})} onMouseLeave={() => this.setState({showConclusion: false})}>
-          {getSuggestionValue(suggestion)} {this.state.showConclusion && <> (<CopiableExpression expression={suggestion.source} boundVariableLists={[]} /> -> <CopiableExpression expression={suggestion.result} boundVariableLists={[]} />)</>}
-        </div>
-      }
-    }
-
     let getSuggestionValue = s => s.inference.name;
-    let renderSuggestion = s => <SuggestionDropdownElement suggestion={s}/>;
+    let renderSuggestion = s => <SuggestionDropdownElement
+      mainElement={getSuggestionValue(s)}
+      hoverElement={<><CopiableExpression expression={s.source} boundVariableLists={[]} /> -> <CopiableExpression expression={s.result} boundVariableLists={[]} /></>} />;
 
     return <>
       <Form.Group>

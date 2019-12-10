@@ -163,7 +163,7 @@ const ProofLine = connect()(styled(class ProofLine extends React.Component {
   `}
 `);
 
-ProofLine.SingleStatementWithPrefixContent = connect()(class extends React.Component {
+ProofLine.SingleStatementWithPrefixContent = connect()(class SingleStatementWithPrefixContent extends React.Component {
   static contextType = ProofContext;
 
   render() {
@@ -193,7 +193,7 @@ ProofLine.SingleStatementWithPrefixContent = connect()(class extends React.Compo
   }
 });
 
-ProofLine.SingleStatementWithPrefix = class extends React.Component {
+ProofLine.SingleStatementWithPrefix = class SingleStatementWithPrefix extends React.Component {
   render() {
     return <ProofLine {...this.props}>
       <ProofLine.SingleStatementWithPrefixContent {...this.props}/>

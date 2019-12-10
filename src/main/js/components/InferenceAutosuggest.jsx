@@ -19,7 +19,7 @@ const DropdownContainer = styled.div`
   }
 `;
 
-export default class extends React.Component {
+export default class InferenceAutosuggest extends React.Component {
   constructor(...args) {
     super(...args);
     this.autoSuggestRef = React.createRef();

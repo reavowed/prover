@@ -272,21 +272,6 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     }.toResponseEntity
   }
 
-  @PostMapping(value = Array("/extract"), produces = Array("application/json;charset=UTF-8"))
-  def extract(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("proofIndex") proofIndex: Int,
-    @PathVariable("stepPath") stepPath: PathData
-  ): ResponseEntity[_] = {
-    replaceStepAndAddBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
-      for {
-        (newStep, target) <- SubstatementExtractor.extract(step.statement)(stepProvingContext).orBadRequest(s"Could not extract statement ${step.statement}")
-      } yield (newStep, target.toSeq)
-    }.toResponseEntity
-  }
-
   @PostMapping(value = Array("/rearrange"), produces = Array("application/json;charset=UTF-8"))
   def rearrange(
     @PathVariable("bookKey") bookKey: String,

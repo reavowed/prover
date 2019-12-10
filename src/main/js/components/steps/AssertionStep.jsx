@@ -6,7 +6,7 @@ import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import {InferenceLink} from "./InferenceLink";
 import ProofLine from "./ProofLine";
 
-export const AssertionStepProofLine = connect()(class extends React.Component {
+export const AssertionStepProofLine = connect()(class AssertionStepProofLine extends React.Component {
   static contextType = ProofContext;
   createTargets = () => {
     this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "createTargets", {method: "POST"}));

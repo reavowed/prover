@@ -9,7 +9,7 @@ import ProofLine from "./ProofLine";
 import {Steps} from "./Steps";
 import {ElidedStep as ElidedStepModel} from "../../models/Step";
 
-export const ElidedStepProofLine = connect()(class extends React.Component {
+export const ElidedStepProofLine = connect()(class ElidedStepProofLine extends React.Component {
   static contextType = ProofContext;
   constructor(...args) {
     super(...args);
