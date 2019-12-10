@@ -3,7 +3,9 @@ import React from "react";
 import {Col, Row} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import {renderToString} from "react-dom/server";
 import {connect} from "react-redux";
+import {Expression} from "../../models/Expression";
 import {CopiableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import {InferenceFinder} from "../InferenceFinder";
@@ -19,11 +21,14 @@ export const TargetStepProofLine = connect()(class extends React.Component {
     super(props);
     this.state = {
       proving: false,
-      activeProvingType: null
+      activeProvingType: null,
+      availablePremises: []
     };
   }
   componentDidMount() {
     this.context.registerStep(this, this.props.path);
+    this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, "premises"))
+      .then(premiseJson => this.setState({availablePremises: _.map(premiseJson, Expression.parseFromJson)}));
   }
   componentWillUnmount() {
     this.context.unregisterStep(this.props.path);
@@ -200,6 +205,12 @@ export const TargetStepProofLine = connect()(class extends React.Component {
     } else {
       this.cancelImmediateNamingPremises();
     }
+    if (provingType === 'target') {
+      this.setState({targetStatement: ''});
+    }
+    if (provingType === 'rewritePremise') {
+      this.setState({premiseToRewrite: ""});
+    }
   };
 
   handleImmediateNamingPremises = (paths) => {
@@ -228,6 +239,13 @@ export const TargetStepProofLine = connect()(class extends React.Component {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(rewrites)
     }));
+  };
+  rewritePremise = (rewrites) => {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewritePremise", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(rewrites)
+    })).then(this.setProvingType(null));
   };
   rewriteLeft = (rewrites) => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewriteLeft", {
@@ -258,18 +276,6 @@ export const TargetStepProofLine = connect()(class extends React.Component {
             <CopiableExpression expression={step.statement} boundVariableLists={boundVariableLists}/>
           </h5>
           <div>
-            {!transitive &&
-              <Row className="mb-1">
-                <Col xs={2} className="text-right">
-                  Insert before
-                </Col>
-                <Col xs={10}>
-                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('premise')}>Add premise</Button>
-                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('naming')}>Name</Button>
-                  <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'target', targetStatement: ''})}>Add target</Button>
-                </Col>
-              </Row>
-            }
             <Row className="mb-1">
               <Col xs={2} className="text-right">
                 Prove directly
@@ -283,6 +289,19 @@ export const TargetStepProofLine = connect()(class extends React.Component {
                 <Button size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
               </Col>
             </Row>
+            {!transitive &&
+            <Row className="mb-1">
+              <Col xs={2} className="text-right">
+                Insert before
+              </Col>
+              <Col xs={10}>
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('premise')}>Add premise</Button>
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('naming')}>Name</Button>
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('rewritePremise')}>Rewrite premise</Button>
+                <Button size="sm" className="ml-1" onClick={() => this.setState({activeProvingType: 'target', targetStatement: ''})}>Add target</Button>
+              </Col>
+            </Row>
+            }
             <Row className="mb-1">
               <Col xs={2} className="text-right">
                 Automatic
@@ -386,6 +405,26 @@ export const TargetStepProofLine = connect()(class extends React.Component {
             getSuggestions={this.getRewriteSuggestions}
             onSave={this.rewriteRight}
           />}
+          {activeProvingType === 'rewritePremise' && <>
+          <Form.Group>
+            <Form.Label><strong>Choose premise</strong></Form.Label>
+            <Form.Control as="select" autoFocus value={this.state.premiseToRewrite && this.state.premiseToRewrite.serialize()} onChange={e => this.setState({premiseToRewrite: _.find(this.state.availablePremises, p => p.serialize() === e.target.value)})}>
+              <option value="" />
+              {this.state.availablePremises.map(p =>
+                <option key={p.serialize()} value={p.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
+                    <CopiableExpression expression={p} boundVariableLists={boundVariableLists} />
+                  )}}/>
+              )}
+            </Form.Control>
+          </Form.Group>
+            {this.state.premiseToRewrite && <Rewriter
+              title="Rewriting Right"
+              expression={this.state.premiseToRewrite}
+              boundVariableLists={boundVariableLists}
+              getSuggestions={this.getRewriteSuggestions}
+              onSave={rewrites => this.rewritePremise({serializedPremise: this.state.premiseToRewrite.serialize(), rewrites})}
+            />}
+          </>}
           {activeProvingType === 'transitiveTarget' && <>
             <Form.Group>
               <Form.Label><strong>Transitive Target</strong></Form.Label>

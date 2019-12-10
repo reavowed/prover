@@ -1,9 +1,9 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{PathData, RewriteRequest}
+import net.prover.controllers.models.{PathData, PremiseRewrite, RewriteRequest}
 import net.prover.model.definitions.{Equality, RearrangementStep, Wrapper}
 import net.prover.model.entries.Theorem
-import net.prover.model.expressions.{Expression, Term, TypedExpression}
+import net.prover.model.expressions.{Expression, Statement, Term, TypedExpression}
 import net.prover.model.proof._
 import net.prover.model.{Inference, ProvingContext}
 import net.prover.util.Swapper
@@ -72,6 +72,24 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     }).toResponseEntity
   }
 
+  @GetMapping(value = Array("/premises"), produces = Array("application/json;charset=UTF-8"))
+  def getPremises(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData
+  ): ResponseEntity[_] = {
+    val (books, definitions) = bookService.booksAndDefinitions
+    (for {
+      book <- findBook(books, bookKey)
+      chapter <- findChapter(book, chapterKey)
+      theorem <- findEntry[Theorem](chapter, theoremKey)
+      provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
+      (_, stepContext) <- findStep[Step](theorem, proofIndex, stepPath)
+    } yield StepProvingContext(stepContext, provingContext).allPremisesSimplestFirst.map(_.statement)).toResponseEntity
+  }
+
   def rewrite[TExpression <: Expression with TypedExpression[TExpression], TStep](
     baseExpression: TExpression,
     rewriteList: Seq[Seq[RewriteRequest]],
@@ -113,6 +131,15 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     } yield (step, newTarget)
   }
 
+  private def elideRewrite(steps: Seq[Step], inferences: Seq[Inference.Summary]) = {
+    inferences.single match {
+      case Some(inference) =>
+        Step.Elided.ifNecessary(steps, inference).get
+      case None =>
+        Step.Elided.ifNecessary(steps, "Rewritten").get
+    }
+  }
+
   @PostMapping(value = Array("/rewrite"), produces = Array("application/json;charset=UTF-8"))
   def rewriteManually(
     @PathVariable("bookKey") bookKey: String,
@@ -122,14 +149,6 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody rewrites: Seq[Seq[RewriteRequest]]
   ): ResponseEntity[_] = {
-    def elide(steps: Seq[Step], inferences: Seq[Inference.Summary]) = {
-      inferences.single match {
-        case Some(inference) =>
-          Step.Elided.ifNecessary(steps, inference).get
-        case None =>
-          Step.Elided.ifNecessary(steps, "Rewritten").get
-      }
-    }
     replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
@@ -138,8 +157,8 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           val substitutionStep = equality.substitution.assertionStep(result, target, wrapper)
           Step.Elided.ifNecessary(steps :+ substitutionStep, inference).get
         } { (_, steps, inferences) =>
-          elide(steps, inferences)
-        }(elide)
+          elideRewrite(steps, inferences)
+        }(elideRewrite)
       } yield Seq(Step.Target(newTarget), step)
     }.toResponseEntity
   }
@@ -156,6 +175,30 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       EqualityRewriter.rewrite(step.statement)(stepProvingContext)
         .orBadRequest(s"Could not rewrite statement ${step.statement}")
         .map(Seq(_))
+    }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/rewritePremise"), produces = Array("application/json;charset=UTF-8"))
+  def rewritePremise(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData,
+    @RequestBody premiseRewrite: PremiseRewrite
+  ): ResponseEntity[_] = {
+    replaceStepAndAddBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+      implicit val spc = stepProvingContext
+      for {
+        equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
+        premiseStatement <- Statement.parser.parseFromString(premiseRewrite.serializedPremise, "premise").recoverWithBadRequest
+        (newStep, _) <- rewrite(premiseStatement, premiseRewrite.rewrites, equality, Swapper.dontSwap) { (result, target, wrapper, steps, inference) =>
+          val substitutionStep = equality.substitution.assertionStep(result, target, wrapper)
+          Step.Elided.ifNecessary(steps :+ substitutionStep, inference).get
+        } { (_, steps, inferences) =>
+          elideRewrite(steps, inferences)
+        }(elideRewrite)
+      } yield (step, Seq(newStep))
     }.toResponseEntity
   }
 
