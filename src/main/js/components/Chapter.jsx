@@ -181,6 +181,7 @@ export class Chapter extends React.Component {
         }
       })
       .then(newProps => {
+        window.definitions = newProps.definitions;
         this.setState({
           title: newProps.title,
           url: newProps.url,
@@ -461,7 +462,7 @@ export class Chapter extends React.Component {
                         onChange={(e) => this.updateTermPremises(e)}/>
         </Form.Group>
         <Form.Group>
-          <Form.Label><strong>Definition</strong></Form.Label>
+          <Form.Label><strong>Definition (use "_" as placeholder)</strong></Form.Label>
           <Form.Control type="text"
                         value={this.state.termBeingAdded.definition}
                         onChange={(e) => this.updateTermDefinition(e)}/>

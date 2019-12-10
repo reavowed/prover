@@ -258,3 +258,8 @@ conclusion ∃! ~ ∧ relation $0 product ℤ diff ℤ singleton 0_ℤ ∀ a →
     }
   }
 }
+
+term ~_ℚ ()
+  (∧ relation $0 product ℤ diff ℤ singleton 0_ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton 0_ℤ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×_ℤ orderedPair $$$$0 $0 apply ×_ℤ orderedPair $$$0 $$0)
+  shorthand (~Q)
+  attributes (infix-relation)

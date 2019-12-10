@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.ChapterController._
 import net.prover.controllers.models.ChapterProps._
-import net.prover.controllers.models.{ChapterProps, LinkSummary}
+import net.prover.controllers.models.{ChapterProps, DefinitionSummary, LinkSummary}
 import net.prover.exceptions.BadRequestException
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
@@ -25,6 +25,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     val index = chaptersWithKeys.findIndexWhere(_._1 == chapter).getOrElse(throw new Exception("Book somehow didn't exist"))
     val previous = chaptersWithKeys.lift(index - 1).map { case (c, key) => LinkSummary(c.title, getChapterUrl(bookKey, key)) }
     val next = chaptersWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, getChapterUrl(bookKey, key)) }
+    val entryContext = EntryContext.forChapterInclusive(books, book, chapter)
 
     val entrySummaries = getEntriesWithKeys(chapter).mapCollect{
       case (axiom: entries.Axiom, key) =>
@@ -58,7 +59,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       chapter.summary,
       entrySummaries,
       previous,
-      next)
+      next,
+      DefinitionSummary.getAllFromContext(entryContext))
   }
 
   @GetMapping(produces = Array("text/html;charset=UTF-8"))
@@ -74,7 +76,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         "Chapter",
         getChapterProps(books, book, bookKey, chapter, chapterKey),
         Map(
-          "definitions" -> getDefinitionSummaries(entryContext),
+          "definitions" -> DefinitionSummary.getAllFromContext(entryContext),
           "typeDefinitions" -> getTypeDefinitions(entryContext),
           "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
           "definitionShorthands" -> getDefinitionShorthands(entryContext)))
@@ -132,7 +134,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           "next" -> next,
           "usages" -> getUsages(entry, books)),
         baseGlobals ++ Map(
-          "definitions" -> getDefinitionSummaries(entryContext),
+          "definitions" -> DefinitionSummary.getAllFromContext(entryContext),
           "typeDefinitions" -> getTypeDefinitions(entryContext),
           "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
           "transitiveStatements" -> getTransitivitySummaries(provingContext),
@@ -187,7 +189,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         boundVariables = boundVariablesAndComponentTypes._1
         componentTypes = boundVariablesAndComponentTypes._2
         componentNames = boundVariables ++ componentTypes.map(_.name)
-        definition <- Statement.parser.parseFromString(newTermDefininition.definition, "definition").recoverWithBadRequest
+        definition <- Statement.parser(expressionParsingContext.addParameters("_")).parseFromString(newTermDefininition.definition, "definition").recoverWithBadRequest
         format <- Option(newTermDefininition.format).filter(_.nonEmpty).map(f => Format.parser(componentNames).parseFromString(f, "format")).getOrElse(Format.default(symbol, componentNames)).recoverWithBadRequest
         premises <- newTermDefininition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}")).recoverWithBadRequest
         newTerm = TermDefinition(
@@ -326,12 +328,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     ).map{ case (books, book, chapter, _) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
-  case class DefinitionSummary(symbol: String, baseFormatString: String, requiresBrackets: Boolean, requiresComponentBrackets: Boolean, numberOfBoundVariables: Int, attributes: Seq[String])
-  private def getDefinitionSummaries(entryContext: EntryContext) = {
-    entryContext.availableEntries.ofType[ExpressionDefinition]
-      .map(d => d.symbol -> DefinitionSummary(d.symbol, d.format.baseFormatString, d.format.requiresBrackets, d.format.requiresComponentBrackets, d.boundVariableNames.length, d.attributes))
-      .toMap
-  }
 
   case class TypeDefinitionSummary(symbol: String, name: String, componentFormatString: String, article: String, properties: Map[String, String])
   private def getTypeDefinitions(entryContext: EntryContext) = {

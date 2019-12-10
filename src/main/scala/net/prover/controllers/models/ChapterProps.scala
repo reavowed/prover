@@ -12,7 +12,8 @@ case class ChapterProps(
   summary: String,
   entries: Seq[ChapterProps.EntryProps],
   previous: Option[LinkSummary],
-  next: Option[LinkSummary])
+  next: Option[LinkSummary],
+  definitions: Map[String, DefinitionSummary])
 
 object ChapterProps {
   sealed trait EntryProps {

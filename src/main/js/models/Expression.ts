@@ -156,7 +156,8 @@ export class DefinedExpression {
     return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
-    return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serializeNicely(boundVariableLists))].join(" ");
+    const innerBoundVariables = this.boundVariableNames.length ? [this.boundVariableNames, ...boundVariableLists] : boundVariableLists;
+    return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serializeNicely(innerBoundVariables))].join(" ");
   }
   formatForHtml(parentRequiresBrackets: boolean) {
     return (parentRequiresBrackets && this.definition.requiresBrackets) ?
