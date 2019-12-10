@@ -103,9 +103,12 @@ export class ExpressionComponent extends React.Component {
     const matchingActionHighlight = _.find(actionHighlights, p => p.path.length === 0);
     const shouldStaticHighlight = _.some(staticHighlights, p => p.path.length === 0);
 
-    const tag = matchingActionHighlight ? (matchingActionHighlight.action ? ClickablePremise : HighlightedPremise) : (shouldStaticHighlight ? HighlightedConclusion : React.Fragment);
+    const tag =
+      shouldStaticHighlight ? HighlightedConclusion :
+        matchingActionHighlight ? (matchingActionHighlight.action ? ClickablePremise : HighlightedPremise) :
+          React.Fragment;
     const props = {};
-    if (matchingActionHighlight && matchingActionHighlight.action) {
+    if (!shouldStaticHighlight && matchingActionHighlight && matchingActionHighlight.action) {
       props.onClick = () => matchingActionHighlight.action(expression.serialize())
     }
     return React.createElement(tag, props, this.renderInner(expression, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, parentRequiresBrackets).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>));
@@ -135,20 +138,25 @@ export const HighlightableExpression = connect(
     additionalReferences = additionalReferences || [];
     additionalPremiseReferences = additionalPremiseReferences || [];
     additionalConclusionReferences = additionalConclusionReferences || [];
-    let referencesAsPremise = state.highlighting.action ? [...references, ...additionalPremiseReferences] : [...references, ...additionalReferences, ...additionalPremiseReferences];
-    let referencesAsConclusion = [...references, ...additionalReferences, ...additionalConclusionReferences];
+    let referencesForAction = [...references, ...additionalPremiseReferences];
+    let referencesForStatic = [...references, ...additionalReferences, ...additionalConclusionReferences];
 
-    const matchingPremises = _.filter(state.highlighting.premises, highlightedPremise =>
-      _.some(referencesAsPremise, reference => referencesMatch(reference, highlightedPremise))
-    );
-    const actionHighlights = _.map(matchingPremises, p => { return { path: p.internalPath || [], action: state.highlighting.action }});
-    const shouldHighlightAsConclusion = !state.highlighting.action && state.highlighting.conclusion && _.some(referencesAsConclusion, r => referencesMatch(r, state.highlighting.conclusion));
+    const actionHighlights = _.chain(state.highlighting.actionHighlights)
+      .filter(actionHighlight => {
+        const references = actionHighlight.action ? referencesForAction : referencesForStatic;
+        return _.some(references, reference => referencesMatch(reference, actionHighlight.reference))
+      })
+      .map(actionHighlight => { return {path: actionHighlight.reference.internalPath || [], action: actionHighlight.action}})
+      .value();
+    const staticHighlights = _.chain(state.highlighting.staticHighlights)
+      .filter(staticHighlight => _.some(referencesForStatic, reference => referencesMatch(reference, staticHighlight)))
+      .map(staticHighlight => {return {path: staticHighlight.internalPath || []}})
+      .value();
 
     return {
       expression,
-      actionHighlights: actionHighlights,
-      staticHighlights: shouldHighlightAsConclusion ? [{path: []}] : [],
-      highlightingAction: state.highlighting.action,
+      actionHighlights,
+      staticHighlights,
       boundVariableLists,
       wrapBoundVariable,
       className

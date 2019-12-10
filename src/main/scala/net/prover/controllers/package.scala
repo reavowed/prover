@@ -47,6 +47,11 @@ package object controllers {
       }
     }
   }
+
+  implicit class BooleanWithResponseExceptionOps(b: Boolean) {
+    def orBadRequest(message: String): Try[Unit] = if (b) Success(()) else Failure(BadRequestException(message))
+  }
+
   implicit class AnyWithResponseExceptionOps[T](t: => T) {
     def recoverWithBadRequest: Try[T] = {
       Try(t).recoverWith { case e => Failure(BadRequestException(e.getMessage))}

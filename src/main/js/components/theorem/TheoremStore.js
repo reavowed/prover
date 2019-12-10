@@ -36,11 +36,16 @@ export const SetHighlightedConclusion = function(newHighlightedConclusion) {
   }
 };
 
-export const SetHighlightingAction = function(highlightablePremises, action) {
+export const SetHighlightingAction = function(actionHighlights, staticHighlights) {
   return {
     type: "SetHighlightingAction",
-    highlightablePremises,
-    action
+    actionHighlights,
+    staticHighlights
+  };
+};
+export const ClearHighlightingAction = function() {
+  return {
+    type: "ClearHighlightingAction"
   };
 };
 
@@ -75,14 +80,20 @@ export const FetchJsonForStepAndUpdate = (proofIndex, stepPath, childPath, optio
 const highlightingReducer = function(state = {}, action) {
   switch (action.type) {
     case "SetHighlightedPremises":
-      return !state.action ? Object.assign({}, state, {premises: action.newHighlightedPremises}) : state;
+      return !state.isActionInUse ? Object.assign({}, state, {actionHighlights: _.map(action.newHighlightedPremises, reference => {return {reference}})}) : state;
     case "SetHighlightedConclusion":
-      return !state.action ? Object.assign({}, state, {conclusion: action.newHighlightedConclusion}) : state;
+      return !state.isActionInUse ? Object.assign({}, state, {staticHighlights: action.newHighlightedConclusion ? [action.newHighlightedConclusion] : []}) : state;
     case "SetHighlightingAction":
       return {
-        premises: action.highlightablePremises,
-        conclusion: null,
-        action: action.action
+        actionHighlights: action.actionHighlights,
+        staticHighlights: action.staticHighlights || [],
+        isActionInUse: true
+      };
+    case "ClearHighlightingAction":
+      return {
+        actionHighlights: [],
+        staticHighlights: [],
+        isActionInUse: false
       };
     default:
       return state;

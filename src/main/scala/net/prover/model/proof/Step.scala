@@ -372,6 +372,9 @@ object Step {
     def ifNecessary(substeps: Seq[Step], description: String): Option[Step] = {
       ifNecessary(substeps, Step.Elided(_, None, Some(description)))
     }
+    def ifNecessary(substeps: Seq[Step], inferenceOption: Option[Inference], description: String): Option[Step] = {
+      ifNecessary(substeps, inferenceOption.map(forInference).getOrElse(forDescription(description)))
+    }
 
     def forInference(inference: Inference): Seq[Step] => Step.Elided = {
       Step.Elided(_, Some(inference.summary), None)

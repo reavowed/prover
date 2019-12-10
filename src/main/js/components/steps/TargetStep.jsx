@@ -10,7 +10,13 @@ import {CopiableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import {InferenceFinder} from "../InferenceFinder";
 import Rewriter from "../Rewriter";
-import {FetchJsonForStep, FetchJsonForStepAndUpdate, SetHighlightingAction} from "../theorem/TheoremStore";
+import {
+  ClearHighlightingAction,
+  FetchJsonForStep,
+  FetchJsonForStepAndUpdate,
+  SetHighlightedConclusion,
+  SetHighlightingAction
+} from "../theorem/TheoremStore";
 import ProofLine from "./ProofLine";
 import {Parser} from "../../Parser";
 import ProofContext from "../theorem/ProofContext";
@@ -111,7 +117,7 @@ export const TargetStepProofLine = connect()(class extends React.Component {
         })
       }
     ));
-  }
+  };
 
   proveWithInference = (suggestion, substitutions) => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "", {
@@ -213,21 +219,40 @@ export const TargetStepProofLine = connect()(class extends React.Component {
     }
   };
 
-  handleImmediateNamingPremises = (paths) => {
+  handleImmediateNamingPremises = (premises) => {
     if (this.state.immediateNamingActive) {
-      this.props.dispatch(SetHighlightingAction(paths, this.handleImmediateNamingPremiseSelected));
+      const highlightingActions = _.map(premises, p => {return {reference: p.referencedLine, action: () => this.handleImmediateNamingPremiseSelected(Expression.parseFromJson(p.statement))}})
+      this.props.dispatch(SetHighlightingAction(highlightingActions));
     }
   };
   handleImmediateNamingPremiseSelected = (premise) => {
     this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "introduceNamingFromPremise", { method: "POST", body: premise }))
       .then(() => {
-        this.props.dispatch(SetHighlightingAction([], null));
+        this.props.dispatch(ClearHighlightingAction());
         this.context.callOnStep([...this.props.path, 0], "startProving")
       });
   };
   cancelImmediateNamingPremises = () => {
     this.setState({immediateNamingActive: false});
-    this.props.dispatch(SetHighlightingAction([], null));
+    this.props.dispatch(ClearHighlightingAction());
+  };
+
+  loadPremiseSuggestions = (expression, pathsAlreadyRewritten, onPremiseSuggestionSelected) => {
+    this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `rewritePremiseSuggestions?expression=${encodeURIComponent(expression.serialize())}&pathsAlreadyRewritten=${_.map(pathsAlreadyRewritten, p => p.join(".")).join(",")}`))
+      .then((suggestions) => {
+        this.setState({rewritePremiseSuggestions: Parser.parsePremiseRewriteSuggestions(suggestions), onPremiseSuggestionSelected}, () => this.resetPremiseSuggestions());
+      });
+  };
+  resetPremiseSuggestions = () => {
+    const highlightingActions = _.map(this.state.rewritePremiseSuggestions, s => { return {reference: s.reference, action: () => {
+        this.state.onPremiseSuggestionSelected(s);
+        this.props.dispatch(SetHighlightingAction(highlightingActions, [s.reference]));
+      }}});
+    this.props.dispatch(SetHighlightingAction(highlightingActions));
+  };
+  cancelPremiseSuggestions = () => {
+    this.setState({rewritePremiseSuggestions: [], onPremiseSuggestionSelected: () => {}});
+    this.props.dispatch(ClearHighlightingAction());
   };
 
   getRewriteSuggestions = (searchText, expression, pathsAlreadyRewritten) => {
@@ -346,6 +371,9 @@ export const TargetStepProofLine = connect()(class extends React.Component {
             expression={step.statement}
             boundVariableLists={boundVariableLists}
             getSuggestions={this.getRewriteSuggestions}
+            loadPremiseSuggestions={this.loadPremiseSuggestions}
+            resetPremiseSuggestions={this.resetPremiseSuggestions}
+            cancelPremiseSuggestions={this.cancelPremiseSuggestions}
             onSave={this.rewrite}
           />}
           {activeProvingType === 'naming' && <>
@@ -396,6 +424,9 @@ export const TargetStepProofLine = connect()(class extends React.Component {
             expression={step.statement.components[0]}
             boundVariableLists={boundVariableLists}
             getSuggestions={this.getRewriteSuggestions}
+            loadPremiseSuggestions={this.loadPremiseSuggestions}
+            resetPremiseSuggestions={this.resetPremiseSuggestions}
+            cancelPremiseSuggestions={this.cancelPremiseSuggestions}
             onSave={this.rewriteLeft}
           />}
           {activeProvingType === 'rewriteRight' && <Rewriter
@@ -403,6 +434,9 @@ export const TargetStepProofLine = connect()(class extends React.Component {
             expression={step.statement.components[1]}
             boundVariableLists={boundVariableLists}
             getSuggestions={this.getRewriteSuggestions}
+            loadPremiseSuggestions={this.loadPremiseSuggestions}
+            resetPremiseSuggestions={this.resetPremiseSuggestions}
+            cancelPremiseSuggestions={this.cancelPremiseSuggestions}
             onSave={this.rewriteRight}
           />}
           {activeProvingType === 'rewritePremise' && <>
@@ -422,6 +456,9 @@ export const TargetStepProofLine = connect()(class extends React.Component {
               expression={this.state.premiseToRewrite}
               boundVariableLists={boundVariableLists}
               getSuggestions={this.getRewriteSuggestions}
+              loadPremiseSuggestions={this.loadPremiseSuggestions}
+              resetPremiseSuggestions={this.resetPremiseSuggestions}
+              cancelPremiseSuggestions={this.cancelPremiseSuggestions}
               onSave={rewrites => this.rewritePremise({serializedPremise: this.state.premiseToRewrite.serialize(), rewrites})}
             />}
           </>}

@@ -84,7 +84,15 @@ export class Parser {
       })
     );
   }
-  static parseRewriteSuggestions(suggestions) {
+  static parsePremiseRewriteSuggestions(suggestions) {
+    return suggestions.map(suggestionJson => {
+      const suggestion = _.cloneDeep(suggestionJson);
+      _.forEach(suggestion.rewriteSuggestions, s => s.result = Expression.parseFromJson(s.result));
+      suggestion.statement = Expression.parseFromJson(suggestion.statement);
+      return suggestion;
+    })
+  }
+  static parseInferenceRewriteSuggestions(suggestions) {
     return suggestions.map(suggestionJson => {
       const suggestion = _.cloneDeep(suggestionJson);
       Parser.parseInferenceSummary(suggestion.inference);

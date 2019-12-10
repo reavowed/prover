@@ -337,7 +337,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
         if singleNamingPremise.scopedBoundVariableNames.single.nonEmpty
         premise <- stepProvingContext.allPremisesSimplestFirst
         if singleNamingPremise.calculateSubstitutions(premise.statement).nonEmpty
-      } yield premise.referencedLine
+      } yield premise
     }).toResponseEntity
   }
 

@@ -15,4 +15,7 @@ object RearrangementStep {
   def apply(resultingTerm: Term, substeps: Seq[Step], description: String): RearrangementStep = {
     RearrangementStep(resultingTerm, substeps, Step.Elided.ifNecessary(_, description))
   }
+  def apply(resultingTerm: Term, substeps: Seq[Step], inference: Option[Inference.Summary], description: String): RearrangementStep = {
+    RearrangementStep(resultingTerm, substeps, Step.Elided.ifNecessary(_, inference, description))
+  }
 }

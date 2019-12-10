@@ -1,10 +1,10 @@
 import React from "react";
 import {Button} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import {Expression} from "../models/Expression";
 import {Parser} from "../Parser";
 import {CopiableExpression} from "./ExpressionComponent";
 import InferenceAutosuggest from "./InferenceAutosuggest";
-import {FetchJsonForStepAndUpdate} from "./theorem/TheoremStore";
 
 export default class extends React.Component {
   constructor(...args) {
@@ -13,18 +13,28 @@ export default class extends React.Component {
       autosuggestValue: "",
       currentExpression: this.props.expression,
       inferenceSuggestions: [],
-      selectedSuggestion: null,
+      selectedInferenceSuggestion: null,
+      selectedPremiseSuggestion: null,
       chosenRewrites: [[]]
     };
   }
+  componentDidMount() {
+    this.props.loadPremiseSuggestions(this.state.currentExpression, this.getCurrentPaths(), this.onPremiseSelected);
+  }
+  componentWillUnmount() {
+    this.props.cancelPremiseSuggestions();
+  }
+
+  getCurrentPaths = () => _.map(this.state.chosenRewrites[this.state.chosenRewrites.length - 1], r => r.path);
+
   onAutosuggestChange = (event, { newValue }) => {
     this.setState({autosuggestValue: newValue});
   };
   onSuggestionsFetchRequested = ({ value }) => {
-    this.props.getSuggestions(value, this.state.currentExpression, _.map(this.state.chosenRewrites[this.state.chosenRewrites.length - 1], r => r.path))
+    this.props.getSuggestions(value, this.state.currentExpression, this.getCurrentPaths())
       .then(suggestionsJson => {
         if (this.state.autosuggestValue === value) {
-          this.setState({inferenceSuggestions: Parser.parseRewriteSuggestions(suggestionsJson)})
+          this.setState({inferenceSuggestions: Parser.parseInferenceRewriteSuggestions(suggestionsJson)})
         }
       })
   };
@@ -32,34 +42,55 @@ export default class extends React.Component {
     this.setState({inferenceSuggestions: []})
   };
   onSuggestionSelected = (event, {suggestion}) => {
-    this.setState({selectedSuggestion: suggestion});
+    this.setState({selectedInferenceSuggestion: suggestion, selectedPremiseSuggestion: null});
+    this.props.resetPremiseSuggestions();
   };
-  onExpressionClicked = (path, replacementExpression, inferenceId, reverse) => {
+
+  onPremiseSelected = (selectedPremiseSuggestion) => {
+    this.setState({selectedInferenceSuggestion: null, selectedPremiseSuggestion});
+  };
+
+  onExpressionClickedForInference = (path, replacementExpression, inferenceId, reverse) => {
+    this.addRewrite({path, inferenceId, reverse}, replacementExpression);
+  };
+  onExpressionClickedForPremise = (path, replacementExpression, serializedPremiseStatement, reverse) => {
+    this.addRewrite({path, serializedPremiseStatement, reverse}, replacementExpression);
+  };
+
+  addRewrite = (rewrite, replacementExpression) => {
     let {chosenRewrites} = this.state;
-    chosenRewrites = [...chosenRewrites.slice(0, chosenRewrites.length - 1), [...chosenRewrites[chosenRewrites.length - 1], {path, inferenceId, reverse}]];
+    chosenRewrites = [...chosenRewrites.slice(0, chosenRewrites.length - 1), [...chosenRewrites[chosenRewrites.length - 1], rewrite]];
     this.setState({
-      currentExpression: this.state.currentExpression.replaceAtPath(path, replacementExpression),
+      currentExpression: this.state.currentExpression.replaceAtPath(rewrite.path, replacementExpression),
       chosenRewrites
     });
   };
+
   again = () => {
     this.setState({
       chosenRewrites: [...this.state.chosenRewrites, []],
       inferenceSuggestions: [],
-      selectedSuggestion: null
+      selectedInferenceSuggestion: null,
+      selectedPremiseSuggestion: null
     })
   };
 
   render() {
     const {title, boundVariableLists, onSave} = this.props;
-    const {currentExpression, selectedSuggestion, chosenRewrites} = this.state;
-    const currentPaths =  _.map(chosenRewrites[chosenRewrites.length - 1], r => r.path);
+    const {currentExpression, selectedInferenceSuggestion, selectedPremiseSuggestion, chosenRewrites} = this.state;
+    const currentPaths = this.getCurrentPaths();
 
-    const actionHighlights = selectedSuggestion ?
-      _.chain(selectedSuggestion.rewriteSuggestions)
+    const actionHighlights = selectedInferenceSuggestion ?
+      _.chain(selectedInferenceSuggestion.rewriteSuggestions)
         .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
-        .map(s => { return {path: s.path, action: () => this.onExpressionClicked(s.path, s.result, selectedSuggestion.inference.id, selectedSuggestion.reverse) }})
+        .map(s => { return {path: s.path, action: () => this.onExpressionClickedForInference(s.path, s.result, selectedInferenceSuggestion.inference.id, selectedInferenceSuggestion.reverse) }})
         .value() :
+      selectedPremiseSuggestion ?
+        _.chain(selectedPremiseSuggestion.rewriteSuggestions)
+          .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
+          .map(s => { return {path: s.path, action: () => this.onExpressionClickedForPremise(s.path, s.result, selectedPremiseSuggestion.statement.serialize(), selectedPremiseSuggestion.reverse) }})
+          .value() :
+
       [];
     const staticHighlights = _.map(currentPaths, path => { return {path}});
 
