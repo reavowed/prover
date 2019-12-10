@@ -33,15 +33,16 @@ class ProofHelperSpec extends ProverSpec {
     val axioms = Seq(specification, modusPonens, reverseImplicationFromEquivalence, combineConjunction, zeroIsANaturalNumber, successorOfNaturalIsNatural)
     implicit val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
 
-    def extract(targetStatement: Statement, premises: Seq[Statement], depth: Int = 0): Option[Step] = {
+    def extract(targetStatement: Statement, premises: Seq[Statement], depth: Int = 0): Option[(Step, Option[Step.Target])] = {
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil).copy(boundVariableLists = (1 to depth).map(i => Seq(i.toString)))
       SubstatementExtractor.extract(targetStatement)(entryContextAndStepContextToStepProvingContext)
-        .map(_.recalculateReferences(stepContext, implicitly[ProvingContext]))
+        .map(_.mapLeft(_.recalculateReferences(stepContext, implicitly[ProvingContext])))
     }
 
     def testExtraction(targetStatement: Statement, premises: Seq[Statement]) = {
-      val step = extract(targetStatement, premises)
-      validateStep(step, targetStatement, premises, entryContextWithAxioms)
+      val stepAndTargetOption = extract(targetStatement, premises)
+      stepAndTargetOption.map(_._2) must beSome(None)
+      validateStep(stepAndTargetOption.map(_._1), targetStatement, premises, entryContextWithAxioms)
     }
 
     "find a statement via specification" in {
@@ -132,7 +133,9 @@ class ProofHelperSpec extends ProverSpec {
             Exists("x")(ψ(FunctionParameter(0, 0) /*x*/, FunctionParameter(0, 3) /*n*/, FunctionParameter(0, 1) /*y*/)))),
           φ(FunctionParameter(0, 1) /*n*/, Successor(FunctionParameter(0, 1)) /*n+*/)),
         2
-      ) must beNone
+      ) must beNone.or(beSome.like {case (_, targetOption) =>
+        targetOption must beSome
+      })
     }
 
     "find non-spurious result with external bound variables" in {
@@ -144,7 +147,9 @@ class ProofHelperSpec extends ProverSpec {
             Exists("x")(ψ(FunctionParameter(0, 0), FunctionParameter(0, 3), FunctionParameter(0, 1))))),
           φ(FunctionParameter(0, 1), Successor(FunctionParameter(0, 0)))),
         2
-      ) must beSome
+      ) must beSome.like { case (step, targetOption) =>
+        targetOption must beNone
+      }
     }
   }
 

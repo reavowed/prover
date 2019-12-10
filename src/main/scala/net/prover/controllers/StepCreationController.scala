@@ -280,10 +280,10 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+    replaceStepAndAddBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
-        newStep <- SubstatementExtractor.extract(step.statement)(stepProvingContext).orBadRequest(s"Could not extract statement ${step.statement}")
-      } yield Seq(newStep)
+        (newStep, target) <- SubstatementExtractor.extract(step.statement)(stepProvingContext).orBadRequest(s"Could not extract statement ${step.statement}")
+      } yield (newStep, target.toSeq)
     }.toResponseEntity
   }
 
