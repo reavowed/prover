@@ -180,6 +180,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val structuralSimplificationInferences: Seq[(Inference, Statement)] = {
     replace(definitions.structuralSimplificationInferences)
   }
+  lazy val facts: Seq[Inference] = {
+    replace(definitions.facts)
+  }
 }
 
 object ProvingContext {

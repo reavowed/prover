@@ -110,13 +110,20 @@ object SubstatementExtractor {
         extractWithRewrite(extractionCandidate, termsSoFar)
     }
 
-    def extractPremise(premise: Premise.SingleLinePremise): Option[(Step, Option[Step.Target])] = {
+    def extractFromPremises: Option[(Step, Option[Step.Target])] = for {
+      (_, steps, target) <- allPremisesSimplestFirst.mapFind(p => extractFromStatement(p.statement, 0))
+      finalStep <- Step.Elided.ifNecessary(steps, "Extracted")
+    } yield (finalStep, target)
+
+    def extractFromFact(fact: Inference): Option[(Step, Option[Step.Target])] = {
       for {
-        (_, steps, target) <- extractFromStatement(premise.statement, 0)
-        finalStep <- Step.Elided.ifNecessary(steps, "Extracted")
+        (_, steps, target) <- extractFromStatement(fact.conclusion, 0)
+        assertion = Step.Assertion(fact.conclusion, fact.summary, Nil, Substitutions.empty)
+        finalStep <- Step.Elided.ifNecessary(assertion +: steps, fact)
       } yield (finalStep, target)
     }
+    def extractFromFacts: Option[(Step, Option[Step.Target])] = provingContext.facts.mapFind(extractFromFact)
 
-    allPremisesSimplestFirst.mapFind(extractPremise)
+    extractFromPremises orElse extractFromFacts
   }
 }

@@ -304,6 +304,13 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     }
   }
 
+  lazy val facts: Seq[Inference] = {
+    inferences.collect {
+      case inference if inference.premises.isEmpty && inference.requiredSubstitutions.isEmpty =>
+        inference
+    }
+  }
+
 }
 
 object Definitions {
