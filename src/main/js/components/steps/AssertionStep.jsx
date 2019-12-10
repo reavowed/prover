@@ -30,13 +30,14 @@ export const AssertionStepProofLine = connect()(class extends React.Component {
 
 export class AssertionStep extends React.Component {
   render() {
-    const {step, path, boundVariableLists} = this.props;
+    const {step, path, boundVariableLists, additionalReferences} = this.props;
     return <AssertionStepProofLine {...this.props}>
       <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
                                                   prefix="Then"
                                                   statement={step.statement}
                                                   path={path}
-                                                  boundVariableLists={boundVariableLists} />
+                                                  boundVariableLists={boundVariableLists}
+                                                  additionalReferences={additionalReferences} />
     </AssertionStepProofLine>
   }
 }
