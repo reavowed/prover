@@ -555,12 +555,13 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
 
 export class TargetStep extends React.Component {
   render() {
-    const {step, path, boundVariableLists} = this.props;
+    const {step, path, boundVariableLists, additionalReferences} = this.props;
     return <TargetStepProofLine {...this.props}>
       <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
                                                   prefix="Then"
                                                   statement={step.statement}
                                                   path={path}
+                                                  additionalReferences={additionalReferences}
                                                   boundVariableLists={boundVariableLists} />
     </TargetStepProofLine>
   }
