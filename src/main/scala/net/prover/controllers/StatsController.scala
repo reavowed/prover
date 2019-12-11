@@ -55,4 +55,19 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
           .exists(_.definition.symbol == symbol))
     } yield ("http://localhost:8080" + getEntryUrl(bookKey, chapterKey, inferenceKey), context.stepReference.stepPath.mkString("."))
   }
+
+  @GetMapping(value = Array("findElisions"))
+  def findElisions(
+    @RequestParam inferenceId: String
+  ): Seq[(String, String)] = {
+    val (books, definitions) = bookService.booksAndDefinitions
+    for {
+      (book, bookKey) <- getBooksWithKeys(books)
+      (chapter, chapterKey) <- getChaptersWithKeys(book)
+      (theorem, inferenceKey) <- getEntriesWithKeys(chapter)
+        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
+      (elision, context) <- theorem.findSteps[Step.Elided]
+      if elision.highlightedInference.exists(_.id == inferenceId)
+    } yield ("http://localhost:8080" + getEntryUrl(bookKey, chapterKey, inferenceKey), context.stepReference.stepPath.mkString("."))
+  }
 }

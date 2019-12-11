@@ -118,7 +118,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     rewriteList: Seq[Seq[RewriteRequest]],
     equality: Equality,
     swapper: Swapper)(
-    f: (Term, Term, Wrapper[Term, TExpression], Seq[Step], Option[Inference.Summary]) => TStep)(
+    f: (Term, Term, Wrapper[Term, TExpression], Seq[Step], Option[Inference.Summary], Option[Inference.Summary]) => TStep)(
     combine: (TExpression, Seq[TStep], Seq[Inference.Summary]) => TStep)(
     elide: (Seq[TStep], Seq[Inference.Summary]) => Step)(
     implicit stepProvingContext: StepProvingContext
@@ -162,7 +162,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
               reversalStepOption = if (reverse) Some((equality.reversal.assertionStep _).tupled(swapper.swap(baseTerm, rewrittenTerm))) else None
               wrapper = Wrapper.fromExpression(function)
               (source, result) = swapper.swap(baseTerm, rewrittenTerm)
-              step = f(source, result, wrapper, rewriteStepOption.toSeq ++ reversalStepOption.toSeq, inferenceOption.orElse(Some(equality.reversal.inference).filter(_ => reverse)))
+              step = f(source, result, wrapper, rewriteStepOption.toSeq ++ reversalStepOption.toSeq, inferenceOption, Some(equality.reversal.inference).filter(_ => reverse))
             } yield (wrapper(rewrittenTerm), stepsSoFar :+ step , inferencesSoFar ++ inferenceOption.toSeq)
           }.map(_.map2(swapper.reverse))
           step = combine(currentExpression, steps, inferences)
@@ -189,7 +189,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       implicit val spc = stepProvingContext
       for {
         equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
-        (step, newTarget) <- rewrite(step.statement, rewrites, equality, Swapper.swap) { (result, target, wrapper, steps, inference) =>
+        (step, newTarget) <- rewrite(step.statement, rewrites, equality, Swapper.swap) { (result, target, wrapper, steps, inference, _) =>
           val substitutionStep = equality.substitution.assertionStep(result, target, wrapper)
           Step.Elided.ifNecessary(steps :+ substitutionStep, inference.getOrElse(equality.substitution.inference)).get
         } { (_, steps, inferences) =>
@@ -228,7 +228,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       for {
         equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
         premiseStatement <- Statement.parser.parseFromString(premiseRewrite.serializedPremise, "premise").recoverWithBadRequest
-        (newStep, _) <- rewrite(premiseStatement, premiseRewrite.rewrites, equality, Swapper.dontSwap) { (result, target, wrapper, steps, inference) =>
+        (newStep, _) <- rewrite(premiseStatement, premiseRewrite.rewrites, equality, Swapper.dontSwap) { (result, target, wrapper, steps, inference, _) =>
           val substitutionStep = equality.substitution.assertionStep(result, target, wrapper)
           Step.Elided.ifNecessary(steps :+ substitutionStep, inference.getOrElse(equality.substitution.inference)).get
         } { (_, steps, inferences) =>
@@ -244,11 +244,12 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     result: Term,
     wrapper: Wrapper[Term, Term],
     steps: Seq[Step],
-    inference: Option[Inference.Summary])(
+    inference: Option[Inference.Summary],
+    fallbackInference: Option[Inference.Summary])(
     implicit substitutionContext: SubstitutionContext
   ): RearrangementStep = {
     val expansionStepOption = equality.expansion.assertionStepIfNecessary(target, result, wrapper)
-    RearrangementStep(wrapper(result), steps ++ expansionStepOption.toSeq, inference orElse Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity), "Rewritten")
+    RearrangementStep(wrapper(result), steps ++ expansionStepOption.toSeq, inference orElse Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity) orElse fallbackInference, "Rewritten")
   }
 
   def rewriteForTransitivity(
