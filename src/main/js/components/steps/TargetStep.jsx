@@ -10,6 +10,7 @@ import {CopiableExpression} from "../ExpressionComponent";
 import Extractor from "../Extractor";
 import {FlexRow} from "../FlexRow";
 import {InferenceFinder} from "../InferenceFinder";
+import PremiseOrFactChooser from "../PremiseOrFactChooser";
 import Rewriter from "../Rewriter";
 import {
   ClearHighlightingAction,
@@ -52,8 +53,8 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
     }))
       .then(() => this.context.callOnStep([...this.props.path, 0], "startProving"));
   };
-  extract = () => {
-    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "extract", { method: "POST" }));
+  extractAutomatically = () => {
+    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "extractAutomatically", { method: "POST" }));
   };
   rearrange = () => {
     this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rearrange", { method: "POST" }));
@@ -287,6 +288,21 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
     }));
   };
 
+  extractWithPremise = (premise) => {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "extract", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({serializedPremiseStatement: premise.statement.serialize()})
+    }));
+  };
+  extractWithFact = (fact) => {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "extract", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({inferenceId: fact.id})
+    }));
+  };
+
 
   render() {
     let {step, path, additionalReferences, boundVariableLists, children, transitive} = this.props;
@@ -312,6 +328,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
                 <Button size="sm" className="ml-1" onClick={this.introduceDeduction}>Introduce deduction</Button>}
                 <Button size="sm" className="ml-1" onClick={() => this.setProvingType('inference')}>Prove with inference</Button>
                 <Button size="sm" className="ml-1" onClick={() => this.setProvingType('rewrite')}>Rewrite</Button>
+                <Button size="sm" className="ml-1" onClick={() => this.setProvingType('extract')}>Extract</Button>
               </Col>
             </Row>
             {!transitive &&
@@ -333,7 +350,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
                 Automatic
               </Col>
               <Col xs={10}>
-                <Button size="sm" className="ml-1" onClick={this.extract}>Extract</Button>
+                <Button size="sm" className="ml-1" onClick={this.extractAutomatically}>Extract</Button>
                 <Button size="sm" className="ml-1" onClick={this.rearrange}>Rearrange</Button>
                 <Button size="sm" className="ml-1" onClick={this.rewriteAutomatically}>Rewrite</Button>
               </Col>
@@ -463,8 +480,15 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
               onSave={rewrites => this.rewritePremise({serializedPremise: this.state.premiseToRewrite.serialize(), rewrites})}
             />}
           </>}
+          {activeProvingType === 'extract' && <PremiseOrFactChooser
+            title="Extract from"
+            availablePremises={this.state.availablePremises}
+            boundVariableLists={boundVariableLists}
+            onPremiseSelected={this.extractWithPremise}
+            onFactSelected={this.extractWithFact}
+          />}
           {activeProvingType === 'extractPremise' && <Extractor
-            title="Extract premise"
+            title="Extract using premise"
             availablePremises={this.state.availablePremises}
             boundVariableLists={boundVariableLists}
             path={path}

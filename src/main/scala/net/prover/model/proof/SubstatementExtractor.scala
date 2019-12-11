@@ -85,28 +85,29 @@ class SubstatementExtractor(implicit stepProvingContext: StepProvingContext) {
     }
   }
 
-  private def extractFromPremisesOrFact[T](targetStatement: Statement, matchAtEnd: (Statement, Int) => Result[T]): Option[(Step, T)] = {
-    def extractFromStatement(extractionCandidate: Statement, termsSoFar: Int): Option[(Seq[Step], T)] = {
-      for {
-        (_, steps, t) <- extractRecursively(
-          extractionCandidate,
-          termsSoFar,
-          matchAtEnd)
-      } yield (steps, t)
-    }
-    def extractFromPremises: Option[(Step, T)] = for {
-      (steps, t) <- allPremisesSimplestFirst.mapFind(p => extractFromStatement(p.statement, 0))
-      finalStep <- Step.Elided.ifNecessary(steps, "Extracted")
+  private def extractFromStatement[T](extractionCandidate: Statement, matchAtEnd: (Statement, Int) => Result[T]): Option[(Seq[Step], T)] = {
+    for {
+      (_, steps, t) <- extractRecursively(
+        extractionCandidate,
+        0,
+        matchAtEnd)
+    } yield (steps, t)
+  }
+  private def extractFromPremise[T](premiseStatement: Statement, matchAtEnd: (Statement, Int) => Result[T]): Option[(Step, T)] = for {
+    (steps, t) <- extractFromStatement(premiseStatement, matchAtEnd)
+    finalStep <- Step.Elided.ifNecessary(steps, "Extracted")
+  } yield (finalStep, t)
+  private def extractFromFact[T](fact: Inference, matchAtEnd: (Statement, Int) => Result[T]): Option[(Step, T)] = {
+    for {
+      (steps, t) <- extractFromStatement(fact.conclusion, matchAtEnd)
+      assertion = Step.Assertion(fact.conclusion, fact.summary, Nil, Substitutions.empty)
+      finalStep <- Step.Elided.ifNecessary(assertion +: steps, fact)
     } yield (finalStep, t)
-    def extractFromFact(fact: Inference): Option[(Step, T)] = {
-      for {
-        (steps, t) <- extractFromStatement(fact.conclusion, 0)
-        assertion = Step.Assertion(fact.conclusion, fact.summary, Nil, Substitutions.empty)
-        finalStep <- Step.Elided.ifNecessary(assertion +: steps, fact)
-      } yield (finalStep, t)
-    }
-    def extractFromFacts: Option[(Step, T)] = provingContext.facts.mapFind(extractFromFact)
+  }
 
+  private def extractFromPremisesOrFact[T](targetStatement: Statement, matchAtEnd: (Statement, Int) => Result[T]): Option[(Step, T)] = {
+    def extractFromPremises: Option[(Step, T)] = allPremisesSimplestFirst.mapFind(p => extractFromPremise(p.statement, matchAtEnd))
+    def extractFromFacts: Option[(Step, T)] = provingContext.facts.mapFind(extractFromFact(_, matchAtEnd))
     extractFromPremises orElse extractFromFacts
   }
   private def matchDirectly(targetStatement: Statement, extractionCandidate: Statement, termsSoFar: Int): Option[Map[Int, Term]] = {
@@ -117,31 +118,35 @@ class SubstatementExtractor(implicit stepProvingContext: StepProvingContext) {
     extractFromPremisesOrFact(targetStatement, matchDirectly(targetStatement, _, _).map((_, Nil, ()))).map(_._1)
   }
 
-  def extractWithTarget(targetStatement: Statement): Option[(Step, Step.Target)] = {
-    def extractStatementWithTarget(extractionCandidate: Statement, termsSoFar: Int): Result[Step.Target] = {
-      statementExtractionInferences.iterator.findFirst {
-        case (inference, firstPremise, otherPremises) =>
-          (for {
-            otherPremise <- otherPremises.single
-            extractionSubstitutions <- firstPremise.calculateSubstitutions(extractionCandidate).flatMap(_.confirmTotality)
-            extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions)
-            terms <- matchDirectly(targetStatement, extractedConclusion, termsSoFar)
-            substitutedFirstPremise = extractionCandidate.specify(terms)
-            substitutions <- firstPremise.calculateSubstitutions(substitutedFirstPremise).flatMap(_.confirmTotality)
-            substitutedOtherPremise <- otherPremise.applySubstitutions(substitutions)
-            substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions)
-            assertionStep = Step.Assertion(
-              substitutedConclusion,
-              inference.summary,
-              Seq(substitutedFirstPremise, substitutedOtherPremise).map(Premise.Pending),
-              substitutions)
-          } yield (terms, Seq(assertionStep), Step.Target(substitutedOtherPremise)))
-      }
+  private def extractStatementWithTarget(targetStatement: Statement, extractionCandidate: Statement, termsSoFar: Int): Result[Step.Target] = {
+    statementExtractionInferences.iterator.findFirst {
+      case (inference, firstPremise, otherPremises) =>
+        (for {
+          otherPremise <- otherPremises.single
+          extractionSubstitutions <- firstPremise.calculateSubstitutions(extractionCandidate).flatMap(_.confirmTotality)
+          extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions)
+          terms <- matchDirectly(targetStatement, extractedConclusion, termsSoFar)
+          substitutedFirstPremise = extractionCandidate.specify(terms)
+          substitutions <- firstPremise.calculateSubstitutions(substitutedFirstPremise).flatMap(_.confirmTotality)
+          substitutedOtherPremise <- otherPremise.applySubstitutions(substitutions)
+          substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions)
+          assertionStep = Step.Assertion(
+            substitutedConclusion,
+            inference.summary,
+            Seq(substitutedFirstPremise, substitutedOtherPremise).map(Premise.Pending),
+            substitutions)
+        } yield (terms, Seq(assertionStep), Step.Target(substitutedOtherPremise)))
     }
-    extractFromPremisesOrFact(targetStatement, extractStatementWithTarget)
   }
 
-  def extractWithFactAndPremise(fact: Inference, targetStatement: Statement): Option[Step] = {
+  def extractFromPremise(premiseStatement: Statement, targetStatement: Statement): Option[(Step, Step.Target)] = {
+    extractFromPremise(premiseStatement, extractStatementWithTarget(targetStatement, _, _))
+  }
+  def extractFromFact(fact: Inference, targetStatement: Statement): Option[(Step, Step.Target)] = {
+    extractFromFact(fact, extractStatementWithTarget(targetStatement, _, _))
+  }
+
+  def extractFromFactWithPremise(fact: Inference, finalPremiseStatement: Statement): Option[Step] = {
     def matchFinal(extractionCandidate: Statement, termsSoFar: Int): Option[(Map[Int, Term], Seq[Step])] = {
       statementExtractionInferences.iterator.findFirst {
         case (inference, firstPremise, otherPremises) =>
@@ -149,7 +154,7 @@ class SubstatementExtractor(implicit stepProvingContext: StepProvingContext) {
             otherPremise <- otherPremises.single
             extractionSubstitutions <- firstPremise.calculateSubstitutions(extractionCandidate).flatMap(_.confirmTotality)
             extractedOtherPremise <- otherPremise.applySubstitutions(extractionSubstitutions)
-            terms <- extractedOtherPremise.calculateArguments(targetStatement, Map.empty)
+            terms <- extractedOtherPremise.calculateArguments(finalPremiseStatement, Map.empty)
             substitutedFirstPremise = extractionCandidate.specify(terms)
             substitutions <- firstPremise.calculateSubstitutions(substitutedFirstPremise).flatMap(_.confirmTotality)
             substitutedOtherPremise <- otherPremise.applySubstitutions(substitutions)
