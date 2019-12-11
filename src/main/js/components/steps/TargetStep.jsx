@@ -255,27 +255,6 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
     this.props.dispatch(ClearHighlightingAction());
   };
 
-  loadPremiseSuggestions = (expression, pathsAlreadyRewritten, onPremiseSuggestionSelected) => {
-    this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `rewritePremiseSuggestions?expression=${encodeURIComponent(expression.serialize())}&pathsAlreadyRewritten=${_.map(pathsAlreadyRewritten, p => p.join(".")).join(",")}`))
-      .then((suggestions) => {
-        this.setState({rewritePremiseSuggestions: Parser.parsePremiseRewriteSuggestions(suggestions), onPremiseSuggestionSelected}, () => this.resetPremiseSuggestions());
-      });
-  };
-  resetPremiseSuggestions = () => {
-    const highlightingActions = _.map(this.state.rewritePremiseSuggestions, s => { return {reference: s.reference, action: () => {
-        this.state.onPremiseSuggestionSelected(s);
-        this.props.dispatch(SetHighlightingAction(highlightingActions, [s.reference]));
-      }}});
-    this.props.dispatch(SetHighlightingAction(highlightingActions));
-  };
-  cancelPremiseSuggestions = () => {
-    this.setState({rewritePremiseSuggestions: [], onPremiseSuggestionSelected: () => {}});
-    this.props.dispatch(ClearHighlightingAction());
-  };
-
-  getRewriteSuggestions = (searchText, expression, pathsAlreadyRewritten) => {
-    return this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `rewriteSuggestions?searchText=${searchText}&expression=${encodeURIComponent(expression.serialize())}&pathsAlreadyRewritten=${_.map(pathsAlreadyRewritten, p => p.join(".")).join(",")}`));
-  };
   rewrite = (rewrites) => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewrite", {
       method: "POST",
@@ -288,33 +267,35 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(rewrites)
-    })).then(this.setProvingType(null));
+    })).then(() => this.setProvingType(null));
   };
   rewriteLeft = (rewrites) => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewriteLeft", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(rewrites)
-    }));
+    })).then(() => this.setProvingType(null));
   };
   rewriteRight = (rewrites) => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "rewriteRight", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(rewrites)
-    }));
+    })).then(() => this.setProvingType(null));
   };
   premiseLeft = (premise) => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "premiseLeft", {
       method: "POST",
       body: premise.statement.serialize()
-    })).then(() => this.props.dispatch(ClearHighlightingAction()));
+    })).then(() => this.props.dispatch(ClearHighlightingAction()))
+      .then(() => this.setProvingType(null));
   };
   premiseRight = (premise) => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "premiseRight", {
       method: "POST",
       body: premise.statement.serialize()
-    })).then(() => this.props.dispatch(ClearHighlightingAction()));
+    })).then(() => this.props.dispatch(ClearHighlightingAction()))
+      .then(() => this.setProvingType(null));
   };
 
   extractWithPremise = (premise) => {
@@ -419,10 +400,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
             title="Rewriting"
             expression={step.statement}
             boundVariableLists={boundVariableLists}
-            getSuggestions={this.getRewriteSuggestions}
-            loadPremiseSuggestions={this.loadPremiseSuggestions}
-            resetPremiseSuggestions={this.resetPremiseSuggestions}
-            cancelPremiseSuggestions={this.cancelPremiseSuggestions}
+            path={path}
             onSave={this.rewrite}
           />}
           {activeProvingType === 'naming' && <>
@@ -472,26 +450,20 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
             title="Rewriting Left"
             expression={step.statement.components[0]}
             boundVariableLists={boundVariableLists}
-            getSuggestions={this.getRewriteSuggestions}
-            loadPremiseSuggestions={this.loadPremiseSuggestions}
-            resetPremiseSuggestions={this.resetPremiseSuggestions}
-            cancelPremiseSuggestions={this.cancelPremiseSuggestions}
+            path={path}
             onSave={this.rewriteLeft}
           />}
           {activeProvingType === 'rewriteRight' && <Rewriter
             title="Rewriting Right"
             expression={step.statement.components[1]}
             boundVariableLists={boundVariableLists}
-            getSuggestions={this.getRewriteSuggestions}
-            loadPremiseSuggestions={this.loadPremiseSuggestions}
-            resetPremiseSuggestions={this.resetPremiseSuggestions}
-            cancelPremiseSuggestions={this.cancelPremiseSuggestions}
+            path={path}
             onSave={this.rewriteRight}
           />}
           {activeProvingType === 'rewritePremise' && <>
           <Form.Group>
             <Form.Label><strong>Choose premise</strong></Form.Label>
-            <Form.Control as="select" autoFocus value={this.state.premiseToRewrite && this.state.premiseToRewrite.serialize()} onChange={e => this.setState({premiseToRewrite: _.find(this.state.availablePremises, p => p.serializedReference === e.target.value).statement})}>
+            <Form.Control as="select" autoFocus value={this.state.premiseToRewrite && this.state.premiseToRewrite.serializedReference} onChange={e => this.setState({premiseToRewrite: _.find(this.state.availablePremises, p => p.serializedReference === e.target.value).statement})}>
               <option value="" />
               {this.state.availablePremises.map(p =>
                 <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
@@ -501,13 +473,10 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
             </Form.Control>
           </Form.Group>
             {this.state.premiseToRewrite && <Rewriter
-              title="Rewriting Right"
+              title="Rewriting Premise"
               expression={this.state.premiseToRewrite}
               boundVariableLists={boundVariableLists}
-              getSuggestions={this.getRewriteSuggestions}
-              loadPremiseSuggestions={this.loadPremiseSuggestions}
-              resetPremiseSuggestions={this.resetPremiseSuggestions}
-              cancelPremiseSuggestions={this.cancelPremiseSuggestions}
+              path={path}
               onSave={rewrites => this.rewritePremise({serializedPremise: this.state.premiseToRewrite.serialize(), rewrites})}
             />}
           </>}

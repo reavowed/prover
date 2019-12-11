@@ -1,12 +1,17 @@
+import _ from "lodash";
 import React from "react";
 import {Button} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import {connect} from "react-redux";
 import {Parser} from "../Parser";
 import {CopiableExpression} from "./ExpressionComponent";
 import InferenceAutosuggest from "./InferenceAutosuggest";
 import SuggestionDropdownElement from "./SuggestionDropdownElement";
+import ProofContext from "./theorem/ProofContext";
+import {ClearHighlightingAction, FetchJsonForStep, SetHighlightingAction} from "./theorem/TheoremStore";
 
-export default class Rewriter extends React.Component {
+export default connect()(class Rewriter extends React.Component {
+  static contextType = ProofContext;
   constructor(...args) {
     super(...args);
     this.state = {
@@ -19,10 +24,10 @@ export default class Rewriter extends React.Component {
     };
   }
   componentDidMount() {
-    this.props.loadPremiseSuggestions(this.state.currentExpression, this.getCurrentPaths(), this.onPremiseSelected);
+    this.loadPremiseSuggestions(this.state.currentExpression, this.getCurrentPaths(), this.onPremiseSelected);
   }
   componentWillUnmount() {
-    this.props.cancelPremiseSuggestions();
+    this.cancelPremiseSuggestions();
   }
 
   getCurrentPaths = () => _.map(this.state.chosenRewrites[this.state.chosenRewrites.length - 1], r => r.path);
@@ -31,7 +36,7 @@ export default class Rewriter extends React.Component {
     this.setState({autosuggestValue: newValue});
   };
   onSuggestionsFetchRequested = ({ value }) => {
-    this.props.getSuggestions(value, this.state.currentExpression, this.getCurrentPaths())
+    this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `rewriteSuggestions?searchText=${value}&expression=${encodeURIComponent(this.state.currentExpression.serialize())}&pathsAlreadyRewritten=${_.map(this.getCurrentPaths(), p => p.join(".")).join(",")}`))
       .then(suggestionsJson => {
         if (this.state.autosuggestValue === value) {
           this.setState({inferenceSuggestions: Parser.parseInferenceRewriteSuggestions(suggestionsJson)})
@@ -43,7 +48,7 @@ export default class Rewriter extends React.Component {
   };
   onSuggestionSelected = (event, {suggestion}) => {
     this.setState({selectedInferenceSuggestion: suggestion, selectedPremiseSuggestion: null});
-    this.props.resetPremiseSuggestions();
+    this.resetPremiseSuggestions();
   };
 
   onPremiseSelected = (selectedPremiseSuggestion) => {
@@ -55,6 +60,24 @@ export default class Rewriter extends React.Component {
   };
   onExpressionClickedForPremise = (path, replacementExpression, serializedPremiseStatement, reverse) => {
     this.addRewrite({path, serializedPremiseStatement, reverse}, replacementExpression);
+  };
+
+  loadPremiseSuggestions = (expression, pathsAlreadyRewritten, onPremiseSuggestionSelected) => {
+    this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, `rewritePremiseSuggestions?expression=${encodeURIComponent(expression.serialize())}&pathsAlreadyRewritten=${_.map(pathsAlreadyRewritten, p => p.join(".")).join(",")}`))
+      .then((suggestions) => {
+        this.setState({premiseSuggestions: Parser.parsePremiseRewriteSuggestions(suggestions), onPremiseSuggestionSelected}, () => this.resetPremiseSuggestions());
+      });
+  };
+  resetPremiseSuggestions = () => {
+    const highlightingActions = _.map(this.state.premiseSuggestions, s => { return {reference: s.reference, action: () => {
+        this.state.onPremiseSuggestionSelected(s);
+        this.props.dispatch(SetHighlightingAction(highlightingActions, [s.reference]));
+      }}});
+    this.props.dispatch(SetHighlightingAction(highlightingActions));
+  };
+  cancelPremiseSuggestions = () => {
+    this.setState({premiseSuggestions: [], onPremiseSuggestionSelected: () => {}});
+    this.props.dispatch(ClearHighlightingAction());
   };
 
   addRewrite = (rewrite, replacementExpression) => {
@@ -88,7 +111,7 @@ export default class Rewriter extends React.Component {
       selectedPremiseSuggestion ?
         _.chain(selectedPremiseSuggestion.rewriteSuggestions)
           .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
-          .map(s => { return {path: s.path, action: () => this.onExpressionClickedForPremise(s.path, s.result, selectedPremiseSuggestion.statement.serialize(), selectedPremiseSuggestion.reverse) }})
+          .map(s => { return {path: s.path, action: () => this.onExpressionClickedForPremise(s.path, s.result, selectedPremiseSuggestion.statement.serialize(), s.reverse) }})
           .value() :
 
       [];
@@ -126,4 +149,4 @@ export default class Rewriter extends React.Component {
       </Form.Group>
     </>
   }
-}
+});
