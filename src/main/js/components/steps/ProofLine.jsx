@@ -35,11 +35,11 @@ const ProofLine = connect()(styled(class ProofLine extends React.Component {
     this.setState({shouldShowButtonPopover: false});
   };
   onMouseEnter = () => {
-    let {premiseReferences, path, reference} = this.props;
+    let {premiseReferences, path, suffix} = this.props;
     if (premiseReferences) {
       this.props.dispatch(SetHighlightedPremises(premiseReferences));
     }
-    let conclusionReference = reference || (path && {stepPath: path});
+    let conclusionReference = path && {stepPath: path, suffix};
     if (conclusionReference) {
       this.props.dispatch(SetHighlightedConclusion(conclusionReference));
     }
@@ -167,7 +167,7 @@ ProofLine.SingleStatementWithPrefixContent = connect()(class SingleStatementWith
   static contextType = ProofContext;
 
   render() {
-    const {editableBoundVariable, prefix, statement, path, reference, additionalReferences, boundVariableLists, dispatch} = this.props;
+    const {editableBoundVariable, prefix, statement, path, suffix, additionalReferences, boundVariableLists, dispatch} = this.props;
     const context = this.context;
     const wrapEditableBoundVariable = (name, index, boundVariablePath) => {
       const callback = (newName) => {
@@ -184,7 +184,7 @@ ProofLine.SingleStatementWithPrefixContent = connect()(class SingleStatementWith
         {' '}
         <HighlightableExpression expression={statement}
                                  boundVariableLists={boundVariableLists}
-                                 references={[reference || {stepPath: path}]}
+                                 references={[{stepPath: path, suffix: suffix}]}
                                  additionalReferences={additionalReferences || []}
                                  wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}/>
        </>}

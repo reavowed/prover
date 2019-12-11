@@ -13,9 +13,8 @@ export const NamingStep = connect()(class NamingStep extends React.Component {
     this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "boundVariable", {method: "PUT", body: newName}));
   };
   render() {
-    let {step, path, additionalReferences, boundVariableLists,} = this.props;
+    let {step, path, additionalReferences, boundVariableLists} = this.props;
     let reference = {stepPath: path};
-    let referenceForAssumption = {stepPath: path, suffix: "a"};
     let referencesForLastStep = [...additionalReferences, reference];
     const innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     const prefix = <>
@@ -30,10 +29,10 @@ export const NamingStep = connect()(class NamingStep extends React.Component {
                                            prefix={prefix}
                                            statement={step.assumption}
                                            path={path}
+                                           suffix="a"
                                            boundVariableLists={innerBoundVariableLists}
                                            additionalReferences={additionalReferences}
                                            premiseReferences={step.referencedLinesForExtraction}
-                                           reference={referenceForAssumption}
                                            buttons={<InferenceLink inference={step.inference}/>} />
       <Steps steps={step.substeps}
              path={path}

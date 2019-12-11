@@ -36,20 +36,15 @@ export const DeductionStep = connect()(class DeductionStep extends React.Compone
   render() {
     let {step, path, additionalReferences, boundVariableLists} = this.props;
     let reference = {stepPath: path};
-    let referenceForAssumption = {stepPath: path, suffix: "a"};
     let referencesForLastStep = [...additionalReferences, reference];
-    const wrapEditableBoundVariable = (boundVariableContent, boundVariableName, boundVariableIndex, boundVariablePath) =>
-      <ClickableText
-        onClick={() => this.showBoundVariableModal(boundVariableName, boundVariableIndex, boundVariablePath)}>
-        {boundVariableContent}
-      </ClickableText>;
     return <>
       <ProofLine.SingleStatementWithPrefix editableBoundVariable
                                            prefix="Assume"
                                            statement={step.assumption}
                                            path={path}
+                                           suffix="a"
                                            boundVariableLists={boundVariableLists}
-                                           additionalReferences={[...additionalReferences, referenceForAssumption]}/>
+                                           additionalReferences={additionalReferences}/>
       <Steps.Children steps={step.substeps}
                       path={path}
                       boundVariableLists={boundVariableLists}
