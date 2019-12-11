@@ -90,7 +90,7 @@ class TransitiveSteps extends React.Component {
       )}
       {rightHandSides.slice(1).map((rightHandSide, index) =>
         renderProofLine(
-          {step: rightHandSide.step, path: rightHandSide.path, boundVariableLists, key: "transitive " + rightHandSide.expression.serialize()},
+          {step: rightHandSide.step, path: rightHandSide.path, boundVariableLists, referencedLines: rightHandSide.referencedLines, key: "transitive " + rightHandSide.expression.serialize()},
           <>
             <span ref={r => this.setSpacerRef(r, rightHandSide.path.join("."))}/>
             {renderRightHandSide(rightHandSide, index + 1)}
@@ -145,34 +145,63 @@ export class Steps extends React.Component {
     const firstLinePath = [...basePath, firstIndex];
     const firstLineReference = {stepPath: firstLinePath};
     const leftHandSideExpression = firstStepMatch[0].expression;
-    const rightHandSides = [{
+
+    function readRightHandSides(currentRightHandSides) {
+      let continuingStepMatch, transitiveStepMatch;
+      if (stepsWithIndexes.length >= 2 &&
+        _.includes(allowableTransitivityStepTypes, stepsWithIndexes[0].step.type) &&
+        stepsWithIndexes[1].step.type === "assertion" &&
+        stepsWithIndexes[1].step.inference && stepsWithIndexes[1].step.inference.id === transitiveStatement.inferenceId &&
+        stepsWithIndexes[1].step.isComplete &&
+        stepsWithIndexes[0].step.statement &&
+        stepsWithIndexes[1].step.statement &&
+        (continuingStepMatch = matchTemplate(transitiveStatement.template, stepsWithIndexes[0].step.statement, [], [])) &&
+        (transitiveStepMatch = matchTemplate(transitiveStatement.template, stepsWithIndexes[1].step.statement, [], [])) &&
+        continuingStepMatch[0].expression.serialize() === currentRightHandSides[currentRightHandSides.length-1].expression.serialize() &&
+        transitiveStepMatch[0].expression.serialize() === leftHandSideExpression.serialize() &&
+        continuingStepMatch[1].expression.serialize() === transitiveStepMatch[1].expression.serialize()
+      ) {
+        const {step, index} = stepsWithIndexes.shift();
+        const {index: transitiveIndex} = stepsWithIndexes.shift();
+        const newRhs = {
+          expression: continuingStepMatch[1].expression,
+          step,
+          path: [...basePath, index],
+          references: [{stepPath: [...basePath, index]}, {stepPath: [...basePath, transitiveIndex]}]
+        };
+        return readRightHandSides([...currentRightHandSides, newRhs]);
+      }
+      else if (stepsWithIndexes.length >= 1 &&
+        _.includes(allowableTransitivityStepTypes, stepsWithIndexes[0].step.type) &&
+        stepsWithIndexes[0].step.type === "assertion" &&
+        stepsWithIndexes[0].step.inference && stepsWithIndexes[0].step.inference.id === transitiveStatement.inferenceId &&
+        stepsWithIndexes[0].step.isComplete &&
+        stepsWithIndexes[0].step.statement &&
+        (transitiveStepMatch = matchTemplate(transitiveStatement.template, stepsWithIndexes[0].step.statement, [], [])) &&
+        transitiveStepMatch[0].expression.serialize() === leftHandSideExpression.serialize()
+      ) {
+        const {step, index} = stepsWithIndexes.shift();
+        const newRhs = {
+          expression: transitiveStepMatch[1].expression,
+          step,
+          path: [...basePath, index],
+          references: [{stepPath: [...basePath, index]}],
+          referencedLines: step.referencedLines.slice(1)
+        };
+        return readRightHandSides([...currentRightHandSides, newRhs]);
+      }
+      else {
+        return currentRightHandSides;
+      }
+    }
+
+    const firstRhs = {
       expression: firstStepMatch[1].expression,
       references: [firstLineReference],
       step: firstStep
-    }];
-    let continuingStepMatch, transitiveStepMatch;
-    while (stepsWithIndexes.length >= 2 &&
-      _.includes(allowableTransitivityStepTypes, stepsWithIndexes[0].step.type) &&
-      stepsWithIndexes[1].step.type === "assertion" &&
-      stepsWithIndexes[1].step.inference && stepsWithIndexes[1].step.inference.id === transitiveStatement.inferenceId &&
-      stepsWithIndexes[1].step.isComplete &&
-      stepsWithIndexes[0].step.statement &&
-      stepsWithIndexes[1].step.statement &&
-      (continuingStepMatch = matchTemplate(transitiveStatement.template, stepsWithIndexes[0].step.statement, [], [])) &&
-      (transitiveStepMatch = matchTemplate(transitiveStatement.template, stepsWithIndexes[1].step.statement, [], [])) &&
-      continuingStepMatch[0].expression.serialize() === rightHandSides[rightHandSides.length-1].expression.serialize() &&
-      transitiveStepMatch[0].expression.serialize() === leftHandSideExpression.serialize() &&
-      continuingStepMatch[1].expression.serialize() === transitiveStepMatch[1].expression.serialize()
-    ) {
-      const {step, index} = stepsWithIndexes.shift();
-      const {index: transitiveIndex} = stepsWithIndexes.shift();
-      rightHandSides.push({
-        expression: continuingStepMatch[1].expression,
-        step,
-        path: [...basePath, index],
-        references: [{stepPath: [...basePath, index]}, {stepPath: [...basePath, transitiveIndex]}]
-      });
-    }
+    };
+    const rightHandSides = readRightHandSides([firstRhs]);
+
     if (rightHandSides.length > 1) {
       return {
         leftHandSide: {

@@ -1,11 +1,10 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.{PathData, PremiseRewrite, RewriteRequest}
+import net.prover.model.Inference
 import net.prover.model.definitions.{Equality, RearrangementStep, Wrapper}
-import net.prover.model.entries.Theorem
 import net.prover.model.expressions.{Expression, Statement, Term, TypedExpression}
 import net.prover.model.proof._
-import net.prover.model.{Inference, ProvingContext}
 import net.prover.util.Swapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -40,20 +39,14 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @RequestParam("expression") serializedExpression: String,
     @RequestParam("pathsAlreadyRewritten") pathsAlreadyRewrittenText: String
   ): ResponseEntity[_] = {
-    val (books, definitions) = bookService.booksAndDefinitions
     (for {
-      book <- findBook(books, bookKey)
-      chapter <- findChapter(book, chapterKey)
-      theorem <- findEntry[Theorem](chapter, theoremKey)
-      provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
-      (_, stepContext) <- findStep[Step](theorem, proofIndex, stepPath)
-      stepProvingContext = StepProvingContext(stepContext, provingContext)
+      (_, stepProvingContext) <- findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       expression <- Expression.parser(stepProvingContext).parseFromString(serializedExpression, "expression").recoverWithBadRequest
     } yield {
-      implicit val implicitStepContext: StepContext = stepContext
+      implicit val spc = stepProvingContext
       val filter = inferenceFilter(searchText)
       val termsFunctionsAndPaths = getTermsFunctionsAndPaths(expression, pathsAlreadyRewrittenText)
-      val inferences = provingContext.termRewriteInferences.filter { case (i, _, _) => filter(i) }
+      val inferences = stepProvingContext.provingContext.termRewriteInferences.filter { case (i, _, _) => filter(i) }
 
       def getSuggestions(inference: Inference, source: Term, target: Term, reverse: Boolean): Option[InferenceRewriteSuggestion] = {
         val suggestions = termsFunctionsAndPaths.mapCollect { case (term, _, path) =>
@@ -88,16 +81,10 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @RequestParam("expression") serializedExpression: String,
     @RequestParam("pathsAlreadyRewritten") pathsAlreadyRewrittenText: String
   ): ResponseEntity[_] = {
-    val (books, definitions) = bookService.booksAndDefinitions
     (for {
-      book <- findBook(books, bookKey)
-      chapter <- findChapter(book, chapterKey)
-      theorem <- findEntry[Theorem](chapter, theoremKey)
-      provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
-      (_, stepContext) <- findStep[Step](theorem, proofIndex, stepPath)
-      stepProvingContext = StepProvingContext(stepContext, provingContext)
+      (_, stepProvingContext) <- findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       expression <- Expression.parser(stepProvingContext).parseFromString(serializedExpression, "expression").recoverWithBadRequest
-      equality <- provingContext.equalityOption.orBadRequest("No equality found")
+      equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
     } yield {
       implicit val spc = stepProvingContext
       val termsFunctionsAndPaths = getTermsFunctionsAndPaths(expression, pathsAlreadyRewrittenText)
@@ -121,14 +108,9 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    val (books, definitions) = bookService.booksAndDefinitions
     (for {
-      book <- findBook(books, bookKey)
-      chapter <- findChapter(book, chapterKey)
-      theorem <- findEntry[Theorem](chapter, theoremKey)
-      provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
-      (_, stepContext) <- findStep[Step](theorem, proofIndex, stepPath)
-    } yield StepProvingContext(stepContext, provingContext).allPremisesSimplestFirst).toResponseEntity
+      (_, stepProvingContext) <- findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+    } yield stepProvingContext.allPremisesSimplestFirst).toResponseEntity
   }
 
   def rewrite[TExpression <: Expression with TypedExpression[TExpression], TStep](
@@ -301,7 +283,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
               Step.Elided.ifNecessary(transitivitySteps, "Rewritten").get
           }
         }
-      } yield (step, Step.Target(equality(intermediateTerm, targetRhs)), intermediateTerm, Nil)
+      } yield (Some(step), Some(Step.Target(equality(intermediateTerm, targetRhs))), intermediateTerm, Nil)
     }
   }
 

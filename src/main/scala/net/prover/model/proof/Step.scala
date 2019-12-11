@@ -43,6 +43,7 @@ object Step {
   sealed trait WithSubsteps extends Step {
     def substeps: Seq[Step]
     def specifyStepContext(outerContext: StepContext): StepContext = outerContext
+    def contextForChild(outerContext: StepContext, index: Int): StepContext = specifyStepContext(outerContext).addSteps(substeps.take(index)).atIndex(index)
     def replaceSubsteps(newSubsteps: Seq[Step]): Step
     def modifyStepForInsertion(step: Step): Step
     def modifyStepForExtraction(step: Step): Option[Step]

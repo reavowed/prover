@@ -114,7 +114,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremises(inference, substitutions, expansionStep.toSeq ++ rewriteStep.toSeq).orBadRequest("Could not apply substitutions to inference")
         newTarget = Step.Target((transitivity.relation.apply _).tupled.apply(swapper.swap(intermediateTerm, targetRhs)))
         (firstStep, secondStep) = swapper.swap(assertionStep, newTarget)
-      } yield (firstStep, secondStep, intermediateTerm, targetSteps)
+      } yield (Some(firstStep), Some(secondStep), intermediateTerm, targetSteps)
     }
   }
 
@@ -157,7 +157,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         intermediateTerm <- Term.parser.parseFromString(serializedTerm, "target term").recoverWithBadRequest
         firstStep = Step.Target(transitivity.relation(targetLhs, intermediateTerm))
         secondStep = Step.Target(transitivity.relation(intermediateTerm, targetRhs))
-      } yield (firstStep, secondStep, intermediateTerm, Nil)
+      } yield (Some(firstStep), Some(secondStep), intermediateTerm, Nil)
     }
   }
 

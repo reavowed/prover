@@ -200,6 +200,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
   };
 
   setProvingType = (provingType) => {
+    this.props.dispatch(ClearHighlightingAction());
     this.setState({
       activeProvingType: provingType,
       targetStatement: '',
@@ -217,6 +218,22 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
     }
     if (provingType === 'rewritePremise') {
       this.setState({premiseToRewrite: ""});
+    }
+    if (provingType === 'premiseLeft') {
+      this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, "suggestTransitivityFromPremiseLeft"))
+        .then(premiseJson => _.map(premiseJson, Parser.parsePremise))
+        .then(premises => {
+          const highlightingActions = _.map(premises, p => {return {reference: p.referencedLine, action: () => this.premiseLeft(p)}});
+          this.props.dispatch(SetHighlightingAction(highlightingActions));
+        });
+    }
+    if (provingType === 'premiseRight') {
+      this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, "suggestTransitivityFromPremiseRight"))
+        .then(premiseJson => _.map(premiseJson, Parser.parsePremise))
+        .then(premises => {
+          const highlightingActions = _.map(premises, p => {return {reference: p.referencedLine, action: () => this.premiseRight(p)}});
+          this.props.dispatch(SetHighlightingAction(highlightingActions));
+        });
     }
   };
 
@@ -286,6 +303,18 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(rewrites)
     }));
+  };
+  premiseLeft = (premise) => {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "premiseLeft", {
+      method: "POST",
+      body: premise.statement.serialize()
+    })).then(() => this.props.dispatch(ClearHighlightingAction()));
+  };
+  premiseRight = (premise) => {
+    return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "premiseRight", {
+      method: "POST",
+      body: premise.statement.serialize()
+    })).then(() => this.props.dispatch(ClearHighlightingAction()));
   };
 
   extractWithPremise = (premise) => {
@@ -361,10 +390,12 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
                   Add transitive
                 </Col>
                 <Col xs={10}>
-                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('addFromLeft')}>Add expression from left</Button>
-                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('addFromRight')}>Add expression from right</Button>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('addFromLeft')}>From left</Button>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('addFromRight')}>From right</Button>
                   <Button size="sm" className="ml-1" onClick={() => this.setProvingType('rewriteLeft')}>Rewrite left</Button>
                   <Button size="sm" className="ml-1" onClick={() => this.setProvingType('rewriteRight')}>Rewrite right</Button>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('premiseLeft')}>Premise left</Button>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('premiseRight')}>Premise right</Button>
                   <Button size="sm" className="ml-1" onClick={() => this.setProvingType('transitiveTarget')}>Add target</Button>
                 </Col>
               </Row>

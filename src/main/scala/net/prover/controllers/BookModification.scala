@@ -68,13 +68,16 @@ trait BookModification {
       .flatMap(_.asOptionalInstanceOf[T].orBadRequest(s"Entry is not a ${classTag[T].runtimeClass.getSimpleName}"))
   }
 
-  protected def findStep[T <: Step : ClassTag](theorem: Theorem, proofIndex: Int, stepPath: PathData): Try[(T, StepContext)] = {
+  protected def findStep[T <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData): Try[(T, StepProvingContext)] = {
+    val (books, definitions) = bookService.booksAndDefinitions
     for {
+      book <- findBook(books, bookKey)
+      chapter <- findChapter(book, chapterKey)
+      theorem <- findEntry[Theorem](chapter, theoremKey)
+      provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
       (rawStep, stepContext) <- theorem.findStep(proofIndex, stepPath.indexes).orNotFound(s"Step $stepPath")
       step <- rawStep.asOptionalInstanceOf[T].orBadRequest(s"Step is not ${classTag[T].runtimeClass.getName}")
-    } yield {
-      (step, stepContext)
-    }
+    } yield (step, StepProvingContext(stepContext, provingContext))
   }
 
   def modifyBook[F[_] : Functor](bookKey: String, f: (Seq[Book], Definitions, Book) => Try[F[Book]]): Try[F[(Seq[Book], Book)]] = {
