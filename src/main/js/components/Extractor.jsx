@@ -44,20 +44,24 @@ export default connect()(class Extractor extends React.Component {
     this.setState({facts: []})
   };
   onSuggestionSelected = (event, {suggestion}) => {
-    this.setState({selectedFact: suggestion, selectedPremise: null});
+    this.setState({selectedFact: suggestion, selectedBasePremise: null});
   };
 
   onSave = () => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "extractWithPremise", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({inferenceId: this.state.selectedFact.id, serializedPremiseStatement: this.state.selectedPremise.statement.serialize()})
+      body: JSON.stringify({
+        inferenceId: this.state.selectedFact && this.state.selectedFact.id,
+        serializedBasePremiseStatement: this.state.selectedBasePremise.statement && this.state.selectedBasePremise.statement.serialize(),
+        serializedHelperPremiseStatement: this.state.selectedHelperPremise.statement.serialize()
+      })
     }));
   };
 
   render() {
     const {availablePremises, boundVariableLists, title} = this.props;
-    const {selectedPremise, selectedFact} = this.state;
+    const { selectedFact, selectedBasePremise, selectedHelperPremise } = this.state;
 
     let getSuggestionValue = s => s.name;
     let renderSuggestion = s => <SuggestionDropdownElement
@@ -66,9 +70,10 @@ export default connect()(class Extractor extends React.Component {
 
     return <>
       <Form.Group>
-        <Form.Label><strong>{title} using fact</strong></Form.Label>
+        <Form.Label><strong>{title} from fact</strong></Form.Label>
         <InferenceAutosuggest
-          autoFocus
+          key={selectedBasePremise ? selectedBasePremise.serializedReference : ""}
+          autoFocus={!selectedBasePremise}
           value={this.state.autosuggestValue}
           onValueChange={this.onAutosuggestChange}
           suggestions={this.state.facts}
@@ -79,8 +84,8 @@ export default connect()(class Extractor extends React.Component {
           onSuggestionSelected={this.onSuggestionSelected} />
       </Form.Group>
       <Form.Group>
-        <Form.Label><strong>And premise</strong></Form.Label>
-        <Form.Control as="select" value={selectedPremise ? selectedPremise.serializedReference : ""} onChange={e => this.setState({selectedPremise: _.find(availablePremises, p => p.serializedReference === e.target.value)})}>
+        <Form.Label><strong>{title} from base premise</strong></Form.Label>
+        <Form.Control as="select" value={selectedBasePremise ? selectedBasePremise.serializedReference : ""} onChange={e => this.setState({selectedBasePremise: _.find(availablePremises, p => p.serializedReference === e.target.value), selectedFact: null })}>
           <option value="" />
           {availablePremises.map(p =>
             <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
@@ -89,8 +94,19 @@ export default connect()(class Extractor extends React.Component {
           )}
         </Form.Control>
       </Form.Group>
+      {(selectedFact || selectedBasePremise) && <Form.Group>
+        <Form.Label><strong>With helper premise</strong></Form.Label>
+        <Form.Control as="select" value={selectedHelperPremise ? selectedHelperPremise.serializedReference : ""} onChange={e => this.setState({selectedHelperPremise: _.find(availablePremises, p => p.serializedReference === e.target.value)})}>
+          <option value="" />
+          {availablePremises.map(p =>
+            <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
+                <CopiableExpression expression={p.statement} boundVariableLists={boundVariableLists} />
+              )}}/>
+          )}
+        </Form.Control>
+      </Form.Group>}
       <Form.Group>
-        <Button variant="success" onClick={() => this.onSave()} disabled={!selectedFact || !selectedPremise}>Extract</Button>
+        <Button variant="success" onClick={() => this.onSave()} disabled={!((selectedFact || selectedBasePremise) && selectedHelperPremise)}>Extract</Button>
       </Form.Group>
     </>;
   }

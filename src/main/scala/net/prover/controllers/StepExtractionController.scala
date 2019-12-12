@@ -4,10 +4,12 @@ import net.prover.controllers.models.{ExtractRequest, ExtractWithPremiseRequest,
 import net.prover.model.ProvingContext
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Step, SubstatementExtractor}
+import net.prover.model.proof.{Premise, Step, SubstatementExtractor}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.{GetMapping, PathVariable, PostMapping, RequestBody, RequestMapping, RequestParam, RestController}
+
+import scala.util.Try
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
@@ -85,11 +87,24 @@ class StepExtractionController @Autowired() (val bookService: BookService) exten
     @RequestBody request: ExtractWithPremiseRequest
   ): ResponseEntity[_] = {
     replaceStepAndAddBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+      def fromBasePremise(serializedBasePremiseStatement: String, helperPremise: Premise): Try[Step] = {
+        for {
+          basePremiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedBasePremiseStatement, "base premise statement").recoverWithBadRequest
+          basePremise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == basePremiseStatement).orBadRequest(s"Could not find base premise '$basePremiseStatement'")
+          newStep <- new SubstatementExtractor()(stepProvingContext).extractFromBasePremiseWithPremise(basePremise.statement, helperPremise.statement).orBadRequest(s"Could not extract statement ${step.statement}")
+        } yield newStep
+      }
+      def fromFact(inferenceId: String, helperPremise: Premise): Try[Step] = {
+        for {
+          fact <- stepProvingContext.provingContext.facts.find(_.id == request.inferenceId).orBadRequest(s"Could not find inference ${request.inferenceId}")
+          newStep <- new SubstatementExtractor()(stepProvingContext).extractFromFactWithPremise(fact, helperPremise.statement).orBadRequest(s"Could not extract statement ${step.statement}")
+        } yield newStep
+      }
+      
       for {
-        premiseStatement <- Statement.parser(stepProvingContext).parseFromString(request.serializedPremiseStatement, "premise statement").recoverWithBadRequest
-        premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-        fact <- stepProvingContext.provingContext.facts.find(_.id == request.inferenceId).orBadRequest(s"Could not find inference ${request.inferenceId}")
-        newStep <- new SubstatementExtractor()(stepProvingContext).extractFromFactWithPremise(fact, premise.statement).orBadRequest(s"Could not extract statement ${step.statement}")
+        helperPremiseStatement <- Statement.parser(stepProvingContext).parseFromString(request.serializedHelperPremiseStatement, "helper premise statement").recoverWithBadRequest
+        helperPremise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == helperPremiseStatement).orBadRequest(s"Could not find helper premise '$helperPremiseStatement'")
+        newStep <- request.inferenceId.map(fromFact(_, helperPremise)) orElse request.serializedBasePremiseStatement.map(fromBasePremise(_, helperPremise)) orBadRequest "Either fact or premise must be provided" flatten
       } yield (step, Seq(newStep))
     }.toResponseEntity
   }
