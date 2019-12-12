@@ -27,31 +27,35 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     val next = chaptersWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, getChapterUrl(bookKey, key)) }
     val entryContext = EntryContext.forChapterInclusive(books, book, chapter)
 
-    val entrySummaries = getEntriesWithKeys(chapter).mapCollect{
-      case (axiom: entries.Axiom, key) =>
-        import axiom._
-        Some(AxiomPropsForChapter(name, getEntryUrl(bookKey, chapterKey, key), premises, conclusion))
-      case (theorem: entries.Theorem, key) =>
-        import theorem._
-        Some(TheoremPropsForChapter(name, getEntryUrl(bookKey, chapterKey, key), premises, conclusion, isComplete))
-      case (statementDefinition: entries.StatementDefinition, key) =>
-        import statementDefinition._
-        Some(StatementDefinitionPropsForChapter(defaultValue, getEntryUrl(bookKey, chapterKey, key), shorthand, definingStatement))
-      case (termDefinition: entries.TermDefinition, key) =>
-        import termDefinition._
-        Some(TermDefinitionPropsForChapter(defaultValue, getEntryUrl(bookKey, chapterKey, key), shorthand, definingStatement, premises))
-      case (typeDefinition: entries.TypeDefinition, key) =>
-        import typeDefinition._
-        Some(TypeDefinitionPropsForChapter(symbol, getEntryUrl(bookKey, chapterKey, key), defaultTermName, otherComponentTypes.map(_.name), definingStatement))
-      case (propertyDefinition: entries.PropertyDefinition, key) =>
-        import propertyDefinition._
-        Some(PropertyDefinitionPropsForChapter(name, getEntryUrl(bookKey, chapterKey, key), defaultTermName, parentType.symbol, parentComponentTypes.map(_.name), definingStatement))
-      case (comment: entries.Comment, key) =>
-        import comment._
-        Some(CommentPropsForChapter(text, key))
-      case _ =>
-        None
-    }
+    val entrySummaries = getEntriesWithKeys(chapter)
+      .map(_.mapRight(key => getEntryUrl(bookKey, chapterKey, key)))
+      .mapCollect { case (entry, url) =>
+        entry match {
+          case axiom: entries.Axiom =>
+            import axiom._
+            Some(AxiomPropsForChapter(name, url, premises, conclusion))
+          case theorem: entries.Theorem =>
+            import theorem._
+            Some(TheoremPropsForChapter(name, url, premises, conclusion, isComplete))
+          case statementDefinition: entries.StatementDefinition =>
+            import statementDefinition._
+            Some(StatementDefinitionPropsForChapter(defaultValue, url, shorthand, definingStatement))
+          case termDefinition: entries.TermDefinition =>
+            import termDefinition._
+            Some(TermDefinitionPropsForChapter(defaultValue, url, shorthand, definingStatement, premises))
+          case typeDefinition: entries.TypeDefinition =>
+            import typeDefinition._
+            Some(TypeDefinitionPropsForChapter(symbol, url, defaultTermName, otherComponentTypes.map(_.name), definingStatement))
+          case propertyDefinition: entries.PropertyDefinition =>
+            import propertyDefinition._
+            Some(PropertyDefinitionPropsForChapter(name, url, defaultTermName, parentType.symbol, parentComponentTypes.map(_.name), definingStatement))
+          case comment: entries.Comment =>
+            import comment._
+            Some(CommentPropsForChapter(text, url))
+          case _ =>
+            Some(PlaceholderPropsForChapter(url))
+        }
+      }
     ChapterProps(
       chapter.title,
       getChapterUrl(bookKey, chapterKey),
@@ -260,28 +264,27 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }.map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
-  @PostMapping(value = Array("/{entryKey}/move"), produces = Array("application/json;charset=UTF-8"))
-  def moveEntry(
+  @PutMapping(value = Array("/{entryKey}/index"), produces = Array("application/json;charset=UTF-8"))
+  def moveEntryToIndex(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("entryKey") entryKey: String,
-    @RequestParam("direction") direction: String
+    @RequestBody newIndex: Int
   ): ResponseEntity[_] = {
     def tryMove(entry: ChapterEntry, previousEntries: Seq[ChapterEntry], nextEntries: Seq[ChapterEntry]): Try[Seq[ChapterEntry]] = {
-      direction match {
-        case "up" =>
-          for {
-            (earlierEntries, precedingEntry) <- :+.unapply(previousEntries).orBadRequest("Entry was first in chapter")
-            _ <- precedingEntry.asOptionalInstanceOf[Inference].filter(i => entry.referencedInferenceIds.contains(i.id)).badRequestIfDefined("Entry depends on previous one")
-            _ <- Some(precedingEntry).filter(entry.referencedEntries.contains).badRequestIfDefined("Entry depends on previous one")
-          } yield earlierEntries ++ Seq(entry, precedingEntry) ++ nextEntries
-        case "down" =>
-          for {
-            (nextEntry, lastEntries) <- +:.unapply(nextEntries).orBadRequest("Entry was last in chapter")
-            _ <- entry.asOptionalInstanceOf[Inference].filter(i => nextEntry.referencedInferenceIds.contains(i.id)).badRequestIfDefined("Next entry depends on this one")
-            _ <- Some(entry).filter(nextEntry.referencedEntries.contains).badRequestIfDefined("Next entry depends on this one")
-          } yield previousEntries ++ Seq(nextEntry, entry) ++ lastEntries
-      }
+      previousEntries.takeAndRemainingIfValid(newIndex).map { case (firstEntries, entriesToSkip) =>
+        val inferenceIdsMoving = entry.referencedInferenceIds
+        for {
+          _ <- (!entriesToSkip.flatMap(_.inferences).exists(i => inferenceIdsMoving.contains(i.id))).orBadRequest("Entry depends on a previous one")
+          _ <- (!entriesToSkip.exists(entry.referencedEntries.contains)).orBadRequest("Entry depends on a previous one")
+        } yield (firstEntries :+ entry) ++ entriesToSkip ++ nextEntries
+      } orElse nextEntries.takeAndRemainingIfValid(newIndex - previousEntries.length).map { case (entriesToSkip, lastEntries) =>
+        val referencedInferenceIdsBeingMovedPast = entriesToSkip.flatMap(_.referencedInferenceIds)
+        for {
+          _ <- (!entry.inferences.map(_.id).exists(referencedInferenceIdsBeingMovedPast.contains)).orBadRequest("Entry depended on by a following one")
+          _ <- (!entriesToSkip.flatMap(_.referencedEntries).contains(entry)).orBadRequest("Entry depended on by a following one")
+        } yield (previousEntries ++ entriesToSkip :+ entry) ++ lastEntries
+      } orBadRequest "Invalid index" flatten
     }
     modifyChapter[Identity](bookKey, chapterKey, (_, _, _, chapter) => {
       for {

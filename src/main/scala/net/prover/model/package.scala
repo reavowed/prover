@@ -247,6 +247,13 @@ package object model {
         (seq.take(index), seq(index), seq.drop(index + 1))
       }
     }
+    def takeAndRemainingIfValid(index: Int): Option[(Seq[T], Seq[T])] = {
+      if (0 <= index && index < seq.length) {
+        Some((seq.take(index), seq.drop(index )))
+      } else {
+        None
+      }
+    }
 
     def tryUpdateAtIndexIfDefined[S](index: Int, f: T => Option[Try[T]]): Option[Try[Seq[T]]] = {
       seq.lift(index).flatMap(f).mapMap(seq.updated(index, _))

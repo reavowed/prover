@@ -19,6 +19,8 @@ object ChapterProps {
   sealed trait EntryProps {
     @JsonSerialize
     val `type`: String
+    @JsonSerialize
+    val url: String
   }
   case class AxiomPropsForChapter(name: String, url: String, premises: Seq[Statement], conclusion: Statement) extends EntryProps {
     override val `type`: String = "axiom"
@@ -38,7 +40,10 @@ object ChapterProps {
   case class PropertyDefinitionPropsForChapter(name: String, url: String, defaultTermName: String, parentTypeSymbol: String, parentTypeComponents: Seq[String], definingStatement: Statement) extends EntryProps {
     override val `type`: String = "propertyDefinition"
   }
-  case class CommentPropsForChapter(text: String, key: String) extends EntryProps {
+  case class CommentPropsForChapter(text: String, url: String) extends EntryProps {
     override val `type`: String = "comment"
+  }
+  case class PlaceholderPropsForChapter(url: String) extends EntryProps {
+    override val `type`: String = "placeholder"
   }
 }

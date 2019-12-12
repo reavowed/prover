@@ -488,6 +488,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
             title="Extract from"
             availablePremises={this.state.availablePremises}
             boundVariableLists={boundVariableLists}
+            path={path}
             onPremiseSelected={this.extractWithPremise}
             onFactSelected={this.extractWithFact}
           />}

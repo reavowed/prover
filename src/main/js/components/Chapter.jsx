@@ -1,5 +1,6 @@
 import path from "path";
 import React from "react";
+import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -9,6 +10,7 @@ import {Breadcrumbs} from "./Breadcrumbs";
 import {CopiableExpression} from "./ExpressionComponent";
 import {formatHtml, replacePlaceholders} from "./helpers/Formatter";
 import {FlexRow} from "./FlexRow";
+import {InlineTextEditor} from "./helpers/InlineTextEditor";
 import {InferenceSummary} from "./InferenceSummary";
 import {NavLinks} from "./NavLinks";
 import {Page} from "./Page";
@@ -47,26 +49,21 @@ const Result = ({title, url, buttons, deleteButton, children, updateChapter, inc
   const deleteEntry = () => {
     updateChapter(url, {method: "DELETE"})
   };
-  const moveEntry = (direction) => {
-    updateChapter(url + "/move?direction=" + direction, {method: "POST"})
-  };
   return <ResultWrapper>
     <FlexRow>
       <FlexRow.Grow><ResultTitle href={url} incomplete={incomplete}>{title}</ResultTitle></FlexRow.Grow>
       {buttons}
-      {deleteButton && <Button size="sm" variant="danger" className="ml-1" onClick={deleteEntry}><span className="fas fa-ban"/></Button>}
-      <Button size="sm" className="ml-1" onClick={() => moveEntry("up")}><span className="fas fa-arrow-up"/></Button>
-      <Button size="sm" className="ml-1" onClick={() => moveEntry("down")}><span className="fas fa-arrow-down"/></Button>
+      {deleteButton && <Button size="sm" variant="danger" className="ml-1 py-0" onClick={deleteEntry}><span className="fas fa-ban"/></Button>}
     </FlexRow>
     {children}
   </ResultWrapper>
 };
 
-const InferenceResult = ({title, entry, updateChapter, incomplete}) => {
+const InferenceResult = ({title, entry, updateChapter, incomplete, editing}) => {
   return <Result title={<>{title}: {formatHtml(entry.name)}</>}
                  url={entry.url}
                  updateChapter={updateChapter}
-                 deleteButton
+                 deleteButton={editing}
                  incomplete={incomplete}>
     <InferenceSummary inference={entry}/>
   </Result>;
@@ -98,17 +95,15 @@ class DefinitionResult extends React.Component {
       .then(() => this.stopEditingShorthand());
   };
   render() {
-    const {title, entry, children, updateChapter} = this.props;
+    const {title, entry, children, updateChapter, editing} = this.props;
 
     return <>
       <Result title={<>{title}: <CopiableExpression expression={entry.defaultValue} boundVariableLists={[]}/></>}
               url={entry.url}
               updateChapter={updateChapter}
-              buttons={<Button size="sm" variant="primary" className="ml-1" onClick={this.startEditingShorthand}>Shorthand</Button>}
+              buttons={editing && <Button size="sm" variant="primary" className="ml-1 mb-n2" onClick={this.startEditingShorthand}>Shorthand</Button>}
       >
-        {children && <div className="mt-n2">
-          {children}
-        </div>}
+        {children}
       </Result>
       <Modal show={this.state.editingShorthand} onHide={this.stopEditingShorthand}>
         <Modal.Header closeButton><Modal.Title>Edit shorthand</Modal.Title></Modal.Header>
@@ -129,37 +124,6 @@ class DefinitionResult extends React.Component {
   }
 }
 
-class ChapterTitle extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hovered: false,
-      editing: false
-    }
-  }
-
-  saveTitle = () => {
-    return this.props.updateChapter(this.props.url + "/title", {method: "PUT", body: this.state.newTitle})
-      .then(() => this.setState({editing: false}));
-  };
-
-  render() {
-    const {title} = this.props;
-    const {editing, hovered, newTitle} = this.state;
-    return editing ?
-      <FlexRow className="mb-2">
-        <FlexRow.Grow><Form.Control type="text" value={newTitle} onChange={e => this.setState({newTitle: e.target.value})} /></FlexRow.Grow>
-        <Button className="ml-1" variant="success" onClick={this.saveTitle}><i className="fas fa-check"/></Button>
-        <Button className="ml-1" variant="danger" onClick={() => this.setState({editing: false})}><i className="fas fa-times"/></Button>
-      </FlexRow> :
-      <h3 onMouseEnter={() => this.setState({hovered: true})} onMouseLeave={() => this.setState({hovered: false})}>
-        {title}
-        {hovered && <Button className="ml-3" size="sm" onClick={() => this.setState({editing: true, hovered: false, newTitle: title})}><i className="fas fa-edit"/></Button>}
-      </h3>;
-  }
-
-}
-
 export class Chapter extends React.Component {
   constructor(props) {
     super(props);
@@ -167,7 +131,8 @@ export class Chapter extends React.Component {
       title: props.title,
       url: props.url,
       entries: Parser.parseEntries(props.entries),
-      theoremBeingAdded: null
+      theoremBeingAdded: null,
+      editing: false
     }
   }
 
@@ -192,18 +157,19 @@ export class Chapter extends React.Component {
         }
       });
   };
-  renderEntry = (entry) => {
+
+  renderEntry = (entry, editing) => {
     switch (entry.type) {
       case "axiom":
-        return <InferenceResult key={entry.url} title="Axiom" entry={entry} updateChapter={this.updateChapter}/>;
+        return <InferenceResult key={entry.url} title="Axiom" entry={entry} updateChapter={this.updateChapter} editing={editing}/>;
       case "theorem":
-        return <InferenceResult key={entry.url} title="Theorem" entry={entry} updateChapter={this.updateChapter} incomplete={!entry.isComplete}/>;
+        return <InferenceResult key={entry.url} title="Theorem" entry={entry} updateChapter={this.updateChapter} incomplete={!entry.isComplete} editing={editing} />;
       case "statementDefinition":
-        return <DefinitionResult key={entry.url} title="Statement Definition" entry={entry} updateChapter={this.updateChapter}>
+        return <DefinitionResult key={entry.url} title="Statement Definition" entry={entry} updateChapter={this.updateChapter} editing={editing}>
           {entry.definingStatement && <><CopiableExpression expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <CopiableExpression expression={entry.definingStatement} boundVariableLists={[]}/>.</>}
         </DefinitionResult>;
       case "termDefinition":
-        return <DefinitionResult key={entry.url} title="Term Definition" entry={entry} updateChapter={this.updateChapter}>
+        return <DefinitionResult key={entry.url} title="Term Definition" entry={entry} updateChapter={this.updateChapter} editing={editing}>
           <ResultWithPremises premises={entry.premises}
                               result={<><CopiableExpression expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <CopiableExpression expression={entry.definingStatement} boundVariableLists={[]}/></>}/>
         </DefinitionResult>;
@@ -224,10 +190,49 @@ export class Chapter extends React.Component {
           <Capitalized>{typeDefinition.article}</Capitalized> {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <CopiableExpression expression={entry.definingStatement} boundVariableLists={[]}/>.
         </Result>;
       case "comment":
-        return <p key={entry.key}>{entry.text}</p>;
+        return <p key={entry.url}>{entry.text}</p>;
+      case "placeholder":
+        return <React.Fragment key={entry.url}/>;
       default:
-        return <React.Fragment key={entry.key}/>;
+        throw `Unrecognised entry '${entry.type}'`;
     }
+  };
+  renderDraggableEntry = (entry, index, editing) => {
+    const key = entry.url;
+    return <Draggable draggableId={key} index={index} key={key} isDragDisabled={!editing || this.state.disableDrag}>
+      {(provided) => (
+        <div ref={provided.innerRef}{...provided.draggableProps}{...provided.dragHandleProps}>
+          {this.renderEntry(entry, editing)}
+        </div>
+      )}
+    </Draggable>
+  };
+  onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+    const reorder = (list, startIndex, endIndex) => {
+      const result = Array.from(list);
+      const [removed] = result.splice(startIndex, 1);
+      result.splice(endIndex, 0, removed);
+      return result;
+    };
+    const entryToMove = this.state.entries[result.source.index];
+    const temporaryEntries = reorder(this.state.entries, result.source.index, result.destination.index);
+    this.setState(
+      {temporaryEntries, disableDrag: true},
+      () => {
+        this.updateChapter(path.join(entryToMove.url, "index"), {
+          method: "PUT",
+          headers: {"Content-Type": "application/json"},
+          body: result.destination.index
+        }).catch(() => {})
+          .then(() => this.setState({temporaryEntries: null, disableDrag: false}));
+      });
+  };
+
+  updateTitle = (newTitle) => {
+    return this.updateChapter(this.state.url + "/title", {method: "PUT", body: newTitle});
   };
 
   startAddingTheorem = () => {
@@ -392,7 +397,7 @@ export class Chapter extends React.Component {
 
   render() {
     const {bookLink, summary, previous, next} = this.props;
-    const {title, url, entries, theoremBeingAdded, termBeingAdded, typeBeingAdded, propertyBeingAdded} = this.state;
+    const {title, url, entries, temporaryEntries, theoremBeingAdded, termBeingAdded, typeBeingAdded, propertyBeingAdded, editing} = this.state;
 
     const updateControl = (caption, statePropertyName, innerPropertyName, transformer) => {
       return <Form.Group>
@@ -403,9 +408,19 @@ export class Chapter extends React.Component {
 
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
-      <ChapterTitle title={title} url={url} updateChapter={this.updateChapter} />
+      <Button className="ml-3 float-right" size="sm" onClick={() => this.setState({editing: !editing})}><i className={"fas fa-" + (editing ? "times" : "edit")}/></Button>
+      <h3><InlineTextEditor text={title} callback={this.updateTitle}/></h3>
       <p>{summary}</p>
-      {entries.map(this.renderEntry)}
+      <DragDropContext onDragEnd={this.onDragEnd}>
+        <Droppable droppableId="entries">
+          {(provided) =>
+            <div ref={provided.innerRef} {...provided.droppableProps}>
+              {(temporaryEntries || entries).map((entry, index) => this.renderDraggableEntry(entry, index, editing))}
+              {provided.placeholder}
+            </div>
+          }
+        </Droppable>
+      </DragDropContext>
       <hr/>
       {!theoremBeingAdded && !termBeingAdded && !typeBeingAdded && !propertyBeingAdded && <>
         <Button onClick={this.startAddingTheorem}>Add theorem</Button>

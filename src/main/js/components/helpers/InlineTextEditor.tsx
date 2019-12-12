@@ -54,7 +54,7 @@ export class InlineTextEditor extends React.Component<InlineTextEditorProps, Inl
     const {text: originalName} = this.props;
     const {newText} = this.state;
     if (newText !== originalName) {
-      this.props.callback(this.state.newText);
+      this.props.callback(this.state.newText).then(() => this.setState({editing: false}));
     } else {
       this.setState({editing: false});
     }

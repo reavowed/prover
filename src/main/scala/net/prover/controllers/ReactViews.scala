@@ -9,6 +9,7 @@ trait ReactViews {
     val initScript = (globals.map { case (name, value) => s"window.$name = ${JsonMapping.toString(value)};" }.toSeq
       :+ s"App.render(App.$viewName, ${JsonMapping.toString(props)});"
       ).mkString("\n")
+    "<!doctype html>" +
     <html>
       <head>
         <title>Prover</title>
