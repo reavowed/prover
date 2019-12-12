@@ -178,9 +178,9 @@ trait BookModification {
     } yield takeWhileTransitive(before, lhs, rhs, Nil, equality)) getOrElse (before, Nil)
   }
 
-  protected def insertTargetsBeforeTransitivity(before: Seq[Step], old: Step, after: Seq[Step], newSteps: Seq[Step], newTargets: Seq[Step])(implicit stepProvingContext: StepProvingContext): Seq[Step] = {
+  protected def insertTargetsBeforeTransitivity(before: Seq[Step], old: Step, newAfter: Seq[Step], newTargets: Seq[Step])(implicit stepProvingContext: StepProvingContext): Seq[Step] = {
     val (existingStepsBeforeTransitive, transitiveSteps) = splitPrecedingStepsWhileTransitive(before, old)
-    (existingStepsBeforeTransitive ++ newTargets ++ transitiveSteps ++ newSteps ++ after)
+    (existingStepsBeforeTransitive ++ newTargets ++ transitiveSteps ++ newAfter)
   }
 
   protected def replaceStepAndAddBeforeTransitivity[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepProvingContext) => Try[(Step, Seq[Step])]): Try[TheoremProps] = {
@@ -192,7 +192,7 @@ trait BookModification {
               for {
                 typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
                 (replacementStep, stepsToAddBeforeTransitive) <- f(typedStep, StepProvingContext(stepContext.addSteps(before).atIndex(last), provingContext))
-              } yield insertTargetsBeforeTransitivity(before, step, after, Seq(replacementStep), stepsToAddBeforeTransitive)(StepProvingContext(stepContext, provingContext))
+              } yield insertTargetsBeforeTransitivity(before, step, replacementStep +: after, stepsToAddBeforeTransitive)(StepProvingContext(stepContext, provingContext))
             }
           }
         case _ =>

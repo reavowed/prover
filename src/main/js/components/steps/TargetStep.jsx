@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {connect} from "react-redux";
-import {Expression} from "../../models/Expression";
+import {Expression, matchTemplate} from "../../models/Expression";
 import {CopiableExpression} from "../ExpressionComponent";
 import Extractor from "../Extractor";
 import {FlexRow} from "../FlexRow";
@@ -320,6 +320,9 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
     const {proving, activeProvingType} = this.state;
     const scopingStatement = _.find(window.definitions, d => _.includes(d.attributes, "scoping"));
     const deductionStatement = _.find(window.definitions, d => _.includes(d.attributes, "deduction"));
+
+    const binaryRelation = _.find(_.reverse(window.binaryRelations.slice()), x => matchTemplate(x.template, step.statement, [], []));
+
     return <>
       {proving ?
         <div className="card" style={{margin: ".5rem", padding: ".5rem .75rem"}}>
@@ -366,7 +369,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
                 <Button size="sm" className="ml-1" onClick={this.rewriteAutomatically}>Rewrite</Button>
               </Col>
             </Row>
-            {transitive &&
+            {binaryRelation &&
               <Row className="mb-1">
                 <Col xs={2} className="text-right">
                   Add transitive
@@ -378,7 +381,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
                   <Button size="sm" className="ml-1" onClick={() => this.setProvingType('rewriteRight')}>Rewrite right</Button>
                   <Button size="sm" className="ml-1" onClick={() => this.setProvingType('premiseLeft')}>Premise left</Button>
                   <Button size="sm" className="ml-1" onClick={() => this.setProvingType('premiseRight')}>Premise right</Button>
-                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('transitiveTarget')}>Add target</Button>
+                  <Button size="sm" className="ml-1" onClick={() => this.setProvingType('transitiveTarget')}>Insert target</Button>
                 </Col>
               </Row>
             }
