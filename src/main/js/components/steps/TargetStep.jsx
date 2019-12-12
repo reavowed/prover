@@ -209,6 +209,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
     if (provingType === 'naming') {
       this.setState({immediateNamingActive: true});
       this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, "suggestImmediateNamingPremises"))
+        .then(premiseJson => _.map(premiseJson, Parser.parsePremise))
         .then(this.handleImmediateNamingPremises);
     } else {
       this.cancelImmediateNamingPremises();
@@ -239,7 +240,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
 
   handleImmediateNamingPremises = (premises) => {
     if (this.state.immediateNamingActive) {
-      const highlightingActions = _.map(premises, p => {return {reference: p.referencedLine, action: () => this.handleImmediateNamingPremiseSelected(Expression.parseFromJson(p.statement))}})
+      const highlightingActions = _.map(premises, p => {return {reference: p.referencedLine, action: () => this.handleImmediateNamingPremiseSelected(p.statement)}});
       this.props.dispatch(SetHighlightingAction(highlightingActions));
     }
   };
@@ -315,10 +316,10 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
 
 
   render() {
-    let {step, path, additionalReferences, boundVariableLists, children, transitive} = this.props;
-    let {proving, activeProvingType} = this.state;
-    let scopingStatement = _.find(window.definitions, d => _.includes(d.attributes, "scoping"));
-    let deductionStatement = _.find(window.definitions, d => _.includes(d.attributes, "deduction"));
+    const {step, path, additionalReferences, boundVariableLists, children, transitive} = this.props;
+    const {proving, activeProvingType} = this.state;
+    const scopingStatement = _.find(window.definitions, d => _.includes(d.attributes, "scoping"));
+    const deductionStatement = _.find(window.definitions, d => _.includes(d.attributes, "deduction"));
     return <>
       {proving ?
         <div className="card" style={{margin: ".5rem", padding: ".5rem .75rem"}}>

@@ -100,7 +100,7 @@ class StepExtractionController @Autowired() (val bookService: BookService) exten
           newStep <- new SubstatementExtractor()(stepProvingContext).extractFromFactWithPremise(fact, helperPremise.statement).orBadRequest(s"Could not extract statement ${step.statement}")
         } yield newStep
       }
-      
+
       for {
         helperPremiseStatement <- Statement.parser(stepProvingContext).parseFromString(request.serializedHelperPremiseStatement, "helper premise statement").recoverWithBadRequest
         helperPremise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == helperPremiseStatement).orBadRequest(s"Could not find helper premise '$helperPremiseStatement'")

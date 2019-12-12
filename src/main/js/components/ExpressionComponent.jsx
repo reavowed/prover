@@ -108,7 +108,10 @@ export class ExpressionComponent extends React.Component {
           React.Fragment;
     const props = {};
     if (!shouldStaticHighlight && matchingActionHighlight && matchingActionHighlight.action) {
-      props.onClick = () => matchingActionHighlight.action(expression.serialize())
+      props.onClick = (e) => {
+        matchingActionHighlight.action(expression.serialize());
+        e.stopPropagation();
+      }
     }
     return React.createElement(tag, props, this.renderInner(expression, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, parentRequiresBrackets).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>));
   }

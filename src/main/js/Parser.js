@@ -1,5 +1,6 @@
 import _ from "lodash";
 import {Expression} from "./models/Expression";
+import {Step} from "./models/Step";
 
 function serializeReference(reference) {
   if (!reference) return "???";
@@ -31,6 +32,7 @@ export class Parser {
     const premise = _.cloneDeep(premiseJson);
     premiseJson.statement && (premise.statement = Expression.parseFromJson(premiseJson.statement));
     premiseJson.premises && (premise.premises =  premise.premises.map(Parser.parsePremise));
+    premiseJson.referencedLine && (premise.referencedLine = Step.parseReference(premise.referencedLine));
     premise.serializedReference = serializeReference(premiseJson.referencedLine);
     return premise;
   }
@@ -99,6 +101,7 @@ export class Parser {
       const suggestion = _.cloneDeep(suggestionJson);
       _.forEach(suggestion.rewriteSuggestions, s => s.result = Expression.parseFromJson(s.result));
       suggestion.statement = Expression.parseFromJson(suggestion.statement);
+      suggestion.reference = Step.parseReference(suggestion.reference);
       return suggestion;
     })
   }
