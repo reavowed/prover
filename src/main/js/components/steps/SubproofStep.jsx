@@ -1,4 +1,5 @@
 import React from "react";
+import {StepReference} from "../../models/Step";
 import {HighlightableExpression} from "../ExpressionComponent";
 import ProofLine from "./ProofLine";
 import {Steps} from "./Steps";
@@ -18,7 +19,7 @@ export class SubproofStep extends React.Component {
   render() {
     let {step, path, additionalReferences, boundVariableLists} = this.props;
     let {showingSubproof} = this.state;
-    let reference ={stepPath: path};
+    let reference = new StepReference(path);
     let referencesForLastStep = [...additionalReferences, reference];
     return <>
       <h6 onClick={this.toggleSubproof} className={"mt-1 mb-1"} style={{cursor: "pointer"}}>{formatHtml(step.name)}</h6>

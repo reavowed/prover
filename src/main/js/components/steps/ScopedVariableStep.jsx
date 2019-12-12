@@ -1,5 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
+import {StepReference} from "../../models/Step";
 import ProofContext from "../theorem/ProofContext";
 import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import ProofLine from "./ProofLine";
@@ -30,7 +31,7 @@ export const ScopedVariableStep = connect()(class ScopedVariableStep extends Rea
                                              path={path}
                                              boundVariableLists={boundVariableLists}
                                              additionalReferences={additionalReferences}
-                                             premiseReferences={[{stepPath: [...path, step.substeps.length - 1]}]} />}
+                                             premiseReferences={[new StepReference([...path, step.substeps.length - 1])]} />}
     </>
   }
 });

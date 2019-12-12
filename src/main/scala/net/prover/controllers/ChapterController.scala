@@ -137,7 +137,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           "definitions" -> DefinitionSummary.getAllFromContext(entryContext),
           "typeDefinitions" -> getTypeDefinitions(entryContext),
           "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
-          "transitiveStatements" -> getTransitivitySummaries(provingContext),
+          "binaryRelations" -> getBinaryRelations(provingContext),
           "definitionShorthands" -> getDefinitionShorthands(entryContext)))
     }).toResponseEntity
   }
@@ -349,10 +349,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     shorthandsFromDefinitions ++ greekLetterShorthands
   }
 
-  case class TransitivitySummary(symbol: String, template: Statement, inferenceId: String)
-  private def getTransitivitySummaries(provingContext: ProvingContext): Seq[TransitivitySummary] = {
-    provingContext.transitivityDefinitions.map { case (symbol, transitivity) =>
-      TransitivitySummary(symbol, transitivity.relation.template, transitivity.inference.id)
+  case class BinaryRelationSummary(symbol: String, template: Statement)
+  private def getBinaryRelations(provingContext: ProvingContext): Seq[BinaryRelationSummary] = {
+    provingContext.definedBinaryRelations.map { case (symbol, relation) =>
+      BinaryRelationSummary(symbol, relation.template)
     }
   }
 

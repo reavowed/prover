@@ -1,5 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
+import {StepReference} from "../../models/Step";
 import ProofContext from "../theorem/ProofContext";
 import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import {InferenceLink} from "./InferenceLink";
@@ -14,7 +15,7 @@ export const NamingStep = connect()(class NamingStep extends React.Component {
   };
   render() {
     let {step, path, additionalReferences, boundVariableLists} = this.props;
-    let reference = {stepPath: path};
+    let reference = new StepReference(path);
     let referencesForLastStep = [...additionalReferences, reference];
     const innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     const prefix = <>

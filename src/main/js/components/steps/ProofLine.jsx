@@ -5,6 +5,7 @@ import Popover from "react-bootstrap/Popover";
 import Tooltip from "react-bootstrap/Tooltip";
 import {connect} from "react-redux";
 import styled, {css} from "styled-components";
+import {StepReference} from "../../models/Step";
 import {HighlightableExpression} from "../ExpressionComponent";
 import {FlexRow} from "../FlexRow";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
@@ -39,7 +40,7 @@ const ProofLine = connect()(styled(class ProofLine extends React.Component {
     if (premiseReferences) {
       this.props.dispatch(SetHighlightedPremises(premiseReferences));
     }
-    let conclusionReference = path && {stepPath: path, suffix};
+    let conclusionReference = path && new StepReference(path, suffix || null);
     if (conclusionReference) {
       this.props.dispatch(SetHighlightedConclusion(conclusionReference));
     }
@@ -114,7 +115,7 @@ const ProofLine = connect()(styled(class ProofLine extends React.Component {
         <span ref={this.attachSpanRef}
               onClick={this.onClick}
               style={this.props.onClick && {cursor: "pointer"}}>
-          {children}
+          {_.isFunction(children) ? children(this.state.isHovered) : children}
         </span>
         <span className="ml-3">
           {buttons}
@@ -184,7 +185,7 @@ ProofLine.SingleStatementWithPrefixContent = connect()(class SingleStatementWith
         {' '}
         <HighlightableExpression expression={statement}
                                  boundVariableLists={boundVariableLists}
-                                 references={[{stepPath: path, suffix: suffix}]}
+                                 references={[new StepReference(path, suffix)]}
                                  additionalReferences={additionalReferences || []}
                                  wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}/>
        </>}

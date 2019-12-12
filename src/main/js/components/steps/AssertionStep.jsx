@@ -13,8 +13,8 @@ export const AssertionStepProofLine = connect()(class AssertionStepProofLine ext
   };
 
   render() {
-    let {step, path, children, referencedLines, boundVariableLists} = this.props;
-    return <ProofLine premiseReferences={referencedLines || step.referencedLines}
+    let {step, path, children, boundVariableLists} = this.props;
+    return <ProofLine premiseReferences={step.referencedLines}
                       path={path}
                       statement={step.statement}
                       boundVariableLists={boundVariableLists}

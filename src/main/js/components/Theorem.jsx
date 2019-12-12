@@ -1,4 +1,5 @@
 import React from "react";
+import {PremiseReference} from "../models/Step";
 import {HighlightableExpression} from "./ExpressionComponent";
 import {Inference} from "./Inference";
 import {connect, Provider} from 'react-redux';
@@ -11,7 +12,7 @@ const Premise = connect(
   (state, {statement, index}) => {
     return {
       expression: statement,
-      references: [{premiseIndex: index}],
+      references: [new PremiseReference(index)],
       boundVariableLists: []
     }
   })(HighlightableExpression);

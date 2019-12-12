@@ -137,7 +137,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId: suggestion.inference.id, substitutions})
     }))
-      .then(this.setProvingType(null));
+      .then(() => this.setProvingType(null));
   };
   createNamingStep = (suggestion, substitutions) => {
     const {namingVariableName: variableName} = this.state;
@@ -153,7 +153,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
       method: "POST",
       body: this.state.targetStatement
     }))
-      .then(this.setProvingType(null));
+      .then(() => this.setProvingType(null));
   };
 
   getInferenceSuggestionsForLeft = (searchText) => {

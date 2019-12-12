@@ -1,5 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
+import {StepReference} from "../../models/Step";
 import ProofContext from "../theorem/ProofContext";
 import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import ProofLine from "./ProofLine";
@@ -35,7 +36,7 @@ export const DeductionStep = connect()(class DeductionStep extends React.Compone
   };
   render() {
     let {step, path, additionalReferences, boundVariableLists} = this.props;
-    let reference = {stepPath: path};
+    let reference = new StepReference(path);
     let referencesForLastStep = [...additionalReferences, reference];
     return <>
       <ProofLine.SingleStatementWithPrefix editableBoundVariable

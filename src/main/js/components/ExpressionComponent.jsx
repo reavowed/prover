@@ -1,6 +1,5 @@
 import _ from "lodash";
 import React from "react";
-import {act} from "react-dom/test-utils";
 import {connect} from "react-redux";
 import styled from "styled-components";
 import {matchTemplate, PropertyExpression, TypeExpression} from "../models/Expression";
@@ -115,16 +114,6 @@ export class ExpressionComponent extends React.Component {
   }
 }
 
-function referencesMatch(r1, r2) {
-  if (_.isNumber(r1.premiseIndex)) {
-    return r1.premiseIndex === r2.premiseIndex;
-  } else {
-    return r2.stepPath &&
-      r1.stepPath.join(".") === r2.stepPath.join(".") &&
-      r1.suffix === r2.suffix;
-  }
-}
-
 export const CopiableExpression = (props) => {
   const expressionToCopy = props.expressionToCopy || props.expression;
   return <span onContextMenu={() => navigator.clipboard.writeText(expressionToCopy.serializeNicely(props.boundVariableLists))}>
@@ -139,18 +128,19 @@ export const HighlightableExpression = connect(
     additionalPremiseReferences = additionalPremiseReferences || [];
     additionalConclusionReferences = additionalConclusionReferences || [];
     let referencesForAction = [...references, ...additionalPremiseReferences];
-    let referencesForStatic = [...references, ...additionalReferences, ...additionalConclusionReferences];
+    let referencesForPremise = [...references, ...additionalPremiseReferences, ...additionalReferences];
+    let referencesForConclusion = [...references, ...additionalReferences, ...additionalConclusionReferences];
 
     const actionHighlights = _.chain(state.highlighting.actionHighlights)
       .filter(actionHighlight => {
-        const references = actionHighlight.action ? referencesForAction : referencesForStatic;
-        return _.some(references, reference => referencesMatch(reference, actionHighlight.reference))
+        const references = actionHighlight.action ? referencesForAction : referencesForPremise;
+        return _.some(references, reference => reference.matches(actionHighlight.reference))
       })
-      .map(actionHighlight => { return {path: actionHighlight.reference.internalPath || [], action: actionHighlight.action}})
+      .map(actionHighlight => { return {path: actionHighlight.reference.innerPath || [], action: actionHighlight.action}})
       .value();
     const staticHighlights = _.chain(state.highlighting.staticHighlights)
-      .filter(staticHighlight => _.some(referencesForStatic, reference => referencesMatch(reference, staticHighlight)))
-      .map(staticHighlight => {return {path: staticHighlight.internalPath || []}})
+      .filter(staticHighlight => _.some(referencesForConclusion, reference => reference.matches(staticHighlight)))
+      .map(staticHighlight => {return {path: staticHighlight.innerPath || []}})
       .value();
 
     return {
@@ -162,7 +152,18 @@ export const HighlightableExpression = connect(
       className
     }
   }
-)(({expression, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, className}) => {
-  const expressionElement = <CopiableExpression expression={expression} actionHighlights={actionHighlights} staticHighlights={staticHighlights} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
-  return className ? <span className={className}>{expressionElement}</span> : expressionElement;
+)(class HighlightableExpression extends React.Component {
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    return !_.isEqual(this.props, nextProps);
+  }
+  render() {
+    const {expression, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, className} = this.props;
+    const expressionElement = <CopiableExpression expression={expression}
+                                                  actionHighlights={actionHighlights}
+                                                  staticHighlights={staticHighlights}
+                                                  boundVariableLists={boundVariableLists}
+                                                  wrapBoundVariable={wrapBoundVariable}
+                                                  parentRequiresBrackets={false}/>;
+    return className ? <span className={className}>{expressionElement}</span> : expressionElement;
+  }
 });
