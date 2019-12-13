@@ -24,6 +24,10 @@ export default class Proof extends React.Component {
     this.steps[path.join(".")][action]();
   };
 
+  duplicate = () => {
+    this.props.dispatch(FetchJsonAndUpdate("proofs", {method: "POST", headers: {"Content-Type": "application/json"}, body: this.props.index}));
+  };
+
   delete = () => {
     this.props.dispatch(FetchJsonAndUpdate(path.join("proofs", this.props.index.toString()), {method: "DELETE"}));
   };
@@ -39,7 +43,8 @@ export default class Proof extends React.Component {
     };
     return <>
       <hr/>
-      {deleteable && <Button onClick={this.delete} variant="danger" size="sm" className="float-right"><i className="fas fa-times"/></Button>}
+      {deleteable && <Button onClick={this.delete} variant="danger" size="sm" className="float-right ml-1"><i className="fas fa-times"/></Button>}
+      <Button onClick={this.duplicate} variant="primary" size="sm" className="float-right ml-1"><i className="fas fa-copy"/></Button>
       <h4>{title}</h4>
       <ProofContext.Provider value={proofContext}>
         <Steps steps={steps}

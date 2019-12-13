@@ -12,16 +12,26 @@ import scala.util.{Failure, Success}
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}"))
 class TheoremController @Autowired() (val bookService: BookService) extends BookModification {
+
   @PostMapping(value = Array("/proofs"))
   def createProof(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String
+    @PathVariable("theoremKey") theoremKey: String,
+    @RequestBody(required = false) proofIndexToCopy: Int
   ): ResponseEntity[_] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
-      Success(theorem.copy(proofs = theorem.proofs :+ Theorem.Proof(Seq(Step.Target(theorem.conclusion)))))
+      for {
+        newProof <- Option(proofIndexToCopy) match {
+          case Some(proofIndex) =>
+            theorem.proofs.lift(proofIndex).orBadRequest(s"Invalid proof index $proofIndex")
+          case None =>
+            Success(Theorem.Proof(Seq(Step.Target(theorem.conclusion))))
+        }
+      } yield theorem.copy(proofs = theorem.proofs :+ newProof)
     }.toResponseEntity
   }
+
   @DeleteMapping(value = Array("/proofs/{proofIndex}"))
   def deleteProof(
     @PathVariable("bookKey") bookKey: String,
