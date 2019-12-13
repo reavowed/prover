@@ -304,14 +304,14 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({serializedPremiseStatement: premise.statement.serialize()})
-    }));
+    })).then(() => this.setProvingType(null));
   };
   extractWithFact = (fact) => {
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "extract", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({inferenceId: fact.id})
-    }));
+    })).then(() => this.setProvingType(null));
   };
 
 
@@ -497,6 +497,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
             availablePremises={this.state.availablePremises}
             boundVariableLists={boundVariableLists}
             path={path}
+            onSave={() => this.setProvingType(null)}
           />}
           {activeProvingType === 'transitiveTarget' && <>
             <Form.Group>

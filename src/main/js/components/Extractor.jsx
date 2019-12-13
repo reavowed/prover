@@ -56,7 +56,7 @@ export default connect()(class Extractor extends React.Component {
         serializedBasePremiseStatement: this.state.selectedBasePremise.statement && this.state.selectedBasePremise.statement.serialize(),
         serializedHelperPremiseStatement: this.state.selectedHelperPremise.statement.serialize()
       })
-    }));
+    })).then(() => this.props.onSave());
   };
 
   render() {
