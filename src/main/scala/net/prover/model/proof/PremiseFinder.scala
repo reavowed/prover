@@ -3,8 +3,6 @@ package net.prover.model.proof
 import net.prover.model.Substitutions
 import net.prover.model.expressions._
 
-import scala.util.Try
-
 object PremiseFinder {
 
   def findParameterisedPremiseSteps(
@@ -24,14 +22,14 @@ object PremiseFinder {
         substitutionsWithPlaceholders <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality).toSeq
         premiseStatementsWithPlaceholders <- inference.substitutePremises(substitutionsWithPlaceholders).toSeq
         (premiseSteps, newTerms) <- findParameterisedPremiseSteps(premiseStatementsWithPlaceholders, terms)
-        conclusion = targetStatement.specify(newTerms)
+        conclusion <- targetStatement.specify(newTerms).toSeq
         substitutions <- inference.conclusion.calculateSubstitutions(conclusion).flatMap(_.confirmTotality).toSeq
-        premiseStatements = premiseStatementsWithPlaceholders.map(_.specify(newTerms))
+        premiseStatements <- premiseStatementsWithPlaceholders.map(_.specify(newTerms)).traverseOption
         assertionStep = Step.Assertion(conclusion, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
       } yield (premiseSteps :+ assertionStep, newTerms)
 
     def asAlreadyKnown = for {
-      knownTarget <- Try(targetStatement.specify(terms)).toOption
+      knownTarget <- targetStatement.specify(terms)
       steps <- findPremiseSteps(knownTarget)
     } yield (steps, terms)
 

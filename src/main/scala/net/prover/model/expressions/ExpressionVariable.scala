@@ -26,8 +26,8 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     targetArguments: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
-  ): ExpressionType = {
-    this
+  ): Option[ExpressionType] = {
+    Some(this)
   }
   override def specifyWithSubstitutions(
     targetArguments: Seq[Term],

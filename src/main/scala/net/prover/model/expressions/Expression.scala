@@ -22,18 +22,18 @@ trait TypedExpression[+ExpressionType <: Expression] {
     targetArguments: Map[Int, Term],
     internalDepth: Int,
     externalDepth: Int
-  ): ExpressionType
+  ): Option[ExpressionType]
   def specify(
     targetArguments: Seq[Term],
     internalDepth: Int,
     externalDepth: Int
-  ): ExpressionType = {
+  ): Option[ExpressionType] = {
     specify(targetArguments.indices.zip(targetArguments).toMap, internalDepth, externalDepth)
   }
-  def specify(targetArguments: Map[Int, Term])(implicit substitutionContext: SubstitutionContext): ExpressionType = {
+  def specify(targetArguments: Map[Int, Term])(implicit substitutionContext: SubstitutionContext): Option[ExpressionType] = {
     specify(targetArguments, 0, substitutionContext.externalDepth)
   }
-  def specify(targetArguments: Seq[Term])(implicit substitutionContext: SubstitutionContext): ExpressionType = {
+  def specify(targetArguments: Seq[Term])(implicit substitutionContext: SubstitutionContext): Option[ExpressionType] = {
     specify(targetArguments.indices.zip(targetArguments).toMap)
   }
 

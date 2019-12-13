@@ -49,15 +49,19 @@ class StepExtractionController @Autowired() (val bookService: BookService) exten
       def fromPremise(serializedPremiseStatement: String) = for {
         premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
         premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-        result <- extractor.extractFromPremise(premise.statement, step.statement) orBadRequest s"Could not extract statement ${step.statement}"
+        result <- extractor.extractFromPremise(premise.statement, step.statement).map((_, None)) orElse
+          extractor.extractFromPremiseWithTarget(premise.statement, step.statement).map(_.mapRight(Some(_))) orBadRequest
+          s"Could not extract statement ${step.statement}"
       } yield result
       def fromFact(inferenceId: String) = for {
         fact <- stepProvingContext.provingContext.facts.find(_.id == inferenceId).orBadRequest(s"Could not find inference ${request.inferenceId}")
-        result <- extractor.extractFromFact(fact, step.statement) orBadRequest s"Could not extract statement ${step.statement}"
+        result <- extractor.extractFromFact(fact, step.statement).map((_, None)) orElse
+          extractor.extractFromFactWithTarget(fact, step.statement).map(_.mapRight(Some(_))) orBadRequest
+          s"Could not extract statement ${step.statement}"
       } yield result
       for {
-        (newStep, target) <- (request.inferenceId.map(fromFact) orElse request.serializedPremiseStatement.map(fromPremise) orBadRequest "Either fact or premise must be provided").flatten
-      } yield Seq(target, newStep)
+        (newStep, targetOption) <- (request.inferenceId.map(fromFact) orElse request.serializedPremiseStatement.map(fromPremise) orBadRequest "Either fact or premise must be provided").flatten
+      } yield targetOption.toSeq :+ newStep
     }.toResponseEntity
   }
 
