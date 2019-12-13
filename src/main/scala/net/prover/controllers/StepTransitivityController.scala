@@ -19,12 +19,12 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     (for {
-      (_, lhs, _, transitivity, stepProvingContext) <- getTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (lhs, _, relation, stepProvingContext) <- getRelation(bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
       implicit val spc = stepProvingContext
       stepProvingContext.allPremisesSimplestFirst.mapCollect { p =>
         for {
-          (premiseLhs, _) <- transitivity.relation.unapply(p.statement)
+          (premiseLhs, _) <- relation.unapply(p.statement)
           if premiseLhs == lhs
         } yield p
       }
@@ -39,12 +39,12 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     (for {
-      (_, _, rhs, transitivity, stepProvingContext) <- getTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (_, rhs, relation, stepProvingContext) <- getRelation(bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
       implicit val spc = stepProvingContext
       stepProvingContext.allPremisesSimplestFirst.mapCollect { p =>
         for {
-          (_, premiseRhs) <- transitivity.relation.unapply(p.statement)
+          (_, premiseRhs) <- relation.unapply(p.statement)
           if premiseRhs == rhs
         } yield p
       }
