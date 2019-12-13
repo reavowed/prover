@@ -122,7 +122,7 @@ const ProofLine = connect()(styled(class ProofLine extends React.Component {
         </span>
         <FlexRow.Grow/>
         {path && (this.state.isHovered || this.state.shouldShowButtonPopover) && <>
-          <Button ref={this.attachButtonRef} onClick={this.toggleButtonPopover} size="sm" className="ml-1"><span className="fas fa-ellipsis-v"/></Button>
+          <Button ref={this.attachButtonRef} onClick={this.toggleButtonPopover} size="sm" className="ml-1 mb-n2"><span className="fas fa-ellipsis-v"/></Button>
           <Overlay target={this.state.buttonRef} show={this.state.shouldShowButtonPopover} onHide={this.hideButtonPopover} rootClose placement="bottom">
             {({show, ...props}) => <Popover {...props}>
               <Button onClick={this.showSubproofNameModal} variant="success" size="sm" className="ml-1">To subproof</Button>
