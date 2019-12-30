@@ -45,13 +45,13 @@ export default connect()(class PremiseOrFactChooser extends React.Component {
   };
 
   render() {
-    const {availablePremises, boundVariableLists, title} = this.props;
+    const {availablePremises, title} = this.props;
     const {selectedPremise} = this.state;
 
     let getSuggestionValue = s => s.name;
     let renderSuggestion = s => <SuggestionDropdownElement
       mainElement={getSuggestionValue(s)}
-      hoverElement={<CopiableExpression expression={s.conclusion} boundVariableLists={[]} />} />;
+      hoverElement={<CopiableExpression expression={s.conclusion} />} />;
 
     return <>
       <Form.Group>
@@ -73,7 +73,7 @@ export default connect()(class PremiseOrFactChooser extends React.Component {
           <option value="" />
           {availablePremises.map(p =>
             <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
-                <CopiableExpression expression={p.statement} boundVariableLists={boundVariableLists} />
+                <CopiableExpression expression={p.statement} />
               )}}/>
           )}
         </Form.Control>

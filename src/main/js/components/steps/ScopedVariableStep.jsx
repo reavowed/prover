@@ -6,6 +6,7 @@ import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import ProofLine from "./ProofLine";
 import {Steps} from "./Steps";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
+import BoundVariableLists from "./BoundVariableLists";
 
 export const ScopedVariableStep = connect()(class ScopedVariableStep extends React.Component {
   static contextType = ProofContext;
@@ -13,23 +14,21 @@ export const ScopedVariableStep = connect()(class ScopedVariableStep extends Rea
     return this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "boundVariable", {method: "PUT", body: newName}));
   };
   render() {
-    let {step, path, boundVariableLists, additionalReferences} = this.props;
-    let innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
+    let {step, path, additionalReferences} = this.props;
     return <>
-      <ProofLine path={path} boundVariableLists={boundVariableLists}>
+      <ProofLine path={path}>
         Take any
         {' '}
         <InlineTextEditor text={step.variableName} callback={this.updateBoundVariable}/>
         .
       </ProofLine>
-      <Steps.Children steps={step.substeps}
-                      path={path}
-                      boundVariableLists={innerBoundVariableLists} />
+      <BoundVariableLists.Add variables={[step.variableName]}>
+        <Steps.Children steps={step.substeps} path={path} />
+      </BoundVariableLists.Add>
       {step.provenStatement &&
         <ProofLine.SingleStatementWithPrefix prefix="So"
                                              statement={step.provenStatement}
                                              path={path}
-                                             boundVariableLists={boundVariableLists}
                                              additionalReferences={additionalReferences}
                                              premiseReferences={[new StepReference([...path, step.substeps.length - 1])]} />}
     </>

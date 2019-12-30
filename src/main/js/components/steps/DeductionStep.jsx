@@ -6,7 +6,6 @@ import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import ProofLine from "./ProofLine";
 import {Steps} from "./Steps";
 import {BoundVariableModal} from "../Modals";
-import {ClickableText} from "./ClickableText";
 
 export const DeductionStep = connect()(class DeductionStep extends React.Component {
   static contextType = ProofContext;
@@ -35,7 +34,7 @@ export const DeductionStep = connect()(class DeductionStep extends React.Compone
     })).then(this.hideBoundVariableModal);
   };
   render() {
-    let {step, path, additionalReferences, boundVariableLists} = this.props;
+    let {step, path, additionalReferences} = this.props;
     let reference = new StepReference(path);
     let referencesForLastStep = [...additionalReferences, reference];
     return <>
@@ -44,11 +43,9 @@ export const DeductionStep = connect()(class DeductionStep extends React.Compone
                                            statement={step.assumption}
                                            path={path}
                                            suffix="a"
-                                           boundVariableLists={boundVariableLists}
                                            additionalReferences={[...additionalReferences, reference]}/>
       <Steps.Children steps={step.substeps}
                       path={path}
-                      boundVariableLists={boundVariableLists}
                       referencesForLastStep={referencesForLastStep} />
       <BoundVariableModal show={this.state.boundVariableModalCallback != null}
                           onHide={this.hideBoundVariableModal}

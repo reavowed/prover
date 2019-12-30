@@ -7,6 +7,7 @@ import {InferenceLink} from "./InferenceLink";
 import ProofLine from "./ProofLine";
 import {Steps} from "./Steps";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
+import BoundVariableLists from "./BoundVariableLists";
 
 export const NamingStep = connect()(class NamingStep extends React.Component {
   static contextType = ProofContext;
@@ -14,10 +15,9 @@ export const NamingStep = connect()(class NamingStep extends React.Component {
     this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "boundVariable", {method: "PUT", body: newName}));
   };
   render() {
-    let {step, path, additionalReferences, boundVariableLists} = this.props;
+    let {step, path, additionalReferences} = this.props;
     let reference = new StepReference(path);
     let referencesForLastStep = [...additionalReferences, reference];
-    const innerBoundVariableLists = [[step.variableName], ...boundVariableLists];
     const prefix = <>
         Let
         {' '}
@@ -25,20 +25,18 @@ export const NamingStep = connect()(class NamingStep extends React.Component {
         {' '}
         be such that
     </>;
-    return <>
+    return <BoundVariableLists.Add variables={[step.variableName]}>
       <ProofLine.SingleStatementWithPrefix editableBoundVariable
                                            prefix={prefix}
                                            statement={step.assumption}
                                            path={path}
                                            suffix="a"
-                                           boundVariableLists={innerBoundVariableLists}
                                            additionalReferences={additionalReferences}
                                            premiseReferences={step.referencedLinesForExtraction}
                                            buttons={<InferenceLink inference={step.inference}/>} />
       <Steps steps={step.substeps}
              path={path}
-             boundVariableLists={innerBoundVariableLists}
              referencesForLastStep={referencesForLastStep} />
-    </>;
+    </BoundVariableLists.Add>;
   }
 });

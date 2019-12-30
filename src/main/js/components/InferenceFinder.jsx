@@ -9,6 +9,7 @@ import {CopiableExpression} from "./ExpressionComponent";
 import InferenceAutosuggest from "./InferenceAutosuggest";
 import {InferenceSummary} from "./InferenceSummary";
 import SuggestionDropdownElement from "./SuggestionDropdownElement";
+import BoundVariableLists from "./steps/BoundVariableLists";
 
 function simpleGetter(type, name) {
   return substitutions => substitutions[type][name];
@@ -233,7 +234,7 @@ export class InferenceFinder extends React.Component {
   };
 
   render() {
-    let showSubstitutionOptions = (name, key, validValues, boundVariableLists, getter, setter) => {
+    let showSubstitutionOptions = (name, key, validValues, getter, setter) => {
       const selectionElement = !validValues ?
         <Form.Control type="text"
                       value={getter(this.state.selectedSubstitutionValues)}
@@ -241,43 +242,45 @@ export class InferenceFinder extends React.Component {
                       onKeyUp={this.onInputKeyUp}
         /> :
         validValues.length === 1 ?
-          <Form.Label column><CopiableExpression expression={validValues[0]} boundVariableLists={boundVariableLists} /></Form.Label> :
+          <Form.Label column><CopiableExpression expression={validValues[0]} /></Form.Label> :
           <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)}>
             <option value="" />
             {validValues.map(v =>
               <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                  <CopiableExpression expression={v} boundVariableLists={boundVariableLists} />
+                  <CopiableExpression expression={v} />
                 )}}/>
             )}
           </Form.Control>;
 
       return <Form.Group key={key} as={Form.Row}>
-        <Form.Label column xs={2}><CopiableExpression expression={{textForHtml: () => name}} boundVariableLists={[]}/></Form.Label>
+        <Form.Label column xs={2}><CopiableExpression expression={{textForHtml: () => name}}/></Form.Label>
         <Form.Label column xs={1}>&rarr;</Form.Label>
         <Col>{selectionElement}</Col>
       </Form.Group>
     };
-    let showSimpleSubstitutions = (key, boundVariableLists) => {
+    let showSimpleSubstitutions = (key) => {
       const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
       return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name => {
         const validValues = this.getValidSubstitutionValues(key, name);
-        return showSubstitutionOptions(name, `${key} ${name}`, validValues, boundVariableLists, x => x[key][name], (x, y) => x[key][name] = y);
+        return showSubstitutionOptions(name, `${key} ${name}`, validValues, x => x[key][name], (x, y) => x[key][name] = y);
       });
     };
-    let showParameteredSubstitutions = (key, boundVariableLists) => {
+    let showParameteredSubstitutions = (key) => {
       const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
       return requiredSubstitutions.length > 0 && requiredSubstitutions.map(([name, numberOfParameters]) => {
         const validValues = this.getValidSubstitutionValues(key, name, numberOfParameters);
         const newVariableList = numberOfParameters === 1 ? ["$"] : _.map(_.range(numberOfParameters), x => "$_" + (x+1));
-        return showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, `${key} ${name} ${numberOfParameters}`, validValues, [...boundVariableLists, newVariableList], x => x[key][name][numberOfParameters], (x, y) => x[key][name][numberOfParameters] = y);
-      });
+        return <BoundVariableLists.Add variables={newVariableList}>
+          showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, `${key} ${name} ${numberOfParameters}`, validValues, x => x[key][name][numberOfParameters], (x, y) => x[key][name][numberOfParameters] = y);
+        </BoundVariableLists.Add>
+        });
     };
-    const {title, boundVariableLists, autofocus} = this.props;
+    const {title, autofocus} = this.props;
 
     let getSuggestionValue = s => s.rewriteInference ? s.inference.name + " [" + s.rewriteInference.name + "]" : s.inference.name;
     let renderSuggestion = s => <SuggestionDropdownElement
       mainElement={getSuggestionValue(s)}
-      hoverElement={<CopiableExpression expression={s.conclusion} boundVariableLists={[]} />} />;
+      hoverElement={<CopiableExpression expression={s.conclusion} />} />;
 
     return <>
       <Form.Group>
@@ -303,14 +306,14 @@ export class InferenceFinder extends React.Component {
           {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
             <Form.Group as={Form.Row} key={i}>
               <Col xs={4}>
-                <CopiableExpression expression={premise} boundVariableLists={[]} />
+                <CopiableExpression expression={premise} />
               </Col>
               <Col>
                 <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)}>
                   <option value="" />
                   {suggestions.map((s, i) =>
                     <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                        <CopiableExpression expression={s.statement} boundVariableLists={boundVariableLists} />
+                        <CopiableExpression expression={s.statement} />
                       )}}/>
                   )}
                 </Form.Control>
@@ -322,10 +325,10 @@ export class InferenceFinder extends React.Component {
         <Form.Group>
           <Form.Label><strong>Substitutions</strong></Form.Label>
           {_.flatten([
-            showSimpleSubstitutions("statements", boundVariableLists),
-            showSimpleSubstitutions("terms", boundVariableLists),
-            showParameteredSubstitutions("predicates", boundVariableLists),
-            showParameteredSubstitutions("functions", boundVariableLists),
+            showSimpleSubstitutions("statements"),
+            showSimpleSubstitutions("terms"),
+            showParameteredSubstitutions("predicates"),
+            showParameteredSubstitutions("functions"),
           ])}
         </Form.Group>
         <div className="text-center">

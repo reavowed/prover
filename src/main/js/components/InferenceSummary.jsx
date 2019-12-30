@@ -6,7 +6,7 @@ export class InferenceSummary extends React.Component {
   render() {
     let {inference, createPremiseElement} = this.props;
     return <ResultWithPremises premises={inference.premises}
-                              result={<CopiableExpression expression={inference.conclusion} boundVariableLists={[]}/>}
+                              result={<CopiableExpression expression={inference.conclusion} />}
                               createPremiseElement={createPremiseElement}/>;
   }
 };

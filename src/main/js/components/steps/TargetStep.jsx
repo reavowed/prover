@@ -316,7 +316,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
 
 
   render() {
-    const {step, path, additionalReferences, boundVariableLists, children, transitive} = this.props;
+    const {step, path, additionalReferences, children, transitive} = this.props;
     const {proving, activeProvingType} = this.state;
     const scopingStatement = _.find(window.definitions, d => _.includes(d.attributes, "scoping"));
     const deductionStatement = _.find(window.definitions, d => _.includes(d.attributes, "deduction"));
@@ -328,7 +328,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
         <div className="card" style={{margin: ".5rem", padding: ".5rem .75rem"}}>
           <Button size="sm" variant="danger" className="float-left" onClick={this.stopProving} style={{position: "absolute"}}><i className="fas fa-times"/></Button>
           <h5 className="text-center">
-            <CopiableExpression expression={step.statement} boundVariableLists={boundVariableLists}/>
+            <CopiableExpression expression={step.statement} />
           </h5>
           <div>
             <Row className="mb-1">
@@ -390,20 +390,17 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
                                                                getInferenceSuggestions={this.getInferenceSuggestionsForPremise}
                                                                getPremiseSuggestions={this.getPremiseSuggestionsForPremise}
                                                                getSubstitutionSuggestions={this.getSubstitutionSuggestionsForPremise}
-                                                               boundVariableLists={boundVariableLists}
                                                                submit={this.addPremise}
                                                                autofocus/>}
           {activeProvingType === 'inference' && <InferenceFinder title='Select Inference'
                                                                  getInferenceSuggestions={this.getInferenceSuggestionsForStep}
                                                                  getPremiseSuggestions={this.getPremiseSuggestionsForStep}
                                                                  getSubstitutionSuggestions={this.getSubstitutionSuggestionsForStep}
-                                                                 boundVariableLists={boundVariableLists}
                                                                  submit={this.proveWithInference}
                                                                  autofocus/>}
           {activeProvingType === 'rewrite' && <Rewriter
             title="Rewriting"
             expression={step.statement}
-            boundVariableLists={boundVariableLists}
             path={path}
             onSave={this.rewrite}
           />}
@@ -418,7 +415,6 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
             <InferenceFinder title='Select Inference for Naming'
                              getInferenceSuggestions={this.getInferenceSuggestionsForNaming}
                              getPremiseSuggestions={this.getPremiseSuggestionsForNaming}
-                             boundVariableLists={boundVariableLists}
                              submit={this.createNamingStep}/>
           </>}
           {activeProvingType === 'target' && <>
@@ -441,26 +437,22 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
           {activeProvingType === 'addFromLeft' && <InferenceFinder title='Select Inference to Add from Left'
                                                                    getInferenceSuggestions={this.getInferenceSuggestionsForLeft}
                                                                    getPremiseSuggestions={this.getPremiseSuggestionsForLeft}
-                                                                   boundVariableLists={boundVariableLists}
                                                                    submit={this.addFromLeft}
                                                                    autofocus/>}
           {activeProvingType === 'addFromRight' && <InferenceFinder title='Select Inference to Add from Right'
                                                                     getInferenceSuggestions={this.getInferenceSuggestionsForRight}
                                                                     getPremiseSuggestions={this.getPremiseSuggestionsForRight}
-                                                                    boundVariableLists={boundVariableLists}
                                                                     submit={this.addFromRight}
                                                                     autofocus/>}
           {activeProvingType === 'rewriteLeft' && <Rewriter
             title="Rewriting Left"
             expression={step.statement.components[0]}
-            boundVariableLists={boundVariableLists}
             path={path}
             onSave={this.rewriteLeft}
           />}
           {activeProvingType === 'rewriteRight' && <Rewriter
             title="Rewriting Right"
             expression={step.statement.components[1]}
-            boundVariableLists={boundVariableLists}
             path={path}
             onSave={this.rewriteRight}
           />}
@@ -471,7 +463,7 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
               <option value="" />
               {this.state.availablePremises.map(p =>
                 <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
-                    <CopiableExpression expression={p.statement} boundVariableLists={boundVariableLists} />
+                    <CopiableExpression expression={p.statement} />
                   )}}/>
               )}
             </Form.Control>
@@ -479,7 +471,6 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
             {this.state.premiseToRewrite && <Rewriter
               title="Rewriting Premise"
               expression={this.state.premiseToRewrite}
-              boundVariableLists={boundVariableLists}
               path={path}
               onSave={rewrites => this.rewritePremise({serializedPremise: this.state.premiseToRewrite.serialize(), rewrites})}
             />}
@@ -487,7 +478,6 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
           {activeProvingType === 'extract' && <PremiseOrFactChooser
             title="Extract from"
             availablePremises={this.state.availablePremises}
-            boundVariableLists={boundVariableLists}
             path={path}
             onPremiseSelected={this.extractWithPremise}
             onFactSelected={this.extractWithFact}
@@ -495,7 +485,6 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
           {activeProvingType === 'extractPremise' && <Extractor
             title="Extract using premise"
             availablePremises={this.state.availablePremises}
-            boundVariableLists={boundVariableLists}
             path={path}
             onSave={() => this.setProvingType(null)}
           />}
@@ -530,14 +519,13 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
 
 export class TargetStep extends React.Component {
   render() {
-    const {step, path, boundVariableLists, additionalReferences} = this.props;
+    const {step, path, additionalReferences} = this.props;
     return <TargetStepProofLine {...this.props}>
       <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
                                                   prefix="Then"
                                                   statement={step.statement}
                                                   path={path}
-                                                  additionalReferences={additionalReferences}
-                                                  boundVariableLists={boundVariableLists} />
+                                                  additionalReferences={additionalReferences} />
     </TargetStepProofLine>
   }
 }

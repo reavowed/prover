@@ -12,8 +12,7 @@ const Premise = connect(
   (state, {statement, index}) => {
     return {
       expression: statement,
-      references: [new PremiseReference(index)],
-      boundVariableLists: []
+      references: [new PremiseReference(index)]
     }
   })(HighlightableExpression);
 

@@ -48,8 +48,7 @@ export default class Proof extends React.Component {
       <h4>{title}</h4>
       <ProofContext.Provider value={proofContext}>
         <Steps steps={steps}
-               path={[]}
-               boundVariableLists={[]}/>
+               path={[]} />
       </ProofContext.Provider>
     </>;
   }

@@ -13,11 +13,10 @@ export const AssertionStepProofLine = connect()(class AssertionStepProofLine ext
   };
 
   render() {
-    let {step, path, children, boundVariableLists} = this.props;
+    let {step, path, children} = this.props;
     return <ProofLine premiseReferences={step.referencedLines}
                       path={path}
                       statement={step.statement}
-                      boundVariableLists={boundVariableLists}
                       buttons={<>
                         <InferenceLink inference={step.inference}/>
                         {!step.isComplete && <Button variant="success" size="sm" onClick={this.createTargets}>Create targets</Button>}
@@ -30,13 +29,12 @@ export const AssertionStepProofLine = connect()(class AssertionStepProofLine ext
 
 export class AssertionStep extends React.Component {
   render() {
-    const {step, path, boundVariableLists, additionalReferences} = this.props;
+    const {step, path, additionalReferences} = this.props;
     return <AssertionStepProofLine {...this.props}>
       <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
                                                   prefix="Then"
                                                   statement={step.statement}
                                                   path={path}
-                                                  boundVariableLists={boundVariableLists}
                                                   additionalReferences={additionalReferences} />
     </AssertionStepProofLine>
   }

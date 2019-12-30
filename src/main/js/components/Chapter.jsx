@@ -98,7 +98,7 @@ class DefinitionResult extends React.Component {
     const {title, entry, children, updateChapter, editing} = this.props;
 
     return <>
-      <Result title={<>{title}: <CopiableExpression expression={entry.defaultValue} boundVariableLists={[]}/></>}
+      <Result title={<>{title}: <CopiableExpression expression={entry.defaultValue} /></>}
               url={entry.url}
               updateChapter={updateChapter}
               buttons={editing && <Button size="sm" variant="primary" className="ml-1 mb-n2" onClick={this.startEditingShorthand}>Shorthand</Button>}
@@ -166,12 +166,12 @@ export class Chapter extends React.Component {
         return <InferenceResult key={entry.url} title="Theorem" entry={entry} updateChapter={this.updateChapter} incomplete={!entry.isComplete} editing={editing} />;
       case "statementDefinition":
         return <DefinitionResult key={entry.url} title="Statement Definition" entry={entry} updateChapter={this.updateChapter} editing={editing}>
-          {entry.definingStatement && <><CopiableExpression expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <CopiableExpression expression={entry.definingStatement} boundVariableLists={[]}/>.</>}
+          {entry.definingStatement && <><CopiableExpression expression={entry.defaultValue}/> is defined by <CopiableExpression expression={entry.definingStatement}/>.</>}
         </DefinitionResult>;
       case "termDefinition":
         return <DefinitionResult key={entry.url} title="Term Definition" entry={entry} updateChapter={this.updateChapter} editing={editing}>
           <ResultWithPremises premises={entry.premises}
-                              result={<><CopiableExpression expression={entry.defaultValue} boundVariableLists={[]}/> is defined by <CopiableExpression expression={entry.definingStatement} boundVariableLists={[]}/></>}/>
+                              result={<><CopiableExpression expression={entry.defaultValue}/> is defined by <CopiableExpression expression={entry.definingStatement}/></>}/>
         </DefinitionResult>;
       case "typeDefinition":
         const definition = window.typeDefinitions[entry.symbol];
@@ -179,7 +179,7 @@ export class Chapter extends React.Component {
                        url={entry.url}
                        key={entry.url}
                        updateChapter={this.updateChapter}>
-          {entry.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormatString, s => replacePlaceholders(s, entry.components))} if <CopiableExpression expression={entry.definingStatement} boundVariableLists={[]}/>.
+          {entry.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormatString, s => replacePlaceholders(s, entry.components))} if <CopiableExpression expression={entry.definingStatement}/>.
         </Result>;
       case "propertyDefinition":
         const typeDefinition = window.typeDefinitions[entry.parentTypeSymbol];
@@ -187,7 +187,7 @@ export class Chapter extends React.Component {
                        url={entry.url}
                        key={entry.url}
                        updateChapter={this.updateChapter}>
-          <Capitalized>{typeDefinition.article}</Capitalized> {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <CopiableExpression expression={entry.definingStatement} boundVariableLists={[]}/>.
+          <Capitalized>{typeDefinition.article}</Capitalized> {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
         </Result>;
       case "comment":
         return <p key={entry.url}>{entry.text}</p>;

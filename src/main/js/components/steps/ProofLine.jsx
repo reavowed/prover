@@ -168,7 +168,7 @@ ProofLine.SingleStatementWithPrefixContent = connect()(class SingleStatementWith
   static contextType = ProofContext;
 
   render() {
-    const {editableBoundVariable, prefix, statement, path, suffix, additionalReferences, boundVariableLists, dispatch} = this.props;
+    const {editableBoundVariable, prefix, statement, path, suffix, additionalReferences, dispatch} = this.props;
     const context = this.context;
     const wrapEditableBoundVariable = (name, index, boundVariablePath) => {
       const callback = (newName) => {
@@ -179,18 +179,17 @@ ProofLine.SingleStatementWithPrefixContent = connect()(class SingleStatementWith
       };
       return <InlineTextEditor text={name} callback={callback} />;
     };
-    return <span onContextMenu={() => navigator.clipboard.writeText(statement.serializeNicely(boundVariableLists))}>
+    return <>
       {prefix}
       {statement && <>
         {' '}
         <HighlightableExpression expression={statement}
-                                 boundVariableLists={boundVariableLists}
                                  references={[new StepReference(path, suffix)]}
                                  additionalReferences={additionalReferences || []}
                                  wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}/>
        </>}
       {'.'}
-    </span>
+    </>
   }
 });
 

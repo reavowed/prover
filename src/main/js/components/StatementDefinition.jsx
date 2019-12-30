@@ -12,8 +12,8 @@ export class StatementDefinition extends React.Component {
     const definition = Parser.parseStatementDefinition(definitionJson);
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
-      <h3>Statement Definition:  <CopiableExpression expression={definition.defaultValue} boundVariableLists={[]}/></h3>
-      {definition.definingStatement && <><CopiableExpression expression={definition.defaultValue} boundVariableLists={[]}/> is defined by <CopiableExpression expression={definition.definingStatement} boundVariableLists={[]}/>.</>}
+      <h3>Statement Definition:  <CopiableExpression expression={definition.defaultValue} /></h3>
+      {definition.definingStatement && <><CopiableExpression expression={definition.defaultValue} /> is defined by <CopiableExpression expression={definition.definingStatement} />.</>}
       {definition.definingStatement && usages.length > 0 && <hr/>}
       {usages.length > 0 && <Usages usages={usages}/>}
     </Page>;

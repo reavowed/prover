@@ -17,7 +17,7 @@ export class SubproofStep extends React.Component {
     this.setState({showingSubproof: !this.state.showingSubproof})
   };
   render() {
-    let {step, path, additionalReferences, boundVariableLists} = this.props;
+    let {step, path, additionalReferences} = this.props;
     let {showingSubproof} = this.state;
     let reference = new StepReference(path);
     let referencesForLastStep = [...additionalReferences, reference];
@@ -27,19 +27,14 @@ export class SubproofStep extends React.Component {
         <ProofLine path={path}
                    statement={step.statement}
                    premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
-                   boundVariableLists={boundVariableLists}
                    incomplete={!step.isComplete}
                    onClick={this.toggleSubproof}>
           Then
           {' '}
-          {step.statement ?
-            <HighlightableExpression expression={step.statement}
-                                     boundVariableLists={boundVariableLists}
-                                     references={[reference]} /> : "???"}.
+          {step.statement ? <HighlightableExpression expression={step.statement} references={[reference]} /> : "???"}.
         </ProofLine>}
       {showingSubproof && <Steps.Children steps={step.substeps}
                                           path={path}
-                                          boundVariableLists={boundVariableLists}
                                           referencesForLastStep={referencesForLastStep} />}
     </>;
   }

@@ -54,7 +54,7 @@ class TransitiveSteps extends React.Component {
   }
 
   render() {
-    const {leftHandSide, rightHandSides, boundVariableLists, referencesForLastStep} = this.props;
+    const {leftHandSide, rightHandSides, referencesForLastStep} = this.props;
 
     class RightHandSide extends React.Component {
       constructor(props) {
@@ -84,20 +84,17 @@ class TransitiveSteps extends React.Component {
           {hovered && rightHandSide.elidedLeftHandSide && <PositionToleft ref={ref => this.span = ref}>
             <HighlightableExpression expression={rightHandSide.elidedLeftHandSide}
                                      expressionToCopy={rightHandSide.step.statement}
-                                     boundVariableLists={boundVariableLists}
                                      references={rightHandSide.references}
                                      additionalPremiseReferences={additionalReferences} />
             {' '}
           </PositionToleft>}
           <HighlightableExpression expression={{textForHtml: () => rightHandSide.symbol}}
                                    expressionToCopy={rightHandSide.step.statement}
-                                   boundVariableLists={[]}
                                    references={rightHandSide.references}
                                    additionalReferences={additionalReferences}/>
           {' '}
           <HighlightableExpression expression={rightHandSide.expression}
                                    expressionToCopy={rightHandSide.step.statement}
-                                   boundVariableLists={boundVariableLists}
                                    references={rightHandSide.references}
                                    additionalPremiseReferences={additionalReferences}
                                    additionalConclusionReferences={nextRightHandSide && nextRightHandSide.highlightsPreviousAsConclusion && nextRightHandSide.references}/>.
@@ -118,11 +115,10 @@ class TransitiveSteps extends React.Component {
 
     return <>
       {renderProofLine(
-        {step: leftHandSide.step, path: leftHandSide.path, boundVariableLists},
+        {step: leftHandSide.step, path: leftHandSide.path},
         <>
           <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
                                                                             expressionToCopy={rightHandSides[0].step.statement}
-                                                                            boundVariableLists={boundVariableLists}
                                                                             references={[leftHandSide.lineReference]}
                                                                             additionalReferences={referencesForLastStep}
                                                                             additionalPremiseReferences={_.flatMap(rightHandSides, rhs => rhs.references)}
@@ -133,7 +129,7 @@ class TransitiveSteps extends React.Component {
       )}
       {rightHandSides.slice(1).map((rightHandSide, index) =>
         renderProofLine(
-          {step: rightHandSide.step, path: rightHandSide.path, boundVariableLists, key: "transitive " + rightHandSide.expression.serialize()},
+          {step: rightHandSide.step, path: rightHandSide.path, key: "transitive " + rightHandSide.expression.serialize()},
           isHovered => <>
             <span ref={r => this.setSpacerRef(r, rightHandSide.path.join("."))}/>
             <RightHandSide rightHandSide={rightHandSide} index={index + 1} hovered={isHovered} />

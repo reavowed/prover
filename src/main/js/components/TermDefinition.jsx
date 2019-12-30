@@ -49,9 +49,9 @@ export class TermDefinition extends React.Component {
     const {definition, newSymbol, newAttributes} = this.state;
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
-      <h3>Term Definition:  <CopiableExpression expression={definition.defaultValue} boundVariableLists={[]}/></h3>
+      <h3>Term Definition:  <CopiableExpression expression={definition.defaultValue} /></h3>
       <ResultWithPremises premises={definition.premises}
-                          result={<><CopiableExpression expression={definition.defaultValue} boundVariableLists={[]}/> is defined by <CopiableExpression expression={definition.definingStatement} boundVariableLists={[]}/></>}/>
+                          result={<><CopiableExpression expression={definition.defaultValue} /> is defined by <CopiableExpression expression={definition.definingStatement} /></>}/>
       <hr/>
       <Row>
         <Col xs={1}><strong>Symbol</strong></Col>

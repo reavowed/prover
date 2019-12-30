@@ -99,7 +99,7 @@ export default connect()(class Rewriter extends React.Component {
   };
 
   render() {
-    const {title, boundVariableLists, onSave} = this.props;
+    const {title, onSave} = this.props;
     const {currentExpression, selectedInferenceSuggestion, selectedPremiseSuggestion, chosenRewrites} = this.state;
     const currentPaths = this.getCurrentPaths();
 
@@ -120,13 +120,13 @@ export default connect()(class Rewriter extends React.Component {
     let getSuggestionValue = s => s.inference.name;
     let renderSuggestion = s => <SuggestionDropdownElement
       mainElement={getSuggestionValue(s)}
-      hoverElement={<><CopiableExpression expression={s.source} boundVariableLists={[]} /> -> <CopiableExpression expression={s.result} boundVariableLists={[]} /></>} />;
+      hoverElement={<><CopiableExpression expression={s.source} /> -> <CopiableExpression expression={s.result} /></>} />;
 
     return <>
       <Form.Group>
         <Form.Label><strong>{title}</strong></Form.Label>
         <div>
-          <CopiableExpression expression={currentExpression} boundVariableLists={boundVariableLists} actionHighlights={actionHighlights} staticHighlights={staticHighlights} />
+          <CopiableExpression expression={currentExpression} actionHighlights={actionHighlights} staticHighlights={staticHighlights} />
         </div>
       </Form.Group>
       <Form.Group>

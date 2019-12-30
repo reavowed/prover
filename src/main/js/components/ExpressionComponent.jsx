@@ -1,9 +1,10 @@
 import _ from "lodash";
-import React from "react";
+import React, {useContext} from "react";
 import {connect} from "react-redux";
 import styled from "styled-components";
 import {matchTemplate, PropertyExpression, TypeExpression} from "../models/Expression";
 import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "./helpers/Formatter";
+import BoundVariableLists from "./steps/BoundVariableLists";
 
 const HighlightedPremise = styled.span`
   color: red;
@@ -22,7 +23,7 @@ function filterPaths(paths, initialPath) {
     .value();
 }
 
-export class ExpressionComponent extends React.Component {
+class ExpressionComponent extends React.Component {
   matchDisplayShorthand(displayShorthand, expression, pathWithinMatch, boundVariablesWithinMatch) {
     const matches = matchTemplate(displayShorthand.template, expression, pathWithinMatch, boundVariablesWithinMatch);
     if (matches) {
@@ -119,8 +120,9 @@ export class ExpressionComponent extends React.Component {
 
 export const CopiableExpression = (props) => {
   const expressionToCopy = props.expressionToCopy || props.expression;
-  return <span onContextMenu={() => navigator.clipboard.writeText(expressionToCopy.serializeNicely(props.boundVariableLists))}>
-      <ExpressionComponent {...props}/>
+  const boundVariableLists = useContext(BoundVariableLists) || [];
+  return <span onContextMenu={() => navigator.clipboard.writeText(expressionToCopy.serializeNicely(boundVariableLists))}>
+      <ExpressionComponent {...props} boundVariableLists={boundVariableLists}/>
     </span>
 };
 
@@ -160,11 +162,10 @@ export const HighlightableExpression = connect(
     return !_.isEqual(this.props, nextProps);
   }
   render() {
-    const {expression, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, className} = this.props;
+    const {expression, actionHighlights, staticHighlights, wrapBoundVariable, className} = this.props;
     const expressionElement = <CopiableExpression expression={expression}
                                                   actionHighlights={actionHighlights}
                                                   staticHighlights={staticHighlights}
-                                                  boundVariableLists={boundVariableLists}
                                                   wrapBoundVariable={wrapBoundVariable}
                                                   parentRequiresBrackets={false}/>;
     return className ? <span className={className}>{expressionElement}</span> : expressionElement;
