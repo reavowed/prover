@@ -1,6 +1,7 @@
 import {Expression} from "./Expression";
 import {Parser} from "../Parser";
 import * as _ from "lodash";
+import {sha256} from "js-sha256";
 
 export class PremiseReference {
     type = "premise";
@@ -29,6 +30,7 @@ export class AssertionStep {
     constructor(public statement: Expression, public premises: any, public inference: any, public referencedLines: Reference[], public isComplete: boolean) {}
     inferencesUsed: any[] = [this.inference];
     allSubsteps: Step[] = [];
+    id: String = sha256(this.type + " " + this.statement.serialize())
 }
 
 export class DeductionStep {
@@ -37,6 +39,7 @@ export class DeductionStep {
     isComplete: boolean = _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
+    id: String = sha256([this.type + " " + this.assumption.serialize(), ..._.map(this.substeps, s => s.id)].join("\n"))
 }
 
 export class ScopedVariableStep {
@@ -45,6 +48,7 @@ export class ScopedVariableStep {
     isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
+    id: String = sha256([this.type, ..._.map(this.substeps, s => s.id)].join("\n"))
 }
 
 export class NamingStep {
@@ -53,6 +57,7 @@ export class NamingStep {
     isComplete: boolean = _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = [..._.flatMap(this.substeps, s => s.inferencesUsed), this.inference];
     allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
+    id: String = sha256([this.type + " " + this.assumption.serialize(), ..._.map(this.substeps, s => s.id)].join("\n"))
 }
 
 export class ElidedStep {
@@ -61,6 +66,7 @@ export class ElidedStep {
     isComplete: boolean = (this.highlightedInference || this.description) && _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
+    id: String = sha256([this.type + (this.statement ? " " + this.statement.serialize() : ""), ..._.map(this.substeps, s => s.id)].join("\n"))
 }
 
 export class TargetStep {
@@ -69,6 +75,7 @@ export class TargetStep {
     isComplete: boolean = false;
     inferencesUsed: any[] = [];
     allSubsteps: Step[] = [];
+    id: String = sha256(this.type + " " + this.statement.serialize())
 }
 
 export class SubproofStep {
@@ -77,6 +84,7 @@ export class SubproofStep {
     isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
+    id: String = sha256([this.type + " " + this.statement.serialize(), ..._.map(this.substeps, s => s.id)].join("\n"))
 }
 
 export type Step = AssertionStep | DeductionStep | ScopedVariableStep | NamingStep | TargetStep | ElidedStep | SubproofStep;

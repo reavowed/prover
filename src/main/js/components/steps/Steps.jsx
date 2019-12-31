@@ -1,3 +1,4 @@
+import {sha256} from "js-sha256";
 import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
@@ -161,24 +162,7 @@ export class Steps extends React.Component {
         return SubproofStep;
     }
   }
-  static getKey(step) {
-    switch (step.type) {
-      case "assertion":
-        return "prove " + step.statement.serialize();
-      case "target":
-        return "target " + step.statement.serialize();
-      case "deduction":
-        return "assume " + step.assumption.serialize() + (step.provenStatement ? " for " + step.provenStatement.serialize() : "");
-      case "scopedVariable":
-        return "take " + step.variableName + (step.provenStatement ? " for " + step.provenStatement.serialize() : "");
-      case "naming":
-        return "name " + step.variableName + " as " + step.assumption.serialize() + (step.provenStatement ? " for " + step.provenStatement.serialize() : "");
-      case "elided":
-        return "elide " + (step.statement ? step.statement.serialize() : "???");
-      case "subproof":
-        return "subproof " + (step.statement ? step.statement.serialize() : "???");
-    }
-  }
+
   static getTransitivityDetails(stepsWithIndexes, firstStep, firstBinaryRelation, basePath, firstIndex) {
     const firstStepMatch = matchTemplate(firstBinaryRelation.template, firstStep.statement, [], []);
     const firstLinePath = [...basePath, firstIndex];
@@ -275,7 +259,8 @@ export class Steps extends React.Component {
       if (binaryRelation) {
         const transitivityDetails = this.getTransitivityDetails(stepsWithIndexes, step, binaryRelation, path, index);
         if (transitivityDetails) {
-          return <TransitiveSteps key={"transitivity for " + transitivityDetails.finalStatement.serialize()}
+          const key = sha256(["transitivity " + transitivityDetails.finalStatement.serialize(), ... _.map(transitivityDetails.rightHandSides, rhs => rhs.step.id)].join("\n"));
+          return <TransitiveSteps key={key}
                                   referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []}
                                   {...transitivityDetails}
                                   {...otherProps}/>;
@@ -285,7 +270,7 @@ export class Steps extends React.Component {
     const props = {
       step,
       path: [...path, index],
-      key: Steps.getKey(step),
+      key: step.id,
       additionalReferences: (index === lastIndex) ? referencesForLastStep || [] : [],
       ...otherProps
     };
