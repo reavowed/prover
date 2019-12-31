@@ -11,6 +11,7 @@ import {TermDefinition} from "./components/TermDefinition"
 export { Books, Book, Chapter, Theorem, Axiom, StatementDefinition, TermDefinition };
 export function render(component, props) {
   const element = document.createElement("div");
+  element.style.height="100%";
   document.body.append(element);
   ReactDOM.render(React.createElement(component, props), element);
 }
