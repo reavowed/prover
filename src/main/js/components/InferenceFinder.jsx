@@ -1,11 +1,11 @@
 import _ from "lodash";
-import React from "react";
+import React, {useContext} from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {Parser} from "../Parser";
-import {CopiableExpression} from "./ExpressionComponent";
+import {CopiableExpression, ExpressionComponent} from "./ExpressionComponent";
 import InferenceAutosuggest from "./InferenceAutosuggest";
 import {InferenceSummary} from "./InferenceSummary";
 import SuggestionDropdownElement from "./SuggestionDropdownElement";
@@ -234,7 +234,31 @@ export class InferenceFinder extends React.Component {
   };
 
   render() {
-    let showSubstitutionOptions = (name, key, validValues, getter, setter) => {
+    let PremiseSuggestions = () => {
+      const boundVariableLists = useContext(BoundVariableLists) || [];
+      return <Form.Group>
+        <Form.Label><strong>Premises</strong></Form.Label>
+        {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
+          <Form.Group as={Form.Row} key={i}>
+            <Col xs={4}>
+              <CopiableExpression expression={premise} />
+            </Col>
+            <Col>
+              <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)}>
+                <option value="" />
+                {suggestions.map((s, i) =>
+                  <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
+                      <ExpressionComponent expression={s.statement} boundVariableLists={boundVariableLists} />
+                    )}}/>
+                )}
+              </Form.Control>
+            </Col>
+          </Form.Group>
+        )}
+      </Form.Group>
+    };
+    let SubstitutionOptions = ({name, validValues, getter, setter}) => {
+      const boundVariableLists = useContext(BoundVariableLists) || [];
       const selectionElement = !validValues ?
         <Form.Control type="text"
                       value={getter(this.state.selectedSubstitutionValues)}
@@ -247,12 +271,12 @@ export class InferenceFinder extends React.Component {
             <option value="" />
             {validValues.map(v =>
               <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                  <CopiableExpression expression={v} />
+                  <ExpressionComponent expression={v} boundVariableLists={boundVariableLists} />
                 )}}/>
             )}
           </Form.Control>;
 
-      return <Form.Group key={key} as={Form.Row}>
+      return <Form.Group as={Form.Row}>
         <Form.Label column xs={2}><CopiableExpression expression={{textForHtml: () => name}}/></Form.Label>
         <Form.Label column xs={1}>&rarr;</Form.Label>
         <Col>{selectionElement}</Col>
@@ -262,7 +286,7 @@ export class InferenceFinder extends React.Component {
       const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
       return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name => {
         const validValues = this.getValidSubstitutionValues(key, name);
-        return showSubstitutionOptions(name, `${key} ${name}`, validValues, x => x[key][name], (x, y) => x[key][name] = y);
+        return <SubstitutionOptions name={name} key={`${key} ${name}`} validValues={validValues} getter={x => x[key][name]} setter={x => x[key][name] = y} />;
       });
     };
     let showParameteredSubstitutions = (key) => {
@@ -270,10 +294,10 @@ export class InferenceFinder extends React.Component {
       return requiredSubstitutions.length > 0 && requiredSubstitutions.map(([name, numberOfParameters]) => {
         const validValues = this.getValidSubstitutionValues(key, name, numberOfParameters);
         const newVariableList = numberOfParameters === 1 ? ["$"] : _.map(_.range(numberOfParameters), x => "$_" + (x+1));
-        return <BoundVariableLists.Add variables={newVariableList}>
-          showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, `${key} ${name} ${numberOfParameters}`, validValues, x => x[key][name][numberOfParameters], (x, y) => x[key][name][numberOfParameters] = y);
+        return <BoundVariableLists.Add variables={newVariableList} key={`${key} ${name} ${numberOfParameters}`}>
+          <SubstitutionOptions name={`${name}(${newVariableList.join(", ")})`} validValues={validValues} getter={x => x[key][name][numberOfParameters]} setter={(x, y) => x[key][name][numberOfParameters] = y} />
         </BoundVariableLists.Add>
-        });
+      });
     };
     const {title, autofocus} = this.props;
 
@@ -300,28 +324,7 @@ export class InferenceFinder extends React.Component {
         <Form.Group>
           <InferenceSummary inference={this.state.selectedInferenceSuggestion.inference}/>
         </Form.Group>
-        { this.state.premiseSuggestions &&
-        <Form.Group>
-          <Form.Label><strong>Premises</strong></Form.Label>
-          {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
-            <Form.Group as={Form.Row} key={i}>
-              <Col xs={4}>
-                <CopiableExpression expression={premise} />
-              </Col>
-              <Col>
-                <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)}>
-                  <option value="" />
-                  {suggestions.map((s, i) =>
-                    <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                        <CopiableExpression expression={s.statement} />
-                      )}}/>
-                  )}
-                </Form.Control>
-              </Col>
-            </Form.Group>
-          )}
-        </Form.Group>
-        }
+        { this.state.premiseSuggestions && <PremiseSuggestions/> }
         <Form.Group>
           <Form.Label><strong>Substitutions</strong></Form.Label>
           {_.flatten([
