@@ -1,6 +1,8 @@
 import path from "path";
 import React from "react";
 import Button from "react-bootstrap/Button";
+import {DndProvider} from "react-dnd";
+import Backend from "react-dnd-html5-backend";
 import {Steps} from "../steps/Steps";
 import {FetchJsonAndUpdate} from "./TheoremStore";
 import ProofContext from "./ProofContext";
@@ -47,8 +49,12 @@ export default class Proof extends React.Component {
       <Button onClick={this.duplicate} variant="primary" size="sm" className="float-right ml-1"><i className="fas fa-copy"/></Button>
       <h4>{title}</h4>
       <ProofContext.Provider value={proofContext}>
-        <Steps steps={steps}
-               path={[]} />
+        <DndProvider backend={Backend}>
+          <Steps.Container path={[]}>
+            <Steps steps={steps}
+                   path={[]} />
+          </Steps.Container>
+        </DndProvider>
       </ProofContext.Provider>
     </>;
   }

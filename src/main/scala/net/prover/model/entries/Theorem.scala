@@ -42,7 +42,7 @@ case class Theorem(
   def modifySteps[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int])(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Theorem]] = {
     modifyProof(proofIndex, _.modifySteps(stepIndexes, initialStepContext, f))
   }
-  def modifyStep[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int], f: (Step, StepContext) => F[Step]): Option[F[Theorem]] = {
+  def modifyStep[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int])(f: (Step, StepContext) => F[Step]): Option[F[Theorem]] = {
     modifyProof(proofIndex, _.modifyStep(stepIndexes, initialStepContext, f))
   }
   def recalculateReferences(provingContext: ProvingContext): Theorem = {
@@ -110,18 +110,7 @@ object Theorem extends Inference.EntryParser {
       }
     }
     def modifySteps[F[_] : Functor](indexes: Seq[Int], initialStepContext: StepContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Proof]] = {
-      def helper(indexes: Seq[Int], steps: Seq[Step], outerContext: StepContext): Option[F[Seq[Step]]] = {
-        indexes match {
-          case Nil =>
-            f(steps, outerContext)
-          case head +: tail =>
-            steps.splitAtIndexIfValid(head).flatMap { case (before, step, after) =>
-                step.modifySubsteps(outerContext.addSteps(before).atIndex(head), (substeps, innerContext) => helper(tail, substeps, innerContext))
-                  .map(_.map(updatedStep => (before :+ updatedStep) ++ after))
-            }
-        }
-      }
-      helper(indexes, steps, initialStepContext).map(_.map(Proof))
+      Proof.modifySteps(steps, indexes, initialStepContext)(f).map(_.map(Proof(_)))
     }
     def modifyStep[F[_] : Functor](indexes: Seq[Int], initialStepContext: StepContext, f: (Step, StepContext) => F[Step]): Option[F[Proof]] = {
       indexes match {
@@ -178,12 +167,26 @@ object Theorem extends Inference.EntryParser {
     def serializedLines: Seq[String] = Seq("{") ++ steps.flatMap(_.serializedLines).indent ++ Seq("}")
   }
 
-  def proofsParser(premises: Seq[Statement], conclusion: Statement)(implicit entryContext: EntryContext): Parser[Seq[Proof]] = {
+  object Proof {
+    def modifySteps[F[_] : Functor](steps: Seq[Step], indexes: Seq[Int], outerContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Seq[Step]]] = {
+      indexes match {
+        case Nil =>
+          f(steps, outerContext)
+        case head +: tail =>
+          steps.splitAtIndexIfValid(head).flatMap { case (before, step, after) =>
+            step.modifySubsteps(outerContext.addSteps(before).atIndex(head)) { (substeps, innerContext) => modifySteps(substeps, tail, innerContext)(f) }
+              .map(_.map(updatedStep => (before :+ updatedStep) ++ after))
+          }
+      }
+    }
+  }
+
+  def proofsParser(theoremName: String, premises: Seq[Statement], conclusion: Statement)(implicit entryContext: EntryContext): Parser[Seq[Proof]] = {
     val proofParser = for {
       steps <- Step.listParser(
         entryContext,
         StepContext.withPremisesAndTerms(premises, (premises :+ conclusion).map(_.requiredSubstitutions).foldTogether.terms)).inBraces
-      _ = if (!steps.mapCollect(_.provenStatement).lastOption.contains(conclusion)) throw new Exception(s"Proof of theorem '$name' did not prove $conclusion")
+      _ = if (!steps.mapCollect(_.provenStatement).lastOption.contains(conclusion)) throw new Exception(s"Proof of theorem '$theoremName' did not prove $conclusion")
     } yield Proof(steps)
 
     for {
@@ -199,7 +202,7 @@ object Theorem extends Inference.EntryParser {
       rearrangementType <- RearrangementType.parser
       premises <- premisesParser
       conclusion <- conclusionParser
-      proofs <- proofsParser(premises, conclusion)
+      proofs <- proofsParser(name, premises, conclusion)
     } yield {
       Theorem(
         name,

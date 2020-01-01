@@ -27,6 +27,7 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
       } yield step.copy(highlightedInference = Some(inference))
     }.toResponseEntity
   }
+
   @PostMapping(value = Array("/description"))
   def setDescription(
     @PathVariable("bookKey") bookKey: String,
@@ -82,7 +83,7 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("boundVariableIndex") boundVariableIndex: Int,
     @RequestBody boundVariableName: String
   ): ResponseEntity[_] = {
-    modifyStep[Step.WithTopLevelStatement](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step,_ ) =>
+    modifyStep[Step.WithTopLevelStatement](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, _) =>
       step.updateStatement(s => s.renameBoundVariable(boundVariableName, boundVariableIndex, Option(statementPath).map(_.indexes).getOrElse(Nil)).orNotFound(s"Bound variable $boundVariableIndex at $statementPath"))
     }.toResponseEntity
   }

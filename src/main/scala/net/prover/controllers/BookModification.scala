@@ -115,7 +115,7 @@ trait BookModification {
 
   case class TheoremProps(theorem: Theorem, newInferences: Map[String, LinkSummary])
   protected def modifyTheorem(bookKey: String, chapterKey: String, theoremKey: String)(f: (Theorem, ProvingContext) => Try[Theorem]): Try[TheoremProps] = {
-    modifyEntry[Theorem, WithValueB[TheoremProps]#Type](bookKey, chapterKey, theoremKey, (books, definitions, book, chapter, theorem) => {
+    modifyEntry[Theorem, WithValue[TheoremProps]#Type](bookKey, chapterKey, theoremKey, (books, definitions, book, chapter, theorem) => {
       val provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
       for {
         newTheorem <- f(theorem, provingContext).map(_.recalculateReferences(provingContext))
@@ -125,14 +125,23 @@ trait BookModification {
     }).map(_._2)
   }
 
-  protected def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepProvingContext) => Try[Step]): Try[TheoremProps] = {
+  implicit def toIndexes(pathData: PathData): Seq[Int] = pathData.indexes
+
+  protected def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[TheoremProps] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-      theorem.modifyStep[Try](proofIndex, stepPath.indexes, (step, stepContext) => {
+      theorem.modifyStep[Try](proofIndex, stepPath) { (step, stepContext) =>
         for {
           typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
           newStep <- f(typedStep, StepProvingContext(stepContext, provingContext))
         } yield newStep
-      }).orNotFound(s"Step $stepPath").flatten
+      }.orNotFound(s"Step $stepPath").flatten
+    }
+  }
+  protected def modifySteps(bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[Seq[Step]]): Try[TheoremProps] = {
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
+      theorem.modifySteps[Try](proofIndex, stepPath) { (steps, stepContext) =>
+        Some(f(steps, StepProvingContext(stepContext, provingContext)))
+      }.orNotFound(s"Step $stepPath").flatten
     }
   }
 

@@ -23,7 +23,7 @@ function filterPaths(paths, initialPath) {
     .value();
 }
 
-class ExpressionComponent extends React.Component {
+export class ExpressionComponent extends React.Component {
   matchDisplayShorthand(displayShorthand, expression, pathWithinMatch, boundVariablesWithinMatch) {
     const matches = matchTemplate(displayShorthand.template, expression, pathWithinMatch, boundVariablesWithinMatch);
     if (matches) {

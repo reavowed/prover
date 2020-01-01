@@ -5,6 +5,7 @@ import ProofContext from "../theorem/ProofContext";
 import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import {InferenceLink} from "./InferenceLink";
 import ProofLine from "./ProofLine";
+import Step from "./Step";
 
 export const AssertionStepProofLine = connect()(class AssertionStepProofLine extends React.Component {
   static contextType = ProofContext;
@@ -30,12 +31,14 @@ export const AssertionStepProofLine = connect()(class AssertionStepProofLine ext
 export class AssertionStep extends React.Component {
   render() {
     const {step, path, additionalReferences} = this.props;
-    return <AssertionStepProofLine {...this.props}>
-      <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
-                                                  prefix="Then"
-                                                  statement={step.statement}
-                                                  path={path}
-                                                  additionalReferences={additionalReferences} />
-    </AssertionStepProofLine>
+    return <Step.WithoutSubsteps>
+      <AssertionStepProofLine {...this.props}>
+        <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
+                                                    prefix="Then"
+                                                    statement={step.statement}
+                                                    path={path}
+                                                    additionalReferences={additionalReferences} />
+      </AssertionStepProofLine>
+    </Step.WithoutSubsteps>
   }
 }

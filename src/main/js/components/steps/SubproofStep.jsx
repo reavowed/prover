@@ -2,8 +2,10 @@ import React from "react";
 import {StepReference} from "../../models/Step";
 import {HighlightableExpression} from "../ExpressionComponent";
 import ProofLine from "./ProofLine";
+import Step from "./Step";
 import {Steps} from "./Steps";
 import {formatHtml} from "../helpers/Formatter";
+import DraggableList from "../DraggableList";
 
 export class SubproofStep extends React.Component {
   constructor(...args) {
@@ -21,9 +23,16 @@ export class SubproofStep extends React.Component {
     let {showingSubproof} = this.state;
     let reference = new StepReference(path);
     let referencesForLastStep = [...additionalReferences, reference];
-    return <>
-      <h6 onClick={this.toggleSubproof} className={"mt-1 mb-1"} style={{cursor: "pointer"}}>{formatHtml(step.name)}</h6>
-      {!showingSubproof &&
+    const titleElement = <h6 onClick={this.toggleSubproof} className={"mt-1 mb-1"} style={{cursor: "pointer"}}>{formatHtml(step.name)}</h6>;
+    return showingSubproof ?
+      <Step.WithSubsteps path={path}>
+        {titleElement}
+        <Steps.Children steps={step.substeps}
+                        path={path}
+                        referencesForLastStep={referencesForLastStep} />
+      </Step.WithSubsteps> :
+      <Step.WithoutSubsteps>
+        {titleElement}
         <ProofLine path={path}
                    statement={step.statement}
                    premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
@@ -32,10 +41,7 @@ export class SubproofStep extends React.Component {
           Then
           {' '}
           {step.statement ? <HighlightableExpression expression={step.statement} references={[reference]} /> : "???"}.
-        </ProofLine>}
-      {showingSubproof && <Steps.Children steps={step.substeps}
-                                          path={path}
-                                          referencesForLastStep={referencesForLastStep} />}
-    </>;
+        </ProofLine>
+      </Step.WithoutSubsteps>;
   }
 }

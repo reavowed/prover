@@ -1,10 +1,13 @@
 import {sha256} from "js-sha256";
 import _ from "lodash";
-import React from "react";
+import path from "path";
+import React, {useContext} from "react";
 import styled from "styled-components";
 import {matchTemplate} from "../../models/Expression";
 import {StepReference} from "../../models/Step";
+import DraggableList from "../DraggableList";
 import {HighlightableExpression} from "../ExpressionComponent";
+import {FetchJsonAndUpdate, FetchJsonForStep, FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import {AssertionStep, AssertionStepProofLine} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
 import {ElidedStep, ElidedStepProofLine} from "./ElidedStep";
@@ -12,12 +15,15 @@ import {NamingStep} from "./NamingStep";
 import {ScopedVariableStep} from "./ScopedVariableStep";
 import {SubproofStep} from "./SubproofStep";
 import {TargetStep, TargetStepProofLine} from "./TargetStep";
+import ProofContext from "../theorem/ProofContext";
+import {connect} from "react-redux";
+import update from 'immutability-helper';
 
 function findBinaryRelation(statement) {
   return _.find(_.reverse(window.binaryRelations.slice()), x => matchTemplate(x.template, statement, [], []));
 }
 
-const PositionToleft = styled.span`
+const PositionToLeft = styled.span`
   position: absolute;
   right: 100%;
 `;
@@ -82,13 +88,13 @@ class TransitiveSteps extends React.Component {
         const additionalReferences = index === rightHandSides.length - 1 ? referencesForLastStep : [];
         const nextRightHandSide = rightHandSides[index + 1];
         return <span style={{position: "relative"}}>
-          {hovered && rightHandSide.elidedLeftHandSide && <PositionToleft ref={ref => this.span = ref}>
+          {hovered && rightHandSide.elidedLeftHandSide && <PositionToLeft ref={ref => this.span = ref}>
             <HighlightableExpression expression={rightHandSide.elidedLeftHandSide}
                                      expressionToCopy={rightHandSide.step.statement}
                                      references={rightHandSide.references}
                                      additionalPremiseReferences={additionalReferences} />
             {' '}
-          </PositionToleft>}
+          </PositionToLeft>}
           <HighlightableExpression expression={{textForHtml: () => rightHandSide.symbol}}
                                    expressionToCopy={rightHandSide.step.statement}
                                    references={rightHandSide.references}
@@ -143,7 +149,7 @@ class TransitiveSteps extends React.Component {
 
 const allowableTransitivityStepTypes = ["assertion", "elided", "target"];
 
-export class Steps extends React.Component {
+export const Steps = connect()(class Steps extends React.Component {
   static getElementName(step) {
     switch (step.type) {
       case "assertion":
@@ -252,7 +258,7 @@ export class Steps extends React.Component {
     return null;
   }
 
-  static renderNextStep(stepsWithIndexes, path, referencesForLastStep, otherProps, lastIndex) {
+  static renderNextStep(stepsWithIndexes, path, referencesForLastStep) {
     const {step, index} = stepsWithIndexes.shift();
     if (_.includes(allowableTransitivityStepTypes, step.type) && step.statement && step.statement.definition) {
       const binaryRelation = findBinaryRelation(step.statement);
@@ -260,40 +266,85 @@ export class Steps extends React.Component {
         const transitivityDetails = this.getTransitivityDetails(stepsWithIndexes, step, binaryRelation, path, index);
         if (transitivityDetails) {
           const key = sha256(["transitivity " + transitivityDetails.finalStatement.serialize(), ... _.map(transitivityDetails.rightHandSides, rhs => rhs.step.id)].join("\n"));
-          return <TransitiveSteps key={key}
-                                  referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []}
-                                  {...transitivityDetails}
-                                  {...otherProps}/>;
+          return {
+            key,
+            element: <TransitiveSteps referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []}
+                                      {...transitivityDetails} />
+          };
         }
       }
     }
     const props = {
       step,
       path: [...path, index],
-      key: step.id,
-      additionalReferences: (index === lastIndex) ? referencesForLastStep || [] : [],
-      ...otherProps
+      additionalReferences: !stepsWithIndexes.length ? referencesForLastStep || [] : []
     };
-    return React.createElement(Steps.getElementName(step), props);
+    return {
+      key: step.id,
+      element: React.createElement(Steps.getElementName(step), props)
+    }
   }
 
-  static renderSteps(steps, path, referencesForLastStep, otherProps) {
-    const lastIndex = steps.length - 1;
+  static renderSteps(steps, path, referencesForLastStep) {
     const stepsWithIndexes = steps.map((step, index) => ({step,index}));
+    const finalIndex = steps.length;
     const results = [];
+    const indexLookup = [];
+    let currentIndex = 0;
     while (stepsWithIndexes.length) {
-      results.push(this.renderNextStep(stepsWithIndexes, path, referencesForLastStep, otherProps, lastIndex))
+      const startIndex = stepsWithIndexes[0].index;
+      const {key, element} = this.renderNextStep(stepsWithIndexes, path, referencesForLastStep);
+      results.push({key, element, data: {path, startIndex}});
+      indexLookup.push(startIndex);
+      currentIndex += 1;
     }
+    indexLookup.push(finalIndex);
+    _.each(results, (r, i) => r.data.endIndex = indexLookup[i + 1]);
     return results;
   }
 
+
   render() {
-    let {steps, className, path, referencesForLastStep, ...otherProps} = this.props;
+    const {steps, className, path, referencesForLastStep} = this.props;
     return <div className={className}>
-      {Steps.renderSteps(steps, path, referencesForLastStep || [], otherProps)}
+      <DraggableList.Entries entries={Steps.renderSteps(steps, path, referencesForLastStep || [])} />
     </div>;
   }
-}
+});
+
+Steps.Container = connect()(function Container({path: stepsPath, children, dispatch}) {
+  const context = useContext(ProofContext);
+
+  function onDrop({path: sourcePath, startIndex, endIndex}, stepToReplace, after) {
+    let destinationIndex = stepToReplace ?
+      (after ? stepToReplace.endIndex : stepToReplace.startIndex) :
+      (after ? -1 : 0);
+    let destinationPath = stepsPath;
+    if (_.isEqual(sourcePath, stepsPath) && startIndex < stepToReplace.startIndex) {
+      destinationIndex -= (endIndex - startIndex);
+    } else if (sourcePath.length < destinationPath.length && _.isEqual(sourcePath, _.take(destinationPath, sourcePath.length)) && startIndex < destinationPath[sourcePath.length]) {
+      destinationPath = update(destinationPath, {$splice: [[sourcePath.length, 1, destinationPath[sourcePath.length] - (endIndex - startIndex)]]})
+    }
+
+    return dispatch(FetchJsonAndUpdate(
+      path.join("proofs", context.proofIndex.toString(), "moveSteps"),
+      {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          sourcePath,
+          sourceStartIndex: startIndex,
+          sourceEndIndex: endIndex,
+          destinationPath,
+          destinationIndex
+        })
+      }
+    ));
+  }
+  return <DraggableList type="Steps" enabled={true} onDrop={onDrop}>
+    {children}
+  </DraggableList>
+});
 
 Steps.Children = styled(Steps)`
   margin-left: 20px;

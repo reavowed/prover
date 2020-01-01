@@ -5,6 +5,7 @@ import ProofContext from "../theorem/ProofContext";
 import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import {InferenceLink} from "./InferenceLink";
 import ProofLine from "./ProofLine";
+import Step from "./Step";
 import {Steps} from "./Steps";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
 import BoundVariableLists from "./BoundVariableLists";
@@ -25,18 +26,22 @@ export const NamingStep = connect()(class NamingStep extends React.Component {
         {' '}
         be such that
     </>;
-    return <BoundVariableLists.Add variables={[step.variableName]}>
-      <ProofLine.SingleStatementWithPrefix editableBoundVariable
-                                           prefix={prefix}
-                                           statement={step.assumption}
-                                           path={path}
-                                           suffix="a"
-                                           additionalReferences={additionalReferences}
-                                           premiseReferences={step.referencedLinesForExtraction}
-                                           buttons={<InferenceLink inference={step.inference}/>} />
-      <Steps steps={step.substeps}
-             path={path}
-             referencesForLastStep={referencesForLastStep} />
-    </BoundVariableLists.Add>;
+    return <Step.WithSubsteps path={path}>
+      <BoundVariableLists.Add variables={[step.variableName]}>
+        <Step.Antecedent>
+          <ProofLine.SingleStatementWithPrefix editableBoundVariable
+                                               prefix={prefix}
+                                               statement={step.assumption}
+                                               path={path}
+                                               suffix="a"
+                                               additionalReferences={additionalReferences}
+                                               premiseReferences={step.referencedLinesForExtraction}
+                                               buttons={<InferenceLink inference={step.inference}/>} />
+        </Step.Antecedent>
+        <Steps steps={step.substeps}
+               path={path}
+               referencesForLastStep={referencesForLastStep} />
+      </BoundVariableLists.Add>
+    </Step.WithSubsteps>;
   }
 });

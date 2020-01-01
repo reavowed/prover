@@ -12,6 +12,7 @@ import {InlineTextEditor} from "../helpers/InlineTextEditor";
 import {BoundVariableModal} from "../Modals";
 import ProofContext from "../theorem/ProofContext";
 import {FetchJsonForStepAndUpdate, SetHighlightedConclusion, SetHighlightedPremises} from "../theorem/TheoremStore";
+import DraggableList from "../DraggableList";
 
 const ProofLine = connect()(styled(class ProofLine extends React.Component {
   static contextType = ProofContext;
@@ -55,22 +56,6 @@ const ProofLine = connect()(styled(class ProofLine extends React.Component {
     if (this.props.onClick) {
       this.props.onClick(e);
     }
-  };
-  moveUp = (e) => {
-    e.stopPropagation();
-    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "move?direction=up", {method: "POST"}));
-  };
-  moveDown = (e) => {
-    e.stopPropagation();
-    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "move?direction=down", {method: "POST"}));
-  };
-  moveIntoNext = (e) => {
-    e.stopPropagation();
-    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "moveIntoNext", {method: "POST"}));
-  };
-  moveOutOfContainer = (e) => {
-    e.stopPropagation();
-    this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "moveOutOfContainer", {method: "POST"}));
   };
   clearStep = () => {
     this.props.dispatch(FetchJsonForStepAndUpdate(this.context.proofIndex, this.props.path, "clear", {method: "POST"}));
@@ -121,6 +106,9 @@ const ProofLine = connect()(styled(class ProofLine extends React.Component {
           {buttons}
         </span>
         <FlexRow.Grow/>
+        {this.state.isHovered && <DraggableList.DragHandle as="span" key="handle">
+          <Button as="span" size="sm" className="ml-1 mb-n2"><span className="fas fa-arrows-alt-v"/></Button>
+        </DraggableList.DragHandle>}
         {path && (this.state.isHovered || this.state.shouldShowButtonPopover) && <>
           <Button ref={this.attachButtonRef} onClick={this.toggleButtonPopover} size="sm" className="ml-1 mb-n2"><span className="fas fa-ellipsis-v"/></Button>
           <Overlay target={this.state.buttonRef} show={this.state.shouldShowButtonPopover} onHide={this.hideButtonPopover} rootClose placement="bottom">
@@ -129,10 +117,6 @@ const ProofLine = connect()(styled(class ProofLine extends React.Component {
               <Button onClick={this.elide} variant="success" size="sm" className="ml-1">Elide</Button>
               <Button onClick={this.clearStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-redo"/></Button>
               <Button onClick={this.deleteStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-trash"/></Button>
-              <Button onClick={this.moveOutOfContainer} size="sm" className="ml-1"><span className="fas fa-level-up-alt"/></Button>
-              <Button onClick={this.moveUp} size="sm" className="ml-1"><span className="fas fa-arrow-up"/></Button>
-              <Button onClick={this.moveDown} size="sm" className="ml-1"><span className="fas fa-arrow-down"/></Button>
-              <Button onClick={this.moveIntoNext} size="sm" className="ml-1"><span className="fas fa-level-down-alt"/></Button>
             </Popover>}
           </Overlay>
         </>}

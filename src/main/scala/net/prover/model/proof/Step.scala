@@ -16,7 +16,7 @@ sealed trait Step {
   def provenStatement: Option[Statement]
   def getSubstep(index: Int, stepContext: StepContext): Option[(Step, StepContext)]
   def extractSubstep(index: Int): Option[Option[(Step, Step)]]
-  def modifySubsteps[F[_] : Functor](outerContext: StepContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]]
+  def modifySubsteps[F[_] : Functor](outerContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]]
   def insertExternalParameters(numberOfParametersToRemove: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int): Option[Step]
   def replaceDefinition(
@@ -38,7 +38,7 @@ object Step {
   sealed trait WithoutSubsteps extends Step {
     override def getSubstep(index: Int, outerContext: StepContext): Option[(Step, StepContext)] = None
     override def extractSubstep(index: Int): Option[Option[(Step, Step)]] = None
-    override def modifySubsteps[F[_] : Functor](outerContext: StepContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]] = None
+    override def modifySubsteps[F[_] : Functor](outerContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]] = None
   }
   sealed trait WithSubsteps extends Step {
     def substeps: Seq[Step]
@@ -63,7 +63,10 @@ object Step {
       val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
       replaceSubsteps(newSubsteps)
     }
-    override def modifySubsteps[F[_] : Functor](outerContext: StepContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]] = {
+    def modifySubstepsDirectly[F[_] : Functor](outerContext: StepContext)(f: (Seq[Step], StepContext) => F[Seq[Step]]): F[Step] = {
+      f(substeps, specifyStepContext(outerContext)).map(replaceSubsteps)
+    }
+    override def modifySubsteps[F[_] : Functor](outerContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]] = {
       f(substeps, specifyStepContext(outerContext)).map(_.map(replaceSubsteps))
     }
   }

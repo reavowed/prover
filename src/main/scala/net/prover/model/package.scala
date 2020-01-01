@@ -67,6 +67,7 @@ package object model {
 
   implicit class SeqOps[T](seq: Seq[T]) {
     def headAndTailOption: Option[(T, Seq[T])] = +:.unapply(seq)
+    def initAndLastOption: Option[(Seq[T], T)] = :+.unapply(seq)
     def single: Option[T]= {
       seq match {
         case Seq(singleElement) => Some(singleElement)
@@ -242,14 +243,21 @@ package object model {
         None
       }
     }
+    def splitBetweenIndexesIfValid(firstIndex: Int, secondIndex: Int): Option[(Seq[T], Seq[T], Seq[T])] = {
+      if (0 <= firstIndex && firstIndex <= secondIndex && secondIndex <= seq.length) {
+        Some((seq.take(firstIndex), seq.slice(firstIndex, firstIndex + secondIndex - firstIndex), seq.drop(secondIndex)))
+      } else {
+        None
+      }
+    }
     def splitWhere(f: T => Boolean): Option[(Seq[T], T, Seq[T])] = {
       findIndexWhere(f).map { index =>
         (seq.take(index), seq(index), seq.drop(index + 1))
       }
     }
     def takeAndRemainingIfValid(index: Int): Option[(Seq[T], Seq[T])] = {
-      if (0 <= index && index < seq.length) {
-        Some((seq.take(index), seq.drop(index )))
+      if (0 <= index && index <= seq.length) {
+        Some((seq.take(index), seq.drop(index)))
       } else {
         None
       }

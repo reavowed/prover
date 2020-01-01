@@ -2,12 +2,13 @@ import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import {connect} from "react-redux";
+import {ElidedStep as ElidedStepModel} from "../../models/Step";
 import ProofContext from "../theorem/ProofContext";
 import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import {InferenceLink} from "./InferenceLink";
 import ProofLine from "./ProofLine";
+import Step from "./Step";
 import {Steps} from "./Steps";
-import {ElidedStep as ElidedStepModel} from "../../models/Step";
 
 export const ElidedStepProofLine = connect()(class ElidedStepProofLine extends React.Component {
   static contextType = ProofContext;
@@ -74,10 +75,12 @@ export const ElidedStepProofLine = connect()(class ElidedStepProofLine extends R
 export class ElidedStep extends React.Component {
   render() {
     const {step, path} = this.props;
-    return <ElidedStepProofLine {...this.props} prefix="Then">
-      <ProofLine.SingleStatementWithPrefixContent prefix="Then"
-                                                  statement={step.statement}
-                                                  path={path} />
-    </ElidedStepProofLine>;
+    return <Step.WithoutSubsteps>
+      <ElidedStepProofLine {...this.props} prefix="Then">
+        <ProofLine.SingleStatementWithPrefixContent prefix="Then"
+                                                    statement={step.statement}
+                                                    path={path} />
+      </ElidedStepProofLine>
+    </Step.WithoutSubsteps>;
   }
 }

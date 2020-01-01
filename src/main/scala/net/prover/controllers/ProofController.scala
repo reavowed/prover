@@ -1,9 +1,10 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.PathData
+import net.prover.controllers.models.{PathData, StepMoveRequest}
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.entries.Theorem
+import net.prover.model.entries.Theorem.Proof
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -45,108 +46,53 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
     ).toResponseEntity
   }
 
-  @PostMapping(value = Array("/{stepPath}/move"))
+  @PostMapping(value = Array("/moveSteps"))
   def moveStep(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("proofIndex") proofIndex: Int,
-    @PathVariable("stepPath") stepPath: PathData,
-    @RequestParam("direction") direction: String
+    @RequestBody stepMoveRequest: StepMoveRequest
   ): ResponseEntity[_] = {
-    def moveInTheorem(theorem: Theorem): Option[Try[Theorem]] = {
-      stepPath.indexes match {
-        case Nil =>
-          None
-        case Seq(0) if direction == "up" =>
-          Some(Failure(BadRequestException("Cannot move step upwards if it's the first step")))
-        case init :+ containerIndex :+ 0 if direction == "up" =>
-          theorem.modifySteps[Try](proofIndex, init) { (steps, _) =>
-            steps.lift(containerIndex).flatMap { outerStep =>
-              outerStep.extractSubstep(0).map(_.orBadRequest(s"Could not extract step $stepPath from outer step"))
-            }.mapMap { case (outerStep, innerStep) =>
-              steps.take(containerIndex) ++ Seq(innerStep, outerStep) ++ steps.drop(containerIndex + 1)
-            }
-          }
-        case init :+ last =>
-          theorem.modifySteps[Try](proofIndex, init) { (steps, _) =>
-            steps.lift(last).map { step =>
-              direction match {
-                case "up" =>
-                  Success((steps.take(last - 1) :+ step :+ steps(last - 1)) ++ steps.drop(last + 1))
-                case "down" =>
-                  Success((steps.take(last) ++ steps.lift(last + 1).toSeq :+ step) ++ steps.drop(last + 2))
-                case _ =>
-                  Failure(BadRequestException(s"Unrecognised direction $direction"))
+    import stepMoveRequest._
+    def commonPrefix[T](a: Seq[T], b: Seq[T], acc: Seq[T] = Nil): (Seq[T], Seq[T], Seq[T]) = {
+      (a, b) match {
+        case (headA +: tailA, headB +: tailB) if headA == headB =>
+          commonPrefix(tailA, tailB, acc :+ headA)
+        case _ =>
+          (acc, a, b)
+      }
+    }
+    val (sharedPath, sourcePathInner, destinationPathInner) = commonPrefix(sourcePath, destinationPath)
+    (for {
+      result <- modifySteps(bookKey, chapterKey, theoremKey, proofIndex, sharedPath) { (sharedParentSteps, sharedContext) =>
+        for {
+          (substepsWithoutCurrent, (currentSteps, currentStepOuterContext)) <-
+            Proof.modifySteps[WithValue[(Seq[Step], StepContext)]#Type](sharedParentSteps, sourcePathInner, sharedContext.stepContext) { (currentSteps, currentStepOuterContext) =>
+              currentSteps.splitBetweenIndexesIfValid(sourceStartIndex, sourceEndIndex).map { case (before, steps, after) =>
+                (before ++ after, (steps, currentStepOuterContext))
               }
+            }.orBadRequest("Invalid source path")
+          resultSteps <- Proof.modifySteps(substepsWithoutCurrent, destinationPathInner, sharedContext.stepContext) { (newSurroundingSteps, newStepOuterContext) =>
+            val sharedParameterDepth = Seq(currentStepOuterContext.externalDepth, newStepOuterContext.externalDepth).min
+            val parametersToRemove = currentStepOuterContext.externalDepth - newStepOuterContext.externalDepth
+            val parametersToAdd = -1 * parametersToRemove
+            newSurroundingSteps.takeAndRemainingIfValid(destinationIndex).map { case (before, after) =>
+              for {
+                _ <- (0 until sharedParameterDepth).map { i =>
+                  (currentStepOuterContext.boundVariableLists(i).size <= newStepOuterContext.boundVariableLists(i).size).orBadRequest("Cannot move step to one with a smaller bound variable list")
+                }.traverseTry
+                stepsWithNewContext <- if (parametersToRemove > 0)
+                  currentSteps.map(_.removeExternalParameters(parametersToRemove)).traverseOption.orBadRequest("Could not remove extra parameters")
+                else if (parametersToAdd > 0)
+                  Success(currentSteps.map(_.insertExternalParameters(parametersToAdd)))
+                else
+                  Success(currentSteps)
+              } yield before ++ stepsWithNewContext ++ after
             }
-          }
-      }
-    }
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
-      moveInTheorem(theorem).orNotFound(s"Step $stepPath").flatten
-    }.toResponseEntity
-  }
-
-  @PostMapping(value = Array("/{stepPath}/moveOutOfContainer"))
-  def moveStepOutOfContainer(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("proofIndex") proofIndex: Int,
-    @PathVariable("stepPath") stepPath: PathData
-  ): ResponseEntity[_] = {
-    def moveInTheorem(theorem: Theorem): Option[Try[Theorem]] = {
-      stepPath.indexes match {
-        case Nil =>
-          None
-        case Seq(_) =>
-          Some(Failure(BadRequestException("No containing step to move out of")))
-        case init :+ containerIndex :+ last =>
-          theorem.modifySteps[Try](proofIndex, init) { (steps, _) =>
-            steps.splitAtIndexIfValid(containerIndex).flatMap { case (beforeContainer, container, afterContainer) =>
-              container.extractSubstep(last).map(_.orBadRequest(s"Could not extract step $stepPath from outer step"))
-                .mapMap { case (updatedContainer, step) =>
-                  (beforeContainer :+ step :+ updatedContainer) ++ afterContainer
-                }
-            }
-          }
-      }
-    }
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
-      moveInTheorem(theorem).orNotFound(s"Step $stepPath").flatten
-    }.toResponseEntity
-  }
-
-  @PostMapping(value = Array("/{stepPath}/moveIntoNext"))
-  def moveStepIntoNext(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("proofIndex") proofIndex: Int,
-    @PathVariable("stepPath") stepPath: PathData
-  ): ResponseEntity[_] = {
-    def moveInTheorem(theorem: Theorem): Option[Try[Theorem]] = {
-      stepPath.indexes match {
-        case Nil =>
-          None
-        case init :+ last =>
-          theorem.modifySteps[Try](proofIndex, init) { (steps, _) =>
-            steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
-                after match {
-                  case (following: Step.WithSubsteps) +: remaining =>
-                    val updatedStep = following.modifyStepForInsertion(step)
-                    Success(before ++ Seq(following.replaceSubsteps(updatedStep +: following.substeps)) ++ remaining)
-                  case _ =>
-                    Failure(BadRequestException("No valid following step to insert into"))
-                }
-
-            }
-          }
-      }
-    }
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
-      moveInTheorem(theorem).orNotFound(s"Step $stepPath").flatten
-    }.toResponseEntity
+          }.orBadRequest("Invalid destination path").flatten
+        } yield resultSteps
+      }.orBadRequest(s"Invalid source path")
+    } yield result).toResponseEntity
   }
 }

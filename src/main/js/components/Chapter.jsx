@@ -1,12 +1,12 @@
 import path from "path";
 import React from "react";
-import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import styled, {css}  from "styled-components";
 import {Parser} from "../Parser";
 import {Breadcrumbs} from "./Breadcrumbs";
+import DraggableList from "./DraggableList";
 import {CopiableExpression} from "./ExpressionComponent";
 import {formatHtml, replacePlaceholders} from "./helpers/Formatter";
 import {FlexRow} from "./FlexRow";
@@ -15,6 +15,8 @@ import {InferenceSummary} from "./InferenceSummary";
 import {NavLinks} from "./NavLinks";
 import {Page} from "./Page";
 import {ResultWithPremises} from "./ResultWithPremises";
+import { DndProvider } from 'react-dnd'
+import Backend from 'react-dnd-html5-backend'
 
 const ResultWrapper = styled.div`
   margin: 10px 0;
@@ -197,38 +199,12 @@ export class Chapter extends React.Component {
         throw `Unrecognised entry '${entry.type}'`;
     }
   };
-  renderDraggableEntry = (entry, index, editing) => {
-    const key = entry.url;
-    return <Draggable draggableId={key} index={index} key={key} isDragDisabled={!editing || this.state.disableDrag}>
-      {(provided) => (
-        <div ref={provided.innerRef}{...provided.draggableProps}{...provided.dragHandleProps}>
-          {this.renderEntry(entry, editing)}
-        </div>
-      )}
-    </Draggable>
-  };
-  onDragEnd = (result) => {
-    if (!result.destination) {
-      return;
-    }
-    const reorder = (list, startIndex, endIndex) => {
-      const result = Array.from(list);
-      const [removed] = result.splice(startIndex, 1);
-      result.splice(endIndex, 0, removed);
-      return result;
-    };
-    const entryToMove = this.state.entries[result.source.index];
-    const temporaryEntries = reorder(this.state.entries, result.source.index, result.destination.index);
-    this.setState(
-      {temporaryEntries, disableDrag: true},
-      () => {
-        this.updateChapter(path.join(entryToMove.url, "index"), {
-          method: "PUT",
-          headers: {"Content-Type": "application/json"},
-          body: result.destination.index
-        }).catch(() => {})
-          .then(() => this.setState({temporaryEntries: null, disableDrag: false}));
-      });
+  onDropEntry = ({url, index}, {index: targetIndex}, after) => {
+    return this.updateChapter(path.join(url, "index"), {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: targetIndex + (after ? 1 : 0) - (index < targetIndex ? 1 : 0)
+    });
   };
 
   updateTitle = (newTitle) => {
@@ -397,7 +373,7 @@ export class Chapter extends React.Component {
 
   render() {
     const {bookLink, summary, previous, next} = this.props;
-    const {title, url, entries, temporaryEntries, theoremBeingAdded, termBeingAdded, typeBeingAdded, propertyBeingAdded, editing} = this.state;
+    const {title, url, entries, theoremBeingAdded, termBeingAdded, typeBeingAdded, propertyBeingAdded, editing} = this.state;
 
     const updateControl = (caption, statePropertyName, innerPropertyName, transformer) => {
       return <Form.Group>
@@ -411,16 +387,14 @@ export class Chapter extends React.Component {
       <Button className="ml-3 float-right" size="sm" onClick={() => this.setState({editing: !editing})}><i className={"fas fa-" + (editing ? "times" : "edit")}/></Button>
       <h3><InlineTextEditor text={title} callback={this.updateTitle}/></h3>
       <p>{summary}</p>
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <Droppable droppableId="entries">
-          {(provided) =>
-            <div ref={provided.innerRef} {...provided.droppableProps}>
-              {(temporaryEntries || entries).map((entry, index) => this.renderDraggableEntry(entry, index, editing))}
-              {provided.placeholder}
-            </div>
-          }
-        </Droppable>
-      </DragDropContext>
+      <DndProvider backend={Backend}>
+        <DraggableList.Simple
+          type="ChapterEntry"
+          enabled={editing}
+          onDrop={this.onDropEntry}
+          entries={entries.map((entry, index) => {return {key: entry.url, data: {url: entry.url, index}, element: this.renderEntry(entry, editing)}})}
+        />
+      </DndProvider>
       <hr/>
       {!theoremBeingAdded && !termBeingAdded && !typeBeingAdded && !propertyBeingAdded && <>
         <Button onClick={this.startAddingTheorem}>Add theorem</Button>

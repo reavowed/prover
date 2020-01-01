@@ -21,6 +21,8 @@ import {
 import ProofLine from "./ProofLine";
 import {Parser} from "../../Parser";
 import ProofContext from "../theorem/ProofContext";
+import DraggableList from "../DraggableList";
+import Step from "./Step";
 
 export const TargetStepProofLine = connect()(class TargetStepProofLine extends React.Component {
   static contextType = ProofContext;
@@ -520,12 +522,14 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
 export class TargetStep extends React.Component {
   render() {
     const {step, path, additionalReferences} = this.props;
-    return <TargetStepProofLine {...this.props}>
-      <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
-                                                  prefix="Then"
-                                                  statement={step.statement}
-                                                  path={path}
-                                                  additionalReferences={additionalReferences} />
-    </TargetStepProofLine>
+    return <Step.WithoutSubsteps>
+      <TargetStepProofLine {...this.props}>
+        <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
+                                                    prefix="Then"
+                                                    statement={step.statement}
+                                                    path={path}
+                                                    additionalReferences={additionalReferences} />
+      </TargetStepProofLine>
+    </Step.WithoutSubsteps>
   }
 }

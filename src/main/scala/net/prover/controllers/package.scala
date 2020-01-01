@@ -49,7 +49,11 @@ package object controllers {
   }
 
   implicit class BooleanWithResponseExceptionOps(b: Boolean) {
-    def orBadRequest(message: String): Try[Unit] = if (b) Success(()) else Failure(BadRequestException(message))
+    def orException(e: Exception): Try[Unit] = {
+      if (b) Success(()) else Failure(e)
+    }
+    def orNotFound(objectDescription: String): Try[Unit] = orException(NotFoundException(objectDescription))
+    def orBadRequest(message: String): Try[Unit] = orException(BadRequestException(message))
   }
 
   implicit class AnyWithResponseExceptionOps[T](t: => T) {
@@ -67,26 +71,24 @@ package object controllers {
     override def map[A,B](a: Identity[A])(f: A ⇒ B): Identity[B] = f(a)
   }
 
-  type WithValue[+A, B] = (A, B)
-  class WithValueB[B] {
+  class WithValue[B] {
     type Type[A] = (A, B)
   }
-  implicit def WithValueFunctor[F[_]: Functor, B]: Functor[WithValueB[B]#Type] = new Functor[WithValueB[B]#Type] {
-    override def map[A, C](input: WithValue[A, B])(f: A => C): WithValue[C, B] = input.mapLeft(f)
+  implicit def WithValueFunctor[F[_]: Functor, B]: Functor[WithValue[B]#Type] = new Functor[WithValue[B]#Type] {
+    override def map[A, C](input: (A, B))(f: A => C): (C, B) = input.mapLeft(f)
   }
 
   class FWithValue[F[_], B] {
-    type Type[A] = F[WithValue[A, B]]
+    type Type[A] = F[(A, B)]
   }
   implicit def FWithValueFunctor[F[_]: Functor, B]: Functor[FWithValue[F, B]#Type] = new Functor[FWithValue[F, B]#Type] {
-    override def map[A, C](input: F[WithValue[A, B]])(f: A => C): F[WithValue[C, B]] = input.map(_.mapLeft(f))
+    override def map[A, C](input: F[(A, B)])(f: A => C): F[(C, B)] = input.map(_.mapLeft(f))
   }
-
 
   class TryFWithValue[F[_], B] {
-    type Type[A] = Try[F[WithValue[A, B]]]
+    type Type[A] = Try[F[(A, B)]]
   }
   implicit def TryFWithValueFunctor[F[_]: Functor, B]: Functor[TryFWithValue[F, B]#Type] = new Functor[TryFWithValue[F, B]#Type] {
-    override def map[A, C](input: Try[F[WithValue[A, B]]])(f: A => C): Try[F[WithValue[C, B]]] = input.map(_.map(_.mapLeft(f)))
+    override def map[A, C](input: Try[F[(A, B)]])(f: A => C): Try[F[(C, B)]] = input.map(_.map(_.mapLeft(f)))
   }
 }

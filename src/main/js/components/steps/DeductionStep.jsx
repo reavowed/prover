@@ -1,11 +1,12 @@
 import React from "react";
 import {connect} from "react-redux";
 import {StepReference} from "../../models/Step";
+import {BoundVariableModal} from "../Modals";
 import ProofContext from "../theorem/ProofContext";
 import {FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
 import ProofLine from "./ProofLine";
+import Step from "./Step";
 import {Steps} from "./Steps";
-import {BoundVariableModal} from "../Modals";
 
 export const DeductionStep = connect()(class DeductionStep extends React.Component {
   static contextType = ProofContext;
@@ -37,13 +38,15 @@ export const DeductionStep = connect()(class DeductionStep extends React.Compone
     let {step, path, additionalReferences} = this.props;
     let reference = new StepReference(path);
     let referencesForLastStep = [...additionalReferences, reference];
-    return <>
-      <ProofLine.SingleStatementWithPrefix editableBoundVariable
-                                           prefix="Assume"
-                                           statement={step.assumption}
-                                           path={path}
-                                           suffix="a"
-                                           additionalReferences={[...additionalReferences, reference]}/>
+    return <Step.WithSubsteps path={path}>
+      <Step.Antecedent>
+        <ProofLine.SingleStatementWithPrefix editableBoundVariable
+                                             prefix="Assume"
+                                             statement={step.assumption}
+                                             path={path}
+                                             suffix="a"
+                                             additionalReferences={[...additionalReferences, reference]}/>
+      </Step.Antecedent>
       <Steps.Children steps={step.substeps}
                       path={path}
                       referencesForLastStep={referencesForLastStep} />
@@ -53,6 +56,6 @@ export const DeductionStep = connect()(class DeductionStep extends React.Compone
                           value={this.state.boundVariableName}
                           onChange={e => this.setState({boundVariableName: e.target.value})}
                           onSave={this.state.boundVariableModalCallback}/>
-    </>;
+    </Step.WithSubsteps>;
   }
 });
