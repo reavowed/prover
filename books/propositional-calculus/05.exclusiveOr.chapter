@@ -88,7 +88,7 @@ conclusion ¬ φ
   prove ¬ φ e4ae6063b86741e544a9c95c2ce96510d5571fb6b97a2d084435181728226d66 (ψ, φ) () () () 0 p1
 }
 
-theorem Proof by Cases
+theorem Proof by Exclusive Cases
 premise ⊕ φ ψ
 premise → φ χ
 premise → ψ χ

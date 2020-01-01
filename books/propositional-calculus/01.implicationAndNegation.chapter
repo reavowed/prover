@@ -8,11 +8,6 @@ statement → (φ ψ)
   shorthand (imp)
   attributes (deduction)
 
-axiom Modus Ponens
-premise → φ ψ
-premise φ
-conclusion ψ
-
 theorem Implication Is Reflexive
 conclusion → φ φ
 {
@@ -20,6 +15,11 @@ conclusion → φ φ
     prove φ bef95b18b97a05ca4c8a14f15ac5e41f30b9f6ee30472fcd4734069751460227 (φ) () () () 0a
   }
 }
+
+axiom Modus Ponens
+premise → φ ψ
+premise φ
+conclusion ψ
 
 theorem Implication Is Transitive
 premise → φ ψ

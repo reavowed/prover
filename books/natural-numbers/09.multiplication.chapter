@@ -93,22 +93,24 @@ conclusion = apply × orderedPair 0 n 0
     prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
     prove = apply × orderedPair 0 0 0 1705e5e6c352d3c68e7a2386a56fd59ef10f57f99bb73ff655cd4cdb34bbb543 () (0) () () 0.0
   }
-  take m {
-    assume ∧ ∈ $0 ℕ = apply × orderedPair 0 $0 0 {
-      elided 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 {
-        prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
-        prove = apply × orderedPair 0 successor $0 apply + orderedPair apply × orderedPair 0 $0 0 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (0, $0) () () 1.0.0.0 1.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+  take x {
+    assume ∈ $0 ℕ {
+      assume = apply × orderedPair 0 $0 0 {
+        elided 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 {
+          prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
+          prove = apply × orderedPair 0 successor $0 apply + orderedPair apply × orderedPair 0 $0 0 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (0, $0) () () 1.0.0.0.0 1.0a
+        }
+        prove = apply + orderedPair apply × orderedPair 0 $0 0 apply + orderedPair 0 0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair 0 $0, 0) () (apply + orderedPair $$0 0) 1.0.0a
+        prove = apply × orderedPair 0 successor $0 apply + orderedPair 0 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair 0 successor $0, apply + orderedPair apply × orderedPair 0 $0 0, apply + orderedPair 0 0) () () 1.0.0.0 1.0.0.1
+        elided a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 {
+          prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
+          prove = apply + orderedPair 0 0 0 a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (0) () () 1.0.0.3.0
+        }
+        prove = apply × orderedPair 0 successor $0 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair 0 successor $0, apply + orderedPair 0 0, 0) () () 1.0.0.2 1.0.0.3
       }
-      prove = apply + orderedPair apply × orderedPair 0 $0 0 apply + orderedPair 0 0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair 0 $0, 0) () (apply + orderedPair $$0 0) 1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-      prove = apply × orderedPair 0 successor $0 apply + orderedPair 0 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair 0 successor $0, apply + orderedPair apply × orderedPair 0 $0 0, apply + orderedPair 0 0) () () 1.0.0 1.0.1
-      elided a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 {
-        prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
-        prove = apply + orderedPair 0 0 0 a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (0) () () 1.0.3.0
-      }
-      prove = apply × orderedPair 0 successor $0 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair 0 successor $0, apply + orderedPair 0 0, 0) () () 1.0.2 1.0.3
     }
   }
-  prove = apply × orderedPair 0 n 0 bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (= apply × orderedPair 0 $0 0) () 0 1 p0
+  prove = apply × orderedPair 0 n 0 304aff0114174ed1e9744ce28acc6d3a88d46a39cfce60de3fe14d4b27acbc65 () (n) (= apply × orderedPair 0 $0 0) () 0 1 p0
 }
 
 theorem Successor of Multiplication (Left)
@@ -135,58 +137,60 @@ conclusion = apply × orderedPair successor n m apply + orderedPair apply × ord
   }
   prove = apply × orderedPair successor n 0 apply + orderedPair apply × orderedPair n 0 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor n 0, apply × orderedPair n 0, apply + orderedPair apply × orderedPair n 0 0) () () 2 3
   take x {
-    assume ∧ ∈ $0 ℕ = apply × orderedPair successor n $0 apply + orderedPair apply × orderedPair n $0 $0 {
-      elided 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 {
-        prove ∈ successor n ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () () p0
-        prove = apply × orderedPair successor n successor $0 apply + orderedPair apply × orderedPair successor n $0 successor n 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (successor n, $0) () () 5.0.0.0 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-      }
-      prove = apply + orderedPair apply × orderedPair successor n $0 successor n apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 successor n 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair successor n $0, apply + orderedPair apply × orderedPair n $0 $0) () (apply + orderedPair $$0 successor n) 5.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-      prove = apply × orderedPair successor n successor $0 apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 successor n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor n successor $0, apply + orderedPair apply × orderedPair successor n $0 successor n, apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 successor n) () () 5.0.0 5.0.1
-      elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
-        prove ∈ apply × orderedPair n $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, $0) () () p0 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-        prove ∈ apply + orderedPair apply × orderedPair n $0 $0 ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (apply × orderedPair n $0, $0) () () 5.0.3.0 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-        prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 successor n successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (apply + orderedPair apply × orderedPair n $0 $0, n) () () 5.0.3.1 p0
-      }
-      prove = apply × orderedPair successor n successor $0 successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor n successor $0, apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 successor n, successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n) () () 5.0.2 5.0.3
-      elided (Rearranged) {
-        elided (Rearranged) {
-          elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
-            elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
-              prove ∈ apply × orderedPair n $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, $0) () () p0 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-              prove = apply + orderedPair apply × orderedPair n $0 apply + orderedPair $0 n apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 () (apply × orderedPair n $0, $0, n) () () 5.0.5.0.0.0.0 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p0
-            }
-            prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n apply + orderedPair apply × orderedPair n $0 apply + orderedPair $0 n 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair apply × orderedPair n $0 apply + orderedPair $0 n, apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n) () () 5.0.5.0.0.0
-          }
-          elided ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 {
-            prove = apply + orderedPair $0 n apply + orderedPair n $0 ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 () ($0, n) () () 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p0
-            prove = apply + orderedPair apply × orderedPair n $0 apply + orderedPair $0 n apply + orderedPair apply × orderedPair n $0 apply + orderedPair n $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair $0 n, apply + orderedPair n $0) () (apply + orderedPair apply × orderedPair n $0 $$0) 5.0.5.0.1.0
-          }
-          prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n apply + orderedPair apply × orderedPair n $0 apply + orderedPair n $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n, apply + orderedPair apply × orderedPair n $0 apply + orderedPair $0 n, apply + orderedPair apply × orderedPair n $0 apply + orderedPair n $0) () () 5.0.5.0.0 5.0.5.0.1
-          elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
-            prove ∈ apply × orderedPair n $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, $0) () () p0 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-            prove = apply + orderedPair apply × orderedPair n $0 apply + orderedPair n $0 apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 () (apply × orderedPair n $0, n, $0) () () 5.0.5.0.3.0 p0 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-          }
-          prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n, apply + orderedPair apply × orderedPair n $0 apply + orderedPair n $0, apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0) () () 5.0.5.0.2 5.0.5.0.3
+    assume ∈ $0 ℕ {
+      assume = apply × orderedPair successor n $0 apply + orderedPair apply × orderedPair n $0 $0 {
+        elided 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 {
+          prove ∈ successor n ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () () p0
+          prove = apply × orderedPair successor n successor $0 apply + orderedPair apply × orderedPair successor n $0 successor n 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (successor n, $0) () () 5.0.0.0.0 5.0a
         }
-        prove = successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n, apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0) () (successor $$0) 5.0.5.0
+        prove = apply + orderedPair apply × orderedPair successor n $0 successor n apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 successor n 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair successor n $0, apply + orderedPair apply × orderedPair n $0 $0) () (apply + orderedPair $$0 successor n) 5.0.0a
+        prove = apply × orderedPair successor n successor $0 apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 successor n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor n successor $0, apply + orderedPair apply × orderedPair successor n $0 successor n, apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 successor n) () () 5.0.0.0 5.0.0.1
+        elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
+          prove ∈ apply × orderedPair n $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, $0) () () p0 5.0a
+          prove ∈ apply + orderedPair apply × orderedPair n $0 $0 ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (apply × orderedPair n $0, $0) () () 5.0.0.3.0 5.0a
+          prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 successor n successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (apply + orderedPair apply × orderedPair n $0 $0, n) () () 5.0.0.3.1 p0
+        }
+        prove = apply × orderedPair successor n successor $0 successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor n successor $0, apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 successor n, successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n) () () 5.0.0.2 5.0.0.3
+        elided (Rearranged) {
+          elided (Rearranged) {
+            elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
+              elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
+                prove ∈ apply × orderedPair n $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, $0) () () p0 5.0a
+                prove = apply + orderedPair apply × orderedPair n $0 apply + orderedPair $0 n apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 () (apply × orderedPair n $0, $0, n) () () 5.0.0.5.0.0.0.0 5.0a p0
+              }
+              prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n apply + orderedPair apply × orderedPair n $0 apply + orderedPair $0 n 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair apply × orderedPair n $0 apply + orderedPair $0 n, apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n) () () 5.0.0.5.0.0.0
+            }
+            elided ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 {
+              prove = apply + orderedPair $0 n apply + orderedPair n $0 ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 () ($0, n) () () 5.0a p0
+              prove = apply + orderedPair apply × orderedPair n $0 apply + orderedPair $0 n apply + orderedPair apply × orderedPair n $0 apply + orderedPair n $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair $0 n, apply + orderedPair n $0) () (apply + orderedPair apply × orderedPair n $0 $$0) 5.0.0.5.0.1.0
+            }
+            prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n apply + orderedPair apply × orderedPair n $0 apply + orderedPair n $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n, apply + orderedPair apply × orderedPair n $0 apply + orderedPair $0 n, apply + orderedPair apply × orderedPair n $0 apply + orderedPair n $0) () () 5.0.0.5.0.0 5.0.0.5.0.1
+            elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
+              prove ∈ apply × orderedPair n $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, $0) () () p0 5.0a
+              prove = apply + orderedPair apply × orderedPair n $0 apply + orderedPair n $0 apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 () (apply × orderedPair n $0, n, $0) () () 5.0.0.5.0.3.0 p0 5.0a
+            }
+            prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n, apply + orderedPair apply × orderedPair n $0 apply + orderedPair n $0, apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0) () () 5.0.0.5.0.2 5.0.0.5.0.3
+          }
+          prove = successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n, apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0) () (successor $$0) 5.0.0.5.0
+        }
+        prove = apply × orderedPair successor n successor $0 successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor n successor $0, successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n, successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0) () () 5.0.0.4 5.0.0.5
+        elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
+          prove ∈ apply × orderedPair n $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, $0) () () p0 5.0a
+          prove ∈ apply + orderedPair apply × orderedPair n $0 n ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (apply × orderedPair n $0, n) () () 5.0.0.7.0 p0
+          prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0 successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (apply + orderedPair apply × orderedPair n $0 n, $0) () () 5.0.0.7.1 5.0a
+          prove = successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0, successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0) () () 5.0.0.7.2
+        }
+        prove = apply × orderedPair successor n successor $0 apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor n successor $0, successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0, apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0) () () 5.0.0.6 5.0.0.7
+        elided 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 {
+          prove = apply × orderedPair n successor $0 apply + orderedPair apply × orderedPair n $0 n 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (n, $0) () () p0 5.0a
+          prove = apply + orderedPair apply × orderedPair n $0 n apply × orderedPair n successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply × orderedPair n successor $0, apply + orderedPair apply × orderedPair n $0 n) () () 5.0.0.9.0
+          prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0 apply + orderedPair apply × orderedPair n successor $0 successor $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair apply × orderedPair n $0 n, apply × orderedPair n successor $0) () (apply + orderedPair $$0 successor $0) 5.0.0.9.1
+        }
+        prove = apply × orderedPair successor n successor $0 apply + orderedPair apply × orderedPair n successor $0 successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor n successor $0, apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0, apply + orderedPair apply × orderedPair n successor $0 successor $0) () () 5.0.0.8 5.0.0.9
       }
-      prove = apply × orderedPair successor n successor $0 successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor n successor $0, successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 $0 n, successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0) () () 5.0.4 5.0.5
-      elided 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f {
-        prove ∈ apply × orderedPair n $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, $0) () () p0 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-        prove ∈ apply + orderedPair apply × orderedPair n $0 n ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (apply × orderedPair n $0, n) () () 5.0.7.0 p0
-        prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0 successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (apply + orderedPair apply × orderedPair n $0 n, $0) () () 5.0.7.1 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-        prove = successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0 apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0, successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0) () () 5.0.7.2
-      }
-      prove = apply × orderedPair successor n successor $0 apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor n successor $0, successor apply + orderedPair apply + orderedPair apply × orderedPair n $0 n $0, apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0) () () 5.0.6 5.0.7
-      elided 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 {
-        prove = apply × orderedPair n successor $0 apply + orderedPair apply × orderedPair n $0 n 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (n, $0) () () p0 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-        prove = apply + orderedPair apply × orderedPair n $0 n apply × orderedPair n successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply × orderedPair n successor $0, apply + orderedPair apply × orderedPair n $0 n) () () 5.0.9.0
-        prove = apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0 apply + orderedPair apply × orderedPair n successor $0 successor $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair apply × orderedPair n $0 n, apply × orderedPair n successor $0) () (apply + orderedPair $$0 successor $0) 5.0.9.1
-      }
-      prove = apply × orderedPair successor n successor $0 apply + orderedPair apply × orderedPair n successor $0 successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor n successor $0, apply + orderedPair apply + orderedPair apply × orderedPair n $0 n successor $0, apply + orderedPair apply × orderedPair n successor $0 successor $0) () () 5.0.8 5.0.9
     }
   }
-  prove = apply × orderedPair successor n m apply + orderedPair apply × orderedPair n m m bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (m) (= apply × orderedPair successor n $0 apply + orderedPair apply × orderedPair n $0 $0) () 4 5 p1
+  prove = apply × orderedPair successor n m apply + orderedPair apply × orderedPair n m m 304aff0114174ed1e9744ce28acc6d3a88d46a39cfce60de3fe14d4b27acbc65 () (m) (= apply × orderedPair successor n $0 apply + orderedPair apply × orderedPair n $0 $0) () 4 5 p1
 }
 
 theorem Multiplication is Commutative
@@ -201,18 +205,20 @@ conclusion = apply × orderedPair n m apply × orderedPair m n
   }
   prove = apply × orderedPair n 0 apply × orderedPair 0 n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n 0, 0, apply × orderedPair 0 n) () () 0 1
   take x {
-    assume ∧ ∈ $0 ℕ = apply × orderedPair n $0 apply × orderedPair $0 n {
-      prove = apply × orderedPair n successor $0 apply + orderedPair apply × orderedPair n $0 n 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (n, $0) () () p0 3.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-      prove = apply + orderedPair apply × orderedPair n $0 n apply + orderedPair apply × orderedPair $0 n n 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair n $0, apply × orderedPair $0 n) () (apply + orderedPair $$0 n) 3.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-      prove = apply × orderedPair n successor $0 apply + orderedPair apply × orderedPair $0 n n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n successor $0, apply + orderedPair apply × orderedPair n $0 n, apply + orderedPair apply × orderedPair $0 n n) () () 3.0.0 3.0.1
-      elided 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 {
-        prove = apply × orderedPair successor $0 n apply + orderedPair apply × orderedPair $0 n n 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 () ($0, n) () () 3.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p0
-        prove = apply + orderedPair apply × orderedPair $0 n n apply × orderedPair successor $0 n 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply × orderedPair successor $0 n, apply + orderedPair apply × orderedPair $0 n n) () () 3.0.3.0
+    assume ∈ $0 ℕ {
+      assume = apply × orderedPair n $0 apply × orderedPair $0 n {
+        prove = apply × orderedPair n successor $0 apply + orderedPair apply × orderedPair n $0 n 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (n, $0) () () p0 3.0a
+        prove = apply + orderedPair apply × orderedPair n $0 n apply + orderedPair apply × orderedPair $0 n n 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair n $0, apply × orderedPair $0 n) () (apply + orderedPair $$0 n) 3.0.0a
+        prove = apply × orderedPair n successor $0 apply + orderedPair apply × orderedPair $0 n n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n successor $0, apply + orderedPair apply × orderedPair n $0 n, apply + orderedPair apply × orderedPair $0 n n) () () 3.0.0.0 3.0.0.1
+        elided 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 {
+          prove = apply × orderedPair successor $0 n apply + orderedPair apply × orderedPair $0 n n 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 () ($0, n) () () 3.0a p0
+          prove = apply + orderedPair apply × orderedPair $0 n n apply × orderedPair successor $0 n 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply × orderedPair successor $0 n, apply + orderedPair apply × orderedPair $0 n n) () () 3.0.0.3.0
+        }
+        prove = apply × orderedPair n successor $0 apply × orderedPair successor $0 n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n successor $0, apply + orderedPair apply × orderedPair $0 n n, apply × orderedPair successor $0 n) () () 3.0.0.2 3.0.0.3
       }
-      prove = apply × orderedPair n successor $0 apply × orderedPair successor $0 n 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n successor $0, apply + orderedPair apply × orderedPair $0 n n, apply × orderedPair successor $0 n) () () 3.0.2 3.0.3
     }
   }
-  prove = apply × orderedPair n m apply × orderedPair m n bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (m) (= apply × orderedPair n $0 apply × orderedPair $0 n) () 2 3 p1
+  prove = apply × orderedPair n m apply × orderedPair m n 304aff0114174ed1e9744ce28acc6d3a88d46a39cfce60de3fe14d4b27acbc65 () (m) (= apply × orderedPair n $0 apply × orderedPair $0 n) () 2 3 p1
 }
 
 theorem Left Distribute Multiplication over Addition
@@ -244,71 +250,73 @@ conclusion = apply × orderedPair n apply + orderedPair m r apply + orderedPair 
   }
   prove = apply × orderedPair 0 apply + orderedPair m r apply + orderedPair apply × orderedPair 0 m apply × orderedPair 0 r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair 0 apply + orderedPair m r, apply + orderedPair apply × orderedPair 0 m 0, apply + orderedPair apply × orderedPair 0 m apply × orderedPair 0 r) () () 4 5
   take x {
-    assume ∧ ∈ $0 ℕ = apply × orderedPair $0 apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r {
-      elided 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 {
-        prove ∈ apply + orderedPair m r ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (m, r) () () p1 p2
-        prove = apply × orderedPair successor $0 apply + orderedPair m r apply + orderedPair apply × orderedPair $0 apply + orderedPair m r apply + orderedPair m r 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 () ($0, apply + orderedPair m r) () () 7.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 7.0.0.0
-      }
-      prove = apply + orderedPair apply × orderedPair $0 apply + orderedPair m r apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair $0 apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r) () (apply + orderedPair $$0 apply + orderedPair m r) 7.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-      prove = apply × orderedPair successor $0 apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor $0 apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 apply + orderedPair m r apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r) () () 7.0.0 7.0.1
-      elided (Rearranged) {
-        elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
+    assume ∈ $0 ℕ {
+      assume = apply × orderedPair $0 apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r {
+        elided 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 {
+          prove ∈ apply + orderedPair m r ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (m, r) () () p1 p2
+          prove = apply × orderedPair successor $0 apply + orderedPair m r apply + orderedPair apply × orderedPair $0 apply + orderedPair m r apply + orderedPair m r 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 () ($0, apply + orderedPair m r) () () 7.0a 7.0.0.0.0
+        }
+        prove = apply + orderedPair apply × orderedPair $0 apply + orderedPair m r apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair $0 apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r) () (apply + orderedPair $$0 apply + orderedPair m r) 7.0.0a
+        prove = apply × orderedPair successor $0 apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor $0 apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 apply + orderedPair m r apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r) () () 7.0.0.0 7.0.0.1
+        elided (Rearranged) {
           elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
-            prove ∈ apply × orderedPair $0 m ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, m) () () 7.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p1
-            prove ∈ apply × orderedPair $0 r ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, r) () () 7.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p2
-            prove ∈ apply + orderedPair m r ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (m, r) () () p1 p2
-            prove = apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 () (apply × orderedPair $0 m, apply × orderedPair $0 r, apply + orderedPair m r) () () 7.0.3.0.0.0 7.0.3.0.0.1 7.0.3.0.0.2
+            elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
+              prove ∈ apply × orderedPair $0 m ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, m) () () 7.0a p1
+              prove ∈ apply × orderedPair $0 r ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, r) () () 7.0a p2
+              prove ∈ apply + orderedPair m r ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (m, r) () () p1 p2
+              prove = apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 () (apply × orderedPair $0 m, apply × orderedPair $0 r, apply + orderedPair m r) () () 7.0.0.3.0.0.0 7.0.0.3.0.0.1 7.0.0.3.0.0.2
+            }
+            prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r) () () 7.0.0.3.0.0
           }
-          prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r) () () 7.0.3.0.0
-        }
-        elided ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 {
           elided ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 {
-            prove ∈ apply × orderedPair $0 r ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, r) () () 7.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p2
-            prove ∈ apply + orderedPair m r ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (m, r) () () p1 p2
-            prove = apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 () (apply × orderedPair $0 r, apply + orderedPair m r) () () 7.0.3.1.0.0 7.0.3.1.0.1
+            elided ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 {
+              prove ∈ apply × orderedPair $0 r ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, r) () () 7.0a p2
+              prove ∈ apply + orderedPair m r ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (m, r) () () p1 p2
+              prove = apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 () (apply × orderedPair $0 r, apply + orderedPair m r) () () 7.0.0.3.1.0.0 7.0.0.3.1.0.1
+            }
+            prove = apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r) () (apply + orderedPair apply × orderedPair $0 m $$0) 7.0.0.3.1.0
           }
-          prove = apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r) () (apply + orderedPair apply × orderedPair $0 m $$0) 7.0.3.1.0
-        }
-        prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r) () () 7.0.3.0 7.0.3.1
-        elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
+          prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r) () () 7.0.0.3.0 7.0.0.3.1
           elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
-            prove ∈ apply × orderedPair $0 r ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, r) () () 7.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p2
-            prove = apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 () (m, r, apply × orderedPair $0 r) () () p1 p2 7.0.3.3.0.0
+            elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
+              prove ∈ apply × orderedPair $0 r ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, r) () () 7.0a p2
+              prove = apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 () (m, r, apply × orderedPair $0 r) () () p1 p2 7.0.0.3.3.0.0
+            }
+            prove = apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r, apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r) () () 7.0.0.3.3.0
+            prove = apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r apply + orderedPair apply × orderedPair $0 m apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r, apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r) () (apply + orderedPair apply × orderedPair $0 m $$0) 7.0.0.3.3.1
           }
-          prove = apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r, apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r) () () 7.0.3.3.0
-          prove = apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r apply + orderedPair apply × orderedPair $0 m apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r, apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r) () (apply + orderedPair apply × orderedPair $0 m $$0) 7.0.3.3.1
-        }
-        prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r, apply + orderedPair apply × orderedPair $0 m apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r) () () 7.0.3.2 7.0.3.3
-        elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
-          prove ∈ apply × orderedPair $0 m ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, m) () () 7.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p1
-          prove ∈ apply × orderedPair $0 r ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, r) () () 7.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p2
-          prove ∈ apply + orderedPair r apply × orderedPair $0 r ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (r, apply × orderedPair $0 r) () () p2 7.0.3.5.1
-          prove = apply + orderedPair apply × orderedPair $0 m apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair r apply × orderedPair $0 r 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 () (apply × orderedPair $0 m, m, apply + orderedPair r apply × orderedPair $0 r) () () 7.0.3.5.0 p1 7.0.3.5.2
-        }
-        prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair r apply × orderedPair $0 r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 m apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair r apply × orderedPair $0 r) () () 7.0.3.4 7.0.3.5
-        elided ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 {
+          prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 m apply + orderedPair apply + orderedPair m r apply × orderedPair $0 r, apply + orderedPair apply × orderedPair $0 m apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r) () () 7.0.0.3.2 7.0.0.3.3
+          elided 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 {
+            prove ∈ apply × orderedPair $0 m ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, m) () () 7.0a p1
+            prove ∈ apply × orderedPair $0 r ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, r) () () 7.0a p2
+            prove ∈ apply + orderedPair r apply × orderedPair $0 r ℕ a68b2cd4517d3a2a38ba1c45fe0329897de3dcc6559f92c44242c35a8df270d9 () (r, apply × orderedPair $0 r) () () p2 7.0.0.3.5.1
+            prove = apply + orderedPair apply × orderedPair $0 m apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair r apply × orderedPair $0 r 04f5c5ea9198a8ef883a6cbbb9bde3ecb4623d50edb1ce8ef1fecf5ce5850806 () (apply × orderedPair $0 m, m, apply + orderedPair r apply × orderedPair $0 r) () () 7.0.0.3.5.0 p1 7.0.0.3.5.2
+          }
+          prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair r apply × orderedPair $0 r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply × orderedPair $0 m apply + orderedPair m apply + orderedPair r apply × orderedPair $0 r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair r apply × orderedPair $0 r) () () 7.0.0.3.4 7.0.0.3.5
           elided ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 {
-            prove ∈ apply × orderedPair $0 r ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, r) () () 7.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p2
-            prove = apply + orderedPair r apply × orderedPair $0 r apply + orderedPair apply × orderedPair $0 r r ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 () (r, apply × orderedPair $0 r) () () p2 7.0.3.7.0.0
+            elided ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 {
+              prove ∈ apply × orderedPair $0 r ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, r) () () 7.0a p2
+              prove = apply + orderedPair r apply × orderedPair $0 r apply + orderedPair apply × orderedPair $0 r r ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 () (r, apply × orderedPair $0 r) () () p2 7.0.0.3.7.0.0
+            }
+            prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair r apply × orderedPair $0 r apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair r apply × orderedPair $0 r, apply + orderedPair apply × orderedPair $0 r r) () (apply + orderedPair apply + orderedPair apply × orderedPair $0 m m $$0) 7.0.0.3.7.0
           }
-          prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair r apply × orderedPair $0 r apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair r apply × orderedPair $0 r, apply + orderedPair apply × orderedPair $0 r r) () (apply + orderedPair apply + orderedPair apply × orderedPair $0 m m $$0) 7.0.3.7.0
+          prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair r apply × orderedPair $0 r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r) () () 7.0.0.3.6 7.0.0.3.7
         }
-        prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair r apply × orderedPair $0 r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r) () () 7.0.3.6 7.0.3.7
+        prove = apply × orderedPair successor $0 apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor $0 apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r) () () 7.0.0.2 7.0.0.3
+        elided 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 {
+          prove = apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 m m 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 () ($0, m) () () 7.0a p1
+          prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r apply + orderedPair apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 r r 7c443e2cf474b9526f100bc88fa4dea410b006c21c5a0a187c8e6e34b2c5eedf () (apply × orderedPair successor $0 m, apply + orderedPair apply × orderedPair $0 m m) () (apply + orderedPair $$0 apply + orderedPair apply × orderedPair $0 r r) 7.0.0.5.0
+        }
+        prove = apply × orderedPair successor $0 apply + orderedPair m r apply + orderedPair apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 r r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor $0 apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r, apply + orderedPair apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 r r) () () 7.0.0.4 7.0.0.5
+        elided 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 {
+          prove = apply × orderedPair successor $0 r apply + orderedPair apply × orderedPair $0 r r 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 () ($0, r) () () 7.0a p2
+          prove = apply + orderedPair apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 r r apply + orderedPair apply × orderedPair successor $0 m apply × orderedPair successor $0 r 7c443e2cf474b9526f100bc88fa4dea410b006c21c5a0a187c8e6e34b2c5eedf () (apply × orderedPair successor $0 r, apply + orderedPair apply × orderedPair $0 r r) () (apply + orderedPair apply × orderedPair successor $0 m $$0) 7.0.0.7.0
+        }
+        prove = apply × orderedPair successor $0 apply + orderedPair m r apply + orderedPair apply × orderedPair successor $0 m apply × orderedPair successor $0 r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor $0 apply + orderedPair m r, apply + orderedPair apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 r r, apply + orderedPair apply × orderedPair successor $0 m apply × orderedPair successor $0 r) () () 7.0.0.6 7.0.0.7
       }
-      prove = apply × orderedPair successor $0 apply + orderedPair m r apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor $0 apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r) () () 7.0.2 7.0.3
-      elided 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 {
-        prove = apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 m m 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 () ($0, m) () () 7.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p1
-        prove = apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r apply + orderedPair apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 r r 7c443e2cf474b9526f100bc88fa4dea410b006c21c5a0a187c8e6e34b2c5eedf () (apply × orderedPair successor $0 m, apply + orderedPair apply × orderedPair $0 m m) () (apply + orderedPair $$0 apply + orderedPair apply × orderedPair $0 r r) 7.0.5.0
-      }
-      prove = apply × orderedPair successor $0 apply + orderedPair m r apply + orderedPair apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 r r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor $0 apply + orderedPair m r, apply + orderedPair apply + orderedPair apply × orderedPair $0 m m apply + orderedPair apply × orderedPair $0 r r, apply + orderedPair apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 r r) () () 7.0.4 7.0.5
-      elided 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 {
-        prove = apply × orderedPair successor $0 r apply + orderedPair apply × orderedPair $0 r r 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 () ($0, r) () () 7.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p2
-        prove = apply + orderedPair apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 r r apply + orderedPair apply × orderedPair successor $0 m apply × orderedPair successor $0 r 7c443e2cf474b9526f100bc88fa4dea410b006c21c5a0a187c8e6e34b2c5eedf () (apply × orderedPair successor $0 r, apply + orderedPair apply × orderedPair $0 r r) () (apply + orderedPair apply × orderedPair successor $0 m $$0) 7.0.7.0
-      }
-      prove = apply × orderedPair successor $0 apply + orderedPair m r apply + orderedPair apply × orderedPair successor $0 m apply × orderedPair successor $0 r 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair successor $0 apply + orderedPair m r, apply + orderedPair apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 r r, apply + orderedPair apply × orderedPair successor $0 m apply × orderedPair successor $0 r) () () 7.0.6 7.0.7
     }
   }
-  prove = apply × orderedPair n apply + orderedPair m r apply + orderedPair apply × orderedPair n m apply × orderedPair n r bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (n) (= apply × orderedPair $0 apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r) () 6 7 p0
+  prove = apply × orderedPair n apply + orderedPair m r apply + orderedPair apply × orderedPair n m apply × orderedPair n r 304aff0114174ed1e9744ce28acc6d3a88d46a39cfce60de3fe14d4b27acbc65 () (n) (= apply × orderedPair $0 apply + orderedPair m r apply + orderedPair apply × orderedPair $0 m apply × orderedPair $0 r) () 6 7 p0
 }
 
 theorem Right Distribute Multiplication over Addition
@@ -356,25 +364,27 @@ conclusion = apply × orderedPair n apply × orderedPair m r apply × orderedPai
   }
   prove = apply × orderedPair n apply × orderedPair m 0 apply × orderedPair apply × orderedPair n m 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n apply × orderedPair m 0, 0, apply × orderedPair apply × orderedPair n m 0) () () 2 3
   take x {
-    assume ∧ ∈ $0 ℕ = apply × orderedPair n apply × orderedPair m $0 apply × orderedPair apply × orderedPair n m $0 {
-      elided 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 {
-        prove = apply × orderedPair m successor $0 apply + orderedPair apply × orderedPair m $0 m 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (m, $0) () () p1 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-        prove = apply × orderedPair n apply × orderedPair m successor $0 apply × orderedPair n apply + orderedPair apply × orderedPair m $0 m 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair m successor $0, apply + orderedPair apply × orderedPair m $0 m) () (apply × orderedPair n $$0) 5.0.0.0
+    assume ∈ $0 ℕ {
+      assume = apply × orderedPair n apply × orderedPair m $0 apply × orderedPair apply × orderedPair n m $0 {
+        elided 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 {
+          prove = apply × orderedPair m successor $0 apply + orderedPair apply × orderedPair m $0 m 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (m, $0) () () p1 5.0a
+          prove = apply × orderedPair n apply × orderedPair m successor $0 apply × orderedPair n apply + orderedPair apply × orderedPair m $0 m 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair m successor $0, apply + orderedPair apply × orderedPair m $0 m) () (apply × orderedPair n $$0) 5.0.0.0.0
+        }
+        elided 6c54e161411e55129d9d8cddc88cf17401d71c6c101ee8a50f54350c94101da0 {
+          prove ∈ apply × orderedPair m $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (m, $0) () () p1 5.0a
+          prove = apply × orderedPair n apply + orderedPair apply × orderedPair m $0 m apply + orderedPair apply × orderedPair n apply × orderedPair m $0 apply × orderedPair n m 6c54e161411e55129d9d8cddc88cf17401d71c6c101ee8a50f54350c94101da0 () (n, apply × orderedPair m $0, m) () () p0 5.0.0.1.0 p1
+        }
+        prove = apply × orderedPair n apply × orderedPair m successor $0 apply + orderedPair apply × orderedPair n apply × orderedPair m $0 apply × orderedPair n m 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n apply × orderedPair m successor $0, apply × orderedPair n apply + orderedPair apply × orderedPair m $0 m, apply + orderedPair apply × orderedPair n apply × orderedPair m $0 apply × orderedPair n m) () () 5.0.0.0 5.0.0.1
+        prove = apply + orderedPair apply × orderedPair n apply × orderedPair m $0 apply × orderedPair n m apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair n apply × orderedPair m $0, apply × orderedPair apply × orderedPair n m $0) () (apply + orderedPair $$0 apply × orderedPair n m) 5.0.0a
+        prove = apply × orderedPair n apply × orderedPair m successor $0 apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n apply × orderedPair m successor $0, apply + orderedPair apply × orderedPair n apply × orderedPair m $0 apply × orderedPair n m, apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m) () () 5.0.0.2 5.0.0.3
+        elided 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 {
+          prove ∈ apply × orderedPair n m ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, m) () () p0 p1
+          prove = apply × orderedPair apply × orderedPair n m successor $0 apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (apply × orderedPair n m, $0) () () 5.0.0.5.0 5.0a
+          prove = apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m apply × orderedPair apply × orderedPair n m successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply × orderedPair apply × orderedPair n m successor $0, apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m) () () 5.0.0.5.1
+        }
+        prove = apply × orderedPair n apply × orderedPair m successor $0 apply × orderedPair apply × orderedPair n m successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n apply × orderedPair m successor $0, apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m, apply × orderedPair apply × orderedPair n m successor $0) () () 5.0.0.4 5.0.0.5
       }
-      elided 6c54e161411e55129d9d8cddc88cf17401d71c6c101ee8a50f54350c94101da0 {
-        prove ∈ apply × orderedPair m $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (m, $0) () () p1 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-        prove = apply × orderedPair n apply + orderedPair apply × orderedPair m $0 m apply + orderedPair apply × orderedPair n apply × orderedPair m $0 apply × orderedPair n m 6c54e161411e55129d9d8cddc88cf17401d71c6c101ee8a50f54350c94101da0 () (n, apply × orderedPair m $0, m) () () p0 5.0.1.0 p1
-      }
-      prove = apply × orderedPair n apply × orderedPair m successor $0 apply + orderedPair apply × orderedPair n apply × orderedPair m $0 apply × orderedPair n m 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n apply × orderedPair m successor $0, apply × orderedPair n apply + orderedPair apply × orderedPair m $0 m, apply + orderedPair apply × orderedPair n apply × orderedPair m $0 apply × orderedPair n m) () () 5.0.0 5.0.1
-      prove = apply + orderedPair apply × orderedPair n apply × orderedPair m $0 apply × orderedPair n m apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply × orderedPair n apply × orderedPair m $0, apply × orderedPair apply × orderedPair n m $0) () (apply + orderedPair $$0 apply × orderedPair n m) 5.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-      prove = apply × orderedPair n apply × orderedPair m successor $0 apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n apply × orderedPair m successor $0, apply + orderedPair apply × orderedPair n apply × orderedPair m $0 apply × orderedPair n m, apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m) () () 5.0.2 5.0.3
-      elided 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 {
-        prove ∈ apply × orderedPair n m ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, m) () () p0 p1
-        prove = apply × orderedPair apply × orderedPair n m successor $0 apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (apply × orderedPair n m, $0) () () 5.0.5.0 5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-        prove = apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m apply × orderedPair apply × orderedPair n m successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply × orderedPair apply × orderedPair n m successor $0, apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m) () () 5.0.5.1
-      }
-      prove = apply × orderedPair n apply × orderedPair m successor $0 apply × orderedPair apply × orderedPair n m successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n apply × orderedPair m successor $0, apply + orderedPair apply × orderedPair apply × orderedPair n m $0 apply × orderedPair n m, apply × orderedPair apply × orderedPair n m successor $0) () () 5.0.4 5.0.5
     }
   }
-  prove = apply × orderedPair n apply × orderedPair m r apply × orderedPair apply × orderedPair n m r bfc5480b68afe6f860a4c75bc4de20cf055bb87d7c2c2a8822c2c82403525c47 () (r) (= apply × orderedPair n apply × orderedPair m $0 apply × orderedPair apply × orderedPair n m $0) () 4 5 p2
+  prove = apply × orderedPair n apply × orderedPair m r apply × orderedPair apply × orderedPair n m r 304aff0114174ed1e9744ce28acc6d3a88d46a39cfce60de3fe14d4b27acbc65 () (r) (= apply × orderedPair n apply × orderedPair m $0 apply × orderedPair apply × orderedPair n m $0) () 4 5 p2
 }

@@ -209,9 +209,9 @@ premise = f functionMap a A with ($0) F
 premise ∀ a → ∈ $0 A ∈ with ($0) F B
 conclusion function f A B
 {
-  elided (Rewritten) {
+  elided 3554b7859d22ea016fcc856a0d0c569d8c25cce90a4ba66d3a2f2f3cce5e276e {
     prove = functionMap a A with ($0) F replacementSet a A orderedPair $0 with ($0) F 3554b7859d22ea016fcc856a0d0c569d8c25cce90a4ba66d3a2f2f3cce5e276e () (A) () (with ($0) F)
-    prove = f replacementSet a A orderedPair $0 with ($0) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (functionMap a A with ($0) F, replacementSet a A orderedPair $0 with ($0) F) (= f $0) () 0.0 p0
+    prove = f replacementSet a A orderedPair $0 with ($0) F 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (f, functionMap a A with ($0) F, replacementSet a A orderedPair $0 with ($0) F) () () p0 0.0
   }
   subproof (Subset) {
     take x {
@@ -263,7 +263,7 @@ premise ∈ a A
 conclusion = apply f a with (a) F
 {
   let B = $0 replacementSet x A with ($0) F cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (= apply f a with (a) F) (replacementSet x A with ($0) F) () () {
-    take a {
+    take x {
       assume ∈ $0 A {
         prove ∈ with ($0) F $$0 d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () ($$0, A, $0) () (with ($$$0) F) 0a 0.0.0a
       }
