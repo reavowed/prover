@@ -4,11 +4,12 @@ import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {connect} from "react-redux";
 import {Parser} from "../Parser";
-import {CopiableExpression} from "./ExpressionComponent";
+import {CopiableExpression, ExpressionComponent} from "./ExpressionComponent";
 import InferenceAutosuggest from "./InferenceAutosuggest";
 import SuggestionDropdownElement from "./SuggestionDropdownElement";
 import ProofContext from "./theorem/ProofContext";
 import {FetchJsonForStep} from "./theorem/TheoremStore";
+import BoundVariableLists from "./steps/BoundVariableLists";
 
 export default connect()(class PremiseOrFactChooser extends React.Component {
   static contextType = ProofContext;
@@ -53,31 +54,33 @@ export default connect()(class PremiseOrFactChooser extends React.Component {
       mainElement={getSuggestionValue(s)}
       hoverElement={<CopiableExpression expression={s.conclusion} />} />;
 
-    return <>
-      <Form.Group>
-        <Form.Label><strong>{title} fact</strong></Form.Label>
-        <InferenceAutosuggest
-          autoFocus
-          value={this.state.autosuggestValue}
-          onValueChange={this.onAutosuggestChange}
-          suggestions={this.state.facts}
-          getSuggestionValue={getSuggestionValue}
-          renderSuggestion={renderSuggestion}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          onSuggestionSelected={this.onSuggestionSelected} />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label><strong>{title} premise</strong></Form.Label>
-        <Form.Control as="select" value={selectedPremise ? selectedPremise.serializedReference : ""} onChange={this.selectPremise}>
-          <option value="" />
-          {availablePremises.map(p =>
-            <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
-                <CopiableExpression expression={p.statement} />
-              )}}/>
-          )}
-        </Form.Control>
-      </Form.Group>
-    </>;
+    return <BoundVariableLists.Consumer>{ boundVariableLists =>
+      <>
+        <Form.Group>
+          <Form.Label><strong>{title} fact</strong></Form.Label>
+          <InferenceAutosuggest
+            autoFocus
+            value={this.state.autosuggestValue}
+            onValueChange={this.onAutosuggestChange}
+            suggestions={this.state.facts}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            onSuggestionSelected={this.onSuggestionSelected} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label><strong>{title} premise</strong></Form.Label>
+          <Form.Control as="select" value={selectedPremise ? selectedPremise.serializedReference : ""} onChange={this.selectPremise}>
+            <option value="" />
+            {availablePremises.map(p =>
+              <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
+                  <ExpressionComponent expression={p.statement} boundVariableLists={boundVariableLists}/>
+                )}}/>
+            )}
+          </Form.Control>
+        </Form.Group>
+      </>
+    }</BoundVariableLists.Consumer>;
   }
 });

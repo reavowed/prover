@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {connect} from "react-redux";
 import {Expression, matchTemplate} from "../../models/Expression";
-import {CopiableExpression} from "../ExpressionComponent";
+import {CopiableExpression, ExpressionComponent} from "../ExpressionComponent";
 import Extractor from "../Extractor";
 import {FlexRow} from "../FlexRow";
 import {InferenceFinder} from "../InferenceFinder";
@@ -23,6 +23,7 @@ import {Parser} from "../../Parser";
 import ProofContext from "../theorem/ProofContext";
 import DraggableList from "../DraggableList";
 import Step from "./Step";
+import BoundVariableLists from "./BoundVariableLists";
 
 export const TargetStepProofLine = connect()(class TargetStepProofLine extends React.Component {
   static contextType = ProofContext;
@@ -458,25 +459,25 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
             path={path}
             onSave={this.rewriteRight}
           />}
-          {activeProvingType === 'rewritePremise' && <>
-          <Form.Group>
-            <Form.Label><strong>Choose premise</strong></Form.Label>
-            <Form.Control as="select" autoFocus value={this.state.premiseToRewrite && this.state.premiseToRewrite.serializedReference} onChange={e => this.setState({premiseToRewrite: _.find(this.state.availablePremises, p => p.serializedReference === e.target.value).statement})}>
-              <option value="" />
-              {this.state.availablePremises.map(p =>
-                <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
-                    <CopiableExpression expression={p.statement} />
-                  )}}/>
-              )}
-            </Form.Control>
-          </Form.Group>
-            {this.state.premiseToRewrite && <Rewriter
-              title="Rewriting Premise"
-              expression={this.state.premiseToRewrite}
-              path={path}
-              onSave={rewrites => this.rewritePremise({serializedPremise: this.state.premiseToRewrite.serialize(), rewrites})}
-            />}
-          </>}
+          {activeProvingType === 'rewritePremise' && <BoundVariableLists.Consumer>{boundVariableLists =>
+            <Form.Group>
+              <Form.Label><strong>Choose premise</strong></Form.Label>
+              <Form.Control as="select" autoFocus value={this.state.premiseToRewrite && this.state.premiseToRewrite.serializedReference} onChange={e => this.setState({premiseToRewrite: _.find(this.state.availablePremises, p => p.serializedReference === e.target.value).statement})}>
+                <option value="" />
+                {this.state.availablePremises.map(p =>
+                  <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
+                      <ExpressionComponent expression={p.statement} boundVariableLists={boundVariableLists} />
+                    )}}/>
+                )}
+              </Form.Control>
+            </Form.Group>
+          }</BoundVariableLists.Consumer>}
+          {this.state.premiseToRewrite && <Rewriter
+            title="Rewriting Premise"
+            expression={this.state.premiseToRewrite}
+            path={path}
+            onSave={rewrites => this.rewritePremise({serializedPremise: this.state.premiseToRewrite.serialize(), rewrites})}
+          />}
           {activeProvingType === 'extract' && <PremiseOrFactChooser
             title="Extract from"
             availablePremises={this.state.availablePremises}

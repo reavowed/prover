@@ -317,10 +317,12 @@ export class Chapter extends React.Component {
     }).then(this.stopAddingTerm);
   };
 
-  createUpdater = (statePropertyName, innerPropertyName, transformer) => (event) => {
-    const [newValue, callback] = transformer ? transformer(event) : [event.target.value, null];
-    const newStateValue = _.assign({}, this.state.statePropertyName, {innerPropertyName: newValue});
-    this.setState({statePropertyName: newStateValue}, callback);
+  createUpdater = (statePropertyName, innerPropertyName, transformer) => {
+    return function(event) {
+      const [newValue, callback] = transformer ? transformer(event) : [event.target.value, null];
+      const newStateValue = _.assign({}, this.state[statePropertyName], {[innerPropertyName]: newValue});
+      this.setState({[statePropertyName]: newStateValue}, callback);
+    }.bind(this);
   };
 
   startAddingProperty = () => {

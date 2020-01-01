@@ -100,7 +100,7 @@ class StepExtractionController @Autowired() (val bookService: BookService) exten
       }
       def fromFact(inferenceId: String, helperPremise: Premise): Try[Step] = {
         for {
-          fact <- stepProvingContext.provingContext.facts.find(_.id == request.inferenceId).orBadRequest(s"Could not find inference ${request.inferenceId}")
+          fact <- stepProvingContext.provingContext.facts.find(_.id == inferenceId).orBadRequest(s"Could not find inference ${request.inferenceId}")
           newStep <- new SubstatementExtractor()(stepProvingContext).extractFromFactWithPremise(fact, helperPremise.statement).orBadRequest(s"Could not extract statement ${step.statement}")
         } yield newStep
       }

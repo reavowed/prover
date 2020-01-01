@@ -5,11 +5,12 @@ import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {connect} from "react-redux";
 import {Parser} from "../Parser";
-import {CopiableExpression} from "./ExpressionComponent";
+import {CopiableExpression, ExpressionComponent} from "./ExpressionComponent";
 import InferenceAutosuggest from "./InferenceAutosuggest";
 import SuggestionDropdownElement from "./SuggestionDropdownElement";
 import ProofContext from "./theorem/ProofContext";
 import {FetchJsonForStep, FetchJsonForStepAndUpdate, SetHighlightingAction} from "./theorem/TheoremStore";
+import BoundVariableLists from "./steps/BoundVariableLists";
 
 export default connect()(class Extractor extends React.Component {
   static contextType = ProofContext;
@@ -53,7 +54,7 @@ export default connect()(class Extractor extends React.Component {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         inferenceId: this.state.selectedFact && this.state.selectedFact.id,
-        serializedBasePremiseStatement: this.state.selectedBasePremise.statement && this.state.selectedBasePremise.statement.serialize(),
+        serializedBasePremiseStatement: this.state.selectedBasePremise && this.state.selectedBasePremise.statement.serialize(),
         serializedHelperPremiseStatement: this.state.selectedHelperPremise.statement.serialize()
       })
     })).then(() => this.props.onSave());
@@ -68,7 +69,7 @@ export default connect()(class Extractor extends React.Component {
       mainElement={getSuggestionValue(s)}
       hoverElement={<CopiableExpression expression={s.conclusion} />} />;
 
-    return <>
+    return <BoundVariableLists.Consumer>{ boundVariableLists => <>
       <Form.Group>
         <Form.Label><strong>{title} from fact</strong></Form.Label>
         <InferenceAutosuggest
@@ -89,7 +90,7 @@ export default connect()(class Extractor extends React.Component {
           <option value="" />
           {availablePremises.map(p =>
             <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
-                <CopiableExpression expression={p.statement} />
+                <ExpressionComponent expression={p.statement} boundVariableLists={boundVariableLists} />
               )}}/>
           )}
         </Form.Control>
@@ -100,7 +101,7 @@ export default connect()(class Extractor extends React.Component {
           <option value="" />
           {availablePremises.map(p =>
             <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
-                <CopiableExpression expression={p.statement} />
+                <ExpressionComponent expression={p.statement} boundVariableLists={boundVariableLists} />
               )}}/>
           )}
         </Form.Control>
@@ -108,6 +109,6 @@ export default connect()(class Extractor extends React.Component {
       <Form.Group>
         <Button variant="success" onClick={() => this.onSave()} disabled={!((selectedFact || selectedBasePremise) && selectedHelperPremise)}>Extract</Button>
       </Form.Group>
-    </>;
+    </>}</BoundVariableLists.Consumer>;
   }
 });

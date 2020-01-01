@@ -257,8 +257,7 @@ export class InferenceFinder extends React.Component {
         )}
       </Form.Group>
     };
-    let SubstitutionOptions = ({name, validValues, getter, setter}) => {
-      const boundVariableLists = useContext(BoundVariableLists) || [];
+    let showSubstitutionOptions = (name, validValues, getter, setter) => {
       const selectionElement = !validValues ?
         <Form.Control type="text"
                       value={getter(this.state.selectedSubstitutionValues)}
@@ -267,14 +266,16 @@ export class InferenceFinder extends React.Component {
         /> :
         validValues.length === 1 ?
           <Form.Label column><CopiableExpression expression={validValues[0]} /></Form.Label> :
-          <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)}>
-            <option value="" />
-            {validValues.map(v =>
-              <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                  <ExpressionComponent expression={v} boundVariableLists={boundVariableLists} />
-                )}}/>
-            )}
-          </Form.Control>;
+          <BoundVariableLists.Consumer>{ boundVariableLists =>
+            <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)}>
+              <option value="" />
+              {validValues.map(v =>
+                <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
+                    <ExpressionComponent expression={v} boundVariableLists={boundVariableLists} />
+                  )}}/>
+              )}
+            </Form.Control>
+          }</BoundVariableLists.Consumer>;
 
       return <Form.Group as={Form.Row}>
         <Form.Label column xs={2}><CopiableExpression expression={{textForHtml: () => name}}/></Form.Label>
@@ -286,7 +287,7 @@ export class InferenceFinder extends React.Component {
       const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
       return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name => {
         const validValues = this.getValidSubstitutionValues(key, name);
-        return <SubstitutionOptions name={name} key={`${key} ${name}`} validValues={validValues} getter={x => x[key][name]} setter={x => x[key][name] = y} />;
+        return showSubstitutionOptions(name, validValues, x => x[key][name], (x, y) => x[key][name] = y);
       });
     };
     let showParameteredSubstitutions = (key) => {
@@ -295,7 +296,7 @@ export class InferenceFinder extends React.Component {
         const validValues = this.getValidSubstitutionValues(key, name, numberOfParameters);
         const newVariableList = numberOfParameters === 1 ? ["$"] : _.map(_.range(numberOfParameters), x => "$_" + (x+1));
         return <BoundVariableLists.Add variables={newVariableList} key={`${key} ${name} ${numberOfParameters}`}>
-          <SubstitutionOptions name={`${name}(${newVariableList.join(", ")})`} validValues={validValues} getter={x => x[key][name][numberOfParameters]} setter={(x, y) => x[key][name][numberOfParameters] = y} />
+          {showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, validValues, x => x[key][name][numberOfParameters], (x, y) => x[key][name][numberOfParameters] = y)}
         </BoundVariableLists.Add>
       });
     };
