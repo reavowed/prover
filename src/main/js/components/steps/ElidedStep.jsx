@@ -44,7 +44,7 @@ export const ElidedStepProofLine = connect()(class ElidedStepProofLine extends R
   };
 
   render() {
-    let {step, path, children} = this.props;
+    let {step, path, children, standalone} = this.props;
     let buttons = <>
       {step.highlightedInference && <InferenceLink inference={step.highlightedInference} suffix={<span className="fas fa-ellipsis-v"/>}/>}
       {step.description && <span className="text-muted text-uppercase ml-1" style={{"fontFamily": "monospace"}}>{step.description} <span className="fas fa-ellipsis-v"/></span>}
@@ -53,20 +53,23 @@ export const ElidedStepProofLine = connect()(class ElidedStepProofLine extends R
         {_.uniqBy(step.inferencesUsed, "id").map(i => <Dropdown.Item key={i.id} onClick={() => this.highlightInference(i.id)}>{i.name}</Dropdown.Item>)}
       </DropdownButton>}
     </>;
+    const proofLine = <ProofLine premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
+                                 path={path}
+                                 statement={step.statement}
+                                 buttons={buttons}
+                                 onClick={this.toggleProofCard}
+                                 incomplete={!step.isComplete}
+    >
+      {children}
+    </ProofLine>;
     return <>
-      <ProofLine premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
-                 path={path}
-                 statement={step.statement}
-                 buttons={buttons}
-                 onClick={this.toggleProofCard}
-                 incomplete={!step.isComplete}
-      >
-        {children}
-      </ProofLine>
+      {(standalone && !this.state.showProofCard) ? <Step.WithoutSubsteps>{proofLine}</Step.WithoutSubsteps> : proofLine}
       {this.state.showProofCard && <div className="card" style={{margin: ".5rem -0.75rem .5rem 2rem", padding: ".5rem .75rem"}}>
-        <Steps steps={step.substeps}
-               path={path}
-               referencesForLastStep={[]}/>
+        <Steps.Container path={path}>
+          <Steps steps={step.substeps}
+                 path={path}
+                 referencesForLastStep={[]}/>
+        </Steps.Container>
       </div>}
     </>;
   }
@@ -75,12 +78,10 @@ export const ElidedStepProofLine = connect()(class ElidedStepProofLine extends R
 export class ElidedStep extends React.Component {
   render() {
     const {step, path} = this.props;
-    return <Step.WithoutSubsteps>
-      <ElidedStepProofLine {...this.props} prefix="Then">
-        <ProofLine.SingleStatementWithPrefixContent prefix="Then"
-                                                    statement={step.statement}
-                                                    path={path} />
-      </ElidedStepProofLine>
-    </Step.WithoutSubsteps>;
+    return <ElidedStepProofLine standalone {...this.props} prefix="Then">
+      <ProofLine.SingleStatementWithPrefixContent prefix="Then"
+                                                  statement={step.statement}
+                                                  path={path} />
+    </ElidedStepProofLine>;
   }
 }
