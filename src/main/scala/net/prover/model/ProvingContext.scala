@@ -155,6 +155,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val statementExtractionInferences: Seq[(Inference, Statement, Seq[Statement])] = {
     replace(definitions.statementExtractionInferences)
   }
+  lazy val finalStatementExtractionInferences: Seq[(Inference, Statement, Seq[Statement])] = {
+    replace(definitions.finalStatementExtractionInferences)
+  }
   lazy val predicateSpecificationInferences: Seq[(Inference, Statement, String, Seq[String])] = {
     replace(definitions.predicateSpecificationInferences)
   }
