@@ -100,16 +100,10 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     externalDepth: Int
   ): Option[Map[Int, Term]] = {
     if (level == internalDepth + externalDepth) {
-      argumentsSoFar.get(index) match {
-        case Some(`target`) =>
-          Some(argumentsSoFar)
-        case Some(_) =>
-          None
-        case None =>
-          target.asOptionalInstanceOf[Term]
-            .flatMap(_.removeExternalParameters(internalDepth))
-            .map(t => argumentsSoFar.updated(index, t))
-      }
+      for {
+        argument <- target.asOptionalInstanceOf[Term].flatMap(_.removeExternalParameters(internalDepth))
+        result <- argumentsSoFar.tryAdd(index, argument)
+      } yield result
     } else if (target == this) {
       Some(argumentsSoFar)
     } else {

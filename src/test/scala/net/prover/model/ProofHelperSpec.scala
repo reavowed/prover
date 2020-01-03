@@ -9,13 +9,14 @@ import org.specs2.matcher.MatchResult
 
 class ProofHelperSpec extends ProverSpec {
 
-  def validateStep(step: Option[Step], targetStatement: Statement, premises: Seq[Statement], entryContext: EntryContext): MatchResult[Any] = {
+  def validateStep(step: Option[Step], targetStatement: Statement, premises: Seq[Statement], entryContext: EntryContext, depth: Int = 0): MatchResult[Any] = {
     step must beSome
+    val proofStep = (0 until depth).foldLeft(step.get) { case (step, i) => Step.ScopedVariable(i.toString, Seq(step), ForAll)}
     val theorem = Theorem(
       "Test Theorem",
       premises,
-      targetStatement,
-      Seq(Theorem.Proof(step.toSeq)),
+      proofStep.provenStatement.get,
+      Seq(Theorem.Proof(Seq(proofStep))),
       RearrangementType.NotRearrangement
     ).recalculateReferences(entryContextToProvingContext(entryContext))
     val serializedTheorem = theorem.serializedLines.mkString("\n").stripPrefix("theorem ")
@@ -35,13 +36,13 @@ class ProofHelperSpec extends ProverSpec {
 
     def extract(targetStatement: Statement, premises: Seq[Statement], depth: Int = 0): Option[Step] = {
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil).copy(boundVariableLists = (1 to depth).map(i => Seq(i.toString)))
-      new SubstatementExtractor()(entryContextAndStepContextToStepProvingContext).extract(targetStatement)
+      new SubstatementExtractor().extract(targetStatement)
         .map(_.recalculateReferences(stepContext, implicitly[ProvingContext]))
     }
 
-    def testExtraction(targetStatement: Statement, premises: Seq[Statement]) = {
-      val step = extract(targetStatement, premises)
-      validateStep(step, targetStatement, premises, entryContextWithAxioms)
+    def testExtraction(targetStatement: Statement, premises: Seq[Statement], depth: Int = 0) = {
+      val step = extract(targetStatement, premises, depth)
+      validateStep(step, targetStatement, premises, entryContextWithAxioms, depth)
     }
 
     "find a statement via specification" in {
@@ -136,15 +137,25 @@ class ProofHelperSpec extends ProverSpec {
     }
 
     "find non-spurious result with external bound variables" in {
-      extract(
+      testExtraction(
         Exists("x")(ψ(FunctionParameter(0, 0), FunctionParameter(0, 2), Successor(FunctionParameter(0, 1)))),
         Seq(
           ForAll("y")(Implication(
             φ(FunctionParameter(0, 2), FunctionParameter(0, 0)),
             Exists("x")(ψ(FunctionParameter(0, 0), FunctionParameter(0, 3), FunctionParameter(0, 1))))),
           φ(FunctionParameter(0, 1), Successor(FunctionParameter(0, 0)))),
-        2
-      ) must beSome
+        2)
+    }
+
+    "extract a statement with an external bound variable appearing twice in an internally bound context" in {
+      testExtraction(
+        ForAll("y")(φ(FunctionParameter(0, 0), FunctionParameter(0, 1), FunctionParameter(0, 1))),
+        Seq(
+          ForAll("x")(Implication(
+            ψ(FunctionParameter(0, 0)),
+            ForAll("y")(φ(FunctionParameter(0, 0), FunctionParameter(0, 1), FunctionParameter(0, 1))))),
+          ψ(FunctionParameter(0, 0))),
+        1)
     }
   }
 

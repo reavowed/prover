@@ -81,7 +81,7 @@ trait ProverSpec extends Specification {
   val Negation = connective("¬", 1, None)
   val Conjunction = connective("∧", 2, Some(Negation(Implication(φ, Negation(ψ)))))
   val Disjunction = connective("∨", 2, Some(Implication(Negation(φ), ψ)))
-  val Equivalence = connective("↔", 2, None)
+  val Equivalence = connective("↔", 2, Some(Conjunction(Implication(φ, ψ), Implication(ψ, φ))))
 
   val ForAll = quantifier("∀", None).copy(attributes = Seq("scoping"))
   val Exists = quantifier("∃", Some(Negation(ForAll("x")(Negation(φ(FunctionParameter(0, 0)))))))

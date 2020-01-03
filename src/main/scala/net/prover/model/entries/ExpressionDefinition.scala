@@ -16,6 +16,7 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
   def defaultValue: Expression
   def typeName: String
   def attributes: Seq[String]
+  def complexity: Int
 
   def withSymbol(newSymbol: String): ExpressionDefinitionType
   def withShorthand(newShorthand: Option[String]): ExpressionDefinitionType

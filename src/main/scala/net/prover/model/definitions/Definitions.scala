@@ -151,8 +151,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     case inference @ Inference(_, Seq(singlePremise), conclusion)
       if singlePremise.complexity > conclusion.complexity &&
         singlePremise.requiredSubstitutions.isEquivalentTo(inference.requiredSubstitutions) &&
-        singlePremise.requiredSubstitutions.predicates.isEmpty && singlePremise.requiredSubstitutions.functions.isEmpty &&
-        conclusion.referencedDefinitions.subsetOf(singlePremise.referencedDefinitions)
+        singlePremise.requiredSubstitutions.predicates.isEmpty && singlePremise.requiredSubstitutions.functions.isEmpty
     =>
       (inference, singlePremise)
   }
@@ -190,11 +189,20 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
 
   lazy val statementExtractionInferences: Seq[(Inference, Statement, Seq[Statement])] = inferenceEntries.collect {
     case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
+      if inference.requiredSubstitutions.copy(statements = Nil).isEmpty &&
+        firstPremise.requiredSubstitutions.contains(inference.requiredSubstitutions) &&
+        conclusion.complexity < firstPremise.complexity &&
+        otherPremises.forall(_.complexity < firstPremise.complexity)
+    =>
+      (inference, firstPremise, otherPremises)
+  }
+  lazy val finalStatementExtractionInferences: Seq[(Inference, Statement, Seq[Statement])] = inferenceEntries.collect {
+    case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
       if conclusion.singleStatementVariable.isDefined &&
         inference.requiredSubstitutions.copy(statements = Nil).isEmpty &&
         firstPremise.requiredSubstitutions.contains(inference.requiredSubstitutions) &&
-        (conclusion.complexity < firstPremise.complexity || firstPremise.requiredSubstitutions.statements.length > 1)
-
+        conclusion.complexity >= firstPremise.complexity &&
+        firstPremise != conclusion
     =>
       (inference, firstPremise, otherPremises)
   }

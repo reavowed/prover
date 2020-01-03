@@ -48,7 +48,7 @@ object PremiseFinder {
     }
   }
 
-  def findPremiseSteps(
+  private def findPremiseStepsWithoutRewriting(
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
   ): Option[Seq[Step.Assertion]] = {
@@ -108,6 +108,31 @@ object PremiseFinder {
     }
 
     fromGivenPremises orElse fromFact orElse bySimplifyingPremises orElse bySimplifyingTarget
+  }
+
+  private def findPremiseStepsWithRewriting(
+    targetStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[Seq[Step.Assertion]] = {
+    stepProvingContext.provingContext.rewriteInferences.mapFind { case (inference, singlePremise) =>
+      for {
+        rewriteSubstitutions <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality)
+        rewrittenStatement <- singlePremise.applySubstitutions(rewriteSubstitutions)
+        innerSteps <- findPremiseStepsWithoutRewriting(rewrittenStatement)
+        rewriteStep = Step.Assertion(
+          targetStatement,
+          inference.summary,
+          Seq(Premise.Pending(rewrittenStatement)),
+          rewriteSubstitutions)
+      } yield innerSteps :+ rewriteStep
+    }
+  }
+
+  def findPremiseSteps(
+    targetStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[Seq[Step.Assertion]] = {
+    findPremiseStepsWithoutRewriting(targetStatement) orElse findPremiseStepsWithRewriting(targetStatement)
   }
 
   def findPremiseSteps(
