@@ -267,7 +267,7 @@ export const Steps = connect()(class Steps extends React.Component {
       if (binaryRelation) {
         const transitivityDetails = this.getTransitivityDetails(stepsWithIndexes, step, binaryRelation, path, index);
         if (transitivityDetails) {
-          const key = sha256(["transitivity " + transitivityDetails.finalStatement.serialize(), ... _.map(transitivityDetails.rightHandSides, rhs => rhs.step.id)].join("\n"));
+          const key = transitivityDetails.finalStatement.serialize();
           return {
             key,
             element: <TransitiveSteps referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []}
@@ -296,7 +296,7 @@ export const Steps = connect()(class Steps extends React.Component {
       }
     }
     return {
-      key: step.id,
+      key: step.provenStatement.serialize(),
       element: React.createElement(Steps.getElementName(step), props)
     }
   }
