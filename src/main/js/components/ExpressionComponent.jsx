@@ -16,11 +16,26 @@ const ClickablePremise = styled(HighlightedPremise)`
   cursor: pointer;
 `;
 
-function filterPaths(paths, initialPath) {
-  return _.chain(paths)
-    .filter(p => _.isEqual(p.path.slice(0, initialPath.length), initialPath))
-    .map(p => Object.assign({}, p, {path: p.path.slice(initialPath.length)}))
+function filterPaths(actions, initialPath) {
+  return _.chain(actions)
+    .filter(a => _.startsWith(a.path, initialPath))
+    .map(a => Object.assign({}, a, {path: a.path.slice(initialPath.length)}))
     .value();
+}
+
+function filterPathsMultiple(actions, initialPaths) {
+  const result = [];
+  for(let i = 0; i < actions.length; ++i) {
+    const action = actions[i];
+    for(let j = 0; j < initialPaths.length; ++j) {
+      const initialPath = initialPaths[j];
+      if (_.startsWith(action.path, initialPath)) {
+        result.push({...action, path: action.path.slice(initialPath.length)});
+        break;
+      }
+    }
+  }
+  return result;
 }
 
 export class ExpressionComponent extends React.Component {
@@ -62,14 +77,46 @@ export class ExpressionComponent extends React.Component {
     }
 
     if (expression instanceof TypeExpression) {
-      const formattedTerm = <ExpressionComponent expression={expression.term} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
-      const renderedOtherComponents = expression.otherComponents.map(c => <ExpressionComponent expression={c} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>);
-      const formattedComponents = formatHtmlWithoutWrapping(expression.definition.componentFormatString, s => replacePlaceholders(s, renderedOtherComponents));
-      const formattedProperties = expression.properties.join(", ");
+      function getPropertyPath(propertyIndex) {
+        return [..._.times(expression.properties.length - 1 - propertyIndex, _.constant(0)), 1];
+      }
+
+      const typePath = _.times(expression.properties.length, _.constant(0));
+      const typeActionHighlights = filterPaths(actionHighlights, typePath);
+      const typeStaticHighlights = filterPaths(staticHighlights, typePath);
+
+
+      const componentPaths = _.map(_.range(expression.properties.length), getPropertyPath);
+      const sharedActionHighlights = filterPathsMultiple(actionHighlights, [typePath, ...componentPaths]);
+      const sharedStaticHighlights = filterPathsMultiple(staticHighlights, [typePath, ...componentPaths]);
+
+      const formattedTerm = <ExpressionComponent expression={expression.term}
+                                                 actionHighlights={sharedActionHighlights}
+                                                 staticHighlights={sharedStaticHighlights}
+                                                 boundVariableLists={boundVariableLists}
+                                                 wrapBoundVariable={wrapBoundVariable}
+                                                 parentRequiresBrackets={false} />;
+      const formattedIs = <ExpressionComponent expression={{textForHtml: () => "is"}}
+                                               actionHighlights={sharedActionHighlights}
+                                               staticHighlights={sharedStaticHighlights} />;
       const articleWord = expression.properties.length ? expression.properties[0] : expression.definition.name;
       const article = _.includes("aeiou", articleWord[0]) ? "an" : "a";
-
-      return [formattedTerm, <> is {article} {formattedProperties} {expression.definition.name} </>, ...formattedComponents];
+      const formattedArticle = <ExpressionComponent expression={{textForHtml: () => article}}
+                                               actionHighlights={typeActionHighlights}
+                                               staticHighlights={typeStaticHighlights} />;
+      const formattedComponents = <ExpressionComponent expression={{formatForHtml: () => expression.definition.componentFormatString, components: expression.otherComponents}}
+                                                       actionHighlights={typeActionHighlights}
+                                                       staticHighlights={typeStaticHighlights} />;
+      const formattedProperties = _.flatMap(expression.properties, (p, i) => {
+        const formattedProperty = <ExpressionComponent expression={{textForHtml: () => p}}
+                                                       actionHighlights={filterPaths(actionHighlights, getPropertyPath(i))}
+                                                       staticHighlights={filterPaths(staticHighlights, getPropertyPath(i))} />;
+        if (i === 0)
+          return [formattedProperty];
+        else
+          return [<>, </>, formattedProperty];
+      });
+      return [formattedTerm, <> </>, formattedIs, <> </>, formattedArticle, <> </>, ...formattedProperties, <> {expression.definition.name} </>, formattedComponents];
     } else if (expression instanceof PropertyExpression) {
       const formattedTerm = <ExpressionComponent expression={expression.term} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
       return [formattedTerm, <> is </>, expression.name];
@@ -115,7 +162,7 @@ export class ExpressionComponent extends React.Component {
         e.stopPropagation();
       }
     }
-    return React.createElement(tag, props, this.renderInner(expression, path, actionHighlights, staticHighlights, boundVariableLists || [], wrapBoundVariable, parentRequiresBrackets).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>));
+    return React.createElement(tag, props, this.renderInner(expression, path, actionHighlights || [], staticHighlights || [], boundVariableLists || [], wrapBoundVariable, parentRequiresBrackets).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>));
   }
 }
 
