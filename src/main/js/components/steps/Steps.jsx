@@ -1,23 +1,24 @@
+import update from 'immutability-helper';
 import {sha256} from "js-sha256";
 import _ from "lodash";
 import path from "path";
 import React, {useContext} from "react";
+import {connect} from "react-redux";
 import styled from "styled-components";
-import {matchTemplate} from "../../models/Expression";
-import {StepReference} from "../../models/Step";
+import {DefinedExpression, FunctionParameter, matchTemplate} from "../../models/Expression";
+import {StepReference, DeductionStep as DeductionStepModel, ScopedVariableStep as ScopedVariableStepModel} from "../../models/Step";
 import DraggableList from "../DraggableList";
-import {HighlightableExpression} from "../ExpressionComponent";
-import {FetchJsonAndUpdate, FetchJsonForStep, FetchJsonForStepAndUpdate} from "../theorem/TheoremStore";
+import {ExpressionComponent, HighlightableExpression} from "../ExpressionComponent";
+import ProofContext from "../theorem/ProofContext";
+import {FetchJsonAndUpdate} from "../theorem/TheoremStore";
 import {AssertionStep, AssertionStepProofLine} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
 import {ElidedStep, ElidedStepProofLine} from "./ElidedStep";
 import {NamingStep} from "./NamingStep";
+import ScopedDeductionStep from "./ScopedDeductionStep";
 import {ScopedVariableStep} from "./ScopedVariableStep";
 import {SubproofStep} from "./SubproofStep";
 import {TargetStep, TargetStepProofLine} from "./TargetStep";
-import ProofContext from "../theorem/ProofContext";
-import {connect} from "react-redux";
-import update from 'immutability-helper';
 
 function findBinaryRelation(statement) {
   return _.find(_.reverse(window.binaryRelations.slice()), x => matchTemplate(x.template, statement, [], []));
@@ -279,6 +280,20 @@ export const Steps = connect()(class Steps extends React.Component {
       path: [...path, index],
       additionalReferences: !stepsWithIndexes.length ? referencesForLastStep || [] : []
     };
+    if (step instanceof ScopedVariableStepModel && step.substeps.length === 1 && step.substeps[0] instanceof DeductionStepModel) {
+      const substep = step.substeps[0];
+      if (substep.assumption instanceof DefinedExpression &&
+        substep.assumption.definition.baseFormatString.startsWith("%0 ") &&
+        substep.assumption.components[0] instanceof FunctionParameter &&
+        substep.assumption.components[0].level === 0 && substep.assumption.components[0].index === 0)
+      {
+        const key = step.id;
+        return {
+          key,
+          element: <ScopedDeductionStep {...props} format={substep.assumption.definition.baseFormatString} components={substep.assumption.components} />
+        };
+      }
+    }
     return {
       key: step.id,
       element: React.createElement(Steps.getElementName(step), props)

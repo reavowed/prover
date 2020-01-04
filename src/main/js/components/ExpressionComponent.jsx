@@ -24,14 +24,16 @@ function filterPaths(paths, initialPath) {
 }
 
 export class ExpressionComponent extends React.Component {
-  matchDisplayShorthand(displayShorthand, expression, pathWithinMatch, boundVariablesWithinMatch) {
-    const matches = matchTemplate(displayShorthand.template, expression, pathWithinMatch, boundVariablesWithinMatch);
-    if (matches) {
-      const matchesConditions = _.every(displayShorthand.conditions, condition => {
-        const match = _.find(matches, match => match.matchedVariable === condition[0]);
-        return match && match.expression.definition && _.includes(match.expression.definition.attributes, condition[1]);
-      });
-      if (matchesConditions) return matches;
+  static matchDisplayShorthand(expression) {
+    for (const displayShorthand of _.reverse(window.displayShorthands.slice())) {
+      const matches = matchTemplate(displayShorthand.template, expression, [], []);
+      if (matches) {
+        const matchesConditions = _.every(displayShorthand.conditions, condition => {
+          const match = _.find(matches, match => match.matchedVariable === condition[0]);
+          return match && match.expression.definition && _.includes(match.expression.definition.attributes, condition[1]);
+        });
+        if (matchesConditions) return {displayShorthand, matches};
+      }
     }
   }
 
@@ -50,16 +52,15 @@ export class ExpressionComponent extends React.Component {
   }
 
   renderInner(expression, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, parentRequiresBrackets) {
-    for (const displayShorthand of _.reverse(window.displayShorthands.slice())) {
-      const matches = this.matchDisplayShorthand(displayShorthand, expression, [], []);
-      if (matches) {
-        let renderedMatches = matches.map(m => this.renderMatch(m, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable));
-        let formatString = (parentRequiresBrackets && displayShorthand.requiresBrackets) ?
-          "(" + displayShorthand.baseFormatString + ")" :
-          displayShorthand.baseFormatString;
-        return formatHtmlWithoutWrapping(formatString, s => replacePlaceholders(s, renderedMatches));
-      }
+    const {displayShorthand, matches} = ExpressionComponent.matchDisplayShorthand(expression) || {};
+    if (matches) {
+      let renderedMatches = matches.map(m => this.renderMatch(m, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable));
+      let formatString = (parentRequiresBrackets && displayShorthand.requiresBrackets) ?
+        "(" + displayShorthand.baseFormatString + ")" :
+        displayShorthand.baseFormatString;
+      return formatHtmlWithoutWrapping(formatString, s => replacePlaceholders(s, renderedMatches));
     }
+
     if (expression instanceof TypeExpression) {
       const formattedTerm = <ExpressionComponent expression={expression.term} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>;
       const renderedOtherComponents = expression.otherComponents.map(c => <ExpressionComponent expression={c} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false}/>);
@@ -127,7 +128,7 @@ export const CopiableExpression = (props) => {
 };
 
 export const HighlightableExpression = connect(
-  (state, {expression, references, additionalReferences, additionalPremiseReferences, additionalConclusionReferences, boundVariableLists, wrapBoundVariable, className}) => {
+  (state, {expression, references, additionalReferences, additionalPremiseReferences, additionalConclusionReferences, boundVariableLists, wrapBoundVariable, className, expressionToCopy}) => {
 
     additionalReferences = additionalReferences || [];
     additionalPremiseReferences = additionalPremiseReferences || [];
@@ -154,7 +155,8 @@ export const HighlightableExpression = connect(
       staticHighlights,
       boundVariableLists,
       wrapBoundVariable,
-      className
+      className,
+      expressionToCopy
     }
   }
 )(class HighlightableExpression extends React.Component {
@@ -162,11 +164,12 @@ export const HighlightableExpression = connect(
     return !_.isEqual(this.props, nextProps);
   }
   render() {
-    const {expression, actionHighlights, staticHighlights, wrapBoundVariable, className} = this.props;
+    const {expression, actionHighlights, staticHighlights, wrapBoundVariable, className, expressionToCopy} = this.props;
     const expressionElement = <CopiableExpression expression={expression}
                                                   actionHighlights={actionHighlights}
                                                   staticHighlights={staticHighlights}
                                                   wrapBoundVariable={wrapBoundVariable}
+                                                  expressionToCopy={expressionToCopy}
                                                   parentRequiresBrackets={false}/>;
     return className ? <span className={className}>{expressionElement}</span> : expressionElement;
   }
