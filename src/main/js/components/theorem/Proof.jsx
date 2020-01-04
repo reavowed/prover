@@ -18,6 +18,7 @@ export default class Proof extends React.Component {
 
   registerStep = (step, path) => {
     this.steps[path.join(".")] = step;
+    if (step.onUpdate) step.onUpdate();
   };
   unregisterStep = (path) => {
     delete this.steps[path.join(".")];
@@ -25,6 +26,13 @@ export default class Proof extends React.Component {
   callOnStep = (path, action) => {
     this.steps[path.join(".")][action]();
   };
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.steps !== this.props.steps) {
+      _.forEach(_.values(this.steps), step => {
+        if (step.onUpdate) step.onUpdate();
+      });
+    }
+  }
 
   duplicate = () => {
     this.props.dispatch(FetchJsonAndUpdate("proofs", {method: "POST", headers: {"Content-Type": "application/json"}, body: this.props.index}));

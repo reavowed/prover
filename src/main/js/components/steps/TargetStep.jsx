@@ -37,11 +37,13 @@ export const TargetStepProofLine = connect()(class TargetStepProofLine extends R
   }
   componentDidMount() {
     this.context.registerStep(this, this.props.path);
-    this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, "premises"))
-      .then(premiseJson => this.setState({availablePremises: _.map(premiseJson, Parser.parsePremise)}));
   }
   componentWillUnmount() {
     this.context.unregisterStep(this.props.path);
+  }
+  onUpdate() {
+    this.props.dispatch(FetchJsonForStep(this.context.proofIndex, this.props.path, "premises"))
+      .then(premiseJson => this.setState({availablePremises: _.map(premiseJson, Parser.parsePremise)}));
   }
 
   introduceBoundVariable = () => {
