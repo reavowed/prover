@@ -287,7 +287,9 @@ export class InferenceFinder extends React.Component {
       const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
       return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name => {
         const validValues = this.getValidSubstitutionValues(key, name);
-        return showSubstitutionOptions(name, validValues, x => x[key][name], (x, y) => x[key][name] = y);
+        return <React.Fragment key={`${key} ${name}`}>
+          {showSubstitutionOptions(name, validValues, x => x[key][name], (x, y) => x[key][name] = y)}
+        </React.Fragment>;
       });
     };
     let showParameteredSubstitutions = (key) => {
@@ -295,9 +297,9 @@ export class InferenceFinder extends React.Component {
       return requiredSubstitutions.length > 0 && requiredSubstitutions.map(([name, numberOfParameters]) => {
         const validValues = this.getValidSubstitutionValues(key, name, numberOfParameters);
         const newVariableList = numberOfParameters === 1 ? ["$"] : _.map(_.range(numberOfParameters), x => "$_" + (x+1));
-        return <BoundVariableLists.Add variables={newVariableList} key={`${key} ${name} ${numberOfParameters}`}>
+        return <BoundVariableLists.AddParameters variables={newVariableList} key={`${key} ${name} ${numberOfParameters}`}>
           {showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, validValues, x => x[key][name][numberOfParameters], (x, y) => x[key][name][numberOfParameters] = y)}
-        </BoundVariableLists.Add>
+        </BoundVariableLists.AddParameters>
       });
     };
     const {title, autofocus} = this.props;
