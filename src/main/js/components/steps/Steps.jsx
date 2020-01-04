@@ -221,6 +221,7 @@ export const Steps = connect()(class Steps extends React.Component {
         stepsWithIndexes[0].step.statement &&
         _.some(stepsWithIndexes[0].step.referencedLines, r => r.matches(previousReference)) &&
         (nextRelation = findBinaryRelation(stepsWithIndexes[0].step.statement)) &&
+        nextRelation.symbol === previousRightHandSide.symbol &&
         (transitiveStepMatch = matchTemplate(nextRelation.template, stepsWithIndexes[0].step.statement, [], [])) &&
         transitiveStepMatch[0].expression.serialize() === leftHandSideExpression.serialize()
       ) {
