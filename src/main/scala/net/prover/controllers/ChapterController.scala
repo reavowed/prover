@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.ChapterController._
 import net.prover.controllers.models.ChapterProps._
-import net.prover.controllers.models.{ChapterProps, DefinitionSummary, LinkSummary}
+import net.prover.controllers.models.{ChapterProps, DefinitionSummary, LinkSummary, TypeDefinitionSummary}
 import net.prover.exceptions.BadRequestException
 import net.prover.model.Inference.RearrangementType
 import net.prover.model._
@@ -64,7 +64,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       entrySummaries,
       previous,
       next,
-      DefinitionSummary.getAllFromContext(entryContext))
+      DefinitionSummary.getAllFromContext(entryContext),
+      TypeDefinitionSummary.getAllFromContext(entryContext),
+      entryContext.availableEntries.ofType[DisplayShorthand],
+      getDefinitionShorthands(entryContext))
   }
 
   @GetMapping(produces = Array("text/html;charset=UTF-8"))
@@ -76,14 +79,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       chapter <- findChapter(chaptersWithKeys, chapterKey)
     } yield {
       val entryContext = EntryContext.forChapterInclusive(books, book, chapter)
-      createReactView(
-        "Chapter",
-        getChapterProps(books, book, bookKey, chapter, chapterKey),
-        Map(
-          "definitions" -> DefinitionSummary.getAllFromContext(entryContext),
-          "typeDefinitions" -> getTypeDefinitions(entryContext),
-          "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
-          "definitionShorthands" -> getDefinitionShorthands(entryContext)))
+      createReactView("Chapter", getChapterProps(books, book, bookKey, chapter, chapterKey))
     }).toResponseEntity
   }
 
@@ -110,15 +106,15 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       chapter <- findChapter(book, chapterKey)
       entriesWithKeys = getEntriesWithKeys(chapter).mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[ChapterEntry.Standalone]))
       entry <- findEntry[ChapterEntry](entriesWithKeys, entryKey)
-      (viewName, baseProps: Map[String, AnyRef], baseGlobals: Map[String, AnyRef]) <- entry match {
+      (viewName, baseProps: Map[String, AnyRef]) <- entry match {
         case axiom: Axiom =>
-          Success(("Axiom", Map("axiom" -> axiom), Map.empty))
+          Success(("Axiom", Map("axiom" -> axiom)))
         case theorem: Theorem =>
-          Success(("Theorem", Map("theorem" -> theorem), Map("inferences" -> getInferenceLinks(theorem.referencedInferenceIds))))
+          Success(("Theorem", Map("theorem" -> theorem, "inferences" -> getInferenceLinks(theorem.referencedInferenceIds))))
         case statementDefinition: StatementDefinition =>
-          Success(("StatementDefinition", Map("definition" -> statementDefinition), Map.empty))
+          Success(("StatementDefinition", Map("definition" -> statementDefinition)))
         case termDefinition: TermDefinition =>
-          Success(("TermDefinition", Map("definition" -> termDefinition), Map.empty))
+          Success(("TermDefinition", Map("definition" -> termDefinition)))
         case _ =>
           Failure(BadRequestException(s"Cannot view ${entry.getClass.getSimpleName}"))
       }
@@ -136,10 +132,9 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           "chapterLink" -> LinkSummary(chapter.title, getChapterUrl(bookKey, chapterKey)),
           "previous" -> previous,
           "next" -> next,
-          "usages" -> getUsages(entry, books)),
-        baseGlobals ++ Map(
+          "usages" -> getInferenceUsages(entry, books),
           "definitions" -> DefinitionSummary.getAllFromContext(entryContext),
-          "typeDefinitions" -> getTypeDefinitions(entryContext),
+          "typeDefinitions" -> TypeDefinitionSummary.getAllFromContext(entryContext),
           "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
           "binaryRelations" -> getBinaryRelations(provingContext),
           "definitionShorthands" -> getDefinitionShorthands(entryContext)))
@@ -156,10 +151,11 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       for {
+        name <- Some(newTheoremDefininition.name.trim).filter(_.nonEmpty).orBadRequest("Theorem name must be given")
         premises <- newTheoremDefininition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}").recoverWithBadRequest).traverseTry
         conclusion <- Statement.parser.parseFromString(newTheoremDefininition.conclusion, "conclusion").recoverWithBadRequest
         newTheorem = Theorem(
-          newTheoremDefininition.name,
+          name,
           premises,
           conclusion,
           Seq(Theorem.Proof(Seq(Step.Target(conclusion)))),
@@ -184,11 +180,11 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
-      val symbol = newTermDefininition.symbol
       val name = Option(newTermDefininition.name).filter(_.nonEmpty)
       val shorthand = Option(newTermDefininition.shorthand).filter(_.nonEmpty)
       val attributes = Option(newTermDefininition.attributes).toSeq.flatMap(_.splitByWhitespace()).filter(_.nonEmpty)
       for {
+        symbol <- Option(newTermDefininition.symbol).filter(_.nonEmpty).orBadRequest("Symbol must be provided")
         boundVariablesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newTermDefininition.components, "components").recoverWithBadRequest
         boundVariables = boundVariablesAndComponentTypes._1
         componentTypes = boundVariablesAndComponentTypes._2
@@ -219,10 +215,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
-      val symbol = newTypeDefininition.symbol
-      val defaultTermName = newTypeDefininition.defaultTermName
       val name = Option(newTypeDefininition.name).filter(_.nonEmpty)
       for {
+        symbol <- Option(newTypeDefininition.symbol).filter(_.nonEmpty).orBadRequest("Symbol must be provided")
+        defaultTermName <- Option(newTypeDefininition.defaultTermName).filter(_.nonEmpty).orBadRequest("Default term name must be provided")
         otherComponentTypes <- ComponentType.listWithoutBoundVariablesParser.parseFromString(newTypeDefininition.otherComponents, "component types").recoverWithBadRequest
         format <- Format.parser(otherComponentTypes.map(_.name)).parseFromString(newTypeDefininition.format, "format").recoverWithBadRequest
         definition <- Statement.parser.parseFromString(newTypeDefininition.definition, "definition").recoverWithBadRequest
@@ -246,10 +242,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
-      val symbol = newPropertyDefininition.symbol
-      val defaultTermName = newPropertyDefininition.defaultTermName
       val name = Option(newPropertyDefininition.name).filter(_.nonEmpty)
       for {
+        symbol <- Option(newPropertyDefininition.symbol).filter(_.nonEmpty).orBadRequest("Symbol must be provided")
+        defaultTermName <- Option(newPropertyDefininition.defaultTermName).filter(_.nonEmpty).orBadRequest("Default term name must be provided")
         parentType <- entryContext.typeDefinitions.find(_.symbol == newPropertyDefininition.parentType).orBadRequest(s"Unknown type '${newPropertyDefininition.parentType}'")
         parentComponentTypes <- parentType.childComponentTypesParser.parseFromString(newPropertyDefininition.parentComponents, "parent component types").recoverWithBadRequest
         definition <- Statement.parser.parseFromString(newPropertyDefininition.definition, "definition").recoverWithBadRequest
@@ -276,13 +272,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         val inferenceIdsMoving = entry.referencedInferenceIds
         for {
           _ <- (!entriesToSkip.flatMap(_.inferences).exists(i => inferenceIdsMoving.contains(i.id))).orBadRequest("Entry depends on a previous one")
-          _ <- (!entriesToSkip.exists(entry.referencedEntries.contains)).orBadRequest("Entry depends on a previous one")
+          _ <- (!entriesToSkip.exists(entry.referencedDefinitions.contains)).orBadRequest("Entry depends on a previous one")
         } yield (firstEntries :+ entry) ++ entriesToSkip ++ nextEntries
       } orElse nextEntries.takeAndRemainingIfValid(newIndex - previousEntries.length).map { case (entriesToSkip, lastEntries) =>
         val referencedInferenceIdsBeingMovedPast = entriesToSkip.flatMap(_.referencedInferenceIds)
         for {
           _ <- (!entry.inferences.map(_.id).exists(referencedInferenceIdsBeingMovedPast.contains)).orBadRequest("Entry depended on by a following one")
-          _ <- (!entriesToSkip.flatMap(_.referencedEntries).contains(entry)).orBadRequest("Entry depended on by a following one")
+          _ <- (!entriesToSkip.flatMap(_.referencedDefinitions).contains(entry)).orBadRequest("Entry depended on by a following one")
         } yield (previousEntries ++ entriesToSkip :+ entry) ++ lastEntries
       } orBadRequest "Invalid index" flatten
     }
@@ -301,14 +297,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("entryKey") entryKey: String
   ): ResponseEntity[_] = {
     def deleteEntry(chapterEntry: ChapterEntry, chapter: Chapter, books: Seq[Book]): Try[Chapter] = {
-      chapterEntry match {
-        case inference: Inference if getUsages(inference, books).isEmpty =>
-          Success(chapter.copy(entries = chapter.entries.filter(_ != inference)))
-        case _: Inference =>
-          Failure(BadRequestException("Cannot delete inference with usages"))
-        case _ =>
-          Failure(BadRequestException("Deleting non-inference entries not yet supported"))
-      }
+      if (getInferenceUsages(chapterEntry, books).isEmpty && getDefinitionUsages(chapterEntry, books).isEmpty)
+        Success(chapter.copy(entries = chapter.entries.filter(_ != chapterEntry)))
+      else
+        Failure(BadRequestException("Cannot delete entry with usages"))
     }
 
     modifyChapter[Identity](bookKey, chapterKey, (books, _, _, chapter) =>
@@ -331,19 +323,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     ).map{ case (books, book, chapter, _) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
-
-  case class TypeDefinitionSummary(symbol: String, name: String, componentFormatString: String, article: String, properties: Map[String, String])
-  private def getTypeDefinitions(entryContext: EntryContext) = {
-    entryContext.typeDefinitions
-      .map(d => d.symbol -> TypeDefinitionSummary(
-        d.symbol,
-        d.name,
-        d.componentFormat.baseFormatString,
-        d.article,
-        entryContext.propertyDefinitionsByType.getOrElse(d.symbol, Nil).map(pd => pd.qualifiedSymbol -> pd.name).toMap))
-      .toMap
-  }
-
   private def getDefinitionShorthands(entryContext: EntryContext): Map[String, String] = {
     val shorthandsFromDefinitions = entryContext.availableEntries.ofType[ExpressionDefinition].mapCollect(d => d.shorthand.map(_ -> d.symbol)).toMap
     val greekLetterShorthands = 'α'.to('ω')
@@ -359,7 +338,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }
   }
 
-  private def getUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[LinkSummary])] = {
+  private def getInferenceUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[LinkSummary])] = {
     val inferenceIds = entry.inferences.map(_.id).toSet
     for {
       (book, bookKey) <- getBooksWithKeys(bookService.books)
@@ -369,6 +348,16 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         .filter(_._1.referencedInferenceIds.intersect(inferenceIds).nonEmpty)
       if theoremsWithKeys.nonEmpty
     } yield (book.title, chapter.title, theoremsWithKeys.map { case (theorem, key) => LinkSummary(theorem.name, getEntryUrl(bookKey, chapterKey, key))})
+  }
+
+  private def getDefinitionUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[LinkSummary])] = {
+    for {
+      (book, bookKey) <- getBooksWithKeys(bookService.books)
+      (chapter, chapterKey) <- getChaptersWithKeys(book)
+      entriesWithKeys = getEntriesWithKeys(chapter)
+        .filter(_._1.referencedDefinitions.contains(entry))
+      if entriesWithKeys.nonEmpty
+    } yield (book.title, chapter.title, entriesWithKeys.map { case (entry, key) => LinkSummary(entry.name, getEntryUrl(bookKey, chapterKey, key))})
   }
 }
 

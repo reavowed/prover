@@ -1,6 +1,6 @@
 import * as React from "react";
 import {formatHtml} from "./Formatter";
-import {ClickableText} from "../steps/ClickableText";
+import {ClickableText} from "../pages/theorem/steps/components/ClickableText";
 import Form from "react-bootstrap/Form";
 
 export interface InlineTextEditorProps {

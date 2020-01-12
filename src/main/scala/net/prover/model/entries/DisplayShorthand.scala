@@ -15,7 +15,7 @@ case class DisplayShorthand(template: Template, format: Format.Explicit, conditi
     ).mkString(" "))
 
   override def referencedInferenceIds: Set[String] = Set.empty
-  override def referencedEntries: Set[ChapterEntry] = template.referencedDefinitions.toType[ChapterEntry]
+  override def referencedDefinitions: Set[ChapterEntry] = template.referencedDefinitions.toType[ChapterEntry]
 
   override def replaceDefinition(
     oldDefinition: ExpressionDefinition,

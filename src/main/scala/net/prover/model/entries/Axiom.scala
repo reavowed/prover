@@ -13,7 +13,7 @@ case class Axiom(
 {
   override def withName(newName: String): Axiom = copy(name = newName)
   override def referencedInferenceIds: Set[String] = Set.empty
-  override def referencedEntries: Set[ChapterEntry] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions
+  override def referencedDefinitions: Set[ChapterEntry] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions
   override def inferences: Seq[Inference] = Seq(this)
   override def serializedLines: Seq[String] = {
     Seq(s"axiom $name") ++

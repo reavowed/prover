@@ -1,7 +1,7 @@
 import React, {useCallback, useContext, useRef, useState} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import update from 'immutability-helper';
-import BoundVariableLists from "./steps/BoundVariableLists";
+import BoundVariableLists from "./pages/theorem/steps/BoundVariableLists";
 
 const ListContext = React.createContext();
 const EntryContext = React.createContext();

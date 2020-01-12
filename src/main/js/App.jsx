@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Book} from "./components/Book";
-import {Books} from "./components/Books";
-import {Chapter} from "./components/Chapter";
-import {Theorem} from "./components/Theorem"
-import {Axiom} from "./components/Axiom";
-import {StatementDefinition} from "./components/StatementDefinition"
-import {TermDefinition} from "./components/TermDefinition"
+import {Book} from "./components/pages/Book";
+import {Books} from "./components/pages/Books";
+import {Chapter} from "./components/pages/Chapter";
+import {Theorem} from "./components/pages/Theorem"
+import {Axiom} from "./components/pages/Axiom";
+import {StatementDefinition} from "./components/pages/StatementDefinition"
+import {TermDefinition} from "./components/pages/TermDefinition"
 
 export { Books, Book, Chapter, Theorem, Axiom, StatementDefinition, TermDefinition };
 export function render(component, props) {

@@ -1,8 +1,7 @@
 package net.prover.controllers.models
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import net.prover.model.{Book, Chapter, entries}
-import net.prover.model.entries.ChapterEntry
+import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions.{Statement, Term}
 
 case class ChapterProps(
@@ -13,7 +12,10 @@ case class ChapterProps(
   entries: Seq[ChapterProps.EntryProps],
   previous: Option[LinkSummary],
   next: Option[LinkSummary],
-  definitions: Map[String, DefinitionSummary])
+  definitions: Map[String, DefinitionSummary],
+  typeDefinitions: Map[String, TypeDefinitionSummary],
+  displayShorthands: Seq[DisplayShorthand],
+  definitionShorthands: Map[String, String])
 
 object ChapterProps {
   sealed trait EntryProps {

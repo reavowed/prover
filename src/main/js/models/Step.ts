@@ -1,5 +1,4 @@
 import {Expression} from "./Expression";
-import {Parser} from "../Parser";
 import * as _ from "lodash";
 import {sha256} from "js-sha256";
 
@@ -93,63 +92,4 @@ export class SubproofStep {
 }
 
 export type Step = AssertionStep | DeductionStep | ScopedVariableStep | NamingStep | TargetStep | ElidedStep | SubproofStep;
-
-export const Step = {
-    parseReference(json: any): Reference {
-        if (_.isNumber(json.premiseIndex)) {
-            return new PremiseReference(json.premiseIndex, json.internalPath || null);
-        } else {
-            return new StepReference(json.stepPath, json.suffix || null, json.internalPath || null);
-        }
-    },
-    parseFromJson(json: any): Step[] {
-        return json.map((stepJson: any) => {
-           switch (stepJson.type) {
-               case "assertion":
-                   return new AssertionStep(
-                       Expression.parseFromJson(stepJson.statement),
-                       stepJson.premises.map(Parser.parsePremise),
-                       Parser.parseInference(stepJson.inference),
-                       stepJson.referencedLines.map(Step.parseReference),
-                       stepJson.complete);
-               case "deduction":
-                   return new DeductionStep(
-                       Expression.parseFromJson(stepJson.assumption),
-                       Step.parseFromJson(stepJson.substeps),
-                       stepJson.provenStatement && Expression.parseFromJson(stepJson.provenStatement));
-               case "scopedVariable":
-                   return new ScopedVariableStep(
-                       stepJson.variableName,
-                       Step.parseFromJson(stepJson.substeps),
-                       stepJson.provenStatement && Expression.parseFromJson(stepJson.provenStatement));
-               case "naming":
-                   return new NamingStep(
-                       stepJson.variableName,
-                       Expression.parseFromJson(stepJson.assumption),
-                       Expression.parseFromJson(stepJson.provenStatement),
-                       Step.parseFromJson(stepJson.substeps),
-                       Parser.parseInference(stepJson.inference),
-                       stepJson.referencedLines.map(Step.parseReference),
-                       stepJson.referencedLinesForExtraction.map(Step.parseReference));
-               case "target":
-                   return new TargetStep(Expression.parseFromJson(stepJson.statement));
-               case "elided":
-                   return new ElidedStep(
-                       stepJson.provenStatement && Expression.parseFromJson(stepJson.provenStatement),
-                       Step.parseFromJson(stepJson.substeps),
-                       stepJson.highlightedInference && Parser.parseInference(stepJson.highlightedInference),
-                       stepJson.description,
-                       stepJson.referencedLines.map(Step.parseReference));
-               case "subproof":
-                   return new SubproofStep(
-                       stepJson.name,
-                       stepJson.provenStatement && Expression.parseFromJson(stepJson.provenStatement),
-                       Step.parseFromJson(stepJson.substeps),
-                       stepJson.referencedLines.map(Step.parseReference));
-               default:
-                   throw "Unrecognised step " + JSON.stringify(stepJson);
-           }
-        });
-    }
-};
 

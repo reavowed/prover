@@ -81,7 +81,10 @@ case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
     }
   }
   def parseFromString(str: String, description: String): T = {
-    parse(Tokenizer.fromString(str, description))._1
+    val (result, remainingTokenizer) = parse(Tokenizer.fromString(str, description))
+    if (!remainingTokenizer.isEmpty)
+      remainingTokenizer.throwParseException("Parsing finished before end of string")
+    result
   }
   def parseFromFile(path: Path, description: String): T = {
     parse(Tokenizer.fromPath(path, description))._1

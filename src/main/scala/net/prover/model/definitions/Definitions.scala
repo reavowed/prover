@@ -218,6 +218,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
         }
         .map { case (predicateName, argumentNames) => (inference, singlePremise, predicateName, argumentNames)}
   }.collectDefined
+
   lazy val rewriteInferences: Seq[(Inference, Statement)] = {
     inferenceEntries.collect {
       case inference @ Inference(_, Seq(singlePremise), conclusion)

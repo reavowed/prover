@@ -23,7 +23,7 @@ case class Theorem(
 {
   override def withName(newName: String): Theorem = copy(name = newName)
   override def referencedInferenceIds: Set[String] = proofs.flatMap(_.referencedInferenceIds).toSet
-  override def referencedEntries: Set[ChapterEntry] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions ++ proofs.flatMap(_.referencedDefinitions).toSet
+  override def referencedDefinitions: Set[ChapterEntry] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions ++ proofs.flatMap(_.referencedDefinitions).toSet
   override def inferences: Seq[Inference] = Seq(this)
 
   def isComplete: Boolean = proofs.exists(_.isComplete)

@@ -18,7 +18,7 @@ case class PropertyDefinition(
   def qualifiedSymbol: String = symbol + parentType.symbol.capitalize
 
   override def referencedInferenceIds: Set[String] = Set.empty
-  override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry] + parentType
+  override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry] + parentType
 
   def fullFormat: Format = Format.Explicit(s"$defaultTermName is $name", Seq(defaultTermName), requiresBrackets = false, requiresComponentBrackets = true)
   def statementDefinition = StatementDefinition(

@@ -9,7 +9,7 @@ case class Token(text: String, contextDescription: String, lineNumber: Int, colu
 case class TokenStream(tokens: Vector[Token], endToken: Token, lines: Vector[Vector[Char]], index: Int) {
   def isEmpty: Boolean = index == tokens.length
   def currentToken: Token = {
-    if (isEmpty) throw new ParseException("No tokens remaining")
+    if (isEmpty) throwParseException("No tokens remaining")
     tokens(index)
   }
   def advance(): TokenStream = copy(index = index + 1)
@@ -41,7 +41,7 @@ case class TokenStream(tokens: Vector[Token], endToken: Token, lines: Vector[Vec
       else
         findCloseParen(currentIndex + 1, parenDepth)
     }
-    val closeParenIndex = findCloseParen(index, 1).getOrElse(throwParseException("No matching close-paren", None))
+    val closeParenIndex = findCloseParen(index, 1).getOrElse(throwParseException("No matching close-paren"))
     (lineSubstring(initialLineNumber - 1, currentToken.columnNumber - 1, tokens(closeParenIndex).columnNumber - 1), copy(index = closeParenIndex))
   }
 
@@ -52,7 +52,7 @@ case class TokenStream(tokens: Vector[Token], endToken: Token, lines: Vector[Vec
     lines(lineIndex).subSequence(start, end).toString
   }
 
-  def throwParseException(message: String, cause: Option[Throwable]): Nothing = {
+  def throwParseException(message: String, cause: Option[Throwable] = None): Nothing = {
     val token = if (isEmpty) endToken else tokens(index)
     throw ParseException(
       s"Error in ${token.contextDescription}, line ${token.lineNumber} col ${token.columnNumber}: $message",

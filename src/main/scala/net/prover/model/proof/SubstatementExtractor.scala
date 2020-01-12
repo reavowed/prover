@@ -148,7 +148,7 @@ class SubstatementExtractor(implicit stepProvingContext: StepProvingContext) {
   }
   private def matchDirectlyOrFromSingleInference(targetStatement: Statement, extractionCandidate: Statement, termsSoFar: Int): Result[Unit] = {
     matchDirectly(targetStatement, extractionCandidate, termsSoFar).map((_, Nil, ())).iterator ++
-      finalStatementExtractionInferences.flatMap { case (inference, firstPremise, otherPremises) =>
+      (finalStatementExtractionInferences ++ rewriteInferences.map { case (i, p) => (i, p, Nil) }).flatMap { case (inference, firstPremise, otherPremises) =>
         extractStatementFromInference(
           extractionCandidate,
           termsSoFar,

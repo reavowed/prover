@@ -17,7 +17,7 @@ case class TypeDefinition(
   override def title: String = s"Definition: ${name.capitalizeWords}"
 
   override def referencedInferenceIds: Set[String] = Set.empty
-  override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry]
+  override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry]
 
   def article: String = if (name.headOption.exists("aeiou".contains(_))) "an" else "a"
   def fullFormat: Format.Explicit = Format.Explicit(
