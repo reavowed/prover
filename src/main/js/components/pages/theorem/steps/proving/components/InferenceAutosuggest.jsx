@@ -31,7 +31,7 @@ export default class InferenceAutosuggest extends React.Component {
   }
 
   render() {
-    const {getSuggestionValue, renderSuggestion, suggestions, onSuggestionsFetchRequested, onSuggestionsClearRequested, onSuggestionSelected, value, onValueChange} = this.props;
+    const {getSuggestionValue, renderSuggestion, suggestions, onSuggestionsFetchRequested, onSuggestionsClearRequested, onSuggestionSelected, value, onValueChange, readOnly} = this.props;
 
     function renderSuggestionsContainer ({containerProps, children}) {
       return <div {...containerProps}><DropdownContainer>{children}</DropdownContainer></div>
@@ -47,6 +47,6 @@ export default class InferenceAutosuggest extends React.Component {
       renderSuggestionsContainer={renderSuggestionsContainer}
       onSuggestionSelected={onSuggestionSelected}
       renderSuggestion={s => <span className="dropdown-item">{(renderSuggestion || getSuggestionValue)(s)}</span>}
-      inputProps={{value: value, onChange: onValueChange, className:"form-control"}} />
+      inputProps={{value: value, onChange: onValueChange, className:"form-control", readOnly}} />
   }
 }

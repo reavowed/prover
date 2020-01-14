@@ -2,11 +2,11 @@ import _ from "lodash";
 import React from "react";
 import {Button} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import {Parser} from "../../../../../Parser";
-import {CopiableExpression} from "../../../../ExpressionComponent";
+import {Parser} from "../../../../../../Parser";
+import {CopiableExpression} from "../../../../../ExpressionComponent";
 import InferenceAutosuggest from "./InferenceAutosuggest";
 import SuggestionDropdownElement from "./SuggestionDropdownElement";
-import ProofContext from "../../ProofContext";
+import ProofContext from "../../../ProofContext";
 
 export default class Rewriter extends React.Component {
   static contextType = ProofContext;
@@ -18,7 +18,8 @@ export default class Rewriter extends React.Component {
       inferenceSuggestions: [],
       selectedInferenceSuggestion: null,
       selectedPremiseSuggestion: null,
-      chosenRewrites: [[]]
+      chosenRewrites: [[]],
+      saving: false
     };
   }
   componentDidMount() {
@@ -61,7 +62,7 @@ export default class Rewriter extends React.Component {
   };
 
   loadPremiseSuggestions = (expression, pathsAlreadyRewritten, onPremiseSuggestionSelected) => {
-    this.context.fetchJsonForStep(this.context.proofIndex, this.props.path, `rewritePremiseSuggestions?expression=${encodeURIComponent(expression.serialize())}&pathsAlreadyRewritten=${_.map(pathsAlreadyRewritten, p => p.join(".")).join(",")}`)
+    this.context.fetchJsonForStep(this.props.path, `rewritePremiseSuggestions?expression=${encodeURIComponent(expression.serialize())}&pathsAlreadyRewritten=${_.map(pathsAlreadyRewritten, p => p.join(".")).join(",")}`)
       .then((suggestions) => {
         this.setState({premiseSuggestions: this.context.parser.parsePremiseRewriteSuggestions(suggestions), onPremiseSuggestionSelected}, () => this.resetPremiseSuggestions());
       });
@@ -87,6 +88,13 @@ export default class Rewriter extends React.Component {
     });
   };
 
+  save = () => {
+    return new Promise((resolve => this.setState({saving: true}, resolve)))
+      .then(() => this.props.onSave(this.state.chosenRewrites))
+      .catch(() => {})
+      .then(() => this.setState({saving: false}));
+  };
+
   again = () => {
     this.setState({
       chosenRewrites: [...this.state.chosenRewrites, []],
@@ -97,8 +105,8 @@ export default class Rewriter extends React.Component {
   };
 
   render() {
-    const {title, onSave} = this.props;
-    const {currentExpression, selectedInferenceSuggestion, selectedPremiseSuggestion, chosenRewrites} = this.state;
+    const {title} = this.props;
+    const {currentExpression, selectedInferenceSuggestion, selectedPremiseSuggestion, chosenRewrites, saving} = this.state;
     const currentPaths = this.getCurrentPaths();
 
     const actionHighlights = selectedInferenceSuggestion ?
@@ -120,6 +128,8 @@ export default class Rewriter extends React.Component {
       mainElement={getSuggestionValue(s)}
       hoverElement={<><CopiableExpression expression={s.source} /> -> <CopiableExpression expression={s.result} /></>} />;
 
+    const saveDisabled = saving || chosenRewrites.length === 0 || chosenRewrites[chosenRewrites.length - 1].length === 0;
+
     return <>
       <Form.Group>
         <Form.Label><strong>{title}</strong></Form.Label>
@@ -137,13 +147,14 @@ export default class Rewriter extends React.Component {
           suggestions={this.state.inferenceSuggestions}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
+          readOnly={saving}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           onSuggestionSelected={this.onSuggestionSelected} />
       </Form.Group>
       <Form.Group>
-        <Button variant="success" onClick={() => onSave(chosenRewrites)} disabled={chosenRewrites.length === 0 || chosenRewrites[chosenRewrites.length - 1].length === 0}>Save</Button>
-        <Button variant="primary" onClick={this.again} disabled={chosenRewrites.length === 0 || chosenRewrites[chosenRewrites.length - 1].length === 0}>Again</Button>
+        <Button variant="success" onClick={this.save} disabled={saveDisabled}>{saving ? <span className="fas fa-spin fa-spinner"/>  : "Save"}</Button>
+        <Button variant="primary" className="ml-1" onClick={this.again} disabled={saveDisabled}>Again</Button>
       </Form.Group>
     </>
   }

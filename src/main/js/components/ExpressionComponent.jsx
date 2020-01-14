@@ -40,9 +40,8 @@ function filterPathsMultiple(actions, initialPaths) {
   return result;
 }
 
-export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path}) {
-
-  const entryContext = useContext(EntryContext);
+export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, entryContext}) {
+  entryContext = entryContext || useContext(EntryContext);
 
   function matchDisplayShorthand(expression) {
     for (const displayShorthand of _.reverse(entryContext.displayShorthands.slice())) {
@@ -66,7 +65,8 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
                                   staticHighlights={filterPaths(staticHighlights, match.pathWithinMatch)}
                                   boundVariableLists={[...match.boundVariablesWithinMatch, ...boundVariableLists]}
                                   wrapBoundVariable={wrapBoundVariable}
-                                  parentRequiresBrackets={true}/> // Display shorthands currently default to requiring brackets
+                                  parentRequiresBrackets={true}
+                                  entryContext={entryContext} /> // Display shorthands currently default to requiring brackets
     }
   }
   function renderInner(expression, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, parentRequiresBrackets) {
@@ -98,22 +98,27 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
                                                  staticHighlights={sharedStaticHighlights}
                                                  boundVariableLists={boundVariableLists}
                                                  wrapBoundVariable={wrapBoundVariable}
-                                                 parentRequiresBrackets={false} />;
+                                                 parentRequiresBrackets={false}
+                                                 entryContext={entryContext} />;
       const formattedIs = <ExpressionComponent expression={{textForHtml: () => "is"}}
                                                actionHighlights={sharedActionHighlights}
-                                               staticHighlights={sharedStaticHighlights} />;
+                                               staticHighlights={sharedStaticHighlights}
+                                               entryContext={entryContext} />;
       const articleWord = expression.properties.length ? expression.properties[0] : expression.definition.name;
       const article = _.includes("aeiou", articleWord[0]) ? "an" : "a";
       const formattedArticle = <ExpressionComponent expression={{textForHtml: () => article}}
                                                     actionHighlights={typeActionHighlights}
-                                                    staticHighlights={typeStaticHighlights} />;
+                                                    staticHighlights={typeStaticHighlights}
+                                                    entryContext={entryContext} />;
       const formattedComponents = <ExpressionComponent expression={{formatForHtml: () => expression.definition.componentFormatString, components: expression.otherComponents}}
                                                        actionHighlights={typeActionHighlights}
-                                                       staticHighlights={typeStaticHighlights} />;
+                                                       staticHighlights={typeStaticHighlights}
+                                                       entryContext={entryContext} />;
       const formattedProperties = _.flatMap(expression.properties, (p, i) => {
         const formattedProperty = <ExpressionComponent expression={{textForHtml: () => p}}
                                                        actionHighlights={filterPaths(actionHighlights, getPropertyPath(i))}
-                                                       staticHighlights={filterPaths(staticHighlights, getPropertyPath(i))} />;
+                                                       staticHighlights={filterPaths(staticHighlights, getPropertyPath(i))}
+                                                       entryContext={entryContext} />;
         if (i === 0)
           return [formattedProperty];
         else
@@ -135,7 +140,8 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
                                     staticHighlights={filterPaths(staticHighlights, [i])}
                                     boundVariableLists={innerBoundVariables}
                                     wrapBoundVariable={wrapBoundVariable}
-                                    parentRequiresBrackets={expression.definition ? expression.definition.requiresComponentBrackets : true}/>
+                                    parentRequiresBrackets={expression.definition ? expression.definition.requiresComponentBrackets : true}
+                                    entryContext={entryContext}/>
       });
       return formatHtmlWithoutWrapping(format, s => replacePlaceholders(s, [...renderedBoundVariables, ...renderedComponents]));
     } else if (expression.textForHtml) {

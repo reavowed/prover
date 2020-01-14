@@ -4,14 +4,15 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
-import {Parser} from "../../../../../Parser";
-import {CopiableExpression, ExpressionComponent} from "../../../../ExpressionComponent";
-import InputWithShorthandReplacement from "../../../../helpers/InputWithShorthandReplacement";
+import {Parser} from "../../../../../../Parser";
+import EntryContext from "../../../../../EntryContext";
+import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
+import InputWithShorthandReplacement from "../../../../../helpers/InputWithShorthandReplacement";
 import InferenceAutosuggest from "./InferenceAutosuggest";
-import {InferenceSummary} from "../../../../InferenceSummary";
+import {InferenceSummary} from "../../../../../InferenceSummary";
 import SuggestionDropdownElement from "./SuggestionDropdownElement";
-import BoundVariableLists from "../BoundVariableLists";
-import ProofContext from "../../ProofContext";
+import BoundVariableLists from "../../BoundVariableLists";
+import ProofContext from "../../../ProofContext";
 
 function simpleGetter(type, name) {
   return substitutions => substitutions[type][name];
@@ -67,7 +68,7 @@ export class InferenceFinder extends React.Component {
     super(...args);
     this.autoSuggestRef = React.createRef();
     this.state = {
-      isLoading: false,
+      saving: false,
       autosuggestValue: "",
       inferenceSuggestions: [],
       premiseSuggestions: null,
@@ -230,118 +231,134 @@ export class InferenceFinder extends React.Component {
     return this.areSubstitutionValuesSufficient(this.state.selectedInferenceSuggestion, this.state.selectedSubstitutionValues);
   };
   submit = () => {
-    this.submitWithSelectedValues(this.state.selectedInferenceSuggestion, this.state.selectedSubstitutionValues);
+    const promise = new Promise((resolve) => this.setState({saving: true}, resolve))
+      .then(() => this.props.onSaving && this.props.onSaving(true))
+      .then(() => this.submitWithSelectedValues(this.state.selectedInferenceSuggestion, this.state.selectedSubstitutionValues))
+    promise.catch(() => {})
+      .then(() => this.setState({saving: false}))
+      .then(() => this.props.onSaving && this.props.onSaving(false));
+    return promise;
   };
   submitWithSelectedValues = (selectedInferenceSuggestion, selectedSubstitutionValues) => {
-    this.props.submit(selectedInferenceSuggestion, selectedSubstitutionValues || this.state.selectedSubstitutionValues);
+    return this.props.submit(selectedInferenceSuggestion, selectedSubstitutionValues || this.state.selectedSubstitutionValues);
   };
 
   render() {
-    let PremiseSuggestions = () => {
-      const boundVariableLists = useContext(BoundVariableLists) || [];
-      return <Form.Group>
-        <Form.Label><strong>Premises</strong></Form.Label>
-        {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
-          <Form.Group as={Form.Row} key={i}>
-            <Col xs={4}>
-              <CopiableExpression expression={premise} />
-            </Col>
-            <Col>
-              <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)}>
+    const disabled = this.props.disabled || this.state.saving;
+
+    return <EntryContext.Consumer>{ entryContext => {
+      let PremiseSuggestions = () => {
+        const boundVariableLists = useContext(BoundVariableLists) || [];
+        return <Form.Group>
+          <Form.Label><strong>Premises</strong></Form.Label>
+          {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
+            <Form.Group as={Form.Row} key={i}>
+              <Col xs={4}>
+                <CopiableExpression expression={premise} />
+              </Col>
+              <Col>
+                <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)} readOnly={disabled}>
+                  <option value="" />
+                  {suggestions.map((s, i) =>
+                    <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
+                        <ExpressionComponent expression={s.statement} boundVariableLists={boundVariableLists} entryContext={entryContext} />
+                      )}}/>
+                  )}
+                </Form.Control>
+              </Col>
+            </Form.Group>
+          )}
+        </Form.Group>
+      };
+      let showSubstitutionOptions = (name, validValues, getter, setter) => {
+        const selectionElement = !validValues ?
+          <InputWithShorthandReplacement value={getter(this.state.selectedSubstitutionValues)}
+                                         readOnly={disabled}
+                                         onChange={(value, callback) => this.setSelectedSubstitutionValue(setter, value, callback)}
+                                         onKeyUp={this.onInputKeyUp} /> :
+          validValues.length === 1 ?
+            <Form.Label column><CopiableExpression expression={validValues[0]} /></Form.Label> :
+            <BoundVariableLists.Consumer>{ boundVariableLists =>
+              <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)} readOnly={disabled}>
                 <option value="" />
-                {suggestions.map((s, i) =>
-                  <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                      <ExpressionComponent expression={s.statement} boundVariableLists={boundVariableLists} />
+                {validValues.map(v =>
+                  <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
+                      <ExpressionComponent expression={v} boundVariableLists={boundVariableLists} entryContext={entryContext}/>
                     )}}/>
                 )}
               </Form.Control>
-            </Col>
-          </Form.Group>
-        )}
-      </Form.Group>
-    };
-    let showSubstitutionOptions = (name, validValues, getter, setter) => {
-      const selectionElement = !validValues ?
-        <InputWithShorthandReplacement value={getter(this.state.selectedSubstitutionValues)}
-                                       onChange={e => this.setSelectedSubstitutionValue(setter, ...this.context.parser.replaceShorthands(e))}
-                                       onKeyUp={this.onInputKeyUp} /> :
-        validValues.length === 1 ?
-          <Form.Label column><CopiableExpression expression={validValues[0]} /></Form.Label> :
-          <BoundVariableLists.Consumer>{ boundVariableLists =>
-            <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)}>
-              <option value="" />
-              {validValues.map(v =>
-                <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                    <ExpressionComponent expression={v} boundVariableLists={boundVariableLists} />
-                  )}}/>
-              )}
-            </Form.Control>
-          }</BoundVariableLists.Consumer>;
+            }</BoundVariableLists.Consumer>;
 
-      return <Form.Group as={Form.Row}>
-        <Form.Label column xs={2}><CopiableExpression expression={{textForHtml: () => name}}/></Form.Label>
-        <Form.Label column xs={1}>&rarr;</Form.Label>
-        <Col>{selectionElement}</Col>
-      </Form.Group>
-    };
-    let showSimpleSubstitutions = (key) => {
-      const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
-      return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name => {
-        const validValues = this.getValidSubstitutionValues(key, name);
-        return <React.Fragment key={`${key} ${name}`}>
-          {showSubstitutionOptions(name, validValues, x => x[key][name], (x, y) => x[key][name] = y)}
-        </React.Fragment>;
-      });
-    };
-    let showParameteredSubstitutions = (key) => {
-      const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
-      return requiredSubstitutions.length > 0 && requiredSubstitutions.map(([name, numberOfParameters]) => {
-        const validValues = this.getValidSubstitutionValues(key, name, numberOfParameters);
-        const newVariableList = numberOfParameters === 1 ? ["$"] : _.map(_.range(numberOfParameters), x => "$_" + (x+1));
-        return <BoundVariableLists.AddParameters variables={newVariableList} key={`${key} ${name} ${numberOfParameters}`}>
-          {showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, validValues, x => x[key][name][numberOfParameters], (x, y) => x[key][name][numberOfParameters] = y)}
-        </BoundVariableLists.AddParameters>
-      });
-    };
-    const {title, autofocus} = this.props;
-
-    let getSuggestionValue = s => s.rewriteInference ? s.inference.name + " [" + s.rewriteInference.name + "]" : s.inference.name;
-    let renderSuggestion = s => <SuggestionDropdownElement
-      mainElement={getSuggestionValue(s)}
-      hoverElement={<CopiableExpression expression={s.conclusion} />} />;
-
-    return <>
-      <Form.Group>
-        <Form.Label><strong>{title}</strong></Form.Label>
-        <InferenceAutosuggest
-          autofocus={autofocus}
-          value={this.state.autosuggestValue}
-          onValueChange={this.onAutosuggestChange}
-          suggestions={this.state.inferenceSuggestions}
-          getSuggestionValue={getSuggestionValue}
-          renderSuggestion={renderSuggestion}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          onSuggestionSelected={this.onSuggestionSelected} />
-      </Form.Group>
-      {this.state.selectedInferenceSuggestion && <>
-        <Form.Group>
-          <InferenceSummary inference={this.state.selectedInferenceSuggestion.inference}/>
+        return <Form.Group as={Form.Row}>
+          <Form.Label column xs={2}><CopiableExpression expression={{textForHtml: () => name}}/></Form.Label>
+          <Form.Label column xs={1}>&rarr;</Form.Label>
+          <Col>{selectionElement}</Col>
         </Form.Group>
-        { this.state.premiseSuggestions && <PremiseSuggestions/> }
+      };
+      let showSimpleSubstitutions = (key) => {
+        const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
+        return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name => {
+          const validValues = this.getValidSubstitutionValues(key, name);
+          return <React.Fragment key={`${key} ${name}`}>
+            {showSubstitutionOptions(name, validValues, x => x[key][name], (x, y) => x[key][name] = y)}
+          </React.Fragment>;
+        });
+      };
+      let showParameteredSubstitutions = (key) => {
+        const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
+        return requiredSubstitutions.length > 0 && requiredSubstitutions.map(([name, numberOfParameters]) => {
+          const validValues = this.getValidSubstitutionValues(key, name, numberOfParameters);
+          const newVariableList = numberOfParameters === 1 ? ["$"] : _.map(_.range(numberOfParameters), x => "$_" + (x+1));
+          return <BoundVariableLists.AddParameters variables={newVariableList} key={`${key} ${name} ${numberOfParameters}`}>
+            {showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, validValues, x => x[key][name][numberOfParameters], (x, y) => x[key][name][numberOfParameters] = y)}
+          </BoundVariableLists.AddParameters>
+        });
+      };
+      const {title, autofocus} = this.props;
+
+      let getSuggestionValue = s => s.rewriteInference ? s.inference.name + " [" + s.rewriteInference.name + "]" : s.inference.name;
+      let renderSuggestion = s => <SuggestionDropdownElement
+        mainElement={getSuggestionValue(s)}
+        hoverElement={<CopiableExpression expression={s.conclusion} />} />;
+
+      return <>
         <Form.Group>
-          <Form.Label><strong>Substitutions</strong></Form.Label>
-          {_.flatten([
-            showSimpleSubstitutions("statements"),
-            showSimpleSubstitutions("terms"),
-            showParameteredSubstitutions("predicates"),
-            showParameteredSubstitutions("functions"),
-          ])}
+          <Form.Label><strong>{title}</strong></Form.Label>
+          <InferenceAutosuggest
+            autofocus={autofocus}
+            value={this.state.autosuggestValue}
+            onValueChange={this.onAutosuggestChange}
+            suggestions={this.state.inferenceSuggestions}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            onSuggestionSelected={this.onSuggestionSelected}
+            readOnly={disabled} />
         </Form.Group>
-        <div className="text-center">
-          <Button variant="primary" onClick={this.submit} disabled={!this.readyToSubmit()}>Save Changes</Button>
-        </div>
-      </>}
-    </>
+        {
+          this.state.selectedInferenceSuggestion && <>
+            <Form.Group>
+              <InferenceSummary inference={this.state.selectedInferenceSuggestion.inference}/>
+            </Form.Group>
+            {this.state.premiseSuggestions && <PremiseSuggestions/>}
+            <Form.Group>
+              <Form.Label><strong>Substitutions</strong></Form.Label>
+              {_.flatten([
+                showSimpleSubstitutions("statements"),
+                showSimpleSubstitutions("terms"),
+                showParameteredSubstitutions("predicates"),
+                showParameteredSubstitutions("functions"),
+              ])}
+            </Form.Group>
+            <div className="text-center">
+              <Button variant="primary" onClick={this.submit} disabled={!this.readyToSubmit() || disabled}>
+                {disabled ? <span className="fas fa-spin fa-spinner"/> : "Save Changes"}
+              </Button>
+            </div>
+          </>
+        }
+      </>
+    }}</EntryContext.Consumer>
   }
 }

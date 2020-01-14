@@ -11,7 +11,7 @@ import BoundVariableLists from "./BoundVariableLists";
 export function NamingStep({step, path, additionalReferences}) {
   const context = useContext(ProofContext);
   const updateBoundVariable = (newName) => {
-    context.fetchJsonForStepAndUpdateTheorem(context.proofIndex, this.props.path, "boundVariable", {method: "PUT", body: newName});
+    context.fetchJsonForStepAndUpdateTheorem(this.props.path, "boundVariable", {method: "PUT", body: newName});
   };
   const reference = new StepReference(path);
   const referencesForLastStep = [...additionalReferences, reference];

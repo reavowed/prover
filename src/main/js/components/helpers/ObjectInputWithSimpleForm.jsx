@@ -37,7 +37,7 @@ export default class ObjectInputWithSimpleForm extends React.Component {
       <h4>Add {description}</h4>
       {_.map(values, (value, index) => {
         const {key, title, inputType, inputProps} = value;
-        return <SimpleControlGroup key={key} title={title} inputType={inputType} {...inputProps} value={object[key]} onChange={value => this.setState({object: {...object, [key]: value}})} ref={index === 0 ? this.firstInputRef : null} readonly={saving}/>
+        return <SimpleControlGroup key={key} title={title} inputType={inputType} {...inputProps} value={object[key]} onChange={value => this.setState({object: {...object, [key]: value}})} ref={index === 0 ? this.firstInputRef : null} readOnly={saving}/>
       })}
       <Button size="sm" onClick={this.save} disabled={saving}>Save {description}</Button>
       <Button size="sm" className="ml-2" variant="danger" onClick={onCancel} disabled={saving}>Cancel</Button>

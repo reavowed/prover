@@ -40,18 +40,18 @@ export class Theorem extends React.Component {
       fetchJson(subpath,  options) {
         return window.fetch(path.join(url, subpath), options)
           .then(response => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              throw response.statusText;
-            }
+            return new Promise(((resolve, reject) => {
+              response.json().then(response.ok ? resolve : reject);
+            }))
           })
       },
       updateTheorem(newTheoremJson) {
-        self.setState({
-          theorem: parser.parseTheorem(newTheoremJson.theorem),
-          inferences: {...inferences, ...newTheoremJson.newInferences}
-        });
+        return new Promise((resolve) => {
+          self.setState({
+            theorem: parser.parseTheorem(newTheoremJson.theorem),
+            inferences: {...inferences, ...newTheoremJson.newInferences}
+          }, () => resolve());
+        })
       },
       setHighlighting(newHighlightedPremises, newHighlightedConclusion, proofIndex) {
         if (!highlighting.isActionInUse) {
