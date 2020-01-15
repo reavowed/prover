@@ -13,7 +13,7 @@ React.Component.prototype.setStatePromise = function(newState) {
 };
 
 Window.prototype.fetchJson = function(input, init) {
-  const {body, headers, ...otherInit} = init;
+  const {body, headers, ...otherInit} = init || {};
   return this.fetch(input, {
     ...otherInit,
     body: body && JSON.stringify(body),
