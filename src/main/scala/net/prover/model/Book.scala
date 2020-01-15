@@ -13,10 +13,12 @@ case class Book(
     termVariableNames: Seq[String])
 {
   def serialized: String = {
-    (Seq(imports.map(i => s"import $i")) ++
-      (if (termVariableNames.nonEmpty) Seq(Seq(s"term-variables (${termVariableNames.mkString(" ")})")) else Nil) ++
-      Seq(chapters.map(c => s"chapter ${c.title}"))
-    ).map(_.mkString("\n")).mkString("\n\n") + "\n"
+    val sections = Seq(
+      imports.map(i => s"import $i"),
+      if (termVariableNames.nonEmpty) Seq(s"term-variables (${termVariableNames.mkString(" ")})") else Nil,
+      chapters.map(c => s"chapter ${c.title}"))
+
+    sections.filter(_.nonEmpty).map(_.mkString("\n")).mkString("\n\n") + "\n"
   }
 }
 

@@ -30,7 +30,7 @@ const PositionToLeft = styled.span`
   right: 100%;
 `;
 
-class TransitiveSteps extends React.Component {
+class ChainedSteps extends React.Component {
   constructor(props) {
     super(props);
     this.spacerRefs = {};
@@ -118,7 +118,7 @@ class TransitiveSteps extends React.Component {
         case "elided":
           return <ElidedStepProofLine {...props}>{children}</ElidedStepProofLine>;
         case "target":
-          return <TargetStepProofLine {...props} transitive>{children}</TargetStepProofLine>;
+          return <TargetStepProofLine {...props} chained>{children}</TargetStepProofLine>;
       }
     };
 
@@ -138,7 +138,7 @@ class TransitiveSteps extends React.Component {
       )}
       {rightHandSides.slice(1).map((rightHandSide, index) =>
         renderProofLine(
-          {step: rightHandSide.step, path: rightHandSide.path, key: "transitive " + rightHandSide.expression.serialize()},
+          {step: rightHandSide.step, path: rightHandSide.path, key: "chained " + rightHandSide.expression.serialize()},
           isHovered => <>
             <span ref={r => this.setSpacerRef(r, rightHandSide.path.join("."))}/>
             <RightHandSide rightHandSide={rightHandSide} index={index + 1} hovered={isHovered} />
@@ -149,7 +149,11 @@ class TransitiveSteps extends React.Component {
   }
 }
 
-const allowableTransitivityStepTypes = ["assertion", "elided", "target"];
+const allowableChainedStepTypes = ["assertion", "elided", "target"];
+
+function isChainable(binaryRelation) {
+  return binaryRelation.isTransitive || _.includes(binaryRelation.attributes, "chainable");
+}
 
 export class Steps extends React.Component {
   static getElementName(step) {
@@ -171,7 +175,8 @@ export class Steps extends React.Component {
     }
   }
 
-  static getTransitivityDetails(stepsWithIndexes, firstStep, firstBinaryRelation, basePath, firstIndex, entryContext) {
+
+  static getChainingDetails(stepsWithIndexes, firstStep, firstBinaryRelation, basePath, firstIndex, entryContext) {
     const firstStepMatch = matchTemplate(firstBinaryRelation.template, firstStep.statement, [], []);
     const firstLinePath = [...basePath, firstIndex];
     const firstLineReference = new StepReference(firstLinePath);
@@ -185,12 +190,12 @@ export class Steps extends React.Component {
     };
 
     function readRightHandSides(currentRightHandSides) {
-      let continuingStepMatch, transitiveStepMatch, nextRelation;
+      let continuingStepMatch, linkingStepMatch, nextRelation;
       const previousRightHandSide = currentRightHandSides[currentRightHandSides.length - 1];
       const previousReference = previousRightHandSide.references[previousRightHandSide.references.length - 1];
 
       if (stepsWithIndexes.length >= 2 &&
-        _.includes(allowableTransitivityStepTypes, stepsWithIndexes[0].step.type) &&
+        _.includes(allowableChainedStepTypes, stepsWithIndexes[0].step.type) &&
         stepsWithIndexes[1].step.type === "assertion" &&
         stepsWithIndexes[1].step.referencedLines.length === 2 &&
         _.isEqual(stepsWithIndexes[1].step.referencedLines[0], previousReference) &&
@@ -200,42 +205,43 @@ export class Steps extends React.Component {
         stepsWithIndexes[1].step.statement &&
         (nextRelation = findBinaryRelation(stepsWithIndexes[0].step.statement, entryContext)) &&
         (continuingStepMatch = matchTemplate(nextRelation.template, stepsWithIndexes[0].step.statement, [], [])) &&
-        (transitiveStepMatch = matchTemplate(nextRelation.template, stepsWithIndexes[1].step.statement, [], [])) &&
+        (linkingStepMatch = matchTemplate(nextRelation.template, stepsWithIndexes[1].step.statement, [], [])) &&
         continuingStepMatch[0].expression.serialize() === previousRightHandSide.expression.serialize() &&
-        transitiveStepMatch[0].expression.serialize() === leftHandSideExpression.serialize() &&
-        continuingStepMatch[1].expression.serialize() === transitiveStepMatch[1].expression.serialize()
+        linkingStepMatch[0].expression.serialize() === leftHandSideExpression.serialize() &&
+        continuingStepMatch[1].expression.serialize() === linkingStepMatch[1].expression.serialize()
       ) {
         const {step, index} = stepsWithIndexes.shift();
-        const {index: transitiveIndex} = stepsWithIndexes.shift();
+        const {index: linkingIndex} = stepsWithIndexes.shift();
         const newRhs = {
           symbol: nextRelation.symbol,
           expression: continuingStepMatch[1].expression,
           step,
           path: [...basePath, index],
-          references: [new StepReference([...basePath, index]), new StepReference([...basePath, transitiveIndex])],
+          references: [new StepReference([...basePath, index]), new StepReference([...basePath, linkingIndex])],
           highlightsPreviousAsConclusion: true
         };
         return readRightHandSides([...currentRightHandSides, newRhs]);
       }
       else if (stepsWithIndexes.length >= 1 &&
-        _.includes(allowableTransitivityStepTypes, stepsWithIndexes[0].step.type) &&
+        _.includes(allowableChainedStepTypes, stepsWithIndexes[0].step.type) &&
         stepsWithIndexes[0].step.statement &&
         _.some(stepsWithIndexes[0].step.referencedLines, r => r.matches(previousReference)) &&
         (nextRelation = findBinaryRelation(stepsWithIndexes[0].step.statement, entryContext)) &&
         nextRelation.symbol === previousRightHandSide.symbol &&
-        (transitiveStepMatch = matchTemplate(nextRelation.template, stepsWithIndexes[0].step.statement, [], [])) &&
-        transitiveStepMatch[0].expression.serialize() === leftHandSideExpression.serialize()
+        isChainable(nextRelation) &&
+        (linkingStepMatch = matchTemplate(nextRelation.template, stepsWithIndexes[0].step.statement, [], [])) &&
+        linkingStepMatch[0].expression.serialize() === leftHandSideExpression.serialize()
       ) {
         const {step, index} = stepsWithIndexes.shift();
         const refersToFirst = _.some(step.referencedLines, r => r.matches(previousReference));
         const newRhs = {
           symbol: nextRelation.symbol,
-          expression: transitiveStepMatch[1].expression,
+          expression: linkingStepMatch[1].expression,
           step,
           path: [...basePath, index],
           references: [new StepReference([...basePath, index])],
           highlightsFirstAsConclusion: !refersToFirst,
-          elidedLeftHandSide: refersToFirst && transitiveStepMatch[0].expression
+          elidedLeftHandSide: refersToFirst && linkingStepMatch[0].expression
         };
         return readRightHandSides([...currentRightHandSides, newRhs]);
       }
@@ -263,16 +269,16 @@ export class Steps extends React.Component {
 
   static renderNextStep(stepsWithIndexes, path, referencesForLastStep, entryContext) {
     const {step, index} = stepsWithIndexes.shift();
-    if (_.includes(allowableTransitivityStepTypes, step.type) && step.statement && step.statement.definition) {
+    if (_.includes(allowableChainedStepTypes, step.type) && step.statement && step.statement.definition) {
       const binaryRelation = findBinaryRelation(step.statement, entryContext);
-      if (binaryRelation) {
-        const transitivityDetails = this.getTransitivityDetails(stepsWithIndexes, step, binaryRelation, path, index, entryContext);
-        if (transitivityDetails) {
-          const key = transitivityDetails.finalStatement.serialize();
+      if (binaryRelation && isChainable(binaryRelation)) {
+        const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, entryContext);
+        if (chainingDetails) {
+          const key = chainingDetails.finalStatement.serialize();
           return {
             key,
-            element: <TransitiveSteps referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []}
-                                      {...transitivityDetails} />
+            element: <ChainedSteps referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []}
+                                      {...chainingDetails} />
           };
         }
       }
@@ -348,14 +354,13 @@ Steps.Container = function Container({path: stepsPath, children}) {
       "moveSteps",
       {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
+        body: {
           sourcePath,
           sourceStartIndex: startIndex,
           sourceEndIndex: endIndex,
           destinationPath,
           destinationIndex
-        })
+        }
       });
   }
   return <DraggableList type="Steps" enabled={true} onDrop={onDrop}>

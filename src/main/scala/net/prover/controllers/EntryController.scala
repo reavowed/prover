@@ -4,7 +4,7 @@ import net.prover.model.{Book, EntryContext, Inference}
 import net.prover.model.entries.{ExpressionDefinition, TermDefinition}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.{PathVariable, PutMapping, RequestBody, RequestMapping, RestController}
+import org.springframework.web.bind.annotation.{CrossOrigin, PathVariable, PutMapping, RequestBody, RequestMapping, RestController}
 
 import scala.util.Success
 
@@ -54,8 +54,8 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     (for {
       book <- findBook(bookKey)
       chapter <- findChapter(book, chapterKey)
-      entry <- findEntry[TermDefinition](chapter, entryKey)
-      newEntry = entry.copy(attributes = newAttributes)
+      entry <- findEntry[ExpressionDefinition](chapter, entryKey)
+      newEntry = entry.withAttributes(newAttributes)
       _ = modifyDefinition(entry, newEntry)
     } yield ()).toResponseEntity
   }

@@ -7,16 +7,12 @@ import ProofContext from "../../ProofContext";
 import BoundVariableLists from "../BoundVariableLists";
 import Rewriter from "./components/Rewriter";
 
-export default function RewritePremise({step, path, availablePremises, entryContext, onCancel, onError}) {
+export default function RewritePremise({path, availablePremises, entryContext, onCancel, onError}) {
   const context = useContext(ProofContext);
   const [premiseToRewrite, setPremiseToRewrite] = useState(null);
 
   const rewrite = (rewrites) => {
-    return context.fetchJsonForStepAndUpdateTheorem(path, "rewritePremise", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(rewrites)
-    })
+    return context.fetchJsonForStepAndUpdateTheorem(path, "rewritePremise", {method: "POST", rewrites})
       .then(onCancel)
       .catch(onError);
   };

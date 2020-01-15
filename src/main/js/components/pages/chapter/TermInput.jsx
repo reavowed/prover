@@ -19,11 +19,7 @@ export default function TermInput({onCancel}) {
   const context = useContext(ChapterContext);
   function saveTerm(termToAdd) {
     termToAdd.premises = _.filter(termToAdd.premises.split(/\r?\n/), s => s.length);
-    return context.updateChapter(path.join(context.url, "termDefinitions"), {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(termToAdd)
-    });
+    return context.updateChapter(path.join(context.url, "termDefinitions"), {method: "POST", body: termToAdd});
   }
   return <ObjectInputWithSimpleForm description="Term" values={values} save={saveTerm} onCancel={onCancel} />;
 }

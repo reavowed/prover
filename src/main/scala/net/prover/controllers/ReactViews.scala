@@ -5,10 +5,7 @@ import net.prover.JsonMapping
 import scala.xml.Unparsed
 
 trait ReactViews {
-  protected def createReactView(viewName: String, props: AnyRef, globals: Map[String, AnyRef] = Map.empty): String = {
-    val initScript = (globals.map { case (name, value) => s"window.$name = ${JsonMapping.toString(value)};" }.toSeq
-      :+ s"App.render(App.$viewName, ${JsonMapping.toString(props)});"
-      ).mkString("\n")
+  protected def createReactView(viewName: String, props: AnyRef): String = {
     "<!doctype html>" +
     <html>
       <head>
@@ -22,7 +19,7 @@ trait ReactViews {
         <script src="http://localhost:8079/node_modules/react/umd/react.development.js"></script>
         <script src="http://localhost:8079/node_modules/react-dom/umd/react-dom.development.js"></script>
         <script src="http://localhost:8079/bundle.js"></script>
-        <script type="text/javascript">{Unparsed(initScript)}</script>
+        <script type="text/javascript">{Unparsed(s"App.render(App.$viewName, ${JsonMapping.toString(props)});")}</script>
       </body>
     </html>.toString()
   }

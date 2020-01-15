@@ -10,14 +10,7 @@ import {Usages} from "./components/Usages";
 
 export class Inference extends React.Component {
   updateName = (newName) => {
-    return window.fetch(path.join(this.props.url, "name"), {method: "PUT", body: newName})
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw response.statusText;
-        }
-      })
+    return window.fetchJson(path.join(this.props.url, "name"), {method: "PUT", body: newName})
       .then(url => window.location.pathname = url);
   }
   render() {

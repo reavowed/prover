@@ -17,26 +17,23 @@ export default function ProveCurrentTarget({path, onError}) {
       `suggestSubstitutions`,
       {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
+        body: {
           inferenceId,
           serializedPremises: _.mapValues(selectedPremises, p => p.serialize()),
           withConclusion: true
-        })
+        }
       }
     );
   };
   const proveWithInference = (suggestion, substitutions) => {
     return context.fetchJsonForStepAndUpdateTheorem(path, "", {
       method: "PUT",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
+      body: {
         inferenceId: suggestion.inference.id,
         substitutions,
         rewriteInferenceId: suggestion.rewriteInference && suggestion.rewriteInference.id
-      })
-    })
-      .catch(onError);
+      }
+    }).catch(onError);
   };
   return <InferenceFinder title='Select Inference'
                           getInferenceSuggestions={getInferenceSuggestions}

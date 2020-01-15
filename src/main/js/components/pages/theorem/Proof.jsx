@@ -65,7 +65,7 @@ export default class Proof extends React.Component {
       };
 
       const duplicateProof = () => {
-        theoremContext.fetchJson("proofs", {method: "POST", headers: {"Content-Type": "application/json"}, body: this.props.index})
+        theoremContext.fetchJson("proofs", {method: "POST", body: this.props.index})
           .then(theoremContext.updateTheorem);
       };
 

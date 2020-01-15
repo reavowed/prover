@@ -20,7 +20,7 @@ export default class ApplyTransitivePremiseFromRight extends React.Component {
     return this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "premiseRight", {
       method: "POST",
       body: premise.statement.serialize()
-    });
+    }).catch(this.props.onError);
   };
 
   render() {

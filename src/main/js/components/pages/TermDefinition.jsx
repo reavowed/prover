@@ -25,26 +25,10 @@ export class TermDefinition extends React.Component {
   }
   getParser = () => new Parser(this.props.definitions, this.props.typeDefinitions);
   setSymbol = () => {
-    return window.fetch(path.join(this.props.url, "symbol"), {method: "PUT", body: this.state.newSymbol})
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw response.statusText;
-        }
-      })
-      .then(() => window.location.reload());
+    return window.fetchJson(path.join(this.props.url, "symbol"), {method: "PUT", body: this.state.newSymbol});
   };
   setAttributes = () => {
-    return window.fetch(path.join(this.props.url, "attributes"), {method: "PUT", body: JSON.stringify(this.state.newAttributes), headers: {"Content-Type": "application/json"}})
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw response.statusText;
-        }
-      })
-      .then(() => window.location.reload());
+    return window.fetchJson(path.join(this.props.url, "attributes"), {method: "PUT", body: this.state.newAttributes});
   };
   render() {
     const {url, bookLink, chapterLink, previous, next, usages, definitions, displayShorthands, definitionShorthands, inferences, binaryRelations} = this.props;

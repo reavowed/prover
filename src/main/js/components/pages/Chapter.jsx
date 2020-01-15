@@ -42,14 +42,7 @@ export class Chapter extends React.Component {
   getParser = () => new Parser(this.props.definitions, this.props.typeDefinitions);
 
   updateChapter = (fetchUrl, fetchData) => {
-    return window.fetch(fetchUrl, fetchData)
-      .then(response => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          throw response.statusText;
-        }
-      })
+    return window.fetchJson(fetchUrl, fetchData)
       .then(newProps => {
         this.setState({
           title: newProps.title,
@@ -65,7 +58,6 @@ export class Chapter extends React.Component {
   onDropEntry = ({url, index}, {index: targetIndex}, after) => {
     return this.updateChapter(path.join(url, "index"), {
       method: "PUT",
-      headers: {"Content-Type": "application/json"},
       body: targetIndex + (after ? 1 : 0) - (index < targetIndex ? 1 : 0)
     });
   };
@@ -75,14 +67,15 @@ export class Chapter extends React.Component {
   };
 
   render() {
-    const {bookLink, summary, previous, next} = this.props;
+    const {bookLink, summary, previous, next, displayShorthands, definitionShorthands, typeDefinitions} = this.props;
     const {title, url, entries, editing} = this.state;
 
     const context = {updateChapter: this.updateChapter, url, editing};
+    const entryContext = {parser: this.getParser(), displayShorthands, definitionShorthands, typeDefinitions};
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <ChapterContext.Provider value={context}>
-        <EntryContext.Provider value={{parser: this.getParser(), displayShorthands: this.props.displayShorthands, definitionShorthands: this.props.definitionShorthands}}>
+        <EntryContext.Provider value={entryContext}>
           <Button className="ml-3 float-right" size="sm" onClick={() => this.setState({editing: !editing})}><i className={"fas fa-" + (editing ? "times" : "edit")}/></Button>
           <h3><InlineTextEditor text={title} callback={this.updateTitle}/></h3>
           <p>{summary}</p>

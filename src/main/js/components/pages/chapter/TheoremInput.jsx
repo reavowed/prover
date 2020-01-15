@@ -14,11 +14,7 @@ export default function TheoremInput({onCancel}) {
   const context = useContext(ChapterContext);
   function saveTheorem(theoremToAdd) {
     theoremToAdd.premises = _.filter(theoremToAdd.premises.split(/\r?\n/), s => s.length);
-    return context.updateChapter(path.join(context.url, "theorems"), {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(theoremToAdd)
-    });
+    return context.updateChapter(path.join(context.url, "theorems"), {method: "POST", body: theoremToAdd});
   }
   return <ObjectInputWithSimpleForm description="Theorem" values={values} save={saveTheorem} onCancel={onCancel} />;
 }

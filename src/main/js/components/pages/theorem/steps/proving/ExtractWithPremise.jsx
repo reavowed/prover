@@ -51,12 +51,11 @@ export default class ExtractWithPremise extends React.Component {
     return new Promise((resolve => this.setState({saving: true}, resolve)))
       .then(() => this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "extractWithPremise", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
+        body: {
           inferenceId: this.state.selectedFact && this.state.selectedFact.id,
           serializedBasePremiseStatement: this.state.selectedBasePremise && this.state.selectedBasePremise.statement.serialize(),
           serializedHelperPremiseStatement: this.state.selectedHelperPremise.statement.serialize()
-        })
+        }
       }))
       .then(this.props.onCancel)
       .catch(this.props.onError)
@@ -64,7 +63,7 @@ export default class ExtractWithPremise extends React.Component {
   };
 
   render() {
-    const {availablePremises, title} = this.props;
+    const {availablePremises} = this.props;
     const {selectedFact, selectedBasePremise, selectedHelperPremise, saving} = this.state;
 
     let getSuggestionValue = s => s.name;

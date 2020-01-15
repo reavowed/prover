@@ -65,56 +65,6 @@ export function matchTemplate(template: any, expression: Expression, pathWithinM
 }
 
 export type Expression = TextBasedExpression | FormatBasedExpression | TypeExpression | PropertyExpression
-export const Expression = {
-  parseFromJson(json: any): Expression {
-    if (typeof json === "string") {
-      const definition = window.definitions[json];
-      if (definition) {
-        return new DefinedExpression(definition, [], [])
-      } else {
-      return new VariableOrConstant(json);
-      }
-    } else if (_.isArray(json) && _.isString(json[0])) {
-      const [definitionSymbol, ...boundVariablesAndComponents] = json;
-      const expressionDefinition = window.definitions[definitionSymbol];
-      const typeDefinition = window.typeDefinitions[definitionSymbol];
-      const parentTypeDefinition = _.find(window.typeDefinitions, d => _.has(d.properties, definitionSymbol));
-      if (expressionDefinition) {
-        const boundVariableNames = boundVariablesAndComponents.slice(0, expressionDefinition.numberOfBoundVariables);
-        const componentsJson = boundVariablesAndComponents.slice(expressionDefinition.numberOfBoundVariables);
-        if (_.includes(expressionDefinition.attributes, "conjunction")) {
-          const [firstComponentJson, secondComponentJson] = componentsJson;
-          const firstComponent = Expression.parseFromJson(firstComponentJson);
-          if (firstComponent instanceof TypeExpression && _.isArray(secondComponentJson) && _.isString(secondComponentJson[0])) {
-            const [propertyName, termJson, ...otherComponentsJson] = secondComponentJson;
-            const property = firstComponent.definition.properties[propertyName];
-            const term = Expression.parseFromJson(termJson);
-            const otherComponents = otherComponentsJson.map(Expression.parseFromJson);
-            if (property && term.serialize() === firstComponent.term.serialize() && otherComponents.map(c => c.serialize()).join(" ") === firstComponent.otherComponents.map(c => c.serialize()).join(" ")) {
-              firstComponent.addProperty(property);
-              return firstComponent;
-            }
-          }
-        }
-        return new DefinedExpression(expressionDefinition, boundVariableNames, componentsJson.map(Expression.parseFromJson));
-      } else if (typeDefinition) {
-        return new TypeExpression(typeDefinition, Expression.parseFromJson(boundVariablesAndComponents[0]), boundVariablesAndComponents.slice(1).map(Expression.parseFromJson), [])
-      } else if (parentTypeDefinition) {
-        return new PropertyExpression(parentTypeDefinition, definitionSymbol, parentTypeDefinition.properties[definitionSymbol], Expression.parseFromJson(boundVariablesAndComponents[0]), boundVariablesAndComponents.slice(1).map(Expression.parseFromJson))
-      } else {
-        throw `Unrecognised definition ${definitionSymbol}`
-      }
-    } else if (_.isArray(json) && _.isNumber(json[0])) {
-      const [level, index] = json;
-      return new FunctionParameter(level, index);
-    } else if (_.isObject(json)) {
-      let [[name, args]] = _.toPairs(json);
-      return new ExpressionApplication(name, args.map(Expression.parseFromJson));
-    } else {
-      throw `Unrecognised expression ${JSON.stringify(json)}`
-    }
-  }
-};
 
 interface TextBasedExpression {
   serialize(): string

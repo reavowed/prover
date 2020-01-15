@@ -2,6 +2,7 @@ Introduce the set membership predicate ∈ and the Axiom of Extensionality, and 
 
 statement ∈ (a b)
   shorthand (in)
+  attributes (chainable)
 
 display ∀ x → ∈ $0 a φ as ((∀x ∈ a)φ)
 

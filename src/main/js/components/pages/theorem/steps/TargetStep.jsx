@@ -44,7 +44,7 @@ class TargetStepProofLineInner extends React.Component {
   };
 
   render() {
-    const {step, path, additionalReferences, children, transitive} = this.props;
+    const {step, path, additionalReferences, children, chained} = this.props;
     const {proving} = this.state;
 
     return <EntryContext.Consumer>{entryContext => {
@@ -55,7 +55,7 @@ class TargetStepProofLineInner extends React.Component {
           <h5 className="text-center">
             <CopiableExpression expression={step.statement} />
           </h5>
-          <ProvingCard step={step} path={path} availablePremises={this.state.availablePremises} transitive={transitive} />
+          <ProvingCard step={step} path={path} availablePremises={this.state.availablePremises} chained={chained} />
         </div> :
         <ProofLine incomplete
                    editableBoundVariable

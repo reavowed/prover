@@ -4,7 +4,7 @@ import net.prover.model._
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.SubstitutionContext
 
-case class BinaryRelation(template: Statement) {
+case class BinaryRelation(template: Statement, attributes: Seq[String]) {
   def apply(left: Term, right: Term)(implicit substitutionContext: SubstitutionContext): Statement = {
     template.applySubstitutions(Substitutions(terms = template.requiredSubstitutions.terms.zip(Seq(left, right)).toMap)).get
   }

@@ -38,12 +38,7 @@ export class Theorem extends React.Component {
     const theoremContext = {
       parser,
       fetchJson(subpath,  options) {
-        return window.fetch(path.join(url, subpath), options)
-          .then(response => {
-            return new Promise(((resolve, reject) => {
-              response.json().then(response.ok ? resolve : reject);
-            }))
-          })
+        return window.fetchJson(path.join(url, subpath), options);
       },
       updateTheorem(newTheoremJson) {
         return new Promise((resolve) => {

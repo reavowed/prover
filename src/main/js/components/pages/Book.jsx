@@ -40,24 +40,13 @@ export class Book extends React.Component {
     this.setState({newChapter});
   };
   addNewChapter = () => {
-    window.fetch(
+    window.fetchJson(
       path.join(this.props.url, "chapters"),
-      {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(this.state.newChapter)
-      }
-    ).then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw response.statusText;
-      }
-    })
-      .then(({chapters}) => {
-        this.setState({chapters});
-        this.hideNewChapterModal();
-      });
+      {method: "POST", body: this.state.newChapter}
+    ).then(({chapters}) => {
+      this.setState({chapters});
+      this.hideNewChapterModal();
+    });
   };
 
   render() {

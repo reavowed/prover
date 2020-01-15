@@ -37,20 +37,7 @@ export class Books extends React.Component {
     this.setState({newBook});
   };
   addNewBook = () => {
-    window.fetch(
-      "/books",
-      {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(this.state.newBook)
-      }
-    ).then(response => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          throw response.statusText;
-        }
-      })
+    window.fetchJson("/books", {method: "POST", body: this.state.newBook})
       .then(({books}) => {
         this.setState({books});
         this.hideNewBookModal();

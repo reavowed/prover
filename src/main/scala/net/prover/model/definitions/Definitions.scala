@@ -13,7 +13,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
   lazy val equalityOption: Option[Equality] = {
     for {
       definition <- statementDefinitions.find(_.attributes.contains("equality"))
-      relation = BinaryRelation(definition.defaultValue)
+      relation = BinaryRelation(definition.defaultValue, definition.attributes)
       definitions <- definitionsByRelation.get(relation)
       expansion <- definitions.expansion
       substitution <- definitions.substitution
@@ -329,7 +329,7 @@ object Definitions {
     def fromDefinitions = for {
       definition <- statementDefinitions
       if definition.componentTypes.length == 2 && definition.format.baseFormatString == s"%0 ${definition.symbol} %1"
-      relation = BinaryRelation(definition.defaultValue)
+      relation = BinaryRelation(definition.defaultValue, definition.attributes)
     } yield (definition.symbol, relation)
     def fromShorthands = for {
       shorthand <- shorthands
@@ -352,7 +352,8 @@ object Definitions {
             lhsVariable.name -> TermVariable(lhsVariable.name),
             rhsVariable.name -> TermVariable(rhsVariable.name),
             symbolVariable.name -> definition.defaultValue)
-        ).asInstanceOf[Statement])
+        ).asInstanceOf[Statement],
+        Nil)
     } yield (definition.symbol, relation)
     fromDefinitions ++ fromShorthands
   }

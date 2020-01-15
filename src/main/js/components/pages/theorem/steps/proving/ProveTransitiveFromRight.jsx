@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import ProofContext from "../../ProofContext";
 import {InferenceFinder} from "./components/InferenceFinder";
 
-export default function ProveTransitiveFromRight({path}) {
+export default function ProveTransitiveFromRight({path, onError}) {
   const context = useContext(ProofContext);
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `suggestInferencesForTransitivityFromRight?searchText=${searchText}`);
@@ -19,7 +19,7 @@ export default function ProveTransitiveFromRight({path}) {
         substitutions,
         rewriteInferenceId: suggestion.rewriteInference && suggestion.rewriteInference.id
       })
-    });
+    }).catch(onError);
   };
   return <InferenceFinder title='Select Inference to Add from Right'
                           getInferenceSuggestions={getInferenceSuggestions}

@@ -20,11 +20,7 @@ const values = [
 export default function TypeInput({onCancel}) {
   const context = useContext(ChapterContext);
   const saveType = (propertyToAdd) => {
-    return context.updateChapter(path.join(context.url, "typeDefinitions"), {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(propertyToAdd)
-    });
+    return context.updateChapter(path.join(context.url, "typeDefinitions"), {method: "POST", body: propertyToAdd});
   };
   return <ObjectInputWithSimpleForm description="Type" values={values} save={saveType} onCancel={onCancel} />;
 }

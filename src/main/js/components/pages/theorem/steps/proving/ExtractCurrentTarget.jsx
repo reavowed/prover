@@ -8,15 +8,13 @@ export default function ExtractCurrentTarget({path, onError, availablePremises})
   const extractWithPremise = (premise) => {
     return context.fetchJsonForStepAndUpdateTheorem(path, "extract", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({serializedPremiseStatement: premise.statement.serialize()})
+      body: {serializedPremiseStatement: premise.statement.serialize()}
     }).catch(onError);
   };
   const extractWithFact = (fact) => {
     return context.fetchJsonForStepAndUpdateTheorem(path, "extract", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({inferenceId: fact.id})
+      body: {inferenceId: fact.id}
     }).catch(onError);
   };
   return <PremiseOrFactChooser

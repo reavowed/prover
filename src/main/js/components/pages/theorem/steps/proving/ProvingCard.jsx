@@ -27,8 +27,9 @@ import RewritePremise from "./RewritePremise";
 import RewriteTransitiveFromLeft from "./RewriteTransitiveFromLeft";
 import RewriteTransitiveFromRight from "./RewriteTransitiveFromRight";
 
-export default function ProvingCard({step, path, availablePremises, transitive}) {
+export default function ProvingCard({step, path, availablePremises, chained}) {
   const entryContext = useContext(EntryContext);
+  const [currentRowLabel, setCurrentRowLabel] = useState(null);
   const [currentProverLabel, setCurrentProverLabel] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -83,7 +84,7 @@ export default function ProvingCard({step, path, availablePremises, transitive})
         }
       ]
     },
-    !transitive && {
+    !chained && {
       label: "Insert before",
       provers: [
         {
@@ -121,7 +122,7 @@ export default function ProvingCard({step, path, availablePremises, transitive})
         }
       ]
     },
-    binaryRelation && {
+    binaryRelation && binaryRelation.isTransitive && {
       label: "Insert transitive",
       provers: [
         {
@@ -155,7 +156,8 @@ export default function ProvingCard({step, path, availablePremises, transitive})
       ]
     }
   ];
-  const currentProver = _.chain(rows).filter().flatMap(r => r.provers).find(p => p.label === currentProverLabel).value();
+  const currentRow = _.find(rows, r => r && r.label === currentRowLabel);
+  const currentProver = currentRow && _.find(currentRow.provers, p => p && p.label === currentProverLabel);
 
   const SmallButton = styled(Button)`padding: 0.1rem 0.25rem;`;
 
@@ -176,8 +178,13 @@ export default function ProvingCard({step, path, availablePremises, transitive})
               <Col xs={2} className="text-right">{row.label}</Col>
               <Col xs={10}>
                 {_.map(provers, prover =>
-                  <Button key={prover.label} size="sm" className="ml-1 mb-1"
-                          onClick={() => setCurrentProverLabel(prover.label)}>{prover.label}</Button>
+                  <Button key={prover.label}
+                          size="sm"
+                          className="ml-1 mb-1"
+                          onClick={() => {setCurrentRowLabel(row.label); setCurrentProverLabel(prover.label);}}
+                  >
+                    {prover.label}
+                  </Button>
                 )}
               </Col>
             </Row>;

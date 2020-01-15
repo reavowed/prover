@@ -38,6 +38,7 @@ case class StatementDefinition(
 
   override def withSymbol(newSymbol: String): StatementDefinition = copy(symbol = newSymbol)
   override def withShorthand(newShorthand: Option[String]): StatementDefinition = copy(shorthand = newShorthand)
+  override def withAttributes(newAttributes: Seq[String]): StatementDefinition = copy(attributes = newAttributes)
 
   val constructionInference = definingStatement.map(s => Inference.Definition(name, Seq(s), defaultValue))
   val destructionInference = definingStatement.map(s => Inference.Definition(name, Seq(defaultValue), s))

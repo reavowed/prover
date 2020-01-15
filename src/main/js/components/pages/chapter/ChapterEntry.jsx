@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useContext} from "react";
 import styled from "styled-components";
+import EntryContext from "../../EntryContext";
 import {CopiableExpression} from "../../ExpressionComponent";
 import {formatHtml, replacePlaceholders} from "../../helpers/Formatter";
 import {ResultWithPremises} from "../../ResultWithPremises";
@@ -12,6 +13,7 @@ const Capitalized = styled.span`
 `;
 
 export default function ChapterEntry({entry}) {
+  const entryContext = useContext(EntryContext);
   switch (entry.type) {
     case "axiom":
       return <InferenceEntry key={entry.url} title="Axiom" entry={entry} />;
@@ -27,14 +29,14 @@ export default function ChapterEntry({entry}) {
                             result={<><CopiableExpression expression={entry.defaultValue}/> is defined by <CopiableExpression expression={entry.definingStatement}/></>}/>
       </DefinitionEntry>;
     case "typeDefinition":
-      const definition = window.typeDefinitions[entry.symbol];
+      const definition = entryContext.typeDefinitions[entry.symbol];
       return <ChapterEntryWrapper title={<>Definition: <Capitalized>{definition.name}</Capitalized></>}
                                   url={entry.url}
                                   key={entry.url}>
         {entry.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormatString, s => replacePlaceholders(s, entry.components))} if <CopiableExpression expression={entry.definingStatement}/>.
       </ChapterEntryWrapper>;
     case "propertyDefinition":
-      const typeDefinition = window.typeDefinitions[entry.parentTypeSymbol];
+      const typeDefinition = entryContext.typeDefinitions[entry.parentTypeSymbol];
       return <ChapterEntryWrapper title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name} {typeDefinition.name}</span></>}
                                   url={entry.url}
                                   key={entry.url}>

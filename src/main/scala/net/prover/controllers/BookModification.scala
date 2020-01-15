@@ -113,21 +113,21 @@ trait BookModification {
     )
   }
 
-  case class TheoremProps(theorem: Theorem, newInferences: Map[String, LinkSummary])
-  protected def modifyTheorem(bookKey: String, chapterKey: String, theoremKey: String)(f: (Theorem, ProvingContext) => Try[Theorem]): Try[TheoremProps] = {
-    modifyEntry[Theorem, WithValue[TheoremProps]#Type](bookKey, chapterKey, theoremKey, (books, definitions, book, chapter, theorem) => {
+  case class TheoremUpdateProps(theorem: Theorem, newInferences: Map[String, LinkSummary])
+  protected def modifyTheorem(bookKey: String, chapterKey: String, theoremKey: String)(f: (Theorem, ProvingContext) => Try[Theorem]): Try[TheoremUpdateProps] = {
+    modifyEntry[Theorem, WithValue[TheoremUpdateProps]#Type](bookKey, chapterKey, theoremKey, (books, definitions, book, chapter, theorem) => {
       val provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
       for {
         newTheorem <- f(theorem, provingContext).map(_.recalculateReferences(provingContext))
         newInferenceIds = newTheorem.referencedInferenceIds.diff(theorem.referencedInferenceIds)
         inferenceLinks = getInferenceLinks(newInferenceIds)
-      } yield (newTheorem, TheoremProps(newTheorem, inferenceLinks))
+      } yield (newTheorem, TheoremUpdateProps(newTheorem, inferenceLinks))
     }).map(_._2)
   }
 
   implicit def toIndexes(pathData: PathData): Seq[Int] = pathData.indexes
 
-  protected def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[TheoremProps] = {
+  protected def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[TheoremUpdateProps] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
       theorem.modifyStep[Try](proofIndex, stepPath) { (step, stepContext) =>
         for {
@@ -137,7 +137,7 @@ trait BookModification {
       }.orNotFound(s"Step $stepPath").flatten
     }
   }
-  protected def modifySteps(bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[Seq[Step]]): Try[TheoremProps] = {
+  protected def modifySteps(bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[Seq[Step]]): Try[TheoremUpdateProps] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
       theorem.modifySteps[Try](proofIndex, stepPath) { (steps, stepContext) =>
         Some(f(steps, StepProvingContext(stepContext, provingContext)))
@@ -145,7 +145,7 @@ trait BookModification {
     }
   }
 
-  protected def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[TheoremProps] = {
+  protected def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[TheoremUpdateProps] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
       (stepPath.indexes match {
         case init :+ last =>
@@ -192,7 +192,7 @@ trait BookModification {
     (existingStepsBeforeTransitive ++ newTargets ++ transitiveSteps ++ newAfter)
   }
 
-  protected def replaceStepAndAddBeforeTransitivity[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepProvingContext) => Try[(Step, Seq[Step])]): Try[TheoremProps] = {
+  protected def replaceStepAndAddBeforeTransitivity[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepProvingContext) => Try[(Step, Seq[Step])]): Try[TheoremUpdateProps] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
       (stepPath.indexes match {
         case init :+ last =>

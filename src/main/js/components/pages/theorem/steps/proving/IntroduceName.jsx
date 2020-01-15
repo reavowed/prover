@@ -47,8 +47,7 @@ export default class IntroduceName extends React.Component {
     const {namingVariableName: variableName} = this.state;
     return this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "introduceNaming", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({inferenceId: suggestion.inference.id, substitutions, variableName})
+        body: {inferenceId: suggestion.inference.id, substitutions, variableName}
       })
       .then(() => this.context.callOnStep([...this.props.path, 0], "startProving"))
       .catch(this.props.onError);
