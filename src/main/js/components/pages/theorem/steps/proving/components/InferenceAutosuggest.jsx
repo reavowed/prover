@@ -23,6 +23,10 @@ export default class InferenceAutosuggest extends React.Component {
   constructor(...args) {
     super(...args);
     this.autoSuggestRef = React.createRef();
+    this.state = {
+      autosuggestValue: "",
+      suggestions: []
+    }
   }
   componentDidMount() {
     if (this.props.autofocus) {
@@ -30,8 +34,26 @@ export default class InferenceAutosuggest extends React.Component {
     }
   }
 
+  onAutosuggestChange = (event, { newValue }) => {
+    this.setState({autosuggestValue: newValue});
+  };
+  onSuggestionsFetchRequested = ({value}) => {
+    this.props.fetchSuggestions(value)
+      .then(suggestions => {
+        if (this.state.autosuggestValue === value) {
+          this.setState({suggestions})
+        }
+      });
+  };
+  onSuggestionsClearRequested = () => {
+    this.setState({suggestions: []});
+  };
+  onSuggestionSelected = (event, {suggestion}) => {
+    this.props.setSelectedSuggestion(suggestion);
+  };
+
   render() {
-    const {getSuggestionValue, renderSuggestion, suggestions, onSuggestionsFetchRequested, onSuggestionsClearRequested, onSuggestionSelected, value, onValueChange, readOnly} = this.props;
+    const {getSuggestionValue, renderSuggestion, readOnly} = this.props;
 
     function renderSuggestionsContainer ({containerProps, children}) {
       return <div {...containerProps}><DropdownContainer>{children}</DropdownContainer></div>
@@ -39,14 +61,14 @@ export default class InferenceAutosuggest extends React.Component {
 
     return <Autosuggest
       ref={this.autoSuggestRef}
-      suggestions={suggestions}
-      onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-      onSuggestionsClearRequested={onSuggestionsClearRequested}
+      suggestions={this.state.suggestions}
+      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+      onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+      onSuggestionSelected={this.onSuggestionSelected}
       shouldRenderSuggestions={() => true}
       getSuggestionValue={getSuggestionValue}
       renderSuggestionsContainer={renderSuggestionsContainer}
-      onSuggestionSelected={onSuggestionSelected}
       renderSuggestion={s => <span className="dropdown-item">{(renderSuggestion || getSuggestionValue)(s)}</span>}
-      inputProps={{value: value, onChange: onValueChange, className:"form-control", readOnly}} />
+      inputProps={{value: this.state.autosuggestValue, onChange: this.onAutosuggestChange, className:"form-control", readOnly}} />
   }
 }

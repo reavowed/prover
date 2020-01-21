@@ -57,8 +57,9 @@ package object controllers {
   }
 
   implicit class AnyWithResponseExceptionOps[T](t: => T) {
-    def recoverWithBadRequest: Try[T] = {
-      Try(t).recoverWith { case e => Failure(BadRequestException(e.getMessage))}
+    def recoverWithBadRequest: Try[T] = recoverWithBadRequest(identity)
+    def recoverWithBadRequest(f: String => String): Try[T] = {
+      Try(t).recoverWith { case e => Failure(BadRequestException(f(e.getMessage)))}
     }
   }
 

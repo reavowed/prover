@@ -23,7 +23,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
 
   private def getTermsFunctionsAndPaths(expression: Expression, pathsAlreadyRewrittenText: String)(implicit stepContext: StepContext): Seq[(Term, Expression, Seq[Int])] = {
     val pathsAlreadyRewritten = pathsAlreadyRewrittenText.split(',').filter(_.nonEmpty).map(_.split('.').map(_.toInt))
-    expression.getTerms(stepContext).filter { case (_, _, path) =>
+    expression.getTerms().filter { case (_, _, path) =>
       !pathsAlreadyRewritten.exists(path.startsWith(_))
     }
   }
@@ -66,13 +66,13 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           .flatMap { case (inference, left, right) =>
             getSuggestions(inference, left, right, reverse = false).toSeq ++ getSuggestions(inference, right, left, reverse = true).toSeq
           }
-        .sortBy(_.inference.conclusion.complexity)(implicitly[Ordering[Int]].reverse)
+        .sortBy(_.inference.conclusion.structuralComplexity)(implicitly[Ordering[Int]].reverse)
         .take(10)
     }).toResponseEntity
   }
 
   @GetMapping(value = Array("/rewritePremiseSuggestions"), produces = Array("application/json;charset=UTF-8"))
-  def getPremiseSuggestions(
+  def getRewritePremiseSuggestions(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
@@ -154,7 +154,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
 
             for {
               (currentInnerExpression, stepsSoFar, inferencesSoFar) <- trySoFar
-              (baseTerm, function, _) <- currentInnerExpression.getTerms(stepProvingContext.stepContext).find(_._3 == rewrite.path).orBadRequest(s"No term at path ${rewrite.path.mkString(".")}")
+              (baseTerm, function, _) <- currentInnerExpression.getTerms().find(_._3 == rewrite.path).orBadRequest(s"No term at path ${rewrite.path.mkString(".")}")
               (rewrittenTerm, rewriteStepOption, inferenceOption) <- ((rewrite.inferenceId.map(applyInference(_, currentInnerExpression, baseTerm)) orElse
                 rewrite.serializedPremiseStatement.map(applyPremise(_, currentInnerExpression, baseTerm))) orBadRequest
                 "Neither inference nor premise supplied").flatten

@@ -303,7 +303,7 @@ export class Steps extends React.Component {
       }
     }
     return {
-      key: step.provenStatement.serialize(),
+      key: step.provenStatement ? step.provenStatement.serialize() : index,
       element: React.createElement(Steps.getElementName(step), props)
     }
   };

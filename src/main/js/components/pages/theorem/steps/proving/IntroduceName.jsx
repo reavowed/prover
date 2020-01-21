@@ -40,15 +40,16 @@ export default class IntroduceName extends React.Component {
   getInferenceSuggestions = (searchText) => {
     return this.context.fetchJsonForStep(this.props.path, `suggestNamingInferences?searchText=${searchText}`);
   };
-  getPremiseSuggestions = (inferenceId) => {
-    return this.context.fetchJsonForStep(this.props.path, `suggestNamingPremises?inferenceId=${inferenceId}`);
-  };
-  submit = (suggestion, substitutions) => {
+  submit = (possibleInference, possibleConclusion, substitutions) => {
     const {namingVariableName: variableName} = this.state;
     return this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "introduceNaming", {
-        method: "POST",
-        body: {inferenceId: suggestion.inference.id, substitutions, variableName}
-      })
+      method: "POST",
+      body: {
+        inferenceId: possibleInference.inference.id,
+        substitutions,
+        variableName
+      }
+    })
       .then(() => this.context.callOnStep([...this.props.path, 0], "startProving"))
       .catch(this.props.onError);
   };
@@ -66,10 +67,10 @@ export default class IntroduceName extends React.Component {
       </Form.Group>
       <InferenceFinder title='Select Inference for Naming'
                        getInferenceSuggestions={this.getInferenceSuggestions}
-                       getPremiseSuggestions={this.getPremiseSuggestions}
                        submit={this.submit}
                        disabled={saving}
-                       onSaving={(innerSaving) => this.setState({innerSaving})}/>
+                       onSaving={(innerSaving) => this.setState({innerSaving})}
+                       hideSummary />
     </>
   }
 }

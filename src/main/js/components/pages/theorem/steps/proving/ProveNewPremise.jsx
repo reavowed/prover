@@ -3,13 +3,10 @@ import React, {useContext} from "react";
 import ProofContext from "../../ProofContext";
 import {InferenceFinder} from "./components/InferenceFinder";
 
-export default function ProveNewPremise({path, onError}) {
+export default function ProveNewPremise({path, onCancel, onError}) {
   const context = useContext(ProofContext);
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `suggestInferencesForPremise?searchText=${searchText}`);
-  };
-  const getPremiseSuggestions = (inferenceId) => {
-    return context.fetchJsonForStep(path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=false`);
   };
   const getSubstitutionSuggestions = (inferenceId, selectedPremises) => {
     return context.fetchJsonForStep(
@@ -25,18 +22,20 @@ export default function ProveNewPremise({path, onError}) {
       }
     );
   };
-  const proveWithInference = (suggestion, substitutions) => {
+  const proveWithInference = (possibleInference, possibleConclusion, substitutions) => {
     return context.fetchJsonForStepAndUpdateTheorem(path, "assertion", {
       method: "POST",
       body: {
-        inferenceId: suggestion.inference.id,
-        substitutions
+        inferenceId: possibleInference.inference.id,
+        substitutions,
+        extractionInferenceIds: possibleConclusion.extractionInferenceIds
       }
-    }).catch(onError);
+    })
+      .then(onCancel)
+      .catch(onError);
   };
   return <InferenceFinder title='Select Inference'
                           getInferenceSuggestions={getInferenceSuggestions}
-                          getPremiseSuggestions={getPremiseSuggestions}
                           getSubstitutionSuggestions={getSubstitutionSuggestions}
                           submit={proveWithInference}
                           autofocus/>

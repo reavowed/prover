@@ -61,6 +61,7 @@ package object model {
   }
 
   implicit class Tuple3Ops[S,T,U](tuple: (S, T, U)) {
+    def map1[R](f: S => R): (R, T, U) = (f(tuple._1), tuple._2, tuple._3)
     def map2[R](f: T => R): (S, R, U) = (tuple._1, f(tuple._2), tuple._3)
     def optionMap2[R](f: T => Option[R]): Option[(S, R, U)] = f(tuple._2).map((tuple._1, _, tuple._3))
   }
@@ -358,8 +359,16 @@ package object model {
     def findFirst[S](f: T => Option[S]): Option[S] = {
       iterator.map(f).collect { case Some(t) => t }.headOption
     }
+    def collectFirst[S](f: PartialFunction[T, Option[S]]): Option[S] = {
+      iterator.collectOption(f).headOption
+    }
     def mapCollect[S](f: T => Option[S]): Iterator[S] = {
       iterator.map(f).collect {
+        case Some(t) => t
+      }
+    }
+    def collectOption[S](f: PartialFunction[T, Option[S]]): Iterator[S] = {
+      iterator.collect(f).collect {
         case Some(t) => t
       }
     }
@@ -420,6 +429,14 @@ package object model {
     def ifEmpty(action: => Unit): Option[T] = {
       if (x.isEmpty) action
       x
+    }
+  }
+
+  implicit class OptionOptionOps[T](x: Option[Option[T]]) {
+    def swap: Option[Option[T]] = x match {
+      case Some(None) => None
+      case None => Some(None)
+      case _ => x
     }
   }
 

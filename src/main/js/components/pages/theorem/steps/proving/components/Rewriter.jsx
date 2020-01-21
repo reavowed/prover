@@ -13,9 +13,7 @@ export default class Rewriter extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
-      autosuggestValue: "",
       currentExpression: this.props.expression,
-      inferenceSuggestions: [],
       selectedInferenceSuggestion: null,
       selectedPremiseSuggestion: null,
       chosenRewrites: [[]],
@@ -31,22 +29,16 @@ export default class Rewriter extends React.Component {
 
   getCurrentPaths = () => _.map(this.state.chosenRewrites[this.state.chosenRewrites.length - 1], r => r.path);
 
-  onAutosuggestChange = (event, { newValue }) => {
-    this.setState({autosuggestValue: newValue});
+  fetchRewriteSuggestions = (searchText) => {
+    const serializedExpression = encodeURIComponent(this.state.currentExpression.serialize());
+    const serializedPaths = _.map(this.getCurrentPaths(), p => p.join(".")).join(",");
+    return this.context.fetchJsonForStep(
+      this.props.path,
+      `rewriteSuggestions?searchText=${searchText}&expression=${serializedExpression}&pathsAlreadyRewritten=${serializedPaths}`
+    ).then(this.context.parser.parseInferenceRewriteSuggestions)
   };
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.context.fetchJsonForStep(this.props.path, `rewriteSuggestions?searchText=${value}&expression=${encodeURIComponent(this.state.currentExpression.serialize())}&pathsAlreadyRewritten=${_.map(this.getCurrentPaths(), p => p.join(".")).join(",")}`)
-      .then(suggestionsJson => {
-        if (this.state.autosuggestValue === value) {
-          this.setState({inferenceSuggestions: this.context.parser.parseInferenceRewriteSuggestions(suggestionsJson)})
-        }
-      })
-  };
-  onSuggestionsClearRequested = () => {
-    this.setState({inferenceSuggestions: []})
-  };
-  onSuggestionSelected = (event, {suggestion}) => {
-    this.setState({selectedInferenceSuggestion: suggestion, selectedPremiseSuggestion: null});
+  onInferenceSelected = (selectedInferenceSuggestion) => {
+    this.setState({selectedInferenceSuggestion, selectedPremiseSuggestion: null});
     this.resetPremiseSuggestions();
   };
 
@@ -142,15 +134,11 @@ export default class Rewriter extends React.Component {
         <InferenceAutosuggest
           key={chosenRewrites.length} // Force reset when Again button is clicked
           autofocus
-          value={this.state.autosuggestValue}
-          onValueChange={this.onAutosuggestChange}
-          suggestions={this.state.inferenceSuggestions}
+          fetchSuggestions={this.fetchRewriteSuggestions}
+          setSelectedSuggestion={this.onInferenceSelected}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
-          readOnly={saving}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          onSuggestionSelected={this.onSuggestionSelected} />
+          readOnly={saving} />
       </Form.Group>
       <Form.Group>
         <Button variant="success" onClick={this.save} disabled={saveDisabled}>{saving ? <span className="fas fa-spin fa-spinner"/>  : "Save"}</Button>

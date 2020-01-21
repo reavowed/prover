@@ -22,7 +22,7 @@ case class Associativity(operator: BinaryOperator, inference: Inference.Summary,
 
   def forwardRearrangementStep(a: Term, b: Term, c: Term, wrapper: Wrapper[Term, Term])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep] = {
     for {
-      (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremises(
+      (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremisesAndElide(
         inference,
         Substitutions(terms = inference.requiredSubstitutions.terms.zip(Seq(a, b, c)).toMap))
       if targetSteps.isEmpty

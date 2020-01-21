@@ -7,22 +7,18 @@ export default function ProveTransitiveFromLeft({path, onError}) {
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `suggestInferencesForTransitivityFromLeft?searchText=${searchText}`);
   };
-  const getPremiseSuggestions = (inferenceId) => {
-    return context.fetchJsonForStep(path, `suggestPremisesForTransitivityFromLeft?inferenceId=${inferenceId}`);
-  };
-  const submit = (suggestion, substitutions) => {
+  const submit = (possibleInference, possibleConclusion, substitutions) => {
     return context.fetchJsonForStepAndUpdateTheorem(path, "transitivityFromLeft", {
       method: "POST",
       body: {
-        inferenceId: suggestion.inference.id,
+        inferenceId: possibleInference.inference.id,
         substitutions,
-        rewriteInferenceId: suggestion.rewriteInference && suggestion.rewriteInference.id
+        extractionInferenceIds: possibleConclusion.extractionInferenceIds
       }
     }).catch(onError);
   };
   return <InferenceFinder title='Select Inference to Add from Left'
                           getInferenceSuggestions={getInferenceSuggestions}
-                          getPremiseSuggestions={getPremiseSuggestions}
                           submit={submit}
                           autofocus/>
 }

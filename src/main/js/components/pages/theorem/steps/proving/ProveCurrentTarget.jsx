@@ -8,9 +8,6 @@ export default function ProveCurrentTarget({path, onError}) {
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `suggestInferences?searchText=${searchText}`);
   };
-  const getPremiseSuggestions = (inferenceId) => {
-    return context.fetchJsonForStep(path, `suggestPremises?inferenceId=${inferenceId}&withConclusion=true`);
-  };
   const getSubstitutionSuggestions = (inferenceId, selectedPremises) => {
     return context.fetchJsonForStep(
       path,
@@ -25,20 +22,20 @@ export default function ProveCurrentTarget({path, onError}) {
       }
     );
   };
-  const proveWithInference = (suggestion, substitutions) => {
+  const proveWithInference = (possibleInference, possibleConclusion, substitutions) => {
     return context.fetchJsonForStepAndUpdateTheorem(path, "", {
       method: "PUT",
       body: {
-        inferenceId: suggestion.inference.id,
+        inferenceId: possibleInference.inference.id,
         substitutions,
-        rewriteInferenceId: suggestion.rewriteInference && suggestion.rewriteInference.id
+        extractionInferenceIds: possibleConclusion.extractionInferenceIds
       }
     }).catch(onError);
   };
   return <InferenceFinder title='Select Inference'
                           getInferenceSuggestions={getInferenceSuggestions}
-                          getPremiseSuggestions={getPremiseSuggestions}
                           getSubstitutionSuggestions={getSubstitutionSuggestions}
                           submit={proveWithInference}
+                          allowAutoSubmit
                           autofocus/>
 }

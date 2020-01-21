@@ -7,12 +7,14 @@ import net.prover.model.{ExpressionParsingContext, Parser, Substitutions}
 trait Expression extends TypedExpression[Expression]
 
 trait TypedExpression[+ExpressionType <: Expression] {
-  def complexity: Int
+  def structuralComplexity: Int
+  def definitionalComplexity: Int
+  def complexity: (Int, Int) = (structuralComplexity, definitionalComplexity)
   def definitionUsages: DefinitionUsages
   def referencedDefinitions: Set[ExpressionDefinition] = definitionUsages.map.keySet
 
   def getTerms(depth: Int): Seq[(Term, ExpressionType, Seq[Int])]
-  def getTerms(implicit stepContext: StepContext): Seq[(Term, ExpressionType, Seq[Int])] = getTerms(stepContext.externalDepth)
+  def getTerms()(implicit stepContext: StepContext): Seq[(Term, ExpressionType, Seq[Int])] = getTerms(stepContext.externalDepth)
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType]

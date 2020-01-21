@@ -22,7 +22,9 @@ abstract class ExpressionApplication[ExpressionType <: Expression : ClassTag] ex
   def getMatch(other: Expression): Option[Seq[Expression]]
   def update(newArguments: Seq[Term]): ExpressionType
 
-  override def complexity: Int = arguments.map(_.complexity).sum + 1
+  override def structuralComplexity: Int = arguments.map(_.structuralComplexity).sum + 1
+  override def definitionalComplexity: Int = arguments.map(_.definitionalComplexity).sum + 1
+
   override def getTerms(depth: Int): Seq[(Term, ExpressionType, Seq[Int])] = {
     def helper(previous: Seq[Term], next: Seq[Term], acc: Seq[(Term, ExpressionType, Seq[Int])]): Seq[(Term, ExpressionType, Seq[Int])] = {
       next match {

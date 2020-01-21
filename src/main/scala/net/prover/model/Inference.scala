@@ -82,6 +82,16 @@ trait Inference {
     statement.applySubstitutions(substitutions)
   }
 
+  def canEqual(other: Any): Boolean = other.isInstanceOf[Inference]
+  override def equals(other: Any): Boolean = other match {
+    case that: Inference =>
+      (that canEqual this) &&
+        id == that.id
+    case _ => false
+  }
+
+  override def hashCode: Int = id.hashCode
+
   override def toString: String = name
 }
 

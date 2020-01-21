@@ -1,10 +1,12 @@
 package net.prover.model.definitions
 
-import net.prover.model.definitions.Definitions.RelationDefinitions
 import net.prover.model._
+import net.prover.model.definitions.Definitions.RelationDefinitions
 import net.prover.model.entries.{ChapterEntry, DisplayShorthand, StatementDefinition, TermDefinition}
-import net.prover.model.expressions.{DefinedStatement, Expression, ExpressionVariable, FunctionApplication, PredicateApplication, Statement, StatementVariable, Template, Term, TermVariable}
+import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
+
+import scala.Ordering.Implicits._
 
 case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext.EntryTypes {
 
@@ -187,37 +189,35 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     }
   }
 
-  lazy val statementExtractionInferences: Seq[(Inference, Statement, Seq[Statement])] = inferenceEntries.collect {
+  lazy val statementExtractionInferences: Seq[(Inference, Statement, Option[Statement])] = inferenceEntries.collectOption {
     case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
       if inference.requiredSubstitutions.copy(statements = Nil).isEmpty &&
         firstPremise.requiredSubstitutions.contains(inference.requiredSubstitutions) &&
         conclusion.complexity < firstPremise.complexity &&
         otherPremises.forall(_.complexity < firstPremise.complexity)
     =>
-      (inference, firstPremise, otherPremises)
+      otherPremises match {
+        case Nil =>
+          Some((inference, firstPremise, None))
+        case Seq(single) =>
+          Some((inference, firstPremise, Some(single)))
+        case _ =>
+          None
+      }
   }
-  lazy val finalStatementExtractionInferences: Seq[(Inference, Statement, Seq[Statement])] = inferenceEntries.collect {
-    case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
-      if conclusion.singleStatementVariable.isDefined &&
-        inference.requiredSubstitutions.copy(statements = Nil).isEmpty &&
-        firstPremise.requiredSubstitutions.contains(inference.requiredSubstitutions) &&
-        conclusion.complexity >= firstPremise.complexity &&
-        firstPremise != conclusion
-    =>
-      (inference, firstPremise, otherPremises)
+
+  val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
+    scopingDefinitionOption.flatMap { scopingDefinition =>
+      inferenceEntries.iterator.collect {
+        case inference@Inference(
+          _,
+          Seq(singlePremise@DefinedStatement(Seq(PredicateApplication(premisePredicateName, Seq(FunctionParameter(0, 0)))), `scopingDefinition`)),
+          PredicateApplication(conclusionName, Seq(TermVariable(variableName)))
+        ) if premisePredicateName == conclusionName =>
+          (inference, singlePremise, premisePredicateName, variableName)
+      }.headOption
+    }
   }
-  val predicateSpecificationInferences: Seq[(Inference, Statement, String, Seq[String])] = inferenceEntries.collect {
-    case inference @ Inference(_, Seq(singlePremise), conclusion)
-      if conclusion.complexity < singlePremise.complexity
-    =>
-      conclusion.singlePredicateApplication
-        .flatMap(pa => pa.arguments.map(_.asOptionalInstanceOf[TermVariable].map(_.name)).traverseOption.map(pa.variableName -> _))
-        .filter { case (predicateName, argumentNames) =>
-          singlePremise.requiredSubstitutions.isEquivalentTo(Substitutions.Required(Nil, Nil, Seq((predicateName, argumentNames.length)), Nil)) &&
-            inference.requiredSubstitutions.isEquivalentTo(Substitutions.Required(Nil, argumentNames, Seq((predicateName, argumentNames.length)), Nil))
-        }
-        .map { case (predicateName, argumentNames) => (inference, singlePremise, predicateName, argumentNames)}
-  }.collectDefined
 
   lazy val rewriteInferences: Seq[(Inference, Statement)] = {
     inferenceEntries.collect {

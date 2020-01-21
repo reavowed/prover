@@ -66,7 +66,7 @@ export default function DraggableList({type, enabled, onDrop, children}) {
   </ListContext.Provider>;
 };
 
-DraggableList.Entries = function({entries}) {
+DraggableList.Entries = function Entries({entries}) {
   const {type, path: outerPath, listCallbacks, hiddenIndex, placeholderProps, enabled} = useContext(ListContext);
   const boundVariableLists = useContext(BoundVariableLists);
 

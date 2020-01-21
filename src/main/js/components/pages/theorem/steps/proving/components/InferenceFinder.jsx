@@ -58,162 +58,85 @@ function getAllRequiredPaths(requiredSubstitutions) {
   ];
 }
 
-function getAtPath(substitutions, path) {
-  return path(substitutions);
-}
-
 export class InferenceFinder extends React.Component {
   static contextType = ProofContext;
   constructor(...args) {
     super(...args);
+    this.ref = React.createRef();
     this.autoSuggestRef = React.createRef();
     this.state = {
       saving: false,
-      autosuggestValue: "",
-      inferenceSuggestions: [],
       premiseSuggestions: null,
-      selectedInferenceSuggestion: null,
-      selectedPremiseSuggestions: []
+      selectedInference: null,
+      selectedConclusion: null,
+      selectedPremises: []
     };
   }
   componentDidMount() {
     if (this.props.focusOnMount) {
       this.autoSuggestRef.current.input.focus();
+      this.ref.current.scrollIntoView();
     }
   }
-  onAutosuggestChange = (event, { newValue }) => {
-    this.setState({autosuggestValue: newValue});
+  fetchPossibleInferences = (value) => {
+    return this.props.getInferenceSuggestions(value)
+      .then(suggestionsJson => this.context.parser.parsePossibleInferences(suggestionsJson))
   };
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.props.getInferenceSuggestions(value)
-      .then(suggestionsJson => {
-        if (this.state.autosuggestValue === value) {
-          this.setState({inferenceSuggestions: this.context.parser.parseInferenceSuggestions(suggestionsJson)})
-        }
-      })
-  };
-  onSuggestionsClearRequested = () => {
-    this.setState({
-      inferenceSuggestions: []
-    });
-  };
-  onSuggestionSelected = (event, {suggestion}) => {
-    const forcedSubstitutionValues = this.getAllForcedSubstitutionValues(_.filter([suggestion.substitutions]), suggestion.requiredSubstitutions);
-    const selectedSubstitutionValues = buildSubstitutionMap(suggestion.requiredSubstitutions, getter => getter(forcedSubstitutionValues) ? getter(forcedSubstitutionValues) : "");
-    this.setState({
-      selectedInferenceSuggestion: suggestion,
-      premiseSuggestions: null,
-      selectedSubstitutionValues
-    });
-    if (this.areSubstitutionValuesSufficient(suggestion, selectedSubstitutionValues)) {
-      this.submitWithSelectedValues(suggestion, selectedSubstitutionValues);
-    } else {
-      this.props.getPremiseSuggestions &&
-      this.props.getPremiseSuggestions(suggestion.inference.id)
-        .then(this.handlePremiseSuggestions)
+  setSelectedInference = (selectedInference) => {
+    this.setState({selectedInference});
+    const conclusionToSelect = selectedInference.possibleConclusions.length === 1 ?
+      selectedInference.possibleConclusions[0] :
+      _.find(selectedInference.possibleConclusions, c => c.conclusion.serialize() === selectedInference.inference.conclusion.serialize());
+    if (conclusionToSelect) {
+      this.setSelectedConclusion(conclusionToSelect, selectedInference, true);
     }
   };
-  handlePremiseSuggestions = (suggestionsJson) => {
-    if (suggestionsJson.immediateSubstitutions) {
-      const substitutions = this.context.parser.parseSubstitutions(suggestionsJson.immediateSubstitutions);
-      const selectedSubstitutionValues = this.getAllForcedSubstitutionValues([[substitutions]], this.state.selectedInferenceSuggestion.requiredSubstitutions);
-      this.setState({selectedSubstitutionValues});
-      this.submitWithSelectedValues(this.state.selectedInferenceSuggestion, selectedSubstitutionValues);
-    } else {
-      this.setState({
-        premiseSuggestions: this.context.parser.parsePremiseSuggestions(suggestionsJson.premiseMatches),
-        selectedPremiseSuggestions: this.state.selectedInferenceSuggestion.inference.premises.map(() => ["", null])
-      })
-    }
-  };
-  setSelectedPremiseSuggestion = (premiseIndex, suggestionIndex) => {
-    const selectedSuggestion = [suggestionIndex, suggestionIndex !== "" ? this.state.premiseSuggestions[premiseIndex][parseInt(suggestionIndex)].substitutions : null];
-    const selectedPremiseSuggestions = Object.assign({}, this.state.selectedPremiseSuggestions, {[premiseIndex]: selectedSuggestion});
-    const selectedSubstitutionValues = this.updateForcedSubstitutionValues(this.state.selectedSubstitutionValues, selectedPremiseSuggestions);
-    this.setState({selectedSubstitutionValues, selectedPremiseSuggestions})
-    this.getSubstitutionSuggestions(selectedPremiseSuggestions);
-  };
-
-  getSubstitutionSuggestions = (selectedPremiseSuggestions) => {
-    if (this.props.getSubstitutionSuggestions && _.keys(_.pickBy(selectedPremiseSuggestions, x => x[1])).length > 1) {
-      this.props.getSubstitutionSuggestions(
-        this.state.selectedInferenceSuggestion.inference.id,
-        _.chain(selectedPremiseSuggestions)
-          .pickBy(x => x[1])
-          .map((value, key) => [key, this.state.premiseSuggestions[key][parseInt(value[0])].statement])
-          .fromPairs()
-          .value())
-      .then(this.context.parser.parseSubstitutions)
-      .then(additionalSubstitutionSuggestions => {
-        if (_.isEqual(this.state.selectedPremiseSuggestions, selectedPremiseSuggestions)) {
-          const selectedSubstitutionValues = this.updateForcedSubstitutionValues(this.state.selectedSubstitutionValues, selectedPremiseSuggestions, additionalSubstitutionSuggestions);
-          this.setState({additionalSubstitutionSuggestions, selectedSubstitutionValues});
-        }
-      })
-    }
-  };
-
-  updateForcedSubstitutionValues = (selectedSubstitutionValues, selectedPremiseSuggestions, additionalSubstitutionSuggestions) => {
-    const compatibleSubstitutions = this.getPossibleSubstitutionsLists(selectedPremiseSuggestions, selectedSubstitutionValues, additionalSubstitutionSuggestions);
-    const forcedSubstitutionValues = this.getAllForcedSubstitutionValues(compatibleSubstitutions, this.state.selectedInferenceSuggestion.requiredSubstitutions);
-    const areAnyNewValuesForced = _.some(getAllRequiredPaths( this.state.selectedInferenceSuggestion.requiredSubstitutions), path => {
-      const forcedValue = getAtPath(forcedSubstitutionValues, path);
-      return forcedValue && forcedValue !== getAtPath(selectedSubstitutionValues, path)
-    });
-    if (areAnyNewValuesForced) {
-      const newSelectedSubstitutionValues = _.merge({}, selectedSubstitutionValues, forcedSubstitutionValues);
-      return this.updateForcedSubstitutionValues(newSelectedSubstitutionValues, selectedPremiseSuggestions, additionalSubstitutionSuggestions);
-    } else {
-      return selectedSubstitutionValues;
-    }
-  };
-  getAllForcedSubstitutionValues = (possibleSubstitutionsLists, requiredSubstitutions) => {
-    const selectableSubstitutionValues = this.getAllSelectableSubstitutionValues(possibleSubstitutionsLists, requiredSubstitutions);
-    return buildSubstitutionMap(requiredSubstitutions, getter =>
-      getter(selectableSubstitutionValues) && getter(selectableSubstitutionValues).length === 1 && getter(selectableSubstitutionValues)[0].serialize() || undefined
-    );
-  };
-  getAllSelectableSubstitutionValues = (possibleSubstitutionsLists, requiredSubstitutions) => {
-    return buildSubstitutionMap(requiredSubstitutions, getter => {
-      const allowedValuesLists = _.map(possibleSubstitutionsLists, substitutionsList =>
-        _.uniqBy(_.flatten(substitutionsList.map(getter)), x => !x || x.serialize())
-      );
-      const allowAnything = _.every(allowedValuesLists, allowedValues => _.some(allowedValues, _.isUndefined));
-      if (allowAnything) {
-        return null;
+  setSelectedConclusion = (selectedConclusion, selectedInference) => {
+    selectedInference = selectedInference || this.state.selectedInference;
+    if (selectedConclusion) {
+      const selectedPremises = selectedConclusion.possiblePremises.map(p => ["", null]);
+      const selectedSubstitutionValues = buildSubstitutionMap(selectedConclusion.requiredSubstitutions, () => "");
+      this.setState({selectedConclusion, selectedPremises, selectedSubstitutionValues});
+      if (this.props.allowAutoSubmit && this.areSubstitutionValuesSufficient(selectedConclusion, selectedPremises, selectedSubstitutionValues)) {
+        this.submitWithSelectedValues(selectedInference, selectedConclusion, selectedPremises, selectedSubstitutionValues)
       }
-      const listsWithRestrictions = _.filter(allowedValuesLists, allowedValues => !_.some(allowedValues, _.isUndefined));
-      return _.intersectionBy(...listsWithRestrictions, x => x.serialize());
-    });
+    } else {
+      this.setState({selectedConclusion: null})
+    }
   };
-
-  getPossibleSubstitutionsLists = (selectedPremiseSuggestions, selectedSubstitutionValues, additionalSubstitutionSuggestions) => {
-    const possibleSubstitutionsFromInferenceAndPremises = _.filter([(additionalSubstitutionSuggestions ? [additionalSubstitutionSuggestions] : this.state.selectedInferenceSuggestion.substitutions), ..._.map(selectedPremiseSuggestions, s => s[1])]);
-    return _.map(possibleSubstitutionsFromInferenceAndPremises, possibleSubstitutions =>
-      _.filter(possibleSubstitutions, s =>
-        _.every(getAllRequiredPaths(this.state.selectedInferenceSuggestion.requiredSubstitutions), path => {
-          const selectedValue = getAtPath(selectedSubstitutionValues, path);
-          const value = getAtPath(s, path);
-          return selectedValue === '' || !value || (_.isArray(value) ? _.some(value, v => selectedValue === v.serialize()) : selectedValue === value.serialize());
-        })
-      )
-    );
-  };
-
-  getValidSubstitutionValues = (type, name, numberOfParameters) => {
-    const selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
-    numberOfParameters ? selectedSubstitutionValues[type][name][numberOfParameters] = "" : selectedSubstitutionValues[type][name] = "";
-    const compatibleSubstitutions = this.getPossibleSubstitutionsLists(this.state.selectedPremiseSuggestions, selectedSubstitutionValues, this.state.additionalSubstitutionSuggestions);
-    const allSelectableValues = this.getAllSelectableSubstitutionValues(compatibleSubstitutions, this.state.selectedInferenceSuggestion.requiredSubstitutions)
-    return numberOfParameters ? allSelectableValues[type][name][numberOfParameters] : allSelectableValues[type][name];
+  setSelectedPremise = (premiseIndex, matchIndex) => {
+    const selectedPremise = [matchIndex, matchIndex !== "" ? this.state.selectedConclusion.possiblePremises[premiseIndex].possibleMatches[parseInt(matchIndex)].substitutions : null];
+    const selectedPremises = Object.assign({}, this.state.selectedPremises, {[premiseIndex]: selectedPremise});
+    this.setState({selectedPremises});
   };
 
   setSelectedSubstitutionValue = (setter, value, callback) => {
     let selectedSubstitutionValues = _.cloneDeep(this.state.selectedSubstitutionValues);
     setter(selectedSubstitutionValues, value);
-    selectedSubstitutionValues = this.updateForcedSubstitutionValues(selectedSubstitutionValues, this.state.selectedPremiseSuggestions, this.state.additionalSubstitutionSuggestions);
     this.setState({selectedSubstitutionValues}, callback);
   };
+  getValidSubstitutionValues = (getter) => {
+    const applicableSubstitutions = this.getApplicableSubstitutions(this.state.selectedConclusion, this.state.selectedPremises);
+    const selectableSubstitutionValues = this.getAllSelectableSubstitutionValues(applicableSubstitutions, this.state.selectedConclusion.requiredSubstitutions);
+    return getter(selectableSubstitutionValues);
+  };
+  getApplicableSubstitutions = (selectedConclusion, selectedPremises) => {
+    return _.filter([selectedConclusion.substitutions, ..._.map(selectedPremises, s => s[1])])
+  };
+  getAllSelectableSubstitutionValues = (applicableSubstitutions, requiredSubstitutions) => {
+    return buildSubstitutionMap(requiredSubstitutions, getter => {
+      const allowedValuesLists = _.map(applicableSubstitutions, substitutions => {
+        const value = getter(substitutions);
+        return (_.isUndefined(value) || _.isArray(value)) ? value : [value];
+      });
+      const allowAnything = _.every(allowedValuesLists, _.isUndefined);
+      if (allowAnything) {
+        return null;
+      }
+      return _.intersectionBy(..._.filter(allowedValuesLists), x => x.serialize());
+    });
+  };
+
   onInputKeyUp = (event) => {
     if (event.keyCode === 13 && this.readyToSubmit()) {
       this.submit();
@@ -222,25 +145,38 @@ export class InferenceFinder extends React.Component {
     event.stopPropagation();
   };
 
-  areSubstitutionValuesSufficient(selectedInferenceSuggestion, selectedSubstitutionValues) {
-    return selectedInferenceSuggestion && _.every(
-      getAllRequiredPaths(selectedInferenceSuggestion.requiredSubstitutions),
-      path => getAtPath(selectedSubstitutionValues, path));
-  }
+  getSubstitutionValuesToSubmit = (selectedConclusion, selectedPremises, selectedSubstitutionValues) => {
+    const applicableSubstitutions = this.getApplicableSubstitutions(selectedConclusion, selectedPremises);
+    const selectableSubstitutionValues = this.getAllSelectableSubstitutionValues(applicableSubstitutions, selectedConclusion.requiredSubstitutions);
+    return buildSubstitutionMap(selectedConclusion.requiredSubstitutions, getter => {
+      const selectedValue = getter(selectedSubstitutionValues);
+      const selectableValues = getter(selectableSubstitutionValues);
+      return selectedValue || (selectableValues && selectableValues.length === 1 && selectableValues[0].serialize());
+    });
+  };
+
+  areSubstitutionValuesSufficient = (selectedConclusion, selectedPremises, selectedSubstitutionValues) => {
+    if (!selectedConclusion) return false;
+    const valuesToSubmit = this.getSubstitutionValuesToSubmit(selectedConclusion, selectedPremises, selectedSubstitutionValues);
+    return _.every(
+      getAllRequiredPaths(selectedConclusion.requiredSubstitutions),
+      getter => getter(valuesToSubmit));
+  };
   readyToSubmit() {
-    return this.areSubstitutionValuesSufficient(this.state.selectedInferenceSuggestion, this.state.selectedSubstitutionValues);
+    return this.areSubstitutionValuesSufficient(this.state.selectedConclusion, this.state.selectedPremises, this.state.selectedSubstitutionValues);
   };
   submit = () => {
+    return this.submitWithSelectedValues(this.state.selectedInference, this.state.selectedConclusion, this.state.selectedPremises, this.state.selectedSubstitutionValues);
+  };
+  submitWithSelectedValues = (selectedInference, selectedConclusion, selectedPremises, selectedSubstitutionValues) => {
+    const valuesToSubmit = this.getSubstitutionValuesToSubmit(selectedConclusion, selectedPremises, selectedSubstitutionValues);
     const promise = new Promise((resolve) => this.setState({saving: true}, resolve))
       .then(() => this.props.onSaving && this.props.onSaving(true))
-      .then(() => this.submitWithSelectedValues(this.state.selectedInferenceSuggestion, this.state.selectedSubstitutionValues))
+      .then(() => this.props.submit(selectedInference, selectedConclusion, valuesToSubmit));
     promise.catch(() => {})
       .then(() => this.setState({saving: false}))
       .then(() => this.props.onSaving && this.props.onSaving(false));
     return promise;
-  };
-  submitWithSelectedValues = (selectedInferenceSuggestion, selectedSubstitutionValues) => {
-    return this.props.submit(selectedInferenceSuggestion, selectedSubstitutionValues || this.state.selectedSubstitutionValues);
   };
 
   render() {
@@ -251,17 +187,17 @@ export class InferenceFinder extends React.Component {
         const boundVariableLists = useContext(BoundVariableLists) || [];
         return <Form.Group>
           <Form.Label><strong>Premises</strong></Form.Label>
-          {_.zip(this.state.selectedInferenceSuggestion.inference.premises, this.state.premiseSuggestions).map(([premise, suggestions], i) =>
+          {this.state.selectedConclusion.possiblePremises.map(({premise, possibleMatches}, i) =>
             <Form.Group as={Form.Row} key={i}>
               <Col xs={4}>
-                <CopiableExpression expression={premise} />
+                <CopiableExpression expression={premise} boundVariableLists={[]}/>
               </Col>
               <Col>
-                <Form.Control as="select" value={this.state.selectedPremiseSuggestions[i][0]} onChange={(e) => this.setSelectedPremiseSuggestion(i, e.target.value)} readOnly={disabled}>
+                <Form.Control as="select" value={this.state.selectedPremises[i][0]} onChange={(e) => this.setSelectedPremise(i, e.target.value)} readOnly={disabled}>
                   <option value="" />
-                  {suggestions.map((s, i) =>
+                  {possibleMatches.map(({matchingPremise}, i) =>
                     <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                        <ExpressionComponent expression={s.statement} boundVariableLists={boundVariableLists} entryContext={entryContext} />
+                        <ExpressionComponent expression={matchingPremise} boundVariableLists={boundVariableLists} entryContext={entryContext} />
                       )}}/>
                   )}
                 </Form.Control>
@@ -296,69 +232,86 @@ export class InferenceFinder extends React.Component {
         </Form.Group>
       };
       let showSimpleSubstitutions = (key) => {
-        const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
+        const requiredSubstitutions = this.state.selectedConclusion.requiredSubstitutions[key];
         return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name => {
-          const validValues = this.getValidSubstitutionValues(key, name);
+          const getter = x => x[key][name];
+          const setter = (x, y) => x[key][name] = y;
+          const validValues = this.getValidSubstitutionValues(getter, setter);
           return <React.Fragment key={`${key} ${name}`}>
-            {showSubstitutionOptions(name, validValues, x => x[key][name], (x, y) => x[key][name] = y)}
+            {showSubstitutionOptions(name, validValues, getter, setter)}
           </React.Fragment>;
         });
       };
       let showParameteredSubstitutions = (key) => {
-        const requiredSubstitutions = this.state.selectedInferenceSuggestion.requiredSubstitutions[key];
+        const requiredSubstitutions = this.state.selectedConclusion.requiredSubstitutions[key];
         return requiredSubstitutions.length > 0 && requiredSubstitutions.map(([name, numberOfParameters]) => {
-          const validValues = this.getValidSubstitutionValues(key, name, numberOfParameters);
+          const getter = x => x[key][name][numberOfParameters];
+          const setter = (x, y) => x[key][name][numberOfParameters] = y;
+          const validValues = this.getValidSubstitutionValues(getter, setter);
           const newVariableList = numberOfParameters === 1 ? ["$"] : _.map(_.range(numberOfParameters), x => "$_" + (x+1));
           return <BoundVariableLists.AddParameters variables={newVariableList} key={`${key} ${name} ${numberOfParameters}`}>
-            {showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, validValues, x => x[key][name][numberOfParameters], (x, y) => x[key][name][numberOfParameters] = y)}
+            {showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, validValues, getter, setter)}
           </BoundVariableLists.AddParameters>
         });
       };
       const {title, autofocus} = this.props;
 
-      let getSuggestionValue = s => s.rewriteInference ? s.inference.name + " [" + s.rewriteInference.name + "]" : s.inference.name;
+      let getSuggestionValue = s => s.inference.name;
       let renderSuggestion = s => <SuggestionDropdownElement
         mainElement={getSuggestionValue(s)}
-        hoverElement={<CopiableExpression expression={s.conclusion} />} />;
+        hoverElement={<CopiableExpression expression={s.inference.conclusion} />} />;
 
-      return <>
+      return <div ref={this.ref}>
         <Form.Group>
           <Form.Label><strong>{title}</strong></Form.Label>
           <InferenceAutosuggest
             autofocus={autofocus}
-            value={this.state.autosuggestValue}
-            onValueChange={this.onAutosuggestChange}
-            suggestions={this.state.inferenceSuggestions}
+            fetchSuggestions={this.fetchPossibleInferences}
+            setSelectedSuggestion={this.setSelectedInference}
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderSuggestion}
-            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-            onSuggestionSelected={this.onSuggestionSelected}
             readOnly={disabled} />
         </Form.Group>
-        {
-          this.state.selectedInferenceSuggestion && <>
-            <Form.Group>
-              <InferenceSummary inference={this.state.selectedInferenceSuggestion.inference}/>
-            </Form.Group>
-            {this.state.premiseSuggestions && <PremiseSuggestions/>}
-            <Form.Group>
-              <Form.Label><strong>Substitutions</strong></Form.Label>
-              {_.flatten([
-                showSimpleSubstitutions("statements"),
-                showSimpleSubstitutions("terms"),
-                showParameteredSubstitutions("predicates"),
-                showParameteredSubstitutions("functions"),
-              ])}
-            </Form.Group>
-            <div className="text-center">
-              <Button variant="primary" onClick={this.submit} disabled={!this.readyToSubmit() || disabled}>
-                {disabled ? <span className="fas fa-spin fa-spinner"/> : "Save Changes"}
-              </Button>
-            </div>
+        {this.state.selectedInference && this.state.selectedInference.possibleConclusions.length > 1 && <>
+          <Form.Group>
+            <Form.Label><strong>Choose conclusion</strong></Form.Label>
+            <Form.Control as="select"
+                          value={this.state.selectedConclusion ? _.indexOf(this.state.selectedInference.possibleConclusions, this.state.selectedConclusion) : ""}
+                          onChange={e => this.setSelectedConclusion(this.state.selectedInference.possibleConclusions[e.target.value])} readOnly={disabled}>
+              <option value="" />
+              {this.state.selectedInference.possibleConclusions.map(({conclusion}, index) =>
+                <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(
+                    <ExpressionComponent expression={conclusion} boundVariableLists={[]} entryContext={entryContext}/>
+                  )}}/>
+              )}
+            </Form.Control>
+          </Form.Group>
+        </>}
+        {this.state.selectedConclusion &&
+          <>
+            {!this.props.hideSummary && <Form.Group>
+              <InferenceSummary inference={{premises: this.state.selectedConclusion.possiblePremises.map(p => p.premise), conclusion: this.state.selectedConclusion.conclusion}}/>
+            </Form.Group>}
+            {getAllRequiredPaths(this.state.selectedConclusion.requiredSubstitutions).length > 0 && <>
+              {this.state.selectedConclusion.possiblePremises.length !== 0 && <PremiseSuggestions/>}
+              <Form.Group>
+                <Form.Label><strong>Substitutions</strong></Form.Label>
+                {_.flatten([
+                  showSimpleSubstitutions("statements"),
+                  showSimpleSubstitutions("terms"),
+                  showParameteredSubstitutions("predicates"),
+                  showParameteredSubstitutions("functions"),
+                ])}
+              </Form.Group>
+            </>}
           </>
         }
-      </>
+        <div className="text-center">
+          <Button variant="primary" onClick={this.submit} disabled={!this.readyToSubmit() || disabled}>
+            {disabled ? <span className="fas fa-spin fa-spinner"/> : "Save Changes"}
+          </Button>
+        </div>
+      </div>
     }}</EntryContext.Consumer>
   }
 }

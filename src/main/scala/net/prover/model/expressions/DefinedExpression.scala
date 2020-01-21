@@ -18,9 +18,13 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   def updateComponents(newComponents: Seq[Expression]): ExpressionType
   def updateBoundVariableNames(newBoundVariableNames: Seq[String]): ExpressionType
 
-  override def complexity: Int = {
-    components.map(_.complexity).sum + definition.complexity
+  override def structuralComplexity: Int = {
+    components.map(_.structuralComplexity).sum + 1
   }
+  override def definitionalComplexity: Int = {
+    components.map(_.definitionalComplexity).sum + definition.complexity
+  }
+
   override def getTerms(depth: Int): Seq[(Term, ExpressionType, Seq[Int])] = {
     @scala.annotation.tailrec
     def helper(previous: Seq[Expression], next: Seq[Expression], acc: Seq[(Term, ExpressionType, Seq[Int])]): Seq[(Term, ExpressionType, Seq[Int])] = {
@@ -34,7 +38,10 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
           acc
       }
     }
-    helper(Nil, components, Nil)
+    if (scopedBoundVariableNames.isEmpty)
+      helper(Nil, components, Nil)
+    else
+      Nil
   }
   override def definitionUsages: DefinitionUsages = components.map(_.definitionUsages).foldTogether.addUsage(definition)
 

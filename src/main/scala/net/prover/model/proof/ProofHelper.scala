@@ -48,35 +48,29 @@ object ProofHelper {
 
   def getAssertionWithPremises(
     inference: Inference,
-    substitutions: Substitutions,
-    followUpSteps: Seq[Step] = Nil)(
+    substitutions: Substitutions)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[(Step, Seq[Step.Target])] = {
+  ): Option[(Step.Assertion, Seq[Step.Assertion], Seq[Step.Target])] = {
     for {
       premiseStatements <- inference.substitutePremises(substitutions)
       conclusion <- inference.substituteConclusion(substitutions)
-      (targetSteps, premiseSteps) = premiseStatements.foldLeft((Seq.empty[Step.Target], Seq.empty[Step])) { case ((targetStepsSoFar, premiseStepsSoFar), premiseStatement) =>
-        PremiseFinder.findPremiseSteps(premiseStatement) match {
-          case Some(newPremiseSteps) =>
-            (targetStepsSoFar, premiseStepsSoFar ++ newPremiseSteps)
-          case None =>
-            val (deconstructedStatements, deconstructionSteps) = PremiseFinder.deconstructStatement(premiseStatement)
-            val (deconstructionTargetSteps, deconstructionPremiseSteps) = deconstructedStatements.foldLeft((Seq.empty[Step.Target], Seq.empty[Step])) { case ((otherTargetStepsSoFar, otherPremiseStepsSoFar), deconstructedStatement) =>
-              PremiseFinder.findPremiseSteps(deconstructedStatement) match {
-                case Some(newPremiseSteps) =>
-                  (otherTargetStepsSoFar, otherPremiseStepsSoFar ++ newPremiseSteps)
-                case None =>
-                  (otherTargetStepsSoFar :+ Step.Target(deconstructedStatement), otherPremiseStepsSoFar)
-              }
-            }
-            (targetStepsSoFar ++ deconstructionTargetSteps, premiseStepsSoFar ++ deconstructionPremiseSteps ++ deconstructionSteps)
-        }
-      }
+      (premiseSteps, targetSteps) = PremiseFinder.findPremiseStepsOrTargets(premiseStatements)
       assertionStep = Step.Assertion(
         conclusion,
         inference.summary,
         premiseStatements.map(Premise.Pending),
         substitutions)
+    } yield (assertionStep, premiseSteps, targetSteps)
+  }
+
+  def getAssertionWithPremisesAndElide(
+    inference: Inference,
+    substitutions: Substitutions,
+    followUpSteps: Seq[Step] = Nil)(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[(Step, Seq[Step.Target])] = {
+    for {
+      (assertionStep, premiseSteps, targetSteps) <- getAssertionWithPremises(inference, substitutions)
       elidedStep <- Step.Elided.ifNecessary((premiseSteps :+ assertionStep) ++ followUpSteps, inference)
     } yield (elidedStep, targetSteps)
   }

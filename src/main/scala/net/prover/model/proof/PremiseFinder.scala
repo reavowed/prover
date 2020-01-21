@@ -3,6 +3,8 @@ package net.prover.model.proof
 import net.prover.model.Substitutions
 import net.prover.model.expressions._
 
+import scala.Ordering.Implicits._
+
 object PremiseFinder {
 
   def findParameterisedPremiseSteps(
@@ -142,6 +144,29 @@ object PremiseFinder {
     premiseStatements.map(findPremiseSteps).traverseOption.map(_.flatten)
   }
 
+  def findPremiseStepsOrTargets(
+    premiseStatements: Seq[Statement])(
+    implicit stepProvingContext: StepProvingContext
+  ): (Seq[Step.Assertion], Seq[Step.Target]) = {
+    premiseStatements.foldLeft((Seq.empty[Step.Assertion], Seq.empty[Step.Target])) { case ((premiseStepsSoFar, targetStepsSoFar), premiseStatement) =>
+      PremiseFinder.findPremiseSteps(premiseStatement) match {
+        case Some(newPremiseSteps) =>
+          (premiseStepsSoFar ++ newPremiseSteps, targetStepsSoFar)
+        case None =>
+          val (deconstructedStatements, deconstructionSteps) = PremiseFinder.deconstructStatement(premiseStatement)
+          val (deconstructionTargetSteps, deconstructionPremiseSteps) = deconstructedStatements.foldLeft((Seq.empty[Step.Target], Seq.empty[Step.Assertion])) { case ((otherTargetStepsSoFar, otherPremiseStepsSoFar), deconstructedStatement) =>
+            PremiseFinder.findPremiseSteps(deconstructedStatement) match {
+              case Some(newPremiseSteps) =>
+                (otherTargetStepsSoFar, otherPremiseStepsSoFar ++ newPremiseSteps)
+              case None =>
+                (otherTargetStepsSoFar :+ Step.Target(deconstructedStatement), otherPremiseStepsSoFar)
+            }
+          }
+          (premiseStepsSoFar ++ deconstructionPremiseSteps ++ deconstructionSteps, targetStepsSoFar ++ deconstructionTargetSteps)
+      }
+    }
+  }
+
 
   def findPremiseSteps(
     unsubstitutedPremiseStatement: Statement,
@@ -205,7 +230,7 @@ object PremiseFinder {
   def deconstructStatement(
     statement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): (Seq[Statement], Seq[Step]) = {
+  ): (Seq[Statement], Seq[Step.Assertion]) = {
     import stepProvingContext._
     def byDeconstructing = for {
       statementDefinition <- statement.asOptionalInstanceOf[DefinedStatement].map(_.definition)

@@ -1,3 +1,3 @@
 package net.prover.controllers.models
 
-case class StepDefinition(inferenceId: String, substitutions: SerializedSubstitutions, rewriteInferenceId: Option[String])
+case class StepDefinition(inferenceId: String, substitutions: SerializedSubstitutions, extractionInferenceIds: Seq[String])

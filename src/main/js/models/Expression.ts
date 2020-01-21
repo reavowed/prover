@@ -171,7 +171,7 @@ export class FunctionParameter {
   }
   textForHtml(boundVariableLists: string[][]) {
     const name = boundVariableLists[this.level][this.index];
-    if (_.countBy(_.flattenDeep(boundVariableLists))[name] > 1) { // Disambiguate variables that appear multiple times in scope
+    if (_.countBy(_.flattenDeep(boundVariableLists.slice(0, this.level)))[name] > 0) { // If there are two bound variables with the same name and we're pointing to one that's further up the scope, disambiguate it
       return this.serialize()
     } else {
       return name;

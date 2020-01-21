@@ -69,6 +69,10 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     ): Allowable[(A, B, C, D)] = {
       allowable(t => allowableA.isAllowed(t._1) && allowableB.isAllowed(t._2) &&  allowableC.isAllowed(t._3)  &&  allowableD.isAllowed(t._4))
     }
+
+    implicit def allowableOption[A](implicit allowableA: Allowable[A]): Allowable[Option[A]] = {
+      allowable(o => o.forall(allowableA.isAllowed))
+    }
   }
 
   object Replacable {
@@ -152,14 +156,11 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     replace(definitions.rewriteInferences)
   }
 
-  lazy val statementExtractionInferences: Seq[(Inference, Statement, Seq[Statement])] = {
+  lazy val statementExtractionInferences: Seq[(Inference, Statement, Option[Statement])] = {
     replace(definitions.statementExtractionInferences)
   }
-  lazy val finalStatementExtractionInferences: Seq[(Inference, Statement, Seq[Statement])] = {
-    replace(definitions.finalStatementExtractionInferences)
-  }
-  lazy val predicateSpecificationInferences: Seq[(Inference, Statement, String, Seq[String])] = {
-    replace(definitions.predicateSpecificationInferences)
+  lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
+    replace(definitions.specificationInferenceOption)
   }
 
   lazy val termRewriteInferences: Seq[(Inference, Term, Term)] = {

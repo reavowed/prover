@@ -203,12 +203,21 @@ export class Parser {
     const functionApplications = parseApplications(substitutions.functionApplications, s => s.map(this.parseExpression));
     return {statements, terms, predicates, functions, predicateApplications, functionApplications};
   };
-  parseInferenceSuggestions = (suggestions) => {
+  parsePossibleInferences = (suggestions) => {
     return suggestions.map(suggestionJson => {
       const suggestion = _.cloneDeep(suggestionJson);
       this.parseInferenceSummary(suggestion.inference);
-      suggestion.substitutions && (suggestion.substitutions = _.map(suggestion.substitutions, this.parseSubstitutions));
-      suggestion.conclusion = this.parseExpression(suggestion.conclusion);
+      _.forEach(suggestion.possibleConclusions, c => {
+        c.conclusion = this.parseExpression(c.conclusion);
+        c.substitutions = c.substitutions && this.parseSubstitutions(c.substitutions);
+        _.forEach(c.possiblePremises, p => {
+          p.premise = this.parseExpression(p.premise);
+          _.forEach(p.possibleMatches, m => {
+            m.matchingPremise = this.parseExpression(m.matchingPremise);
+            m.substitutions = this.parseSubstitutions(m.substitutions);
+          });
+        });
+      });
       return suggestion;
     })
   };

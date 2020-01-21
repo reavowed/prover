@@ -61,14 +61,17 @@ export class ElidedStepProofLine extends React.Component {
       {children}
     </ProofLine>;
     return <>
-      {(standalone && !this.state.showProofCard) ? <Step.WithoutSubsteps>{proofLine}</Step.WithoutSubsteps> : proofLine}
-      {this.state.showProofCard && <div className="card" style={{margin: ".5rem -0.75rem .5rem 2rem", padding: ".5rem .75rem"}}>
-        <Steps.Container path={path}>
-          <Steps steps={step.substeps}
-                 path={path}
-                 referencesForLastStep={[]}/>
-        </Steps.Container>
-      </div>}
+      {this.state.showProofCard ?
+        <Step.WithSubsteps path={path}>
+          <Step.Antecedent>{proofLine}</Step.Antecedent>
+          <div className="card" style={{margin: ".5rem -0.75rem .5rem 2rem", padding: ".5rem .75rem"}}>
+            <Steps.Children steps={step.substeps}
+                            path={path}
+                            referencesForLastStep={[]}/>
+          </div>
+        </Step.WithSubsteps> :
+        standalone ? proofLine :
+        <Step.WithoutSubsteps>{proofLine}</Step.WithoutSubsteps>}
     </>;
   }
 }

@@ -173,7 +173,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
 
 export const CopiableExpression = (props) => {
   const expressionToCopy = props.expressionToCopy || props.expression;
-  const boundVariableLists = useContext(BoundVariableLists) || [];
+  const boundVariableLists = props.boundVariableLists || useContext(BoundVariableLists) || [];
   return <span onContextMenu={() => navigator.clipboard.writeText(expressionToCopy.serializeNicely(boundVariableLists))}>
       <ExpressionComponent {...props} boundVariableLists={boundVariableLists}/>
     </span>

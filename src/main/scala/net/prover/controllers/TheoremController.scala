@@ -18,7 +18,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
-    @RequestBody(required = false) proofIndexToCopy: Int
+    @RequestBody(required = false) proofIndexToCopy: java.lang.Integer
   ): ResponseEntity[_] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
       for {

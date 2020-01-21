@@ -4,6 +4,8 @@ import net.prover.model._
 import net.prover.model.definitions.{Equality, RearrangementStep, Wrapper}
 import net.prover.model.expressions._
 
+import scala.Ordering.Implicits._
+
 case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: StepProvingContext)
 {
   import stepProvingContext.provingContext._

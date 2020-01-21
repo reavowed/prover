@@ -14,9 +14,7 @@ import ProveTransitiveFromLeft from "./ProveTransitiveFromLeft";
 import ProveTransitiveFromRight from "./ProveTransitiveFromRight";
 import RearrangeAutomatically from "./RearrangeAutomatically";
 import RewriteAutomatically from "./RewriteAutomatically";
-import ExtractAutomatically from "./ExtractAutomatically";
 import ExtractCurrentTarget from "./ExtractCurrentTarget";
-import ExtractWithPremise from "./ExtractWithPremise";
 import IntroduceBoundVariable from "./IntroduceBoundVariable";
 import IntroduceDeduction from "./IntroduceDeduction";
 import IntroduceName from "./IntroduceName";
@@ -42,6 +40,14 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
     setErrorMessage(null);
   };
   const onError = (message) => {
+    if (_.isObject(message)) {
+      if (message.message)
+        message = message.message;
+      else {
+        console.log(message);
+        message = "Unknown error"
+      }
+    }
     setErrorMessage(message);
   };
   const onErrorCancel = (message) => {
@@ -98,20 +104,12 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
         {
           label: "Rewrite premise",
           element: RewritePremise
-        },
-        {
-          label: "Extract with premise",
-          element: ExtractWithPremise
-        },
+        }
       ]
     },
     {
       label: "Automatic",
       provers: [
-        {
-          label: "Extract",
-          element: ExtractAutomatically
-        },
         {
           label: "Rewrite",
           element: RewriteAutomatically

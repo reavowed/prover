@@ -8,7 +8,8 @@ import net.prover.model.entries.ExpressionDefinition
 
 @JsonSerialize(using = classOf[FunctionParameterSerializer])
 case class FunctionParameter(index: Int, level: Int) extends Term {
-  override def complexity: Int = 0
+  override def structuralComplexity: Int = 1
+  override def definitionalComplexity: Int = 1
   override def definitionUsages: DefinitionUsages = DefinitionUsages.empty
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = {
