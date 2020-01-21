@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import styled, {css} from "styled-components";
 import {FlexRow} from "../../FlexRow";
 import ChapterContext from "./ChapterContext";
+import DeleteEntryButton from "./DeleteEntryButton";
 
 const ChapterEntryContainer = styled.div`
   margin: 10px 0;
@@ -31,14 +32,11 @@ const ChapterEntryTitle = styled.a`
 
 export default function ChapterEntryWrapper({title, url, buttons, children, incomplete}) {
   const context = useContext(ChapterContext);
-  const deleteEntry = () => {
-    context.updateChapter(url, {method: "DELETE"})
-  };
   return <ChapterEntryContainer>
     <FlexRow>
       <FlexRow.Grow><ChapterEntryTitle href={url} incomplete={incomplete}>{title}</ChapterEntryTitle></FlexRow.Grow>
       {buttons}
-      {context.editing && <Button size="sm" variant="danger" className="ml-1 py-0" onClick={deleteEntry}><span className="fas fa-ban"/></Button>}
+      {context.editing && <DeleteEntryButton/>}
     </FlexRow>
     {children}
   </ChapterEntryContainer>

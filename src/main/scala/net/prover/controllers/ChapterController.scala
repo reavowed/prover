@@ -260,6 +260,17 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }.map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
+  @PostMapping(value = Array("/comments"), produces = Array("application/json;charset=UTF-8"))
+  def createComment(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @RequestBody newCommentText: String
+  ): ResponseEntity[_] = {
+    addChapterEntry(bookKey, chapterKey) { (_, _, _) =>
+      Option(newCommentText.trim).filter(_.nonEmpty).orBadRequest("Comment text must be provided").map(Comment(_))
+    }.map{ case (books, book, chapter) => getChapterProps(books, book, bookKey, chapter, chapterKey) }.toResponseEntity
+  }
+
   @PutMapping(value = Array("/{entryKey}/index"), produces = Array("application/json;charset=UTF-8"))
   def moveEntryToIndex(
     @PathVariable("bookKey") bookKey: String,

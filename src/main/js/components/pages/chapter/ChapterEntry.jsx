@@ -1,10 +1,14 @@
 import React, {useContext} from "react";
+import Button from "react-bootstrap/Button";
 import styled from "styled-components";
 import EntryContext from "../../EntryContext";
 import {CopiableExpression} from "../../ExpressionComponent";
+import {FlexRow} from "../../FlexRow";
 import {formatHtml, replacePlaceholders} from "../../helpers/Formatter";
 import {ResultWithPremises} from "../../ResultWithPremises";
+import ChapterContext from "./ChapterContext";
 import DefinitionEntry from "./DefinitionEntry";
+import DeleteEntryButton from "./DeleteEntryButton";
 import InferenceEntry from "./InferenceEntry";
 import ChapterEntryWrapper from "./ChapterEntryWrapper";
 
@@ -43,7 +47,11 @@ export default function ChapterEntry({entry}) {
         <Capitalized>{typeDefinition.article}</Capitalized> {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
       </ChapterEntryWrapper>;
     case "comment":
-      return <p key={entry.url}>{entry.text}</p>;
+      const chapterContext = useContext(ChapterContext);
+      return <p key={entry.url}>
+        {chapterContext.editing && <span className="float-right" style={{marginRight: "0.69rem"}}><DeleteEntryButton entry={entry} /></span>}
+        {entry.text}
+      </p>;
     case "placeholder":
       return <React.Fragment key={entry.url}/>;
     default:

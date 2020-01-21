@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import Button from "react-bootstrap/Button";
+import CommentInput from "./CommentInput";
 import PropertyInput from "./PropertyInput";
 import TermInput from "./TermInput";
 import TheoremInput from "./TheoremInput";
@@ -12,7 +13,8 @@ export default function ChapterEntryAdder() {
     {name: "Theorem", element: <TheoremInput onCancel={onCancel}/>},
     {name: "Term", element: <TermInput onCancel={onCancel}/>},
     {name: "Type", element: <TypeInput onCancel={onCancel}/>},
-    {name: "Property", element: <PropertyInput onCancel={onCancel}/>}
+    {name: "Property", element: <PropertyInput onCancel={onCancel}/>},
+    {name: "Comment", element: <CommentInput onCancel={onCancel}/>}
   ];
   if (!entryBeingAdded) {
     return <>
