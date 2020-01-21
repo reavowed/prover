@@ -94,12 +94,12 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
       label: "Insert before",
       provers: [
         {
-          label: "New target",
-          element: AddTarget
-        },
-        {
           label: "By inference",
           element: ProveNewPremise
+        },
+        {
+          label: "New target",
+          element: AddTarget
         },
         {
           label: "Rewrite premise",
