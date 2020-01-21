@@ -1,11 +1,9 @@
 package net.prover.model
 
-import java.nio.file.Paths
-
 import net.prover.model.definitions.Definitions
-import net.prover.model.entries.ExpressionDefinition.{ComponentType, StatementComponent, TermComponent}
-import net.prover.model.expressions._
+import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.entries._
+import net.prover.model.expressions._
 import net.prover.model.proof.{StepContext, StepProvingContext}
 import org.specs2.mutable.Specification
 
@@ -69,7 +67,7 @@ trait ProverSpec extends Specification {
     StatementDefinition(
       symbol,
       Seq("x"),
-      Seq(ExpressionDefinition.PredicateComponent("φ", Seq(ExpressionDefinition.ComponentArgument("x", 0)))),
+      Seq(ComponentType.PredicateComponent("φ", Seq(ExpressionDefinition.ComponentArgument("x", 0)))),
       None,
       Format.Explicit(s"($symbol%0)%1", s"(${symbol}x)φ", requiresBrackets = false, requiresComponentBrackets = true),
       definingStatement,
@@ -248,8 +246,8 @@ trait ProverSpec extends Specification {
   implicit class TermVariableOps(termVariable: TermVariable) {
     def apply(terms: Term*) = FunctionApplication(termVariable.name, terms)
   }
-  implicit def statementVariableToComponentType(statementVariable: StatementVariable): StatementComponent = StatementComponent(statementVariable.name)
-  implicit def termVariableToComponentType(termVariable: TermVariable): TermComponent = TermComponent(termVariable.name)
+  implicit def statementVariableToComponentType(statementVariable: StatementVariable): ComponentType.StatementComponent = ComponentType.StatementComponent(statementVariable.name)
+  implicit def termVariableToComponentType(termVariable: TermVariable): ComponentType.TermComponent = ComponentType.TermComponent(termVariable.name)
   implicit def variableTupleToString[T](tuple: (ExpressionVariable[_], T)): (String, T) = tuple.mapLeft(_.name)
   implicit def variableTupleTupleToString[T](tuple: ((ExpressionVariable[_], Int), T)): ((String, Int), T) = tuple.mapLeft(_.mapLeft(_.name))
   implicit def entryContextToParsingContext(implicit entryContext: EntryContext): ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)

@@ -1,8 +1,8 @@
 package net.prover.model.entries
 
-import net.prover.model.entries.ExpressionDefinition.{ComponentType, TermComponent}
-import net.prover.model.expressions.Statement
 import net.prover.model._
+import net.prover.model.entries.ExpressionDefinition.ComponentType
+import net.prover.model.expressions.Statement
 
 case class PropertyDefinition(
     symbol: String,
@@ -24,7 +24,7 @@ case class PropertyDefinition(
   def statementDefinition = StatementDefinition(
     qualifiedSymbol,
     Nil,
-    TermComponent(defaultTermName) +: parentComponentTypes,
+    ComponentType.TermComponent(defaultTermName) +: parentComponentTypes,
     explicitName.orElse(Some(symbol)),
     fullFormat,
     Some(definingStatement),
@@ -62,7 +62,7 @@ object PropertyDefinition extends ChapterEntryParser {
       defaultSymbol <- Parser.singleWord
       parentComponentTypes <- parentType.childComponentTypesParser
       explicitName <- Parser.optional("name", Parser.allInParens)
-      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultSymbol +: parentComponentTypes.ofType[TermComponent].map(_.name))).inParens)
+      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultSymbol +: parentComponentTypes.ofType[ComponentType.TermComponent].map(_.name))).inParens)
     } yield PropertyDefinition(symbol, parentType, defaultSymbol, parentComponentTypes, explicitName, definingStatement)
   }
 
