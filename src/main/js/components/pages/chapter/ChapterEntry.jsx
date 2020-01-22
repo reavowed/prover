@@ -49,7 +49,7 @@ export default function ChapterEntry({entry}) {
     case "comment":
       const chapterContext = useContext(ChapterContext);
       return <p key={entry.url}>
-        {chapterContext.editing && <span className="float-right" style={{marginRight: "0.69rem"}}><DeleteEntryButton entry={entry} /></span>}
+        {chapterContext.editing && <span className="float-right" style={{marginRight: "11px"}}><DeleteEntryButton entry={entry} /></span>}
         {entry.text}
       </p>;
     case "placeholder":
