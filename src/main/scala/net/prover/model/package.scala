@@ -9,7 +9,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter
 
 import scala.collection.JavaConverters._
 import scala.collection.generic.CanBuildFrom
-import scala.collection.{TraversableLike, mutable}
+import scala.collection.{AbstractIterator, Iterator, TraversableLike, mutable}
 import scala.reflect.ClassTag
 import scala.util.{Failure, Try}
 
@@ -389,6 +389,28 @@ package object model {
           SingleMatch(firstMatch)
         } else {
           MultipleMatches
+        }
+      }
+    }
+
+    def matchingFirst(predicate: T => Boolean): Iterator[T] = {
+      new AbstractIterator[T] {
+        private val queue = mutable.Queue.empty[T]
+        override def hasNext: Boolean = iterator.hasNext || queue.nonEmpty
+        override def next(): T = {
+          if (iterator.hasNext) {
+            val item = iterator.next()
+            if (predicate(item)) {
+              item
+            } else {
+              queue.enqueue(item)
+              next()
+            }
+          } else if (queue.nonEmpty) {
+            queue.dequeue()
+          } else {
+            Iterator.empty.next()
+          }
         }
       }
     }

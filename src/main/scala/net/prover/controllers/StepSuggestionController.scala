@@ -4,7 +4,7 @@ import monocle.Lens
 import net.prover.controllers.models.{PathData, SubstitutionRequest}
 import net.prover.model._
 import net.prover.model.definitions.Transitivity
-import net.prover.model.expressions.{DefinedStatement, Expression, Statement, Term}
+import net.prover.model.expressions.{DefinedStatement, Expression, Statement, StatementVariable, Term}
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -140,6 +140,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
         .sortBy(_.conclusion.structuralComplexity)(implicitly[Ordering[Int]].reverse)
         .iterator
         .mapCollect(findPossibleInference)
+        .matchingFirst(_.possibleConclusions.exists(!_.conclusion.isInstanceOf[StatementVariable]))
         .take(10)
         .toSeq
     }).toResponseEntity
