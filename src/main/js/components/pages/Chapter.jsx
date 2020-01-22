@@ -27,6 +27,9 @@ export class Chapter extends React.Component {
   }
 
   onKeyDown = (event) => {
+    if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) {
+      return;
+    }
     if (event.key === "e") {
       this.setState({editing: !this.state.editing});
     }
