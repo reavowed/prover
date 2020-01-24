@@ -4,6 +4,10 @@ statement ⊆ (A B)
   definition (∀ x → ∈ $0 A ∈ $0 B)
   shorthand (sub)
 
+display ∀ A → ⊆ $0 B φ as ((∀A ⊆ B)φ)
+
+display ∃ A ∧ ⊆ $0 B φ as ((∀A ⊆ B)φ)
+
 theorem Element of Subset Is Element of Set
 premise ⊆ A B
 premise ∈ a A

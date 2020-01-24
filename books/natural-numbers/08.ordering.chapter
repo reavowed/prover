@@ -1,0 +1,757 @@
+The standard ordering on natural numbers.
+
+term < ()
+  name (Standard order on ℕ)
+  (= $0 productComprehension a b ℕ ℕ ∈ $0 $1)
+  attributes (infix-relation)
+
+theorem < Is Element Relation
+conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0
+{
+  prove = < productComprehension a b ℕ ℕ ∈ $0 $1 46a3844b528238eaf9d850ec2286edfe1aa2de50841d34a16a2eac55df09f1e0 () () () ()
+  prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 751c850eba5a2cfa3c5528d6b65b68d0be82e329e4dbf0c89e5538bb2a9786fd () (<, ℕ, ℕ) (∈ $0 $1) () 0
+}
+
+theorem < Is a Strict Total Order on ℕ
+conclusion strictTotalOrder < ℕ
+{
+  prove = < productComprehension a b ℕ ℕ ∈ $0 $1 46a3844b528238eaf9d850ec2286edfe1aa2de50841d34a16a2eac55df09f1e0 () () () ()
+  subproof (Relation) {
+    prove ⊆ < product ℕ ℕ c0ce77038a2a5774880329460d6e08cf82a79c4a0e991c50d5bccf2d08a9e00b () (<, ℕ, ℕ) (∈ $0 $1) () 0
+    prove relation < ℕ 64dac6bb3fd9231be3d7210a6751c712a4af4bcd31ef18b3fbcfd19610b1b57b () (<, ℕ) () () 1.0
+  }
+  subproof (Asymmetric) {
+    take a {
+      assume ∈ $0 ℕ {
+        take b {
+          assume ∈ $0 ℕ {
+            assume ∈ orderedPair $$0 $0 < {
+              elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+                prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+                prove → ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0) () 2.0.0.0.0.0.0.0
+                prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0) () () () 2.0.0.0.0.0.0.1 2.0.0a
+                prove → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $$0 $$$0 < ∈ $$0 $$$0) () 2.0.0.0.0.0.0.2
+                prove ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () () () 2.0.0.0.0.0.0.3 2.0.0.0.0a
+                prove → ∈ orderedPair $$0 $0 < ∈ $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$0 $0 <, ∈ $$0 $0) () () () 2.0.0.0.0.0.0.4
+                prove ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 <, ∈ $$0 $0) () () () 2.0.0.0.0.0.0.5 2.0.0.0.0.0a
+              }
+              prove ¬ ∈ $0 $$0 2b3ba86408996dce3f0dec95e3371dd6fb0104d817d1744142840cb50591910b () ($$0, $0) () () 2.0.0.0.0.0.0
+              elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+                prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+                prove → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0) () 2.0.0.0.0.0.2.0
+                prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () () () 2.0.0.0.0.0.2.1 2.0.0.0.0a
+                prove → ∈ $$0 ℕ ↔ ∈ orderedPair $0 $$0 < ∈ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $0 $$$0 < ∈ $0 $$$0) () 2.0.0.0.0.0.2.2
+                prove ↔ ∈ orderedPair $0 $$0 < ∈ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ↔ ∈ orderedPair $0 $$0 < ∈ $0 $$0) () () () 2.0.0.0.0.0.2.3 2.0.0a
+                prove → ∈ orderedPair $0 $$0 < ∈ $0 $$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $0 $$0 <, ∈ $0 $$0) () () () 2.0.0.0.0.0.2.4
+                prove ¬ ∈ orderedPair $0 $$0 < 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ orderedPair $0 $$0 <, ∈ $0 $$0) () () () 2.0.0.0.0.0.2.5 2.0.0.0.0.0.1
+              }
+            }
+          }
+        }
+      }
+    }
+    prove asymmetricRelation < ℕ a8e1219757b81f608e2c8e04f71b3c54cbcbdcba07e94dcacc79933c4a09e3bb () (ℕ, <) () () 2.0
+  }
+  subproof (Transitive) {
+    take a {
+      assume ∈ $0 ℕ {
+        take b {
+          assume ∈ $0 ℕ {
+            take c {
+              assume ∈ $0 ℕ {
+                assume ∧ ∈ orderedPair $$$0 $$0 < ∈ orderedPair $$0 $0 < {
+                  elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+                    prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+                    prove → ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$$0) (→ ∈ $$$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$$0 $0 < ∈ $$$$$0 $0) () 3.0.0.0.0.0.0.0.0.0
+                    prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0) () () () 3.0.0.0.0.0.0.0.0.1 3.0.0a
+                    prove → ∈ $$0 ℕ ↔ ∈ orderedPair $$$0 $$0 < ∈ $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$0 ℕ ↔ ∈ orderedPair $$$0 $$$$0 < ∈ $$$0 $$$$0) () 3.0.0.0.0.0.0.0.0.2
+                    prove ↔ ∈ orderedPair $$$0 $$0 < ∈ $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ↔ ∈ orderedPair $$$0 $$0 < ∈ $$$0 $$0) () () () 3.0.0.0.0.0.0.0.0.3 3.0.0.0.0a
+                    prove → ∈ orderedPair $$$0 $$0 < ∈ $$$0 $$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$$0 $$0 <, ∈ $$$0 $$0) () () () 3.0.0.0.0.0.0.0.0.4
+                    prove ∈ $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$$0 $$0 <, ∈ $$$0 $$0) () () () 3.0.0.0.0.0.0.0.0.5 3.0.0.0.0.0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  }
+                  elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+                    prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+                    prove → ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$$0 $0 < ∈ $$$$$0 $0) () 3.0.0.0.0.0.0.0.1.0
+                    prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0) () () () 3.0.0.0.0.0.0.0.1.1 3.0.0.0.0a
+                    prove → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ ↔ ∈ orderedPair $$0 $$$$0 < ∈ $$0 $$$$0) () 3.0.0.0.0.0.0.0.1.2
+                    prove ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () () () 3.0.0.0.0.0.0.0.1.3 3.0.0.0.0.0.0a
+                    prove → ∈ orderedPair $$0 $0 < ∈ $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$0 $0 <, ∈ $$0 $0) () () () 3.0.0.0.0.0.0.0.1.4
+                    prove ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 <, ∈ $$0 $0) () () () 3.0.0.0.0.0.0.0.1.5 3.0.0.0.0.0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                  }
+                  elided 54451f5b6c29e5e9958728481d12497451bb0f8ad6f641972f0f5654ce7d42ab {
+                    prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 $$0 ∀ x → ∈ $0 $$0 ∈ $0 $$$0 54451f5b6c29e5e9958728481d12497451bb0f8ad6f641972f0f5654ce7d42ab () () () ()
+                    prove → ∈ $0 ℕ ∀ m → ∈ $0 $$0 ∀ x → ∈ $0 $$0 ∈ $0 $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ ∀ m → ∈ $0 $$$$$0 ∀ x → ∈ $0 $$0 ∈ $0 $$$$$$0) () 3.0.0.0.0.0.0.0.2.0
+                    prove ∀ m → ∈ $0 $$0 ∀ x → ∈ $0 $$0 ∈ $0 $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ m → ∈ $0 $$0 ∀ x → ∈ $0 $$0 ∈ $0 $$$0) () () () 3.0.0.0.0.0.0.0.2.1 3.0.0.0.0.0.0a
+                    prove → ∈ $$0 $0 ∀ x → ∈ $0 $$$0 ∈ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$0 $0 ∀ x → ∈ $0 $$$$$0 ∈ $0 $$0) () 3.0.0.0.0.0.0.0.2.2
+                    prove ∀ x → ∈ $0 $$$0 ∈ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 $0, ∀ x → ∈ $0 $$$0 ∈ $0 $$0) () () () 3.0.0.0.0.0.0.0.2.3 3.0.0.0.0.0.0.0.1
+                    prove → ∈ $$$0 $$0 ∈ $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$$0) (→ ∈ $$$$0 $$0 ∈ $$$$0 $0) () 3.0.0.0.0.0.0.0.2.4
+                    prove ∈ $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 $$0, ∈ $$$0 $0) () () () 3.0.0.0.0.0.0.0.2.5 3.0.0.0.0.0.0.0.0
+                  }
+                  elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+                    prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+                    prove → ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$$0) (→ ∈ $$$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$$0 $0 < ∈ $$$$$0 $0) () 3.0.0.0.0.0.0.0.3.0
+                    prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0) () () () 3.0.0.0.0.0.0.0.3.1 3.0.0a
+                    prove → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ ↔ ∈ orderedPair $$$0 $$$$0 < ∈ $$$0 $$$$0) () 3.0.0.0.0.0.0.0.3.2
+                    prove ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0) () () () 3.0.0.0.0.0.0.0.3.3 3.0.0.0.0.0.0a
+                    prove → ∈ $$$0 $0 ∈ orderedPair $$$0 $0 < 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $$$0 $0 <, ∈ $$$0 $0) () () () 3.0.0.0.0.0.0.0.3.4
+                    prove ∈ orderedPair $$$0 $0 < fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 $0, ∈ orderedPair $$$0 $0 <) () () () 3.0.0.0.0.0.0.0.3.5 3.0.0.0.0.0.0.0.2
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    prove transitiveRelation < ℕ d26cf74d7674a38fc658458585b11aae531a4be9159ca9cfdc8c14bd5eae58fc () (ℕ, <) () () 3.0
+  }
+  subproof (Semi-Complete) {
+    take a {
+      assume ∈ $0 ℕ {
+        take b {
+          assume ∈ $0 ℕ {
+            prove ∨ ∈ $$0 $0 ∨ = $$0 $0 ∈ $0 $$0 371bd2c5c39f4f44ac5fc8e18d85d18903a2d85022f89fa59ad030005993a9a2 () ($$0, $0) () () 4.0.0a 4.0.0.0.0a
+            elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+              prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+              prove → ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0) () 4.0.0.0.0.1.0
+              prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0) () () () 4.0.0.0.0.1.1 4.0.0a
+              prove → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $$0 $$$0 < ∈ $$0 $$$0) () 4.0.0.0.0.1.2
+              prove ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () () () 4.0.0.0.0.1.3 4.0.0.0.0a
+              prove → ∈ $$0 $0 ∈ orderedPair $$0 $0 < 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $$0 $0 <, ∈ $$0 $0) () () () 4.0.0.0.0.1.4
+            }
+            elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+              prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+              prove → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0) () 4.0.0.0.0.2.0
+              prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () () () 4.0.0.0.0.2.1 4.0.0.0.0a
+              prove → ∈ $$0 ℕ ↔ ∈ orderedPair $0 $$0 < ∈ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $0 $$$0 < ∈ $0 $$$0) () 4.0.0.0.0.2.2
+              prove ↔ ∈ orderedPair $0 $$0 < ∈ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ↔ ∈ orderedPair $0 $$0 < ∈ $0 $$0) () () () 4.0.0.0.0.2.3 4.0.0a
+              prove → ∈ $0 $$0 ∈ orderedPair $0 $$0 < 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $0 $$0 <, ∈ $0 $$0) () () () 4.0.0.0.0.2.4
+            }
+            elided 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea {
+              assume ∨ = $$0 $0 ∈ $0 $$0 {
+                prove ∨ = $$0 $0 ∈ orderedPair $0 $$0 < fa95429f653e5cde94e123ab4a6683a012ceab4b2a8c35d1a6b43d900bae6b78 (= $$0 $0, ∈ $0 $$0, ∈ orderedPair $0 $$0 <) () () () 4.0.0.0.0.3.0a 4.0.0.0.0.2
+              }
+              prove ∨ ∈ orderedPair $$0 $0 < ∨ = $$0 $0 ∈ orderedPair $0 $$0 < 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (∈ $$0 $0, ∨ = $$0 $0 ∈ $0 $$0, ∈ orderedPair $$0 $0 <, ∨ = $$0 $0 ∈ orderedPair $0 $$0 <) () () () 4.0.0.0.0.0 4.0.0.0.0.1 4.0.0.0.0.3.0
+            }
+          }
+        }
+      }
+    }
+    prove semicompleteRelation < ℕ 04924e63b487e6ad063d8faea98f4f85012a2e4775cbe7343827621ef7cb6354 () (ℕ, <) () () 4.0
+  }
+  elided b3266dc481e1b3e83b5124f058e80789a3e7c1c96f5a0bc57a04e927e9456cd6 {
+    prove ∧ relation < ℕ asymmetricRelation < ℕ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation < ℕ, asymmetricRelation < ℕ) () () () 1 2
+    prove ∧ ∧ relation < ℕ asymmetricRelation < ℕ transitiveRelation < ℕ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ relation < ℕ asymmetricRelation < ℕ, transitiveRelation < ℕ) () () () 5.0 3
+    prove ∧ ∧ ∧ relation < ℕ asymmetricRelation < ℕ transitiveRelation < ℕ semicompleteRelation < ℕ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ ∧ relation < ℕ asymmetricRelation < ℕ transitiveRelation < ℕ, semicompleteRelation < ℕ) () () () 5.1 4
+    prove strictTotalOrder < ℕ b3266dc481e1b3e83b5124f058e80789a3e7c1c96f5a0bc57a04e927e9456cd6 () (<, ℕ) () () 5.2
+  }
+}
+
+theorem Natural Number Is Smaller than Successor
+premise ∈ n ℕ
+conclusion ∈ orderedPair n successor n <
+{
+  prove ∈ n successor n bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n) () ()
+  elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+    prove ∈ successor n ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () () p0
+    elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+      prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+      prove → ∈ n ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () 1.1.0
+      prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) () () () 1.1.1 p0
+      prove → ∈ successor n ℕ ↔ ∈ orderedPair n successor n < ∈ n successor n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor n) (→ ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) () 1.1.2
+      prove ↔ ∈ orderedPair n successor n < ∈ n successor n fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor n ℕ, ↔ ∈ orderedPair n successor n < ∈ n successor n) () () () 1.1.3 1.0
+      prove → ∈ n successor n ∈ orderedPair n successor n < 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair n successor n <, ∈ n successor n) () () () 1.1.4
+      prove ∈ orderedPair n successor n < fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n successor n, ∈ orderedPair n successor n <) () () () 1.1.5 0
+    }
+  }
+}
+
+theorem A Natural Number That Is Greater than Another Is Non-Zero
+premise ∈ n ℕ
+premise ∈ m ℕ
+premise ∈ orderedPair n m <
+conclusion ¬ = m 0
+{
+  elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+    prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+    prove → ∈ n ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () 0.0
+    prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) () () () 0.1 p0
+    prove → ∈ m ℕ ↔ ∈ orderedPair n m < ∈ n m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) () 0.2
+    prove ↔ ∈ orderedPair n m < ∈ n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m ℕ, ↔ ∈ orderedPair n m < ∈ n m) () () () 0.3 p1
+    prove → ∈ orderedPair n m < ∈ n m f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair n m <, ∈ n m) () () () 0.4
+    prove ∈ n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair n m <, ∈ n m) () () () 0.5 p2
+  }
+  prove ¬ = m ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (n, m) () () 0
+  elided 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf {
+    prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
+    prove = ∅ 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (0, ∅) () () 2.0
+    prove ¬ = m 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∅, 0) (¬ = m $0) () 2.1 1
+  }
+}
+
+theorem Remove Successor from Ordering
+premise ∈ n ℕ
+premise ∈ m ℕ
+premise ∈ orderedPair successor n successor m <
+conclusion ∈ orderedPair n m <
+{
+  elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+    prove ∈ successor n ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (n) () () p0
+    prove ∈ successor m ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (m) () () p1
+    elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+      prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+      prove → ∈ successor n ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair successor n $0 < ∈ successor n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor n) (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () 0.2.0
+      prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair successor n $0 < ∈ successor n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor n ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair successor n $0 < ∈ successor n $0) () () () 0.2.1 0.0
+      prove → ∈ successor m ℕ ↔ ∈ orderedPair successor n successor m < ∈ successor n successor m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor m) (→ ∈ $0 ℕ ↔ ∈ orderedPair successor n $0 < ∈ successor n $0) () 0.2.2
+      prove ↔ ∈ orderedPair successor n successor m < ∈ successor n successor m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor m ℕ, ↔ ∈ orderedPair successor n successor m < ∈ successor n successor m) () () () 0.2.3 0.1
+      prove → ∈ orderedPair successor n successor m < ∈ successor n successor m f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair successor n successor m <, ∈ successor n successor m) () () () 0.2.4
+      prove ∈ successor n successor m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair successor n successor m <, ∈ successor n successor m) () () () 0.2.5 p2
+    }
+  }
+  prove ∈ n m 60477141a5ca56e8e7720a8e1e80411f77f4320fa676a6c43d586d15454732a8 () (m, n) () () p1 0
+  elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+    prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+    prove → ∈ n ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () 2.0
+    prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) () () () 2.1 p0
+    prove → ∈ m ℕ ↔ ∈ orderedPair n m < ∈ n m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) () 2.2
+    prove ↔ ∈ orderedPair n m < ∈ n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m ℕ, ↔ ∈ orderedPair n m < ∈ n m) () () () 2.3 p1
+    prove → ∈ n m ∈ orderedPair n m < 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair n m <, ∈ n m) () () () 2.4
+    prove ∈ orderedPair n m < fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n m, ∈ orderedPair n m <) () () () 2.5 1
+  }
+}
+
+term ≤ ()
+  (= $0 productComprehension a b ℕ ℕ ∨ ∈ orderedPair $0 $1 < = $0 $1)
+  shorthand (le)
+  attributes (infix-relation)
+
+theorem ≤ Is Element Relation or Equality
+conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0
+{
+  prove = ≤ productComprehension a b ℕ ℕ ∨ ∈ orderedPair $0 $1 < = $0 $1 77353c434b8259dd965a806c0d441637e47b9f6419f2629a36cf323b085b6c12 () () () ()
+  take a {
+    assume ∈ $0 ℕ {
+      take b {
+        assume ∈ $0 ℕ {
+          assume ∈ orderedPair $$0 $0 ≤ {
+            elided 751c850eba5a2cfa3c5528d6b65b68d0be82e329e4dbf0c89e5538bb2a9786fd {
+              prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0 751c850eba5a2cfa3c5528d6b65b68d0be82e329e4dbf0c89e5538bb2a9786fd () (≤, ℕ, ℕ) (∨ ∈ orderedPair $$$0 $$$1 < = $$$0 $$$1) () 0
+              prove → ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 ≤ ∨ ∈ orderedPair $$$0 $0 < = $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 ≤ ∨ ∈ orderedPair $$$$0 $0 < = $$$$0 $0) () 1.0.0.0.0.0.0
+              prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 ≤ ∨ ∈ orderedPair $$$0 $0 < = $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 ≤ ∨ ∈ orderedPair $$$0 $0 < = $$$0 $0) () () () 1.0.0.0.0.0.1 1.0a
+              prove → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $$0 $$$0 ≤ ∨ ∈ orderedPair $$0 $$$0 < = $$0 $$$0) () 1.0.0.0.0.0.2
+              prove ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0) () () () 1.0.0.0.0.0.3 1.0.0.0a
+              prove → ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$0 $0 ≤, ∨ ∈ orderedPair $$0 $0 < = $$0 $0) () () () 1.0.0.0.0.0.4
+              prove ∨ ∈ orderedPair $$0 $0 < = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 ≤, ∨ ∈ orderedPair $$0 $0 < = $$0 $0) () () () 1.0.0.0.0.0.5 1.0.0.0.0a
+            }
+            assume ∈ orderedPair $$0 $0 < {
+              elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+                prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+                prove → ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0) () 1.0.0.0.0.1.0.0
+                prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0) () () () 1.0.0.0.0.1.0.1 1.0a
+                prove → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $$0 $$$0 < ∈ $$0 $$$0) () 1.0.0.0.0.1.0.2
+                prove ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () () () 1.0.0.0.0.1.0.3 1.0.0.0a
+                prove → ∈ orderedPair $$0 $0 < ∈ $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$0 $0 <, ∈ $$0 $0) () () () 1.0.0.0.0.1.0.4
+                prove ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 <, ∈ $$0 $0) () () () 1.0.0.0.0.1.0.5 1.0.0.0.0.1a
+              }
+            }
+            prove ∨ ∈ $$0 $0 = $$0 $0 2fef1e6f547d23b9aa52e58e574fab87dbf5de6cf4c4dc35820bbae4723c7c09 (∈ orderedPair $$0 $0 <, = $$0 $0, ∈ $$0 $0) () () () 1.0.0.0.0.0 1.0.0.0.0.1
+          }
+          assume ∨ ∈ $$0 $0 = $$0 $0 {
+            assume ∈ $$0 $0 {
+              elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+                prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+                prove → ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0) () 1.0.0.0.1.0.0.0
+                prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0) () () () 1.0.0.0.1.0.0.1 1.0a
+                prove → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $$0 $$$0 < ∈ $$0 $$$0) () 1.0.0.0.1.0.0.2
+                prove ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () () () 1.0.0.0.1.0.0.3 1.0.0.0a
+                prove → ∈ $$0 $0 ∈ orderedPair $$0 $0 < 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $$0 $0 <, ∈ $$0 $0) () () () 1.0.0.0.1.0.0.4
+                prove ∈ orderedPair $$0 $0 < fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 $0, ∈ orderedPair $$0 $0 <) () () () 1.0.0.0.1.0.0.5 1.0.0.0.1.0a
+              }
+            }
+            prove ∨ ∈ orderedPair $$0 $0 < = $$0 $0 2fef1e6f547d23b9aa52e58e574fab87dbf5de6cf4c4dc35820bbae4723c7c09 (∈ $$0 $0, = $$0 $0, ∈ orderedPair $$0 $0 <) () () () 1.0.0.0.1a 1.0.0.0.1.0
+            elided 751c850eba5a2cfa3c5528d6b65b68d0be82e329e4dbf0c89e5538bb2a9786fd {
+              prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0 751c850eba5a2cfa3c5528d6b65b68d0be82e329e4dbf0c89e5538bb2a9786fd () (≤, ℕ, ℕ) (∨ ∈ orderedPair $$$0 $$$1 < = $$$0 $$$1) () 0
+              prove → ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 ≤ ∨ ∈ orderedPair $$$0 $0 < = $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 ≤ ∨ ∈ orderedPair $$$$0 $0 < = $$$$0 $0) () 1.0.0.0.1.2.0
+              prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 ≤ ∨ ∈ orderedPair $$$0 $0 < = $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 ≤ ∨ ∈ orderedPair $$$0 $0 < = $$$0 $0) () () () 1.0.0.0.1.2.1 1.0a
+              prove → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $$0 $$$0 ≤ ∨ ∈ orderedPair $$0 $$$0 < = $$0 $$$0) () 1.0.0.0.1.2.2
+              prove ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0) () () () 1.0.0.0.1.2.3 1.0.0.0a
+              prove → ∨ ∈ orderedPair $$0 $0 < = $$0 $0 ∈ orderedPair $$0 $0 ≤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $$0 $0 ≤, ∨ ∈ orderedPair $$0 $0 < = $$0 $0) () () () 1.0.0.0.1.2.4
+              prove ∈ orderedPair $$0 $0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ orderedPair $$0 $0 < = $$0 $0, ∈ orderedPair $$0 $0 ≤) () () () 1.0.0.0.1.2.5 1.0.0.0.1.1
+            }
+          }
+          elided a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 {
+            prove ∧ → ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 → ∨ ∈ $$0 $0 = $$0 $0 ∈ orderedPair $$0 $0 ≤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (→ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0, → ∨ ∈ $$0 $0 = $$0 $0 ∈ orderedPair $$0 $0 ≤) () () () 1.0.0.0.0 1.0.0.0.1
+            prove ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 (∈ orderedPair $$0 $0 ≤, ∨ ∈ $$0 $0 = $$0 $0) () () () 1.0.0.0.2.0
+          }
+        }
+      }
+    }
+  }
+}
+
+theorem One Natural Is Either Smaller than Another or At Least as Large
+conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤
+{
+  take n {
+    assume ∈ $0 ℕ {
+      take m {
+        assume ∈ $0 ℕ {
+          subproof (Or) {
+            prove ∨ ∈ $$0 $0 ∨ = $$0 $0 ∈ $0 $$0 371bd2c5c39f4f44ac5fc8e18d85d18903a2d85022f89fa59ad030005993a9a2 () ($$0, $0) () () 0.0a 0.0.0.0a
+            assume ∈ $$0 $0 {
+              elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+                prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+                prove → ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0) () 0.0.0.0.0.1.0.0
+                prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0) () () () 0.0.0.0.0.1.0.1 0.0a
+                prove → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $$0 $$$0 < ∈ $$0 $$$0) () 0.0.0.0.0.1.0.2
+                prove ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () () () 0.0.0.0.0.1.0.3 0.0.0.0a
+                prove → ∈ $$0 $0 ∈ orderedPair $$0 $0 < 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $$0 $0 <, ∈ $$0 $0) () () () 0.0.0.0.0.1.0.4
+                prove ∈ orderedPair $$0 $0 < fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 $0, ∈ orderedPair $$0 $0 <) () () () 0.0.0.0.0.1.0.5 0.0.0.0.0.1a
+              }
+            }
+            assume = $$0 $0 {
+              elided ba70ac3a0824056023bb9b0f4ad204f397e0007433c52531eaca647e45464bae {
+                prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 ba70ac3a0824056023bb9b0f4ad204f397e0007433c52531eaca647e45464bae () () () ()
+                prove → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 ≤ ∨ ∈ $$$$0 $0 = $$$$0 $0) () 0.0.0.0.0.2.0.0
+                prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0) () () () 0.0.0.0.0.2.0.1 0.0.0.0a
+                prove → ∈ $$0 ℕ ↔ ∈ orderedPair $0 $$0 ≤ ∨ ∈ $0 $$0 = $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $0 $$$0 ≤ ∨ ∈ $0 $$$0 = $0 $$$0) () 0.0.0.0.0.2.0.2
+                prove ↔ ∈ orderedPair $0 $$0 ≤ ∨ ∈ $0 $$0 = $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ↔ ∈ orderedPair $0 $$0 ≤ ∨ ∈ $0 $$0 = $0 $$0) () () () 0.0.0.0.0.2.0.3 0.0a
+                prove → ∨ ∈ $0 $$0 = $0 $$0 ∈ orderedPair $0 $$0 ≤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $0 $$0 ≤, ∨ ∈ $0 $$0 = $0 $$0) () () () 0.0.0.0.0.2.0.4
+                elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                  prove = $0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$0, $0) () () 0.0.0.0.0.2a
+                  prove ∨ ∈ $0 $$0 = $0 $$0 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (= $0 $$0, ∈ $0 $$0) () () () 0.0.0.0.0.2.0.6.0
+                  prove ∈ orderedPair $0 $$0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ $0 $$0 = $0 $$0, ∈ orderedPair $0 $$0 ≤) () () () 0.0.0.0.0.2.0.5 0.0.0.0.0.2.0.6.1
+                }
+              }
+            }
+            assume ∈ $0 $$0 {
+              elided ba70ac3a0824056023bb9b0f4ad204f397e0007433c52531eaca647e45464bae {
+                prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 ba70ac3a0824056023bb9b0f4ad204f397e0007433c52531eaca647e45464bae () () () ()
+                prove → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 ≤ ∨ ∈ $$$$0 $0 = $$$$0 $0) () 0.0.0.0.0.3.0.0
+                prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0) () () () 0.0.0.0.0.3.0.1 0.0.0.0a
+                prove → ∈ $$0 ℕ ↔ ∈ orderedPair $0 $$0 ≤ ∨ ∈ $0 $$0 = $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $0 $$$0 ≤ ∨ ∈ $0 $$$0 = $0 $$$0) () 0.0.0.0.0.3.0.2
+                prove ↔ ∈ orderedPair $0 $$0 ≤ ∨ ∈ $0 $$0 = $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ↔ ∈ orderedPair $0 $$0 ≤ ∨ ∈ $0 $$0 = $0 $$0) () () () 0.0.0.0.0.3.0.3 0.0a
+                prove → ∨ ∈ $0 $$0 = $0 $$0 ∈ orderedPair $0 $$0 ≤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $0 $$0 ≤, ∨ ∈ $0 $$0 = $0 $$0) () () () 0.0.0.0.0.3.0.4
+                elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                  prove ∨ ∈ $0 $$0 = $0 $$0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ $0 $$0, = $0 $$0) () () () 0.0.0.0.0.3a
+                  prove ∈ orderedPair $0 $$0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ $0 $$0 = $0 $$0, ∈ orderedPair $0 $$0 ≤) () () () 0.0.0.0.0.3.0.5 0.0.0.0.0.3.0.6.0
+                }
+              }
+            }
+            prove → ∨ = $$0 $0 ∈ $0 $$0 ∈ orderedPair $0 $$0 ≤ 601e278a38579fd247c444cdbd61fe6d5f48c99f2b5725ef973cc3cb781a8eef (= $$0 $0, ∈ orderedPair $0 $$0 ≤, ∈ $0 $$0) () () () 0.0.0.0.0.2 0.0.0.0.0.3
+            prove ∨ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤ 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (∈ $$0 $0, ∨ = $$0 $0 ∈ $0 $$0, ∈ orderedPair $$0 $0 <, ∈ orderedPair $0 $$0 ≤) () () () 0.0.0.0.0.0 0.0.0.0.0.1 0.0.0.0.0.4
+          }
+          subproof (Not Both) {
+            assume ∧ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤ {
+              elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+                prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+                prove → ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 < ∈ $$$$0 $0) () 0.0.0.0.1.0.0.0
+                prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 < ∈ $$$0 $0) () () () 0.0.0.0.1.0.0.1 0.0a
+                prove → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $$0 $$$0 < ∈ $$0 $$$0) () 0.0.0.0.1.0.0.2
+                prove ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () () () 0.0.0.0.1.0.0.3 0.0.0.0a
+                prove → ∈ orderedPair $$0 $0 < ∈ $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$0 $0 <, ∈ $$0 $0) () () () 0.0.0.0.1.0.0.4
+                prove ∈ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 <, ∈ $$0 $0) () () () 0.0.0.0.1.0.0.5 0.0.0.0.1.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+              }
+              elided ba70ac3a0824056023bb9b0f4ad204f397e0007433c52531eaca647e45464bae {
+                prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 ba70ac3a0824056023bb9b0f4ad204f397e0007433c52531eaca647e45464bae () () () ()
+                prove → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 ≤ ∨ ∈ $$$$0 $0 = $$$$0 $0) () 0.0.0.0.1.0.1.0
+                prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0) () () () 0.0.0.0.1.0.1.1 0.0.0.0a
+                prove → ∈ $$0 ℕ ↔ ∈ orderedPair $0 $$0 ≤ ∨ ∈ $0 $$0 = $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$0 ℕ ↔ ∈ orderedPair $0 $$$0 ≤ ∨ ∈ $0 $$$0 = $0 $$$0) () 0.0.0.0.1.0.1.2
+                prove ↔ ∈ orderedPair $0 $$0 ≤ ∨ ∈ $0 $$0 = $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ↔ ∈ orderedPair $0 $$0 ≤ ∨ ∈ $0 $$0 = $0 $$0) () () () 0.0.0.0.1.0.1.3 0.0a
+                prove → ∈ orderedPair $0 $$0 ≤ ∨ ∈ $0 $$0 = $0 $$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $0 $$0 ≤, ∨ ∈ $0 $$0 = $0 $$0) () () () 0.0.0.0.1.0.1.4
+                prove ∨ ∈ $0 $$0 = $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $0 $$0 ≤, ∨ ∈ $0 $$0 = $0 $$0) () () () 0.0.0.0.1.0.1.5 0.0.0.0.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              }
+              prove ¬ ∈ $0 $$0 2b3ba86408996dce3f0dec95e3371dd6fb0104d817d1744142840cb50591910b () ($$0, $0) () () 0.0.0.0.1.0.0
+              prove = $0 $$0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∈ $0 $$0, = $0 $$0) () () () 0.0.0.0.1.0.1 0.0.0.0.1.0.2
+              prove ∈ $$0 $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, $$0) (∈ $$0 $$$0) () 0.0.0.0.1.0.3 0.0.0.0.1.0.0
+              elided bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a {
+                prove ¬ ∈ $$0 $$0 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () ($$0) () ()
+                prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∈ $$0 $$0) () () () 0.0.0.0.1.0.4 0.0.0.0.1.0.5.0
+              }
+            }
+            prove ¬ ∧ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤) () () () 0.0.0.0.1.0
+          }
+          prove ⊕ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤ 85d9228e116d39e101fccf8102b9ae979459e94efa97bd1f050fb7327031497b (∈ orderedPair $$0 $0 <, ∈ orderedPair $0 $$0 ≤) () () () 0.0.0.0.0 0.0.0.0.1
+        }
+      }
+    }
+  }
+}
+
+theorem Less than One Number Is At Most Its Predecessor
+premise ∈ n ℕ
+premise ∈ m ℕ
+premise ∈ orderedPair n successor m <
+conclusion ∈ orderedPair n m ≤
+{
+  elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+    prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+    prove → ∈ n ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () 0.0
+    prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) () () () 0.1 p0
+    prove → ∈ successor m ℕ ↔ ∈ orderedPair n successor m < ∈ n successor m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor m) (→ ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) () 0.2
+    elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+      prove ∈ successor m ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (m) () () p1
+      prove ↔ ∈ orderedPair n successor m < ∈ n successor m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor m ℕ, ↔ ∈ orderedPair n successor m < ∈ n successor m) () () () 0.3 0.4.0
+    }
+    prove → ∈ orderedPair n successor m < ∈ n successor m f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair n successor m <, ∈ n successor m) () () () 0.4
+    prove ∈ n successor m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair n successor m <, ∈ n successor m) () () () 0.5 p2
+  }
+  prove ∨ ∈ n m = n m 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () (n, m) () () 0
+  assume ∈ n m {
+    elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
+      prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () () () ()
+      prove → ∈ n ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) () 2.0.0
+      prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) () () () 2.0.1 p0
+      prove → ∈ m ℕ ↔ ∈ orderedPair n m < ∈ n m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0) () 2.0.2
+      prove ↔ ∈ orderedPair n m < ∈ n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m ℕ, ↔ ∈ orderedPair n m < ∈ n m) () () () 2.0.3 p1
+      prove → ∈ n m ∈ orderedPair n m < 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair n m <, ∈ n m) () () () 2.0.4
+      prove ∈ orderedPair n m < fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n m, ∈ orderedPair n m <) () () () 2.0.5 2a
+    }
+  }
+  prove ∨ ∈ orderedPair n m < = n m 2fef1e6f547d23b9aa52e58e574fab87dbf5de6cf4c4dc35820bbae4723c7c09 (∈ n m, = n m, ∈ orderedPair n m <) () () () 1 2
+  elided ba70ac3a0824056023bb9b0f4ad204f397e0007433c52531eaca647e45464bae {
+    prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 ba70ac3a0824056023bb9b0f4ad204f397e0007433c52531eaca647e45464bae () () () ()
+    prove → ∈ n ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 ≤ ∨ ∈ n $0 = n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0) () 4.0
+    prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 ≤ ∨ ∈ n $0 = n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 ≤ ∨ ∈ n $0 = n $0) () () () 4.1 p0
+    prove → ∈ m ℕ ↔ ∈ orderedPair n m ≤ ∨ ∈ n m = n m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (m) (→ ∈ $0 ℕ ↔ ∈ orderedPair n $0 ≤ ∨ ∈ n $0 = n $0) () 4.2
+    prove ↔ ∈ orderedPair n m ≤ ∨ ∈ n m = n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m ℕ, ↔ ∈ orderedPair n m ≤ ∨ ∈ n m = n m) () () () 4.3 p1
+    prove → ∨ ∈ n m = n m ∈ orderedPair n m ≤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair n m ≤, ∨ ∈ n m = n m) () () () 4.4
+    prove ∈ orderedPair n m ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ n m = n m, ∈ orderedPair n m ≤) () () () 4.5 1
+  }
+}
+
+theorem ≤ Is a Well-Order on ℕ
+conclusion wellOrder ≤ ℕ
+{
+  prove strictTotalOrder < ℕ 81dedf73d69b50c05235585a865ec89191df7af8ed00dd4751e918a19efa59c5 () () () ()
+  prove = ≤ productComprehension a b ℕ ℕ ∨ ∈ orderedPair $0 $1 < = $0 $1 77353c434b8259dd965a806c0d441637e47b9f6419f2629a36cf323b085b6c12 () () () ()
+  prove totalOrder ≤ ℕ d1c9fea91ab59bfbea0d7fd36c4d57a69a6a0eb70d2b33dc3f7b625ca2daf906 () (<, ℕ, ≤) () () 0 1
+  take S {
+    assume ⊆ $0 ℕ {
+      assume ¬ = $0 ∅ {
+        prove ∃ s ∈ $0 $$0 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () ($0) () () 3.0.0a
+        let s ∈ $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤) () (∈ $$0 $0) () {
+          prove ∈ $0 ℕ ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($$0, ℕ, $0) () () 3.0a 3.0.0.1a
+          let L = $0 comprehension a ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ a ∧ ∈ $0 $$$0 ∀ b → ∈ $0 $$$$0 ∈ orderedPair $$0 $0 ≤) (comprehension a ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair $$0 $0 ≤) () () {
+            subproof (0 is a lower bound) {
+              take b {
+                assume ∈ $0 $$$$0 {
+                  prove ∈ $0 ℕ ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($$$$0, ℕ, $0) () () 3.0a 3.0.0.1.1.0.0.0a
+                  elided 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 {
+                    prove ∨ = $0 0 ∈ 0 $0 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 () ($0) () () 3.0.0.1.1.0.0.0.0
+                    elided 2fef1e6f547d23b9aa52e58e574fab87dbf5de6cf4c4dc35820bbae4723c7c09 {
+                      prove ↔ = $0 0 = 0 $0 0f0ba273a7d5b887a011356e2d51526d020a124f0971f1cbd6d8e66df7ad2504 () ($0, 0) () ()
+                      prove → = $0 0 = 0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= $0 0, = 0 $0) () () () 3.0.0.1.1.0.0.0.1.1.0
+                      prove ∨ = 0 $0 ∈ 0 $0 2fef1e6f547d23b9aa52e58e574fab87dbf5de6cf4c4dc35820bbae4723c7c09 (= $0 0, ∈ 0 $0, = 0 $0) () () () 3.0.0.1.1.0.0.0.1.0 3.0.0.1.1.0.0.0.1.1.1
+                    }
+                    prove ∨ ∈ 0 $0 = 0 $0 7e3651c820e1f41df1d2e5a80ff9e1c8bc55f236a482bf9ee54c7c4188e2ee93 (= 0 $0, ∈ 0 $0) () () () 3.0.0.1.1.0.0.0.1.1
+                  }
+                  elided ba70ac3a0824056023bb9b0f4ad204f397e0007433c52531eaca647e45464bae {
+                    prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ $$0 $0 = $$0 $0 ba70ac3a0824056023bb9b0f4ad204f397e0007433c52531eaca647e45464bae () () () ()
+                    prove → ∈ 0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair 0 $0 ≤ ∨ ∈ 0 $0 = 0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (0) (→ ∈ $$$$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$$$0 $0 ≤ ∨ ∈ $$$$$$0 $0 = $$$$$$0 $0) () 3.0.0.1.1.0.0.0.2.0
+                    elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                      prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
+                      prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair 0 $0 ≤ ∨ ∈ 0 $0 = 0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair 0 $0 ≤ ∨ ∈ 0 $0 = 0 $0) () () () 3.0.0.1.1.0.0.0.2.1 3.0.0.1.1.0.0.0.2.2.0
+                    }
+                    prove → ∈ $0 ℕ ↔ ∈ orderedPair 0 $0 ≤ ∨ ∈ 0 $0 = 0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 ℕ ↔ ∈ orderedPair 0 $$$$$0 ≤ ∨ ∈ 0 $$$$$0 = 0 $$$$$0) () 3.0.0.1.1.0.0.0.2.2
+                    prove ↔ ∈ orderedPair 0 $0 ≤ ∨ ∈ 0 $0 = 0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ↔ ∈ orderedPair 0 $0 ≤ ∨ ∈ 0 $0 = 0 $0) () () () 3.0.0.1.1.0.0.0.2.3 3.0.0.1.1.0.0.0.0
+                    prove → ∨ ∈ 0 $0 = 0 $0 ∈ orderedPair 0 $0 ≤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair 0 $0 ≤, ∨ ∈ 0 $0 = 0 $0) () () () 3.0.0.1.1.0.0.0.2.4
+                    prove ∈ orderedPair 0 $0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ 0 $0 = 0 $0, ∈ orderedPair 0 $0 ≤) () () () 3.0.0.1.1.0.0.0.2.5 3.0.0.1.1.0.0.0.1
+                  }
+                }
+              }
+              elided 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d {
+                prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () () () ()
+                prove ∈ 0 $0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($0, ℕ, 0) (∀ b → ∈ $0 $$$$0 ∈ orderedPair $$$$$0 $0 ≤) () 3.0.0.1.1a 3.0.0.1.1.0.1.0 3.0.0.1.1.0.0
+              }
+            }
+            subproof (s^+ is not a lower bound) {
+              prove ∈ orderedPair $$0 successor $$0 < 03ca329a7f30e183c6921ba709d61c5535da2fb28b0a1f8bc1cdfedcf59b8b1c () ($$0) () () 3.0.0.1.0
+              elided cc279d317b1338fab4d429b1c27115c2a44f88934bd383895c03b357bb296369 {
+                prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤ cc279d317b1338fab4d429b1c27115c2a44f88934bd383895c03b357bb296369 () () () ()
+                prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$$0 $0 < ∈ orderedPair $0 $$$0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$$$$0 $0 < ∈ orderedPair $0 $$$$$0 ≤) () 3.0.0.1.1.1.1.0
+                prove ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$$0 $0 < ∈ orderedPair $0 $$$0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$$0 $0 < ∈ orderedPair $0 $$$0 ≤) () () () 3.0.0.1.1.1.1.1 3.0.0.1.0
+                prove → ∈ successor $$0 ℕ ⊕ ∈ orderedPair $$0 successor $$0 < ∈ orderedPair successor $$0 $$0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $$0) (→ ∈ $$$$0 ℕ ⊕ ∈ orderedPair $$0 $$$$0 < ∈ orderedPair $$$$0 $$0 ≤) () 3.0.0.1.1.1.1.2
+                elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                  prove ∈ successor $$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$0) () () 3.0.0.1.0
+                  prove ⊕ ∈ orderedPair $$0 successor $$0 < ∈ orderedPair successor $$0 $$0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $$0 ℕ, ⊕ ∈ orderedPair $$0 successor $$0 < ∈ orderedPair successor $$0 $$0 ≤) () () () 3.0.0.1.1.1.1.3 3.0.0.1.1.1.1.4.0
+                }
+                prove ¬ ∈ orderedPair successor $$0 $$0 ≤ e4ae6063b86741e544a9c95c2ce96510d5571fb6b97a2d084435181728226d66 (∈ orderedPair $$0 successor $$0 <, ∈ orderedPair successor $$0 $$0 ≤) () () () 3.0.0.1.1.1.1.4 3.0.0.1.1.1.0
+              }
+              elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+                prove ∧ ∈ $$0 $$$0 ¬ ∈ orderedPair successor $$0 $$0 ≤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$0 $$$0, ¬ ∈ orderedPair successor $$0 $$0 ≤) () () () 3.0.0.1a 3.0.0.1.1.1.1
+                prove ∃ b ∧ ∈ $0 $$$$0 ¬ ∈ orderedPair successor $$$0 $0 ≤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($$0) (∧ ∈ $$$$0 $$$0 ¬ ∈ orderedPair successor $$0 $$$$0 ≤) () 3.0.0.1.1.1.2.0
+              }
+              elided (By definition) {
+                prove ¬ ∀ b ¬ ∧ ∈ $0 $$$$0 ¬ ∈ orderedPair successor $$$0 $0 ≤ 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 () () (∧ ∈ $$$$0 $$$0 ¬ ∈ orderedPair successor $$0 $$$$0 ≤) () 3.0.0.1.1.1.2
+                elided e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a {
+                  assume ∀ b ¬ ¬ → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤ {
+                    take b {
+                      prove ¬ ¬ → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ¬ → ∈ $$$$$0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $$$$$0 ≤) () 3.0.0.1.1.1.3.1.0a
+                      assume ∧ ∈ $0 $$$$0 ¬ ∈ orderedPair successor $$$0 $0 ≤ {
+                        prove ¬ → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤ e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (∈ $0 $$$$0, ¬ ∈ orderedPair successor $$$0 $0 ≤) () () () 3.0.0.1.1.1.3.1.0.0.1a
+                      }
+                      prove ¬ ∧ ∈ $0 $$$$0 ¬ ∈ orderedPair successor $$$0 $0 ≤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ ∈ $0 $$$$0 ¬ ∈ orderedPair successor $$$0 $0 ≤, ¬ → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤) () () () 3.0.0.1.1.1.3.1.0.0.1 3.0.0.1.1.1.3.1.0.0.0
+                    }
+                  }
+                  prove ¬ ∀ b ¬ ¬ → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∀ x ¬ ¬ → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤, ∀ x ¬ ∧ ∈ $0 $$$$0 ¬ ∈ orderedPair successor $$$0 $0 ≤) () () () 3.0.0.1.1.1.3.1.0 3.0.0.1.1.1.3.0
+                }
+                elided 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 {
+                  assume ∀ b → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤ {
+                    take b {
+                      prove → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $$$$$0 ≤) () 3.0.0.1.1.1.3.2.0a
+                      prove ¬ ¬ → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (→ ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤) () () () 3.0.0.1.1.1.3.2.0.0.0
+                    }
+                  }
+                  prove ¬ ∀ b → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∀ x → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤, ∀ x ¬ ¬ → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤) () () () 3.0.0.1.1.1.3.2.0 3.0.0.1.1.1.3.1
+                }
+                elided 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 {
+                  assume ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ {
+                    take b {
+                      prove → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 $$$$0 ∈ orderedPair successor $$$0 $$$$$0 ≤) () 3.0.0.1.1.1.3.3.0a
+                      assume ∈ $0 $$$$0 {
+                        prove ∈ orderedPair successor $$$0 $0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$$$0, ∈ orderedPair successor $$$0 $0 ≤) () () () 3.0.0.1.1.1.3.3.0.0.0 3.0.0.1.1.1.3.3.0.0.1a
+                        prove ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (∈ orderedPair successor $$$0 $0 ≤) () () () 3.0.0.1.1.1.3.3.0.0.1.0
+                      }
+                    }
+                  }
+                  prove ¬ ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∀ x → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤, ∀ x → ∈ $0 $$$$0 ¬ ¬ ∈ orderedPair successor $$$0 $0 ≤) () () () 3.0.0.1.1.1.3.3.0 3.0.0.1.1.1.3.2
+                }
+              }
+              elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
+                prove ¬ ∧ ∈ successor $$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ fda7c4618e5ff1aae7e4feee10e9f74edc94da1ee6578cc508c2b4e56973058d (∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤, ∈ successor $$0 ℕ) () () () 3.0.0.1.1.1.3
+                prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () ($0, ℕ) (∀ b → ∈ $0 $$$$0 ∈ orderedPair $$$$$0 $0 ≤) () 3.0.0.1.1a
+                elided (Extracted) {
+                  prove ↔ ∈ successor $$0 $0 ∧ ∈ successor $$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $$0) (↔ ∈ $$$$0 $0 ∧ ∈ $$$$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair $$$$$0 $0 ≤) () 3.0.0.1.1.1.4.1
+                  prove → ∈ successor $$0 $0 ∧ ∈ successor $$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ successor $$0 $0, ∧ ∈ successor $$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤) () () () 3.0.0.1.1.1.4.2.0
+                  prove ¬ ∈ successor $$0 $0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ successor $$0 $0, ∧ ∈ successor $$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤) () () () 3.0.0.1.1.1.4.2.1 3.0.0.1.1.1.4.0
+                }
+              }
+            }
+            subproof (There is a greatest lower bound) {
+              assume ∀ t → ∈ $0 $$0 ∈ successor $0 $$0 {
+                elided bf554a2aab3c6a5e3dbcf0924479154a006b12a51158cd9a2d469703f5aa8932 {
+                  prove ⊆ $0 ℕ 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () ($0, ℕ) (∀ b → ∈ $0 $$$$0 ∈ orderedPair $$$$$0 $0 ≤) () 3.0.0.1.1a
+                  prove = $0 ℕ bf554a2aab3c6a5e3dbcf0924479154a006b12a51158cd9a2d469703f5aa8932 () ($0) () () 3.0.0.1.1.2.0.0.0 3.0.0.1.1.0 3.0.0.1.1.2.0a
+                }
+                prove ¬ ∈ successor $$0 ℕ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, ℕ) (¬ ∈ successor $$0 $$$$0) () 3.0.0.1.1.2.0.0 3.0.0.1.1.1
+                elided bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a {
+                  prove ∈ successor $$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$0) () () 3.0.0.1.0
+                  prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∈ successor $$0 ℕ) () () () 3.0.0.1.1.2.0.2.0 3.0.0.1.1.2.0.1
+                }
+              }
+              prove ¬ ∀ t → ∈ $0 $$0 ∈ successor $0 $$0 adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∀ t → ∈ $0 $$0 ∈ successor $0 $$0) () () () 3.0.0.1.1.2.0
+              elided (By definition) {
+                elided 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 {
+                  assume ∀ t → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0 {
+                    take t {
+                      prove → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$0 $$0 ¬ ¬ ∈ successor $$$$$0 $$0) () 3.0.0.1.1.2.2.0.0a
+                      assume ∈ $0 $$0 {
+                        prove ¬ ¬ ∈ successor $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ¬ ¬ ∈ successor $0 $$0) () () () 3.0.0.1.1.2.2.0.0.0.0 3.0.0.1.1.2.2.0.0.0.1a
+                        prove ∈ successor $0 $$0 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 (∈ successor $0 $$0) () () () 3.0.0.1.1.2.2.0.0.0.1.0
+                      }
+                    }
+                  }
+                  prove ¬ ∀ t → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∀ x → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0, ∀ x → ∈ $0 $$0 ∈ successor $0 $$0) () () () 3.0.0.1.1.2.2.0.0 3.0.0.1.1.2.1
+                }
+                elided 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 {
+                  assume ∀ t ¬ ¬ → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0 {
+                    take t {
+                      prove ¬ ¬ → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ¬ → ∈ $$$$$0 $$0 ¬ ¬ ∈ successor $$$$$0 $$0) () 3.0.0.1.1.2.2.1.0a
+                      prove → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 (→ ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0) () () () 3.0.0.1.1.2.2.1.0.0.0
+                    }
+                  }
+                  prove ¬ ∀ t ¬ ¬ → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∀ x ¬ ¬ → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0, ∀ x → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0) () () () 3.0.0.1.1.2.2.1.0 3.0.0.1.1.2.2.0
+                }
+                elided 1fb57cbd284d5244531819f8c2dfd32be60e7a13a7c04d539048d8535037c02a {
+                  assume ∀ x ¬ ∧ ∈ $0 $$0 ¬ ∈ successor $0 $$0 {
+                    take x {
+                      prove ¬ ∧ ∈ $0 $$0 ¬ ∈ successor $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∧ ∈ $$$$$0 $$0 ¬ ∈ successor $$$$$0 $$0) () 3.0.0.1.1.2.2.2.0a
+                      assume ¬ → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0 {
+                        prove ∧ ∈ $0 $$0 ¬ ∈ successor $0 $$0 1fb57cbd284d5244531819f8c2dfd32be60e7a13a7c04d539048d8535037c02a (∈ $0 $$0, ¬ ∈ successor $0 $$0) () () () 3.0.0.1.1.2.2.2.0.0.1a
+                      }
+                      prove ¬ ¬ → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (¬ → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0, ∧ ∈ $0 $$0 ¬ ∈ successor $0 $$0) () () () 3.0.0.1.1.2.2.2.0.0.1 3.0.0.1.1.2.2.2.0.0.0
+                    }
+                  }
+                  prove ¬ ∀ x ¬ ∧ ∈ $0 $$0 ¬ ∈ successor $0 $$0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∀ x ¬ ∧ ∈ $0 $$0 ¬ ∈ successor $0 $$0, ∀ x ¬ ¬ → ∈ $0 $$0 ¬ ¬ ∈ successor $0 $$0) () () () 3.0.0.1.1.2.2.2.0 3.0.0.1.1.2.2.1
+                }
+                prove ∃ x ∧ ∈ $0 $$0 ¬ ∈ successor $0 $$0 4e1baa7f31829a472647ff0c26af3e00308af8ed31ab25b1d5c229c0fcec6381 () () (∧ ∈ $$$$0 $0 ¬ ∈ successor $$$$0 $0) () 3.0.0.1.1.2.2.2
+              }
+            }
+            let t ∧ ∈ $0 $$0 ¬ ∈ successor $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 $$$$0 ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤) () (∧ ∈ $$$$0 $0 ¬ ∈ successor $$$$0 $0) () {
+              prove ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$0, ℕ, $0) (∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$$$$$0 $0 ≤) () 3.0.0.1.1a 3.0.0.1.1.3a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+              subproof (Greatest lower bound is in S) {
+                prove ∈ $0 ℕ 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () ($$0, ℕ, $0) (∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$$$$$0 $0 ≤) () 3.0.0.1.1a 3.0.0.1.1.3a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
+                  prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℕ ∀ b → ∈ $0 $$$$$$0 ∈ orderedPair $$0 $0 ≤ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () ($$0, ℕ) (∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$$$$$0 $0 ≤) () 3.0.0.1.1a
+                  elided (Extracted) {
+                    prove ↔ ∈ successor $0 $$0 ∧ ∈ successor $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $0) (↔ ∈ $$$$$0 $$0 ∧ ∈ $$$$$0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$$$$$0 $0 ≤) () 3.0.0.1.1.3.1.1.0
+                    prove → ∧ ∈ successor $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤ ∈ successor $0 $$0 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ successor $0 $$0, ∧ ∈ successor $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.1.1.0
+                    prove ¬ ∧ ∈ successor $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ ∈ successor $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤, ∈ successor $0 $$0) () () () 3.0.0.1.1.3.1.1.1.1 3.0.0.1.1.3a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    elided 1af0b96e1cd8a24462ecc71676818b369217603427758b355312ec9f802ee00b {
+                      prove ∈ successor $0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($0) () () 3.0.0.1.1.3.1.0
+                      prove ¬ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤ 1af0b96e1cd8a24462ecc71676818b369217603427758b355312ec9f802ee00b (∈ successor $0 ℕ, ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.1.1.2 3.0.0.1.1.3.1.1.1.3.0
+                    }
+                  }
+                }
+                elided (By definition) {
+                  elided 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 {
+                    assume ∀ b → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤ {
+                      take b {
+                        prove → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$$0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $$$$$$0 ≤) () 3.0.0.1.1.3.1.2.0.0a
+                        assume ∈ $0 $$$$$0 {
+                          prove ¬ ¬ ∈ orderedPair successor $$0 $0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$$$$0, ¬ ¬ ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.2.0.0.0.0 3.0.0.1.1.3.1.2.0.0.0.1a
+                          prove ∈ orderedPair successor $$0 $0 ≤ 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 (∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.2.0.0.0.1.0
+                        }
+                      }
+                    }
+                    prove ¬ ∀ b → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∀ x → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤, ∀ x → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.2.0.0 3.0.0.1.1.3.1.1
+                  }
+                  elided 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 {
+                    assume ∀ b ¬ ¬ → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤ {
+                      take b {
+                        prove ¬ ¬ → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ¬ → ∈ $$$$$$0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $$$$$$0 ≤) () 3.0.0.1.1.3.1.2.1.0a
+                        prove → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤ 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 (→ ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.2.1.0.0.0
+                      }
+                    }
+                    prove ¬ ∀ b ¬ ¬ → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∀ x ¬ ¬ → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤, ∀ x → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.2.1.0 3.0.0.1.1.3.1.2.0
+                  }
+                  elided 1fb57cbd284d5244531819f8c2dfd32be60e7a13a7c04d539048d8535037c02a {
+                    assume ∀ b ¬ ∧ ∈ $0 $$$$$0 ¬ ∈ orderedPair successor $$0 $0 ≤ {
+                      take b {
+                        prove ¬ ∧ ∈ $0 $$$$$0 ¬ ∈ orderedPair successor $$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∧ ∈ $$$$$$0 $$$$$0 ¬ ∈ orderedPair successor $$0 $$$$$$0 ≤) () 3.0.0.1.1.3.1.2.2.0a
+                        assume ¬ → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤ {
+                          prove ∧ ∈ $0 $$$$$0 ¬ ∈ orderedPair successor $$0 $0 ≤ 1fb57cbd284d5244531819f8c2dfd32be60e7a13a7c04d539048d8535037c02a (∈ $0 $$$$$0, ¬ ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.2.2.0.0.1a
+                        }
+                        prove ¬ ¬ → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (¬ → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤, ∧ ∈ $0 $$$$$0 ¬ ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.2.2.0.0.1 3.0.0.1.1.3.1.2.2.0.0.0
+                      }
+                    }
+                    prove ¬ ∀ b ¬ ∧ ∈ $0 $$$$$0 ¬ ∈ orderedPair successor $$0 $0 ≤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∀ x ¬ ∧ ∈ $0 $$$$$0 ¬ ∈ orderedPair successor $$0 $0 ≤, ∀ x ¬ ¬ → ∈ $0 $$$$$0 ¬ ¬ ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.2.2.0 3.0.0.1.1.3.1.2.1
+                  }
+                  prove ∃ b ∧ ∈ $0 $$$$$0 ¬ ∈ orderedPair successor $$0 $0 ≤ 4e1baa7f31829a472647ff0c26af3e00308af8ed31ab25b1d5c229c0fcec6381 () () (∧ ∈ $$$$$0 $$$$0 ¬ ∈ orderedPair successor $0 $$$$$0 ≤) () 3.0.0.1.1.3.1.2.2
+                }
+                let b ∧ ∈ $0 $$$$$0 ¬ ∈ orderedPair successor $$0 $0 ≤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 $$$$0) () (∧ ∈ $$$$$0 $$$$0 ¬ ∈ orderedPair successor $0 $$$$$0 ≤) () {
+                  prove ∈ $0 ℕ ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($$$$$0, ℕ, $0) () () 3.0a 3.0.0.1.1.3.1.3a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  elided cc279d317b1338fab4d429b1c27115c2a44f88934bd383895c03b357bb296369 {
+                    prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤ cc279d317b1338fab4d429b1c27115c2a44f88934bd383895c03b357bb296369 () () () ()
+                    prove → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$$0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$$$$$$0 $0 < ∈ orderedPair $0 $$$$$$$0 ≤) () 3.0.0.1.1.3.1.3.1.0
+                    prove ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤) () () () 3.0.0.1.1.3.1.3.1.1 3.0.0.1.1.3.1.3.0
+                    prove → ∈ successor $$0 ℕ ⊕ ∈ orderedPair $0 successor $$0 < ∈ orderedPair successor $$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $$0) (→ ∈ $$$$$$0 ℕ ⊕ ∈ orderedPair $0 $$$$$$0 < ∈ orderedPair $$$$$$0 $0 ≤) () 3.0.0.1.1.3.1.3.1.2
+                    elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                      prove ∈ successor $$0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($$0) () () 3.0.0.1.1.3.1.0
+                      prove ⊕ ∈ orderedPair $0 successor $$0 < ∈ orderedPair successor $$0 $0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $$0 ℕ, ⊕ ∈ orderedPair $0 successor $$0 < ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.3.1.3 3.0.0.1.1.3.1.3.1.4.0
+                    }
+                    prove ∨ ∈ orderedPair $0 successor $$0 < ∈ orderedPair successor $$0 $0 ≤ 2fcf85e65b11715f1d1a789ddc4dc1e46b321f9ee5ae372ff0453e54a1f41c65 (∈ orderedPair $0 successor $$0 <, ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.3.1.4
+                    prove ∈ orderedPair $0 successor $$0 < 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ orderedPair $0 successor $$0 <, ∈ orderedPair successor $$0 $0 ≤) () () () 3.0.0.1.1.3.1.3.1.5 3.0.0.1.1.3.1.3a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                  }
+                  prove ∈ orderedPair $0 $$0 ≤ 59993739525cf2e7d874aa07ed6cb1433233bf7687f4cfd93540ae81dadde80b () ($0, $$0) () () 3.0.0.1.1.3.1.3.0 3.0.0.1.1.3.1.0 3.0.0.1.1.3.1.3.1
+                  elided (Extracted) {
+                    prove → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$$0 $$$$$0 ∈ orderedPair $$0 $$$$$$0 ≤) () 3.0.0.1.1.3.0
+                    prove ∈ orderedPair $$0 $0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$$$$0, ∈ orderedPair $$0 $0 ≤) () () () 3.0.0.1.1.3.1.3.3.0 3.0.0.1.1.3.1.3a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  }
+                  elided d1cd115e49451183e6ece9205dc051456ac09661ba6cd9acef14582ee680a902 {
+                    prove ∧ ∈ orderedPair $0 $$0 ≤ ∈ orderedPair $$0 $0 ≤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair $0 $$0 ≤, ∈ orderedPair $$0 $0 ≤) () () () 3.0.0.1.1.3.1.3.2 3.0.0.1.1.3.1.3.3
+                    elided d1cd115e49451183e6ece9205dc051456ac09661ba6cd9acef14582ee680a902 {
+                      prove ∧ ∧ ∧ relation ≤ ℕ antisymmetricRelation ≤ ℕ transitiveRelation ≤ ℕ completeRelation ≤ ℕ d1cd115e49451183e6ece9205dc051456ac09661ba6cd9acef14582ee680a902 () (≤, ℕ) () () 2
+                      prove ∧ ∧ relation ≤ ℕ antisymmetricRelation ≤ ℕ transitiveRelation ≤ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ relation ≤ ℕ antisymmetricRelation ≤ ℕ transitiveRelation ≤ ℕ, completeRelation ≤ ℕ) () () () 3.0.0.1.1.3.1.3.4.1.0
+                      prove ∧ relation ≤ ℕ antisymmetricRelation ≤ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ relation ≤ ℕ antisymmetricRelation ≤ ℕ, transitiveRelation ≤ ℕ) () () () 3.0.0.1.1.3.1.3.4.1.1
+                      prove antisymmetricRelation ≤ ℕ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (relation ≤ ℕ, antisymmetricRelation ≤ ℕ) () () () 3.0.0.1.1.3.1.3.4.1.2
+                      prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ → ∧ ∈ orderedPair $$0 $0 ≤ ∈ orderedPair $0 $$0 ≤ = $$0 $0 86c86ff7999dfe867abb69aac822635bedbd1528c6ca17470ad42323f4e44b42 () (≤, ℕ) () () 3.0.0.1.1.3.1.3.4.1.3
+                      prove → ∈ $0 ℕ ∀ b → ∈ $0 ℕ → ∧ ∈ orderedPair $$0 $0 ≤ ∈ orderedPair $0 $$0 ≤ = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$$$0 ℕ ∀ b → ∈ $0 ℕ → ∧ ∈ orderedPair $$$$$$$0 $0 ≤ ∈ orderedPair $0 $$$$$$$0 ≤ = $$$$$$$0 $0) () 3.0.0.1.1.3.1.3.4.1.4
+                      prove ∀ b → ∈ $0 ℕ → ∧ ∈ orderedPair $$0 $0 ≤ ∈ orderedPair $0 $$0 ≤ = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ b → ∈ $0 ℕ → ∧ ∈ orderedPair $$0 $0 ≤ ∈ orderedPair $0 $$0 ≤ = $$0 $0) () () () 3.0.0.1.1.3.1.3.4.1.5 3.0.0.1.1.3.1.3.0
+                      prove → ∈ $$0 ℕ → ∧ ∈ orderedPair $0 $$0 ≤ ∈ orderedPair $$0 $0 ≤ = $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$$$0 ℕ → ∧ ∈ orderedPair $0 $$$$$$0 ≤ ∈ orderedPair $$$$$$0 $0 ≤ = $0 $$$$$$0) () 3.0.0.1.1.3.1.3.4.1.6
+                      prove → ∧ ∈ orderedPair $0 $$0 ≤ ∈ orderedPair $$0 $0 ≤ = $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, → ∧ ∈ orderedPair $0 $$0 ≤ ∈ orderedPair $$0 $0 ≤ = $0 $$0) () () () 3.0.0.1.1.3.1.3.4.1.7 3.0.0.1.1.3.1.0
+                      prove = $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair $0 $$0 ≤ ∈ orderedPair $$0 $0 ≤, = $0 $$0) () () () 3.0.0.1.1.3.1.3.4.1.8 3.0.0.1.1.3.1.3.4.0
+                    }
+                  }
+                  prove ∈ $$0 $$$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, $$0) (∈ $$$$$$0 $$$$$0) () 3.0.0.1.1.3.1.3.4 3.0.0.1.1.3.1.3a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                } 3.0.0.1.1.3.1.2
+              }
+              elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+                prove ∧ ∈ $0 $$$$0 ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 $$$$0, ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤) () () () 3.0.0.1.1.3.1 3.0.0.1.1.3.0
+                prove ∃ x ∧ ∈ $0 $$$$$0 ∀ b → ∈ $0 $$$$$$0 ∈ orderedPair $$0 $0 ≤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$$$$0 $$$$0 ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$$$$$0 $0 ≤) () 3.0.0.1.1.3.2.0
+              }
+            } 3.0.0.1.1.2
+          }
+        } 3.0.0.0
+      }
+    }
+  }
+  elided 3de4b50457881deb35b0988623262360911f166fe2621a289b54634d4466b4f0 {
+    prove ∧ totalOrder ≤ ℕ ∀ S → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (totalOrder ≤ ℕ, ∀ S → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤) () () () 2 3
+    prove wellOrder ≤ ℕ 3de4b50457881deb35b0988623262360911f166fe2621a289b54634d4466b4f0 () (≤, ℕ) () () 4.0
+  }
+}
+
+theorem Proof by Strong Induction
+premise ∀ n → ∈ $0 ℕ → ∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$0 < with ($0) φ with ($0) φ
+conclusion ∀ n → ∈ $0 ℕ with ($0) φ
+{
+  let S = $0 comprehension n ℕ ¬ with ($0) φ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∀ n → ∈ $0 ℕ with ($0) φ) (comprehension n ℕ ¬ with ($0) φ) () () {
+    assume ¬ = $0 ∅ {
+      prove ⊆ $0 ℕ 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () ($0, ℕ) (¬ with ($$0) φ) () 0a
+      elided 6f90b5f4a586fbce3ddc0fc082d721614733476d3a2e6918d84bc83df6b7d717 {
+        prove wellOrder ≤ ℕ 6f90b5f4a586fbce3ddc0fc082d721614733476d3a2e6918d84bc83df6b7d717 () () () ()
+        prove ∧ totalOrder ≤ ℕ ∀ S → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ cc2f94d9a9a42d27d06fbc1664e053b3c54d7793ec7ba8d522b70a84a8543b14 () (≤, ℕ) () () 0.0.1.0
+        prove ∀ S → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (totalOrder ≤ ℕ, ∀ S → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤) () () () 0.0.1.1
+        prove → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ⊆ $$0 ℕ → ¬ = $$0 ∅ ∃ a ∧ ∈ $0 $$$0 ∀ b → ∈ $0 $$$$0 ∈ orderedPair $$0 $0 ≤) () 0.0.1.2
+        prove → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (⊆ $0 ℕ, → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤) () () () 0.0.1.3 0.0.0
+        prove ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ = $0 ∅, ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤) () () () 0.0.1.4 0.0a
+      }
+      let a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (⊥) () (∧ ∈ $$0 $0 ∀ b → ∈ $0 $$0 ∈ orderedPair $$$0 $0 ≤) () {
+        prove ∈ $0 ℕ 904f9146653eefca9983ca38031e7d67b8a21d1746215d73baad140517fd911d () ($$0, ℕ, $0) (¬ with ($$$0) φ) () 0a 0.0.2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        take m {
+          assume ∈ $0 ℕ {
+            assume ∈ orderedPair $0 $$0 < {
+              elided cc279d317b1338fab4d429b1c27115c2a44f88934bd383895c03b357bb296369 {
+                prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤ cc279d317b1338fab4d429b1c27115c2a44f88934bd383895c03b357bb296369 () () () ()
+                prove → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$$$$0 $0 < ∈ orderedPair $0 $$$$$0 ≤) () 0.0.2.1.0.0.0.0
+                prove ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 < ∈ orderedPair $0 $$0 ≤) () () () 0.0.2.1.0.0.0.1 0.0.2.1.0a
+                prove → ∈ $$0 ℕ ⊕ ∈ orderedPair $0 $$0 < ∈ orderedPair $$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (→ ∈ $$$$0 ℕ ⊕ ∈ orderedPair $0 $$$$0 < ∈ orderedPair $$$$0 $0 ≤) () 0.0.2.1.0.0.0.2
+                prove ⊕ ∈ orderedPair $0 $$0 < ∈ orderedPair $$0 $0 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℕ, ⊕ ∈ orderedPair $0 $$0 < ∈ orderedPair $$0 $0 ≤) () () () 0.0.2.1.0.0.0.3 0.0.2.0
+                prove ¬ ∈ orderedPair $$0 $0 ≤ e4ae6063b86741e544a9c95c2ce96510d5571fb6b97a2d084435181728226d66 (∈ orderedPair $0 $$0 <, ∈ orderedPair $$0 $0 ≤) () () () 0.0.2.1.0.0.0.4 0.0.2.1.0.0a
+              }
+              elided (Extracted) {
+                prove → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 $$$0 ∈ orderedPair $$0 $$$$0 ≤) () 0.0.2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                prove ¬ ∈ $0 $$$0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ $0 $$$0, ∈ orderedPair $$0 $0 ≤) () () () 0.0.2.1.0.0.1.0 0.0.2.1.0.0.0
+              }
+              elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
+                prove ∀ y ↔ ∈ $0 $$$$0 ∧ ∈ $0 ℕ ¬ with ($0) φ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () ($$$0, ℕ) (¬ with ($$$$0) φ) () 0a
+                prove ↔ ∈ $0 $$$0 ∧ ∈ $0 ℕ ¬ with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$$0 $$$0 ∧ ∈ $$$$0 ℕ ¬ with ($$$$0) φ) () 0.0.2.1.0.0.2.0
+                prove → ∧ ∈ $0 ℕ ¬ with ($0) φ ∈ $0 $$$0 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 $$$0, ∧ ∈ $0 ℕ ¬ with ($0) φ) () () () 0.0.2.1.0.0.2.1
+                prove ¬ ∧ ∈ $0 ℕ ¬ with ($0) φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ ∈ $0 ℕ ¬ with ($0) φ, ∈ $0 $$$0) () () () 0.0.2.1.0.0.2.2 0.0.2.1.0.0.1
+                prove ¬ ¬ with ($0) φ 1af0b96e1cd8a24462ecc71676818b369217603427758b355312ec9f802ee00b (∈ $0 ℕ, ¬ with ($0) φ) () () () 0.0.2.1.0.0.2.3 0.0.2.1.0a
+                prove with ($0) φ 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 (with ($0) φ) () () () 0.0.2.1.0.0.2.4
+              }
+            }
+          }
+        }
+        elided (Extracted) {
+          prove → ∈ $0 ℕ → ∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$0 < with ($0) φ with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 ℕ → ∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$$$0 < with ($0) φ with ($$$0) φ) () p0
+          prove → ∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$0 < with ($0) φ with ($0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, → ∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$0 < with ($0) φ with ($0) φ) () () () 0.0.2.2.0 0.0.2.0
+          prove with ($0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$0 < with ($0) φ, with ($0) φ) () () () 0.0.2.2.1 0.0.2.1
+        }
+        prove ¬ with ($0) φ fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$0, ℕ, $0) (¬ with ($$$0) φ) () 0a 0.0.2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (with ($0) φ) () () () 0.0.2.2 0.0.2.3
+      } 0.0.1
+    }
+    prove = $0 ∅ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (= $0 ∅) () () () 0.0
+    take n {
+      assume ∈ $0 ℕ {
+        prove ¬ ∈ $0 ∅ 2a07c3469d7b9f30a2e73a8615d711278aff1a423ddcf01c763a30443d9de3aa () ($0) () ()
+        elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+          prove = ∅ $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$0, ∅) () () 0.1
+          prove ¬ ∈ $0 $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∅, $$0) (¬ ∈ $0 $$$0) () 0.2.0.1.0 0.2.0.0
+        }
+        elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
+          prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℕ ¬ with ($0) φ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () ($$0, ℕ) (¬ with ($$$0) φ) () 0a
+          prove ↔ ∈ $0 $$0 ∧ ∈ $0 ℕ ¬ with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 ℕ ¬ with ($$$0) φ) () 0.2.0.2.0
+          prove → ∧ ∈ $0 ℕ ¬ with ($0) φ ∈ $0 $$0 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 $$0, ∧ ∈ $0 ℕ ¬ with ($0) φ) () () () 0.2.0.2.1
+          prove ¬ ∧ ∈ $0 ℕ ¬ with ($0) φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ ∈ $0 ℕ ¬ with ($0) φ, ∈ $0 $$0) () () () 0.2.0.2.2 0.2.0.1
+          prove ¬ ¬ with ($0) φ 1af0b96e1cd8a24462ecc71676818b369217603427758b355312ec9f802ee00b (∈ $0 ℕ, ¬ with ($0) φ) () () () 0.2.0.2.3 0.2.0a
+          prove with ($0) φ 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 (with ($0) φ) () () () 0.2.0.2.4
+        }
+      }
+    }
+  }
+}

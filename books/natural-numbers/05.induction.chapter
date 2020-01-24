@@ -27,13 +27,15 @@ premise ∈ 0 S
 premise ∀ n → ∈ $0 S ∈ successor $0 S
 conclusion = S ℕ
 {
-  prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
-  prove ∈ ∅ S 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (0, ∅) (∈ $0 S) () 0 p1
-  elided 8b7a38f87c467c6ea53b15a76b9448412eddc7a5b75741f936ea8764e5f087bf {
-    prove ∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ ∅ S, ∀ n → ∈ $0 S ∈ successor $0 S) () () () 1 p2
-    prove inductive S 8b7a38f87c467c6ea53b15a76b9448412eddc7a5b75741f936ea8764e5f087bf () (S) () () 2.0
+  elided 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf {
+    prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () () () ()
+    prove ∈ ∅ S 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (0, ∅) (∈ $0 S) () 0.0 p1
   }
-  prove = S ℕ 323abac858d29c3fdfff980d135ac4f5676512b12a42e8d2737ea6bdb3feb22e () (S) () () p0 2
+  elided 8b7a38f87c467c6ea53b15a76b9448412eddc7a5b75741f936ea8764e5f087bf {
+    prove ∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ ∅ S, ∀ n → ∈ $0 S ∈ successor $0 S) () () () 0 p2
+    prove inductive S 8b7a38f87c467c6ea53b15a76b9448412eddc7a5b75741f936ea8764e5f087bf () (S) () () 1.0
+  }
+  prove = S ℕ 323abac858d29c3fdfff980d135ac4f5676512b12a42e8d2737ea6bdb3feb22e () (S) () () p0 1
 }
 
 theorem Proof by Induction over Comprehension

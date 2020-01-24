@@ -313,3 +313,88 @@ conclusion ∈ with (a b c d) F S
     }
   }
 }
+
+term productComprehension ($a $b A B with (a b) φ)
+  name (Product Comprehension)
+  format ({ (a, b) ∈ A × B | φ })
+  (= $0 comprehension x product A B with (first $0 second $0) φ)
+  shorthand (pcomp)
+
+theorem Membership Condition for Product Comprehension
+premise = S productComprehension a b A B with ($0 $1) φ
+conclusion ∀ a → ∈ $0 A ∀ b → ∈ $0 B ↔ ∈ orderedPair $$0 $0 S with ($$0 $0) φ
+{
+  elided a10b2534e4c73095e9ab89554a1151658e32a7198a78604e0950fbb02010a715 {
+    prove = productComprehension a b A B with ($0 $1) φ comprehension x product A B with (first $0 second $0) φ a10b2534e4c73095e9ab89554a1151658e32a7198a78604e0950fbb02010a715 () (A, B) (with ($0 $1) φ) ()
+    elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+      prove = productComprehension a b A B with ($0 $1) φ S 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (S, productComprehension a b A B with ($0 $1) φ) () () p0
+      prove = S comprehension x product A B with (first $0 second $0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (productComprehension a b A B with ($0 $1) φ, S) (= $0 comprehension x product A B with (first $0 second $0) φ) () 0.1.0 0.0
+    }
+  }
+  prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 product A B with (first $0 second $0) φ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (S, product A B) (with (first $0 second $0) φ) () 0
+  take a {
+    assume ∈ $0 A {
+      take b {
+        assume ∈ $0 B {
+          assume ∈ orderedPair $$0 $0 S {
+            elided (Extracted) {
+              prove ↔ ∈ orderedPair $$0 $0 S ∧ ∈ orderedPair $$0 $0 product A B with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (orderedPair $$0 $0) (↔ ∈ $$$0 S ∧ ∈ $$$0 product A B with (first $$$0 second $$$0) φ) () 1
+              prove → ∈ orderedPair $$0 $0 S ∧ ∈ orderedPair $$0 $0 product A B with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$0 $0 S, ∧ ∈ orderedPair $$0 $0 product A B with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ) () () () 2.0.0.0.0.0.0
+              prove ∧ ∈ orderedPair $$0 $0 product A B with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 S, ∧ ∈ orderedPair $$0 $0 product A B with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ) () () () 2.0.0.0.0.0.1 2.0.0.0.0a
+            }
+            elided (Rewritten) {
+              elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
+                prove = first orderedPair $$0 $0 $$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () ($$0, $0) () ()
+                prove with ($$0 second orderedPair $$0 $0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (first orderedPair $$0 $0, $$0) (with ($$$0 second orderedPair $$0 $0) φ) () 2.0.0.0.0.1.0.0 2.0.0.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              }
+              elided 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 {
+                prove = second orderedPair $$0 $0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($$0, $0) () ()
+                prove with ($$0 $0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (second orderedPair $$0 $0, $0) (with ($$0 $$$0) φ) () 2.0.0.0.0.1.1.0 2.0.0.0.0.1.0
+              }
+            }
+          }
+          assume with ($$0 $0) φ {
+            prove ∈ orderedPair $$0 $0 product A B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, A, $0, B) () () 2.0a 2.0.0.0a
+            elided (Rewritten) {
+              elided (Rewritten) {
+                elided (Rewritten) {
+                  prove = first orderedPair $$0 $0 $$0 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 () ($$0, $0) () ()
+                  prove = $$0 first orderedPair $$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (first orderedPair $$0 $0, $$0) () () 2.0.0.0.1.1.0.0.0
+                }
+                prove with (first orderedPair $$0 $0 $0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($$0, first orderedPair $$0 $0) (with ($$$0 $0) φ) () 2.0.0.0.1.1.0.0 2.0.0.0.1a
+              }
+              elided (Rewritten) {
+                elided (Rewritten) {
+                  prove = second orderedPair $$0 $0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($$0, $0) () ()
+                  prove = $0 second orderedPair $$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (second orderedPair $$0 $0, $0) () () 2.0.0.0.1.1.1.0.0
+                }
+                prove with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, second orderedPair $$0 $0) (with (first orderedPair $$0 $0 $$$0) φ) () 2.0.0.0.1.1.1.0 2.0.0.0.1.1.0
+              }
+            }
+            elided (Extracted) {
+              prove ↔ ∈ orderedPair $$0 $0 S ∧ ∈ orderedPair $$0 $0 product A B with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (orderedPair $$0 $0) (↔ ∈ $$$0 S ∧ ∈ $$$0 product A B with (first $$$0 second $$$0) φ) () 1
+              prove → ∧ ∈ orderedPair $$0 $0 product A B with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ ∈ orderedPair $$0 $0 S 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $$0 $0 S, ∧ ∈ orderedPair $$0 $0 product A B with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ) () () () 2.0.0.0.1.2.0
+              elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+                prove ∧ ∈ orderedPair $$0 $0 product A B with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair $$0 $0 product A B, with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ) () () () 2.0.0.0.1.0 2.0.0.0.1.1
+                prove ∈ orderedPair $$0 $0 S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair $$0 $0 product A B with (first orderedPair $$0 $0 second orderedPair $$0 $0) φ, ∈ orderedPair $$0 $0 S) () () () 2.0.0.0.1.2.1 2.0.0.0.1.2.2.0
+              }
+            }
+          }
+          prove ↔ ∈ orderedPair $$0 $0 S with ($$0 $0) φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ orderedPair $$0 $0 S, with ($$0 $0) φ) () () () 2.0.0.0.0 2.0.0.0.1
+        }
+      }
+    }
+  }
+}
+
+theorem Product Comprehension Is a Subset of Its Product
+premise = S productComprehension a b A B with ($0 $1) φ
+conclusion ⊆ S product A B
+{
+  prove = productComprehension a b A B with ($0 $1) φ comprehension x product A B with (first $0 second $0) φ a10b2534e4c73095e9ab89554a1151658e32a7198a78604e0950fbb02010a715 () (A, B) (with ($0 $1) φ) ()
+  elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+    prove = productComprehension a b A B with ($0 $1) φ S 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (S, productComprehension a b A B with ($0 $1) φ) () () p0
+    prove = S comprehension x product A B with (first $0 second $0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (productComprehension a b A B with ($0 $1) φ, S) (= $0 comprehension x product A B with (first $0 second $0) φ) () 1.0 0
+  }
+  prove ⊆ S product A B 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a () (S, product A B) (with (first $0 second $0) φ) () 1
+}

@@ -120,20 +120,20 @@ conclusion = ∪ a b ∪ b a
   prove = ∪ a b ∪ b a 4b83926de252406c08777885e14c3c906028ee3c7fb53340249ba1eb1ada4d4d () (∪ a b, ∪ b a) (∨ ∈ $0 a ∈ $0 b, ∨ ∈ $0 b ∈ $0 a) () 0 1 2
 }
 
-theorem Element Transfers from Left of Union
+theorem Element of Union (Left)
 premise ∈ c a
 conclusion ∈ c ∪ a b
 {
   prove ∨ ∈ c a ∈ c b 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ c a, ∈ c b) () () () p0
   prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b) () ()
-  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
+  elided (Extracted) {
     prove ↔ ∈ c ∪ a b ∨ ∈ c a ∈ c b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (c) (↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b) () 1
     prove → ∨ ∈ c a ∈ c b ∈ c ∪ a b 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ c ∪ a b, ∨ ∈ c a ∈ c b) () () () 2.0
     prove ∈ c ∪ a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ c a ∈ c b, ∈ c ∪ a b) () () () 2.1 0
   }
 }
 
-theorem Element Transfers from Right of Union
+theorem Element of Union (Right)
 premise ∈ c b
 conclusion ∈ c ∪ a b
 {
@@ -257,7 +257,7 @@ conclusion ⊆ ∪ A B X
   prove ⊆ ∪ A B X 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (∪ A B, X) () () 4
 }
 
-theorem Subset Transfers to Union
+theorem Subset of Union (Left)
 premise ⊆ X A
 conclusion ⊆ X ∪ A B
 {
@@ -270,7 +270,7 @@ conclusion ⊆ X ∪ A B
   prove ⊆ X ∪ A B 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (X, ∪ A B) () () 0
 }
 
-theorem Subset Transfers to Union
+theorem Subset of Union (Right)
 premise ⊆ X A
 conclusion ⊆ X ∪ B A
 {

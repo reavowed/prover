@@ -136,7 +136,7 @@ conclusion ∨ φ χ
   prove ∨ φ χ 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (φ, ψ, φ, χ) () () () p0 0 p1
 }
 
-theorem Eliminate Redundant Or
+theorem Eliminate Redundant Left Disjunct
 premise ∨ φ ψ
 premise → φ ψ
 conclusion ψ
@@ -145,7 +145,7 @@ conclusion ψ
   prove ψ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, ψ) () () () p0 p1 0
 }
 
-theorem Eliminate Redundant Or
+theorem Eliminate Redundant Right Disjunct
 premise ∨ φ ψ
 premise → ψ φ
 conclusion φ
