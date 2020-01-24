@@ -89,12 +89,12 @@ object SubstatementExtractor {
         implicitly[EntryContext].typeDefinitions.map(_.statementDefinition) ++
         implicitly[EntryContext].propertyDefinitionsByType.values.flatten.map(_.statementDefinition)
       ).contains(definition)
-      destructionInference <- definedStatement.definition.destructionInference.toSeq
-      extractionPremise <- destructionInference.premises.single.toSeq
+      deconstructionInference <- definedStatement.definition.deconstructionInference.toSeq
+      extractionPremise <- deconstructionInference.premises.single.toSeq
       extractedSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality).toSeq
-      deconstructedStatement <- destructionInference.conclusion.applySubstitutions(extractedSubstitutions).toSeq
+      deconstructedStatement <- deconstructionInference.conclusion.applySubstitutions(extractedSubstitutions).toSeq
       innerOption <- recurse(deconstructedStatement, variableTracker)
-    } yield innerOption.copy(inferences = destructionInference +: innerOption.inferences)
+    } yield innerOption.copy(inferences = deconstructionInference +: innerOption.inferences)
   }
 
   private def getFinalExtractionOptions(
@@ -249,17 +249,17 @@ object SubstatementExtractor {
         implicitly[EntryContext].typeDefinitions.map(_.statementDefinition) ++
         implicitly[EntryContext].propertyDefinitionsByType.values.flatten.map(_.statementDefinition)
       ).contains(definition)
-      destructionInference <- definedStatement.definition.destructionInference.toSeq
-      premise <- destructionInference.premises.single.toSeq
+      deconstructionInference <- definedStatement.definition.deconstructionInference.toSeq
+      premise <- deconstructionInference.premises.single.toSeq
       extractionSubstitutions <- premise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality).toSeq
-      deconstructedStatement <- destructionInference.conclusion.applySubstitutions(extractionSubstitutions).iterator
+      deconstructedStatement <- deconstructionInference.conclusion.applySubstitutions(extractionSubstitutions).iterator
       ExtractionResult(extractionSteps, innerTargetSteps, terms) <- findByExtracting(deconstructedStatement, targetStatement, termsUsed)
       substitutedPremise <- sourceStatement.specify(terms).iterator
       substitutions <- premise.calculateSubstitutions(substitutedPremise).flatMap(_.confirmTotality).iterator
-      substitutedConclusion <- destructionInference.conclusion.applySubstitutions(substitutions).iterator
+      substitutedConclusion <- deconstructionInference.conclusion.applySubstitutions(substitutions).iterator
       assertionStep = Step.Assertion(
         substitutedConclusion,
-        destructionInference.summary,
+        deconstructionInference.summary,
         Seq(Premise.Pending(substitutedPremise)),
         substitutions)
     } yield ExtractionResult(assertionStep +: extractionSteps, innerTargetSteps, terms)

@@ -1,8 +1,10 @@
 package net.prover.model
 
+import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.FunctionParameter
+import org.specs2.mutable.Specification
 
-class FunctionParameterSpec extends ProverSpec {
+class FunctionParameterSpec extends Specification {
 
   "a function parameter specified to a non-variable term should substitute that term" in {
     FunctionParameter(1, 2)

@@ -1,42 +1,15 @@
 package net.prover.model
 
-import net.prover.model.Inference.RearrangementType
-import net.prover.model.entries.{Axiom, Theorem}
+import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{FunctionParameter, Statement, Term}
 import net.prover.model.proof._
 import org.specs2.execute.Result
-import org.specs2.matcher.{MatchResult, Matcher}
+import org.specs2.matcher.MatchResult
+import org.specs2.mutable.Specification
 
-class ProofHelperSpec extends ProverSpec {
-
-  def beValidTheorem(implicit entryContext: EntryContext): Matcher[Theorem] = (theorem: Theorem) => {
-    val serializedTheorem = theorem.recalculateReferences(implicitly).serializedLines.mkString("\n").stripPrefix("theorem ")
-    val parsedTheorem = Theorem.parser(entryContext).parseFromString(serializedTheorem, "Theorem")
-    parsedTheorem must beTypedEqualTo(theorem)
-    parsedTheorem.isComplete must beTrue
-  }
-
-  def beStepThatMakesValidTheorem(premises: Seq[Statement])(implicit entryContext: EntryContext, stepContext: StepContext): Matcher[Step] = {
-    beValidTheorem ^^ { step: Step =>
-      Theorem(
-        "Test Theorem",
-        premises,
-        step.provenStatement.get,
-        Seq(Theorem.Proof(Seq(step))),
-        RearrangementType.NotRearrangement)
-    }
-  }
+class ProofHelperSpec extends Specification {
 
   "extracting a statement" should {
-    val specification = Axiom("Specification", Seq(ForAll("x")(φ(FunctionParameter(0, 0)))), φ(a))
-    val modusPonens = Axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
-    val reverseImplicationFromEquivalence = Axiom("Reverse Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(ψ, φ))
-    val combineConjunction = Axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
-    val zeroIsANaturalNumber = Axiom("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
-    val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
-    val axioms = Seq(specification, modusPonens, reverseImplicationFromEquivalence, combineConjunction, zeroIsANaturalNumber, successorOfNaturalIsNatural)
-    implicit val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
-
     def createStepContext(premises: Seq[Statement], depth: Int = 0) = StepContext.withPremisesAndTerms(premises, Nil).copy(boundVariableLists = (1 to depth).map(i => Seq(i.toString)))
 
     def getExtractions(sourceStatement: Statement, targetStatement: Statement, premises: Seq[Statement], depth: Int = 0): Seq[(Step, Seq[Step.Target])] = {
@@ -44,26 +17,6 @@ class ProofHelperSpec extends ProverSpec {
       SubstatementExtractor.findByExtracting(sourceStatement, targetStatement)
     }
 
-    def beValidExtractionStep(premises: Seq[Statement], depth: Int)(implicit stepContext: StepContext): Matcher[Step] = {
-      if (depth == 0)
-        beStepThatMakesValidTheorem(premises)
-      else {
-        def generalizeOnce(statement: Statement, i: Int): Statement = ForAll(s"x_$i")(statement)
-        def generalizeToDepth(statement: Statement, parameterDepth: Int): Statement = (0 until parameterDepth).foldLeft(statement)(generalizeOnce)
-        def specificationStep(statement: Statement, parameterDepth: Int) = {
-          val externalDepth = depth - parameterDepth
-          Step.Assertion(
-            statement,
-            specification.summary,
-            Seq(Premise.Pending(generalizeOnce(statement, parameterDepth).insertExternalParameters(1))),
-            Substitutions(predicates = Map((φ, 1) -> statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get), terms = Map(a -> FunctionParameter(0, 0))))
-        }
-
-        beStepThatMakesValidTheorem(premises.map(generalizeToDepth(_, depth))) ^^ { step: Step =>
-          (0 until depth).foldLeft(step) { case (step, i) => Step.ScopedVariable(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) :+ step, ForAll)}
-        }
-      }
-    }
 
     def testExtraction(sourceStatement: Statement, targetStatement: Statement, extraPremises: Seq[Statement], depth: Int = 0): MatchResult[Any] = {
       val premises = sourceStatement +: extraPremises
@@ -71,7 +24,7 @@ class ProofHelperSpec extends ProverSpec {
       getExtractions(sourceStatement, targetStatement, premises, depth)
           .collect { case (step, Nil) => step }
           .single
-          .must(beSome(beValidExtractionStep(premises, depth)))
+          .must(beSome(beStepThatMakesValidTheorem(premises, depth)))
     }
 
     "find a statement via specification" in {
@@ -183,16 +136,6 @@ class ProofHelperSpec extends ProverSpec {
   }
 
   "rearranging a statement" should {
-    def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
-    val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
-    val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
-    val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
-    val substitutionOfEqualsIntoFunction = Axiom("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
-    val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
-    val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
-    val axioms = Seq(reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, additionIsAssociative, additionIsCommutative)
-    implicit val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
-
     def rearrange(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
       TermRearranger.rearrange(targetStatement)
@@ -233,24 +176,6 @@ class ProofHelperSpec extends ProverSpec {
   "rewriting a statement" should {
 
     def testRewrite(premises: Seq[Statement], target: Statement) = {
-      val elementOfCartesianProductFromCoordinates = Axiom("Element of Cartesian Product from Coordinates", Seq(ElementOf(a, Product(A, B))), Equals(a, Pair(First(a), Second(a))))
-      val firstCoordinateOfElementOfCartesianProduct = Axiom("First Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(First(a), A))
-      val secondCoordinateOfElementOfCartesianProduct = Axiom("Second Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(Second(a), B))
-      val firstElement = Axiom("First Element", Nil, Equals(First(Pair(a, b)), a))
-      val reverseEquality = Axiom("Reverse equality", Seq(Equals(a, b)), Equals(b, a))
-      val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
-      val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
-      val substitutionOfEqualsIntoFunction = Axiom("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
-      val axioms = Seq(
-        elementOfCartesianProductFromCoordinates,
-        firstCoordinateOfElementOfCartesianProduct,
-        secondCoordinateOfElementOfCartesianProduct,
-        firstElement,
-        reverseEquality,
-        equalityIsTransitive,
-        substitutionOfEquals,
-        substitutionOfEqualsIntoFunction)
-      implicit val entryContextWithAxioms = entryContext.copy(availableEntries = entryContext.availableEntries ++ axioms)
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
 
       val stepOption = EqualityRewriter.rewrite(target)

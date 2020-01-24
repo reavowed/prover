@@ -104,9 +104,8 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         // Our target is A = C. We're either going to prove A = B or B = C, and add the other part in as a target.
         (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
         (conclusion, ExtractionApplication(extractionSteps, extractionPremises, extractionTargets)) <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions)
-
         (conclusionLhs, conclusionRhs) <- transitivity.relation.unapply(conclusion).orBadRequest("Inference conclusion is not a transitive statement")
-        (conclusionSource, _) = swapper.swap(conclusionLhs, conclusionRhs)
+        conclusionSource = swapper.getOne(conclusionLhs, conclusionRhs)
         wrapper <- targetSource.getTerms().filter(_._1 == conclusionSource).map(_._2).map(Wrapper.fromExpression).single.orBadRequest("Could not find conclusion LHS uniquely in target LHS")
         (expansionStep, expandedConclusion) <-
           if (wrapper.isIdentity)
@@ -136,7 +135,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    insertTransitivityAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, Swapper.dontSwap)
+    insertTransitivityAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, Swapper.DontSwap)
   }
 
   @PostMapping(value = Array("/transitivityFromRight"))
@@ -148,7 +147,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    insertTransitivityAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, Swapper.swap)
+    insertTransitivityAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, Swapper.Swap)
   }
 
   @PostMapping(value = Array("/transitiveTarget"))
@@ -311,6 +310,25 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         targetStatement <- Statement.parser.parseFromString(serializedStatement, "target statement").recoverWithBadRequest
         targetStep = Step.Target(targetStatement)
       } yield Seq(targetStep, step)
+    }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/rewriteDefinition"))
+  def rewriteDefinition(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData,
+    @RequestBody serializedPremiseStatement: String
+  ): ResponseEntity[_] = {
+    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+      implicit val spc = stepProvingContext
+      for {
+        premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
+        premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
+        newStep <- DefinitionRewriter.rewriteDefinitions(premise.statement, step.statement).orBadRequest("Could not rewrite definition")
+      } yield Seq(newStep)
     }.toResponseEntity
   }
 }

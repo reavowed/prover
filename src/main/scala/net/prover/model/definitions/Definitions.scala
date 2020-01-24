@@ -5,6 +5,7 @@ import net.prover.model.definitions.Definitions.RelationDefinitions
 import net.prover.model.entries.{ChapterEntry, DisplayShorthand, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
+import net.prover.util.Swapper
 
 import scala.Ordering.Implicits._
 
@@ -170,25 +171,6 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       false
   }
 
-  implicit class ExpressionOps(expression: Expression) {
-    def singleStatementVariable: Option[StatementVariable] = expression match {
-      case sv: StatementVariable =>
-        Some(sv)
-      case DefinedStatement(Seq(singleStatement: Statement), _) =>
-        singleStatement.singleStatementVariable
-      case _ =>
-        None
-    }
-    def singlePredicateApplication: Option[PredicateApplication] = expression match {
-      case pa: PredicateApplication =>
-        Some(pa)
-      case DefinedStatement(Seq(singleStatement: Statement), _) =>
-        singleStatement.singlePredicateApplication
-      case _ =>
-        None
-    }
-  }
-
   lazy val statementExtractionInferences: Seq[(Inference, Statement, Option[Statement])] = inferenceEntries.collectOption {
     case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
       if inference.requiredSubstitutions.copy(statements = Nil).isEmpty &&
@@ -206,12 +188,25 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       }
   }
 
-  val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
+  lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
+    deductionDefinitionOption.flatMap { deductionDefinition =>
+      inferenceEntries.iterator.collect {
+        case inference @ Inference(
+          _,
+          Seq(deductionPremise @ deductionDefinition(StatementVariable(antecedentName), StatementVariable(consequentName)), antecedentPremise @ StatementVariable(antecedentName2)),
+          StatementVariable(consequentName2)
+        ) if antecedentName == antecedentName2 && consequentName == consequentName2 =>
+          (inference, deductionPremise, antecedentPremise)
+      }.headOption
+    }
+  }
+
+  lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
     scopingDefinitionOption.flatMap { scopingDefinition =>
       inferenceEntries.iterator.collect {
-        case inference@Inference(
+        case inference @ Inference(
           _,
-          Seq(singlePremise@DefinedStatement(Seq(PredicateApplication(premisePredicateName, Seq(FunctionParameter(0, 0)))), `scopingDefinition`)),
+          Seq(singlePremise @ scopingDefinition(PredicateApplication(premisePredicateName, Seq(FunctionParameter(0, 0))))),
           PredicateApplication(conclusionName, Seq(TermVariable(variableName)))
         ) if premisePredicateName == conclusionName =>
           (inference, singlePremise, premisePredicateName, variableName)
@@ -317,6 +312,45 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     inferences.collect {
       case inference if inference.premises.isEmpty && inference.requiredSubstitutions.isEmpty =>
         inference
+    }
+  }
+
+  lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Swapper)] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      deduction <- deductionDefinitionOption.toSeq
+      result <- for {
+        inference <- inferences
+        Seq(firstPremise @ deduction(StatementVariable(a), StatementVariable(b)), otherPremise: DefinedStatement) <- Seq.unapplySeq(inference.premises).toSeq
+        swapper <- Seq(Swapper.DontSwap, Swapper.Swap)
+        (premiseName, conclusionName) = swapper.swap(a, b)
+        if otherPremise.requiredSubstitutions.copy(statements = Nil).isEmpty && inference.conclusion.requiredSubstitutions.copy(statements = Nil).isEmpty
+        if otherPremise.requiredSubstitutions.statements.contains(premiseName) && inference.conclusion.requiredSubstitutions.statements.contains(conclusionName)
+        if otherPremise.applySubstitutions(Substitutions(otherPremise.requiredSubstitutions.statements.map(n => n -> StatementVariable(if (n == premiseName) conclusionName else n)).toMap)).contains(inference.conclusion)
+      } yield (inference, firstPremise, otherPremise, premiseName, conclusionName, swapper)
+    } yield result
+  }
+
+  object WrappedStatementVariable {
+    def unapply(statement: Statement): Option[String] = statement match {
+      case DefinedStatement(Seq(StatementVariable(name)), _) => Some(name)
+      case DefinedStatement(Seq(WrappedStatementVariable(name)), _) => Some(name)
+      case _ => None
+    }
+  }
+
+  lazy val statementDefinitionIntroductionInferences: Seq[(Inference, Statement)] = {
+    inferences.collect {
+      case inference @ Inference(_, Seq(premise @ StatementVariable(name)), WrappedStatementVariable(conclusionName))
+        if conclusionName == name
+      => (inference, premise)
+    }
+  }
+  lazy val statementDefinitionEliminationInferences: Seq[(Inference, Statement)] = {
+    inferences.collect {
+      case inference @ Inference(_, Seq(premise @ WrappedStatementVariable(premiseName)), StatementVariable(name))
+        if premiseName == name
+      => (inference, premise)
     }
   }
 

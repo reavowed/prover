@@ -1,9 +1,10 @@
 package net.prover.model
 
+import net.prover.model.TestDefinitions._
 import net.prover.model.expressions._
+import org.specs2.mutable.Specification
 
-class StatementSpec extends ProverSpec {
-  implicit val ec = entryContext
+class StatementSpec extends Specification {
 
   def parseStatement(line: String): Statement = {
     Statement.parser.parseAndDiscard(line)

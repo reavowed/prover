@@ -7,7 +7,7 @@ import ProofContext from "../../ProofContext";
 import BoundVariableLists from "../BoundVariableLists";
 import Rewriter from "./components/Rewriter";
 
-export default function RewritePremise({path, availablePremises, entryContext, onCancel, onError}) {
+export default function RewriteEqualityFromPremise({path, availablePremises, entryContext, onCancel, onError}) {
   const context = useContext(ProofContext);
   const [premiseToRewrite, setPremiseToRewrite] = useState(null);
 

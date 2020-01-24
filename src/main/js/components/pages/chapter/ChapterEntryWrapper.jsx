@@ -36,7 +36,7 @@ export default function ChapterEntryWrapper({title, url, buttons, children, inco
     <FlexRow>
       <FlexRow.Grow><ChapterEntryTitle href={url} incomplete={incomplete}>{title}</ChapterEntryTitle></FlexRow.Grow>
       {buttons}
-      {context.editing && <DeleteEntryButton/>}
+      {context.editing && <DeleteEntryButton url={url}/>}
     </FlexRow>
     {children}
   </ChapterEntryContainer>

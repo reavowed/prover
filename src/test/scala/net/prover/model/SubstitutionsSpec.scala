@@ -1,9 +1,11 @@
 package net.prover.model
 
+import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{Expression, FunctionParameter}
 import org.specs2.execute.Result
+import org.specs2.mutable.Specification
 
-class SubstitutionsSpec extends ProverSpec {
+class SubstitutionsSpec extends Specification {
   def testSuccessfulMatch(externalDepth: Int, expectedSubstitutions: Substitutions, sourceToTarget: (Expression, Expression)*): Result = {
     val calculatedSubstitutions = sourceToTarget.foldLeft(Option(Substitutions.Possible.empty)) { case (substitutions, (source, target)) =>
       substitutions.flatMap(source.calculateSubstitutions(target, _, 0, externalDepth))

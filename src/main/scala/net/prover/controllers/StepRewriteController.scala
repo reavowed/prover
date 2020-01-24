@@ -189,7 +189,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       implicit val spc = stepProvingContext
       for {
         equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
-        (step, newTarget) <- rewrite(step.statement, rewrites, equality, Swapper.swap) { (result, target, wrapper, steps, inference, _) =>
+        (step, newTarget) <- rewrite(step.statement, rewrites, equality, Swapper.Swap) { (result, target, wrapper, steps, inference, _) =>
           val substitutionStep = equality.substitution.assertionStep(result, target, wrapper)
           Step.Elided.ifNecessary(steps :+ substitutionStep, inference.getOrElse(equality.substitution.inference)).get
         } {
@@ -230,7 +230,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       for {
         equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
         premiseStatement <- Statement.parser.parseFromString(premiseRewrite.serializedPremise, "premise").recoverWithBadRequest
-        (newStep, _) <- rewrite(premiseStatement, premiseRewrite.rewrites, equality, Swapper.dontSwap) { (result, target, wrapper, steps, inference, _) =>
+        (newStep, _) <- rewrite(premiseStatement, premiseRewrite.rewrites, equality, Swapper.DontSwap) { (result, target, wrapper, steps, inference, _) =>
           val substitutionStep = equality.substitution.assertionStep(result, target, wrapper)
           Step.Elided.ifNecessary(steps :+ substitutionStep, inference.getOrElse(equality.substitution.inference)).get
         } {
@@ -282,7 +282,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           }
           RearrangementStep(targetTerm, transitivitySteps, elider)
         } { (rewrittenTerm, steps, inferences) =>
-          val transitivitySteps = equality.addTransitivityToRearrangement(swapper.swap(termToRewrite, rewrittenTerm)._1, steps)
+          val transitivitySteps = equality.addTransitivityToRearrangement(swapper.getOne(termToRewrite, rewrittenTerm), steps)
           inferences.single match {
             case Some(inference) =>
               Step.Elided.ifNecessary(transitivitySteps, inference).get
@@ -305,7 +305,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody rewrites: Seq[Seq[RewriteRequest]]
   ): ResponseEntity[_] = {
-    rewriteForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, rewrites, Swapper.dontSwap)
+    rewriteForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, rewrites, Swapper.DontSwap)
   }
 
   @PostMapping(value = Array("/rewriteRight"), produces = Array("application/json;charset=UTF-8"))
@@ -317,6 +317,6 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody rewrites: Seq[Seq[RewriteRequest]]
   ): ResponseEntity[_] = {
-    rewriteForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, rewrites, Swapper.swap)
+    rewriteForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, rewrites, Swapper.Swap)
   }
 }

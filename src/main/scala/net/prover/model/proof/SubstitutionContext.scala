@@ -5,8 +5,9 @@ trait SubstitutionContext {
 }
 
 object SubstitutionContext {
-  val outsideProof: SubstitutionContext = new SubstitutionContext {
-    override def externalDepth: Int = 0
+  def withDepth(depth: Int) = new SubstitutionContext {
+    override def externalDepth: Int = depth
   }
+  val outsideProof: SubstitutionContext = withDepth(0)
   implicit def fromStepProvingContext(implicit stepProvingContext: StepProvingContext): SubstitutionContext = stepProvingContext.stepContext
 }

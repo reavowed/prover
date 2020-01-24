@@ -60,6 +60,16 @@ package object model {
     def reverse: (T, S) = (tuple._2, tuple._1)
   }
 
+  implicit class Tuple2SameOps[T](tuple: (T, T)) {
+    def map[S](f: T => S): (S, S) = (f(tuple._1), f(tuple._2))
+    def mapOption[S](f: T => Option[S]): Option[(S, S)] = {
+      for {
+        first <- f(tuple._1)
+        second <- f(tuple._2)
+      } yield (first, second)
+    }
+  }
+
   implicit class Tuple3Ops[S,T,U](tuple: (S, T, U)) {
     def map1[R](f: S => R): (R, T, U) = (f(tuple._1), tuple._2, tuple._3)
     def map2[R](f: T => R): (S, R, U) = (tuple._1, f(tuple._2), tuple._3)

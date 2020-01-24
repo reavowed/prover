@@ -452,6 +452,13 @@ object Step {
         Assertion(statement, inference, premises, substitutions)
       }
     }
+
+    def forInference(inference: Inference, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Assertion] = {
+      for {
+        premises <- inference.substitutePremises(substitutions)
+        conclusion <- inference.substituteConclusion(substitutions)
+      } yield Assertion(conclusion, inference.summary, premises.map(Premise.Pending), substitutions)
+    }
   }
 
   case class SubProof(name: String, substeps: Seq[Step]) extends Step.WithSubsteps with WithoutVariable {

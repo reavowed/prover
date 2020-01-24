@@ -41,9 +41,9 @@ case class StatementDefinition(
   override def withAttributes(newAttributes: Seq[String]): StatementDefinition = copy(attributes = newAttributes)
 
   val constructionInference = definingStatement.map(s => Inference.Definition(name, Seq(s), defaultValue))
-  val destructionInference = definingStatement.map(s => Inference.Definition(name, Seq(defaultValue), s))
+  val deconstructionInference = definingStatement.map(s => Inference.Definition(name, Seq(defaultValue), s))
 
-  override def inferences: Seq[Inference] = constructionInference.toSeq ++ destructionInference.toSeq
+  override def inferences: Seq[Inference] = constructionInference.toSeq ++ deconstructionInference.toSeq
 
   override def serializedLines: Seq[String] = Seq(s"statement $symbol $serializedComponents") ++
     (explicitName.map(n => s"name ($n)").toSeq ++

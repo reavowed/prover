@@ -139,15 +139,6 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   override def serializedForHash: String = (Seq(definition.symbol) ++ components.map(_.serializedForHash)).mkString(" ")
 }
 
-object DefinedExpression {
-  def unapply(expression: DefinedExpression[_]): Option[(ExpressionDefinition, Seq[String], Seq[Expression])] = expression match {
-    case definedExpression: DefinedExpression[_] =>
-      Some((definedExpression.definition, definedExpression.scopedBoundVariableNames, definedExpression.components))
-    case _ =>
-      None
-  }
-}
-
 private class DefinedExpressionSerializer extends JsonSerializer[DefinedExpression[_]] {
   override def serialize(value: DefinedExpression[_], gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeStartArray(value.components.length + value.scopedBoundVariableNames.length + 1)

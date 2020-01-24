@@ -1,11 +1,13 @@
 package net.prover.model
 
+import net.prover.model.TestDefinitions._
 import net.prover.model.entries.StatementDefinition
+import org.specs2.mutable.Specification
 
-class StatementDefinitionSpec extends ProverSpec {
+class StatementDefinitionSpec extends Specification {
+
   "statement definition parser" should {
     def parseStatementDefinition(text: String): StatementDefinition = {
-      implicit val ec = entryContext
       StatementDefinition.parser.parseAndDiscard(text)
     }
 

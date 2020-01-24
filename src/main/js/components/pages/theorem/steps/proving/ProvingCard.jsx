@@ -21,7 +21,8 @@ import IntroduceName from "./IntroduceName";
 import ProveCurrentTarget from "./ProveCurrentTarget";
 import ProveNewPremise from "./ProveNewPremise";
 import RewriteCurrentTarget from "./RewriteCurrentTarget";
-import RewritePremise from "./RewritePremise";
+import RewriteCurrentTargetByDefinition from "./RewriteCurrentTargetByDefinition";
+import RewriteEqualityFromPremise from "./RewriteEqualityFromPremise";
 import RewriteTransitiveFromLeft from "./RewriteTransitiveFromLeft";
 import RewriteTransitiveFromRight from "./RewriteTransitiveFromRight";
 
@@ -87,6 +88,10 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
         {
           label: "By extracting",
           element: ExtractCurrentTarget
+        },
+        {
+          label: "By definition",
+          element: RewriteCurrentTargetByDefinition
         }
       ]
     },
@@ -103,7 +108,7 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
         },
         {
           label: "Rewrite premise",
-          element: RewritePremise
+          element: RewriteEqualityFromPremise
         }
       ]
     },

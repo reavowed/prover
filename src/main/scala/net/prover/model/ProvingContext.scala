@@ -5,6 +5,7 @@ import net.prover.model.definitions._
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 import net.prover.model.expressions.{DefinedStatement, Expression, Statement, Term}
 import net.prover.model.proof.StepProvingContext
+import net.prover.util.Swapper
 
 case class ProvingContext(entryContext: EntryContext, private val definitions: Definitions) {
 
@@ -25,6 +26,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val alwaysAllowableTerm: AlwaysAllowable[Term] = alwaysAllowable
     implicit val alwaysAllowableExpression: AlwaysAllowable[Expression] = alwaysAllowable
     implicit val alwaysAllowableString: AlwaysAllowable[String] = alwaysAllowable
+    implicit val alwaysAllowableSwapper: AlwaysAllowable[Swapper] = alwaysAllowable
     implicit def alwaysAllowableSeq[T](implicit inner: AlwaysAllowable[T]): AlwaysAllowable[Seq[T]] = alwaysAllowable
 
     implicit val allowableInference: Allowable[Inference] = allowable(i => entryContext.inferences.exists(_.id == i.id))
@@ -69,6 +71,16 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     ): Allowable[(A, B, C, D)] = {
       allowable(t => allowableA.isAllowed(t._1) && allowableB.isAllowed(t._2) &&  allowableC.isAllowed(t._3)  &&  allowableD.isAllowed(t._4))
     }
+    implicit def allowableTuple6[A, B, C, D, E, F](
+      implicit allowableA: Allowable[A],
+      allowableB: Allowable[B],
+      allowableC: Allowable[C],
+      allowableD: Allowable[D],
+      allowableE: Allowable[E],
+      allowableF: Allowable[F]
+    ): Allowable[(A, B, C, D, E, F)] = {
+      allowable(t => allowableA.isAllowed(t._1) && allowableB.isAllowed(t._2) &&  allowableC.isAllowed(t._3)  &&  allowableD.isAllowed(t._4) && allowableE.isAllowed(t._5) && allowableF.isAllowed(t._6))
+    }
 
     implicit def allowableOption[A](implicit allowableA: Allowable[A]): Allowable[Option[A]] = {
       allowable(o => o.forall(allowableA.isAllowed))
@@ -99,30 +111,31 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   def isAllowed[T](t: T)(implicit allowable: Allowable[T]): Boolean = allowable.isAllowed(t)
   def replace[T](t: T)(implicit replacable: Replacable[T]): T = replacable.replace(t)
 
+  lazy val deductionDefinitionOption: Option[StatementDefinition] = replace(definitions.deductionDefinitionOption)
+  lazy val scopingDefinitionOption: Option[StatementDefinition] = replace(definitions.scopingDefinitionOption)
+
   def matchScopingStatement(statement: Statement): Option[(Statement, String, StatementDefinition)] = {
-    replace(definitions.scopingDefinitionOption)
-      .flatMap { scopingDefinition =>
-        statement match {
-          case definedStatement @ DefinedStatement(Seq(substatement), `scopingDefinition`) =>
-            substatement.asOptionalInstanceOf[Statement].map((_, definedStatement.scopedBoundVariableNames.head, scopingDefinition))
-          case _ =>
-            None
-        }
+    scopingDefinitionOption.flatMap { scopingDefinition =>
+      statement match {
+        case definedStatement @ DefinedStatement(Seq(substatement), `scopingDefinition`) =>
+          substatement.asOptionalInstanceOf[Statement].map((_, definedStatement.scopedBoundVariableNames.head, scopingDefinition))
+        case _ =>
+          None
       }
+    }
   }
   def matchDeductionStatement(statement: Statement): Option[(Statement, Statement, StatementDefinition)] = {
-    replace(definitions.deductionDefinitionOption)
-      .flatMap { deductionDefinition =>
-        statement match {
-          case DefinedStatement(Seq(antecedentExpression, consequentExpression), `deductionDefinition`) =>
-            for {
-              antecedent <- antecedentExpression.asOptionalInstanceOf[Statement]
-              consequent <- consequentExpression.asOptionalInstanceOf[Statement]
-            } yield (antecedent, consequent, deductionDefinition)
-          case _ =>
-            None
-        }
+    deductionDefinitionOption.flatMap { deductionDefinition =>
+      statement match {
+        case DefinedStatement(Seq(antecedentExpression, consequentExpression), `deductionDefinition`) =>
+          for {
+            antecedent <- antecedentExpression.asOptionalInstanceOf[Statement]
+            consequent <- consequentExpression.asOptionalInstanceOf[Statement]
+          } yield (antecedent, consequent, deductionDefinition)
+        case _ =>
+          None
       }
+    }
   }
   lazy val definedBinaryRelations: Seq[(String, BinaryRelation)] = {
     Definitions.getDefinedBinaryRelations(
@@ -159,6 +172,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val statementExtractionInferences: Seq[(Inference, Statement, Option[Statement])] = {
     replace(definitions.statementExtractionInferences)
   }
+  lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
+    replace(definitions.deductionEliminationInferenceOption)
+  }
   lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
     replace(definitions.specificationInferenceOption)
   }
@@ -186,6 +202,15 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   }
   lazy val facts: Seq[Inference] = {
     replace(definitions.facts)
+  }
+  lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Swapper)] = {
+    replace(definitions.statementDeductionInferences)
+  }
+  lazy val statementDefinitionIntroductionInferences: Seq[(Inference, Statement)] = {
+    replace(definitions.statementDefinitionIntroductionInferences)
+  }
+  lazy val statementDefinitionEliminationInferences: Seq[(Inference, Statement)] = {
+    replace(definitions.statementDefinitionEliminationInferences)
   }
 }
 

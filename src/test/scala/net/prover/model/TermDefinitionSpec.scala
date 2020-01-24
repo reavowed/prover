@@ -1,12 +1,13 @@
 package net.prover.model
 
-import net.prover.model.entries.{ChapterEntry, TermDefinition}
+import net.prover.model.TestDefinitions._
+import net.prover.model.entries.TermDefinition
 import net.prover.model.expressions.{DefinedTerm, FunctionParameter}
+import org.specs2.mutable.Specification
 
-class TermDefinitionSpec extends ProverSpec {
+class TermDefinitionSpec extends Specification {
 
   private def parse(text: String): TermDefinition = {
-    implicit val ec = entryContext
     TermDefinition.parser.parseAndDiscard(text)
   }
 
