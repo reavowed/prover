@@ -13,7 +13,7 @@ object ExtractionHelper {
     def addPremiseSteps(steps: Seq[Step.Assertion]): ExtractionApplication = copy(premiseSteps = premiseSteps ++ steps)
     def addTargetSteps(steps: Seq[Step.Target]): ExtractionApplication = copy(targetSteps = targetSteps ++ steps)
   }
-  def applySpecification(
+  private def applySpecification(
     currentStatement: Statement,
     specificationInference: Inference,
     extractionPremise: Statement,
@@ -33,7 +33,7 @@ object ExtractionHelper {
       assertionStep = Step.Assertion(extractedConclusion, specificationInference.summary, Seq(Premise.Pending(currentStatement)), extractionSubstitutions)
     } yield (assertionStep, newVariableTracker)
   }
-  def applySimpleExtraction(
+  private def applySimpleExtraction(
     currentStatement: Statement,
     inference: Inference)(
     implicit stepProvingContext: StepProvingContext
@@ -47,24 +47,29 @@ object ExtractionHelper {
       assertionStep = Step.Assertion(extractedConclusion, inference.summary, (currentStatement +: substitutedPremises).map(Premise.Pending), extractionSubstitutions)
     } yield (assertionStep, premiseSteps, targetSteps)
   }
-  def applyExtractions(statement: Statement, extractionInferences: Seq[Inference], baseInference: Inference, substitutions: Substitutions)(implicit stepProvingContext: StepProvingContext): Try[(Statement, ExtractionApplication)] = {
-    def helper(currentStatement: Statement, inferencesRemaining: Seq[Inference], applicationSoFar: ExtractionApplication, variableTracker: VariableTracker): Try[(Statement, ExtractionApplication)] = {
-      inferencesRemaining match {
-        case inference +: tailInferences =>
-          stepProvingContext.provingContext.specificationInferenceOption.filter(_._1 == inference)
-            .map { case (_, singlePremise, predicateName, variableName) =>
-              applySpecification(currentStatement, inference, singlePremise, predicateName, variableName, variableTracker, substitutions)
-                .flatMap { case (assertion, newVariableTracker) =>
-                  helper(assertion.statement, tailInferences, applicationSoFar.addExtractionStep(assertion), newVariableTracker)
-                }
-            } getOrElse applySimpleExtraction(currentStatement, inference)
-            .flatMap { case (assertion, premiseSteps, targetSteps) =>
-              helper(assertion.statement, tailInferences, applicationSoFar.addExtractionStep(assertion).addPremiseSteps(premiseSteps).addTargetSteps(targetSteps), variableTracker)
-            }
-        case Nil =>
-          Success((currentStatement, applicationSoFar))
-      }
+  private def applyExtractions(currentStatement: Statement, inferencesRemaining: Seq[Inference], applicationSoFar: ExtractionApplication, substitutions: Substitutions, variableTracker: VariableTracker)(implicit stepProvingContext: StepProvingContext): Try[(Statement, ExtractionApplication)] = {
+    inferencesRemaining match {
+      case inference +: tailInferences =>
+        stepProvingContext.provingContext.specificationInferenceOption.filter(_._1 == inference)
+          .map { case (_, singlePremise, predicateName, variableName) =>
+            applySpecification(currentStatement, inference, singlePremise, predicateName, variableName, variableTracker, substitutions)
+              .flatMap { case (assertion, newVariableTracker) =>
+                applyExtractions(assertion.statement, tailInferences, applicationSoFar.addExtractionStep(assertion), substitutions, newVariableTracker)
+              }
+          } getOrElse applySimpleExtraction(currentStatement, inference)
+          .flatMap { case (assertion, premiseSteps, targetSteps) =>
+            applyExtractions(assertion.statement, tailInferences, applicationSoFar.addExtractionStep(assertion).addPremiseSteps(premiseSteps).addTargetSteps(targetSteps), substitutions, variableTracker)(
+              stepProvingContext = stepProvingContext.copy(stepContext = stepProvingContext.stepContext.addSteps(premiseSteps))
+            )
+          }
+      case Nil =>
+        Success((currentStatement, applicationSoFar))
     }
-    helper(statement, extractionInferences, ExtractionApplication(Nil, Nil, Nil), VariableTracker(baseInference.requiredSubstitutions.terms))
+  }
+  def applyExtractions(statement: Statement, extractionInferences: Seq[Inference], baseInference: Inference, substitutions: Substitutions)(implicit stepProvingContext: StepProvingContext): Try[(Statement, ExtractionApplication)] = {
+    applyExtractions(statement, extractionInferences, ExtractionApplication(Nil, Nil, Nil), substitutions, VariableTracker(baseInference.requiredSubstitutions.terms))
+  }
+  def applyExtractions(premise: Premise, extractionInferences: Seq[Inference], substitutions: Substitutions)(implicit stepProvingContext: StepProvingContext): Try[(Statement, ExtractionApplication)] = {
+    applyExtractions(premise.statement, extractionInferences, ExtractionApplication(Nil, Nil, Nil), substitutions, VariableTracker(stepProvingContext.stepContext.termVariableNames))
   }
 }

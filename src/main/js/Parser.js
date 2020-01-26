@@ -203,33 +203,27 @@ export class Parser {
     const functionApplications = parseApplications(substitutions.functionApplications, s => s.map(this.parseExpression));
     return {statements, terms, predicates, functions, predicateApplications, functionApplications};
   };
-  parsePossibleInferences = (suggestions) => {
-    return suggestions.map(suggestionJson => {
-      const suggestion = _.cloneDeep(suggestionJson);
-      this.parseInferenceSummary(suggestion.inference);
-      _.forEach(suggestion.possibleConclusions, c => {
-        c.conclusion = this.parseExpression(c.conclusion);
-        c.substitutions = c.substitutions && this.parseSubstitutions(c.substitutions);
-        _.forEach(c.possiblePremises, p => {
-          p.premise = this.parseExpression(p.premise);
-          _.forEach(p.possibleMatches, m => {
-            m.matchingPremise = this.parseExpression(m.matchingPremise);
-            m.substitutions = this.parseSubstitutions(m.substitutions);
-          });
+  parsePossibleInferences = (possibleInferences) => {
+    _.forEach(possibleInferences, possibleInference => {
+      this.parseInferenceSummary(possibleInference.inference);
+      this.parsePossibleConclusions(possibleInference.possibleConclusions);
+      return possibleInference;
+    });
+    return possibleInferences;
+  };
+  parsePossibleConclusions = (possibleConclusions) => {
+    _.forEach(possibleConclusions, c => {
+      c.conclusion = this.parseExpression(c.conclusion);
+      c.substitutions = c.substitutions && this.parseSubstitutions(c.substitutions);
+      _.forEach(c.possiblePremises, p => {
+        p.premise = this.parseExpression(p.premise);
+        _.forEach(p.possibleMatches, m => {
+          m.matchingPremise = this.parseExpression(m.matchingPremise);
+          m.substitutions = this.parseSubstitutions(m.substitutions);
         });
       });
-      return suggestion;
-    })
-  };
-  parsePremiseSuggestions = (suggestionsForPremises) => {
-    return suggestionsForPremises.map(suggestionsForPremise =>
-      suggestionsForPremise.map(suggestionJson => {
-        const suggestion = _.cloneDeep(suggestionJson);
-        suggestion.statement && (suggestion.statement = this.parseExpression(suggestion.statement));
-        suggestion.substitutions = _.map(suggestion.substitutions, this.parseSubstitutions);
-        return suggestion;
-      })
-    );
+    });
+    return possibleConclusions;
   };
   parsePremiseRewriteSuggestions = (suggestions) => {
     return suggestions.map(suggestionJson => {

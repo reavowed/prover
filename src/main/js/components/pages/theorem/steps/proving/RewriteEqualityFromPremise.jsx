@@ -1,10 +1,6 @@
-import _ from "lodash";
 import React, {useContext, useState} from "react";
-import Form from "react-bootstrap/Form";
-import {renderToString} from "react-dom/server";
-import {ExpressionComponent} from "../../../../ExpressionComponent";
 import ProofContext from "../../ProofContext";
-import BoundVariableLists from "../BoundVariableLists";
+import PremiseChooser from "./components/PremiseChooser";
 import Rewriter from "./components/Rewriter";
 
 export default function RewriteEqualityFromPremise({path, availablePremises, entryContext, onCancel, onError}) {
@@ -12,28 +8,16 @@ export default function RewriteEqualityFromPremise({path, availablePremises, ent
   const [premiseToRewrite, setPremiseToRewrite] = useState(null);
 
   const rewrite = (rewrites) => {
-    return context.fetchJsonForStepAndUpdateTheorem(path, "rewritePremise", {method: "POST", rewrites})
+    return context.fetchJsonForStepAndUpdateTheorem(path, "rewritePremise", {method: "POST", body: rewrites})
       .then(onCancel)
       .catch(onError);
   };
-  return <BoundVariableLists.Consumer>{boundVariableLists =>
-    <>
-      <Form.Group>
-        <Form.Label><strong>Choose premise</strong></Form.Label>
-        <Form.Control as="select" autoFocus value={premiseToRewrite && premiseToRewrite.serializedReference} onChange={e => setPremiseToRewrite(_.find(availablePremises, p => p.serializedReference === e.target.value).statement)}>
-          <option value="" />
-          {availablePremises.map(p =>
-            <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{__html: renderToString(
-                <ExpressionComponent expression={p.statement} boundVariableLists={boundVariableLists} entryContext={entryContext} />
-              )}}/>
-          )}
-        </Form.Control>
-      </Form.Group>
-      {premiseToRewrite && <Rewriter title="Rewriting Premise"
-                                     expression={premiseToRewrite}
-                                     path={path}
-                                     onSave={rewrites => rewrite({serializedPremise: premiseToRewrite.serialize(), rewrites})}
-      />}
-    </>
-  }</BoundVariableLists.Consumer>;
+  return <>
+    <PremiseChooser premise={premiseToRewrite} setPremise={setPremiseToRewrite} availablePremises={availablePremises} entryContext={entryContext}/>
+    {premiseToRewrite && <Rewriter title="Rewriting Premise"
+                                   expression={premiseToRewrite.statement}
+                                   path={path}
+                                   onSave={rewrites => rewrite({serializedPremise: premiseToRewrite.statement.serialize(), rewrites})}
+    />}
+  </>;
 }

@@ -132,6 +132,10 @@ object SubstatementExtractor {
     getExtractionOptions(inference.conclusion, VariableTracker(inference.requiredSubstitutions.terms))
   }
 
+  def getExtractionOptions(premise: Statement)(implicit stepProvingContext: StepProvingContext): Seq[ExtractionOption] = {
+    getExtractionOptions(premise, VariableTracker(stepProvingContext.stepContext.termVariableNames))
+  }
+
   private def findByExtractingBase(
     sourceStatement: Statement,
     targetStatement: Statement)(

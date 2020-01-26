@@ -6,23 +6,23 @@ import Button from "react-bootstrap/Button";
 import styled from "styled-components";
 import {matchTemplate} from "../../../../../models/Expression";
 import EntryContext from "../../../../EntryContext";
-import AddTarget from "./AddTarget";
+import AddTargetManually from "./AddTargetManually";
 import AddTransitiveTarget from "./AddTransitiveTarget";
 import ApplyTransitivePremiseFromLeft from "./ApplyTransitivePremiseFromLeft";
 import ApplyTransitivePremiseFromRight from "./ApplyTransitivePremiseFromRight";
+import ProveCurrentTargetByPremise from "./ProveCurrentTargetByPremise";
 import ProveTransitiveFromLeft from "./ProveTransitiveFromLeft";
 import ProveTransitiveFromRight from "./ProveTransitiveFromRight";
 import RearrangeAutomatically from "./RearrangeAutomatically";
 import RewriteAutomatically from "./RewriteAutomatically";
-import ExtractCurrentTarget from "./ExtractCurrentTarget";
 import IntroduceBoundVariable from "./IntroduceBoundVariable";
 import IntroduceDeduction from "./IntroduceDeduction";
 import IntroduceName from "./IntroduceName";
-import ProveCurrentTarget from "./ProveCurrentTarget";
-import ProveNewPremise from "./ProveNewPremise";
-import RewriteCurrentTarget from "./RewriteCurrentTarget";
-import RewriteCurrentTargetByDefinition from "./RewriteCurrentTargetByDefinition";
-import RewriteEqualityFromPremise from "./RewriteEqualityFromPremise";
+import ProveCurrentTargetByInference from "./ProveCurrentTargetByInference";
+import AddTargetByInference from "./AddTargetByInference";
+import ProveCurrentTargetByRewritingEquality from "./RewriteCurrentTarget";
+import ProveCurrentTargetByRewritingDefinition from "./RewriteCurrentTargetByDefinition";
+import AddTargetByRewritingEquality from "./RewriteEqualityFromPremise";
 import RewriteTransitiveFromLeft from "./RewriteTransitiveFromLeft";
 import RewriteTransitiveFromRight from "./RewriteTransitiveFromRight";
 
@@ -41,11 +41,11 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
     setErrorMessage(null);
   };
   const onError = (message) => {
+    console.log(message);
     if (_.isObject(message)) {
       if (message.message)
         message = message.message;
       else {
-        console.log(message);
         message = "Unknown error"
       }
     }
@@ -75,40 +75,40 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
       ]
     },
     {
-      label: "Prove",
+      label: "Prove this",
       provers: [
         {
           label: "By inference",
-          element: ProveCurrentTarget
+          element: ProveCurrentTargetByInference
         },
         {
-          label: "By rewriting",
-          element: RewriteCurrentTarget
+          label: "By premise",
+          element: ProveCurrentTargetByPremise
         },
         {
-          label: "By extracting",
-          element: ExtractCurrentTarget
+          label: "By rewriting equality",
+          element: ProveCurrentTargetByRewritingEquality
         },
         {
-          label: "By definition",
-          element: RewriteCurrentTargetByDefinition
+          label: "By rewriting definition",
+          element: ProveCurrentTargetByRewritingDefinition
         }
       ]
     },
     !chained && {
-      label: "Insert before",
+      label: "Insert target",
       provers: [
         {
           label: "By inference",
-          element: ProveNewPremise
+          element: AddTargetByInference
         },
         {
-          label: "New target",
-          element: AddTarget
+          label: "Manually",
+          element: AddTargetManually
         },
         {
-          label: "Rewrite premise",
-          element: RewriteEqualityFromPremise
+          label: "By rewriting equality",
+          element: AddTargetByRewritingEquality
         }
       ]
     },

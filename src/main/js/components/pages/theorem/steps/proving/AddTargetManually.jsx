@@ -5,7 +5,7 @@ import {FlexRow} from "../../../../FlexRow";
 import InputWithShorthandReplacement from "../../../../helpers/InputWithShorthandReplacement";
 import ProofContext from "../../ProofContext";
 
-export default class AddTarget extends React.Component {
+export default class AddTargetManually extends React.Component {
   static contextType = ProofContext;
 
   constructor(props) {

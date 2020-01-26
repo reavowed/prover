@@ -3,7 +3,7 @@ import React, {useContext} from "react";
 import ProofContext from "../../ProofContext";
 import {InferenceFinder} from "./components/InferenceFinder";
 
-export default function ProveNewPremise({path, onCancel, onError}) {
+export default function AddTargetByInference({path, onCancel, onError}) {
   const context = useContext(ProofContext);
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `suggestInferencesForPremise?searchText=${searchText}`);
