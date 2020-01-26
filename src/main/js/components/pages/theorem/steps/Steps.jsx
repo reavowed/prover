@@ -1,6 +1,7 @@
 import update from 'immutability-helper';
 import _ from "lodash";
 import React, {useContext} from "react";
+import {Form} from "react-bootstrap";
 import styled from "styled-components";
 import {DefinedExpression, FunctionParameter, matchTemplate} from "../../../../models/Expression";
 import {
@@ -12,6 +13,7 @@ import DraggableList from "../../../DraggableList";
 import EntryContext from "../../../EntryContext";
 import {HighlightableExpression} from "../../../ExpressionComponent";
 import ProofContext from "../ProofContext";
+import TheoremContext from "../TheoremContext";
 import {AssertionStep, AssertionStepProofLine} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
 import {ElidedStep, ElidedStepProofLine} from "./ElidedStep";
@@ -175,7 +177,6 @@ export class Steps extends React.Component {
     }
   }
 
-
   static getChainingDetails(stepsWithIndexes, firstStep, firstBinaryRelation, basePath, firstIndex, entryContext) {
     const firstStepMatch = matchTemplate(firstBinaryRelation.template, firstStep.statement, [], []);
     const firstLinePath = [...basePath, firstIndex];
@@ -211,11 +212,12 @@ export class Steps extends React.Component {
         continuingStepMatch[1].expression.serialize() === linkingStepMatch[1].expression.serialize()
       ) {
         const {step, index} = stepsWithIndexes.shift();
-        const {index: linkingIndex} = stepsWithIndexes.shift();
+        const {step: linkingStep, index: linkingIndex} = stepsWithIndexes.shift();
         const newRhs = {
           symbol: nextRelation.symbol,
           expression: continuingStepMatch[1].expression,
           step,
+          linkingStep,
           path: [...basePath, index],
           references: [new StepReference([...basePath, index]), new StepReference([...basePath, linkingIndex])],
           highlightsPreviousAsConclusion: true
@@ -267,12 +269,12 @@ export class Steps extends React.Component {
     return null;
   };
 
-  static renderNextStep(stepsWithIndexes, path, referencesForLastStep, entryContext) {
+  static renderNextStep(stepsWithIndexes, path, referencesForLastStep, theoremContext) {
     const {step, index} = stepsWithIndexes.shift();
-    if (_.includes(allowableChainedStepTypes, step.type) && step.statement && step.statement.definition) {
-      const binaryRelation = findBinaryRelation(step.statement, entryContext);
+    if (!theoremContext.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.statement && step.statement.definition) {
+      const binaryRelation = findBinaryRelation(step.statement, theoremContext.entryContext);
       if (binaryRelation && isChainable(binaryRelation)) {
-        const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, entryContext);
+        const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, theoremContext.entryContext);
         if (chainingDetails) {
           const key = chainingDetails.finalStatement.serialize();
           return {
@@ -308,7 +310,7 @@ export class Steps extends React.Component {
     }
   };
 
-  static renderSteps(steps, path, referencesForLastStep, entryContext) {
+  static renderSteps(steps, path, referencesForLastStep, theoremContext) {
     const stepsWithIndexes = steps.map((step, index) => ({step,index}));
     const finalIndex = steps.length;
     const results = [];
@@ -316,7 +318,7 @@ export class Steps extends React.Component {
     let currentIndex = 0;
     while (stepsWithIndexes.length) {
       const startIndex = stepsWithIndexes[0].index;
-      const {key, element} = this.renderNextStep(stepsWithIndexes, path, referencesForLastStep, entryContext);
+      const {key, element} = this.renderNextStep(stepsWithIndexes, path, referencesForLastStep, theoremContext);
       results.push({key, element, data: {path, startIndex}});
       indexLookup.push(startIndex);
       currentIndex += 1;
@@ -328,11 +330,11 @@ export class Steps extends React.Component {
 
   render() {
     const {steps, className, path, referencesForLastStep} = this.props;
-    return <EntryContext.Consumer>{entryContext =>
+    return <TheoremContext.Consumer>{theoremContext =>
       <div className={className}>
-        <DraggableList.Entries entries={Steps.renderSteps(steps, path, referencesForLastStep || [], entryContext)}/>
+        <DraggableList.Entries entries={Steps.renderSteps(steps, path, referencesForLastStep || [], theoremContext)}/>
       </div>
-    }</EntryContext.Consumer>;
+    }</TheoremContext.Consumer>;
   }
 }
 

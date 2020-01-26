@@ -22,8 +22,25 @@ export class Theorem extends React.Component {
         actionHighlights: [],
         staticHighlights: [],
         isActionInUse: false
-      }
+      },
+      disableChaining: false
     }
+  }
+
+  onKeyDown = (event) => {
+    if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) {
+      return;
+    }
+    if (event.key === "d") {
+      this.setState({disableChaining: !this.state.disableChaining});
+    }
+  };
+
+  componentDidMount() {
+    document.body.addEventListener('keydown', this.onKeyDown);
+  }
+  componentWillUnmount() {
+    document.body.removeEventListener('keydown', this.onKeyDown);
   }
 
   getParser = () => new Parser(this.props.definitions, this.props.typeDefinitions);
@@ -31,12 +48,14 @@ export class Theorem extends React.Component {
   render() {
     const self = this;
     const {url, definitions, displayShorthands, definitionShorthands, binaryRelations} = this.props;
-    const {theorem, inferences, highlighting} = this.state;
+    const {theorem, inferences, highlighting, disableChaining} = this.state;
     const parser = this.getParser();
 
     const entryContext = {parser, definitions, displayShorthands, definitionShorthands, inferences, binaryRelations};
     const theoremContext = {
+      entryContext,
       parser,
+      disableChaining,
       fetchJson(subpath,  options) {
         return window.fetchJson(path.join(url, subpath), options);
       },
