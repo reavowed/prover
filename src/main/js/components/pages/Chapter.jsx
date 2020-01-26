@@ -21,7 +21,6 @@ export class Chapter extends React.Component {
       title: props.title,
       url: props.url,
       entries: this.getParser().parseEntries(props.entries),
-      theoremBeingAdded: null,
       editing: false
     }
   }

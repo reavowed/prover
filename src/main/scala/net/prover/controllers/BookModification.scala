@@ -223,4 +223,25 @@ trait BookModification {
         .filter{ case (inference, key) => inferenceIds.contains(inference.id) }
     } yield inference.id -> LinkSummary(inference.name, getEntryUrl(bookKey, chapterKey, key))).toMap
   }
+
+  def getInferenceUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[LinkSummary])] = {
+    val inferenceIds = entry.inferences.map(_.id).toSet
+    for {
+      (book, bookKey) <- getBooksWithKeys(bookService.books)
+      (chapter, chapterKey) <- getChaptersWithKeys(book)
+      theoremsWithKeys = getEntriesWithKeys(chapter)
+        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
+        .filter(_._1.referencedInferenceIds.intersect(inferenceIds).nonEmpty)
+      if theoremsWithKeys.nonEmpty
+    } yield (book.title, chapter.title, theoremsWithKeys.map { case (theorem, key) => LinkSummary(theorem.name, getEntryUrl(bookKey, chapterKey, key))})
+  }
+
+  def hasUsages(entry: ChapterEntry, books: Seq[Book]): Boolean = {
+    hasUsages(Seq(entry), books.iterator.flatMap(_.chapters).flatMap(_.entries))
+  }
+
+  def hasUsages(entriesPotentiallyBeingUsed: Seq[ChapterEntry], entriesPotentiallyUsing: TraversableOnce[ChapterEntry]): Boolean = {
+    val inferenceIds = entriesPotentiallyBeingUsed.flatMap(_.inferences.map(_.id)).toSet
+    entriesPotentiallyUsing.exists(e => e.referencedInferenceIds.intersect(inferenceIds).nonEmpty || e.referencedDefinitions.exists(entriesPotentiallyBeingUsed.contains))
+  }
 }

@@ -280,16 +280,12 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   ): ResponseEntity[_] = {
     def tryMove(entry: ChapterEntry, previousEntries: Seq[ChapterEntry], nextEntries: Seq[ChapterEntry]): Try[Seq[ChapterEntry]] = {
       previousEntries.takeAndRemainingIfValid(newIndex).map { case (firstEntries, entriesToSkip) =>
-        val inferenceIdsMoving = entry.referencedInferenceIds
         for {
-          _ <- (!entriesToSkip.flatMap(_.inferences).exists(i => inferenceIdsMoving.contains(i.id))).orBadRequest("Entry depends on a previous one")
-          _ <- (!entriesToSkip.exists(entry.referencedDefinitions.contains)).orBadRequest("Entry depends on a previous one")
+          _ <- (!hasUsages(Seq(entry), entriesToSkip)).orBadRequest("Entry depends on a previous one")
         } yield (firstEntries :+ entry) ++ entriesToSkip ++ nextEntries
       } orElse nextEntries.takeAndRemainingIfValid(newIndex - previousEntries.length).map { case (entriesToSkip, lastEntries) =>
-        val referencedInferenceIdsBeingMovedPast = entriesToSkip.flatMap(_.referencedInferenceIds)
         for {
-          _ <- (!entry.inferences.map(_.id).exists(referencedInferenceIdsBeingMovedPast.contains)).orBadRequest("Entry depended on by a following one")
-          _ <- (!entriesToSkip.flatMap(_.referencedDefinitions).contains(entry)).orBadRequest("Entry depended on by a following one")
+          _ <- (!hasUsages(entriesToSkip, Seq(entry))).orBadRequest("Entry depended on by a following one")
         } yield (previousEntries ++ entriesToSkip :+ entry) ++ lastEntries
       } orBadRequest "Invalid index" flatten
     }
@@ -308,7 +304,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("entryKey") entryKey: String
   ): ResponseEntity[_] = {
     def deleteEntry(chapterEntry: ChapterEntry, chapter: Chapter, books: Seq[Book]): Try[Chapter] = {
-      if (getInferenceUsages(chapterEntry, books).isEmpty && getDefinitionUsages(chapterEntry, books).isEmpty)
+      if (!hasUsages(chapterEntry, books))
         Success(chapter.copy(entries = chapter.entries.filter(_ != chapterEntry)))
       else
         Failure(BadRequestException("Cannot delete entry with usages"))
@@ -349,27 +345,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }
   }
 
-  private def getInferenceUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[LinkSummary])] = {
-    val inferenceIds = entry.inferences.map(_.id).toSet
-    for {
-      (book, bookKey) <- getBooksWithKeys(bookService.books)
-      (chapter, chapterKey) <- getChaptersWithKeys(book)
-      theoremsWithKeys = getEntriesWithKeys(chapter)
-        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-        .filter(_._1.referencedInferenceIds.intersect(inferenceIds).nonEmpty)
-      if theoremsWithKeys.nonEmpty
-    } yield (book.title, chapter.title, theoremsWithKeys.map { case (theorem, key) => LinkSummary(theorem.name, getEntryUrl(bookKey, chapterKey, key))})
-  }
-
-  private def getDefinitionUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[LinkSummary])] = {
-    for {
-      (book, bookKey) <- getBooksWithKeys(bookService.books)
-      (chapter, chapterKey) <- getChaptersWithKeys(book)
-      entriesWithKeys = getEntriesWithKeys(chapter)
-        .filter(_._1.referencedDefinitions.contains(entry))
-      if entriesWithKeys.nonEmpty
-    } yield (book.title, chapter.title, entriesWithKeys.map { case (entry, key) => LinkSummary(entry.name, getEntryUrl(bookKey, chapterKey, key))})
-  }
 }
 
 object ChapterController {

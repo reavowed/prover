@@ -18,7 +18,7 @@ export default function ChapterEntryAdder() {
   ];
   if (!entryBeingAdded) {
     return <>
-      {inputs.map(i => <Button className="ml-2" key={i.name} onClick={() => setEntryBeingAdded(i.name)}>Add {i.name}</Button>)}
+      {inputs.map(i => <Button className="mr-2" key={i.name} onClick={() => setEntryBeingAdded(i.name)}>Add {i.name}</Button>)}
     </>
   } else {
     return _.find(inputs, i => i.name === entryBeingAdded).element;

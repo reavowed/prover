@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.util.Success
+import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}"))
@@ -43,6 +43,53 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
       val chapter = new Chapter(chapterDefinition.title, chapterDefinition.summary, Nil)
       val newBook = book.copy(chapters = book.chapters :+ chapter)
       Success(newBook)
+    }).map { case (books, book) => createBookProps(book, bookKey, getBooksWithKeys(books)) }.toResponseEntity
+  }
+
+  @DeleteMapping(value = Array("/{chapterKey}"), produces = Array("application/json;charset=UTF-8"))
+  def deleteChapter(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String
+  ): ResponseEntity[_] = {
+    modifyBook[Identity](bookKey, (books, _, book) => {
+      val entriesAfterInThisBook = getChaptersWithKeys(book).iterator
+        .dropUntil { case (_, key) => key == chapterKey }
+        .flatMap(_._1.entries)
+      val entriesInLaterBooks = getBooksWithKeys(books).iterator
+        .dropUntil{ case (_, key) => key == bookKey }
+        .flatMap(_._1.chapters)
+        .flatMap(_.entries)
+      for {
+        (chapter, _) <- getChaptersWithKeys(book).find { case (_, key) => key == chapterKey } orNotFound s"Chapter $chapterKey"
+        _ <- !hasUsages(chapter.entries, entriesAfterInThisBook ++ entriesInLaterBooks) orBadRequest "Later chapters / books depend on this one"
+      } yield {
+        book.copy(chapters = getChaptersWithKeys(book).removeWhere { case (_, key ) => key == chapterKey }.map(_._1))
+      }
+    }).map { case (books, book) => createBookProps(book, bookKey, getBooksWithKeys(books)) }.toResponseEntity
+  }
+
+  @PutMapping(value = Array("/{chapterKey}/index"), produces = Array("application/json;charset=UTF-8"))
+  def moveChapterToIndex(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @RequestBody newIndex: Int
+  ): ResponseEntity[_] = {
+    def tryMove(chapter: Chapter, previousChapters: Seq[Chapter], nextChapters: Seq[Chapter]): Try[Seq[Chapter]] = {
+      previousChapters.takeAndRemainingIfValid(newIndex).map { case (firstChapters, chaptersToSkip) =>
+        for {
+          _ <- (!hasUsages(chapter.entries, chaptersToSkip.flatMap(_.entries))).orBadRequest("Entry depends on a previous one")
+        } yield (firstChapters :+ chapter) ++ chaptersToSkip ++ nextChapters
+      } orElse nextChapters.takeAndRemainingIfValid(newIndex - previousChapters.length).map { case (chaptersToSkip, lastChapters) =>
+        for {
+          _ <- (!hasUsages(chaptersToSkip.flatMap(_.entries), chapter.entries)).orBadRequest("Entry depended on by a following one")
+        } yield (previousChapters ++ chaptersToSkip :+ chapter) ++ lastChapters
+      } orBadRequest "Invalid index" flatten
+    }
+    modifyBook[Identity](bookKey, (_, _, book) => {
+      for {
+        (previousChapters, chapter, nextChapters) <- getChaptersWithKeys(book).splitWhere(_._2 == chapterKey).orNotFound(s"Chapter $chapterKey")
+        updatedChapters <- tryMove(chapter._1, previousChapters.map(_._1), nextChapters.map(_._1))
+      } yield book.copy(chapters = updatedChapters)
     }).map { case (books, book) => createBookProps(book, bookKey, getBooksWithKeys(books)) }.toResponseEntity
   }
 }

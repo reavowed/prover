@@ -1,11 +1,28 @@
 import path from "path";
 import React from "react";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Modal from "react-bootstrap/Modal";
+import {DndProvider} from "react-dnd";
+import Backend from "react-dnd-html5-backend";
+import styled from "styled-components";
+import DraggableList from "../DraggableList";
+import {FlexRow} from "../FlexRow";
+import BookContext from "./book/BookContext";
+import {ChapterAdder} from "./book/ChapterAdder";
 import {Breadcrumbs} from "./components/Breadcrumbs";
 import {NavLinks} from "./components/NavLinks";
 import {Page} from "./Page";
+
+function Chapter({chapter, deleteChapter, editing}) {
+  return <React.Fragment key={chapter.url}>
+    <FlexRow className="mt-3">
+      <FlexRow.Grow>
+        <h4><a href={chapter.url}>{chapter.title}</a></h4>
+      </FlexRow.Grow>
+      {editing && <Button size="sm" variant="danger" className="ml-1 py-0" onClick={() => deleteChapter(chapter)}><span className="fas fa-ban"/></Button>}
+    </FlexRow>
+    <p>{chapter.summary}</p>
+  </React.Fragment>
+}
 
 export class Book extends React.Component {
   constructor(props) {
@@ -13,75 +30,63 @@ export class Book extends React.Component {
     this.state = {
       chapters: this.props.chapters,
       addingNewChapter: false,
-      newChapter: {}
+      newChapter: {},
+      editing: false
     }
   }
 
-  openNewChapterModal = () => {
-    this.setState({
-      addingNewChapter: true,
-      newChapter: {
-        title: '',
-        summary: ''
-      }
-    })
+  onKeyDown = (event) => {
+    if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) {
+      return;
+    }
+    if (event.key === "e") {
+      this.setState({editing: !this.state.editing});
+    }
   };
-  hideNewChapterModal = () => {
-    this.setState({addingNewChapter: false})
+
+  componentDidMount() {
+    document.body.addEventListener('keydown', this.onKeyDown);
+  }
+  componentWillUnmount() {
+    document.body.removeEventListener('keydown', this.onKeyDown);
+  }
+
+  updateChapters = (chapters) => {
+    return this.setStatePromise({chapters});
   };
-  updateNewChapterTitle = (e) => {
-    const newChapter = this.state.newChapter;
-    newChapter.title = e.target.value;
-    this.setState({newChapter});
+
+  deleteChapter = (chapter) => {
+    return window.fetchJson(chapter.url, {method: "DELETE"})
+      .then(({chapters}) => this.updateChapters(chapters));
   };
-  updateNewChapterSummary = (e) => {
-    const newChapter = this.state.newChapter;
-    newChapter.summary = e.target.value;
-    this.setState({newChapter});
-  };
-  addNewChapter = () => {
-    window.fetchJson(
-      path.join(this.props.url, "chapters"),
-      {method: "POST", body: this.state.newChapter}
-    ).then(({chapters}) => {
-      this.setState({chapters});
-      this.hideNewChapterModal();
-    });
+
+  onDropChapter = ({url}, {index: newIndex}) => {
+    return window.fetchJson(path.join(url, "index"), {method: "PUT", body: newIndex})
+      .then(({chapters}) => this.updateChapters(chapters));
   };
 
   render() {
     const {title, url, previous, next} = this.props;
-    const {chapters} = this.state;
-    const newChapterModal = <Modal show={this.state.addingNewChapter} onHide={this.hideNewChapterModal}>
-      <Modal.Header closeButton><Modal.Title>New chapter</Modal.Title></Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group>
-            <Form.Label>Title</Form.Label>
-            <Form.Control type="text" value={this.state.newChapter.title} onChange={this.updateNewChapterTitle}/>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Summary</Form.Label>
-            <Form.Control type="text" value={this.state.newChapter.summary} onChange={this.updateNewChapterSummary}/>
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={this.hideNewChapterModal}>Close</Button>
-        <Button variant="primary" onClick={this.addNewChapter}>Save Changes</Button>
-      </Modal.Footer>
-    </Modal>;
-    return <Page breadcrumbs={<Breadcrumbs links={[{title, url}]}/>}>
-      <NavLinks previous={previous} next={next} />
-      <h3>{title}</h3>
-      {chapters.map(chapter =>
-        <React.Fragment key={chapter.url}>
-          <h4 className="mt-3"><a href={chapter.url}>{chapter.title}</a></h4>
-          <p>{chapter.summary}</p>
-        </React.Fragment>
-      )}
-      <Button className="mt-3 float-right" onClick={this.openNewChapterModal}>New chapter</Button>
-      {newChapterModal}
-    </Page>
+    const {chapters, editing} = this.state;
+    const context = {
+      url,
+      updateChapters: this.updateChapters
+    };
+    return <BookContext.Provider value={context}>
+      <Page breadcrumbs={<Breadcrumbs links={[{title, url}]}/>}>
+        <NavLinks previous={previous} next={next} />
+        <h3>{title}</h3>
+        <DndProvider backend={Backend}>
+          <DraggableList.Simple
+            type="ChapterEntry"
+            enabled={editing}
+            onDrop={this.onDropChapter}
+            entries={chapters.map((chapter, index) => {return {key: chapter.url, data: {url: chapter.url, index}, element: <Chapter chapter={chapter} deleteChapter={this.deleteChapter} editing={editing} />}})}
+          />
+        </DndProvider>
+        <hr/>
+        <ChapterAdder/>
+      </Page>
+    </BookContext.Provider>;
   }
 }
