@@ -18,7 +18,7 @@ case class TermDefinition(
 {
   override def name: String = explicitName.getOrElse(symbol)
   override def typeName: String = "Term"
-  override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions ++ premises.flatMap(_.referencedDefinitions).toSet
+  override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions - this ++ premises.flatMap(_.referencedDefinitions).toSet
   override def complexity: Int = definitionPredicate.definitionalComplexity
 
   override val defaultValue: DefinedTerm = {
