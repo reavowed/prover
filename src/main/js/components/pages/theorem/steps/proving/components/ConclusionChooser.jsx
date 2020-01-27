@@ -66,9 +66,10 @@ export default class ConclusionChooser extends React.Component {
 
   componentDidMount() {
     this.ref.current.scrollIntoView();
-    const conclusionToSelect = this.props.possibleConclusions.length === 1 ?
-      this.props.possibleConclusions[0] :
-      _.find(this.props.possibleConclusions, c => c.conclusion.serialize() === this.props.defaultConclusionStatement.serialize());
+    const {possibleConclusions, defaultConclusionStatement} = this.props;
+    const conclusionToSelect = (possibleConclusions.length > 0 && _.every(possibleConclusions.slice(1), c => _.startsWith(c.extractionInferenceIds, possibleConclusions[0].extractionInferenceIds))) ?
+      possibleConclusions[0] :
+      _.find(possibleConclusions, c => c.conclusion.serialize() === defaultConclusionStatement.serialize());
     if (conclusionToSelect) {
       this.setSelectedConclusion(conclusionToSelect);
     }
