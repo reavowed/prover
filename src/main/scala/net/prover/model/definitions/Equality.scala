@@ -4,7 +4,7 @@ import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.{Step, StepContext, SubstitutionContext}
 import net.prover.model._
 
-case class Equality(relation: BinaryRelation, expansion: Expansion, substitution: Substitution, reversal: Reversal, transitivity: Transitivity) {
+case class Equality(relation: BinaryRelation, expansion: Expansion, substitution: Substitution, reversal: Reversal, transitivity: Transitivity[Term]) {
   def apply(left: Term, right: Term)(implicit substitutionContext: SubstitutionContext): Statement = relation(left, right)
   def unapply(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(Term, Term)] = relation.unapply(statement)
 

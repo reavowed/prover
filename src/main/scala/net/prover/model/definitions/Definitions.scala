@@ -26,9 +26,9 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
   }
 
   lazy val definedBinaryRelations: Seq[(String, BinaryRelation)] = Definitions.getDefinedBinaryRelations(statementDefinitions, displayShorthands, termDefinitions)
-  lazy val definitionsByRelation: Map[BinaryRelation, RelationDefinitions] = {
+  lazy val definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions] = {
     @scala.annotation.tailrec
-    def helper(remainingInferences: Seq[Inference], acc: Map[BinaryRelation, RelationDefinitions]): Map[BinaryRelation, RelationDefinitions] = {
+    def helper(remainingInferences: Seq[Inference], acc: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
       remainingInferences match {
         case Nil =>
           acc
@@ -43,7 +43,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     helper(inferenceEntries, definedBinaryRelations.map(_._2).map(r => r -> RelationDefinitions(None, None, None, None)).toMap)
   }
 
-  private def findReversal(inference: Inference, definitionsByRelation: Map[BinaryRelation, RelationDefinitions]): Map[BinaryRelation, RelationDefinitions] = {
+  private def findReversal(inference: Inference, definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     (for {
       relation <- definitionsByRelation.keys.find(r => r.unapply(inference.conclusion).nonEmpty)
@@ -59,7 +59,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       })
     } yield definitionsByRelation.replace(relation, _.copy(reversal = Some(Reversal(relation, inference.summary))))) getOrElse definitionsByRelation
   }
-  private def findTransitivity(inference: Inference, definitionsByRelation: Map[BinaryRelation, RelationDefinitions]): Map[BinaryRelation, RelationDefinitions] = {
+  private def findTransitivity(inference: Inference, definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     (for {
       relation <- definitionsByRelation.keys.find(r => r.unapply(inference.conclusion).nonEmpty)
@@ -75,7 +75,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       })
     } yield definitionsByRelation.replace(relation, _.copy(transitivity = Some(Transitivity(relation, inference.summary))))) getOrElse definitionsByRelation
   }
-  private def findExpansion(inference: Inference, definitionsByRelation: Map[BinaryRelation, RelationDefinitions]): Map[BinaryRelation, RelationDefinitions] = {
+  private def findExpansion(inference: Inference, definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     (for {
       relation <- inference.premises.headOption.flatMap(p => definitionsByRelation.keys.find(r => r.unapply(p).nonEmpty))
@@ -91,7 +91,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       })
     } yield definitionsByRelation.replace(relation, _.copy(expansion = Some(Expansion(relation, inference.summary))))) getOrElse definitionsByRelation
   }
-  private def findSubstitution(inference: Inference, definitionsByRelation: Map[BinaryRelation, RelationDefinitions]): Map[BinaryRelation, RelationDefinitions] = {
+  private def findSubstitution(inference: Inference, definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     (for {
       relation <- inference.premises.headOption.flatMap(p => definitionsByRelation.keys.find(r => r.unapply(p).nonEmpty))
@@ -110,7 +110,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     } yield definitionsByRelation.replace(relation, _.copy(substitution = Some(Substitution(relation, inference.summary))))) getOrElse definitionsByRelation
   }
 
-  lazy val transitivityDefinitions: Seq[(String, Transitivity)] = {
+  lazy val transitivityDefinitions: Seq[(String, Transitivity[Term])] = {
     definedBinaryRelations.mapCollect { case (symbol, relation) =>
         definitionsByRelation.get(relation).flatMap(_.transitivity).map(symbol -> _)
     }
@@ -357,7 +357,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
 }
 
 object Definitions {
-  case class RelationDefinitions(reversal: Option[Reversal], transitivity: Option[Transitivity], expansion: Option[Expansion], substitution: Option[Substitution])
+  case class RelationDefinitions(reversal: Option[Reversal], transitivity: Option[Transitivity[Term]], expansion: Option[Expansion], substitution: Option[Substitution])
 
   def getDefinedBinaryRelations(statementDefinitions: Seq[StatementDefinition], shorthands: Seq[DisplayShorthand], termDefinitions: Seq[TermDefinition]): Seq[(String, BinaryRelation)] = {
     def fromDefinitions = for {

@@ -4,7 +4,7 @@ import net.prover.model.expressions.Term
 import net.prover.model.proof.{Premise, Step, SubstitutionContext}
 import net.prover.model.{Inference, Substitutions}
 
-case class Expansion(relation: BinaryRelation, inference: Inference.Summary) {
+case class Expansion(relation: BinaryStatement[Term], inference: Inference.Summary) {
   def assertionStep(left: Term, right: Term, wrapper: Wrapper[Term, Term])(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
     Step.Assertion(
       relation(wrapper(left), wrapper(right)),

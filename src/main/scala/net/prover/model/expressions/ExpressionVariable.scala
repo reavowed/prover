@@ -10,11 +10,8 @@ import net.prover.model.entries.ExpressionDefinition
 import scala.reflect.ClassTag
 
 @JsonSerialize(using = classOf[ExpressionVariableSerializer])
-abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] extends Expression with TypedExpression[ExpressionType] { this: ExpressionType =>
+abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] extends Expression with TypedExpression[ExpressionType] with Substitutions.Lenses[ExpressionType] { this: ExpressionType =>
   def name: String
-  def substitutionsLens: Lens[Substitutions, Map[String, ExpressionType]]
-  def possibleSubstitutionsLens: Lens[Substitutions.Possible, Map[String, ExpressionType]]
-  def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[String]]
 
   override def structuralComplexity: Int = 1
   override def definitionalComplexity: Int = 1

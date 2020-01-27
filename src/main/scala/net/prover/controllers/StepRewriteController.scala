@@ -44,9 +44,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       expression <- Expression.parser(stepProvingContext).parseFromString(serializedExpression, "expression").recoverWithBadRequest
     } yield {
       implicit val spc = stepProvingContext
-      val filter = inferenceFilter(searchText)
       val termsFunctionsAndPaths = getTermsFunctionsAndPaths(expression, pathsAlreadyRewrittenText)
-      val inferences = stepProvingContext.provingContext.termRewriteInferences.filter { case (i, _, _) => filter(i) }
 
       def getSuggestions(inference: Inference, source: Term, target: Term, reverse: Boolean): Option[InferenceRewriteSuggestion] = {
         val suggestions = termsFunctionsAndPaths.mapCollect { case (term, _, path) =>
@@ -62,11 +60,14 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           None
       }
 
-      inferences
-          .flatMap { case (inference, left, right) =>
-            getSuggestions(inference, left, right, reverse = false).toSeq ++ getSuggestions(inference, right, left, reverse = true).toSeq
-          }
-        .sortBy(_.inference.conclusion.structuralComplexity)(implicitly[Ordering[Int]].reverse)
+      val filter = inferenceFilter(searchText)
+      stepProvingContext.provingContext.termRewriteInferences
+        .filter { case (i, _, _) => filter(i) }
+        .sortBy(_._1.conclusion.structuralComplexity)(implicitly[Ordering[Int]].reverse)
+        .iterator
+        .flatMap { case (inference, left, right) =>
+          getSuggestions(inference, left, right, reverse = false).toSeq ++ getSuggestions(inference, right, left, reverse = true).toSeq
+        }
         .take(10)
     }).toResponseEntity
   }

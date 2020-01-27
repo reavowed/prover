@@ -2,9 +2,9 @@ package net.prover.controllers
 
 import net.prover.controllers.models.{LinkSummary, PathData}
 import net.prover.model._
-import net.prover.model.definitions.{Definitions, Equality}
+import net.prover.model.definitions.{BinaryRelation, BinaryStatement, Definitions, Equality, Transitivity}
 import net.prover.model.entries.{ChapterEntry, Theorem}
-import net.prover.model.expressions.Term
+import net.prover.model.expressions.{Expression, Term}
 import net.prover.model.proof.{Step, StepContext, StepProvingContext}
 import scalaz.Functor
 import scalaz.syntax.functor._
@@ -163,18 +163,31 @@ trait BookModification {
     }
   }
 
-  private def splitPrecedingStepsWhileTransitive(before: Seq[Step], step: Step)(implicit stepProvingContext: StepProvingContext): (Seq[Step], Seq[Step]) = {
+  private def splitPrecedingStepsWhileTransitive(before: Seq[Step], after: Seq[Step])(implicit stepProvingContext: StepProvingContext): (Seq[Step], Seq[Step]) = {
+    def getTargetLhsFromTransitivity[T <: Expression](currentRhs: Expression, followingSteps: Seq[Step], transitivity: Transitivity[T]): Option[T] = {
+      followingSteps match {
+        case Step.Assertion(transitivity.statement(lhs, `currentRhs`), transitivity.inference, _, _) +: _ =>
+          Some(lhs)
+        case _ =>
+          None
+      }
+    }
     @scala.annotation.tailrec
-    def takeWhileTransitive(steps: Seq[Step], lhs: Term, rhs: Term, acc: Seq[Step], equality: Equality): (Seq[Step], Seq[Step]) = {
+    def takeWhileTransitive(steps: Seq[Step], targetLhs: Term, currentLhs: Term, acc: Seq[Step], equality: Equality): (Seq[Step], Seq[Step]) = {
       steps match {
         case first :+ preceding :+ (transitive: Step.Assertion)
           if transitive.inference.id == equality.transitivity.inference.id
         =>
           (preceding.provenStatement, transitive.statement) match {
-            case (Some(equality(`lhs`, middle1)), equality(middle2, `rhs`)) if middle1 == middle2 =>
-              takeWhileTransitive(first, lhs, middle1, Seq(preceding, transitive) ++ acc, equality)
+            case (Some(equality(newLhs, `currentLhs`)), equality(`targetLhs`, `currentLhs`)) =>
+              takeWhileTransitive(first, targetLhs, newLhs, Seq(preceding, transitive) ++ acc, equality)
             case _ =>
               (steps, acc)
+          }
+        case first :+ preceding =>
+          preceding.provenStatement match {
+            case Some(equality(`targetLhs`, `currentLhs`)) =>
+              (first, preceding +: acc)
           }
         case _ =>
           (steps, acc)
@@ -182,13 +195,15 @@ trait BookModification {
     }
     (for {
       equality <- stepProvingContext.provingContext.equalityOption
-      statement <- step.provenStatement
+      (firstStep, followingSteps) <- after.headAndTailOption
+      statement <- firstStep.provenStatement
       (lhs, rhs) <- equality.unapply(statement)
-    } yield takeWhileTransitive(before, lhs, rhs, Nil, equality)) getOrElse (before, Nil)
+      targetLhs <- getTargetLhsFromTransitivity(rhs, followingSteps, equality.transitivity)
+    } yield takeWhileTransitive(before, targetLhs, lhs, Nil, equality)) getOrElse (before, Nil)
   }
 
-  protected def insertTargetsBeforeTransitivity(before: Seq[Step], old: Step, newAfter: Seq[Step], newTargets: Seq[Step])(implicit stepProvingContext: StepProvingContext): Seq[Step] = {
-    val (existingStepsBeforeTransitive, transitiveSteps) = splitPrecedingStepsWhileTransitive(before, old)
+  protected def insertTargetsBeforeTransitivity(before: Seq[Step], newAfter: Seq[Step], newTargets: Seq[Step])(implicit stepProvingContext: StepProvingContext): Seq[Step] = {
+    val (existingStepsBeforeTransitive, transitiveSteps) = splitPrecedingStepsWhileTransitive(before, newAfter)
     (existingStepsBeforeTransitive ++ newTargets ++ transitiveSteps ++ newAfter)
   }
 
@@ -201,7 +216,7 @@ trait BookModification {
               for {
                 typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
                 (replacementStep, stepsToAddBeforeTransitive) <- f(typedStep, StepProvingContext(stepContext.addSteps(before).atIndex(last), provingContext))
-              } yield insertTargetsBeforeTransitivity(before, step, replacementStep +: after, stepsToAddBeforeTransitive)(StepProvingContext(stepContext, provingContext))
+              } yield insertTargetsBeforeTransitivity(before, replacementStep +: after, stepsToAddBeforeTransitive)(StepProvingContext(stepContext, provingContext))
             }
           }
         case _ =>

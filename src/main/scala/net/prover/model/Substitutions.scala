@@ -292,4 +292,30 @@ object Substitutions {
       Substitutions.Possible(substitutions.statements, substitutions.terms, substitutions.predicates, substitutions.functions, Map.empty, Map.empty)
     }
   }
+
+  trait Lenses[TExpression <: Expression] {
+    def substitutionsLens: Lens[Substitutions, Map[String, TExpression]]
+    def possibleSubstitutionsLens: Lens[Substitutions.Possible, Map[String, TExpression]]
+    def requiredSubstitutionsLens: Lens[Substitutions.Required, Seq[String]]
+
+    def fillRequiredSubstitutions(required: Required, expressions: Seq[TExpression]): Substitutions = {
+      substitutionsLens.set(requiredSubstitutionsLens.get(required).zip(expressions).toMap)(Substitutions.empty)
+    }
+    def getRequiredSubstitutions(possible: Possible, required: Required): Option[Seq[TExpression]] = {
+      requiredSubstitutionsLens.get(required).map(possibleSubstitutionsLens.get(possible).get).traverseOption
+    }
+  }
+
+  object Lenses {
+    trait ForStatements extends Lenses[Statement] {
+      override def substitutionsLens = GenLens[Substitutions](_.statements)
+      override def possibleSubstitutionsLens = GenLens[Substitutions.Possible](_.statements)
+      override def requiredSubstitutionsLens = GenLens[Substitutions.Required](_.statements)
+    }
+    trait ForTerms extends Lenses[Term] {
+      override def substitutionsLens = GenLens[Substitutions](_.terms)
+      override def possibleSubstitutionsLens = GenLens[Substitutions.Possible](_.terms)
+      override def requiredSubstitutionsLens = GenLens[Substitutions.Required](_.terms)
+    }
+  }
 }

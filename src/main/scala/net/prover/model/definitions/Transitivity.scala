@@ -1,15 +1,15 @@
 package net.prover.model.definitions
 
-import net.prover.model.expressions.Term
+import net.prover.model.Inference
+import net.prover.model.expressions.Expression
 import net.prover.model.proof.{Premise, Step, SubstitutionContext}
-import net.prover.model.{Inference, Substitutions}
 
-case class Transitivity(relation: BinaryRelation, inference: Inference.Summary) {
-  def assertionStep(left: Term, middle: Term, right: Term)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
+case class Transitivity[TComponent <: Expression](statement: BinaryStatement[TComponent], inference: Inference.Summary) {
+  def assertionStep(left: TComponent, middle: TComponent, right: TComponent)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
     Step.Assertion(
-      relation(left, right),
+      statement(left, right),
       inference,
-      Seq(Premise.Pending(relation(left, middle)), Premise.Pending(relation(middle, right))),
-      Substitutions(terms = inference.requiredSubstitutions.terms.zip(Seq(left, middle, right)).toMap))
+      Seq(Premise.Pending(statement(left, middle)), Premise.Pending(statement(middle, right))),
+      statement.fillRequiredSubstitutions(inference.requiredSubstitutions, Seq(left, middle, right)))
   }
 }

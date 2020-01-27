@@ -33,9 +33,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(entryContext.statementDefinitions.contains)
     implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(entryContext.termDefinitions.contains)
 
-    implicit val allowableRelation: Allowable[BinaryRelation] = allowable(r => definedBinaryRelations.exists(_._2 == r))
+    implicit val allowableRelation: Allowable[BinaryStatement[Term]] = allowable(r => definedBinaryRelations.exists(_._2 == r))
     implicit val allowableReversal: Allowable[Reversal] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
-    implicit val allowableTransitivity: Allowable[Transitivity] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
+    implicit val allowableTransitivity: Allowable[Transitivity[Term]] = allowable(r => isAllowed(r.statement) && isAllowed(r.inference))
     implicit val allowableExpansion: Allowable[Expansion] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
 
@@ -152,10 +152,10 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     replace(definitions.equalityOption)
   }
 
-  lazy val definitionsByRelation: Map[BinaryRelation, RelationDefinitions] = {
+  lazy val definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions] = {
     replace(definitions.definitionsByRelation)
   }
-  lazy val transitivityDefinitions: Seq[(String, Transitivity)] = {
+  lazy val transitivityDefinitions: Seq[(String, Transitivity[Term])] = {
     replace(definitions.transitivityDefinitions)
   }
 

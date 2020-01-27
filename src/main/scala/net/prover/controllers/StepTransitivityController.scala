@@ -64,9 +64,9 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
         premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-        (premiseLhs, premiseRhs) <- transitivity.relation.unapply(premise.statement) orBadRequest "Premise was not transitive statement"
+        (premiseLhs, premiseRhs) <- transitivity.statement.unapply(premise.statement) orBadRequest "Premise was not transitive statement"
         _ <- (premiseLhs == targetLhs).orBadRequest("Premise LHS did not match target LHS")
-      } yield (None, Some(Step.Target(transitivity.relation(premiseRhs, targetRhs))), premiseRhs, Nil)
+      } yield (None, Some(Step.Target(transitivity.statement(premiseRhs, targetRhs))), premiseRhs, Nil)
     }
   }
   @PostMapping(value = Array("/premiseRight"), produces = Array("application/json;charset=UTF-8"))
@@ -83,9 +83,9 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
         premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-        (premiseLhs, premiseRhs) <- transitivity.relation.unapply(premise.statement) orBadRequest "Premise was not transitive statement"
+        (premiseLhs, premiseRhs) <- transitivity.statement.unapply(premise.statement) orBadRequest "Premise was not transitive statement"
         _ <- (premiseRhs == targetRhs).orBadRequest("Premise LHS did not match target LHS")
-      } yield (Some(Step.Target(transitivity.relation(targetLhs, premiseLhs))), None, premiseLhs, Nil)
+      } yield (Some(Step.Target(transitivity.statement(targetLhs, premiseLhs))), None, premiseLhs, Nil)
     }
   }
 }

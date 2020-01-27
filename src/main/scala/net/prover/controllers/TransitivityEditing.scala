@@ -34,7 +34,7 @@ trait TransitivityEditing extends BookModification {
     theoremKey: String,
     proofIndex: Int,
     stepPath: PathData)(
-    f: (StepProvingContext, Transitivity, Term, Term) => Try[(Option[Step], Option[Step], Term, Seq[Step.Target])]
+    f: (StepProvingContext, Transitivity[Term], Term, Term) => Try[(Option[Step], Option[Step], Term, Seq[Step.Target])]
   ): ResponseEntity[_] = {
     (stepPath.indexes match {
       case Nil =>
@@ -49,11 +49,11 @@ trait TransitivityEditing extends BookModification {
                 targetStep <- step.asOptionalInstanceOf[Step.Target].orBadRequest(s"Step was not target")
                 (targetLhs, targetRhs, transitivityDefinition) <- provingContext.transitivityDefinitions.map(_._2).mapFind { transitivityDefinition =>
                   for {
-                    (lhs, rhs) <- transitivityDefinition.relation.unapply(targetStep.statement)
+                    (lhs, rhs) <- transitivityDefinition.statement.unapply(targetStep.statement)
                   } yield (lhs, rhs, transitivityDefinition)
                 }.orBadRequest("Target step is not a transitive statement")
                 createFinalTransitivitySteps = after.headAndTailOption match {
-                  case Some((Step.Assertion(transitivityDefinition.relation(mainLhs, _), transitivityDefinition.inference, _, _), restOfSteps)) =>
+                  case Some((Step.Assertion(transitivityDefinition.statement(mainLhs, _), transitivityDefinition.inference, _, _), restOfSteps)) =>
                     (firstStep: Option[Step], secondStep: Option[Step], intermediateTerm: Term) =>
                       val firstTransitivityStep = transitivityDefinition.assertionStep(mainLhs, targetLhs, intermediateTerm)
                       val secondTransitivityStep = transitivityDefinition.assertionStep(mainLhs, intermediateTerm, targetRhs)
@@ -65,7 +65,7 @@ trait TransitivityEditing extends BookModification {
                 }
                 (firstStep, secondStep, intermediateTerm, targetSteps) <- f(stepProvingContext, transitivityDefinition, targetLhs, targetRhs)
                 transitivitySteps = createFinalTransitivitySteps(firstStep, secondStep, intermediateTerm)
-              } yield insertTargetsBeforeTransitivity(before, targetStep, transitivitySteps, targetSteps)
+              } yield insertTargetsBeforeTransitivity(before, transitivitySteps, targetSteps)
             }
           }.orNotFound(s"Step $stepPath").flatten
         }

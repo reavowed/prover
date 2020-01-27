@@ -114,7 +114,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
       def extract(conclusion: Statement) = {
         for {
           // Our target is A = C. We're either going to prove A = B or B = C, and add the other part in as a target.
-          (conclusionLhs, conclusionRhs) <- transitivity.relation.unapply(conclusion).orBadRequest("Inference conclusion is not a transitive statement")
+          (conclusionLhs, conclusionRhs) <- transitivity.statement.unapply(conclusion).orBadRequest("Inference conclusion is not a transitive statement")
           conclusionSource = swapper.getOne(conclusionLhs, conclusionRhs)
           wrapper <- targetSource.getTerms().filter(_._1 == conclusionSource).map(_._2).map(Wrapper.fromExpression).single.orBadRequest("Could not find conclusion LHS uniquely in target LHS")
           (expansionStep, expandedConclusion) <-
@@ -122,12 +122,12 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
               Success((None, conclusion))
             else
               for {
-                expansionDefinition <- stepProvingContext.provingContext.definitionsByRelation.get(transitivity.relation).flatMap(_.expansion).orBadRequest("Could not find expansion inference")
+                expansionDefinition <- stepProvingContext.provingContext.definitionsByRelation.get(transitivity.statement).flatMap(_.expansion).orBadRequest("Could not find expansion inference")
                 step = expansionDefinition.assertionStep(conclusionLhs, conclusionRhs, wrapper)
               } yield (
                 Some(step),
                 step.statement)
-          (_, intermediateTerm) <- transitivity.relation.unapply(expandedConclusion).map(swapper.swapTuple).orBadRequest("Rewritten expanded conclusion is not a transitive statement")
+          (_, intermediateTerm) <- transitivity.statement.unapply(expandedConclusion).map(swapper.swapTuple).orBadRequest("Rewritten expanded conclusion is not a transitive statement")
         } yield (expansionStep, intermediateTerm)
       }
 
@@ -141,7 +141,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
           (expansionStep, intermediateTerm) <- extract(conclusion)
           extractionStep = Step.Elided.ifNecessary(mainAssertion +: extractionSteps, inference).get
           finalStep = Step.Elided.ifNecessary((mainPremises ++ extractionPremises :+ extractionStep) ++ expansionStep.toSeq, inference).get
-          newTarget = Step.Target((transitivity.relation.apply _).tupled.apply(swapper.swap(intermediateTerm, targetDestination)))
+          newTarget = Step.Target((transitivity.statement.apply _).tupled.apply(swapper.swap(intermediateTerm, targetDestination)))
           (firstStep, secondStep) = swapper.swap(finalStep, newTarget)
         } yield (Some(firstStep), Some(secondStep), intermediateTerm, mainTargets ++ extractionTargets)
       }
@@ -155,7 +155,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
           (expansionStep, intermediateTerm) <- extract(conclusion)
           extractionStep = Step.Elided.ifNecessary(extractionSteps, "Extracted").get
           finalStep = Step.Elided.ifNecessary((extractionPremises :+ extractionStep) ++ expansionStep.toSeq, "Extracted").get
-          newTarget = Step.Target((transitivity.relation.apply _).tupled.apply(swapper.swap(intermediateTerm, targetDestination)))
+          newTarget = Step.Target((transitivity.statement.apply _).tupled.apply(swapper.swap(intermediateTerm, targetDestination)))
           (firstStep, secondStep) = swapper.swap(finalStep, newTarget)
         } yield (Some(firstStep), Some(secondStep), intermediateTerm, extractionTargets)
       }
@@ -201,8 +201,8 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
       implicit val spc = stepProvingContext
       for {
         intermediateTerm <- Term.parser.parseFromString(serializedTerm, "target term").recoverWithBadRequest
-        firstStep = Step.Target(transitivity.relation(targetLhs, intermediateTerm))
-        secondStep = Step.Target(transitivity.relation(intermediateTerm, targetRhs))
+        firstStep = Step.Target(transitivity.statement(targetLhs, intermediateTerm))
+        secondStep = Step.Target(transitivity.statement(intermediateTerm, targetRhs))
       } yield (Some(firstStep), Some(secondStep), intermediateTerm, Nil)
     }
   }
