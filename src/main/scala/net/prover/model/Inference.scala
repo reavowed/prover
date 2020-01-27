@@ -19,6 +19,8 @@ trait Inference {
   def premises: Seq[Statement]
   @JsonSerialize
   def conclusion: Statement
+  @JsonSerialize
+  def isComplete: Boolean
 
   def summary: Summary = Summary(this)
 
@@ -111,7 +113,7 @@ object Inference {
     }
   }
 
-  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement) extends Inference {
+  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement, isComplete: Boolean) extends Inference {
     def replaceDefinition(
       oldDefinition: ExpressionDefinition,
       newDefinition: ExpressionDefinition
@@ -122,12 +124,13 @@ object Inference {
         name,
         Inference.calculateHash(newPremises, newConclusion),
         newPremises,
-        newConclusion)
+        newConclusion,
+        isComplete)
     }
   }
   object Summary {
     def apply(inference: Inference): Summary = {
-      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.name, inference.id, inference.premises, inference.conclusion))
+      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.name, inference.id, inference.premises, inference.conclusion, inference.isComplete))
     }
   }
 
@@ -138,6 +141,7 @@ object Inference {
     extends Inference.WithCalculatedId
   {
     override def name: String = s"Definition of ${nameOfDefinition.capitalizeWords}"
+    override def isComplete: Boolean = true
   }
 
   case class Substitutions(

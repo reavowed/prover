@@ -15,7 +15,7 @@ export function AssertionStepProofLine({step, path, children}) {
                     statement={step.statement}
                     buttons={<>
                       <InferenceLink inference={step.inference}/>
-                      {!step.isComplete && <Button variant="success" size="sm" onClick={createTargets}>Create targets</Button>}
+                      {!step.isComplete && step.inference.isComplete && <Button variant="success" size="sm" onClick={createTargets}>Create targets</Button>}
                     </>}
                     incomplete={!step.isComplete}>
     {children}
