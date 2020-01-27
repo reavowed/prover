@@ -20,9 +20,11 @@ export class Chapter extends React.Component {
     this.state = {
       title: props.title,
       url: props.url,
-      entries: this.getParser().parseEntries(props.entries),
+      definitions: props.definitions,
+      typeDefinitions: props.typeDefinitions,
+      entries: new Parser(props.definitions, props.typeDefinitions).parseEntries(props.entries),
       editing: false
-    }
+    };
   }
 
   onKeyDown = (event) => {
@@ -41,15 +43,15 @@ export class Chapter extends React.Component {
     document.body.removeEventListener('keydown', this.onKeyDown);
   }
 
-  getParser = () => new Parser(this.props.definitions, this.props.typeDefinitions);
-
   updateChapter = (fetchUrl, fetchData) => {
     return window.fetchJson(fetchUrl, fetchData)
       .then(newProps => {
         this.setState({
           title: newProps.title,
           url: newProps.url,
-          entries: this.getParser().parseEntries(newProps.entries)
+          definitions: newProps.definitions,
+          typeDefinitions: newProps.typeDefinitions,
+          entries: new Parser(newProps.definitions, newProps.typeDefinitions).parseEntries(newProps.entries)
         });
         if (window.location.pathname !== newProps.url) {
           history.replaceState({}, "", newProps.url);
@@ -69,11 +71,11 @@ export class Chapter extends React.Component {
   };
 
   render() {
-    const {bookLink, summary, previous, next, displayShorthands, definitionShorthands, typeDefinitions} = this.props;
-    const {title, url, entries, editing} = this.state;
+    const {bookLink, summary, previous, next, displayShorthands, definitionShorthands} = this.props;
+    const {title, url, entries, editing, definitions, typeDefinitions} = this.state;
 
     const context = {updateChapter: this.updateChapter, url, editing};
-    const entryContext = {parser: this.getParser(), displayShorthands, definitionShorthands, typeDefinitions};
+    const entryContext = {parser: new Parser(definitions, typeDefinitions), displayShorthands, definitionShorthands, typeDefinitions};
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <ChapterContext.Provider value={context}>
