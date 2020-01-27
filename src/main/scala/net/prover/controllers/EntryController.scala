@@ -20,7 +20,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @RequestBody(required = false) newName: String
   ): ResponseEntity[_] = {
     modifyEntry[Inference.Entry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, inference) => Success(inference.withName(newName)))
-      .flatMap { case (_, _, chapter, entry) =>
+      .flatMap { case (_, _, _, chapter, entry) =>
         for {
           (_, newKey) <- getEntriesWithKeys(chapter).find(_._1 == entry).orException(new Exception("Couldn't find new entry"))
         } yield getEntryUrl(bookKey, chapterKey, newKey)
@@ -61,7 +61,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
   }
 
   private def modifyDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Unit = {
-    bookService.modifyBooks[Identity]((books, definitions) => {
+    bookService.modifyBooks[Identity]((books, _) => {
       books.mapReduceWithPrevious[Book] { (previousBooks, bookToModify) =>
         bookToModify.chapters.mapFold(EntryContext.forBookExclusive(previousBooks, bookToModify)) { (entryContextForChapter, chapterToModify) =>
           chapterToModify.entries.mapFold(entryContextForChapter) { (entryContext, entryToModify) =>

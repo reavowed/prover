@@ -4,7 +4,7 @@ import net.prover.model.{EntryContext, Inference}
 
 trait ChapterEntry {
   def name: String
-  def inferences: Seq[Inference] = Nil
+  def inferences: Seq[Inference.FromEntry] = Nil
   def serializedLines: Seq[String]
   def referencedInferenceIds: Set[String]
   def referencedDefinitions: Set[ChapterEntry]

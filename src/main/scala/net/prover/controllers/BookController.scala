@@ -43,7 +43,7 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
       val chapter = new Chapter(chapterDefinition.title, chapterDefinition.summary, Nil)
       val newBook = book.copy(chapters = book.chapters :+ chapter)
       Success(newBook)
-    }).map { case (books, book) => createBookProps(book, bookKey, getBooksWithKeys(books)) }.toResponseEntity
+    }).map { case (books, _, book) => createBookProps(book, bookKey, getBooksWithKeys(books)) }.toResponseEntity
   }
 
   @DeleteMapping(value = Array("/{chapterKey}"), produces = Array("application/json;charset=UTF-8"))
@@ -65,7 +65,7 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
       } yield {
         book.copy(chapters = getChaptersWithKeys(book).removeWhere { case (_, key ) => key == chapterKey }.map(_._1))
       }
-    }).map { case (books, book) => createBookProps(book, bookKey, getBooksWithKeys(books)) }.toResponseEntity
+    }).map { case (books, _, book) => createBookProps(book, bookKey, getBooksWithKeys(books)) }.toResponseEntity
   }
 
   @PutMapping(value = Array("/{chapterKey}/index"), produces = Array("application/json;charset=UTF-8"))
@@ -90,7 +90,7 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
         (previousChapters, chapter, nextChapters) <- getChaptersWithKeys(book).splitWhere(_._2 == chapterKey).orNotFound(s"Chapter $chapterKey")
         updatedChapters <- tryMove(chapter._1, previousChapters.map(_._1), nextChapters.map(_._1))
       } yield book.copy(chapters = updatedChapters)
-    }).map { case (books, book) => createBookProps(book, bookKey, getBooksWithKeys(books)) }.toResponseEntity
+    }).map { case (books, _, book) => createBookProps(book, bookKey, getBooksWithKeys(books)) }.toResponseEntity
   }
 }
 

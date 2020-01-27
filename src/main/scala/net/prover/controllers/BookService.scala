@@ -28,7 +28,7 @@ class BookService {
   }
   def books: Seq[Book] = booksAndDefinitions._1
 
-  def modifyBooks[F[_] : Functor](f: (Seq[Book], Definitions) => F[Seq[Book]]): F[Seq[Book]] = this.synchronized {
+  def modifyBooks[F[_] : Functor](f: (Seq[Book], Definitions) => F[Seq[Book]]): F[(Seq[Book], Definitions)] = this.synchronized {
     val (books, definitions) = booksAndDefinitions
     for {
       newBooks <- f(books, definitions)
@@ -36,7 +36,7 @@ class BookService {
       val newDefinitions = getDefinitions(books)
       writeBooks(newBooks)
       _booksAndDefinitions = (newBooks, newDefinitions)
-      newBooks
+      (newBooks, newDefinitions)
     }
   }
 

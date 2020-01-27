@@ -299,7 +299,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
     val serializedTheorem = theorem.recalculateReferences(implicitly).serializedLines.mkString("\n").stripPrefix("theorem ")
     val parsedTheorem = Theorem.parser(entryContext).parseFromString(serializedTheorem, "Theorem")
     parsedTheorem must beTypedEqualTo(theorem)
-    parsedTheorem.isComplete must beTrue
+    parsedTheorem.isComplete(new Definitions(entryContext.availableEntries)) must beTrue
   }
 
   def beStepThatMakesValidTheorem(premises: Seq[Statement]): Matcher[Step] = {

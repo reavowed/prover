@@ -36,7 +36,7 @@ class BooksController @Autowired() (val bookService: BookService) extends BookMo
     }
     (for {
       _ <- definition.imports.foreach(validateImport).recoverWithBadRequest
-      newBooks = bookService.modifyBooks[Identity] { (books, _) =>
+      (newBooks, _) = bookService.modifyBooks[Identity] { (books, _) =>
         books :+ Book(definition.title, definition.imports, Nil, Nil)
       }
     } yield createBooksProps(newBooks)).toResponseEntity

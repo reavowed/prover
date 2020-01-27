@@ -38,7 +38,7 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: 
 object EntryContext {
   trait EntryTypes {
     def availableEntries: Seq[ChapterEntry]
-    lazy val inferences: Seq[Inference] = availableEntries.flatMap(_.inferences)
+    lazy val inferences: Seq[Inference.FromEntry] = availableEntries.flatMap(_.inferences)
     lazy val statementDefinitions: Seq[StatementDefinition] = availableEntries.collect {
       case statementDefinition: StatementDefinition => statementDefinition
       case typeDefinition: TypeDefinition => typeDefinition.statementDefinition

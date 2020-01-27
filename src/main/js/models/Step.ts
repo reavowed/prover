@@ -26,9 +26,10 @@ export type Reference = PremiseReference | StepReference;
 
 export class AssertionStep {
     type = "assertion";
-    constructor(public statement: Expression, public premises: any, public inference: any, public referencedLines: Reference[], public isComplete: boolean) {}
+    constructor(public statement: Expression, public premises: any, public inference: any, public referencedLines: Reference[],) {}
+    isComplete: boolean = _.every(this.premises, "complete") && this.inference.isComplete;
     inferencesUsed: any[] = [this.inference];
-    allSubsteps: Step[] = [];
+    getAllSubsteps(): Step[] { return []; }
     provenStatement: Expression | null = this.statement;
     id: String = sha256(this.type + " " + this.statement.serialize())
 }
@@ -38,7 +39,7 @@ export class DeductionStep {
     constructor(public assumption: Expression, public substeps: Step[], public provenStatement: Expression | null) {}
     isComplete: boolean = _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
-    allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
+    getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     id: String = sha256([this.type + " " + this.assumption.serialize(), ..._.map(this.substeps, s => s.id)].join("\n"))
 }
 
@@ -47,7 +48,7 @@ export class ScopedVariableStep {
     constructor(public variableName: String, public substeps: Step[], public provenStatement: Expression | null) {}
     isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
-    allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
+    getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     id: String = sha256([this.type, ..._.map(this.substeps, s => s.id)].join("\n"))
 }
 
@@ -56,7 +57,7 @@ export class NamingStep {
     constructor(public variableName: String, public assumption: Expression, public statement: Expression, public substeps: Step[], public inference: any, public referencedLines: Reference[], public referencedLinesForExtraction: Reference[]) {}
     isComplete: boolean = _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = [..._.flatMap(this.substeps, s => s.inferencesUsed), this.inference];
-    allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
+    getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = this.statement;
     id: String = sha256([this.type + " " + this.assumption.serialize(), ..._.map(this.substeps, s => s.id)].join("\n"))
 }
@@ -66,7 +67,7 @@ export class ElidedStep {
     constructor(public statement: Expression | void, public substeps: Step[], public highlightedInference: any, public description: string | null, public referencedLines: Reference[]) {}
     isComplete: boolean = (this.highlightedInference || this.description) && _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
-    allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
+    getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = this.substeps.length > 0 ? this.substeps[this.substeps.length - 1].provenStatement : null;
     id: String = sha256([this.type + (this.statement ? " " + this.statement.serialize() : ""), ..._.map(this.substeps, s => s.id)].join("\n"))
 }
@@ -76,7 +77,7 @@ export class TargetStep {
     constructor(public statement: Expression) {}
     isComplete: boolean = false;
     inferencesUsed: any[] = [];
-    allSubsteps: Step[] = [];
+    getAllSubsteps(): Step[] { return []; }
     provenStatement: Expression | null = this.statement;
     id: String = sha256(this.type + " " + this.statement.serialize())
 }
@@ -86,7 +87,7 @@ export class SubproofStep {
     constructor(public name: String, public statement: Expression, public substeps: Step[], public referencedLines: Reference[]) {}
     isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
-    allSubsteps: Step[] = _.flatMap(this.substeps, s => [s, ...s.allSubsteps]);
+    getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = this.statement;
     id: String = sha256([this.type + " " + this.statement.serialize(), ..._.map(this.substeps, s => s.id)].join("\n"))
 }

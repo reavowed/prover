@@ -30,7 +30,7 @@ case class PropertyDefinition(
     Some(definingStatement),
     None,
     Nil)
-  override def inferences: Seq[Inference] = statementDefinition.inferences
+  override def inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
 
   override def serializedLines: Seq[String] = (Seq("property", symbol, "on", parentType.name, defaultTermName) ++ parentComponentTypes.map(_.serialized)).mkString(" ") +:
     (explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++

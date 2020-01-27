@@ -35,7 +35,7 @@ case class TypeDefinition(
     Some(definingStatement),
     None,
     Nil)
-  override def inferences: Seq[Inference] = statementDefinition.inferences
+  override def inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
 
   override def serializedLines: Seq[String] = Seq("type", symbol, defaultTermName, otherComponentTypes.map(_.serialized).mkString(" ").inParens).mkString(" ") +:
     (Seq(componentFormat.serialized.value) ++

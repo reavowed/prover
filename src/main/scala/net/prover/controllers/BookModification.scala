@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{LinkSummary, PathData}
+import net.prover.controllers.models.{InferenceSummary, LinkSummary, PathData}
 import net.prover.model._
 import net.prover.model.definitions.{BinaryRelation, BinaryStatement, Definitions, Equality, Transitivity}
 import net.prover.model.entries.{ChapterEntry, Theorem}
@@ -80,47 +80,47 @@ trait BookModification {
     } yield (step, StepProvingContext(stepContext, provingContext))
   }
 
-  def modifyBook[F[_] : Functor](bookKey: String, f: (Seq[Book], Definitions, Book) => Try[F[Book]]): Try[F[(Seq[Book], Book)]] = {
+  def modifyBook[F[_] : Functor](bookKey: String, f: (Seq[Book], Definitions, Book) => Try[F[Book]]): Try[F[(Seq[Book], Definitions, Book)]] = {
     bookService.modifyBooks[TryFWithValue[F, Book]#Type] { (books, definitions) =>
       for {
         currentBook <- findBook(books, bookKey)
         newBookF <- f(books, definitions, currentBook)
       } yield newBookF.map(newBook => (books.replaceValue(currentBook, newBook), newBook))
-    }
+    }.map(_.map { case ((books, definitions), book) => (books, definitions, book)})
   }
 
-  def modifyChapter[F[_] : Functor](bookKey: String, chapterKey: String, f: (Seq[Book], Definitions, Book, Chapter) => Try[F[Chapter]]): Try[F[(Seq[Book], Book, Chapter)]] = {
+  def modifyChapter[F[_] : Functor](bookKey: String, chapterKey: String, f: (Seq[Book], Definitions, Book, Chapter) => Try[F[Chapter]]): Try[F[(Seq[Book], Definitions, Book, Chapter)]] = {
     modifyBook[FWithValue[F, Chapter]#Type](bookKey, (books, definitions, book) =>
       for {
         currentChapter <- findChapter(book, chapterKey)
         newChapterF <- f(books, definitions, book, currentChapter)
       } yield newChapterF.map(newChapter => (book.copy(chapters = book.chapters.replaceValue(currentChapter, newChapter)), newChapter))
-    ).map(_.map { case ((books, book), chapter) => (books, book, chapter)})
+    ).map(_.map { case ((books, definitions, book), chapter) => (books, definitions, book, chapter)})
   }
 
-  def modifyEntry[TEntry <: ChapterEntry : ClassTag, F[_] : Functor](bookKey: String, chapterKey: String, entryKey: String, f: (Seq[Book], Definitions, Book, Chapter, TEntry) => Try[F[TEntry]]): Try[F[(Seq[Book], Book, Chapter, TEntry)]] = {
+  def modifyEntry[TEntry <: ChapterEntry : ClassTag, F[_] : Functor](bookKey: String, chapterKey: String, entryKey: String, f: (Seq[Book], Definitions, Book, Chapter, TEntry) => Try[F[TEntry]]): Try[F[(Seq[Book], Definitions, Book, Chapter, TEntry)]] = {
     modifyChapter[FWithValue[F, TEntry]#Type](bookKey, chapterKey, (books, definitions, book, chapter) =>
       for {
         currentEntry <- findEntry[TEntry](chapter, entryKey)
         newEntryF <- f(books, definitions, book, chapter, currentEntry)
       } yield newEntryF.map(newEntry => (chapter.copy(entries = chapter.entries.replaceValue(currentEntry, newEntry)), newEntry))
-    ).map(_.map  { case ((books, book, chapter), entry) => (books, book, chapter, entry) })
+    ).map(_.map  { case ((books, definitions, book, chapter), entry) => (books, definitions, book, chapter, entry) })
   }
 
-  def addChapterEntry(bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => Try[ChapterEntry]): Try[(Seq[Book], Book, Chapter)] = {
+  def addChapterEntry(bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => Try[ChapterEntry]): Try[(Seq[Book], Definitions, Book, Chapter)] = {
     modifyChapter[Identity](bookKey, chapterKey, (books, _, book, chapter) =>
       f(books, book, chapter).map(chapter.addEntry)
     )
   }
 
-  case class TheoremUpdateProps(theorem: Theorem, newInferences: Map[String, LinkSummary])
+  case class TheoremUpdateProps(theorem: Theorem, newInferences: Map[String, InferenceSummary])
   protected def modifyTheorem(bookKey: String, chapterKey: String, theoremKey: String)(f: (Theorem, ProvingContext) => Try[Theorem]): Try[TheoremUpdateProps] = {
     modifyEntry[Theorem, WithValue[TheoremUpdateProps]#Type](bookKey, chapterKey, theoremKey, (books, definitions, book, chapter, theorem) => {
-      val provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
+      implicit val provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
       for {
         newTheorem <- f(theorem, provingContext).map(_.recalculateReferences(provingContext))
         newInferenceIds = newTheorem.referencedInferenceIds.diff(theorem.referencedInferenceIds)
-        inferenceLinks = getInferenceLinks(newInferenceIds)
+        inferenceLinks = getInferenceLinks(newInferenceIds, definitions)
       } yield (newTheorem, TheoremUpdateProps(newTheorem, inferenceLinks))
     }).map(_._2)
   }
@@ -229,14 +229,14 @@ trait BookModification {
     stepProvingContext.provingContext.entryContext.inferences.find(_.id == inferenceId).map(_.summary).orBadRequest(s"Invalid inference $inferenceId")
   }
 
-  protected def getInferenceLinks(inferenceIds: Set[String]): Map[String, LinkSummary] = {
+  protected def getInferenceLinks(inferenceIds: Set[String], definitions: Definitions): Map[String, InferenceSummary] = {
     (for {
       (book, bookKey) <- getBooksWithKeys(bookService.books)
       (chapter, chapterKey) <- getChaptersWithKeys(book)
       (inference, key) <- getEntriesWithKeys(chapter)
         .flatMap { case (entry, key) => entry.inferences.map(_ -> key) }
-        .filter{ case (inference, key) => inferenceIds.contains(inference.id) }
-    } yield inference.id -> LinkSummary(inference.name, getEntryUrl(bookKey, chapterKey, key))).toMap
+        .filter{ case (inference, _) => inferenceIds.contains(inference.id) }
+    } yield inference.id -> InferenceSummary(inference.name, getEntryUrl(bookKey, chapterKey, key), definitions.isInferenceComplete(inference))).toMap
   }
 
   def getInferenceUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[LinkSummary])] = {

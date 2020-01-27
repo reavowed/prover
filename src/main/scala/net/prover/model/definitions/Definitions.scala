@@ -8,10 +8,17 @@ import net.prover.model.proof.SubstitutionContext
 import net.prover.util.Swapper
 
 import scala.Ordering.Implicits._
+import scala.collection.mutable
 
 case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext.EntryTypes {
 
   lazy val inferenceEntries: Seq[Inference] = availableEntries.ofType[Inference]
+
+  val completenessByInference = mutable.Map.empty[String, Boolean]
+  def isInferenceComplete(inference: Inference): Boolean = {
+    completenessByInference.getOrElseUpdate(inference.id, inferences.find(_.id == inference.id).exists(_.isComplete(this)))
+  }
+
 
   lazy val equalityOption: Option[Equality] = {
     for {

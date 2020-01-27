@@ -3,6 +3,7 @@ package net.prover.model.proof
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
+import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import scalaz.Functor
@@ -25,7 +26,7 @@ sealed trait Step {
     entryContext: EntryContext
   ): Step
   def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step
-  def isComplete: Boolean
+  def isComplete(definitions: Definitions): Boolean
   def referencedInferenceIds: Set[String]
   def referencedDefinitions: Set[ExpressionDefinition]
   @JsonSerialize
@@ -47,7 +48,7 @@ object Step {
     def replaceSubsteps(newSubsteps: Seq[Step]): Step
     def modifyStepForInsertion(step: Step): Step
     def modifyStepForExtraction(step: Step): Option[Step]
-    override def isComplete: Boolean = substeps.forall(_.isComplete)
+    override def isComplete(definitions: Definitions): Boolean = substeps.forall(_.isComplete(definitions))
     override def getSubstep(index: Int, outerStepContext: StepContext): Option[(Step, StepContext)] = {
       substeps.splitAtIndexIfValid(index).map { case (before, step, _) =>
         val innerStepContext = specifyStepContext(outerStepContext).addSteps(before).atIndex(index)
@@ -160,7 +161,7 @@ object Step {
   {
     val `type` = "naming"
 
-    override def isComplete: Boolean = super.isComplete && premises.forall(_.isComplete) && inference.isComplete
+    override def isComplete(definitions: Definitions): Boolean = super.isComplete(definitions) && premises.forall(_.isComplete) && definitions.isInferenceComplete(inference)
     override def provenStatement: Option[Statement] = Some(statement)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
@@ -291,7 +292,7 @@ object Step {
 
   case class Target(statement: Statement) extends Step.WithoutSubsteps with Step.WithTopLevelStatement {
     val `type` = "target"
-    override def isComplete: Boolean = false
+    override def isComplete(definitions: Definitions): Boolean = false
     override def provenStatement: Option[Statement] = Some(statement)
     override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
       Target(statement.insertExternalParameters(numberOfParametersToInsert))
@@ -396,7 +397,7 @@ object Step {
     extends Step.WithoutSubsteps with Step.WithTopLevelStatement
   {
     val `type`: String = "assertion"
-    override def isComplete: Boolean = premises.forall(_.isComplete) && inference.isComplete
+    override def isComplete(definitions: Definitions): Boolean = premises.forall(_.isComplete) && definitions.isInferenceComplete(inference)
     override def provenStatement: Option[Statement] = Some(statement)
     override def insertExternalParameters(numberOfParametersToInsert: Int): Step = {
       Assertion(

@@ -5,6 +5,7 @@ import java.security.MessageDigest
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.Inference._
+import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, ChapterEntryParser, ExpressionDefinition}
 import net.prover.model.expressions._
 import net.prover.model.proof.{StepContext, SubstitutionContext}
@@ -19,8 +20,6 @@ trait Inference {
   def premises: Seq[Statement]
   @JsonSerialize
   def conclusion: Statement
-  @JsonSerialize
-  def isComplete: Boolean
 
   def summary: Summary = Summary(this)
 
@@ -100,7 +99,10 @@ object Inference {
   trait WithCalculatedId extends Inference {
     val id: String = Inference.calculateHash(premises, conclusion)
   }
-  trait Entry extends Inference.WithCalculatedId with ChapterEntry.Standalone {
+  trait FromEntry extends WithCalculatedId {
+    def isComplete(definitions: Definitions): Boolean
+  }
+  trait Entry extends Inference.FromEntry with ChapterEntry.Standalone {
     override def title: String = name
     def withName(newName: String): Entry
   }
@@ -113,7 +115,7 @@ object Inference {
     }
   }
 
-  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement, isComplete: Boolean) extends Inference {
+  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement) extends Inference {
     def replaceDefinition(
       oldDefinition: ExpressionDefinition,
       newDefinition: ExpressionDefinition
@@ -124,13 +126,12 @@ object Inference {
         name,
         Inference.calculateHash(newPremises, newConclusion),
         newPremises,
-        newConclusion,
-        isComplete)
+        newConclusion)
     }
   }
   object Summary {
     def apply(inference: Inference): Summary = {
-      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.name, inference.id, inference.premises, inference.conclusion, inference.isComplete))
+      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.name, inference.id, inference.premises, inference.conclusion))
     }
   }
 
@@ -138,10 +139,10 @@ object Inference {
       nameOfDefinition: String,
       premises: Seq[Statement],
       conclusion: Statement)
-    extends Inference.WithCalculatedId
+    extends Inference.FromEntry
   {
     override def name: String = s"Definition of ${nameOfDefinition.capitalizeWords}"
-    override def isComplete: Boolean = true
+    override def isComplete(definitions: Definitions): Boolean = true
   }
 
   case class Substitutions(

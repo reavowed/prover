@@ -3,6 +3,7 @@ package net.prover.model.entries
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.controllers.Identity
 import net.prover.model._
+import net.prover.model.definitions.Definitions
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
@@ -22,9 +23,9 @@ case class Theorem(
   override def withName(newName: String): Theorem = copy(name = newName)
   override def referencedInferenceIds: Set[String] = proofs.flatMap(_.referencedInferenceIds).toSet
   override def referencedDefinitions: Set[ChapterEntry] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions ++ proofs.flatMap(_.referencedDefinitions).toSet
-  override def inferences: Seq[Inference] = Seq(this)
+  override def inferences: Seq[Inference.FromEntry] = Seq(this)
 
-  def isComplete: Boolean = proofs.exists(_.isComplete)
+  def isComplete(definitions: Definitions): Boolean = proofs.exists(_.isComplete(definitions))
   def initialStepContext: StepContext = StepContext.withPremisesAndTerms(premises, requiredSubstitutions.terms)
 
   private def modifyProof[F[_] : Functor](proofIndex: Int, f: Proof => Option[F[Proof]]): Option[F[Theorem]] = {
@@ -88,7 +89,7 @@ object Theorem extends Inference.EntryParser {
   case class Proof(steps: Seq[Step]) {
     def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
     def referencedDefinitions: Set[ExpressionDefinition] = steps.flatMap(_.referencedDefinitions).toSet
-    def isComplete: Boolean = steps.forall(_.isComplete)
+    def isComplete(definitions: Definitions): Boolean = steps.forall(_.isComplete(definitions))
 
     def findStep(indexes: Seq[Int], initialStepContext: StepContext): Option[(Step, StepContext)] = {
       indexes match {

@@ -16,8 +16,8 @@ export class Theorem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      theorem: this.getParser().parseTheorem(props.theorem),
-      inferences: this.props.inferences,
+      theorem: this.getParser().parseTheorem(props.theorem, props.inferences),
+      inferences: props.inferences,
       highlighting: {
         actionHighlights: [],
         staticHighlights: [],
@@ -61,9 +61,10 @@ export class Theorem extends React.Component {
       },
       updateTheorem(newTheoremJson) {
         return new Promise((resolve) => {
+          const inferences = {...inferences, ...newTheoremJson.newInferences};
           self.setState({
-            theorem: parser.parseTheorem(newTheoremJson.theorem),
-            inferences: {...inferences, ...newTheoremJson.newInferences}
+            theorem: parser.parseTheorem(newTheoremJson.theorem, inferences),
+            inferences
           }, () => resolve());
         })
       },
