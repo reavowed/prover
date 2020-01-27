@@ -281,11 +281,11 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     def tryMove(entry: ChapterEntry, previousEntries: Seq[ChapterEntry], nextEntries: Seq[ChapterEntry]): Try[Seq[ChapterEntry]] = {
       previousEntries.takeAndRemainingIfValid(newIndex).map { case (firstEntries, entriesToSkip) =>
         for {
-          _ <- (!hasUsages(Seq(entry), entriesToSkip)).orBadRequest("Entry depends on a previous one")
+          _ <- (!hasUsages(entriesToSkip, Seq(entry))).orBadRequest("Entry depends on a previous one")
         } yield (firstEntries :+ entry) ++ entriesToSkip ++ nextEntries
       } orElse nextEntries.takeAndRemainingIfValid(newIndex - previousEntries.length).map { case (entriesToSkip, lastEntries) =>
         for {
-          _ <- (!hasUsages(entriesToSkip, Seq(entry))).orBadRequest("Entry depended on by a following one")
+          _ <- (!hasUsages(Seq(entry), entriesToSkip)).orBadRequest("Entry depended on by a following one")
         } yield (previousEntries ++ entriesToSkip :+ entry) ++ lastEntries
       } orBadRequest "Invalid index" flatten
     }
