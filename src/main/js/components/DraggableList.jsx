@@ -182,14 +182,19 @@ function createHoverZone(contextType, children, hover) {
 }
 
 function move(itemBeingDragged, context, newIndex, movingAfter) {
-  const placeholderElement = itemBeingDragged.listCallbacks.removePlaceholder();
-  context.listCallbacks.addPlaceholder(placeholderElement, newIndex);
+  const newPath = [...context.path.slice(0, context.path.length - 1), newIndex];
+  if (!_.isEqual(itemBeingDragged.path, newPath)) {
+    console.log("Moving ", itemBeingDragged.path.join("."), "to", newPath.join("."));
+    console.log(context);
 
-  itemBeingDragged.index = newIndex;
-  itemBeingDragged.path = [...context.path.slice(0, context.path.length - 1), newIndex];
-  itemBeingDragged.itemToReplace = context;
-  itemBeingDragged.movingAfter = movingAfter;
-  itemBeingDragged.listCallbacks = context.listCallbacks;
+    const placeholderElement = itemBeingDragged.listCallbacks.removePlaceholder();
+    context.listCallbacks.addPlaceholder(placeholderElement, newIndex);
+    itemBeingDragged.index = newIndex;
+    itemBeingDragged.path = newPath;
+    itemBeingDragged.itemToReplace = context;
+    itemBeingDragged.movingAfter = movingAfter;
+    itemBeingDragged.listCallbacks = context.listCallbacks;
+  }
 }
 
 DraggableList.SingleDropZone = function SingleDropZone({children}) {

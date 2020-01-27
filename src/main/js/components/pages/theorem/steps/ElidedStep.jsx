@@ -42,7 +42,7 @@ export class ElidedStepProofLine extends React.Component {
   };
 
   render() {
-    let {step, path, children, standalone} = this.props;
+    let {step, path, children} = this.props;
     let buttons = <>
       {step.highlightedInference && <InferenceLink inference={step.highlightedInference} suffix={<span className="fas fa-ellipsis-v"/>}/>}
       {step.description && <span className="text-muted text-uppercase ml-1" style={{"fontFamily": "monospace"}}>{step.description} <span className="fas fa-ellipsis-v"/></span>}
@@ -70,7 +70,6 @@ export class ElidedStepProofLine extends React.Component {
                             referencesForLastStep={[]}/>
           </div>
         </Step.WithSubsteps> :
-        standalone ? proofLine :
         <Step.WithoutSubsteps>{proofLine}</Step.WithoutSubsteps>}
     </>;
   }
@@ -79,7 +78,7 @@ export class ElidedStepProofLine extends React.Component {
 export class ElidedStep extends React.Component {
   render() {
     const {step, path} = this.props;
-    return <ElidedStepProofLine standalone {...this.props} prefix="Then">
+    return <ElidedStepProofLine {...this.props} prefix="Then">
       <ProofLine.SingleStatementWithPrefixContent prefix="Then"
                                                   statement={step.statement}
                                                   path={path} />
