@@ -198,7 +198,8 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
         } {
           (_, steps, inferences) => elideRewrite(steps, inferences)
         }
-      } yield Seq(Step.Target(newTarget), step)
+        targetStepOption = if (stepProvingContext.allPremisesSimplestLast.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
+      } yield targetStepOption.toSeq :+ step
     }.toResponseEntity
   }
 
