@@ -6,7 +6,6 @@ statement ∧ (φ ψ)
   attributes (conjunction)
 
 theorem Extract Left Conjunct
-simplification
 premise ∧ φ ψ
 conclusion φ
 {
@@ -18,7 +17,6 @@ conclusion φ
 }
 
 theorem Extract Right Conjunct
-simplification
 premise ∧ φ ψ
 conclusion ψ
 {
@@ -30,7 +28,6 @@ conclusion ψ
 }
 
 theorem Combine Conjunction
-expansion
 premise φ
 premise ψ
 conclusion ∧ φ ψ
@@ -63,7 +60,6 @@ conclusion ¬ ∧ φ ¬ φ
 comment Some inferences for negated conjunctions.
 
 theorem Add Right Negated Conjunct
-expansion
 premise ¬ φ
 conclusion ¬ ∧ φ ψ
 {
@@ -74,7 +70,6 @@ conclusion ¬ ∧ φ ψ
 }
 
 theorem Add Left Negated Conjunct
-expansion
 premise ¬ ψ
 conclusion ¬ ∧ φ ψ
 {

@@ -2,7 +2,6 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.controllers.Identity
-import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.expressions.Statement
@@ -17,8 +16,7 @@ case class Theorem(
     name: String,
     premises: Seq[Statement],
     conclusion: Statement,
-    proofs: Seq[Proof],
-    rearrangementType: RearrangementType)
+    proofs: Seq[Proof])
   extends Inference.Entry
 {
   override def withName(newName: String): Theorem = copy(name = newName)
@@ -67,7 +65,6 @@ case class Theorem(
   }
 
   override def serializedLines: Seq[String] = Seq(s"theorem $name") ++
-    rearrangementType.serialized.toSeq ++
     premises.map("premise " + _.serialized) ++
     Seq("conclusion " + conclusion.serialized) ++
     proofs.flatMap(_.serializedLines)
@@ -81,8 +78,7 @@ case class Theorem(
       name,
       premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
       conclusion.replaceDefinition(oldDefinition, newDefinition),
-      proofs.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)),
-      rearrangementType)
+      proofs.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)))
   }
 }
 
@@ -199,7 +195,6 @@ object Theorem extends Inference.EntryParser {
     implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
     for {
       name <- Parser.toEndOfLine
-      rearrangementType <- RearrangementType.parser
       premises <- premisesParser
       conclusion <- conclusionParser
       proofs <- proofsParser(name, premises, conclusion)
@@ -208,8 +203,7 @@ object Theorem extends Inference.EntryParser {
         name,
         premises,
         conclusion,
-        proofs,
-        rearrangementType)
+        proofs)
     }
   }
 }

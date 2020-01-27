@@ -1,14 +1,12 @@
 package net.prover.model.entries
 
-import net.prover.model.Inference.RearrangementType
 import net.prover.model.expressions.Statement
 import net.prover.model._
 
 case class Axiom(
     name: String,
     premises: Seq[Statement],
-    conclusion: Statement,
-    rearrangementType: RearrangementType = RearrangementType.NotRearrangement)
+    conclusion: Statement)
   extends Inference.Entry
 {
   override def withName(newName: String): Axiom = copy(name = newName)
@@ -17,7 +15,6 @@ case class Axiom(
   override def inferences: Seq[Inference] = Seq(this)
   override def serializedLines: Seq[String] = {
     Seq(s"axiom $name") ++
-      rearrangementType.serialized.toSeq ++
       premises.map("premise " + _.serialized) ++
       Seq(s"conclusion ${conclusion.serialized}")
   }
@@ -30,8 +27,7 @@ case class Axiom(
     Axiom(
       name,
       premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
-      conclusion.replaceDefinition(oldDefinition, newDefinition),
-      rearrangementType)
+      conclusion.replaceDefinition(oldDefinition, newDefinition))
   }
 }
 
@@ -42,15 +38,13 @@ object Axiom extends Inference.EntryParser {
     implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
     for {
       name <- Parser.toEndOfLine
-      rearrangementType <- RearrangementType.parser
       premises <- premisesParser
       conclusion <- conclusionParser
     } yield {
       Axiom(
         name,
         premises,
-        conclusion,
-        rearrangementType)
+        conclusion)
     }
   }
   override def toString = name

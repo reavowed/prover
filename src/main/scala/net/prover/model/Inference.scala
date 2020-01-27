@@ -19,7 +19,6 @@ trait Inference {
   def premises: Seq[Statement]
   @JsonSerialize
   def conclusion: Statement
-  def rearrangementType: RearrangementType
 
   def summary: Summary = Summary(this)
 
@@ -112,7 +111,7 @@ object Inference {
     }
   }
 
-  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement, rearrangementType: RearrangementType) extends Inference {
+  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement) extends Inference {
     def replaceDefinition(
       oldDefinition: ExpressionDefinition,
       newDefinition: ExpressionDefinition
@@ -123,13 +122,12 @@ object Inference {
         name,
         Inference.calculateHash(newPremises, newConclusion),
         newPremises,
-        newConclusion,
-        rearrangementType)
+        newConclusion)
     }
   }
   object Summary {
     def apply(inference: Inference): Summary = {
-      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.name, inference.id, inference.premises, inference.conclusion, inference.rearrangementType))
+      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.name, inference.id, inference.premises, inference.conclusion))
     }
   }
 
@@ -140,30 +138,6 @@ object Inference {
     extends Inference.WithCalculatedId
   {
     override def name: String = s"Definition of ${nameOfDefinition.capitalizeWords}"
-    override def rearrangementType = RearrangementType.NotRearrangement
-  }
-
-  sealed trait RearrangementType {
-    def serialized: Option[String]
-  }
-  object RearrangementType {
-    object NotRearrangement extends RearrangementType {
-      override def serialized = None
-    }
-    object Simplification extends RearrangementType {
-      override def serialized = Some("simplification")
-    }
-    object Expansion extends RearrangementType {
-      override def serialized = Some("expansion")
-    }
-
-    def parser: Parser[RearrangementType] = {
-      Parser.singleWord.map {
-        case "simplification" => Some(Simplification)
-        case "expansion" => Some(Expansion)
-        case _ => None
-      }.getOrElse(NotRearrangement)
-    }
   }
 
   case class Substitutions(

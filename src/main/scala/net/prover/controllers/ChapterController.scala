@@ -4,7 +4,6 @@ import net.prover.controllers.ChapterController._
 import net.prover.controllers.models.ChapterProps._
 import net.prover.controllers.models.{ChapterProps, DefinitionSummary, LinkSummary, TypeDefinitionSummary}
 import net.prover.exceptions.BadRequestException
-import net.prover.model.Inference.RearrangementType
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.entries._
@@ -158,8 +157,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           name,
           premises,
           conclusion,
-          Seq(Theorem.Proof(Seq(Step.Target(conclusion)))),
-          RearrangementType.NotRearrangement)
+          Seq(Theorem.Proof(Seq(Step.Target(conclusion)))))
         existingTheoremOption = entryContext.inferences.find(_.id == newTheorem.id)
         _ <- existingTheoremOption match {
           case Some(_) =>

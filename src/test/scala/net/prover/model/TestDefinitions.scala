@@ -1,6 +1,5 @@
 package net.prover.model
 
-import net.prover.model.Inference.RearrangementType
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.ExpressionDefinition.{ComponentType, StatementComponent, TermComponent}
 import net.prover.model.entries.{Axiom, ExpressionDefinition, StatementDefinition, TermDefinition, Theorem}
@@ -309,8 +308,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
         "Test Theorem",
         premises,
         step.provenStatement.get,
-        Seq(Theorem.Proof(Seq(step))),
-        RearrangementType.NotRearrangement)
+        Seq(Theorem.Proof(Seq(step))))
     }
   }
 

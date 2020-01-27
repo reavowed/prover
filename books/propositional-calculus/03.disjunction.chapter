@@ -5,7 +5,6 @@ statement ∨ (φ ψ)
   shorthand (or)
 
 theorem Add Right Disjunct
-expansion
 premise φ
 conclusion ∨ φ ψ
 {
@@ -14,7 +13,6 @@ conclusion ∨ φ ψ
 }
 
 theorem Add Left Disjunct
-expansion
 premise ψ
 conclusion ∨ φ ψ
 {

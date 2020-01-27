@@ -5,7 +5,6 @@ statement ↔ (φ ψ)
   shorthand (equiv)
 
 theorem Equivalence by Both Cases
-expansion
 premise → φ ψ
 premise → ψ φ
 conclusion ↔ φ ψ
