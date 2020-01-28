@@ -25,7 +25,7 @@ export default class EditableProperty extends React.Component {
         .then(() => this.setStatePromise({saving: false}))
     };
 
-    return <InputGroup>
+    return <InputGroup className="mb-2">
       <InputGroup.Prepend><InputGroup.Text>{label}</InputGroup.Text></InputGroup.Prepend>
       <Form.Control type="text" readOnly={saving} value={currentValue} onChange={e => this.setState({currentValue: e.target.value})}/>
       <InputGroup.Append><Button variant="success" disabled={saving} onClick={save}><span className={saving ? "fas fa-spin fa-spinner" : "fas fa-check"}/></Button></InputGroup.Append>

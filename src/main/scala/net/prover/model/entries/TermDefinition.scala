@@ -41,6 +41,7 @@ case class TermDefinition(
   override def withSymbol(newSymbol: String): TermDefinition = copy(symbol = newSymbol)
   override def withShorthand(newShorthand: Option[String]): TermDefinition = copy(shorthand = newShorthand)
   override def withAttributes(newAttributes: Seq[String]): TermDefinition = copy(attributes = newAttributes)
+  override def withFormat(newFormat: Format): TermDefinition = copy(format = newFormat)
 
   override def inferences: Seq[Inference.FromEntry] = Seq(Inference.Definition(name, premises, definingStatement))
 

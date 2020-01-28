@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.model.{Book, EntryContext, Inference}
+import net.prover.model.{Book, EntryContext, Format, Inference}
 import net.prover.model.entries.{ExpressionDefinition, TermDefinition}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -56,6 +56,24 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
       chapter <- findChapter(book, chapterKey)
       entry <- findEntry[ExpressionDefinition](chapter, entryKey)
       newEntry = entry.withAttributes(newAttributes)
+      _ = modifyDefinition(entry, newEntry)
+    } yield ()).toResponseEntity
+  }
+
+  @PutMapping(value = Array("/format"), produces = Array("application/json;charset=UTF-8"))
+  def editFormat(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String,
+    @RequestBody(required = false) newFormatText: String
+  ): ResponseEntity[_] = {
+    (for {
+      book <- findBook(bookKey)
+      chapter <- findChapter(book, chapterKey)
+      entry <- findEntry[ExpressionDefinition](chapter, entryKey)
+      componentNames = entry.boundVariableNames ++ entry.componentTypes.map(_.name)
+      format <- Format.parser(componentNames).parseFromString(newFormatText, "format").recoverWithBadRequest
+      newEntry = entry.withFormat(format)
       _ = modifyDefinition(entry, newEntry)
     } yield ()).toResponseEntity
   }

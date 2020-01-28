@@ -21,6 +21,7 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
   def withSymbol(newSymbol: String): ExpressionDefinitionType
   def withShorthand(newShorthand: Option[String]): ExpressionDefinitionType
   def withAttributes(newAttributes: Seq[String]): ExpressionDefinitionType
+  def withFormat(newFormat: Format): ExpressionDefinitionType
 
   @JsonSerialize
   override def title: String = s"$typeName Definition: $name"

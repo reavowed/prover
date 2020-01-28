@@ -61,10 +61,10 @@ export class Theorem extends React.Component {
       },
       updateTheorem(newTheoremJson) {
         return new Promise((resolve) => {
-          const inferences = {...inferences, ...newTheoremJson.newInferences};
+          const newInferences = {...inferences, ...newTheoremJson.newInferences};
           self.setState({
-            theorem: parser.parseTheorem(newTheoremJson.theorem, inferences),
-            inferences
+            theorem: parser.parseTheorem(newTheoremJson.theorem, newInferences),
+            inferences: newInferences
           }, () => resolve());
         })
       },
