@@ -346,7 +346,9 @@ Steps.Container = function Container({path: stepsPath, children}) {
       (after ? stepToReplace.endIndex : stepToReplace.startIndex) :
       (after ? -1 : 0);
     let destinationPath = stepsPath;
-    if (_.isEqual(sourcePath, stepsPath) && stepToReplace && startIndex < stepToReplace.startIndex) {
+    if (_.isEqual(sourcePath, destinationPath) && startIndex === destinationIndex) {
+      return Promise.resolve();
+    } else if (_.isEqual(sourcePath, destinationPath) && stepToReplace && startIndex < stepToReplace.startIndex) {
       destinationIndex -= (endIndex - startIndex);
     } else if (sourcePath.length < destinationPath.length && _.isEqual(sourcePath, _.take(destinationPath, sourcePath.length)) && startIndex < destinationPath[sourcePath.length]) {
       destinationPath = update(destinationPath, {$splice: [[sourcePath.length, 1, destinationPath[sourcePath.length] - (endIndex - startIndex)]]})

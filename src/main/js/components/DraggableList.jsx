@@ -38,27 +38,32 @@ export default function DraggableList({type, enabled, onDrop, children}) {
   }
   function onDropEntry(itemDropped, itemToReplace) {
     setWaitingForDrop(true);
-    onDrop(itemDropped.data, itemToReplace.data, itemDropped.movingAfter)
+    onDrop(itemDropped.data, itemToReplace && itemToReplace.data, itemDropped.movingAfter)
       .catch(() => {})
       .then(() => {
         reset();
-        itemDropped.originalListCallbacks.reset();
+        itemDropped.originalListContext.reset();
         setWaitingForDrop(false)
       });
   }
-  const listCallbacks = {addPlaceholder, removePlaceholder, onDragStart, onDrop: onDropEntry, reset};
 
-  const parentContext = useContext(EntryContext);
-  const path = parentContext ? parentContext.path : [];
+  const parentContext = useContext(ListContext);
+  const entryContext = useContext(EntryContext);
+  const path = entryContext ? entryContext.path : [];
 
   const context = {
     type,
     path,
-    listCallbacks,
     hiddenIndex,
     placeholderProps,
-    enabled: enabled && !waitingForDrop && !(parentContext && parentContext.insideDrag),
-    parentContext
+    enabled: enabled && !waitingForDrop && !(entryContext && entryContext.insideDrag),
+    entryContext,
+    parentContext,
+    addPlaceholder,
+    removePlaceholder,
+    onDragStart,
+    onDrop: onDropEntry,
+    reset
   };
 
   return <ListContext.Provider value={context}>
@@ -67,7 +72,8 @@ export default function DraggableList({type, enabled, onDrop, children}) {
 };
 
 DraggableList.Entries = function Entries({entries}) {
-  const {type, path: outerPath, listCallbacks, hiddenIndex, placeholderProps, enabled} = useContext(ListContext);
+  const listContext = useContext(ListContext);
+  const {type, path: outerPath, hiddenIndex, placeholderProps, enabled} = listContext;
   const boundVariableLists = useContext(BoundVariableLists);
 
   function wrapAndAddPlaceholder(entryProps) {
@@ -99,7 +105,7 @@ DraggableList.Entries = function Entries({entries}) {
   }
 
   function onDragStart(index) {
-    listCallbacks.onDragStart(entries[index], index, boundVariableLists);
+    listContext.onDragStart(entries[index], index, boundVariableLists);
   }
 
   if (enabled) {
@@ -107,7 +113,7 @@ DraggableList.Entries = function Entries({entries}) {
       entries.map((entry, index) => {
         const {key, element, data} = entry;
         const path = [...outerPath, index];
-        const context = {type, index, path, data, enabled, onDragStart, listCallbacks, originalListCallbacks: listCallbacks};
+        const context = {type, index, path, data, enabled, onDragStart, listContext, originalListContext: listContext};
         return {element: <Entry context={context}>{element}</Entry>, key};
       })
     );
@@ -125,8 +131,8 @@ function Entry({context, children}) {
     },
     end(item) {
       if (!item.dropHandled) {
-        item.listCallbacks.reset();
-        item.originalListCallbacks.reset();
+        item.listContext.reset();
+        item.originalListContext.reset();
       }
     }
   });
@@ -135,11 +141,7 @@ function Entry({context, children}) {
     drop(item) {
       if (!item.dropHandled) {
         item.dropHandled = true;
-        if (item.itemToReplace) {
-          return item.itemToReplace.listCallbacks.onDrop(item, item.itemToReplace);
-        } else {
-          item.listCallbacks.reset();
-        }
+        return item.listContext.onDrop(item, item.itemToReplace);
       }
     }
   });
@@ -181,19 +183,19 @@ function createHoverZone(contextType, children, hover) {
   return <div>{children}</div>;
 }
 
-function move(itemBeingDragged, context, newIndex, movingAfter) {
-  const newPath = [...context.path.slice(0, context.path.length - 1), newIndex];
+function move(itemBeingDragged, listContext, newIndex, itemToReplace, movingAfter) {
+  const newPath = [...listContext.path, newIndex];
   if (!_.isEqual(itemBeingDragged.path, newPath)) {
     console.log("Moving ", itemBeingDragged.path.join("."), "to", newPath.join("."));
-    console.log(context);
+    console.log(listContext);
 
-    const placeholderElement = itemBeingDragged.listCallbacks.removePlaceholder();
-    context.listCallbacks.addPlaceholder(placeholderElement, newIndex);
+    const placeholderElement = itemBeingDragged.listContext.removePlaceholder();
+    listContext.addPlaceholder(placeholderElement, newIndex);
     itemBeingDragged.index = newIndex;
     itemBeingDragged.path = newPath;
-    itemBeingDragged.itemToReplace = context;
+    itemBeingDragged.itemToReplace = itemToReplace;
     itemBeingDragged.movingAfter = movingAfter;
-    itemBeingDragged.listCallbacks = context.listCallbacks;
+    itemBeingDragged.listContext = listContext;
   }
 }
 
@@ -205,9 +207,9 @@ DraggableList.SingleDropZone = function SingleDropZone({children}) {
     const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
     if (hoverClientY < hoverMiddleY) {
-      move(itemBeingDragged, context, context.index, false);
+      move(itemBeingDragged, context.listContext, context.index, context, false);
     } else {
-      move(itemBeingDragged, context, context.index + 1, true);
+      move(itemBeingDragged, context.listContext, context.index + 1, context, true);
     }
   });
 };
@@ -219,9 +221,9 @@ DraggableList.Before = function Before({children}) {
     const clientOffset = monitor.getClientOffset();
     const hoverClientY = clientOffset.y - hoverBoundingRect.top;
     if (hoverClientY < hoverMiddleY) {
-      move(itemBeingDragged, context.parentContext, context.parentContext.index, false);
+      move(itemBeingDragged, context.parentContext, context.entryContext.index, null, false);
     } else {
-      move(itemBeingDragged, context, 0, false);
+      move(itemBeingDragged, context, 0, null, false);
     }
   });
 };

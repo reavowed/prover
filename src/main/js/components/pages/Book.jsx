@@ -60,9 +60,15 @@ export class Book extends React.Component {
       .then(({chapters}) => this.updateChapters(chapters));
   };
 
-  onDropChapter = ({url}, {index: newIndex}) => {
-    return window.fetchJson(path.join(url, "index"), {method: "PUT", body: newIndex})
-      .then(({chapters}) => this.updateChapters(chapters));
+  onDropChapter = ({url, index}, target, after) => {
+    if (target) {
+      const newIndex = target.index + (after ? 1 : 0) - (index < target.index ? 1 : 0);
+      if (newIndex !== index) {
+        return window.fetchJson(path.join(url, "index"), {method: "PUT", body: newIndex})
+          .then(({chapters}) => this.updateChapters(chapters));
+      }
+    }
+    return Promise.resolve();
   };
 
   render() {

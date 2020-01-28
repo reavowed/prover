@@ -59,11 +59,14 @@ export class Chapter extends React.Component {
       });
   };
 
-  onDropEntry = ({url, index}, {index: targetIndex}, after) => {
-    return this.updateChapter(path.join(url, "index"), {
-      method: "PUT",
-      body: targetIndex + (after ? 1 : 0) - (index < targetIndex ? 1 : 0)
-    });
+  onDropEntry = ({url, index}, target, after) => {
+    if (target) {
+      const newIndex = target.index + (after ? 1 : 0) - (index < target.index ? 1 : 0);
+      if (newIndex !== index) {
+        return this.updateChapter(path.join(url, "index"), {method: "PUT", body: newIndex});
+      }
+    }
+    return Promise.resolve();
   };
 
   updateTitle = (newTitle) => {
