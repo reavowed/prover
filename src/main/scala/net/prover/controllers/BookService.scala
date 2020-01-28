@@ -33,7 +33,7 @@ class BookService {
     for {
       newBooks <- f(books, definitions)
     } yield {
-      val newDefinitions = getDefinitions(books)
+      val newDefinitions = getDefinitions(newBooks)
       writeBooks(newBooks)
       _booksAndDefinitions = (newBooks, newDefinitions)
       (newBooks, newDefinitions)
