@@ -219,6 +219,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
+        variableName <- Option(definition.variableName.trim).filter(_.nonEmpty).orBadRequest("Variable name must be provided")
         inference <- findInference(definition.inferenceId)
         (namingPremises, assumption) <- ProofHelper.getNamingPremisesAndAssumption(inference).orBadRequest(s"Inference ${definition.inferenceId} is not a naming inference")
         substitutions <- definition.substitutions.parse()
@@ -229,7 +230,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         val premises = premiseStatements.map(stepProvingContext.createPremise)
         val targetSteps = premises.ofType[Premise.Pending].map(p => ProofHelper.findFact(p.statement).getOrElse(Step.Target(p.statement)))
         targetSteps :+ Step.Naming(
-          definition.variableName,
+          variableName,
           substitutedAssumption,
           step.statement,
           Seq(Step.Target(step.statement.insertExternalParameters(1))),

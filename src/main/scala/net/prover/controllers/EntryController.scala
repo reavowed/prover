@@ -40,7 +40,8 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
       chapter <- findChapter(book, chapterKey)
       entry <- findEntry[ExpressionDefinition](chapter, entryKey)
       newEntry = entry.withSymbol(newSymbol)
-      _ = modifyDefinition(entry, newEntry)
+      newEntryWithFormat = if (entry.format.isInstanceOf[Format.Default]) newEntry.withFormat(Format.default(newSymbol, entry.boundVariableNames ++ entry.componentTypes.map(_.name))) else newEntry
+      _ = modifyDefinition(entry, newEntryWithFormat)
     } yield ()).toResponseEntity
   }
 
