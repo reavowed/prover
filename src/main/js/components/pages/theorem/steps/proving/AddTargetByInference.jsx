@@ -34,7 +34,7 @@ export default function AddTargetByInference({path, onCancel, onError}) {
       .then(onCancel)
       .catch(onError);
   };
-  return <InferenceFinder title='Select Inference'
+  return <InferenceFinder title='Select Inference for New Target'
                           getInferenceSuggestions={getInferenceSuggestions}
                           getSubstitutionSuggestions={getSubstitutionSuggestions}
                           submit={proveWithInference}

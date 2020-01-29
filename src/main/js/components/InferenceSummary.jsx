@@ -6,10 +6,8 @@ import {ResultWithPremises} from "./ResultWithPremises";
 export class InferenceSummary extends React.Component {
   render() {
     let {inference, createPremiseElement} = this.props;
-    return <BoundVariableLists.Provider value={[]}>
-        <ResultWithPremises premises={inference.premises}
+    return <ResultWithPremises premises={inference.premises}
                             result={<CopiableExpression expression={inference.conclusion} />}
-                            createPremiseElement={createPremiseElement}/>
-      </BoundVariableLists.Provider>
+                            createPremiseElement={createPremiseElement}/>;
   }
 };
