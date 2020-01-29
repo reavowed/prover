@@ -37,15 +37,18 @@ object ExtractionHelper {
     currentStatement: Statement,
     inference: Inference)(
     implicit stepProvingContext: StepProvingContext
-  ): Try[(Step.Assertion, Seq[Step.Assertion], Seq[Step.Target])] = {
+  ): Try[(Statement, Option[Step.Assertion], Seq[Step.Assertion], Seq[Step.Target])] = {
     for {
       (extractionPremise, otherPremises) <- +:.unapply(inference.premises).filter(_._1.requiredSubstitutions.contains(inference.requiredSubstitutions)).orBadRequest(s"Inference ${inference.id} did not have an extraction premise")
       extractionSubstitutions <- extractionPremise.calculateSubstitutions(currentStatement).flatMap(_.confirmTotality).orBadRequest(s"Could not apply extraction premise for inference ${inference.id}")
       extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions).orBadRequest(s"Could not get extraction conclusion for inference ${inference.id}")
       substitutedPremises <- otherPremises.map(_.applySubstitutions(extractionSubstitutions).orBadRequest(s"Could not apply substitutions to premise")).traverseTry
       (premiseSteps, targetSteps) = PremiseFinder.findPremiseStepsOrTargets(substitutedPremises)
-      assertionStep = Step.Assertion(extractedConclusion, inference.summary, (currentStatement +: substitutedPremises).map(Premise.Pending), extractionSubstitutions)
-    } yield (assertionStep, premiseSteps, targetSteps)
+      assertionStep = if (stepProvingContext.provingContext.structuralSimplificationInferences.exists(_._1 == inference))
+        None
+      else
+        Some(Step.Assertion(extractedConclusion, inference.summary, (currentStatement +: substitutedPremises).map(Premise.Pending), extractionSubstitutions))
+    } yield (extractedConclusion, assertionStep, premiseSteps, targetSteps)
   }
   private def applyExtractions(currentStatement: Statement, inferencesRemaining: Seq[Inference], applicationSoFar: ExtractionApplication, substitutions: Substitutions, variableTracker: VariableTracker)(implicit stepProvingContext: StepProvingContext): Try[(Statement, ExtractionApplication)] = {
     inferencesRemaining match {
@@ -57,8 +60,8 @@ object ExtractionHelper {
                 applyExtractions(assertion.statement, tailInferences, applicationSoFar.addExtractionStep(assertion), substitutions, newVariableTracker)
               }
           } getOrElse applySimpleExtraction(currentStatement, inference)
-          .flatMap { case (assertion, premiseSteps, targetSteps) =>
-            applyExtractions(assertion.statement, tailInferences, applicationSoFar.addExtractionStep(assertion).addPremiseSteps(premiseSteps).addTargetSteps(targetSteps), substitutions, variableTracker)(
+          .flatMap { case (result, assertionOption, premiseSteps, targetSteps) =>
+            applyExtractions(result, tailInferences, assertionOption.map(applicationSoFar.addExtractionStep).getOrElse(applicationSoFar).addPremiseSteps(premiseSteps).addTargetSteps(targetSteps), substitutions, variableTracker)(
               stepProvingContext = stepProvingContext.copy(stepContext = stepProvingContext.stepContext.addSteps(premiseSteps))
             )
           }
