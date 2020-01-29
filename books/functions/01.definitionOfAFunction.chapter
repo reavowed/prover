@@ -209,12 +209,26 @@ conclusion ∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B
       assume function $0 A B {
         prove ⊆ $0 product A B 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () ($0, A, B) () () 0.0.0a
         prove ∈ $0 powerSet product A B 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () ($0, product A B) () () 0.0.0.0
-        prove ∈ $0 $$0 366b3d0e803afc8074c1e71696b4a158c2f41f2e3691fb2b0ec4232d001b451d () ($$0, powerSet product A B, $0) (function $$$0 A B) () 0a 0.0.0.1 0.0.0a
+        elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
+          prove ∧ ∈ $0 powerSet product A B function $0 A B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 powerSet product A B, function $0 A B) () () () 0.0.0.1 0.0.0a
+          elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
+            prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 powerSet product A B function $0 A B 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () ($$0, powerSet product A B) (function $$$0 A B) () 0a
+            prove ↔ ∈ $0 $$0 ∧ ∈ $0 powerSet product A B function $0 A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 powerSet product A B function $$$0 A B) () 0.0.0.2.1.0
+            prove → ∧ ∈ $0 powerSet product A B function $0 A B ∈ $0 $$0 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 $$0, ∧ ∈ $0 powerSet product A B function $0 A B) () () () 0.0.0.2.1.1
+            prove ∈ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $0 powerSet product A B function $0 A B, ∈ $0 $$0) () () () 0.0.0.2.1.2 0.0.0.2.0
+          }
+        }
       }
     }
     take f {
       assume ∈ $0 $$0 {
-        prove function $0 A B fcce0447644570b6bcc9f2a022941377315504a3314f29cab9b9390b22c1094c () ($$0, powerSet product A B, $0) (function $$$0 A B) () 0a 0.1.0a
+        elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
+          prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 powerSet product A B function $0 A B 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () ($$0, powerSet product A B) (function $$$0 A B) () 0a
+          prove ↔ ∈ $0 $$0 ∧ ∈ $0 powerSet product A B function $0 A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 powerSet product A B function $$$0 A B) () 0.1.0.0.0
+          prove → ∈ $0 $$0 ∧ ∈ $0 powerSet product A B function $0 A B f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 $$0, ∧ ∈ $0 powerSet product A B function $0 A B) () () () 0.1.0.0.1
+          prove ∧ ∈ $0 powerSet product A B function $0 A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ∧ ∈ $0 powerSet product A B function $0 A B) () () () 0.1.0.0.2 0.1.0a
+          prove function $0 A B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 powerSet product A B, function $0 A B) () () () 0.1.0.0.3
+        }
       }
     }
     elided 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 {
