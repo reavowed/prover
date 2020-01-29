@@ -89,7 +89,7 @@ export class SubproofStep {
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = this.statement;
-    id: String = sha256([this.type + " " + this.statement.serialize(), ..._.map(this.substeps, s => s.id)].join("\n"))
+    id: String = sha256(this.type + " " + this.name)
 }
 
 export type Step = AssertionStep | DeductionStep | ScopedVariableStep | NamingStep | TargetStep | ElidedStep | SubproofStep;

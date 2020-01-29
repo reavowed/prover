@@ -297,7 +297,7 @@ export class Steps extends React.Component {
         substep.assumption.components[0] instanceof FunctionParameter &&
         substep.assumption.components[0].level === 0 && substep.assumption.components[0].index === 0)
       {
-        const key = step.provenStatement.serialize();
+        const key = step.provenStatement ? step.provenStatement.serialize() : "???";
         return {
           key,
           element: <ScopedDeductionStep {...props} format={substep.assumption.definition.baseFormatString} components={substep.assumption.components} />
