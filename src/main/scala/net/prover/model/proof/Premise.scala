@@ -11,9 +11,9 @@ sealed trait Premise {
   def referencedInferenceIds: Set[String]
   def referencedLines: Set[PreviousLineReference]
   def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending]
-  def insertExternalParameters(numberOfParametersToInsert: Int): Premise
-  def removeExternalParameters(numberOfParametersToRemove: Int): Option[Premise] = {
-    statement.removeExternalParameters(numberOfParametersToRemove).map(Pending)
+  def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise
+  def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Premise] = {
+    statement.removeExternalParameters(numberOfParametersToRemove, internalDepth).map(Pending)
   }
   def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Premise
   def toPending: Pending = Pending(statement)
@@ -67,8 +67,8 @@ object Premise {
     override def referencedInferenceIds: Set[String] = Set.empty
     override def referencedLines: Set[PreviousLineReference] = Set.empty
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending] = Map(path -> this)
-    override def insertExternalParameters(numberOfParametersToInsert: Int): Premise.Pending = {
-      copy(statement = statement.insertExternalParameters(numberOfParametersToInsert))
+    override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Pending = {
+      copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
     }
     def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Pending = {
       Pending(statement.replaceDefinition(oldDefinition, newDefinition))
@@ -80,8 +80,8 @@ object Premise {
     val `type` = "given"
     override def referencedInferenceIds: Set[String] = Set.empty
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending] = Map.empty
-    override def insertExternalParameters(numberOfParametersToInsert: Int): Premise.Given = {
-      copy(statement = statement.insertExternalParameters(numberOfParametersToInsert))
+    override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Given = {
+      copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
     }
     def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Given = {
       Given(
@@ -96,10 +96,10 @@ object Premise {
     override def referencedLine: PreviousLineReference = premise.referencedLine.addInternalPath(path)
     override def referencedInferenceIds: Set[String] = premise.referencedInferenceIds + inference.id
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Pending] = premise.getPendingPremises(path :+ 0)
-    override def insertExternalParameters(numberOfParametersToInsert: Int): Premise.Simplification = {
+    override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Simplification = {
       copy(
-        statement = statement.insertExternalParameters(numberOfParametersToInsert),
-        substitutions = substitutions.insertExternalParameters(numberOfParametersToInsert))
+        statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth),
+        substitutions = substitutions.insertExternalParameters(numberOfParametersToInsert, internalDepth))
     }
     def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Simplification = {
       Simplification(

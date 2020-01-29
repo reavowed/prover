@@ -83,9 +83,9 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
                   (currentStepOuterContext.boundVariableLists(i).size <= newStepOuterContext.boundVariableLists(i).size).orBadRequest("Cannot move step to one with a smaller bound variable list")
                 }.traverseTry
                 stepsWithNewContext <- if (parametersToRemove > 0)
-                  currentSteps.map(_.removeExternalParameters(parametersToRemove)).traverseOption.orBadRequest("Could not remove extra parameters")
+                  currentSteps.map(_.removeExternalParameters(parametersToRemove, 0)).traverseOption.orBadRequest("Could not remove extra parameters")
                 else if (parametersToAdd > 0)
-                  Success(currentSteps.map(_.insertExternalParameters(parametersToAdd)))
+                  Success(currentSteps.map(_.insertExternalParameters(parametersToAdd, 0)))
                 else
                   Success(currentSteps)
               } yield before ++ stepsWithNewContext ++ after

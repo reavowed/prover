@@ -14,7 +14,7 @@ case class StepContext private(
   def atIndex(index: Int): StepContext = copy(stepReference = stepReference.forChild(index))
   def addBoundVariable(name: String): StepContext = copy(
     boundVariableLists = boundVariableLists :+ Seq(name),
-    premises = premises.map(_.insertExternalParameters(1)))
+    premises = premises.map(_.insertExternalParameters(1, 0)))
 
   private def addPremise(givenPremise: Premise.Given): StepContext = {
     copy(premises = premises :+ givenPremise)

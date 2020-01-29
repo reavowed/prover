@@ -16,19 +16,19 @@ case class Substitutions(
 {
   def isEmpty: Boolean = statements.isEmpty && terms.isEmpty && functions.isEmpty && predicates.isEmpty
 
-  def insertExternalParameters(numberOfParametersToInsert: Int): Substitutions = {
+  def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Substitutions = {
     Substitutions(
-      statements.mapValues(_.insertExternalParameters(numberOfParametersToInsert)),
-      terms.mapValues(_.insertExternalParameters(numberOfParametersToInsert)),
-      predicates.mapValues(_.insertExternalParameters(numberOfParametersToInsert)),
-      functions.mapValues(_.insertExternalParameters(numberOfParametersToInsert)))
+      statements.mapValues(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)),
+      terms.mapValues(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)),
+      predicates.mapValues(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)),
+      functions.mapValues(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)))
   }
-  def removeExternalParameters(numberOfParametersToRemove: Int): Option[Substitutions] = {
+  def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Substitutions] = {
     for {
-      newStatements <- statements.mapValues(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
-      newTerms <- terms.mapValues(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
-      newPredicates <- predicates.mapValues(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
-      newFunctions <- functions.mapValues(_.removeExternalParameters(numberOfParametersToRemove)).traverseOption
+      newStatements <- statements.mapValues(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
+      newTerms <- terms.mapValues(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
+      newPredicates <- predicates.mapValues(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
+      newFunctions <- functions.mapValues(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
     } yield Substitutions(newStatements, newTerms, newPredicates, newFunctions)
   }
   def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Substitutions = {
