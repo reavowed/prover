@@ -29,7 +29,8 @@ sealed trait Step {
   def referencedInferenceIds: Set[String]
   def referencedDefinitions: Set[ExpressionDefinition]
   @JsonSerialize
-  def referencedLines: Set[PreviousLineReference]
+  def referencedLines: Set[PreviousLineReference] = recursivePremises.flatMap(_.referencedLines).toSet
+  def recursivePremises: Seq[Premise]
   def length: Int
   def serializedLines: Seq[String]
 }
@@ -118,7 +119,7 @@ object Step {
         entryContext.deductionDefinitionOption.get)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
-    override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
+    override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet + deductionStatement
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"assume ${assumption.serialized} {") ++
@@ -195,7 +196,7 @@ object Step {
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet + inference.id
     override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet
-    override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet ++ substeps.flatMap(_.referencedLines).toSet
+    override def recursivePremises: Seq[Premise] = premises ++ substeps.flatMap(_.recursivePremises)
     @JsonSerialize
     def referencedLinesForExtraction: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def length: Int = substeps.map(_.length).sum + 1
@@ -262,7 +263,7 @@ object Step {
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet + scopingStatement
-    override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
+    override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"take $variableName {") ++
       substeps.flatMap(_.serializedLines).indent ++
@@ -300,7 +301,7 @@ object Step {
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step = this
     override def referencedInferenceIds: Set[String] = Set.empty
     override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
-    override def referencedLines: Set[PreviousLineReference] = Set.empty
+    override def recursivePremises: Seq[Premise] = Nil
     override def length = 1
     def serializedLines: Seq[String] = Seq(s"target ${statement.serialized}")
   }
@@ -339,7 +340,7 @@ object Step {
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
-    override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
+    override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(("elided" +: (highlightedInference.map(_.id).toSeq ++ description.map(_.inParens).toSeq) :+ "{").mkString(" ")) ++
       substeps.flatMap(_.serializedLines).indent ++
@@ -353,7 +354,7 @@ object Step {
         substeps <- listParser.inBraces
       } yield Elided(substeps, highlightedInference, description)
     }
-    private def ifNecessary(substeps: Seq[Step], elider: Seq[Step] => Step): Option[Step] = {
+    def ifNecessary(substeps: Seq[Step], elider: Seq[Step] => Step): Option[Step] = {
       substeps match {
         case Nil => None
         case Seq(single) => Some(single)
@@ -420,7 +421,7 @@ object Step {
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def referencedInferenceIds: Set[String] = Set(inference.id) ++ premises.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
-    override def referencedLines: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
+    override def recursivePremises: Seq[Premise] = premises
     override def length: Int = 1
     override def serializedLines: Seq[String] = {
       Seq(Seq("prove", statement.serialized, inference.id, inference.serializeSubstitutions(substitutions), Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
@@ -476,7 +477,7 @@ object Step {
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
-    override def referencedLines: Set[PreviousLineReference] = substeps.flatMap(_.referencedLines).toSet
+    override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"subproof ($name) {") ++
       substeps.flatMap(_.serializedLines).indent ++

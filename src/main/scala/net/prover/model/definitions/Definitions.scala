@@ -23,7 +23,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
   lazy val equalityOption: Option[Equality] = {
     for {
       definition <- statementDefinitions.find(_.attributes.contains("equality"))
-      relation = BinaryRelation(definition.defaultValue, definition.attributes)
+      relation = BinaryRelation(definition.symbol, definition.defaultValue, definition.attributes)
       definitions <- definitionsByRelation.get(relation)
       expansion <- definitions.expansion
       substitution <- definitions.substitution
@@ -32,7 +32,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     } yield Equality(relation, expansion, substitution, reversal, transitivity)
   }
 
-  lazy val definedBinaryRelations: Seq[(String, BinaryRelation)] = Definitions.getDefinedBinaryRelations(statementDefinitions, displayShorthands, termDefinitions)
+  lazy val definedBinaryRelations: Seq[BinaryRelation] = Definitions.getDefinedBinaryRelations(statementDefinitions, displayShorthands, termDefinitions)
   lazy val definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions] = {
     @scala.annotation.tailrec
     def helper(remainingInferences: Seq[Inference], acc: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
@@ -47,7 +47,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
           helper(tailInferences, afterSubstitution)
       }
     }
-    helper(inferenceEntries, definedBinaryRelations.map(_._2).map(r => r -> RelationDefinitions(None, None, None, None)).toMap)
+    helper(inferenceEntries, definedBinaryRelations.map(r => r -> RelationDefinitions(None, None, None, None)).toMap)
   }
 
   private def findReversal(inference: Inference, definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
@@ -115,12 +115,6 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
           false
       })
     } yield definitionsByRelation.replace(relation, _.copy(substitution = Some(Substitution(relation, inference.summary))))) getOrElse definitionsByRelation
-  }
-
-  lazy val transitivityDefinitions: Seq[(String, Transitivity[Term])] = {
-    definedBinaryRelations.mapCollect { case (symbol, relation) =>
-        definitionsByRelation.get(relation).flatMap(_.transitivity).map(symbol -> _)
-    }
   }
 
   lazy val rearrangeableFunctions: Seq[(BinaryOperator, Commutativity, Associativity)] = {
@@ -366,12 +360,11 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
 object Definitions {
   case class RelationDefinitions(reversal: Option[Reversal], transitivity: Option[Transitivity[Term]], expansion: Option[Expansion], substitution: Option[Substitution])
 
-  def getDefinedBinaryRelations(statementDefinitions: Seq[StatementDefinition], shorthands: Seq[DisplayShorthand], termDefinitions: Seq[TermDefinition]): Seq[(String, BinaryRelation)] = {
+  def getDefinedBinaryRelations(statementDefinitions: Seq[StatementDefinition], shorthands: Seq[DisplayShorthand], termDefinitions: Seq[TermDefinition]): Seq[BinaryRelation] = {
     def fromDefinitions = for {
       definition <- statementDefinitions
       if definition.componentTypes.length == 2 && definition.format.baseFormatString == s"%0 ${definition.symbol} %1"
-      relation = BinaryRelation(definition.defaultValue, definition.attributes)
-    } yield (definition.symbol, relation)
+    } yield BinaryRelation(definition.symbol, definition.defaultValue, definition.attributes)
     def fromShorthands = for {
       shorthand <- shorthands
       if shorthand.template.isInstanceOf[Template.DefinedStatement]
@@ -387,6 +380,7 @@ object Definitions {
       if definition.componentTypes.isEmpty
       if shorthand.conditions.map(_._2).forall(definition.attributes.contains)
       relation = BinaryRelation(
+        definition.symbol,
         shorthand.template.expand(
           Map.empty,
           Map(
@@ -395,7 +389,7 @@ object Definitions {
             symbolVariable.name -> definition.defaultValue)
         ).asInstanceOf[Statement],
         Nil)
-    } yield (definition.symbol, relation)
+    } yield relation
     fromDefinitions ++ fromShorthands
   }
 }

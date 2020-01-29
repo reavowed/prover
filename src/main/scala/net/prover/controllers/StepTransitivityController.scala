@@ -19,7 +19,8 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     (for {
-      (lhs, _, relation, stepProvingContext) <- getRelation(bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (step, stepProvingContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (relation, lhs, _) <- getRelation(step.statement)(stepProvingContext)
     } yield {
       implicit val spc = stepProvingContext
       stepProvingContext.allPremisesSimplestFirst.mapCollect { p =>
@@ -39,7 +40,8 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     (for {
-      (_, rhs, relation, stepProvingContext) <- getRelation(bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (step, stepProvingContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (relation, _, rhs) <- getRelation(step.statement)(stepProvingContext)
     } yield {
       implicit val spc = stepProvingContext
       stepProvingContext.allPremisesSimplestFirst.mapCollect { p =>
@@ -59,14 +61,14 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedPremiseStatement: String
   ): ResponseEntity[_] = {
-    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (stepProvingContext, transitivity, targetLhs, targetRhs) =>
+    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (stepProvingContext, relation, targetLhs, targetRhs) =>
       implicit val spc = stepProvingContext
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
         premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-        (premiseLhs, premiseRhs) <- transitivity.statement.unapply(premise.statement) orBadRequest "Premise was not transitive statement"
+        (premiseLhs, premiseRhs) <- relation.unapply(premise.statement) orBadRequest "Premise was not transitive statement"
         _ <- (premiseLhs == targetLhs).orBadRequest("Premise LHS did not match target LHS")
-      } yield (None, Some(Step.Target(transitivity.statement(premiseRhs, targetRhs))), premiseRhs, Nil)
+      } yield (relation, None, relation, Some(Step.Target(relation(premiseRhs, targetRhs))), premiseRhs, Nil)
     }
   }
   @PostMapping(value = Array("/premiseRight"), produces = Array("application/json;charset=UTF-8"))
@@ -78,14 +80,14 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedPremiseStatement: String
   ): ResponseEntity[_] = {
-    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (stepProvingContext, transitivity, targetLhs, targetRhs) =>
+    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (stepProvingContext, relation, targetLhs, targetRhs) =>
       implicit val spc = stepProvingContext
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
         premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-        (premiseLhs, premiseRhs) <- transitivity.statement.unapply(premise.statement) orBadRequest "Premise was not transitive statement"
+        (premiseLhs, premiseRhs) <- relation.unapply(premise.statement) orBadRequest "Premise was not transitive statement"
         _ <- (premiseRhs == targetRhs).orBadRequest("Premise LHS did not match target LHS")
-      } yield (Some(Step.Target(transitivity.statement(targetLhs, premiseLhs))), None, premiseLhs, Nil)
+      } yield (relation, Some(Step.Target(relation(targetLhs, premiseLhs))), relation, None, premiseLhs, Nil)
     }
   }
 }

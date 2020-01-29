@@ -125,7 +125,7 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
         }
       ]
     },
-    binaryRelation && binaryRelation.isTransitive && {
+    binaryRelation && {
       label: "Insert transitive",
       provers: [
         {

@@ -51,7 +51,7 @@ export class ElidedStepProofLine extends React.Component {
         {_.uniqBy(step.inferencesUsed, "id").map(i => <Dropdown.Item key={i.id} onClick={() => this.highlightInference(i.id)}>{i.name}</Dropdown.Item>)}
       </DropdownButton>}
     </>;
-    const proofLine = <ProofLine premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
+    const proofLine = <ProofLine premiseReferences={step.filterReferences(path)}
                                  path={path}
                                  statement={step.statement}
                                  buttons={buttons}

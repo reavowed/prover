@@ -341,8 +341,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
 
   case class BinaryRelationSummary(symbol: String, template: Statement, attributes: Seq[String], isTransitive: Boolean)
   private def getBinaryRelations(provingContext: ProvingContext): Seq[BinaryRelationSummary] = {
-    provingContext.definedBinaryRelations.map { case (symbol, relation) =>
-      BinaryRelationSummary(symbol, relation.template, relation.attributes, provingContext.transitivityDefinitions.exists(_._1 == symbol))
+    provingContext.definedBinaryRelations.map { relation =>
+      BinaryRelationSummary(relation.symbol, relation.template, relation.attributes, provingContext.definitionsByRelation(relation).transitivity.nonEmpty)
     }
   }
 

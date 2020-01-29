@@ -267,13 +267,13 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     rewrites: Seq[Seq[RewriteRequest]],
     swapper: Swapper
   ): ResponseEntity[_] = {
-    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (stepProvingContext, transitivity, targetLhs, targetRhs) =>
+    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (stepProvingContext, relation, targetLhs, targetRhs) =>
       implicit val spc = stepProvingContext
       for {
         equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
-        if equality.transitivity == transitivity
-        (termToRewrite, staticTerm) = swapper.swap(targetLhs, targetRhs)
-        (rewriteStep, intermediateTerm) <- rewrite(termToRewrite, rewrites, equality, swapper)(substituteForRearrangement(equality)) { (baseTerm, rewrittenTerm, steps, inferences) =>
+        if equality.relation == relation
+        (sourceTerm, destinationTerm) = swapper.swap(targetLhs, targetRhs)
+        (rewriteStep, intermediateTerm) <- rewrite(sourceTerm, rewrites, equality, swapper)(substituteForRearrangement(equality)) { (baseTerm, rewrittenTerm, steps, inferences) =>
           val (sourceTerm, targetTerm) = swapper.swap(baseTerm, rewrittenTerm)
           val transitivitySteps = equality.addTransitivityToRearrangement(sourceTerm, steps)
           val elider = (steps: Seq[Step]) => inferences.single match {
@@ -284,7 +284,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           }
           RearrangementStep(targetTerm, transitivitySteps, elider)
         } { (rewrittenTerm, steps, inferences) =>
-          val transitivitySteps = equality.addTransitivityToRearrangement(swapper.getOne(termToRewrite, rewrittenTerm), steps)
+          val transitivitySteps = equality.addTransitivityToRearrangement(swapper.getOne(sourceTerm, rewrittenTerm), steps)
           inferences.single match {
             case Some(inference) =>
               Step.Elided.ifNecessary(transitivitySteps, inference).get
@@ -292,9 +292,9 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
               Step.Elided.ifNecessary(transitivitySteps, "Rewritten").get
           }
         }
-        targetStep = Step.Target((equality.apply _).tupled(swapper.swap(intermediateTerm, staticTerm)))
+        targetStep = Step.Target((equality.apply _).tupled(swapper.swap(intermediateTerm, destinationTerm)))
         (firstStep, secondStep) = swapper.swap(rewriteStep, targetStep)
-      } yield (Some(firstStep), Some(secondStep), intermediateTerm, Nil)
+      } yield (relation, Some(firstStep), relation, Some(secondStep), intermediateTerm, Nil)
     }
   }
 

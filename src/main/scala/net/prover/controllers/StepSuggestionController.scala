@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.models._
 import net.prover.model._
-import net.prover.model.definitions.Transitivity
+import net.prover.model.definitions.{BinaryRelation, Transitivity}
 import net.prover.model.expressions.{DefinedStatement, Statement, StatementVariable, Term}
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
@@ -82,25 +82,37 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     proofIndex: Int,
     stepPath: PathData,
     searchText: String)(
-    f: (Transitivity[Term], Statement, StepContext) => Option[Term]
+    getSourceTerm: (BinaryRelation, Statement, StepContext) => Option[Term]
   ): ResponseEntity[_] = {
     (for {
       (step, stepProvingContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      (targetSource, transitivityDefinition) <- stepProvingContext.provingContext.transitivityDefinitions.mapFind { case (_, definition) =>
-        for {
-          lhs <- f(definition, step.statement, stepProvingContext.stepContext)
-        } yield (lhs, definition)
-      }.orBadRequest("Target step is not a transitive statement")
+      (targetSource, relation) <- stepProvingContext.provingContext.definedBinaryRelations.reverse.mapFind { relation =>
+        getSourceTerm(relation, step.statement, stepProvingContext.stepContext).map(_ -> relation)
+      }.orBadRequest("Target step is not a binary relation")
     } yield {
       import stepProvingContext._
       implicit val spc = stepProvingContext
 
+      def getSubstitutionsForRelation(extractionResult: Statement, relation: BinaryRelation): Option[Substitutions.Possible] = {
+        for {
+          conclusionSource <- getSourceTerm(relation, extractionResult, stepContext)
+          substitutions <- calculateSubstitutionsForTermOrSubTerm(targetSource, conclusionSource)
+        } yield substitutions
+      }
+      def getSubstitutions(extractionResult: Statement): Option[Substitutions.Possible] = {
+        (for {
+          equality <- provingContext.equalityOption
+          substitutions <- getSubstitutionsForRelation(extractionResult, equality.relation)
+        } yield substitutions) orElse
+          (if (!provingContext.equalityOption.exists(_.relation == relation))
+            getSubstitutionsForRelation(extractionResult, relation)
+          else
+            None)
+      }
+
       def getPossibleInference(inference: Inference): Option[PossibleInference] = {
         val possibleConclusions = SubstatementExtractor.getExtractionOptions(inference)
-          .mapCollect(PossibleConclusion.fromExtractionOptionWithSubstitutions(
-            _,
-            result => f(transitivityDefinition, result, stepProvingContext.stepContext).flatMap(calculateSubstitutionsForTermOrSubTerm(targetSource, _)),
-            inference.premises))
+          .mapCollect(PossibleConclusion.fromExtractionOptionWithSubstitutions(_, getSubstitutions, inference.premises))
         if (possibleConclusions.nonEmpty) {
           Some(PossibleInference(inference.summary, possibleConclusions))
         } else {
@@ -127,7 +139,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
-    suggestInferencesForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText)(_.statement.unapply(_)(_).map(_._1))
+    suggestInferencesForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText)(_.unapply(_)(_).map(_._1))
   }
 
   @GetMapping(value = Array("/suggestInferencesForTransitivityFromRight"), produces = Array("application/json;charset=UTF-8"))
@@ -139,7 +151,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
-    suggestInferencesForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText)(_.statement.unapply(_)(_).map(_._2))
+    suggestInferencesForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText)(_.unapply(_)(_).map(_._2))
   }
 
   @GetMapping(value = Array("/suggestImmediateNamingPremises"), produces = Array("application/json;charset=UTF-8"))

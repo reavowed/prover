@@ -191,22 +191,24 @@ export class Steps extends React.Component {
     };
 
     function readRightHandSides(currentRightHandSides) {
-      let continuingStepMatch, linkingStepMatch, nextRelation;
+      let continuingStepMatch, linkingStepMatch, nextRelation, linkingRelation, references;
       const previousRightHandSide = currentRightHandSides[currentRightHandSides.length - 1];
       const previousReference = previousRightHandSide.references[previousRightHandSide.references.length - 1];
 
       if (stepsWithIndexes.length >= 2 &&
         _.includes(allowableChainedStepTypes, stepsWithIndexes[0].step.type) &&
-        stepsWithIndexes[1].step.type === "assertion" &&
-        stepsWithIndexes[1].step.referencedLines.length === 2 &&
-        _.isEqual(stepsWithIndexes[1].step.referencedLines[0], previousReference) &&
-        _.isEqual(stepsWithIndexes[1].step.referencedLines[1], new StepReference([...basePath, stepsWithIndexes[0].index])) &&
+        (stepsWithIndexes[1].step.type === "assertion" || stepsWithIndexes[1].step.type === "elided") &&
+        (references = stepsWithIndexes[1].step.filterReferences ?
+          stepsWithIndexes[1].step.filterReferences([...basePath, stepsWithIndexes[1].index]) :
+          stepsWithIndexes[1].step.referencedLines) &&
+        _.isEqual(_.sortBy(references), _.sortBy([previousReference, new StepReference([...basePath, stepsWithIndexes[0].index])])) &&
         stepsWithIndexes[1].step.isComplete &&
         stepsWithIndexes[0].step.statement &&
         stepsWithIndexes[1].step.statement &&
         (nextRelation = findBinaryRelation(stepsWithIndexes[0].step.statement, entryContext)) &&
         (continuingStepMatch = matchTemplate(nextRelation.template, stepsWithIndexes[0].step.statement, [], [])) &&
-        (linkingStepMatch = matchTemplate(nextRelation.template, stepsWithIndexes[1].step.statement, [], [])) &&
+        (linkingRelation = findBinaryRelation(stepsWithIndexes[1].step.statement, entryContext)) &&
+        (linkingStepMatch = matchTemplate(linkingRelation.template, stepsWithIndexes[1].step.statement, [], [])) &&
         continuingStepMatch[0].expression.serialize() === previousRightHandSide.expression.serialize() &&
         linkingStepMatch[0].expression.serialize() === leftHandSideExpression.serialize() &&
         continuingStepMatch[1].expression.serialize() === linkingStepMatch[1].expression.serialize()
@@ -214,7 +216,7 @@ export class Steps extends React.Component {
         const {step, index} = stepsWithIndexes.shift();
         const {step: linkingStep, index: linkingIndex} = stepsWithIndexes.shift();
         const newRhs = {
-          symbol: nextRelation.symbol,
+          symbol: linkingRelation.symbol,
           expression: continuingStepMatch[1].expression,
           step,
           linkingStep,

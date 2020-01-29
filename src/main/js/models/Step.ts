@@ -69,7 +69,10 @@ export class ElidedStep {
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = this.substeps.length > 0 ? this.substeps[this.substeps.length - 1].provenStatement : null;
-    id: String = sha256([this.type + (this.statement ? " " + this.statement.serialize() : ""), ..._.map(this.substeps, s => s.id)].join("\n"))
+    id: String = sha256([this.type + (this.statement ? " " + this.statement.serialize() : ""), ..._.map(this.substeps, s => s.id)].join("\n"));
+    filterReferences(path: number[]): Reference[] {
+        return this.referencedLines.filter(r => ("stepPath" in r) ? !_.isEqual(path, _.take(r.stepPath, path.length)) : true)
+    }
 }
 
 export class TargetStep {
