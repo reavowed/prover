@@ -29,12 +29,12 @@ export default class ScopedDeductionStep extends React.Component {
     const patchedExpression = new DefinedExpression({baseFormatString: format}, [step.variableName], components.slice(1));
 
     return <Step.WithSubsteps path={path}>
+      <Step.Antecedent>
+          <ProofLine path={path}>
+            Take any <HighlightableExpression expression={patchedExpression} references={[assumptionReference]} wrapBoundVariable={wrapBoundVariable} expressionToCopy={substep.assumption}/>.
+          </ProofLine>
+      </Step.Antecedent>
       <BoundVariableLists.Add variables={[step.variableName]}>
-        <Step.Antecedent>
-            <ProofLine path={path}>
-              Take any <HighlightableExpression expression={patchedExpression} references={[assumptionReference]} wrapBoundVariable={wrapBoundVariable} expressionToCopy={substep.assumption}/>.
-            </ProofLine>
-        </Step.Antecedent>
         <Steps.Children steps={substep.substeps} path={substepPath} />
       </BoundVariableLists.Add>
       {step.provenStatement &&
