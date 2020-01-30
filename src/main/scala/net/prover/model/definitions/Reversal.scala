@@ -4,7 +4,7 @@ import net.prover.model.Inference
 import net.prover.model.expressions.Expression
 import net.prover.model.proof.{Premise, Step, SubstitutionContext}
 
-case class Reversal[TComponent <: Expression](relation: BinaryStatement[TComponent], inference: Inference.Summary) {
+case class Reversal[TComponent <: Expression](relation: BinaryJoiner[TComponent], inference: Inference.Summary) {
   def assertionStep(left: TComponent, right: TComponent)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
     Step.Assertion(
       relation(left, right),

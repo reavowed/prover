@@ -30,7 +30,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     } yield Equality(relation, expansion, substitution, reversal, transitivity)
   }
 
-  lazy val definedBinaryStatements: Seq[BinaryStatement[_ <: Expression]] = Definitions.getDefinedBinaryStatements(statementDefinitions, displayShorthands, termDefinitions)
+  lazy val definedBinaryStatements: Seq[BinaryJoiner[_ <: Expression]] = Definitions.getDefinedBinaryStatements(statementDefinitions, displayShorthands, termDefinitions)
   lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryStatements.ofType[BinaryRelation]
 
   lazy val reversals: Seq[Reversal[_ <: Expression]] = {
@@ -348,7 +348,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
 }
 
 object Definitions {
-  def getDefinedBinaryStatements(statementDefinitions: Seq[StatementDefinition], shorthands: Seq[DisplayShorthand], termDefinitions: Seq[TermDefinition]): Seq[BinaryStatement[_ <: Expression]] = {
+  def getDefinedBinaryStatements(statementDefinitions: Seq[StatementDefinition], shorthands: Seq[DisplayShorthand], termDefinitions: Seq[TermDefinition]): Seq[BinaryJoiner[_ <: Expression]] = {
     def fromDefinitions = for {
       definition <- statementDefinitions
       if definition.format.baseFormatString == s"%0 ${definition.symbol} %1"

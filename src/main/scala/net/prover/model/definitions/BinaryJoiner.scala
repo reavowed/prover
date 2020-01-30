@@ -4,7 +4,7 @@ import net.prover.model.{Inference, Substitutions}
 import net.prover.model.expressions.{Expression, Statement}
 import net.prover.model.proof.SubstitutionContext
 
-trait BinaryStatement[TComponent <: Expression] extends Substitutions.Lenses[TComponent] {
+trait BinaryJoiner[TComponent <: Expression] extends Substitutions.Lenses[TComponent] {
   def symbol: String
   def template: Statement
   def attributes: Seq[String]

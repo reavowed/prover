@@ -32,7 +32,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(entryContext.statementDefinitions.contains)
     implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(entryContext.termDefinitions.contains)
 
-    implicit val allowableRelation: Allowable[BinaryStatement[_ <: Expression]] = allowable(definedBinaryStatements.contains)
+    implicit val allowableRelation: Allowable[BinaryJoiner[_ <: Expression]] = allowable(definedBinaryStatements.contains)
     implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
     implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.statement) && isAllowed(r.inference))
     implicit val allowableExpansion: Allowable[Expansion] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
@@ -128,7 +128,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
       }
     }
   }
-  lazy val definedBinaryStatements: Seq[BinaryStatement[_ <: Expression]] = {
+  lazy val definedBinaryStatements: Seq[BinaryJoiner[_ <: Expression]] = {
     Definitions.getDefinedBinaryStatements(
       entryContext.statementDefinitions,
       entryContext.displayShorthands,

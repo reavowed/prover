@@ -2,8 +2,8 @@ package net.prover.controllers
 
 import net.prover.controllers.models._
 import net.prover.model._
-import net.prover.model.definitions.BinaryRelation
-import net.prover.model.expressions.{DefinedStatement, Statement, StatementVariable, Term}
+import net.prover.model.definitions.{BinaryRelation, BinaryJoiner}
+import net.prover.model.expressions.{DefinedStatement, Expression, Statement, StatementVariable, Term}
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -70,11 +70,6 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     }).toResponseEntity
   }
 
-  private def calculateSubstitutionsForTermOrSubTerm(targetTerm: Term, conclusionTerm: Term)(implicit stepContext: StepContext): Option[Substitutions.Possible] = {
-    conclusionTerm.calculateSubstitutions(targetTerm) orElse
-      (targetTerm.getTerms().map(_._1).toSet - targetTerm).toSeq.mapCollect(conclusionTerm.calculateSubstitutions).single
-  }
-
   private def suggestInferencesForTransitivity(
     bookKey: String,
     chapterKey: String,
@@ -82,32 +77,33 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     proofIndex: Int,
     stepPath: PathData,
     searchText: String)(
-    getSourceTerm: (BinaryRelation, Statement, StepContext) => Option[Term]
+    getSourceTerm: (BinaryJoiner[_ <: Expression], Statement, StepContext) => Option[Expression]
   ): ResponseEntity[_] = {
     (for {
       (step, stepProvingContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      (targetSource, relation) <- stepProvingContext.provingContext.definedBinaryRelations.reverse.mapFind { relation =>
+      (targetSource, relation) <- stepProvingContext.provingContext.definedBinaryStatements.reverse.mapFind { relation =>
         getSourceTerm(relation, step.statement, stepProvingContext.stepContext).map(_ -> relation)
       }.orBadRequest("Target step is not a binary relation")
     } yield {
       import stepProvingContext._
       implicit val spc = stepProvingContext
 
-      def getSubstitutionsForRelation(extractionResult: Statement, relation: BinaryRelation): Option[Substitutions.Possible] = {
-        for {
-          conclusionSource <- getSourceTerm(relation, extractionResult, stepContext)
-          substitutions <- calculateSubstitutionsForTermOrSubTerm(targetSource, conclusionSource)
-        } yield substitutions
-      }
       def getSubstitutions(extractionResult: Statement): Option[Substitutions.Possible] = {
-        (for {
-          equality <- provingContext.equalityOption
-          substitutions <- getSubstitutionsForRelation(extractionResult, equality.relation)
-        } yield substitutions) orElse
-          (if (!provingContext.equalityOption.exists(_.relation == relation))
-            getSubstitutionsForRelation(extractionResult, relation)
-          else
-            None)
+        def asEquality: Option[Substitutions.Possible] = {
+          for {
+            equality <- provingContext.equalityOption
+            conclusionSource <- getSourceTerm(equality.relation, extractionResult, stepContext)
+            substitutions <- conclusionSource.calculateSubstitutions(targetSource) orElse
+              (targetSource.getTerms().map(_._1).toSet diff targetSource.asOptionalInstanceOf[Term].toSet).toSeq.mapCollect(conclusionSource.calculateSubstitutions).single
+          } yield substitutions
+        }
+        def asMatchingRelation: Option[Substitutions.Possible] = {
+          for {
+            conclusionSource <- getSourceTerm(relation, extractionResult, stepContext)
+            substitutions <- conclusionSource.calculateSubstitutions(targetSource)
+          } yield substitutions
+        }
+        asEquality orElse asMatchingRelation
       }
 
       def getPossibleInference(inference: Inference): Option[PossibleInference] = {

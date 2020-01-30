@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.models.{InferenceSummary, LinkSummary, PathData}
 import net.prover.model._
-import net.prover.model.definitions.{BinaryRelation, BinaryStatement, Definitions, Equality, Transitivity}
+import net.prover.model.definitions.{BinaryRelation, BinaryJoiner, Definitions, Equality, Transitivity}
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.expressions.{Expression, Term}
 import net.prover.model.proof.{Step, StepContext, StepProvingContext}

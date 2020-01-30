@@ -3,13 +3,14 @@ package net.prover.controllers
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models.{NamingDefinition, PathData, StepDefinition}
 import net.prover.model._
-import net.prover.model.definitions.Wrapper
-import net.prover.model.expressions.{DefinedStatement, Statement, Term}
+import net.prover.model.definitions.{BinaryConnective, BinaryJoiner, BinaryRelation, Wrapper}
+import net.prover.model.expressions.{DefinedStatement, Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.util.Swapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
+import shapeless.PolyDefns.~>
 
 import scala.util.{Success, Try}
 
@@ -106,22 +107,18 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @RequestBody definition: StepDefinition,
     swapper: Swapper
   ): ResponseEntity[_] = {
-    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (stepProvingContext, targetRelation, targetLhs, targetRhs) =>
-      implicit val spc = stepProvingContext
-      // Our target is A ~ C. We're either going to prove A ≈ B or B ≈ C, and add the other part in as a new target.
-      val (targetSource, targetDestination) = swapper.swap(targetLhs, targetRhs)
-
-      def getResult(applyExtractions: (Seq[Inference.Summary], Substitutions) => Try[(Statement, ExtractionApplication, Seq[Step.Assertion], Seq[Step.Assertion], Seq[Step.Target], Seq[Step] => Step.Elided)]) = {
-        for {
-          extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
-          substitutions <- definition.substitutions.parse()
-          (conclusion, ExtractionApplication(extractionSteps, extractionPremises, extractionTargets), additionalAssertions, additionalPremises, additionalTargets, elider) <- applyExtractions(extractionInferences, substitutions)
-          (conclusionRelation, conclusionLhs, conclusionRhs) <- getRelation(conclusion)
-          conclusionSource = swapper.getOne(conclusionLhs, conclusionRhs)
+    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateStepsForTransitivity {
+      override def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[Statement], Option[Step], BinaryJoiner[Statement], Option[Step], Statement, Seq[Step.Target])] = {
+        implicit val spc = stepProvingContext
+        createSteps(targetConnective, targetLhs, targetRhs, (_, _, relation, lhs, rhs) => Success((None, relation(lhs, rhs))))
+      }
+      override def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[Term], Option[Step], BinaryJoiner[Term], Option[Step], Term, Seq[Step.Target])] = {
+        implicit val spc = stepProvingContext
+        def getExpansion(conclusionSource: Term, targetSource: Term, conclusionRelation: BinaryJoiner[Term], conclusionLhs: Term, conclusionRhs: Term) = for {
           wrapper <- targetSource.getTerms().filter(_._1 == conclusionSource).map(_._2).map(Wrapper.fromExpression).single.orBadRequest("Could not find conclusion LHS uniquely in target LHS")
           (expansionStep, expandedConclusion) <-
             if (wrapper.isIdentity)
-              Success(( None, conclusion))
+              Success((None, conclusionRelation(conclusionLhs, conclusionRhs)))
             else
               for {
                 expansionDefinition <- stepProvingContext.provingContext.expansions.find(_.relation == conclusionRelation).orBadRequest("Could not find expansion inference")
@@ -129,37 +126,56 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
               } yield (
                 Some(step),
                 step.statement)
-          (_, intermediateTerm) <- conclusionRelation.unapply(expandedConclusion).map(swapper.swapTuple).orBadRequest("Rewritten expanded conclusion is not a transitive statement")
-          extractionStep <- Step.Elided.ifNecessary(additionalAssertions ++ extractionSteps, elider) orBadRequest "No extraction steps"
-          finalStep = Step.Elided.ifNecessary((additionalPremises ++ extractionPremises :+ extractionStep) ++ expansionStep.toSeq, elider).get
-          newTarget = (targetRelation.apply _).tupled.apply(swapper.swap(intermediateTerm, targetDestination))
-          newTargetStep = Step.Target(newTarget)
-          ((firstRelation, firstStep), (secondRelation, secondStep)) = swapper.swap((conclusionRelation, finalStep), (targetRelation, newTargetStep))
-        } yield (firstRelation, Some(firstStep), secondRelation, Some(secondStep), intermediateTerm, additionalTargets ++ extractionTargets)
+        } yield (expansionStep, expandedConclusion)
+        createSteps(targetRelation, targetLhs, targetRhs, getExpansion)
       }
 
-
-      def fromInference(inferenceId: String) = {
-        getResult { (extractionInferences, substitutions) =>
+      def createSteps[T <: Expression : TransitivityMethods](
+        targetRelation: BinaryJoiner[T],
+        targetLhs: T,
+        targetRhs: T,
+        handle: (T, T, BinaryJoiner[T], T, T) => Try[(Option[Step], Statement)])(
+        implicit stepProvingContext: StepProvingContext
+      ): Try[(BinaryJoiner[T], Option[Step], BinaryJoiner[T], Option[Step], T, Seq[Step.Target])] = {
+        val (targetSource, targetDestination) = swapper.swap(targetLhs, targetRhs)
+        def getResult(applyExtractions: (Seq[Inference.Summary], Substitutions) => Try[(Statement, ExtractionApplication, Seq[Step.Assertion], Seq[Step.Assertion], Seq[Step.Target], Seq[Step] => Step.Elided)]) = {
           for {
-            inference <- findInference(inferenceId)
-            (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
-            (conclusion, extractionApplication) <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions)
-          } yield (conclusion, extractionApplication, Seq(mainAssertion), mainPremises, mainTargets, Step.Elided.forInference(inference))
+            extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
+            substitutions <- definition.substitutions.parse()
+            (conclusion, ExtractionApplication(extractionSteps, extractionPremises, extractionTargets), additionalAssertions, additionalPremises, additionalTargets, elider) <- applyExtractions(extractionInferences, substitutions)
+            (conclusionRelation, conclusionLhs, conclusionRhs) <- TransitivityMethods.getRelation[T](conclusion).orBadRequest("Conclusion was not binary statement")
+            conclusionSource = swapper.getOne(conclusionLhs, conclusionRhs)
+            (expansionStepOption, expandedConclusion) <- handle(conclusionSource, targetSource, conclusionRelation, conclusionLhs, conclusionRhs)
+            (_, intermediateTerm) <- conclusionRelation.unapply(expandedConclusion).map(swapper.swapTuple).orBadRequest("Rewritten expanded conclusion is not a transitive statement")
+            extractionStep <- Step.Elided.ifNecessary(additionalAssertions ++ extractionSteps, elider) orBadRequest "No extraction steps"
+            finalStep = Step.Elided.ifNecessary((additionalPremises ++ extractionPremises :+ extractionStep) ++ expansionStepOption.toSeq, elider).get
+            newTarget = (targetRelation.apply _).tupled.apply(swapper.swap(intermediateTerm, targetDestination))
+            newTargetStep = Step.Target(newTarget)
+            ((firstRelation, firstStep), (secondRelation, secondStep)) = swapper.swap((conclusionRelation, finalStep), (targetRelation, newTargetStep))
+          } yield (firstRelation, Some(firstStep), secondRelation, Some(secondStep), intermediateTerm, additionalTargets ++ extractionTargets)
         }
-      }
-      def fromPremise(serializedPremiseStatement: String) = {
-        getResult { (extractionInferences, substitutions) =>
-          for {
-            premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
-            premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
-            (conclusion, extractionApplication) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions)
-          } yield (conclusion, extractionApplication, Nil, Nil, Nil, Step.Elided.forDescription("Extracted"))
-        }
-      }
 
-      definition.getFromInferenceOrPremise(fromInference, fromPremise)
-    }
+        def fromInference(inferenceId: String) = {
+          getResult { (extractionInferences, substitutions) =>
+            for {
+              inference <- findInference(inferenceId)
+              (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
+              (conclusion, extractionApplication) <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions)
+            } yield (conclusion, extractionApplication, Seq(mainAssertion), mainPremises, mainTargets, Step.Elided.forInference(inference))
+          }
+        }
+        def fromPremise(serializedPremiseStatement: String) = {
+          getResult { (extractionInferences, substitutions) =>
+            for {
+              premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
+              premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
+              (conclusion, extractionApplication) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions)
+            } yield (conclusion, extractionApplication, Nil, Nil, Nil, Step.Elided.forDescription("Extracted"))
+          }
+        }
+        definition.getFromInferenceOrPremise(fromInference, fromPremise)
+      }
+    })
   }
 
   @PostMapping(value = Array("/transitivityFromLeft"))
@@ -195,14 +211,16 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedTerm: String
   ): ResponseEntity[_] = {
-    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (stepProvingContext, relation, targetLhs, targetRhs) =>
-      implicit val spc = stepProvingContext
-      for {
-        intermediateTerm <- Term.parser.parseFromString(serializedTerm, "target term").recoverWithBadRequest
-        firstStep = Step.Target(relation(targetLhs, intermediateTerm))
-        secondStep = Step.Target(relation(intermediateTerm, targetRhs))
-      } yield (relation, Some(firstStep), relation, Some(secondStep), intermediateTerm, Nil)
-    }
+    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateStepsForTransitivityCommon {
+      def createSteps[T <: Expression : TransitivityMethods](joiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[T], Option[Step], BinaryJoiner[T], Option[Step], T, Seq[Step.Target])] = {
+        implicit val spc = stepProvingContext
+        for {
+          intermediateTerm <- TransitivityMethods.parser.parseFromString(serializedTerm, "target term").recoverWithBadRequest
+          firstStep = Step.Target(joiner(targetLhs, intermediateTerm))
+          secondStep = Step.Target(joiner(intermediateTerm, targetRhs))
+        } yield (joiner, Some(firstStep), joiner, Some(secondStep), intermediateTerm, Nil)
+      }
+    })
   }
 
   @PostMapping(value = Array("/introduceNaming"))
