@@ -1,6 +1,5 @@
 package net.prover.model
 
-import net.prover.model.definitions.Definitions.RelationDefinitions
 import net.prover.model.definitions._
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 import net.prover.model.expressions.{DefinedStatement, Expression, Statement, Term}
@@ -33,9 +32,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(entryContext.statementDefinitions.contains)
     implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(entryContext.termDefinitions.contains)
 
-    implicit val allowableRelation: Allowable[BinaryStatement[Term]] = allowable(definedBinaryRelations.contains)
-    implicit val allowableReversal: Allowable[Reversal] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
-    implicit val allowableTransitivity: Allowable[Transitivity[Term]] = allowable(r => isAllowed(r.statement) && isAllowed(r.inference))
+    implicit val allowableRelation: Allowable[BinaryStatement[_ <: Expression]] = allowable(definedBinaryStatements.contains)
+    implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
+    implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.statement) && isAllowed(r.inference))
     implicit val allowableExpansion: Allowable[Expansion] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
 
@@ -98,14 +97,6 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit def replacableMapFromAllowable[T, S](implicit allowableT: Allowable[T], allowableS: Allowable[S]): Replacable[Map[T, S]] = {
       Replacable[Map[T, S]](m => m.filter { case (t, s) => allowableT.isAllowed(t) && allowableS.isAllowed(s) })
     }
-
-    implicit val replacableRelationDefinitions: Replacable[RelationDefinitions] = {
-      Replacable[RelationDefinitions](d => d.copy(
-        replace(d.reversal),
-        replace(d.transitivity),
-        replace(d.expansion),
-        replace(d.substitution)))
-    }
   }
 
   def isAllowed[T](t: T)(implicit allowable: Allowable[T]): Boolean = allowable.isAllowed(t)
@@ -137,12 +128,18 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
       }
     }
   }
-  lazy val definedBinaryRelations: Seq[BinaryRelation] = {
-    Definitions.getDefinedBinaryRelations(
+  lazy val definedBinaryStatements: Seq[BinaryStatement[_ <: Expression]] = {
+    Definitions.getDefinedBinaryStatements(
       entryContext.statementDefinitions,
       entryContext.displayShorthands,
       entryContext.termDefinitions)
   }
+  lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryStatements.ofType[BinaryRelation]
+
+  lazy val reversals: Seq[Reversal[_ <: Expression]] = replace(definitions.reversals)
+  lazy val transitivities: Seq[Transitivity[_ <: Expression]] = replace(definitions.transitivities)
+  lazy val expansions: Seq[Expansion] = replace(definitions.expansions)
+  lazy val substitutions: Seq[Substitution] = replace(definitions.substitutions)
 
   lazy val rearrangeableFunctions: Seq[(BinaryOperator, Commutativity, Associativity)] = {
     replace(definitions.rearrangeableFunctions)
@@ -150,10 +147,6 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
 
   lazy val equalityOption: Option[Equality] = {
     replace(definitions.equalityOption)
-  }
-
-  lazy val definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions] = {
-    replace(definitions.definitionsByRelation)
   }
 
   lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = {

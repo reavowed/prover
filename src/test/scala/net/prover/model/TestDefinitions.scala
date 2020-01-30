@@ -1,9 +1,10 @@
 package net.prover.model
 
 import net.prover.model.definitions.Definitions
-import net.prover.model.entries.ExpressionDefinition.{ComponentType, StatementComponent, TermComponent}
-import net.prover.model.entries.{Axiom, ExpressionDefinition, StatementDefinition, TermDefinition, Theorem}
-import net.prover.model.expressions.{DefinedStatement, DefinedTerm, ExpressionVariable, FunctionApplication, FunctionParameter, PredicateApplication, Statement, StatementVariable, Term, TermVariable}
+import net.prover.model.entries.ExpressionDefinition.ComponentType
+import net.prover.model.entries.ExpressionDefinition.ComponentType.{PredicateComponent, StatementComponent, TermComponent}
+import net.prover.model.entries._
+import net.prover.model.expressions._
 import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
 import org.specs2.matcher.Matcher
 
@@ -77,7 +78,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     StatementDefinition(
       symbol,
       Seq("x"),
-      Seq(ExpressionDefinition.PredicateComponent("φ", Seq(ExpressionDefinition.ComponentArgument("x", 0)))),
+      Seq(PredicateComponent("φ", Seq(ExpressionDefinition.ComponentArgument("x", 0)))),
       None,
       Format.Explicit(s"($symbol%0)%1", s"(${symbol}x)φ", requiresBrackets = false, requiresComponentBrackets = true),
       definingStatement,
@@ -265,8 +266,8 @@ trait InferenceDefinitions extends ExpressionDefinitions {
 
 object TestDefinitions extends VariableDefinitions with ExpressionDefinitions with InferenceDefinitions  {
 
-  import org.specs2.matcher.MustExpectations._
   import org.specs2.matcher.Matchers._
+  import org.specs2.matcher.MustExpectations._
 
   implicit val entryContext: EntryContext = EntryContext(
     Seq(

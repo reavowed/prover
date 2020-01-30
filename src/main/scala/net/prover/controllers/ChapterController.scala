@@ -339,10 +339,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     shorthandsFromDefinitions ++ greekLetterShorthands
   }
 
-  case class BinaryRelationSummary(symbol: String, template: Statement, attributes: Seq[String], isTransitive: Boolean)
-  private def getBinaryRelations(provingContext: ProvingContext): Seq[BinaryRelationSummary] = {
-    provingContext.definedBinaryRelations.map { relation =>
-      BinaryRelationSummary(relation.symbol, relation.template, relation.attributes, provingContext.definitionsByRelation(relation).transitivity.nonEmpty)
+  case class BinaryStatementSummary(symbol: String, template: Statement, attributes: Seq[String], isTransitive: Boolean)
+  private def getBinaryRelations(provingContext: ProvingContext): Seq[BinaryStatementSummary] = {
+    provingContext.definedBinaryStatements.map { relation =>
+      BinaryStatementSummary(relation.symbol, relation.template, relation.attributes, provingContext.transitivities.exists(_.statement == relation))
     }
   }
 

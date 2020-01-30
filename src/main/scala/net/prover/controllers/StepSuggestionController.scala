@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.models._
 import net.prover.model._
-import net.prover.model.definitions.{BinaryRelation, Transitivity}
+import net.prover.model.definitions.BinaryRelation
 import net.prover.model.expressions.{DefinedStatement, Statement, StatementVariable, Term}
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired

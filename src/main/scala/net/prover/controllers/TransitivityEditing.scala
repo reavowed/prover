@@ -3,7 +3,7 @@ package net.prover.controllers
 import net.prover.controllers.models.PathData
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
-import net.prover.model.definitions.{BinaryRelation, Wrapper}
+import net.prover.model.definitions.{BinaryRelation, Reversal, Transitivity, Wrapper}
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.Premise.SingleLinePremise
 import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
@@ -33,23 +33,20 @@ trait TransitivityEditing extends BookModification {
     substitutionContext: SubstitutionContext
   ): Try[(BinaryRelation, Step)] = {
     def byTransitivity = for {
-      definitions <- provingContext.definitionsByRelation.get(firstRelation)
-      transitivity <- definitions.transitivity
+      transitivity <- provingContext.transitivities.ofType[Transitivity[Term]].find(_.statement == firstRelation)
       if firstRelation == secondRelation
     } yield firstRelation -> transitivity.assertionStep(source, intermediate, target)
     def bySubstitutionFromFirst = for {
-      definitions <- provingContext.definitionsByRelation.get(firstRelation)
-      substitution <- definitions.substitution
-      reversal <- definitions.reversal
+      substitution <- provingContext.substitutions.find(_.relation == firstRelation)
+      reversal <- provingContext.reversals.ofType[Reversal[Term]].find(_.relation == firstRelation)
     } yield {
       secondRelation -> Step.Elided.forInference(substitution.inference)(Seq(
         reversal.assertionStep(intermediate, source),
         substitution.assertionStep(intermediate, source, new Wrapper(secondRelation(_, target)))))
     }
-    def bySubstitutionFromSecond =
-      provingContext.definitionsByRelation.get(secondRelation)
-        .flatMap(_.substitution)
-        .map(substitution => firstRelation -> substitution.assertionStep(intermediate, target, new Wrapper(firstRelation(source, _))))
+    def bySubstitutionFromSecond = for {
+      substitution <- provingContext.substitutions.find(_.relation == secondRelation)
+    } yield firstRelation -> substitution.assertionStep(intermediate, target, new Wrapper(firstRelation(source, _)))
     byTransitivity orElse bySubstitutionFromFirst orElse bySubstitutionFromSecond orBadRequest "Could not chain steps"
   }
 

@@ -17,7 +17,6 @@ import scala.util.{Success, Try}
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
 class StepCreationController @Autowired() (val bookService: BookService) extends BookModification with TransitivityEditing {
 
-
   def rewriteFromConclusion(conclusion: Statement, rewriteInferenceId: Option[String])(implicit stepProvingContext: StepProvingContext): Try[(Option[Step.Assertion], Statement)] = {
     rewriteInferenceId.map { rewriteInferenceid =>
       for {
@@ -125,7 +124,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
               Success(( None, conclusion))
             else
               for {
-                expansionDefinition <- stepProvingContext.provingContext.definitionsByRelation.get(conclusionRelation).flatMap(_.expansion).orBadRequest("Could not find expansion inference")
+                expansionDefinition <- stepProvingContext.provingContext.expansions.find(_.relation == conclusionRelation).orBadRequest("Could not find expansion inference")
                 step = expansionDefinition.assertionStep(conclusionLhs, conclusionRhs, wrapper)
               } yield (
                 Some(step),

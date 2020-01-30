@@ -1,7 +1,8 @@
 package net.prover.model.entries
 
 import net.prover.model._
-import net.prover.model.entries.ExpressionDefinition.{ComponentType, TermComponent}
+import net.prover.model.entries.ExpressionDefinition.ComponentType
+import net.prover.model.entries.ExpressionDefinition.ComponentType.TermComponent
 import net.prover.model.expressions.Statement
 
 case class TypeDefinition(

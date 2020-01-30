@@ -1,7 +1,7 @@
 package net.prover.model.definitions
 
 import net.prover.model._
-import net.prover.model.definitions.Definitions.RelationDefinitions
+import net.prover.model.entries.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.entries.{ChapterEntry, DisplayShorthand, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
@@ -19,57 +19,43 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     completenessByInference.getOrElseUpdate(inference.id, inferences.find(_.id == inference.id).exists(_.isComplete(this)))
   }
 
-
   lazy val equalityOption: Option[Equality] = {
     for {
       definition <- statementDefinitions.find(_.attributes.contains("equality"))
       relation = BinaryRelation(definition.symbol, definition.defaultValue, definition.attributes)
-      definitions <- definitionsByRelation.get(relation)
-      expansion <- definitions.expansion
-      substitution <- definitions.substitution
-      reversal <- definitions.reversal
-      transitivity <- definitions.transitivity
+      expansion <- expansions.find(_.relation == relation)
+      substitution <- substitutions.find(_.relation == relation)
+      reversal <- reversals.ofType[Reversal[Term]].find(_.relation == relation)
+      transitivity <- transitivities.ofType[Transitivity[Term]].find(_.statement == relation)
     } yield Equality(relation, expansion, substitution, reversal, transitivity)
   }
 
-  lazy val definedBinaryRelations: Seq[BinaryRelation] = Definitions.getDefinedBinaryRelations(statementDefinitions, displayShorthands, termDefinitions)
-  lazy val definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions] = {
-    @scala.annotation.tailrec
-    def helper(remainingInferences: Seq[Inference], acc: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
-      remainingInferences match {
-        case Nil =>
-          acc
-        case inference +: tailInferences =>
-          val afterReversal = findReversal(inference, acc)
-          val afterTransitivity = findTransitivity(inference, afterReversal)
-          val afterExpansion = findExpansion(inference, afterTransitivity)
-          val afterSubstitution = findSubstitution(inference, afterExpansion)
-          helper(tailInferences, afterSubstitution)
-      }
-    }
-    helper(inferenceEntries, definedBinaryRelations.map(r => r -> RelationDefinitions(None, None, None, None)).toMap)
-  }
+  lazy val definedBinaryStatements: Seq[BinaryStatement[_ <: Expression]] = Definitions.getDefinedBinaryStatements(statementDefinitions, displayShorthands, termDefinitions)
+  lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryStatements.ofType[BinaryRelation]
 
-  private def findReversal(inference: Inference, definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
+  lazy val reversals: Seq[Reversal[_ <: Expression]] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
-    (for {
-      relation <- definitionsByRelation.keys.find(r => r.unapply(inference.conclusion).nonEmpty)
+    for {
+      inference <- inferenceEntries
+      relation <- definedBinaryStatements.find(r => r.unapply(inference.conclusion).nonEmpty)
       if (inference match {
         case Inference(
-          _,
-          Seq(relation(ExpressionVariable(a), ExpressionVariable(b))),
-          relation(ExpressionVariable(c), ExpressionVariable(d))
+        _,
+        Seq(relation(ExpressionVariable(a), ExpressionVariable(b))),
+        relation(ExpressionVariable(c), ExpressionVariable(d))
         ) if a == d && b == c =>
           true
         case _ =>
           false
       })
-    } yield definitionsByRelation.replace(relation, _.copy(reversal = Some(Reversal(relation, inference.summary))))) getOrElse definitionsByRelation
+    } yield relation.reversal(inference.summary)
   }
-  private def findTransitivity(inference: Inference, definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
+
+  lazy val transitivities: Seq[Transitivity[_ <: Expression]] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
-    (for {
-      relation <- definitionsByRelation.keys.find(r => r.unapply(inference.conclusion).nonEmpty)
+    for {
+      inference <- inferenceEntries
+      relation <- definedBinaryStatements.find(r => r.unapply(inference.conclusion).nonEmpty)
       if (inference match {
         case Inference(
           _,
@@ -80,12 +66,14 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
         case _ =>
           false
       })
-    } yield definitionsByRelation.replace(relation, _.copy(transitivity = Some(Transitivity(relation, inference.summary))))) getOrElse definitionsByRelation
+    } yield relation.transitivity(inference.summary)
   }
-  private def findExpansion(inference: Inference, definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
+
+  lazy val expansions: Seq[Expansion] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
-    (for {
-      relation <- inference.premises.headOption.flatMap(p => definitionsByRelation.keys.find(r => r.unapply(p).nonEmpty))
+    for {
+      inference <- inferenceEntries
+      relation <- definedBinaryRelations.find(r => r.unapply(inference.conclusion).nonEmpty)
       if (inference match {
         case Inference(
           _,
@@ -96,12 +84,14 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
         case _ =>
           false
       })
-    } yield definitionsByRelation.replace(relation, _.copy(expansion = Some(Expansion(relation, inference.summary))))) getOrElse definitionsByRelation
+    } yield Expansion(relation, inference.summary)
   }
-  private def findSubstitution(inference: Inference, definitionsByRelation: Map[BinaryStatement[Term], RelationDefinitions]): Map[BinaryStatement[Term], RelationDefinitions] = {
+
+  lazy val substitutions: Seq[Substitution] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
-    (for {
-      relation <- inference.premises.headOption.flatMap(p => definitionsByRelation.keys.find(r => r.unapply(p).nonEmpty))
+    for {
+      inference <- inferenceEntries
+      relation <- inference.premises.headOption.flatMap(p => definedBinaryRelations.find(r => r.unapply(p).nonEmpty))
       if (inference match {
         case Inference(
           _,
@@ -114,7 +104,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
         case _ =>
           false
       })
-    } yield definitionsByRelation.replace(relation, _.copy(substitution = Some(Substitution(relation, inference.summary))))) getOrElse definitionsByRelation
+    } yield Substitution(relation, inference.summary)
   }
 
   lazy val rearrangeableFunctions: Seq[(BinaryOperator, Commutativity, Associativity)] = {
@@ -358,13 +348,17 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
 }
 
 object Definitions {
-  case class RelationDefinitions(reversal: Option[Reversal], transitivity: Option[Transitivity[Term]], expansion: Option[Expansion], substitution: Option[Substitution])
-
-  def getDefinedBinaryRelations(statementDefinitions: Seq[StatementDefinition], shorthands: Seq[DisplayShorthand], termDefinitions: Seq[TermDefinition]): Seq[BinaryRelation] = {
+  def getDefinedBinaryStatements(statementDefinitions: Seq[StatementDefinition], shorthands: Seq[DisplayShorthand], termDefinitions: Seq[TermDefinition]): Seq[BinaryStatement[_ <: Expression]] = {
     def fromDefinitions = for {
       definition <- statementDefinitions
-      if definition.componentTypes.length == 2 && definition.format.baseFormatString == s"%0 ${definition.symbol} %1"
-    } yield BinaryRelation(definition.symbol, definition.defaultValue, definition.attributes)
+      if definition.format.baseFormatString == s"%0 ${definition.symbol} %1"
+      constructor <- definition.componentTypes match {
+        case Seq(_: StatementComponent, _: StatementComponent) => Some(BinaryConnective.apply _)
+        case Seq(_: TermComponent, _: TermComponent) => Some(BinaryRelation.apply _)
+        case _ => None
+      }
+    } yield constructor(definition.symbol, definition.defaultValue, definition.attributes)
+
     def fromShorthands = for {
       shorthand <- shorthands
       if shorthand.template.isInstanceOf[Template.DefinedStatement]
@@ -390,6 +384,7 @@ object Definitions {
         ).asInstanceOf[Statement],
         Nil)
     } yield relation
+
     fromDefinitions ++ fromShorthands
   }
 }
