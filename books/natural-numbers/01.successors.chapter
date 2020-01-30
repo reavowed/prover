@@ -5,6 +5,32 @@ term successor (n)
   format (n^+)
   (= $0 ∪ n singleton n)
 
+theorem Membership Condition for Successor
+conclusion ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0
+{
+  take n {
+    take m {
+      elided 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a {
+        prove ∀ x ↔ ∈ $0 ∪ $$$0 singleton $$$0 ∨ ∈ $0 $$$0 ∈ $0 singleton $$$0 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () ($$0, singleton $$0) () ()
+        prove ↔ ∈ $0 ∪ $$0 singleton $$0 ∨ ∈ $0 $$0 ∈ $0 singleton $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 ∪ $$0 singleton $$0 ∨ ∈ $$$0 $$0 ∈ $$$0 singleton $$0) () 0.0.0.0
+      }
+      elided 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 {
+        elided 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 {
+          prove ∀ x ↔ ∈ $0 singleton $$$0 = $0 $$$0 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () ($$0) () ()
+          prove ↔ ∈ $0 singleton $$0 = $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 singleton $$0 = $$$0 $$0) () 0.0.1.0.0
+        }
+        prove ↔ ∨ ∈ $0 $$0 ∈ $0 singleton $$0 ∨ ∈ $0 $$0 = $0 $$0 f8559bd53d4671ecb607125cef6e210029664855e6383ed783a0a88971632654 (∈ $0 singleton $$0, = $0 $$0, ∈ $0 $$0) () () () 0.0.1.0
+      }
+      prove ↔ ∈ $0 ∪ $$0 singleton $$0 ∨ ∈ $0 $$0 = $0 $$0 e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 ∪ $$0 singleton $$0, ∨ ∈ $0 $$0 ∈ $0 singleton $$0, ∨ ∈ $0 $$0 = $0 $$0) () () () 0.0.0 0.0.1
+      elided 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c {
+        prove = successor $$0 ∪ $$0 singleton $$0 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () ($$0) () ()
+        prove = ∪ $$0 singleton $$0 successor $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (successor $$0, ∪ $$0 singleton $$0) () () 0.0.3.0
+        prove ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (∪ $$0 singleton $$0, successor $$0) (↔ ∈ $0 $$$0 ∨ ∈ $0 $$0 = $0 $$0) () 0.0.3.1 0.0.2
+      }
+    }
+  }
+}
+
 theorem Element of Successor
 premise ∈ n successor m
 conclusion ∨ ∈ n m = n m

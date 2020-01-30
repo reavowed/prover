@@ -184,3 +184,20 @@ conclusion ↔ ∧ φ ψ ∧ φ χ
   }
   prove ↔ ∧ φ ψ ∧ φ χ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ φ ψ, ∧ φ χ) () () () 0 1
 }
+
+comment Adding extra disjunctions to equivalences.
+
+theorem Add Left Disjunction to Equivalence
+premise ↔ φ ψ
+conclusion ↔ ∨ χ φ ∨ χ ψ
+{
+  assume ∨ χ φ {
+    prove → φ ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () () () p0
+    prove ∨ χ ψ fa95429f653e5cde94e123ab4a6683a012ceab4b2a8c35d1a6b43d900bae6b78 (χ, φ, ψ) () () () 0a 0.0
+  }
+  assume ∨ χ ψ {
+    prove → ψ φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (φ, ψ) () () () p0
+    prove ∨ χ φ fa95429f653e5cde94e123ab4a6683a012ceab4b2a8c35d1a6b43d900bae6b78 (χ, ψ, φ) () () () 1a 1.0
+  }
+  prove ↔ ∨ χ φ ∨ χ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ χ φ, ∨ χ ψ) () () () 0 1
+}

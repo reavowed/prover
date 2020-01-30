@@ -280,6 +280,68 @@ conclusion ∈ m n
   }
 }
 
+theorem Element Condition for Successors
+conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ successor $$0 successor $0 ∈ $$0 $0
+{
+  take n {
+    assume ∈ $0 ℕ {
+      take m {
+        assume ∈ $0 ℕ {
+          assume ∈ successor $$0 successor $0 {
+            elided 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c {
+              prove ∈ successor $0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($0) () () 0.0.0.0a
+              prove ∈ $$0 successor $0 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () (successor $0, $$0) () () 0.0.0.0.0.0.0 0.0.0.0.0a
+            }
+            elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
+              prove ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 () () () ()
+              prove ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (∀ m ↔ ∈ $0 successor $$$$0 ∨ ∈ $0 $$$$0 = $0 $$$$0) () 0.0.0.0.0.1.0
+              prove ↔ ∈ $$0 successor $0 ∨ ∈ $$0 $0 = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($$0) (↔ ∈ $$$0 successor $0 ∨ ∈ $$$0 $0 = $$$0 $0) () 0.0.0.0.0.1.1
+              prove → ∈ $$0 successor $0 ∨ ∈ $$0 $0 = $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $$0 successor $0, ∨ ∈ $$0 $0 = $$0 $0) () () () 0.0.0.0.0.1.2
+              prove ∨ ∈ $$0 $0 = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 successor $0, ∨ ∈ $$0 $0 = $$0 $0) () () () 0.0.0.0.0.1.3 0.0.0.0.0.0
+            }
+            assume = $$0 $0 {
+              prove ¬ ∈ successor $0 successor $0 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (successor $0) () ()
+              elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+                prove = $0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$0, $0) () () 0.0.0.0.0.2a
+                prove ¬ ∈ successor $$0 successor $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, $$0) (¬ ∈ successor $$$0 successor $0) () 0.0.0.0.0.2.1.0 0.0.0.0.0.2.0
+              }
+              prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∈ successor $$0 successor $0) () () () 0.0.0.0.0a 0.0.0.0.0.2.1
+            }
+            prove ¬ = $$0 $0 adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (= $$0 $0) () () () 0.0.0.0.0.2
+            prove ∈ $$0 $0 21e8de79a2ec70694179886dc0d9d294c2f388fbab3cd653dd7fed53e7dc07a1 (∈ $$0 $0, = $$0 $0) () () () 0.0.0.0.0.1 0.0.0.0.0.3
+          }
+          assume ∈ $$0 $0 {
+            prove ∈ $0 successor $0 bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () ($0) () ()
+            prove ∨ ∈ successor $$0 $0 = successor $$0 $0 220bd30d1396001c231c4257d9a9f1d98ebf4bd91132cbb730afda2d43cb7b1c () ($0, $$0) () () 0.0.0.0a 0.0.0.0.1a
+            assume ∈ successor $$0 $0 {
+              elided 54451f5b6c29e5e9958728481d12497451bb0f8ad6f641972f0f5654ce7d42ab {
+                prove ∈ successor $0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($0) () () 0.0.0.0a
+                elided 54451f5b6c29e5e9958728481d12497451bb0f8ad6f641972f0f5654ce7d42ab {
+                  prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 $$0 ∀ x → ∈ $0 $$0 ∈ $0 $$$0 54451f5b6c29e5e9958728481d12497451bb0f8ad6f641972f0f5654ce7d42ab () () () ()
+                  prove → ∈ successor $0 ℕ ∀ m → ∈ $0 successor $$0 ∀ x → ∈ $0 $$0 ∈ $0 successor $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $0) (→ ∈ $$$0 ℕ ∀ m → ∈ $0 $$$$0 ∀ x → ∈ $0 $$0 ∈ $0 $$$$$0) () 0.0.0.0.1.2.0.1.0
+                  prove ∀ m → ∈ $0 successor $$0 ∀ x → ∈ $0 $$0 ∈ $0 successor $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $0 ℕ, ∀ m → ∈ $0 successor $$0 ∀ x → ∈ $0 $$0 ∈ $0 successor $$$0) () () () 0.0.0.0.1.2.0.1.1 0.0.0.0.1.2.0.0
+                  prove → ∈ $0 successor $0 ∀ x → ∈ $0 $$0 ∈ $0 successor $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 successor $0 ∀ x → ∈ $0 $$$$0 ∈ $0 successor $$0) () 0.0.0.0.1.2.0.1.2
+                  prove ∀ x → ∈ $0 $$0 ∈ $0 successor $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 successor $0, ∀ x → ∈ $0 $$0 ∈ $0 successor $$0) () () () 0.0.0.0.1.2.0.1.3 0.0.0.0.1.0
+                  prove → ∈ successor $$0 $0 ∈ successor $$0 successor $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (successor $$0) (→ ∈ $$$0 $0 ∈ $$$0 successor $0) () 0.0.0.0.1.2.0.1.4
+                  prove ∈ successor $$0 successor $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $$0 $0, ∈ successor $$0 successor $0) () () () 0.0.0.0.1.2.0.1.5 0.0.0.0.1.2a
+                }
+              }
+            }
+            assume = successor $$0 $0 {
+              elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+                prove = $0 successor $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (successor $$0, $0) () () 0.0.0.0.1.3a
+                prove ∈ successor $$0 successor $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, successor $$0) (∈ $$$0 successor $0) () 0.0.0.0.1.3.0.0 0.0.0.0.1.0
+              }
+            }
+            prove ∈ successor $$0 successor $0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ successor $$0 $0, = successor $$0 $0, ∈ successor $$0 successor $0) () () () 0.0.0.0.1.1 0.0.0.0.1.2 0.0.0.0.1.3
+          }
+          prove ↔ ∈ successor $$0 successor $0 ∈ $$0 $0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ successor $$0 successor $0, ∈ $$0 $0) () () () 0.0.0.0.0 0.0.0.0.1
+        }
+      }
+    }
+  }
+}
+
 theorem Natural Number Contains Element If Successor Contains Successor
 premise ∈ n ℕ
 premise ∈ successor m successor n
