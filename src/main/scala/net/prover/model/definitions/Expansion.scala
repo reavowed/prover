@@ -1,23 +1,40 @@
 package net.prover.model.definitions
 
-import net.prover.model.Inference
-import net.prover.model.expressions.Term
+import net.prover.model.{Inference, Substitutions}
+import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.{Premise, Step, SubstitutionContext}
 
-case class Expansion(relation: BinaryJoiner[Term], inference: Inference.Summary) {
-  def assertionStep(left: Term, right: Term, wrapper: Wrapper[Term, Term])(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
+trait Expansion[TComponent <: Expression] {
+  def sourceJoiner: BinaryJoiner[Term]
+  def resultJoiner: BinaryJoiner[TComponent]
+  def inference: Inference.Summary
+  protected def fillRequiredSubstitutions(requiredSubstitutions: Substitutions.Required, left: Term, right: Term, wrapper: Wrapper[Term, TComponent])(implicit substitutionContext: SubstitutionContext): Substitutions
+
+  def assertionStep(left: Term, right: Term, wrapper: Wrapper[Term, TComponent])(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
     Step.Assertion(
-      relation(wrapper(left), wrapper(right)),
+      resultJoiner(wrapper(left), wrapper(right)),
       inference,
-      Seq(Premise.Pending(relation(left, right))),
-      inference.requiredSubstitutions.fill(Nil, Seq(left, right, wrapper.template)))
+      Seq(Premise.Pending(sourceJoiner(left, right))),
+      fillRequiredSubstitutions(inference.requiredSubstitutions, left, right, wrapper))
   }
 
-  def assertionStepIfNecessary(left: Term, right: Term, wrapper: Wrapper[Term, Term])(implicit substitutionContext: SubstitutionContext): Option[Step.Assertion] = {
-    if (wrapper.isIdentity) {
+  def assertionStepIfNecessary(left: Term, right: Term, wrapper: Wrapper[Term, TComponent])(implicit substitutionContext: SubstitutionContext): Option[Step.Assertion] = {
+    if (wrapper.isIdentity && sourceJoiner == resultJoiner) {
       None
     } else {
       Some(assertionStep(left, right, wrapper))
     }
   }
 }
+
+case class ConnectiveExpansion(sourceJoiner: BinaryRelation, resultJoiner: BinaryConnective, inference: Inference.Summary) extends Expansion[Statement] {
+  override protected def fillRequiredSubstitutions(requiredSubstitutions: Substitutions.Required, left: Term, right: Term, wrapper: Wrapper[Term, Statement])(implicit substitutionContext: SubstitutionContext): Substitutions = {
+    requiredSubstitutions.fill(Seq(wrapper.template), Seq(left, right))
+  }
+}
+case class RelationExpansion(sourceJoiner: BinaryRelation, resultJoiner: BinaryRelation, inference: Inference.Summary) extends Expansion[Term] {
+  override protected def fillRequiredSubstitutions(requiredSubstitutions: Substitutions.Required, left: Term, right: Term, wrapper: Wrapper[Term, Term])(implicit substitutionContext: SubstitutionContext): Substitutions = {
+    requiredSubstitutions.fill(Nil, Seq(left, right, wrapper.template))
+  }
+}
+

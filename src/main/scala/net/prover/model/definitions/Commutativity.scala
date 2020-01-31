@@ -5,7 +5,7 @@ import net.prover.model.proof.{ProofHelper, Step, StepProvingContext}
 import net.prover.model.{Inference, Substitutions}
 
 case class Commutativity(operator: BinaryOperator, inference: Inference.Summary, equality: Equality) {
-  def rearrangementStep(a: Term, b: Term, wrapper: Wrapper[Term, Term])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep] = {
+  def rearrangementStep(a: Term, b: Term, wrapper: Wrapper[Term, Term])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[Term]] = {
     for {
       (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremisesAndElide(
         inference,

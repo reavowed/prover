@@ -39,7 +39,7 @@ case class TermRearranger(
     wrapper.insert(operator(lhs.baseTerm, _)(_))
   }
 
-  private def pullLeft(tree: OperatorTree, targetLeft: OperatorTree, wrapper: Wrapper[Term, Term]): Option[(Seq[RearrangementStep], OperatorTree)] = {
+  private def pullLeft(tree: OperatorTree, targetLeft: OperatorTree, wrapper: Wrapper[Term, Term]): Option[(Seq[RearrangementStep[Term]], OperatorTree)] = {
     tree match {
       case Operator(`targetLeft`, r, _) =>
         Some((Nil, r))
@@ -74,7 +74,7 @@ case class TermRearranger(
     }
   }
 
-  private def matchTrees(lhs: OperatorTree, rhs: OperatorTree, wrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStep]] = {
+  private def matchTrees(lhs: OperatorTree, rhs: OperatorTree, wrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStep[Term]]] = {
     rhs match {
       case Operator(rhsLeft, rhsRight, _) =>
         for {
@@ -91,7 +91,7 @@ case class TermRearranger(
     }
   }
 
-  private def rearrangeLeaves(baseTree: OperatorTree, availableLeaves: Seq[Term], wrapper: Wrapper[Term, Term]): Option[(Seq[RearrangementStep], OperatorTree, Seq[Term])] = {
+  private def rearrangeLeaves(baseTree: OperatorTree, availableLeaves: Seq[Term], wrapper: Wrapper[Term, Term]): Option[(Seq[RearrangementStep[Term]], OperatorTree, Seq[Term])] = {
     baseTree match {
       case Leaf(t) =>
         if (availableLeaves.contains(t)) {
@@ -117,13 +117,13 @@ case class TermRearranger(
     } yield innerRearrangementSteps ++ mainRearrangementSteps
   }
 
-  def rearrange(lhsTerm: Term, rhsTerm: Term, wrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStep]] = {
+  def rearrange(lhsTerm: Term, rhsTerm: Term, wrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStep[Term]]] = {
     val baseLhs = disassemble(lhsTerm)
     val baseRhs = disassemble(rhsTerm)
 
-    def rearrangeDirectly: Option[Seq[RearrangementStep]] = rearrangeTrees(baseLhs, baseRhs, wrapper)
+    def rearrangeDirectly: Option[Seq[RearrangementStep[Term]]] = rearrangeTrees(baseLhs, baseRhs, wrapper)
 
-    def rearrangeUsingPremise(premiseLhs: OperatorTree, premiseRhs: OperatorTree): Option[Seq[RearrangementStep]] = {
+    def rearrangeUsingPremise(premiseLhs: OperatorTree, premiseRhs: OperatorTree): Option[Seq[RearrangementStep[Term]]] = {
       (for {
         lhsMatch <- rearrangeTrees(baseLhs, premiseLhs, wrapper)
         rhsMatch <- rearrangeTrees(premiseRhs, baseRhs, wrapper)
@@ -136,7 +136,7 @@ case class TermRearranger(
         } yield (firstMatch :+ joiner) ++ secondMatch)
     }
 
-    def rearrangeUsingPremises: Option[Seq[RearrangementStep]] = (for {
+    def rearrangeUsingPremises: Option[Seq[RearrangementStep[Term]]] = (for {
       premise <- allPremisesSimplestFirst
       (premiseLhsTerm, premiseRhsTerm) <- equality.unapply(premise.statement).toSeq
       premiseLhs = disassemble(premiseLhsTerm)
@@ -155,7 +155,7 @@ object TermRearranger {
     equality: Equality,
     wrapper: Wrapper[Term, Term])(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[RearrangementStep]] = {
+  ): Option[Seq[RearrangementStep[Term]]] = {
     for {
       (operator, commutativity, associativity) <- stepProvingContext.provingContext.rearrangeableFunctions
         .find { case (operator, _, _) => operator.unapply(lhs).nonEmpty}
@@ -169,7 +169,7 @@ object TermRearranger {
     wrapper: Wrapper[Term, Term],
     equality: Equality)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[RearrangementStep]] = {
+  ): Option[Seq[RearrangementStep[Term]]] = {
     if (lhs == rhs)
       Some(Nil)
     else
@@ -189,7 +189,7 @@ object TermRearranger {
     wrapper: Wrapper[Statement, Term],
     equality: Equality)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[RearrangementStep]] = {
+  ): Option[Seq[RearrangementStep[Term]]] = {
     if (lhsStatement == rhsStatement)
       Some(Nil)
     else (lhsStatement, rhsStatement) match {
@@ -207,8 +207,8 @@ object TermRearranger {
     wrapper: Wrapper[Seq[Expression], Term],
     equality: Equality)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[RearrangementStep]] = {
-    def helper(previousComponents: Seq[(Expression, Expression)], nextComponents: Seq[(Expression, Expression)], currentSteps: Seq[RearrangementStep]): Option[Seq[RearrangementStep]] = {
+  ): Option[Seq[RearrangementStep[Term]]] = {
+    def helper(previousComponents: Seq[(Expression, Expression)], nextComponents: Seq[(Expression, Expression)], currentSteps: Seq[RearrangementStep[Term]]): Option[Seq[RearrangementStep[Term]]] = {
       nextComponents match {
         case Nil =>
           Some(currentSteps)
@@ -230,7 +230,7 @@ object TermRearranger {
       equality <- stepProvingContext.provingContext.equalityOption
       (lhs, rhs) <- equality.unapply(targetStatement)
       rearrangementSteps <- rearrangeTerm(lhs, rhs, Wrapper.identity, equality)
-      steps = equality.addTransitivityToRearrangement(lhs, rearrangementSteps)
+      steps = equality.transitivity.addToRearrangement(lhs, rearrangementSteps)
       result <- Step.Elided.ifNecessary(steps, "Rearranged")
     } yield result
   }

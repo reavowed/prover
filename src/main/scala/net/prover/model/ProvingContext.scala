@@ -35,7 +35,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableRelation: Allowable[BinaryJoiner[_ <: Expression]] = allowable(definedBinaryStatements.contains)
     implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
     implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.statement) && isAllowed(r.inference))
-    implicit val allowableExpansion: Allowable[Expansion] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
+    implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
 
     implicit val alwaysAllowableOperator: Allowable[BinaryOperator] = alwaysAllowable
@@ -138,7 +138,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
 
   lazy val reversals: Seq[Reversal[_ <: Expression]] = replace(definitions.reversals)
   lazy val transitivities: Seq[Transitivity[_ <: Expression]] = replace(definitions.transitivities)
-  lazy val expansions: Seq[Expansion] = replace(definitions.expansions)
+  lazy val expansions: Seq[Expansion[_ <: Expression]] = replace(definitions.expansions)
   lazy val substitutions: Seq[Substitution] = replace(definitions.substitutions)
 
   lazy val rearrangeableFunctions: Seq[(BinaryOperator, Commutativity, Associativity)] = {

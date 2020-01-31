@@ -20,7 +20,7 @@ case class Associativity(operator: BinaryOperator, inference: Inference.Summary,
     equality(reversedTerm(a, b, c), normalisedTerm(a, b, c))
   }
 
-  def forwardRearrangementStep(a: Term, b: Term, c: Term, wrapper: Wrapper[Term, Term])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep] = {
+  def forwardRearrangementStep(a: Term, b: Term, c: Term, wrapper: Wrapper[Term, Term])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[Term]] = {
     for {
       (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremisesAndElide(
         inference,
@@ -30,7 +30,7 @@ case class Associativity(operator: BinaryOperator, inference: Inference.Summary,
     } yield RearrangementStep(wrapper(reversedTerm(a, b, c)), assertionStep +: expansionSteps, inference)
   }
 
-  def reverseRearrangementStep(a: Term, b: Term, c: Term, wrapper: Wrapper[Term, Term])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep] = {
+  def reverseRearrangementStep(a: Term, b: Term, c: Term, wrapper: Wrapper[Term, Term])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[Term]] = {
     for {
       forwardStep <- forwardRearrangementStep(a, b, c, wrapper)
       reversalStep = equality.reversal.assertionStep(wrapper(reversedTerm(a, b, c)), wrapper(normalisedTerm(a, b, c)))

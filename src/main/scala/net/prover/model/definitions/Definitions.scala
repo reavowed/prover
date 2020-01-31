@@ -23,7 +23,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     for {
       definition <- statementDefinitions.find(_.attributes.contains("equality"))
       relation = BinaryRelation(definition.symbol, definition.defaultValue, definition.attributes)
-      expansion <- expansions.find(_.relation == relation)
+      expansion <- expansions.ofType[RelationExpansion].find(e => e.sourceJoiner == relation && e.resultJoiner == relation)
       substitution <- substitutions.find(_.relation == relation)
       reversal <- reversals.ofType[Reversal[Term]].find(_.relation == relation)
       transitivity <- transitivities.ofType[Transitivity[Term]].find(_.statement == relation)
@@ -31,6 +31,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
   }
 
   lazy val definedBinaryStatements: Seq[BinaryJoiner[_ <: Expression]] = Definitions.getDefinedBinaryStatements(statementDefinitions, displayShorthands, termDefinitions)
+  lazy val definedBinaryConnectives: Seq[BinaryConnective] = definedBinaryStatements.ofType[BinaryConnective]
   lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryStatements.ofType[BinaryRelation]
 
   lazy val reversals: Seq[Reversal[_ <: Expression]] = {
@@ -41,8 +42,8 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       if (inference match {
         case Inference(
         _,
-        Seq(relation(ExpressionVariable(a), ExpressionVariable(b))),
-        relation(ExpressionVariable(c), ExpressionVariable(d))
+        Seq(relation(ExpressionVariable(a, Nil), ExpressionVariable(b, Nil))),
+        relation(ExpressionVariable(c, Nil), ExpressionVariable(d, Nil))
         ) if a == d && b == c =>
           true
         case _ =>
@@ -59,8 +60,8 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       if (inference match {
         case Inference(
           _,
-          Seq(relation(ExpressionVariable(a), ExpressionVariable(b)), relation(ExpressionVariable(c), ExpressionVariable(d))),
-          relation(ExpressionVariable(e), ExpressionVariable(f))
+          Seq(relation(ExpressionVariable(a, Nil), ExpressionVariable(b, Nil)), relation(ExpressionVariable(c, Nil), ExpressionVariable(d, Nil))),
+          relation(ExpressionVariable(e, Nil), ExpressionVariable(f, Nil))
         ) if a == e && b == c && d == f =>
           true
         case _ =>
@@ -69,22 +70,25 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     } yield relation.transitivity(inference.summary)
   }
 
-  lazy val expansions: Seq[Expansion] = {
+  lazy val expansions: Seq[Expansion[_ <: Expression]] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
       inference <- inferenceEntries
-      relation <- definedBinaryRelations.find(r => r.unapply(inference.conclusion).nonEmpty)
+      premise <- inference.premises.single
+      sourceRelation <- definedBinaryRelations.find(r => r.unapply(premise).nonEmpty)
+      (targetRelation, constructor) <- definedBinaryRelations.find(_.unapply(inference.conclusion).nonEmpty).map(r => r -> ((i: Inference.Summary) => RelationExpansion.apply(sourceRelation, r, i))) orElse
+       definedBinaryConnectives.find(_.unapply(inference.conclusion).nonEmpty).map(c => c -> ((i: Inference.Summary) => ConnectiveExpansion.apply(sourceRelation, c, i)))
       if (inference match {
         case Inference(
           _,
-          Seq(relation(TermVariable(a, Nil), TermVariable(b, Nil))),
-          relation(TermVariable(f, Seq(TermVariable(c, Nil))), TermVariable(g, Seq(TermVariable(d, Nil))))
+          Seq(sourceRelation(TermVariable(a, Nil), TermVariable(b, Nil))),
+          targetRelation(ExpressionVariable(f, Seq(TermVariable(c, Nil))), ExpressionVariable(g, Seq(TermVariable(d, Nil))))
         ) if a == c && b == d && f == g =>
           true
         case _ =>
           false
       })
-    } yield Expansion(relation, inference.summary)
+    } yield constructor(inference.summary)
   }
 
   lazy val substitutions: Seq[Substitution] = {

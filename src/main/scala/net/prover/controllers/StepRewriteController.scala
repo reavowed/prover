@@ -3,7 +3,7 @@ package net.prover.controllers
 import net.prover.controllers.models.{PathData, PremiseRewrite, RewriteRequest}
 import net.prover.exceptions.BadRequestException
 import net.prover.model.Inference
-import net.prover.model.definitions.{BinaryConnective, BinaryJoiner, BinaryRelation, Equality, RearrangementStep, Wrapper}
+import net.prover.model.definitions.{BinaryConnective, BinaryJoiner, BinaryRelation, ConnectiveExpansion, Equality, Expansion, RearrangementStep, RelationExpansion, Transitivity, Wrapper}
 import net.prover.model.expressions.{Expression, Statement, Term, TypedExpression}
 import net.prover.model.proof._
 import net.prover.util.Swapper
@@ -245,18 +245,18 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     }.toResponseEntity
   }
 
-  def substituteForRearrangement(
-    equality: Equality)(
+  def substituteForRearrangement[TExpression <: Expression](
+    expansion: Expansion[TExpression])(
     target: Term,
     result: Term,
-    wrapper: Wrapper[Term, Term],
+    wrapper: Wrapper[Term, TExpression],
     steps: Seq[Step],
     inference: Option[Inference.Summary],
     fallbackInference: Option[Inference.Summary])(
     implicit substitutionContext: SubstitutionContext
-  ): RearrangementStep = {
-    val expansionStepOption = equality.expansion.assertionStepIfNecessary(target, result, wrapper)
-    RearrangementStep(wrapper(result), steps ++ expansionStepOption.toSeq, inference orElse Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity) orElse fallbackInference, "Rewritten")
+  ): RearrangementStep[TExpression] = {
+    val expansionStepOption = expansion.assertionStepIfNecessary(target, result, wrapper)
+    RearrangementStep(wrapper(result), steps ++ expansionStepOption.toSeq, inference orElse Some(expansion.inference).filter(_ => !wrapper.isIdentity) orElse fallbackInference, "Rewritten")
   }
 
   def rewriteForTransitivity(
@@ -268,19 +268,20 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     rewrites: Seq[Seq[RewriteRequest]],
     swapper: Swapper
   ): ResponseEntity[_] = {
-    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateStepsForTransitivity {
-      override def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[Statement], Option[Step], BinaryJoiner[Statement], Option[Step], Statement, Seq[Step.Target])] = {
-        Failure(BadRequestException("Rewriting binary connective not yet supported"))
-      }
-      override def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[Term], Option[Step], BinaryJoiner[Term], Option[Step], Term, Seq[Step.Target])] = {
+    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateStepsForTransitivityCommon {
+      override def createSteps[T <: Expression with TypedExpression[T] : TransitivityMethods](targetJoiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[T], Option[Step], BinaryJoiner[T], Option[Step], T, Seq[Step.Target])] = {
         implicit val spc = stepProvingContext
         for {
           equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
-          if equality.relation == targetRelation
+          expansion <- stepProvingContext.provingContext.expansions.ofType[Expansion[T]]
+            .find(e => e.sourceJoiner == equality.relation && e.resultJoiner == targetJoiner)
+            .orBadRequest("No applicable expansion found")
+          transitivity <- stepProvingContext.provingContext.transitivities.ofType[Transitivity[T]].find(_.statement == targetJoiner)
+            .orBadRequest("No applicable transitivity found")
           (sourceTerm, destinationTerm) = swapper.swap(targetLhs, targetRhs)
-          (rewriteStep, intermediateTerm) <- rewrite(sourceTerm, rewrites, equality, swapper)(substituteForRearrangement(equality)) { (baseTerm, rewrittenTerm, steps, inferences) =>
+          (rewriteStep, intermediateTerm) <- rewrite(sourceTerm, rewrites, equality, swapper)(substituteForRearrangement(expansion)) { (baseTerm, rewrittenTerm, steps, inferences) =>
             val (sourceTerm, targetTerm) = swapper.swap(baseTerm, rewrittenTerm)
-            val transitivitySteps = equality.addTransitivityToRearrangement(sourceTerm, steps)
+            val transitivitySteps = transitivity.addToRearrangement(sourceTerm, steps)
             val elider = (steps: Seq[Step]) => inferences.single match {
               case Some(inference) =>
                 Step.Elided.ifNecessary(steps, inference)
@@ -289,7 +290,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
             }
             RearrangementStep(targetTerm, transitivitySteps, elider)
           } { (rewrittenTerm, steps, inferences) =>
-            val transitivitySteps = equality.addTransitivityToRearrangement(swapper.getOne(sourceTerm, rewrittenTerm), steps)
+            val transitivitySteps = transitivity.addToRearrangement(swapper.getOne(sourceTerm, rewrittenTerm), steps)
             inferences.single match {
               case Some(inference) =>
                 Step.Elided.ifNecessary(transitivitySteps, inference).get
@@ -297,9 +298,9 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
                 Step.Elided.ifNecessary(transitivitySteps, "Rewritten").get
             }
           }
-          targetStep = Step.Target((equality.apply _).tupled(swapper.swap(intermediateTerm, destinationTerm)))
+          targetStep = Step.Target((targetJoiner.apply _).tupled(swapper.swap(intermediateTerm, destinationTerm)))
           (firstStep, secondStep) = swapper.swap(rewriteStep, targetStep)
-        } yield (targetRelation, Some(firstStep), targetRelation, Some(secondStep), intermediateTerm, Nil)
+        } yield (targetJoiner, Some(firstStep), targetJoiner, Some(secondStep), intermediateTerm, Nil)
       }
     })
   }

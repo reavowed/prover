@@ -4,7 +4,7 @@ import net.prover.controllers.models.PathData
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
 import net.prover.model.definitions._
-import net.prover.model.expressions.{Expression, Statement, Term}
+import net.prover.model.expressions.{Expression, Statement, Term, TypedExpression}
 import net.prover.model.proof.Premise.SingleLinePremise
 import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
 import org.springframework.http.ResponseEntity
@@ -34,12 +34,13 @@ trait TransitivityEditing extends BookModification {
       .orBadRequest("Target step is not a relation").flatten
   }
 
+
   trait CreateStepsForTransitivity {
     def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[Statement], Option[Step], BinaryJoiner[Statement], Option[Step], Statement, Seq[Step.Target])]
     def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[Term], Option[Step], BinaryJoiner[Term], Option[Step], Term, Seq[Step.Target])]
   }
   trait CreateStepsForTransitivityCommon extends CreateStepsForTransitivity {
-    def createSteps[T <: Expression : TransitivityMethods](targetJoiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[T], Option[Step], BinaryJoiner[T], Option[Step], T, Seq[Step.Target])]
+    def createSteps[T <: (Expression with TypedExpression[T]) : TransitivityMethods](targetJoiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[T], Option[Step], BinaryJoiner[T], Option[Step], T, Seq[Step.Target])]
     def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[Statement], Option[Step], BinaryJoiner[Statement], Option[Step], Statement, Seq[Step.Target])] = {
       createSteps(targetConnective, targetLhs, targetRhs, stepProvingContext)
     }
@@ -152,10 +153,10 @@ object TransitivityMethods {
     }
   }
 
-  implicit object ForStatement extends TransitivityMethodsAux[Statement, BinaryConnective] {
+  implicit object ForStatement extends TransitivityMethodsAux[Statement, BinaryConnective] with TransitivityMethods[Statement] {
     override def parser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Statement] = Statement.parser
   }
-  implicit object ForTerm extends TransitivityMethodsAux[Term, BinaryRelation] {
+  implicit object ForTerm extends TransitivityMethodsAux[Term, BinaryRelation] with TransitivityMethods[Term] {
     override def getTransitivityStep(
       source: Term,
       intermediate: Term,

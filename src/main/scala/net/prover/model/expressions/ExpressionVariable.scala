@@ -130,9 +130,9 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
 }
 
 object ExpressionVariable {
-  def unapply(expression: Expression): Option[String] = expression match {
+  def unapply(expression: Expression): Option[(String, Seq[Term])] = expression match {
     case expressionVariable: ExpressionVariable[_] =>
-      Some(expressionVariable.name)
+      Some(expressionVariable.name, expressionVariable.arguments)
     case _ =>
       None
   }

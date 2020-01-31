@@ -3,14 +3,13 @@ package net.prover.controllers
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models.{NamingDefinition, PathData, StepDefinition}
 import net.prover.model._
-import net.prover.model.definitions.{BinaryConnective, BinaryJoiner, BinaryRelation, Wrapper}
+import net.prover.model.definitions.{BinaryConnective, BinaryJoiner, BinaryRelation, RelationExpansion, Wrapper}
 import net.prover.model.expressions.{DefinedStatement, Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.util.Swapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
-import shapeless.PolyDefns.~>
 
 import scala.util.{Success, Try}
 
@@ -121,7 +120,9 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
               Success((None, conclusionRelation(conclusionLhs, conclusionRhs)))
             else
               for {
-                expansionDefinition <- stepProvingContext.provingContext.expansions.find(_.relation == conclusionRelation).orBadRequest("Could not find expansion inference")
+                expansionDefinition <- stepProvingContext.provingContext.expansions.ofType[RelationExpansion]
+                  .find(e => e.sourceJoiner == conclusionRelation && e.resultJoiner == targetRelation)
+                  .orBadRequest("Could not find expansion")
                 step = expansionDefinition.assertionStep(conclusionLhs, conclusionRhs, wrapper)
               } yield (
                 Some(step),
