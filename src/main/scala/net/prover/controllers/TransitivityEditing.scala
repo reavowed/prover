@@ -70,13 +70,13 @@ trait TransitivityEditing extends BookModification {
               def forConnective(connective: BinaryConnective, lhs: Statement, rhs: Statement): Try[(Seq[Step], Seq[Step.Target])] = {
                 for {
                   (firstJoiner, firstStep, secondJoiner, secondStep, intermediate, targetSteps) <- createSteps.createStepsForConnective(connective, lhs, rhs, stepProvingContext)
-                  transitivitySteps <- getTransitivitySteps(firstJoiner, firstStep, secondJoiner, secondStep, lhs, intermediate, rhs)
+                  transitivitySteps <- getTransitivitySteps(firstJoiner, firstStep, secondJoiner, secondStep, lhs, intermediate, rhs, connective)
                 } yield (transitivitySteps, targetSteps)
               }
               def forRelation(relation: BinaryRelation, lhs: Term, rhs: Term): Try[(Seq[Step], Seq[Step.Target])] = {
                 for {
                   (firstJoiner, firstStep, secondJoiner, secondStep, intermediate, targetSteps) <- createSteps.createStepsForRelation(relation, lhs, rhs, stepProvingContext)
-                  transitivitySteps <- getTransitivitySteps(firstJoiner, firstStep, secondJoiner, secondStep, lhs, intermediate, rhs)
+                  transitivitySteps <- getTransitivitySteps(firstJoiner, firstStep, secondJoiner, secondStep, lhs, intermediate, rhs, relation)
                 } yield (transitivitySteps, targetSteps)
               }
               def getTransitivitySteps[T <: Expression : TransitivityMethods](
@@ -86,7 +86,8 @@ trait TransitivityEditing extends BookModification {
                 secondStep: Option[Step],
                 targetLhs: T,
                 intermediate: T,
-                targetRhs: T
+                targetRhs: T,
+                targetJoiner: BinaryJoiner[T]
               ): Try[Seq[Step]] = {
                 def getWithFollowingTransitivity = for {
                   (followingStep, remainingSteps) <- after.headAndTailOption
@@ -101,15 +102,25 @@ trait TransitivityEditing extends BookModification {
                   (initialRelation, initialLhs, _) <- TransitivityMethods.getRelation(otherPremise.statement)
                   if (initialLhs == followingLhs)
                 } yield {
-                  (for {
+                  for {
                     (intermediateRelation, firstTransitivityStep) <- TransitivityMethods.getTransitivityStep(initialLhs, targetLhs, intermediate, initialRelation, firstJoiner)
                     (lastRelation, secondTransitivityStep) <- TransitivityMethods.getTransitivityStep(initialLhs, intermediate, targetRhs, intermediateRelation, secondJoiner)
                     if lastRelation == followingRelation
-                  } yield (firstStep.toSeq :+ firstTransitivityStep) ++ (secondStep.toSeq :+ secondTransitivityStep) ++ remainingSteps)
+                    stepsForFirst = if (targetLhs == intermediate && initialRelation == intermediateRelation) Nil else firstStep.toSeq :+ firstTransitivityStep
+                    stepsForSecond = if (intermediate == targetRhs && intermediateRelation == lastRelation) Nil else secondStep.toSeq :+ secondTransitivityStep
+                  } yield stepsForFirst ++ stepsForSecond ++ remainingSteps
                 }
-                def withNewTransitivity = for {
-                  (_, transitivityStep) <- TransitivityMethods.getTransitivityStep(targetLhs, intermediate, targetRhs, firstJoiner, secondJoiner)
-                } yield (firstStep.toSeq ++ secondStep.toSeq :+ transitivityStep) ++ after
+                def withNewTransitivity = {
+                  if (targetLhs == intermediate && secondJoiner == targetJoiner) {
+                    secondStep.map(_ +: after)
+                  } else if (intermediate == targetRhs && firstJoiner == targetJoiner) {
+                    firstStep.map(_ +: after)
+                  } else for {
+                    (_, transitivityStep) <- TransitivityMethods.getTransitivityStep(targetLhs, intermediate, targetRhs, firstJoiner, secondJoiner)
+                  } yield {
+                    (firstStep.toSeq ++ secondStep.toSeq :+ transitivityStep) ++ after
+                  }
+                }
                 getWithFollowingTransitivity getOrElse withNewTransitivity orBadRequest "Could not chain steps"
               }
 
