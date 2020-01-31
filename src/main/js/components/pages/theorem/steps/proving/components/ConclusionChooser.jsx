@@ -4,44 +4,40 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
-import {Parser} from "../../../../../../Parser";
 import EntryContext from "../../../../../EntryContext";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
 import InputWithShorthandReplacement from "../../../../../helpers/InputWithShorthandReplacement";
 import {InferenceSummary} from "../../../../../InferenceSummary";
 import BoundVariableLists from "../../BoundVariableLists";
 
-function simpleGetter(type, name) {
-  return substitutions => substitutions[type][name][1];
-}
-function applicationGetter(type, applicationType, name, length) {
+function substitutionGetter(type, applicationType, name) {
   return substitutions => {
-    const baseValue = substitutions[type][name] && substitutions[type][name][length];
+    const baseValue = substitutions[type][name] && substitutions[type][name][1];
     if (!_.isUndefined(baseValue)) {
       return baseValue;
     } else {
-      return substitutions[applicationType] && substitutions[applicationType][name] && substitutions[applicationType][name][length];
+      return substitutions[applicationType] && substitutions[applicationType][name] && substitutions[applicationType][name][1];
     }
   };
 }
 
 function buildSubstitutionMap(requiredSubstitutions, f) {
-  function callOnValues(type) {
-    return {[type]: _.fromPairs(requiredSubstitutions[type].map(([name, arity]) => [name, [arity, f(simpleGetter(type, name), arity)]]))};
+  function callOnValues(type, applicationType) {
+    return {[type]: _.fromPairs(requiredSubstitutions[type].map(([name, arity]) => [name, [arity, f(substitutionGetter(type, applicationType, name), arity)]]))};
   }
   return {
-    ...callOnValues("statements"),
-    ...callOnValues("terms")
+    ...callOnValues("statements", "statementApplications"),
+    ...callOnValues("terms", "termApplications")
   };
 }
 
 function getAllRequiredPaths(requiredSubstitutions) {
-  function getSimple(type) {
-    return _.map(requiredSubstitutions[type], ([name, ]) => simpleGetter(type, name));
+  function getPaths(type, applicationType) {
+    return _.map(requiredSubstitutions[type], ([name, ]) => substitutionGetter(type, applicationType, name));
   }
   return [
-    ...getSimple("statements"),
-    ...getSimple("terms")
+    ...getPaths("statements", "statementApplications"),
+    ...getPaths("terms", "termApplications")
   ];
 }
 
