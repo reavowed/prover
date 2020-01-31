@@ -8,6 +8,6 @@ theorem An Inductive Set Contains the Empty Set
 premise inductive S
 conclusion ∈ ∅ S
 {
-  prove ∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S 9fdf4a2b45725ccf4717edcf7aa0cdc5c999cd6fa1dcc06464e1e455cdbbff3c () (S) () () p0
-  prove ∈ ∅ S 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ ∅ S, ∀ n → ∈ $0 S ∈ successor $0 S) () () () 0
+  prove ∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S 9fdf4a2b45725ccf4717edcf7aa0cdc5c999cd6fa1dcc06464e1e455cdbbff3c () (S) p0
+  prove ∈ ∅ S 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ ∅ S, ∀ n → ∈ $0 S ∈ successor $0 S) () 0
 }

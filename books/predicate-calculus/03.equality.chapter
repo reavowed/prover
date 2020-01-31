@@ -19,8 +19,8 @@ theorem Reverse Equality
 premise = a b
 conclusion = b a
 {
-  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
-  prove = b a 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= $0 a) () p0 0
+  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a)
+  prove = b a 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $0 a) (a, b) p0 0
 }
 
 theorem Substitution of Equals (Reversed)
@@ -28,8 +28,8 @@ premise = a b
 premise with (b) φ
 conclusion with (a) φ
 {
-  prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () () p0
-  prove with (a) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (b, a) (with ($0) φ) () 0 p1
+  prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) p0
+  prove with (a) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (with ($0) φ) (b, a) 0 p1
 }
 
 comment Now we can also prove that the substitution axiom works when substituting into equal terms.
@@ -38,16 +38,16 @@ theorem Substitution of Equals into Function
 premise = a b
 conclusion = with (a) F with (b) F
 {
-  prove = with (a) F with (a) F 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (with (a) F) () ()
-  prove = with (a) F with (b) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (= with (a) F with ($0) F) () p0 0
+  prove = with (a) F with (a) F 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (with (a) F)
+  prove = with (a) F with (b) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= with (a) F with ($0) F) (a, b) p0 0
 }
 
 theorem Substitution of Equals into Function (Reversed)
 premise = a b
 conclusion = with (b) F with (a) F
 {
-  prove = with (a) F with (b) F 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (a, b) () (with ($0) F) p0
-  prove = with (b) F with (a) F 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (with (a) F, with (b) F) () () 0
+  prove = with (a) F with (b) F 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (a, b, with ($0) F) p0
+  prove = with (b) F with (a) F 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (with (a) F, with (b) F) 0
 }
 
 comment Basic facts about equality.
@@ -56,12 +56,12 @@ theorem Equality Is Symmetric
 conclusion ↔ = a b = b a
 {
   assume = a b {
-    prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) () () 0a
+    prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) 0a
   }
   assume = b a {
-    prove = a b 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (b, a) () () 1a
+    prove = a b 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (b, a) 1a
   }
-  prove ↔ = a b = b a 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= a b, = b a) () () () 0 1
+  prove ↔ = a b = b a 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= a b, = b a) () 0 1
 }
 
 theorem Equality Is Transitive
@@ -69,7 +69,7 @@ premise = a b
 premise = b c
 conclusion = a c
 {
-  prove = a c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (b, c) (= a $0) () p1 p0
+  prove = a c 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= a $0) (b, c) p1 p0
 }
 
 theorem Equality by Equaling the Same Thing (Left)
@@ -77,8 +77,8 @@ premise = a x
 premise = b x
 conclusion = a b
 {
-  prove = x b 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (b, x) () () p1
-  prove = a b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (a, x, b) () () p0 0
+  prove = x b 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (b, x) p1
+  prove = a b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (a, x, b) p0 0
 }
 
 theorem Equality by Equaling the Same Thing (Right)
@@ -86,8 +86,8 @@ premise = x a
 premise = x b
 conclusion = a b
 {
-  prove = a x 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (x, a) () () p0
-  prove = a b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (a, x, b) () () 0 p1
+  prove = a x 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (x, a) p0
+  prove = a b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (a, x, b) 0 p1
 }
 
 theorem Equivalence of Substituted Equals
@@ -95,12 +95,12 @@ premise = a b
 conclusion ↔ with (a) φ with (b) φ
 {
   assume with (a) φ {
-    prove with (b) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (with ($0) φ) () p0 0a
+    prove with (b) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (with ($0) φ) (a, b) p0 0a
   }
   assume with (b) φ {
-    prove with (a) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (a, b) (with ($0) φ) () p0 1a
+    prove with (a) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (with ($0) φ) (a, b) p0 1a
   }
-  prove ↔ with (a) φ with (b) φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (with (a) φ, with (b) φ) () () () 0 1
+  prove ↔ with (a) φ with (b) φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (with (a) φ, with (b) φ) () 0 1
 }
 
 theorem Distinguishable Terms Are Not Equal
@@ -109,24 +109,24 @@ premise ¬ with (b) φ
 conclusion ¬ = a b
 {
   assume = a b {
-    prove with (b) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (a, b) (with ($0) φ) () 0a p0
+    prove with (b) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (with ($0) φ) (a, b) 0a p0
   }
-  prove ¬ = a b 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= a b, with (b) φ) () () () 0 p1
+  prove ¬ = a b 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= a b, with (b) φ) () 0 p1
 }
 
 theorem Every Set Exists
 conclusion ∃ x = $0 a
 {
-  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a) () ()
-  prove ∃ x = $0 a c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (a) (= $0 a) () 0
+  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a)
+  prove ∃ x = $0 a c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (= $0 a) (a) 0
 }
 
 theorem Renamed Set
 premise ∀ x → = $0 a φ
 conclusion φ
 {
-  prove ∃ x = $0 a 8cf72cf7b527d9e599e1e396a28cdc3485d6e669a1aa4c12184758ca101eceb3 () (a) () ()
-  prove φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (φ) () (= $0 a) () 0 p0
+  prove ∃ x = $0 a 8cf72cf7b527d9e599e1e396a28cdc3485d6e669a1aa4c12184758ca101eceb3 () (a)
+  prove φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $0 a, φ) () 0 p0
 }
 
 theorem Exclusive Or for Equality
@@ -135,10 +135,10 @@ premise ¬ = b c
 conclusion ⊕ = a b = a c
 {
   assume ∧ = a b = a c {
-    prove = b c 44fd8329fe93cb8213e4e6996b2de73b2e0aaeeb19ebaebc0ed7a29ddf1f619b () (a, b, c) () () 0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove = b c 44fd8329fe93cb8213e4e6996b2de73b2e0aaeeb19ebaebc0ed7a29ddf1f619b () (a, b, c) 0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
   }
-  prove ¬ ∧ = a b = a c 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ = a b = a c, = b c) () () () 0 p1
-  prove ⊕ = a b = a c 85d9228e116d39e101fccf8102b9ae979459e94efa97bd1f050fb7327031497b (= a b, = a c) () () () p0 1
+  prove ¬ ∧ = a b = a c 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ = a b = a c, = b c) () 0 p1
+  prove ⊕ = a b = a c 85d9228e116d39e101fccf8102b9ae979459e94efa97bd1f050fb7327031497b (= a b, = a c) () p0 1
 }
 
 theorem Equivalence of Generalised Equals
@@ -149,14 +149,14 @@ conclusion ↔ ∀ x → with ($0) φ with ($0 with ($0) G) ψ ∀ x → with ($
     take x {
       assume with ($0) φ {
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove → with ($0) φ = with ($0) G with ($0) H 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ with ($$0) φ = with ($$0) G with ($$0) H) () p0
-          prove = with ($0) G with ($0) H fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, = with ($0) G with ($0) H) () () () 0.0.0.0.0 0.0.0a
+          prove → with ($0) φ = with ($0) G with ($0) H 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ with ($$0) φ = with ($$0) G with ($$0) H) ($0) p0
+          prove = with ($0) G with ($0) H fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, = with ($0) G with ($0) H) () 0.0.0.0.0 0.0.0a
         }
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove → with ($0) φ with ($0 with ($0) G) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ with ($$0) φ with ($$0 with ($$0) G) ψ) () 0a
-          prove with ($0 with ($0) G) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, with ($0 with ($0) G) ψ) () () () 0.0.0.1.0 0.0.0a
+          prove → with ($0) φ with ($0 with ($0) G) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ with ($$0) φ with ($$0 with ($$0) G) ψ) ($0) 0a
+          prove with ($0 with ($0) G) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, with ($0 with ($0) G) ψ) () 0.0.0.1.0 0.0.0a
         }
-        prove with ($0 with ($0) H) ψ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (with ($0) G, with ($0) H) (with ($0 $$0) ψ) () 0.0.0.0 0.0.0.1
+        prove with ($0 with ($0) H) ψ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (with ($0 $$0) ψ) (with ($0) G, with ($0) H) 0.0.0.0 0.0.0.1
       }
     }
   }
@@ -164,16 +164,16 @@ conclusion ↔ ∀ x → with ($0) φ with ($0 with ($0) G) ψ ∀ x → with ($
     take x {
       assume with ($0) φ {
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove → with ($0) φ = with ($0) G with ($0) H 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ with ($$0) φ = with ($$0) G with ($$0) H) () p0
-          prove = with ($0) G with ($0) H fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, = with ($0) G with ($0) H) () () () 1.0.0.0.0 1.0.0a
+          prove → with ($0) φ = with ($0) G with ($0) H 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ with ($$0) φ = with ($$0) G with ($$0) H) ($0) p0
+          prove = with ($0) G with ($0) H fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, = with ($0) G with ($0) H) () 1.0.0.0.0 1.0.0a
         }
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove → with ($0) φ with ($0 with ($0) H) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ with ($$0) φ with ($$0 with ($$0) H) ψ) () 1a
-          prove with ($0 with ($0) H) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, with ($0 with ($0) H) ψ) () () () 1.0.0.1.0 1.0.0a
+          prove → with ($0) φ with ($0 with ($0) H) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ with ($$0) φ with ($$0 with ($$0) H) ψ) ($0) 1a
+          prove with ($0 with ($0) H) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, with ($0 with ($0) H) ψ) () 1.0.0.1.0 1.0.0a
         }
-        prove with ($0 with ($0) G) ψ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (with ($0) G, with ($0) H) (with ($0 $$0) ψ) () 1.0.0.0 1.0.0.1
+        prove with ($0 with ($0) G) ψ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (with ($0 $$0) ψ) (with ($0) G, with ($0) H) 1.0.0.0 1.0.0.1
       }
     }
   }
-  prove ↔ ∀ x → with ($0) φ with ($0 with ($0) G) ψ ∀ x → with ($0) φ with ($0 with ($0) H) ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ x → with ($0) φ with ($0 with ($0) G) ψ, ∀ x → with ($0) φ with ($0 with ($0) H) ψ) () () () 0 1
+  prove ↔ ∀ x → with ($0) φ with ($0 with ($0) G) ψ ∀ x → with ($0) φ with ($0 with ($0) H) ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ x → with ($0) φ with ($0 with ($0) G) ψ, ∀ x → with ($0) φ with ($0 with ($0) H) ψ) () 0 1
 }

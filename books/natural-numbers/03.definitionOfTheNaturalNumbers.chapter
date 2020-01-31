@@ -6,9 +6,9 @@ conclusion ∃ X inductive $0
 theorem The Natural Numbers Exist
 conclusion ∃! Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0
 {
-  prove ∃ X inductive $0 bfdf6d068ad4edf797fca0b9cf9945bf0e12f0a0abe1a2f692f69e1e5e9973e6 () () () ()
-  prove ∃ Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0 abba1013aa8f6c308803b75be9ad5743dbacab674c1314b1a8b0e4550d3e8153 () () (inductive $0) () 0
-  prove ∃! Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∀ X → inductive $0 ∈ $$0 $0) () 1
+  prove ∃ X inductive $0 bfdf6d068ad4edf797fca0b9cf9945bf0e12f0a0abe1a2f692f69e1e5e9973e6 () ()
+  prove ∃ Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0 abba1013aa8f6c308803b75be9ad5743dbacab674c1314b1a8b0e4550d3e8153 (inductive $0) () 0
+  prove ∃! Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a (∀ X → inductive $0 ∈ $$0 $0) () 1
 }
 
 term ℕ ()
@@ -19,11 +19,11 @@ theorem An Element of All Inductive Sets Is a Natural Number
 premise ∀ X → inductive $0 ∈ n $0
 conclusion ∈ n ℕ
 {
-  prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0 69ab0035b05f277d98392c7b596d7e0dfef8953dd2f283a416a33e3c3ffcec6f () () () ()
+  prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0 69ab0035b05f277d98392c7b596d7e0dfef8953dd2f283a416a33e3c3ffcec6f () ()
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ ∈ n ℕ ∀ X → inductive $0 ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0) () 0
-    prove → ∀ X → inductive $0 ∈ n $0 ∈ n ℕ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ n ℕ, ∀ X → inductive $0 ∈ n $0) () () () 1.0
-    prove ∈ n ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∀ X → inductive $0 ∈ n $0, ∈ n ℕ) () () () 1.1 p0
+    prove ↔ ∈ n ℕ ∀ X → inductive $0 ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0) (n) 0
+    prove → ∀ X → inductive $0 ∈ n $0 ∈ n ℕ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ n ℕ, ∀ X → inductive $0 ∈ n $0) () 1.0
+    prove ∈ n ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∀ X → inductive $0 ∈ n $0, ∈ n ℕ) () 1.1 p0
   }
 }
 
@@ -32,15 +32,15 @@ premise ∈ n ℕ
 premise inductive S
 conclusion ∈ n S
 {
-  prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0 69ab0035b05f277d98392c7b596d7e0dfef8953dd2f283a416a33e3c3ffcec6f () () () ()
+  prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0 69ab0035b05f277d98392c7b596d7e0dfef8953dd2f283a416a33e3c3ffcec6f () ()
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ ∈ n ℕ ∀ X → inductive $0 ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0) () 0
-    prove → ∈ n ℕ ∀ X → inductive $0 ∈ n $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ n ℕ, ∀ X → inductive $0 ∈ n $0) () () () 1.0
-    prove ∀ X → inductive $0 ∈ n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ X → inductive $0 ∈ n $0) () () () 1.1 p0
+    prove ↔ ∈ n ℕ ∀ X → inductive $0 ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0) (n) 0
+    prove → ∈ n ℕ ∀ X → inductive $0 ∈ n $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ n ℕ, ∀ X → inductive $0 ∈ n $0) () 1.0
+    prove ∀ X → inductive $0 ∈ n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ X → inductive $0 ∈ n $0) () 1.1 p0
   }
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove → inductive S ∈ n S 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (S) (→ inductive $0 ∈ n $0) () 1
-    prove ∈ n S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (inductive S, ∈ n S) () () () 2.0 p1
+    prove → inductive S ∈ n S 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ inductive $0 ∈ n $0) (S) 1
+    prove ∈ n S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (inductive S, ∈ n S) () 2.0 p1
   }
 }
 
@@ -50,13 +50,13 @@ conclusion ∈ successor n ℕ
 {
   take X {
     assume inductive $0 {
-      prove ∈ n $0 ed2d7dba0ae289c7dea2faa9f19c4e1f2271e4e12bdff2029ea1587d966ac27c () (n, $0) () () p0 0.0a
-      prove ∧ ∈ ∅ $0 ∀ n → ∈ $0 $$0 ∈ successor $0 $$0 9fdf4a2b45725ccf4717edcf7aa0cdc5c999cd6fa1dcc06464e1e455cdbbff3c () ($0) () () 0.0a
+      prove ∈ n $0 ed2d7dba0ae289c7dea2faa9f19c4e1f2271e4e12bdff2029ea1587d966ac27c () (n, $0) p0 0.0a
+      prove ∧ ∈ ∅ $0 ∀ n → ∈ $0 $$0 ∈ successor $0 $$0 9fdf4a2b45725ccf4717edcf7aa0cdc5c999cd6fa1dcc06464e1e455cdbbff3c () ($0) 0.0a
       elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-        prove → ∈ n $0 ∈ successor n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (n) (→ ∈ $$0 $0 ∈ successor $$0 $0) () 0.0.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-        prove ∈ successor n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n $0, ∈ successor n $0) () () () 0.0.2.0 0.0.0
+        prove → ∈ n $0 ∈ successor n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 $0 ∈ successor $$0 $0) (n) 0.0.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        prove ∈ successor n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n $0, ∈ successor n $0) () 0.0.2.0 0.0.0
       }
     }
   }
-  prove ∈ successor n ℕ 3094218044e941a9ae278629bb25c91256f3cf5b82853fae2c5155f82e0b64f6 () (successor n) () () 0
+  prove ∈ successor n ℕ 3094218044e941a9ae278629bb25c91256f3cf5b82853fae2c5155f82e0b64f6 () (successor n) 0
 }

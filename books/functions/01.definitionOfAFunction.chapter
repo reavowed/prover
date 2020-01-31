@@ -16,10 +16,10 @@ premise function f A B
 premise ∈ a A
 conclusion ∃! y ∈ orderedPair a $0 f
 {
-  prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) () () p0
+  prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove → ∈ a A ∃! y ∈ orderedPair a $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (a) (→ ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-    prove ∃! y ∈ orderedPair a $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∃! y ∈ orderedPair a $0 f) () () () 1.0 p1
+    prove → ∈ a A ∃! y ∈ orderedPair a $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) (a) 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove ∃! y ∈ orderedPair a $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∃! y ∈ orderedPair a $0 f) () 1.0 p1
   }
 }
 
@@ -33,8 +33,8 @@ theorem Function Is Subset of Product
 premise function f A B
 conclusion ⊆ f product A B
 {
-  prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) () () p0
-  prove ⊆ f product A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ f product A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () () () 0
+  prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
+  prove ⊆ f product A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ f product A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () 0
 }
 
 theorem First Coordinate of Element of Function Is Element of Domain
@@ -42,9 +42,9 @@ premise function f A B
 premise ∈ orderedPair a b f
 conclusion ∈ a A
 {
-  prove ⊆ f product A B 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () (f, A, B) () () p0
-  prove ∈ orderedPair a b product A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, product A B, orderedPair a b) () () 0 p1
-  prove ∈ a A 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () (a, b, A, B) () () 1
+  prove ⊆ f product A B 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () (f, A, B) p0
+  prove ∈ orderedPair a b product A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, product A B, orderedPair a b) 0 p1
+  prove ∈ a A 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () (a, b, A, B) 1
 }
 
 theorem Second Coordinate of Element of Function Is Element of Range
@@ -52,9 +52,9 @@ premise function f A B
 premise ∈ orderedPair a b f
 conclusion ∈ b B
 {
-  prove ⊆ f product A B 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () (f, A, B) () () p0
-  prove ∈ orderedPair a b product A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, product A B, orderedPair a b) () () 0 p1
-  prove ∈ b B fd9eacaeda58b006596b2a50422b6bc2841496d77f4db1e4196a7e9759de2d78 () (a, b, A, B) () () 1
+  prove ⊆ f product A B 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () (f, A, B) p0
+  prove ∈ orderedPair a b product A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, product A B, orderedPair a b) 0 p1
+  prove ∈ b B fd9eacaeda58b006596b2a50422b6bc2841496d77f4db1e4196a7e9759de2d78 () (a, b, A, B) 1
 }
 
 theorem Function Application Is Element of Range
@@ -62,8 +62,8 @@ premise function f A B
 premise ∈ a A
 conclusion ∈ apply f a B
 {
-  prove ∈ orderedPair a apply f a f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, a) () () p0 p1
-  prove ∈ apply f a B dcc696c503db6554d43904698b71d4b1bca3b5927c301caf40f2036a60d3bd46 () (f, A, B, a, apply f a) () () p0 0
+  prove ∈ orderedPair a apply f a f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, a) p0 p1
+  prove ∈ apply f a B dcc696c503db6554d43904698b71d4b1bca3b5927c301caf40f2036a60d3bd46 () (f, A, B, a, apply f a) p0 0
 }
 
 theorem Extend Function Range to Superset
@@ -71,14 +71,14 @@ premise function f A B
 premise ⊆ B C
 conclusion function f A C
 {
-  prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) () () p0
+  prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
   elided a56ef8aba50fbf515e3ca63d354f5ae8b08157b98df96492ee0a4ab9bcb7390b {
-    prove ⊆ product A B product A C a56ef8aba50fbf515e3ca63d354f5ae8b08157b98df96492ee0a4ab9bcb7390b () (B, C, A) () () p1
-    prove ⊆ f product A C 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, product A B, product A C) () () 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0
+    prove ⊆ product A B product A C a56ef8aba50fbf515e3ca63d354f5ae8b08157b98df96492ee0a4ab9bcb7390b () (B, C, A) p1
+    prove ⊆ f product A C 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, product A B, product A C) 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0
   }
   elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
-    prove ∧ ⊆ f product A C ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ f product A C, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () () () 1 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-    prove function f A C 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (f, A, C) () () 2.0
+    prove ∧ ⊆ f product A C ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ f product A C, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () 1 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove function f A C 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (f, A, C) 2.0
   }
 }
 
@@ -87,44 +87,44 @@ premise function f A B
 premise ∈ orderedPair a b f
 conclusion = b apply f a
 {
-  prove ∈ a A 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () (f, A, B, a, b) () () p0 p1
-  prove ∃! x ∈ orderedPair a $0 f 49026c2de95e5ee17fef618394741a9f6cf98795fa1f38675a2bb7f5d30aeaec () (f, A, B, a) () () p0 0
-  prove ∈ orderedPair a apply f a f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, a) () () p0 0
-  prove = b apply f a 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 () (b, apply f a) (∈ orderedPair a $0 f) () 1 p1 2
+  prove ∈ a A 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () (f, A, B, a, b) p0 p1
+  prove ∃! x ∈ orderedPair a $0 f 49026c2de95e5ee17fef618394741a9f6cf98795fa1f38675a2bb7f5d30aeaec () (f, A, B, a) p0 0
+  prove ∈ orderedPair a apply f a f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, a) p0 0
+  prove = b apply f a 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 (∈ orderedPair a $0 f) (b, apply f a) 1 p1 2
 }
 
 theorem Membership Condition for Function
 premise function f A B
 conclusion ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
 {
-  prove ⊆ f product A B 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () (f, A, B) () () p0
+  prove ⊆ f product A B 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () (f, A, B) p0
   take x {
     assume ∈ $0 f {
-      prove ∈ $0 product A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, product A B, $0) () () 0 1.0a
-      prove ∈ first $0 A 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($0, A, B) () () 1.0.0
-      prove = $0 orderedPair first $0 second $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($0, A, B) () () 1.0.0
-      prove ∈ orderedPair first $0 second $0 f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () ($0, orderedPair first $0 second $0) (∈ $$0 f) () 1.0.2 1.0a
-      prove = second $0 apply f first $0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, B, first $0, second $0) () () p0 1.0.3
-      prove = $0 orderedPair first $0 apply f first $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (second $0, apply f first $0) (= $0 orderedPair first $0 $$0) () 1.0.4 1.0.2
+      prove ∈ $0 product A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, product A B, $0) 0 1.0a
+      prove ∈ first $0 A 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($0, A, B) 1.0.0
+      prove = $0 orderedPair first $0 second $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($0, A, B) 1.0.0
+      prove ∈ orderedPair first $0 second $0 f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$0 f) ($0, orderedPair first $0 second $0) 1.0.2 1.0a
+      prove = second $0 apply f first $0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, B, first $0, second $0) p0 1.0.3
+      prove = $0 orderedPair first $0 apply f first $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $0 orderedPair first $0 $$0) (second $0, apply f first $0) 1.0.4 1.0.2
       elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-        prove ∧ ∈ first $0 A = $0 orderedPair first $0 apply f first $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ first $0 A, = $0 orderedPair first $0 apply f first $0) () () () 1.0.1 1.0.5
-        prove ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (first $0) (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0) () 1.0.6.0
+        prove ∧ ∈ first $0 A = $0 orderedPair first $0 apply f first $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ first $0 A, = $0 orderedPair first $0 apply f first $0) () 1.0.1 1.0.5
+        prove ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0) (first $0) 1.0.6.0
       }
     }
   }
   take x {
     assume ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 {
-      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 f) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0) () {
-        prove ∈ orderedPair $0 apply f $0 f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, $0) () () p0 2.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-        prove ∈ $$0 f 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, orderedPair $0 apply f $0) (∈ $$$0 f) () 2.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 2.0.0.0
+      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0, ∈ $0 f) () {
+        prove ∈ orderedPair $0 apply f $0 f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, $0) p0 2.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        prove ∈ $$0 f 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∈ $$$0 f) ($$0, orderedPair $0 apply f $0) 2.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 2.0.0.0
       } 2.0a
     }
   }
   elided 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 {
     take x {
-      prove → ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$0 f ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0) () 1
-      prove → ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 ∈ $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0 ∈ $$0 f) () 2
-      prove ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 f, ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () () () 3.0.0 3.0.1
+      prove → ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 f ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0) ($0) 1
+      prove → ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 ∈ $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0 ∈ $$0 f) ($0) 2
+      prove ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 f, ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () 3.0.0 3.0.1
     }
   }
 }
@@ -135,40 +135,40 @@ premise function g A B
 premise ∀ x → ∈ $0 A = apply f $0 apply g $0
 conclusion = f g
 {
-  prove ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 3ce328146ec577046de9c2d35107e33ccea59175c6a8ad4b5792c1d8384913df () (f, A, B) () () p0
-  prove ∀ x ↔ ∈ $0 g ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 3ce328146ec577046de9c2d35107e33ccea59175c6a8ad4b5792c1d8384913df () (g, A, B) () () p1
+  prove ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 3ce328146ec577046de9c2d35107e33ccea59175c6a8ad4b5792c1d8384913df () (f, A, B) p0
+  prove ∀ x ↔ ∈ $0 g ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 3ce328146ec577046de9c2d35107e33ccea59175c6a8ad4b5792c1d8384913df () (g, A, B) p1
   take x {
     assume ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 {
-      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0) () {
+      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A = $0 orderedPair $$0 apply f $$0, ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0) () {
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove → ∈ $0 A = apply f $0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 A = apply f $$$0 apply g $$$0) () p2
-          prove = apply f $0 apply g $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply f $0 apply g $0) () () () 2.0.0.0.0 2.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+          prove → ∈ $0 A = apply f $0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A = apply f $$$0 apply g $$$0) ($0) p2
+          prove = apply f $0 apply g $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply f $0 apply g $0) () 2.0.0.0.0 2.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
         }
-        prove ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 () (apply f $0, apply g $0) (∧ ∈ $0 A = $$0 orderedPair $0 $$$0) () 2.0.0.0 2.0.0a
-        prove ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply g $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$$0 A = $$0 orderedPair $$$0 apply g $$$0) () 2.0.0.1
+        prove ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∧ ∈ $0 A = $$0 orderedPair $0 $$$0) (apply f $0, apply g $0) 2.0.0.0 2.0.0a
+        prove ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply g $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 A = $$0 orderedPair $$$0 apply g $$$0) ($0) 2.0.0.1
       } 2.0a
     }
   }
   take x {
     assume ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 {
-      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () (∧ ∈ $$0 A = $0 orderedPair $$0 apply g $$0) () {
+      let a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A = $0 orderedPair $$0 apply g $$0, ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0) () {
         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove → ∈ $0 A = apply f $0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 A = apply f $$$0 apply g $$$0) () p2
-          prove = apply f $0 apply g $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply f $0 apply g $0) () () () 3.0.0.0.0 3.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+          prove → ∈ $0 A = apply f $0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A = apply f $$$0 apply g $$$0) ($0) p2
+          prove = apply f $0 apply g $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply f $0 apply g $0) () 3.0.0.0.0 3.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
         }
-        prove ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (apply f $0, apply g $0) (∧ ∈ $0 A = $$0 orderedPair $0 $$$0) () 3.0.0.0 3.0.0a
-        prove ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$$0 A = $$0 orderedPair $$$0 apply f $$$0) () 3.0.0.1
+        prove ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∧ ∈ $0 A = $$0 orderedPair $0 $$$0) (apply f $0, apply g $0) 3.0.0.0 3.0.0a
+        prove ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 A = $$0 orderedPair $$$0 apply f $$$0) ($0) 3.0.0.1
       } 3.0a
     }
   }
   elided 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 {
     take x {
-      prove → ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0 ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply g $0) () 2
-      prove → ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply g $0 ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0) () 3
-      prove ↔ ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0, ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0) () () () 4.0.0 4.0.1
+      prove → ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0 ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply g $0) ($0) 2
+      prove → ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply g $0 ∃ a ∧ ∈ $0 A = $$$0 orderedPair $0 apply f $0) ($0) 3
+      prove ↔ ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0 ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0, ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0) () 4.0.0 4.0.1
     }
   }
-  prove = f g 4b83926de252406c08777885e14c3c906028ee3c7fb53340249ba1eb1ada4d4d () (f, g) (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0, ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0) () 0 1 4
+  prove = f g 4b83926de252406c08777885e14c3c906028ee3c7fb53340249ba1eb1ada4d4d (∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0, ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply g $0) (f, g) 0 1 4
 }
 
 theorem Function With Specified Values Is Unique
@@ -181,41 +181,41 @@ conclusion ∃! f ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0
         take x {
           assume ∈ $0 A {
             elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-              prove → ∈ $0 A = apply $$$0 $0 with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 A = apply $$$0 $$$$0 with ($$$$0) F) () 0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-              prove = apply $$$0 $0 with ($0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply $$$0 $0 with ($0) F) () () () 0.0.0.0.0.0.0 0.0.0.0.0a
+              prove → ∈ $0 A = apply $$$0 $0 with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A = apply $$$0 $$$$0 with ($$$$0) F) ($0) 0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              prove = apply $$$0 $0 with ($0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply $$$0 $0 with ($0) F) () 0.0.0.0.0.0.0 0.0.0.0.0a
             }
             elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-              prove → ∈ $0 A = apply $$0 $0 with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$$0 A = apply $$0 $$$$0 with ($$$$0) F) () 0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-              prove = apply $$0 $0 with ($0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply $$0 $0 with ($0) F) () () () 0.0.0.0.0.1.0 0.0.0.0.0a
+              prove → ∈ $0 A = apply $$0 $0 with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A = apply $$0 $$$$0 with ($$$$0) F) ($0) 0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              prove = apply $$0 $0 with ($0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply $$0 $0 with ($0) F) () 0.0.0.0.0.1.0 0.0.0.0.0a
             }
-            prove = apply $$$0 $0 apply $$0 $0 c23a01cc15e828d72e0e45b93e062cd3e609d01d59029b2516edf5993bfc6565 () (apply $$$0 $0, with ($0) F, apply $$0 $0) () () 0.0.0.0.0.0 0.0.0.0.0.1
+            prove = apply $$$0 $0 apply $$0 $0 c23a01cc15e828d72e0e45b93e062cd3e609d01d59029b2516edf5993bfc6565 () (apply $$$0 $0, with ($0) F, apply $$0 $0) 0.0.0.0.0.0 0.0.0.0.0.1
           }
         }
-        prove = $$0 $0 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () ($$0, A, B, $0) () () 0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0.0
+        prove = $$0 $0 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () ($$0, A, B, $0) 0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0.0
       }
     }
   }
   elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
-    prove ∧ ∃ x ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F ∀ x ∀ y → ∧ ∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F, ∀ x ∀ y → ∧ ∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F = $$0 $0) () () () p0 0
-    prove ∃! f ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 () () (∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F) () 1.0
+    prove ∧ ∃ x ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F ∀ x ∀ y → ∧ ∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F, ∀ x ∀ y → ∧ ∧ function $$0 A B ∀ x → ∈ $0 A = apply $$$0 $0 with ($0) F ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F = $$0 $0) () p0 0
+    prove ∃! f ∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 (∧ function $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F) () 1.0
   }
 }
 
 theorem Function Space Is Unique
 conclusion ∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B
 {
-  let S = $0 comprehension f powerSet product A B function $0 A B cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B) (comprehension f powerSet product A B function $0 A B) () () {
+  let S = $0 comprehension f powerSet product A B function $0 A B cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B) (comprehension f powerSet product A B function $0 A B) {
     take f {
       assume function $0 A B {
-        prove ⊆ $0 product A B 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () ($0, A, B) () () 0.0.0a
-        prove ∈ $0 powerSet product A B 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () ($0, product A B) () () 0.0.0.0
+        prove ⊆ $0 product A B 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () ($0, A, B) 0.0.0a
+        prove ∈ $0 powerSet product A B 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () ($0, product A B) 0.0.0.0
         elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-          prove ∧ ∈ $0 powerSet product A B function $0 A B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 powerSet product A B, function $0 A B) () () () 0.0.0.1 0.0.0a
+          prove ∧ ∈ $0 powerSet product A B function $0 A B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 powerSet product A B, function $0 A B) () 0.0.0.1 0.0.0a
           elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-            prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 powerSet product A B function $0 A B 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () ($$0, powerSet product A B) (function $$$0 A B) () 0a
-            prove ↔ ∈ $0 $$0 ∧ ∈ $0 powerSet product A B function $0 A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 powerSet product A B function $$$0 A B) () 0.0.0.2.1.0
-            prove → ∧ ∈ $0 powerSet product A B function $0 A B ∈ $0 $$0 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 $$0, ∧ ∈ $0 powerSet product A B function $0 A B) () () () 0.0.0.2.1.1
-            prove ∈ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $0 powerSet product A B function $0 A B, ∈ $0 $$0) () () () 0.0.0.2.1.2 0.0.0.2.0
+            prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 powerSet product A B function $0 A B 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (function $$$0 A B) ($$0, powerSet product A B) 0a
+            prove ↔ ∈ $0 $$0 ∧ ∈ $0 powerSet product A B function $0 A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 powerSet product A B function $$$0 A B) ($0) 0.0.0.2.1.0
+            prove → ∧ ∈ $0 powerSet product A B function $0 A B ∈ $0 $$0 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 $$0, ∧ ∈ $0 powerSet product A B function $0 A B) () 0.0.0.2.1.1
+            prove ∈ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $0 powerSet product A B function $0 A B, ∈ $0 $$0) () 0.0.0.2.1.2 0.0.0.2.0
           }
         }
       }
@@ -223,23 +223,23 @@ conclusion ∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B
     take f {
       assume ∈ $0 $$0 {
         elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-          prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 powerSet product A B function $0 A B 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () ($$0, powerSet product A B) (function $$$0 A B) () 0a
-          prove ↔ ∈ $0 $$0 ∧ ∈ $0 powerSet product A B function $0 A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 powerSet product A B function $$$0 A B) () 0.1.0.0.0
-          prove → ∈ $0 $$0 ∧ ∈ $0 powerSet product A B function $0 A B f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 $$0, ∧ ∈ $0 powerSet product A B function $0 A B) () () () 0.1.0.0.1
-          prove ∧ ∈ $0 powerSet product A B function $0 A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ∧ ∈ $0 powerSet product A B function $0 A B) () () () 0.1.0.0.2 0.1.0a
-          prove function $0 A B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 powerSet product A B, function $0 A B) () () () 0.1.0.0.3
+          prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 powerSet product A B function $0 A B 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (function $$$0 A B) ($$0, powerSet product A B) 0a
+          prove ↔ ∈ $0 $$0 ∧ ∈ $0 powerSet product A B function $0 A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 powerSet product A B function $$$0 A B) ($0) 0.1.0.0.0
+          prove → ∈ $0 $$0 ∧ ∈ $0 powerSet product A B function $0 A B f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 $$0, ∧ ∈ $0 powerSet product A B function $0 A B) () 0.1.0.0.1
+          prove ∧ ∈ $0 powerSet product A B function $0 A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$0, ∧ ∈ $0 powerSet product A B function $0 A B) () 0.1.0.0.2 0.1.0a
+          prove function $0 A B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 powerSet product A B, function $0 A B) () 0.1.0.0.3
         }
       }
     }
     elided 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 {
       take f {
-        prove → ∈ $0 $$0 function $0 A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ ∈ $$$0 $$0 function $$$0 A B) () 0.1
-        prove → function $0 A B ∈ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (→ function $$$0 A B ∈ $$$0 $$0) () 0.0
-        prove ↔ ∈ $0 $$0 function $0 A B 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 $$0, function $0 A B) () () () 0.2.0.0 0.2.0.1
+        prove → ∈ $0 $$0 function $0 A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 $$0 function $$$0 A B) ($0) 0.1
+        prove → function $0 A B ∈ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ function $$$0 A B ∈ $$$0 $$0) ($0) 0.0
+        prove ↔ ∈ $0 $$0 function $0 A B 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 $$0, function $0 A B) () 0.2.0.0 0.2.0.1
       }
     }
-    prove ∃ S ∀ f ↔ ∈ $0 $$0 function $0 A B c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∀ f ↔ ∈ $0 $$$0 function $0 A B) () 0.2
-    prove ∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (function $$0 A B) () 0.3
+    prove ∃ S ∀ f ↔ ∈ $0 $$0 function $0 A B c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∀ f ↔ ∈ $0 $$$0 function $0 A B) ($0) 0.2
+    prove ∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a (function $$0 A B) () 0.3
   }
 }
 
@@ -252,10 +252,10 @@ theorem Element of Function Space Is Function
 premise ∈ f functionSpace A B
 conclusion function f A B
 {
-  prove ∀ f ↔ ∈ $0 functionSpace A B function $0 A B 7c7caa8d3ebd277e15f06400bc3c8d650d303c6a21d56e5873fd06fe7aaeef4c () (A, B) () ()
+  prove ∀ f ↔ ∈ $0 functionSpace A B function $0 A B 7c7caa8d3ebd277e15f06400bc3c8d650d303c6a21d56e5873fd06fe7aaeef4c () (A, B)
   elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ ∈ f functionSpace A B function f A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () (f) (↔ ∈ $0 functionSpace A B function $0 A B) () 0
-    prove → ∈ f functionSpace A B function f A B f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ f functionSpace A B, function f A B) () () () 1.0
-    prove function f A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ f functionSpace A B, function f A B) () () () 1.1 p0
+    prove ↔ ∈ f functionSpace A B function f A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 functionSpace A B function $0 A B) (f) 0
+    prove → ∈ f functionSpace A B function f A B f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ f functionSpace A B, function f A B) () 1.0
+    prove function f A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ f functionSpace A B, function f A B) () 1.1 p0
   }
 }

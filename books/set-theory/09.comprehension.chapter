@@ -4,17 +4,17 @@ theorem Comprehensions Exist for Empty Sets
 premise ¬ ∃ x ∧ ∈ $0 A with ($0) φ
 conclusion ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 {
-  prove ∀ x ¬ ∧ ∈ $0 A with ($0) φ 9ce9302cc7e8ff857912b57f2692ecd928d2c84e880583a1086decf024c4a51f () () (∧ ∈ $0 A with ($0) φ) () p0
-  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () () () ()
+  prove ∀ x ¬ ∧ ∈ $0 A with ($0) φ 9ce9302cc7e8ff857912b57f2692ecd928d2c84e880583a1086decf024c4a51f (∧ ∈ $0 A with ($0) φ) () p0
+  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
   elided 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 {
     take x {
-      prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∈ $$0 ∅) () 1
-      prove ¬ ∧ ∈ $0 A with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (¬ ∧ ∈ $$0 A with ($$0) φ) () 0
-      prove ↔ ∈ $0 ∅ ∧ ∈ $0 A with ($0) φ 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 (∈ $0 ∅, ∧ ∈ $0 A with ($0) φ) () () () 2.0.0 2.0.1
+      prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$0 ∅) ($0) 1
+      prove ¬ ∧ ∈ $0 A with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∧ ∈ $$0 A with ($$0) φ) ($0) 0
+      prove ↔ ∈ $0 ∅ ∧ ∈ $0 A with ($0) φ 3a7d4bf538cdd14b555c6c361fc4f3035fd4193133b97066d44160fac19cc834 (∈ $0 ∅, ∧ ∈ $0 A with ($0) φ) () 2.0.0 2.0.1
     }
   }
-  prove ∃ y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () (∅) (∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) () 2
-  prove ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a () () (∧ ∈ $0 A with ($0) φ) () 3
+  prove ∃ y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) (∅) 2
+  prove ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a (∧ ∈ $0 A with ($0) φ) () 3
 }
 
 theorem Comprehensions Exist for Non-Empty Sets Lemma
@@ -23,40 +23,40 @@ conclusion ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ wit
 {
   take y {
     assume ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a {
-      let x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $0 A with ($0) φ) () (∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 a) () {
+      let x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 a, ∧ ∈ $0 A with ($0) φ) () {
         assume with ($0) φ {
           elided 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d {
-            prove ¬ ¬ with ($0) φ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (with ($0) φ) () () () 0.0.0.0a
-            prove ↔ ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 $0 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d (with ($0) φ, ¬ with ($0) φ, = $$0 $0, = $$0 a) () () () 0.0.0.0a 0.0.0.0.0.0
+            prove ¬ ¬ with ($0) φ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (with ($0) φ) () 0.0.0.0a
+            prove ↔ ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 $0 7cd803cf462c4d93dc8acd14fb0837dc3d853e9f4cfe8bdd6785de7000e2225d (with ($0) φ, ¬ with ($0) φ, = $$0 $0, = $$0 a) () 0.0.0.0a 0.0.0.0.0.0
           }
           elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-            prove → ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 $0) () () () 0.0.0.0.0
-            prove = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 $0) () () () 0.0.0.0.1.0 0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove → ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 $0) () 0.0.0.0.0
+            prove = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 $0) () 0.0.0.0.1.0 0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
           }
-          prove ∧ ∈ $0 A with ($0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 A, with ($0) φ) () () () 0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0.0a
-          prove ∧ ∈ $$0 A with ($$0) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, $0) (∧ ∈ $$$0 A with ($$$0) φ) () 0.0.0.0.1 0.0.0.0.2
+          prove ∧ ∈ $0 A with ($0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 A, with ($0) φ) () 0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0.0a
+          prove ∧ ∈ $$0 A with ($$0) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∧ ∈ $$$0 A with ($$$0) φ) ($$0, $0) 0.0.0.0.1 0.0.0.0.2
         }
         assume ¬ with ($0) φ {
-          prove ↔ ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 a 8cd89d7a4d6604f8d8d3530be80c9155084c8729b41a1bb1620e1c027b90b8ea (with ($0) φ, ¬ with ($0) φ, = $$0 $0, = $$0 a) () () () 0.0.0.1a 0.0.0.1a
+          prove ↔ ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 a 8cd89d7a4d6604f8d8d3530be80c9155084c8729b41a1bb1620e1c027b90b8ea (with ($0) φ, ¬ with ($0) φ, = $$0 $0, = $$0 a) () 0.0.0.1a 0.0.0.1a
           elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-            prove → ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 a) () () () 0.0.0.1.0
-            prove = $$0 a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 a) () () () 0.0.0.1.1.0 0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove → ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a = $$0 a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 a) () 0.0.0.1.0
+            prove = $$0 a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, = $$0 a) () 0.0.0.1.1.0 0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
           }
-          prove ∧ ∈ $$0 A with ($$0) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () ($$0, a) (∧ ∈ $$$0 A with ($$$0) φ) () 0.0.0.1.1 p0
+          prove ∧ ∈ $$0 A with ($$0) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∧ ∈ $$$0 A with ($$$0) φ) ($$0, a) 0.0.0.1.1 p0
         }
-        prove ∧ ∈ $$0 A with ($$0) φ 35f46479d4f3054e0f463194f8ed4dd77e7526b58f2b6157594bf81bccfcf95a (with ($0) φ, ∧ ∈ $$0 A with ($$0) φ) () () () 0.0.0.0 0.0.0.1
+        prove ∧ ∈ $$0 A with ($$0) φ 35f46479d4f3054e0f463194f8ed4dd77e7526b58f2b6157594bf81bccfcf95a (with ($0) φ, ∧ ∈ $$0 A with ($$0) φ) () 0.0.0.0 0.0.0.1
       } 0.0a
     }
     assume ∧ ∈ $0 A with ($0) φ {
-      prove = $0 $0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () ($0) () ()
+      prove = $0 $0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () ($0)
       elided bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d {
-        prove ∧ with ($0) φ = $0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (with ($0) φ, = $0 $0) () () () 0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.1.0
-        prove ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∧ with ($0) φ = $0 $0, ∧ ¬ with ($0) φ = $0 a) () () () 0.1.1.0
-        prove ∧ ∈ $0 A ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 A, ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a) () () () 0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.1.1.1
+        prove ∧ with ($0) φ = $0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (with ($0) φ, = $0 $0) () 0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.1.0
+        prove ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∧ with ($0) φ = $0 $0, ∧ ¬ with ($0) φ = $0 a) () 0.1.1.0
+        prove ∧ ∈ $0 A ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 A, ∨ ∧ with ($0) φ = $0 $0 ∧ ¬ with ($0) φ = $0 a) () 0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.1.1.1
       }
-      prove ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd () ($0) (∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 a) () 0.1.1
+      prove ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$0 A ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 a) ($0) 0.1.1
     }
-    prove ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a ∧ ∈ $0 A with ($0) φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, ∧ ∈ $0 A with ($0) φ) () () () 0.0 0.1
+    prove ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a ∧ ∈ $0 A with ($0) φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a, ∧ ∈ $0 A with ($0) φ) () 0.0 0.1
   }
 }
 
@@ -64,14 +64,14 @@ theorem Comprehensions Exist for Non-Empty Sets
 premise ∃ y ∧ ∈ $0 A with ($0) φ
 conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 {
-  let a ∧ ∈ $0 A with ($0) φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) () (∧ ∈ $0 A with ($0) φ) () {
+  let a ∧ ∈ $0 A with ($0) φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $0 A with ($0) φ, ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) () {
     take x {
-      prove ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0 01497a2df4aaf91a9748bc5c17111c99b57fcc47c9a4cacb216acc397324cf83 (with ($0) φ) ($0, $$0) () ()
-      prove → ∈ $0 A ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0, ∈ $0 A) () () () 0.0.0
+      prove ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0 01497a2df4aaf91a9748bc5c17111c99b57fcc47c9a4cacb216acc397324cf83 (with ($0) φ) ($0, $$0)
+      prove → ∈ $0 A ∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∃! y ∨ ∧ with ($$0) φ = $0 $$0 ∧ ¬ with ($$0) φ = $0 $$$0, ∈ $0 A) () 0.0.0
     }
-    prove ∃! x ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$$0 a23a254299d258a1307d257384c823b073a0c85f62f1606a89715f5d133ca2c7 () (A) (∨ ∧ with ($$0) φ = $$1 $$0 ∧ ¬ with ($$0) φ = $$1 $0) () 0.0
-    prove ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$0 ∧ ∈ $0 A with ($0) φ b708f511a717e74c973f6de531b41be9dd1608d03f371544b0b3f5e5820592be () ($0, A) (with ($$0) φ) () 0a
-    prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ d2e7024f4fa96bd78696602328e3ef0d125281eafe2790c6fc17fcd49b3cc2f1 () () (∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$$0 $0 ∧ ¬ with ($0) φ = $$$0 $$0, ∧ ∈ $$0 A with ($$0) φ) () 0.1 0.2
+    prove ∃! x ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$$0 a23a254299d258a1307d257384c823b073a0c85f62f1606a89715f5d133ca2c7 (∨ ∧ with ($$0) φ = $$1 $$0 ∧ ¬ with ($$0) φ = $$1 $0) (A) 0.0
+    prove ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 $$$0 ∧ ∈ $0 A with ($0) φ b708f511a717e74c973f6de531b41be9dd1608d03f371544b0b3f5e5820592be (with ($$0) φ) ($0, A) 0a
+    prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ d2e7024f4fa96bd78696602328e3ef0d125281eafe2790c6fc17fcd49b3cc2f1 (∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$$0 $0 ∧ ¬ with ($0) φ = $$$0 $$0, ∧ ∈ $$0 A with ($$0) φ) () 0.1 0.2
   } p0
 }
 
@@ -79,12 +79,12 @@ theorem Comprehensions Exist
 conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ
 {
   assume ¬ ∃ y ∧ ∈ $0 X with ($0) φ {
-    prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ 34ea80ac4dc2e2e953296c2d11b812e86eef1f686590546d051f8b1e9732317a () (X) (with ($0) φ) () 0a
+    prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ 34ea80ac4dc2e2e953296c2d11b812e86eef1f686590546d051f8b1e9732317a (with ($0) φ) (X) 0a
   }
   assume ∃ y ∧ ∈ $0 X with ($0) φ {
-    prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ 2f60c41955d2f9bf1309bdf7a1fc74c978342425cf7a3f23ba4e449edee631d8 () (X) (with ($0) φ) () 1a
+    prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ 2f60c41955d2f9bf1309bdf7a1fc74c978342425cf7a3f23ba4e449edee631d8 (with ($0) φ) (X) 1a
   }
-  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ 35f46479d4f3054e0f463194f8ed4dd77e7526b58f2b6157594bf81bccfcf95a (∃ y ∧ ∈ $0 X with ($0) φ, ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ) () () () 1 0
+  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ 35f46479d4f3054e0f463194f8ed4dd77e7526b58f2b6157594bf81bccfcf95a (∃ y ∧ ∈ $0 X with ($0) φ, ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ) () 1 0
 }
 
 term comprehension ($x A with x φ)
@@ -96,8 +96,8 @@ theorem Membership Condition for a Comprehension
 premise = S comprehension x A with ($0) φ
 conclusion ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ
 {
-  prove ∀ y ↔ ∈ $0 comprehension x A with ($0) φ ∧ ∈ $0 A with ($0) φ 0111376b28debd444ee3e3e7b480f45e33692930df3feb46e5b5ef76a6b43933 () (A) (with ($0) φ) ()
-  prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a () (S, comprehension x A with ($0) φ) (∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) () p0 0
+  prove ∀ y ↔ ∈ $0 comprehension x A with ($0) φ ∧ ∈ $0 A with ($0) φ 0111376b28debd444ee3e3e7b480f45e33692930df3feb46e5b5ef76a6b43933 (with ($0) φ) (A)
+  prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ) (S, comprehension x A with ($0) φ) p0 0
 }
 
 theorem A Comprehension Is a Subset of Its Domain
@@ -107,13 +107,13 @@ conclusion ⊆ S A
   take y {
     assume ∈ $0 S {
       elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-        prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d () (S, A) (with ($$0) φ) () p0
-        prove ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 () ($0) (↔ ∈ $$0 S ∧ ∈ $$0 A with ($$0) φ) () 0.0.0.0
-        prove → ∈ $0 S ∧ ∈ $0 A with ($0) φ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 S, ∧ ∈ $0 A with ($0) φ) () () () 0.0.0.1
-        prove ∧ ∈ $0 A with ($0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 S, ∧ ∈ $0 A with ($0) φ) () () () 0.0.0.2 0.0a
-        prove ∈ $0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, with ($0) φ) () () () 0.0.0.3
+        prove ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (with ($$0) φ) (S, A) p0
+        prove ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 S ∧ ∈ $$0 A with ($$0) φ) ($0) 0.0.0.0
+        prove → ∈ $0 S ∧ ∈ $0 A with ($0) φ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 S, ∧ ∈ $0 A with ($0) φ) () 0.0.0.1
+        prove ∧ ∈ $0 A with ($0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 S, ∧ ∈ $0 A with ($0) φ) () 0.0.0.2 0.0a
+        prove ∈ $0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, with ($0) φ) () 0.0.0.3
       }
     }
   }
-  prove ⊆ S A 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (S, A) () () 0
+  prove ⊆ S A 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (S, A) 0
 }

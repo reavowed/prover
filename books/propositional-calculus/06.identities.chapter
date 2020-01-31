@@ -4,47 +4,47 @@ theorem And Is Symmetric
 conclusion ↔ ∧ φ ψ ∧ ψ φ
 {
   assume ∧ φ ψ {
-    prove ∧ ψ φ 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (φ, ψ) () () () 0a
+    prove ∧ ψ φ 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (φ, ψ) () 0a
   }
   assume ∧ ψ φ {
-    prove ∧ φ ψ 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (ψ, φ) () () () 1a
+    prove ∧ φ ψ 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (ψ, φ) () 1a
   }
-  prove ↔ ∧ φ ψ ∧ ψ φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ φ ψ, ∧ ψ φ) () () () 0 1
+  prove ↔ ∧ φ ψ ∧ ψ φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ φ ψ, ∧ ψ φ) () 0 1
 }
 
 theorem Or Is Symmetric
 conclusion ↔ ∨ φ ψ ∨ ψ φ
 {
   assume ∨ φ ψ {
-    prove ∨ ψ φ 7e3651c820e1f41df1d2e5a80ff9e1c8bc55f236a482bf9ee54c7c4188e2ee93 (φ, ψ) () () () 0a
+    prove ∨ ψ φ 7e3651c820e1f41df1d2e5a80ff9e1c8bc55f236a482bf9ee54c7c4188e2ee93 (φ, ψ) () 0a
   }
   assume ∨ ψ φ {
-    prove ∨ φ ψ 7e3651c820e1f41df1d2e5a80ff9e1c8bc55f236a482bf9ee54c7c4188e2ee93 (ψ, φ) () () () 1a
+    prove ∨ φ ψ 7e3651c820e1f41df1d2e5a80ff9e1c8bc55f236a482bf9ee54c7c4188e2ee93 (ψ, φ) () 1a
   }
-  prove ↔ ∨ φ ψ ∨ ψ φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ φ ψ, ∨ ψ φ) () () () 0 1
+  prove ↔ ∨ φ ψ ∨ ψ φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ φ ψ, ∨ ψ φ) () 0 1
 }
 
 theorem And Is Idempotent
 conclusion ↔ ∧ φ φ φ
 {
   assume ∧ φ φ {
-    prove φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, φ) () () () 0a
+    prove φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, φ) () 0a
   }
   assume φ {
-    prove ∧ φ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, φ) () () () 1a 1a
+    prove ∧ φ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, φ) () 1a 1a
   }
-  prove ↔ ∧ φ φ φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ φ φ, φ) () () () 0 1
+  prove ↔ ∧ φ φ φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ φ φ, φ) () 0 1
 }
 
 theorem Or Is Idempotent
 conclusion ↔ ∨ φ φ φ
 {
   assume ∨ φ φ {
-    prove → φ φ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (φ) () () ()
-    prove φ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, φ, φ) () () () 0a 0.0 0.0
+    prove → φ φ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (φ) ()
+    prove φ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, φ, φ) () 0a 0.0 0.0
   }
   assume φ {
-    prove ∨ φ φ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (φ, φ) () () () 1a
+    prove ∨ φ φ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (φ, φ) () 1a
   }
-  prove ↔ ∨ φ φ φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ φ φ, φ) () () () 0 1
+  prove ↔ ∨ φ φ φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ φ φ, φ) () 0 1
 }

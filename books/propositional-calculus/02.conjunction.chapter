@@ -9,22 +9,22 @@ theorem Extract Left Conjunct
 premise ∧ φ ψ
 conclusion φ
 {
-  prove ¬ → φ ¬ ψ e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (φ, ψ) () () () p0
+  prove ¬ → φ ¬ ψ e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (φ, ψ) () p0
   assume ¬ φ {
-    prove → φ ¬ ψ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (φ, ¬ ψ) () () () 1a
+    prove → φ ¬ ψ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (φ, ¬ ψ) () 1a
   }
-  prove φ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (φ, → φ ¬ ψ) () () () 1 0
+  prove φ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (φ, → φ ¬ ψ) () 1 0
 }
 
 theorem Extract Right Conjunct
 premise ∧ φ ψ
 conclusion ψ
 {
-  prove ¬ → φ ¬ ψ e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (φ, ψ) () () () p0
+  prove ¬ → φ ¬ ψ e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (φ, ψ) () p0
   assume ¬ ψ {
-    prove → φ ¬ ψ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (¬ ψ, φ) () () () 1a
+    prove → φ ¬ ψ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (¬ ψ, φ) () 1a
   }
-  prove ψ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (ψ, → φ ¬ ψ) () () () 1 0
+  prove ψ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (ψ, → φ ¬ ψ) () 1 0
 }
 
 theorem Combine Conjunction
@@ -33,28 +33,28 @@ premise ψ
 conclusion ∧ φ ψ
 {
   assume → φ ¬ ψ {
-    prove ¬ ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ¬ ψ) () () () 0a p0
+    prove ¬ ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ¬ ψ) () 0a p0
   }
-  prove ¬ → φ ¬ ψ fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (→ φ ¬ ψ, ψ) () () () 0 p1
-  prove ∧ φ ψ 1fb57cbd284d5244531819f8c2dfd32be60e7a13a7c04d539048d8535037c02a (φ, ψ) () () () 1
+  prove ¬ → φ ¬ ψ fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (→ φ ¬ ψ, ψ) () 0 p1
+  prove ∧ φ ψ 1fb57cbd284d5244531819f8c2dfd32be60e7a13a7c04d539048d8535037c02a (φ, ψ) () 1
 }
 
 theorem Reverse Conjunction
 premise ∧ φ ψ
 conclusion ∧ ψ φ
 {
-  prove φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () () () p0
-  prove ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () () () p0
-  prove ∧ ψ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (ψ, φ) () () () 1 0
+  prove φ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (φ, ψ) () p0
+  prove ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () p0
+  prove ∧ ψ φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (ψ, φ) () 1 0
 }
 
 theorem Law of Non-Contradiction
 conclusion ¬ ∧ φ ¬ φ
 {
   assume ∧ φ ¬ φ {
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () () 0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () 0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
   }
-  prove ¬ ∧ φ ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ¬ φ) () () () 0
+  prove ¬ ∧ φ ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ¬ φ) () 0
 }
 
 comment Some inferences for negated conjunctions.
@@ -64,9 +64,9 @@ premise ¬ φ
 conclusion ¬ ∧ φ ψ
 {
   assume ∧ φ ψ {
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () () 0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p0
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () 0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p0
   }
-  prove ¬ ∧ φ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ψ) () () () 0
+  prove ¬ ∧ φ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ψ) () 0
 }
 
 theorem Add Left Negated Conjunct
@@ -74,9 +74,9 @@ premise ¬ ψ
 conclusion ¬ ∧ φ ψ
 {
   assume ∧ φ ψ {
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () () 0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c p0
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () 0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c p0
   }
-  prove ¬ ∧ φ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ψ) () () () 0
+  prove ¬ ∧ φ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ψ) () 0
 }
 
 theorem Add Negated Conjunct
@@ -84,9 +84,9 @@ premise φ
 conclusion ¬ ∧ ¬ φ ψ
 {
   assume ∧ ¬ φ ψ {
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () () () p0 0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () p0 0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
   }
-  prove ¬ ∧ ¬ φ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ ¬ φ ψ) () () () 0
+  prove ¬ ∧ ¬ φ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ ¬ φ ψ) () 0
 }
 
 theorem Add Negated Conjunct
@@ -94,9 +94,9 @@ premise ψ
 conclusion ¬ ∧ φ ¬ ψ
 {
   assume ∧ φ ¬ ψ {
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () () () p0 0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () p0 0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
   }
-  prove ¬ ∧ φ ¬ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ¬ ψ) () () () 0
+  prove ¬ ∧ φ ¬ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ φ ¬ ψ) () 0
 }
 
 theorem Extract Negated Conjunct
@@ -105,9 +105,9 @@ premise φ
 conclusion ¬ ψ
 {
   assume ψ {
-    prove ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () () p1 0a
+    prove ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () p1 0a
   }
-  prove ¬ ψ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (ψ, ∧ φ ψ) () () () 0 p0
+  prove ¬ ψ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (ψ, ∧ φ ψ) () 0 p0
 }
 
 theorem Extract Negated Conjunct
@@ -116,7 +116,7 @@ premise ψ
 conclusion ¬ φ
 {
   assume φ {
-    prove ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () () () 0a p1
+    prove ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () 0a p1
   }
-  prove ¬ φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (φ, ∧ φ ψ) () () () 0 p0
+  prove ¬ φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (φ, ∧ φ ψ) () 0 p0
 }
