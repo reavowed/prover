@@ -151,9 +151,9 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
             extractionStep <- Step.Elided.ifNecessary(additionalAssertions ++ extractionSteps, elider) orBadRequest "No extraction steps"
             finalStep = Step.Elided.ifNecessary((additionalPremises ++ extractionPremises :+ extractionStep) ++ expansionStepOption.toSeq, elider).get
             newTarget = (targetRelation.apply _).tupled.apply(swapper.swap(intermediateTerm, targetDestination))
-            newTargetStep = Step.Target(newTarget)
-            ((firstRelation, firstStep), (secondRelation, secondStep)) = swapper.swap((conclusionRelation, finalStep), (targetRelation, newTargetStep))
-          } yield (firstRelation, Some(firstStep), secondRelation, Some(secondStep), intermediateTerm, additionalTargets ++ extractionTargets)
+            newTargetStepOption = if (stepProvingContext.allPremisesSimplestFirst.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
+            ((firstRelation, firstStep), (secondRelation, secondStep)) = swapper.swap((conclusionRelation, Some(finalStep)), (targetRelation, newTargetStepOption))
+          } yield (firstRelation, firstStep, secondRelation, secondStep, intermediateTerm, additionalTargets ++ extractionTargets)
         }
 
         def fromInference(inferenceId: String) = {
