@@ -10,8 +10,6 @@ case class ExpressionParsingContext(
     parameterLists: Seq[Seq[(String, Int)]])
   extends ParsingContextWithParameters
 {
-  def parameterDepth: Int = parameterLists.length
-
   def addParameters(parameters: String *): ExpressionParsingContext = {
     copy(parameterLists = parameterLists :+ parameters.zipWithIndex)
   }
@@ -59,13 +57,13 @@ object ExpressionParsingContext {
       override protected def isValidTermVariable(text: String): Boolean = pattern.pattern.matcher(text).matches()
 
       override def getVariableOrParameter(text: String, parameter: Option[FunctionParameter]): Option[Term] = {
-        parameter orElse getVariable(text).map(TermVariable)
+        parameter orElse getVariable(text).map(TermVariable(_, Nil))
       }
     }
     case class LimitedList(allowedTermVariables: Seq[String]) extends TermVariableValidator {
       override def isValidTermVariable(text: String): Boolean = allowedTermVariables.contains(text)
       override def getVariableOrParameter(text: String, parameter: Option[FunctionParameter]): Option[Term] = {
-        getVariable(text).map(TermVariable) orElse parameter
+        getVariable(text).map(TermVariable(_, Nil)) orElse parameter
       }
     }
   }

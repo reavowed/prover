@@ -25,7 +25,7 @@ case class PropertyDefinition(
   def statementDefinition = StatementDefinition(
     qualifiedSymbol,
     Nil,
-    TermComponent(defaultTermName) +: parentComponentTypes,
+    TermComponent(defaultTermName, Nil) +: parentComponentTypes,
     explicitName.orElse(Some(symbol)),
     fullFormat,
     Some(definingStatement),

@@ -1,6 +1,5 @@
 package net.prover.model.proof
 
-import net.prover.model
 import net.prover.model._
 import net.prover.model.expressions._
 
@@ -21,6 +20,11 @@ object SubstatementExtractor {
       (newName, VariableTracker(namesUsedSoFar :+ newName))
     }
   }
+  object VariableTracker {
+    def fromInference(inference: Inference): VariableTracker = VariableTracker(inference.requiredSubstitutions.terms.map(_._1))
+    def fromStepContext(implicit stepContext: StepContext): VariableTracker = VariableTracker(stepContext.termVariableNames)
+  }
+
 
   private def getBaseExtractionOption(sourceStatement: Statement): Seq[ExtractionOption] = {
     Seq(ExtractionOption(sourceStatement, Nil, Nil))
@@ -68,7 +72,7 @@ object SubstatementExtractor {
       (inference, extractionPremise, predicateName, _) <- provingContext.specificationInferenceOption.toSeq
       extractionSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality).toSeq // missing external depth increase?
       boundVariableName <- sourceStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.scopedBoundVariableNames.single).toSeq
-      extractionPredicate <- extractionSubstitutions.predicates.get((predicateName, 1)).toSeq
+      (1, extractionPredicate) <- extractionSubstitutions.statements.get(predicateName).toSeq
       (newVariableName, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(boundVariableName)
       nextPremise <- extractionPredicate.specify(Seq(TermVariable(newVariableName))).toSeq
       innerOption <- recurse(nextPremise, newVariableTracker)
@@ -129,11 +133,11 @@ object SubstatementExtractor {
 
   def getExtractionOptions(inference: Inference)(implicit provingContext: ProvingContext): Seq[ExtractionOption] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
-    getExtractionOptions(inference.conclusion, VariableTracker(inference.requiredSubstitutions.terms))
+    getExtractionOptions(inference.conclusion, VariableTracker.fromInference(inference))
   }
 
   def getExtractionOptions(premise: Statement)(implicit stepProvingContext: StepProvingContext): Seq[ExtractionOption] = {
-    getExtractionOptions(premise, VariableTracker(stepProvingContext.stepContext.termVariableNames))
+    getExtractionOptions(premise, VariableTracker.fromStepContext)
   }
 
   private def findByExtractingBase(
@@ -157,10 +161,10 @@ object SubstatementExtractor {
     implicit stepProvingContext: StepProvingContext
   ): Seq[ExtractionResult] = {
     for {
-      extractionSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality).toSeq
-      extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions).toSeq
+      extractionSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement)(StepContext.withExtraParameter).flatMap(_.confirmTotality).toSeq
+      extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions)(StepContext.withExtraParameter).toSeq
       ExtractionResult(innerExtractionSteps, innerTargetSteps, innerTerms) <- recurse(extractedConclusion, targetStatement, termsUsed)
-      extractedOtherPremiseOption <- otherPremiseOption.map(_.applySubstitutions(extractionSubstitutions)).swap.toSeq
+      extractedOtherPremiseOption <- otherPremiseOption.map(_.applySubstitutions(extractionSubstitutions)(StepContext.withExtraParameter)).swap.toSeq
       (premiseSteps, targetSteps, terms) <- extractedOtherPremiseOption match {
         case Some(extractedOtherPremise) =>
           val results = PremiseFinder.findParameterisedPremiseSteps(extractedOtherPremise, innerTerms)
@@ -221,14 +225,14 @@ object SubstatementExtractor {
   ): Seq[ExtractionResult] = {
     implicitly[ProvingContext].specificationInferenceOption.toSeq.flatMap { case (inference, extractionPremise, predicateName, variableName) =>
       for {
-        extractionSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement, Substitutions.empty, 0, implicitly[StepContext].externalDepth + 1).flatMap(_.confirmTotality).toSeq
-        extractionPredicate <- extractionSubstitutions.predicates.get((predicateName, 1)).toSeq
-        nextPremise <- extractionPredicate.specify(Seq(FunctionParameter(termsUsed, stepProvingContext.stepContext.externalDepth)), 0, implicitly[StepContext].externalDepth + 1).toSeq
+        extractionSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement)(StepContext.withExtraParameter).flatMap(_.confirmTotality).toSeq
+        (1, extractionPredicate) <- extractionSubstitutions.statements.get(predicateName).toSeq
+        nextPremise <- extractionPredicate.specify(Seq(FunctionParameter(termsUsed, stepProvingContext.stepContext.externalDepth)))(StepContext.withExtraParameter).toSeq
         ExtractionResult(extractionSteps, innerTargetSteps, terms) <- findByExtracting(nextPremise, targetStatement, termsUsed + 1)
         specificationArgument <- terms.get(termsUsed).toSeq
         substitutedPremise <- sourceStatement.specify(terms).toSeq
         substitutions <- extractionPremise.calculateSubstitutions(substitutedPremise).flatMap(_.confirmTotality)
-          .map(_.copy(terms = Map(variableName -> specificationArgument)))
+          .map(_.copy(terms = Map(variableName -> (0, specificationArgument))))
           .toSeq
         substitutedConclusion <- inference.conclusion.applySubstitutions(substitutions).toSeq
         assertionStep = Step.Assertion(

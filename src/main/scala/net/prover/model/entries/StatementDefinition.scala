@@ -73,7 +73,7 @@ case class StatementDefinition(
   def apply(components: Expression*): DefinedStatement = {
     DefinedStatement(components, this)(boundVariableNames)
   }
-  def apply(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
+  def bind(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
     DefinedStatement(components, this)(boundVariableNames)
   }
   def unapplySeq(expression: Expression): Option[Seq[Expression]] = expression match {

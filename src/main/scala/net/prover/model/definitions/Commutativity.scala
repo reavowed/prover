@@ -9,7 +9,7 @@ case class Commutativity(operator: BinaryOperator, inference: Inference.Summary,
     for {
       (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremisesAndElide(
         inference,
-        Substitutions(terms = inference.requiredSubstitutions.terms.zip(Seq(a, b)).toMap))
+        inference.requiredSubstitutions.fill(Nil, Seq(a, b)))
       if targetSteps.isEmpty
       expansionSteps = equality.expansion.assertionStepIfNecessary(operator(a, b), operator(b, a), wrapper).toSeq
     } yield RearrangementStep(wrapper(operator(b, a)), assertionStep +: expansionSteps, inference)

@@ -42,5 +42,7 @@ object StepContext {
     }
   }
   implicit def fromStepProvingContext(implicit stepProvingContext: StepProvingContext): StepContext = stepProvingContext.stepContext
+
+  def withExtraParameter(implicit stepContext: StepContext) = stepContext.copy(boundVariableLists = Nil +: stepContext.boundVariableLists)
 }
 

@@ -6,7 +6,6 @@ import net.prover.model.expressions._
 import scala.Ordering.Implicits._
 
 object PremiseFinder {
-
   def findParameterisedPremiseSteps(
     targetStatement: Statement,
     terms: Map[Int, Term])(
@@ -21,8 +20,8 @@ object PremiseFinder {
       }
     def bySimplifyingTarget = for {
         inference <- stepProvingContext.provingContext.conclusionSimplificationInferences
-        substitutionsWithPlaceholders <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality).toSeq
-        premiseStatementsWithPlaceholders <- inference.substitutePremises(substitutionsWithPlaceholders).toSeq
+        substitutionsWithPlaceholders <- inference.conclusion.calculateSubstitutions(targetStatement)(StepContext.withExtraParameter).flatMap(_.confirmTotality).toSeq
+        premiseStatementsWithPlaceholders <- inference.substitutePremises(substitutionsWithPlaceholders)(StepContext.withExtraParameter).toSeq
         (premiseSteps, newTerms) <- findParameterisedPremiseSteps(premiseStatementsWithPlaceholders, terms)
         conclusion <- targetStatement.specify(newTerms).toSeq
         substitutions <- inference.conclusion.calculateSubstitutions(conclusion).flatMap(_.confirmTotality).toSeq

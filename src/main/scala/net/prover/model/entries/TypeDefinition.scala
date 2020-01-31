@@ -30,7 +30,7 @@ case class TypeDefinition(
   def statementDefinition = StatementDefinition(
     symbol,
     Nil,
-    TermComponent(defaultTermName) +: otherComponentTypes,
+    TermComponent(defaultTermName, Nil) +: otherComponentTypes,
     explicitName,
     fullFormat,
     Some(definingStatement),

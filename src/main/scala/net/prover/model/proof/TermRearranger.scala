@@ -33,10 +33,10 @@ case class TermRearranger(
   }
 
   private def addRight(wrapper: Wrapper[Term, Term], rhs: OperatorTree): Wrapper[Term, Term] = {
-    wrapper.insert(operator(_, rhs.baseTerm))
+    wrapper.insert(operator(_, rhs.baseTerm)(_))
   }
   private def addLeft(wrapper: Wrapper[Term, Term], lhs: OperatorTree): Wrapper[Term, Term] = {
-    wrapper.insert(operator(lhs.baseTerm, _))
+    wrapper.insert(operator(lhs.baseTerm, _)(_))
   }
 
   private def pullLeft(tree: OperatorTree, targetLeft: OperatorTree, wrapper: Wrapper[Term, Term]): Option[(Seq[RearrangementStep], OperatorTree)] = {
@@ -103,8 +103,8 @@ case class TermRearranger(
         }
       case Operator(l, r, _) =>
         for {
-          (leftSteps, leftTree, leavesAfterLeft) <- rearrangeLeaves(l, availableLeaves, wrapper.insert(t => operator(t, r.baseTerm)))
-          (rightSteps, rightTree, leavesAfterRight) <- rearrangeLeaves(r, leavesAfterLeft, wrapper.insert(t => operator(leftTree.baseTerm, t)))
+          (leftSteps, leftTree, leavesAfterLeft) <- rearrangeLeaves(l, availableLeaves, wrapper.insert(operator(_, r.baseTerm)(_)))
+          (rightSteps, rightTree, leavesAfterRight) <- rearrangeLeaves(r, leavesAfterLeft, wrapper.insert(operator(leftTree.baseTerm, _)(_)))
         } yield (leftSteps ++ rightSteps, Operator(leftTree, rightTree, operator(leftTree.baseTerm, rightTree.baseTerm)), leavesAfterRight)
     }
   }
@@ -176,9 +176,9 @@ object TermRearranger {
       rearrangeDirectly(lhs, rhs, equality, wrapper) orElse
         ((lhs, rhs) match {
           case (DefinedTerm(premiseComponents, premiseDefinition), DefinedTerm(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
-            rearrangeComponents(premiseComponents, targetComponents, wrapper.insert(components => premiseDefinition(components:_*)), equality)
-          case (FunctionApplication(premiseName, premiseArguments), FunctionApplication(targetName, targetArguments)) if premiseName == targetName =>
-            rearrangeComponents(premiseArguments, targetArguments, wrapper.insert(arguments => FunctionApplication(premiseName, arguments.toType[Term].get)), equality)
+            rearrangeComponents(premiseComponents, targetComponents, wrapper.insert((components, _) => premiseDefinition(components:_*)), equality)
+          case (TermVariable(premiseName, premiseArguments), TermVariable(targetName, targetArguments)) if premiseName == targetName =>
+            rearrangeComponents(premiseArguments, targetArguments, wrapper.insert((arguments, _) => TermVariable(premiseName, arguments.toType[Term].get)), equality)
           case _ =>
             None
         })
@@ -194,9 +194,9 @@ object TermRearranger {
       Some(Nil)
     else (lhsStatement, rhsStatement) match {
       case (DefinedStatement(premiseComponents, premiseDefinition), DefinedStatement(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
-        rearrangeComponents(premiseComponents, targetComponents, wrapper.insert(components => premiseDefinition(components:_*)), equality)
-      case (PredicateApplication(premiseName, premiseArguments), PredicateApplication(targetName, targetArguments)) if premiseName == targetName =>
-        rearrangeComponents(premiseArguments, targetArguments, wrapper.insert(arguments => PredicateApplication(premiseName, arguments.toType[Term].get)), equality)
+        rearrangeComponents(premiseComponents, targetComponents, wrapper.insert((components, _) => premiseDefinition(components:_*)), equality)
+      case (StatementVariable(premiseName, premiseArguments), StatementVariable(targetName, targetArguments)) if premiseName == targetName =>
+        rearrangeComponents(premiseArguments, targetArguments, wrapper.insert((arguments, _) => StatementVariable(premiseName, arguments.toType[Term].get)), equality)
       case _ =>
         None
     }
@@ -213,10 +213,10 @@ object TermRearranger {
         case Nil =>
           Some(currentSteps)
         case (premise: Statement, target: Statement) +: moar =>
-          rearrangeStatement(premise, target, wrapper.insert(s => (previousComponents.map(_._2) :+ s) ++ moar.map(_._1)), equality)
+          rearrangeStatement(premise, target, wrapper.insert((s, _) => (previousComponents.map(_._2) :+ s) ++ moar.map(_._1)), equality)
             .flatMap(newSteps => helper(previousComponents :+ (premise, target), moar, currentSteps ++ newSteps))
         case (premise: Term, target: Term) +: moar =>
-          rearrangeTerm(premise, target, wrapper.insert(t => (previousComponents.map(_._2) :+ t) ++ moar.map(_._1)), equality)
+          rearrangeTerm(premise, target, wrapper.insert((t, _) => (previousComponents.map(_._2) :+ t) ++ moar.map(_._1)), equality)
             .flatMap(newSteps => helper(previousComponents :+ (premise, target), moar, currentSteps ++ newSteps))
         case _ =>
           None

@@ -77,8 +77,8 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       if (inference match {
         case Inference(
           _,
-          Seq(relation(TermVariable(a), TermVariable(b))),
-          relation(FunctionApplication(f, Seq(TermVariable(c))), FunctionApplication(g, Seq(TermVariable(d))))
+          Seq(relation(TermVariable(a, Nil), TermVariable(b, Nil))),
+          relation(TermVariable(f, Seq(TermVariable(c, Nil))), TermVariable(g, Seq(TermVariable(d, Nil))))
         ) if a == c && b == d && f == g =>
           true
         case _ =>
@@ -96,9 +96,9 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
         case Inference(
           _,
           Seq(
-            relation(TermVariable(a), TermVariable(b)),
-            PredicateApplication(phi, Seq(TermVariable(c)))),
-          PredicateApplication(psi, Seq(TermVariable(d)))
+            relation(TermVariable(a, Nil), TermVariable(b, Nil)),
+            StatementVariable(phi, Seq(TermVariable(c, Nil)))),
+        StatementVariable(psi, Seq(TermVariable(d, Nil)))
         ) if a == c && b == d && phi == psi =>
           true
         case _ =>
@@ -114,8 +114,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       appropriateInferences = inferenceEntries.filter { inference =>
         val substitutions = inference.requiredSubstitutions
         substitutions.statements.isEmpty &&
-          substitutions.predicates.isEmpty &&
-          substitutions.functions.isEmpty &&
+          substitutions.hasNoApplications &&
           inference.conclusion.requiredSubstitutions.isEquivalentTo(substitutions)
       }
       results <- appropriateInferences
@@ -145,7 +144,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     case inference @ Inference(_, Seq(singlePremise), conclusion)
       if singlePremise.complexity > conclusion.complexity &&
         singlePremise.requiredSubstitutions.isEquivalentTo(inference.requiredSubstitutions) &&
-        singlePremise.requiredSubstitutions.predicates.isEmpty && singlePremise.requiredSubstitutions.functions.isEmpty
+        inference.requiredSubstitutions.hasNoApplications
     =>
       (inference, singlePremise)
   }
@@ -154,7 +153,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       if premises.nonEmpty &&
         premises.forall(_.complexity < conclusion.complexity) &&
         conclusion.requiredSubstitutions.isEquivalentTo(inference.requiredSubstitutions) &&
-        conclusion.requiredSubstitutions.predicates.isEmpty && conclusion.requiredSubstitutions.functions.isEmpty &&
+        inference.requiredSubstitutions.hasNoApplications &&
         premises.forall(_.referencedDefinitions.subsetOf(conclusion.referencedDefinitions))
     =>
       true
@@ -184,8 +183,8 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       inferenceEntries.iterator.collect {
         case inference @ Inference(
           _,
-          Seq(deductionPremise @ deductionDefinition(StatementVariable(antecedentName), StatementVariable(consequentName)), antecedentPremise @ StatementVariable(antecedentName2)),
-          StatementVariable(consequentName2)
+          Seq(deductionPremise @ deductionDefinition(StatementVariable(antecedentName, Nil), StatementVariable(consequentName, Nil)), antecedentPremise @ StatementVariable(antecedentName2, Nil)),
+          StatementVariable(consequentName2, Nil)
         ) if antecedentName == antecedentName2 && consequentName == consequentName2 =>
           (inference, deductionPremise, antecedentPremise)
       }.headOption
@@ -197,9 +196,9 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       inferenceEntries.iterator.collect {
         case inference @ Inference(
           _,
-          Seq(singlePremise @ scopingDefinition(PredicateApplication(premisePredicateName, Seq(FunctionParameter(0, 0))))),
-          PredicateApplication(conclusionName, Seq(TermVariable(variableName)))
-        ) if premisePredicateName == conclusionName =>
+          Seq(singlePremise @ scopingDefinition(StatementVariable(premisePredicateName, Seq(FunctionParameter(0, 0))))),
+          StatementVariable(conclusionPredicateName, Seq(TermVariable(variableName, Nil)))
+        ) if premisePredicateName == conclusionPredicateName =>
           (inference, singlePremise, premisePredicateName, variableName)
       }.headOption
     }
@@ -210,6 +209,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       case inference @ Inference(_, Seq(singlePremise), conclusion)
         if conclusion.complexity == singlePremise.complexity &&
           conclusion.requiredSubstitutions.isEquivalentTo(singlePremise.requiredSubstitutions) &&
+          inference.requiredSubstitutions.hasNoApplications &&
           conclusion != singlePremise
       => (inference, singlePremise)
     }
@@ -312,19 +312,19 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       deduction <- deductionDefinitionOption.toSeq
       result <- for {
         inference <- inferences
-        Seq(firstPremise @ deduction(StatementVariable(a), StatementVariable(b)), otherPremise: DefinedStatement) <- Seq.unapplySeq(inference.premises).toSeq
+        Seq(firstPremise @ deduction(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq.unapplySeq(inference.premises).toSeq
         swapper <- Seq(Swapper.DontSwap, Swapper.Swap)
         (premiseName, conclusionName) = swapper.swap(a, b)
-        if otherPremise.requiredSubstitutions.copy(statements = Nil).isEmpty && inference.conclusion.requiredSubstitutions.copy(statements = Nil).isEmpty
-        if otherPremise.requiredSubstitutions.statements.contains(premiseName) && inference.conclusion.requiredSubstitutions.statements.contains(conclusionName)
-        if otherPremise.applySubstitutions(Substitutions(otherPremise.requiredSubstitutions.statements.map(n => n -> StatementVariable(if (n == premiseName) conclusionName else n)).toMap)).contains(inference.conclusion)
+        if inference.requiredSubstitutions.terms.isEmpty && inference.requiredSubstitutions.hasNoApplications
+        if otherPremise.requiredSubstitutions.statements.contains((premiseName, 0)) && inference.conclusion.requiredSubstitutions.statements.contains((conclusionName, 0))
+        if otherPremise.applySubstitutions(Substitutions(otherPremise.requiredSubstitutions.statements.map { case (n, a) => n -> (a, StatementVariable(if (n == premiseName) conclusionName else n))}.toMap)).contains(inference.conclusion)
       } yield (inference, firstPremise, otherPremise, premiseName, conclusionName, swapper)
     } yield result
   }
 
   object WrappedStatementVariable {
     def unapply(statement: Statement): Option[String] = statement match {
-      case DefinedStatement(Seq(StatementVariable(name)), _) => Some(name)
+      case DefinedStatement(Seq(StatementVariable(name, Nil)), _) => Some(name)
       case DefinedStatement(Seq(WrappedStatementVariable(name)), _) => Some(name)
       case _ => None
     }
@@ -332,14 +332,14 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
 
   lazy val statementDefinitionIntroductionInferences: Seq[(Inference, Statement)] = {
     inferences.collect {
-      case inference @ Inference(_, Seq(premise @ StatementVariable(name)), WrappedStatementVariable(conclusionName))
+      case inference @ Inference(_, Seq(premise @ StatementVariable(name, Nil)), WrappedStatementVariable(conclusionName))
         if conclusionName == name
       => (inference, premise)
     }
   }
   lazy val statementDefinitionEliminationInferences: Seq[(Inference, Statement)] = {
     inferences.collect {
-      case inference @ Inference(_, Seq(premise @ WrappedStatementVariable(premiseName)), StatementVariable(name))
+      case inference @ Inference(_, Seq(premise @ WrappedStatementVariable(premiseName)), StatementVariable(name, Nil))
         if premiseName == name
       => (inference, premise)
     }

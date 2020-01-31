@@ -67,7 +67,7 @@ object DefinitionRewriter {
         premisePredicate <- getPredicate(premise)
         targetPredicate <- getPredicate(target)
         variableName <- premise.asOptionalInstanceOf[DefinedStatement].flatMap(_.scopedBoundVariableNames.single).toSeq
-        innerSubstitutionContext = SubstitutionContext.withDepth(substitutionContext.externalDepth + 1)
+        innerSubstitutionContext = SubstitutionContext.withExtraParameter
         innerRewriteStep <- getRewriteStep(premisePredicate, targetPredicate)(implicitly, innerSubstitutionContext)
         source = scopingDefinition(innerRewriteStep.source)
         result = scopingDefinition(innerRewriteStep.result)
@@ -99,11 +99,11 @@ object DefinitionRewriter {
         deductionDefinition <- provingContext.deductionDefinitionOption.toSeq
         (deductionInference, _, deductionPremise, premiseName, conclusionName, wrappingSwapper) <- provingContext.statementDeductionInferences
         initialDeductionSubstitutions <- deductionPremise.calculateSubstitutions(premise).flatMap(_.confirmTotality)
-        innerPremise <- initialDeductionSubstitutions.statements.get(premiseName)
+        (0, innerPremise) <- initialDeductionSubstitutions.statements.get(premiseName)
         definition <- innerPremise.asOptionalInstanceOf[DefinedStatement].map(_.definition)
         deconstructionSubstitutions <- definition.defaultValue.calculateSubstitutions(innerPremise).flatMap(_.confirmTotality)
         deconstructedInnerPremise <- definition.definingStatement.flatMap(_.applySubstitutions(deconstructionSubstitutions))
-        deductionSubstitutions = initialDeductionSubstitutions.copy(statements = initialDeductionSubstitutions.statements + (conclusionName -> deconstructedInnerPremise))
+        deductionSubstitutions = initialDeductionSubstitutions.copy(statements = initialDeductionSubstitutions.statements + (conclusionName -> (0, deconstructedInnerPremise)))
         deconstructedSource <- deductionInference.conclusion.applySubstitutions(deductionSubstitutions)
         if provingContext.statementDefinitionEliminationInferences.exists(_._2.calculateSubstitutions(deconstructedSource).nonEmpty)
         deconstructionInference <- wrappingSwapper.getOne(definition.deconstructionInference, definition.constructionInference)
@@ -117,11 +117,11 @@ object DefinitionRewriter {
         deductionDefinition <- provingContext.deductionDefinitionOption.toSeq
         (deductionInference, _, deductionPremise, premiseName, conclusionName, wrappingSwapper) <- provingContext.statementDeductionInferences
         initialDeductionSubstitutions <- deductionInference.conclusion.calculateSubstitutions(target).flatMap(_.confirmTotality)
-        innerTarget <- initialDeductionSubstitutions.statements.get(conclusionName)
+        (0, innerTarget) <- initialDeductionSubstitutions.statements.get(conclusionName)
         definition <- innerTarget.asOptionalInstanceOf[DefinedStatement].map(_.definition)
         constructionSubstitutions <- definition.defaultValue.calculateSubstitutions(innerTarget).flatMap(_.confirmTotality)
         deconstructedInnerTarget <- definition.definingStatement.flatMap(_.applySubstitutions(constructionSubstitutions))
-        deductionSubstitutions = initialDeductionSubstitutions.copy(statements = initialDeductionSubstitutions.statements + (premiseName -> deconstructedInnerTarget))
+        deductionSubstitutions = initialDeductionSubstitutions.copy(statements = initialDeductionSubstitutions.statements + (premiseName -> (0, deconstructedInnerTarget)))
         deconstructedTarget <- deductionPremise.applySubstitutions(deductionSubstitutions)
         if provingContext.statementDefinitionIntroductionInferences.exists(_._1.conclusion.calculateSubstitutions(deconstructedTarget).nonEmpty)
         constructionInference <- wrappingSwapper.getOne(definition.constructionInference, definition.deconstructionInference)

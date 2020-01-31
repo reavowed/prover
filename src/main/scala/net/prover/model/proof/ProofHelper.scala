@@ -31,11 +31,11 @@ object ProofHelper {
             initialPremises :+
               DefinedStatement(
               Seq(DefinedStatement(
-                Seq(assumption: Statement, StatementVariable(deductionConclusionVariableName)),
+                Seq(assumption: Statement, StatementVariable(deductionConclusionVariableName, Nil)),
                 `deductionDefinition`
                 )),
               `scopingDefinition`),
-            StatementVariable(conclusionVariableName)
+            StatementVariable(conclusionVariableName, Nil)
           ) if deductionConclusionVariableName == conclusionVariableName =>
             Some((initialPremises, assumption))
           case _ =>

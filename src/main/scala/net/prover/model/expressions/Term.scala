@@ -39,8 +39,10 @@ object Term {
       case "with" =>
         for {
           arguments <- Term.parser.listOrSingle(None)
-          name <- Parser.singleWord
-        } yield FunctionApplication(name, arguments)
+          name <- Parser.selectWord("variable name") {
+            case context.RecognisedTermVariableName(name) => name
+          }
+        } yield TermVariable(name, arguments)
       case context.entryContext.RecognisedTermDefinition(termDefinition) =>
         termDefinition.termParser
       case context.RecognisedTermVariableOrParameter(variableOrParameter) =>

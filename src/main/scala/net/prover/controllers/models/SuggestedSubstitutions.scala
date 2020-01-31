@@ -6,33 +6,31 @@ import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.StepContext
 
 case class SuggestedSubstitutions(
-  statements: Map[String, Statement],
-  terms: Map[String, Term],
-  predicates: Map[(String, Int), Statement],
-  functions: Map[(String, Int), Term],
-  predicateApplications: Map[(String, Int), Seq[Statement]],
-  functionApplications: Map[(String, Int), Seq[Term]])
+  statements: Map[String, (Int, Statement)],
+  terms: Map[String, (Int, Term)],
+  statementApplications: Map[String, (Int, Seq[Statement])],
+  termApplications: Map[String, (Int, Seq[Term])])
 {
   def confirmTotality: Option[Substitutions] = {
-    if (predicateApplications.isEmpty && functionApplications.isEmpty)
-      Some(Substitutions(statements, terms, predicates, functions))
+    if (statementApplications.isEmpty && termApplications.isEmpty)
+      Some(Substitutions(statements, terms))
     else
       None
   }
 }
 
 object SuggestedSubstitutions {
-  val empty = SuggestedSubstitutions(Map.empty, Map.empty, Map.empty, Map.empty, Map.empty, Map.empty)
+  val empty = SuggestedSubstitutions(Map.empty, Map.empty, Map.empty, Map.empty)
 
   def apply(possibleSubstitutions: Substitutions.Possible)(implicit stepContext: StepContext): SuggestedSubstitutions = {
     val plainSubstitutions = possibleSubstitutions.stripApplications()
     def filterApplications[T <: Expression](
-      applicationsMap: Map[(String, Int), Seq[(Seq[Term], T, Int)]],
-      lens: Lens[Substitutions.Possible, Map[(String, Int), T]],
-      applicationLens: Lens[Substitutions.Possible, Map[(String, Int), Seq[(Seq[Term], T, Int)]]]
-    ): Map[(String, Int), Seq[T]] = {
+      applicationsMap: Map[String, (Int, Seq[(Seq[Term], T, Int)])],
+      lens: Lens[Substitutions.Possible, Map[String, (Int, T)]],
+      applicationLens: Lens[Substitutions.Possible, Map[String, (Int, Seq[(Seq[Term], T, Int)])]]
+    ): Map[String, (Int, Seq[T])] = {
       applicationsMap
-        .map { case ((name, arity), applications) =>
+        .map { case (name, (arity, applications)) =>
           val results = applications
             .find { case (arguments, _, _) => (0 until arity).forall(i => arguments(i).applySubstitutions(plainSubstitutions).nonEmpty) }
             .map { case (arguments, value, depth) =>
@@ -40,17 +38,15 @@ object SuggestedSubstitutions {
             }
             .getOrElse(Nil)
 
-          ((name, arity), results)
+          (name, (arity, results))
         }
-        .filter { case (_, applications) => applications.nonEmpty }
+        .filter { case (_, (_, applications)) => applications.nonEmpty }
     }
 
     SuggestedSubstitutions(
       possibleSubstitutions.statements,
       possibleSubstitutions.terms,
-      possibleSubstitutions.predicates,
-      possibleSubstitutions.functions,
-      filterApplications(possibleSubstitutions.predicateApplications, Substitutions.Possible.predicatesLens, Substitutions.Possible.predicateApplicationsLens),
-      filterApplications(possibleSubstitutions.functionApplications, Substitutions.Possible.functionsLens, Substitutions.Possible.functionApplicationsLens))
+      filterApplications(possibleSubstitutions.statementApplications, Substitutions.Possible.statementsLens, Substitutions.Possible.statementApplicationsLens),
+      filterApplications(possibleSubstitutions.termApplications, Substitutions.Possible.termsLens, Substitutions.Possible.termApplicationsLens))
   }
 }

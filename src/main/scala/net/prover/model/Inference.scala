@@ -31,24 +31,16 @@ trait Inference {
     for {
       statements <- Statement.parser.listInParens(Some(","))
       terms <- Term.parser.listInParens(Some(","))
-      predicates <- Statement.parser(parsingContext.addParameterList(Nil)).listInParens(Some(","))
-      functions <- Term.parser(parsingContext.addParameterList(Nil)).listInParens(Some(","))
     } yield {
-      Substitutions(
-        requiredSubstitutions.statements.zip(statements).toMap,
-        requiredSubstitutions.terms.zip(terms).toMap,
-        requiredSubstitutions.predicates.zip(predicates).toMap,
-        requiredSubstitutions.functions.zip(functions).toMap)
+      requiredSubstitutions.fill(statements, terms)
     }
   }
 
   def serializeSubstitutions(substitutions: Substitutions): String = {
     Seq(
-      requiredSubstitutions.statements.map(substitutions.statements.apply),
-      requiredSubstitutions.terms.map(substitutions.terms.apply),
-      requiredSubstitutions.predicates.map(substitutions.predicates.apply),
-      requiredSubstitutions.functions.map(substitutions.functions.apply)
-    )
+      requiredSubstitutions.statements.map { case (name, arity) => substitutions.statements.get(name).filter(_._1 == arity).map(_._2)}.traverseOption,
+      requiredSubstitutions.terms.map { case (name, arity) => substitutions.terms.get(name).filter(_._1 == arity).map(_._2)}.traverseOption
+    ).traverseOption.get
       .map(x => "(" + x.map(_.serialized).mkString(", ") + ")")
       .mkString(" ")
   }

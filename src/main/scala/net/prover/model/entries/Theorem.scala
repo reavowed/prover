@@ -26,7 +26,7 @@ case class Theorem(
   override def inferences: Seq[Inference.FromEntry] = Seq(this)
 
   def isComplete(definitions: Definitions): Boolean = proofs.exists(_.isComplete(definitions))
-  def initialStepContext: StepContext = StepContext.withPremisesAndTerms(premises, requiredSubstitutions.terms)
+  def initialStepContext: StepContext = StepContext.withPremisesAndTerms(premises, requiredSubstitutions.terms.map(_._1))
 
   private def modifyProof[F[_] : Functor](proofIndex: Int, f: Proof => Option[F[Proof]]): Option[F[Theorem]] = {
     proofs.splitAtIndexIfValid(proofIndex).flatMap { case (before, proof, after) =>
@@ -182,7 +182,7 @@ object Theorem extends Inference.EntryParser {
     val proofParser = for {
       steps <- Step.listParser(
         entryContext,
-        StepContext.withPremisesAndTerms(premises, (premises :+ conclusion).map(_.requiredSubstitutions).foldTogether.terms)).inBraces
+        StepContext.withPremisesAndTerms(premises, (premises :+ conclusion).map(_.requiredSubstitutions).foldTogether.terms.map(_._1))).inBraces
       _ = if (!steps.mapCollect(_.provenStatement).lastOption.contains(conclusion)) throw new Exception(s"Proof of theorem '$theoremName' did not prove $conclusion")
     } yield Proof(steps)
 

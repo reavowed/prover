@@ -78,18 +78,18 @@ object ExpressionDefinition {
     def listWithoutBoundVariablesParser: Parser[Seq[ComponentType]] = {
       Parser.selectOptionalWordParser {
         case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
-          Parser.constant(StatementComponent(name))
+          Parser.constant(StatementComponent(name, Nil))
         case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
-          Parser.constant(TermComponent(name))
+          Parser.constant(TermComponent(name, Nil))
       }.whileDefined
     }
 
     def listParser(boundVariableNames: Seq[String]): Parser[Seq[ComponentType]] = {
       Parser.selectOptionalWordParser {
         case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
-          Parser.constant(StatementComponent(name))
+          Parser.constant(StatementComponent(name, Nil))
         case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
-          Parser.constant(TermComponent(name))
+          Parser.constant(TermComponent(name, Nil))
         case "with" =>
           for {
             arguments <- Parser.selectWord("argument") {
@@ -98,49 +98,35 @@ object ExpressionDefinition {
             }.listOrSingle(None)
             componentType <- Parser.selectWord("predicate or function name") {
               case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
-                PredicateComponent(name, arguments)
+                StatementComponent(name, arguments)
               case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
-                FunctionComponent(name, arguments)
+                TermComponent(name, arguments)
             }
           } yield componentType
       }.whileDefined
     }
 
-    case class StatementComponent(name: String) extends ComponentType {
+    case class StatementComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
       override def withName(newName: String): StatementComponent = copy(name = newName)
-      override def arguments = Nil
-      override def expression = StatementVariable(name)
+      override def expression = StatementVariable(name, arguments.map(a => FunctionParameter(a.index, 0)))
       override def expressionParser(implicit context: ExpressionParsingContext) = Statement.parser
       override def templateParser(implicit context: TemplateParsingContext) = Statement.templateParser
-      override def serialized = name
+      override def serialized = arguments match {
+        case Nil => name
+        case Seq(single) => s"with ${single.name} $name"
+        case multiple => s"with (${multiple.map(_.name).mkString(" ")}) $name"
+      }
     }
-    case class TermComponent(name: String) extends ComponentType {
+    case class TermComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
       override def withName(newName: String): TermComponent = copy(name = newName)
-      override def arguments = Nil
-      override def expression = TermVariable(name)
+      override def expression = TermVariable(name, arguments.map(a => FunctionParameter(a.index, 0)))
       override def expressionParser(implicit context: ExpressionParsingContext) = Term.parser
       override def templateParser(implicit context: TemplateParsingContext) = Term.templateParser
-      override def serialized = name
-    }
-    case class PredicateComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-      override def withName(newName: String): PredicateComponent = copy(name = newName)
-      override def expression = PredicateApplication(name, arguments.map(a => FunctionParameter(a.index, 0)))
-      override def expressionParser(implicit context: ExpressionParsingContext) = Statement.parser
-      override def templateParser(implicit context: TemplateParsingContext) = Statement.templateParser
-      override def serialized = "with " + (arguments match {
-        case Seq(single) => single.name
-        case multiple => "(" + multiple.map(_.name).mkString(" ") + ")"
-      }) + " " + name
-    }
-    case class FunctionComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-      override def withName(newName: String): FunctionComponent = copy(name = newName)
-      override def expression = FunctionApplication(name, arguments.map(a => FunctionParameter(a.index, 0)))
-      override def expressionParser(implicit context: ExpressionParsingContext) = Term.parser
-      override def templateParser(implicit context: TemplateParsingContext) = Term.templateParser
-      override def serialized = "with " + (arguments match {
-        case Seq(single) => single.name
-        case multiple => "(" + multiple.map(_.name).mkString(" ") + ")"
-      }) + " " + name
+      override def serialized = arguments match {
+        case Nil => name
+        case Seq(single) => s"with ${single.name} $name"
+        case multiple => s"with (${multiple.map(_.name).mkString(" ")}) $name"
+      }
     }
   }
 

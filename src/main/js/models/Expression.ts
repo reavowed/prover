@@ -80,22 +80,30 @@ interface FormatBasedExpression {
   replaceAtPath(path: number[], expression: Expression): Expression
 }
 
-export class VariableOrConstant {
-  constructor(public name: string) {}
-  serialize(): string {
-    return this.name;
+export class Variable {
+  constructor(public name: string, public components: Expression[]) {}
+  serialize() {
+    return this.components.length == 0 ?
+        this.name :
+        `with (${this.components.map(a => a.serialize()).join(" ")}) ${this.name}`;
   }
-  serializeNicely(_: string[][]): string {
-    return this.serialize();
+  serializeNicely(boundVariableLists: string[][]): string {
+    return this.components.length == 0 ?
+        this.name :
+        `with (${this.components.map(a => a.serializeNicely(boundVariableLists)).join(" ")}) ${this.name}`;
   }
-  textForHtml(): string {
-    return this.name;
+  formatForHtml() {
+    return this.components.length == 0 ?
+        this.name :
+        this.name + "(" + this.components.map((_, i) => "%" + i).join(", ") + ")";
   }
   replaceAtPath(path: number[], expression: Expression): Expression {
     if (!path.length) {
       return expression
     } else {
-      throw "Cannot replace subexpression of variable or constant"
+      const [first, ...remaining] = path;
+      const newComponents = [...this.components.slice(0, first), this.components[first].replaceAtPath(remaining, expression), ... this.components.slice(first + 1)];
+      return new Variable(this.name, newComponents);
     }
   }
 }
@@ -182,28 +190,6 @@ export class FunctionParameter {
       return expression
     } else {
       throw "Cannot replace subexpression of function parameter"
-    }
-  }
-}
-
-export class ExpressionApplication {
-  constructor(public name: string, public components: Expression[]) {}
-  serialize() {
-    return `with (${this.components.map(a => a.serialize()).join(" ")}) ${this.name}`
-  }
-  serializeNicely(boundVariableLists: string[][]): string {
-    return `with (${this.components.map(a => a.serializeNicely(boundVariableLists)).join(" ")}) ${this.name}`;
-  }
-  formatForHtml() {
-    return this.name + "(" + this.components.map((_, i) => "%" + i).join(", ") + ")";
-  }
-  replaceAtPath(path: number[], expression: Expression): Expression {
-    if (!path.length) {
-      return expression
-    } else {
-      const [first, ...remaining] = path;
-      const newComponents = [...this.components.slice(0, first), this.components[first].replaceAtPath(remaining, expression), ... this.components.slice(first + 1)];
-      return new ExpressionApplication(this.name, newComponents);
     }
   }
 }

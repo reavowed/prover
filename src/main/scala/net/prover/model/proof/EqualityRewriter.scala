@@ -59,7 +59,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
             ): Seq[(Term, RearrangementStep, Seq[Inference.Summary])] = {
               nextComponents match {
                 case (innerTerm: Term) +: moar =>
-                  val innerWrapper = wrapper.insert((t: Term) => termDefinition((previousComponents :+ t) ++ moar: _*))
+                  val innerWrapper = wrapper.insert[Term]((t, _) => termDefinition((previousComponents :+ t) ++ moar: _*))
                   val newSimplifications = findSimplifications(innerTerm, direction, innerWrapper)
                   helper(previousComponents :+ innerTerm, moar, simplificationsSoFar ++ newSimplifications)
                 case nonTerm +: moar =>
@@ -137,7 +137,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         nextComponents match {
           case (premiseComponent, targetComponent) +: moreComponents =>
             for {
-              (nextSteps, nextInferences) <- findRearrangementSteps(premiseComponent, targetComponent, innerWrapper.insert(t => (previousComponents.map(_._2) :+ t) ++ moreComponents.map(_._1)))
+              (nextSteps, nextInferences) <- findRearrangementSteps(premiseComponent, targetComponent, innerWrapper.insert((t, _) => (previousComponents.map(_._2) :+ t) ++ moreComponents.map(_._1)))
               result <- helper(
                 previousComponents :+ (premiseComponent, targetComponent),
                 moreComponents,
@@ -156,12 +156,12 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
             premiseTerms <- premiseComponents.map(_.asOptionalInstanceOf[Term]).traverseOption
             targetTerms <- targetComponents.map(_.asOptionalInstanceOf[Term]).traverseOption
             componentTerms <- premiseTerms.zipStrict(targetTerms)
-            result <- helper(Nil, componentTerms, Nil, Nil, wrapper.insert(components => premiseDefinition(components:_*)))
+            result <- helper(Nil, componentTerms, Nil, Nil, wrapper.insert((components, _) => premiseDefinition(components:_*)))
           } yield result
-        case (FunctionApplication(f, premiseComponents), FunctionApplication(g, targetComponents)) if f == g =>
+        case (TermVariable(f, premiseComponents), TermVariable(g, targetComponents)) if f == g =>
           for {
             componentTerms <- premiseComponents.zipStrict(targetComponents)
-            result <- helper(Nil, componentTerms, Nil, Nil, wrapper.insert(arguments => FunctionApplication(f, arguments)))
+            result <- helper(Nil, componentTerms, Nil, Nil, wrapper.insert((arguments, _) => TermVariable(f, arguments)))
           } yield result
         case _ =>
           None
@@ -197,12 +197,12 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
             case Nil =>
               Some((currentSteps, currentInferences))
             case (premise: Statement, target: Statement) +: moar =>
-              rewriteStatement(premise, target, wrapper.insert(s => (previousComponents.map(_._2) :+ s) ++ moar.map(_._1)))
+              rewriteStatement(premise, target, wrapper.insert((s, _) => (previousComponents.map(_._2) :+ s) ++ moar.map(_._1)))
                 .flatMap { case (newSteps, newInferences) =>
                   helper(previousComponents :+ (premise, target), moar, currentSteps ++ newSteps, currentInferences ++ newInferences)
                 }
             case (premise: Term, target: Term) +: moar =>
-              rewriteTerm(premise, target, wrapper.insert(t => (previousComponents.map(_._2) :+ t) ++ moar.map(_._1)))
+              rewriteTerm(premise, target, wrapper.insert((t, _) => (previousComponents.map(_._2) :+ t) ++ moar.map(_._1)))
                 .flatMap { case (newSteps, newInferenceForElision) =>
                   helper(previousComponents :+ (premise, target), moar, currentSteps ++ newSteps, currentInferences ++ newInferenceForElision)
                 }
@@ -218,9 +218,9 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
           Some((Nil, Nil))
         else (premiseStatement, currentTarget) match {
           case (DefinedStatement(premiseComponents, premiseDefinition), DefinedStatement(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
-            rewriteComponents(premiseComponents, targetComponents, wrapper.insert(components => premiseDefinition(components:_*)))
-          case (PredicateApplication(premiseName, premiseArguments), PredicateApplication(targetName, targetArguments)) if premiseName == targetName =>
-            rewriteComponents(premiseArguments, targetArguments, wrapper.insert(arguments => PredicateApplication(premiseName, arguments.toType[Term].get)))
+            rewriteComponents(premiseComponents, targetComponents, wrapper.insert((components, _) => premiseDefinition(components:_*)))
+          case (StatementVariable(premiseName, premiseArguments), StatementVariable(targetName, targetArguments)) if premiseName == targetName =>
+            rewriteComponents(premiseArguments, targetArguments, wrapper.insert((arguments, _) => StatementVariable(premiseName, arguments.toType[Term].get)))
           case _ =>
             None
         }
@@ -232,9 +232,9 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         else
           (premiseTerm, targetTerm) match {
             case (DefinedTerm(premiseComponents, premiseDefinition), DefinedTerm(targetComponents, targetDefinition)) if premiseDefinition == targetDefinition && premiseDefinition.boundVariableNames.isEmpty =>
-              rewriteComponents(premiseComponents, targetComponents, wrapper.insert(components => premiseDefinition(components:_*)))
-            case (FunctionApplication(premiseName, premiseArguments), FunctionApplication(targetName, targetArguments)) if premiseName == targetName =>
-              rewriteComponents(premiseArguments, targetArguments, wrapper.insert(arguments => FunctionApplication(premiseName, arguments.toType[Term].get)))
+              rewriteComponents(premiseComponents, targetComponents, wrapper.insert((components, _) => premiseDefinition(components:_*)))
+            case (TermVariable(premiseName, premiseArguments), TermVariable(targetName, targetArguments)) if premiseName == targetName =>
+              rewriteComponents(premiseArguments, targetArguments, wrapper.insert((arguments, _) => TermVariable(premiseName, arguments.toType[Term].get)))
             case _ =>
               findRearrangement(premiseTerm, targetTerm, Wrapper.identity, Some(wrapper)).map(_.mapLeft(Seq(_)))
           }

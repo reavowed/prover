@@ -10,14 +10,16 @@ object Statement {
       case "with" =>
         for {
           arguments <- Term.parser.listOrSingle(None)
-          name <- Parser.singleWord
-        } yield PredicateApplication(name, arguments)
+          name <- Parser.selectWord("variable name") {
+            case ExpressionParsingContext.RecognisedStatementVariableName(name) => name
+          }
+        } yield StatementVariable(name, arguments)
       case "is" =>
         typeStatementParser
       case context.entryContext.RecognisedStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
       case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
-        Parser.constant(StatementVariable(name))
+        Parser.constant(StatementVariable(name, Nil))
       case context.entryContext.RecognisedStatementShorthand(template) =>
         template.expressionParser.map(_.asInstanceOf[Statement])
     }

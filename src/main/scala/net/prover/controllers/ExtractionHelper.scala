@@ -25,7 +25,7 @@ object ExtractionHelper {
   ): Try[(Step.Assertion, VariableTracker)] = {
     for {
       extractionSubstitutionsWithoutVariable <- extractionPremise.calculateSubstitutions(currentStatement).flatMap(_.confirmTotality).orBadRequest(s"Could not apply extraction premise for inference ${specificationInference.id}")
-      boundVariableName <- currentStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.scopedBoundVariableNames.single).orBadRequest(s"Statement ${currentStatement} did not have a single variable")
+      boundVariableName <- currentStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.scopedBoundVariableNames.single).orBadRequest(s"Statement $currentStatement did not have a single variable")
       (newName, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(boundVariableName)
       term <- mainSubstitutions.terms.get(newName).orBadRequest(s"Substitutions did not specify a term '$newName'")
       extractionSubstitutions = extractionSubstitutionsWithoutVariable.copy(terms = extractionSubstitutionsWithoutVariable.terms + (variableName -> term))
@@ -70,9 +70,9 @@ object ExtractionHelper {
     }
   }
   def applyExtractions(statement: Statement, extractionInferences: Seq[Inference], baseInference: Inference, substitutions: Substitutions)(implicit stepProvingContext: StepProvingContext): Try[(Statement, ExtractionApplication)] = {
-    applyExtractions(statement, extractionInferences, ExtractionApplication(Nil, Nil, Nil), substitutions, VariableTracker(baseInference.requiredSubstitutions.terms))
+    applyExtractions(statement, extractionInferences, ExtractionApplication(Nil, Nil, Nil), substitutions, VariableTracker.fromInference(baseInference))
   }
   def applyExtractions(premise: Premise, extractionInferences: Seq[Inference], substitutions: Substitutions)(implicit stepProvingContext: StepProvingContext): Try[(Statement, ExtractionApplication)] = {
-    applyExtractions(premise.statement, extractionInferences, ExtractionApplication(Nil, Nil, Nil), substitutions, VariableTracker(stepProvingContext.stepContext.termVariableNames))
+    applyExtractions(premise.statement, extractionInferences, ExtractionApplication(Nil, Nil, Nil), substitutions, VariableTracker.fromStepContext)
   }
 }

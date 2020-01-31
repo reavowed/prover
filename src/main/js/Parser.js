@@ -1,11 +1,10 @@
 import _ from "lodash";
 import {
   DefinedExpression,
-  ExpressionApplication,
+  Variable,
   FunctionParameter,
   PropertyExpression,
   TypeExpression,
-  VariableOrConstant
 } from "./models/Expression";
 import {
   AssertionStep,
@@ -33,14 +32,7 @@ export class Parser {
     this.typeDefinitions = typeDefinitions;
   }
   parseExpression = (json) => {
-    if (typeof json === "string") {
-      const definition = this.definitions[json];
-      if (definition) {
-        return new DefinedExpression(definition, [], [])
-      } else {
-        return new VariableOrConstant(json);
-      }
-    } else if (_.isArray(json) && _.isString(json[0])) {
+    if (_.isArray(json) && _.isString(json[0])) {
       const [definitionSymbol, ...boundVariablesAndComponents] = json;
       const expressionDefinition = this.definitions[definitionSymbol];
       const typeDefinition = this.typeDefinitions[definitionSymbol];
@@ -75,7 +67,7 @@ export class Parser {
       return new FunctionParameter(level, index);
     } else if (_.isObject(json)) {
       let [[name, args]] = _.toPairs(json);
-      return new ExpressionApplication(name, args.map(this.parseExpression));
+      return new Variable(name, args.map(this.parseExpression));
     } else {
       throw `Unrecognised expression ${JSON.stringify(json)}`
     }

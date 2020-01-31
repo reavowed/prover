@@ -16,7 +16,7 @@ class StatementSpec extends Specification {
 
   "statement parser" should {
     "parse a statement variable" in {
-      parseStatement("φ") mustEqual φ
+      parseStatement("φ") mustEqual φ.toVariable
     }
 
     "parse a binary connective" in {
@@ -43,11 +43,11 @@ class StatementSpec extends Specification {
     }
 
     "parse a list with a single statement" in {
-      parseStatementList("(φ)") mustEqual Seq(φ)
+      parseStatementList("(φ)") mustEqual Seq(φ.toVariable)
     }
 
     "parse a list with multiple statements" in {
-      parseStatementList("(φ, ψ, χ)") mustEqual Seq(φ, ψ, χ)
+      parseStatementList("(φ, ψ, χ)") mustEqual Seq(φ, ψ, χ).map(_.toVariable)
     }
   }
 }

@@ -220,7 +220,7 @@ object Step {
         premises <- premiseStatements.init.map(Premise.parser).traverse
         scopingDefinition = entryContext.scopingDefinitionOption.getOrElse(throw new Exception("Naming step requires a scoping statement"))
         deductionDefinition = entryContext.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
-        internalPremise = scopingDefinition(variableName)(deductionDefinition(assumption, internalConclusion))
+        internalPremise = scopingDefinition.bind(variableName)(deductionDefinition(assumption, internalConclusion))
         _ = if (internalPremise != premiseStatements.last) throw new Exception("Invalid naming premise")
       } yield {
         Naming(variableName, assumption, extractedConclusion, substeps, inference, premises, substitutions)

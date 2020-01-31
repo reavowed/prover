@@ -1,8 +1,8 @@
 package net.prover.model.definitions
 
+import net.prover.model.Inference
 import net.prover.model.expressions.{Statement, Term}
-import net.prover.model.proof.{ProofHelper, Step, StepProvingContext, SubstitutionContext}
-import net.prover.model.{Inference, Substitutions}
+import net.prover.model.proof.{ProofHelper, StepProvingContext, SubstitutionContext}
 
 case class Associativity(operator: BinaryOperator, inference: Inference.Summary, equality: Equality) {
 
@@ -24,7 +24,7 @@ case class Associativity(operator: BinaryOperator, inference: Inference.Summary,
     for {
       (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremisesAndElide(
         inference,
-        Substitutions(terms = inference.requiredSubstitutions.terms.zip(Seq(a, b, c)).toMap))
+        inference.requiredSubstitutions.fill(Nil, Seq(a, b, c)))
       if targetSteps.isEmpty
       expansionSteps = equality.expansion.assertionStepIfNecessary(normalisedTerm(a, b, c), reversedTerm(a, b, c), wrapper).toSeq
     } yield RearrangementStep(wrapper(reversedTerm(a, b, c)), assertionStep +: expansionSteps, inference)
