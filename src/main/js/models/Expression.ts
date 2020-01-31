@@ -43,6 +43,11 @@ type MatchResult = ExpressionMatchResult | BoundVariableMatchResult;
 export function matchTemplate(template: any, expression: Expression, pathWithinMatch: number[], boundVariablesWithinMatch: string[][]): MatchResult[] | undefined {
   if (_.isString(template)) {
     return [{type: "expression", matchedVariable: template, expression, pathWithinMatch, boundVariablesWithinMatch}];
+  } else if (_.isObject(template) && !_.isArray(template)) {
+    const [[name, args]] = _.toPairs(template);
+    if (args.length == 0) {
+      return [{type: "expression", matchedVariable: name, expression, pathWithinMatch, boundVariablesWithinMatch}];
+    }
   } else if (_.isArray(template) && _.isString(template[0])) {
     if ((expression instanceof DefinedExpression) && (expression.definition.symbol === template[0])) {
       const innerBoundVariables = expression.definition.numberOfBoundVariables ? [expression.boundVariableNames, ...boundVariablesWithinMatch] : boundVariablesWithinMatch;
