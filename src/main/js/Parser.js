@@ -179,26 +179,12 @@ export class Parser {
     definition.premises && (definition.premises = definition.premises.map(this.parseExpression));
     return definition;
   };
-  static doubleMapFromTriples = (triples) => {
-    const namesToPairLists = _.mapValues(_.groupBy(triples, 0), x => x.map(y => y.slice(1)));
-    return _.mapValues(namesToPairLists, _.fromPairs);
-  };
   parseSubstitutions = (substitutions) => {
-    const parseApplications = (applications, parser) => {
-      const triples = _.map(_.toPairs(applications), ([nameAndCount, e]) => {
-        const [, name, count] = nameAndCount.match(/\((.*),(\d+)\)/);
-        return [name, parseInt(count), parser(e)];
-      });
-      return Parser.doubleMapFromTriples(triples);
-    };
-
-    const statements = _.mapValues(substitutions.statements, s => s && this.parseExpression(s));
-    const terms = _.mapValues(substitutions.terms, t => t && this.parseExpression(t));
-    const predicates = parseApplications(substitutions.predicates, this.parseExpression);
-    const functions = parseApplications(substitutions.functions, this.parseExpression);
-    const predicateApplications = parseApplications(substitutions.predicateApplications, s => s.map(this.parseExpression));
-    const functionApplications = parseApplications(substitutions.functionApplications, s => s.map(this.parseExpression));
-    return {statements, terms, predicates, functions, predicateApplications, functionApplications};
+    const statements = _.mapValues(substitutions.statements, ([i, s]) => [i, this.parseExpression(s)]);
+    const terms = _.mapValues(substitutions.terms, ([i, t]) => [i, this.parseExpression(t)]);
+    const statementApplications = _.mapValues(substitutions.statementApplications, ([i, e]) => [i, e.map(this.parseExpression)]);
+    const termApplications = _.mapValues(substitutions.termApplications, ([i, e]) => [i, e.map(this.parseExpression)]);
+    return {statements, terms, statementApplications, termApplications};
   };
   parsePossibleInferences = (possibleInferences) => {
     _.forEach(possibleInferences, possibleInference => {

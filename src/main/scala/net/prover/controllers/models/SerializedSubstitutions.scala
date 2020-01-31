@@ -7,23 +7,20 @@ import net.prover.model.expressions.{Statement, Term}
 import scala.util.Try
 
 case class SerializedSubstitutions(
-  statements: Map[String, Map[String, String]],
-  terms: Map[String, Map[String, String]]
+  statements: Map[String, (Int, String)],
+  terms: Map[String, (Int, String)]
 ) {
   def parse()(implicit parsingContext: ExpressionParsingContext): Try[Substitutions] = {
     def lookup[T](
-      source: Map[String, Map[String, String]],
+      source: Map[String, (Int, String)],
       parser: ExpressionParsingContext => Parser[T],
       description: String)(
       implicit parsingContext: ExpressionParsingContext
     ): Try[Map[String, (Int, T)]] = {
-      source.flatMap { case (name, valuesMap) =>
-        valuesMap.map { case (numberOfParametersString, serializedValue) =>
-          for {
-            numberOfParameters <- numberOfParametersString.toInt.recoverWithBadRequest(_ => s"Invalid number of parameters $numberOfParametersString")
-            value <- Try(parser(parsingContext.withPlaceholderParameters(numberOfParameters)).parseFromString(serializedValue, "")).orBadRequest(s"Invalid substitution $description $name '$serializedValue'")
-          } yield (name, (numberOfParameters, value))
-        }
+      source.map { case (name, (arity, serializedValue)) =>
+        for {
+          value <- Try(parser(parsingContext.withPlaceholderParameters(arity)).parseFromString(serializedValue, "")).orBadRequest(s"Invalid substitution $description $name '$serializedValue'")
+        } yield (name, (arity, value))
       }.traverseTry.map(_.toMap)
     }
 

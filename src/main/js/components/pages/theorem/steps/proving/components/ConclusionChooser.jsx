@@ -12,7 +12,7 @@ import {InferenceSummary} from "../../../../../InferenceSummary";
 import BoundVariableLists from "../../BoundVariableLists";
 
 function simpleGetter(type, name) {
-  return substitutions => substitutions[type][name];
+  return substitutions => substitutions[type][name][1];
 }
 function applicationGetter(type, applicationType, name, length) {
   return substitutions => {
@@ -26,32 +26,22 @@ function applicationGetter(type, applicationType, name, length) {
 }
 
 function buildSubstitutionMap(requiredSubstitutions, f) {
-  const map = {};
-  function getSimple(type) {
-    map[type] = _.fromPairs(requiredSubstitutions[type].map(name => [name, f(simpleGetter(type, name))]));
+  function callOnValues(type) {
+    return {[type]: _.fromPairs(requiredSubstitutions[type].map(([name, arity]) => [name, [arity, f(simpleGetter(type, name), arity)]]))};
   }
-  function getParametered(type, applicationType) {
-    map[type] = Parser.doubleMapFromTriples(requiredSubstitutions[type].map(([name, length]) => [name, length, f(applicationGetter(type, applicationType, name, length))]));
-  }
-  getSimple("statements");
-  getSimple("terms");
-  getParametered("predicates", "predicateApplications");
-  getParametered("functions", "functionApplications");
-  return map;
+  return {
+    ...callOnValues("statements"),
+    ...callOnValues("terms")
+  };
 }
 
 function getAllRequiredPaths(requiredSubstitutions) {
   function getSimple(type) {
-    return _.map(requiredSubstitutions[type], name => simpleGetter(type, name));
-  }
-  function getParametered(type, applicationType) {
-    return _.map(requiredSubstitutions[type], ([name, length]) => applicationGetter(type, applicationType, name, length));
+    return _.map(requiredSubstitutions[type], ([name, ]) => simpleGetter(type, name));
   }
   return [
     ...getSimple("statements"),
-    ...getSimple("terms"),
-    ...getParametered("predicates", "predicateApplications"),
-    ...getParametered("functions", "functionApplications")
+    ...getSimple("terms")
   ];
 }
 
@@ -127,10 +117,7 @@ export default class ConclusionChooser extends React.Component {
         return (_.isUndefined(value) || _.isArray(value)) ? value : [value];
       });
       const allowAnything = _.every(allowedValuesLists, _.isUndefined);
-      if (allowAnything) {
-        return null;
-      }
-      return _.intersectionBy(..._.filter(allowedValuesLists), x => x.serialize());
+      return allowAnything ? null : _.intersectionBy(..._.filter(allowedValuesLists), x => x.serialize());
     });
   };
 
@@ -222,27 +209,22 @@ export default class ConclusionChooser extends React.Component {
           <Col>{selectionElement}</Col>
         </Form.Group>
       };
-      let showSimpleSubstitutions = (key) => {
+      let showSubstitutions = (key) => {
         const requiredSubstitutions = selectedConclusion.requiredSubstitutions[key];
-        return requiredSubstitutions.length > 0 && requiredSubstitutions.map(name => {
-          const getter = x => x[key][name];
-          const setter = (x, y) => x[key][name] = y;
+        return requiredSubstitutions.length > 0 && requiredSubstitutions.map(([name, arity]) => {
+          const getter = x => x[key][name][1];
+          const setter = (x, y) => x[key][name][1] = y;
           const validValues = this.getValidSubstitutionValues(getter, setter);
-          return <React.Fragment key={`${key} ${name}`}>
-            {showSubstitutionOptions(name, validValues, getter, setter)}
-          </React.Fragment>;
-        });
-      };
-      let showParameteredSubstitutions = (key) => {
-        const requiredSubstitutions = selectedConclusion.requiredSubstitutions[key];
-        return requiredSubstitutions.length > 0 && requiredSubstitutions.map(([name, numberOfParameters]) => {
-          const getter = x => x[key][name][numberOfParameters];
-          const setter = (x, y) => x[key][name][numberOfParameters] = y;
-          const validValues = this.getValidSubstitutionValues(getter, setter);
-          const newVariableList = numberOfParameters === 1 ? ["$"] : _.map(_.range(numberOfParameters), x => "$_" + (x+1));
-          return <BoundVariableLists.AddParameters variables={newVariableList} key={`${key} ${name} ${numberOfParameters}`}>
-            {showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, validValues, getter, setter)}
-          </BoundVariableLists.AddParameters>
+          const newVariableList = arity === 0 ? null :
+            arity === 1 ? ["$"] :
+            _.map(_.range(arity), x => "$_" + (x+1));
+          return newVariableList ?
+            <BoundVariableLists.AddParameters variables={newVariableList} key={`${key} ${name}`}>
+              {showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, validValues, getter, setter)}
+            </BoundVariableLists.AddParameters> :
+            <React.Fragment key={`${key} ${name}`}>
+              {showSubstitutionOptions(name, validValues, getter, setter)}
+            </React.Fragment>;
         });
       };
 
@@ -269,10 +251,8 @@ export default class ConclusionChooser extends React.Component {
             <Form.Group>
               <Form.Label><strong>Substitutions</strong></Form.Label>
               {_.flatten([
-                showSimpleSubstitutions("statements"),
-                showSimpleSubstitutions("terms"),
-                showParameteredSubstitutions("predicates"),
-                showParameteredSubstitutions("functions"),
+                showSubstitutions("statements"),
+                showSubstitutions("terms")
               ])}
             </Form.Group>
           </>}
