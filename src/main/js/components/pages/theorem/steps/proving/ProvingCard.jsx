@@ -34,7 +34,14 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
 
   const scopingStatement = _.find(entryContext.definitions, d => _.includes(d.attributes, "scoping"));
   const deductionStatement = _.find(entryContext.definitions, d => _.includes(d.attributes, "deduction"));
-  const binaryRelation = _.find(entryContext.binaryRelations, x => matchTemplate(x.template, step.statement, [], []));
+  const [binaryRelation, leftComponent, rightComponent] = _.chain(entryContext.binaryRelations)
+    .map(x => {
+      const matchResult = matchTemplate(x.template, step.statement, [], []);
+      return matchResult ? [x, matchResult[0].expression, matchResult[1].expression] : null;
+    })
+    .find()
+    .value() || [null, null, null];
+
 
   const onCancel = () => {
     setCurrentProverLabel(null);
@@ -165,7 +172,7 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
   const SmallButton = styled(Button)`padding: 0.1rem 0.25rem;`;
 
   return <EntryContext.Consumer>{entryContext => {
-    const proverProps = {step, path, availablePremises, onError, onCancel, onErrorCancel, entryContext};
+    const proverProps = {step, path, availablePremises, leftComponent, rightComponent, onError, onCancel, onErrorCancel, entryContext};
     return <div>
       {errorMessage && <Alert variant="danger" onClose={() => setErrorMessage(null)} dismissible>{errorMessage}</Alert>}
       {currentProver ?
