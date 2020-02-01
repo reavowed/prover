@@ -38,7 +38,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
       inference <- inferenceEntries
-      relation <- definedBinaryStatements.find(r => r.unapply(inference.conclusion).nonEmpty)
+      relation <- definedBinaryStatements
       if (inference match {
         case Inference(
         _,
@@ -56,7 +56,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
       inference <- inferenceEntries
-      relation <- definedBinaryStatements.find(r => r.unapply(inference.conclusion).nonEmpty)
+      relation <- definedBinaryStatements
       if (inference match {
         case Inference(
           _,
@@ -389,6 +389,6 @@ object Definitions {
         Nil)
     } yield relation
 
-    fromDefinitions ++ fromShorthands
+    (fromDefinitions ++ fromShorthands).reverse
   }
 }

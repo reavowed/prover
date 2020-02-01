@@ -24,7 +24,7 @@ import {SubproofStep} from "./SubproofStep";
 import {TargetStep, TargetStepProofLine} from "./TargetStep";
 
 function findBinaryRelation(statement, entryContext) {
-  return _.find(_.reverse(entryContext.binaryRelations.slice()), x => matchTemplate(x.template, statement, [], []));
+  return _.find(entryContext.binaryRelations, x => matchTemplate(x.template, statement, [], []));
 }
 
 const PositionToLeft = styled.span`

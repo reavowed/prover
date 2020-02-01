@@ -34,7 +34,7 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
 
   const scopingStatement = _.find(entryContext.definitions, d => _.includes(d.attributes, "scoping"));
   const deductionStatement = _.find(entryContext.definitions, d => _.includes(d.attributes, "deduction"));
-  const binaryRelation = _.find(_.reverse(entryContext.binaryRelations.slice()), x => matchTemplate(x.template, step.statement, [], []));
+  const binaryRelation = _.find(entryContext.binaryRelations, x => matchTemplate(x.template, step.statement, [], []));
 
   const onCancel = () => {
     setCurrentProverLabel(null);
