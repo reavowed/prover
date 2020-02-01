@@ -81,7 +81,8 @@ export class InferenceFinder extends React.Component {
       {this.state.selectedInference && <ConclusionChooser possibleConclusions={selectedInference.possibleConclusions}
                                                           defaultConclusionStatement={selectedInference.inference.conclusion}
                                                           submit={this.submit}
-                                                          disabled={disabled} />}
+                                                          disabled={disabled}
+                                                          boundVariableListsForPremises={[]}/>}
     </div>;
   }
 }

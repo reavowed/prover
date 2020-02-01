@@ -1,8 +1,7 @@
-import _ from "lodash";
-import React, {useContext, useState} from "react";
+import React from "react";
 import ProofContext from "../../ProofContext";
+import BoundVariableLists from "../BoundVariableLists";
 import ConclusionChooser from "./components/ConclusionChooser";
-import {InferenceFinder} from "./components/InferenceFinder";
 import PremiseChooser from "./components/PremiseChooser";
 
 export default class ProveCurrentTargetByPremise extends React.Component {
@@ -39,12 +38,13 @@ export default class ProveCurrentTargetByPremise extends React.Component {
   render () {
     const {availablePremises, entryContext} = this.props;
     const {selectedPremise, possibleConclusions, saving} = this.state;
-    return <>
+    return <BoundVariableLists.Consumer>{boundVariableLists => <>
       <PremiseChooser premise={selectedPremise} setPremise={this.setPremise} availablePremises={availablePremises} entryContext={entryContext}/>
-      { possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}
-                                              defaultConclusionStatement={selectedPremise.statement}
-                                              submit={this.submit}
-                                              disabled={saving} /> }
-    </>;
+      {possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}
+                                                 defaultConclusionStatement={selectedPremise.statement}
+                                                 submit={this.submit}
+                                                 disabled={saving}
+                                                 boundVariableListsForPremises={boundVariableLists}/>}
+    </>}</BoundVariableLists.Consumer>;
   }
 }

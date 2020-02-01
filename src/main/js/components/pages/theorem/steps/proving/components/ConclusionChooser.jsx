@@ -153,7 +153,7 @@ export default class ConclusionChooser extends React.Component {
   };
 
   render() {
-    const {possibleConclusions, hideSummary, disabled} = this.props;
+    const {possibleConclusions, hideSummary, disabled, boundVariableListsForPremises} = this.props;
     const {selectedConclusion} = this.state;
     return <EntryContext.Consumer>{entryContext => {
 
@@ -164,7 +164,7 @@ export default class ConclusionChooser extends React.Component {
           {selectedConclusion.possiblePremises.map(({premise, possibleMatches}, i) =>
             <Form.Group as={Form.Row} key={i}>
               <Col xs={4}>
-                <CopiableExpression expression={premise} boundVariableLists={[]}/>
+                <CopiableExpression expression={premise} boundVariableLists={boundVariableListsForPremises}/>
               </Col>
               <Col>
                 <Form.Control as="select" value={this.state.selectedPremises[i][0]} onChange={(e) => this.setSelectedPremise(i, e.target.value)} readOnly={disabled}>
