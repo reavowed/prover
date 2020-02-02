@@ -1,9 +1,8 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.{PathData, PremiseRewrite, RewriteRequest}
-import net.prover.exceptions.BadRequestException
 import net.prover.model.Inference
-import net.prover.model.definitions.{BinaryConnective, BinaryJoiner, BinaryRelation, ConnectiveExpansion, Equality, Expansion, RearrangementStep, RelationExpansion, Transitivity, Wrapper}
+import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term, TypedExpression}
 import net.prover.model.proof._
 import net.prover.util.Swapper
@@ -11,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.util.{Failure, Try}
+import scala.util.Try
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
@@ -41,7 +40,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @RequestParam("pathsAlreadyRewritten") pathsAlreadyRewrittenText: String
   ): ResponseEntity[_] = {
     (for {
-      (_, stepProvingContext) <- findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (_, stepProvingContext) <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       expression <- Expression.parser(stepProvingContext).parseFromString(serializedExpression, "expression").recoverWithBadRequest
     } yield {
       implicit val spc = stepProvingContext
@@ -84,7 +83,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @RequestParam("pathsAlreadyRewritten") pathsAlreadyRewrittenText: String
   ): ResponseEntity[_] = {
     (for {
-      (_, stepProvingContext) <- findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (_, stepProvingContext) <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       expression <- Expression.parser(stepProvingContext).parseFromString(serializedExpression, "expression").recoverWithBadRequest
       equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
     } yield {
@@ -111,7 +110,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     (for {
-      (_, stepProvingContext) <- findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (_, stepProvingContext) <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield stepProvingContext.allPremisesSimplestFirst).toResponseEntity
   }
 
@@ -187,7 +186,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody rewrites: Seq[Seq[RewriteRequest]]
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
         equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
@@ -212,7 +211,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       EqualityRewriter.rewrite(step.statement)(stepProvingContext)
         .orBadRequest(s"Could not rewrite statement ${step.statement}")
         .map(Seq(_))

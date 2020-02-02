@@ -1,106 +1,183 @@
 package net.prover.controllers
 
-import java.nio.file.{Files, Path, Paths}
-
+import net.prover.controllers.models.{InferenceSummary, PathData, TheoremUpdateProps}
 import net.prover.model._
 import net.prover.model.definitions.Definitions
-import org.apache.commons.io.FileUtils
-import org.slf4j.{Logger, LoggerFactory}
+import net.prover.model.entries.{ChapterEntry, Theorem}
+import net.prover.model.proof.{Step, StepProvingContext}
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import scalaz.Functor
 import scalaz.syntax.functor._
 
-import scala.collection.JavaConverters._
+import scala.reflect.{ClassTag, classTag}
 import scala.util.Try
 
 @Service
-class BookService {
-  private val bookDirectoryPath = Paths.get("books")
+class BookService @Autowired() (bookRepository: BookRepository) {
+  def booksAndDefinitions: (Seq[Book], Definitions) = bookRepository.booksAndDefinitions
+  def books: Seq[Book] = bookRepository.books
+  def getBooksWithKeys: Seq[(Book, String)] = BookService.getBooksWithKeys(books)
 
-  private var _booksAndDefinitions: (Seq[Book], Definitions) = this.synchronized {
-    val books = parseBooks
-    val definitions = getDefinitions(books)
-    writeBooks(books)
-    (books, definitions)
-  }
-  def booksAndDefinitions: (Seq[Book], Definitions) = this.synchronized {
-    _booksAndDefinitions
-  }
-  def books: Seq[Book] = booksAndDefinitions._1
+  def reload(): Try[Any] = bookRepository.reload()
 
-  def modifyBooks[F[_] : Functor](f: (Seq[Book], Definitions) => F[Seq[Book]]): F[(Seq[Book], Definitions)] = this.synchronized {
-    val (books, definitions) = booksAndDefinitions
+  def findBook(bookKey: String): Try[Book] = {
+    findBook(bookRepository.books, bookKey)
+  }
+
+  def findBook(books: Seq[Book], bookKey: String): Try[Book] = {
+    findBook(BookService.getBooksWithKeys(books), bookKey)
+  }
+
+  def findBook(booksWithKeys: Seq[(Book, String)], bookKey: String)(implicit dummyImplicit: DummyImplicit): Try[Book] = {
+    booksWithKeys.find(_._2 == bookKey).map(_._1).orNotFound(s"Book $bookKey")
+  }
+
+  def findChapter(book: Book, chapterKey: String): Try[Chapter] = {
+    findChapter(BookService.getChaptersWithKeys(book), chapterKey)
+  }
+
+  def findChapter(chaptersWithKeys: Seq[(Chapter, String)], chapterKey: String): Try[Chapter] = {
+    chaptersWithKeys.find(_._2 == chapterKey).map(_._1).orNotFound(s"Chapter $chapterKey")
+  }
+
+  def findEntry[T <: ChapterEntry : ClassTag](chapter: Chapter, entryKey: String): Try[T] = {
+    findEntry(BookService.getEntriesWithKeys(chapter), entryKey)
+  }
+
+  def findEntry[T <: ChapterEntry : ClassTag](entriesWithKeys: Seq[(ChapterEntry, String)], entryKey: String): Try[T] = {
+    entriesWithKeys
+      .find(_._2 == entryKey).map(_._1)
+      .orNotFound(s"Entry $entryKey")
+      .flatMap(_.asOptionalInstanceOf[T].orBadRequest(s"Entry is not a ${classTag[T].runtimeClass.getSimpleName}"))
+  }
+
+  def findStep[T <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData): Try[(T, StepProvingContext)] = {
+    val (books, definitions) = bookRepository.booksAndDefinitions
     for {
-      newBooks <- f(books, definitions)
-    } yield {
-      val newDefinitions = getDefinitions(newBooks)
-      writeBooks(newBooks)
-      _booksAndDefinitions = (newBooks, newDefinitions)
-      (newBooks, newDefinitions)
-    }
+      book <- findBook(books, bookKey)
+      chapter <- findChapter(book, chapterKey)
+      theorem <- findEntry[Theorem](chapter, theoremKey)
+      provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
+      (rawStep, stepContext) <- theorem.findStep(proofIndex, stepPath.indexes).orNotFound(s"Step $stepPath")
+      step <- rawStep.asOptionalInstanceOf[T].orBadRequest(s"Step is not ${classTag[T].runtimeClass.getName}")
+    } yield (step, StepProvingContext(stepContext, provingContext))
   }
 
-  def reload(): Try[Any] = {
-    modifyBooks((_, _) => Try(parseBooks))
+  def modifyBooks[F[_] : Functor](f: (Seq[Book], Definitions) => F[Seq[Book]]): F[(Seq[Book], Definitions)] = bookRepository.modifyBooks(f)
+
+  def modifyBook[F[_] : Functor](bookKey: String, f: (Seq[Book], Definitions, Book) => Try[F[Book]]): Try[F[(Seq[Book], Definitions, Book)]] = {
+    bookRepository.modifyBooks[TryFWithValue[F, Book]#Type] { (books, definitions) =>
+      for {
+        currentBook <- findBook(books, bookKey)
+        newBookF <- f(books, definitions, currentBook)
+      } yield newBookF.map(newBook => (books.replaceValue(currentBook, newBook), newBook))
+    }.map(_.map { case ((books, definitions), book) => (books, definitions, book)})
   }
 
-  private def parseBooks: Seq[Book] = {
-    val books = getBookList.mapReduceWithPrevious[Book] { case (booksSoFar, bookTitle) =>
-      parseBook(bookTitle, booksSoFar)
-    }
-    BookService.logger.info(s"Parsed ${books.length} books")
-    books
+  def modifyChapter[F[_] : Functor](bookKey: String, chapterKey: String, f: (Seq[Book], Definitions, Book, Chapter) => Try[F[Chapter]]): Try[F[(Seq[Book], Definitions, Book, Chapter)]] = {
+    modifyBook[FWithValue[F, Chapter]#Type](bookKey, (books, definitions, book) =>
+      for {
+        currentChapter <- findChapter(book, chapterKey)
+        newChapterF <- f(books, definitions, book, currentChapter)
+      } yield newChapterF.map(newChapter => (book.copy(chapters = book.chapters.replaceValue(currentChapter, newChapter)), newChapter))
+    ).map(_.map { case ((books, definitions, book), chapter) => (books, definitions, book, chapter)})
   }
 
-  private def parseBook(title: String, previousBooks: Seq[Book]): Book = {
-    BookService.logger.info(s"Parsing book $title")
-    Book.parse(title, getBookPath(title), previousBooks, getChapterPath(title, _, _))
-  }
-
-  private def getBookList: Seq[String] = {
-    Files
-      .readAllLines(getBookListPath)
-      .asScala
-      .filter(s => !s.startsWith("#"))
-  }
-
-  private def writeBooks(books: Seq[Book]): Unit = {
-    FileUtils.cleanDirectory(bookDirectoryPath.toFile)
-    writeBooklist(books)
-    books.foreach(writeBook)
-  }
-
-  private def writeBooklist(books: Seq[Book]): Unit = {
-    Files.write(getBookListPath, (books.map(_.title).mkString("\n") + "\n").getBytes("UTF-8"))
-  }
-
-  private def writeBook(book: Book): Unit = {
-    val bookPath = getBookPath(book.title)
-    Files.createDirectories(bookPath.getParent)
-    Files.write(bookPath, book.serialized.getBytes("UTF-8"))
-    book.chapters.foreachWithIndex((chapter, index) =>
-      Files.write(getChapterPath(book.title, chapter.title, index), chapter.serialized.getBytes("UTF-8"))
+  def addChapterEntry(bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => Try[ChapterEntry]): Try[(Seq[Book], Definitions, Book, Chapter)] = {
+    modifyChapter[Identity](bookKey, chapterKey, (books, _, book, chapter) =>
+      f(books, book, chapter).map(chapter.addEntry)
     )
   }
 
-  private def getBookListPath: Path = {
-    bookDirectoryPath.resolve("books.list")
+  def modifyEntry[TEntry <: ChapterEntry : ClassTag, F[_] : Functor](bookKey: String, chapterKey: String, entryKey: String, f: (Seq[Book], Definitions, Book, Chapter, TEntry) => Try[F[TEntry]]): Try[F[(Seq[Book], Definitions, Book, Chapter, TEntry)]] = {
+    modifyChapter[FWithValue[F, TEntry]#Type](bookKey, chapterKey, (books, definitions, book, chapter) =>
+      for {
+        currentEntry <- findEntry[TEntry](chapter, entryKey)
+        newEntryF <- f(books, definitions, book, chapter, currentEntry)
+      } yield newEntryF.map(newEntry => (chapter.copy(entries = chapter.entries.replaceValue(currentEntry, newEntry)), newEntry))
+    ).map(_.map  { case ((books, definitions, book, chapter), entry) => (books, definitions, book, chapter, entry) })
   }
 
-  private def getBookPath(title: String): Path = {
-    val key = title.formatAsKey
-    bookDirectoryPath.resolve(key).resolve(key + ".book")
+  def modifyTheorem(bookKey: String, chapterKey: String, theoremKey: String)(f: (Theorem, ProvingContext) => Try[Theorem]): Try[TheoremUpdateProps] = {
+    modifyEntry[Theorem, WithValue[TheoremUpdateProps]#Type](bookKey, chapterKey, theoremKey, (books, definitions, book, chapter, theorem) => {
+      implicit val provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
+      for {
+        newTheorem <- f(theorem, provingContext).map(_.recalculateReferences(provingContext))
+        newInferenceIds = newTheorem.referencedInferenceIds.diff(theorem.referencedInferenceIds)
+        inferenceLinks = BookService.getInferenceLinks(newInferenceIds, books, definitions)
+      } yield (newTheorem, TheoremUpdateProps(newTheorem, inferenceLinks))
+    }).map(_._2)
   }
 
-  private def getChapterPath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
-    bookDirectoryPath.resolve(bookTitle.formatAsKey).resolve("%02d".format(chapterIndex + 1) + "." + chapterTitle.camelCase + ".chapter")
+  def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[TheoremUpdateProps] = {
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
+      theorem.modifyStep[Try](proofIndex, stepPath) { (step, stepContext) =>
+        for {
+          typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
+          newStep <- f(typedStep, StepProvingContext(stepContext, provingContext))
+        } yield newStep
+      }.orNotFound(s"Step $stepPath").flatten
+    }
   }
 
-  private def getDefinitions(books: Seq[Book]): Definitions = {
-    Definitions(books.flatMap(_.chapters).flatMap(_.entries))
+  def modifySteps(bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[Seq[Step]]): Try[TheoremUpdateProps] = {
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
+      theorem.modifySteps[Try](proofIndex, stepPath) { (steps, stepContext) =>
+        Some(f(steps, StepProvingContext(stepContext, provingContext)))
+      }.orNotFound(s"Step $stepPath").flatten
+    }
+  }
+
+  def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[TheoremUpdateProps] = {
+    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
+      (stepPath.indexes match {
+        case init :+ last =>
+          theorem.modifySteps[Try](proofIndex, init) { (steps, stepContext) =>
+            steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+              for {
+                typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
+                replacementSteps <- f(typedStep, StepProvingContext(stepContext.addSteps(before).atIndex(last), provingContext))
+              } yield before ++ replacementSteps ++ after
+            }
+          }
+        case _ =>
+          None
+      }).orNotFound(s"Step $stepPath").flatten
+    }
   }
 }
 
 object BookService {
-  val logger: Logger = LoggerFactory.getLogger(BookService.getClass)
+  def getBookUrl(bookKey: String): String = s"/books/$bookKey"
+  def getChapterUrl(bookKey: String, chapterKey: String): String = s"${getBookUrl(bookKey)}/$chapterKey"
+  def getEntryUrl(bookKey: String, chapterKey: String, entryKey: String): String = s"${getChapterUrl(bookKey, chapterKey)}/$entryKey"
+
+  def getBooksWithKeys(books: Seq[Book]): Seq[(Book, String)] = getWithKeys(books)(_.title)
+  def getChaptersWithKeys(book: Book): Seq[(Chapter, String)] = getWithKeys(book.chapters)(_.title)
+  def getEntriesWithKeys(chapter: Chapter): Seq[(ChapterEntry, String)] = getWithKeys(chapter.entries)(_.name)
+
+  private def getWithKeys[T](seq: Seq[T])(keyProperty: T => String): Seq[(T, String)] = {
+    seq.foldLeft(Seq.empty[(T, String)]) { case (acc, t) =>
+      def keyExists(k: String): Boolean = acc.exists(_._2 == k)
+      val initialKey = keyProperty(t).formatAsKey
+      val key = if (keyExists(initialKey))
+        Stream.from(2)
+          .mapFind(i => Some(s"$initialKey-$i").filter(s => !keyExists(s)))
+          .getOrElse(throw new Exception("Map somehow contained every possible key"))
+      else
+        initialKey
+      acc :+ (t -> key)
+    }
+  }
+
+  def getInferenceLinks(inferenceIds: Set[String], books: Seq[Book], definitions: Definitions): Map[String, InferenceSummary] = {
+    (for {
+      (book, bookKey) <- getBooksWithKeys(books)
+      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
+      (inference, key) <- BookService.getEntriesWithKeys(chapter)
+        .flatMap { case (entry, key) => entry.inferences.map(_ -> key) }
+        .filter{ case (inference, _) => inferenceIds.contains(inference.id) }
+    } yield inference.id -> InferenceSummary(inference.name, getEntryUrl(bookKey, chapterKey, key), definitions.isInferenceComplete(inference))).toMap
+  }
 }

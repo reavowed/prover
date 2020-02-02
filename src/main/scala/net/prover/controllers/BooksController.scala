@@ -13,7 +13,7 @@ class BooksController @Autowired() (val bookService: BookService) extends BookMo
 
   case class BooksProps(books: Seq[LinkSummary])
   def createBooksProps(books: Seq[Book]): BooksProps = {
-    BooksProps(getBooksWithKeys(books).map { case (book, key) => LinkSummary(book.title, getBookUrl(key)) })
+    BooksProps(bookService.getBooksWithKeys.map { case (book, key) => LinkSummary(book.title, BookService.getBookUrl(key)) })
   }
 
   @GetMapping(produces = Array("text/html;charset=UTF-8"))

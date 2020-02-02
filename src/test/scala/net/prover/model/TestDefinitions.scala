@@ -255,6 +255,7 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val modusTollens = Axiom("Modus Tollens", Seq(Implication(φ, ψ), Negation(ψ)), Negation(φ))
   val addDoubleNegation = Axiom("Add Double Negation", Seq(φ), Negation(Negation(φ)))
   val removeDoubleNegation = Axiom("Remove Double Negation", Seq(Negation(Negation(φ))), φ)
+  val equivalenceIsTransitive = Axiom("EquiValence Is Transitive", Seq(Equivalence(φ, ψ), Equivalence(ψ, χ)), Equivalence(φ, χ))
   val reverseImplicationFromEquivalence = Axiom("Reverse Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(ψ, φ))
   val combineConjunction = Axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
 
@@ -288,7 +289,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second,
       ZeroDefinition, NaturalsDefinition, Successor, AdditionDefinition, Apply) ++
     Seq(
-      specification, modusPonens, modusTollens, addDoubleNegation, removeDoubleNegation, reverseImplicationFromEquivalence, combineConjunction,
+      specification, modusPonens, modusTollens, addDoubleNegation, removeDoubleNegation, equivalenceIsTransitive, reverseImplicationFromEquivalence, combineConjunction,
       reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction,
       elementOfCartesianProductFromCoordinates, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, firstElement,
       zeroIsANaturalNumber, successorOfNaturalIsNatural, additionIsAssociative, additionIsCommutative),

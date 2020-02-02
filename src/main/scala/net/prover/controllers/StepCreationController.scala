@@ -233,7 +233,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: NamingDefinition
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
         variableName <- Option(definition.variableName.trim).filter(_.nonEmpty).orBadRequest("Variable name must be provided")
@@ -268,7 +268,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedPremise: String
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (targetStep, stepProvingContext) =>
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (targetStep, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremise, "premise").recoverWithBadRequest
@@ -304,7 +304,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+    bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
         (substatement, variableName, scopingStatementDefinition) <- stepProvingContext.provingContext.matchScopingStatement(step.statement).orBadRequest("Target statement is not a scoped statement")
       } yield {
@@ -324,7 +324,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+    bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
         (antecedent, consequent, deductionStatementDefinition) <- stepProvingContext.provingContext.matchDeductionStatement(step.statement).orBadRequest("Target statement is not a deduction statement")
       } yield {
@@ -344,7 +344,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
         newStep <- TermRearranger.rearrange(step.statement)(stepProvingContext).orBadRequest(s"Could not rearrange statement ${step.statement}")
       } yield Seq(newStep)
@@ -360,7 +360,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedStatement: String
   ): ResponseEntity[_] = {
-    replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+    bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
         targetStatement <- Statement.parser.parseFromString(serializedStatement, "target statement").recoverWithBadRequest
@@ -378,7 +378,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedPremiseStatement: String
   ): ResponseEntity[_] = {
-    replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
         premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest

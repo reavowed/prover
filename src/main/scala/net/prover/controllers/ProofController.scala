@@ -24,7 +24,7 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)((step, _) =>
+    bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)((step, _) =>
       Success(step.provenStatement.map(s => Step.Target(s)).toSeq)
     ).toResponseEntity
   }
@@ -37,7 +37,7 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)((step, _) =>
+    bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)((step, _) =>
       // Deleting naming steps is confusing, just clear them
       Success(step.asOptionalInstanceOf[Step.Naming]
         .flatMap(namingStep => namingStep.provenStatement)
@@ -65,7 +65,7 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
     }
     val (sharedPath, sourcePathInner, destinationPathInner) = commonPrefix(sourcePath, destinationPath)
     (for {
-      result <- modifySteps(bookKey, chapterKey, theoremKey, proofIndex, sharedPath) { (sharedParentSteps, sharedContext) =>
+      result <- bookService.modifySteps(bookKey, chapterKey, theoremKey, proofIndex, sharedPath) { (sharedParentSteps, sharedContext) =>
         for {
           (substepsWithoutCurrent, (currentSteps, currentStepOuterContext)) <-
             Proof.modifySteps[WithValue[(Seq[Step], StepContext)]#Type](sharedParentSteps, sourcePathInner, sharedContext.stepContext) { (currentSteps, currentStepOuterContext) =>

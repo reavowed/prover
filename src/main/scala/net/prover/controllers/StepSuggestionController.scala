@@ -2,8 +2,8 @@ package net.prover.controllers
 
 import net.prover.controllers.models._
 import net.prover.model._
-import net.prover.model.definitions.{BinaryRelation, BinaryJoiner}
-import net.prover.model.expressions.{DefinedStatement, Expression, Statement, StatementVariable, Term}
+import net.prover.model.definitions.BinaryJoiner
+import net.prover.model.expressions._
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -24,7 +24,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
     (for {
-      (step, stepProvingContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
       implicit val spc = stepProvingContext
       def findPossibleInference(inference: Inference): Option[PossibleInference] = {
@@ -56,7 +56,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
     (for {
-      (_, stepProvingContext) <- findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (_, stepProvingContext) <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
       implicit val spc = stepProvingContext
       filterInferences(stepProvingContext.provingContext.entryContext.inferences, searchText)
@@ -80,7 +80,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     getSourceTerm: (BinaryJoiner[_ <: Expression], Statement, StepContext) => Option[Expression]
   ): ResponseEntity[_] = {
     (for {
-      (step, stepProvingContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       (targetSource, relation) <- stepProvingContext.provingContext.definedBinaryStatements.reverse.mapFind { relation =>
         getSourceTerm(relation, step.statement, stepProvingContext.stepContext).map(_ -> relation)
       }.orBadRequest("Target step is not a binary relation")
@@ -159,7 +159,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     (for {
-      (_, stepProvingContext) <- findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (_, stepProvingContext) <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
       implicit val spc = stepProvingContext
       for {
@@ -181,7 +181,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
     (for {
-      (step, stepProvingContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
       implicit val spc = stepProvingContext
       ProofHelper.findNamingInferences(stepProvingContext.provingContext.entryContext)
@@ -212,7 +212,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @RequestBody substitutionRequest: SubstitutionRequest
   ): ResponseEntity[_] = {
     (for {
-      (step, stepProvingContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       inference <- findInference(substitutionRequest.inferenceId)(stepProvingContext)
       premises <- substitutionRequest.serializedPremises.map { case (i, v) => Statement.parser(stepProvingContext).parseFromString(v, s"Premise $i").recoverWithBadRequest.map(i -> _) }.traverseTry.map(_.toMap)
       conclusionSubstitutions <- if (substitutionRequest.withConclusion)
@@ -239,7 +239,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @RequestParam("serializedPremiseStatement") serializedPremiseStatement: String
   ): ResponseEntity[_] = {
     (for {
-      (step, stepProvingContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
       premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
     } yield {

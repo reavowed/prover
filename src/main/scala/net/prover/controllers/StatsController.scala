@@ -14,11 +14,11 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
   @GetMapping(value = Array("longestProofs"))
   def getLongestProofs: Seq[(String, Int)] = {
     val urlsWithLengths = for {
-      (book, bookKey) <- getBooksWithKeys(bookService.books)
-      (chapter, chapterKey) <- getChaptersWithKeys(book)
-      (theorem, theoremKey) <- getEntriesWithKeys(chapter)
+      (book, bookKey) <- bookService.getBooksWithKeys
+      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
+      (theorem, theoremKey) <- BookService.getEntriesWithKeys(chapter)
         .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-    } yield (getEntryUrl(bookKey, chapterKey, theoremKey), theorem.proofs.map(_.steps.map(_.length).sum).min)
+    } yield (BookService.getEntryUrl(bookKey, chapterKey, theoremKey), theorem.proofs.map(_.steps.map(_.length).sum).min)
     urlsWithLengths
         .sortBy { case (_, length) => -1 * length }
         .take(10)
@@ -29,12 +29,12 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
     val entryContext = EntryContext.forBooks(bookService.books, Nil)
     val usedInferenceIds = entryContext.inferences.ofType[Theorem].flatMap(_.referencedInferenceIds)
     for {
-      (book, bookKey) <- getBooksWithKeys(bookService.books)
-      (chapter, chapterKey) <- getChaptersWithKeys(book)
-      (inference, inferenceKey) <- getEntriesWithKeys(chapter)
+      (book, bookKey) <- bookService.getBooksWithKeys
+      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
+      (inference, inferenceKey) <- BookService.getEntriesWithKeys(chapter)
         .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
       if !usedInferenceIds.contains(inference.id)
-    } yield getEntryUrl(bookKey, chapterKey, inferenceKey)
+    } yield BookService.getEntryUrl(bookKey, chapterKey, inferenceKey)
   }
 
   @GetMapping(value = Array("findAssertions"))
@@ -42,32 +42,30 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
     @RequestParam inferenceId: String,
     @RequestParam(required = false) statementSymbol: String
   ): Seq[(String, String)] = {
-    val (books, definitions) = bookService.booksAndDefinitions
     for {
-      (book, bookKey) <- getBooksWithKeys(books)
-      (chapter, chapterKey) <- getChaptersWithKeys(book)
-      (theorem, inferenceKey) <- getEntriesWithKeys(chapter)
+      (book, bookKey) <- bookService.getBooksWithKeys
+      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
+      (theorem, inferenceKey) <- BookService.getEntriesWithKeys(chapter)
         .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
       (assertion, context) <- theorem.findSteps[Step.Assertion]
       if assertion.inference.id == inferenceId
       if Option(statementSymbol).forall(symbol =>
         assertion.statement.asOptionalInstanceOf[DefinedStatement]
           .exists(_.definition.symbol == symbol))
-    } yield ("http://localhost:8080" + getEntryUrl(bookKey, chapterKey, inferenceKey), context.stepReference.stepPath.mkString("."))
+    } yield ("http://localhost:8080" + BookService.getEntryUrl(bookKey, chapterKey, inferenceKey), context.stepReference.stepPath.mkString("."))
   }
 
   @GetMapping(value = Array("findElisions"))
   def findElisions(
     @RequestParam inferenceId: String
   ): Seq[(String, String)] = {
-    val (books, definitions) = bookService.booksAndDefinitions
     for {
-      (book, bookKey) <- getBooksWithKeys(books)
-      (chapter, chapterKey) <- getChaptersWithKeys(book)
-      (theorem, inferenceKey) <- getEntriesWithKeys(chapter)
+      (book, bookKey) <- bookService.getBooksWithKeys
+      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
+      (theorem, inferenceKey) <- BookService.getEntriesWithKeys(chapter)
         .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
       (elision, context) <- theorem.findSteps[Step.Elided]
       if elision.highlightedInference.exists(_.id == inferenceId)
-    } yield ("http://localhost:8080" + getEntryUrl(bookKey, chapterKey, inferenceKey), context.stepReference.stepPath.mkString("."))
+    } yield ("http://localhost:8080" + BookService.getEntryUrl(bookKey, chapterKey, inferenceKey), context.stepReference.stepPath.mkString("."))
   }
 }

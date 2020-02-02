@@ -7,7 +7,7 @@ import net.prover.model._
 
 @RestController
 @RequestMapping(Array("/"))
-class MainController @Autowired() (bookService: BookService)  {
+class MainController @Autowired() (bookService: BookRepository)  {
   @GetMapping(value = Array(""))
   def get(response: HttpServletResponse) = response.sendRedirect("/books")
 }

@@ -32,7 +32,7 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
       })
     }
     (for {
-      (step, stepProvingContext) <- findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       result <- withRelation(step.statement, getPremises(_, _, _)(stepProvingContext), getPremises(_, _, _)(stepProvingContext))(stepProvingContext)
     } yield result).toResponseEntity
   }
@@ -59,7 +59,7 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
     suggestTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, Swapper.Swap)
   }
 
-  def addPremise(
+  private def addPremise(
     bookKey: String,
     chapterKey: String,
     theoremKey: String,
@@ -75,8 +75,12 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
           premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
           premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
           (premiseLhs, premiseRhs) <- targetJoiner.unapply(premise.statement) orBadRequest "Premise was not transitive statement"
-          _ <- (swapper.getOne(targetLhs, targetRhs) == swapper.getOne(premiseLhs, premiseRhs)).orBadRequest("Premise did not match target")
-        } yield (targetJoiner, None, targetJoiner, Some(Step.Target(targetJoiner(premiseRhs, targetRhs))), premiseRhs, Nil)
+          (premiseSource, premiseResult) = swapper.swap(premiseLhs, premiseRhs)
+          (targetSource, targetResult) = swapper.swap(targetLhs, targetRhs)
+          _ <- (premiseSource == targetSource).orBadRequest("Premise did not match target")
+          targetStatement = (targetJoiner.apply _).tupled(swapper.swap(premiseResult, targetResult))
+          (firstStep, secondStep) = swapper.swap(None, Some(Step.Target(targetStatement)))
+        } yield (targetJoiner, firstStep, targetJoiner, secondStep, premiseResult, Nil)
       }
     })
   }

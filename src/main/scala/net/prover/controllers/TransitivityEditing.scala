@@ -61,74 +61,73 @@ trait TransitivityEditing extends BookModification {
       case Nil =>
         Failure(NotFoundException(s"Step $stepPath"))
       case init :+ last =>
-        modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-          theorem.modifySteps(proofIndex, init) { (steps, outerStepContext) =>
-            steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
-              implicit val stepContext = outerStepContext.addSteps(before).atIndex(last)
-              implicit val stepProvingContext = StepProvingContext(stepContext, provingContext)
+        bookService.modifySteps(bookKey, chapterKey, theoremKey, proofIndex, init) { (steps, outerStepProvingContext) =>
+          steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+            val outerStepContext = outerStepProvingContext.stepContext
+            implicit val stepContext = outerStepContext.addSteps(before).atIndex(last)
+            implicit val stepProvingContext = StepProvingContext(stepContext, outerStepProvingContext.provingContext)
 
-              def forConnective(connective: BinaryConnective, lhs: Statement, rhs: Statement): Try[(Seq[Step], Seq[Step.Target])] = {
-                for {
-                  (firstJoiner, firstStep, secondJoiner, secondStep, intermediate, targetSteps) <- createSteps.createStepsForConnective(connective, lhs, rhs, stepProvingContext)
-                  transitivitySteps <- getTransitivitySteps(firstJoiner, firstStep, secondJoiner, secondStep, lhs, intermediate, rhs, connective)
-                } yield (transitivitySteps, targetSteps)
-              }
-              def forRelation(relation: BinaryRelation, lhs: Term, rhs: Term): Try[(Seq[Step], Seq[Step.Target])] = {
-                for {
-                  (firstJoiner, firstStep, secondJoiner, secondStep, intermediate, targetSteps) <- createSteps.createStepsForRelation(relation, lhs, rhs, stepProvingContext)
-                  transitivitySteps <- getTransitivitySteps(firstJoiner, firstStep, secondJoiner, secondStep, lhs, intermediate, rhs, relation)
-                } yield (transitivitySteps, targetSteps)
-              }
-              def getTransitivitySteps[T <: Expression : TransitivityMethods](
-                firstJoiner: BinaryJoiner[T],
-                firstStep: Option[Step],
-                secondJoiner: BinaryJoiner[T],
-                secondStep: Option[Step],
-                targetLhs: T,
-                intermediate: T,
-                targetRhs: T,
-                targetJoiner: BinaryJoiner[T]
-              ): Try[Seq[Step]] = {
-                def getWithFollowingTransitivity = for {
-                  (followingStep, remainingSteps) <- after.headAndTailOption
-                  followingStatement <- followingStep.provenStatement
-                  (followingRelation, followingLhs, followingRhs) <- TransitivityMethods.getRelation(followingStatement)
-                  if followingRhs == targetRhs
-                  stepPath = outerStepContext.atIndex(last).stepReference.stepPath
-                  followingStepPath = outerStepContext.atIndex(last + 1).stepReference.stepPath
-                  followingPremises = followingStep.recursivePremises.filter(p => !p.asOptionalInstanceOf[SingleLinePremise].flatMap(_.referencedLine.asOptionalInstanceOf[StepReference]).exists(_.stepPath.startsWith(followingStepPath)))
-                  if followingPremises.exists(p => p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath)))
-                  otherPremise <- followingPremises.removeWhere(p => p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath))).single
-                  (initialRelation, initialLhs, _) <- TransitivityMethods.getRelation(otherPremise.statement)
-                  if (initialLhs == followingLhs)
-                } yield {
-                  for {
-                    (intermediateRelation, firstTransitivityStep) <- TransitivityMethods.getTransitivityStep(initialLhs, targetLhs, intermediate, initialRelation, firstJoiner)
-                    (lastRelation, secondTransitivityStep) <- TransitivityMethods.getTransitivityStep(initialLhs, intermediate, targetRhs, intermediateRelation, secondJoiner)
-                    if lastRelation == followingRelation
-                    stepsForFirst = if (targetLhs == intermediate && initialRelation == intermediateRelation) Nil else firstStep.toSeq :+ firstTransitivityStep
-                    stepsForSecond = if (intermediate == targetRhs && intermediateRelation == lastRelation) Nil else secondStep.toSeq :+ secondTransitivityStep
-                  } yield stepsForFirst ++ stepsForSecond ++ remainingSteps
-                }
-                def withNewTransitivity = {
-                  if (targetLhs == intermediate && secondJoiner == targetJoiner) {
-                    secondStep.map(_ +: after)
-                  } else if (intermediate == targetRhs && firstJoiner == targetJoiner) {
-                    firstStep.map(_ +: after)
-                  } else for {
-                    (_, transitivityStep) <- TransitivityMethods.getTransitivityStep(targetLhs, intermediate, targetRhs, firstJoiner, secondJoiner)
-                  } yield {
-                    (firstStep.toSeq ++ secondStep.toSeq :+ transitivityStep) ++ after
-                  }
-                }
-                getWithFollowingTransitivity getOrElse withNewTransitivity orBadRequest "Could not chain steps"
-              }
-
+            def forConnective(connective: BinaryConnective, lhs: Statement, rhs: Statement): Try[(Seq[Step], Seq[Step.Target])] = {
               for {
-                targetStep <- step.asOptionalInstanceOf[Step.Target].orBadRequest(s"Step was not target")
-                (transitivitySteps, targetSteps) <- withRelation(targetStep.statement, forConnective, forRelation)
-              } yield insertTargetsBeforeTransitivity(before, transitivitySteps, targetSteps)
+                (firstJoiner, firstStep, secondJoiner, secondStep, intermediate, targetSteps) <- createSteps.createStepsForConnective(connective, lhs, rhs, stepProvingContext)
+                transitivitySteps <- getTransitivitySteps(firstJoiner, firstStep, secondJoiner, secondStep, lhs, intermediate, rhs, connective)
+              } yield (transitivitySteps, targetSteps)
             }
+            def forRelation(relation: BinaryRelation, lhs: Term, rhs: Term): Try[(Seq[Step], Seq[Step.Target])] = {
+              for {
+                (firstJoiner, firstStep, secondJoiner, secondStep, intermediate, targetSteps) <- createSteps.createStepsForRelation(relation, lhs, rhs, stepProvingContext)
+                transitivitySteps <- getTransitivitySteps(firstJoiner, firstStep, secondJoiner, secondStep, lhs, intermediate, rhs, relation)
+              } yield (transitivitySteps, targetSteps)
+            }
+            def getTransitivitySteps[T <: Expression : TransitivityMethods](
+              firstJoiner: BinaryJoiner[T],
+              firstStep: Option[Step],
+              secondJoiner: BinaryJoiner[T],
+              secondStep: Option[Step],
+              targetLhs: T,
+              intermediate: T,
+              targetRhs: T,
+              targetJoiner: BinaryJoiner[T]
+            ): Try[Seq[Step]] = {
+              def getWithFollowingTransitivity = for {
+                (followingStep, remainingSteps) <- after.headAndTailOption
+                followingStatement <- followingStep.provenStatement
+                (followingRelation, followingLhs, followingRhs) <- TransitivityMethods.getRelation(followingStatement)
+                if followingRhs == targetRhs
+                stepPath = stepContext.stepReference.stepPath
+                followingStepPath = outerStepContext.atIndex(last + 1).stepReference.stepPath
+                followingPremises = followingStep.recursivePremises.filter(p => !p.asOptionalInstanceOf[SingleLinePremise].flatMap(_.referencedLine.asOptionalInstanceOf[StepReference]).exists(_.stepPath.startsWith(followingStepPath)))
+                if followingPremises.exists(p => p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath)))
+                otherPremise <- followingPremises.removeWhere(p => p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath))).single
+                (initialRelation, initialLhs, _) <- TransitivityMethods.getRelation(otherPremise.statement)
+                if (initialLhs == followingLhs)
+              } yield {
+                for {
+                  (intermediateRelation, firstTransitivityStep) <- TransitivityMethods.getTransitivityStep(initialLhs, targetLhs, intermediate, initialRelation, firstJoiner)
+                  (lastRelation, secondTransitivityStep) <- TransitivityMethods.getTransitivityStep(initialLhs, intermediate, targetRhs, intermediateRelation, secondJoiner)
+                  if lastRelation == followingRelation
+                  stepsForFirst = if (targetLhs == intermediate && initialRelation == intermediateRelation) Nil else firstStep.toSeq :+ firstTransitivityStep
+                  stepsForSecond = if (intermediate == targetRhs && intermediateRelation == lastRelation) Nil else secondStep.toSeq :+ secondTransitivityStep
+                } yield stepsForFirst ++ stepsForSecond ++ remainingSteps
+              }
+              def withNewTransitivity = {
+                if (targetLhs == intermediate && secondJoiner == targetJoiner) {
+                  secondStep.map(_ +: after)
+                } else if (intermediate == targetRhs && firstJoiner == targetJoiner) {
+                  firstStep.map(_ +: after)
+                } else for {
+                  (_, transitivityStep) <- TransitivityMethods.getTransitivityStep(targetLhs, intermediate, targetRhs, firstJoiner, secondJoiner)
+                } yield {
+                  (firstStep.toSeq ++ secondStep.toSeq :+ transitivityStep) ++ after
+                }
+              }
+              getWithFollowingTransitivity getOrElse withNewTransitivity orBadRequest "Could not chain steps"
+            }
+
+            for {
+              targetStep <- step.asOptionalInstanceOf[Step.Target].orBadRequest(s"Step was not target")
+              (transitivitySteps, targetSteps) <- withRelation(targetStep.statement, forConnective, forRelation)
+            } yield insertTargetsBeforeTransitivity(before, transitivitySteps, targetSteps)
           }.orNotFound(s"Step $stepPath").flatten
         }
     }).toResponseEntity
