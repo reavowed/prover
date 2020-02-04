@@ -134,7 +134,6 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
       entryContext.displayShorthands,
       entryContext.termDefinitions)
   }
-  lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryStatements.ofType[BinaryRelation]
 
   lazy val reversals: Seq[Reversal[_ <: Expression]] = replace(definitions.reversals)
   lazy val transitivities: Seq[Transitivity[_ <: Expression]] = replace(definitions.transitivities)

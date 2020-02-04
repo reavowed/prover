@@ -81,7 +81,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
   ): ResponseEntity[_] = {
     (for {
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      (targetSource, relation) <- stepProvingContext.provingContext.definedBinaryStatements.reverse.mapFind { relation =>
+      (targetSource, relation) <- stepProvingContext.provingContext.definedBinaryStatements.mapFind { relation =>
         getSourceTerm(relation, step.statement, stepProvingContext.stepContext).map(_ -> relation)
       }.orBadRequest("Target step is not a binary relation")
     } yield {

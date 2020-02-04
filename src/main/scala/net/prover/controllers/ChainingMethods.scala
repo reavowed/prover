@@ -28,7 +28,7 @@ sealed trait ChainingMethods[T <: Expression] {
 object ChainingMethods {
   abstract class ChainingMethodsAux[TExpression <: Expression, TStatement <: BinaryJoiner[TExpression] : ClassTag] extends ChainingMethods[TExpression] {
     override def getRelation(statement: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(BinaryJoiner[TExpression], TExpression, TExpression)] = {
-      provingContext.definedBinaryStatements.ofType[TStatement].reverse.mapFind { relation =>
+      provingContext.definedBinaryStatements.ofType[TStatement].mapFind { relation =>
         for {
           (lhs, rhs) <- relation.unapply(statement)
         } yield (relation, lhs, rhs)
