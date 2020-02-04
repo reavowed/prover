@@ -13,7 +13,7 @@ import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepTransitivityController @Autowired() (val bookService: BookService) extends BookModification with TransitivityEditing {
+class StepTransitivityController @Autowired() (val bookService: BookService) extends BookModification with ChainingStepEditing {
 
   def suggestTransitivity(
     bookKey: String,
@@ -27,7 +27,7 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
       Success(stepProvingContext.allPremisesSimplestFirst.mapCollect { p =>
         for {
           (premiseLhs, premiseRhs) <- joiner.unapply(p.statement)
-          if swapper.getOne(lhs, rhs) == swapper.getOne(premiseLhs, premiseRhs)
+          if swapper.getSource(lhs, rhs) == swapper.getSource(premiseLhs, premiseRhs)
         } yield p
       })
     }
@@ -68,19 +68,21 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
     serializedPremiseStatement: String,
     swapper: Swapper
   ): ResponseEntity[_] = {
-    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateStepsForTransitivityCommon {
-      override def createSteps[T <: Expression : TransitivityMethods](targetJoiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[T], Option[Step], BinaryJoiner[T], Option[Step], T, Seq[Step.Target])] = {
+    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateChainingStepsCommon {
+      override def createSteps[T <: Expression : ChainingMethods](targetJoiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
         implicit val spc = stepProvingContext
         for {
           premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
           premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
           (premiseLhs, premiseRhs) <- targetJoiner.unapply(premise.statement) orBadRequest "Premise was not transitive statement"
-          (premiseSource, premiseResult) = swapper.swap(premiseLhs, premiseRhs)
-          (targetSource, targetResult) = swapper.swap(targetLhs, targetRhs)
+          (premiseSource, premiseResult) = swapper.swapSourceAndResult(premiseLhs, premiseRhs)
+          (targetSource, targetResult) = swapper.swapSourceAndResult(targetLhs, targetRhs)
           _ <- (premiseSource == targetSource).orBadRequest("Premise did not match target")
-          targetStatement = (targetJoiner.apply _).tupled(swapper.swap(premiseResult, targetResult))
-          (firstStep, secondStep) = swapper.swap(None, Some(Step.Target(targetStatement)))
-        } yield (targetJoiner, firstStep, targetJoiner, secondStep, premiseResult, Nil)
+          (targetLhs, targetRhs) = swapper.swapSourceAndResult(premiseResult, targetResult)
+          premiseChainingDefinition = ChainingStepDefinition(premiseLhs, premiseRhs, targetJoiner, None)
+          targetStepDefinition = ChainingStepDefinition.forTarget(targetLhs, targetRhs, targetJoiner)
+          (firstStep, secondStep) = swapper.swapSourceAndResult(premiseChainingDefinition, targetStepDefinition)
+        } yield (firstStep, secondStep, Nil)
       }
     })
   }

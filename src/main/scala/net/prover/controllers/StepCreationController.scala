@@ -15,7 +15,7 @@ import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepCreationController @Autowired() (val bookService: BookService) extends BookModification with TransitivityEditing {
+class StepCreationController @Autowired() (val bookService: BookService) extends BookModification with ChainingStepEditing {
 
   def rewriteFromConclusion(conclusion: Statement, rewriteInferenceId: Option[String])(implicit stepProvingContext: StepProvingContext): Try[(Option[Step.Assertion], Statement)] = {
     rewriteInferenceId.map { rewriteInferenceid =>
@@ -106,54 +106,54 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @RequestBody definition: StepDefinition,
     swapper: Swapper
   ): ResponseEntity[_] = {
-    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateStepsForTransitivity {
-      override def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[Statement], Option[Step], BinaryJoiner[Statement], Option[Step], Statement, Seq[Step.Target])] = {
+    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateChainingSteps {
+      override def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.Target])] = {
         implicit val spc = stepProvingContext
-        createSteps(targetConnective, targetLhs, targetRhs, (_, _, relation, lhs, rhs) => Success((None, relation(lhs, rhs))))
+        createSteps(targetConnective, targetLhs, targetRhs, (_, _, relation, lhs, rhs) => Success(ChainingStepDefinition(lhs, rhs, relation, None)))
       }
-      override def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[Term], Option[Step], BinaryJoiner[Term], Option[Step], Term, Seq[Step.Target])] = {
+      override def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.Target])] = {
         implicit val spc = stepProvingContext
         def getExpansion(conclusionSource: Term, targetSource: Term, conclusionRelation: BinaryJoiner[Term], conclusionLhs: Term, conclusionRhs: Term) = for {
           wrapper <- targetSource.getTerms().filter(_._1 == conclusionSource).map(_._2).map(Wrapper.fromExpression).single.orBadRequest("Could not find conclusion LHS uniquely in target LHS")
-          (expansionStep, expandedConclusion) <-
+          step <-
             if (wrapper.isIdentity)
-              Success((None, conclusionRelation(conclusionLhs, conclusionRhs)))
+              Success(ChainingStepDefinition(conclusionLhs, conclusionRhs, conclusionRelation, None))
             else
               for {
                 expansionDefinition <- stepProvingContext.provingContext.expansions.ofType[RelationExpansion]
                   .find(e => e.sourceJoiner == conclusionRelation && e.resultJoiner == targetRelation)
                   .orBadRequest("Could not find expansion")
                 step = expansionDefinition.assertionStep(conclusionLhs, conclusionRhs, wrapper)
-              } yield (
-                Some(step),
-                step.statement)
-        } yield (expansionStep, expandedConclusion)
+              } yield ChainingStepDefinition(wrapper(conclusionLhs), wrapper(conclusionRhs), targetRelation, Some(step))
+        } yield step
         createSteps(targetRelation, targetLhs, targetRhs, getExpansion)
       }
 
-      def createSteps[T <: Expression : TransitivityMethods](
+      def createSteps[T <: Expression : ChainingMethods](
         targetRelation: BinaryJoiner[T],
         targetLhs: T,
         targetRhs: T,
-        handle: (T, T, BinaryJoiner[T], T, T) => Try[(Option[Step], Statement)])(
+        handle: (T, T, BinaryJoiner[T], T, T) => Try[ChainingStepDefinition[T]])(
         implicit stepProvingContext: StepProvingContext
-      ): Try[(BinaryJoiner[T], Option[Step], BinaryJoiner[T], Option[Step], T, Seq[Step.Target])] = {
-        val (targetSource, targetDestination) = swapper.swap(targetLhs, targetRhs)
+      ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
+        val (targetSource, targetResult) = swapper.swapSourceAndResult(targetLhs, targetRhs)
         def getResult(applyExtractions: (Seq[Inference.Summary], Substitutions) => Try[(Statement, ExtractionApplication, Seq[Step.Assertion], Seq[Step.Assertion], Seq[Step.Target], Seq[Step] => Step.Elided)]) = {
           for {
             extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
             substitutions <- definition.substitutions.parse()
             (conclusion, ExtractionApplication(extractionSteps, extractionPremises, extractionTargets), additionalAssertions, additionalPremises, additionalTargets, elider) <- applyExtractions(extractionInferences, substitutions)
-            (conclusionRelation, conclusionLhs, conclusionRhs) <- TransitivityMethods.getRelation[T](conclusion).orBadRequest("Conclusion was not binary statement")
-            conclusionSource = swapper.getOne(conclusionLhs, conclusionRhs)
-            (expansionStepOption, expandedConclusion) <- handle(conclusionSource, targetSource, conclusionRelation, conclusionLhs, conclusionRhs)
-            (_, intermediateTerm) <- conclusionRelation.unapply(expandedConclusion).map(swapper.swapTuple).orBadRequest("Rewritten expanded conclusion is not a transitive statement")
+            (conclusionRelation, conclusionLhs, conclusionRhs) <- ChainingMethods.getRelation[T](conclusion).orBadRequest("Conclusion was not binary statement")
+            conclusionSource = swapper.getSource(conclusionLhs, conclusionRhs)
+            rewriteChainingDefinition <- handle(conclusionSource, targetSource, conclusionRelation, conclusionLhs, conclusionRhs)
             extractionStep <- Step.Elided.ifNecessary(additionalAssertions ++ extractionSteps, elider) orBadRequest "No extraction steps"
-            finalStep = Step.Elided.ifNecessary((additionalPremises ++ extractionPremises :+ extractionStep) ++ expansionStepOption.toSeq, elider).get
-            newTarget = (targetRelation.apply _).tupled.apply(swapper.swap(intermediateTerm, targetDestination))
+            finalStep = Step.Elided.ifNecessary((additionalPremises ++ extractionPremises :+ extractionStep) ++ rewriteChainingDefinition.step.toSeq, elider).get
+            intermediate = swapper.getResult(rewriteChainingDefinition.lhs, rewriteChainingDefinition.rhs)
+            updatedChainingDefinition = rewriteChainingDefinition.copy(step = Some(finalStep))
+            (targetLhs, targetRhs) = swapper.swapSourceAndResult(intermediate, targetResult)
+            newTarget = targetRelation(targetLhs, targetRhs)
             newTargetStepOption = if (stepProvingContext.allPremisesSimplestFirst.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
-            ((firstRelation, firstStep), (secondRelation, secondStep)) = swapper.swap((conclusionRelation, Some(finalStep)), (targetRelation, newTargetStepOption))
-          } yield (firstRelation, firstStep, secondRelation, secondStep, intermediateTerm, additionalTargets ++ extractionTargets)
+            (firstDefinition, secondDefinition) = swapper.swapSourceAndResult(updatedChainingDefinition, ChainingStepDefinition(targetLhs, targetRhs, targetRelation, newTargetStepOption))
+          } yield (firstDefinition, secondDefinition, additionalTargets ++ extractionTargets)
         }
 
         def fromInference(inferenceId: String) = {
@@ -210,16 +210,16 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData,
-    @RequestBody serializedTerm: String
+    @RequestBody serializedExpression: String
   ): ResponseEntity[_] = {
-    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateStepsForTransitivityCommon {
-      def createSteps[T <: Expression : TransitivityMethods](joiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(BinaryJoiner[T], Option[Step], BinaryJoiner[T], Option[Step], T, Seq[Step.Target])] = {
+    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateChainingStepsCommon {
+      def createSteps[T <: Expression : ChainingMethods](joiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
         implicit val spc = stepProvingContext
         for {
-          intermediateTerm <- TransitivityMethods.parser.parseFromString(serializedTerm, "target term").recoverWithBadRequest
-          firstStep = Step.Target(joiner(targetLhs, intermediateTerm))
-          secondStep = Step.Target(joiner(intermediateTerm, targetRhs))
-        } yield (joiner, Some(firstStep), joiner, Some(secondStep), intermediateTerm, Nil)
+          intermediateExpression <- ChainingMethods.parser.parseFromString(serializedExpression, "target expression").recoverWithBadRequest
+          firstStep = ChainingStepDefinition.forTarget(targetLhs, intermediateExpression, joiner)
+          secondStep = ChainingStepDefinition.forTarget(intermediateExpression, targetRhs, joiner)
+        } yield (firstStep, secondStep, Nil)
       }
     })
   }

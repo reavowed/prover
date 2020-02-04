@@ -24,12 +24,18 @@ trait VariableDefinitions {
   val φ = StatementVariablePlaceholder("φ")
   val ψ = StatementVariablePlaceholder("ψ")
   val χ = StatementVariablePlaceholder("χ")
+  val ω = StatementVariablePlaceholder("ω")
 
   case class TermVariablePlaceholder(name: String) extends Placeholder[TermVariable] {
     def apply(terms: Term*) = TermVariable(name, terms)
     override def toVariable = TermVariable(name, Nil)
   }
   implicit def placeholderToTermComponent(placeholder: TermVariablePlaceholder): TermComponent = TermComponent(placeholder.name, Nil)
+
+  case object $ {
+
+  }
+  implicit def $ToFunctionParameter(x: $.type): FunctionParameter = FunctionParameter(0, 0)
 
   val a = TermVariablePlaceholder("a")
   val b = TermVariablePlaceholder("b")
@@ -245,6 +251,23 @@ trait ExpressionDefinitions extends VariableDefinitions {
     BlankDefinition,
     None,
     Nil)
+  val LessThanDefinition = TermDefinition(
+    "<",
+    Nil,
+    Nil,
+    None,
+    Format.default("<", Nil),
+    Nil,
+    BlankDefinition,
+    None,
+    Seq("infix-relation"))
+  val LessThan = DefinedTerm(Nil, LessThanDefinition)(Nil)
+  def lessThan(a: Term, b: Term): Statement = ElementOf(Pair(a, b), LessThan)
+
+  val InfixRelationShorthand = DisplayShorthand(
+    Template.DefinedStatement(ElementOf, Nil, Seq(Template.DefinedTerm(Pair, Nil, Seq(Template.TermVariable("a"), Template.TermVariable("b"))), Template.TermVariable("<"))),
+    Format.Explicit("a < b", Seq("a", "b", "<"), false, false),
+    Seq(("<", "infix-relation")))
 
   def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
 }
@@ -255,7 +278,7 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val modusTollens = Axiom("Modus Tollens", Seq(Implication(φ, ψ), Negation(ψ)), Negation(φ))
   val addDoubleNegation = Axiom("Add Double Negation", Seq(φ), Negation(Negation(φ)))
   val removeDoubleNegation = Axiom("Remove Double Negation", Seq(Negation(Negation(φ))), φ)
-  val equivalenceIsTransitive = Axiom("EquiValence Is Transitive", Seq(Equivalence(φ, ψ), Equivalence(ψ, χ)), Equivalence(φ, χ))
+  val equivalenceIsTransitive = Axiom("Equivalence Is Transitive", Seq(Equivalence(φ, ψ), Equivalence(ψ, χ)), Equivalence(φ, χ))
   val reverseImplicationFromEquivalence = Axiom("Reverse Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(ψ, φ))
   val combineConjunction = Axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
 
@@ -263,6 +286,7 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
   val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
   val substitutionOfEqualsIntoFunction = Axiom("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
+  val equivalenceOfSubstitutedEquals = Axiom("Equivalence of Substituted Equals", Seq(Equals(a, b)), Equivalence(φ(a), φ(b)))
 
   val elementOfCartesianProductFromCoordinates = Axiom("Element of Cartesian Product from Coordinates", Seq(ElementOf(a, Product(A, B))), Equals(a, Pair(First(a), Second(a))))
   val firstCoordinateOfElementOfCartesianProduct = Axiom("First Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(First(a), A))
@@ -273,6 +297,8 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
   val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
   val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
+  val addingZeroIsSame = Axiom("Adding Zero Is Same", Nil, Equals(a, add(a, Zero)))
+  val orderingIsTransitive = Axiom("Natural Ordering Is Transitive", Seq(lessThan(a, b), lessThan(b, c)), lessThan(a, c))
 }
 
 object TestDefinitions extends VariableDefinitions with ExpressionDefinitions with InferenceDefinitions  {
@@ -287,12 +313,13 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       ElementOf, Equals, Subset) ++
     Seq(
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second,
-      ZeroDefinition, NaturalsDefinition, Successor, AdditionDefinition, Apply) ++
+      ZeroDefinition, NaturalsDefinition, Successor, AdditionDefinition, Apply, LessThanDefinition) ++
     Seq(
       specification, modusPonens, modusTollens, addDoubleNegation, removeDoubleNegation, equivalenceIsTransitive, reverseImplicationFromEquivalence, combineConjunction,
-      reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction,
+      reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
       elementOfCartesianProductFromCoordinates, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, firstElement,
-      zeroIsANaturalNumber, successorOfNaturalIsNatural, additionIsAssociative, additionIsCommutative),
+      zeroIsANaturalNumber, successorOfNaturalIsNatural, additionIsAssociative, additionIsCommutative, addingZeroIsSame, orderingIsTransitive) ++
+    Seq(InfixRelationShorthand),
     Nil)
 
   implicit class ParserOps[T](parser: Parser[T]) {

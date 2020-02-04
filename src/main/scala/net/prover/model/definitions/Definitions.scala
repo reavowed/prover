@@ -318,7 +318,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
         inference <- inferences
         Seq(firstPremise @ deduction(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq.unapplySeq(inference.premises).toSeq
         swapper <- Seq(Swapper.DontSwap, Swapper.Swap)
-        (premiseName, conclusionName) = swapper.swap(a, b)
+        (premiseName, conclusionName) = swapper.swapSourceAndResult(a, b)
         if inference.requiredSubstitutions.terms.isEmpty && inference.requiredSubstitutions.hasNoApplications
         if otherPremise.requiredSubstitutions.statements.contains((premiseName, 0)) && inference.conclusion.requiredSubstitutions.statements.contains((conclusionName, 0))
         if otherPremise.applySubstitutions(Substitutions(otherPremise.requiredSubstitutions.statements.map { case (n, a) => n -> (a, StatementVariable(if (n == premiseName) conclusionName else n))}.toMap)).contains(inference.conclusion)

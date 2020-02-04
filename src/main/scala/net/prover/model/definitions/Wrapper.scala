@@ -12,15 +12,13 @@ class Wrapper[TInput, TOutput](f: (TInput, SubstitutionContext) => TOutput) {
 trait WrapperIdentity[T, S] {
   def isIdentity(wrapper: Wrapper[T, S], substitutionContext: SubstitutionContext): Boolean
 }
-trait LowPriorityWrapperIdentity {
-  implicit def notIdentity[T, S]: WrapperIdentity[T, S] = (_, _) => false
-}
-object WrapperIdentity extends LowPriorityWrapperIdentity {
+object WrapperIdentity {
   implicit def termIdentity: WrapperIdentity[Term, Term] = (wrapper, context) => wrapper(TermVariable("_"))(context) == TermVariable("_")
   implicit def statementIdentity: WrapperIdentity[Statement, Statement] = (wrapper, context) => wrapper(StatementVariable("_"))(context) == StatementVariable("_")
+  def none[T, S]: WrapperIdentity[T, S] = (wrapper, _) => false
 }
 
-object Wrapper extends LowPriorityWrapperIdentity {
+object Wrapper {
   def identity[T]: Wrapper[T, T] = new Wrapper((t, _) => t)
   def fromExpression[T <: Expression with TypedExpression[T]](expression: T): Wrapper[Term, T] = {
     new Wrapper((t, context) => expression.specify(Seq(t))(context).get)
