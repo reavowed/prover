@@ -9,11 +9,30 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
+import scala.collection.{SeqLike, SortedSet, TraversableLike}
 import scala.util.Try
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
 class StepSuggestionController @Autowired() (val bookService: BookService) extends BookModification with InferenceSearch {
+
+  val NumberOfSuggestionsToReturn = 10
+
+  case class InferenceWithMaximumPossibleComplexity(inference: Inference, maximumPossibleComplexity: Int)
+  case class PossibleInferenceWithMaximumMatchingComplexity(possibleInference: PossibleInference, maximumMatchingComplexity: Int, minimumExtractionDepth: Int)
+  object +: {
+    def unapply[T,Coll <: TraversableLike[T, Coll]](
+      t: Coll with TraversableLike[T, Coll]): Option[(T, Coll)] =
+      if(t.isEmpty) None
+      else Some(t.head -> t.tail)
+  }
+  object Empty {
+    def unapply[T,Coll <: TraversableLike[T, Coll]](
+      t: Coll with TraversableLike[T, Coll]): Option[Unit] =
+      if (t.isEmpty) Some(())
+      else None
+  }
+
   @GetMapping(value = Array("/suggestInferences"), produces = Array("application/json;charset=UTF-8"))
   def suggestInferences(
     @PathVariable("bookKey") bookKey: String,
@@ -27,22 +46,53 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
       implicit val spc = stepProvingContext
-      def findPossibleInference(inference: Inference): Option[PossibleInference] = {
+
+      def findPossibleInference(inferenceWithComplexity: InferenceWithMaximumPossibleComplexity): Option[PossibleInferenceWithMaximumMatchingComplexity] = {
+        import inferenceWithComplexity._
         val possibleConclusions = SubstatementExtractor.getExtractionOptions(inference)
           .mapCollect(PossibleConclusion.fromExtractionOptionWithTarget(_, step.statement, inference.premises))
         if (possibleConclusions.nonEmpty)
-          Some(PossibleInference(inference.summary, possibleConclusions))
+          Some(PossibleInferenceWithMaximumMatchingComplexity(
+            PossibleInference(inference.summary, possibleConclusions),
+            possibleConclusions.map(_.conclusion.structuralComplexity).max,
+            possibleConclusions.map(_.extractionInferenceIds.length).min))
         else
           None
       }
 
-      filterInferences(stepProvingContext.provingContext.entryContext.inferences, searchText)
-        .sortBy(_.conclusion.structuralComplexity)(implicitly[Ordering[Int]].reverse)
-        .iterator
-        .mapCollect(findPossibleInference)
-        .matchingFirst(_.possibleConclusions.exists(!_.conclusion.isInstanceOf[StatementVariable]))
-        .take(10)
-        .toSeq
+      @scala.annotation.tailrec
+      def recursivelyFindInferences(
+        matchingInferences: Seq[InferenceWithMaximumPossibleComplexity],
+        matchedInferences: Seq[PossibleInference],
+        queuedInferences: SortedSet[PossibleInferenceWithMaximumMatchingComplexity]
+      ): Seq[PossibleInference] = {
+        if (matchedInferences.size >= NumberOfSuggestionsToReturn) { // We've already found the required number of matches
+          matchedInferences
+        } else (matchingInferences, queuedInferences) match {
+          case (matchHead +: _, queueHead +: queueTail) if queueHead.maximumMatchingComplexity >= matchHead.maximumPossibleComplexity =>
+            recursivelyFindInferences(matchingInferences, matchedInferences :+ queueHead.possibleInference, queueTail)
+          case (matchHead +: matchTail, _) =>
+            findPossibleInference(matchHead) match {
+              case Some(possibleInferenceWithComplexity) =>
+                recursivelyFindInferences(matchTail, matchedInferences, queuedInferences + possibleInferenceWithComplexity)
+              case None =>
+                recursivelyFindInferences(matchTail, matchedInferences, queuedInferences)
+            }
+          case (Empty(_), _) =>
+            matchedInferences ++ queuedInferences.take(NumberOfSuggestionsToReturn - matchedInferences.length).map(_.possibleInference)
+        }
+      }
+
+      val matchingInferences = filterInferences(stepProvingContext.provingContext.entryContext.inferences, searchText)
+        .map(i => InferenceWithMaximumPossibleComplexity(i, i.conclusion.structuralComplexity))
+        .sortBy(_.maximumPossibleComplexity)(Ordering[Int].reverse)
+
+      recursivelyFindInferences(
+        matchingInferences,
+        Nil,
+        SortedSet.empty(Ordering.by[PossibleInferenceWithMaximumMatchingComplexity, (Int, Int)](
+          x => (x.maximumMatchingComplexity, x.minimumExtractionDepth)
+        ).reverse))
     }).toResponseEntity
   }
 

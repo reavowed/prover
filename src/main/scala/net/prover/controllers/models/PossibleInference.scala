@@ -5,9 +5,18 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.StepProvingContext
 import net.prover.model.proof.SubstatementExtractor.{ExtractionOption, ExtractionResult}
 
-case class PossibleInference(
-  inference: Inference.Summary,
-  possibleConclusions: Seq[PossibleConclusion])
+case class PossibleInference(inference: Inference.Summary, possibleConclusions: Seq[PossibleConclusion]) {
+  def canEqual(other: Any): Boolean = other.isInstanceOf[PossibleInference]
+  override def equals(other: Any): Boolean = other match {
+    case that: PossibleInference =>
+      (that canEqual this) &&
+        inference == that.inference
+    case _ => false
+  }
+  override def hashCode(): Int = {
+    inference.hashCode
+  }
+}
 
 case class PossibleConclusion(
   conclusion: Statement,
