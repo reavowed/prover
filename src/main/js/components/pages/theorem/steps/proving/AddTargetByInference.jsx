@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React, {useContext} from "react";
 import ProofContext from "../../ProofContext";
 import {InferenceFinder} from "./components/InferenceFinder";
@@ -6,24 +5,10 @@ import {InferenceFinder} from "./components/InferenceFinder";
 export default function AddTargetByInference({path, onCancel, onError}) {
   const context = useContext(ProofContext);
   const getInferenceSuggestions = (searchText) => {
-    return context.fetchJsonForStep(path, `suggestInferencesForPremise?searchText=${searchText}`);
-  };
-  const getSubstitutionSuggestions = (inferenceId, selectedPremises) => {
-    return context.fetchJsonForStep(
-      path,
-      `suggestSubstitutions`,
-      {
-        method: "POST",
-        body: {
-          inferenceId,
-          serializedPremises: _.mapValues(selectedPremises, p => p.serialize()),
-          withConclusion: false
-        }
-      }
-    );
+    return context.fetchJsonForStep(path, `possibleInferencesForNewTarget?searchText=${searchText}`);
   };
   const proveWithInference = (possibleInference, possibleConclusion, substitutions) => {
-    return context.fetchJsonForStepAndUpdateTheorem(path, "assertion", {
+    return context.fetchJsonForStepAndUpdateTheorem(path, "newTarget", {
       method: "POST",
       body: {
         inferenceId: possibleInference.inference.id,
@@ -36,7 +21,6 @@ export default function AddTargetByInference({path, onCancel, onError}) {
   };
   return <InferenceFinder title='Select Inference for New Target'
                           getInferenceSuggestions={getInferenceSuggestions}
-                          getSubstitutionSuggestions={getSubstitutionSuggestions}
                           submit={proveWithInference}
                           autofocus/>
 }

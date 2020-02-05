@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import styled from "styled-components";
 import {matchTemplate} from "../../../../../models/Expression";
 import EntryContext from "../../../../EntryContext";
+import AddTargetByPremise from "./AddTargetByPremise";
 import AddTargetManually from "./AddTargetManually";
 import AddTransitiveTarget from "./AddTransitiveTarget";
 import ApplyTransitivePremiseFromLeft from "./ApplyTransitivePremiseFromLeft";
@@ -110,12 +111,16 @@ export default function ProvingCard({step, path, availablePremises, chained}) {
           element: AddTargetByInference
         },
         {
-          label: "Manually",
-          element: AddTargetManually
+          label: "By premise",
+          element: AddTargetByPremise
         },
         {
           label: "By rewriting equality",
           element: AddTargetByRewritingEquality
+        },
+        {
+          label: "Manually",
+          element: AddTargetManually
         }
       ]
     },
