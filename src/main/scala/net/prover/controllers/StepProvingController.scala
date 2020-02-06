@@ -63,8 +63,12 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
 
   val NumberOfSuggestionsToReturn = 10
 
-  case class InferenceWithMaximumPossibleComplexity(inference: Inference, maximumPossibleComplexity: Int)
-  case class PossibleInferenceWithMaximumMatchingComplexity(possibleInference: PossibleInference, maximumMatchingComplexity: Int, minimumExtractionDepth: Int)
+  case class InferenceWithMaximumPossibleComplexity(inference: Inference, maximumPossibleComplexity: Int, index: Int)
+  case class PossibleInferenceWithMaximumMatchingComplexity(possibleInference: PossibleInference, maximumMatchingComplexity: Int, minimumExtractionDepth: Int, index: Int)
+  object PossibleInferenceWithMaximumMatchingComplexity {
+    implicit val ordering: Ordering[PossibleInferenceWithMaximumMatchingComplexity] = Ordering.by((i: PossibleInferenceWithMaximumMatchingComplexity) => (i.maximumMatchingComplexity, i.minimumExtractionDepth, i.index)).reverse
+  }
+
   object +: {
     def unapply[T,Coll <: TraversableLike[T, Coll]](
       t: Coll with TraversableLike[T, Coll]): Option[(T, Coll)] =
@@ -100,7 +104,8 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
           Some(PossibleInferenceWithMaximumMatchingComplexity(
             PossibleInference(inference.summary, possibleConclusions),
             possibleConclusions.map(_.conclusion.structuralComplexity).max,
-            possibleConclusions.map(_.extractionInferenceIds.length).min))
+            possibleConclusions.map(_.extractionInferenceIds.length).min,
+            index))
         else
           None
       }
@@ -129,15 +134,13 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       }
 
       val matchingInferences = filterInferences(stepProvingContext.provingContext.entryContext.inferences, searchText)
-        .map(i => InferenceWithMaximumPossibleComplexity(i, i.conclusion.structuralComplexity))
+        .mapWithIndex((i, index) => InferenceWithMaximumPossibleComplexity(i, i.conclusion.structuralComplexity, index))
         .sortBy(_.maximumPossibleComplexity)(Ordering[Int].reverse)
 
       recursivelyFindInferences(
         matchingInferences,
         Nil,
-        SortedSet.empty(Ordering.by[PossibleInferenceWithMaximumMatchingComplexity, (Int, Int)](
-          x => (x.maximumMatchingComplexity, x.minimumExtractionDepth)
-        ).reverse))
+        SortedSet.empty)
     }).toResponseEntity
   }
 
