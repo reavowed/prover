@@ -231,7 +231,7 @@ export default class ConclusionChooser extends React.Component {
             <option value="" />
             {possibleConclusions.map(({conclusion}, index) =>
               <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(
-                  <ExpressionComponent expression={conclusion} boundVariableLists={[]} entryContext={entryContext}/>
+                  <ExpressionComponent expression={conclusion} boundVariableLists={boundVariableListsForPremises} entryContext={entryContext}/>
                 )}}/>
             )}
           </Form.Control>
