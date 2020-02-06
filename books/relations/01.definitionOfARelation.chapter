@@ -256,3 +256,25 @@ conclusion ∧ relation S A completeRelation S A
   }
   prove ∧ relation S A completeRelation S A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation S A, completeRelation S A) () 0 1
 }
+
+theorem Asymmetric Relation Is Irreflexive
+premise ∧ relation ~ A asymmetricRelation ~ A
+conclusion irreflexiveRelation ~ A
+{
+  take a {
+    assume ∈ $0 A {
+      assume ∈ orderedPair $0 $0 ~ {
+        elided f2b5332e6fcb25bc466d15f27e25b5f29d17bc1f7dd5eca57631c85ed3e5fea3 {
+          prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ¬ ∈ orderedPair $0 $$0 ~ f2b5332e6fcb25bc466d15f27e25b5f29d17bc1f7dd5eca57631c85ed3e5fea3 () (~, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          prove → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ¬ ∈ orderedPair $0 $$0 ~ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ b → ∈ $0 A → ∈ orderedPair $$$0 $0 ~ ¬ ∈ orderedPair $0 $$$0 ~) ($0) 0.0.0.0.0
+          prove ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ¬ ∈ orderedPair $0 $$0 ~ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ¬ ∈ orderedPair $0 $$0 ~) () 0.0.0.0.1 0.0a
+          prove → ∈ $0 A → ∈ orderedPair $0 $0 ~ ¬ ∈ orderedPair $0 $0 ~ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A → ∈ orderedPair $0 $$0 ~ ¬ ∈ orderedPair $$0 $0 ~) ($0) 0.0.0.0.2
+          prove → ∈ orderedPair $0 $0 ~ ¬ ∈ orderedPair $0 $0 ~ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, → ∈ orderedPair $0 $0 ~ ¬ ∈ orderedPair $0 $0 ~) () 0.0.0.0.3 0.0a
+          prove ¬ ∈ orderedPair $0 $0 ~ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $0 $0 ~, ¬ ∈ orderedPair $0 $0 ~) () 0.0.0.0.4 0.0.0a
+        }
+      }
+      prove ¬ ∈ orderedPair $0 $0 ~ 988830ddcfefb79db242457e8906b5f1fbb998c834a6847e70db5cc0b7479d28 (∈ orderedPair $0 $0 ~) () 0.0.0
+    }
+  }
+  prove irreflexiveRelation ~ A 0fbd588b10f1780da6cc5ebafea4732c0f65b6ec66e920472ed0c164b32a9eb1 () (A, ~) 0
+}

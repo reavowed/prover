@@ -105,7 +105,7 @@ conclusion φ
   prove φ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (φ, ψ) () 0 p1
 }
 
-theorem Disjunction of Two Falsehoods Is False
+theorem Combine Negated Disjunction
 premise ¬ φ
 premise ¬ ψ
 conclusion ¬ ∨ φ ψ

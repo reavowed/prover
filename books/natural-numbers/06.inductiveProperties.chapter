@@ -20,6 +20,59 @@ conclusion ∀ n → ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor 
   prove ∀ n → ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0 00f138cbcce0cb146f44a952b3739fb77d56c39ebf7169232706dec6bbde05ec (∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) () 1 2
 }
 
+theorem Proof by Induction on Property for Non-Zero Numbers
+premise with (1) φ
+premise ∀ n → ∈ $0 ℕ → ¬ = $0 0 → with ($0) φ with (successor $0) φ
+conclusion ∀ n → ∈ $0 ℕ → ¬ = $0 0 with ($0) φ
+{
+  elided 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca {
+    elided 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca {
+      prove = 1 successor 0 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca () ()
+      prove = 1 successor 0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (1, successor 0, $0) 0.0.0
+    }
+    prove with (successor 0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (with ($0) φ) (1, successor 0) 0.0 p0
+  }
+  take n {
+    assume ∈ $0 ℕ {
+      assume with (successor $0) φ {
+        prove ¬ = successor $0 0 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () ($0)
+        elided (Extracted) {
+          prove ∈ successor $0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($0) 1.0a
+          elided (Extracted) {
+            prove → ∈ successor $0 ℕ → ¬ = successor $0 0 → with (successor $0) φ with (successor successor $0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 ℕ → ¬ = $$0 0 → with ($$0) φ with (successor $$0) φ) (successor $0) p1
+            prove → ¬ = successor $0 0 → with (successor $0) φ with (successor successor $0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor $0 ℕ, → ¬ = successor $0 0 → with (successor $0) φ with (successor successor $0) φ) () 1.0.0.1.1.0 1.0.0.1.0
+            prove → with (successor $0) φ with (successor successor $0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ = successor $0 0, → with (successor $0) φ with (successor successor $0) φ) () 1.0.0.1.1.1 1.0.0.0
+            prove with (successor successor $0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with (successor $0) φ, with (successor successor $0) φ) () 1.0.0.1.1.2 1.0.0a
+          }
+        }
+      }
+    }
+  }
+  prove ∀ n → ∈ $0 ℕ with (successor $0) φ 00f138cbcce0cb146f44a952b3739fb77d56c39ebf7169232706dec6bbde05ec (with (successor $0) φ) () 0 1
+  take n {
+    assume ∈ $0 ℕ {
+      assume ¬ = $0 0 {
+        elided 817914d173acc04a5310d4256154e04b82441c976d615cbe5121e434c75957cb {
+          prove ∀ n → ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0 817914d173acc04a5310d4256154e04b82441c976d615cbe5121e434c75957cb () ()
+          prove → ∈ $0 ℕ ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 ℕ ∨ = $$0 0 ∃ m ∧ ∈ $0 ℕ = $$$0 successor $0) ($0) 3.0.0.0.0
+          prove ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∨ = $0 0 ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) () 3.0.0.0.1 3.0a
+          prove ∃ m ∧ ∈ $0 ℕ = $$0 successor $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (= $0 0, ∃ m ∧ ∈ $0 ℕ = $$0 successor $0) () 3.0.0.0.2 3.0.0a
+        }
+        let m ∧ ∈ $0 ℕ = $$0 successor $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 ℕ = $0 successor $$0, with ($0) φ) () {
+          elided (Extracted) {
+            prove → ∈ $0 ℕ with (successor $0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ℕ with (successor $$$0) φ) ($0) 2
+            prove with (successor $0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, with (successor $0) φ) () 3.0.0.1.0.0 3.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+          }
+          elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+            prove = successor $0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$0, successor $0) 3.0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove with ($$0) φ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (with ($$$0) φ) (successor $0, $$0) 3.0.0.1.1.0 3.0.0.1.0
+          }
+        } 3.0.0.0
+      }
+    }
+  }
+}
+
 theorem Every Element of a Natural Number Is a Natural Number
 premise ∈ n ℕ
 premise ∈ m n
