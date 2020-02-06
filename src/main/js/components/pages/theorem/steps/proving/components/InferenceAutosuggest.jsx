@@ -25,6 +25,8 @@ export default class InferenceAutosuggest extends React.Component {
     this.autoSuggestRef = React.createRef();
     this.state = {
       autosuggestValue: "",
+      valueCurrentlyBeingFetched: null,
+      lastFetchResult: null,
       suggestions: []
     }
   }
@@ -38,12 +40,21 @@ export default class InferenceAutosuggest extends React.Component {
     this.setState({autosuggestValue: newValue});
   };
   onSuggestionsFetchRequested = ({value}) => {
-    this.props.fetchSuggestions(value)
-      .then(suggestions => {
-        if (this.state.autosuggestValue === value) {
-          this.setState({suggestions})
-        }
-      });
+    if (this.state.lastFetchResult && this.state.lastFetchResult.value === value) {
+      this.setState({suggestions: this.state.lastFetchResult.suggestions})
+    } else if (value !== this.state.valueCurrentlyBeingFetched) {
+      this.setStatePromise({valueCurrentlyBeingFetched: value})
+        .then(() => this.props.fetchSuggestions(value))
+        .then(suggestions => {
+          if (this.state.autosuggestValue === value) {
+            this.setState({
+              suggestions,
+              valueCurrentlyBeingFetched: null,
+              lastFetchResult: {value, suggestions}
+            })
+          }
+        });
+    }
   };
   onSuggestionsClearRequested = () => {
     this.setState({suggestions: []});
