@@ -9,7 +9,7 @@ trait Expression extends TypedExpression[Expression]
 trait TypedExpression[+ExpressionType <: Expression] {
   def structuralComplexity: Int
   def definitionalComplexity: Int
-  def complexity: (Int, Int) = (structuralComplexity, definitionalComplexity)
+  lazy val complexity: (Int, Int) = (structuralComplexity, definitionalComplexity)
   def definitionUsages: DefinitionUsages
   def referencedDefinitions: Set[ExpressionDefinition] = definitionUsages.map.keySet
 
