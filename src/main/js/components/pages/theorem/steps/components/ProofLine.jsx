@@ -80,7 +80,7 @@ const ProofLine = styled(class ProofLine extends React.Component {
     const {className, children, tooltip, path, buttons} = this.props;
 
     const subProofNamingModal = <BoundVariableModal show={this.state.shouldShowSubproofNameModal}
-                                                    onHide={() => this.hideSubproofNameModal}
+                                                    onHide={this.hideSubproofNameModal}
                                                     title="Choose sub-proof name"
                                                     value={this.state.subproofName}
                                                     onChange={e => this.setState({subproofName: e.target.value})}
