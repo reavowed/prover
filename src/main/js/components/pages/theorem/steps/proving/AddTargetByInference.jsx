@@ -5,7 +5,7 @@ import {InferenceFinder} from "./components/InferenceFinder";
 export default function AddTargetByInference({path, onCancel, onError}) {
   const context = useContext(ProofContext);
   const getInferenceSuggestions = (searchText) => {
-    return context.fetchJsonForStep(path, `possibleInferencesForNewTarget?searchText=${searchText}`);
+    return context.fetchJsonForStep(path, `possibleInferencesForNewTarget?searchText=${encodeURIComponent(searchText)}`);
   };
   const proveWithInference = (possibleInference, possibleConclusion, substitutions) => {
     return context.fetchJsonForStepAndUpdateTheorem(path, "newTarget", {

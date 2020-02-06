@@ -5,7 +5,7 @@ import {InferenceFinder} from "./components/InferenceFinder";
 export default function ProveTransitiveFromLeft({path, onError}) {
   const context = useContext(ProofContext);
   const getInferenceSuggestions = (searchText) => {
-    return context.fetchJsonForStep(path, `suggestInferencesForTransitivityFromLeft?searchText=${searchText}`);
+    return context.fetchJsonForStep(path, `suggestInferencesForTransitivityFromLeft?searchText=${encodeURIComponent(searchText)}`);
   };
   const submit = (possibleInference, possibleConclusion, substitutions) => {
     return context.fetchJsonForStepAndUpdateTheorem(path, "transitivityFromLeft", {

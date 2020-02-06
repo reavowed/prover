@@ -8,7 +8,7 @@ import ProveByPremise from "./components/ProveByPremise";
 export default function AddTargetByPremise(props) {
   const context = useContext(ProofContext);
   const fetchPossibleConclusions = (statement) => {
-    return context.fetchJsonForStep(props.path, `possibleConclusionsForNewTargetByPremise?serializedPremiseStatement=${statement.serialize()}`);
+    return context.fetchJsonForStep(props.path, `possibleConclusionsForNewTargetByPremise?serializedPremiseStatement=${encodeURIComponent(statement.serialize())}`);
   };
   const submit = (statement, substitutions, extractionInferenceIds) => {
     return context.fetchJsonForStepAndUpdateTheorem(props.path, "newTarget", {

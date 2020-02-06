@@ -38,7 +38,7 @@ export default class IntroduceName extends React.Component {
   };
 
   getInferenceSuggestions = (searchText) => {
-    return this.context.fetchJsonForStep(this.props.path, `suggestNamingInferences?searchText=${searchText}`);
+    return this.context.fetchJsonForStep(this.props.path, `suggestNamingInferences?searchText=${encodeURIComponent(searchText)}`);
   };
   submit = (possibleInference, possibleConclusion, substitutions) => {
     const {namingVariableName: variableName} = this.state;

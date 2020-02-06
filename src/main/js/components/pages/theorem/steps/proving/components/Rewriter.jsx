@@ -2,7 +2,6 @@ import _ from "lodash";
 import React from "react";
 import {Button} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import {Parser} from "../../../../../../Parser";
 import {CopiableExpression} from "../../../../../ExpressionComponent";
 import InferenceAutosuggest from "./InferenceAutosuggest";
 import SuggestionDropdownElement from "./SuggestionDropdownElement";
