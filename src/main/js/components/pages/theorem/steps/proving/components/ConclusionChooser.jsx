@@ -66,9 +66,7 @@ export default class ConclusionChooser extends React.Component {
     const conclusionToSelect = (possibleConclusions.length > 0 && _.every(possibleConclusions.slice(1), c => _.startsWith(c.extractionInferenceIds, possibleConclusions[0].extractionInferenceIds))) ?
       possibleConclusions[0] :
       _.find(possibleConclusions, c => c.conclusion.serialize() === defaultConclusionStatement.serialize());
-    if (conclusionToSelect) {
-      this.setSelectedConclusion(conclusionToSelect);
-    }
+    this.setSelectedConclusion(conclusionToSelect);
   }
 
   setSelectedConclusion = (selectedConclusion) => {
@@ -80,7 +78,7 @@ export default class ConclusionChooser extends React.Component {
         this.submitWithSelectedValues(selectedConclusion, selectedPremises, selectedSubstitutionValues)
       }
     } else {
-      this.setState({selectedConclusion: null})
+      this.setState({selectedConclusion: null, selectedPremises: [], selectedSubstitutionValues: {}})
     }
   };
 
