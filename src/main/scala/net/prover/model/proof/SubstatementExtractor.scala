@@ -45,6 +45,7 @@ object SubstatementExtractor {
       extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions).toSeq
       innerOption <- recurse(extractedConclusion, variableTracker)
       newPremiseOption <- otherPremiseOption.map(_.applySubstitutions(extractionSubstitutions)).swap.toSeq
+      if !newPremiseOption.contains(innerOption.extractionResult) // Filter out spurious extractions
     } yield innerOption.copy(premises = newPremiseOption.toSeq ++ innerOption.premises, inferences = inference +: innerOption.inferences)
   }
 
@@ -133,7 +134,7 @@ object SubstatementExtractor {
 
   def getExtractionOptions(inference: Inference)(implicit provingContext: ProvingContext): Seq[ExtractionOption] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
-    getExtractionOptions(inference.conclusion, VariableTracker.fromInference(inference))
+    getExtractionOptions(inference.conclusion, VariableTracker.fromInference(inference)).filter(extractionOption => !inference.premises.contains(extractionOption.extractionResult))
   }
 
   def getExtractionOptions(premise: Statement)(implicit stepProvingContext: StepProvingContext): Seq[ExtractionOption] = {
