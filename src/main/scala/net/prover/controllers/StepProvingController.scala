@@ -2,13 +2,14 @@ package net.prover.controllers
 
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models.{PathData, PossibleConclusion, PossibleInference, StepDefinition}
-import net.prover.model.{Inference, ProvingContext}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, ProofHelper, Step, StepContext, StepProvingContext, SubstatementExtractor}
+import net.prover.model.proof._
+import net.prover.model.{Inference, ProvingContext}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.{GetMapping, PathVariable, PostMapping, PutMapping, RequestBody, RequestMapping, RequestParam, RestController}
+import org.springframework.web.bind.annotation._
 
+import scala.Ordering.Implicits._
 import scala.collection.{SortedSet, TraversableLike}
 import scala.util.{Success, Try}
 
@@ -66,7 +67,9 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
   case class InferenceWithMaximumPossibleComplexity(inference: Inference, maximumPossibleComplexity: Int, index: Int)
   case class PossibleInferenceWithMaximumMatchingComplexity(possibleInference: PossibleInference, maximumMatchingComplexity: Int, minimumExtractionDepth: Int, index: Int)
   object PossibleInferenceWithMaximumMatchingComplexity {
-    implicit val ordering: Ordering[PossibleInferenceWithMaximumMatchingComplexity] = Ordering.by((i: PossibleInferenceWithMaximumMatchingComplexity) => (i.maximumMatchingComplexity, i.minimumExtractionDepth, i.index)).reverse
+    implicit val ordering: Ordering[PossibleInferenceWithMaximumMatchingComplexity] = Ordering.by(
+      (i: PossibleInferenceWithMaximumMatchingComplexity) => (i.maximumMatchingComplexity, i.minimumExtractionDepth, i.index))(
+      Ordering.Tuple3(Ordering.Int.reverse, Ordering.Int, Ordering.Int))
   }
 
   object +: {
@@ -113,14 +116,14 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       @scala.annotation.tailrec
       def recursivelyFindInferences(
         matchingInferences: Seq[InferenceWithMaximumPossibleComplexity],
-        matchedInferences: Seq[PossibleInference],
+        matchedInferences: Seq[PossibleInferenceWithMaximumMatchingComplexity],
         queuedInferences: SortedSet[PossibleInferenceWithMaximumMatchingComplexity]
       ): Seq[PossibleInference] = {
         if (matchedInferences.size >= NumberOfSuggestionsToReturn) { // We've already found the required number of matches
-          matchedInferences
+          matchedInferences.map(_.possibleInference)
         } else (matchingInferences, queuedInferences) match {
-          case (matchHead +: _, queueHead +: queueTail) if queueHead.maximumMatchingComplexity >= matchHead.maximumPossibleComplexity =>
-            recursivelyFindInferences(matchingInferences, matchedInferences :+ queueHead.possibleInference, queueTail)
+          case (matchHead +: _, queueHead +: queueTail) if queueHead.maximumMatchingComplexity > matchHead.maximumPossibleComplexity =>
+            recursivelyFindInferences(matchingInferences, matchedInferences :+ queueHead, queueTail)
           case (matchHead +: matchTail, _) =>
             findPossibleInference(matchHead) match {
               case Some(possibleInferenceWithComplexity) =>
@@ -129,7 +132,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
                 recursivelyFindInferences(matchTail, matchedInferences, queuedInferences)
             }
           case (Empty(_), _) =>
-            matchedInferences ++ queuedInferences.take(NumberOfSuggestionsToReturn - matchedInferences.length).map(_.possibleInference)
+            (matchedInferences ++ queuedInferences.take(NumberOfSuggestionsToReturn - matchedInferences.length)).map(_.possibleInference)
         }
       }
 

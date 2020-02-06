@@ -17,8 +17,8 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   def getMatch(other: Expression): Option[Seq[Expression]]
   def update(newArguments: Seq[Term]): ExpressionType
 
-  override def structuralComplexity: Int = arguments.map(_.structuralComplexity).sum + 1
-  override def definitionalComplexity: Int = arguments.map(_.definitionalComplexity).sum + 1
+  override def structuralComplexity: Int = arguments.map(_.structuralComplexity).sum
+  override def definitionalComplexity: Int = arguments.map(_.definitionalComplexity).sum
 
   override def definitionUsages: DefinitionUsages = arguments.map(_.definitionUsages).foldTogether
   override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {
