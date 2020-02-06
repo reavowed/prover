@@ -43,7 +43,7 @@ export class Parser {
         if (_.includes(expressionDefinition.attributes, "conjunction")) {
           const [firstComponentJson, secondComponentJson] = componentsJson;
           const firstComponent = this.parseExpression(firstComponentJson);
-          if (firstComponent instanceof TypeExpression && _.isArray(secondComponentJson) && secondComponentJson.length > 0 && _.includes(firstComponent.definition.properties, secondComponentJson[0])) {
+          if (firstComponent instanceof TypeExpression && _.isArray(secondComponentJson) && secondComponentJson.length > 0 && _.includes(_.keys(firstComponent.definition.properties), secondComponentJson[0])) {
             const [propertyName, termJson, ...otherComponentsJson] = secondComponentJson;
             const property = firstComponent.definition.properties[propertyName];
             const term = this.parseExpression(termJson);
