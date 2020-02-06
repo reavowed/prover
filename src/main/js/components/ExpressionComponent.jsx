@@ -110,6 +110,10 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
                                                     actionHighlights={typeActionHighlights}
                                                     staticHighlights={typeStaticHighlights}
                                                     entryContext={entryContext} />;
+      const formattedName = <ExpressionComponent expression={{textForHtml: () => expression.definition.name}}
+                                                 actionHighlights={typeActionHighlights}
+                                                 staticHighlights={typeStaticHighlights}
+                                                 entryContext={entryContext} />;
       const formattedComponents = <ExpressionComponent expression={{formatForHtml: () => expression.definition.componentFormatString, components: expression.otherComponents}}
                                                        actionHighlights={typeActionHighlights}
                                                        staticHighlights={typeStaticHighlights}
@@ -124,7 +128,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         else
           return [<>, </>, formattedProperty];
       });
-      return [formattedTerm, <> </>, formattedIs, <> </>, formattedArticle, <> </>, ...formattedProperties, <> {expression.definition.name} </>, formattedComponents];
+      return [formattedTerm, <> </>, formattedIs, <> </>, formattedArticle, <> </>, ...formattedProperties, <> </>, formattedName, <> </>,, formattedComponents];
     } else if (expression instanceof PropertyExpression) {
       const formattedTerm = <ExpressionComponent expression={expression.term} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false} entryContext={entryContext}/>;
       return [formattedTerm, <> is </>, expression.name];
