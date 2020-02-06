@@ -183,7 +183,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   def getStatementDefinitionSimplifications(statementDefinition: StatementDefinition): Seq[(Inference, Statement, Expression)] = {
     statementDefinitionSimplifications.getOrElse(statementDefinition, Nil)
   }
-  lazy val statementDefinitionDeconstructions: Map[StatementDefinition, Inference] = {
+  lazy val statementDefinitionDeconstructions: Seq[Inference] = {
     replace(definitions.statementDefinitionDeconstructions)
   }
   lazy val structuralSimplificationInferences: Seq[(Inference, Statement)] = {

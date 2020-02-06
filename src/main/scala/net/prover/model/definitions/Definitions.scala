@@ -272,25 +272,28 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     }
     helper(inferenceEntries, Map.empty)
   }
-  lazy val statementDefinitionDeconstructions: Map[StatementDefinition, Inference] = {
-    implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
+
+  lazy val statementDefinitionDeconstructions: Seq[Inference] = {
     @scala.annotation.tailrec
-    def helper(
-      remainingInferences: Seq[Inference],
-      acc: Map[StatementDefinition, Inference]
-    ): Map[StatementDefinition, Inference] = {
-      remainingInferences match {
-        case Nil =>
-          acc
-        case inference +: tailInferences =>
-          val updated = (for {
-            (_, premises, DefinedStatement(components, definition)) <- Inference.unapply(inference)
-            if components.map(_.asOptionalInstanceOf[StatementVariable]).traverseOption.contains(premises)
-          } yield acc.updated(definition, inference)).getOrElse(acc)
-          helper(tailInferences, updated)
+    def isBinaryDefinitionWithinUnaryDefinition(firstPremise: Statement, secondPremise: Statement, conclusion: Statement): Boolean = {
+      (firstPremise, secondPremise, conclusion) match {
+        case (StatementVariable(v1, Nil), StatementVariable(v2, Nil), DefinedStatement(Seq(StatementVariable(v3, Nil), StatementVariable(v4, Nil)), _))
+          if (v1 == v3) && (v2 == v4)
+        =>
+          true
+        case (DefinedStatement(Seq(innerFirstPremise: Statement), firstDefinition), DefinedStatement(Seq(innerSecondPremise: Statement), secondDefinition), DefinedStatement(Seq(innerConclusion: Statement), conclusionDefinition))
+          if (firstDefinition == conclusionDefinition && secondDefinition == conclusionDefinition)
+        =>
+          isBinaryDefinitionWithinUnaryDefinition(innerFirstPremise, innerSecondPremise, innerConclusion)
+        case _ =>
+          false
       }
     }
-    helper(inferenceEntries, Map.empty)
+
+    inferenceEntries.collect {
+      case inference @ Inference(_, Seq(firstPremise, secondPremise), conclusion) if isBinaryDefinitionWithinUnaryDefinition(firstPremise, secondPremise, conclusion) =>
+        inference
+    }
   }
   lazy val structuralSimplificationInferences: Seq[(Inference, Statement)] = {
     inferenceEntries.collect {

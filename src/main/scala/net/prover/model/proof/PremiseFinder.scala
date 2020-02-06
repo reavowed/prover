@@ -231,16 +231,15 @@ object PremiseFinder {
     implicit stepProvingContext: StepProvingContext
   ): (Seq[Statement], Seq[Step.Assertion]) = {
     import stepProvingContext._
-    def byDeconstructing = for {
-      statementDefinition <- statement.asOptionalInstanceOf[DefinedStatement].map(_.definition)
-      deconstructionInference <- provingContext.statementDefinitionDeconstructions.get(statementDefinition)
+    def byDeconstructing = (for {
+      deconstructionInference <- provingContext.statementDefinitionDeconstructions
       substitutions <- deconstructionInference.conclusion.calculateSubstitutions(statement).flatMap(_.confirmTotality)
       premises <- deconstructionInference.premises.map(_.applySubstitutions(substitutions)).traverseOption
       premiseStatementsAndSteps = premises.map(deconstructStatement)
       premiseDeconstructedStatements = premiseStatementsAndSteps.flatMap(_._1)
       premiseDeconstructionSteps = premiseStatementsAndSteps.flatMap(_._2)
       step = Step.Assertion(statement, deconstructionInference.summary, premises.map(Premise.Pending), substitutions)
-    } yield (premiseDeconstructedStatements, premiseDeconstructionSteps :+ step)
+    } yield (premiseDeconstructedStatements, premiseDeconstructionSteps :+ step)).headOption
 
     byDeconstructing.getOrElse((Seq(statement), Nil))
   }
