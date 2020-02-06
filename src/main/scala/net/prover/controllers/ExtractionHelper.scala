@@ -37,17 +37,14 @@ object ExtractionHelper {
     currentStatement: Statement,
     inference: Inference)(
     implicit stepProvingContext: StepProvingContext
-  ): Try[(Statement, Option[Step.Assertion], Seq[Step.Assertion], Seq[Step.Target])] = {
+  ): Try[(Statement, Step.Assertion, Seq[Step.Assertion], Seq[Step.Target])] = {
     for {
       (extractionPremise, otherPremises) <- +:.unapply(inference.premises).filter(_._1.requiredSubstitutions.contains(inference.requiredSubstitutions)).orBadRequest(s"Inference ${inference.id} did not have an extraction premise")
       extractionSubstitutions <- extractionPremise.calculateSubstitutions(currentStatement).flatMap(_.confirmTotality).orBadRequest(s"Could not apply extraction premise for inference ${inference.id}")
       extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions).orBadRequest(s"Could not get extraction conclusion for inference ${inference.id}")
       substitutedPremises <- otherPremises.map(_.applySubstitutions(extractionSubstitutions).orBadRequest(s"Could not apply substitutions to premise")).traverseTry
       (premiseSteps, targetSteps) = PremiseFinder.findPremiseStepsOrTargets(substitutedPremises)
-      assertionStep = if (stepProvingContext.provingContext.structuralSimplificationInferences.exists(_._1 == inference))
-        None
-      else
-        Some(Step.Assertion(extractedConclusion, inference.summary, (currentStatement +: substitutedPremises).map(Premise.Pending), extractionSubstitutions))
+      assertionStep = Step.Assertion(extractedConclusion, inference.summary, (currentStatement +: substitutedPremises).map(Premise.Pending), extractionSubstitutions)
     } yield (extractedConclusion, assertionStep, premiseSteps, targetSteps)
   }
   private def applyExtractions(currentStatement: Statement, inferencesRemaining: Seq[Inference], applicationSoFar: ExtractionApplication, substitutions: Substitutions, variableTracker: VariableTracker)(implicit stepProvingContext: StepProvingContext): Try[(Statement, ExtractionApplication)] = {
@@ -60,8 +57,8 @@ object ExtractionHelper {
                 applyExtractions(assertion.statement, tailInferences, applicationSoFar.addExtractionStep(assertion), substitutions, newVariableTracker)
               }
           } getOrElse applySimpleExtraction(currentStatement, inference)
-          .flatMap { case (result, assertionOption, premiseSteps, targetSteps) =>
-            applyExtractions(result, tailInferences, assertionOption.map(applicationSoFar.addExtractionStep).getOrElse(applicationSoFar).addPremiseSteps(premiseSteps).addTargetSteps(targetSteps), substitutions, variableTracker)(
+          .flatMap { case (result, assertion, premiseSteps, targetSteps) =>
+            applyExtractions(result, tailInferences, applicationSoFar.addExtractionStep(assertion).addPremiseSteps(premiseSteps).addTargetSteps(targetSteps), substitutions, variableTracker)(
               stepProvingContext = stepProvingContext.copy(stepContext = stepProvingContext.stepContext.addSteps(premiseSteps))
             )
           }
@@ -69,10 +66,28 @@ object ExtractionHelper {
         Success((currentStatement, applicationSoFar))
     }
   }
+  private def removeStructuralSimplifications(
+    extractionApplication: ExtractionApplication)(
+    implicit stepProvingContext: StepProvingContext
+  ): ExtractionApplication = {
+    def isStructuralSimplification(inference: Inference): Boolean = stepProvingContext.provingContext.structuralSimplificationInferences.exists(_._1 == inference)
+    @scala.annotation.tailrec
+    def helper(remainingAssertions: Seq[Step.Assertion], filteredAssertions: Seq[Step.Assertion]): Seq[Step.Assertion] = {
+      remainingAssertions match {
+        case head +: tail if isStructuralSimplification(head.inference) && tail.exists(a => !isStructuralSimplification(a.inference)) =>
+          helper(tail, filteredAssertions)
+        case head +: tail =>
+          helper(tail, filteredAssertions :+ head)
+        case Nil =>
+          filteredAssertions
+      }
+    }
+    extractionApplication.copy(extractionSteps = helper(extractionApplication.extractionSteps, Nil))
+  }
   def applyExtractions(statement: Statement, extractionInferences: Seq[Inference], baseInference: Inference, substitutions: Substitutions)(implicit stepProvingContext: StepProvingContext): Try[(Statement, ExtractionApplication)] = {
-    applyExtractions(statement, extractionInferences, ExtractionApplication(Nil, Nil, Nil), substitutions, VariableTracker.fromInference(baseInference))
+    applyExtractions(statement, extractionInferences, ExtractionApplication(Nil, Nil, Nil), substitutions, VariableTracker.fromInference(baseInference)).map(_.mapRight(removeStructuralSimplifications))
   }
   def applyExtractions(premise: Premise, extractionInferences: Seq[Inference], substitutions: Substitutions)(implicit stepProvingContext: StepProvingContext): Try[(Statement, ExtractionApplication)] = {
-    applyExtractions(premise.statement, extractionInferences, ExtractionApplication(Nil, Nil, Nil), substitutions, VariableTracker.fromStepContext)
+    applyExtractions(premise.statement, extractionInferences, ExtractionApplication(Nil, Nil, Nil), substitutions, VariableTracker.fromStepContext).map(_.mapRight(removeStructuralSimplifications))
   }
 }

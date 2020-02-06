@@ -276,11 +276,15 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val specification = Axiom("Specification", Seq(ForAll("x")(φ(FunctionParameter(0, 0)))), φ(a))
   val modusPonens = Axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
   val modusTollens = Axiom("Modus Tollens", Seq(Implication(φ, ψ), Negation(ψ)), Negation(φ))
+
   val addDoubleNegation = Axiom("Add Double Negation", Seq(φ), Negation(Negation(φ)))
   val removeDoubleNegation = Axiom("Remove Double Negation", Seq(Negation(Negation(φ))), φ)
+
+  val extractRightConjunct = Axiom("Extract Right Conjunct", Seq(Conjunction(φ, ψ)), ψ)
+  val combineConjunction = Axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
+
   val equivalenceIsTransitive = Axiom("Equivalence Is Transitive", Seq(Equivalence(φ, ψ), Equivalence(ψ, χ)), Equivalence(φ, χ))
   val reverseImplicationFromEquivalence = Axiom("Reverse Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(ψ, φ))
-  val combineConjunction = Axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
 
   val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
   val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
@@ -315,7 +319,10 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second,
       ZeroDefinition, NaturalsDefinition, Successor, AdditionDefinition, Apply, LessThanDefinition) ++
     Seq(
-      specification, modusPonens, modusTollens, addDoubleNegation, removeDoubleNegation, equivalenceIsTransitive, reverseImplicationFromEquivalence, combineConjunction,
+      specification, modusPonens, modusTollens,
+      addDoubleNegation, removeDoubleNegation,
+      extractRightConjunct, combineConjunction,
+      equivalenceIsTransitive, reverseImplicationFromEquivalence,
       reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
       elementOfCartesianProductFromCoordinates, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, firstElement,
       zeroIsANaturalNumber, successorOfNaturalIsNatural, additionIsAssociative, additionIsCommutative, addingZeroIsSame, orderingIsTransitive) ++
