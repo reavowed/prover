@@ -47,8 +47,8 @@ trait ChainingStepEditing extends BookModification {
       for {
         (chainingJoiner, chainingStep) <- ChainingMethods.getTransitivityStep(precedingLhs, lhs, rhs, precedingJoiner, joiner)
       } yield {
-        if (lhs == rhs && joiner == chainingJoiner)
-          (joiner, step.toSeq)
+        if (lhs == rhs && chainingJoiner == precedingJoiner)
+          (joiner, Nil)
         else
           (chainingJoiner, step.toSeq :+ chainingStep)
       }
