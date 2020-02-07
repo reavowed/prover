@@ -86,7 +86,7 @@ trait ChainingStepEditing extends BookModification {
       case Nil =>
         Failure(NotFoundException(s"Step $stepPath"))
       case init :+ last =>
-        bookService.modifySteps(bookKey, chapterKey, theoremKey, proofIndex, init) { (steps, outerStepProvingContext) =>
+        bookService.replaceSteps(bookKey, chapterKey, theoremKey, proofIndex, init) { (steps, outerStepProvingContext) =>
           steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
             val outerStepContext = outerStepProvingContext.stepContext
             implicit val stepContext = outerStepContext.addSteps(before).atIndex(last)

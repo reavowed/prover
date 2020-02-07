@@ -43,13 +43,13 @@ export default class Proof extends React.Component {
           return theoremContext.fetchJson(path.join("proofs", index.toString(), subpath), options)
         },
         fetchJsonAndUpdateTheorem(subpath, options) {
-          return this.fetchJson(subpath, options).then(this.updateTheorem);
+          return this.fetchJson(subpath, options).then(stepJson => theoremContext.updateStep(index, stepJson));
         },
         fetchJsonForStep(stepPath, subpath, options) {
           return this.fetchJson(path.join(stepPath.join("."), subpath), options)
         },
         fetchJsonForStepAndUpdateTheorem(stepPath, subpath, options) {
-          return this.fetchJsonForStep(stepPath, subpath, options).then(this.updateTheorem);
+          return this.fetchJsonForStep(stepPath, subpath, options).then(stepJson => theoremContext.updateStep(index, stepJson));
         },
         updateTheorem: theoremContext.updateTheorem,
         setHighlighting(newHighlightedPremises, newHighlightedConclusion) {

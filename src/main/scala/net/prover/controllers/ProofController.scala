@@ -65,7 +65,7 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
     }
     val (sharedPath, sourcePathInner, destinationPathInner) = commonPrefix(sourcePath, destinationPath)
     (for {
-      result <- bookService.modifySteps(bookKey, chapterKey, theoremKey, proofIndex, sharedPath) { (sharedParentSteps, sharedContext) =>
+      result <- bookService.replaceSteps(bookKey, chapterKey, theoremKey, proofIndex, sharedPath) { (sharedParentSteps, sharedContext) =>
         for {
           (substepsWithoutCurrent, (currentSteps, currentStepOuterContext)) <-
             Proof.modifySteps[WithValue[(Seq[Step], StepContext)]#Type](sharedParentSteps, sourcePathInner, sharedContext.stepContext) { (currentSteps, currentStepOuterContext) =>

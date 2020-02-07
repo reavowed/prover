@@ -68,6 +68,15 @@ export class Theorem extends React.Component {
           }, () => resolve());
         })
       },
+      updateStep(proofIndex, {path: stepPath, step: stepJson, newInferences: newInferencesFromStep}) {
+        return new Promise((resolve) => {
+          const newInferences = {...inferences, ...newInferencesFromStep};
+          self.setState({
+            theorem: self.state.theorem.updateStep(proofIndex, stepPath, parser.parseStep(stepJson, newInferences)),
+            inferences: newInferences
+          }, () => resolve());
+        })
+      },
       setHighlighting(newHighlightedPremises, newHighlightedConclusion, proofIndex) {
         if (!highlighting.isActionInUse) {
           self.setState({highlighting: {

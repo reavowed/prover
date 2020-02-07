@@ -43,7 +43,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
 
   def createService = {
     val service = mock[BookService]
-    service.modifySteps(any, any, any, any, any)(any) returns Success(null)
+    service.replaceSteps(any, any, any, any, any)(any) returns Success(null)
     service
   }
 
@@ -54,7 +54,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     existingSteps: Seq[Step],
     expectedSteps: Seq[Step]
   ) = {
-    there was one(service).modifySteps(eq(bookKey), eq(chapterKey), eq(theoremKey), eq(proofIndex), eq(outerStepPath))(modifyStepsCallback(existingSteps, expectedSteps))
+    there was one(service).replaceSteps(eq(bookKey), eq(chapterKey), eq(theoremKey), eq(proofIndex), eq(outerStepPath))(modifyStepsCallback(existingSteps, expectedSteps))
   }
 
   def modifyStepsCallback(existingSteps: Seq[Step], expectedSteps: Seq[Step]): (Seq[Step], StepProvingContext) => Try[Seq[Step]] = {

@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{InferenceSummary, PathData, TheoremUpdateProps}
+import net.prover.controllers.models.{InferenceSummary, PathData, StepUpdateProps, TheoremUpdateProps}
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
@@ -110,41 +110,33 @@ class BookService @Autowired() (bookRepository: BookRepository) {
     }).map(_._2)
   }
 
-  def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[TheoremUpdateProps] = {
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-      theorem.modifyStep[Try](proofIndex, stepPath) { (step, stepContext) =>
-        for {
-          typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
-          newStep <- f(typedStep, StepProvingContext(stepContext, provingContext))
-        } yield newStep
-      }.orNotFound(s"Step $stepPath").flatten
+  def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[StepUpdateProps] = {
+    replaceStep[TStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) => f(step, stepProvingContext).map(Seq(_)) }.map { case StepUpdateProps(_, step, newInferences) =>
+      StepUpdateProps(stepPath, step.asInstanceOf[Step.WithSubsteps].substeps(stepPath.last), newInferences)
     }
   }
 
-  def modifySteps(bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[Seq[Step]]): Try[TheoremUpdateProps] = {
+  def replaceSteps(bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[Seq[Step]]): Try[StepUpdateProps] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-      theorem.modifySteps[Try](proofIndex, stepPath) { (steps, stepContext) =>
+      theorem.replaceSteps[Try](proofIndex, stepPath) { (steps, stepContext) =>
         Some(f(steps, StepProvingContext(stepContext, provingContext)))
       }.orNotFound(s"Step $stepPath").flatten
+    }.map { theoremUpdateProps =>
+      StepUpdateProps(stepPath, theoremUpdateProps.theorem.findStep(proofIndex, stepPath).get._1, theoremUpdateProps.newInferences)
     }
   }
 
-  def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[TheoremUpdateProps] = {
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-      (stepPath.indexes match {
-        case init :+ last =>
-          theorem.modifySteps[Try](proofIndex, init) { (steps, stepContext) =>
-            steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
-              for {
-                typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
-                replacementSteps <- f(typedStep, StepProvingContext(stepContext.addSteps(before).atIndex(last), provingContext))
-              } yield before ++ replacementSteps ++ after
-            }
-          }
-        case _ =>
-          None
-      }).orNotFound(s"Step $stepPath").flatten
-    }
+  def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[StepUpdateProps] = {
+    stepPath.initAndLastOption.map { case (init, last) =>
+      replaceSteps(bookKey, chapterKey, theoremKey, proofIndex, init) { (steps, stepProvingContext) =>
+        steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+          for {
+            typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
+            replacementSteps <- f(typedStep, StepProvingContext(stepProvingContext.stepContext.addSteps(before).atIndex(last), stepProvingContext.provingContext))
+          } yield before ++ replacementSteps ++ after
+        }.orNotFound(s"Step $stepPath").flatten
+      }
+    }.orNotFound(s"Step $stepPath").flatten
   }
 }
 

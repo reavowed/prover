@@ -38,11 +38,11 @@ case class Theorem(
   def findStep(proofIndex: Int, stepIndexes: Seq[Int]): Option[(Step, StepContext)] = {
     proofs.lift(proofIndex).flatMap(_.findStep(stepIndexes, initialStepContext))
   }
-  def modifySteps[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int])(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Theorem]] = {
+  def replaceSteps[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int])(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Theorem]] = {
     modifyProof(proofIndex, _.modifySteps(stepIndexes, initialStepContext, f))
   }
-  def modifyStep[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int])(f: (Step, StepContext) => F[Step]): Option[F[Theorem]] = {
-    modifyProof(proofIndex, _.modifyStep(stepIndexes, initialStepContext, f))
+  def replaceStep[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int])(f: (Step, StepContext) => F[Seq[Step]]): Option[F[Theorem]] = {
+    modifyProof(proofIndex, _.replaceStep(stepIndexes, initialStepContext, f))
   }
   def recalculateReferences(provingContext: ProvingContext): Theorem = {
     copy(proofs = proofs.map(_.recalculateReferences(initialStepContext, provingContext)))
@@ -109,14 +109,14 @@ object Theorem extends Inference.EntryParser {
     def modifySteps[F[_] : Functor](indexes: Seq[Int], initialStepContext: StepContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Proof]] = {
       Proof.modifySteps(steps, indexes, initialStepContext)(f).map(_.map(Proof(_)))
     }
-    def modifyStep[F[_] : Functor](indexes: Seq[Int], initialStepContext: StepContext, f: (Step, StepContext) => F[Step]): Option[F[Proof]] = {
+    def replaceStep[F[_] : Functor](indexes: Seq[Int], initialStepContext: StepContext, f: (Step, StepContext) => F[Seq[Step]]): Option[F[Proof]] = {
       indexes match {
         case Nil =>
           None
         case init :+ last =>
           modifySteps(init, initialStepContext, (steps, context) => steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
-            f(step, context.atIndex(last)).map { updatedStep =>
-              (before :+ updatedStep) ++ after
+            f(step, context.atIndex(last)).map { updatedSteps =>
+              before ++ updatedSteps ++ after
             }
           })
       }

@@ -17,6 +17,7 @@ import {
   SubproofStep,
   TargetStep
 } from "./models/Step";
+import {Theorem} from "./models/Theorem";
 
 function serializeReference(reference) {
   if (!reference) return "???";
@@ -86,65 +87,66 @@ export class Parser {
     const summary = inferenceSummaries[inference.id];
     return {...inference, ...summary};
   };
+
+  parseStep = (stepJson, inferenceSummaries) => {
+    switch (stepJson.type) {
+      case "assertion":
+        return new AssertionStep(
+          this.parseExpression(stepJson.statement),
+          stepJson.premises.map(this.parsePremise),
+          this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
+          stepJson.referencedLines.map(this.parseReference));
+      case "deduction":
+        return new DeductionStep(
+          this.parseExpression(stepJson.assumption),
+          this.parseSteps(stepJson.substeps, inferenceSummaries),
+          stepJson.provenStatement && this.parseExpression(stepJson.provenStatement));
+      case "scopedVariable":
+        return new ScopedVariableStep(
+          stepJson.variableName,
+          this.parseSteps(stepJson.substeps, inferenceSummaries),
+          stepJson.provenStatement && this.parseExpression(stepJson.provenStatement));
+      case "naming":
+        return new NamingStep(
+          stepJson.variableName,
+          this.parseExpression(stepJson.assumption),
+          this.parseExpression(stepJson.provenStatement),
+          this.parseSteps(stepJson.substeps, inferenceSummaries),
+          this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
+          stepJson.referencedLines.map(this.parseReference),
+          stepJson.referencedLinesForExtraction.map(this.parseReference));
+      case "target":
+        return new TargetStep(this.parseExpression(stepJson.statement));
+      case "elided":
+        return new ElidedStep(
+          stepJson.provenStatement && this.parseExpression(stepJson.provenStatement),
+          this.parseSteps(stepJson.substeps, inferenceSummaries),
+          stepJson.highlightedInference && this.parseInferenceWithSummary(stepJson.highlightedInference, inferenceSummaries),
+          stepJson.description,
+          stepJson.referencedLines.map(this.parseReference));
+      case "subproof":
+        return new SubproofStep(
+          stepJson.name,
+          stepJson.provenStatement && this.parseExpression(stepJson.provenStatement),
+          this.parseSteps(stepJson.substeps, inferenceSummaries),
+          stepJson.referencedLines.map(this.parseReference));
+      default:
+        throw "Unrecognised step " + JSON.stringify(stepJson);
+    }
+  };
   
   parseSteps = (json, inferenceSummaries) => {
-    return json.map(stepJson => {
-      switch (stepJson.type) {
-        case "assertion":
-          return new AssertionStep(
-            this.parseExpression(stepJson.statement),
-            stepJson.premises.map(this.parsePremise),
-            this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
-            stepJson.referencedLines.map(this.parseReference));
-        case "deduction":
-          return new DeductionStep(
-            this.parseExpression(stepJson.assumption),
-            this.parseSteps(stepJson.substeps, inferenceSummaries),
-            stepJson.provenStatement && this.parseExpression(stepJson.provenStatement));
-        case "scopedVariable":
-          return new ScopedVariableStep(
-            stepJson.variableName,
-            this.parseSteps(stepJson.substeps, inferenceSummaries),
-            stepJson.provenStatement && this.parseExpression(stepJson.provenStatement));
-        case "naming":
-          return new NamingStep(
-            stepJson.variableName,
-            this.parseExpression(stepJson.assumption),
-            this.parseExpression(stepJson.provenStatement),
-            this.parseSteps(stepJson.substeps, inferenceSummaries),
-            this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
-            stepJson.referencedLines.map(this.parseReference),
-            stepJson.referencedLinesForExtraction.map(this.parseReference));
-        case "target":
-          return new TargetStep(this.parseExpression(stepJson.statement));
-        case "elided":
-          return new ElidedStep(
-            stepJson.provenStatement && this.parseExpression(stepJson.provenStatement),
-            this.parseSteps(stepJson.substeps, inferenceSummaries),
-            stepJson.highlightedInference && this.parseInferenceWithSummary(stepJson.highlightedInference, inferenceSummaries),
-            stepJson.description,
-            stepJson.referencedLines.map(this.parseReference));
-        case "subproof":
-          return new SubproofStep(
-            stepJson.name,
-            stepJson.provenStatement && this.parseExpression(stepJson.provenStatement),
-            this.parseSteps(stepJson.substeps, inferenceSummaries),
-            stepJson.referencedLines.map(this.parseReference));
-        default:
-          throw "Unrecognised step " + JSON.stringify(stepJson);
-      }
-    });
+    return json.map(stepJson => this.parseStep(stepJson, inferenceSummaries));
   };
 
   parseTheorem = (theoremJson, inferences) => {
-    return {
-      name: theoremJson.name,
-      id: theoremJson.id,
-      key: theoremJson.key,
-      premises: theoremJson.premises.map(this.parseExpression),
-      conclusion: this.parseExpression(theoremJson.conclusion),
-      proofs: theoremJson.proofs.map(proof => this.parseSteps(proof.steps, inferences))
-    };
+    return new Theorem(
+      theoremJson.name,
+      theoremJson.id,
+      theoremJson.key,
+      theoremJson.premises.map(this.parseExpression),
+      this.parseExpression(theoremJson.conclusion),
+      theoremJson.proofs.map(proof => this.parseSteps(proof.steps, inferences)));
   };
 
   parseInferenceSummary = (inference) => {

@@ -1,6 +1,7 @@
 import {Expression} from "./Expression";
 import * as _ from "lodash";
 import {sha256} from "js-sha256";
+import {mapAtIndex} from "./Helpers";
 
 export class PremiseReference {
     type = "premise";
@@ -24,47 +25,75 @@ export class StepReference {
 }
 export type Reference = PremiseReference | StepReference;
 
-export class AssertionStep {
+class StepWithoutSubsteps {
+    replaceStep(path: number[], newStep: Step): Step {
+        if (path.length == 0) {
+            return newStep;
+        }
+        throw "Cannot replace substep of step without substeps"
+    }
+}
+abstract class StepWithSubsteps {
+    constructor(public substeps: Step[]) {}
+    replaceStep(path: number[], newStep: Step): Step {
+        if (path.length == 0) {
+            return newStep;
+        }
+        return this.replaceSubsteps(mapAtIndex(this.substeps, path[0], step => step.replaceStep(path.slice(1), newStep)))
+    }
+    abstract replaceSubsteps(newSubsteps: Step[]): Step
+}
+
+export class AssertionStep extends StepWithoutSubsteps {
     type = "assertion";
-    constructor(public statement: Expression, public premises: any, public inference: any, public referencedLines: Reference[],) {}
+    constructor(public statement: Expression, public premises: any, public inference: any, public referencedLines: Reference[]) { super(); }
     isComplete: boolean = _.every(this.premises, "complete") && this.inference.isComplete;
     inferencesUsed: any[] = [this.inference];
     getAllSubsteps(): Step[] { return []; }
     provenStatement: Expression | null = this.statement;
-    id: String = sha256(this.type + " " + this.statement.serialize())
+    id: String = sha256(this.type + " " + this.statement.serialize());
 }
 
-export class DeductionStep {
+export class DeductionStep extends StepWithSubsteps {
     type = "deduction";
-    constructor(public assumption: Expression, public substeps: Step[], public provenStatement: Expression | null) {}
+    constructor(public assumption: Expression, substeps: Step[], public provenStatement: Expression | null) { super(substeps); }
     isComplete: boolean = _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     id: String = sha256([this.type + " " + this.assumption.serialize(), ..._.map(this.substeps, s => s.id)].join("\n"))
+    replaceSubsteps(newSubsteps: Step[]): Step {
+        return new DeductionStep(this.assumption, newSubsteps, this.provenStatement);
+    }
 }
 
-export class ScopedVariableStep {
+export class ScopedVariableStep extends StepWithSubsteps {
     type = "scopedVariable";
-    constructor(public variableName: String, public substeps: Step[], public provenStatement: Expression | null) {}
+    constructor(public variableName: String, substeps: Step[], public provenStatement: Expression | null) { super(substeps); }
     isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     id: String = sha256([this.type, ..._.map(this.substeps, s => s.id)].join("\n"))
+    replaceSubsteps(newSubsteps: Step[]): Step {
+        return new ScopedVariableStep(this.variableName, newSubsteps, this.provenStatement);
+    }
 }
 
-export class NamingStep {
+export class NamingStep extends StepWithSubsteps {
     type = "naming";
-    constructor(public variableName: String, public assumption: Expression, public statement: Expression, public substeps: Step[], public inference: any, public referencedLines: Reference[], public referencedLinesForExtraction: Reference[]) {}
+    constructor(public variableName: String, public assumption: Expression, public statement: Expression, substeps: Step[], public inference: any, public referencedLines: Reference[], public referencedLinesForExtraction: Reference[]) { super(substeps); }
     isComplete: boolean = _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = [..._.flatMap(this.substeps, s => s.inferencesUsed), this.inference];
     getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = this.statement;
     id: String = sha256([this.type + " " + this.assumption.serialize(), ..._.map(this.substeps, s => s.id)].join("\n"))
+    replaceSubsteps(newSubsteps: Step[]): Step {
+        return new NamingStep(this.variableName, this.assumption, this.statement, newSubsteps, this.inference, this.referencedLines, this.referencedLinesForExtraction);
+    }
 }
 
-export class ElidedStep {
+export class ElidedStep extends StepWithSubsteps {
     type = "elided";
-    constructor(public statement: Expression | void, public substeps: Step[], public highlightedInference: any, public description: string | null, public referencedLines: Reference[]) {}
+    constructor(public statement: Expression | void, substeps: Step[], public highlightedInference: any, public description: string | null, public referencedLines: Reference[]) { super(substeps); }
     isComplete: boolean = (this.highlightedInference || this.description) && _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
@@ -73,11 +102,14 @@ export class ElidedStep {
     filterReferences(path: number[]): Reference[] {
         return this.referencedLines.filter(r => ("stepPath" in r) ? !_.isEqual(path, _.take(r.stepPath, path.length)) : true)
     }
+    replaceSubsteps(newSubsteps: Step[]): Step {
+        return new ElidedStep(this.statement, newSubsteps, this.highlightedInference, this.description, this.referencedLines);
+    }
 }
 
-export class TargetStep {
+export class TargetStep extends StepWithoutSubsteps {
     type = "target";
-    constructor(public statement: Expression) {}
+    constructor(public statement: Expression) { super(); }
     isComplete: boolean = false;
     inferencesUsed: any[] = [];
     getAllSubsteps(): Step[] { return []; }
@@ -85,14 +117,17 @@ export class TargetStep {
     id: String = sha256(this.type + " " + this.statement.serialize())
 }
 
-export class SubproofStep {
+export class SubproofStep extends StepWithSubsteps {
     type = "subproof";
-    constructor(public name: String, public statement: Expression, public substeps: Step[], public referencedLines: Reference[]) {}
+    constructor(public name: String, public statement: Expression, substeps: Step[], public referencedLines: Reference[]) { super(substeps); }
     isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = this.statement;
     id: String = sha256(this.type + " " + this.name)
+    replaceSubsteps(newSubsteps: Step[]): Step {
+        return new SubproofStep(this.name, this.statement, newSubsteps, this.referencedLines);
+    }
 }
 
 export type Step = AssertionStep | DeductionStep | ScopedVariableStep | NamingStep | TargetStep | ElidedStep | SubproofStep;

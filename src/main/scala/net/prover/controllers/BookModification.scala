@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{LinkSummary, PathData, TheoremUpdateProps}
+import net.prover.controllers.models.{LinkSummary, PathData, StepUpdateProps, TheoremUpdateProps}
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
 import net.prover.model.definitions.{Equality, Transitivity}
@@ -60,10 +60,10 @@ trait BookModification {
     (existingStepsBeforeTransitive ++ newTargets ++ transitiveSteps ++ newAfter)
   }
 
-  protected def replaceStepAndAddBeforeTransitivity[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepProvingContext) => Try[(Step, Seq[Step])]): Try[TheoremUpdateProps] = {
+  protected def replaceStepAndAddBeforeTransitivity[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepProvingContext) => Try[(Step, Seq[Step])]): Try[StepUpdateProps] = {
     stepPath.indexes match {
       case init :+ last =>
-        bookService.modifySteps(bookKey, chapterKey, theoremKey, proofIndex, init) { case (steps, stepProvingContext) =>
+        bookService.replaceSteps(bookKey, chapterKey, theoremKey, proofIndex, init) { case (steps, stepProvingContext) =>
           import stepProvingContext._
           steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
             for {

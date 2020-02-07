@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.Ordering.Implicits._
 import scala.collection.{SortedSet, TraversableLike}
 import scala.util.{Success, Try}
 
