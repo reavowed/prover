@@ -73,12 +73,14 @@ export default class ConclusionChooser extends React.Component {
     if (selectedConclusion) {
       const selectedPremises = selectedConclusion.possiblePremises.map(p => ["", null]);
       const selectedSubstitutionValues = buildSubstitutionMap(selectedConclusion.requiredSubstitutions, () => "");
-      this.setState({selectedConclusion, selectedPremises, selectedSubstitutionValues});
+      this.setStatePromise({selectedConclusion, selectedPremises, selectedSubstitutionValues})
+        .then(() => this.ref.current.scrollIntoView());
       if (this.props.allowAutoSubmit && this.areSubstitutionValuesSufficient(selectedConclusion, selectedPremises, selectedSubstitutionValues)) {
         this.submitWithSelectedValues(selectedConclusion, selectedPremises, selectedSubstitutionValues)
       }
     } else {
-      this.setState({selectedConclusion: null, selectedPremises: [], selectedSubstitutionValues: {}})
+      this.setStatePromise({selectedConclusion: null, selectedPremises: [], selectedSubstitutionValues: {}})
+        .then(() => this.ref.current.scrollIntoView());
     }
   };
 
