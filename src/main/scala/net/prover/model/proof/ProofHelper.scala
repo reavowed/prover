@@ -50,7 +50,7 @@ object ProofHelper {
     inference: Inference,
     substitutions: Substitutions)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[(Step.Assertion, Seq[Step.Assertion], Seq[Step.Target])] = {
+  ): Option[(Step.Assertion, Seq[Step], Seq[Step.Target])] = {
     for {
       premiseStatements <- inference.substitutePremises(substitutions)
       conclusion <- inference.substituteConclusion(substitutions)

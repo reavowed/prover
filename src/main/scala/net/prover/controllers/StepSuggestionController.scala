@@ -54,7 +54,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
 
       def getPossibleInference(inference: Inference): Option[PossibleInference] = {
         val possibleConclusions = SubstatementExtractor.getExtractionOptions(inference)
-          .mapCollect(PossibleConclusion.fromExtractionOptionWithSubstitutions(_, getSubstitutions, inference.premises))
+          .mapCollect(PossibleConclusion.fromExtractionOptionWithSubstitutions(_, getSubstitutions))
         if (possibleConclusions.nonEmpty) {
           Some(PossibleInference(inference.summary, possibleConclusions))
         } else {

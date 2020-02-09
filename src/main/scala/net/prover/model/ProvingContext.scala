@@ -2,12 +2,13 @@ package net.prover.model
 
 import net.prover.model.definitions._
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
-import net.prover.model.expressions.{DefinedStatement, Expression, Statement, Term}
-import net.prover.model.proof.StepProvingContext
+import net.prover.model.expressions.{Expression, Statement, Term}
+import net.prover.model.proof.{StepProvingContext, SubstatementExtractor, SubstitutionContext}
 import net.prover.util.Swapper
 
-case class ProvingContext(entryContext: EntryContext, private val definitions: Definitions) {
+import scala.Ordering.Implicits._
 
+case class ProvingContext(entryContext: EntryContext, private val definitions: Definitions) {
   trait Allowable[-T] {
     def isAllowed(t: T): Boolean
   }
@@ -41,6 +42,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val alwaysAllowableOperator: Allowable[BinaryOperator] = alwaysAllowable
     implicit val allowableCommutativity: Allowable[Commutativity] = allowable(r => isAllowed(r.inference) && isAllowed(r.equality))
     implicit val allowableAssociativity: Allowable[Associativity] = allowable(r => isAllowed(r.inference) && isAllowed(r.equality))
+    implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationSimplificationInference] = allowable(r => isAllowed(r.inference))
 
     implicit val allowableEquality: Allowable[Equality] = allowable(e =>
       isAllowed(e.relation) &&
@@ -103,49 +105,52 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   def replace[T](t: T)(implicit replacable: Replacable[T]): T = replacable.replace(t)
 
   lazy val deductionDefinitionOption: Option[StatementDefinition] = replace(definitions.deductionDefinitionOption)
-  lazy val scopingDefinitionOption: Option[StatementDefinition] = replace(definitions.scopingDefinitionOption)
+  lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
+    replace(definitions.deductionEliminationInferenceOption)
+  }
 
-  def matchScopingStatement(statement: Statement): Option[(Statement, String, StatementDefinition)] = {
-    scopingDefinitionOption.flatMap { scopingDefinition =>
-      statement match {
-        case definedStatement @ DefinedStatement(Seq(substatement), `scopingDefinition`) =>
-          substatement.asOptionalInstanceOf[Statement].map((_, definedStatement.scopedBoundVariableNames.head, scopingDefinition))
-        case _ =>
-          None
-      }
-    }
+  lazy val scopingDefinitionOption: Option[StatementDefinition] = replace(definitions.scopingDefinitionOption)
+  lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
+    replace(definitions.specificationInferenceOption)
   }
-  def matchDeductionStatement(statement: Statement): Option[(Statement, Statement, StatementDefinition)] = {
-    deductionDefinitionOption.flatMap { deductionDefinition =>
-      statement match {
-        case DefinedStatement(Seq(antecedentExpression, consequentExpression), `deductionDefinition`) =>
-          for {
-            antecedent <- antecedentExpression.asOptionalInstanceOf[Statement]
-            consequent <- consequentExpression.asOptionalInstanceOf[Statement]
-          } yield (antecedent, consequent, deductionDefinition)
-        case _ =>
-          None
-      }
-    }
-  }
+
   lazy val definedBinaryStatements: Seq[BinaryJoiner[_ <: Expression]] = {
     Definitions.getDefinedBinaryStatements(
       entryContext.statementDefinitions,
       entryContext.displayShorthands,
       entryContext.termDefinitions)
   }
+  lazy val definedBinaryConnectives: Seq[BinaryConnective] = definedBinaryStatements.ofType[BinaryConnective]
+  lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryStatements.ofType[BinaryRelation]
 
   lazy val reversals: Seq[Reversal[_ <: Expression]] = replace(definitions.reversals)
   lazy val transitivities: Seq[Transitivity[_ <: Expression]] = replace(definitions.transitivities)
   lazy val expansions: Seq[Expansion[_ <: Expression]] = replace(definitions.expansions)
   lazy val substitutions: Seq[Substitution] = replace(definitions.substitutions)
 
+  lazy val equalityOption: Option[Equality] = {
+    replace(definitions.equalityOption)
+  }
+
   lazy val rearrangeableFunctions: Seq[(BinaryOperator, Commutativity, Associativity)] = {
     replace(definitions.rearrangeableFunctions)
   }
 
-  lazy val equalityOption: Option[Equality] = {
-    replace(definitions.equalityOption)
+  lazy val premiseRelationSimplificationInferences: Seq[PremiseRelationSimplificationInference] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      inference <- entryContext.inferences
+      if inference.premises.length <= 1
+      extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(this)
+      premise <- extractionOption.premises.single.toSeq
+      if premise.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
+      conclusionRelation <- definedBinaryRelations
+      (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
+      premiseRelation <- definedBinaryRelations
+      (premiseLhs, premiseRhs) <- premiseRelation.unapply(premise)
+      if conclusionLhs.complexity >= premiseLhs.complexity && conclusionLhs.definitionUsages.contains(premiseLhs.definitionUsages)
+      if premiseRhs.complexity > conclusionRhs.complexity && premiseRhs.definitionUsages.contains(conclusionRhs.definitionUsages)
+    } yield PremiseRelationSimplificationInference(inference, premise, extractionOption.conclusion, premiseRelation, extractionOption.extractionInferences)
   }
 
   lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = {
@@ -160,12 +165,6 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
 
   lazy val statementExtractionInferences: Seq[(Inference, Statement, Option[Statement])] = {
     replace(definitions.statementExtractionInferences)
-  }
-  lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
-    replace(definitions.deductionEliminationInferenceOption)
-  }
-  lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
-    replace(definitions.specificationInferenceOption)
   }
 
   lazy val termRewriteInferences: Seq[(Inference, Term, Term)] = {

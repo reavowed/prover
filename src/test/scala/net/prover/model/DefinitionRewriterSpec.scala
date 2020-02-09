@@ -12,7 +12,7 @@ class DefinitionRewriterSpec extends Specification {
 
     def testRewrite(source: Statement, target: Statement, depth: Int = 0): MatchResult[Any] = {
       implicit val stepContext = StepContext.withPremisesAndTerms(Seq(source), Nil).copy(boundVariableLists = (1 to depth).map(i => Seq(s"x_$i")))
-      DefinitionRewriter.rewriteDefinitions(source, target) must beSome(beStepThatMakesValidTheorem(Seq(source), depth))
+      DefinitionRewriter.rewriteDefinitions(source, target) must beSome(beStepThatMakesValidTheorem(Seq(source), target, depth))
     }
 
     "rewrite basic quantifier equivalence" in {

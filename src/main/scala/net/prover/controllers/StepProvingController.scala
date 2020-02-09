@@ -42,7 +42,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         substitutions <- definition.substitutions.parse()
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
         (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
-        (extractionResult, ExtractionApplication(extractionSteps, extractionPremises, extractionTargets)) <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions)
+        (extractionResult, ExtractionApplication(extractionSteps, extractionPremises, extractionTargets)) <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, PremiseFinder.findPremiseStepsOrTargets)
         extractionStep = Step.Elided.ifNecessary(mainAssertion +: extractionSteps, inference).get
         finalStep = Step.Elided.ifNecessary(mainPremises ++ extractionPremises :+ extractionStep, inference).get
       } yield (extractionResult, finalStep, mainTargets ++ extractionTargets)
@@ -53,7 +53,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         substitutions <- definition.substitutions.parse()
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
-        (extractionResult, ExtractionApplication(extractionSteps, extractionPremises, extractionTargets)) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions)
+        (extractionResult, ExtractionApplication(extractionSteps, extractionPremises, extractionTargets)) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, PremiseFinder.findPremiseStepsOrTargets)
         extractionStep = Step.Elided.ifNecessary(extractionSteps, "Extracted").get
         finalStep = Step.Elided.ifNecessary(extractionPremises :+ extractionStep, "Extracted").get
       } yield (extractionResult, finalStep, extractionTargets)
@@ -101,7 +101,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       def findPossibleInference(inferenceWithComplexity: InferenceWithMaximumPossibleComplexity): Option[PossibleInferenceWithMaximumMatchingComplexity] = {
         import inferenceWithComplexity._
         val possibleConclusions = SubstatementExtractor.getExtractionOptions(inference)
-          .mapCollect(PossibleConclusion.fromExtractionOptionWithTarget(_, step.statement, inference.premises))
+          .mapCollect(PossibleConclusion.fromExtractionOptionWithTarget(_, step.statement))
         if (possibleConclusions.nonEmpty)
           Some(PossibleInferenceWithMaximumMatchingComplexity(
             PossibleInference(inference.summary, possibleConclusions),
@@ -164,7 +164,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         .take(10)
         .map { inference =>
           val possibleConclusions = SubstatementExtractor.getExtractionOptions(inference)
-            .map(PossibleConclusion.fromExtractionOption(_, None, inference.premises))
+            .map(PossibleConclusion.fromExtractionOption(_, None))
           PossibleInference(inference.summary, possibleConclusions)
         }
     }).toResponseEntity
@@ -204,7 +204,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
     } yield {
       SubstatementExtractor.getExtractionOptions(premise.statement)(stepProvingContext)
-        .map(PossibleConclusion.fromExtractionOption(_, None, Nil)(stepProvingContext))
+        .map(PossibleConclusion.fromExtractionOption(_, None)(stepProvingContext))
     }).toResponseEntity
   }
 

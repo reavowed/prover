@@ -3,7 +3,7 @@ package net.prover.controllers.models
 import net.prover.model.{Inference, Substitutions}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.StepProvingContext
-import net.prover.model.proof.SubstatementExtractor.{ExtractionOption, ExtractionResult}
+import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 
 case class PossibleInference(inference: Inference.Summary, possibleConclusions: Seq[PossibleConclusion]) {
   def canEqual(other: Any): Boolean = other.isInstanceOf[PossibleInference]
@@ -26,21 +26,21 @@ case class PossibleConclusion(
   extractionInferenceIds: Seq[String])
 
 object PossibleConclusion {
-  def fromExtractionOptionWithTarget(extractionOption: ExtractionOption, target: Statement, additionalPremises: Seq[Statement] = Nil)(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusion] = {
-    fromExtractionOptionWithSubstitutions(extractionOption, _.calculateSubstitutions(target), additionalPremises)
+  def fromExtractionOptionWithTarget(extractionOption: ExtractionOption, target: Statement)(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusion] = {
+    fromExtractionOptionWithSubstitutions(extractionOption, _.calculateSubstitutions(target))
   }
-  def fromExtractionOptionWithSubstitutions(extractionOption: ExtractionOption, getSubstitutions: Statement => Option[Substitutions.Possible], additionalPremises: Seq[Statement] = Nil)(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusion] = {
-    getSubstitutions(extractionOption.extractionResult).map(s => fromExtractionOption(extractionOption, Some(s), additionalPremises))
+  def fromExtractionOptionWithSubstitutions(extractionOption: ExtractionOption, getSubstitutions: Statement => Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusion] = {
+    getSubstitutions(extractionOption.conclusion).map(s => fromExtractionOption(extractionOption, Some(s)))
   }
-  def fromExtractionOption(extractionOption: ExtractionOption, substitutions: Option[Substitutions.Possible], additionalPremises: Seq[Statement] = Nil)(implicit stepProvingContext: StepProvingContext): PossibleConclusion = {
-    val conclusion = extractionOption.extractionResult
-    val premises = additionalPremises ++ extractionOption.premises
+  def fromExtractionOption(extractionOption: ExtractionOption, substitutions: Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): PossibleConclusion = {
+    val premises = extractionOption.premises
+    val conclusion = extractionOption.conclusion
     PossibleConclusion(
       conclusion,
       PossiblePremise.fromAvailablePremises(premises, substitutions),
       substitutions.map(SuggestedSubstitutions(_)),
       (conclusion.requiredSubstitutions +: premises.map(_.requiredSubstitutions)).foldTogether,
-      extractionOption.inferences.map(_.id))
+      extractionOption.extractionInferences.map(_.id))
   }
 }
 

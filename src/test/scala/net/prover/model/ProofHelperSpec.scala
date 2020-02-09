@@ -18,7 +18,7 @@ class ProofHelperSpec extends Specification {
     def testRearranging(targetStatement: Statement, premises: Seq[Statement]) = {
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
       val step = rearrange(targetStatement, premises)
-      step must beSome(beStepThatMakesValidTheorem(premises))
+      step must beSome(beStepThatMakesValidTheorem(premises, targetStatement))
     }
 
     "rearrange with associativity and commutativity" in {
@@ -52,7 +52,7 @@ class ProofHelperSpec extends Specification {
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
 
       val stepOption = EqualityRewriter.rewrite(target)
-      stepOption must beSome(beStepThatMakesValidTheorem(premises))
+      stepOption must beSome(beStepThatMakesValidTheorem(premises, target))
 
       def checkSteps(steps: Seq[Step]): Result = {
         Result.foreach(steps) { step =>

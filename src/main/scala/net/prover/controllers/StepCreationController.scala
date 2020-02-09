@@ -57,7 +57,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         implicit stepProvingContext: StepProvingContext
       ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
         val (targetSource, targetResult) = swapper.swapSourceAndResult(targetLhs, targetRhs)
-        def getResult(applyExtractions: (Seq[Inference.Summary], Substitutions) => Try[(Statement, ExtractionApplication, Seq[Step.Assertion], Seq[Step.Assertion], Seq[Step.Target], Seq[Step] => Step.Elided)]) = {
+        def getResult(applyExtractions: (Seq[Inference.Summary], Substitutions) => Try[(Statement, ExtractionApplication, Seq[Step.Assertion], Seq[Step], Seq[Step.Target], Seq[Step] => Step.Elided)]) = {
           for {
             extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
             substitutions <- definition.substitutions.parse()
@@ -81,7 +81,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
             for {
               inference <- findInference(inferenceId)
               (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
-              (conclusion, extractionApplication) <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions)
+              (conclusion, extractionApplication) <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, PremiseFinder.findPremiseStepsOrTargets)
             } yield (conclusion, extractionApplication, Seq(mainAssertion), mainPremises, mainTargets, Step.Elided.forInference(inference))
           }
         }
@@ -90,7 +90,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
             for {
               premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
               premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
-              (conclusion, extractionApplication) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions)
+              (conclusion, extractionApplication) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, PremiseFinder.findPremiseStepsOrTargets)
             } yield (conclusion, extractionApplication, Nil, Nil, Nil, Step.Elided.forDescription("Extracted"))
           }
         }
@@ -226,12 +226,18 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
   ): ResponseEntity[_] = {
     bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
-        (substatement, variableName, scopingStatementDefinition) <- stepProvingContext.provingContext.matchScopingStatement(step.statement).orBadRequest("Target statement is not a scoped statement")
+        scopingDefinition <- stepProvingContext.provingContext.scopingDefinitionOption.orBadRequest("No scoping definition provided")
+        (substatement, variableName) <- (step.statement match {
+          case definedStatement @ DefinedStatement(Seq(substatement: Statement), `scopingDefinition`) =>
+            definedStatement.scopedBoundVariableNames.single.map(substatement -> _)
+          case _ =>
+            None
+        }).orBadRequest("Target statement is not a scoped statement")
       } yield {
         Step.ScopedVariable(
           variableName,
           Seq(Step.Target(substatement)),
-          scopingStatementDefinition)
+          scopingDefinition)
       }
     }.toResponseEntity
   }
@@ -246,12 +252,18 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
   ): ResponseEntity[_] = {
     bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
-        (antecedent, consequent, deductionStatementDefinition) <- stepProvingContext.provingContext.matchDeductionStatement(step.statement).orBadRequest("Target statement is not a deduction statement")
+        deductionDefinition <- stepProvingContext.provingContext.deductionDefinitionOption.orBadRequest("No scoping definition provided")
+        (antecedent, consequent) <- (step.statement match {
+          case definedStatement @ DefinedStatement(Seq(antecedent: Statement, consequent: Statement), `deductionDefinition`) =>
+            Some((antecedent, consequent))
+          case _ =>
+            None
+        }).orBadRequest("Target statement is not a deduction statement")
       } yield {
         Step.Deduction(
           antecedent,
           Seq(Step.Target(consequent)),
-          deductionStatementDefinition)
+          deductionDefinition)
       }
     }.toResponseEntity
   }

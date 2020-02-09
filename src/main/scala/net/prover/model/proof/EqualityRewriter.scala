@@ -94,8 +94,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         for {
           steps <- PremiseFinder.findPremiseSteps(equality(premiseTerm, targetTerm))
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
-          assertionInferences = steps.map(_.inference)
-          inference = if (assertionInferences.nonEmpty) assertionInferences.distinct.single else Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity)
+          inference = Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity)
         } yield Seq((RearrangementStep(wrapper(targetTerm), steps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
       }
       def findReverse = {
@@ -103,8 +102,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
           steps <- PremiseFinder.findPremiseSteps(equality(targetTerm, premiseTerm))
           reversalStep = equality.reversal.assertionStep(premiseTerm, targetTerm)
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
-          assertionInferences = steps.map(_.inference)
-          inference = if (assertionInferences.nonEmpty) assertionInferences.distinct.single else if (!wrapper.isIdentity) Some(equality.expansion.inference) else Some(equality.reversal.inference)
+          inference = Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity)
         } yield Seq((RearrangementStep(wrapper(targetTerm), (steps :+ reversalStep) ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
       }
       findExactly orElse findDirectly orElse findReverse

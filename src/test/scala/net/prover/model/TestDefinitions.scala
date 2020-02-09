@@ -32,9 +32,7 @@ trait VariableDefinitions {
   }
   implicit def placeholderToTermComponent(placeholder: TermVariablePlaceholder): TermComponent = TermComponent(placeholder.name, Nil)
 
-  case object $ {
-
-  }
+  case object $
   implicit def $ToFunctionParameter(x: $.type): FunctionParameter = FunctionParameter(0, 0)
 
   val a = TermVariablePlaceholder("a")
@@ -273,7 +271,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
 }
 
 trait InferenceDefinitions extends ExpressionDefinitions {
-  val specification = Axiom("Specification", Seq(ForAll("x")(φ(FunctionParameter(0, 0)))), φ(a))
+  val specification = Axiom("Specification", Seq(ForAll("x")(φ($))), φ(a))
   val modusPonens = Axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
   val modusTollens = Axiom("Modus Tollens", Seq(Implication(φ, ψ), Negation(ψ)), Negation(φ))
 
@@ -284,6 +282,7 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val combineConjunction = Axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
 
   val equivalenceIsTransitive = Axiom("Equivalence Is Transitive", Seq(Equivalence(φ, ψ), Equivalence(ψ, χ)), Equivalence(φ, χ))
+  val forwardImplicationFromEquivalence = Axiom("Forward Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(φ, ψ))
   val reverseImplicationFromEquivalence = Axiom("Reverse Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(ψ, φ))
 
   val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
@@ -292,6 +291,7 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val substitutionOfEqualsIntoFunction = Axiom("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
   val equivalenceOfSubstitutedEquals = Axiom("Equivalence of Substituted Equals", Seq(Equals(a, b)), Equivalence(φ(a), φ(b)))
 
+  val membershipConditionForSingleton = Axiom("Membership Condition for Singleton", Nil, ForAll("x")(Equivalence(ElementOf($, Singleton(a)), Equals($, a))))
   val elementOfCartesianProductFromCoordinates = Axiom("Element of Cartesian Product from Coordinates", Seq(ElementOf(a, Product(A, B))), Equals(a, Pair(First(a), Second(a))))
   val firstCoordinateOfElementOfCartesianProduct = Axiom("First Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(First(a), A))
   val secondCoordinateOfElementOfCartesianProduct = Axiom("Second Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(Second(a), B))
@@ -299,6 +299,7 @@ trait InferenceDefinitions extends ExpressionDefinitions {
 
   val zeroIsANaturalNumber = Axiom("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
   val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
+  val additionIsClosed = Axiom("Addition Is Associative", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(add(a, b), Naturals))
   val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
   val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
   val addingZeroIsSame = Axiom("Adding Zero Is Same", Nil, Equals(a, add(a, Zero)))
@@ -322,10 +323,10 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       specification, modusPonens, modusTollens,
       addDoubleNegation, removeDoubleNegation,
       extractRightConjunct, combineConjunction,
-      equivalenceIsTransitive, reverseImplicationFromEquivalence,
+      equivalenceIsTransitive, forwardImplicationFromEquivalence, reverseImplicationFromEquivalence,
       reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
-      elementOfCartesianProductFromCoordinates, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, firstElement,
-      zeroIsANaturalNumber, successorOfNaturalIsNatural, additionIsAssociative, additionIsCommutative, addingZeroIsSame, orderingIsTransitive) ++
+      membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, firstElement,
+      zeroIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, addingZeroIsSame, orderingIsTransitive) ++
     Seq(InfixRelationShorthand),
     Nil)
 
@@ -348,19 +349,23 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
     parsedTheorem.isComplete(new Definitions(entryContext.availableEntries)) must beTrue
   }
 
-  def beStepThatMakesValidTheorem(premises: Seq[Statement]): Matcher[Step] = {
-    beValidTheorem ^^ { step: Step =>
+  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement): Matcher[Seq[Step]] = {
+    beValidTheorem ^^ { steps: Seq[Step] =>
       Theorem(
         "Test Theorem",
         premises,
-        step.provenStatement.get,
-        Seq(Theorem.Proof(Seq(step))))
+        conclusion,
+        Seq(Theorem.Proof(steps)))
     }
   }
 
-  def beStepThatMakesValidTheorem(premises: Seq[Statement], depth: Int)(implicit stepContext: StepContext): Matcher[Step] = {
+  def beStepThatMakesValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int = 0)(implicit stepContext: StepContext): Matcher[Step] = {
+    beStepsThatMakeValidTheorem(premises, conclusion, depth) ^^ { step: Step => Seq(step) }
+  }
+
+  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit stepContext: StepContext): Matcher[Seq[Step]] = {
     if (depth == 0)
-      beStepThatMakesValidTheorem(premises)
+      beStepsThatMakeValidTheorem(premises, conclusion)
     else {
       def generalizeOnce(statement: Statement, i: Int): Statement = ForAll(s"x_$i")(statement)
       def generalizeToDepth(statement: Statement, parameterDepth: Int): Statement = (0 until parameterDepth).foldLeft(statement)(generalizeOnce)
@@ -371,9 +376,8 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
           Seq(Premise.Pending(generalizeOnce(statement, parameterDepth).insertExternalParameters(1))),
           Substitutions(statements = Map(φ -> (1, statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get)), terms = Map(a -> (0, FunctionParameter(0, 0)))))
       }
-
-      beStepThatMakesValidTheorem(premises.map(generalizeToDepth(_, depth))) ^^ { step: Step =>
-        (0 until depth).foldLeft(step) { case (step, i) => Step.ScopedVariable(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) :+ step, ForAllDefinition)}
+      beStepsThatMakeValidTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth)) ^^ { steps: Seq[Step] =>
+        (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.ScopedVariable(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, ForAllDefinition))}
       }
     }
   }

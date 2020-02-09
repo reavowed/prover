@@ -5,9 +5,7 @@ import net.prover.model.expressions._
 
 object SubstatementExtractor {
 
-  case class ExtractionOption(extractionResult: Statement, premises: Seq[Statement], inferences: Seq[Inference])
-
-  case class ExtractionResult(extractionSteps: Seq[Step], targetSteps: Seq[Step.Target], terms: Map[Int, Term])
+  case class ExtractionOption(conclusion: Statement, premises: Seq[Statement], extractionInferences: Seq[Inference])
 
   case class VariableTracker(namesUsedSoFar: Seq[String]) {
     def getAndAddUniqueVariableName(baseName: String): (String, VariableTracker) = {
@@ -45,8 +43,8 @@ object SubstatementExtractor {
       extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions).toSeq
       innerOption <- recurse(extractedConclusion, variableTracker)
       newPremiseOption <- otherPremiseOption.map(_.applySubstitutions(extractionSubstitutions)).swap.toSeq
-      if !newPremiseOption.contains(innerOption.extractionResult) // Filter out spurious extractions
-    } yield innerOption.copy(premises = newPremiseOption.toSeq ++ innerOption.premises, inferences = inference +: innerOption.inferences)
+      if !newPremiseOption.contains(innerOption.conclusion) // Filter out spurious extractions
+    } yield innerOption.copy(premises = newPremiseOption.toSeq ++ innerOption.premises, extractionInferences = inference +: innerOption.extractionInferences)
   }
 
   private def getStatementExtractionOptions(
@@ -77,7 +75,7 @@ object SubstatementExtractor {
       (newVariableName, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(boundVariableName)
       nextPremise <- extractionPredicate.specify(Seq(TermVariable(newVariableName))).toSeq
       innerOption <- recurse(nextPremise, newVariableTracker)
-    } yield innerOption.copy(inferences = inference +: innerOption.inferences)
+    } yield innerOption.copy(extractionInferences = inference +: innerOption.extractionInferences)
   }
 
   private def getDefinitionDeconstructionExtractionOptions(
@@ -99,7 +97,7 @@ object SubstatementExtractor {
       extractedSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality).toSeq
       deconstructedStatement <- deconstructionInference.conclusion.applySubstitutions(extractedSubstitutions).toSeq
       innerOption <- recurse(deconstructedStatement, variableTracker)
-    } yield innerOption.copy(inferences = deconstructionInference +: innerOption.inferences)
+    } yield innerOption.copy(extractionInferences = deconstructionInference +: innerOption.extractionInferences)
   }
 
   private def getFinalExtractionOptions(
@@ -134,7 +132,9 @@ object SubstatementExtractor {
 
   def getExtractionOptions(inference: Inference)(implicit provingContext: ProvingContext): Seq[ExtractionOption] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
-    getExtractionOptions(inference.conclusion, VariableTracker.fromInference(inference)).filter(extractionOption => !inference.premises.contains(extractionOption.extractionResult))
+    getExtractionOptions(inference.conclusion, VariableTracker.fromInference(inference))
+      .filter(extractionOption => !inference.premises.contains(extractionOption.conclusion))
+      .map(extractionOption => extractionOption.copy(premises = inference.premises ++ extractionOption.premises))
   }
 
   def getExtractionOptions(premise: Statement)(implicit stepProvingContext: StepProvingContext): Seq[ExtractionOption] = {

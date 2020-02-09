@@ -9,6 +9,7 @@ import net.prover.util.Swapper
 
 import scala.Ordering.Implicits._
 import scala.collection.mutable
+import scala.util.Try
 
 case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext.EntryTypes {
 
@@ -19,15 +20,30 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     completenessByInference.getOrElseUpdate(inference.id, inferences.find(_.id == inference.id).exists(_.isComplete(this)))
   }
 
-  lazy val equalityOption: Option[Equality] = {
-    for {
-      definition <- statementDefinitions.find(_.attributes.contains("equality"))
-      relation = BinaryRelation(definition.symbol, definition.defaultValue, definition.attributes)
-      expansion <- expansions.ofType[RelationExpansion].find(e => e.sourceJoiner == relation && e.resultJoiner == relation)
-      substitution <- substitutions.find(_.relation == relation)
-      reversal <- reversals.ofType[Reversal[Term]].find(_.relation == relation)
-      transitivity <- transitivities.ofType[Transitivity[Term]].find(_.statement == relation)
-    } yield Equality(relation, expansion, substitution, reversal, transitivity)
+  lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
+    deductionDefinitionOption.flatMap { deductionDefinition =>
+      inferenceEntries.iterator.collect {
+        case inference @ Inference(
+        _,
+        Seq(deductionPremise @ deductionDefinition(StatementVariable(antecedentName, Nil), StatementVariable(consequentName, Nil)), antecedentPremise @ StatementVariable(antecedentName2, Nil)),
+        StatementVariable(consequentName2, Nil)
+        ) if antecedentName == antecedentName2 && consequentName == consequentName2 =>
+          (inference, deductionPremise, antecedentPremise)
+      }.headOption
+    }
+  }
+
+  lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
+    scopingDefinitionOption.flatMap { scopingDefinition =>
+      inferenceEntries.iterator.collect {
+        case inference @ Inference(
+        _,
+        Seq(singlePremise @ scopingDefinition(StatementVariable(premisePredicateName, Seq(FunctionParameter(0, 0))))),
+        StatementVariable(conclusionPredicateName, Seq(TermVariable(variableName, Nil)))
+        ) if premisePredicateName == conclusionPredicateName =>
+          (inference, singlePremise, premisePredicateName, variableName)
+      }.headOption
+    }
   }
 
   lazy val definedBinaryStatements: Seq[BinaryJoiner[_ <: Expression]] = Definitions.getDefinedBinaryStatements(statementDefinitions, displayShorthands, termDefinitions)
@@ -111,6 +127,17 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     } yield Substitution(relation, inference.summary)
   }
 
+  lazy val equalityOption: Option[Equality] = {
+    for {
+      definition <- statementDefinitions.find(_.attributes.contains("equality"))
+      relation = BinaryRelation(definition.symbol, definition.defaultValue, definition.attributes)
+      expansion <- expansions.ofType[RelationExpansion].find(e => e.sourceJoiner == relation && e.resultJoiner == relation)
+      substitution <- substitutions.find(_.relation == relation)
+      reversal <- reversals.ofType[Reversal[Term]].find(_.relation == relation)
+      transitivity <- transitivities.ofType[Transitivity[Term]].find(_.statement == relation)
+    } yield Equality(relation, expansion, substitution, reversal, transitivity)
+  }
+
   lazy val rearrangeableFunctions: Seq[(BinaryOperator, Commutativity, Associativity)] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
@@ -165,6 +192,17 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       false
   }
 
+  lazy val rewriteInferences: Seq[(Inference, Statement)] = {
+    inferenceEntries.collect {
+      case inference @ Inference(_, Seq(singlePremise), conclusion)
+        if conclusion.complexity == singlePremise.complexity &&
+          conclusion.requiredSubstitutions.isEquivalentTo(singlePremise.requiredSubstitutions) &&
+          inference.requiredSubstitutions.hasNoApplications &&
+          conclusion != singlePremise
+      => (inference, singlePremise)
+    }
+  }
+
   lazy val statementExtractionInferences: Seq[(Inference, Statement, Option[Statement])] = inferenceEntries.collectOption {
     case inference @ Inference(_, firstPremise +: otherPremises, conclusion)
       if inference.requiredSubstitutions.copy(statements = Nil).isEmpty &&
@@ -182,42 +220,6 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       }
   }
 
-  lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
-    deductionDefinitionOption.flatMap { deductionDefinition =>
-      inferenceEntries.iterator.collect {
-        case inference @ Inference(
-          _,
-          Seq(deductionPremise @ deductionDefinition(StatementVariable(antecedentName, Nil), StatementVariable(consequentName, Nil)), antecedentPremise @ StatementVariable(antecedentName2, Nil)),
-          StatementVariable(consequentName2, Nil)
-        ) if antecedentName == antecedentName2 && consequentName == consequentName2 =>
-          (inference, deductionPremise, antecedentPremise)
-      }.headOption
-    }
-  }
-
-  lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
-    scopingDefinitionOption.flatMap { scopingDefinition =>
-      inferenceEntries.iterator.collect {
-        case inference @ Inference(
-          _,
-          Seq(singlePremise @ scopingDefinition(StatementVariable(premisePredicateName, Seq(FunctionParameter(0, 0))))),
-          StatementVariable(conclusionPredicateName, Seq(TermVariable(variableName, Nil)))
-        ) if premisePredicateName == conclusionPredicateName =>
-          (inference, singlePremise, premisePredicateName, variableName)
-      }.headOption
-    }
-  }
-
-  lazy val rewriteInferences: Seq[(Inference, Statement)] = {
-    inferenceEntries.collect {
-      case inference @ Inference(_, Seq(singlePremise), conclusion)
-        if conclusion.complexity == singlePremise.complexity &&
-          conclusion.requiredSubstitutions.isEquivalentTo(singlePremise.requiredSubstitutions) &&
-          inference.requiredSubstitutions.hasNoApplications &&
-          conclusion != singlePremise
-      => (inference, singlePremise)
-    }
-  }
   lazy val termRewriteInferences: Seq[(Inference, Term, Term)] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
@@ -366,7 +368,7 @@ object Definitions {
       }
     } yield constructor(definition.symbol, definition.defaultValue, definition.attributes)
 
-    def fromShorthands = for {
+    def fromGeneralShorthands = for {
       shorthand <- shorthands
       if shorthand.template.isInstanceOf[Template.DefinedStatement]
       if shorthand.template.variables.length == 3
@@ -392,6 +394,29 @@ object Definitions {
         Nil)
     } yield relation
 
-    (fromDefinitions ++ fromShorthands).reverse
+    def fromSpecificShorthands = for {
+      shorthand <- shorthands
+      if shorthand.template.isInstanceOf[Template.DefinedStatement]
+      if shorthand.template.variables.length == 2
+      Seq(lhsIndexText, symbol, rhsIndexText) <- "%(\\d) (.) %(\\d)".r.unapplySeq(shorthand.format.baseFormatString).toSeq
+      lhsIndex <- Try(lhsIndexText.toInt).toOption
+      rhsIndex <- Try(rhsIndexText.toInt).toOption
+      if lhsIndex != rhsIndex
+      lhsVariable = shorthand.template.variables(lhsIndex)
+      rhsVariable = shorthand.template.variables(rhsIndex)
+      if lhsVariable.isInstanceOf[Template.TermVariable] && rhsVariable.isInstanceOf[Template.TermVariable]
+      if shorthand.conditions.isEmpty
+      relation = BinaryRelation(
+        symbol,
+        shorthand.template.expand(
+          Map.empty,
+          Map(
+            lhsVariable.name -> TermVariable(lhsVariable.name),
+            rhsVariable.name -> TermVariable(rhsVariable.name))
+        ).asInstanceOf[Statement],
+        Nil)
+    } yield relation
+
+    (fromDefinitions ++ fromGeneralShorthands ++ fromSpecificShorthands).reverse
   }
 }
