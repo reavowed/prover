@@ -10,10 +10,12 @@ import Step from "./Step";
 import {Steps} from "./Steps";
 
 class ElidedStepProofLineWithContexts extends React.Component {
-  constructor(...args) {
-    super(...args);
+  constructor(props) {
+    super(props);
+    const containsHighlightedInference = _.intersection(_.map(props.step.inferencesUsed, "id"), props.hashParamsContext.inferencesToHighlight).length;
+    const isHighlightedInference = props.step.highlightedInference && _.isEqual(props.hashParamsContext.inferencesToHighlight, [props.step.highlightedInference.id])
     this.state = {
-      showProofCard: !this.props.step.isComplete || _.intersection(_.map(this.props.step.inferencesUsed, "id"), this.props.hashParamsContext.inferencesToHighlight).length
+      showProofCard: !props.step.isComplete || (containsHighlightedInference && !isHighlightedInference)
     }
   }
 
