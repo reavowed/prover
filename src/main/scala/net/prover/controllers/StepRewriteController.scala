@@ -89,7 +89,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     } yield {
       implicit val spc = stepProvingContext
       val termsFunctionsAndPaths = getTermsFunctionsAndPaths(expression, pathsAlreadyRewrittenText)
-      stepProvingContext.allPremisesSimplestFirst.mapCollect { p =>
+      stepProvingContext.allPremises.mapCollect { p =>
         for {
           (lhs, rhs) <- equality.unapply(p.statement)
           forward = termsFunctionsAndPaths.filter(_._1 == lhs).map(_._3).map(PremiseRewritePath(_, reverse = false, rhs))
@@ -111,7 +111,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
   ): ResponseEntity[_] = {
     (for {
       (_, stepProvingContext) <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-    } yield stepProvingContext.allPremisesSimplestFirst).toResponseEntity
+    } yield stepProvingContext.allPremises).toResponseEntity
   }
 
   def rewrite[TExpression <: Expression with TypedExpression[TExpression], TStep](
@@ -194,7 +194,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
         } {
           (_, steps, inferences) => EqualityRewriter.optionalRewriteElider(inferences)(steps).get
         }
-        targetStepOption = if (stepProvingContext.allPremisesSimplestLast.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
+        targetStepOption = if (stepProvingContext.allPremises.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
       } yield targetStepOption.toSeq :+ step
     }.toResponseEntity
   }

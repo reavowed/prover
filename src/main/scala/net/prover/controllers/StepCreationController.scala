@@ -71,7 +71,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
             updatedChainingDefinition = rewriteChainingDefinition.copy(step = Some(finalStep))
             (targetLhs, targetRhs) = swapper.swapSourceAndResult(intermediate, targetResult)
             newTarget = targetRelation(targetLhs, targetRhs)
-            newTargetStepOption = if (stepProvingContext.allPremisesSimplestFirst.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
+            newTargetStepOption = if (stepProvingContext.allPremises.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
             (firstDefinition, secondDefinition) = swapper.swapSourceAndResult(updatedChainingDefinition, ChainingStepDefinition(targetLhs, targetRhs, targetRelation, newTargetStepOption))
           } yield (firstDefinition, secondDefinition, additionalTargets ++ extractionTargets)
         }
@@ -314,7 +314,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
       implicit val spc = stepProvingContext
       for {
         premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
-        premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
+        premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
         newStep <- DefinitionRewriter.rewriteDefinitions(premise.statement, step.statement).orBadRequest("Could not rewrite definition")
       } yield Seq(newStep)
     }.toResponseEntity

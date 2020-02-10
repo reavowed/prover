@@ -14,12 +14,6 @@ class PremiseFinderSpec extends Specification {
       PremiseFinder.findPremiseSteps(target) must beSome(beStepsThatMakeValidTheorem(Seq(premise), target))
     }
 
-    "find premise by extracting" in {
-      checkFindPremise(
-        φ,
-        Negation(Negation(φ)))
-    }
-
     "find premise using relation simplification" in {
       checkFindPremise(
         ElementOf(First(a), b),
@@ -36,6 +30,12 @@ class PremiseFinderSpec extends Specification {
       checkFindPremise(
         Equals(First(a), b),
         ElementOf(a, Product(Singleton(b), c)))
+    }
+
+    "find premise using relation simplification in structural simplification" in {
+      checkFindPremise(
+        ElementOf(First(a), b),
+        Conjunction(ElementOf(a, Product(b, c)), φ))
     }
 
     "find premise by simplifying target" in {

@@ -24,7 +24,7 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
     swapper: Swapper
   ): ResponseEntity[_] = {
     def getPremises[T <: Expression](joiner: BinaryJoiner[T], lhs: T, rhs: T)(implicit stepProvingContext: StepProvingContext): Try[Seq[Premise.SingleLinePremise]] = {
-      Success(stepProvingContext.allPremisesSimplestFirst.mapCollect { p =>
+      Success(stepProvingContext.allPremises.mapCollect { p =>
         for {
           (premiseLhs, premiseRhs) <- joiner.unapply(p.statement)
           if swapper.getSource(lhs, rhs) == swapper.getSource(premiseLhs, premiseRhs)
@@ -73,7 +73,7 @@ class StepTransitivityController @Autowired() (val bookService: BookService) ext
         implicit val spc = stepProvingContext
         for {
           premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
-          premise <- stepProvingContext.allPremisesSimplestFirst.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
+          premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
           (premiseLhs, premiseRhs) <- targetJoiner.unapply(premise.statement) orBadRequest "Premise was not transitive statement"
           (premiseSource, premiseResult) = swapper.swapSourceAndResult(premiseLhs, premiseRhs)
           (targetSource, targetResult) = swapper.swapSourceAndResult(targetLhs, targetRhs)

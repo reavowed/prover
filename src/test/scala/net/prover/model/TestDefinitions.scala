@@ -278,6 +278,7 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val addDoubleNegation = Axiom("Add Double Negation", Seq(φ), Negation(Negation(φ)))
   val removeDoubleNegation = Axiom("Remove Double Negation", Seq(Negation(Negation(φ))), φ)
 
+  val extractLeftConjunct = Axiom("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), φ)
   val extractRightConjunct = Axiom("Extract Right Conjunct", Seq(Conjunction(φ, ψ)), ψ)
   val combineConjunction = Axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
 
@@ -322,7 +323,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
     Seq(
       specification, modusPonens, modusTollens,
       addDoubleNegation, removeDoubleNegation,
-      extractRightConjunct, combineConjunction,
+      extractLeftConjunct, extractRightConjunct, combineConjunction,
       equivalenceIsTransitive, forwardImplicationFromEquivalence, reverseImplicationFromEquivalence,
       reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
       membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, firstElement,

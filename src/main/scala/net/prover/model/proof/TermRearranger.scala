@@ -137,7 +137,7 @@ case class TermRearranger(
     }
 
     def rearrangeUsingPremises: Option[Seq[RearrangementStep[Term]]] = (for {
-      premise <- allPremisesSimplestFirst
+      premise <- allPremises
       (premiseLhsTerm, premiseRhsTerm) <- equality.unapply(premise.statement).toSeq
       premiseLhs = disassemble(premiseLhsTerm)
       premiseRhs = disassemble(premiseRhsTerm)

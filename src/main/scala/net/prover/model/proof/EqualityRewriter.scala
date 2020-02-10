@@ -246,7 +246,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         findEquality(premiseTerm, targetTerm, Wrapper.identity, None).map(_._1)
       case _ =>
         None
-    }) orElse stepProvingContext.allPremisesSimplestFirst.mapFind(rewritePremise)
+    }) orElse stepProvingContext.allPremises.mapFind(rewritePremise)
   }
 }
 

@@ -13,7 +13,7 @@ object PremiseFinder {
     terms: Map[Int, Term])(
     implicit stepProvingContext: StepProvingContext
   ): Seq[(Seq[Step], Map[Int, Term])] = {
-    def fromGivenPremises = stepProvingContext.premisesThenSimplifications
+    def fromGivenPremises = stepProvingContext.allPremises
       .map(_.statement)
       .mapCollect { premiseStatement =>
         for {
@@ -57,39 +57,24 @@ object PremiseFinder {
   ): Option[Seq[Step]] = {
     import stepProvingContext._
 
-    val premiseExtractions = {
-      val premiseExtractionsByPremise = stepContext.premises.map { premise =>
-        premise -> SubstatementExtractor.getExtractionOptions(premise.statement).filter(_.premises.isEmpty)
-      }
-      premiseExtractionsByPremise.map(_.mapRight(_.head)) ++ premiseExtractionsByPremise.filter(_._2.length > 1).flatMap { case (p, e) => e.tail.map(p -> _) }
-    }
-
-    def fromPremises = premiseExtractions.mapFind { case (premise, extractionOption) =>
-      if (extractionOption.conclusion == targetStatement)
-        for {
-          substitutions <- premise.statement.calculateSubstitutions(premise.statement).flatMap(_.confirmTotality)
-          (`targetStatement`, ExtractionApplication(extractionSteps, Nil, Nil)) <- ExtractionHelper.applyExtractions(premise, extractionOption.extractionInferences, substitutions, _ => (Nil, Nil)).toOption
-        } yield extractionSteps
-      else
-        None
-    }
+    def fromPremises = if (allPremises.exists(_.statement == targetStatement)) Some(Nil) else None
     def fromFact = ProofHelper.findFact(targetStatement).map(Seq(_))
 
-    def findFromSimplifiedPremiseRelations(premise: Statement, targetLhs: Term, targetRhs: Term, extractionOption: ExtractionOption): Option[Seq[Step]] = {
+    def findFromSimplifiedPremiseRelations(premise: Statement, targetLhs: Term, targetRhs: Term): Option[Seq[Step]] = {
       if (premise == targetStatement)
         Some(Nil)
       else
         (for {
           premiseRelationSimplificationInference <- provingContext.premiseRelationSimplificationInferences.iterator
           (newPremise, assertionStep) <- premiseRelationSimplificationInference.matchPremiseToTarget(premise, targetLhs, targetRhs)
-          innerSteps <- findFromSimplifiedPremiseRelations(newPremise, targetLhs, targetRhs, extractionOption)
+          innerSteps <- findFromSimplifiedPremiseRelations(newPremise, targetLhs, targetRhs)
         } yield assertionStep +: innerSteps).headOption
     }
 
     def fromSimplifiedPremiseRelations = (for {
       (targetLhs, targetRhs) <- provingContext.definedBinaryStatements.ofType[BinaryRelation].iterator.mapCollect(_.unapply(targetStatement))
-      (premise, extractionOption) <- premiseExtractions
-      steps <- findFromSimplifiedPremiseRelations(premise.statement, targetLhs, targetRhs, extractionOption)
+      premise <- allPremises
+      steps <- findFromSimplifiedPremiseRelations(premise.statement, targetLhs, targetRhs)
     } yield steps).headOption
 
 
@@ -144,7 +129,7 @@ object PremiseFinder {
     import stepProvingContext._
 
     def directly = for {
-      premise <- allPremisesSimplestFirst
+      premise <- allPremises
       finalSubstitutions <- unsubstitutedPremiseStatement.calculateSubstitutions(premise.statement, initialSubstitutions).toSeq
     } yield (Nil, premise.statement, finalSubstitutions)
 
