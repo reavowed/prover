@@ -282,14 +282,14 @@ export class Steps extends React.Component {
 
   static renderNextStep(stepsWithIndexes, path, referencesForLastStep, theoremContext) {
     const {step, index} = stepsWithIndexes.shift();
-    const key = [...path, index].join(".");
+    const serializedPath = [...path, index].join(".");
     if (!theoremContext.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.statement && step.statement.definition) {
       const binaryRelation = findBinaryRelation(step.statement, theoremContext.entryContext);
       if (binaryRelation && isChainable(binaryRelation)) {
         const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, theoremContext.entryContext);
         if (chainingDetails) {
           return {
-            key,
+            key: serializedPath + " " + chainingDetails.finalStatement.serialize(),
             element: <ChainedSteps referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []}
                                       {...chainingDetails} />
           };
@@ -309,13 +309,13 @@ export class Steps extends React.Component {
         substep.assumption.components[0].level === 0 && substep.assumption.components[0].index === 0)
       {
         return {
-          key,
+          key: serializedPath + " " + (step.provenStatement ? step.provenStatement.serialize() : "???"),
           element: <ScopedDeductionStep {...props} format={substep.assumption.definition.baseFormatString} components={substep.assumption.components} />
         };
       }
     }
     return {
-      key,
+      key: serializedPath + " " + (step.provenStatement ? step.provenStatement.serialize() : "???"),
       element: React.createElement(Steps.getElementName(step), props)
     }
   };
