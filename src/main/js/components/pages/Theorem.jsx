@@ -68,11 +68,14 @@ export class Theorem extends React.Component {
           }, () => resolve());
         })
       },
-      updateStep(proofIndex, {path: stepPath, step: stepJson, newInferences: newInferencesFromStep}) {
+      updateStep(proofIndex, {path: stepPath, step: stepJson, newInferences: newInferencesFromStep, proof: proofJson}) {
         return new Promise((resolve) => {
           const newInferences = {...inferences, ...newInferencesFromStep};
+          const newTheorem = proofJson ?
+            self.state.theorem.updateProof(proofIndex, parser.parseSteps(proofJson, newInferences)) :
+            self.state.theorem.updateStep(proofIndex, stepPath, parser.parseStep(stepJson, newInferences));
           self.setState({
-            theorem: self.state.theorem.updateStep(proofIndex, stepPath, parser.parseStep(stepJson, newInferences)),
+            theorem: newTheorem,
             inferences: newInferences
           }, () => resolve());
         })

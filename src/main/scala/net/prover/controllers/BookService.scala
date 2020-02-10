@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{InferenceSummary, PathData, StepUpdateProps, TheoremUpdateProps}
+import net.prover.controllers.models.{InferenceSummary, PathData, ProofUpdateProps, StepUpdateProps, TheoremUpdateProps, UpdateProps}
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
@@ -110,23 +110,26 @@ class BookService @Autowired() (bookRepository: BookRepository) {
     }).map(_._2)
   }
 
-  def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[StepUpdateProps] = {
+  def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[UpdateProps] = {
     replaceStep[TStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) => f(step, stepProvingContext).map(Seq(_)) }.map { case StepUpdateProps(_, step, newInferences) =>
       StepUpdateProps(stepPath, step.asInstanceOf[Step.WithSubsteps].substeps(stepPath.last), newInferences)
     }
   }
 
-  def replaceSteps(bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[Seq[Step]]): Try[StepUpdateProps] = {
+  def replaceSteps(bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[Seq[Step]]): Try[UpdateProps] = {
     modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
       theorem.replaceSteps[Try](proofIndex, stepPath) { (steps, stepContext) =>
         Some(f(steps, StepProvingContext(stepContext, provingContext)))
       }.orNotFound(s"Step $stepPath").flatten
     }.map { theoremUpdateProps =>
-      StepUpdateProps(stepPath, theoremUpdateProps.theorem.findStep(proofIndex, stepPath).get._1, theoremUpdateProps.newInferences)
+      if (stepPath.nonEmpty)
+        StepUpdateProps(stepPath, theoremUpdateProps.theorem.findStep(proofIndex, stepPath).get._1, theoremUpdateProps.newInferences)
+      else
+        ProofUpdateProps(theoremUpdateProps.theorem.proofs(proofIndex).steps, theoremUpdateProps.newInferences)
     }
   }
 
-  def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[StepUpdateProps] = {
+  def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[UpdateProps] = {
     stepPath.initAndLastOption.map { case (init, last) =>
       replaceSteps(bookKey, chapterKey, theoremKey, proofIndex, init) { (steps, stepProvingContext) =>
         steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
