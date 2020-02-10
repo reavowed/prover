@@ -95,20 +95,20 @@ class ChainedSteps extends React.Component {
           {hovered && rightHandSide.elidedLeftHandSide && <PositionToLeft ref={ref => this.span = ref}>
             <HighlightableExpression expression={rightHandSide.elidedLeftHandSide}
                                      expressionToCopy={rightHandSide.step.statement}
-                                     references={rightHandSide.references}
+                                     references={rightHandSide.referencesForLhs}
                                      additionalPremiseReferences={additionalReferences} />
             {' '}
           </PositionToLeft>}
           <HighlightableExpression expression={{textForHtml: () => rightHandSide.symbol}}
                                    expressionToCopy={rightHandSide.step.statement}
-                                   references={rightHandSide.references}
+                                   references={rightHandSide.referencesForRhs}
                                    additionalReferences={additionalReferences}/>
           {' '}
           <HighlightableExpression expression={rightHandSide.expression}
                                    expressionToCopy={rightHandSide.step.statement}
-                                   references={rightHandSide.references}
-                                   additionalPremiseReferences={additionalReferences}
-                                   additionalConclusionReferences={nextRightHandSide && nextRightHandSide.highlightsPreviousAsConclusion && nextRightHandSide.references}/>.
+                                   references={rightHandSide.referencesForRhs}
+                                   additionalPremiseReferences={[...additionalReferences, ...(nextRightHandSide && nextRightHandSide.referencesForPrevious || [])]}
+                                   additionalConclusionReferences={nextRightHandSide && nextRightHandSide.referencesForPrevious}/>.
       </span>
       }
     }
@@ -132,7 +132,7 @@ class ChainedSteps extends React.Component {
                                                                             expressionToCopy={rightHandSides[0].step.statement}
                                                                             references={[leftHandSide.lineReference]}
                                                                             additionalReferences={referencesForLastStep}
-                                                                            additionalPremiseReferences={_.flatMap(rightHandSides, rhs => rhs.references)}
+                                                                            additionalPremiseReferences={_.flatMap(rightHandSides, rhs => rhs.referencesForLhs)}
                                                                             additionalConclusionReferences={_.chain(rightHandSides).filter("highlightsFirstAsConclusion").flatMap("references").value()}
           />{' '}</span>
           <RightHandSide rightHandSide={rightHandSides[0]} index={0} />
@@ -186,14 +186,16 @@ export class Steps extends React.Component {
     const firstRhs = {
       symbol: firstBinaryRelation.symbol,
       expression: firstStepMatch[1].expression,
-      references: [firstLineReference],
+      linkingReference: firstLineReference,
+      referencesForLhs: [firstLineReference],
+      referencesForRhs: [firstLineReference],
       step: firstStep
     };
 
     function readRightHandSides(currentRightHandSides) {
       let continuingStepMatch, linkingStepMatch, nextRelation, linkingRelation, references;
       const previousRightHandSide = currentRightHandSides[currentRightHandSides.length - 1];
-      const previousReference = previousRightHandSide.references[previousRightHandSide.references.length - 1];
+      const previousReference = previousRightHandSide.linkingReference;
 
       if (stepsWithIndexes.length >= 2 &&
         _.includes(allowableChainedStepTypes, stepsWithIndexes[0].step.type) &&
@@ -215,14 +217,18 @@ export class Steps extends React.Component {
       ) {
         const {step, index} = stepsWithIndexes.shift();
         const {step: linkingStep, index: linkingIndex} = stepsWithIndexes.shift();
+        const mainReference = new StepReference([...basePath, index]);
+        const linkingReference = new StepReference([...basePath, linkingIndex]);
         const newRhs = {
           symbol: linkingRelation.symbol,
           expression: continuingStepMatch[1].expression,
           step,
           linkingStep,
           path: [...basePath, index],
-          references: [new StepReference([...basePath, index]), new StepReference([...basePath, linkingIndex])],
-          highlightsPreviousAsConclusion: true
+          linkingReference,
+          referencesForLhs: [linkingReference],
+          referencesForRhs: [mainReference, linkingReference],
+          referencesForPrevious: [mainReference]
         };
         return readRightHandSides([...currentRightHandSides, newRhs]);
       }
@@ -238,13 +244,16 @@ export class Steps extends React.Component {
       ) {
         const {step, index} = stepsWithIndexes.shift();
         const refersToFirst = _.some(step.referencedLines, r => r.matches(previousReference));
+        const reference = new StepReference([...basePath, index]);
         const newRhs = {
           symbol: nextRelation.symbol,
           expression: linkingStepMatch[1].expression,
           step,
           path: [...basePath, index],
-          references: [new StepReference([...basePath, index])],
           highlightsFirstAsConclusion: !refersToFirst,
+          linkingReference: reference,
+          referencesForLhs: [reference],
+          referencesForRhs: [reference],
           elidedLeftHandSide: refersToFirst && linkingStepMatch[0].expression
         };
         return readRightHandSides([...currentRightHandSides, newRhs]);
@@ -273,12 +282,12 @@ export class Steps extends React.Component {
 
   static renderNextStep(stepsWithIndexes, path, referencesForLastStep, theoremContext) {
     const {step, index} = stepsWithIndexes.shift();
+    const key = [...path, index].join(".");
     if (!theoremContext.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.statement && step.statement.definition) {
       const binaryRelation = findBinaryRelation(step.statement, theoremContext.entryContext);
       if (binaryRelation && isChainable(binaryRelation)) {
         const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, theoremContext.entryContext);
         if (chainingDetails) {
-          const key = chainingDetails.finalStatement.serialize();
           return {
             key,
             element: <ChainedSteps referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []}
@@ -299,7 +308,6 @@ export class Steps extends React.Component {
         substep.assumption.components[0] instanceof FunctionParameter &&
         substep.assumption.components[0].level === 0 && substep.assumption.components[0].index === 0)
       {
-        const key = step.provenStatement ? step.provenStatement.serialize() : "???";
         return {
           key,
           element: <ScopedDeductionStep {...props} format={substep.assumption.definition.baseFormatString} components={substep.assumption.components} />
@@ -307,7 +315,7 @@ export class Steps extends React.Component {
       }
     }
     return {
-      key: step.provenStatement ? step.provenStatement.serialize() : index,
+      key,
       element: React.createElement(Steps.getElementName(step), props)
     }
   };
