@@ -5,7 +5,7 @@ import net.prover.model.expressions.Statement
 
 case class StepProvingContext(stepContext: StepContext, provingContext: ProvingContext) {
   lazy val premisesAndSimplifications: Seq[(Premise.Given, Seq[Premise.Simplification])] = {
-    stepContext.premises.map(p => p -> SimplificationFinder.getSimplifications(p)(this))
+    stepContext.premises.reverse.map(p => p -> SimplificationFinder.getSimplifications(p)(this))
   }
 
   def premisesThenSimplifications: Seq[Premise.SingleLinePremise] = {
