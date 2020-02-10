@@ -177,3 +177,14 @@ conclusion ↔ ∀ x → with ($0) φ with ($0 with ($0) G) ψ ∀ x → with ($
   }
   prove ↔ ∀ x → with ($0) φ with ($0 with ($0) G) ψ ∀ x → with ($0) φ with ($0 with ($0) H) ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ x → with ($0) φ with ($0 with ($0) G) ψ, ∀ x → with ($0) φ with ($0 with ($0) H) ψ) () 0 1
 }
+
+theorem Reverse Negated Equality
+premise ¬ = a b
+conclusion ¬ = b a
+{
+  assume = b a {
+    prove = a b 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (b, a) 0a
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (= a b) () 0.0 p0
+  }
+  prove ¬ = b a adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (= b a) () 0
+}

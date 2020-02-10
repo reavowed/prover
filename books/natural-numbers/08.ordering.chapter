@@ -149,6 +149,17 @@ conclusion strictTotalOrder < ℕ
   }
 }
 
+theorem < Is Irreflexive
+conclusion ∧ relation < ℕ irreflexiveRelation < ℕ
+{
+  elided 81dedf73d69b50c05235585a865ec89191df7af8ed00dd4751e918a19efa59c5 {
+    prove strictTotalOrder < ℕ 81dedf73d69b50c05235585a865ec89191df7af8ed00dd4751e918a19efa59c5 () ()
+    prove ∧ ∧ ∧ relation < ℕ asymmetricRelation < ℕ transitiveRelation < ℕ semicompleteRelation < ℕ 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 () (<, ℕ) 0.0
+  }
+  prove irreflexiveRelation < ℕ ca974034f4ee7669a91a639dc28baaab319a216ecd3ab78c942bc19cd31b8d75 () (<, ℕ) 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+  prove ∧ relation < ℕ irreflexiveRelation < ℕ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation < ℕ, irreflexiveRelation < ℕ) () 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1
+}
+
 theorem Natural Number Strict Ordering Is Transitive
 premise ∈ orderedPair n m <
 premise ∈ orderedPair m r <

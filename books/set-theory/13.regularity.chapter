@@ -27,7 +27,7 @@ conclusion ¬ ∈ a a
   prove ¬ ∈ a a 27177c191d8f27ae5397cd3f90eed9841516040c0a0ed25957ef03f175584fb8 () (a, singleton a, a) 2 3
 }
 
-theorem No Set Contains Itself
+theorem Element of a Set Is Not the Set
 premise ∈ a b
 conclusion ¬ = a b
 {

@@ -151,3 +151,25 @@ conclusion φ
   prove → φ φ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (φ) ()
   prove φ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, φ) () p0 0 p1
 }
+
+theorem Extract Left Negated Disjunct
+premise ¬ ∨ φ ψ
+conclusion ¬ φ
+{
+  assume φ {
+    prove ∨ φ ψ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (φ, ψ) () 0a
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∨ φ ψ) () 0.0 p0
+  }
+  prove ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (φ) () 0
+}
+
+theorem Extract Right Negated Disjunct
+premise ¬ ∨ φ ψ
+conclusion ¬ ψ
+{
+  assume ψ {
+    prove ∨ φ ψ 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (ψ, φ) () 0a
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∨ φ ψ) () 0.0 p0
+  }
+  prove ¬ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (ψ) () 0
+}

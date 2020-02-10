@@ -109,3 +109,10 @@ conclusion = n m
   }
   prove = n m b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (= n m) () 4
 }
+
+theorem Nothing Equals Its Successor
+conclusion ¬ = n successor n
+{
+  prove ∈ n successor n bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n)
+  prove ¬ = n successor n 16fda33960dd8fd78138ca0a459ad1f44078b64f825b678bc152e6b63de6bf54 () (n, successor n) 0
+}

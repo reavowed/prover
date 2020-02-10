@@ -1,5 +1,0 @@
-Define some literal integers.
-
-term 0_ℤ ()
-  (= $0 apply ⍳_ℤ 0)
-  shorthand (0Z)

@@ -278,3 +278,26 @@ conclusion irreflexiveRelation ~ A
   }
   prove irreflexiveRelation ~ A 0fbd588b10f1780da6cc5ebafea4732c0f65b6ec66e920472ed0c164b32a9eb1 () (A, ~) 0
 }
+
+theorem Elements Related by an Irreflexive Relation Are Not Equal
+premise ∧ relation ~ A irreflexiveRelation ~ A
+premise ∈ orderedPair a b ~
+conclusion ¬ = a b
+{
+  prove ⊆ ~ product A A bdc3e1f2449e2fbd0a83076d34a8055e2d09d67c1806a4bc59547d29cfa15bd1 () (~, A) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+  prove ∈ orderedPair a b product A A ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (~, product A A, orderedPair a b) 0 p1
+  prove ∈ a A 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () (a, b, A, A) 1
+  assume = a b {
+    elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+      prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) 3a
+      prove ∈ orderedPair a a ~ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair a $0 ~) (b, a) 3.0.0 p1
+    }
+    elided b0c0ff4d53d06218989345233233ec4616d639ef9ae4420f71d4c7759d3fb987 {
+      prove ∀ a → ∈ $0 A ¬ ∈ orderedPair $0 $0 ~ b0c0ff4d53d06218989345233233ec4616d639ef9ae4420f71d4c7759d3fb987 () (~, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove → ∈ a A ¬ ∈ orderedPair a a ~ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ¬ ∈ orderedPair $0 $0 ~) (a) 3.1.0
+      prove ¬ ∈ orderedPair a a ~ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ¬ ∈ orderedPair a a ~) () 3.1.1 2
+    }
+    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∈ orderedPair a a ~) () 3.0 3.1
+  }
+  prove ¬ = a b adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (= a b) () 3
+}

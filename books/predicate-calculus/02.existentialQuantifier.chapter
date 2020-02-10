@@ -5,7 +5,7 @@ statement ∃ ($x with x φ)
   definition (¬ ∀ x ¬ with ($0) φ)
   shorthand (ex)
 
-theorem Existence
+theorem Existence by Exhibiting Value
 premise with (a) φ
 conclusion ∃ x with ($0) φ
 {

@@ -209,6 +209,18 @@ conclusion function +_ℤ product ℤ ℤ ℤ
   }
 }
 
+theorem Addition Is Closed on the Integers
+premise ∈ a ℤ
+premise ∈ b ℤ
+conclusion ∈ apply +_ℤ orderedPair a b ℤ
+{
+  prove function +_ℤ product ℤ ℤ ℤ e90d5fe6cdf606ec5ae4a04deb82c5451b71c0677196e3117d8faa1fbaf4abde () ()
+  elided 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 {
+    prove ∈ orderedPair a b product ℤ ℤ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (a, ℤ, b, ℤ) p0 p1
+    prove ∈ apply +_ℤ orderedPair a b ℤ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (+_ℤ, product ℤ ℤ, ℤ, orderedPair a b) 0 1.0
+  }
+}
+
 theorem Integer Addition on Equivalence Classes
 premise ∈ a ℕ
 premise ∈ b ℕ

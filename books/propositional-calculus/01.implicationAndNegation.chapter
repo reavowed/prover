@@ -186,3 +186,16 @@ conclusion → ¬ φ ψ
     prove ψ 11d0fff7a64bf999eb92163828dd9f9c59f567d1ed1e532cd51a8c5d0bbb731c (φ, ψ) () p0 0a
   }
 }
+
+theorem Contraposition
+premise → ¬ φ ¬ ψ
+conclusion → ψ φ
+{
+  assume ψ {
+    assume ¬ φ {
+      prove ¬ ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ φ, ¬ ψ) () p0 0.0a
+      prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () 0a 0.0.0
+    }
+    prove φ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (φ) () 0.0
+  }
+}

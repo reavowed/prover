@@ -283,6 +283,26 @@ conclusion = n m
   }
 }
 
+theorem Natural Addition is Left-Cancellable
+premise ∈ n ℕ
+premise ∈ m ℕ
+premise ∈ r ℕ
+premise = apply + orderedPair r n apply + orderedPair r m
+conclusion = n m
+{
+  elided ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 {
+    elided ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 {
+      prove = apply + orderedPair r n apply + orderedPair n r ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 () (r, n) p2 p0
+      prove = apply + orderedPair n r apply + orderedPair r m 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $0 apply + orderedPair r m) (apply + orderedPair r n, apply + orderedPair n r) 0.0.0 p3
+    }
+    elided ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 {
+      prove = apply + orderedPair r m apply + orderedPair m r ca54ccff8d9c6c920b77cbf1f9384970cfa30eca61cd628ff16ca6e02f0a3d62 () (r, m) p2 p1
+      prove = apply + orderedPair n r apply + orderedPair m r 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply + orderedPair n r $0) (apply + orderedPair r m, apply + orderedPair m r) 0.1.0 0.0
+    }
+  }
+  prove = n m 56fdd0faafd2e2db6a7dedeb528dcb8d9c17411a56ffc8144eb51935cb8a5b0f () (n, m, r) p0 p1 p2 0
+}
+
 theorem Natural Addition Preserves Order (Left)
 premise ∈ n ℕ
 premise ∈ m ℕ

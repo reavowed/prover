@@ -1,0 +1,38 @@
+Define some literal integers.
+
+term 0_ℤ ()
+  (= $0 equivalenceClass orderedPair 0 0 ~_ℤ)
+  shorthand (0Z)
+
+theorem 0_ℤ as Equivalence Class of Same Naturals
+premise ∈ a ℕ
+conclusion = 0_ℤ equivalenceClass orderedPair a a ~_ℤ
+{
+  prove = apply + orderedPair 0 a apply + orderedPair 0 a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (apply + orderedPair 0 a)
+  prove = 0_ℤ equivalenceClass orderedPair 0 0 ~_ℤ a4343fdbaa9ad4c0b312ae54b4d2a9801363f4f4c0794dc6f21b1b8153f3504e () ()
+  elided 686404f284a3936508f269343c28655d97c5ee9f62c551338e1f020b6c722735 {
+    prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () ()
+    prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () ()
+    elided 686404f284a3936508f269343c28655d97c5ee9f62c551338e1f020b6c722735 {
+      prove ↔ = equivalenceClass orderedPair 0 0 ~_ℤ equivalenceClass orderedPair a a ~_ℤ = apply + orderedPair 0 a apply + orderedPair 0 a 686404f284a3936508f269343c28655d97c5ee9f62c551338e1f020b6c722735 () (0, 0, a, a) 2.0 2.0 p0 p0
+      prove → = apply + orderedPair 0 a apply + orderedPair 0 a = equivalenceClass orderedPair 0 0 ~_ℤ equivalenceClass orderedPair a a ~_ℤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (= equivalenceClass orderedPair 0 0 ~_ℤ equivalenceClass orderedPair a a ~_ℤ, = apply + orderedPair 0 a apply + orderedPair 0 a) () 2.2.0
+      prove = equivalenceClass orderedPair 0 0 ~_ℤ equivalenceClass orderedPair a a ~_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply + orderedPair 0 a apply + orderedPair 0 a, = equivalenceClass orderedPair 0 0 ~_ℤ equivalenceClass orderedPair a a ~_ℤ) () 2.2.1 0
+    }
+  }
+  prove = 0_ℤ equivalenceClass orderedPair a a ~_ℤ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (0_ℤ, equivalenceClass orderedPair 0 0 ~_ℤ, equivalenceClass orderedPair a a ~_ℤ) 1 2
+}
+
+theorem 0_ℤ Is an Integer
+conclusion ∈ 0_ℤ ℤ
+{
+  elided e11b973099825be06ace54a206bbbbac7b605be328e595b1dbcc64e8ce99eb82 {
+    prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () ()
+    prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () ()
+    prove ∈ equivalenceClass orderedPair 0 0 ~_ℤ ℤ e11b973099825be06ace54a206bbbbac7b605be328e595b1dbcc64e8ce99eb82 () (0, 0) 0.0 0.0
+  }
+  elided a4343fdbaa9ad4c0b312ae54b4d2a9801363f4f4c0794dc6f21b1b8153f3504e {
+    prove = 0_ℤ equivalenceClass orderedPair 0 0 ~_ℤ a4343fdbaa9ad4c0b312ae54b4d2a9801363f4f4c0794dc6f21b1b8153f3504e () ()
+    prove = equivalenceClass orderedPair 0 0 ~_ℤ 0_ℤ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (0_ℤ, equivalenceClass orderedPair 0 0 ~_ℤ) 1.0
+    prove ∈ 0_ℤ ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 ℤ) (equivalenceClass orderedPair 0 0 ~_ℤ, 0_ℤ) 1.1 0
+  }
+}
