@@ -4,9 +4,11 @@ import {PremiseReference} from "../../models/Step";
 import {Parser} from "../../Parser";
 import EntryContext from "../EntryContext";
 import {HighlightableExpression} from "../ExpressionComponent";
+import HashParamsContext from "../HashParamsContext";
 import {Inference} from "./Inference";
 import Proofs from "./theorem/Proofs";
 import TheoremContext from "./theorem/TheoremContext";
+import queryString from "query-string";
 
 function Premise({statement, index}) {
   return <HighlightableExpression expression={statement} references={[new PremiseReference(index)]}/>
@@ -123,12 +125,20 @@ export class Theorem extends React.Component {
       return <Premise statement={premise} index={index}/>
     };
 
-    return <EntryContext.Provider value={entryContext}>
-      <TheoremContext.Provider value={theoremContext}>
-        <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" {...this.props}>
-          <Proofs proofs={theorem.proofs} />
-        </Inference>
-      </TheoremContext.Provider>
-    </EntryContext.Provider> ;
+    const rawHashParams = queryString.parse(window.location.hash);
+    const hashParams = {};
+    if (rawHashParams.inferencesToHighlight) {
+      hashParams.inferencesToHighlight = rawHashParams.inferencesToHighlight.split(",")
+    }
+
+    return <HashParamsContext.Provider value={hashParams}>
+      <EntryContext.Provider value={entryContext}>
+        <TheoremContext.Provider value={theoremContext}>
+          <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" {...this.props}>
+            <Proofs proofs={theorem.proofs} />
+          </Inference>
+        </TheoremContext.Provider>
+      </EntryContext.Provider>
+    </HashParamsContext.Provider>;
   }
 }

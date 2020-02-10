@@ -90,7 +90,7 @@ trait BookModification {
         .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
         .filter(_._1.referencedInferenceIds.intersect(inferenceIds).nonEmpty)
       if theoremsWithKeys.nonEmpty
-    } yield (book.title, chapter.title, theoremsWithKeys.map { case (theorem, key) => LinkSummary(theorem.name, BookService.getEntryUrl(bookKey, chapterKey, key))})
+    } yield (book.title, chapter.title, theoremsWithKeys.map { case (theorem, key) => LinkSummary(theorem.name, BookService.getEntryUrl(bookKey, chapterKey, key) + "#inferencesToHighlight=" + entry.inferences.map(_.id).mkString(","))})
   }
 
   def hasUsages(entry: ChapterEntry, books: Seq[Book]): Boolean = {

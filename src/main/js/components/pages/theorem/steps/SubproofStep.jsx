@@ -1,18 +1,19 @@
 import React from "react";
 import {StepReference} from "../../../../models/Step";
 import {HighlightableExpression} from "../../../ExpressionComponent";
+import HashParamsContext from "../../../HashParamsContext";
 import ProofLine from "./components/ProofLine";
 import Step from "./Step";
 import {Steps} from "./Steps";
 import {formatHtml} from "../../../helpers/Formatter";
-import DraggableList from "../../../DraggableList";
 
 export class SubproofStep extends React.Component {
+  static contextType = HashParamsContext;
   constructor(...args) {
     super(...args);
     const {step} = this.props;
     this.state = {
-      showingSubproof: !step.isComplete && (step.substeps.length > 1 || step.substeps[0].type !== "target")
+      showingSubproof: !step.isComplete && (step.substeps.length > 1 || step.substeps[0].type !== "target") || _.intersection(_.map(this.props.step.inferencesUsed, "id"), this.context.inferencesToHighlight).length
     };
   }
   toggleSubproof = () => {
