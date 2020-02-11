@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{LinkSummary, PathData, StepUpdateProps, TheoremUpdateProps, UpdateProps}
+import net.prover.controllers.models.{LinkSummary, PathData, UpdateProps}
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
 import net.prover.model.definitions.{Equality, Transitivity}
@@ -93,11 +93,19 @@ trait BookModification {
     } yield (book.title, chapter.title, theoremsWithKeys.map { case (theorem, key) => LinkSummary(theorem.name, BookService.getEntryUrl(bookKey, chapterKey, key) + "#inferencesToHighlight=" + entry.inferences.map(_.id).mkString(","))})
   }
 
-  def hasUsages(entry: ChapterEntry, books: Seq[Book]): Boolean = {
-    hasUsages(Seq(entry), books.iterator.flatMap(_.chapters).flatMap(_.entries))
+  def findUsage(entriesPotentiallyUsing: Seq[ChapterEntry], entriesPotentiallyBeingUsed: Seq[ChapterEntry]): Option[(ChapterEntry, ChapterEntry)] = {
+    entriesPotentiallyBeingUsed.mapFind(e =>
+      e.referencedInferenceIds
+        .mapFind(i => entriesPotentiallyUsing.find(_.inferences.exists(_.id == i)).map(_ -> e)) orElse
+      e.referencedDefinitions
+        .mapFind(d => entriesPotentiallyUsing.find(_.referencedDefinitions.contains(d)).map(_ -> e)))
   }
 
-  def hasUsages(entriesPotentiallyBeingUsed: Seq[ChapterEntry], entriesPotentiallyUsing: TraversableOnce[ChapterEntry]): Boolean = {
+  def findUsage(entry: ChapterEntry, books: Seq[Book]): Option[(ChapterEntry, ChapterEntry)] = {
+    findUsage(Seq(entry), books.view.flatMap(_.chapters).flatMap(_.entries))
+  }
+
+  def hasUsages(entriesPotentiallyBeingUsed: Seq[ChapterEntry], entriesPotentiallyUsing: Seq[ChapterEntry]): Boolean = {
     val inferenceIds = entriesPotentiallyBeingUsed.flatMap(_.inferences.map(_.id)).toSet
     entriesPotentiallyUsing.exists(e => e.referencedInferenceIds.intersect(inferenceIds).nonEmpty || e.referencedDefinitions.exists(entriesPotentiallyBeingUsed.contains))
   }

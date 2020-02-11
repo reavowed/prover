@@ -281,11 +281,11 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     def tryMove(entry: ChapterEntry, previousEntries: Seq[ChapterEntry], nextEntries: Seq[ChapterEntry]): Try[Seq[ChapterEntry]] = {
       previousEntries.takeAndRemainingIfValid(newIndex).map { case (firstEntries, entriesToSkip) =>
         for {
-          _ <- (!hasUsages(entriesToSkip, Seq(entry))).orBadRequest("Entry depends on a previous one")
+          _ <- findUsage(entriesToSkip, Seq(entry)).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
         } yield (firstEntries :+ entry) ++ entriesToSkip ++ nextEntries
       } orElse nextEntries.takeAndRemainingIfValid(newIndex - previousEntries.length).map { case (entriesToSkip, lastEntries) =>
         for {
-          _ <- (!hasUsages(Seq(entry), entriesToSkip)).orBadRequest("Entry depended on by a following one")
+          _ <- findUsage(Seq(entry), entriesToSkip).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
         } yield (previousEntries ++ entriesToSkip :+ entry) ++ lastEntries
       } orBadRequest "Invalid index" flatten
     }
@@ -304,10 +304,9 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("entryKey") entryKey: String
   ): ResponseEntity[_] = {
     def deleteEntry(chapterEntry: ChapterEntry, chapter: Chapter, books: Seq[Book]): Try[Chapter] = {
-      if (!hasUsages(chapterEntry, books))
-        Success(chapter.copy(entries = chapter.entries.filter(_ != chapterEntry)))
-      else
-        Failure(BadRequestException("Cannot delete entry with usages"))
+      findUsage(chapterEntry, books)
+        .badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+        .map(_ => chapter.copy(entries = chapter.entries.filter(_ != chapterEntry)))
     }
 
     bookService.modifyChapter[Identity](bookKey, chapterKey, (books, _, _, chapter) =>

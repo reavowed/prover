@@ -297,6 +297,10 @@ package object model {
     def removeWhere(f: T => Boolean): Seq[T] = {
       removeAtIndex(seq.indexWhere(f))
     }
+
+    def dropUntil(p: T => Boolean): Seq[T] = {
+      seq.dropWhile(t => !p(t)).drop(1)
+    }
   }
 
   implicit class IterableOps[T](iterable: Iterable[T]) {
