@@ -111,8 +111,11 @@ class BookService @Autowired() (bookRepository: BookRepository) {
   }
 
   def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[UpdateProps] = {
-    replaceStep[TStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) => f(step, stepProvingContext).map(Seq(_)) }.map { case StepUpdateProps(_, step, newInferences) =>
-      StepUpdateProps(stepPath, step.asInstanceOf[Step.WithSubsteps].substeps(stepPath.last), newInferences)
+    replaceStep[TStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) => f(step, stepProvingContext).map(Seq(_)) }.map {
+      case StepUpdateProps(_, step, newInferences) =>
+        StepUpdateProps(stepPath, step.asInstanceOf[Step.WithSubsteps].substeps(stepPath.last), newInferences)
+      case ProofUpdateProps(proof, newInferences) =>
+        StepUpdateProps(stepPath, proof(stepPath.last), newInferences)
     }
   }
 
