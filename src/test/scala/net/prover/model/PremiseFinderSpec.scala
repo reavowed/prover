@@ -14,6 +14,12 @@ class PremiseFinderSpec extends Specification {
       PremiseFinder.findPremiseSteps(target) must beSome(beStepsThatMakeValidTheorem(Seq(premise), target))
     }
 
+    "find premise using rewrite" in {
+      checkFindPremise(
+        Equals(a, b),
+        Equals(b, a))
+    }
+
     "find premise using relation simplification" in {
       checkFindPremise(
         ElementOf(First(a), b),

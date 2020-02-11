@@ -1,11 +1,8 @@
 package net.prover.model.proof
 
-import net.prover.controllers.ExtractionHelper
-import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.model.Substitutions
 import net.prover.model.definitions.BinaryRelation
 import net.prover.model.expressions._
-import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 
 object PremiseFinder {
   def findParameterisedPremiseSteps(
@@ -60,6 +57,14 @@ object PremiseFinder {
     def fromPremises = if (allPremises.exists(_.statement == targetStatement)) Some(Nil) else None
     def fromFact = ProofHelper.findFact(targetStatement).map(Seq(_))
 
+    def fromRewrite = (for {
+      (rewriteInference, rewritePremise) <- provingContext.rewriteInferences.iterator
+      substitutions <- rewriteInference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality)
+      premise <- rewritePremise.applySubstitutions(substitutions)
+      if (allPremises.exists(_.statement == premise))
+      step <- Step.Assertion.forInference(rewriteInference, substitutions)
+    } yield Seq(step)).headOption
+
     def findFromSimplifiedPremiseRelations(premise: Statement, targetLhs: Term, targetRhs: Term): Option[Seq[Step]] = {
       if (premise == targetStatement)
         Some(Nil)
@@ -87,7 +92,7 @@ object PremiseFinder {
       } yield premiseSteps :+ assertionStep
     }
 
-    fromPremises orElse fromFact orElse fromSimplifiedPremiseRelations orElse bySimplifyingTarget
+    fromPremises orElse fromFact orElse fromRewrite orElse fromSimplifiedPremiseRelations orElse bySimplifyingTarget
   }
 
   def findPremiseSteps(
