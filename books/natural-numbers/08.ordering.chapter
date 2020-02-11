@@ -275,7 +275,15 @@ conclusion ∈ orderedPair n m <
       prove ∈ successor n successor m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair successor n successor m <, ∈ successor n successor m) () 0.2.5 p2
     }
   }
-  prove ∈ n m 60477141a5ca56e8e7720a8e1e80411f77f4320fa676a6c43d586d15454732a8 () (m, n) p1 0
+  elided e6a50915d2adfe34f5001b423b8856772760e48917c6bf6f0843ceb96be4f33e {
+    prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ successor $$0 successor $0 ∈ $$0 $0 e6a50915d2adfe34f5001b423b8856772760e48917c6bf6f0843ceb96be4f33e () ()
+    prove → ∈ n ℕ ∀ m → ∈ $0 ℕ ↔ ∈ successor n successor $0 ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ successor $$0 successor $0 ∈ $$0 $0) (n) 1.0
+    prove ∀ m → ∈ $0 ℕ ↔ ∈ successor n successor $0 ∈ n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ m → ∈ $0 ℕ ↔ ∈ successor n successor $0 ∈ n $0) () 1.1 p0
+    prove → ∈ m ℕ ↔ ∈ successor n successor m ∈ n m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ ↔ ∈ successor n successor $0 ∈ n $0) (m) 1.2
+    prove ↔ ∈ successor n successor m ∈ n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m ℕ, ↔ ∈ successor n successor m ∈ n m) () 1.3 p1
+    prove → ∈ successor n successor m ∈ n m f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ successor n successor m, ∈ n m) () 1.4
+    prove ∈ n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ successor n successor m, ∈ n m) () 1.5 0
+  }
   elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
     prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () ()
     prove → ∈ n ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 < ∈ n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0) (n) 2.0
@@ -522,7 +530,13 @@ conclusion ∈ orderedPair n m ≤
     prove → ∈ orderedPair n successor m < ∈ n successor m f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair n successor m <, ∈ n successor m) () 0.4
     prove ∈ n successor m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair n successor m <, ∈ n successor m) () 0.5 p2
   }
-  prove ∨ ∈ n m = n m 25a2e00a8c3107f5475c9e0c9e3d5ea803ed97b0e7bcb2b317036b50fe797b1b () (n, m) 0
+  elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
+    prove ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 () ()
+    prove ∀ m ↔ ∈ $0 successor m ∨ ∈ $0 m = $0 m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0) (m) 1.0
+    prove ↔ ∈ n successor m ∨ ∈ n m = n m 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 successor m ∨ ∈ $0 m = $0 m) (n) 1.1
+    prove → ∈ n successor m ∨ ∈ n m = n m f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ n successor m, ∨ ∈ n m = n m) () 1.2
+    prove ∨ ∈ n m = n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n successor m, ∨ ∈ n m = n m) () 1.3 0
+  }
   assume ∈ n m {
     elided e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae {
       prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 e8ebb0912376005e9f6c58e44725d603f7ef2dd7efdc308574929746da0af1ae () ()
