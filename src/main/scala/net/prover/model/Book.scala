@@ -20,6 +20,19 @@ case class Book(
 
     sections.filter(_.nonEmpty).map(_.mkString("\n")).mkString("\n\n") + "\n"
   }
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[Book]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: Book =>
+      (that canEqual this) &&
+        title == that.title
+    case _ => false
+  }
+
+  override def hashCode(): Int = {
+    title.hashCode
+  }
 }
 
 object Book {

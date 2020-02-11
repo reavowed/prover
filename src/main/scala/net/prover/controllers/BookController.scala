@@ -55,13 +55,13 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
       val entriesAfterInThisBook = BookService.getChaptersWithKeys(book).view
         .dropUntil { case (_, key) => key == chapterKey }
         .flatMap(_._1.entries)
-      val entriesInLaterBooks = BookService.getBooksWithKeys(books).view
+      val entriesInOtherBooks = (BookService.getBooksWithKeys(books).removeWhere(_._1 == book)).view
         .dropUntil{ case (_, key) => key == bookKey }
         .flatMap(_._1.chapters)
         .flatMap(_.entries)
       for {
         (chapter, _) <- BookService.getChaptersWithKeys(book).find { case (_, key) => key == chapterKey } orNotFound s"Chapter $chapterKey"
-        _ <- findUsage(chapter.entries, entriesAfterInThisBook ++ entriesInLaterBooks).badRequestIfDefined { case (usedEntry, entryUsing) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+        _ <- findUsage(entriesAfterInThisBook ++ entriesInOtherBooks, chapter.entries).badRequestIfDefined { case (usedEntry, entryUsing) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
       } yield {
         book.copy(chapters = BookService.getChaptersWithKeys(book).removeWhere { case (_, key ) => key == chapterKey }.map(_._1))
       }
@@ -75,14 +75,14 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
     @RequestBody newIndex: Int
   ): ResponseEntity[_] = {
     def tryMove(chapter: Chapter, previousChapters: Seq[Chapter], nextChapters: Seq[Chapter]): Try[Seq[Chapter]] = {
-      previousChapters.takeAndRemainingIfValid(newIndex).map { case (firstChapters, chaptersToSkip) =>
+      previousChapters.takeAndRemainingIfValid(newIndex).map { case (firstChapters, chaptersToMoveBefore) =>
         for {
-          _ <- findUsage(chapter.entries, chaptersToSkip.flatMap(_.entries)).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
-        } yield (firstChapters :+ chapter) ++ chaptersToSkip ++ nextChapters
-      } orElse nextChapters.takeAndRemainingIfValid(newIndex - previousChapters.length).map { case (chaptersToSkip, lastChapters) =>
+          _ <- findUsage(chapter.entries, chaptersToMoveBefore.flatMap(_.entries)).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+        } yield (firstChapters :+ chapter) ++ chaptersToMoveBefore ++ nextChapters
+      } orElse nextChapters.takeAndRemainingIfValid(newIndex - previousChapters.length).map { case (chaptersToMoveAfter, lastChapters) =>
         for {
-          _ <- findUsage(chaptersToSkip.flatMap(_.entries), chapter.entries).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
-        } yield (previousChapters ++ chaptersToSkip :+ chapter) ++ lastChapters
+          _ <- findUsage(chaptersToMoveAfter.flatMap(_.entries), chapter.entries).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+        } yield (previousChapters ++ chaptersToMoveAfter :+ chapter) ++ lastChapters
       } orBadRequest "Invalid index" flatten
     }
     bookService.modifyBook[Identity](bookKey, (_, _, book) => {

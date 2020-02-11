@@ -279,14 +279,14 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     @RequestBody newIndex: Int
   ): ResponseEntity[_] = {
     def tryMove(entry: ChapterEntry, previousEntries: Seq[ChapterEntry], nextEntries: Seq[ChapterEntry]): Try[Seq[ChapterEntry]] = {
-      previousEntries.takeAndRemainingIfValid(newIndex).map { case (firstEntries, entriesToSkip) =>
+      previousEntries.takeAndRemainingIfValid(newIndex).map { case (firstEntries, entriesToMoveBefore) =>
         for {
-          _ <- findUsage(entriesToSkip, Seq(entry)).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
-        } yield (firstEntries :+ entry) ++ entriesToSkip ++ nextEntries
-      } orElse nextEntries.takeAndRemainingIfValid(newIndex - previousEntries.length).map { case (entriesToSkip, lastEntries) =>
+          _ <- findUsage(Seq(entry), entriesToMoveBefore).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+        } yield (firstEntries :+ entry) ++ entriesToMoveBefore ++ nextEntries
+      } orElse nextEntries.takeAndRemainingIfValid(newIndex - previousEntries.length).map { case (entriesToMoveAfter, lastEntries) =>
         for {
-          _ <- findUsage(Seq(entry), entriesToSkip).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
-        } yield (previousEntries ++ entriesToSkip :+ entry) ++ lastEntries
+          _ <- findUsage(entriesToMoveAfter, Seq(entry)).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+        } yield (previousEntries ++ entriesToMoveAfter :+ entry) ++ lastEntries
       } orBadRequest "Invalid index" flatten
     }
     bookService.modifyChapter[Identity](bookKey, chapterKey, (_, _, _, chapter) => {
@@ -304,7 +304,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("entryKey") entryKey: String
   ): ResponseEntity[_] = {
     def deleteEntry(chapterEntry: ChapterEntry, chapter: Chapter, books: Seq[Book]): Try[Chapter] = {
-      findUsage(chapterEntry, books)
+      findUsage(books, chapterEntry)
         .badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
         .map(_ => chapter.copy(entries = chapter.entries.filter(_ != chapterEntry)))
     }

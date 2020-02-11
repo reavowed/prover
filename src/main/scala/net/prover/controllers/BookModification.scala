@@ -94,15 +94,17 @@ trait BookModification {
   }
 
   def findUsage(entriesPotentiallyUsing: Seq[ChapterEntry], entriesPotentiallyBeingUsed: Seq[ChapterEntry]): Option[(ChapterEntry, ChapterEntry)] = {
-    entriesPotentiallyBeingUsed.mapFind(e =>
-      e.referencedInferenceIds
-        .mapFind(i => entriesPotentiallyUsing.find(_.inferences.exists(_.id == i)).map(_ -> e)) orElse
-      e.referencedDefinitions
-        .mapFind(d => entriesPotentiallyUsing.find(_.referencedDefinitions.contains(d)).map(_ -> e)))
+    entriesPotentiallyUsing
+      .mapFind { entryUsing =>
+        entryUsing.referencedInferenceIds
+          .mapFind(referencedInference => entriesPotentiallyBeingUsed.find(_.inferences.exists(_.id == referencedInference)).map(entryUsing -> _)) orElse
+        entryUsing.referencedDefinitions
+          .mapFind(referencedDefinition => entriesPotentiallyBeingUsed.find(_ == referencedDefinition).map(entryUsing -> _))
+      }
   }
 
-  def findUsage(entry: ChapterEntry, books: Seq[Book]): Option[(ChapterEntry, ChapterEntry)] = {
-    findUsage(Seq(entry), books.view.flatMap(_.chapters).flatMap(_.entries))
+  def findUsage(books: Seq[Book], entry: ChapterEntry): Option[(ChapterEntry, ChapterEntry)] = {
+    findUsage(books.view.flatMap(_.chapters).flatMap(_.entries), Seq(entry))
   }
 
   def hasUsages(entriesPotentiallyBeingUsed: Seq[ChapterEntry], entriesPotentiallyUsing: Seq[ChapterEntry]): Boolean = {
