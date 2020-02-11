@@ -13,7 +13,8 @@ class ElidedStepProofLineWithContexts extends React.Component {
   constructor(props) {
     super(props);
     const containsHighlightedInference = _.intersection(_.map(props.step.inferencesUsed, "id"), props.hashParamsContext.inferencesToHighlight).length;
-    const isHighlightedInference = props.step.highlightedInference && _.isEqual(props.hashParamsContext.inferencesToHighlight, [props.step.highlightedInference.id])
+    const isHighlightedInference = props.step.highlightedInference && _.isEqual(props.hashParamsContext.inferencesToHighlight, [props.step.highlightedInference.id]);
+    this.proofLineRef = React.createRef();
     this.state = {
       showProofCard: !props.step.isComplete || (containsHighlightedInference && !isHighlightedInference)
     }
@@ -26,7 +27,8 @@ class ElidedStepProofLineWithContexts extends React.Component {
   }
 
   toggleProofCard = () => {
-    this.setState({showProofCard: !this.state.showProofCard})
+    this.setStatePromise({showProofCard: !this.state.showProofCard})
+      .then(() => this.proofLineRef.current && this.proofLineRef.current.focus());
   };
 
   setDescription = (description) => {
@@ -43,22 +45,30 @@ class ElidedStepProofLineWithContexts extends React.Component {
     });
   };
 
+  onProofLineKeyDown = (event) => {
+    if (event.key === "x") {
+      this.toggleProofCard();
+    }
+  };
+
   render() {
     let {step, path, children} = this.props;
     let buttons = <>
-      {step.highlightedInference && <InferenceLink inference={step.highlightedInference} suffix={<span className="fas fa-ellipsis-v"/>}/>}
-      {step.description && <span className="text-muted text-uppercase ml-1" style={{"fontFamily": "monospace"}}>{step.description} <span className="fas fa-ellipsis-v"/></span>}
-      {!step.highlightedInference && !step.description && <DropdownButton title="Highlighted Inference" size="sm" className="ml-1">
+      {step.highlightedInference && <span className="mr-2"><InferenceLink inference={step.highlightedInference}/></span>}
+      {step.description && <span className="text-muted text-uppercase mr-2" style={{"fontFamily": "monospace"}}>{step.description}</span>}
+      {!step.highlightedInference && !step.description && step.inferencesUsed.length > 0 && <DropdownButton title="Highlighted Inference" size="sm" className="mr-2" as="span">
         {_.chain(step.getAllSubsteps()).filter(s => (s instanceof ElidedStepModel)).map(s => s.description).filter().uniq().value().map(d => <Dropdown.Item key={d} onClick={() => this.setDescription(d)}>{d}</Dropdown.Item>)  }
         {_.uniqBy(step.inferencesUsed, "id").map(i => <Dropdown.Item key={i.id} onClick={() => this.highlightInference(i.id)}>{i.name}</Dropdown.Item>)}
       </DropdownButton>}
+      <span className="fas fa-ellipsis-v text-muted mr-2" onClick={this.toggleProofCard} style={{cursor: "pointer"}}/>
     </>;
     const proofLine = <ProofLine premiseReferences={step.filterReferences(path)}
                                  path={path}
                                  statement={step.statement}
                                  buttons={buttons}
-                                 onClick={this.toggleProofCard}
                                  incomplete={!step.isComplete}
+                                 onKeyDown={this.onProofLineKeyDown}
+                                 ref={this.proofLineRef}
     >
       {children}
     </ProofLine>;

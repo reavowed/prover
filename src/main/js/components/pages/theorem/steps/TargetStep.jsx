@@ -30,6 +30,12 @@ class TargetStepProofLineInner extends React.Component {
       .then(premiseJson => this.setState({availablePremises: _.map(premiseJson, this.props.entryContext.parser.parsePremise)}));
   }
 
+  onProofLineKeyDown = (event) => {
+    if (event.key === "p") {
+      this.startProving();
+    }
+  };
+
   startProving = () => {
     this.setState({proving: true});
   };
@@ -42,17 +48,12 @@ class TargetStepProofLineInner extends React.Component {
     const {proving} = this.state;
 
     return proving ?
-      <div className="card" style={{margin: ".5rem", padding: ".5rem .75rem"}}>
-        <Button size="sm" variant="danger" className="float-left" onClick={this.stopProving} style={{position: "absolute"}}><i className="fas fa-times"/></Button>
-        <h5 className="text-center">
-          <CopiableExpression expression={step.statement} />
-        </h5>
-        <ProvingCard step={step} path={path} availablePremises={this.state.availablePremises} chained={chained} />
-      </div> :
+      <ProvingCard step={step} path={path} availablePremises={this.state.availablePremises} chained={chained} stopProving={this.stopProving} /> :
       <ProofLine incomplete
                  editableBoundVariable
                  path={path}
                  additionalReferences={additionalReferences}
+                 onKeyDown={this.onProofLineKeyDown}
                  buttons={<Button variant="danger" size="sm" className="pt-0 pb-0" onClick={this.startProving}>Prove</Button>}>
         {children}
       </ProofLine>;

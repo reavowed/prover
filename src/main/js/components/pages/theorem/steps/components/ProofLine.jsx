@@ -12,7 +12,7 @@ import {InlineTextEditor} from "../../../../helpers/InlineTextEditor";
 import {BoundVariableModal} from "../../../../Modals";
 import ProofContext from "../../ProofContext";
 
-const ProofLine = styled(class ProofLine extends React.Component {
+const ProofLineBase = styled(class ProofLine extends React.Component {
   static contextType = ProofContext;
   constructor(...args) {
     super(...args);
@@ -20,7 +20,7 @@ const ProofLine = styled(class ProofLine extends React.Component {
     this.attachButtonRef = buttonRef => this.setState({ buttonRef });
     this.state = {
       isHovered: false,
-      shouldShowButtonPopover: false,
+      isFocused: false,
       shouldShowSubproofNameModal: false,
       subproofName: '',
       addingTarget: false,
@@ -28,12 +28,6 @@ const ProofLine = styled(class ProofLine extends React.Component {
       findInferenceModalCallbacks: null
     };
   }
-  toggleButtonPopover = () => {
-    this.setState({shouldShowButtonPopover: !this.state.shouldShowButtonPopover});
-  };
-  hideButtonPopover = () => {
-    this.setState({shouldShowButtonPopover: false});
-  };
   onMouseEnter = () => {
     let {premiseReferences, path, suffix} = this.props;
     this.context.setHighlighting(
@@ -51,8 +45,24 @@ const ProofLine = styled(class ProofLine extends React.Component {
       this.props.onClick(e);
     }
   };
+  onKeyDown = (event) => {
+    if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) {
+      return;
+    }
+    if (event.key === "d") {
+      this.deleteStep();
+    } else if (event.key === "r") {
+      this.clearStep();
+    } else if (event.key === "e") {
+      this.elide();
+    } else if (this.props.onKeyDown) {
+      this.props.onKeyDown(event);
+    }
+  };
+
   clearStep = () => {
-    this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "clear", {method: "POST"});
+    this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "clear", {method: "POST"})
+      .then(() => this.context.callOnStep(this.props.path, "startProving"));
   };
   deleteStep = () => {
     this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "", {method: "DELETE"});
@@ -77,7 +87,7 @@ const ProofLine = styled(class ProofLine extends React.Component {
 
 
   render() {
-    const {className, children, tooltip, path, buttons} = this.props;
+    const {className, children, tooltip, path, buttons, containerRef} = this.props;
 
     const subProofNamingModal = <BoundVariableModal show={this.state.shouldShowSubproofNameModal}
                                                     onHide={this.hideSubproofNameModal}
@@ -87,7 +97,13 @@ const ProofLine = styled(class ProofLine extends React.Component {
                                                     onSave={this.createSubproof}/>;
 
     const lineElement= <div onMouseEnter={this.onMouseEnter}
+                            onMouseOver={this.onMouseEnter}
                             onMouseLeave={this.onMouseLeave}
+                            onFocus={() => this.setState({isFocused: true})}
+                            onBlur={() => this.setState({isFocused: false})}
+                            onKeyDown={this.onKeyDown}
+                            tabIndex={0}
+                            ref={containerRef}
                             className={"mb-1 " + className}>
       <FlexRow>
         <span ref={this.attachSpanRef}
@@ -99,13 +115,12 @@ const ProofLine = styled(class ProofLine extends React.Component {
           {buttons}
         </span>
         <FlexRow.Grow/>
-        <span className="mb-n2">
+        <span className="mb-n2" ref={this.attachButtonRef}>
           {this.state.isHovered && <DraggableList.DragHandle as="span" key="handle">
             <Button as="span" size="sm" className="ml-1"><span className="fas fa-arrows-alt-v"/></Button>
           </DraggableList.DragHandle>}
-          {path && (this.state.isHovered || this.state.shouldShowButtonPopover) && <>
-            <Button ref={this.attachButtonRef} onClick={this.toggleButtonPopover} size="sm" className="ml-1"><span className="fas fa-ellipsis-v"/></Button>
-            <Overlay target={this.state.buttonRef} show={this.state.shouldShowButtonPopover} onHide={this.hideButtonPopover} rootClose placement="bottom">
+          {path && (this.state.isHovered || this.state.isFocused) && <>
+            <Overlay target={this.state.buttonRef} show={this.state.isFocused} placement="bottom">
               {({show, ...props}) => <Popover {...props}>
                 <Button onClick={this.showSubproofNameModal} variant="success" size="sm" className="ml-1">To subproof</Button>
                 <Button onClick={this.elide} variant="success" size="sm" className="ml-1">Elide</Button>
@@ -142,6 +157,8 @@ const ProofLine = styled(class ProofLine extends React.Component {
     }
   `}
 `;
+
+const ProofLine = React.forwardRef((props, ref) => <ProofLineBase {...props} containerRef={ref} />)
 
 ProofLine.SingleStatementWithPrefixContent = function({editableBoundVariable, prefix, statement, path, suffix, additionalReferences}) {
   const context = useContext(ProofContext);

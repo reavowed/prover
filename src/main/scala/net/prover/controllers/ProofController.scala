@@ -29,6 +29,19 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
     ).toResponseEntity
   }
 
+  @PostMapping(value = Array("/{stepPath}/unpack"))
+  def unpackStep(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData
+  ): ResponseEntity[_] = {
+    bookService.replaceStep[Step.WithSubsteps](bookKey, chapterKey, theoremKey, proofIndex, stepPath)((step, _) =>
+      Success(step.substeps)
+    ).toResponseEntity
+  }
+
   @DeleteMapping(value = Array("/{stepPath}"))
   def deleteStep(
     @PathVariable("bookKey") bookKey: String,
