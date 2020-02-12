@@ -130,6 +130,7 @@ trait TypedExpression[+ExpressionType <: Expression] {
   def calculateArguments(
     target: Expression,
     argumentsSoFar: Map[Int, Term],
+    previousInternalDepth: Int,
     internalDepth: Int,
     externalDepth: Int
   ): Option[Map[Int, Term]]
@@ -137,7 +138,7 @@ trait TypedExpression[+ExpressionType <: Expression] {
     target: Expression,
     argumentsSoFar: Map[Int, Term])(
     implicit substitutionContext: SubstitutionContext
-  ): Option[Map[Int, Term]] = calculateArguments(target, argumentsSoFar, 0, substitutionContext.externalDepth)
+  ): Option[Map[Int, Term]] = calculateArguments(target, argumentsSoFar, 0, 0, substitutionContext.externalDepth)
 
 
   def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = None
@@ -193,13 +194,14 @@ object Expression {
     def calculateArguments(
       targets: Seq[Expression],
       argumentsSoFar: Map[Int, Term],
+      previousInternalDepth: Int,
       internalDepth: Int,
       externalDepth: Int
     ): Option[Map[Int, Term]] = {
       expressions.zipStrict(targets).flatMap(_.foldLeft(Option(argumentsSoFar)) { case (argumentsOption, (expression, target)) =>
         for {
           arguments <- argumentsOption
-          result <- expression.calculateArguments(target, arguments, internalDepth, externalDepth)
+          result <- expression.calculateArguments(target, arguments, previousInternalDepth, internalDepth, externalDepth)
         } yield result
       })
     }

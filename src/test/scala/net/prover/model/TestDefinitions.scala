@@ -32,7 +32,9 @@ trait VariableDefinitions {
   }
   implicit def placeholderToTermComponent(placeholder: TermVariablePlaceholder): TermComponent = TermComponent(placeholder.name, Nil)
 
-  case object $
+  case object $ {
+    def ^ : FunctionParameter = FunctionParameter(0, 1)
+  }
   implicit def $ToFunctionParameter(x: $.type): FunctionParameter = FunctionParameter(0, 0)
 
   val a = TermVariablePlaceholder("a")

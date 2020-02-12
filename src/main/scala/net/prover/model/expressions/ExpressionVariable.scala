@@ -75,7 +75,7 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     if (other.isRuntimeInstance[ExpressionType]) {
       substitutionsLens.get(substitutions.stripApplications()).get(name) match {
         case Some((`arity`, applicative)) =>
-          applicative.calculateArguments(other, Map.empty, 0, externalDepth).flatMap { otherArguments =>
+          applicative.calculateArguments(other, Map.empty, internalDepth, 0, externalDepth).flatMap { otherArguments =>
             (0 until arity).foldLeft(Option(substitutions)) { case (substitutionOptions, index) =>
               substitutionOptions.flatMap { substitutionsSoFar =>
                 otherArguments.get(index).map { otherArgument =>
@@ -118,10 +118,11 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   override def calculateArguments(
     target: Expression,
     argumentsSoFar: Map[Int, Term],
+    previousInternalDepth: Int,
     internalDepth: Int,
     externalDepth: Int
   ): Option[Map[Int, Term]] = {
-    getMatch(target).flatMap(targetComponents => arguments.calculateArguments(targetComponents, argumentsSoFar, internalDepth, externalDepth))
+    getMatch(target).flatMap(targetComponents => arguments.calculateArguments(targetComponents, argumentsSoFar, previousInternalDepth, internalDepth, externalDepth))
   }
 
   override def toString: String = name + (if (arguments.nonEmpty) "(" + arguments.map(_.toString).mkString(", ") + ")" else "")

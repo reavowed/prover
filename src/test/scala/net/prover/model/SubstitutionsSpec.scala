@@ -304,5 +304,12 @@ class SubstitutionsSpec extends Specification {
           1)
         .mustEqual(Some(ForAll("x")(Equals(b, FunctionParameter(0, 1)))))
     }
+
+    "match a variable to a parameter at different internal depths" in {
+      testSuccessfulMatch(
+        1,
+        Substitutions(terms = Map(a -> (0, $), b -> (0, c))),
+        Conjunction(Equals(a, b), ForAll("x")(ElementOf(a, $))) -> Conjunction(Equals($, c), ForAll("x")(ElementOf($.^, $))))
+    }
   }
 }

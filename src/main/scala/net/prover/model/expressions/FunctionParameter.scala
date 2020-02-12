@@ -97,6 +97,7 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
   override def calculateArguments(
     target: Expression,
     argumentsSoFar: Map[Int, Term],
+    previousInternalDepth: Int,
     internalDepth: Int,
     externalDepth: Int
   ): Option[Map[Int, Term]] = {
@@ -105,7 +106,7 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
         argument <- target.asOptionalInstanceOf[Term].flatMap(_.removeExternalParameters(internalDepth))
         result <- argumentsSoFar.tryAdd(index, argument)
       } yield result
-    } else if (target == this) {
+    } else if (target.removeExternalParameters(previousInternalDepth).contains(this)) {
       Some(argumentsSoFar)
     } else {
       None
