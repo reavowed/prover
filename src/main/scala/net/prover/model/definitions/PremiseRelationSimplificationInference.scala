@@ -18,7 +18,7 @@ case class PremiseRelationSimplificationInference(inference: Inference, premise:
         for {
           substitutions <- premise.calculateSubstitutions(premiseToMatch).flatMap(_.confirmTotality)
           assertionStep <- Step.Assertion.forInference(inference, substitutions)
-          (extractionResult, ExtractionApplication(extractionSteps, _, _)) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionInferences, inference, substitutions, _ => (Nil, Nil)).toOption
+          ExtractionApplication(extractionResult, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionInferences, inference, substitutions, None, _ => (Nil, Nil)).toOption
         } yield (extractionResult, Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference).get)
       case _ =>
         None

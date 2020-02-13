@@ -5,7 +5,9 @@ import net.prover.model.expressions._
 
 object SubstatementExtractor {
 
-  case class ExtractionOption(conclusion: Statement, premises: Seq[Statement], extractionInferences: Seq[Inference])
+  case class ExtractionOption(conclusion: Statement, premises: Seq[Statement], extractionInferences: Seq[Inference]) {
+    def requiredSubstitutions: Substitutions.Required = (premises.map(_.requiredSubstitutions) :+ conclusion.requiredSubstitutions).foldTogether
+  }
 
   case class VariableTracker(namesUsedSoFar: Seq[String]) {
     def getAndAddUniqueVariableName(baseName: String): (String, VariableTracker) = {

@@ -33,13 +33,11 @@ object PossibleConclusion {
     getSubstitutions(extractionOption.conclusion).map(s => fromExtractionOption(extractionOption, Some(s)))
   }
   def fromExtractionOption(extractionOption: ExtractionOption, substitutions: Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): PossibleConclusion = {
-    val premises = extractionOption.premises
-    val conclusion = extractionOption.conclusion
     PossibleConclusion(
-      conclusion,
-      PossiblePremise.fromAvailablePremises(premises, substitutions),
+      extractionOption.conclusion,
+      PossiblePremise.fromAvailablePremises(extractionOption.premises, substitutions),
       substitutions.map(SuggestedSubstitutions(_)),
-      (conclusion.requiredSubstitutions +: premises.map(_.requiredSubstitutions)).foldTogether,
+      extractionOption.requiredSubstitutions,
       extractionOption.extractionInferences.map(_.id))
   }
 }

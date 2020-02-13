@@ -1,16 +1,17 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.{SerializedSubstitutions, StepDefinition}
-import net.prover.model.Inference
+import net.prover.model.{EntryContext, Inference}
+import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{Statement, StatementVariable, Term}
-import net.prover.model.proof.{Step, StepContext, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof.{Step, StepContext, StepProvingContext, SubstatementExtractor, SubstitutionContext}
+import org.specs2.matcher.{Matcher, ValueChecks}
 import org.specs2.mock.mockito.{CalledMatchers, MockitoMatchers, MockitoStubs}
 import org.specs2.mutable.Specification
 
 import scala.util.{Success, Try}
-import net.prover.model.TestDefinitions._
 
-trait ControllerSpec extends Specification with MockitoStubs with MockitoMatchers with CalledMatchers {
+trait ControllerSpec extends Specification with MockitoStubs with MockitoMatchers with CalledMatchers with ValueChecks {
 
   val bookKey = "test-book-key"
   val chapterKey = "test-chapter-key"
@@ -32,12 +33,17 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
   def createOuterStepContext(premises: Seq[Statement], termVariableNames: Seq[String]) = outerStepPath.foldLeft(StepContext.withPremisesAndTerms(premises, termVariableNames)) { case (context, index) => context.atIndex(index)}
 
   def definition(inference: Inference, statements: Seq[Statement], terms: Seq[Term], extractionInferences: Seq[Inference]): StepDefinition = {
-    val substitutions = inference.requiredSubstitutions.fill(statements, terms)
+    val extractionOption = SubstatementExtractor.getExtractionOptions(inference).find(_.extractionInferences == extractionInferences).get
+    val substitutions = extractionOption.requiredSubstitutions.fill(statements, terms)
     val serializedSubstitutions = SerializedSubstitutions(substitutions.statements.mapValues(_.mapRight(_.serialized)), substitutions.terms.mapValues(_.mapRight(_.serialized)))
     StepDefinition(Some(inference.id), None, serializedSubstitutions, extractionInferences.map(_.id))
   }
-  def definition(premise: Statement, terms: Map[String, Term], extractionInferences: Seq[Inference]): StepDefinition = {
-    val serializedSubstitutions = SerializedSubstitutions(Map.empty, terms.mapValues(t => 0 -> t.serialized))
+  def definition(premise: Statement, terms: Seq[Term], extractionInferences: Seq[Inference]): StepDefinition = {
+    implicit val stepContext = createOuterStepContext(Nil, Nil)
+    val extractionOption = SubstatementExtractor.getExtractionOptions(premise).find(_.extractionInferences == extractionInferences).get
+    val baseSubstitutions = premise.calculateSubstitutions(premise).get
+    val substitutions = baseSubstitutions.copy(terms = baseSubstitutions.terms ++ extractionOption.requiredSubstitutions.fill(Nil, terms).terms)
+    val serializedSubstitutions = SerializedSubstitutions(substitutions.statements.mapValues(_.mapRight(_.serialized)), substitutions.terms.mapValues(_.mapRight(_.serialized)))
     StepDefinition(None, Some(premise.serialized), serializedSubstitutions, extractionInferences.map(_.id))
   }
 
@@ -52,15 +58,28 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
   def checkModifySteps(
     service: BookService,
     existingSteps: Seq[Step],
-    expectedSteps: Seq[Step]
+    expectedSteps: Seq[Step])(
+    implicit entryContext: EntryContext
   ) = {
-    there was one(service).replaceSteps(eq(bookKey), eq(chapterKey), eq(theoremKey), eq(proofIndex), eq(outerStepPath))(modifyStepsCallback(existingSteps, expectedSteps))
+    there was one(service).replaceSteps(eq(bookKey), eq(chapterKey), eq(theoremKey), eq(proofIndex), eq(outerStepPath))(modifyStepsCallback(existingSteps, beEqualTo(expectedSteps))(entryContext))
+  }
+  def checkModifySteps(
+    service: BookService,
+    existingSteps: Seq[Step],
+    stepsMatcher: Matcher[Seq[Step]])(
+    implicit entryContext: EntryContext
+  ) = {
+    there was one(service).replaceSteps(eq(bookKey), eq(chapterKey), eq(theoremKey), eq(proofIndex), eq(outerStepPath))(modifyStepsCallback(existingSteps, stepsMatcher)(entryContext))
   }
 
-  def modifyStepsCallback(existingSteps: Seq[Step], expectedSteps: Seq[Step]): (Seq[Step], StepProvingContext) => Try[Seq[Step]] = {
+  def modifyStepsCallback(
+    existingSteps: Seq[Step],
+    stepsMatcher: Matcher[Seq[Step]])(
+    implicit entryContext: EntryContext
+  ): (Seq[Step], StepProvingContext) => Try[Seq[Step]] = {
+    implicit val provingContext = entryContextToProvingContext(entryContext)
     val outerStepContext = createOuterStepContext(Nil, existingSteps.mapCollect(_.provenStatement).flatMap(_.requiredSubstitutions.terms).map(_._1).distinct)
-    val existingStepsWithReferences = existingSteps.recalculateReferences(outerStepContext, implicitly)
-    (existingStepsWithReferences, StepProvingContext(outerStepContext, implicitly)) -> Success(expectedSteps)
+    val existingStepsWithReferences = existingSteps.recalculateReferences(outerStepContext, provingContext)
+    (existingStepsWithReferences, StepProvingContext(outerStepContext, provingContext)) -> beSuccessfulTry[Seq[Step]].withValue(stepsMatcher)
   }
-
 }

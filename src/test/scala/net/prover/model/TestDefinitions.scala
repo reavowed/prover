@@ -33,6 +33,7 @@ trait VariableDefinitions {
   implicit def placeholderToTermComponent(placeholder: TermVariablePlaceholder): TermComponent = TermComponent(placeholder.name, Nil)
 
   case object $ {
+    def apply(index: Int) = FunctionParameter(index, 0)
     def ^ : FunctionParameter = FunctionParameter(0, 1)
   }
   implicit def $ToFunctionParameter(x: $.type): FunctionParameter = FunctionParameter(0, 0)
@@ -314,7 +315,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
   import org.specs2.matcher.Matchers._
   import org.specs2.matcher.MustExpectations._
 
-  implicit val entryContext: EntryContext = EntryContext(
+  implicit val defaultEntryContext: EntryContext = EntryContext(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
       ForAllDefinition, ExistsDefinition, ExistsUnique,
@@ -344,9 +345,8 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
     StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
   }
 
-
   def beValidTheorem(implicit entryContext: EntryContext): Matcher[Theorem] = (theorem: Theorem) => {
-    val serializedTheorem = theorem.recalculateReferences(implicitly).serializedLines.mkString("\n").stripPrefix("theorem ")
+    val serializedTheorem = theorem.recalculateReferences(entryContextToProvingContext(entryContext)).serializedLines.mkString("\n").stripPrefix("theorem ")
     val parsedTheorem = Theorem.parser(entryContext).parseFromString(serializedTheorem, "Theorem")
     parsedTheorem must beTypedEqualTo(theorem)
     parsedTheorem.isComplete(new Definitions(entryContext.availableEntries)) must beTrue

@@ -57,11 +57,11 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         implicit stepProvingContext: StepProvingContext
       ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
         val (targetSource, targetResult) = swapper.swapSourceAndResult(targetLhs, targetRhs)
-        def getResult(applyExtractions: (Seq[Inference.Summary], Substitutions) => Try[(Statement, ExtractionApplication, Seq[Step.Assertion], Seq[Step], Seq[Step.Target], Seq[Step] => Step.Elided)]) = {
+        def getResult(applyExtractions: (Seq[Inference.Summary], Substitutions) => Try[(ExtractionApplication, Seq[Step.Assertion], Seq[Step], Seq[Step.Target], Seq[Step] => Step.Elided)]) = {
           for {
             extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
             substitutions <- definition.substitutions.parse()
-            (conclusion, ExtractionApplication(extractionSteps, extractionPremises, extractionTargets), additionalAssertions, additionalPremises, additionalTargets, elider) <- applyExtractions(extractionInferences, substitutions)
+            (ExtractionApplication(conclusion, _, extractionSteps, extractionPremises, extractionTargets), additionalAssertions, additionalPremises, additionalTargets, elider) <- applyExtractions(extractionInferences, substitutions)
             (conclusionRelation, conclusionLhs, conclusionRhs) <- ChainingMethods.getRelation[T](conclusion).orBadRequest("Conclusion was not binary statement")
             conclusionSource = swapper.getSource(conclusionLhs, conclusionRhs)
             rewriteChainingDefinition <- handle(conclusionSource, targetSource, conclusionRelation, conclusionLhs, conclusionRhs)
@@ -81,8 +81,8 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
             for {
               inference <- findInference(inferenceId)
               (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
-              (conclusion, extractionApplication) <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, PremiseFinder.findPremiseStepsOrTargets)
-            } yield (conclusion, extractionApplication, Seq(mainAssertion), mainPremises, mainTargets, Step.Elided.forInference(inference))
+              extractionApplication <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, None, PremiseFinder.findPremiseStepsOrTargets)
+            } yield (extractionApplication, Seq(mainAssertion), mainPremises, mainTargets, Step.Elided.forInference(inference))
           }
         }
         def fromPremise(serializedPremiseStatement: String) = {
@@ -90,8 +90,8 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
             for {
               premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
               premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
-              (conclusion, extractionApplication) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, PremiseFinder.findPremiseStepsOrTargets)
-            } yield (conclusion, extractionApplication, Nil, Nil, Nil, Step.Elided.forDescription("Extracted"))
+              extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, None, PremiseFinder.findPremiseStepsOrTargets)
+            } yield (extractionApplication, Nil, Nil, Nil, Step.Elided.forDescription("Extracted"))
           }
         }
         definition.getFromInferenceOrPremise(fromInference, fromPremise)

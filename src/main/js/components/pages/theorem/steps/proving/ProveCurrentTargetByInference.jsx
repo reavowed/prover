@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import ProofContext from "../../ProofContext";
 import {InferenceFinder} from "./components/InferenceFinder";
 
-export default function ProveCurrentTargetByInference({path, onError}) {
+export default function ProveCurrentTargetByInference({path, step, onError}) {
   const context = useContext(ProofContext);
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `possibleInferencesForCurrentTarget?searchText=${encodeURIComponent(searchText)}`);

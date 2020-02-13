@@ -35,17 +35,19 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     }.getOrElse(Success((None, premise)))
   }
 
-  def createStep(definition: StepDefinition)(implicit stepProvingContext: StepProvingContext): Try[(Statement, Step, Seq[Step.Target])] = {
+  def createStep(definition: StepDefinition, targetOption: Option[Statement])(implicit stepProvingContext: StepProvingContext): Try[(Statement, Step, Seq[Step.Target])] = {
     def withInference(inferenceId: String) = {
       for {
         inference <- findInference(inferenceId)
         substitutions <- definition.substitutions.parse()
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
         (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
-        (extractionResult, ExtractionApplication(extractionSteps, extractionPremises, extractionTargets)) <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, PremiseFinder.findPremiseStepsOrTargets)
-        extractionStep = Step.Elided.ifNecessary(mainAssertion +: extractionSteps, inference).get
+        ExtractionApplication(result, mainPremise, extractionSteps, extractionPremises, extractionTargets) <-
+          ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, targetOption, PremiseFinder.findPremiseStepsOrTargets)
+        mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = mainPremise)
+        extractionStep = Step.Elided.ifNecessary(mainAssertionWithCorrectConclusion +: extractionSteps, inference).get
         finalStep = Step.Elided.ifNecessary(mainPremises ++ extractionPremises :+ extractionStep, inference).get
-      } yield (extractionResult, finalStep, mainTargets ++ extractionTargets)
+      } yield (result, finalStep, mainTargets ++ extractionTargets)
     }
     def withPremise(serializedPremiseStatement: String) = {
       for {
@@ -53,10 +55,10 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         substitutions <- definition.substitutions.parse()
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
-        (extractionResult, ExtractionApplication(extractionSteps, extractionPremises, extractionTargets)) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, PremiseFinder.findPremiseStepsOrTargets)
+        ExtractionApplication(result, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, targetOption, PremiseFinder.findPremiseStepsOrTargets)
         extractionStep = Step.Elided.ifNecessary(extractionSteps, "Extracted").get
         finalStep = Step.Elided.ifNecessary(extractionPremises :+ extractionStep, "Extracted").get
-      } yield (extractionResult, finalStep, extractionTargets)
+      } yield (result, finalStep, extractionTargets)
     }
     definition.getFromInferenceOrPremise(withInference, withPremise)
   }
@@ -183,9 +185,11 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
       premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
+      baseSubstitutions <- premise.statement.calculateSubstitutions(premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '$premiseStatement'")
     } yield {
-      SubstatementExtractor.getExtractionOptions(premise.statement)(stepProvingContext)
-        .flatMap(PossibleConclusion.fromExtractionOptionWithTarget(_, step.statement)(stepProvingContext))
+      implicit val spc = stepProvingContext
+      SubstatementExtractor.getExtractionOptions(premise.statement)
+        .flatMap(PossibleConclusion.fromExtractionOptionWithSubstitutions(_, _.calculateSubstitutions(step.statement, baseSubstitutions)))
     }).toResponseEntity
   }
 
@@ -202,9 +206,11 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       (_, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
       premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
+      baseSubstitutions <- premise.statement.calculateSubstitutions(premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '$premiseStatement'")
     } yield {
-      SubstatementExtractor.getExtractionOptions(premise.statement)(stepProvingContext)
-        .map(PossibleConclusion.fromExtractionOption(_, None)(stepProvingContext))
+      implicit val spc = stepProvingContext
+      SubstatementExtractor.getExtractionOptions(premise.statement)
+        .map(PossibleConclusion.fromExtractionOption(_, Some(baseSubstitutions))(stepProvingContext))
     }).toResponseEntity
   }
 
@@ -220,7 +226,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     replaceStepAndAddBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (targetStep, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
-        (result, newStep, targets) <- createStep(definition)
+        (result, newStep, targets) <- createStep(definition, Some(targetStep.statement))
         _ <- (result == targetStep.statement).orBadRequest("Conclusion was incorrect")
       } yield (newStep, targets)
     }.toResponseEntity
@@ -238,7 +244,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     replaceStepAndAddBeforeTransitivity[Step](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (step, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
-        (_, newStep, targets) <- createStep(definition)
+        (_, newStep, targets) <- createStep(definition, None)
       } yield (step, targets :+ newStep)
     }.toResponseEntity
   }

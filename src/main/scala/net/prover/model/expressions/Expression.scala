@@ -140,7 +140,6 @@ trait TypedExpression[+ExpressionType <: Expression] {
     implicit substitutionContext: SubstitutionContext
   ): Option[Map[Int, Term]] = calculateArguments(target, argumentsSoFar, 0, 0, substitutionContext.externalDepth)
 
-
   def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = None
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
     if (this == other) {
