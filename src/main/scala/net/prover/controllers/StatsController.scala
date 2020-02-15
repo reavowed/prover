@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.model.EntryContext
+import net.prover.model.{EntryContext, Inference}
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.DefinedStatement
 import net.prover.model.proof.Step
@@ -32,9 +32,21 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
       (book, bookKey) <- bookService.getBooksWithKeys
       (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
       (inference, inferenceKey) <- BookService.getEntriesWithKeys(chapter)
-        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
+        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Inference]))
       if !usedInferenceIds.contains(inference.id)
     } yield BookService.getEntryUrl(bookKey, chapterKey, inferenceKey)
+  }
+
+  @GetMapping(value = Array("unprovenTheorems"))
+  def getUnprovenTheorems: Seq[String] = {
+    val (books, definitions) = bookService.booksAndDefinitions
+    for {
+      (book, bookKey) <- BookService.getBooksWithKeys(books)
+      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
+      (theorem, theoremKey) <- BookService.getEntriesWithKeys(chapter)
+        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
+      if !theorem.isComplete(definitions)
+    } yield BookService.getEntryUrl(bookKey, chapterKey, theoremKey)
   }
 
   @GetMapping(value = Array("findAssertions"))
