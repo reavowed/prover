@@ -53,7 +53,12 @@ premise ∈ x equivalenceQuotient A ≈
 conclusion ∃ a ∧ ∈ $0 A = x equivalenceClass $0 ≈
 {
   prove = equivalenceQuotient A ≈ replacementSet a A equivalenceClass $0 ≈ ee847b980cb0ac32359a914ee29e89ca3b82e119bbfa35371f913a1aa2c74040 () (≈, A) p0
-  prove ∃ a ∧ ∈ $0 A = x equivalenceClass $0 ≈ 59f16feab39e419a00c1a5ff891838a6995d40cf560efb4a00d0b51a9a16ff2a () (equivalenceQuotient A ≈, A, equivalenceClass $0 ≈, x) 0 p1
+  elided b29d1a2902ac2af3d85c5a939ca36f99c1a246caf6799bcf64e4b7a3ad1a40d0 {
+    prove ∀ s ↔ ∈ $0 equivalenceQuotient A ≈ ∃ a ∧ ∈ $0 A = $$0 equivalenceClass $0 ≈ b29d1a2902ac2af3d85c5a939ca36f99c1a246caf6799bcf64e4b7a3ad1a40d0 () (equivalenceQuotient A ≈, A, equivalenceClass $0 ≈) 0
+    prove ↔ ∈ x equivalenceQuotient A ≈ ∃ a ∧ ∈ $0 A = x equivalenceClass $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 equivalenceQuotient A ≈ ∃ a ∧ ∈ $0 A = $$0 equivalenceClass $0 ≈) (x) 1.0
+    prove → ∈ x equivalenceQuotient A ≈ ∃ a ∧ ∈ $0 A = x equivalenceClass $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ x equivalenceQuotient A ≈, ∃ a ∧ ∈ $0 A = x equivalenceClass $0 ≈) () 1.1
+    prove ∃ a ∧ ∈ $0 A = x equivalenceClass $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ x equivalenceQuotient A ≈, ∃ a ∧ ∈ $0 A = x equivalenceClass $0 ≈) () 1.2 p1
+  }
 }
 
 theorem Element of Own Equivalence Class
@@ -252,7 +257,12 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
           let a_x ∧ ∈ $0 A = $$0 equivalenceClass $0 ≈ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 A = $0 equivalenceClass $$$0 ≈, ∃! y ∈ orderedPair $$0 $0 $$$0) () {
             take y {
               assume ∈ orderedPair $$$0 $0 $$$$0 {
-                prove ∃ a ∧ ∈ $0 A = orderedPair $$$$0 $$0 orderedPair equivalenceClass $0 ≈ apply f $0 59f16feab39e419a00c1a5ff891838a6995d40cf560efb4a00d0b51a9a16ff2a () ($$$$0, A, orderedPair equivalenceClass $$$$$0 ≈ apply f $$$$$0, orderedPair $$$0 $0) 0a 0.0.2.0.1.0.0a
+                elided b29d1a2902ac2af3d85c5a939ca36f99c1a246caf6799bcf64e4b7a3ad1a40d0 {
+                  prove ∀ s ↔ ∈ $0 $$$$$0 ∃ a ∧ ∈ $0 A = $$0 orderedPair equivalenceClass $0 ≈ apply f $0 b29d1a2902ac2af3d85c5a939ca36f99c1a246caf6799bcf64e4b7a3ad1a40d0 () ($$$$0, A, orderedPair equivalenceClass $$$$$0 ≈ apply f $$$$$0) 0a
+                  prove ↔ ∈ orderedPair $$$0 $0 $$$$0 ∃ a ∧ ∈ $0 A = orderedPair $$$$0 $$0 orderedPair equivalenceClass $0 ≈ apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 $$$$0 ∃ a ∧ ∈ $0 A = $$$$$$0 orderedPair equivalenceClass $0 ≈ apply f $0) (orderedPair $$$0 $0) 0.0.2.0.1.0.0.0.0
+                  prove → ∈ orderedPair $$$0 $0 $$$$0 ∃ a ∧ ∈ $0 A = orderedPair $$$$0 $$0 orderedPair equivalenceClass $0 ≈ apply f $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$$0 $0 $$$$0, ∃ a ∧ ∈ $0 A = orderedPair $$$$0 $$0 orderedPair equivalenceClass $0 ≈ apply f $0) () 0.0.2.0.1.0.0.0.1
+                  prove ∃ a ∧ ∈ $0 A = orderedPair $$$$0 $$0 orderedPair equivalenceClass $0 ≈ apply f $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$$0 $0 $$$$0, ∃ a ∧ ∈ $0 A = orderedPair $$$$0 $$0 orderedPair equivalenceClass $0 ≈ apply f $0) () 0.0.2.0.1.0.0.0.2 0.0.2.0.1.0.0a
+                }
                 let a_y ∧ ∈ $0 A = orderedPair $$$$0 $$0 orderedPair equivalenceClass $0 ≈ apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$0 A = orderedPair $$$0 $0 orderedPair equivalenceClass $$$$$0 ≈ apply f $$$$$0, = $0 apply f $$0) () {
                   elided 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 {
                     prove = $$$$0 equivalenceClass $0 ≈ 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () ($$$$0, $$0, equivalenceClass $0 ≈, apply f $0) 0.0.2.0.1.0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c

@@ -176,7 +176,11 @@ premise ∀ x ↔ with ($0) φ with ($0) ψ
 conclusion ∃! x with ($0) ψ
 {
   prove ∧ ∃ x with ($0) φ ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0 3bd85ee951a3c89051f17367163d0ec7295c3fa75ac7cadf25fdb7ccd7db35dc (with ($0) φ) () p0
-  prove ∃ x with ($0) ψ 87e71fbe429a6b71a2761c5bd01710af4d008768f51fa6773d248636406fefbf (with ($0) φ, with ($0) ψ) () 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p1
+  elided f9cd9ee7e387058ae9eb81964315273c7cf579e08bcf6a56979dec7e74e1d692 {
+    prove ↔ ∃ x with ($0) φ ∃ x with ($0) ψ f9cd9ee7e387058ae9eb81964315273c7cf579e08bcf6a56979dec7e74e1d692 (with ($0) φ, with ($0) ψ) () p1
+    prove → ∃ x with ($0) φ ∃ x with ($0) ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∃ x with ($0) φ, ∃ x with ($0) ψ) () 1.0
+    prove ∃ x with ($0) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ x with ($0) φ, ∃ x with ($0) ψ) () 1.1 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+  }
   take x {
     take y {
       assume ∧ with ($$0) ψ with ($0) ψ {

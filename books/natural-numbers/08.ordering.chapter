@@ -2,7 +2,7 @@ The standard ordering on natural numbers.
 
 term < ()
   name (Standard order on ℕ)
-  (= $0 productComprehension a b ℕ ℕ ∈ $0 $1)
+  (= $0 comprehension2 a b ℕ ℕ ∈ $0 $1)
   attributes (infix-relation)
 
 write ∈ orderedPair a b < as lessN
@@ -10,16 +10,16 @@ write ∈ orderedPair a b < as lessN
 theorem < Is Element Relation
 conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0
 {
-  prove = < productComprehension a b ℕ ℕ ∈ $0 $1 46a3844b528238eaf9d850ec2286edfe1aa2de50841d34a16a2eac55df09f1e0 () ()
-  prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 751c850eba5a2cfa3c5528d6b65b68d0be82e329e4dbf0c89e5538bb2a9786fd (∈ $0 $1) (<, ℕ, ℕ) 0
+  prove = < comprehension2 a b ℕ ℕ ∈ $0 $1 7bf64b9c08f03797c5efeaf5e4606332584daa6a6c75a736d0f5a4a14c7a917e () ()
+  prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 < ∈ $$0 $0 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 (∈ $0 $1) (<, ℕ, ℕ) 0
 }
 
 theorem < Is a Strict Total Order on ℕ
 conclusion strictTotalOrder < ℕ
 {
-  prove = < productComprehension a b ℕ ℕ ∈ $0 $1 46a3844b528238eaf9d850ec2286edfe1aa2de50841d34a16a2eac55df09f1e0 () ()
+  prove = < comprehension2 a b ℕ ℕ ∈ $0 $1 7bf64b9c08f03797c5efeaf5e4606332584daa6a6c75a736d0f5a4a14c7a917e () ()
   subproof (Relation) {
-    prove ⊆ < product ℕ ℕ c0ce77038a2a5774880329460d6e08cf82a79c4a0e991c50d5bccf2d08a9e00b (∈ $0 $1) (<, ℕ, ℕ) 0
+    prove ⊆ < product ℕ ℕ 5e99c5b358fd307f501708a728801ffdcbf4b40a5c6c33ad65f50b67e51d8d64 (∈ $0 $1) (<, ℕ, ℕ) 0
     prove relation < ℕ 64dac6bb3fd9231be3d7210a6751c712a4af4bcd31ef18b3fbcfd19610b1b57b () (<, ℕ) 1.0
   }
   subproof (Asymmetric) {
@@ -347,7 +347,7 @@ conclusion ¬ ∈ orderedPair n 0 <
 comment Non-strict ordering.
 
 term ≤ ()
-  (= $0 productComprehension a b ℕ ℕ ∨ ∈ orderedPair $0 $1 < = $0 $1)
+  (= $0 comprehension2 a b ℕ ℕ ∨ ∈ orderedPair $0 $1 < = $0 $1)
   shorthand (le)
   attributes (infix-relation)
 
@@ -356,8 +356,8 @@ write ∈ orderedPair a b ≤ as leqN
 theorem Membership Condition for ≤
 conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0
 {
-  prove = ≤ productComprehension a b ℕ ℕ ∨ ∈ orderedPair $0 $1 < = $0 $1 77353c434b8259dd965a806c0d441637e47b9f6419f2629a36cf323b085b6c12 () ()
-  prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0 751c850eba5a2cfa3c5528d6b65b68d0be82e329e4dbf0c89e5538bb2a9786fd (∨ ∈ orderedPair $0 $1 < = $0 $1) (≤, ℕ, ℕ) 0
+  prove = ≤ comprehension2 a b ℕ ℕ ∨ ∈ orderedPair $0 $1 < = $0 $1 47d2c685211af10ad44b126df63a8137e2c99bbc8736a99e10a0548cdcec8794 () ()
+  prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 < = $$0 $0 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 (∨ ∈ orderedPair $0 $1 < = $0 $1) (≤, ℕ, ℕ) 0
 }
 
 theorem ≤ Is Element Relation or Equality
@@ -564,8 +564,8 @@ theorem ≤ Is a Well-Order on ℕ
 conclusion wellOrder ≤ ℕ
 {
   prove strictTotalOrder < ℕ 81dedf73d69b50c05235585a865ec89191df7af8ed00dd4751e918a19efa59c5 () ()
-  prove = ≤ productComprehension a b ℕ ℕ ∨ ∈ orderedPair $0 $1 < = $0 $1 77353c434b8259dd965a806c0d441637e47b9f6419f2629a36cf323b085b6c12 () ()
-  prove totalOrder ≤ ℕ d1c9fea91ab59bfbea0d7fd36c4d57a69a6a0eb70d2b33dc3f7b625ca2daf906 () (<, ℕ, ≤) 0 1
+  prove = ≤ comprehension2 a b ℕ ℕ ∨ ∈ orderedPair $0 $1 < = $0 $1 47d2c685211af10ad44b126df63a8137e2c99bbc8736a99e10a0548cdcec8794 () ()
+  prove totalOrder ≤ ℕ 4914703dff48c6d3e867d6501b2448f5f71ed5a6b342558b0a341b376f1f996d () (<, ℕ, ≤) 0 1
   take S {
     assume ⊆ $0 ℕ {
       assume ¬ = $0 ∅ {

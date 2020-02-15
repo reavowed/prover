@@ -739,7 +739,12 @@ conclusion function ⍳_ℤ ℕ ℤ
         prove ∈ orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ ⍳_ℤ d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () (⍳_ℤ, ℕ, orderedPair $$0 equivalenceClass orderedPair $$0 0 ~_ℤ, $0) 0 2.0.0a
         take x {
           assume ∈ orderedPair $$0 $0 ⍳_ℤ {
-            prove ∃ m ∧ ∈ $0 ℕ = orderedPair $$$0 $$0 orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ 59f16feab39e419a00c1a5ff891838a6995d40cf560efb4a00d0b51a9a16ff2a () (⍳_ℤ, ℕ, orderedPair $$$0 equivalenceClass orderedPair $$$0 0 ~_ℤ, orderedPair $$0 $0) 0 2.0.0.1.0a
+            elided b29d1a2902ac2af3d85c5a939ca36f99c1a246caf6799bcf64e4b7a3ad1a40d0 {
+              prove ∀ s ↔ ∈ $0 ⍳_ℤ ∃ m ∧ ∈ $0 ℕ = $$0 orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ b29d1a2902ac2af3d85c5a939ca36f99c1a246caf6799bcf64e4b7a3ad1a40d0 () (⍳_ℤ, ℕ, orderedPair $$$0 equivalenceClass orderedPair $$$0 0 ~_ℤ) 0
+              prove ↔ ∈ orderedPair $$0 $0 ⍳_ℤ ∃ m ∧ ∈ $0 ℕ = orderedPair $$$0 $$0 orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 ⍳_ℤ ∃ a ∧ ∈ $0 ℕ = $$$$0 orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ) (orderedPair $$0 $0) 2.0.0.1.0.0.0
+              prove → ∈ orderedPair $$0 $0 ⍳_ℤ ∃ m ∧ ∈ $0 ℕ = orderedPair $$$0 $$0 orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$0 $0 ⍳_ℤ, ∃ a ∧ ∈ $0 ℕ = orderedPair $$$0 $$0 orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ) () 2.0.0.1.0.0.1
+              prove ∃ m ∧ ∈ $0 ℕ = orderedPair $$$0 $$0 orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 ⍳_ℤ, ∃ a ∧ ∈ $0 ℕ = orderedPair $$$0 $$0 orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ) () 2.0.0.1.0.0.2 2.0.0.1.0a
+            }
             let m_n ∧ ∈ $0 ℕ = orderedPair $$$0 $$0 orderedPair $0 equivalenceClass orderedPair $0 0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 ℕ = orderedPair $$0 $0 orderedPair $$$0 equivalenceClass orderedPair $$$0 0 ~_ℤ, = $0 equivalenceClass orderedPair $$0 0 ~_ℤ) () {
               prove = $$0 equivalenceClass orderedPair $0 0 ~_ℤ 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$$0, $$0, $0, equivalenceClass orderedPair $0 0 ~_ℤ) 2.0.0.1.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
               elided (Rewritten) {
