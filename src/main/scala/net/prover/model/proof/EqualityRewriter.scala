@@ -3,6 +3,7 @@ package net.prover.model.proof
 import net.prover.model._
 import net.prover.model.definitions.{Equality, RearrangementStep, Wrapper}
 import net.prover.model.expressions._
+import net.prover.util.PossibleSingleMatch
 
 import scala.Ordering.Implicits._
 
@@ -92,9 +93,16 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       }
       def findDirectly = {
         for {
-          steps <- PremiseFinder.findPremiseSteps(equality(premiseTerm, targetTerm))
+          (steps, inferences) <- PremiseFinder.findPremiseStepsWithInferences(equality(premiseTerm, targetTerm)).map(_.split)
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
-          inference = Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity)
+          inference = inferences.singleMatch match {
+            case PossibleSingleMatch.NoMatches =>
+              Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity)
+            case PossibleSingleMatch.SingleMatch(inference) =>
+              Some(inference.summary)
+            case PossibleSingleMatch.MultipleMatches =>
+              None
+          }
         } yield Seq((RearrangementStep(wrapper(targetTerm), steps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
       }
       def findReverse = {

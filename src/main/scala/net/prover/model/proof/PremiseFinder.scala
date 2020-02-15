@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.Substitutions
+import net.prover.model.{Inference, Substitutions}
 import net.prover.model.definitions.BinaryRelation
 import net.prover.model.expressions._
 
@@ -52,10 +52,17 @@ object PremiseFinder {
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
   ): Option[Seq[Step]] = {
+    findPremiseStepsWithInferences(targetStatement).map(_.map(_._1))
+  }
+
+  def findPremiseStepsWithInferences(
+    targetStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[Seq[(Step, Inference)]] = {
     import stepProvingContext._
 
     def fromPremises = if (allPremises.exists(_.statement == targetStatement)) Some(Nil) else None
-    def fromFact = ProofHelper.findFact(targetStatement).map(Seq(_))
+    def fromFact = ProofHelper.findFact(targetStatement).map(s => Seq((s, s.inference)))
 
     def fromRewrite = (for {
       (rewriteInference, rewritePremise) <- provingContext.rewriteInferences.iterator
@@ -63,9 +70,9 @@ object PremiseFinder {
       premise <- rewritePremise.applySubstitutions(substitutions)
       if (allPremises.exists(_.statement == premise))
       step <- Step.Assertion.forInference(rewriteInference, substitutions)
-    } yield Seq(step)).headOption
+    } yield Seq((step, rewriteInference))).headOption
 
-    def findFromSimplifiedPremiseRelations(premise: Statement, targetLhs: Term, targetRhs: Term): Option[Seq[Step]] = {
+    def findFromSimplifiedPremiseRelations(premise: Statement, targetLhs: Term, targetRhs: Term): Option[Seq[(Step, Inference)]] = {
       if (premise == targetStatement)
         Some(Nil)
       else
@@ -73,7 +80,7 @@ object PremiseFinder {
           premiseRelationSimplificationInference <- provingContext.premiseRelationSimplificationInferences.iterator
           (newPremise, assertionStep) <- premiseRelationSimplificationInference.matchPremiseToTarget(premise, targetLhs, targetRhs)
           innerSteps <- findFromSimplifiedPremiseRelations(newPremise, targetLhs, targetRhs)
-        } yield assertionStep +: innerSteps).headOption
+        } yield (assertionStep, premiseRelationSimplificationInference.inference) +: innerSteps).headOption
     }
 
     def fromSimplifiedPremiseRelations = (for {
@@ -87,9 +94,9 @@ object PremiseFinder {
       for {
         substitutions <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality)
         premiseStatements <- inference.substitutePremises(substitutions)
-        premiseSteps <- findPremiseSteps(premiseStatements)
+        premiseSteps <- findPremiseStepsWithInferences(premiseStatements)
         assertionStep = Step.Assertion(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
-      } yield premiseSteps :+ assertionStep
+      } yield premiseSteps :+ (assertionStep, inference)
     }
 
     fromPremises orElse fromFact orElse fromRewrite orElse fromSimplifiedPremiseRelations orElse bySimplifyingTarget
@@ -99,7 +106,14 @@ object PremiseFinder {
     premiseStatements: Seq[Statement])(
     implicit stepProvingContext: StepProvingContext
   ): Option[Seq[Step]] = {
-    premiseStatements.map(findPremiseSteps).traverseOption.map(_.flatten)
+    findPremiseStepsWithInferences(premiseStatements).map(_.map(_._1))
+  }
+
+  def findPremiseStepsWithInferences(
+    premiseStatements: Seq[Statement])(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[Seq[(Step, Inference)]] = {
+    premiseStatements.map(findPremiseStepsWithInferences).traverseOption.map(_.flatten)
   }
 
   def findPremiseStepsOrTargets(
