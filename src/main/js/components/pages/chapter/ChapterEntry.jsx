@@ -1,9 +1,9 @@
 import React, {useContext} from "react";
 import Button from "react-bootstrap/Button";
 import styled from "styled-components";
+import {DefinedExpression} from "../../../models/Expression";
 import EntryContext from "../../EntryContext";
 import {CopiableExpression} from "../../ExpressionComponent";
-import {FlexRow} from "../../FlexRow";
 import {formatHtml, replacePlaceholders} from "../../helpers/Formatter";
 import {ResultWithPremises} from "../../ResultWithPremises";
 import ChapterContext from "./ChapterContext";
@@ -25,12 +25,16 @@ export default function ChapterEntry({entry}) {
       return <InferenceEntry key={entry.url} title="Theorem" entry={entry} incomplete={!entry.isComplete} />;
     case "statementDefinition":
       return <DefinitionEntry key={entry.url} title="Statement Definition" entry={entry}>
-        {entry.definingStatement && <><CopiableExpression expression={entry.defaultValue}/> is defined by <CopiableExpression expression={entry.definingStatement}/>.</>}
+        {entry.definingStatement && <><CopiableExpression expression={entry.defaultValue}/> is defined as <CopiableExpression expression={entry.definingStatement}/>.</>}
       </DefinitionEntry>;
     case "termDefinition":
+      const equality = _.find(entryContext.definitions, d => _.includes(d.attributes, "equality"));
+      const result = (equality && entry.definingStatement instanceof DefinedExpression && entry.definingStatement.definition === equality && entry.definingStatement.components[0].serialize() === entry.defaultValue.serialize()) ?
+        <><CopiableExpression expression={entry.defaultValue}/> is defined to be equal to <CopiableExpression expression={entry.definingStatement.components[1]}/></> :
+        <><CopiableExpression expression={entry.defaultValue}/> is defined by <CopiableExpression expression={entry.definingStatement}/></>;
       return <DefinitionEntry key={entry.url} title="Term Definition" entry={entry}>
         <ResultWithPremises premises={entry.premises}
-                            result={<><CopiableExpression expression={entry.defaultValue}/> is defined by <CopiableExpression expression={entry.definingStatement}/></>}/>
+                            result={result}/>
       </DefinitionEntry>;
     case "typeDefinition":
       const definition = entryContext.typeDefinitions[entry.symbol];

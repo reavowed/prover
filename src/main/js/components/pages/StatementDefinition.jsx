@@ -10,7 +10,7 @@ export function StatementDefinition({definition: definitionJson, definitions, ty
 
   return <ExpressionDefinition title="Statement Definition" definition={definition} entryContext={entryContext} parser={parser} {...otherProps}>
     {definition.definingStatement ?
-      <><CopiableExpression expression={definition.defaultValue} /> is defined by <CopiableExpression expression={definition.definingStatement} />.</> :
+      <><CopiableExpression expression={definition.defaultValue} /> is defined as <CopiableExpression expression={definition.definingStatement} />.</> :
       <><CopiableExpression expression={definition.defaultValue} /> is not defined in terms of another expression - it derives its meaning from its usage in axioms.</>
     }
   </ExpressionDefinition>;

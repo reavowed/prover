@@ -78,7 +78,7 @@ export class Chapter extends React.Component {
     const {title, url, entries, editing, definitions, typeDefinitions} = this.state;
 
     const context = {updateChapter: this.updateChapter, url, editing};
-    const entryContext = {parser: new Parser(definitions, typeDefinitions), displayShorthands, definitionShorthands, typeDefinitions};
+    const entryContext = {parser: new Parser(definitions, typeDefinitions), displayShorthands, definitionShorthands, definitions, typeDefinitions};
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <ChapterContext.Provider value={context}>
