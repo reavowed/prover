@@ -45,9 +45,16 @@ class ElidedStepProofLineWithContexts extends React.Component {
     });
   };
 
+  unpackStep = () => {
+    this.props.proofContext.fetchJsonForStepAndUpdateTheorem(this.props.path, "unpack", {method: "POST"});
+  };
+
+
   onProofLineKeyDown = (event) => {
     if (event.key === "x") {
       this.toggleProofCard();
+    } else if (event.key === "u") {
+      this.unpackStep();
     }
   };
 
