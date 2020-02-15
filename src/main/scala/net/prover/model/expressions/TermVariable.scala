@@ -9,7 +9,10 @@ case class TermVariable(name: String, arguments: Seq[Term]) extends ExpressionVa
   }
   def update(newArguments: Seq[Term]): TermVariable = TermVariable(name, newArguments)
 
-  override def getTerms(depth: Int): Seq[(Term, Term, Seq[Int])] = super[Term].getTerms(depth) ++ super[ExpressionVariable].getTerms(depth)
+  override def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, Term, Int, Seq[Int])] = {
+    super[Term].getTerms(internalDepth, externalDepth) ++
+      super[ExpressionVariable].getTerms(internalDepth, externalDepth)
+  }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
     substitutions: Substitutions.Possible,

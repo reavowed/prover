@@ -31,14 +31,17 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     update(arguments.map(_.replaceDefinition(oldDefinition, newDefinition)))
   }
 
-  override def getTerms(depth: Int): Seq[(Term, ExpressionType, Seq[Int])] = {
-    def helper(previous: Seq[Term], next: Seq[Term], acc: Seq[(Term, ExpressionType, Seq[Int])]): Seq[(Term, ExpressionType, Seq[Int])] = {
+  override def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, ExpressionType, Int, Seq[Int])] = {
+    def helper(previous: Seq[Term], next: Seq[Term], acc: Seq[(Term, ExpressionType, Int, Seq[Int])]): Seq[(Term, ExpressionType, Int, Seq[Int])] = {
       next match {
         case current +: more =>
           helper(
             previous :+ current,
             more,
-            acc ++ current.getTerms(depth).map { case (term, function, path) => (term, update((previous :+ function) ++ more), previous.length +: path)})
+            acc ++ current.getTerms(internalDepth, externalDepth)
+              .map { case (term, function, depth, path) =>
+                (term, update((previous :+ function) ++ more), depth, previous.length +: path)
+              })
         case _ =>
           acc
       }

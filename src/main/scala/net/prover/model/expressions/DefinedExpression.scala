@@ -25,23 +25,22 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     components.map(_.definitionalComplexity).sum + definition.complexity
   }
 
-  override def getTerms(depth: Int): Seq[(Term, ExpressionType, Seq[Int])] = {
+  override def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, ExpressionType, Int, Seq[Int])] = {
     @scala.annotation.tailrec
-    def helper(previous: Seq[Expression], next: Seq[Expression], acc: Seq[(Term, ExpressionType, Seq[Int])]): Seq[(Term, ExpressionType, Seq[Int])] = {
+    def helper(previous: Seq[Expression], next: Seq[Expression], acc: Seq[(Term, ExpressionType, Int, Seq[Int])]): Seq[(Term, ExpressionType, Int, Seq[Int])] = {
       next match {
         case current +: more =>
           helper(
             previous :+ current,
             more,
-            acc ++ current.getTerms(definition.increaseDepth(depth)).map { case (term, function, path) => (term, updateComponents((previous :+ function) ++ more), previous.length +: path)})
+            acc ++ current.getTerms(definition.increaseDepth(internalDepth), externalDepth).map { case (term, function, depth, path) =>
+              (term, updateComponents((previous :+ function) ++ more), depth, previous.length +: path)
+            })
         case _ =>
           acc
       }
     }
-    if (scopedBoundVariableNames.isEmpty)
-      helper(Nil, components, Nil)
-    else
-      Nil
+    helper(Nil, components, Nil).mapCollect(_.optionMap1(t => if (scopedBoundVariableNames.isEmpty) Some(t) else t.removeExternalParameters(1)))
   }
   override def definitionUsages: DefinitionUsages = components.map(_.definitionUsages).foldTogether.addUsage(definition)
 
