@@ -72,21 +72,38 @@ object PremiseFinder {
       step <- Step.Assertion.forInference(rewriteInference, substitutions)
     } yield Seq((step, rewriteInference))).headOption
 
-    def findFromSimplifiedPremiseRelations(premise: Statement, targetLhs: Term, targetRhs: Term): Option[Seq[(Step, Inference)]] = {
+    def findFromDoubleSimplifiedPremiseRelations(premise: Statement, targetLhs: Term, targetRhs: Term): Option[Seq[(Step, Inference)]] = {
       if (premise == targetStatement)
         Some(Nil)
       else
         (for {
-          premiseRelationSimplificationInference <- provingContext.premiseRelationSimplificationInferences.iterator
+          premiseRelationSimplificationInference <- provingContext.premiseRelationDoubleSimplificationInferences.iterator
           (newPremise, assertionStep) <- premiseRelationSimplificationInference.matchPremiseToTarget(premise, targetLhs, targetRhs)
-          innerSteps <- findFromSimplifiedPremiseRelations(newPremise, targetLhs, targetRhs)
+          innerSteps <- findFromDoubleSimplifiedPremiseRelations(newPremise, targetLhs, targetRhs)
         } yield (assertionStep, premiseRelationSimplificationInference.inference) +: innerSteps).headOption
     }
 
-    def fromSimplifiedPremiseRelations = (for {
+    def fromDoubleSimplifiedPremiseRelations = (for {
       (targetLhs, targetRhs) <- provingContext.definedBinaryStatements.ofType[BinaryRelation].iterator.mapCollect(_.unapply(targetStatement))
       premise <- allPremises
-      steps <- findFromSimplifiedPremiseRelations(premise.statement, targetLhs, targetRhs)
+      steps <- findFromDoubleSimplifiedPremiseRelations(premise.statement, targetLhs, targetRhs)
+    } yield steps).headOption
+
+    def findFromLeftHandSimplifiedPremiseRelations(premise: Statement, targetLhs: Term, targetRhs: Term): Option[Seq[(Step, Inference)]] = {
+      if (premise == targetStatement)
+        Some(Nil)
+      else
+        (for {
+          premiseRelationSimplificationInference <- provingContext.premiseRelationLeftHandSimplificationInferences.iterator
+          (newPremise, assertionStep) <- premiseRelationSimplificationInference.matchPremiseToTarget(premise, targetLhs, targetRhs)
+          innerSteps <- findFromLeftHandSimplifiedPremiseRelations(newPremise, targetLhs, targetRhs)
+        } yield (assertionStep, premiseRelationSimplificationInference.inference) +: innerSteps).headOption
+    }
+
+    def fromLeftHandSimplifiedPremiseRelations = (for {
+      (targetLhs, targetRhs) <- provingContext.definedBinaryStatements.ofType[BinaryRelation].iterator.mapCollect(_.unapply(targetStatement))
+      premise <- allPremises
+      steps <- findFromLeftHandSimplifiedPremiseRelations(premise.statement, targetLhs, targetRhs)
     } yield steps).headOption
 
 
@@ -99,7 +116,7 @@ object PremiseFinder {
       } yield premiseSteps :+ (assertionStep, inference)
     }
 
-    fromPremises orElse fromFact orElse fromRewrite orElse fromSimplifiedPremiseRelations orElse bySimplifyingTarget
+    fromPremises orElse fromFact orElse fromRewrite orElse fromDoubleSimplifiedPremiseRelations orElse fromLeftHandSimplifiedPremiseRelations orElse bySimplifyingTarget
   }
 
   def findPremiseSteps(

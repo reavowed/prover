@@ -9,9 +9,9 @@ import org.specs2.mutable.Specification
 class PremiseFinderSpec extends Specification {
     "premise finder" should {
 
-    def checkFindPremise(target: Statement, premise: Statement): MatchResult[Any] = {
-      implicit val stepContext = StepContext.withPremisesAndTerms(Seq(premise), premise.requiredSubstitutions.terms.map(_._1))
-      PremiseFinder.findPremiseSteps(target) must beSome(beStepsThatMakeValidTheorem(Seq(premise), target))
+    def checkFindPremise(target: Statement, premises: Statement*): MatchResult[Any] = {
+      implicit val stepContext = StepContext.withPremisesAndTerms(premises, premises.map(_.requiredSubstitutions).foldTogether.terms.map(_._1))
+      PremiseFinder.findPremiseSteps(target) must beSome(beStepsThatMakeValidTheorem(premises, target))
     }
 
     "find premise using rewrite" in {
@@ -48,6 +48,18 @@ class PremiseFinderSpec extends Specification {
       checkFindPremise(
         ElementOf(add(First(a), Second(a)), Naturals),
         ElementOf(a, Product(Naturals, Naturals)))
+    }
+
+    "find premise by simplification" in {
+      checkFindPremise(
+        ElementOf(a, A),
+        ElementOf(Pair(a, b), Product(A, B)))
+    }
+
+    "find premise by double simplification" in {
+      checkFindPremise(
+        ElementOf(a, A),
+        ElementOf(Pair(Pair(a, b), Pair(c, d)), Product(Product(A, B), Product(C, D))))
     }
   }
 }

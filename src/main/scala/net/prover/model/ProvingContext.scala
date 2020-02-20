@@ -42,7 +42,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val alwaysAllowableOperator: Allowable[BinaryOperator] = alwaysAllowable
     implicit val allowableCommutativity: Allowable[Commutativity] = allowable(r => isAllowed(r.inference) && isAllowed(r.equality))
     implicit val allowableAssociativity: Allowable[Associativity] = allowable(r => isAllowed(r.inference) && isAllowed(r.equality))
-    implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationSimplificationInference] = allowable(r => isAllowed(r.inference))
+    implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationLeftHandSimplificationInference] = allowable(r => isAllowed(r.inference))
 
     implicit val allowableEquality: Allowable[Equality] = allowable(e =>
       isAllowed(e.relation) &&
@@ -136,7 +136,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     replace(definitions.rearrangeableFunctions)
   }
 
-  lazy val premiseRelationSimplificationInferences: Seq[PremiseRelationSimplificationInference] = {
+  lazy val premiseRelationLeftHandSimplificationInferences: Seq[PremiseRelationLeftHandSimplificationInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
       inference <- entryContext.inferences
@@ -150,7 +150,22 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
       (premiseLhs, premiseRhs) <- premiseRelation.unapply(premise)
       if conclusionLhs.complexity >= premiseLhs.complexity && conclusionLhs.definitionUsages.contains(premiseLhs.definitionUsages)
       if premiseRhs.complexity > conclusionRhs.complexity && premiseRhs.definitionUsages.contains(conclusionRhs.definitionUsages)
-    } yield PremiseRelationSimplificationInference(inference, premise, extractionOption.conclusion, premiseRelation, extractionOption.extractionInferences)
+    } yield PremiseRelationLeftHandSimplificationInference(inference, premise, extractionOption.conclusion, premiseRelation, extractionOption.extractionInferences)
+  }
+
+  lazy val premiseRelationDoubleSimplificationInferences: Seq[PremiseRelationDoubleSimplificationInference] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      inference <- entryContext.inferences
+      if inference.premises.length <= 1
+      extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(this)
+      premise <- extractionOption.premises.single.toSeq
+      conclusionRelation <- definedBinaryRelations
+      (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
+      premiseRelation <- definedBinaryRelations
+      (premiseLhs, premiseRhs) <- premiseRelation.unapply(premise)
+      if premiseLhs.complexity > conclusionLhs.complexity && premiseRhs.complexity > conclusionRhs.complexity
+    } yield PremiseRelationDoubleSimplificationInference(inference, premise, extractionOption.conclusion, premiseRelation, extractionOption.extractionInferences)
   }
 
   lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = {

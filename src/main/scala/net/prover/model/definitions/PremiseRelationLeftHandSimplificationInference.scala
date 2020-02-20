@@ -8,7 +8,7 @@ import net.prover.model.proof.{Step, StepProvingContext}
 
 import scala.Ordering.Implicits._
 
-case class PremiseRelationSimplificationInference(inference: Inference, premise: Statement, conclusion: Statement, premiseRelation: BinaryRelation, extractionInferences: Seq[Inference]) {
+case class PremiseRelationLeftHandSimplificationInference(inference: Inference, premise: Statement, conclusion: Statement, premiseRelation: BinaryRelation, extractionInferences: Seq[Inference]) {
   def matchPremiseToTarget(premiseToMatch: Statement, targetLhs: Term, targetRhs: Term)(implicit stepProvingContext: StepProvingContext): Option[(Statement, Step)] = {
     premiseToMatch match {
       case premiseRelation(premiseToMatchLhs, premiseToMatchRhs)
