@@ -23,7 +23,8 @@ case class PossibleConclusion(
   possiblePremises: Seq[PossiblePremise],
   substitutions: Option[SuggestedSubstitutions],
   requiredSubstitutions: Substitutions.Required,
-  extractionInferenceIds: Seq[String])
+  extractionInferenceIds: Seq[String],
+  additionalVariableNames: Seq[String])
 
 object PossibleConclusion {
   def fromExtractionOptionWithTarget(extractionOption: ExtractionOption, target: Statement)(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusion] = {
@@ -38,7 +39,8 @@ object PossibleConclusion {
       PossiblePremise.fromAvailablePremises(extractionOption.premises, substitutions),
       substitutions.map(SuggestedSubstitutions(_)),
       extractionOption.requiredSubstitutions,
-      extractionOption.extractionInferences.map(_.id))
+      extractionOption.extractionInferences.map(_.id),
+      extractionOption.additionalVariableNames)
   }
 }
 

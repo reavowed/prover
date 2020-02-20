@@ -7,13 +7,13 @@ export default function ProveCurrentTargetByPremise(props) {
   const fetchPossibleConclusions = (statement) => {
     return context.fetchJsonForStep(props.path, `possibleConclusionsForCurrentTargetByPremise?serializedPremiseStatement=${encodeURIComponent(statement.serialize())}`)
   };
-  const submit = (premiseStatement, substitutions, extractionInferenceIds) => {
+  const submit = (premiseStatement, substitutions, selectedConclusion) => {
     return context.fetchJsonForStepAndUpdateTheorem(props.path, "", {
       method: "PUT",
       body: {
         serializedPremiseStatement: premiseStatement.serialize(),
         substitutions,
-        extractionInferenceIds
+        extractionInferenceIds: selectedConclusion.extractionInferenceIds
       }
     });
   };

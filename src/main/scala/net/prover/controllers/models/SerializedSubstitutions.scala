@@ -19,7 +19,7 @@ case class SerializedSubstitutions(
     ): Try[Map[String, (Int, T)]] = {
       source.map { case (name, (arity, serializedValue)) =>
         for {
-          value <- Try(parser(parsingContext.withPlaceholderParameters(arity)).parseFromString(serializedValue, "")).orBadRequest(s"Invalid substitution $description $name '$serializedValue'")
+          value <- Try(parser(parsingContext.withPlaceholderParameters(arity)).parseFromString(serializedValue, s"substitution $description")).orBadRequest(s"Invalid substitution $description $name '$serializedValue'")
         } yield (name, (arity, value))
       }.traverseTry.map(_.toMap)
     }

@@ -32,19 +32,19 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
 
   def createOuterStepContext(premises: Seq[Statement], termVariableNames: Seq[String]) = outerStepPath.foldLeft(StepContext.withPremisesAndTerms(premises, termVariableNames)) { case (context, index) => context.atIndex(index)}
 
-  def definition(inference: Inference, statements: Seq[Statement], terms: Seq[Term], extractionInferences: Seq[Inference]): StepDefinition = {
+  def definition(inference: Inference, statements: Seq[Statement], terms: Seq[Term], extractionInferences: Seq[Inference], conclusionOption: Option[Statement]): StepDefinition = {
     val extractionOption = SubstatementExtractor.getExtractionOptions(inference).find(_.extractionInferences == extractionInferences).get
     val substitutions = extractionOption.requiredSubstitutions.fill(statements, terms)
     val serializedSubstitutions = SerializedSubstitutions(substitutions.statements.mapValues(_.mapRight(_.serialized)), substitutions.terms.mapValues(_.mapRight(_.serialized)))
-    StepDefinition(Some(inference.id), None, serializedSubstitutions, extractionInferences.map(_.id))
+    StepDefinition(Some(inference.id), None, serializedSubstitutions, extractionInferences.map(_.id), conclusionOption.map(_.serialized), Some(extractionOption.additionalVariableNames))
   }
-  def definition(premise: Statement, terms: Seq[Term], extractionInferences: Seq[Inference]): StepDefinition = {
+  def definition(premise: Statement, terms: Seq[Term], extractionInferences: Seq[Inference], conclusionOption: Option[Statement]): StepDefinition = {
     implicit val stepContext = createOuterStepContext(Nil, Nil)
     val extractionOption = SubstatementExtractor.getExtractionOptions(premise).find(_.extractionInferences == extractionInferences).get
     val baseSubstitutions = premise.calculateSubstitutions(premise).get
     val substitutions = baseSubstitutions.copy(terms = baseSubstitutions.terms ++ extractionOption.requiredSubstitutions.fill(Nil, terms).terms)
     val serializedSubstitutions = SerializedSubstitutions(substitutions.statements.mapValues(_.mapRight(_.serialized)), substitutions.terms.mapValues(_.mapRight(_.serialized)))
-    StepDefinition(None, Some(premise.serialized), serializedSubstitutions, extractionInferences.map(_.id))
+    StepDefinition(None, Some(premise.serialized), serializedSubstitutions, extractionInferences.map(_.id), conclusionOption.map(_.serialized), Some(extractionOption.additionalVariableNames))
   }
 
   def createService = {

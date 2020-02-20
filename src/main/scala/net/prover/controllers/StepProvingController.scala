@@ -2,9 +2,11 @@ package net.prover.controllers
 
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models.{PathData, PossibleConclusion, PossibleInference, StepDefinition}
+import net.prover.model.ExpressionParsingContext.TermVariableValidator
 import net.prover.model.expressions.Statement
+import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
-import net.prover.model.{Inference, ProvingContext}
+import net.prover.model.{ExpressionParsingContext, Inference, ProvingContext, Substitutions}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -35,12 +37,14 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     }.getOrElse(Success((None, premise)))
   }
 
-  def createStep(definition: StepDefinition, targetOption: Option[Statement])(implicit stepProvingContext: StepProvingContext): Try[(Statement, Step, Seq[Step.Target])] = {
+  def createStep(definition: StepDefinition, getTargetOption: Option[(ExpressionParsingContext, Substitutions) => Try[Statement]])(implicit stepProvingContext: StepProvingContext): Try[(Statement, Step, Seq[Step.Target])] = {
     def withInference(inferenceId: String) = {
       for {
         inference <- findInference(inferenceId)
         substitutions <- definition.substitutions.parse()
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
+        epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromInference(inference).baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
+        targetOption <- getTargetOption.map(f => f(epc, substitutions)).swap
         (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
         ExtractionApplication(result, mainPremise, extractionSteps, extractionPremises, extractionTargets) <-
           ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, targetOption, PremiseFinder.findPremiseStepsOrTargets)
@@ -54,6 +58,8 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
         premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         substitutions <- definition.substitutions.parse()
+        epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromStepContext.baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
+        targetOption <- getTargetOption.map(f => f(epc, substitutions)).swap
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
         ExtractionApplication(result, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, targetOption, PremiseFinder.findPremiseStepsOrTargets)
         extractionStep = Step.Elided.ifNecessary(extractionSteps, "Extracted").get
@@ -226,7 +232,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     replaceStepAndAddBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (targetStep, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
-        (result, newStep, targets) <- createStep(definition, Some(targetStep.statement))
+        (result, newStep, targets) <- createStep(definition, Some((_, _) => Success(targetStep.statement)))
         _ <- (result == targetStep.statement).orBadRequest("Conclusion was incorrect")
       } yield (newStep, targets)
     }.toResponseEntity
@@ -244,7 +250,14 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     replaceStepAndAddBeforeTransitivity[Step](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (step, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
-        (_, newStep, targets) <- createStep(definition, None)
+        (_, newStep, targets) <- createStep(
+          definition,
+          definition.serializedConclusionStatement.map(s =>
+            (expressionParsingContext: ExpressionParsingContext, substitutions: Substitutions) =>
+              for {
+                conclusionStatement <- Statement.parser(expressionParsingContext).parseFromString(s, "conclusion").recoverWithBadRequest
+                substitutedConclusionStatement <- conclusionStatement.applySubstitutions(substitutions).orBadRequest("Could not apply substitutions to intended conclusion")
+              } yield substitutedConclusionStatement))
       } yield (step, targets :+ newStep)
     }.toResponseEntity
   }

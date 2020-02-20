@@ -6,8 +6,10 @@ import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import EntryContext from "../../../../../EntryContext";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
+import {InlineTextEditor} from "../../../../../helpers/InlineTextEditor";
 import InputWithShorthandReplacement from "../../../../../helpers/InputWithShorthandReplacement";
 import {InferenceSummary} from "../../../../../InferenceSummary";
+import {ResultWithPremises} from "../../../../../ResultWithPremises";
 import BoundVariableLists from "../../BoundVariableLists";
 
 function substitutionGetter(type, applicationType, name) {
@@ -71,15 +73,16 @@ export default class ConclusionChooser extends React.Component {
 
   setSelectedConclusion = (selectedConclusion) => {
     if (selectedConclusion) {
+      const conclusionStatement = selectedConclusion.conclusion;
       const selectedPremises = selectedConclusion.possiblePremises.map(p => ["", null]);
       const selectedSubstitutionValues = buildSubstitutionMap(selectedConclusion.requiredSubstitutions, () => "");
-      this.setStatePromise({selectedConclusion, selectedPremises, selectedSubstitutionValues})
+      this.setStatePromise({selectedConclusion, conclusionStatement, selectedPremises, selectedSubstitutionValues})
         .then(() => this.ref.current.scrollIntoView());
       if (this.props.allowAutoSubmit && this.areSubstitutionValuesSufficient(selectedConclusion, selectedPremises, selectedSubstitutionValues)) {
         this.submitWithSelectedValues(selectedConclusion, selectedPremises, selectedSubstitutionValues)
       }
     } else {
-      this.setStatePromise({selectedConclusion: null, selectedPremises: [], selectedSubstitutionValues: {}})
+      this.setStatePromise({selectedConclusion: null, conclusionStatement: null, selectedPremises: [], selectedSubstitutionValues: {}})
         .then(() => this.ref.current.scrollIntoView());
     }
   };
@@ -149,12 +152,12 @@ export default class ConclusionChooser extends React.Component {
 
   submit = () => {
     const substitutionValues = this.getSubstitutionValuesToSubmit(this.state.selectedConclusion, this.state.selectedPremises, this.state.selectedSubstitutionValues);
-    this.props.submit(this.state.selectedConclusion, substitutionValues);
+    this.props.submit(this.state.selectedConclusion, substitutionValues, this.state.conclusionStatement);
   };
 
   render() {
     const {possibleConclusions, hideSummary, disabled, boundVariableListsForPremises} = this.props;
-    const {selectedConclusion} = this.state;
+    const {selectedConclusion, conclusionStatement} = this.state;
     return <EntryContext.Consumer>{entryContext => {
 
       let PremiseSuggestions = () => {
@@ -224,6 +227,14 @@ export default class ConclusionChooser extends React.Component {
         });
       };
 
+      const wrapConclusionBoundVariable = (name, index, boundVariablePath) => {
+        const callback = (newName) => {
+          const newConclusion = conclusionStatement.setBoundVariableName(newName, index, boundVariablePath);
+          return this.setStatePromise({conclusionStatement: newConclusion});
+        };
+        return <InlineTextEditor text={name} callback={callback} />;
+      };
+
       return <div ref={this.ref}>
         {possibleConclusions.length > 1 && <Form.Group>
           <Form.Label><strong>Choose conclusion</strong></Form.Label>
@@ -240,7 +251,8 @@ export default class ConclusionChooser extends React.Component {
         </Form.Group>}
         {selectedConclusion && <>
           {!hideSummary && <Form.Group>
-            <InferenceSummary inference={{premises: selectedConclusion.possiblePremises.map(p => p.premise), conclusion: selectedConclusion.conclusion}}/>
+            <ResultWithPremises premises={selectedConclusion.possiblePremises.map(p => p.premise)}
+                                result={<CopiableExpression expression={conclusionStatement} wrapBoundVariable={wrapConclusionBoundVariable}/>}/>
           </Form.Group>}
           {getAllRequiredPaths(selectedConclusion.requiredSubstitutions).length > 0 && <>
             {selectedConclusion.possiblePremises.length !== 0 && <PremiseSuggestions/>}

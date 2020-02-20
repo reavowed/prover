@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import {mapAtIndex, replaceAtIndex} from "./Helpers";
 
 declare global {
     interface Window {
@@ -75,6 +76,7 @@ interface TextBasedExpression {
   serialize(): string
   serializeNicely(boundVariableLists: string[][]): string
   textForHtml(boundVariableLists: string[][]): string
+  setBoundVariableName(newName: string, index: number, path: number[]): Expression
   replaceAtPath(path: number[], expression: Expression): Expression
 }
 interface FormatBasedExpression {
@@ -82,6 +84,7 @@ interface FormatBasedExpression {
   serialize(): string
   serializeNicely(boundVariableLists: string[][]): string
   formatForHtml(parentRequiresBrackets: boolean): string
+  setBoundVariableName(newName: string, index: number, path: number[]): Expression
   replaceAtPath(path: number[], expression: Expression): Expression
 }
 
@@ -101,6 +104,9 @@ export class Variable {
     return this.components.length == 0 ?
         this.name :
         this.name + "(" + this.components.map((_, i) => "%" + i).join(", ") + ")";
+  }
+  setBoundVariableName(): Expression {
+    throw "Cannot set bound variable name in variable"
   }
   replaceAtPath(path: number[], expression: Expression): Expression {
     if (!path.length) {
@@ -126,6 +132,13 @@ export class DefinedExpression {
     return (parentRequiresBrackets && this.definition.requiresBrackets) ?
       "(" + this.definition.baseFormatString + ")" :
       this.definition.baseFormatString;
+  }
+  setBoundVariableName(newName: string, index: number, path: number[]): Expression {
+    if (path.length == 0) {
+      return new DefinedExpression(this.definition, replaceAtIndex(this.boundVariableNames, index, newName), this.components);
+    } else {
+      return new DefinedExpression(this.definition, this.boundVariableNames, mapAtIndex(this.components, path[0], c => c.setBoundVariableName(newName, index, path.slice(1))));
+    }
   }
   replaceAtPath(path: number[], expression: Expression): Expression {
     if (!path.length) {
@@ -153,6 +166,9 @@ export class TypeExpression {
   addProperty(newProperty: string) {
     this.properties = [...this.properties, newProperty];
   }
+  setBoundVariableName(): Expression {
+    throw "Cannot set bound variable name in type expression"
+  }
   replaceAtPath(_path: number[], _expression: Expression): Expression {
     throw "Cannot replace in type expression"
   }
@@ -165,6 +181,9 @@ export class PropertyExpression {
   }
   serializeNicely(boundVariableLists: string[][]): string {
     return [this.symbol, this.term.serialize(), ...this.otherComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+  }
+  setBoundVariableName(): Expression {
+    throw "Cannot set bound variable name in property expression"
   }
   replaceAtPath(_path: number[], _expression: Expression): Expression {
     throw "Cannot replace in property expression"
@@ -189,6 +208,9 @@ export class FunctionParameter {
     } else {
       return name;
     }
+  }
+  setBoundVariableName(): Expression {
+    throw "Cannot set bound variable name in function parameter"
   }
   replaceAtPath(path: number[], expression: Expression): Expression {
     if (!path.length) {

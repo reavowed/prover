@@ -3,7 +3,7 @@ package net.prover.controllers
 import net.prover.controllers.models.PathData
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.Axiom
-import net.prover.model.expressions.DefinedStatement
+import net.prover.model.expressions.{DefinedStatement, TermVariable}
 import net.prover.model.proof.Step
 
 class StepProvingSpec extends ControllerSpec {
@@ -26,7 +26,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(premise, Nil, Seq(extractRightConjunct, modusPonens)))
+        definition(premise, Nil, Seq(extractRightConjunct, modusPonens), None))
 
       checkModifySteps(
         service,
@@ -45,7 +45,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(premise, Nil, Seq(modusPonens, extractRightConjunct)))
+        definition(premise, Nil, Seq(modusPonens, extractRightConjunct), None))
 
       checkModifySteps(
         service,
@@ -55,7 +55,7 @@ class StepProvingSpec extends ControllerSpec {
           assertion(extractRightConjunct, Seq(ψ, χ), Nil))))
     }
 
-    "retain conclusion bound variable names" in {
+    "retain conclusion bound variable names when proving target by inference" in {
       val service = createService
       val controller = new StepProvingController(service)
 
@@ -68,7 +68,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(specification, Seq(Exists("y")(Equals($, $.^))), Seq(a), Nil))
+        definition(specification, Seq(Exists("y")(Equals($, $.^))), Seq(a), Nil, None))
 
       checkModifySteps(
         service,
@@ -77,7 +77,7 @@ class StepProvingSpec extends ControllerSpec {
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last, Nil)})
     }
 
-    "retain conclusion bound variable names inside extraction" in {
+    "retain conclusion bound variable names when proving target by inference inside extraction" in {
       val service = createService
       val controller = new StepProvingController(service)
 
@@ -93,7 +93,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(axiom, Seq(φ($), ψ($(0), $(1))), Seq(a), Seq(specification, forwardImplicationFromEquivalence, modusPonens)))
+        definition(axiom, Seq(φ($), ψ($(0), $(1))), Seq(a), Seq(specification, forwardImplicationFromEquivalence, modusPonens), None))
 
       checkModifySteps(
         service,
@@ -111,29 +111,53 @@ class StepProvingSpec extends ControllerSpec {
         entryContext)
     }
 
-    "retain premise bound variable names inside extraction" in {
+
+    "retain conclusion bound variable names when adding target by inference" in {
       val service = createService
       val controller = new StepProvingController(service)
 
-      val premise = ForAll("x")(ForAll("y")(φ($.^, $)))
-      val statementToProve = φ(a, b)
+      val premise = φ(b)
 
-      controller.proveCurrentTarget(
+      controller.addNewTarget(
         bookKey,
         chapterKey,
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(premise, Seq(a, b), Seq(specification, specification)))
+        definition(existence, Seq(φ($)), Seq(b), Nil, Some(Exists("z")(φ($)))))
 
       checkModifySteps(
         service,
-        fillerSteps(stepIndex - 1) :+ target(premise) :+ target(statementToProve),
-        beEqualTo(fillerSteps(stepIndex - 1) :+ target(premise) :+ elided("Extracted", Seq(
-          assertion(specification, Seq(ForAll("y")(φ($.^, $))), Seq(a)),
-          assertion(specification, Seq(φ(a, $)), Seq(b))))
+        fillerSteps(stepIndex - 1) :+ target(premise) :+ target(φ),
+        beEqualTo(fillerSteps(stepIndex - 1) :+ target(premise) :+ assertion(existence, Seq(φ($)), Seq(b)) :+ target(φ)) and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)})
+    }
+
+    "retain conclusion bound variable names when adding target by premise" in {
+      val service = createService
+      val controller = new StepProvingController(service)
+
+      val premise = ForAll("x")(Implication(φ($), Exists("y")(ψ($.^, $))))
+
+      controller.addNewTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        definition(premise, Seq(a), Seq(specification, modusPonens), Some(Exists("z")(ψ(TermVariable("x", Nil), $)))))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ(a)) :+ target(χ(a)),
+        beEqualTo(fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ(a)) :+
+          elided("Extracted", Seq(
+            assertion(specification, Seq(Implication(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
+            assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil))) :+
+          target(χ(a))
         ) and
-          beEqualTo("y") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(0), Nil)})
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.Elided].substeps(0), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.Elided].substeps(1), Nil)})
     }
   }
 }

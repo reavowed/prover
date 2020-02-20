@@ -275,6 +275,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
 
 trait InferenceDefinitions extends ExpressionDefinitions {
   val specification = Axiom("Specification", Seq(ForAll("x")(φ($))), φ(a))
+  val existence = Axiom("Existence", Seq(φ(a)), Exists("x")(φ($)))
   val modusPonens = Axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
   val modusTollens = Axiom("Modus Tollens", Seq(Implication(φ, ψ), Negation(ψ)), Negation(φ))
 
@@ -325,7 +326,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second,
       ZeroDefinition, NaturalsDefinition, Successor, AdditionDefinition, Apply, LessThanDefinition) ++
     Seq(
-      specification, modusPonens, modusTollens,
+      specification, existence, modusPonens, modusTollens,
       addDoubleNegation, removeDoubleNegation,
       extractLeftConjunct, extractRightConjunct, combineConjunction,
       equivalenceIsTransitive, forwardImplicationFromEquivalence, reverseImplicationFromEquivalence,

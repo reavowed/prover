@@ -25,8 +25,8 @@ export default class ProveByPremise extends React.Component {
       return this.setStatePromise({selectedPremise: null, possibleConclusions: null});
     }
   };
-  submit = (selectedConclusion, substitutions) => {
-    return this.props.submit(this.state.selectedPremise.statement, substitutions, selectedConclusion.extractionInferenceIds)
+  submit = (selectedConclusion, substitutions, conclusionStatement) => {
+    return this.props.submit(this.state.selectedPremise.statement, substitutions, selectedConclusion, conclusionStatement)
       .then(this.props.onCancel)
       .catch(this.props.onError);
   };

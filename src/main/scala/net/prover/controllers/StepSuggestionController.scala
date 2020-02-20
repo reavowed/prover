@@ -142,6 +142,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
                 PossiblePremise.fromAvailablePremises(namingPremises, Some(s)),
                 Some(SuggestedSubstitutions(s)),
                 inference.requiredSubstitutions,
+                Nil,
                 Nil))))
         }
         .take(10)

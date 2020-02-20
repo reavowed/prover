@@ -43,13 +43,13 @@ export class InferenceFinder extends React.Component {
   setSelectedInference = (selectedInference) => {
     this.setState({selectedInference});
   };
-  submit = (selectedConclusion, selectedSubstitutionValues) => {
-    return this.submitWithSelectedValues(this.state.selectedInference, selectedConclusion, selectedSubstitutionValues);
+  submit = (selectedConclusion, selectedSubstitutionValues, conclusionStatement) => {
+    return this.submitWithSelectedValues(this.state.selectedInference, selectedConclusion, selectedSubstitutionValues, conclusionStatement);
   };
-  submitWithSelectedValues = (selectedInference, selectedConclusion, substitutionValues) => {
+  submitWithSelectedValues = (selectedInference, selectedConclusion, substitutionValues, conclusionStatement) => {
     const promise = new Promise((resolve) => this.setState({saving: true}, resolve))
       .then(() => this.props.onSaving && this.props.onSaving(true))
-      .then(() => this.props.submit(selectedInference, selectedConclusion, substitutionValues));
+      .then(() => this.props.submit(selectedInference, selectedConclusion, substitutionValues, conclusionStatement));
     promise.catch(() => {})
       .then(() => this.setState({saving: false}))
       .then(() => this.props.onSaving && this.props.onSaving(false));

@@ -5,11 +5,12 @@ import net.prover.model.expressions._
 
 object SubstatementExtractor {
 
-  case class ExtractionOption(conclusion: Statement, premises: Seq[Statement], extractionInferences: Seq[Inference]) {
+  case class ExtractionOption(conclusion: Statement, premises: Seq[Statement], extractionInferences: Seq[Inference], additionalVariableNames: Seq[String]) {
     def requiredSubstitutions: Substitutions.Required = (premises.map(_.requiredSubstitutions) :+ conclusion.requiredSubstitutions).foldTogether
   }
 
-  case class VariableTracker(namesUsedSoFar: Seq[String]) {
+  case class VariableTracker(baseVariableNames: Seq[String], additionalVariableNames: Seq[String]) {
+    def namesUsedSoFar: Seq[String] = baseVariableNames ++ additionalVariableNames
     def getAndAddUniqueVariableName(baseName: String): (String, VariableTracker) = {
       val newName = if (!namesUsedSoFar.contains(baseName))
         baseName
@@ -17,17 +18,16 @@ object SubstatementExtractor {
         val i = Stream.from(1).find(i => !namesUsedSoFar.contains(s"${baseName}_$i")).get
         s"${baseName}_$i"
       }
-      (newName, VariableTracker(namesUsedSoFar :+ newName))
+      (newName, VariableTracker(baseVariableNames, additionalVariableNames :+ newName))
     }
   }
   object VariableTracker {
-    def fromInference(inference: Inference): VariableTracker = VariableTracker(inference.requiredSubstitutions.terms.map(_._1))
-    def fromStepContext(implicit stepContext: StepContext): VariableTracker = VariableTracker(stepContext.termVariableNames)
+    def fromInference(inference: Inference): VariableTracker = VariableTracker(inference.requiredSubstitutions.terms.map(_._1), Nil)
+    def fromStepContext(implicit stepContext: StepContext): VariableTracker = VariableTracker(stepContext.termVariableNames, Nil)
   }
 
-
-  private def getBaseExtractionOption(sourceStatement: Statement): Seq[ExtractionOption] = {
-    Seq(ExtractionOption(sourceStatement, Nil, Nil))
+  private def getBaseExtractionOption(sourceStatement: Statement, variableTracker: VariableTracker): Seq[ExtractionOption] = {
+    Seq(ExtractionOption(sourceStatement, Nil, Nil, variableTracker.additionalVariableNames))
   }
 
   private def getStatementExtractionOptions(
@@ -108,14 +108,14 @@ object SubstatementExtractor {
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
   ): Seq[ExtractionOption] = {
-    getBaseExtractionOption(sourceStatement) ++
+    getBaseExtractionOption(sourceStatement, variableTracker) ++
       provingContext.rewriteInferences.flatMap { case (inference, firstPremise) =>
         getStatementExtractionOptions(
           sourceStatement,
           inference,
           firstPremise,
           None,
-          (s, _) => getBaseExtractionOption(s),
+          getBaseExtractionOption,
           variableTracker)
       }
   }

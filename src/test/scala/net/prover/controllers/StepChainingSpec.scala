@@ -153,7 +153,7 @@ class StepChainingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(addingZeroIsSame, Nil, Seq(b), Nil))
+        definition(addingZeroIsSame, Nil, Seq(b), Nil, None))
 
       checkModifySteps(
         service,

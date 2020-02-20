@@ -7,13 +7,15 @@ export default function AddTargetByPremise(props) {
   const fetchPossibleConclusions = (statement) => {
     return context.fetchJsonForStep(props.path, `possibleConclusionsForNewTargetByPremise?serializedPremiseStatement=${encodeURIComponent(statement.serialize())}`);
   };
-  const submit = (premiseStatement, substitutions, extractionInferenceIds) => {
+  const submit = (premiseStatement, substitutions, selectedConclusion, conclusionStatement) => {
     return context.fetchJsonForStepAndUpdateTheorem(props.path, "newTarget", {
       method: "POST",
       body: {
         serializedPremiseStatement: premiseStatement.serialize(),
         substitutions,
-        extractionInferenceIds
+        extractionInferenceIds: selectedConclusion.extractionInferenceIds,
+        serializedConclusionStatement: conclusionStatement.serialize(),
+        additionalVariableNames: selectedConclusion.additionalVariableNames
       }
     });
   };

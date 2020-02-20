@@ -11,7 +11,7 @@ import scala.collection.JavaConverters._
 import scala.collection.generic.CanBuildFrom
 import scala.collection.{AbstractIterator, Iterator, TraversableLike, mutable}
 import scala.reflect.ClassTag
-import scala.util.{Failure, Try}
+import scala.util.{Failure, Success, Try}
 
 package object model {
   implicit class AnyOps[T](t: T) {
@@ -522,6 +522,10 @@ package object model {
       case None => Failure(exception)
     }
     def mapMap[S](f: T => S): Option[Try[S]] = x.map(_.map(f))
+    def swap: Try[Option[T]] = x match {
+      case Some(tryT) => tryT.map(Some(_))
+      case None => Success(None)
+    }
   }
 
   implicit class SeqStringOps(seq: Seq[String]) {
