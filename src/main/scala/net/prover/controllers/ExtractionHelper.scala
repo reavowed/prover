@@ -94,11 +94,11 @@ object ExtractionHelper {
     }
   }
 
-  private def removeStructuralSimplifications(
+  private def isStructuralSimplification(inference: Inference)(implicit provingContext: ProvingContext): Boolean = provingContext.structuralSimplificationInferences.exists(_._1 == inference)
+  private def removeNonEndStructuralSimplifications(
     extractionApplication: ExtractionApplication)(
     implicit provingContext: ProvingContext
   ): ExtractionApplication = {
-    def isStructuralSimplification(inference: Inference): Boolean = provingContext.structuralSimplificationInferences.exists(_._1 == inference)
     @scala.annotation.tailrec
     def helper(remainingAssertions: Seq[Step.Assertion], filteredAssertions: Seq[Step.Assertion]): Seq[Step.Assertion] = {
       remainingAssertions match {
@@ -113,6 +113,13 @@ object ExtractionHelper {
     extractionApplication.copy(extractionSteps = helper(extractionApplication.extractionSteps, Nil))
   }
 
+  def removeAllStructuralSimplifications(
+    extractionApplication: ExtractionApplication)(
+    implicit provingContext: ProvingContext
+  ): ExtractionApplication = {
+    extractionApplication.copy(extractionSteps = extractionApplication.extractionSteps.filter(s => !isStructuralSimplification(s.inference)))
+  }
+
   def applyExtractions(
     premise: Statement,
     extractionInferences: Seq[Inference],
@@ -122,7 +129,7 @@ object ExtractionHelper {
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
     implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
-    applyExtractions(premise, extractionInferences, substitutions, intendedConclusion, VariableTracker.fromInference(baseInference), findPremiseStepsOrTargets).map(removeStructuralSimplifications)
+    applyExtractions(premise, extractionInferences, substitutions, intendedConclusion, VariableTracker.fromInference(baseInference), findPremiseStepsOrTargets).map(removeNonEndStructuralSimplifications)
   }
   def applyExtractions(
     premise: Premise,
@@ -132,6 +139,6 @@ object ExtractionHelper {
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
     implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
-    applyExtractions(premise.statement, extractionInferences, substitutions, intendedConclusion, VariableTracker.fromStepContext, findPremiseStepsOrTargets).map(removeStructuralSimplifications)
+    applyExtractions(premise.statement, extractionInferences, substitutions, intendedConclusion, VariableTracker.fromStepContext, findPremiseStepsOrTargets).map(removeNonEndStructuralSimplifications)
   }
 }

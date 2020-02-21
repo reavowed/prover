@@ -61,16 +61,8 @@ object PremiseFinder {
   ): Option[Seq[(Step, Inference)]] = {
     import stepProvingContext._
 
-    def fromPremises = if (allPremises.exists(_.statement == targetStatement)) Some(Nil) else None
+    def fromPremises = allPremiseExtractions.find(_._1 == targetStatement).map(_._2)
     def fromFact = ProofHelper.findFact(targetStatement).map(s => Seq((s, s.inference)))
-
-    def fromRewrite = (for {
-      (rewriteInference, rewritePremise) <- provingContext.rewriteInferences.iterator
-      substitutions <- rewriteInference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality)
-      premise <- rewritePremise.applySubstitutions(substitutions)
-      if (allPremises.exists(_.statement == premise))
-      step <- Step.Assertion.forInference(rewriteInference, substitutions)
-    } yield Seq((step, rewriteInference))).headOption
 
     def findFromDoubleSimplifiedPremiseRelations(premise: Statement, targetLhs: Term, targetRhs: Term): Option[Seq[(Step, Inference)]] = {
       if (premise == targetStatement)
@@ -85,9 +77,9 @@ object PremiseFinder {
 
     def fromDoubleSimplifiedPremiseRelations = (for {
       (targetLhs, targetRhs) <- provingContext.definedBinaryStatements.ofType[BinaryRelation].iterator.mapCollect(_.unapply(targetStatement))
-      premise <- allPremises
-      steps <- findFromDoubleSimplifiedPremiseRelations(premise.statement, targetLhs, targetRhs)
-    } yield steps).headOption
+      (premise, extractionSteps) <- allPremiseExtractions
+      steps <- findFromDoubleSimplifiedPremiseRelations(premise, targetLhs, targetRhs)
+    } yield extractionSteps ++ steps).headOption
 
     def findFromLeftHandSimplifiedPremiseRelations(premise: Statement, targetLhs: Term, targetRhs: Term): Option[Seq[(Step, Inference)]] = {
       if (premise == targetStatement)
@@ -102,10 +94,9 @@ object PremiseFinder {
 
     def fromLeftHandSimplifiedPremiseRelations = (for {
       (targetLhs, targetRhs) <- provingContext.definedBinaryStatements.ofType[BinaryRelation].iterator.mapCollect(_.unapply(targetStatement))
-      premise <- allPremises
-      steps <- findFromLeftHandSimplifiedPremiseRelations(premise.statement, targetLhs, targetRhs)
-    } yield steps).headOption
-
+      (premise, extractionSteps) <- allPremiseExtractions
+      steps <- findFromLeftHandSimplifiedPremiseRelations(premise, targetLhs, targetRhs)
+    } yield extractionSteps ++ steps).headOption
 
     def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { inference =>
       for {
@@ -116,7 +107,7 @@ object PremiseFinder {
       } yield premiseSteps :+ (assertionStep, inference)
     }
 
-    fromPremises orElse fromFact orElse fromRewrite orElse fromDoubleSimplifiedPremiseRelations orElse fromLeftHandSimplifiedPremiseRelations orElse bySimplifyingTarget
+    fromPremises orElse fromFact orElse fromDoubleSimplifiedPremiseRelations orElse fromLeftHandSimplifiedPremiseRelations orElse bySimplifyingTarget
   }
 
   def findPremiseSteps(
