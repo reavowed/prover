@@ -15,24 +15,8 @@ sealed trait Template {
   def referencedDefinitions: Set[ExpressionDefinition]
   def variables: Seq[Template.Variable]
   def expand(statements: Map[String, Statement], terms: Map[String, Term]): Expression
-  def expressionParser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Expression] = {
-    variables.distinct.foldLeft(Parser.constant((Map.empty[String, Statement], Map.empty[String, Term]))) {
-      case (mapParser, Template.StatementVariable(name)) =>
-        for {
-          statementMapAndTermMap <- mapParser
-          (statementMap, termMap) = statementMapAndTermMap
-          newStatement <- Statement.parser
-        } yield (statementMap + (name -> newStatement), termMap)
-      case (mapParser, Template.TermVariable(name)) =>
-        for {
-          statementMapAndTermMap <- mapParser
-          (statementMap, termMap) = statementMapAndTermMap
-          newTerm <- Term.parser
-        } yield (statementMap, termMap + (name -> newTerm))
-    }.map { case (statementMap, termMap) =>
-      expand(statementMap, termMap)
-    }
-  }
+  def expressionParser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Expression] = expressionParserBuilder(Map.empty, Map.empty).map(_._1)
+  def expressionParserBuilder(statements: Map[String, Statement], terms: Map[String, Term])(implicit expressionParsingContext: ExpressionParsingContext): Parser[(Expression, Map[String, Statement], Map[String, Term])]
   def serialized: String
 }
 
@@ -52,6 +36,16 @@ object Template {
     ): Template = this
     override def variables: Seq[Variable] = Seq(this)
     override def expand(statements: Map[String, Statement], terms: Map[String, Term]): Statement = statements(name)
+    def expressionParserBuilder(statements: Map[String, Statement], terms: Map[String, Term])(implicit expressionParsingContext: ExpressionParsingContext): Parser[(Statement, Map[String, Statement], Map[String, Term])] = {
+      statements.get(name) match {
+        case Some(statement) =>
+          Parser.constant((statement, statements, terms))
+        case None =>
+          Statement.parser.map { statement =>
+            (statement, statements.updated(name, statement), terms)
+          }
+      }
+    }
     override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
     override def serialized: String = name
   }
@@ -71,6 +65,16 @@ object Template {
     ): Template = this
     override def variables: Seq[Variable] = Seq(this)
     override def expand(statements: Map[String, Statement], terms: Map[String, Term]): Term = terms(name)
+    def expressionParserBuilder(statements: Map[String, Statement], terms: Map[String, Term])(implicit expressionParsingContext: ExpressionParsingContext): Parser[(Term, Map[String, Statement], Map[String, Term])] = {
+      terms.get(name) match {
+        case Some(term) =>
+          Parser.constant((term, statements, terms))
+        case None =>
+          Term.parser.map { term =>
+            (term, statements, terms.updated(name, term))
+          }
+      }
+    }
     override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
     override def serialized: String = name
   }
@@ -90,7 +94,10 @@ object Template {
     ): Template = this
     override def variables: Seq[Variable] = Nil
     override def expand(statements: Map[String, Statement], terms: Map[String, Term]): Term = {
-      throw new Exception("Parsing templated parameters not currently supported")
+      parameter
+    }
+    def expressionParserBuilder(statements: Map[String, Statement], terms: Map[String, Term])(implicit expressionParsingContext: ExpressionParsingContext): Parser[(expressions.FunctionParameter, Map[String, Statement], Map[String, Term])] = {
+      Parser.constant((parameter, statements, terms))
     }
     override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
     override def serialized: String = parameter.toString
@@ -129,6 +136,20 @@ object Template {
       if (boundVariableNames.nonEmpty) throw new Exception("Parsing templated statements with bound variables not currently supported")
       definition(components.map(_.expand(statements, terms)):_*)
     }
+    def expressionParserBuilder(statements: Map[String, Statement], terms: Map[String, Term])(implicit expressionParsingContext: ExpressionParsingContext): Parser[(expressions.DefinedStatement, Map[String, Statement], Map[String, Term])] = {
+      for {
+        parsedBoundVariableNames <- Parser.nWords(boundVariableNames.length)
+        x <- components.zip(definition.componentTypes).foldLeft(Parser.constant((Seq.empty[Expression], statements, terms))) { case (currentParser, (componentTemplate, componentType)) =>
+          for {
+            x <- currentParser
+            (currentComponents, currentStatements, currentTerms) = x
+            y <- componentTemplate.expressionParserBuilder(currentStatements, currentTerms)(expressionParsingContext.addInnerParameters(componentType.getParameters(parsedBoundVariableNames)))
+            (newComponent, newStatements, newTerms) = y
+          } yield (currentComponents :+ newComponent, newStatements, newTerms)
+        }
+        (parsedComponents, resultStatements, resultTerms) = x
+      } yield (expressions.DefinedStatement(parsedComponents, definition)(parsedBoundVariableNames), resultStatements, resultTerms)
+    }
     override def referencedDefinitions: Set[ExpressionDefinition] = components.flatMap(_.referencedDefinitions).toSet + definition
     override def serialized: String = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
   }
@@ -156,10 +177,10 @@ object Template {
       oldDefinition: ExpressionDefinition,
       newDefinition: ExpressionDefinition
     ): Template = {
-      if (oldDefinition == definition)
-        copy(definition = newDefinition.asInstanceOf[TermDefinition])
-      else
-        this
+      DefinedTerm(
+        if (oldDefinition == definition) newDefinition.asInstanceOf[TermDefinition] else definition,
+        boundVariableNames,
+        components.map(_.replaceDefinition(oldDefinition, newDefinition)))
     }
     override def referencedDefinitions: Set[ExpressionDefinition] = components.flatMap(_.referencedDefinitions).toSet + definition
     override def serialized: String = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
@@ -167,6 +188,20 @@ object Template {
     override def expand(statements: Map[String, Statement], terms: Map[String, Term]): Term = {
       if (boundVariableNames.nonEmpty) throw new Exception("Parsing templated terms with bound variables not currently supported")
       definition(components.map(_.expand(statements, terms)):_*)
+    }
+    def expressionParserBuilder(statements: Map[String, Statement], terms: Map[String, Term])(implicit expressionParsingContext: ExpressionParsingContext): Parser[(expressions.DefinedTerm, Map[String, Statement], Map[String, Term])] = {
+      for {
+        parsedBoundVariableNames <- Parser.nWords(boundVariableNames.length)
+        x <- components.zip(definition.componentTypes).foldLeft(Parser.constant((Seq.empty[Expression], statements, terms))) { case (currentParser, (componentTemplate, componentType)) =>
+          for {
+            x <- currentParser
+            (currentComponents, currentStatements, currentTerms) = x
+            y <- componentTemplate.expressionParserBuilder(currentStatements, currentTerms)(expressionParsingContext.addInnerParameters(componentType.getParameters(parsedBoundVariableNames)))
+            (newComponent, newStatements, newTerms) = y
+          } yield (currentComponents :+ newComponent, newStatements, newTerms)
+        }
+        (parsedComponents, resultStatements, resultTerms) = x
+      } yield (expressions.DefinedTerm(parsedComponents, definition)(parsedBoundVariableNames), resultStatements, resultTerms)
     }
   }
 

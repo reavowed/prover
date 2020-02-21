@@ -28,22 +28,11 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
   override def title: String = s"$typeName Definition: $name"
   override def referencedInferenceIds: Set[String] = Set.empty
 
-  private def addBoundVariableList(
-    existingBoundVariableLists: Seq[Seq[(String, Int)]],
-    newBoundVariableNames: Seq[String],
-    componentType: ComponentType
-  ): Seq[Seq[(String, Int)]] = {
-    if (boundVariableNames.isEmpty)
-      existingBoundVariableLists
-    else
-      existingBoundVariableLists :+ componentType.arguments.map(a => newBoundVariableNames(a.index) -> a.index)
-  }
-
   protected def componentExpressionParser(implicit context: ExpressionParsingContext): Parser[(Seq[String], Seq[Expression])] = {
     for {
       newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
       components <- componentTypes.map { componentType =>
-        componentType.expressionParser(context.copy(parameterLists = addBoundVariableList(context.parameterLists, newBoundVariableNames, componentType)))
+        componentType.expressionParser(context.addInnerParameters(componentType.getParameters(newBoundVariableNames)))
       }.traverseParser
     } yield (newBoundVariableNames, components)
   }
@@ -52,7 +41,7 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
     for {
       newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
       components <- componentTypes.map { componentType =>
-        componentType.templateParser(context.copy(parameterLists = addBoundVariableList(context.parameterLists, newBoundVariableNames, componentType)))
+        componentType.templateParser(context.addInnerParameters(componentType.getParameters(newBoundVariableNames)))
       }.traverseParser
     } yield (newBoundVariableNames, components)
   }
@@ -73,6 +62,9 @@ object ExpressionDefinition {
     def arguments: Seq[ComponentArgument]
     def expressionParser(implicit context: ExpressionParsingContext): Parser[Expression]
     def templateParser(implicit context: TemplateParsingContext): Parser[Template]
+    def getParameters(boundVariableNames: Seq[String]): Seq[(String, Int)] = {
+      arguments.map(a => boundVariableNames(a.index) -> a.index)
+    }
     def serialized: String
   }
   object ComponentType {

@@ -113,7 +113,7 @@ object TermDefinition extends ChapterEntryParser {
       name <- nameParser
       format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
       premises <- premisesParser
-      definitionPredicate <- Statement.parser(expressionParsingContext.addParameters("_")).inParens
+      definitionPredicate <- Statement.parser(expressionParsingContext.addInitialParameters("_")).inParens
       shorthand <- ExpressionDefinition.shorthandParser
       attributes <- ExpressionDefinition.attributesParser
     } yield {

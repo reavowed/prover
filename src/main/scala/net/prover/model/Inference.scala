@@ -137,27 +137,6 @@ object Inference {
     override def isComplete(definitions: Definitions): Boolean = true
   }
 
-  case class Substitutions(
-      statements: Seq[Option[Statement]],
-      terms: Seq[Option[Term]],
-      predicates: Seq[Option[Statement]],
-      functions: Seq[Option[Term]])
-  {
-    def serialized: String = Seq(statements, terms, predicates, functions)
-      .map(x => "(" + x.map(_.map(_.serialized).getOrElse("%")).mkString(", ") + ")")
-      .mkString(" ")
-  }
-  object Substitutions {
-    def parser(implicit parsingContext: ExpressionParsingContext): Parser[Substitutions] = {
-      for {
-        statements <- Statement.parser.withNone("%").listInParens(Some(","))
-        terms <- Term.parser.withNone("%").listInParens(Some(","))
-        predicates <- Statement.parser(parsingContext.addParameters()).withNone("%").listInParens(Some(","))
-        functions <- Term.parser(parsingContext.addParameters()).withNone("%").listInParens(Some(","))
-      } yield Substitutions(statements, terms, predicates, functions)
-    }
-  }
-
   def unapply(inference: Inference): Option[(String, Seq[Statement], Statement)] = {
     Some(inference.name, inference.premises, inference.conclusion)
   }

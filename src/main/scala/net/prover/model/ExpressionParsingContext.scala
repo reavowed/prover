@@ -10,12 +10,14 @@ case class ExpressionParsingContext(
     parameterLists: Seq[Seq[(String, Int)]])
   extends ParsingContextWithParameters
 {
-  def addParameters(parameters: String *): ExpressionParsingContext = {
-    copy(parameterLists = parameterLists :+ parameters.zipWithIndex)
+  def addInitialParameters(parameters: String *): ExpressionParsingContext = {
+    copy(parameterLists = parameters.zipWithIndex +: parameterLists)
   }
-
-  def addParameterList(parameters: Seq[(String, Int)]): ExpressionParsingContext = {
-    copy(parameterLists = parameterLists :+ parameters)
+  def addInnerParameters(parameters: Seq[(String, Int)]): ExpressionParsingContext = {
+    if (parameters.isEmpty)
+      this
+    else
+      copy(parameterLists = parameterLists :+ parameters)
   }
 
   def withPlaceholderParameters(numberOfParameters: Int): ExpressionParsingContext = {
