@@ -13,6 +13,10 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
   const saveSymbol = (newSymbol) => {
     return window.fetchJson(path.join(url, "symbol"), {method: "PUT", body: newSymbol});
   };
+  const saveName = (newName) => {
+    return window.fetchJson(path.join(url, "name"), {method: "PUT", body: newName})
+      .then(url => window.location.pathname = url);
+  };
   const saveFormat = (newFormat) => {
     return window.fetchJson(path.join(url, "format"), {method: "PUT", body: newFormat});
   };
@@ -25,12 +29,13 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
     "";
 
   return <EntryContext.Provider value={entryContext}>
-    <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title, url}]}/>}>
+    <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <h3>{title}:  <CopiableExpression expression={definition.defaultValue} /></h3>
       {children}
       <hr/>
       <EditableProperty label="Symbol" initialValue={definition.symbol} onSave={saveSymbol} />
+      <EditableProperty label="Name" initialValue={definition.explicitName} onSave={saveName} />
       <EditableProperty label="Format" initialValue={serializedFormat} onSave={saveFormat} />
       <EditableProperty label="Attributes" initialValue={definition.attributes.join(" ")} onSave={saveAttributes} />
 

@@ -39,6 +39,7 @@ case class TermDefinition(
   }
 
   override def withSymbol(newSymbol: String): TermDefinition = copy(symbol = newSymbol)
+  override def withName(newName: Option[String]): TermDefinition = copy(explicitName = newName)
   override def withShorthand(newShorthand: Option[String]): TermDefinition = copy(shorthand = newShorthand)
   override def withAttributes(newAttributes: Seq[String]): TermDefinition = copy(attributes = newAttributes)
   override def withFormat(newFormat: Format): TermDefinition = copy(format = newFormat)

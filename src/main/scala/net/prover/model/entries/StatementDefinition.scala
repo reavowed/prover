@@ -37,6 +37,7 @@ case class StatementDefinition(
   }
 
   override def withSymbol(newSymbol: String): StatementDefinition = copy(symbol = newSymbol)
+  override def withName(newName: Option[String]): StatementDefinition = copy(explicitName = newName)
   override def withShorthand(newShorthand: Option[String]): StatementDefinition = copy(shorthand = newShorthand)
   override def withAttributes(newAttributes: Seq[String]): StatementDefinition = copy(attributes = newAttributes)
   override def withFormat(newFormat: Format): StatementDefinition = copy(format = newFormat)

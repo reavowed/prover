@@ -26,6 +26,10 @@ Window.prototype.fetchJson = function(input, init) {
     )
 };
 
+String.prototype.capitalize = function() {
+  return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+};
+
 export { Books, Book, Chapter, Theorem, Axiom, StatementDefinition, TermDefinition };
 export function render(component, props) {
   const element = document.createElement("div");

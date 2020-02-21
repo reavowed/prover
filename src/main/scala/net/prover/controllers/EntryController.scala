@@ -1,12 +1,13 @@
 package net.prover.controllers
 
-import net.prover.model.entries.ExpressionDefinition
+import net.prover.exceptions.BadRequestException
+import net.prover.model.entries.{ChapterEntry, ExpressionDefinition}
 import net.prover.model.{Book, EntryContext, Format, Inference}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.util.Success
+import scala.util.{Failure, Success}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{entryKey}"))
@@ -19,7 +20,14 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @PathVariable("entryKey") entryKey: String,
     @RequestBody(required = false) newName: String
   ): ResponseEntity[_] = {
-    bookService.modifyEntry[Inference.Entry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, inference) => Success(inference.withName(newName)))
+    bookService.modifyEntry[ChapterEntry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, entry) => entry match {
+      case inference: Inference.Entry =>
+        Success(inference.withName(newName))
+      case definition: ExpressionDefinition =>
+        Success(definition.withName(Option(newName).filter(_.nonEmpty)))
+      case _ =>
+        Failure(BadRequestException(s"Cannot set name of ${entry.getClass.getName}"))
+    })
       .flatMap { case (_, _, _, chapter, entry) =>
         for {
           (_, newKey) <- BookService.getEntriesWithKeys(chapter).find(_._1 == entry).orException(new Exception("Couldn't find new entry"))
