@@ -112,7 +112,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
       Success(SubstatementExtractor.getExtractionOptions(premise)
         .flatMap(PossibleConclusion.fromExtractionOptionWithSubstitutions(_, conclusion => for {
           (conclusionLhs, conclusionRhs) <- joiner.unapply(conclusion)
-          substitutions <- swapper.getSource(conclusionLhs, conclusionRhs).calculateSubstitutions(swapper.getSource(lhs, rhs))
+          substitutions <- swapper.getSource(conclusionLhs, conclusionRhs).calculateSubstitutions(swapper.getSource(lhs, rhs), baseSubstitutions)
         } yield substitutions)))
     }
     (for {
