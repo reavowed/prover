@@ -13,8 +13,8 @@ import AddTransitiveTarget from "./AddTransitiveTarget";
 import ApplyChainingPremiseFromLeft from "./ApplyChainingPremiseFromLeft";
 import ApplyChainingPremiseFromRight from "./ApplyChainingPremiseFromRight";
 import ProveCurrentTargetByPremise from "./ProveCurrentTargetByPremise";
-import ProveTransitiveFromLeft from "./ProveTransitiveFromLeft";
-import ProveTransitiveFromRight from "./ProveTransitiveFromRight";
+import ProveChainingFromLeft from "./ProveChainingFromLeft";
+import ProveChainingFromRight from "./ProveChainingFromRight";
 import RearrangeAutomatically from "./RearrangeAutomatically";
 import RewriteAutomatically from "./RewriteAutomatically";
 import IntroduceBoundVariable from "./IntroduceBoundVariable";
@@ -155,11 +155,11 @@ export default class ProvingCard extends React.Component {
         provers: [
           {
             label: "Prove from left",
-            element: ProveTransitiveFromLeft
+            element: ProveChainingFromLeft
           },
           {
             label: "Prove from right",
-            element: ProveTransitiveFromRight
+            element: ProveChainingFromRight
           },
           {
             label: "Rewrite left",
