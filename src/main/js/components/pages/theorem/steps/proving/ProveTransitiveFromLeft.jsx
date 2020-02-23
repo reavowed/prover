@@ -8,7 +8,7 @@ export default function ProveTransitiveFromLeft({path, onError}) {
     return context.fetchJsonForStep(path, `suggestInferencesForTransitivityFromLeft?searchText=${encodeURIComponent(searchText)}`);
   };
   const submit = (possibleInference, possibleConclusion, substitutions) => {
-    return context.fetchJsonForStepAndUpdateTheorem(path, "transitivityFromLeft", {
+    return context.fetchJsonForStepAndUpdateTheorem(path, "chainingFromLeft", {
       method: "POST",
       body: {
         inferenceId: possibleInference.inference.id,

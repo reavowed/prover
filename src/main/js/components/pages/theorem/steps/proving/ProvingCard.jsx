@@ -10,8 +10,8 @@ import {CopiableExpression} from "../../../../ExpressionComponent";
 import AddTargetByPremise from "./AddTargetByPremise";
 import AddTargetManually from "./AddTargetManually";
 import AddTransitiveTarget from "./AddTransitiveTarget";
-import ApplyTransitivePremiseFromLeft from "./ApplyTransitivePremiseFromLeft";
-import ApplyTransitivePremiseFromRight from "./ApplyTransitivePremiseFromRight";
+import ApplyChainingPremiseFromLeft from "./ApplyChainingPremiseFromLeft";
+import ApplyChainingPremiseFromRight from "./ApplyChainingPremiseFromRight";
 import ProveCurrentTargetByPremise from "./ProveCurrentTargetByPremise";
 import ProveTransitiveFromLeft from "./ProveTransitiveFromLeft";
 import ProveTransitiveFromRight from "./ProveTransitiveFromRight";
@@ -171,11 +171,11 @@ export default class ProvingCard extends React.Component {
           },
           {
             label: "Add premise from left",
-            element: ApplyTransitivePremiseFromLeft
+            element: ApplyChainingPremiseFromLeft
           },
           {
             label: "Add premise from right",
-            element: ApplyTransitivePremiseFromRight
+            element: ApplyChainingPremiseFromRight
           },
           {
             label: "Target",

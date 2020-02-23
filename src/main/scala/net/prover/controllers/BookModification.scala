@@ -41,6 +41,8 @@ trait BookModification {
           preceding.provenStatement match {
             case Some(equality(`targetLhs`, `currentLhs`)) =>
               (first, preceding +: acc)
+            case _ =>
+              (steps, acc)
           }
         case _ =>
           (steps, acc)

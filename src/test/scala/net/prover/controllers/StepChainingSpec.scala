@@ -11,7 +11,7 @@ class StepChainingSpec extends ControllerSpec {
   "adding a target" should {
     "add new chain correctly" in {
       val service = createService
-      val controller = new StepCreationController(service)
+      val controller = new StepChainingController(service)
 
       controller.addTransitiveTarget(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), ψ.serialized)
 
@@ -26,7 +26,7 @@ class StepChainingSpec extends ControllerSpec {
 
     "add into existing chain correctly" in {
       val service = createService
-      val controller = new StepCreationController(service)
+      val controller = new StepChainingController(service)
 
       controller.addTransitiveTarget(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), χ.serialized)
 
@@ -49,9 +49,9 @@ class StepChainingSpec extends ControllerSpec {
     "add left premise to new transitivity" in {
       val premise = Equivalence(φ, ψ)
       val service = createService
-      val controller = new StepTransitivityController(service)
+      val controller = new StepChainingController(service)
 
-      controller.addPremiseLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), premise.serialized)
+      controller.addChainingFromLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), definition(premise, Nil, Nil, None))
 
       checkModifySteps(
         service,
@@ -61,9 +61,9 @@ class StepChainingSpec extends ControllerSpec {
     "add right premise to new transitivity" in {
       val premise = Equivalence(ψ, χ)
       val service = createService
-      val controller = new StepTransitivityController(service)
+      val controller = new StepChainingController(service)
 
-      controller.addPremiseRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), premise.serialized)
+      controller.addChainingFromRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), definition(premise, Nil, Nil, None))
 
       checkModifySteps(
         service,
@@ -145,9 +145,9 @@ class StepChainingSpec extends ControllerSpec {
   "proving with inference" should {
     "not add new RHS target if not necessary" in {
       val service = createService
-      val controller = new StepCreationController(service)
+      val controller = new StepChainingController(service)
 
-      controller.addTransitivityFromLeft(
+      controller.addChainingFromLeft(
         bookKey,
         chapterKey,
         theoremKey,
