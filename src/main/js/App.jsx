@@ -7,6 +7,7 @@ import {Theorem} from "./components/pages/Theorem"
 import {Axiom} from "./components/pages/Axiom";
 import {StatementDefinition} from "./components/pages/StatementDefinition"
 import {TermDefinition} from "./components/pages/TermDefinition"
+import {TypeDefinition} from "./components/pages/TypeDefinition"
 
 React.Component.prototype.setStatePromise = function(newState) {
   return new Promise(resolve => this.setState(newState, resolve));
@@ -30,7 +31,7 @@ String.prototype.capitalize = function() {
   return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
 };
 
-export { Books, Book, Chapter, Theorem, Axiom, StatementDefinition, TermDefinition };
+export { Books, Book, Chapter, Theorem, Axiom, StatementDefinition, TermDefinition, TypeDefinition };
 export function render(component, props) {
   const element = document.createElement("div");
   element.style.height="100%";

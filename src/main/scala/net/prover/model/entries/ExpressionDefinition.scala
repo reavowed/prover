@@ -1,6 +1,5 @@
 package net.prover.model.entries
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 import net.prover.model._
@@ -24,7 +23,6 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
   def withAttributes(newAttributes: Seq[String]): ExpressionDefinitionType
   def withFormat(newFormat: Format): ExpressionDefinitionType
 
-  @JsonSerialize
   override def title: String = s"$typeName Definition: $name"
   override def referencedInferenceIds: Set[String] = Set.empty
 

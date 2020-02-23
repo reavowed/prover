@@ -12,7 +12,7 @@ case class WritingShorthand(template: Template, symbol: String) extends ChapterE
     oldDefinition: ExpressionDefinition,
     newDefinition: ExpressionDefinition,
     entryContext: EntryContext
-  ): WritingShorthand = this
+  ): WritingShorthand = copy(template = template.replaceDefinition(oldDefinition, newDefinition))
 }
 
 object WritingShorthand extends ChapterEntryParser {

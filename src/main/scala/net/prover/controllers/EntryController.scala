@@ -1,8 +1,9 @@
 package net.prover.controllers
 
 import net.prover.exceptions.BadRequestException
-import net.prover.model.entries.{ChapterEntry, ExpressionDefinition}
-import net.prover.model.{Book, EntryContext, Format, Inference}
+import net.prover.model.entries.{ChapterEntry, ExpressionDefinition, TypeDefinition}
+import net.prover.model._
+import net.prover.model.definitions.Definitions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -46,11 +47,22 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     (for {
       book <- bookService.findBook(bookKey)
       chapter <- bookService.findChapter(book, chapterKey)
-      entry <- bookService.findEntry[ExpressionDefinition](chapter, entryKey)
-      newEntry = entry.withSymbol(newSymbol)
-      newEntryWithFormat = if (entry.format.isInstanceOf[Format.Default]) newEntry.withFormat(Format.default(newSymbol, entry.boundVariableNames ++ entry.componentTypes.map(_.name))) else newEntry
-      _ = modifyDefinition(entry, newEntryWithFormat)
-    } yield ()).toResponseEntity
+      entry <- bookService.findEntry[ChapterEntry](chapter, entryKey)
+      (newEntry, newBooks) <- entry match {
+        case definition: ExpressionDefinition =>
+          val newDefinition = definition.withSymbol(newSymbol)
+          val newDefinitionWithFormat = if (definition.format.isInstanceOf[Format.Default]) newDefinition.withFormat(Format.default(newSymbol, definition.boundVariableNames ++ definition.componentTypes.map(_.name))) else newDefinition
+          Success((newDefinition, modifyExpressionDefinition(definition, newDefinitionWithFormat)._1))
+        case definition: TypeDefinition =>
+          val newDefinition = definition.withSymbol(newSymbol)
+          Success((newDefinition, modifyTypeDefinition(definition, newDefinition)._1))
+        case _ =>
+          Failure(BadRequestException(s"Cannot edit symbol of ${entry.getClass.getName}"))
+      }
+      newBook <- bookService.findBook(newBooks, bookKey)
+      newChapter <- bookService.findChapter(newBook, chapterKey)
+      newKey <- BookService.getEntriesWithKeys(newChapter).find(_._1 == newEntry).map(_._2).orException(new Exception("Couldn't find new entry"))
+    } yield BookService.getEntryUrl(bookKey, chapterKey, newKey)).toResponseEntity
   }
 
   @PutMapping(value = Array("/attributes"), produces = Array("application/json;charset=UTF-8"))
@@ -60,13 +72,12 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @PathVariable("entryKey") entryKey: String,
     @RequestBody(required = false) newAttributes: Seq[String]
   ): ResponseEntity[_] = {
-    (for {
-      book <- bookService.findBook(bookKey)
-      chapter <- bookService.findChapter(book, chapterKey)
-      entry <- bookService.findEntry[ExpressionDefinition](chapter, entryKey)
-      newEntry = entry.withAttributes(newAttributes)
-      _ = modifyDefinition(entry, newEntry)
-    } yield ()).toResponseEntity
+    bookService.modifyEntry[ChapterEntry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, entry) => entry match {
+      case definition: ExpressionDefinition =>
+        Success(definition.withAttributes(newAttributes))
+      case _ =>
+        Failure(BadRequestException(s"Cannot set attributes of ${entry.getClass.getName}"))
+    }).toResponseEntity
   }
 
   @PutMapping(value = Array("/format"), produces = Array("application/json;charset=UTF-8"))
@@ -76,31 +87,55 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @PathVariable("entryKey") entryKey: String,
     @RequestBody(required = false) newFormatText: String
   ): ResponseEntity[_] = {
-    (for {
-      book <- bookService.findBook(bookKey)
-      chapter <- bookService.findChapter(book, chapterKey)
-      entry <- bookService.findEntry[ExpressionDefinition](chapter, entryKey)
-      componentNames = entry.boundVariableNames ++ entry.componentTypes.map(_.name)
-      format <- Format.parser(componentNames).parseFromString(newFormatText, "format").recoverWithBadRequest
-      newEntry = entry.withFormat(format)
-      _ = modifyDefinition(entry, newEntry)
-    } yield ()).toResponseEntity
+    bookService.modifyEntry[ChapterEntry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, entry) => {
+      entry match {
+        case definition: ExpressionDefinition =>
+          val componentNames = definition.boundVariableNames ++ definition.componentTypes.map(_.name)
+          for {
+            format <- Format.parser(componentNames).parseFromString(newFormatText, "format").recoverWithBadRequest
+          } yield definition.withFormat(format)
+        case definition: TypeDefinition =>
+          val componentNames = definition.otherComponentTypes.map(_.name)
+          for {
+            format <- Format.parser(componentNames).parseFromString(newFormatText, "format").recoverWithBadRequest
+          } yield definition.withFormat(format)
+
+        case _ =>
+          Failure(BadRequestException(s"Cannot set format of ${entry.getClass.getName}"))
+      }
+    }).toResponseEntity
   }
 
-  private def modifyDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Unit = {
+  private def modifyDefinitions(
+    books: Seq[Book],
+    entriesToReplace: Map[ChapterEntry, ChapterEntry],
+    definitionsToReplace: Map[ExpressionDefinition, ExpressionDefinition]
+  ): Seq[Book] = {
+    books.mapReduceWithPrevious[Book] { (previousBooks, bookToModify) =>
+      bookToModify.chapters.mapFold(EntryContext.forBookExclusive(previousBooks, bookToModify)) { (entryContextForChapter, chapterToModify) =>
+        chapterToModify.entries.mapFold(entryContextForChapter) { (entryContext, entryToModify) =>
+          val modifiedEntry = entriesToReplace.getOrElse(entryToModify, definitionsToReplace.foldLeft(entryToModify) { case (entry, (oldDefinition, newDefinition)) =>
+            entry.replaceDefinition(oldDefinition, newDefinition, entryContext)
+          })
+          (entryContext.addEntry(modifiedEntry), modifiedEntry)
+        }.mapRight(newEntries => chapterToModify.copy(entries = newEntries))
+      }.mapRight(newChapters => bookToModify.copy(chapters = newChapters))._2
+    }
+  }
+
+  private def modifyExpressionDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): (Seq[Book], Definitions) = {
     bookService.modifyBooks[Identity]((books, _) => {
-      books.mapReduceWithPrevious[Book] { (previousBooks, bookToModify) =>
-        bookToModify.chapters.mapFold(EntryContext.forBookExclusive(previousBooks, bookToModify)) { (entryContextForChapter, chapterToModify) =>
-          chapterToModify.entries.mapFold(entryContextForChapter) { (entryContext, entryToModify) =>
-            val modifiedEntry = if (entryToModify == oldDefinition) {
-              newDefinition
-            } else {
-              entryToModify.replaceDefinition(oldDefinition, newDefinition, entryContext)
-            }
-            (entryContext.addEntry(modifiedEntry), modifiedEntry)
-          }.mapRight(newEntries => chapterToModify.copy(entries = newEntries))
-        }.mapRight(newChapters => bookToModify.copy(chapters = newChapters))._2
-      }
+      modifyDefinitions(books, Map(oldDefinition -> newDefinition), Map(oldDefinition -> newDefinition))
+    })
+  }
+
+  private def modifyTypeDefinition(oldDefinition: TypeDefinition, newDefinition: TypeDefinition): (Seq[Book], Definitions) = {
+    bookService.modifyBooks[Identity]((books, definitions) => {
+      val propertyDefinitions = definitions.propertyDefinitionsByType(oldDefinition.symbol)
+      modifyDefinitions(
+        books,
+        ((oldDefinition -> newDefinition) +: propertyDefinitions.map(p => p -> p.copy(parentType = newDefinition))).toMap,
+        ((oldDefinition.statementDefinition -> newDefinition.statementDefinition) +: propertyDefinitions.map(p => p.statementDefinition -> p.copy(parentType = newDefinition).statementDefinition)).toMap)
     })
   }
 }

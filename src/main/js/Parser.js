@@ -181,6 +181,11 @@ export class Parser {
     definition.premises && (definition.premises = definition.premises.map(this.parseExpression));
     return definition;
   };
+  parseTypeDefinition = (definitionJson) => {
+    const definition = _.cloneDeep(definitionJson);
+    definition.definingStatement && (definition.definingStatement = this.parseExpression(definition.definingStatement));
+    return definition;
+  };
   parseSubstitutions = (substitutions) => {
     const statements = _.mapValues(substitutions.statements, ([i, s]) => [i, this.parseExpression(s)]);
     const terms = _.mapValues(substitutions.terms, ([i, t]) => [i, this.parseExpression(t)]);

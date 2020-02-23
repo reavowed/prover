@@ -1,8 +1,10 @@
 package net.prover.model.entries
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.{EntryContext, Inference}
 
 trait ChapterEntry {
+  @JsonSerialize
   def name: String
   def inferences: Seq[Inference.FromEntry] = Nil
   def serializedLines: Seq[String]
@@ -18,6 +20,7 @@ trait ChapterEntry {
 
 object ChapterEntry {
   trait Standalone extends ChapterEntry {
+    @JsonSerialize
     def title: String
   }
 }

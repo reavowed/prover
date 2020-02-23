@@ -114,6 +114,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           Success(("StatementDefinition", Map("definition" -> statementDefinition)))
         case termDefinition: TermDefinition =>
           Success(("TermDefinition", Map("definition" -> termDefinition)))
+        case typeDefinition: TypeDefinition =>
+          Success(("TypeDefinition", Map("definition" -> typeDefinition)))
         case _ =>
           Failure(BadRequestException(s"Cannot view ${entry.getClass.getSimpleName}"))
       }

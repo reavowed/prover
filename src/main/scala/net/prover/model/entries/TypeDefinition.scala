@@ -1,5 +1,6 @@
 package net.prover.model.entries
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.entries.ExpressionDefinition.ComponentType.TermComponent
@@ -15,11 +16,15 @@ case class TypeDefinition(
   extends ChapterEntry.Standalone
 {
   override def name: String = explicitName.getOrElse(symbol)
-  override def title: String = s"Definition: ${name.capitalizeWords}"
+  override def title: String = s"Type Definition: ${name.capitalizeWords}"
 
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry]
 
+  def withSymbol(newSymbol: String): TypeDefinition = copy(symbol = newSymbol)
+  def withFormat(newFormat: Format.Explicit): TypeDefinition = copy(componentFormat = newFormat)
+
+  @JsonSerialize
   def article: String = if (name.headOption.exists("aeiou".contains(_))) "an" else "a"
   def fullFormat: Format.Explicit = Format.Explicit(
     s"$defaultTermName is $article $name ${componentFormat.originalValue}",

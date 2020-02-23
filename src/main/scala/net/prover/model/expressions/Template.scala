@@ -126,10 +126,10 @@ object Template {
       oldDefinition: ExpressionDefinition,
       newDefinition: ExpressionDefinition
     ): Template = {
-      if (oldDefinition == definition)
-        copy(definition = newDefinition.asInstanceOf[StatementDefinition])
-      else
-        this
+      DefinedStatement(
+        if (oldDefinition == definition) newDefinition.asInstanceOf[StatementDefinition] else definition,
+        boundVariableNames,
+        components.map(_.replaceDefinition(oldDefinition, newDefinition)))
     }
     override def variables: Seq[Variable] = components.flatMap(_.variables)
     override def expand(statements: Map[String, Statement], terms: Map[String, Term]): Statement = {
