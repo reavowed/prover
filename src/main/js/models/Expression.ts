@@ -61,6 +61,14 @@ export function matchTemplate(template: any, expression: Expression, pathWithinM
         const flattenedComponentMatches: MatchResult[] = _.flatten(componentMatches as MatchResult[][]);
         return [...boundVariableMatches, ...flattenedComponentMatches];
       }
+    } else if ((expression instanceof TypeExpression) && (expression.definition.symbol === template[0])) {
+      const componentMatches = _.chain(template.slice(1))
+          .zip([expression.term, ...expression.otherComponents])
+          .map(([t, c], i) => matchTemplate(t, c!, [...pathWithinMatch, i], boundVariablesWithinMatch))
+          .value();
+      if (_.every(componentMatches)) {
+        return _.flatten(componentMatches as MatchResult[][]);
+      }
     }
   } else if (_.isArray(template) && _.isNumber(template[0])) {
     if ((expression instanceof FunctionParameter) && _.isEqual(template, [expression.level, expression.index])) {
