@@ -81,6 +81,12 @@ object PremiseFinder {
       steps <- findFromDoubleSimplifiedPremiseRelations(premise, targetLhs, targetRhs)
     } yield extractionSteps ++ steps).headOption
 
+    def fromDoubleSimplifiedConclusionRelations = (for {
+      conclusionRelationSimplificationInference <- provingContext.conclusionRelationDoubleSimplificationInferences.iterator
+      (simplifiedTarget, step) <- conclusionRelationSimplificationInference.matchTarget(targetStatement)
+      innerSteps <- findPremiseStepsWithInferences(simplifiedTarget)
+    } yield innerSteps :+ (step, conclusionRelationSimplificationInference.inference)).headOption
+
     def findFromLeftHandSimplifiedPremiseRelations(premise: Statement, targetLhs: Term, targetRhs: Term): Option[Seq[(Step, Inference)]] = {
       if (premise == targetStatement)
         Some(Nil)
@@ -107,7 +113,7 @@ object PremiseFinder {
       } yield premiseSteps :+ (assertionStep, inference)
     }
 
-    fromPremises orElse fromFact orElse fromDoubleSimplifiedPremiseRelations orElse fromLeftHandSimplifiedPremiseRelations orElse bySimplifyingTarget
+    fromPremises orElse fromFact orElse fromDoubleSimplifiedPremiseRelations orElse fromLeftHandSimplifiedPremiseRelations orElse bySimplifyingTarget orElse fromDoubleSimplifiedConclusionRelations
   }
 
   def findPremiseSteps(

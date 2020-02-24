@@ -2,7 +2,7 @@ package net.prover.model
 
 import net.prover.model.definitions._
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
-import net.prover.model.expressions.{Expression, Statement, Term}
+import net.prover.model.expressions.{Expression, Statement, Term, TermVariable}
 import net.prover.model.proof.{StepProvingContext, SubstatementExtractor, SubstitutionContext}
 import net.prover.util.Swapper
 
@@ -166,6 +166,22 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
       (premiseLhs, premiseRhs) <- premiseRelation.unapply(premise)
       if premiseLhs.complexity > conclusionLhs.complexity && premiseRhs.complexity > conclusionRhs.complexity
     } yield PremiseRelationDoubleSimplificationInference(inference, premise, extractionOption.conclusion, premiseRelation, extractionOption.extractionInferences)
+  }
+
+  lazy val conclusionRelationDoubleSimplificationInferences: Seq[ConclusionRelationDoubleSimplificationInference] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      inference <- entryContext.inferences
+      if inference.requiredSubstitutions.hasNoApplications
+      extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(this)
+      if extractionOption.premises.nonEmpty
+      lastPremise = extractionOption.premises.last
+      conclusionRelation <- definedBinaryRelations
+      (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
+      premiseRelation <- definedBinaryRelations
+      (premiseLhs @ TermVariable(_, Nil), premiseRhs @ TermVariable(_, Nil)) <- premiseRelation.unapply(lastPremise)
+      if conclusionLhs.complexity > premiseLhs.complexity && conclusionRhs.complexity > premiseRhs.complexity
+    } yield ConclusionRelationDoubleSimplificationInference(inference, extractionOption.extractionInferences)
   }
 
   lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = {
