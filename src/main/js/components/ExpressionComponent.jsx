@@ -31,8 +31,8 @@ function filterPathsMultiple(actions, initialPaths) {
     const action = actions[i];
     for(let j = 0; j < initialPaths.length; ++j) {
       const initialPath = initialPaths[j];
-      if (_.startsWith(action.path, initialPath)) {
-        result.push({...action, path: action.path.slice(initialPath.length)});
+      if (_.isEqual(action.path, initialPath)) {
+        result.push({...action, path: []});
         break;
       }
     }
@@ -88,19 +88,24 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       const typePath = _.times(expression.properties.length, _.constant(0));
       const typeActionHighlights = filterPaths(actionHighlights, typePath);
       const typeStaticHighlights = filterPaths(staticHighlights, typePath);
-
-
+      const termPath = [...typePath, 0];
       const componentPaths = _.map(_.range(expression.properties.length), getPropertyPath);
       const sharedActionHighlights = filterPathsMultiple(actionHighlights, [typePath, ...componentPaths]);
       const sharedStaticHighlights = filterPathsMultiple(staticHighlights, [typePath, ...componentPaths]);
 
-      const formattedTerm = renderExpression(expression.term, [], sharedActionHighlights, sharedStaticHighlights, boundVariableLists, false);
+      const formattedTerm = renderExpression(expression.term, termPath, [...sharedActionHighlights, ...filterPaths(actionHighlights, termPath)], [...sharedStaticHighlights, ...filterPaths(staticHighlights, termPath)], boundVariableLists, false);
       const formattedIs = renderExpression({textForHtml: () => "is"}, [], sharedActionHighlights, sharedStaticHighlights, boundVariableLists, false);
       const articleWord = expression.properties.length ? expression.properties[0] : expression.definition.name;
       const article = _.includes("aeiou", articleWord[0]) ? "an" : "a";
       const formattedArticle = renderExpression({textForHtml: () => article}, [], typeActionHighlights, typeStaticHighlights, boundVariableLists, false);
       const formattedName = renderExpression({textForHtml: () => expression.definition.name}, [], typeActionHighlights, typeStaticHighlights, boundVariableLists, false);
-      const formattedComponents = renderExpression({formatForHtml: () => expression.definition.componentFormatString, components: expression.otherComponents}, [], typeActionHighlights, typeStaticHighlights, boundVariableLists, false);
+
+      const formattedComponents = _.map(expression.otherComponents, (component, i) => {
+        const componentPath = [...typePath, i + 1];
+        return renderExpression(component, componentPath, [...sharedActionHighlights, ...filterPaths(actionHighlights, componentPath)], [...sharedStaticHighlights, ...filterPaths(staticHighlights, componentPath)], boundVariableLists, false);
+      });
+      const formattedComponentText = formatHtmlWithoutWrapping(expression.definition.componentFormatString, s => replacePlaceholders(s, formattedComponents));
+
       const formattedProperties = _.flatMap(expression.properties, (p, i) => {
         const formattedProperty = renderExpression({textForHtml: () => p}, [], filterPaths(actionHighlights, getPropertyPath(i)), filterPaths(staticHighlights, getPropertyPath(i)), boundVariableLists, false);
         if (i === 0)
@@ -108,7 +113,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         else
           return [<>, </>, formattedProperty];
       });
-      return [formattedTerm, <> </>, formattedIs, <> </>, formattedArticle, <> </>, ...formattedProperties, <> </>, formattedName, <> </>,, formattedComponents];
+      return [formattedTerm, <> </>, formattedIs, <> </>, formattedArticle, <> </>, ...formattedProperties, <> </>, formattedName, <> </>, formattedComponentText];
     } else if (expression instanceof PropertyExpression) {
       const formattedTerm = <ExpressionComponent expression={expression.term} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false} entryContext={entryContext}/>;
       return [formattedTerm, <> is </>, expression.name];

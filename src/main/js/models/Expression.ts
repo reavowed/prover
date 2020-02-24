@@ -177,8 +177,18 @@ export class TypeExpression {
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in type expression"
   }
-  replaceAtPath(_path: number[], _expression: Expression): Expression {
-    throw "Cannot replace in type expression"
+  replaceAtPath(path: number[], expression: Expression): Expression {
+    if (!path.length) {
+      return expression
+    } else if (!this.properties.length) {
+      const [first, ...remaining] = path;
+      if (first == 0)
+        return new TypeExpression(this.definition, this.term.replaceAtPath(remaining, expression), this.otherComponents, this.properties);
+      else
+        return new TypeExpression(this.definition, this.term, [...this.otherComponents.slice(0, first - 1), this.otherComponents[first - 1].replaceAtPath(remaining, expression), ... this.otherComponents.slice(first)], this.properties);
+    } else {
+      throw "Replacing in type expression with properties not implemented"
+    }
   }
 }
 
