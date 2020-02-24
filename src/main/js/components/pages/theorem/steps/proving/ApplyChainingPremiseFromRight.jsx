@@ -1,29 +1,22 @@
-import _ from "lodash";
+import {useContext} from "react";
 import * as React from "react";
 import ProofContext from "../../ProofContext";
+import ProveByPremise from "./components/ProveByPremise";
 
-export default class ApplyChainingPremiseFromRight extends React.Component {
-  static contextType = ProofContext;
-  componentDidMount() {
-    this.context.fetchJsonForStep(this.props.path, "suggestChainingFromPremiseRight")
-      .then(premiseJson => _.map(premiseJson, this.props.entryContext.parser.parsePremise))
-      .then(premises => {
-        const highlightingActions = _.map(premises, p => {return {reference: p.referencedLine, action: () => this.submit(p)}});
-        this.context.setHighlightingAction(highlightingActions);
-      });
-  }
-  componentWillUnmount() {
-    this.context.clearHighlightingAction()
-  }
-
-  submit = (premise) => {
-    return this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "chainingFromRight", {
-      method: "POST",
-      body: premise.statement.serialize()
-    }).catch(this.props.onError);
+export default function ApplyChainingPremiseFromRight(props) {
+  const context = useContext(ProofContext);
+  const fetchPossibleConclusions = (statement) => {
+    return context.fetchJsonForStep(props.path, `suggestChainingFromPremiseRight?serializedPremiseStatement=${encodeURIComponent(statement.serialize())}`)
   };
-
-  render() {
-    return "Choose premise to apply"
-  }
+  const submit = (premiseStatement, substitutions, selectedConclusion) => {
+    return context.fetchJsonForStepAndUpdateTheorem(props.path, "chainingFromRight", {
+      method: "POST",
+      body: {
+        serializedPremiseStatement: premiseStatement.serialize(),
+        substitutions,
+        extractionInferenceIds: selectedConclusion.extractionInferenceIds
+      }
+    });
+  };
+  return <ProveByPremise fetchPossibleConclusions={fetchPossibleConclusions} submit={submit} {...props}/>
 }

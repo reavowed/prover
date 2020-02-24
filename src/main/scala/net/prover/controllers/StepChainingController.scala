@@ -18,6 +18,10 @@ import scala.util.{Success, Try}
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
 class StepChainingController @Autowired() (val bookService: BookService) extends BookModification with ChainingStepEditing with InferenceSearch {
+  private def getSubstitutionsWithTermOrSubterm(source: Expression, result: Expression, baseSubstitutions: Substitutions.Possible = Substitutions.Possible.empty)(implicit substitutionContext: SubstitutionContext, stepContext: StepContext): Option[Substitutions.Possible] = {
+    source.calculateSubstitutions(result, baseSubstitutions) orElse
+      (result.getTerms().map(_._1).toSet diff result.asOptionalInstanceOf[Term].toSet).toSeq.mapCollect(source.calculateSubstitutions(_, baseSubstitutions)).single
+  }
 
   private def suggestInferencesForChaining(
     bookKey: String,
@@ -42,8 +46,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           for {
             equality <- provingContext.equalityOption
             conclusionSource <- getSourceTerm(equality.relation, extractionResult, stepContext)
-            substitutions <- conclusionSource.calculateSubstitutions(targetSource) orElse
-              (targetSource.getTerms().map(_._1).toSet diff targetSource.asOptionalInstanceOf[Term].toSet).toSeq.mapCollect(conclusionSource.calculateSubstitutions).single
+            substitutions <- getSubstitutionsWithTermOrSubterm(conclusionSource, targetSource)
           } yield substitutions
         }
         def asMatchingRelation: Option[Substitutions.Possible] = {
@@ -112,7 +115,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
       Success(SubstatementExtractor.getExtractionOptions(premise)
         .flatMap(PossibleConclusion.fromExtractionOptionWithSubstitutions(_, conclusion => for {
           (conclusionLhs, conclusionRhs) <- joiner.unapply(conclusion)
-          substitutions <- swapper.getSource(conclusionLhs, conclusionRhs).calculateSubstitutions(swapper.getSource(lhs, rhs), baseSubstitutions)
+          substitutions <- getSubstitutionsWithTermOrSubterm(swapper.getSource(conclusionLhs, conclusionRhs), swapper.getSource(lhs, rhs), baseSubstitutions)
         } yield substitutions)))
     }
     (for {
