@@ -33,7 +33,7 @@ export class Theorem extends React.Component {
     if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) {
       return;
     }
-    if (event.key === "d") {
+    if (event.key === "c") {
       this.setState({disableChaining: !this.state.disableChaining});
     }
   };
