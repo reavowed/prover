@@ -26,7 +26,7 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
 
   @GetMapping(value = Array("unusedInferences"))
   def getUnusedInferences: Seq[String] = {
-    val entryContext = EntryContext.forBooks(bookService.books, Nil)
+    val entryContext = EntryContext.forBooks(bookService.books)
     val usedInferenceIds = entryContext.inferences.ofType[Theorem].flatMap(_.referencedInferenceIds)
     for {
       (book, bookKey) <- bookService.getBooksWithKeys

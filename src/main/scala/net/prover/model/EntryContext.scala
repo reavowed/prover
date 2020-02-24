@@ -3,7 +3,7 @@ package net.prover.model
 import net.prover.model.entries._
 import net.prover.model.expressions._
 
-case class EntryContext(availableEntries: Seq[ChapterEntry], termVariableNames: Seq[String]) extends EntryContext.EntryTypes {
+case class EntryContext(availableEntries: Seq[ChapterEntry]) extends EntryContext.EntryTypes {
 
   def addEntry(entry: ChapterEntry): EntryContext = copy(availableEntries = availableEntries :+ entry)
   def addEntries(entries: Seq[ChapterEntry]): EntryContext = copy(availableEntries = availableEntries ++ entries)
@@ -58,11 +58,11 @@ object EntryContext {
     }
   }
 
-  def forBooks(books: Seq[Book], termVariableNames: Seq[String]): EntryContext = {
-    EntryContext(books.flatMap(_.chapters).flatMap(_.entries), termVariableNames)
+  def forBooks(books: Seq[Book]): EntryContext = {
+    EntryContext(books.flatMap(_.chapters).flatMap(_.entries))
   }
   def forBookExclusive(allBooks: Seq[Book], book: Book): EntryContext = {
-    forBooks(Book.getDependencies(book.imports, allBooks), book.termVariableNames)
+    forBooks(Book.getDependencies(book.imports, allBooks))
   }
   def forChapterExclusive(allBooks: Seq[Book], book: Book, chapter: Chapter): EntryContext = {
     forBookExclusive(allBooks, book).addEntries(book.chapters.until(chapter).flatMap(_.entries))

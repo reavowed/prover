@@ -9,13 +9,11 @@ import org.slf4j.{Logger, LoggerFactory}
 case class Book(
     title: String,
     imports: Seq[String],
-    chapters: Seq[Chapter],
-    termVariableNames: Seq[String])
+    chapters: Seq[Chapter])
 {
   def serialized: String = {
     val sections = Seq(
       imports.map(i => s"import $i"),
-      if (termVariableNames.nonEmpty) Seq(s"term-variables (${termVariableNames.mkString(" ")})") else Nil,
       chapters.map(c => s"chapter ${c.title}"))
 
     sections.filter(_.nonEmpty).map(_.mkString("\n")).mkString("\n\n") + "\n"
@@ -57,27 +55,22 @@ object Book {
     for {
       imports <- importsParser
       _ <- variableDefinitionsParser
-      termVariableNames <- termVariableNamesParser
       chapterTitles <- chapterTitlesParser
     } yield {
       val dependencies = getDependencies(imports, previousBooks)
-      val entryContext = EntryContext.forBooks(dependencies, termVariableNames)
+      val entryContext = EntryContext.forBooks(dependencies)
       val chapters = chapterTitles.zipWithIndex.mapFold(entryContext) { case (context, (chapterTitle, index)) =>
         val chapterPath = getChapterPath(chapterTitle, index)
         val (chapterOutline, newContext) = Chapter.parser(chapterTitle)(context)
           .parseFromFile(chapterPath, s"book '$title' chapter '$chapterTitle'")
         (newContext, chapterOutline)
       }._2
-      Book(title, imports, chapters, termVariableNames)
+      Book(title, imports, chapters)
     }
   }
 
   private def importsParser: Parser[Seq[String]] = {
     Parser.optional("import", Parser.toEndOfLine).whileDefined
-  }
-
-  def termVariableNamesParser: Parser[Seq[String]] = {
-    Parser.optional("term-variables", Parser.allInParens.map(_.splitByWhitespace()), Nil)
   }
 
   def variableDefinitionsParser: Parser[(Seq[String], Seq[String])] = {
