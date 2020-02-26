@@ -4,8 +4,9 @@ import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.entries.{ChapterEntry, DisplayShorthand, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
-import net.prover.model.proof.SubstitutionContext
+import net.prover.model.proof.{SubstatementExtractor, SubstitutionContext}
 import net.prover.util.Swapper
+import scalaz.Memo
 
 import scala.Ordering.Implicits._
 import scala.collection.mutable
@@ -14,6 +15,7 @@ import scala.util.Try
 case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext.EntryTypes {
 
   lazy val inferenceEntries: Seq[Inference] = availableEntries.ofType[Inference]
+  private val provingContext: ProvingContext = ProvingContext(EntryContext(availableEntries), this)
 
   val completenessByInference = mutable.Map.empty[String, Boolean]
   def isInferenceComplete(inference: Inference): Boolean = {
@@ -169,6 +171,54 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
             }
         }
     } yield results
+  }
+
+  lazy val premiseRelationLeftHandSimplificationInferences: Seq[PremiseRelationLeftHandSimplificationInference] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      inference <- inferences
+      if inference.premises.length <= 1
+      extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(provingContext)
+      premise <- extractionOption.premises.single.toSeq
+      if premise.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
+      conclusionRelation <- definedBinaryRelations
+      (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
+      premiseRelation <- definedBinaryRelations
+      (premiseLhs, premiseRhs) <- premiseRelation.unapply(premise)
+      if conclusionLhs.complexity >= premiseLhs.complexity && conclusionLhs.definitionUsages.contains(premiseLhs.definitionUsages)
+      if premiseRhs.complexity > conclusionRhs.complexity && premiseRhs.definitionUsages.contains(conclusionRhs.definitionUsages)
+    } yield PremiseRelationLeftHandSimplificationInference(inference, premise, extractionOption.conclusion, premiseRelation, extractionOption.extractionInferences)
+  }
+
+  lazy val premiseRelationDoubleSimplificationInferences: Seq[PremiseRelationDoubleSimplificationInference] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      inference <- inferences
+      if inference.premises.length <= 1
+      extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(provingContext)
+      premise <- extractionOption.premises.single.toSeq
+      conclusionRelation <- definedBinaryRelations
+      (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
+      premiseRelation <- definedBinaryRelations
+      (premiseLhs, premiseRhs) <- premiseRelation.unapply(premise)
+      if premiseLhs.complexity > conclusionLhs.complexity && premiseRhs.complexity > conclusionRhs.complexity
+    } yield PremiseRelationDoubleSimplificationInference(inference, premise, extractionOption.conclusion, premiseRelation, extractionOption.extractionInferences)
+  }
+
+  lazy val conclusionRelationDoubleSimplificationInferences: Seq[ConclusionRelationDoubleSimplificationInference] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      inference <- inferences
+      if inference.requiredSubstitutions.hasNoApplications
+      extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(provingContext)
+      if extractionOption.premises.nonEmpty
+      lastPremise = extractionOption.premises.last
+      conclusionRelation <- definedBinaryRelations
+      (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
+      premiseRelation <- definedBinaryRelations
+      (premiseLhs @ TermVariable(_, Nil), premiseRhs @ TermVariable(_, Nil)) <- premiseRelation.unapply(lastPremise)
+      if conclusionLhs.complexity > premiseLhs.complexity && conclusionRhs.complexity > premiseRhs.complexity
+    } yield ConclusionRelationDoubleSimplificationInference(inference, extractionOption.extractionInferences)
   }
 
   lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = inferenceEntries.collect {
