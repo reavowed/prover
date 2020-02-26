@@ -2,9 +2,11 @@ name := "prover"
 
 version := "0.1"
 
-scalaVersion := "2.12.0"
+scalaVersion := "2.12.5"
 
 val monocleVersion = "1.4.0"
+
+addCompilerPlugin("io.tryp" % "splain" % "0.5.1" cross CrossVersion.patch)
 
 libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.3.2",
