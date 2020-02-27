@@ -15,8 +15,8 @@ case class TypeDefinition(
     definingStatement: Statement)
   extends ChapterEntry.Standalone
 {
-  override def name: String = explicitName.getOrElse(symbol)
-  override def title: String = s"Type Definition: ${name.capitalizeWords}"
+  override val name: String = explicitName.getOrElse(symbol)
+  override val title: String = s"Type Definition: ${name.capitalizeWords}"
 
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry]
@@ -25,14 +25,14 @@ case class TypeDefinition(
   def withFormat(newFormat: Format.Explicit): TypeDefinition = copy(componentFormat = newFormat)
 
   @JsonSerialize
-  def article: String = if (name.headOption.exists("aeiou".contains(_))) "an" else "a"
+  val article: String = if (name.headOption.exists("aeiou".contains(_))) "an" else "a"
   def fullFormat: Format.Explicit = Format.Explicit(
     s"$defaultTermName is $article $name ${componentFormat.originalValue}",
     defaultTermName +: otherComponentTypes.map(_.name),
     componentFormat.requiresBrackets,
     componentFormat.requiresComponentBrackets)
 
-  def statementDefinition = StatementDefinition(
+  val statementDefinition: StatementDefinition = StatementDefinition(
     symbol,
     Nil,
     TermComponent(defaultTermName, Nil) +: otherComponentTypes,

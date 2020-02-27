@@ -18,7 +18,7 @@ case class StatementDefinition(
   override def name: String = explicitName.getOrElse(symbol)
   override def typeName: String = "Statement"
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.map(_.referencedDefinitions).getOrElse(Set.empty).toType[ChapterEntry] - this
-  override def complexity: Int = definingStatement.map(_.definitionalComplexity).getOrElse(1)
+  override val complexity: Int = definingStatement.map(_.definitionalComplexity).getOrElse(1)
 
   val defaultValue: DefinedStatement = {
     DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)
