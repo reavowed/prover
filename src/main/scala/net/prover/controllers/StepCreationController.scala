@@ -1,17 +1,12 @@
 package net.prover.controllers
 
-import net.prover.controllers.ExtractionHelper.ExtractionApplication
-import net.prover.controllers.models.{NamingDefinition, PathData, StepDefinition}
+import net.prover.controllers.models.{NamingDefinition, PathData}
 import net.prover.model._
-import net.prover.model.definitions.{BinaryConnective, BinaryJoiner, BinaryRelation, RelationExpansion, Wrapper}
-import net.prover.model.expressions.{DefinedStatement, Expression, Statement, Term}
+import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof._
-import net.prover.util.Swapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
-
-import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))

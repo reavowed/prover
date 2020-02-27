@@ -8,7 +8,7 @@ import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
 import net.prover.model.{ExpressionParsingContext, Inference, Substitutions}
-import net.prover.util.Swapper
+import net.prover.util.Direction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -109,13 +109,13 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     proofIndex: Int,
     stepPath: PathData,
     serializedPremiseStatement: String,
-    swapper: Swapper
+    direction: Direction
   ): ResponseEntity[_] = {
     def getPremises[T <: Expression](joiner: BinaryJoiner[T], lhs: T, rhs: T, premise: Statement, baseSubstitutions: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Try[Seq[PossibleConclusion]] = {
       Success(SubstatementExtractor.getExtractionOptions(premise)
         .flatMap(PossibleConclusion.fromExtractionOptionWithSubstitutions(_, conclusion => for {
           (conclusionLhs, conclusionRhs) <- joiner.unapply(conclusion)
-          substitutions <- getSubstitutionsWithTermOrSubterm(swapper.getSource(conclusionLhs, conclusionRhs), swapper.getSource(lhs, rhs), baseSubstitutions)
+          substitutions <- getSubstitutionsWithTermOrSubterm(direction.getSource(conclusionLhs, conclusionRhs), direction.getSource(lhs, rhs), baseSubstitutions)
         } yield substitutions)))
     }
     (for {
@@ -137,7 +137,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("serializedPremiseStatement") serializedPremiseStatement: String
   ): ResponseEntity[_] = {
-    suggestChainingFromPremise(bookKey, chapterKey, theoremKey, proofIndex, stepPath, serializedPremiseStatement, Swapper.DontSwap)
+    suggestChainingFromPremise(bookKey, chapterKey, theoremKey, proofIndex, stepPath, serializedPremiseStatement, Direction.Forward)
   }
   @GetMapping(value = Array("/suggestChainingFromPremiseRight"), produces = Array("application/json;charset=UTF-8"))
   def suggestChainingFromPremiseRight(
@@ -148,7 +148,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("serializedPremiseStatement") serializedPremiseStatement: String
   ): ResponseEntity[_] = {
-    suggestChainingFromPremise(bookKey, chapterKey, theoremKey, proofIndex, stepPath, serializedPremiseStatement, Swapper.Swap)
+    suggestChainingFromPremise(bookKey, chapterKey, theoremKey, proofIndex, stepPath, serializedPremiseStatement, Direction.Reverse)
   }
 
   private def insertChainingAssertion(
@@ -158,7 +158,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     proofIndex: Int,
     stepPath: PathData,
     @RequestBody definition: StepDefinition,
-    swapper: Swapper
+    direction: Direction
   ): ResponseEntity[_] = {
     insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateChainingSteps {
       override def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.Target])] = {
@@ -190,7 +190,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
         handle: (T, T, BinaryJoiner[T], T, T) => Try[ChainingStepDefinition[T]])(
         implicit stepProvingContext: StepProvingContext
       ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
-        val (targetSource, targetResult) = swapper.swapSourceAndResult(targetLhs, targetRhs)
+        val (targetSource, targetResult) = direction.swapSourceAndResult(targetLhs, targetRhs)
         def getResult(applyExtractions: (Seq[Inference.Summary], Substitutions, ExpressionParsingContext => Try[Option[Statement]]) => Try[(ExtractionApplication, Seq[Step.Assertion], Seq[Step], Seq[Step.Target], Seq[Step] => Step.Elided)]) = {
           for {
             extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
@@ -200,25 +200,25 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
                 for {
                   conclusionStatement <- Statement.parser(expressionParsingContext).parseFromString(serializedConclusionStatement, "intended conclusion").recoverWithBadRequest
                   (conclusionLhs, conclusionRhs) <- targetRelation.unapply(conclusionStatement).orBadRequest("Intended conclusion was not matching binary statement")
-                  conclusionSource = swapper.getSource(conclusionLhs, conclusionRhs)
+                  conclusionSource = direction.getSource(conclusionLhs, conclusionRhs)
                   substitutedConclusionSource <- conclusionSource.applySubstitutions(substitutions).orBadRequest("Could not apply substitutions to intended conclusion source")
-                  (intendedTargetLhs: T, intendedTargetRhs: T) = swapper.swapSourceAndResult(substitutedConclusionSource, targetResult)
+                  (intendedTargetLhs: T, intendedTargetRhs: T) = direction.swapSourceAndResult(substitutedConclusionSource, targetResult)
                 } yield Some(targetRelation(intendedTargetLhs, intendedTargetRhs))
               case None =>
                 Success(None)
             }
             (ExtractionApplication(conclusion, _, extractionSteps, extractionPremises, extractionTargets), additionalAssertions, additionalPremises, additionalTargets, elider) <- applyExtractions(extractionInferences, substitutions, getIntendedTarget)
             (conclusionRelation, conclusionLhs, conclusionRhs) <- ChainingMethods.getRelation[T](conclusion).orBadRequest("Conclusion was not binary statement")
-            conclusionSource = swapper.getSource(conclusionLhs, conclusionRhs)
+            conclusionSource = direction.getSource(conclusionLhs, conclusionRhs)
             rewriteChainingDefinition <- handle(conclusionSource, targetSource, conclusionRelation, conclusionLhs, conclusionRhs)
             extractionStep = Step.Elided.ifNecessary(additionalAssertions ++ extractionSteps, elider)
             finalStep = Step.Elided.ifNecessary((additionalPremises ++ extractionPremises ++ extractionStep.toSeq) ++ rewriteChainingDefinition.step.toSeq, elider)
-            intermediate = swapper.getResult(rewriteChainingDefinition.lhs, rewriteChainingDefinition.rhs)
+            intermediate = direction.getResult(rewriteChainingDefinition.lhs, rewriteChainingDefinition.rhs)
             updatedChainingDefinition = rewriteChainingDefinition.copy(step = finalStep)
-            (targetLhs, targetRhs) = swapper.swapSourceAndResult(intermediate, targetResult)
+            (targetLhs, targetRhs) = direction.swapSourceAndResult(intermediate, targetResult)
             newTarget = targetRelation(targetLhs, targetRhs)
             newTargetStepOption = if (stepProvingContext.allPremises.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
-            (firstDefinition, secondDefinition) = swapper.swapSourceAndResult(updatedChainingDefinition, ChainingStepDefinition(targetLhs, targetRhs, targetRelation, newTargetStepOption))
+            (firstDefinition, secondDefinition) = direction.swapSourceAndResult(updatedChainingDefinition, ChainingStepDefinition(targetLhs, targetRhs, targetRelation, newTargetStepOption))
           } yield (firstDefinition, secondDefinition, additionalTargets ++ extractionTargets)
         }
 
@@ -229,7 +229,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
               (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
               epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromInference(inference).baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
               intendedTargetOption <- getIntendedTarget(epc)
-              extractionApplication <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, intendedTargetOption, PremiseFinder.findPremiseStepsOrTargets)
+              extractionApplication <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, intendedTargetOption, PremiseFinder.findPremiseStepsOrTargets _)
             } yield (extractionApplication, Seq(mainAssertion), mainPremises, mainTargets, Step.Elided.forInference(inference))
           }
         }
@@ -240,7 +240,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
               premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
               epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromStepContext.baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
               intendedTargetOption <- getIntendedTarget(epc)
-              extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, intendedTargetOption, PremiseFinder.findPremiseStepsOrTargets)
+              extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, intendedTargetOption, PremiseFinder.findPremiseStepsOrTargets _)
             } yield (extractionApplication, Nil, Nil, Nil, Step.Elided.forDescription("Extracted"))
           }
         }
@@ -258,7 +258,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    insertChainingAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, Swapper.DontSwap)
+    insertChainingAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, Direction.Forward)
   }
 
   @PostMapping(value = Array("/chainingFromRight"))
@@ -270,7 +270,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    insertChainingAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, Swapper.Swap)
+    insertChainingAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, Direction.Reverse)
   }
 
   @PostMapping(value = Array("/transitiveTarget"))

@@ -5,7 +5,7 @@ import net.prover.model.Inference
 import net.prover.model.definitions._
 import net.prover.model.expressions._
 import net.prover.model.proof._
-import net.prover.util.Swapper
+import net.prover.util.Direction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -118,7 +118,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     baseExpression: TExpression,
     rewriteList: Seq[Seq[RewriteRequest]],
     equality: Equality,
-    swapper: Swapper)(
+    direction: Direction)(
     f: (Term, Term, Wrapper[Term, TExpression], Seq[Step], Option[Inference.Summary], Option[Inference.Summary]) => (TStep, Option[Inference.Summary]))(
     combine: (TExpression, TExpression, Seq[TStep], Seq[Option[Inference.Summary]]) => TStep)(
     elide: (TExpression, Seq[TStep], Seq[Option[Inference.Summary]]) => Step)(
@@ -128,7 +128,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       (newTarget, steps, inferences) <- rewriteList.foldLeft(Try((baseExpression, Seq.empty[TStep], Seq.empty[Option[Inference.Summary]]))) { case (trySoFar, rewrites) =>
         for {
           (currentExpression, stepsSoFar, inferencesSoFar) <- trySoFar
-          (newTarget, steps, inferences) <- swapper.reverse(rewrites).foldLeft(Try((currentExpression, Seq.empty[TStep], Seq.empty[Option[Inference.Summary]]))) { case (trySoFar, rewrite) =>
+          (newTarget, steps, inferences) <- direction.reverseIfNecessary(rewrites).foldLeft(Try((currentExpression, Seq.empty[TStep], Seq.empty[Option[Inference.Summary]]))) { case (trySoFar, rewrite) =>
             def applyInference(inferenceId: String, currentInnerExpression: TExpression, baseTerm: Term): Try[(Term, Option[Step], Option[Inference.Summary])] = {
               for {
                 inference <- findInference(inferenceId)
@@ -158,16 +158,16 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
               (rewrittenTerm, rewriteStepOption, inferenceOption) <- ((rewrite.inferenceId.map(applyInference(_, currentInnerExpression, baseTerm)) orElse
                 rewrite.serializedPremiseStatement.map(applyPremise(_, currentInnerExpression, baseTerm))) orBadRequest
                 "Neither inference nor premise supplied").flatten
-              reverse = rewrite.reverse != swapper.isReversed
-              reversalStepOption = if (reverse) Some((equality.reversal.assertionStep _).tupled(swapper.swapSourceAndResult(baseTerm, rewrittenTerm))) else None
+              reverse = rewrite.reverse != direction.isReversed
+              reversalStepOption = if (reverse) Some((equality.reversal.assertionStep _).tupled(direction.swapSourceAndResult(baseTerm, rewrittenTerm))) else None
               wrapper = Wrapper.fromExpression(function)
-              (source, result) = swapper.swapSourceAndResult(baseTerm, rewrittenTerm)
+              (source, result) = direction.swapSourceAndResult(baseTerm, rewrittenTerm)
               (step, resultInferenceOption) = f(source, result, wrapper, rewriteStepOption.toSeq ++ reversalStepOption.toSeq, inferenceOption, Some(equality.reversal.inference).filter(_ => reverse))
             } yield (wrapper(rewrittenTerm), stepsSoFar :+ step, inferencesSoFar :+ resultInferenceOption)
-          }.map(_.map2(swapper.reverse))
+          }.map(_.map2(direction.reverseIfNecessary))
           step = combine(currentExpression, newTarget, steps, inferences)
         } yield (newTarget, stepsSoFar :+ step , inferencesSoFar ++ inferences)
-      }.map(_.map2(swapper.reverse))
+      }.map(_.map2(direction.reverseIfNecessary))
       step = elide(newTarget, steps, inferences)
     } yield (step, newTarget)
   }
@@ -185,7 +185,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       implicit val spc = stepProvingContext
       for {
         equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
-        (step, newTarget) <- rewrite(step.statement, rewrites, equality, Swapper.Swap) { (result, target, wrapper, steps, inferenceOption, _) =>
+        (step, newTarget) <- rewrite(step.statement, rewrites, equality, Direction.Reverse) { (result, target, wrapper, steps, inferenceOption, _) =>
           val substitutionStep = equality.substitution.assertionStep(result, target, wrapper)
           val inference = inferenceOption.getOrElse(equality.substitution.inference.summary)
           (Step.Elided.ifNecessary(steps :+ substitutionStep, inference).get, Some(inference))
@@ -228,7 +228,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       for {
         equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
         premiseStatement <- Statement.parser.parseFromString(premiseRewrite.serializedPremise, "premise").recoverWithBadRequest
-        (newStep, _) <- rewrite(premiseStatement, premiseRewrite.rewrites, equality, Swapper.DontSwap) { (result, target, wrapper, steps, inferenceOption, _) =>
+        (newStep, _) <- rewrite(premiseStatement, premiseRewrite.rewrites, equality, Direction.Forward) { (result, target, wrapper, steps, inferenceOption, _) =>
           val substitutionStep = equality.substitution.assertionStep(result, target, wrapper)
           val inference = inferenceOption.getOrElse(equality.substitution.inference.summary)
           (Step.Elided.ifNecessary(steps :+ substitutionStep, inference).get, Some(inference))
@@ -259,26 +259,26 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
   def addTransitivityForRewrite[TExpression <: Expression](
     sourceExpression: TExpression,
     transitivity: Transitivity[TExpression],
-    swapper: Swapper)(
+    direction: Direction)(
     rewrittenExpression: TExpression,
     rearrangementSteps: Seq[RearrangementStep[TExpression]],
     inferences: Seq[Option[Inference.Summary]])(
     implicit stepContext: StepContext
   ): Step = {
-    val transitivitySteps = transitivity.addToRearrangement(swapper.getSource(sourceExpression, rewrittenExpression), rearrangementSteps)
+    val transitivitySteps = transitivity.addToRearrangement(direction.getSource(sourceExpression, rewrittenExpression), rearrangementSteps)
     EqualityRewriter.optionalRewriteElider(inferences)(transitivitySteps).get
   }
 
   def addRearrangementTransitivityForRewrite[TExpression <: Expression](
     transitivity: Transitivity[TExpression],
-    swapper: Swapper)(
+    direction: Direction)(
     sourceExpression: TExpression,
     rewrittenExpression: TExpression,
     rearrangementSteps: Seq[RearrangementStep[TExpression]],
     inferences: Seq[Option[Inference.Summary]])(
     implicit stepContext: StepContext
   ): RearrangementStep[TExpression] = {
-    val (sourceTerm, targetTerm) = swapper.swapSourceAndResult(sourceExpression, rewrittenExpression)
+    val (sourceTerm, targetTerm) = direction.swapSourceAndResult(sourceExpression, rewrittenExpression)
     val transitivitySteps = transitivity.addToRearrangement(sourceTerm, rearrangementSteps)
     RearrangementStep(targetTerm, transitivitySteps, EqualityRewriter.optionalRewriteElider(inferences))
   }
@@ -290,7 +290,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     proofIndex: Int,
     stepPath: PathData,
     rewrites: Seq[Seq[RewriteRequest]],
-    swapper: Swapper
+    direction: Direction
   ): ResponseEntity[_] = {
     insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateChainingSteps {
       def createStepsWithExpansion[T <: Expression with TypedExpression[T] : ChainingMethods](targetJoiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
@@ -302,16 +302,16 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
             .orBadRequest("No applicable expansion found")
           transitivity <- stepProvingContext.provingContext.transitivities.ofType[Transitivity[T]].find(_.statement == targetJoiner)
             .orBadRequest("No applicable transitivity found")
-          (sourceTerm, destinationTerm) = swapper.swapSourceAndResult(targetLhs, targetRhs)
-          (rewriteStep, intermediateTerm) <- rewrite(sourceTerm, rewrites, equality, swapper)(
+          (sourceTerm, destinationTerm) = direction.swapSourceAndResult(targetLhs, targetRhs)
+          (rewriteStep, intermediateTerm) <- rewrite(sourceTerm, rewrites, equality, direction)(
             expandForRearrangement(expansion))(
-            addRearrangementTransitivityForRewrite(transitivity, swapper))(
-            addTransitivityForRewrite(sourceTerm, transitivity, swapper))
-          (targetLhs, targetRhs) = swapper.swapSourceAndResult(intermediateTerm, destinationTerm)
-          (rewriteLhs, rewriteRhs) = swapper.swapSourceAndResult(sourceTerm, intermediateTerm)
+            addRearrangementTransitivityForRewrite(transitivity, direction))(
+            addTransitivityForRewrite(sourceTerm, transitivity, direction))
+          (targetLhs, targetRhs) = direction.swapSourceAndResult(intermediateTerm, destinationTerm)
+          (rewriteLhs, rewriteRhs) = direction.swapSourceAndResult(sourceTerm, intermediateTerm)
           rewriteStepDefinition = ChainingStepDefinition(rewriteLhs, rewriteRhs, targetJoiner, Some(rewriteStep))
           targetStepDefinition = ChainingStepDefinition.forTarget(targetLhs, targetRhs, targetJoiner)
-          (firstStep, secondStep) = swapper.swapSourceAndResult(rewriteStepDefinition, targetStepDefinition)
+          (firstStep, secondStep) = direction.swapSourceAndResult(rewriteStepDefinition, targetStepDefinition)
         } yield (firstStep, secondStep, Nil)
       }
       def createStepsWithSubstitution(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.Target])] = {
@@ -320,16 +320,16 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
           transitivity <- stepProvingContext.provingContext.transitivities.ofType[Transitivity[Term]].find(_.statement == targetRelation)
             .orBadRequest("No applicable transitivity found")
-          (sourceTerm, destinationTerm) = swapper.swapSourceAndResult(targetLhs, targetRhs)
-          (rewriteStep, intermediateTerm) <- rewrite(sourceTerm, rewrites, equality, swapper)(
+          (sourceTerm, destinationTerm) = direction.swapSourceAndResult(targetLhs, targetRhs)
+          (rewriteStep, intermediateTerm) <- rewrite(sourceTerm, rewrites, equality, direction)(
             expandForRearrangement(equality.expansion))(
-            addRearrangementTransitivityForRewrite(equality.transitivity, swapper))(
-            addTransitivityForRewrite(sourceTerm, transitivity, swapper))
-          (targetLhs, targetRhs) = swapper.swapSourceAndResult(intermediateTerm, destinationTerm)
-          (rewriteLhs, rewriteRhs) = swapper.swapSourceAndResult(sourceTerm, intermediateTerm)
+            addRearrangementTransitivityForRewrite(equality.transitivity, direction))(
+            addTransitivityForRewrite(sourceTerm, transitivity, direction))
+          (targetLhs, targetRhs) = direction.swapSourceAndResult(intermediateTerm, destinationTerm)
+          (rewriteLhs, rewriteRhs) = direction.swapSourceAndResult(sourceTerm, intermediateTerm)
           rewriteStepDefinition = ChainingStepDefinition(rewriteLhs, rewriteRhs, equality.relation, Some(rewriteStep))
           targetStepDefinition = ChainingStepDefinition.forTarget(targetLhs, targetRhs, targetRelation)
-          (firstStep, secondStep) = swapper.swapSourceAndResult(rewriteStepDefinition, targetStepDefinition)
+          (firstStep, secondStep) = direction.swapSourceAndResult(rewriteStepDefinition, targetStepDefinition)
         } yield (firstStep, secondStep, Nil)
       }
 
@@ -353,7 +353,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody rewrites: Seq[Seq[RewriteRequest]]
   ): ResponseEntity[_] = {
-    rewriteForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, rewrites, Swapper.DontSwap)
+    rewriteForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, rewrites, Direction.Forward)
   }
 
   @PostMapping(value = Array("/rewriteRight"), produces = Array("application/json;charset=UTF-8"))
@@ -365,6 +365,6 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody rewrites: Seq[Seq[RewriteRequest]]
   ): ResponseEntity[_] = {
-    rewriteForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, rewrites, Swapper.Swap)
+    rewriteForTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, rewrites, Direction.Reverse)
   }
 }

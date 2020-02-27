@@ -5,7 +5,7 @@ import net.prover.model.entries.ExpressionDefinition.ComponentType.{StatementCom
 import net.prover.model.entries.{ChapterEntry, DisplayShorthand, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
 import net.prover.model.proof.{SubstatementExtractor, SubstitutionContext}
-import net.prover.util.Swapper
+import net.prover.util.Direction
 import scalaz.Memo
 
 import scala.Ordering.Implicits._
@@ -365,14 +365,14 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     }
   }
 
-  lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Swapper)] = {
+  lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Direction)] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
       deduction <- deductionDefinitionOption.toSeq
       result <- for {
         inference <- inferences
         Seq(firstPremise @ deduction(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq.unapplySeq(inference.premises).toSeq
-        swapper <- Seq(Swapper.DontSwap, Swapper.Swap)
+        swapper <- Seq(Direction.Forward, Direction.Reverse)
         (premiseName, conclusionName) = swapper.swapSourceAndResult(a, b)
         if inference.requiredSubstitutions.terms.isEmpty && inference.requiredSubstitutions.hasNoApplications
         if otherPremise.requiredSubstitutions.statements.contains((premiseName, 0)) && inference.conclusion.requiredSubstitutions.statements.contains((conclusionName, 0))

@@ -4,7 +4,7 @@ import net.prover.model.definitions._
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.StepProvingContext
-import net.prover.util.Swapper
+import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
 
 case class ProvingContext(entryContext: EntryContext, private val definitions: Definitions) {
@@ -33,7 +33,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val alwaysAllowableTerm: AlwaysAllowable[Term] = alwaysAllowable
     implicit val alwaysAllowableExpression: AlwaysAllowable[Expression] = alwaysAllowable
     implicit val alwaysAllowableString: AlwaysAllowable[String] = alwaysAllowable
-    implicit val alwaysAllowableSwapper: AlwaysAllowable[Swapper] = alwaysAllowable
+    implicit val alwaysAllowableDirection: AlwaysAllowable[Direction] = alwaysAllowable
     implicit def allowableSeq[T](implicit inner: Allowable[T]): Allowable[Seq[T]] = allowable { x => x.forall(isAllowed) }
 
     implicit val allowableInference: Allowable[Inference] = allowable(i => entryContext.inferences.exists(_.id == i.id))
@@ -184,7 +184,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val facts: Seq[Inference] = {
     filter(definitions.facts)
   }
-  lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Swapper)] = {
+  lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Direction)] = {
     filter(definitions.statementDeductionInferences)
   }
   lazy val statementDefinitionIntroductionInferences: Seq[(Inference, Statement)] = {

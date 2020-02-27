@@ -3,7 +3,7 @@ package net.prover.model.proof
 import net.prover.model._
 import net.prover.model.definitions.{Equality, RearrangementStep, Wrapper}
 import net.prover.model.expressions._
-import net.prover.util.PossibleSingleMatch
+import net.prover.util.{Direction, PossibleSingleMatch}
 
 import scala.Ordering.Implicits._
 
@@ -11,30 +11,15 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
 {
   import stepProvingContext.provingContext._
   def rewrite(targetStatement: Statement): Option[Step] = {
-    sealed trait Direction {
-      def getSourceAndResult[T](left: T, right: T): (T, T)
-      def reverse: Direction
-    }
-    object Direction {
-      val SourceToTarget: Direction = new Direction {
-        def getSourceAndResult[T](left: T, right: T): (T, T) = (left, right)
-        def reverse: Direction = TargetToSource
-      }
-      val TargetToSource: Direction = new Direction {
-        def getSourceAndResult[T](left: T, right: T): (T, T) = (right, left)
-        def reverse: Direction = SourceToTarget
-      }
-    }
-
     def findSimplificationsFromInferences(premiseTerm: Term, inferences: Seq[(Inference, Term, Term)], direction: Direction, wrapper: Wrapper[Term, Term]): Seq[(Term, RearrangementStep[Term], Option[Inference.Summary])] = {
       for {
         (inference, left, right) <- inferences
-        (inferenceSource, inferenceResult) = direction.getSourceAndResult(left, right)
+        (inferenceSource, inferenceResult) = direction.swapSourceAndResult(left, right)
         conclusionSubstitutions <- inferenceSource.calculateSubstitutions(premiseTerm).flatMap(_.confirmTotality)
         simplifiedTerm <- inferenceResult.applySubstitutions(conclusionSubstitutions).flatMap(_.asOptionalInstanceOf[Term])
         (premiseSteps, substitutedPremises, possibleFinalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions)
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality
-        (source, result) = direction.getSourceAndResult(premiseTerm, simplifiedTerm)
+        (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
         assertionStep = Step.Assertion(
           equality(source, result),
           inference.summary,
@@ -53,7 +38,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
 
     def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[(Term, RearrangementStep[Term], Option[Inference.Summary])] = {
       def findSimplificationsDirectly = {
-        val (forwardInferences, reverseInferences) = direction.getSourceAndResult(termSimplificationInferences, termDesimplificationInferences)
+        val (forwardInferences, reverseInferences) = direction.swapSourceAndResult(termSimplificationInferences, termDesimplificationInferences)
         findSimplificationsFromInferences(premiseTerm, forwardInferences, direction, wrapper) ++ reverseSimplifications(findSimplificationsFromInferences(premiseTerm, reverseInferences, direction.reverse, wrapper))
       }
       def findSimplificationsWithinExpansion: Seq[(Term, RearrangementStep[Term], Option[Inference.Summary])] = {
@@ -117,12 +102,12 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
     }
 
     def findSimplificationEquality(premiseTerm: Term, targetTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Option[Seq[(RearrangementStep[Term], Option[Inference.Summary])]] = {
-      val (source, result) = direction.getSourceAndResult(premiseTerm, targetTerm)
+      val (source, result) = direction.swapSourceAndResult(premiseTerm, targetTerm)
       if (source.complexity > result.complexity) {
         findSimplifications(source, direction, wrapper).mapCollect { case (baseTerm, rearrangementStep, inference) =>
-          val newSource = direction.getSourceAndResult(baseTerm, rearrangementStep.result)._2
-          val (precedingSteps, followingSteps) = direction.getSourceAndResult(Seq((rearrangementStep, inference)), Nil)
-          val (newPremise, newTarget) = direction.getSourceAndResult(newSource, result)
+          val newSource = direction.swapSourceAndResult(baseTerm, rearrangementStep.result)._2
+          val (precedingSteps, followingSteps) = direction.swapSourceAndResult(Seq((rearrangementStep, inference)), Nil)
+          val (newPremise, newTarget) = direction.swapSourceAndResult(newSource, result)
           findEqualitySteps(newPremise, newTarget, wrapper).map { remainingSteps =>
             precedingSteps ++ remainingSteps ++ followingSteps
           }
@@ -173,7 +158,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
     }
 
     def findEqualitySteps(premiseTerm: Term, targetTerm: Term, termWrapper: Wrapper[Term, Term]): Option[Seq[(RearrangementStep[Term], Option[Inference.Summary])]] = {
-      def direction = if (premiseTerm.complexity > targetTerm.complexity) Direction.SourceToTarget else Direction.TargetToSource
+      def direction = if (premiseTerm.complexity > targetTerm.complexity) Direction.Forward else Direction.Reverse
       findKnownEquality(premiseTerm, targetTerm, termWrapper) orElse
         findComponentEquality(premiseTerm, targetTerm, termWrapper) orElse
         findSimplificationEquality(premiseTerm, targetTerm, direction, termWrapper)
