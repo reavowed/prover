@@ -42,7 +42,7 @@ case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
       _ <- Parser.requiredWord(closeBracket)
     } yield t
   }
-  private def listInBrackets(openBracket: String, closeBracket: String, separatorOption: Option[String]) = {
+  private def listInBrackets(openBracket: String, closeBracket: String, separatorOption: Option[String]): Parser[Seq[T]] = {
     def parseNext(tokenStream: TokenStream, acc: Seq[T] = Nil): (Seq[T], TokenStream) = {
       if (tokenStream.currentToken.text == closeBracket) {
         (acc, tokenStream.advance())
@@ -67,10 +67,10 @@ case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
   }
 
   def inParens: Parser[T] = inBrackets("(", ")")
-  def listInParens(separatorOption: Option[String]) = listInBrackets("(", ")", separatorOption)
+  def listInParens(separatorOption: Option[String]): Parser[Seq[T]] = listInBrackets("(", ")", separatorOption)
 
   def inBraces: Parser[T] = inBrackets("{", "}")
-  def listInBraces(separatorOption: Option[String]) = listInBrackets("{", "}", separatorOption)
+  def listInBraces(separatorOption: Option[String]): Parser[Seq[T]] = listInBrackets("{", "}", separatorOption)
 
   def parse(tokenStream: TokenStream): (T, TokenStream) = {
     try {

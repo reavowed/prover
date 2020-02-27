@@ -8,16 +8,16 @@ case class ExpressionParsingContext(
     entryContext: EntryContext,
     termVariableValidator: TermVariableValidator,
     parameterLists: Seq[Seq[(String, Int)]])
-  extends ParsingContextWithParameters
+  extends ParsingContextWithParameters[ExpressionParsingContext]
 {
-  def addInitialParameters(parameters: String *): ExpressionParsingContext = {
-    copy(parameterLists = parameters.zipWithIndex +: parameterLists)
-  }
-  def addInnerParameters(parameters: Seq[(String, Int)]): ExpressionParsingContext = {
-    if (parameters.isEmpty)
-      this
+  def addInitialParameters(numberOfParametersToAdd: Int): ExpressionParsingContext = {
+    if (numberOfParametersToAdd > 0)
+      copy(parameterLists = (0 until numberOfParametersToAdd).map(i => "$_" + i -> i) +: parameterLists)
     else
-      copy(parameterLists = parameterLists :+ parameters)
+      this
+  }
+  override def addInnerParameters(parameters: Seq[(String, Int)]): ExpressionParsingContext = {
+    copy(parameterLists = parameterLists :+ parameters)
   }
 
   def withPlaceholderParameters(numberOfParameters: Int): ExpressionParsingContext = {

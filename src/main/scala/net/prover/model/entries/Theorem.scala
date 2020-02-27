@@ -34,7 +34,6 @@ case class Theorem(
     }
   }
 
-
   def findStep(proofIndex: Int, stepIndexes: Seq[Int]): Option[(Step, StepContext)] = {
     proofs.lift(proofIndex).flatMap(_.findStep(stepIndexes, initialStepContext))
   }

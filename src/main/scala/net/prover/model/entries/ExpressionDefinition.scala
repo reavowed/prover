@@ -30,7 +30,7 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
     for {
       newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
       components <- componentTypes.map { componentType =>
-        componentType.expressionParser(context.addInnerParameters(componentType.getParameters(newBoundVariableNames)))
+        componentType.expressionParser(componentType.addParametersToContext(context, newBoundVariableNames))
       }.traverseParser
     } yield (newBoundVariableNames, components)
   }
@@ -39,7 +39,7 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
     for {
       newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
       components <- componentTypes.map { componentType =>
-        componentType.templateParser(context.addInnerParameters(componentType.getParameters(newBoundVariableNames)))
+        componentType.templateParser(componentType.addParametersToContext(context, newBoundVariableNames))
       }.traverseParser
     } yield (newBoundVariableNames, components)
   }
@@ -60,6 +60,12 @@ object ExpressionDefinition {
     def arguments: Seq[ComponentArgument]
     def expressionParser(implicit context: ExpressionParsingContext): Parser[Expression]
     def templateParser(implicit context: TemplateParsingContext): Parser[Template]
+    def addParametersToContext[T <: ParsingContextWithParameters[T]](context: T, boundVariableNames: Seq[String]): T = {
+      if (boundVariableNames.nonEmpty)
+        context.addInnerParameters(getParameters(boundVariableNames))
+      else
+        context
+    }
     def getParameters(boundVariableNames: Seq[String]): Seq[(String, Int)] = {
       arguments.map(a => boundVariableNames(a.index) -> a.index)
     }

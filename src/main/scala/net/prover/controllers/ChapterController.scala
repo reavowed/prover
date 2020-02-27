@@ -188,7 +188,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         boundVariables = boundVariablesAndComponentTypes._1
         componentTypes = boundVariablesAndComponentTypes._2
         componentNames = boundVariables ++ componentTypes.map(_.name)
-        definition <- Statement.parser(expressionParsingContext.addInitialParameters("_")).parseFromString(newTermDefininition.definition, "definition").recoverWithBadRequest
+        definition <- Statement.parser(expressionParsingContext.addInitialParameters(1)).parseFromString(newTermDefininition.definition, "definition").recoverWithBadRequest
         format <- Option(newTermDefininition.format).filter(_.nonEmpty)
           .map(f => Format.parser(componentNames).parseFromString(f, "format"))
           .getOrElse(Format.default(symbol, componentNames))

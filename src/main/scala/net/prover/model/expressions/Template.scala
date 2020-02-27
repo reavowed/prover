@@ -143,7 +143,7 @@ object Template {
           for {
             x <- currentParser
             (currentComponents, currentStatements, currentTerms) = x
-            y <- componentTemplate.expressionParserBuilder(currentStatements, currentTerms)(expressionParsingContext.addInnerParameters(componentType.getParameters(parsedBoundVariableNames)))
+            y <- componentTemplate.expressionParserBuilder(currentStatements, currentTerms)(componentType.addParametersToContext(expressionParsingContext, parsedBoundVariableNames))
             (newComponent, newStatements, newTerms) = y
           } yield (currentComponents :+ newComponent, newStatements, newTerms)
         }
@@ -196,7 +196,7 @@ object Template {
           for {
             x <- currentParser
             (currentComponents, currentStatements, currentTerms) = x
-            y <- componentTemplate.expressionParserBuilder(currentStatements, currentTerms)(expressionParsingContext.addInnerParameters(componentType.getParameters(parsedBoundVariableNames)))
+            y <- componentTemplate.expressionParserBuilder(currentStatements, currentTerms)(componentType.addParametersToContext(expressionParsingContext, parsedBoundVariableNames))
             (newComponent, newStatements, newTerms) = y
           } yield (currentComponents :+ newComponent, newStatements, newTerms)
         }

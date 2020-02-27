@@ -209,7 +209,7 @@ object Step {
     def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Naming] = {
       for {
         variableName <- Parser.singleWord
-        assumption <- Statement.parser
+        assumption <- Statement.parser(ExpressionParsingContext.atStep(implicitly, stepContext.addBoundVariable(variableName)))
         innerStepContext = stepContext.addBoundVariable(variableName).addStatement(assumption, "a")
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser

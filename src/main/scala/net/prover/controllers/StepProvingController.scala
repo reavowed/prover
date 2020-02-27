@@ -58,7 +58,10 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
         premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         substitutions <- definition.substitutions.parse()
-        epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromStepContext.baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
+        epc = ExpressionParsingContext(
+          implicitly,
+          TermVariableValidator.LimitedList(VariableTracker.fromStepContext.baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten),
+          stepProvingContext.stepContext.boundVariableLists.map(_.zipWithIndex))
         targetOption <- getTargetOption.map(f => f(epc, substitutions)).swap
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
         ExtractionApplication(result, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, targetOption, PremiseFinder.findPremiseStepsOrTargets)

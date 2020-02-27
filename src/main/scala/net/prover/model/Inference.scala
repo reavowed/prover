@@ -23,16 +23,26 @@ trait Inference {
 
   def summary: Summary = Summary(this)
 
-  def requiredSubstitutions: Substitutions.Required = {
+  val requiredSubstitutions: Substitutions.Required = {
     (premises.map(_.requiredSubstitutions) :+ conclusion.requiredSubstitutions).foldTogether
   }
 
   def substitutionsParser(implicit parsingContext: ExpressionParsingContext): Parser[Substitutions] = {
     for {
-      statements <- Statement.parser.listInParens(Some(","))
-      terms <- Term.parser.listInParens(Some(","))
+      statements <- requiredSubstitutions.statements.mapWithIndex { case ((name, arity), index) => {
+        for {
+          _ <- if (index > 0) Parser.requiredWord(",") else Parser.constant(())
+          s <- Statement.parser(parsingContext.addInitialParameters(arity))
+        } yield name -> (arity -> s)
+      }}.traverseParser.map(_.toMap).inParens
+      terms <- requiredSubstitutions.terms.mapWithIndex { case ((name, arity), index) => {
+        for {
+          _ <- if (index > 0) Parser.requiredWord(",") else Parser.constant(())
+          t <- Term.parser(parsingContext.addInitialParameters(arity))
+        } yield name -> (arity -> t)
+      }}.traverseParser.map(_.toMap).inParens
     } yield {
-      requiredSubstitutions.fill(statements, terms)
+      Substitutions(statements, terms)
     }
   }
 
