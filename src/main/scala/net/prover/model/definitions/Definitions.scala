@@ -6,7 +6,6 @@ import net.prover.model.entries.{ChapterEntry, DisplayShorthand, StatementDefini
 import net.prover.model.expressions._
 import net.prover.model.proof.{SubstatementExtractor, SubstitutionContext}
 import net.prover.util.Direction
-import scalaz.Memo
 
 import scala.Ordering.Implicits._
 import scala.collection.mutable
@@ -187,7 +186,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       (premiseLhs, premiseRhs) <- premiseRelation.unapply(premise)
       if conclusionLhs.complexity >= premiseLhs.complexity && conclusionLhs.definitionUsages.contains(premiseLhs.definitionUsages)
       if premiseRhs.complexity > conclusionRhs.complexity && premiseRhs.definitionUsages.contains(conclusionRhs.definitionUsages)
-    } yield PremiseRelationLeftHandSimplificationInference(inference, premise, extractionOption.conclusion, premiseRelation, extractionOption.extractionInferences)
+    } yield PremiseRelationLeftHandSimplificationInference(inference, premise, extractionOption.conclusion, extractionOption.extractionInferences)
   }
 
   lazy val premiseRelationDoubleSimplificationInferences: Seq[PremiseRelationDoubleSimplificationInference] = {
@@ -202,7 +201,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
       premiseRelation <- definedBinaryRelations
       (premiseLhs, premiseRhs) <- premiseRelation.unapply(premise)
       if premiseLhs.complexity > conclusionLhs.complexity && premiseRhs.complexity > conclusionRhs.complexity
-    } yield PremiseRelationDoubleSimplificationInference(inference, premise, extractionOption.conclusion, premiseRelation, extractionOption.extractionInferences)
+    } yield PremiseRelationDoubleSimplificationInference(inference, premise, extractionOption.conclusion, extractionOption.extractionInferences)
   }
 
   lazy val conclusionRelationDoubleSimplificationInferences: Seq[ConclusionRelationDoubleSimplificationInference] = {

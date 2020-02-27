@@ -23,6 +23,26 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
     } yield (extractionApplication.result, extractionApplication.extractionSteps.map(s => (s, s.inference)))
   }
 
+  lazy val allPremiseSimplifications: Seq[(Statement, Seq[(Step, Inference)])] = {
+    val simplifiers = provingContext.premiseRelationLeftHandSimplificationInferences ++ provingContext.premiseRelationDoubleSimplificationInferences
+    def helper(previous: Seq[(Statement, Seq[(Step, Inference)])], current: Seq[(Statement, Seq[(Step, Inference)])]): Seq[(Statement, Seq[(Step, Inference)])] = {
+      if (current.isEmpty)
+        previous
+      else {
+        val existing = previous ++ current
+        val newSimplifications = current.flatMap { case (statement, stepsAndInferences) =>
+          simplifiers.mapCollect { simplifier =>
+            simplifier.getPremiseSimplification(statement)(this)
+              .filter { case (statement, _) => !existing.exists(_._1 == statement)}
+              .map { case (statement, step) => (statement, stepsAndInferences :+ (step, simplifier.inference)) }
+          }
+        }
+        helper(existing, newSimplifications)
+      }
+    }
+    helper(Nil, allPremiseExtractions)
+  }
+
   def findPremise(statement: Statement): Option[Premise.SingleLinePremise] = {
     allPremises.find(_.statement == statement)
   }

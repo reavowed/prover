@@ -17,7 +17,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         (inferenceSource, inferenceResult) = direction.swapSourceAndResult(left, right)
         conclusionSubstitutions <- inferenceSource.calculateSubstitutions(premiseTerm).flatMap(_.confirmTotality)
         simplifiedTerm <- inferenceResult.applySubstitutions(conclusionSubstitutions).flatMap(_.asOptionalInstanceOf[Term])
-        (premiseSteps, substitutedPremises, possibleFinalSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, conclusionSubstitutions)
+        (premiseSteps, substitutedPremises, possibleFinalSubstitutions) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(inference.premises, conclusionSubstitutions)
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
         assertionStep = Step.Assertion(
@@ -78,7 +78,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       }
       def findDirectly = {
         for {
-          (steps, inferences) <- PremiseFinder.findPremiseStepsWithInferences(equality(premiseTerm, targetTerm)).map(_.split)
+          (steps, inferences) <- PremiseFinder.findPremiseStepsWithInferencesForStatement(equality(premiseTerm, targetTerm)).map(_.split)
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
           inference = inferences.singleMatch match {
             case PossibleSingleMatch.NoMatches =>
@@ -92,7 +92,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       }
       def findReverse = {
         for {
-          steps <- PremiseFinder.findPremiseSteps(equality(targetTerm, premiseTerm))
+          steps <- PremiseFinder.findPremiseStepsForStatement(equality(targetTerm, premiseTerm))
           reversalStep = equality.reversal.assertionStep(premiseTerm, targetTerm)
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
           inference = Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity)

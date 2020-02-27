@@ -61,8 +61,8 @@ package object model {
   }
 
   implicit class Tuple2SameOps[T](tuple: (T, T)) {
-    def map[S](f: T => S): (S, S) = (f(tuple._1), f(tuple._2))
-    def mapOption[S](f: T => Option[S]): Option[(S, S)] = {
+    def mapBoth[S](f: T => S): (S, S) = (f(tuple._1), f(tuple._2))
+    def mapBothOption[S](f: T => Option[S]): Option[(S, S)] = {
       for {
         first <- f(tuple._1)
         second <- f(tuple._2)

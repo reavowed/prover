@@ -3,7 +3,6 @@ package net.prover.controllers
 import net.prover.controllers.models.{PathData, RewriteRequest}
 import net.prover.model.TestDefinitions
 import net.prover.model.TestDefinitions._
-import net.prover.model.proof.StepContext
 
 class StepChainingSpec extends ControllerSpec {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name

@@ -51,7 +51,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           for {
             substitutions <- source.calculateSubstitutions(term)
             result <- target.applySubstitutions(substitutions.stripApplications()).map(_.insertExternalParameters(depth))
-            _ <- PremiseFinder.findPremiseSteps(inference.premises, substitutions)(stepProvingContext)
+            _ <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(inference.premises, substitutions)(stepProvingContext)
           } yield InferenceRewritePath(path, result)
         }
         if (suggestions.nonEmpty)
@@ -136,7 +136,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
                 (sourceTemplate, targetTemplate) = if (!rewrite.reverse) (inferenceLhs, inferenceRhs) else (inferenceRhs, inferenceLhs)
                 substitutions <- sourceTemplate.calculateSubstitutions(baseTerm).orBadRequest("Could not find substitutions")
                 rewrittenTerm <- targetTemplate.applySubstitutions(substitutions.stripApplications()).orBadRequest("Could not apply substitutions to target")
-                (premiseSteps, premises, finalPossibleSubstitutions) <- PremiseFinder.findPremiseSteps(inference.premises, substitutions).orBadRequest("Could not find premises")
+                (premiseSteps, premises, finalPossibleSubstitutions) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(inference.premises, substitutions).orBadRequest("Could not find premises")
                 finalSubstitutions <- finalPossibleSubstitutions.confirmTotality.orBadRequest("Substitutions were not complete")
                 substitutedConclusion <- inference.conclusion.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to inference conclusion")
                 assertionStep = Step.Assertion(substitutedConclusion, inference, premises.map(Premise.Pending), finalSubstitutions)
