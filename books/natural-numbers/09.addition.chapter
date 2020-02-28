@@ -20,7 +20,11 @@ conclusion ∃! f ∧ function $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ =
             take m {
               assume ∈ $0 ℕ {
                 prove ∈ apply $$0 $0 ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () ($$0, ℕ, ℕ, $0) 0.1.0.1.0a 0.1.0.1.0.0.0a
-                prove = apply $$$$0 apply $$0 $0 successor apply $$0 $0 5b8937e0549f4bd35034b1befa967dca80703d645eab3d1e6cf213c3d15280f9 () ($$$$0, ℕ, successor $$$$$0, apply $$0 $0) 0a 0.1.0.1.0.0.0.0
+                elided 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 {
+                  prove ∀ a → ∈ $0 ℕ = apply $$$$$0 $0 successor $0 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 () ($$$$0, ℕ, successor $$$$$0) 0a
+                  prove → ∈ apply $$0 $0 ℕ = apply $$$$0 apply $$0 $0 successor apply $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$0 ℕ = apply $$$$0 $$$$$0 successor $$$$$0) (apply $$0 $0) 0.1.0.1.0.0.0.1.0
+                  prove = apply $$$$0 apply $$0 $0 successor apply $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply $$0 $0 ℕ, = apply $$$$0 apply $$0 $0 successor apply $$0 $0) () 0.1.0.1.0.0.0.1.1 0.1.0.1.0.0.0.0
+                }
               }
             }
             prove ↔ ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply $$$$0 apply $$0 $0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 successor apply $$0 $0 3d8a2e45186bbd081f985225ca3caab793faf774eac772ac216638749b0ae8c0 (∈ $$$$0 ℕ, = apply $0 successor $$$$0 $$$$1) (apply $$$0 apply $0 $$$$0, successor apply $0 $$$$0) 0.1.0.1.0.0

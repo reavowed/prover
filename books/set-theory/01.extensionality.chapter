@@ -12,6 +12,10 @@ display ∃! x ∧ ∈ $0 a φ as ((∃!x ∈ a)φ)
 
 display ¬ ∈ a b as (a ∉ b) requires-brackets
 
+write ∀ x → ∈ $0 X φ as allin
+
+write ∃ x ∧ ∈ $0 X φ as exin
+
 axiom Extensionality
 premise ∀ x ↔ ∈ $0 a ∈ $0 b
 conclusion = a b

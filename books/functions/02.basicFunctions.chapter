@@ -332,7 +332,7 @@ conclusion ∃! f ∧ function $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) 
 comment Define function maps.
 
 term functionMap ($a A with a F)
-  format (a ∈ A ↦ F) requires-brackets
+  format (a : A ↦ F) requires-brackets
   (= $0 replacementSet a A orderedPair $0 with ($0) F)
 
 theorem Function Map Is Function
@@ -400,24 +400,29 @@ conclusion function f A B
 
 theorem Function Map Application
 premise = f functionMap a A with ($0) F
-premise ∈ a A
-conclusion = apply f a with (a) F
+conclusion ∀ a → ∈ $0 A = apply f $0 with ($0) F
 {
-  let B = $0 replacementSet x A with ($0) F cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (= apply f a with (a) F) (replacementSet x A with ($0) F) {
-    take x {
-      assume ∈ $0 A {
-        prove ∈ with ($0) F $$0 d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () ($$0, A, with ($$$0) F, $0) 0a 0.0.0a
+  elided 3554b7859d22ea016fcc856a0d0c569d8c25cce90a4ba66d3a2f2f3cce5e276e {
+    prove = functionMap a A with ($0) F replacementSet a A orderedPair $0 with ($0) F 3554b7859d22ea016fcc856a0d0c569d8c25cce90a4ba66d3a2f2f3cce5e276e () (A, with ($0) F)
+    prove = f replacementSet a A orderedPair $0 with ($0) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= f $0) (functionMap a A with ($0) F, replacementSet a A orderedPair $0 with ($0) F) 0.0 p0
+  }
+  let B = $0 replacementSet x A with ($0) F cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∀ a → ∈ $0 A = apply f $0 with ($0) F) (replacementSet x A with ($0) F) {
+    elided d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b {
+      take a {
+        assume ∈ $0 A {
+          prove ∈ with ($0) F $$0 d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () ($$0, A, with ($$$0) F, $0) 1a 1.0.0.0a
+        }
       }
     }
-    prove function f A $0 ca3465bfac5bc8294749b6861f05413cbf73fb1facc9bb123d883da7ae3773c2 () (f, A, with ($$0) F, $0) p0 0.0
-    elided (Rewritten) {
-      prove = functionMap a A with ($0) F replacementSet a A orderedPair $0 with ($0) F 3554b7859d22ea016fcc856a0d0c569d8c25cce90a4ba66d3a2f2f3cce5e276e () (A, with ($$0) F)
-      prove = f replacementSet a A orderedPair $0 with ($0) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= f $$0) (functionMap a A with ($0) F, replacementSet a A orderedPair $0 with ($0) F) 0.2.0 p0
-    }
-    prove ∈ orderedPair a with (a) F f d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () (f, A, orderedPair $$0 with ($$0) F, a) 0.2 p1
-    elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
-      prove = with (a) F apply f a bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, $0, a, with (a) F) 0.1 0.3
-      prove = apply f a with (a) F 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (with (a) F, apply f a) 0.4.0
+    prove function f A $0 ca3465bfac5bc8294749b6861f05413cbf73fb1facc9bb123d883da7ae3773c2 () (f, A, with ($$0) F, $0) p0 1.0
+    take a {
+      assume ∈ $0 A {
+        prove ∈ orderedPair $0 with ($0) F f d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () (f, A, orderedPair $$$0 with ($$$0) F, $0) 0 1.2.0a
+        elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
+          prove = with ($0) F apply f $0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, $$0, $0, with ($0) F) 1.1 1.2.0.0
+          prove = apply f $0 with ($0) F 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (with ($0) F, apply f $0) 1.2.0.1.0
+        }
+      }
     }
   }
 }
@@ -426,7 +431,7 @@ comment Binary function maps.
 
 term functionMap2 ($a $b A B with (a b) F)
   name (Binary Function Map)
-  format ((a ∈ A, b ∈ B) ↦ F) requires-brackets
+  format ((a : A, b : B) ↦ F) requires-brackets
   (= $0 functionMap x product A B with (first $0 second $0) F)
 
 theorem Binary Function Map Is Function
@@ -453,11 +458,41 @@ conclusion function f product A B C
   prove function f product A B C ca3465bfac5bc8294749b6861f05413cbf73fb1facc9bb123d883da7ae3773c2 () (f, product A B, with (first $0 second $0) F, C) 0 1
 }
 
+theorem Binary Function Map Application
+premise = f functionMap2 a b A B with ($0 $1) F
+conclusion ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply f orderedPair $$0 $0 with ($$0 $0) F
+{
+  elided 7f1c522e6b2b5efb16c1d7a3d192ed6c17b9ac66f65c085a7235411cf8fb00b5 {
+    prove = functionMap2 a b A B with ($0 $1) F functionMap x product A B with (first $0 second $0) F 7f1c522e6b2b5efb16c1d7a3d192ed6c17b9ac66f65c085a7235411cf8fb00b5 () (A, B, with ($0 $1) F)
+    prove = f functionMap x product A B with (first $0 second $0) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= f $0) (functionMap2 a b A B with ($0 $1) F, functionMap x product A B with (first $0 second $0) F) 0.0 p0
+  }
+  prove ∀ x → ∈ $0 product A B = apply f $0 with (first $0 second $0) F 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 () (f, product A B, with (first $0 second $0) F) 0
+  elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+    take x {
+      assume ∈ $0 product A B {
+        elided (Extracted) {
+          prove → ∈ $0 product A B = apply f $0 with (first $0 second $0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 product A B = apply f $$0 with (first $$0 second $$0) F) ($0) 1
+          prove = apply f $0 with (first $0 second $0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 product A B, = apply f $0 with (first $0 second $0) F) () 2.0.0.0.0 2.0.0a
+        }
+        elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+          prove = $0 orderedPair first $0 second $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($0, A, B) 2.0.0a
+          prove = apply f orderedPair first $0 second $0 with (first $0 second $0) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply f $$0 with (first $0 second $0) F) ($0, orderedPair first $0 second $0) 2.0.0.1.0 2.0.0.0
+        }
+      }
+    }
+  }
+  elided 248ead457a5ea22f39eea9433df16553470ff1d8fa0047c868cbb31568d3e0d9 {
+    prove ↔ ∀ x → ∈ $0 product A B = apply f orderedPair first $0 second $0 with (first $0 second $0) F ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply f orderedPair $$0 $0 with ($$0 $0) F 248ead457a5ea22f39eea9433df16553470ff1d8fa0047c868cbb31568d3e0d9 (= apply f orderedPair $0 $1 with ($0 $1) F) (A, B)
+    prove → ∀ x → ∈ $0 product A B = apply f orderedPair first $0 second $0 with (first $0 second $0) F ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply f orderedPair $$0 $0 with ($$0 $0) F f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∀ x → ∈ $0 product A B = apply f orderedPair first $0 second $0 with (first $0 second $0) F, ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply f orderedPair $$0 $0 with ($$0 $0) F) () 3.0
+    prove ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply f orderedPair $$0 $0 with ($$0 $0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∀ x → ∈ $0 product A B = apply f orderedPair first $0 second $0 with (first $0 second $0) F, ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply f orderedPair $$0 $0 with ($$0 $0) F) () 3.1 2
+  }
+}
+
 comment And extend that to quadruple function maps.
 
 term functionMap4 ($a $b $c $d A B C D with (a b c d) F)
   name (Quadruple Function Map)
-  format (((a, b), (c, d)) ∈ ((A × B) × (C × D)) ↦ F)
+  format (((a : A, b : B), (c : C, d : D)) ↦ F)
   (= $0 functionMap2 x y product A B product C D with (first $0 second $0 first $1 second $1) F)
 
 theorem Quadruple Function Map Is Function
@@ -494,4 +529,97 @@ conclusion function f product product A B product C D E
     }
   }
   prove function f product product A B product C D E 935af583c6d311254145c7b3ee947ea9808fb68950708c26f74b563fd485c813 () (f, product A B, product C D, with (first $0 second $0 first $1 second $1) F, E) 0 1
+}
+
+theorem Quadruple Function Map Application
+premise = f functionMap4 a b c d A B C D with ($0 $1 $2 $3) F
+conclusion ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 with ($$$$0 $$$0 $$0 $0) F
+{
+  elided 43c300cbc542cb8d0e74ee2747e5fcdfc2f3b243fd0dffa1f28b28d74796e82d {
+    prove = functionMap4 a b c d A B C D with ($0 $1 $2 $3) F functionMap2 x y product A B product C D with (first $0 second $0 first $1 second $1) F 43c300cbc542cb8d0e74ee2747e5fcdfc2f3b243fd0dffa1f28b28d74796e82d () (A, B, C, D, with ($0 $1 $2 $3) F)
+    prove = f functionMap2 x y product A B product C D with (first $0 second $0 first $1 second $1) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= f $0) (functionMap4 a b c d A B C D with ($0 $1 $2 $3) F, functionMap2 x y product A B product C D with (first $0 second $0 first $1 second $1) F) 0.0 p0
+  }
+  prove ∀ x → ∈ $0 product A B ∀ y → ∈ $0 product C D = apply f orderedPair $$0 $0 with (first $$0 second $$0 first $0 second $0) F 8c729f6f1d66672cf0581359e44903f70f9a26155498931b1c2117ccd8836fce () (f, product A B, product C D, with (first $0 second $0 first $1 second $1) F) 0
+  elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+    take x {
+      assume ∈ $0 product A B {
+        take y {
+          assume ∈ $0 product C D {
+            elided (Extracted) {
+              prove → ∈ $$0 product A B ∀ y → ∈ $0 product C D = apply f orderedPair $$$0 $0 with (first $$$0 second $$$0 first $0 second $0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 product A B ∀ y → ∈ $0 product C D = apply f orderedPair $$$$0 $0 with (first $$$$0 second $$$$0 first $0 second $0) F) ($$0) 1
+              prove ∀ y → ∈ $0 product C D = apply f orderedPair $$$0 $0 with (first $$$0 second $$$0 first $0 second $0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 product A B, ∀ y → ∈ $0 product C D = apply f orderedPair $$$0 $0 with (first $$$0 second $$$0 first $0 second $0) F) () 2.0.0.0.0.0.0 2.0.0a
+              prove → ∈ $0 product C D = apply f orderedPair $$0 $0 with (first $$0 second $$0 first $0 second $0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 product C D = apply f orderedPair $$0 $$$0 with (first $$0 second $$0 first $$$0 second $$$0) F) ($0) 2.0.0.0.0.0.1
+              prove = apply f orderedPair $$0 $0 with (first $$0 second $$0 first $0 second $0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 product C D, = apply f orderedPair $$0 $0 with (first $$0 second $$0 first $0 second $0) F) () 2.0.0.0.0.0.2 2.0.0.0.0a
+            }
+            elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+              elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+                prove = $$0 orderedPair first $$0 second $$0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($$0, A, B) 2.0.0a
+                prove = apply f orderedPair orderedPair first $$0 second $$0 $0 with (first $$0 second $$0 first $0 second $0) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply f orderedPair $$$0 $0 with (first $$0 second $$0 first $0 second $0) F) ($$0, orderedPair first $$0 second $$0) 2.0.0.0.0.1.0.0 2.0.0.0.0.0
+              }
+              elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+                prove = $0 orderedPair first $0 second $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($0, C, D) 2.0.0.0.0a
+                prove = apply f orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply f orderedPair orderedPair first $$0 second $$0 $$$0 with (first $$0 second $$0 first $0 second $0) F) ($0, orderedPair first $0 second $0) 2.0.0.0.0.1.1.0 2.0.0.0.0.1.0
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  elided 248ead457a5ea22f39eea9433df16553470ff1d8fa0047c868cbb31568d3e0d9 {
+    take x {
+      assume ∈ $0 product A B {
+        elided (Extracted) {
+          prove → ∈ $0 product A B ∀ y → ∈ $0 product C D = apply f orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 product A B ∀ y → ∈ $0 product C D = apply f orderedPair orderedPair first $$$0 second $$$0 orderedPair first $0 second $0 with (first $$$0 second $$$0 first $0 second $0) F) ($0) 2
+          prove ∀ y → ∈ $0 product C D = apply f orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 product A B, ∀ y → ∈ $0 product C D = apply f orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) F) () 3.0.0.0.0 3.0.0a
+        }
+        elided 248ead457a5ea22f39eea9433df16553470ff1d8fa0047c868cbb31568d3e0d9 {
+          prove ↔ ∀ x → ∈ $0 product C D = apply f orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) F ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 with (first $$$0 second $$$0 $$0 $0) F 248ead457a5ea22f39eea9433df16553470ff1d8fa0047c868cbb31568d3e0d9 (= apply f orderedPair orderedPair first $0 second $0 orderedPair $$0 $$1 with (first $0 second $0 $$0 $$1) F) (C, D)
+          prove → ∀ x → ∈ $0 product C D = apply f orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) F ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 with (first $$$0 second $$$0 $$0 $0) F f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∀ x → ∈ $0 product C D = apply f orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) F, ∀ a → ∈ $0 C ∀ b → ∈ $0 D = apply f orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 with (first $$$0 second $$$0 $$0 $0) F) () 3.0.0.1.0
+          prove ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 with (first $$$0 second $$$0 $$0 $0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∀ x → ∈ $0 product C D = apply f orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) F, ∀ a → ∈ $0 C ∀ b → ∈ $0 D = apply f orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 with (first $$$0 second $$$0 $$0 $0) F) () 3.0.0.1.1 3.0.0.0
+        }
+      }
+    }
+  }
+  elided 248ead457a5ea22f39eea9433df16553470ff1d8fa0047c868cbb31568d3e0d9 {
+    prove ↔ ∀ x → ∈ $0 product A B ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 with (first $$$0 second $$$0 $$0 $0) F ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 with ($$$$0 $$$0 $$0 $0) F 248ead457a5ea22f39eea9433df16553470ff1d8fa0047c868cbb31568d3e0d9 (∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair $$$0 $$$1 orderedPair $$0 $0 with ($$$0 $$$1 $$0 $0) F) (A, B)
+    prove → ∀ x → ∈ $0 product A B ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 with (first $$$0 second $$$0 $$0 $0) F ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 with ($$$$0 $$$0 $$0 $0) F f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∀ x → ∈ $0 product A B ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 with (first $$$0 second $$$0 $$0 $0) F, ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 with ($$$$0 $$$0 $$0 $0) F) () 4.0
+    prove ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 with ($$$$0 $$$0 $$0 $0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∀ x → ∈ $0 product A B ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 with (first $$$0 second $$$0 $$0 $0) F, ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 with ($$$$0 $$$0 $$0 $0) F) () 4.1 3
+  }
+}
+
+comment Function composition
+
+term ∘ (f g)
+  name (function composition)
+  (= $0 functionMap a A apply f apply g $0)
+  shorthand (comp)
+
+theorem Function Composition Is Function
+premise function f A B
+premise function g B C
+conclusion function ∘ g f A C
+{
+  prove = ∘ g f functionMap a A apply g apply f $0 0e549ee78bff96c86354fb97ee3d0a517aa239248a8af90dc1cffdc332957ee2 () (g, f, A)
+  take a {
+    assume ∈ $0 A {
+      prove ∈ apply f $0 B 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (f, A, B, $0) p0 1.0a
+      prove ∈ apply g apply f $0 C 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (g, B, C, apply f $0) p1 1.0.0
+    }
+  }
+  prove function ∘ g f A C ca3465bfac5bc8294749b6861f05413cbf73fb1facc9bb123d883da7ae3773c2 () (∘ g f, A, apply g apply f $0, C) 0 1
+}
+
+theorem Application of Function Composition
+premise function f A B
+premise function g B C
+premise ∈ a A
+conclusion = apply ∘ g f a apply g apply f a
+{
+  prove = ∘ g f functionMap a A apply g apply f $0 0e549ee78bff96c86354fb97ee3d0a517aa239248a8af90dc1cffdc332957ee2 () (g, f, A)
+  elided 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 {
+    prove ∀ a → ∈ $0 A = apply ∘ g f $0 apply g apply f $0 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 () (∘ g f, A, apply g apply f $0) 0
+    prove → ∈ a A = apply ∘ g f a apply g apply f a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A = apply ∘ g f $0 apply g apply f $0) (a) 1.0
+    prove = apply ∘ g f a apply g apply f a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, = apply ∘ g f a apply g apply f a) () 1.1 p2
+  }
 }

@@ -1,0 +1,10 @@
+Define injectivity, surjectivity and bijectivity for functions.
+
+property injective on function f A B
+  definition (∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0)
+
+property surjective on function f A B
+  definition (∀ b → ∈ $0 B ∃ a ∧ ∈ $0 A = apply f $0 $$0)
+
+property bijective on function f A B
+  definition (∧ injectiveFunction f A B surjectiveFunction f A B)

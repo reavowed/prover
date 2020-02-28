@@ -1004,3 +1004,11 @@ conclusion equivalenceRelation ~_ℚ product ℤ diff ℤ singleton 0_ℤ
     prove equivalenceRelation ~_ℚ product ℤ diff ℤ singleton 0_ℤ 1e51ab5b58ae08ce5d2499d681d198d5c03e9f381f3241c2c9f8e9147a1e791c () (~_ℚ, product ℤ diff ℤ singleton 0_ℤ) 4.2
   }
 }
+
+write equivalenceClass orderedPair a b ~_ℚ as rat2
+
+display equivalenceClass orderedPair a b ~_ℚ as ((a, b)_ℚ)
+
+term ℚ ()
+  (= $0 equivalenceQuotient product ℤ diff ℤ singleton 0_ℤ ~_ℚ)
+  shorthand (rat)

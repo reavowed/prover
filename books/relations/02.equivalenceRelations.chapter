@@ -37,6 +37,7 @@ term equivalenceQuotient (A ≈)
   format (A/≈) requires-brackets
   premises (equivalenceRelation ≈ A)
   (= $0 replacementSet a A equivalenceClass $0 ≈)
+  shorthand (eq)
 
 theorem Equivalence Class Is Element of Quotient
 premise equivalenceRelation ≈ A
@@ -344,3 +345,9 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
     }
   }
 }
+
+term quotientFunction (f A B ≈)
+  name (quotient function)
+  format (f/≈) requires-brackets
+  premises (equivalenceRelation ≈ A, function f A B, ∀ x → ∈ $0 A ∀ y → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ = apply f $$0 apply f $0)
+  (∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0)
