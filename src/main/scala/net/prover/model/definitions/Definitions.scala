@@ -2,7 +2,7 @@ package net.prover.model.definitions
 
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
-import net.prover.model.entries.{ChapterEntry, DisplayShorthand, StatementDefinition, TermDefinition}
+import net.prover.model.entries.{DisplayShorthand, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
 import net.prover.model.proof.{SubstatementExtractor, SubstitutionContext}
 import net.prover.util.Direction
@@ -11,18 +11,18 @@ import scala.Ordering.Implicits._
 import scala.collection.mutable
 import scala.util.Try
 
-case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext.EntryTypes {
+case class Definitions(rootEntryContext: EntryContext) {
 
-  lazy val inferenceEntries: Seq[Inference] = availableEntries.ofType[Inference]
-  private val provingContext: ProvingContext = ProvingContext(EntryContext(availableEntries), this)
+  lazy val inferenceEntries: Seq[Inference] = rootEntryContext.availableEntries.ofType[Inference]
+  private val provingContext: ProvingContext = ProvingContext(rootEntryContext, this)
 
   val completenessByInference = mutable.Map.empty[String, Boolean]
   def isInferenceComplete(inference: Inference): Boolean = {
-    completenessByInference.getOrElseUpdate(inference.id, inferences.find(_.id == inference.id).exists(_.isComplete(this)))
+    completenessByInference.getOrElseUpdate(inference.id, rootEntryContext.allInferences.find(_.id == inference.id).exists(_.isComplete(this)))
   }
 
   lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
-    deductionDefinitionOption.flatMap { deductionDefinition =>
+    rootEntryContext.deductionDefinitionOption.flatMap { deductionDefinition =>
       inferenceEntries.iterator.collect {
         case inference @ Inference(
         _,
@@ -35,7 +35,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
   }
 
   lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
-    scopingDefinitionOption.flatMap { scopingDefinition =>
+    rootEntryContext.scopingDefinitionOption.flatMap { scopingDefinition =>
       inferenceEntries.iterator.collect {
         case inference @ Inference(
         _,
@@ -47,7 +47,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     }
   }
 
-  lazy val definedBinaryStatements: Seq[BinaryJoiner[_ <: Expression]] = Definitions.getDefinedBinaryStatements(statementDefinitions, displayShorthands, termDefinitions)
+  lazy val definedBinaryStatements: Seq[BinaryJoiner[_ <: Expression]] = Definitions.getDefinedBinaryStatements(rootEntryContext.statementDefinitions, rootEntryContext.displayShorthands, rootEntryContext.termDefinitions)
   lazy val definedBinaryConnectives: Seq[BinaryConnective] = definedBinaryStatements.ofType[BinaryConnective]
   lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryStatements.ofType[BinaryRelation]
 
@@ -130,7 +130,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
 
   lazy val equalityOption: Option[Equality] = {
     for {
-      definition <- statementDefinitions.find(_.attributes.contains("equality"))
+      definition <- rootEntryContext.statementDefinitions.find(_.attributes.contains("equality"))
       relation = BinaryRelation(definition.symbol, definition.defaultValue, definition.attributes)
       expansion <- expansions.ofType[RelationExpansion].find(e => e.sourceJoiner == relation && e.resultJoiner == relation)
       substitution <- substitutions.find(_.relation == relation)
@@ -175,7 +175,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
   lazy val premiseRelationLeftHandSimplificationInferences: Seq[PremiseRelationLeftHandSimplificationInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
-      inference <- inferences
+      inference <- rootEntryContext.allInferences
       if inference.premises.length <= 1
       extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(provingContext)
       premise <- extractionOption.premises.single.toSeq
@@ -192,7 +192,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
   lazy val premiseRelationDoubleSimplificationInferences: Seq[PremiseRelationDoubleSimplificationInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
-      inference <- inferences
+      inference <- rootEntryContext.allInferences
       if inference.premises.length <= 1
       extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(provingContext)
       premise <- extractionOption.premises.single.toSeq
@@ -207,7 +207,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
   lazy val conclusionRelationDoubleSimplificationInferences: Seq[ConclusionRelationDoubleSimplificationInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
-      inference <- inferences
+      inference <- rootEntryContext.allInferences
       if inference.requiredSubstitutions.hasNoApplications
       extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(provingContext)
       if extractionOption.premises.nonEmpty
@@ -273,7 +273,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
       equality <- equalityOption.toSeq
-      result <- inferences
+      result <- rootEntryContext.allInferences
         .collect {
           case inference @ Inference(
           _,
@@ -305,7 +305,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
           acc
         case inference +: tailInferences =>
           val updated = (for {
-            statementDefinition <- statementDefinitions.find(_.unapplySeq(inference.conclusion).nonEmpty)
+            statementDefinition <- rootEntryContext.statementDefinitions.find(_.unapplySeq(inference.conclusion).nonEmpty)
             (singlePremise, firstConclusionComponent) <- inference match {
               case Inference(_, Seq(singlePremise @ statementDefinition(firstPremiseComponent, _*)), statementDefinition(firstConclusionComponent, _*))
                 if firstConclusionComponent.complexity > firstPremiseComponent.complexity &&
@@ -358,7 +358,7 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
   }
 
   lazy val facts: Seq[Inference] = {
-    inferences.collect {
+    rootEntryContext.allInferences.collect {
       case inference if inference.premises.isEmpty && inference.requiredSubstitutions.isEmpty =>
         inference
     }
@@ -367,9 +367,9 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Direction)] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
-      deduction <- deductionDefinitionOption.toSeq
+      deduction <- rootEntryContext.deductionDefinitionOption.toSeq
       result <- for {
-        inference <- inferences
+        inference <- rootEntryContext.allInferences
         Seq(firstPremise @ deduction(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq.unapplySeq(inference.premises).toSeq
         swapper <- Seq(Direction.Forward, Direction.Reverse)
         (premiseName, conclusionName) = swapper.swapSourceAndResult(a, b)
@@ -389,14 +389,14 @@ case class Definitions(availableEntries: Seq[ChapterEntry]) extends EntryContext
   }
 
   lazy val statementDefinitionIntroductionInferences: Seq[(Inference, Statement)] = {
-    inferences.collect {
+    rootEntryContext.allInferences.collect {
       case inference @ Inference(_, Seq(premise @ StatementVariable(name, Nil)), WrappedStatementVariable(conclusionName))
         if conclusionName == name
       => (inference, premise)
     }
   }
   lazy val statementDefinitionEliminationInferences: Seq[(Inference, Statement)] = {
-    inferences.collect {
+    rootEntryContext.allInferences.collect {
       case inference @ Inference(_, Seq(premise @ WrappedStatementVariable(premiseName)), StatementVariable(name, Nil))
         if premiseName == name
       => (inference, premise)

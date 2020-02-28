@@ -131,7 +131,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
 
   private def modifyTypeDefinition(oldDefinition: TypeDefinition, newDefinition: TypeDefinition): (Seq[Book], Definitions) = {
     bookService.modifyBooks[Identity]((books, definitions) => {
-      val propertyDefinitions = definitions.propertyDefinitionsByType(oldDefinition.symbol)
+      val propertyDefinitions = definitions.rootEntryContext.propertyDefinitionsByType(oldDefinition.symbol)
       modifyDefinitions(
         books,
         ((oldDefinition -> newDefinition) +: propertyDefinitions.map(p => p -> p.copy(parentType = newDefinition))).toMap,

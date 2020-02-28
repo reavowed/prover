@@ -5,7 +5,7 @@ import net.prover.model.expressions._
 
 object ProofHelper {
   def findFact(target: Statement)(implicit provingContext: ProvingContext, stepContext: StepContext): Option[Step.Assertion] = {
-    provingContext.entryContext.inferences
+    provingContext.entryContext.allInferences
       .filter(_.premises.isEmpty)
       .mapFind { inference =>
         inference.conclusion.calculateSubstitutions(target).flatMap(_.confirmTotality)
@@ -16,7 +16,7 @@ object ProofHelper {
   }
 
   def findNamingInferences(implicit entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement)] = {
-    entryContext.inferences.mapCollect(i =>
+    entryContext.allInferences.mapCollect(i =>
       getNamingPremisesAndAssumption(i).map {
         case (premises, assumption) => (i, premises, assumption)
       })

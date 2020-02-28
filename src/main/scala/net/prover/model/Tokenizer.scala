@@ -81,51 +81,34 @@ object Tokenizer {
   private val singleCharacterTokens = "(){},"
   def fromString(str: String, context: String): TokenStream = {
     val lines = str.split("\\r?\\n").toVector.map(_.toVector)
-    def findEndOfWhitespace(currentLine: Int, currentColumn: Int): Option[(Int, Int)] = {
-      if (currentLine == lines.length)
-        None
-      else if (currentColumn == lines(currentLine).length)
-        findEndOfWhitespace(currentLine + 1, 0)
-      else if (lines(currentLine)(currentColumn).isWhitespace)
-        findEndOfWhitespace(currentLine, currentColumn + 1)
-      else
-        Some((currentLine, currentColumn))
-    }
-    def findEndOfToken(currentLine: Int, currentColumn: Int): Int = {
-      if (currentColumn == lines(currentLine).length || lines(currentLine)(currentColumn).isWhitespace || singleCharacterTokens.contains(lines(currentLine)(currentColumn)))
-        currentColumn
-      else
-        findEndOfToken(currentLine, currentColumn + 1)
-    }
-    def getTokens(builder: mutable.Builder[Token, Vector[Token]], currentLine: Int, currentColumn: Int): Vector[Token] = {
-      findEndOfWhitespace(currentLine, currentColumn) match {
-        case Some((endOfWhitespaceLine, endOfWhitespaceColumn)) =>
-          if (singleCharacterTokens.contains(lines(endOfWhitespaceLine)(endOfWhitespaceColumn)))
-            getTokens(
-              builder += Token(
-                lines(endOfWhitespaceLine)(endOfWhitespaceColumn).toString,
-                context,
-                endOfWhitespaceLine + 1,
-                endOfWhitespaceColumn + 1),
-              endOfWhitespaceLine,
-              endOfWhitespaceColumn + 1)
-          else {
-            val endOfTokenColumn = findEndOfToken(endOfWhitespaceLine, endOfWhitespaceColumn + 1)
-            getTokens(
-              builder += Token(
-                lines(endOfWhitespaceLine).subSequence(endOfWhitespaceColumn, endOfTokenColumn).toString,
-                context,
-                endOfWhitespaceLine + 1,
-                endOfWhitespaceColumn + 1),
-              endOfWhitespaceLine,
-              endOfTokenColumn)
+    val numberOfLines = lines.length
+    var lineIndex = 0
+    val builder = Vector.newBuilder[Token]
+    while (lineIndex < numberOfLines) {
+      val line = lines(lineIndex)
+      val lineLength = line.length
+      var columnIndex = 0
+      while (columnIndex < lineLength) {
+        val char = line(columnIndex)
+        if (char.isWhitespace) {
+          columnIndex += 1
+        } else if (singleCharacterTokens.contains(char)) {
+          builder += Token(char.toString, context, lineIndex + 1, columnIndex + 1)
+          columnIndex += 1
+        } else {
+          var endColumnIndex = columnIndex + 1
+          while (endColumnIndex < lineLength && !line(endColumnIndex).isWhitespace && !singleCharacterTokens.contains(line(endColumnIndex))) {
+            endColumnIndex += 1
           }
-        case None =>
-          builder.result()
+          builder += Token(line.subSequence(columnIndex, endColumnIndex).toString, context, lineIndex + 1, columnIndex + 1)
+          columnIndex = endColumnIndex
+        }
       }
+      lineIndex += 1
     }
-    TokenStream(getTokens(Vector.newBuilder, 0, 0), Token("", context, lines.length, lines.last.length), lines, 0)
+    TokenStream(builder.result(), Token("", context, lines.length, lines.last.length), lines, 0)
   }
+
   def fromPath(path: Path, context: String): TokenStream = {
     fromString(new String(Files.readAllBytes(path), "UTF-8"), s"$context ($path)")
   }

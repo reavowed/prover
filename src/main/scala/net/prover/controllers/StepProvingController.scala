@@ -146,7 +146,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         }
       }
 
-      val matchingInferences = filterInferences(stepProvingContext.provingContext.entryContext.inferences, searchText)
+      val matchingInferences = filterInferences(stepProvingContext.provingContext.entryContext.allInferences, searchText)
         .mapWithIndex((i, index) => InferenceWithMaximumPossibleComplexity(i, i.conclusion.structuralComplexity, index))
         .sortBy(_.maximumPossibleComplexity)(Ordering[Int].reverse)
 
@@ -170,7 +170,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       (_, stepProvingContext) <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
       implicit val spc = stepProvingContext
-      filterInferences(stepProvingContext.provingContext.entryContext.inferences, searchText)
+      filterInferences(stepProvingContext.provingContext.entryContext.allInferences, searchText)
         .reverse
         .take(10)
         .map { inference =>

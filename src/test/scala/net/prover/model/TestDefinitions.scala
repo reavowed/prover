@@ -341,7 +341,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
     }
   }
   implicit def entryContextToParsingContext(implicit entryContext: EntryContext): ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
-  implicit def entryContextToProvingContext(implicit entryContext: EntryContext): ProvingContext = ProvingContext(entryContext, new Definitions(entryContext.availableEntries))
+  implicit def entryContextToProvingContext(implicit entryContext: EntryContext): ProvingContext = ProvingContext(entryContext, new Definitions(entryContext))
   implicit def entryContextAndStepContextToStepProvingContext(implicit entryContext: EntryContext, stepContext: StepContext): StepProvingContext = {
     StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
   }
@@ -350,7 +350,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
     val serializedTheorem = theorem.recalculateReferences(entryContextToProvingContext(entryContext)).serializedLines.mkString("\n").stripPrefix("theorem ")
     val parsedTheorem = Theorem.parser(entryContext).parseFromString(serializedTheorem, "Theorem")
     parsedTheorem must beTypedEqualTo(theorem)
-    parsedTheorem.isComplete(new Definitions(entryContext.availableEntries)) must beTrue
+    parsedTheorem.isComplete(new Definitions(entryContext)) must beTrue
   }
 
   def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement): Matcher[Seq[Step]] = {

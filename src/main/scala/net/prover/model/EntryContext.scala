@@ -3,7 +3,27 @@ package net.prover.model
 import net.prover.model.entries._
 import net.prover.model.expressions._
 
-case class EntryContext(availableEntries: Seq[ChapterEntry]) extends EntryContext.EntryTypes {
+case class EntryContext(availableEntries: Seq[ChapterEntry]) {
+
+  lazy val inferenceEntries: Seq[Inference] = availableEntries.ofType[Inference]
+  lazy val allInferences: Seq[Inference.FromEntry] = availableEntries.flatMap(_.inferences)
+  lazy val statementDefinitions: Seq[StatementDefinition] = availableEntries.collect {
+    case statementDefinition: StatementDefinition => statementDefinition
+    case typeDefinition: TypeDefinition => typeDefinition.statementDefinition
+    case propertyDefinition: PropertyDefinition => propertyDefinition.statementDefinition
+  }
+  lazy val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
+  lazy val typeDefinitions: Seq[TypeDefinition] = availableEntries.ofType[TypeDefinition]
+  lazy val propertyDefinitionsByType: Map[String, Seq[PropertyDefinition]] = availableEntries.ofType[PropertyDefinition].groupBy(_.parentType.symbol)
+  lazy val displayShorthands: Seq[DisplayShorthand] = availableEntries.ofType[DisplayShorthand]
+  lazy val writingShorthands: Seq[WritingShorthand] = availableEntries.ofType[WritingShorthand]
+
+  lazy val deductionDefinitionOption: Option[StatementDefinition] = {
+    statementDefinitions.find(_.attributes.contains("deduction"))
+  }
+  lazy val scopingDefinitionOption: Option[StatementDefinition] = {
+    statementDefinitions.find(_.attributes.contains("scoping"))
+  }
 
   def addEntry(entry: ChapterEntry): EntryContext = copy(availableEntries = availableEntries :+ entry)
   def addEntries(entries: Seq[ChapterEntry]): EntryContext = copy(availableEntries = availableEntries ++ entries)
@@ -36,27 +56,6 @@ case class EntryContext(availableEntries: Seq[ChapterEntry]) extends EntryContex
 }
 
 object EntryContext {
-  trait EntryTypes {
-    def availableEntries: Seq[ChapterEntry]
-    lazy val inferences: Seq[Inference.FromEntry] = availableEntries.flatMap(_.inferences)
-    lazy val statementDefinitions: Seq[StatementDefinition] = availableEntries.collect {
-      case statementDefinition: StatementDefinition => statementDefinition
-      case typeDefinition: TypeDefinition => typeDefinition.statementDefinition
-      case propertyDefinition: PropertyDefinition => propertyDefinition.statementDefinition
-    }
-    lazy val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
-    lazy val typeDefinitions: Seq[TypeDefinition] = availableEntries.ofType[TypeDefinition]
-    lazy val propertyDefinitionsByType: Map[String, Seq[PropertyDefinition]] = availableEntries.ofType[PropertyDefinition].groupBy(_.parentType.symbol)
-    lazy val displayShorthands: Seq[DisplayShorthand] = availableEntries.ofType[DisplayShorthand]
-    lazy val writingShorthands: Seq[WritingShorthand] = availableEntries.ofType[WritingShorthand]
-
-    lazy val deductionDefinitionOption: Option[StatementDefinition] = {
-      statementDefinitions.find(_.attributes.contains("deduction"))
-    }
-    lazy val scopingDefinitionOption: Option[StatementDefinition] = {
-      statementDefinitions.find(_.attributes.contains("scoping"))
-    }
-  }
 
   def forBooks(books: Seq[Book]): EntryContext = {
     EntryContext(books.flatMap(_.chapters).flatMap(_.entries))

@@ -68,7 +68,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
         }
       }
 
-      filterInferences(provingContext.entryContext.inferences, searchText)
+      filterInferences(provingContext.entryContext.allInferences, searchText)
         .sortBy(_.conclusion.structuralComplexity)(implicitly[Ordering[Int]].reverse)
         .iterator
         .mapCollect(getPossibleInference)

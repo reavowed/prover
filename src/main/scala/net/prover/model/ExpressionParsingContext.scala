@@ -16,6 +16,9 @@ case class ExpressionParsingContext(
     else
       this
   }
+  def addInitialParameter(parameter: String): ExpressionParsingContext = {
+    copy(parameterLists = Seq((parameter, 0)) +: parameterLists)
+  }
   override def addInnerParameters(parameters: Seq[(String, Int)]): ExpressionParsingContext = {
     copy(parameterLists = parameterLists :+ parameters)
   }

@@ -162,7 +162,7 @@ object Inference {
     for {
       inferenceId <- Parser.singleWord
     } yield {
-      entryContext.inferences.find(_.id == inferenceId)
+      entryContext.allInferences.find(_.id == inferenceId)
         .getOrElse(throw new Exception(s"Could not find inference with id $inferenceId"))
         .summary
     }

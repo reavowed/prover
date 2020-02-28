@@ -97,7 +97,7 @@ class BookRepository {
   }
 
   private def getDefinitions(books: Seq[Book]): Definitions = {
-    Definitions(books.flatMap(_.chapters).flatMap(_.entries))
+    Definitions(EntryContext(books.flatMap(_.chapters).flatMap(_.entries)))
   }
 }
 

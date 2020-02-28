@@ -36,7 +36,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val alwaysAllowableDirection: AlwaysAllowable[Direction] = alwaysAllowable
     implicit def allowableSeq[T](implicit inner: Allowable[T]): Allowable[Seq[T]] = allowable { x => x.forall(isAllowed) }
 
-    implicit val allowableInference: Allowable[Inference] = allowable(i => entryContext.inferences.exists(_.id == i.id))
+    implicit val allowableInference: Allowable[Inference] = allowable(i => entryContext.allInferences.exists(_.id == i.id))
     implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(entryContext.statementDefinitions.contains)
     implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(entryContext.termDefinitions.contains)
 
@@ -110,12 +110,12 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   def isAllowed[T](t: T)(implicit allowable: Allowable[T]): Boolean = allowable.isAllowed(t)
   def filter[T](t: T)(implicit replacable: Filterable[T]): T = replacable.replace(t)
 
-  lazy val deductionDefinitionOption: Option[StatementDefinition] = filter(definitions.deductionDefinitionOption)
+  lazy val deductionDefinitionOption: Option[StatementDefinition] = entryContext.deductionDefinitionOption
   lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
     filter(definitions.deductionEliminationInferenceOption)
   }
 
-  lazy val scopingDefinitionOption: Option[StatementDefinition] = filter(definitions.scopingDefinitionOption)
+  lazy val scopingDefinitionOption: Option[StatementDefinition] = entryContext.scopingDefinitionOption
   lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
     filter(definitions.specificationInferenceOption)
   }

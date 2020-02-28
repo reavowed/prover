@@ -159,7 +159,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           premises,
           conclusion,
           Seq(Theorem.Proof(Seq(Step.Target(conclusion)))))
-        existingTheoremOption = entryContext.inferences.find(_.id == newTheorem.id)
+        existingTheoremOption = entryContext.allInferences.find(_.id == newTheorem.id)
         _ <- existingTheoremOption match {
           case Some(_) =>
             Failure(BadRequestException("An inference with these premises and conclusion already exists"))
@@ -188,7 +188,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         boundVariables = boundVariablesAndComponentTypes._1
         componentTypes = boundVariablesAndComponentTypes._2
         componentNames = boundVariables ++ componentTypes.map(_.name)
-        definition <- Statement.parser(expressionParsingContext.addInitialParameters(1)).parseFromString(newTermDefininition.definition, "definition").recoverWithBadRequest
+        definition <- Statement.parser(expressionParsingContext.addInitialParameter("_")).parseFromString(newTermDefininition.definition, "definition").recoverWithBadRequest
         format <- Option(newTermDefininition.format).filter(_.nonEmpty)
           .map(f => Format.parser(componentNames).parseFromString(f, "format"))
           .getOrElse(Format.default(symbol, componentNames))
