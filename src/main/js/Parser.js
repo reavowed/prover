@@ -12,7 +12,7 @@ import {
   ElidedStep,
   NamingStep,
   PremiseReference,
-  ScopedVariableStep,
+  GeneralizationStep,
   StepReference,
   SubproofStep,
   TargetStep
@@ -101,8 +101,8 @@ export class Parser {
           this.parseExpression(stepJson.assumption),
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           stepJson.provenStatement && this.parseExpression(stepJson.provenStatement));
-      case "scopedVariable":
-        return new ScopedVariableStep(
+      case "generalization":
+        return new GeneralizationStep(
           stepJson.variableName,
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           stepJson.provenStatement && this.parseExpression(stepJson.provenStatement));

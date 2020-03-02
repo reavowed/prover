@@ -117,8 +117,8 @@ object Template {
       case definedStatement @ expressions.DefinedStatement(matchedComponents, `definition`) =>
         for {
           pairs <- components.zipStrict(matchedComponents)
-          submatches <- pairs.mapWithIndex { case ((a, b), i) => a.matchExpression(b, outerBoundVariableNames :+ definedStatement.scopedBoundVariableNames, internalPath :+ i) }.traverseOption
-        } yield definedStatement.scopedBoundVariableNames.mapWithIndex((name, index) => Template.Match.BoundVariable(name, index, internalPath)) ++ submatches.flatten
+          submatches <- pairs.mapWithIndex { case ((a, b), i) => a.matchExpression(b, outerBoundVariableNames :+ definedStatement.boundVariableNames, internalPath :+ i) }.traverseOption
+        } yield definedStatement.boundVariableNames.mapWithIndex((name, index) => Template.Match.BoundVariable(name, index, internalPath)) ++ submatches.flatten
       case _ =>
         None
     }
@@ -168,8 +168,8 @@ object Template {
       case definedTerm @ expressions.DefinedTerm(matchedComponents, `definition`) =>
         for {
           pairs <- components.zipStrict(matchedComponents)
-          submatches <- pairs.mapWithIndex { case ((a, b), i) => a.matchExpression(b, outerBoundVariableNames :+ definedTerm.scopedBoundVariableNames, internalPath :+ i) }.traverseOption
-        } yield definedTerm.scopedBoundVariableNames.mapWithIndex((name, index) => Template.Match.BoundVariable(name, index, internalPath)) ++ submatches.flatten
+          submatches <- pairs.mapWithIndex { case ((a, b), i) => a.matchExpression(b, outerBoundVariableNames :+ definedTerm.boundVariableNames, internalPath :+ i) }.traverseOption
+        } yield definedTerm.boundVariableNames.mapWithIndex((name, index) => Template.Match.BoundVariable(name, index, internalPath)) ++ submatches.flatten
       case _ =>
         None
     }

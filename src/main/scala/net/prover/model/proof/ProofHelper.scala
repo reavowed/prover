@@ -23,8 +23,8 @@ object ProofHelper {
   }
 
   def getNamingPremisesAndAssumption(inference: Inference)(implicit entryContext: EntryContext): Option[(Seq[Statement], Statement)] = {
-    (entryContext.scopingDefinitionOption, entryContext.deductionDefinitionOption) match {
-      case (Some(scopingDefinition), Some(deductionDefinition)) =>
+    (entryContext.generalizationDefinitionOption, entryContext.deductionDefinitionOption) match {
+      case (Some(generalizationDefinition), Some(deductionDefinition)) =>
         inference match {
           case Inference(
             _,
@@ -34,7 +34,7 @@ object ProofHelper {
                 Seq(assumption: Statement, StatementVariable(deductionConclusionVariableName, Nil)),
                 `deductionDefinition`
                 )),
-              `scopingDefinition`),
+              `generalizationDefinition`),
             StatementVariable(conclusionVariableName, Nil)
           ) if deductionConclusionVariableName == conclusionVariableName =>
             Some((initialPremises, assumption))

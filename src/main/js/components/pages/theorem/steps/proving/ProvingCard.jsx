@@ -67,7 +67,7 @@ export default class ProvingCard extends React.Component {
     const {step, path, availablePremises, chained} = this.props;
     const {currentRowLabel, currentProverLabel, errorMessage} = this.state;
 
-    const scopingStatement = _.find(this.context.definitions, d => _.includes(d.attributes, "scoping"));
+    const generalizationStatement = _.find(this.context.definitions, d => _.includes(d.attributes, "generalization"));
     const deductionStatement = _.find(this.context.definitions, d => _.includes(d.attributes, "deduction"));
     const [binaryRelation, leftComponent, rightComponent] = _.chain(this.context.binaryRelations)
       .map(x => {
@@ -81,7 +81,7 @@ export default class ProvingCard extends React.Component {
       {
         label: "Introduce",
         provers: [
-          scopingStatement && step.statement.definition === scopingStatement && {
+          generalizationStatement && step.statement.definition === generalizationStatement && {
             label: "Bound variable",
             element: IntroduceBoundVariable
           },

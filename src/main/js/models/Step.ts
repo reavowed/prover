@@ -66,15 +66,15 @@ export class DeductionStep extends StepWithSubsteps {
     }
 }
 
-export class ScopedVariableStep extends StepWithSubsteps {
-    type = "scopedVariable";
+export class GeneralizationStep extends StepWithSubsteps {
+    type = "generalization";
     constructor(public variableName: String, substeps: Step[], public provenStatement: Expression | null) { super(substeps); }
     isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     id: String = sha256([this.type, ..._.map(this.substeps, s => s.id)].join("\n"))
     replaceSubsteps(newSubsteps: Step[]): Step {
-        return new ScopedVariableStep(this.variableName, newSubsteps, this.provenStatement);
+        return new GeneralizationStep(this.variableName, newSubsteps, this.provenStatement);
     }
 }
 
@@ -130,5 +130,5 @@ export class SubproofStep extends StepWithSubsteps {
     }
 }
 
-export type Step = AssertionStep | DeductionStep | ScopedVariableStep | NamingStep | TargetStep | ElidedStep | SubproofStep;
+export type Step = AssertionStep | DeductionStep | GeneralizationStep | NamingStep | TargetStep | ElidedStep | SubproofStep;
 

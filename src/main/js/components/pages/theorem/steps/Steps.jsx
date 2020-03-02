@@ -1,16 +1,14 @@
 import update from 'immutability-helper';
 import _ from "lodash";
 import React, {useContext} from "react";
-import {Form} from "react-bootstrap";
 import styled from "styled-components";
 import {DefinedExpression, FunctionParameter, matchTemplate} from "../../../../models/Expression";
 import {
   DeductionStep as DeductionStepModel,
-  ScopedVariableStep as ScopedVariableStepModel,
+  GeneralizationStep as GeneralizationStepModel,
   StepReference
 } from "../../../../models/Step";
 import DraggableList from "../../../DraggableList";
-import EntryContext from "../../../EntryContext";
 import {HighlightableExpression} from "../../../ExpressionComponent";
 import ProofContext from "../ProofContext";
 import TheoremContext from "../TheoremContext";
@@ -18,8 +16,8 @@ import {AssertionStep, AssertionStepProofLine} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
 import {ElidedStep, ElidedStepProofLine} from "./ElidedStep";
 import {NamingStep} from "./NamingStep";
-import ScopedDeductionStep from "./ScopedDeductionStep";
-import {ScopedVariableStep} from "./ScopedVariableStep";
+import GeneralizedDeductionStep from "./GeneralizedDeductionStep";
+import {GeneralizationStep} from "./GeneralizationStep";
 import {SubproofStep} from "./SubproofStep";
 import {TargetStep, TargetStepProofLine} from "./TargetStep";
 
@@ -166,8 +164,8 @@ export class Steps extends React.Component {
         return TargetStep;
       case "deduction":
         return DeductionStep;
-      case "scopedVariable":
-        return ScopedVariableStep;
+      case "generalization":
+        return GeneralizationStep;
       case "naming":
         return NamingStep;
       case "elided":
@@ -301,7 +299,7 @@ export class Steps extends React.Component {
       path: [...path, index],
       additionalReferences: !stepsWithIndexes.length ? referencesForLastStep || [] : []
     };
-    if (step instanceof ScopedVariableStepModel && step.substeps.length === 1 && step.substeps[0] instanceof DeductionStepModel) {
+    if (step instanceof GeneralizationStepModel && step.substeps.length === 1 && step.substeps[0] instanceof DeductionStepModel) {
       const substep = step.substeps[0];
       if (substep.assumption instanceof DefinedExpression &&
         substep.assumption.definition.baseFormatString.startsWith("%0 ") &&
@@ -310,7 +308,7 @@ export class Steps extends React.Component {
       {
         return {
           key: serializedPath + " " + (step.provenStatement ? step.provenStatement.serialize() : "???"),
-          element: <ScopedDeductionStep {...props} format={substep.assumption.definition.baseFormatString} components={substep.assumption.components} />
+          element: <GeneralizedDeductionStep {...props} format={substep.assumption.definition.baseFormatString} components={substep.assumption.components} />
         };
       }
     }

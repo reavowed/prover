@@ -72,7 +72,7 @@ object SubstatementExtractor {
     for {
       (inference, extractionPremise, predicateName, _) <- provingContext.specificationInferenceOption.toSeq
       extractionSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality).toSeq // missing external depth increase?
-      boundVariableName <- sourceStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.scopedBoundVariableNames.single).toSeq
+      boundVariableName <- sourceStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).toSeq
       (1, extractionPredicate) <- extractionSubstitutions.statements.get(predicateName).toSeq
       (newVariableName, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(boundVariableName)
       nextPremise <- extractionPredicate.specify(Seq(TermVariable(newVariableName))).toSeq

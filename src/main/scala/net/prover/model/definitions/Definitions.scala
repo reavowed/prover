@@ -35,11 +35,11 @@ case class Definitions(rootEntryContext: EntryContext) {
   }
 
   lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
-    rootEntryContext.scopingDefinitionOption.flatMap { scopingDefinition =>
+    rootEntryContext.generalizationDefinitionOption.flatMap { generalizationDefinition =>
       inferenceEntries.iterator.collect {
         case inference @ Inference(
         _,
-        Seq(singlePremise @ scopingDefinition(StatementVariable(premisePredicateName, Seq(FunctionParameter(0, 0))))),
+        Seq(singlePremise @ generalizationDefinition(StatementVariable(premisePredicateName, Seq(FunctionParameter(0, 0))))),
         StatementVariable(conclusionPredicateName, Seq(TermVariable(variableName, Nil)))
         ) if premisePredicateName == conclusionPredicateName =>
           (inference, singlePremise, premisePredicateName, variableName)

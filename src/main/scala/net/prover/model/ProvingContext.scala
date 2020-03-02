@@ -115,7 +115,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     filter(definitions.deductionEliminationInferenceOption)
   }
 
-  lazy val scopingDefinitionOption: Option[StatementDefinition] = entryContext.scopingDefinitionOption
+  lazy val generalizationDefinitionOption: Option[StatementDefinition] = entryContext.generalizationDefinitionOption
   lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
     filter(definitions.specificationInferenceOption)
   }

@@ -150,7 +150,7 @@ object Substitutions {
       } yield (StatementVariable(variableName, terms), resultSubstitutions)
       def definedStatement = for {
         currentApplicationsAsDefinedStatement <- currentApplications.map(_.optionMap2(_.asOptionalInstanceOf[DefinedStatement])).traverseOption.iterator
-        boundVariableNames = currentApplicationsAsDefinedStatement.head._2.scopedBoundVariableNames
+        boundVariableNames = currentApplicationsAsDefinedStatement.head._2.boundVariableNames
         statementDefinition <- currentApplicationsAsDefinedStatement.map { case (_, t, _) => t.definition }.distinct.single.iterator
         expressionsAndResultSubstitutions <- clearAtExpressions(statementDefinition.componentTypes.length, arity, currentApplicationsAsDefinedStatement.map(_.map2(_.components)), externalDepth, statementDefinition.increaseDepth(currentInternalDepth), currentSubstitutions)
         (expressions, resultSubstitutions) = expressionsAndResultSubstitutions
@@ -191,7 +191,7 @@ object Substitutions {
       }
       def definedTerm = for {
         currentApplicationsAsDefinedTerm <- currentApplications.map(_.optionMap2(_.asOptionalInstanceOf[DefinedTerm])).traverseOption.iterator
-        boundVariableNames = currentApplicationsAsDefinedTerm.head._2.scopedBoundVariableNames
+        boundVariableNames = currentApplicationsAsDefinedTerm.head._2.boundVariableNames
         termDefinition <- currentApplicationsAsDefinedTerm.map { case (_, t, _) => t.definition }.distinct.single.iterator
         expressionsAndResultSubstitutions <- clearAtExpressions(termDefinition.componentTypes.length, arity, currentApplicationsAsDefinedTerm.map(_.map2(_.components)), externalDepth, termDefinition.increaseDepth(currentInternalDepth), currentSubstitutions)
         (expressions, resultSubstitutions) = expressionsAndResultSubstitutions

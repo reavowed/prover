@@ -21,8 +21,8 @@ case class EntryContext(availableEntries: Seq[ChapterEntry]) {
   lazy val deductionDefinitionOption: Option[StatementDefinition] = {
     statementDefinitions.find(_.attributes.contains("deduction"))
   }
-  lazy val scopingDefinitionOption: Option[StatementDefinition] = {
-    statementDefinitions.find(_.attributes.contains("scoping"))
+  lazy val generalizationDefinitionOption: Option[StatementDefinition] = {
+    statementDefinitions.find(_.attributes.contains("generalization"))
   }
 
   def addEntry(entry: ChapterEntry): EntryContext = copy(availableEntries = availableEntries :+ entry)

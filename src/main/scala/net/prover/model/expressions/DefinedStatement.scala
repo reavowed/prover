@@ -5,7 +5,7 @@ import net.prover.model.entries.{ExpressionDefinition, StatementDefinition}
 case class DefinedStatement(
     components: Seq[Expression],
     definition: StatementDefinition)(
-    val scopedBoundVariableNames: Seq[String])
+    val boundVariableNames: Seq[String])
  extends Statement with DefinedExpression[Statement]
 {
   override def getMatch(other: Expression): Option[Seq[Expression]] = other match {
@@ -15,7 +15,7 @@ case class DefinedStatement(
       None
   }
   override def updateComponents(newComponents: Seq[Expression]): DefinedStatement = {
-    DefinedStatement(newComponents, definition)(scopedBoundVariableNames)
+    DefinedStatement(newComponents, definition)(boundVariableNames)
   }
   override def updateBoundVariableNames(newBoundVariableNames: Seq[String]): DefinedStatement = {
     DefinedStatement(components, definition)(newBoundVariableNames)
@@ -24,6 +24,6 @@ case class DefinedStatement(
     DefinedStatement(
       components.map(_.replaceDefinition(oldDefinition, newDefinition)),
       if (definition == oldDefinition) newDefinition.asInstanceOf[StatementDefinition] else definition
-    )(scopedBoundVariableNames)
+    )(boundVariableNames)
   }
 }

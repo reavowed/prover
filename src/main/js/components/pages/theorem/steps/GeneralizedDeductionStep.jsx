@@ -10,7 +10,7 @@ import ProofLine from "./components/ProofLine";
 import Step from "./Step";
 import {Steps} from "./Steps";
 
-export default class ScopedDeductionStep extends React.Component {
+export default class GeneralizedDeductionStep extends React.Component {
   static contextType = ProofContext;
   render() {
     let {step, path, additionalReferences, format, components} = this.props;

@@ -59,24 +59,24 @@ object DefinitionRewriter {
         deductionStep = Step.Deduction(antecedent, eliminationStep +: innerRewriteStep.steps, deductionDefinition)
       } yield DefinitionRewriteStep(Seq(deductionStep), innerRewriteStep.inference, source, result)
     }
-    def insideScopingStatement: Seq[DefinitionRewriteStep] = {
+    def insideGeneralizationStatement: Seq[DefinitionRewriteStep] = {
       for {
-        scopingDefinition <- provingContext.scopingDefinitionOption.toSeq
+        generalizationDefinition <- provingContext.generalizationDefinitionOption.toSeq
         (specificationInference, specificationPremise, _, _) <- provingContext.specificationInferenceOption.toSeq
-        getPredicate = (s: Statement) => scopingDefinition.unapplySeq(s).flatMap(_.single).flatMap(_.asOptionalInstanceOf[Statement]).toSeq
+        getPredicate = (s: Statement) => generalizationDefinition.unapplySeq(s).flatMap(_.single).flatMap(_.asOptionalInstanceOf[Statement]).toSeq
         premisePredicate <- getPredicate(premise)
         targetPredicate <- getPredicate(target)
-        variableName <- premise.asOptionalInstanceOf[DefinedStatement].flatMap(_.scopedBoundVariableNames.single).toSeq
+        variableName <- premise.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).toSeq
         innerSubstitutionContext = SubstitutionContext.withExtraParameter
         innerRewriteStep <- getRewriteStep(premisePredicate, targetPredicate)(implicitly, innerSubstitutionContext)
-        source = scopingDefinition(innerRewriteStep.source)
-        result = scopingDefinition(innerRewriteStep.result)
+        source = generalizationDefinition(innerRewriteStep.source)
+        result = generalizationDefinition(innerRewriteStep.result)
         specificationSubstitutions <- specificationPremise.calculateSubstitutions(source.insertExternalParameters(1))(innerSubstitutionContext)
           .flatMap(specificationInference.conclusion.calculateSubstitutions(innerRewriteStep.source, _)(innerSubstitutionContext))
           .flatMap(_.confirmTotality)
         specificationStep <- Step.Assertion.forInference(specificationInference, specificationSubstitutions)(innerSubstitutionContext)
-        scopingStep = Step.ScopedVariable(variableName, specificationStep +: innerRewriteStep.steps, scopingDefinition)
-      } yield DefinitionRewriteStep(Seq(scopingStep), innerRewriteStep.inference, source, result)
+        generalizationStep = Step.Generalization(variableName, specificationStep +: innerRewriteStep.steps, generalizationDefinition)
+      } yield DefinitionRewriteStep(Seq(generalizationStep), innerRewriteStep.inference, source, result)
     }
     def byEliminatingPremise: Seq[DefinitionRewriteStep] = {
       for {
@@ -132,7 +132,7 @@ object DefinitionRewriter {
     }
 
     byDeconstructingPremise ++ byConstructingTarget ++
-      insideDeductableStatement ++ insideDeductionStatement ++ insideScopingStatement ++
+      insideDeductableStatement ++ insideDeductionStatement ++ insideGeneralizationStatement ++
       byEliminatingPremise ++ byIntroducingTarget ++
       byDeconstructingPremiseForElimination ++ byConstructingTargetForIntroduction
   }

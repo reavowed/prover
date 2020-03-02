@@ -11,7 +11,7 @@ import scala.collection.immutable.Nil
 @JsonSerialize(using = classOf[DefinedExpressionSerializer])
 trait DefinedExpression[ExpressionType <: Expression] extends Expression with TypedExpression[ExpressionType] {
   def components: Seq[Expression]
-  def scopedBoundVariableNames: Seq[String]
+  def boundVariableNames: Seq[String]
   def definition: ExpressionDefinition
 
   def getMatch(other: Expression): Option[Seq[Expression]]
@@ -40,7 +40,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
           acc
       }
     }
-    helper(Nil, components, Nil).mapCollect(_.optionMap1(t => if (scopedBoundVariableNames.isEmpty) Some(t) else t.removeExternalParameters(1)))
+    helper(Nil, components, Nil).mapCollect(_.optionMap1(t => if (boundVariableNames.isEmpty) Some(t) else t.removeExternalParameters(1)))
   }
   override def definitionUsages: DefinitionUsages = components.map(_.definitionUsages).foldTogether.addUsage(definition)
 
@@ -113,8 +113,8 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   override def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = {
     path match {
       case Nil =>
-        if (scopedBoundVariableNames.lift(index).nonEmpty)
-          Some(updateBoundVariableNames(scopedBoundVariableNames.updated(index, newName)))
+        if (boundVariableNames.lift(index).nonEmpty)
+          Some(updateBoundVariableNames(boundVariableNames.updated(index, newName)))
         else
           None
       case head +: tail =>
@@ -130,20 +130,20 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
 
   override def toString: String = {
-    definition.format.formatText(scopedBoundVariableNames ++ components.map(_.safeToString), parentRequiresBrackets = false)
+    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), parentRequiresBrackets = false)
   }
   override def safeToString: String = {
-    definition.format.formatText(scopedBoundVariableNames ++ components.map(_.safeToString), parentRequiresBrackets = true)
+    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), parentRequiresBrackets = true)
   }
-  override def serialized: String = (Seq(definition.symbol) ++ scopedBoundVariableNames ++ components.map(_.serialized)).mkString(" ")
+  override def serialized: String = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
   override def serializedForHash: String = (Seq(definition.symbol) ++ components.map(_.serializedForHash)).mkString(" ")
 }
 
 private class DefinedExpressionSerializer extends JsonSerializer[DefinedExpression[_]] {
   override def serialize(value: DefinedExpression[_], gen: JsonGenerator, serializers: SerializerProvider): Unit = {
-    gen.writeStartArray(value.components.length + value.scopedBoundVariableNames.length + 1)
+    gen.writeStartArray(value.components.length + value.boundVariableNames.length + 1)
     gen.writeString(value.definition.symbol)
-    value.scopedBoundVariableNames.foreach(gen.writeString)
+    value.boundVariableNames.foreach(gen.writeString)
     value.components.foreach(gen.writeObject)
     gen.writeEndArray()
   }

@@ -107,7 +107,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
   val Disjunction = connective("∨", 2, Some(Implication(Negation(φ), ψ)))
   val Equivalence = connective("↔", 2, Some(Conjunction(Implication(φ, ψ), Implication(ψ, φ))))
 
-  val ForAllDefinition = quantifier("∀", None).copy(attributes = Seq("scoping"))
+  val ForAllDefinition = quantifier("∀", None).copy(attributes = Seq("generalization"))
   def ForAll(name: String)(expression: Statement) = ForAllDefinition.bind(name)(expression)
   val ExistsDefinition = quantifier("∃", Some(Negation(ForAll("x")(Negation(φ(FunctionParameter(0, 0)))))))
   def Exists(name: String)(expression: Statement) = ExistsDefinition.bind(name)(expression)
@@ -381,7 +381,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
           Substitutions(statements = Map(φ -> (1, statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get)), terms = Map(a -> (0, FunctionParameter(0, 0)))))
       }
       beStepsThatMakeValidTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth)) ^^ { steps: Seq[Step] =>
-        (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.ScopedVariable(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, ForAllDefinition))}
+        (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.Generalization(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, ForAllDefinition))}
       }
     }
   }

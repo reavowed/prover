@@ -11,7 +11,7 @@ import scalaz.syntax.functor._
 
 import scala.util.Try
 
-@JsonIgnoreProperties(Array("substitutions", "deductionStatement", "scopingStatement", "isComplete"))
+@JsonIgnoreProperties(Array("substitutions", "deductionStatement", "generalizationStatement", "isComplete"))
 sealed trait Step {
   @JsonSerialize
   def provenStatement: Option[Statement]
@@ -218,9 +218,9 @@ object Step {
         extractedConclusion = internalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
         premiseStatements = inference.substitutePremisesAndValidateConclusion(extractedConclusion, substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
         premises <- premiseStatements.init.map(Premise.parser).traverse
-        scopingDefinition = entryContext.scopingDefinitionOption.getOrElse(throw new Exception("Naming step requires a scoping statement"))
+        generalizationDefinition = entryContext.generalizationDefinitionOption.getOrElse(throw new Exception("Naming step requires a generalization statement"))
         deductionDefinition = entryContext.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
-        internalPremise = scopingDefinition.bind(variableName)(deductionDefinition(assumption, internalConclusion))
+        internalPremise = generalizationDefinition.bind(variableName)(deductionDefinition(assumption, internalConclusion))
         _ = if (internalPremise != premiseStatements.last) throw new Exception("Invalid naming premise")
       } yield {
         Naming(variableName, assumption, extractedConclusion, substeps, inference, premises, substitutions)
@@ -228,55 +228,55 @@ object Step {
     }
   }
 
-  case class ScopedVariable(
+  case class Generalization(
       variableName: String,
       substeps: Seq[Step],
-      scopingStatement: StatementDefinition)
+      generalizationStatement: StatementDefinition)
     extends Step.WithSubsteps with WithVariable
   {
-    val `type` = "scopedVariable"
+    val `type` = "generalization"
     override def provenStatement: Option[Statement] = {
-      substeps.lastOption.flatMap(_.provenStatement).map(s => DefinedStatement(Seq(s), scopingStatement)(Seq(variableName)))
+      substeps.lastOption.flatMap(_.provenStatement).map(s => DefinedStatement(Seq(s), generalizationStatement)(Seq(variableName)))
     }
     override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Step = {
-      ScopedVariable(
+      Generalization(
         variableName,
         substeps.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth + 1)),
-        scopingStatement)
+        generalizationStatement)
     }
     override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
       for {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth + 1)).traverseOption
-      } yield ScopedVariable(variableName, newSubsteps, scopingStatement)
+      } yield Generalization(variableName, newSubsteps, generalizationStatement)
     }
     override def replaceDefinition(
       oldDefinition: ExpressionDefinition,
       newDefinition: ExpressionDefinition,
       entryContext: EntryContext
-    ): ScopedVariable = {
-      ScopedVariable(
+    ): Generalization = {
+      Generalization(
         variableName,
         substeps.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)),
-        entryContext.scopingDefinitionOption.get)
+        entryContext.generalizationDefinitionOption.get)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
-    override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet + scopingStatement
+    override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet + generalizationStatement
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"take $variableName {") ++
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
-  object ScopedVariable {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[ScopedVariable] = {
-      val scopingDefinition = entryContext.scopingDefinitionOption
-        .getOrElse(throw new Exception("Scoped variable step could not find scoping statement"))
+  object Generalization {
+    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Generalization] = {
+      val generalizationDefinition = entryContext.generalizationDefinitionOption
+        .getOrElse(throw new Exception("Generalization step could not find generalization statement"))
       for {
         variableName <- Parser.singleWord
         substeps <- listParser(entryContext, stepContext.addBoundVariable(variableName)).inBraces
-      } yield ScopedVariable(variableName, substeps, scopingDefinition)
+      } yield Generalization(variableName, substeps, generalizationDefinition)
     }
   }
 
@@ -506,7 +506,7 @@ object Step {
     Parser.selectOptionalWordParser {
       case "assume" => Deduction.parser
       case "let" => Naming.parser
-      case "take" => ScopedVariable.parser
+      case "take" => Generalization.parser
       case "target" => Target.parser
       case "prove" => Assertion.parser
       case "elided" => Elided.parser

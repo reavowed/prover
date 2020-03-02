@@ -31,7 +31,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       implicit val spc = stepProvingContext
       for {
         (_, Seq(singleNamingPremise: DefinedStatement), _) <- ProofHelper.findNamingInferences(stepProvingContext.provingContext.entryContext)
-        if singleNamingPremise.scopedBoundVariableNames.single.nonEmpty
+        if singleNamingPremise.boundVariableNames.single.nonEmpty
         premise <- stepProvingContext.allPremises
         if singleNamingPremise.calculateSubstitutions(premise.statement).nonEmpty
       } yield premise

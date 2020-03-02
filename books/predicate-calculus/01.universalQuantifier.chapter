@@ -3,7 +3,7 @@ Introduce the universal quantifier, ∀.
 statement ∀ ($x with x φ)
   format ((∀x)φ)
   shorthand (fa)
-  attributes (scoping)
+  attributes (generalization)
 
 axiom Specification
 premise ∀ x with ($0) φ

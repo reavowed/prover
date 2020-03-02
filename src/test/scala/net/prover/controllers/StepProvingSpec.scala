@@ -10,7 +10,7 @@ class StepProvingSpec extends ControllerSpec {
   def getBoundVariable(step: Step, path: Seq[Int]): String = {
     path.foldLeft(step.asInstanceOf[Step.Assertion].statement.asInstanceOf[DefinedStatement]) { case (s, i) =>
       s.components(i).asInstanceOf[DefinedStatement]
-    }.scopedBoundVariableNames.head
+    }.boundVariableNames.head
   }
 
   "proving a step" should {

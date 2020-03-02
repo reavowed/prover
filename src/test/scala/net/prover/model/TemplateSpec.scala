@@ -11,7 +11,7 @@ class TemplateSpec extends Specification {
       val template = Template.parser.parseFromString("∀ x → ∈ $0 X φ", "test template")
       val parsedStatement = template.expressionParser.parseFromString("a A with a ψ", "test statement")
       parsedStatement mustEqual ForAll("a")(Implication(ElementOf($, A), ψ($)))
-      parsedStatement.asInstanceOf[DefinedStatement].scopedBoundVariableNames mustEqual Seq("a")
+      parsedStatement.asInstanceOf[DefinedStatement].boundVariableNames mustEqual Seq("a")
     }
   }
 }

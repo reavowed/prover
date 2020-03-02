@@ -61,7 +61,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremise, "premise").recoverWithBadRequest
         premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
-        variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.scopedBoundVariableNames.single).orBadRequest("Premise did not have single bound variable")
+        variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).orBadRequest("Premise did not have single bound variable")
         (namingInference, namingInferenceAssumption, substitutionsAfterPremise) <- ProofHelper.findNamingInferences(stepProvingContext.provingContext.entryContext).mapFind {
           case (i, Seq(singlePremise), a) =>
             singlePremise.calculateSubstitutions(premiseStatement).map { s => (i, a, s) }
@@ -94,18 +94,18 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
   ): ResponseEntity[_] = {
     bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
-        scopingDefinition <- stepProvingContext.provingContext.scopingDefinitionOption.orBadRequest("No scoping definition provided")
+        generalizationDefinition <- stepProvingContext.provingContext.generalizationDefinitionOption.orBadRequest("No generalization definition provided")
         (substatement, variableName) <- (step.statement match {
-          case definedStatement @ DefinedStatement(Seq(substatement: Statement), `scopingDefinition`) =>
-            definedStatement.scopedBoundVariableNames.single.map(substatement -> _)
+          case definedStatement @ DefinedStatement(Seq(substatement: Statement), `generalizationDefinition`) =>
+            definedStatement.boundVariableNames.single.map(substatement -> _)
           case _ =>
             None
-        }).orBadRequest("Target statement is not a scoped statement")
+        }).orBadRequest("Target statement is not a generalized statement")
       } yield {
-        Step.ScopedVariable(
+        Step.Generalization(
           variableName,
           Seq(Step.Target(substatement)),
-          scopingDefinition)
+          generalizationDefinition)
       }
     }.toResponseEntity
   }
@@ -120,9 +120,9 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
   ): ResponseEntity[_] = {
     bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
-        deductionDefinition <- stepProvingContext.provingContext.deductionDefinitionOption.orBadRequest("No scoping definition provided")
+        deductionDefinition <- stepProvingContext.provingContext.deductionDefinitionOption.orBadRequest("No deduction definition provided")
         (antecedent, consequent) <- (step.statement match {
-          case definedStatement @ DefinedStatement(Seq(antecedent: Statement, consequent: Statement), `deductionDefinition`) =>
+          case DefinedStatement(Seq(antecedent: Statement, consequent: Statement), `deductionDefinition`) =>
             Some((antecedent, consequent))
           case _ =>
             None

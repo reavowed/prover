@@ -7,7 +7,7 @@ import ProofLine from "./components/ProofLine";
 import Step from "./Step";
 import {Steps} from "./Steps";
 
-export class ScopedVariableStep extends React.Component {
+export class GeneralizationStep extends React.Component {
   static contextType = ProofContext;
   updateBoundVariable = (newName) => {
     return this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "boundVariable", {method: "PUT", body: newName});

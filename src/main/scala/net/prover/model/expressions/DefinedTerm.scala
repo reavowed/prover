@@ -6,7 +6,7 @@ import net.prover.model.entries.{ExpressionDefinition, TermDefinition}
 case class DefinedTerm(
     components: Seq[Expression],
     definition: TermDefinition)(
-    val scopedBoundVariableNames: Seq[String])
+    val boundVariableNames: Seq[String])
   extends Term with DefinedExpression[Term]
 {
   override def getMatch(other: Expression): Option[Seq[Expression]] = other match {
@@ -16,7 +16,7 @@ case class DefinedTerm(
       None
   }
   override def updateComponents(newComponents: Seq[Expression]): DefinedTerm = {
-    DefinedTerm(newComponents, definition)(scopedBoundVariableNames)
+    DefinedTerm(newComponents, definition)(boundVariableNames)
   }
   override def updateBoundVariableNames(newBoundVariableNames: Seq[String]): DefinedTerm = {
     DefinedTerm(components, definition)(newBoundVariableNames)
@@ -25,7 +25,7 @@ case class DefinedTerm(
     DefinedTerm(
       components.map(_.replaceDefinition(oldDefinition, newDefinition)),
       if (definition == oldDefinition) newDefinition.asInstanceOf[TermDefinition] else definition
-    )(scopedBoundVariableNames)
+    )(boundVariableNames)
   }
 
   override def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, Term, Int, Seq[Int])] = {
