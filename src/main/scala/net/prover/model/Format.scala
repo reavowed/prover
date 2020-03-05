@@ -42,7 +42,7 @@ object Format {
   object Explicit {
     def apply(originalValue: String, replacementNames: Seq[String], requiresBrackets: Boolean, requiresComponentBrackets: Boolean): Explicit = {
       val baseFormatString = replacementNames.zipWithIndex.foldLeft(originalValue) { case (str, (name, index)) =>
-        str.replaceAll(s"(?<!\\w)${Pattern.quote(name)}(?!\\w)", s"%$index")
+        str.replaceAll(s"(?<!\\[a-zA-Z])${Pattern.quote(name)}(?![a-zA-Z])", s"%$index")
       }
       Format.Explicit(baseFormatString, originalValue, requiresBrackets, requiresComponentBrackets)
     }
