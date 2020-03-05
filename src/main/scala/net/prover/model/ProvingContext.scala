@@ -137,6 +137,8 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val equalityOption: Option[Equality] = {
     filter(definitions.equalityOption)
   }
+  lazy val generalizationDistributions: Map[BinaryJoiner[Statement], Inference] = filter(definitions.generalizationDistributions)
+  lazy val deductionDistributions: Map[BinaryJoiner[Statement], Inference] = filter(definitions.deductionDistributions)
 
   lazy val rearrangeableFunctions: Seq[(BinaryOperator, Commutativity, Associativity)] = {
     filter(definitions.rearrangeableFunctions)

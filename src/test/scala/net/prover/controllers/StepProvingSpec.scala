@@ -4,7 +4,7 @@ import net.prover.controllers.models.PathData
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.Axiom
 import net.prover.model.expressions.{DefinedStatement, TermVariable}
-import net.prover.model.proof.Step
+import net.prover.model.proof.{Step, SubstitutionContext}
 
 class StepProvingSpec extends ControllerSpec {
   def getBoundVariable(step: Step, path: Seq[Int]): String = {
@@ -70,10 +70,10 @@ class StepProvingSpec extends ControllerSpec {
         PathData(stepPath),
         definition(specification, Seq(Exists("y")(Equals($, $.^))), Seq(a), Nil, None))
 
-      checkModifySteps(
+      checkModifyStepsWithMatcher(
         service,
         fillerSteps(stepIndex - 1) :+ target(premise) :+ target(statementToProve),
-        beEqualTo(fillerSteps(stepIndex - 1) :+ target(premise) :+ assertion(specification, Seq(Exists("z")(Equals($, $.^))), Seq(a))) and
+        matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ assertion(specification, Seq(Exists("z")(Equals($, $.^))), Seq(a))) and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last, Nil)})
     }
 
@@ -95,10 +95,10 @@ class StepProvingSpec extends ControllerSpec {
         PathData(stepPath),
         definition(axiom, Seq(φ($), ψ($(0), $(1))), Seq(a), Seq(specification, forwardImplicationFromEquivalence, modusPonens), None))
 
-      checkModifySteps(
+      checkModifyStepsWithMatcher(
         service,
         fillerSteps(stepIndex - 1) :+ target(premise) :+ target(statementToProve),
-        beEqualTo(fillerSteps(stepIndex - 1) :+ target(premise) :+ elided(axiom, Seq(
+        matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ elided(axiom, Seq(
           assertion(axiom, Seq(φ($), ψ($(0), $(1))), Nil),
           assertion(specification, Seq(Equivalence(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
           assertion(forwardImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
@@ -126,10 +126,10 @@ class StepProvingSpec extends ControllerSpec {
         PathData(stepPath),
         definition(existence, Seq(φ($)), Seq(b), Nil, Some(Exists("z")(φ($)))))
 
-      checkModifySteps(
+      checkModifyStepsWithMatcher(
         service,
         fillerSteps(stepIndex - 1) :+ target(premise) :+ target(φ),
-        beEqualTo(fillerSteps(stepIndex - 1) :+ target(premise) :+ assertion(existence, Seq(φ($)), Seq(b)) :+ target(φ)) and
+        matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ assertion(existence, Seq(φ($)), Seq(b)) :+ target(φ)) and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)})
     }
 
@@ -147,10 +147,10 @@ class StepProvingSpec extends ControllerSpec {
         PathData(stepPath),
         definition(premise, Seq(a), Seq(specification, modusPonens), Some(Exists("z")(ψ(TermVariable("x", Nil), $)))))
 
-      checkModifySteps(
+      checkModifyStepsWithMatcher(
         service,
         fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ(a)) :+ target(χ(a)),
-        beEqualTo(fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ(a)) :+
+        matchSteps(fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ(a)) :+
           elided("Extracted", Seq(
             assertion(specification, Seq(Implication(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
             assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil))) :+

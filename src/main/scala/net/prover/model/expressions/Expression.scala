@@ -213,3 +213,9 @@ object Expression {
     }
   }
 }
+
+sealed trait ExpressionType[T <: Expression]
+object ExpressionType {
+  implicit object StatementType extends ExpressionType[Statement]
+  implicit object TermType extends ExpressionType[Term]
+}

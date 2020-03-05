@@ -66,11 +66,10 @@ trait BookModification {
     stepPath.indexes match {
       case init :+ last =>
         bookService.replaceSteps(bookKey, chapterKey, theoremKey, proofIndex, init) { case (steps, stepProvingContext) =>
-          import stepProvingContext._
           steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
             for {
               typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
-              (replacementStep, stepsToAddBeforeTransitive) <- f(typedStep, StepProvingContext(stepContext.addSteps(before).atIndex(last), provingContext))
+              (replacementStep, stepsToAddBeforeTransitive) <- f(typedStep, StepProvingContext.updateStepContext(_.addSteps(before).atIndex(last))(stepProvingContext))
             } yield insertTargetsBeforeTransitivity(before, replacementStep +: after, stepsToAddBeforeTransitive)(stepProvingContext)
           }.orNotFound(s"Step $stepPath").flatten
         }

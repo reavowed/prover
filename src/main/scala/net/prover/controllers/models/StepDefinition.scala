@@ -8,6 +8,7 @@ case class StepDefinition(
     serializedPremiseStatement: Option[String],
     substitutions: SerializedSubstitutions,
     extractionInferenceIds: Seq[String],
+    serializedInferencePremiseStatements: Option[Seq[String]],
     serializedConclusionStatement: Option[String],
     additionalVariableNames: Option[Seq[String]])
 {

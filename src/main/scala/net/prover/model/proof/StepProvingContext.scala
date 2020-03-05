@@ -50,3 +50,12 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
     findPremise(statement) getOrElse Premise.Pending(statement)
   }
 }
+
+object StepProvingContext {
+  def updateStepContext(f: StepContext => StepContext)(implicit stepProvingContext: StepProvingContext): StepProvingContext = {
+    stepProvingContext.copy(stepContext = f(stepProvingContext.stepContext))
+  }
+  def withStepContext(newStepContext: StepContext)(implicit stepProvingContext: StepProvingContext): StepProvingContext = {
+    stepProvingContext.copy(stepContext = newStepContext)
+  }
+}

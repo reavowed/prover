@@ -35,6 +35,9 @@ trait VariableDefinitions {
   case object $ {
     def apply(index: Int) = FunctionParameter(index, 0)
     def ^ : FunctionParameter = FunctionParameter(0, 1)
+    def ^^ : FunctionParameter = FunctionParameter(0, 2)
+    def ^^^ : FunctionParameter = FunctionParameter(0, 3)
+    def ^^^^ : FunctionParameter = FunctionParameter(0, 4)
   }
   implicit def $ToFunctionParameter(x: $.type): FunctionParameter = FunctionParameter(0, 0)
 
@@ -290,6 +293,9 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val forwardImplicationFromEquivalence = Axiom("Forward Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(φ, ψ))
   val reverseImplicationFromEquivalence = Axiom("Reverse Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(ψ, φ))
 
+  val distributeImplicationOverEquivalence = Axiom("Distribute Implication over Equivalence", Seq(Implication(φ, Equivalence(ψ, χ))), Equivalence(Implication(φ, ψ), Implication(φ, χ)))
+  val distributeUniversalQuantifierOverEquivalence = Axiom("Distribute Universal Quantifier over Equivalence", Seq(ForAll("x")(Equivalence(φ($), ψ($)))), Equivalence(ForAll("x")(φ($)), ForAll("x")(ψ($))))
+
   val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
   val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
   val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
@@ -330,6 +336,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       addDoubleNegation, removeDoubleNegation,
       extractLeftConjunct, extractRightConjunct, combineConjunction,
       equivalenceIsTransitive, forwardImplicationFromEquivalence, reverseImplicationFromEquivalence,
+      distributeImplicationOverEquivalence, distributeUniversalQuantifierOverEquivalence,
       reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
       membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfOrderedPairInCartesianProduct, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, firstElement,
       zeroIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, addingZeroIsSame, orderingIsTransitive) ++

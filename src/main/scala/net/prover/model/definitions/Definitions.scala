@@ -139,6 +139,28 @@ case class Definitions(rootEntryContext: EntryContext) {
     } yield Equality(relation, expansion, substitution, reversal, transitivity)
   }
 
+  lazy val generalizationDistributions: Map[BinaryJoiner[Statement], Inference] = {
+    implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
+    (for {
+      generalizationDefinition <- rootEntryContext.generalizationDefinitionOption.toSeq
+      inference <- inferenceEntries
+      connective <- definedBinaryConnectives
+      (generalizationDefinition(StatementVariable(a, Seq(FunctionParameter(0, 0)))), generalizationDefinition(StatementVariable(b, Seq(FunctionParameter(0, 0))))) <- connective.unapply(inference.conclusion)
+      if inference.premises == Seq(generalizationDefinition(connective(StatementVariable(a, Seq(FunctionParameter(0, 0))), StatementVariable(b, Seq(FunctionParameter(0, 0))))(SubstitutionContext.withExtraParameters(1))))
+    } yield connective -> inference).toMap
+  }
+  lazy val deductionDistributions: Map[BinaryJoiner[Statement], Inference] = {
+    implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
+    (for {
+      deductionDefinition <- rootEntryContext.deductionDefinitionOption.toSeq
+      inference <- inferenceEntries
+      connective <- definedBinaryConnectives
+      (deductionDefinition(StatementVariable(a, Nil), StatementVariable(b, Nil)), deductionDefinition(StatementVariable(c, Nil), StatementVariable(d, Nil))) <- connective.unapply(inference.conclusion)
+      if a == c
+      if inference.premises == Seq(deductionDefinition(StatementVariable(a, Nil), connective(StatementVariable(b, Nil), StatementVariable(d, Nil))))
+    } yield connective -> inference).toMap
+  }
+
   lazy val rearrangeableFunctions: Seq[(BinaryOperator, Commutativity, Associativity)] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {

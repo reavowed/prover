@@ -18,8 +18,8 @@ object PremiseFinder {
       }
     def bySimplifyingTarget = for {
         inference <- stepProvingContext.provingContext.conclusionSimplificationInferences
-        substitutionsWithPlaceholders <- inference.conclusion.calculateSubstitutions(targetStatement)(StepContext.withExtraParameter).flatMap(_.confirmTotality).toSeq
-        premiseStatementsWithPlaceholders <- inference.substitutePremises(substitutionsWithPlaceholders)(StepContext.withExtraParameter).toSeq
+        substitutionsWithPlaceholders <- inference.conclusion.calculateSubstitutions(targetStatement)(SubstitutionContext.withExtraParameter).flatMap(_.confirmTotality).toSeq
+        premiseStatementsWithPlaceholders <- inference.substitutePremises(substitutionsWithPlaceholders)(SubstitutionContext.withExtraParameter).toSeq
         (premiseSteps, newTerms) <- findParameterisedPremiseStepsForStatements(premiseStatementsWithPlaceholders, terms)
         conclusion <- targetStatement.specify(newTerms).toSeq
         substitutions <- inference.conclusion.calculateSubstitutions(conclusion).flatMap(_.confirmTotality).toSeq

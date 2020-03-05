@@ -33,6 +33,7 @@ sealed trait Step {
   def recursivePremises: Seq[Premise]
   def length: Int
   def serializedLines: Seq[String]
+  override def toString: String = serializedLines.mkString("\n")
 }
 
 object Step {
