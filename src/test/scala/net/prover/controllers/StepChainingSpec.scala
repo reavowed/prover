@@ -50,7 +50,7 @@ class StepChainingSpec extends ControllerSpec {
       val service = createService
       val controller = new StepChainingController(service)
 
-      controller.addChainingFromLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), definition(premise, Nil, Nil, None))
+      controller.addChainingFromLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), definitionWithPremise(premise, Nil, Nil, None))
 
       checkModifySteps(
         service,
@@ -62,7 +62,7 @@ class StepChainingSpec extends ControllerSpec {
       val service = createService
       val controller = new StepChainingController(service)
 
-      controller.addChainingFromRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), definition(premise, Nil, Nil, None))
+      controller.addChainingFromRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), definitionWithPremise(premise, Nil, Nil, None))
 
       checkModifySteps(
         service,
@@ -152,7 +152,7 @@ class StepChainingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(addingZeroIsSame, Nil, Seq(b), Nil, None))
+        definitionWithInference(addingZeroIsSame, Nil, Seq(b), Nil))
 
       checkModifySteps(
         service,

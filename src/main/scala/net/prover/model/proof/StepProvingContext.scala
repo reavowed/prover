@@ -18,7 +18,7 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
       premise <- stepContext.premises
       extractionOption <- SubstatementExtractor.getExtractionOptions(premise.statement)(this)
       if extractionOption.premises.isEmpty
-      extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionOption.extractionInferences, Substitutions.empty, None, s => (Nil, s.map(Step.Target(_))))(this).toOption.toSeq
+      extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionOption.extractionInferences, Substitutions.empty, None, None, s => (Nil, s.map(Step.Target(_))))(this).toOption.toSeq
         .map(ExtractionHelper.removeAllStructuralSimplifications(_)(provingContext))
     } yield (extractionApplication.result, extractionApplication.extractionSteps.map(s => (s, s.inference)))
   }

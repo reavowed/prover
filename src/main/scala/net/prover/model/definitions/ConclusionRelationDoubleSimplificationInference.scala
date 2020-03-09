@@ -22,7 +22,7 @@ case class ConclusionRelationDoubleSimplificationInference(inference: Inference,
       substitutions <- inference.conclusion.calculateSubstitutions(target).flatMap(_.confirmTotality)
       assertionStep <- Step.Assertion.forInference(inference, substitutions)
       ExtractionApplication(_, _, extractionSteps, premiseSteps, targetSteps) <-
-        ExtractionHelper.applyExtractions(assertionStep.statement, extractionInferences, inference, substitutions, None, findPremises).toOption
+        ExtractionHelper.applyExtractions(assertionStep.statement, extractionInferences, inference, substitutions, None, None, findPremises).toOption
       if targetSteps.isEmpty
       extractionStep = Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference).get
       finalStep = Step.Elided.ifNecessary(premiseSteps :+ extractionStep, inference).get

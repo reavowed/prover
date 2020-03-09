@@ -7,13 +7,14 @@ export default function AddTargetByInference({path, onCancel, onError}) {
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `possibleInferencesForNewTarget?searchText=${encodeURIComponent(searchText)}`);
   };
-  const proveWithInference = (possibleInference, possibleConclusion, substitutions, conclusionStatement) => {
+  const proveWithInference = (possibleInference, possibleConclusion, substitutions, premiseStatements, conclusionStatement) => {
     return context.fetchJsonForStepAndUpdateTheorem(path, "newTarget", {
       method: "POST",
       body: {
         inferenceId: possibleInference.inference.id,
         substitutions,
         extractionInferenceIds: possibleConclusion.extractionInferenceIds,
+        serializedNewTargetStatements: premiseStatements.map(p => p.serialize()),
         serializedConclusionStatement: conclusionStatement.serialize(),
         additionalVariableNames: possibleConclusion.additionalVariableNames
       }

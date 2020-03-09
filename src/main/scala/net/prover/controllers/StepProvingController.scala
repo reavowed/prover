@@ -6,7 +6,7 @@ import net.prover.model.ExpressionParsingContext.TermVariableValidator
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
-import net.prover.model.{ExpressionParsingContext, Inference, ProvingContext, Substitutions}
+import net.prover.model._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -37,17 +37,31 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     }.getOrElse(Success((None, premise)))
   }
 
-  def createStep(definition: StepDefinition, getTargetOption: Option[(ExpressionParsingContext, Substitutions) => Try[Statement]])(implicit stepProvingContext: StepProvingContext): Try[(Statement, Step, Seq[Step.Target])] = {
+  def createStep(
+    definition: StepDefinition,
+    getConclusionOption: Option[(ExpressionParsingContext, Substitutions) => Try[Statement]])(
+    implicit stepProvingContext: StepProvingContext
+  ): Try[(Statement, Step, Seq[Step.Target])] = {
     def withInference(inferenceId: String) = {
       for {
         inference <- findInference(inferenceId)
         substitutions <- definition.substitutions.parse()
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
         epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromInference(inference).baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
-        targetOption <- getTargetOption.map(f => f(epc, substitutions)).swap
-        (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
+        conclusionOption <- getConclusionOption.map(f => f(epc, substitutions)).swap
+        newTargetStatementsOption <- definition.parseNewTargetStatements(epc)
+        (inferenceToApply, newTargetStatementsForExtractionOption) <- newTargetStatementsOption match {
+          case Some(newTargetStatements) =>
+            for {
+              (targetStatementsForInference, targetStatementsForExtraction) <- newTargetStatements.takeAndRemainingIfValid(inference.premises.length).orBadRequest("Not enough target statements provided")
+              _ <- (targetStatementsForInference == inference.premises).orBadRequest("Target statements did not match inference premise")
+            } yield (inference.copy(premises = targetStatementsForInference), Some(targetStatementsForExtraction))
+          case None =>
+            Success((inference, None))
+        }
+        (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inferenceToApply, substitutions).orBadRequest("Could not apply substitutions to inference")
         ExtractionApplication(result, mainPremise, extractionSteps, extractionPremises, extractionTargets) <-
-          ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, targetOption, PremiseFinder.findPremiseStepsOrTargets)
+          ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, newTargetStatementsForExtractionOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets)
         mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = mainPremise)
         extractionStep = Step.Elided.ifNecessary(mainAssertionWithCorrectConclusion +: extractionSteps, inference).get
         finalStep = Step.Elided.ifNecessary(mainPremises ++ extractionPremises :+ extractionStep, inference).get
@@ -62,9 +76,10 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
           implicitly,
           TermVariableValidator.LimitedList(VariableTracker.fromStepContext.baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten),
           stepProvingContext.stepContext.boundVariableLists.map(_.zipWithIndex))
-        targetOption <- getTargetOption.map(f => f(epc, substitutions)).swap
+        conclusionOption <- getConclusionOption.map(f => f(epc, substitutions)).swap
+        newTargetStatementsOption <- definition.parseNewTargetStatements(epc)
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
-        ExtractionApplication(result, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, targetOption, PremiseFinder.findPremiseStepsOrTargets)
+        ExtractionApplication(result, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, newTargetStatementsOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets)
         extractionStep = Step.Elided.ifNecessary(extractionSteps, "Extracted").get
         finalStep = Step.Elided.ifNecessary(extractionPremises :+ extractionStep, "Extracted").get
       } yield (result, finalStep, extractionTargets)

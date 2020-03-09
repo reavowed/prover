@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
+import {replaceAtIndex} from "../../../../../../models/Helpers";
 import EntryContext from "../../../../../EntryContext";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
 import {InlineTextEditor} from "../../../../../helpers/InlineTextEditor";
@@ -73,10 +74,11 @@ export default class ConclusionChooser extends React.Component {
 
   setSelectedConclusion = (selectedConclusion) => {
     if (selectedConclusion) {
+      const premiseStatements = selectedConclusion.possiblePremises.map(p => p.premise);
       const conclusionStatement = selectedConclusion.conclusion;
       const selectedPremises = selectedConclusion.possiblePremises.map(p => ["", null]);
       const selectedSubstitutionValues = buildSubstitutionMap(selectedConclusion.requiredSubstitutions, () => "");
-      this.setStatePromise({selectedConclusion, conclusionStatement, selectedPremises, selectedSubstitutionValues})
+      this.setStatePromise({selectedConclusion, premiseStatements, conclusionStatement, selectedPremises, selectedSubstitutionValues})
         .then(() => this.ref.current.scrollIntoView());
       if (this.props.allowAutoSubmit && this.areSubstitutionValuesSufficient(selectedConclusion, selectedPremises, selectedSubstitutionValues)) {
         this.submitWithSelectedValues(selectedConclusion, selectedPremises, selectedSubstitutionValues)
@@ -89,7 +91,7 @@ export default class ConclusionChooser extends React.Component {
 
   setSelectedPremise = (premiseIndex, matchIndex) => {
     const selectedPremise = [matchIndex, matchIndex !== "" ? this.state.selectedConclusion.possiblePremises[premiseIndex].possibleMatches[parseInt(matchIndex)].substitutions : null];
-    const selectedPremises = Object.assign({}, this.state.selectedPremises, {[premiseIndex]: selectedPremise});
+    const selectedPremises = replaceAtIndex(this.state.selectedPremises, premiseIndex, selectedPremise);
     this.setState({selectedPremises});
   };
 
@@ -152,12 +154,29 @@ export default class ConclusionChooser extends React.Component {
 
   submit = () => {
     const substitutionValues = this.getSubstitutionValuesToSubmit(this.state.selectedConclusion, this.state.selectedPremises, this.state.selectedSubstitutionValues);
-    this.props.submit(this.state.selectedConclusion, substitutionValues, this.state.conclusionStatement);
+    this.props.submit(this.state.selectedConclusion, substitutionValues, this.state.premiseStatements, this.state.conclusionStatement);
   };
 
   render() {
     const {possibleConclusions, hideSummary, disabled, boundVariableListsForPremises} = this.props;
-    const {selectedConclusion, conclusionStatement} = this.state;
+    const {selectedConclusion, premiseStatements, conclusionStatement} = this.state;
+
+    const wrapPremiseBoundVariable = (premiseIndex) => (name, index, boundVariablePath) => {
+      const callback = (newName) => {
+        const newPremise = premiseStatements[premiseIndex].setBoundVariableName(newName, index, boundVariablePath);
+        const newPremiseStatements = replaceAtIndex(premiseStatements, premiseIndex, newPremise);
+        return this.setStatePromise({premiseStatements: newPremiseStatements});
+      };
+      return <InlineTextEditor text={name} callback={callback} />;
+    };
+    const wrapConclusionBoundVariable = (name, index, boundVariablePath) => {
+      const callback = (newName) => {
+        const newConclusion = conclusionStatement.setBoundVariableName(newName, index, boundVariablePath);
+        return this.setStatePromise({conclusionStatement: newConclusion});
+      };
+      return <InlineTextEditor text={name} callback={callback} />;
+    };
+
     return <EntryContext.Consumer>{entryContext => {
 
       let PremiseSuggestions = () => {
@@ -227,14 +246,6 @@ export default class ConclusionChooser extends React.Component {
         });
       };
 
-      const wrapConclusionBoundVariable = (name, index, boundVariablePath) => {
-        const callback = (newName) => {
-          const newConclusion = conclusionStatement.setBoundVariableName(newName, index, boundVariablePath);
-          return this.setStatePromise({conclusionStatement: newConclusion});
-        };
-        return <InlineTextEditor text={name} callback={callback} />;
-      };
-
       return <div ref={this.ref}>
         {possibleConclusions.length > 1 && <Form.Group>
           <Form.Label><strong>Choose conclusion</strong></Form.Label>
@@ -251,7 +262,8 @@ export default class ConclusionChooser extends React.Component {
         </Form.Group>}
         {selectedConclusion && <>
           {!hideSummary && <Form.Group>
-            <ResultWithPremises premises={selectedConclusion.possiblePremises.map(p => p.premise)}
+            <ResultWithPremises premises={premiseStatements}
+                                createPremiseElement={(p, i) => <CopiableExpression key={p.serialize()} expression={p} wrapBoundVariable={wrapPremiseBoundVariable(i)}  />}
                                 result={<CopiableExpression expression={conclusionStatement} wrapBoundVariable={wrapConclusionBoundVariable}/>}/>
           </Form.Group>}
           {getAllRequiredPaths(selectedConclusion.requiredSubstitutions).length > 0 && <>

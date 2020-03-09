@@ -51,6 +51,7 @@ trait VariableDefinitions {
   val D = TermVariablePlaceholder("D")
   val n = TermVariablePlaceholder("n")
   val F = TermVariablePlaceholder("F")
+  val x = TermVariablePlaceholder("x")
 
   implicit def placeholderToVariable[T <: ExpressionVariable[_ <: Expression]](placeholder: Placeholder[T]): T = placeholder.toVariable
   implicit def placeholderToString(placeholder: Placeholder[_]): String = placeholder.name

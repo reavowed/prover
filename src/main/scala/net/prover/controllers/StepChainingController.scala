@@ -226,10 +226,20 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           getResult { (extractionInferences, substitutions, getIntendedTarget) =>
             for {
               inference <- findInference(inferenceId)
-              (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
               epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromInference(inference).baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
-              intendedTargetOption <- getIntendedTarget(epc)
-              extractionApplication <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, intendedTargetOption, PremiseFinder.findPremiseStepsOrTargets _)
+              intendedConclusionOption <- getIntendedTarget(epc)
+              newTargetStatementsOption <- definition.parseNewTargetStatements(epc)
+              (inferenceToApply, newTargetStatementsForExtractionOption) <- newTargetStatementsOption match {
+                case Some(newTargetStatements) =>
+                  for {
+                    (targetStatementsForInference, targetStatementsForExtraction) <- newTargetStatements.takeAndRemainingIfValid(inference.premises.length).orBadRequest("Not enough target statements provided")
+                    _ <- (targetStatementsForInference == inference.premises).orBadRequest("Target statements did not match inference premise")
+                  } yield (inference.copy(premises = targetStatementsForInference), Some(targetStatementsForExtraction))
+                case None =>
+                  Success((inference, None))
+              }
+              (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inferenceToApply, substitutions).orBadRequest("Could not apply substitutions to inference")
+              extractionApplication <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, newTargetStatementsForExtractionOption, intendedConclusionOption, PremiseFinder.findPremiseStepsOrTargets _)
             } yield (extractionApplication, Seq(mainAssertion), mainPremises, mainTargets, Step.Elided.forInference(inference))
           }
         }
@@ -239,8 +249,9 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
               premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
               premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
               epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromStepContext.baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
-              intendedTargetOption <- getIntendedTarget(epc)
-              extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, intendedTargetOption, PremiseFinder.findPremiseStepsOrTargets _)
+              intendedConclusionOption <- getIntendedTarget(epc)
+              newTargetStatementsOption <- definition.parseNewTargetStatements(epc)
+              extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, newTargetStatementsOption, intendedConclusionOption, PremiseFinder.findPremiseStepsOrTargets _)
             } yield (extractionApplication, Nil, Nil, Nil, Step.Elided.forDescription("Extracted"))
           }
         }

@@ -13,7 +13,7 @@ case class PremiseRelationDoubleSimplificationInference(inference: Inference, pr
     for {
       substitutions <- premise.calculateSubstitutions(premiseToMatch).flatMap(_.confirmTotality)
       assertionStep <- Step.Assertion.forInference(inference, substitutions)
-      ExtractionApplication(extractionResult, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionInferences, inference, substitutions, None, _ => (Nil, Nil)).toOption
+      ExtractionApplication(extractionResult, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionInferences, inference, substitutions, None, None, _ => (Nil, Nil)).toOption
     } yield (extractionResult, Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference).get)
   }
 }

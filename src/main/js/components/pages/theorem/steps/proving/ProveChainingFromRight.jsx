@@ -7,13 +7,16 @@ export default function ProveChainingFromRight({path, onError}) {
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `suggestInferencesForChainingFromRight?searchText=${encodeURIComponent(searchText)}`);
   };
-  const submit = (possibleInference, possibleConclusion, substitutions) => {
+  const submit = (possibleInference, possibleConclusion, substitutions, premiseStatements, conclusionStatement) => {
     return context.fetchJsonForStepAndUpdateTheorem(path, "chainingFromRight", {
       method: "POST",
       body: {
         inferenceId: possibleInference.inference.id,
         substitutions,
-        extractionInferenceIds: possibleConclusion.extractionInferenceIds
+        extractionInferenceIds: possibleConclusion.extractionInferenceIds,
+        serializedNewTargetStatements: premiseStatements.map(p => p.serialize()),
+        serializedConclusionStatement: conclusionStatement.serialize(),
+        additionalVariableNames: possibleConclusion.additionalVariableNames
       }
     }).catch(onError);
   };

@@ -8,7 +8,7 @@ import net.prover.model.proof.{Step, SubstitutionContext}
 
 class StepProvingSpec extends ControllerSpec {
   def getBoundVariable(step: Step, path: Seq[Int]): String = {
-    path.foldLeft(step.asInstanceOf[Step.Assertion].statement.asInstanceOf[DefinedStatement]) { case (s, i) =>
+    path.foldLeft(step.provenStatement.get.asInstanceOf[DefinedStatement]) { case (s, i) =>
       s.components(i).asInstanceOf[DefinedStatement]
     }.boundVariableNames.head
   }
@@ -26,7 +26,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(premise, Nil, Seq(extractRightConjunct, modusPonens), None))
+        definitionWithPremise(premise, Nil, Seq(extractRightConjunct, modusPonens), None))
 
       checkModifySteps(
         service,
@@ -45,7 +45,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(premise, Nil, Seq(modusPonens, extractRightConjunct), None))
+        definitionWithPremise(premise, Nil, Seq(modusPonens, extractRightConjunct), None))
 
       checkModifySteps(
         service,
@@ -68,7 +68,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(specification, Seq(Exists("y")(Equals($, $.^))), Seq(a), Nil, None))
+        definitionWithInference(specification, Seq(Exists("y")(Equals($, $.^))), Seq(a), Nil))
 
       checkModifyStepsWithMatcher(
         service,
@@ -93,7 +93,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(axiom, Seq(φ($), ψ($(0), $(1))), Seq(a), Seq(specification, forwardImplicationFromEquivalence, modusPonens), None))
+        definitionWithInference(axiom, Seq(φ($), ψ($(0), $(1))), Seq(a), Seq(specification, forwardImplicationFromEquivalence, modusPonens)))
 
       checkModifyStepsWithMatcher(
         service,
@@ -124,7 +124,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(existence, Seq(φ($)), Seq(b), Nil, Some(Exists("z")(φ($)))))
+        definitionWithInference(existence, Seq(φ($)), Seq(b), Nil, conclusionOption = Some(Exists("z")(φ($)))))
 
       checkModifyStepsWithMatcher(
         service,
@@ -145,7 +145,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definition(premise, Seq(a), Seq(specification, modusPonens), Some(Exists("z")(ψ(TermVariable("x", Nil), $)))))
+        definitionWithPremise(premise, Seq(a), Seq(specification, modusPonens), Some(Exists("z")(ψ(x, $)))))
 
       checkModifyStepsWithMatcher(
         service,
@@ -158,6 +158,61 @@ class StepProvingSpec extends ControllerSpec {
         ) and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.Elided].substeps(0), Seq(1))} and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.Elided].substeps(1), Nil)})
+    }
+
+    "retain premise bound variable names when proving target by inference" in {
+      val service = createService
+      val controller = new StepProvingController(service)
+
+      val statementToProve = Exists("y")(Equals($, a))
+
+      controller.proveCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        definitionWithInference(specification, Seq(Exists("y")(Equals($, $.^))), Seq(a), Nil, premisesOption = Some(Seq(ForAll("z")(φ($))))))
+
+      checkModifyStepsWithMatcher(
+        service,
+        fillerSteps(stepIndex) :+ target(statementToProve),
+        matchSteps(fillerSteps(stepIndex) :+ target(ForAll("z")(Exists("y")(Equals($, $.^)))) :+ assertion(specification, Seq(Exists("z")(Equals($, $.^))), Seq(a))) and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)})
+    }
+
+    "retain bound variable names in extraction premise when proving target by inference" in {
+      val service = createService
+      val controller = new StepProvingController(service)
+
+      val axiom = Axiom("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
+      val entryContext = defaultEntryContext.copy(availableEntries = defaultEntryContext.availableEntries :+ axiom)
+
+      val premise = Exists("z")(ψ(a, $))
+      val statementToProve = φ(a)
+
+      controller.proveCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        definitionWithInference(axiom, Seq(ψ($(0), $(1)), φ($)), Seq(a), Seq(specification, reverseImplicationFromEquivalence, modusPonens), premisesOption = Some(Seq(Exists("z")(ψ(x, $))))))
+
+      checkModifyStepsWithMatcher(
+        service,
+        fillerSteps(stepIndex) :+ target(statementToProve),
+        matchSteps(fillerSteps(stepIndex) :+ target(premise) :+ elided(axiom, Seq(
+          assertion(axiom, Seq(φ($), ψ($(0), $(1))), Nil),
+          assertion(specification, Seq(Equivalence(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
+          assertion(reverseImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
+          assertion(modusPonens, Seq(Exists("z")(ψ(a, $)), φ(a)), Nil)))
+        ) and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(0), Seq(0, 1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(1), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(2), Seq(0))})(
+        entryContext)
     }
   }
 }
