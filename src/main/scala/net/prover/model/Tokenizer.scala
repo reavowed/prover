@@ -78,7 +78,7 @@ trait Tokenizer {
 }
 
 object Tokenizer {
-  private val singleCharacterTokens = "(){},"
+  private val singleCharacterTokens = "(){},".toSet
   def fromString(str: String, context: String): TokenStream = {
     val lines = str.split("\\r?\\n").toVector.map(_.toVector)
     val numberOfLines = lines.length
