@@ -37,8 +37,8 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit def allowableSeq[T](implicit inner: Allowable[T]): Allowable[Seq[T]] = allowable { x => x.forall(isAllowed) }
 
     implicit val allowableInference: Allowable[Inference] = allowable(i => entryContext.allInferences.exists(_.id == i.id))
-    implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(entryContext.statementDefinitions.contains)
-    implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(entryContext.termDefinitions.contains)
+    implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(d => entryContext.statementDefinitionsBySymbol.contains(d.symbol))
+    implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(d => entryContext.termDefinitionsBySymbol.contains(d.symbol))
 
     implicit val allowableRelation: Allowable[BinaryJoiner[_ <: Expression]] = allowable(definedBinaryStatements.contains)
     implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))

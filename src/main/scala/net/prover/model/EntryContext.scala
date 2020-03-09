@@ -3,15 +3,10 @@ package net.prover.model
 import net.prover.model.entries._
 import net.prover.model.expressions._
 
-case class EntryContext(availableEntries: Seq[ChapterEntry]) {
+case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map[String, Inference], statementDefinitionsBySymbol: Map[String, StatementDefinition], termDefinitionsBySymbol: Map[String, TermDefinition]) {
 
-  lazy val inferenceEntries: Seq[Inference] = availableEntries.ofType[Inference]
   lazy val allInferences: Seq[Inference.FromEntry] = availableEntries.flatMap(_.inferences)
-  lazy val statementDefinitions: Seq[StatementDefinition] = availableEntries.collect {
-    case statementDefinition: StatementDefinition => statementDefinition
-    case typeDefinition: TypeDefinition => typeDefinition.statementDefinition
-    case propertyDefinition: PropertyDefinition => propertyDefinition.statementDefinition
-  }
+  lazy val statementDefinitions: Seq[StatementDefinition] = availableEntries.mapCollect(EntryContext.getStatementDefinitionFromEntry)
   lazy val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
   lazy val typeDefinitions: Seq[TypeDefinition] = availableEntries.ofType[TypeDefinition]
   lazy val propertyDefinitionsByType: Map[String, Seq[PropertyDefinition]] = availableEntries.ofType[PropertyDefinition].groupBy(_.parentType.symbol)
@@ -25,21 +20,25 @@ case class EntryContext(availableEntries: Seq[ChapterEntry]) {
     statementDefinitions.find(_.attributes.contains("generalization"))
   }
 
-  def addEntry(entry: ChapterEntry): EntryContext = copy(availableEntries = availableEntries :+ entry)
-  def addEntries(entries: Seq[ChapterEntry]): EntryContext = copy(availableEntries = availableEntries ++ entries)
+  def addEntry(entry: ChapterEntry): EntryContext = {
+    addEntries(Seq(entry))
+  }
+  def addEntries(entries: Seq[ChapterEntry]): EntryContext = {
+    this ++ EntryContext(entries)
+  }
 
   lazy val conjunctionDefinitionOption: Option[StatementDefinition] = {
     statementDefinitions.find(_.attributes.contains("conjunction"))
   }
 
   object RecognisedStatementDefinition {
-    def unapply(string: String): Option[StatementDefinition] = {
-      statementDefinitions.find(_.symbol == string)
+    def unapply(symbol: String): Option[StatementDefinition] = {
+      statementDefinitionsBySymbol.get(symbol)
     }
   }
   object RecognisedTermDefinition {
-    def unapply(s: String): Option[TermDefinition] = {
-      termDefinitions.find(_.symbol == s)
+    def unapply(symbol: String): Option[TermDefinition] = {
+      termDefinitionsBySymbol.get(symbol)
     }
   }
 
@@ -53,9 +52,33 @@ case class EntryContext(availableEntries: Seq[ChapterEntry]) {
       writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[Template.DefinedTerm])
     }
   }
+
+  def ++ (other: EntryContext) = {
+    EntryContext(
+      availableEntries ++ other.availableEntries,
+      inferencesById ++ other.inferencesById,
+      statementDefinitionsBySymbol ++ other.statementDefinitionsBySymbol,
+      termDefinitionsBySymbol ++ other.termDefinitionsBySymbol)
+  }
 }
 
 object EntryContext {
+
+  def getStatementDefinitionFromEntry(entry: ChapterEntry): Option[StatementDefinition] = entry match {
+    case statementDefinition: StatementDefinition => Some(statementDefinition)
+    case typeDefinition: TypeDefinition => Some(typeDefinition.statementDefinition)
+    case propertyDefinition: PropertyDefinition => Some(propertyDefinition.statementDefinition)
+    case _ => None
+  }
+
+  def apply(entries: Seq[ChapterEntry]): EntryContext = {
+    EntryContext(
+      entries,
+      entries.flatMap(_.inferences).toMapWithKey(_.id),
+      entries.mapCollect(getStatementDefinitionFromEntry).toMapWithKey(_.symbol),
+      entries.ofType[TermDefinition].toMapWithKey(_.symbol))
+  }
+
 
   def forBooks(books: Seq[Book]): EntryContext = {
     EntryContext(books.flatMap(_.chapters).flatMap(_.entries))

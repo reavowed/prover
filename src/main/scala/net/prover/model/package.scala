@@ -304,6 +304,10 @@ package object model {
     def dropUntil(p: T => Boolean): Seq[T] = {
       seq.dropWhile(t => !p(t)).drop(1)
     }
+
+    def toMapWithKey[S](getKey: T => S): Map[S, T] = {
+      seq.map(t => (getKey(t), t)).toMap
+    }
   }
 
   implicit class IterableOps[T](iterable: Iterable[T]) {
