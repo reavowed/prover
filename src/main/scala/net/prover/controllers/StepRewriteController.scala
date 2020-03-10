@@ -54,8 +54,8 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       def getSuggestions(inference: Inference, source: Term, target: Term, reverse: Boolean): Option[InferenceRewriteSuggestion] = {
         val suggestions = replacementPossibilities.mapCollect { case ReplacementPossibility(term, _, depth, path, unwrappers) =>
           for {
-            substitutions <- source.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
-            result <- target.applySubstitutions(substitutions.stripApplications())(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
+            substitutions <- source.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.size))
+            result <- target.applySubstitutions(substitutions.stripApplications())(SubstitutionContext.withExtraParameters(unwrappers.size)).map(_.insertExternalParameters(depth))
             _ <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(inference.premises, substitutions)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
           } yield InferenceRewritePath(path, result)
         }
@@ -124,11 +124,11 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     inferenceId: String,
     baseTerm: Term,
     rewrite: RewriteRequest,
-    unwrappers: Seq[ReplacementUnwrapper],
+    unwrappers: Seq[ScopedDeductionUnwrapper],
     wrapperExpression: TExpression,
     equality: Equality)(
     implicit stepProvingContext: StepProvingContext
-  ): Try[(Term, Term, Option[Step], Option[Inference.Summary], Seq[ReplacementUnwrapper], TExpression)] = {
+  ): Try[(Term, Term, Option[Step], Option[Inference.Summary], Seq[ScopedDeductionUnwrapper], TExpression)] = {
     for {
       inference <- findInference(inferenceId)
       (inferenceLhs, inferenceRhs) <- equality.unapply(inference.conclusion).orBadRequest("Inference conclusion was not equality")
@@ -170,7 +170,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     rewriteList: Seq[Seq[RewriteRequest]],
     equality: Equality,
     direction: Direction)(
-    applyRewrite: (Term, Term, Seq[ReplacementUnwrapper], Wrapper[Term, TExpression], Seq[Step], Option[Inference.Summary], Option[Inference.Summary]) => Try[(TStep, Option[Inference.Summary], Wrapper[Term, TExpression])])(
+    applyRewrite: (Term, Term, Seq[ScopedDeductionUnwrapper], Wrapper[Term, TExpression], Seq[Step], Option[Inference.Summary], Option[Inference.Summary]) => Try[(TStep, Option[Inference.Summary], Wrapper[Term, TExpression])])(
     combine: (TExpression, TExpression, Seq[TStep], Seq[Option[Inference.Summary]]) => TStep)(
     elide: (TExpression, Seq[TStep], Seq[Option[Inference.Summary]]) => Step)(
     implicit stepProvingContext: StepProvingContext
@@ -205,7 +205,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     equality: Equality)(
     source: Term,
     result: Term,
-    unwrappers: Seq[ReplacementUnwrapper],
+    unwrappers: Seq[ScopedDeductionUnwrapper],
     wrapper: Wrapper[Term, Statement],
     steps: Seq[Step],
     rewriteInferenceOption: Option[Inference.Summary],
@@ -226,7 +226,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     expansion: Expansion[TExpression])(
     source: Term,
     result: Term,
-    unwrappers: Seq[ReplacementUnwrapper],
+    unwrappers: Seq[ScopedDeductionUnwrapper],
     wrapper: Wrapper[Term, TExpression],
     steps: Seq[Step],
     rewriteInferenceOption: Option[Inference.Summary],
@@ -420,104 +420,99 @@ object StepRewriteController {
   case class PremiseSuggestion(reference: PreviousLineReference, statement: Statement, rewriteSuggestions: Seq[PremiseRewritePath])
   case class PremiseRewritePath(path: Seq[Int], reverse: Boolean, result: Term)
 
-  sealed trait ReplacementUnwrapper {
-    def depth: Int
-    def inference: Inference
-    def enhanceContext(stepContext: StepContext): StepContext
-    def enhanceWrapper(wrapper: Wrapper[Term, Statement]): Wrapper[Term, Statement]
-    def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion
-    def rewrap(steps: Seq[Step], wrapper: Wrapper[Term, Statement]): (Step, Wrapper[Term, Statement])
-    def rewrapWithDistribution(steps: Seq[Step], wrapper: Wrapper[Term, Statement], joiner: BinaryJoiner[Statement], source: Statement, result: Statement)(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Statement], Statement, Statement)]
-    def remove(source: Term, premises: Seq[Statement], wrapperStatement: Statement)(implicit stepContext: StepContext): Option[(Term, Seq[Statement], Statement)]
-  }
-  case class GeneralizationUnwrapper(variableName: String, generalizationDefinition: StatementDefinition, specificationInference: Inference) extends ReplacementUnwrapper {
-    val depth = 1
-    def inference = specificationInference
+  case class ScopedDeductionUnwrapper(
+    variableName: String,
+    antecedent: Statement,
+    generalizationDefinition: StatementDefinition,
+    specificationInference: Inference,
+    deductionDefinition: StatementDefinition,
+    deductionEliminationInference: Inference
+  ) {
     def enhanceContext(stepContext: StepContext): StepContext = {
+      enhanceContextForDeduction(enhanceContextForGeneralization(stepContext))
+    }
+    def enhanceContextForGeneralization(stepContext: StepContext): StepContext = {
       stepContext.addBoundVariable(variableName).atIndex(0)
     }
+    def enhanceContextForDeduction(stepContext: StepContext): StepContext = {
+      stepContext.addStatement(antecedent, "a").atIndex(0)
+    }
     def enhanceWrapper(wrapper: Wrapper[Term, Statement]): Wrapper[Term, Statement] = {
+      enhanceWrapperForGeneralization(enhanceWrapperForDeduction(wrapper))
+    }
+    private def enhanceWrapperForGeneralization(wrapper: Wrapper[Term, Statement]): Wrapper[Term, Statement] = {
       new Wrapper((t, sc) => generalizationDefinition.bind(variableName)(wrapper(t)(SubstitutionContext.withExtraParameter(sc))))
     }
-    def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
+    private def enhanceWrapperForDeduction(wrapper: Wrapper[Term, Statement]): Wrapper[Term, Statement] = {
+      new Wrapper((t, sc) => deductionDefinition(antecedent, wrapper(t)(sc)))
+    }
+    private def wrapStatement(statement: Statement): Statement = {
+      generalizationDefinition.bind(variableName)(deductionDefinition(antecedent, statement))
+    }
+    def extractionSteps(result: Statement, depth: Int)(implicit stepContext: StepContext): (Seq[Step.Assertion], Statement) = {
+      val insertedAntecedent = antecedent.insertExternalParameters(depth)
+      val deductionSubstitutions = deductionEliminationInference.requiredSubstitutions.fill(Seq(insertedAntecedent, result), Nil)
+      val deductionAssertionStep = Step.Assertion.forInference(deductionEliminationInference, deductionSubstitutions)(enhanceContextForGeneralization(stepContext)).get
+      val deductionPremise = deductionAssertionStep.premises.head.statement
+
       val parameter = FunctionParameter(0, depth)
       val inferenceVariableName = specificationInference.requiredSubstitutions.terms.head._1
-      val predicate = result.calculateApplicatives(Seq(TermVariable(inferenceVariableName, Nil)), Substitutions(terms = Map(inferenceVariableName -> (0, parameter)))).next()._1
-      val substitutions = specificationInference.requiredSubstitutions.fill(Seq(predicate), Seq(parameter))
-      val baseAssertionStep = Step.Assertion.forInference(inference, substitutions).get
-      baseAssertionStep.copy(premises = Seq(Premise.Pending(baseAssertionStep.premises.head.statement.asInstanceOf[DefinedStatement].updateBoundVariableNames(Seq(variableName)))))
+      val predicate = deductionPremise.calculateApplicatives(Seq(TermVariable(inferenceVariableName, Nil)), Substitutions(terms = Map(inferenceVariableName -> (0, parameter)))).next()._1
+      val specificationSubstitutions = specificationInference.requiredSubstitutions.fill(Seq(predicate), Seq(parameter))
+      val baseSpecificationAssertionStep = Step.Assertion.forInference(specificationInference, specificationSubstitutions).get
+      val specificationAssertionStep = baseSpecificationAssertionStep.copy(premises = Seq(Premise.Pending(baseSpecificationAssertionStep.premises.head.statement.asInstanceOf[DefinedStatement].updateBoundVariableNames(Seq(variableName)))))
+
+      (Seq(specificationAssertionStep, deductionAssertionStep), specificationAssertionStep.premises.head.statement)
     }
     def rewrap(steps: Seq[Step], wrapper: Wrapper[Term, Statement]): (Step, Wrapper[Term, Statement]) = {
-      (Step.Generalization(variableName, steps, generalizationDefinition), enhanceWrapper(wrapper))
+      val deductionStep = Step.Deduction(antecedent, steps, deductionDefinition)
+      val generalizationStep = Step.Generalization(variableName, Seq(deductionStep), generalizationDefinition)
+      (generalizationStep, enhanceWrapper(wrapper))
     }
     def rewrapWithDistribution(steps: Seq[Step], wrapper: Wrapper[Term, Statement], joiner: BinaryJoiner[Statement], source: Statement, result: Statement)(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Statement], Statement, Statement)] = {
       for {
-        distributionInference <- stepProvingContext.provingContext.generalizationDistributions.get(joiner).orBadRequest(s"Could not find generalization distribution inference for ${joiner.symbol}")
-        distributionSubstitutions <- distributionInference.premises.head.calculateSubstitutions(generalizationDefinition.bind(variableName)(joiner(source, result)(enhanceContext(implicitly)))).flatMap(_.confirmTotality)
+        deductionDistributionInference <- stepProvingContext.provingContext.deductionDistributions.get(joiner).orBadRequest(s"Could not find deduction distribution inference for ${joiner.symbol}")
+        deductionStep = Step.Deduction(antecedent, steps, deductionDefinition)
+        deductionDistributionStep <- Step.Assertion.forInference(
+          deductionDistributionInference,
+          deductionDistributionInference.requiredSubstitutions.fill(Seq(antecedent, source, result), Nil))(
+          enhanceContextForGeneralization(implicitly)
+        ).orBadRequest("Could not apply deduction distribution inference")
+
+        generalizationDistributionInference <- stepProvingContext.provingContext.generalizationDistributions.get(joiner).orBadRequest(s"Could not find generalization distribution inference for ${joiner.symbol}")
+        generalizationDistributionSubstitutions <- generalizationDistributionInference.premises.head.calculateSubstitutions(generalizationDefinition.bind(variableName)(deductionDistributionStep.statement)).flatMap(_.confirmTotality)
           .orBadRequest("Could not calculate substitutions for generalization distribution inference")
-        distributionStep <- Step.Assertion.forInference(distributionInference, distributionSubstitutions).orBadRequest("Could not apply generalization distribution inference")
-        (generalizationStep, newWrapper) = rewrap(steps, wrapper)
-      } yield (Seq(generalizationStep, distributionStep), newWrapper, generalizationDefinition.bind(variableName)(source), generalizationDefinition.bind(variableName)(result))
+        generalizationDistributionStep <- Step.Assertion.forInference(generalizationDistributionInference, generalizationDistributionSubstitutions).orBadRequest("Could not apply generalization distribution inference")
+        generalizationStep = Step.Generalization(variableName, Seq(deductionStep, deductionDistributionStep), generalizationDefinition)
+      } yield (Seq(generalizationStep, generalizationDistributionStep), enhanceWrapper(wrapper), wrapStatement(source), wrapStatement(result))
     }
     def remove(source: Term, premises: Seq[Statement], wrapperStatement: Statement)(implicit stepContext: StepContext): Option[(Term, Seq[Statement], Statement)] = {
       for {
         removedSource <- source.removeExternalParameters(1)
         removedPremises <- premises.map(_.removeExternalParameters(1)).traverseOption
-      } yield (removedSource, removedPremises, generalizationDefinition.bind(variableName)(wrapperStatement))
+      } yield (removedSource, removedPremises, wrapStatement(wrapperStatement))
     }
   }
-  case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: StatementDefinition, deductionEliminationInference: Inference) extends ReplacementUnwrapper {
-    val depth = 0
-    def inference = deductionEliminationInference
-    def enhanceContext(stepContext: StepContext): StepContext = {
-      stepContext.addStatement(antecedent, "a").atIndex(0)
-    }
-    def enhanceWrapper(wrapper: Wrapper[Term, Statement]): Wrapper[Term, Statement] = {
-      new Wrapper((t, sc) => deductionDefinition(antecedent, wrapper(t)(sc)))
-    }
-    def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
-      val insertedAntecedent = antecedent.insertExternalParameters(depth)
-      val substitutions = deductionEliminationInference.requiredSubstitutions.fill(Seq(insertedAntecedent, result), Nil)
-      Step.Assertion.forInference(deductionEliminationInference, substitutions).get
-    }
-    def rewrap(steps: Seq[Step], wrapper: Wrapper[Term, Statement]): (Step, Wrapper[Term, Statement]) = {
-      (Step.Deduction(antecedent, steps, deductionDefinition), enhanceWrapper(wrapper))
-    }
-    def rewrapWithDistribution(steps: Seq[Step], wrapper: Wrapper[Term, Statement], joiner: BinaryJoiner[Statement], source: Statement, result: Statement)(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Statement], Statement, Statement)] = {
-      for {
-        distributionInference <- stepProvingContext.provingContext.deductionDistributions.get(joiner).orBadRequest(s"Could not find deduction distribution inference for ${joiner.symbol}")
-        distributionStep <- Step.Assertion.forInference(distributionInference, distributionInference.requiredSubstitutions.fill(Seq(antecedent, source, result), Nil)).orBadRequest("Could not apply deduction distribution inference")
-        (deductionStep, newWrapper) = rewrap(steps, wrapper)
-      } yield (Seq(deductionStep, distributionStep), newWrapper, deductionDefinition(antecedent, source), deductionDefinition(antecedent, result))
-    }
-    def remove(source: Term, premises: Seq[Statement], wrapperStatement: Statement)(implicit stepContext: StepContext): Option[(Term, Seq[Statement], Statement)] = {
-      if (!premises.contains(antecedent)) {
-        Some((source, premises, deductionDefinition(antecedent, wrapperStatement)))
-      } else {
-        None
-      }
-    }
-  }
-  case class ReplacementPossibility[T <: Expression](term: Term, function: T, depth: Int, path: Seq[Int], unwrappers: Seq[ReplacementUnwrapper])
 
-  implicit class ReplacementUnwrappers(unwrappers: Seq[ReplacementUnwrapper]) {
-    def depth: Int = unwrappers.map(_.depth).sum
+  case class ReplacementPossibility[T <: Expression](term: Term, function: T, depth: Int, path: Seq[Int], unwrappers: Seq[ScopedDeductionUnwrapper])
+
+  implicit class ReplacementUnwrappers(unwrappers: Seq[ScopedDeductionUnwrapper]) {
     def enhanceContext(stepContext: StepContext): StepContext = {
       unwrappers.foldLeft(stepContext) { case (context, unwrapper) => unwrapper.enhanceContext(context) }
     }
     private def getExtractionSteps(premise: Statement, steps: Seq[Step], inference: Option[Inference])(implicit stepContext: StepContext): Seq[Step] = {
       val enhancedContext = enhanceContext(stepContext)
-      def helper(currentUnwrappers: Seq[ReplacementUnwrapper]): (Seq[Step], Statement, Int) = {
+      def helper(currentUnwrappers: Seq[ScopedDeductionUnwrapper]): (Seq[Step], Statement) = {
         currentUnwrappers match {
           case unwrapper +: tailUnwrappers =>
-            val (innerSteps, innerStatement, innerDepth) = helper(tailUnwrappers)
-            val newStep = unwrapper.extractionStep(innerStatement, innerDepth)(enhancedContext)
-            (newStep +: innerSteps, newStep.premises(0).statement, innerDepth + unwrapper.depth)
+            val (innerSteps, innerStatement) = helper(tailUnwrappers)
+            val (newSteps, newResult) = unwrapper.extractionSteps(innerStatement, tailUnwrappers.length)(enhancedContext)
+            (newSteps ++ innerSteps, newResult)
           case Nil =>
-            (Nil, premise, 0)
+            (Nil, premise)
         }
       }
-      val (extractionSteps, _, _) = helper(unwrappers)
+      val (extractionSteps, _) = helper(unwrappers)
       Step.Elided.ifNecessary(extractionSteps, "Extracted") match {
         case Some(extractionStep) =>
           Seq(extractionStep, EqualityRewriter.rewriteElider(inference)(steps).get)
@@ -536,7 +531,7 @@ object StepRewriteController {
         implicit val enhancedStepContext = enhanceContext(implicitly)
         (wrapper(source), wrapper(result))
       }
-      def helper(currentUnwrappers: Seq[ReplacementUnwrapper], currentStepContext: StepContext): Try[(Seq[Step], Wrapper[Term, Statement], Statement, Statement)] = {
+      def helper(currentUnwrappers: Seq[ScopedDeductionUnwrapper], currentStepContext: StepContext): Try[(Seq[Step], Wrapper[Term, Statement], Statement, Statement)] = {
         currentUnwrappers match {
           case unwrapper +: tailUnwrappers =>
             val innerStepContext = unwrapper.enhanceContext(currentStepContext)
@@ -550,8 +545,8 @@ object StepRewriteController {
       }
       helper(unwrappers, stepProvingContext.stepContext).map { case (steps, wrapper, _ , _) => (steps, wrapper) }
     }
-    def removeUnneeded(source: Term, premises: Seq[Statement], wrapper: Statement)(implicit stepContext: StepContext): (Seq[ReplacementUnwrapper], Term, Seq[Statement], Statement) = {
-      def helper(currentUnwrappers: Seq[ReplacementUnwrapper], currentStepContext: StepContext): (Seq[ReplacementUnwrapper], Term, Seq[Statement], Statement) = {
+    def removeUnneeded(source: Term, premises: Seq[Statement], wrapper: Statement)(implicit stepContext: StepContext): (Seq[ScopedDeductionUnwrapper], Term, Seq[Statement], Statement) = {
+      def helper(currentUnwrappers: Seq[ScopedDeductionUnwrapper], currentStepContext: StepContext): (Seq[ScopedDeductionUnwrapper], Term, Seq[Statement], Statement) = {
         currentUnwrappers match {
           case unwrapper +: tailUnwrappers =>
             val innerStepContext = unwrapper.enhanceContext(currentStepContext)
@@ -575,10 +570,10 @@ object StepRewriteController {
   }
 
   trait ReplacementMethods[T <: Expression] {
-    def getReplacementPossibilitiesFromOuterExpression(t: T, path: Seq[Int], unwrappers: Seq[ReplacementUnwrapper])(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[T]]
+    def getReplacementPossibilitiesFromOuterExpression(t: T, path: Seq[Int], unwrappers: Seq[ScopedDeductionUnwrapper])(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[T]]
 
-    def rewrapWithDistribution(unwrappers: Seq[ReplacementUnwrapper], joiner: BinaryJoiner[T], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, T], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, T])]
-    def removeUnwrappers(source: Term, premises: Seq[Statement], wrapperExpression: T, unwrappers: Seq[ReplacementUnwrapper])(implicit stepContext: StepContext): (Seq[ReplacementUnwrapper], Term, Seq[Statement], T)
+    def rewrapWithDistribution(unwrappers: Seq[ScopedDeductionUnwrapper], joiner: BinaryJoiner[T], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, T], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, T])]
+    def removeUnwrappers(source: Term, premises: Seq[Statement], wrapperExpression: T, unwrappers: Seq[ScopedDeductionUnwrapper])(implicit stepContext: StepContext): (Seq[ScopedDeductionUnwrapper], Term, Seq[Statement], T)
   }
   object ReplacementMethods {
     def apply[T <: Expression](implicit replacementMethods: ReplacementMethods[T]) = replacementMethods
@@ -593,48 +588,48 @@ object StepRewriteController {
     }
 
     object StatementReplacementMethods extends ReplacementMethods[Statement] {
-      def getReplacementPossibilitiesFromExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[ReplacementUnwrapper], wrapper: Statement => Statement)(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[Statement]] = {
+      def getReplacementPossibilitiesFromExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[ScopedDeductionUnwrapper], wrapper: Statement => Statement)(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[Statement]] = {
         statement.getTerms() map { case (term, predicate, depth, innerPath) =>
           ReplacementPossibility[Statement](term, wrapper(predicate), depth, path ++ innerPath, unwrappers)
         }
       }
-      override def getReplacementPossibilitiesFromOuterExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[ReplacementUnwrapper])(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[Statement]] = {
-        (statement, stepProvingContext.provingContext.deductionEliminationInferenceOption, stepProvingContext.provingContext.specificationInferenceOption) match {
-          case (generalizedStatement @ DefinedStatement(Seq(predicate: Statement), definition), _, Some((specificationInference, _, _, _)))
-            if stepProvingContext.provingContext.entryContext.generalizationDefinitionOption.contains(definition)
-          =>
-            val unwrapper = GeneralizationUnwrapper(generalizedStatement.boundVariableNames.head, definition, specificationInference)
-            getReplacementPossibilitiesFromOuterExpression(predicate, path :+ 0, unwrappers :+ unwrapper)(StepProvingContext.updateStepContext(unwrapper.enhanceContext))
-          case (DefinedStatement(Seq(antecedent: Statement, consequent: Statement), definition), Some((deductionEliminationInference, _, _)), _)
-            if stepProvingContext.provingContext.entryContext.deductionDefinitionOption.contains(definition)
-          =>
-            val unwrapper = DeductionUnwrapper(antecedent, definition, deductionEliminationInference)
-            getReplacementPossibilitiesFromExpression(antecedent, path :+ 0, unwrappers, definition(_, consequent)) ++ getReplacementPossibilitiesFromOuterExpression(consequent, path :+ 1, unwrappers :+ unwrapper)(StepProvingContext.updateStepContext(unwrapper.enhanceContext))
-          case _ =>
-            getReplacementPossibilitiesFromExpression(statement, path, unwrappers, identity)
-        }
+      override def getReplacementPossibilitiesFromOuterExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[ScopedDeductionUnwrapper])(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[Statement]] = {
+        (for {
+          generalizationDefinition <- stepProvingContext.provingContext.generalizationDefinitionOption
+          (specificationInference, _, _, _) <- stepProvingContext.provingContext.specificationInferenceOption
+          deductionDefinition <- stepProvingContext.provingContext.deductionDefinitionOption
+          (deductionEliminationInference, _, _) <- stepProvingContext.provingContext.deductionEliminationInferenceOption
+        } yield {
+          statement match {
+            case generalizedStatement @ DefinedStatement(Seq(deductionDefinition(antecedent: Statement, consequent: Statement)), `generalizationDefinition`) =>
+              val unwrapper = ScopedDeductionUnwrapper(generalizedStatement.boundVariableNames.head, antecedent, generalizationDefinition, specificationInference, deductionDefinition, deductionEliminationInference)
+              getReplacementPossibilitiesFromOuterExpression(consequent, path ++ Seq(0, 1), unwrappers :+ unwrapper)(StepProvingContext.updateStepContext(unwrapper.enhanceContext))
+            case _ =>
+              getReplacementPossibilitiesFromExpression(statement, path, unwrappers, identity)
+          }
+        }).getOrElse(getReplacementPossibilitiesFromExpression(statement, path, unwrappers, identity))
       }
-      override def rewrapWithDistribution(unwrappers: Seq[ReplacementUnwrapper], joiner: BinaryJoiner[Statement], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Statement], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Statement])] = {
+      override def rewrapWithDistribution(unwrappers: Seq[ScopedDeductionUnwrapper], joiner: BinaryJoiner[Statement], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Statement], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Statement])] = {
         unwrappers.rewrapWithDistribution(joiner, source, result, steps, wrapper, inferenceOption)
       }
-      def removeUnwrappers(source: Term, premises: Seq[Statement], wrapperStatement: Statement, unwrappers: Seq[ReplacementUnwrapper])(implicit stepContext: StepContext): (Seq[ReplacementUnwrapper], Term, Seq[Statement], Statement) = {
+      def removeUnwrappers(source: Term, premises: Seq[Statement], wrapperStatement: Statement, unwrappers: Seq[ScopedDeductionUnwrapper])(implicit stepContext: StepContext): (Seq[ScopedDeductionUnwrapper], Term, Seq[Statement], Statement) = {
         unwrappers.removeUnneeded(source, premises, wrapperStatement)
       }
     }
     object TermReplacementMethods extends ReplacementMethods[Term] {
-      override def getReplacementPossibilitiesFromOuterExpression(term: Term, path: Seq[Int], unwrappers: Seq[ReplacementUnwrapper])(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[Term]] = {
+      override def getReplacementPossibilitiesFromOuterExpression(term: Term, path: Seq[Int], unwrappers: Seq[ScopedDeductionUnwrapper])(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[Term]] = {
         term.getTerms() map { case (innerTerm, function, depth, innerPath) =>
           ReplacementPossibility[Term](innerTerm, function, depth, path ++ innerPath, unwrappers)
         }
       }
-      override def rewrapWithDistribution(unwrappers: Seq[ReplacementUnwrapper], joiner: BinaryJoiner[Term], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Term], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Term])] = {
+      override def rewrapWithDistribution(unwrappers: Seq[ScopedDeductionUnwrapper], joiner: BinaryJoiner[Term], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Term], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Term])] = {
         if (unwrappers.nonEmpty) {
           Failure(new Exception("Unwrappers for term somehow"))
         } else {
           Success((steps, wrapper))
         }
       }
-      def removeUnwrappers(source: Term, premises: Seq[Statement], wrapperTerm: Term, unwrappers: Seq[ReplacementUnwrapper])(implicit stepContext: StepContext): (Seq[ReplacementUnwrapper], Term, Seq[Statement], Term) = {
+      def removeUnwrappers(source: Term, premises: Seq[Statement], wrapperTerm: Term, unwrappers: Seq[ScopedDeductionUnwrapper])(implicit stepContext: StepContext): (Seq[ScopedDeductionUnwrapper], Term, Seq[Statement], Term) = {
         (Nil, source, premises, wrapperTerm)
       }
     }
