@@ -42,10 +42,15 @@ export class InferenceFinder extends React.Component {
       .then(suggestionsJson => this.context.parser.parsePossibleInferences(suggestionsJson))
   };
   setSelectedInference = (selectedInference) => {
-    this.setState({selectedInference});
+    return this.setStatePromise({selectedInference})
+      .then(() => {
+        if (selectedInference.possibleTargets && selectedInference.possibleTargets.length === 1) {
+          return this.setSelectedTarget(selectedInference.possibleTargets[0]);
+        }
+      });
   };
   setSelectedTarget = (selectedTarget) => {
-    this.setState({selectedTarget});
+    return this.setStatePromise({selectedTarget});
   };
   submit = (selectedConclusion, selectedSubstitutionValues, premiseStatements, conclusionStatement) => {
     return this.submitWithSelectedValues(this.state.selectedInference, this.state.selectedTarget, selectedConclusion, selectedSubstitutionValues, premiseStatements, conclusionStatement);
@@ -85,6 +90,14 @@ export class InferenceFinder extends React.Component {
           renderSuggestion={renderSuggestion}
           readOnly={disabled} />
       </Form.Group>
+      {possibleTargets && possibleTargets.length === 1 &&
+      <BoundVariableLists.Consumer>{boundVariableLists =>
+        <Form.Group>
+          <Form.Label><strong>Target</strong></Form.Label>
+          <div><CopiableExpression expression={possibleTargets[0].target} boundVariableLists={[...boundVariableLists, ...possibleTargets[0].additionalBoundVariables]}/></div>
+        </Form.Group>
+      }</BoundVariableLists.Consumer>
+      }
       {possibleTargets && possibleTargets.length > 1 && <BoundVariableLists.Consumer>{boundVariableLists =>
         <EntryContext.Consumer>{entryContext =>
           <Form.Group>
