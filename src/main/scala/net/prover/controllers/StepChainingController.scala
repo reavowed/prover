@@ -198,11 +198,8 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
               case Some(serializedIntendedConclusionStatement) =>
                 for {
                   conclusionStatement <- Statement.parser(expressionParsingContext).parseFromString(serializedIntendedConclusionStatement, "intended conclusion").recoverWithBadRequest
-                  (conclusionLhs, conclusionRhs) <- targetRelation.unapply(conclusionStatement).orBadRequest("Intended conclusion was not matching binary statement")
-                  conclusionSource = direction.getSource(conclusionLhs, conclusionRhs)
-                  substitutedConclusionSource <- conclusionSource.applySubstitutions(substitutions).orBadRequest("Could not apply substitutions to intended conclusion source")
-                  (intendedTargetLhs: T, intendedTargetRhs: T) = direction.swapSourceAndResult(substitutedConclusionSource, targetResult)
-                } yield Some(targetRelation(intendedTargetLhs, intendedTargetRhs))
+                  substitutedConclusionStatement <- conclusionStatement.applySubstitutions(substitutions).orBadRequest("Could not apply substitutions to intended conclusion")
+                } yield Some(substitutedConclusionStatement)
               case None =>
                 Success(None)
             }
