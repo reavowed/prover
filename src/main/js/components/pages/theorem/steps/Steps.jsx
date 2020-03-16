@@ -25,6 +25,54 @@ function findBinaryRelation(statement, entryContext) {
   return _.find(entryContext.binaryRelations, x => matchTemplate(x.template, statement, [], []));
 }
 
+function updateWidth(element) {
+  const elementStyle = window.getComputedStyle(element);
+  const temporarySpacingElement = document.createElement("span");
+  temporarySpacingElement.style.font = elementStyle.font;
+  temporarySpacingElement.style.visibility = "hidden";
+  temporarySpacingElement.style.whiteSpace = "pre";
+  temporarySpacingElement.innerHTML = element.innerHTML;
+  document.body.appendChild(temporarySpacingElement);
+  const contentWidth = temporarySpacingElement.getBoundingClientRect().width;
+  document.body.removeChild(temporarySpacingElement);
+  element.style.width = contentWidth + "px";
+}
+
+class RightHandSide extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  componentDidUpdate = () => {
+    if (this.props.hovered && this.span) {
+      updateWidth(this.span);
+    }
+  };
+  render() {
+    const {rightHandSide, index, hovered, additionalReferences, additionalReferencesFromNext} = this.props;
+    const {} = this.state;
+    return <span style={{position: "relative"}}>
+          {hovered && rightHandSide.elidedLeftHandSide && <PositionToLeft ref={ref => this.span = ref}>
+            <HighlightableExpression expression={rightHandSide.elidedLeftHandSide}
+                                     expressionToCopy={rightHandSide.step.statement}
+                                     references={rightHandSide.referencesForLhs}
+                                     additionalPremiseReferences={additionalReferences} />
+            {' '}
+          </PositionToLeft>}
+      <HighlightableExpression expression={{textForHtml: () => rightHandSide.symbol}}
+                               expressionToCopy={rightHandSide.step.statement}
+                               references={rightHandSide.referencesForRhs}
+                               additionalReferences={additionalReferences}/>
+      {' '}
+      <HighlightableExpression expression={rightHandSide.expression}
+                               expressionToCopy={rightHandSide.step.statement}
+                               references={rightHandSide.referencesForRhs}
+                               additionalPremiseReferences={[...additionalReferences, ...additionalReferencesFromNext]}
+                               additionalConclusionReferences={additionalReferencesFromNext}/>.
+      </span>
+  }
+}
+
 const PositionToLeft = styled.span`
   position: absolute;
   right: 100%;
@@ -65,52 +113,6 @@ class ChainedSteps extends React.Component {
   render() {
     const {leftHandSide, rightHandSides, referencesForLastStep} = this.props;
 
-    class RightHandSide extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {};
-      }
-      componentDidUpdate() {
-        if (this.props.hovered && this.span) {
-          const spanStyle = window.getComputedStyle(this.span);
-          const temporarySpacingElement = document.createElement("span");
-          temporarySpacingElement.style.font = spanStyle.font;
-          temporarySpacingElement.style.visibility = "hidden";
-          temporarySpacingElement.style.whiteSpace = "pre";
-          temporarySpacingElement.innerHTML = this.span.innerHTML;
-          document.body.appendChild(temporarySpacingElement);
-          const contentWidth = temporarySpacingElement.getBoundingClientRect().width;
-          document.body.removeChild(temporarySpacingElement);
-          this.span.style.width = contentWidth + "px";
-        }
-      }
-      render() {
-        const {rightHandSide, index, hovered} = this.props;
-        const {} = this.state;
-        const additionalReferences = index === rightHandSides.length - 1 ? referencesForLastStep : [];
-        const nextRightHandSide = rightHandSides[index + 1];
-        return <span style={{position: "relative"}}>
-          {hovered && rightHandSide.elidedLeftHandSide && <PositionToLeft ref={ref => this.span = ref}>
-            <HighlightableExpression expression={rightHandSide.elidedLeftHandSide}
-                                     expressionToCopy={rightHandSide.step.statement}
-                                     references={rightHandSide.referencesForLhs}
-                                     additionalPremiseReferences={additionalReferences} />
-            {' '}
-          </PositionToLeft>}
-          <HighlightableExpression expression={{textForHtml: () => rightHandSide.symbol}}
-                                   expressionToCopy={rightHandSide.step.statement}
-                                   references={rightHandSide.referencesForRhs}
-                                   additionalReferences={additionalReferences}/>
-          {' '}
-          <HighlightableExpression expression={rightHandSide.expression}
-                                   expressionToCopy={rightHandSide.step.statement}
-                                   references={rightHandSide.referencesForRhs}
-                                   additionalPremiseReferences={[...additionalReferences, ...(nextRightHandSide && nextRightHandSide.referencesForPrevious || [])]}
-                                   additionalConclusionReferences={nextRightHandSide && nextRightHandSide.referencesForPrevious}/>.
-      </span>
-      }
-    }
-
     const renderProofLine = (props, children) => {
       switch (props.step.type) {
         case "assertion":
@@ -133,7 +135,7 @@ class ChainedSteps extends React.Component {
                                                                             additionalPremiseReferences={_.flatMap(rightHandSides, rhs => rhs.referencesForLhs)}
                                                                             additionalConclusionReferences={_.chain(rightHandSides).filter("highlightsFirstAsConclusion").flatMap("references").value()}
           />{' '}</span>
-          <RightHandSide rightHandSide={rightHandSides[0]} index={0} />
+          <RightHandSide rightHandSide={rightHandSides[0]} index={0} additionalReferences={[]} additionalReferencesFromNext={rightHandSides[1] && rightHandSides[1].referencesForPrevious || []} />
         </>
       )}
       {rightHandSides.slice(1).map((rightHandSide, index) =>
@@ -141,7 +143,11 @@ class ChainedSteps extends React.Component {
           {step: rightHandSide.step, path: rightHandSide.path, key: "chained " + rightHandSide.expression.serialize()},
           isHovered => <>
             <span ref={r => this.setSpacerRef(r, rightHandSide.path.join("."))}/>
-            <RightHandSide rightHandSide={rightHandSide} index={index + 1} hovered={isHovered} />
+            <RightHandSide rightHandSide={rightHandSide}
+                           index={index + 1}
+                           hovered={isHovered}
+                           additionalReferences={index === rightHandSides.length - 1 ? referencesForLastStep : []}
+                           additionalReferencesFromNext={rightHandSides[index + 1] && rightHandSides[index + 1].referencesForPrevious || []} />
           </>
         )
       )}
