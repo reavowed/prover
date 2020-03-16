@@ -23,14 +23,13 @@ export class SubproofStep extends React.Component {
     let {step, path, additionalReferences} = this.props;
     let {showingSubproof} = this.state;
     let reference = new StepReference(path);
-    let referencesForLastStep = [...additionalReferences, reference];
     const titleElement = <h6 onClick={this.toggleSubproof} className={"mt-1 mb-1"} style={{cursor: "pointer"}}>{formatHtml(step.name)}</h6>;
     return showingSubproof ?
       <Step.WithSubsteps path={path}>
         <Step.Antecedent>{titleElement}</Step.Antecedent>
         <Steps.Children steps={step.substeps}
                         path={path}
-                        referencesForLastStep={referencesForLastStep} />
+                        propsForLastStep={{additionalReferences: [...additionalReferences, reference]}} />
       </Step.WithSubsteps> :
       <Step.WithoutSubsteps>
         {titleElement}

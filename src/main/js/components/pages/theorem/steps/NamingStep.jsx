@@ -14,7 +14,6 @@ export function NamingStep({step, path, additionalReferences}) {
     return context.fetchJsonForStepAndUpdateTheorem(path, "boundVariable", {method: "PUT", body: newName});
   };
   const reference = new StepReference(path);
-  const referencesForLastStep = [...additionalReferences, reference];
   const prefix = <>
       Let
       {' '}
@@ -36,7 +35,7 @@ export function NamingStep({step, path, additionalReferences}) {
       </Step.Antecedent>
       <Steps steps={step.substeps}
              path={path}
-             referencesForLastStep={referencesForLastStep} />
+             propsForLastStep={{additionalReferences: [...additionalReferences, reference]}} />
     </BoundVariableLists.Add>
   </Step.WithSubsteps>;
 }

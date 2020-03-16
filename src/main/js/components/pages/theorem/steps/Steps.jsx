@@ -49,7 +49,9 @@ class RightHandSide extends React.Component {
     }
   };
   render() {
-    const {rightHandSide, index, hovered, additionalReferences, additionalReferencesFromNext} = this.props;
+    const {rightHandSide, hovered, additionalReferencesFromNext} = this.props;
+    let {additionalReferences} = this.props;
+    additionalReferences = additionalReferences || [];
     const {} = this.state;
     return <span style={{position: "relative"}}>
           {hovered && rightHandSide.elidedLeftHandSide && <PositionToLeft ref={ref => this.span = ref}>
@@ -111,7 +113,7 @@ class ChainedSteps extends React.Component {
   }
 
   render() {
-    const {leftHandSide, rightHandSides, referencesForLastStep} = this.props;
+    const {leftHandSide, rightHandSides, propsForLastStep} = this.props;
 
     const renderProofLine = (props, children) => {
       switch (props.step.type) {
@@ -131,7 +133,7 @@ class ChainedSteps extends React.Component {
           <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
                                                                             expressionToCopy={rightHandSides[0].step.statement}
                                                                             references={[leftHandSide.lineReference]}
-                                                                            additionalReferences={referencesForLastStep}
+                                                                            {...propsForLastStep}
                                                                             additionalPremiseReferences={_.flatMap(rightHandSides, rhs => rhs.referencesForLhs)}
                                                                             additionalConclusionReferences={_.chain(rightHandSides).filter("highlightsFirstAsConclusion").flatMap("references").value()}
           />{' '}</span>
@@ -146,8 +148,8 @@ class ChainedSteps extends React.Component {
             <RightHandSide rightHandSide={rightHandSide}
                            index={index + 1}
                            hovered={isHovered}
-                           additionalReferences={index === rightHandSides.length - 1 ? referencesForLastStep : []}
-                           additionalReferencesFromNext={rightHandSides[index + 1] && rightHandSides[index + 1].referencesForPrevious || []} />
+                           {...((index === rightHandSides.length - 2) ? propsForLastStep : {})}
+                           additionalReferencesFromNext={rightHandSides[index + 2] && rightHandSides[index + 2].referencesForPrevious || []} />
           </>
         )
       )}
@@ -284,7 +286,7 @@ export class Steps extends React.Component {
     return null;
   };
 
-  static renderNextStep(stepsWithIndexes, path, referencesForLastStep, theoremContext) {
+  static renderNextStep(stepsWithIndexes, path, propsForLastStep, theoremContext) {
     const {step, index} = stepsWithIndexes.shift();
     const serializedPath = [...path, index].join(".");
     if (!theoremContext.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.statement && step.statement.definition) {
@@ -294,7 +296,7 @@ export class Steps extends React.Component {
         if (chainingDetails) {
           return {
             key: serializedPath + " " + chainingDetails.finalStatement.serialize(),
-            element: <ChainedSteps referencesForLastStep={stepsWithIndexes.length === 0 ? referencesForLastStep : []}
+            element: <ChainedSteps propsForLastStep={stepsWithIndexes.length === 0 ? propsForLastStep : {}}
                                       {...chainingDetails} />
           };
         }
@@ -303,7 +305,7 @@ export class Steps extends React.Component {
     const props = {
       step,
       path: [...path, index],
-      additionalReferences: !stepsWithIndexes.length ? referencesForLastStep || [] : []
+      ...(!stepsWithIndexes.length ? propsForLastStep : {})
     };
     if (step instanceof GeneralizationStepModel && step.substeps.length === 1 && step.substeps[0] instanceof DeductionStepModel) {
       const substep = step.substeps[0];
@@ -324,7 +326,7 @@ export class Steps extends React.Component {
     }
   };
 
-  static renderSteps(steps, path, referencesForLastStep, theoremContext) {
+  static renderSteps(steps, path, propsForLastStep, theoremContext) {
     const stepsWithIndexes = steps.map((step, index) => ({step,index}));
     const finalIndex = steps.length;
     const results = [];
@@ -332,7 +334,7 @@ export class Steps extends React.Component {
     let currentIndex = 0;
     while (stepsWithIndexes.length) {
       const startIndex = stepsWithIndexes[0].index;
-      const {key, element} = this.renderNextStep(stepsWithIndexes, path, referencesForLastStep, theoremContext);
+      const {key, element} = this.renderNextStep(stepsWithIndexes, path, propsForLastStep, theoremContext);
       results.push({key, element, data: {path, startIndex}});
       indexLookup.push(startIndex);
       currentIndex += 1;
@@ -343,10 +345,10 @@ export class Steps extends React.Component {
   };
 
   render() {
-    const {steps, className, path, referencesForLastStep} = this.props;
+    const {steps, className, path, propsForLastStep} = this.props;
     return <TheoremContext.Consumer>{theoremContext =>
       <div className={className}>
-        <DraggableList.Entries entries={Steps.renderSteps(steps, path, referencesForLastStep || [], theoremContext)}/>
+        <DraggableList.Entries entries={Steps.renderSteps(steps, path, propsForLastStep, theoremContext)}/>
       </div>
     }</TheoremContext.Consumer>;
   }

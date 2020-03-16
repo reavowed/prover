@@ -13,7 +13,7 @@ export class GeneralizationStep extends React.Component {
     return this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "boundVariable", {method: "PUT", body: newName});
   };
   render() {
-    let {step, path, additionalReferences} = this.props;
+    let {step, path, additionalReferences, suppressConclusion} = this.props;
     return <Step.WithSubsteps path={path}>
       <Step.Antecedent>
         <ProofLine path={path}>
@@ -21,9 +21,9 @@ export class GeneralizationStep extends React.Component {
         </ProofLine>
       </Step.Antecedent>
       <BoundVariableLists.Add variables={[step.variableName]}>
-        <Steps.Children steps={step.substeps} path={path} />
+        <Steps.Children steps={step.substeps} path={path} suppressConclusionForLastStep />
       </BoundVariableLists.Add>
-      {step.provenStatement &&
+      {step.provenStatement && !suppressConclusion &&
         <ProofLine.SingleStatementWithPrefix prefix="So"
                                              statement={step.provenStatement}
                                              path={path}

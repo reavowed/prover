@@ -5,8 +5,8 @@ import Step from "./Step";
 import {Steps} from "./Steps";
 
 export function DeductionStep({step, path, additionalReferences}) {
-  let reference = new StepReference(path);
-  let referencesForLastStep = [...additionalReferences, reference];
+  additionalReferences = additionalReferences || [];
+  const reference = new StepReference(path);
   return <Step.WithSubsteps path={path}>
     <Step.Antecedent>
       <ProofLine.SingleStatementWithPrefix editableBoundVariable
@@ -18,6 +18,6 @@ export function DeductionStep({step, path, additionalReferences}) {
     </Step.Antecedent>
     <Steps.Children steps={step.substeps}
                     path={path}
-                    referencesForLastStep={referencesForLastStep} />
+                    propsForLastStep={{additionalReferences: [...additionalReferences, reference]}} />
   </Step.WithSubsteps>;
 }
