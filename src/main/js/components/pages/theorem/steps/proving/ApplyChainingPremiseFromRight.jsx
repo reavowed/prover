@@ -2,24 +2,14 @@ import {useContext} from "react";
 import * as React from "react";
 import ProofContext from "../../ProofContext";
 import ProveByPremise from "./components/ProveByPremise";
+import {createSubmitFunctionForStepDefinitionEndpointFromPremise} from "./components/stepDefinitionSubmitFunctions";
 
 export default function ApplyChainingPremiseFromRight(props) {
+  const {path, onCancel, onError} = props;
   const context = useContext(ProofContext);
   const fetchPossibleConclusions = (statement) => {
     return context.fetchJsonForStep(props.path, `suggestChainingFromPremiseRight?serializedPremiseStatement=${encodeURIComponent(statement.serialize())}`)
   };
-  const submit = (premiseStatement, substitutions, selectedConclusion, premiseStatements, conclusionStatement) => {
-    return context.fetchJsonForStepAndUpdateTheorem(props.path, "chainingFromRight", {
-      method: "POST",
-      body: {
-        serializedPremiseStatement: premiseStatement.serialize(),
-        substitutions,
-        extractionInferenceIds: selectedConclusion.extractionInferenceIds,
-        serializedNewTargetStatements: premiseStatements.map(p => p.serialize()),
-        serializedConclusionStatement: conclusionStatement.serialize(),
-        additionalVariableNames: selectedConclusion.additionalVariableNames
-      }
-    });
-  };
+  const submit = createSubmitFunctionForStepDefinitionEndpointFromPremise(context, path, "chainingFromRight", "POST", onCancel, onError);
   return <ProveByPremise fetchPossibleConclusions={fetchPossibleConclusions} submit={submit} {...props}/>
 }

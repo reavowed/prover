@@ -58,13 +58,14 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
           inference.conclusion.calculateSubstitutions(step.statement)
             .map(s => PossibleInference(
               inference.summary,
-              Seq(PossibleConclusion(
+              None,
+              Some(Seq(PossibleConclusion(
                 inference.conclusion,
                 PossiblePremise.fromAvailablePremises(namingPremises, Some(s)),
                 Some(SuggestedSubstitutions(s)),
                 inference.requiredSubstitutions,
                 Nil,
-                Nil))))
+                Nil)))))
         }
         .take(10)
     }).toResponseEntity

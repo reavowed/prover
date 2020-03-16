@@ -26,6 +26,7 @@ export class InferenceFinder extends React.Component {
       saving: false,
       premiseSuggestions: null,
       selectedInference: null,
+      selectedTarget: null,
       selectedConclusion: null,
       selectedPremises: []
     };
@@ -43,13 +44,16 @@ export class InferenceFinder extends React.Component {
   setSelectedInference = (selectedInference) => {
     this.setState({selectedInference});
   };
-  submit = (selectedConclusion, selectedSubstitutionValues, premiseStatements, conclusionStatement) => {
-    return this.submitWithSelectedValues(this.state.selectedInference, selectedConclusion, selectedSubstitutionValues, premiseStatements, conclusionStatement);
+  setSelectedTarget = (selectedTarget) => {
+    this.setState({selectedTarget});
   };
-  submitWithSelectedValues = (selectedInference, selectedConclusion, substitutionValues, premiseStatements, conclusionStatement) => {
+  submit = (selectedConclusion, selectedSubstitutionValues, premiseStatements, conclusionStatement) => {
+    return this.submitWithSelectedValues(this.state.selectedInference, this.state.selectedTarget, selectedConclusion, selectedSubstitutionValues, premiseStatements, conclusionStatement);
+  };
+  submitWithSelectedValues = (selectedInference, selectedTarget, selectedConclusion, substitutionValues, premiseStatements, conclusionStatement) => {
     const promise = new Promise((resolve) => this.setState({saving: true}, resolve))
       .then(() => this.props.onSaving && this.props.onSaving(true))
-      .then(() => this.props.submit(selectedInference, selectedConclusion, substitutionValues, premiseStatements, conclusionStatement));
+      .then(() => this.props.submit(selectedInference, selectedTarget, selectedConclusion, substitutionValues, premiseStatements, conclusionStatement));
     promise.catch(() => {})
       .then(() => this.setState({saving: false}))
       .then(() => this.props.onSaving && this.props.onSaving(false));
@@ -60,12 +64,15 @@ export class InferenceFinder extends React.Component {
     const disabled = this.props.disabled || this.state.saving;
 
     const {title, autofocus} = this.props;
-    const {selectedInference} = this.state;
+    const {selectedInference, selectedTarget} = this.state;
 
     let getSuggestionValue = s => s.inference.name;
     let renderSuggestion = s => <SuggestionDropdownElement
       mainElement={getSuggestionValue(s)}
       hoverElement={<CopiableExpression expression={s.inference.conclusion} />} />;
+
+    const possibleTargets = selectedInference && selectedInference.possibleTargets;
+    const possibleConclusions = (selectedInference && selectedInference.possibleConclusions) || (selectedTarget && selectedTarget.possibleConclusions);
 
     return <div ref={this.ref}>
       <Form.Group>
@@ -78,11 +85,28 @@ export class InferenceFinder extends React.Component {
           renderSuggestion={renderSuggestion}
           readOnly={disabled} />
       </Form.Group>
-      {this.state.selectedInference && <ConclusionChooser possibleConclusions={selectedInference.possibleConclusions}
-                                                          defaultConclusionStatement={selectedInference.inference.conclusion}
-                                                          submit={this.submit}
-                                                          disabled={disabled}
-                                                          boundVariableListsForPremises={[]}/>}
+      {possibleTargets && possibleTargets.length > 1 && <BoundVariableLists.Consumer>{boundVariableLists =>
+        <EntryContext.Consumer>{entryContext =>
+          <Form.Group>
+            <Form.Label><strong>Choose target</strong></Form.Label>
+            <Form.Control as="select"
+                          value={selectedTarget ? _.indexOf(possibleTargets, selectedTarget) : ""}
+                          onChange={e => this.setSelectedTarget(possibleTargets[e.target.value])}
+                          readOnly={disabled}>
+              <option value=""/>
+              {possibleTargets.map(({target, additionalBoundVariables}, index) =>
+                <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(<ExpressionComponent expression={target} boundVariableLists={[...boundVariableLists, ...additionalBoundVariables]} entryContext={entryContext}/>)}}/>
+              )}
+            </Form.Control>
+          </Form.Group>
+        }</EntryContext.Consumer>
+      }</BoundVariableLists.Consumer>}
+      {possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}
+                                                 defaultConclusionStatement={selectedInference.inference.conclusion}
+                                                 submit={this.submit}
+                                                 disabled={disabled}
+                                                 boundVariableListsForPremises={[]}
+                                                 boundVariableListsForSubstitutions={selectedTarget ? selectedTarget.additionalBoundVariables : []}/>}
     </div>;
   }
 }

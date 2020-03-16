@@ -33,6 +33,7 @@ class StepProvingSpec extends ControllerSpec {
         fillerSteps(stepIndex - 2) :+ target(premise) :+ target(ψ) :+ target(χ),
         fillerSteps(stepIndex - 2) :+ target(premise) :+ target(ψ) :+ assertion(modusPonens, Seq(ψ, χ), Nil))
     }
+
     "not remove necessary structural simplifications" in {
       val service = createService
       val controller = new StepProvingController(service)
@@ -110,7 +111,6 @@ class StepProvingSpec extends ControllerSpec {
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(3), Nil)})(
         entryContext)
     }
-
 
     "retain conclusion bound variable names when adding target by inference" in {
       val service = createService
@@ -213,6 +213,36 @@ class StepProvingSpec extends ControllerSpec {
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(1), Seq(1))} and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(2), Seq(0))})(
         entryContext)
+    }
+
+    "prove a target inside a scoped deduction" in {
+      val service = createService
+      val controller = new StepProvingController(service)
+
+      controller.proveCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        definitionWithInference(successorOfNaturalIsNatural, Nil, Seq(add($.^, $)), Nil, unwrappers = Seq(ForAllDefinition, Implication, ForAllDefinition, Implication)))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex) :+ target(ForAll("x")(Implication(ElementOf($, A), ForAll("y")(Implication(ElementOf($, B), ElementOf(Successor(add($.^, $)), Naturals)))))),
+        fillerSteps(stepIndex) :+
+          target(ForAll("x")(Implication(ElementOf($, A), ForAll("y")(Implication(ElementOf($, B), ElementOf(add($.^, $), Naturals)))))) :+
+          elided(successorOfNaturalIsNatural, Seq(
+            generalization("x", Seq(
+              deduction(ElementOf($, A), Seq(
+                generalization("y", Seq(
+                  deduction(ElementOf($, B), Seq(
+                    elided("Extracted", Seq(
+                      assertion(specification, Seq(Implication(ElementOf($.^^, A), ForAll("y")(Implication(ElementOf($, B), ElementOf(add($.^^^, $), Naturals))))), Seq($.^)),
+                      assertion(modusPonens, Seq(ElementOf($.^, A), ForAll("y")(Implication(ElementOf($, B), ElementOf(add($.^^, $), Naturals)))), Nil),
+                      assertion(specification, Seq(Implication(ElementOf($.^^, B), ElementOf(add($.^, $.^^), Naturals))), Seq($)),
+                      assertion(modusPonens, Seq(ElementOf($, B), ElementOf(add($.^, $), Naturals)), Nil))),
+                    assertion(successorOfNaturalIsNatural, Nil, Seq(add($.^, $))))))))))))))
     }
   }
 }

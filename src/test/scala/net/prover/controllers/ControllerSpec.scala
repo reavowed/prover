@@ -3,6 +3,7 @@ package net.prover.controllers
 import net.prover.controllers.models.{SerializedSubstitutions, StepDefinition}
 import net.prover.model.{EntryContext, Inference}
 import net.prover.model.TestDefinitions._
+import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions.{Statement, StatementVariable, Term}
 import net.prover.model.proof.{Step, StepContext, StepProvingContext, SubstatementExtractor, SubstitutionContext}
 import org.mockito.Mockito
@@ -53,19 +54,48 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     outerStepPath.foldLeft(contextWithBoundVariables) { case (context, index) => context.atIndex(index) }
   }
 
-  def definitionWithInference(inference: Inference, statements: Seq[Statement], terms: Seq[Term], extractionInferences: Seq[Inference], premisesOption: Option[Seq[Statement]] = None, conclusionOption: Option[Statement] = None): StepDefinition = {
+  def definitionWithInference(
+    inference: Inference,
+    statements: Seq[Statement],
+    terms: Seq[Term],
+    extractionInferences: Seq[Inference],
+    unwrappers: Seq[StatementDefinition] = Nil,
+    premisesOption: Option[Seq[Statement]] = None,
+    conclusionOption: Option[Statement] = None
+  ): StepDefinition = {
     val extractionOption = SubstatementExtractor.getExtractionOptions(inference).find(_.extractionInferences == extractionInferences).get
     val substitutions = extractionOption.requiredSubstitutions.fill(statements, terms)
     val serializedSubstitutions = SerializedSubstitutions(substitutions.statements.mapValues(_.mapRight(_.serialized)), substitutions.terms.mapValues(_.mapRight(_.serialized)))
-    StepDefinition(Some(inference.id), None, serializedSubstitutions, extractionInferences.map(_.id), premisesOption.map(_.map(_.serialized)), conclusionOption.map(_.serialized), Some(extractionOption.additionalVariableNames))
+    StepDefinition(
+      Some(inference.id),
+      None,
+      serializedSubstitutions,
+      extractionInferences.map(_.id),
+      unwrappers.map(_.symbol),
+      premisesOption.map(_.map(_.serialized)),
+      conclusionOption.map(_.serialized),
+      Some(extractionOption.additionalVariableNames))
   }
-  def definitionWithPremise(premise: Statement, terms: Seq[Term], extractionInferences: Seq[Inference], conclusionOption: Option[Statement]): StepDefinition = {
+  def definitionWithPremise(
+    premise: Statement,
+    terms: Seq[Term],
+    extractionInferences: Seq[Inference],
+    conclusionOption: Option[Statement]
+  ): StepDefinition = {
     implicit val stepContext = createOuterStepContext(Nil, Nil)
     val extractionOption = SubstatementExtractor.getExtractionOptions(premise).find(_.extractionInferences == extractionInferences).get
     val baseSubstitutions = premise.calculateSubstitutions(premise).get
     val substitutions = baseSubstitutions.copy(terms = baseSubstitutions.terms ++ extractionOption.requiredSubstitutions.fill(Nil, terms).terms)
     val serializedSubstitutions = SerializedSubstitutions(substitutions.statements.mapValues(_.mapRight(_.serialized)), substitutions.terms.mapValues(_.mapRight(_.serialized)))
-    StepDefinition(None, Some(premise.serialized), serializedSubstitutions, extractionInferences.map(_.id), None, conclusionOption.map(_.serialized), Some(extractionOption.additionalVariableNames))
+    StepDefinition(
+      None,
+      Some(premise.serialized),
+      serializedSubstitutions,
+      extractionInferences.map(_.id),
+      Nil,
+      None,
+      conclusionOption.map(_.serialized),
+      Some(extractionOption.additionalVariableNames))
   }
 
   def createService = {

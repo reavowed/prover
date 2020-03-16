@@ -1,9 +1,9 @@
 package net.prover.controllers
 
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
-import net.prover.controllers.models.{PathData, PossibleConclusion, PossibleInference, StepDefinition}
+import net.prover.controllers.models.{DeductionUnwrapper, GeneralizationUnwrapper, PathData, PossibleConclusion, PossibleInference, PossibleTarget, StepDefinition, Unwrapper}
 import net.prover.model.ExpressionParsingContext.TermVariableValidator
-import net.prover.model.expressions.Statement
+import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
 import net.prover.model._
@@ -18,38 +18,21 @@ import scala.util.{Success, Try}
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
 class StepProvingController @Autowired() (val bookService: BookService) extends BookModification with InferenceSearch {
 
-  def rewriteFromConclusion(conclusion: Statement, rewriteInferenceId: Option[String])(implicit stepProvingContext: StepProvingContext): Try[(Option[Step.Assertion], Statement)] = {
-    rewriteInferenceId.map { rewriteInferenceid =>
-      for {
-        (rewriteInference, rewriteInferencePremise) <- stepProvingContext.provingContext.rewriteInferences.find(_._1.id == rewriteInferenceid).orBadRequest(s"Could not find rewrite inference $rewriteInferenceid")
-        rewriteSubstitutions <- rewriteInference.conclusion.calculateSubstitutions(conclusion).flatMap(_.confirmTotality).orBadRequest("Could not calculate substitutions for rewrite inference")
-        substitutedPremise <- rewriteInferencePremise.applySubstitutions(rewriteSubstitutions).orBadRequest("Could not apply substitutions from rewrite inference")
-      } yield (Some(Step.Assertion(conclusion, rewriteInference.summary, Seq(Premise.Pending(substitutedPremise)), rewriteSubstitutions)), substitutedPremise)
-    }.getOrElse(Success((None, conclusion)))
-  }
-  def rewriteFromPremise(premise: Statement, rewriteInferenceId: Option[String])(implicit provingContext: ProvingContext, stepContext: StepContext): Try[(Option[Step.Assertion], Statement)] = {
-    rewriteInferenceId.map { rewriteInferenceid =>
-      for {
-        (rewriteInference, rewriteInferencePremise) <- provingContext.rewriteInferences.find(_._1.id == rewriteInferenceid).orBadRequest(s"Could not find rewrite inference $rewriteInferenceid")
-        rewriteSubstitutions <- rewriteInferencePremise.calculateSubstitutions(premise).flatMap(_.confirmTotality).orBadRequest("Could not calculate substitutions for rewrite inference")
-        substitutedConclusion <- rewriteInference.conclusion.applySubstitutions(rewriteSubstitutions).orBadRequest("Could not apply substitutions from rewrite inference")
-      } yield (Some(Step.Assertion(substitutedConclusion, rewriteInference.summary, Seq(Premise.Pending(premise)), rewriteSubstitutions)), substitutedConclusion)
-    }.getOrElse(Success((None, premise)))
-  }
-
   def createStep(
     definition: StepDefinition,
-    getConclusionOption: Option[(ExpressionParsingContext, Substitutions) => Try[Statement]])(
+    getConclusionOption: Option[(ExpressionParsingContext, Substitutions) => Try[Statement]],
+    unwrappers: Seq[Unwrapper])(
     implicit stepProvingContext: StepProvingContext
   ): Try[(Statement, Step, Seq[Step.Target])] = {
     def withInference(inferenceId: String) = {
       for {
         inference <- findInference(inferenceId)
-        substitutions <- definition.substitutions.parse()
+        wrappedStepProvingContext = StepProvingContext.updateStepContext(unwrappers.enhanceContext)
+        substitutions <- definition.substitutions.parse()(ExpressionParsingContext.atStep(wrappedStepProvingContext))
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
         epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromInference(inference).baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
         conclusionOption <- getConclusionOption.map(f => f(epc, substitutions)).swap
-        newTargetStatementsOption <- definition.parseNewTargetStatements(epc)
+        newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
         (inferenceToApply, newTargetStatementsForExtractionOption) <- newTargetStatementsOption match {
           case Some(newTargetStatements) =>
             for {
@@ -59,13 +42,19 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
           case None =>
             Success((inference, None))
         }
-        (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inferenceToApply, substitutions).orBadRequest("Could not apply substitutions to inference")
+        (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inferenceToApply, substitutions)(wrappedStepProvingContext).orBadRequest("Could not apply substitutions to inference")
         ExtractionApplication(result, mainPremise, extractionSteps, extractionPremises, extractionTargets) <-
-          ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, newTargetStatementsForExtractionOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets)
+          ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, newTargetStatementsForExtractionOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets)(wrappedStepProvingContext)
         mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = mainPremise)
         extractionStep = Step.Elided.ifNecessary(mainAssertionWithCorrectConclusion +: extractionSteps, inference).get
-        finalStep = Step.Elided.ifNecessary(mainPremises ++ extractionPremises :+ extractionStep, inference).get
-      } yield (result, finalStep, mainTargets ++ extractionTargets)
+        assertionWithExtractionStep = Step.Elided.ifNecessary(mainPremises ++ extractionPremises :+ extractionStep, inference).get
+        (wrappedResult, wrappedStep, wrappedTargets) = if (unwrappers.nonEmpty)
+          unwrappers
+            .addNecessaryExtractions(result, assertionWithExtractionStep, mainTargets ++ extractionTargets)
+              .map2(Step.Elided.forInference(inference)(_))
+          else
+          (result, assertionWithExtractionStep, mainTargets ++ extractionTargets)
+      } yield (wrappedResult, wrappedStep, wrappedTargets)
     }
     def withPremise(serializedPremiseStatement: String) = {
       for {
@@ -77,7 +66,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
           TermVariableValidator.LimitedList(VariableTracker.fromStepContext.baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten),
           stepProvingContext.stepContext.boundVariableLists.map(_.zipWithIndex))
         conclusionOption <- getConclusionOption.map(f => f(epc, substitutions)).swap
-        newTargetStatementsOption <- definition.parseNewTargetStatements(epc)
+        newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
         ExtractionApplication(result, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, newTargetStatementsOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets)
         extractionStep = Step.Elided.ifNecessary(extractionSteps, "Extracted").get
@@ -110,6 +99,29 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       else None
   }
 
+  case class UnwrappedStatement(statement: Statement, unwrappers: Seq[Unwrapper]) {
+    def definitionSymbols: Seq[String] = unwrappers.map(_.definitionSymbol)
+  }
+
+  def getPossibleTargets(statement: Statement)(implicit stepProvingContext: StepProvingContext): Seq[UnwrappedStatement] = {
+    val provingContext = stepProvingContext.provingContext
+    def helper(currentUnwrappedStatement: UnwrappedStatement, resultsSoFar: Seq[UnwrappedStatement], variableTracker: VariableTracker): Seq[UnwrappedStatement] = {
+      (currentUnwrappedStatement.statement, provingContext.specificationInferenceOption, provingContext.deductionEliminationInferenceOption) match {
+        case (generalizationStatement @ DefinedStatement(Seq(predicate: Statement), definition), Some((specificationInference, _, _, _)), _) if provingContext.generalizationDefinitionOption.contains(definition) =>
+          val (variableName, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(generalizationStatement.boundVariableNames.head)
+          val newUnwrappedStatement = UnwrappedStatement(predicate, currentUnwrappedStatement.unwrappers :+ GeneralizationUnwrapper(variableName, definition, specificationInference))
+          helper(newUnwrappedStatement, resultsSoFar :+ newUnwrappedStatement, newVariableTracker)
+        case (DefinedStatement(Seq(antecedent: Statement, consequent: Statement), definition), _, Some((deductionEliminationInference, _ , _))) if provingContext.deductionDefinitionOption.contains(definition) =>
+          val newUnwrappedStatement = UnwrappedStatement(consequent, currentUnwrappedStatement.unwrappers :+ DeductionUnwrapper(antecedent, definition, deductionEliminationInference))
+          helper(newUnwrappedStatement, resultsSoFar :+ newUnwrappedStatement, variableTracker)
+        case _ =>
+          resultsSoFar
+      }
+    }
+    val initialUnwrappedStatement = UnwrappedStatement(statement, Nil)
+    helper(initialUnwrappedStatement, Seq(initialUnwrappedStatement), VariableTracker.fromStepContext)
+  }
+
   @GetMapping(value = Array("/possibleInferencesForCurrentTarget"), produces = Array("application/json;charset=UTF-8"))
   def getPossibleInferencesForCurrentTarget(
     @PathVariable("bookKey") bookKey: String,
@@ -124,15 +136,26 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     } yield {
       implicit val spc = stepProvingContext
 
+      val possibleUnwrappedTargetStatements = getPossibleTargets(step.statement)
+
       def findPossibleInference(inferenceWithComplexity: InferenceWithMaximumPossibleComplexity): Option[PossibleInferenceWithMaximumMatchingComplexity] = {
         import inferenceWithComplexity._
-        val possibleConclusions = SubstatementExtractor.getExtractionOptions(inference)
-          .mapCollect(PossibleConclusion.fromExtractionOptionWithTarget(_, step.statement))
-        if (possibleConclusions.nonEmpty)
+        val possibleTargets = for {
+          possibleUnwrappedTargetStatement <- possibleUnwrappedTargetStatements
+          possibleConclusions = spc.provingContext.extractionOptionsByInferenceId(inference.id)
+            .mapCollect(PossibleConclusion.fromExtractionOptionWithTarget(_, possibleUnwrappedTargetStatement.statement)(StepProvingContext.updateStepContext(possibleUnwrappedTargetStatement.unwrappers.enhanceContext)))
+          if possibleConclusions.nonEmpty
+        } yield PossibleTarget(
+          possibleUnwrappedTargetStatement.statement,
+          possibleUnwrappedTargetStatement.definitionSymbols,
+          possibleUnwrappedTargetStatement.unwrappers.ofType[GeneralizationUnwrapper].map(_.variableName).map(Seq(_)),
+          possibleConclusions)
+
+        if (possibleTargets.nonEmpty)
           Some(PossibleInferenceWithMaximumMatchingComplexity(
-            PossibleInference(inference.summary, possibleConclusions),
-            possibleConclusions.map(_.conclusion.structuralComplexity).max,
-            possibleConclusions.map(_.extractionInferenceIds.length).min,
+            PossibleInference(inference.summary, Some(possibleTargets), None),
+            possibleTargets.flatMap(_.possibleConclusions.map(_.conclusion.structuralComplexity)).max,
+            possibleTargets.flatMap(_.possibleConclusions.map(_.extractionInferenceIds.length)).min,
             index))
         else
           None
@@ -189,9 +212,9 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         .reverse
         .take(10)
         .map { inference =>
-          val possibleConclusions = SubstatementExtractor.getExtractionOptions(inference)
+          val possibleConclusions = spc.provingContext.extractionOptionsByInferenceId(inference.id)
             .map(PossibleConclusion.fromExtractionOption(_, None))
-          PossibleInference(inference.summary, possibleConclusions)
+          PossibleInference(inference.summary, None, Some(possibleConclusions))
         }
     }).toResponseEntity
   }
@@ -250,7 +273,8 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     replaceStepAndAddBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (targetStep, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
-        (result, newStep, targets) <- createStep(definition, Some((_, _) => Success(targetStep.statement)))
+        (targetStatement, unwrappers) <- getPossibleTargets(targetStep.statement).find(_.definitionSymbols == definition.wrappingSymbols).map(x => (x.statement, x.unwrappers)).orBadRequest("Invalid wrapping symbols")
+        (result, newStep, targets) <- createStep(definition, Some((_, _) => Success(targetStatement)), unwrappers)
         _ <- (result == targetStep.statement).orBadRequest("Conclusion was incorrect")
       } yield (newStep, targets)
     }.toResponseEntity
@@ -270,12 +294,13 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       for {
         (_, newStep, targets) <- createStep(
           definition,
-          definition.serializedConclusionStatement.map(s =>
+          definition.serializedIntendedConclusionStatement.map(s =>
             (expressionParsingContext: ExpressionParsingContext, substitutions: Substitutions) =>
               for {
                 conclusionStatement <- Statement.parser(expressionParsingContext).parseFromString(s, "conclusion").recoverWithBadRequest
                 substitutedConclusionStatement <- conclusionStatement.applySubstitutions(substitutions).orBadRequest("Could not apply substitutions to intended conclusion")
-              } yield substitutedConclusionStatement))
+              } yield substitutedConclusionStatement),
+          Nil)
       } yield (step, targets :+ newStep)
     }.toResponseEntity
   }

@@ -1,25 +1,14 @@
 import React, {useContext} from "react";
 import ProofContext from "../../ProofContext";
+import {createSubmitFunctionForStepDefinitionEndpointFromInference} from "./components/stepDefinitionSubmitFunctions";
 import {InferenceFinder} from "./components/InferenceFinder";
 
-export default function ProveCurrentTargetByInference({path, onError}) {
+export default function ProveCurrentTargetByInference({path, onCancel, onError}) {
   const context = useContext(ProofContext);
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `possibleInferencesForCurrentTarget?searchText=${encodeURIComponent(searchText)}`);
   };
-  const proveWithInference = (possibleInference, possibleConclusion, substitutions, premiseStatements, conclusionStatement) => {
-    return context.fetchJsonForStepAndUpdateTheorem(path, "", {
-      method: "PUT",
-      body: {
-        inferenceId: possibleInference.inference.id,
-        substitutions,
-        extractionInferenceIds: possibleConclusion.extractionInferenceIds,
-        serializedNewTargetStatements: premiseStatements.map(p => p.serialize()),
-        serializedConclusionStatement: conclusionStatement.serialize(),
-        additionalVariableNames: possibleConclusion.additionalVariableNames
-      }
-    }).catch(onError);
-  };
+  const proveWithInference = createSubmitFunctionForStepDefinitionEndpointFromInference(context, path, "", "PUT", onCancel, onError);
   return <InferenceFinder title='Select Inference'
                           getInferenceSuggestions={getInferenceSuggestions}
                           submit={proveWithInference}

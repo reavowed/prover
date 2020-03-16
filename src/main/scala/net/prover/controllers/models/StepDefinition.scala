@@ -10,15 +10,16 @@ case class StepDefinition(
     serializedPremiseStatement: Option[String],
     substitutions: SerializedSubstitutions,
     extractionInferenceIds: Seq[String],
-    serializedNewTargetStatements: Option[Seq[String]],
-    serializedConclusionStatement: Option[String],
+    wrappingSymbols: Seq[String],
+    serializedIntendedPremiseStatements: Option[Seq[String]],
+    serializedIntendedConclusionStatement: Option[String],
     additionalVariableNames: Option[Seq[String]])
 {
   def getFromInferenceOrPremise[T](fromInference: String => Try[T], fromPremise: String => Try[T]): Try[T] = {
     (inferenceId.map(fromInference) orElse serializedPremiseStatement.map(fromPremise) orBadRequest "Neither inference nor premise supplied").flatten
   }
-  def parseNewTargetStatements(expressionParsingContext: ExpressionParsingContext): Try[Option[Seq[Statement]]] = {
-    serializedNewTargetStatements.map { serializedStatements =>
+  def parseIntendedPremiseStatements(expressionParsingContext: ExpressionParsingContext): Try[Option[Seq[Statement]]] = {
+    serializedIntendedPremiseStatements.map { serializedStatements =>
       serializedStatements.mapWithIndex { (s, i) => Statement.parser(expressionParsingContext).parseFromString(s, s"new target statement ${i + 1}").recoverWithBadRequest }.traverseTry
     }.swap
   }

@@ -4,6 +4,7 @@ import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.entries.{DisplayShorthand, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
+import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 import net.prover.model.proof.{SubstatementExtractor, SubstitutionContext}
 import net.prover.util.Direction
 
@@ -19,6 +20,12 @@ case class Definitions(rootEntryContext: EntryContext) {
   val completenessByInference = mutable.Map.empty[String, Boolean]
   def isInferenceComplete(inference: Inference): Boolean = {
     completenessByInference.getOrElseUpdate(inference.id, rootEntryContext.allInferences.find(_.id == inference.id).exists(_.isComplete(this)))
+  }
+
+  lazy val extractionOptionsByInferenceId: Map[String, Seq[ExtractionOption]] = {
+    rootEntryContext.allInferences.map { i =>
+      (i.id, SubstatementExtractor.getExtractionOptions(i)(provingContext))
+    }.toMap
   }
 
   lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
@@ -199,7 +206,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     for {
       inference <- rootEntryContext.allInferences
       if inference.premises.length <= 1
-      extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(provingContext)
+      extractionOption <- extractionOptionsByInferenceId(inference.id)
       premise <- extractionOption.premises.single.toSeq
       if premise.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
       conclusionRelation <- definedBinaryRelations
@@ -216,7 +223,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     for {
       inference <- rootEntryContext.allInferences
       if inference.premises.length <= 1
-      extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(provingContext)
+      extractionOption <- extractionOptionsByInferenceId(inference.id)
       premise <- extractionOption.premises.single.toSeq
       conclusionRelation <- definedBinaryRelations
       (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
@@ -231,7 +238,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     for {
       inference <- rootEntryContext.allInferences
       if inference.requiredSubstitutions.hasNoApplications
-      extractionOption <- SubstatementExtractor.getExtractionOptions(inference)(provingContext)
+      extractionOption <- extractionOptionsByInferenceId(inference.id)
       if extractionOption.premises.nonEmpty
       lastPremise = extractionOption.premises.last
       conclusionRelation <- definedBinaryRelations

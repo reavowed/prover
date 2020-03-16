@@ -196,10 +196,18 @@ export class Parser {
   parsePossibleInferences = (possibleInferences) => {
     _.forEach(possibleInferences, possibleInference => {
       this.parseInferenceSummary(possibleInference.inference);
-      this.parsePossibleConclusions(possibleInference.possibleConclusions);
+      possibleInference.possibleTargets && this.parsePossibleTargets(possibleInference.possibleTargets);
+      possibleInference.possibleConclusions && this.parsePossibleConclusions(possibleInference.possibleConclusions);
       return possibleInference;
     });
     return possibleInferences;
+  };
+
+  parsePossibleTargets = (possibleTargets) => {
+    _.forEach(possibleTargets, t => {
+      t.target = this.parseExpression(t.target);
+      this.parsePossibleConclusions(t.possibleConclusions);
+    });
   };
   parsePossibleConclusions = (possibleConclusions) => {
     _.forEach(possibleConclusions, c => {

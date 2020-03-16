@@ -3,6 +3,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import {DndProvider} from "react-dnd";
 import Backend from "react-dnd-html5-backend";
+import BoundVariableLists from "./steps/BoundVariableLists";
 import {Steps} from "./steps/Steps";
 import ProofContext from "./ProofContext";
 import TheoremContext from "./TheoremContext";
@@ -80,10 +81,12 @@ export default class Proof extends React.Component {
         <Button onClick={duplicateProof} variant="primary" size="sm" className="float-right ml-1"><i className="fas fa-copy"/></Button>
         <h4>{title}</h4>
         <DndProvider backend={Backend}>
-          <Steps.Container path={[]}>
-            <Steps steps={steps}
-                   path={[]} />
-          </Steps.Container>
+          <BoundVariableLists.Provider value={[]}>
+            <Steps.Container path={[]}>
+              <Steps steps={steps}
+                     path={[]} />
+            </Steps.Container>
+          </BoundVariableLists.Provider>
         </DndProvider>
       </ProofContext.Provider>
     }}</TheoremContext.Consumer>;

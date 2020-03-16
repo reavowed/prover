@@ -9,7 +9,6 @@ import EntryContext from "../../../../../EntryContext";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
 import {InlineTextEditor} from "../../../../../helpers/InlineTextEditor";
 import InputWithShorthandReplacement from "../../../../../helpers/InputWithShorthandReplacement";
-import {InferenceSummary} from "../../../../../InferenceSummary";
 import {ResultWithPremises} from "../../../../../ResultWithPremises";
 import BoundVariableLists from "../../BoundVariableLists";
 
@@ -158,7 +157,7 @@ export default class ConclusionChooser extends React.Component {
   };
 
   render() {
-    const {possibleConclusions, hideSummary, disabled, boundVariableListsForPremises} = this.props;
+    const {possibleConclusions, hideSummary, disabled, boundVariableListsForPremises, boundVariableListsForSubstitutions} = this.props;
     const {selectedConclusion, premiseStatements, conclusionStatement} = this.state;
 
     const wrapPremiseBoundVariable = (premiseIndex) => (name, index, boundVariablePath) => {
@@ -208,15 +207,15 @@ export default class ConclusionChooser extends React.Component {
                                          readOnly={disabled}
                                          onChange={(value, callback) => this.setSelectedSubstitutionValue(setter, value, callback)}
                                          onKeyUp={this.onInputKeyUp} /> :
-          validValues.length === 1 ?
-            <Form.Label column><CopiableExpression expression={validValues[0]} /></Form.Label> :
             <BoundVariableLists.Consumer>{ boundVariableLists =>
-              <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)} readOnly={disabled}>
-                <option value="" />
-                {validValues.map(v =>
-                  <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                      <ExpressionComponent expression={v} boundVariableLists={boundVariableLists} entryContext={entryContext}/>
-                    )}}/>
+              validValues.length === 1 ?
+                <Form.Label column><CopiableExpression expression={validValues[0]} boundVariableLists={[...boundVariableListsForSubstitutions, ...boundVariableLists]} /></Form.Label> :
+                <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)} readOnly={disabled}>
+                  <option value="" />
+                  {validValues.map(v =>
+                    <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
+                        <ExpressionComponent expression={v} boundVariableLists={[...boundVariableListsForSubstitutions, ...boundVariableLists]} entryContext={entryContext}/>
+                      )}}/>
                 )}
               </Form.Control>
             }</BoundVariableLists.Consumer>;

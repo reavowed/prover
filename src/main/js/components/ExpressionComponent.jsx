@@ -122,16 +122,9 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       const boundVariables = expression.boundVariableNames || [];
       const innerBoundVariables = boundVariables.length ? [boundVariables, ...boundVariableLists] : boundVariableLists;
       const renderedBoundVariables = boundVariables.map((name, index) => wrapBoundVariable(name, index, path));
-      const renderedComponents = expression.components.map((c, i) => {
-        return <ExpressionComponent expression={c}
-                                    path={[...path, i]}
-                                    actionHighlights={filterPaths(actionHighlights, [i])}
-                                    staticHighlights={filterPaths(staticHighlights, [i])}
-                                    boundVariableLists={innerBoundVariables}
-                                    wrapBoundVariable={wrapBoundVariable}
-                                    parentRequiresBrackets={expression.definition ? expression.definition.requiresComponentBrackets : true}
-                                    entryContext={entryContext}/>
-      });
+      const renderedComponents = expression.components.map((c, i) =>
+        renderExpression(c, [...path, i], filterPaths(actionHighlights, [i]), filterPaths(staticHighlights, [i]), innerBoundVariables, expression.definition ? expression.definition.requiresComponentBrackets : true)
+      );
       return formatHtmlWithoutWrapping(format, s => replacePlaceholders(s, [...renderedBoundVariables, ...renderedComponents]));
     } else if (expression.textForHtml) {
       return formatHtmlWithoutWrapping(expression.textForHtml(boundVariableLists));

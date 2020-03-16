@@ -4,6 +4,7 @@ import net.prover.model.definitions._
 import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.StepProvingContext
+import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
 
@@ -53,6 +54,8 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowablePremiseRelationLeftHandSimplificationInference: Allowable[PremiseRelationLeftHandSimplificationInference] = allowableGeneric(Generic[PremiseRelationLeftHandSimplificationInference])
     implicit val allowablePremiseRelationDoubleSimplificationInference: Allowable[PremiseRelationDoubleSimplificationInference] = allowableGeneric(Generic[PremiseRelationDoubleSimplificationInference])
     implicit val allowableConclusionRelationDoubleSimplificationInference: Allowable[ConclusionRelationDoubleSimplificationInference] = allowableGeneric(Generic[ConclusionRelationDoubleSimplificationInference])
+
+    implicit val allowableExtractionOption: Allowable[ExtractionOption] = allowableGeneric(Generic[ExtractionOption])
 
     implicit def allowableTuple2[A, B](
       implicit allowableA: Allowable[A],
@@ -109,6 +112,8 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
 
   def isAllowed[T](t: T)(implicit allowable: Allowable[T]): Boolean = allowable.isAllowed(t)
   def filter[T](t: T)(implicit replacable: Filterable[T]): T = replacable.replace(t)
+
+  lazy val extractionOptionsByInferenceId: Map[String, Seq[ExtractionOption]] = filter(definitions.extractionOptionsByInferenceId)
 
   lazy val deductionDefinitionOption: Option[StatementDefinition] = entryContext.deductionDefinitionOption
   lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
