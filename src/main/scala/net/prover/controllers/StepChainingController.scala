@@ -244,7 +244,10 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
             for {
               premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
               premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
-              epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromStepContext.baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
+              epc = ExpressionParsingContext(
+                implicitly,
+                TermVariableValidator.LimitedList(VariableTracker.fromStepContext.baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten),
+                stepProvingContext.stepContext.boundVariableLists.map(_.zipWithIndex))
               intendedConclusionOption <- getIntendedConclusion(epc)
               intendedPremiseStatementsOption <- definition.parseIntendedPremiseStatements(epc)
               extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, intendedPremiseStatementsOption, intendedConclusionOption, PremiseFinder.findPremiseStepsOrTargets _)

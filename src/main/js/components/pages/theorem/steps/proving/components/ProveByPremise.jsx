@@ -26,9 +26,7 @@ export default class ProveByPremise extends React.Component {
     }
   };
   submit = (selectedConclusion, substitutions, premiseStatements, conclusionStatement) => {
-    return this.props.submit(this.state.selectedPremise.statement, substitutions, selectedConclusion, premiseStatements, conclusionStatement)
-      .then(this.props.onCancel)
-      .catch(this.props.onError);
+    return this.props.submit(this.state.selectedPremise.statement, substitutions, selectedConclusion, premiseStatements, conclusionStatement);
   };
   render () {
     const {availablePremises, entryContext} = this.props;
