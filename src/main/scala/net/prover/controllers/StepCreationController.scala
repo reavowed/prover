@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
+import scala.util.Success
+
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
 class StepCreationController @Autowired() (val bookService: BookService) extends BookModification with ChainingStepEditing {
@@ -133,6 +135,31 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
           Seq(Step.Target(consequent)),
           deductionDefinition)
       }
+    }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/introduceAll"))
+  def introduceAll(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData
+  ): ResponseEntity[_] = {
+    bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+      def getNestedIntroductionStepForStatement(statement: Statement): Step = {
+        statement match {
+          case generalizationStatement @ DefinedStatement(Seq(predicate: Statement), definition) if stepProvingContext.provingContext.generalizationDefinitionOption.contains(definition) =>
+            val innerStep = getNestedIntroductionStepForStatement(predicate)
+            Step.Generalization(generalizationStatement.boundVariableNames.head, Seq(innerStep), definition)
+          case DefinedStatement(Seq(antecedent: Statement, consequent: Statement), definition) if stepProvingContext.provingContext.deductionDefinitionOption.contains(definition) =>
+            val innerStep = getNestedIntroductionStepForStatement(consequent)
+            Step.Deduction(antecedent, Seq(innerStep), definition)
+          case _ =>
+            Step.Target(statement)
+        }
+      }
+      Success(getNestedIntroductionStepForStatement(step.statement))
     }.toResponseEntity
   }
 

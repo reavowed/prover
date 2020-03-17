@@ -12,6 +12,7 @@ import AddTargetManually from "./AddTargetManually";
 import AddTransitiveTarget from "./AddTransitiveTarget";
 import ApplyChainingPremiseFromLeft from "./ApplyChainingPremiseFromLeft";
 import ApplyChainingPremiseFromRight from "./ApplyChainingPremiseFromRight";
+import IntroduceAll from "./IntroduceAll";
 import ProveCurrentTargetByPremise from "./ProveCurrentTargetByPremise";
 import ProveChainingFromLeft from "./ProveChainingFromLeft";
 import ProveChainingFromRight from "./ProveChainingFromRight";
@@ -77,17 +78,24 @@ export default class ProvingCard extends React.Component {
       .find()
       .value() || [null, null, null];
 
+    const isGeneralization = generalizationStatement && step.statement.definition === generalizationStatement;
+    const isDeduction = deductionStatement && step.statement.definition === deductionStatement;
+
     const rows = [
       {
         label: "Introduce",
         provers: [
-          generalizationStatement && step.statement.definition === generalizationStatement && {
+          isGeneralization && {
             label: "Bound variable",
             element: IntroduceBoundVariable
           },
-          deductionStatement && step.statement.definition === deductionStatement && {
+          isDeduction && {
             label: "Deduction",
             element: IntroduceDeduction
+          },
+          (isGeneralization || isDeduction) && {
+            label: "All",
+            element: IntroduceAll
           },
           {
             label: "Name",
