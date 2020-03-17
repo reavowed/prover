@@ -1,1 +1,4 @@
 Addition on the rationals.
+
+term +_ℚ ()
+  (= $0 productQuotientFunction functionMap4 a b c d ℤ ℤ ℤ ℤ equivalenceClass orderedPair apply +_ℤ orderedPair apply ×_ℤ orderedPair $0 $3 apply ×_ℤ orderedPair $1 $2 apply ×_ℤ orderedPair $1 $3 ~_ℚ product ℤ ℤ product ℤ ℤ ℚ ~_ℚ ~_ℚ)

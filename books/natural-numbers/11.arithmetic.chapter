@@ -1,6 +1,6 @@
 Some basic facts about natural number arithmetic.
 
-display apply × orderedPair a b as (ab)
+display apply × orderedPair a b as (%0%1)
 
 theorem Difference Condition for Ordered Naturals
 premise ∈ n ℕ

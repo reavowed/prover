@@ -75,3 +75,30 @@ conclusion ↔ φ ψ
   prove → ψ φ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (ψ, φ) () p1
   prove ↔ φ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, ψ) () 0 1
 }
+
+theorem Distribute Implication over Equivalence
+premise → φ ↔ ψ χ
+conclusion ↔ → φ ψ → φ χ
+{
+  assume → φ ψ {
+    assume φ {
+      prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () 0a 0.0a
+      elided (Extracted) {
+        prove ↔ ψ χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ↔ ψ χ) () p0 0.0a
+        prove → ψ χ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (ψ, χ) () 0.0.1.0
+        prove χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, χ) () 0.0.1.1 0.0.0
+      }
+    }
+  }
+  assume → φ χ {
+    assume φ {
+      prove χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, χ) () 1a 1.0a
+      elided (Extracted) {
+        prove ↔ ψ χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ↔ ψ χ) () p0 1.0a
+        prove → χ ψ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (ψ, χ) () 1.0.1.0
+        prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (χ, ψ) () 1.0.1.1 1.0.0
+      }
+    }
+  }
+  prove ↔ → φ ψ → φ χ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (→ φ ψ, → φ χ) () 0 1
+}
