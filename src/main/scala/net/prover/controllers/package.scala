@@ -24,6 +24,9 @@ package object controllers {
           throw e
       }
     }
+    def toEmptyResponseEntity: ResponseEntity[_] = {
+      t.map(_ => ()).toResponseEntity
+    }
     def orBadRequest(message: String): Try[T] = {
       t.recoverWith {
         case e => Failure(BadRequestException(s"$message: ${e.getMessage}"))

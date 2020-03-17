@@ -77,7 +77,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
         Success(definition.withAttributes(newAttributes))
       case _ =>
         Failure(BadRequestException(s"Cannot set attributes of ${entry.getClass.getName}"))
-    }).toResponseEntity
+    }).toEmptyResponseEntity
   }
 
   @PutMapping(value = Array("/format"), produces = Array("application/json;charset=UTF-8"))
@@ -103,7 +103,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
         case _ =>
           Failure(BadRequestException(s"Cannot set format of ${entry.getClass.getName}"))
       }
-    }).toResponseEntity
+    }).toEmptyResponseEntity
   }
 
   private def modifyDefinitions(
