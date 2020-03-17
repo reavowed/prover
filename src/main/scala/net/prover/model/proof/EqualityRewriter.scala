@@ -10,8 +10,13 @@ import scala.Ordering.Implicits._
 case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: StepProvingContext)
 {
   import stepProvingContext.provingContext._
+
+  case class SimplificationStepWithInference(result: Term, rearrangementStep: RearrangementStep[Term], inference: Inference.Summary)
+  case class RearrangementStepWithInference(rearrangementStep: RearrangementStep[Term], inference: Option[Inference.Summary])
+  case class StepWithInference(step: Step, inference: Option[Inference.Summary])
+
   def rewrite(targetStatement: Statement): Option[Step] = {
-    def findSimplificationsFromInferences(premiseTerm: Term, inferences: Seq[(Inference, Term, Term)], direction: Direction, wrapper: Wrapper[Term, Term]): Seq[(Term, RearrangementStep[Term], Option[Inference.Summary])] = {
+    def findSimplificationsFromInferences(premiseTerm: Term, inferences: Seq[(Inference, Term, Term)], direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {
       for {
         (inference, left, right) <- inferences
         (inferenceSource, inferenceResult) = direction.swapSourceAndResult(left, right)
@@ -26,30 +31,30 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
           substitutedPremises.map(Premise.Pending),
           finalSubstitutions)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
-      } yield (wrapper(source), RearrangementStep(wrapper(result), (premiseSteps :+ assertionStep) ++ expansionStep.toSeq, inference.summary), Some(inference.summary))
+      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premiseSteps :+ assertionStep) ++ expansionStep.toSeq, inference.summary), inference.summary)
     }
 
-    def reverseSimplifications(simplifications: Seq[(Term, RearrangementStep[Term], Option[Inference.Summary])]): Seq[(Term, RearrangementStep[Term], Option[Inference.Summary])] = {
-      simplifications.map { case (source, RearrangementStep(result, steps, elider), inferenceForElision) =>
+    def reverseSimplifications(simplifications: Seq[SimplificationStepWithInference]): Seq[SimplificationStepWithInference] = {
+      simplifications.map { case SimplificationStepWithInference(source, RearrangementStep(result, steps, elider), inference) =>
         val reversalStep = equality.reversal.assertionStep(result, source)
-        (result, RearrangementStep(source, steps :+ reversalStep, elider), inferenceForElision)
+        SimplificationStepWithInference(result, RearrangementStep(source, steps :+ reversalStep, elider), inference)
       }
     }
 
-    def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[(Term, RearrangementStep[Term], Option[Inference.Summary])] = {
+    def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {
       def findSimplificationsDirectly = {
         val (forwardInferences, reverseInferences) = direction.swapSourceAndResult(termSimplificationInferences, termDesimplificationInferences)
         findSimplificationsFromInferences(premiseTerm, forwardInferences, direction, wrapper) ++ reverseSimplifications(findSimplificationsFromInferences(premiseTerm, reverseInferences, direction.reverse, wrapper))
       }
-      def findSimplificationsWithinExpansion: Seq[(Term, RearrangementStep[Term], Option[Inference.Summary])] = {
+      def findSimplificationsWithinExpansion: Seq[SimplificationStepWithInference] = {
         premiseTerm match {
           case DefinedTerm(components, termDefinition) =>
             @scala.annotation.tailrec
             def helper(
               previousComponents: Seq[Expression],
               nextComponents: Seq[Expression],
-              simplificationsSoFar: Seq[(Term, RearrangementStep[Term], Option[Inference.Summary])]
-            ): Seq[(Term, RearrangementStep[Term], Option[Inference.Summary])] = {
+              simplificationsSoFar: Seq[SimplificationStepWithInference]
+            ): Seq[SimplificationStepWithInference] = {
               nextComponents match {
                 case (innerTerm: Term) +: moar =>
                   val innerWrapper = wrapper.insert[Term]((t, _) => termDefinition((previousComponents :+ t) ++ moar: _*))
@@ -69,7 +74,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       findSimplificationsDirectly ++ findSimplificationsWithinExpansion
     }
 
-    def findKnownEquality(premiseTerm: Term, targetTerm: Term, wrapper: Wrapper[Term, Term]): Option[Seq[(RearrangementStep[Term], Option[Inference.Summary])]] = {
+    def findKnownEquality(premiseTerm: Term, targetTerm: Term, wrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStepWithInference]] = {
       def findExactly = {
         if (premiseTerm == targetTerm)
           Some(Nil)
@@ -88,25 +93,17 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
             case PossibleSingleMatch.MultipleMatches =>
               None
           }
-        } yield Seq((RearrangementStep(wrapper(targetTerm), steps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
+        } yield Seq(RearrangementStepWithInference(RearrangementStep(wrapper(targetTerm), steps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
       }
-      def findReverse = {
-        for {
-          steps <- PremiseFinder.findPremiseStepsForStatement(equality(targetTerm, premiseTerm))
-          reversalStep = equality.reversal.assertionStep(premiseTerm, targetTerm)
-          wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
-          inference = Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity)
-        } yield Seq((RearrangementStep(wrapper(targetTerm), (steps :+ reversalStep) ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
-      }
-      findExactly orElse findDirectly orElse findReverse
+      findExactly orElse findDirectly
     }
 
-    def findSimplificationEquality(premiseTerm: Term, targetTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Option[Seq[(RearrangementStep[Term], Option[Inference.Summary])]] = {
+    def findSimplificationEquality(premiseTerm: Term, targetTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStepWithInference]] = {
       val (source, result) = direction.swapSourceAndResult(premiseTerm, targetTerm)
       if (source.complexity > result.complexity) {
-        findSimplifications(source, direction, wrapper).mapCollect { case (baseTerm, rearrangementStep, inference) =>
+        findSimplifications(source, direction, wrapper).mapCollect { case SimplificationStepWithInference(baseTerm, rearrangementStep, inference) =>
           val newSource = direction.swapSourceAndResult(baseTerm, rearrangementStep.result)._2
-          val (precedingSteps, followingSteps) = direction.swapSourceAndResult(Seq((rearrangementStep, inference)), Nil)
+          val (precedingSteps, followingSteps) = direction.swapSourceAndResult(Seq(RearrangementStepWithInference(rearrangementStep, Some(inference))), Nil)
           val (newPremise, newTarget) = direction.swapSourceAndResult(newSource, result)
           findEqualitySteps(newPremise, newTarget, wrapper).map { remainingSteps =>
             precedingSteps ++ remainingSteps ++ followingSteps
@@ -117,13 +114,13 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         None
     }
 
-    def findComponentEquality(premiseTerm: Term, targetTerm: Term, wrapper: Wrapper[Term, Term]): Option[Seq[(RearrangementStep[Term], Option[Inference.Summary])]] = {
+    def findComponentEquality(premiseTerm: Term, targetTerm: Term, wrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStepWithInference]] = {
       def helper(
         previousComponents: Seq[(Term, Term)],
         nextComponents: Seq[(Term, Term)],
-        stepsSoFar: Seq[(RearrangementStep[Term], Option[Inference.Summary])],
+        rewritesSoFar: Seq[RearrangementStepWithInference],
         innerWrapper: Wrapper[Seq[Term], Term]
-      ): Option[Seq[(RearrangementStep[Term], Option[Inference.Summary])]] = {
+      ): Option[Seq[RearrangementStepWithInference]] = {
         nextComponents match {
           case (premiseComponent, targetComponent) +: moreComponents =>
             for {
@@ -131,11 +128,11 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
               result <- helper(
                 previousComponents :+ (premiseComponent, targetComponent),
                 moreComponents,
-                stepsSoFar ++ nextSteps,
+                rewritesSoFar ++ nextSteps,
                 innerWrapper)
             } yield result
           case Nil =>
-            Some(stepsSoFar)
+            Some(rewritesSoFar)
         }
       }
 
@@ -157,32 +154,45 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       }
     }
 
-    def findEqualitySteps(premiseTerm: Term, targetTerm: Term, termWrapper: Wrapper[Term, Term]): Option[Seq[(RearrangementStep[Term], Option[Inference.Summary])]] = {
+    def findEqualitySteps(premiseTerm: Term, targetTerm: Term, termWrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStepWithInference]] = {
       def direction = if (premiseTerm.complexity > targetTerm.complexity) Direction.Forward else Direction.Reverse
       findKnownEquality(premiseTerm, targetTerm, termWrapper) orElse
         findComponentEquality(premiseTerm, targetTerm, termWrapper) orElse
         findSimplificationEquality(premiseTerm, targetTerm, direction, termWrapper)
     }
 
-    def findEquality(premiseTerm: Term, targetTerm: Term, termWrapper: Wrapper[Term, Term], statementWrapperOption: Option[Wrapper[Term, Statement]]): Option[(Step, Option[Inference.Summary])] = {
+    def findEquality(premiseTerm: Term, targetTerm: Term, termWrapper: Wrapper[Term, Term], statementWrapperOption: Option[Wrapper[Term, Statement]]): Option[StepWithInference] = {
       for {
-        rearrangementStepsAndInferences <- findEqualitySteps(premiseTerm, targetTerm, termWrapper)
-        rearrangementSteps = rearrangementStepsAndInferences.map(_._1)
-        rearrangementInferences = rearrangementStepsAndInferences.map(_._2)
-        transitivitySteps = equality.transitivity.addToRearrangement(premiseTerm, rearrangementSteps)
+        rearrangementStepsWithInferences <- findEqualitySteps(premiseTerm, targetTerm, termWrapper)
+        rearrangementSteps = rearrangementStepsWithInferences.map(_.rearrangementStep)
+        rearrangementInferences = rearrangementStepsWithInferences.map(_.inference)
+        transitivitySteps = rearrangementSteps.single match {
+          case Some(singleRearrangementStep) =>
+            singleRearrangementStep.substeps
+          case _ =>
+            equality.transitivity.addToRearrangement(premiseTerm, rearrangementSteps)
+        }
         substitutionStepOption = statementWrapperOption.map(wrapper => equality.substitution.assertionStep(premiseTerm, targetTerm, wrapper))
-        inference = if (rearrangementInferences.nonEmpty) rearrangementInferences.distinct.single.flatten else Some(equality.substitution.inference)
+        inference = if (rearrangementInferences.nonEmpty) {
+          val singleInference = rearrangementInferences.distinct.single.flatten
+          singleInference match {
+            case Some(equality.reversal.inference) =>
+              Some(equality.substitution.inference)
+            case _ =>
+              singleInference
+          }
+        } else Some(equality.substitution.inference)
         result <- EqualityRewriter.rewriteElider(inference)(transitivitySteps ++ substitutionStepOption.toSeq)
-      } yield (result, inference)
+      } yield StepWithInference(result, inference)
     }
 
     def rewritePremise(premise: Premise): Option[Step] = {
-      def rewriteComponents(premiseComponents: Seq[Expression], targetComponents: Seq[Expression], wrapper: Wrapper[Seq[Expression], Statement]): Option[Seq[(Step, Option[Inference.Summary])]] = {
+      def rewriteComponents(premiseComponents: Seq[Expression], targetComponents: Seq[Expression], wrapper: Wrapper[Seq[Expression], Statement]): Option[Seq[StepWithInference]] = {
         def helper(
           previousComponents: Seq[(Expression, Expression)],
           nextComponents: Seq[(Expression, Expression)],
-          currentSteps: Seq[(Step, Option[Inference.Summary])]
-        ): Option[Seq[(Step, Option[Inference.Summary])]] = {
+          currentSteps: Seq[StepWithInference]
+        ): Option[Seq[StepWithInference]] = {
           nextComponents match {
             case Nil =>
               Some(currentSteps)
@@ -203,7 +213,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         premiseComponents.zipStrict(targetComponents).flatMap(helper(Nil, _, Nil))
       }
 
-      def rewriteStatement(premiseStatement: Statement, currentTarget: Statement, wrapper: Wrapper[Statement, Statement]): Option[Seq[(Step, Option[Inference.Summary])]] = {
+      def rewriteStatement(premiseStatement: Statement, currentTarget: Statement, wrapper: Wrapper[Statement, Statement]): Option[Seq[StepWithInference]] = {
         if (premiseStatement == currentTarget)
           Some(Nil)
         else (premiseStatement, currentTarget) match {
@@ -216,7 +226,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         }
       }
 
-      def rewriteTerm(premiseTerm: Term, targetTerm: Term, wrapper: Wrapper[Term, Statement]): Option[Seq[(Step, Option[Inference.Summary])]] = {
+      def rewriteTerm(premiseTerm: Term, targetTerm: Term, wrapper: Wrapper[Term, Statement]): Option[Seq[StepWithInference]] = {
         if (premiseTerm == targetTerm)
           Some(Nil)
         else
@@ -231,12 +241,12 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       }
 
       rewriteStatement(premise.statement, targetStatement, Wrapper.identity)
-        .flatMap { stepsAndInferences => EqualityRewriter.optionalRewriteElider(stepsAndInferences.map(_._2))(stepsAndInferences.map(_._1)) }
+        .flatMap { stepsAndInferences => EqualityRewriter.optionalRewriteElider(stepsAndInferences.map(_.inference))(stepsAndInferences.map(_.step)) }
     }
 
     (targetStatement match {
       case equality(premiseTerm, targetTerm) =>
-        findEquality(premiseTerm, targetTerm, Wrapper.identity, None).map(_._1)
+        findEquality(premiseTerm, targetTerm, Wrapper.identity, None).map(_.step)
       case _ =>
         None
     }) orElse stepProvingContext.allPremises.mapFind(rewritePremise)
