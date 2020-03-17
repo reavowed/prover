@@ -1012,3 +1012,132 @@ display equivalenceClass orderedPair a b ~_ℚ as ((a, b)_ℚ)
 term ℚ ()
   (= $0 equivalenceQuotient product ℤ diff ℤ singleton 0_ℤ ~_ℚ)
   shorthand (rat)
+
+theorem Product of Non-Zeros Is Non-Zero
+premise ∈ a diff ℤ singleton 0_ℤ
+premise ∈ b diff ℤ singleton 0_ℤ
+conclusion ∈ apply ×_ℤ orderedPair a b diff ℤ singleton 0_ℤ
+{
+  elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+    prove ∀ a ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton 0_ℤ)
+    prove ↔ ∈ a diff ℤ singleton 0_ℤ ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ) (a) 0.0
+    prove → ∈ a diff ℤ singleton 0_ℤ ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ a diff ℤ singleton 0_ℤ, ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ) () 0.1
+    prove ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a diff ℤ singleton 0_ℤ, ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ) () 0.2 p0
+    prove ¬ ∈ a singleton 0_ℤ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ a ℤ, ¬ ∈ a singleton 0_ℤ) () 0.3
+  }
+  elided 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 {
+    prove ∀ x ↔ ∈ $0 singleton 0_ℤ = $0 0_ℤ 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (0_ℤ)
+    prove ↔ ∈ a singleton 0_ℤ = a 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 singleton 0_ℤ = $0 0_ℤ) (a) 1.0
+    prove → = a 0_ℤ ∈ a singleton 0_ℤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ a singleton 0_ℤ, = a 0_ℤ) () 1.1
+    prove ¬ = a 0_ℤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= a 0_ℤ, ∈ a singleton 0_ℤ) () 1.2 0
+  }
+  elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+    prove ∀ a ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton 0_ℤ)
+    prove ↔ ∈ b diff ℤ singleton 0_ℤ ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ) (b) 2.0
+    prove → ∈ b diff ℤ singleton 0_ℤ ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b diff ℤ singleton 0_ℤ, ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ) () 2.1
+    prove ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b diff ℤ singleton 0_ℤ, ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ) () 2.2 p1
+    prove ¬ ∈ b singleton 0_ℤ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ b ℤ, ¬ ∈ b singleton 0_ℤ) () 2.3
+  }
+  elided 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 {
+    prove ∀ x ↔ ∈ $0 singleton 0_ℤ = $0 0_ℤ 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (0_ℤ)
+    prove ↔ ∈ b singleton 0_ℤ = b 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 singleton 0_ℤ = $0 0_ℤ) (b) 3.0
+    prove → = b 0_ℤ ∈ b singleton 0_ℤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b singleton 0_ℤ, = b 0_ℤ) () 3.1
+    prove ¬ = b 0_ℤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= b 0_ℤ, ∈ b singleton 0_ℤ) () 3.2 2
+  }
+  elided 191998d54f731e3b30ebf21cf203b2ec14b47f9d23b4a6dc3dd368c911c37cd8 {
+    elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+      prove ∀ a ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton 0_ℤ)
+      prove ↔ ∈ a diff ℤ singleton 0_ℤ ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ) (a) 4.0.0
+      prove → ∈ a diff ℤ singleton 0_ℤ ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ a diff ℤ singleton 0_ℤ, ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ) () 4.0.1
+      prove ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a diff ℤ singleton 0_ℤ, ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ) () 4.0.2 p0
+      prove ∈ a ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ a ℤ, ¬ ∈ a singleton 0_ℤ) () 4.0.3
+    }
+    elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+      prove ∀ a ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton 0_ℤ)
+      prove ↔ ∈ b diff ℤ singleton 0_ℤ ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ) (b) 4.1.0
+      prove → ∈ b diff ℤ singleton 0_ℤ ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b diff ℤ singleton 0_ℤ, ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ) () 4.1.1
+      prove ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b diff ℤ singleton 0_ℤ, ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ) () 4.1.2 p1
+      prove ∈ b ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ b ℤ, ¬ ∈ b singleton 0_ℤ) () 4.1.3
+    }
+    prove ¬ ∨ = a 0_ℤ = b 0_ℤ 7de09e8a989572b5b5bd3e83a8f59edc959d20e00cfb9290ee3a1926363ceb10 (= a 0_ℤ, = b 0_ℤ) () 1 3
+    elided 191998d54f731e3b30ebf21cf203b2ec14b47f9d23b4a6dc3dd368c911c37cd8 {
+      prove ↔ = apply ×_ℤ orderedPair a b 0_ℤ ∨ = a 0_ℤ = b 0_ℤ 191998d54f731e3b30ebf21cf203b2ec14b47f9d23b4a6dc3dd368c911c37cd8 () (a, b) 4.0 4.1
+      prove → = apply ×_ℤ orderedPair a b 0_ℤ ∨ = a 0_ℤ = b 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= apply ×_ℤ orderedPair a b 0_ℤ, ∨ = a 0_ℤ = b 0_ℤ) () 4.3.0
+      prove ¬ = apply ×_ℤ orderedPair a b 0_ℤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= apply ×_ℤ orderedPair a b 0_ℤ, ∨ = a 0_ℤ = b 0_ℤ) () 4.3.1 4.2
+    }
+  }
+  elided 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 {
+    prove ∀ x ↔ ∈ $0 singleton 0_ℤ = $0 0_ℤ 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (0_ℤ)
+    prove ↔ ∈ apply ×_ℤ orderedPair a b singleton 0_ℤ = apply ×_ℤ orderedPair a b 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 singleton 0_ℤ = $0 0_ℤ) (apply ×_ℤ orderedPair a b) 5.0
+    prove → ∈ apply ×_ℤ orderedPair a b singleton 0_ℤ = apply ×_ℤ orderedPair a b 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ apply ×_ℤ orderedPair a b singleton 0_ℤ, = apply ×_ℤ orderedPair a b 0_ℤ) () 5.1
+    prove ¬ ∈ apply ×_ℤ orderedPair a b singleton 0_ℤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ apply ×_ℤ orderedPair a b singleton 0_ℤ, = apply ×_ℤ orderedPair a b 0_ℤ) () 5.2 4
+  }
+  elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+    elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+      prove ∀ a ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton 0_ℤ)
+      prove ↔ ∈ a diff ℤ singleton 0_ℤ ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ) (a) 6.0.0
+      prove → ∈ a diff ℤ singleton 0_ℤ ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ a diff ℤ singleton 0_ℤ, ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ) () 6.0.1
+      prove ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a diff ℤ singleton 0_ℤ, ∧ ∈ a ℤ ¬ ∈ a singleton 0_ℤ) () 6.0.2 p0
+      prove ∈ a ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ a ℤ, ¬ ∈ a singleton 0_ℤ) () 6.0.3
+    }
+    elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+      prove ∀ a ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton 0_ℤ)
+      prove ↔ ∈ b diff ℤ singleton 0_ℤ ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ) (b) 6.1.0
+      prove → ∈ b diff ℤ singleton 0_ℤ ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b diff ℤ singleton 0_ℤ, ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ) () 6.1.1
+      prove ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b diff ℤ singleton 0_ℤ, ∧ ∈ b ℤ ¬ ∈ b singleton 0_ℤ) () 6.1.2 p1
+      prove ∈ b ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ b ℤ, ¬ ∈ b singleton 0_ℤ) () 6.1.3
+    }
+    prove ∈ apply ×_ℤ orderedPair a b ℤ 19f636ec8a1d77afbf1b9f15f50fb768780e423731dd6ef2d52cf99548a542a1 () (a, b) 6.0 6.1
+    prove ∧ ∈ apply ×_ℤ orderedPair a b ℤ ¬ ∈ apply ×_ℤ orderedPair a b singleton 0_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ apply ×_ℤ orderedPair a b ℤ, ¬ ∈ apply ×_ℤ orderedPair a b singleton 0_ℤ) () 6.2 5
+    elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+      prove ∀ a ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton 0_ℤ)
+      prove ↔ ∈ apply ×_ℤ orderedPair a b diff ℤ singleton 0_ℤ ∧ ∈ apply ×_ℤ orderedPair a b ℤ ¬ ∈ apply ×_ℤ orderedPair a b singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ) (apply ×_ℤ orderedPair a b) 6.4.0
+      prove → ∧ ∈ apply ×_ℤ orderedPair a b ℤ ¬ ∈ apply ×_ℤ orderedPair a b singleton 0_ℤ ∈ apply ×_ℤ orderedPair a b diff ℤ singleton 0_ℤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ apply ×_ℤ orderedPair a b diff ℤ singleton 0_ℤ, ∧ ∈ apply ×_ℤ orderedPair a b ℤ ¬ ∈ apply ×_ℤ orderedPair a b singleton 0_ℤ) () 6.4.1
+      prove ∈ apply ×_ℤ orderedPair a b diff ℤ singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ apply ×_ℤ orderedPair a b ℤ ¬ ∈ apply ×_ℤ orderedPair a b singleton 0_ℤ, ∈ apply ×_ℤ orderedPair a b diff ℤ singleton 0_ℤ) () 6.4.2 6.3
+    }
+  }
+}
+
+theorem Equivalence Class Is Rational
+premise ∈ a ℤ
+premise ∈ b diff ℤ singleton 0_ℤ
+conclusion ∈ equivalenceClass orderedPair a b ~_ℚ ℚ
+{
+  elided 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 {
+    prove equivalenceRelation ~_ℚ product ℤ diff ℤ singleton 0_ℤ 2f6081f05485b89a30bf5dd1d0220e94555cb319a07c0e8722d291129475f207 () ()
+    prove ∈ orderedPair a b product ℤ diff ℤ singleton 0_ℤ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (a, ℤ, b, diff ℤ singleton 0_ℤ) p0 p1
+    prove ∈ equivalenceClass orderedPair a b ~_ℚ equivalenceQuotient product ℤ diff ℤ singleton 0_ℤ ~_ℚ 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 () (~_ℚ, product ℤ diff ℤ singleton 0_ℤ, orderedPair a b) 0.0 0.1
+  }
+  elided e7d84e34d39824c791d7567dcccbb13774db5a1d9604182251b46c8a0b0d268d {
+    prove = ℚ equivalenceQuotient product ℤ diff ℤ singleton 0_ℤ ~_ℚ e7d84e34d39824c791d7567dcccbb13774db5a1d9604182251b46c8a0b0d268d () ()
+    prove = equivalenceQuotient product ℤ diff ℤ singleton 0_ℤ ~_ℚ ℚ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (ℚ, equivalenceQuotient product ℤ diff ℤ singleton 0_ℤ ~_ℚ) 1.0
+    prove ∈ equivalenceClass orderedPair a b ~_ℚ ℚ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ equivalenceClass orderedPair a b ~_ℚ $0) (equivalenceQuotient product ℤ diff ℤ singleton 0_ℤ ~_ℚ, ℚ) 1.1 0
+  }
+}
+
+theorem Equality Condition for Rational Equivalence Classes
+premise ∈ a ℤ
+premise ∈ b diff ℤ singleton 0_ℤ
+premise ∈ c ℤ
+premise ∈ d diff ℤ singleton 0_ℤ
+conclusion ↔ = equivalenceClass orderedPair a b ~_ℚ equivalenceClass orderedPair c d ~_ℚ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c
+{
+  elided 674ea6d2d925fafd208d4724f48198c52ced6886f2580721810e700c7f2fdee8 {
+    prove equivalenceRelation ~_ℚ product ℤ diff ℤ singleton 0_ℤ 2f6081f05485b89a30bf5dd1d0220e94555cb319a07c0e8722d291129475f207 () ()
+    prove ∈ orderedPair a b product ℤ diff ℤ singleton 0_ℤ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (a, ℤ, b, diff ℤ singleton 0_ℤ) p0 p1
+    prove ∈ orderedPair c d product ℤ diff ℤ singleton 0_ℤ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (c, ℤ, d, diff ℤ singleton 0_ℤ) p2 p3
+    prove ↔ = equivalenceClass orderedPair a b ~_ℚ equivalenceClass orderedPair c d ~_ℚ ∈ orderedPair orderedPair a b orderedPair c d ~_ℚ 674ea6d2d925fafd208d4724f48198c52ced6886f2580721810e700c7f2fdee8 () (~_ℚ, product ℤ diff ℤ singleton 0_ℤ, orderedPair a b, orderedPair c d) 0.0 0.1 0.2
+  }
+  elided d33324b8c1baf9a56054a5baba9f5309b016c62b245e19fa09f700b6078bd5d0 {
+    prove ∧ relation ~_ℚ product ℤ diff ℤ singleton 0_ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton 0_ℤ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×_ℤ orderedPair $$$$0 $0 apply ×_ℤ orderedPair $$$0 $$0 d33324b8c1baf9a56054a5baba9f5309b016c62b245e19fa09f700b6078bd5d0 () ()
+    prove → ∈ a ℤ ∀ b → ∈ $0 diff ℤ singleton 0_ℤ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a $$$0 orderedPair $$0 $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton 0_ℤ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×_ℤ orderedPair $$$$0 $0 apply ×_ℤ orderedPair $$$0 $$0) (a) 1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove ∀ b → ∈ $0 diff ℤ singleton 0_ℤ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a $$$0 orderedPair $$0 $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a ℤ, ∀ b → ∈ $0 diff ℤ singleton 0_ℤ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a $$$0 orderedPair $$0 $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0) () 1.1 p0
+    prove → ∈ b diff ℤ singleton 0_ℤ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a b orderedPair $$0 $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 diff ℤ singleton 0_ℤ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a $$$0 orderedPair $$0 $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0) (b) 1.2
+    prove ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a b orderedPair $$0 $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b diff ℤ singleton 0_ℤ, ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a b orderedPair $$0 $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0) () 1.3 p1
+    prove → ∈ c ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a b orderedPair c $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a b orderedPair $$0 $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0) (c) 1.4
+    prove ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a b orderedPair c $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ c ℤ, ∀ d → ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a b orderedPair c $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c) () 1.5 p2
+    prove → ∈ d diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a b orderedPair c d ~_ℚ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 diff ℤ singleton 0_ℤ ↔ ∈ orderedPair orderedPair a b orderedPair c $0 ~_ℚ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c) (d) 1.6
+    prove ↔ ∈ orderedPair orderedPair a b orderedPair c d ~_ℚ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ d diff ℤ singleton 0_ℤ, ↔ ∈ orderedPair orderedPair a b orderedPair c d ~_ℚ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c) () 1.7 p3
+  }
+  prove ↔ = equivalenceClass orderedPair a b ~_ℚ equivalenceClass orderedPair c d ~_ℚ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (= equivalenceClass orderedPair a b ~_ℚ equivalenceClass orderedPair c d ~_ℚ, ∈ orderedPair orderedPair a b orderedPair c d ~_ℚ, = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c) () 0 1
+}
