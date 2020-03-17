@@ -1,5 +1,4 @@
 import React, {useContext} from "react";
-import Button from "react-bootstrap/Button";
 import styled from "styled-components";
 import {DefinedExpression} from "../../../models/Expression";
 import EntryContext from "../../EntryContext";

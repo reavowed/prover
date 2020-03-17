@@ -17,6 +17,9 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
     return window.fetchJson(path.join(url, "name"), {method: "PUT", body: newName})
       .then(url => window.location.pathname = url);
   };
+  const saveShorthand = (newName) => {
+    return window.fetchJson(path.join(url, "shorthand"), {method: "PUT", body: newName});
+  };
   const saveComponents = (componentsText) => {
     return window.fetchJson(path.join(url, "components"), {method: "PUT", body: componentsText})
   };
@@ -39,6 +42,7 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
       <hr/>
       <EditableProperty label="Symbol" initialValue={definition.symbol} onSave={saveSymbol} />
       <EditableProperty label="Name" initialValue={definition.explicitName} onSave={saveName} />
+      <EditableProperty label="Shorthand" initialValue={definition.shorthand} onSave={saveShorthand} />
       <EditableProperty label="Components" initialValue={definition.componentTypes.map(x => x.name).join(" ")} onSave={saveComponents} />
       <EditableProperty label="Format" initialValue={serializedFormat} onSave={saveFormat} />
       <EditableProperty label="Attributes" initialValue={definition.attributes.join(" ")} onSave={saveAttributes} />
