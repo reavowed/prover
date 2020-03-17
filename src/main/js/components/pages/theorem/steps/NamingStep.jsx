@@ -9,6 +9,7 @@ import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import BoundVariableLists from "./BoundVariableLists";
 
 export function NamingStep({step, path, additionalReferences}) {
+  additionalReferences = additionalReferences || [];
   const context = useContext(ProofContext);
   const updateBoundVariable = (newName) => {
     return context.fetchJsonForStepAndUpdateTheorem(path, "boundVariable", {method: "PUT", body: newName});

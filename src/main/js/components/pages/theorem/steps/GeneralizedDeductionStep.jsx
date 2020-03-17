@@ -14,6 +14,7 @@ export default class GeneralizedDeductionStep extends React.Component {
   static contextType = ProofContext;
   render() {
     let {step, path, additionalReferences, format, components, suppressConclusion} = this.props;
+    additionalReferences = additionalReferences || [];
     const substep = step.substeps[0];
     const substepPath = [...path, 0];
 

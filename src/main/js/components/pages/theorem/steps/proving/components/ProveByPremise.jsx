@@ -39,7 +39,8 @@ export default class ProveByPremise extends React.Component {
                                                  defaultConclusionStatement={selectedPremise.statement}
                                                  submit={this.submit}
                                                  disabled={saving}
-                                                 boundVariableListsForPremises={boundVariableLists}/>}
+                                                 boundVariableListsForPremises={boundVariableLists}
+                                                 boundVariableListsForSubstitutions={[]}/>}
     </>}</BoundVariableLists.Consumer>;
   }
 }

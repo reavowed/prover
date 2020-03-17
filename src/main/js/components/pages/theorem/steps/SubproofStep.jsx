@@ -21,6 +21,7 @@ export class SubproofStep extends React.Component {
   };
   render() {
     let {step, path, additionalReferences} = this.props;
+    additionalReferences = additionalReferences || [];
     let {showingSubproof} = this.state;
     let reference = new StepReference(path);
     const titleElement = <h6 onClick={this.toggleSubproof} className={"mt-1 mb-1"} style={{cursor: "pointer"}}>{formatHtml(step.name)}</h6>;

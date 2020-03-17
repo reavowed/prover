@@ -24,7 +24,7 @@ export function createSubmitFunctionForStepDefinitionEndpointFromPremise(context
       body: {
         serializedPremiseStatement: premiseStatement.serialize(),
         substitutions,
-        extractionInferenceIds: possibleConclusion.extractionInferenceIds,
+        extractionInferenceIds: selectedConclusion.extractionInferenceIds,
         wrappingSymbols: [],
         serializedIntendedPremiseStatements: premiseStatements.map(p => p.serialize()),
         serializedIntendedConclusionStatement: conclusionStatement.serialize(),
