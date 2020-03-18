@@ -2,7 +2,8 @@ package net.prover.controllers.models
 
 import net.prover.model.EntryContext
 
-case class TypeDefinitionSummary(symbol: String, name: String, componentFormatString: String, article: String, properties: Map[String, String])
+case class TypeDefinitionSummary(symbol: String, name: String, componentFormatString: String, article: String, properties: Map[String, PropertyDefinitionSummary])
+case class PropertyDefinitionSummary(symbol: String, name: String)
 
 object TypeDefinitionSummary {
   def getAllFromContext(entryContext: EntryContext): Map[String, TypeDefinitionSummary] = {
@@ -12,7 +13,7 @@ object TypeDefinitionSummary {
         d.name,
         d.componentFormat.baseFormatString,
         d.article,
-        entryContext.propertyDefinitionsByType.getOrElse(d.symbol, Nil).map(pd => pd.qualifiedSymbol -> pd.name).toMap))
+        entryContext.propertyDefinitionsByType.getOrElse(d.symbol, Nil).map(pd => pd.qualifiedSymbol -> PropertyDefinitionSummary(pd.symbol, pd.name)).toMap))
       .toMap
   }
 }

@@ -8,6 +8,11 @@ declare global {
     }
 }
 
+export interface PropertyDefinition {
+  symbol: String,
+  name: String
+}
+
 export interface ExpressionDefinition {
   symbol: string;
   baseFormatString: string;
@@ -160,18 +165,18 @@ export class DefinedExpression {
 }
 
 export class TypeExpression {
-  constructor(public definition: TypeDefinition, public term: Expression, public otherComponents: Expression[], public properties: string[]) {}
+  constructor(public definition: TypeDefinition, public term: Expression, public otherComponents: Expression[], public properties: PropertyDefinition[]) {}
   serialize(): string {
     const baseWords = ["is", this.term.serialize(), this.definition.symbol, ...this.otherComponents.map(c => c.serialize())];
-    const allWords = this.properties.length ? [...baseWords, "with", "(" + this.properties.join(" ") + ")"] : baseWords;
+    const allWords = this.properties.length ? [...baseWords, "with", "(" + this.properties.map(p => p.symbol).join(" ") + ")"] : baseWords;
     return allWords.join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
     const baseWords = ["is", this.term.serializeNicely(boundVariableLists), this.definition.symbol, ...this.otherComponents.map(c => c.serializeNicely(boundVariableLists))];
-    const allWords = this.properties.length ? [...baseWords, "with", "(" + this.properties.join(" ") + ")"] : baseWords;
+    const allWords = this.properties.length ? [...baseWords, "with", "(" + this.properties.map(p => p.symbol).join(" ") + ")"] : baseWords;
     return allWords.join(" ")
   }
-  addProperty(newProperty: string) {
+  addProperty(newProperty: PropertyDefinition) {
     this.properties = [...this.properties, newProperty];
   }
   setBoundVariableName(): Expression {
@@ -193,7 +198,7 @@ export class TypeExpression {
 }
 
 export class PropertyExpression {
-  constructor(public typeDefinition: TypeDefinition, public symbol: string, public name: string, public term: Expression, public otherComponents: Expression[]) {}
+  constructor(public typeDefinition: TypeDefinition, public symbol: string, public definition: PropertyDefinition, public term: Expression, public otherComponents: Expression[]) {}
   serialize(): string {
     return [this.symbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
   }

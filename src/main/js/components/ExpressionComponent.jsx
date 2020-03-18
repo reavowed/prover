@@ -95,7 +95,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
 
       const formattedTerm = renderExpression(expression.term, termPath, [...sharedActionHighlights, ...filterPaths(actionHighlights, termPath)], [...sharedStaticHighlights, ...filterPaths(staticHighlights, termPath)], boundVariableLists, false);
       const formattedIs = renderExpression({textForHtml: () => "is"}, [], sharedActionHighlights, sharedStaticHighlights, boundVariableLists, false);
-      const articleWord = expression.properties.length ? expression.properties[0] : expression.definition.name;
+      const articleWord = expression.properties.length ? expression.properties[0].name : expression.definition.name;
       const article = _.includes("aeiou", articleWord[0]) ? "an" : "a";
       const formattedArticle = renderExpression({textForHtml: () => article}, [], typeActionHighlights, typeStaticHighlights, boundVariableLists, false);
       const formattedName = renderExpression({textForHtml: () => expression.definition.name}, [], typeActionHighlights, typeStaticHighlights, boundVariableLists, false);
@@ -107,7 +107,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       const formattedComponentText = formatHtmlWithoutWrapping(expression.definition.componentFormatString, s => replacePlaceholders(s, formattedComponents));
 
       const formattedProperties = _.flatMap(expression.properties, (p, i) => {
-        const formattedProperty = renderExpression({textForHtml: () => p}, [], filterPaths(actionHighlights, getPropertyPath(i)), filterPaths(staticHighlights, getPropertyPath(i)), boundVariableLists, false);
+        const formattedProperty = renderExpression({textForHtml: () => p.name}, [], filterPaths(actionHighlights, getPropertyPath(i)), filterPaths(staticHighlights, getPropertyPath(i)), boundVariableLists, false);
         if (i === 0)
           return [formattedProperty];
         else
@@ -116,7 +116,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       return [formattedTerm, <> </>, formattedIs, <> </>, formattedArticle, <> </>, ...formattedProperties, <> </>, formattedName, <> </>, formattedComponentText];
     } else if (expression instanceof PropertyExpression) {
       const formattedTerm = <ExpressionComponent expression={expression.term} boundVariableLists={boundVariableLists} wrapBoundVariable={wrapBoundVariable} parentRequiresBrackets={false} entryContext={entryContext}/>;
-      return [formattedTerm, <> is </>, expression.name];
+      return [formattedTerm, <> is </>, expression.definition.name];
     } else if (expression.formatForHtml) {
       const format = expression.formatForHtml(parentRequiresBrackets);
       const boundVariables = expression.boundVariableNames || [];
