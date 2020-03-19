@@ -19,12 +19,14 @@ export interface ExpressionDefinition {
   requiresBrackets: boolean;
   requiresComponentBrackets: boolean;
   numberOfBoundVariables: number;
+  numberOfComponents: number;
   attributes: string[];
 }
 
 export interface TypeDefinition {
   symbol: string;
   name: string;
+  numberOfComponents: number;
   componentFormatString: string;
   properties: { [key: string]: string }
 }

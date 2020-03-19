@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.Substitutions
 import net.prover.model.entries.ExpressionDefinition
 
-@JsonSerialize(using = classOf[FunctionParameterSerializer])
 case class FunctionParameter(index: Int, level: Int) extends Term {
   override def structuralComplexity: Int = 1
   override def definitionalComplexity: Int = 1
@@ -116,13 +115,4 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
   override def serialized = (0 to level).map(_ => "$").mkString("") + index
   override def serializedForHash = serialized
   override def toString = serialized
-}
-
-private class FunctionParameterSerializer extends JsonSerializer[FunctionParameter] {
-  override def serialize(value: FunctionParameter, gen: JsonGenerator, serializers: SerializerProvider) = {
-    gen.writeStartArray(2)
-    gen.writeNumber(value.level)
-    gen.writeNumber(value.index)
-    gen.writeEndArray()
-  }
 }

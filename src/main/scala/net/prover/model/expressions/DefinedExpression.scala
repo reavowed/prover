@@ -8,7 +8,6 @@ import net.prover.model.entries.ExpressionDefinition
 
 import scala.collection.immutable.Nil
 
-@JsonSerialize(using = classOf[DefinedExpressionSerializer])
 trait DefinedExpression[ExpressionType <: Expression] extends Expression with TypedExpression[ExpressionType] {
   def components: Seq[Expression]
   def boundVariableNames: Seq[String]
@@ -137,14 +136,4 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
   override def serialized: String = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
   override def serializedForHash: String = (Seq(definition.symbol) ++ components.map(_.serializedForHash)).mkString(" ")
-}
-
-private class DefinedExpressionSerializer extends JsonSerializer[DefinedExpression[_]] {
-  override def serialize(value: DefinedExpression[_], gen: JsonGenerator, serializers: SerializerProvider): Unit = {
-    gen.writeStartArray(value.components.length + value.boundVariableNames.length + 1)
-    gen.writeString(value.definition.symbol)
-    value.boundVariableNames.foreach(gen.writeString)
-    value.components.foreach(gen.writeObject)
-    gen.writeEndArray()
-  }
 }

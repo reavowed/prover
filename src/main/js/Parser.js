@@ -33,45 +33,92 @@ export class Parser {
     this.typeDefinitions = typeDefinitions;
   }
   parseExpression = (json) => {
-    if (_.isArray(json) && _.isString(json[0])) {
-      const [definitionSymbol, ...boundVariablesAndComponents] = json;
-      const expressionDefinition = this.definitions[definitionSymbol];
-      const typeDefinition = this.typeDefinitions[definitionSymbol];
-      const parentTypeDefinition = _.find(this.typeDefinitions, d => _.has(d.properties, definitionSymbol));
-      if (expressionDefinition) {
-        const boundVariableNames = boundVariablesAndComponents.slice(0, expressionDefinition.numberOfBoundVariables);
-        const componentsJson = boundVariablesAndComponents.slice(expressionDefinition.numberOfBoundVariables);
-        if (_.includes(expressionDefinition.attributes, "conjunction")) {
-          const [firstComponentJson, secondComponentJson] = componentsJson;
-          const firstComponent = this.parseExpression(firstComponentJson);
-          if (firstComponent instanceof TypeExpression && _.isArray(secondComponentJson) && secondComponentJson.length > 0 && _.includes(_.keys(firstComponent.definition.properties), secondComponentJson[0])) {
-            const [propertyName, termJson, ...otherComponentsJson] = secondComponentJson;
-            const property = firstComponent.definition.properties[propertyName];
-            const term = this.parseExpression(termJson);
-            const otherComponents = otherComponentsJson.map(this.parseExpression);
-            if (term.serialize() === firstComponent.term.serialize() && otherComponents.map(c => c.serialize()).join(" ") === firstComponent.otherComponents.map(c => c.serialize()).join(" ")) {
-              firstComponent.addProperty(property);
-              return firstComponent;
+    const self = this;
+    function parseExpressionsFromTokens(tokens, numberOfExpressions) {
+      return _.reduce(
+        _.range(numberOfExpressions),
+        ([componentsSoFar, tokens]) => {
+          const [newComponent, newTokens] = parseExpressionFromTokens(tokens);
+          return [[...componentsSoFar, newComponent], newTokens];
+        },
+        [[], tokens]
+      );
+    }
+    function parseArgumentsFromTokens(tokens) {
+      if (tokens.length > 0) {
+        if (tokens[0] === ")") {
+          return [[], tokens.slice(1)];
+        } else {
+          const [currentArgument, tokensAfterCurrentArgument] = parseExpressionFromTokens(tokens);
+          const [remainingArguments, remainingTokens] = parseArgumentsFromTokens(tokensAfterCurrentArgument);
+          return [[currentArgument, ...remainingArguments], remainingTokens]
+        }
+      } else {
+        throw "Expression ended unexpectedly during parsing"
+      }
+    }
+    function parseExpressionFromTokens(tokens) {
+      if (tokens.length > 0) {
+        const [firstToken, ...tokensAfterFirst] = tokens;
+        const expressionDefinition = self.definitions[firstToken];
+        const typeDefinition = self.typeDefinitions[firstToken];
+        const parentTypeDefinition = _.find(self.typeDefinitions, d => _.has(d.properties, firstToken));
+        if (expressionDefinition) {
+          const boundVariables = tokensAfterFirst.slice(0, expressionDefinition.numberOfBoundVariables);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterFirst.slice(expressionDefinition.numberOfBoundVariables), expressionDefinition.numberOfComponents);
+          if (_.includes(expressionDefinition.attributes, "conjunction")) {
+            const [firstComponent, secondComponent] = components;
+            if (firstComponent instanceof TypeExpression && secondComponent instanceof DefinedExpression && _.includes(_.keys(firstComponent.definition.properties), secondComponent.definition.symbol)) {
+              const property = firstComponent.definition.properties[secondComponent.definition.symbol];
+              const [term, ...otherComponents] = secondComponent.components;
+              if (term.serialize() === firstComponent.term.serialize() && otherComponents.map(c => c.serialize()).join(" ") === firstComponent.otherComponents.map(c => c.serialize()).join(" ")) {
+                firstComponent.addProperty(property);
+                return firstComponent;
+              }
             }
           }
+          return [new DefinedExpression(expressionDefinition, boundVariables, components), tokensAfterComponents];
+        } else if (typeDefinition) {
+          const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, typeDefinition.numberOfComponents);
+          return [new TypeExpression(typeDefinition, term, components, []), tokensAfterComponents];
+        } else if (parentTypeDefinition) {
+          const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, parentTypeDefinition.numberOfComponents);
+          return [new PropertyExpression(parentTypeDefinition, firstToken, parentTypeDefinition.properties[firstToken], term, components), tokensAfterComponents];
+        } else if (firstToken === "with") {
+          const [variableArguments, [name, ...remainingTokens]] = parseArgumentsFromTokens(tokensAfterFirst.slice(1));
+          return [new Variable(name, variableArguments), remainingTokens];
+        } else if (firstToken.startsWith("$")) {
+          const match = firstToken.match(new RegExp("^(\\$+)(\\d+)"));
+          if (!match) {
+            throw `Invalid parameter ${firstToken}`
+          }
+          return [new FunctionParameter(match[1].length - 1, parseInt(match[2])), tokensAfterFirst]
+        } else {
+          return [new Variable(firstToken, []), tokensAfterFirst];
         }
-        return new DefinedExpression(expressionDefinition, boundVariableNames, componentsJson.map(this.parseExpression));
-      } else if (typeDefinition) {
-        return new TypeExpression(typeDefinition, this.parseExpression(boundVariablesAndComponents[0]), boundVariablesAndComponents.slice(1).map(this.parseExpression), [])
-      } else if (parentTypeDefinition) {
-        return new PropertyExpression(parentTypeDefinition, definitionSymbol, parentTypeDefinition.properties[definitionSymbol], this.parseExpression(boundVariablesAndComponents[0]), boundVariablesAndComponents.slice(1).map(this.parseExpression))
       } else {
-        throw `Unrecognised definition ${definitionSymbol}`
+        throw "Expression ended unexpectedly during parsing"
       }
-    } else if (_.isArray(json) && _.isNumber(json[0])) {
-      const [level, index] = json;
-      return new FunctionParameter(level, index);
-    } else if (_.isObject(json)) {
-      let [[name, args]] = _.toPairs(json);
-      return new Variable(name, args.map(this.parseExpression));
-    } else {
-      throw `Unrecognised expression ${JSON.stringify(json)}`
     }
+    function splitToken(token) {
+      const firstSingleCharacterIndex = _.findIndex(token, x => _.includes("(){}", x));
+      if (firstSingleCharacterIndex === 0) {
+        return [token[0], ...splitToken(token.substring(1))];
+      } else if (firstSingleCharacterIndex > 0) {
+        return [token.substring(0, firstSingleCharacterIndex), token[firstSingleCharacterIndex], ...splitToken(token.substring(firstSingleCharacterIndex + 1))];
+      } else if (token.length) {
+        return [token];
+      } else {
+        return [];
+      }
+    }
+    const [expression, tokens] = parseExpressionFromTokens(_.flatMap(json.split(/ /), splitToken));
+    if (tokens.length) {
+      throw "Expression parsing ended before end of string";
+    }
+    return expression;
   };
 
   parseReference = (json) => {

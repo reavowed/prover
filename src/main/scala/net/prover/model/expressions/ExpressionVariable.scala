@@ -8,7 +8,6 @@ import net.prover.model.entries.ExpressionDefinition
 
 import scala.reflect.ClassTag
 
-@JsonSerialize(using = classOf[ExpressionVariableSerializer])
 abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] extends Expression with TypedExpression[ExpressionType] with Substitutions.Lenses[ExpressionType] { this: ExpressionType =>
   def name: String
   def arguments: Seq[Term]
@@ -142,11 +141,4 @@ object ExpressionVariable {
   }
 }
 
-private class ExpressionVariableSerializer extends JsonSerializer[ExpressionVariable[_]] {
-  override def serialize(value: ExpressionVariable[_], gen: JsonGenerator, serializers: SerializerProvider): Unit = {
-    gen.writeStartObject(value)
-    gen.writeObjectField(value.name, value.arguments)
-    gen.writeEndObject()
-  }
-}
 

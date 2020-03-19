@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import javax.servlet.http.HttpServletRequest
 import net.prover.model.{EntryContext, Inference}
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.DefinedStatement
@@ -38,7 +39,7 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
   }
 
   @GetMapping(value = Array("unprovenTheorems"))
-  def getUnprovenTheorems: Seq[String] = {
+  def getUnprovenTheorems(request: HttpServletRequest): Seq[String] = {
     val (books, definitions) = bookService.booksAndDefinitions
     for {
       (book, bookKey) <- BookService.getBooksWithKeys(books)
@@ -46,7 +47,7 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
       (theorem, theoremKey) <- BookService.getEntriesWithKeys(chapter)
         .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
       if !theorem.isComplete(definitions)
-    } yield BookService.getEntryUrl(bookKey, chapterKey, theoremKey)
+    } yield "http://" + request.getHeader("Host") + BookService.getEntryUrl(bookKey, chapterKey, theoremKey)
   }
 
   @GetMapping(value = Array("findAssertions"))

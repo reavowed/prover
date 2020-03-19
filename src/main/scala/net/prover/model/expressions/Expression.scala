@@ -1,9 +1,13 @@
 package net.prover.model.expressions
 
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.entries.ExpressionDefinition
 import net.prover.model.proof.{StepContext, SubstitutionContext}
 import net.prover.model.{ExpressionParsingContext, Parser, Substitutions}
 
+@JsonSerialize(using = classOf[ExpressionSerializer])
 trait Expression extends TypedExpression[Expression]
 
 trait TypedExpression[+ExpressionType <: Expression] {
@@ -218,4 +222,10 @@ sealed trait ExpressionType[T <: Expression]
 object ExpressionType {
   implicit object StatementType extends ExpressionType[Statement]
   implicit object TermType extends ExpressionType[Term]
+}
+
+private class ExpressionSerializer extends JsonSerializer[Expression] {
+  override def serialize(value: Expression, gen: JsonGenerator, serializers: SerializerProvider): Unit = {
+    gen.writeString(value.serialized)
+  }
 }
