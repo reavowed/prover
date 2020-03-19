@@ -41,12 +41,17 @@ case class ExpressionParsingContext(
 object ExpressionParsingContext {
   private val StatementVariablePattern: String = "[α-ω]"
   private val TermVariableNamePattern: String = "[^α-ω(){}\\[\\]]"
+  // Matches an optional prime or sub/superscripts
+  private val TermVariableSuffixPattern = "(?:'|[_\\^].*)?"
 
   object RecognisedStatementVariableName {
     def unapply(text: String): Option[String] = s"($StatementVariablePattern)".r.unapplySeq(text).flatMap(_.headOption)
   }
   object RecognisedDefaultTermVariableName {
     def unapply(text: String): Option[String] = s"($TermVariableNamePattern)".r.unapplySeq(text).flatMap(_.headOption)
+  }
+  object RecognisedDefaultTermVariableNameWithSuffix {
+    def unapply(text: String): Option[String] = s"($TermVariableNamePattern$TermVariableSuffixPattern)".r.unapplySeq(text).flatMap(_.headOption)
   }
 
   trait TermVariableValidator {
@@ -56,11 +61,7 @@ object ExpressionParsingContext {
   }
   object TermVariableValidator{
     case object AnyTermVariable extends TermVariableValidator {
-      // Matches an optional prime or sub/superscripts
-      private val allowedSuffixMatch = "(?:'|[_\\^].*)?"
-      private val pattern = s"($TermVariableNamePattern$allowedSuffixMatch)".r
-      override protected def isValidTermVariable(text: String): Boolean = pattern.pattern.matcher(text).matches()
-
+      override protected def isValidTermVariable(text: String): Boolean = RecognisedDefaultTermVariableNameWithSuffix.unapply(text).nonEmpty
       override def getVariableOrParameter(text: String, parameter: Option[FunctionParameter]): Option[Term] = {
         parameter orElse getVariable(text).map(TermVariable(_, Nil))
       }

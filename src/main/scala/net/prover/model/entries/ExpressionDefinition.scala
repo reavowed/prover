@@ -76,7 +76,7 @@ object ExpressionDefinition {
       Parser.selectOptionalWordParser {
         case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
           Parser.constant(StatementComponent(name, Nil))
-        case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
+        case ExpressionParsingContext.RecognisedDefaultTermVariableNameWithSuffix(name) =>
           Parser.constant(TermComponent(name, Nil))
       }.whileDefined
     }
@@ -85,7 +85,7 @@ object ExpressionDefinition {
       Parser.selectOptionalWordParser {
         case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
           Parser.constant(StatementComponent(name, Nil))
-        case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
+        case ExpressionParsingContext.RecognisedDefaultTermVariableNameWithSuffix(name) =>
           Parser.constant(TermComponent(name, Nil))
         case "with" =>
           for {
