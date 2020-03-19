@@ -28,7 +28,7 @@ export interface TypeDefinition {
   name: string;
   numberOfComponents: number;
   componentFormatString: string;
-  properties: { [key: string]: string }
+  properties: { [key: string]: PropertyDefinition }
 }
 
 export interface ExpressionMatchResult {

@@ -82,24 +82,47 @@ export default function InputWithShorthandReplacement({value, onChange, ...other
       return preceding + newWord;
     });
   }
+  function matchWords(words, searchText) {
+    if (!searchText.length) {
+      return true;
+    }
+    if (!words.length) {
+      return false;
+    }
+    const [firstWord, ...remainingWords] = words;
+    if (!firstWord.length) {
+      return matchWords(remainingWords, searchText);
+    }
+    if (firstWord[0].toUpperCase() === searchText[0].toUpperCase()) {
+      return matchWords([firstWord.substring(1), ...remainingWords], searchText.substring(1)) ||
+        matchWords(remainingWords, searchText.substring(1));
+    } else {
+      return matchWords(remainingWords, searchText);
+    }
+  }
+
+  function isMatch(key, searchText) {
+    const keyWords = key.split(/(?=[A-Z])/);
+    return matchWords(keyWords, searchText);
+  }
 
   function onSuggestionsFetchRequested() {
     const [initialText, ] = getInputContents();
     const [, lastWord] = splitLastWord(initialText);
     if (lastWord) {
       const matchingDefinitions = _.chain(context.definitions)
-        .filter((value, key) => _.startsWith(key, lastWord))
+        .filter((value, key) => isMatch(key, lastWord))
         .map((value) => value.symbol)
         .value();
       const matchingShorthands = _.chain(context.definitionShorthands)
-        .filter((value, key) => _.startsWith(key, lastWord))
+        .filter((value, key) => isMatch(key, lastWord))
         .map((value) => value)
         .value();
       const matchingTypes = _.chain(context.typeDefinitions)
-        .flatMap((value, key) => [key, ..._.values(value.properties)])
-        .filter(key => _.startsWith(key, lastWord))
+        .flatMap((value, key) => [key, ..._.values(value.properties).map(p => p.symbol)])
+        .filter(key => isMatch(key, lastWord))
         .value();
-      const matchingValues = _.chain([...matchingDefinitions, ...matchingShorthands, ...matchingTypes]).uniq().sortBy().value();
+      const matchingValues = _.chain([...matchingDefinitions, ...matchingShorthands, ...matchingTypes]).uniq().sortBy().value().slice(0, 10);
       setSuggestions(matchingValues);
     } else {
       setSuggestions([]);
