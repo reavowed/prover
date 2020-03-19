@@ -140,7 +140,7 @@ export class DefinedExpression {
     return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
-    const innerBoundVariables = this.boundVariableNames.length ? [this.boundVariableNames, ...boundVariableLists] : boundVariableLists;
+    const innerBoundVariables = this.boundVariableNames.length ? [...boundVariableLists, this.boundVariableNames] : boundVariableLists;
     return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serializeNicely(innerBoundVariables))].join(" ");
   }
   formatForHtml(parentRequiresBrackets: boolean) {
