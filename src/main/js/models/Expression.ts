@@ -225,8 +225,8 @@ export class FunctionParameter {
     return this.textForHtml(boundVariableLists);
   }
   textForHtml(boundVariableLists: string[][]) {
-    const name = boundVariableLists[this.level][this.index];
-    if (_.countBy(_.flattenDeep(boundVariableLists.slice(0, this.level)))[name] > 0) { // If there are two bound variables with the same name and we're pointing to one that's further up the scope, disambiguate it
+    const name = boundVariableLists[boundVariableLists.length - this.level - 1][this.index];
+    if (_.countBy(_.flattenDeep(boundVariableLists.slice(boundVariableLists.length - this.level)))[name] > 0) { // If there are two bound variables with the same name and we're pointing to one that's further up the scope, disambiguate it
       return this.serialize()
     } else {
       return name;

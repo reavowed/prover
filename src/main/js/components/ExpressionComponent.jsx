@@ -65,7 +65,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         path.concat(match.pathWithinMatch),
         filterPaths(actionHighlights, match.pathWithinMatch),
         filterPaths(staticHighlights, match.pathWithinMatch),
-        [...match.boundVariablesWithinMatch, ...boundVariableLists],
+        [...boundVariableLists, ...match.boundVariablesWithinMatch],
         true // Display shorthands currently default to requiring brackets
       );
     }
@@ -120,7 +120,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
     } else if (expression.formatForHtml) {
       const format = expression.formatForHtml(parentRequiresBrackets);
       const boundVariables = expression.boundVariableNames || [];
-      const innerBoundVariables = boundVariables.length ? [boundVariables, ...boundVariableLists] : boundVariableLists;
+      const innerBoundVariables = boundVariables.length ? [...boundVariableLists, boundVariables] : boundVariableLists;
       const renderedBoundVariables = boundVariables.map((name, index) => wrapBoundVariable(name, index, path));
       const renderedComponents = expression.components.map((c, i) =>
         renderExpression(c, [...path, i], filterPaths(actionHighlights, [i]), filterPaths(staticHighlights, [i]), innerBoundVariables, expression.definition ? expression.definition.requiresComponentBrackets : true)

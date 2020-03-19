@@ -1,7 +1,7 @@
 package net.prover.controllers
 
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
-import net.prover.controllers.models.{PathData, PossibleConclusion, PossibleInference, StepDefinition}
+import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, PossibleInference, StepDefinition}
 import net.prover.model.ExpressionParsingContext.TermVariableValidator
 import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
@@ -60,7 +60,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
 
       def getPossibleInference(inference: Inference): Option[PossibleInference] = {
         val possibleConclusions = provingContext.extractionOptionsByInferenceId(inference.id)
-          .mapCollect(PossibleConclusion.fromExtractionOptionWithSubstitutions(_, getSubstitutions))
+          .mapCollect(PossibleConclusionWithPremises.fromExtractionOptionWithSubstitutions(_, getSubstitutions))
         if (possibleConclusions.nonEmpty) {
           Some(PossibleInference(inference.summary, None, Some(possibleConclusions)))
         } else {
@@ -110,9 +110,9 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     serializedPremiseStatement: String,
     direction: Direction
   ): ResponseEntity[_] = {
-    def getPremises[T <: Expression](joiner: BinaryJoiner[T], lhs: T, rhs: T, premise: Statement, baseSubstitutions: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Try[Seq[PossibleConclusion]] = {
+    def getPremises[T <: Expression](joiner: BinaryJoiner[T], lhs: T, rhs: T, premise: Statement, baseSubstitutions: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Try[Seq[PossibleConclusionWithPremises]] = {
       Success(SubstatementExtractor.getExtractionOptions(premise)
-        .flatMap(PossibleConclusion.fromExtractionOptionWithSubstitutions(_, conclusion => for {
+        .flatMap(PossibleConclusionWithPremises.fromExtractionOptionWithSubstitutions(_, conclusion => for {
           (conclusionLhs, conclusionRhs) <- joiner.unapply(conclusion)
           substitutions <- getSubstitutionsWithTermOrSubterm(direction.getSource(conclusionLhs, conclusionRhs), direction.getSource(lhs, rhs), baseSubstitutions)
         } yield substitutions)))

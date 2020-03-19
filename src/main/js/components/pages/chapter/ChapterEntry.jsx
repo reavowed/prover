@@ -30,7 +30,7 @@ export default function ChapterEntry({entry}) {
       const equality = _.find(entryContext.definitions, d => _.includes(d.attributes, "equality"));
       const result = (equality && entry.definingStatement instanceof DefinedExpression && entry.definingStatement.definition === equality && entry.definingStatement.components[0].serialize() === entry.defaultValue.serialize()) ?
         <><CopiableExpression expression={entry.defaultValue}/> is defined to be equal to <CopiableExpression expression={entry.definingStatement.components[1]}/></> :
-        <><CopiableExpression expression={entry.defaultValue}/> is defined by <CopiableExpression expression={entry.definingStatement}/></>;
+        <><CopiableExpression expression={entry.defaultValue}/> is defined such that <CopiableExpression expression={entry.definingStatement}/></>;
       return <DefinitionEntry key={entry.url} title="Term Definition" entry={entry}>
         <ResultWithPremises premises={entry.premises}
                             result={result}/>

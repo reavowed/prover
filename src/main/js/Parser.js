@@ -210,18 +210,20 @@ export class Parser {
     });
   };
   parsePossibleConclusions = (possibleConclusions) => {
-    _.forEach(possibleConclusions, c => {
-      c.conclusion = this.parseExpression(c.conclusion);
-      c.substitutions = c.substitutions && this.parseSubstitutions(c.substitutions);
-      _.forEach(c.possiblePremises, p => {
-        p.premise = this.parseExpression(p.premise);
-        _.forEach(p.possibleMatches, m => {
-          m.matchingPremise = this.parseExpression(m.matchingPremise);
-          m.substitutions = this.parseSubstitutions(m.substitutions);
-        });
+    _.forEach(possibleConclusions, this.parsePossibleConclusion);
+    return possibleConclusions;
+  };
+  parsePossibleConclusion = (possibleConclusion) => {
+    possibleConclusion.conclusion = this.parseExpression(possibleConclusion.conclusion);
+    possibleConclusion.substitutions = possibleConclusion.substitutions && this.parseSubstitutions(possibleConclusion.substitutions);
+    _.forEach(possibleConclusion.possiblePremises, p => {
+      p.premise = this.parseExpression(p.premise);
+      _.forEach(p.possibleMatches, m => {
+        m.matchingPremise = this.parseExpression(m.matchingPremise);
+        m.substitutions = this.parseSubstitutions(m.substitutions);
       });
     });
-    return possibleConclusions;
+    return possibleConclusion;
   };
   parsePremiseRewriteSuggestions = (suggestions) => {
     return suggestions.map(suggestionJson => {

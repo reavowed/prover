@@ -73,15 +73,20 @@ export default class ConclusionChooser extends React.Component {
 
   setSelectedConclusion = (selectedConclusion) => {
     if (selectedConclusion) {
-      const premiseStatements = selectedConclusion.possiblePremises.map(p => p.premise);
-      const conclusionStatement = selectedConclusion.conclusion;
-      const selectedPremises = selectedConclusion.possiblePremises.map(p => ["", null]);
-      const selectedSubstitutionValues = buildSubstitutionMap(selectedConclusion.requiredSubstitutions, () => "");
-      this.setStatePromise({selectedConclusion, premiseStatements, conclusionStatement, selectedPremises, selectedSubstitutionValues})
-        .then(() => this.ref.current.scrollIntoView());
-      if (this.props.allowAutoSubmit && this.areSubstitutionValuesSufficient(selectedConclusion, selectedPremises, selectedSubstitutionValues)) {
-        this.submitWithSelectedValues(selectedConclusion, selectedPremises, selectedSubstitutionValues)
-      }
+      const fetchConclusionWithPremises = selectedConclusion.possiblePremises ?
+        Promise.resolve(selectedConclusion) :
+        this.props.fetchPossiblePremises(selectedConclusion);
+      return fetchConclusionWithPremises.then(selectedConclusion => {
+        const premiseStatements = selectedConclusion.possiblePremises.map(p => p.premise);
+        const conclusionStatement = selectedConclusion.conclusion;
+        const selectedPremises = selectedConclusion.possiblePremises.map(p => ["", null]);
+        const selectedSubstitutionValues = buildSubstitutionMap(selectedConclusion.requiredSubstitutions, () => "");
+        this.setStatePromise({selectedConclusion, premiseStatements, conclusionStatement, selectedPremises, selectedSubstitutionValues})
+          .then(() => this.ref.current.scrollIntoView());
+        if (this.props.allowAutoSubmit && this.areSubstitutionValuesSufficient(selectedConclusion, selectedPremises, selectedSubstitutionValues)) {
+          this.submitWithSelectedValues(selectedConclusion, selectedPremises, selectedSubstitutionValues)
+        }
+      });
     } else {
       this.setStatePromise({selectedConclusion: null, conclusionStatement: null, selectedPremises: [], selectedSubstitutionValues: {}})
         .then(() => this.ref.current.scrollIntoView());
@@ -209,12 +214,12 @@ export default class ConclusionChooser extends React.Component {
                                          onKeyUp={this.onInputKeyUp} /> :
             <BoundVariableLists.Consumer>{ boundVariableLists =>
               validValues.length === 1 ?
-                <Form.Label column><CopiableExpression expression={validValues[0]} boundVariableLists={[...boundVariableListsForSubstitutions, ...boundVariableLists]} /></Form.Label> :
+                <Form.Label column><CopiableExpression expression={validValues[0]} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} /></Form.Label> :
                 <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)} readOnly={disabled}>
                   <option value="" />
                   {validValues.map(v =>
                     <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                        <ExpressionComponent expression={v} boundVariableLists={[...boundVariableListsForSubstitutions, ...boundVariableLists]} entryContext={entryContext}/>
+                        <ExpressionComponent expression={v} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} entryContext={entryContext}/>
                       )}}/>
                 )}
               </Form.Control>
@@ -249,7 +254,7 @@ export default class ConclusionChooser extends React.Component {
         {possibleConclusions.length > 1 && <Form.Group>
           <Form.Label><strong>Choose conclusion</strong></Form.Label>
           <Form.Control as="select"
-                        value={selectedConclusion ? _.indexOf(possibleConclusions, selectedConclusion) : ""}
+                        value={selectedConclusion ? _.findIndex(possibleConclusions, p => p.conclusion.serialize() === selectedConclusion.conclusion.serialize()) : ""}
                         onChange={e => this.setSelectedConclusion(possibleConclusions[e.target.value])} readOnly={disabled}>
             <option value="" />
             {possibleConclusions.map(({conclusion}, index) =>

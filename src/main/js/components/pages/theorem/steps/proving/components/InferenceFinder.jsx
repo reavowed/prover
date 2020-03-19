@@ -38,8 +38,12 @@ export class InferenceFinder extends React.Component {
     }
   }
   fetchPossibleInferences = (value) => {
-    return this.props.getInferenceSuggestions(value)
-      .then(suggestionsJson => this.context.parser.parsePossibleInferences(suggestionsJson))
+    if (value !== "") {
+      return this.props.getInferenceSuggestions(value)
+        .then(suggestionsJson => this.context.parser.parsePossibleInferences(suggestionsJson))
+    } else {
+      return Promise.resolve([]);
+    }
   };
   setSelectedInference = (selectedInference) => {
     return this.setStatePromise({selectedInference})
@@ -116,6 +120,7 @@ export class InferenceFinder extends React.Component {
       }</BoundVariableLists.Consumer>}
       {possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}
                                                  defaultConclusionStatement={selectedInference.inference.conclusion}
+                                                 fetchPossiblePremises={(selectedConclusion) => this.props.fetchPossiblePremises(selectedInference.inference, selectedTarget.target, selectedConclusion.conclusion)}
                                                  submit={this.submit}
                                                  disabled={disabled}
                                                  boundVariableListsForPremises={[]}

@@ -5,7 +5,7 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.StepProvingContext
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 
-case class PossibleInference(inference: Inference.Summary, possibleTargets: Option[Seq[PossibleTarget]], possibleConclusions: Option[Seq[PossibleConclusion]]) {
+case class PossibleInference(inference: Inference.Summary, possibleTargets: Option[Seq[PossibleTarget]], possibleConclusions: Option[Seq[PossibleConclusionWithPremises]]) {
   def canEqual(other: Any): Boolean = other.isInstanceOf[PossibleInference]
   override def equals(other: Any): Boolean = other match {
     case that: PossibleInference =>
@@ -26,21 +26,26 @@ case class PossibleTarget(
 
 case class PossibleConclusion(
   conclusion: Statement,
+  extractionInferenceIds: Seq[String],
+  additionalVariableNames: Seq[String])
+
+case class PossibleConclusionWithPremises(
+  conclusion: Statement,
   possiblePremises: Seq[PossiblePremise],
   substitutions: Option[SuggestedSubstitutions],
   requiredSubstitutions: Substitutions.Required,
   extractionInferenceIds: Seq[String],
   additionalVariableNames: Seq[String])
 
-object PossibleConclusion {
-  def fromExtractionOptionWithTarget(extractionOption: ExtractionOption, target: Statement)(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusion] = {
+object PossibleConclusionWithPremises {
+  def fromExtractionOptionWithTarget(extractionOption: ExtractionOption, target: Statement)(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {
     fromExtractionOptionWithSubstitutions(extractionOption, _.calculateSubstitutions(target))
   }
-  def fromExtractionOptionWithSubstitutions(extractionOption: ExtractionOption, getSubstitutions: Statement => Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusion] = {
+  def fromExtractionOptionWithSubstitutions(extractionOption: ExtractionOption, getSubstitutions: Statement => Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {
     getSubstitutions(extractionOption.conclusion).map(s => fromExtractionOption(extractionOption, Some(s)))
   }
-  def fromExtractionOption(extractionOption: ExtractionOption, substitutions: Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): PossibleConclusion = {
-    PossibleConclusion(
+  def fromExtractionOption(extractionOption: ExtractionOption, substitutions: Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): PossibleConclusionWithPremises = {
+    PossibleConclusionWithPremises(
       extractionOption.conclusion,
       PossiblePremise.fromAvailablePremises(extractionOption.premises, substitutions),
       substitutions.map(SuggestedSubstitutions(_)),

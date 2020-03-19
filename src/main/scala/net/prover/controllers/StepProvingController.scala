@@ -1,7 +1,7 @@
 package net.prover.controllers
 
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
-import net.prover.controllers.models.{DeductionUnwrapper, GeneralizationUnwrapper, PathData, PossibleConclusion, PossibleInference, PossibleTarget, StepDefinition, Unwrapper}
+import net.prover.controllers.models.{DeductionUnwrapper, GeneralizationUnwrapper, PathData, PossibleConclusion, PossibleConclusionWithPremises, PossibleInference, PossibleTarget, StepDefinition, Unwrapper}
 import net.prover.model.ExpressionParsingContext.TermVariableValidator
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
@@ -143,7 +143,8 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         val possibleTargets = for {
           possibleUnwrappedTargetStatement <- possibleUnwrappedTargetStatements
           possibleConclusions = spc.provingContext.extractionOptionsByInferenceId(inference.id)
-            .mapCollect(PossibleConclusion.fromExtractionOptionWithTarget(_, possibleUnwrappedTargetStatement.statement)(StepProvingContext.updateStepContext(possibleUnwrappedTargetStatement.unwrappers.enhanceContext)))
+            .filter(_.conclusion.calculateSubstitutions(possibleUnwrappedTargetStatement.statement).nonEmpty)
+            .map(e => PossibleConclusion(e.conclusion, e.extractionInferences.map(_.id), e.additionalVariableNames))
           if possibleConclusions.nonEmpty
         } yield PossibleTarget(
           possibleUnwrappedTargetStatement.statement,
@@ -195,6 +196,27 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     }).toResponseEntity
   }
 
+  @GetMapping(value = Array("/possiblePremisesForCurrentTarget"), produces = Array("application/json;charset=UTF-8"))
+  def getPossibleInferencesForCurrentTarget(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData,
+    @RequestParam("inferenceId") inferenceId: String,
+    @RequestParam("target") serializedTargetStatement: String,
+    @RequestParam("conclusion") serializedConclusionStatement: String
+  ): ResponseEntity[_] = {
+    (for {
+      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      inference <- findInference(inferenceId)(stepProvingContext)
+      conclusionStatement <- Statement.parser(stepProvingContext).parseFromString(serializedConclusionStatement, "conclusion statement").recoverWithBadRequest
+      possibleTarget <- getPossibleTargets(step.statement)(stepProvingContext).find(_.statement.serialized == serializedTargetStatement).orBadRequest(s"Could not find target $serializedTargetStatement")
+      extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id).find(_.conclusion == conclusionStatement).orBadRequest(s"Could not find extraction option with conclusion $conclusionStatement")
+    } yield PossibleConclusionWithPremises.fromExtractionOptionWithTarget(extractionOption, possibleTarget.statement)(StepProvingContext.updateStepContext(possibleTarget.unwrappers.enhanceContext)(stepProvingContext))).toResponseEntity
+  }
+
+
   @GetMapping(value = Array("/possibleInferencesForNewTarget"), produces = Array("application/json;charset=UTF-8"))
   def getPossibleInferencesForNewTarget(
     @PathVariable("bookKey") bookKey: String,
@@ -213,7 +235,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         .take(10)
         .map { inference =>
           val possibleConclusions = spc.provingContext.extractionOptionsByInferenceId(inference.id)
-            .map(PossibleConclusion.fromExtractionOption(_, None))
+            .map(PossibleConclusionWithPremises.fromExtractionOption(_, None))
           PossibleInference(inference.summary, None, Some(possibleConclusions))
         }
     }).toResponseEntity
@@ -236,7 +258,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     } yield {
       implicit val spc = stepProvingContext
       SubstatementExtractor.getExtractionOptions(premise.statement)
-        .flatMap(PossibleConclusion.fromExtractionOptionWithSubstitutions(_, _.calculateSubstitutions(step.statement, baseSubstitutions)))
+        .flatMap(PossibleConclusionWithPremises.fromExtractionOptionWithSubstitutions(_, _.calculateSubstitutions(step.statement, baseSubstitutions)))
     }).toResponseEntity
   }
 
@@ -257,7 +279,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     } yield {
       implicit val spc = stepProvingContext
       SubstatementExtractor.getExtractionOptions(premise.statement)
-        .map(PossibleConclusion.fromExtractionOption(_, Some(baseSubstitutions))(stepProvingContext))
+        .map(PossibleConclusionWithPremises.fromExtractionOption(_, Some(baseSubstitutions))(stepProvingContext))
     }).toResponseEntity
   }
 

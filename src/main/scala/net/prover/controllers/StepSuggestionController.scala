@@ -59,7 +59,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
             .map(s => PossibleInference(
               inference.summary,
               None,
-              Some(Seq(PossibleConclusion(
+              Some(Seq(PossibleConclusionWithPremises(
                 inference.conclusion,
                 PossiblePremise.fromAvailablePremises(namingPremises, Some(s)),
                 Some(SuggestedSubstitutions(s)),
