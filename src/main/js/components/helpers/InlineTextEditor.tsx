@@ -70,7 +70,7 @@ export class InlineTextEditor extends React.Component<InlineTextEditorProps, Inl
                     onBlur={this.saveValue}
                     ref={(ref: any) => { this.input = ref }}
                     style={{display: "inline", padding: 0, height: "inherit", lineHeight: "inherit", fontSize: "inherit"}}/> :
-      <ClickableText onClick={() => this.setState({editing: true, newText: text})}>
+      <ClickableText onFocus={() => this.setState({editing: true, newText: text})} tabIndex={0}>
         {formatHtml(text)}
       </ClickableText>;
   }
