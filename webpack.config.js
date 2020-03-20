@@ -1,9 +1,12 @@
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+
 module.exports = {
   entry: './src/main/js/App.jsx',
   output: {
     filename: 'bundle.js',
     libraryTarget: 'var',
-    library: 'App'
+    library: 'App',
+    publicPath: `http://localhost:8079/`,
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -31,10 +34,15 @@ module.exports = {
   mode: 'development',
   devtool: 'source-map',
   devServer: {
-    port: 8079
+    port: 8079,
+    hot: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    }
   },
   externals: {
     "react": "React",
     "react-dom": "ReactDOM"
-  }
+  },
+  plugins: [new ReactRefreshWebpackPlugin({disableRefreshCheck: true, useLegacyWDSSockets: true})]
 };
