@@ -13,7 +13,7 @@ import {Page} from "./Page";
 export function TypeDefinition({definition: definitionJson, definitions, typeDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, bookLink, chapterLink, url, previous, next, usages}) {
   const parser = new Parser(definitions, typeDefinitions);
   const definition = parser.parseTypeDefinition(definitionJson);
-  const entryContext = {parser, definitions, displayShorthands, definitionShorthands, inferences, binaryRelations};
+  const entryContext = EntryContext.create(parser, definitions, typeDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
 
   const saveSymbol = (newSymbol) => {
     return window.fetchJson(path.join(url, "symbol"), {method: "PUT", body: newSymbol})

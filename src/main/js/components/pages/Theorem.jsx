@@ -17,8 +17,11 @@ function Premise({statement, index}) {
 export class Theorem extends React.Component {
   constructor(props) {
     super(props);
+    this.parser = new Parser(props.definitions, props.typeDefinitions);
+    this.entryContext = EntryContext.create(this.parser, props.definitions, props.typeDefinitions, props.definitionShorthands, props.displayShorthands, props.inferences, props.binaryRelations);
+
     this.state = {
-      theorem: this.getParser().parseTheorem(props.theorem, props.inferences),
+      theorem: this.parser.parseTheorem(props.theorem, props.inferences),
       inferences: props.inferences,
       highlighting: {
         actionHighlights: [],
@@ -45,18 +48,15 @@ export class Theorem extends React.Component {
     document.body.removeEventListener('keydown', this.onKeyDown);
   }
 
-  getParser = () => new Parser(this.props.definitions, this.props.typeDefinitions);
 
   render() {
     const self = this;
-    const {url, definitions, displayShorthands, definitionShorthands, binaryRelations} = this.props;
+    const {url} = this.props;
     const {theorem, inferences, highlighting, disableChaining} = this.state;
-    const parser = this.getParser();
 
-    const entryContext = {parser, definitions, displayShorthands, definitionShorthands, inferences, binaryRelations};
     const theoremContext = {
-      entryContext,
-      parser,
+      entryContext: this.entryContext,
+      parser: this.parser,
       disableChaining,
       fetchJson(subpath,  options) {
         return window.fetchJson(path.join(url, subpath), options);
@@ -132,7 +132,7 @@ export class Theorem extends React.Component {
     }
 
     return <HashParamsContext.Provider value={hashParams}>
-      <EntryContext.Provider value={entryContext}>
+      <EntryContext.Provider value={this.entryContext}>
         <TheoremContext.Provider value={theoremContext}>
           <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" {...this.props}>
             <Proofs proofs={theorem.proofs} />

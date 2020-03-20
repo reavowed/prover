@@ -48,39 +48,46 @@ export interface BoundVariableMatchResult {
 
 type MatchResult = ExpressionMatchResult | BoundVariableMatchResult;
 
-export function matchTemplate(template: any, expression: Expression, pathWithinMatch: number[], boundVariablesWithinMatch: string[][]): MatchResult[] | undefined {
-  if (_.isString(template)) {
-    return [{type: "expression", matchedVariable: template, expression, pathWithinMatch, boundVariablesWithinMatch}];
-  } else if (_.isObject(template) && !_.isArray(template)) {
-    const [[name, args]] = _.toPairs(template);
-    if (args.length == 0) {
-      return [{type: "expression", matchedVariable: name, expression, pathWithinMatch, boundVariablesWithinMatch}];
+export function tokenize(str: string): string[]  {
+  function splitToken(word: string): string[] {
+    const firstSingleCharacterIndex = _.findIndex(word, x => _.includes("(){}", x));
+    if (firstSingleCharacterIndex === 0) {
+      return [word[0], ...splitToken(word.substring(1))];
+    } else if (firstSingleCharacterIndex > 0) {
+      return [word.substring(0, firstSingleCharacterIndex), word[firstSingleCharacterIndex], ...splitToken(word.substring(firstSingleCharacterIndex + 1))];
+    } else if (word.length) {
+      return [word];
+    } else {
+      return [];
     }
-  } else if (_.isArray(template) && _.isString(template[0])) {
-    if ((expression instanceof DefinedExpression) && (expression.definition.symbol === template[0])) {
+  }
+  return _.flatMap(str.split(' '), splitToken);
+}
+
+export function matchTemplate(template: Expression, expression: Expression, pathWithinMatch: number[], boundVariablesWithinMatch: string[][]): MatchResult[] | undefined {
+  if (template instanceof Variable && template.components.length === 0) {
+    return [{type: "expression", matchedVariable: template.name, expression, pathWithinMatch, boundVariablesWithinMatch}];
+  } else if (template instanceof DefinedExpression && expression instanceof DefinedExpression && expression.definition === template.definition) {
       const innerBoundVariables = expression.definition.numberOfBoundVariables ? [expression.boundVariableNames, ...boundVariablesWithinMatch] : boundVariablesWithinMatch;
-      const componentMatches = _.chain(template.slice(1))
+      const componentMatches = _.chain(template.components)
           .zip(expression.components)
-          .map(([t, c], i) => matchTemplate(t, c!, [...pathWithinMatch, i], innerBoundVariables))
+          .map(([t, c], i) => t && matchTemplate(t, c!, [...pathWithinMatch, i], innerBoundVariables))
           .value();
       if (_.every(componentMatches)) {
         const boundVariableMatches = expression.boundVariableNames.map((name, index) => ({type: "boundVariable", name, index, pathWithinMatch} as BoundVariableMatchResult));
         const flattenedComponentMatches: MatchResult[] = _.flatten(componentMatches as MatchResult[][]);
         return [...boundVariableMatches, ...flattenedComponentMatches];
       }
-    } else if ((expression instanceof TypeExpression) && (expression.definition.symbol === template[0])) {
-      const componentMatches = _.chain(template.slice(1))
-          .zip([expression.term, ...expression.otherComponents])
-          .map(([t, c], i) => matchTemplate(t, c!, [...pathWithinMatch, i], boundVariablesWithinMatch))
-          .value();
-      if (_.every(componentMatches)) {
-        return _.flatten(componentMatches as MatchResult[][]);
-      }
+  } else if (template instanceof TypeExpression && expression instanceof TypeExpression && expression.definition === template.definition) {
+    const componentMatches = _.chain([template.term, ...template.otherComponents])
+        .zip([expression.term, ...expression.otherComponents])
+        .map(([t, c], i) => t && matchTemplate(t, c!, [...pathWithinMatch, i], boundVariablesWithinMatch))
+        .value();
+    if (_.every(componentMatches)) {
+      return _.flatten(componentMatches as MatchResult[][]);
     }
-  } else if (_.isArray(template) && _.isNumber(template[0])) {
-    if ((expression instanceof FunctionParameter) && _.isEqual(template, [expression.level, expression.index])) {
-      return [];
-    }
+  } else if (template instanceof FunctionParameter && expression instanceof FunctionParameter && template.index === expression.index && template.level === expression.level) {
+    return [];
   }
   return undefined;
 }

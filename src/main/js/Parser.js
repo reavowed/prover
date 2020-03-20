@@ -5,6 +5,7 @@ import {
   FunctionParameter,
   PropertyExpression,
   TypeExpression,
+  tokenize,
 } from "./models/Expression";
 import {
   AssertionStep,
@@ -102,19 +103,7 @@ export class Parser {
         throw "Expression ended unexpectedly during parsing"
       }
     }
-    function splitToken(token) {
-      const firstSingleCharacterIndex = _.findIndex(token, x => _.includes("(){}", x));
-      if (firstSingleCharacterIndex === 0) {
-        return [token[0], ...splitToken(token.substring(1))];
-      } else if (firstSingleCharacterIndex > 0) {
-        return [token.substring(0, firstSingleCharacterIndex), token[firstSingleCharacterIndex], ...splitToken(token.substring(firstSingleCharacterIndex + 1))];
-      } else if (token.length) {
-        return [token];
-      } else {
-        return [];
-      }
-    }
-    const [expression, tokens] = parseExpressionFromTokens(_.flatMap(json.split(/ /), splitToken));
+    const [expression, tokens] = parseExpressionFromTokens(tokenize(json));
     if (tokens.length) {
       throw "Expression parsing ended before end of string";
     }
@@ -301,4 +290,9 @@ export class Parser {
       return entry;
     });
   };
+  parseDisplayShorthand = (json) => {
+    const shorthand = _.cloneDeep(json);
+    shorthand.template = this.parseExpression(shorthand.template);
+    return shorthand;
+  }
 }

@@ -81,8 +81,7 @@ private class DisplayShorthandSerializer extends JsonSerializer[DisplayShorthand
     gen.writeObjectField("baseFormatString", value.format.baseFormatString)
     gen.writeObjectField("requiresBrackets", value.format.requiresBrackets)
     gen.writeObjectField("conditions", value.conditions)
-    gen.writeFieldName("template")
-    serialize(value.template, gen)
+    gen.writeObjectField("template", value.template.serialized)
     gen.writeEndObject()
   }
 }
