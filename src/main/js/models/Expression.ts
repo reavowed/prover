@@ -174,10 +174,19 @@ export class DefinedExpression {
 }
 
 export class TypeExpression {
-  constructor(public definition: TypeDefinition, public term: Expression, public otherComponents: Expression[], public properties: PropertyDefinition[]) {}
+  constructor(public definition: TypeDefinition, public term: Expression, public otherComponents: Expression[], public properties: PropertyDefinition[], public conjunctionDefinition: ExpressionDefinition | undefined) {}
   serialize(): string {
-    const baseWords = ["is", this.term.serialize(), this.definition.symbol, ...this.otherComponents.map(c => c.serialize())];
-    const allWords = this.properties.length ? [...baseWords, "with", "(" + this.properties.map(p => p.symbol).join(" ") + ")"] : baseWords;
+    const termAndComponentsWords = [this.term.serialize(), ...this.otherComponents.map(c => c.serialize())];
+    const baseWords = [this.definition.symbol, ...termAndComponentsWords];
+    const allWords = _.reduce(
+          this.properties,
+        // @ts-ignore
+          (wordsSoFar: string[], propertyDefinition: PropertyDefinition) => {
+            if (this.conjunctionDefinition) {
+              return [this.conjunctionDefinition.symbol, ...wordsSoFar, propertyDefinition.symbol, ...termAndComponentsWords]
+            } else throw "Cannot serialize type with property without conjunction";
+          },
+          baseWords);
     return allWords.join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
@@ -185,8 +194,9 @@ export class TypeExpression {
     const allWords = this.properties.length ? [...baseWords, "with", "(" + this.properties.map(p => p.symbol).join(" ") + ")"] : baseWords;
     return allWords.join(" ")
   }
-  addProperty(newProperty: PropertyDefinition) {
+  addProperty(newProperty: PropertyDefinition, conjunctionDefinition: ExpressionDefinition) {
     this.properties = [...this.properties, newProperty];
+    this.conjunctionDefinition = conjunctionDefinition;
   }
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in type expression"
@@ -197,9 +207,9 @@ export class TypeExpression {
     } else if (!this.properties.length) {
       const [first, ...remaining] = path;
       if (first == 0)
-        return new TypeExpression(this.definition, this.term.replaceAtPath(remaining, expression), this.otherComponents, this.properties);
+        return new TypeExpression(this.definition, this.term.replaceAtPath(remaining, expression), this.otherComponents, this.properties, this.conjunctionDefinition);
       else
-        return new TypeExpression(this.definition, this.term, [...this.otherComponents.slice(0, first - 1), this.otherComponents[first - 1].replaceAtPath(remaining, expression), ... this.otherComponents.slice(first)], this.properties);
+        return new TypeExpression(this.definition, this.term, [...this.otherComponents.slice(0, first - 1), this.otherComponents[first - 1].replaceAtPath(remaining, expression), ... this.otherComponents.slice(first)], this.properties, this.conjunctionDefinition);
     } else {
       throw "Replacing in type expression with properties not implemented"
     }

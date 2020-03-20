@@ -73,7 +73,7 @@ export class Parser {
               const property = firstComponent.definition.properties[secondComponent.definition.symbol];
               const [term, ...otherComponents] = secondComponent.components;
               if (term.serialize() === firstComponent.term.serialize() && otherComponents.map(c => c.serialize()).join(" ") === firstComponent.otherComponents.map(c => c.serialize()).join(" ")) {
-                firstComponent.addProperty(property);
+                firstComponent.addProperty(property, expressionDefinition);
                 return firstComponent;
               }
             }
