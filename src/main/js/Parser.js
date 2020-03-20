@@ -294,5 +294,10 @@ export class Parser {
     const shorthand = _.cloneDeep(json);
     shorthand.template = this.parseExpression(shorthand.template);
     return shorthand;
-  }
+  };
+  parseBinaryRelation = (json) => {
+    const relation = _.cloneDeep(json);
+    relation.template = this.parseExpression(relation.template);
+    return relation;
+  };
 }

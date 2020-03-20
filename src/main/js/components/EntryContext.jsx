@@ -9,7 +9,7 @@ EntryContext.create = function(parser, definitions, typeDefinitions, definitionS
     definitionShorthands,
     displayShorthands: displayShorthands.map(parser.parseDisplayShorthand),
     inferences,
-    binaryRelations
+    binaryRelations: binaryRelations.map(parser.parseBinaryRelation)
   };
 };
 
