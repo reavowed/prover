@@ -134,6 +134,7 @@ export default function InputWithShorthandReplacement({value, onChange, ...other
   function onSuggestionSelected(event, {suggestion}) {
     replaceLastWord(suggestion);
     event.preventDefault();
+    event.stopPropagation();
   }
 
   function renderSuggestionsContainer ({containerProps, children}) {

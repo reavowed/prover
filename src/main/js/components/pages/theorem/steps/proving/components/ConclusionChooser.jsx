@@ -126,12 +126,12 @@ export default class ConclusionChooser extends React.Component {
     });
   };
 
-  onInputKeyUp = (event) => {
-    if (event.keyCode === 13 && this.readyToSubmit()) {
+  onInputKeyDown = (event) => {
+    if (!event.isDefaultPrevented() && event.keyCode === 13 && this.readyToSubmit()) {
       this.submit();
+      event.preventDefault();
+      event.stopPropagation();
     }
-    event.preventDefault();
-    event.stopPropagation();
   };
 
   getSubstitutionValuesToSubmit = (selectedConclusion, selectedPremises, selectedSubstitutionValues) => {
@@ -211,7 +211,7 @@ export default class ConclusionChooser extends React.Component {
           <InputWithShorthandReplacement value={getter(this.state.selectedSubstitutionValues)}
                                          readOnly={disabled}
                                          onChange={(value, callback) => this.setSelectedSubstitutionValue(setter, value, callback)}
-                                         onKeyUp={this.onInputKeyUp} /> :
+                                         onKeyDown={this.onInputKeyDown} /> :
             <BoundVariableLists.Consumer>{ boundVariableLists =>
               validValues.length === 1 ?
                 <Form.Label column><CopiableExpression expression={validValues[0]} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} /></Form.Label> :
