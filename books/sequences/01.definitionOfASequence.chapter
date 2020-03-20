@@ -1,0 +1,5 @@
+Define sequences.
+
+type sequence a (X)
+  format (on X)
+  definition (function a ℕ X)

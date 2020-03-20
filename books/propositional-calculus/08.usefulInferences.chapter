@@ -201,3 +201,13 @@ conclusion ↔ ∨ χ φ ∨ χ ψ
   }
   prove ↔ ∨ χ φ ∨ χ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ χ φ, ∨ χ ψ) () 0 1
 }
+
+comment Replacing equivalent statements in conjunctions and disjunctions.
+
+theorem Replace Equivalent Left Conjunct
+premise ↔ φ ψ
+premise ∧ φ χ
+conclusion ∧ ψ χ
+{
+  target ∧ ψ χ
+}

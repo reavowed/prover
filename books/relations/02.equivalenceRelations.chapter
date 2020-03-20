@@ -27,7 +27,7 @@ conclusion ∈ orderedPair b a ≈
 
 term equivalenceClass (a ≈)
   name (Equivalence Class)
-  format ([a])
+  format ([a]_≈)
   premises (equivalenceRelation ≈ A, ∈ a A)
   (= $0 comprehension x A ∈ orderedPair a $0 ≈)
   shorthand (ec)
@@ -116,6 +116,9 @@ conclusion ↔ ∈ b equivalenceClass a ≈ ∈ orderedPair a b ≈
     }
   }
   prove ↔ ∈ b equivalenceClass a ≈ ∈ orderedPair a b ≈ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ b equivalenceClass a ≈, ∈ orderedPair a b ≈) () 1 2
+}
+{
+  target ↔ ∈ b equivalenceClass a ≈ ∈ orderedPair a b ≈
 }
 
 theorem Equality Condition for Equivalence Classes
@@ -236,6 +239,8 @@ conclusion ↔ = equivalenceClass a ≈ equivalenceClass b ≈ ∈ orderedPair a
   prove ↔ = equivalenceClass a ≈ equivalenceClass b ≈ ∈ orderedPair a b ≈ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= equivalenceClass a ≈ equivalenceClass b ≈, ∈ orderedPair a b ≈) () 2 3
 }
 
+comment If a function on a set is constant on the equivalence classes of a relation on that set, we can lift the function to one on the quotient.
+
 theorem Lift Function to Quotient
 premise equivalenceRelation ≈ A
 premise function f A B
@@ -351,3 +356,188 @@ term quotientFunction (f A B ≈)
   format (f/≈) requires-brackets
   premises (equivalenceRelation ≈ A, function f A B, ∀ x → ∈ $0 A ∀ y → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ = apply f $$0 apply f $0)
   (∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0)
+
+comment And we can do the same thing to a relation that is constant on equivalence classes.
+
+theorem Lift Relation to Quotient
+premise equivalenceRelation ≈ A
+premise relation R A
+premise ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$$0 ≈ ∈ orderedPair $$0 $0 ≈ ↔ ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$$0 $0 R
+conclusion ∃! S ∧ relation $0 equivalenceQuotient A ≈ ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 ∈ orderedPair $$0 $0 R
+{
+  let S = $0 replacementSet2 a b R orderedPair equivalenceClass $0 ≈ equivalenceClass $1 ≈ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! S ∧ relation $0 equivalenceQuotient A ≈ ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 ∈ orderedPair $$0 $0 R) (replacementSet2 a b R orderedPair equivalenceClass $0 ≈ equivalenceClass $1 ≈) {
+    subproof (S is relation) {
+      prove ⊆ R product A A bdc3e1f2449e2fbd0a83076d34a8055e2d09d67c1806a4bc59547d29cfa15bd1 () (R, A) p1
+      take a {
+        assume ∈ $0 A {
+          take b {
+            assume ∈ $0 A {
+              prove ∈ equivalenceClass $$0 ≈ equivalenceQuotient A ≈ 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 () (≈, A, $$0) p0 0.0.1.0a
+              prove ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 () (≈, A, $0) p0 0.0.1.0.0.0a
+              prove ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ product equivalenceQuotient A ≈ equivalenceQuotient A ≈ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (equivalenceClass $$0 ≈, equivalenceQuotient A ≈, equivalenceClass $0 ≈, equivalenceQuotient A ≈) 0.0.1.0.0.0.0 0.0.1.0.0.0.1
+            }
+          }
+        }
+      }
+      prove ⊆ $0 product equivalenceQuotient A ≈ equivalenceQuotient A ≈ fe474c3f9eabf0ed0e5114186008aab8fab862ad49756d52de93e123fa8e6e9f () ($0, R, orderedPair equivalenceClass $$0 ≈ equivalenceClass $$1 ≈, A, A, product equivalenceQuotient A ≈ equivalenceQuotient A ≈) 0a 0.0.0 0.0.1
+      prove relation $0 equivalenceQuotient A ≈ 64dac6bb3fd9231be3d7210a6751c712a4af4bcd31ef18b3fbcfd19610b1b57b () ($0, equivalenceQuotient A ≈) 0.0.2
+    }
+    subproof (S satisfies condition) {
+      take a {
+        assume ∈ $0 A {
+          take b {
+            assume ∈ $0 A {
+              assume ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 {
+                elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
+                  prove ⊆ R product A A bdc3e1f2449e2fbd0a83076d34a8055e2d09d67c1806a4bc59547d29cfa15bd1 () (R, A) p1
+                  elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
+                    prove ∀ s ↔ ∈ $0 $$$$0 ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = $$$0 orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a () ($$$0, R, orderedPair equivalenceClass $$$$0 ≈ equivalenceClass $$$$1 ≈, A, A) 0a 0.1.0.0.0.0.0.0.0
+                    prove ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = orderedPair equivalenceClass $$$$0 ≈ equivalenceClass $$$0 ≈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$0 $$$0 ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = $$$$$$0 orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈) (orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈) 0.1.0.0.0.0.0.0.1.0
+                    prove → ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = orderedPair equivalenceClass $$$$0 ≈ equivalenceClass $$$0 ≈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = orderedPair equivalenceClass $$$$0 ≈ equivalenceClass $$$0 ≈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈) () 0.1.0.0.0.0.0.0.1.1
+                    prove ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = orderedPair equivalenceClass $$$$0 ≈ equivalenceClass $$$0 ≈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = orderedPair equivalenceClass $$$$0 ≈ equivalenceClass $$$0 ≈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈) () 0.1.0.0.0.0.0.0.1.2 0.1.0.0.0.0.0a
+                  }
+                }
+                let a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = orderedPair equivalenceClass $$$$0 ≈ equivalenceClass $$$0 ≈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$0 A ∃ b' ∧ ∈ $0 A ∧ ∈ orderedPair $$$$$0 $0 R = orderedPair equivalenceClass $$$0 ≈ equivalenceClass $$0 ≈ orderedPair equivalenceClass $$$$$0 ≈ equivalenceClass $0 ≈, ∈ orderedPair $$0 $0 R) () {
+                  let b' ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = orderedPair equivalenceClass $$$$0 ≈ equivalenceClass $$$0 ≈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$0 A ∧ ∈ orderedPair $0 $$$$$0 R = orderedPair equivalenceClass $$$0 ≈ equivalenceClass $$0 ≈ orderedPair equivalenceClass $0 ≈ equivalenceClass $$$$$0 ≈, ∈ orderedPair $$$0 $$0 R) () {
+                    prove = equivalenceClass $$$$0 ≈ equivalenceClass $$0 ≈ 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () (equivalenceClass $$$$0 ≈, equivalenceClass $$$0 ≈, equivalenceClass $$0 ≈, equivalenceClass $0 ≈) 0.1.0.0.0.0.0.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove = equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () (equivalenceClass $$$$0 ≈, equivalenceClass $$$0 ≈, equivalenceClass $$0 ≈, equivalenceClass $0 ≈) 0.1.0.0.0.0.0.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    elided 674ea6d2d925fafd208d4724f48198c52ced6886f2580721810e700c7f2fdee8 {
+                      prove ↔ = equivalenceClass $$$$0 ≈ equivalenceClass $$0 ≈ ∈ orderedPair $$$$0 $$0 ≈ 674ea6d2d925fafd208d4724f48198c52ced6886f2580721810e700c7f2fdee8 () (≈, A, $$$$0, $$0) p0 0.1.0.0a 0.1.0.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      prove → = equivalenceClass $$$$0 ≈ equivalenceClass $$0 ≈ ∈ orderedPair $$$$0 $$0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= equivalenceClass $$$$0 ≈ equivalenceClass $$0 ≈, ∈ orderedPair $$$$0 $$0 ≈) () 0.1.0.0.0.0.0.1.0.2.0
+                      prove ∈ orderedPair $$$$0 $$0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= equivalenceClass $$$$0 ≈ equivalenceClass $$0 ≈, ∈ orderedPair $$$$0 $$0 ≈) () 0.1.0.0.0.0.0.1.0.2.1 0.1.0.0.0.0.0.1.0.0
+                    }
+                    elided 674ea6d2d925fafd208d4724f48198c52ced6886f2580721810e700c7f2fdee8 {
+                      prove ↔ = equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ ∈ orderedPair $$$0 $0 ≈ 674ea6d2d925fafd208d4724f48198c52ced6886f2580721810e700c7f2fdee8 () (≈, A, $$$0, $0) p0 0.1.0.0.0.0a 0.1.0.0.0.0.0.1.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      prove → = equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ ∈ orderedPair $$$0 $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= equivalenceClass $$$0 ≈ equivalenceClass $0 ≈, ∈ orderedPair $$$0 $0 ≈) () 0.1.0.0.0.0.0.1.0.3.0
+                      prove ∈ orderedPair $$$0 $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= equivalenceClass $$$0 ≈ equivalenceClass $0 ≈, ∈ orderedPair $$$0 $0 ≈) () 0.1.0.0.0.0.0.1.0.3.1 0.1.0.0.0.0.0.1.0.1
+                    }
+                    elided (Extracted) {
+                      prove ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$$0 $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair $$$$0 $$0 ≈, ∈ orderedPair $$$0 $0 ≈) () 0.1.0.0.0.0.0.1.0.2 0.1.0.0.0.0.0.1.0.3
+                      elided (Extracted) {
+                        prove → ∈ $$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$$$0 $$$0 ≈ ∈ orderedPair $$0 $0 ≈ ↔ ∈ orderedPair $$$$$$$0 $$0 R ∈ orderedPair $$$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$$$$$0 $$$0 ≈ ∈ orderedPair $$0 $0 ≈ ↔ ∈ orderedPair $$$$$$$$$0 $$0 R ∈ orderedPair $$$0 $0 R) ($$$$0) p2
+                        prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$$$0 $$$0 ≈ ∈ orderedPair $$0 $0 ≈ ↔ ∈ orderedPair $$$$$$$0 $$0 R ∈ orderedPair $$$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$$$0 $$$0 ≈ ∈ orderedPair $$0 $0 ≈ ↔ ∈ orderedPair $$$$$$$0 $$0 R ∈ orderedPair $$$0 $0 R) () 0.1.0.0.0.0.0.1.0.4.1.0 0.1.0.0a
+                        prove → ∈ $$0 A ∀ c → ∈ $0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$$0 $$$$0 ≈ ∈ orderedPair $$0 $0 ≈ ↔ ∈ orderedPair $$$$$$0 $$0 R ∈ orderedPair $$$$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ c → ∈ $0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$$0 $$$$$$$$0 ≈ ∈ orderedPair $$0 $0 ≈ ↔ ∈ orderedPair $$$$$$0 $$0 R ∈ orderedPair $$$$$$$$0 $0 R) ($$0) 0.1.0.0.0.0.0.1.0.4.1.1
+                        prove ∀ c → ∈ $0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$$0 $$$$0 ≈ ∈ orderedPair $$0 $0 ≈ ↔ ∈ orderedPair $$$$$$0 $$0 R ∈ orderedPair $$$$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ c → ∈ $0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$$0 $$$$0 ≈ ∈ orderedPair $$0 $0 ≈ ↔ ∈ orderedPair $$$$$$0 $$0 R ∈ orderedPair $$$$0 $0 R) () 0.1.0.0.0.0.0.1.0.4.1.2 0.1.0.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                        prove → ∈ $$$0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$0 $$$0 ≈ ∈ orderedPair $$$$0 $0 ≈ ↔ ∈ orderedPair $$$$$0 $$$$0 R ∈ orderedPair $$$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$0 $$$0 ≈ ∈ orderedPair $$$$$$$0 $0 ≈ ↔ ∈ orderedPair $$$$$0 $$$$$$$0 R ∈ orderedPair $$$0 $0 R) ($$$0) 0.1.0.0.0.0.0.1.0.4.1.3
+                        prove ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$0 $$$0 ≈ ∈ orderedPair $$$$0 $0 ≈ ↔ ∈ orderedPair $$$$$0 $$$$0 R ∈ orderedPair $$$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$$0 $$$0 ≈ ∈ orderedPair $$$$0 $0 ≈ ↔ ∈ orderedPair $$$$$0 $$$$0 R ∈ orderedPair $$$0 $0 R) () 0.1.0.0.0.0.0.1.0.4.1.4 0.1.0.0.0.0a
+                        prove → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$$0 $0 ≈ ↔ ∈ orderedPair $$$$0 $$$0 R ∈ orderedPair $$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$$0 $$$$$$0 ≈ ↔ ∈ orderedPair $$$$0 $$$0 R ∈ orderedPair $$0 $$$$$$0 R) ($0) 0.1.0.0.0.0.0.1.0.4.1.5
+                        prove → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$$0 $0 ≈ ↔ ∈ orderedPair $$$$0 $$$0 R ∈ orderedPair $$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$$0 $0 ≈ ↔ ∈ orderedPair $$$$0 $$$0 R ∈ orderedPair $$0 $0 R) () 0.1.0.0.0.0.0.1.0.4.1.6 0.1.0.0.0.0.0.1.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                        prove ↔ ∈ orderedPair $$$$0 $$$0 R ∈ orderedPair $$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$$0 $0 ≈, ↔ ∈ orderedPair $$$$0 $$$0 R ∈ orderedPair $$0 $0 R) () 0.1.0.0.0.0.0.1.0.4.1.7 0.1.0.0.0.0.0.1.0.4.0
+                        prove → ∈ orderedPair $$0 $0 R ∈ orderedPair $$$$0 $$$0 R 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $$$$0 $$$0 R, ∈ orderedPair $$0 $0 R) () 0.1.0.0.0.0.0.1.0.4.1.8
+                        prove ∈ orderedPair $$$$0 $$$0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 R, ∈ orderedPair $$$$0 $$$0 R) () 0.1.0.0.0.0.0.1.0.4.1.9 0.1.0.0.0.0.0.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      }
+                    }
+                  } 0.1.0.0.0.0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                } 0.1.0.0.0.0.0.0
+              }
+              assume ∈ orderedPair $$0 $0 R {
+                prove ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 08c8d4f6238c2cfcad5ee9a5717dadf21257e0215396b276badb4e7d82ec8920 () ($$$0, R, orderedPair equivalenceClass $$$$0 ≈ equivalenceClass $$$$1 ≈, $$0, A, $0, A) 0a 0.1.0.0a 0.1.0.0.0.0a 0.1.0.0.0.0.1a
+              }
+              prove ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 ∈ orderedPair $$0 $0 R 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0, ∈ orderedPair $$0 $0 R) () 0.1.0.0.0.0.0 0.1.0.0.0.0.1
+            }
+          }
+        }
+      }
+    }
+    subproof (S is unique) {
+      take S' {
+        assume ∧ relation $0 equivalenceQuotient A ≈ ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 ∈ orderedPair $$0 $0 R {
+          take x {
+            assume ∈ $0 $$0 {
+              elided ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c {
+                prove ⊆ $$0 product equivalenceQuotient A ≈ equivalenceQuotient A ≈ bdc3e1f2449e2fbd0a83076d34a8055e2d09d67c1806a4bc59547d29cfa15bd1 () ($$0, equivalenceQuotient A ≈) 0.2.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                prove ∈ $0 product equivalenceQuotient A ≈ equivalenceQuotient A ≈ ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($$0, product equivalenceQuotient A ≈ equivalenceQuotient A ≈, $0) 0.2.0.0.0.0.0.0 0.2.0.0.0.0a
+              }
+              prove ∈ first $0 equivalenceQuotient A ≈ 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($0, equivalenceQuotient A ≈, equivalenceQuotient A ≈) 0.2.0.0.0.0.0
+              prove ∈ second $0 equivalenceQuotient A ≈ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($0, equivalenceQuotient A ≈, equivalenceQuotient A ≈) 0.2.0.0.0.0.0
+              prove ∃ a_0 ∧ ∈ $0 A = first $$0 equivalenceClass $0 ≈ c653a37ffa1d81361e01187938eb89b605b5c113f11179c00e19ede4f26a7090 () (≈, A, first $0) p0 0.2.0.0.0.0.1
+              prove ∃ a_1 ∧ ∈ $0 A = second $$0 equivalenceClass $0 ≈ c653a37ffa1d81361e01187938eb89b605b5c113f11179c00e19ede4f26a7090 () (≈, A, second $0) p0 0.2.0.0.0.0.2
+              let a_0 ∧ ∈ $0 A = first $$0 equivalenceClass $0 ≈ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$0 A = first $0 equivalenceClass $$$$0 ≈, ∈ orderedPair first $0 second $0 $$$0) () {
+                let a_1 ∧ ∈ $0 A = second $$$0 equivalenceClass $0 ≈ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$0 A = second $$0 equivalenceClass $$$$$0 ≈, ∈ orderedPair first $$0 second $$0 $$$$0) () {
+                  elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+                    prove = $$$0 orderedPair first $$$0 second $$$0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($$$0, equivalenceQuotient A ≈, equivalenceQuotient A ≈) 0.2.0.0.0.0.0
+                    prove ∈ orderedPair first $$$0 second $$$0 $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$$$$0 $$$$0) ($$$0, orderedPair first $$$0 second $$$0) 0.2.0.0.0.0.5.0.0.0 0.2.0.0.0.0a
+                  }
+                  elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+                    prove ∈ orderedPair equivalenceClass $$0 ≈ second $$$0 $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair $$$$$$0 second $$$0 $$$$0) (first $$$0, equivalenceClass $$0 ≈) 0.2.0.0.0.0.5a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.2.0.0.0.0.5.0.0
+                    prove ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair equivalenceClass $$0 ≈ $$$$$$0 $$$$0) (second $$$0, equivalenceClass $0 ≈) 0.2.0.0.0.0.5.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.2.0.0.0.0.5.0.1.0
+                  }
+                  elided (Extracted) {
+                    prove → ∈ $$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ $$$$$0 ∈ orderedPair $$$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$$$$$0 ≈ equivalenceClass $0 ≈ $$$$$0 ∈ orderedPair $$$$$$$0 $0 R) ($$0) 0.2.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ $$$$$0 ∈ orderedPair $$$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ $$$$$0 ∈ orderedPair $$$0 $0 R) () 0.2.0.0.0.0.5.0.2.0 0.2.0.0.0.0.5a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    prove → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0 ∈ orderedPair $$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $$$$$$0 ≈ $$$$0 ∈ orderedPair $$0 $$$$$$0 R) ($0) 0.2.0.0.0.0.5.0.2.1
+                    prove ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0 ∈ orderedPair $$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0 ∈ orderedPair $$0 $0 R) () 0.2.0.0.0.0.5.0.2.2 0.2.0.0.0.0.5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    prove → ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0 ∈ orderedPair $$0 $0 R f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0, ∈ orderedPair $$0 $0 R) () 0.2.0.0.0.0.5.0.2.3
+                    prove ∈ orderedPair $$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0, ∈ orderedPair $$0 $0 R) () 0.2.0.0.0.0.5.0.2.4 0.2.0.0.0.0.5.0.1
+                  }
+                  elided (Extracted) {
+                    prove → ∈ $$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ $$$$$$0 ∈ orderedPair $$$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$$$$$0 ≈ equivalenceClass $0 ≈ $$$$$$0 ∈ orderedPair $$$$$$$0 $0 R) ($$0) 0.1
+                    prove ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ $$$$$$0 ∈ orderedPair $$$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ $$$$$$0 ∈ orderedPair $$$0 $0 R) () 0.2.0.0.0.0.5.0.3.0 0.2.0.0.0.0.5a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    prove → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$$0 ∈ orderedPair $$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $$$$$$0 ≈ $$$$$0 ∈ orderedPair $$0 $$$$$$0 R) ($0) 0.2.0.0.0.0.5.0.3.1
+                    prove ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$$0 ∈ orderedPair $$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$$0 ∈ orderedPair $$0 $0 R) () 0.2.0.0.0.0.5.0.3.2 0.2.0.0.0.0.5.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    prove → ∈ orderedPair $$0 $0 R ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$$0 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$$0, ∈ orderedPair $$0 $0 R) () 0.2.0.0.0.0.5.0.3.3
+                    prove ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 R, ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$$0) () 0.2.0.0.0.0.5.0.3.4 0.2.0.0.0.0.5.0.2
+                  }
+                  elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+                    elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+                      prove = equivalenceClass $$0 ≈ first $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (first $$$0, equivalenceClass $$0 ≈) 0.2.0.0.0.0.5a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∈ orderedPair first $$$0 equivalenceClass $0 ≈ $$$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair $$$$$$0 equivalenceClass $0 ≈ $$$$$0) (equivalenceClass $$0 ≈, first $$$0) 0.2.0.0.0.0.5.0.4.0.0 0.2.0.0.0.0.5.0.3
+                    }
+                    elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+                      prove = equivalenceClass $0 ≈ second $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (second $$$0, equivalenceClass $0 ≈) 0.2.0.0.0.0.5.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∈ orderedPair first $$$0 second $$$0 $$$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair first $$$0 $$$$$$0 $$$$$0) (equivalenceClass $0 ≈, second $$$0) 0.2.0.0.0.0.5.0.4.1.0 0.2.0.0.0.0.5.0.4.0
+                    }
+                  }
+                } 0.2.0.0.0.0.4
+              } 0.2.0.0.0.0.3
+              elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+                prove = $0 orderedPair first $0 second $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($0, equivalenceQuotient A ≈, equivalenceQuotient A ≈) 0.2.0.0.0.0.0
+                prove = orderedPair first $0 second $0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($0, orderedPair first $0 second $0) 0.2.0.0.0.0.6.0
+                prove ∈ $0 $$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$$0 $$$0) (orderedPair first $0 second $0, $0) 0.2.0.0.0.0.6.1 0.2.0.0.0.0.5
+              }
+            }
+            assume ∈ $0 $$$0 {
+              elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
+                prove ⊆ R product A A bdc3e1f2449e2fbd0a83076d34a8055e2d09d67c1806a4bc59547d29cfa15bd1 () (R, A) p1
+                elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
+                  prove ∀ s ↔ ∈ $0 $$$$0 ∃ a_0 ∧ ∈ $0 A ∃ a_1 ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = $$$0 orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a () ($$$0, R, orderedPair equivalenceClass $$$$0 ≈ equivalenceClass $$$$1 ≈, A, A) 0a 0.2.0.0.0.1.0.0
+                  prove ↔ ∈ $0 $$$0 ∃ a_0 ∧ ∈ $0 A ∃ a_1 ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = $$$0 orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$0 $$$0 ∃ a_0 ∧ ∈ $0 A ∃ a_1 ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = $$$$$$0 orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈) ($0) 0.2.0.0.0.1.0.1.0
+                  prove → ∈ $0 $$$0 ∃ a_0 ∧ ∈ $0 A ∃ a_1 ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = $$$0 orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 $$$0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = $$$0 orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈) () 0.2.0.0.0.1.0.1.1
+                  prove ∃ a_0 ∧ ∈ $0 A ∃ a_1 ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = $$$0 orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 $$$0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = $$$0 orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈) () 0.2.0.0.0.1.0.1.2 0.2.0.0.0.1a
+                }
+              }
+              let a_0 ∧ ∈ $0 A ∃ a_1 ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = $$$0 orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$0 A ∃ a_1 ∧ ∈ $0 A ∧ ∈ orderedPair $$$$$0 $0 R = $$0 orderedPair equivalenceClass $$$$$0 ≈ equivalenceClass $0 ≈, ∈ $0 $$0) () {
+                let a_1 ∧ ∈ $0 A ∧ ∈ orderedPair $$0 $0 R = $$$0 orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$0 A ∧ ∈ orderedPair $0 $$$$$0 R = $$0 orderedPair equivalenceClass $0 ≈ equivalenceClass $$$$$0 ≈, ∈ $$0 $$$0) () {
+                  elided (Extracted) {
+                    prove → ∈ $$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ $$$$$0 ∈ orderedPair $$$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$$$$$0 ≈ equivalenceClass $0 ≈ $$$$$0 ∈ orderedPair $$$$$$$0 $0 R) ($$0) 0.2.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ $$$$$0 ∈ orderedPair $$$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$$0 ≈ equivalenceClass $0 ≈ $$$$$0 ∈ orderedPair $$$0 $0 R) () 0.2.0.0.0.1.1.0.0.0 0.2.0.0.0.1.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    prove → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0 ∈ orderedPair $$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $$$$$$0 ≈ $$$$0 ∈ orderedPair $$0 $$$$$$0 R) ($0) 0.2.0.0.0.1.1.0.0.1
+                    prove ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0 ∈ orderedPair $$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0 ∈ orderedPair $$0 $0 R) () 0.2.0.0.0.1.1.0.0.2 0.2.0.0.0.1.1.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    prove → ∈ orderedPair $$0 $0 R ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0, ∈ orderedPair $$0 $0 R) () 0.2.0.0.0.1.1.0.0.3
+                    prove ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 R, ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0) () 0.2.0.0.0.1.1.0.0.4 0.2.0.0.0.1.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  }
+                  elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+                    prove = orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$$0, orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈) 0.2.0.0.0.1.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove ∈ $$$0 $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$$$$0 $$$$0) (orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈, $$$0) 0.2.0.0.0.1.1.0.1.0 0.2.0.0.0.1.1.0.0
+                  }
+                } 0.2.0.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              } 0.2.0.0.0.1.0
+            }
+            prove ↔ ∈ $0 $$0 ∈ $0 $$$0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 $$0, ∈ $0 $$$0) () 0.2.0.0.0.0 0.2.0.0.0.1
+          }
+          prove = $0 $$0 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () ($0, $$0) 0.2.0.0.0
+        }
+      }
+    }
+    elided ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d {
+      prove ∧ relation $0 equivalenceQuotient A ≈ ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 ∈ orderedPair $$0 $0 R bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation $0 equivalenceQuotient A ≈, ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 ∈ orderedPair $$0 $0 R) () 0.0 0.1
+      prove ∃! S ∧ relation $0 equivalenceQuotient A ≈ ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 ∈ orderedPair $$0 $0 R ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∧ relation $$0 equivalenceQuotient A ≈ ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$$0 ∈ orderedPair $$0 $0 R) ($0) 0.3.0 0.2
+    }
+  }
+}
+
+term quotientRelation (R ≈)
+  name (quotient relation)
+  format (%0/%1)
+  premises (equivalenceRelation ≈ A, relation R A, ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A ∀ d → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$$0 ≈ ∈ orderedPair $$0 $0 ≈ ↔ ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$$0 $0 R)
+  (∧ relation $0 equivalenceQuotient A ≈ ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair equivalenceClass $$0 ≈ equivalenceClass $0 ≈ $$$0 ∈ orderedPair $$0 $0 R)
