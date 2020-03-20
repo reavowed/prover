@@ -210,9 +210,8 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     (for {
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       inference <- findInference(inferenceId)(stepProvingContext)
-      conclusionStatement <- Statement.parser(stepProvingContext).parseFromString(serializedConclusionStatement, "conclusion statement").recoverWithBadRequest
       possibleTarget <- getPossibleTargets(step.statement)(stepProvingContext).find(_.statement.serialized == serializedTargetStatement).orBadRequest(s"Could not find target $serializedTargetStatement")
-      extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id).find(_.conclusion == conclusionStatement).orBadRequest(s"Could not find extraction option with conclusion $conclusionStatement")
+      extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id).find(_.conclusion.serialized == serializedConclusionStatement).orBadRequest(s"Could not find extraction option with conclusion $serializedConclusionStatement")
     } yield PossibleConclusionWithPremises.fromExtractionOptionWithTarget(extractionOption, possibleTarget.statement)(StepProvingContext.updateStepContext(possibleTarget.unwrappers.enhanceContext)(stepProvingContext))).toResponseEntity
   }
 
