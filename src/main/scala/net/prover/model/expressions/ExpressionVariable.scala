@@ -89,13 +89,20 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
         case Some((otherArity, _)) =>
           None
         case None =>
-          substitutions
-            .updateAdd(
-              name,
-              arity,
-              (arguments, other.asInstanceOf[ExpressionType], internalDepth),
-              possibleSubstitutionsApplicationsLens)
-            .flatMap(_.clearApplicationsWherePossible(externalDepth))
+          if (arguments.isEmpty) {
+            for {
+              reducedOther <- other.removeExternalParameters(internalDepth)
+              result <- substitutions.update(name, arity, reducedOther.asInstanceOf[ExpressionType], possibleSubstitutionsLens)
+            } yield result
+          } else {
+            substitutions
+              .updateAdd(
+                name,
+                arity,
+                (arguments, other.asInstanceOf[ExpressionType], internalDepth),
+                possibleSubstitutionsApplicationsLens)
+              .flatMap(_.clearApplicationsWherePossible(externalDepth))
+          }
       }
     } else None
   }

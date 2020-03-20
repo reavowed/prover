@@ -294,7 +294,7 @@ class SubstitutionsSpec extends Specification {
         F(FunctionParameter(0, 0)) -> Singleton(FunctionParameter(0, 0)))
     }
 
-    "something something" in {
+    "correctly apply substitutions to a bound predicate" in {
       ForAll("x")(φ(F(a)))
         .applySubstitutions(
           Substitutions(
@@ -310,6 +310,35 @@ class SubstitutionsSpec extends Specification {
         1,
         Substitutions(terms = Map(a -> (0, $), b -> (0, c))),
         Conjunction(Equals(a, b), ForAll("x")(ElementOf(a, $))) -> Conjunction(Equals($, c), ForAll("x")(ElementOf($.^, $))))
+    }
+
+    "allow a bound variable to match itself as an argument if it is within the internal binding of a predicate" in {
+      testSuccessfulMatch(
+        1,
+        Substitutions(
+          Map(φ -> (2, ExistsIn("y", Product(C, D))(
+            Conjunction(
+              ElementOf(Pair(Pair($.^^(0), $.^^(1)), $), X),
+              Equals(n, F($.^^(0), $.^^(1), First($), Second($))))))),
+          Map(A -> (0, A), B -> (0, B))),
+        (Equivalence(
+          ExistsIn("x", Product(A, B))(
+            φ(First($), Second($))),
+          ExistsIn("a", A)(
+            ExistsIn("b", B)(
+                φ($.^, $)))) ->
+          Equivalence(
+            ExistsIn("x", Product(A, B))(
+              ExistsIn("y", Product(C, D))(
+                Conjunction(
+                  ElementOf(Pair(Pair(First($.^), Second($.^)), $), X),
+                  Equals(n, F(First($.^), Second($.^), First($), Second($)))))),
+            ExistsIn("a", A)(
+              ExistsIn("b", B)(
+                ExistsIn("y", Product(C, D))(
+                  Conjunction(
+                    ElementOf(Pair(Pair($.^^, $.^), $), X),
+                    Equals(n, F($.^^, $.^, First($), Second($))))))))))
     }
   }
 }

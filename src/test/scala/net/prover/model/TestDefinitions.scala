@@ -35,7 +35,8 @@ trait VariableDefinitions {
   case object $ {
     def apply(index: Int) = FunctionParameter(index, 0)
     def ^ : FunctionParameter = FunctionParameter(0, 1)
-    def ^^ : FunctionParameter = FunctionParameter(0, 2)
+    def ^^ : FunctionParameter = ^^(0)
+    def ^^(index: Int) : FunctionParameter = FunctionParameter(index, 2)
     def ^^^ : FunctionParameter = FunctionParameter(0, 3)
     def ^^^^ : FunctionParameter = FunctionParameter(0, 4)
   }
@@ -49,6 +50,7 @@ trait VariableDefinitions {
   val B = TermVariablePlaceholder("B")
   val C = TermVariablePlaceholder("C")
   val D = TermVariablePlaceholder("D")
+  val X = TermVariablePlaceholder("X")
   val n = TermVariablePlaceholder("n")
   val F = TermVariablePlaceholder("F")
   val x = TermVariablePlaceholder("x")
@@ -113,8 +115,10 @@ trait ExpressionDefinitions extends VariableDefinitions {
 
   val ForAllDefinition = quantifier("∀", None).copy(attributes = Seq("generalization"))
   def ForAll(name: String)(expression: Statement) = ForAllDefinition.bind(name)(expression)
+  def ForAllIn(name: String, term: Term)(expression: Statement) = ForAll(name)(Implication(ElementOf($, term), expression))
   val ExistsDefinition = quantifier("∃", Some(Negation(ForAll("x")(Negation(φ(FunctionParameter(0, 0)))))))
   def Exists(name: String)(expression: Statement) = ExistsDefinition.bind(name)(expression)
+  def ExistsIn(name: String, term: Term)(expression: Statement) = Exists(name)(Conjunction(ElementOf($, term), expression))
   val Equals = predicate("=", 2, None).copy(attributes = Seq("equality"))
   val ExistsUnique = quantifier("∃!", Some(Exists("y")(ForAll("x")(Equivalence(
     φ(FunctionParameter(0, 0)),

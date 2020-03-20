@@ -105,7 +105,7 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
         argument <- target.asOptionalInstanceOf[Term].flatMap(_.removeExternalParameters(internalDepth))
         result <- argumentsSoFar.tryAdd(index, argument)
       } yield result
-    } else if (target.removeExternalParameters(previousInternalDepth).contains(this)) {
+    } else if (target.removeExternalParameters(previousInternalDepth, internalDepth).contains(this)) {
       Some(argumentsSoFar)
     } else {
       None
