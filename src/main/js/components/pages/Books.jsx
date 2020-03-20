@@ -56,8 +56,8 @@ export class Books extends React.Component {
           </Form.Group>
           <Form.Group>
             <Form.Label>Imports</Form.Label>
-            <Form.Control as="select" multiple onChange={this.updateNewBookImports}>
-              {books.map(book => <option key={book.url} selected={_.includes(this.state.newBookImports, book.title)}>{book.title}</option>)}
+            <Form.Control as="select" multiple onChange={this.updateNewBookImports} value={this.state.newBookImports}>
+              {books.map(book => <option key={book.url}>{book.title}</option>)}
             </Form.Control>
           </Form.Group>
         </Form>
