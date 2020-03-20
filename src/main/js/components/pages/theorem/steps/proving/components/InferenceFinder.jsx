@@ -1,19 +1,14 @@
 import _ from "lodash";
-import React, {useContext} from "react";
-import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
+import React from "react";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
-import {Parser} from "../../../../../../Parser";
 import EntryContext from "../../../../../EntryContext";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
-import InputWithShorthandReplacement from "../../../../../helpers/InputWithShorthandReplacement";
+import ProofContext from "../../../ProofContext";
+import BoundVariableLists from "../../BoundVariableLists";
 import ConclusionChooser from "./ConclusionChooser";
 import InferenceAutosuggest from "./InferenceAutosuggest";
-import {InferenceSummary} from "../../../../../InferenceSummary";
 import SuggestionDropdownElement from "./SuggestionDropdownElement";
-import BoundVariableLists from "../../BoundVariableLists";
-import ProofContext from "../../../ProofContext";
 
 
 export class InferenceFinder extends React.Component {
@@ -38,12 +33,8 @@ export class InferenceFinder extends React.Component {
     }
   }
   fetchPossibleInferences = (value) => {
-    if (value !== "") {
-      return this.props.getInferenceSuggestions(value)
-        .then(suggestionsJson => this.context.parser.parsePossibleInferences(suggestionsJson))
-    } else {
-      return Promise.resolve([]);
-    }
+    return this.props.getInferenceSuggestions(value)
+      .then(suggestionsJson => this.context.parser.parsePossibleInferences(suggestionsJson))
   };
   setSelectedInference = (selectedInference) => {
     return this.setStatePromise({selectedInference})
