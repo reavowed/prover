@@ -65,7 +65,7 @@ export class Theorem extends React.Component {
         return new Promise((resolve) => {
           const newInferences = {...inferences, ...newTheoremJson.newInferences};
           self.setState({
-            theorem: parser.parseTheorem(newTheoremJson.theorem, newInferences),
+            theorem: self.parser.parseTheorem(newTheoremJson.theorem, newInferences),
             inferences: newInferences
           }, () => resolve());
         })
@@ -74,8 +74,8 @@ export class Theorem extends React.Component {
         return new Promise((resolve) => {
           const newInferences = {...inferences, ...newInferencesFromStep};
           const newTheorem = proofJson ?
-            self.state.theorem.updateProof(proofIndex, parser.parseSteps(proofJson, newInferences)) :
-            self.state.theorem.updateStep(proofIndex, stepPath, parser.parseStep(stepJson, newInferences));
+            self.state.theorem.updateProof(proofIndex, self.parser.parseSteps(proofJson, newInferences)) :
+            self.state.theorem.updateStep(proofIndex, stepPath, self.parser.parseStep(stepJson, newInferences));
           self.setState({
             theorem: newTheorem,
             inferences: newInferences
