@@ -8,7 +8,7 @@ import Step from "./Step";
 export function AssertionStepProofLine({step, path, children}) {
   const context = useContext(ProofContext);
   const createTargets = () => {
-    context.fetchJsonForStepAndUpdateTheorem(path, "createTargets", {method: "POST"});
+    context.fetchJsonForStepAndInsert(path, "createTargets", {method: "POST"});
   };
   return <ProofLine premiseReferences={step.referencedLines}
                     path={path}

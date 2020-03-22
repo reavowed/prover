@@ -187,12 +187,11 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedStatement: String
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+    bookService.insertSteps[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (_, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
         targetStatement <- Statement.parser.parseFromString(serializedStatement, "target statement").recoverWithBadRequest
-        targetStep = Step.Target(targetStatement)
-      } yield Seq(targetStep, step)
+      } yield Seq(Step.Target(targetStatement))
     }.toResponseEntity
   }
 

@@ -1,7 +1,10 @@
 package net.prover.model.proof
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ExpressionDefinition, StatementDefinition}
@@ -11,9 +14,8 @@ import scalaz.syntax.functor._
 
 import scala.util.Try
 
-@JsonIgnoreProperties(Array("substitutions", "deductionStatement", "generalizationStatement", "isComplete"))
+@JsonIgnoreProperties(Array("substitutions", "isComplete"))
 sealed trait Step {
-  @JsonSerialize
   def provenStatement: Option[Statement]
   def getSubstep(index: Int, stepContext: StepContext): Option[(Step, StepContext)]
   def modifySubsteps[F[_] : Functor](outerContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]]
@@ -24,7 +26,7 @@ sealed trait Step {
     newDefinition: ExpressionDefinition,
     entryContext: EntryContext
   ): Step
-  def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step
+  def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange])
   def isComplete(definitions: Definitions): Boolean
   def referencedInferenceIds: Set[String]
   def referencedDefinitions: Set[ExpressionDefinition]
@@ -53,9 +55,9 @@ object Step {
         (step, innerStepContext)
       }
     }
-    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step = {
-      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
-      replaceSubsteps(newSubsteps)
+    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
+      substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
+        .mapLeft(replaceSubsteps)
     }
     def modifySubstepsDirectly[F[_] : Functor](outerContext: StepContext)(f: (Seq[Step], StepContext) => F[Seq[Step]]): F[Step] = {
       f(substeps, specifyStepContext(outerContext)).map(replaceSubsteps)
@@ -88,7 +90,7 @@ object Step {
   case class Deduction(
       assumption: Statement,
       substeps: Seq[Step],
-      deductionStatement: StatementDefinition)
+      @JsonSerialize(using = classOf[StatementDefinitionSymbolSerializer]) deductionStatement: StatementDefinition)
     extends Step.WithSubsteps with WithoutVariable with WithTopLevelStatement with WithAssumption
   {
     val `type` = "deduction"
@@ -190,10 +192,12 @@ object Step {
         premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
         substitutions.replaceDefinition(oldDefinition, newDefinition))
     }
-    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step = {
-      val newSubsteps = substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
+    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
+      val (newSubsteps, innerStepsWithReferenceChanges) = substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
       val newPremises = premises.map(p => StepProvingContext(stepContext, provingContext).createPremise(p.statement))
-      copy(substeps = newSubsteps, premises = newPremises)
+      val newStep = copy(substeps = newSubsteps, premises = newPremises)
+      val stepsWithReferenceChanges = if (premises == newPremises) innerStepsWithReferenceChanges else innerStepsWithReferenceChanges :+ StepWithReferenceChange(newStep, stepContext.stepReference.stepPath)
+      (newStep, stepsWithReferenceChanges)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet + inference.id
     override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet
@@ -232,7 +236,7 @@ object Step {
   case class Generalization(
       variableName: String,
       substeps: Seq[Step],
-      generalizationStatement: StatementDefinition)
+      @JsonSerialize(using = classOf[StatementDefinitionSymbolSerializer]) generalizationStatement: StatementDefinition)
     extends Step.WithSubsteps with WithVariable
   {
     val `type` = "generalization"
@@ -299,7 +303,7 @@ object Step {
       entryContext: EntryContext
     ): Target = Target(statement.replaceDefinition(oldDefinition, newDefinition))
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
-    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step = this
+    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = (this, Nil)
     override def referencedInferenceIds: Set[String] = Set.empty
     override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
     override def recursivePremises: Seq[Premise] = Nil
@@ -415,9 +419,10 @@ object Step {
         premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
         substitutions.replaceDefinition(oldDefinition, newDefinition))
     }
-    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): Step = {
+    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
       val newPremises = premises.map(p => StepProvingContext(stepContext, provingContext).createPremise(p.statement))
-      copy(premises = newPremises)
+      val newStep = copy(premises = newPremises)
+      (newStep, if (newPremises == premises) Nil else Seq(StepWithReferenceChange(newStep, stepContext.stepReference.stepPath)))
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def referencedInferenceIds: Set[String] = Set(inference.id) ++ premises.flatMap(_.referencedInferenceIds).toSet
@@ -494,12 +499,12 @@ object Step {
   }
 
   implicit class StepSeqOps(steps: Seq[Step]) {
-    def recalculateReferences(outerStepContext: StepContext, provingContext: ProvingContext): Seq[Step] = {
+    def recalculateReferences(outerStepContext: StepContext, provingContext: ProvingContext): (Seq[Step], Seq[StepWithReferenceChange]) = {
       steps.zipWithIndex.mapFold(outerStepContext) { case (currentStepContext, (step, index)) =>
         val innerStepContext = currentStepContext.atIndex(index)
-        val newStep = step.recalculateReferences(innerStepContext, provingContext)
-        currentStepContext.addStep(newStep, innerStepContext.stepReference) -> newStep
-      }._2
+        val (newStep, stepsWithReferenceChanges) = step.recalculateReferences(innerStepContext, provingContext)
+        currentStepContext.addStep(newStep, innerStepContext.stepReference) -> (newStep, stepsWithReferenceChanges)
+      }._2.split.mapRight(_.flatten)
     }
   }
 
@@ -520,5 +525,11 @@ object Step {
       parser(entryContext, innerStepContext)
         .mapMap(step => step -> currentStepContext.addStep(step, innerStepContext.stepReference))
     }.map(_._1)
+  }
+}
+
+class StatementDefinitionSymbolSerializer extends JsonSerializer[StatementDefinition] {
+  override def serialize(value: StatementDefinition, gen: JsonGenerator, serializers: SerializerProvider): Unit = {
+    gen.writeString(value.symbol)
   }
 }

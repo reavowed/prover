@@ -12,7 +12,7 @@ class ProofHelperSpec extends Specification {
     def rearrange(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
       TermRearranger.rearrange(targetStatement)
-        .map(_.recalculateReferences(stepContext, implicitly[ProvingContext]))
+        .map(_.recalculateReferences(stepContext, implicitly[ProvingContext])._1)
     }
 
     def testRearranging(targetStatement: Statement, premises: Seq[Statement]) = {

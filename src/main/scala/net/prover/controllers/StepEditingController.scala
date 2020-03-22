@@ -50,9 +50,9 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step.Assertion](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, _) =>
+    bookService.insertSteps[Step.Assertion](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, _) =>
       val targetStatements = step.pendingPremises.values.map(_.statement).toSeq
-      Success(targetStatements.map(Step.Target(_)) :+ step)
+      Success(targetStatements.map(Step.Target(_)))
     }.toResponseEntity
   }
 

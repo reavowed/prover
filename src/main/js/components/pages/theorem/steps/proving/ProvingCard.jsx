@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, {createRef, useContext, useRef, useState} from "react";
+import React, {createRef} from "react";
 import {ButtonToolbar, Col, Row} from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
@@ -7,25 +7,25 @@ import styled from "styled-components";
 import {matchTemplate} from "../../../../../models/Expression";
 import EntryContext from "../../../../EntryContext";
 import {CopiableExpression} from "../../../../ExpressionComponent";
+import AddTargetByInference from "./AddTargetByInference";
 import AddTargetByPremise from "./AddTargetByPremise";
 import AddTargetManually from "./AddTargetManually";
 import AddTransitiveTarget from "./AddTransitiveTarget";
 import ApplyChainingPremiseFromLeft from "./ApplyChainingPremiseFromLeft";
 import ApplyChainingPremiseFromRight from "./ApplyChainingPremiseFromRight";
 import IntroduceAll from "./IntroduceAll";
-import ProveCurrentTargetByPremise from "./ProveCurrentTargetByPremise";
-import ProveChainingFromLeft from "./ProveChainingFromLeft";
-import ProveChainingFromRight from "./ProveChainingFromRight";
-import RearrangeAutomatically from "./RearrangeAutomatically";
-import RewriteAutomatically from "./RewriteAutomatically";
 import IntroduceBoundVariable from "./IntroduceBoundVariable";
 import IntroduceDeduction from "./IntroduceDeduction";
 import IntroduceName from "./IntroduceName";
+import ProveChainingFromLeft from "./ProveChainingFromLeft";
+import ProveChainingFromRight from "./ProveChainingFromRight";
 import ProveCurrentTargetByInference from "./ProveCurrentTargetByInference";
-import AddTargetByInference from "./AddTargetByInference";
-import ProveCurrentTargetByRewritingEquality from "./RewriteCurrentTarget";
-import ProveCurrentTargetByRewritingDefinition from "./RewriteCurrentTargetByDefinition";
-import AddTargetByRewritingEquality from "./RewriteEqualityFromPremise";
+import ProveCurrentTargetByPremise from "./ProveCurrentTargetByPremise";
+import RearrangeAutomatically from "./RearrangeAutomatically";
+import RewriteAutomatically from "./RewriteAutomatically";
+import RewriteCurrentTarget from "./RewriteCurrentTarget";
+import RewriteCurrentTargetByDefinition from "./RewriteCurrentTargetByDefinition";
+import RewritePremise from "./RewritePremise";
 import RewriteTransitiveFromLeft from "./RewriteTransitiveFromLeft";
 import RewriteTransitiveFromRight from "./RewriteTransitiveFromRight";
 
@@ -116,11 +116,11 @@ export default class ProvingCard extends React.Component {
           },
           {
             label: "By rewriting equality",
-            element: ProveCurrentTargetByRewritingEquality
+            element: RewriteCurrentTarget
           },
           {
             label: "By rewriting definition",
-            element: ProveCurrentTargetByRewritingDefinition
+            element: RewriteCurrentTargetByDefinition
           }
         ]
       },
@@ -137,7 +137,7 @@ export default class ProvingCard extends React.Component {
           },
           {
             label: "By rewriting equality",
-            element: AddTargetByRewritingEquality
+            element: RewritePremise
           },
           {
             label: "Manually",
@@ -194,8 +194,6 @@ export default class ProvingCard extends React.Component {
     ];
     const currentRow = _.find(rows, r => r && r.label === currentRowLabel);
     const currentProver = currentRow && _.find(currentRow.provers, p => p && p.label === currentProverLabel);
-
-    const SmallButton = styled(Button)`padding: 0.1rem 0.25rem;`;
 
     return <EntryContext.Consumer>{entryContext => {
       const proverProps = {

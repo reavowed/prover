@@ -9,6 +9,6 @@ export default function ProveCurrentTargetByPremise(props) {
   const fetchPossibleConclusions = (statement) => {
     return context.fetchJsonForStep(path, `possibleConclusionsForCurrentTargetByPremise?serializedPremiseStatement=${encodeURIComponent(statement.serialize())}`)
   };
-  const submit = createSubmitFunctionForStepDefinitionEndpointFromPremise(context, path, "", "PUT", onCancel, onError);
+  const submit = createSubmitFunctionForStepDefinitionEndpointFromPremise(context.fetchJsonForStepAndInsertAndReplace, path, "", "PUT", onError);
   return <ProveByPremise fetchPossibleConclusions={fetchPossibleConclusions} submit={submit} {...props}/>
 }

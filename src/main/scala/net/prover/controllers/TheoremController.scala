@@ -20,7 +20,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("theoremKey") theoremKey: String,
     @RequestBody(required = false) proofIndexToCopy: java.lang.Integer
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
+    bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, _) =>
       for {
         newProof <- Option(proofIndexToCopy) match {
           case Some(proofIndex) =>
@@ -39,7 +39,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("proofIndex") proofIndex: Int
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, _) =>
+    bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, _) =>
       if (theorem.proofs.length == 1)
         Failure(BadRequestException("Cannot delete the only proof on a theorem"))
       else

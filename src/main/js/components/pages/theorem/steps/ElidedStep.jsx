@@ -32,21 +32,21 @@ class ElidedStepProofLineWithContexts extends React.Component {
   };
 
   setDescription = (description) => {
-    this.props.proofContext.fetchJsonForStepAndUpdateTheorem(this.props.path, "description", {
+    this.props.proofContext.fetchJsonForStepAndReplace(this.props.path, "description", {
       method: "POST",
       body: description
     });
   };
 
   highlightInference = (inferenceId) => {
-    this.props.proofContext.fetchJsonForStepAndUpdateTheorem(this.props.path, "highlightedInference", {
+    this.props.proofContext.fetchJsonForStepAndReplace(this.props.path, "highlightedInference", {
       method: "POST",
       body: inferenceId
     });
   };
 
   unpackStep = () => {
-    this.props.proofContext.fetchJsonForStepAndUpdateTheorem(this.props.path, "unpack", {method: "POST"});
+    this.props.proofContext.fetchJsonForStepAndReplace(this.props.path, "unpack", {method: "POST"});
   };
 
 
@@ -71,7 +71,6 @@ class ElidedStepProofLineWithContexts extends React.Component {
     </>;
     const proofLine = <ProofLine premiseReferences={step.filterReferences(path)}
                                  path={path}
-                                 statement={step.statement}
                                  buttons={buttons}
                                  incomplete={!step.isComplete}
                                  onKeyDown={this.onProofLineKeyDown}
@@ -106,7 +105,7 @@ export class ElidedStep extends React.Component {
     const {step, path} = this.props;
     return <ElidedStepProofLine {...this.props} prefix="Then">
       <ProofLine.SingleStatementWithPrefixContent prefix="Then"
-                                                  statement={step.statement}
+                                                  statement={step.provenStatement}
                                                   path={path} />
     </ElidedStepProofLine>;
   }

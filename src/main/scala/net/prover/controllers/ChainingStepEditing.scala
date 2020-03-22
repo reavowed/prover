@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.PathData
+import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, MultipleStepReplacementProps, PathData}
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
 import net.prover.model.definitions._
@@ -86,30 +86,30 @@ trait ChainingStepEditing extends BookModification {
       case Nil =>
         Failure(NotFoundException(s"Step $stepPath"))
       case init :+ last =>
-        bookService.replaceSteps(bookKey, chapterKey, theoremKey, proofIndex, init) { (steps, outerStepProvingContext) =>
+        bookService.replaceSteps[WithValue[InsertionAndMultipleReplacementProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { (steps, outerStepProvingContext) =>
           steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
             val outerStepContext = outerStepProvingContext.stepContext
             implicit val stepContext = outerStepContext.addSteps(before).atIndex(last)
             implicit val stepProvingContext = StepProvingContext(stepContext, outerStepProvingContext.provingContext)
 
-            def forConnective(connective: BinaryConnective, lhs: Statement, rhs: Statement): Try[(Seq[Step], Seq[Step.Target])] = {
+            def forConnective(connective: BinaryConnective, lhs: Statement, rhs: Statement): Try[(Seq[Step], Seq[Step.Target], MultipleStepReplacementProps)] = {
               for {
                 (firstChainingStep, secondChainingStep, targetSteps) <- createSteps.createStepsForConnective(connective, lhs, rhs, stepProvingContext)
-                transitivitySteps <- getTransitivitySteps(firstChainingStep, secondChainingStep, connective)
-              } yield (transitivitySteps, targetSteps)
+                (transitivitySteps, replacementProps) <- getTransitivitySteps(firstChainingStep, secondChainingStep, connective)
+              } yield (transitivitySteps, targetSteps, replacementProps)
             }
-            def forRelation(relation: BinaryRelation, lhs: Term, rhs: Term): Try[(Seq[Step], Seq[Step.Target])] = {
+            def forRelation(relation: BinaryRelation, lhs: Term, rhs: Term): Try[(Seq[Step], Seq[Step.Target], MultipleStepReplacementProps)] = {
               for {
                 (firstChainingStep, secondChainingStep, targetSteps) <- createSteps.createStepsForRelation(relation, lhs, rhs, stepProvingContext)
-                transitivitySteps <- getTransitivitySteps(firstChainingStep, secondChainingStep, relation)
-              } yield (transitivitySteps, targetSteps)
+                (transitivitySteps, replacementProps) <- getTransitivitySteps(firstChainingStep, secondChainingStep, relation)
+              } yield (transitivitySteps, targetSteps, replacementProps)
             }
             def getTransitivitySteps[T <: Expression : ChainingMethods](
               firstChainingStep: ChainingStepDefinition[T],
               secondChainingStep: ChainingStepDefinition[T],
               targetJoiner: BinaryJoiner[T]
-            ): Try[Seq[Step]] = {
-              def getWithFollowingTransitivity = for {
+            ): Try[(Seq[Step], MultipleStepReplacementProps)] = {
+              def getWithFollowingTransitivity: Option[Option[(Seq[Step], MultipleStepReplacementProps)]] = for {
                 (followingStep, remainingSteps) <- after.headAndTailOption
                 followingStatement <- followingStep.provenStatement
                 (followingRelation, followingLhs, followingRhs) <- ChainingMethods.getRelation(followingStatement)
@@ -126,28 +126,32 @@ trait ChainingStepEditing extends BookModification {
                   (intermediateRelation, stepsForFirst) <- firstChainingStep.getChainingSteps(initialLhs, initialRelation)
                   (lastRelation, stepsForSecond) <- secondChainingStep.getChainingSteps(initialLhs, intermediateRelation)
                   if (lastRelation == followingRelation)
-                } yield stepsForFirst ++ stepsForSecond ++ remainingSteps
+                } yield (stepsForFirst ++ stepsForSecond ++ remainingSteps, MultipleStepReplacementProps(init, before.length, before.length + 2, stepsForFirst ++ stepsForSecond))
               }
               def withNewTransitivity = {
-                if (secondChainingStep.lhs == firstChainingStep.lhs && secondChainingStep.joiner == targetJoiner) {
-                  secondChainingStep.step.map(_ +: after)
+                val newStepsOption = if (secondChainingStep.lhs == firstChainingStep.lhs && secondChainingStep.joiner == targetJoiner) {
+                  secondChainingStep.step.map(Seq(_))
                 } else if (firstChainingStep.rhs == secondChainingStep.rhs && firstChainingStep.joiner == targetJoiner) {
-                  firstChainingStep.step.map(_ +: after)
+                  firstChainingStep.step.map(Seq(_))
                 } else for {
                   (joiner, secondSteps) <- secondChainingStep.getChainingSteps(firstChainingStep.lhs, firstChainingStep.joiner)
                   if (joiner == targetJoiner)
                 } yield {
-                  firstChainingStep.step.toSeq ++ secondSteps ++ after
+                  firstChainingStep.step.toSeq ++ secondSteps
                 }
+                newStepsOption.map(s => (s ++ after, MultipleStepReplacementProps(init, before.length, before.length + 1, s)))
               }
               getWithFollowingTransitivity getOrElse withNewTransitivity orBadRequest "Could not chain steps"
             }
 
             for {
               targetStep <- step.asOptionalInstanceOf[Step.Target].orBadRequest(s"Step was not target")
-              (transitivitySteps, targetSteps) <- withRelation(targetStep.statement, forConnective, forRelation)
-            } yield insertTargetsBeforeTransitivity(before, transitivitySteps, targetSteps)
+              (transitivitySteps, targetSteps, replacementProps) <- withRelation(targetStep.statement, forConnective, forRelation)
+              (finalSteps, insertionProps) = insertTargetsBeforeTransitivity(init, before, transitivitySteps, targetSteps)
+            } yield (finalSteps, InsertionAndMultipleReplacementProps(insertionProps, replacementProps))
           }.orNotFound(s"Step $stepPath").flatten
+        }.map { case (proofUpdateProps, stepUpdateProps) =>
+          proofUpdateProps.withNewStepUpdateProps(stepUpdateProps)
         }
     }).toResponseEntity
   }

@@ -5,7 +5,7 @@ import SingleActionProver from "./components/SingleActionProver";
 
 export default function IntroduceDeduction({path, onErrorCancel}) {
   const context = useContext(ProofContext);
-  const prove = () => context.fetchJsonForStepAndUpdateTheorem(path, "introduceDeduction", {method: "POST"})
+  const prove = () => context.fetchJsonForStepAndReplaceWithWrapping(path, "introduceDeduction", {method: "POST"})
     .then(() => context.callOnStep([...path, 0], "startProving"));
   return <SingleActionProver prove={prove} onError={onErrorCancel} loadingText="Introducing deduction" />
 }

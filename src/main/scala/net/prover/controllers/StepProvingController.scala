@@ -3,7 +3,7 @@ package net.prover.controllers
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models.{DeductionUnwrapper, GeneralizationUnwrapper, PathData, PossibleConclusion, PossibleConclusionWithPremises, PossibleInference, PossibleTarget, StepDefinition, Unwrapper}
 import net.prover.model.ExpressionParsingContext.TermVariableValidator
-import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
+import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
 import net.prover.model._
@@ -310,7 +310,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepReference: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    replaceStepAndAddBeforeTransitivity[Step](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (step, stepProvingContext) =>
+    addBeforeTransitivity[Step](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { stepProvingContext =>
       implicit val spc = stepProvingContext
       for {
         (_, newStep, targets) <- createStep(
@@ -322,7 +322,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
                 substitutedConclusionStatement <- conclusionStatement.applySubstitutions(substitutions).orBadRequest("Could not apply substitutions to intended conclusion")
               } yield substitutedConclusionStatement),
           Nil)
-      } yield (step, targets :+ newStep)
+      } yield targets :+ newStep
     }.toResponseEntity
   }
 }

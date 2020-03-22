@@ -5,7 +5,6 @@ import SingleActionProver from "./components/SingleActionProver";
 
 export default function IntroduceBoundVariable({path, onErrorCancel}) {
   const context = useContext(ProofContext);
-  const prove = () => context.fetchJsonForStepAndUpdateTheorem(path, "introduceBoundVariable", {method: "POST"})
-      .then(() => context.callOnStep([...path, 0], "startProving"));
+  const prove = () => context.fetchJsonForStepAndReplaceWithWrapping(path, "introduceBoundVariable", {method: "POST"});
   return <SingleActionProver prove={prove} onError={onErrorCancel} loadingText="Introducing bound variable" />
 }

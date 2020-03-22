@@ -12,6 +12,9 @@ import {Steps} from "./Steps";
 
 export default class GeneralizedDeductionStep extends React.Component {
   static contextType = ProofContext;
+  shouldComponentUpdate() {
+    return true;
+  }
   render() {
     let {step, path, additionalReferences, format, components, suppressConclusion} = this.props;
     additionalReferences = additionalReferences || [];
@@ -23,8 +26,8 @@ export default class GeneralizedDeductionStep extends React.Component {
 
     const wrapBoundVariable = (name, index, boundVariablePath) => {
       const callback = (boundVariablePath.length === 0 && index === 0) ?
-        (newName) => this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "boundVariable", {method: "PUT", body: newName}) :
-        (newName) => this.context.fetchJsonForStepAndUpdateTheorem(substepPath, `boundVariables/${update(boundVariablePath, {$splice: [[0, 1, boundVariablePath[0] + 1]]}).join(".")}/${index}/`, {method: "PUT", body: newName});
+        (newName) => this.context.fetchJsonForStepAndReplace(this.props.path, "boundVariable", {method: "PUT", body: newName}) :
+        (newName) => this.context.fetchJsonForStepAndReplace(substepPath, `boundVariables/${update(boundVariablePath, {$splice: [[0, 1, boundVariablePath[0] + 1]]}).join(".")}/${index}/`, {method: "PUT", body: newName});
       return <InlineTextEditor text={name} callback={callback} />;
     };
 

@@ -82,6 +82,71 @@ export class Theorem extends React.Component {
           }, () => resolve());
         })
       },
+      insertSteps(proofIndex, {stepUpdates: {path, newSteps: newStepsJson}, newInferences: newInferencesFromUpdate, stepsWithReferenceChanges: stepsWithReferenceChangesJson}) {
+        const newInferences = {...inferences, ...newInferencesFromUpdate};
+        const newSteps = self.parser.parseSteps(newStepsJson, newInferences);
+        const stepsWithReferenceChanges = self.parser.parseStepsWithReferenceChanges(stepsWithReferenceChangesJson, newInferences);
+        const newTheorem = self.state.theorem.insertSteps(proofIndex, path, newSteps)
+          .updateStepsWithReferenceChanges(proofIndex, stepsWithReferenceChanges);
+        return self.setStatePromise({
+          theorem: newTheorem,
+          inferences: newInferences
+        }).then(() => [path, newSteps]);
+      },
+      replaceStep(proofIndex, {stepUpdates: {path, newSteps: newStepsJson}, newInferences: newInferencesFromUpdate, stepsWithReferenceChanges: stepsWithReferenceChangesJson}) {
+        const newInferences = {...inferences, ...newInferencesFromUpdate};
+        const newSteps = self.parser.parseSteps(newStepsJson, newInferences);
+        const stepsWithReferenceChanges = self.parser.parseStepsWithReferenceChanges(stepsWithReferenceChangesJson, newInferences);
+        const newTheorem = self.state.theorem.replaceStep(proofIndex, path, newSteps)
+          .updateStepsWithReferenceChanges(proofIndex, stepsWithReferenceChanges);
+        return self.setStatePromise({
+          theorem: newTheorem,
+          inferences: newInferences
+        }).then(() => [path, newSteps]);
+      },
+      insertAndReplaceSteps(proofIndex, {stepUpdates: {insertion, replacement}, newInferences: newInferencesFromUpdate, stepsWithReferenceChanges: stepsWithReferenceChangesJson}) {
+        const newInferences = {...inferences, ...newInferencesFromUpdate};
+        const insertionSteps = self.parser.parseSteps(insertion.newSteps, newInferences);
+        const replacementSteps = self.parser.parseSteps(replacement.newSteps, newInferences);
+        const stepsWithReferenceChanges = self.parser.parseStepsWithReferenceChanges(stepsWithReferenceChangesJson, newInferences);
+        const newTheorem = self.state.theorem
+          .replaceStep(proofIndex, replacement.path, replacementSteps)
+          .insertSteps(proofIndex, insertion.path, insertionSteps)
+          .updateStepsWithReferenceChanges(proofIndex, stepsWithReferenceChanges);
+        return self.setStatePromise({
+          theorem: newTheorem,
+          inferences: newInferences
+        }).then(() => [insertion.path, insertionSteps, replacement.path, replacementSteps]);
+      },
+      insertAndReplaceMultipleSteps(proofIndex, {stepUpdates: {insertion, replacement}, newInferences: newInferencesFromUpdate, stepsWithReferenceChanges: stepsWithReferenceChangesJson}) {
+        const newInferences = {...inferences, ...newInferencesFromUpdate};
+        const insertionSteps = self.parser.parseSteps(insertion.newSteps, newInferences);
+        const replacementSteps = self.parser.parseSteps(replacement.newSteps, newInferences);
+        const stepsWithReferenceChanges = self.parser.parseStepsWithReferenceChanges(stepsWithReferenceChangesJson, newInferences);
+        const newTheorem = self.state.theorem
+          .replaceSteps(proofIndex, replacement.parentPath, replacement.startIndex, replacement.endIndex, replacementSteps)
+          .insertSteps(proofIndex, insertion.path, insertionSteps)
+          .updateStepsWithReferenceChanges(proofIndex, stepsWithReferenceChanges);
+        return self.setStatePromise({
+          theorem: newTheorem,
+          inferences: newInferences
+        }).then(() => [insertion.path, insertionSteps, [...replacement.parentPath, replacement.startIndex], replacementSteps]);
+      },
+      insertAndDeleteSteps(proofIndex, {stepUpdates: {insertion, deletion}, newInferences: newInferencesFromUpdate, stepsWithReferenceChanges: stepsWithReferenceChangesJson}) {
+        const newInferences = {...inferences, ...newInferencesFromUpdate};
+        const insertionSteps = self.parser.parseSteps(insertion.newSteps, newInferences);
+        const stepsWithReferenceChanges = self.parser.parseStepsWithReferenceChanges(stepsWithReferenceChangesJson, newInferences);
+        const newTheorem = _.reduce(
+            _.range(deletion.endIndex - deletion.startIndex),
+            theorem => theorem.replaceStep(proofIndex, [...deletion.parentPath, deletion.startIndex], []),
+            theorem)
+          .insertSteps(proofIndex, insertion.path, insertionSteps)
+          .updateStepsWithReferenceChanges(proofIndex, stepsWithReferenceChanges);
+        return self.setStatePromise({
+          theorem: newTheorem,
+          inferences: newInferences
+        });
+      },
       setHighlighting(newHighlightedPremises, newHighlightedConclusion, proofIndex) {
         if (!highlighting.isActionInUse) {
           self.setState({highlighting: {

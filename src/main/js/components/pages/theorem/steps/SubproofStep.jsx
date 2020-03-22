@@ -3,6 +3,7 @@ import {StepReference} from "../../../../models/Step";
 import {HighlightableExpression} from "../../../ExpressionComponent";
 import HashParamsContext from "../../../HashParamsContext";
 import ProofLine from "./components/ProofLine";
+import {ElidedStepProofLine} from "./ElidedStep";
 import Step from "./Step";
 import {Steps} from "./Steps";
 import {formatHtml} from "../../../helpers/Formatter";
@@ -35,13 +36,12 @@ export class SubproofStep extends React.Component {
       <Step.WithoutSubsteps>
         {titleElement}
         <ProofLine path={path}
-                   statement={step.statement}
                    premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
                    incomplete={!step.isComplete}
                    onClick={this.toggleSubproof}>
-          Then
-          {' '}
-          {step.statement ? <HighlightableExpression expression={step.statement} references={[reference]} /> : "???"}.
+          <ProofLine.SingleStatementWithPrefixContent prefix="Then"
+                                                      statement={step.provenStatement}
+                                                      path={path} />
         </ProofLine>
       </Step.WithoutSubsteps>;
   }

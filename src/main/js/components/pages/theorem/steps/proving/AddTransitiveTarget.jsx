@@ -18,7 +18,7 @@ export default class AddTransitiveTarget extends React.Component {
 
   addTarget = () => {
     return new Promise(((resolve) => this.setState({saving: true}, resolve)))
-      .then(() => this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "transitiveTarget", {
+      .then(() => this.context.fetchJsonForStepAndInsertAndReplaceMultiple(this.props.path, "transitiveTarget", {
         method: "POST",
         body: this.state.targetStatement
       }))

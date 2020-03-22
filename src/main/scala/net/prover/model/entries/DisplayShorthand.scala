@@ -52,30 +52,6 @@ object DisplayShorthand extends ChapterEntryParser {
 }
 
 private class DisplayShorthandSerializer extends JsonSerializer[DisplayShorthand] {
-  private def serialize(template: Template, gen: JsonGenerator): Unit = {
-    template match {
-      case Template.StatementVariable(name) =>
-        gen.writeString(name)
-      case Template.TermVariable(name) =>
-        gen.writeString(name)
-      case Template.DefinedStatement(definition, boundVariableNames, components) =>
-        gen.writeStartArray(boundVariableNames.length + components.length + 1)
-        gen.writeString(definition.symbol)
-        components.foreach(serialize(_, gen))
-        gen.writeEndArray()
-      case Template.DefinedTerm(definition, boundVariableNames, components) =>
-        gen.writeStartArray(boundVariableNames.length + components.length + 1)
-        gen.writeString(definition.symbol)
-        components.foreach(serialize(_, gen))
-        gen.writeEndArray()
-      case Template.FunctionParameter(parameter) =>
-        gen.writeStartArray(2)
-        gen.writeNumber(parameter.level)
-        gen.writeNumber(parameter.index)
-        gen.writeEndArray()
-    }
-  }
-
   override def serialize(value: DisplayShorthand, gen: JsonGenerator, serializers: SerializerProvider): Unit = {
     gen.writeStartObject(value)
     gen.writeObjectField("baseFormatString", value.format.baseFormatString)

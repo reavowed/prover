@@ -12,7 +12,7 @@ class StepRewriteSpec extends ControllerSpec {
 
   "proving a step" should {
     "get rewrite suggestions using a generalized deduction premise" in {
-      val service = createService
+      val service = mock[BookService]
       val controller = new StepRewriteController(service)
 
       val statement = ForAll("x")(Implication(ElementOf($, Product(A, B)), Equals($, Zero)))
@@ -43,7 +43,8 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "apply rewrite using a generalized deduction premise" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
       val controller = new StepRewriteController(service)
 
       val statement = ForAll("x")(Implication(ElementOf($, Product(A, B)), Equals($, Zero)))
@@ -56,7 +57,7 @@ class StepRewriteSpec extends ControllerSpec {
         PathData(stepPath),
         Seq(Seq(RewriteRequest(Seq(0, 1, 0), Some(elementOfCartesianProductFromCoordinates.id), None, false))))
 
-      checkModifySteps(
+      checkModifyStepsWithoutProps(
         service,
         fillerSteps(stepIndex) :+ target(statement),
         fillerSteps(stepIndex) :+
@@ -74,7 +75,8 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "apply multiple rewrites using a generalized deduction premise at depth" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
       val controller = new StepRewriteController(service)
 
       val statement = ForAll("x")(Implication(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^, $), $.^^)))))
@@ -89,7 +91,7 @@ class StepRewriteSpec extends ControllerSpec {
           RewriteRequest(Seq(0, 1, 0, 1, 0, 0), Some(elementOfCartesianProductFromCoordinates.id), None, false),
           RewriteRequest(Seq(0, 1, 0, 1, 0, 1), Some(elementOfCartesianProductFromCoordinates.id), None, false))))
 
-      checkModifySteps(
+      checkModifyStepsWithoutProps(
         service,
         fillerSteps(stepIndex) :+ target(statement),
         fillerSteps(stepIndex) :+
@@ -123,7 +125,8 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "apply rewrite to chained statement using a generalized deduction premise" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
 
       val statement = Equivalence(ForAll("x")(Implication(ElementOf($, Product(A, B)), Equals($, Zero))), φ)
@@ -159,7 +162,8 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "apply multiple rewrites to chained statement using a generalized deduction premise at depth" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
 
       val statement = Equivalence(ForAll("x")(Implication(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^, $), $.^^))))), φ)
@@ -251,7 +255,8 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "rewrite in a deduction antecedent" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
       val controller = new StepRewriteController(service)
 
       val statement = ForAll("x")(Implication(ElementOf($, Product(A, B)), Implication(Equals($, Zero), φ)))
@@ -265,7 +270,7 @@ class StepRewriteSpec extends ControllerSpec {
         Seq(Seq(
           RewriteRequest(Seq(0, 1, 0, 0), Some(elementOfCartesianProductFromCoordinates.id), None, false))))
 
-      checkModifySteps(
+      checkModifyStepsWithoutProps(
         service,
         fillerSteps(stepIndex) :+ target(statement),
         fillerSteps(stepIndex) :+

@@ -61,11 +61,11 @@ const ProofLineBase = styled(class ProofLine extends React.Component {
   };
 
   clearStep = () => {
-    this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "clear", {method: "POST"})
+    this.context.fetchJsonForStepAndReplace(this.props.path, "clear", {method: "POST"})
       .then(() => this.context.callOnStep(this.props.path, "startProving"));
   };
   deleteStep = () => {
-    this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "", {method: "DELETE"});
+    this.context.fetchJsonForStepAndReplace(this.props.path, "", {method: "DELETE"});
   };
 
   showSubproofNameModal = () => {
@@ -75,14 +75,14 @@ const ProofLineBase = styled(class ProofLine extends React.Component {
     this.setState({shouldShowSubproofNameModal: false})
   };
   createSubproof = () => {
-    this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "introduceSubproof", {
+    this.context.fetchJsonForStepAndReplace(this.props.path, "introduceSubproof", {
       method: "POST",
       body: this.state.subproofName
     }).then(this.hideSubproofNameModal);
   };
 
   elide = () => {
-    this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "elide", {method: "POST"});
+    this.context.fetchJsonForStepAndReplace(this.props.path, "elide", {method: "POST"});
   };
 
 
@@ -175,10 +175,12 @@ ProofLine.SingleStatementWithPrefixContent = function({editableBoundVariable, pr
     {prefix}
     {statement && <>
       {' '}
-      <HighlightableExpression expression={statement}
-                               references={[new StepReference(path, suffix)]}
-                               additionalReferences={additionalReferences || []}
-                               wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}/>
+      {statement ?
+        <HighlightableExpression expression={statement}
+                                references={[new StepReference(path, suffix)]}
+                                additionalReferences={additionalReferences || []}
+                                wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}/> :
+        "???"}
      </>}
     {'.'}
   </>

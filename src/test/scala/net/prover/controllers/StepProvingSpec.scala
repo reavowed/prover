@@ -15,7 +15,8 @@ class StepProvingSpec extends ControllerSpec {
 
   "proving a step" should {
     "remove unnecessary structural simplifications" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
 
       val premise = Conjunction(φ, Implication(ψ, χ))
@@ -35,7 +36,8 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "not remove necessary structural simplifications" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
 
       val premise = Implication(φ, Conjunction(ψ, χ))
@@ -57,7 +59,8 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain conclusion bound variable names when proving target by inference" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
 
       val premise = ForAll("x")(Exists("y")(Equals($, $.^)))
@@ -79,7 +82,8 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain conclusion bound variable names when proving target by inference inside extraction" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
 
       val axiom = Axiom("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
@@ -113,7 +117,8 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain conclusion bound variable names when adding target by inference" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForInsertion(service)
       val controller = new StepProvingController(service)
 
       val premise = φ(b)
@@ -134,7 +139,8 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain conclusion bound variable names when adding target by premise" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForInsertion(service)
       val controller = new StepProvingController(service)
 
       val premise = ForAll("x")(Implication(φ($), Exists("y")(ψ($.^, $))))
@@ -161,7 +167,8 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain premise bound variable names when proving target by inference" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
 
       val statementToProve = Exists("y")(Equals($, a))
@@ -182,7 +189,8 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain bound variable names in extraction premise when proving target by inference" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
 
       val axiom = Axiom("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
@@ -216,7 +224,8 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "prove a target inside a scoped deduction" in {
-      val service = createService
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
 
       controller.proveCurrentTarget(

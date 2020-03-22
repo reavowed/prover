@@ -18,7 +18,7 @@ export default class RewriteCurrentTargetByDefinition extends React.Component {
     };
   }
   submit = () => {
-    return this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "rewriteDefinition", {
+    return this.context.fetchJsonForStepAndReplace(this.props.path, "rewriteDefinition", {
       method: "POST",
       body: this.state.selectedPremise.statement.serialize()
     })

@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{LinkSummary, PathData, UpdateProps}
+import net.prover.controllers.models.{InsertionAndReplacementProps, LinkSummary, PathData, ProofUpdateProps, StepInsertionProps, StepReplacementProps}
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
 import net.prover.model.definitions.{Equality, Transitivity}
@@ -57,21 +57,57 @@ trait BookModification {
     } yield takeWhileTransitive(before, targetLhs, lhs, Nil, equality)) getOrElse (before, Nil)
   }
 
-  protected def insertTargetsBeforeTransitivity(before: Seq[Step], newAfter: Seq[Step], newTargets: Seq[Step])(implicit stepProvingContext: StepProvingContext): Seq[Step] = {
+  protected def insertTargetsBeforeTransitivity(outerPath: Seq[Int], before: Seq[Step], newAfter: Seq[Step], newTargets: Seq[Step])(implicit stepProvingContext: StepProvingContext): (Seq[Step], StepInsertionProps) = {
     val (existingStepsBeforeTransitive, transitiveSteps) = splitPrecedingStepsWhileTransitive(before, newAfter)
-    (existingStepsBeforeTransitive ++ newTargets ++ transitiveSteps ++ newAfter)
+    (existingStepsBeforeTransitive ++ newTargets ++ transitiveSteps ++ newAfter, StepInsertionProps(outerPath :+ existingStepsBeforeTransitive.length, newTargets))
   }
 
-  protected def replaceStepAndAddBeforeTransitivity[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (TStep, StepProvingContext) => Try[(Step, Seq[Step])]): Try[UpdateProps] = {
+  protected def addBeforeTransitivity[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData)(f: (StepProvingContext) => Try[Seq[Step]]): Try[ProofUpdateProps[StepInsertionProps]] = {
     stepPath.indexes match {
       case init :+ last =>
-        bookService.replaceSteps(bookKey, chapterKey, theoremKey, proofIndex, init) { case (steps, stepProvingContext) =>
+        bookService.replaceSteps[WithValue[StepInsertionProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { case (steps, stepProvingContext) =>
+          steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+            for {
+              stepsToAddBeforeTransitive <- f(StepProvingContext.updateStepContext(_.addSteps(before).atIndex(last))(stepProvingContext))
+            } yield insertTargetsBeforeTransitivity(init, before, step +: after, stepsToAddBeforeTransitive)(stepProvingContext)
+          }.orNotFound(s"Step $stepPath").flatten
+        }.map { case (proofUpdateProps, stepInsertionProps) =>
+          proofUpdateProps.withNewStepUpdateProps(StepInsertionProps(
+            stepInsertionProps.path,
+            proofUpdateProps.stepUpdates.newSteps.slice(stepInsertionProps.path.last, stepInsertionProps.path.last + stepInsertionProps.newSteps.length)))
+        }
+      case _ =>
+        Failure(NotFoundException(s"Step $stepPath"))
+    }
+  }
+
+  protected def replaceStepAndAddBeforeTransitivity[TStep <: Step : ClassTag](
+    bookKey: String,
+    chapterKey: String,
+    theoremKey: String,
+    proofIndex: Int,
+    stepPath: PathData)
+    (f: (TStep, StepProvingContext) => Try[(Step, Seq[Step])]
+    ): Try[ProofUpdateProps[InsertionAndReplacementProps]] = {
+    stepPath.indexes match {
+      case init :+ last =>
+        bookService.replaceSteps[WithValue[InsertionAndReplacementProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { case (steps, stepProvingContext) =>
           steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
             for {
               typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
               (replacementStep, stepsToAddBeforeTransitive) <- f(typedStep, StepProvingContext.updateStepContext(_.addSteps(before).atIndex(last))(stepProvingContext))
-            } yield insertTargetsBeforeTransitivity(before, replacementStep +: after, stepsToAddBeforeTransitive)(stepProvingContext)
+              (newSteps, stepInsertionProps) = insertTargetsBeforeTransitivity(init, before, replacementStep +: after, stepsToAddBeforeTransitive)(stepProvingContext)
+            } yield (newSteps, InsertionAndReplacementProps(stepInsertionProps, StepReplacementProps(stepPath.indexes, Seq(replacementStep))))
           }.orNotFound(s"Step $stepPath").flatten
+        }.map { case (proofUpdateProps, stepProps) =>
+          proofUpdateProps.withNewStepUpdateProps(
+            InsertionAndReplacementProps(
+              StepInsertionProps(
+                stepProps.insertion.path,
+                proofUpdateProps.stepUpdates.newSteps.slice(stepProps.insertion.path.last, stepProps.insertion.path.last + stepProps.insertion.newSteps.length)),
+              StepReplacementProps(
+                stepProps.replacement.path,
+                proofUpdateProps.stepUpdates.newSteps.slice(stepProps.replacement.path.last + stepProps.insertion.newSteps.length, stepProps.replacement.path.last + stepProps.insertion.newSteps.length + stepProps.replacement.newSteps.length))))
         }
       case _ =>
         Failure(NotFoundException(s"Step $stepPath"))

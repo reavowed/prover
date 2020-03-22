@@ -6,7 +6,7 @@ import Rewriter from "./components/Rewriter";
 export default function RewriteTransitiveFromRight({path, rightComponent, onError}) {
   const context = useContext(ProofContext);
   const submit = (rewrites) => {
-    return context.fetchJsonForStepAndUpdateTheorem(path, "rewriteRight", {method: "POST", body: rewrites})
+    return context.fetchJsonForStepAndInsertAndReplaceMultiple(path, "rewriteRight", {method: "POST", body: rewrites})
       .catch(onError);
   };
   return <Rewriter

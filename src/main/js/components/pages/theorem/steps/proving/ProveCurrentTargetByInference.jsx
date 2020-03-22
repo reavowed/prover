@@ -3,7 +3,7 @@ import ProofContext from "../../ProofContext";
 import {createSubmitFunctionForStepDefinitionEndpointFromInference} from "./components/stepDefinitionSubmitFunctions";
 import {InferenceFinder} from "./components/InferenceFinder";
 
-export default function ProveCurrentTargetByInference({path, onCancel, onError}) {
+export default function ProveCurrentTargetByInference({path, onError}) {
   const context = useContext(ProofContext);
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `possibleInferencesForCurrentTarget?searchText=${encodeURIComponent(searchText)}`);
@@ -12,7 +12,7 @@ export default function ProveCurrentTargetByInference({path, onCancel, onError})
     return context.fetchJsonForStep(path, `possiblePremisesForCurrentTarget?inferenceId=${encodeURIComponent(inference.id)}&target=${encodeURIComponent(targetStatement.serialize())}&conclusion=${encodeURIComponent(conclusion.serialize())}`)
       .then(context.parser.parsePossibleConclusion);
   };
-  const proveWithInference = createSubmitFunctionForStepDefinitionEndpointFromInference(context, path, "", "PUT", onCancel, onError);
+  const proveWithInference = createSubmitFunctionForStepDefinitionEndpointFromInference(context.fetchJsonForStepAndInsertAndReplace, path, "", "PUT", onError);
   return <InferenceFinder title='Select Inference'
                           getInferenceSuggestions={getInferenceSuggestions}
                           fetchPossiblePremises={fetchPossiblePremises}

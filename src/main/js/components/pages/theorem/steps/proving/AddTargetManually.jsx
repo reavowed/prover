@@ -18,7 +18,7 @@ export default class AddTargetManually extends React.Component {
 
   addTarget = () => {
     return new Promise(((resolve) => this.setState({saving: true}, resolve)))
-      .then(() => this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "target", {
+      .then(() => this.context.fetchJsonForStepAndInsert(this.props.path, "target", {
         method: "POST",
         body: this.state.targetStatement
       }))

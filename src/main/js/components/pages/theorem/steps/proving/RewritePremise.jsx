@@ -3,13 +3,12 @@ import ProofContext from "../../ProofContext";
 import PremiseChooser from "./components/PremiseChooser";
 import Rewriter from "./components/Rewriter";
 
-export default function RewriteEqualityFromPremise({path, availablePremises, entryContext, onCancel, onError}) {
+export default function RewritePremise({path, availablePremises, entryContext, onCancel, onError}) {
   const context = useContext(ProofContext);
   const [premiseToRewrite, setPremiseToRewrite] = useState(null);
 
   const rewrite = (rewrites) => {
-    return context.fetchJsonForStepAndUpdateTheorem(path, "rewritePremise", {method: "POST", body: rewrites})
-      .then(onCancel)
+    return context.fetchJsonForStepAndInsert(path, "rewritePremise", {method: "POST", body: rewrites})
       .catch(onError);
   };
   return <>

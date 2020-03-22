@@ -10,7 +10,7 @@ import {Steps} from "./Steps";
 export class GeneralizationStep extends React.Component {
   static contextType = ProofContext;
   updateBoundVariable = (newName) => {
-    return this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "boundVariable", {method: "PUT", body: newName});
+    return this.context.fetchJsonForStepAndReplace(this.props.path, "boundVariable", {method: "PUT", body: newName});
   };
   render() {
     let {step, path, additionalReferences, suppressConclusion} = this.props;

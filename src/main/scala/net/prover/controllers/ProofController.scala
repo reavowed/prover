@@ -1,16 +1,14 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{PathData, StepMoveRequest}
-import net.prover.exceptions.BadRequestException
+import net.prover.controllers.models.{InsertionAndDeletionProps, PathData, ProofUpdateProps, StepDeletionProps, StepInsertionProps, StepMoveRequest}
 import net.prover.model._
-import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.util.{Failure, Success, Try}
+import scala.util.Success
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}"))
@@ -78,7 +76,7 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
     }
     val (sharedPath, sourcePathInner, destinationPathInner) = commonPrefix(sourcePath, destinationPath)
     (for {
-      result <- bookService.replaceSteps(bookKey, chapterKey, theoremKey, proofIndex, sharedPath) { (sharedParentSteps, sharedContext) =>
+      (proofUpdateProps, insertionAndDeletionProps) <- bookService.replaceSteps[WithValue[InsertionAndDeletionProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, sharedPath) { (sharedParentSteps, sharedContext) =>
         for {
           (substepsWithoutCurrent, (currentSteps, currentStepOuterContext)) <-
             Proof.modifySteps[WithValue[(Seq[Step], StepContext)]#Type](sharedParentSteps, sourcePathInner, sharedContext.stepContext) { (currentSteps, currentStepOuterContext) =>
@@ -86,7 +84,7 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
                 (before ++ after, (steps, currentStepOuterContext))
               }
             }.orBadRequest("Invalid source path")
-          resultSteps <- Proof.modifySteps(substepsWithoutCurrent, destinationPathInner, sharedContext.stepContext) { (newSurroundingSteps, newStepOuterContext) =>
+          result <- Proof.modifySteps[TryWithValue[InsertionAndDeletionProps]#Type](substepsWithoutCurrent, destinationPathInner, sharedContext.stepContext) { (newSurroundingSteps, newStepOuterContext) =>
             val sharedParameterDepth = Seq(currentStepOuterContext.externalDepth, newStepOuterContext.externalDepth).min
             val parametersToRemove = currentStepOuterContext.externalDepth - newStepOuterContext.externalDepth
             val parametersToAdd = -1 * parametersToRemove
@@ -101,11 +99,16 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
                   Success(currentSteps.map(_.insertExternalParameters(parametersToAdd, 0)))
                 else
                   Success(currentSteps)
-              } yield before ++ stepsWithNewContext ++ after
+              } yield (before ++ stepsWithNewContext ++ after, InsertionAndDeletionProps(StepInsertionProps(destinationPath :+ destinationIndex, stepsWithNewContext), StepDeletionProps(sourcePath, sourceStartIndex, sourceEndIndex)))
             }
           }.orBadRequest("Invalid destination path").flatten
-        } yield resultSteps
+        } yield result
       }.orBadRequest(s"Invalid source path")
-    } yield result).toResponseEntity
+    } yield proofUpdateProps.withNewStepUpdateProps(
+      InsertionAndDeletionProps(
+        StepInsertionProps(
+          insertionAndDeletionProps.insertion.path,
+          destinationPathInner.foldLeft(proofUpdateProps.stepUpdates.newSteps) { (steps, index) => steps(index).asInstanceOf[Step.WithSubsteps].substeps }.slice(destinationIndex, destinationIndex + insertionAndDeletionProps.insertion.newSteps.length)),
+        insertionAndDeletionProps.deletion))).toResponseEntity
   }
 }

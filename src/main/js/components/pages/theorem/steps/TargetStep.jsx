@@ -27,7 +27,8 @@ class TargetStepProofLineInner extends React.Component {
   }
   onUpdate() {
     this.context.fetchJsonForStep(this.props.path, "premises")
-      .then(premiseJson => this.setState({availablePremises: _.map(premiseJson, this.props.entryContext.parser.parsePremise)}));
+      .then(premiseJson => this.setState({availablePremises: _.map(premiseJson, this.props.entryContext.parser.parsePremise)}))
+      .catch(console.log);
   }
 
   onProofLineKeyDown = (event) => {

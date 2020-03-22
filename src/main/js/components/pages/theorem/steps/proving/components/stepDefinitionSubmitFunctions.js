@@ -1,6 +1,6 @@
-export function createSubmitFunctionForStepDefinitionEndpointFromInference(context, path, endpointName, method, onCancel, onError) {
+export function createSubmitFunctionForStepDefinitionEndpointFromInference(contextFunction, path, endpointName, method, onError) {
   return (possibleInference, possibleTarget, possibleConclusion, substitutions, premiseStatements, conclusionStatement) => {
-    return context.fetchJsonForStepAndUpdateTheorem(path, endpointName, {
+    return contextFunction(path, endpointName, {
       method,
       body: {
         inferenceId: possibleInference.inference.id,
@@ -12,14 +12,13 @@ export function createSubmitFunctionForStepDefinitionEndpointFromInference(conte
         additionalVariableNames: possibleConclusion.additionalVariableNames
       }
     })
-      .then(onCancel)
       .catch(onError);
   };
 }
 
-export function createSubmitFunctionForStepDefinitionEndpointFromPremise(context, path, endpointName, method, onCancel, onError) {
+export function createSubmitFunctionForStepDefinitionEndpointFromPremise(contextFunction, path, endpointName, method, onError) {
   return (premiseStatement, substitutions, selectedConclusion, premiseStatements, conclusionStatement) => {
-    return context.fetchJsonForStepAndUpdateTheorem(path, endpointName, {
+    return contextFunction(path, endpointName, {
       method,
       body: {
         serializedPremiseStatement: premiseStatement.serialize(),
@@ -31,7 +30,6 @@ export function createSubmitFunctionForStepDefinitionEndpointFromPremise(context
         additionalVariableNames: selectedConclusion.additionalVariableNames
       }
     })
-      .then(onCancel)
       .catch(onError);
   };
 }

@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{InferenceSummary, PathData, ProofUpdateProps, StepUpdateProps, TheoremUpdateProps, UpdateProps}
+import net.prover.controllers.models.{InferenceSummary, MultipleStepReplacementProps, PathData, ProofUpdateProps, StepInsertionProps, StepReplacementProps, TheoremUpdateProps}
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
@@ -99,50 +99,60 @@ class BookService @Autowired() (bookRepository: BookRepository) {
     ).map(_.map  { case ((books, definitions, book, chapter), entry) => (books, definitions, book, chapter, entry) })
   }
 
-  def modifyTheorem(bookKey: String, chapterKey: String, theoremKey: String)(f: (Theorem, ProvingContext) => Try[Theorem]): Try[TheoremUpdateProps] = {
-    modifyEntry[Theorem, WithValue[TheoremUpdateProps]#Type](bookKey, chapterKey, theoremKey, (books, definitions, book, chapter, theorem) => {
+  def modifyTheorem[F[_] : Functor](bookKey: String, chapterKey: String, theoremKey: String)(f: (Theorem, ProvingContext) => Try[F[Theorem]]): Try[F[TheoremUpdateProps]] = {
+    modifyEntry[Theorem, FWithValue[F, TheoremUpdateProps]#Type](bookKey, chapterKey, theoremKey, (books, definitions, book, chapter, theorem) => {
       implicit val provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
-      for {
-        newTheorem <- f(theorem, provingContext).map(_.recalculateReferences(provingContext))
-        newInferenceIds = newTheorem.referencedInferenceIds.diff(theorem.referencedInferenceIds)
-        inferenceLinks = BookService.getInferenceLinks(newInferenceIds, books, definitions)
-      } yield (newTheorem, TheoremUpdateProps(newTheorem, inferenceLinks))
-    }).map(_._2)
+      f(theorem, provingContext).map(_.map(_.recalculateReferences(provingContext))).map(_.map { case (newTheorem, stepsWithReferenceChanges) =>
+        val newInferenceIds = newTheorem.referencedInferenceIds.diff(theorem.referencedInferenceIds)
+        val inferenceLinks = BookService.getInferenceLinks(newInferenceIds, books, definitions)
+        (newTheorem, TheoremUpdateProps(newTheorem, inferenceLinks, stepsWithReferenceChanges))
+      })
+    }).map(_.map(_._2))
   }
 
-  def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[UpdateProps] = {
-    replaceStep[TStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) => f(step, stepProvingContext).map(Seq(_)) }.map {
-      case StepUpdateProps(_, step, newInferences) =>
-        StepUpdateProps(stepPath, step.asInstanceOf[Step.WithSubsteps].substeps(stepPath.last), newInferences)
-      case ProofUpdateProps(proof, newInferences) =>
-        StepUpdateProps(stepPath, proof(stepPath.last), newInferences)
-    }
+  def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[ProofUpdateProps[StepReplacementProps]] = {
+    replaceStep[TStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) => f(step, stepProvingContext).map(Seq(_)) }
   }
 
-  def replaceSteps(bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[Seq[Step]]): Try[UpdateProps] = {
-    modifyTheorem(bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-      theorem.replaceSteps[Try](proofIndex, stepPath) { (steps, stepContext) =>
-        Some(f(steps, StepProvingContext(stepContext, provingContext)))
+  def replaceSteps[F[_]: Functor](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[F[Seq[Step]]]): Try[F[ProofUpdateProps[MultipleStepReplacementProps]]] = {
+    modifyTheorem[FWithValue[F, MultipleStepReplacementProps]#Type](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
+      theorem.replaceSteps[TryFWithValue[F, MultipleStepReplacementProps]#Type](proofIndex, stepPath) { (steps, stepContext) =>
+        Some(f(steps, StepProvingContext(stepContext, provingContext)).map(_.map { newSteps =>
+          (newSteps, MultipleStepReplacementProps(stepPath, 0, steps.length, newSteps))
+        }))
       }.orNotFound(s"Step $stepPath").flatten
-    }.map { theoremUpdateProps =>
-      if (stepPath.nonEmpty)
-        StepUpdateProps(stepPath, theoremUpdateProps.theorem.findStep(proofIndex, stepPath).get._1, theoremUpdateProps.newInferences)
-      else
-        ProofUpdateProps(theoremUpdateProps.theorem.proofs(proofIndex).steps, theoremUpdateProps.newInferences)
-    }
+    }.map(_.map { case (theoremUpdateProps, stepReplacementProps) =>
+      ProofUpdateProps(
+        MultipleStepReplacementProps(
+          stepPath,
+          stepReplacementProps.startIndex,
+          stepReplacementProps.endIndex,
+          if (stepPath.nonEmpty) theoremUpdateProps.theorem.findStep(proofIndex, stepPath).get._1.asInstanceOf[Step.WithSubsteps].substeps else theoremUpdateProps.theorem.proofs(proofIndex).steps),
+        theoremUpdateProps.newInferences,
+        theoremUpdateProps.stepsWithReferenceChanges(proofIndex))
+    })
   }
 
-  def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[UpdateProps] = {
+  def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[ProofUpdateProps[StepReplacementProps]] = {
     stepPath.initAndLastOption.map { case (init, last) =>
-      replaceSteps(bookKey, chapterKey, theoremKey, proofIndex, init) { (steps, stepProvingContext) =>
+      replaceSteps[WithValue[Seq[Step]]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { (steps, stepProvingContext) =>
         steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
           for {
             typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
             replacementSteps <- f(typedStep, StepProvingContext.updateStepContext(_.addSteps(before).atIndex(last))(stepProvingContext))
-          } yield before ++ replacementSteps ++ after
+          } yield (before ++ replacementSteps ++ after, replacementSteps)
         }.orNotFound(s"Step $stepPath").flatten
+      }.map { case (proofUpdateProps, replacementSteps) =>
+        proofUpdateProps.withNewStepUpdateProps(StepReplacementProps(stepPath, proofUpdateProps.stepUpdates.newSteps.slice(last, last + replacementSteps.length)))
       }
     }.orNotFound(s"Step $stepPath").flatten
+  }
+
+  def insertSteps[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[ProofUpdateProps[StepInsertionProps]] = {
+    replaceStep[TStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath)((step, stepProvingContext) => f(step, stepProvingContext).map { steps => steps :+ step})
+      .map { proofUpdateProps =>
+        proofUpdateProps.withNewStepUpdateProps(StepInsertionProps(proofUpdateProps.stepUpdates.path, proofUpdateProps.stepUpdates.newSteps.init))
+      }
   }
 }
 

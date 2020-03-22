@@ -286,7 +286,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody premiseRewrite: PremiseRewrite
   ): ResponseEntity[_] = {
-    replaceStepAndAddBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
+    addBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepProvingContext =>
       implicit val spc = stepProvingContext
       for {
         equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
@@ -296,7 +296,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
         } {
           (_, steps, inferences) => EqualityRewriter.optionalRewriteElider(inferences)(steps).get
         }
-      } yield (step, Seq(newStep))
+      } yield Seq(newStep)
     }.toResponseEntity
   }
 

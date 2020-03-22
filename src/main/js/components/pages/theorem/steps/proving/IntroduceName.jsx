@@ -28,10 +28,9 @@ export default class IntroduceName extends React.Component {
   }
   handleImmediateNamingPremiseSelected = (premise) => {
     return new Promise((resolve) => this.setState({saving: true}, resolve))
-      .then(() => this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "introduceNamingFromPremise", { method: "POST", body: premise.serialize() }))
+      .then(() => this.context.fetchJsonForStepAndReplaceWithWrapping(this.props.path, "introduceNamingFromPremise", { method: "POST", body: premise.serialize() }))
       .then(() => {
         this.context.clearHighlightingAction();
-        this.context.callOnStep([...this.props.path, 0], "startProving")
       })
       .catch(this.props.onError)
       .then(() => this.setState({saving: false}));
@@ -42,7 +41,7 @@ export default class IntroduceName extends React.Component {
   };
   submit = (possibleInference, _, possibleConclusion, substitutions) => {
     const {namingVariableName: variableName} = this.state;
-    return this.context.fetchJsonForStepAndUpdateTheorem(this.props.path, "introduceNaming", {
+    return this.context.fetchJsonForStepAndReplaceWithWrapping(this.props.path, "introduceNaming", {
       method: "POST",
       body: {
         inferenceId: possibleInference.inference.id,
@@ -50,7 +49,6 @@ export default class IntroduceName extends React.Component {
         variableName
       }
     })
-      .then(() => this.context.callOnStep([...this.props.path, 0], "startProving"))
       .catch(this.props.onError);
   };
 

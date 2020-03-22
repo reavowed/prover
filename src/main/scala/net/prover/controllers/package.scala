@@ -78,8 +78,15 @@ package object controllers {
   class WithValue[B] {
     type Type[A] = (A, B)
   }
-  implicit def WithValueFunctor[F[_]: Functor, B]: Functor[WithValue[B]#Type] = new Functor[WithValue[B]#Type] {
+  implicit def WithValueFunctor[B]: Functor[WithValue[B]#Type] = new Functor[WithValue[B]#Type] {
     override def map[A, C](input: (A, B))(f: A => C): (C, B) = input.mapLeft(f)
+  }
+
+  class TryWithValue[B] {
+    type Type[A] = Try[(A, B)]
+  }
+  implicit def TryWithValueFunctor[B]: Functor[TryWithValue[B]#Type] = new Functor[TryWithValue[B]#Type] {
+    override def map[A, C](input: Try[(A, B)])(f: A => C): Try[(C, B)] = input.map(_.mapLeft(f))
   }
 
   class FWithValue[F[_], B] {

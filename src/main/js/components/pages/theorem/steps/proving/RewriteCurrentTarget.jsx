@@ -5,7 +5,7 @@ import Rewriter from "./components/Rewriter";
 export default function RewriteCurrentTarget({step, path, onError}) {
   const context = useContext(ProofContext);
   const rewrite = (rewrites) => {
-    return context.fetchJsonForStepAndUpdateTheorem(path, "rewrite", {method: "POST", body: rewrites})
+    return context.fetchJsonForStepAndReplace(path, "rewrite", {method: "POST", body: rewrites})
       .catch(onError);
   };
   return <Rewriter

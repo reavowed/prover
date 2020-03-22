@@ -2,6 +2,7 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.controllers.Identity
+import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.Theorem.Proof
@@ -43,8 +44,8 @@ case class Theorem(
   def replaceStep[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int])(f: (Step, StepContext) => F[Seq[Step]]): Option[F[Theorem]] = {
     modifyProof(proofIndex, _.replaceStep(stepIndexes, initialStepContext, f))
   }
-  def recalculateReferences(provingContext: ProvingContext): Theorem = {
-    copy(proofs = proofs.map(_.recalculateReferences(initialStepContext, provingContext)))
+  def recalculateReferences(provingContext: ProvingContext): (Theorem, Seq[Seq[StepWithReferenceChange]]) = {
+    proofs.map(_.recalculateReferences(initialStepContext, provingContext)).split.mapLeft(newProofs => copy(proofs = newProofs))
   }
 
   def findSteps[T <: Step : ClassTag]: Seq[(T, StepContext)] = {
@@ -131,8 +132,8 @@ object Theorem extends Inference.EntryParser {
           })
       }
     }
-    def recalculateReferences(initialStepContext: StepContext, provingContext: ProvingContext): Proof = {
-      Proof(steps.recalculateReferences(initialStepContext, provingContext))
+    def recalculateReferences(initialStepContext: StepContext, provingContext: ProvingContext): (Proof, Seq[StepWithReferenceChange]) = {
+      steps.recalculateReferences(initialStepContext, provingContext).mapLeft(Proof(_))
     }
 
     def findAssertions(initialStepContext: StepContext): Seq[(Step.Assertion, StepContext)] = {
