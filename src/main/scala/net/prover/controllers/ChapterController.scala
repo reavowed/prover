@@ -170,30 +170,66 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
-  @PostMapping(value = Array("/termDefinitions"), produces = Array("application/json;charset=UTF-8"))
-  def createTermDefinition(
+  @PostMapping(value = Array("/statementDefinitions"), produces = Array("application/json;charset=UTF-8"))
+  def createStatementDefinition(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
-    @RequestBody newTermDefininition: NewTermDefinitionModel
+    @RequestBody newStatementDefinition: NewStatementDefinitionModel
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
-      val name = Option(newTermDefininition.name).filter(_.nonEmpty)
-      val shorthand = Option(newTermDefininition.shorthand).filter(_.nonEmpty)
-      val attributes = Option(newTermDefininition.attributes).toSeq.flatMap(_.splitByWhitespace()).filter(_.nonEmpty)
+      val name = Option(newStatementDefinition.name).filter(_.nonEmpty)
+      val shorthand = Option(newStatementDefinition.shorthand).filter(_.nonEmpty)
+      val attributes = Option(newStatementDefinition.attributes).toSeq.flatMap(_.splitByWhitespace()).filter(_.nonEmpty)
       for {
-        symbol <- Option(newTermDefininition.symbol).filter(_.nonEmpty).orBadRequest("Symbol must be provided")
-        boundVariablesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newTermDefininition.components, "components").recoverWithBadRequest
+        symbol <- Option(newStatementDefinition.symbol).filter(_.nonEmpty).orBadRequest("Symbol must be provided")
+        boundVariablesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newStatementDefinition.components, "components").recoverWithBadRequest
         boundVariables = boundVariablesAndComponentTypes._1
         componentTypes = boundVariablesAndComponentTypes._2
         componentNames = boundVariables ++ componentTypes.map(_.name)
-        definition <- Statement.parser(expressionParsingContext.addInitialParameter("_")).parseFromString(newTermDefininition.definition, "definition").recoverWithBadRequest
-        format <- Option(newTermDefininition.format).filter(_.nonEmpty)
+        definition <- newStatementDefinition.definition.filter(_.nonEmpty).map(d => Statement.parser(expressionParsingContext.addInitialParameter("_")).parseFromString(d, "definition").recoverWithBadRequest).swap
+        format <- Option(newStatementDefinition.format).filter(_.nonEmpty)
           .map(f => Format.parser(componentNames).parseFromString(f, "format"))
           .getOrElse(Format.default(symbol, componentNames))
           .recoverWithBadRequest
-        premises <- newTermDefininition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}")).recoverWithBadRequest
+        newStatementDefinition = StatementDefinition(
+          symbol,
+          boundVariables,
+          componentTypes,
+          name,
+          format,
+          definition,
+          shorthand,
+          attributes)
+      } yield newStatementDefinition
+    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/termDefinitions"), produces = Array("application/json;charset=UTF-8"))
+  def createTermDefinition(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @RequestBody newTermDefinition: NewTermDefinitionModel
+  ): ResponseEntity[_] = {
+    bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
+      val name = Option(newTermDefinition.name).filter(_.nonEmpty)
+      val shorthand = Option(newTermDefinition.shorthand).filter(_.nonEmpty)
+      val attributes = Option(newTermDefinition.attributes).toSeq.flatMap(_.splitByWhitespace()).filter(_.nonEmpty)
+      for {
+        symbol <- Option(newTermDefinition.symbol).filter(_.nonEmpty).orBadRequest("Symbol must be provided")
+        boundVariablesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newTermDefinition.components, "components").recoverWithBadRequest
+        boundVariables = boundVariablesAndComponentTypes._1
+        componentTypes = boundVariablesAndComponentTypes._2
+        componentNames = boundVariables ++ componentTypes.map(_.name)
+        definition <- Statement.parser(expressionParsingContext.addInitialParameter("_")).parseFromString(newTermDefinition.definition, "definition").recoverWithBadRequest
+        format <- Option(newTermDefinition.format).filter(_.nonEmpty)
+          .map(f => Format.parser(componentNames).parseFromString(f, "format"))
+          .getOrElse(Format.default(symbol, componentNames))
+          .recoverWithBadRequest
+        premises <- newTermDefinition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}")).recoverWithBadRequest
         newTerm = TermDefinition(
           symbol,
           boundVariables,
@@ -353,6 +389,14 @@ object ChapterController {
     name: String,
     premises: Seq[String],
     conclusion: String)
+  case class NewStatementDefinitionModel(
+    symbol: String,
+    components: String,
+    name: String,
+    format: String,
+    definition: Option[String],
+    shorthand: String,
+    attributes: String)
   case class NewTermDefinitionModel(
     symbol: String,
     components: String,

@@ -15,11 +15,11 @@ const values = [
   {key: "attributes", title: "Attributes"},
 ];
 
-export default function TermInput({onCancel}) {
+export default function TermDefinitionInput({onCancel}) {
   const context = useContext(ChapterContext);
   function saveTerm(termToAdd) {
     termToAdd.premises = _.filter(termToAdd.premises.split(/\r?\n/), s => s.length);
     return context.updateChapter(path.join(context.url, "termDefinitions"), {method: "POST", body: termToAdd});
   }
-  return <ObjectInputWithSimpleForm description="Term" values={values} save={saveTerm} onCancel={onCancel} />;
+  return <ObjectInputWithSimpleForm description="Term Definition" values={values} save={saveTerm} onCancel={onCancel} />;
 }

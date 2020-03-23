@@ -1,19 +1,21 @@
 import React, {useState} from "react";
 import Button from "react-bootstrap/Button";
 import CommentInput from "./CommentInput";
-import PropertyInput from "./PropertyInput";
-import TermInput from "./TermInput";
+import PropertyInput from "./PropertyDefinitionInput";
+import StatementDefinitionInput from "./StatementDefinitionInput";
+import TermDefinitionInput from "./TermDefinitionInput";
 import TheoremInput from "./TheoremInput";
-import TypeInput from "./TypeInput";
+import TypeDefinitionInput from "./TypeDefinitionInput";
 
 export default function ChapterEntryAdder() {
   const [entryBeingAdded, setEntryBeingAdded] = useState(null);
   const onCancel = () => setEntryBeingAdded(null);
   const inputs = [
     {name: "Theorem", element: <TheoremInput onCancel={onCancel}/>},
-    {name: "Term", element: <TermInput onCancel={onCancel}/>},
-    {name: "Type", element: <TypeInput onCancel={onCancel}/>},
-    {name: "Property", element: <PropertyInput onCancel={onCancel}/>},
+    {name: "Statement Definition", element: <StatementDefinitionInput onCancel={onCancel}/>},
+    {name: "Term Definition", element: <TermDefinitionInput onCancel={onCancel}/>},
+    {name: "Type Definition", element: <TypeDefinitionInput onCancel={onCancel}/>},
+    {name: "Property Definition", element: <PropertyInput onCancel={onCancel}/>},
     {name: "Comment", element: <CommentInput onCancel={onCancel}/>}
   ];
   if (!entryBeingAdded) {

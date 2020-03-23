@@ -17,10 +17,10 @@ const values = [
   {key: "definition", title: "Definition", inputType: InputWithShorthandReplacement}
 ];
 
-export default function TypeInput({onCancel}) {
+export default function PropertyDefinitionInput({onCancel}) {
   const context = useContext(ChapterContext);
   const saveProperty = (typeToAdd) => {
     return context.updateChapter(path.join(context.url, "propertyDefinitions"), {method: "POST", body: typeToAdd});
   };
-  return <ObjectInputWithSimpleForm description="Property" values={values} save={saveProperty} onCancel={onCancel} />;
+  return <ObjectInputWithSimpleForm description="Property Definition" values={values} save={saveProperty} onCancel={onCancel} />;
 }
