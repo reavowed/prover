@@ -27,7 +27,7 @@ conclusion ∈ orderedPair b a ≈
 
 term equivalenceClass (a ≈)
   name (Equivalence Class)
-  format ([a])
+  format ([a]_≈)
   premises (equivalenceRelation ≈ A, ∈ a A)
   (= $0 comprehension x A ∈ orderedPair a $0 ≈)
   shorthand (ec)
@@ -116,6 +116,9 @@ conclusion ↔ ∈ b equivalenceClass a ≈ ∈ orderedPair a b ≈
     }
   }
   prove ↔ ∈ b equivalenceClass a ≈ ∈ orderedPair a b ≈ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ b equivalenceClass a ≈, ∈ orderedPair a b ≈) () 1 2
+}
+{
+  target ↔ ∈ b equivalenceClass a ≈ ∈ orderedPair a b ≈
 }
 
 theorem Equality Condition for Equivalence Classes
@@ -235,6 +238,8 @@ conclusion ↔ = equivalenceClass a ≈ equivalenceClass b ≈ ∈ orderedPair a
   }
   prove ↔ = equivalenceClass a ≈ equivalenceClass b ≈ ∈ orderedPair a b ≈ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= equivalenceClass a ≈ equivalenceClass b ≈, ∈ orderedPair a b ≈) () 2 3
 }
+
+comment If a function on a set is constant on the equivalence classes of a relation on that set, we can lift the function to one on the quotient.
 
 theorem Lift Function to Quotient
 premise equivalenceRelation ≈ A

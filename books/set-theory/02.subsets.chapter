@@ -61,3 +61,29 @@ conclusion ⊆ A A
   }
   prove ⊆ A A 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (A, A) 0
 }
+
+theorem Uniqueness Condition from Subset Condition
+premise ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ ⊆ $$0 $0
+conclusion ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0
+{
+  take x {
+    take y {
+      assume ∧ with ($$0) φ with ($0) φ {
+        elided (Extracted) {
+          prove ∀ y → ∧ with ($$$0) φ with ($0) φ ⊆ $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (∀ y → ∧ with ($$$$0) φ with ($0) φ ⊆ $$$$0 $0) ($$0) p0
+          prove → ∧ with ($$0) φ with ($0) φ ⊆ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∧ with ($$0) φ with ($$$0) φ ⊆ $$0 $$$0) ($0) 0.0.0.0.0
+          prove ⊆ $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ with ($$0) φ with ($0) φ, ⊆ $$0 $0) () 0.0.0.0.1 0.0.0a
+        }
+        elided (Extracted) {
+          prove ∧ with ($0) φ with ($$0) φ 8e72b548d5104b42ce2f1a1e0a1fee6a1a98971975218158732786113aa90494 (with ($$0) φ, with ($0) φ) () 0.0.0a
+          elided (Extracted) {
+            prove ∀ y → ∧ with ($$0) φ with ($0) φ ⊆ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (∀ y → ∧ with ($$$$0) φ with ($0) φ ⊆ $$$$0 $0) ($0) p0
+            prove → ∧ with ($0) φ with ($$0) φ ⊆ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∧ with ($0) φ with ($$$0) φ ⊆ $0 $$$0) ($$0) 0.0.0.1.1.0
+            prove ⊆ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ with ($0) φ with ($$0) φ, ⊆ $0 $$0) () 0.0.0.1.1.1 0.0.0.1.0
+          }
+        }
+        prove = $$0 $0 0477ee5edbf3b855830ed7f269321584ce9ef7540ea076c0bfcc087dec2b62b6 () ($$0, $0) 0.0.0.0 0.0.0.1
+      }
+    }
+  }
+}

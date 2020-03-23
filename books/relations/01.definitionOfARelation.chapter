@@ -10,6 +10,10 @@ display ¬ ∈ orderedPair a b x as (¬(a x b)) requires-brackets if x infix-rel
 
 write ∈ orderedPair a b ~ as in2
 
+write ∈ orderedPair orderedPair a b orderedPair c d ~ as in4
+
+write orderedPair orderedPair a b orderedPair c d as pair4
+
 property reflexive on relation ~ A
   definition (∀ a → ∈ $0 A ∈ orderedPair $0 $0 ~)
 
@@ -37,11 +41,11 @@ property semicomplete on relation ~ A
 
 theorem Antisymmetric Relation from Extended Asymmetric Relation
 premise ∧ relation R A asymmetricRelation R A
-premise = S comprehension2 a b A A ∨ ∈ orderedPair $0 $1 R = $0 $1
+premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
 conclusion ∧ relation S A antisymmetricRelation S A
 {
   subproof (Relation) {
-    prove ⊆ S product A A 5e99c5b358fd307f501708a728801ffdcbf4b40a5c6c33ad65f50b67e51d8d64 (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, A, A) p1
+    prove ⊆ S product A A 5dfca0f7cb6dbc56fdca35e2090132f0896d503c5b92c67a0d47d55484d7aab5 (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, product A A) p1
     prove relation S A 64dac6bb3fd9231be3d7210a6751c712a4af4bcd31ef18b3fbcfd19610b1b57b () (S, A) 0.0
   }
   subproof (Antisymmetric) {
@@ -50,8 +54,8 @@ conclusion ∧ relation S A antisymmetricRelation S A
         take b {
           assume ∈ $0 A {
             assume ∧ ∈ orderedPair $$0 $0 S ∈ orderedPair $0 $$0 S {
-              elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
-                prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
+              elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+                prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
                 prove → ∈ $$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) ($$0) 1.0.0.0.0.0.0.0
                 prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0) () 1.0.0.0.0.0.0.1 1.0.0a
                 prove → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ↔ ∈ orderedPair $$0 $$$0 S ∨ ∈ orderedPair $$0 $$$0 R = $$0 $$$0) ($0) 1.0.0.0.0.0.0.2
@@ -68,8 +72,8 @@ conclusion ∧ relation S A antisymmetricRelation S A
                   prove → ∈ orderedPair $$0 $0 R ¬ ∈ orderedPair $0 $$0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, → ∈ orderedPair $$0 $0 R ¬ ∈ orderedPair $0 $$0 R) () 1.0.0.0.0.0.1.0.3 1.0.0.0.0a
                   prove ¬ ∈ orderedPair $0 $$0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 R, ¬ ∈ orderedPair $0 $$0 R) () 1.0.0.0.0.0.1.0.4 1.0.0.0.0.0.1a
                 }
-                elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
-                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
+                elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
                   prove → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) ($0) 1.0.0.0.0.0.1.1.0
                   prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.0.1.1.1 1.0.0.0.0a
                   prove → ∈ $$0 A ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ↔ ∈ orderedPair $0 $$$0 S ∨ ∈ orderedPair $0 $$$0 R = $0 $$$0) ($$0) 1.0.0.0.0.0.1.1.2
@@ -95,11 +99,11 @@ conclusion ∧ relation S A antisymmetricRelation S A
 
 theorem Transitive Relation from Extended Transitive Relation
 premise ∧ relation R A transitiveRelation R A
-premise = S comprehension2 a b A A ∨ ∈ orderedPair $0 $1 R = $0 $1
+premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
 conclusion ∧ relation S A transitiveRelation S A
 {
   subproof (Relation) {
-    prove ⊆ S product A A 5e99c5b358fd307f501708a728801ffdcbf4b40a5c6c33ad65f50b67e51d8d64 (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, A, A) p1
+    prove ⊆ S product A A 5dfca0f7cb6dbc56fdca35e2090132f0896d503c5b92c67a0d47d55484d7aab5 (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, product A A) p1
     prove relation S A 64dac6bb3fd9231be3d7210a6751c712a4af4bcd31ef18b3fbcfd19610b1b57b () (S, A) 0.0
   }
   subproof (Transitive) {
@@ -110,8 +114,8 @@ conclusion ∧ relation S A transitiveRelation S A
             take c {
               assume ∈ $0 A {
                 assume ∧ ∈ orderedPair $$$0 $$0 S ∈ orderedPair $$0 $0 S {
-                  elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
-                    prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 (∨ ∈ orderedPair $$$$0 $$$$1 R = $$$$0 $$$$1) (S, A, A) p1
+                  elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+                    prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 (∨ ∈ orderedPair $$$$0 $$$$1 R = $$$$0 $$$$1) (S, A, A) p1
                     prove → ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$$0 $0 S ∨ ∈ orderedPair $$$$$0 $0 R = $$$$$0 $0) ($$$0) 1.0.0.0.0.0.0.0.0.0
                     prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) () 1.0.0.0.0.0.0.0.0.1 1.0.0a
                     prove → ∈ $$0 A ↔ ∈ orderedPair $$$0 $$0 S ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ↔ ∈ orderedPair $$$0 $$$$0 S ∨ ∈ orderedPair $$$0 $$$$0 R = $$$0 $$$$0) ($$0) 1.0.0.0.0.0.0.0.0.2
@@ -119,8 +123,8 @@ conclusion ∧ relation S A transitiveRelation S A
                     prove → ∈ orderedPair $$$0 $$0 S ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$$0 $$0 S, ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0) () 1.0.0.0.0.0.0.0.0.4
                     prove ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$$0 $$0 S, ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0) () 1.0.0.0.0.0.0.0.0.5 1.0.0.0.0.0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                   }
-                  elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
-                    prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 (∨ ∈ orderedPair $$$$0 $$$$1 R = $$$$0 $$$$1) (S, A, A) p1
+                  elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+                    prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 (∨ ∈ orderedPair $$$$0 $$$$1 R = $$$$0 $$$$1) (S, A, A) p1
                     prove → ∈ $$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$$0 $0 S ∨ ∈ orderedPair $$$$$0 $0 R = $$$$$0 $0) ($$0) 1.0.0.0.0.0.0.0.1.0
                     prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0) () 1.0.0.0.0.0.0.0.1.1 1.0.0.0.0a
                     prove → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ↔ ∈ orderedPair $$0 $$$$0 S ∨ ∈ orderedPair $$0 $$$$0 R = $$0 $$$$0) ($0) 1.0.0.0.0.0.0.0.1.2
@@ -143,10 +147,10 @@ conclusion ∧ relation S A transitiveRelation S A
                           prove ∈ orderedPair $$$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair $$$0 $$0 R ∈ orderedPair $$0 $0 R, ∈ orderedPair $$$0 $0 R) () 1.0.0.0.0.0.0.0.2.0.0.1.6 1.0.0.0.0.0.0.0.2.0.0.0
                         }
                       }
-                      elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
+                      elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
                         prove ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ orderedPair $$$0 $0 R, = $$$0 $0) () 1.0.0.0.0.0.0.0.2.0.0
-                        elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
-                          prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 (∨ ∈ orderedPair $$$$0 $$$$1 R = $$$$0 $$$$1) (S, A, A) p1
+                        elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+                          prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 (∨ ∈ orderedPair $$$$0 $$$$1 R = $$$$0 $$$$1) (S, A, A) p1
                           prove → ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$$0 $0 S ∨ ∈ orderedPair $$$$$0 $0 R = $$$$$0 $0) ($$$0) 1.0.0.0.0.0.0.0.2.0.1.1.0
                           prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) () 1.0.0.0.0.0.0.0.2.0.1.1.1 1.0.0a
                           prove → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ↔ ∈ orderedPair $$$0 $$$$0 S ∨ ∈ orderedPair $$$0 $$$$0 R = $$$0 $$$$0) ($0) 1.0.0.0.0.0.0.0.2.0.1.1.2
@@ -182,11 +186,11 @@ conclusion ∧ relation S A transitiveRelation S A
 
 theorem Complete Relation from Extended Semi-Complete Relation
 premise ∧ relation R A semicompleteRelation R A
-premise = S comprehension2 a b A A ∨ ∈ orderedPair $0 $1 R = $0 $1
+premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
 conclusion ∧ relation S A completeRelation S A
 {
   subproof (Relation) {
-    prove ⊆ S product A A 5e99c5b358fd307f501708a728801ffdcbf4b40a5c6c33ad65f50b67e51d8d64 (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, A, A) p1
+    prove ⊆ S product A A 5dfca0f7cb6dbc56fdca35e2090132f0896d503c5b92c67a0d47d55484d7aab5 (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, product A A) p1
     prove relation S A 64dac6bb3fd9231be3d7210a6751c712a4af4bcd31ef18b3fbcfd19610b1b57b () (S, A) 0.0
   }
   subproof (Complete) {
@@ -202,10 +206,10 @@ conclusion ∧ relation S A completeRelation S A
               prove ∨ ∈ orderedPair $$0 $0 R ∨ = $$0 $0 ∈ orderedPair $0 $$0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∨ ∈ orderedPair $$0 $0 R ∨ = $$0 $0 ∈ orderedPair $0 $$0 R) () 1.0.0.0.0.0.3 1.0.0.0.0a
             }
             assume ∈ orderedPair $$0 $0 R {
-              elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
+              elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
                 prove ∨ ∈ orderedPair $$0 $0 R = $$0 $0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ orderedPair $$0 $0 R, = $$0 $0) () 1.0.0.0.0.1a
-                elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
-                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
+                elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
                   prove → ∈ $$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) ($$0) 1.0.0.0.0.1.0.1.0
                   prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0) () 1.0.0.0.0.1.0.1.1 1.0.0a
                   prove → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ↔ ∈ orderedPair $$0 $$$0 S ∨ ∈ orderedPair $$0 $$$0 R = $$0 $$$0) ($0) 1.0.0.0.0.1.0.1.2
@@ -216,11 +220,11 @@ conclusion ∧ relation S A completeRelation S A
               }
             }
             assume = $$0 $0 {
-              elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
+              elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
                 prove = $0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$0, $0) 1.0.0.0.0.2a
                 prove ∨ ∈ orderedPair $0 $$0 R = $0 $$0 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (= $0 $$0, ∈ orderedPair $0 $$0 R) () 1.0.0.0.0.2.0.0
-                elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
-                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
+                elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
                   prove → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) ($0) 1.0.0.0.0.2.0.2.0
                   prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.2.0.2.1 1.0.0.0.0a
                   prove → ∈ $$0 A ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ↔ ∈ orderedPair $0 $$$0 S ∨ ∈ orderedPair $0 $$$0 R = $0 $$$0) ($$0) 1.0.0.0.0.2.0.2.2
@@ -231,10 +235,10 @@ conclusion ∧ relation S A completeRelation S A
               }
             }
             assume ∈ orderedPair $0 $$0 R {
-              elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
+              elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
                 prove ∨ ∈ orderedPair $0 $$0 R = $0 $$0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (∈ orderedPair $0 $$0 R, = $0 $$0) () 1.0.0.0.0.3a
-                elided 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 {
-                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 51b0b4eef90a9ab8afa2ff8ec5ec798ee03eb8c8703c549ebb7fe4fead064830 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
+                elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
                   prove → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) ($0) 1.0.0.0.0.3.0.1.0
                   prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.3.0.1.1 1.0.0.0.0a
                   prove → ∈ $$0 A ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ↔ ∈ orderedPair $0 $$$0 S ∨ ∈ orderedPair $0 $$$0 R = $0 $$$0) ($$0) 1.0.0.0.0.3.0.1.2
