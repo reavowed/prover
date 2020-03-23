@@ -847,13 +847,15 @@ conclusion ∨ ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ 
         }
       }
       let d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair first $$0 $0 second $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 ℕ ∧ ¬ = $$0 0 = apply + orderedPair first $0 $$0 second $0, ∃ x ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ) () {
-        elided a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 {
-          elided a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 {
+        elided a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 {
+          elided a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 {
             prove ∈ second $$0 ℕ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($$0, ℕ, ℕ) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-            prove = apply + orderedPair second $$0 0 second $$0 a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (second $$0) 2.1.2.0.0.0
+            elided a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 {
+              prove ∧ = apply + orderedPair second $$0 0 second $$0 = apply + orderedPair 0 second $$0 second $$0 a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 () (second $$0) 2.1.2.0.0.0
+              prove = second $$0 apply + orderedPair second $$0 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair second $$0 0, second $$0) 2.1.2.0.0.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            }
           }
-          prove = second $$0 apply + orderedPair second $$0 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair second $$0 0, second $$0) 2.1.2.0.0
-          prove = apply + orderedPair first $$0 $0 apply + orderedPair second $$0 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply + orderedPair first $$0 $0 $$$0) (second $$0, apply + orderedPair second $$0 0) 2.1.2.0.1 2.1.2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          prove = apply + orderedPair first $$0 $0 apply + orderedPair second $$0 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply + orderedPair first $$0 $0 $$$0) (second $$0, apply + orderedPair second $$0 0) 2.1.2.0.0 2.1.2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
         }
         elided 686404f284a3936508f269343c28655d97c5ee9f62c551338e1f020b6c722735 {
           prove ∈ first $$0 ℕ 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($$0, ℕ, ℕ) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
@@ -932,13 +934,15 @@ conclusion ∨ ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ 
         }
       }
       let d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair second $$0 $0 first $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 ℕ ∧ ¬ = $$0 0 = apply + orderedPair second $0 $$0 first $0, ∃ x ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ) () {
-        elided a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 {
-          elided a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 {
+        elided a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 {
+          elided a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 {
             prove ∈ first $$0 ℕ 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($$0, ℕ, ℕ) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-            prove = apply + orderedPair first $$0 0 first $$0 a7daf9cb6ec80d6de35151f89f9c91ec8680640b92e225a93072b8f5c48cd996 () (first $$0) 2.3.2.0.0.0
+            elided a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 {
+              prove ∧ = apply + orderedPair first $$0 0 first $$0 = apply + orderedPair 0 first $$0 first $$0 a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 () (first $$0) 2.3.2.0.0.0
+              prove = first $$0 apply + orderedPair first $$0 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair first $$0 0, first $$0) 2.3.2.0.0.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            }
           }
-          prove = first $$0 apply + orderedPair first $$0 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair first $$0 0, first $$0) 2.3.2.0.0
-          prove = apply + orderedPair second $$0 $0 apply + orderedPair first $$0 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply + orderedPair second $$0 $0 $$$0) (first $$0, apply + orderedPair first $$0 0) 2.3.2.0.1 2.3.2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          prove = apply + orderedPair second $$0 $0 apply + orderedPair first $$0 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply + orderedPair second $$0 $0 $$$0) (first $$0, apply + orderedPair first $$0 0) 2.3.2.0.0 2.3.2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
         }
         prove = apply + orderedPair first $$0 0 apply + orderedPair second $$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply + orderedPair second $$0 $0, apply + orderedPair first $$0 0) 2.3.2.0
         elided 686404f284a3936508f269343c28655d97c5ee9f62c551338e1f020b6c722735 {

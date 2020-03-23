@@ -6,6 +6,8 @@ statement = (a b)
 
 display ¬ = a b as (a ≠ b) requires-brackets
 
+display ∧ = a c = b c as (a = b = c) requires-brackets
+
 axiom Equality Is Reflexive
 conclusion = a a
 
