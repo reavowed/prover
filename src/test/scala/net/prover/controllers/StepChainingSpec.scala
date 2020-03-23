@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{PathData, RewriteRequest}
+import net.prover.controllers.models.PathData
 import net.prover.model.TestDefinitions
 import net.prover.model.TestDefinitions._
 
@@ -81,7 +81,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
 
-      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(RewriteRequest(Nil, Some(addingZeroIsSame.id), None, false))))
+      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(addingZeroIsSame, Nil, Nil))))
 
       checkModifySteps(
         service,
@@ -98,7 +98,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
 
-      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(RewriteRequest(Nil, Some(addingZeroIsSame.id), None, false))))
+      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(addingZeroIsSame, Nil, Nil))))
 
       checkModifySteps(
         service,
@@ -116,7 +116,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
 
-      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(RewriteRequest(Seq(0), Some(addingZeroIsSame.id), None, false))))
+      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(addingZeroIsSame, Seq(0), Nil))))
 
       checkModifySteps(
         service,
@@ -134,7 +134,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
 
-      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(RewriteRequest(Seq(0), Some(addingZeroIsSame.id), None, false))))
+      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(addingZeroIsSame, Seq(0), Nil))))
 
       checkModifySteps(
         service,
@@ -142,8 +142,9 @@ class StepChainingSpec extends ControllerSpec {
         fillerSteps(stepIndex) :+
           target(Equivalence(φ, ψ(add(a, Zero)))) :+
           elided(addingZeroIsSame, Seq(
-            assertion(addingZeroIsSame, Nil, Seq(a)),
-            assertion(reverseEquality, Nil, Seq(a, add(a, Zero))),
+            elided(addingZeroIsSame, Seq(
+              assertion(addingZeroIsSame, Nil, Seq(a)),
+              assertion(reverseEquality, Nil, Seq(a, add(a, Zero))))),
             assertion(equivalenceOfSubstitutedEquals, Seq(ψ($)), Seq(add(a, Zero), a)))) :+
           assertion(equivalenceIsTransitive, Seq(φ, ψ(add(a, Zero)), ψ(a)), Nil))
     }

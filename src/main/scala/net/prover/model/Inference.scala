@@ -117,7 +117,7 @@ object Inference {
     }
   }
 
-  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement) extends Inference {
+  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement, additionalVariableNames: Seq[String]) extends Inference {
     def replaceDefinition(
       oldDefinition: ExpressionDefinition,
       newDefinition: ExpressionDefinition
@@ -128,12 +128,13 @@ object Inference {
         name,
         Inference.calculateHash(newPremises, newConclusion),
         newPremises,
-        newConclusion)
+        newConclusion,
+        additionalVariableNames)
     }
   }
   object Summary {
     def apply(inference: Inference): Summary = {
-      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.name, inference.id, inference.premises, inference.conclusion))
+      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.name, inference.id, inference.premises, inference.conclusion, Nil))
     }
   }
 

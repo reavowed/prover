@@ -1,7 +1,9 @@
 package net.prover.model.proof
 
+import net.prover.controllers.ExtractionHelper
+import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.model._
-import net.prover.model.definitions.{Equality, RearrangementStep, Wrapper}
+import net.prover.model.definitions.{Equality, RearrangementStep, TermRewriteInference, Wrapper}
 import net.prover.model.expressions._
 import net.prover.util.{Direction, PossibleSingleMatch}
 
@@ -16,35 +18,26 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
   case class StepWithInference(step: Step, inference: Option[Inference.Summary])
 
   def rewrite(targetStatement: Statement): Option[Step] = {
-    def findSimplificationsFromInferences(premiseTerm: Term, inferences: Seq[(Inference, Term, Term)], direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {
+    def findSimplificationsFromInferences(premiseTerm: Term, inferences: Seq[TermRewriteInference], direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {
       for {
-        (inference, left, right) <- inferences
+        TermRewriteInference(inference, extractionOption, left, right) <- inferences
         (inferenceSource, inferenceResult) = direction.swapSourceAndResult(left, right)
         conclusionSubstitutions <- inferenceSource.calculateSubstitutions(premiseTerm).flatMap(_.confirmTotality)
         simplifiedTerm <- inferenceResult.applySubstitutions(conclusionSubstitutions).flatMap(_.asOptionalInstanceOf[Term])
-        (premiseSteps, substitutedPremises, possibleFinalSubstitutions) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(inference.premises, conclusionSubstitutions)
+        (premiseSteps, _, possibleFinalSubstitutions) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, conclusionSubstitutions)
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
-        assertionStep = Step.Assertion(
-          equality(source, result),
-          inference.summary,
-          substitutedPremises.map(Premise.Pending),
-          finalSubstitutions)
+        assertionStep <- Step.Assertion.forInference(inference, finalSubstitutions)
+        ExtractionApplication(_, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, finalSubstitutions, None, None, _ => (Nil, Nil)).toOption
+        elidedExtractionStep = Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference).get
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
-      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premiseSteps :+ assertionStep) ++ expansionStep.toSeq, inference.summary), inference.summary)
-    }
-
-    def reverseSimplifications(simplifications: Seq[SimplificationStepWithInference]): Seq[SimplificationStepWithInference] = {
-      simplifications.map { case SimplificationStepWithInference(source, RearrangementStep(result, steps, elider), inference) =>
-        val reversalStep = equality.reversal.assertionStep(result, source)
-        SimplificationStepWithInference(result, RearrangementStep(source, steps :+ reversalStep, elider), inference)
-      }
+      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premiseSteps :+ elidedExtractionStep) ++ expansionStep.toSeq, inference.summary), inference.summary)
     }
 
     def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {
       def findSimplificationsDirectly = {
-        val (forwardInferences, reverseInferences) = direction.swapSourceAndResult(termSimplificationInferences, termDesimplificationInferences)
-        findSimplificationsFromInferences(premiseTerm, forwardInferences, direction, wrapper) ++ reverseSimplifications(findSimplificationsFromInferences(premiseTerm, reverseInferences, direction.reverse, wrapper))
+        val inferences = direction.getSource(termSimplificationInferences, termDesimplificationInferences)
+        findSimplificationsFromInferences(premiseTerm, inferences, direction, wrapper)
       }
       def findSimplificationsWithinExpansion: Seq[SimplificationStepWithInference] = {
         premiseTerm match {

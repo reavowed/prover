@@ -45,8 +45,8 @@ export default class Rewriter extends React.Component {
     this.setState({selectedInferenceSuggestion: null, selectedPremiseSuggestion});
   };
 
-  onExpressionClickedForInference = (path, replacementExpression, inferenceId, reverse) => {
-    this.addRewrite({path, inferenceId, reverse}, replacementExpression);
+  onExpressionClickedForInference = (path, replacementExpression, inferenceId, extractionInferenceIds) => {
+    this.addRewrite({path, inferenceId, extractionInferenceIds}, replacementExpression);
   };
   onExpressionClickedForPremise = (path, replacementExpression, serializedPremiseStatement, reverse) => {
     this.addRewrite({path, serializedPremiseStatement, reverse}, replacementExpression);
@@ -103,7 +103,7 @@ export default class Rewriter extends React.Component {
     const actionHighlights = selectedInferenceSuggestion ?
       _.chain(selectedInferenceSuggestion.rewriteSuggestions)
         .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
-        .map(s => { return {path: s.path, action: () => this.onExpressionClickedForInference(s.path, s.result, selectedInferenceSuggestion.inference.id, selectedInferenceSuggestion.reverse) }})
+        .map(s => { return {path: s.path, action: () => this.onExpressionClickedForInference(s.path, s.result, selectedInferenceSuggestion.inference.id, selectedInferenceSuggestion.extractionInferenceIds) }})
         .value() :
       selectedPremiseSuggestion ?
         _.chain(selectedPremiseSuggestion.rewriteSuggestions)

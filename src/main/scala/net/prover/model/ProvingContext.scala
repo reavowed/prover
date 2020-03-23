@@ -56,6 +56,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableConclusionRelationDoubleSimplificationInference: Allowable[ConclusionRelationDoubleSimplificationInference] = allowableGeneric(Generic[ConclusionRelationDoubleSimplificationInference])
 
     implicit val allowableExtractionOption: Allowable[ExtractionOption] = allowableGeneric(Generic[ExtractionOption])
+    implicit val allowableTermRewriteInference: Allowable[TermRewriteInference] = allowableGeneric(Generic[TermRewriteInference])
 
     implicit def allowableTuple2[A, B](
       implicit allowableA: Allowable[A],
@@ -167,13 +168,13 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     filter(definitions.statementExtractionInferences)
   }
 
-  lazy val termRewriteInferences: Seq[(Inference, Term, Term)] = {
+  lazy val termRewriteInferences: Seq[TermRewriteInference] = {
     filter(definitions.termRewriteInferences)
   }
-  lazy val termSimplificationInferences: Seq[(Inference, Term, Term)] = {
+  lazy val termSimplificationInferences: Seq[TermRewriteInference] = {
     filter(definitions.termSimplificationInferences)
   }
-  lazy val termDesimplificationInferences: Seq[(Inference, Term, Term)] = {
+  lazy val termDesimplificationInferences: Seq[TermRewriteInference] = {
     filter(definitions.termDesimplificationInferences)
   }
   lazy val statementDefinitionSimplifications: Map[StatementDefinition, Seq[(Inference, Statement, Expression)]] = {

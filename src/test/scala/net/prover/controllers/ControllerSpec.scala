@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, InsertionAndReplacementProps, MultipleStepReplacementProps, ProofUpdateProps, SerializedSubstitutions, StepDefinition, StepInsertionProps, StepReplacementProps}
+import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, InsertionAndReplacementProps, MultipleStepReplacementProps, ProofUpdateProps, RewriteRequest, SerializedSubstitutions, StepDefinition, StepInsertionProps, StepReplacementProps}
 import net.prover.model.{EntryContext, Inference}
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.StatementDefinition
@@ -97,6 +97,14 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
       None,
       conclusionOption.map(_.serialized),
       Some(extractionOption.additionalVariableNames))
+  }
+
+  def rewrite(
+    inference: Inference,
+    path: Seq[Int],
+    extractionInferences: Seq[Inference]
+  ): RewriteRequest = {
+    RewriteRequest(path, Some(inference.id), None, extractionInferences.map(_.id), false)
   }
 
   def createService = {

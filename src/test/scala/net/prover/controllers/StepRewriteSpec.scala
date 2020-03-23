@@ -55,7 +55,7 @@ class StepRewriteSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        Seq(Seq(RewriteRequest(Seq(0, 1, 0), Some(elementOfCartesianProductFromCoordinates.id), None, false))))
+        Seq(Seq(rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0), Nil))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -69,8 +69,9 @@ class StepRewriteSpec extends ControllerSpec {
                   assertion(specification, Seq(Implication(ElementOf($.^, Product(A, B)), Equals(Pair(First($.^), Second($.^)), Zero))), Seq($)),
                   assertion(modusPonens, Seq(ElementOf($, Product(A, B)), Equals(Pair(First($), Second($)), Zero)), Nil))),
                 elided(elementOfCartesianProductFromCoordinates, Seq(
-                  assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
-                  assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))),
+                  elided(elementOfCartesianProductFromCoordinates, Seq(
+                    assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
+                    assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))))),
                   assertion(substitutionOfEquals, Seq(Equals($.^, Zero)), Seq(Pair(First($), Second($)), $)))))))))))
     }
 
@@ -88,8 +89,8 @@ class StepRewriteSpec extends ControllerSpec {
         proofIndex,
         PathData(stepPath),
         Seq(Seq(
-          RewriteRequest(Seq(0, 1, 0, 1, 0, 0), Some(elementOfCartesianProductFromCoordinates.id), None, false),
-          RewriteRequest(Seq(0, 1, 0, 1, 0, 1), Some(elementOfCartesianProductFromCoordinates.id), None, false))))
+          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 0), Nil),
+          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 1), Nil))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -104,8 +105,9 @@ class StepRewriteSpec extends ControllerSpec {
                     assertion(specification, Seq(Implication(ElementOf($.^^, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^^^), Second($.^^^)), Pair(First($), Second($))), $.^^))))), Seq($)),
                     assertion(modusPonens, Seq(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^)))), Nil))),
                   elided(elementOfCartesianProductFromCoordinates, Seq(
-                    assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
-                    assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))),
+                    elided(elementOfCartesianProductFromCoordinates, Seq(
+                      assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
+                      assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))))),
                     assertion(substitutionOfEquals, Seq(ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^^^, Pair(First($), Second($))), $.^^)))), Seq(Pair(First($), Second($)), $)))))))))),
             elided(elementOfCartesianProductFromCoordinates, Seq(
               generalization("x", Seq(
@@ -118,8 +120,9 @@ class StepRewriteSpec extends ControllerSpec {
                         assertion(specification, Seq(Implication(ElementOf($.^^^, Product(C, D)), Equals(Pair($.^, Pair(First($.^^^), Second($.^^^))), $.^^))), Seq($)),
                         assertion(modusPonens, Seq(ElementOf($, Product(C, D)), Equals(Pair($.^, Pair(First($), Second($))), $.^^)), Nil))),
                       elided(elementOfCartesianProductFromCoordinates, Seq(
-                        assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, C, D)),
-                        assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))),
+                        elided(elementOfCartesianProductFromCoordinates, Seq(
+                          assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, C, D)),
+                          assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))))),
                         assertion(substitutionOfEquals, Seq(Equals(Pair($.^, $.^^^), $.^^)), Seq(Pair(First($), Second($)), $)))))))))))))))),
         Seq("f"))
     }
@@ -137,7 +140,7 @@ class StepRewriteSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        Seq(Seq(RewriteRequest(Seq(0, 1, 0), Some(elementOfCartesianProductFromCoordinates.id), None, false))))
+        Seq(Seq(rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0), Nil))))
 
       checkModifySteps(
         service,
@@ -175,8 +178,8 @@ class StepRewriteSpec extends ControllerSpec {
         proofIndex,
         PathData(stepPath),
         Seq(Seq(
-          RewriteRequest(Seq(0, 1, 0, 1, 0, 0), Some(elementOfCartesianProductFromCoordinates.id), None, false),
-          RewriteRequest(Seq(0, 1, 0, 1, 0, 1), Some(elementOfCartesianProductFromCoordinates.id), None, false))))
+          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 0), Nil),
+          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 1), Nil))))
 
       checkModifySteps(
         service,
@@ -268,7 +271,7 @@ class StepRewriteSpec extends ControllerSpec {
         proofIndex,
         PathData(stepPath),
         Seq(Seq(
-          RewriteRequest(Seq(0, 1, 0, 0), Some(elementOfCartesianProductFromCoordinates.id), None, false))))
+          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 0), Nil))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -282,8 +285,9 @@ class StepRewriteSpec extends ControllerSpec {
                   assertion(specification, Seq(Implication(ElementOf($.^, Product(A, B)), Implication(Equals(Pair(First($.^), Second($.^)), Zero), φ))), Seq($)),
                   assertion(modusPonens, Seq(ElementOf($, Product(A, B)), Implication(Equals(Pair(First($), Second($)), Zero), φ)), Nil))),
                 elided(elementOfCartesianProductFromCoordinates, Seq(
-                  assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
-                  assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))),
+                  elided(elementOfCartesianProductFromCoordinates, Seq(
+                    assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
+                    assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))))),
                   assertion(substitutionOfEquals, Seq(Implication(Equals($.^, Zero), φ)), Seq(Pair(First($), Second($)), $)))))))))))
     }
   }

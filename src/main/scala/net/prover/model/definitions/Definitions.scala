@@ -298,28 +298,23 @@ case class Definitions(rootEntryContext: EntryContext) {
       }
   }
 
-  lazy val termRewriteInferences: Seq[(Inference, Term, Term)] = {
+  lazy val termRewriteInferences: Seq[TermRewriteInference] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
       equality <- equalityOption.toSeq
-      result <- rootEntryContext.allInferences
-        .collect {
-          case inference @ Inference(
-          _,
-          _,
-          equality(left: Term, right: Term)) =>
-            (inference, left, right)
-        }
-    } yield result
+      inference <- rootEntryContext.allInferences
+      extractionOption <- extractionOptionsByInferenceId.get(inference.id).toSeq.flatten
+      (lhs, rhs) <- equality.unapply(extractionOption.conclusion)
+    } yield TermRewriteInference(inference, extractionOption, lhs, rhs)
   }
-  lazy val termSimplificationInferences: Seq[(Inference, Term, Term)] = {
-    termRewriteInferences.filter { case (inference, left, right) =>
-      left.complexity > right.complexity && left.requiredSubstitutions.contains(inference.conclusion.requiredSubstitutions)
+  lazy val termSimplificationInferences: Seq[TermRewriteInference] = {
+    termRewriteInferences.filter { case TermRewriteInference(_, extractionOption, left, right) =>
+      left.complexity > right.complexity && left.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
     }
   }
-  lazy val termDesimplificationInferences: Seq[(Inference, Term, Term)] = {
-    termRewriteInferences.filter { case (inference, left, right) =>
-      left.complexity < right.complexity && right.requiredSubstitutions.contains(inference.conclusion.requiredSubstitutions)
+  lazy val termDesimplificationInferences: Seq[TermRewriteInference] = {
+    termRewriteInferences.filter { case TermRewriteInference(_, extractionOption, left, right) =>
+      left.complexity < right.complexity && right.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
     }
   }
   lazy val statementDefinitionSimplifications: Map[StatementDefinition, Seq[(Inference, Statement, Expression)]] = {
