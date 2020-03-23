@@ -109,7 +109,7 @@ export default function InputWithShorthandReplacement({value, onChange, ...other
   function onSuggestionsFetchRequested() {
     const [initialText, ] = getInputContents();
     const [, lastWord] = splitLastWord(initialText);
-    if (lastWord) {
+    if (lastWord && lastWord.length > 1) {
       const matchingDefinitions = _.chain(context.definitions)
         .filter((value, key) => isMatch(key, lastWord))
         .map((value) => value.symbol)
