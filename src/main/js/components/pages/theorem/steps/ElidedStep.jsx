@@ -49,7 +49,6 @@ class ElidedStepProofLineWithContexts extends React.Component {
     this.props.proofContext.fetchJsonForStepAndReplace(this.props.path, "unpack", {method: "POST"});
   };
 
-
   onProofLineKeyDown = (event) => {
     if (event.key === "x") {
       this.toggleProofCard();

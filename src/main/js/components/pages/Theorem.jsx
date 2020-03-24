@@ -61,27 +61,6 @@ export class Theorem extends React.Component {
       fetchJson(subpath,  options) {
         return window.fetchJson(path.join(url, subpath), options);
       },
-      updateTheorem(newTheoremJson) {
-        return new Promise((resolve) => {
-          const newInferences = {...inferences, ...newTheoremJson.newInferences};
-          self.setState({
-            theorem: self.parser.parseTheorem(newTheoremJson.theorem, newInferences),
-            inferences: newInferences
-          }, () => resolve());
-        })
-      },
-      updateStep(proofIndex, {path: stepPath, step: stepJson, newInferences: newInferencesFromStep, proof: proofJson}) {
-        return new Promise((resolve) => {
-          const newInferences = {...inferences, ...newInferencesFromStep};
-          const newTheorem = proofJson ?
-            self.state.theorem.updateProof(proofIndex, self.parser.parseSteps(proofJson, newInferences)) :
-            self.state.theorem.updateStep(proofIndex, stepPath, self.parser.parseStep(stepJson, newInferences));
-          self.setState({
-            theorem: newTheorem,
-            inferences: newInferences
-          }, () => resolve());
-        })
-      },
       insertSteps(proofIndex, {stepUpdates: {path, newSteps: newStepsJson}, newInferences: newInferencesFromUpdate, stepsWithReferenceChanges: stepsWithReferenceChangesJson}) {
         const newInferences = {...inferences, ...newInferencesFromUpdate};
         const newSteps = self.parser.parseSteps(newStepsJson, newInferences);

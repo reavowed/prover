@@ -4,6 +4,7 @@ import scala.util.Try
 import net.prover.controllers._
 import net.prover.model._
 import net.prover.model.expressions.Statement
+import net.prover.model.proof.SubstitutionContext
 
 case class StepDefinition(
     inferenceId: Option[String],
@@ -21,6 +22,14 @@ case class StepDefinition(
   def parseIntendedPremiseStatements(expressionParsingContext: ExpressionParsingContext): Try[Option[Seq[Statement]]] = {
     serializedIntendedPremiseStatements.map { serializedStatements =>
       serializedStatements.mapWithIndex { (s, i) => Statement.parser(expressionParsingContext).parseFromString(s, s"new target statement ${i + 1}").recoverWithBadRequest }.traverseTry
+    }.swap
+  }
+  def parseIntendedConclusion(expressionParsingContext: ExpressionParsingContext, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Try[Option[Statement]] = {
+    serializedIntendedConclusionStatement.map { serializedIntendedConclusion =>
+      for {
+        conclusionStatement <- Statement.parser(expressionParsingContext).parseFromString(serializedIntendedConclusion, "conclusion").recoverWithBadRequest
+        substitutedConclusionStatement <- conclusionStatement.applySubstitutions(substitutions).orBadRequest("Could not apply substitutions to intended conclusion")
+      } yield substitutedConclusionStatement
     }.swap
   }
 }

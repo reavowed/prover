@@ -47,9 +47,6 @@ export default class Proof extends React.Component {
         fetchJsonForStep(stepPath, subpath, options) {
           return this.fetchJson(path.join(stepPath.join("."), subpath), options)
         },
-        fetchJsonForStepAndUpdateTheorem(stepPath, subpath, options) {
-          return this.fetchJsonForStep(stepPath, subpath, options).then(stepJson => theoremContext.updateStep(index, stepJson));
-        },
         fetchJsonForStepAndInsert(stepPath, subpath, options) {
           return this.fetchJsonForStep(stepPath, subpath, options)
             .then(stepJson => theoremContext.insertSteps(index, stepJson))

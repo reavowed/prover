@@ -164,7 +164,7 @@ ProofLine.SingleStatementWithPrefixContent = function({editableBoundVariable, pr
   const context = useContext(ProofContext);
   const wrapEditableBoundVariable = (name, index, boundVariablePath) => {
     const callback = (newName) => {
-      return context.fetchJsonForStepAndUpdateTheorem(path, `boundVariables/${boundVariablePath.join(".")}/${index}/`, {
+      return context.fetchJsonForStepAndReplace(path, `boundVariables/${boundVariablePath.join(".")}/${index}/`, {
         method: "PUT",
         body: newName
       });
@@ -173,15 +173,13 @@ ProofLine.SingleStatementWithPrefixContent = function({editableBoundVariable, pr
   };
   return <>
     {prefix}
-    {statement && <>
-      {' '}
-      {statement ?
-        <HighlightableExpression expression={statement}
-                                references={[new StepReference(path, suffix)]}
-                                additionalReferences={additionalReferences || []}
-                                wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}/> :
-        "???"}
-     </>}
+    {' '}
+    {statement ?
+      <HighlightableExpression expression={statement}
+                              references={[new StepReference(path, suffix)]}
+                              additionalReferences={additionalReferences || []}
+                              wrapBoundVariable={editableBoundVariable && wrapEditableBoundVariable}/> :
+      "???"}
     {'.'}
   </>
 };

@@ -17,6 +17,7 @@ import IntroduceAll from "./IntroduceAll";
 import IntroduceBoundVariable from "./IntroduceBoundVariable";
 import IntroduceDeduction from "./IntroduceDeduction";
 import IntroduceName from "./IntroduceName";
+import IntroduceNameByInference from "./IntroduceNameByInference";
 import ProveChainingFromLeft from "./ProveChainingFromLeft";
 import ProveChainingFromRight from "./ProveChainingFromRight";
 import ProveCurrentTargetByInference from "./ProveCurrentTargetByInference";
@@ -100,6 +101,10 @@ export default class ProvingCard extends React.Component {
           {
             label: "Name",
             element: IntroduceName
+          },
+          {
+            label: "Name by inference",
+            element: IntroduceNameByInference
           }
         ]
       },

@@ -2,10 +2,13 @@ import update from 'immutability-helper';
 import _ from "lodash";
 import React, {useContext} from "react";
 import styled from "styled-components";
-import {DefinedExpression, FunctionParameter, matchTemplate} from "../../../../models/Expression";
+import {matchTemplate} from "../../../../models/Expression";
 import {
+  AssertionStep as AssertionStepModel,
   DeductionStep as DeductionStepModel,
+  ElidedStep as ElidedStepModel,
   GeneralizationStep as GeneralizationStepModel,
+  NamingStep as NamingStepModel,
   StepReference
 } from "../../../../models/Step";
 import DraggableList from "../../../DraggableList";
@@ -15,9 +18,10 @@ import TheoremContext from "../TheoremContext";
 import {AssertionStep, AssertionStepProofLine} from "./AssertionStep";
 import {DeductionStep} from "./DeductionStep";
 import {ElidedStep, ElidedStepProofLine} from "./ElidedStep";
-import {NamingStep} from "./NamingStep";
-import GeneralizedDeductionStep from "./GeneralizedDeductionStep";
 import {GeneralizationStep} from "./GeneralizationStep";
+import GeneralizedDeductionStep from "./GeneralizedDeductionStep";
+import NamingStep from "./NamingStep";
+import {matchElidableVariableDescription} from "./stepDisplayFunctions";
 import {SubproofStep} from "./SubproofStep";
 import {TargetStep, TargetStepProofLine} from "./TargetStep";
 
@@ -142,7 +146,7 @@ class ChainedSteps extends React.Component {
       )}
       {rightHandSides.slice(1).map((rightHandSide, index) =>
         renderProofLine(
-          {step: rightHandSide.step, path: rightHandSide.path, key: "chained " + rightHandSide.expression.serialize()},
+          {step: rightHandSide.step, path: rightHandSide.path, key: "chained " + rightHandSide.expression.serialize(), premiseReferences: rightHandSide.step.referencedLines},
           isHovered => <>
             <span ref={r => this.setSpacerRef(r, rightHandSide.path.join("."))}/>
             <RightHandSide rightHandSide={rightHandSide}
@@ -288,6 +292,7 @@ export class Steps extends React.Component {
 
   static renderNextStep(stepsWithIndexes, path, propsForLastStep, theoremContext) {
     const {step, index} = stepsWithIndexes.shift();
+    const stepPath = [...path, index];
     const serializedPath = [...path, index].join(".");
     if (!theoremContext.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.provenStatement && step.provenStatement.definition) {
       const binaryRelation = findBinaryRelation(step.provenStatement, theoremContext.entryContext);
@@ -304,22 +309,35 @@ export class Steps extends React.Component {
     }
     const props = {
       step,
-      path: [...path, index],
+      path: stepPath,
       ...(!stepsWithIndexes.length ? propsForLastStep : {})
     };
-    if (step instanceof GeneralizationStepModel && step.substeps.length === 1 && step.substeps[0] instanceof DeductionStepModel) {
-      const substep = step.substeps[0];
-      if (substep.assumption instanceof DefinedExpression &&
-        substep.assumption.definition.baseFormatString.startsWith("%0 ") &&
-        substep.assumption.components[0] instanceof FunctionParameter &&
-        substep.assumption.components[0].level === 0 && substep.assumption.components[0].index === 0)
-      {
-        return {
-          key: serializedPath + " " + (step.provenStatement ? step.provenStatement.serialize() : "???"),
-          element: <GeneralizedDeductionStep {...props} format={substep.assumption.definition.baseFormatString} components={substep.assumption.components} />
-        };
-      }
+    let elidableVariableDescription;
+
+    if (step instanceof GeneralizationStepModel &&
+      step.substeps.length === 1 &&
+      step.substeps[0] instanceof DeductionStepModel &&
+      (elidableVariableDescription = matchElidableVariableDescription(step.substeps[0].assumption))) {
+      return {
+        key: serializedPath + " " + (step.provenStatement ? step.provenStatement.serialize() : "???"),
+        element: <GeneralizedDeductionStep {...props} variableDescription={elidableVariableDescription} />
+      };
     }
+
+    if (!theoremContext.disableChaining && (step instanceof AssertionStepModel || (step instanceof ElidedStepModel && step.highlightedInference)) &&
+      step.provenStatement &&
+      stepsWithIndexes.length &&
+      stepsWithIndexes[0].step instanceof NamingStepModel &&
+      _.some(stepsWithIndexes[0].step.referencedLinesForExtraction, r => _.isEqual(r.stepPath, stepPath)) &&
+      !_.some(stepsWithIndexes.slice(1), ({step}) => _.some(step.referencedLines, r => _.isEqual(r.stepPath, stepPath))))
+    {
+      let {step: namingStep} = stepsWithIndexes.shift();
+      return {
+        key: serializedPath + " " + (namingStep.provenStatement ? namingStep.provenStatement.serialize() : "???"),
+        element: <NamingStep {...props} step={namingStep} assertionStep={step} />
+      };
+    }
+
     return {
       key: serializedPath + " " + (step.provenStatement ? step.provenStatement.serialize() : "???"),
       element: React.createElement(Steps.getElementName(step), props)

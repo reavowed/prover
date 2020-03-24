@@ -8,6 +8,12 @@ Context.Add = function({variables, children}) {
     {children}
   </Context.Provider>
 };
+Context.AddMultiple = function({variables, children}) {
+  const existingLists = useContext(Context) || [];
+  return <Context.Provider value={[...existingLists, ...variables]}>
+    {children}
+  </Context.Provider>
+};
 Context.AddParameters = function({variables, children}) {
   const existingLists = useContext(Context) || [];
   return <Context.Provider value={[variables, ...existingLists]}>

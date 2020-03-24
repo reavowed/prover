@@ -168,7 +168,8 @@ export class HighlightableExpression extends React.Component {
     return !_.isEqual(this.props, nextProps);
   }
   render() {
-    let {expression, references, additionalReferences, additionalPremiseReferences, additionalConclusionReferences, wrapBoundVariable, className, expressionToCopy} = this.props;
+    let {expression, references, additionalReferences, additionalPremiseReferences, additionalConclusionReferences, wrapBoundVariable, className, expressionToCopy, path} = this.props;
+    path = path || [];
     additionalReferences = additionalReferences || [];
     additionalPremiseReferences = additionalPremiseReferences || [];
     additionalConclusionReferences = additionalConclusionReferences || [];
@@ -178,7 +179,7 @@ export class HighlightableExpression extends React.Component {
 
     function renderFromContext(context) {
       const [allActionHighlights, allStaticHighlights] = context.getHighlighting();
-      const actionHighlights = _.chain(allActionHighlights)
+      let actionHighlights = _.chain(allActionHighlights)
         .filter(actionHighlight => {
           const references = actionHighlight.action ? referencesForAction : referencesForPremise;
           return _.some(references, reference => reference.matches(actionHighlight.reference))
@@ -186,11 +187,21 @@ export class HighlightableExpression extends React.Component {
         .map(actionHighlight => {
           return {path: actionHighlight.reference.innerPath || [], action: actionHighlight.action}
         })
+        .filter(highlight => _.startsWith(highlight.path, path) || _.startsWith(path, highlight.path))
+        .map(highlight => {
+          highlight.path = highlight.path.slice(path.length);
+          return highlight;
+        })
         .value();
-      const staticHighlights = _.chain(allStaticHighlights)
+      let staticHighlights = _.chain(allStaticHighlights)
         .filter(staticHighlight => _.some(referencesForConclusion, reference => reference.matches(staticHighlight)))
         .map(staticHighlight => {
           return {path: staticHighlight.innerPath || []}
+        })
+        .filter(highlight => _.startsWith(highlight.path, path) || _.startsWith(path, highlight.path))
+        .map(highlight => {
+          highlight.path = highlight.path.slice(path.length);
+          return highlight;
         })
         .value();
       const expressionElement = <CopiableExpression expression={expression}
@@ -198,6 +209,7 @@ export class HighlightableExpression extends React.Component {
                                                     staticHighlights={staticHighlights}
                                                     wrapBoundVariable={wrapBoundVariable}
                                                     expressionToCopy={expressionToCopy}
+                                                    path={path}
                                                     parentRequiresBrackets={false}/>;
       return className ? <span className={className}>{expressionElement}</span> : expressionElement;
     }

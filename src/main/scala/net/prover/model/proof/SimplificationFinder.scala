@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.Inference
+import net.prover.model.{Inference, ProvingContext}
 import net.prover.model.expressions.Statement
 
 object SimplificationFinder {
@@ -28,5 +28,29 @@ object SimplificationFinder {
       }
     }
     helper(Nil, Seq(premise))
+  }
+
+  private def getSimplification(statement: Statement, simplificationInference: Inference, inferencePremise: Statement)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {
+    for {
+      substitutions <- inferencePremise.calculateSubstitutions(statement).flatMap(_.confirmTotality)
+      simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions)
+    } yield {
+      simplifiedTarget
+    }
+  }
+  def getSimplifications(statement: Statement)(implicit substitutionContext: SubstitutionContext, provingContext: ProvingContext): Seq[Statement] = {
+    def helper(acc: Seq[Statement], toCalculate: Seq[Statement]): Seq[Statement] = {
+      if (toCalculate.isEmpty)
+        acc
+      else {
+        val next = for {
+          s <- toCalculate
+          (inference, inferencePremise) <- provingContext.structuralSimplificationInferences
+          simplification <- getSimplification(s, inference, inferencePremise)
+        } yield simplification
+        helper(acc ++ next, next)
+      }
+    }
+    helper(Nil, Seq(statement))
   }
 }

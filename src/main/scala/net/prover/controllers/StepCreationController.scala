@@ -48,7 +48,6 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     }.toResponseEntity
   }
 
-
   @PostMapping(value = Array("/introduceNamingFromPremise"))
   def introduceNamingFromPremise(
     @PathVariable("bookKey") bookKey: String,
@@ -64,7 +63,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         premiseStatement <- Statement.parser.parseFromString(serializedPremise, "premise").recoverWithBadRequest
         premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).orBadRequest("Premise did not have single bound variable")
-        (namingInference, namingInferenceAssumption, substitutionsAfterPremise) <- ProofHelper.findNamingInferences(stepProvingContext.provingContext.entryContext).mapFind {
+        (namingInference, namingInferenceAssumption, substitutionsAfterPremise) <- ProofHelper.findNamingInferences.mapFind {
           case (i, Seq(singlePremise), a) =>
             singlePremise.calculateSubstitutions(premiseStatement).map { s => (i, a, s) }
           case _ =>

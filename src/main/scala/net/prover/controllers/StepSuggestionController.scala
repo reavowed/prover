@@ -51,8 +51,9 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
       implicit val spc = stepProvingContext
+      val filter = inferenceFilter(searchText.toLowerCase)
       ProofHelper.findNamingInferences(stepProvingContext.provingContext.entryContext)
-        .filter(_._1.name.toLowerCase.contains(searchText.toLowerCase))
+        .filter(x => filter(x._1))
         .reverse
         .mapCollect { case (inference, namingPremises, _) =>
           inference.conclusion.calculateSubstitutions(step.statement)

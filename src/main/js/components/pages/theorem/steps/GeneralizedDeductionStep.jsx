@@ -16,7 +16,7 @@ export default class GeneralizedDeductionStep extends React.Component {
     return true;
   }
   render() {
-    let {step, path, additionalReferences, format, components, suppressConclusion} = this.props;
+    let {step, path, additionalReferences, variableDescription, suppressConclusion} = this.props;
     additionalReferences = additionalReferences || [];
     const substep = step.substeps[0];
     const substepPath = [...path, 0];
@@ -31,7 +31,7 @@ export default class GeneralizedDeductionStep extends React.Component {
       return <InlineTextEditor text={name} callback={callback} />;
     };
 
-    const patchedExpression = new DefinedExpression({baseFormatString: format}, [step.variableName], components.slice(1));
+    const patchedExpression = new DefinedExpression({baseFormatString: variableDescription.format}, [step.variableName], variableDescription.otherComponents);
 
     return <Step.WithSubsteps path={path}>
       <Step.Antecedent>
