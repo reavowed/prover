@@ -42,6 +42,7 @@ function filterPathsMultiple(actions, initialPaths) {
 
 export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, entryContext}) {
   entryContext = entryContext || useContext(EntryContext);
+  const theoremContext = useContext(TheoremContext);
   wrapBoundVariable = wrapBoundVariable || ((name) => formatHtml(name));
 
   function matchDisplayShorthand(expression) {
@@ -71,13 +72,15 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
     }
   }
   function renderChildrenOfTag(expression, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, parentRequiresBrackets) {
-    const {displayShorthand, matches} = matchDisplayShorthand(expression) || {};
-    if (matches) {
-      let renderedMatches = matches.map(m => renderMatch(m, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable));
-      let formatString = (parentRequiresBrackets && displayShorthand.requiresBrackets) ?
-        "(" + displayShorthand.baseFormatString + ")" :
-        displayShorthand.baseFormatString;
-      return formatHtmlWithoutWrapping(formatString, s => replacePlaceholders(s, renderedMatches));
+    if (!(theoremContext && theoremContext.disableChaining)) {
+      const {displayShorthand, matches} = matchDisplayShorthand(expression) || {};
+      if (matches) {
+        let renderedMatches = matches.map(m => renderMatch(m, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable));
+        let formatString = (parentRequiresBrackets && displayShorthand.requiresBrackets) ?
+          "(" + displayShorthand.baseFormatString + ")" :
+          displayShorthand.baseFormatString;
+        return formatHtmlWithoutWrapping(formatString, s => replacePlaceholders(s, renderedMatches));
+      }
     }
 
     if (expression instanceof TypeExpression) {
