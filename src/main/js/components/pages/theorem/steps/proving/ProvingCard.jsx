@@ -129,7 +129,7 @@ export default class ProvingCard extends React.Component {
           }
         ]
       },
-      !chained && {
+      {
         label: "Insert target",
         provers: [
           {

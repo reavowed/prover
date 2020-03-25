@@ -8,8 +8,8 @@ export default function ApplyChainingPremiseFromLeft(props) {
   const {path, onCancel, onError} = props;
   const context = useContext(ProofContext);
   const fetchPossibleConclusions = (statement) => {
-    return context.fetchJsonForStepAndInsertAndReplaceMultiple(props.path, `suggestChainingFromPremiseLeft?serializedPremiseStatement=${encodeURIComponent(statement.serialize())}`)
+    return context.fetchJsonForStep(props.path, `suggestChainingFromPremiseLeft?serializedPremiseStatement=${encodeURIComponent(statement.serialize())}`)
   };
-  const submit = createSubmitFunctionForStepDefinitionEndpointFromPremise(context, path, "chainingFromLeft", "POST", onError);
+  const submit = createSubmitFunctionForStepDefinitionEndpointFromPremise(context.fetchJsonForStepAndInsertAndReplaceMultiple, path, "chainingFromLeft", "POST", onError);
   return <ProveByPremise fetchPossibleConclusions={fetchPossibleConclusions} submit={submit} {...props}/>
 }
