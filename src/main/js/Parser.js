@@ -63,18 +63,16 @@ export class Parser {
         const [firstToken, ...tokensAfterFirst] = tokens;
         const expressionDefinition = self.definitions[firstToken];
         const typeDefinition = self.typeDefinitions[firstToken];
-        const parentTypeDefinition = _.find(self.typeDefinitions, d => _.has(d.properties, firstToken));
+        const parentTypeDefinition = _.find(self.typeDefinitions, d => _.some(d.properties, p => p.qualifiedSymbol === firstToken));
         if (expressionDefinition) {
           const boundVariables = tokensAfterFirst.slice(0, expressionDefinition.numberOfBoundVariables);
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterFirst.slice(expressionDefinition.numberOfBoundVariables), expressionDefinition.numberOfComponents);
           if (_.includes(expressionDefinition.attributes, "conjunction")) {
             const [firstComponent, secondComponent] = components;
-            if (firstComponent instanceof TypeExpression && secondComponent instanceof DefinedExpression && _.includes(_.keys(firstComponent.definition.properties), secondComponent.definition.symbol)) {
-              const property = firstComponent.definition.properties[secondComponent.definition.symbol];
-              const [term, ...otherComponents] = secondComponent.components;
-              if (term.serialize() === firstComponent.term.serialize() && otherComponents.map(c => c.serialize()).join(" ") === firstComponent.otherComponents.map(c => c.serialize()).join(" ")) {
-                firstComponent.addProperty(property, expressionDefinition);
-                return firstComponent;
+            if (firstComponent instanceof TypeExpression && secondComponent instanceof PropertyExpression && _.includes(firstComponent.definition.properties, secondComponent.definition)) {
+              if (secondComponent.term.serialize() === firstComponent.term.serialize() && secondComponent.otherComponents.map(c => c.serialize()).join(" ") === firstComponent.otherComponents.map(c => c.serialize()).join(" ")) {
+                firstComponent.addProperty(secondComponent.definition, expressionDefinition);
+                return [firstComponent, tokensAfterComponents];
               }
             }
           }
@@ -82,11 +80,11 @@ export class Parser {
         } else if (typeDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, typeDefinition.numberOfComponents);
-          return [new TypeExpression(typeDefinition, term, components, []), tokensAfterComponents];
+          return [new TypeExpression(typeDefinition, term, components, [], null), tokensAfterComponents];
         } else if (parentTypeDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, parentTypeDefinition.numberOfComponents);
-          return [new PropertyExpression(parentTypeDefinition, firstToken, parentTypeDefinition.properties[firstToken], term, components), tokensAfterComponents];
+          return [new PropertyExpression(parentTypeDefinition, _.find(parentTypeDefinition.properties, p => p.qualifiedSymbol === firstToken), term, components), tokensAfterComponents];
         } else if (firstToken === "with") {
           const [variableArguments, [name, ...remainingTokens]] = parseArgumentsFromTokens(tokensAfterFirst.slice(1));
           return [new Variable(name, variableArguments), remainingTokens];

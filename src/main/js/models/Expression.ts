@@ -10,6 +10,7 @@ declare global {
 
 export interface PropertyDefinition {
   symbol: String,
+  qualifiedSymbol: String,
   name: String
 }
 
@@ -28,7 +29,7 @@ export interface TypeDefinition {
   name: string;
   numberOfComponents: number;
   componentFormatString: string;
-  properties: { [key: string]: PropertyDefinition }
+  properties: PropertyDefinition[]
 }
 
 export interface ExpressionMatchResult {
@@ -183,7 +184,7 @@ export class TypeExpression {
         // @ts-ignore
           (wordsSoFar: string[], propertyDefinition: PropertyDefinition) => {
             if (this.conjunctionDefinition) {
-              return [this.conjunctionDefinition.symbol, ...wordsSoFar, propertyDefinition.symbol, ...termAndComponentsWords]
+              return [this.conjunctionDefinition.symbol, ...wordsSoFar, propertyDefinition.qualifiedSymbol, ...termAndComponentsWords]
             } else throw "Cannot serialize type with property without conjunction";
           },
           baseWords);
@@ -217,12 +218,12 @@ export class TypeExpression {
 }
 
 export class PropertyExpression {
-  constructor(public typeDefinition: TypeDefinition, public symbol: string, public definition: PropertyDefinition, public term: Expression, public otherComponents: Expression[]) {}
+  constructor(public typeDefinition: TypeDefinition, public definition: PropertyDefinition, public term: Expression, public otherComponents: Expression[]) {}
   serialize(): string {
-    return [this.symbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
+    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
-    return [this.symbol, this.term.serialize(), ...this.otherComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.otherComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
   }
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in property expression"
