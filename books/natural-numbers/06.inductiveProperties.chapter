@@ -137,7 +137,7 @@ conclusion ⊆ n ℕ
 
 theorem A Natural Number Either Is 0 or Contains 0
 premise ∈ n ℕ
-conclusion ∨ = n 0 ∈ 0 n
+conclusion ⊕ = n 0 ∈ 0 n
 {
   prove = 0 0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (0)
   prove ∨ = 0 0 ∈ 0 0 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= 0 0, ∈ 0 0) () 0
@@ -168,6 +168,15 @@ conclusion ∨ = n 0 ∈ 0 n
     }
   }
   prove ∨ = n 0 ∈ 0 n 304aff0114174ed1e9744ce28acc6d3a88d46a39cfce60de3fe14d4b27acbc65 (∨ = $0 0 ∈ 0 $0) (n) 1 2 p0
+  assume ∧ = n 0 ∈ 0 n {
+    prove ∈ 0 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ 0 $0) (n, 0) 4a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 4a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    elided 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf {
+      prove ¬ ∈ 0 0 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (0)
+      prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∈ 0 0) () 4.0 4.1.0
+    }
+  }
+  prove ¬ ∧ = n 0 ∈ 0 n adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∧ = n 0 ∈ 0 n) () 4
+  prove ⊕ = n 0 ∈ 0 n 85d9228e116d39e101fccf8102b9ae979459e94efa97bd1f050fb7327031497b (= n 0, ∈ 0 n) () 3 5
 }
 
 theorem A Natural Number Either Contains Or Is The Successor of an Element
@@ -244,7 +253,10 @@ premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ∨ ∈ n m ∨ = n m ∈ m n
 {
-  prove ∨ = n 0 ∈ 0 n 2958aa008d5f6cdd52feb6a2659cb7734d22bcb997c8622052a0d8322715f1a0 () (n) p0
+  elided 63c0b2453da9527e30fadbcba8b4ebd15649468ae346e77cd14fd8435c055183 {
+    prove ⊕ = n 0 ∈ 0 n 63c0b2453da9527e30fadbcba8b4ebd15649468ae346e77cd14fd8435c055183 () (n) p0
+    prove ∨ = n 0 ∈ 0 n 2fcf85e65b11715f1d1a789ddc4dc1e46b321f9ee5ae372ff0453e54a1f41c65 (= n 0, ∈ 0 n) () 0.0
+  }
   prove ∨ ∈ n 0 ∨ = n 0 ∈ 0 n 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (∨ = n 0 ∈ 0 n, ∈ n 0) () 0
   take a {
     assume ∈ $0 ℕ {

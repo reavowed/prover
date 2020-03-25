@@ -283,6 +283,29 @@ conclusion irreflexiveRelation ~ A
   prove irreflexiveRelation ~ A 0fbd588b10f1780da6cc5ebafea4732c0f65b6ec66e920472ed0c164b32a9eb1 () (A, ~) 0
 }
 
+theorem Complete Relation Is Reflexive
+premise ∧ relation ~ A completeRelation ~ A
+conclusion reflexiveRelation ~ A
+{
+  take a {
+    assume ∈ $0 A {
+      elided 3dff5d9bf86f9566985c44b097ae9b2c02e089772ec5c23988bf10082fc0e7b4 {
+        prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~ 3dff5d9bf86f9566985c44b097ae9b2c02e089772ec5c23988bf10082fc0e7b4 () (~, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        prove → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$$0 $0 ~ ∈ orderedPair $0 $$$0 ~) ($0) 0.0.0.0
+        prove ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~) () 0.0.0.1 0.0a
+        prove → ∈ $0 A ∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∨ ∈ orderedPair $0 $$0 ~ ∈ orderedPair $$0 $0 ~) ($0) 0.0.0.2
+        prove ∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~) () 0.0.0.3 0.0a
+      }
+      elided 1a5fe4d48796996e1e2f60648d87841214623937e106ac6df3f624fb834748fc {
+        prove ↔ ∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ 1a5fe4d48796996e1e2f60648d87841214623937e106ac6df3f624fb834748fc (∈ orderedPair $0 $0 ~) ()
+        prove → ∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~, ∈ orderedPair $0 $0 ~) () 0.0.1.0
+        prove ∈ orderedPair $0 $0 ~ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~, ∈ orderedPair $0 $0 ~) () 0.0.1.1 0.0.0
+      }
+    }
+  }
+  prove reflexiveRelation ~ A ef4ce46ab9c772b8e879fb1bb19f2b0ec2e28da2c516df28247407caf637b5a5 () (A, ~) 0
+}
+
 theorem Elements Related by an Irreflexive Relation Are Not Equal
 premise ∧ relation ~ A irreflexiveRelation ~ A
 premise ∈ orderedPair a b ~

@@ -187,7 +187,20 @@ conclusion → ¬ φ ψ
   }
 }
 
-theorem Contraposition
+theorem Add Contraposition
+premise → φ ψ
+conclusion → ¬ ψ ¬ φ
+{
+  assume ¬ ψ {
+    assume φ {
+      prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () p0 0.0a
+      prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () 0.0.0 0a
+    }
+    prove ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (φ) () 0.0
+  }
+}
+
+theorem Remove Contraposition
 premise → ¬ φ ¬ ψ
 conclusion → ψ φ
 {

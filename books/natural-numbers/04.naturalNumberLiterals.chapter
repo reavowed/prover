@@ -62,3 +62,16 @@ conclusion = 1 singleton 0
   prove = ∪ ∅ singleton 0 singleton 0 7b4af45d996d58a9bc0a3545d5d2d90cc5493de12289c3038266d3afae1628e4 () (singleton 0)
   prove = 1 singleton 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (1, ∪ ∅ singleton 0, singleton 0) 3 4
 }
+
+theorem One Is Not Zero
+conclusion ¬ = 1 0
+{
+  prove ¬ = successor 0 0 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () (0)
+  elided 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca {
+    elided 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca {
+      prove = 1 successor 0 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca () ()
+      prove = successor 0 1 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (1, successor 0) 1.0.0
+    }
+    prove ¬ = 1 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ = $0 0) (successor 0, 1) 1.0 0
+  }
+}

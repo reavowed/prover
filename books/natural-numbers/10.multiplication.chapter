@@ -463,7 +463,7 @@ conclusion = apply × orderedPair n apply × orderedPair m r apply × orderedPai
   prove = apply × orderedPair n apply × orderedPair m r apply × orderedPair apply × orderedPair n m r 304aff0114174ed1e9744ce28acc6d3a88d46a39cfce60de3fe14d4b27acbc65 (= apply × orderedPair n apply × orderedPair m $0 apply × orderedPair apply × orderedPair n m $0) (r) 4 5 p2
 }
 
-theorem Natural Multiplication Preserves Order (Left)
+theorem Natural Multiplication Preserves < (Left)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -752,4 +752,107 @@ conclusion ↔ = apply × orderedPair r n apply × orderedPair r m ∨ = n m = r
   }
   prove ↔ = apply × orderedPair n r apply × orderedPair m r ∨ = n m = r 0 0df59913df5787dd9d169673452bd15f1df96b74635a3290537c2c450ef7f877 () (n, m, r) p0 p1 p2
   prove ↔ = apply × orderedPair r n apply × orderedPair r m ∨ = n m = r 0 e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (= apply × orderedPair r n apply × orderedPair r m, = apply × orderedPair n r apply × orderedPair m r, ∨ = n m = r 0) () 0 1
+}
+
+theorem Natural Multiplication Is Zero Iff A Multiplicand Is Zero
+premise ∈ n ℕ
+premise ∈ m ℕ
+conclusion ↔ = apply × orderedPair n m 0 ∨ = n 0 = m 0
+{
+  assume = apply × orderedPair n m 0 {
+    assume ¬ = n 0 {
+      elided 817914d173acc04a5310d4256154e04b82441c976d615cbe5121e434c75957cb {
+        prove ∀ n → ∈ $0 ℕ ∨ = $0 0 ∃ n^- ∧ ∈ $0 ℕ = $$0 successor $0 817914d173acc04a5310d4256154e04b82441c976d615cbe5121e434c75957cb () ()
+        prove → ∈ n ℕ ∨ = n 0 ∃ n^- ∧ ∈ $0 ℕ = n successor $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ ∨ = $0 0 ∃ n^- ∧ ∈ $0 ℕ = $$0 successor $0) (n) 0.0.0.0
+        prove ∨ = n 0 ∃ n^- ∧ ∈ $0 ℕ = n successor $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∨ = n 0 ∃ m ∧ ∈ $0 ℕ = n successor $0) () 0.0.0.1 p0
+        prove ∃ n^- ∧ ∈ $0 ℕ = n successor $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (= n 0, ∃ m ∧ ∈ $0 ℕ = n successor $0) () 0.0.0.2 0.0a
+      }
+      let n^- ∧ ∈ $0 ℕ = n successor $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $0 ℕ = n successor $0, = m 0) () {
+        elided 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 {
+          prove = apply × orderedPair successor $0 m apply + orderedPair apply × orderedPair $0 m m 9005f13ae08ff7bb115d4071cfdcf4cc0a31c9e468066293fc0bb616ad37c677 () ($0, m) 0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p1
+          prove = apply + orderedPair apply × orderedPair $0 m m apply × orderedPair successor $0 m 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply × orderedPair successor $0 m, apply + orderedPair apply × orderedPair $0 m m) 0.0.1.0.0
+        }
+        prove = apply × orderedPair successor $0 m 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply × orderedPair $$0 m 0) (n, successor $0) 0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0a
+        prove = apply + orderedPair apply × orderedPair $0 m m 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair apply × orderedPair $0 m m, apply × orderedPair successor $0 m, 0) 0.0.1.0 0.0.1.1
+        elided 29bb7516e8dea4e2956591c489e0ea2cadbbe8a4432e4f0d7b9098d391ad15a6 {
+          prove ∈ apply × orderedPair $0 m ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () ($0, m) 0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p1
+          elided 29bb7516e8dea4e2956591c489e0ea2cadbbe8a4432e4f0d7b9098d391ad15a6 {
+            prove ↔ = apply + orderedPair apply × orderedPair $0 m m 0 ∧ = apply × orderedPair $0 m 0 = m 0 29bb7516e8dea4e2956591c489e0ea2cadbbe8a4432e4f0d7b9098d391ad15a6 () (apply × orderedPair $0 m, m) 0.0.1.3.0 p1
+            prove → = apply + orderedPair apply × orderedPair $0 m m 0 ∧ = apply × orderedPair $0 m 0 = m 0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= apply + orderedPair apply × orderedPair $0 m m 0, ∧ = apply × orderedPair $0 m 0 = m 0) () 0.0.1.3.1.0
+            prove ∧ = apply × orderedPair $0 m 0 = m 0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply + orderedPair apply × orderedPair $0 m m 0, ∧ = apply × orderedPair $0 m 0 = m 0) () 0.0.1.3.1.1 0.0.1.2
+            prove = m 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply × orderedPair $0 m 0, = m 0) () 0.0.1.3.1.2
+          }
+        }
+      } 0.0.0
+    }
+    prove ∨ = n 0 = m 0 94eabd8c44d2886bcf8b632647ae5882b8e713fa3c14c8b25800ea563dfc1919 (= n 0, = m 0) () 0.0
+  }
+  assume = n 0 {
+    prove = apply × orderedPair n m apply × orderedPair 0 m 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (n, 0, apply × orderedPair $0 m) 1a
+    elided b1c5aedfa258e570d52db1a30bd2ac1ca1dc46c339edfd053b55fcc09e217661 {
+      prove ∧ = apply × orderedPair m 0 0 = apply × orderedPair 0 m 0 b1c5aedfa258e570d52db1a30bd2ac1ca1dc46c339edfd053b55fcc09e217661 () (m) p1
+      prove = apply × orderedPair 0 m 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply × orderedPair m 0 0, = apply × orderedPair 0 m 0) () 1.1.0
+    }
+    prove = apply × orderedPair n m 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n m, apply × orderedPair 0 m, 0) 1.0 1.1
+  }
+  assume = m 0 {
+    prove = apply × orderedPair n m apply × orderedPair n 0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (m, 0, apply × orderedPair n $0) 2a
+    elided b1c5aedfa258e570d52db1a30bd2ac1ca1dc46c339edfd053b55fcc09e217661 {
+      prove ∧ = apply × orderedPair n 0 0 = apply × orderedPair 0 n 0 b1c5aedfa258e570d52db1a30bd2ac1ca1dc46c339edfd053b55fcc09e217661 () (n) p0
+      prove = apply × orderedPair n 0 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply × orderedPair n 0 0, = apply × orderedPair 0 n 0) () 2.1.0
+    }
+    prove = apply × orderedPair n m 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply × orderedPair n m, apply × orderedPair n 0, 0) 2.0 2.1
+  }
+  prove → ∨ = n 0 = m 0 = apply × orderedPair n m 0 601e278a38579fd247c444cdbd61fe6d5f48c99f2b5725ef973cc3cb781a8eef (= n 0, = apply × orderedPair n m 0, = m 0) () 1 2
+  prove ↔ = apply × orderedPair n m 0 ∨ = n 0 = m 0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= apply × orderedPair n m 0, ∨ = n 0 = m 0) () 0 3
+}
+
+theorem Multiplication of Non-Zero Natural Is At Least As Large
+premise ∈ n ℕ
+premise ∈ m ℕ
+premise ¬ = m 0
+conclusion ∈ orderedPair n apply × orderedPair n m ≤
+{
+  elided 04698fbbfaa6a4008e528d5ece4a9836f6f33fd4c22f8900192cae1b740ca191 {
+    prove ∧ = apply × orderedPair n 1 n = apply × orderedPair 1 n n 04698fbbfaa6a4008e528d5ece4a9836f6f33fd4c22f8900192cae1b740ca191 () (n) p0
+    prove = n apply × orderedPair n 1 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply × orderedPair n 1, n) 0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+  }
+  elided d22e531de82b5d577bbc737db1caa9deb6d59a8c82ffa3e667c637399ff4d9d2 {
+    prove ∈ 1 ℕ 0ea2cae46b5b1dec42fef1b2b68f5d829b809f821651b8628f2f94b1abd87ac5 () ()
+    prove ∈ apply × orderedPair n 1 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, 1) p0 1.0
+    prove ∨ ∈ orderedPair n apply × orderedPair n 1 <_ℕ = n apply × orderedPair n 1 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (= n apply × orderedPair n 1, ∈ orderedPair n apply × orderedPair n 1 <_ℕ) () 0
+    elided d22e531de82b5d577bbc737db1caa9deb6d59a8c82ffa3e667c637399ff4d9d2 {
+      prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 <_ℕ = $$0 $0 d22e531de82b5d577bbc737db1caa9deb6d59a8c82ffa3e667c637399ff4d9d2 () ()
+      prove → ∈ n ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 ≤ ∨ ∈ orderedPair n $0 <_ℕ = n $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ ∨ ∈ orderedPair $$0 $0 <_ℕ = $$0 $0) (n) 1.3.0
+      prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 ≤ ∨ ∈ orderedPair n $0 <_ℕ = n $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair n $0 ≤ ∨ ∈ orderedPair n $0 <_ℕ = n $0) () 1.3.1 p0
+      prove → ∈ apply × orderedPair n 1 ℕ ↔ ∈ orderedPair n apply × orderedPair n 1 ≤ ∨ ∈ orderedPair n apply × orderedPair n 1 <_ℕ = n apply × orderedPair n 1 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ ↔ ∈ orderedPair n $0 ≤ ∨ ∈ orderedPair n $0 <_ℕ = n $0) (apply × orderedPair n 1) 1.3.2
+      prove ↔ ∈ orderedPair n apply × orderedPair n 1 ≤ ∨ ∈ orderedPair n apply × orderedPair n 1 <_ℕ = n apply × orderedPair n 1 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply × orderedPair n 1 ℕ, ↔ ∈ orderedPair n apply × orderedPair n 1 ≤ ∨ ∈ orderedPair n apply × orderedPair n 1 <_ℕ = n apply × orderedPair n 1) () 1.3.3 1.1
+      prove → ∨ ∈ orderedPair n apply × orderedPair n 1 <_ℕ = n apply × orderedPair n 1 ∈ orderedPair n apply × orderedPair n 1 ≤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair n apply × orderedPair n 1 ≤, ∨ ∈ orderedPair n apply × orderedPair n 1 <_ℕ = n apply × orderedPair n 1) () 1.3.4
+      prove ∈ orderedPair n apply × orderedPair n 1 ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ orderedPair n apply × orderedPair n 1 <_ℕ = n apply × orderedPair n 1, ∈ orderedPair n apply × orderedPair n 1 ≤) () 1.3.5 1.2
+    }
+  }
+  take r {
+    assume ∈ $0 ℕ {
+      assume ¬ = $0 0 {
+        assume ∈ orderedPair n apply × orderedPair n $0 ≤ {
+          elided a2d5a7111706e55f999af9b39c2ec58a79db431cd948bb939d1cfa63160e59aa {
+            prove ∈ apply × orderedPair n $0 ℕ da90b2995e401b0166991e724a28d5ccdfa446be13888d68b4e0c40214057cc5 () (n, $0) p0 2.0a
+            prove ∈ orderedPair apply × orderedPair n $0 apply + orderedPair apply × orderedPair n $0 n ≤ a2d5a7111706e55f999af9b39c2ec58a79db431cd948bb939d1cfa63160e59aa () (apply × orderedPair n $0, n) 2.0.0.0.0.0 p0
+          }
+          prove ∈ orderedPair n apply + orderedPair apply × orderedPair n $0 n ≤ aa3964f2d73d88f68b6a0ebad1e683e9fdc7395d7aa3535331a09d96eab1c1b5 () (n, apply × orderedPair n $0, apply + orderedPair apply × orderedPair n $0 n) 2.0.0.0a 2.0.0.0.0
+          elided 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 {
+            prove = apply × orderedPair n successor $0 apply + orderedPair apply × orderedPair n $0 n 17cba1e069f2bd6202e6e89e5b4909de6aef0ac2dd9da96125e635a692dedec6 () (n, $0) p0 2.0a
+            prove = apply + orderedPair apply × orderedPair n $0 n apply × orderedPair n successor $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply × orderedPair n successor $0, apply + orderedPair apply × orderedPair n $0 n) 2.0.0.0.2.0
+          }
+          prove ∈ orderedPair n apply × orderedPair n successor $0 ≤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair n $$0 ≤) (apply + orderedPair apply × orderedPair n $0 n, apply × orderedPair n successor $0) 2.0.0.0.2 2.0.0.0.1
+        }
+      }
+    }
+  }
+  elided 97b5d627048fd8c3b587702efcd751fb6243dd3530676de9ad8316fea8138c5c {
+    prove ∀ n → ∈ $0 ℕ → ¬ = $0 0 ∈ orderedPair n apply × orderedPair n $0 ≤ 97b5d627048fd8c3b587702efcd751fb6243dd3530676de9ad8316fea8138c5c (∈ orderedPair n apply × orderedPair n $0 ≤) () 1 2
+    prove → ∈ m ℕ → ¬ = m 0 ∈ orderedPair n apply × orderedPair n m ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ → ¬ = $0 0 ∈ orderedPair n apply × orderedPair n $0 ≤) (m) 3.0
+    prove → ¬ = m 0 ∈ orderedPair n apply × orderedPair n m ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m ℕ, → ¬ = m 0 ∈ orderedPair n apply × orderedPair n m ≤) () 3.1 p1
+    prove ∈ orderedPair n apply × orderedPair n m ≤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ = m 0, ∈ orderedPair n apply × orderedPair n m ≤) () 3.2 p2
+  }
 }
