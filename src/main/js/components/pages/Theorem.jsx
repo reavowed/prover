@@ -36,7 +36,7 @@ export class Theorem extends React.Component {
     if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) {
       return;
     }
-    if (event.key === "c") {
+    if (event.key === "c" && !event.ctrlKey) {
       this.setState({disableChaining: !this.state.disableChaining});
     }
   };
@@ -60,6 +60,15 @@ export class Theorem extends React.Component {
       disableChaining,
       fetchJson(subpath,  options) {
         return window.fetchJson(path.join(url, subpath), options);
+      },
+      updateTheorem(newTheoremJson) {
+        return new Promise((resolve) => {
+          const newInferences = {...inferences, ...newTheoremJson.newInferences};
+          self.setState({
+            theorem: self.parser.parseTheorem(newTheoremJson.theorem, newInferences),
+            inferences: newInferences
+          }, () => resolve());
+        })
       },
       insertSteps(proofIndex, {stepUpdates: {path, newSteps: newStepsJson}, newInferences: newInferencesFromUpdate, stepsWithReferenceChanges: stepsWithReferenceChangesJson}) {
         const newInferences = {...inferences, ...newInferencesFromUpdate};
