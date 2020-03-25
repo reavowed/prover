@@ -173,14 +173,13 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
   ): Try[(Term, Term, Option[Step], Option[Inference.Summary], Option[Inference.Summary], Seq[Unwrapper], TExpression)] = {
     for {
       premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
-      (sourceTerm, rewrittenTerm) <- equality.unapply(premiseStatement).orBadRequest("Premise was not equality")
+      (premiseLhs, premiseRhs) <- equality.unapply(premiseStatement).orBadRequest("Premise was not equality")
+      (sourceTerm, rewrittenTerm) = if (!rewrite.reverse) (premiseLhs, premiseRhs) else (premiseRhs, premiseLhs)
       _ <- (sourceTerm == baseTerm).orBadRequest("Premise did not match term at path")
       reverse = rewrite.reverse != direction.isReversed
-      (source, result) = direction.swapSourceAndResult(sourceTerm, rewrittenTerm)
-      reversalStepOption = if (reverse) Some(equality.reversal.assertionStep(source, result)(unwrappers.enhanceContext(implicitly))) else None
+      reversalStepOption = if (reverse) Some(equality.reversal.assertionStep(sourceTerm, rewrittenTerm)(unwrappers.enhanceContext(implicitly))) else None
     } yield (baseTerm, rewrittenTerm, reversalStepOption, None, Some(equality.reversal.inference.summary).filter(_ => reverse), unwrappers, wrapperExpression)
   }
-
 
   def rewrite[TExpression <: Expression with TypedExpression[TExpression] : ReplacementMethods, TStep](
     baseExpression: TExpression,

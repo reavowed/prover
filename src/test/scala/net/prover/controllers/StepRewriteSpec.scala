@@ -1,7 +1,7 @@
 package net.prover.controllers
 
 import net.prover.controllers.StepRewriteController.{InferenceRewritePath, InferenceRewriteSuggestion}
-import net.prover.controllers.models.{PathData, RewriteRequest}
+import net.prover.controllers.models.{PathData, PremiseRewrite, RewriteRequest}
 import net.prover.model.TestDefinitions._
 import net.prover.model.proof.{Step, StepProvingContext}
 import org.springframework.http.ResponseEntity
@@ -11,6 +11,109 @@ import scala.util.Success
 class StepRewriteSpec extends ControllerSpec {
 
   "proving a step" should {
+
+    "rewrite target using a direct premise" in {
+      val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
+      val controller = new StepRewriteController(service)
+
+      val equalityPremise = Equals(a, b)
+
+      controller.rewriteManually(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        Seq(Seq(rewrite(equalityPremise, Seq(0), false))))
+
+      checkModifyStepsWithoutProps(
+        service,
+        fillerSteps(stepIndex - 1) :+ target(equalityPremise) :+ target(φ(a)),
+        fillerSteps(stepIndex - 1) :+ target(equalityPremise) :+
+          target(φ(b)) :+
+          elided(substitutionOfEquals, Seq(
+            assertion(reverseEquality, Nil, Seq(b, a)),
+            assertion(substitutionOfEquals, Seq(φ($)), Seq(b, a)))))
+    }
+
+    "rewrite premise using a direct premise" in {
+      val service = mock[BookService]
+      mockReplaceStepsForInsertion(service)
+      val controller = new StepRewriteController(service)
+
+      val equalityPremise = Equals(a, b)
+      val premiseToRewrite = φ(a)
+
+      controller.rewritePremise(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        PremiseRewrite(
+          premiseToRewrite.serialized,
+          Seq(Seq(rewrite(equalityPremise, Seq(0), false)))))
+
+      checkModifyStepsWithoutProps(
+        service,
+        fillerSteps(stepIndex - 2) :+ target(equalityPremise) :+ target(premiseToRewrite) :+ target(φ),
+        fillerSteps(stepIndex - 2) :+ target(equalityPremise) :+ target(premiseToRewrite) :+
+          assertion(substitutionOfEquals, Seq(φ($)), Seq(a, b)) :+
+          target(φ))
+    }
+
+    "rewrite target using a reversed premise" in {
+      val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
+      val controller = new StepRewriteController(service)
+
+      val equalityPremise = Equals(a, b)
+
+      controller.rewriteManually(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        Seq(Seq(rewrite(equalityPremise, Seq(0), true))))
+
+      checkModifyStepsWithoutProps(
+        service,
+        fillerSteps(stepIndex - 1) :+ target(equalityPremise) :+ target(φ(b)),
+        fillerSteps(stepIndex - 1) :+ target(equalityPremise) :+
+          target(φ(a)) :+
+          assertion(substitutionOfEquals, Seq(φ($)), Seq(a, b)))
+    }
+
+    "rewrite premise using a reversed premise" in {
+      val service = mock[BookService]
+      mockReplaceStepsForInsertion(service)
+      val controller = new StepRewriteController(service)
+
+      val equalityPremise = Equals(a, b)
+      val premiseToRewrite = φ(b)
+
+      controller.rewritePremise(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        PremiseRewrite(
+          premiseToRewrite.serialized,
+          Seq(Seq(rewrite(equalityPremise, Seq(0), true)))))
+
+      checkModifyStepsWithoutProps(
+        service,
+        fillerSteps(stepIndex - 2) :+ target(equalityPremise) :+ target(premiseToRewrite) :+ target(φ),
+        fillerSteps(stepIndex - 2) :+ target(equalityPremise) :+ target(premiseToRewrite) :+
+          elided(substitutionOfEquals, Seq(
+            assertion(reverseEquality, Nil, Seq(a, b)),
+            assertion(substitutionOfEquals, Seq(φ($)), Seq(b, a)))) :+
+          target(φ))
+    }
+
     "get rewrite suggestions using a generalized deduction premise" in {
       val service = mock[BookService]
       val controller = new StepRewriteController(service)

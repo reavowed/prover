@@ -106,6 +106,13 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
   ): RewriteRequest = {
     RewriteRequest(path, Some(inference.id), None, extractionInferences.map(_.id), false)
   }
+  def rewrite(
+    premise: Statement,
+    path: Seq[Int],
+    reverse: Boolean
+  ): RewriteRequest = {
+    RewriteRequest(path, None, Some(premise.serialized), Nil, reverse)
+  }
 
   def createService = {
     val service = mock[BookService]
