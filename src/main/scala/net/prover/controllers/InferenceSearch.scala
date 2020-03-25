@@ -7,8 +7,8 @@ trait InferenceSearch {
     inferences.filter(inferenceFilter(searchText))
   }
   def inferenceFilter(searchText: String): Inference => Boolean = {
-    val searchWords = searchText.toLowerCase().splitByWhitespace().filter(_.nonEmpty)
-    (inference: Inference) => matchWords(searchWords, inference.name.toLowerCase().splitByWhitespace().filter(_.nonEmpty))
+    val searchWords = searchText.toLowerCase().splitByWhitespaceOrPunctuation().filter(_.nonEmpty)
+    (inference: Inference) => matchWords(searchWords, inference.name.toLowerCase().splitByWhitespaceOrPunctuation().filter(_.nonEmpty))
   }
   private def matchWords(searchWords: Seq[String], titleWords: Seq[String]): Boolean = {
     if (searchWords.isEmpty)

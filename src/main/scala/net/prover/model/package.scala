@@ -42,6 +42,9 @@ package object model {
     def splitByWhitespace(max: Int = 0): Seq[String] = {
       s.trim.split("\\s+", max).toSeq.filter(_.nonEmpty)
     }
+    def splitByWhitespaceOrPunctuation(max: Int = 0): Seq[String] = {
+      s.trim.split("[\\s-]+", max).toSeq.filter(_.nonEmpty)
+    }
     def camelCase: String = {
       val words = splitByWhitespace().map(_.replaceAll("[\\W]+", "")).map(_.toLowerCase)
       words.headOption.getOrElse("") + words.drop(1).map(_.capitalize).mkString("")
