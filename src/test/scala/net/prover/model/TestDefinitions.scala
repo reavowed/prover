@@ -365,8 +365,8 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
     parsedTheorem.isComplete(new Definitions(entryContext)) must beTrue
   }
 
-  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement): Matcher[Seq[Step]] = {
-    beValidTheorem ^^ { steps: Seq[Step] =>
+  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement)(implicit entryContext: EntryContext): Matcher[Seq[Step]] = {
+    beValidTheorem(entryContext) ^^ { steps: Seq[Step] =>
       Theorem(
         "Test Theorem",
         premises,

@@ -46,6 +46,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.statement) && isAllowed(r.inference))
     implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowableGeneric(Generic[Substitution])
+    implicit val allowableExtractionOption: Allowable[ExtractionOption] = allowableGeneric(Generic[ExtractionOption])
 
     implicit val alwaysAllowableOperator: Allowable[BinaryOperator] = alwaysAllowable
     implicit val allowableEquality: Allowable[Equality] = allowableGeneric(Generic[Equality])
@@ -53,9 +54,8 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableAssociativity: Allowable[Associativity] = allowableGeneric(Generic[Associativity])
     implicit val allowablePremiseRelationLeftHandSimplificationInference: Allowable[PremiseRelationLeftHandSimplificationInference] = allowableGeneric(Generic[PremiseRelationLeftHandSimplificationInference])
     implicit val allowablePremiseRelationDoubleSimplificationInference: Allowable[PremiseRelationDoubleSimplificationInference] = allowableGeneric(Generic[PremiseRelationDoubleSimplificationInference])
-    implicit val allowableConclusionRelationDoubleSimplificationInference: Allowable[ConclusionRelationDoubleSimplificationInference] = allowableGeneric(Generic[ConclusionRelationDoubleSimplificationInference])
+    implicit val allowableConclusionRelationDoubleSimplificationInference: Allowable[ConclusionRelationSimplificationInference] = allowableGeneric(Generic[ConclusionRelationSimplificationInference])
 
-    implicit val allowableExtractionOption: Allowable[ExtractionOption] = allowableGeneric(Generic[ExtractionOption])
     implicit val allowableTermRewriteInference: Allowable[TermRewriteInference] = allowableGeneric(Generic[TermRewriteInference])
 
     implicit def allowableTuple2[A, B](
@@ -111,7 +111,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     }
   }
 
-  def isAllowed[T](t: T)(implicit allowable: Allowable[T]): Boolean = allowable.isAllowed(t)
+  def isAllowed[T](t: T)(implicit allowable: Allowable[T]): Boolean = {
+    allowable.isAllowed(t)
+  }
   def filter[T](t: T)(implicit replacable: Filterable[T]): T = replacable.replace(t)
 
   lazy val extractionOptionsByInferenceId: Map[String, Seq[ExtractionOption]] = filter(definitions.extractionOptionsByInferenceId)
@@ -152,7 +154,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
 
   lazy val premiseRelationLeftHandSimplificationInferences: Seq[PremiseRelationLeftHandSimplificationInference] = filter(definitions.premiseRelationLeftHandSimplificationInferences)
   lazy val premiseRelationDoubleSimplificationInferences: Seq[PremiseRelationDoubleSimplificationInference] = filter(definitions.premiseRelationDoubleSimplificationInferences)
-  lazy val conclusionRelationDoubleSimplificationInferences: Seq[ConclusionRelationDoubleSimplificationInference] = filter(definitions.conclusionRelationDoubleSimplificationInferences)
+  lazy val conclusionRelationSimplificationInferences: Seq[ConclusionRelationSimplificationInference] = filter(definitions.conclusionRelationSimplificationInferences)
 
   lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = {
     filter(definitions.premiseSimplificationInferences)

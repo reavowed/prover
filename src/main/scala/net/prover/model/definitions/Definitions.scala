@@ -233,7 +233,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     } yield PremiseRelationDoubleSimplificationInference(inference, premise, extractionOption.conclusion, extractionOption.extractionInferences)
   }
 
-  lazy val conclusionRelationDoubleSimplificationInferences: Seq[ConclusionRelationDoubleSimplificationInference] = {
+  lazy val conclusionRelationSimplificationInferences: Seq[ConclusionRelationSimplificationInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
       inference <- rootEntryContext.allInferences
@@ -244,12 +244,15 @@ case class Definitions(rootEntryContext: EntryContext) {
       conclusionRelation <- definedBinaryRelations
       (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
       premiseRelation <- definedBinaryRelations
-      (premiseLhs @ TermVariable(_, Nil), premiseRhs @ TermVariable(_, Nil)) <- premiseRelation.unapply(lastPremise)
-      if conclusionLhs.complexity > premiseLhs.complexity && conclusionRhs.complexity > premiseRhs.complexity
-    } yield ConclusionRelationDoubleSimplificationInference(inference, extractionOption.extractionInferences)
+      (premiseLhs, premiseRhs) <- premiseRelation.unapply(lastPremise)
+      if (premiseLhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) && conclusionLhs.complexity > premiseLhs.complexity && conclusionRhs == premiseRhs) ||
+        (premiseRhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) && conclusionRhs.complexity > premiseRhs.complexity && conclusionLhs == premiseLhs) ||
+        (premiseLhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) && conclusionLhs.complexity > premiseLhs.complexity &&
+          premiseRhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) && conclusionRhs.complexity > premiseRhs.complexity)
+    } yield ConclusionRelationSimplificationInference(inference, extractionOption)
   }
 
-  lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = inferenceEntries.collect {
+  lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = rootEntryContext.allInferences.collect {
     case inference @ Inference(_, Seq(singlePremise), conclusion)
       if singlePremise.complexity > conclusion.complexity &&
         singlePremise.requiredSubstitutions.isEquivalentTo(inference.requiredSubstitutions) &&
@@ -257,7 +260,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     =>
       (inference, singlePremise)
   }
-  lazy val conclusionSimplificationInferences: Seq[Inference] = inferenceEntries.filter {
+  lazy val conclusionSimplificationInferences: Seq[Inference] = rootEntryContext.allInferences.filter {
     case inference @ Inference(_, premises, conclusion)
       if premises.nonEmpty &&
         premises.forall(_.complexity < conclusion.complexity) &&

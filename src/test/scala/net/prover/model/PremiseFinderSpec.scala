@@ -1,6 +1,8 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
+import net.prover.model.entries.ExpressionDefinition.ComponentType
+import net.prover.model.entries.TermDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{PremiseFinder, StepContext}
 import org.specs2.matcher.MatchResult
@@ -9,9 +11,9 @@ import org.specs2.mutable.Specification
 class PremiseFinderSpec extends Specification {
     "premise finder" should {
 
-    def checkFindPremise(target: Statement, premises: Statement*): MatchResult[Any] = {
+    def checkFindPremise(target: Statement, premises: Statement*)(implicit entryContext: EntryContext): MatchResult[Any] = {
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, premises.map(_.requiredSubstitutions).foldTogether.terms.map(_._1))
-      PremiseFinder.findPremiseStepsForStatement(target) must beSome(beStepsThatMakeValidTheorem(premises, target))
+      PremiseFinder.findPremiseStepsForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, stepContext)) must beSome(beStepsThatMakeValidTheorem(premises, target)(entryContext))
     }
 
     "find premise using rewrite" in {
@@ -60,6 +62,25 @@ class PremiseFinderSpec extends Specification {
       checkFindPremise(
         ElementOf(a, A),
         ElementOf(Pair(Pair(a, b), Pair(c, d)), Product(Product(A, B), Product(C, D))))
+    }
+
+    "find a premise by a left-hand relation simplifcation from extracting a term definition" in {
+      val Negated = TermDefinition(
+        "negatedZ",
+        Nil,
+        Seq(ComponentType.TermComponent("a", Nil)),
+        Some("negated integer"),
+        Format.Explicit("-a", Seq("a"), false, true),
+        Seq(ElementOf(a, Naturals)),
+        Conjunction(ElementOf($, Naturals), Equals(add($, a), Zero)),
+        None,
+        Nil)
+      val entryContextWithDefinition = defaultEntryContext.addEntry(Negated)
+
+      checkFindPremise(
+        ElementOf(Negated(a), Naturals),
+        ElementOf(a, Naturals))(
+        entryContextWithDefinition)
     }
   }
 }
