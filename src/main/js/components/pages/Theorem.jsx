@@ -36,7 +36,10 @@ export class Theorem extends React.Component {
     if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) {
       return;
     }
-    if (event.key === "c" && !event.ctrlKey) {
+    if (event.shiftKey || event.ctrlKey || event.altKey) {
+      return;
+    }
+    if (event.key === "c") {
       this.setState({disableChaining: !this.state.disableChaining});
     }
   };

@@ -49,6 +49,9 @@ const ProofLineBase = styled(class ProofLine extends React.Component {
     if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) {
       return;
     }
+    if (event.shiftKey || event.ctrlKey || event.altKey) {
+      return;
+    }
     if (event.key === "d") {
       this.deleteStep();
     } else if (event.key === "r") {
