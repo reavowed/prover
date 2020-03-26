@@ -325,7 +325,7 @@ export class Steps extends React.Component {
       };
     }
 
-    if (!theoremContext.disableAssumptionCollapse && (step instanceof AssertionStepModel || (step instanceof ElidedStepModel && step.highlightedInference)) &&
+    if (!theoremContext.disableAssumptionCollapse && (step instanceof AssertionStepModel || step instanceof ElidedStepModel) &&
       step.provenStatement &&
       stepsWithIndexes.length &&
       stepsWithIndexes[0].step instanceof NamingStepModel &&

@@ -106,8 +106,14 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
     }
   };
 
+  const inference = assertionStep ?
+    assertionStep.inference || assertionStep.highlightedInference :
+    innermostNamingStep.step.inference;
+  const description = assertionStep && assertionStep.description;
+
   const buttons = <>
-    <span className="mr-2"><InferenceLink inference={assertionStep ? (assertionStep.inference || assertionStep.highlightedInference) : innermostNamingStep.step.inference}/></span>
+    {inference && <span className="mr-2"><InferenceLink inference={inference}/></span>}
+    {description && <span className="text-muted text-uppercase mr-2" style={{"fontFamily": "monospace"}}>{description}</span>}
     {assertionStep && assertionStep instanceof ElidedStep && <span className="fas fa-ellipsis-v text-muted mr-2" onClick={toggleProofCard} style={{cursor: "pointer"}}/>}
   </>;
 
