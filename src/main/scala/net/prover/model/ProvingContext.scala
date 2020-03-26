@@ -34,6 +34,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val alwaysAllowableTerm: AlwaysAllowable[Term] = alwaysAllowable
     implicit val alwaysAllowableExpression: AlwaysAllowable[Expression] = alwaysAllowable
     implicit val alwaysAllowableString: AlwaysAllowable[String] = alwaysAllowable
+    implicit val alwaysAllowableInt: AlwaysAllowable[Int] = alwaysAllowable
     implicit val alwaysAllowableDirection: AlwaysAllowable[Direction] = alwaysAllowable
     implicit def allowableSeq[T](implicit inner: Allowable[T]): Allowable[Seq[T]] = allowable { x => x.forall(isAllowed) }
 

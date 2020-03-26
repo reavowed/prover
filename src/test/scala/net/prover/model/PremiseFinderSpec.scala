@@ -2,7 +2,7 @@ package net.prover.model
 
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.ExpressionDefinition.ComponentType
-import net.prover.model.entries.TermDefinition
+import net.prover.model.entries.{Axiom, TermDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{PremiseFinder, StepContext}
 import org.specs2.matcher.MatchResult
@@ -82,5 +82,26 @@ class PremiseFinderSpec extends Specification {
         ElementOf(a, Naturals))(
         entryContextWithDefinition)
     }
+
+      "find a premise by a left-hand relation simplification from extracting a term definition" in {
+        val IntegerDefinition = TermDefinition(
+          "ℤ",
+          Nil,
+          Nil,
+          None,
+          Format.default("ℤ", Nil),
+          Nil,
+          BlankDefinition,
+          None,
+          Nil)
+        val Integers = IntegerDefinition()
+        val PairIsInteger = Axiom("Pair Is Integer", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(Pair(a, b), Integers))
+        val entryContextWithDefinitions = defaultEntryContext.addEntry(IntegerDefinition).addEntry(PairIsInteger)
+
+        checkFindPremise(
+          ElementOf(Pair(a, b), Integers),
+          ElementOf(a, Naturals), ElementOf(b, Naturals))(
+          entryContextWithDefinitions)
+      }
   }
 }

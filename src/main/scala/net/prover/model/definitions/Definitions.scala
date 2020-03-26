@@ -240,16 +240,17 @@ case class Definitions(rootEntryContext: EntryContext) {
       if inference.requiredSubstitutions.hasNoApplications
       extractionOption <- extractionOptionsByInferenceId(inference.id)
       if extractionOption.premises.nonEmpty
-      lastPremise = extractionOption.premises.last
       conclusionRelation <- definedBinaryRelations
-      (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
-      premiseRelation <- definedBinaryRelations
-      (premiseLhs, premiseRhs) <- premiseRelation.unapply(lastPremise)
-      if (premiseLhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) && conclusionLhs.complexity > premiseLhs.complexity && conclusionRhs == premiseRhs) ||
-        (premiseRhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) && conclusionRhs.complexity > premiseRhs.complexity && conclusionLhs == premiseLhs) ||
-        (premiseLhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) && conclusionLhs.complexity > premiseLhs.complexity &&
-          premiseRhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) && conclusionRhs.complexity > premiseRhs.complexity)
-    } yield ConclusionRelationSimplificationInference(inference, extractionOption)
+      (conclusionLhs, _) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
+      simplifiedPremiseIndexes = extractionOption.premises.zipWithIndex.reverse.takeWhile { case (premise, _) =>
+        definedBinaryRelations.exists { premiseRelation =>
+          premiseRelation.unapply(premise).exists { case (premiseLhs, _) =>
+            premiseLhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) && conclusionLhs.complexity > premiseLhs.complexity
+          }
+        }
+      }.map(_._2).reverse
+      if simplifiedPremiseIndexes.nonEmpty
+    } yield ConclusionRelationSimplificationInference(inference, extractionOption, simplifiedPremiseIndexes)
   }
 
   lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = rootEntryContext.allInferences.collect {

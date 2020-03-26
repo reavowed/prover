@@ -66,8 +66,8 @@ object PremiseFinder {
 
     def fromDoubleSimplifiedConclusionRelations = (for {
       conclusionRelationSimplificationInference <- provingContext.conclusionRelationSimplificationInferences.iterator
-      (simplifiedTarget, step) <- conclusionRelationSimplificationInference.matchTarget(targetStatement)
-      innerSteps <- findPremiseStepsWithInferencesForStatement(simplifiedTarget)
+      (simplifiedTargets, step) <- conclusionRelationSimplificationInference.matchTarget(targetStatement)
+      innerSteps <- simplifiedTargets.map(findPremiseStepsWithInferencesForStatement).traverseOption.map(_.flatten)
     } yield innerSteps :+ (step, conclusionRelationSimplificationInference.inference)).headOption
 
     def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { inference =>
