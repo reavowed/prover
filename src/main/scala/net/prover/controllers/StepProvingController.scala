@@ -166,21 +166,21 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
   }
 
   @GetMapping(value = Array("/possiblePremisesForCurrentTarget"), produces = Array("application/json;charset=UTF-8"))
-  def getPossibleInferencesForCurrentTarget(
+  def getPossiblePremisesForCurrentTarget(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("inferenceId") inferenceId: String,
-    @RequestParam("target") serializedTargetStatement: String,
-    @RequestParam("conclusion") serializedConclusionStatement: String
+    @RequestParam("targetUnwrappers") targetUnwrappers: Array[String],
+    @RequestParam("conclusionExtractionInferenceIds") conclusionExtractionInferenceIds: Array[String]
   ): ResponseEntity[_] = {
     (for {
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       inference <- findInference(inferenceId)(stepProvingContext)
-      possibleTarget <- getPossibleTargets(step.statement)(stepProvingContext).find(_.statement.serialized == serializedTargetStatement).orBadRequest(s"Could not find target $serializedTargetStatement")
-      extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id).find(_.conclusion.serialized == serializedConclusionStatement).orBadRequest(s"Could not find extraction option with conclusion $serializedConclusionStatement")
+      possibleTarget <- getPossibleTargets(step.statement)(stepProvingContext).find(_.unwrappers.map(_.definitionSymbol) == targetUnwrappers.toSeq).orBadRequest(s"Could not find target with unwrappers ${targetUnwrappers.mkString(", ")}")
+      extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == conclusionExtractionInferenceIds.toSeq).orBadRequest(s"Could not find extraction option with inference ids ${conclusionExtractionInferenceIds.mkString(", ")}")
     } yield PossibleConclusionWithPremises.fromExtractionOptionWithTarget(extractionOption, possibleTarget.statement)(StepProvingContext.updateStepContext(possibleTarget.unwrappers.enhanceContext)(stepProvingContext))).toResponseEntity
   }
 

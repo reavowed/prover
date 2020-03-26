@@ -65,13 +65,16 @@ export default class ConclusionChooser extends React.Component {
   onUpdate() {
     this.ref.current.scrollIntoView();
     const {possibleConclusions, defaultConclusionStatement} = this.props;
-    const conclusionToSelect = (possibleConclusions.length > 0 && _.every(possibleConclusions.slice(1), c => _.startsWith(c.extractionInferenceIds, possibleConclusions[0].extractionInferenceIds))) ?
-      possibleConclusions[0] :
-      _.find(possibleConclusions, c => c.conclusion.serialize() === defaultConclusionStatement.serialize());
-    this.setSelectedConclusion(conclusionToSelect);
+    const conclusionIndexToSelect = (possibleConclusions.length > 0 && _.every(possibleConclusions.slice(1), c => _.startsWith(c.extractionInferenceIds, possibleConclusions[0].extractionInferenceIds))) ?
+      0 :
+      _.findIndex(possibleConclusions, c => c.conclusion.serialize() === defaultConclusionStatement.serialize());
+    const conclusionToSelect = conclusionIndexToSelect === -1 ?
+      null :
+      possibleConclusions[conclusionIndexToSelect];
+    this.setSelectedConclusion(conclusionToSelect, conclusionIndexToSelect);
   }
 
-  setSelectedConclusion = (selectedConclusion) => {
+  setSelectedConclusion = (selectedConclusion, selectedConclusionIndex) => {
     if (selectedConclusion) {
       const fetchConclusionWithPremises = selectedConclusion.possiblePremises ?
         Promise.resolve(selectedConclusion) :
@@ -81,14 +84,14 @@ export default class ConclusionChooser extends React.Component {
         const conclusionStatement = selectedConclusion.conclusion;
         const selectedPremises = selectedConclusion.possiblePremises.map(p => ["", null]);
         const selectedSubstitutionValues = buildSubstitutionMap(selectedConclusion.requiredSubstitutions, () => "");
-        this.setStatePromise({selectedConclusion, premiseStatements, conclusionStatement, selectedPremises, selectedSubstitutionValues})
+        this.setStatePromise({selectedConclusion, selectedConclusionIndex, premiseStatements, conclusionStatement, selectedPremises, selectedSubstitutionValues})
           .then(() => this.ref.current.scrollIntoView());
         if (this.props.allowAutoSubmit && this.areSubstitutionValuesSufficient(selectedConclusion, selectedPremises, selectedSubstitutionValues)) {
           this.submitWithSelectedValues(selectedConclusion, selectedPremises, selectedSubstitutionValues)
         }
       });
     } else {
-      this.setStatePromise({selectedConclusion: null, conclusionStatement: null, selectedPremises: [], selectedSubstitutionValues: {}})
+      this.setStatePromise({selectedConclusion: null, selectedConclusionIndex: null, conclusionStatement: null, selectedPremises: [], selectedSubstitutionValues: {}})
         .then(() => this.ref.current.scrollIntoView());
     }
   };
@@ -163,7 +166,7 @@ export default class ConclusionChooser extends React.Component {
 
   render() {
     const {possibleConclusions, hideSummary, disabled, boundVariableListsForPremises, boundVariableListsForSubstitutions} = this.props;
-    const {selectedConclusion, premiseStatements, conclusionStatement} = this.state;
+    const {selectedConclusion, selectedConclusionIndex, premiseStatements, conclusionStatement} = this.state;
 
     const wrapPremiseBoundVariable = (premiseIndex) => (name, index, boundVariablePath) => {
       const callback = (newName) => {
@@ -254,8 +257,8 @@ export default class ConclusionChooser extends React.Component {
         {possibleConclusions.length > 1 && <Form.Group>
           <Form.Label><strong>Choose conclusion</strong></Form.Label>
           <Form.Control as="select"
-                        value={selectedConclusion ? _.findIndex(possibleConclusions, p => p.conclusion.serialize() === selectedConclusion.conclusion.serialize()) : ""}
-                        onChange={e => this.setSelectedConclusion(possibleConclusions[e.target.value])} readOnly={disabled}>
+                        value={selectedConclusion ? selectedConclusionIndex : ""}
+                        onChange={e => this.setSelectedConclusion(possibleConclusions[e.target.value], e.target.value)} readOnly={disabled}>
             <option value="" />
             {possibleConclusions.map(({conclusion}, index) =>
               <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(

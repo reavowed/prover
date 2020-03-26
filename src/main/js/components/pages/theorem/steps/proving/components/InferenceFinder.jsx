@@ -111,7 +111,7 @@ export class InferenceFinder extends React.Component {
       }</BoundVariableLists.Consumer>}
       {possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}
                                                  defaultConclusionStatement={selectedInference.inference.conclusion}
-                                                 fetchPossiblePremises={(selectedConclusion) => this.props.fetchPossiblePremises(selectedInference.inference, selectedTarget.target, selectedConclusion.conclusion)}
+                                                 fetchPossiblePremises={(selectedConclusion) => this.props.fetchPossiblePremises(selectedInference.inference, selectedTarget.wrappingDefinitions, selectedConclusion.extractionInferenceIds)}
                                                  submit={this.submit}
                                                  disabled={disabled}
                                                  boundVariableListsForPremises={[]}
