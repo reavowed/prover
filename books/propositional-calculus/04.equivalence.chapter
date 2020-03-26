@@ -4,6 +4,8 @@ statement ↔ (φ ψ)
   definition (∧ → φ ψ → ψ φ)
   shorthand (equiv)
 
+display ∧ ↔ φ χ ↔ ψ χ as (φ ↔ ψ ↔ χ) requires-brackets
+
 theorem Equivalence by Both Cases
 premise → φ ψ
 premise → ψ φ

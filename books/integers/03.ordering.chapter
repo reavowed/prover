@@ -772,3 +772,26 @@ conclusion totalOrder ≤_ℤ ℤ
   prove = ≤_ℤ productComprehension a b product ℤ ℤ ∨ ∈ orderedPair $0 $1 <_ℤ = $0 $1 ef09d9ef8b40f0cca0db32e84f86b2a35b000b2cccb9ffacf029e6a41612abf8 () ()
   prove totalOrder ≤_ℤ ℤ ce36ad0016e927f8ca4cd1776f92dc544d131087d4730af7f0f02d40f91a0a0a () (<_ℤ, ℤ, ≤_ℤ) 0 1
 }
+
+term ℤ^+ ()
+  (= $0 comprehension a ℤ ∈ orderedPair 0_ℤ $0 <_ℤ)
+  shorthand (Z+)
+
+theorem Membership Condition for ℤ^+
+conclusion ∀ a → ∈ $0 ℤ ↔ ∈ $0 ℤ^+ ∈ orderedPair 0_ℤ $0 <_ℤ
+{
+  prove = ℤ^+ comprehension a ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 39039aedc036694dc0f0fc530d193d7c41edccd5d18968dc0483fbb73334f833 () ()
+  take a {
+    assume ∈ $0 ℤ {
+      elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
+        prove ∀ y ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair 0_ℤ $$0 <_ℤ) (ℤ^+, ℤ) 0
+        prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 ℤ^+ ∧ ∈ $$0 ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) ($0) 1.0.0.0
+      }
+      elided 6301d09d66b0a087d37eb6fdfb57305fb0584d31883012474d1101001436cb7e {
+        prove → ∈ orderedPair 0_ℤ $0 <_ℤ ∈ $0 ℤ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∈ $0 ℤ, ∈ orderedPair 0_ℤ $0 <_ℤ) () 1.0a
+        prove ↔ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 6301d09d66b0a087d37eb6fdfb57305fb0584d31883012474d1101001436cb7e (∈ orderedPair 0_ℤ $0 <_ℤ, ∈ $0 ℤ) () 1.0.1.0
+      }
+      prove ↔ ∈ $0 ℤ^+ ∈ orderedPair 0_ℤ $0 <_ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ, ∈ orderedPair 0_ℤ $0 <_ℤ) () 1.0.0 1.0.1
+    }
+  }
+}
