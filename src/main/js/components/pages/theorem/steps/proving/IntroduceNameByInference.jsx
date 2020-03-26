@@ -11,7 +11,7 @@ export default function IntroduceNameByInference({path, onError}) {
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `suggestInferencesForNamingByInference?searchText=${encodeURIComponent(searchText)}`);
   };
-  const submit = createSubmitFunctionForStepDefinitionEndpointFromInference(context.fetchJsonForStepAndReplace, path, "introduceNamingByInference", "POST", onError);
+  const submit = createSubmitFunctionForStepDefinitionEndpointFromInference(context.fetchJsonForStepAndReplaceWithWrapping, path, "introduceNamingByInference", "POST", onError);
 
   return <InferenceFinder title='Select Inference for Naming'
                        getInferenceSuggestions={getInferenceSuggestions}
