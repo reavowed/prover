@@ -1,5 +1,7 @@
 import path from "path";
 import React from "react";
+import Toggle from "react-bootstrap-toggle";
+import Dropdown from "react-bootstrap/Dropdown";
 import {PremiseReference} from "../../models/Step";
 import {Parser} from "../../Parser";
 import EntryContext from "../EntryContext";
@@ -28,39 +30,23 @@ export class Theorem extends React.Component {
         staticHighlights: [],
         isActionInUse: false
       },
-      disableChaining: false
+      disableChaining: false,
+      disableAssumptionCollapse: false,
+      disableShorthands: false,
     }
   }
-
-  onKeyDown = (event) => {
-    if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) {
-      return;
-    }
-    if (event.shiftKey || event.ctrlKey || event.altKey) {
-      return;
-    }
-    if (event.key === "c") {
-      this.setState({disableChaining: !this.state.disableChaining});
-    }
-  };
-
-  componentDidMount() {
-    document.body.addEventListener('keydown', this.onKeyDown);
-  }
-  componentWillUnmount() {
-    document.body.removeEventListener('keydown', this.onKeyDown);
-  }
-
 
   render() {
     const self = this;
     const {url} = this.props;
-    const {theorem, inferences, highlighting, disableChaining} = this.state;
+    const {theorem, inferences, highlighting, disableChaining, disableShorthands, disableAssumptionCollapse} = this.state;
 
     const theoremContext = {
       entryContext: this.entryContext,
       parser: this.parser,
       disableChaining,
+      disableShorthands,
+      disableAssumptionCollapse,
       fetchJson(subpath,  options) {
         return window.fetchJson(path.join(url, subpath), options);
       },
@@ -187,10 +173,40 @@ export class Theorem extends React.Component {
       hashParams.inferencesToHighlight = rawHashParams.inferencesToHighlight.split(",")
     }
 
+    const settingsDropdown = <Dropdown className="position-static">
+        <Dropdown.Toggle size="sm" className="mr-2" variant="success" id="dropdown-basic-button">Settings</Dropdown.Toggle>
+        <Dropdown.Menu>
+          <span className="d-flex w-100 px-4 py-1">
+            <span className="flex-fill">Collapse chained steps</span>
+            <Toggle onClick={() => this.setStatePromise({disableChaining: !disableChaining})}
+                    active={!disableChaining}
+                    size="xs"
+                    className="ml-2"
+                    offstyle="danger"/>
+          </span>
+          <span className="d-flex w-100 px-4 py-1">
+            <span className="flex-fill">Collapse shorthanded expressions</span>
+            <Toggle onClick={() => this.setStatePromise({disableShorthands: !disableShorthands})}
+                    active={!disableShorthands}
+                    size="xs"
+                    className="ml-2"
+                    offstyle="danger"/>
+          </span>
+          <span className="d-flex w-100 px-4 py-1">
+            <span className="flex-fill">Collapse step assumptions</span>
+            <Toggle onClick={() => this.setStatePromise({disableAssumptionCollapse: !disableAssumptionCollapse})}
+                    active={!disableAssumptionCollapse}
+                    size="xs"
+                    className="ml-2"
+                    offstyle="danger"/>
+          </span>
+        </Dropdown.Menu>
+      </Dropdown>
+
     return <HashParamsContext.Provider value={hashParams}>
       <EntryContext.Provider value={this.entryContext}>
         <TheoremContext.Provider value={theoremContext}>
-          <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" {...this.props}>
+          <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" buttons={settingsDropdown} {...this.props}>
             <Proofs proofs={theorem.proofs} />
           </Inference>
         </TheoremContext.Provider>

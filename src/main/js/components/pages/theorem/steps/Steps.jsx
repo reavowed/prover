@@ -314,7 +314,8 @@ export class Steps extends React.Component {
     };
     let elidableVariableDescription;
 
-    if (step instanceof GeneralizationStepModel &&
+    if (!theoremContext.disableAssumptionCollapse &&
+      step instanceof GeneralizationStepModel &&
       step.substeps.length === 1 &&
       step.substeps[0] instanceof DeductionStepModel &&
       (elidableVariableDescription = matchElidableVariableDescription(step.substeps[0].assumption))) {
@@ -324,7 +325,7 @@ export class Steps extends React.Component {
       };
     }
 
-    if (!theoremContext.disableChaining && (step instanceof AssertionStepModel || (step instanceof ElidedStepModel && step.highlightedInference)) &&
+    if (!theoremContext.disableAssumptionCollapse && (step instanceof AssertionStepModel || (step instanceof ElidedStepModel && step.highlightedInference)) &&
       step.provenStatement &&
       stepsWithIndexes.length &&
       stepsWithIndexes[0].step instanceof NamingStepModel &&

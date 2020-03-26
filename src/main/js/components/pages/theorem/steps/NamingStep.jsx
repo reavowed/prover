@@ -47,7 +47,7 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
     }
   }
   addNamingStep(namingStep, namingStepPath);
-  while (!theoremContext.disableChaining &&
+  while (!theoremContext.disableAssumptionCollapse &&
     namingStep.substeps.length === 1 &&
     namingStep.substeps[0] instanceof NamingStepModel &&
     _.some(namingStep.substeps[0].referencedLinesForExtraction, r => _.isEqual(r.stepPath, namingStepPath) && r.suffix === "a"))

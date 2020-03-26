@@ -14,11 +14,12 @@ export class Inference extends React.Component {
       .then(url => window.location.pathname = url);
   }
   render() {
-    const {inference, title, url, bookLink, chapterLink, previous, next, usages, children, createPremiseElement} = this.props;
+    const {inference, title, url, bookLink, chapterLink, previous, next, usages, children, buttons, createPremiseElement} = this.props;
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: inference.name, url}]}/>}>
       <NavLinks previous={previous} next={next}/>
       <h3 className="text-center mb-0">
         {title}: <InlineTextEditor text={inference.name} callback={this.updateName}/>
+        {buttons && <span className="float-right">{buttons}</span>}
       </h3>
       <Monospace className="text-center mb-1">{inference.id}</Monospace>
       <InferenceSummary createPremiseElement={createPremiseElement} inference={inference}/>

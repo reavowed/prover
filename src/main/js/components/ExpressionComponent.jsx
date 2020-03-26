@@ -72,7 +72,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
     }
   }
   function renderChildrenOfTag(expression, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, parentRequiresBrackets) {
-    if (!(theoremContext && theoremContext.disableChaining)) {
+    if (!(theoremContext && theoremContext.disableShorthands)) {
       const {displayShorthand, matches} = matchDisplayShorthand(expression) || {};
       if (matches) {
         let renderedMatches = matches.map(m => renderMatch(m, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable));
