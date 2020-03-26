@@ -29,7 +29,9 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
           .mapCollect { inference =>
             val conclusions = for {
               extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id)
-              if ProofHelper.findNamingInferences.exists(_._1.conclusion.calculateSubstitutions(extractionOption.conclusion)(SubstitutionContext.outsideProof).nonEmpty)
+              if ProofHelper.findNamingInferences.exists { case (_, initialPremises, _) =>
+                initialPremises.single.exists(_.calculateSubstitutions(extractionOption.conclusion)(SubstitutionContext.outsideProof).nonEmpty)
+              }
             } yield PossibleConclusionWithPremises.fromExtractionOption(extractionOption, None)
             if (conclusions.nonEmpty) {
               Some(PossibleInference(inference.summary, None, Some(conclusions)))
