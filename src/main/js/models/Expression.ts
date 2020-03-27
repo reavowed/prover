@@ -32,12 +32,9 @@ export interface TypeDefinition {
   properties: PropertyDefinition[]
 }
 
-export interface ExpressionMatchResult {
-  type: "expression";
-  matchedVariable: string;
-  expression: Expression;
-  pathWithinMatch: number[];
-  boundVariablesWithinMatch: string[][];
+export class ExpressionMatchResult {
+  constructor(public matchedVariable: string, public expression: Expression, public pathWithinMatch: number[], public boundVariablesWithinMatch: string[][]) {}
+  type = "expression";
 }
 
 export interface BoundVariableMatchResult {
@@ -65,9 +62,19 @@ export function tokenize(str: string): string[]  {
   return _.flatMap(str.split(' '), splitToken);
 }
 
+function checkComponentsMatch(matchResults: MatchResult[]): MatchResult[] | undefined {
+  const expressionMatchResults = <ExpressionMatchResult[]>matchResults.filter(a => a instanceof ExpressionMatchResult);
+  const matchesByVariable = <{[index: string]: ExpressionMatchResult[]}>_.groupBy(expressionMatchResults, r => r.matchedVariable);
+  if (_.every(matchesByVariable, rs => _.uniq(_.map(rs, r => r.expression.serialize())).length == 1)) {
+    return matchResults;
+  } else {
+    return undefined;
+  }
+}
+
 export function matchTemplate(template: Expression, expression: Expression, pathWithinMatch: number[], boundVariablesWithinMatch: string[][]): MatchResult[] | undefined {
   if (template instanceof Variable && template.components.length === 0) {
-    return [{type: "expression", matchedVariable: template.name, expression, pathWithinMatch, boundVariablesWithinMatch}];
+    return [new ExpressionMatchResult(template.name, expression, pathWithinMatch, boundVariablesWithinMatch)];
   } else if (template instanceof DefinedExpression && expression instanceof DefinedExpression && expression.definition === template.definition) {
       const innerBoundVariables = expression.definition.numberOfBoundVariables ? [expression.boundVariableNames, ...boundVariablesWithinMatch] : boundVariablesWithinMatch;
       const componentMatches = _.chain(template.components)
@@ -77,7 +84,7 @@ export function matchTemplate(template: Expression, expression: Expression, path
       if (_.every(componentMatches)) {
         const boundVariableMatches = expression.boundVariableNames.map((name, index) => ({type: "boundVariable", name, index, pathWithinMatch} as BoundVariableMatchResult));
         const flattenedComponentMatches: MatchResult[] = _.flatten(componentMatches as MatchResult[][]);
-        return [...boundVariableMatches, ...flattenedComponentMatches];
+        return checkComponentsMatch([...boundVariableMatches, ...flattenedComponentMatches]);
       }
   } else if (template instanceof TypeExpression && expression instanceof TypeExpression && expression.definition === template.definition) {
     const componentMatches = _.chain([template.term, ...template.otherComponents])
@@ -85,7 +92,7 @@ export function matchTemplate(template: Expression, expression: Expression, path
         .map(([t, c], i) => t && matchTemplate(t, c!, [...pathWithinMatch, i], boundVariablesWithinMatch))
         .value();
     if (_.every(componentMatches)) {
-      return _.flatten(componentMatches as MatchResult[][]);
+      return checkComponentsMatch(_.flatten(componentMatches as MatchResult[][]));
     }
   } else if (template instanceof FunctionParameter && expression instanceof FunctionParameter && template.index === expression.index && template.level === expression.level) {
     return [];
