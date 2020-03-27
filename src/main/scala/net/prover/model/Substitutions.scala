@@ -60,6 +60,12 @@ object Substitutions {
         this.statements.zip(statements).map { case ((name, arity), statement) => (name, (arity, statement)) }.toMap,
         this.terms.zip(terms).map { case ((name, arity), term) => (name, (arity, term)) }.toMap)
     }
+
+    def filterSubstitutions(substitutions: Substitutions): Substitutions = {
+      Substitutions(
+        statements = substitutions.statements.filterKeys(s => statements.exists(_._1 == s)),
+        terms = substitutions.terms.filterKeys(t => terms.exists(_._1 == t)))
+    }
   }
 
   object Required {

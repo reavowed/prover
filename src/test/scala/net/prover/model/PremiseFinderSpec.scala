@@ -4,16 +4,21 @@ import net.prover.model.TestDefinitions._
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.entries.{Axiom, TermDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{PremiseFinder, StepContext}
+import net.prover.model.proof.{PremiseFinder, Step, StepContext}
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
 class PremiseFinderSpec extends Specification {
-    "premise finder" should {
+  val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
 
+  "premise finder" should {
     def checkFindPremise(target: Statement, premises: Statement*)(implicit entryContext: EntryContext): MatchResult[Any] = {
+      findPremise(target, premises: _*)(entryContext) must beSome(beStepsThatMakeValidTheorem(premises, target)(entryContext))
+    }
+
+    def findPremise(target: Statement, premises: Statement*)(implicit entryContext: EntryContext): Option[Seq[Step]] = {
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, premises.map(_.requiredSubstitutions).foldTogether.terms.map(_._1))
-      PremiseFinder.findPremiseStepsForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, stepContext)) must beSome(beStepsThatMakeValidTheorem(premises, target)(entryContext))
+      PremiseFinder.findPremiseStepsForStatement(target, Nil)(entryContextAndStepContextToStepProvingContext(entryContext, stepContext))
     }
 
     "find premise using rewrite" in {
@@ -83,25 +88,55 @@ class PremiseFinderSpec extends Specification {
         entryContextWithDefinition)
     }
 
-      "find a premise by a left-hand relation simplification from extracting a term definition" in {
-        val IntegerDefinition = TermDefinition(
-          "ℤ",
-          Nil,
-          Nil,
-          None,
-          Format.default("ℤ", Nil),
-          Nil,
-          BlankDefinition,
-          None,
-          Nil)
-        val Integers = IntegerDefinition()
-        val PairIsInteger = Axiom("Pair Is Integer", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(Pair(a, b), Integers))
-        val entryContextWithDefinitions = defaultEntryContext.addEntry(IntegerDefinition).addEntry(PairIsInteger)
+    "find a premise by a left-hand relation simplification from extracting a term definition" in {
+      val IntegerDefinition = TermDefinition(
+        "ℤ",
+        Nil,
+        Nil,
+        None,
+        Format.default("ℤ", Nil),
+        Nil,
+        BlankDefinition,
+        None,
+        Nil)
+      val Integers = IntegerDefinition()
+      val PairIsInteger = Axiom("Pair Is Integer", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(Pair(a, b), Integers))
+      val entryContextWithDefinitions = defaultEntryContext.addEntry(IntegerDefinition).addEntry(PairIsInteger)
 
-        checkFindPremise(
-          ElementOf(Pair(a, b), Integers),
-          ElementOf(a, Naturals), ElementOf(b, Naturals))(
-          entryContextWithDefinitions)
-      }
+      checkFindPremise(
+        ElementOf(Pair(a, b), Integers),
+        ElementOf(a, Naturals), ElementOf(b, Naturals))(
+        entryContextWithDefinitions)
+    }
+
+    "chain conclusion relation simplification definitions using premise substitutions" in {
+      val ElementOfSubsetIsElementOfSet = Axiom("Element of Subset Is Element of Set", Seq(Subset(A, B), ElementOf(a, A)), ElementOf(a, B))
+      val entryContextWithDefinition = defaultEntryContext.addEntry(ElementOfSubsetIsElementOfSet)
+
+      checkFindPremise(
+        ElementOf(Pair(a, b), Product(A, B)),
+        ElementOf(a, A), ElementOf(b, C), Subset(C, B))(
+        entryContextWithDefinition)
+    }
+
+    "chain conclusion relation simplification definitions using premise substitutions first" in {
+      checkFindPremise(
+        ElementOf(First(a), C),
+        Subset(A, C), ElementOf(a, Product(A, B)))
+    }
+
+    "avoid infinite loop with complexity increases" in {
+      val ElementOfSuccessorIsElementOfSet = Axiom("Element of Successor Is Element of Set", Seq(ElementOf(a, Successor(b))), ElementOf(a, b))
+      val entryContextWithDefinition = defaultEntryContext.addEntry(ElementOfSuccessorIsElementOfSet)
+
+      findPremise(ElementOf(a, b))(entryContextWithDefinition) must beNone
+    }
+
+    "avoid infinite loop by passing from complex relation to simpler one" in {
+      val LessThanIsElementRelation = Axiom("Less Than Is Element Relation", Seq(lessThan(a, b)), ElementOf(a, b)) // if naively implemented, the premise finder will treat "a < b" as "(a, b) ∈ <" and recurse
+      val entryContextWithDefinition = defaultEntryContext.addEntry(LessThanIsElementRelation)
+
+      findPremise(ElementOf(a, b))(entryContextWithDefinition) must beNone
+    }
   }
 }

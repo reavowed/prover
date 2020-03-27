@@ -454,7 +454,7 @@ object Step {
       for {
         premises <- inference.substitutePremises(substitutions)
         conclusion <- inference.substituteConclusion(substitutions)
-      } yield Assertion(conclusion, inference.summary, premises.map(Premise.Pending), substitutions)
+      } yield Assertion(conclusion, inference.summary, premises.map(Premise.Pending), inference.requiredSubstitutions.filterSubstitutions(substitutions))
     }
   }
 

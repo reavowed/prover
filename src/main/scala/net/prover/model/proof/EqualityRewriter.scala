@@ -24,7 +24,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         (inferenceSource, inferenceResult) = direction.swapSourceAndResult(left, right)
         conclusionSubstitutions <- inferenceSource.calculateSubstitutions(premiseTerm).flatMap(_.confirmTotality)
         simplifiedTerm <- inferenceResult.applySubstitutions(conclusionSubstitutions).flatMap(_.asOptionalInstanceOf[Term])
-        (premiseSteps, _, possibleFinalSubstitutions) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, conclusionSubstitutions)
+        (premiseSteps, _, possibleFinalSubstitutions) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, conclusionSubstitutions, Nil)
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
         assertionStep <- Step.Assertion.forInference(inference, finalSubstitutions)
@@ -76,7 +76,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       }
       def findDirectly = {
         for {
-          (steps, inferences) <- PremiseFinder.findPremiseStepsWithInferencesForStatement(equality(premiseTerm, targetTerm)).map(_.split)
+          (steps, inferences) <- PremiseFinder.findPremiseStepsWithInferencesForStatement(equality(premiseTerm, targetTerm), Nil).map(_.split)
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
           inference = inferences.singleMatch match {
             case PossibleSingleMatch.NoMatches =>

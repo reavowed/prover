@@ -116,17 +116,13 @@ trait ExpressionDefinitions extends VariableDefinitions {
   val ForAllDefinition = quantifier("∀", None).copy(attributes = Seq("generalization"))
   def ForAll(name: String)(expression: Statement) = ForAllDefinition.bind(name)(expression)
   def ForAllIn(name: String, term: Term)(expression: Statement) = ForAll(name)(Implication(ElementOf($, term), expression))
-  val ExistsDefinition = quantifier("∃", Some(Negation(ForAll("x")(Negation(φ(FunctionParameter(0, 0)))))))
+  val ExistsDefinition = quantifier("∃", Some(Negation(ForAll("x")(Negation(φ($))))))
   def Exists(name: String)(expression: Statement) = ExistsDefinition.bind(name)(expression)
   def ExistsIn(name: String, term: Term)(expression: Statement) = Exists(name)(Conjunction(ElementOf($, term), expression))
   val Equals = predicate("=", 2, None).copy(attributes = Seq("equality"))
-  val ExistsUnique = quantifier("∃!", Some(Exists("y")(ForAll("x")(Equivalence(
-    φ(FunctionParameter(0, 0)),
-    Equals(FunctionParameter(0, 0), FunctionParameter(0, 1)))))))
+  val ExistsUnique = quantifier("∃!", Some(Exists("y")(ForAll("x")(Equivalence(φ($), Equals($, $.^))))))
   val ElementOf = predicate("∈", 2, None)
-  val Subset = predicate("⊆", 2, Some(ForAll("x")(Implication(
-    ElementOf(FunctionParameter(0, 0), a),
-    ElementOf(FunctionParameter(0, 0), b)))))
+  val Subset = predicate("⊆", 2, Some(ForAll("x")(Implication(ElementOf($, a), ElementOf($, b)))))
 
 
   val BlankDefinition = DefinedStatement(Nil, connective("false", 0, None))(Nil)
@@ -312,6 +308,7 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val firstCoordinateOfOrderedPairInCartesianProduct = Axiom("First Coordinate of Ordered Pair in Cartesian Product", Seq(ElementOf(Pair(a, b), Product(A, B))), ElementOf(a, A))
   val firstCoordinateOfElementOfCartesianProduct = Axiom("First Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(First(a), A))
   val secondCoordinateOfElementOfCartesianProduct = Axiom("Second Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(Second(a), B))
+  val orderedPairIsElementOfCartesianProduct = Axiom("Ordered Pair Is Element of Cartesian Product", Seq(ElementOf(a, A), ElementOf(b, B)), ElementOf(Pair(a, b), Product(A, B)))
   val firstElement = Axiom("First Element", Nil, Equals(First(Pair(a, b)), a))
 
   val zeroIsANaturalNumber = Axiom("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
@@ -343,7 +340,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       equivalenceIsTransitive, forwardImplicationFromEquivalence, reverseImplicationFromEquivalence,
       distributeImplicationOverEquivalence, distributeUniversalQuantifierOverEquivalence,
       reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
-      membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfOrderedPairInCartesianProduct, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, firstElement,
+      membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfOrderedPairInCartesianProduct, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, orderedPairIsElementOfCartesianProduct, firstElement,
       zeroIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, addingZeroIsSame, orderingIsTransitive) ++
     Seq(InfixRelationShorthand))
 

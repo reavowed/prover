@@ -5,7 +5,7 @@ import net.prover.model.entries.ExpressionDefinition.ComponentType.{StatementCom
 import net.prover.model.entries.{DisplayShorthand, StatementDefinition, TermDefinition}
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
-import net.prover.model.proof.{SubstatementExtractor, SubstitutionContext}
+import net.prover.model.proof.{Step, SubstatementExtractor, SubstitutionContext}
 import net.prover.util.Direction
 
 import scala.Ordering.Implicits._
@@ -235,22 +235,35 @@ case class Definitions(rootEntryContext: EntryContext) {
 
   lazy val conclusionRelationSimplificationInferences: Seq[ConclusionRelationSimplificationInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
+
+    def splitPremises(currentPremises: Seq[Statement], premisesToRecurseOn: Seq[(Statement, BinaryRelation)], conclusionLhs: Term, conclusionRhs: Term): (Seq[Statement], Seq[(Statement, BinaryRelation)]) = {
+      currentPremises match {
+        case initPremises :+ premise =>
+          (for {
+            premiseRelation <- definedBinaryRelations
+            (TermVariable(name, Nil), premiseRhs) <- premiseRelation.unapply(premise)
+            if conclusionLhs.requiredSubstitutions.terms.contains((name, 0)) && premiseRhs.complexity <= conclusionRhs.complexity
+          } yield (premise, premiseRelation)).headOption match {
+            case Some((premise, premiseRelation)) =>
+              splitPremises(initPremises, (premise, premiseRelation) +: premisesToRecurseOn, conclusionLhs, conclusionRhs)
+            case None =>
+              (currentPremises, premisesToRecurseOn)
+          }
+        case _ =>
+          (currentPremises, premisesToRecurseOn)
+      }
+    }
+
     for {
       inference <- rootEntryContext.allInferences
       if inference.requiredSubstitutions.hasNoApplications
       extractionOption <- extractionOptionsByInferenceId(inference.id)
       if extractionOption.premises.nonEmpty
       conclusionRelation <- definedBinaryRelations
-      (conclusionLhs, _) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
-      simplifiedPremiseIndexes = extractionOption.premises.zipWithIndex.reverse.takeWhile { case (premise, _) =>
-        definedBinaryRelations.exists { premiseRelation =>
-          premiseRelation.unapply(premise).exists { case (premiseLhs, _) =>
-            premiseLhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) && conclusionLhs.complexity > premiseLhs.complexity
-          }
-        }
-      }.map(_._2).reverse
-      if simplifiedPremiseIndexes.nonEmpty
-    } yield ConclusionRelationSimplificationInference(inference, extractionOption, simplifiedPremiseIndexes)
+      (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
+      (premisesThatMustBePresent, premisesToRecurseOn) = splitPremises(extractionOption.premises, Nil, conclusionLhs, conclusionRhs)
+      if premisesToRecurseOn.nonEmpty
+    } yield ConclusionRelationSimplificationInference(inference, extractionOption, premisesThatMustBePresent, premisesToRecurseOn, conclusionRelation)
   }
 
   lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = rootEntryContext.allInferences.collect {

@@ -55,7 +55,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           for {
             substitutions <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
             result <- termRewriteInference.rhs.applySubstitutions(substitutions.stripApplications())(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
-            _ <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutions)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
+            _ <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutions, Nil)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
           } yield InferenceRewritePath(path, result)
         }
         if (suggestions.nonEmpty)
@@ -146,7 +146,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       (sourceTemplate, targetTemplate) = direction.swapSourceAndResult(lhs, rhs)
       unwrappedStepContext = unwrappers.enhanceContext(implicitly)
       substitutions <- sourceTemplate.calculateSubstitutions(baseTerm)(unwrappedStepContext).orBadRequest("Could not find substitutions")
-      (premiseSteps, premises, _) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, substitutions)(StepProvingContext(unwrappedStepContext, implicitly))
+      (premiseSteps, premises, _) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, substitutions, Nil)(StepProvingContext(unwrappedStepContext, implicitly))
         .orBadRequest("Could not find premises")
       (removedUnwrappers, removedSource, removedPremises, removedWrapperExpression) = ReplacementMethods[TExpression].removeUnwrappers(baseTerm, premises, wrapperExpression, unwrappers)
       removedUnwrappedStepContext = removedUnwrappers.enhanceContext(implicitly)
