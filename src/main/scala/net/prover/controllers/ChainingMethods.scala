@@ -19,7 +19,7 @@ sealed trait ChainingMethods[T <: Expression] {
     substitutionContext: SubstitutionContext
   ): Option[(BinaryJoiner[T], Step)] = {
     for {
-      transitivity <- provingContext.transitivities.ofType[Transitivity[T]].find(_.statement == firstJoiner)
+      transitivity <- provingContext.transitivities.ofType[Transitivity[T]].find(_.joiner == firstJoiner)
       if firstJoiner == secondJoiner
     } yield firstJoiner -> transitivity.assertionStep(source, intermediate, target)
   }
@@ -51,7 +51,7 @@ object ChainingMethods {
     ): Option[(BinaryJoiner[Term], Step)] = {
       def bySubstitutionFromFirst = for {
         substitution <- provingContext.substitutions.find(_.relation == firstRelation)
-        reversal <- provingContext.reversals.ofType[Reversal[Term]].find(_.relation == firstRelation)
+        reversal <- provingContext.reversals.ofType[Reversal[Term]].find(_.joiner == firstRelation)
       } yield {
         secondRelation -> Step.Elided.forInference(substitution.inference)(Seq(
           reversal.assertionStep(intermediate, source),

@@ -43,8 +43,8 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(d => entryContext.termDefinitionsBySymbol.contains(d.symbol))
 
     implicit val allowableRelation: Allowable[BinaryJoiner[_ <: Expression]] = allowable(definedBinaryStatements.contains)
-    implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.relation) && isAllowed(r.inference))
-    implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.statement) && isAllowed(r.inference))
+    implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.joiner) && isAllowed(r.inference))
+    implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.joiner) && isAllowed(r.inference))
     implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowableGeneric(Generic[Substitution])
     implicit val allowableExtractionOption: Allowable[ExtractionOption] = allowableGeneric(Generic[ExtractionOption])

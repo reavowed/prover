@@ -290,6 +290,7 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val extractRightConjunct = Axiom("Extract Right Conjunct", Seq(Conjunction(φ, ψ)), ψ)
   val combineConjunction = Axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
 
+  val reverseEquivalence = Axiom("Reverse Equivalence", Seq(Equivalence(φ, ψ)), Equivalence(ψ, φ))
   val equivalenceIsTransitive = Axiom("Equivalence Is Transitive", Seq(Equivalence(φ, ψ), Equivalence(ψ, χ)), Equivalence(φ, χ))
   val forwardImplicationFromEquivalence = Axiom("Forward Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(φ, ψ))
   val reverseImplicationFromEquivalence = Axiom("Reverse Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(ψ, φ))
@@ -337,7 +338,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       specification, existence, modusPonens, modusTollens,
       addDoubleNegation, removeDoubleNegation,
       extractLeftConjunct, extractRightConjunct, combineConjunction,
-      equivalenceIsTransitive, forwardImplicationFromEquivalence, reverseImplicationFromEquivalence,
+      reverseEquivalence, equivalenceIsTransitive, forwardImplicationFromEquivalence, reverseImplicationFromEquivalence,
       distributeImplicationOverEquivalence, distributeUniversalQuantifierOverEquivalence,
       reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
       membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfOrderedPairInCartesianProduct, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, orderedPairIsElementOfCartesianProduct, firstElement,

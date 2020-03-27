@@ -141,8 +141,8 @@ case class Definitions(rootEntryContext: EntryContext) {
       relation = BinaryRelation(definition.symbol, definition.defaultValue, definition.attributes)
       expansion <- expansions.ofType[RelationExpansion].find(e => e.sourceJoiner == relation && e.resultJoiner == relation)
       substitution <- substitutions.find(_.relation == relation)
-      reversal <- reversals.ofType[Reversal[Term]].find(_.relation == relation)
-      transitivity <- transitivities.ofType[Transitivity[Term]].find(_.statement == relation)
+      reversal <- reversals.ofType[Reversal[Term]].find(_.joiner == relation)
+      transitivity <- transitivities.ofType[Transitivity[Term]].find(_.joiner == relation)
     } yield Equality(relation, expansion, substitution, reversal, transitivity)
   }
 

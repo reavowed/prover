@@ -44,6 +44,11 @@ class ProofHelperSpec extends Specification {
       val conclusion = Equals(F(add(add(a, b), add(c, d)), add(c, d)), F(add(add(a, c), add(b, d)), add(d, c)))
       testRearranging(conclusion, Nil)
     }
+
+    "rearrange inside equivalence" in {
+      val conclusion = Equivalence(Equals(add(add(a, b), add(c, d)), add(c, d)), Equals(add(add(a, c), add(b, d)), add(d, c)))
+      testRearranging(conclusion, Nil)
+    }
   }
 
   "rewriting a statement" should {
