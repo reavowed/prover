@@ -67,7 +67,7 @@ object PremiseFinder {
     import stepProvingContext._
 
     def fromPremises = allPremiseExtractions.find(_._1 == targetStatement).map(_._2)
-    def fromFact = ProofHelper.findFact(targetStatement).map(s => Seq((s, s.inference)))
+    def fromFact = ProofHelper.findFact(targetStatement).map(Seq(_))
     def fromSimplification = allPremiseSimplifications.find(_._1 == targetStatement).map(_._2)
 
     def fromDoubleSimplifiedConclusionRelations = (for {

@@ -192,7 +192,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val structuralSimplificationInferences: Seq[(Inference, Statement)] = {
     filter(definitions.structuralSimplificationInferences)
   }
-  lazy val facts: Seq[Inference] = {
+  lazy val facts: Seq[(Statement, Inference, ExtractionOption)] = {
     filter(definitions.facts)
   }
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Direction)] = {

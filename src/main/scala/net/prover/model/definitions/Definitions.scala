@@ -398,11 +398,12 @@ case class Definitions(rootEntryContext: EntryContext) {
     }
   }
 
-  lazy val facts: Seq[Inference] = {
-    rootEntryContext.allInferences.collect {
-      case inference if inference.premises.isEmpty && inference.requiredSubstitutions.isEmpty =>
-        inference
-    }
+  lazy val facts: Seq[(Statement, Inference, ExtractionOption)] = {
+    for {
+      inference <- rootEntryContext.allInferences
+      extractionOption <- extractionOptionsByInferenceId(inference.id)
+      if extractionOption.premises.isEmpty && extractionOption.requiredSubstitutions.isEmpty
+    } yield (extractionOption.conclusion, inference, extractionOption)
   }
 
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Direction)] = {

@@ -1,18 +1,19 @@
 package net.prover.model.proof
 
+import net.prover.controllers.ExtractionHelper
+import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.model._
 import net.prover.model.expressions._
 
 object ProofHelper {
-  def findFact(target: Statement)(implicit provingContext: ProvingContext, stepContext: StepContext): Option[Step.Assertion] = {
-    provingContext.entryContext.allInferences
-      .filter(_.premises.isEmpty)
-      .mapFind { inference =>
-        inference.conclusion.calculateSubstitutions(target).flatMap(_.confirmTotality)
-          .map { substitutions =>
-            Step.Assertion(target, inference.summary, Nil, substitutions)
-          }
-      }
+  def findFact(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[(Step, Inference)] = {
+    for {
+      (_, inference, extractionOption) <- stepProvingContext.provingContext.facts.find(_._1 == target)
+      assertionStep <- Step.Assertion.forInference(inference, Substitutions.empty)
+      ExtractionApplication(_, _, extractionSteps, premiseSteps, targetSteps) <- ExtractionHelper.applyExtractions(inference.conclusion, extractionOption.extractionInferences, inference, Substitutions.empty, None, Some(target), _ => (Nil, Nil)).toOption
+      if premiseSteps.isEmpty && targetSteps.isEmpty
+      finalStep <- Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference)
+    } yield (finalStep, inference)
   }
 
   def findNamingInferences(implicit entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement)] = {
