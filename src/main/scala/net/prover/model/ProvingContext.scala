@@ -44,7 +44,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
 
     implicit val allowableRelation: Allowable[BinaryJoiner[_ <: Expression]] = allowable(definedBinaryStatements.contains)
     implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.joiner) && isAllowed(r.inference))
-    implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.joiner) && isAllowed(r.inference))
+    implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.firstPremiseJoiner) && isAllowed(r.secondPremiseJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowableGeneric(Generic[Substitution])
     implicit val allowableExtractionOption: Allowable[ExtractionOption] = allowableGeneric(Generic[ExtractionOption])
@@ -159,6 +159,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val conclusionSimplificationInferences: Seq[Inference] = {
     filter(definitions.conclusionSimplificationInferences)
   }
+
   lazy val rewriteInferences: Seq[(Inference, Statement)] = {
     filter(definitions.rewriteInferences)
   }

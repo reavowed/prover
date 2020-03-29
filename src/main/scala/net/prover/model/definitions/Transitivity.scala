@@ -4,13 +4,13 @@ import net.prover.model.Inference
 import net.prover.model.expressions.Expression
 import net.prover.model.proof.{Premise, Step, StepContext, SubstitutionContext}
 
-case class Transitivity[TComponent <: Expression](joiner: BinaryJoiner[TComponent], inference: Inference.Summary) {
+case class Transitivity[TComponent <: Expression](firstPremiseJoiner: BinaryJoiner[TComponent], secondPremiseJoiner: BinaryJoiner[TComponent], resultJoiner: BinaryJoiner[TComponent], inference: Inference.Summary) {
   def assertionStep(left: TComponent, middle: TComponent, right: TComponent)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
     Step.Assertion(
-      joiner(left, right),
+      resultJoiner(left, right),
       inference,
-      Seq(Premise.Pending(joiner(left, middle)), Premise.Pending(joiner(middle, right))),
-      joiner.fillRequiredSubstitutions(inference.requiredSubstitutions, Seq(left, middle, right)))
+      Seq(Premise.Pending(firstPremiseJoiner(left, middle)), Premise.Pending(secondPremiseJoiner(middle, right))),
+      resultJoiner.fillRequiredSubstitutions(inference.requiredSubstitutions, Seq(left, middle, right)))
   }
 
   def addToRearrangement(base: TComponent, rearrangementSteps: Seq[RearrangementStep[TComponent]])(implicit stepContext: StepContext): Seq[Step] = {
@@ -20,5 +20,9 @@ case class Transitivity[TComponent <: Expression](joiner: BinaryJoiner[TComponen
         tailStep.elidedStep.toSeq :+ assertionStep(base, previousTerm, tailStep.result))
       }._2
     }
+  }
+
+  def isTransitivityForJoiner(joiner: BinaryJoiner[_]): Boolean = {
+    firstPremiseJoiner == joiner && secondPremiseJoiner == joiner && resultJoiner == joiner
   }
 }

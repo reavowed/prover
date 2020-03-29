@@ -19,5 +19,4 @@ trait BinaryJoiner[TComponent <: Expression] extends Substitutions.Lenses[TCompo
   }
 
   def reversal(inference: Inference.Summary) = Reversal[TComponent](this, inference)
-  def transitivity(inference: Inference.Summary) = Transitivity[TComponent](this, inference)
 }

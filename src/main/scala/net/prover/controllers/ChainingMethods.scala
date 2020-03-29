@@ -19,9 +19,8 @@ sealed trait ChainingMethods[T <: Expression] {
     substitutionContext: SubstitutionContext
   ): Option[(BinaryJoiner[T], Step)] = {
     for {
-      transitivity <- provingContext.transitivities.ofType[Transitivity[T]].find(_.joiner == firstJoiner)
-      if firstJoiner == secondJoiner
-    } yield firstJoiner -> transitivity.assertionStep(source, intermediate, target)
+      transitivity <- provingContext.transitivities.ofType[Transitivity[T]].find(t => t.firstPremiseJoiner == firstJoiner && t.secondPremiseJoiner == secondJoiner)
+    } yield transitivity.resultJoiner -> transitivity.assertionStep(source, intermediate, target)
   }
   def parser(implicit expressionParsingContext: ExpressionParsingContext): Parser[T]
 }

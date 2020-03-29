@@ -252,7 +252,7 @@ object TermRearranger {
       (lhs, rhs) <- joiner.unapply(targetStatement)
       expansion <- stepProvingContext.provingContext.expansions.ofType[Expansion[T]].find(e => e.sourceJoiner == equality.relation && e.resultJoiner == joiner)
       reversal <- stepProvingContext.provingContext.reversals.ofType[Reversal[T]].find(_.joiner == joiner)
-      transitivity <- stepProvingContext.provingContext.transitivities.ofType[Transitivity[T]].find(_.joiner == joiner)
+      transitivity <- stepProvingContext.provingContext.transitivities.ofType[Transitivity[T]].find(_.isTransitivityForJoiner(joiner))
       rearrangementSteps <- rearrange(lhs, rhs, Wrapper.identity, equality, expansion, reversal)
       steps = transitivity.addToRearrangement(lhs, rearrangementSteps)
       result <- Step.Elided.ifNecessary(steps, "Rearranged")

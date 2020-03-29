@@ -359,7 +359,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           expansion <- stepProvingContext.provingContext.expansions.ofType[Expansion[T]]
             .find(e => e.sourceJoiner == equality.relation && e.resultJoiner == targetJoiner)
             .orBadRequest("No applicable expansion found")
-          transitivity <- stepProvingContext.provingContext.transitivities.ofType[Transitivity[T]].find(_.joiner == targetJoiner)
+          transitivity <- stepProvingContext.provingContext.transitivities.ofType[Transitivity[T]].find(_.isTransitivityForJoiner(targetJoiner))
             .orBadRequest("No applicable transitivity found")
           (sourceTerm, destinationTerm) = direction.swapSourceAndResult(targetLhs, targetRhs)
           (rewriteStep, intermediateTerm) <- rewrite(sourceTerm, rewrites, equality, direction)(
@@ -377,7 +377,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
         implicit val spc = stepProvingContext
         for {
           equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
-          transitivity <- stepProvingContext.provingContext.transitivities.ofType[Transitivity[Term]].find(_.joiner == targetRelation)
+          transitivity <- stepProvingContext.provingContext.transitivities.ofType[Transitivity[Term]].find(_.isTransitivityForJoiner(targetRelation))
             .orBadRequest("No applicable transitivity found")
           (sourceTerm, destinationTerm) = direction.swapSourceAndResult(targetLhs, targetRhs)
           (rewriteStep, intermediateTerm) <- rewrite(sourceTerm, rewrites, equality, direction)(

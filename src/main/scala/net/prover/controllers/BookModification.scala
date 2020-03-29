@@ -19,7 +19,7 @@ trait BookModification {
   private def splitPrecedingStepsWhileTransitive(before: Seq[Step], after: Seq[Step])(implicit stepProvingContext: StepProvingContext): (Seq[Step], Seq[Step]) = {
     def getTargetLhsFromTransitivity[T <: Expression](currentRhs: Expression, followingSteps: Seq[Step], transitivity: Transitivity[T]): Option[T] = {
       followingSteps match {
-        case Step.Assertion(transitivity.joiner(lhs, `currentRhs`), transitivity.inference, _, _) +: _ =>
+        case Step.Assertion(transitivity.resultJoiner(lhs, `currentRhs`), transitivity.inference, _, _) +: _ =>
           Some(lhs)
         case _ =>
           None

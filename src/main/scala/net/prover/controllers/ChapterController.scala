@@ -5,7 +5,7 @@ import net.prover.controllers.models.ChapterProps._
 import net.prover.controllers.models.{ChapterProps, DefinitionSummary, LinkSummary, TypeDefinitionSummary}
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
-import net.prover.model.definitions.Definitions
+import net.prover.model.definitions.{Definitions, Transitivity}
 import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
@@ -378,7 +378,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   case class BinaryStatementSummary(symbol: String, template: Statement, attributes: Seq[String], isTransitive: Boolean)
   private def getBinaryRelations(provingContext: ProvingContext): Seq[BinaryStatementSummary] = {
     provingContext.definedBinaryStatements.map { relation =>
-      BinaryStatementSummary(relation.symbol, relation.template, relation.attributes, provingContext.transitivities.exists(_.joiner == relation))
+      BinaryStatementSummary(relation.symbol, relation.template, relation.attributes, provingContext.transitivities.exists(_.isTransitivityForJoiner(relation)))
     }
   }
 

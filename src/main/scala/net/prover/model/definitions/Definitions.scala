@@ -78,20 +78,25 @@ case class Definitions(rootEntryContext: EntryContext) {
 
   lazy val transitivities: Seq[Transitivity[_ <: Expression]] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
+
+    def find[T <: Expression](inference: Inference): Option[Transitivity[T]] = (for {
+      (firstPremise, secondPremise) <- inference.premises match {
+        case Seq(a, b) => Seq((a, b))
+        case _ => Nil
+      }
+      conclusionJoiner <- definedBinaryStatements.ofType[BinaryJoiner[T]]
+      (ExpressionVariable(conclusionLhs, Nil), ExpressionVariable(conclusionRhs, Nil)) <- conclusionJoiner.unapply(inference.conclusion).toSeq
+      firstPremiseJoiner <- definedBinaryStatements.ofType[BinaryJoiner[T]]
+      (ExpressionVariable(firstPremiseLhs, Nil), ExpressionVariable(firstPremiseRhs, Nil)) <- firstPremiseJoiner.unapply(firstPremise).toSeq
+      secondPremiseJoiner <- definedBinaryStatements.ofType[BinaryJoiner[T]]
+      (ExpressionVariable(secondPremiseLhs, Nil), ExpressionVariable(secondPremiseRhs, Nil)) <- secondPremiseJoiner.unapply(secondPremise).toSeq
+      if firstPremiseLhs == conclusionLhs && firstPremiseRhs == secondPremiseLhs && secondPremiseRhs == conclusionRhs
+    } yield Transitivity[T](firstPremiseJoiner, secondPremiseJoiner, conclusionJoiner, inference.summary)).headOption
+
     for {
       inference <- inferenceEntries
-      relation <- definedBinaryStatements
-      if (inference match {
-        case Inference(
-          _,
-          Seq(relation(ExpressionVariable(a, Nil), ExpressionVariable(b, Nil)), relation(ExpressionVariable(c, Nil), ExpressionVariable(d, Nil))),
-          relation(ExpressionVariable(e, Nil), ExpressionVariable(f, Nil))
-        ) if a == e && b == c && d == f =>
-          true
-        case _ =>
-          false
-      })
-    } yield relation.transitivity(inference.summary)
+      result <- find[Statement](inference) orElse find[Term](inference)
+    } yield result
   }
 
   lazy val expansions: Seq[Expansion[_ <: Expression]] = {
@@ -142,7 +147,7 @@ case class Definitions(rootEntryContext: EntryContext) {
       expansion <- expansions.ofType[RelationExpansion].find(e => e.sourceJoiner == relation && e.resultJoiner == relation)
       substitution <- substitutions.find(_.relation == relation)
       reversal <- reversals.ofType[Reversal[Term]].find(_.joiner == relation)
-      transitivity <- transitivities.ofType[Transitivity[Term]].find(_.joiner == relation)
+      transitivity <- transitivities.ofType[Transitivity[Term]].find(_.isTransitivityForJoiner(relation))
     } yield Equality(relation, expansion, substitution, reversal, transitivity)
   }
 
