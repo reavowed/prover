@@ -1,8 +1,8 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
-import net.prover.model.entries.ExpressionDefinition.ComponentType
-import net.prover.model.entries.{Axiom, TermDefinition}
+import net.prover.model.entries.ExpressionDefinition.{ComponentArgument, ComponentType}
+import net.prover.model.entries.{Axiom, StatementDefinition, TermDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{PremiseFinder, Step, StepContext}
 import org.specs2.matcher.MatchResult
@@ -18,7 +18,7 @@ class PremiseFinderSpec extends Specification {
 
     def findPremise(target: Statement, premises: Statement*)(implicit entryContext: EntryContext): Option[Seq[Step]] = {
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, premises.map(_.requiredSubstitutions).foldTogether.terms.map(_._1))
-      PremiseFinder.findPremiseStepsForStatement(target, Nil)(entryContextAndStepContextToStepProvingContext(entryContext, stepContext))
+      PremiseFinder.findPremiseStepsForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, stepContext))
     }
 
     "find premise using rewrite" in {
@@ -69,7 +69,7 @@ class PremiseFinderSpec extends Specification {
         ElementOf(Pair(Pair(a, b), Pair(c, d)), Product(Product(A, B), Product(C, D))))
     }
 
-    "find a premise by a left-hand relation simplifcation from extracting a term definition" in {
+    "find a premise by a conclusion simplification from extracting a term definition" in {
       val Negated = TermDefinition(
         "negatedZ",
         Nil,
@@ -88,7 +88,7 @@ class PremiseFinderSpec extends Specification {
         entryContextWithDefinition)
     }
 
-    "find a premise by a left-hand relation simplification from extracting a term definition" in {
+    "find a premise by a conclusion simplification from extracting a term definition with multiple premises" in {
       val IntegerDefinition = TermDefinition(
         "ℤ",
         Nil,
@@ -110,13 +110,9 @@ class PremiseFinderSpec extends Specification {
     }
 
     "chain conclusion relation simplification definitions using premise substitutions" in {
-      val ElementOfSubsetIsElementOfSet = Axiom("Element of Subset Is Element of Set", Seq(Subset(A, B), ElementOf(a, A)), ElementOf(a, B))
-      val entryContextWithDefinition = defaultEntryContext.addEntry(ElementOfSubsetIsElementOfSet)
-
       checkFindPremise(
         ElementOf(Pair(a, b), Product(A, B)),
-        ElementOf(a, A), ElementOf(b, C), Subset(C, B))(
-        entryContextWithDefinition)
+        ElementOf(a, A), ElementOf(b, C), Subset(C, B))
     }
 
     "chain conclusion relation simplification definitions using premise substitutions first" in {
@@ -137,6 +133,31 @@ class PremiseFinderSpec extends Specification {
       val entryContextWithDefinition = defaultEntryContext.addEntry(LessThanIsElementRelation)
 
       findPremise(ElementOf(a, b))(entryContextWithDefinition) must beNone
+    }
+
+    "simplify a conclusion by converting a complex defined term into a simpler one" in {
+      val Comprehension = TermDefinition(
+        "comprehension",
+        Seq("a"),
+        Seq(ComponentType.TermComponent("A", Nil), ComponentType.StatementComponent("φ", Seq(ComponentArgument("a", 0)))),
+        None,
+        Format.Explicit("{ a ∈ A | φ }", Seq("a", "A", "φ"), false, true),
+        Nil,
+        ForAll("a")(Equivalence(ElementOf($), Conjunction(ElementOf($, A), φ($)))),
+        None,
+        Nil)
+      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, Format.default("ℕ^+", Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
+      val PositiveNaturals = PositiveNaturalsDefinition()
+      val DefinitionOfPositiveNatural = Axiom("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Zero, $)))))
+
+      val entryContextWithDefinitions = defaultEntryContext
+        .addEntry(PositiveNaturalsDefinition)
+        .addEntry(DefinitionOfPositiveNatural)
+
+      checkFindPremise(
+        ElementOf(add(a, b), Naturals),
+        ElementOf(a, Naturals), ElementOf(b, PositiveNaturals))(
+        entryContextWithDefinitions)
     }
   }
 }

@@ -55,7 +55,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           for {
             substitutions <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
             result <- termRewriteInference.rhs.applySubstitutions(substitutions.stripApplications())(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
-            _ <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutions, Nil)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
+            _ <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutions)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
           } yield InferenceRewritePath(path, result)
         }
         if (suggestions.nonEmpty)
@@ -146,7 +146,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       (sourceTemplate, targetTemplate) = direction.swapSourceAndResult(lhs, rhs)
       unwrappedStepContext = unwrappers.enhanceContext(implicitly)
       substitutions <- sourceTemplate.calculateSubstitutions(baseTerm)(unwrappedStepContext).orBadRequest("Could not find substitutions")
-      (premiseSteps, premises, _) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, substitutions, Nil)(StepProvingContext(unwrappedStepContext, implicitly))
+      (premiseSteps, premises, _) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, substitutions)(StepProvingContext(unwrappedStepContext, implicitly))
         .orBadRequest("Could not find premises")
       (removedUnwrappers, removedSource, removedPremises, removedWrapperExpression) = ReplacementMethods[TExpression].removeUnwrappers(baseTerm, premises, wrapperExpression, unwrappers)
       removedUnwrappedStepContext = removedUnwrappers.enhanceContext(implicitly)
@@ -155,7 +155,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality.orBadRequest("Substitutions were not complete")
       rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions)(unwrappedStepContext).orBadRequest("Could not apply substitutions to target")
       assertionStep <- Step.Assertion.forInference(inference, finalSubstitutions)(unwrappedStepContext).orBadRequest("Could not apply substitutions to inference")
-      extractionSteps <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, finalSubstitutions, None, None, _ => (Nil, Nil))(StepProvingContext.updateStepContext(_ => unwrappedStepContext)).map(_.extractionSteps)
+      extractionSteps <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, finalSubstitutions, None, None, _ => (Nil, Nil))(implicitly, unwrappedStepContext).map(_.extractionSteps)
       elidedExtractionStep = Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference).get
       elidedStep = Step.Elided.ifNecessary(premiseSteps :+ elidedExtractionStep, inference).get
     } yield (removedSource, rewrittenTerm, Some(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
@@ -322,7 +322,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     rewrittenExpression: TExpression,
     rearrangementSteps: Seq[RearrangementStep[TExpression]],
     inferences: Seq[Option[Inference.Summary]])(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): RearrangementStep[TExpression] = {
     val (sourceTerm, targetTerm) = direction.swapSourceAndResult(sourceExpression, rewrittenExpression)
     val transitivitySteps = transitivity.addToRearrangement(sourceTerm, rearrangementSteps)
@@ -336,7 +336,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     rewrittenExpression: TExpression,
     rearrangementSteps: Seq[RearrangementStep[TExpression]],
     inferences: Seq[Option[Inference.Summary]])(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Step] = {
     val transitivitySteps = transitivity.addToRearrangement(direction.getSource(sourceExpression, rewrittenExpression), rearrangementSteps)
     EqualityRewriter.optionalRewriteElider(inferences)(transitivitySteps)

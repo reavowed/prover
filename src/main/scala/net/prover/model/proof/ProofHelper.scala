@@ -55,7 +55,7 @@ object ProofHelper {
     for {
       premiseStatements <- inference.substitutePremises(substitutions)
       conclusion <- inference.substituteConclusion(substitutions)
-      (premiseSteps, targetSteps) = PremiseFinder.findPremiseStepsOrTargets(premiseStatements, Nil)
+      (premiseSteps, targetSteps) = PremiseFinder.findPremiseStepsOrTargets(premiseStatements)
       assertionStep = Step.Assertion(
         conclusion,
         inference.summary,

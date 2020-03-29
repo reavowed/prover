@@ -75,9 +75,9 @@ case class TermDefinition(
   def apply(components: Expression*): DefinedTerm = {
     DefinedTerm(components, this)(boundVariableNames)
   }
-//  def apply(boundVariableNames: String*)(components: Expression*): DefinedTerm = {
-//    DefinedTerm(components, this)(boundVariableNames)
-//  }
+  def bind(boundVariableNames: String*)(components: Expression*): DefinedTerm = {
+    DefinedTerm(components, this)(boundVariableNames)
+  }
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[TermDefinition]
 

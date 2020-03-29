@@ -235,7 +235,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
                   Success((inference, None))
               }
               (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inferenceToApply, substitutions).orBadRequest("Could not apply substitutions to inference")
-              extractionApplication <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, intendedExtractionPremisesOption, intendedConclusionOption, PremiseFinder.findPremiseStepsOrTargets(_, Nil))
+              extractionApplication <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, intendedExtractionPremisesOption, intendedConclusionOption, PremiseFinder.findPremiseStepsOrTargets)
             } yield (extractionApplication, Seq(mainAssertion), mainPremises, mainTargets, Step.Elided.forInference(inference))
           }
         }
@@ -250,7 +250,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
                 stepProvingContext.stepContext.boundVariableLists.map(_.zipWithIndex))
               intendedConclusionOption <- getIntendedConclusion(epc)
               intendedPremiseStatementsOption <- definition.parseIntendedPremiseStatements(epc)
-              extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, intendedPremiseStatementsOption, intendedConclusionOption, PremiseFinder.findPremiseStepsOrTargets(_, Nil))
+              extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, intendedPremiseStatementsOption, intendedConclusionOption, PremiseFinder.findPremiseStepsOrTargets)
             } yield (extractionApplication, Nil, Nil, Nil, Step.Elided.forDescription("Extracted"))
           }
         }

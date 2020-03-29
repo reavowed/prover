@@ -53,9 +53,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableEquality: Allowable[Equality] = allowableGeneric(Generic[Equality])
     implicit val allowableCommutativity: Allowable[Commutativity] = allowableGeneric(Generic[Commutativity])
     implicit val allowableAssociativity: Allowable[Associativity] = allowableGeneric(Generic[Associativity])
-    implicit val allowablePremiseRelationLeftHandSimplificationInference: Allowable[PremiseRelationLeftHandSimplificationInference] = allowableGeneric(Generic[PremiseRelationLeftHandSimplificationInference])
-    implicit val allowablePremiseRelationDoubleSimplificationInference: Allowable[PremiseRelationDoubleSimplificationInference] = allowableGeneric(Generic[PremiseRelationDoubleSimplificationInference])
-    implicit val allowableConclusionRelationDoubleSimplificationInference: Allowable[ConclusionRelationSimplificationInference] = allowableGeneric(Generic[ConclusionRelationSimplificationInference])
+    implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationSimplificationInference] = allowableGeneric(Generic[PremiseRelationSimplificationInference])
+    implicit val allowablePremiseRelationRewriteInference: Allowable[PremiseRelationRewriteInference] = allowableGeneric(Generic[PremiseRelationRewriteInference])
+    implicit val allowableConclusionRelationSimplificationInference: Allowable[ConclusionRelationSimplificationInference] = allowableGeneric(Generic[ConclusionRelationSimplificationInference])
 
     implicit val allowableTermRewriteInference: Allowable[TermRewriteInference] = allowableGeneric(Generic[TermRewriteInference])
 
@@ -153,13 +153,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     filter(definitions.rearrangeableFunctions)
   }
 
-  lazy val premiseRelationLeftHandSimplificationInferences: Seq[PremiseRelationLeftHandSimplificationInference] = filter(definitions.premiseRelationLeftHandSimplificationInferences)
-  lazy val premiseRelationDoubleSimplificationInferences: Seq[PremiseRelationDoubleSimplificationInference] = filter(definitions.premiseRelationDoubleSimplificationInferences)
+  lazy val premiseRelationSimplificationInferences: Seq[PremiseRelationSimplificationInference] = filter(definitions.premiseRelationSimplificationInferences)
+  lazy val premiseRelationRewriteInferences: Seq[PremiseRelationRewriteInference] = filter(definitions.premiseRelationRewriteInferences)
   lazy val conclusionRelationSimplificationInferences: Seq[ConclusionRelationSimplificationInference] = filter(definitions.conclusionRelationSimplificationInferences)
-
-  lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = {
-    filter(definitions.premiseSimplificationInferences)
-  }
   lazy val conclusionSimplificationInferences: Seq[Inference] = {
     filter(definitions.conclusionSimplificationInferences)
   }

@@ -37,7 +37,7 @@ trait StepCreation extends BookModification {
       }
       (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inferenceToApply, substitutions)(wrappedStepProvingContext).orBadRequest("Could not apply substitutions to inference")
       ExtractionApplication(result, mainPremise, extractionSteps, extractionPremises, extractionTargets) <-
-        ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, newTargetStatementsForExtractionOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets(_, Nil))(wrappedStepProvingContext)
+        ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, newTargetStatementsForExtractionOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets)(wrappedStepProvingContext.provingContext, wrappedStepProvingContext.stepContext)
       mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = mainPremise)
       extractionStep = Step.Elided.ifNecessary(mainAssertionWithCorrectConclusion +: extractionSteps, inference).get
       assertionWithExtractionStep = Step.Elided.ifNecessary(mainPremises ++ extractionPremises :+ extractionStep, inference).get

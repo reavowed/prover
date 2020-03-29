@@ -4,7 +4,7 @@ import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
-import net.prover.model.proof.{Premise, Step, StepProvingContext}
+import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext, SubstitutionContext}
 
 import scala.util.{Failure, Success, Try}
 
@@ -23,7 +23,8 @@ object ExtractionHelper {
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
-    implicit stepProvingContext: StepProvingContext
+    implicit provingContext: ProvingContext,
+    substitutionContext: SubstitutionContext
   ): Try[ExtractionApplication] = {
     for {
       extractionSubstitutionsWithoutVariable <- extractionPremise.calculateSubstitutions(currentStatement).flatMap(_.confirmTotality).orBadRequest(s"Could not apply extraction premise for inference ${specificationInference.id}")
@@ -53,7 +54,8 @@ object ExtractionHelper {
     intendedPremisesOption: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
-    implicit stepProvingContext: StepProvingContext
+    implicit provingContext: ProvingContext,
+    substitutionContext: SubstitutionContext
   ): Try[ExtractionApplication] = {
     for {
       (extractionPremise, otherPremises) <- +:.unapply(inference.premises).filter(_._1.requiredSubstitutions.contains(inference.requiredSubstitutions)).orBadRequest(s"Inference ${inference.id} did not have an extraction premise")
@@ -99,11 +101,12 @@ object ExtractionHelper {
     intendedConclusion: Option[Statement],
     variableTracker: VariableTracker,
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
-    implicit stepProvingContext: StepProvingContext
+    implicit provingContext: ProvingContext,
+    substitutionContext: SubstitutionContext
   ): Try[ExtractionApplication] = {
     inferencesRemaining match {
       case inference +: tailInferences =>
-        stepProvingContext.provingContext.specificationInferenceOption.filter(_._1 == inference)
+        provingContext.specificationInferenceOption.filter(_._1 == inference)
           .map { case (_, singlePremise, predicateName, variableName) =>
             applySpecification(currentStatement, inference, singlePremise, predicateName, variableName, variableTracker, tailInferences, substitutions, intendedPremises, intendedConclusion, findPremiseStepsOrTargets)
           } getOrElse applySimpleExtraction(currentStatement, inference, variableTracker,  tailInferences, substitutions, intendedPremises, intendedConclusion, findPremiseStepsOrTargets)
@@ -153,7 +156,8 @@ object ExtractionHelper {
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
-    implicit stepProvingContext: StepProvingContext
+    implicit provingContext: ProvingContext,
+    substitutionContext: SubstitutionContext
   ): Try[ExtractionApplication] = {
     applyExtractions(premise, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromInference(baseInference), findPremiseStepsOrTargets).map(removeNonEndStructuralSimplifications)
   }
@@ -164,7 +168,8 @@ object ExtractionHelper {
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
-    implicit stepProvingContext: StepProvingContext
+    implicit provingContext: ProvingContext,
+    stepContext: StepContext
   ): Try[ExtractionApplication] = {
     applyExtractions(premise.statement, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext, findPremiseStepsOrTargets).map(removeNonEndStructuralSimplifications)
   }

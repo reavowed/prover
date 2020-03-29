@@ -201,79 +201,70 @@ case class Definitions(rootEntryContext: EntryContext) {
     } yield results
   }
 
-  lazy val premiseRelationLeftHandSimplificationInferences: Seq[PremiseRelationLeftHandSimplificationInference] = {
-    implicit val substitutionContext = SubstitutionContext.outsideProof
-    for {
-      inference <- rootEntryContext.allInferences
-      if inference.premises.length <= 1
-      extractionOption <- extractionOptionsByInferenceId(inference.id)
-      premise <- extractionOption.premises.single.toSeq
-      if premise.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
-      conclusionRelation <- definedBinaryRelations
-      (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
-      premiseRelation <- definedBinaryRelations
-      (premiseLhs, premiseRhs) <- premiseRelation.unapply(premise)
-      if conclusionLhs.complexity >= premiseLhs.complexity && conclusionLhs.definitionUsages.contains(premiseLhs.definitionUsages)
-      if premiseRhs.complexity > conclusionRhs.complexity && premiseRhs.definitionUsages.contains(conclusionRhs.definitionUsages)
-    } yield PremiseRelationLeftHandSimplificationInference(inference, premise, extractionOption.conclusion, extractionOption.extractionInferences)
+  def getSimpleTermVariable(term: Term): Option[String] = {
+    term.asOptionalInstanceOf[TermVariable].filter(_.arguments.isEmpty).map(_.name)
+  }
+  def isSimpleTermVariable(term: Term): Boolean = {
+    getSimpleTermVariable(term).isDefined
+  }
+  def isSimpleTermDefinition(term: Term): Boolean = {
+    term.asOptionalInstanceOf[DefinedTerm].exists(_.components.isEmpty)
   }
 
-  lazy val premiseRelationDoubleSimplificationInferences: Seq[PremiseRelationDoubleSimplificationInference] = {
+  lazy val premiseRelationSimplificationInferences: Seq[PremiseRelationSimplificationInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
       inference <- rootEntryContext.allInferences
-      if inference.premises.length <= 1
       extractionOption <- extractionOptionsByInferenceId(inference.id)
-      premise <- extractionOption.premises.single.toSeq
-      conclusionRelation <- definedBinaryRelations
-      (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
-      premiseRelation <- definedBinaryRelations
-      (premiseLhs, premiseRhs) <- premiseRelation.unapply(premise)
-      if premiseLhs.complexity > conclusionLhs.complexity && premiseRhs.complexity > conclusionRhs.complexity
-    } yield PremiseRelationDoubleSimplificationInference(inference, premise, extractionOption.conclusion, extractionOption.extractionInferences)
+      singlePremise <- extractionOption.premises.single.toSeq
+      if singlePremise.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
+      (conclusionLhs, conclusionRhs) <- definedBinaryRelations.mapFind(_.unapply(extractionOption.conclusion)).toSeq
+      (premiseLhs, premiseRhs) <- definedBinaryRelations.mapFind(_.unapply(singlePremise)).toSeq
+      if (isSimpleTermVariable(conclusionRhs) || isSimpleTermDefinition(conclusionRhs)) &&
+        (isSimpleTermVariable(premiseLhs) || isSimpleTermVariable(conclusionLhs)) &&
+        conclusionRhs.complexity < premiseRhs.complexity
+    } yield PremiseRelationSimplificationInference(inference, singlePremise, extractionOption.conclusion, extractionOption.extractionInferences)
+  }
+
+  lazy val premiseRelationRewriteInferences: Seq[PremiseRelationRewriteInference] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      inference <- rootEntryContext.allInferences
+      extractionOption <- extractionOptionsByInferenceId(inference.id)
+      (initialPremise, lastPremise) <- extractionOption.premises match {
+        case Seq(a, b) => Seq((a, b))
+        case _ => Nil
+      }
+      if extractionOption.premises.map(_.requiredSubstitutions).foldTogether.contains(extractionOption.conclusion.requiredSubstitutions) && !lastPremise.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
+      (conclusionLhs, conclusionRhs) <- definedBinaryRelations.mapFind(_.unapply(extractionOption.conclusion)).toSeq
+      (premiseLhs, premiseRhs) <- definedBinaryRelations.mapFind(_.unapply(lastPremise)).toSeq
+      if getSimpleTermVariable(premiseLhs).exists(p => getSimpleTermVariable(conclusionLhs).contains(p)) &&
+        isSimpleTermVariable(premiseRhs) &&
+        isSimpleTermVariable(conclusionRhs)
+    } yield PremiseRelationRewriteInference(inference, initialPremise, lastPremise, extractionOption.conclusion, extractionOption.extractionInferences)
+
   }
 
   lazy val conclusionRelationSimplificationInferences: Seq[ConclusionRelationSimplificationInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
-
-    def splitPremises(currentPremises: Seq[Statement], premisesToRecurseOn: Seq[(Statement, BinaryRelation)], conclusionLhs: Term, conclusionRhs: Term): (Seq[Statement], Seq[(Statement, BinaryRelation)]) = {
-      currentPremises match {
-        case initPremises :+ premise =>
-          (for {
-            premiseRelation <- definedBinaryRelations
-            (TermVariable(name, Nil), premiseRhs) <- premiseRelation.unapply(premise)
-            if conclusionLhs.requiredSubstitutions.terms.contains((name, 0)) && premiseRhs.complexity <= conclusionRhs.complexity
-          } yield (premise, premiseRelation)).headOption match {
-            case Some((premise, premiseRelation)) =>
-              splitPremises(initPremises, (premise, premiseRelation) +: premisesToRecurseOn, conclusionLhs, conclusionRhs)
-            case None =>
-              (currentPremises, premisesToRecurseOn)
-          }
-        case _ =>
-          (currentPremises, premisesToRecurseOn)
-      }
-    }
-
     for {
       inference <- rootEntryContext.allInferences
-      if inference.requiredSubstitutions.hasNoApplications
       extractionOption <- extractionOptionsByInferenceId(inference.id)
-      if extractionOption.premises.nonEmpty
-      conclusionRelation <- definedBinaryRelations
-      (conclusionLhs, conclusionRhs) <- conclusionRelation.unapply(extractionOption.conclusion).toSeq
-      (premisesThatMustBePresent, premisesToRecurseOn) = splitPremises(extractionOption.premises, Nil, conclusionLhs, conclusionRhs)
-      if premisesToRecurseOn.nonEmpty
-    } yield ConclusionRelationSimplificationInference(inference, extractionOption, premisesThatMustBePresent, premisesToRecurseOn, conclusionRelation)
+      if extractionOption.premises.nonEmpty && extractionOption.conclusion.requiredSubstitutions.contains(extractionOption.requiredSubstitutions)
+      (conclusionLhs, conclusionRhs) <- definedBinaryRelations.mapFind(_.unapply(extractionOption.conclusion)).toSeq
+      if isSimpleTermVariable(conclusionRhs) || isSimpleTermDefinition(conclusionRhs)
+      if extractionOption.premises.forall { premise =>
+        definedBinaryRelations.exists { premiseRelation =>
+          premiseRelation.unapply(premise).exists { case (premiseLhs, premiseRhs) =>
+            isSimpleTermVariable(premiseLhs) &&
+              (isSimpleTermVariable(premiseRhs) || isSimpleTermDefinition(premiseRhs)) &&
+              premiseLhs.complexity < conclusionLhs.complexity
+          }
+        }
+      }
+    } yield ConclusionRelationSimplificationInference(inference, extractionOption)
   }
 
-  lazy val premiseSimplificationInferences: Seq[(Inference, Statement)] = rootEntryContext.allInferences.collect {
-    case inference @ Inference(_, Seq(singlePremise), conclusion)
-      if singlePremise.complexity > conclusion.complexity &&
-        singlePremise.requiredSubstitutions.isEquivalentTo(inference.requiredSubstitutions) &&
-        inference.requiredSubstitutions.hasNoApplications
-    =>
-      (inference, singlePremise)
-  }
   lazy val conclusionSimplificationInferences: Seq[Inference] = rootEntryContext.allInferences.filter {
     case inference @ Inference(_, premises, conclusion)
       if premises.nonEmpty &&
