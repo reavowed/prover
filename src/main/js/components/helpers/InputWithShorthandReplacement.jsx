@@ -33,8 +33,13 @@ export default function InputWithShorthandReplacement({value, onChange, ...other
     const initialText = text.substring(0, selectionPosition);
     const finalText = text.substring(selectionPosition);
     const replacedInitialText =_.reduce(_.toPairs(context.definitionShorthands), (text, [valueToReplace, symbol]) => {
-      const regex = new RegExp('(?<=^|\\s)' + _.escapeRegExp(valueToReplace) + (requireWhitespace ? '(?=\\s$)' : '$'), 'gim');
-      return text.replace(regex, symbol);
+      const regex = new RegExp('(^|\\s)' + _.escapeRegExp(valueToReplace) + (requireWhitespace ? '(\\s$)' : '$'));
+      const match = text.match(regex);
+      if (match) {
+        return text.substring(0, match.index + match[1].length) + symbol + text.substring(match.index + match[1].length + valueToReplace.length)
+      } else {
+        return text;
+      }
     }, initialText);
     const replacedText = replacedInitialText + finalText;
     return [replacedText, replacedInitialText.length];
@@ -61,9 +66,9 @@ export default function InputWithShorthandReplacement({value, onChange, ...other
     return [initialText, finalText];
   }
   function splitLastWord(text) {
-    const match = text.match(new RegExp('(?<=^||\\s)\\w+$'));
+    const match = text.match(new RegExp('(^|\\s)(\\w+)$'));
     if (match) {
-      return [text.substring(0, match.index), match[0]];
+      return [text.substring(0, match.index + match[1].length), match[2]];
     } else {
       return [text, null];
     }
