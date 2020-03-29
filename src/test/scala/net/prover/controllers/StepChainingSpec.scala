@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import net.prover.controllers.StepChainingController.ChainedTargetDefinition
 import net.prover.controllers.models.PathData
 import net.prover.model.TestDefinitions
 import net.prover.model.TestDefinitions._
@@ -13,7 +14,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
-      controller.addTransitiveTarget(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), ψ.serialized)
+      controller.addChainedTarget(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), ChainedTargetDefinition(ψ.serialized, Equivalence.symbol, Equivalence.symbol))
 
       checkModifySteps(
         service,
@@ -29,7 +30,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
-      controller.addTransitiveTarget(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), χ.serialized)
+      controller.addChainedTarget(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), ChainedTargetDefinition(χ.serialized, Equivalence.symbol, Equivalence.symbol))
 
       checkModifySteps(
         service,

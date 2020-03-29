@@ -18,7 +18,7 @@ trait ChainingStepEditing extends BookModification {
     forRelation: (BinaryRelation, Term, Term) => Try[T])(
     implicit stepProvingContext: StepProvingContext
   ): Try[T] = {
-    stepProvingContext.provingContext.definedBinaryStatements.mapFind {
+    stepProvingContext.provingContext.definedBinaryJoiners.mapFind {
       case connective: BinaryConnective =>
         for {
           (lhs, rhs) <- connective.unapply(statement)(stepProvingContext.stepContext)

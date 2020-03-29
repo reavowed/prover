@@ -42,7 +42,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(d => entryContext.statementDefinitionsBySymbol.contains(d.symbol))
     implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(d => entryContext.termDefinitionsBySymbol.contains(d.symbol))
 
-    implicit val allowableRelation: Allowable[BinaryJoiner[_ <: Expression]] = allowable(definedBinaryStatements.contains)
+    implicit val allowableRelation: Allowable[BinaryJoiner[_ <: Expression]] = allowable(definedBinaryJoiners.contains)
     implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.joiner) && isAllowed(r.inference))
     implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.firstPremiseJoiner) && isAllowed(r.secondPremiseJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
@@ -129,14 +129,14 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     filter(definitions.specificationInferenceOption)
   }
 
-  lazy val definedBinaryStatements: Seq[BinaryJoiner[_ <: Expression]] = {
+  lazy val definedBinaryJoiners: Seq[BinaryJoiner[_ <: Expression]] = {
     Definitions.getDefinedBinaryStatements(
       entryContext.statementDefinitions,
       entryContext.displayShorthands,
       entryContext.termDefinitions)
   }
-  lazy val definedBinaryConnectives: Seq[BinaryConnective] = definedBinaryStatements.ofType[BinaryConnective]
-  lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryStatements.ofType[BinaryRelation]
+  lazy val definedBinaryConnectives: Seq[BinaryConnective] = definedBinaryJoiners.ofType[BinaryConnective]
+  lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryJoiners.ofType[BinaryRelation]
 
   lazy val reversals: Seq[Reversal[_ <: Expression]] = filter(definitions.reversals)
   lazy val transitivities: Seq[Transitivity[_ <: Expression]] = filter(definitions.transitivities)

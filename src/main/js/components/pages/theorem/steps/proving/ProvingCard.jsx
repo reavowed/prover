@@ -10,7 +10,7 @@ import {CopiableExpression} from "../../../../ExpressionComponent";
 import AddTargetByInference from "./AddTargetByInference";
 import AddTargetByPremise from "./AddTargetByPremise";
 import AddTargetManually from "./AddTargetManually";
-import AddTransitiveTarget from "./AddTransitiveTarget";
+import AddChainedTarget from "./AddChainedTarget";
 import ApplyChainingPremiseFromLeft from "./ApplyChainingPremiseFromLeft";
 import ApplyChainingPremiseFromRight from "./ApplyChainingPremiseFromRight";
 import IntroduceAll from "./IntroduceAll";
@@ -192,7 +192,7 @@ export default class ProvingCard extends React.Component {
           },
           {
             label: "Target",
-            element: AddTransitiveTarget
+            element: AddChainedTarget
           }
         ]
       }

@@ -1,6 +1,7 @@
 package net.prover.controllers
 
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
+import net.prover.controllers.StepChainingController.ChainedTargetDefinition
 import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, PossibleInference, StepDefinition}
 import net.prover.model.ExpressionParsingContext.TermVariableValidator
 import net.prover.model.definitions._
@@ -34,7 +35,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
   ): ResponseEntity[_] = {
     (for {
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      (targetSource, relation) <- stepProvingContext.provingContext.definedBinaryStatements.mapFind { relation =>
+      (targetSource, relation) <- stepProvingContext.provingContext.definedBinaryJoiners.mapFind { relation =>
         getSourceTerm(relation, step.statement, stepProvingContext.stepContext).map(_ -> relation)
       }.orBadRequest("Target step is not a binary relation")
     } yield {
@@ -283,24 +284,59 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     insertChainingAssertion(bookKey, chapterKey, theoremKey, proofIndex, stepPath, definition, Direction.Reverse)
   }
 
-  @PostMapping(value = Array("/transitiveTarget"))
-  def addTransitiveTarget(
+  @GetMapping(value = Array("/chainedTargetJoiners"))
+  def getChainedTargetJoiners(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @PathVariable("proofIndex") proofIndex: Int,
+    @PathVariable("stepPath") stepPath: PathData
+  ): ResponseEntity[_] = {
+    (for {
+      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      joiner <- stepProvingContext.provingContext.definedBinaryJoiners.find(_.unapply(step.statement)(stepProvingContext.stepContext).nonEmpty).orBadRequest("Target statement was not connective or relation")
+      fromEquality = stepProvingContext.provingContext.equalityOption.map { e => Seq((e.relation.symbol, joiner.symbol), (joiner.symbol, e.relation.symbol))}.getOrElse(Nil)
+      fromTransitivities = stepProvingContext.provingContext.transitivities.filter(_.resultJoiner == joiner).map(t => (t.firstPremiseJoiner.symbol, t.secondPremiseJoiner.symbol))
+    } yield fromEquality ++ fromTransitivities).toResponseEntity
+  }
+
+  @PostMapping(value = Array("/chainedTarget"))
+  def addChainedTarget(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData,
-    @RequestBody serializedExpression: String
+    @RequestBody definition: ChainedTargetDefinition
   ): ResponseEntity[_] = {
-    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateChainingStepsCommon {
-      def createSteps[T <: Expression : ChainingMethods](joiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
+    insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateChainingSteps {
+      def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.Target])] = {
         implicit val spc = stepProvingContext
         for {
-          intermediateExpression <- ChainingMethods.parser.parseFromString(serializedExpression, "target expression").recoverWithBadRequest
-          firstStep = ChainingStepDefinition.forTarget(targetLhs, intermediateExpression, joiner)
-          secondStep = ChainingStepDefinition.forTarget(intermediateExpression, targetRhs, joiner)
+          intermediateStatement <- Statement.parser.parseFromString(definition.serializedExpression, "target expression").recoverWithBadRequest
+          leftJoiner <- spc.provingContext.definedBinaryConnectives.find(_.symbol == definition.leftJoiner).orBadRequest(s"Could not find connective with symbol ${definition.leftJoiner}")
+          rightJoiner <- spc.provingContext.definedBinaryConnectives.find(_.symbol == definition.rightJoiner).orBadRequest(s"Could not find connective with symbol ${definition.rightJoiner}")
+          firstStep = ChainingStepDefinition.forTarget(targetLhs, intermediateStatement, leftJoiner)
+          secondStep = ChainingStepDefinition.forTarget(intermediateStatement, targetRhs, rightJoiner)
+        } yield (firstStep, secondStep, Nil)
+      }
+      def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.Target])] = {
+        implicit val spc = stepProvingContext
+        for {
+          intermediateTerm <- Term.parser.parseFromString(definition.serializedExpression, "target expression").recoverWithBadRequest
+          leftJoiner <- spc.provingContext.definedBinaryRelations.find(_.symbol == definition.leftJoiner).orBadRequest(s"Could not find relation with symbol ${definition.leftJoiner}")
+          rightJoiner <- spc.provingContext.definedBinaryRelations.find(_.symbol == definition.rightJoiner).orBadRequest(s"Could not find relation with symbol ${definition.rightJoiner}")
+          firstStep = ChainingStepDefinition.forTarget(targetLhs, intermediateTerm, leftJoiner)
+          secondStep = ChainingStepDefinition.forTarget(intermediateTerm, targetRhs, rightJoiner)
         } yield (firstStep, secondStep, Nil)
       }
     })
   }
+}
+
+object StepChainingController {
+  case class ChainedTargetDefinition(
+    serializedExpression: String,
+    leftJoiner: String,
+    rightJoiner: String)
 }
