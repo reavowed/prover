@@ -19,7 +19,7 @@ function Premise({statement, index}) {
 export class Theorem extends React.Component {
   constructor(props) {
     super(props);
-    this.parser = new Parser(props.definitions, props.typeDefinitions);
+    this.parser = new Parser(props.definitions, props.typeDefinitions, props.standalonePropertyDefinitions);
     this.entryContext = EntryContext.create(this.parser, props.definitions, props.typeDefinitions, props.definitionShorthands, props.displayShorthands, props.inferences, props.binaryRelations);
 
     this.state = {

@@ -1,7 +1,11 @@
 import path from "path";
 import React, {useContext} from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import {Parser} from "../../../Parser";
 import InputWithShorthandReplacement from "../../helpers/InputWithShorthandReplacement";
 import ObjectInputWithSimpleForm from "../../helpers/ObjectInputWithSimpleForm";
+import SimpleControlGroup from "../../helpers/SimpleControlGroup";
 import ChapterContext from "./ChapterContext";
 
 const values = [
@@ -13,10 +17,10 @@ const values = [
   {key: "definition", title: "Definition", inputType: InputWithShorthandReplacement}
 ];
 
-export default function TypeDefinitionInput({onCancel}) {
+export default function StandalonePropertyDefinitionInput({onCancel}) {
   const context = useContext(ChapterContext);
-  const saveType = (propertyToAdd) => {
-    return context.updateChapter(path.join(context.url, "typeDefinitions"), {method: "POST", body: propertyToAdd});
+  const saveProperty = (typeToAdd) => {
+    return context.updateChapter(path.join(context.url, "standalonePropertyDefinitions"), {method: "POST", body: typeToAdd});
   };
-  return <ObjectInputWithSimpleForm description="Type Definition" values={values} save={saveType} onCancel={onCancel} />;
+  return <ObjectInputWithSimpleForm description="Standalone Property Definition" values={values} save={saveProperty} onCancel={onCancel} />;
 }

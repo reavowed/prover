@@ -9,9 +9,17 @@ declare global {
 }
 
 export interface PropertyDefinition {
-  symbol: String,
-  qualifiedSymbol: String,
-  name: String
+  symbol: String;
+  qualifiedSymbol: String;
+  name: String;
+}
+
+export interface StandalonePropertyDefinition {
+  symbol: String;
+  qualifiedSymbol: String;
+  name: String;
+  numberOfComponents: number;
+  componentFormatString: string;
 }
 
 export interface ExpressionDefinition {
@@ -29,7 +37,7 @@ export interface TypeDefinition {
   name: string;
   numberOfComponents: number;
   componentFormatString: string;
-  properties: PropertyDefinition[]
+  properties: PropertyDefinition[];
 }
 
 export class ExpressionMatchResult {
@@ -100,7 +108,7 @@ export function matchTemplate(template: Expression, expression: Expression, path
   return undefined;
 }
 
-export type Expression = TextBasedExpression | FormatBasedExpression | TypeExpression | PropertyExpression
+export type Expression = TextBasedExpression | FormatBasedExpression | TypeExpression | PropertyExpression | StandalonePropertyExpression
 
 interface TextBasedExpression {
   serialize(): string
@@ -226,6 +234,22 @@ export class TypeExpression {
 
 export class PropertyExpression {
   constructor(public typeDefinition: TypeDefinition, public definition: PropertyDefinition, public term: Expression, public otherComponents: Expression[]) {}
+  serialize(): string {
+    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
+  }
+  serializeNicely(boundVariableLists: string[][]): string {
+    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.otherComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+  }
+  setBoundVariableName(): Expression {
+    throw "Cannot set bound variable name in property expression"
+  }
+  replaceAtPath(_path: number[], _expression: Expression): Expression {
+    throw "Cannot replace in property expression"
+  }
+}
+
+export class StandalonePropertyExpression {
+  constructor(public definition: StandalonePropertyDefinition, public term: Expression, public otherComponents: Expression[]) {}
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
   }

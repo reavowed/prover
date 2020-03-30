@@ -5,7 +5,7 @@ import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.entries.ExpressionDefinition.ComponentType.TermComponent
 import net.prover.model.expressions.Statement
 
-case class PropertyDefinition(
+case class PropertyDefinitionOnType(
     symbol: String,
     parentType: TypeDefinition,
     defaultTermName: String,
@@ -42,8 +42,8 @@ case class PropertyDefinition(
     oldDefinition: ExpressionDefinition,
     newDefinition: ExpressionDefinition,
     entryContext: EntryContext
-  ): PropertyDefinition = {
-    PropertyDefinition(
+  ): PropertyDefinitionOnType = {
+    PropertyDefinitionOnType(
       symbol,
       entryContext.typeDefinitions.find(_.symbol == parentType.symbol).get,
       defaultTermName,
@@ -53,18 +53,17 @@ case class PropertyDefinition(
   }
 }
 
-object PropertyDefinition extends ChapterEntryParser {
+object PropertyDefinitionOnType extends ChapterEntryParser {
   override def name: String = "property"
   override def parser(implicit context: EntryContext): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
       parentTypeName <- Parser.required("on", Parser.singleWord)
       parentType = context.typeDefinitions.find(_.name == parentTypeName).getOrElse(throw new Exception(s"Unrecognised type '$parentTypeName'"))
-      defaultSymbol <- Parser.singleWord
+      defaultTermName <- Parser.singleWord
       parentComponentTypes <- parentType.childComponentTypesParser
       explicitName <- Parser.optional("name", Parser.allInParens)
-      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultSymbol +: parentComponentTypes.ofType[TermComponent].map(_.name))).inParens)
-    } yield PropertyDefinition(symbol, parentType, defaultSymbol, parentComponentTypes, explicitName, definingStatement)
+      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultTermName +: parentComponentTypes.ofType[TermComponent].map(_.name))).inParens)
+    } yield PropertyDefinitionOnType(symbol, parentType, defaultTermName, parentComponentTypes, explicitName, definingStatement)
   }
-
 }

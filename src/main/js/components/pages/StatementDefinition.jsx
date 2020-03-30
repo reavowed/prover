@@ -4,8 +4,8 @@ import EntryContext from "../EntryContext";
 import {CopiableExpression} from "../ExpressionComponent";
 import {ExpressionDefinition} from "../ExpressionDefinition";
 
-export function StatementDefinition({definition: definitionJson, definitions, typeDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, ...otherProps}) {
-  const parser = new Parser(definitions, typeDefinitions);
+export function StatementDefinition({definition: definitionJson, definitions, typeDefinitions, standalonePropertyDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, ...otherProps}) {
+  const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
   const definition = parser.parseStatementDefinition(definitionJson);
   const entryContext = EntryContext.create(parser, definitions, typeDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
 

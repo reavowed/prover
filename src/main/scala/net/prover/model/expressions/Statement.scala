@@ -1,6 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model._
+import net.prover.model.entries.{StandalonePropertyDefinition, TypeDefinition}
 
 trait Statement extends Expression with TypedExpression[Statement]
 
@@ -15,7 +16,7 @@ object Statement {
           }
         } yield StatementVariable(name, arguments)
       case "is" =>
-        typeStatementParser
+        typeOrPropertyStatementParser
       case context.entryContext.RecognisedStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
       case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
@@ -25,14 +26,21 @@ object Statement {
     }
   }
 
-  def typeStatementParser(implicit context: ExpressionParsingContext): Parser[Statement] = {
+  def typeOrPropertyStatementParser(implicit context: ExpressionParsingContext): Parser[Statement] = {
     for {
       term <- Term.parser
-      typeDefinitionSymbol <- Parser.singleWord
-      typeDefinition = context.entryContext.typeDefinitions.find(_.symbol == typeDefinitionSymbol).getOrElse(throw new Exception(s"Unrecognised type '$typeDefinitionSymbol'"))
+      symbol <- Parser.singleWord
+      result <- context.entryContext.typeDefinitions.find(_.symbol == symbol).map(typeStatementParser(term, _)) orElse
+        context.entryContext.standalonePropertyDefinitions.find(_.symbol == symbol).map(propertyStatementParser(term, _)) getOrElse
+        (throw new Exception(s"Unrecognised type or property'$symbol'"))
+    } yield result
+  }
+
+  def typeStatementParser(term: Term, typeDefinition: TypeDefinition)(implicit context: ExpressionParsingContext): Parser[Statement] = {
+    for {
       otherComponents <- typeDefinition.otherComponentTypes.map(_.expressionParser).traverseParser
-      availableProperties = context.entryContext.propertyDefinitionsByType.get(typeDefinitionSymbol).toSeq.flatten
-      properties <- Parser.optional("with", Parser.allInParens.map(_.splitByWhitespace().map(s => availableProperties.find(_.symbol == s).getOrElse(throw new Exception(s"Unrecognised property '$s' for '$typeDefinitionSymbol'")))), Nil)
+      availableProperties = context.entryContext.propertyDefinitionsByType.get(typeDefinition.symbol).toSeq.flatten
+      properties <- Parser.optional("with", Parser.allInParens.map(_.splitByWhitespace().map(s => availableProperties.find(_.symbol == s).getOrElse(throw new Exception(s"Unrecognised property '$s' for '${typeDefinition.symbol}'")))), Nil)
     } yield {
       val baseStatement = DefinedStatement(term +: otherComponents, typeDefinition.statementDefinition)(Nil)
       properties.foldLeft(baseStatement) { (statement, property) =>
@@ -40,6 +48,14 @@ object Statement {
         val propertyStatement = DefinedStatement(term +: otherComponents, property.statementDefinition)(Nil)
         DefinedStatement(Seq(statement, propertyStatement), conjunctionDefinition)(Nil)
       }
+    }
+  }
+
+  def propertyStatementParser(term: Term, standalonePropertyDefinition: StandalonePropertyDefinition)(implicit context: ExpressionParsingContext): Parser[Statement] = {
+    for {
+      otherComponents <- standalonePropertyDefinition.otherComponentTypes.map(_.expressionParser).traverseParser
+    } yield {
+      DefinedStatement(term +: otherComponents, standalonePropertyDefinition.statementDefinition)(Nil)
     }
   }
 

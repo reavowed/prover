@@ -6,8 +6,8 @@ import {CopiableExpression} from "../ExpressionComponent";
 import {ExpressionDefinition} from "../ExpressionDefinition";
 import {ResultWithPremises} from "../ResultWithPremises";
 
-export function TermDefinition({definition: definitionJson, definitions, typeDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, ...otherProps}) {
-  const parser = new Parser(definitions, typeDefinitions);
+export function TermDefinition({definition: definitionJson, definitions, typeDefinitions, standalonePropertyDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, ...otherProps}) {
+  const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
   const definition = parser.parseTermDefinition(definitionJson);
   const entryContext = EntryContext.create(parser, definitions, typeDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
 

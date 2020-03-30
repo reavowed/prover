@@ -10,8 +10,8 @@ import {NavLinks} from "./components/NavLinks";
 import {Usages} from "./components/Usages";
 import {Page} from "./Page";
 
-export function TypeDefinition({definition: definitionJson, definitions, typeDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, bookLink, chapterLink, url, previous, next, usages}) {
-  const parser = new Parser(definitions, typeDefinitions);
+export function TypeDefinition({definition: definitionJson, definitions, typeDefinitions, standalonePropertyDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, bookLink, chapterLink, url, previous, next, usages}) {
+  const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
   const definition = parser.parseTypeDefinition(definitionJson);
   const entryContext = EntryContext.create(parser, definitions, typeDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
 

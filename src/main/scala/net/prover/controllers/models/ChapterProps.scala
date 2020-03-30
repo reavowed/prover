@@ -14,6 +14,7 @@ case class ChapterProps(
   next: Option[LinkSummary],
   definitions: Map[String, DefinitionSummary],
   typeDefinitions: Map[String, TypeDefinitionSummary],
+  standalonePropertyDefinitions: Map[String, StandalonePropertyDefinitionSummary],
   displayShorthands: Seq[DisplayShorthand],
   definitionShorthands: Map[String, String])
 
@@ -41,6 +42,9 @@ object ChapterProps {
   }
   case class PropertyDefinitionPropsForChapter(name: String, url: String, defaultTermName: String, parentTypeSymbol: String, parentTypeComponents: Seq[String], definingStatement: Statement) extends EntryProps {
     override val `type`: String = "propertyDefinition"
+  }
+  case class StandalonePropertyDefinitionPropsForChapter(name: String, url: String, defaultTermName: String, components: Seq[String], definingStatement: Statement) extends EntryProps {
+    override val `type`: String = "standalonePropertyDefinition"
   }
   case class CommentPropsForChapter(text: String, url: String) extends EntryProps {
     override val `type`: String = "comment"

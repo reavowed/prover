@@ -22,7 +22,8 @@ export class Chapter extends React.Component {
       url: props.url,
       definitions: props.definitions,
       typeDefinitions: props.typeDefinitions,
-      entries: new Parser(props.definitions, props.typeDefinitions).parseEntries(props.entries),
+      standalonePropertyDefinitions: props.standalonePropertyDefinitions,
+      entries: new Parser(props.definitions, props.typeDefinitions, props.standalonePropertyDefinitions).parseEntries(props.entries),
       editing: false
     };
   }
@@ -51,7 +52,8 @@ export class Chapter extends React.Component {
           url: newProps.url,
           definitions: newProps.definitions,
           typeDefinitions: newProps.typeDefinitions,
-          entries: new Parser(newProps.definitions, newProps.typeDefinitions).parseEntries(newProps.entries)
+          standalonePropertyDefinitions: newProps.standalonePropertyDefinitions,
+          entries: new Parser(newProps.definitions, newProps.typeDefinitions, newProps.standalonePropertyDefinitions).parseEntries(newProps.entries)
         });
         if (window.location.pathname !== newProps.url) {
           history.replaceState({}, "", newProps.url);
@@ -75,10 +77,10 @@ export class Chapter extends React.Component {
 
   render() {
     const {bookLink, summary, previous, next, displayShorthands, definitionShorthands} = this.props;
-    const {title, url, entries, editing, definitions, typeDefinitions} = this.state;
+    const {title, url, entries, editing, definitions, typeDefinitions, standalonePropertyDefinitions} = this.state;
 
     const context = {updateChapter: this.updateChapter, url, editing};
-    const parser = new Parser(definitions, typeDefinitions);
+    const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
     const entryContext = EntryContext.create(parser, definitions, typeDefinitions, definitionShorthands, displayShorthands);
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />

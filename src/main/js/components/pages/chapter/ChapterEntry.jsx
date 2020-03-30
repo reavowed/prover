@@ -49,6 +49,12 @@ export default function ChapterEntry({entry}) {
                                   key={entry.url}>
         <Capitalized>{typeDefinition.article}</Capitalized> {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
       </ChapterEntryWrapper>;
+    case "standalonePropertyDefinition":
+      return <ChapterEntryWrapper title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name}</span></>}
+                                  url={entry.url}
+                                  key={entry.url}>
+        {entry.defaultTermName} is {entry.name} {entry.components.length > 0 && formatHtml(entry.componentFormatString, s => replacePlaceholders(s, entry.components))} if <CopiableExpression expression={entry.definingStatement}/>.
+      </ChapterEntryWrapper>;
     case "comment":
       const chapterContext = useContext(ChapterContext);
       return <p key={entry.url}>

@@ -9,7 +9,8 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
   lazy val statementDefinitions: Seq[StatementDefinition] = availableEntries.mapCollect(EntryContext.getStatementDefinitionFromEntry)
   lazy val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
   lazy val typeDefinitions: Seq[TypeDefinition] = availableEntries.ofType[TypeDefinition]
-  lazy val propertyDefinitionsByType: Map[String, Seq[PropertyDefinition]] = availableEntries.ofType[PropertyDefinition].groupBy(_.parentType.symbol)
+  lazy val propertyDefinitionsByType: Map[String, Seq[PropertyDefinitionOnType]] = availableEntries.ofType[PropertyDefinitionOnType].groupBy(_.parentType.symbol)
+  lazy val standalonePropertyDefinitions: Seq[StandalonePropertyDefinition] = availableEntries.ofType[StandalonePropertyDefinition]
   lazy val displayShorthands: Seq[DisplayShorthand] = availableEntries.ofType[DisplayShorthand]
   lazy val writingShorthands: Seq[WritingShorthand] = availableEntries.ofType[WritingShorthand]
 
@@ -67,7 +68,8 @@ object EntryContext {
   def getStatementDefinitionFromEntry(entry: ChapterEntry): Option[StatementDefinition] = entry match {
     case statementDefinition: StatementDefinition => Some(statementDefinition)
     case typeDefinition: TypeDefinition => Some(typeDefinition.statementDefinition)
-    case propertyDefinition: PropertyDefinition => Some(propertyDefinition.statementDefinition)
+    case propertyDefinition: PropertyDefinitionOnType => Some(propertyDefinition.statementDefinition)
+    case standalonePropertyDefinition: StandalonePropertyDefinition => Some(standalonePropertyDefinition.statementDefinition)
     case _ => None
   }
 

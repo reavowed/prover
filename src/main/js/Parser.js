@@ -5,7 +5,7 @@ import {
   FunctionParameter,
   PropertyExpression,
   TypeExpression,
-  tokenize,
+  tokenize, StandalonePropertyExpression,
 } from "./models/Expression";
 import {
   AssertionStep,
@@ -29,9 +29,10 @@ function serializeReference(reference) {
 }
 
 export class Parser {
-  constructor( definitions, typeDefinitions) {
+  constructor(definitions, typeDefinitions, standalonePropertyDefinitions) {
     this.definitions = definitions;
     this.typeDefinitions = typeDefinitions;
+    this.standalonePropertyDefinitions = standalonePropertyDefinitions;
   }
   parseExpression = (json) => {
     const self = this;
@@ -64,6 +65,7 @@ export class Parser {
         const expressionDefinition = self.definitions[firstToken];
         const typeDefinition = self.typeDefinitions[firstToken];
         const parentTypeDefinition = _.find(self.typeDefinitions, d => _.some(d.properties, p => p.qualifiedSymbol === firstToken));
+        const standalonePropertyDefinition = self.standalonePropertyDefinitions[firstToken];
         if (expressionDefinition) {
           const boundVariables = tokensAfterFirst.slice(0, expressionDefinition.numberOfBoundVariables);
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterFirst.slice(expressionDefinition.numberOfBoundVariables), expressionDefinition.numberOfComponents);
@@ -85,6 +87,10 @@ export class Parser {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, parentTypeDefinition.numberOfComponents);
           return [new PropertyExpression(parentTypeDefinition, _.find(parentTypeDefinition.properties, p => p.qualifiedSymbol === firstToken), term, components), tokensAfterComponents];
+        } else if (standalonePropertyDefinition) {
+          const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, standalonePropertyDefinition.numberOfComponents);
+          return [new StandalonePropertyExpression(standalonePropertyDefinition, term, components), tokensAfterComponents];
         } else if (firstToken === "with") {
           const [variableArguments, [name, ...remainingTokens]] = parseArgumentsFromTokens(tokensAfterFirst.slice(1));
           return [new Variable(name, variableArguments), remainingTokens];
