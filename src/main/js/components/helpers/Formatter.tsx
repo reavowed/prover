@@ -27,7 +27,10 @@ export function formatHtmlWithoutWrapping(text: String, replacementFunction?: ((
   const regex = /([^\s])([_^])([^\s(){}]+)/g;
   const getMatches = (s: String) => {
     const matches = [...(s as any).matchAll(regex)];
-    _.forEach(matches, m => m.index = m.index + m[1].length);
+    _.forEach(matches, m => {
+      m.index = m.index + m[1].length;
+      m[0] = m[0].substring(m[1].length);
+    });
     return matches;
   };
   return formatWithReplacement(text, getMatches, replacementFunction, match => {
