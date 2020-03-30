@@ -185,6 +185,20 @@ conclusion ↔ ∧ φ ψ ∧ φ χ
   prove ↔ ∧ φ ψ ∧ φ χ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ φ ψ, ∧ φ χ) () 0 1
 }
 
+comment And removing them.
+
+theorem Remove Known Conjunct From Equivalence
+premise ↔ φ ∧ ψ χ
+premise χ
+conclusion ↔ φ ψ
+{
+  elided 2ca7ed37a3468a129caccc521004ea96152f4ea4af73188ddaf790e90172876e {
+    prove → ψ χ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (χ, ψ) () p1
+    prove ↔ ∧ ψ χ ψ 2ca7ed37a3468a129caccc521004ea96152f4ea4af73188ddaf790e90172876e (ψ, χ) () 0.0
+  }
+  prove ↔ φ ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (φ, ∧ ψ χ, ψ) () p0 0
+}
+
 comment Adding extra disjunctions to equivalences.
 
 theorem Add Left Disjunction to Equivalence

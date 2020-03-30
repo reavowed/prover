@@ -1326,6 +1326,57 @@ conclusion ∈ negatedZ a diff ℤ singleton 0_ℤ
   } 0
 }
 
+theorem Positive Integers Are a Subset of the Non-Zero Integers
+conclusion ⊆ ℤ^+ diff ℤ singleton 0_ℤ
+{
+  take x {
+    assume ∈ $0 ℤ^+ {
+      elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+        prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+        prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 ℤ^+ ∧ ∈ $$0 ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) ($0) 0.0.0.0
+        prove → ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.1
+        prove ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.2 0.0a
+        prove ∈ orderedPair 0_ℤ $0 <_ℤ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℤ, ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.3
+      }
+      elided d36266d0d00106d6cbd43c082c96ba9cfe11c027625896d5e4a21565e2d79308 {
+        elided 521c3ad94b31a415d12bcc81f4099195a2552f87cccfb90a9dc04f1873a7bfc9 {
+          prove ∧ relation <_ℤ ℤ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <_ℤ ∈ orderedPair apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 <_ℕ 521c3ad94b31a415d12bcc81f4099195a2552f87cccfb90a9dc04f1873a7bfc9 () ()
+          prove relation <_ℤ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (relation <_ℤ ℤ, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <_ℤ ∈ orderedPair apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 <_ℕ) () 0.0.1.0.0
+        }
+        prove irreflexiveRelation <_ℤ ℤ 1972a9f52e38a11a20bfe8b7d9923625252ddd657e3c2fddb89ab2075a608d1d () ()
+        prove ∧ relation <_ℤ ℤ irreflexiveRelation <_ℤ ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation <_ℤ ℤ, irreflexiveRelation <_ℤ ℤ) () 0.0.1.0 0.0.1.1
+        elided d36266d0d00106d6cbd43c082c96ba9cfe11c027625896d5e4a21565e2d79308 {
+          prove ¬ = 0_ℤ $0 d36266d0d00106d6cbd43c082c96ba9cfe11c027625896d5e4a21565e2d79308 () (<_ℤ, ℤ, 0_ℤ, $0) 0.0.1.2 0.0.0
+          prove ¬ = $0 0_ℤ 35c4b3bdb5afef55d4ceaab6eddde750bce304bc30ca1a61c5d38cc997fb0d65 () (0_ℤ, $0) 0.0.1.3.0
+        }
+      }
+      elided 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 {
+        prove ∀ x ↔ ∈ $0 singleton 0_ℤ = $0 0_ℤ 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (0_ℤ)
+        prove ↔ ∈ $0 singleton 0_ℤ = $0 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 singleton 0_ℤ = $$0 0_ℤ) ($0) 0.0.2.0
+        prove → ∈ $0 singleton 0_ℤ = $0 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 singleton 0_ℤ, = $0 0_ℤ) () 0.0.2.1
+        prove ¬ ∈ $0 singleton 0_ℤ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ $0 singleton 0_ℤ, = $0 0_ℤ) () 0.0.2.2 0.0.1
+      }
+      elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+        elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+          prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+          prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 ℤ^+ ∧ ∈ $$0 ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) ($0) 0.0.3.0.0
+          prove → ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.3.0.1
+          prove ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.3.0.2 0.0a
+          prove ∈ $0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℤ, ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.3.0.3
+        }
+        prove ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 ℤ, ¬ ∈ $0 singleton 0_ℤ) () 0.0.3.0 0.0.2
+        elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+          prove ∀ a ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton 0_ℤ)
+          prove ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 diff ℤ singleton 0_ℤ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton 0_ℤ) ($0) 0.0.3.2.0
+          prove → ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ ∈ $0 diff ℤ singleton 0_ℤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 diff ℤ singleton 0_ℤ, ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ) () 0.0.3.2.1
+          prove ∈ $0 diff ℤ singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ, ∈ $0 diff ℤ singleton 0_ℤ) () 0.0.3.2.2 0.0.3.1
+        }
+      }
+    }
+  }
+  prove ⊆ ℤ^+ diff ℤ singleton 0_ℤ 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (ℤ^+, diff ℤ singleton 0_ℤ) 0
+}
+
 comment Now we can show that every rational can be formed as the ratio of two integers, where the denominator is positive.
 
 theorem Rational Is Equivalence Class with Positive Denominator
@@ -1346,29 +1397,29 @@ conclusion ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = a equivalenceClass orde
       prove ⊕ ∈ orderedPair 0_ℤ second $0 <_ℤ ∈ orderedPair second $0 0_ℤ <_ℤ de80108f8781582c8d63fb870a34d818f386da69ed005b3ec1d40bf2054f1a70 () (second $0) 2.0.0
     }
     assume ∈ orderedPair 0_ℤ second $0 <_ℤ {
-      elided 0fc82dbc861b7356d9b7023cc41b30952a631ba42a05ec20f3323d40c0c46d6b {
+      elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
+        prove = $0 orderedPair first $0 second $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($0, ℤ, diff ℤ singleton 0_ℤ) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        prove = a equivalenceClass orderedPair first $0 second $0 ~_ℚ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= a equivalenceClass $$0 ~_ℚ) ($0, orderedPair first $0 second $0) 2.1.0.0 2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      }
+      elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
         prove ∈ second $0 diff ℤ singleton 0_ℤ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($0, ℤ, diff ℤ singleton 0_ℤ) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
         elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
           prove ∀ a ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton 0_ℤ)
-          prove ↔ ∈ second $0 diff ℤ singleton 0_ℤ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 diff ℤ singleton 0_ℤ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton 0_ℤ) (second $0) 2.1.0.1.0
-          prove → ∈ second $0 diff ℤ singleton 0_ℤ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ second $0 diff ℤ singleton 0_ℤ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ) () 2.1.0.1.1
-          prove ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ second $0 diff ℤ singleton 0_ℤ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ) () 2.1.0.1.2 2.1.0.0
-          prove ∈ second $0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ second $0 ℤ, ¬ ∈ second $0 singleton 0_ℤ) () 2.1.0.1.3
+          prove ↔ ∈ second $0 diff ℤ singleton 0_ℤ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 diff ℤ singleton 0_ℤ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton 0_ℤ) (second $0) 2.1.1.1.0
+          prove → ∈ second $0 diff ℤ singleton 0_ℤ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ second $0 diff ℤ singleton 0_ℤ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ) () 2.1.1.1.1
+          prove ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ second $0 diff ℤ singleton 0_ℤ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ) () 2.1.1.1.2 2.1.1.0
+          prove ∈ second $0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ second $0 ℤ, ¬ ∈ second $0 singleton 0_ℤ) () 2.1.1.1.3
         }
-        elided 0fc82dbc861b7356d9b7023cc41b30952a631ba42a05ec20f3323d40c0c46d6b {
-          prove ∀ a → ∈ $0 ℤ ↔ ∈ $0 ℤ^+ ∈ orderedPair 0_ℤ $0 <_ℤ 0fc82dbc861b7356d9b7023cc41b30952a631ba42a05ec20f3323d40c0c46d6b () ()
-          prove → ∈ second $0 ℤ ↔ ∈ second $0 ℤ^+ ∈ orderedPair 0_ℤ second $0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 ℤ ↔ ∈ $$0 ℤ^+ ∈ orderedPair 0_ℤ $$0 <_ℤ) (second $0) 2.1.0.2.0
-          prove ↔ ∈ second $0 ℤ^+ ∈ orderedPair 0_ℤ second $0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ second $0 ℤ, ↔ ∈ second $0 ℤ^+ ∈ orderedPair 0_ℤ second $0 <_ℤ) () 2.1.0.2.1 2.1.0.1
-          prove → ∈ orderedPair 0_ℤ second $0 <_ℤ ∈ second $0 ℤ^+ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ second $0 ℤ^+, ∈ orderedPair 0_ℤ second $0 <_ℤ) () 2.1.0.2.2
-          prove ∈ second $0 ℤ^+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair 0_ℤ second $0 <_ℤ, ∈ second $0 ℤ^+) () 2.1.0.2.3 2.1a
+        prove ∧ ∈ second $0 ℤ ∈ orderedPair 0_ℤ second $0 <_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ second $0 ℤ, ∈ orderedPair 0_ℤ second $0 <_ℤ) () 2.1.1.1 2.1a
+        elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+          prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+          prove ↔ ∈ second $0 ℤ^+ ∧ ∈ second $0 ℤ ∈ orderedPair 0_ℤ second $0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 ℤ^+ ∧ ∈ $$0 ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) (second $0) 2.1.1.3.0
+          prove → ∧ ∈ second $0 ℤ ∈ orderedPair 0_ℤ second $0 <_ℤ ∈ second $0 ℤ^+ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ second $0 ℤ^+, ∧ ∈ second $0 ℤ ∈ orderedPair 0_ℤ second $0 <_ℤ) () 2.1.1.3.1
+          prove ∈ second $0 ℤ^+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ second $0 ℤ ∈ orderedPair 0_ℤ second $0 <_ℤ, ∈ second $0 ℤ^+) () 2.1.1.3.2 2.1.1.2
         }
-      }
-      elided 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c {
-        prove = $0 orderedPair first $0 second $0 754cf5cc61442d27f1eec1f7f7d7bebb365558976b52cef6993830180276393c () ($0, ℤ, diff ℤ singleton 0_ℤ) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-        prove = a equivalenceClass orderedPair first $0 second $0 ~_ℚ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= a equivalenceClass $$0 ~_ℚ) ($0, orderedPair first $0 second $0) 2.1.1.0 2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
       }
       elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-        prove ∧ ∈ second $0 ℤ^+ = a equivalenceClass orderedPair first $0 second $0 ~_ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ second $0 ℤ^+, = a equivalenceClass orderedPair first $0 second $0 ~_ℚ) () 2.1.0 2.1.1
+        prove ∧ ∈ second $0 ℤ^+ = a equivalenceClass orderedPair first $0 second $0 ~_ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ second $0 ℤ^+, = a equivalenceClass orderedPair first $0 second $0 ~_ℚ) () 2.1.1 2.1.0
         prove ∃ y ∧ ∈ $0 ℤ^+ = a equivalenceClass orderedPair first $$0 $0 ~_ℚ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$0 ℤ^+ = a equivalenceClass orderedPair first $0 $$0 ~_ℚ) (second $0) 2.1.2.0
       }
       elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
@@ -1393,27 +1444,25 @@ conclusion ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = a equivalenceClass orde
           prove ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair second $0 0_ℤ <_ℤ, ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ) () 2.2.0.2.1 2.2a
         }
       }
-      elided 0fc82dbc861b7356d9b7023cc41b30952a631ba42a05ec20f3323d40c0c46d6b {
-        elided 25b0ee7a2c9d2900804cc99421a9fadb4dadff384a4adfc6d75d79ba37e22e68 {
-          prove ∈ second $0 diff ℤ singleton 0_ℤ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($0, ℤ, diff ℤ singleton 0_ℤ) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-          elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
-            prove ∀ a ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton 0_ℤ)
-            prove ↔ ∈ second $0 diff ℤ singleton 0_ℤ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 diff ℤ singleton 0_ℤ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton 0_ℤ) (second $0) 2.2.1.0.1.0
-            prove → ∈ second $0 diff ℤ singleton 0_ℤ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ second $0 diff ℤ singleton 0_ℤ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ) () 2.2.1.0.1.1
-            prove ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ second $0 diff ℤ singleton 0_ℤ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ) () 2.2.1.0.1.2 2.2.1.0.0
-            prove ∈ second $0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ second $0 ℤ, ¬ ∈ second $0 singleton 0_ℤ) () 2.2.1.0.1.3
-          }
-          elided 25b0ee7a2c9d2900804cc99421a9fadb4dadff384a4adfc6d75d79ba37e22e68 {
-            prove ∧ ∈ negatedZ second $0 ℤ ∧ = apply +_ℤ orderedPair second $0 negatedZ second $0 0_ℤ = apply +_ℤ orderedPair negatedZ second $0 second $0 0_ℤ 25b0ee7a2c9d2900804cc99421a9fadb4dadff384a4adfc6d75d79ba37e22e68 () (second $0) 2.2.1.0.1
-            prove ∈ negatedZ second $0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ negatedZ second $0 ℤ, ∧ = apply +_ℤ orderedPair second $0 negatedZ second $0 0_ℤ = apply +_ℤ orderedPair negatedZ second $0 second $0 0_ℤ) () 2.2.1.0.2.0
-          }
+      elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+        prove ∈ second $0 diff ℤ singleton 0_ℤ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($0, ℤ, diff ℤ singleton 0_ℤ) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+          prove ∀ a ↔ ∈ $0 diff ℤ singleton 0_ℤ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton 0_ℤ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton 0_ℤ)
+          prove ↔ ∈ second $0 diff ℤ singleton 0_ℤ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 diff ℤ singleton 0_ℤ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton 0_ℤ) (second $0) 2.2.1.1.0
+          prove → ∈ second $0 diff ℤ singleton 0_ℤ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ second $0 diff ℤ singleton 0_ℤ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ) () 2.2.1.1.1
+          prove ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ second $0 diff ℤ singleton 0_ℤ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton 0_ℤ) () 2.2.1.1.2 2.2.1.0
+          prove ∈ second $0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ second $0 ℤ, ¬ ∈ second $0 singleton 0_ℤ) () 2.2.1.1.3
         }
-        elided 0fc82dbc861b7356d9b7023cc41b30952a631ba42a05ec20f3323d40c0c46d6b {
-          prove ∀ a → ∈ $0 ℤ ↔ ∈ $0 ℤ^+ ∈ orderedPair 0_ℤ $0 <_ℤ 0fc82dbc861b7356d9b7023cc41b30952a631ba42a05ec20f3323d40c0c46d6b () ()
-          prove → ∈ negatedZ second $0 ℤ ↔ ∈ negatedZ second $0 ℤ^+ ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 ℤ ↔ ∈ $$0 ℤ^+ ∈ orderedPair 0_ℤ $$0 <_ℤ) (negatedZ second $0) 2.2.1.1.0
-          prove ↔ ∈ negatedZ second $0 ℤ^+ ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ negatedZ second $0 ℤ, ↔ ∈ negatedZ second $0 ℤ^+ ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ) () 2.2.1.1.1 2.2.1.0
-          prove → ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ ∈ negatedZ second $0 ℤ^+ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ negatedZ second $0 ℤ^+, ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ) () 2.2.1.1.2
-          prove ∈ negatedZ second $0 ℤ^+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ, ∈ negatedZ second $0 ℤ^+) () 2.2.1.1.3 2.2.0
+        elided 25b0ee7a2c9d2900804cc99421a9fadb4dadff384a4adfc6d75d79ba37e22e68 {
+          prove ∧ ∈ negatedZ second $0 ℤ ∧ = apply +_ℤ orderedPair second $0 negatedZ second $0 0_ℤ = apply +_ℤ orderedPair negatedZ second $0 second $0 0_ℤ 25b0ee7a2c9d2900804cc99421a9fadb4dadff384a4adfc6d75d79ba37e22e68 () (second $0) 2.2.1.1
+          prove ∈ negatedZ second $0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ negatedZ second $0 ℤ, ∧ = apply +_ℤ orderedPair second $0 negatedZ second $0 0_ℤ = apply +_ℤ orderedPair negatedZ second $0 second $0 0_ℤ) () 2.2.1.2.0
+        }
+        prove ∧ ∈ negatedZ second $0 ℤ ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ negatedZ second $0 ℤ, ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ) () 2.2.1.2 2.2.0
+        elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+          prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+          prove ↔ ∈ negatedZ second $0 ℤ^+ ∧ ∈ negatedZ second $0 ℤ ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 ℤ^+ ∧ ∈ $$0 ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) (negatedZ second $0) 2.2.1.4.0
+          prove → ∧ ∈ negatedZ second $0 ℤ ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ ∈ negatedZ second $0 ℤ^+ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ negatedZ second $0 ℤ^+, ∧ ∈ negatedZ second $0 ℤ ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ) () 2.2.1.4.1
+          prove ∈ negatedZ second $0 ℤ^+ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ negatedZ second $0 ℤ ∈ orderedPair 0_ℤ negatedZ second $0 <_ℤ, ∈ negatedZ second $0 ℤ^+) () 2.2.1.4.2 2.2.1.3
         }
       }
       elided cfd0f8edef144642fdd3527ad198a0a080d35961d2fd04a9fd3b627bc86f8fa2 {
@@ -1525,4 +1574,351 @@ conclusion ∈ equivalenceClass orderedPair a b ~_ℚ ℚ
     prove = equivalenceQuotient product ℤ diff ℤ singleton 0_ℤ ~_ℚ ℚ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (ℚ, equivalenceQuotient product ℤ diff ℤ singleton 0_ℤ ~_ℚ) 1.0
     prove ∈ equivalenceClass orderedPair a b ~_ℚ ℚ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ equivalenceClass orderedPair a b ~_ℚ $0) (equivalenceQuotient product ℤ diff ℤ singleton 0_ℤ ~_ℚ, ℚ) 1.1 0
   }
+}
+
+theorem Equal Rationals Share Positive Denominators
+premise ∈ a ℤ
+premise ∈ b ℤ^+
+premise ∈ c ℤ
+premise ∈ d ℤ^+
+premise = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c
+conclusion ↔ ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ c <_ℤ
+{
+  take z {
+    assume ∈ $0 ℤ {
+      take y {
+        assume ∈ $0 ℤ^+ {
+          take x {
+            assume ∈ $0 ℤ {
+              take w {
+                assume ∈ $0 ℤ^+ {
+                  assume ∧ = apply ×_ℤ orderedPair $$$$0 $0 apply ×_ℤ orderedPair $$$0 $$0 ∈ orderedPair 0_ℤ $$$$0 <_ℤ {
+                    elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+                      prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+                      prove ↔ ∈ $$$0 ℤ^+ ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 ℤ^+ ∧ ∈ $$$$$0 ℤ ∈ orderedPair 0_ℤ $$$$$0 <_ℤ) ($$$0) 0.0.0.0.0.0.0.0.0.0.0
+                      prove → ∈ $$$0 ℤ^+ ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $$$0 ℤ^+, ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.0.1
+                      prove ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 ℤ^+, ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.0.2 0.0.0.0a
+                      prove ∈ orderedPair 0_ℤ $$$0 <_ℤ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$$0 ℤ, ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.0.3
+                    }
+                    elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+                      prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+                      prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 ℤ^+ ∧ ∈ $$$$$0 ℤ ∈ orderedPair 0_ℤ $$$$$0 <_ℤ) ($0) 0.0.0.0.0.0.0.0.0.1.0
+                      prove → ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.0.0.0.0.0.0.1.1
+                      prove ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.0.0.0.0.0.0.1.2 0.0.0.0.0.0.0.0a
+                      prove ∈ orderedPair 0_ℤ $0 <_ℤ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 ℤ, ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.0.0.0.0.0.0.1.3
+                    }
+                    elided 948cdb561f0ae2f392470f606322804592c8a8da0029768bbf10ab66e437fc8f {
+                      elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+                        prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+                        prove ↔ ∈ $$$0 ℤ^+ ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 ℤ^+ ∧ ∈ $$$$$0 ℤ ∈ orderedPair 0_ℤ $$$$$0 <_ℤ) ($$$0) 0.0.0.0.0.0.0.0.0.2.0.0
+                        prove → ∈ $$$0 ℤ^+ ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $$$0 ℤ^+, ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.2.0.1
+                        prove ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 ℤ^+, ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.2.0.2 0.0.0.0a
+                        prove ∈ $$$0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$0 ℤ, ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.2.0.3
+                      }
+                      elided 948cdb561f0ae2f392470f606322804592c8a8da0029768bbf10ab66e437fc8f {
+                        prove ∧ = apply ×_ℤ orderedPair $$$0 0_ℤ 0_ℤ = apply ×_ℤ orderedPair 0_ℤ $$$0 0_ℤ 948cdb561f0ae2f392470f606322804592c8a8da0029768bbf10ab66e437fc8f () ($$$0) 0.0.0.0.0.0.0.0.0.2.0
+                        prove = apply ×_ℤ orderedPair $$$0 0_ℤ 0_ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply ×_ℤ orderedPair $$$0 0_ℤ 0_ℤ, = apply ×_ℤ orderedPair 0_ℤ $$$0 0_ℤ) () 0.0.0.0.0.0.0.0.0.2.1.0
+                      }
+                    }
+                    elided 948cdb561f0ae2f392470f606322804592c8a8da0029768bbf10ab66e437fc8f {
+                      prove ∧ = apply ×_ℤ orderedPair $$$$0 0_ℤ 0_ℤ = apply ×_ℤ orderedPair 0_ℤ $$$$0 0_ℤ 948cdb561f0ae2f392470f606322804592c8a8da0029768bbf10ab66e437fc8f () ($$$$0) 0.0a
+                      prove = 0_ℤ apply ×_ℤ orderedPair $$$$0 0_ℤ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ×_ℤ orderedPair $$$$0 0_ℤ, 0_ℤ) 0.0.0.0.0.0.0.0.0.3.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    }
+                    prove = apply ×_ℤ orderedPair $$$0 0_ℤ apply ×_ℤ orderedPair $$$$0 0_ℤ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ×_ℤ orderedPair $$$0 0_ℤ, 0_ℤ, apply ×_ℤ orderedPair $$$$0 0_ℤ) 0.0.0.0.0.0.0.0.0.2 0.0.0.0.0.0.0.0.0.3
+                    elided 753b97db97d26564a51e65c7aa5d17ff65e89c85dbae1f5a37bba9a6e62247dc {
+                      prove ∈ 0_ℤ ℤ 194046d524446c5189060ae5e1af86a57909405018083e5114be7fe9f0122dca () ()
+                      elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+                        prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+                        prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 ℤ^+ ∧ ∈ $$$$$0 ℤ ∈ orderedPair 0_ℤ $$$$$0 <_ℤ) ($0) 0.0.0.0.0.0.0.0.0.5.1.0
+                        prove → ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.0.0.0.0.0.0.5.1.1
+                        prove ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.0.0.0.0.0.0.5.1.2 0.0.0.0.0.0.0.0a
+                        prove ∈ $0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℤ, ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.0.0.0.0.0.0.5.1.3
+                      }
+                      elided 753b97db97d26564a51e65c7aa5d17ff65e89c85dbae1f5a37bba9a6e62247dc {
+                        prove ∧ ↔ ∈ orderedPair apply ×_ℤ orderedPair 0_ℤ $$$$0 apply ×_ℤ orderedPair $0 $$$$0 <_ℤ ∈ orderedPair 0_ℤ $0 <_ℤ ↔ ∈ orderedPair apply ×_ℤ orderedPair $$$$0 0_ℤ apply ×_ℤ orderedPair $$$$0 $0 <_ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 753b97db97d26564a51e65c7aa5d17ff65e89c85dbae1f5a37bba9a6e62247dc () (0_ℤ, $0, $$$$0) 0.0.0.0.0.0.0.0.0.5.0 0.0.0.0.0.0.0.0.0.5.1 0.0a 0.0.0.0.0.0.0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                        prove → ∈ orderedPair 0_ℤ $0 <_ℤ ∈ orderedPair apply ×_ℤ orderedPair $$$$0 0_ℤ apply ×_ℤ orderedPair $$$$0 $0 <_ℤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair apply ×_ℤ orderedPair $$$$0 0_ℤ apply ×_ℤ orderedPair $$$$0 $0 <_ℤ, ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.0.0.0.0.0.0.5.2.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                        prove ∈ orderedPair apply ×_ℤ orderedPair $$$$0 0_ℤ apply ×_ℤ orderedPair $$$$0 $0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair 0_ℤ $0 <_ℤ, ∈ orderedPair apply ×_ℤ orderedPair $$$$0 0_ℤ apply ×_ℤ orderedPair $$$$0 $0 <_ℤ) () 0.0.0.0.0.0.0.0.0.5.2.1 0.0.0.0.0.0.0.0.0.1
+                      }
+                    }
+                    elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+                      prove = apply ×_ℤ orderedPair $$$$0 0_ℤ apply ×_ℤ orderedPair $$$0 0_ℤ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ×_ℤ orderedPair $$$0 0_ℤ, apply ×_ℤ orderedPair $$$$0 0_ℤ) 0.0.0.0.0.0.0.0.0.4
+                      prove ∈ orderedPair apply ×_ℤ orderedPair $$$0 0_ℤ apply ×_ℤ orderedPair $$$$0 $0 <_ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair $$$$$0 apply ×_ℤ orderedPair $$$$0 $0 <_ℤ) (apply ×_ℤ orderedPair $$$$0 0_ℤ, apply ×_ℤ orderedPair $$$0 0_ℤ) 0.0.0.0.0.0.0.0.0.6.0 0.0.0.0.0.0.0.0.0.5
+                    }
+                    prove ∈ orderedPair apply ×_ℤ orderedPair $$$0 0_ℤ apply ×_ℤ orderedPair $$$0 $$0 <_ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair apply ×_ℤ orderedPair $$$0 0_ℤ $$$$$0 <_ℤ) (apply ×_ℤ orderedPair $$$$0 $0, apply ×_ℤ orderedPair $$$0 $$0) 0.0.0.0.0.0.0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0.0.0.0.0.0.0.6
+                    elided 753b97db97d26564a51e65c7aa5d17ff65e89c85dbae1f5a37bba9a6e62247dc {
+                      prove ∈ 0_ℤ ℤ 194046d524446c5189060ae5e1af86a57909405018083e5114be7fe9f0122dca () ()
+                      elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+                        prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+                        prove ↔ ∈ $$$0 ℤ^+ ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 ℤ^+ ∧ ∈ $$$$$0 ℤ ∈ orderedPair 0_ℤ $$$$$0 <_ℤ) ($$$0) 0.0.0.0.0.0.0.0.0.8.1.0
+                        prove → ∈ $$$0 ℤ^+ ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $$$0 ℤ^+, ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.8.1.1
+                        prove ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 ℤ^+, ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.8.1.2 0.0.0.0a
+                        prove ∈ $$$0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$0 ℤ, ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.8.1.3
+                      }
+                      elided 753b97db97d26564a51e65c7aa5d17ff65e89c85dbae1f5a37bba9a6e62247dc {
+                        prove ∧ ↔ ∈ orderedPair apply ×_ℤ orderedPair 0_ℤ $$$0 apply ×_ℤ orderedPair $$0 $$$0 <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ ↔ ∈ orderedPair apply ×_ℤ orderedPair $$$0 0_ℤ apply ×_ℤ orderedPair $$$0 $$0 <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ 753b97db97d26564a51e65c7aa5d17ff65e89c85dbae1f5a37bba9a6e62247dc () (0_ℤ, $$0, $$$0) 0.0.0.0.0.0.0.0.0.8.0 0.0.0.0.0.0a 0.0.0.0.0.0.0.0.0.8.1 0.0.0.0.0.0.0.0.0.0
+                        prove → ∈ orderedPair apply ×_ℤ orderedPair $$$0 0_ℤ apply ×_ℤ orderedPair $$$0 $$0 <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair apply ×_ℤ orderedPair $$$0 0_ℤ apply ×_ℤ orderedPair $$$0 $$0 <_ℤ, ∈ orderedPair 0_ℤ $$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.8.2.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                        prove ∈ orderedPair 0_ℤ $$0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair apply ×_ℤ orderedPair $$$0 0_ℤ apply ×_ℤ orderedPair $$$0 $$0 <_ℤ, ∈ orderedPair 0_ℤ $$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.8.2.1 0.0.0.0.0.0.0.0.0.7
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  assume ∈ orderedPair 0_ℤ a <_ℤ {
+    elided (Extracted) {
+      prove ∧ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c ∈ orderedPair 0_ℤ a <_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c, ∈ orderedPair 0_ℤ a <_ℤ) () p4 1a
+      elided (Extracted) {
+        prove → ∈ a ℤ ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0 ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair $$$$0 $0 apply ×_ℤ orderedPair $$$0 $$0 ∈ orderedPair 0_ℤ $$$$0 <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) (a) 0
+        prove ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0 ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a ℤ, ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0 ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) () 1.0.1.0 p0
+        prove → ∈ b ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0 ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0 ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) (b) 1.0.1.1
+        prove ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0 ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b ℤ^+, ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0 ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) () 1.0.1.2 p1
+        prove → ∈ c ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ c <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0 ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) (c) 1.0.1.3
+        prove ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ c <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ c ℤ, ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ c <_ℤ) () 1.0.1.4 p2
+        prove → ∈ d ℤ^+ → ∧ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ c <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ c <_ℤ) (d) 1.0.1.5
+        prove → ∧ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ c <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ d ℤ^+, → ∧ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ c <_ℤ) () 1.0.1.6 p3
+        prove ∈ orderedPair 0_ℤ c <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c ∈ orderedPair 0_ℤ a <_ℤ, ∈ orderedPair 0_ℤ c <_ℤ) () 1.0.1.7 1.0.0
+      }
+    }
+  }
+  assume ∈ orderedPair 0_ℤ c <_ℤ {
+    elided (Rearranged) {
+      elided 88d733850c59acf22c3f7e0bd5f82faa5c79381ca3cdd3f3d56f39005a83e37c {
+        elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+          prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+          prove ↔ ∈ b ℤ^+ ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) (b) 2.0.0.0.0
+          prove → ∈ b ℤ^+ ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b ℤ^+, ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ) () 2.0.0.0.1
+          prove ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b ℤ^+, ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ) () 2.0.0.0.2 p1
+          prove ∈ b ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ b ℤ, ∈ orderedPair 0_ℤ b <_ℤ) () 2.0.0.0.3
+        }
+        prove = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair b c 88d733850c59acf22c3f7e0bd5f82faa5c79381ca3cdd3f3d56f39005a83e37c () (c, b) p2 2.0.0.0
+      }
+      prove = apply ×_ℤ orderedPair b c apply ×_ℤ orderedPair a d 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ×_ℤ orderedPair a d, apply ×_ℤ orderedPair b c) p4
+      prove = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair a d 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ×_ℤ orderedPair c b, apply ×_ℤ orderedPair b c, apply ×_ℤ orderedPair a d) 2.0.0 2.0.1
+      elided 88d733850c59acf22c3f7e0bd5f82faa5c79381ca3cdd3f3d56f39005a83e37c {
+        elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+          prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+          prove ↔ ∈ d ℤ^+ ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) (d) 2.0.3.0.0
+          prove → ∈ d ℤ^+ ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ d ℤ^+, ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ) () 2.0.3.0.1
+          prove ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ d ℤ^+, ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ) () 2.0.3.0.2 p3
+          prove ∈ d ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ d ℤ, ∈ orderedPair 0_ℤ d <_ℤ) () 2.0.3.0.3
+        }
+        prove = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair d a 88d733850c59acf22c3f7e0bd5f82faa5c79381ca3cdd3f3d56f39005a83e37c () (a, d) p0 2.0.3.0
+      }
+      prove = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ×_ℤ orderedPair c b, apply ×_ℤ orderedPair a d, apply ×_ℤ orderedPair d a) 2.0.2 2.0.3
+    }
+    elided (Extracted) {
+      prove ∧ = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a ∈ orderedPair 0_ℤ c <_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a, ∈ orderedPair 0_ℤ c <_ℤ) () 2.0 2a
+      elided (Extracted) {
+        prove → ∈ c ℤ ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair $$$0 $$0 ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair $$$$0 $0 apply ×_ℤ orderedPair $$$0 $$0 ∈ orderedPair 0_ℤ $$$$0 <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) (c) 0
+        prove ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair $$$0 $$0 ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ c ℤ, ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair $$$0 $$0 ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) () 2.1.1.0 p2
+        prove → ∈ d ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d $$0 ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair $$$0 $$0 ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) (d) 2.1.1.1
+        prove ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d $$0 ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ d ℤ^+, ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d $$0 ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) () 2.1.1.2 p3
+        prove → ∈ a ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d a ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ a <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d $$0 ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ $$0 <_ℤ) (a) 2.1.1.3
+        prove ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d a ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ a <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a ℤ, ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d a ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ a <_ℤ) () 2.1.1.4 p0
+        prove → ∈ b ℤ^+ → ∧ = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ a <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d a ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ a <_ℤ) (b) 2.1.1.5
+        prove → ∧ = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ a <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b ℤ^+, → ∧ = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a ∈ orderedPair 0_ℤ c <_ℤ ∈ orderedPair 0_ℤ a <_ℤ) () 2.1.1.6 p1
+        prove ∈ orderedPair 0_ℤ a <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a ∈ orderedPair 0_ℤ c <_ℤ, ∈ orderedPair 0_ℤ a <_ℤ) () 2.1.1.7 2.1.0
+      }
+    }
+  }
+  prove ↔ ∈ orderedPair 0_ℤ a <_ℤ ∈ orderedPair 0_ℤ c <_ℤ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ orderedPair 0_ℤ a <_ℤ, ∈ orderedPair 0_ℤ c <_ℤ) () 1 2
+}
+
+theorem Equal Rationals Share Negative Denominators
+premise ∈ a ℤ
+premise ∈ b ℤ^+
+premise ∈ c ℤ
+premise ∈ d ℤ^+
+premise = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c
+conclusion ↔ ∈ orderedPair a 0_ℤ <_ℤ ∈ orderedPair c 0_ℤ <_ℤ
+{
+  elided cfd0f8edef144642fdd3527ad198a0a080d35961d2fd04a9fd3b627bc86f8fa2 {
+    elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+      prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+      prove ↔ ∈ d ℤ^+ ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) (d) 0.0.0
+      prove → ∈ d ℤ^+ ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ d ℤ^+, ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ) () 0.0.1
+      prove ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ d ℤ^+, ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ) () 0.0.2 p3
+      prove ∈ d ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ d ℤ, ∈ orderedPair 0_ℤ d <_ℤ) () 0.0.3
+    }
+    elided cfd0f8edef144642fdd3527ad198a0a080d35961d2fd04a9fd3b627bc86f8fa2 {
+      prove ∧ = apply ×_ℤ orderedPair a negatedZ d negatedZ apply ×_ℤ orderedPair a d = apply ×_ℤ orderedPair negatedZ a d negatedZ apply ×_ℤ orderedPair a d cfd0f8edef144642fdd3527ad198a0a080d35961d2fd04a9fd3b627bc86f8fa2 () (a, d) p0 0.0
+      prove = apply ×_ℤ orderedPair negatedZ a d negatedZ apply ×_ℤ orderedPair a d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply ×_ℤ orderedPair a negatedZ d negatedZ apply ×_ℤ orderedPair a d, = apply ×_ℤ orderedPair negatedZ a d negatedZ apply ×_ℤ orderedPair a d) () 0.1.0
+    }
+  }
+  prove = negatedZ apply ×_ℤ orderedPair a d negatedZ apply ×_ℤ orderedPair b c 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply ×_ℤ orderedPair a d, apply ×_ℤ orderedPair b c, negatedZ $0) p4
+  prove = apply ×_ℤ orderedPair negatedZ a d negatedZ apply ×_ℤ orderedPair b c 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ×_ℤ orderedPair negatedZ a d, negatedZ apply ×_ℤ orderedPair a d, negatedZ apply ×_ℤ orderedPair b c) 0 1
+  elided cfd0f8edef144642fdd3527ad198a0a080d35961d2fd04a9fd3b627bc86f8fa2 {
+    elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+      prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+      prove ↔ ∈ b ℤ^+ ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) (b) 3.0.0
+      prove → ∈ b ℤ^+ ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b ℤ^+, ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ) () 3.0.1
+      prove ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b ℤ^+, ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ) () 3.0.2 p1
+      prove ∈ b ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ b ℤ, ∈ orderedPair 0_ℤ b <_ℤ) () 3.0.3
+    }
+    elided cfd0f8edef144642fdd3527ad198a0a080d35961d2fd04a9fd3b627bc86f8fa2 {
+      prove ∧ = apply ×_ℤ orderedPair b negatedZ c negatedZ apply ×_ℤ orderedPair b c = apply ×_ℤ orderedPair negatedZ b c negatedZ apply ×_ℤ orderedPair b c cfd0f8edef144642fdd3527ad198a0a080d35961d2fd04a9fd3b627bc86f8fa2 () (b, c) 3.0 p2
+      prove = negatedZ apply ×_ℤ orderedPair b c apply ×_ℤ orderedPair b negatedZ c 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ×_ℤ orderedPair b negatedZ c, negatedZ apply ×_ℤ orderedPair b c) 3.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+    }
+  }
+  prove = apply ×_ℤ orderedPair negatedZ a d apply ×_ℤ orderedPair b negatedZ c 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ×_ℤ orderedPair negatedZ a d, negatedZ apply ×_ℤ orderedPair b c, apply ×_ℤ orderedPair b negatedZ c) 2 3
+  prove ↔ ∈ orderedPair a 0_ℤ <_ℤ ∈ orderedPair 0_ℤ negatedZ a <_ℤ 09d1931058dab7372e897a1328170675ca6cf6714fcba7c362f857594b87c7a4 () (a) p0
+  elided 4ba233faf0a2bfe10d671dbce7dbcf8ab6675d6cf9ec00fb6473c4e88b0590aa {
+    elided 25b0ee7a2c9d2900804cc99421a9fadb4dadff384a4adfc6d75d79ba37e22e68 {
+      prove ∧ ∈ negatedZ a ℤ ∧ = apply +_ℤ orderedPair a negatedZ a 0_ℤ = apply +_ℤ orderedPair negatedZ a a 0_ℤ 25b0ee7a2c9d2900804cc99421a9fadb4dadff384a4adfc6d75d79ba37e22e68 () (a) p0
+      prove ∈ negatedZ a ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ negatedZ a ℤ, ∧ = apply +_ℤ orderedPair a negatedZ a 0_ℤ = apply +_ℤ orderedPair negatedZ a a 0_ℤ) () 6.0.0
+    }
+    elided 25b0ee7a2c9d2900804cc99421a9fadb4dadff384a4adfc6d75d79ba37e22e68 {
+      prove ∧ ∈ negatedZ c ℤ ∧ = apply +_ℤ orderedPair c negatedZ c 0_ℤ = apply +_ℤ orderedPair negatedZ c c 0_ℤ 25b0ee7a2c9d2900804cc99421a9fadb4dadff384a4adfc6d75d79ba37e22e68 () (c) p2
+      prove ∈ negatedZ c ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ negatedZ c ℤ, ∧ = apply +_ℤ orderedPair c negatedZ c 0_ℤ = apply +_ℤ orderedPair negatedZ c c 0_ℤ) () 6.1.0
+    }
+    prove ↔ ∈ orderedPair 0_ℤ negatedZ a <_ℤ ∈ orderedPair 0_ℤ negatedZ c <_ℤ 4ba233faf0a2bfe10d671dbce7dbcf8ab6675d6cf9ec00fb6473c4e88b0590aa () (negatedZ a, b, negatedZ c, d) 6.0 p1 6.1 p3 4
+  }
+  prove ↔ ∈ orderedPair a 0_ℤ <_ℤ ∈ orderedPair 0_ℤ negatedZ c <_ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ orderedPair a 0_ℤ <_ℤ, ∈ orderedPair 0_ℤ negatedZ a <_ℤ, ∈ orderedPair 0_ℤ negatedZ c <_ℤ) () 5 6
+  elided 09d1931058dab7372e897a1328170675ca6cf6714fcba7c362f857594b87c7a4 {
+    prove ↔ ∈ orderedPair c 0_ℤ <_ℤ ∈ orderedPair 0_ℤ negatedZ c <_ℤ 09d1931058dab7372e897a1328170675ca6cf6714fcba7c362f857594b87c7a4 () (c) p2
+    prove ↔ ∈ orderedPair 0_ℤ negatedZ c <_ℤ ∈ orderedPair c 0_ℤ <_ℤ 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (∈ orderedPair c 0_ℤ <_ℤ, ∈ orderedPair 0_ℤ negatedZ c <_ℤ) () 8.0
+  }
+  prove ↔ ∈ orderedPair a 0_ℤ <_ℤ ∈ orderedPair c 0_ℤ <_ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ orderedPair a 0_ℤ <_ℤ, ∈ orderedPair 0_ℤ negatedZ c <_ℤ, ∈ orderedPair c 0_ℤ <_ℤ) () 7 8
+}
+
+theorem Equal Rationals Share Zero Denominators
+premise ∈ a ℤ
+premise ∈ b ℤ^+
+premise ∈ c ℤ
+premise ∈ d ℤ^+
+premise = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c
+conclusion ↔ = a 0_ℤ = c 0_ℤ
+{
+  take z {
+    assume ∈ $0 ℤ {
+      take y {
+        assume ∈ $0 ℤ^+ {
+          take x {
+            assume ∈ $0 ℤ {
+              take w {
+                assume ∈ $0 ℤ^+ {
+                  assume ∧ = apply ×_ℤ orderedPair $$$$0 $0 apply ×_ℤ orderedPair $$$0 $$0 = $$$$0 0_ℤ {
+                    prove = apply ×_ℤ orderedPair $$$0 $$0 apply ×_ℤ orderedPair $$$$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ×_ℤ orderedPair $$$$0 $0, apply ×_ℤ orderedPair $$$0 $$0) 0.0.0.0.0.0.0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    prove = apply ×_ℤ orderedPair $$$$0 $0 apply ×_ℤ orderedPair 0_ℤ $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () ($$$$0, 0_ℤ, apply ×_ℤ orderedPair $$$$$0 $0) 0.0.0.0.0.0.0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove = apply ×_ℤ orderedPair $$$0 $$0 apply ×_ℤ orderedPair 0_ℤ $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ×_ℤ orderedPair $$$0 $$0, apply ×_ℤ orderedPair $$$$0 $0, apply ×_ℤ orderedPair 0_ℤ $0) 0.0.0.0.0.0.0.0.0.0 0.0.0.0.0.0.0.0.0.1
+                    elided 948cdb561f0ae2f392470f606322804592c8a8da0029768bbf10ab66e437fc8f {
+                      elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+                        prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+                        prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 ℤ^+ ∧ ∈ $$$$$0 ℤ ∈ orderedPair 0_ℤ $$$$$0 <_ℤ) ($0) 0.0.0.0.0.0.0.0.0.3.0.0
+                        prove → ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.0.0.0.0.0.0.3.0.1
+                        prove ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.0.0.0.0.0.0.3.0.2 0.0.0.0.0.0.0.0a
+                        prove ∈ $0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℤ, ∈ orderedPair 0_ℤ $0 <_ℤ) () 0.0.0.0.0.0.0.0.0.3.0.3
+                      }
+                      elided 948cdb561f0ae2f392470f606322804592c8a8da0029768bbf10ab66e437fc8f {
+                        prove ∧ = apply ×_ℤ orderedPair $0 0_ℤ 0_ℤ = apply ×_ℤ orderedPair 0_ℤ $0 0_ℤ 948cdb561f0ae2f392470f606322804592c8a8da0029768bbf10ab66e437fc8f () ($0) 0.0.0.0.0.0.0.0.0.3.0
+                        prove = apply ×_ℤ orderedPair 0_ℤ $0 0_ℤ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply ×_ℤ orderedPair $0 0_ℤ 0_ℤ, = apply ×_ℤ orderedPair 0_ℤ $0 0_ℤ) () 0.0.0.0.0.0.0.0.0.3.1.0
+                      }
+                    }
+                    prove = apply ×_ℤ orderedPair $$$0 $$0 0_ℤ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ×_ℤ orderedPair $$$0 $$0, apply ×_ℤ orderedPair 0_ℤ $0, 0_ℤ) 0.0.0.0.0.0.0.0.0.2 0.0.0.0.0.0.0.0.0.3
+                    elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+                      prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+                      prove ↔ ∈ $$$0 ℤ^+ ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 ℤ^+ ∧ ∈ $$$$$0 ℤ ∈ orderedPair 0_ℤ $$$$$0 <_ℤ) ($$$0) 0.0.0.0.0.0.0.0.0.5.0
+                      prove → ∈ $$$0 ℤ^+ ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $$$0 ℤ^+, ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.5.1
+                      prove ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 ℤ^+, ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.5.2 0.0.0.0a
+                      prove ∈ orderedPair 0_ℤ $$$0 <_ℤ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$$0 ℤ, ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.5.3
+                    }
+                    elided d36266d0d00106d6cbd43c082c96ba9cfe11c027625896d5e4a21565e2d79308 {
+                      elided 521c3ad94b31a415d12bcc81f4099195a2552f87cccfb90a9dc04f1873a7bfc9 {
+                        prove ∧ relation <_ℤ ℤ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <_ℤ ∈ orderedPair apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 <_ℕ 521c3ad94b31a415d12bcc81f4099195a2552f87cccfb90a9dc04f1873a7bfc9 () ()
+                        prove relation <_ℤ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (relation <_ℤ ℤ, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <_ℤ ∈ orderedPair apply + orderedPair $$$$0 $0 apply + orderedPair $$$0 $$0 <_ℕ) () 0.0.0.0.0.0.0.0.0.6.0.0
+                      }
+                      prove irreflexiveRelation <_ℤ ℤ 1972a9f52e38a11a20bfe8b7d9923625252ddd657e3c2fddb89ab2075a608d1d () ()
+                      prove ∧ relation <_ℤ ℤ irreflexiveRelation <_ℤ ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation <_ℤ ℤ, irreflexiveRelation <_ℤ ℤ) () 0.0.0.0.0.0.0.0.0.6.0 0.0.0.0.0.0.0.0.0.6.1
+                      elided d36266d0d00106d6cbd43c082c96ba9cfe11c027625896d5e4a21565e2d79308 {
+                        prove ¬ = 0_ℤ $$$0 d36266d0d00106d6cbd43c082c96ba9cfe11c027625896d5e4a21565e2d79308 () (<_ℤ, ℤ, 0_ℤ, $$$0) 0.0.0.0.0.0.0.0.0.6.2 0.0.0.0.0.0.0.0.0.5
+                        prove ¬ = $$$0 0_ℤ 35c4b3bdb5afef55d4ceaab6eddde750bce304bc30ca1a61c5d38cc997fb0d65 () (0_ℤ, $$$0) 0.0.0.0.0.0.0.0.0.6.3.0
+                      }
+                    }
+                    elided 191998d54f731e3b30ebf21cf203b2ec14b47f9d23b4a6dc3dd368c911c37cd8 {
+                      elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+                        prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+                        prove ↔ ∈ $$$0 ℤ^+ ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 ℤ^+ ∧ ∈ $$$$$0 ℤ ∈ orderedPair 0_ℤ $$$$$0 <_ℤ) ($$$0) 0.0.0.0.0.0.0.0.0.7.0.0
+                        prove → ∈ $$$0 ℤ^+ ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $$$0 ℤ^+, ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.7.0.1
+                        prove ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 ℤ^+, ∧ ∈ $$$0 ℤ ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.7.0.2 0.0.0.0a
+                        prove ∈ $$$0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$0 ℤ, ∈ orderedPair 0_ℤ $$$0 <_ℤ) () 0.0.0.0.0.0.0.0.0.7.0.3
+                      }
+                      elided 191998d54f731e3b30ebf21cf203b2ec14b47f9d23b4a6dc3dd368c911c37cd8 {
+                        prove ↔ = apply ×_ℤ orderedPair $$$0 $$0 0_ℤ ∨ = $$$0 0_ℤ = $$0 0_ℤ 191998d54f731e3b30ebf21cf203b2ec14b47f9d23b4a6dc3dd368c911c37cd8 () ($$$0, $$0) 0.0.0.0.0.0.0.0.0.7.0 0.0.0.0.0.0a
+                        prove → = apply ×_ℤ orderedPair $$$0 $$0 0_ℤ ∨ = $$$0 0_ℤ = $$0 0_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= apply ×_ℤ orderedPair $$$0 $$0 0_ℤ, ∨ = $$$0 0_ℤ = $$0 0_ℤ) () 0.0.0.0.0.0.0.0.0.7.1.0
+                        prove ∨ = $$$0 0_ℤ = $$0 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply ×_ℤ orderedPair $$$0 $$0 0_ℤ, ∨ = $$$0 0_ℤ = $$0 0_ℤ) () 0.0.0.0.0.0.0.0.0.7.1.1 0.0.0.0.0.0.0.0.0.4
+                        prove = $$0 0_ℤ 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (= $$$0 0_ℤ, = $$0 0_ℤ) () 0.0.0.0.0.0.0.0.0.7.1.2 0.0.0.0.0.0.0.0.0.6
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  assume = a 0_ℤ {
+    elided (Extracted) {
+      prove ∧ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c = a 0_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c, = a 0_ℤ) () p4 1a
+      elided (Extracted) {
+        prove → ∈ a ℤ ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0 = a 0_ℤ = $$0 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair $$$$0 $0 apply ×_ℤ orderedPair $$$0 $$0 = $$$$0 0_ℤ = $$0 0_ℤ) (a) 0
+        prove ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0 = a 0_ℤ = $$0 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a ℤ, ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0 = a 0_ℤ = $$0 0_ℤ) () 1.0.1.0 p0
+        prove → ∈ b ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0 = a 0_ℤ = $$0 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair $$$0 $$0 = a 0_ℤ = $$0 0_ℤ) (b) 1.0.1.1
+        prove ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0 = a 0_ℤ = $$0 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b ℤ^+, ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0 = a 0_ℤ = $$0 0_ℤ) () 1.0.1.2 p1
+        prove → ∈ c ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c = a 0_ℤ = c 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b $$0 = a 0_ℤ = $$0 0_ℤ) (c) 1.0.1.3
+        prove ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c = a 0_ℤ = c 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ c ℤ, ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c = a 0_ℤ = c 0_ℤ) () 1.0.1.4 p2
+        prove → ∈ d ℤ^+ → ∧ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c = a 0_ℤ = c 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair a $0 apply ×_ℤ orderedPair b c = a 0_ℤ = c 0_ℤ) (d) 1.0.1.5
+        prove → ∧ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c = a 0_ℤ = c 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ d ℤ^+, → ∧ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c = a 0_ℤ = c 0_ℤ) () 1.0.1.6 p3
+        prove = c 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair b c = a 0_ℤ, = c 0_ℤ) () 1.0.1.7 1.0.0
+      }
+    }
+  }
+  assume = c 0_ℤ {
+    elided (Rearranged) {
+      elided 88d733850c59acf22c3f7e0bd5f82faa5c79381ca3cdd3f3d56f39005a83e37c {
+        elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+          prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+          prove ↔ ∈ b ℤ^+ ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) (b) 2.0.0.0.0
+          prove → ∈ b ℤ^+ ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b ℤ^+, ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ) () 2.0.0.0.1
+          prove ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b ℤ^+, ∧ ∈ b ℤ ∈ orderedPair 0_ℤ b <_ℤ) () 2.0.0.0.2 p1
+          prove ∈ b ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ b ℤ, ∈ orderedPair 0_ℤ b <_ℤ) () 2.0.0.0.3
+        }
+        prove = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair b c 88d733850c59acf22c3f7e0bd5f82faa5c79381ca3cdd3f3d56f39005a83e37c () (c, b) p2 2.0.0.0
+      }
+      prove = apply ×_ℤ orderedPair b c apply ×_ℤ orderedPair a d 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ×_ℤ orderedPair a d, apply ×_ℤ orderedPair b c) p4
+      prove = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair a d 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ×_ℤ orderedPair c b, apply ×_ℤ orderedPair b c, apply ×_ℤ orderedPair a d) 2.0.0 2.0.1
+      elided 88d733850c59acf22c3f7e0bd5f82faa5c79381ca3cdd3f3d56f39005a83e37c {
+        elided 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 {
+          prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 317dabcc71d72f963463650d60c4571662e487f121903e44403d8fb38accbd84 () ()
+          prove ↔ ∈ d ℤ^+ ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ) (d) 2.0.3.0.0
+          prove → ∈ d ℤ^+ ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ d ℤ^+, ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ) () 2.0.3.0.1
+          prove ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ d ℤ^+, ∧ ∈ d ℤ ∈ orderedPair 0_ℤ d <_ℤ) () 2.0.3.0.2 p3
+          prove ∈ d ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ d ℤ, ∈ orderedPair 0_ℤ d <_ℤ) () 2.0.3.0.3
+        }
+        prove = apply ×_ℤ orderedPair a d apply ×_ℤ orderedPair d a 88d733850c59acf22c3f7e0bd5f82faa5c79381ca3cdd3f3d56f39005a83e37c () (a, d) p0 2.0.3.0
+      }
+      prove = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ×_ℤ orderedPair c b, apply ×_ℤ orderedPair a d, apply ×_ℤ orderedPair d a) 2.0.2 2.0.3
+    }
+    elided (Extracted) {
+      prove ∧ = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a = c 0_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a, = c 0_ℤ) () 2.0 2a
+      elided (Extracted) {
+        prove → ∈ c ℤ ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair $$$0 $$0 = c 0_ℤ = $$0 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair $$$$0 $0 apply ×_ℤ orderedPair $$$0 $$0 = $$$$0 0_ℤ = $$0 0_ℤ) (c) 0
+        prove ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair $$$0 $$0 = c 0_ℤ = $$0 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ c ℤ, ∀ y → ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair $$$0 $$0 = c 0_ℤ = $$0 0_ℤ) () 2.1.1.0 p2
+        prove → ∈ d ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d $$0 = c 0_ℤ = $$0 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ^+ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair $$$0 $$0 = c 0_ℤ = $$0 0_ℤ) (d) 2.1.1.1
+        prove ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d $$0 = c 0_ℤ = $$0 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ d ℤ^+, ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d $$0 = c 0_ℤ = $$0 0_ℤ) () 2.1.1.2 p3
+        prove → ∈ a ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d a = c 0_ℤ = a 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d $$0 = c 0_ℤ = $$0 0_ℤ) (a) 2.1.1.3
+        prove ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d a = c 0_ℤ = a 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a ℤ, ∀ w → ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d a = c 0_ℤ = a 0_ℤ) () 2.1.1.4 p0
+        prove → ∈ b ℤ^+ → ∧ = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a = c 0_ℤ = a 0_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ^+ → ∧ = apply ×_ℤ orderedPair c $0 apply ×_ℤ orderedPair d a = c 0_ℤ = a 0_ℤ) (b) 2.1.1.5
+        prove → ∧ = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a = c 0_ℤ = a 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b ℤ^+, → ∧ = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a = c 0_ℤ = a 0_ℤ) () 2.1.1.6 p1
+        prove = a 0_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ = apply ×_ℤ orderedPair c b apply ×_ℤ orderedPair d a = c 0_ℤ, = a 0_ℤ) () 2.1.1.7 2.1.0
+      }
+    }
+  }
+  prove ↔ = a 0_ℤ = c 0_ℤ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= a 0_ℤ, = c 0_ℤ) () 1 2
 }
