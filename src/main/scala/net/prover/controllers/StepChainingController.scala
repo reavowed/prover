@@ -205,7 +205,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
                 Success(None)
             }
             (ExtractionApplication(conclusion, _, extractionSteps, extractionPremises, extractionTargets), additionalAssertions, additionalPremises, additionalTargets, elider) <- applyExtractions(extractionInferences, substitutions, getIntendedConclusion)
-            (conclusionRelation, conclusionLhs, conclusionRhs) <- ChainingMethods.getRelation[T](conclusion).orBadRequest("Conclusion was not binary statement")
+            (conclusionRelation, conclusionLhs, conclusionRhs) <- ChainingMethods.getJoiner[T](conclusion).orBadRequest("Conclusion was not binary statement")
             conclusionSource = direction.getSource(conclusionLhs, conclusionRhs)
             rewriteChainingDefinition <- handle(conclusionSource, targetSource, conclusionRelation, conclusionLhs, conclusionRhs)
             extractionStep = Step.Elided.ifNecessary(additionalAssertions ++ extractionSteps, elider)

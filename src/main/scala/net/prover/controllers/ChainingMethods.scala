@@ -8,8 +8,8 @@ import net.prover.model.proof.{Step, SubstitutionContext}
 import scala.reflect.ClassTag
 
 sealed trait ChainingMethods[T <: Expression] {
-  def getRelation(statement: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(BinaryJoiner[T], T, T)]
-  def getTransitivityStep(
+  def getJoiner(statement: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(BinaryJoiner[T], T, T)]
+  def getChainingStep(
     source: T,
     intermediate: T,
     target: T,
@@ -25,9 +25,9 @@ sealed trait ChainingMethods[T <: Expression] {
   def parser(implicit expressionParsingContext: ExpressionParsingContext): Parser[T]
 }
 object ChainingMethods {
-  abstract class ChainingMethodsAux[TExpression <: Expression, TStatement <: BinaryJoiner[TExpression] : ClassTag] extends ChainingMethods[TExpression] {
-    override def getRelation(statement: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(BinaryJoiner[TExpression], TExpression, TExpression)] = {
-      provingContext.definedBinaryJoiners.ofType[TStatement].mapFind { relation =>
+  abstract class ChainingMethodsAux[TExpression <: Expression, TJoiner <: BinaryJoiner[TExpression] : ClassTag] extends ChainingMethods[TExpression] {
+    override def getJoiner(statement: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(BinaryJoiner[TExpression], TExpression, TExpression)] = {
+      provingContext.definedBinaryJoiners.ofType[TJoiner].mapFind { relation =>
         for {
           (lhs, rhs) <- relation.unapply(statement)
         } yield (relation, lhs, rhs)
@@ -35,11 +35,11 @@ object ChainingMethods {
     }
   }
 
-  implicit object ForStatement2 extends ChainingMethodsAux[Statement, BinaryConnective] with ChainingMethods[Statement] {
+  implicit object ForStatement extends ChainingMethodsAux[Statement, BinaryConnective] with ChainingMethods[Statement] {
     override def parser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Statement] = Statement.parser
   }
   implicit object ForTerm extends ChainingMethodsAux[Term, BinaryRelation] with ChainingMethods[Term] {
-    override def getTransitivityStep(
+    override def getChainingStep(
       source: Term,
       intermediate: Term,
       target: Term,
@@ -59,15 +59,15 @@ object ChainingMethods {
       def bySubstitutionFromSecond = for {
         substitution <- provingContext.substitutions.find(_.relation == secondRelation)
       } yield firstRelation -> substitution.assertionStep(intermediate, target, new Wrapper(firstRelation(source, _)(_)))
-      super.getTransitivityStep(source, intermediate, target, firstRelation, secondRelation) orElse bySubstitutionFromFirst orElse bySubstitutionFromSecond
+      super.getChainingStep(source, intermediate, target, firstRelation, secondRelation) orElse bySubstitutionFromFirst orElse bySubstitutionFromSecond
     }
     override def parser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Term] = Term.parser
   }
 
-  def getRelation[T <: Expression : ChainingMethods](statement: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(BinaryJoiner[T], T, T)] = {
-    implicitly[ChainingMethods[T]].getRelation(statement)
+  def getJoiner[T <: Expression : ChainingMethods](statement: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(BinaryJoiner[T], T, T)] = {
+    implicitly[ChainingMethods[T]].getJoiner(statement)
   }
-  def getTransitivityStep[T <: Expression : ChainingMethods](
+  def getChainingStep[T <: Expression : ChainingMethods](
     source: T,
     intermediate: T,
     target: T,
@@ -76,7 +76,7 @@ object ChainingMethods {
     implicit provingContext: ProvingContext,
     substitutionContext: SubstitutionContext
   ): Option[(BinaryJoiner[T], Step)] = {
-    implicitly[ChainingMethods[T]].getTransitivityStep(source, intermediate, target, firstJoiner, secondJoiner)
+    implicitly[ChainingMethods[T]].getChainingStep(source, intermediate, target, firstJoiner, secondJoiner)
   }
   def parser[T <: Expression : ChainingMethods](implicit expressionParsingContext: ExpressionParsingContext): Parser[T] = implicitly[ChainingMethods[T]].parser
 }

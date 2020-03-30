@@ -1,7 +1,7 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, InsertionAndReplacementProps, MultipleStepReplacementProps, ProofUpdateProps, RewriteRequest, SerializedSubstitutions, StepDefinition, StepInsertionProps, StepReplacementProps}
-import net.prover.model.{EntryContext, Inference}
+import net.prover.model.{EntryContext, Inference, ProvingContext}
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions.{Statement, StatementVariable, Term}
@@ -10,7 +10,6 @@ import org.mockito.Mockito
 import org.specs2.matcher.{Matcher, ValueChecks}
 import org.specs2.mock.mockito.{CalledMatchers, MockitoMatchers, MockitoStubs}
 import org.specs2.mutable.Specification
-import scalaz.Functor
 
 import scala.util.{Success, Try}
 
@@ -43,16 +42,21 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
   implicit def seqConstructorToConstructorSeq(seq: Seq[SubstitutionContext => Step]): SubstitutionContext => Seq[Step] = { sc =>
     seq.map(_(sc))
   }
-  def matchSteps(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil): Matcher[Seq[Step]] = beEqualTo(stepsConstructor(SubstitutionContext.withExtraParameters(boundVariables.length) (SubstitutionContext.outsideProof)))
 
   def createOuterStepContext(
     premises: Seq[Statement],
     termVariableNames: Seq[String],
-    boundVariables: Seq[String] = Nil
-  ) = {
+    boundVariables: Seq[String]
+  ): StepContext = {
     val baseContext = StepContext.withPremisesAndTerms(premises, termVariableNames)
     val contextWithBoundVariables = boundVariables.foldLeft(baseContext) { case (context, variable) => context.addBoundVariable(variable) }
     outerStepPath.foldLeft(contextWithBoundVariables) { case (context, index) => context.atIndex(index) }
+  }
+  def createOuterStepContext(
+    steps: Seq[Step],
+    boundVariables: Seq[String]
+  ): StepContext = {
+    createOuterStepContext(Nil, steps.mapCollect(_.provenStatement).flatMap(_.requiredSubstitutions.terms).map(_._1).distinct, boundVariables)
   }
 
   def definitionWithInference(
@@ -157,6 +161,20 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
 
   def eq[T](t: T) = org.mockito.Matchers.eq(t)
 
+  def buildStepsWithReferences(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit entryContext: EntryContext): Seq[Step] = {
+    implicit val provingContext = entryContextToProvingContext(entryContext)
+    val steps = stepsConstructor(SubstitutionContext.withExtraParameters(boundVariables.length) (SubstitutionContext.outsideProof))
+    val outerStepContext = createOuterStepContext(steps, boundVariables)
+    steps.recalculateReferences(outerStepContext, provingContext)._1
+  }
+  def recalculateReferences(steps: Seq[Step], outerStepContext: StepContext)(implicit entryContext: EntryContext): Seq[Step] = {
+    steps.recalculateReferences(outerStepContext, entryContextToProvingContext(entryContext))._1
+  }
+
+  def matchSteps(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit entryContext: EntryContext): Matcher[Seq[Step]] = {
+    beEqualTo(buildStepsWithReferences(stepsConstructor, boundVariables)(entryContext))
+  }
+
   def checkModifySteps(
     service: BookService,
     existingSteps: SubstitutionContext => Seq[Step],
@@ -164,7 +182,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     boundVariables: Seq[String] = Nil)(
     implicit entryContext: EntryContext
   ) = {
-    there was one(service).replaceSteps[WithValue[InsertionAndReplacementProps]#Type](eq(bookKey), eq(chapterKey), eq(theoremKey), eq(proofIndex), eq(outerStepPath))(modifyStepsCallback(existingSteps, matchSteps(expectedSteps, boundVariables), boundVariables)(entryContext))(any)
+    there was one(service).replaceSteps[WithValue[InsertionAndReplacementProps]#Type](eq(bookKey), eq(chapterKey), eq(theoremKey), eq(proofIndex), eq(outerStepPath))(modifyStepsCallback(existingSteps, matchSteps(expectedSteps, boundVariables)(entryContext), boundVariables)(entryContext))(any)
   }
   def checkModifyStepsWithoutProps(
     service: BookService,
@@ -173,7 +191,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     boundVariables: Seq[String] = Nil)(
     implicit entryContext: EntryContext
   ) = {
-    there was one(service).replaceSteps[WithValue[Seq[Step]]#Type](eq(bookKey), eq(chapterKey), eq(theoremKey), eq(proofIndex), eq(outerStepPath))(modifyStepsCallbackWithoutProps(existingSteps, matchSteps(expectedSteps, boundVariables), boundVariables)(entryContext))(any)
+    there was one(service).replaceSteps[WithValue[Seq[Step]]#Type](eq(bookKey), eq(chapterKey), eq(theoremKey), eq(proofIndex), eq(outerStepPath))(modifyStepsCallbackWithoutProps(existingSteps, matchSteps(expectedSteps, boundVariables)(entryContext), boundVariables)(entryContext))(any)
   }
   def checkModifyStepsWithMatcher(
     service: BookService,
@@ -193,9 +211,9 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
   ): (Seq[Step], StepProvingContext) => Try[(Seq[Step], Seq[Step])] = {
     implicit val provingContext = entryContextToProvingContext(entryContext)
     val existingSteps = existingStepsFn(SubstitutionContext.outsideProof)
-    val outerStepContext = createOuterStepContext(Nil, existingSteps.mapCollect(_.provenStatement).flatMap(_.requiredSubstitutions.terms).map(_._1).distinct, boundVariables)
-    val existingStepsWithReferences = existingSteps.recalculateReferences(outerStepContext, provingContext)._1
-    (existingStepsWithReferences, StepProvingContext(outerStepContext, provingContext)) -> beSuccessfulTry[(Seq[Step], Seq[Step])].withValue(stepsMatcher ^^ { t: (Seq[Step], Seq[Step]) => t._1 })
+    val outerStepContext = createOuterStepContext(existingSteps, boundVariables)
+    val existingStepsWithReferences = recalculateReferences(existingSteps, outerStepContext)(entryContext)
+    (existingStepsWithReferences, StepProvingContext(outerStepContext, provingContext)) -> beSuccessfulTry[(Seq[Step], Seq[Step])].withValue(stepsMatcher ^^ { t: (Seq[Step], Seq[Step]) => recalculateReferences(t._1, outerStepContext)(entryContext) })
   }
   def modifyStepsCallback(
     existingStepsFn: SubstitutionContext => Seq[Step],
@@ -204,9 +222,8 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     implicit entryContext: EntryContext
   ): (Seq[Step], StepProvingContext) => Try[(Seq[Step], InsertionAndReplacementProps)] = {
     implicit val provingContext = entryContextToProvingContext(entryContext)
-    val existingSteps = existingStepsFn(SubstitutionContext.outsideProof)
-    val outerStepContext = createOuterStepContext(Nil, existingSteps.mapCollect(_.provenStatement).flatMap(_.requiredSubstitutions.terms).map(_._1).distinct, boundVariables)
-    val existingStepsWithReferences = existingSteps.recalculateReferences(outerStepContext, provingContext)._1
-    (existingStepsWithReferences, StepProvingContext(outerStepContext, provingContext)) -> beSuccessfulTry[(Seq[Step], InsertionAndReplacementProps)].withValue(stepsMatcher ^^ { t: (Seq[Step], InsertionAndReplacementProps) => t._1 })
+    val existingSteps = buildStepsWithReferences(existingStepsFn, boundVariables)(entryContext)
+    val outerStepContext = createOuterStepContext(existingSteps, boundVariables)
+    (existingSteps, StepProvingContext(outerStepContext, provingContext)) -> beSuccessfulTry[(Seq[Step], InsertionAndReplacementProps)].withValue(stepsMatcher ^^ { t: (Seq[Step], InsertionAndReplacementProps) => recalculateReferences(t._1, outerStepContext)(entryContext) })
   }
 }

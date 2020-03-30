@@ -3,10 +3,9 @@ package net.prover.controllers
 import net.prover.controllers.models.{InsertionAndReplacementProps, LinkSummary, PathData, ProofUpdateProps, StepInsertionProps, StepReplacementProps}
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
-import net.prover.model.definitions.{Equality, Transitivity}
 import net.prover.model.entries.{ChapterEntry, Theorem}
-import net.prover.model.expressions.{Expression, Term}
-import net.prover.model.proof.{Step, StepProvingContext}
+import net.prover.model.expressions.{Expression, Statement, Term}
+import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
 
 import scala.reflect.{ClassTag, classTag}
 import scala.util.{Failure, Try}
@@ -16,49 +15,69 @@ trait BookModification {
 
   implicit def toIndexes(pathData: PathData): Seq[Int] = pathData.indexes
 
-  private def splitPrecedingStepsWhileTransitive(before: Seq[Step], after: Seq[Step])(implicit stepProvingContext: StepProvingContext): (Seq[Step], Seq[Step]) = {
-    def getTargetLhsFromTransitivity[T <: Expression](currentRhs: Expression, followingSteps: Seq[Step], transitivity: Transitivity[T]): Option[T] = {
-      followingSteps match {
-        case Step.Assertion(transitivity.resultJoiner(lhs, `currentRhs`), transitivity.inference, _, _) +: _ =>
-          Some(lhs)
-        case _ =>
-          None
+  def matchTransitiveChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, stepThree: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(T, T, T)] = {
+    if (stepThree.referencedLines.flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath) == Set(outerPath :+ firstStepIndex, outerPath :+ (firstStepIndex + 1)))
+      for {
+        statementOne <- stepOne.provenStatement
+        (_, lhsOne, rhsOne) <- ChainingMethods.getJoiner(statementOne)
+        statementTwo <- stepTwo.provenStatement
+        (_, lhsTwo, rhsTwo) <- ChainingMethods.getJoiner(statementTwo)
+        statementThree <- stepThree.provenStatement
+        (_, lhsThree, rhsThree) <- ChainingMethods.getJoiner(statementThree)
+        if (lhsOne == lhsThree && rhsOne == lhsTwo && rhsTwo == rhsThree)
+      } yield (lhsOne, rhsOne, rhsTwo)
+    else None
+  }
+  def matchReplacementChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(T, T, T)] = {
+    if (stepTwo.referencedLines.flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath).contains(outerPath :+ firstStepIndex))
+      for {
+        statementOne <- stepOne.provenStatement
+        (_, lhsOne, rhsOne) <- ChainingMethods.getJoiner(statementOne)
+        statementTwo <- stepTwo.provenStatement
+        (_, lhsTwo, rhsTwo) <- ChainingMethods.getJoiner(statementTwo)
+        if lhsOne == lhsTwo
+      } yield (lhsOne, rhsOne, rhsTwo)
+    else None
+  }
+
+  private def splitPrecedingStepsWhileTransitive(before: Seq[Step], after: Seq[Step], outerPath: Seq[Int])(implicit stepProvingContext: StepProvingContext): (Seq[Step], Seq[Step]) = {
+
+    def splitPrecedingStepsWhileTransitiveGeneric[T <: Expression : ChainingMethods]: Option[(Seq[Step], Seq[Step])] = {
+      @scala.annotation.tailrec
+      def removeWhileTransitive(currentBefore: Seq[Step], currentStep: Step, currentTransitive: Seq[Step], targetLhs: T): (Seq[Step], Seq[Step]) = {
+        currentBefore match {
+          case moreBefore :+ first :+ second if matchTransitiveChaining(first, second, currentStep, outerPath, moreBefore.length).exists(_._1 == targetLhs) =>
+            removeWhileTransitive(moreBefore, first, first +: second +: currentTransitive, targetLhs)
+          case moreBefore :+ first if matchReplacementChaining(first, currentStep, outerPath, moreBefore.length).exists(_._1 == targetLhs) =>
+            removeWhileTransitive(moreBefore, first, first +: currentTransitive, targetLhs)
+          case _ =>
+            (currentBefore, currentTransitive)
+        }
       }
-    }
-    @scala.annotation.tailrec
-    def takeWhileTransitive(steps: Seq[Step], targetLhs: Term, currentLhs: Term, acc: Seq[Step], equality: Equality): (Seq[Step], Seq[Step]) = {
-      steps match {
-        case first :+ preceding :+ (transitive: Step.Assertion)
-          if transitive.inference.id == equality.transitivity.inference.id
-        =>
-          (preceding.provenStatement, transitive.statement) match {
-            case (Some(equality(newLhs, `currentLhs`)), equality(`targetLhs`, `currentLhs`)) =>
-              takeWhileTransitive(first, targetLhs, newLhs, Seq(preceding, transitive) ++ acc, equality)
-            case _ =>
-              (steps, acc)
-          }
-        case first :+ preceding =>
-          preceding.provenStatement match {
-            case Some(equality(`targetLhs`, `currentLhs`)) =>
-              (first, preceding +: acc)
-            case _ =>
-              (steps, acc)
-          }
-        case _ =>
-          (steps, acc)
+      def withTransitivityInFollowingStep: Option[(Seq[Step], Seq[Step])] = {
+        for {
+          (firstStep, followingSteps) <- after.headAndTailOption
+          nextStep <- followingSteps.headOption
+          (moreBefore, previousStep) <- before.initAndLastOption
+          (lhs, _, _) <- matchTransitiveChaining(previousStep, firstStep, nextStep, outerPath, before.length - 1)
+        } yield removeWhileTransitive(moreBefore, previousStep, Seq(previousStep), lhs)
       }
+      def fromCurrentStep: Option[(Seq[Step], Seq[Step])] = {
+        for {
+          firstStep <- after.headOption
+          statement <- firstStep.provenStatement
+          (_, lhs, _) <- ChainingMethods.getJoiner(statement)
+        } yield removeWhileTransitive(before, firstStep, Nil, lhs)
+      }
+
+      withTransitivityInFollowingStep orElse fromCurrentStep
     }
-    (for {
-      equality <- stepProvingContext.provingContext.equalityOption
-      (firstStep, followingSteps) <- after.headAndTailOption
-      statement <- firstStep.provenStatement
-      (lhs, rhs) <- equality.unapply(statement)
-      targetLhs <- getTargetLhsFromTransitivity(rhs, followingSteps, equality.transitivity)
-    } yield takeWhileTransitive(before, targetLhs, lhs, Nil, equality)) getOrElse (before, Nil)
+
+    splitPrecedingStepsWhileTransitiveGeneric[Statement] orElse splitPrecedingStepsWhileTransitiveGeneric[Term] getOrElse (before, Nil)
   }
 
   protected def insertTargetsBeforeTransitivity(outerPath: Seq[Int], before: Seq[Step], newAfter: Seq[Step], newTargets: Seq[Step])(implicit stepProvingContext: StepProvingContext): (Seq[Step], StepInsertionProps) = {
-    val (existingStepsBeforeTransitive, transitiveSteps) = splitPrecedingStepsWhileTransitive(before, newAfter)
+    val (existingStepsBeforeTransitive, transitiveSteps) = splitPrecedingStepsWhileTransitive(before, newAfter, outerPath)
     (existingStepsBeforeTransitive ++ newTargets ++ transitiveSteps ++ newAfter, StepInsertionProps(outerPath :+ existingStepsBeforeTransitive.length, newTargets))
   }
 

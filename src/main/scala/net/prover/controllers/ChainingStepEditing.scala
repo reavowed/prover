@@ -45,7 +45,7 @@ trait ChainingStepEditing extends BookModification {
       substitutionContext: SubstitutionContext
     ): Option[(BinaryJoiner[TComponent], Seq[Step])] = {
       for {
-        (chainingJoiner, chainingStep) <- ChainingMethods.getTransitivityStep(precedingLhs, lhs, rhs, precedingJoiner, joiner)
+        (chainingJoiner, chainingStep) <- ChainingMethods.getChainingStep(precedingLhs, lhs, rhs, precedingJoiner, joiner)
       } yield {
         if (lhs == rhs && chainingJoiner == precedingJoiner)
           (joiner, Nil)
@@ -113,14 +113,14 @@ trait ChainingStepEditing extends BookModification {
               def getWithFollowingTransitivity: Option[Option[(Seq[Step], MultipleStepReplacementProps)]] = for {
                 (followingStep, remainingSteps) <- after.headAndTailOption
                 followingStatement <- followingStep.provenStatement
-                (followingRelation, followingLhs, followingRhs) <- ChainingMethods.getRelation(followingStatement)
+                (followingRelation, followingLhs, followingRhs) <- ChainingMethods.getJoiner(followingStatement)
                 if followingRhs == secondChainingStep.rhs
                 stepPath = stepContext.stepReference.stepPath
                 followingStepPath = outerStepContext.atIndex(last + 1).stepReference.stepPath
                 followingPremises = followingStep.recursivePremises.filter(p => !p.asOptionalInstanceOf[SingleLinePremise].flatMap(_.referencedLine.asOptionalInstanceOf[StepReference]).exists(_.stepPath.startsWith(followingStepPath)))
                 if followingPremises.exists(p => p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath)))
                 otherPremise <- followingPremises.removeWhere(p => p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath))).single
-                (initialRelation, initialLhs, _) <- ChainingMethods.getRelation(otherPremise.statement)
+                (initialRelation, initialLhs, _) <- ChainingMethods.getJoiner(otherPremise.statement)
                 if (initialLhs == followingLhs)
               } yield {
                 for {
