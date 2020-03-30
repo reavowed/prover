@@ -14,7 +14,8 @@ export default function IntroduceNameByInference({path, onError}) {
   const submit = createSubmitFunctionForStepDefinitionEndpointFromInference(context.fetchJsonForStepAndReplaceWithWrapping, path, "introduceNamingByInference", "POST", onError);
 
   return <InferenceFinder title='Select Inference for Naming'
-                       getInferenceSuggestions={getInferenceSuggestions}
-                       submit={submit}
-                       hideSummary />;
+                          getInferenceSuggestions={getInferenceSuggestions}
+                          submit={submit}
+                          hideSummary
+                          autofocus />;
 }
