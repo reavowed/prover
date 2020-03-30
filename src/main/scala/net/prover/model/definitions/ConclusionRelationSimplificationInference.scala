@@ -10,7 +10,7 @@ import net.prover.model.proof.{Step, StepProvingContext}
 case class ConclusionRelationSimplificationInference(inference: Inference, extractionOption: ExtractionOption) {
   def getConclusionSimplification(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[(Seq[Statement], Step)] = {
     for {
-      substitutions <- target.calculateSubstitutions(extractionOption.conclusion).flatMap(_.confirmTotality)
+      substitutions <- extractionOption.conclusion.calculateSubstitutions(target).flatMap(_.confirmTotality)
       assertionStep <- Step.Assertion.forInference(inference, substitutions)
       ExtractionApplication(extractionResult, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, substitutions, None, None, _ => (Nil, Nil)).toOption
       if extractionResult == target

@@ -159,5 +159,30 @@ class PremiseFinderSpec extends Specification {
         ElementOf(a, Naturals), ElementOf(b, PositiveNaturals))(
         entryContextWithDefinitions)
     }
+
+    "rewrite a premise using a fact" in {
+      val Comprehension = TermDefinition(
+        "comprehension",
+        Seq("a"),
+        Seq(ComponentType.TermComponent("A", Nil), ComponentType.StatementComponent("φ", Seq(ComponentArgument("a", 0)))),
+        None,
+        Format.Explicit("{ a ∈ A | φ }", Seq("a", "A", "φ"), false, true),
+        Nil,
+        ForAll("a")(Equivalence(ElementOf($), Conjunction(ElementOf($, A), φ($)))),
+        None,
+        Nil)
+      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, Format.default("ℕ^+", Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
+      val PositiveNaturals = PositiveNaturalsDefinition()
+      val PositiveNaturalsAreASubsetOfTheNaturals = Axiom("Positive Naturals Are a Subset of the Naturals", Nil, Subset(PositiveNaturals, Naturals))
+
+      val entryContextWithDefinitions = defaultEntryContext
+        .addEntry(PositiveNaturalsDefinition)
+        .addEntry(PositiveNaturalsAreASubsetOfTheNaturals)
+
+      checkFindPremise(
+        ElementOf(Pair(a, b), Product(Naturals, Naturals)),
+        ElementOf(a, Naturals), ElementOf(b, PositiveNaturals))(
+        entryContextWithDefinitions)
+    }
   }
 }

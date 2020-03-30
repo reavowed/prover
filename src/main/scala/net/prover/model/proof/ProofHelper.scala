@@ -15,6 +15,17 @@ object ProofHelper {
       finalStep <- Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference)
     } yield (finalStep, inference)
   }
+  def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Option[(Step, Inference, Substitutions.Possible)] = {
+    stepProvingContext.provingContext.facts.mapFind { case (fact, inference, extractionOption) =>
+      for {
+        substitutions <- target.calculateSubstitutions(fact, substitutionsSoFar)
+        assertionStep <- Step.Assertion.forInference(inference, Substitutions.empty)
+        ExtractionApplication(_, _, extractionSteps, premiseSteps, targetSteps) <- ExtractionHelper.applyExtractions(inference.conclusion, extractionOption.extractionInferences, inference, Substitutions.empty, None, None, _ => (Nil, Nil)).toOption
+        if premiseSteps.isEmpty && targetSteps.isEmpty
+        finalStep <- Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference)
+      } yield (finalStep, inference, substitutions)
+    }
+  }
 
   def findNamingInferences(implicit entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement)] = {
     entryContext.allInferences.mapCollect(i =>

@@ -215,6 +215,13 @@ case class Definitions(rootEntryContext: EntryContext) {
   def isSimpleTermDefinition(term: Term): Boolean = {
     term.asOptionalInstanceOf[DefinedTerm].exists(_.components.isEmpty)
   }
+  def getWrappedSimpleTermVariable(term: Term): Option[String] = {
+    getSimpleTermVariable(term) orElse
+      term.asOptionalInstanceOf[DefinedTerm].flatMap(_.components.single).flatMap(_.asOptionalInstanceOf[Term]).flatMap(getWrappedSimpleTermVariable)
+  }
+  def findRelation(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(BinaryRelation, Term, Term)] = {
+    definedBinaryRelations.mapFind(relation => relation.unapply(statement).map { case (lhs, rhs) => (relation, lhs, rhs) })
+  }
 
   lazy val premiseRelationSimplificationInferences: Seq[PremiseRelationSimplificationInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
@@ -223,10 +230,10 @@ case class Definitions(rootEntryContext: EntryContext) {
       extractionOption <- extractionOptionsByInferenceId(inference.id)
       singlePremise <- extractionOption.premises.single.toSeq
       if singlePremise.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
-      (conclusionLhs, conclusionRhs) <- definedBinaryRelations.mapFind(_.unapply(extractionOption.conclusion)).toSeq
-      (premiseLhs, premiseRhs) <- definedBinaryRelations.mapFind(_.unapply(singlePremise)).toSeq
+      (_, conclusionLhs, conclusionRhs) <- findRelation(extractionOption.conclusion).toSeq
+      (_, premiseLhs, premiseRhs) <- findRelation(singlePremise).toSeq
       if (isSimpleTermVariable(conclusionRhs) || isSimpleTermDefinition(conclusionRhs)) &&
-        (isSimpleTermVariable(premiseLhs) || isSimpleTermVariable(conclusionLhs)) &&
+        (isSimpleTermVariable(conclusionLhs) || getSimpleTermVariable(premiseLhs).exists(getWrappedSimpleTermVariable(conclusionLhs).contains)) &&
         conclusionRhs.complexity < premiseRhs.complexity
     } yield PremiseRelationSimplificationInference(inference, singlePremise, extractionOption.conclusion, extractionOption.extractionInferences)
   }
@@ -241,11 +248,12 @@ case class Definitions(rootEntryContext: EntryContext) {
         case _ => Nil
       }
       if extractionOption.premises.map(_.requiredSubstitutions).foldTogether.contains(extractionOption.conclusion.requiredSubstitutions) && !lastPremise.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
-      (conclusionLhs, conclusionRhs) <- definedBinaryRelations.mapFind(_.unapply(extractionOption.conclusion)).toSeq
-      (premiseLhs, premiseRhs) <- definedBinaryRelations.mapFind(_.unapply(lastPremise)).toSeq
+      (conclusionRelation, conclusionLhs, conclusionRhs) <- findRelation(extractionOption.conclusion).toSeq
+      (_, premiseLhs, premiseRhs) <- findRelation(lastPremise).toSeq
       if getSimpleTermVariable(premiseLhs).exists(p => getSimpleTermVariable(conclusionLhs).contains(p)) &&
         isSimpleTermVariable(premiseRhs) &&
-        isSimpleTermVariable(conclusionRhs)
+        isSimpleTermVariable(conclusionRhs) &&
+        conclusionRelation.unapply(initialPremise).isEmpty
     } yield PremiseRelationRewriteInference(inference, initialPremise, lastPremise, extractionOption.conclusion, extractionOption.extractionInferences)
 
   }

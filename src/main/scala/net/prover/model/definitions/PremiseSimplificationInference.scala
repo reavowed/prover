@@ -6,5 +6,5 @@ import net.prover.model.proof.{Step, StepProvingContext}
 
 trait PremiseSimplificationInference {
   def inference: Inference
-  def getPremiseSimplification(premiseToMatch: Statement, existingPremises: Seq[(Statement, Seq[(Step, Inference)])])(implicit stepProvingContext: StepProvingContext): Option[(Statement, Step)]
+  def getPremiseSimplification(premiseToMatch: Statement, existingPremises: Seq[(Statement, Seq[(Step, Inference)])])(implicit stepProvingContext: StepProvingContext): Option[(Statement, Seq[(Step, Inference)])]
 }

@@ -23,8 +23,7 @@ object ExtractionHelper {
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
-    implicit provingContext: ProvingContext,
-    substitutionContext: SubstitutionContext
+    implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     for {
       extractionSubstitutionsWithoutVariable <- extractionPremise.calculateSubstitutions(currentStatement).flatMap(_.confirmTotality).orBadRequest(s"Could not apply extraction premise for inference ${specificationInference.id}")
@@ -54,8 +53,7 @@ object ExtractionHelper {
     intendedPremisesOption: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
-    implicit provingContext: ProvingContext,
-    substitutionContext: SubstitutionContext
+    implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     for {
       (extractionPremise, otherPremises) <- +:.unapply(inference.premises).filter(_._1.requiredSubstitutions.contains(inference.requiredSubstitutions)).orBadRequest(s"Inference ${inference.id} did not have an extraction premise")
@@ -101,12 +99,11 @@ object ExtractionHelper {
     intendedConclusion: Option[Statement],
     variableTracker: VariableTracker,
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
-    implicit provingContext: ProvingContext,
-    substitutionContext: SubstitutionContext
+    implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     inferencesRemaining match {
       case inference +: tailInferences =>
-        provingContext.specificationInferenceOption.filter(_._1 == inference)
+        stepProvingContext.provingContext.specificationInferenceOption.filter(_._1 == inference)
           .map { case (_, singlePremise, predicateName, variableName) =>
             applySpecification(currentStatement, inference, singlePremise, predicateName, variableName, variableTracker, tailInferences, substitutions, intendedPremises, intendedConclusion, findPremiseStepsOrTargets)
           } getOrElse applySimpleExtraction(currentStatement, inference, variableTracker,  tailInferences, substitutions, intendedPremises, intendedConclusion, findPremiseStepsOrTargets)
@@ -156,8 +153,7 @@ object ExtractionHelper {
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
-    implicit provingContext: ProvingContext,
-    substitutionContext: SubstitutionContext
+    implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     applyExtractions(premise, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromInference(baseInference), findPremiseStepsOrTargets).map(removeNonEndStructuralSimplifications)
   }
@@ -168,8 +164,7 @@ object ExtractionHelper {
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
     findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
-    implicit provingContext: ProvingContext,
-    stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     applyExtractions(premise.statement, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext, findPremiseStepsOrTargets).map(removeNonEndStructuralSimplifications)
   }

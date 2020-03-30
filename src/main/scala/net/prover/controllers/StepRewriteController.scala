@@ -145,8 +145,9 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       (lhs, rhs) <- equality.unapply(extractionOption.conclusion).orBadRequest("Rewrite conclusion was not equality")
       (sourceTemplate, targetTemplate) = direction.swapSourceAndResult(lhs, rhs)
       unwrappedStepContext = unwrappers.enhanceContext(implicitly)
+      unwrappedStepProvingContext = StepProvingContext.withStepContext(unwrappedStepContext)
       substitutions <- sourceTemplate.calculateSubstitutions(baseTerm)(unwrappedStepContext).orBadRequest("Could not find substitutions")
-      (premiseSteps, premises, _) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, substitutions)(StepProvingContext(unwrappedStepContext, implicitly))
+      (premiseSteps, premises, _) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, substitutions)(unwrappedStepProvingContext)
         .orBadRequest("Could not find premises")
       (removedUnwrappers, removedSource, removedPremises, removedWrapperExpression) = ReplacementMethods[TExpression].removeUnwrappers(baseTerm, premises, wrapperExpression, unwrappers)
       removedUnwrappedStepContext = removedUnwrappers.enhanceContext(implicitly)
@@ -155,7 +156,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality.orBadRequest("Substitutions were not complete")
       rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions)(unwrappedStepContext).orBadRequest("Could not apply substitutions to target")
       assertionStep <- Step.Assertion.forInference(inference, finalSubstitutions)(unwrappedStepContext).orBadRequest("Could not apply substitutions to inference")
-      extractionSteps <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, finalSubstitutions, None, None, _ => (Nil, Nil))(implicitly, unwrappedStepContext).map(_.extractionSteps)
+      extractionSteps <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, finalSubstitutions, None, None, _ => (Nil, Nil))(unwrappedStepProvingContext).map(_.extractionSteps)
       elidedExtractionStep = Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference).get
       elidedStep = Step.Elided.ifNecessary(premiseSteps :+ elidedExtractionStep, inference).get
     } yield (removedSource, rewrittenTerm, Some(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
