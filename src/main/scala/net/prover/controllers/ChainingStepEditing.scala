@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, MultipleStepReplacementProps, PathData}
+import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, MultipleStepReplacementProps, PathData, StepInsertionProps}
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
 import net.prover.model.definitions._
@@ -151,7 +151,9 @@ trait ChainingStepEditing extends BookModification {
             } yield (finalSteps, InsertionAndMultipleReplacementProps(insertionProps, replacementProps))
           }.orNotFound(s"Step $stepPath").flatten
         }.map { case (proofUpdateProps, stepUpdateProps) =>
-          proofUpdateProps.withNewStepUpdateProps(stepUpdateProps)
+          proofUpdateProps.withNewStepUpdateProps(InsertionAndMultipleReplacementProps(
+            stepUpdateProps.insertion.updateStepsFrom(proofUpdateProps.stepUpdates),
+            stepUpdateProps.replacement.updateStepsFrom(proofUpdateProps.stepUpdates)))
         }
     }).toResponseEntity
   }

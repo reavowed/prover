@@ -72,9 +72,7 @@ trait BookModification {
             } yield insertTargetsBeforeTransitivity(init, before, step +: after, stepsToAddBeforeTransitive)(stepProvingContext)
           }.orNotFound(s"Step $stepPath").flatten
         }.map { case (proofUpdateProps, stepInsertionProps) =>
-          proofUpdateProps.withNewStepUpdateProps(StepInsertionProps(
-            stepInsertionProps.path,
-            proofUpdateProps.stepUpdates.newSteps.slice(stepInsertionProps.path.last, stepInsertionProps.path.last + stepInsertionProps.newSteps.length)))
+          proofUpdateProps.withNewStepUpdateProps(stepInsertionProps.updateStepsFrom(proofUpdateProps.stepUpdates))
         }
       case _ =>
         Failure(NotFoundException(s"Step $stepPath"))
@@ -102,12 +100,8 @@ trait BookModification {
         }.map { case (proofUpdateProps, stepProps) =>
           proofUpdateProps.withNewStepUpdateProps(
             InsertionAndReplacementProps(
-              StepInsertionProps(
-                stepProps.insertion.path,
-                proofUpdateProps.stepUpdates.newSteps.slice(stepProps.insertion.path.last, stepProps.insertion.path.last + stepProps.insertion.newSteps.length)),
-              StepReplacementProps(
-                stepProps.replacement.path,
-                proofUpdateProps.stepUpdates.newSteps.slice(stepProps.replacement.path.last + stepProps.insertion.newSteps.length, stepProps.replacement.path.last + stepProps.insertion.newSteps.length + stepProps.replacement.newSteps.length))))
+              stepProps.insertion.updateStepsFrom(proofUpdateProps.stepUpdates),
+              stepProps.replacement.updateStepsFrom(proofUpdateProps.stepUpdates, stepProps.insertion.newSteps.length)))
         }
       case _ =>
         Failure(NotFoundException(s"Step $stepPath"))
