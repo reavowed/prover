@@ -290,12 +290,19 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
+    def forConnective(connective: BinaryConnective)(implicit stepProvingContext: StepProvingContext): Try[Seq[(String, String)]] = {
+      Success(stepProvingContext.provingContext.transitivities.filter(_.resultJoiner == connective).map(t => (t.firstPremiseJoiner.symbol, t.secondPremiseJoiner.symbol)))
+    }
+    def forRelation(relation: BinaryRelation)(implicit stepProvingContext: StepProvingContext): Try[Seq[(String, String)]] = {
+      Success(
+        stepProvingContext.provingContext.equalityOption.map { e => Seq((e.relation.symbol, relation.symbol), (relation.symbol, e.relation.symbol))}.getOrElse(Nil) ++
+          stepProvingContext.provingContext.transitivities.filter(_.resultJoiner == relation).map(t => (t.firstPremiseJoiner.symbol, t.secondPremiseJoiner.symbol)))
+    }
+
     (for {
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      joiner <- stepProvingContext.provingContext.definedBinaryJoiners.find(_.unapply(step.statement)(stepProvingContext.stepContext).nonEmpty).orBadRequest("Target statement was not connective or relation")
-      fromEquality = stepProvingContext.provingContext.equalityOption.map { e => Seq((e.relation.symbol, joiner.symbol), (joiner.symbol, e.relation.symbol))}.getOrElse(Nil)
-      fromTransitivities = stepProvingContext.provingContext.transitivities.filter(_.resultJoiner == joiner).map(t => (t.firstPremiseJoiner.symbol, t.secondPremiseJoiner.symbol))
-    } yield fromEquality ++ fromTransitivities).toResponseEntity
+      result <- withRelation(step.statement, (c, _, _) => forConnective(c)(stepProvingContext), (r, _, _) => forRelation(r)(stepProvingContext))(stepProvingContext)
+    } yield result).toResponseEntity
   }
 
   @PostMapping(value = Array("/chainedTarget"))

@@ -22,7 +22,10 @@ export default class AddChainedTarget extends React.Component {
 
   componentDidMount() {
     this.context.fetchJsonForStep(this.props.path, "chainedTargetJoiners")
-      .then(joiners => this.setStatePromise({joiners}))
+      .then(joiners => {
+        const chosenJoinerIndex = joiners.length === 1 ? 0 : -1;
+        this.setStatePromise({joiners, chosenJoinerIndex})
+      })
   }
 
   addTarget = () => {
@@ -48,7 +51,7 @@ export default class AddChainedTarget extends React.Component {
         this.addTarget();
       }
     };
-    const readyToSave = targetStatement && targetStatement.trim().length && chosenJoinerIndex;
+    const readyToSave = targetStatement && targetStatement.trim().length && chosenJoinerIndex > -1;
     return <>
       {!joiners && <span className="fas fa-spin fa-spinner text-center mt-4 mb-4"/>}
       {joiners && <>
