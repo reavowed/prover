@@ -213,9 +213,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
             intermediate = direction.getResult(rewriteChainingDefinition.lhs, rewriteChainingDefinition.rhs)
             updatedChainingDefinition = rewriteChainingDefinition.copy(step = finalStep)
             (targetLhs, targetRhs) = direction.swapSourceAndResult(intermediate, targetResult)
-            newTarget = targetRelation(targetLhs, targetRhs)
-            newTargetStepOption = if (stepProvingContext.allPremises.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
-            (firstDefinition, secondDefinition) = direction.swapSourceAndResult(updatedChainingDefinition, ChainingStepDefinition(targetLhs, targetRhs, targetRelation, newTargetStepOption))
+            (firstDefinition, secondDefinition) = direction.swapSourceAndResult(updatedChainingDefinition, ChainingStepDefinition.forTarget(targetLhs, targetRhs, targetRelation))
           } yield (firstDefinition, secondDefinition, additionalTargets ++ extractionTargets)
         }
 

@@ -55,8 +55,9 @@ trait ChainingStepEditing extends BookModification {
     }
   }
   object ChainingStepDefinition {
-    def forTarget[T <: Expression : ChainingMethods](lhs: T, rhs: T, joiner: BinaryJoiner[T])(implicit substitutionContext: SubstitutionContext): ChainingStepDefinition[T] = {
-      ChainingStepDefinition(lhs, rhs, joiner, Some(Step.Target(joiner(lhs, rhs))))
+    def forTarget[T <: Expression : ChainingMethods](lhs: T, rhs: T, joiner: BinaryJoiner[T])(implicit stepProvingContext: StepProvingContext): ChainingStepDefinition[T] = {
+      val stepOption = Some(Step.Target(joiner(lhs, rhs))).filter(step => !stepProvingContext.allPremises.exists(_.statement == step.statement))
+      ChainingStepDefinition(lhs, rhs, joiner, stepOption)
     }
   }
 
