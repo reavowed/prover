@@ -182,7 +182,14 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                   subproof (Existence) {
                     prove ∈ $$$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, $$$$0, $$$0) 0.5.0.0.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.5.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                     prove = $$$0 apply $$0 $$$$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, $0, X, $$$$0, $$$0) 0.5.0.0.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.5.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                    prove ∨ ∈ successor $$$$0 $0 = successor $$$$0 $0 220bd30d1396001c231c4257d9a9f1d98ebf4bd91132cbb730afda2d43cb7b1c () ($0, $$$$0) 0.5.0.0.0.0.1.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.5.0.0.0.0.1.1.0.0
+                    elided c06768d75c05348690098b02ae1dd805419c16771314db00c4d82f16a9522255 {
+                      prove ∀ n → ∈ $0 ℕ ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 c06768d75c05348690098b02ae1dd805419c16771314db00c4d82f16a9522255 () ()
+                      prove → ∈ $0 ℕ ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 ℕ ∀ m ↔ ∈ $0 $$$$$$$0 ∨ ∈ successor $0 $$$$$$$0 = successor $0 $$$$$$$0) ($0) 0.5.0.0.0.0.1.1.0.2.0
+                      prove ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0) () 0.5.0.0.0.0.1.1.0.2.1 0.5.0.0.0.0.1.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      prove ↔ ∈ $$$$0 $0 ∨ ∈ successor $$$$0 $0 = successor $$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$$0 $0 ∨ ∈ successor $$$$$$0 $0 = successor $$$$$$0 $0) ($$$$0) 0.5.0.0.0.0.1.1.0.2.2
+                      prove → ∈ $$$$0 $0 ∨ ∈ successor $$$$0 $0 = successor $$$$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $$$$0 $0, ∨ ∈ successor $$$$0 $0 = successor $$$$0 $0) () 0.5.0.0.0.0.1.1.0.2.3
+                      prove ∨ ∈ successor $$$$0 $0 = successor $$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 $0, ∨ ∈ successor $$$$0 $0 = successor $$$$0 $0) () 0.5.0.0.0.0.1.1.0.2.4 0.5.0.0.0.0.1.1.0.0
+                    }
                     subproof (Successor is in domain) {
                       assume ∈ successor $$$$0 $0 {
                         elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
@@ -193,7 +200,13 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                           prove ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∧ = successor $$$$0 0 = apply $$0 successor $$$$0 g_0, ∃ b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0) () 0.5.0.0.0.0.1.1.0.3.0.0.1 0.5.0.0.0.0.1.1.0.3.0.0.3
                         }
                         let b ∧ = successor $$$$$0 successor $0 = apply $$$0 successor $$$$$0 apply f apply $$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ = successor $$$$0 successor $$$$$$0 = apply $$0 successor $$$$0 apply f apply $$0 $$$$$$0, = apply $$0 successor $$$$0 apply f $$$0) () {
-                          prove = $$$$$0 $0 5778861e17c0abb75b73129b83d1c1f7cf2f553201969f92436d386720fa0a99 () ($$$$$0, $0) 0.5.0.0.0.0.1.1.0.3.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                          elided 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd {
+                            prove ∀ n ∀ m ↔ = successor $$0 successor $0 = $$0 $0 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd () ()
+                            prove ∀ m ↔ = successor $$$$$$0 successor $0 = $$$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (∀ m ↔ = successor $$$$$$$$0 successor $0 = $$$$$$$$0 $0) ($$$$$0) 0.5.0.0.0.0.1.1.0.3.0.1.0.0
+                            prove ↔ = successor $$$$$0 successor $0 = $$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ = successor $$$$$0 successor $$$$$$$0 = $$$$$0 $$$$$$$0) ($0) 0.5.0.0.0.0.1.1.0.3.0.1.0.1
+                            prove → = successor $$$$$0 successor $0 = $$$$$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= successor $$$$$0 successor $0, = $$$$$0 $0) () 0.5.0.0.0.0.1.1.0.3.0.1.0.2
+                            prove = $$$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= successor $$$$$0 successor $0, = $$$$$0 $0) () 0.5.0.0.0.0.1.1.0.3.0.1.0.3 0.5.0.0.0.0.1.1.0.3.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                          }
                           prove = apply $$$0 successor $$$$$0 apply f apply $$$0 $$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (= apply $$$0 successor $$$$$0 apply f apply $$$0 $$$$$$$0) ($$$$$0, $0) 0.5.0.0.0.0.1.1.0.3.0.1.0 0.5.0.0.0.0.1.1.0.3.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                           prove = apply $$$0 successor $$$$$0 apply f $$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (= apply $$$0 successor $$$$$0 apply f $$$$$$$0) ($$$$0, apply $$$0 $$$$$0) 0.5.0.0.0.0.1.1.0.1 0.5.0.0.0.0.1.1.0.3.0.1.1
                         } 0.5.0.0.0.0.1.1.0.3.0.0
@@ -406,7 +419,13 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                               }
                               prove ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∧ = successor $$$$$$$0 0 = apply $$0 successor $$$$$$$0 g_0, ∃ x ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0) () 0.5.0.0.0.0.1.1.1.0.0.1.1.1.2 0.5.0.0.0.0.1.1.1.0.0.1.1.1.3
                               let b ∧ = successor $$$$$$$$0 successor $0 = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ = successor $$$$$$$0 successor $$$$$$$$$0 = apply $$0 successor $$$$$$$0 apply f apply $$0 $$$$$$$$$0, = apply $$0 successor $$$$$$$0 apply f apply $$0 $$$$$$$0) () {
-                                prove = $$$$$$$$0 $0 5778861e17c0abb75b73129b83d1c1f7cf2f553201969f92436d386720fa0a99 () ($$$$$$$$0, $0) 0.5.0.0.0.0.1.1.1.0.0.1.1.1.5a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                                elided 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd {
+                                  prove ∀ n ∀ m ↔ = successor $$0 successor $0 = $$0 $0 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd () ()
+                                  prove ∀ m ↔ = successor $$$$$$$$$0 successor $0 = $$$$$$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (∀ m ↔ = successor $$$$$$$$$$$0 successor $0 = $$$$$$$$$$$0 $0) ($$$$$$$$0) 0.5.0.0.0.0.1.1.1.0.0.1.1.1.5.0.0
+                                  prove ↔ = successor $$$$$$$$0 successor $0 = $$$$$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ = successor $$$$$$$$0 successor $$$$$$$$$$0 = $$$$$$$$0 $$$$$$$$$$0) ($0) 0.5.0.0.0.0.1.1.1.0.0.1.1.1.5.0.1
+                                  prove → = successor $$$$$$$$0 successor $0 = $$$$$$$$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= successor $$$$$$$$0 successor $0, = $$$$$$$$0 $0) () 0.5.0.0.0.0.1.1.1.0.0.1.1.1.5.0.2
+                                  prove = $$$$$$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= successor $$$$$$$$0 successor $0, = $$$$$$$$0 $0) () 0.5.0.0.0.0.1.1.1.0.0.1.1.1.5.0.3 0.5.0.0.0.0.1.1.1.0.0.1.1.1.5a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                                }
                                 prove = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $$$$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (= apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $$$$$$$$$$0) ($$$$$$$$0, $0) 0.5.0.0.0.0.1.1.1.0.0.1.1.1.5.0 0.5.0.0.0.0.1.1.1.0.0.1.1.1.5a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                               } 0.5.0.0.0.0.1.1.1.0.0.1.1.1.4
                             }
@@ -465,7 +484,13 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                 prove ∃ b ∧ = successor $$$$0 successor $0 = apply $$$0 successor $$$$0 apply f apply $$$0 $0 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (∧ = successor $$$0 0 = apply $$0 successor $$$0 g_0, ∃ b ∧ = successor $$$$0 successor $0 = apply $$$0 successor $$$$0 apply f apply $$$0 $0) () 0.9.0.0.2.1.0.2 0.9.0.0.2.1.0.3
               }
               let b_n ∧ = successor $$$$0 successor $0 = apply $$$0 successor $$$$0 apply f apply $$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ = successor $$$0 successor $$$$$0 = apply $$0 successor $$$0 apply f apply $$0 $$$$$0, = apply $$0 successor $$$0 apply f apply $$0 $$$0) () {
-                prove = $$$$0 $0 5778861e17c0abb75b73129b83d1c1f7cf2f553201969f92436d386720fa0a99 () ($$$$0, $0) 0.9.0.0.2.1.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                elided 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd {
+                  prove ∀ n ∀ m ↔ = successor $$0 successor $0 = $$0 $0 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd () ()
+                  prove ∀ m ↔ = successor $$$$$0 successor $0 = $$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (∀ m ↔ = successor $$$$$$$0 successor $0 = $$$$$$$0 $0) ($$$$0) 0.9.0.0.2.1.1.0.0
+                  prove ↔ = successor $$$$0 successor $0 = $$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ = successor $$$$0 successor $$$$$$0 = $$$$0 $$$$$$0) ($0) 0.9.0.0.2.1.1.0.1
+                  prove → = successor $$$$0 successor $0 = $$$$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= successor $$$$0 successor $0, = $$$$0 $0) () 0.9.0.0.2.1.1.0.2
+                  prove = $$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= successor $$$$0 successor $0, = $$$$0 $0) () 0.9.0.0.2.1.1.0.3 0.9.0.0.2.1.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                }
                 prove = apply $$$0 successor $$$$0 apply f apply $$$0 $$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (= apply $$$0 successor $$$$0 apply f apply $$$0 $$$$$$0) ($$$$0, $0) 0.9.0.0.2.1.1.0 0.9.0.0.2.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
               } 0.9.0.0.2.1.0
               prove ⊆ $$0 union $$$$0 95c32c2c8cc0e00a8696a1caecffdb78140c40d6904ea90ced8f6d059852cb3a () ($$0, $$$$0) 0.9.0.0.2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c

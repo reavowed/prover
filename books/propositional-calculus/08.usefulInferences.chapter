@@ -215,3 +215,32 @@ conclusion ↔ ∨ χ φ ∨ χ ψ
   }
   prove ↔ ∨ χ φ ∨ χ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ χ φ, ∨ χ ψ) () 0 1
 }
+
+theorem Add Right Disjunction to Equivalence
+premise ↔ φ ψ
+conclusion ↔ ∨ φ χ ∨ ψ χ
+{
+  prove ↔ ∨ φ χ ∨ χ φ 2eaae6272d534dc99795d91bbbacc12e5e5b58aa4db06ed18bf864f72b5c947d (φ, χ) ()
+  prove ↔ ∨ χ φ ∨ χ ψ f8559bd53d4671ecb607125cef6e210029664855e6383ed783a0a88971632654 (φ, ψ, χ) () p0
+  prove ↔ ∨ φ χ ∨ χ ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∨ φ χ, ∨ χ φ, ∨ χ ψ) () 0 1
+  prove ↔ ∨ χ ψ ∨ ψ χ 2eaae6272d534dc99795d91bbbacc12e5e5b58aa4db06ed18bf864f72b5c947d (χ, ψ) ()
+  prove ↔ ∨ φ χ ∨ ψ χ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∨ φ χ, ∨ χ ψ, ∨ ψ χ) () 2 3
+}
+
+theorem Disjunction of Equivalences
+premise ↔ φ ψ
+premise ↔ χ ω
+conclusion ↔ ∨ φ χ ∨ ψ ω
+{
+  assume ∨ φ χ {
+    prove → φ ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () p0
+    prove → χ ω f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (χ, ω) () p1
+    prove ∨ ψ ω 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (φ, χ, ψ, ω) () 0a 0.0 0.1
+  }
+  assume ∨ ψ ω {
+    prove → ψ φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (φ, ψ) () p0
+    prove → ω χ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (χ, ω) () p1
+    prove ∨ φ χ 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (ψ, ω, φ, χ) () 1a 1.0 1.1
+  }
+  prove ↔ ∨ φ χ ∨ ψ ω 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ φ χ, ∨ ψ ω) () 0 1
+}

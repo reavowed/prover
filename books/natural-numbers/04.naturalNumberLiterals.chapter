@@ -75,3 +75,33 @@ conclusion ¬ = 1 0
     prove ¬ = 1 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ = $0 0) (successor 0, 1) 1.0 0
   }
 }
+
+term 2 ()
+  (= $0 successor 1)
+
+theorem 2 Is a Natural Number
+conclusion ∈ 2 ℕ
+{
+  prove ∈ 1 ℕ 0ea2cae46b5b1dec42fef1b2b68f5d829b809f821651b8628f2f94b1abd87ac5 () ()
+  prove ∈ successor 1 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (1) 0
+  elided 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 {
+    elided 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 {
+      prove = 2 successor 1 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 () ()
+      prove = successor 1 2 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (2, successor 1) 2.0.0
+    }
+    prove ∈ 2 ℕ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 ℕ) (successor 1, 2) 2.0 1
+  }
+}
+
+theorem 2 Is Not Zero
+conclusion ¬ = 2 0
+{
+  prove ¬ = successor 1 0 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () (1)
+  elided 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 {
+    elided 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 {
+      prove = 2 successor 1 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 () ()
+      prove = successor 1 2 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (2, successor 1) 1.0.0
+    }
+    prove ¬ = 2 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ = $0 0) (successor 1, 2) 1.0 0
+  }
+}

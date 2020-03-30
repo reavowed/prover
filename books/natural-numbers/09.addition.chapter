@@ -292,7 +292,13 @@ conclusion ↔ = apply + orderedPair n r apply + orderedPair m r = n m
           prove = successor apply + orderedPair n $0 apply + orderedPair m successor $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (successor apply + orderedPair n $0, apply + orderedPair n successor $0, apply + orderedPair m successor $0) 1.0.0.0.0 1.0.0.0a
           prove = apply + orderedPair m successor $0 successor apply + orderedPair m $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (m, $0) p1 1.0a
           prove = successor apply + orderedPair n $0 successor apply + orderedPair m $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (successor apply + orderedPair n $0, apply + orderedPair m successor $0, successor apply + orderedPair m $0) 1.0.0.0.1 1.0.0.0.2
-          prove = apply + orderedPair n $0 apply + orderedPair m $0 5778861e17c0abb75b73129b83d1c1f7cf2f553201969f92436d386720fa0a99 () (apply + orderedPair n $0, apply + orderedPair m $0) 1.0.0.0.3
+          elided 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd {
+            prove ∀ n ∀ m ↔ = successor $$0 successor $0 = $$0 $0 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd () ()
+            prove ∀ m ↔ = successor apply + orderedPair n $$0 successor $0 = apply + orderedPair n $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (∀ m ↔ = successor $$$0 successor $0 = $$$0 $0) (apply + orderedPair n $0) 1.0.0.0.4.0
+            prove ↔ = successor apply + orderedPair n $0 successor apply + orderedPair m $0 = apply + orderedPair n $0 apply + orderedPair m $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ = successor apply + orderedPair n $0 successor $$0 = apply + orderedPair n $0 $$0) (apply + orderedPair m $0) 1.0.0.0.4.1
+            prove → = successor apply + orderedPair n $0 successor apply + orderedPair m $0 = apply + orderedPair n $0 apply + orderedPair m $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= successor apply + orderedPair n $0 successor apply + orderedPair m $0, = apply + orderedPair n $0 apply + orderedPair m $0) () 1.0.0.0.4.2
+            prove = apply + orderedPair n $0 apply + orderedPair m $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= successor apply + orderedPair n $0 successor apply + orderedPair m $0, = apply + orderedPair n $0 apply + orderedPair m $0) () 1.0.0.0.4.3 1.0.0.0.3
+          }
           prove = n m fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply + orderedPair n $0 apply + orderedPair m $0, = n m) () 1.0.0a 1.0.0.0.4
         }
       }
