@@ -83,9 +83,9 @@ conclusion ∃! ~ ∧ relation $0 ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ^
                                 }
                               }
                               elided 54e8cb2fe918132ed232d332ef68c4171fed3669d6d28ddc9630172b01c3adde {
-                                elided d01db38b4996ec0b4d291e1ac8e6308e7bb09b49068860a16229d0cbf282e9be {
+                                elided 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f {
                                   prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () ()
-                                  prove ∈ apply ⍳_ℤ 0 ℤ d01db38b4996ec0b4d291e1ac8e6308e7bb09b49068860a16229d0cbf282e9be () (0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.0
+                                  prove ∈ apply ⍳_ℤ 0 ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.0
                                 }
                                 elided 54e8cb2fe918132ed232d332ef68c4171fed3669d6d28ddc9630172b01c3adde {
                                   prove strictTotalOrder <_ℤ ℤ 54e8cb2fe918132ed232d332ef68c4171fed3669d6d28ddc9630172b01c3adde () ()
@@ -285,9 +285,9 @@ conclusion ∃! ~ ∧ relation $0 ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ^
                                 }
                                 prove ↔ ∈ orderedPair apply ×_ℤ orderedPair $$$$$$0 $$$0 apply ×_ℤ orderedPair $$$$$0 $$$$0 <_ℤ ∈ orderedPair apply ×_ℤ orderedPair $$$$$0 apply ⍳_ℤ 0 apply ×_ℤ orderedPair $$$$$0 $$$$0 <_ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ orderedPair apply ×_ℤ orderedPair $$$$$$0 $$$0 apply ×_ℤ orderedPair $$$$$0 $$$$0 <_ℤ, ∈ orderedPair apply ⍳_ℤ 0 apply ×_ℤ orderedPair $$$$$0 $$$$0 <_ℤ, ∈ orderedPair apply ×_ℤ orderedPair $$$$$0 apply ⍳_ℤ 0 apply ×_ℤ orderedPair $$$$$0 $$$$0 <_ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.3 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.4
                                 elided 84b71f57dd7d8234817bc95e39977ee8034b886cc5eb9ad04c9c6277bbdbaaab {
-                                  elided d01db38b4996ec0b4d291e1ac8e6308e7bb09b49068860a16229d0cbf282e9be {
+                                  elided 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f {
                                     prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () ()
-                                    prove ∈ apply ⍳_ℤ 0 ℤ d01db38b4996ec0b4d291e1ac8e6308e7bb09b49068860a16229d0cbf282e9be () (0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.6.0.0
+                                    prove ∈ apply ⍳_ℤ 0 ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.6.0.0
                                   }
                                   elided ba9f6751bdff096d5414f53689f3e1fe20ec95e19789212bad177601f7fbcfe9 {
                                     prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0 $0 <_ℤ ba9f6751bdff096d5414f53689f3e1fe20ec95e19789212bad177601f7fbcfe9 () ()
@@ -310,9 +310,9 @@ conclusion ∃! ~ ∧ relation $0 ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ^
                                 }
                                 prove ↔ ∈ orderedPair apply ×_ℤ orderedPair $$$$$$0 $$$0 apply ×_ℤ orderedPair $$$$$0 $$$$0 <_ℤ ∈ orderedPair apply ⍳_ℤ 0 $$$$0 <_ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ orderedPair apply ×_ℤ orderedPair $$$$$$0 $$$0 apply ×_ℤ orderedPair $$$$$0 $$$$0 <_ℤ, ∈ orderedPair apply ×_ℤ orderedPair $$$$$0 apply ⍳_ℤ 0 apply ×_ℤ orderedPair $$$$$0 $$$$0 <_ℤ, ∈ orderedPair apply ⍳_ℤ 0 $$$$0 <_ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.5 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.6
                                 elided 84b71f57dd7d8234817bc95e39977ee8034b886cc5eb9ad04c9c6277bbdbaaab {
-                                  elided d01db38b4996ec0b4d291e1ac8e6308e7bb09b49068860a16229d0cbf282e9be {
+                                  elided 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f {
                                     prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () ()
-                                    prove ∈ apply ⍳_ℤ 0 ℤ d01db38b4996ec0b4d291e1ac8e6308e7bb09b49068860a16229d0cbf282e9be () (0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.8.0.0
+                                    prove ∈ apply ⍳_ℤ 0 ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.8.0.0
                                   }
                                   elided ba9f6751bdff096d5414f53689f3e1fe20ec95e19789212bad177601f7fbcfe9 {
                                     prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0 $0 <_ℤ ba9f6751bdff096d5414f53689f3e1fe20ec95e19789212bad177601f7fbcfe9 () ()
