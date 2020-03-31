@@ -1,8 +1,5 @@
 package net.prover.model.expressions
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition
 
@@ -16,8 +13,8 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   def getMatch(other: Expression): Option[Seq[Expression]]
   def update(newArguments: Seq[Term]): ExpressionType
 
-  override def structuralComplexity: Int = arguments.map(_.structuralComplexity).sum
-  override def definitionalComplexity: Int = arguments.map(_.definitionalComplexity).sum
+  override def structuralComplexity: Int = 1
+  override def definitionalComplexity: Int = 1
 
   override def definitionUsages: DefinitionUsages = arguments.map(_.definitionUsages).foldTogether
   override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {

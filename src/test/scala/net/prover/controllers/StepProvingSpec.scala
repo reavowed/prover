@@ -4,7 +4,11 @@ import net.prover.controllers.models.PathData
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.Axiom
 import net.prover.model.expressions.{DefinedStatement, TermVariable}
-import net.prover.model.proof.{Step, SubstitutionContext}
+import net.prover.model.proof.{Step, StepProvingContext, SubstitutionContext}
+import org.specs2.matcher.Matcher
+import org.springframework.http.ResponseEntity
+
+import scala.util.Success
 
 class StepProvingSpec extends ControllerSpec {
   def getBoundVariable(step: Step, path: Seq[Int]): String = {
@@ -13,7 +17,27 @@ class StepProvingSpec extends ControllerSpec {
     }.boundVariableNames.head
   }
 
+  def beResponseEntity[T](matcher: Matcher[T]): Matcher[ResponseEntity[_]] = matcher ^^ { (responseEntity: ResponseEntity[_]) => responseEntity.getBody.asInstanceOf[T] }
+
   "proving a step" should {
+    "suggest an extraction using modus tollens" in {
+      val service = mock[BookService]
+      val controller = new StepProvingController(service)
+
+      service.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns Success((
+        Step.Target(Negation(Equals(a, b))),
+        entryContextAndStepContextToStepProvingContext(defaultEntryContext, createOuterStepContext(Nil, Nil))))
+
+      controller.getPossibleInferencesForCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        "Singleton"
+      ) should beResponseEntity(not(empty))
+    }
+
     "remove unnecessary structural simplifications" in {
       val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
