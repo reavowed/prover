@@ -118,7 +118,7 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
     {assertionStep && assertionStep instanceof ElidedStep && <span className="fas fa-ellipsis-v text-muted mr-2" onClick={toggleProofCard} style={{cursor: "pointer"}}/>}
   </>;
 
-  const proofLine = <ProofLine path={innermostNamingPath}
+  const proofLine = <ProofLine path={path}
                                suffix="a"
                                premiseReferences={[...innermostNamingStep.step.referencedLinesForExtraction, ...(assertionStep ? _.filter(assertionStep.referencedLines, r => !_.startsWith(r.stepPath, path)) : [])]}
                                ref={proofLineRef}
