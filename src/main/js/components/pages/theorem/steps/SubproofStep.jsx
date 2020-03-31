@@ -25,7 +25,7 @@ export class SubproofStep extends React.Component {
     additionalReferences = additionalReferences || [];
     let {showingSubproof} = this.state;
     let reference = new StepReference(path);
-    const titleElement = <h6 onClick={this.toggleSubproof} className={"mt-1 mb-1"} style={{cursor: "pointer"}}>{formatHtml(step.name)}</h6>;
+    const titleElement = <div onClick={this.toggleSubproof} className={"font-weight-bold mt-1 mb-1"} style={{cursor: "pointer"}}>{formatHtml(step.name)}</div>;
     return showingSubproof ?
       <Step.WithSubsteps path={path}>
         <Step.Antecedent>{titleElement}</Step.Antecedent>
@@ -37,8 +37,7 @@ export class SubproofStep extends React.Component {
         {titleElement}
         <ProofLine path={path}
                    premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
-                   incomplete={!step.isComplete}
-                   onClick={this.toggleSubproof}>
+                   incomplete={!step.isComplete}>
           <ProofLine.SingleStatementWithPrefixContent prefix="Then"
                                                       statement={step.provenStatement}
                                                       path={path} />
