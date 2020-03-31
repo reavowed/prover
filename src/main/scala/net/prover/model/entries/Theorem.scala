@@ -70,6 +70,13 @@ case class Theorem(
     Seq("conclusion " + conclusion.serialized) ++
     proofs.flatMap(_.serializedLines)
 
+  def replaceInference(
+    oldInference: Inference,
+    newInference: Inference,
+    provingContext: ProvingContext
+  ): Theorem = {
+    copy(proofs = proofs.map(_.replaceInference(oldInference, newInference, StepProvingContext(initialStepContext, provingContext))))
+  }
   override def replaceDefinition(
     oldDefinition: ExpressionDefinition,
     newDefinition: ExpressionDefinition,
@@ -153,6 +160,11 @@ object Theorem extends Inference.EntryParser {
       forSteps(steps, initialStepContext)
     }
 
+    def replaceInference(
+      oldInference: Inference,
+      newInference: Inference,
+      stepProvingContext: StepProvingContext
+    ): Proof = Proof(steps.replaceInference(oldInference, newInference, stepProvingContext))
     def replaceDefinition(
       oldDefinition: ExpressionDefinition,
       newDefinition: ExpressionDefinition,

@@ -128,7 +128,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       inference <- findInference(inferenceId)(stepProvingContext)
       possibleTarget <- getPossibleTargets(step.statement)(stepProvingContext).find(_.unwrappers.map(_.definitionSymbol) == targetUnwrappers.toSeq).orBadRequest(s"Could not find target with unwrappers ${targetUnwrappers.mkString(", ")}")
       extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == conclusionExtractionInferenceIds.toSeq).orBadRequest(s"Could not find extraction option with inference ids ${conclusionExtractionInferenceIds.mkString(", ")}")
-    } yield PossibleConclusionWithPremises.fromExtractionOptionWithTarget(extractionOption, possibleTarget.statement)(StepProvingContext.updateStepContext(possibleTarget.unwrappers.enhanceContext)(stepProvingContext))).toResponseEntity
+    } yield PossibleConclusionWithPremises.fromExtractionOptionWithTarget(extractionOption, possibleTarget.statement)(stepProvingContext.updateStepContext(possibleTarget.unwrappers.enhanceContext))).toResponseEntity
   }
 
   @GetMapping(value = Array("/possibleInferencesForNewTarget"), produces = Array("application/json;charset=UTF-8"))

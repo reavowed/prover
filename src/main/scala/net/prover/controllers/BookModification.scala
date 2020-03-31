@@ -87,7 +87,7 @@ trait BookModification {
         bookService.replaceSteps[WithValue[StepInsertionProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { case (steps, stepProvingContext) =>
           steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
             for {
-              stepsToAddBeforeTransitive <- f(StepProvingContext.updateStepContext(_.addSteps(before).atIndex(last))(stepProvingContext))
+              stepsToAddBeforeTransitive <- f(stepProvingContext.updateStepContext(_.addSteps(before).atIndex(last)))
             } yield insertTargetsBeforeTransitivity(init, before, step +: after, stepsToAddBeforeTransitive)(stepProvingContext)
           }.orNotFound(s"Step $stepPath").flatten
         }.map { case (proofUpdateProps, stepInsertionProps) =>
@@ -112,7 +112,7 @@ trait BookModification {
           steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
             for {
               typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
-              (replacementStep, stepsToAddBeforeTransitive) <- f(typedStep, StepProvingContext.updateStepContext(_.addSteps(before).atIndex(last))(stepProvingContext))
+              (replacementStep, stepsToAddBeforeTransitive) <- f(typedStep, stepProvingContext.updateStepContext(_.addSteps(before).atIndex(last)))
               (newSteps, stepInsertionProps) = insertTargetsBeforeTransitivity(init, before, replacementStep +: after, stepsToAddBeforeTransitive)(stepProvingContext)
             } yield (newSteps, InsertionAndReplacementProps(stepInsertionProps, StepReplacementProps(stepPath.indexes, Seq(replacementStep))))
           }.orNotFound(s"Step $stepPath").flatten

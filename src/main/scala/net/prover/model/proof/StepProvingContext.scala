@@ -50,16 +50,23 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
   def createPremise(statement: Statement): Premise = {
     findPremise(statement) getOrElse Premise.Pending(statement)
   }
+
+  def updateStepContext(f: StepContext => StepContext): StepProvingContext = {
+    withStepContext(f(stepContext))
+  }
+  def withStepContext(newStepContext: StepContext): StepProvingContext = {
+    if (newStepContext != stepContext)
+      copy(stepContext = newStepContext)
+    else
+      this
+  }
 }
 
 object StepProvingContext {
   def updateStepContext(f: StepContext => StepContext)(implicit stepProvingContext: StepProvingContext): StepProvingContext = {
-    withStepContext(f(stepProvingContext.stepContext))
+    stepProvingContext.updateStepContext(f)
   }
   def withStepContext(newStepContext: StepContext)(implicit stepProvingContext: StepProvingContext): StepProvingContext = {
-    if (newStepContext != stepProvingContext.stepContext)
-      stepProvingContext.copy(stepContext = newStepContext)
-    else
-      stepProvingContext
+    stepProvingContext.withStepContext(newStepContext)
   }
 }

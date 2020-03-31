@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.controllers.ExtractionHelper
+import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.model._
 import net.prover.model.definitions.Definitions
@@ -25,6 +27,11 @@ sealed trait Step {
     oldDefinition: ExpressionDefinition,
     newDefinition: ExpressionDefinition,
     entryContext: EntryContext
+  ): Step
+  def replaceInference(
+    oldInference: Inference,
+    newInference: Inference,
+    stepProvingContext: StepProvingContext
   ): Step
   def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange])
   def isComplete(definitions: Definitions): Boolean
@@ -54,6 +61,13 @@ object Step {
         val innerStepContext = specifyStepContext(outerStepContext).addSteps(before).atIndex(index)
         (step, innerStepContext)
       }
+    }
+    override def replaceInference(
+      oldInference: Inference,
+      newInference: Inference,
+      stepProvingContext: StepProvingContext
+    ): Step = {
+      replaceSubsteps(substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext)))
     }
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
       substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
@@ -97,7 +111,7 @@ object Step {
     override def provenStatement: Option[Statement] = {
       substeps.lastOption.flatMap(_.provenStatement).map(s => DefinedStatement(Seq(assumption, s), deductionStatement)(Nil))
     }
-    override def replaceSubsteps(newSubsteps: Seq[Step]): Step = copy(substeps = newSubsteps)
+    override def replaceSubsteps(newSubsteps: Seq[Step]): Deduction = copy(substeps = newSubsteps)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Step = {
       Deduction(
@@ -151,7 +165,6 @@ object Step {
     extends Step.WithSubsteps with WithTopLevelStatement with WithVariable with WithAssumption
   {
     val `type` = "naming"
-
     override def isComplete(definitions: Definitions): Boolean = super.isComplete(definitions) && premises.forall(_.isComplete) && definitions.isInferenceComplete(inference)
     override def provenStatement: Option[Statement] = Some(statement)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
@@ -192,6 +205,23 @@ object Step {
         premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
         substitutions.replaceDefinition(oldDefinition, newDefinition))
     }
+    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Step = {
+      if (inference == oldInference) {
+        val updatedAssertion = Assertion(statement, inference, premises, substitutions)
+          .replaceInference(oldInference, newInference, stepProvingContext)
+          .asOptionalInstanceOf[Assertion].getOrElse(throw new Exception("Cannot replace naming with an elided step"))
+        Naming(
+          variableName,
+          assumption,
+          statement,
+          substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext)),
+          updatedAssertion.inference,
+          updatedAssertion.premises,
+          updatedAssertion.substitutions)
+      } else {
+        super.replaceInference(oldInference, newInference, stepProvingContext)
+      }
+    }
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
       val (newSubsteps, innerStepsWithReferenceChanges) = substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
       val newPremises = premises.map(p => StepProvingContext(stepContext, provingContext).createPremise(p.statement))
@@ -209,7 +239,6 @@ object Step {
       substeps.flatMap(_.serializedLines).indent ++
       Seq(Seq("}", Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
   }
-
   object Naming {
     def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Naming] = {
       for {
@@ -297,6 +326,7 @@ object Step {
         s <- statement.removeExternalParameters(numberOfParametersToRemove, internalDepth)
       } yield copy(statement = s)
     }
+    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Step = this
     override def replaceDefinition(
       oldDefinition: ExpressionDefinition,
       newDefinition: ExpressionDefinition,
@@ -332,6 +362,16 @@ object Step {
       for {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
       } yield Elided(newSubsteps, highlightedInference, description)
+    }
+
+    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Step = {
+      if (highlightedInference.contains(oldInference)) {
+        copy(
+          highlightedInference = Some(newInference.summary),
+          substeps = substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext)))
+      } else {
+        super.replaceInference(oldInference, newInference, stepProvingContext)
+      }
     }
     override def replaceDefinition(
       oldDefinition: ExpressionDefinition,
@@ -407,6 +447,20 @@ object Step {
         newPremises <- premises.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
         newSubstitutions <- substitutions.removeExternalParameters(numberOfParametersToRemove, internalDepth)
       } yield Assertion(newStatement, inference, newPremises, newSubstitutions)
+    }
+    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Step = {
+      implicit val spc = stepProvingContext
+      if (inference == oldInference) {
+        (for {
+          extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(newInference.id)
+          substitutionsAfterConclusion <- extractionOption.conclusion.calculateSubstitutions(statement).toSeq
+          substitutionsAfterPremises <- extractionOption.premises.zipStrict(premises).flatMap(_.foldLeft(Option(substitutionsAfterConclusion)) { case (so, (ep, p)) => so.flatMap(s => ep.calculateSubstitutions(p.statement, s)) }).toSeq
+          substitutions <- substitutionsAfterPremises.confirmTotality.toSeq
+          assertionStep <- Assertion.forInference(newInference, substitutions).toSeq
+          ExtractionApplication(_, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, newInference, substitutions, Some(premises.map(_.statement)), Some(statement), _ => (Nil, Nil)).toOption.toSeq
+          extractionStep <- Elided.ifNecessary(assertionStep +: extractionSteps, newInference).toSeq
+        } yield extractionStep).headOption.getOrElse(throw new Exception("Could not replace assertion"))
+      } else this
     }
     override def replaceDefinition(
       oldDefinition: ExpressionDefinition,
@@ -505,6 +559,17 @@ object Step {
         val (newStep, stepsWithReferenceChanges) = step.recalculateReferences(innerStepContext, provingContext)
         currentStepContext.addStep(newStep, innerStepContext.stepReference) -> (newStep, stepsWithReferenceChanges)
       }._2.split.mapRight(_.flatten)
+    }
+    def replaceInference(
+      oldInference: Inference,
+      newInference: Inference,
+      outerStepProvingContext: StepProvingContext
+    ): Seq[Step] = {
+      steps.zipWithIndex.mapFold(outerStepProvingContext) { case (currentStepProvingContext, (step, index)) =>
+        val innerStepProvingContext = currentStepProvingContext.updateStepContext(_.atIndex(index))
+        val newStep = step.replaceInference(oldInference, newInference, innerStepProvingContext)
+        currentStepProvingContext.updateStepContext(_.addStep(newStep, innerStepProvingContext.stepContext.stepReference)) -> newStep
+      }._2
     }
   }
 

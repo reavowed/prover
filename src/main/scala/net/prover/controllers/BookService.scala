@@ -139,7 +139,7 @@ class BookService @Autowired() (bookRepository: BookRepository) {
         steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
           for {
             typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
-            replacementSteps <- f(typedStep, StepProvingContext.updateStepContext(_.addSteps(before).atIndex(last))(stepProvingContext))
+            replacementSteps <- f(typedStep, stepProvingContext.updateStepContext(_.addSteps(before).atIndex(last)))
           } yield (before ++ replacementSteps ++ after, replacementSteps)
         }.orNotFound(s"Step $stepPath").flatten
       }.map { case (proofUpdateProps, replacementSteps) =>
