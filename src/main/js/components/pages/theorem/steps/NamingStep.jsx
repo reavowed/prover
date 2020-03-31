@@ -25,7 +25,8 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
     return context.fetchJsonForStepAndReplace(namingStepPath, "boundVariable", {method: "PUT", body: newName});
   };
 
-  let namingStepPath = assertionStep ? [...path.slice(0, path.length - 1), path[path.length - 1] + 1] : path;
+  const outerNamingStepPath = assertionStep ? [...path.slice(0, path.length - 1), path[path.length - 1] + 1] : path;
+  let currentNamingStepPath = outerNamingStepPath;
   const namingSteps = [];
   let elidableVariableDescription;
   function addNamingStep(namingStep, namingStepPath) {
@@ -46,20 +47,20 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
       });
     }
   }
-  addNamingStep(namingStep, namingStepPath);
+  addNamingStep(namingStep, currentNamingStepPath);
   while (!theoremContext.disableAssumptionCollapse &&
     namingStep.substeps.length === 1 &&
     namingStep.substeps[0] instanceof NamingStepModel &&
-    _.some(namingStep.substeps[0].referencedLinesForExtraction, r => _.isEqual(r.stepPath, namingStepPath) && r.suffix === "a"))
+    _.some(namingStep.substeps[0].referencedLinesForExtraction, r => _.isEqual(r.stepPath, currentNamingStepPath) && r.suffix === "a"))
   {
     namingStep = namingStep.substeps[0];
-    namingStepPath = [...namingStepPath, 0];
-    addNamingStep(namingStep, namingStepPath);
+    currentNamingStepPath = [...currentNamingStepPath, 0];
+    addNamingStep(namingStep, currentNamingStepPath);
   }
 
+  const outerNamingStepReference = new StepReference(outerNamingStepPath);
   const innermostNamingStep = namingSteps[namingSteps.length - 1];
   const innermostNamingPath = innermostNamingStep.path;
-  const innermostReference = new StepReference(innermostNamingPath);
   const innermostAssumptionReference = new StepReference(innermostNamingPath, "a");
 
   function getNamingStepVariableDescriptions(namingSteps, boundVariableLists) {
@@ -153,7 +154,7 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
       <BoundVariableLists.AddMultiple variables={namingSteps.map(({step}) => [step.variableName])}>
         <Steps steps={innermostNamingStep.step.substeps}
                path={innermostNamingPath}
-               propsForLastStep={{additionalReferences: [...additionalReferences, innermostReference]}} />
+               propsForLastStep={{additionalReferences: [...additionalReferences, outerNamingStepReference]}} />
       </BoundVariableLists.AddMultiple>
     </Step.WithSubsteps>
   </>;
