@@ -1,11 +1,12 @@
 package net.prover.controllers.models
 
 import net.prover.model.{Inference, Substitutions}
-import net.prover.model.expressions.Statement
+import net.prover.model.expressions.{Expression, Statement}
 import net.prover.model.proof.StepProvingContext
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 
-case class PossibleInference(inference: Inference.Summary, possibleTargets: Option[Seq[PossibleTarget]], possibleConclusions: Option[Seq[PossibleConclusionWithPremises]]) {
+sealed trait PossibleInference {
+  def inference: Inference.Summary
   def canEqual(other: Any): Boolean = other.isInstanceOf[PossibleInference]
   override def equals(other: Any): Boolean = other match {
     case that: PossibleInference =>
@@ -18,16 +19,26 @@ case class PossibleInference(inference: Inference.Summary, possibleTargets: Opti
   }
 }
 
+case class PossibleInferenceWithTargets(inference: Inference.Summary, possibleTargets: Seq[PossibleTarget]) extends PossibleInference
+case class PossibleInferenceWithConclusions(inference: Inference.Summary, possibleConclusions: Seq[PossibleConclusionWithPremises]) extends PossibleInference
+
 case class PossibleTarget(
-  target: Statement,
+  target: Expression,
   wrappingDefinitions: Seq[String],
   additionalBoundVariables: Seq[Seq[String]],
   possibleConclusions: Seq[PossibleConclusion])
 
-case class PossibleConclusion(
+sealed trait PossibleConclusion {
+  def conclusion: Statement
+  def extractionInferenceIds: Seq[String]
+  def additionalVariableNames: Seq[String]
+}
+
+case class PossibleConclusionWithoutPremises(
   conclusion: Statement,
   extractionInferenceIds: Seq[String],
-  additionalVariableNames: Seq[String])
+  additionalVariableNames: Seq[String]
+) extends PossibleConclusion
 
 case class PossibleConclusionWithPremises(
   conclusion: Statement,
@@ -35,7 +46,8 @@ case class PossibleConclusionWithPremises(
   substitutions: Option[SuggestedSubstitutions],
   requiredSubstitutions: Substitutions.Required,
   extractionInferenceIds: Seq[String],
-  additionalVariableNames: Seq[String])
+  additionalVariableNames: Seq[String]
+) extends PossibleConclusion
 
 object PossibleConclusionWithPremises {
   def fromExtractionOptionWithTarget(extractionOption: ExtractionOption, target: Statement)(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {

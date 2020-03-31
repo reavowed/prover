@@ -6,6 +6,7 @@ trait Direction {
   def swapSourceAndResult[T](l: T, r: T): (T, T) = getSourceAndResultFromTuple((l, r))
   def getSource[T](l: T, r: T): T = swapSourceAndResult(l, r)._1
   def getResult[T](l: T, r: T): T = swapSourceAndResult(l, r)._2
+  def getSourceFromTuple[T](tuple: (T, T)): T = getSourceAndResultFromTuple(tuple)._1
   def reverseIfNecessary[T](seq: Seq[T]): Seq[T] = getSource(seq, seq.reverse)
   def combine(otherDirection: Direction): Direction = getSource(otherDirection, otherDirection.reverse)
   def reverse: Direction

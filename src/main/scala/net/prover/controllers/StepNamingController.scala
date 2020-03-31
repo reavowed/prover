@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, PossibleInference, StepDefinition}
+import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, PossibleInference, PossibleInferenceWithConclusions, StepDefinition}
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof.{Premise, ProofHelper, SimplificationFinder, Step, SubstitutionContext}
 import net.prover.model._
@@ -34,7 +34,7 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
               }
             } yield PossibleConclusionWithPremises.fromExtractionOption(extractionOption, None)
             if (conclusions.nonEmpty) {
-              Some(PossibleInference(inference.summary, None, Some(conclusions)))
+              Some(PossibleInferenceWithConclusions(inference.summary, conclusions))
             } else {
               None
             }

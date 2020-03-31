@@ -18,7 +18,7 @@ trait TypedExpression[+ExpressionType <: Expression] {
   def referencedDefinitions: Set[ExpressionDefinition] = definitionUsages.map.keySet
 
   def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, ExpressionType, Int, Seq[Int])]
-  def getTerms()(implicit stepContext: StepContext): Seq[(Term, ExpressionType, Int, Seq[Int])] = getTerms(0, stepContext.externalDepth)
+  def getTerms()(implicit substitutionContext: SubstitutionContext): Seq[(Term, ExpressionType, Int, Seq[Int])] = getTerms(0, substitutionContext.externalDepth)
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType]

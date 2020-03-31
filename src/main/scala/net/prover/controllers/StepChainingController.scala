@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.StepChainingController.ChainedTargetDefinition
-import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, PossibleInference, StepDefinition}
+import net.prover.controllers.models.{PathData, PossibleConclusion, PossibleConclusionWithPremises, PossibleInference, PossibleInferenceWithTargets, PossibleTarget, StepDefinition}
 import net.prover.model.ExpressionParsingContext.TermVariableValidator
 import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
+import scala.reflect.ClassTag
 import scala.util.{Success, Try}
 
 @RestController
@@ -30,52 +31,41 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     theoremKey: String,
     proofIndex: Int,
     stepPath: PathData,
-    searchText: String)(
-    getSourceTerm: (BinaryJoiner[_ <: Expression], Statement, StepContext) => Option[Expression]
+    searchText: String,
+    direction: Direction
   ): ResponseEntity[_] = {
-    (for {
-      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      (targetSource, relation) <- stepProvingContext.provingContext.definedBinaryJoiners.mapFind { relation =>
-        getSourceTerm(relation, step.statement, stepProvingContext.stepContext).map(_ -> relation)
-      }.orBadRequest("Target step is not a binary relation")
-    } yield {
-      import stepProvingContext._
+
+    def withJoiner[T <: Expression, TJoiner <: BinaryJoiner[T] : ClassTag](targetConnective: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[Seq[PossibleInference]] = {
       implicit val spc = stepProvingContext
-
+      val targetSource = direction.getSource(targetLhs, targetRhs)
       def getSubstitutions(extractionResult: Statement): Option[Substitutions.Possible] = {
-        def asEquality: Option[Substitutions.Possible] = {
-          for {
-            equality <- provingContext.equalityOption
-            conclusionSource <- getSourceTerm(equality.relation, extractionResult, stepContext)
-            substitutions <- getSubstitutionsWithTermOrSubterm(conclusionSource, targetSource)
-          } yield substitutions
-        }
-        def asMatchingRelation: Option[Substitutions.Possible] = {
-          for {
-            conclusionSource <- getSourceTerm(relation, extractionResult, stepContext)
-            substitutions <- conclusionSource.calculateSubstitutions(targetSource)
-          } yield substitutions
-        }
-        asEquality orElse asMatchingRelation
+        for {
+          (conclusionConnective, conclusionSource) <- stepProvingContext.provingContext.definedBinaryRelations.ofType[TJoiner].mapFind(j => j.unapply(extractionResult).map { case (l, r) => (j, direction.getSource(l, r))} )
+          if stepProvingContext.provingContext.transitivities.exists(t => direction.getSource(t.firstPremiseJoiner, t.secondPremiseJoiner) == conclusionConnective && t.resultJoiner == targetConnective)
+          substitutions <- conclusionSource.calculateSubstitutions(targetSource)
+        } yield substitutions
       }
-
-      def getPossibleInference(inference: Inference): Option[PossibleInference] = {
-        val possibleConclusions = provingContext.extractionOptionsByInferenceId(inference.id)
+      def getPossibleInference(inference: Inference): Option[PossibleInferenceWithTargets] = {
+        val possibleConclusions = stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id)
           .mapCollect(PossibleConclusionWithPremises.fromExtractionOptionWithSubstitutions(_, getSubstitutions))
         if (possibleConclusions.nonEmpty) {
-          Some(PossibleInference(inference.summary, None, Some(possibleConclusions)))
+          Some(PossibleInferenceWithTargets(inference.summary, Seq(PossibleTarget(targetSource, Nil, Nil, possibleConclusions))))
         } else {
           None
         }
       }
+      def getConclusionComplexity(possibleConclusion: PossibleConclusion): Int = {
+        stepProvingContext.provingContext.definedBinaryRelations.ofType[TJoiner]
+          .mapFind(j => j.unapply(possibleConclusion.conclusion).map { case (l, r) => direction.getSource(l, r).structuralComplexity })
+          .getOrElse(0)
+      }
+      Success(getPossibleInferences(stepProvingContext.provingContext.entryContext.allInferences, searchText, getPossibleInference, getConclusionComplexity))
+    }
 
-      filterInferences(provingContext.entryContext.allInferences, searchText)
-        .sortBy(_.conclusion.structuralComplexity)(implicitly[Ordering[Int]].reverse)
-        .iterator
-        .mapCollect(getPossibleInference)
-        .take(10)
-        .toSeq
-    }).toResponseEntity
+    (for {
+      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      possibleInferences <- withRelation(step.statement, withJoiner[Statement, BinaryConnective](_, _, _, stepProvingContext), withJoiner[Term, BinaryRelation](_, _, _, stepProvingContext))(stepProvingContext)
+    } yield possibleInferences).toResponseEntity
   }
 
   @GetMapping(value = Array("/suggestInferencesForChainingFromLeft"), produces = Array("application/json;charset=UTF-8"))
@@ -87,7 +77,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
-    suggestInferencesForChaining(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText)(_.unapply(_)(_).map(_._1))
+    suggestInferencesForChaining(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText, Direction.Forward)
   }
 
   @GetMapping(value = Array("/suggestInferencesForChainingFromRight"), produces = Array("application/json;charset=UTF-8"))
@@ -99,7 +89,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
-    suggestInferencesForChaining(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText)(_.unapply(_)(_).map(_._2))
+    suggestInferencesForChaining(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText, Direction.Reverse)
   }
 
   def suggestChainingFromPremise(

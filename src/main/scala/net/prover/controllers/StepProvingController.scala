@@ -4,7 +4,7 @@ import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models._
 import net.prover.model.ExpressionParsingContext.TermVariableValidator
 import net.prover.model._
-import net.prover.model.expressions.{DefinedStatement, Statement}
+import net.prover.model.expressions.{DefinedStatement, Expression, Statement}
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,29 +43,6 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       } yield (result, finalStep, extractionTargets)
     }
     definition.getFromInferenceOrPremise(withInference, withPremise)
-  }
-
-  val NumberOfSuggestionsToReturn = 10
-
-  case class InferenceWithMaximumPossibleComplexity(inference: Inference, maximumPossibleComplexity: Int, index: Int)
-  case class PossibleInferenceWithMaximumMatchingComplexity(possibleInference: PossibleInference, maximumMatchingComplexity: Int, minimumExtractionDepth: Int, index: Int)
-  object PossibleInferenceWithMaximumMatchingComplexity {
-    implicit val ordering: Ordering[PossibleInferenceWithMaximumMatchingComplexity] = Ordering.by(
-      (i: PossibleInferenceWithMaximumMatchingComplexity) => (i.maximumMatchingComplexity, i.minimumExtractionDepth, i.index))(
-      Ordering.Tuple3(Ordering.Int.reverse, Ordering.Int, Ordering.Int))
-  }
-
-  object +: {
-    def unapply[T,Coll <: TraversableLike[T, Coll]](
-      t: Coll with TraversableLike[T, Coll]): Option[(T, Coll)] =
-      if(t.isEmpty) None
-      else Some(t.head -> t.tail)
-  }
-  object Empty {
-    def unapply[T,Coll <: TraversableLike[T, Coll]](
-      t: Coll with TraversableLike[T, Coll]): Option[Unit] =
-      if (t.isEmpty) Some(())
-      else None
   }
 
   case class UnwrappedStatement(statement: Statement, unwrappers: Seq[Unwrapper]) {
@@ -107,13 +84,12 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
 
       val possibleUnwrappedTargetStatements = getPossibleTargets(step.statement)
 
-      def findPossibleInference(inferenceWithComplexity: InferenceWithMaximumPossibleComplexity): Option[PossibleInferenceWithMaximumMatchingComplexity] = {
-        import inferenceWithComplexity._
+      def findPossibleInference(inference: Inference): Option[PossibleInferenceWithTargets] = {
         val possibleTargets = for {
           possibleUnwrappedTargetStatement <- possibleUnwrappedTargetStatements
           possibleConclusions = spc.provingContext.extractionOptionsByInferenceId(inference.id)
             .filter(_.conclusion.calculateSubstitutions(possibleUnwrappedTargetStatement.statement).nonEmpty)
-            .map(e => PossibleConclusion(e.conclusion, e.extractionInferences.map(_.id), e.additionalVariableNames))
+            .map(e => PossibleConclusionWithoutPremises(e.conclusion, e.extractionInferences.map(_.id), e.additionalVariableNames))
           if possibleConclusions.nonEmpty
         } yield PossibleTarget(
           possibleUnwrappedTargetStatement.statement,
@@ -122,46 +98,17 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
           possibleConclusions)
 
         if (possibleTargets.nonEmpty)
-          Some(PossibleInferenceWithMaximumMatchingComplexity(
-            PossibleInference(inference.summary, Some(possibleTargets), None),
-            possibleTargets.flatMap(_.possibleConclusions.map(_.conclusion.structuralComplexity)).max,
-            possibleTargets.flatMap(_.possibleConclusions.map(_.extractionInferenceIds.length)).min,
-            index))
+          Some(PossibleInferenceWithTargets(inference.summary, possibleTargets))
         else
           None
       }
+      def getConclusionComplexity(possibleConclusion: PossibleConclusion): Int = possibleConclusion.conclusion.structuralComplexity
 
-      @scala.annotation.tailrec
-      def recursivelyFindInferences(
-        matchingInferences: Seq[InferenceWithMaximumPossibleComplexity],
-        matchedInferences: Seq[PossibleInferenceWithMaximumMatchingComplexity],
-        queuedInferences: SortedSet[PossibleInferenceWithMaximumMatchingComplexity]
-      ): Seq[PossibleInference] = {
-        if (matchedInferences.size >= NumberOfSuggestionsToReturn) { // We've already found the required number of matches
-          matchedInferences.map(_.possibleInference)
-        } else (matchingInferences, queuedInferences) match {
-          case (matchHead +: _, queueHead +: queueTail) if queueHead.maximumMatchingComplexity > matchHead.maximumPossibleComplexity =>
-            recursivelyFindInferences(matchingInferences, matchedInferences :+ queueHead, queueTail)
-          case (matchHead +: matchTail, _) =>
-            findPossibleInference(matchHead) match {
-              case Some(possibleInferenceWithComplexity) =>
-                recursivelyFindInferences(matchTail, matchedInferences, queuedInferences + possibleInferenceWithComplexity)
-              case None =>
-                recursivelyFindInferences(matchTail, matchedInferences, queuedInferences)
-            }
-          case (Empty(_), _) =>
-            (matchedInferences ++ queuedInferences.take(NumberOfSuggestionsToReturn - matchedInferences.length)).map(_.possibleInference)
-        }
-      }
-
-      val matchingInferences = filterInferences(stepProvingContext.provingContext.entryContext.allInferences, searchText)
-        .mapWithIndex((i, index) => InferenceWithMaximumPossibleComplexity(i, i.conclusion.structuralComplexity, index))
-        .sortBy(_.maximumPossibleComplexity)(Ordering[Int].reverse)
-
-      recursivelyFindInferences(
-        matchingInferences,
-        Nil,
-        SortedSet.empty)
+      getPossibleInferences(
+        stepProvingContext.provingContext.entryContext.allInferences,
+        searchText,
+        findPossibleInference,
+        getConclusionComplexity)
     }).toResponseEntity
   }
 
@@ -203,7 +150,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         .map { inference =>
           val possibleConclusions = spc.provingContext.extractionOptionsByInferenceId(inference.id)
             .map(PossibleConclusionWithPremises.fromExtractionOption(_, None))
-          PossibleInference(inference.summary, None, Some(possibleConclusions))
+          PossibleInferenceWithConclusions(inference.summary, possibleConclusions)
         }
     }).toResponseEntity
   }
