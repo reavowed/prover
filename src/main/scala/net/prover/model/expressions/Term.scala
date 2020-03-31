@@ -45,10 +45,10 @@ object Term {
         } yield TermVariable(name, arguments)
       case context.entryContext.RecognisedTermDefinition(termDefinition) =>
         termDefinition.termParser
-      case context.RecognisedTermVariableOrParameter(variableOrParameter) =>
-        Parser.constant(variableOrParameter)
       case context.entryContext.RecognisedTermShorthand(template) =>
         template.expressionParser.map(_.asInstanceOf[Term])
+      case context.RecognisedTermVariableOrParameter(variableOrParameter) =>
+        Parser.constant(variableOrParameter)
     }
   }
 

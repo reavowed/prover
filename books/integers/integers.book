@@ -2,7 +2,7 @@ import Natural Numbers
 import Relations
 
 chapter Definition of the Integers
-chapter Integer Literals
+chapter Embedding the Naturals in the Integers
 chapter Ordering
 chapter Addition
 chapter Subtraction

@@ -684,12 +684,12 @@ conclusion totalOrder ≤_ℤ ℤ
 }
 
 term ℤ^+ ()
-  (= $0 comprehension a ℤ ∈ orderedPair 0_ℤ $0 <_ℤ)
+  (= $0 comprehension a ℤ ∈ orderedPair apply ⍳_ℤ 0 $0 <_ℤ)
   shorthand (Z+)
 
 theorem Membership Condition for ℤ^+
-conclusion ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ
+conclusion ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0 $0 <_ℤ
 {
-  prove = ℤ^+ comprehension a ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 39039aedc036694dc0f0fc530d193d7c41edccd5d18968dc0483fbb73334f833 () ()
-  prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair 0_ℤ $0 <_ℤ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair 0_ℤ $0 <_ℤ) (ℤ^+, ℤ) 0
+  prove = ℤ^+ comprehension a ℤ ∈ orderedPair apply ⍳_ℤ 0 $0 <_ℤ 568d0462c1fde155ba61065bf50e6a5bb31afc5f72ece4e2b3dc54d9fab1731b () ()
+  prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0 $0 <_ℤ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair apply ⍳_ℤ 0 $0 <_ℤ) (ℤ^+, ℤ) 0
 }

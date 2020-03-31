@@ -113,6 +113,11 @@ package object model {
         acc :+ f(acc, t)
       }
     }
+    def mapFoldWithPrevious[R, S](initial: R)(f: (R, Seq[S], T) => (R, S)): (R, Seq[S]) = {
+      seq.foldLeft((initial, Seq.empty[S])) { case ((acc, ss), t) =>
+        f(acc, ss, t).mapRight(ss :+ _)
+      }
+    }
     def mapTry[S](f: T => Try[S]): Try[Seq[S]] = {
       seq.foldLeft(Try(Seq.empty[S])) { (previousOption, t) =>
         for {
