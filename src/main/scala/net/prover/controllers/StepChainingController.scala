@@ -40,7 +40,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
       val targetSource = direction.getSource(targetLhs, targetRhs)
       def getSubstitutions(extractionResult: Statement): Option[Substitutions.Possible] = {
         for {
-          (conclusionConnective, conclusionSource) <- stepProvingContext.provingContext.definedBinaryRelations.ofType[TJoiner].mapFind(j => j.unapply(extractionResult).map { case (l, r) => (j, direction.getSource(l, r))} )
+          (conclusionConnective, conclusionSource) <- stepProvingContext.provingContext.definedBinaryJoiners.ofType[TJoiner].mapFind(j => j.unapply(extractionResult).map { case (l, r) => (j, direction.getSource(l, r))} )
           if stepProvingContext.provingContext.transitivities.exists(t => direction.getSource(t.firstPremiseJoiner, t.secondPremiseJoiner) == conclusionConnective && t.resultJoiner == targetConnective)
           substitutions <- conclusionSource.calculateSubstitutions(targetSource)
         } yield substitutions

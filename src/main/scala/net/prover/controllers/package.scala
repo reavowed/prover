@@ -42,6 +42,7 @@ package object controllers {
     }
     def orNotFound(objectDescription: String): Try[T] = orException(NotFoundException(objectDescription))
     def orBadRequest(message: String): Try[T] = orException(BadRequestException(message))
+    def orServerError(message: String): Try[T] = orException(new Exception(message))
 
     def badRequestIfDefined(getMessage: T => String): Try[Unit] = {
       option match {

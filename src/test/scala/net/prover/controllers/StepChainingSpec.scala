@@ -149,6 +149,24 @@ class StepChainingSpec extends ControllerSpec {
             assertion(equivalenceOfSubstitutedEquals, Seq(ψ($)), Seq(add(a, Zero), a)))) :+
           assertion(equivalenceIsTransitive, Seq(φ, ψ(add(a, Zero)), ψ(a)), Nil))
     }
+
+    "rewrite RHS of a non-transitive relation" in {
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndMultipleReplacement(service)
+      val controller = new StepRewriteController(service)
+
+      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(addingZeroIsSame, Nil, Nil))))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex) :+ target(ElementOf(a, b)),
+        fillerSteps(stepIndex) :+
+          target(ElementOf(a, add(b, Zero))) :+
+          elided(addingZeroIsSame, Seq(
+            assertion(addingZeroIsSame, Nil, Seq(b)),
+            assertion(reverseEquality, Nil, Seq(b, add(b, Zero))))) :+
+          assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(add(b, Zero), b)))
+    }
   }
 
   "proving with inference" should {
