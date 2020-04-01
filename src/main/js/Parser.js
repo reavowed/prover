@@ -33,6 +33,7 @@ export class Parser {
     this.definitions = definitions;
     this.typeDefinitions = typeDefinitions;
     this.standalonePropertyDefinitions = standalonePropertyDefinitions;
+    this.stepCounter = 0;
   }
   parseExpression = (json) => {
     const self = this;
@@ -132,22 +133,26 @@ export class Parser {
     switch (stepJson.type) {
       case "assertion":
         return new AssertionStep(
+          ++this.stepCounter,
           this.parseExpression(stepJson.statement),
           stepJson.premises.map(this.parsePremise),
           this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
           stepJson.referencedLines.map(this.parseReference));
       case "deduction":
         return new DeductionStep(
+          ++this.stepCounter,
           this.parseExpression(stepJson.assumption),
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           this.definitions[stepJson.deductionStatement]);
       case "generalization":
         return new GeneralizationStep(
+          ++this.stepCounter,
           stepJson.variableName,
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           this.definitions[stepJson.generalizationStatement]);
       case "naming":
         return new NamingStep(
+          ++this.stepCounter,
           stepJson.variableName,
           this.parseExpression(stepJson.assumption),
           this.parseExpression(stepJson.statement),
@@ -156,15 +161,19 @@ export class Parser {
           stepJson.referencedLines.map(this.parseReference),
           stepJson.referencedLinesForExtraction.map(this.parseReference));
       case "target":
-        return new TargetStep(this.parseExpression(stepJson.statement));
+        return new TargetStep(
+          ++this.stepCounter,
+          this.parseExpression(stepJson.statement));
       case "elided":
         return new ElidedStep(
+          ++this.stepCounter,
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           stepJson.highlightedInference && this.parseInferenceWithSummary(stepJson.highlightedInference, inferenceSummaries),
           stepJson.description,
           stepJson.referencedLines.map(this.parseReference));
       case "subproof":
         return new SubproofStep(
+          ++this.stepCounter,
           stepJson.name,
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           stepJson.referencedLines.map(this.parseReference));

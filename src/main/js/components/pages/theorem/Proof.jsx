@@ -50,10 +50,6 @@ export default class Proof extends React.Component {
         fetchJsonForStepAndInsert(stepPath, subpath, options) {
           return this.fetchJsonForStep(stepPath, subpath, options)
             .then(stepJson => theoremContext.insertSteps(index, stepJson))
-            .then(([, newSteps]) => {
-              const newPath = [...stepPath.slice(0, stepPath.length - 1), stepPath[stepPath.length - 1] + newSteps.length];
-              this.callOnStep(newPath, "startProving");
-            });
         },
         fetchJsonForStepAndReplace(stepPath, subpath, options) {
           return this.fetchJsonForStep(stepPath, subpath, options)

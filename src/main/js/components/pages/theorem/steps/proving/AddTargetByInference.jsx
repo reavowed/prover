@@ -3,12 +3,12 @@ import ProofContext from "../../ProofContext";
 import {createSubmitFunctionForStepDefinitionEndpointFromInference} from "./components/stepDefinitionSubmitFunctions";
 import {InferenceFinder} from "./components/InferenceFinder";
 
-export default function AddTargetByInference({path, onError}) {
+export default function AddTargetByInference({path, onCancel, onError}) {
   const context = useContext(ProofContext);
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `possibleInferencesForNewTarget?searchText=${encodeURIComponent(searchText)}`);
   };
-  const proveWithInference = createSubmitFunctionForStepDefinitionEndpointFromInference(context.fetchJsonForStepAndInsert, path, "newTarget", "POST", onError);
+  const proveWithInference = createSubmitFunctionForStepDefinitionEndpointFromInference(context.fetchJsonForStepAndInsert, path, "newTarget", "POST", onError, onCancel);
 
   return <InferenceFinder title='Select Inference for New Target'
                           getInferenceSuggestions={getInferenceSuggestions}

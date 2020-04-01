@@ -130,13 +130,15 @@ class ChainedSteps extends React.Component {
       }
     };
 
+    const firstRightHandSide = rightHandSides[0];
+
     return <>
       {renderProofLine(
-        {step: leftHandSide.step, path: leftHandSide.path},
+        {step: firstRightHandSide.step, path: firstRightHandSide.path, key: firstRightHandSide.step.id},
         <>
-          <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide.expression}
+          <span ref={this.setLeftHandSideRef}>Then <HighlightableExpression expression={leftHandSide}
                                                                             expressionToCopy={rightHandSides[0].step.provenStatement}
-                                                                            references={[leftHandSide.lineReference]}
+                                                                            references={firstRightHandSide.referencesForLhs}
                                                                             {...propsForLastStep}
                                                                             additionalPremiseReferences={_.flatMap(rightHandSides, rhs => rhs.referencesForLhs)}
                                                                             additionalConclusionReferences={_.chain(rightHandSides).filter("highlightsFirstAsConclusion").flatMap("references").value()}
@@ -144,9 +146,10 @@ class ChainedSteps extends React.Component {
           <RightHandSide rightHandSide={rightHandSides[0]} index={0} additionalReferences={[]} additionalReferencesFromNext={rightHandSides[1] && rightHandSides[1].referencesForPrevious || []} />
         </>
       )}
-      {rightHandSides.slice(1).map((rightHandSide, index) =>
-        renderProofLine(
-          {step: rightHandSide.step, path: rightHandSide.path, key: "chained " + rightHandSide.expression.serialize(), premiseReferences: rightHandSide.step.referencedLines},
+      {rightHandSides.slice(1).map((rightHandSide, index) => {
+        const key = rightHandSide.linkingStep ? `${rightHandSide.step.id} ${rightHandSide.linkingStep.id}` : rightHandSide.step.id;
+        return renderProofLine(
+          {step: rightHandSide.step, path: rightHandSide.path, premiseReferences: rightHandSide.step.referencedLines, key},
           isHovered => <>
             <span ref={r => this.setSpacerRef(r, rightHandSide.path.join("."))}/>
             <RightHandSide rightHandSide={rightHandSide}
@@ -156,7 +159,7 @@ class ChainedSteps extends React.Component {
                            additionalReferencesFromNext={rightHandSides[index + 2] && rightHandSides[index + 2].referencesForPrevious || []} />
           </>
         )
-      )}
+      })}
     </>
   }
 }
@@ -199,7 +202,8 @@ export class Steps extends React.Component {
       linkingReference: firstLineReference,
       referencesForLhs: [firstLineReference],
       referencesForRhs: [firstLineReference],
-      step: firstStep
+      step: firstStep,
+      path: firstLinePath
     };
 
     function readRightHandSides(currentRightHandSides) {
@@ -277,12 +281,7 @@ export class Steps extends React.Component {
 
     if (rightHandSides.length > 1) {
       return {
-        leftHandSide: {
-          expression: leftHandSideExpression,
-          step: firstStep,
-          path: firstLinePath,
-          lineReference: firstLineReference
-        },
+        leftHandSide: leftHandSideExpression,
         rightHandSides: rightHandSides,
         finalStatement: rightHandSides[rightHandSides.length - 1].step.provenStatement
       }
@@ -300,7 +299,6 @@ export class Steps extends React.Component {
         const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, theoremContext.entryContext);
         if (chainingDetails) {
           return {
-            key: serializedPath + " " + chainingDetails.finalStatement.serialize(),
             element: <ChainedSteps propsForLastStep={stepsWithIndexes.length === 0 ? propsForLastStep : {}}
                                       {...chainingDetails} />
           };
@@ -320,7 +318,7 @@ export class Steps extends React.Component {
       step.substeps[0] instanceof DeductionStepModel &&
       (elidableVariableDescription = matchElidableVariableDescription(step.substeps[0].assumption))) {
       return {
-        key: serializedPath + " " + (step.provenStatement ? step.provenStatement.serialize() : "???"),
+        key: step.id,
         element: <GeneralizedDeductionStep {...props} variableDescription={elidableVariableDescription} />
       };
     }
@@ -334,13 +332,13 @@ export class Steps extends React.Component {
     {
       let {step: namingStep} = stepsWithIndexes.shift();
       return {
-        key: serializedPath + " " + (namingStep.provenStatement ? namingStep.provenStatement.serialize() : "???"),
+        key: namingStep.id,
         element: <NamingStep {...props} step={namingStep} assertionStep={step} />
       };
     }
 
     return {
-      key: serializedPath + " " + (step.provenStatement ? step.provenStatement.serialize() : "???"),
+      key: step.id,
       element: React.createElement(Steps.getElementName(step), props)
     }
   };

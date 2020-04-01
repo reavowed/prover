@@ -1,6 +1,6 @@
-export function createSubmitFunctionForStepDefinitionEndpointFromInference(contextFunction, path, endpointName, method, onError) {
+export function createSubmitFunctionForStepDefinitionEndpointFromInference(contextFunction, path, endpointName, method, onError, onCancel) {
   return (possibleInference, possibleTarget, possibleConclusion, substitutions, premiseStatements, conclusionStatement) => {
-    return contextFunction(path, endpointName, {
+    let promise =  contextFunction(path, endpointName, {
       method,
       body: {
         inferenceId: possibleInference.inference.id,
@@ -12,13 +12,16 @@ export function createSubmitFunctionForStepDefinitionEndpointFromInference(conte
         additionalVariableNames: possibleConclusion.additionalVariableNames
       }
     })
-      .catch(onError);
+    if (onCancel) {
+      promise = promise.then(onCancel);
+    }
+    return promise.catch(onError);
   };
 }
 
-export function createSubmitFunctionForStepDefinitionEndpointFromPremise(contextFunction, path, endpointName, method, onError) {
+export function createSubmitFunctionForStepDefinitionEndpointFromPremise(contextFunction, path, endpointName, method, onError, onCancel) {
   return (premiseStatement, substitutions, selectedConclusion, premiseStatements, conclusionStatement) => {
-    return contextFunction(path, endpointName, {
+    let promise = contextFunction(path, endpointName, {
       method,
       body: {
         serializedPremiseStatement: premiseStatement.serialize(),
@@ -29,7 +32,10 @@ export function createSubmitFunctionForStepDefinitionEndpointFromPremise(context
         serializedIntendedConclusionStatement: conclusionStatement.serialize(),
         additionalVariableNames: selectedConclusion.additionalVariableNames
       }
-    })
-      .catch(onError);
+    });
+    if (onCancel) {
+      promise = promise.then(onCancel);
+    }
+    return promise.catch(onError);
   };
 }
