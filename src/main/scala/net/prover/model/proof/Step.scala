@@ -37,7 +37,6 @@ sealed trait Step {
   def isComplete(definitions: Definitions): Boolean
   def referencedInferenceIds: Set[String]
   def referencedDefinitions: Set[ExpressionDefinition]
-  @JsonSerialize
   def referencedLines: Set[PreviousLineReference] = recursivePremises.flatMap(_.referencedLines).toSet
   def recursivePremises: Seq[Premise]
   def length: Int
@@ -479,6 +478,8 @@ object Step {
       (newStep, if (newPremises == premises) Nil else Seq(StepWithReferenceChange(newStep, stepContext.stepReference.stepPath)))
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
+    @JsonSerialize
+    def referencedLinesForAssertion: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def referencedInferenceIds: Set[String] = Set(inference.id) ++ premises.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
     override def recursivePremises: Seq[Premise] = premises

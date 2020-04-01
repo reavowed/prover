@@ -137,7 +137,7 @@ export class Parser {
           this.parseExpression(stepJson.statement),
           stepJson.premises.map(this.parsePremise),
           this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
-          stepJson.referencedLines.map(this.parseReference));
+          stepJson.referencedLinesForAssertion.map(this.parseReference));
       case "deduction":
         return new DeductionStep(
           ++this.stepCounter,
@@ -158,7 +158,6 @@ export class Parser {
           this.parseExpression(stepJson.statement),
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
-          stepJson.referencedLines.map(this.parseReference),
           stepJson.referencedLinesForExtraction.map(this.parseReference));
       case "target":
         return new TargetStep(
@@ -169,14 +168,12 @@ export class Parser {
           ++this.stepCounter,
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           stepJson.highlightedInference && this.parseInferenceWithSummary(stepJson.highlightedInference, inferenceSummaries),
-          stepJson.description,
-          stepJson.referencedLines.map(this.parseReference));
+          stepJson.description);
       case "subproof":
         return new SubproofStep(
           ++this.stepCounter,
           stepJson.name,
-          this.parseSteps(stepJson.substeps, inferenceSummaries),
-          stepJson.referencedLines.map(this.parseReference));
+          this.parseSteps(stepJson.substeps, inferenceSummaries));
       default:
         throw "Unrecognised step " + JSON.stringify(stepJson);
     }
