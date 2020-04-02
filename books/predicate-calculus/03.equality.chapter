@@ -191,3 +191,13 @@ conclusion ¬ = b a
   }
   prove ¬ = b a adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (= b a) () 0
 }
+
+theorem Function Equality Equivalence
+premise → = with (a) F with (b) F = a b
+conclusion ↔ = with (a) F with (b) F = a b
+{
+  assume = a b {
+    prove = with (a) F with (b) F 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (a, b, with ($0) F) 0a
+  }
+  prove ↔ = with (a) F with (b) F = a b 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= with (a) F with (b) F, = a b) () p0 0
+}

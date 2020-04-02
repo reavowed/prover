@@ -782,7 +782,7 @@ conclusion ∨ ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ 
           prove ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair first $$0 $0 second $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair first $0 second $0 <_ℕ, ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair first $$0 $0 second $$0) () 2.1.1.2.1 2.1.0
         }
       }
-      let d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair first $$0 $0 second $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 ℕ ∧ ¬ = $$0 0 = apply + orderedPair first $0 $$0 second $0, ∃ x ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ) () {
+      let b ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair first $$0 $0 second $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 ℕ ∧ ¬ = $$0 0 = apply + orderedPair first $0 $$0 second $0, ∃ x ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ) () {
         elided a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 {
           elided a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 {
             prove ∈ second $$0 ℕ 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($$0, ℕ, ℕ) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
@@ -814,7 +814,7 @@ conclusion ∨ ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ 
         }
         elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
           prove ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 ℕ, = a equivalenceClass orderedPair 0 $0 ~_ℤ) () 2.1.2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 2.1.2.3
-          prove ∃ x ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 ℕ = a equivalenceClass orderedPair 0 $$$0 ~_ℤ) ($0) 2.1.2.4.0
+          prove ∃ b ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 ℕ = a equivalenceClass orderedPair 0 $$$0 ~_ℤ) ($0) 2.1.2.4.0
         }
       } 2.1.1
     }
@@ -839,7 +839,7 @@ conclusion ∨ ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ 
       elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
         prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () ()
         prove ∧ ∈ 0 ℕ = a equivalenceClass orderedPair 0 0 ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ 0 ℕ, = a equivalenceClass orderedPair 0 0 ~_ℤ) () 2.2.4.0 2.2.3
-        prove ∃ x ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$0 ℕ = a equivalenceClass orderedPair $$0 0 ~_ℤ) (0) 2.2.4.1
+        prove ∃ b ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$0 ℕ = a equivalenceClass orderedPair $$0 0 ~_ℤ) (0) 2.2.4.1
       }
     }
     assume ∈ second $0 first $0 {
@@ -869,7 +869,7 @@ conclusion ∨ ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ 
           prove ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair second $$0 $0 first $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair second $0 first $0 <_ℕ, ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair second $$0 $0 first $$0) () 2.3.1.2.1 2.3.0
         }
       }
-      let d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair second $$0 $0 first $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 ℕ ∧ ¬ = $$0 0 = apply + orderedPair second $0 $$0 first $0, ∃ x ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ) () {
+      let b ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair second $$0 $0 first $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 ℕ ∧ ¬ = $$0 0 = apply + orderedPair second $0 $$0 first $0, ∃ x ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ) () {
         elided a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 {
           elided a38c0786e3d573fd1f1eb13acc2d1b0b92ac4c17a139097539bcebc1943e6857 {
             prove ∈ first $$0 ℕ 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($$0, ℕ, ℕ) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
@@ -902,13 +902,13 @@ conclusion ∨ ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ 
         }
         elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
           prove ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 ℕ, = a equivalenceClass orderedPair $0 0 ~_ℤ) () 2.3.2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 2.3.2.4
-          prove ∃ x ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 ℕ = a equivalenceClass orderedPair $$$0 0 ~_ℤ) ($0) 2.3.2.5.0
+          prove ∃ b ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 ℕ = a equivalenceClass orderedPair $$$0 0 ~_ℤ) ($0) 2.3.2.5.0
         }
       } 2.3.1
     }
     elided 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea {
-      prove → ∨ = first $0 second $0 ∈ second $0 first $0 ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ 601e278a38579fd247c444cdbd61fe6d5f48c99f2b5725ef973cc3cb781a8eef (= first $0 second $0, ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ, ∈ second $0 first $0) () 2.2 2.3
-      prove ∨ ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (∈ first $0 second $0, ∨ = first $0 second $0 ∈ second $0 first $0, ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ, ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ) () 2.0 2.1 2.4.0
+      prove → ∨ = first $0 second $0 ∈ second $0 first $0 ∃ b ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ 601e278a38579fd247c444cdbd61fe6d5f48c99f2b5725ef973cc3cb781a8eef (= first $0 second $0, ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ, ∈ second $0 first $0) () 2.2 2.3
+      prove ∨ ∃ b ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ ∃ b ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (∈ first $0 second $0, ∨ = first $0 second $0 ∈ second $0 first $0, ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0 $0 ~_ℤ, ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0 ~_ℤ) () 2.0 2.1 2.4.0
     }
   } 1
 }

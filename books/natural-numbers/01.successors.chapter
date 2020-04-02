@@ -109,10 +109,7 @@ conclusion ∀ n ∀ m ↔ = successor $$0 successor $0 = $$0 $0
         }
         prove = $$0 $0 b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (= $$0 $0) () 0.0.0.4
       }
-      assume = $$0 $0 {
-        prove = successor $$0 successor $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () ($$0, $0, successor $$$0) 0.0.1a
-      }
-      prove ↔ = successor $$0 successor $0 = $$0 $0 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= successor $$0 successor $0, = $$0 $0) () 0.0.0 0.0.1
+      prove ↔ = successor $$0 successor $0 = $$0 $0 f38e50f3885584ab2088007d947dcc528b1ef41e9db2ea0236113fe98c5c058a () ($$0, successor $$$0, $0) 0.0.0
     }
   }
 }

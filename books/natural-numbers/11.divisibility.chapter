@@ -384,7 +384,7 @@ conclusion prime 2
   }
 }
 
-theorem Euclidean Division
+theorem Euclidean Division for Naturals
 premise ∈ a ℕ
 premise ∈ b ℕ
 premise ∈ orderedPair 0 b <_ℕ

@@ -4,7 +4,7 @@ term ⍳_ℤ ()
   (= $0 functionMap n ℕ equivalenceClass orderedPair $0 0 ~_ℤ)
   shorthand (iZ)
 
-write apply ⍳_ℤ 0 as 0_ℤ
+write apply ⍳_ℤ a as toZ
 
 display apply ⍳_ℤ a as (%0_ℤ)
 
@@ -125,4 +125,16 @@ conclusion = apply ⍳_ℤ 0 equivalenceClass orderedPair a a ~_ℤ
     }
   }
   prove = apply ⍳_ℤ 0 equivalenceClass orderedPair a a ~_ℤ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ⍳_ℤ 0, equivalenceClass orderedPair 0 0 ~_ℤ, equivalenceClass orderedPair a a ~_ℤ) 1 2
+}
+
+theorem Equality Condition for Embedded Naturals
+premise ∈ a ℕ
+premise ∈ b ℕ
+conclusion ↔ = apply ⍳_ℤ a apply ⍳_ℤ b = a b
+{
+  elided e5890c0f377394cdb9cf702c929fc48bd3e7455ccbc3eb339f9798ef30f61c90 {
+    prove ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0 ~_ℤ e5890c0f377394cdb9cf702c929fc48bd3e7455ccbc3eb339f9798ef30f61c90 () ()
+    prove ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0 ~_ℤ) () 0.0
+  }
+  prove ↔ = apply ⍳_ℤ a apply ⍳_ℤ b = a b bb2e1af527f3c9e208745e84541d1f6ef89acf139f9175e969ef1550a5eda849 () (⍳_ℤ, ℕ, ℤ, a, b) 0 p0 p1
 }
