@@ -184,5 +184,9 @@ class PremiseFinderSpec extends Specification {
         ElementOf(a, Naturals), ElementOf(b, PositiveNaturals))(
         entryContextWithDefinitions)
     }
+
+    "find a premise using an or condition" in {
+      checkFindPremise(Disjunction(φ, ψ), φ)
+    }
   }
 }

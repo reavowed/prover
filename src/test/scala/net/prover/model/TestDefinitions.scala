@@ -290,6 +290,9 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val extractRightConjunct = Axiom("Extract Right Conjunct", Seq(Conjunction(φ, ψ)), ψ)
   val combineConjunction = Axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
 
+  val addLeftDisjunct = Axiom("Add Left Disjunct", Seq(φ), Disjunction(ψ, φ))
+  val addRightDisjunct = Axiom("Add Right Disjunct", Seq(φ), Disjunction(φ, ψ))
+
   val reverseEquivalence = Axiom("Reverse Equivalence", Seq(Equivalence(φ, ψ)), Equivalence(ψ, φ))
   val equivalenceIsTransitive = Axiom("Equivalence Is Transitive", Seq(Equivalence(φ, ψ), Equivalence(ψ, χ)), Equivalence(φ, χ))
   val forwardImplicationFromEquivalence = Axiom("Forward Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(φ, ψ))
@@ -338,6 +341,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       specification, existence, modusPonens, modusTollens,
       addDoubleNegation, removeDoubleNegation,
       extractLeftConjunct, extractRightConjunct, combineConjunction,
+      addLeftDisjunct, addRightDisjunct,
       reverseEquivalence, equivalenceIsTransitive, forwardImplicationFromEquivalence, reverseImplicationFromEquivalence,
       distributeImplicationOverEquivalence, distributeUniversalQuantifierOverEquivalence,
       reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
