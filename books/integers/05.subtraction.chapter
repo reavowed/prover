@@ -600,6 +600,44 @@ conclusion ↔ ∈ orderedPair a b ≤_ℤ ∈ orderedPair negatedZ b negatedZ a
   prove ↔ ∈ orderedPair a b ≤_ℤ ∈ orderedPair negatedZ b negatedZ a ≤_ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ orderedPair a b ≤_ℤ, ∨ ∈ orderedPair negatedZ b negatedZ a <_ℤ = negatedZ b negatedZ a, ∈ orderedPair negatedZ b negatedZ a ≤_ℤ) () 4 5
 }
 
+theorem Negation of Non-Positive Integer Is Non-Negative
+premise ∈ a ℤ
+conclusion ↔ ∈ orderedPair a apply ⍳_ℤ 0 ≤_ℤ ∈ orderedPair apply ⍳_ℤ 0 negatedZ a ≤_ℤ
+{
+  elided fb2f18c7a7ad9140e3cf1ef1ebcc1c284fe57535569202f4fb1b1f8e52432708 {
+    prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () ()
+    prove ∈ apply ⍳_ℤ 0 ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0) 0.0
+    prove ↔ ∈ orderedPair a apply ⍳_ℤ 0 ≤_ℤ ∈ orderedPair negatedZ apply ⍳_ℤ 0 negatedZ a ≤_ℤ fb2f18c7a7ad9140e3cf1ef1ebcc1c284fe57535569202f4fb1b1f8e52432708 () (a, apply ⍳_ℤ 0) p0 0.1
+  }
+  elided dcbc7bdf6ad69316274289f616f0b4a401e1fd42ab503d43ee0945b944e8e895 {
+    elided dcbc7bdf6ad69316274289f616f0b4a401e1fd42ab503d43ee0945b944e8e895 {
+      prove = apply ⍳_ℤ 0 negatedZ apply ⍳_ℤ 0 dcbc7bdf6ad69316274289f616f0b4a401e1fd42ab503d43ee0945b944e8e895 () ()
+      prove = negatedZ apply ⍳_ℤ 0 apply ⍳_ℤ 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ⍳_ℤ 0, negatedZ apply ⍳_ℤ 0) 1.0.0
+    }
+    prove ↔ ∈ orderedPair negatedZ apply ⍳_ℤ 0 negatedZ a ≤_ℤ ∈ orderedPair apply ⍳_ℤ 0 negatedZ a ≤_ℤ fdc63ea4bba256874a2511a985e1ee1580f52fc9863143c31dcabb6a8efc1f5d (∈ orderedPair $0 negatedZ a ≤_ℤ) (negatedZ apply ⍳_ℤ 0, apply ⍳_ℤ 0) 1.0
+  }
+  prove ↔ ∈ orderedPair a apply ⍳_ℤ 0 ≤_ℤ ∈ orderedPair apply ⍳_ℤ 0 negatedZ a ≤_ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ orderedPair a apply ⍳_ℤ 0 ≤_ℤ, ∈ orderedPair negatedZ apply ⍳_ℤ 0 negatedZ a ≤_ℤ, ∈ orderedPair apply ⍳_ℤ 0 negatedZ a ≤_ℤ) () 0 1
+}
+
+theorem Negation of Non-Negative Integer Is Non-Positive
+premise ∈ a ℤ
+conclusion ↔ ∈ orderedPair apply ⍳_ℤ 0 a ≤_ℤ ∈ orderedPair negatedZ a apply ⍳_ℤ 0 ≤_ℤ
+{
+  elided fb2f18c7a7ad9140e3cf1ef1ebcc1c284fe57535569202f4fb1b1f8e52432708 {
+    prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () ()
+    prove ∈ apply ⍳_ℤ 0 ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0) 0.0
+    prove ↔ ∈ orderedPair apply ⍳_ℤ 0 a ≤_ℤ ∈ orderedPair negatedZ a negatedZ apply ⍳_ℤ 0 ≤_ℤ fb2f18c7a7ad9140e3cf1ef1ebcc1c284fe57535569202f4fb1b1f8e52432708 () (apply ⍳_ℤ 0, a) 0.1 p0
+  }
+  elided dcbc7bdf6ad69316274289f616f0b4a401e1fd42ab503d43ee0945b944e8e895 {
+    elided dcbc7bdf6ad69316274289f616f0b4a401e1fd42ab503d43ee0945b944e8e895 {
+      prove = apply ⍳_ℤ 0 negatedZ apply ⍳_ℤ 0 dcbc7bdf6ad69316274289f616f0b4a401e1fd42ab503d43ee0945b944e8e895 () ()
+      prove = negatedZ apply ⍳_ℤ 0 apply ⍳_ℤ 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ⍳_ℤ 0, negatedZ apply ⍳_ℤ 0) 1.0.0
+    }
+    prove ↔ ∈ orderedPair negatedZ a negatedZ apply ⍳_ℤ 0 ≤_ℤ ∈ orderedPair negatedZ a apply ⍳_ℤ 0 ≤_ℤ fdc63ea4bba256874a2511a985e1ee1580f52fc9863143c31dcabb6a8efc1f5d (∈ orderedPair negatedZ a $0 ≤_ℤ) (negatedZ apply ⍳_ℤ 0, apply ⍳_ℤ 0) 1.0
+  }
+  prove ↔ ∈ orderedPair apply ⍳_ℤ 0 a ≤_ℤ ∈ orderedPair negatedZ a apply ⍳_ℤ 0 ≤_ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ orderedPair apply ⍳_ℤ 0 a ≤_ℤ, ∈ orderedPair negatedZ a negatedZ apply ⍳_ℤ 0 ≤_ℤ, ∈ orderedPair negatedZ a apply ⍳_ℤ 0 ≤_ℤ) () 0 1
+}
+
 comment Define subtraction.
 
 term -_ℤ ()
