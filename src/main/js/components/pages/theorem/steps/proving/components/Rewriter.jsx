@@ -13,8 +13,7 @@ export default class Rewriter extends React.Component {
     super(...args);
     this.state = {
       currentExpression: this.props.expression,
-      selectedInferenceSuggestion: null,
-      selectedPremiseSuggestion: null,
+      availableRewrites: [],
       chosenRewrites: [[]],
       saving: false
     };
@@ -36,21 +35,6 @@ export default class Rewriter extends React.Component {
       `rewriteSuggestions?searchText=${searchText}&expression=${serializedExpression}&pathsAlreadyRewritten=${serializedPaths}`
     ).then(this.context.parser.parseInferenceRewriteSuggestions)
   };
-  onInferenceSelected = (selectedInferenceSuggestion) => {
-    this.setState({selectedInferenceSuggestion, selectedPremiseSuggestion: null});
-    this.resetPremiseSuggestions();
-  };
-
-  onPremiseSelected = (selectedPremiseSuggestion) => {
-    this.setState({selectedInferenceSuggestion: null, selectedPremiseSuggestion});
-  };
-
-  onExpressionClickedForInference = (path, replacementExpression, inferenceId, extractionInferenceIds) => {
-    this.addRewrite({path, inferenceId, extractionInferenceIds}, replacementExpression);
-  };
-  onExpressionClickedForPremise = (path, replacementExpression, serializedPremiseStatement, reverse) => {
-    this.addRewrite({path, serializedPremiseStatement, reverse}, replacementExpression);
-  };
 
   loadPremiseSuggestions = (expression, pathsAlreadyRewritten, onPremiseSuggestionSelected) => {
     this.context.fetchJsonForStep(this.props.path, `rewritePremiseSuggestions?expression=${encodeURIComponent(expression.serialize())}&pathsAlreadyRewritten=${_.map(pathsAlreadyRewritten, p => p.join(".")).join(",")}`)
@@ -70,12 +54,31 @@ export default class Rewriter extends React.Component {
     this.context.clearHighlightingAction();
   };
 
-  addRewrite = (rewrite, replacementExpression) => {
-    let {chosenRewrites} = this.state;
-    chosenRewrites = [...chosenRewrites.slice(0, chosenRewrites.length - 1), [...chosenRewrites[chosenRewrites.length - 1], rewrite]];
+  onInferenceSelected = (selectedInferenceSuggestion) => {
+    const currentPaths = this.getCurrentPaths();
+    const availableRewrites = _.chain(selectedInferenceSuggestion.rewriteSuggestions)
+      .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
+      .map(s => { return { path: s.path, replacementExpression: s.result, rewrite: { path: s.path, inferenceId: selectedInferenceSuggestion.inference.id, extractionInferenceIds: selectedInferenceSuggestion.extractionInferenceIds }}})
+      .value();
+    this.setState({availableRewrites});
+    this.resetPremiseSuggestions();
+  };
+  onPremiseSelected = (selectedPremiseSuggestion) => {
+    const currentPaths = this.getCurrentPaths();
+    const availableRewrites = _.chain(selectedPremiseSuggestion.rewriteSuggestions)
+      .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
+      .map(s => { return { path: s.path, replacementExpression: s.result, rewrite: {path: s.path, serializedPremiseStatement: selectedPremiseSuggestion.statement.serialize(), reverse: s.reverse }}})
+      .value();
+    this.setState({availableRewrites});
+  };
+
+  onExpressionClickedForRewrite = (path, replacementExpression, rewrite) => {
+    const {chosenRewrites: currentChosenRewrites, availableRewrites} = this.state;
+    const [replacedExpression, rewritePaths] = this.state.currentExpression.replaceAtPath(path, replacementExpression);
+    const newChosenRewrites = _.map(rewritePaths, p => _.find(availableRewrites, r => _.isEqual(r.path, p)).rewrite);
     this.setState({
-      currentExpression: this.state.currentExpression.replaceAtPath(rewrite.path, replacementExpression),
-      chosenRewrites
+      currentExpression: replacedExpression,
+      chosenRewrites: [...currentChosenRewrites.slice(0, currentChosenRewrites.length - 1), [...currentChosenRewrites[currentChosenRewrites.length - 1], ...newChosenRewrites]]
     });
   };
 
@@ -97,21 +100,10 @@ export default class Rewriter extends React.Component {
 
   render() {
     const {title} = this.props;
-    const {currentExpression, selectedInferenceSuggestion, selectedPremiseSuggestion, chosenRewrites, saving} = this.state;
+    const {currentExpression, availableRewrites, chosenRewrites, saving} = this.state;
     const currentPaths = this.getCurrentPaths();
 
-    const actionHighlights = selectedInferenceSuggestion ?
-      _.chain(selectedInferenceSuggestion.rewriteSuggestions)
-        .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
-        .map(s => { return {path: s.path, action: () => this.onExpressionClickedForInference(s.path, s.result, selectedInferenceSuggestion.inference.id, selectedInferenceSuggestion.extractionInferenceIds) }})
-        .value() :
-      selectedPremiseSuggestion ?
-        _.chain(selectedPremiseSuggestion.rewriteSuggestions)
-          .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
-          .map(s => { return {path: s.path, action: () => this.onExpressionClickedForPremise(s.path, s.result, selectedPremiseSuggestion.statement.serialize(), s.reverse) }})
-          .value() :
-
-      [];
+    const actionHighlights = availableRewrites.map(({path, replacementExpression, rewrite}) => { return { path, action: () => this.onExpressionClickedForRewrite(path, replacementExpression, rewrite)}})
     const staticHighlights = _.map(currentPaths, path => { return {path}});
 
     let getSuggestionValue = s => s.inference.name;

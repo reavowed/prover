@@ -115,7 +115,7 @@ interface TextBasedExpression {
   serializeNicely(boundVariableLists: string[][]): string
   textForHtml(boundVariableLists: string[][]): string
   setBoundVariableName(newName: string, index: number, path: number[]): Expression
-  replaceAtPath(path: number[], expression: Expression): Expression
+  replaceAtPath(path: number[], expression: Expression): [Expression, number[][]]
 }
 interface FormatBasedExpression {
   components: Expression[]
@@ -123,7 +123,7 @@ interface FormatBasedExpression {
   serializeNicely(boundVariableLists: string[][]): string
   formatForHtml(parentRequiresBrackets: boolean): string
   setBoundVariableName(newName: string, index: number, path: number[]): Expression
-  replaceAtPath(path: number[], expression: Expression): Expression
+  replaceAtPath(path: number[], expression: Expression): [Expression, number[][]]
 }
 
 export class Variable {
@@ -146,13 +146,14 @@ export class Variable {
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in variable"
   }
-  replaceAtPath(path: number[], expression: Expression): Expression {
+  replaceAtPath(path: number[], expression: Expression): [Expression, number[][]] {
     if (!path.length) {
-      return expression
+      return [expression, [path]];
     } else {
       const [first, ...remaining] = path;
-      const newComponents = [...this.components.slice(0, first), this.components[first].replaceAtPath(remaining, expression), ... this.components.slice(first + 1)];
-      return new Variable(this.name, newComponents);
+      const [replacedComponent, replacementPaths] = this.components[first].replaceAtPath(remaining, expression);
+      const newComponents = [...this.components.slice(0, first), replacedComponent, ... this.components.slice(first + 1)];
+      return [new Variable(this.name, newComponents), replacementPaths.map(p => [first, ...p])];
     }
   }
 }
@@ -178,13 +179,14 @@ export class DefinedExpression {
       return new DefinedExpression(this.definition, this.boundVariableNames, mapAtIndex(this.components, path[0], c => c.setBoundVariableName(newName, index, path.slice(1))));
     }
   }
-  replaceAtPath(path: number[], expression: Expression): Expression {
+  replaceAtPath(path: number[], expression: Expression): [Expression, number[][]] {
     if (!path.length) {
-      return expression
+      return [expression, [path]];
     } else {
       const [first, ...remaining] = path;
-      const newComponents = [...this.components.slice(0, first), this.components[first].replaceAtPath(remaining, expression), ... this.components.slice(first + 1)];
-      return new DefinedExpression(this.definition, this.boundVariableNames, newComponents);
+      const [replacedComponent, replacedPaths] = this.components[first].replaceAtPath(remaining, expression);
+      const newComponents = [...this.components.slice(0, first), replacedComponent, ... this.components.slice(first + 1)];
+      return [new DefinedExpression(this.definition, this.boundVariableNames, newComponents), replacedPaths.map(p => [first, ...p])];
     }
   }
 }
@@ -217,17 +219,31 @@ export class TypeExpression {
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in type expression"
   }
-  replaceAtPath(path: number[], expression: Expression): Expression {
+  replaceAtPath(path: number[], expression: Expression): [Expression, number[][]] {
     if (!path.length) {
-      return expression
-    } else if (!this.properties.length) {
-      const [first, ...remaining] = path;
-      if (first == 0)
-        return new TypeExpression(this.definition, this.term.replaceAtPath(remaining, expression), this.otherComponents, this.properties, this.conjunctionDefinition);
-      else
-        return new TypeExpression(this.definition, this.term, [...this.otherComponents.slice(0, first - 1), this.otherComponents[first - 1].replaceAtPath(remaining, expression), ... this.otherComponents.slice(first)], this.properties, this.conjunctionDefinition);
+      return [expression, [path]];
     } else {
-      throw "Replacing in type expression with properties not implemented"
+      // @ts-ignore
+      if (!_.startsWith(path, Array(this.properties.length).fill(0))) {
+        throw "Cannot replace in property expression"
+      }
+      const pathAfterProperties = path.slice(this.properties.length);
+      const [first, ...remaining] = pathAfterProperties;
+      let replacedExpression: Expression, replacedInnerPaths: number[][];
+      if (first == 0) {
+        const [replacedTerm, replacedPathsInTerm] = this.term.replaceAtPath(remaining, expression)
+        replacedExpression = new TypeExpression(this.definition, replacedTerm, this.otherComponents, this.properties, this.conjunctionDefinition);
+        replacedInnerPaths = replacedPathsInTerm;
+      } else {
+        const [replacedComponent, replacedPathsInComponent] = this.otherComponents[first - 1].replaceAtPath(remaining, expression);
+        const replacedComponents = [...this.otherComponents.slice(0, first - 1), replacedComponent, ... this.otherComponents.slice(first)];
+        replacedExpression = new TypeExpression(this.definition, this.term, replacedComponents, this.properties, this.conjunctionDefinition);
+        replacedInnerPaths = replacedPathsInComponent;
+      }
+      const replacedTermPaths = replacedInnerPaths.map(p => [...Array(this.properties.length).fill(0), first, ...p]);
+      const replacedPropertyPaths = _.flatMap(_.range(this.properties.length), i => replacedInnerPaths.map(p => [...Array(i).fill(0), 1, first, ...p]));
+
+      return [replacedExpression, [...replacedTermPaths, ...replacedPropertyPaths]];
     }
   }
 }
@@ -243,7 +259,7 @@ export class PropertyExpression {
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in property expression"
   }
-  replaceAtPath(_path: number[], _expression: Expression): Expression {
+  replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
     throw "Cannot replace in property expression"
   }
 }
@@ -259,7 +275,7 @@ export class StandalonePropertyExpression {
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in property expression"
   }
-  replaceAtPath(_path: number[], _expression: Expression): Expression {
+  replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
     throw "Cannot replace in property expression"
   }
 }
@@ -286,9 +302,9 @@ export class FunctionParameter {
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in function parameter"
   }
-  replaceAtPath(path: number[], expression: Expression): Expression {
+  replaceAtPath(path: number[], expression: Expression): [Expression, number[][]] {
     if (!path.length) {
-      return expression
+      return [expression, [path]];
     } else {
       throw "Cannot replace subexpression of function parameter"
     }
