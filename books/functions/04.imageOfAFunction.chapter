@@ -1,0 +1,76 @@
+Define the image of a function.
+
+term image (f)
+  format (Im(f)) no-component-brackets
+  premises (function f A B)
+  (= $0 comprehension b B ∃ a ∧ ∈ $0 A = $$0 apply f $0)
+
+theorem Membership Condition for Function Image
+premise function f A B
+conclusion ∀ b ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0
+{
+  prove = image f comprehension b B ∃ a ∧ ∈ $0 A = $$0 apply f $0 16db9007a1a6474c2e573cfc1fbbe6d07f7ca4874149ba15aafe7c5e53bc3f88 () (f, A, B) p0
+  take b {
+    assume ∃ a ∧ ∈ $0 A = $$0 apply f $0 {
+      let a ∧ ∈ $0 A = $$0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A = $0 apply f $$0, ∈ $0 B) () {
+        prove ∈ apply f $0 B 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (f, A, B, $0) p0 1.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+          prove = apply f $0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$0, apply f $0) 1.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          prove ∈ $$0 B 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$0 B) (apply f $0, $$0) 1.0.0.1.0 1.0.0.0
+        }
+      } 1.0a
+    }
+    elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
+      prove ∀ y ↔ ∈ $0 image f ∧ ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∃ a ∧ ∈ $0 A = $$$0 apply f $0) (image f, B) 0
+      prove ↔ ∈ $0 image f ∧ ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 image f ∧ ∈ $$0 B ∃ a ∧ ∈ $0 A = $$$0 apply f $0) ($0) 1.1.0
+    }
+    prove ↔ ∧ ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0 ∃ a ∧ ∈ $0 A = $$0 apply f $0 6301d09d66b0a087d37eb6fdfb57305fb0584d31883012474d1101001436cb7e (∃ a ∧ ∈ $0 A = $$0 apply f $0, ∈ $0 B) () 1.0
+    prove ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 image f, ∧ ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0, ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 1.1 1.2
+  }
+}
+
+theorem A Function Can Be Restricted to Its Image
+premise function f A B
+conclusion function f A image f
+{
+  take x {
+    assume ∈ $0 f {
+      elided 2c5898a93d503f67864a5f7946c9db3d7c9c578a1ccb09f54d947eb150789919 {
+        prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
+        elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+          prove ∀ x → ∈ $0 f ∈ $0 product A B f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (f, product A B) 0.0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+          prove → ∈ $0 f ∈ $0 product A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 f ∈ $$0 product A B) ($0) 0.0.0.1.0
+          prove ∈ $0 product A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 f, ∈ $0 product A B) () 0.0.0.1.1 0.0a
+        }
+        prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 2c5898a93d503f67864a5f7946c9db3d7c9c578a1ccb09f54d947eb150789919 () ($0, A, B) 0.0.0.1
+      }
+      let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0, ∈ $0 product A image f) () {
+        let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0, ∈ $$0 product A image f) () {
+          prove ∈ orderedPair $$0 $0 f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$$0 f) ($$$0, orderedPair $$0 $0) 0.0.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.0a
+          prove = $0 apply f $$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, B, $$0, $0) p0 0.0.1.0.0
+          elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+            prove ∧ ∈ $$0 A = $0 apply f $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$0 A, = $0 apply f $$0) () 0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.1.0.1
+            prove ∃ a ∧ ∈ $0 A = $$0 apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$$0 A = $0 apply f $$$$0) ($$0) 0.0.1.0.2.0
+          }
+          elided 80cdec7e974cb4d1f017a69e7bc7f37f2636e4bd1434f462a1169384434b6f65 {
+            prove ∀ b ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 80cdec7e974cb4d1f017a69e7bc7f37f2636e4bd1434f462a1169384434b6f65 () (f, A, B) p0
+            prove ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$0 image f ∃ a ∧ ∈ $0 A = $$$$$0 apply f $0) ($0) 0.0.1.0.3.0
+            prove → ∃ a ∧ ∈ $0 A = $$0 apply f $0 ∈ $0 image f 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 image f, ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 0.0.1.0.3.1
+            prove ∈ $0 image f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ a ∧ ∈ $0 A = $$0 apply f $0, ∈ $0 image f) () 0.0.1.0.3.2 0.0.1.0.2
+          }
+          prove ∈ orderedPair $$0 $0 product A image f 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, A, $0, image f) 0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.1.0.3
+          elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+            prove = orderedPair $$0 $0 $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$$0, orderedPair $$0 $0) 0.0.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∈ $$$0 product A image f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$$0 product A image f) (orderedPair $$0 $0, $$$0) 0.0.1.0.5.0 0.0.1.0.4
+          }
+        } 0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      } 0.0.0
+    }
+  }
+  prove ⊆ f product A image f 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (f, product A image f) 0
+  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
+    prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
+    prove ∧ ⊆ f product A image f ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ f product A image f, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () 1 2.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove function f A image f 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (f, A, image f) 2.1
+  }
+}

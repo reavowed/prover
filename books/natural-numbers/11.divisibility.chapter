@@ -46,7 +46,7 @@ conclusion ∈ orderedPair 1 a |_ℕ
   }
 }
 
-theorem Every Number Divides Itself
+theorem Every Natural Divides Itself
 premise ∈ a ℕ
 conclusion ∈ orderedPair a a |_ℕ
 {
@@ -70,7 +70,7 @@ conclusion ∈ orderedPair a a |_ℕ
   }
 }
 
-theorem Existence of Greatest Common Divisor
+theorem Existence of Greatest Common Divisor for Naturals
 premise ∈ a ℕ
 premise ∈ b ℕ
 premise ∈ orderedPair 0 a <_ℕ

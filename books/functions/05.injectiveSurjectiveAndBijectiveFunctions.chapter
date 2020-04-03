@@ -1,0 +1,71 @@
+Define injectivity, surjectivity and bijectivity for functions.
+
+property injective on function f A B
+  definition (∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0)
+
+property surjective on function f A B
+  definition (∀ b → ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0)
+
+property bijective on function f A B
+  definition (∧ injectiveFunction f A B surjectiveFunction f A B)
+
+theorem Injective Function Value Is Unique
+premise ∧ function f A B injectiveFunction f A B
+premise ∈ a_1 A
+premise ∈ a_2 A
+conclusion ↔ = apply f a_1 apply f a_2 = a_1 a_2
+{
+  assume = apply f a_1 apply f a_2 {
+    elided 525b4ace6543f96748a3911c8783983fce6a0628c1947bd6fb63e8b624e9cfc5 {
+      prove ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0 525b4ace6543f96748a3911c8783983fce6a0628c1947bd6fb63e8b624e9cfc5 () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove → ∈ a_1 A ∀ y → ∈ $0 A → = apply f a_1 apply f $0 = a_1 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0) (a_1) 0.0.0
+      prove ∀ y → ∈ $0 A → = apply f a_1 apply f $0 = a_1 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a_1 A, ∀ y → ∈ $0 A → = apply f a_1 apply f $0 = a_1 $0) () 0.0.1 p1
+      prove → ∈ a_2 A → = apply f a_1 apply f a_2 = a_1 a_2 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A → = apply f a_1 apply f $0 = a_1 $0) (a_2) 0.0.2
+      prove → = apply f a_1 apply f a_2 = a_1 a_2 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a_2 A, → = apply f a_1 apply f a_2 = a_1 a_2) () 0.0.3 p2
+      prove = a_1 a_2 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply f a_1 apply f a_2, = a_1 a_2) () 0.0.4 0a
+    }
+  }
+  assume = a_1 a_2 {
+    prove = apply f a_1 apply f a_2 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (a_1, a_2, apply f $0) 1a
+  }
+  prove ↔ = apply f a_1 apply f a_2 = a_1 a_2 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= apply f a_1 apply f a_2, = a_1 a_2) () 0 1
+}
+
+theorem A Function Is Surjective on Its Image
+premise function f A B
+conclusion ∧ function f A image f surjectiveFunction f A image f
+{
+  prove function f A image f 1ca520de2b3109525e7f28033acacb944c84cffc60fef4c0aa2e69140860969d () (f, A, B) p0
+  take b {
+    assume ∈ $0 image f {
+      elided 80cdec7e974cb4d1f017a69e7bc7f37f2636e4bd1434f462a1169384434b6f65 {
+        prove ∀ b ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 80cdec7e974cb4d1f017a69e7bc7f37f2636e4bd1434f462a1169384434b6f65 () (f, A, B) p0
+        prove ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 image f ∃ a ∧ ∈ $0 A = $$$0 apply f $0) ($0) 1.0.0.0
+        prove → ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 image f, ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 1.0.0.1
+        prove ∃ a ∧ ∈ $0 A = $$0 apply f $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 image f, ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 1.0.0.2 1.0a
+      }
+    }
+  }
+  prove surjectiveFunction f A image f 7c202e0e261248e7fe3c97a6699d4a6ec9234110498e3dc481784b41e4aa5767 () (image f, A, f) 1
+  prove ∧ function f A image f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f A image f, surjectiveFunction f A image f) () 0 2
+}
+
+theorem Injective Function Is Bijective with Its Image
+premise ∧ function f A B injectiveFunction f A B
+conclusion ∧ function f A image f bijectiveFunction f A image f
+{
+  prove function f A image f 1ca520de2b3109525e7f28033acacb944c84cffc60fef4c0aa2e69140860969d () (f, A, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+  elided c2afafe0e25ec2cbcc5e858cda4206b5eb6c7297eac08a5746e0c6a3971f1c71 {
+    prove ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0 525b4ace6543f96748a3911c8783983fce6a0628c1947bd6fb63e8b624e9cfc5 () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove injectiveFunction f A image f c2afafe0e25ec2cbcc5e858cda4206b5eb6c7297eac08a5746e0c6a3971f1c71 () (A, f, image f) 1.0
+  }
+  elided ab3fc9ebc41d3de64a82d88963f2ed29020ce07b0a1993dfab2d3c73ecd4055b {
+    prove ∧ function f A image f surjectiveFunction f A image f ab3fc9ebc41d3de64a82d88963f2ed29020ce07b0a1993dfab2d3c73ecd4055b () (f, A, image f) 0
+    prove surjectiveFunction f A image f 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f A image f, surjectiveFunction f A image f) () 2.0
+  }
+  elided 9ea96c5162cbc7a17da30c25cccfd1de28bfa6e45672f2eb2f0a0d1b5b37d00a {
+    prove ∧ injectiveFunction f A image f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (injectiveFunction f A image f, surjectiveFunction f A image f) () 1 2
+    prove bijectiveFunction f A image f 9ea96c5162cbc7a17da30c25cccfd1de28bfa6e45672f2eb2f0a0d1b5b37d00a () (f, A, image f) 3.0
+  }
+  prove ∧ function f A image f bijectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f A image f, bijectiveFunction f A image f) () 0 3
+}
